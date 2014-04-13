@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using ConfigManager
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
 @using EzBob.Web.Infrastructure
@@ -8,8 +9,8 @@
 @using StructureMap
 @{
     var controller = (string)ViewContext.RouteData.Values["controller"];
-    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-    var showGetSatisfaction = controller == "Wizard" && config.GetSatisfactionEnabled;
+    bool getSatisfactionEnabled = CurrentValues.Instance.GetSatisfactionEnabled;
+    var showGetSatisfaction = controller == "Wizard" && getSatisfactionEnabled;
     var authCookie = Request.IsAuthenticated ? "auth" : "";
 
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;

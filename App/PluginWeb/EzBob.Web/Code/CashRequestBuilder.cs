@@ -8,7 +8,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using Infrastructure;
 
 	public class CashRequestBuilder {
 		#region constructor
@@ -17,7 +16,6 @@
 			ILoanTypeRepository loanTypes,
 			IDiscountPlanRepository discounts,
 			IUsersRepository users,
-			IEzBobConfiguration config,
 			IConfigurationVariablesRepository configurationVariables,
 			ILoanSourceRepository loanSources,
 			IDecisionHistoryRepository historyRepository,
@@ -27,7 +25,6 @@
 			_loanTypes = loanTypes;
 			_discounts = discounts;
 			_users = users;
-			_config = config;
 			this.configurationVariables = configurationVariables;
 			_loanSources = loanSources;
 			_historyRepository = historyRepository;
@@ -170,7 +167,6 @@
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IUsersRepository _users;
-		private readonly IEzBobConfiguration _config;
 		private readonly IConfigurationVariablesRepository configurationVariables;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IDecisionHistoryRepository _historyRepository;

@@ -245,6 +245,18 @@
 		EbayPixelEnabled,
 		TradeTrackerPixelEnabled,
 		TaboolaPixelEnabled,
-		PayPalEnabled
+		PayPalEnabled,
+		TargetsEnabledEntrepreneur,
+		ManagementPartEnabled,
+		GetSatisfactionEnabled,
+		NotEnoughFundsToAddress,
+		NotEnoughFundsTemplateName,
+		WizardInstructionsEnabled,
+		RefreshYodleeEnabled,
+		PacnetBalanceMaxManualChange,
+		PacnetBalanceWeekendLimit,
+		PacnetBalanceWeekdayLimit,
+		SkipServiceOnNewCreditLine,
+		SessionTimeout
 	} // enum Variables
 } // namespace ConfigManager

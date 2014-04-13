@@ -6,6 +6,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 {
 	using System;
 	using System.Linq;
+	using ConfigManager;
 	using Customer.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
@@ -25,7 +26,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
-		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 		private readonly ILoanSourceRepository _loanSources;
 
 		public ApplicationInfoModelBuilder(
@@ -114,7 +114,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	        DateTime today = DateTime.UtcNow;
 	        model.FundsAvailableUnderLimitClass = string.Empty;
-	        int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? config.PacnetBalanceWeekendLimit : config.PacnetBalanceWeekdayLimit;
+			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
 	        if (fundsAvailable < relevantLimit)
 			{
 				model.FundsAvailableUnderLimitClass = "red_cell";

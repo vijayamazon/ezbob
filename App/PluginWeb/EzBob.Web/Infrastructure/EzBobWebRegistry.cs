@@ -36,7 +36,6 @@ namespace EzBob.Web.Infrastructure
 		public PluginWebRegistry()
 		{
 			var localRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<EzBobConfigRoot>();
-			var ezBobConfiguration = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<EzBobConfiguration>();
 			var bobconfig = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRootBob>();
 
 			For<ConfigurationRootBob>().Use(bobconfig);
@@ -53,7 +52,6 @@ namespace EzBob.Web.Infrastructure
 			For<IMedalStatisticReportRepository>().Use<MedalStatisticReportRepository>();
 			For<IDailyReportRepository>().Use<DailyReportRepository>();
 
-			For<IEzBobConfiguration>().Singleton().Use(ezBobConfiguration);
 			For<IPayPalConfig>().Singleton().Use(localRoot.PayPalConfig);
 			For<BaseAPIProfile>().Use(() => ProfileProvider.CreateProfile(localRoot.PayPalConfig));
 			For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());

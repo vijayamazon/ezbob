@@ -4,7 +4,9 @@ using StructureMap;
 
 namespace EzBob.Web.Areas.Underwriter
 {
-    public class UnderwriterAreaRegistration : AreaRegistration
+	using ConfigManager;
+
+	public class UnderwriterAreaRegistration : AreaRegistration
     {
         public override string AreaName
         {
@@ -16,8 +18,7 @@ namespace EzBob.Web.Areas.Underwriter
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
-            var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-            if (!config.ManagementPartEnabled) return;
+            if (!CurrentValues.Instance.ManagementPartEnabled) return;
             context.MapRoute(
                 "Underwriter_default",
                 "Underwriter/{controller}/{action}/{id}",

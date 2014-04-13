@@ -29,7 +29,6 @@
         private readonly DatabaseDataHelper _helper;
 		private readonly ServiceClient m_oServiceClient;
         private readonly ISession _session;
-        private readonly IEzBobConfiguration _config;
         private readonly CustomerMarketPlaceRepository _customerMarketPlaceRepository;
         private readonly AskvilleRepository _askvilleRepository;
         private readonly IMPUniqChecker _mpChecker;
@@ -42,7 +41,6 @@
             IEzbobWorkplaceContext context, 
             DatabaseDataHelper helper, 
             ISession session, 
-            IEzBobConfiguration config, 
             CustomerMarketPlaceRepository customerMarketPlaceRepository, 
             AskvilleRepository askvilleRepository,
             IMPUniqChecker mpChecker,
@@ -52,7 +50,6 @@
             _helper = helper;
 	        m_oServiceClient = new ServiceClient();
             _session = session;
-            _config = config;
             _customerMarketPlaceRepository = customerMarketPlaceRepository;
             _askvilleRepository = askvilleRepository;
             _mpChecker = mpChecker;

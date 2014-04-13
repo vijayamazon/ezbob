@@ -587,8 +587,8 @@
         EzBob.Config.MinLoan = @CurrentValues.Instance.MinLoan.Value;
         EzBob.Config.MaxLoan = @CurrentValues.Instance.MaxLoan.Value;
         EzBob.Config.XMinLoan = @CurrentValues.Instance.XMinLoan.Value;
-        EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
-        EzBob.Config.PacnetBalanceMaxManualChange = @Model.Config.PacnetBalanceMaxManualChange;
+        EzBob.Config.SessionTimeout = @CurrentValues.Instance.SessionTimeout.Value;
+        EzBob.Config.PacnetBalanceMaxManualChange = @CurrentValues.Instance.PacnetBalanceMaxManualChange.Value;
         EzBob.Underwriter.StaticData = {};
         EzBob.Underwriter.StaticData.CollectionStatuses = new EzBob.Underwriter.CollectionStatuses(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.CollectionStatuses)));
 

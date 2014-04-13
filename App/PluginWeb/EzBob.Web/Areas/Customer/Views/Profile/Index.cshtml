@@ -333,7 +333,7 @@
         EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
         EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
         EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
-        EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
+        EzBob.Config.SessionTimeout = @CurrentValues.Instance.SessionTimeout.Value;
         EzBob.Config.CaptchaMode = '@CurrentValues.Instance.CaptchaMode.Value';
 
         $(function() {

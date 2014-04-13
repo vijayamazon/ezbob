@@ -1,10 +1,11 @@
-﻿@using EzBob.Web.Infrastructure
+﻿@using ConfigManager
+@using EzBob.Web.Infrastructure
 @using StructureMap
 @model dynamic
 <script id="stores-template" type="text/template">
 	@{
 		var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-		bool refreshYodleeEnabled = config.RefreshYodleeEnabled;
+		bool refreshYodleeEnabled = CurrentValues.Instance.RefreshYodleeEnabled;
 	}
 
     <table class="table grey-table account-activity-table">

@@ -9,7 +9,6 @@
 @model dynamic
 @{
 	Layout = null;
-	var config = ViewData[Constant.Config] as IEzBobConfiguration;
 }
 <!DOCTYPE html>
 <html>
@@ -786,7 +785,7 @@
 		EzBob.LoadedConfig = EzBob.LoadedConfig || {};
 		EzBob.LoadedConfig.PasswordPolicyType = '@CurrentValues.Instance.PasswordPolicyType.Value';
 	    EzBob.LoadedConfig.CaptchaMode = '@CurrentValues.Instance.CaptchaMode.Value';
-	    EzBob.Config.SessionTimeout = @config.SessionTimeout;
+	    EzBob.Config.SessionTimeout = @CurrentValues.Instance.SessionTimeout.Value;
 	</script>
 	<!-- scripts - end -->
 </body>

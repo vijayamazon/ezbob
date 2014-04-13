@@ -1850,5 +1850,65 @@
 		{
 			get { return this[Variables.PayPalEnabled]; }
 		}
+
+		public virtual VariableValue TargetsEnabledEntrepreneur
+		{
+			get { return this[Variables.TargetsEnabledEntrepreneur]; }
+		}
+
+		public virtual VariableValue ManagementPartEnabled
+		{
+			get { return this[Variables.ManagementPartEnabled]; }
+		}
+
+		public virtual VariableValue GetSatisfactionEnabled
+		{
+			get { return this[Variables.GetSatisfactionEnabled]; }
+		}
+
+		public virtual VariableValue NotEnoughFundsToAddress
+		{
+			get { return this[Variables.NotEnoughFundsToAddress]; }
+		}
+
+		public virtual VariableValue NotEnoughFundsTemplateName
+		{
+			get { return this[Variables.NotEnoughFundsTemplateName]; }
+		}
+
+		public virtual VariableValue WizardInstructionsEnabled
+		{
+			get { return this[Variables.WizardInstructionsEnabled]; }
+		}
+
+		public virtual VariableValue RefreshYodleeEnabled
+		{
+			get { return this[Variables.RefreshYodleeEnabled]; }
+		}
+
+		public virtual VariableValue PacnetBalanceMaxManualChange
+		{
+			get { return this[Variables.PacnetBalanceMaxManualChange]; }
+		}
+
+		public virtual VariableValue PacnetBalanceWeekendLimit
+		{
+			get { return this[Variables.PacnetBalanceWeekendLimit]; }
+		}
+
+		public virtual VariableValue PacnetBalanceWeekdayLimit
+		{
+			get { return this[Variables.PacnetBalanceWeekdayLimit]; }
+		}
+
+		public virtual VariableValue SkipServiceOnNewCreditLine
+		{
+			get { return this[Variables.SkipServiceOnNewCreditLine]; }
+		}
+
+		public virtual VariableValue SessionTimeout
+		{
+			get { return this[Variables.SessionTimeout]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

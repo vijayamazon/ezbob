@@ -10,18 +10,18 @@ using StructureMap;
 
 namespace EzBob.Web.Code
 {
-    public class AvailableFundsValidator
+	using ConfigManager;
+
+	public class AvailableFundsValidator
     {
         private readonly PacNetBalanceRepository _funds;
         private readonly PacNetManualBalanceRepository _manualFunds;
-        private readonly IEzBobConfiguration _config;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(AvailableFundsValidator));
 
-        public AvailableFundsValidator(PacNetBalanceRepository funds, PacNetManualBalanceRepository manualFunds, IEzBobConfiguration config)
+        public AvailableFundsValidator(PacNetBalanceRepository funds, PacNetManualBalanceRepository manualFunds)
         {
             _funds = funds;
             _manualFunds = manualFunds;
-            _config = config;
         }
 
         public virtual void VerifyAvailableFunds(decimal transfered)
@@ -33,7 +33,7 @@ namespace EzBob.Web.Code
                 var fundsAvailable = balance.Adjusted + manualBalance - transfered;
 				
                 var today = DateTime.UtcNow;
-                int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? _config.PacnetBalanceWeekendLimit : _config.PacnetBalanceWeekdayLimit;
+				int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
 				Log.InfoFormat("VerifyAvailableFunds pacnet balance {0} manual balance {1} transfered {2} funds available {3} relevant limit {4}", balance, manualBalance, transfered, fundsAvailable, relevantLimit);
                 if (fundsAvailable < relevantLimit)
                 {
@@ -55,7 +55,7 @@ namespace EzBob.Web.Code
 					{"RequiredFunds", requiredFunds.ToString("N", CultureInfo.InvariantCulture)} 
 				};
 
-            var result = mail.Send(vars, _config.NotEnoughFundsToAddress, _config.NotEnoughFundsTemplateName);
+			var result = mail.Send(vars, CurrentValues.Instance.NotEnoughFundsToAddress, CurrentValues.Instance.NotEnoughFundsTemplateName);
             if (result == "OK")
             {
                 Log.InfoFormat("Sent mail - not enough funds");

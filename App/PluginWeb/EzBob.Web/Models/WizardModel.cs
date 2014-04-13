@@ -1,11 +1,9 @@
-﻿using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Infrastructure;
-
-namespace EzBob.Web.Models
+﻿namespace EzBob.Web.Models
 {
+	using Areas.Customer.Models;
+
     public class WizardModel
     {
         public CustomerModel Customer { get; set; }
-        public IEzBobConfiguration Config { get; set; }
     }
 }

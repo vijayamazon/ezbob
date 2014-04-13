@@ -5,10 +5,9 @@
 @model dynamic
 @{
 	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
-	var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 	string captchamode = CurrentValues.Instance.CaptchaMode;
     bool ebayPixelEnabled = CurrentValues.Instance.EbayPixelEnabled;
-	bool instructionsEnabled = config.WizardInstructionsEnabled;
+    bool instructionsEnabled = CurrentValues.Instance.WizardInstructionsEnabled;
 	var bml = new WizardBrokerLeadModel(Session);
 	var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
 	var sBrokerForCustomerIndicator = bml.BrokerFillsForCustomer ? "broker-for-customer" : string.Empty;

@@ -26,7 +26,6 @@
 	public class ApplicationInfoController : Controller {
 		private readonly ICustomerRepository _customerRepository;
 		private readonly ICashRequestsRepository _cashRequestsRepository;
-		private readonly IEzBobConfiguration _config;
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly LoanLimit _limit;
 		private readonly IDiscountPlanRepository _discounts;
@@ -48,7 +47,6 @@
 			ICustomerRepository customerRepository,
 			ICustomerStatusesRepository customerStatusesRepository,
 			ICashRequestsRepository cashRequestsRepository,
-			IEzBobConfiguration config,
 			ILoanTypeRepository loanTypes,
 			LoanLimit limit,
 			IDiscountPlanRepository discounts,
@@ -64,7 +62,6 @@
 		) {
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
-			_config = config;
 			_loanTypes = loanTypes;
 			_limit = limit;
 			_discounts = discounts;
@@ -471,7 +468,7 @@
 				return Json(new {Message = "Go to new mode"});
 			}
 
-			if (!_config.SkipServiceOnNewCreditLine) {
+			if (!CurrentValues.Instance.SkipServiceOnNewCreditLine) {
 				var anyApps = StrategyChecker.IsStrategyRunning(Id, true);
 				if (anyApps)
 					return Json(new { Message = "The evaluation strategy is already running. Please wait..." });

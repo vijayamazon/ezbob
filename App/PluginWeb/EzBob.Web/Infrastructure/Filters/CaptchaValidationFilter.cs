@@ -3,14 +3,9 @@
 	using CaptchaMvc.HtmlHelpers;
 	using ConfigManager;
 	using Recaptcha;
-	using StructureMap;
 	using log4net;
 
 	public class CaptchaValidationFilter : ActionFilterAttribute {
-		public CaptchaValidationFilter() {
-			config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-		} // constructor
-
 		public override void OnActionExecuting(ActionExecutingContext filterContext) {
 			ILog log = LogManager.GetLogger(typeof (CaptchaValidationFilter));
 
@@ -84,7 +79,5 @@
 		private const string ResponseFieldKey = "recaptcha_response_field";
 		private const string PrivateKey = "6Le8aM8SAAAAAGGFIOwlLu23_L-fndyQN8vVKOUX";
 		private const string ErrorMessage = "Captcha verification code you entered does not match. Please try again";
-
-		private readonly IEzBobConfiguration config;
 	} // class CaptchaValidationFilter
 } // namespace

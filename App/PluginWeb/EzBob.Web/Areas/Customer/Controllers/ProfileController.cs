@@ -3,6 +3,7 @@
 	using System;
 	using System.Web.Mvc;
 	using CommonLib.Security;
+	using ConfigManager;
 	using EKM;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -25,7 +26,6 @@
 		private readonly CustomerModelBuilder _customerModelBuilder;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly IEzBobConfiguration _config;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ISession _session;
 		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
@@ -33,7 +33,6 @@
 		public ProfileController(
 			CustomerModelBuilder customerModelBuilder,
 			IEzbobWorkplaceContext context,
-			IEzBobConfiguration config,
 			CashRequestBuilder crBuilder,
 			ISession session,
 			IConfigurationVariablesRepository configurationVariablesRepository
@@ -41,7 +40,6 @@
 			_customerModelBuilder = customerModelBuilder;
 			_context = context;
 			m_oServiceClient = new ServiceClient();
-			_config = config;
 			_crBuilder = crBuilder;
 			_session = session;
 			_configurationVariablesRepository = configurationVariablesRepository;
@@ -52,7 +50,7 @@
 		[Transactional]
 		public ViewResult Index()
 		{
-			var wizardModel = new WizardModel { Customer = _customerModelBuilder.BuildWizardModel(_context.Customer), Config = _config };
+			var wizardModel = new WizardModel { Customer = _customerModelBuilder.BuildWizardModel(_context.Customer) };
 			ViewData["ShowChangePasswordPage"] = _context.User.IsPasswordRestored;
 
 			ViewData["MarketPlaces"] = _session
@@ -168,8 +166,7 @@
 			_crBuilder.ForceEvaluate(customer.Id, customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false, false);
 
 			var yodlees = customer.GetYodleeAccounts().ToList();
-			var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-			bool refreshYodleeEnabled = config.RefreshYodleeEnabled;
+			bool refreshYodleeEnabled = CurrentValues.Instance.RefreshYodleeEnabled;
 			if (yodlees.Any() && refreshYodleeEnabled)
 				return Json(new { hasYodlee = true });
 

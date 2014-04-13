@@ -40,7 +40,6 @@
 		#region constructor
 
 		public BrokerHomeController() {
-			m_oConfig = ObjectFactory.GetInstance<IEzBobConfiguration>();
 			m_oServiceClient = new ServiceClient();
 			m_oHelper = new BrokerHelper(m_oServiceClient, m_oLog);
 
@@ -63,7 +62,6 @@
 
 			ViewData[Constant.Broker.MarketingFiles] = m_oFileList;
 
-			ViewData[Constant.Config] = m_oConfig;
 			ViewData[Constant.Broker.Auth] = string.Empty;
 
 			string sMsgOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString().Trim();
@@ -942,7 +940,6 @@
 
 		#region fields
 
-		private readonly IEzBobConfiguration m_oConfig;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly BrokerHelper m_oHelper;
 

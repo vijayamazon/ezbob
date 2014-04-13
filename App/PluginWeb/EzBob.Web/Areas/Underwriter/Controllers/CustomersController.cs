@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System.Web.Security;
-	using Infrastructure;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -29,7 +28,6 @@
 			ISession session,
 			CustomerStatusesRepository customerStatusesRepository,
 			CustomerRepository customers,
-			IEzBobConfiguration config,
 			IDecisionHistoryRepository historyRepository,
 			IWorkplaceContext context,
 			LoanLimit limit,
@@ -47,7 +45,6 @@
 			_historyRepository = historyRepository;
 			_limit = limit;
 			_mpType = mpType;
-			_config = config;
 
 			_customerStatusesRepository = customerStatusesRepository;
 
@@ -65,7 +62,6 @@
 				IsEscalated = _context.User.Roles.Any(r => r.Name == "manager"),
 				MpTypes = _mpType.GetAll().ToList(),
 				CollectionStatuses = _customerStatusesRepository.GetAll().ToList(),
-				Config = _config,
 				MaxLoan = _limit.GetMaxLimit()
 			};
 
@@ -615,7 +611,6 @@
 		private readonly LoanLimit _limit;
 		private readonly IWorkplaceContext _context;
 		private readonly MarketPlaceRepository _mpType;
-		private readonly IEzBobConfiguration _config;
 		private readonly MembershipProvider _membershipProvider;
 
 		private readonly CustomerStatusesRepository _customerStatusesRepository;

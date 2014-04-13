@@ -39,7 +39,7 @@
 
     public class AvailableFundsValidatorFake : AvailableFundsValidator
     {
-        public AvailableFundsValidatorFake() : base(null, null, null)
+        public AvailableFundsValidatorFake() : base(null, null)
         {
         }
 

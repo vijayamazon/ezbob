@@ -22,7 +22,6 @@
 			IEzbobWorkplaceContext context,
 			ISecurityQuestionRepository questions,
 			CustomerModelBuilder customerModelBuilder,
-			IEzBobConfiguration config,
 			ISession session,
 			ICustomerReasonRepository customerReasonRepository,
 			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository
@@ -30,7 +29,6 @@
 			_context = context;
 			_questions = questions;
 			_customerModelBuilder = customerModelBuilder;
-			_config = config;
 			_session = session;
 			_reasons = customerReasonRepository;
 			_sourcesOfRepayment = customerSourceOfRepaymentRepository;
@@ -51,9 +49,9 @@
 			ViewData["WizardTopNaviagtionEnabled"] = wizardTopNaviagtionEnabled;
 			bool targetsEnabled = CurrentValues.Instance.TargetsEnabled;
 			ViewData["TargetsEnabled"] = targetsEnabled;
-			ViewData["TargetsEnabledEntrepreneur"] = _config.TargetsEnabledEntrepreneur;
-			ViewData[Constant.Config] = _config;
-
+			bool targetsEnabledEntrepreneur = CurrentValues.Instance.TargetsEnabledEntrepreneur;
+			ViewData["TargetsEnabledEntrepreneur"] = targetsEnabledEntrepreneur;
+			
 			ViewData["MarketPlaces"] = _session
 				.Query<MP_MarketplaceType>()
 				.ToArray();
@@ -95,7 +93,6 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ISecurityQuestionRepository _questions;
 		private readonly CustomerModelBuilder _customerModelBuilder;
-		private readonly IEzBobConfiguration _config;
 		private readonly ISession _session;
 		private readonly ICustomerReasonRepository _reasons;
 		private readonly ICustomerSourceOfRepaymentRepository _sourcesOfRepayment;
