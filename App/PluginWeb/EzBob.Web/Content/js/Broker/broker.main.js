@@ -46,6 +46,10 @@ $(document).ready(function() {
 		var oTerms = $('#broker-terms-and-conditions');
 		oTerms.html(oResponse.broker_terms.text);
 		oTerms.attr('data-terms-version', oResponse.broker_terms.id);
+
+		var oSmsCounts = $('#broker-sms-count');
+		oSmsCounts.attr('data-max-per-number', oResponse.max_per_number);
+		oSmsCounts.attr('data-max-per-page', oResponse.max_per_page);
 	});
 
 	var sMsgOnStart = $('body').attr('data-msg-on-start');

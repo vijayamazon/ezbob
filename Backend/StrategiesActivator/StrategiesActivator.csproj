@@ -168,19 +168,13 @@
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerSmsCountActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerTermsActionResult.datasource">
+    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.CrmLookupsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.DateTimeActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.FileListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.IntActionResult.datasource">

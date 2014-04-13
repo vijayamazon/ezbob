@@ -35,9 +35,6 @@
 		#region Broker
 
 		[OperationContract]
-		BrokerSmsCountActionResult BrokerLoadSmsCount();
-
-		[OperationContract]
 		BoolActionResult IsBroker(string sContactEmail);
 
 		[OperationContract]
@@ -111,13 +108,10 @@
 		BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail);
 
 		[OperationContract]
-		BrokerTermsActionResult BrokerLoadCurrentTerms();
-
-		[OperationContract]
 		ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
 
 		[OperationContract]
-		FileListActionResult BrokerLoadMarketingFiles();
+		BrokerStaticDataActionResult BrokerLoadStaticData();
 
 		#endregion Broker
 

@@ -20,9 +20,8 @@
 	using Ezbob.Utils;
 	using Infrastructure.Attributes;
 	using Infrastructure.Filters;
+	using Models;
 	using log4net;
-
-	using StructureMap;
 
 	#endregion using
 
@@ -42,11 +41,6 @@
 		public BrokerHomeController() {
 			m_oServiceClient = new ServiceClient();
 			m_oHelper = new BrokerHelper(m_oServiceClient, m_oLog);
-
-			m_oFiles = new SortedDictionary<string, FileDescription>();
-			m_oFileList = new FileDescription[0];
-
-			LoadMarketingFiles();
 		} // constructor
 
 		#endregion constructor
@@ -55,46 +49,31 @@
 
 		// GET: /Broker/BrokerHome/
 		public System.Web.Mvc.ViewResult Index(string sourceref = "") {
+			MarketingFiles oFiles = LoadMarketingFiles(false);
+
+			var oModel = new BrokerHomeModel(oFiles == null ? null : oFiles.Ordinal);
+
 			if (!string.IsNullOrWhiteSpace(sourceref)) {
 				var cookie = new HttpCookie(Constant.SourceRef, sourceref) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
 			} // if
 
-			ViewData[Constant.Broker.MarketingFiles] = m_oFileList;
+			oModel.MessageOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString().Trim();
 
-			ViewData[Constant.Broker.Auth] = string.Empty;
-
-			string sMsgOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString().Trim();
-
-			if (!string.IsNullOrWhiteSpace(sMsgOnStart)) {
-				ViewData[Constant.Broker.MessageOnStart] = sMsgOnStart;
-				ViewData[Constant.Broker.MessageOnStartSeverity] = (Session[Constant.Broker.MessageOnStartSeverity] ?? string.Empty).ToString();
+			if (!string.IsNullOrWhiteSpace(oModel.MessageOnStart)) {
+				oModel.MessageOnStartSeverity = (Session[Constant.Broker.MessageOnStartSeverity] ?? string.Empty).ToString();
 
 				Session[Constant.Broker.MessageOnStart] = null;
 				Session[Constant.Broker.MessageOnStartSeverity] = null;
 			} // if
 
 			if (User.Identity.IsAuthenticated) {
-				string sAuthenticationResult = m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : Constant.Broker.Forbidden;
+				oModel.Auth = m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : Constant.Broker.Forbidden;
 
-				ViewData[Constant.Broker.Auth] = sAuthenticationResult;
-
-				m_oLog.Info("Broker page sent to browser with authentication result '{0}' for identified name '{1}'.", sAuthenticationResult, User.Identity.Name);
+				m_oLog.Info("Broker page sent to browser with authentication result '{0}' for identified name '{1}'.", oModel.Auth, User.Identity.Name);
 			} // if
 
-			try {
-				BrokerSmsCountActionResult bsc = m_oServiceClient.Instance.BrokerLoadSmsCount();
-
-				ViewData[Constant.Broker.MaxPerNumber] = bsc.MaxPerNumber;
-				ViewData[Constant.Broker.MaxPerPage] = bsc.MaxPerPage;
-			}
-			catch (Exception e) {
-				m_oLog.Warn(e, "Failed to load broker SMS count configuration, using defaults.");
-				ViewData[Constant.Broker.MaxPerNumber] = 3;
-				ViewData[Constant.Broker.MaxPerPage] = 10;
-			} // try
-
-			return View();
+			return View("Index", oModel);
 		} // Index
 
 		#endregion action Index (default)
@@ -373,29 +352,28 @@
 		public JsonResult LoadStaticData() {
 			m_oLog.Debug("Broker loading CRM details started...");
 
-			CrmLookupsActionResult oLookups = null;
+			BrokerStaticDataActionResult oResult = null;
 
 			try {
-				oLookups = m_oServiceClient.Instance.CrmLoadLookups();
+				oResult = m_oServiceClient.Instance.BrokerLoadStaticData();
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Broker loading CRM details failed.");
-				oLookups = new CrmLookupsActionResult();
-			} // try
+				m_oLog.Alert(e, "Broker loading static data failed.");
 
-			BrokerTermsActionResult oTerms = null;
-
-			try {
-				oTerms = m_oServiceClient.Instance.BrokerLoadCurrentTerms();
-			}
-			catch (Exception e) {
-				m_oLog.Alert(e, "Broker loading CRM details failed.");
-				oTerms = new BrokerTermsActionResult();
+				oResult = new BrokerStaticDataActionResult {
+					MaxPerNumber = 3,
+					MaxPerPage = 10,
+					Files = new FileDescription[0],
+					Actions = new Dictionary<int, string>(),
+					Statuses = new Dictionary<int, string>(),
+					Terms = "",
+					TermsID = 0,
+				};
 			} // try
 
 			m_oLog.Debug("Broker loading CRM details complete.");
 
-			return new StaticDataBrokerForJsonResult(oLookups, oTerms);
+			return new StaticDataBrokerForJsonResult(oResult);
 		} // LoadStaticData
 
 		#endregion action LoadStaticData
@@ -801,11 +779,13 @@
 
 			string sFileName = fid.Trim();
 
+			MarketingFiles oFiles = LoadMarketingFiles(true);
+
 			m_oLog.Debug("Broker download file request: file with id {0}.", sFileName);
 
-			if (m_oFiles.ContainsKey(sFileName)) {
-				FileDescription fd = m_oFiles[sFileName];
+			FileDescription fd = oFiles.Find(sFileName);
 
+			if (fd != null) {
 				string sPath = System.Web.HttpContext.Current.Server.MapPath("~/Areas/Broker/Files/" + fd.FileName);
 
 				m_oLog.Debug("Broker download file request: found file with id {0} of type {1} as {2}.", sFileName, fd.MimeType, sPath);
@@ -875,28 +855,23 @@
 
 		#region method LoadMarketingFiles
 
-		private void LoadMarketingFiles() {
+		private MarketingFiles LoadMarketingFiles(bool bCreateAlphabetical) {
 			m_oLog.Debug("Loading broker marketing files...");
 
-			FileListActionResult flar = null;
+			BrokerStaticDataActionResult flar = null;
 
 			try {
-				flar = m_oServiceClient.Instance.BrokerLoadMarketingFiles();
+				flar = m_oServiceClient.Instance.BrokerLoadStaticData(); // TODO: add argument to retrieve files only
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to load broker marketing files.");
 			} // try
 
-			if (flar != null) {
-				m_oFileList = flar.Files ?? new FileDescription[0];
-
-				m_oFiles.Clear();
-
-				foreach (FileDescription fd in m_oFileList)
-					m_oFiles[fd.FileID] = fd;
-			} // flar
+			var oResult = new MarketingFiles(flar == null ? null : flar.Files, bCreateAlphabetical);
 
 			m_oLog.Debug("Loading broker marketing files complete.");
+
+			return oResult;
 		} // LoadMarketingFiles
 
 		#endregion method LoadMarketingFiles
@@ -1062,20 +1037,26 @@
 
 		public class StaticDataBrokerForJsonResult : BrokerForJsonResult {
 			public StaticDataBrokerForJsonResult(
-				CrmLookupsActionResult oLookups,
-				BrokerTermsActionResult oTerms,
+				BrokerStaticDataActionResult oResult,
 				string sErrorMsg = "",
 				bool? bExplicitSuccess = null
 			) : base(sErrorMsg, bExplicitSuccess) {
-				actions = oLookups.Actions.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value);
+				actions = oResult.Actions.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value);
 
-				statuses = oLookups.Statuses.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value);
+				statuses = oResult.Statuses.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value);
 
 				broker_terms = new Dictionary<string, string>() {
-					{ "id", oTerms.TermsID.ToString() },
-					{ "text", oTerms.Terms },
+					{ "id", oResult.TermsID.ToString() },
+					{ "text", oResult.Terms },
 				};
+
+				max_per_number = oResult.MaxPerNumber;
+				max_per_page = oResult.MaxPerPage;
 			} // constructor
+
+			public virtual int max_per_number { get; private set; }
+
+			public virtual int max_per_page { get; private set; }
 
 			public virtual Dictionary<string, string> actions { get; private set; } // actions
 
@@ -1103,8 +1084,30 @@
 
 		#region downloadable file descriptor
 
-		private SortedDictionary<string, FileDescription> m_oFiles;
-		private FileDescription[] m_oFileList;
+		private class MarketingFiles {
+			public MarketingFiles(FileDescription[] oOrdinalList, bool bCreateAlphabetical) {
+				Ordinal = oOrdinalList ?? new FileDescription[0];
+
+				if (!bCreateAlphabetical)
+					return;
+
+				m_oAlphabetical = new SortedDictionary<string, FileDescription>();
+
+				foreach (FileDescription fd in Ordinal)
+					m_oAlphabetical[fd.FileID] = fd;
+			} // constructor
+
+			public FileDescription[] Ordinal { get; private set; }
+
+			public FileDescription Find(string sKey) {
+				if (m_oAlphabetical == null)
+					return null;
+
+				return m_oAlphabetical.ContainsKey(sKey) ? m_oAlphabetical[sKey] : null;
+			} // Find
+
+			private readonly SortedDictionary<string, FileDescription> m_oAlphabetical;
+		} // class MarketingFiles
 
 		#endregion downloadable file descriptor
 

@@ -1,4 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System;
+	using System.Collections.Generic;
 	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Models;
@@ -33,22 +35,6 @@
 		#endregion async
 
 		#region sync
-
-		#region method BrokerLoadSmsCount
-
-		public BrokerSmsCountActionResult BrokerLoadSmsCount() {
-			BrokerLoadSmsCount oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
-
-			return new BrokerSmsCountActionResult {
-				MetaData = oMetaData,
-				MaxPerNumber = oInstance.MaxPerNumber,
-				MaxPerPage = oInstance.MaxPerPage,
-			};
-		} // BrokerLoadSmsCount
-
-		#endregion method BrokerLoadSmsCount
 
 		#region method IsBroker
 
@@ -342,22 +328,6 @@
 
 		#endregion method BrokerLoadOwnProperties
 
-		#region method BrokerLoadCurrentTerms
-
-		public BrokerTermsActionResult BrokerLoadCurrentTerms() {
-			BrokerLoadCurrentTerms oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
-
-			return new BrokerTermsActionResult {
-				MetaData = oMetaData,
-				Terms = oInstance.Terms,
-				TermsID = oInstance.ID,
-			};
-		} // BrokerLoadCurrentTerms
-
-		#endregion method BrokerLoadCurrentTerms
-
 		#region method BrokerUpdatePassword
 
 		public ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2) {
@@ -373,20 +343,75 @@
 
 		#endregion method BrokerUpdatePassword
 
-		#region method BrokerLoadMarketingFiles
+		#region method BrokerLoadStaticData
 
-		public FileListActionResult BrokerLoadMarketingFiles() {
-			BrokerLoadMarketingFiles oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
-
-			return new FileListActionResult {
-				MetaData = oMetaData,
-				Files = oInstance.Files.ToArray(),
+		public BrokerStaticDataActionResult BrokerLoadStaticData() {
+			var oResult = new BrokerStaticDataActionResult {
+				MaxPerNumber = 3,
+				MaxPerPage = 10,
+				Files = new FileDescription[0],
+				Actions = new SortedDictionary<int, string>(),
+				Statuses = new SortedDictionary<int, string>(),
+				Terms = "",
+				TermsID = 0,
 			};
-		} // BrokerLoadMarketingFiles
 
-		#endregion method BrokerLoadMarketingFiles
+			try {
+				BrokerLoadCurrentTerms oInstance;
+
+				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+
+				if (oMetaData.Status == ActionStatus.Done) {
+					oResult.Terms = oInstance.Terms;
+					oResult.TermsID = oInstance.ID;
+				} // if
+			}
+			catch (Exception e) {
+				Log.Alert(e, "Failed to retrieve terms.");
+			} // try
+
+			try {
+				BrokerLoadMarketingFiles oInstance;
+
+				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+
+				if (oMetaData.Status == ActionStatus.Done)
+					oResult.Files = oInstance.Files.ToArray();
+			}
+			catch (Exception e) {
+				Log.Alert(e, "Failed to retrieve marketing files.");
+			} // try
+
+			try {
+				BrokerLoadSmsCount oInstance;
+
+				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+
+				if (oMetaData.Status == ActionStatus.Done) {
+					oResult.MaxPerNumber = oInstance.MaxPerNumber;
+					oResult.MaxPerPage = oInstance.MaxPerPage;
+				} // if
+			}
+			catch (Exception e) {
+				Log.Alert(e, "Failed to retrieve SMS counts.");
+			} // try
+
+			try {
+				CrmLookupsActionResult oCrm = CrmLoadLookups();
+
+				if (oCrm.MetaData.Status == ActionStatus.Done) {
+					oResult.Actions = oCrm.Actions;
+					oResult.Statuses = oCrm.Statuses;
+				} // if
+			}
+			catch (Exception e) {
+				Log.Alert(e, "Failed to retrieve CRM look up values.");
+			} // try
+
+			return oResult;
+		} // BrokerLoadStaticData
+
+		#endregion method BrokerLoadStaticData
 
 		#endregion sync
 	} // class EzServiceImplementation

@@ -86,16 +86,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ActionResult" nillable="true" type="tns:ActionResult" />
-  <xs:complexType name="IntActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
   <xs:complexType name="DateTimeActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -106,17 +96,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="DateTimeActionResult" nillable="true" type="tns:DateTimeActionResult" />
-  <xs:complexType name="BrokerSmsCountActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="MaxPerNumber" type="xs:int" />
-          <xs:element minOccurs="0" name="MaxPerPage" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BrokerSmsCountActionResult" nillable="true" type="tns:BrokerSmsCountActionResult" />
   <xs:complexType name="BoolActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -202,33 +181,28 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BrokerLeadDetailsActionResult" nillable="true" type="tns:BrokerLeadDetailsActionResult" />
-  <xs:complexType name="BrokerTermsActionResult">
+  <xs:complexType name="BrokerStaticDataActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
+          <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Actions" nillable="true" type="q6:ArrayOfKeyValueOfintstring" />
+          <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q7:ArrayOfFileDescription" />
+          <xs:element minOccurs="0" name="MaxPerNumber" type="xs:int" />
+          <xs:element minOccurs="0" name="MaxPerPage" type="xs:int" />
+          <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Statuses" nillable="true" type="q8:ArrayOfKeyValueOfintstring" />
           <xs:element minOccurs="0" name="Terms" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="TermsID" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="BrokerTermsActionResult" nillable="true" type="tns:BrokerTermsActionResult" />
-  <xs:complexType name="FileListActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q6:ArrayOfFileDescription" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="FileListActionResult" nillable="true" type="tns:FileListActionResult" />
+  <xs:element name="BrokerStaticDataActionResult" nillable="true" type="tns:BrokerStaticDataActionResult" />
   <xs:complexType name="CrmLookupsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Actions" nillable="true" type="q7:ArrayOfKeyValueOfintstring" />
-          <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Statuses" nillable="true" type="q8:ArrayOfKeyValueOfintstring" />
+          <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Actions" nillable="true" type="q9:ArrayOfKeyValueOfintstring" />
+          <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Statuses" nillable="true" type="q10:ArrayOfKeyValueOfintstring" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -239,7 +213,7 @@
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
           <xs:element minOccurs="0" name="HasValue" type="xs:boolean" />
-          <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q9:QuickOfferModel" />
+          <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q11:QuickOfferModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -256,4 +230,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="WizardConfigsActionResult" nillable="true" type="tns:WizardConfigsActionResult" />
+  <xs:complexType name="IntActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
 </xs:schema>

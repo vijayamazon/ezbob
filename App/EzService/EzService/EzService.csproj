@@ -73,11 +73,9 @@
     <Compile Include="ActionResults\BrokerCustomerDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerFilesActionResult.cs" />
     <Compile Include="ActionResults\BrokerLeadDetailsActionResult.cs" />
-    <Compile Include="ActionResults\BrokerSmsCountActionResult.cs" />
     <Compile Include="ActionResults\BrokerPropertiesActionResult.cs" />
-    <Compile Include="ActionResults\BrokerTermsActionResult.cs" />
     <Compile Include="ActionResults\DateTimeActionResult.cs" />
-    <Compile Include="ActionResults\FileListActionResult.cs" />
+    <Compile Include="ActionResults\BrokerStaticDataActionResult.cs" />
     <Compile Include="ActionResults\IntActionResult.cs" />
     <Compile Include="ActionResults\SerializedDataTableActionResult.cs" />
     <Compile Include="ActionResults\StringActionResult.cs" />

@@ -173,6 +173,7 @@
     </Compile>
     <Compile Include="Areas\Broker\BrokerAreaRegistration.cs" />
     <Compile Include="Areas\Broker\Controllers\BrokerHomeController.cs" />
+    <Compile Include="Areas\Broker\Models\BrokerHomeModel.cs" />
     <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
@@ -1400,19 +1401,13 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.WizardConfigsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerSmsCountActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.DateTimeActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerPropertiesActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerTermsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.FileListActionResult.datasource">
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerStaticDataActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Service References\EzServiceReference\Reference.svcmap">
@@ -2092,7 +2087,6 @@
     <Content Include="Views\Account\Recaptcha.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Broker\Models\" />
     <Folder Include="Areas\Broker\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>

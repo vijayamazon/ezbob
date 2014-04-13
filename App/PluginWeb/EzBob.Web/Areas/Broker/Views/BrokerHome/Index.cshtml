@@ -1,21 +1,22 @@
 ﻿@using EzBob.Web.Infrastructure
 @using EzBob.Web.Infrastructure.csrf
-@using Ezbob.Backend.Models
-@using Newtonsoft.Json
 @using SquishIt.Framework
 @using SquishIt.Mvc
-@using ConfigManager
-@using Configuration = Integration.ChannelGrabberConfig.Configuration
-@model dynamic
+@model EzBob.Web.Areas.Broker.Models.BrokerHomeModel
 @{
 	Layout = null;
+
+	Model.RootUrl = Url.Content("~/");
+
+	Model.LogoUrl = Url.Content("~/Content/img/ezbob-logo-2014.png");
+	Model.EuIconUrl = Url.Content("~/Content/img/eu-menu.png");
 }
 <!DOCTYPE html>
 <html>
 <head>
 	@{ Html.RenderPartial("_FrameKiller"); }
 	<script type="text/javascript">
-		window.gRootPath = '@Url.Content("~/")';
+		window.gRootPath = '@Model.RootUrl';
 	</script>
 
 	<title>Broker's home | EZBOB</title>
@@ -59,9 +60,9 @@
 </head>
 
 <body
-	data-auth="@ViewData[Constant.Broker.Auth]"
-	data-msg-on-start="@ViewData[Constant.Broker.MessageOnStart]"
-	data-msg-on-start-severity="@ViewData[Constant.Broker.MessageOnStartSeverity]"
+	data-auth="@Model.Auth"
+	data-msg-on-start="@Model.MessageOnStart"
+	data-msg-on-start-severity="@Model.MessageOnStartSeverity"
 >
 	@Html.AntiForgeryTokenNoUserCheck()
 
@@ -69,12 +70,12 @@
 		<div id="header">
 			<div class="header-inner">
 				<a href="http://www.ezbob.com">
-					<img src="@Url.Content("~/Content/img/ezbob-logo-2014.png")" class="newlogo"></a>
+					<img src="@Model.LogoUrl" class="newlogo"></a>
 
 				<div class="header-phone">0800-011-4787</div>
 
 				<div class="eu-menu">
-					<img src="@Url.Content("~/Content/img/eu-menu.png")"><br>
+					<img src="@Model.EuIconUrl"><br>
 					Authorised by the European Union
 				</div>
 
@@ -196,7 +197,7 @@
 
 						<div id="CaptchaSection" class="form_field_container hide" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
 							<input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0"/>
-							@EzForm.Captcha(CurrentValues.Instance.CaptchaMode.Value, sId: "broker-captcha")
+							@EzForm.Captcha(Model.CaptchaMode, sId: "broker-captcha")
 						</div>
 
 						<div class="form_field_container form-read-and-accept">
@@ -400,11 +401,8 @@
 							<div class="aka-row">
 								<div class="aka-column">
 									<ul>
-										@{
-											var aryFiles = ViewData[Constant.Broker.MarketingFiles] as FileDescription[];
-											foreach (FileDescription fd in aryFiles) {
-												<li>@Html.ActionLink(fd.DisplayName, "DownloadFile", "BrokerHome", new { Area = "Broker", fid = fd.FileID, }, new {})</li>
-											}
+										@foreach (var fd in Model.FileList) {
+											<li>@Html.ActionLink(fd.DisplayName, "DownloadFile", "BrokerHome", new { Area = "Broker", fid = fd.FileID, }, new {})</li>
 										}
 									</ul>
 								</div>
@@ -676,17 +674,14 @@
 			@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
 		</div>
 
-		<div style="display: none;" class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
+		<div style="display: none;" class="hide" id="cg-account-list">@Model.ChannelGrabberAccounts</div>
 		
 		<div style="display: none;" class="hide" id="crm-lookups">
 			<div class="actions crm-lookup" data-field-name="actions">{}</div>
 			<div class="statuses crm-lookup" data-field-name="statuses">{}</div>
 		</div>
 
-		<div style="display: none;" class="hide" id="broker-sms-count"
-			data-max-per-number="@ViewData[Constant.Broker.MaxPerNumber]"
-			data-max-per-page="@ViewData[Constant.Broker.MaxPerPage]"
-		></div>
+		<div style="display: none;" class="hide" id="broker-sms-count" data-max-per-number="@Model.MaxPerNumber" data-max-per-page="@Model.MaxPerPage"></div>
 
 		<div id="broker-terms-and-conditions" title="Terms and Conditions" data-terms-version="0"></div>
 	</div>
@@ -776,9 +771,9 @@
 	<script>
 		var EzBob = EzBob || {};
 		EzBob.LoadedConfig = EzBob.LoadedConfig || {};
-		EzBob.LoadedConfig.PasswordPolicyType = '@CurrentValues.Instance.PasswordPolicyType.Value';
-	    EzBob.LoadedConfig.CaptchaMode = '@CurrentValues.Instance.CaptchaMode.Value';
-	    EzBob.Config.SessionTimeout = @CurrentValues.Instance.SessionTimeout.Value;
+		EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';
+		EzBob.LoadedConfig.CaptchaMode = '@Model.CaptchaMode';
+		EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;
 	</script>
 	<!-- scripts - end -->
 </body>
