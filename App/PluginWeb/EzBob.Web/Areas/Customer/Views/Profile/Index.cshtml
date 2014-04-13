@@ -1,10 +1,10 @@
 ﻿@using EzBob.Web.Infrastructure
 @using StructureMap
+@using ConfigManager
 @model EzBob.Web.Models.WizardModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-    bool taboolaPixelEnabled = config.TaboolaPixelEnabled;
+    bool taboolaPixelEnabled = CurrentValues.Instance.TaboolaPixelEnabled;
     var customer = Model.Customer;
     customer.IsProfile = true;
 }
@@ -24,8 +24,7 @@
                 <div id="message-sign" class=""></div>
                 <h1 style="margin-top: -10px;">My Account</h1>
                 @{
-                    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-                    bool ebayPixelEnabled = config.EbayPixelEnabled;
+                    bool ebayPixelEnabled = CurrentValues.Instance.EbayPixelEnabled;
                     if (ebayPixelEnabled)
                     {
                     <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- orddb %>'?" width="1" height="1" border="0" alt="" />
@@ -327,15 +326,15 @@
 
     <script type="text/javascript">
 
-        EzBob.Config.GetCashSliderStep = @Model.Config.GetCashSliderStep.ToString();
-        EzBob.Config.MinLoan = @Model.Config.MinLoan.ToString();
-        EzBob.Config.XMinLoan = @Model.Config.XMinLoan.ToString();
-        EzBob.Config.PayPalEnabled = @Model.Config.PayPalEnabled.ToString().ToLower();
+        EzBob.Config.GetCashSliderStep = @CurrentValues.Instance.GetCashSliderStep.Value;
+        EzBob.Config.MinLoan = @CurrentValues.Instance.MinLoan.Value;
+        EzBob.Config.XMinLoan = @CurrentValues.Instance.XMinLoan.Value;
+        EzBob.Config.PayPalEnabled = @CurrentValues.Instance.PayPalEnabled.Value.ToLower();
         EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
         EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
         EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
         EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
-        EzBob.Config.CaptchaMode = '@Model.Config.CaptchaMode';
+        EzBob.Config.CaptchaMode = '@CurrentValues.Instance.CaptchaMode.Value';
 
         $(function() {
             @{ string wizardComplete = "false";}
@@ -456,8 +455,7 @@
 
 @helper EbayPixelFinishWizard()
 {
-    //var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-    bool ebayPixelEnabled = false;//config.EbayPixelEnabled;
+    bool ebayPixelEnabled = false;//CurrentValues.Instance.EbayPixelEnabled;
     if (ebayPixelEnabled)
     {
     <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- ordty %>'?" width="1" height="1" border="0" alt="" />

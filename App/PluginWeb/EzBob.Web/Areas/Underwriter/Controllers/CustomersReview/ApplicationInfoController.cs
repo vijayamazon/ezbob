@@ -2,6 +2,7 @@
 	using System.Data;
 	using System.Globalization;
 	using Code.Agreements;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System;
 	using System.Web.Mvc;
@@ -126,7 +127,7 @@
 		public JsonResult ChangeCashRequestOpenCreditLine(long id, double amount) {
 			_limit.Check(amount);
 			var cr = _cashRequestsRepository.Get(id);
-			int step = _config.GetCashSliderStep;
+			int step = CurrentValues.Instance.GetCashSliderStep;
 			cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
 			cr.LoanTemplate = null;
 			_cashRequestsRepository.SaveOrUpdate(cr);

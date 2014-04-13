@@ -107,11 +107,9 @@
 		} // InitOnStart
 
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters) {
-			var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-
 			var underwriterRoles = string.Join(", ", ObjectFactory.GetInstance<IRolesRepository>().GetAll().Where(x => x.Name != "Web").Select(x => x.Name));
 
-			if (config.LandingPageEnabled)
+			if (CurrentValues.Instance.LandingPageEnabled)
 				filters.Add(new WhiteListFilter(), 0);
 
 			filters.Add(new GlobalAreaAuthorizationFilter("Underwriter", underwriterRoles, true), 1);

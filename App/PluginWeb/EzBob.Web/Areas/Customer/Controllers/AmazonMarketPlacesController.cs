@@ -163,7 +163,7 @@
                 _session.Flush();
                 m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, marketplace.Id, true);
 
-                if (_config.AskvilleEnabled)
+				if (CurrentValues.Instance.AskvilleEnabled)
                 {
                     Askville(marketplace.Id, merchantId, marketplaceId);
                 }

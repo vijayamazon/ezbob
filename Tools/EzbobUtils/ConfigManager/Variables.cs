@@ -224,6 +224,26 @@
 		AgreementPdfLoanPath2,
 		AgreementPdfConsentPath1,
 		AgreementPdfConsentPath2,
-		NHibernateEnableProfiler
+		NHibernateEnableProfiler,
+		CheckStoreUniqueness,
+		PostcodeConnectionKey,
+		CaptchaMode,
+		PasswordPolicyType,
+		WizardTopNaviagtionEnabled,
+		LandingPageEnabled,
+		GetCashSliderStep,
+		MinLoan,
+		XMinLoan,
+		ManagerMaxLoan,
+		MaxLoan,
+		AskvilleEnabled,
+		TargetsEnabled,
+		UpdateOnReapplyLastDays,
+		DummyPostcodeSearchResult,
+		DummyAddressSearchResult,
+		EbayPixelEnabled,
+		TradeTrackerPixelEnabled,
+		TaboolaPixelEnabled,
+		PayPalEnabled
 	} // enum Variables
 } // namespace ConfigManager

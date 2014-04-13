@@ -2,6 +2,7 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using Infrastructure.Attributes;
@@ -45,9 +46,11 @@
 			ViewData["Questions"] = _questions.GetAll().ToList();
 			ViewData["Reasons"] = _reasons.GetAll().OrderBy(x => x.Id).ToList();
 			ViewData["Sources"] = _sourcesOfRepayment.GetAll().OrderBy(x => x.Id).ToList();
-			ViewData["CaptchaMode"] = _config.CaptchaMode;
-			ViewData["WizardTopNaviagtionEnabled"] = _config.WizardTopNaviagtionEnabled;
-			ViewData["TargetsEnabled"] = _config.TargetsEnabled;
+			ViewData["CaptchaMode"] = CurrentValues.Instance.CaptchaMode.Value;
+			bool wizardTopNaviagtionEnabled = CurrentValues.Instance.WizardTopNaviagtionEnabled;
+			ViewData["WizardTopNaviagtionEnabled"] = wizardTopNaviagtionEnabled;
+			bool targetsEnabled = CurrentValues.Instance.TargetsEnabled;
+			ViewData["TargetsEnabled"] = targetsEnabled;
 			ViewData["TargetsEnabledEntrepreneur"] = _config.TargetsEnabledEntrepreneur;
 			ViewData[Constant.Config] = _config;
 

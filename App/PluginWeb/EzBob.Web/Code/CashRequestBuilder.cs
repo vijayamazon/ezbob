@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Code {
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EzServiceReference;
 	using System;
@@ -141,7 +142,7 @@
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
 
 			bUpdateMarketplaces = bUpdateMarketplaces && customer.CustomerMarketPlaces.Any(x =>
-				x.UpdatingEnd != null && (DateTime.UtcNow - x.UpdatingEnd.Value).Days > _config.UpdateOnReapplyLastDays
+				x.UpdatingEnd != null && (DateTime.UtcNow - x.UpdatingEnd.Value).Days > CurrentValues.Instance.UpdateOnReapplyLastDays
 			);
 
 			if (bUpdateMarketplaces) {

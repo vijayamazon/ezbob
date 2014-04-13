@@ -1743,6 +1743,104 @@
 			get { return this[Variables.NHibernateEnableProfiler]; }
 		}
 
+		public virtual VariableValue CheckStoreUniqueness
+		{
+			get { return this[Variables.CheckStoreUniqueness]; }
+		}
+
+		public virtual VariableValue PostcodeConnectionKey
+		{
+			get { return this[Variables.PostcodeConnectionKey]; }
+		}
+
+		public virtual VariableValue CaptchaMode
+		{
+			get { return this[Variables.CaptchaMode]; }
+		}
+
+		public virtual VariableValue PasswordPolicyType
+		{
+			get { return this[Variables.PasswordPolicyType]; }
+		}
+
+		public virtual VariableValue WizardTopNaviagtionEnabled
+		{
+			get { return this[Variables.WizardTopNaviagtionEnabled]; }
+		}
+
+		public virtual VariableValue LandingPageEnabled
+		{
+			get { return this[Variables.LandingPageEnabled]; }
+		}
+
+		public virtual VariableValue GetCashSliderStep
+		{
+			get { return this[Variables.GetCashSliderStep]; }
+		}
+
+		public virtual VariableValue MinLoan
+		{
+			get { return this[Variables.MinLoan]; }
+		}
+
+		public virtual VariableValue XMinLoan
+		{
+			get { return this[Variables.XMinLoan]; }
+		}
+
+		public virtual VariableValue ManagerMaxLoan
+		{
+			get { return this[Variables.ManagerMaxLoan]; }
+		}
+
+		public virtual VariableValue MaxLoan
+		{
+			get { return this[Variables.MaxLoan]; }
+		}
+
+		public virtual VariableValue AskvilleEnabled
+		{
+			get { return this[Variables.AskvilleEnabled]; }
+		}
+
+		public virtual VariableValue TargetsEnabled
+		{
+			get { return this[Variables.TargetsEnabled]; }
+		}
+
+		public virtual VariableValue UpdateOnReapplyLastDays
+		{
+			get { return this[Variables.UpdateOnReapplyLastDays]; }
+		}
 		
+		public virtual VariableValue DummyPostcodeSearchResult
+		{
+			get { return this[Variables.DummyPostcodeSearchResult]; }
+		}
+
+		public virtual VariableValue DummyAddressSearchResult
+		{
+			get { return this[Variables.DummyAddressSearchResult]; }
+		}
+
+		public virtual VariableValue EbayPixelEnabled
+		{
+			get { return this[Variables.EbayPixelEnabled]; }
+		}
+
+		public virtual VariableValue TradeTrackerPixelEnabled
+		{
+			get { return this[Variables.TradeTrackerPixelEnabled]; }
+		}
+
+		public virtual VariableValue TaboolaPixelEnabled
+		{
+			get { return this[Variables.TaboolaPixelEnabled]; }
+		}
+
+		public virtual VariableValue PayPalEnabled
+		{
+			get { return this[Variables.PayPalEnabled]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

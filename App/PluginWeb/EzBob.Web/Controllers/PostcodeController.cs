@@ -5,6 +5,7 @@
 	using System.Web.Mvc;
 	using Code;
 	using Code.PostCode;
+	using ConfigManager;
 	using Infrastructure;
 	using Newtonsoft.Json;
 	using log4net;
@@ -13,9 +14,8 @@
 	public class PostcodeController : Controller {
 		#region constructor
 
-		public PostcodeController(IEzbobWorkplaceContext context, IEzBobConfiguration cfg) {
+		public PostcodeController(IEzbobWorkplaceContext context) {
 			m_oContext = context;
-			m_oCfg = cfg;
 		} // constructor
 
 		#endregion constructor
@@ -72,7 +72,7 @@
 
 			string sUrl = string.Format(
 				"http://www.simplylookupadmin.co.uk/JSONservice/{0}.aspx?datakey={1}&{2}={3}",
-				sRequestAction, m_oCfg.PostcodeConnectionKey, sKeyName, sSearchKey
+				sRequestAction, CurrentValues.Instance.PostcodeConnectionKey.Value, sKeyName, sSearchKey
 			);
 
 			ms_oLog.DebugFormat("Postcode service request for user {0}: {1} of type {2} - URL is {3}", nUserID, sSearchKey, oPostCodeResponseType, sUrl);
@@ -144,7 +144,6 @@
 		#endregion method PostToPostcodeService
 
 		private readonly IEzbobWorkplaceContext m_oContext;
-		private readonly IEzBobConfiguration m_oCfg;
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (PostcodeController));
 

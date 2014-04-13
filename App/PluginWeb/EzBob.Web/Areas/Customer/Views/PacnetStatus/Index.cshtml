@@ -1,10 +1,10 @@
 ﻿@using EzBob.Web.Code
 @using EzBob.Web.Infrastructure
 @using StructureMap
+@using ConfigManager
 @{
     ViewBag.Title = "Loan Confirmation: Loan Confirmation | EZBOB";
-    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-    bool ttPixelEnabled = config.TradeTrackerPixelEnabled;
+    bool ttPixelEnabled = CurrentValues.Instance.TradeTrackerPixelEnabled;
 }
 
 @section css {

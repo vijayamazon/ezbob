@@ -35,8 +35,7 @@
             @*
             This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
             @{
-                var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-                bool ebayPixelEnabled = config.EbayPixelEnabled;
+                bool ebayPixelEnabled = CurrentValues.Instance.EbayPixelEnabled;
                 var controller = (string)ViewContext.RouteData.Values["controller"];
 
                 if (ebayPixelEnabled && controller == "Wizard")

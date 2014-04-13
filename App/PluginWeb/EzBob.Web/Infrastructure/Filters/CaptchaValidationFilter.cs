@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Infrastructure.Filters {
 	using System.Web.Mvc;
 	using CaptchaMvc.HtmlHelpers;
+	using ConfigManager;
 	using Recaptcha;
 	using StructureMap;
 	using log4net;
@@ -41,8 +42,10 @@
 
 			if (bSignupSkipCaptcha || bBrokerSignupSkipCaptcha)
 				isValid = true;
-			else {
-				switch (config.CaptchaMode) {
+			else
+			{
+				switch (CurrentValues.Instance.CaptchaMode.Value)
+				{
 				case "off":
 					log.Debug("Captcha off mode");
 					isValid = true;

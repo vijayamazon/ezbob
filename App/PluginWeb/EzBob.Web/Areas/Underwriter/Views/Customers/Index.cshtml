@@ -1,4 +1,5 @@
-﻿@model EzBob.Web.Areas.Underwriter.Models.LoansGrids
+﻿@using ConfigManager
+@model EzBob.Web.Areas.Underwriter.Models.LoansGrids
 @{
     ViewBag.Title = "Underwriter";
 }
@@ -583,9 +584,9 @@
 }
 @section Js{
     <script type="text/javascript">
-        EzBob.Config.MinLoan = @Model.Config.MinLoan;
-        EzBob.Config.MaxLoan = @Model.MaxLoan;
-        EzBob.Config.XMinLoan = @Model.Config.XMinLoan;
+        EzBob.Config.MinLoan = @CurrentValues.Instance.MinLoan.Value;
+        EzBob.Config.MaxLoan = @CurrentValues.Instance.MaxLoan.Value;
+        EzBob.Config.XMinLoan = @CurrentValues.Instance.XMinLoan.Value;
         EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
         EzBob.Config.PacnetBalanceMaxManualChange = @Model.Config.PacnetBalanceMaxManualChange;
         EzBob.Underwriter.StaticData = {};

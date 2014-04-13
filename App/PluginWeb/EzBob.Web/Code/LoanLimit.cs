@@ -2,18 +2,16 @@
 {
 	using System;
 	using System.Linq;
-	using Infrastructure;
+	using ConfigManager;
 	using NHibernateWrapper.Web;
 
     public class LoanLimit
     {
         private readonly IWorkplaceContext _context;
-        private readonly IEzBobConfiguration _config;
 
-        public LoanLimit(IWorkplaceContext context, IEzBobConfiguration config)
+        public LoanLimit(IWorkplaceContext context)
         {
             _context = context;
-            _config = config;
         }
 
         public void Check(double amount)
@@ -22,9 +20,10 @@
         }
         public void Check(decimal amount)
         {
-            if (amount < 0 || amount < _config.XMinLoan || amount > GetMaxLimit())
+	        int xMinLoan = CurrentValues.Instance.XMinLoan;
+			if (amount < 0 || amount < xMinLoan || amount > GetMaxLimit())
             {
-                throw new ArgumentException(string.Format("Amount is more then {0} or less then {1}", GetMaxLimit(), _config.XMinLoan));
+				throw new ArgumentException(string.Format("Amount is more then {0} or less then {1}", GetMaxLimit(), xMinLoan));
             }
         }
 
@@ -32,9 +31,9 @@
         {
             if (_context.User.Roles.Any(r => r.Name == "manager"))
             {
-                return _config.ManagerMaxLoan;
+                return CurrentValues.Instance.ManagerMaxLoan;
             }
-            return _config.MaxLoan;
+			return CurrentValues.Instance.MaxLoan;
         }
     }
 }

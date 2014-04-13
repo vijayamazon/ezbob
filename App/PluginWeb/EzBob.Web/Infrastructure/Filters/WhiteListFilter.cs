@@ -1,17 +1,16 @@
-﻿using System;
-using System.Web.Mvc;
-using System.Web.Routing;
-using EzBob.Web.Models;
-using NHibernate;
-using StructureMap;
-
-namespace EzBob.Web.Infrastructure.Filters
+﻿namespace EzBob.Web.Infrastructure.Filters
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+	using System;
+	using System.Web.Mvc;
+	using System.Web.Routing;
+	using Models;
+	using NHibernate;
+	using StructureMap;
+	using ConfigManager;
+
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
     public class WhiteListFilter : FilterAttribute, IAuthorizationFilter
     {
-        private const string WhiteList = "Landing"; 
-
         public virtual void OnAuthorization(AuthorizationContext filterContext)
         {
 
@@ -20,8 +19,7 @@ namespace EzBob.Web.Infrastructure.Filters
                 throw new ArgumentNullException("filterContext");
             }
 
-            var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-            if (!config.LandingPageEnabled) return;
+            if (!CurrentValues.Instance.LandingPageEnabled) return;
 
             HandleWhiteListRequest(filterContext);
         }

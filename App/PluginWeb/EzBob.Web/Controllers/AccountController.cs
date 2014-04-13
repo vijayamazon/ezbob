@@ -10,6 +10,7 @@ namespace EzBob.Web.Controllers {
 	using ApplicationMng.Model;
 	using ApplicationMng.Repository;
 	using Areas.Customer.Controllers.Exceptions;
+	using ConfigManager;
 	using DbConstants;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
@@ -44,7 +45,6 @@ namespace EzBob.Web.Controllers {
 		private readonly IUsersRepository _users;
 		private readonly CustomerRepository _customers;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly IEzBobConfiguration _config;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IEmailConfirmation _confirmation;
 		private readonly ICustomerSessionsRepository _sessionIpLog;
@@ -62,7 +62,6 @@ namespace EzBob.Web.Controllers {
 			_users = ObjectFactory.GetInstance<IUsersRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
 			m_oServiceClient = new ServiceClient();
-			_config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 			_context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
 			_confirmation = ObjectFactory.GetInstance<IEmailConfirmation>();
 			_sessionIpLog = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
@@ -374,7 +373,7 @@ namespace EzBob.Web.Controllers {
 			if (!string.Equals(signupPass1, signupPass2))
 				throw new Exception(DbStrings.PasswordDoesNotMatch);
 
-			var maxPassLength = _config.PasswordPolicyType == "hard" ? 7 : 6;
+			var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
 			if (signupPass1.Length < maxPassLength)
 				throw new Exception(DbStrings.NotValidEmailAddress);
 
@@ -477,7 +476,7 @@ namespace EzBob.Web.Controllers {
 
 		//------------------------------------------------------------------------        
 		public ActionResult ForgotPassword() {
-			ViewData["CaptchaMode"] = _config.CaptchaMode;
+			ViewData["CaptchaMode"] = CurrentValues.Instance.CaptchaMode.Value;
 			return View("ForgotPassword");
 		}
 

@@ -4,6 +4,7 @@
 @using Newtonsoft.Json
 @using SquishIt.Framework
 @using SquishIt.Mvc
+@using ConfigManager
 @using Configuration = Integration.ChannelGrabberConfig.Configuration
 @model dynamic
 @{
@@ -196,7 +197,7 @@
 
 						<div id="CaptchaSection" class="form_field_container hide" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
 							<input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0"/>
-							@EzForm.Captcha(config.CaptchaMode, sId: "broker-captcha")
+							@EzForm.Captcha(CurrentValues.Instance.CaptchaMode.Value, sId: "broker-captcha")
 						</div>
 
 						<div class="form_field_container form-read-and-accept">
@@ -783,8 +784,8 @@
 	<script>
 		var EzBob = EzBob || {};
 		EzBob.LoadedConfig = EzBob.LoadedConfig || {};
-		EzBob.LoadedConfig.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
-	    EzBob.LoadedConfig.CaptchaMode = '@config.CaptchaMode';
+		EzBob.LoadedConfig.PasswordPolicyType = '@CurrentValues.Instance.PasswordPolicyType.Value';
+	    EzBob.LoadedConfig.CaptchaMode = '@CurrentValues.Instance.CaptchaMode.Value';
 	    EzBob.Config.SessionTimeout = @config.SessionTimeout;
 	</script>
 	<!-- scripts - end -->

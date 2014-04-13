@@ -2,6 +2,7 @@
 @using EZBob.DatabaseLib.Model.Database
 @using EzBob.Web.Infrastructure
 @using StructureMap
+@using ConfigManager
 @*Renders select*@
 @helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
 {
@@ -263,8 +264,6 @@
 
 @helper AddressInput(string name, string title, string sUiEventControlID, string css = "")
 {
-    var oCfg = ObjectFactory.GetInstance<IEzBobConfiguration>();
-
 	sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;
 
     var identificator = new HtmlString(name);
@@ -272,10 +271,10 @@
     HtmlString oByPostcode = null;
     HtmlString oById = null;
 
-    if ((oCfg.DummyPostcodeSearchResult != string.Empty) && (oCfg.DummyAddressSearchResult != string.Empty))
+    if ((CurrentValues.Instance.DummyPostcodeSearchResult.Value != string.Empty) && (CurrentValues.Instance.DummyAddressSearchResult.Value != string.Empty))
     {
-        oByPostcode = new HtmlString(oCfg.DummyPostcodeSearchResult);
-        oById = new HtmlString(oCfg.DummyAddressSearchResult);
+        oByPostcode = new HtmlString(CurrentValues.Instance.DummyPostcodeSearchResult.Value);
+        oById = new HtmlString(CurrentValues.Instance.DummyAddressSearchResult.Value);
     } // if
 
     <div class="control-group form_field_container @css">

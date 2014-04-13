@@ -1,12 +1,13 @@
 ﻿@using EzBob.Web.Infrastructure
 @using NHibernateWrapper.NHibernate.Model
 @using StructureMap
+@using ConfigManager
 @model dynamic
 @{
 	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
 	var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-	string captchamode = config.CaptchaMode;
-	bool ebayPixelEnabled = config.EbayPixelEnabled;
+	string captchamode = CurrentValues.Instance.CaptchaMode;
+    bool ebayPixelEnabled = CurrentValues.Instance.EbayPixelEnabled;
 	bool instructionsEnabled = config.WizardInstructionsEnabled;
 	var bml = new WizardBrokerLeadModel(Session);
 	var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;

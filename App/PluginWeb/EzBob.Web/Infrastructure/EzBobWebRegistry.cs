@@ -84,7 +84,7 @@ namespace EzBob.Web.Infrastructure
 				For<ICustomerNameValidator>().Use<FakeCustomerNameValidator>();
 			}
 
-			if (ezBobConfiguration.CheckStoreUniqueness)
+			if (CurrentValues.Instance.CheckStoreUniqueness)
 			{
 				For<IMPUniqChecker>().Use<MPUniqChecker>();
 			}

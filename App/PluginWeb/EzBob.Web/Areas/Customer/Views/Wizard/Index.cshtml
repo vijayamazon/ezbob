@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using ConfigManager
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
 @using EzBob.Web.Areas.Customer.Models
@@ -52,14 +53,14 @@
 
         SetCaptchaMode();
 
-        EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
+        EzBob.Config.WizardTopNaviagtionEnabled = @CurrentValues.Instance.WizardTopNaviagtionEnabled.Value.ToLower(CultureInfo.InvariantCulture);
 
         EzBob.Config.TargetsEnabled = @ViewData["TargetsEnabled"].ToString().ToLower(CultureInfo.InvariantCulture);
 
         EzBob.Config.TargetsEnabledEntrepreneur = @ViewData["TargetsEnabledEntrepreneur"].ToString().ToLower(CultureInfo.InvariantCulture);
 
-        EzBob.Config.PayPalEnabled = @config.PayPalEnabled.ToString().ToLower();
-        EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
+        EzBob.Config.PayPalEnabled = @CurrentValues.Instance.PayPalEnabled.Value.ToLower(CultureInfo.InvariantCulture);
+        EzBob.Config.PasswordPolicyType = '@CurrentValues.Instance.PasswordPolicyType.Value.ToLower(CultureInfo.InvariantCulture)';
 
         $(function() {
             var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer));
