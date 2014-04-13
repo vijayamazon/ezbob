@@ -1449,7 +1449,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_ApprovalSettings.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_AutomationSettings.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_RejectionSettings.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\google_conversion.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_CustomerRelations.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\AddCustomerRelationsEntry.cshtml" />
     <Content Include="Areas\Customer\Views\SageMarketPlaces\SageCallback.cshtml" />
@@ -1656,10 +1655,8 @@
     <Content Include="Views\ConfirmEmail\ConfirmationError.cshtml" />
     <Content Include="Views\Shared\_FeaturedIn.cshtml" />
     <Content Include="Views\Shared\_OnlineSellers.cshtml" />
-    <Content Include="Views\Shared\_GetSatisfaction.cshtml" />
     <Content Include="Views\Shared\_LivePerson.cshtml" />
     <Content Include="Views\Shared\security_template.cshtml" />
-    <Content Include="Views\Shared\_NanoRep.cshtml" />
     <Content Include="Views\Shared\_NanoRepSupport.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_NanoRepSideBar.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
@@ -2083,13 +2080,10 @@
     <Content Include="Views\Account\AdminLogOn.cshtml" />
     <Content Include="Views\Home\ActivateStore.cshtml" />
     <Content Include="Views\Account\SimpleCaptcha.cshtml" />
-    <Content Include="Views\Shared\_ClickTale.cshtml" />
-    <Content Include="Views\Shared\_GoogleAnalytics.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Shared\_Truste.cshtml" />
     <Content Include="Views\Shared\_FavIcon.cshtml" />
     <None Include="Properties\PublishProfiles\EzBob.Release.pubxml" />
-    <Content Include="Views\Shared\_AddRoll.cshtml" />
     <Content Include="Views\Shared\_StaticPageLayout.cshtml" />
     <None Include="Properties\PublishProfiles\EzBob.Test.pubxml" />
     <Content Include="Views\PaypointTemplate\Index.cshtml" />
