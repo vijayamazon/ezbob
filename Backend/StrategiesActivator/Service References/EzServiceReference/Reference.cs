@@ -184,6 +184,7 @@ namespace StrategiesActivator.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.DateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerSmsCountActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BoolActionResult))]
@@ -199,7 +200,6 @@ namespace StrategiesActivator.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.WizardConfigsActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.SerializedDataTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -239,6 +239,29 @@ namespace StrategiesActivator.EzServiceReference {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="IntActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class IntActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
             }
         }
     }
@@ -743,29 +766,6 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
                     this.NumberOfMobileCodeAttemptsField = value;
                     this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="IntActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class IntActionResult : StrategiesActivator.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((this.ValueField.Equals(value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
                 }
             }
         }
@@ -3463,6 +3463,12 @@ namespace StrategiesActivator.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval", ReplyAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse")]
+        StrategiesActivator.EzServiceReference.IntActionResult GetCustomerStatusRefreshInterval();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval", ReplyAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.IntActionResult> GetCustomerStatusRefreshIntervalAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CreateUnderwriter", ReplyAction="http://tempuri.org/IEzService/CreateUnderwriterResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role);
         
@@ -3817,6 +3823,12 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerForceResetCustomerPassword", ReplyAction="http://tempuri.org/IEzService/BrokerForceResetCustomerPasswordResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerForceResetCustomerPasswordAsync(int nUserID, int nCustomerID, string sNewPassword);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/NotifySalesOnNewCustomer", ReplyAction="http://tempuri.org/IEzService/NotifySalesOnNewCustomerResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData NotifySalesOnNewCustomer(int nCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/NotifySalesOnNewCustomer", ReplyAction="http://tempuri.org/IEzService/NotifySalesOnNewCustomerResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> NotifySalesOnNewCustomerAsync(int nCustomerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId, bool forceCheck);
         
@@ -3984,12 +3996,6 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerState", ReplyAction="http://tempuri.org/IEzService/GetCustomerStateResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> GetCustomerStateAsync(int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval", ReplyAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse")]
-        StrategiesActivator.EzServiceReference.IntActionResult GetCustomerStatusRefreshInterval();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval", ReplyAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.IntActionResult> GetCustomerStatusRefreshIntervalAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -4017,6 +4023,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public StrategiesActivator.EzServiceReference.IntActionResult GetCustomerStatusRefreshInterval() {
+            return base.Channel.GetCustomerStatusRefreshInterval();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.IntActionResult> GetCustomerStatusRefreshIntervalAsync() {
+            return base.Channel.GetCustomerStatusRefreshIntervalAsync();
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role) {
@@ -4491,6 +4505,14 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.BrokerForceResetCustomerPasswordAsync(nUserID, nCustomerID, sNewPassword);
         }
         
+        public StrategiesActivator.EzServiceReference.ActionMetaData NotifySalesOnNewCustomer(int nCustomerID) {
+            return base.Channel.NotifySalesOnNewCustomer(nCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> NotifySalesOnNewCustomerAsync(int nCustomerID) {
+            return base.Channel.NotifySalesOnNewCustomerAsync(nCustomerID);
+        }
+        
         public StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId, bool forceCheck) {
             return base.Channel.CheckExperianCompany(customerId, forceCheck);
         }
@@ -4713,14 +4735,6 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> GetCustomerStateAsync(int customerId) {
             return base.Channel.GetCustomerStateAsync(customerId);
-        }
-        
-        public StrategiesActivator.EzServiceReference.IntActionResult GetCustomerStatusRefreshInterval() {
-            return base.Channel.GetCustomerStatusRefreshInterval();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.IntActionResult> GetCustomerStatusRefreshIntervalAsync() {
-            return base.Channel.GetCustomerStatusRefreshIntervalAsync();
         }
     }
 }

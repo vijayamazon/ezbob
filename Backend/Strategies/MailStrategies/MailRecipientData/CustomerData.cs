@@ -7,26 +7,28 @@
 		#region method Load
 
 		public virtual void Load(int customerId, AConnection oDb) {
-			DataTable dt = oDb.ExecuteReader(
+			oDb.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					Id = sr["Id"];
+					FirstName = sr["FirstName"];
+					Surname = sr["Surname"];
+					FullName = sr["FullName"];
+					Mail = sr["Mail"];
+					IsOffline = sr["IsOffline"];
+					NumOfLoans = sr["NumOfLoans"];
+					RefNum = sr["RefNum"];
+					MobilePhone = sr["MobilePhone"];
+					DaytimePhone = sr["DaytimePhone"];
+
+					return ActionResult.SkipAll;
+				},
 				"GetBasicCustomerData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			Id = customerId;
-
-			if (dt.Rows.Count != 1)
+			if (Id != customerId)
 				throw new Exception("Failed to find a customer by id " + customerId);
-
-			var sr = new SafeReader(dt.Rows[0]);
-
-			FirstName = sr["FirstName"];
-			Surname = sr["Surname"];
-			FullName = sr["FullName"];
-			Mail = sr["Mail"];
-			IsOffline = sr["IsOffline"];
-			NumOfLoans = sr["NumOfLoans"];
-			RefNum = sr["RefNum"];
 		} // Load
 
 		#endregion method Load
@@ -58,6 +60,8 @@
 		public virtual bool IsOffline { get; protected set; }
 		public virtual int NumOfLoans { get; protected set; }
 		public virtual string RefNum { get; protected set; }
+		public virtual string MobilePhone { get; protected set; }
+		public virtual string DaytimePhone { get; protected set; }
 
 		#endregion properties
 	} // class CustomerData

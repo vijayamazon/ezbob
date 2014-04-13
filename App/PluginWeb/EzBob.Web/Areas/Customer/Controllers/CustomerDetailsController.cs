@@ -326,6 +326,15 @@
 			_session.Flush();
 			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
 
+			if (!customer.IsTest) {
+				try {
+					m_oServiceClient.Instance.NotifySalesOnNewCustomer(customer.Id);
+				}
+				catch (Exception e) {
+					ms_oLog.Error("Something went pretty not so excellent while sending notification to sales.", e);
+				} // try
+			} // if
+
 			return Json(new { });
 		} // Save
 

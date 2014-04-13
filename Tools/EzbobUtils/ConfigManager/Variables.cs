@@ -90,6 +90,7 @@
 		ExperianUIdCertificateThumb,
 		EzbobMailCc,
 		EzbobMailTo,
+		EzServiceUpdateConfiguration,
 		FinancialAccounts_AliasOfJointApplicant,
 		FinancialAccounts_AliasOfMainApplicant,
 		FinancialAccounts_AssociationOfJointApplicant,
@@ -180,6 +181,7 @@
 		SagePurchaseInvoicesRequest,
 		SageRequestForDatesPart,
 		SageSalesInvoicesRequest,
+		SalesEmail,
 		SetupFeeEnabled,
 		SetupFeeFixed,
 		SetupFeeMaxFixedPercent,
@@ -207,6 +209,7 @@
 		UseNewUpdateMpStrategy,
 		VerboseConfigurationLogging,
 		YodleeAccountPrefix,
+
 		AmazonEnableRetrying,
 		AmazonMinorTimeoutInSeconds,
 		AmazonUseLastTimeOut,

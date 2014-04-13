@@ -60,12 +60,56 @@
 		public virtual VariableValue this[Variables nIdx] {
 			get {
 				lock (ms_oInstanceLock) {
-					return m_oData.ContainsKey(nIdx) ? m_oData[nIdx] : null;
+					if (m_nRefreshIntervalMinutes > 0) {
+						double nAge = (DateTime.UtcNow - m_oLastReloadTime).TotalMinutes;
+
+						if (nAge > int.MaxValue)
+							ReLoad();
+						else if (nAge > m_nRefreshIntervalMinutes)
+							ReLoad();
+					} // if
+
+					if (m_oData.ContainsKey(nIdx))
+						return m_oData[nIdx];
+
+					return m_oDefaults.ContainsKey(nIdx) ? m_oDefaults[nIdx] : null;
 				} // lock
 			} // get
 		} // indexer
 
 		#endregion indexer
+
+		#region property RefreshIntervalMinutes
+
+		public virtual int RefreshIntervalMinutes {
+			get {
+				lock (ms_oInstanceLock) {
+					return m_nRefreshIntervalMinutes;
+				} // lock
+			} // get
+
+			set {
+				lock (ms_oInstanceLock) {
+					m_nRefreshIntervalMinutes = Math.Max(0, value);
+				} // lock
+			} // set
+		} // RefreshIntervalMinutes
+
+		private int m_nRefreshIntervalMinutes;
+
+		#endregion property RefreshInterval
+
+		#region method SetDefault
+
+		public virtual CurrentValues SetDefault(Variables nName, object oValue) {
+			lock (ms_oInstanceLock) {
+				m_oDefaults[nName] = new VariableValue(nName, (oValue ?? "").ToString(), Log);
+			} // lock
+
+			return this;
+		} // SetDefault
+
+		#endregion method SetDefault
 
 		#endregion public
 
@@ -74,7 +118,9 @@
 		#region constructor
 
 		protected CurrentValues(AConnection oDB, ASafeLog oLog) {
+			m_nRefreshIntervalMinutes = 0;
 			m_oData = new SortedDictionary<Variables, VariableValue>();
+			m_oDefaults = new SortedDictionary<Variables, VariableValue>();
 
 			DB = oDB;
 			Log = new SafeLog(oLog);
@@ -104,6 +150,7 @@
 			);
 
 			VariableValue.LogVerbosityLevel = VerboseConfigurationLogging ? LogVerbosityLevel.Verbose : LogVerbosityLevel.Compact;
+			m_oLastReloadTime = DateTime.UtcNow;
 		} // ReLoad
 
 		#endregion method ReLoad
@@ -125,6 +172,9 @@
 		#region private
 
 		private readonly SortedDictionary<Variables, VariableValue> m_oData;
+		private readonly SortedDictionary<Variables, VariableValue> m_oDefaults;
+
+		private DateTime m_oLastReloadTime;
 
 		private static CurrentValues ms_oInstance;
 		private static readonly object ms_oInstanceLock;

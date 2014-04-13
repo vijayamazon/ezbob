@@ -2,12 +2,22 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	using EzBob.Backend.Strategies.MailStrategies.API;
 
 	public abstract class AMailStrategyBase : AStrategy {
+		#region static constructor
+
+		static AMailStrategyBase() {
+			ms_oLock = new object();
+			ms_bDefaultsAreReady = false;
+		} // static constructor
+
+		#endregion static constructor
+
 		#region public
 
 		#region method Execute
@@ -52,6 +62,8 @@
 		#region constructor
 
 		protected AMailStrategyBase(int customerId, bool bSendToCustomer, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			InitDefaults(); // should not be moved to static constructor
+
 			m_oMailer = new StrategiesMailer(DB, Log);
 
 			CustomerId = customerId;
@@ -101,12 +113,9 @@
 
 		protected virtual string CustomerSite {
 			get {
-				m_sCustomerSite = LoadCfgValue(m_sCustomerSite, "CustomerSite", "https://app.ezbob.com");
-				return m_sCustomerSite;
+				return RemoveLastSlash(CurrentValues.Instance.CustomerSite);
 			} // get
 		} // CustomerSite
-
-		private string m_sCustomerSite;
 
 		#endregion property CustomerSite
 
@@ -114,14 +123,21 @@
 
 		protected virtual string BrokerSite {
 			get {
-				m_sBrokerSite = LoadCfgValue(m_sBrokerSite, "BrokerSite", "https://app.ezbob.com/Broker");
-				return m_sBrokerSite;
+				return RemoveLastSlash(CurrentValues.Instance.BrokerSite);
 			} // get
-		} // CustomerSite
+		} // BrokerSite
 
-		private string m_sBrokerSite;
+		#endregion property BrokerSite
 
-		#endregion property CustomerSite
+		#region property UnderwriterSite
+
+		protected virtual string UnderwriterSite {
+			get {
+				return RemoveLastSlash(CurrentValues.Instance.UnderwriterSite);
+			} // get
+		} // UnderwriterSite
+
+		#endregion property UnderwriterSite
 
 		#region properties
 
@@ -133,42 +149,46 @@
 
 		#endregion properties
 
-		#region method LoadCfgValue
-
-		protected virtual string LoadCfgValue(string sCurrentValue, string sName, string sDefault, bool bRemoveLastSlash = true) {
-			if (!string.IsNullOrWhiteSpace(sCurrentValue))
-				return sCurrentValue;
-
-			string sResult = string.Empty;
-
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					sResult = ((string)sr["Value"] ?? string.Empty).Trim();
-					return ActionResult.SkipAll;
-				},
-				"LoadConfigurationVariable",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CfgVarName", sName)
-			);
-
-			if (string.IsNullOrWhiteSpace(sResult))
-				sResult = sDefault;
-
-			if (bRemoveLastSlash)
-				while (sResult.EndsWith("/"))
-					sResult = sResult.Substring(0, sResult.Length - 1);
-
-			return sResult;
-		} // LoadCfgValue
-
-		#endregion method LoadCfgValue
-
 		#endregion protected
 
 		#region private
 
 		private readonly StrategiesMailer m_oMailer;
 		private readonly bool m_bSendToCustomer;
+
+		private static readonly object ms_oLock;
+		private static bool ms_bDefaultsAreReady;
+
+		#region method RemoveLastSlash
+
+		private string RemoveLastSlash(string sResult) {
+			while (sResult.EndsWith("/"))
+				sResult = sResult.Substring(0, sResult.Length - 1);
+
+			return sResult;
+		} // RemoveLastSlash
+
+		#endregion method RemoveLastSlash
+
+		#region method InitDefaults
+
+		private static void InitDefaults() {
+			if (ms_bDefaultsAreReady)
+				return;
+
+			lock (ms_oLock) {
+				if (ms_bDefaultsAreReady)
+					return;
+
+				CurrentValues.Instance
+					.SetDefault(ConfigManager.Variables.CustomerSite, "https://app.ezbob.com")
+					.SetDefault(ConfigManager.Variables.BrokerSite, "https://app.ezbob.com/Broker");
+
+				ms_bDefaultsAreReady = true;
+			} // lock
+		} // InitDefaults
+
+		#endregion method InitDefaults
 
 		#endregion private
 	} // class MailStrategyBase

@@ -96,6 +96,10 @@
 			return Execute<BrokerForceResetCustomerPassword>(nCustomerID, nUserID, nCustomerID, sNewPassword);
 		} // BrokerForceResetCustomerPassword
 
+		public ActionMetaData NotifySalesOnNewCustomer(int nCustomerID) {
+			return Execute<NotifySalesOnNewCustomer>(nCustomerID, null, nCustomerID);
+		} // NotifySalesOnNewCustomer
+
 		#endregion async
 
 		#region sync

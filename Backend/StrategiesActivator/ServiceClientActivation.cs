@@ -21,7 +21,7 @@
 
 			InitMethods();
 
-			string sInstanceName = args[0];
+			string sInstanceName = args[0].ToLower();
 
 			if (sInstanceName.ToLower() == "list") {
 				ListSupported();
@@ -689,6 +689,18 @@ crm:           CRM");
 			foreach (var oEntry in res.Customers)
 				m_oLog.Msg("Customer ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);
 		} // BrokerLoadCustomerList
+
+		[Activation]
+		private void NotifySalesOnNewCustomer() {
+			int nCustomerID = 0;
+
+			if ((args.Length != 2) || !int.TryParse(args[1], out nCustomerID)) {
+				m_oLog.Msg("Usage: NotifySalesOnNewCustomer <customer id>");
+				return;
+			} // if
+
+			serviceClient.NotifySalesOnNewCustomer(nCustomerID);
+		} // NotifySalesOnNewCustomer
 
 		[Activation]
 		private void ListActiveActions() {

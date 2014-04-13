@@ -2,7 +2,6 @@
 	using System;
 	using System.Diagnostics;
 	using System.IO;
-	using System.Net;
 	using System.Reflection;
 	using System.Text;
 	using System.Threading;
@@ -14,7 +13,6 @@
 	using EzBob.PayPal;
 	using EzBob.eBayLib;
 	using EzService;
-	using Ezbob.Context;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using FreeAgent;
@@ -33,7 +31,6 @@
 	using EzBob.Configuration;
 	using EzServiceConfigurationLoader;
 	using ActionResult = Ezbob.Database.ActionResult;
-	using Environment = System.Environment;
 
 	public class Program : IHost {
 		#region public
@@ -207,6 +204,9 @@
 				InstanceName = m_sInstanceName,
 				InstanceID = m_oCfg.InstanceID
 			});
+
+			CurrentValues.Init(m_oDB, m_oLog);
+			CurrentValues.Instance.RefreshIntervalMinutes = CurrentValues.Instance.EzServiceUpdateConfiguration;
 
 			return true;
 		} // Init

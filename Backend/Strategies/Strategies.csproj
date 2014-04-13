@@ -123,6 +123,7 @@
     <Compile Include="MailStrategies\Broker\BrokerPasswordRestored.cs" />
     <Compile Include="MailStrategies\Broker\BrokerLeadSendInvitation.cs" />
     <Compile Include="MailStrategies\MailRecipientData\BrokerLeadData.cs" />
+    <Compile Include="MailStrategies\NotifySalesOnNewCustomer.cs" />
     <Compile Include="Postcode\PostcodeSaveLog.cs" />
     <Compile Include="QuickOffer\QuickOffer.cs" />
     <Compile Include="QuickOffer\QuickOfferData.cs" />
@@ -293,6 +294,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
       <Name>Barrymore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>

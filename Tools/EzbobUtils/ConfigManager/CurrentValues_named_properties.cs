@@ -720,6 +720,14 @@
 
 		#endregion property EzbobMailTo
 
+		#region property EzServiceUpdateConfiguration
+
+		public virtual VariableValue EzServiceUpdateConfiguration {
+			get { return this[Variables.EzServiceUpdateConfiguration]; } // get
+		} // EzServiceUpdateConfiguration
+
+		#endregion property EzServiceUpdateConfiguration
+
 		#region property FinancialAccounts_AliasOfJointApplicant
 
 		public virtual VariableValue FinancialAccounts_AliasOfJointApplicant {
@@ -1439,6 +1447,14 @@
 		} // SageSalesInvoicesRequest
 
 		#endregion property SageSalesInvoicesRequest
+
+		#region property SalesEmail
+
+		public virtual VariableValue SalesEmail {
+			get { return this[Variables.SalesEmail]; } // get
+		} // SalesEmail
+
+		#endregion property SalesEmail
 
 		#region property SetupFeeEnabled
 

@@ -1,16 +1,12 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetBasicCustomerData]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetBasicCustomerData]
+IF OBJECT_ID('GetBasicCustomerData') IS NULL
+	EXECUTE('CREATE PROCEDURE GetBasicCustomerData AS SELECT 1')
 GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetBasicCustomerData] 
-	(@CustomerId INT)
+
+ALTER PROCEDURE GetBasicCustomerData
+@CustomerId INT
 AS
 BEGIN
-	DECLARE 
-		@NumOfLoans INT
+	DECLARE @NumOfLoans INT
 
 	SELECT 
 		@NumOfLoans = count(1) 
@@ -20,13 +16,16 @@ BEGIN
 		CustomerId = @CustomerId
 		
 	SELECT
+		Id,
 		FirstName,
 		Surname,
 		Fullname,
 		Name AS Mail,
 		IsOffline,
 		@NumOfLoans AS NumOfLoans,
-		RefNumber
+		RefNumber,
+		MobilePhone,
+		DaytimePhone
 	FROM
 		Customer
 	WHERE
