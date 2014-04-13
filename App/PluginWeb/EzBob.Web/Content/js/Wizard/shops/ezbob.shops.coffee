@@ -104,7 +104,7 @@ class EzBob.StoreInfoView extends Backbone.View
 
         xhr.done ->
             EzBob.App.trigger 'clear'
-            EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile#GetCash', 'Wizard Complete', 'Go To account', 'Quick Offer Taken')
+            setTimeout((-> window.location = window.gRootPath + 'Customer/Profile#GetCash'), 500)
 
         false
     # end of takeQuickOffer
@@ -470,7 +470,7 @@ class EzBob.StoreInfoView extends Backbone.View
         xhr = $.post window.gRootPath + 'CustomerDetails/LinkAccountsComplete'
         xhr.done ->
             EzBob.App.trigger "clear"
-            EzBob.App.GA.trackEventReditect(window.gRootPath + 'CustomerDetails/Dashboard', 'Wizard Complete', 'Go To account', 'Awaiting Approval')
+            setTimeout((-> window.location = window.gRootPath + 'CustomerDetails/Dashboard'), 500)
         xhr.error ->
             setTimeout((-> BlockUi 'off'), 500)
         false

@@ -1,10 +1,8 @@
 ﻿@using EzBob.Web.Infrastructure
-@using StructureMap
 @using ConfigManager
 @model EzBob.Web.Models.WizardModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    bool taboolaPixelEnabled = CurrentValues.Instance.TaboolaPixelEnabled;
     var customer = Model.Customer;
     customer.IsProfile = true;
 }
@@ -23,13 +21,6 @@
             <div class="profile-headlines">
                 <div id="message-sign" class=""></div>
                 <h1 style="margin-top: -10px;">My Account</h1>
-                @{
-                    bool ebayPixelEnabled = CurrentValues.Instance.EbayPixelEnabled;
-                    if (ebayPixelEnabled)
-                    {
-                    <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- orddb %>'?" width="1" height="1" border="0" alt="" />
-                    }
-                }
                 <div class="proccessing-message"></div>
             </div>
             <div class="whats-new-main notification_lightblue" style="display: none">
@@ -395,23 +386,6 @@
 
 }
 
-@section head
-{
-    @if (taboolaPixelEnabled)
-    {
-        @TaboolaPixel()
-    }
-}
-
-@helper TaboolaPixel()
-{
-    <script>
-        window._tfa = window._tfa || [];
-        _tfa.push({ notify: "action", name: " successful_ conversion" });
-    </script>
-    <script src="//cdn.taboola.com/libtrc/ezbobsc/tfa.js"></script>
-}
-
 <div class="hide">
     <div id="thankyou_help" class="help_window">
         <h2 class="form_section">Your application is complete!</h2>
@@ -446,18 +420,6 @@
             <button onclick="javascript:$.colorbox.close(); return false;" class="button orange pull-right" ui-event-control-id="profile:thank-you-popup">Continue</button>
         </div>
         <div class="clear"></div>
-        @EbayPixelFinishWizard()
-        <div style="display: block; height: 5px;">
-            <img height="1" width="1" style="border-style: none;" alt="" src="//www.googleadservices.com/pagead/conversion/985067256/?value=0&amp;label=TBrFCLiQ9gQQ-N3b1QM&amp;guid=ON&amp;script=0" />
-        </div>
+        
     </div>
 </div>
-
-@helper EbayPixelFinishWizard()
-{
-    bool ebayPixelEnabled = false;//CurrentValues.Instance.EbayPixelEnabled;
-    if (ebayPixelEnabled)
-    {
-    <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- ordty %>'?" width="1" height="1" border="0" alt="" />
-    }
-}

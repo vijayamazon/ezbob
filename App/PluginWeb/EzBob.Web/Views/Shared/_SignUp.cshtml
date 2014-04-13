@@ -4,136 +4,135 @@
 @using ConfigManager
 @model dynamic
 @{
-	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
-	string captchamode = CurrentValues.Instance.CaptchaMode;
-    bool ebayPixelEnabled = CurrentValues.Instance.EbayPixelEnabled;
+    var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+    string captchamode = CurrentValues.Instance.CaptchaMode;
     bool instructionsEnabled = CurrentValues.Instance.WizardInstructionsEnabled;
-	var bml = new WizardBrokerLeadModel(Session);
-	var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
-	var sBrokerForCustomerIndicator = bml.BrokerFillsForCustomer ? "broker-for-customer" : string.Empty;
+    var bml = new WizardBrokerLeadModel(Session);
+    var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
+    var sBrokerForCustomerIndicator = bml.BrokerFillsForCustomer ? "broker-for-customer" : string.Empty;
 }
 
-@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
-	<h2 class="form_start @sBrokerForCustomerIndicator">Create account</h2>
+@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" }))
+{
+    <h2 class="form_start @sBrokerForCustomerIndicator">Create account</h2>
 
-	if (ebayPixelEnabled) {
-		<img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobregister;ord='<%- ordsu %>'?" width="1" height="1" border="0" alt="" />
-	}
+    <div class="form_field_container">
+        <label class="attardi-input">
+            <span>Email address</span>
+            <input type="email" name="Email" id="Email" tabindex="1" class="form_field" value="@sInitialEmail" ui-event-control-id="signup:email" />
+            <img id="EmailImage" class="field_status required" />
+        </label>
+    </div>
 
-	<div class="form_field_container">
-		<label class="attardi-input">
-			<span>Email address</span>
-			<input type="email" name="Email" id="Email" tabindex="1" class="form_field" value="@sInitialEmail" ui-event-control-id="signup:email" />
-			<img id="EmailImage" class="field_status required" />
-		</label>
-	</div>
+    <div id="strength-password-view" class="form_field_container">
+        <label class="attardi-input">
+            <span>Password</span>
+            <input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1" ui-event-control-id="signup:password1" />
+            <img id="Password1Image" class="field_status required" />
+        </label>
+        <p id="message" class="help-block"></p>
+    </div>
 
-	<div id="strength-password-view" class="form_field_container">
-		<label class="attardi-input">
-			<span>Password</span>
-			<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1" ui-event-control-id="signup:password1" />
-			<img id="Password1Image" class="field_status required" />
-		</label>
-		<p id="message" class="help-block"></p>
-	</div>
+    <div class="form_field_container">
+        <label class="attardi-input">
+            <span>Confirm password</span>
+            <input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2" ui-event-control-id="signup:password2" />
+            <img id="Password2Image" class="field_status required" />
+        </label>
+    </div>
 
-	<div class="form_field_container">
-		<label class="attardi-input">
-			<span>Confirm password</span>
-			<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2" ui-event-control-id="signup:password2" />
-			<img id="Password2Image" class="field_status required" />
-		</label>
-	</div>
+    <div class="form_field_container">
+        <label class="attardi-input">
+            <span>Secret question</span>
+            <select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field" ui-event-control-id="signup:security_question">
+                <option value=""></option>
+                @if (securityQuestions != null)
+                {
+                    foreach (var item in securityQuestions)
+                    {
+                    <option value="@item.Id">@item.Name</option>
+                    } // foreach
+                } // if
+            </select>
+            <img id="SecurityQuestionImage" class="field_status required" />
+        </label>
+    </div>
 
-	<div class="form_field_container">
-		<label class="attardi-input">
-			<span>Secret question</span>
-			<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field" ui-event-control-id="signup:security_question">
-				<option value=""></option>
-				@if (securityQuestions != null) {
-					foreach (var item in securityQuestions) {
-						<option value="@item.Id">@item.Name</option>
-					} // foreach
-				} // if
-			</select>
-			<img id="SecurityQuestionImage" class="field_status required" />
-		</label>
-	</div>
+    <div class="form_field_container">
+        <label class="attardi-input">
+            <span>Secret answer</span>
+            <input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field" ui-event-control-id="signup:security-answer" />
+            <img id="SecretAnswerImage" class="field_status required" />
+        </label>
+    </div>
 
-	<div class="form_field_container">
-		<label class="attardi-input">
-			<span>Secret answer</span>
-			<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field" ui-event-control-id="signup:security-answer" />
-			<img id="SecretAnswerImage" class="field_status required" />
-		</label>
-	</div>
+    <div class="form_field_container">
+        <label class="attardi-input">
+            <span>Promotional code (optional)</span>
+            <input type="text" class="form_field" name="promoCode" id="promoCode" ui-event-control-id="signup:promo-code" />
+            <img id="promoCodeImage" class="field_status" />
+        </label>
+    </div>
 
-	<div class="form_field_container">
-		<label class="attardi-input">
-			<span>Promotional code (optional)</span>
-			<input type="text" class="form_field" name="promoCode" id="promoCode" ui-event-control-id="signup:promo-code" />
-			<img id="promoCodeImage" class="field_status" />
-		</label>
-	</div>
-
-	<div class="form_field_container">
-		<label class="attardi-input">
-			<span>Requested loan amount</span>
-			<input type="text" name="amount" id="amount" tabindex="6" class="form_field" ui-event-control-id="signup:requested-amount" />
-			<img id="amountImage" class="field_status required" />
-		</label>
-	</div>
+    <div class="form_field_container">
+        <label class="attardi-input">
+            <span>Requested loan amount</span>
+            <input type="text" name="amount" id="amount" tabindex="6" class="form_field" ui-event-control-id="signup:requested-amount" />
+            <img id="amountImage" class="field_status required" />
+        </label>
+    </div>
     
-	<div id="twilioDiv" class="hide">
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<div class="code-sent-style-container">
-					<label id="codeSentLabel" class="code-sent-style">Code sent</label>
-				</div>
-				<span>Mobile phone</span>
-				<input type="text" class="phonenumber form_field_left_side form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone" />
-				<img id="mobilePhoneImage" class="field_status required" />
-				<input id="generateMobileCode" class="btn green form_field_right_side_signup_phone disabled" type="button" value="Send activation code" ui-event-control-id="signup:generate-mobile-code" />
-			</label>
-		</div>
+    <div id="twilioDiv" class="hide">
+        <div class="form_field_container">
+            <label class="attardi-input">
+                <div class="code-sent-style-container">
+                    <label id="codeSentLabel" class="code-sent-style">Code sent</label>
+                </div>
+                <span>Mobile phone</span>
+                <input type="text" class="phonenumber form_field_left_side form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone" />
+                <img id="mobilePhoneImage" class="field_status required" />
+                <input id="generateMobileCode" class="btn green form_field_right_side_signup_phone disabled" type="button" value="Send activation code" ui-event-control-id="signup:generate-mobile-code" />
+            </label>
+        </div>
 
-		<div id="mobileCodeDiv" class="form_field_container hide">
-			<label class="attardi-input">
-				<span>Mobile phone authentication code</span>
-				<input type="text" class="phonenumbercode form_field_left_side form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code" />
-				<img id="mobileCodeImage" class="field_status required" />
-				<input id="switchToCaptcha" class="btn green form_field_right_side_signup_phone" type="button" value="Did not recieve code" ui-event-control-id="signup:switch-to-captcha" />
-			</label>
-		</div>
-	</div>
+        <div id="mobileCodeDiv" class="form_field_container hide">
+            <label class="attardi-input">
+                <span>Mobile phone authentication code</span>
+                <input type="text" class="phonenumbercode form_field_left_side form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code" />
+                <img id="mobileCodeImage" class="field_status required" />
+                <input id="switchToCaptcha" class="btn green form_field_right_side_signup_phone" type="button" value="Did not recieve code" ui-event-control-id="signup:switch-to-captcha" />
+            </label>
+        </div>
+    </div>
     
-	<div id="captchaDiv" class="hide">
-		<div class="form_field_container">
-			@EzForm.Captcha(captchamode)
-		</div>
-	</div>
+    <div id="captchaDiv" class="hide">
+        <div class="form_field_container">
+            @EzForm.Captcha(captchamode)
+        </div>
+    </div>
 
-	<div class="form_buttons_container">
-		<div class="attardi-button">
-			<input type="submit" id="signupSubmitButton" value="Continue" class="rc-button green continue disabled" tabindex="13" ui-event-control-id="signup:submit">
-		</div>
-	</div>
+    <div class="form_buttons_container">
+        <div class="attardi-button">
+            <input type="submit" id="signupSubmitButton" value="Continue" class="rc-button green continue disabled" tabindex="13" ui-event-control-id="signup:submit">
+        </div>
+    </div>
 
-	if (instructionsEnabled) {
-		<div class="hide">
-			<div id="offline_help" class="help_window">
-				<h2>Welcome to the ezbob application process</h2>
-				<p>Please find below what you need to complete your application successfully.</p>
-				<div class="help_image help_offline"></div>
-				<p>Complete it in five minutes.</p>
-				<br>
-				<div class="alignright" style="padding: 0 10px 0 0;">
-					<a href="javascript:$.colorbox.close()" target="_blank" class="button orange pull-right" ui-event-control-id="signup:offline-popup-continue">Continue</a>
-				</div>
-				<div class="clear"></div>
-				<hr>
-				<div class="help_security"></div>
-			</div>
-		</div>
-	}
+    if (instructionsEnabled)
+    {
+    <div class="hide">
+        <div id="offline_help" class="help_window">
+            <h2>Welcome to the ezbob application process</h2>
+            <p>Please find below what you need to complete your application successfully.</p>
+            <div class="help_image help_offline"></div>
+            <p>Complete it in five minutes.</p>
+            <br>
+            <div class="alignright" style="padding: 0 10px 0 0;">
+                <a href="javascript:$.colorbox.close()" target="_blank" class="button orange pull-right" ui-event-control-id="signup:offline-popup-continue">Continue</a>
+            </div>
+            <div class="clear"></div>
+            <hr>
+            <div class="help_security"></div>
+        </div>
+    </div>
+    }
 }

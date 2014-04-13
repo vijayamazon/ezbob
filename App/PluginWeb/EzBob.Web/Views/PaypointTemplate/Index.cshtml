@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "PayPoint: Fill Debit Card Details | EZBOB";
+    string baseUrl = string.Empty;
 }
 
 @using EzBob.Web.Infrastructure
@@ -10,27 +11,24 @@
     @switch (Model)
     {
         case "Prod":
-            <!--prod-->
-            <base href="https://app.ezbob.com/" />
+            baseUrl = "https://app.ezbob.com";
             break;
         case "Qa":
-            <!--qa-->
-            <base href="https://192.168.120.11" />
+            baseUrl = "https://192.168.120.11";
             break;
         case "Dev":
-            <!--local-->
-            <base href="https://localhost:44300" />
+            baseUrl = "https://localhost:44300";
             break;
         default:
-            <!--prod-->
-            <base href="https://app.ezbob.com/" />
+            baseUrl = "https://app.ezbob.com";
             break;
     }
+    
+    <base href="@baseUrl"/>
+
     <script type="text/javascript">
         var EzBob = EzBob || {};
         EzBob.Config = EzBob.Config || {};
-        EzBob.GA = EzBob.GA || function () {
-        };
     </script>
     <style>
         .error h3 {
@@ -137,7 +135,7 @@
                                 </div>
                             </div>
 
-                            @*                            <div>
+                            @*<div>
                                 <div>
                                     <p id="mandatory_text">${mandatory_Text:=Mandatory fields} <span class="mand">*</span></p>
                                 </div>
@@ -148,6 +146,7 @@
                                     type="submit"
                                     name="accept" 
                                     value="Confirm" 
+                                    id="paypoint-submit"
                                     class="submit pull-right button orange disabled confirm" tabindex="6" />
                                 
                                 <a href="#"class="button grey pull-right back">Back</a>
@@ -221,245 +220,219 @@
 </div>
 
 @section Js{
-	<script type="text/javascript">
-	    function PPHelp() {
-	        helpwindow = window.open('https://www.paypal.com/uk/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside', 'olcwhatispaypal', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');
-	    }
+    <script type="text/javascript">
+        function PPHelp() {
+            helpwindow = window.open('https://www.paypal.com/uk/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside', 'olcwhatispaypal', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');
+        }
 
-	    $(document).ready(function () {
-	        var oFieldStatusIcons = $('img.field_status');
-	        oFieldStatusIcons.filter('.required').field_status({ required: true });
-	        oFieldStatusIcons.not('.required').field_status({ required: false });
-	    });
+        $(document).ready(function () {
+            var oFieldStatusIcons = $('img.field_status');
+            oFieldStatusIcons.filter('.required').field_status({ required: true });
+            oFieldStatusIcons.not('.required').field_status({ required: false });
+        });
 
-	    EzBob.Config.HeartBeatEnabled = false;
-	    EzBob.Config.SessionTimeout = -1;
+        EzBob.Config.HeartBeatEnabled = false;
+        EzBob.Config.SessionTimeout = -1;
 
-	    function submitPaypointForm() {
-	        $('form').data("validator").cancelSubmit = true;
-	        $('form').submit();
-	    }
+        function submitPaypointForm() {
+            $('form').data("validator").cancelSubmit = true;
+            $('form').submit();
+        }
 
-	    function getCallbackValue(key) {
-	        var uri = new Uri(decodeURIComponent(new Uri(document.location).getQueryParamValue('callback')));
-	        return uri.getQueryParamValue(key);
-	    }
+        function getCallbackValue(key) {
+            var uri = new Uri(decodeURIComponent(new Uri(document.location).getQueryParamValue('callback')));
+            return uri.getQueryParamValue(key);
+        }
 
-	    function getOptionsValue() {
-	        var uri = new Uri(document.location);
-	        return decodeURIComponent(uri.getQueryParamValue('options'));
-	    }
+        function getOptionsValue() {
+            var uri = new Uri(document.location);
+            return decodeURIComponent(uri.getQueryParamValue('options'));
+        }
 
-	    var uri = new Uri(decodeURIComponent(new Uri(document.location).getQueryParamValue('options')));
+        var uri = new Uri(decodeURIComponent(new Uri(document.location).getQueryParamValue('options')));
 
-	    function inputChanged(validator) {
-	        var isValid = EzBob.Validation.checkForm(validator);
-	        return $('.submit').toggleClass('disabled', !isValid);
-	    }
+        function inputChanged(validator) {
+            var isValid = EzBob.Validation.checkForm(validator);
+            return $('.submit').toggleClass('disabled', !isValid);
+        }
 
-	    (function () {
-	        var sSegmentType = decodeURIComponent(new Uri(document.location).getQueryParamValue('segmenttype'));
-	        var sLogoClassExt = (sSegmentType === 'offline') ? 'ezbob_logo_offline' : 'ezbob_logo_online';
-	        $('.ezbob_logo').removeClass('ezbob_logo_online ezbob_logo_offline').addClass(sLogoClassExt);
-	    })();
+        (function () {
+            var sSegmentType = decodeURIComponent(new Uri(document.location).getQueryParamValue('segmenttype'));
+            var sLogoClassExt = (sSegmentType === 'offline') ? 'ezbob_logo_offline' : 'ezbob_logo_online';
+            $('.ezbob_logo').removeClass('ezbob_logo_online ezbob_logo_offline').addClass(sLogoClassExt);
+        })();
 
-	    $(function () {
-	        $('form').attr('action', document.location.href);
-	        var amount = $('.amount').val();
-	        var isPayEarly = amount != 5;
-	        var lastDateOfPayment;
+        $(function () {
+            $('form').attr('action', document.location.href);
+            var amount = $('.amount').val();
+            var isPayEarly = amount != 5;
+            var lastDateOfPayment;
 
-	        if (isPayEarly) {
-	            lastDateOfPayment = moment();
-	        }
-	        else {
-	            var param = decodeURIComponent(getCallbackValue('lastDatePayment') || "");
-	            lastDateOfPayment = moment(param || moment().add("months", 3), "DD/MM/YYYY");
-	        }
-	        var isTest = getOptionsValue().indexOf('test_status=true') != -1;
+            if (isPayEarly) {
+                lastDateOfPayment = moment();
+            }
+            else {
+                var param = decodeURIComponent(getCallbackValue('lastDatePayment') || "");
+                lastDateOfPayment = moment(param || moment().add("months", 3), "DD/MM/YYYY");
+            }
+            var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
-	        //set user email in top bar
-	        var html = '<span id="logged-in-user-name">' + decodeURIComponent(getCallbackValue('username') || "") + '</span><a href="/Account/LogOff" class="button grey medium_btn">Log off</a>';
-	        $("#header_description").html(html);
+            //set user email in top bar
+            var html = '<span id="logged-in-user-name">' + decodeURIComponent(getCallbackValue('username') || "") + '</span><a href="/Account/LogOff" class="button grey medium_btn">Log off</a>';
+            $("#header_description").html(html);
 
-	        //set url for back button
-	        var ulrBack = !isPayEarly ? 'https://app.ezbob.com/Customer/Profile#GetCash' : "https://app.ezbob.com/Customer/Profile#PayEarly";
-	        var testUrlBack = !isPayEarly ? 'https://192.168.0.99/EzBob/EzBob.Web/Customer/Profile#GetCash' : "https://192.168.0.99/EzBob/EzBob.Web/Customer/Profile#PayEarly";
+            //set url for back button
+            var ulrBack = !isPayEarly ? 'https://app.ezbob.com/Customer/Profile#GetCash' : "https://app.ezbob.com/Customer/Profile#PayEarly";
+            var testUrlBack = !isPayEarly ? "@baseUrl/EzBob/EzBob.Web/Customer/Profile#GetCash" : "@baseUrl/EzBob/EzBob.Web/Customer/Profile#PayEarly";
 
-	        $(".btn-back").attr("href", isTest ? testUrlBack : ulrBack);
+            $(".btn-back").attr("href", isTest ? testUrlBack : ulrBack);
 
-	        if (!isTest) {
-	            $("select option[value='Visa']").remove();
-	        }
-	        $("#expiry").mask("99/99");
-	        $("#card_no").mask("9999999999999999");
+            if (!isTest) {
+                $("select option[value='Visa']").remove();
+            }
+            $("#expiry").mask("99/99");
+            $("#card_no").mask("9999999999999999");
 
-	        if (isPayEarly) {
-	            $('#amount-group').show();
-	            $('.PayPointHeader h3').hide();
-	            $(".dashboard-steps").hide();
-	        }
+            if (isPayEarly) {
+                $('#amount-group').show();
+                $('.PayPointHeader h3').hide();
+                $(".dashboard-steps").hide();
+            }
 
-	        $('li[rel]').popover({ placement: 'left' });
+            $('li[rel]').popover({ placement: 'left' });
 
-	        $('input[name="back"]').click(function () {
-	            history.go(-1);
-	        });
+            $('input[name="back"]').click(function () {
+                history.go(-1);
+            });
 
-	        var contactUs = new EzBob.ContactUsView();
-	        contactUs.template = $(".contactUs").html();
-	        contactUs.render();
+            var contactUs = new EzBob.ContactUsView();
+            contactUs.template = $(".contactUs").html();
+            contactUs.render();
 
-	        $('input[type="submit"]').click(function (e) {
-	            if (EzBob.Validation.checkForm(validator)) {
-	                if (!isTest) {
-	                    _gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']);
-	                    setTimeout(function () { submitPaypointForm(); }, 500);
-	                }
-	                else {
-	                    submitPaypointForm();
-	                }
-	            }
-	            else {
-	                validator.form();
-	            }
-	            return false;
-	        });
+            $('input[type="submit"]').click(function (e) {
+                if (EzBob.Validation.checkForm(validator)) {
+                    submitPaypointForm();
+                }
+                else {
+                    validator.form();
+                }
+                return false;
+            });
 
-	        $('input[type="text"]').change(function (e) {
-	            return inputChanged(validator);
-	        });
-	        $('input[type="text"]').keyup(function (e) {
-	            return inputChanged(validator);
-	        });
-	        $('input[type="password"]').change(function (e) {
-	            return inputChanged(validator);
-	        });
-	        $('input[type="password"]').keyup(function (e) {
-	            return inputChanged(validator);
-	        });
-	        $('select').change(function (e) {
-	            return inputChanged(validator);
-	        });
-	        $('select').keyup(function (e) {
-	            return inputChanged(validator);
-	        });
-	        $('select').click(function (e) {
-	            return inputChanged(validator);
-	        });
+            $('input[type="text"]').change(function (e) {
+                return inputChanged(validator);
+            });
+            $('input[type="text"]').keyup(function (e) {
+                return inputChanged(validator);
+            });
+            $('input[type="password"]').change(function (e) {
+                return inputChanged(validator);
+            });
+            $('input[type="password"]').keyup(function (e) {
+                return inputChanged(validator);
+            });
+            $('select').change(function (e) {
+                return inputChanged(validator);
+            });
+            $('select').keyup(function (e) {
+                return inputChanged(validator);
+            });
+            $('select').click(function (e) {
+                return inputChanged(validator);
+            });
 
-	        var validator = $('.paypont-form').validate({
-	            rules: {
-	                customer: { required: true, minlength: 2 },
-	                card_no: { required: true, digits: true, maxlength: 16, minlength: 16 },
-	                cv2: { required: true, minlength: 3 },
-	                expiry: { required: true, validateLastDateOfPayment: lastDateOfPayment, regex: "^(0[1-9]|1[012])/\([0-9]{2})" },
-	                card_type: { required: true }
-	            },
-	            messages: {
-	                card_no: { digits: "Please enter a valid credit card number" }
-	            },
-	            errorPlacement: EzBob.Validation.errorPlacement,
-	            unhighlight:
-					EzBob.Validation.unhighlightFS,
-	            highlight:
-					EzBob.Validation.highlightFS
-	        });
+            var validator = $('.paypont-form').validate({
+                rules: {
+                    customer: { required: true, minlength: 2 },
+                    card_no: { required: true, digits: true, maxlength: 16, minlength: 16 },
+                    cv2: { required: true, minlength: 3 },
+                    expiry: { required: true, validateLastDateOfPayment: lastDateOfPayment, regex: "^(0[1-9]|1[012])/\([0-9]{2})" },
+                    card_type: { required: true }
+                },
+                messages: {
+                    card_no: { digits: "Please enter a valid credit card number" }
+                },
+                errorPlacement: EzBob.Validation.errorPlacement,
+                unhighlight:
+                    EzBob.Validation.unhighlightFS,
+                highlight:
+                    EzBob.Validation.highlightFS
+            });
 
-	        $.validator.addMethod(
-				"validateLastDateOfPayment", function (value, element, date) {
-				    date = $.browser.msie ? date._d : date;
-				    var expirydate = moment(value, "MM/YY");
-				    var res = expirydate >= date;
-				    return res;
-				}, "Debit card expires before the loan term. Please use another card."
-			);
-	    });
-	</script>
-	<script type="text/javascript">
-	    adroll_adv_id = "PLSVG5WCDVB33CAAP2HAAG";
-	    adroll_pix_id = "VXRFC42DQVGXFOJMAXOXFA";
-	    (function () {
-	        var oldonload = window.onload;
-	        window.onload = function () {
-	            __adroll_loaded = true;
-	            var scr = document.createElement("script");
-	            var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
-	            scr.setAttribute('async', 'true');
-	            scr.type = "text/javascript";
-	            scr.src = host + "/j/roundtrip.js";
-	            ((document.getElementsByTagName('head') || [null])[0] ||
-					document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
-	            if (oldonload) {
-	                oldonload();
-	            }
-	        };
-	    }());
-	</script>
+            $.validator.addMethod(
+                "validateLastDateOfPayment", function(value, element, date) {
+                    date = $.browser.msie ? date._d : date;
+                    var expirydate = moment(value, "MM/YY");
+                    var res = expirydate >= date;
+                    return res;
+                }, "Debit card expires before the loan term. Please use another card."
+            );
+        });
+    </script>
 }
 
 
 @helper Hiddens()
 {
     <text><input type="hidden" name="merchant" value="${merchant}">
-          <input type="hidden" name="trans_id" value="${trans_id}">
-          <input type="hidden" name="callback" value="${callback}">
-          <input type="hidden" name="backcallback" value="${backcallback}">
-          <input type="hidden" name="order" value="${order}">
-          <input type="hidden" name="shipping" value="${shipping}">
-          <input type="hidden" name="billing" value="${billing}">
-          <input type="hidden" name="template" value="${template}">
-          <input type="hidden" name="err_template" value="${err_template}">
-          <input type="hidden" name="options" value="${options}">
-          <input type="hidden" class="amount" name="amount" value="${amount}">
-          <input type="hidden" name="currency" value="${currency}">
-          <input type="hidden" name="cb_list" value="${cb_list}">
-          <input type="hidden" name="cb_flds" value="${cb_flds}">
-          <input type="hidden" name="map_flds" value="${map_flds}">
-          <input type="hidden" name="md_flds" value="${md_flds}">
-          <input type="hidden" name="background" value="${background}">
-          <input type="hidden" name="bgcolor" value="${bgcolor}">
-          <input type="hidden" name="font_face" value="${font_face}">
-          <input type="hidden" name="font_color" value="${font_color}">
-          <input type="hidden" name="font_size" value="${font_size}">
-          <input type="hidden" name="branding" value="${branding}">
-          <input type="hidden" name="mail_message" value="${mail_message}">
-          <input type="hidden" name="cb_message" value="${cb_message}">
-          <input type="hidden" name="cb_fail_message" value="${cb_fail_message}">
-          <input type="hidden" name="mandatory_Text" value="${mandatory_Text}">
-          <input type="hidden" name="customer_Text" value="${customer_Text}">
-          <input type="hidden" name="card_type_Text" value="${card_type_Text}">
-          <input type="hidden" name="card_no_Text" value="${card_no_Text}">
-          <input type="hidden" name="expiry_Text" value="${expiry_Text}">
-          <input type="hidden" name="issue_Text" value="${issue_Text}">
-          <input type="hidden" name="start_date_Text" value="${start_date_Text}">
-          <input type="hidden" name="authorise_Text" value="${authorise_Text}">
-          <input type="hidden" name="wait_Text" value="${wait_Text}">
-          <input type="hidden" name="error_table_Text" value="${error_table_Text}">
-          <input type="hidden" name="Master_Card_Text" value="${Master_Card_Text}">
-          <input type="hidden" name="Delta_Text" value="${Delta_Text}">
-          <input type="hidden" name="Visa_Text" value="${Visa_Text}">
-          <input type="hidden" name="JCB_Text" value="${JCB_Text}">
-          <input type="hidden" name="Solo_Text" value="${Solo_Text}">
-          <input type="hidden" name="Switch_Text" value="${Switch_Text}">
-          <input type="hidden" name="Maestro_Text" value="${Maestro_Text}">
-          <input type="hidden" name="American_Express_Text" value="${American_Express_Text}">
-          <input type="hidden" name="Diners_Club_Text" value="${Diners_Club_Text}">
-          <input type="hidden" name="cv2_Text" value="${cv2_Text}">
-          <input type="hidden" name="start_date_Error" value="${start_date_Error}">
-          <input type="hidden" name="card_no_Error" value="${card_no_Error}">
-          <input type="hidden" name="card_type_Error" value="${card_type_Error}">
-          <input type="hidden" name="customer_name_Error" value="${customer_name_Error}">
-          <input type="hidden" name="expiry_date_Error" value="${expiry_date_Error}">
-          <input type="hidden" name="issue_Error" value="${issue_Error}">
-          <input type="hidden" name="email_Error" value="${email_Error}">
-          <input type="hidden" name="cv2_Error" value="${cv2_Error}">
-          <input type="hidden" name="save_other_pay" value="${save_other_pay}">
-          <input type="hidden" name="usercallback" value="${usercallback}">
-          <input type="hidden" name="token" value="${token}">
-          <input type="hidden" name="error_table">
-          <input type="hidden" name="error_list">
-          </text>
+    <input type="hidden" name="trans_id" value="${trans_id}">
+    <input type="hidden" name="callback" value="${callback}">
+    <input type="hidden" name="backcallback" value="${backcallback}">
+    <input type="hidden" name="order" value="${order}">
+    <input type="hidden" name="shipping" value="${shipping}">
+    <input type="hidden" name="billing" value="${billing}">
+    <input type="hidden" name="template" value="${template}">
+    <input type="hidden" name="err_template" value="${err_template}">
+    <input type="hidden" name="options" value="${options}">
+    <input type="hidden" class="amount" name="amount" value="${amount}">
+    <input type="hidden" name="currency" value="${currency}">
+    <input type="hidden" name="cb_list" value="${cb_list}">
+    <input type="hidden" name="cb_flds" value="${cb_flds}">
+    <input type="hidden" name="map_flds" value="${map_flds}">
+    <input type="hidden" name="md_flds" value="${md_flds}">
+    <input type="hidden" name="background" value="${background}">
+    <input type="hidden" name="bgcolor" value="${bgcolor}">
+    <input type="hidden" name="font_face" value="${font_face}">
+    <input type="hidden" name="font_color" value="${font_color}">
+    <input type="hidden" name="font_size" value="${font_size}">
+    <input type="hidden" name="branding" value="${branding}">
+    <input type="hidden" name="mail_message" value="${mail_message}">
+    <input type="hidden" name="cb_message" value="${cb_message}">
+    <input type="hidden" name="cb_fail_message" value="${cb_fail_message}">
+    <input type="hidden" name="mandatory_Text" value="${mandatory_Text}">
+    <input type="hidden" name="customer_Text" value="${customer_Text}">
+    <input type="hidden" name="card_type_Text" value="${card_type_Text}">
+    <input type="hidden" name="card_no_Text" value="${card_no_Text}">
+    <input type="hidden" name="expiry_Text" value="${expiry_Text}">
+    <input type="hidden" name="issue_Text" value="${issue_Text}">
+    <input type="hidden" name="start_date_Text" value="${start_date_Text}">
+    <input type="hidden" name="authorise_Text" value="${authorise_Text}">
+    <input type="hidden" name="wait_Text" value="${wait_Text}">
+    <input type="hidden" name="error_table_Text" value="${error_table_Text}">
+    <input type="hidden" name="Master_Card_Text" value="${Master_Card_Text}">
+    <input type="hidden" name="Delta_Text" value="${Delta_Text}">
+    <input type="hidden" name="Visa_Text" value="${Visa_Text}">
+    <input type="hidden" name="JCB_Text" value="${JCB_Text}">
+    <input type="hidden" name="Solo_Text" value="${Solo_Text}">
+    <input type="hidden" name="Switch_Text" value="${Switch_Text}">
+    <input type="hidden" name="Maestro_Text" value="${Maestro_Text}">
+    <input type="hidden" name="American_Express_Text" value="${American_Express_Text}">
+    <input type="hidden" name="Diners_Club_Text" value="${Diners_Club_Text}">
+    <input type="hidden" name="cv2_Text" value="${cv2_Text}">
+    <input type="hidden" name="start_date_Error" value="${start_date_Error}">
+    <input type="hidden" name="card_no_Error" value="${card_no_Error}">
+    <input type="hidden" name="card_type_Error" value="${card_type_Error}">
+    <input type="hidden" name="customer_name_Error" value="${customer_name_Error}">
+    <input type="hidden" name="expiry_date_Error" value="${expiry_date_Error}">
+    <input type="hidden" name="issue_Error" value="${issue_Error}">
+    <input type="hidden" name="email_Error" value="${email_Error}">
+    <input type="hidden" name="cv2_Error" value="${cv2_Error}">
+    <input type="hidden" name="save_other_pay" value="${save_other_pay}">
+    <input type="hidden" name="usercallback" value="${usercallback}">
+    <input type="hidden" name="token" value="${token}">
+    <input type="hidden" name="error_table">
+    <input type="hidden" name="error_list">
+    </text>
 }
 
 

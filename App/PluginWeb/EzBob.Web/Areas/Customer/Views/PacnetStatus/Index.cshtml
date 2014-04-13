@@ -1,6 +1,5 @@
 ﻿@using EzBob.Web.Code
 @using EzBob.Web.Infrastructure
-@using StructureMap
 @using ConfigManager
 @{
     ViewBag.Title = "Loan Confirmation: Loan Confirmation | EZBOB";
@@ -58,9 +57,9 @@
             <div class="span12" style="padding-top: 30px;">
                 <a href="#" class="schedule-print-link pull-left print-link" style="margin-top: 8px;" onclick="window.print();return false;">Print for your records</a>
                 <a 
-                    href='#' 
+                    href='@Url.Action("Index", "Profile", new { Area = "Customer" })' 
                     class="btn-continue button orange pull-right btn-fix"
-                    onClick="EzBob.App.GA.trackEventReditect('@Url.Action("Index", "Profile", new { Area = "Customer" })','Loan Payment Complete', 'Back To Profile', 'View Loan');">Go to My Account
+                    id="pacnet-status-back-to-profile">Go to My Account
                 </a>
             </div>
         </div>
@@ -72,9 +71,6 @@
                                       "12996", "19438", "sales", "1", @ViewData["loanNo"], @ViewData["Amount"], ViewData["email"], "Ezbob", "Loan", "GBP");
         <img src="@srcStr" width="1" height="1" border="0" alt="" />
     }
-</div>
-<div style="display: inline;">
-    <img height="1" width="1" style="border-style: none;" alt="" src="//www.googleadservices.com/pagead/conversion/985067256/?value=0&amp;label=zC-dCKDS8AQQ-N3b1QM&amp;guid=ON&amp;script=0" />
 </div>
 
 <script id="paypoint-schedule-template" type="text/template">
@@ -117,7 +113,7 @@
 
 @section Js
 {
-    <script type='text/javascript' src='https://my.nanorep.com/common/API/conversionUpdate.js?account=ezbob&revenue=@ViewData["Amount"]&orderId=@ViewData["loanNo"]' ></script>
+    <script type='text/javascript' src='https://my.nanorep.com/common/API/conversionUpdate.js?account=ezbob&revenue=@ViewData["Amount"]&orderId=@ViewData["loanNo"]'></script>
     <script type="text/javascript">
         $(function () {
             var scheduleView = new EzBob.Profile.PaypointLoanScheduleView({ el: $('#schedule'), schedule:  @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"]))});

@@ -293,7 +293,6 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
     },
     getCash: function () {
         EzBob.CT.recordEvent('ct:profile:getCash');
-        EzBob.App.GA.trackEvent('Loan Approved', 'Choose Amount', 'Request Cash');
         this.trigger('getCash');
         this.marketing("GetCash");
     },

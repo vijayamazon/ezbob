@@ -51,7 +51,6 @@
     <!--[if lt IE 9]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
         <![endif]-->
-    @{ Html.RenderPartial("_GoogleAnalytics"); }
     @{Html.RenderPartial("security_template");}
 </head>
 
@@ -59,42 +58,30 @@
     @{Html.RenderPartial("_GoogleTagManager");}
     @RenderSection("afterHead", false)
 
-    @{
-        var isUnderwriter = (Url.Action(null) ?? "").Contains("AdminLogOn");
-        if (!isUnderwriter && !Request.Browser.IsMobileDevice)
-        {
-            Html.RenderPartial("_LivePerson");
-            if (controller == "Wizard")
-            {
-                Html.RenderPartial("_NanoRep");
-            }
-        }
-    }
-
     @Html.AntiForgeryTokenNoUserCheck()
 
     <div id="wrapper">
-		<div id="header">
-			<div class="header-inner">
-				<a href="http://www.ezbob.com">
-					<img src="@Url.Content("~/Content/img/ezbob-logo-2014.png")" class="newlogo"></a>
+        <div id="header">
+            <div class="header-inner">
+                <a href="http://www.ezbob.com">
+                    <img src="@Url.Content("~/Content/img/ezbob-logo-2014.png")" class="newlogo"></a>
 
-				<div class="header-phone">0800-011-4787</div>
+                <div class="header-phone">0800-011-4787</div>
 
-				<div class="eu-menu">
-					<img src="@Url.Content("~/Content/img/eu-menu.png")"><br>
-					Authorised by the European Union
-				</div>
+                <div class="eu-menu">
+                    <img src="@Url.Content("~/Content/img/eu-menu.png")"><br>
+                    Authorised by the European Union
+                </div>
 
-				<ul id="user-menu">
-					<li id="logoff-li" class="login" style="display: none;">
-						<a href="@Url.Action("LogOff", "Account", new { Area = "" })">LOG OFF</a>
-					</li>
-					<li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })">LOGIN</a></li>
-					<li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp">SIGN UP</a></li>
-				</ul>
-			</div>
-		</div>
+                <ul id="user-menu">
+                    <li id="logoff-li" class="login" style="display: none;">
+                        <a href="@Url.Action("LogOff", "Account", new { Area = "" })">LOG OFF</a>
+                    </li>
+                    <li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })">LOGIN</a></li>
+                    <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp">SIGN UP</a></li>
+                </ul>
+            </div>
+        </div>
 
         <div class="inner main-page">
             <section id="full_width">
@@ -128,42 +115,33 @@
         @BundleHelper.RenderProfileJs()
     }
     @RenderSection("Js", false)
-    
-	<script type="text/javascript">
-		function ShowHideSignLogOnOff() {
-			var sEmail = $('body').attr('data-user-name');
-			if (sEmail) {
-				$('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
-				$('#user-menu .login_btn, .signup_btn').hide();
-			}
-			else {
-				$('#logoff-li').hide();
 
-				if ($('.login-form-user-name').length) {
-					$('.login_btn').hide();
-					$('.signup_btn').show();
-				}
-				else {
-					$('.login_btn').show();
-					$('.signup_btn').hide();
-				} // if
-			} // if
-		} // ShowHideSignLogOnOff
+    <script type="text/javascript">
+        function ShowHideSignLogOnOff() {
+            var sEmail = $('body').attr('data-user-name');
+            if (sEmail) {
+                $('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
+                $('#user-menu .login_btn, .signup_btn').hide();
+            }
+            else {
+                $('#logoff-li').hide();
 
-		$(document).ready(function() {
-			$('body').attr('data-user-name', '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")');
-			ShowHideSignLogOnOff();
-		});
-	</script>
+                if ($('.login-form-user-name').length) {
+                    $('.login_btn').hide();
+                    $('.signup_btn').show();
+                }
+                else {
+                    $('.login_btn').show();
+                    $('.signup_btn').hide();
+                } // if
+            } // if
+        } // ShowHideSignLogOnOff
 
-    @{ Html.RenderPartial("_ClickTale"); }
-    @{ Html.RenderPartial("_AddRoll"); }
-    @{
-        if (showGetSatisfaction)
-        {
-            Html.RenderPartial("_GetSatisfaction");
-        }
-    }
+        $(document).ready(function() {
+            $('body').attr('data-user-name', '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")');
+            ShowHideSignLogOnOff();
+        });
+    </script>
 
     <div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
     <div style="display: none;" class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>

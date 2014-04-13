@@ -165,7 +165,9 @@
       xhr = $.post(window.gRootPath + 'CustomerDetails/TakeQuickOffer');
       xhr.done(function() {
         EzBob.App.trigger('clear');
-        return EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile#GetCash', 'Wizard Complete', 'Go To account', 'Quick Offer Taken');
+        return setTimeout((function() {
+          return window.location = window.gRootPath + 'Customer/Profile#GetCash';
+        }), 500);
       });
       return false;
     };
@@ -540,7 +542,6 @@
     };
 
     StoreInfoView.prototype.back = function() {
-      console.log('back triggered');
       this.$el.find(">div").hide();
       this.storeList.show();
       $(document).attr("title", this.oldTitle);
@@ -558,7 +559,9 @@
       xhr = $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
       xhr.done(function() {
         EzBob.App.trigger("clear");
-        return EzBob.App.GA.trackEventReditect(window.gRootPath + 'CustomerDetails/Dashboard', 'Wizard Complete', 'Go To account', 'Awaiting Approval');
+        return setTimeout((function() {
+          return window.location = window.gRootPath + 'CustomerDetails/Dashboard';
+        }), 500);
       });
       xhr.error(function() {
         return setTimeout((function() {
