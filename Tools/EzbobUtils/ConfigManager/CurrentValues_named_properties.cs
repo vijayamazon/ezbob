@@ -1640,6 +1640,14 @@
 
 		#endregion property UseNewUpdateMpStrategy
 
+		#region property VerboseConfigurationLogging
+
+		public virtual VariableValue VerboseConfigurationLogging{
+			get { return this[Variables.VerboseConfigurationLogging]; } // get
+		} // VerboseConfigurationLogging
+
+		#endregion property VerboseConfigurationLogging
+
 		#region property YodleeAccountPrefix
 
 		public virtual VariableValue YodleeAccountPrefix {

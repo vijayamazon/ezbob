@@ -69,12 +69,6 @@
 			InitOnStart();
 		} // constructor
 
-		public override void Dispose() {
-			base.Dispose();
-
-			Log.NotifyStop();
-		} // Dispose
-
 		private void InitOnStart() {
 			base.Init();
 
@@ -86,12 +80,14 @@
 					return;
 
 				try {
+					new Log4Net().Init();
+
 					Log.NotifyStart();
+
+					CurrentValues.Init(DbConnectionGenerator.Get(Log), Log);
 
 					if (CurrentValues.Instance.NHibernateEnableProfiler)
 						HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
-
-					CurrentValues.Init(DbConnectionGenerator.Get(Log), Log);
 
 					Ezbob.RegistryScanner.Scanner.Register();
 
@@ -164,7 +160,11 @@
 			bs.InitDatabaseMarketPlaceTypes();
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
-		} // Application_OnStart
+		} // Application_Start
+
+		protected void Application_End() {
+			Log.NotifyStop();
+		} // Application_End
 
 		private static void ConfigureSquishIt() {
 			if (HttpContext.Current.IsDebuggingEnabled) {

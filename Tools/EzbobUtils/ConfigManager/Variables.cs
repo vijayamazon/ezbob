@@ -205,6 +205,7 @@
 		UseNewMainStrategy,
 		UseNewUpdateCustomerMpsStrategy,
 		UseNewUpdateMpStrategy,
+		VerboseConfigurationLogging,
 		YodleeAccountPrefix,
 		AmazonEnableRetrying,
 		AmazonMinorTimeoutInSeconds,

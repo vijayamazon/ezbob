@@ -1,8 +1,42 @@
 ﻿namespace ConfigManager {
 	using System;
 	using System.Globalization;
+	using Ezbob.Logger;
 
 	public class VariableValue {
+		#region static constructor
+
+		static VariableValue() {
+			ms_oLock = new object();
+			LogVerbosityLevel = LogVerbosityLevel.Compact;
+		} // static constructor
+
+		#endregion static constructor
+
+		#region property LogVerbosityLevel
+
+		public static LogVerbosityLevel LogVerbosityLevel {
+			get {
+				LogVerbosityLevel nLevel;
+
+				lock (ms_oLock) {
+					nLevel = ms_nLogVerbosityLevel;
+				} // lock
+
+				return nLevel;
+			} // get
+
+			set {
+				lock (ms_oLock) {
+					ms_nLogVerbosityLevel = value;
+				} // lock
+			} // set
+		} // LogVerbosityLevel
+
+		private static LogVerbosityLevel ms_nLogVerbosityLevel;
+
+		#endregion property LogVerbosityLevel
+
 		#region type case operators
 
 		#region operator string
@@ -10,6 +44,9 @@
 		public static implicit operator string(VariableValue oValue) {
 			if (oValue == null)
 				throw new NullReferenceException("String configuration variable not specified.");
+
+			if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
+				oValue.m_oLog.Debug("VariableValue {0} requested as string: '{1}'", oValue.Name, oValue.Value);
 
 			return oValue.Value;
 		} // operator to string
@@ -22,7 +59,12 @@
 			if (oValue == null)
 				throw new NullReferenceException("Integer configuration variable not specified.");
 
-			return Convert.ToInt32(oValue.Value, CultureInfo.InvariantCulture);
+			int nValue = Convert.ToInt32(oValue.Value, CultureInfo.InvariantCulture);
+
+			if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
+				oValue.m_oLog.Debug("VariableValue {0} requested as int: '{1}' -> {2}", oValue.Name, oValue.Value, nValue);
+
+			return nValue;
 		} // operator to int
 
 		#endregion operator int
@@ -33,7 +75,12 @@
 			if (oValue == null)
 				throw new NullReferenceException("Double configuration variable not specified.");
 
-			return Convert.ToDouble(oValue.Value, CultureInfo.InvariantCulture);
+			double nValue = Convert.ToDouble(oValue.Value, CultureInfo.InvariantCulture);
+
+			if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
+				oValue.m_oLog.Debug("VariableValue {0} requested as double: '{1}' -> {2}", oValue.Name, oValue.Value, nValue);
+
+			return nValue;
 		} // operator to double
 
 		#endregion operator double
@@ -44,7 +91,12 @@
 			if (oValue == null)
 				throw new NullReferenceException("Decimal configuration variable not specified.");
 
-			return Convert.ToDecimal(oValue.Value, CultureInfo.InvariantCulture);
+			decimal nValue = Convert.ToDecimal(oValue.Value, CultureInfo.InvariantCulture);
+
+			if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
+				oValue.m_oLog.Debug("VariableValue {0} requested as decimal: '{1}' -> {2}", oValue.Name, oValue.Value, nValue);
+
+			return nValue;
 		} // operator to decimal
 
 		#endregion operator decimal
@@ -55,14 +107,20 @@
 			if (oValue == null)
 				throw new NullReferenceException("Boolean configuration variable not specified.");
 
+			bool bValue = false;
+
 			switch (oValue.Value.ToLower(CultureInfo.InvariantCulture)) {
 			case "true":
 			case "1":
 			case "yes":
-				return true;
+				bValue = true;
+				break;
 			} // switch
 
-			return false;
+			if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
+				oValue.m_oLog.Debug("VariableValue {0} requested as boolean: '{1}' -> {2}", oValue.Name, oValue.Value, bValue ? "true" : "false");
+
+			return bValue;
 		} // operator to bool
 
 		#endregion operator bool
@@ -71,11 +129,20 @@
 
 		#region constructor
 
-		public VariableValue(string sValue) {
+		public VariableValue(Variables nName, string sValue, ASafeLog oLog) {
+			Name = nName;
 			Value = sValue;
+
+			m_oLog = oLog ?? new SafeLog();
 		} // constructor
 
 		#endregion constructor
+
+		#region property Name
+
+		public virtual Variables Name { get; protected set; }
+
+		#endregion property Name
 
 		#region property Value
 
@@ -87,5 +154,13 @@
 		private string m_sValue;
 
 		#endregion property Value
+
+		#region private
+
+		private readonly ASafeLog m_oLog;
+
+		private static readonly object ms_oLock;
+
+		#endregion private
 	} // class VariableValue
 } // namespace ConfigManager

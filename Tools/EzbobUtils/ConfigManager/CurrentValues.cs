@@ -1,26 +1,15 @@
 ﻿namespace ConfigManager {
 	using System;
 	using System.Collections.Generic;
-	using Ezbob.Context;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using log4net;
 
-	public partial class CurrentValues
-	{
-		private static readonly AConnection db;
-		private static readonly SafeILog log;
-
+	public partial class CurrentValues {
 		#region static constructor
 
 		static CurrentValues() {
 			ms_oInstance = null;
 			ms_oInstanceLock = new object();
-
-			log4net.Config.XmlConfigurator.Configure();
-			log = new SafeILog(LogManager.GetLogger(typeof(CurrentValues)));
-			db = new SqlConnection(new Ezbob.Context.Environment(), log);
-			Init(db, log);
 		} // static constructor
 
 		#endregion static constructor
@@ -104,7 +93,7 @@
 					string sName = sr["Name"];
 
 					if (Enum.TryParse<Variables>(sName, out nVar))
-						m_oData[nVar] = new VariableValue(sr["Value"]);
+						m_oData[nVar] = new VariableValue(nVar, sr["Value"], Log);
 					else
 						Log.Alert("Unknown configuration variable detected: {0}", sName);
 
@@ -113,6 +102,8 @@
 				"GetAllConfigurationVariables",
 				CommandSpecies.StoredProcedure
 			);
+
+			VariableValue.LogVerbosityLevel = VerboseConfigurationLogging ? LogVerbosityLevel.Verbose : LogVerbosityLevel.Compact;
 		} // ReLoad
 
 		#endregion method ReLoad

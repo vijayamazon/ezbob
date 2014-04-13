@@ -7,6 +7,7 @@
 	using System.Text;
 	using System.Threading;
 	using CompanyFiles;
+	using ConfigManager;
 	using EKM;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.AmazonLib;
@@ -109,56 +110,14 @@
 				throw new NullReferenceException("Failed to determine current environment.", e);
 			} // try
 
-			string sErrorMailRecipient = "";
-
-			switch (m_oEnv.Name) {
-			case Name.Dev:
-				sErrorMailRecipient = m_oEnv.UserName;
-				break;
-
-			case Name.Qa:
-				sErrorMailRecipient = "qa";
-				break;
-
-			case Name.Integration:
-			case Name.Uat:
-				sErrorMailRecipient = "uatmail";
-				break;
-
-			case Name.Production:
-				sErrorMailRecipient = "ProdLogs";
-				break;
-
-			default:
-				throw new ArgumentOutOfRangeException("Unsupported environment name: " + m_oEnv.Name, (Exception)null);
-			} // switch
-
-			sErrorMailRecipient += "@ezbob.com";
-
-
-			string ipStr = string.Empty;
-			foreach (var address in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
-			{
-				string addressStr = address.ToString();
-				if (addressStr.StartsWith("192"))
-				{
-					ipStr = addressStr;
-					break;
-				}
-			}
-
-			string mailSubject = Environment.MachineName + " (" + ipStr + "): EzBob log";
-			GlobalContext.Properties["MailSubject"] = mailSubject;
-			GlobalContext.Properties["ErrorEmailRecipient"] = sErrorMailRecipient;
-
-			log4net.Config.XmlConfigurator.Configure();
+			var oLog4NetCfg = new Log4Net(m_oEnv).Init();
 
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(EzServiceHost)));
 
 			NotifyStartStop("started");
 
 			m_oLog.Debug("Current environment: {0}", m_oEnv.Context);
-			m_oLog.Debug("Error emails will be sent to: {0}", sErrorMailRecipient);
+			m_oLog.Debug("Error emails will be sent to: {0}", oLog4NetCfg.ErrorMailRecipient);
 
 			EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
 
