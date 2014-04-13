@@ -3,12 +3,10 @@
 	using System.Linq;
 	using System.Web;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using Code;
 	using Code.MpUniq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
-	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.ValueIntervals;
@@ -280,6 +278,7 @@
 		} // CreateError
 
 		private JsonResult CreateError(string sErrorMsg) {
+			Log.WarnFormat("Returning error from HMRC controller to web UI: {0}", sErrorMsg);
 			return Json(new { error = sErrorMsg });
 		} // CreateError
 
