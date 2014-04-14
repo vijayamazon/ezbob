@@ -59,9 +59,6 @@
     <Reference Include="NHibernate.Caches.SysCache2">
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration.Loader">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>

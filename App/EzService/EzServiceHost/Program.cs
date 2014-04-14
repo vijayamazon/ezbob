@@ -26,7 +26,6 @@
 	using StructureMap.Pipeline;
 	using YodleeLib.connector;
 	using log4net;
-	using Scorto.Configuration.Loader;
 	using ISession = NHibernate.ISession;
 	using EzBob.Configuration;
 	using EzServiceConfigurationLoader;
@@ -115,8 +114,6 @@
 
 			m_oLog.Debug("Current environment: {0}", m_oEnv.Context);
 			m_oLog.Debug("Error emails will be sent to: {0}", oLog4NetCfg.ErrorMailRecipient);
-
-			EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
 
 			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
