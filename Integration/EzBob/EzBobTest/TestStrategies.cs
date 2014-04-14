@@ -4,7 +4,6 @@ using log4net;
 
 namespace EzBobTest
 {
-	using System.Xml;
 	using EKM;
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.MailStrategies;
@@ -17,15 +16,11 @@ namespace EzBobTest
 	using EzBob.eBayLib;
 	using NHibernate;
 	using NUnit.Framework;
-	using Scorto.Configuration;
-	using Scorto.Configuration.Loader;
 	using NHibernateWrapper.NHibernate;
 	using StructureMap;
 	using StructureMap.Pipeline;
-	using log4net.Config;
     using PayPoint;
     using YodleeLib.connector;
-	using System.IO;
 	using Integration.ChannelGrabberFrontend;
 
 	[TestFixture]
@@ -34,20 +29,6 @@ namespace EzBobTest
 		[SetUp]
 		public void Init()
 		{
-			var paths = new []
-				{
-					@"c:\EzBob\App\clients\Maven\maven.exe"
-				};
-
-			foreach (string sPath in paths)
-			{
-				if (File.Exists(sPath))
-				{
-					EnvironmentConfigurationLoader.AppPathDummy = sPath;
-					break;
-				} // if
-			} // foreach
-
 			NHibernateManager.FluentAssemblies.Add(typeof (ApplicationMng.Model.Application).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof (Customer).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof (eBayDatabaseMarketPlace).Assembly);
@@ -67,11 +48,6 @@ namespace EzBobTest
 					 .Use(ctx => NHibernateManager.SessionFactory.OpenSession());
 					x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 				});
-
-			var cfg = ConfigurationRoot.GetConfiguration();
-
-			XmlElement configurationElement = cfg.XmlElementLog;
-			XmlConfigurator.Configure(configurationElement);
 
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(TestStrategies)));
 

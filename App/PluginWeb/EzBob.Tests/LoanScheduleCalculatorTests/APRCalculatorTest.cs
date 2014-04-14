@@ -6,8 +6,6 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
-	using Scorto.Configuration;
-	using Scorto.Configuration.Loader;
 	using log4net;
 
 	[TestFixture]

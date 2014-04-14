@@ -2,8 +2,6 @@
 using EZBob.DatabaseLib.Model.Database;
 using NHibernate;
 using NUnit.Framework;
-using Scorto.Configuration;
-using Scorto.Configuration.Loader;
 using NHibernateWrapper.NHibernate;
 using StructureMap;
 using StructureMap.Pipeline;
@@ -19,7 +17,6 @@ namespace EzBob.Tests
         [SetUp]
         public void SetUp()
         {
-            EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
             NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 
@@ -30,12 +27,7 @@ namespace EzBob.Tests
                 x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
                 x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
             });
-
-            var cfg = ConfigurationRoot.GetConfiguration();
-
-            XmlElement configurationElement = cfg.XmlElementLog;
-            XmlConfigurator.Configure(configurationElement);
-
+			
             _session = ObjectFactory.GetInstance<ISession>();
 
             Init();

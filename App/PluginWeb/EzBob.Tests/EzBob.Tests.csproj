@@ -78,12 +78,6 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.Configuration.Loader">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
@@ -157,7 +151,6 @@
     <Compile Include="LoanScheduleCalculatorTests\PaymentCalculatorFixture.cs" />
     <Compile Include="LoanScheduleCalculatorTests\ScheduleWithSetupFee.cs" />
     <Compile Include="LoanScheduleCalculatorTests\LoanScheduleFixture.cs" />
-    <Compile Include="Log4netFixture.cs" />
     <Compile Include="LoanScheduleCalculatorTests\PayEarlyFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\PayAllLoansForCustomerFixture.cs" />
     <Compile Include="MarketplaceUpdatingHistory.cs" />

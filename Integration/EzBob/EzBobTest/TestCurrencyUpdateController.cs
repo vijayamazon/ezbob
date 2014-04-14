@@ -14,8 +14,6 @@ namespace EzBobTest
 	using NUnit.Framework;
 	using PayPoint;
 	using Sage;
-	using Scorto.Configuration;
-	using Scorto.Configuration.Loader;
 	using NHibernateWrapper.NHibernate;
 	using Ezbob.RegistryScanner;
 	using StructureMap;
@@ -29,20 +27,6 @@ namespace EzBobTest
 		[SetUp]
 		public void Init()
 		{
-			var paths = new string[] {
-				@"c:\alexbo\src\App\clients\Maven\maven.exe",
-				@"c:\EzBob\App\clients\Maven\maven.exe"
-			};
-
-			foreach (string sPath in paths)
-			{
-				if (File.Exists(sPath))
-				{
-					EnvironmentConfigurationLoader.AppPathDummy = sPath;
-					break;
-				} // if
-			} // foreach
-
 			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(eBayDatabaseMarketPlace).Assembly);
@@ -60,11 +44,6 @@ namespace EzBobTest
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 			});
-
-			var cfg = ConfigurationRoot.GetConfiguration();
-
-			XmlElement configurationElement = cfg.XmlElementLog;
-			XmlConfigurator.Configure(configurationElement);
 		}
 
 		[Test]
