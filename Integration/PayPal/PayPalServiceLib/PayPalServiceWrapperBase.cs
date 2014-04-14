@@ -11,11 +11,11 @@ namespace EzBob.PayPalServiceLib
 		private readonly BaseAPIProfile _Profile;
 		protected ServiceUrlsInfo ConnectionInfo { get; private set; }
 
-		protected PayPalServiceWrapperBase(IPayPalConfig config, PayPalServiceType serviceType)
+		protected PayPalServiceWrapperBase(PayPalServiceType serviceType)
 		{
 			var factory = ObjectFactory.GetInstance<IServiceEndPointFactory>();
-			ConnectionInfo = factory.Create( serviceType, config.ServiceType );
-			_Profile = ProfileProvider.CreateProfile( config );
+			ConnectionInfo = factory.Create( serviceType );
+			_Profile = ProfileProvider.CreateProfile( );
 		}
 
 		protected BaseAPIProfile GetProfile( PayPalPermissionsGranted securityData = null, string scriptName = null )

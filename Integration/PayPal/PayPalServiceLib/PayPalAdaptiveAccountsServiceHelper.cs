@@ -17,8 +17,8 @@ namespace EzBob.PayPalServiceLib
 	{
 		private static readonly ILog _log = log4net.LogManager.GetLogger( typeof( PayPalAdaptiveAccountsServiceHelper ) );
 
-		private PayPalAdaptiveAccountsServiceHelper(IPayPalConfig config)
-			:base(config, PayPalServiceType.AdaptiveAccounts)
+		private PayPalAdaptiveAccountsServiceHelper()
+			:base(PayPalServiceType.AdaptiveAccounts)
 		{
 			
 		}
@@ -33,9 +33,9 @@ namespace EzBob.PayPalServiceLib
 			get { return AdaptiveAccounts.Endpoint; }
 		}
 
-		public static PayPalAccountStatusInfo GetVerifiedStatus( IPayPalConfig config, string userFirstName, string userLastName, string userEMail )
+		public static PayPalAccountStatusInfo GetVerifiedStatus( string userFirstName, string userLastName, string userEMail )
 		{
-			return new PayPalAdaptiveAccountsServiceHelper( config ).InternalGetVerifiedStatus( userFirstName, userLastName, userEMail );
+			return new PayPalAdaptiveAccountsServiceHelper(  ).InternalGetVerifiedStatus( userFirstName, userLastName, userEMail );
 		}
 
 		private PayPalAccountStatusInfo InternalGetVerifiedStatus( string userFirstName, string userLastName, string userEMail )

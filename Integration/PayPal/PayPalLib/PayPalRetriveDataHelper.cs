@@ -16,17 +16,14 @@ namespace EzBob.PayPal
 	using PayPalDbLib.Models;
 	using PayPalServiceLib;
 	using PayPalServiceLib.Common;
-	using StructureMap;
 
 	public class PayPalRetriveDataHelper : MarketplaceRetrieveDataHelperBase<PayPalDatabaseFunctionType>
 	{
-		private readonly IPayPalConfig _Config;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPalRetriveDataHelper));
 
 		public PayPalRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<PayPalDatabaseFunctionType> marketplace)
 			: base(helper, marketplace)
 		{
-			_Config = ObjectFactory.GetInstance<IPayPalConfig>();
 		}
 
 		protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord)
@@ -110,7 +107,7 @@ namespace EzBob.PayPal
 						};
 					var newTransactionsList = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
-									() => PayPalServiceHelper.GetTransactionData(_Config, reqInfo));
+									() => PayPalServiceHelper.GetTransactionData(reqInfo));
 
 					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									ElapsedDataMemberType.StoreDataToDatabase,
@@ -186,12 +183,12 @@ namespace EzBob.PayPal
 
 		public PayPalPermissionsGranted GetAccessToken(string requestToken, string verificationCode)
 		{
-			return PayPalServiceHelper.GetAccessToken(_Config, requestToken, verificationCode);
+			return PayPalServiceHelper.GetAccessToken(requestToken, verificationCode);
 		}
 
 		public PayPalPersonalData GetAccountInfo(PayPalPermissionsGranted securityInfo)
 		{
-			return PayPalServiceHelper.GetAccountInfo(_Config, securityInfo);
+			return PayPalServiceHelper.GetAccountInfo(securityInfo);
 		}
 
 		/*public MP_CustomerMarketPlace SaveOrUpdateCustomerMarketplace( string email, byte[] securityData, Customer customer )

@@ -17,8 +17,8 @@ namespace EzBob.PayPalServiceLib
 	{
 		private static readonly ILog _log = LogManager.GetLogger( typeof( PayPalPermissionServiceHelper ) );
 
-		private PayPalPermissionServiceHelper(IPayPalConfig config)
-			:base(config, PayPalServiceType.Permissions)
+		private PayPalPermissionServiceHelper()
+			:base(PayPalServiceType.Permissions)
 		{
 		}
 
@@ -27,14 +27,14 @@ namespace EzBob.PayPalServiceLib
 			get { return Permissions.Endpoint; }
 		}
 
-		public static PayPalPermissionsGranted GetAccessToken( IPayPalConfig config, string requestToken, string verificationCode )
+		public static PayPalPermissionsGranted GetAccessToken( string requestToken, string verificationCode )
 		{
             if (string.IsNullOrEmpty(requestToken))
             {
                 throw new ArgumentEmptyException("requestToken was null or empty");
             }
 
-			return new PayPalPermissionServiceHelper(config).GetAccessTokenInternal( requestToken, verificationCode );
+			return new PayPalPermissionServiceHelper().GetAccessTokenInternal( requestToken, verificationCode );
 		}
 
 		private PayPalPermissionsGranted GetAccessTokenInternal( string requestToken, string verificationCode )
@@ -65,9 +65,9 @@ namespace EzBob.PayPalServiceLib
 			       	};
 		}
 
-        public static GetRequestPermissionsUrlResponse GetRequestPermissionsUrl(IPayPalConfig config, string callback)
+        public static GetRequestPermissionsUrlResponse GetRequestPermissionsUrl(string callback)
 		{
-			return new PayPalPermissionServiceHelper(config).GetRequestPermissionsUrlInternal( callback );
+			return new PayPalPermissionServiceHelper().GetRequestPermissionsUrlInternal( callback );
 		}
 
         private GetRequestPermissionsUrlResponse GetRequestPermissionsUrlInternal(string callback)
@@ -107,9 +107,9 @@ namespace EzBob.PayPalServiceLib
 			return new Permissions { APIProfile = GetProfile(securityData, scriptName) };
 		}
 
-		public static PayPalPersonalData GetAccountInfo(IPayPalConfig config, PayPalPermissionsGranted securityData)
+		public static PayPalPersonalData GetAccountInfo(PayPalPermissionsGranted securityData)
 		{
-			return new PayPalPermissionServiceHelper(config).InternalGetAccountInfo(securityData);
+			return new PayPalPermissionServiceHelper().InternalGetAccountInfo(securityData);
 		}
 
 		private PayPalPersonalData InternalGetAccountInfo( PayPalPermissionsGranted securityData )

@@ -6,13 +6,11 @@
 	using AmazonLib;
 	using Configuration;
 	using EzBob.PayPal;
-	using PayPalServiceLib;
 	using eBayLib;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
 	using NUnit.Framework;
 	using PayPoint;
-	using Scorto.Configuration;
 	using NHibernateWrapper.NHibernate;
 	using StructureMap;
 	using YodleeLib.connector;
@@ -55,8 +53,6 @@
             NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(FreeAgentDatabaseMarketPlace).Assembly);
             //Scanner.Register();
-            var localRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<EzBobConfigRoot>();
-            ObjectFactory.Configure(x => x.For<IPayPalConfig>().Singleton().Use(localRoot.PayPalConfig));
             ObjectFactory.Configure(x => x.AddRegistry<EzBobRegistry>());
             ObjectFactory.Configure(x => x.AddRegistry<EzBob.PayPal.PluginRegistry>());
 

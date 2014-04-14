@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace EzBob.PayPalServiceLib.Common
+﻿namespace EzBob.PayPalServiceLib.Common
 {
-	public enum ServiceEndPointType { Sandbox, Production }
+	using System;
 
 	public enum PayPalServiceType
 	{
@@ -17,13 +12,14 @@ namespace EzBob.PayPalServiceLib.Common
 
 	public interface IServiceEndPointFactory
 	{
-		ServiceUrlsInfo Create( PayPalServiceType serviceType, ServiceEndPointType endPointType );
+		ServiceUrlsInfo Create( PayPalServiceType serviceType );
 	}
 
 	public class ServiceEndPointFactory : IServiceEndPointFactory
 	{
-		public ServiceUrlsInfo Create( PayPalServiceType serviceType, ServiceEndPointType endPointType )
+		public ServiceUrlsInfo Create( PayPalServiceType serviceType )
 		{
+			string endPointType = ConfigManager.CurrentValues.Instance.PayPalServiceType;
 			string endPoint = string.Empty;
 			string redirect = string.Empty;
 
@@ -33,12 +29,12 @@ namespace EzBob.PayPalServiceLib.Common
 					{
 						switch ( endPointType )
 						{
-							case ServiceEndPointType.Production:
+							case "Production":
 								endPoint = "https://svcs.paypal.com/";
 								redirect = "https://www.paypal.com/webscr&cmd=";
 								break;
 
-							case ServiceEndPointType.Sandbox:
+							case "Sandbox":
 								endPoint = "https://svcs.sandbox.paypal.com/";
 								redirect = "https://www.sandbox.paypal.com/webscr&cmd=";
 								break;
@@ -54,11 +50,11 @@ namespace EzBob.PayPalServiceLib.Common
 					{
 						switch ( endPointType )
 						{
-							case ServiceEndPointType.Production:
+							case "Production":
 								endPoint = "https://svcs.paypal.com/";
 								break;
 
-							case ServiceEndPointType.Sandbox:
+							case "Sandbox":
 								endPoint = "https://svcs.sandbox.paypal.com/";
 								break;
 						}
@@ -68,11 +64,11 @@ namespace EzBob.PayPalServiceLib.Common
 					{
 						switch ( endPointType )
 						{
-							case ServiceEndPointType.Production:
+							case "Production":
 								endPoint = "https://api-3t.paypal.com/2.0/";								
 								break;
 
-							case ServiceEndPointType.Sandbox:
+							case "Sandbox":
 								endPoint = "https://api.sandbox.paypal.com/2.0/";
 								break;
 
@@ -86,11 +82,11 @@ namespace EzBob.PayPalServiceLib.Common
 					{
 						switch ( endPointType )
 						{
-							case ServiceEndPointType.Production:
+							case "Production":
 								endPoint = "https://api.paypal.com/2.0/";
 								break;
 
-							case ServiceEndPointType.Sandbox:
+							case "Sandbox":
 								endPoint = "https://api.sandbox.paypal.com/2.0/";
 								break;
 

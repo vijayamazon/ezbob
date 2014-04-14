@@ -56,9 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PayPalConfigBase.cs" />
-    <Compile Include="PayPalConfigTestProduction.cs" />
-    <Compile Include="PayPalConfigTestSandbox.cs" />
     <Compile Include="PayPalMarketPlace.cs" />
     <Compile Include="PayPalRetriveDataHelper.cs" />
     <Compile Include="PayPalTest.cs" />

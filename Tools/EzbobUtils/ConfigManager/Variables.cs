@@ -45,6 +45,7 @@
 		BankBasedApprovalMinOffer,
 		BankBasedApprovalNotHomeOwnerCap,
 		BankBasedApprovalNumOfMonthsToLookForDefaults,
+		BankBasedApprovalNumOfMonthBackForVatCheck,
 		BankBasedApprovalPersonalScoreThreshold,
 		BankBasedApprovalPersonalScoreThresholdWhenNoCompanyScore,
 		BankBasedApprovalSilentTemplateName,
@@ -275,6 +276,17 @@
 		PayPalIterationSettings2TimeOutAfterRetryingExpiredInMinutes,
 		PayPalIterationSettings3Index,
 		PayPalIterationSettings3CountRequestsExpectError,
-		PayPalIterationSettings3TimeOutAfterRetryingExpiredInMinutes
+		PayPalIterationSettings3TimeOutAfterRetryingExpiredInMinutes,
+		PayPalApiAuthenticationMode,
+		PayPalPpApplicationId,
+		PayPalApiUsername,
+		PayPalApiPassword,
+		PayPalApiSignature,
+		PayPalApiRequestFormat,
+		PayPalApiResponseFormat,
+		PayPalTrustAll,
+		PayPalServiceType,
+		PayPalNumberOfRetries,
+		PayPalMaxAllowedFailures
 	} // enum Variables
 } // namespace ConfigManager

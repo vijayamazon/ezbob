@@ -9,43 +9,41 @@ namespace EzBob.PayPalServiceLib
 	public class PayPalServiceHelper
 	{
 		private static readonly ILog _log = log4net.LogManager.GetLogger( typeof( PayPalServiceHelper ) );
-		private readonly IPayPalConfig _Config;
 
-		private PayPalServiceHelper(IPayPalConfig config)
+		private PayPalServiceHelper()
 		{
-			_Config = config;
 		}
 
-		public static PayPalPersonalData GetAccountInfo(IPayPalConfig config, PayPalPermissionsGranted securityData )
+		public static PayPalPersonalData GetAccountInfo(PayPalPermissionsGranted securityData )
 		{
-			var payPalServiceHelper = new PayPalServiceHelper(config);
+			var payPalServiceHelper = new PayPalServiceHelper();
 			var info = payPalServiceHelper.GetAccountInfoInternal(securityData);
 			return info;
 		}
 
 		private PayPalAccountStatusInfo GetVerifiedStatus( string userFirstName, string userLastName, string userEMail)
 		{
-			return PayPalAdaptiveAccountsServiceHelper.GetVerifiedStatus(_Config, userFirstName, userLastName, userEMail);			
+			return PayPalAdaptiveAccountsServiceHelper.GetVerifiedStatus(userFirstName, userLastName, userEMail);			
 		}
 
 		private PayPalPersonalData GetAccountInfoInternal( PayPalPermissionsGranted securityData )
 		{
-			return PayPalPermissionServiceHelper.GetAccountInfo( _Config, securityData );				
+			return PayPalPermissionServiceHelper.GetAccountInfo( securityData );				
 		}
 
-		public static PayPalTransactionsList GetTransactionData( IPayPalConfig config, PayPalRequestInfo reqInfo )
+		public static PayPalTransactionsList GetTransactionData(PayPalRequestInfo reqInfo)
 		{			
-			return new PayPalServicePaymentsProHelper( config ).GetTransactionData( reqInfo );
+			return new PayPalServicePaymentsProHelper().GetTransactionData( reqInfo );
 		}
 
-        public static GetRequestPermissionsUrlResponse GetRequestPermissionsUrl(IPayPalConfig config, string callback)
+        public static GetRequestPermissionsUrlResponse GetRequestPermissionsUrl(string callback)
 		{
-			return PayPalPermissionServiceHelper.GetRequestPermissionsUrl(config, callback);
+			return PayPalPermissionServiceHelper.GetRequestPermissionsUrl(callback);
 		}
 
-		public static PayPalPermissionsGranted GetAccessToken( IPayPalConfig config, string requestToken, string verificationCode )
+		public static PayPalPermissionsGranted GetAccessToken( string requestToken, string verificationCode )
 		{
-			return PayPalPermissionServiceHelper.GetAccessToken(config, requestToken, verificationCode);
+			return PayPalPermissionServiceHelper.GetAccessToken(requestToken, verificationCode);
 		}
 	}
 }

@@ -6,7 +6,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using MailApi;
-	using PayPalServiceLib;
 	using PayPalServiceLib.Common;
 	using TeraPeakServiceLib;
 	using Scorto.Configuration;
@@ -16,13 +15,8 @@
 	{
 		public EzBobRegistry()
 		{
-			var ezBobConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<EzBobConfigRoot>();
-			if ( ezBobConfigRoot != null )
-			{
-				For<IPayPalConfig>().Singleton().Use(ezBobConfigRoot.PayPalConfig);
-			}
 			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
-			if ( ezBobConfigRoot != null )
+			if (teraPeakConfigRoot != null)
 			{
 				For<ITeraPeakCredentionProvider>().Singleton().Use( teraPeakConfigRoot.TeraPeakCredentionProvider );
 				For<ITeraPeakConnectionProvider>().Singleton().Use( teraPeakConfigRoot.TeraPeakCredentionProvider );

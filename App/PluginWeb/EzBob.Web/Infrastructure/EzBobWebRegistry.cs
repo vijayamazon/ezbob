@@ -1,5 +1,3 @@
-using PayPal.Platform.SDK;
-
 namespace EzBob.Web.Infrastructure
 {
 	using System.Web.Security;
@@ -16,7 +14,6 @@ namespace EzBob.Web.Infrastructure
 	using Configuration;
 	using EzBob.Models.Agreements;
 	using Membership;
-	using PayPalServiceLib;
 	using PayPalServiceLib.Common;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Models;
@@ -35,7 +32,6 @@ namespace EzBob.Web.Infrastructure
 	{
 		public PluginWebRegistry()
 		{
-			var localRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<EzBobConfigRoot>();
 			var bobconfig = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRootBob>();
 
 			For<ConfigurationRootBob>().Use(bobconfig);
@@ -52,11 +48,8 @@ namespace EzBob.Web.Infrastructure
 			For<IMedalStatisticReportRepository>().Use<MedalStatisticReportRepository>();
 			For<IDailyReportRepository>().Use<DailyReportRepository>();
 
-			For<IPayPalConfig>().Singleton().Use(localRoot.PayPalConfig);
-			For<BaseAPIProfile>().Use(() => ProfileProvider.CreateProfile(localRoot.PayPalConfig));
 			For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());
 			For<IDbStringRepository>().Use<DbStringRepository>();
-			For<EzBobConfigRoot>().Use(c => localRoot);
 			For<IPayPointFacade>().Use<PayPointFacade>();
 			For<IPersonalInfoHistoryRepository>().Use<PersonalInfoHistoryRepository>();
 			For<IPacnetPaypointServiceLogRepository>().Use<PacnetPaypointServiceLogRepository>();

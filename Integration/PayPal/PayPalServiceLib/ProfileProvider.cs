@@ -1,52 +1,53 @@
-using System;
-using System.IO;
-using System.Web;
-using EzBob.PayPalServiceLib.Common;
-using PayPal.Platform.SDK;
-using StructureMap;
-
 namespace EzBob.PayPalServiceLib
 {
-    public static class ProfileProvider
+	using System;
+	using System.Web;
+	using Common;
+	using PayPal.Platform.SDK;
+	using StructureMap;
+	using ConfigManager;
+
+	public static class ProfileProvider
     {
-        public static BaseAPIProfile GetCachedProfile(IPayPalConfig payPalConfig)
+		private enum PayPalProfileType
+		{
+			ThreeToken,
+			Certificate
+		}
+
+        public static BaseAPIProfile GetCachedProfile()
         {
             var profile = HttpContext.Current.Session["PROFILE"] as BaseAPIProfile;
             if(profile == null)
             {
-                HttpContext.Current.Session["PROFILE"] = profile = CreateProfile(payPalConfig);
+                HttpContext.Current.Session["PROFILE"] = profile = CreateProfile();
             }
             return profile;
         }
 
-        public static BaseAPIProfile CreateProfile(IPayPalConfig config)
+        public static BaseAPIProfile CreateProfile()
         {
             BaseAPIProfile profile = null;
-            //byte[] bCert = null;
-            //string filePath = string.Empty;
-            //FileStream fs = null;
 
 			var factory = ObjectFactory.GetInstance<IServiceEndPointFactory>();
 
-			var connectionInfo = factory.Create( PayPalServiceType.Permissions, config.ServiceType );
+			var connectionInfo = factory.Create(PayPalServiceType.Permissions);
             try
             {
-
-                if (config.ApiAuthenticationMode == PayPalProfileType.ThreeToken)
+				if (CurrentValues.Instance.PayPalApiAuthenticationMode == PayPalProfileType.ThreeToken.ToString())
                 {
-                    ////Three token 
-                    profile = new BaseAPIProfile
-                                  {
-                                      APIProfileType = ConvertToServerEnum(config.ApiAuthenticationMode),
-                                      ApplicationID = config.PPApplicationId,
-                                      APIUsername = config.ApiUsername,
-                                      APIPassword = config.ApiPassword,
-                                      APISignature = config.ApiSignature,
-									  Environment = connectionInfo.ServiceEndPoint,
-                                      RequestDataformat = config.ApiRequestformat.ToString(),
-                                      ResponseDataformat = config.ApiResponseformat.ToString(),
-                                      IsTrustAllCertificates = config.TrustAll
-                                  };
+	                profile = new BaseAPIProfile
+		                {
+			                APIProfileType = ConvertToServerEnum(PayPalProfileType.ThreeToken),
+			                ApplicationID = CurrentValues.Instance.PayPalPpApplicationId,
+			                APIUsername = CurrentValues.Instance.PayPalApiUsername,
+			                APIPassword = CurrentValues.Instance.PayPalApiPassword,
+			                APISignature = CurrentValues.Instance.PayPalApiSignature,
+			                Environment = connectionInfo.ServiceEndPoint,
+			                RequestDataformat = CurrentValues.Instance.PayPalApiRequestFormat.Value,
+							ResponseDataformat = CurrentValues.Instance.PayPalApiResponseFormat.Value,
+			                IsTrustAllCertificates = CurrentValues.Instance.PayPalTrustAll
+		                };
                 }
                 else
                 {

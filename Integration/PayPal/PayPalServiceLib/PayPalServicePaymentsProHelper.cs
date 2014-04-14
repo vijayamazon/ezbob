@@ -1,28 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
-using EzBob.CommonLib;
-using EzBob.PayPalDbLib.Models;
-using EzBob.PayPalServiceLib.Common;
-using EzBob.PayPalServiceLib.com.paypal.service;
-using StructureMap;
-
 namespace EzBob.PayPalServiceLib
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Reflection;
+	using System.ServiceModel;
+	using System.Text;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
+	using CommonLib;
+	using PayPalDbLib.Models;
+	using Common;
+	using com.paypal.service;
+	using StructureMap;
+	using ConfigManager;
+
 	internal class PayPalServicePaymentsProHelper
 	{
 		private readonly string Version = "94";
 
-		private readonly IPayPalConfig _Config;
 		private readonly ServiceUrlsInfo _ConnectionInfo;
 		private static string[] _CommonInternalErrors;
 
@@ -37,19 +35,16 @@ namespace EzBob.PayPalServiceLib
 			};
 		}
 
-		public PayPalServicePaymentsProHelper(IPayPalConfig config)
+		public PayPalServicePaymentsProHelper()
 		{
-			_Config = config;
 			var factory = ObjectFactory.GetInstance<IServiceEndPointFactory>();
-			_ConnectionInfo = factory.Create( PayPalServiceType.WebServiceThreeToken, config.ServiceType );
+			_ConnectionInfo = factory.Create( PayPalServiceType.WebServiceThreeToken );
 		}
 
 		private PayPalAPIInterfaceClient CreateService( PayPalRequestInfo reqInfo )
 		{
 			int openTimeOutInMinutes = reqInfo.OpenTimeOutInMinutes;
 			int sendTimeout = reqInfo.SendTimeoutInMinutes;
-			
-			
 
 			var binding = new BasicHttpBinding( BasicHttpSecurityMode.Transport );
 			binding.MaxReceivedMessageSize = 2147483647;
@@ -60,8 +55,7 @@ namespace EzBob.PayPalServiceLib
 			binding.SendTimeout = new TimeSpan( 0, sendTimeout, 0 );
 			var addr = new EndpointAddress( _ConnectionInfo.ServiceEndPoint );
 
-
-			return new PayPalAPIInterfaceClient( binding, addr );			
+			return new PayPalAPIInterfaceClient( binding, addr );
 		}
 
 		private List<Tuple<DateTime, DateTime>> GetDailyRanges(DateTime startDate, DateTime endDate)
@@ -176,7 +170,7 @@ namespace EzBob.PayPalServiceLib
 			Exception lastEx = null;
 			int counter = 0;
 
-			while (needToRetry && counter <= _Config.NumberOfRetries)
+			while (needToRetry && counter <= CurrentValues.Instance.PayPalNumberOfRetries)
 			{
 				counter++;
 				try
@@ -212,7 +206,7 @@ namespace EzBob.PayPalServiceLib
 
 			WriteLoggerHelper.Write(string.Format("Failed fetching pay pal data from {0} to {1}", request.TransactionSearchRequest.StartDate, request.TransactionSearchRequest.EndDate), WriteLogType.Info, null, lastEx);
 
-			if (daysFailedSoFar == _Config.MaxAllowedFailures)
+			if (daysFailedSoFar == CurrentValues.Instance.PayPalMaxAllowedFailures)
 			{
 				WriteLoggerHelper.Write(string.Format("Max number of failures:{0} exceeded.", daysFailedSoFar), WriteLogType.Error, null, lastEx);
 				throw lastEx ?? new Exception();
@@ -262,17 +256,16 @@ namespace EzBob.PayPalServiceLib
 		private CustomSecurityHeaderType CreateCredentials( PayPalSecurityData securityInfo )
 		{
 			return new CustomSecurityHeaderType
-			       	{
-			       		Credentials = new UserIdPasswordType
-			       		              	{
-			       		              		Username = _Config.ApiUsername,
-			       		              		Password = _Config.ApiPassword,
-			       		              		Signature = _Config.ApiSignature,
-			       		              		Subject = securityInfo.UserId,
-											AppId = _Config.PPApplicationId
-											
-			       		              	}
-			       	};
+				{
+					Credentials = new UserIdPasswordType
+						{
+							Username = CurrentValues.Instance.PayPalApiUsername,
+							Password = CurrentValues.Instance.PayPalApiPassword,
+							Signature = CurrentValues.Instance.PayPalApiSignature,
+							Subject = securityInfo.UserId,
+							AppId = CurrentValues.Instance.PayPalPpApplicationId
+						}
+				};
 		}
 
         public static string GetLogFor(object target)

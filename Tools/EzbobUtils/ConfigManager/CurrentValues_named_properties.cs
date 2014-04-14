@@ -360,6 +360,15 @@
 
 		#endregion property BankBasedApprovalNumOfMonthsToLookForDefaults
 
+		#region property BankBasedApprovalNumOfMonthBackForVatCheck
+
+		public virtual VariableValue BankBasedApprovalNumOfMonthBackForVatCheck
+		{
+			get { return this[Variables.BankBasedApprovalNumOfMonthBackForVatCheck]; } // get
+		} // BankBasedApprovalNumOfMonthBackForVatCheck
+
+		#endregion property BankBasedApprovalNumOfMonthBackForVatCheck
+
 		#region property BankBasedApprovalPersonalScoreThreshold
 
 		public virtual VariableValue BankBasedApprovalPersonalScoreThreshold {
@@ -2000,6 +2009,61 @@
 		public virtual VariableValue PayPalIterationSettings3TimeOutAfterRetryingExpiredInMinutes
 		{
 			get { return this[Variables.PayPalIterationSettings3TimeOutAfterRetryingExpiredInMinutes]; }
+		}
+
+		public virtual VariableValue PayPalApiAuthenticationMode
+		{
+			get { return this[Variables.PayPalApiAuthenticationMode]; }
+		}
+
+		public virtual VariableValue PayPalPpApplicationId
+		{
+			get { return this[Variables.PayPalPpApplicationId]; }
+		}
+
+		public virtual VariableValue PayPalApiUsername
+		{
+			get { return this[Variables.PayPalApiUsername]; }
+		}
+
+		public virtual VariableValue PayPalApiPassword
+		{
+			get { return this[Variables.PayPalApiPassword]; }
+		}
+
+		public virtual VariableValue PayPalApiSignature
+		{
+			get { return this[Variables.PayPalApiSignature]; }
+		}
+
+		public virtual VariableValue PayPalApiRequestFormat
+		{
+			get { return this[Variables.PayPalApiRequestFormat]; }
+		}
+		
+		public virtual VariableValue PayPalApiResponseFormat
+		{
+			get { return this[Variables.PayPalApiResponseFormat]; }
+		}
+
+		public virtual VariableValue PayPalTrustAll
+		{
+			get { return this[Variables.PayPalTrustAll]; }
+		}
+
+		public virtual VariableValue PayPalServiceType
+		{
+			get { return this[Variables.PayPalServiceType]; }
+		}
+
+		public virtual VariableValue PayPalNumberOfRetries
+		{
+			get { return this[Variables.PayPalNumberOfRetries]; }
+		}
+
+		public virtual VariableValue PayPalMaxAllowedFailures
+		{
+			get { return this[Variables.PayPalMaxAllowedFailures]; }
 		}
 	} // class CurrentValues
 } // namespace ConfigManager

@@ -37,7 +37,6 @@
 		private readonly ISortCodeChecker _sortCodeChecker;
 		private readonly IYodleeAccountChecker _yodleeAccountChecker;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PaymentAccountsController));
-		private readonly IPayPalConfig _payPalConfig;
 
 		public PaymentAccountsController(
 			DatabaseDataHelper helper,
@@ -54,7 +53,6 @@
 			_session = session;
 			_mpChecker = mpChecker;
 			_yodleeAccountChecker = yodleeAccountChecker;
-			_payPalConfig = ObjectFactory.GetInstance<IPayPalConfig>();
 			if (CurrentValues.Instance.PostcodeAnywhereEnabled)
 			{
 				_sortCodeChecker = new SortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
@@ -78,11 +76,11 @@
 
 			var customer = _context.Customer;
 
-			PayPalPermissionsGranted permissionsGranted = PayPalServiceHelper.GetAccessToken(_payPalConfig, request_token, verification_code);
+			PayPalPermissionsGranted permissionsGranted = PayPalServiceHelper.GetAccessToken(request_token, verification_code);
 			PayPalPersonalData personalData;
 			try
 			{
-				personalData = PayPalServiceHelper.GetAccountInfo(_payPalConfig, permissionsGranted);
+				personalData = PayPalServiceHelper.GetAccountInfo(permissionsGranted);
 				_mpChecker.Check(paypal.InternalId, customer, personalData.Email);
 			}
 			catch (PayPalException e)
@@ -118,7 +116,7 @@
 			try
 			{
 				var callback = Url.Action("Success", "PaymentAccounts", new { Area = "Customer" }, "https");
-				var url = PayPalServiceHelper.GetRequestPermissionsUrl(_payPalConfig, callback);
+				var url = PayPalServiceHelper.GetRequestPermissionsUrl(callback);
 				return Json(new { url = url }, JsonRequestBehavior.AllowGet);
 			}
 			catch (PayPalException ex)
@@ -136,7 +134,7 @@
 			try
 			{
 				var callback = Url.Action("Success", "PaymentAccounts", new { Area = "Customer" }, "https");
-				var response = PayPalServiceHelper.GetRequestPermissionsUrl(_payPalConfig, callback);
+				var response = PayPalServiceHelper.GetRequestPermissionsUrl(callback);
 
 				return Redirect(response.Url);
 			}
