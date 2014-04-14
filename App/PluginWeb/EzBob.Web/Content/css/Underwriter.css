@@ -933,3 +933,20 @@ div.form_buttons_container a, div.form_buttons_container button { float: right; 
 	font-weight: bold;
 	color: #58B8FC;
 }
+
+.experian-account-status.Active {
+    background-color: #00BB00;
+}
+
+.experian-account-status.Settled {
+    background-color: grey;
+}
+
+.experian-account-status.Default {
+    background-color: red;
+}
+
+.experian-account-status.Late {
+    background-color: yellow;
+}
+

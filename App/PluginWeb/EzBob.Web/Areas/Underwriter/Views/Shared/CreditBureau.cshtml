@@ -895,9 +895,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @RawCell("<%- ai.OpenDate %>", "<%- ai.Account %>", "<%- ai.MatchTo %>", "<%- ai.TermAndfreq %>",
-                                             "<%- ai.Limit %>", "<%- ai.AccBalance %>", "<%- ai.AccountStatus %>", "<%- ai.SettlementDate %>",
-                                             "<%- ai.CashWithdrawals %>", "<%- ai.MinimumPayment %>")
+                                    <tr>
+                                        <td><%- ai.OpenDate %></td>
+                                        <td><%- ai.Account %></td>
+                                        <td><%- ai.MatchTo %></td>
+                                        <td><%- ai.TermAndfreq %></td>
+                                        <td><%- ai.Limit %></td>
+                                        <td><%- ai.AccBalance %></td>
+                                        <td class="experian-account-status <%- ai.AccountStatus %>"><%- ai.AccountStatus %></td>
+                                        <td><%- ai.SettlementDate %></td>
+                                        <td><%- ai.CashWithdrawals %></td>
+                                        <td><%- ai.MinimumPayment %></td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <table class="table table-finaccount">
