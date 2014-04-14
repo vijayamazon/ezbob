@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="MultiCopy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TemplateTask.cs" />
     <Compile Include="WebCopy.cs" />
     <Compile Include="XmlUpdate.cs" />
   </ItemGroup>

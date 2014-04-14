@@ -63,7 +63,6 @@
 
 		<MultiCopy CopyFrom="$(Src)\App\ezmanage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ezmanage\" />
 		
-		<Copy SourceFiles="$(Src)\Deployment\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 		<Copy SourceFiles="$(Src)\Integration\ChannelGrabberConfig\channelgrabber.json" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 				
 		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonStandaloneApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Amazon\"/>
@@ -144,8 +143,6 @@
 						<MandrillConfig>$(MandrillConfig)</MandrillConfig>
 				</data>]]></EnvConfigXml>
 		</PropertyGroup>
-		<TemplateTask TemplatePath = "$(ServerBaseFolder)\EnvironmentTemplate.xml" OutPath = "$(EnvFilePath)"
-                               DataXml = "$(EnvConfigXml)" OutXpath="//environment[@id='$(EnvId)']" /> 
 	</Target>
 
 	<Target Name="IncrementalUpdateDB">
