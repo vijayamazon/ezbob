@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ITeraPeakConnectionProvider.cs" />
     <Compile Include="Requests\ResearchResult\GetResearchResultsRequest.cs" />
     <Compile Include="Requests\ResearchResult\SearchQuery.cs" />
     <Compile Include="Requests\ResearchResult\TeraPeakRequesterCredentials.cs" />
@@ -65,15 +64,12 @@
     <Compile Include="Requests\SellerResearch\SearchQueryParamCountDates.cs" />
     <Compile Include="Requests\SellerResearch\SearchQuerySeller.cs" />
     <Compile Include="Requests\SellerResearch\SellerInfo.cs" />
-    <Compile Include="Stub\ConnectionProviderStub.cs" />
-    <Compile Include="Stub\CredentialsProviderStub.cs" />
     <Compile Include="Stub\TerapeakRequestInfoBuilder.cs" />
-    <Compile Include="TeraPeakCredentionProviderProduction.cs" />
-    <Compile Include="TeraPeakCredentionProviderSandbox.cs" />
     <Compile Include="GetSellerResearchResults.cs" />
-    <Compile Include="ITeraPeakCredentionProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Requests\ResearchResult\DateRangeInfo.cs" />
     <Compile Include="Requests\SellerResearch\GetSellerResearchResultsRequest.cs" />
     <Compile Include="Requests\ServiceRequestDataBase.cs" />
@@ -86,6 +82,10 @@
     <Compile Include="TerapeakTestFixture.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>

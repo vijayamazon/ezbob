@@ -299,6 +299,8 @@
 		YodleeApplicationToken,
 		YodleeApplicationKey,
 		YodleeAddAccountURL,
-		YodleeEditAccountURL
+		YodleeEditAccountURL,
+		TeraPeakApiKey,
+		TeraPeakUrl
 	} // enum Variables
 } // namespace ConfigManager

@@ -19,16 +19,6 @@ namespace EzBob.TeraPeakServiceLib
 
 	public class TeraPeakService : ITeraPeakService
 	{
-		private static readonly ILog _Log = LogManager.GetLogger( typeof( TeraPeakService ) );
-		private readonly ITeraPeakCredentionProvider _CredentionProvider;
-		private readonly ITeraPeakConnectionProvider _ConnectionProvider;
-
-		private TeraPeakService( ITeraPeakConnectionProvider connectionProvider, ITeraPeakCredentionProvider credentionProvider )
-		{
-			_CredentionProvider = credentionProvider;
-			_ConnectionProvider = connectionProvider;
-		}
-
 		private WebRequest CreateWebRequest()
 		{
 			//_StatusCode = default( HttpStatusCode );
@@ -47,23 +37,25 @@ namespace EzBob.TeraPeakServiceLib
 
 		private Uri CreateUrl()
 		{
-			string url;
-		
-			if ( _CredentionProvider.IsNewVersionOfCredentials)
+			string result;
+
+			string apiKey = ConfigManager.CurrentValues.Instance.TeraPeakApiKey;
+			string url = ConfigManager.CurrentValues.Instance.TeraPeakUrl;
+			if (!string.IsNullOrEmpty( apiKey ))
 			{
-				url = string.Format( "{0}?api_key={1}", _ConnectionProvider.Url, _CredentionProvider.ApiKey );
+				result = string.Format( "{0}?api_key={1}", url, apiKey );
 			}
 			else
 			{
-				url = _ConnectionProvider.Url;
+				result = url;
 			}
 
-			return new Uri( url );
+			return new Uri( result );
 		}
 
-		public static TeraPeakDatabaseSellerData SearchBySeller( ITeraPeakConnectionProvider connectionProvider, ITeraPeakCredentionProvider credentionProvider, TeraPeakRequestInfo requestInfo )
+		public static TeraPeakDatabaseSellerData SearchBySeller(TeraPeakRequestInfo requestInfo)
 		{
-			var service = new TeraPeakService( connectionProvider, credentionProvider );
+			var service = new TeraPeakService();
 			var req = new TeraPeakSearchBySellerRequester( service );
 
 			return req.Run( requestInfo );
@@ -102,7 +94,7 @@ namespace EzBob.TeraPeakServiceLib
 
 		private string CreateRequestStringSearchBySeller(string sellerId, ResultSellerInfo resultSellerInfo, SearchQueryDates searchQueryDates)
 		{
-			var req = new GetSellerResearchResultsRequest(  _CredentionProvider.RequesterCredentials, sellerId, resultSellerInfo, searchQueryDates );
+			var req = new GetSellerResearchResultsRequest(null, sellerId, resultSellerInfo, searchQueryDates);
 			return CreateRequestString( req );
 		}
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using EZBob.DatabaseLib.Model.Database;
-using EzBob.CommonLib;
 using EzBob.TeraPeakServiceLib;
 using EzBob.TeraPeakServiceLib.Stub;
 using StandaloneInitializer;
@@ -13,7 +12,6 @@ namespace TeraPeakStandaloneApp
         {
             StandaloneApp.Execute<App>(args);
         }
-
 
         public class App : StandaloneApp
         {
@@ -35,11 +33,8 @@ namespace TeraPeakStandaloneApp
                 }
 
                 var requestInfo = TerapeakRequestInfoBuilder.CreateRequestInfo(displayName, months);
-
-                var credetnialsProvider = new CredentialsProviderStub();
-                var connectionProvider = new ConnectionProviderStub();
-
-                var data = TeraPeakService.SearchBySeller(connectionProvider, credetnialsProvider, requestInfo);
+				
+                var data = TeraPeakService.SearchBySeller(requestInfo);
             }
 
             private string GetShop(string umiOrShop)

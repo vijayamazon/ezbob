@@ -58,8 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\EzBobRegistry.cs" />
-    <Compile Include="Configuration\TeraPeakConfigRoot.cs" />
-    <Compile Include="Configuration\TeraPeakCredentionProviderEnvConfig.cs" />
     <Compile Include="RequestsQueueCore\DatabaseMarketPlaceTest.cs" />
     <Compile Include="RequestsQueueCore\ExternalRequestsController.cs" />
     <Compile Include="RequestsQueueCore\ExternalRequestsManager.cs" />

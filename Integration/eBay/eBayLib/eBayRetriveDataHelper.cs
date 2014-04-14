@@ -37,8 +37,6 @@ using log4net;
 
 namespace EzBob.eBayLib
 {
-	
-
 	public class eBayRetriveDataHelper : MarketplaceRetrieveDataHelperBase<eBayDatabaseFunctionType>
 	{
 
@@ -121,8 +119,6 @@ namespace EzBob.eBayLib
 		private static readonly ILog _Log = LogManager.GetLogger( typeof( eBayRetriveDataHelper ) );
 
 		private readonly EbayServiceConnectionInfo _EbayConnectionInfo;
-		private readonly ITeraPeakCredentionProvider _TeraPeakCredentionProvider;
-		private readonly ITeraPeakConnectionProvider _TeraPeakConnectionProvider;
 		private readonly IEbayMarketplaceSettings _Settings;
 		private readonly UpdateStaretagy _UpdateStaretagy;
 		#endregion
@@ -135,8 +131,6 @@ namespace EzBob.eBayLib
 
 			var ebayConnectionInfo = ObjectFactory.GetInstance<IEbayMarketplaceTypeConnection>();
 			
-			_TeraPeakCredentionProvider = ObjectFactory.GetInstance<ITeraPeakCredentionProvider>();
-			_TeraPeakConnectionProvider = ObjectFactory.GetInstance<ITeraPeakConnectionProvider>();
 			_EbayConnectionInfo = eBayServiceHelper.CreateConnection( ebayConnectionInfo );
 
 			_UpdateStaretagy = UpdateStaretagy.CreateStrategy(this,
@@ -648,7 +642,7 @@ namespace EzBob.eBayLib
 
 						var teraPeakDatabaseSellerDataByRange = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
-									() => TeraPeakService.SearchBySeller(_TeraPeakConnectionProvider, _TeraPeakCredentionProvider, requestInfoByRange));
+									() => TeraPeakService.SearchBySeller(requestInfoByRange));
 
 						
 						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
@@ -724,7 +718,7 @@ namespace EzBob.eBayLib
 
 							var teraPeakDatabaseSellerData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
-									() => TeraPeakService.SearchBySeller( _TeraPeakConnectionProvider, _TeraPeakCredentionProvider, requestInfo ) );
+									() => TeraPeakService.SearchBySeller( requestInfo ) );
 
 	                        if (teraPeakDatabaseSellerData != null && teraPeakDatabaseSellerData.Any())
 	                        {

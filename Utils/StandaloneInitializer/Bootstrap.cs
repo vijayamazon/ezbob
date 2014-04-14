@@ -1,16 +1,12 @@
 ﻿namespace StandaloneInitializer
 {
 	using System;
-	using System.Xml;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.RegistryScanner;
 	using NHibernate;
-	using Scorto.Configuration;
-	using Scorto.Configuration.Loader;
 	using StructureMap;
 	using StructureMap.Attributes;
 	using StructureMap.Pipeline;
-	using log4net.Config;
 	using NHibernateWrapper.NHibernate;
 
 	public abstract class StandaloneApp
@@ -38,26 +34,18 @@
 
     public class Bootstrap
     {
-        public static void Init(string path = @"c:\ezbob\app\pluginweb\EzBob.Web\")
+        public static void Init()
         {
-            EnvironmentConfigurationLoader.AppPathDummy = path;
 			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 
             Scanner.Register();
-
-            //ObjectFactory.Configure(x => x.AddRegistry<EzBobRegistry>());
 
             ObjectFactory.Configure(x =>
             {
                 x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
                 x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
             });
-
-            var cfg = ConfigurationRoot.GetConfiguration();
-
-            XmlElement configurationElement = cfg.XmlElementLog;
-            XmlConfigurator.Configure(configurationElement);
         }
     }
 }

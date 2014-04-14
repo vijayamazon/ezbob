@@ -105,8 +105,7 @@ namespace ExperianStandAlone
 
 		public static void Init()
 		{
-			string webpath = System.Configuration.ConfigurationManager.AppSettings.Get("webpath");
-			Bootstrap.Init(webpath);
+			Bootstrap.Init();
 		}
 	}
 }

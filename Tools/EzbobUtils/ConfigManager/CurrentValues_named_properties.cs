@@ -2125,5 +2125,15 @@
 		{
 			get { return this[Variables.YodleeEditAccountURL]; }
 		}
+
+		public virtual VariableValue TeraPeakApiKey
+		{
+			get { return this[Variables.TeraPeakApiKey]; }
+		}
+
+		public virtual VariableValue TeraPeakUrl
+		{
+			get { return this[Variables.TeraPeakUrl]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager
