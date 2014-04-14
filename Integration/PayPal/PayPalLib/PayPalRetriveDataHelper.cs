@@ -1,34 +1,32 @@
-using System;
-using System.Collections.Generic;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.CommonLib;
-using EzBob.PayPalDbLib;
-using EzBob.PayPalDbLib.Models;
-using EzBob.PayPalServiceLib;
-using EzBob.PayPalServiceLib.Common;
-using StructureMap;
-
 namespace EzBob.PayPal
 {
+	using ConfigManager;
 	using log4net;
+	using System;
+	using System.Collections.Generic;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
+	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
+	using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
+	using EZBob.DatabaseLib.Model.Database;
+	using CommonLib;
+	using PayPalDbLib;
+	using PayPalDbLib.Models;
+	using PayPalServiceLib;
+	using PayPalServiceLib.Common;
+	using StructureMap;
 
 	public class PayPalRetriveDataHelper : MarketplaceRetrieveDataHelperBase<PayPalDatabaseFunctionType>
 	{
 		private readonly IPayPalConfig _Config;
-		private readonly IPayPalMarketplaceSettings _Settings;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPalRetriveDataHelper));
 
 		public PayPalRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<PayPalDatabaseFunctionType> marketplace)
 			: base(helper, marketplace)
 		{
 			_Config = ObjectFactory.GetInstance<IPayPalConfig>();
-			_Settings = ObjectFactory.GetInstance<IPayPalMarketplaceSettings>();
 		}
 
 		protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord)
@@ -91,19 +89,24 @@ namespace EzBob.PayPal
 									() => Helper.GetLastPayPalTransactionRequest(databaseCustomerMarketPlace));
 					if (!startDate.HasValue)
 					{
-						startDate = endDate.AddMonths(-_Settings.MonthsBack);
+						startDate = endDate.AddMonths(-CurrentValues.Instance.PayPalTransactionSearchMonthsBack);
 					}
 
-					var errorRetryingInfo = _Settings.ErrorRetryingInfo;
+					var errorRetryingInfo = new ErrorRetryingInfo((bool)CurrentValues.Instance.PayPalEnableRetrying, CurrentValues.Instance.PayPalMinorTimeoutInSeconds, CurrentValues.Instance.PayPalUseLastTimeOut);
 
+					errorRetryingInfo.Info = new ErrorRetryingItemInfo[3];
+					errorRetryingInfo.Info[0] = new ErrorRetryingItemInfo(CurrentValues.Instance.PayPalIterationSettings1Index, CurrentValues.Instance.PayPalIterationSettings1CountRequestsExpectError, CurrentValues.Instance.PayPalIterationSettings1TimeOutAfterRetryingExpiredInMinutes);
+					errorRetryingInfo.Info[1] = new ErrorRetryingItemInfo(CurrentValues.Instance.PayPalIterationSettings2Index, CurrentValues.Instance.PayPalIterationSettings2CountRequestsExpectError, CurrentValues.Instance.PayPalIterationSettings2TimeOutAfterRetryingExpiredInMinutes);
+					errorRetryingInfo.Info[2] = new ErrorRetryingItemInfo(CurrentValues.Instance.PayPalIterationSettings3Index, CurrentValues.Instance.PayPalIterationSettings3CountRequestsExpectError, CurrentValues.Instance.PayPalIterationSettings3TimeOutAfterRetryingExpiredInMinutes);
+		
 					var reqInfo = new PayPalRequestInfo
 						{
 							SecurityInfo = securityInfo,
 							StartDate = startDate.Value,
 							EndDate = endDate,
 							ErrorRetryingInfo = errorRetryingInfo,
-							OpenTimeOutInMinutes = _Settings.OpenTimeOutInMinutes,
-							SendTimeoutInMinutes = _Settings.SendTimeoutInMinutes
+							OpenTimeOutInMinutes = CurrentValues.Instance.PayPalOpenTimeoutInMinutes,
+							SendTimeoutInMinutes = CurrentValues.Instance.PayPalSendTimeoutInMinutes
 						};
 					var newTransactionsList = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,

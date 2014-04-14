@@ -20,7 +20,6 @@
 			if ( ezBobConfigRoot != null )
 			{
 				For<IPayPalConfig>().Singleton().Use(ezBobConfigRoot.PayPalConfig);
-				For<IPayPalMarketplaceSettings>().Singleton().Use( ezBobConfigRoot.PayPalSettings );
 			}
 			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
 			if ( ezBobConfigRoot != null )

@@ -86,20 +86,6 @@ namespace EzBobTest
             _Helper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
         }
 
-        [Test]
-        public void PayPalSettingsStoredInConfig()
-        {
-            var payPalSettings = ObjectFactory.GetInstance<IPayPalMarketplaceSettings>();
-            var a = payPalSettings.ErrorRetryingInfo;
-        }
-
-        [Test]
-        public void eBaySettingsStoredInConfig()
-        {
-            var payPalSettings = ObjectFactory.GetInstance<IEbayMarketplaceSettings>();
-            var a = payPalSettings.ErrorRetryingInfo;
-        }
-
 		[Test]
 		public void TestHmrcPdfThrasher() {
 			var oLog = new SafeILog(LogManager.GetLogger(typeof(TestRetrieveDataHelper)));

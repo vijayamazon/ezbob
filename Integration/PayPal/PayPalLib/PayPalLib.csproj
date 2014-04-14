@@ -60,7 +60,6 @@
     <Compile Include="PayPalConfigTestProduction.cs" />
     <Compile Include="PayPalConfigTestSandbox.cs" />
     <Compile Include="PayPalMarketPlace.cs" />
-    <Compile Include="PayPalMarketplaceSettingsHardcode.cs" />
     <Compile Include="PayPalRetriveDataHelper.cs" />
     <Compile Include="PayPalTest.cs" />
     <Compile Include="PayPaltransactionAgregator.cs" />
@@ -71,6 +70,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>

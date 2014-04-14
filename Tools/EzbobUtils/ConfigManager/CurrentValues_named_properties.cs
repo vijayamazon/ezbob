@@ -1926,5 +1926,80 @@
 		{
 			get { return this[Variables.SessionTimeout]; }
 		}
+
+		public virtual VariableValue PayPalTransactionSearchMonthsBack
+		{
+			get { return this[Variables.PayPalTransactionSearchMonthsBack]; }
+		}
+
+		public virtual VariableValue PayPalOpenTimeoutInMinutes
+		{
+			get { return this[Variables.PayPalOpenTimeoutInMinutes]; }
+		}
+
+		public virtual VariableValue PayPalSendTimeoutInMinutes
+		{
+			get { return this[Variables.PayPalSendTimeoutInMinutes]; }
+		}
+
+		public virtual VariableValue PayPalEnableRetrying
+		{
+			get { return this[Variables.PayPalEnableRetrying]; }
+		}
+		
+		public virtual VariableValue PayPalMinorTimeoutInSeconds
+		{
+			get { return this[Variables.PayPalMinorTimeoutInSeconds]; }
+		}
+
+		public virtual VariableValue PayPalUseLastTimeOut
+		{
+			get { return this[Variables.PayPalUseLastTimeOut]; }
+		}
+
+		public virtual VariableValue PayPalIterationSettings1Index
+		{
+			get { return this[Variables.PayPalIterationSettings1Index]; }
+		}
+
+		public virtual VariableValue PayPalIterationSettings1CountRequestsExpectError
+		{
+			get { return this[Variables.PayPalIterationSettings1CountRequestsExpectError]; }
+		}
+		
+		public virtual VariableValue PayPalIterationSettings1TimeOutAfterRetryingExpiredInMinutes
+		{
+			get { return this[Variables.PayPalIterationSettings1TimeOutAfterRetryingExpiredInMinutes]; }
+		}
+
+		public virtual VariableValue PayPalIterationSettings2Index
+		{
+			get { return this[Variables.PayPalIterationSettings2Index]; }
+		}
+
+		public virtual VariableValue PayPalIterationSettings2CountRequestsExpectError
+		{
+			get { return this[Variables.PayPalIterationSettings2CountRequestsExpectError]; }
+		}
+
+		public virtual VariableValue PayPalIterationSettings2TimeOutAfterRetryingExpiredInMinutes
+		{
+			get { return this[Variables.PayPalIterationSettings2TimeOutAfterRetryingExpiredInMinutes]; }
+		}
+
+		public virtual VariableValue PayPalIterationSettings3Index
+		{
+			get { return this[Variables.PayPalIterationSettings3Index]; }
+		}
+
+		public virtual VariableValue PayPalIterationSettings3CountRequestsExpectError
+		{
+			get { return this[Variables.PayPalIterationSettings3CountRequestsExpectError]; }
+		}
+
+		public virtual VariableValue PayPalIterationSettings3TimeOutAfterRetryingExpiredInMinutes
+		{
+			get { return this[Variables.PayPalIterationSettings3TimeOutAfterRetryingExpiredInMinutes]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

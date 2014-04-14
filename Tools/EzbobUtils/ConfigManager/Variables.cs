@@ -260,6 +260,21 @@
 		PacnetBalanceWeekendLimit,
 		PacnetBalanceWeekdayLimit,
 		SkipServiceOnNewCreditLine,
-		SessionTimeout
+		SessionTimeout,
+		PayPalTransactionSearchMonthsBack,
+		PayPalOpenTimeoutInMinutes,
+		PayPalSendTimeoutInMinutes,
+		PayPalEnableRetrying,
+		PayPalMinorTimeoutInSeconds,
+		PayPalUseLastTimeOut,
+		PayPalIterationSettings1Index,
+		PayPalIterationSettings1CountRequestsExpectError,
+		PayPalIterationSettings1TimeOutAfterRetryingExpiredInMinutes,
+		PayPalIterationSettings2Index,
+		PayPalIterationSettings2CountRequestsExpectError,
+		PayPalIterationSettings2TimeOutAfterRetryingExpiredInMinutes,
+		PayPalIterationSettings3Index,
+		PayPalIterationSettings3CountRequestsExpectError,
+		PayPalIterationSettings3TimeOutAfterRetryingExpiredInMinutes
 	} // enum Variables
 } // namespace ConfigManager
