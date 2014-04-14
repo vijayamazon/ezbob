@@ -169,10 +169,6 @@
       <Project>{590C01C7-CF2C-4D5B-A307-3EB7EC61FB0D}</Project>
       <Name>EKM</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EzBob.Configuration\EzBob.Configuration.csproj">
-      <Project>{7D1F5CBE-9FF9-4170-862B-AB203D968EF5}</Project>
-      <Name>EzBob.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\EzBob.Models\EzBob.Models.csproj">
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>

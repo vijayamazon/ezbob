@@ -110,10 +110,6 @@
       <Project>{d91f3fd0-9e1b-41ff-ae2e-67f051198f51}</Project>
       <Name>ExperianLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EzBob.Configuration\EzBob.Configuration.csproj">
-      <Project>{7d1f5cbe-9ff9-4170-862b-ab203d968ef5}</Project>
-      <Name>EzBob.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EzBob\EzBob.csproj">
       <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
       <Name>EzBob</Name>

@@ -39,12 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.Configuration.Loader">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -120,10 +114,6 @@
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EzBob.Configuration\EzBob.Configuration.csproj">
-      <Project>{7d1f5cbe-9ff9-4170-862b-ab203d968ef5}</Project>
-      <Name>EzBob.Configuration</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

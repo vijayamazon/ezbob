@@ -11,7 +11,6 @@ namespace EzBob.Web.Infrastructure
 	using EZBob.DatabaseLib.Model.Email;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
-	using Configuration;
 	using EzBob.Models.Agreements;
 	using Membership;
 	using PayPalServiceLib.Common;
@@ -23,7 +22,6 @@ namespace EzBob.Web.Infrastructure
 	using Code.MpUniq;
 	using Models.Repository;
 	using MailApi;
-	using Scorto.Configuration;
 	using NHibernateWrapper.Web;
 	using StructureMap.Configuration.DSL;
 	using ConfigManager;
@@ -32,10 +30,6 @@ namespace EzBob.Web.Infrastructure
 	{
 		public PluginWebRegistry()
 		{
-			var bobconfig = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRootBob>();
-
-			For<ConfigurationRootBob>().Use(bobconfig);
-
 			For<MembershipProvider>().Use<EzbobMembershipProvider>();
 			For<IWorkplaceContext>().Use<EzBobContext>();
 			For<IEzbobWorkplaceContext>().Use<EzBobContext>();

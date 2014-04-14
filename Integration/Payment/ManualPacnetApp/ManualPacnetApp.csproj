@@ -95,10 +95,6 @@
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EzBob.Configuration\EzBob.Configuration.csproj">
-      <Project>{7d1f5cbe-9ff9-4170-862b-ab203d968ef5}</Project>
-      <Name>EzBob.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\EzBob\EzBob.csproj">
       <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
       <Name>EzBob</Name>
