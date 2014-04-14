@@ -1,26 +1,21 @@
-using FluentNHibernate.Cfg;
-using FluentNHibernate.Conventions;
-using FluentNHibernate.Conventions.Helpers;
-using log4net;
-using NHibernate;
-using NHibernate.Cfg;
-using Scorto.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Xml;
 namespace NHibernateWrapper.NHibernate
 {
+	using FluentNHibernate.Cfg;
+	using FluentNHibernate.Conventions;
+	using FluentNHibernate.Conventions.Helpers;
+	using global::NHibernate;
+	using log4net;
+	using System.IO;
+	using System.Linq;
+	using System.Xml;
+	using System.Configuration;
+
 	public class NHibernateManager
 	{
 		private static readonly object _lock = new object();
 		private static ILog _log = LogManager.GetLogger("NHibernateWrapper.NHibernate.NHibernateManager");
 		private static ISessionFactory _sessionFactory;
 		private static global::NHibernate.Cfg.Configuration _config;
-		private static bool _isOracle;
 		private static readonly System.Collections.Generic.List<System.Reflection.Assembly> _fluentAssemblies = new System.Collections.Generic.List<System.Reflection.Assembly>();
 		private static readonly System.Collections.Generic.List<System.Reflection.Assembly> _hbmAssemblies = new System.Collections.Generic.List<System.Reflection.Assembly>();
 		public static global::NHibernate.Cfg.Configuration Configuration
@@ -86,15 +81,12 @@ namespace NHibernateWrapper.NHibernate
 		}
 		private static void Configure()
 		{
-			ConfigurationRoot configuration = ConfigurationRoot.GetConfiguration();
-			System.Xml.XmlElement innerXml = configuration.NHibernateConfig.InnerXml;
-			NHibernateManager._config.Configure(System.Xml.XmlReader.Create(new System.IO.StringReader(innerXml.OuterXml)));
-			NHibernateManager._config.Properties.Add("connection.connection_string", configuration.DbLib.ConnectionString);
-			NHibernateManager._isOracle = NHibernateManager._config.GetProperty("dialect").ToLower().Contains("oracle");
+			_config.Configure(XmlReader.Create(new StringReader("<hibernate-configuration xmlns=\"urn:nhibernate-configuration-2.2\"><session-factory><property name=\"cache.provider_class\">NHibernate.Caches.SysCache2.SysCacheProvider, NHibernate.Caches.SysCache2</property><property name=\"cache.use_query_cache\">true</property><property name=\"connection.provider\">NHibernate.Connection.DriverConnectionProvider</property><property name=\"dialect\">NHibernate.Dialect.MsSql2005Dialect</property><property name=\"connection.driver_class\">NHibernate.Driver.SqlClientDriver</property><property name=\"show_sql\">false</property><property name=\"cache.use_second_level_cache\">true</property><property name=\"adonet.batch_size\">50</property></session-factory></hibernate-configuration>")));
+		
+			string connectionString = ConfigurationManager.ConnectionStrings[new Ezbob.Context.Environment().Context.ToLower()].ConnectionString;
+			_config.Properties.Add("connection.connection_string", connectionString);
 		}
-		private static void BuildSchema(global::NHibernate.Cfg.Configuration config)
-		{
-		}
+
 		private static void AddMappings(MappingConfiguration mappings)
 		{
 			mappings.FluentMappings.Conventions.Add<IHibernateMappingConvention>(AutoImport.Never());
@@ -111,14 +103,6 @@ namespace NHibernateWrapper.NHibernate
 		{
 			ISession session = NHibernateManager.SessionFactory.OpenSession();
 			session.FlushMode = FlushMode.Commit;
-			if (NHibernateManager._isOracle)
-			{
-				using (System.Data.IDbCommand dbCommand = session.Connection.CreateCommand())
-				{
-					dbCommand.CommandText = "alter session set nls_date_format='YYYY-MM-DD'";
-					dbCommand.ExecuteNonQuery();
-				}
-			}
 			return session;
 		}
 	}

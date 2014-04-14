@@ -52,12 +52,10 @@
     <Reference Include="NHibernate">
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.Core" />
@@ -159,6 +157,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="NHibernate\SecurityApplication.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
