@@ -3,8 +3,8 @@ root.EzBob = root.EzBob or {}
 
 class EzBob.GA
     trackPage:(url) ->
-        _gaq.push(['_trackPageview', url])
+        if(_gaq?)
+            _gaq.push(['_trackPageview', url])
+        else
+            console.log 'Track PageView: %s', url
 
-class EzBob.GATest
-    trackPage:(url) ->
-        console.log 'Track PageView: %s', url
