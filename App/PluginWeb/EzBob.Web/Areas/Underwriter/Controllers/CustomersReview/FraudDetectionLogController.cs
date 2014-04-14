@@ -6,6 +6,7 @@
 	using EzBob.Web.Areas.Underwriter.Models;
 	using System;
 	using ApplicationMng.Repository;
+	using Ezbob.Backend.Models;
 	using FraudChecker;
 	using Infrastructure.Attributes;
 

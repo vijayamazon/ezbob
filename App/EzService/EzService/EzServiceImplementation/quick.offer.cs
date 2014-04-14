@@ -4,6 +4,7 @@
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.QuickOffer;
 	using EzServiceConfiguration;
+	using Ezbob.Backend.Models;
 	using FraudChecker;
 
 	partial class EzServiceImplementation {

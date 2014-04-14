@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Fraud;
 	using EzBob.Web.Code;
+	using Ezbob.Backend.Models;
 	using log4net;
 	using NHibernate;
 	using NHibernate.Linq;

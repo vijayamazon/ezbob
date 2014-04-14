@@ -9,6 +9,7 @@ namespace FraudChecker
 {
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Ezbob.Backend.Models;
 	using Iesi.Collections.Generic;
 
 	public class FraudDetectionChecker

@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies {
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using global::FraudChecker;

@@ -4,13 +4,16 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Infrastructure.Attributes;
 	using NHibernate;
 	using NHibernate.Linq;
+	using Newtonsoft.Json;
 	using StructureMap;
 	using Models;
 	using Code;
@@ -369,6 +372,17 @@
 
 			switch (status) {
 			case CreditResultStatus.Approved:
+				if (!customer.WizardStep.TheLastOne) {
+					try {
+						var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(CurrentValues.Instance.FinishWizardForApproved);
+						oArgs.CustomerID = customer.Id;
+						m_oServiceClient.Instance.FinishWizard(oArgs, user.Id);
+					}
+					catch (Exception e) {
+						m_oLog.Alert(e, "Something went horribly not so cool while finishing customer's wizard.");
+					} // try
+				} // if
+
 				customer.DateApproved = DateTime.UtcNow;
 				customer.Status = Status.Approved;
 				customer.ApprovedReason = reason;

@@ -833,23 +833,6 @@ namespace EzBob.Web.EzServiceReference {
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="NewCreditLineOption", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies")]
-    public enum NewCreditLineOption : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SkipEverything = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UpdateEverythingExceptMp = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UpdateEverythingAndApplyAutoRules = 3,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UpdateEverythingAndGoToManualDecision = 4,
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzServiceAdmin")]
     public interface IEzServiceAdmin {
@@ -1106,13 +1089,13 @@ namespace EzBob.Web.EzServiceReference {
         string LandRegistryRes(int customerId, string titleNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
         EzBob.Web.EzServiceReference.BoolActionResult GenerateMobileCode(string phone);
@@ -1124,7 +1107,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData FraudChecker(int customerId, FraudChecker.FraudMode mode);
+        EzBob.Web.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData LateBy14Days();
@@ -1172,7 +1155,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData FinishWizard(int customerId, int underwriterId);
+        EzBob.Web.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerState", ReplyAction="http://tempuri.org/IEzService/GetCustomerStateResponse")]
         EzBob.Web.EzServiceReference.StringActionResult GetCustomerState(int customerId);
@@ -1455,15 +1438,15 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.LandRegistryRes(customerId, titleNumber);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
             return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
@@ -1479,7 +1462,7 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.FirstOfMonthStatusNotifier();
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData FraudChecker(int customerId, FraudChecker.FraudMode mode) {
+        public EzBob.Web.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode) {
             return base.Channel.FraudChecker(customerId, mode);
         }
         
@@ -1543,8 +1526,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.GetWizardConfigs();
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData FinishWizard(int customerId, int underwriterId) {
-            return base.Channel.FinishWizard(customerId, underwriterId);
+        public EzBob.Web.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId) {
+            return base.Channel.FinishWizard(oArgs, underwriterId);
         }
         
         public EzBob.Web.EzServiceReference.StringActionResult GetCustomerState(int customerId) {

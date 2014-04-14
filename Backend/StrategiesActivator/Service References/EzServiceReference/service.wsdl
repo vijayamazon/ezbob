@@ -75,8 +75,6 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Models.Agreements" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Web.Areas.Customer.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/FraudChecker" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Web.Areas.Underwriter.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />

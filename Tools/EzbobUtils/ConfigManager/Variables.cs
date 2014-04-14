@@ -99,6 +99,7 @@
 		FinancialAccounts_JointApplicant,
 		FinancialAccounts_MainApplicant,
 		FinancialAccounts_No_Match,
+		FinishWizardForApproved,
 		FirstOfMonthEnableCustomerMail,
 		FirstOfMonthStatusMailCopyTo,
 		FirstOfMonthStatusMailEnabled,

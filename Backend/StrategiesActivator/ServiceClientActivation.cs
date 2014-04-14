@@ -3,11 +3,14 @@
 	using System.Linq;
 	using System.Reflection;
 	using System.ServiceModel;
+	using ConfigManager;
 	using EzServiceConfigurationLoader;
 	using System;
 	using EzServiceReference;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Newtonsoft.Json;
 	using log4net;
 
 	public class ServiceClientActivation {
@@ -31,6 +34,8 @@
 
 			var env = new Ezbob.Context.Environment(m_oLog);
 			AConnection db = new SqlConnection(env, m_oLog);
+
+			ConfigManager.CurrentValues.Init(db, m_oLog);
 
 			Configuration cfg = null;
 
@@ -620,7 +625,11 @@
 				return;
 			}
 
-			serviceClient.FinishWizard(customerId, underwriterId);
+			var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(CurrentValues.Instance.FinishWizardForApproved);
+
+			oArgs.CustomerID = customerId;
+
+			serviceClient.FinishWizard(oArgs, underwriterId);
 		}
 
 		[Activation]

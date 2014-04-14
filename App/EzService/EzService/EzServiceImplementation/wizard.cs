@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using EzBob.Backend.Strategies;
+	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
 		public WizardConfigsActionResult GetWizardConfigs() {
@@ -14,8 +15,8 @@
 			};
 		} // GetWizardConfigs
 
-		public ActionMetaData FinishWizard(int customerId, int underwriterId) {
-			return Execute(customerId, underwriterId, typeof(FinishWizard), customerId);
+		public ActionMetaData FinishWizard(FinishWizardArgs oArgs, int underwriterId) {
+			return Execute(oArgs.CustomerID, underwriterId, typeof(FinishWizard), oArgs);
 		} // FinishWizard
 	} // class EzServiceImplementation
 } // namespace EzService

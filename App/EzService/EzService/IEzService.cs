@@ -5,6 +5,7 @@
 	using EzBob.Backend.Strategies;
 	using EzBob.Models.Agreements;
 	using EzBob.Web.Areas.Underwriter.Models;
+	using Ezbob.Backend.Models;
 	using FraudChecker;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -326,7 +327,7 @@
 		WizardConfigsActionResult GetWizardConfigs();
 
 		[OperationContract]
-		ActionMetaData FinishWizard(int customerId, int underwriterId);
+		ActionMetaData FinishWizard(FinishWizardArgs oArgs, int underwriterId);
 
 		[OperationContract]
 		StringActionResult GetCustomerState(int customerId);

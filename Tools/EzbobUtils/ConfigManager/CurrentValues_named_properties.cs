@@ -793,6 +793,14 @@
 
 		#endregion property FinancialAccounts_No_Match
 
+		#region property FinishWizardForApproved
+
+		public virtual VariableValue FinishWizardForApproved {
+			get { return this[Variables.FinishWizardForApproved]; } // get
+		} // FinishWizardForApproved
+
+		#endregion property FinishWizardForApproved
+
 		#region property FirstOfMonthEnableCustomerMail
 
 		public virtual VariableValue FirstOfMonthEnableCustomerMail {

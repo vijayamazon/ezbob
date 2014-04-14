@@ -1,7 +1,7 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.Postcode;
-	using FraudChecker;
+	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData FirstOfMonthStatusNotifier() {

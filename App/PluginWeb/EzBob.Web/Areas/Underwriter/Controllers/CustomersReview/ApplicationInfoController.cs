@@ -13,6 +13,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzServiceReference;
+	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
@@ -565,7 +566,9 @@
 		{
 			int underwriterId = context.User.Id;
 
-			new ServiceClient().Instance.FinishWizard(customerId, underwriterId);
+			var oArgs = new FinishWizardArgs { CustomerID = customerId, };
+
+			new ServiceClient().Instance.FinishWizard(oArgs, underwriterId);
 
 			return Json(true);
 		}

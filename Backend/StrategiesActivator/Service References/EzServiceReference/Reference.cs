@@ -294,10 +294,10 @@ namespace StrategiesActivator.EzServiceReference {
     public partial class BrokerPropertiesActionResult : StrategiesActivator.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategiesActivator.EzServiceReference.BrokerProperties PropertiesField;
+        private Ezbob.Backend.Models.BrokerProperties PropertiesField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategiesActivator.EzServiceReference.BrokerProperties Properties {
+        public Ezbob.Backend.Models.BrokerProperties Properties {
             get {
                 return this.PropertiesField;
             }
@@ -317,10 +317,10 @@ namespace StrategiesActivator.EzServiceReference {
     public partial class BrokerCustomersActionResult : StrategiesActivator.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategiesActivator.EzServiceReference.BrokerCustomerEntry[] CustomersField;
+        private Ezbob.Backend.Models.BrokerCustomerEntry[] CustomersField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategiesActivator.EzServiceReference.BrokerCustomerEntry[] Customers {
+        public Ezbob.Backend.Models.BrokerCustomerEntry[] Customers {
             get {
                 return this.CustomersField;
             }
@@ -340,10 +340,10 @@ namespace StrategiesActivator.EzServiceReference {
     public partial class BrokerCustomerDetailsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategiesActivator.EzServiceReference.BrokerCustomerDetails DataField;
+        private Ezbob.Backend.Models.BrokerCustomerDetails DataField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategiesActivator.EzServiceReference.BrokerCustomerDetails Data {
+        public Ezbob.Backend.Models.BrokerCustomerDetails Data {
             get {
                 return this.DataField;
             }
@@ -386,10 +386,10 @@ namespace StrategiesActivator.EzServiceReference {
     public partial class BrokerCustomerFilesActionResult : StrategiesActivator.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategiesActivator.EzServiceReference.BrokerCustomerFile[] FilesField;
+        private Ezbob.Backend.Models.BrokerCustomerFile[] FilesField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategiesActivator.EzServiceReference.BrokerCustomerFile[] Files {
+        public Ezbob.Backend.Models.BrokerCustomerFile[] Files {
             get {
                 return this.FilesField;
             }
@@ -538,7 +538,7 @@ namespace StrategiesActivator.EzServiceReference {
         private System.Collections.Generic.Dictionary<int, string> ActionsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategiesActivator.EzServiceReference.FileDescription[] FilesField;
+        private Ezbob.Backend.Models.FileDescription[] FilesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int MaxPerNumberField;
@@ -569,7 +569,7 @@ namespace StrategiesActivator.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategiesActivator.EzServiceReference.FileDescription[] Files {
+        public Ezbob.Backend.Models.FileDescription[] Files {
             get {
                 return this.FilesField;
             }
@@ -696,7 +696,7 @@ namespace StrategiesActivator.EzServiceReference {
         private bool HasValueField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategiesActivator.EzServiceReference.QuickOfferModel ValueField;
+        private EzBob.Backend.Models.QuickOfferModel ValueField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool HasValue {
@@ -712,7 +712,7 @@ namespace StrategiesActivator.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategiesActivator.EzServiceReference.QuickOfferModel Value {
+        public EzBob.Backend.Models.QuickOfferModel Value {
             get {
                 return this.ValueField;
             }
@@ -829,1294 +829,6 @@ namespace StrategiesActivator.EzServiceReference {
                     this.RecordsField = value;
                     this.RaisePropertyChanged("Records");
                 }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerProperties", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
-    [System.SerializableAttribute()]
-    public partial class BrokerProperties : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int BrokerIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string BrokerNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string BrokerRegNumField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string BrokerWebSiteUrlField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ContactEmailField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ContactMobileField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ContactNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ContactOtherPhoneField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ErrorMsgField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string SourceRefField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int BrokerID {
-            get {
-                return this.BrokerIDField;
-            }
-            set {
-                if ((this.BrokerIDField.Equals(value) != true)) {
-                    this.BrokerIDField = value;
-                    this.RaisePropertyChanged("BrokerID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string BrokerName {
-            get {
-                return this.BrokerNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.BrokerNameField, value) != true)) {
-                    this.BrokerNameField = value;
-                    this.RaisePropertyChanged("BrokerName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string BrokerRegNum {
-            get {
-                return this.BrokerRegNumField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.BrokerRegNumField, value) != true)) {
-                    this.BrokerRegNumField = value;
-                    this.RaisePropertyChanged("BrokerRegNum");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string BrokerWebSiteUrl {
-            get {
-                return this.BrokerWebSiteUrlField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.BrokerWebSiteUrlField, value) != true)) {
-                    this.BrokerWebSiteUrlField = value;
-                    this.RaisePropertyChanged("BrokerWebSiteUrl");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ContactEmail {
-            get {
-                return this.ContactEmailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ContactEmailField, value) != true)) {
-                    this.ContactEmailField = value;
-                    this.RaisePropertyChanged("ContactEmail");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ContactMobile {
-            get {
-                return this.ContactMobileField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ContactMobileField, value) != true)) {
-                    this.ContactMobileField = value;
-                    this.RaisePropertyChanged("ContactMobile");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ContactName {
-            get {
-                return this.ContactNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ContactNameField, value) != true)) {
-                    this.ContactNameField = value;
-                    this.RaisePropertyChanged("ContactName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ContactOtherPhone {
-            get {
-                return this.ContactOtherPhoneField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ContactOtherPhoneField, value) != true)) {
-                    this.ContactOtherPhoneField = value;
-                    this.RaisePropertyChanged("ContactOtherPhone");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ErrorMsg {
-            get {
-                return this.ErrorMsgField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ErrorMsgField, value) != true)) {
-                    this.ErrorMsgField = value;
-                    this.RaisePropertyChanged("ErrorMsg");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string SourceRef {
-            get {
-                return this.SourceRefField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.SourceRefField, value) != true)) {
-                    this.SourceRefField = value;
-                    this.RaisePropertyChanged("SourceRef");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerEntry", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
-    [System.SerializableAttribute()]
-    public partial class BrokerCustomerEntry : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime ApplyDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int CustomerIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string EmailField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FirstNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsLeadDeletedField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime LastInvitationSentField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string LastNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int LeadIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal LoanAmountField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime LoanDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MarketplacesField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string RefNumberField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal SetupFeeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string StatusField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string WizardStepField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime ApplyDate {
-            get {
-                return this.ApplyDateField;
-            }
-            set {
-                if ((this.ApplyDateField.Equals(value) != true)) {
-                    this.ApplyDateField = value;
-                    this.RaisePropertyChanged("ApplyDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int CustomerID {
-            get {
-                return this.CustomerIDField;
-            }
-            set {
-                if ((this.CustomerIDField.Equals(value) != true)) {
-                    this.CustomerIDField = value;
-                    this.RaisePropertyChanged("CustomerID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email {
-            get {
-                return this.EmailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
-                    this.EmailField = value;
-                    this.RaisePropertyChanged("Email");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FirstName {
-            get {
-                return this.FirstNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
-                    this.FirstNameField = value;
-                    this.RaisePropertyChanged("FirstName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsLeadDeleted {
-            get {
-                return this.IsLeadDeletedField;
-            }
-            set {
-                if ((this.IsLeadDeletedField.Equals(value) != true)) {
-                    this.IsLeadDeletedField = value;
-                    this.RaisePropertyChanged("IsLeadDeleted");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime LastInvitationSent {
-            get {
-                return this.LastInvitationSentField;
-            }
-            set {
-                if ((this.LastInvitationSentField.Equals(value) != true)) {
-                    this.LastInvitationSentField = value;
-                    this.RaisePropertyChanged("LastInvitationSent");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string LastName {
-            get {
-                return this.LastNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
-                    this.LastNameField = value;
-                    this.RaisePropertyChanged("LastName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int LeadID {
-            get {
-                return this.LeadIDField;
-            }
-            set {
-                if ((this.LeadIDField.Equals(value) != true)) {
-                    this.LeadIDField = value;
-                    this.RaisePropertyChanged("LeadID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal LoanAmount {
-            get {
-                return this.LoanAmountField;
-            }
-            set {
-                if ((this.LoanAmountField.Equals(value) != true)) {
-                    this.LoanAmountField = value;
-                    this.RaisePropertyChanged("LoanAmount");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime LoanDate {
-            get {
-                return this.LoanDateField;
-            }
-            set {
-                if ((this.LoanDateField.Equals(value) != true)) {
-                    this.LoanDateField = value;
-                    this.RaisePropertyChanged("LoanDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Marketplaces {
-            get {
-                return this.MarketplacesField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MarketplacesField, value) != true)) {
-                    this.MarketplacesField = value;
-                    this.RaisePropertyChanged("Marketplaces");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string RefNumber {
-            get {
-                return this.RefNumberField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.RefNumberField, value) != true)) {
-                    this.RefNumberField = value;
-                    this.RaisePropertyChanged("RefNumber");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal SetupFee {
-            get {
-                return this.SetupFeeField;
-            }
-            set {
-                if ((this.SetupFeeField.Equals(value) != true)) {
-                    this.SetupFeeField = value;
-                    this.RaisePropertyChanged("SetupFee");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Status {
-            get {
-                return this.StatusField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.StatusField, value) != true)) {
-                    this.StatusField = value;
-                    this.RaisePropertyChanged("Status");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string WizardStep {
-            get {
-                return this.WizardStepField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.WizardStepField, value) != true)) {
-                    this.WizardStepField = value;
-                    this.RaisePropertyChanged("WizardStep");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerDetails", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
-    [System.SerializableAttribute()]
-    public partial class BrokerCustomerDetails : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategiesActivator.EzServiceReference.BrokerCustomerCrmEntry[] CrmDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategiesActivator.EzServiceReference.BrokerCustomerPersonalData PersonalDataField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategiesActivator.EzServiceReference.BrokerCustomerCrmEntry[] CrmData {
-            get {
-                return this.CrmDataField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CrmDataField, value) != true)) {
-                    this.CrmDataField = value;
-                    this.RaisePropertyChanged("CrmData");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategiesActivator.EzServiceReference.BrokerCustomerPersonalData PersonalData {
-            get {
-                return this.PersonalDataField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.PersonalDataField, value) != true)) {
-                    this.PersonalDataField = value;
-                    this.RaisePropertyChanged("PersonalData");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerPersonalData", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
-    [System.SerializableAttribute()]
-    public partial class BrokerCustomerPersonalData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string addressField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime birthdateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string daytimephoneField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string emailField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string genderField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int idField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string maritalstatusField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string mobilephoneField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string nameField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string address {
-            get {
-                return this.addressField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.addressField, value) != true)) {
-                    this.addressField = value;
-                    this.RaisePropertyChanged("address");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime birthdate {
-            get {
-                return this.birthdateField;
-            }
-            set {
-                if ((this.birthdateField.Equals(value) != true)) {
-                    this.birthdateField = value;
-                    this.RaisePropertyChanged("birthdate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string daytimephone {
-            get {
-                return this.daytimephoneField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.daytimephoneField, value) != true)) {
-                    this.daytimephoneField = value;
-                    this.RaisePropertyChanged("daytimephone");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string email {
-            get {
-                return this.emailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.emailField, value) != true)) {
-                    this.emailField = value;
-                    this.RaisePropertyChanged("email");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string gender {
-            get {
-                return this.genderField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.genderField, value) != true)) {
-                    this.genderField = value;
-                    this.RaisePropertyChanged("gender");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int id {
-            get {
-                return this.idField;
-            }
-            set {
-                if ((this.idField.Equals(value) != true)) {
-                    this.idField = value;
-                    this.RaisePropertyChanged("id");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string maritalstatus {
-            get {
-                return this.maritalstatusField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.maritalstatusField, value) != true)) {
-                    this.maritalstatusField = value;
-                    this.RaisePropertyChanged("maritalstatus");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string mobilephone {
-            get {
-                return this.mobilephoneField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.mobilephoneField, value) != true)) {
-                    this.mobilephoneField = value;
-                    this.RaisePropertyChanged("mobilephone");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string name {
-            get {
-                return this.nameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.nameField, value) != true)) {
-                    this.nameField = value;
-                    this.RaisePropertyChanged("name");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerCrmEntry", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
-    [System.SerializableAttribute()]
-    public partial class BrokerCustomerCrmEntry : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ActionNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CommentField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime CrDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string StatusNameField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ActionName {
-            get {
-                return this.ActionNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ActionNameField, value) != true)) {
-                    this.ActionNameField = value;
-                    this.RaisePropertyChanged("ActionName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Comment {
-            get {
-                return this.CommentField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CommentField, value) != true)) {
-                    this.CommentField = value;
-                    this.RaisePropertyChanged("Comment");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime CrDate {
-            get {
-                return this.CrDateField;
-            }
-            set {
-                if ((this.CrDateField.Equals(value) != true)) {
-                    this.CrDateField = value;
-                    this.RaisePropertyChanged("CrDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string StatusName {
-            get {
-                return this.StatusNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.StatusNameField, value) != true)) {
-                    this.StatusNameField = value;
-                    this.RaisePropertyChanged("StatusName");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerFile", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
-    [System.SerializableAttribute()]
-    public partial class BrokerCustomerFile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FileDescriptionField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int FileIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FileNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime UploadDateField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FileDescription {
-            get {
-                return this.FileDescriptionField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FileDescriptionField, value) != true)) {
-                    this.FileDescriptionField = value;
-                    this.RaisePropertyChanged("FileDescription");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int FileID {
-            get {
-                return this.FileIDField;
-            }
-            set {
-                if ((this.FileIDField.Equals(value) != true)) {
-                    this.FileIDField = value;
-                    this.RaisePropertyChanged("FileID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FileName {
-            get {
-                return this.FileNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FileNameField, value) != true)) {
-                    this.FileNameField = value;
-                    this.RaisePropertyChanged("FileName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime UploadDate {
-            get {
-                return this.UploadDateField;
-            }
-            set {
-                if ((this.UploadDateField.Equals(value) != true)) {
-                    this.UploadDateField = value;
-                    this.RaisePropertyChanged("UploadDate");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FileDescription", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
-    [System.SerializableAttribute()]
-    public partial class FileDescription : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DisplayNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FileIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FileNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string IDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MimeTypeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int SortPositionField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string DisplayName {
-            get {
-                return this.DisplayNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DisplayNameField, value) != true)) {
-                    this.DisplayNameField = value;
-                    this.RaisePropertyChanged("DisplayName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FileID {
-            get {
-                return this.FileIDField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FileIDField, value) != true)) {
-                    this.FileIDField = value;
-                    this.RaisePropertyChanged("FileID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FileName {
-            get {
-                return this.FileNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FileNameField, value) != true)) {
-                    this.FileNameField = value;
-                    this.RaisePropertyChanged("FileName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ID {
-            get {
-                return this.IDField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.IDField, value) != true)) {
-                    this.IDField = value;
-                    this.RaisePropertyChanged("ID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string MimeType {
-            get {
-                return this.MimeTypeField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MimeTypeField, value) != true)) {
-                    this.MimeTypeField = value;
-                    this.RaisePropertyChanged("MimeType");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int SortPosition {
-            get {
-                return this.SortPositionField;
-            }
-            set {
-                if ((this.SortPositionField.Equals(value) != true)) {
-                    this.SortPositionField = value;
-                    this.RaisePropertyChanged("SortPosition");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="QuickOfferModel", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models")]
-    [System.SerializableAttribute()]
-    public partial class QuickOfferModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int AmlField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AmountField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int BusinessScoreField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime CreationDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime ExpirationDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal ImmediateInterestRateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal ImmediateSetupFeeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ImmediateTermField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime IncorporationDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal PotentialAmountField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal PotentialInterestRateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal PotentialSetupFeeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int PotentialTermField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal TangibleEquityField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal TotalCurrentAssetsField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Aml {
-            get {
-                return this.AmlField;
-            }
-            set {
-                if ((this.AmlField.Equals(value) != true)) {
-                    this.AmlField = value;
-                    this.RaisePropertyChanged("Aml");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal Amount {
-            get {
-                return this.AmountField;
-            }
-            set {
-                if ((this.AmountField.Equals(value) != true)) {
-                    this.AmountField = value;
-                    this.RaisePropertyChanged("Amount");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int BusinessScore {
-            get {
-                return this.BusinessScoreField;
-            }
-            set {
-                if ((this.BusinessScoreField.Equals(value) != true)) {
-                    this.BusinessScoreField = value;
-                    this.RaisePropertyChanged("BusinessScore");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime CreationDate {
-            get {
-                return this.CreationDateField;
-            }
-            set {
-                if ((this.CreationDateField.Equals(value) != true)) {
-                    this.CreationDateField = value;
-                    this.RaisePropertyChanged("CreationDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime ExpirationDate {
-            get {
-                return this.ExpirationDateField;
-            }
-            set {
-                if ((this.ExpirationDateField.Equals(value) != true)) {
-                    this.ExpirationDateField = value;
-                    this.RaisePropertyChanged("ExpirationDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ID {
-            get {
-                return this.IDField;
-            }
-            set {
-                if ((this.IDField.Equals(value) != true)) {
-                    this.IDField = value;
-                    this.RaisePropertyChanged("ID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal ImmediateInterestRate {
-            get {
-                return this.ImmediateInterestRateField;
-            }
-            set {
-                if ((this.ImmediateInterestRateField.Equals(value) != true)) {
-                    this.ImmediateInterestRateField = value;
-                    this.RaisePropertyChanged("ImmediateInterestRate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal ImmediateSetupFee {
-            get {
-                return this.ImmediateSetupFeeField;
-            }
-            set {
-                if ((this.ImmediateSetupFeeField.Equals(value) != true)) {
-                    this.ImmediateSetupFeeField = value;
-                    this.RaisePropertyChanged("ImmediateSetupFee");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ImmediateTerm {
-            get {
-                return this.ImmediateTermField;
-            }
-            set {
-                if ((this.ImmediateTermField.Equals(value) != true)) {
-                    this.ImmediateTermField = value;
-                    this.RaisePropertyChanged("ImmediateTerm");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime IncorporationDate {
-            get {
-                return this.IncorporationDateField;
-            }
-            set {
-                if ((this.IncorporationDateField.Equals(value) != true)) {
-                    this.IncorporationDateField = value;
-                    this.RaisePropertyChanged("IncorporationDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal PotentialAmount {
-            get {
-                return this.PotentialAmountField;
-            }
-            set {
-                if ((this.PotentialAmountField.Equals(value) != true)) {
-                    this.PotentialAmountField = value;
-                    this.RaisePropertyChanged("PotentialAmount");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal PotentialInterestRate {
-            get {
-                return this.PotentialInterestRateField;
-            }
-            set {
-                if ((this.PotentialInterestRateField.Equals(value) != true)) {
-                    this.PotentialInterestRateField = value;
-                    this.RaisePropertyChanged("PotentialInterestRate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal PotentialSetupFee {
-            get {
-                return this.PotentialSetupFeeField;
-            }
-            set {
-                if ((this.PotentialSetupFeeField.Equals(value) != true)) {
-                    this.PotentialSetupFeeField = value;
-                    this.RaisePropertyChanged("PotentialSetupFee");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int PotentialTerm {
-            get {
-                return this.PotentialTermField;
-            }
-            set {
-                if ((this.PotentialTermField.Equals(value) != true)) {
-                    this.PotentialTermField = value;
-                    this.RaisePropertyChanged("PotentialTerm");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal TangibleEquity {
-            get {
-                return this.TangibleEquityField;
-            }
-            set {
-                if ((this.TangibleEquityField.Equals(value) != true)) {
-                    this.TangibleEquityField = value;
-                    this.RaisePropertyChanged("TangibleEquity");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal TotalCurrentAssets {
-            get {
-                return this.TotalCurrentAssetsField;
-            }
-            set {
-                if ((this.TotalCurrentAssetsField.Equals(value) != true)) {
-                    this.TotalCurrentAssetsField = value;
-                    this.RaisePropertyChanged("TotalCurrentAssets");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -3152,40 +1864,6 @@ namespace StrategiesActivator.EzServiceReference {
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="NewCreditLineOption", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies")]
-    public enum NewCreditLineOption : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SkipEverything = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UpdateEverythingExceptMp = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UpdateEverythingAndApplyAutoRules = 3,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UpdateEverythingAndGoToManualDecision = 4,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FraudMode", Namespace="http://schemas.datacontract.org/2004/07/FraudChecker")]
-    public enum FraudMode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        FullCheck = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PersonalDetaisCheck = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CompanyDetailsCheck = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        MarketplacesCheck = 3,
-    }
-    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="BasicInterestRate", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Web.Areas.Underwriter.Models")]
@@ -3846,22 +2524,22 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
-        StrategiesActivator.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        StrategiesActivator.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
         StrategiesActivator.EzServiceReference.BoolActionResult GenerateMobileCode(string phone);
@@ -3882,10 +2560,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData FraudChecker(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode);
+        StrategiesActivator.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, Ezbob.Backend.Models.FraudMode mode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData LateBy14Days();
@@ -3978,10 +2656,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.WizardConfigsActionResult> GetWizardConfigsAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData FinishWizard(int customerId, int underwriterId);
+        StrategiesActivator.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(int customerId, int underwriterId);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerState", ReplyAction="http://tempuri.org/IEzService/GetCustomerStateResponse")]
         StrategiesActivator.EzServiceReference.StringActionResult GetCustomerState(int customerId);
@@ -4517,27 +3195,27 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.LandRegistryResAsync(customerId, titleNumber);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+        public StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+        public StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
             return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
             return base.Channel.MainStrategy2Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+        public StrategiesActivator.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategySync1Async(underwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
@@ -4565,11 +3243,11 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.FirstOfMonthStatusNotifierAsync();
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData FraudChecker(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode) {
+        public StrategiesActivator.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode) {
             return base.Channel.FraudChecker(customerId, mode);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode) {
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, Ezbob.Backend.Models.FraudMode mode) {
             return base.Channel.FraudCheckerAsync(customerId, mode);
         }
         
@@ -4693,12 +3371,12 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.GetWizardConfigsAsync();
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData FinishWizard(int customerId, int underwriterId) {
-            return base.Channel.FinishWizard(customerId, underwriterId);
+        public StrategiesActivator.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId) {
+            return base.Channel.FinishWizard(oArgs, underwriterId);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(int customerId, int underwriterId) {
-            return base.Channel.FinishWizardAsync(customerId, underwriterId);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId) {
+            return base.Channel.FinishWizardAsync(oArgs, underwriterId);
         }
         
         public StrategiesActivator.EzServiceReference.StringActionResult GetCustomerState(int customerId) {

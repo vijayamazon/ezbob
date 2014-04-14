@@ -1,37 +1,53 @@
-﻿namespace EzBob.Backend.Strategies
-{
+﻿namespace EzBob.Backend.Strategies {
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MailStrategies;
-	using global::FraudChecker;
 
-	public class FinishWizard : AStrategy
-	{
-		private readonly int customerId;
+	public class FinishWizard : AStrategy {
+		public FinishWizard(FinishWizardArgs oArgs, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+			m_oArgs = oArgs;
+		} // constructor
 
-		public FinishWizard(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
-			this.customerId = customerId;
-		}
-		
-		public override string Name
-		{
+		public override string Name {
 			get { return "Finish wizard"; }
 		} // Name
 
-		public override void Execute()
-		{
-			DB.ExecuteNonQuery("FinishWizard", new QueryParameter("CustomerId", customerId));
-			
-			var emailUnderReviewStratgey = new EmailUnderReview(customerId, DB, Log);
-			emailUnderReviewStratgey.Execute();
+		public override void Execute() {
+			DB.ExecuteNonQuery(
+				"FinishWizard",
+				new QueryParameter("CustomerId", m_oArgs.CustomerID)
+			);
 
-			var mainStrategy = new MainStrategy(customerId, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, DB, Log);
-			mainStrategy.Execute();
+			if (m_oArgs.DoSendEmail) {
+				new EmailUnderReview(
+					m_oArgs.CustomerID,
+					DB,
+					Log
+				).Execute();
+			} // if
 
-			var fraudCheckStrategy = new FraudChecker(customerId, FraudMode.FullCheck, DB, Log);
-			fraudCheckStrategy.Execute();
-		}
-	}
-}
+			if (m_oArgs.DoMain) {
+				new MainStrategy(
+					m_oArgs.CustomerID,
+					m_oArgs.NewCreditLineOption,
+					m_oArgs.AvoidAutoDecision,
+					m_oArgs.IsUnderwriterForced,
+					DB,
+					Log
+				).Execute();
+			} // if
+
+			if (m_oArgs.DoFraud) {
+				new FraudChecker(
+					m_oArgs.CustomerID,
+					m_oArgs.FraudMode,
+					DB,
+					Log
+				).Execute();
+			} // if
+		} // Execute
+
+		private readonly FinishWizardArgs m_oArgs;
+	} // class FinishWizard
+} // namespace

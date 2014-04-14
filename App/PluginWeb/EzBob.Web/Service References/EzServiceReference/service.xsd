@@ -4,8 +4,7 @@
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Models.Agreements" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/FraudChecker" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Web.Areas.Underwriter.Models" />
   <xs:element name="Shutdown">
@@ -1039,7 +1038,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="uderwriterId" type="xs:int" />
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
-        <xs:element xmlns:q69="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" minOccurs="0" name="newCreditLine" type="q69:NewCreditLineOption" />
+        <xs:element xmlns:q69="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="newCreditLine" type="q69:NewCreditLineOption" />
         <xs:element minOccurs="0" name="avoidAutoDescison" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -1056,7 +1055,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="uderwriterId" type="xs:int" />
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
-        <xs:element xmlns:q71="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" minOccurs="0" name="newCreditLine" type="q71:NewCreditLineOption" />
+        <xs:element xmlns:q71="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="newCreditLine" type="q71:NewCreditLineOption" />
         <xs:element minOccurs="0" name="avoidAutoDescison" type="xs:int" />
         <xs:element minOccurs="0" name="isUnderwriterForced" type="xs:boolean" />
       </xs:sequence>
@@ -1074,7 +1073,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="underwriterId" type="xs:int" />
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
-        <xs:element xmlns:q73="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" minOccurs="0" name="newCreditLine" type="q73:NewCreditLineOption" />
+        <xs:element xmlns:q73="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="newCreditLine" type="q73:NewCreditLineOption" />
         <xs:element minOccurs="0" name="avoidAutoDescison" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -1131,7 +1130,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
-        <xs:element xmlns:q78="http://schemas.datacontract.org/2004/07/FraudChecker" minOccurs="0" name="mode" type="q78:FraudMode" />
+        <xs:element xmlns:q78="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="mode" type="q78:FraudMode" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1349,7 +1348,7 @@
   <xs:element name="FinishWizard">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="customerId" type="xs:int" />
+        <xs:element xmlns:q98="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="oArgs" nillable="true" type="q98:FinishWizardArgs" />
         <xs:element minOccurs="0" name="underwriterId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -1357,7 +1356,7 @@
   <xs:element name="FinishWizardResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q98="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="FinishWizardResult" nillable="true" type="q98:ActionMetaData" />
+        <xs:element xmlns:q99="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="FinishWizardResult" nillable="true" type="q99:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1371,7 +1370,7 @@
   <xs:element name="GetCustomerStateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q99="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStateResult" nillable="true" type="q99:StringActionResult" />
+        <xs:element xmlns:q100="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStateResult" nillable="true" type="q100:StringActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1383,7 +1382,7 @@
   <xs:element name="GetCustomerStatusRefreshIntervalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q100="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStatusRefreshIntervalResult" nillable="true" type="q100:IntActionResult" />
+        <xs:element xmlns:q101="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStatusRefreshIntervalResult" nillable="true" type="q101:IntActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1399,7 +1398,7 @@
   <xs:element name="CreateUnderwriterResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q101="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="CreateUnderwriterResult" nillable="true" type="q101:ActionMetaData" />
+        <xs:element xmlns:q102="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="CreateUnderwriterResult" nillable="true" type="q102:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

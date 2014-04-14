@@ -1660,9 +1660,6 @@
     <None Include="Service References\EzServiceReference\EzBob.Backend.Models1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\EzServiceReference\EzBob.Models.Agreements.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1676,9 +1673,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\EzService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\FraudChecker.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\service.wsdl" />

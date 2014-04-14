@@ -1,13 +1,13 @@
 ﻿namespace EzBob.Web.Code {
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
-	using EzServiceReference;
 	using System;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using Ezbob.Backend.Models;
 
 	public class CashRequestBuilder {
 		#region constructor

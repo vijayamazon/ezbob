@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using EzServiceReference;
+	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
