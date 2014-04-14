@@ -8,6 +8,8 @@
 
 	Model.RootUrl = Url.Content("~/");
 
+	Model.MarketingFileUrlTemplate = Url.Action("DownloadFile", "BrokerHome", new {Area = "Broker", fid = "__FILE_ID__",});
+
 	Model.LogoUrl = Url.Content("~/Content/img/ezbob-logo-2014.png");
 	Model.EuIconUrl = Url.Content("~/Content/img/eu-menu.png");
 }
@@ -400,11 +402,7 @@
 							<div class="box-title aka-caption">Useful links</div>
 							<div class="aka-row">
 								<div class="aka-column">
-									<ul>
-										@foreach (var fd in Model.FileList) {
-											<li>@Html.ActionLink(fd.DisplayName, "DownloadFile", "BrokerHome", new { Area = "Broker", fid = fd.FileID, }, new {})</li>
-										}
-									</ul>
+									<ul class="marketing-files" data-url-template="@Model.MarketingFileUrlTemplate"></ul>
 								</div>
 							</div>
 						</div>

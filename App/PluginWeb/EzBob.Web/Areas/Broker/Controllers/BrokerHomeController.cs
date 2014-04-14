@@ -49,9 +49,7 @@
 
 		// GET: /Broker/BrokerHome/
 		public System.Web.Mvc.ViewResult Index(string sourceref = "") {
-			MarketingFiles oFiles = LoadMarketingFiles(false);
-
-			var oModel = new BrokerHomeModel(oFiles == null ? null : oFiles.Ordinal);
+			var oModel = new BrokerHomeModel();
 
 			if (!string.IsNullOrWhiteSpace(sourceref)) {
 				var cookie = new HttpCookie(Constant.SourceRef, sourceref) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
@@ -355,7 +353,7 @@
 			BrokerStaticDataActionResult oResult = null;
 
 			try {
-				oResult = m_oServiceClient.Instance.BrokerLoadStaticData();
+				oResult = m_oServiceClient.Instance.BrokerLoadStaticData(false);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Broker loading static data failed.");
@@ -779,14 +777,14 @@
 
 			string sFileName = fid.Trim();
 
-			MarketingFiles oFiles = LoadMarketingFiles(true);
+			var oFiles = new MarketingFiles(m_oServiceClient);
 
 			m_oLog.Debug("Broker download file request: file with id {0}.", sFileName);
 
 			FileDescription fd = oFiles.Find(sFileName);
 
 			if (fd != null) {
-				string sPath = System.Web.HttpContext.Current.Server.MapPath("~/Areas/Broker/Files/" + fd.FileName);
+				string sPath = System.Web.HttpContext.Current.Server.MapPath("~" + BrokerHomeModel.MarketingFileLocation + fd.FileName);
 
 				m_oLog.Debug("Broker download file request: found file with id {0} of type {1} as {2}.", sFileName, fd.MimeType, sPath);
 
@@ -852,29 +850,6 @@
 		#endregion public
 
 		#region private
-
-		#region method LoadMarketingFiles
-
-		private MarketingFiles LoadMarketingFiles(bool bCreateAlphabetical) {
-			m_oLog.Debug("Loading broker marketing files...");
-
-			BrokerStaticDataActionResult flar = null;
-
-			try {
-				flar = m_oServiceClient.Instance.BrokerLoadStaticData(); // TODO: add argument to retrieve files only
-			}
-			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to load broker marketing files.");
-			} // try
-
-			var oResult = new MarketingFiles(flar == null ? null : flar.Files, bCreateAlphabetical);
-
-			m_oLog.Debug("Loading broker marketing files complete.");
-
-			return oResult;
-		} // LoadMarketingFiles
-
-		#endregion method LoadMarketingFiles
 
 		#region method IsAuth
 
@@ -1050,13 +1025,17 @@
 					{ "text", oResult.Terms },
 				};
 
+				marketing_files = oResult.Files;
+
 				max_per_number = oResult.MaxPerNumber;
 				max_per_page = oResult.MaxPerPage;
 			} // constructor
 
-			public virtual int max_per_number { get; private set; }
+			public virtual int max_per_number { get; private set; } // max_per_number
 
-			public virtual int max_per_page { get; private set; }
+			public virtual int max_per_page { get; private set; } // max_per_page
+
+			public virtual FileDescription[] marketing_files { get; private set; } // marketing_files
 
 			public virtual Dictionary<string, string> actions { get; private set; } // actions
 
@@ -1085,19 +1064,14 @@
 		#region downloadable file descriptor
 
 		private class MarketingFiles {
-			public MarketingFiles(FileDescription[] oOrdinalList, bool bCreateAlphabetical) {
-				Ordinal = oOrdinalList ?? new FileDescription[0];
-
-				if (!bCreateAlphabetical)
-					return;
+			public MarketingFiles(ServiceClient oServiceClient) {
+				IEnumerable<FileDescription> oFiles = Load(oServiceClient);
 
 				m_oAlphabetical = new SortedDictionary<string, FileDescription>();
 
-				foreach (FileDescription fd in Ordinal)
+				foreach (FileDescription fd in oFiles)
 					m_oAlphabetical[fd.FileID] = fd;
 			} // constructor
-
-			public FileDescription[] Ordinal { get; private set; }
 
 			public FileDescription Find(string sKey) {
 				if (m_oAlphabetical == null)
@@ -1107,6 +1081,25 @@
 			} // Find
 
 			private readonly SortedDictionary<string, FileDescription> m_oAlphabetical;
+
+			private IEnumerable<FileDescription> Load(ServiceClient oServiceClient) {
+				m_oLog.Debug("Loading broker marketing files...");
+
+				BrokerStaticDataActionResult flar = null;
+
+				try {
+					flar = oServiceClient.Instance.BrokerLoadStaticData(true);
+				}
+				catch (Exception e) {
+					m_oLog.Alert(e, "Failed to load broker marketing files.");
+				} // try
+
+				FileDescription[] oResult = (flar == null ? null : flar.Files) ?? new FileDescription[0];
+
+				m_oLog.Debug("Loading broker marketing files complete, {0} file(s) loaded.", oResult.Length);
+
+				return oResult;
+			} // Load
 		} // class MarketingFiles
 
 		#endregion downloadable file descriptor

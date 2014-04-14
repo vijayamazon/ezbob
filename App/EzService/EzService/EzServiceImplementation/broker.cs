@@ -345,7 +345,7 @@
 
 		#region method BrokerLoadStaticData
 
-		public BrokerStaticDataActionResult BrokerLoadStaticData() {
+		public BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly) {
 			var oResult = new BrokerStaticDataActionResult {
 				MaxPerNumber = 3,
 				MaxPerPage = 10,
@@ -355,6 +355,21 @@
 				Terms = "",
 				TermsID = 0,
 			};
+
+			try {
+				BrokerLoadMarketingFiles oInstance;
+
+				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+
+				if (oMetaData.Status == ActionStatus.Done)
+					oResult.Files = oInstance.Files.ToArray();
+			}
+			catch (Exception e) {
+				Log.Alert(e, "Failed to retrieve marketing files.");
+			} // try
+
+			if (bLoadFilesOnly)
+				return oResult;
 
 			try {
 				BrokerLoadCurrentTerms oInstance;
@@ -368,18 +383,6 @@
 			}
 			catch (Exception e) {
 				Log.Alert(e, "Failed to retrieve terms.");
-			} // try
-
-			try {
-				BrokerLoadMarketingFiles oInstance;
-
-				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
-
-				if (oMetaData.Status == ActionStatus.Done)
-					oResult.Files = oInstance.Files.ToArray();
-			}
-			catch (Exception e) {
-				Log.Alert(e, "Failed to retrieve marketing files.");
 			} // try
 
 			try {

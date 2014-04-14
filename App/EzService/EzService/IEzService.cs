@@ -111,7 +111,7 @@
 		ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
 
 		[OperationContract]
-		BrokerStaticDataActionResult BrokerLoadStaticData();
+		BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly);
 
 		#endregion Broker
 

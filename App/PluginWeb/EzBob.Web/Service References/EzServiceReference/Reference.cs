@@ -1004,7 +1004,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadStaticData", ReplyAction="http://tempuri.org/IEzService/BrokerLoadStaticDataResponse")]
-        EzBob.Web.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData();
+        EzBob.Web.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
@@ -1319,8 +1319,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.BrokerUpdatePassword(sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
         }
         
-        public EzBob.Web.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData() {
-            return base.Channel.BrokerLoadStaticData();
+        public EzBob.Web.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly) {
+            return base.Channel.BrokerLoadStaticData(bLoadFilesOnly);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {

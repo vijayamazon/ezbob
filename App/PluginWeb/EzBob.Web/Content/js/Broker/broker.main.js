@@ -50,6 +50,17 @@ $(document).ready(function() {
 		var oSmsCounts = $('#broker-sms-count');
 		oSmsCounts.attr('data-max-per-number', oResponse.max_per_number);
 		oSmsCounts.attr('data-max-per-page', oResponse.max_per_page);
+
+		var oLinks = $('.marketing-files');
+		var sTemplate = oLinks.attr('data-url-template');
+
+		_.each(oResponse.marketing_files, function(fd) {
+			oLinks.append($('<li />').append(
+				$('<a />').attr('href', sTemplate.replace('__FILE_ID__', fd.FileID)).text(fd.DisplayName)
+			));
+		});
+
+		oLinks.removeAttr('data-url-template').removeClass('marketing-files');
 	});
 
 	var sMsgOnStart = $('body').attr('data-msg-on-start');

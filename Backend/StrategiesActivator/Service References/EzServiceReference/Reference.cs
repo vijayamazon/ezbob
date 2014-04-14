@@ -3642,10 +3642,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadStaticData", ReplyAction="http://tempuri.org/IEzService/BrokerLoadStaticDataResponse")]
-        StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData();
+        StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadStaticData", ReplyAction="http://tempuri.org/IEzService/BrokerLoadStaticDataResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync();
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync(bool bLoadFilesOnly);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
@@ -4245,12 +4245,12 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.BrokerUpdatePasswordAsync(sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
         }
         
-        public StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData() {
-            return base.Channel.BrokerLoadStaticData();
+        public StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly) {
+            return base.Channel.BrokerLoadStaticData(bLoadFilesOnly);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync() {
-            return base.Channel.BrokerLoadStaticDataAsync();
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync(bool bLoadFilesOnly) {
+            return base.Channel.BrokerLoadStaticDataAsync(bLoadFilesOnly);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {

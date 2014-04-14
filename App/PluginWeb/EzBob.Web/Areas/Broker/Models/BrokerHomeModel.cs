@@ -1,11 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Broker.Models {
 	using ConfigManager;
-	using Ezbob.Backend.Models;
 	using Newtonsoft.Json;
 
 	public class BrokerHomeModel {
-		public BrokerHomeModel(FileDescription[] oFileList) {
-			FileList = oFileList ?? new FileDescription[0];
+		public BrokerHomeModel() {
 			Auth = string.Empty;
 
 			MessageOnStart = string.Empty;
@@ -25,8 +23,11 @@
 			get { return JsonConvert.SerializeObject(Integration.ChannelGrabberConfig.Configuration.Instance.Vendors); }
 		} // ChannelGrabberAccounts
 
-		public FileDescription[] FileList { get; private set; }
 		public string Auth { get; set; }
+
+		public string MarketingFileUrlTemplate { get; set; }
+
+		public static string MarketingFileLocation { get { return "/Areas/Broker/Files/"; } }
 
 		public string MessageOnStart { get; set; }
 		public string MessageOnStartSeverity { get; set; }
