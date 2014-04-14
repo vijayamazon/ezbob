@@ -19,7 +19,6 @@ namespace ApplicationMng.Model.Mappings
 			base.HasOne<ExecutionState>((Application x) => x.ExecutionState).PropertyRef((ExecutionState p) => p.App).Cascade.All().Fetch.Join();
 			base.Map((Application x) => (object)x.ParentAppID);
 			base.Map((Application x) => x.ExecutionPathBin);
-			base.HasOne<AppAdditionalData>((Application x) => x.AdditionalData).Fetch.Join().Cascade.All();
 		}
 	}
 }

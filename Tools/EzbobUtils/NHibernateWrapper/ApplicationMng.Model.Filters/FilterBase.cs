@@ -16,7 +16,6 @@ namespace ApplicationMng.Model.Filters
 			get;
 			set;
 		}
-		public abstract System.Linq.IQueryable<Application> ApplyFilter(System.Linq.IQueryable<Application> applications, IWorkplaceContext context);
 		public virtual void ApplyFilter(ICriteria applications, IWorkplaceContext context)
 		{
 			throw new System.NotImplementedException();

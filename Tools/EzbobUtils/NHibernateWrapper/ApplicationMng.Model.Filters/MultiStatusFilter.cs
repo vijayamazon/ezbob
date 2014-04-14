@@ -41,13 +41,6 @@ namespace ApplicationMng.Model.Filters
 					select int.Parse(s)).ToArray<int>();
 			}
 		}
-		public override System.Linq.IQueryable<Application> ApplyFilter(System.Linq.IQueryable<Application> applications, IWorkplaceContext context)
-		{
-			return 
-				from a in applications
-				where a.AdditionalData.Id != 0L && this._statuses.Contains(a.AdditionalData.Status.Name) && this._states.Contains((int)a.State)
-				select a;
-		}
 		public override void ApplyFilter(ICriteria applications, IWorkplaceContext context)
 		{
 			applications.CreateAlias("AdditionalData", "ad");

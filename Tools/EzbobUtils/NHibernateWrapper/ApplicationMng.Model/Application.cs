@@ -60,11 +60,6 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual AppAdditionalData AdditionalData
-		{
-			get;
-			set;
-		}
 		public Application()
 		{
 		}

@@ -69,20 +69,11 @@
     <Reference Include="System.Data.OracleClient" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationMng.Model.Commands\AddAttachment.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\AddAttachmentMap.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\CommandBase.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\CommandBaseMap.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\CommandsList.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\CommandsListMap.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\CommandsListSerializationWrapper.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\CommandsRepository.cs" />
     <Compile Include="ApplicationMng.Model.Commands\ICommand.cs" />
     <Compile Include="ApplicationMng.Model.Commands\IContext.cs" />
     <Compile Include="ApplicationMng.Model.Commands\ISerializationHelper.cs" />
     <Compile Include="ApplicationMng.Model.Commands\NHCommandsSerializationHelper.cs" />
     <Compile Include="ApplicationMng.Model.Commands\SerializtionHelper.cs" />
-    <Compile Include="ApplicationMng.Model.Filters\AllAppsFilter.cs" />
     <Compile Include="ApplicationMng.Model.Filters\FilterBase.cs" />
     <Compile Include="ApplicationMng.Model.Filters\FilterBaseMap.cs" />
     <Compile Include="ApplicationMng.Model.Filters\MultiStatusFilter.cs" />
@@ -99,9 +90,6 @@
     <Compile Include="ApplicationMng.Model.Mappings\SecuritySessionMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\StrategyScheduleParamMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\UserMap.cs" />
-    <Compile Include="ApplicationMng.Model\AppAdditionalData.cs" />
-    <Compile Include="ApplicationMng.Model\AppAdditionalDataMap.cs" />
-    <Compile Include="ApplicationMng.Model\AppAdditionalDataMapLM.cs" />
     <Compile Include="ApplicationMng.Model\AppAttachment.cs" />
     <Compile Include="ApplicationMng.Model\AppDetailName.cs" />
     <Compile Include="ApplicationMng.Model\Application.cs" />
@@ -141,9 +129,6 @@
     <Compile Include="ApplicationMng.Repository\StrategyNotFoundException.cs" />
     <Compile Include="ApplicationMng.Repository\UsersRepository.cs" />
     <Compile Include="NHibernate.Mappings\NodeMap.cs" />
-    <Compile Include="NHibernate.Model.Commands\IPlayerRunner.cs" />
-    <Compile Include="NHibernate.Model.Commands\SaveAutonodeData.cs" />
-    <Compile Include="NHibernate.Model.Commands\SaveAutonodeDataMap.cs" />
     <Compile Include="NHibernate.Model\ApplicationExecutionTypeItem.cs" />
     <Compile Include="NHibernate.Model\ApplicationSuspended.cs" />
     <Compile Include="NHibernate.Model\ExecutionStateMap.cs" />
