@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-
 namespace YodleeLib
 {
-	using EzBob.Configuration;
-	using config;
+	using System;
+	using System.Collections.Generic;
+	using ConfigManager;
 	using log4net;
 
 	/// <summary>
@@ -13,12 +11,11 @@ namespace YodleeLib
 	public class GetBankData : ApplicationSuper
 	{
 		DataServiceService dataService;
-		private static YodleeEnvConnectionConfig _config;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(GetBankData));
 		public GetBankData()
 		{
-			_config = YodleeConfig._Config;
-			dataService = new DataServiceService { Url = _config.soapServer + "/" + "DataService" };
+			string soapServer = CurrentValues.Instance.YodleeSoapServer;
+			dataService = new DataServiceService { Url = soapServer + "/" + "DataService" };
 		}
 
 		/// <summary>

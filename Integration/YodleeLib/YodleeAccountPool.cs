@@ -2,12 +2,11 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using EzBob.CommonLib.Security;
-	using EzBob.Configuration;
 	using StructureMap;
-	using config;
 	using log4net;
 
 	public static class YodleeAccountPool
@@ -15,14 +14,13 @@
 		private static readonly ILog log = LogManager.GetLogger(typeof(YodleeAccountPool));
 		private static readonly List<YodleeAccounts> accounts;
 		private static readonly YodleeMain yodleeMain = new YodleeMain();
-		private static readonly YodleeEnvConnectionConfig config = YodleeConfig._Config;
 		private static readonly object accountsLock = new object();
 		
 		static YodleeAccountPool()
 		{
 			accounts = AccountRepository.SearchNotAllocated();
 
-			while (accounts.Count < config.AccountPoolSize)
+			while (accounts.Count < CurrentValues.Instance.YodleeAccountPoolSize)
 			{
 				accounts.Add(CreateUnallocatedAccount());
 			}

@@ -7,11 +7,6 @@
     {
         private static ConfigurationRootBob _configuration;
 		
-		public virtual YodleeEnvConnectionConfig YodleeConfig
-		{
-			get { return GetConfiguration<YodleeEnvConnectionConfig>("YodleeConfig"); }
-		}
-
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static ConfigurationRootBob GetConfiguration()
         {

@@ -69,6 +69,23 @@
 
 		#endregion operator int
 
+		#region operator long
+
+		public static implicit operator long(VariableValue oValue)
+		{
+			if (oValue == null)
+				throw new NullReferenceException("Long configuration variable not specified.");
+
+			long nValue = Convert.ToInt64(oValue.Value, CultureInfo.InvariantCulture);
+
+			if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
+				oValue.m_oLog.Debug("VariableValue {0} requested as int: '{1}' -> {2}", oValue.Name, oValue.Value, nValue);
+
+			return nValue;
+		} // operator to long
+
+		#endregion operator long
+
 		#region operator double
 
 		public static implicit operator double(VariableValue oValue) {

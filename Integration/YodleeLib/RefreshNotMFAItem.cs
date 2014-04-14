@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace YodleeLib
+﻿namespace YodleeLib
 {
+	using System;
 	using System.Threading;
-	using EzBob.Configuration;
-	using config;
+	using ConfigManager;
 	using log4net;
 
 	/// <summary>
@@ -13,7 +11,6 @@ namespace YodleeLib
 	public class RefreshNotMFAItem : ApplicationSuper
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(RefreshNotMFAItem));
-		private static YodleeEnvConnectionConfig config;
 
 		protected DataServiceService dataService;
 		protected RefreshService refresh;
@@ -47,15 +44,14 @@ namespace YodleeLib
 
 		public RefreshNotMFAItem()
 		{
-			config = YodleeConfig._Config;
-
+			string soapServer = CurrentValues.Instance.YodleeSoapServer;
 			dataService = new DataServiceService
 				{
-					Url = config.soapServer + "/" + "DataService"
+					Url = soapServer + "/" + "DataService"
 				};
 			refresh = new RefreshService
 				{
-					Url = config.soapServer + "/" + "RefreshService"
+					Url = soapServer + "/" + "RefreshService"
 				};
 		}
 

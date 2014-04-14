@@ -1,8 +1,7 @@
 namespace YodleeLib
 {
-	using EzBob.Configuration;
-	using config;
 	using System;
+	using ConfigManager;
 	using log4net;
 
 	/// <summary>
@@ -14,13 +13,12 @@ namespace YodleeLib
 		private static readonly ILog log = LogManager.GetLogger(typeof(LoginUser));
 		readonly LoginService loginService;
 		OAuthAccessTokenManagementServiceService oAuthAccessTokenManagementService;
-		private static YodleeEnvConnectionConfig _config;
 
 		public LoginUser()
 		{
-			_config = YodleeConfig._Config;
 			loginService = new LoginService();
-			loginService.Url = _config.soapServer + "/" + loginService.GetType().FullName;
+			string soapServer = CurrentValues.Instance.YodleeSoapServer;
+			loginService.Url = soapServer + "/" + loginService.GetType().FullName;
 		}
 
 		/// <summary>
@@ -79,8 +77,9 @@ namespace YodleeLib
 		public OAuthAccessToken getAccessTokens(UserContext userContext)
 		{
 			oAuthAccessTokenManagementService = new OAuthAccessTokenManagementServiceService();
-			oAuthAccessTokenManagementService.Url = _config.soapServer + "/OAuthAccessTokenManagementService_11_1";
-			long? applicationId = _config.BridgetApplicationID;
+			string soapServer = CurrentValues.Instance.YodleeSoapServer;
+			oAuthAccessTokenManagementService.Url = soapServer + "/OAuthAccessTokenManagementService_11_1";
+			long? applicationId = (long)CurrentValues.Instance.YodleeBridgetApplicationId;
 
 			try
 			{

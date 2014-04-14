@@ -287,6 +287,18 @@
 		PayPalTrustAll,
 		PayPalServiceType,
 		PayPalNumberOfRetries,
-		PayPalMaxAllowedFailures
+		PayPalMaxAllowedFailures,
+		YodleeSoapServer,
+		YodleeCobrandId,
+		YodleeApplicationId,
+		YodleeUsername,
+		YodleePassword,
+		YodleeTncVersion,
+		YodleeBridgetApplicationId,
+		YodleeAccountPoolSize,
+		YodleeApplicationToken,
+		YodleeApplicationKey,
+		YodleeAddAccountURL,
+		YodleeEditAccountURL
 	} // enum Variables
 } // namespace ConfigManager

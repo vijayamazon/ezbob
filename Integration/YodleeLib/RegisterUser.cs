@@ -1,7 +1,6 @@
 ﻿namespace YodleeLib
 {
-	using EzBob.Configuration;
-	using config;
+	using ConfigManager;
 
 	/// <summary>
 	/// Encapsulates user registration APIs of the Yodlee software platform.
@@ -9,14 +8,13 @@
 	public class RegisterUser : ApplicationSuper
 	{
 		private UserRegistrationService registerService;
-		private static YodleeEnvConnectionConfig _config;
 
 		public RegisterUser()
 		{
-			_config = YodleeConfig._Config;
 			registerService = new UserRegistrationService();
 			registerService.EnableDecompression = true;
-			registerService.Url = _config.soapServer + "/" + registerService.GetType().FullName;
+			string soapServer = CurrentValues.Instance.YodleeSoapServer;
+			registerService.Url = soapServer + "/" + registerService.GetType().FullName;
 		}
 
 		public UserContext DoRegisterUser(string loginName, string password, string email)

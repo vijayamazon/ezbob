@@ -3,22 +3,15 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Threading;
-	using EzBob.Configuration;
-	using config;
+	using ConfigManager;
 	using log4net;
 
 	public class YodleeMain : ApplicationSuper
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeMain));
 		public UserContext UserContext = null;
-		private static YodleeEnvConnectionConfig config;
 		private int numOfRetriesForGetItemSummary;
-
-		public YodleeMain()
-		{
-			config = YodleeConfig._Config;
-		}
-
+		
 		public LoginUser LoginUser(string userName, string password)
 		{
 			try
@@ -53,7 +46,7 @@
 		{
 			try
 			{
-				var url = config.AddAccountURL;
+				string url = CurrentValues.Instance.YodleeAddAccountURL;
 				const string sParams = "?access_type=oauthdeeplink&displayMode=desktop&_csid=";
 				var oAuthBase = new OAuthBase();
 				OAuthAccessToken token = null;
@@ -68,8 +61,8 @@
 				{
 					string timestamp = oAuthBase.GenerateTimeStamp();
 					string nonce = oAuthBase.GenerateNonce();
-					string applicationKey = config.ApplicationKey;
-					string applicationToken = config.ApplicationToken;
+					string applicationKey = CurrentValues.Instance.YodleeApplicationKey;
+					string applicationToken = CurrentValues.Instance.YodleeApplicationToken;
 
 					string signatureBase = oAuthBase.GenerateSignatureBase(
 						new Uri(string.Format("{0}{1}{2}", url, sParams, csId)),
@@ -110,7 +103,7 @@
 		{
 			try
 			{
-				string url = config.EditAccountURL;
+				string url = CurrentValues.Instance.YodleeEditAccountURL;
 				const string sParams = "?access_type=oauthdeeplink&displayMode=desktop&_flowId=editSiteCredentials&_itemid=";
 				var oAuthBase = new OAuthBase();
 				OAuthAccessToken token = null;
@@ -121,8 +114,8 @@
 				string signature = null;
 				string normalizedUrl = null;
 				string normalizedRequestParameters = null;
-				string applicationKey = config.ApplicationKey;
-				string applicationToken = config.ApplicationToken;
+				string applicationKey = CurrentValues.Instance.YodleeApplicationKey;
+				string applicationToken = CurrentValues.Instance.YodleeApplicationToken;
 
 				while (string.IsNullOrEmpty(signature) || signature.Contains("+"))
 				{
@@ -259,7 +252,8 @@
 		{
 			try
 			{
-				var itemManagement = new ItemManagementService { Url = config.soapServer + "/" + "ItemManagementService" };
+				string soapServer = CurrentValues.Instance.YodleeSoapServer;
+				var itemManagement = new ItemManagementService { Url = soapServer + "/" + "ItemManagementService" };
 				itemManagement.removeItem(UserContext, itemId, true);
 			}
 			catch (Exception ex)
@@ -275,7 +269,8 @@
 
 		public bool IsMFA(long itemId)
 		{
-			var dataService = new DataServiceService { Url = config.soapServer + "/" + "DataService" };
+			string soapServer = CurrentValues.Instance.YodleeSoapServer;
+			var dataService = new DataServiceService { Url = soapServer + "/" + "DataService" };
 			ItemSummary itemSummary = dataService.getItemSummaryForItem(UserContext, itemId, true);
 			if (itemSummary == null)
 			{

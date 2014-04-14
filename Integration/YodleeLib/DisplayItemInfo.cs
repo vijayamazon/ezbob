@@ -1,11 +1,8 @@
-using System;
-using System.Text;
-
 namespace YodleeLib
 {
-	using EzBob.Configuration;
-	using StructureMap;
-    using config;
+	using System;
+	using System.Text;
+	using ConfigManager;
 
     /// <summary>
     /// Encapsulates DataService functionality of the Yodlee software platform.
@@ -13,11 +10,10 @@ namespace YodleeLib
     public class DisplayItemInfo
     {
         readonly DataServiceService dataService;
-		private static YodleeEnvConnectionConfig _config;
         public DisplayItemInfo()
         {
-			_config = YodleeConfig._Config;
-            dataService = new DataServiceService {Url = _config.soapServer + "/" + "DataService"};
+	        string soapServer = CurrentValues.Instance.YodleeSoapServer;
+			dataService = new DataServiceService { Url = soapServer + "/" + "DataService" };
         }
 
         /// <summary>

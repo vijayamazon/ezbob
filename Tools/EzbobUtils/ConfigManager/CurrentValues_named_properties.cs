@@ -2065,5 +2065,65 @@
 		{
 			get { return this[Variables.PayPalMaxAllowedFailures]; }
 		}
+
+		public virtual VariableValue YodleeSoapServer
+		{
+			get { return this[Variables.YodleeSoapServer]; }
+		}
+
+		public virtual VariableValue YodleeCobrandId
+		{
+			get { return this[Variables.YodleeCobrandId]; }
+		}
+
+		public virtual VariableValue YodleeApplicationId
+		{
+			get { return this[Variables.YodleeApplicationId]; }
+		}
+
+		public virtual VariableValue YodleeUsername
+		{
+			get { return this[Variables.YodleeUsername]; }
+		}
+
+		public virtual VariableValue YodleePassword
+		{
+			get { return this[Variables.YodleePassword]; }
+		}
+
+		public virtual VariableValue YodleeTncVersion
+		{
+			get { return this[Variables.YodleeTncVersion]; }
+		}
+
+		public virtual VariableValue YodleeBridgetApplicationId
+		{
+			get { return this[Variables.YodleeBridgetApplicationId]; }
+		}
+
+		public virtual VariableValue YodleeAccountPoolSize
+		{
+			get { return this[Variables.YodleeAccountPoolSize]; }
+		}
+
+		public virtual VariableValue YodleeApplicationToken
+		{
+			get { return this[Variables.YodleeApplicationToken]; }
+		}
+
+		public virtual VariableValue YodleeApplicationKey
+		{
+			get { return this[Variables.YodleeApplicationKey]; }
+		}
+
+		public virtual VariableValue YodleeAddAccountURL
+		{
+			get { return this[Variables.YodleeAddAccountURL]; }
+		}
+
+		public virtual VariableValue YodleeEditAccountURL
+		{
+			get { return this[Variables.YodleeEditAccountURL]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager
