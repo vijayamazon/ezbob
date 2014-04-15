@@ -18,7 +18,7 @@
 		[SetUp]
 		public void Setup()
 		{
-			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
 			Scanner.Register();

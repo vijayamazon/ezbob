@@ -115,7 +115,7 @@
 			m_oLog.Debug("Current environment: {0}", m_oEnv.Context);
 			m_oLog.Debug("Error emails will be sent to: {0}", oLog4NetCfg.ErrorMailRecipient);
 
-			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(eBayDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(AmazonDatabaseMarketPlace).Assembly);

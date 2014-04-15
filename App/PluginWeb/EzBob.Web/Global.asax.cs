@@ -147,7 +147,7 @@
 			ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
 			ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
 
-			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(Application).Assembly);
+			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
 			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(DbString).Assembly);
 			NHibernateWrapper.NHibernate.NHibernateManager.HbmAssemblies.Add(typeof(PerformencePerUnderwriterDataRow).Assembly);

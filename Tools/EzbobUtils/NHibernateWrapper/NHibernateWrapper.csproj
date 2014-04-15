@@ -67,14 +67,10 @@
     <Reference Include="System.Data.OracleClient" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationMng.Model.Mappings\ApplicationMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\RoleMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\SecurityApplicationMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\SecuritySessionMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\UserMap.cs" />
-    <Compile Include="ApplicationMng.Model\Application.cs" />
-    <Compile Include="ApplicationMng.Model\AppStatus.cs" />
-    <Compile Include="ApplicationMng.Model\AppStatusMap.cs" />
     <Compile Include="ApplicationMng.Model\Role.cs" />
     <Compile Include="ApplicationMng.Model\SecurityApplication.cs" />
     <Compile Include="ApplicationMng.Model\SecurityApplicationType.cs" />
@@ -93,17 +89,12 @@
     <Compile Include="NHibernate.Model\PermissionMap.cs" />
     <Compile Include="NHibernate.Model\SecurityQuestion.cs" />
     <Compile Include="NHibernate.Model\SecurityQuestionMap.cs" />
-    <Compile Include="NHibernate.Repository\AppStatusRepository.cs" />
-    <Compile Include="NHibernate.Repository\IAppStatusRepository.cs" />
     <Compile Include="NHibernate.Repository\ISecurityApplicationsRepository.cs" />
     <Compile Include="NHibernate.Repository\RepositoryRegistry.cs" />
     <Compile Include="NHibernate.Repository\SecurityApplicationsRepository.cs" />
     <Compile Include="NHibernate.Types\CaseInsensitiveEnumStringType.cs" />
     <Compile Include="NHibernate\NHibernateManager.cs" />
     <Compile Include="NHibernate\SecurityApplication.cs" />
-    <Compile Include="NHibernate\SessionUtils.cs" />
-    <Compile Include="StrategySchedule\ExecutionType.cs" />
-    <Compile Include="StrategySchedule\ScheduleItemType.cs" />
     <Compile Include="Web\IWorkplaceContext.cs" />
   </ItemGroup>
   <ItemGroup>

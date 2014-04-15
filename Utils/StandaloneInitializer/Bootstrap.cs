@@ -36,7 +36,7 @@
     {
         public static void Init()
         {
-			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 
             Scanner.Register();

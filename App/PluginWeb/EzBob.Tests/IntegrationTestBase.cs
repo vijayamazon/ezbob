@@ -17,7 +17,7 @@ namespace EzBob.Tests
         [SetUp]
         public void SetUp()
         {
-            NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
+            NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 
             PreInit();
