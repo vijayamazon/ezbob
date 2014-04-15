@@ -28,11 +28,6 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual Iesi.Collections.Generic.ISet<SecurityApplication> Applications
-		{
-			get;
-			set;
-		}
 		public virtual Iesi.Collections.Generic.ISet<Permission> Permissions
 		{
 			get;
@@ -41,16 +36,7 @@ namespace ApplicationMng.Model
 		public Role()
 		{
 			this.Users = new HashedSet<User>();
-			this.Applications = new HashedSet<SecurityApplication>();
 			this.Permissions = new HashedSet<Permission>();
-		}
-		public virtual void AddApplications(System.Collections.Generic.IEnumerable<SecurityApplication> securityApplications)
-		{
-			foreach (SecurityApplication current in securityApplications)
-			{
-				current.Roles.Add(this);
-				this.Applications.Add(current);
-			}
 		}
 		public virtual void AddUsers(System.Collections.Generic.List<User> users)
 		{
@@ -59,14 +45,6 @@ namespace ApplicationMng.Model
 				current.Roles.Add(this);
 				this.Users.Add(current);
 			}
-		}
-		public virtual void ClearApplications()
-		{
-			foreach (SecurityApplication current in this.Applications)
-			{
-				current.Roles.Remove(this);
-			}
-			this.Applications.Clear();
 		}
 		public virtual void ClearUsers()
 		{

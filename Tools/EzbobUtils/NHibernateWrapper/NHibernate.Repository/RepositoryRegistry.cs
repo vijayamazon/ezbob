@@ -8,13 +8,11 @@ namespace NHibernateWrapper.NHibernate.Repository
 		public RepositoryRegistry()
 		{
 			base.For(typeof(IRepository<>)).Use(typeof(NHibernateRepositoryBase<>));
-			base.For<IAttachDocTypeRepository>().Use<AttachDocTypeRepository>();
 			base.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 			base.For<IUsersRepository>().Use<UsersRepository>();
 			base.For<IRolesRepository>().Use<RolesRepository>();
 			base.For<ISecurityApplicationsRepository>().Use<SecurityApplicationsRepository>();
 			base.For<IAppStatusRepository>().Use<AppStatusRepository>();
-			base.For<ApplicationSuspendedRepository>().Use<ApplicationSuspendedRepository>();
 			base.For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
 		}
 	}

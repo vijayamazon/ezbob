@@ -12,11 +12,6 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual SecurityApplication SecApp
-		{
-			get;
-			set;
-		}
 		public virtual string Caption
 		{
 			get;
@@ -54,20 +49,6 @@ namespace ApplicationMng.Model
 			}
 		}
 		
-		public virtual string Path
-		{
-			get
-			{
-				return this.Url.Contains("/") ? this.Url : ("~/" + this.MvcPath);
-			}
-		}
-		public virtual string MvcPath
-		{
-			get
-			{
-				return (this.SecApp.Name + this.GetPathToRoot()).TrimStart(new char[0]).TrimEnd(new char[0]).Replace(" ", "_") + ".aspx";
-			}
-		}
 		public virtual ISet<AppStatus> Statuses
 		{
 			get

@@ -13,7 +13,6 @@ namespace ApplicationMng.Model.Mappings
 			base.Map((Role x) => x.Name);
 			base.Map((Role x) => x.Description);
 			base.HasManyToMany<User>((Role x) => x.Users).AsSet().Table("Security_UserRoleRelation").ParentKeyColumn("RoleId").ChildKeyColumn("UserId").Cascade.SaveUpdate().Inverse().Cache.Region("LongTerm").ReadWrite();
-			base.HasManyToMany<SecurityApplication>((Role x) => x.Applications).AsSet().Table("Security_RoleAppRel").ParentKeyColumn("RoleId").ChildKeyColumn("AppId").Cascade.SaveUpdate().Inverse().Cache.Region("LongTerm").ReadWrite();
 			base.HasManyToMany<Permission>((Role x) => x.Permissions).AsSet().Table("Security_RolePermissionRel").ParentKeyColumn("RoleId").ChildKeyColumn("PermissionId").Cascade.All().Cache.Region("LongTerm").ReadWrite();
 		}
 	}

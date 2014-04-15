@@ -9,7 +9,6 @@ namespace ApplicationMng.Model.Mappings
 			base.LazyLoad();
 			base.Cache.ReadWrite().Region("LongTerm");
 			this.Id((MenuItem x) => (object)x.Id).GeneratedBy.Native("SEQ_MENUITEM");
-			base.References<SecurityApplication>((MenuItem x) => x.SecApp).Column("SecAppId");
 			base.Map((MenuItem x) => x.Caption).Length(256);
 			base.Map((MenuItem x) => x.Description).Length(256);
 			base.Map((MenuItem x) => x.Url).Length(512);
