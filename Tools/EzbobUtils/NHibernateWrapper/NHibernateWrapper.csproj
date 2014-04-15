@@ -68,16 +68,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationMng.Model.Mappings\ApplicationMap.cs" />
-    <Compile Include="ApplicationMng.Model.Mappings\MenuItemMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\RoleMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\SecurityApplicationMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\SecuritySessionMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\UserMap.cs" />
     <Compile Include="ApplicationMng.Model\Application.cs" />
-    <Compile Include="ApplicationMng.Model\ApplicationStrategyState.cs" />
     <Compile Include="ApplicationMng.Model\AppStatus.cs" />
     <Compile Include="ApplicationMng.Model\AppStatusMap.cs" />
-    <Compile Include="ApplicationMng.Model\MenuItem.cs" />
     <Compile Include="ApplicationMng.Model\Role.cs" />
     <Compile Include="ApplicationMng.Model\SecurityApplication.cs" />
     <Compile Include="ApplicationMng.Model\SecurityApplicationType.cs" />
@@ -92,10 +89,10 @@
     <Compile Include="ApplicationMng.Repository\SecurityQuestionRepository.cs" />
     <Compile Include="ApplicationMng.Repository\SessionRepository.cs" />
     <Compile Include="ApplicationMng.Repository\UsersRepository.cs" />
-    <Compile Include="NHibernate.Model\ExecutionStateMap.cs" />
     <Compile Include="NHibernate.Model\Permission.cs" />
     <Compile Include="NHibernate.Model\PermissionMap.cs" />
     <Compile Include="NHibernate.Model\SecurityQuestion.cs" />
+    <Compile Include="NHibernate.Model\SecurityQuestionMap.cs" />
     <Compile Include="NHibernate.Repository\AppStatusRepository.cs" />
     <Compile Include="NHibernate.Repository\IAppStatusRepository.cs" />
     <Compile Include="NHibernate.Repository\ISecurityApplicationsRepository.cs" />

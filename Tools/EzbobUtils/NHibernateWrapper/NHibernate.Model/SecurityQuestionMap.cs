@@ -2,9 +2,9 @@ using FluentNHibernate.Mapping;
 using System;
 namespace NHibernateWrapper.NHibernate.Model
 {
-	public class ExecutionStateMap : ClassMap<SecurityQuestion>
+	public class SecurityQuestionMap : ClassMap<SecurityQuestion>
 	{
-		public ExecutionStateMap()
+		public SecurityQuestionMap()
 		{
 			base.Not.LazyLoad();
 			base.Table("Security_Question");

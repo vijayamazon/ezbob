@@ -28,6 +28,11 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
+		public virtual Iesi.Collections.Generic.ISet<SecurityApplication> Applications
+		{
+			get;
+			set;
+		}
 		public virtual Iesi.Collections.Generic.ISet<Permission> Permissions
 		{
 			get;
@@ -36,6 +41,7 @@ namespace ApplicationMng.Model
 		public Role()
 		{
 			this.Users = new HashedSet<User>();
+			this.Applications = new HashedSet<SecurityApplication>();
 			this.Permissions = new HashedSet<Permission>();
 		}
 		public virtual void AddUsers(System.Collections.Generic.List<User> users)

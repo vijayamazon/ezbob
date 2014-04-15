@@ -20,11 +20,6 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual ApplicationStrategyState State
-		{
-			get;
-			set;
-		}
 		public virtual User Creator
 		{
 			get;

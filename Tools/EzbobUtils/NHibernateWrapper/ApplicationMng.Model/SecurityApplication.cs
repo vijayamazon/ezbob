@@ -33,11 +33,6 @@ namespace ApplicationMng.Model
 				return result;
 			}
 		}
-		public virtual System.Collections.Generic.IList<MenuItem> MenuItems
-		{
-			get;
-			set;
-		}
 		public virtual Iesi.Collections.Generic.ISet<Role> Roles
 		{
 			get;

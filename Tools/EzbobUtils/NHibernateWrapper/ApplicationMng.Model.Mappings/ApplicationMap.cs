@@ -10,7 +10,6 @@ namespace ApplicationMng.Model.Mappings
 			base.Table("Application_Application");
 			this.Id((Application x) => (object)x.Id).Column("ApplicationId");
 			base.Map((Application x) => (object)x.Version);
-			base.Map((Application x) => (object)x.State).CustomType(typeof(ApplicationStrategyState));
 			base.References<User>((Application x) => x.Locker).Column("LockedByUserId").Cascade.All();
 			base.References<User>((Application x) => x.Creator).Column("CreatorUserId").Cascade.All();
 			base.Map((Application x) => (object)x.CreationDate);

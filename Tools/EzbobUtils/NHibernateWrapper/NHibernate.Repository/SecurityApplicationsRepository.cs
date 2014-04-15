@@ -18,13 +18,6 @@ namespace NHibernateWrapper.NHibernate.Repository
 				where (int)a.ApplicationType == 1
 				select a;
 		}
-		public System.Collections.Generic.IEnumerable<ApplicationMng.Model.SecurityApplication> GetWebApplicationsWithMenuItems()
-		{
-			return 
-				from m in this.GetWebApplications().ToList<ApplicationMng.Model.SecurityApplication>()
-				where m.MenuItems != null && m.MenuItems.Any<ApplicationMng.Model.MenuItem>()
-				select m;
-		}
 		public bool CheckName(int id, string name)
 		{
 			return this.GetAll().Any((ApplicationMng.Model.SecurityApplication s) => s.Id != id && s.Name.ToUpper() == name.ToUpper());
