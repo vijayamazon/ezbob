@@ -1,4 +1,3 @@
-using ApplicationMng.Model.Filters;
 using FluentNHibernate.Mapping;
 using System;
 namespace ApplicationMng.Model.Mappings
@@ -14,7 +13,6 @@ namespace ApplicationMng.Model.Mappings
 			base.Map((MenuItem x) => x.Caption).Length(256);
 			base.Map((MenuItem x) => x.Description).Length(256);
 			base.Map((MenuItem x) => x.Url).Length(512);
-			base.References<FilterBase>((MenuItem x) => x.Filter).Column("FilterId").Nullable();
 			base.Table("MenuItem");
 			base.Map((MenuItem x) => x.FilterData, "Filter");
 			base.HasManyToMany<AppStatus>((MenuItem x) => x.Statuses).AsSet().Table("MenuItem_Status_Rel").ParentKeyColumn("MenuItemId").ChildKeyColumn("StatusId").Cascade.None();

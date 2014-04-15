@@ -1,4 +1,3 @@
-using ApplicationMng.Model.Filters;
 using Iesi.Collections.Generic;
 using NHibernateWrapper.NHibernate;
 using System;
@@ -29,11 +28,6 @@ namespace ApplicationMng.Model
 			set;
 		}
 		public virtual string Url
-		{
-			get;
-			set;
-		}
-		public virtual FilterBase Filter
 		{
 			get;
 			set;
