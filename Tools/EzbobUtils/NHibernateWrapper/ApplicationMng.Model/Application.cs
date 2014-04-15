@@ -45,11 +45,6 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual ExecutionState ExecutionState
-		{
-			get;
-			set;
-		}
 		public virtual int? ParentAppID
 		{
 			get;

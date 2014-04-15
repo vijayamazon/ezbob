@@ -81,7 +81,6 @@
     <Compile Include="ApplicationMng.Model.Mappings\ApplicationExecutionTypeMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\ApplicationMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\MenuItemMap.cs" />
-    <Compile Include="ApplicationMng.Model.Mappings\NodeMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\RoleMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\ScoringModelMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\SecurityApplicationMap.cs" />
@@ -97,10 +96,7 @@
     <Compile Include="ApplicationMng.Model\AppStatusMap.cs" />
     <Compile Include="ApplicationMng.Model\AttachDocType.cs" />
     <Compile Include="ApplicationMng.Model\AttachDocTypeMap.cs" />
-    <Compile Include="ApplicationMng.Model\ExecutionState.cs" />
-    <Compile Include="ApplicationMng.Model\ExecutionStateMap.cs" />
     <Compile Include="ApplicationMng.Model\MenuItem.cs" />
-    <Compile Include="ApplicationMng.Model\Node.cs" />
     <Compile Include="ApplicationMng.Model\Role.cs" />
     <Compile Include="ApplicationMng.Model\ScoringModel.cs" />
     <Compile Include="ApplicationMng.Model\SecurityApplication.cs" />
@@ -120,7 +116,6 @@
     <Compile Include="ApplicationMng.Repository\MenuRepository.cs" />
     <Compile Include="ApplicationMng.Repository\NHibernateRepositoryBase.cs" />
     <Compile Include="ApplicationMng.Repository\NodeNotFoundException.cs" />
-    <Compile Include="ApplicationMng.Repository\NodesRepository.cs" />
     <Compile Include="ApplicationMng.Repository\RolesRepository.cs" />
     <Compile Include="ApplicationMng.Repository\SecurityQuestionRepository.cs" />
     <Compile Include="ApplicationMng.Repository\SessionRepository.cs" />
