@@ -13,7 +13,6 @@ namespace NHibernateWrapper.NHibernate.Repository
 			base.For<IUsersRepository>().Use<UsersRepository>();
 			base.For<IRolesRepository>().Use<RolesRepository>();
 			base.For<ISecurityApplicationsRepository>().Use<SecurityApplicationsRepository>();
-			base.For<IMenuRepository>().Use<MenuRepository>();
 			base.For<IAppStatusRepository>().Use<AppStatusRepository>();
 			base.For<ApplicationSuspendedRepository>().Use<ApplicationSuspendedRepository>();
 			base.For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
