@@ -4,12 +4,12 @@
 	using System.Web.Mvc;
 	using Code;
 	using Ezbob.Utils;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.Membership;
 	using Models;
 	using Infrastructure.csrf;
 	using NHibernateWrapper.NHibernate.Model;
-	using NHibernateWrapper.Web;
 
 	public class AccountSettingsController : Controller
     {

@@ -1,7 +1,7 @@
-using ApplicationMng.Model;
-using System;
-namespace NHibernateWrapper.Web
+namespace EzBob.Web.Infrastructure
 {
+	using ApplicationMng.Model;
+
 	public interface IWorkplaceContext
 	{
 		int SecAppId

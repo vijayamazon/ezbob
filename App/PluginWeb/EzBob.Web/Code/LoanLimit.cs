@@ -3,9 +3,9 @@
 	using System;
 	using System.Linq;
 	using ConfigManager;
-	using NHibernateWrapper.Web;
+	using Infrastructure;
 
-    public class LoanLimit
+	public class LoanLimit
     {
         private readonly IWorkplaceContext _context;
 

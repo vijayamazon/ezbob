@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Infrastructure
 {
-	using NHibernateWrapper.Web;
 	using StructureMap;
 	using System.Web.Mvc;
 	using System.Linq;

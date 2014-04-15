@@ -95,7 +95,6 @@
     <Compile Include="NHibernate.Types\CaseInsensitiveEnumStringType.cs" />
     <Compile Include="NHibernate\NHibernateManager.cs" />
     <Compile Include="NHibernate\SecurityApplication.cs" />
-    <Compile Include="Web\IWorkplaceContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="NHibernate\SecurityApplication.resources" />
@@ -110,5 +109,6 @@
       <Name>Logger</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -22,7 +22,6 @@ namespace EzBob.Web.Infrastructure
 	using Code.MpUniq;
 	using Models.Repository;
 	using MailApi;
-	using NHibernateWrapper.Web;
 	using StructureMap.Configuration.DSL;
 	using ConfigManager;
 

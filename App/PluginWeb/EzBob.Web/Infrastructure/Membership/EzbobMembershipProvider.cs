@@ -16,7 +16,6 @@
 	using ApplicationMng.Repository;
 	using StructureMap;
 	using log4net;
-	using NHibernateWrapper.Web;
 
 	public class UserAlreadyExistsException : Exception
 	{

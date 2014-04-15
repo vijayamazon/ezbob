@@ -10,6 +10,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using NHibernate;
 	using NHibernate.Linq;
@@ -19,7 +20,6 @@
 	using Code;
 	using Infrastructure.csrf;
 	using log4net;
-	using NHibernateWrapper.Web;
 	using ActionResult = Ezbob.Database.ActionResult;
 
 	public class CustomersController : Controller {

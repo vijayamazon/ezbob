@@ -7,10 +7,10 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib.CaisFile;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models.CAIS;
 	using Code;
-	using NHibernateWrapper.Web;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CAISController : Controller {

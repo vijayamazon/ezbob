@@ -2,6 +2,7 @@
 	using System.Data;
 	using Code;
 	using ConfigManager;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using NHibernate;
 	using System;
@@ -12,7 +13,6 @@
 	using Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Customer.Models;
-	using NHibernateWrapper.Web;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class PaymentAccountsController : Controller {

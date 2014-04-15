@@ -8,11 +8,11 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
 	using StructureMap;
-	using NHibernateWrapper.Web;
 
 	public class MessagesController : Controller
 	{

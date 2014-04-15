@@ -12,7 +12,6 @@
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
-	using NHibernateWrapper.Web;
 
 	[RestfullErrorHandlingAttribute]
     public class LoanEditorController : Controller

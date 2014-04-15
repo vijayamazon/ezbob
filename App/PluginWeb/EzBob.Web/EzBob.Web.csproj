@@ -380,6 +380,7 @@
     <Compile Include="Infrastructure\Filters\IsSuccessfullyRegisteredFilter.cs" />
     <Compile Include="Infrastructure\csrf\JsonAntiForgeryHttpContextWrapper.cs" />
     <Compile Include="Infrastructure\Filters\LoggingContextFilter.cs" />
+    <Compile Include="Infrastructure\IWorkplaceContext.cs" />
     <Compile Include="Infrastructure\Membership\EmptyAnswerExeption.cs" />
     <Compile Include="Infrastructure\Membership\RoleNotFoundException.cs" />
     <Compile Include="Infrastructure\Membership\EzbobMembershipProvider.cs" />

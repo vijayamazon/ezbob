@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Infrastructure.Filters
 {
 	using System.Web.Mvc;
-	using NHibernateWrapper.Web;
 	using StructureMap;
 	using log4net;
 

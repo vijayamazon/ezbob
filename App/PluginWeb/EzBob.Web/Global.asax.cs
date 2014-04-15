@@ -29,7 +29,6 @@
 	using NHibernate;
 	using NHibernateWrapper.NHibernate;
 	using log4net;
-	using NHibernateWrapper.Web;
 
 	#endregion using
 
