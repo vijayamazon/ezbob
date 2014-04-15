@@ -102,8 +102,6 @@
     <Compile Include="ApplicationMng.Model\SecurityApplication.cs" />
     <Compile Include="ApplicationMng.Model\SecurityApplicationType.cs" />
     <Compile Include="ApplicationMng.Model\SecuritySession.cs" />
-    <Compile Include="ApplicationMng.Model\SingleRunApplication.cs" />
-    <Compile Include="ApplicationMng.Model\SingleRunApplicationMap.cs" />
     <Compile Include="ApplicationMng.Model\User.cs" />
     <Compile Include="ApplicationMng.Repository\AttachDocTypeRepository.cs" />
     <Compile Include="ApplicationMng.Repository\DatasourceNotFoundException.cs" />
@@ -121,11 +119,9 @@
     <Compile Include="ApplicationMng.Repository\SessionRepository.cs" />
     <Compile Include="ApplicationMng.Repository\StrategyNotFoundException.cs" />
     <Compile Include="ApplicationMng.Repository\UsersRepository.cs" />
-    <Compile Include="NHibernate.Mappings\NodeMap.cs" />
     <Compile Include="NHibernate.Model\ApplicationExecutionTypeItem.cs" />
     <Compile Include="NHibernate.Model\ApplicationSuspended.cs" />
     <Compile Include="NHibernate.Model\ExecutionStateMap.cs" />
-    <Compile Include="NHibernate.Model\ExportJournal.cs" />
     <Compile Include="NHibernate.Model\IDeleteSupported.cs" />
     <Compile Include="NHibernate.Model\ISignable.cs" />
     <Compile Include="NHibernate.Model\Permission.cs" />
@@ -136,7 +132,6 @@
     <Compile Include="NHibernate.Repository\ApplicationExecutionTypeRepository.cs" />
     <Compile Include="NHibernate.Repository\ApplicationSuspendedRepository.cs" />
     <Compile Include="NHibernate.Repository\AppStatusRepository.cs" />
-    <Compile Include="NHibernate.Repository\ExportJournalRepository.cs" />
     <Compile Include="NHibernate.Repository\IAppAttachmentsRepository.cs" />
     <Compile Include="NHibernate.Repository\IAppStatusRepository.cs" />
     <Compile Include="NHibernate.Repository\ISecurityApplicationsRepository.cs" />

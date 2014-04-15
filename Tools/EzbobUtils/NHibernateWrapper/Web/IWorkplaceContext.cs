@@ -4,10 +4,6 @@ namespace NHibernateWrapper.Web
 {
 	public interface IWorkplaceContext
 	{
-		SecurityApplication SecApp
-		{
-			get;
-		}
 		int SecAppId
 		{
 			get;

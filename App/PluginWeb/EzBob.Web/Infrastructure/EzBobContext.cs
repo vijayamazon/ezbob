@@ -6,25 +6,16 @@
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using NHibernateWrapper.NHibernate.Repository;
 
 	public class EzBobContext : IEzbobWorkplaceContext
 	{
-		private readonly ISecurityApplicationsRepository _apps;
 		private readonly IUsersRepository _users;
 		private readonly ICustomerRepository _customers;
-		private SecurityApplication _wp;
 
-		public EzBobContext(SecurityApplicationsRepository apps, IUsersRepository users, ICustomerRepository customers)
+		public EzBobContext(IUsersRepository users, ICustomerRepository customers)
 		{
-			_apps = apps;
 			_users = users;
 			_customers = customers;
-		}
-
-		public SecurityApplication SecApp
-		{
-			get { return _wp ?? (_wp = _apps.Get(1)); }
 		}
 
 		public int SecAppId
