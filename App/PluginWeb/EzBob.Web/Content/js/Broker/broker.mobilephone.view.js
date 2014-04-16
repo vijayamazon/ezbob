@@ -5,16 +5,13 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 	initialize: function() {
 		EzBob.Broker.MobilePhoneView.__super__.initialize.apply(this, arguments);
 
+		this.on('show-captcha', this.showCaptcha, this);
+
 		this.hasCodeEverBeenSent = false;
 
 		this.aryCurrentCount = {};
 
 		this.sendAttemptsCount = 0;
-
-		var oCfg = $('#broker-sms-count');
-
-		this.maxSendToCurrentCount = oCfg.attr('data-max-per-number') || 3;
-		this.maxSendAttemptsCount = oCfg.attr('data-max-per-page') || 10;
 
 		this.specialKeys = {
 			8: 'Backspace',
@@ -106,8 +103,8 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 			if ((sPhoneNumber === this.getLastCodeTarget()) || this.currentCount(sPhoneNumber)) {
 				var bEnabled =
-					(this.currentCount(sPhoneNumber) < this.maxSendToCurrentCount) &&
-					(this.sendAttemptsCount < this.maxSendAttemptsCount);
+					(this.currentCount(sPhoneNumber) < this.maxSendToCurrentCount()) &&
+					(this.sendAttemptsCount < this.maxSendAttemptsCount());
 
 				this.setSomethingEnabled('#' + this.GenerateCodeBtnID, bEnabled).val('Resend activation code');
 
@@ -163,29 +160,34 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 	}, // setSentLabelVisible
 
 	handleTooManyAttempts: function() {
-		if ((this.currentCount() >= this.maxSendToCurrentCount) || (this.sendAttemptsCount >= this.maxSendAttemptsCount)) {
+		if ((this.currentCount() >= this.maxSendToCurrentCount()) || (this.sendAttemptsCount >= this.maxSendAttemptsCount())) {
 			this.setSomethingEnabled('#' + this.GenerateCodeBtnID, false);
 
 			EzBob.App.trigger('clear');
 
-			if (this.sendAttemptsCount >= this.maxSendAttemptsCount) {
+			if (this.sendAttemptsCount >= this.maxSendAttemptsCount()) {
 				EzBob.App.trigger('error', 'Too many attempts to send verification code.');
 
-				if (this.CaptchaEnabledFieldID) {
-					this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
-					this.$el.find('#' + this.MobileCodeSectionID).addClass('hide').hide();
-					this.setSentLabelVisible(false);
-
-					this.$el.find('#' + this.CaptchaEnabledFieldID).val('1');
-					this.$el.find('#' + this.CaptchaSectionID).removeClass('hide').show();
-
-					this.inputChanged();
-				} // if
+				if (this.CaptchaEnabledFieldID)
+					this.showCaptcha();
 			} // if
 			else
 				EzBob.App.trigger('warning', 'Too many attempts to send verification code to number ' + this.$el.find('#' + this.PhoneFieldID).val() + '.');
 		} // if
 	}, // handleTooManyAttempts
+
+	showCaptcha: function() {
+		this.setSomethingEnabled('#' + this.GenerateCodeBtnID, false);
+
+		this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
+		this.$el.find('#' + this.MobileCodeSectionID).addClass('hide').hide();
+		this.setSentLabelVisible(false);
+
+		this.$el.find('#' + this.CaptchaEnabledFieldID).val('1');
+		this.$el.find('#' + this.CaptchaSectionID).removeClass('hide').show();
+
+		this.inputChanged();
+	}, // showCaptcha
 
 	setLastCodeTarget: function(sPhoneNumber) {
 		this.$el.find('#' + this.CodeSentLabelID).attr('data-sent-to', sPhoneNumber);
@@ -231,7 +233,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 		this.handleTooManyAttempts();
 
-		if ((this.currentCount() <= this.maxSendToCurrentCount) && (this.sendAttemptsCount <= this.maxSendAttemptsCount)) {
+		if ((this.currentCount() <= this.maxSendToCurrentCount()) && (this.sendAttemptsCount <= this.maxSendAttemptsCount())) {
 			var self = this;
 
 			var xhr = $.post(window.gRootPath + 'Account/GenerateMobileCode', { mobilePhone: sPhoneNumber, });
@@ -286,4 +288,12 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 		return oCfg;
 	}, // setMobilePhoneValidatorCfg
+
+	maxSendToCurrentCount: function() {
+		return parseInt($('#broker-sms-count').attr('data-max-per-number') || 3, 10);
+	}, // maxSendToCurrentCount
+
+	maxSendAttemptsCount: function() {
+		return parseInt($('#broker-sms-count').attr('data-max-per-page') || 10, 10);
+	}, // maxSendAttemptsCount
 }); // EzBob.Broker.SignupView

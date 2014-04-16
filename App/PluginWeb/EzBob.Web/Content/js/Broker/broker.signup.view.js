@@ -32,9 +32,14 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		var evt = EzBob.Broker.SignupView.__super__.events.apply(this, arguments);
 
 		evt['click .show-terms-and-conditions'] = 'showConsent';
+		evt['click #switchToCaptcha'] = 'switchToCaptcha';
 
 		return evt;
 	}, // events
+
+	switchToCaptcha: function() {
+		this.trigger('show-captcha');
+	}, // switchToCaptcha
 
 	clear: function() {
 		EzBob.Broker.SignupView.__super__.clear.apply(this, arguments);
