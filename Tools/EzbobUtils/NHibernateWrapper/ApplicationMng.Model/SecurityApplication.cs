@@ -16,23 +16,6 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual string TranslatedName
-		{
-			get
-			{
-				string @string = NHibernateWrapper.NHibernate.SecurityApplication.ResourceManager.GetString(this.Name);
-				string result;
-				if (string.IsNullOrEmpty(@string))
-				{
-					result = this.Name;
-				}
-				else
-				{
-					result = @string;
-				}
-				return result;
-			}
-		}
 		public virtual Iesi.Collections.Generic.ISet<Role> Roles
 		{
 			get;

@@ -94,10 +94,6 @@
     <Compile Include="NHibernate.Repository\SecurityApplicationsRepository.cs" />
     <Compile Include="NHibernate.Types\CaseInsensitiveEnumStringType.cs" />
     <Compile Include="NHibernate\NHibernateManager.cs" />
-    <Compile Include="NHibernate\SecurityApplication.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="NHibernate\SecurityApplication.resources" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EzEnvironment\EzEnvironment.csproj">
