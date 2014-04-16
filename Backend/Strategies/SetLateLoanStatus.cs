@@ -93,7 +93,7 @@
 								{"DaysBetween", daysBetween.ToString(CultureInfo.InvariantCulture)}
 							};
 
-							mailer.Send(templateName, variables, mail);
+							mailer.Send(templateName, variables, new Addressee(mail));
 						}
 					} // if
 				} // if

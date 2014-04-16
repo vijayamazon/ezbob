@@ -1,14 +1,17 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace EzBob.Backend.Strategies.MailStrategies
+{
 	using System;
 	using System.Data;
 	using Ezbob.Database;
 
-	public class CustomerData {
+	public class CustomerData
+	{
 		#region method Load
 
-		public virtual void Load(int customerId, AConnection oDb) {
-			oDb.ForEachRowSafe(
-				(sr, bRowsetStart) => {
+		public virtual void Load(int customerId, AConnection oDb)
+		{
+			oDb.ForEachRowSafe((sr, bRowsetStart) =>
+				{
 					Id = sr["Id"];
 					FirstName = sr["FirstName"];
 					Surname = sr["Surname"];
@@ -19,7 +22,7 @@
 					RefNum = sr["RefNum"];
 					MobilePhone = sr["MobilePhone"];
 					DaytimePhone = sr["DaytimePhone"];
-
+					IsTest = sr["IsTest"];
 					return ActionResult.SkipAll;
 				},
 				"GetBasicCustomerData",
@@ -35,7 +38,8 @@
 
 		#region method ToString
 
-		public override string ToString() {
+		public override string ToString()
+		{
 			return string.Format(
 				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}",
 				Id,
@@ -62,6 +66,7 @@
 		public virtual string RefNum { get; protected set; }
 		public virtual string MobilePhone { get; protected set; }
 		public virtual string DaytimePhone { get; protected set; }
+		public virtual bool IsTest { get; protected set; }
 
 		#endregion properties
 	} // class CustomerData

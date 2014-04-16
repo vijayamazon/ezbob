@@ -2143,5 +2143,10 @@
 		{
 			get { return this[Variables.TeraPeakUrl]; }
 		}
+
+		public virtual VariableValue TrustPilotBccMail
+		{
+			get { return this[Variables.TrustPilotBccMail]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

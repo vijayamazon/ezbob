@@ -44,7 +44,7 @@
 					{"Total", total.ToString(CultureInfo.InvariantCulture)}
 				};
 
-				mailer.Send("Mandrill - 14 days notification email", variables, mail);
+				mailer.Send("Mandrill - 14 days notification email", variables, new Addressee(mail));
 
 				DB.ExecuteNonQuery("SetLateBy14Days", CommandSpecies.StoredProcedure, new QueryParameter("LoanId", loanId));
 			} // for

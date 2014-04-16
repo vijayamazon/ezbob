@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
+	using API;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -18,14 +19,15 @@
 
 		#region method GetRecipients
 
-		protected override string[] GetRecipients() {
+		protected override Addressee[] GetRecipients()
+		{
 			if (CustomerData.NumOfLoans > 1)
 				return base.GetRecipients();
 
 			if (!m_bSendWhenOneLoan && (CustomerData.NumOfLoans == 1))
 				return base.GetRecipients();
 
-			var aryAddresses = new List<string>(); 
+			var aryAddresses = new List<Addressee>(); 
 
 			aryAddresses.AddRange(base.GetRecipients());
 
@@ -34,7 +36,7 @@
 			string sBrokerEmail = sp.ExecuteScalar<string>();
 
 			if (!string.IsNullOrWhiteSpace(sBrokerEmail))
-				aryAddresses.Add(sBrokerEmail);
+				aryAddresses.Add(new Addressee(sBrokerEmail));
 
 			return aryAddresses.ToArray();
 		} // GetRecipients

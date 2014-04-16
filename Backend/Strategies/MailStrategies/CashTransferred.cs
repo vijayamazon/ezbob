@@ -5,10 +5,11 @@
 	using Ezbob.Logger;
 
 	public class CashTransferred : ABrokerMailToo {
-		#region consturctor
+		#region constructor
 
 		public CashTransferred(int customerId, decimal amount, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog, true) {
 			this.amount = amount;
+			toTrustPilot = true;
 		} // constructor
 
 		#endregion consturctor

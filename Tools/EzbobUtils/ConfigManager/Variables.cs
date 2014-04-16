@@ -302,6 +302,7 @@
 		YodleeAddAccountURL,
 		YodleeEditAccountURL,
 		TeraPeakApiKey,
-		TeraPeakUrl
+		TeraPeakUrl,
+		TrustPilotBccMail
 	} // enum Variables
 } // namespace ConfigManager

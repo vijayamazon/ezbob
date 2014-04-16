@@ -166,7 +166,7 @@
 				{"RefNum", refNum}
 			};
 
-			mailer.Send("Mandrill - Repayment confirmation", variables, customerMail);
+			mailer.Send("Mandrill - Repayment confirmation", variables, new Addressee(customerMail));
 		} // SendConfirmationMail
 
 		#endregion method SendConfirmationMail
@@ -190,7 +190,7 @@
 					{"RefNum", refNum}
 				};
 
-				mailer.Send("Mandrill - Loan paid in full", variables, customerMail);
+				mailer.Send("Mandrill - Loan paid in full", variables, new Addressee(customerMail));
 			} // if
 		} // SendLoanStatusMail
 
@@ -205,7 +205,7 @@
 				{"DueDate", FormattingUtils.FormatDateToString(DateTime.UtcNow)}
 			};
 
-			mailer.Send("Mandrill - Automatic Re-Payment has Failed", variables, customerMail);
+			mailer.Send("Mandrill - Automatic Re-Payment has Failed", variables, new Addressee(customerMail));
 		} // SendFailureMail
 
 		#endregion method SendFailureMail

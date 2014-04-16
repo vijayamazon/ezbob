@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
+	using API;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -80,11 +81,11 @@
 
 		#region method GetRecipients
 
-		protected override string[] GetRecipients() {
+		protected override Addressee[] GetRecipients() {
 			if (m_nCurrentPassNumber == 0)
 				return base.GetRecipients();
 
-			return new string[] { BrokerData.Email, };
+			return new [] { new Addressee(BrokerData.Email) };
 		} // GetRecipients
 
 		#endregion method GetRecipients

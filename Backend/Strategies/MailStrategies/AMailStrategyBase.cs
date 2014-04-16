@@ -1,4 +1,5 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace EzBob.Backend.Strategies.MailStrategies
+{
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -8,10 +9,12 @@
 
 	using EzBob.Backend.Strategies.MailStrategies.API;
 
-	public abstract class AMailStrategyBase : AStrategy {
+	public abstract class AMailStrategyBase : AStrategy
+	{
 		#region static constructor
 
-		static AMailStrategyBase() {
+		static AMailStrategyBase()
+		{
 			ms_oLock = new object();
 			ms_bDefaultsAreReady = false;
 		} // static constructor
@@ -22,8 +25,10 @@
 
 		#region method Execute
 
-		public override void Execute() {
-			try {
+		public override void Execute()
+		{
+			try
+			{
 				Log.Debug("Execute() started...");
 
 				LoadRecipientData();
@@ -36,7 +41,7 @@
 				Log.Debug("Customer data: {0}", CustomerData);
 				Log.Debug("Variables:\n\t{0}", string.Join("\n\t", Variables.Select(kv => kv.Key + ": " + kv.Value)));
 
-				string[] aryRecipients = GetRecipients() ?? new string[0];
+				Addressee[] aryRecipients = GetRecipients() ?? new Addressee[0];
 
 				Log.Debug("Sending an email to staff{0}...", aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty);
 				m_oMailer.Send(TemplateName, Variables, aryRecipients);
@@ -48,7 +53,8 @@
 
 				Log.Debug("Execute() complete.");
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				throw new StrategyException(this, "Something went terribly wrong during Execute() of " + this.GetType(), e);
 			} // try
 		} // Execute
@@ -61,9 +67,12 @@
 
 		#region constructor
 
-		protected AMailStrategyBase(int customerId, bool bSendToCustomer, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		protected AMailStrategyBase(int customerId, bool bSendToCustomer, AConnection oDB, ASafeLog oLog)
+			: base(oDB, oLog)
+		{
 			InitDefaults(); // should not be moved to static constructor
 
+			toTrustPilot = false;
 			m_oMailer = new StrategiesMailer(DB, Log);
 
 			CustomerId = customerId;
@@ -73,10 +82,13 @@
 
 		#endregion constructor
 
+		protected virtual bool toTrustPilot { get; set; }
+
 		#region method GetRecipients
 
-		protected virtual string[] GetRecipients() {
-			return m_bSendToCustomer ? new string[] { CustomerData.Mail } : new string[0];
+		protected virtual Addressee[] GetRecipients()
+		{
+			return m_bSendToCustomer ? new [] { new Addressee(CustomerData.Mail, toTrustPilot && !CustomerData.IsTest ?  CurrentValues.Instance.TrustPilotBccMail : "") } : new Addressee[0];
 		} // GetRecipients
 
 		#endregion method GetCustomerEmail
@@ -89,7 +101,8 @@
 
 		#region method ActionAtEnd
 
-		protected virtual void ActionAtEnd() {
+		protected virtual void ActionAtEnd()
+		{
 			Log.Debug("default action - nothing to do.");
 		} // ActionAtEnd
 
@@ -97,7 +110,8 @@
 
 		#region method LoadRecipientData
 
-		protected virtual void LoadRecipientData() {
+		protected virtual void LoadRecipientData()
+		{
 			Log.Debug("Loading customer data...");
 
 			CustomerData = new CustomerData();
@@ -111,8 +125,10 @@
 
 		#region property CustomerSite
 
-		protected virtual string CustomerSite {
-			get {
+		protected virtual string CustomerSite
+		{
+			get
+			{
 				return RemoveLastSlash(CurrentValues.Instance.CustomerSite);
 			} // get
 		} // CustomerSite
@@ -121,8 +137,10 @@
 
 		#region property BrokerSite
 
-		protected virtual string BrokerSite {
-			get {
+		protected virtual string BrokerSite
+		{
+			get
+			{
 				return RemoveLastSlash(CurrentValues.Instance.BrokerSite);
 			} // get
 		} // BrokerSite
@@ -131,8 +149,10 @@
 
 		#region property UnderwriterSite
 
-		protected virtual string UnderwriterSite {
-			get {
+		protected virtual string UnderwriterSite
+		{
+			get
+			{
 				return RemoveLastSlash(CurrentValues.Instance.UnderwriterSite);
 			} // get
 		} // UnderwriterSite
@@ -161,7 +181,8 @@
 
 		#region method RemoveLastSlash
 
-		private string RemoveLastSlash(string sResult) {
+		private string RemoveLastSlash(string sResult)
+		{
 			while (sResult.EndsWith("/"))
 				sResult = sResult.Substring(0, sResult.Length - 1);
 
@@ -172,11 +193,13 @@
 
 		#region method InitDefaults
 
-		private static void InitDefaults() {
+		private static void InitDefaults()
+		{
 			if (ms_bDefaultsAreReady)
 				return;
 
-			lock (ms_oLock) {
+			lock (ms_oLock)
+			{
 				if (ms_bDefaultsAreReady)
 					return;
 

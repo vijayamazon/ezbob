@@ -1,6 +1,8 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
+	using API;
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -50,13 +52,13 @@
 
 		#region method GetRecipients
 
-		protected override string[] GetRecipients() {
+		protected override Addressee[] GetRecipients() {
 			string sEmail = CurrentValues.Instance.SalesEmail;
 
 			if (string.IsNullOrWhiteSpace(sEmail))
-				return new string[0];
+				return new Addressee[0];
 
-			return sEmail.Split(',');
+			return sEmail.Split(',').Select(addr => new Addressee(addr)).ToArray();
 		} // GetRecipients
 
 		#endregion method GetCustomerEmail

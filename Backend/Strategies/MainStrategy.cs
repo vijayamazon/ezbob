@@ -218,7 +218,7 @@
 						{"EzbobAccount", "https://app.ezbob.com/Customer/Profile"}
 					};
 
-					mailer.Send("Mandrill - Rejection email", variables, appEmail);
+					mailer.Send("Mandrill - Rejection email", variables, new Addressee(appEmail));
 					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
 				} // if
 			}
@@ -338,7 +338,7 @@
 					{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 				};
 
-				mailer.Send("Mandrill - Approval (not 1st time)", customerMailVariables, appEmail);
+				mailer.Send("Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(appEmail));
 			} // if
 		}
 
@@ -396,7 +396,7 @@
 				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 			};
 
-			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, appEmail);
+			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(appEmail));
 		}
 
 		private void UpdateApprovalData()
@@ -437,7 +437,7 @@
 				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 			};
 
-			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, appEmail);
+			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(appEmail));
 		}
 
 		private void UpdateBankBasedApprovalData()

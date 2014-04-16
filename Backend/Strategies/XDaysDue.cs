@@ -48,7 +48,7 @@
 					{"DebitCard", creditCard}
 				};
 
-				mailer.Send("Mandrill - 5 days notice", variables, mail);
+				mailer.Send("Mandrill - 5 days notice", variables, new Addressee(mail));
 
 				DB.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
 					CommandSpecies.StoredProcedure,
@@ -75,7 +75,7 @@
 					{"DebitCard", creditCard}
 				};
 
-				mailer.Send("Mandrill - 2 days notice", variables, mail);
+				mailer.Send("Mandrill - 2 days notice", variables, new Addressee(mail));
 
 				DB.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
 					CommandSpecies.StoredProcedure,

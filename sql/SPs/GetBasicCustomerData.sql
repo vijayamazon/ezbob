@@ -26,9 +26,11 @@ BEGIN
 		RefNumber,
 		MobilePhone,
 		DaytimePhone
+		IsTest
 	FROM
 		Customer
 	WHERE
 		Id = @CustomerId
 END
+
 GO

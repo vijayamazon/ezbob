@@ -159,6 +159,7 @@
 		UseNewUpdateCustomerMpsStrategy,
 		UseNewUpdateMpStrategy,
 		YodleeAccountPrefix,
+		TrustPilotBccMail
 	} // enum ConfigurationVariables
 
 	#endregion enum ConfigurationVariables
