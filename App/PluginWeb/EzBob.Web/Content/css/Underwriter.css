@@ -950,3 +950,75 @@ div.form_buttons_container a, div.form_buttons_container button { float: right; 
     background-color: yellow;
 }
 
+textarea.BusinessAddress {
+	font-size: 16px;
+	line-height: 20px;
+	height: 124px;
+}
+
+.aka-table {
+	display: table;
+	width: 100%;
+}
+
+.aka-caption {
+	display: table-caption;
+}
+
+.aka-row {
+	display: table-row;
+}
+
+.aka-column {
+	display: table-cell;
+}
+
+.hmrc-enter-business-data {
+	margin-top: 1em;
+}
+
+.hmrc-enter-business-data .aka-column {
+	width: 50%;
+	vertical-align: top;
+}
+
+div.hmrc-enter-data-holder {
+	overflow-x: auto;
+	width: 99%;
+}
+
+div.hmrc-enter-data-holder .add-one-period {
+	float: right;
+}
+
+.hmrc-enter-data { border-collapse: collapse; }
+
+.hmrc-enter-data th,
+.hmrc-enter-data td {
+	border: 1px solid black;
+	padding: 3px;
+	vertical-align: middle;
+}
+
+.hmrc-enter-data th {
+	text-align: left;
+	min-width: 400px;
+}
+
+.hmrc-enter-data tbody td {
+	text-align: right;
+	min-width: 180px;
+}
+
+.hmrc-enter-data .date-holder {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.hmrc-enter-data input {
+	width: 145px;
+}
+
+.hmrc-enter-data tfoot td {
+	text-align: center;
+}

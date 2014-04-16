@@ -112,6 +112,9 @@
         $(".mps-tables").show();
         return _this.$el.find('#hmrc-upload-container').hide().empty();
       });
+      EzBob.App.vent.on('ct:marketplaces.enterHmrc', function() {
+        return EzBob.Underwriter.EnterHmrcView.execute(_this.model.customerId);
+      });
       return this;
     };
 

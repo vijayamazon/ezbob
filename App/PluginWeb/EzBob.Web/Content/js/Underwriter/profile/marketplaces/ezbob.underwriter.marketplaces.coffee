@@ -70,6 +70,10 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
             @$el.find('#hmrc-upload-container').hide().empty()
         # end of on uploadHmrcBack
 
+        EzBob.App.vent.on 'ct:marketplaces.enterHmrc', () =>
+            EzBob.Underwriter.EnterHmrcView.execute @model.customerId
+        # end of on enterHmrc
+
         @
     # end of initialize
 

@@ -70,7 +70,8 @@
     MarketPlacesHistoryView.prototype.events = {
       "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked",
       "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked",
-      "click .uploadHmrcMp": "uploadHmrcClicked"
+      "click .uploadHmrcMp": "uploadHmrcClicked",
+      "click .enterHmrcMp": "enterHmrcClicked"
     };
 
     MarketPlacesHistoryView.prototype.serializeData = function() {
@@ -93,6 +94,12 @@
       event.preventDefault();
       event.stopPropagation();
       return EzBob.App.vent.trigger('ct:marketplaces.uploadHmrc');
+    };
+
+    MarketPlacesHistoryView.prototype.enterHmrcClicked = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      return EzBob.App.vent.trigger('ct:marketplaces.enterHmrc');
     };
 
     return MarketPlacesHistoryView;
