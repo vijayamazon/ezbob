@@ -69,10 +69,7 @@
 							ReLoad();
 					} // if
 
-					if (m_oData.ContainsKey(nIdx))
-						return m_oData[nIdx];
-
-					return m_oDefaults.ContainsKey(nIdx) ? m_oDefaults[nIdx] : null;
+					return UnsafeGet(nIdx);
 				} // lock
 			} // get
 		} // indexer
@@ -118,6 +115,7 @@
 		#region constructor
 
 		protected CurrentValues(AConnection oDB, ASafeLog oLog) {
+			m_oLastReloadTime = new DateTime();
 			m_nRefreshIntervalMinutes = 0;
 			m_oData = new SortedDictionary<Variables, VariableValue>();
 			m_oDefaults = new SortedDictionary<Variables, VariableValue>();
@@ -149,8 +147,11 @@
 				CommandSpecies.StoredProcedure
 			);
 
-			VariableValue.LogVerbosityLevel = VerboseConfigurationLogging ? LogVerbosityLevel.Verbose : LogVerbosityLevel.Compact;
 			m_oLastReloadTime = DateTime.UtcNow;
+
+			VariableValue.LogVerbosityLevel = UnsafeGet(Variables.VerboseConfigurationLogging)
+				? LogVerbosityLevel.Verbose
+				: LogVerbosityLevel.Compact;
 		} // ReLoad
 
 		#endregion method ReLoad
@@ -170,6 +171,17 @@
 		#endregion protected
 
 		#region private
+
+		#region method UnsafeGet
+
+		private VariableValue UnsafeGet(Variables nIdx) {
+			if (m_oData.ContainsKey(nIdx))
+				return m_oData[nIdx];
+
+			return m_oDefaults.ContainsKey(nIdx) ? m_oDefaults[nIdx] : null;
+		} // UnsafeGet
+
+		#endregion method UnsafeGet
 
 		private readonly SortedDictionary<Variables, VariableValue> m_oData;
 		private readonly SortedDictionary<Variables, VariableValue> m_oDefaults;
