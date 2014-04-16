@@ -41,6 +41,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		this.companyTypes.limited = this.companyTypes.llp;
 
 		this.events = _.extend({}, this.events, {
+			'submit .CompanyDetailForm': 'submitForm',
+
 			'click .btn-continue': 'next',
 
 			'click .oobts': 'businessTypeSelected',
@@ -64,6 +66,15 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		this.readyToProceed = false;
 		this.curOobts = null;
 	}, // initialize
+
+	submitForm: function(evt) {
+		evt.preventDefault();
+		evt.stopPropagation();
+
+		this.next();
+
+		return false;
+	}, // submitForm
 
 	businessTypeSelected: function(evt) {
 		// this.$el.find('.after-business-type *').enable();
@@ -192,7 +203,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		};
 	}, // ownValidationMessages
 
-	next: function(e) {
+	next: function() {
 		if ($('#TypeOfBusiness').val() !== "Entrepreneur")
 			if (!this.$el.find('input#DirectorCheck').is(":checked"))
 				EzBob.App.trigger('error', 'You must agree to director constraint in order to continue.');
@@ -273,19 +284,19 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 							that.targetingTries++;
 						}
 						else
-							that.saveTargeting(null, action, form, typeOfBussiness);
+							that.saveTargeting(null, action, form);
 
 						break;
 
 					case 1:
-						that.saveTargeting(reqData[0], action, form, typeOfBussiness);
+						that.saveTargeting(reqData[0], action, form);
 						break;
 
 					default:
 						var companyTargets = new EzBob.companyTargets({ model: reqData });
 						companyTargets.render();
 						companyTargets.on('BusRefNumGetted', function(targetingData) {
-							that.saveTargeting(targetingData, action, form, typeOfBussiness);
+							that.saveTargeting(targetingData, action, form);
 						});
 						break;
 				} // switch reqData.length
@@ -296,9 +307,10 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			UnBlockUi();
 		});
 	}, // handleTargeting
-	saveTargeting: function(targetingData, action, form, typeOfBussiness) {
-		var that = this;
+
+	saveTargeting: function(targetingData, action, form) {
 		var data = form.serializeArray();
+
 		if (targetingData) {
 			data.push({ name: "AddrLine1", value: targetingData.AddrLine1 });
 			data.push({ name: "AddrLine2", value: targetingData.AddrLine2 });
@@ -307,11 +319,12 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			data.push({ name: "PostCode", value: targetingData.PostCode });
 			data.push({ name: "BusName", value: targetingData.BusName });
 			data.push({ name: "BusRefNum", value: targetingData.BusRefNum });
-		} else {
+		} else
 			data.push({ name: "BusRefNum", value: "NotFound" });
-		}
+
 		this.saveDataRequest(action, data);
-	},
+	}, // saveTargeting
+
 	saveDataRequest: function(action, data, typeOfBussiness) {
 		BlockUi();
 
