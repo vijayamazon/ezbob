@@ -607,12 +607,13 @@
 		]
 	},
 	{
-		"Name": "Limited Company Instalment CAIS Details",
+		"Name": "Limited Company Installment CAIS Details",
 
 		"PathToParent": "./REQUEST/DL97",
 
 		"MetaData": {
-			"DisplayDirection": "horizontal"
+			"DisplayDirection": "horizontal",
+			"ID": "DL97"
 		},
 
 		"Fields": [
@@ -627,8 +628,9 @@
 						"Transformation": {
 							"Types": [ "map" ],
 							"Map": {
-								"A": "Active",
 								"D": "Defaulted",
+								"F": "Delinquent",
+								"A": "Active",
 								"S": "Settled"
 							}
 						}
@@ -671,25 +673,26 @@
 						"Transformation": {
 							"Types": [ "map" ],
 							"Map": {
-								"1":  "Hire Purchase",
-								"2":  "Loan",
-								"3":  "Mortgage",
-								"4":  "Budget Account",
-								"5":  "Credit Card",
-								"6":  "Charge Card",
-								"7":  "Rental",
-								"8":  "Mail Order Agency",
-								"9":  "Mail Order Direct",
+								"01": "Hire purchase (including lease purchase)",
+								"02": "Loan",
+								"03": "Mortgage (including second mortgage)",
+								"04": "Budget Account/Revolving Account",
+								"05": "Credit Card / Store Card",
+								"06": "Charge card",
+								"07": "Rental ",
+								"08": "Mail Order",
+								"15": "Current accounts",
+								"19": "Primary Lease",
+								"20": "Secondary Lease",
+								"21": "Dealer buy-back",
+								"22": "Balloon Rental",
+
+								"09":  "Mail Order Direct",
 								"10": "Mail Order Cash",
 								"11": "Overdraft",
-								"15": "Current Account",
 								"16": "Secured Loan",
 								"17": "Credit Sale",
 								"18": "Conditional Sale",
-								"19": "Primary Lease",
-								"20": "Secondary Lease",
-								"21": "Dealer Buy-Back",
-								"22": "Balloon Rental"
 							}
 						}
 					}
@@ -701,8 +704,7 @@
 			{ "SourcePath": "./SETTLEMTDATE-YYYY", "Targets": [{ "Name": "Settlement Date", "Position": 2, "Prefix": " " }] },
 			{ "SourcePath": "./SETTLEMTDATE-MM",   "Targets": [{ "Name": "Settlement Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
 			{ "SourcePath": "./SETTLEMTDATE-DD",   "Targets": [{ "Name": "Settlement Date", "Position": 1, "Prefix": " " }] },
-			{ "SourcePath": "./DEFAULTBALANCE", "Targets": [{ "Name": "Default Balance" }] },
-			{ "SourcePath": "./CURRBALANCE", "Targets": [{ "Name": "Current Balance" }] },
+			{ "SourcePath": "./CURRBALANCE", "Targets": [{ "Name": "Current Balance", "Transformation": { "Types": ["money"] } }] },
 			{ "SourcePath": "./STATUS1TO2", "Targets": [{ "Name": "Status 1-2" }] },
 			{ "SourcePath": "./STATUS3TO9", "Targets": [{ "Name": "Status 3-9" }] },
 			{ "SourcePath": "./CAISLASTUPDATED-YYYY", "Targets": [{ "Name": "CAIS Last Updated Date", "Position": 2, "Prefix": " " }] },

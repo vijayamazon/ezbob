@@ -79,7 +79,18 @@
 
 		%><%- sValue %><%;
 	} // DrawFormatted
-
+    
+    function AddStyling(sValue, sValueTitle, sTableID) {
+        if(sTableID == 'DL97' && sValueTitle == 'Account State'){
+            switch (sValue[0]){
+                case 'A': return 'experian-account-status Active';
+                case 'D': return 'experian-account-status Default';
+                case 'F': return 'experian-account-status Delinquent';
+                case 'S': return 'experian-account-status Settled';
+            }
+        }
+        return '';
+    }
 	// console.log('serialised:', response);
 
 	var sCompanyCaption = '';
@@ -120,7 +131,10 @@
 						aryData[j].Values['% of Shareholding'] = EzBob.formatPercents(aryData[j].Values['Description of Shareholding'] / nTotal);
 				} // if total
 			} // if
-
+            
+            if(oMetaData.ID == 'DL97'){
+                aryData = _.sortBy(aryData, function(obj) { return obj.Values["Account State"]; } );
+            }
 			if (oMetaData.ID == 'DL41') {
 				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
 					<thead class="box">
@@ -462,7 +476,7 @@
 				var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
 	
 				var nColspan = arySortOrder.length;
-				if (oMetaData.ID === 'DL65')
+				if (oMetaData.ID === 'DL65' || oMetaData.ID === 'DL97')
 					nColspan++;
 
 				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
@@ -471,6 +485,9 @@
 						<th colspan="<%- nColspan %>"><%= i %></th>
 					</tr>
 					<tr class="box-title"><%
+                        if (oMetaData.ID === 'DL97') {
+							%><th>Account #</th><%
+						}
 						for (var j = 0; j < arySortOrder.length; j++) {
 							%><th><%- arySortOrder[j] %></th><%
 						}
@@ -485,10 +502,12 @@
 					var obj = aryData[j].Values;
 
 					print('<tr>');
-
+                    if(oMetaData.ID == 'DL97'){%>
+                           <td><%=j%></td>
+                    <%}
 					for (var t = 0; t < arySortOrder.length; t++) {
 						var fld = arySortOrder[t];
-						%><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td><%
+						%><td class="<%-AddStyling(obj[fld], fld, oMetaData.ID)%>"><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td><%
 					} // for each field
 
 					if (oMetaData.ID === 'DL65') {
