@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using EZBob.DatabaseLib;
-using EzBob.Web.Infrastructure;
-using log4net;
-using MailApi;
-using StructureMap;
-
-
-namespace EzBob.Web.Code
+﻿namespace EzBob.Web.Code
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using EZBob.DatabaseLib;
+	using log4net;
+	using MailApi;
+	using StructureMap;
 	using ConfigManager;
 
 	public class AvailableFundsValidator
@@ -30,11 +27,12 @@ namespace EzBob.Web.Code
             {
                 var balance = _funds.GetBalance();
                 var manualBalance = _manualFunds.GetBalance();
+
                 var fundsAvailable = balance.Adjusted + manualBalance - transfered;
 				
                 var today = DateTime.UtcNow;
 				int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
-				Log.InfoFormat("VerifyAvailableFunds pacnet balance {0} manual balance {1} transfered {2} funds available {3} relevant limit {4}", balance, manualBalance, transfered, fundsAvailable, relevantLimit);
+				Log.InfoFormat("VerifyAvailableFunds pacnet adjusted balance {0} manual balance {1} transfered {2} funds available {3} relevant limit {4}", balance.Adjusted, manualBalance, transfered, fundsAvailable, relevantLimit);
                 if (fundsAvailable < relevantLimit)
                 {
                     SendMail(fundsAvailable, relevantLimit);
