@@ -51,7 +51,7 @@
 			// retrieve orders
 			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
-									() => Helper.GetAllYodleeOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
+									() => Helper.GetAllYodleeOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace, isFirstTime: true));
 
 			//calculate transactions aggregated data
 			var transactionsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,

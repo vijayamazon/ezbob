@@ -344,36 +344,22 @@
 
 			customerMarketPlace.YodleeOrders.Add(mpOrder);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+			_session.Flush();
 		}
 
 		#endregion method StoreYodleeOrdersData
 
 		#region method CalculateYodleeRunningBalance(
 
-		public List<MP_YodleeOrderItemBankTransaction> CalculateYodleeRunningBalance(
-			IDatabaseCustomerMarketPlace dmp,
+		public void CalculateYodleeRunningBalance(
+			MP_CustomerMarketPlace mp,
 			string sourceId,
-			AmountInfo currentBalance
-		) {
-			var mp = GetCustomerMarketPlace(dmp);
-
-			if (mp == null)
-				return new List<MP_YodleeOrderItemBankTransaction>();
-
-			var directors = GetExperianDirectors(mp.Customer);
-
-			List<MP_YodleeOrderItemBankTransaction> transactions = mp.YodleeOrders
-				.SelectMany(yo => yo.OrderItems)
-				.Where(oi => oi.srcElementId == sourceId)
-				.SelectMany(oi => oi.OrderItemBankTransactions)
-				.Where(t => t.isSeidMod.HasValue && t.isSeidMod.Value == 0)
-				.Distinct(new YodleeTransactionComparer())
-				.OrderByDescending(x => (x.postDate ?? x.transactionDate).Value)
-				.ToList();
-
-			if (transactions.Count < 1)
-				return new List<MP_YodleeOrderItemBankTransaction>();
-
+			AmountInfo currentBalance,
+			List<MP_YodleeOrderItemBankTransaction> transactions,
+			List<string> directors
+		)
+		{
+			if (transactions.Count < 1) return;
 			List<MP_YodleeGroup> yodleeGroupRepository = new YodleeGroupRepository(_session).GetAll().ToList();
 			List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository = new YodleeGroupRuleMapRepository(_session).GetAll().ToList();
 
@@ -428,15 +414,40 @@
 			} // for
 
 			_session.Flush();
+		}
+
+		private List<MP_YodleeOrderItemBankTransaction> GetTransactions(IDatabaseCustomerMarketPlace dmp, string sourceId, out MP_CustomerMarketPlace mp,
+		                             out List<string> directors)
+		{
+			mp = GetCustomerMarketPlace(dmp);
+
+			if (mp == null)
+			{
+				directors = new List<string>();
+				return new List<MP_YodleeOrderItemBankTransaction>();
+			}
+
+			directors = GetExperianDirectors(mp.Customer);
+
+			var transactions = mp.YodleeOrders
+			                     .SelectMany(yo => yo.OrderItems)
+			                     .Where(oi => oi.srcElementId == sourceId)
+			                     .SelectMany(oi => oi.OrderItemBankTransactions)
+			                     .Where(t => t.isSeidMod.HasValue && t.isSeidMod.Value == 0)
+			                     .Distinct(new YodleeTransactionComparer())
+			                     .OrderByDescending(x => (x.postDate ?? x.transactionDate).Value)
+			                     .ToList();
 
 			return transactions;
-		} // CalculateYodleeRunningBalance
+		}
+
+// CalculateYodleeRunningBalance
 
 		#endregion method CalculateYodleeRunningBalance(
 
 		#region method GetAllYodleeOrdersData
 
-		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime = false) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			var orders = new YodleeOrderDictionary { Data = new Dictionary<BankData, List<BankTransactionData>>() };
@@ -468,14 +479,21 @@
 						secondaryAccountHolderName = item.secondaryAccountHolderName,
 					};
 
-					double currentBalance = item.currentBalance == null ? 0 : item.currentBalance.Value;
-					string currentBalanceCurrency = string.IsNullOrEmpty(item.currentBalanceCurrency) ? "GBP" : item.currentBalanceCurrency;
+					MP_CustomerMarketPlace mp;
+					List<string> directors;
+					List<MP_YodleeOrderItemBankTransaction> transactions = GetTransactions(databaseCustomerMarketPlace, item.srcElementId, out mp, out directors);
+					if (!isFirstTime)
+					{
+						double currentBalance = item.currentBalance == null ? 0 : item.currentBalance.Value;
+						string currentBalanceCurrency = string.IsNullOrEmpty(item.currentBalanceCurrency)
+							                                ? "GBP"
+							                                : item.currentBalanceCurrency;
 
-					var transactions = CalculateYodleeRunningBalance(
-						databaseCustomerMarketPlace,
-						item.srcElementId,
-						_CurrencyConvertor.ConvertToBaseCurrency(currentBalanceCurrency, currentBalance, item.asOfDate)
-					);
+						CalculateYodleeRunningBalance(mp,
+							item.srcElementId,
+							_CurrencyConvertor.ConvertToBaseCurrency(currentBalanceCurrency, currentBalance, item.asOfDate), transactions, directors);
+					}
+
 
 					// Not Retrieving Seid transactions as they seem to be duplicated data
 					var bankTransactionsDataList = transactions
@@ -484,7 +502,6 @@
 								(t.transactionDate.HasValue && t.transactionDate.Value.Date <= history) ||
 								(t.postDate.HasValue && t.postDate.Value.Date <= history)
 							)
-							&& (t.isSeidMod.HasValue && t.isSeidMod == 0)
 						)
 						.Select(bankTransaction => new BankTransactionData {
 							isSeidMod = bankTransaction.isSeidMod,
