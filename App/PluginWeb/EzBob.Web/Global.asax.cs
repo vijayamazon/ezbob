@@ -10,14 +10,13 @@
 	using System.Web;
 	using System.Web.Mvc;
 	using System.Web.Routing;
-	using ApplicationMng.Model;
-	using ApplicationMng.Repository;
 	using Aspose.Cells;
 	using Code;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using Areas.Underwriter.Models.Reports;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Filters;
@@ -146,10 +145,10 @@
 			ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
 			ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
 
-			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
-			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
-			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(DbString).Assembly);
-			NHibernateWrapper.NHibernate.NHibernateManager.HbmAssemblies.Add(typeof(PerformencePerUnderwriterDataRow).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(DbString).Assembly);
+			NHibernateManager.HbmAssemblies.Add(typeof(PerformencePerUnderwriterDataRow).Assembly);
 			ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
 			InitAspose();
 			ConfigureSquishIt();

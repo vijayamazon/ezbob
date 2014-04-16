@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using NHibernate;
-using NUnit.Framework;
-
-namespace EzBob.Tests
+﻿namespace EzBob.Tests
 {
-    public class LoanHistoryRepoFixture : InMemoryDbTestFixtureBase
+	using System;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate;
+	using NUnit.Framework;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+
+	public class LoanHistoryRepoFixture : InMemoryDbTestFixtureBase
     {
         private ISession _session;
         private LoanHistoryRepository _lhrepo;

@@ -1,14 +1,14 @@
-﻿using System;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using NHibernate;
-using NUnit.Framework;
-
-namespace EzBob.Tests
+﻿namespace EzBob.Tests
 {
-    public class LoanPersistenceFixture : InMemoryDbTestFixtureBase
+	using System;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate;
+	using NUnit.Framework;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+
+	public class LoanPersistenceFixture : InMemoryDbTestFixtureBase
     {
         private ISession _session;
 

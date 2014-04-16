@@ -1,14 +1,13 @@
-﻿using System;
-using ApplicationMng.Model;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using FluentNHibernate.Mapping;
-using NHibernate;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Loans
+﻿namespace EZBob.DatabaseLib.Model.Loans
 {
-    public class LoanChangesHistory
+	using System;
+	using ApplicationMng.Repository;
+	using FluentNHibernate.Mapping;
+	using NHibernate;
+	using NHibernate.Type;
+	using Database.UserManagement;
+
+	public class LoanChangesHistory
     {
         public virtual int Id { get; set; }
         public virtual DateTime Date { get; set; }

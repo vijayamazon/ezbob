@@ -6,13 +6,13 @@
 	using System.IO;
 	using System.Linq;
 	using System.Xml.Serialization;
-	using ApplicationMng.Model;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Repository;
 	using CommonLib.TimePeriodLogic;

@@ -1,6 +1,6 @@
 namespace EzBob.Web.Infrastructure
 {
-	using ApplicationMng.Model;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 
 	public interface IWorkplaceContext
 	{

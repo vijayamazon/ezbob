@@ -7,6 +7,7 @@ namespace EzBobTest
 	using System.Xml;
 	using CompanyFiles;
 	using EKM;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EzBob.Models;
 	using Ezbob.RegistryScanner;
 	using FreeAgent;
@@ -44,7 +45,7 @@ namespace EzBobTest
         [SetUp]
         public void Init()
         {
-			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(eBayDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(AmazonDatabaseMarketPlace).Assembly);

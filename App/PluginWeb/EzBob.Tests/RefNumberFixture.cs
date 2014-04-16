@@ -1,13 +1,13 @@
-﻿using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.Code;
-using NHibernate;
-using NUnit.Framework;
-
-namespace EzBob.Tests
+﻿namespace EzBob.Tests
 {
-    [TestFixture]
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Web.Code;
+	using NHibernate;
+	using NUnit.Framework;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+
+	[TestFixture]
     public class RefNumberFixture : InMemoryDbTestFixtureBase
     {
         private ISession _session;

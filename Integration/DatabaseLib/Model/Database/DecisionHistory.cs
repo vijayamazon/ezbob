@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ApplicationMng.Model;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Loans;
 using FluentNHibernate.Mapping;
@@ -10,8 +9,9 @@ using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using UserManagement;
 
-    public enum DecisionActions
+	public enum DecisionActions
     {
         Approve, Reject, Escalate, Pending, Waiting
     }

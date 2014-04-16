@@ -1,12 +1,11 @@
-﻿using System;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using NHibernate;
-using NUnit.Framework;
-using EZBob.DatabaseLib.Repository;
-
-namespace EzBob.Tests
+﻿namespace EzBob.Tests
 {
+	using System;
+	using EZBob.DatabaseLib.Model.Database;
+	using NHibernate;
+	using NUnit.Framework;
+	using EZBob.DatabaseLib.Repository;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 
 	[TestFixture]
 	public class CurrencyRateRepositoryFixture : InMemoryDbTestFixtureBase

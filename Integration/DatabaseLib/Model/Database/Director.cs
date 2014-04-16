@@ -1,10 +1,8 @@
-using System;
-using ApplicationMng.Model;
-using FluentNHibernate.Mapping;
-using Iesi.Collections.Generic;
-
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using System;
+	using Iesi.Collections.Generic;
+
     public class Director
     {
         public virtual int Id { get; set; }
@@ -62,7 +60,9 @@ namespace EZBob.DatabaseLib.Model.Database
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping
 {
+	using System;
 	using ApplicationMng.Repository;
+	using FluentNHibernate.Mapping;
 	using NHibernate;
 
 	public class DirectorModelMap : ClassMap<Director>

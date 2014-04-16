@@ -2,6 +2,7 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using Code;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using System;

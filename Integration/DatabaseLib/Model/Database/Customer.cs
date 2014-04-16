@@ -4,7 +4,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Script.Serialization;
-	using ApplicationMng.Model;
 	using Loans;
 	using Email;
 	using Ezbob.ExperianParser;

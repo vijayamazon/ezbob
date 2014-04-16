@@ -2,10 +2,9 @@
 {
 	using System;
 	using System.Web;
-	using ApplicationMng.Model;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 
 	public class EzBobContext : IEzbobWorkplaceContext
 	{

@@ -9,7 +9,9 @@ using log4net.Config;
 
 namespace EzBob.Tests
 {
-    [TestFixture]
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+
+	[TestFixture]
     public class IntegrationTestBase
     {
         protected ISession _session;
@@ -17,7 +19,7 @@ namespace EzBob.Tests
         [SetUp]
         public void SetUp()
         {
-            NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
+            NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 
             PreInit();

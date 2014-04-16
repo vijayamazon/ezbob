@@ -1,11 +1,11 @@
 ﻿using System;
-using ApplicationMng.Model;
 using FluentNHibernate.Mapping;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using UserManagement;
 
-    public class MP_AlertDocument
+	public class MP_AlertDocument
     {
         public virtual int Id { get; set; }
         public virtual string DocName { get; set; }

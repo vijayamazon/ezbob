@@ -1,15 +1,14 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using ApplicationMng.Model;
-using ApplicationMng.Repository;
-using EzBob.Web.Infrastructure.Filters;
-using Moq;
-using NUnit.Framework;
-
-namespace EzBob.Tests
+﻿namespace EzBob.Tests
 {
-    [TestFixture]
+	using System.Web;
+	using System.Web.Mvc;
+	using System.Web.Routing;
+	using Web.Infrastructure.Filters;
+	using Moq;
+	using NUnit.Framework;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+
+	[TestFixture]
     public class GlobalAreaAuthorizationFilterFixture
     {
         [Test]

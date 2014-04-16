@@ -1,19 +1,17 @@
 ﻿namespace EzBob.Web.Infrastructure.Membership
 {
 	using System.Collections.Generic;
-	using ApplicationMng.Model;
 	using Areas.Customer.Controllers.Exceptions;
 	using Code;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Utils;
 	using NHibernate;
 	using Newtonsoft.Json;
-	using NHibernateWrapper.NHibernate.Model;
 	using System;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Web;
 	using System.Web.Security;
-	using ApplicationMng.Repository;
 	using StructureMap;
 	using log4net;
 

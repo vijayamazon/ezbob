@@ -3,13 +3,13 @@
 	using System.Data;
 	using System.Web.Mvc;
 	using Code;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Utils;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.Membership;
 	using Models;
 	using Infrastructure.csrf;
-	using NHibernateWrapper.NHibernate.Model;
 
 	public class AccountSettingsController : Controller
     {

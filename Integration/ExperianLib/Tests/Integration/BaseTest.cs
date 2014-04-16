@@ -1,6 +1,7 @@
 ﻿namespace ExperianLib.Tests.Integration
 {
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using log4net;
 	using NHibernate;
 	using NUnit.Framework;
@@ -18,7 +19,7 @@
         [SetUp]
         public void Start()
         {
-			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
             Scanner.Register();
             ObjectFactory.Configure(x =>

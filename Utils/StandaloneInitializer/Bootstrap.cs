@@ -2,6 +2,7 @@
 {
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.RegistryScanner;
 	using NHibernate;
 	using StructureMap;
@@ -36,7 +37,7 @@
     {
         public static void Init()
         {
-			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 
             Scanner.Register();

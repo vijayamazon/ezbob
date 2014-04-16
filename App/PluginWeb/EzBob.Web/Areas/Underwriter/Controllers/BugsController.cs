@@ -8,6 +8,7 @@ using System.Linq;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Infrastructure.Attributes;
 
 	public class BugsController : Controller

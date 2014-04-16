@@ -5,6 +5,7 @@ using log4net;
 namespace EzBobTest
 {
 	using EKM;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using Ezbob.RegistryScanner;
@@ -29,7 +30,7 @@ namespace EzBobTest
 		[SetUp]
 		public void Init()
 		{
-			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof (Customer).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof (eBayDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof (AmazonDatabaseMarketPlace).Assembly);

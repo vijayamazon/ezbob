@@ -1,15 +1,15 @@
-﻿using System;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Web.Code;
-using NHibernate;
-using NUnit.Framework;
-
-namespace EzBob.Tests
+﻿namespace EzBob.Tests
 {
-    [TestFixture]
+	using System;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using Web.Code;
+	using NHibernate;
+	using NUnit.Framework;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+
+	[TestFixture]
     public class ExpectationReportFixture : InMemoryDbTestFixtureBase
     {
         private ISession _session;

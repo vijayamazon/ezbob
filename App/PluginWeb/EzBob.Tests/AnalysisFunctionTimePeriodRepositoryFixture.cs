@@ -1,13 +1,13 @@
-﻿using System;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using NHibernate;
-using NUnit.Framework;
-
-namespace EzBob.Tests
+﻿namespace EzBob.Tests
 {
-    [TestFixture]
+	using System;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using NHibernate;
+	using NUnit.Framework;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+
+	[TestFixture]
     public class AnalysisFunctionTimePeriodRepositoryFixture : InMemoryDbTestFixtureBase
     {
         private ISession _session;

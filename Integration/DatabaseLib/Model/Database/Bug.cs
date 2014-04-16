@@ -1,14 +1,14 @@
-﻿using System;
-using System.Linq;
-using ApplicationMng.Model;
-using ApplicationMng.Repository;
-using FluentNHibernate.Mapping;
-using NHibernate;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Database
+﻿namespace EZBob.DatabaseLib.Model.Database
 {
-    public enum BugState
+	using System;
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using FluentNHibernate.Mapping;
+	using NHibernate;
+	using NHibernate.Type;
+	using UserManagement;
+
+	public enum BugState
     {
         Opened, Closed, Reopened
     }

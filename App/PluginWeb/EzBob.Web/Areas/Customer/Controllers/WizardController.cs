@@ -4,6 +4,7 @@
 	using ApplicationMng.Repository;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using Infrastructure.Attributes;
 	using Models;

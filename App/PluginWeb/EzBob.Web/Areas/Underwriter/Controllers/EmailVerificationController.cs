@@ -6,6 +6,7 @@
 	using Code;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code.Email;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.Membership;

@@ -4,6 +4,7 @@ using ApplicationMng.Repository;
 using StructureMap;
 
 namespace EzBob.Web.Infrastructure {
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Utils;
 
 	public class EzbobRoleProvider : System.Web.Security.RoleProvider {

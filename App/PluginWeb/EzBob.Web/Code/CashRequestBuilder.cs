@@ -6,6 +6,7 @@
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Models;
 

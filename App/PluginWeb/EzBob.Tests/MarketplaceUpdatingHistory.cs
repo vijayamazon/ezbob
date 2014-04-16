@@ -1,13 +1,13 @@
-﻿using System.Linq;
-using System.Text;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using NHibernate;
-using NUnit.Framework;
-
-namespace EzBob.Tests
+﻿namespace EzBob.Tests
 {
-    public class MarketplaceUpdatingHistory : InMemoryDbTestFixtureBase
+	using System.Linq;
+	using System.Text;
+	using EZBob.DatabaseLib.Model.Database;
+	using NHibernate;
+	using NUnit.Framework;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+
+	public class MarketplaceUpdatingHistory : InMemoryDbTestFixtureBase
     {
         private ISession _session;
 

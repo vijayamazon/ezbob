@@ -5,6 +5,7 @@
 	using System.Web.Routing;
 	using ApplicationMng.Repository;
 	using Code;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using StructureMap;
 
 	public class GlobalAreaAuthorizationFilter : AuthorizeAttribute {

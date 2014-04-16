@@ -7,7 +7,6 @@ namespace EzBob.Web.Controllers {
 	using System.Web;
 	using System.Web.Mvc;
 	using System.Web.Security;
-	using ApplicationMng.Model;
 	using ApplicationMng.Repository;
 	using Areas.Customer.Controllers.Exceptions;
 	using ConfigManager;
@@ -15,6 +14,7 @@ namespace EzBob.Web.Controllers {
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib.Ebusiness;
 	using Code;

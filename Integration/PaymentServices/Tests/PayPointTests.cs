@@ -3,6 +3,7 @@
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using NHibernate;
 	using NHibernateWrapper.NHibernate;
 	using NUnit.Framework;
@@ -18,7 +19,7 @@
 		[SetUp]
 		public void Setup()
 		{
-			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.User).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
 			Scanner.Register();
