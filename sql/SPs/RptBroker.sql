@@ -15,12 +15,13 @@ BEGIN
 		B.ContactMobile Mobile,
 		B.ContactOtherPhone Phone,
 		B.ContactEmail Email,
-		B.AgreedToTermsDate SignUpDate,
-		CASE B.IsTest WHEN 1 THEN 'test' ELSE '' END AS TestBroker
+		B.AgreedToTermsDate SignUpDate
 	FROM 
 		Broker B
 	WHERE
 		@DateStart <= B.AgreedToTermsDate AND B.AgreedToTermsDate < @DateEnd
+		AND
+		B.IsTest = 0
 	ORDER BY
 		B.AgreedToTermsDate DESC
 END
