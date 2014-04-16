@@ -6,6 +6,7 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
+	using System.Text.RegularExpressions;
 	using System.Xml.Linq;
 	using System.Xml.Serialization;
 	using System.Xml.XPath;
@@ -482,7 +483,7 @@
 							accountInfo.TermAndfreq = GetRepaymentPeriodString(repaymentPeriod);
 
 							accountInfo.Limit = caisDetails.CreditLimit.Amount;
-							accountInfo.AccBalance = caisDetails.Balance.Amount;
+							accountInfo.AccBalance = caisDetails.Balance.Amount == null ? null : ConvertAmount(caisDetails.Balance.Amount);
 
 							accountInfo.CashWithdrawals = string.Empty;
 							accountInfo.MinimumPayment = string.Empty;
@@ -572,6 +573,14 @@
 			}
 			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
 			return model;
+		}
+
+		private string ConvertAmount(string amountStr)
+		{
+			var numbersStr = Regex.Replace(amountStr, "[^\\d]", "");
+			decimal number;
+			decimal.TryParse(numbersStr, out number);
+			return string.Format("£ {0}", number.ToString("N0"));
 		}
 
 		private static string PrintErrorList(List<string> errorList)

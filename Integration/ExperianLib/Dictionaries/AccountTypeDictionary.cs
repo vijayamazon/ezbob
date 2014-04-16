@@ -22,6 +22,7 @@ namespace ExperianLib.Dictionaries
 			AccountTypes.Add("06", "Charge card");
 			AccountTypes.Add("07", "Rental");
 			AccountTypes.Add("08", "Mail Order");
+			AccountTypes.Add("15", "Current accounts");
 			AccountTypes.Add("19", "Primary Lease");
 			AccountTypes.Add("20", "Secondary Lease");
 			AccountTypes.Add("21", "Dealer buy back");
@@ -32,7 +33,6 @@ namespace ExperianLib.Dictionaries
 			AccountTypes.Add("12", "CML member");
 			AccountTypes.Add("13", "CML member");
 			AccountTypes.Add("14", "CML member");
-			AccountTypes.Add("15", "Current accounts");
 			AccountTypes.Add("16", "Second mortgage (secured loan)");
 			AccountTypes.Add("17", "Credit sale fixed term");
 			AccountTypes.Add("18", "Communications");
