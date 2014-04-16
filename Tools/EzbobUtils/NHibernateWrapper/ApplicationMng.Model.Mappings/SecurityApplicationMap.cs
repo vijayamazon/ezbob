@@ -11,7 +11,6 @@ namespace ApplicationMng.Model.Mappings
 			base.LazyLoad();
 			this.Id((SecurityApplication x) => (object)x.Id, "ApplicationId").GeneratedBy.Native("SEQ_SEC_APP");
 			base.Map((SecurityApplication x) => x.Name).Length(255);
-			base.Map((SecurityApplication x) => (object)x.ApplicationType).CustomType<SecurityApplicationType>();
 			base.Map((SecurityApplication x) => x.Description);
 			base.HasManyToMany<Role>((SecurityApplication x) => x.Roles).AsSet().Table("Security_RoleAppRel").ParentKeyColumn("AppId").ChildKeyColumn("RoleId").Cascade.None().Cache.Region("LongTerm").ReadWrite();
 		}

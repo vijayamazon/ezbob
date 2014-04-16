@@ -21,11 +21,6 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual SecurityApplicationType ApplicationType
-		{
-			get;
-			set;
-		}
 		public virtual string Description
 		{
 			get;

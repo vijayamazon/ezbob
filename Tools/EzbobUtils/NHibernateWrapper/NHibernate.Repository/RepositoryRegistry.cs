@@ -11,7 +11,6 @@ namespace NHibernateWrapper.NHibernate.Repository
 			base.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 			base.For<IUsersRepository>().Use<UsersRepository>();
 			base.For<IRolesRepository>().Use<RolesRepository>();
-			base.For<ISecurityApplicationsRepository>().Use<SecurityApplicationsRepository>();
 			base.For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
 		}
 	}

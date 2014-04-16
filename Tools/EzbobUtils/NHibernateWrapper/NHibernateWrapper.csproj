@@ -73,7 +73,6 @@
     <Compile Include="ApplicationMng.Model.Mappings\UserMap.cs" />
     <Compile Include="ApplicationMng.Model\Role.cs" />
     <Compile Include="ApplicationMng.Model\SecurityApplication.cs" />
-    <Compile Include="ApplicationMng.Model\SecurityApplicationType.cs" />
     <Compile Include="ApplicationMng.Model\SecuritySession.cs" />
     <Compile Include="ApplicationMng.Model\User.cs" />
     <Compile Include="ApplicationMng.Repository\IRepository.cs" />
@@ -89,9 +88,7 @@
     <Compile Include="NHibernate.Model\PermissionMap.cs" />
     <Compile Include="NHibernate.Model\SecurityQuestion.cs" />
     <Compile Include="NHibernate.Model\SecurityQuestionMap.cs" />
-    <Compile Include="NHibernate.Repository\ISecurityApplicationsRepository.cs" />
     <Compile Include="NHibernate.Repository\RepositoryRegistry.cs" />
-    <Compile Include="NHibernate.Repository\SecurityApplicationsRepository.cs" />
     <Compile Include="NHibernate.Types\CaseInsensitiveEnumStringType.cs" />
     <Compile Include="NHibernate\NHibernateManager.cs" />
   </ItemGroup>
