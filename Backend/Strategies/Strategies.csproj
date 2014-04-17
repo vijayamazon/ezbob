@@ -86,6 +86,7 @@
     <Compile Include="Broker\BrokerLoadMarketingFiles.cs" />
     <Compile Include="Broker\BrokerUpdatePassword.cs" />
     <Compile Include="Broker\SpBrokerLoadOwnProperties.cs" />
+    <Compile Include="GetLatestInterestRate.cs" />
     <Compile Include="MailStrategies\Broker\BrokerForceResetCustomerPassword.cs" />
     <Compile Include="Broker\BrokerIsBroker.cs" />
     <Compile Include="Broker\BrokerLeadCheckToken.cs" />

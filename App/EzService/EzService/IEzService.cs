@@ -345,6 +345,9 @@
 
 		[OperationContract]
 		DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
+
+		[OperationContract]
+		DecimalActionResult GetLatestInterestRate(int customerId, int underwriterId);
 	} // interface IEzService
 } // namespace EzService
 

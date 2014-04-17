@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using EZBob.DatabaseLib.Model.Database.Loans;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
 	using System;
 	using System.Linq;
@@ -14,6 +10,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models;
 	using Code;
+	using System.Text;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EzServiceReference;
 	using Infrastructure;
 	using StructureMap;
 
@@ -27,6 +26,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ILoanSourceRepository _loanSources;
+		private readonly ServiceClient serviceClient;
 
 		public ApplicationInfoModelBuilder(
 			IPacNetBalanceRepository funds,
@@ -45,6 +45,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 			this.configurationVariablesRepository = configurationVariablesRepository;
 			_loanSources = loanSources;
+			serviceClient = new ServiceClient();
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
@@ -54,8 +55,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
             model.Id = customer.Id;
 
             if (cr != null)
-            {
-                model.InterestRate = cr.InterestRate;
+			{
+				var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+				DecimalActionResult result = serviceClient.Instance.GetLatestInterestRate(customer.Id, context.UserId);
+				model.InterestRate = result.Value == -1 ? cr.InterestRate : result.Value;
                 model.CashRequestId = cr.Id;
                 
 				model.UseSetupFee = cr.UseSetupFee;
