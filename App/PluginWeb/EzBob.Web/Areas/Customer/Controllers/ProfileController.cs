@@ -162,7 +162,7 @@
 			if (oldOffer != null && oldOffer.HasLoans)
 				m_oServiceClient.Instance.RequestCashWithoutTakenLoan(customer.Id);
 
-			var cashRequest = _crBuilder.CreateCashRequest(customer);
+			var cashRequest = _crBuilder.CreateCashRequest(customer, CashRequestOriginator.RequestCashBtn);
 
 			_crBuilder.ForceEvaluate(customer.Id, customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false, false);
 

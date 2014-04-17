@@ -81,6 +81,22 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	#endregion enum VatReporting
 
+	#region enum CashRequestOriginator
+	public enum CashRequestOriginator
+	{
+		[Description("Finished wizard")]
+		FinishedWizard = 0,
+		[Description("Quick offer")]
+		QuickOffer = 1,
+		[Description("Dashboard request cash button")]
+		RequestCashBtn = 2,
+		[Description("UW new credit line button")]
+		NewCreditLineBtn = 3,
+		[Description("Other")]
+		Other = 4,
+	} // enum CashRequestOriginator
+	#endregion
+
 	#region class EnumDescription
 
 	public static class EnumDescription {

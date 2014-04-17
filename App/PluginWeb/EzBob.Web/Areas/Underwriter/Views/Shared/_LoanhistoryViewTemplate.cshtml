@@ -3,7 +3,7 @@
 @using StructureMap
 @model dynamic
 
-<script id="loanhistory-view-template" type="text/template">    
+<script id="loanhistory-view-template" type="text/template">
     <div id="loanhistory-table">
     </div>
     <div id="loanhistory-details">
@@ -113,6 +113,7 @@
                 <th>Repayment Period</th>
                 <th>Type</th>
                 <th>Source</th>
+                <th>Originator</th>
                 <th>Comments</th>
             </tr>
         </thead>
@@ -141,6 +142,7 @@
         <td><%- offer.RepaymentPeriod %></td>
         <td><%- offer.LoanType %></td>
         <td><%- offer.LoanSourceName %></td>
+        <td><%- offer.Originator %></td>
         <td><%- offer.Comments %></td>
     </tr>
 }
@@ -151,7 +153,7 @@
         <td class="centered"></td>
         <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
         <td colspan="8"></td>
-
+        <td><%- offer.Originator %></td>
         <td><%- offer.Comments %></td>
     </tr>
 }

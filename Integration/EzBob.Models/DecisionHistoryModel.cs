@@ -21,6 +21,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public decimal ApprovedSum { get; set; }
 		public string LoanType { get; set; }
 		public int IsLoanTypeSelectionAllowed { get; set; }
+		public string Originator { get; set; }
 		private static RepaymentCalculator _repaymentCalculator;
 
 		public DecisionHistoryModel()
@@ -30,7 +31,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 		public static DecisionHistoryModel Create(DecisionHistory item)
 		{
-			var dm = new DecisionHistoryModel()
+			var dm = new DecisionHistoryModel
 										   {
 											   Id = item.Id,
 											   Action = item.Action.ToString(),
@@ -51,6 +52,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				dm.UseBrokerSetupFee = item.CashRequest.UseBrokerSetupFee;
 				dm.ApprovedSum = item.CashRequest.ApprovedSum();
 				dm.IsLoanTypeSelectionAllowed = item.CashRequest.IsLoanTypeSelectionAllowed;
+				dm.Originator = item.CashRequest.Originator.HasValue ? item.CashRequest.Originator.DescriptionAttr() : "";
 			}
 			return dm;
 		}

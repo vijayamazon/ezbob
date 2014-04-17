@@ -1,16 +1,17 @@
-﻿namespace EzBob.Web.Code {
+﻿namespace EzBob.Web.Code
+{
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using System;
 	using System.Linq;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Models;
 
-	public class CashRequestBuilder {
+	public class CashRequestBuilder
+	{
 		#region constructor
 
 		public CashRequestBuilder(
@@ -21,7 +22,8 @@
 			ILoanSourceRepository loanSources,
 			IDecisionHistoryRepository historyRepository,
 			ExperianDataCacheRepository experianData
-		) {
+		)
+		{
 			m_oServiceClient = new ServiceClient();
 			_loanTypes = loanTypes;
 			_discounts = discounts;
@@ -36,7 +38,8 @@
 
 		#region method CreateCashRequest
 
-		public CashRequest CreateCashRequest(Customer customer) {
+		public CashRequest CreateCashRequest(Customer customer, CashRequestOriginator originator)
+		{
 			var loanType = _loanTypes.GetDefault();
 			var loanSource = _loanSources.GetDefault();
 			var score = customer.ScoringResults.OrderByDescending(x => x.ScoreDate).FirstOrDefault();
@@ -44,26 +47,28 @@
 			var postcode = address != null ? address.Postcode : null;
 			var personInfo = customer.PersonalInfo ?? new PersonalInfo();
 			var experian = _experianData.GetCustomerFromCache(customer.Id, personInfo.FirstName, personInfo.Surname,
-			                                                  personInfo.DateOfBirth, postcode);
+															  personInfo.DateOfBirth, postcode);
 			int? experianScore = experian != null ? experian.ExperianScore : 0;
 
-			var cashRequest = new CashRequest {
-				CreationDate = DateTime.UtcNow,
-				Customer = customer,
-				InterestRate = 0.06M,
-				LoanType = loanType,
-				RepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
-				UseSetupFee = configurationVariables.GetByNameAsBool("SetupFeeEnabled"),
-				UseBrokerSetupFee = (customer.Broker != null) || configurationVariables.GetByNameAsBool("BrokerCommissionEnabled"),
-				DiscountPlan = _discounts.GetDefault(),
-				IsLoanTypeSelectionAllowed = 1,
-				OfferValidUntil = DateTime.UtcNow.AddDays(1),
-				OfferStart = DateTime.UtcNow,
-				LoanSource = loanSource,
-				IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed,
-				ScorePoints = score != null ? score.ScorePoints : 0,
-				ExpirianRating = experianScore
-			};
+			var cashRequest = new CashRequest
+				{
+					CreationDate = DateTime.UtcNow,
+					Customer = customer,
+					InterestRate = 0.06M,
+					LoanType = loanType,
+					RepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
+					UseSetupFee = configurationVariables.GetByNameAsBool("SetupFeeEnabled"),
+					UseBrokerSetupFee = (customer.Broker != null) || configurationVariables.GetByNameAsBool("BrokerCommissionEnabled"),
+					DiscountPlan = _discounts.GetDefault(),
+					IsLoanTypeSelectionAllowed = 1,
+					OfferValidUntil = DateTime.UtcNow.AddDays(1),
+					OfferStart = DateTime.UtcNow,
+					LoanSource = loanSource,
+					IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed,
+					ScorePoints = score != null ? score.ScorePoints : 0,
+					ExpirianRating = experianScore,
+					Originator = originator
+				};
 
 			customer.CashRequests.Add(cashRequest);
 
@@ -74,7 +79,8 @@
 
 		#region method CreateQuickOfferCashRequest
 
-		public CashRequest CreateQuickOfferCashRequest(Customer customer) {
+		public CashRequest CreateQuickOfferCashRequest(Customer customer)
+		{
 			var loanType = _loanTypes.GetDefault();
 			var loanSource = _loanSources.GetDefault();
 
@@ -82,33 +88,35 @@
 
 			var user = _users.GetAll().FirstOrDefault(x => x.Id == 21); // TODO: do something really really really better than this.
 
-			var cashRequest = new CashRequest {
-				
-				CreationDate = DateTime.UtcNow,
-				Customer = customer,
-				InterestRate = customer.QuickOffer.ImmediateInterestRate,
-				LoanType = loanType,
-				RepaymentPeriod = customer.QuickOffer.ImmediateTerm,
-				UseSetupFee = customer.QuickOffer.ImmediateSetupFee > 0,
-				UseBrokerSetupFee = false,
-				DiscountPlan = _discounts.GetDefault(),
-				IsLoanTypeSelectionAllowed = 0,
-				OfferValidUntil = DateTime.UtcNow.AddDays(1),
-				OfferStart = DateTime.UtcNow,
-				LoanSource = loanSource, // TODO: can it be EU loan?
-				IsCustomerRepaymentPeriodSelectionAllowed = false,
+			var cashRequest = new CashRequest
+				{
 
-				ManualSetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
-				SystemCalculatedSum = (double)customer.QuickOffer.Amount,
-				ManagerApprovedSum = (double)customer.QuickOffer.Amount,
-				QuickOffer = customer.QuickOffer,
-				SystemDecision = SystemDecision.Approve,
-				SystemDecisionDate = DateTime.UtcNow,
-				UnderwriterDecision = CreditResultStatus.Approved,
-				UnderwriterDecisionDate = DateTime.UtcNow,
-				UnderwriterComment = sReason,
-				IdUnderwriter = user.Id,
-			};
+					CreationDate = DateTime.UtcNow,
+					Customer = customer,
+					InterestRate = customer.QuickOffer.ImmediateInterestRate,
+					LoanType = loanType,
+					RepaymentPeriod = customer.QuickOffer.ImmediateTerm,
+					UseSetupFee = customer.QuickOffer.ImmediateSetupFee > 0,
+					UseBrokerSetupFee = false,
+					DiscountPlan = _discounts.GetDefault(),
+					IsLoanTypeSelectionAllowed = 0,
+					OfferValidUntil = DateTime.UtcNow.AddDays(1),
+					OfferStart = DateTime.UtcNow,
+					LoanSource = loanSource, // TODO: can it be EU loan?
+					IsCustomerRepaymentPeriodSelectionAllowed = false,
+
+					ManualSetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
+					SystemCalculatedSum = (double) customer.QuickOffer.Amount,
+					ManagerApprovedSum = (double) customer.QuickOffer.Amount,
+					QuickOffer = customer.QuickOffer,
+					SystemDecision = SystemDecision.Approve,
+					SystemDecisionDate = DateTime.UtcNow,
+					UnderwriterDecision = CreditResultStatus.Approved,
+					UnderwriterDecisionDate = DateTime.UtcNow,
+					UnderwriterComment = sReason,
+					IdUnderwriter = user.Id,
+					Originator = CashRequestOriginator.QuickOffer
+				};
 
 			customer.CashRequests.Add(cashRequest);
 
@@ -134,7 +142,8 @@
 
 		#region method ForceEvaluate
 
-		public void ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced, bool isSync) {
+		public void ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced, bool isSync)
+		{
 			bool bUpdateMarketplaces =
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
@@ -143,7 +152,8 @@
 				x.UpdatingEnd != null && (DateTime.UtcNow - x.UpdatingEnd.Value).Days > CurrentValues.Instance.UpdateOnReapplyLastDays
 			);
 
-			if (bUpdateMarketplaces) {
+			if (bUpdateMarketplaces)
+			{
 				// Update all marketplaces
 				foreach (var mp in customer.CustomerMarketPlaces)
 				{
@@ -152,7 +162,8 @@
 				}
 			} // if
 
-			if (!isUnderwriterForced) {
+			if (!isUnderwriterForced)
+			{
 				if (isSync)
 					m_oServiceClient.Instance.MainStrategySync1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
 				else

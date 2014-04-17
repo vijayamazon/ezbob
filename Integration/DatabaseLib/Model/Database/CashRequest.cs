@@ -1,12 +1,12 @@
-﻿using System;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using NHibernate;
-
-namespace EZBob.DatabaseLib.Model.Database
+﻿namespace EZBob.DatabaseLib.Model.Database
 {
 	using System.Collections.Generic;
+	using NHibernate.Type;
+	using System;
+	using ApplicationMng.Repository;
+	using Loans;
+	using Model.Loans;
+	using NHibernate;
 
 	public class CashRequest
 	{
@@ -95,8 +95,12 @@ namespace EZBob.DatabaseLib.Model.Database
 
 		public virtual int? ExpirianRating { get; set; }
 		public virtual double? ScorePoints { get; set; }
+
+		public virtual CashRequestOriginator? Originator { get; set; }
 	} // class CashRequest
 
+	public class CashRequestOriginatorType : EnumStringType<CashRequestOriginator> { }
+	
 	public interface ICashRequestRepository : IRepository<CashRequest>
 	{
 

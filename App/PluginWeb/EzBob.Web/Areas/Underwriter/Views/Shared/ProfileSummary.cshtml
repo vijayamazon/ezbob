@@ -362,7 +362,7 @@
                         <td><%- cec.EmployeeCount %></td>
                     </tr>
                     <%if(cec.TopEarningEmployeeCount){%>
-					<tr>
+                    <tr>
                         <td><b>Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</b></td>
                         <td><%- cec.TopEarningEmployeeCount %></td>
                     </tr>
@@ -382,7 +382,7 @@
                         <td><%- EzBob.formatPoundsAsInt(cai.CapitalExpenditure) %></td>
                     </tr>
                     <%}%>
-				    <tr>
+                    <tr>
                         <td><b>Total Monthly Salary Expenditure (inc tax & NI):</b></td>
                         <td><%- EzBob.formatPoundsAsInt(cec.TotalMonthlySalary) %></td>
                     </tr>
@@ -417,6 +417,7 @@
                             <th>Discount Plan </th>
                             <th>Customer Selection </th>
                             <th>Loan Source </th>
+                            <th>Originator </th>
                             <th>Underwriter </th>
                             <th>Comment </th>
                             <th>ID </th>
@@ -439,7 +440,8 @@
                             <td><%- EzBob.formatLoanTypeSelection(d.IsLoanTypeSelectionAllowed) %></td>
                             <td><%- d.LoanSourceName %></td>
                             <%}%>
-                                <td><%- d.UnderwriterName %></td>
+                            <td><%- d.Originator %></td>
+                            <td><%- d.UnderwriterName %></td>
                             <td><%- d.Comment %></td>
                             <td><%- d.Id %></td>
                         </tr>

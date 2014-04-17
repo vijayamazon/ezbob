@@ -52,6 +52,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
 			Map(x => x.ExpirianRating);
 			Map(x => x.ScorePoints);
+			Map(x => x.Originator).CustomType<CashRequestOriginatorType>();
 		} // constructor
 	} // class CashRequestMap
 } // namespace

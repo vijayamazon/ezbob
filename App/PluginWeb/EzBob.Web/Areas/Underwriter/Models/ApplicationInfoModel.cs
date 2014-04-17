@@ -1,6 +1,4 @@
-﻿using EZBob.DatabaseLib.Model.Database.Loans;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
     public class ApplicationInfoModel
     {

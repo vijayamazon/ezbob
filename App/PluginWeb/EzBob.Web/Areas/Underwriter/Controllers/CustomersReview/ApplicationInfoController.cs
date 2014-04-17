@@ -478,7 +478,7 @@
 
 			var customer = _customerRepository.Get(Id);
 
-			var cashRequest = _crBuilder.CreateCashRequest(customer);
+			var cashRequest = _crBuilder.CreateCashRequest(customer, CashRequestOriginator.NewCreditLineBtn);
 			cashRequest.LoanType = _loanTypes.GetDefault();
 
 			var underwriter = _users.GetUserByLogin(User.Identity.Name);
@@ -500,7 +500,7 @@
 		{
 			var customer = _customerRepository.Get(Id);
 
-			var cashRequest = _crBuilder.CreateCashRequest(customer);
+			var cashRequest = _crBuilder.CreateCashRequest(customer, CashRequestOriginator.NewCreditLineBtn);
 			cashRequest.LoanType = _loanTypes.GetDefault();
 
 			customer.CreditResult = null;

@@ -188,7 +188,7 @@
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 
-			_crBuilder.CreateCashRequest(customer);
+			_crBuilder.CreateCashRequest(customer, CashRequestOriginator.FinishedWizard);
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
