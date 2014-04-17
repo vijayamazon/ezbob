@@ -86,6 +86,35 @@
             </tr>
         </thead>
         <tbody>
+            <%if (FraudHighlightCss == 'red_cell') { %> 
+                @RawCellWithButtonNear("Fraud Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "<%- FraudHighlightCss %>")
+            <% } %>
+    
+            <% if (IsTest) { %>
+                @RawCellWithButtonNear("Test User:", "Yes", "isTestEditButton", "<%- IsTestHighlightCss %>")
+            <% } %>
+    
+            <% if (CciMark) { %>
+                <tr>
+                    <td class="red_cell">CCI mark</td>
+                    <td class="red_cell">
+                        <span class="cci-mark"/>
+                        <button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button>
+                    </td>
+                </tr>
+            <% } %>
+
+            <% if (DisabledText != 'Enabled') { %>
+                @RawCellWithButtonNear("Customer Status", "<%- DisabledText %>", "changeDisabledState", "red_cell")
+            <% } %>
+
+            <% if (AmlResult != 'Passed') { %>    
+                <tr>
+		            <td width="10%" class="red_cell">AML</td>
+		            <td class="red_cell"><%- AmlResult %></td>
+	            </tr>
+            <% } %>
+
             @RawCell("Id", "<%- Id %>")
             @RawCell("Name", "<%- Name %>")
 
@@ -97,12 +126,6 @@
 			</tr>
 
             <tr>
-                <td>CCI mark</td>
-                <td><span class="cci-mark"></span>
-                    <button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button></td>
-            </tr>
-
-            <tr>
                 <td>Ref Source</td>
                 <td><%- ReferenceSource ? (ReferenceSource.length <= 20 ? ReferenceSource : ReferenceSource.substring(0,17)+'...') : '-' %>
 					<i data-title="<%- ReferenceSource || 'no source ref' %>" class="tltp icon-question-sign"></i>
@@ -112,11 +135,9 @@
             @RawCell("A/B Testing", "<%- ABTesting || '-' %>")
             @RawCell("User score", "<%- CreditScore %>")
             @RawCell("Reg date", "<%- EzBob.formatDate(RegistrationDate) %>")
-            @RawCellWithButtonNear("Customer Status", "<%- DisabledText %>", "changeDisabledState")
             @RawCell("User status", "<%- UserStatus %>")
-            @RawCellWithButtonNear("Test User:", "<%= IsTest ? 'Yes' : 'No' %>", "isTestEditButton")
             @RawCellWithButtonNear("Manual Decision:", "<%= IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
-            @RawCellWithButtonNear("Fraud Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "<%- FraudHighlightCss %>")
+            
             <tr>
                 <td class="<%= PromoCodeCss %>">Promo Code:</td>
                 <td class="<%= PromoCodeCss %>">
@@ -124,6 +145,36 @@
                 </td>
             </tr>
             @RawCell("Active Campaigns:", "<%- ActiveCampaign %>")
+    
+            <%if (FraudHighlightCss != 'red_cell') { %> 
+                @RawCellWithButtonNear("Fraud Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "<%- FraudHighlightCss %>")
+            <% } %>    
+    
+            <% if (!IsTest) { %>
+                @RawCellWithButtonNear("Test User:", "No", "isTestEditButton", "<%- IsTestHighlightCss %>")
+            <% } %>
+    
+            <% if (!CciMark) { %>
+                <tr>
+                    <td>CCI mark</td>
+                    <td>
+                        <span class="cci-mark"/>
+                        <button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button>
+                    </td>
+                </tr>
+            <% } %>
+
+            <% if (DisabledText == 'Enabled') { %>
+                @RawCellWithButtonNear("Customer Status", "<%- DisabledText %>", "changeDisabledState")
+            <% } %>
+
+            <% if (AmlResult == 'Passed') { %>
+                <tr>
+		            <td width="10%">AML</td>
+		            <td><%- AmlResult %></td>
+	            </tr>
+            <% } %>
+
             @RawCellWithButtonNear("Trust Pilot status", "<%- TrustPilotStatusDescription %>", "TrustPilotStatusUpdate")
             @RawCell("Mobile Phone #", "<%- MobilePhone %>")
             @RawCell("Daytime Phone #", "<%- DaytimePhone %>")

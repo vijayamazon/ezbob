@@ -32,6 +32,9 @@
 		public string FraudCheckStatus { get; set; }
 		public int FraudCheckStatusId { get; set; }
 		public string FraudHighlightCss { get; set; }
+		public string IsTestHighlightCss { get; set; }
+		public string AmlResult { get; set; }
+		
 		public bool IsWarning { get; set; }
 		public string PromoCode { get; set; }
 		public string PromoCodeCss { get; set; }
@@ -54,8 +57,18 @@
 
 			FraudCheckStatus = customer.FraudStatus.Description();
 			FraudCheckStatusId = (int)customer.FraudStatus;
-			if (customer.FraudStatus == FraudStatus.FraudSuspect)
+
+			if (customer.FraudStatus != FraudStatus.Ok)
+			{
 				FraudHighlightCss = "red_cell";
+			}
+
+			if (IsTest)
+			{
+				IsTestHighlightCss = "red_cell";
+			}
+
+			AmlResult = customer.AMLResult;
 
 			PromoCode = customer.PromoCode;
 			if (!string.IsNullOrEmpty(PromoCode))

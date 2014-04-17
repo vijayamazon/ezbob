@@ -139,6 +139,9 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                 id: @model.get("Id")
         )
         d.render()
+        d.on( 'done', =>
+            @model.fetch()
+        )
         return
 
     avoidAutomaticDecisionButton: ->
@@ -204,7 +207,6 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
         @set {"DisabledText": disabledText}, {silent:true}
 
     changeFraudCheckStatus: ->
-        #fraudText = @get("FraudCheckStatus")
         fraud = @get("FraudCheckStatusId")
         fraudCss = ""
         
@@ -212,5 +214,4 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
             when 2
                 fraudCss = "red_cell"
         
-        #@set "FraudCheckStatus", fraudText
         @set "FraudHighlightCss", fraudCss
