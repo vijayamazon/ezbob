@@ -27,76 +27,85 @@
 </script>
 
 <script id="hmrc-enter-template" type="text/template">
-	<form novalidate="novalidate">
-		<div class="aka-table hmrc-enter-business-data">
-			<div class="aka-row">
-				<div class="aka-column">
-					<div class="form_field_container">
-						<label class="attardi-input">
-							<span>Registration #</span>
-							<input type="text" tabindex="1" class="RegNo form_field" ui-event-control-id="enter-hmrc:registration-number" />
-						</label>
-					</div>
-
-					<div class="form_field_container">
-						<label class="attardi-input">
-							<span>Business name</span>
-							<input type="text" tabindex="2" class="BusinessName form_field" ui-event-control-id="enter-hmrc:business-name" />
-						</label>
-					</div>
+	<div class="aka-table hmrc-enter-business-data">
+		<div class="aka-row">
+			<div class="aka-column">
+				<div class="form_field_container">
+					<label class="attardi-input">
+						<span>Registration #</span>
+						<input type="text" tabindex="1" class="RegNo form_field validatable" ui-event-control-id="enter-hmrc:registration-number" />
+					</label>
 				</div>
 
-				<div class="aka-column">
-					<div class="form_field_container">
-						<label class="attardi-input">
-							<span>Business address</span>
-							<textarea tabindex="3" class="BusinessAddress form_field" rows="6" ui-event-control-id="enter-hmrc:business-address"></textarea>
-						</label>
-					</div>
+				<div class="form_field_container">
+					<label class="attardi-input">
+						<span>Business name</span>
+						<input type="text" tabindex="2" class="BusinessName form_field validatable" ui-event-control-id="enter-hmrc:business-name" />
+					</label>
+				</div>
+
+				<div class="validation-result"></div>
+			</div>
+
+			<div class="aka-column">
+				<div class="form_field_container">
+					<label class="attardi-input">
+						<span>Business address</span>
+						<textarea tabindex="3" class="BusinessAddress form_field validatable" rows="6" ui-event-control-id="enter-hmrc:business-address"></textarea>
+					</label>
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<div class="hmrc-enter-data-holder">
-			<table class="hmrc-enter-data">
-				<tbody>
-					<tr class=period-holder>
-						<th>Perdiod <button class="add-one-period" type="button" title="Add one more period.">+</button></th>
-					</tr>
-					<tr class=box-holder data-box-num=1>
-						<th>VAT due in this period on sales and other outputs (Box 1)</th>
-					</tr>
-					<tr class=box-holder data-box-num=2>
-						<th>VAT due in this period on acquisitions from other EC Member States (Box 2)</th>
-					</tr>
-					<tr class=box-holder data-box-num=3>
-						<th>Total VAT due (the sum of boxes 1 and 2) (Box 3)</th>
-					</tr>
-					<tr class=box-holder data-box-num=4>
-						<th>VAT reclaimed in this period on purchases and other inputs, (including acquisitions from the EC) (Box 4)</th>
-					</tr>
-					<tr class=box-holder data-box-num=5>
-						<th>Net VAT to be paid to HM Revenue &amp; Customs or reclaimed by you (Difference between boxes 3 and 4) (Box 5)</th>
-					</tr>
-					<tr class=box-holder data-box-num=6>
-						<th>Total value of sales and all other outputs excluding any VAT. Include your box 8 figure (Box 6)</th>
-					</tr>
-					<tr class=box-holder data-box-num=7>
-						<th>Total value of purchases and all other inputs excluding any VAT. Include your box 9 figure (Box 7)</th>
-					</tr>
-					<tr class=box-holder data-box-num=8>
-						<th>Total value of all supplies of goods and related costs, excluding any VAT, to other EC Member States (Box 8)</th>
-					</tr>
-					<tr class=box-holder data-box-num=9>
-						<th>Total value of all acquisitions of goods and related costs, excluding any VAT, from other EC Member States (Box 9)</th>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr class="remove-holder">
-						<th></th>
-					</tr>
-				</tfoot>
-			</table>
-		</div>
-	</form>
+	<div class="hmrc-enter-data-holder">
+		<table class="hmrc-enter-data">
+			<tbody>
+				<tr class=period-holder>
+					<th><span class="fill-test-data">Perdioid</span> <button class="add-one-period" type="button" title="Add one more perdioid.">+</button></th>
+				</tr>
+				<tr class=box-holder data-box-num=1>
+					<th>VAT due in this period on sales and other outputs (Box 1)</th>
+				</tr>
+				<tr class=box-holder data-box-num=2>
+					<th>VAT due in this period on acquisitions from other EC Member States (Box 2)</th>
+				</tr>
+				<tr class=box-holder data-box-num=3>
+					<th>Total VAT due (the sum of boxes 1 and 2) (Box 3)</th>
+				</tr>
+				<tr class=box-holder data-box-num=4>
+					<th>VAT reclaimed in this period on purchases and other inputs, (including acquisitions from the EC) (Box 4)</th>
+				</tr>
+				<tr class=box-holder data-box-num=5>
+					<th>Net VAT to be paid to HM Revenue &amp; Customs or reclaimed by you (Difference between boxes 3 and 4) (Box 5)</th>
+				</tr>
+				<tr class=box-holder data-box-num=6>
+					<th>Total value of sales and all other outputs excluding any VAT. Include your box 8 figure (Box 6)</th>
+				</tr>
+				<tr class=box-holder data-box-num=7>
+					<th>Total value of purchases and all other inputs excluding any VAT. Include your box 9 figure (Box 7)</th>
+				</tr>
+				<tr class=box-holder data-box-num=8>
+					<th>Total value of all supplies of goods and related costs, excluding any VAT, to other EC Member States (Box 8)</th>
+				</tr>
+				<tr class=box-holder data-box-num=9>
+					<th>Total value of all acquisitions of goods and related costs, excluding any VAT, from other EC Member States (Box 9)</th>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr class="remove-holder">
+					<th><button class="remove-all-periods" type="button">Remove all</button></th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</script>
+
+<script id="hmrc-enter-one-value-template" type="text/template">
+	<div class="value-container">
+		<label class="attardi-input">
+			<span class="value-label"></span>
+			<input type="text" class="value form_field" />
+		</label>
+	</div>
 </script>

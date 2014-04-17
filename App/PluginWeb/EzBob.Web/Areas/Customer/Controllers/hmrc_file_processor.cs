@@ -320,18 +320,17 @@
 
 	#region class SessionHmrcFileProcessor
 
-	internal class SessionHmrcFileProcessor : AHmrcFileProcessor
-	{
-		private readonly string _name;
+	internal class SessionHmrcFileProcessor : AHmrcFileProcessor {
 		#region constructor
 
-		public SessionHmrcFileProcessor(HttpSessionStateBase oSession, int nCustomerID, HttpFileCollectionBase oFiles, string name = HmrcFileCache.StaticName)
-			: base(nCustomerID, oFiles, oSession)
-		{
-			_name = name;
-		}
-
-		// constructor
+		public SessionHmrcFileProcessor(
+			HttpSessionStateBase oSession,
+			int nCustomerID,
+			HttpFileCollectionBase oFiles,
+			string name = HmrcFileCache.StaticName
+		) : base(nCustomerID, oFiles, oSession) {
+			m_sName = name;
+		} // constructor
 
 		#endregion constructor
 
@@ -339,16 +338,22 @@
 
 		public override HmrcFileCache FileCache {
 			get {
-				HmrcFileCache oFileCache = HmrcFileCache.Get(Session, _name);
+				HmrcFileCache oFileCache = HmrcFileCache.Get(Session, m_sName);
 
 				if (oFileCache == null)
-					oFileCache = new HmrcFileCache(Session, _name);
+					oFileCache = new HmrcFileCache(Session, m_sName);
 
 				return oFileCache;
 			} // get
 		} // HmrcFileCache
 
 		#endregion property FileCache
+
+		#region private
+
+		private readonly string m_sName;
+
+		#endregion private
 	} // SessionHmrcFileProcessor
 
 	#endregion class SessionHmrcFileProcessor

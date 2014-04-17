@@ -10,6 +10,8 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		events: {
 			'click .add-one-period': 'addOnePeriod',
 			'click .remove-one-period': 'removeOnePeriod',
+			'click .remove-all-periods': 'removeAllPeriods',
+			'click .fill-test-data': 'fillTestData',
 		}, // events
 
 		render: function() {
@@ -41,7 +43,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			this.tabReindex();
 
-			oDateFrom.focus();
+			oDateFrom.find('input').focus();
 
 			this.setSomethingEnabled(this.$el.find('.add-one-period'), true);
 
@@ -49,23 +51,33 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		}, // addOnePeriod
 
 		removeOnePeriod: function(event) {
-			console.log('remove one', event.currentTarget);
-
 			var sPeriodID = $(event.currentTarget).closest('td').attr('data-period-id');
 
 			this.$el.find('.td' + sPeriodID).remove();
+
 			this.tabReindex();
+
+			return this;
 		}, // removeOnePeriod
 
+		removeAllPeriods: function() {
+			var oIds = this.getAllIds();
+
+			var self = this;
+
+			_.each(oIds.periods, function(sPeriodID) {
+				self.$el.find('.td' + sPeriodID).remove();
+			});
+
+			this.addOnePeriod();
+
+			return oIds;
+		}, // removeAllPeriods
+
 		tabReindex: function() {
-			var aryPeriods = [];
-			var aryBoxes = [];
+			var oIds = this.getAllIds();
 
-			this.$el.find('.period-holder TD').each(function() { aryPeriods.push($(this).attr('data-period-id')); });
-
-			this.$el.find('.box-holder').each(function() { aryBoxes.push($(this).attr('data-box-num')); });
-
-			if (aryPeriods.length < 2)
+			if (oIds.periods.length < 2)
 				this.$el.find('.remove-holder').hide();
 			else {
 				this.$el.find('.remove-holder').show().find('TD').each(function() {
@@ -75,18 +87,34 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			var nTabIndex = parseInt(this.$el.find('.BusinessAddress').attr('tabIndex'), 10);
 
-			for (var i = 0; i < aryPeriods.length; i++) {
-				var sPeriodID = aryPeriods[i];
+			for (var i = 0; i < oIds.periods.length; i++) {
+				var sPeriodID = oIds.periods[i];
 
 				this.$el.find('.' + this.dateId('DateFrom', sPeriodID)).attr('tabIndex', ++nTabIndex);
 				this.$el.find('.' + this.dateId('DateTo', sPeriodID)).attr('tabIndex', ++nTabIndex);
 
-				for (var j = 0; j < aryBoxes.length; j++)
-					this.$el.find('.' + this.boxId(aryBoxes[j], sPeriodID)).attr('tabIndex', ++nTabIndex);
+				for (var j = 0; j < oIds.boxes.length; j++)
+					this.$el.find('.' + this.boxId(oIds.boxes[j], sPeriodID)).attr('tabIndex', ++nTabIndex);
 			} // for
 
-			console.log('periods', aryPeriods, 'boxes', aryBoxes);
+			var oScrollPane = this.$el.find('.hmrc-enter-data-holder');
+			var nVisibleWidth = oScrollPane.width();
+			var nFullWidth = oScrollPane[0].scrollWidth;
+
+			oScrollPane.scrollLeft((nFullWidth > nVisibleWidth) ? (nFullWidth - nVisibleWidth) : 0);
+
+			return oIds;
 		}, // tabReindex
+
+		getAllIds: function() {
+			var oResult = { periods: [], boxes: [], };
+
+			this.$el.find('.period-holder TD').each(function() { oResult.periods.push($(this).attr('data-period-id')); });
+
+			this.$el.find('.box-holder').each(function() { oResult.boxes.push($(this).attr('data-box-num')); });
+
+			return oResult;
+		}, // getAllIds
 
 		createCell: function(sPeriodID) {
 			var oTD = $('<td />')
@@ -101,13 +129,21 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			var sBoxNum = oTR.attr('data-box-num');
 
-			var oFld = $('<input type=text />')
-				.addClass('data' + sPeriodID + ' ' + this.boxId(sBoxNum, sPeriodID))
+			var oFld = $($('#hmrc-enter-one-value-template').html());
+
+			var sBoxID = this.boxId(sBoxNum, sPeriodID);
+
+			oFld.find('.value')
+				.addClass('validatable data' + sPeriodID + ' ' + sBoxID)
 				.attr({
 					'data-period-id': sPeriodID,
 					'data-field-name': 'box' + sBoxNum,
+					'ui-event-control-id': 'enter-hmrc:one-value',
+					'id': sBoxID,
 				})
 				.moneyFormat();
+
+			oFld.find('.value-label').text('Box ' + sBoxNum);
 
 			oTR.append(oTD.append(oFld));
 		}, // createBoxField
@@ -120,7 +156,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			var oContainer = $('<div class=date-holder>' + sCaption + ': </div>');
 
 			var oFld = $('<input type=date />')
-				.addClass('data' + sPeriodID + ' ' + this.dateId(sFieldName, sPeriodID))
+				.addClass('validatable date data' + sPeriodID + ' ' + this.dateId(sFieldName, sPeriodID))
 				.attr({
 					'data-period-id': sPeriodID,
 					'data-field-name': sFieldName,
@@ -128,35 +164,179 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			return oContainer.append(oFld);
 		}, // createDateField
+
+		validate: function() {
+			this.$el.find('.validation-result').removeClass('good bad').empty();
+
+			this.$el.find('.validatable').filter('.invalid').removeClass('invalid');
+
+			var aryErrors = [];
+
+			var nErrorCount = 0;
+
+			this.$el.find('.RegNo').each(function() {
+				var oCtrl = $(this);
+
+				if (oCtrl.val() === '') {
+					aryErrors.push('Business registration number not specified.');
+					oCtrl.addClass('invalid');
+				} // if
+			});
+
+			this.$el.find('.BusinessName, .BusinessAddress').each(function() {
+				var oCtrl = $(this);
+
+				if ($.trim(oCtrl.val()) === '') {
+					aryErrors.push('Business ' + (this.tagName.toLowerCase() === 'input' ? 'name' : 'address') + ' not specified.');
+					oCtrl.addClass('invalid');
+				} // if
+			});
+
+			this.$el.find('.date').each(function() {
+				var oDateCtrl = $(this);
+
+				if (oDateCtrl.val() === '') {
+					oDateCtrl.addClass('invalid');
+					nErrorCount++;
+				} // if
+			});
+
+			if (nErrorCount > 0)
+				aryErrors.push('Some date fields are not filled.');
+
+			nErrorCount = 0;
+
+			this.$el.find('.value').each(function() {
+				var oCtrl = $(this);
+
+				if (oCtrl.val() === '')
+					oCtrl.autoNumericSet(0).blur();
+			});
+
+			if (nErrorCount > 0)
+				aryErrors.push('Some box fields are not filled.');
+
+			if (aryErrors.length < 1) {
+				var oSet = new EzBob.DateIntervalSet();
+
+				var oIds = this.getAllIds();
+
+				for (var i = 0; i < oIds.periods.length; i++) {
+					var sPeriodID = oIds.periods[i];
+
+					var sFrom = this.$el.find('.' + this.dateId('DateFrom', sPeriodID)).val();
+					var sTo = this.$el.find('.' + this.dateId('DateTo', sPeriodID)).val();
+
+					if (!oSet.add(sFrom, sTo)) {
+						aryErrors.push('Inconsistent date intervals detected.');
+						break;
+					} // if
+				} // for
+
+				if (!oSet.isConsequent())
+					aryErrors.push('In-consequent date intervals detected.');
+			} // if
+
+			if (aryErrors.length > 0)
+				this.$el.find('.validation-result').addClass('bad').text(aryErrors.join(' '));
+			else
+				this.$el.find('.validation-result').addClass('good').text('Valid.');
+
+			return aryErrors.length === 0;
+		}, // validate
+
+		fillTestData: function(event) {
+			if (!event.ctrlKey)
+				return;
+
+			this.$el.find('.RegNo').val('112233445566').blur();
+
+			this.$el.find('.BusinessName').val('The Horns And The Hooves Inc').blur();
+
+			this.$el.find('.BusinessAddress').val('Horny Hooves House\n13 The Holy Cow Blvd\nJust around the corner\nLondon\nXY76 85E').blur();
+
+			this.removeAllPeriods();
+
+			this.addOnePeriod().addOnePeriod().addOnePeriod();
+
+			var oIds = this.getAllIds();
+
+			var oCurDate = moment(moment.utc().add('years', -2)).date(1);
+
+			for (var i = 0; i < oIds.periods.length; i++) {
+				var sPeriodID = oIds.periods[i];
+
+				this.$el.find('.' + this.dateId('DateFrom', sPeriodID)).val(oCurDate.format('YYYY-MM-DD')).blur();
+				oCurDate = oCurDate.add('months', 3);
+				oCurDate = oCurDate.add('days', -1);
+
+				this.$el.find('.' + this.dateId('DateTo', sPeriodID)).val(oCurDate.format('YYYY-MM-DD')).blur();
+				oCurDate = oCurDate.add('days', 1);
+
+				for (var j = 0; j < oIds.boxes.length; j++)
+					this.$el.find('.' + this.boxId(oIds.boxes[j], sPeriodID)).autoNumericSet(100 * i + 10 * j + 10).blur();
+			} // for
+		}, // fillTestData
+
+		show: function() {
+			var self = this;
+
+			this.$el.dialog({
+				width: Math.min($(window).width() - 10, 1300),
+				height: Math.min($(window).height() - 10, 900),
+				modal: true,
+				buttons: [
+					{
+						text: 'Cancel',
+						'class': 'hmrc-enter-data-btn',
+						click: function() { self.close(); },
+					}, // cancel
+					{
+						text: 'Validate',
+						'class': 'hmrc-enter-data-btn',
+						click: function() { self.validate(); },
+					}, // Validate
+					{
+						text: 'Save',
+						'class': 'hmrc-enter-data-btn',
+						click: function() { self.save(); },
+					}, // Save
+				], // buttons
+			});
+		}, // show
+
+		close: function() {
+			this.$el.dialog('close');
+		}, // close
+
+		save: function() {
+			this.disableButtons();
+
+			if (!this.validate()) {
+				this.enableButtons();
+				return;
+			} // if
+
+			this.enableButtons();
+		}, // save
+
+		enableButtons: function() {
+			this.setSomethingEnabled(this.$el.dialog('widget').find('.hmrc-enter-data-btn'), true);
+		}, // enableButtons
+
+		disableButtons: function() {
+			this.setSomethingEnabled(this.$el.dialog('widget').find('.hmrc-enter-data-btn'), false);
+		}, // disableButtons
 	}; // member def
 
 	var oStaticDef = {
 		execute: function(nCustomerID) {
-			console.log('enter hmrc view for customer', nCustomerID);
-
 			var oView = new EzBob.Underwriter.EnterHmrcView({
 				CustomerID: nCustomerID,
 				el: $('<div title="Enter VAT manually"></div>'),
 			});
 
-			oView.render().addOnePeriod();
-
-			oView.$el.dialog({
-				width: Math.min($(window).width() - 10, 1300),
-				height: Math.min($(window).height() - 10, 800),
-				modal: true,
-				buttons: {
-					'Cancel': function() {
-						$(this).dialog('close');
-					}, // cancel
-
-					'Save': function() {
-						console.log('Save');
-
-						$(this).dialog('close');
-					}, // Save
-				}, // buttons
-			});
+			oView.render().addOnePeriod().show();
 		}, // execute
 	}; // static def
 

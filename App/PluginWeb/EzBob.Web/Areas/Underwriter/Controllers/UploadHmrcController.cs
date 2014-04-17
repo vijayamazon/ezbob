@@ -47,10 +47,9 @@
 
 		[HttpPost]
 		public ActionResult UploadHmrc(int customerId) {
-			if (customerId == 0)
+			if (customerId < 1)
 				return Json(new { error = "Customer not specified" });
 
-			//var customer = _customers.Get(customerId);
 			var oProcessor = new SessionHmrcFileProcessor(Session, customerId, Request.Files, string.Format("HmrcFileCache{0}", customerId));
 
 			oProcessor.Run();
@@ -68,11 +67,9 @@
 			if ((oFileCache != null) && !string.IsNullOrWhiteSpace(oFileCache.ErrorMsg))
 				return CreateError(oFileCache.ErrorMsg);
 
-			var customer = _customers.Get(customerId);
-			string customerEmail = customer.Name;
-			var model = new AccountModel { accountTypeName = "HMRC", displayName = customerEmail, name = customerEmail, login = customerEmail, password = "topsecret" };
-
-			AddAccountState oState = ValidateHmrcModel(model, customer);
+			AccountModel model;
+			AddAccountState oState;
+			CreateAccountModel(customerId, out model, out oState);
 
 			if (oState.Error != null)
 				return oState.Error;
@@ -82,6 +79,76 @@
 
 			if (stateError != null)
 				return CreateError(stateError);
+
+			return DoSave(oState, model, customerId, oSeeds);
+		} // UploadFiles
+
+		[HttpPost]
+		public ActionResult SaveNewManuallyEntered(int nCustomerID, object data) {
+			AccountModel model;
+			AddAccountState oState;
+			CreateAccountModel(nCustomerID, out model, out oState);
+
+			if (oState.Error != null)
+				return oState.Error;
+
+			string stateError;
+			Hopper oSeeds = ThrashManualData(nCustomerID, data, out stateError);
+
+			if (stateError != null)
+				return CreateError(stateError);
+
+			return DoSave(oState, model, nCustomerID, oSeeds);
+		} // SaveNewManuallyEntered
+
+		private Hopper ThrashManualData(int nCustomerID, object data, out string sStateError) {
+			sStateError = null;
+
+			// TODO
+
+			return null;
+		} // ThrashManualData
+
+		private void CreateAccountModel(int nCustomerID, out AccountModel model, out AddAccountState oState) {
+			Customer customer = _customers.Get(nCustomerID);
+
+			string customerEmail = customer.Name;
+
+			model = new AccountModel {
+				accountTypeName = "HMRC",
+				displayName = customerEmail,
+				name = customerEmail,
+				login = customerEmail,
+				password = "topsecret"
+			};
+
+			oState = new AddAccountState { VendorInfo = Configuration.Instance.GetVendorInfo(model.accountTypeName) };
+
+			if (oState.VendorInfo == null) {
+				var sError = "Unsupported account type: " + model.accountTypeName;
+				Log.Error(sError);
+				oState.Error = CreateError(sError);
+				return;
+			} // try
+
+			try {
+				oState.Marketplace = new DatabaseMarketPlace(model.accountTypeName);
+				_mpChecker.Check(oState.Marketplace.InternalId, customer, model.Fill().UniqueID());
+			}
+			catch (MarketPlaceAddedByThisCustomerException) {
+				oState.Error = CreateError(DbStrings.StoreAddedByYou);
+			}
+			catch (MarketPlaceIsAlreadyAddedException) {
+				oState.Error = CreateError(DbStrings.StoreAlreadyExistsInDb);
+			}
+			catch (Exception e) {
+				Log.Error(e);
+				oState.Error = CreateError(e.Message);
+			} // try
+		} // CreateAccountModel
+
+		private ActionResult DoSave(AddAccountState oState, AccountModel model, int nCustomerID, Hopper oSeeds) {
+			Customer customer = _customers.Get(nCustomerID);
 
 			SaveMarketplace(oState, model, customer);
 
@@ -115,40 +182,9 @@
 				return CreateError("Account has been linked but error occurred while storing uploaded data: " + e.Message);
 			} // try
 
-			HmrcFileCache.Clean(Session, string.Format("HmrcFileCache{0}", customerId));
+			HmrcFileCache.Clean(Session, string.Format("HmrcFileCache{0}", nCustomerID));
 			return Json(new { });
-		} // UploadFiles
-
-		private AddAccountState ValidateHmrcModel(AccountModel model, Customer customer) {
-			var oResult = new AddAccountState { VendorInfo = Configuration.Instance.GetVendorInfo(model.accountTypeName) };
-
-			if (oResult.VendorInfo == null) {
-				var sError = "Unsupported account type: " + model.accountTypeName;
-				Log.Error(sError);
-				oResult.Error = CreateError(sError);
-				return oResult;
-			} // try
-
-			try {
-				oResult.Marketplace = new DatabaseMarketPlace(model.accountTypeName);
-				_mpChecker.Check(oResult.Marketplace.InternalId, customer, model.Fill().UniqueID());
-			}
-			catch (MarketPlaceAddedByThisCustomerException) {
-				oResult.Error = CreateError(DbStrings.StoreAddedByYou);
-				return oResult;
-			}
-			catch (MarketPlaceIsAlreadyAddedException) {
-				oResult.Error = CreateError(DbStrings.StoreAlreadyExistsInDb);
-				return oResult;
-			}
-			catch (Exception e) {
-				Log.Error(e);
-				oResult.Error = CreateError(e.Message);
-				return oResult;
-			} // try
-
-			return oResult;
-		} // ValidateModel
+		} // DoSave
 
 		private class AddAccountState {
 			public VendorInfo VendorInfo;
@@ -197,7 +233,7 @@
 					next = cur;
 
 					if (!prev.IsJustBefore(next)) {
-						stateError = "Inconsequent date ranges: " + prev + " and " + next;
+						stateError = "In-consequent date ranges: " + prev + " and " + next;
 						return null;
 					} // if
 				} // for each interval

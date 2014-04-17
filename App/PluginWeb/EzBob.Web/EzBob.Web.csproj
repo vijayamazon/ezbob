@@ -925,6 +925,7 @@
       <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
+    <Content Include="Content\js\lib\date.interval.js" />
     <Content Include="Content\js\ezbob.addDirectorInfoView.js" />
     <Content Include="Content\js\EzBob.DataTables.Helper.js" />
     <Content Include="Content\js\ezbob.models.js" />

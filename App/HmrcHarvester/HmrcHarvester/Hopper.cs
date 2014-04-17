@@ -23,7 +23,7 @@
 		/// <summary>
 		/// Adds an error message. Thread safe.
 		/// </summary>
-		/// <param name="fi">File identifier where the error occured.</param>
+		/// <param name="fi">File identifier where the error occurred.</param>
 		/// <param name="response">HTTP response with an error.</param>
 		public void Add(SheafMetaData fi, HttpResponseMessage response) {
 			lock (this) {

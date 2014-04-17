@@ -29,7 +29,9 @@ div.uwReason {
 }
 
 ::-webkit-scrollbar-track {
+    -moz-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
     -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
     border: none;
     border-radius: 10px;
 }
@@ -51,14 +53,12 @@ div.uwReason {
 #profile-view fieldset legend {
     font-style: italic;
     font-size: 16px;
-    font-style: normal;
     font-weight: bold;
     display: inline;
     padding-right: 20px;
     padding-left: 0px;
     margin-left: -20px;
     border: none;
-    width: auto;
 }
 
 #profile-view fieldset {
@@ -187,6 +187,7 @@ p.yodlee-cashflow-graph-labels {
 }
 
 .left-underwriter-pane {
+    width: 400px;
 }
 
 .reportDatePicker {
@@ -240,6 +241,7 @@ table.rright tbody td:not(:first-child) {
 }
 
 .profile-person-info td {
+    -ms-word-wrap: break-word;
     word-wrap: break-word;
 }
 
@@ -259,10 +261,6 @@ table.rright tbody td:not(:first-child) {
     #spl > div {
         overflow: visible;
     }
-
-.left-underwriter-pane {
-    width: 400px;
-}
 
 .vsplitbar {
     width: 5px;
@@ -452,6 +450,8 @@ a.ezbob-logo {
     height: 100%;
     background-image: url(../img/ezbob-logo.png);
     background-repeat: no-repeat;
+    -moz-background-size: contain;
+    -webkit-background-size: contain;
     background-size: contain;
 }
 
@@ -538,10 +538,6 @@ a.ezbob-logo-login {
     cursor: pointer;
 }
 
-.cais-file-view {
-    overflow: auto;
-}
-
 .first td {
     background: #ffffff;
 }
@@ -569,6 +565,7 @@ a.ezbob-logo-login {
 }
 
 .cais-file-view {
+    overflow: auto;
     width: 98%;
     height: 95%;
     resize: none;
@@ -956,6 +953,13 @@ textarea.BusinessAddress {
 	height: 124px;
 }
 
+.invalid {
+	border: 1px solid red !important;
+}
+
+.validation-result.good { color: #51a351; }
+.validation-result.bad { color: red; }
+
 .aka-table {
 	display: table;
 	width: 100%;
@@ -995,7 +999,7 @@ div.hmrc-enter-data-holder .add-one-period {
 
 .hmrc-enter-data th,
 .hmrc-enter-data td {
-	border: 1px solid black;
+	border: 0;
 	padding: 3px;
 	vertical-align: middle;
 }
@@ -1019,6 +1023,9 @@ div.hmrc-enter-data-holder .add-one-period {
 	width: 145px;
 }
 
+.hmrc-enter-data tfoot th,
 .hmrc-enter-data tfoot td {
 	text-align: center;
 }
+
+.hmrc-enter-data .value-container { padding-top: 13px; }
