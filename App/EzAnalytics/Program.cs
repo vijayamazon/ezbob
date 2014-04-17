@@ -5,7 +5,6 @@ using Ezbob.Context;
 using Ezbob.Database;
 using Ezbob.Logger;
 using Google.Apis.Analytics.v3;
-using Google.Apis.Analytics.v3.Data;
 using Google.Apis.Authentication.OAuth2;
 using Google.Apis.Authentication.OAuth2.DotNetOpenAuth;
 using System;
@@ -38,7 +37,7 @@ namespace EzAnalyticsConsoleClient {
 			}
 			else {
 				try {
-					if (app.Init(DateTime.Today))
+					if (app.Init(DateTime.Today.AddDays(-1)))
 						app.Run();
 
 					app.Done();
@@ -88,7 +87,7 @@ namespace EzAnalyticsConsoleClient {
 			Log.Debug("Creating service client...");
 
 			m_oService = new AnalyticsService(initializer);
-
+			
 			Log.Debug("Program.Init complete.");
 
 			return true;
@@ -228,7 +227,8 @@ namespace EzAnalyticsConsoleClient {
 				m_oReportDate, 
 				new GoogleReportDimensions[] { GoogleReportDimensions.country, },
 				new GoogleReportMetrics[] { GoogleReportMetrics.visitors, GoogleReportMetrics.newVisits },
-				GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==www.ezbob.com",
+				null
+				/*GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==ezbob.com"*/,
 				Log
 			);
 
@@ -272,7 +272,8 @@ namespace EzAnalyticsConsoleClient {
 				m_oReportDate, 
 				new GoogleReportDimensions[] { GoogleReportDimensions.pagePath, },
 				new GoogleReportMetrics[] { GoogleReportMetrics.visitors },
-				GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==app.ezbob.com",
+				null
+				/*GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==ezbob.com"*/,
 				Log
 			);
 
@@ -322,7 +323,9 @@ namespace EzAnalyticsConsoleClient {
 				m_oReportDate,
 				new GoogleReportDimensions[] { GoogleReportDimensions.sourceMedium, },
 				new GoogleReportMetrics[] { GoogleReportMetrics.visitors, GoogleReportMetrics.newVisits },
-				GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==app.ezbob.com"
+				null
+				/*GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==ezbob.com"*/, 
+				Log
 			);
 			var model = new List<StatsModel>(); 
 			List<GoogleDataItem> oFetchResult = oFetcher.Fetch();
