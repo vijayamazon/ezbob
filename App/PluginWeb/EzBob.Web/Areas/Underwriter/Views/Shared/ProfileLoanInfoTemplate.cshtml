@@ -89,16 +89,6 @@
             @RawCell("Id", "<%- Id %>")
             @RawCell("Name", "<%- Name %>")
 
-            <tr>
-                <td>E-mail 
-					<i data-title="<%- EmailState %>" class="tltp <%=getIcon()%>"></i>
-                </td>
-                <td><%- Email.length <= 20 ? Email : Email.substring(0,17)+'...' %>
-					<i data-title="<%- Email %>" class="tltp-left <%=getIcon()%>"></i>
-                    <button class="btn btn-mini btn-primary" name="editEmail"><i class="fa fa-pencil"></i></button>
-                </td>
-            </tr>
-
             @RawCell("Segment Type", "<%- SegmentType %>")
 
 			<tr id="with-broker">
@@ -111,11 +101,6 @@
                 <td><span class="cci-mark"></span>
                     <button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button></td>
             </tr>
-
-            @RawCellWithButtonNear("Trust Pilot status", "<%- TrustPilotStatusDescription %>", "TrustPilotStatusUpdate")
-
-            @RawCell("Mobile Phone #", "<%- MobilePhone %>")
-            @RawCell("Daytime Phone #", "<%- DaytimePhone %>")
 
             <tr>
                 <td>Ref Source</td>
@@ -139,6 +124,19 @@
                 </td>
             </tr>
             @RawCell("Active Campaigns:", "<%- ActiveCampaign %>")
+            @RawCellWithButtonNear("Trust Pilot status", "<%- TrustPilotStatusDescription %>", "TrustPilotStatusUpdate")
+            @RawCell("Mobile Phone #", "<%- MobilePhone %>")
+            @RawCell("Daytime Phone #", "<%- DaytimePhone %>")
+
+            <tr>
+                <td>E-mail 
+					<i data-title="<%- EmailState %>" class="tltp <%=getIcon()%>"></i>
+                </td>
+                <td><%- Email.length <= 20 ? Email : Email.substring(0,17)+'...' %>
+					<i data-title="<%- Email %>" class="tltp-left <%=getIcon()%>"></i>
+                    <button class="btn btn-mini btn-primary" name="editEmail"><i class="fa fa-pencil"></i></button>
+                </td>
+            </tr>
         </tbody>
     </table>
 </script>
