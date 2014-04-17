@@ -6,8 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[RptExecutive] 
-	(@DateStart DATETIME,
-@DateEnd DATETIME)
+	(@DateStart DATETIME, @DateEnd DATETIME)
 AS
 BEGIN
 	SELECT
@@ -630,6 +629,56 @@ BEGIN
 		@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose
 
 	------------------------------------------------------------------------------
+	
+	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
+	  	VALUES ('Loans by customer status without CCI mark', 'Customers', 'Loan Amount', 'Balance', '', '', 'total')
+
+	------------------------------------------------------------------------------
+	
+	INSERT INTO #out (Caption, Number, Amount, Principal)
+	SELECT
+	 	S.Name,
+		count(1) Customers,
+		sum(L.LoanAmount) LoanAmount,
+		sum(L.Balance) Balance
+	FROM Customer C,
+		 CustomerStatuses S,
+		 Loan L
+	WHERE 
+		C.IsTest = 0 AND 
+		L.CustomerId = c.Id AND
+		L.Status != 'PaidOff' and
+		C.CollectionStatus = S.Id AND
+		C.CciMark = 0
+	GROUP BY S.Name
+	ORDER BY sum(L.LoanAmount) DESC	
+	
+	------------------------------------------------------------------------------
+	
+	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
+		VALUES ('Loans by customer status with CCI mark', 'Customers', 'Loan Amount', 'Balance', '', '', 'total')
+
+	------------------------------------------------------------------------------
+	
+	INSERT INTO #out (Caption, Number, Amount, Principal)
+	SELECT 
+	    S.Name,
+		count(1) Customers,
+		sum(L.LoanAmount) LoanAmount,
+		sum(L.Balance) Balance
+	FROM Customer C,
+		 CustomerStatuses S,
+		 Loan L
+	WHERE 
+		C.IsTest = 0 AND 
+		L.CustomerId = c.Id AND
+		L.Status != 'PaidOff' and
+		C.CollectionStatus = S.Id AND
+		C.CciMark = 1
+	GROUP BY S.Name
+	ORDER BY sum(L.LoanAmount) DESC	
+	
+	------------------------------------------------------------------------------	
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
