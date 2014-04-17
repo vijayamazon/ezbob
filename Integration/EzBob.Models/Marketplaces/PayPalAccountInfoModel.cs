@@ -15,8 +15,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
             FullName = pi.FullName;
             DateOfBirth = pi.DateOfBirth.HasValue ? pi.DateOfBirth.ToString() : "-";
             Email = pi.EMail;
-            Phone = Phone;
+            Phone = pi.Phone;
             BuisnessName = pi.BusinessName;
+	        Street1 = pi.Street1;
             Street2 = pi.Street2;
             City = pi.City;
             State = pi.State;
