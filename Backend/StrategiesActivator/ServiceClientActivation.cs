@@ -167,12 +167,12 @@
 		private void CashTransferred() {
 			int customerId;
 			decimal amount;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
-				m_oLog.Msg("Usage: CashTransferred <CustomerId> <amount>");
+			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
+				m_oLog.Msg("Usage: CashTransferred <CustomerId> <amount> <LoanRefNumber>");
 				return;
 			}
 
-			serviceClient.CashTransferred(customerId, amount);
+			serviceClient.CashTransferred(customerId, amount, args[3]);
 		}
 
 		[Activation]
