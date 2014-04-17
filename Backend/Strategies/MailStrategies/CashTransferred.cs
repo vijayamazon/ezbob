@@ -7,8 +7,9 @@
 	public class CashTransferred : ABrokerMailToo {
 		#region constructor
 
-		public CashTransferred(int customerId, decimal amount, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog, true) {
+		public CashTransferred(int customerId, decimal amount, string loanRefNum, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog, true) {
 			this.amount = amount;
+			this.loanRefNum = loanRefNum;
 			toTrustPilot = true;
 		} // constructor
 
@@ -21,7 +22,9 @@
 		protected override void SetTemplateAndVariables() {
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
-				{"Amount", amount.ToString(CultureInfo.InvariantCulture)}
+				{"Amount", amount.ToString(CultureInfo.InvariantCulture)},
+				{"EMAIL", CustomerData.Mail},
+				{"LOANREFNUM", loanRefNum}
 			};
 
 			if (CustomerData.NumOfLoans == 1)
@@ -37,5 +40,6 @@
 		#endregion method SetTemplateAndVariables
 
 		private readonly decimal amount;
+		private readonly string loanRefNum;
 	} // class CashTransferred
 } // namespace

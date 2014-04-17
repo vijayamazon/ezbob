@@ -80,7 +80,7 @@ namespace EzBobTest
 		[Test]
 		public void CashTransferred()
 		{
-			var s = new CashTransferred(3060, 2500, m_oDB, m_oLog);
+			var s = new CashTransferred(21340, 2500, "01971847001", m_oDB, m_oLog);
 			s.Execute();
 		}
 

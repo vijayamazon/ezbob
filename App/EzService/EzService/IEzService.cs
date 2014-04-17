@@ -145,7 +145,7 @@
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount);
 
 		[OperationContract]
-		ActionMetaData CashTransferred(int customerId, decimal amount);
+		ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum);
 
 		[OperationContract]
 		ActionMetaData EmailUnderReview(int customerId);

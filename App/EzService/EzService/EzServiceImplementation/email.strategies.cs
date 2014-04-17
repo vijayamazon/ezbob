@@ -12,8 +12,8 @@
 			return Execute(customerId, userId, typeof(ApprovedUser), customerId, loanAmount);
 		} // ApprovedUser
 
-		public ActionMetaData CashTransferred(int customerId, decimal amount) {
-			return Execute(customerId, null, typeof(CashTransferred), customerId, amount);
+		public ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum) {
+			return Execute(customerId, null, typeof(CashTransferred), customerId, amount, loanRefNum);
 		} // CashTransferred
 
 		public ActionMetaData EmailUnderReview(int customerId) {
