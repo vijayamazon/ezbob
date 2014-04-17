@@ -1,4 +1,5 @@
-﻿namespace StrategiesActivator {
+﻿namespace StrategiesActivator
+{
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
@@ -13,12 +14,14 @@
 	using Newtonsoft.Json;
 	using log4net;
 
-	public class ServiceClientActivation {
+	public class ServiceClientActivation
+	{
 		private readonly string[] args;
 		private readonly EzServiceClient serviceClient;
 		private readonly EzServiceAdminClient adminClient;
 
-		public ServiceClientActivation(string[] args) {
+		public ServiceClientActivation(string[] args)
+		{
 			m_oLog = new ConsoleLog(new SafeILog(LogManager.GetLogger(typeof(ServiceClientActivation))));
 			m_oLog.NotifyStart();
 
@@ -26,7 +29,8 @@
 
 			string sInstanceName = args[0].ToLower();
 
-			if (sInstanceName.ToLower() == "list") {
+			if (sInstanceName.ToLower() == "list")
+			{
 				ListSupported();
 				m_oLog.NotifyStop();
 				throw new ExitException();
@@ -39,11 +43,13 @@
 
 			Configuration cfg = null;
 
-			if (m_oMethods.ContainsKey(sInstanceName)) {
+			if (m_oMethods.ContainsKey(sInstanceName))
+			{
 				cfg = new DefaultConfiguration(System.Environment.MachineName, db, m_oLog);
 				this.args = args;
 			}
-			else {
+			else
+			{
 				this.args = new string[args.Length - 1];
 				Array.Copy(args, 1, this.args, 0, args.Length - 1);
 
@@ -68,14 +74,16 @@
 			);
 		} // constructor
 
-		public void Execute() {
+		public void Execute()
+		{
 			string strategyName = args[0];
 
 			string sKey = strategyName.ToLower();
 
 			if (m_oMethods.ContainsKey(sKey))
 				m_oMethods[sKey].Invoke(this, new object[] { });
-			else {
+			else
+			{
 				m_oLog.Msg("Strategy {0} is not supported", strategyName);
 				ListSupported();
 			} // if
@@ -83,16 +91,19 @@
 			m_oLog.NotifyStop();
 		} // Execute
 
-		private void ListSupported() {
+		private void ListSupported()
+		{
 			m_oLog.Msg("Supported strategies are (case insensitive):\n\t{0}", string.Join("\n\t", m_oMethods.Keys));
 		} // ListSupported
 
-		private void InitMethods() {
+		private void InitMethods()
+		{
 			MethodInfo[] aryMethods = GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
 
 			m_oMethods = new SortedDictionary<string, MethodInfo>();
 
-			foreach (MethodInfo mi in aryMethods) {
+			foreach (MethodInfo mi in aryMethods)
+			{
 				IEnumerable<ActivationAttribute> oAttrList = mi.GetCustomAttributes<ActivationAttribute>();
 
 				if (oAttrList.Any())
@@ -108,9 +119,11 @@
 		// ReSharper disable UnusedMember.Local
 
 		[Activation]
-		private void Greeting() {
+		private void Greeting()
+		{
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: Greeting <CustomerId> <ConfirmEmailAddress>");
 				return;
 			}
@@ -119,16 +132,19 @@
 		}
 
 		[Activation]
-		private void GetWizardConfigs() {
+		private void GetWizardConfigs()
+		{
 			serviceClient.GetWizardConfigs();
 		}
 
 		[Activation]
-		private void QuickOffer() {
+		private void QuickOffer()
+		{
 			int customerId;
 			bool bSaveOfferToDB;
 
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out bSaveOfferToDB)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out bSaveOfferToDB))
+			{
 				m_oLog.Msg("Usage: QuickOffer <CustomerId> <Save offer to DB>");
 				return;
 			}
@@ -137,11 +153,13 @@
 		} // QuickOffer
 
 		[Activation]
-		private void QuickOfferWithPrerequisites() {
+		private void QuickOfferWithPrerequisites()
+		{
 			int customerId;
 			bool bSaveOfferToDB;
 
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out bSaveOfferToDB)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out bSaveOfferToDB))
+			{
 				m_oLog.Msg("Usage: QuickOfferWithPrerequisites <CustomerId> <Save offer to DB>");
 				return;
 			}
@@ -150,12 +168,14 @@
 		} // QuickOffer
 
 		[Activation]
-		private void ApprovedUser() {
+		private void ApprovedUser()
+		{
 			int underwriterId;
 			int customerId;
 			decimal loanAmount;
 
-			if (args.Length != 4 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId) || !decimal.TryParse(args[3], out loanAmount)) {
+			if (args.Length != 4 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId) || !decimal.TryParse(args[3], out loanAmount))
+			{
 				m_oLog.Msg("Usage: ApprovedUser <Underwriter ID> <CustomerId> <loanAmount>");
 				return;
 			}
@@ -164,22 +184,26 @@
 		}
 
 		[Activation]
-		private void CashTransferred() {
+		private void CashTransferred()
+		{
 			int customerId;
 			decimal amount;
-			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
-				m_oLog.Msg("Usage: CashTransferred <CustomerId> <amount> <LoanRefNumber>");
+			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount))
+			{
+				m_oLog.Msg("Usage: CashTransferred <CustomerId> <amount> <loanRefNum>");
 				return;
 			}
-
-			serviceClient.CashTransferred(customerId, amount, args[3]);
+			string loanRefNum = args[3];
+			serviceClient.CashTransferred(customerId, amount, loanRefNum);
 		}
 
 		[Activation]
-		private void EmailRolloverAdded() {
+		private void EmailRolloverAdded()
+		{
 			int customerId;
 			decimal amount;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount))
+			{
 				m_oLog.Msg("Usage: EmailRolloverAdded <CustomerId> <amount>");
 				return;
 			}
@@ -188,9 +212,11 @@
 		}
 
 		[Activation]
-		private void EmailUnderReview() {
+		private void EmailUnderReview()
+		{
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: EmailUnderReview <CustomerId>");
 				return;
 			}
@@ -199,9 +225,11 @@
 		}
 
 		[Activation]
-		private void Escalated() {
+		private void Escalated()
+		{
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: Escalated <CustomerId>");
 				return;
 			}
@@ -210,9 +238,11 @@
 		}
 
 		[Activation]
-		private void GetCashFailed() {
+		private void GetCashFailed()
+		{
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: GetCashFailed <CustomerId>");
 				return;
 			}
@@ -221,9 +251,11 @@
 		}
 
 		[Activation]
-		private void LoanFullyPaid() {
+		private void LoanFullyPaid()
+		{
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: LoanFullyPaid <CustomerId> <loanRefNum>");
 				return;
 			}
@@ -232,10 +264,12 @@
 		}
 
 		[Activation]
-		private void MoreAmlAndBwaInformation() {
+		private void MoreAmlAndBwaInformation()
+		{
 			int underwriterId;
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId))
+			{
 				m_oLog.Msg("Usage: MoreAmlAndBwaInformation <Underwriter ID> <CustomerId>");
 				return;
 			}
@@ -244,10 +278,12 @@
 		}
 
 		[Activation]
-		private void MoreAmlInformation() {
+		private void MoreAmlInformation()
+		{
 			int underwriterId;
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId))
+			{
 				m_oLog.Msg("Usage: MoreAmlInformation <Underwriter ID> <CustomerId>");
 				return;
 			}
@@ -255,10 +291,12 @@
 		}
 
 		[Activation]
-		private void MoreBwaInformation() {
+		private void MoreBwaInformation()
+		{
 			int underwriterId;
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId))
+			{
 				m_oLog.Msg("Usage: MoreBwaInformation <Underwriter ID> <CustomerId>");
 				return;
 			}
@@ -267,9 +305,11 @@
 		}
 
 		[Activation]
-		private void PasswordChanged() {
+		private void PasswordChanged()
+		{
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: PasswordChanged <CustomerId> <password>");
 				return;
 			}
@@ -278,9 +318,11 @@
 		}
 
 		[Activation]
-		private void PasswordRestored() {
+		private void PasswordRestored()
+		{
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: PasswordRestored <CustomerId> <password>");
 				return;
 			}
@@ -289,10 +331,12 @@
 		}
 
 		[Activation]
-		private void PayEarly() {
+		private void PayEarly()
+		{
 			int customerId;
 			decimal amount;
-			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
+			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount))
+			{
 				m_oLog.Msg("Usage: PayEarly <CustomerId> <amount> <loanRefNumber>");
 				return;
 			}
@@ -301,9 +345,11 @@
 		}
 
 		[Activation]
-		private void PayPointAddedByUnderwriter() {
+		private void PayPointAddedByUnderwriter()
+		{
 			int customerId, underwriterId;
-			if (args.Length != 5 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[4], out underwriterId)) {
+			if (args.Length != 5 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[4], out underwriterId))
+			{
 				m_oLog.Msg("Usage: PayPointAddedByUnderwriter <CustomerId> <cardno> <underwriterName> <underwriterId>");
 				return;
 			}
@@ -312,10 +358,12 @@
 		}
 
 		[Activation]
-		private void PayPointNameValidationFailed() {
+		private void PayPointNameValidationFailed()
+		{
 			int underwriterId;
 			int customerId;
-			if (args.Length != 4 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+			if (args.Length != 4 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId))
+			{
 				m_oLog.Msg("Usage: PayPointNameValidationFailed <Underwriter ID> <CustomerId> <cardHodlerName>");
 				return;
 			}
@@ -324,10 +372,12 @@
 		}
 
 		[Activation]
-		private void RejectUser() {
+		private void RejectUser()
+		{
 			int underwriterId;
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId))
+			{
 				m_oLog.Msg("Usage: RejectUser <Underwriter ID> <CustomerId>");
 				return;
 			}
@@ -336,9 +386,11 @@
 		}
 
 		[Activation]
-		private void RenewEbayToken() {
+		private void RenewEbayToken()
+		{
 			int customerId;
-			if (args.Length != 4 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 4 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: RenewEbayToken <CustomerId> <marketplaceName> <eBayAddress>");
 				return;
 			}
@@ -347,9 +399,11 @@
 		}
 
 		[Activation]
-		private void RequestCashWithoutTakenLoan() {
+		private void RequestCashWithoutTakenLoan()
+		{
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: RequestCashWithoutTakenLoan <CustomerId>");
 				return;
 			}
@@ -358,9 +412,11 @@
 		}
 
 		[Activation]
-		private void SendEmailVerification() {
+		private void SendEmailVerification()
+		{
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: SendEmailVerification <CustomerId> <address>");
 				return;
 			}
@@ -369,9 +425,11 @@
 		}
 
 		[Activation]
-		private void ThreeInvalidAttempts() {
+		private void ThreeInvalidAttempts()
+		{
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: ThreeInvalidAttempts <CustomerId> <password>");
 				return;
 			}
@@ -380,9 +438,11 @@
 		}
 
 		[Activation]
-		private void TransferCashFailed() {
+		private void TransferCashFailed()
+		{
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
+			{
 				m_oLog.Msg("Usage: TransferCashFailed <CustomerId>");
 				return;
 			}
@@ -391,9 +451,11 @@
 		}
 
 		[Activation]
-		private void CaisGenerate() {
+		private void CaisGenerate()
+		{
 			int underwriterId;
-			if (args.Length != 2 || !int.TryParse(args[1], out underwriterId)) {
+			if (args.Length != 2 || !int.TryParse(args[1], out underwriterId))
+			{
 				m_oLog.Msg("Usage: CaisGenerate <underwriterId>");
 				return;
 			}
@@ -402,10 +464,12 @@
 		}
 
 		[Activation]
-		private void CaisUpdate() {
+		private void CaisUpdate()
+		{
 			int underwriterId;
 			int caisId;
-			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out caisId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out caisId))
+			{
 				m_oLog.Msg("Usage: CaisUpdate <Underwriter ID> <caisId>");
 				return;
 			}
@@ -414,8 +478,10 @@
 		}
 
 		[Activation]
-		private void FirstOfMonthStatusNotifier() {
-			if (args.Length != 1) {
+		private void FirstOfMonthStatusNotifier()
+		{
+			if (args.Length != 1)
+			{
 				m_oLog.Msg("Usage: FirstOfMonthStatusNotifier");
 				return;
 			}
@@ -424,11 +490,13 @@
 		}
 
 		[Activation]
-		private void FraudChecker() {
+		private void FraudChecker()
+		{
 			int customerId;
 			FraudMode mode;
 
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !FraudMode.TryParse(args[2], true, out mode)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !FraudMode.TryParse(args[2], true, out mode))
+			{
 				m_oLog.Msg("Usage: FraudChecker <CustomerId> <Fraud mode>");
 				m_oLog.Msg("Fraud mode values: {0}", string.Join(", ", Enum.GetValues(typeof(FraudMode))));
 				return;
@@ -438,8 +506,10 @@
 		}
 
 		[Activation]
-		private void LateBy14Days() {
-			if (args.Length != 1) {
+		private void LateBy14Days()
+		{
+			if (args.Length != 1)
+			{
 				m_oLog.Msg("Usage: LateBy14Days");
 				return;
 			}
@@ -448,8 +518,10 @@
 		}
 
 		[Activation]
-		private void PayPointCharger() {
-			if (args.Length != 1) {
+		private void PayPointCharger()
+		{
+			if (args.Length != 1)
+			{
 				m_oLog.Msg("Usage: PayPointCharger");
 				return;
 			}
@@ -458,8 +530,10 @@
 		}
 
 		[Activation]
-		private void SetLateLoanStatus() {
-			if (args.Length != 1) {
+		private void SetLateLoanStatus()
+		{
+			if (args.Length != 1)
+			{
 				m_oLog.Msg("Usage: SetLateLoanStatus");
 				return;
 			}
@@ -468,10 +542,12 @@
 		}
 
 		[Activation]
-		private void CustomerMarketPlaceAdded() {
+		private void CustomerMarketPlaceAdded()
+		{
 			int customerId, marketplaceId;
 			bool bUpdateWizardStep;
-			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out marketplaceId) || !bool.TryParse(args[3], out bUpdateWizardStep)) {
+			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out marketplaceId) || !bool.TryParse(args[3], out bUpdateWizardStep))
+			{
 				m_oLog.Msg("Usage: CustomerMarketPlaceAdded <CustomerId> <CustomerMarketplaceId> <Update customer wizard step>");
 				m_oLog.Msg("<Update customer wizard step>: is boolean and means whether to set customer wizard step to Marketplace or not. If wizard step is 'TheLastOne' it is never changed.");
 				return;
@@ -481,8 +557,10 @@
 		}
 
 		[Activation]
-		private void UpdateTransactionStatus() {
-			if (args.Length != 1) {
+		private void UpdateTransactionStatus()
+		{
+			if (args.Length != 1)
+			{
 				m_oLog.Msg("Usage: UpdateTransactionStatus");
 				return;
 			}
@@ -491,8 +569,10 @@
 		}
 
 		[Activation]
-		private void XDaysDue() {
-			if (args.Length != 1) {
+		private void XDaysDue()
+		{
+			if (args.Length != 1)
+			{
 				m_oLog.Msg("Usage: XDaysDue");
 				return;
 			}
@@ -501,26 +581,30 @@
 		}
 
 		[Activation]
-		private void MainStrategy() {
+		private void MainStrategy()
+		{
 			int underwriterId;
 			int customerId, avoidAutoDescison;
 			NewCreditLineOption newCreditLineOption;
 
-			switch (args.Length) {
-			case 5:
-				if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison)) {
-					serviceClient.MainStrategy1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
-					return;
-				}
-				break;
+			switch (args.Length)
+			{
+				case 5:
+					if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison))
+					{
+						serviceClient.MainStrategy1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
+						return;
+					}
+					break;
 
-			case 6:
-				bool isUnderwriterForced;
-				if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison) && bool.TryParse(args[5], out isUnderwriterForced)) {
-					serviceClient.MainStrategy2(underwriterId, customerId, newCreditLineOption, avoidAutoDescison, isUnderwriterForced);
-					return;
-				}
-				break;
+				case 6:
+					bool isUnderwriterForced;
+					if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison) && bool.TryParse(args[5], out isUnderwriterForced))
+					{
+						serviceClient.MainStrategy2(underwriterId, customerId, newCreditLineOption, avoidAutoDescison, isUnderwriterForced);
+						return;
+					}
+					break;
 			} // switch
 
 			m_oLog.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
@@ -529,11 +613,13 @@
 		}
 
 		[Activation]
-		private void MainStrategySync() {
+		private void MainStrategySync()
+		{
 			int underwriterId;
 			int customerId, avoidAutoDescison;
 			NewCreditLineOption newCreditLineOption;
-			if (args.Length == 5 && int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison)) {
+			if (args.Length == 5 && int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison))
+			{
 				serviceClient.MainStrategySync1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
 				return;
 			}
@@ -542,8 +628,10 @@
 		}
 
 		[Activation]
-		private void UpdateCurrencyRates() {
-			if (args.Length != 1) {
+		private void UpdateCurrencyRates()
+		{
+			if (args.Length != 1)
+			{
 				m_oLog.Msg("Usage: UpdateCurrencyRates");
 				return;
 			}
@@ -552,7 +640,8 @@
 		}
 
 		[Activation]
-		private void CheckExperianCompany() {
+		private void CheckExperianCompany()
+		{
 			int customerId;
 			bool forceCheck;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out forceCheck))
@@ -565,7 +654,8 @@
 		}
 
 		[Activation]
-		private void CheckExperianConsumer() {
+		private void CheckExperianConsumer()
+		{
 			int customerId, directorId;
 			bool forceCheck;
 
@@ -579,15 +669,18 @@
 		}
 
 		[Activation]
-		private void AmlChecker() {
+		private void AmlChecker()
+		{
 			int customerId;
 
-			if (args.Length == 2 && int.TryParse(args[1], out customerId)) {
+			if (args.Length == 2 && int.TryParse(args[1], out customerId))
+			{
 				serviceClient.CheckAml(customerId);
 				return;
 			}
 
-			if (args.Length == 9 && int.TryParse(args[1], out customerId)) {
+			if (args.Length == 9 && int.TryParse(args[1], out customerId))
+			{
 				serviceClient.CheckAmlCustom(customerId, args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
 				return;
 			}
@@ -599,15 +692,18 @@
 		}
 
 		[Activation]
-		private void BwaChecker() {
+		private void BwaChecker()
+		{
 			int customerId;
 
-			if (args.Length == 2 && int.TryParse(args[1], out customerId)) {
+			if (args.Length == 2 && int.TryParse(args[1], out customerId))
+			{
 				serviceClient.CheckBwa(customerId);
 				return;
 			}
 
-			if (args.Length == 11 && int.TryParse(args[1], out customerId)) {
+			if (args.Length == 11 && int.TryParse(args[1], out customerId))
+			{
 				serviceClient.CheckBwaCustom(customerId, args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
 				return;
 			}
@@ -618,9 +714,11 @@
 		}
 
 		[Activation]
-		private void FinishWizard() {
+		private void FinishWizard()
+		{
 			int customerId, underwriterId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out underwriterId)) {
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out underwriterId))
+			{
 				m_oLog.Msg("Usage: FinishWizard <CustomerId> <UnderwriterId>");
 				return;
 			}
@@ -633,8 +731,10 @@
 		}
 
 		[Activation]
-		private void GenerateMobileCode() {
-			if (args.Length != 2) {
+		private void GenerateMobileCode()
+		{
+			if (args.Length != 2)
+			{
 				m_oLog.Msg("Usage: GenerateMobileCode <phone number>");
 				return;
 			}
@@ -643,15 +743,18 @@
 		}
 
 		[Activation]
-		private void GetSpResultTable() {
-			if (args.Length < 2 || args.Length % 2 != 0) {
+		private void GetSpResultTable()
+		{
+			if (args.Length < 2 || args.Length % 2 != 0)
+			{
 				m_oLog.Msg("Usage: GetSpResultTable <spName> <parameters - should come in couples>");
 				return;
 			}
 
 			string spName = args[1];
 			var parameterList = new List<string>();
-			for (int i = 2; i < args.Length; i++) {
+			for (int i = 2; i < args.Length; i++)
+			{
 				parameterList.Add(args[i]);
 			}
 			string[] parameterArgs = parameterList.ToArray();
@@ -687,8 +790,10 @@ crm:           CRM");
 		}
 
 		[Activation]
-		private void BrokerLoadCustomerList() {
-			if (args.Length != 2) {
+		private void BrokerLoadCustomerList()
+		{
+			if (args.Length != 2)
+			{
 				m_oLog.Msg("Usage: BrokerLoadCustomerList <Contact person email>");
 				return;
 			} // if
@@ -700,10 +805,12 @@ crm:           CRM");
 		} // BrokerLoadCustomerList
 
 		[Activation]
-		private void NotifySalesOnNewCustomer() {
+		private void NotifySalesOnNewCustomer()
+		{
 			int nCustomerID = 0;
 
-			if ((args.Length != 2) || !int.TryParse(args[1], out nCustomerID)) {
+			if ((args.Length != 2) || !int.TryParse(args[1], out nCustomerID))
+			{
 				m_oLog.Msg("Usage: NotifySalesOnNewCustomer <customer id>");
 				return;
 			} // if
@@ -712,7 +819,8 @@ crm:           CRM");
 		} // NotifySalesOnNewCustomer
 
 		[Activation]
-		private void ListActiveActions() {
+		private void ListActiveActions()
+		{
 			StringListActionResult res = adminClient.ListActiveActions();
 
 			m_oLog.Msg(
@@ -736,8 +844,10 @@ crm:           CRM");
 		} // ListActiveActions
 
 		[Activation]
-		private void TerminateAction() {
-			if (args.Length != 2) {
+		private void TerminateAction()
+		{
+			if (args.Length != 2)
+			{
 				m_oLog.Msg("Usage: TerminateAction <action guid>");
 
 				m_oLog.Msg(@"
