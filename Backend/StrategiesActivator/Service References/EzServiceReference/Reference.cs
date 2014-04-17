@@ -2534,10 +2534,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> ApprovedUserAsync(int userId, int customerId, decimal loanAmount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount);
+        StrategiesActivator.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, decimal amount);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, decimal amount, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData EmailUnderReview(int customerId);
@@ -3201,12 +3201,12 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.ApprovedUserAsync(userId, customerId, loanAmount);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount) {
-            return base.Channel.CashTransferred(customerId, amount);
+        public StrategiesActivator.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum) {
+            return base.Channel.CashTransferred(customerId, amount, loanRefNum);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, decimal amount) {
-            return base.Channel.CashTransferredAsync(customerId, amount);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, decimal amount, string loanRefNum) {
+            return base.Channel.CashTransferredAsync(customerId, amount, loanRefNum);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData EmailUnderReview(int customerId) {
