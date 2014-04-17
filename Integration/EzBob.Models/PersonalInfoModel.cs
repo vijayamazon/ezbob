@@ -10,9 +10,7 @@
 
 	public class PersonalInfoModel {
 		public int Id { get; set; }
-		public string RefNumber { get; set; }
 		public string Name { get; set; }
-		public string Medal { get; set; }
 		public string Email { get; set; }
 		public string EmailState { get; set; }
 		public string MobilePhone { get; set; }
@@ -69,10 +67,8 @@
 				DaytimePhone = customer.PersonalInfo.DaytimePhone;
 			} // if
 
-			Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 			Email = customer.Name;
 			EmailState = customer.EmailState.ToString();
-			RefNumber = customer.RefNumber;
 
 			if (customer.GreetingMailSentDate != null)
 				RegistrationDate = customer.GreetingMailSentDate.Value;
@@ -112,13 +108,13 @@
 			TrustPilotStatusDescription = customer.TrustPilotStatus.Description;
 			TrustPilotStatusName = customer.TrustPilotStatus.Name;
 
-			LastMainStrategyStatus = (string)session.CreateSQLQuery("EXEC GetLastMainStrategyStatus " + customer.Id).UniqueResult();
+			string lastMainStrategyStatus = (string)session.CreateSQLQuery("EXEC GetLastMainStrategyStatus " + customer.Id).UniqueResult();
 
-			IsMainStratFinished = LastMainStrategyStatus != "BG launch" && LastMainStrategyStatus != "In progress";
-			if (LastMainStrategyStatus == "Finished" || LastMainStrategyStatus == "Failed" ||
-			    LastMainStrategyStatus == "Terminated")
+			IsMainStratFinished = lastMainStrategyStatus != "BG launch" && lastMainStrategyStatus != "In progress";
+			if (lastMainStrategyStatus == "Finished" || lastMainStrategyStatus == "Failed" ||
+			    lastMainStrategyStatus == "Terminated")
 			{
-				StrategyError = string.Format("Error occured in main strategy, its status is:{0}", LastMainStrategyStatus);
+				StrategyError = string.Format("Error occured in main strategy, its status is:{0}", lastMainStrategyStatus);
 			}
 
 			BrokerID = customer.Broker == null ? 0 : customer.Broker.ID;
@@ -132,7 +128,6 @@
 
 		public string TrustPilotStatusDescription { get; set; }
 		public string TrustPilotStatusName { get; set; }
-		public string LastMainStrategyStatus { get; set; }
 
 		public int BrokerID { get; set; }
 		public string BrokerName { get; set; }

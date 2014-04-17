@@ -79,11 +79,13 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th colspan="2">Customer Details</th>
+                <th colspan="2">Customer Details
+                    <button id="MainStrategyHidden" class="hide btn btn-mini btn-primary">Run main strategy</button>
+                    <button id="FinishWizardHidden" class="hide btn btn-mini btn-primary">Finish wizard</button>
+                </th>
             </tr>
         </thead>
         <tbody>
-            @RawCell("Account #", "<%- RefNumber %>")
             @RawCell("Id", "<%- Id %>")
             @RawCell("Name", "<%- Name %>")
 
@@ -114,15 +116,6 @@
 
             @RawCell("Mobile Phone #", "<%- MobilePhone %>")
             @RawCell("Daytime Phone #", "<%- DaytimePhone %>")
-    
-            @RawCell("Cart", "<%- Medal %>")
-            <tr>
-		        <td width="10%">Last Main Strategy Status
-                    <button id="MainStrategyHidden" class="hide btn btn-mini btn-primary">Run main strategy</button>
-                    <button id="FinishWizardHidden" class="hide btn btn-mini btn-primary">Finish wizard</button>
-                </td>
-		        <td><%- LastMainStrategyStatus %></td>
-	        </tr>
 
             <tr>
                 <td>Ref Source</td>
