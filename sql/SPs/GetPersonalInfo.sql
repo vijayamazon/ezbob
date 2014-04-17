@@ -53,6 +53,7 @@ BEGIN
 		@CustomerStatusIsWarning AS CustomerStatusIsWarning,
 		@prevExperianConsumerScore AS PrevExperianConsumerScore,
 		IsOffline,
+		CAST(CASE WHEN BrokerID IS NULL THEN 0 ELSE 1 END AS BIT) AS IsBrokerCustomer,
 		Name AS CustomerEmail,
 		Company.TypeOfBusiness AS CompanyType,		
 		ExperianRefNum,

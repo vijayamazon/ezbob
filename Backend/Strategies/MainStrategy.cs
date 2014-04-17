@@ -666,8 +666,13 @@
 				enableAutomaticApproval = false;
 			} // if
 
-			if (isOffline ||
-				newCreditLineOption == NewCreditLineOption.SkipEverything ||
+			if (isOffline || isBrokerCustomer)
+			{
+				enableAutomaticReApproval = false;
+				enableAutomaticReRejection = false;
+			}
+
+			if (newCreditLineOption == NewCreditLineOption.SkipEverything ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
 				avoidAutomaticDecision == 1)
@@ -736,6 +741,7 @@
 		private bool customerStatusIsEnabled;
 		private bool customerStatusIsWarning;
 		private bool isOffline;
+		private bool isBrokerCustomer;
 		private string appEmail;
 		private string companyType;
 		private string experianRefNum;
@@ -831,6 +837,7 @@
 			customerStatusIsEnabled = results["CustomerStatusIsEnabled"];
 			customerStatusIsWarning = results["CustomerStatusIsWarning"];
 			isOffline = results["IsOffline"];
+			isBrokerCustomer = results["IsBrokerCustomer"];
 			appEmail = results["CustomerEmail"];
 			companyType = results["CompanyType"];
 			experianRefNum = results["ExperianRefNum"];
