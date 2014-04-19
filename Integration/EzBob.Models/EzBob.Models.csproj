@@ -34,6 +34,7 @@
     <Reference Include="Aspose.Words">
       <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
     </Reference>
+    <Reference Include="Ezbob.Backend.Models, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -56,6 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -125,7 +127,6 @@
     <Compile Include="Marketplaces\Builders\PayPointMarketplaceModelBuilder.cs" />
     <Compile Include="PayPalModelBuilder.cs" />
     <Compile Include="PayPointCardModel.cs" />
-    <Compile Include="PersonalInfoModel.cs" />
     <Compile Include="ProfileSummaryModel.cs" />
     <Compile Include="ProfileSummaryModelBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -235,7 +236,6 @@
       <Name>ZooplaLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

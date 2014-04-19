@@ -1017,6 +1017,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetLatestInterestRate", ReplyAction="http://tempuri.org/IEzService/GetLatestInterestRateResponse")]
         EzBob.Web.EzServiceReference.DecimalActionResult GetLatestInterestRate(int customerId, int underwriterId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanySeniority", ReplyAction="http://tempuri.org/IEzService/GetCompanySeniorityResponse")]
+        EzBob.Web.EzServiceReference.DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Models.Agreements.AgreementModel model, string refNumber, string name, EzBob.Models.Agreements.TemplateModel template, string path1, string path2);
         
@@ -1331,6 +1334,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.DecimalActionResult GetLatestInterestRate(int customerId, int underwriterId) {
             return base.Channel.GetLatestInterestRate(customerId, underwriterId);
+        }
+        
+        public EzBob.Web.EzServiceReference.DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId) {
+            return base.Channel.GetCompanySeniority(customerId, underwriterId);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Models.Agreements.AgreementModel model, string refNumber, string name, EzBob.Models.Agreements.TemplateModel template, string path1, string path2) {

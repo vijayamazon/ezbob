@@ -60,6 +60,34 @@
 		} // FirstDayOfWeek
 
 		#endregion method WeekStart
+
+		public static int GetFullYears(DateTime date)
+		{
+			int years = DateTime.UtcNow.Year - date.Year;
+			if (date > DateTime.UtcNow.AddYears(-years))
+			{
+				years--;
+			}
+
+			return years;
+		}
+
+		public static void GetFullYearsAndMonths(DateTime date, out int years, out int months)
+		{
+			years = GetFullYears(date);
+			months = DateTime.UtcNow.Month - date.Month;
+			if (months < 0)
+			{
+				months = 0;
+			}
+			else if (months > 0)
+			{
+				if (DateTime.UtcNow.Day < date.Day)
+				{
+					months--;
+				}
+			}
+		}
 	} // class MiscUtils
 
 	#endregion class MiscUtils

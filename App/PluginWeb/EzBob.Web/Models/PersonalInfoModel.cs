@@ -4,18 +4,24 @@
 	using System.Linq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.Utils;
+	using Infrastructure;
 	using NHibernate;
 	using CommonLib;
 	using StructureMap;
+	using Code;
 
 	public class PersonalInfoModel {
+
+		private readonly ServiceClient serviceClient;
+
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Email { get; set; }
 		public string EmailState { get; set; }
 		public string MobilePhone { get; set; }
 		public string DaytimePhone { get; set; }
-		public DateTime RegistrationDate { get; set; }
+		public string RegistrationDate { get; set; }
 		public List<string> IndustryFields { get; set; }
 		public string UserStatus { get; set; }
 		public string CreditResult { get; set; }
@@ -34,16 +40,25 @@
 		public string FraudHighlightCss { get; set; }
 		public string IsTestHighlightCss { get; set; }
 		public string AmlResult { get; set; }
-		
+		public int Age { get; set; }
+		public string Gender { get; set; }
+		public string FamilyStatus { get; set; }
+		public string ResidentalStatus { get; set; }
+		public string CompanyType { get; set; }
+		public string CompanySeniority { get; set; }
+		public string NumOfDirectorsAndShareholders { get; set; }
+		public string Website { get; set; }
 		public bool IsWarning { get; set; }
 		public string PromoCode { get; set; }
 		public string PromoCodeCss { get; set; }
 		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
 		public string ActiveCampaign { get; set; }
+
 		public PersonalInfoModel() {
 			IndustryFields = new List<string>();
 			StrategyError = "";
 			CompanyEmployeeCountInfo = null;
+			serviceClient = new ServiceClient();
 		} // constructor
 
 		public void InitFromCustomer(Customer customer, ISession session) {
@@ -57,6 +72,34 @@
 
 			FraudCheckStatus = customer.FraudStatus.Description();
 			FraudCheckStatusId = (int)customer.FraudStatus;
+
+			Website = "www." + customer.Name.Substring(customer.Name.IndexOf('@') + 1);
+
+			if (customer.PersonalInfo != null)
+			{
+				if (customer.PersonalInfo.DateOfBirth.HasValue)
+				{
+					Age = MiscUtils.GetFullYears(customer.PersonalInfo.DateOfBirth.Value);
+
+					Gender = customer.PersonalInfo.Gender.ToString();
+					FamilyStatus = customer.PersonalInfo.MaritalStatus.ToString();
+					ResidentalStatus = customer.PersonalInfo.ResidentialStatus;
+				}
+			}
+
+			if (customer.Company != null)
+			{
+				CompanyType = customer.Company.TypeOfBusiness.ToString();
+			}
+
+			NumOfDirectorsAndShareholders = "2/5"; // where is the shareholder data?
+
+			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+			DateTime companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
+			int companySeniorityYears, companySeniorityMonths;
+			MiscUtils.GetFullYearsAndMonths(companySeniority, out companySeniorityYears, out companySeniorityMonths);
+			
+			CompanySeniority = string.Format("{0}Y{1}M", companySeniorityYears, companySeniorityMonths);
 
 			if (customer.FraudStatus != FraudStatus.Ok)
 			{
@@ -84,7 +127,14 @@
 			EmailState = customer.EmailState.ToString();
 
 			if (customer.GreetingMailSentDate != null)
-				RegistrationDate = customer.GreetingMailSentDate.Value;
+			{
+				DateTime registrationDate = customer.GreetingMailSentDate.Value;
+				int registrationTimeYears, registrationTimeMonths;
+				MiscUtils.GetFullYearsAndMonths(registrationDate, out registrationTimeYears, out registrationTimeMonths);
+				
+				RegistrationDate = customer.GreetingMailSentDate.Value.ToString("MMM dd, yyyy") +
+				                   string.Format(" [{0}Y{1}M]", registrationTimeYears, registrationTimeMonths);
+			}
 
 			IndustryFields.Add(string.Empty);
 			UserStatus = customer.Status.ToString();

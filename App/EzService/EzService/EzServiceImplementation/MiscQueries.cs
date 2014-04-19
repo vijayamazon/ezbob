@@ -2,7 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
-	using EzService.ActionResults;
+	using ActionResults;
 	using EzBob.Backend.Strategies;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using Ezbob.Database;
@@ -171,6 +171,19 @@
 			{
 				MetaData = result,
 				Value = instance.LatestInterestRate
+			};
+		}
+
+		public DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId)
+		{
+			GetCompanySeniority instance;
+
+			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
+
+			return new DateTimeActionResult
+			{
+				MetaData = result,
+				Value = instance.CompanyIncorporationDate.HasValue ? instance.CompanyIncorporationDate.Value : DateTime.UtcNow
 			};
 		}
 	} // class EzServiceImplementation

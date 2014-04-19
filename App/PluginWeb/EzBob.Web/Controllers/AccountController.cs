@@ -7,7 +7,6 @@ namespace EzBob.Web.Controllers {
 	using System.Web;
 	using System.Web.Mvc;
 	using System.Web.Security;
-	using ApplicationMng.Repository;
 	using Areas.Customer.Controllers.Exceptions;
 	using ConfigManager;
 	using DbConstants;

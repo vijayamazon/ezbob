@@ -348,6 +348,9 @@
 
 		[OperationContract]
 		DecimalActionResult GetLatestInterestRate(int customerId, int underwriterId);
+
+		[OperationContract]
+		DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
 	} // interface IEzService
 } // namespace EzService
 

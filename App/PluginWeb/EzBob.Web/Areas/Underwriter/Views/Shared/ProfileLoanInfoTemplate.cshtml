@@ -117,6 +117,14 @@
 
             @RawCell("Id", "<%- Id %>")
             @RawCell("Name", "<%- Name %>")
+            @RawCell("Age", "<%- Age %>")
+            @RawCell("Gender", "<%- Gender %>")
+            @RawCell("Family Status", "<%- FamilyStatus %>")
+            @RawCell("Residental Status", "<%- ResidentalStatus %>")
+            @RawCell("Company Type", "<%- CompanyType %>")
+            @RawCell("Company Seniority", "<%- CompanySeniority %>")
+            @RawCell("# Directors\\# Shareholders", "<%- NumOfDirectorsAndShareholders %>")
+            @RawCell("Website", "<%- Website %>")
 
             @RawCell("Segment Type", "<%- SegmentType %>")
 
@@ -134,7 +142,7 @@
 
             @RawCell("A/B Testing", "<%- ABTesting || '-' %>")
             @RawCell("User score", "<%- CreditScore %>")
-            @RawCell("Reg date", "<%- EzBob.formatDate(RegistrationDate) %>")
+            @RawCell("Reg date", "<%- RegistrationDate %>")
             @RawCell("User status", "<%- UserStatus %>")
             @RawCellWithButtonNear("Manual Decision:", "<%= IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
             

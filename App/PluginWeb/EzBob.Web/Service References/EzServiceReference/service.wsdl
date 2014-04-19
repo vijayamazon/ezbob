@@ -254,6 +254,12 @@
   <wsdl:message name="IEzService_GetLatestInterestRate_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetLatestInterestRateResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanySeniority_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanySeniority" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanySeniority_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanySeniorityResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
@@ -756,6 +762,10 @@
     <wsdl:operation name="GetLatestInterestRate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetLatestInterestRate" message="tns:IEzService_GetLatestInterestRate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetLatestInterestRateResponse" message="tns:IEzService_GetLatestInterestRate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanySeniority">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanySeniority" message="tns:IEzService_GetCompanySeniority_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanySeniorityResponse" message="tns:IEzService_GetCompanySeniority_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
@@ -1277,6 +1287,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetLatestInterestRate">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetLatestInterestRate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanySeniority">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanySeniority" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
