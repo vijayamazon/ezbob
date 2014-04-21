@@ -12,19 +12,9 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         if @model.get('BrokerID')
             @$el.find('#with-broker').addClass 'with-broker'
 
-        @setCciMark()
         @$el.find(".tltp").tooltip()
         @$el.find(".tltp-left").tooltip({placement: "left"})
-
-    setCciMark: ->
-        oSpan = @$el.find '.cci-mark'
-
-        if @model.get 'CciMark'
-            oSpan.text('on').closest('td').addClass 'red_cell'
-        else
-            oSpan.text('off').closest('td').removeClass 'red_cell'
-    # end of setCciMark
-
+        
     toggleCciMark: ->
         id = @model.get 'Id'
 
@@ -37,7 +27,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                 EzBob.App.trigger 'error', result.error
             else
                 @model.set('CciMark', result.mark)
-                @setCciMark()
+                @model.fetch()
         ).always( ->
             UnBlockUi()
         )
@@ -102,9 +92,9 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
     changeDisabledState: ->
         collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel( 
             customerId : @model.get ('Id')
-            currentStatus : @model.get('Disabled')
+            currentStatus : @model.get('CustomerStatusId')
             )
-        prevStatus = @model.get('Disabled')
+        prevStatus = @model.get('CustomerStatusId')
         customerId = @model.get('Id')
         BlockUi "on"
         xhr = collectionStatusModel.fetch();
@@ -120,8 +110,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                 xhr.done (result) =>    
                     BlockUi "on"        
                     isWarning = result
-                    that.model.set 'Disabled', newStatus
-                    that.model.set 'IsWarning', isWarning
+                    that.model.fetch()
                     xhr2 = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/LogStatusChange", {newStatus: newStatus, prevStatus: prevStatus, customerId: customerId}
                     xhr2.done () =>
                         BlockUi "off"
@@ -159,18 +148,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         d.render()
         return
 
-    disablingChanged: ->
-        disabled = @$el.find("select[name=\"disabling\"] option:selected").val()
-        id = @model.get("Id")
-        that = this
-        @model.set "Disabled", disabled
-        $.post(window.gRootPath + "Underwriter/ApplicationInfo/ChangeDisabled",
-            id: id
-            disabled: disabled
-        ).done ->
-            that.trigger "DisableChange", id
-
-
     editEmail: ->
         view = new EzBob.EmailEditView(model: @model)
         EzBob.App.jqmodal.show view
@@ -183,9 +160,7 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
     idAttribute: "Id"
     urlRoot: window.gRootPath + "Underwriter/CustomerInfo/Index"
     initialize: ->
-        @on "change:Disabled", @changeDisabled, this
         @on "change:FraudCheckStatusId", @changeFraudCheckStatus, this
-        @changeDisabled()
         @changeFraudCheckStatus()
         if (@StatusesArr == undefined)
             @statuses = EzBob.Underwriter.StaticData.CollectionStatuses
@@ -193,19 +168,7 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
         @StatusesArr = {}
         for status in @statuses.models
             @StatusesArr[status.get('Id')] = status.get('Name')
-
-    changeDisabled: (silent = false)->
-        disabledText = ""
-        disabled = @get("Disabled")
-        if (disabled == undefined)
-            return
-
-        disabledText = @StatusesArr[disabled]
-        if (disabledText == undefined)
-            disabledText = "Enabled"
-
-        @set {"DisabledText": disabledText}, {silent:true}
-
+            
     changeFraudCheckStatus: ->
         fraud = @get("FraudCheckStatusId")
         fraudCss = ""

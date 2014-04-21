@@ -332,7 +332,6 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             
             @personalInfoModel.set {Id: id}, {silent: true}
             @personalInfoModel.set fullModel.get("PersonalInfoModel"), silent: true
-            @personalInfoModel.changeDisabled(true)
             @changeDecisionButtonsState @personalInfoModel.get("Editable")
             @personalInfoModel.trigger "sync"
 
@@ -424,7 +423,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         @$el.hide()
 
     changeDecisionButtonsState: (isHideAll)->
-        disabled = @personalInfoModel.get("Disabled") is 1 #disabled
+        disabled = !@personalInfoModel.get("IsCustomerInEnabledStatus")
         creditResult = @personalInfoModel.get("CreditResult")
        
         @$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").toggleClass "disabled", disabled

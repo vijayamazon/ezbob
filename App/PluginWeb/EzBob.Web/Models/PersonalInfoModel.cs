@@ -26,7 +26,8 @@
 		public string UserStatus { get; set; }
 		public string CreditResult { get; set; }
 		public double CreditScore { get; set; }
-		public int Disabled { get; set; }
+		public int CustomerStatusId { get; set; }
+		public string CustomerStatusName { get; set; }
 		public bool Editable { get; set; }
 		public List<string> TopCategories { get; set; }
 		public decimal? WebSiteTurnOver { get; set; }
@@ -37,8 +38,12 @@
 		public string StrategyError { get; set; }
 		public string FraudCheckStatus { get; set; }
 		public int FraudCheckStatusId { get; set; }
-		public string FraudHighlightCss { get; set; }
-		public string IsTestHighlightCss { get; set; }
+		public bool IsCustomerInEnabledStatus { get; set; }
+		public bool IsFraudInAlertMode { get; set; }
+		public bool IsTestInAlertMode { get; set; }
+		public bool IsCciMarkInAlertMode { get; set; }
+		public bool IsCustomerStatusInAlertMode { get; set; }
+		public bool IsAmlInAlertMode { get; set; }
 		public string AmlResult { get; set; }
 		public int Age { get; set; }
 		public string Gender { get; set; }
@@ -66,7 +71,6 @@
 				return;
 
 			Id = customer.Id;
-			IsTest = customer.IsTest;
 			SegmentType = customer.SegmentType();
 			IsAvoid = customer.IsAvoid;
 
@@ -103,15 +107,13 @@
 
 			if (customer.FraudStatus != FraudStatus.Ok)
 			{
-				FraudHighlightCss = "red_cell";
+				IsFraudInAlertMode = true;
 			}
 
-			if (IsTest)
-			{
-				IsTestHighlightCss = "red_cell";
-			}
+			IsTestInAlertMode = customer.IsTest;
 
 			AmlResult = customer.AMLResult;
+			IsAmlInAlertMode = AmlResult != "Passed";
 
 			PromoCode = customer.PromoCode;
 			if (!string.IsNullOrEmpty(PromoCode))
@@ -140,7 +142,12 @@
 			UserStatus = customer.Status.ToString();
 			CreditResult = customer.CreditResult.ToString();
 			CreditScore = customer.ScoringResults.Any() ? customer.ScoringResults.Last().ScoreResult : 0.00;
-			Disabled = customer.CollectionStatus.CurrentStatus.Id;
+
+			CustomerStatusId = customer.CollectionStatus.CurrentStatus.Id;
+			IsCustomerInEnabledStatus = customer.CollectionStatus.CurrentStatus.IsEnabled;
+			IsCustomerStatusInAlertMode = customer.CollectionStatus.CurrentStatus.Name != "Enabled";
+			CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;
+
 			Editable = customer.CreditResult == CreditResultStatus.WaitingForDecision && customer.CollectionStatus.CurrentStatus.IsEnabled;
 			IsWarning = customer.CollectionStatus.CurrentStatus.IsWarning;
 
@@ -166,7 +173,7 @@
 			if (activeCampaigns.Any())
 				ActiveCampaign = activeCampaigns.Aggregate((i, j) => i + ", " + j);
 
-			CciMark = customer.CciMark;
+			IsCciMarkInAlertMode = customer.CciMark;
 
 			TrustPilotStatusDescription = customer.TrustPilotStatus.Description;
 			TrustPilotStatusName = customer.TrustPilotStatus.Name;
@@ -184,10 +191,8 @@
 			BrokerName = customer.Broker == null ? "" : customer.Broker.FirmName;
 		} // InitFromCustomer
 
-		public bool IsTest { get; set; }
 		public bool IsAvoid { get; set; }
 		public string SegmentType { get; set; }
-		public bool CciMark { get; set; }
 
 		public string TrustPilotStatusDescription { get; set; }
 		public string TrustPilotStatusName { get; set; }

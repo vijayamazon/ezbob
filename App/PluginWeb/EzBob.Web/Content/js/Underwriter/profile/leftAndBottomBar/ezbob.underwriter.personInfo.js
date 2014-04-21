@@ -27,22 +27,10 @@
       if (this.model.get('BrokerID')) {
         this.$el.find('#with-broker').addClass('with-broker');
       }
-      this.setCciMark();
       this.$el.find(".tltp").tooltip();
       return this.$el.find(".tltp-left").tooltip({
         placement: "left"
       });
-    };
-
-    PersonInfoView.prototype.setCciMark = function() {
-      var oSpan;
-
-      oSpan = this.$el.find('.cci-mark');
-      if (this.model.get('CciMark')) {
-        return oSpan.text('on').closest('td').addClass('red_cell');
-      } else {
-        return oSpan.text('off').closest('td').removeClass('red_cell');
-      }
     };
 
     PersonInfoView.prototype.toggleCciMark = function() {
@@ -58,7 +46,7 @@
           return EzBob.App.trigger('error', result.error);
         } else {
           _this.model.set('CciMark', result.mark);
-          return _this.setCciMark();
+          return _this.model.fetch();
         }
       }).always(function() {
         return UnBlockUi();
@@ -156,9 +144,9 @@
 
       collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel({
         customerId: this.model.get('Id'),
-        currentStatus: this.model.get('Disabled')
+        currentStatus: this.model.get('CustomerStatusId')
       });
-      prevStatus = this.model.get('Disabled');
+      prevStatus = this.model.get('CustomerStatusId');
       customerId = this.model.get('Id');
       BlockUi("on");
       xhr = collectionStatusModel.fetch();
@@ -184,8 +172,7 @@
 
             BlockUi("on");
             isWarning = result;
-            that.model.set('Disabled', newStatus);
-            that.model.set('IsWarning', isWarning);
+            that.model.fetch();
             xhr2 = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/LogStatusChange", {
               newStatus: newStatus,
               prevStatus: prevStatus,
@@ -239,21 +226,6 @@
       d.render();
     };
 
-    PersonInfoView.prototype.disablingChanged = function() {
-      var disabled, id, that;
-
-      disabled = this.$el.find("select[name=\"disabling\"] option:selected").val();
-      id = this.model.get("Id");
-      that = this;
-      this.model.set("Disabled", disabled);
-      return $.post(window.gRootPath + "Underwriter/ApplicationInfo/ChangeDisabled", {
-        id: id,
-        disabled: disabled
-      }).done(function() {
-        return that.trigger("DisableChange", id);
-      });
-    };
-
     PersonInfoView.prototype.editEmail = function() {
       var view;
 
@@ -286,9 +258,7 @@
     PersonalInfoModel.prototype.initialize = function() {
       var status, _i, _len, _ref2, _results;
 
-      this.on("change:Disabled", this.changeDisabled, this);
       this.on("change:FraudCheckStatusId", this.changeFraudCheckStatus, this);
-      this.changeDisabled();
       this.changeFraudCheckStatus();
       if (this.StatusesArr === void 0) {
         this.statuses = EzBob.Underwriter.StaticData.CollectionStatuses;
@@ -301,28 +271,6 @@
         _results.push(this.StatusesArr[status.get('Id')] = status.get('Name'));
       }
       return _results;
-    };
-
-    PersonalInfoModel.prototype.changeDisabled = function(silent) {
-      var disabled, disabledText;
-
-      if (silent == null) {
-        silent = false;
-      }
-      disabledText = "";
-      disabled = this.get("Disabled");
-      if (disabled === void 0) {
-        return;
-      }
-      disabledText = this.StatusesArr[disabled];
-      if (disabledText === void 0) {
-        disabledText = "Enabled";
-      }
-      return this.set({
-        "DisabledText": disabledText
-      }, {
-        silent: true
-      });
     };
 
     PersonalInfoModel.prototype.changeFraudCheckStatus = function() {

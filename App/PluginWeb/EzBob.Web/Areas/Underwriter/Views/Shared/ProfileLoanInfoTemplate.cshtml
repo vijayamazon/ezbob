@@ -86,29 +86,29 @@
             </tr>
         </thead>
         <tbody>
-            <%if (FraudHighlightCss == 'red_cell') { %> 
-                @RawCellWithButtonNear("Fraud Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "<%- FraudHighlightCss %>")
+            <%if (IsFraudInAlertMode) { %> 
+                @RawCellWithButtonNear("Fraud Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "red_cell")
             <% } %>
     
-            <% if (IsTest) { %>
-                @RawCellWithButtonNear("Test User:", "Yes", "isTestEditButton", "<%- IsTestHighlightCss %>")
+            <% if (IsTestInAlertMode) { %>
+                @RawCellWithButtonNear("Test User:", "Yes", "isTestEditButton", "red_cell")
             <% } %>
     
-            <% if (CciMark) { %>
+            <% if (IsCciMarkInAlertMode) { %>
                 <tr>
                     <td class="red_cell">CCI mark</td>
                     <td class="red_cell">
-                        <span class="cci-mark"/>
+                        <span class="cci-mark">on</span>
                         <button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button>
                     </td>
                 </tr>
             <% } %>
 
-            <% if (DisabledText != 'Enabled') { %>
-                @RawCellWithButtonNear("Customer Status", "<%- DisabledText %>", "changeDisabledState", "red_cell")
+            <% if (IsCustomerStatusInAlertMode) { %>
+                @RawCellWithButtonNear("Customer Status", "<%- CustomerStatusName %>", "changeDisabledState", "red_cell")
             <% } %>
 
-            <% if (AmlResult != 'Passed') { %>    
+            <% if (IsAmlInAlertMode) { %>    
                 <tr>
 		            <td width="10%" class="red_cell">AML</td>
 		            <td class="red_cell"><%- AmlResult %></td>
@@ -154,29 +154,29 @@
             </tr>
             @RawCell("Active Campaigns:", "<%- ActiveCampaign %>")
     
-            <%if (FraudHighlightCss != 'red_cell') { %> 
-                @RawCellWithButtonNear("Fraud Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "<%- FraudHighlightCss %>")
+            <%if (!IsFraudInAlertMode) { %> 
+                @RawCellWithButtonNear("Fraud Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy")
             <% } %>    
     
-            <% if (!IsTest) { %>
-                @RawCellWithButtonNear("Test User:", "No", "isTestEditButton", "<%- IsTestHighlightCss %>")
+            <% if (!IsTestInAlertMode) { %>
+                @RawCellWithButtonNear("Test User:", "No", "isTestEditButton")
             <% } %>
     
-            <% if (!CciMark) { %>
+            <% if (!IsCciMarkInAlertMode) { %>
                 <tr>
                     <td>CCI mark</td>
                     <td>
-                        <span class="cci-mark"/>
+                        <span class="cci-mark">off</span>
                         <button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button>
                     </td>
                 </tr>
             <% } %>
 
-            <% if (DisabledText == 'Enabled') { %>
-                @RawCellWithButtonNear("Customer Status", "<%- DisabledText %>", "changeDisabledState")
+            <% if (!IsCustomerStatusInAlertMode) { %>
+                @RawCellWithButtonNear("Customer Status", "<%- CustomerStatusName %>", "changeDisabledState")
             <% } %>
 
-            <% if (AmlResult == 'Passed') { %>
+            <% if (!IsAmlInAlertMode) { %>
                 <tr>
 		            <td width="10%">AML</td>
 		            <td><%- AmlResult %></td>

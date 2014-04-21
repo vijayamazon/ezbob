@@ -6,14 +6,12 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EzServiceReference;
 	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
 	using Models;
@@ -90,13 +88,6 @@
 			var cr = customer.LastCashRequest;
 			_infoModelBuilder.InitApplicationInfo(m, customer, cr);
 			return Json(m, JsonRequestBehavior.AllowGet);
-		}
-
-		[Ajax]
-		[OutputCache(VaryByParam = "status", Duration = int.MaxValue)]
-		public JsonResult GetIsStatusEnabled(int status) {
-			bool res = customerStatusesRepository.GetIsEnabled(status);
-			return Json(res, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
