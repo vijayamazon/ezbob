@@ -2,6 +2,7 @@
 	using System;
 	using System.Net;
 	using Ezbob.Context;
+	using log4net;
 
 	public class Log4Net {
 		#region constructor
@@ -67,8 +68,8 @@
 		public virtual Ezbob.Context.Environment Environment { get; private set; } // Environment
 
 		public virtual Log4Net Init() {
-			log4net.GlobalContext.Properties["MailSubject"] = MailSubject;
-			log4net.GlobalContext.Properties["ErrorEmailRecipient"] = ErrorMailRecipient;
+			GlobalContext.Properties["MailSubject"] = MailSubject;
+			GlobalContext.Properties["ErrorEmailRecipient"] = ErrorMailRecipient;
 
 			log4net.Config.XmlConfigurator.Configure();
 

@@ -264,8 +264,8 @@
 				"Logging {0} for {1} v{5} on {2} as {3} with pid {4}.",
 				sEvent,
 				"EzService",
-				System.Environment.MachineName,
-				System.Environment.UserName,
+				Environment.MachineName,
+				Environment.UserName,
 				Process.GetCurrentProcess().Id,
 				Assembly.GetCallingAssembly().GetName().Version.ToString(4)
 			);
