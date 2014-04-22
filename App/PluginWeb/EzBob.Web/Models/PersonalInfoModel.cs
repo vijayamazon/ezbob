@@ -96,8 +96,21 @@
 				CompanyType = customer.Company.TypeOfBusiness.ToString();
 			}
 
-			NumOfDirectorsAndShareholders = "2/5"; // where is the shareholder data?
-
+			ExperianParserOutput parsedExperian = customer.ParseExperian(ExperianParserFacade.Target.Company);
+			int numOfShareholders = 0;
+			if (parsedExperian.Dataset != null && parsedExperian.Dataset.ContainsKey("Limited Company Shareholders") &&
+				parsedExperian.Dataset["Limited Company Shareholders"].Data != null)
+			{
+				numOfShareholders = parsedExperian.Dataset["Limited Company Shareholders"].Data.Count;
+			}
+			SortedSet<string> experianDirectors = CrossCheckModel.GetExperianDirectors(customer);
+			int numOfDirectors = 0;
+			if (experianDirectors != null)
+			{
+				numOfDirectors = experianDirectors.Count;
+			}
+			NumOfDirectorsAndShareholders = string.Format("{0}/{1}", numOfDirectors, numOfShareholders);
+			
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			DateTime companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
 			int companySeniorityYears, companySeniorityMonths;

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using EzBob.Configuration;
-using EZBob.DatabaseLib.Model.Database;
-using Ezbob.ExperianParser;
-
-namespace EzBob.Web.Models {
+﻿namespace EzBob.Web.Models {
+	using System;
+	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.ExperianParser;
 	using EZBob.DatabaseLib;
 
 	public class CompanyScoreModel {
