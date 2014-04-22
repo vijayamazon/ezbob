@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.CreditLineDialog = (function(_super) {
-
     __extends(CreditLineDialog, _super);
 
     function CreditLineDialog() {
-      return CreditLineDialog.__super__.constructor.apply(this, arguments);
+      _ref = CreditLineDialog.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     CreditLineDialog.prototype.template = '#credit-line-dialog-template';
@@ -49,9 +49,10 @@
     };
 
     CreditLineDialog.prototype.onChangeLoanTypeSelectionAllowed = function() {
-      var controlledElements, _ref;
+      var controlledElements, _ref1;
+
       controlledElements = '#loan-type, #repaymentPeriod';
-      if ((_ref = this.cloneModel.get('IsLoanTypeSelectionAllowed')) === 1 || _ref === '1') {
+      if ((_ref1 = this.cloneModel.get('IsLoanTypeSelectionAllowed')) === 1 || _ref1 === '1') {
         this.$el.find(controlledElements).attr('disabled', 'disabled');
         if (this.cloneModel.get('LoanTypeId') !== 1) {
           return this.cloneModel.set('LoanTypeId', 1);
@@ -63,6 +64,7 @@
 
     CreditLineDialog.prototype.onChangeStartingDate = function() {
       var endDate, startingDate;
+
       startingDate = moment.utc(this.cloneModel.get("StartingFromDate"), "DD/MM/YYYY");
       if (startingDate !== null) {
         endDate = startingDate.add('hours', this.cloneModel.get('OfferValidForHours'));
@@ -72,6 +74,7 @@
 
     CreditLineDialog.prototype.onChangeLoanType = function() {
       var currentLoanType, loanTypeId;
+
       loanTypeId = +this.$el.find("#loan-type option:selected").val();
       currentLoanType = _.find(this.cloneModel.get("LoanTypes"), function(l) {
         return l.Id === loanTypeId;
@@ -86,6 +89,7 @@
     CreditLineDialog.prototype.save = function() {
       var action, post, postData,
         _this = this;
+
       if (!this.ui.form.valid()) {
         return;
       }
@@ -100,6 +104,7 @@
 
     CreditLineDialog.prototype.getPostData = function() {
       var data, m;
+
       m = this.cloneModel.toJSON();
       data = {
         id: m.CashRequestId,
@@ -117,7 +122,6 @@
         allowSendingEmail: m.AllowSendingEmail,
         isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed
       };
-      
       return data;
     };
 

@@ -79,9 +79,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             manualSetupFeePercent       : m.ManualSetupFeePercent
             allowSendingEmail           : m.AllowSendingEmail
             isLoanTypeSelectionAllowed  : m.IsLoanTypeSelectionAllowed
-            
-        console.log("m,data",m, data)
-        debugger
+
         return data
             
     bindings:
