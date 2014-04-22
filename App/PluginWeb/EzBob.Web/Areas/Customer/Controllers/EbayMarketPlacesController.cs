@@ -160,7 +160,7 @@
 				bool isValid = _eBayServiceHelper.ValidateAccount(eBaySecurityInfo);
 				if (!isValid)
 				{
-					Log.WarnFormat("eBay Account is not valid");
+					Log.WarnFormat("eBay account has not been activated yet");
 					return Json(new { error = "Your account has not been activated yet. Accounts are not accessible until an actual debit or credit has first been posted to the account, even though you may have already filled out our account creation form." }, JsonRequestBehavior.AllowGet);
 				}
 
