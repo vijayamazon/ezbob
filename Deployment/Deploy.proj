@@ -43,8 +43,6 @@
 				
 		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
 		
-		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\DBSQLServer.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\libs\"/>
-		
 		<MultiCopy CopyFrom="$(Src)\sql\current\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\current\" />
 		<MultiCopy CopyFrom="$(Src)\sql\SPs\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\SPs\" />
 		<MultiCopy CopyFrom="$(Src)\sql\Types\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Types\" />
