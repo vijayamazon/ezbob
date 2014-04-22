@@ -282,6 +282,11 @@ table.squeezed tbody tr td {
     padding-bottom: 4px;
 }
 
+table.extra-squeezed tbody tr td {
+    padding-top: 0px;
+    padding-bottom: 1px;
+}
+
 .api-check-first-column {
     width: 140px;
 }
