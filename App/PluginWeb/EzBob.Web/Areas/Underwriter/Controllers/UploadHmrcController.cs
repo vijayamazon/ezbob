@@ -1,8 +1,8 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using Code;
 	using Code.MpUniq;
 	using Customer.Controllers;
@@ -10,11 +10,14 @@
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzBob.Models;
 	using Ezbob.HmrcHarvester;
+	using Ezbob.Logger;
 	using Ezbob.ValueIntervals;
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;
 	using NHibernate;
+	using Newtonsoft.Json;
 	using Web.Models.Strings;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
@@ -84,29 +87,91 @@
 		} // UploadFiles
 
 		[HttpPost]
-		public ActionResult SaveNewManuallyEntered(int nCustomerID, object data) {
+		public ActionResult SaveNewManuallyEntered(string sData) {
+			if (string.IsNullOrWhiteSpace(sData))
+				return CreateError("No data received.");
+
+			HmrcManualDataModel oData = null;
+
+			try {
+				oData = JsonConvert.DeserializeObject<HmrcManualDataModel>(sData);
+			}
+			catch (Exception e) {
+				return CreateError("Failed to parse input data: " + e.Message);
+			} // try
+
+			if (!oData.IsValid())
+				return CreateError(string.Join("\n", oData.Errors));
+
 			AccountModel model;
 			AddAccountState oState;
-			CreateAccountModel(nCustomerID, out model, out oState);
+			CreateAccountModel(oData.CustomerID, out model, out oState);
 
 			if (oState.Error != null)
 				return oState.Error;
 
 			string stateError;
-			Hopper oSeeds = ThrashManualData(nCustomerID, data, out stateError);
+			Hopper oSeeds = ThrashManualData(oData, out stateError);
 
 			if (stateError != null)
 				return CreateError(stateError);
 
-			return DoSave(oState, model, nCustomerID, oSeeds);
+			return DoSave(oState, model, oData.CustomerID, oSeeds);
 		} // SaveNewManuallyEntered
 
-		private Hopper ThrashManualData(int nCustomerID, object data, out string sStateError) {
+		private Hopper ThrashManualData(HmrcManualDataModel oData, out string sStateError) {
 			sStateError = null;
 
-			// TODO
+			var oLog = new SafeILog(Log);
 
-			return null;
+			var oResult = new Hopper();
+
+			foreach (HmrcManualOnePeriodDataModel oPeriod in oData.VatPeriods) {
+				var smd = new SheafMetaData {
+					BaseFileName = "entered.manually." + oPeriod.Period + ".txt",
+					DataType = DataType.VatReturn,
+					FileType = FileType.Pdf,
+					Thrasher = null,
+				};
+
+				var oSeeds = new VatReturnSeeds();
+
+				oSeeds.Set(VatReturnSeeds.Field.Period, oPeriod.Period, oLog);
+				oSeeds.Set(VatReturnSeeds.Field.DateFrom, oPeriod.FromDate, oLog);
+				oSeeds.Set(VatReturnSeeds.Field.DateTo, oPeriod.ToDate, oLog);
+				oSeeds.Set(VatReturnSeeds.Field.DateDue, oPeriod.DueDate, oLog);
+
+				if (!oSeeds.IsPeriodValid()) {
+					sStateError = "Invalid period detected.";
+					return null;
+				} // if
+
+				if (oData.RegNo > 0)
+					oSeeds.Set(VatReturnSeeds.Field.RegistrationNo, oData.RegNo, oLog);
+
+				oSeeds.Set(VatReturnSeeds.Field.BusinessName, oData.BusinessName, oLog);
+				oSeeds.Set(VatReturnSeeds.Field.BusinessAddress, oData.BusinessAddress.Split('\n'), oLog);
+
+				if (!oSeeds.AreBusinessDetailsValid()) {
+					sStateError = "Invalid business details detected.";
+					return null;
+				} // if
+
+				foreach (KeyValuePair<int, decimal> pair in oPeriod.BoxData) {
+					int nBoxNum = pair.Key;
+					decimal nAmount = pair.Value;
+
+					string sFieldName = oData.BoxNames.ContainsKey(nBoxNum) ? oData.BoxNames[nBoxNum] : " (Box " + nBoxNum + ")";
+
+					oSeeds.ReturnDetails[sFieldName] = new Coin(nAmount, "GBP");
+
+					oLog.Debug("VatReturnSeeds.ReturnDetails[{0}] = {1}", sFieldName, nAmount);
+				} // for each box
+
+				oResult.Add(smd, oSeeds);
+			} // for each period
+
+			return oResult;
 		} // ThrashManualData
 
 		private void CreateAccountModel(int nCustomerID, out AccountModel model, out AddAccountState oState) {
@@ -183,7 +248,7 @@
 			} // try
 
 			HmrcFileCache.Clean(Session, string.Format("HmrcFileCache{0}", nCustomerID));
-			return Json(new { });
+			return Json(new { success = true, });
 		} // DoSave
 
 		private class AddAccountState {
@@ -219,26 +284,8 @@
 				return oFileCache.Hopper;
 
 			default:
-				oFileCache.DateIntervals.Sort((a, b) => a.Left.CompareTo(b.Left));
-
-				DateInterval next = null;
-
-				foreach (DateInterval cur in oFileCache.DateIntervals) {
-					if (next == null) {
-						next = cur;
-						continue;
-					} // if
-
-					DateInterval prev = next;
-					next = cur;
-
-					if (!prev.IsJustBefore(next)) {
-						stateError = "In-consequent date ranges: " + prev + " and " + next;
-						return null;
-					} // if
-				} // for each interval
-
-				return oFileCache.Hopper;
+				stateError = oFileCache.DateIntervals.SortAndCheckSequence();
+				return string.IsNullOrWhiteSpace(stateError) ? oFileCache.Hopper : null;
 			} // switch
 		} // GetProcessedFiles
 
@@ -259,7 +306,7 @@
 		} // SaveMarketplace
 
 		private JsonResult CreateError(string sErrorMsg) {
-			return Json(new { error = sErrorMsg });
+			return Json(new { success = string.IsNullOrWhiteSpace(sErrorMsg), error = sErrorMsg, });
 		} // CreateError
 
 		#endregion

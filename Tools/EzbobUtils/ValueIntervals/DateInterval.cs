@@ -3,6 +3,8 @@
 using EdgeType = Ezbob.ValueIntervals.AIntervalEdge<System.DateTime>.EdgeType;
 
 namespace Ezbob.ValueIntervals {
+	using System.Collections.Generic;
+
 	#region class DateInterval
 
 	public class DateInterval : TInterval<DateTime> {
@@ -110,4 +112,37 @@ namespace Ezbob.ValueIntervals {
 	} // class DateInterval
 
 	#endregion class DateInterval
+
+	#region class DateIntervalListExt
+
+	public static class DateIntervalListExt {
+		public static string SortAndCheckSequence(this List<DateInterval> oDates) {
+			string sResult = null;
+
+			if (oDates.Count > 1) {
+				oDates.Sort((a, b) => a.Left.CompareTo(b.Left));
+
+				DateInterval next = null;
+
+				foreach (DateInterval cur in oDates) {
+					if (next == null) {
+						next = cur;
+						continue;
+					} // if
+
+					DateInterval prev = next;
+					next = cur;
+
+					if (!prev.IsJustBefore(next)) {
+						sResult = "In-consequent date ranges: " + prev + " and " + next + ".";
+						break;
+					} // if
+				} // for each interval
+			} // if
+
+			return sResult;
+		} // SortAndCheckSequence
+	} // class DateIntervalListExt
+
+	#endregion class DateIntervalListExt
 } // namespace Ezbob.ValueIntervals

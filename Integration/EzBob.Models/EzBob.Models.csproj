@@ -75,6 +75,7 @@
     <Compile Include="Agreements\AgreementsTemplatesProvider.cs" />
     <Compile Include="ChangeLoanDetailsModelBuilder.cs" />
     <Compile Include="ConfigurationVariableModel.cs" />
+    <Compile Include="HmrcManualDataModel.cs" />
     <Compile Include="LoanOfferMultiplier.cs" />
     <Compile Include="FirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="CustomerExtensions.cs" />
@@ -149,6 +150,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
+      <Project>{90cc3a5f-5bea-4c13-82b7-992adc41f854}</Project>
+      <Name>ValueIntervals</Name>
     </ProjectReference>
     <ProjectReference Include="..\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>

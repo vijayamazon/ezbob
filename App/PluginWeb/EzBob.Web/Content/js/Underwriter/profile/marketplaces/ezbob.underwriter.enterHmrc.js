@@ -5,6 +5,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 	var oMemberDef = {
 		initialize: function(opts) {
 			this.CustomerID = opts.CustomerID;
+			this.Model = opts.Model;
 		}, // initialize
 
 		events: {
@@ -317,8 +318,100 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 				return;
 			} // if
 
-			this.enableButtons();
+			var oPackage = this.packData();
+
+			console.log('package to save', oPackage);
+
+			var self = this;
+
+			var oXhr = $.ajax({
+				url: window.gRootPath + 'Underwriter/UploadHmrc/SaveNewManuallyEntered',
+				type: 'POST',
+				data: { sData: JSON.stringify(oPackage) },
+				dataType: 'json',
+			});
+
+			oXhr.done(function(oResponse) {
+				self.enableButtons();
+
+				if (oResponse.success) {
+					self.$el.find('.RegNo').val('').blur();
+					self.$el.find('.BusinessName').val('').blur();
+					self.$el.find('.BusinessAddress').val('').blur();
+
+					self.removeAllPeriods();
+					self.close();
+
+					self.Model.fetch();
+
+					return;
+				} // if success
+
+				if (oResponse.error) {
+					EzBob.ShowMessage(oResponse.error, 'Oops!');
+					console.error('Failed to save VAT account.', oResponse.error);
+				}
+				else
+					EzBob.ShowMessage('Error saving VAT data.', 'Oops!');
+			}); // on success
+
+			oXhr.fail(function() {
+				EzBob.ShowMessage('Failed to save VAT data.', 'Oops!');
+				self.enableButtons();
+			}); // on fail
 		}, // save
+
+		packData: function() {
+			var oPackage = {
+				CustomerID: this.CustomerID,
+				RegNo: this.$el.find('.RegNo').autoNumericGet(),
+				BusinessName: $.trim(this.$el.find('.BusinessName').val()),
+				BusinessAddress: $.trim(this.$el.find('.BusinessAddress').val()),
+
+				BoxNames: {},
+
+				VatPeriods: [],
+			};
+
+			this.$el.find('.box-holder').each(function() {
+				var oTR = $(this);
+
+				var sBoxNum = oTR.attr('data-box-num');
+				var sBoxName = oTR.find('th').text();
+
+				oPackage.BoxNames[sBoxNum] = sBoxName;
+			});
+
+			var oIds = this.getAllIds();
+
+			var self = this;
+
+			_.each(oIds.periods, function(sPeriodID) {
+				var oVat = {
+					FromDate: moment.utc(self.$el.find('.' + self.dateId('DateFrom', sPeriodID)).val(), 'YYYY-MM-DD').toDate(),
+					ToDate: null,
+					Period: '',
+					DueDate: null,
+					BoxData: {},
+				};
+
+				var oToDate = moment.utc(self.$el.find('.' + self.dateId('DateTo', sPeriodID)).val(), 'YYYY-MM-DD');
+
+				oVat.ToDate = oToDate.toDate();
+
+				oVat.Period = oToDate.format("MM YY");
+
+				oVat.DueDate = moment(oToDate).add('month', 1).add('week', 1).toDate();
+
+				_.each(oPackage.BoxNames, function(sNameIgnored, sBoxNum) {
+					oVat.BoxData[sBoxNum] = parseFloat(self.$el.find('.' + self.boxId(sBoxNum, sPeriodID)).autoNumericGet());
+				}); // for each box
+
+				oPackage.VatPeriods.push(oVat);
+			}); // for each period
+
+			return oPackage;
+		}, // packData
 
 		enableButtons: function() {
 			this.setSomethingEnabled(this.$el.dialog('widget').find('.hmrc-enter-data-btn'), true);
@@ -330,9 +423,10 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 	}; // member def
 
 	var oStaticDef = {
-		execute: function(nCustomerID) {
+		execute: function(nCustomerID, oModel) {
 			var oView = new EzBob.Underwriter.EnterHmrcView({
 				CustomerID: nCustomerID,
+				Model: oModel,
 				el: $('<div title="Enter VAT manually"></div>'),
 			});
 

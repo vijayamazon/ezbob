@@ -82,7 +82,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
                 EzBob.ShowMessageTimeout 'The customer already has an HMRC account.', 'Oops!', 3
                 return
 
-            EzBob.Underwriter.EnterHmrcView.execute @model.customerId
+            EzBob.Underwriter.EnterHmrcView.execute @model.customerId, @model
         # end of on enterHmrc
 
         @
