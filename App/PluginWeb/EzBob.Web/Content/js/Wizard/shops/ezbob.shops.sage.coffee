@@ -9,7 +9,8 @@ class EzBob.SageAccountInfoView extends Backbone.View
                 EzBob.App.trigger('error', result.error);
             else
                 EzBob.App.trigger('info', 'Congratulations. Sage account was added successfully.');
-            
+
+            $.colorbox.close();
             that.trigger('completed');
             that.trigger('ready');
 

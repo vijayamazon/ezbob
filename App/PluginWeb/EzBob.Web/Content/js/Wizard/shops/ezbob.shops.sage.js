@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1, _ref2, _ref3,
+  var root, _ref, _ref1, _ref2,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7,38 +7,12 @@
 
   root.EzBob = root.EzBob || {};
 
-  EzBob.SageAccountButtonView = (function(_super) {
-    __extends(SageAccountButtonView, _super);
-
-    function SageAccountButtonView() {
-      _ref = SageAccountButtonView.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    SageAccountButtonView.prototype.initialize = function() {
-      return SageAccountButtonView.__super__.initialize.call(this, {
-        name: 'Sage',
-        logoText: '',
-        shops: this.model
-      });
-    };
-
-    SageAccountButtonView.prototype.update = function() {
-      return this.model.fetch().done(function() {
-        return EzBob.App.trigger('ct:storebase.shop.connected');
-      });
-    };
-
-    return SageAccountButtonView;
-
-  })(EzBob.StoreButtonView);
-
   EzBob.SageAccountInfoView = (function(_super) {
     __extends(SageAccountInfoView, _super);
 
     function SageAccountInfoView() {
-      _ref1 = SageAccountInfoView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      _ref = SageAccountInfoView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     SageAccountInfoView.prototype.initialize = function(options) {
@@ -51,6 +25,7 @@
         } else {
           EzBob.App.trigger('info', 'Congratulations. Sage account was added successfully.');
         }
+        $.colorbox.close();
         that.trigger('completed');
         return that.trigger('ready');
       };
@@ -65,8 +40,8 @@
     __extends(SageAccountModel, _super);
 
     function SageAccountModel() {
-      _ref2 = SageAccountModel.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      _ref1 = SageAccountModel.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     SageAccountModel.prototype.urlRoot = "" + window.gRootPath + "Customer/SageMarketPlaces/Accounts";
@@ -79,8 +54,8 @@
     __extends(SageAccounts, _super);
 
     function SageAccounts() {
-      _ref3 = SageAccounts.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      _ref2 = SageAccounts.__super__.constructor.apply(this, arguments);
+      return _ref2;
     }
 
     SageAccounts.prototype.model = EzBob.SageAccountModel;
