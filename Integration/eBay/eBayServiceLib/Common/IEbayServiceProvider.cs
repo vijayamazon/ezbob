@@ -1,4 +1,3 @@
-using System.Web.Services.Protocols;
 using EzBob.eBayServiceLib.TradingServiceCore.DataInfos;
 using EzBob.eBayServiceLib.TradingServiceCore.TokenProvider;
 
@@ -12,8 +11,8 @@ namespace EzBob.eBayServiceLib.Common
 	}
 
 	public interface IEbayServiceProvider<out T> : IEbayServiceProvider
-		//where T : SoapHttpClientProtocol
+	//where T : SoapHttpClientProtocol
 	{
-		T GetService( string callProcedureName, ServiceVersion ver, IServiceTokenProvider tokenProvider );		
+		T GetService(string callProcedureName, ServiceVersion ver, IServiceTokenProvider tokenProvider);
 	}
 }

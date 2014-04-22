@@ -157,6 +157,13 @@
 
 				var eBaySecurityInfo = new eBaySecurityInfo { Token = token };
 
+				bool isValid = _eBayServiceHelper.ValidateAccount(eBaySecurityInfo);
+				if (!isValid)
+				{
+					Log.WarnFormat("eBay Account is not valid");
+					return Json(new { error = "Your account has not been activated yet. Accounts are not accessible until an actual debit or credit has first been posted to the account, even though you may have already filled out our account creation form." }, JsonRequestBehavior.AllowGet);
+				}
+
 				var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ebay, eBaySecurityInfo, customer);
 
 				_session.Flush();

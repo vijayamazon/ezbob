@@ -9,6 +9,8 @@ namespace EzBobTest
 	using EKM;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EzBob.Models;
+	using EzBob.eBayLib.Config;
+	using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant;
 	using Ezbob.RegistryScanner;
 	using FreeAgent;
 	using Sage;
@@ -312,6 +314,17 @@ namespace EzBobTest
                 EBayRetriveDataHelper.StoreOrUpdateCustomerSecurityInfo(customer, data, marketplaceName);
             }
         }
+
+		[Test]
+		public void getEbayAccountInfo()
+		{
+			//var ebayConnectionInfo = ObjectFactory.GetInstance<IEbayMarketplaceTypeConnection>();
+			//var _EbayConnectionInfo = eBayServiceHelper.CreateConnection( ebayConnectionInfo );
+			//var mp = EBayRetriveDataHelper.GetDatabaseCustomerMarketPlace(18290);
+			//var info = EBayRetriveDataHelper.CreateProviderCreationInfo(mp, _EbayConnectionInfo);
+			//var account = new DataProviderGetAccount( info );
+			//var data = account.GetAccount();
+		}
 
         [Test]
         public void Round()
