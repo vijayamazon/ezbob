@@ -17,6 +17,7 @@ EzBob.Config = {
 	CaptchaMode: 'off',
 	WizardTopNaviagtionEnabled: false,
 	TargetsEnabled: true,
+	TargetsEnabledEntrepreneur: true,
 	GetCashSliderStep: 50,
 	ShowChangePasswordPage: false,
 	SessionTimeout: 6000,

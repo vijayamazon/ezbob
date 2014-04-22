@@ -8,8 +8,10 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces;
+	using ExperianLib.Ebusiness;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
+	using Iesi.Collections.Generic;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
@@ -100,6 +102,59 @@
 
 			return Json(new { status = "ok", error = "" });
 		} // ClaimsTrustPilotReview
+
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult EntrepreneurTargeting()
+		{
+			var customer = _context.Customer;
+
+			if (customer == null)
+				return Json(new { status = "error", error = "Customer not found." });
+
+			if (customer.PersonalInfo.TypeOfBusiness == TypeOfBusiness.Entrepreneur && customer.Company == null)
+			{
+				return Json(new { entrepreneurTargeting = true });
+			}
+
+			return Json(new { entrepreneurTargeting = false });
+		} // EntrepreneurTargeting
+
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult SaveTargeting(CompanyInfo company)
+		{
+			var customer = _context.Customer;
+
+			customer.Company = new Company
+				{
+					ExperianRefNum = company.BusRefNum,
+					ExperianCompanyName = company.BusName,
+					
+				};
+
+			customer.Company.ExperianCompanyAddress =
+				new HashedSet<CustomerAddress>
+					{
+						new CustomerAddress
+							{
+								Line1 = company.AddrLine1,
+								Line2 = company.AddrLine2,
+								Line3 = company.AddrLine3,
+								County = company.AddrLine4,
+								Postcode = company.PostCode,
+								AddressType = CustomerAddressType.ExperianCompanyAddress,
+								Customer = customer,
+								Company = customer.Company
+							}
+					};
+
+			return Json(new {});
+		}
 
 		[Transactional]
 		[Ajax]

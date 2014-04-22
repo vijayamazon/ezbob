@@ -1,10 +1,12 @@
-﻿@using EzBob.Web.Infrastructure
+﻿@using System.Globalization
+@using EzBob.Web.Infrastructure
 @using ConfigManager
 @model EzBob.Web.Models.WizardModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var customer = Model.Customer;
     customer.IsProfile = true;
+    var currVals = CurrentValues.Instance;
 }
 
 @section css {
@@ -317,15 +319,16 @@
 
     <script type="text/javascript">
 
-        EzBob.Config.GetCashSliderStep = @CurrentValues.Instance.GetCashSliderStep.Value;
-        EzBob.Config.MinLoan = @CurrentValues.Instance.MinLoan.Value;
-        EzBob.Config.XMinLoan = @CurrentValues.Instance.XMinLoan.Value;
-        EzBob.Config.PayPalEnabled = @CurrentValues.Instance.PayPalEnabled.Value.ToLower();
+        EzBob.Config.GetCashSliderStep = @currVals.GetCashSliderStep.Value;
+        EzBob.Config.MinLoan = @currVals.MinLoan.Value;
+        EzBob.Config.XMinLoan = @currVals.XMinLoan.Value;
+        EzBob.Config.PayPalEnabled = @currVals.PayPalEnabled.Value.ToLower();
         EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
+        EzBob.Config.TargetsEnabledEntrepreneur = @currVals.TargetsEnabledEntrepreneur.Value.ToLower(CultureInfo.InvariantCulture);
         EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
         EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
-        EzBob.Config.SessionTimeout = @CurrentValues.Instance.SessionTimeout.Value;
-        EzBob.Config.CaptchaMode = '@CurrentValues.Instance.CaptchaMode.Value';
+        EzBob.Config.SessionTimeout = @currVals.SessionTimeout.Value;
+        EzBob.Config.CaptchaMode = '@currVals.CaptchaMode.Value';
 
         $(function() {
             @{ string wizardComplete = "false";}

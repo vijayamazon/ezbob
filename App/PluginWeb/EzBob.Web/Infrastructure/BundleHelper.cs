@@ -444,6 +444,7 @@
 				.Add("~/Content/js/ezbob.models.js")
 				.Add("~/Content/js/ezbob.addDirectorInfoView.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
+				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
 
 				//Profile
 				.Add("~/Content/js/Profile/ezbob.profile.smallNotification.js")
