@@ -303,6 +303,7 @@
 		YodleeEditAccountURL,
 		TeraPeakApiKey,
 		TeraPeakUrl,
-		TrustPilotBccMail
+		TrustPilotBccMail,
+		AddSageIntervalMinutes
 	} // enum Variables
 } // namespace ConfigManager

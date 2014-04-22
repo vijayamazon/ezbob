@@ -1,11 +1,11 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System;
 	using Code;
 	using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure;
@@ -21,6 +21,7 @@
         private readonly Customer _customer;
         private readonly DatabaseDataHelper _helper;
 		private readonly ServiceClient m_oServiceClient;
+		private static readonly object sageCallbackLock = new object();
 
 		public SageMarketPlacesController(
             IEzbobWorkplaceContext context,
@@ -59,42 +60,55 @@
 		[Transactional]
 		public ActionResult SageCallback()
 		{
-			log.Info("Arrived to Sage callback, will try to get access token...");
-			string approvalToken = Request.QueryString["code"];
-			string errorMessage;
-			string callback = Url.Action("SageCallback", "SageMarketPlaces", new { Area = "Customer" }, "https");
-			AccessTokenContainer accessTokenContainer = SageConnector.GetToken(approvalToken, callback, out errorMessage);
-			if (accessTokenContainer == null)
+			lock (sageCallbackLock)
 			{
-				return View(new { error = errorMessage ?? "Failure getting access token" });
+				var oEsi = new SageServiceInfo();
+
+				int addSageIntervalMinutes = ConfigManager.CurrentValues.Instance.AddSageIntervalMinutes;
+				MP_CustomerMarketPlace latelyAddedSage = _customer.CustomerMarketPlaces.FirstOrDefault(a => a.Marketplace.InternalId == oEsi.InternalId && a.Created.HasValue && (DateTime.UtcNow - a.Created.Value).TotalMinutes < addSageIntervalMinutes);
+
+				if (latelyAddedSage != null)
+				{
+					log.WarnFormat("Can't add more than 1 sage account every {0} minutes. Added lately:{1}", addSageIntervalMinutes, latelyAddedSage.Id);
+					return View(new { error = string.Format("Can't add more than 1 sage account every {0} minutes", addSageIntervalMinutes) });
+				}
+
+				log.Info("Arrived to Sage callback, will try to get access token...");
+				string approvalToken = Request.QueryString["code"];
+				string errorMessage;
+				string callback = Url.Action("SageCallback", "SageMarketPlaces", new {Area = "Customer"}, "https");
+				AccessTokenContainer accessTokenContainer = SageConnector.GetToken(approvalToken, callback, out errorMessage);
+				if (accessTokenContainer == null)
+				{
+					return View(new {error = errorMessage ?? "Failure getting access token"});
+				}
+				log.Info("Successfully received access token");
+
+				int marketPlaceId = _mpTypes
+					.GetAll()
+					.First(a => a.InternalId == oEsi.InternalId)
+					.Id;
+
+				var securityData = new SageSecurityInfo
+					{
+						ApprovalToken = approvalToken,
+						AccessToken = accessTokenContainer.access_token,
+						TokenType = accessTokenContainer.token_type,
+						MarketplaceId = marketPlaceId
+					};
+
+				var sageDatabaseMarketPlace = new SageDatabaseMarketPlace();
+
+				string accountName = string.Format("SageOne Account #{0}", _customer.CustomerMarketPlaces.Count(a => a.Marketplace.InternalId == oEsi.InternalId) + 1);
+
+				log.Info("Saving sage marketplace data...");
+				var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(accountName, sageDatabaseMarketPlace, securityData, _customer);
+				log.Info("Saved sage marketplace data...");
+
+				m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, marketPlace.Id, true);
+
+				return View(SageAccountModel.ToModel(marketPlace));
 			}
-			log.Info("Successfully received access token");
-
-			var oEsi = new SageServiceInfo();
-			int marketPlaceId = _mpTypes
-				.GetAll()
-				.First(a => a.InternalId == oEsi.InternalId)
-				.Id;
-
-			var securityData = new SageSecurityInfo
-			{
-				ApprovalToken = approvalToken,
-				AccessToken = accessTokenContainer.access_token,
-				TokenType = accessTokenContainer.token_type,
-				MarketplaceId = marketPlaceId
-			};
-
-			var sageDatabaseMarketPlace = new SageDatabaseMarketPlace();
-
-			string accountName = string.Format("SageOne Account #{0}", _customer.CustomerMarketPlaces.Count(a => a.Marketplace.InternalId == oEsi.InternalId) + 1);
-
-			log.Info("Saving sage marketplace data...");
-			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(accountName, sageDatabaseMarketPlace, securityData, _customer);
-			log.Info("Saved sage marketplace data...");
-
-			m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, marketPlace.Id, true);
-
-			return View(SageAccountModel.ToModel(marketPlace));
 		}
     }
 

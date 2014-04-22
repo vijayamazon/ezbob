@@ -2148,5 +2148,10 @@
 		{
 			get { return this[Variables.TrustPilotBccMail]; }
 		}
+
+		public virtual VariableValue AddSageIntervalMinutes
+		{
+			get { return this[Variables.AddSageIntervalMinutes]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager
