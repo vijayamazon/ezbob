@@ -7,7 +7,7 @@ using EzBob.Models;
 
 namespace EzBob.Web.Areas.Customer.Models
 {
-	using Backend.Models;
+	using EzBob.Backend.Models;
 
 	[Serializable]
 	public class CustomerModel
