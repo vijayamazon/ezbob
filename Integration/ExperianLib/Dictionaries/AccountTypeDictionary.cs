@@ -1,8 +1,7 @@
-﻿
+﻿using System.Collections.Generic;
+
 namespace ExperianLib.Dictionaries
 {
-	using System.Collections.Generic;
-
 	public class AccountTypeDictionary
 	{
 		protected static Dictionary<string, string> AccountTypes;
@@ -12,30 +11,26 @@ namespace ExperianLib.Dictionaries
 			if (AccountTypes == null)
 				AccountTypes = new Dictionary<string, string>();
 			AccountTypes.Clear();
-
-			//EZ-1895 begin
-			AccountTypes.Add("01", "Hire purchase (including lease purchase)");
-			AccountTypes.Add("02", "Loan");
-			AccountTypes.Add("03", "Mortgage (including second)");
-			AccountTypes.Add("04", "Budget Account / Revolving Account");
+			AccountTypes.Add("00", "Bank");
+			AccountTypes.Add("01", "Hire purchase/Conditional sale");
+			AccountTypes.Add("02", "Unsecured loan (personal loans etc)");
+			AccountTypes.Add("03", "Mortgage");
+			AccountTypes.Add("04", "Budget (revolving account)");
 			AccountTypes.Add("05", "Credit card / Store card");
 			AccountTypes.Add("06", "Charge card");
-			AccountTypes.Add("07", "Rental");
+			AccountTypes.Add("07", "Rental (TV, brown and white goods)");
 			AccountTypes.Add("08", "Mail Order");
-			AccountTypes.Add("15", "Current accounts");
-			AccountTypes.Add("19", "Primary Lease");
-			AccountTypes.Add("20", "Secondary Lease");
-			AccountTypes.Add("21", "Dealer buy back");
-			AccountTypes.Add("22", "Balloon Rental");
-			//EZ-1895 end
-
-			AccountTypes.Add("00", "Bank");
 			AccountTypes.Add("12", "CML member");
 			AccountTypes.Add("13", "CML member");
 			AccountTypes.Add("14", "CML member");
+			AccountTypes.Add("15", "Current accounts");
 			AccountTypes.Add("16", "Second mortgage (secured loan)");
 			AccountTypes.Add("17", "Credit sale fixed term");
 			AccountTypes.Add("18", "Communications");
+			AccountTypes.Add("19", "Fixed term deferred payment");
+			AccountTypes.Add("20", "Variable subscription");
+			AccountTypes.Add("21", "Utility");
+			AccountTypes.Add("22", "Finance lease");
 			AccountTypes.Add("23", "Operating lease");
 			AccountTypes.Add("24", "Unpresentable cheques");
 			AccountTypes.Add("25", "Flexible Mortgages");
@@ -84,7 +79,6 @@ namespace ExperianLib.Dictionaries
 			AccountTypes.Add("68", "Not Available in CAIS");
 			AccountTypes.Add("69", "Mortgage and Unsecured Loan");
 			AccountTypes.Add("70", "Gambling");
-
 		}
 
 		public static string GetAccountType(string accountTypeCode)
