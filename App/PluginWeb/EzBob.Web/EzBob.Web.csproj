@@ -1652,10 +1652,7 @@
     <Content Include="Views\ConfirmEmail\ConfirmationError.cshtml" />
     <Content Include="Views\Shared\_FeaturedIn.cshtml" />
     <Content Include="Views\Shared\_OnlineSellers.cshtml" />
-    <Content Include="Views\Shared\_LivePerson.cshtml" />
     <Content Include="Views\Shared\security_template.cshtml" />
-    <Content Include="Views\Shared\_NanoRepSupport.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\_NanoRepSideBar.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
