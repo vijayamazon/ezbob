@@ -668,8 +668,8 @@
 
 			if (isOffline || isBrokerCustomer)
 			{
-				enableAutomaticReApproval = false;
-				enableAutomaticReRejection = false;
+				enableAutomaticApproval = false;
+				enableAutomaticRejection = false;
 			}
 
 			if (newCreditLineOption == NewCreditLineOption.SkipEverything ||
