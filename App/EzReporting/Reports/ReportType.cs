@@ -12,5 +12,6 @@
 		RPT_UI_REPORT,
 		RPT_UI_EXT_REPORT,
 		RPT_ACCOUNTING_LOAN_BALANCE,
+		RPT_TRAFFIC_REPORT
 	} // enum ReportType
 } // namespace Reports

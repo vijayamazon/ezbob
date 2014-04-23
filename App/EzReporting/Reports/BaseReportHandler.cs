@@ -11,6 +11,7 @@ using OfficeOpenXml;
 
 namespace Reports {
 	using Ezbob.Utils;
+	using TraficReport;
 
 	public class BaseReportHandler : SafeLog {
 		#region public
@@ -166,12 +167,28 @@ namespace Reports {
 
 		#endregion method TableReport
 
+		#region method BuildTraficReport
+		
+		public ATag BuildTrafficReport(Report report, DateTime from, DateTime to, KeyValuePair<ReportQuery, DataTable> oData, List<string> oColumnTypes = null)
+		{
+			return new Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.GetTitle(from, oToDate: to))))
+				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
+		} // BuildTrafficReport
+
+		public ExcelPackage BuildTrafficReportXls(Report report, DateTime from, DateTime to,
+		                                          KeyValuePair<ReportQuery, DataTable> oData)
+		{
+			return AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), report.Title);
+		}
+		#endregion method BuildTraficReport
+
 		#region method BuildEarnedInterestReport
 
 		public ATag BuildEarnedInterestReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, today, tomorrow);
 
-			return new Html.Tags.Body().Add<Class>("Body")
+			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildEarnedInterestReport

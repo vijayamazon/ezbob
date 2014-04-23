@@ -8,7 +8,9 @@ using Ezbob.Logger;
 
 namespace EzReportToEMail
 {
+	using System.Data;
 	using Html.Attributes;
+	using Reports.TraficReport;
 
 	#region class EmailReportHandler
 
@@ -32,6 +34,7 @@ namespace EzReportToEMail
 			SortedDictionary<string, Report> reportList = Report.GetScheduledReportsList(DB);
 
 			DateTime dTomorrow = dToday.AddDays(1);
+			DateTime dYesterday = dToday.AddDays(-1);
 
 			var sender = new ReportDispatcher(DB, this);
 			try
@@ -124,6 +127,18 @@ namespace EzReportToEMail
 										);
 									break;
 
+								case ReportType.RPT_TRAFFIC_REPORT:
+									var trafficReport = new TrafficReport(DB);
+									KeyValuePair<ReportQuery, DataTable> oData = trafficReport.CreateTrafficReport(report, dYesterday.AddDays(-1), dYesterday);
+
+									sender.Dispatch(
+										report.Title,
+										dYesterday,
+										BuildTrafficReport(report, dYesterday, dToday, oData),
+										BuildTrafficReportXls(report, dYesterday, dToday, oData),
+										report.ToEmail);
+									break;
+
 								default:
 									HandleGenericReport(report, dToday, sender);
 									break;
@@ -134,8 +149,8 @@ namespace EzReportToEMail
 						catch (Exception ex)
 						{
 							Error("Generating {0} report failed \n {1}.", report.Title, ex);
-							sender.Dispatch("Report to mail tool: error generating report", 
-								DateTime.UtcNow, 
+							sender.Dispatch("Report to mail tool: error generating report",
+								DateTime.UtcNow,
 								new Html.Tags.Body()
 								.Add<Class>("Body")
 								.Append(new H1()

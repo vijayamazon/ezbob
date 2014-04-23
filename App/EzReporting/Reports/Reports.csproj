@@ -111,6 +111,12 @@
     <Compile Include="ReportQuery.cs" />
     <Compile Include="ReportType.cs" />
     <Compile Include="tags.cs" />
+    <Compile Include="TraficReport\AnalyticsData.cs" />
+    <Compile Include="TraficReport\CustomersData.cs" />
+    <Compile Include="TraficReport\Source.cs" />
+    <Compile Include="TraficReport\TraficReportRow.cs" />
+    <Compile Include="TraficReport\SourceRefMapper.cs" />
+    <Compile Include="TraficReport\TrafficReport.cs" />
     <Compile Include="UiReportExt\CustomerData.cs" />
     <Compile Include="UiReportExt\UiControlData.cs" />
     <Compile Include="UiReportExt\UiReportExt.cs" />
