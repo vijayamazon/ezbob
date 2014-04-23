@@ -1,133 +1,273 @@
-﻿namespace EzBob.Backend.Strategies
-{
+﻿namespace EzBob.Backend.Strategies {
 	using System;
-	using System.Data;
+	using System.Globalization;
 	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class ExperianConsumerCheck : AStrategy
-	{
-		public ExperianConsumerCheck(int customerId, int directorId, bool forceCheck, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
-			this.customerId = customerId;
-			this.directorId = directorId;
-			this.forceCheck = forceCheck;
+	public class ExperianConsumerCheck : AStrategy {
+		#region public
 
-			GetAddresses();
-			DataTable dt = DB.ExecuteReader("GetPersonalInfoForConsumerCheck", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId), new QueryParameter("DirectorId", directorId));
-			var results = new SafeReader(dt.Rows[0]);
-			firstName = results["FirstName"];
-			surname = results["Surname"];
-			gender = results["Gender"];
-			birthDate = results["DateOfBirth"];
-			timeAtAddress = results["TimeAtAddress"];
+		#region constructor
+
+		public ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_nCustomerID = nCustomerID;
+			m_nDirectorID = nDirectorID;
+			m_bForceCheck = bForceCheck;
+
+			m_oPersonalData = new GetPersonalInfoForConsumerCheck(m_nCustomerID, m_nDirectorID, DB, Log).FillFirst<GetPersonalInfoForConsumerCheck.ResultRow>();
+
+			m_oAddressLines = new GetCustomerAddresses(m_nCustomerID, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
 		} // constructor
 
-		private void GetAddresses()
-		{
-			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var addressesResults = new SafeReader(dt.Rows[0]);
-			currentAddressLine1 = addressesResults["Line1"];
-			currentAddressLine2 = addressesResults["Line2"];
-			currentAddressLine3 = addressesResults["Line3"];
-			currentAddressLine4 = addressesResults["Line4"];
-			currentAddressLine5 = addressesResults["Line5"];
-			currentAddressLine6 = addressesResults["Line6"];
-			prevAddressLine1 = addressesResults["Line1Prev"];
-			prevAddressLine2 = addressesResults["Line2Prev"];
-			prevAddressLine3 = addressesResults["Line3Prev"];
-			prevAddressLine4 = addressesResults["Line4Prev"];
-			prevAddressLine5 = addressesResults["Line5Prev"];
-			prevAddressLine6 = addressesResults["Line6Prev"];
-		} // GetAddresses
+		#endregion constructor
 
-		public override string Name
-		{
+		#region property Name
+
+		public override string Name {
 			get { return "Experian consumer check"; }
 		} // Name
 
-		public override void Execute()
-		{
-			Log.Info("Starting consumer check with params: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} Line1={4} Line2={5} Line3={6} Line4={7} Line5={8} Line6={9} PrevLine1={10} PrevLine2={11} PrevLine3={12} PrevLine4={13} PrevLine5={14} PrevLine6={15}",
-				firstName, surname, gender, birthDate, currentAddressLine1, currentAddressLine2, currentAddressLine3, currentAddressLine4, currentAddressLine5, currentAddressLine6,
-				prevAddressLine1, prevAddressLine2, prevAddressLine3, prevAddressLine4, prevAddressLine5, prevAddressLine6);
-			GetConsumerInfoAndSave(currentAddressLine1, currentAddressLine2, currentAddressLine3, currentAddressLine4, currentAddressLine5, currentAddressLine6);
+		#endregion property Name
 
-			if (!string.IsNullOrEmpty(error) && CanUsePrevAddress())
-			{
-				GetConsumerInfoAndSave(prevAddressLine1, prevAddressLine2, prevAddressLine3, prevAddressLine4, prevAddressLine5, prevAddressLine6);
-			}
-		}
-
-		private bool CanUsePrevAddress()
-		{
-			return directorId == 0 && timeAtAddress == 1 && !string.IsNullOrEmpty(prevAddressLine6);
-		}
-
-		private void GetConsumerInfoAndSave(string line1, string line2, string line3, string line4, string line5, string line6)
-		{
-			var consumerService = new ConsumerService();
-
-			var location = new InputLocationDetailsMultiLineLocation
-				{
-					LocationLine1 = line1,
-					LocationLine2 = line2,
-					LocationLine3 = line3,
-					LocationLine4 = line4,
-					LocationLine5 = line5,
-					LocationLine6 = line6
-				};
-
-			var isDirector = directorId != 0;
-			ConsumerServiceResult result = consumerService.GetConsumerInfo(firstName, surname, gender, birthDate, null, location, "PL", customerId, directorId, false, isDirector, forceCheck);
-
-			if (result.IsError)
-			{
-				error = result.Error;
-			}
-			else
-			{
-				Score = (int) result.BureauScore;
-				error = null;
-			}
-
-			DB.ExecuteNonQuery(
-				"UpdateExperianConsumer",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("Name", firstName),
-				new QueryParameter("Surname", surname),
-				new QueryParameter("PostCode", line6),
-				new QueryParameter("ExperianError", error),
-				new QueryParameter("ExperianScore", Score),
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("DirectorId", directorId)
-				);
-		}
+		#region property Score
 
 		public int Score { get; private set; }
-		private string error;
-		private readonly int customerId;
-		private readonly string firstName;
-		private readonly string surname;
-		private readonly string gender;
-		private readonly DateTime birthDate;
-		private readonly int directorId;
-		private string currentAddressLine1;
-		private string currentAddressLine2;
-		private string currentAddressLine3;
-		private string currentAddressLine4;
-		private string currentAddressLine5;
-		private string currentAddressLine6;
-		private string prevAddressLine1;
-		private string prevAddressLine2;
-		private string prevAddressLine3;
-		private string prevAddressLine4;
-		private string prevAddressLine5;
-		private string prevAddressLine6;
-		private readonly int timeAtAddress;
-		private readonly bool forceCheck;
+
+		#endregion property Score
+
+		#region method Execute
+
+		public override void Execute() {
+			Log.Info("Starting consumer check with parameters: {0} {1}.", m_oPersonalData, m_oAddressLines);
+
+			bool bSuccess = GetConsumerInfoAndSave(AddressCurrency.Current);
+
+			if (!bSuccess && CanUsePrevAddress())
+				bSuccess = GetConsumerInfoAndSave(AddressCurrency.Previous);
+
+			Log.Info("Consumer check {2} with parameters: {0} {1}.", m_oPersonalData, m_oAddressLines, bSuccess ? "succeeded" : "failed");
+		} // Execute
+
+		#endregion method Execute
+
+		#endregion public
+
+		#region private
+
+		#region method CanUsePrevAddress
+
+		private bool CanUsePrevAddress() {
+			return
+				(m_nDirectorID == 0) &&
+				(m_oPersonalData.TimeAtAddress == 1) &&
+				!string.IsNullOrEmpty(m_oAddressLines.GetLine6(AddressCurrency.Previous));
+		} // CanUsePrevAddress
+
+		#endregion method CanUsePrevAddress
+
+		#region method GetConsumerInfoAndSave
+
+		private bool GetConsumerInfoAndSave(AddressCurrency oAddressCurrency) {
+			InputLocationDetailsMultiLineLocation location = m_oAddressLines.GetLocation(oAddressCurrency);
+
+			var consumerService = new ConsumerService();
+
+			ConsumerServiceResult result = consumerService.GetConsumerInfo(
+				m_oPersonalData.FirstName,
+				m_oPersonalData.Surname,
+				m_oPersonalData.Gender,
+				m_oPersonalData.DateOfBirth,
+				null,
+				location,
+				"PL",
+				m_nCustomerID,
+				m_nDirectorID,
+				false,
+				m_nDirectorID != 0,
+				m_bForceCheck
+			);
+
+			if (!result.IsError)
+				Score = (int)result.BureauScore;
+
+			var sp = new UpdateExperianConsumer(DB, Log) {
+				Name = m_oPersonalData.FirstName,
+				Surname = m_oPersonalData.Surname,
+				PostCode = m_oAddressLines.GetLine6(oAddressCurrency),
+				ExperianError = result.Error,
+				ExperianScore = Score,
+				CustomerID = m_nCustomerID,
+				DirectorID = m_nDirectorID,
+			};
+
+			sp.ExecuteNonQuery();
+
+			return !result.IsError;
+		} // GetConsumerInfoAndSave
+
+		#endregion method GetConsumerInfoAndSave
+
+		#region fields
+
+		private readonly int m_nCustomerID;
+		private readonly int m_nDirectorID;
+		private readonly bool m_bForceCheck;
+
+		private readonly GetCustomerAddresses.ResultRow m_oAddressLines;
+		private readonly GetPersonalInfoForConsumerCheck.ResultRow m_oPersonalData;
+
+		#endregion fields
+
+		#region stored procedure classes
+		// ReSharper disable MemberCanBePrivate.Local
+		// ReSharper disable UnusedAutoPropertyAccessor.Local
+
+		#region class GetPersonalInfoForConsumerCheck
+
+		private class GetPersonalInfoForConsumerCheck : AStoredProcedure {
+			public GetPersonalInfoForConsumerCheck(int nCustomerID, int nDirectorID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+				CustomerID = nCustomerID;
+				DirectorID = nDirectorID;
+			} // constructor
+
+			public override bool HasValidParameters() {
+				return CustomerID > 0;
+			} // HasValidParameters
+
+			public int CustomerID { get; set; }
+
+			public int DirectorID { get; set; }
+
+			public class ResultRow : AResultRow {
+				public string FirstName { get; set; }
+				public string Surname { get; set; }
+				public string Gender { get; set; }
+				public DateTime DateOfBirth { get; set; }
+				public int TimeAtAddress { get; set; }
+
+				public override string ToString() {
+					return string.Format(
+						"FirstName='{0}' Surname='{1}' Gender='{2}' DateOfBirth='{3}' Time at address={4}",
+						FirstName, Surname, Gender, DateOfBirth.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture), TimeAtAddress
+					);
+				} // ToString
+			} // class ResultRow
+		} // class GetPersonalInfoForConsumerCheck
+
+		#endregion class GetPersonalInfoForConsumerCheck
+
+		#region class GetCustomerAddresses
+
+		private enum AddressCurrency {
+			Current,
+			Previous,
+		} // enum AddressCurrency
+
+		private class GetCustomerAddresses : AStoredProcedure {
+			public GetCustomerAddresses(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+				CustomerID = nCustomerID;
+			} // constructor
+
+			public override bool HasValidParameters() {
+				return CustomerID > 0;
+			} // HasValidParameters
+
+			public int CustomerID { get; set; }
+
+			public class ResultRow : AResultRow {
+				public string Line1 { get; set; }
+				public string Line2 { get; set; }
+				public string Line3 { get; set; }
+				public string Line4 { get; set; }
+				public string Line5 { get; set; }
+				public string Line6 { get; set; }
+
+				public string Line1Prev { get; set; }
+				public string Line2Prev { get; set; }
+				public string Line3Prev { get; set; }
+				public string Line4Prev { get; set; }
+				public string Line5Prev { get; set; }
+				public string Line6Prev { get; set; }
+
+				public override string ToString() {
+					return string.Format(
+						"Line1='{0}' Line2='{1}' Line3='{2}' Line4='{3}' Line5='{4}' Line6='{5}' " +
+						"PrevLine1='{6}' PrevLine2='{7}' PrevLine3='{8}' PrevLine4='{9}' PrevLine5='{10}' PrevLine6='{11}'",
+						Line1, Line2, Line3, Line4, Line5, Line6,
+						Line1Prev, Line2Prev, Line3Prev, Line4Prev, Line5Prev, Line6Prev
+					);
+				} // ToString
+
+				public InputLocationDetailsMultiLineLocation GetLocation(AddressCurrency oCurrency) {
+					switch (oCurrency) {
+					case AddressCurrency.Current:
+						return new InputLocationDetailsMultiLineLocation {
+							LocationLine1 = Line1,
+							LocationLine2 = Line2,
+							LocationLine3 = Line3,
+							LocationLine4 = Line4,
+							LocationLine5 = Line5,
+							LocationLine6 = Line6,
+						};
+
+					case AddressCurrency.Previous:
+						return new InputLocationDetailsMultiLineLocation {
+							LocationLine1 = Line1Prev,
+							LocationLine2 = Line2Prev,
+							LocationLine3 = Line3Prev,
+							LocationLine4 = Line4Prev,
+							LocationLine5 = Line5Prev,
+							LocationLine6 = Line6Prev,
+						};
+
+					default:
+						throw new ArgumentOutOfRangeException("oCurrency", "Unsupported value: " + oCurrency.ToString());
+					} // switch
+				} // GetLocation
+
+				public string GetLine6(AddressCurrency oCurrency) {
+					switch (oCurrency) {
+					case AddressCurrency.Current:
+						return Line6;
+
+					case AddressCurrency.Previous:
+						return Line6Prev;
+
+					default:
+						throw new ArgumentOutOfRangeException("oCurrency", "Unsupported value: " + oCurrency.ToString());
+					} // switch
+				} // GetLocation
+			} // class ResultRow
+		} // class GetCustomerAddresses
+
+		#endregion class GetCustomerAddresses
+
+		#region class UpdateExperianConsumer
+
+		private class UpdateExperianConsumer : AStoredProcedure {
+			public UpdateExperianConsumer(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+
+			public override bool HasValidParameters() {
+				return CustomerID > 0;
+			} // HasValidParameters
+
+			public string Name { get; set; }
+			public string Surname { get; set; }
+			public string PostCode { get; set; }
+			public string ExperianError { get; set; }
+			public int ExperianScore { get; set; }
+			public long CustomerID { get; set; }
+			public long DirectorID { get; set; }
+		} // class UpdateExperianConsumer
+
+		#endregion class UpdateExperianConsumer
+
+		// ReSharper restore UnusedAutoPropertyAccessor.Local
+		// ReSharper restore MemberCanBePrivate.Local
+		#endregion stored procedure classes
+
+		#endregion private
 	} // class ExperianConsumerCheck
 } // namespace
