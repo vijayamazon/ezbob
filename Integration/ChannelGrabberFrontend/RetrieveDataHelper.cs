@@ -16,6 +16,9 @@ using log4net;
 using Coin = EZBob.DatabaseLib.Common.Coin;
 
 namespace Integration.ChannelGrabberFrontend {
+	using System.Diagnostics;
+	using System.Text;
+
 	#region class RetrieveDataHelper
 
 	public class RetrieveDataHelper : MarketplaceRetrieveDataHelperBase<FunctionType> {
@@ -61,6 +64,26 @@ namespace Integration.ChannelGrabberFrontend {
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
+			if (historyRecord == null) { // should never happen
+				var os = new StringBuilder();
+				var st = new StackTrace(true);
+
+				os.Append("historyRecord is NULL when creating/updating a Channel Grabber account!");
+
+				for (var i = 0; i < st.FrameCount; i++) {
+					StackFrame oFrame = st.GetFrame(i);
+					os.AppendFormat("\n\t{0}: {1} at {2}:{3}:{4}",
+						i,
+						oFrame.GetMethod().Name,
+						oFrame.GetFileName(), 
+						oFrame.GetFileLineNumber(),
+						oFrame.GetFileColumnNumber()
+					);
+				} // for
+
+				ms_oLog.Error(os.ToString());
+			} // if
+
 			AccountModel oSecInfo = null;
 
 			try {

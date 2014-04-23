@@ -294,6 +294,12 @@ namespace EZBob.DatabaseLib {
 		{
 			MP_CustomerMarketplaceUpdatingHistory historyItem = customerMarketPlaceUpdatingHistoryRepository.GetByMarketplaceId(databaseCustomerMarketPlace.Id).FirstOrDefault();
 
+			_Log.DebugFormat(
+				"History item for customer market place id {0} is {1}.",
+				databaseCustomerMarketPlace.Id,
+				historyItem == null ? "NULL" : "not null"
+			);
+
 			try
 			{
 				a(historyItem);
