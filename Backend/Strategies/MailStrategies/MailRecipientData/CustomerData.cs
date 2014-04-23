@@ -1,17 +1,12 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
 	using System;
-	using System.Data;
 	using Ezbob.Database;
 
-	public class CustomerData
-	{
+	public class CustomerData {
 		#region method Load
 
-		public virtual void Load(int customerId, AConnection oDb)
-		{
-			oDb.ForEachRowSafe((sr, bRowsetStart) =>
-				{
+		public virtual void Load(int customerId, AConnection oDb) {
+			oDb.ForEachRowSafe((sr, bRowsetStart) => {
 					Id = sr["Id"];
 					FirstName = sr["FirstName"];
 					Surname = sr["Surname"];
@@ -38,17 +33,19 @@
 
 		#region method ToString
 
-		public override string ToString()
-		{
+		public override string ToString() {
 			return string.Format(
-				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}",
+				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, test: {9}",
 				Id,
 				FirstName,
 				Surname,
 				FullName,
 				Mail,
 				IsOffline ? "offline" : "online",
-				NumOfLoans
+				NumOfLoans,
+				MobilePhone,
+				DaytimePhone,
+				IsTest ? "yes" : "no"
 			);
 		} // ToString
 

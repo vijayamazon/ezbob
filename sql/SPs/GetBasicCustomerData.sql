@@ -9,28 +9,27 @@ BEGIN
 	DECLARE @NumOfLoans INT
 
 	SELECT 
-		@NumOfLoans = count(1) 
+		@NumOfLoans = COUNT(1)
 	FROM 
-		Loan 
+		Loan l
 	WHERE 
-		CustomerId = @CustomerId
-		
-	SELECT
-		Id,
-		FirstName,
-		Surname,
-		Fullname,
-		Name AS Mail,
-		IsOffline,
-		@NumOfLoans AS NumOfLoans,
-		RefNumber,
-		MobilePhone,
-		DaytimePhone
-		IsTest
-	FROM
-		Customer
-	WHERE
-		Id = @CustomerId
-END
+		l.CustomerId = @CustomerId
 
+	SELECT
+		c.Id,
+		c.FirstName,
+		c.Surname,
+		c.Fullname,
+		c.Name AS Mail,
+		c.IsOffline,
+		@NumOfLoans AS NumOfLoans,
+		c.RefNumber,
+		c.MobilePhone,
+		c.DaytimePhone,
+		c.IsTest
+	FROM
+		Customer c
+	WHERE
+		c.Id = @CustomerId
+END
 GO

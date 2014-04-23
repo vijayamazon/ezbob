@@ -34,6 +34,8 @@
 		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
+			Log.Debug("Notifying sales about customer {0}", CustomerData);
+
 			TemplateName = "Mandrill - Sales - New customer";
 
 			Variables = new Dictionary<string, string> {
@@ -41,7 +43,6 @@
 				{ "ProfileLink", "https://" + UnderwriterSite + "/UnderWriter/Customers?customerid=" + CustomerId },
 				{ "FirstName", CustomerData.FirstName },
 				{ "LastName", CustomerData.Surname },
-				{ "Segment", CustomerData.IsOffline ? "offline" : "online" },
 				{ "Email", CustomerData.Mail },
 				{ "MobilePhone", CustomerData.MobilePhone },
 				{ "DaytimePhone", CustomerData.DaytimePhone },
