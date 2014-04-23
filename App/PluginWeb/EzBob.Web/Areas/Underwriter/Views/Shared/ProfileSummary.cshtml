@@ -81,8 +81,14 @@
                         <td><%-mp!=null ? EzBob.SeniorityFormat(mp.Seniority) : "-"%>
                         </td>
                     </tr>
-                    @EzTable.RawCell(Html, "<b>Overall Turnover</b>", "<%- EzBob.formatPoundsNoDecimals(m.OverallTurnOver) %>")
-                    @EzTable.RawCell(Html, "<b>WebSite Turnover</b>", "<%- EzBob.formatPoundsNoDecimals(m.WebSiteTurnOver) %>")
+                    <tr>
+		                <td class="customer-column-width-50">@Html.Raw("<b>Overall Turnover</b>")</td>
+		                <td>@Html.Raw("<%- EzBob.formatPoundsNoDecimals(m.OverallTurnOver) %>")</td>
+	                </tr>
+                    <tr>
+		                <td class="customer-column-width-50">@Html.Raw("<b>WebSite Turnover</b>")</td>
+		                <td>@Html.Raw("<%- EzBob.formatPoundsNoDecimals(m.WebSiteTurnOver) %>")</td>
+	                </tr>
                 </tbody>
             </table>
         </div>

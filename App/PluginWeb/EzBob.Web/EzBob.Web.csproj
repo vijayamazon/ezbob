@@ -1552,7 +1552,6 @@
     <Content Include="Areas\Customer\Views\Shared\Profile\_PayPointCardSelectViewTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\PaymentAccounts\PayPointAdded.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Bugs\_ReportBug.cshtml" />
-    <Content Include="App_Code\EzTable.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\BankAccountDetails.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\PayPal.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\BankAccounts.cshtml" />

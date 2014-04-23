@@ -28,7 +28,6 @@
 		public double CreditScore { get; set; }
 		public int CustomerStatusId { get; set; }
 		public string CustomerStatusName { get; set; }
-		public bool Editable { get; set; }
 		public List<string> TopCategories { get; set; }
 		public decimal? WebSiteTurnOver { get; set; }
 		public decimal? OverallTurnOver { get; set; }
@@ -161,7 +160,6 @@
 			IsCustomerStatusInAlertMode = customer.CollectionStatus.CurrentStatus.Name != "Enabled";
 			CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;
 
-			Editable = customer.CreditResult == CreditResultStatus.WaitingForDecision && customer.CollectionStatus.CurrentStatus.IsEnabled;
 			IsWarning = customer.CollectionStatus.CurrentStatus.IsWarning;
 
 			if (customer.PersonalInfo != null) {
