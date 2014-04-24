@@ -12,6 +12,7 @@
 			Map(x => x.Name);
 			Map(x => x.IsEnabled);
 			Map(x => x.IsWarning);
+			Map(x => x.IsDefault);
         }
     }
 }

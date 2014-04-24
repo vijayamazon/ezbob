@@ -189,6 +189,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
 			customerModel.IsDisabled = !customer.CollectionStatus.CurrentStatus.IsEnabled;
 			customerModel.CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;
+			customerModel.IsDefaultCustomerStatus = customer.CollectionStatus.CurrentStatus.IsDefault;
             customerModel.HasRollovers = customerModel.ActiveRollovers.Any();
 
             var cr = cus.LastCashRequest;
@@ -219,7 +220,7 @@ namespace EzBob.Web.Areas.Customer.Models
 			customerModel.LastSavedWizardStep = ((customer.WizardStep == null) || customer.WizardStep.TheLastOne) ? "" : customer.WizardStep.Name;
 
 			var isDefault = customer.CollectionStatus != null && customer.CollectionStatus.CurrentStatus != null &&
-			                 customer.CollectionStatus.CurrentStatus.Name == "Default";
+			                 customer.CollectionStatus.CurrentStatus.IsDefault;
 			customerModel.Perks = isDefault ? null : _perksRepository.GetActivePerk();
 
 			customerModel.TrustPilotStatusID = customer.TrustPilotStatus.ID;

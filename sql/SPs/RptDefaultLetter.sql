@@ -10,7 +10,7 @@ CREATE PROCEDURE RptDefaultLetter
 @DateEnd DATE
 AS
 SELECT C.Id,C.Name,C.FirstName,C.Surname,AmountDue 
-FROM LoanSchedule S,Customer C,Loan L 
+FROM LoanSchedule S, Customer C, Loan L, CustomerStatuses CS
 WHERE 
 	C.IsTest = 0 AND 
 	C.Id = L.CustomerId AND 
@@ -18,6 +18,8 @@ WHERE
 	dateadd(d,14,S.Date) >= @DateStart AND 
 	dateadd(d,14,S.Date) < @DateEnd AND 
 	S.Status IN ('Late') AND 
-	C.CollectionStatus NOT in (1,4)
+	C.CollectionStatus = CS.Id AND 
+	CS.Name != 'Disabled' AND
+	CS.IsDefault = 0
 
 GO

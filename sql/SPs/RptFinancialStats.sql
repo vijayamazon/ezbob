@@ -146,9 +146,12 @@ BEGIN
 			ON l.Id = t.LoanId
 			AND t.Status = @DONE
 			AND t.Type = @PACNET
-		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 AND c.CollectionStatus = 4
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 
+		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 	WHERE
-		@DateStart <= l.Date AND l.Date < @DateEnd
+		@DateStart <= l.Date AND 
+		l.Date < @DateEnd AND
+		cs.IsDefault = 1
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------

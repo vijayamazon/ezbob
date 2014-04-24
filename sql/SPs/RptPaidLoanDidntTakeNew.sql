@@ -60,6 +60,8 @@ SELECT L.CustomerId,
 	   WHEN C.CollectionStatus = 5 THEN 'Fraud Suspect'
 	   WHEN C.CollectionStatus = 6 THEN 'Risky'
 	   WHEN C.CollectionStatus = 7 THEN 'Bad'
+	   WHEN C.CollectionStatus = 8 THEN 'WriteOff'
+	   WHEN C.CollectionStatus = 9 THEN 'Debt Management'
 	   END AS CustomerStatus,
 	   count(L.[Date]) AS NumOfLoansTook,
 	   T.ExpirianRating,

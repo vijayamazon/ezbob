@@ -74,7 +74,7 @@
 
             var customer = _customerRepository.Get(customerId);
 			customer.CollectionStatus.CurrentStatus = _customerStatusesRepository.Get(currentStatus);
-			if (customer.CollectionStatus.CurrentStatus.Name == "Default")
+			if (customer.CollectionStatus.CurrentStatus.IsDefault)
 	        {
 		        customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
 

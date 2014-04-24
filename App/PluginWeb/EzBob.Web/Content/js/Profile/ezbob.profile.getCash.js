@@ -85,7 +85,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
     }, // getCash
 
     applyForALoan: function () {
-        if (this.customer.get('CustomerStatusName') === 'Legal' || this.customer.get('CustomerStatusName') === 'Default')
+        if (this.customer.get('IsDefaultCustomerStatus'))
             return;
 
         if (this.customer.hasLateLoans())

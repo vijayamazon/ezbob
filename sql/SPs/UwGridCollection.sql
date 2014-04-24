@@ -36,8 +36,7 @@ WHERE
 	(
 		@WithTest = 1 OR c.IsTest = 0
 	)
-	AND
-	cs.Name IN ('Legal', 'Default')
+	AND cs.IsDefault = 1
 ORDER BY
 	c.Id DESC
 END

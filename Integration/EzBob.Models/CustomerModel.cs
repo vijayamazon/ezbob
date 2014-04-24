@@ -86,6 +86,8 @@ namespace EzBob.Web.Areas.Customer.Models
 
 		public string CustomerStatusName { get; set; }
 
+		public bool IsDefaultCustomerStatus { get; set; }
+
 		public bool IsDisabled { get; set; }
 
 		public bool HasRollovers { get; set; }

@@ -11,11 +11,12 @@ CREATE PROCEDURE [dbo].[RptCollectionPayments]
 AS
 BEGIN
 	SELECT C.Id,C.Fullname,T.Amount,T.PostDate,L.LoanAmount,L.Balance
-	FROM LoanTransaction T, Loan L, Customer C 
+	FROM LoanTransaction T, Loan L, Customer C, CustomerStatuses cs
 	WHERE C.IsTest = 0 
 	AND C.Id = L.CustomerId 
 	AND L.Id = T.LoanId 
-	AND C.CollectionStatus IN (3,4,6,7) 
+	AND C.CollectionStatus = cs.Id
+	AND (cs.IsDefault = 1 OR cs.IsWarning = 1)
 	AND T.PostDate >= @DateStart
 	AND T.PostDate <= @DateEnd
 	AND T.Status = 'Done' 

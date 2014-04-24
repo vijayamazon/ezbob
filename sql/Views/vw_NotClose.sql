@@ -7,7 +7,7 @@ AS
 SELECT l.Id AS loanID
 , l.CustomerId
 , l.Date AS StartDate
-, CASE WHEN cs.Name != 'Default' OR l.Status = 'PaidOff' THEN ISNULL(l.DateClosed, 0)
+, CASE WHEN cs.IsDefault = 0 OR l.Status = 'PaidOff' THEN ISNULL(l.DateClosed, 0)
 	ELSE max(csh.Timestamp) END AS DateClose
 , ISNULL(l.MaxDelinquencyDays, 0) as MaxDelinquencyDays
 , l.RepaymentsNum AS RepaymentPeriod
@@ -64,7 +64,7 @@ WHERE c.IsTest <> 1 and
  )
  GROUP BY l.Id, l.CustomerId, l.[Date], l.DateClosed, l.MaxDelinquencyDays, l.RepaymentsNum, l.Balance, c.Gender, c.FirstName, c.MiddleInitial, c.Surname, c.RefNumber, ca.Line1, ca.Line2, ca.Line3, ca.Town, ca.County
  , ca.Postcode, c.DateOfBirth, ld.lsdate, LoanAmount.am, LoanAmount.ScheduledRepayments, c.TypeOfBusiness, co.ExperianRefNum, c.CreditResult
- , c.SortCode, l.IsDefaulted, lo.CaisAccountStatus, cs.IsEnabled, c.CollectionStatus, c.MaritalStatus, lo.ManualCaisFlag, cs.Name, l.Status
+ , c.SortCode, l.IsDefaulted, lo.CaisAccountStatus, cs.IsEnabled, c.CollectionStatus, c.MaritalStatus, lo.ManualCaisFlag, cs.IsDefault, l.Status
 
 GO
 
