@@ -40,6 +40,7 @@ BEGIN
 	FROM
 		CashRequests cr
 		INNER JOIN Customer c ON cr.IdCustomer = c.Id AND (@IncludeTest = 0 OR c.IsTest = 0)
+		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 		LEFT JOIN (
 			SELECT DISTINCT
 				l.CustomerId
@@ -50,7 +51,8 @@ BEGIN
 				@DateStart <= CONVERT(DATE, l.Date)
 		) lt ON c.Id = lt.CustomerId
 	WHERE
-		lt.CustomerId IS NULL
+		lt.CustomerId IS NULL AND
+		cs.IsDefault = 0
 		AND (
 			(cr.IdUnderwriter IS NOT NULL AND cr.UnderwriterDecision = 'Approved')
 			OR
