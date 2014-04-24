@@ -106,7 +106,7 @@
 			hasNonYodleeMarketplace = sr["HasNonYodleeMarketplace"];
 			isOffline = sr["IsOffline"];
 			dateOfBirth = sr["DateOfBirth"];
-			isUnderAge = dateOfBirth.AddYears(minAge) <= DateTime.UtcNow;
+			isUnderAge = dateOfBirth.AddYears(minAge) > DateTime.UtcNow;
 			isHomeOwner = sr["IsHomeOwner"];
 			personalScore = sr["ExperianScore"];
 			earliestTransactionDate = sr["EarliestTransactionDate"];
