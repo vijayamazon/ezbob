@@ -44,34 +44,23 @@
             </tr>
         </thead>
         <tbody>
-            <%if (data.IsFraudInAlertMode) { %> 
-                @RawCellWithButtonNear("Fraud Status:", "<%= data.FraudCheckStatus %>", "changeFraudStatusManualy", "red_cell")
-            <% } %>
-    
-            <% if (data.IsTestInAlertMode) { %>
-                @RawCellWithButtonNear("Test User:", "Yes", "isTestEditButton", "red_cell")
-            <% } %>
-    
-            <% if (data.IsCciMarkInAlertMode) { %>
-                <tr>
-                    <td class="red_cell customer-column-width-50">CCI mark</td>
-                    <td class="red_cell">
-                        <span class="cci-mark">on</span>
-                        <button type="button" class="btn btn-mini btn-primary cci-mark-toggle left-pane-button">Toggle</button>
-                    </td>
-                </tr>
-            <% } %>
+            @RawCellWithButtonNear("Fraud Status:", "<%= data.FraudCheckStatus %>", "changeFraudStatusManualy", "<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>")
+            @RawCellWithButtonNear("Test User:", "Yes", "isTestEditButton", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %>")
 
-            <% if (data.IsCustomerStatusInAlertMode) { %>
-                @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "red_cell")
-            <% } %>
+            <tr>
+                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> customer-column-width-50">CCI mark</td>
+                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %>">
+                    <span class="cci-mark">on</span>
+                    <button type="button" class="btn btn-mini btn-primary cci-mark-toggle left-pane-button">Toggle</button>
+                </td>
+            </tr>
 
-            <% if (data.IsAmlInAlertMode) { %>    
-                <tr>
-		            <td class="red_cell customer-column-width-50">AML</td>
-		            <td class="red_cell"><%- AmlResult %></td>
-	            </tr>
-            <% } %>
+            @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
+
+            <tr>
+		        <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %> customer-column-width-50">AML</td>
+		        <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %>"><%- data.AmlResult %></td>
+	        </tr>
 
             @RawCell("Id", "<%- data.Id %>")
             @RawCell("Name", "<%- data.Name %>")
@@ -111,32 +100,6 @@
                 </td>
             </tr>
             @RawCell("Active Campaigns:", "<%- data.ActiveCampaign %>")
-    
-            <%if (!data.IsFraudInAlertMode) { %> 
-                @RawCellWithButtonNear("Fraud Status:", "<%= data.FraudCheckStatus %>", "changeFraudStatusManualy")
-            <% } %>    
-    
-            <% if (!data.IsTestInAlertMode) { %>
-                @RawCellWithButtonNear("Test User:", "No", "isTestEditButton")
-            <% } %>
-    
-            <% if (!data.IsCciMarkInAlertMode) { %>
-                <tr>
-                    <td>CCI mark</td>
-                    <td>
-                        <span class="cci-mark">off</span>
-                        <button type="button" class="btn btn-mini btn-primary cci-mark-toggle left-pane-button">Toggle</button>
-                    </td>
-                </tr>
-            <% } %>
-
-            <% if (!data.IsCustomerStatusInAlertMode) { %>
-                @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState")
-            <% } %>
-
-            <% if (!data.IsAmlInAlertMode) { %>
-                @RawCell("AML", "<%- data.AmlResult %>")
-            <% } %>
 
             @RawCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusDescription %>", "TrustPilotStatusUpdate")
             @RawCell("Mobile Phone #", "<%- data.MobilePhone %>")
