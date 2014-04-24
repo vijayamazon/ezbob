@@ -138,6 +138,16 @@
       }
     };
 
+    PersonInfoView.prototype.serializeData = function() {
+      var data;
+
+      data = this.model.toJSON();
+      return {
+        data: data,
+        getIcon: this.templateHelpers.getIcon
+      };
+    };
+
     PersonInfoView.prototype.changeDisabledState = function() {
       var collectionStatusModel, customerId, prevStatus, xhr,
         _this = this;

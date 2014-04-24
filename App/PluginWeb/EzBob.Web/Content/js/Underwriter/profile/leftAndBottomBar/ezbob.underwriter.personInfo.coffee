@@ -89,6 +89,13 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             return "icon-ok"  if @EmailState is "Confirmed" or @EmailState is "ManuallyConfirmed"
             "icon-question-sign"
 
+    serializeData: ->
+        data = @model.toJSON()
+        return {
+            data: data,
+            getIcon: @templateHelpers.getIcon
+        };
+
     changeDisabledState: ->
         collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel( 
             customerId : @model.get ('Id')
