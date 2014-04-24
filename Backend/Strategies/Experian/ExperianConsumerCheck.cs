@@ -1,6 +1,8 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Globalization;
+	using System.Linq;
+	using ConfigManager;
 	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Database;
@@ -12,6 +14,7 @@
 		#region constructor
 
 		public ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_oConsumerServiceResult = null;
 			m_nCustomerID = nCustomerID;
 			m_nDirectorID = nDirectorID;
 			m_bForceCheck = bForceCheck;
@@ -47,6 +50,8 @@
 			if (!bSuccess && CanUsePrevAddress())
 				bSuccess = GetConsumerInfoAndSave(AddressCurrency.Previous);
 
+			UpdateAnalytics();
+
 			Log.Info("Consumer check {2} with parameters: {0} {1}.", m_oPersonalData, m_oAddressLines, bSuccess ? "succeeded" : "failed");
 		} // Execute
 
@@ -67,6 +72,119 @@
 
 		#endregion method CanUsePrevAddress
 
+		#region method UpdateAnalytics
+
+		private void UpdateAnalytics() {
+			if ((m_oConsumerServiceResult == null) || m_oConsumerServiceResult.IsError)
+				return;
+
+			if (m_nDirectorID == 0)
+				UpdateCustomerAnalytics();
+			else
+				UpdateDirectorAnalytics();
+		} // UpdateAnalytics
+
+		#endregion method UpdateAnalytics
+
+		#region method UpdateCustomerAnalytics
+
+		private void UpdateCustomerAnalytics() {
+			string sCii = m_oConsumerServiceResult.Output.Output.ConsumerSummary.PremiumValueData.CII.NDSPCII;
+
+			int nCii;
+			if (!int.TryParse(sCii, out nCii))
+				Log.Alert("Failed to parse customer indebtedness index '{0}' (integer expected).", sCii);
+
+			OutputFullConsumerDataConsumerDataCAIS[] cais = null;
+			int nDefaultCount = 0;
+			int nLastDefaultCount = 0;
+
+			try {
+				cais = m_oConsumerServiceResult.Output.Output.FullConsumerData.ConsumerData.CAIS;
+			}
+			catch (Exception e) {
+				Log.Debug(e, "Could not extract CAIS data from Experian output - this is a thin file.");
+			} // try
+
+			if (cais == null)
+				cais = new OutputFullConsumerDataConsumerDataCAIS[0];
+
+			var dThen = DateTime.UtcNow.AddYears(-CurrentValues.Instance.CustomerAnalyticsDefaultHistoryYears);
+
+			foreach (var caisData in cais) {
+				if (caisData.CAISDetails == null)
+					continue;
+
+				foreach (var detail in caisData.CAISDetails.Where(detail => detail.AccountStatus == "F")) {
+					nDefaultCount++;
+
+					int relevantYear, relevantMonth, relevantDay;
+
+					if (detail.SettlementDate != null) {
+						relevantYear = detail.SettlementDate.CCYY;
+						relevantMonth = detail.SettlementDate.MM;
+						relevantDay = detail.SettlementDate.DD;
+					}
+					else {
+						relevantYear = detail.LastUpdatedDate.CCYY;
+						relevantMonth = detail.LastUpdatedDate.MM;
+						relevantDay = detail.LastUpdatedDate.DD;
+					} // if
+
+					var settlementDate = new DateTime(relevantYear, relevantMonth, relevantDay);
+
+					if (settlementDate >= dThen)
+						nLastDefaultCount++;
+				} // for each detail in CAIS datum
+			} // for each CAIS datum in CAIS data
+
+			Log.Debug(
+				"Updating customer analytics (customer = {0}, " +
+				"score = {1}, " +
+				"indebtedness index = {2}, " +
+				"# accounts = {3}, " +
+				"# defaults = {4}, " +
+				"# defaults = {5} since {6}" +
+				")",
+				m_nCustomerID,
+				Score,
+				nCii,
+				cais.Length,
+				nDefaultCount,
+				nLastDefaultCount,
+				dThen.ToString("MMMM d yyyy", CultureInfo.InvariantCulture)
+			);
+
+			DB.ExecuteNonQuery(
+				"CustomerAnalyticsUpdate",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", m_nCustomerID),
+				new QueryParameter("Score", Score),
+				new QueryParameter("IndebtednessIndex", nCii),
+				new QueryParameter("NumOfAccounts", cais.Length),
+				new QueryParameter("NumOfDefaults", nDefaultCount),
+				new QueryParameter("NumOfLastDefaults", nLastDefaultCount)
+			);
+		} // UpdateCustomerAnalytics
+
+		#endregion method UpdateCustomerAnalytics
+
+		#region method UpdateDirectorAnalytics
+
+		private void UpdateDirectorAnalytics() {
+			Log.Debug("Updating customer analytics director score (customer = {0}, director = {1}, score = {2})", m_nCustomerID, m_nDirectorID, Score);
+
+			DB.ExecuteNonQuery(
+				"CustomerAnalyticsUpdateDirector",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", m_nCustomerID),
+				new QueryParameter("DirectorID", m_nDirectorID),
+				new QueryParameter("Score", Score)
+			);
+		} // UpdateDirectorAnalytics
+
+		#endregion method UpdateDirectorAnalytics
+
 		#region method GetConsumerInfoAndSave
 
 		private bool GetConsumerInfoAndSave(AddressCurrency oAddressCurrency) {
@@ -74,7 +192,7 @@
 
 			var consumerService = new ConsumerService();
 
-			ConsumerServiceResult result = consumerService.GetConsumerInfo(
+			m_oConsumerServiceResult = consumerService.GetConsumerInfo(
 				m_oPersonalData.FirstName,
 				m_oPersonalData.Surname,
 				m_oPersonalData.Gender,
@@ -89,14 +207,14 @@
 				m_bForceCheck
 			);
 
-			if (!result.IsError)
-				Score = (int)result.BureauScore;
+			if (!m_oConsumerServiceResult.IsError)
+				Score = (int)m_oConsumerServiceResult.BureauScore;
 
 			var sp = new UpdateExperianConsumer(DB, Log) {
 				Name = m_oPersonalData.FirstName,
 				Surname = m_oPersonalData.Surname,
 				PostCode = m_oAddressLines.GetLine6(oAddressCurrency),
-				ExperianError = result.Error,
+				ExperianError = m_oConsumerServiceResult.Error,
 				ExperianScore = Score,
 				CustomerID = m_nCustomerID,
 				DirectorID = m_nDirectorID,
@@ -104,7 +222,7 @@
 
 			sp.ExecuteNonQuery();
 
-			return !result.IsError;
+			return !m_oConsumerServiceResult.IsError;
 		} // GetConsumerInfoAndSave
 
 		#endregion method GetConsumerInfoAndSave
@@ -117,6 +235,8 @@
 
 		private readonly GetCustomerAddresses.ResultRow m_oAddressLines;
 		private readonly GetPersonalInfoForConsumerCheck.ResultRow m_oPersonalData;
+
+		private ConsumerServiceResult m_oConsumerServiceResult;
 
 		#endregion fields
 

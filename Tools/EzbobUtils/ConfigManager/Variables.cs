@@ -69,6 +69,7 @@
 		CompanyScoreParserConfiguration,
 		CustomerSite,
 		CustomerStateRefreshInterval,
+		CustomerAnalyticsDefaultHistoryYears,
 		DefaultFeedbackValue,
 		DirectorInfoNonLimitedParserConfiguration,
 		DirectorInfoParserConfiguration,

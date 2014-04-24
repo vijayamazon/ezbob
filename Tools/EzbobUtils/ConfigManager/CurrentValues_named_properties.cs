@@ -553,6 +553,14 @@
 
 		#endregion property CustomerStateRefreshInterval
 
+		#region property CustomerAnalyticsDefaultHistoryYears
+
+		public virtual VariableValue CustomerAnalyticsDefaultHistoryYears {
+			get { return this[Variables.CustomerAnalyticsDefaultHistoryYears]; } // get
+		} // CustomerAnalyticsDefaultHistoryYears
+
+		#endregion property CustomerAnalyticsDefaultHistoryYears
+
 		#region property DefaultFeedbackValue
 
 		public virtual VariableValue DefaultFeedbackValue {
