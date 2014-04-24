@@ -8,7 +8,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzServiceReference;
 	using Infrastructure.Attributes;
 	using Models;
 	using Infrastructure;
@@ -68,8 +67,15 @@
 				var callback = Url.Action("Callback", "Paypoint", new { Area = "Customer", loanId, type, username = (_context.User != null ? _context.User.Name : "") }, "https");
 
 				var oCustomer = _context.Customer;
-
-				var url = _payPointFacade.GeneratePaymentUrl(oCustomer != null && oCustomer.IsOffline.HasValue && oCustomer.IsOffline.Value, amount, callback);
+				var isOffline = oCustomer.IsOffline.HasValue && oCustomer.IsOffline.Value;
+				var address = oCustomer.AddressInfo.PersonalAddress.FirstOrDefault();
+				var postCode = address != null ? address.Postcode : "";
+				var accountNumber = oCustomer.BankAccount != null ? oCustomer.BankAccount.AccountNumber : "";
+				var sortCode = oCustomer.BankAccount != null ? oCustomer.BankAccount.SortCode : "";
+				DateTime? dateOfBirth = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.DateOfBirth : null;
+				var surname = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.Surname : "";
+				
+				var url = _payPointFacade.GeneratePaymentUrl(isOffline, amount, callback, dateOfBirth, surname, postCode, accountNumber, sortCode);
 
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to " + url, "Successful", "");
 

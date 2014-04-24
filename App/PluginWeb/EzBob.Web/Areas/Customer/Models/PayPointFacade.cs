@@ -11,7 +11,7 @@
 	public interface IPayPointFacade
     {
         bool CheckHash(string hash, Uri url);
-        string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, bool deferred = false);
+        string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, DateTime? dateOfBirth, string surname, string postcode, string accountNumber, string sortCode, bool deferred = false);
     }
 
     public class PayPointFacade : IPayPointFacade
@@ -54,13 +54,20 @@
             return sb.ToString().ToLowerInvariant();
         }
 
-        public string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, bool deferred = false)
+        public string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, DateTime? dateOfBirth, string surname, string postcode, string accountNumber, string sortCode, bool deferred = false)
         {
             var transactionId = Guid.NewGuid().ToString();
             var merchantId = mid;
             string amountStr = amount.ToString(CultureInfo.InvariantCulture);
             var digest = CalculateMD5Hash(transactionId + amountStr + remotePassword);
-			var options = paypointOptions;
+
+	        var dateOfBirthFormatted = dateOfBirth.HasValue? dateOfBirth.Value.ToString("yyyyMMdd") : "";
+	        var surnameFormatted = surname.Substring(0, 6);
+	        var accountNumberFormatted = accountNumber.Length >= 10
+		                                     ? accountNumber.Substring(0, 10)
+		                                     : string.Format("{0}{1}", accountNumber, sortCode).Substring(0, 10);
+	        var postCodeFormatted = postcode.Split(' ')[0];
+			var options = string.Format("{0};fin_serv_birth_date={1};fin_serv_surname={2};fin_serv_postcode={3};fin_serv_account={4}", paypointOptions, dateOfBirthFormatted, surnameFormatted, postCodeFormatted, accountNumberFormatted);
             if (deferred)
             {
                 if (!string.IsNullOrEmpty(options) && options[options.Length-1] != ';')

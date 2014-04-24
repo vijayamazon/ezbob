@@ -148,10 +148,18 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public RedirectResult AddPayPoint(int id)
         {
-            var customer = _customers.Get(id);
+			var oCustomer = _customers.Get(id);
 
             var callback = Url.Action("PayPointCallback", "PaymentAccounts", new { Area = "Underwriter", customerId = id }, "https");
-            var url = _payPointFacade.GeneratePaymentUrl(customer != null && customer.IsOffline.Value, 5m, callback);
+			var isOffline = oCustomer.IsOffline.HasValue && oCustomer.IsOffline.Value;
+			var address = oCustomer.AddressInfo.PersonalAddress.FirstOrDefault();
+			var postCode = address != null ? address.Postcode : "";
+			var accountNumber = oCustomer.BankAccount != null ? oCustomer.BankAccount.AccountNumber : "";
+			var sortCode = oCustomer.BankAccount != null ? oCustomer.BankAccount.SortCode : "";
+			DateTime? dateOfBirth = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.DateOfBirth : null;
+			var surname = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.Surname : "";
+
+            var url = _payPointFacade.GeneratePaymentUrl(isOffline, 5m, callback, dateOfBirth, surname, postCode, accountNumber, sortCode);
             
             return Redirect(url);
         }
