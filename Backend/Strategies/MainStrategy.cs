@@ -21,9 +21,7 @@
 	{
 		#region public
 
-		#region constructors
-
-		#region constructor - flow #1
+		#region constructor
 
 		public MainStrategy(
 			int customerId,
@@ -54,48 +52,7 @@
 			underwriterCheck = isUnderwriterForced;
 		} // constructor
 
-		#endregion constructor - flow #1
-
-		#region constructor - flow #2
-
-		public MainStrategy(
-			int customerId,
-			int checkType,
-			string houseNumber,
-			string houseName,
-			string street,
-			string district,
-			string town,
-			string county,
-			string postcode,
-			string bankAccount,
-			string sortCode,
-			int avoidAutoDecision,
-			AConnection oDb,
-			ASafeLog oLog
-		)
-			: base(oDb, oLog)
-		{
-			medalScoreCalculator = new MedalScoreCalculator(DB, Log);
-			mailer = new StrategiesMailer(DB, Log);
-			this.customerId = customerId;
-			useCustomIdHubAddress = checkType;
-			underwriterCheck = true;
-			idhubHouseNumber = houseNumber;
-			idhubHouseName = houseName;
-			idhubStreet = street;
-			idhubDistrict = district;
-			idhubTown = town;
-			idhubCounty = county;
-			idhubPostCode = postcode;
-			idhubAccountNumber = bankAccount;
-			idhubBranchCode = sortCode;
-			avoidAutomaticDecision = avoidAutoDecision;
-		} // constructor
-
-		#endregion constructor - flow #2
-
-		#endregion constructors
+		#endregion constructor
 
 		#region property Name
 
@@ -700,16 +657,6 @@
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly bool underwriterCheck;
 		private readonly int avoidAutomaticDecision;
-		private readonly int useCustomIdHubAddress;
-		private readonly string idhubHouseNumber;
-		private readonly string idhubHouseName;
-		private readonly string idhubStreet;
-		private readonly string idhubDistrict;
-		private readonly string idhubTown;
-		private readonly string idhubCounty;
-		private readonly string idhubPostCode;
-		private readonly string idhubBranchCode;
-		private readonly string idhubAccountNumber;
 
 		// Configs
 		private int rejectDefaultsCreditScore;
@@ -906,17 +853,10 @@
 
 		private void GetBwa()
 		{
-			if (useCustomIdHubAddress == 0)
+			if (ShouldRunBwa())
 			{
 				Log.Info("Getting BWA for customer: {0}", customerId);
 				var bwaChecker = new BwaChecker(customerId, DB, Log);
-				bwaChecker.Execute();
-			}
-			else if (useCustomIdHubAddress == 2 || (useCustomIdHubAddress != 1 && ShouldRunBwa()))
-			{
-				Log.Info("Getting BWA with custom address for customer: {0}", customerId);
-				var bwaChecker = new BwaChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown,
-					idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber, DB, Log);
 				bwaChecker.Execute();
 			}
 		}
@@ -925,19 +865,9 @@
 		{
 			if (wasMainStrategyExecutedBefore)
 			{
-				if (useCustomIdHubAddress == 0)
-				{
-					Log.Info("Getting AML for customer: {0}", customerId);
-					var amlChecker = new AmlChecker(customerId, DB, Log);
-					amlChecker.Execute();
-				}
-				else if (useCustomIdHubAddress != 2)
-				{
-					Log.Info("Getting AML with custom address for customer: {0}", customerId);
-					var amlChecker = new AmlChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown,
-													idhubCounty, idhubPostCode, DB, Log);
-					amlChecker.Execute();
-				}
+				Log.Info("Getting AML for customer: {0}", customerId);
+				var amlChecker = new AmlChecker(customerId, DB, Log);
+				amlChecker.Execute();
 			}
 			else if (!WaitForAmlToFinishUpdates())
 			{
