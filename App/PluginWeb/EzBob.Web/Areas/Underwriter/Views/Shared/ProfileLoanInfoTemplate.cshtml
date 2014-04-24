@@ -45,12 +45,12 @@
         </thead>
         <tbody>
             @RawCellWithButtonNear("Fraud Status:", "<%= data.FraudCheckStatus %>", "changeFraudStatusManualy", "<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>")
-            @RawCellWithButtonNear("Test User:", "Yes", "isTestEditButton", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %>")
+            @RawCellWithButtonNear("Test User:", "<%= data.IsTestInAlertMode ? 'Yes' : 'No' %>", "isTestEditButton", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %>")
 
             <tr>
-                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> customer-column-width-50">CCI mark</td>
+                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> customer-column-width-50 cci-mark-td">CCI mark</td>
                 <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %>">
-                    <span class="cci-mark">on</span>
+                    <span class="cci-mark"><%= data.IsCciMarkInAlertMode ? 'on' : 'off' %></span>
                     <button type="button" class="btn btn-mini btn-primary cci-mark-toggle left-pane-button">Toggle</button>
                 </td>
             </tr>

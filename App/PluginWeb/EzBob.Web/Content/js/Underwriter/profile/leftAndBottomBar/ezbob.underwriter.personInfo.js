@@ -46,11 +46,25 @@
           return EzBob.App.trigger('error', result.error);
         } else {
           _this.model.set('CciMark', result.mark);
-          return _this.model.fetch();
+          return _this.setCciMark(result.mark);
         }
       }).always(function() {
         return UnBlockUi();
       });
+    };
+
+    PersonInfoView.prototype.setCciMark = function(cciMark) {
+      var oSpan, oTd;
+
+      oSpan = this.$el.find('.cci-mark');
+      oTd = this.$el.find('.cci-mark-td');
+      if (cciMark) {
+        oSpan.text('on').closest('td').addClass('red_cell');
+        return oTd.addClass('red_cell');
+      } else {
+        oSpan.text('off').closest('td').removeClass('red_cell');
+        return oTd.removeClass('red_cell');
+      }
     };
 
     PersonInfoView.prototype.events = {
@@ -197,8 +211,7 @@
     };
 
     PersonInfoView.prototype.isTestEditButton = function() {
-      var d,
-        _this = this;
+      var d;
 
       d = new EzBob.Dialogs.CheckBoxEdit({
         model: this.model,
@@ -213,9 +226,6 @@
         }
       });
       d.render();
-      d.on('done', function() {
-        return _this.model.fetch();
-      });
     };
 
     PersonInfoView.prototype.avoidAutomaticDecisionButton = function() {

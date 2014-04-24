@@ -27,11 +27,21 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                 EzBob.App.trigger 'error', result.error
             else
                 @model.set('CciMark', result.mark)
-                @model.fetch()
+                @setCciMark(result.mark)
         ).always( ->
             UnBlockUi()
         )
-    # end of toggleCciMark
+
+    setCciMark: (cciMark) ->
+        oSpan = @$el.find '.cci-mark'
+        oTd = @$el.find '.cci-mark-td'
+
+        if cciMark
+            oSpan.text('on').closest('td').addClass 'red_cell'
+            oTd.addClass 'red_cell'
+        else
+            oSpan.text('off').closest('td').removeClass 'red_cell'
+            oTd.removeClass 'red_cell'
 
     events:
         "click button[name=\"changeDisabledState\"]": "changeDisabledState"
@@ -135,9 +145,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                 id: @model.get("Id")
         )
         d.render()
-        d.on( 'done', =>
-            @model.fetch()
-        )
         return
 
     avoidAutomaticDecisionButton: ->
