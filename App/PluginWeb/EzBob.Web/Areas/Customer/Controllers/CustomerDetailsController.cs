@@ -1,4 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
+	#region using
+
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
@@ -11,11 +13,11 @@
 	using DbConstants;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ExperianLib.Ebusiness;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
-	using FraudChecker;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
@@ -24,14 +26,15 @@
 	using Iesi.Collections.Generic;
 	using NHibernate;
 	using EzServiceReference;
+	using StructureMap;
 	using log4net;
 
-	#region class CustomerDetailsController
+	#endregion using
 
 	public class CustomerDetailsController : Controller {
 		#region public
 
-		#region method AddDirectorToCustomer
+		#region static method AddDirectorToCustomer
 
 		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session) {
 			if (customer.Company == null)
@@ -44,7 +47,7 @@
 			var nAddressType = customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
 				? CustomerAddressType.LimitedDirectorHomeAddress
 				: CustomerAddressType.NonLimitedDirectorHomeAddress;
-			
+
 			foreach (var address in dbDirector.DirectorAddressInfo.AllAddresses) {
 				address.Director = dbDirector;
 				address.AddressType = nAddressType;
@@ -63,7 +66,7 @@
 			return new { success = true };
 		} // AddDirectorToCustomer
 
-		#endregion method AddDirectorToCustomer
+		#endregion static method AddDirectorToCustomer
 
 		#region constructor
 
@@ -73,7 +76,7 @@
 			IPersonalInfoHistoryRepository personalInfoHistoryRepository,
 			ISession session,
 			CashRequestBuilder crBuilder,
-			ICustomerRepository _customerRepository
+			DirectorRepository directorRepository
 		) {
 			_context = context;
 			_helper = helper;
@@ -81,7 +84,7 @@
 			m_oServiceClient = new ServiceClient();
 			_session = session;
 			_crBuilder = crBuilder;
-			customerRepository = _customerRepository;
+			_directorRepository = directorRepository;
 		} // constructor
 
 		#endregion constructor
@@ -258,6 +261,23 @@
 				eIndustryType
 			);
 
+			if (nBusinessType != TypeOfBusiness.Entrepreneur) {
+				IQueryable<Director> directors = _directorRepository.GetAll().Where(x => x.Customer.Id == customer.Id);
+
+				foreach (Director director in directors) {
+					try {
+						m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, director.Id, false);
+					}
+					catch (Exception e) {
+						ms_oLog.Error(
+							"Something went pretty not so excellent while starting " +
+							"an Experian consumer check for customer " + customer.Id + " and director " + director.Id + ".",
+							e
+						);
+					} // try
+				} // for each director
+			} // if not Entrepreneur
+
 			QuickOfferActionResult qoar = null;
 
 			try {
@@ -279,7 +299,6 @@
 
 		#region method Save
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -289,50 +308,30 @@
 			List<CustomerAddress> prevPersonAddresses,
 			string dateOfBirth
 		) {
+			SaveCustomerToDB(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth);
+
 			var customer = _context.Customer;
 
-			if (personalInfo == null)
-				throw new ArgumentNullException("personalInfo");
+			try {
+				m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, 0, false);
+			}
+			catch (Exception e) {
+				ms_oLog.Error("Something went pretty not so excellent while starting an Experian consumer check for customer " + customer.Id + ".", e);
+			} // try
 
-			if (string.IsNullOrEmpty(personalInfo.FirstName))
-				throw new ArgumentNullException("personalInfo." + "FirstName");
-
-			if (string.IsNullOrEmpty(personalInfo.Surname))
-				throw new ArgumentNullException("personalInfo." + "Surname");
-
-			personalInfo.DateOfBirth = DateTime.ParseExact(dateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture);
-
-			customer.ConsentToSearch = personalInfo.ConsentToSearch;
-
-			if (customer.PersonalInfo != null)
-				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
-
-			customer.PersonalInfo = personalInfo;
-
-			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial).Trim();
-
-			UpdateAddresses(
-				customer, personalAddress, customer.AddressInfo.PersonalAddress,
-				CustomerAddressType.PersonalAddress,
-				lst => customer.AddressInfo.PersonalAddress = lst
-			);
-
-			UpdateAddresses(
-				customer, prevPersonAddresses, customer.AddressInfo.PrevPersonAddresses,
-				CustomerAddressType.PrevPersonAddresses,
-				lst => customer.AddressInfo.PrevPersonAddresses = lst
-			);
-
-			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
-			_session.Flush();
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
+			try {
+				m_oServiceClient.Instance.CheckAml(customer.Id);
+			}
+			catch (Exception e) {
+				ms_oLog.Error("Something went pretty not so excellent while starting an AML check for customer " + customer.Id + ".", e);
+			} // try
 
 			if (!customer.IsTest) {
 				try {
 					m_oServiceClient.Instance.NotifySalesOnNewCustomer(customer.Id);
 				}
 				catch (Exception e) {
-					ms_oLog.Error("Something went pretty not so excellent while sending notification to sales.", e);
+					ms_oLog.Error("Something went pretty not so excellent while sending notification to sales for customer " + customer.Id + ".", e);
 				} // try
 			} // if
 
@@ -474,14 +473,11 @@
 		#region method SaveEditHistory
 
 		[NonAction]
-		public void SaveEditHistory(PersonalInfoHistoryParameter oldPersonalInfo, PersonalInfoHistoryParameter newPersonalInfo)
-		{
+		public void SaveEditHistory(PersonalInfoHistoryParameter oldPersonalInfo, PersonalInfoHistoryParameter newPersonalInfo) {
 			var customer = _context.Customer;
 
-			if (oldPersonalInfo.DaytimePhone != newPersonalInfo.DaytimePhone)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.DaytimePhone != newPersonalInfo.DaytimePhone) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Day time Phone",
 					OldValue = oldPersonalInfo.DaytimePhone,
@@ -492,10 +488,8 @@
 				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
-			if (oldPersonalInfo.MobilePhone != newPersonalInfo.MobilePhone)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.MobilePhone != newPersonalInfo.MobilePhone) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Mobile Phone",
 					OldValue = oldPersonalInfo.MobilePhone,
@@ -505,10 +499,8 @@
 				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
-			if (oldPersonalInfo.BusinessPhone != newPersonalInfo.BusinessPhone)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.BusinessPhone != newPersonalInfo.BusinessPhone) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Business Phone",
 					OldValue = oldPersonalInfo.BusinessPhone,
@@ -519,10 +511,8 @@
 				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
-			if (oldPersonalInfo.OverallTurnOver != newPersonalInfo.OverallTurnOver)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.OverallTurnOver != newPersonalInfo.OverallTurnOver) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Total Estimated Sales",
 					OldValue = oldPersonalInfo.OverallTurnOver,
@@ -533,10 +523,8 @@
 				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
-			if (oldPersonalInfo.WebSiteTurnover != newPersonalInfo.WebSiteTurnover)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.WebSiteTurnover != newPersonalInfo.WebSiteTurnover) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Estimated Online Sales",
 					OldValue = oldPersonalInfo.WebSiteTurnover,
@@ -566,10 +554,8 @@
 			Iesi.Collections.Generic.ISet<CustomerAddress> oCurrentAddressList,
 			CustomerAddressType nType,
 			Action<Iesi.Collections.Generic.ISet<CustomerAddress>> fSetNewValue
-		)
-		{
-			if (oNewAddressList == null)
-			{
+		) {
+			if (oNewAddressList == null) {
 				if (oCurrentAddressList != null)
 					oCurrentAddressList.Clear();
 
@@ -578,19 +564,16 @@
 
 			var oNewEntries = new List<CustomerAddress>();
 
-			foreach (var val in oNewAddressList.Where(x => x.AddressId == 0))
-			{
+			foreach (var val in oNewAddressList.Where(x => x.AddressId == 0)) {
 				val.AddressType = nType;
 				val.Customer = customer;
 				oNewEntries.Add(val);
 			} // foreach
 
-			if (oNewEntries.Count > 0)
-			{
+			if (oNewEntries.Count > 0) {
 				if (oCurrentAddressList == null)
 					fSetNewValue(new HashedSet<CustomerAddress>(oNewEntries));
-				else
-				{
+				else {
 					oCurrentAddressList.Clear();
 					oCurrentAddressList.AddAll(oNewEntries);
 				} // if
@@ -599,7 +582,7 @@
 
 		#endregion static method UpdateAddresses
 
-		#region static method ProcessCompanyInfo
+		#region static method ProcessCompanyInfoTemporary
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		private void ProcessCompanyInfoTemporary(
@@ -616,8 +599,7 @@
 			CompanyInfo experianInfo, Customer customer,
 			TypeOfBusiness nBusinessType,
 			IndustryType eIndustryType
-		)
-		{
+		) {
 			if (customer.PersonalInfo == null)
 				customer.PersonalInfo = new PersonalInfo();
 
@@ -688,7 +670,7 @@
 					}
 				};
 
-				companyData.VatReporting = vat != null ? (VatReporting?)Enum.Parse(typeof (VatReporting), vat) : null;
+				companyData.VatReporting = vat != null ? (VatReporting?)Enum.Parse(typeof(VatReporting), vat) : null;
 				ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
 			} // if
 
@@ -699,7 +681,11 @@
 				"Customer {1} ({0}): wizard step has been updated to {2}",
 				customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.CompanyDetails
 			);
-		} // SaveCompany
+		} // ProcessCompanyInfoTemporary
+
+		#endregion static method ProcessCompanyInfoTemporary
+
+		#region static method ProcessCompanyInfo
 
 		private static void ProcessCompanyInfo(
 			CompanyInfoMap companyData,
@@ -709,10 +695,9 @@
 			CompanyEmployeeCountInfo companyEmployeeCount,
 			CompanyInfo experianInfo,
 			Customer customer
-		)
-		{
+		) {
 			Company company = new Company();
-			
+
 			company.ExperianCompanyName = experianInfo.BusName;
 			company.ExperianRefNum = experianInfo.BusRefNum == "skip" ? "NotFound" : experianInfo.BusRefNum;
 			company.TypeOfBusiness = companyData.TypeOfBusiness;
@@ -726,22 +711,17 @@
 			company.RentMonthLeft = companyData.RentMonthLeft;
 			company.CapitalExpenditure = companyData.CapitalExpenditure;
 			company.VatReporting = companyData.VatReporting;
-			
+
 			customer.Company = company;
 
-			if (directors != null)
-			{
+			if (directors != null) {
 				company.Directors.AddAll(
-					directors.Select(d =>
-					{
+					directors.Select(d => {
 						var dir = d.FromModel();
 
-						if (dir != null)
-						{
-							if (dir.DirectorAddressInfo != null && dir.DirectorAddressInfo.AllAddresses != null)
-							{
-								foreach (var address in dir.DirectorAddressInfo.AllAddresses)
-								{
+						if (dir != null) {
+							if (dir.DirectorAddressInfo != null && dir.DirectorAddressInfo.AllAddresses != null) {
+								foreach (var address in dir.DirectorAddressInfo.AllAddresses) {
 									address.AddressType = CustomerAddressType.LimitedDirectorHomeAddress;
 									address.Director = dir;
 								} // foreach
@@ -757,10 +737,8 @@
 				); // AddAll
 			} // if
 
-			if (companyAddress != null)
-			{
-				foreach (var val in companyAddress)
-				{
+			if (companyAddress != null) {
+				foreach (var val in companyAddress) {
 					val.AddressType = CustomerAddressType.LimitedCompanyAddress; //TODO
 					val.Customer = customer;
 					val.Company = company;
@@ -769,8 +747,7 @@
 				company.CompanyAddress = new HashedSet<CustomerAddress>(companyAddress);
 			} // if
 
-			if (experianInfo != null)
-			{
+			if (experianInfo != null) {
 				experianCompanyAddress = new Collection<CustomerAddress>
 					{
 						new CustomerAddress
@@ -782,8 +759,7 @@
 								Postcode = experianInfo.PostCode
 							}
 					};
-				foreach (var val in experianCompanyAddress)
-				{
+				foreach (var val in experianCompanyAddress) {
 					val.AddressType = CustomerAddressType.ExperianCompanyAddress;
 					val.Customer = customer;
 					val.Company = company;
@@ -792,8 +768,7 @@
 				company.ExperianCompanyAddress = new HashedSet<CustomerAddress>(experianCompanyAddress);
 			}
 
-			company.CompanyEmployeeCount.Add(new CompanyEmployeeCount
-			{
+			company.CompanyEmployeeCount.Add(new CompanyEmployeeCount {
 				BottomEarningEmployeeCount = companyEmployeeCount.BottomEarningEmployeeCount,
 				Created = DateTime.UtcNow,
 				Customer = customer,
@@ -807,6 +782,57 @@
 
 		#endregion static method ProcessCompanyInfo
 
+		#region method SaveCustomerToDB
+
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		private void SaveCustomerToDB(
+			PersonalInfo personalInfo,
+			IEnumerable<CustomerAddress> personalAddress,
+			IEnumerable<CustomerAddress> prevPersonAddresses,
+			string dateOfBirth
+		) {
+			var customer = _context.Customer;
+
+			if (personalInfo == null)
+				throw new ArgumentNullException("personalInfo");
+
+			if (string.IsNullOrEmpty(personalInfo.FirstName))
+				throw new ArgumentNullException("personalInfo." + "FirstName");
+
+			if (string.IsNullOrEmpty(personalInfo.Surname))
+				throw new ArgumentNullException("personalInfo." + "Surname");
+
+			personalInfo.DateOfBirth = DateTime.ParseExact(dateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture);
+
+			customer.ConsentToSearch = personalInfo.ConsentToSearch;
+
+			if (customer.PersonalInfo != null)
+				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
+
+			customer.PersonalInfo = personalInfo;
+
+			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial).Trim();
+
+			UpdateAddresses(
+				customer, personalAddress, customer.AddressInfo.PersonalAddress,
+				CustomerAddressType.PersonalAddress,
+				lst => customer.AddressInfo.PersonalAddress = lst
+			);
+
+			UpdateAddresses(
+				customer, prevPersonAddresses, customer.AddressInfo.PrevPersonAddresses,
+				CustomerAddressType.PrevPersonAddresses,
+				lst => customer.AddressInfo.PrevPersonAddresses = lst
+			);
+
+			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
+			_session.Flush();
+
+			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
+		} // SaveCustomerToDB
+
+		#endregion method SaveCustomerToDB
+
 		#region method MakeAddress
 
 		private void MakeAddress(
@@ -815,8 +841,7 @@
 			CustomerAddressType prevAddressType,
 			Iesi.Collections.Generic.ISet<CustomerAddress> currentAddress,
 			CustomerAddressType currentAddressType
-		)
-		{
+		) {
 			var newAddresses = newAddress as IList<CustomerAddress> ?? newAddress.ToList();
 			var addAddress = newAddresses.Where(i => i.AddressId == 0).ToList();
 			var curAddress = addAddress.LastOrDefault() ?? currentAddress.LastOrDefault();
@@ -824,8 +849,7 @@
 			if (curAddress == null)
 				return;
 
-			foreach (var address in newAddresses)
-			{
+			foreach (var address in newAddresses) {
 				address.Director = currentAddress.First().Director;
 				address.Customer = currentAddress.First().Customer;
 				address.Company = currentAddress.First().Company;
@@ -834,8 +858,7 @@
 			foreach (var address in currentAddress)
 				address.AddressType = prevAddressType;
 
-			foreach (var item in addAddress.Where(a => a.Id != curAddress.Id))
-			{
+			foreach (var item in addAddress.Where(a => a.Id != curAddress.Id)) {
 				item.AddressType = prevAddressType;
 				prevAddress.Add(item);
 			} // for each old address
@@ -854,18 +877,15 @@
 			IList<CustomerAddress> newAddress,
 			Customer customer,
 			string fieldName
-		)
-		{
+		) {
 			if (oldAddress == null || newAddress == null)
 				return;
 
 			var addedAddress = newAddress.Where(n => oldAddress.All(t => t.Id != n.Id)).ToList();
 			var removeAddress = oldAddress.Where(n => newAddress.All(t => t.Id != n.Id)).ToList();
 
-			foreach (var customerAddress in removeAddress)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			foreach (var customerAddress in removeAddress) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = fieldName,
 					OldValue = customerAddress.Id,
@@ -876,10 +896,8 @@
 				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // for each removed address
 
-			foreach (var customerAddress in addedAddress)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			foreach (var customerAddress in addedAddress) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = fieldName,
 					OldValue = string.Empty,
@@ -897,19 +915,16 @@
 
 		#region method PersonalInfoEditHistoryParametersBuilder
 
-		private PersonalInfoHistoryParameter PersonalInfoEditHistoryParametersBuilder(Customer customer)
-		{
+		private PersonalInfoHistoryParameter PersonalInfoEditHistoryParametersBuilder(Customer customer) {
 			string businessPhone = "";
 			IList<CustomerAddress> companyAddress = null;
 			var company = customer.Company;
-			if (company != null)
-			{
+			if (company != null) {
 				businessPhone = company.BusinessPhone;
 				companyAddress = company.CompanyAddress.ToList();
 			}
 
-			var personalInfo = new PersonalInfoHistoryParameter
-			{
+			var personalInfo = new PersonalInfoHistoryParameter {
 				DaytimePhone = customer.PersonalInfo.DaytimePhone,
 				MobilePhone = customer.PersonalInfo.MobilePhone,
 				BusinessPhone = businessPhone,
@@ -935,13 +950,11 @@
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly IConcentAgreementHelper _concentAgreementHelper = new ConcentAgreementHelper();
 		private readonly DatabaseDataHelper _helper;
-		private static ICustomerRepository customerRepository;
+		private readonly DirectorRepository _directorRepository;
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(CustomerDetailsController));
 
 		#endregion private properties
 
 		#endregion private
 	} // class CustomerDetailsController
-
-	#endregion class CustomerDetailsController
 } // namespace EzBob.Web.Areas.Customer.Controllers

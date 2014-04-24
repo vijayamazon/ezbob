@@ -218,10 +218,10 @@
 		#region Experian
 
 		[OperationContract]
-		ActionMetaData CheckExperianCompany(int customerId, bool forceCheck);
+		ActionMetaData ExperianCompanyCheck(int customerId, bool forceCheck);
 
 		[OperationContract]
-		ActionMetaData CheckExperianConsumer(int customerId, int directorId, bool forceCheck);
+		ActionMetaData ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck);
 
 		#endregion Experian
 

@@ -640,32 +640,32 @@
 		}
 
 		[Activation]
-		private void CheckExperianCompany()
+		private void ExperianCompanyCheck()
 		{
 			int customerId;
 			bool forceCheck;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out forceCheck))
 			{
-				m_oLog.Msg("Usage: CheckExperianCompany <CustomerId> <ForceCheck>");
+				m_oLog.Msg("Usage: ExperianCompanyCheck <CustomerId> <ForceCheck>");
 				return;
 			}
 
-			serviceClient.CheckExperianCompany(customerId, forceCheck);
+			serviceClient.ExperianCompanyCheck(customerId, forceCheck);
 		}
 
 		[Activation]
-		private void CheckExperianConsumer()
+		private void ExperianConsumerCheck()
 		{
 			int customerId, directorId;
 			bool forceCheck;
 
 			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId) || !bool.TryParse(args[2], out forceCheck))
 			{
-				m_oLog.Msg("Usage: CheckExperianConsumer <CustomerId> <DirectorId> <ForceCheck>");
+				m_oLog.Msg("Usage: ExperianConsumerCheck <CustomerId> <DirectorId> <ForceCheck>");
 				return;
 			}
 
-			serviceClient.CheckExperianConsumer(customerId, directorId, forceCheck);
+			serviceClient.ExperianConsumerCheck(customerId, directorId, forceCheck);
 		}
 
 		[Activation]

@@ -45,11 +45,11 @@
 		[Transactional]
 		public JsonResult RunConsumerCheck(int customerId, bool forceCheck)
 		{
-			m_oServiceClient.Instance.CheckExperianConsumer(customerId, 0, forceCheck);
+			m_oServiceClient.Instance.ExperianConsumerCheck(customerId, 0, forceCheck);
 			List<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId).ToList();
 			foreach (Director director in directors)
 			{
-				m_oServiceClient.Instance.CheckExperianConsumer(customerId, director.Id, forceCheck);
+				m_oServiceClient.Instance.ExperianConsumerCheck(customerId, director.Id, forceCheck);
 			}
 			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
@@ -58,7 +58,7 @@
 		[Transactional]
 		public JsonResult RunCompanyCheck(int id, bool forceCheck)
 		{
-			m_oServiceClient.Instance.CheckExperianCompany(id, forceCheck);
+			m_oServiceClient.Instance.ExperianCompanyCheck(id, forceCheck);
 			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
 

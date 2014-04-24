@@ -6,14 +6,13 @@
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
-		public ActionMetaData CheckExperianCompany(int customerId, bool forceCheck) {
-			return Execute(customerId, null, typeof(ExperianCompanyCheck), customerId, forceCheck);
-		} // CheckExperianCompany
+		public ActionMetaData ExperianCompanyCheck(int nCustomerID, bool bForceCheck) {
+			return Execute(nCustomerID, null, typeof(ExperianCompanyCheck), nCustomerID, bForceCheck);
+		} // ExperianCompanyCheck
 
-		public ActionMetaData CheckExperianConsumer(int customerId, int directorId, bool forceCheck)
-		{
-			return Execute(customerId, null, typeof(ExperianConsumerCheck), customerId, directorId, forceCheck);
-		} // CheckExperianConsumer
+		public ActionMetaData ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck) {
+			return Execute(nCustomerID, null, typeof(ExperianConsumerCheck), nCustomerID, nDirectorID, bForceCheck);
+		} // ExperianConsumerCheck
 		
 		public DateTimeActionResult GetExperianConsumerCacheDate(List<int> ids)
 		{

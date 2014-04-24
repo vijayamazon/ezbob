@@ -339,9 +339,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		else
 			data.push({ name: 'PartBusinessOnline', value: this.curOobts === 'online' });
 
-		if (this.$el.find('#DirectorCheck').is(":checked")) {
+		if (this.$el.find('#DirectorCheck').is(":checked"))
 			_.find(data, function(d) { return d.name === 'DirectorCheck'; }).value = true;
-		}
 
 		var totalMonthlySalary = _.find(data, function(d) { return d.name === 'TotalMonthlySalary'; });
 		if (totalMonthlySalary)
@@ -358,20 +357,20 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 			if (res.error) {
 				EzBob.App.trigger('error', res.error);
+				UnBlockUi();
 				return;
 			} // if
 
 			that.model.fetch().done(function() {
+				UnBlockUi();
 				that.trigger('ready');
 				EzBob.App.trigger('clear');
 				that.trigger('next');
 			});
 		});
-		request.complete(function() {
-			if (typeOfBussiness !== 'Entrepreneur') {
-				$.post("" + window.gRootPath + "Customer/Experian/PerformConsumerCheckForDirectors", {});
-			}
 
+		request.fail(function() {
+			EzBob.App.trigger('error', 'Failed to save company details.');
 			UnBlockUi();
 		});
 	}, // saveDataRequest

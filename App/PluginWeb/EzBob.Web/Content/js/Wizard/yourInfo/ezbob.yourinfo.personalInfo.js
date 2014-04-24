@@ -217,8 +217,6 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
         var request = $.post(form.attr('action'), data);
 
         request.success(function (res) {
-            $.post("" + window.gRootPath + "Customer/Experian/PerformConsumerCheck", {});
-		    $.post("" + window.gRootPath + "Customer/Aml/PerformAmlCheck", {});
             scrollTop();
 
             if (res.error) {

@@ -1,5 +1,4 @@
-﻿namespace EzBob.Backend.Strategies
-{
+﻿namespace EzBob.Backend.Strategies {
 	using AutoDecisions;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
@@ -17,8 +16,7 @@
 
 	#region class MainStrategy
 
-	public class MainStrategy : AStrategy
-	{
+	public class MainStrategy : AStrategy {
 		#region public
 
 		#region constructor
@@ -60,14 +58,9 @@
 
 		#endregion property Name
 
-		private void GetZooplaData()
-		{
-			Log.Info("Getting zoopla data for customer:{0}", customerId);
-			strategyHelper.GetZooplaData(customerId);
-		}
+		#region method Execute
 
-		public override void Execute()
-		{
+		public override void Execute() {
 			ReadConfigurations();
 
 			MakeSureMpDataIsSufficient();
@@ -76,8 +69,7 @@
 
 			SetAutoDecisionAvailability();
 
-			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
-			{
+			if (newCreditLineOption != NewCreditLineOption.SkipEverything) {
 				PerformCompanyExperianCheck();
 				PerformConsumerExperianCheck();
 
@@ -89,19 +81,17 @@
 
 				GetAml();
 				GetBwa();
-			} // if
-			else
-			{
+			}
+			else {
 				experianConsumerScore = GetCurrentExperianScore();
 				minExperianScore = experianConsumerScore;
 				maxExperianScore = experianConsumerScore;
 				initialExperianConsumerScore = experianConsumerScore;
-			}
+			} // if
 
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
 
-			if (underwriterCheck)
-			{
+			if (underwriterCheck) {
 				GetZooplaData();
 				SetEndTimestamp();
 				return;
@@ -111,63 +101,69 @@
 
 			CalcAndCapOffer();
 
-			autoDecisionResponse = AutoDecisionMaker.MakeDecision(customerId, minExperianScore, maxExperianScore, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection, offeredCreditLine, marketplaceSeniorityDays, enableAutomaticReRejection, enableAutomaticRejection, enableAutomaticReApproval, enableAutomaticApproval,
-				loanOfferReApprovalFullAmountOld, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalRemainingAmountOld, DB, Log);
+			autoDecisionResponse = AutoDecisionMaker.MakeDecision(
+				customerId,
+				minExperianScore,
+				maxExperianScore,
+				totalSumOfOrders1YTotalForRejection,
+				totalSumOfOrders3MTotalForRejection,
+				offeredCreditLine,
+				marketplaceSeniorityDays,
+				enableAutomaticReRejection,
+				enableAutomaticRejection,
+				enableAutomaticReApproval,
+				enableAutomaticApproval,
+				loanOfferReApprovalFullAmountOld,
+				loanOfferReApprovalFullAmount,
+				loanOfferReApprovalRemainingAmount,
+				loanOfferReApprovalRemainingAmountOld,
+				DB,
+				Log
+			);
 
-			if (autoDecisionResponse.IsAutoApproval)
-			{
+			if (autoDecisionResponse.IsAutoApproval) {
 				modelLoanOffer = autoDecisionResponse.AutoApproveAmount;
+
 				if (modelLoanOffer < offeredCreditLine)
-				{
 					offeredCreditLine = modelLoanOffer;
-				}
 			}
-			else if (autoDecisionResponse.IsAutoBankBasedApproval)
-			{
+			else if (autoDecisionResponse.IsAutoBankBasedApproval) {
 				modelLoanOffer = autoDecisionResponse.BankBasedAutoApproveAmount;
+
 				if (modelLoanOffer < offeredCreditLine)
-				{
 					offeredCreditLine = modelLoanOffer;
-				}
 			}
 
 			if (autoDecisionResponse.SystemDecision == "Reject")
-			{
 				modelLoanOffer = 0;
-			}
 
 			UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent);
 
-			if (autoDecisionResponse.UserStatus == "Approved")
-			{
-				if (autoDecisionResponse.IsAutoApproval)
-				{
+			if (autoDecisionResponse.UserStatus == "Approved") {
+				if (autoDecisionResponse.IsAutoApproval) {
 					UpdateApprovalData();
 					SendApprovalMails(scoringResult.MaxOfferPercent);
+
 					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
 				}
-				else if (autoDecisionResponse.IsAutoBankBasedApproval)
-				{
+				else if (autoDecisionResponse.IsAutoBankBasedApproval) {
 					UpdateBankBasedApprovalData();
 					SendBankBasedApprovalMails();
+
 					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto bank based approval");
 				}
-				else
-				{
+				else {
 					UpdateReApprovalData();
 					SendReApprovalMails();
+
 					if (enableAutomaticReApproval)
-					{
 						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
-					} // if
 				} // if
 			}
-			else if (autoDecisionResponse.UserStatus == "Rejected")
-			{
+			else if (autoDecisionResponse.UserStatus == "Rejected") {
 				if ((autoDecisionResponse.IsReRejected && !enableAutomaticReRejection) || (!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
 					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected ? "Mandrill - User supposed to be re-rejected by the strategy" : "Mandrill - User supposed to be rejected by the strategy");
-				else
-				{
+				else {
 					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy");
 
 					var variables = new Dictionary<string, string> {
@@ -180,29 +176,35 @@
 				} // if
 			}
 			else
-			{
 				SendWaitingForDecisionMail();
-			} // if
 
 			GetZooplaData();
 			SetEndTimestamp();
-		}
+		} // Execute
 
-		private void CalcAndCapOffer()
-		{
+		#endregion method Execute
+
+		#endregion public
+
+		#region private
+
+		#region method CalcAndCapOffer
+
+		private void CalcAndCapOffer() {
 			Log.Info("Finalizing and capping offer");
+
 			if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
 				loanOfferReApprovalRemainingAmount = 0;
 
 			if (loanOfferReApprovalRemainingAmountOld < 500) // TODO: make this 500 configurable
 				loanOfferReApprovalRemainingAmountOld = 0;
-			loanOfferReApprovalSum = new decimal[]
-				{
-					loanOfferReApprovalFullAmount,
-					loanOfferReApprovalRemainingAmount,
-					loanOfferReApprovalFullAmountOld,
-					loanOfferReApprovalRemainingAmountOld
-				}.Max();
+
+			loanOfferReApprovalSum = new [] {
+				loanOfferReApprovalFullAmount,
+				loanOfferReApprovalRemainingAmount,
+				loanOfferReApprovalFullAmountOld,
+				loanOfferReApprovalRemainingAmountOld
+			}.Max();
 
 			offeredCreditLine = modelLoanOffer;
 
@@ -217,10 +219,13 @@
 
 			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < offeredCreditLine)
 				offeredCreditLine = maxCapNotHomeOwner;
-		}
+		} // CalcAndCapOffer
 
-		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase)
-		{
+		#endregion method CalcAndCapOffer
+
+		#region method UpdateCustomerAndCashRequest
+
+		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase) {
 			DB.ExecuteNonQuery(
 				"UpdateScoringResultsNew",
 				CommandSpecies.StoredProcedure,
@@ -231,7 +236,7 @@
 				new QueryParameter("Medal", medalType.ToString()),
 				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor),
 				new QueryParameter("Now", DateTime.UtcNow)
-				);
+			);
 
 			DB.ExecuteNonQuery(
 				"UpdateCashRequestsNew",
@@ -249,8 +254,12 @@
 				new QueryParameter("ManualSetupFeePercent", manualSetupFeePercent),
 				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod),
 				new QueryParameter("Now", DateTime.UtcNow)
-				);
-		}
+			);
+		} // UpdateCustomerAndCashRequest
+
+		#endregion method UpdateCustomerAndCashRequest
+
+		#region method SendWaitingForDecisionMail
 
 		private void SendWaitingForDecisionMail() {
 			mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
@@ -263,10 +272,13 @@
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision}
 			});
-		}
+		} // SendWaitingForDecisionMail
 
-		private void SendReApprovalMails()
-		{
+		#endregion method SendWaitingForDecisionMail
+
+		#region method SendReApprovalMails
+
+		private void SendReApprovalMails() {
 			mailer.Send("Mandrill - User is re-approved",  new Dictionary<string, string> {
 				{"ApprovedReApproved", "Re-Approved"},
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
@@ -281,8 +293,7 @@
 				{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 				{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
 				{
-					"OfferValidUntil",
-					autoDecisionResponse.AppValidFor.HasValue
+					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
 						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
 						: string.Empty
 				}
@@ -297,10 +308,13 @@
 
 				mailer.Send("Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(appEmail));
 			} // if
-		}
+		} // SendReApprovalMails
 
-		private void UpdateReApprovalData()
-		{
+		#endregion method SendReApprovalMails
+
+		#region method UpdateReApprovalData
+
+		private void UpdateReApprovalData() {
 			DB.ExecuteNonQuery(
 				"UpdateCashRequestsReApproval",
 				CommandSpecies.StoredProcedure,
@@ -321,11 +335,14 @@
 				new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", isCustomerRepaymentPeriodSelectionAllowed),
 				new QueryParameter("UseBrokerSetupFee", useBrokerSetupFee),
 				new QueryParameter("Now", DateTime.UtcNow)
-				);
-		}
+			);
+		} // UpdateReApprovalData
 
-		private void SendApprovalMails(decimal interestRate)
-		{
+		#endregion method UpdateReApprovalData
+
+		#region method SendApprovalMails
+
+		private void SendApprovalMails(decimal interestRate) {
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
@@ -340,8 +357,7 @@
 				{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 				{"InterestRate", interestRate.ToString(CultureInfo.InvariantCulture)},
 				{
-					"OfferValidUntil",
-					autoDecisionResponse.AppValidFor.HasValue
+					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
 						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
 						: string.Empty
 				}
@@ -354,17 +370,24 @@
 			};
 
 			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(appEmail));
-		}
+		} // SendApprovalMails
 
-		private void UpdateApprovalData()
-		{
+		#endregion method SendApprovalMails
+
+		#region method UpdateApprovalData
+
+		private void UpdateApprovalData() {
 			DB.ExecuteNonQuery(
 				"UpdateAutoApproval",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("AutoApproveAmount", autoDecisionResponse.AutoApproveAmount)
-				);
-		}
+			);
+		} // UpdateApprovalData
+
+		#endregion method UpdateApprovalData
+
+		#region method SendBankBasedApprovalMails
 
 		private void SendBankBasedApprovalMails() {
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
@@ -381,8 +404,7 @@
 				{"RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 				{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
 				{
-					"OfferValidUntil",
-					autoDecisionResponse.AppValidFor.HasValue
+					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
 						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
 						: string.Empty
 				}
@@ -395,36 +417,47 @@
 			};
 
 			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(appEmail));
-		}
+		} // SendBankBasedApprovalMails
 
-		private void UpdateBankBasedApprovalData()
-		{
+		#endregion method SendBankBasedApprovalMails
+
+		#region method UpdateBankBasedApprovalData
+
+		private void UpdateBankBasedApprovalData() {
 			DB.ExecuteNonQuery(
 				"UpdateBankBasedAutoApproval",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("AutoApproveAmount", autoDecisionResponse.BankBasedAutoApproveAmount),
-				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod));
-		}
+				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod)
+			);
+		} // UpdateBankBasedApprovalData
 
-		private void SetEndTimestamp()
-		{
+		#endregion method UpdateBankBasedApprovalData
+
+		#region method SetEndTimestamp
+
+		private void SetEndTimestamp() {
 			DB.ExecuteNonQuery("Update_Main_Strat_Finish_Date",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("UserId", customerId),
-				new QueryParameter("Now", DateTime.UtcNow));
-		}
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+		} // SetEndTimestatmp
 
-		private void GetLastCashRequestData()
-		{
+		#endregion method SetEndTimestamp
+
+		#region method GetLastCashRequestData
+
+		private void GetLastCashRequestData() {
 			DataTable lastOfferDataTable = DB.ExecuteReader(
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Now", DateTime.UtcNow));
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
 
-			if (lastOfferDataTable.Rows.Count == 1)
-			{
+			if (lastOfferDataTable.Rows.Count == 1) {
 				var lastOfferResults = new SafeReader(lastOfferDataTable.Rows[0]);
 				loanOfferReApprovalFullAmount = lastOfferResults["ReApprovalFullAmountNew"];
 				loanOfferReApprovalRemainingAmount = lastOfferResults["ReApprovalRemainingAmount"];
@@ -442,26 +475,32 @@
 				useBrokerSetupFee = lastOfferResults["UseBrokerSetupFee"];
 				manualSetupFeeAmount = lastOfferResults["ManualSetupFeeAmount"];
 				manualSetupFeePercent = lastOfferResults["ManualSetupFeePercent"];
-			}
-		}
+			} // if
+		} // GetLastCashRequestData
 
-		private ScoreMedalOffer CalculateScoreAndMedal()
-		{
+		#endregion method GetLastCashRequestData
+
+		#region method CalculateScoreAndMedal
+
+		private ScoreMedalOffer CalculateScoreAndMedal() {
 			Log.Info("Starting to calculate score and medal");
+
 			DataTable scoreCardDataTable = DB.ExecuteReader(
 				"GetScoreCardData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Today", DateTime.Today));
+				new QueryParameter("Today", DateTime.Today)
+			);
 
 			var scoreCardResults = new SafeReader(scoreCardDataTable.Rows[0]);
 			string maritalStatusStr = scoreCardResults["MaritalStatus"];
 			MaritalStatus maritalStatus;
-			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatus))
-			{
+
+			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatus)) {
 				Log.Warn("Cant parse marital status:{0}. Will use 'Other'", maritalStatusStr);
 				maritalStatus = MaritalStatus.Other;
-			}
+			} // if
+
 			int modelMaxFeedback = scoreCardResults.IntWithDefault("MaxFeedback", defaultFeedbackValue);
 
 			int modelMPsNumber = scoreCardResults["MPsNumber"];
@@ -474,11 +513,10 @@
 
 			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
 			if (modelFirstRepaymentDate != default(DateTime))
-			{
 				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
-			}
 
 			Log.Info("Getting turnovers and seniority");
+
 			MpsTotals totals = strategyHelper.GetMpsTotals(customerId);
 			totalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
 			totalSumOfOrders1YTotalForRejection = totals.TotalSumOfOrders1YTotalForRejection;
@@ -489,7 +527,9 @@
 			decimal ezbobSeniorityMonths = (decimal)modelEzbobSeniority * 12 / 365; // It is done this way to fit to the excel
 
 			Log.Info("Calculating score & medal");
-			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer,
+
+			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(
+				totalSumOfOrdersForLoanOffer,
 				minExperianScore,
 				marketplaceSeniorityYears,
 				modelMaxFeedback,
@@ -500,7 +540,8 @@
 				ezbobSeniorityMonths,
 				modelOnTimeLoans,
 				modelLatePayments,
-				modelEarlyPayments);
+				modelEarlyPayments
+			);
 
 			modelLoanOffer = scoringResult.MaxOffer;
 
@@ -520,83 +561,102 @@
 			);
 
 			return scoringResult;
-		}
+		} // CalculateScoreAndMedal
 
-		private void PerformExperianConsumerCheckForDirectors()
-		{
-			if (companyType != "Entrepreneur")
-			{
-				DataTable dt = DB.ExecuteReader(
-					"GetCustomerDirectorsForConsumerCheck",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId)
-					);
+		#endregion method CalculateScoreAndMedal
 
-				foreach (DataRow row in dt.Rows)
-				{
-					var sr = new SafeReader(row);
-					int appDirId = sr["DirId"];
-					string appDirName = sr["DirName"];
-					string appDirSurname = sr["DirSurname"];
+		#region method PerformExperianConsumerCheckForDirectors
 
-					if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
-						continue;
+		private void PerformExperianConsumerCheckForDirectors() {
+			if (companyType == "Entrepreneur")
+				return;
 
-					PerformConsumerExperianCheck(appDirId);
+			DataTable dt = DB.ExecuteReader(
+				"GetCustomerDirectorsForConsumerCheck",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
 
-					if (experianConsumerScore > 0 && experianConsumerScore < minExperianScore)
-						minExperianScore = experianConsumerScore;
-					if (experianConsumerScore > 0 && experianConsumerScore > maxExperianScore)
-						maxExperianScore = experianConsumerScore;
-				} // foreach
-			} // if
-		}
+			foreach (DataRow row in dt.Rows) {
+				var sr = new SafeReader(row);
+				int appDirId = sr["DirId"];
+				string appDirName = sr["DirName"];
+				string appDirSurname = sr["DirSurname"];
 
-		private void PerformConsumerExperianCheck(int directorId = 0)
-		{
-			if (wasMainStrategyExecutedBefore)
-			{
+				if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
+					continue;
+
+				PerformConsumerExperianCheck(appDirId);
+
+				if (experianConsumerScore > 0 && experianConsumerScore < minExperianScore)
+					minExperianScore = experianConsumerScore;
+
+				if (experianConsumerScore > 0 && experianConsumerScore > maxExperianScore)
+					maxExperianScore = experianConsumerScore;
+			} // foreach
+		} // PerformExperianConsumerCheckForDirectors
+
+		#endregion method PerformExperianConsumerCheckForDirectors
+
+		#region method PerformConsumerExperianCheck
+
+		private int PerformConsumerExperianCheck(int directorId = 0) {
+			if (wasMainStrategyExecutedBefore) {
 				Log.Info("Performing experian consumer check");
+
 				var strat = new ExperianConsumerCheck(customerId, directorId, false, DB, Log);
 				strat.Execute();
+
 				if (directorId == 0)
-				{
 					experianConsumerScore = strat.Score;
-				}
-			}
-			else if (!WaitForExperianConsumerCheckToFinishUpdates(directorId))
-			{
-				Log.Info("No data exist from experian consumer check for {0}:{1}.", directorId == 0 ? "customer" : "director", customerId);
-			}
-			else if (directorId == 0)
-			{
+
+				return strat.Score;
+			} // if
+
+			if (!WaitForExperianConsumerCheckToFinishUpdates(directorId)) {
+				Log.Info("No data exist from experian consumer check for customer {0}{1}.", customerId, directorId == 0 ? "" : "director " + directorId);
+				return 0;
+			} // if
+
+			if (directorId == 0) {
 				experianConsumerScore = GetCurrentExperianScore();
-			}
-		}
+				return experianConsumerScore;
+			} // if
 
-		private int GetCurrentExperianScore()
-		{
-			DataTable dt = DB.ExecuteReader("GetExperianScore", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var sr = new SafeReader(dt.Rows[0]);
-			return sr["ExperianScore"];
-		}
+			return 0;
+		} // PerformConsumerExperianCheck
 
-		private void PerformCompanyExperianCheck()
-		{
-			if (wasMainStrategyExecutedBefore)
-			{
+		#endregion method PerformConsumerExperianCheck
+
+		#region method GetCurrentExperianScore
+
+		private int GetCurrentExperianScore() {
+			return DB.ExecuteScalar<int>(
+				"GetExperianScore",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+		} // GetCurrentExperianScore
+
+		#endregion method GetCurrentExperianScore
+
+		#region method PerformCompanyExperianCheck
+
+		private void PerformCompanyExperianCheck() {
+			if (wasMainStrategyExecutedBefore) {
 				Log.Info("Performing experian company check");
 				var experianCompanyChecker = new ExperianCompanyCheck(customerId, false, DB, Log);
 				experianCompanyChecker.Execute();
 			}
 			else if (!WaitForExperianCompanyCheckToFinishUpdates())
-			{
 				Log.Info("No data exist from experian company check for customer:{0}.", customerId);
-			}
-		}
+		} // PerformCompanyExperianCheck
 
-		private void MakeSureMpDataIsSufficient()
-		{
+		#endregion method PerformCompanyExperianCheck
+
+		#region method MakeSureMpDataIsSufficient
+
+		private void MakeSureMpDataIsSufficient() {
 			bool shouldExpectMpData =
 				newCreditLineOption != NewCreditLineOption.SkipEverything &&
 				newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp;
@@ -612,130 +672,39 @@
 					});
 				} // if
 			} // if
-		}
+		} // MakeSureMpDataIsSufficient
 
-		private void SetAutoDecisionAvailability()
-		{
+		#endregion method MakeSureMpDataIsSufficient
+
+		#region method SetAutoDecisionAvailability
+
+		private void SetAutoDecisionAvailability() {
 			Log.Info("Setting auto decision availability");
-			if (!customerStatusIsEnabled || customerStatusIsWarning)
-			{
+
+			if (!customerStatusIsEnabled || customerStatusIsWarning) {
 				enableAutomaticReApproval = false;
 				enableAutomaticApproval = false;
 			} // if
 
-			if (isOffline || isBrokerCustomer)
-			{
+			if (isOffline || isBrokerCustomer) {
 				enableAutomaticApproval = false;
 				enableAutomaticRejection = false;
-			}
+			} // if
 
-			if (newCreditLineOption == NewCreditLineOption.SkipEverything ||
+			if (
+				newCreditLineOption == NewCreditLineOption.SkipEverything ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
-				avoidAutomaticDecision == 1)
-			{
+				avoidAutomaticDecision == 1
+			) {
 				enableAutomaticApproval = false;
 				enableAutomaticReApproval = false;
 				enableAutomaticRejection = false;
 				enableAutomaticReRejection = false;
-			}
-		}
+			} // if
+		} // SetAutoDecisionAvailability
 
-		#endregion public
-
-		#region private
-
-		#region properties
-
-		// Helpers
-		private readonly StrategiesMailer mailer;
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-		private readonly MedalScoreCalculator medalScoreCalculator;
-
-		// Inputs
-		private readonly int customerId;
-		private readonly NewCreditLineOption newCreditLineOption;
-		private readonly bool underwriterCheck;
-		private readonly int avoidAutomaticDecision;
-
-		// Configs
-		private int rejectDefaultsCreditScore;
-		private int rejectDefaultsAccountsNum;
-		private int rejectMinimalSeniority;
-		private int rejectDefaultsMonthsNum;
-		private int rejectDefaultsAmount;
-		private string bwaBusinessCheck;
-		private bool enableAutomaticReRejection;
-		private bool enableAutomaticReApproval;
-		private bool enableAutomaticApproval;
-		private bool enableAutomaticRejection;
-		private int maxCapHomeOwner;
-		private int maxCapNotHomeOwner;
-		private int lowCreditScore;
-		private int lowTotalAnnualTurnover;
-		private int lowTotalThreeMonthTurnover;
-		private int defaultFeedbackValue;
-		private int totalTimeToWaitForMarketplacesUpdate;
-		private int intervalWaitForMarketplacesUpdate;
-		private int totalTimeToWaitForExperianCompanyCheck;
-		private int intervalWaitForExperianCompanyCheck;
-		private int totalTimeToWaitForExperianConsumerCheck;
-		private int intervalWaitForExperianConsumerCheck;
-		private int totalTimeToWaitForAmlCheck;
-		private int intervalWaitForAmlCheck;
-
-		// Loaded from DB per customer
-		private bool customerStatusIsEnabled;
-		private bool customerStatusIsWarning;
-		private bool isOffline;
-		private bool isBrokerCustomer;
-		private string appEmail;
-		private string companyType;
-		private string experianRefNum;
-		private string appFirstName;
-		private string appSurname;
-		private string appGender;
-		private string appHomeOwner;
-		private string appAccountNumber;
-		private string appSortCode;
-		private DateTime appRegistrationDate;
-		private string appBankAccountType;
-		private bool wasMainStrategyExecutedBefore;
-
-		private int minExperianScore;
-		private int maxExperianScore;
-		private int experianConsumerScore;
-		private int allMPsNum;
-		private AutoDecisionResponse autoDecisionResponse;
-		private int numOfDefaultAccounts;
-		private MedalMultiplier medalType;
-		private decimal loanOfferApr;
-		private int loanOfferRepaymentPeriod;
-		private decimal loanOfferInterestRate;
-		private int loanOfferUseSetupFee;
-		private int loanOfferLoanTypeId;
-		private int loanOfferIsLoanTypeSelectionAllowed;
-		private int loanOfferDiscountPlanId;
-		private bool useBrokerSetupFee;
-		private int manualSetupFeeAmount;
-		private decimal manualSetupFeePercent;
-		private int loanSourceId;
-		private int isCustomerRepaymentPeriodSelectionAllowed;
-		private decimal loanOfferReApprovalSum;
-		private decimal loanOfferReApprovalFullAmount;
-		private decimal loanOfferReApprovalRemainingAmount;
-		private decimal loanOfferReApprovalFullAmountOld;
-		private decimal loanOfferReApprovalRemainingAmountOld;
-		private int offeredCreditLine;
-		private double initialExperianConsumerScore;
-		private double marketplaceSeniorityDays;
-		private int modelLoanOffer;
-		private double totalSumOfOrders1YTotal;
-		private double totalSumOfOrders1YTotalForRejection;
-		private double totalSumOfOrders3MTotalForRejection;
-		private bool isFirstLoan;
-
-		#endregion properties
+		#endregion method SetAutoDecisionAvailability
 
 		#region method ReadConfigurations
 
@@ -851,29 +820,31 @@
 
 		#endregion method SendRejectionExplanationMail
 
-		private void GetBwa()
-		{
-			if (ShouldRunBwa())
-			{
+		#region method GetBwa
+
+		private void GetBwa() {
+			if (ShouldRunBwa()) {
 				Log.Info("Getting BWA for customer: {0}", customerId);
 				var bwaChecker = new BwaChecker(customerId, DB, Log);
 				bwaChecker.Execute();
-			}
-		}
+			} // if
+		} // GetBwa
 
-		private void GetAml()
-		{
-			if (wasMainStrategyExecutedBefore)
-			{
+		#endregion method GetBwa
+
+		#region method GetAml
+
+		private void GetAml() {
+			if (wasMainStrategyExecutedBefore) {
 				Log.Info("Getting AML for customer: {0}", customerId);
 				var amlChecker = new AmlChecker(customerId, DB, Log);
 				amlChecker.Execute();
 			}
 			else if (!WaitForAmlToFinishUpdates())
-			{
 				Log.Info("No AML data exist for customer:{0}.", customerId);
-			}
-		}
+		} // GetAml
+
+		#endregion method GetAml
 
 		#region method ShouldRunBwa
 
@@ -884,116 +855,227 @@
 
 		#endregion method ShouldRunBwa
 
-		private bool WaitForMarketplacesToFinishUpdates()
-		{
+		#region method WaitForMarketplacesToFinishUpdates
+
+		private bool WaitForMarketplacesToFinishUpdates() {
 			Log.Info("Waiting for marketplace data");
 			return WaitForUpdateToFinish(GetIsMarketPlacesUpdated, totalTimeToWaitForMarketplacesUpdate, intervalWaitForMarketplacesUpdate);
 		} // WaitForMarketplacesToFinishUpdates
 
-		private bool WaitForExperianCompanyCheckToFinishUpdates()
-		{
+		#endregion method WaitForMarketplacesToFinishUpdates
+
+		#region method WaitForExperianCompanyCheckToFinishUpdates
+
+		private bool WaitForExperianCompanyCheckToFinishUpdates() {
 			Log.Info("Waiting for experian company check");
+
 			if (string.IsNullOrEmpty(experianRefNum))
-			{
 				return true;
-			}
 
 			return WaitForUpdateToFinish(GetIsExperianCompanyUpdated, totalTimeToWaitForExperianCompanyCheck, intervalWaitForExperianCompanyCheck);
 		} // WaitForExperianCompanyCheckToFinishUpdates
 
-		private bool WaitForExperianConsumerCheckToFinishUpdates(int directorId = 0)
-		{
+		#endregion method WaitForExperianCompanyCheckToFinishUpdates
+
+		#region method WaitForExperianConsumerCheckToFinishUpdates
+
+		private bool WaitForExperianConsumerCheckToFinishUpdates(int directorId = 0) {
 			Log.Info("Waiting for experian consumer check");
 			return WaitForUpdateToFinish(() => GetIsExperianConsumerUpdated(directorId), totalTimeToWaitForExperianConsumerCheck, intervalWaitForExperianConsumerCheck);
 		} // WaitForExperianConsumerCheckToFinishUpdates
 
-		private bool WaitForAmlToFinishUpdates()
-		{
+		#endregion method WaitForExperianConsumerCheckToFinishUpdates
+
+		#region method WaitForAmlToFinishUpdates
+
+		private bool WaitForAmlToFinishUpdates() {
 			Log.Info("Waiting for AML check");
 			return WaitForUpdateToFinish(GetIsAmlUpdated, totalTimeToWaitForAmlCheck, intervalWaitForAmlCheck);
 		} // WaitForMarketplacesToFinishUpdates
 
-		private bool WaitForUpdateToFinish(Func<bool> function, int totalSecondsToWait, int intervalBetweenCheck)
-		{
-			DateTime startWaitingTime = DateTime.UtcNow;
-			bool isUpdated = false;
-			while (!isUpdated)
-			{
-				isUpdated = function();
+		#endregion method WaitForAmlToFinishUpdates
 
-				if (isUpdated)
+		#region method WaitForUpdateToFinish
+
+		private bool WaitForUpdateToFinish(Func<bool> function, int totalSecondsToWait, int intervalBetweenCheck) {
+			DateTime startWaitingTime = DateTime.UtcNow;
+
+			for ( ; ; ) {
+				if (function())
 					return true;
 
 				if ((DateTime.UtcNow - startWaitingTime).TotalSeconds > totalSecondsToWait)
 					return false;
 
 				Thread.Sleep(intervalBetweenCheck);
-			} // while
+			} // forever
+		} // WaitForUpdateToFinish
 
-			return true;
-		}
+		#endregion method WaitForUpdateToFinish
 
-		private bool GetIsExperianConsumerUpdated(int directorId)
-		{
-			DataTable dt = DB.ExecuteReader("GetIsConsumerDataUpdated", CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId),
-					new QueryParameter("DirectorId", directorId),
-					new QueryParameter("Today", DateTime.Today));
+		#region method GetIsExperianConsumerUpdated
 
-			var sr = new SafeReader(dt.Rows[0]);
-			return sr["IsUpdated"];
-		}
+		private bool GetIsExperianConsumerUpdated(int directorId) {
+			return DB.ExecuteScalar<bool>(
+				"GetIsConsumerDataUpdated",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("DirectorId", directorId),
+				new QueryParameter("Today", DateTime.Today)
+			);
+		} // GetIsExperianConsumerUpdated
 
-		private bool GetIsAmlUpdated()
-		{
-			DataTable dt = DB.ExecuteReader("GetIsAmlUpdated",
+		#endregion method GetIsExperianConsumerUpdated
+
+		#region method GetIsAmlUpdated
+
+		private bool GetIsAmlUpdated() {
+			return DB.ExecuteScalar<bool>("GetIsAmlUpdated",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId));
+		} // GetIsAmlUpdated
 
-			var sr = new SafeReader(dt.Rows[0]);
-			return sr["IsUpdated"];
-		}
-		private bool GetIsExperianCompanyUpdated()
-		{
-			DataTable dt = DB.ExecuteReader(
+		#endregion method GetIsAmlUpdated
+
+		#region method GetIsExperianCompanyUpdated
+
+		private bool GetIsExperianCompanyUpdated() {
+			return DB.ExecuteScalar<bool>(
 				"GetIsCompanyDataUpdated",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CompanyRefNumber", experianRefNum),
 				new QueryParameter("Today", DateTime.Today)
 			);
+		} // GetIsExperianCompanyUpdated
 
-			var sr = new SafeReader(dt.Rows[0]);
-			return sr["IsUpdated"];
-		}
+		#endregion method GetIsExperianCompanyUpdated
 
-		private bool GetIsMarketPlacesUpdated()
-		{
-			DataTable marketplacesDataTable = DB.ExecuteReader(
-				"GetCustomerMarketplaces",
+		#region method GetIsMarketPlacesUpdated
+
+		private bool GetIsMarketPlacesUpdated() {
+			bool bResult = true;
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					string lastStatus = sr["CurrentStatus"];
+
+					if (lastStatus != "Done" && lastStatus != "Never Started" && lastStatus != "Finished" && lastStatus != "Failed" && lastStatus != "Terminated") {
+						bResult = false;
+						return ActionResult.SkipAll;
+					} // if
+
+					return ActionResult.Continue;
+				},
+				"GetAllLastMarketplaceStatuses",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			foreach (DataRow row in marketplacesDataTable.Rows)
-			{
-				var marketplacesSafeReader = new SafeReader(row);
-				int marketplaceId = marketplacesSafeReader["Id"];
+			return bResult;
+		} // GetIsMarketPlacesUpdated
 
-				DataTable lastStatusDataTable = DB.ExecuteReader(
-					"GetLastMarketplaceStatus",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId),
-					new QueryParameter("MarketplaceId", marketplaceId));
+		#endregion method GetIsMarketPlacesUpdated
 
-				var lastStatusSafeReader = new SafeReader(lastStatusDataTable.Rows[0]);
-				string lastStatus = lastStatusSafeReader["CurrentStatus"];
-				if (lastStatus != "Done" && lastStatus != "Never Started" && lastStatus != "Finished" && lastStatus != "Failed" && lastStatus != "Terminated")
-				{
-					return false;
-				}
-			}
-			return true;
-		}
+		#region method GetZooplaData
+
+		private void GetZooplaData() {
+			Log.Info("Getting zoopla data for customer:{0}", customerId);
+			strategyHelper.GetZooplaData(customerId);
+		} // GetZooplaData
+
+		#endregion method GetZooplaData
+
+		#region fields
+
+		// Helpers
+		private readonly StrategiesMailer mailer;
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+		private readonly MedalScoreCalculator medalScoreCalculator;
+
+		// Inputs
+		private readonly int customerId;
+		private readonly NewCreditLineOption newCreditLineOption;
+		private readonly bool underwriterCheck;
+		private readonly int avoidAutomaticDecision;
+
+		// Configs
+		private int rejectDefaultsCreditScore;
+		private int rejectDefaultsAccountsNum;
+		private int rejectMinimalSeniority;
+		private int rejectDefaultsMonthsNum;
+		private int rejectDefaultsAmount;
+		private string bwaBusinessCheck;
+		private bool enableAutomaticReRejection;
+		private bool enableAutomaticReApproval;
+		private bool enableAutomaticApproval;
+		private bool enableAutomaticRejection;
+		private int maxCapHomeOwner;
+		private int maxCapNotHomeOwner;
+		private int lowCreditScore;
+		private int lowTotalAnnualTurnover;
+		private int lowTotalThreeMonthTurnover;
+		private int defaultFeedbackValue;
+		private int totalTimeToWaitForMarketplacesUpdate;
+		private int intervalWaitForMarketplacesUpdate;
+		private int totalTimeToWaitForExperianCompanyCheck;
+		private int intervalWaitForExperianCompanyCheck;
+		private int totalTimeToWaitForExperianConsumerCheck;
+		private int intervalWaitForExperianConsumerCheck;
+		private int totalTimeToWaitForAmlCheck;
+		private int intervalWaitForAmlCheck;
+
+		// Loaded from DB per customer
+		private bool customerStatusIsEnabled;
+		private bool customerStatusIsWarning;
+		private bool isOffline;
+		private bool isBrokerCustomer;
+		private string appEmail;
+		private string companyType;
+		private string experianRefNum;
+		private string appFirstName;
+		private string appSurname;
+		private string appGender;
+		private string appHomeOwner;
+		private string appAccountNumber;
+		private string appSortCode;
+		private DateTime appRegistrationDate;
+		private string appBankAccountType;
+		private bool wasMainStrategyExecutedBefore;
+
+		private int minExperianScore;
+		private int maxExperianScore;
+		private int experianConsumerScore;
+		private int allMPsNum;
+		private AutoDecisionResponse autoDecisionResponse;
+		private int numOfDefaultAccounts;
+		private MedalMultiplier medalType;
+		private decimal loanOfferApr;
+		private int loanOfferRepaymentPeriod;
+		private decimal loanOfferInterestRate;
+		private int loanOfferUseSetupFee;
+		private int loanOfferLoanTypeId;
+		private int loanOfferIsLoanTypeSelectionAllowed;
+		private int loanOfferDiscountPlanId;
+		private bool useBrokerSetupFee;
+		private int manualSetupFeeAmount;
+		private decimal manualSetupFeePercent;
+		private int loanSourceId;
+		private int isCustomerRepaymentPeriodSelectionAllowed;
+		private decimal loanOfferReApprovalSum;
+		private decimal loanOfferReApprovalFullAmount;
+		private decimal loanOfferReApprovalRemainingAmount;
+		private decimal loanOfferReApprovalFullAmountOld;
+		private decimal loanOfferReApprovalRemainingAmountOld;
+		private int offeredCreditLine;
+		private double initialExperianConsumerScore;
+		private double marketplaceSeniorityDays;
+		private int modelLoanOffer;
+		private double totalSumOfOrders1YTotal;
+		private double totalSumOfOrders1YTotalForRejection;
+		private double totalSumOfOrders3MTotalForRejection;
+		private bool isFirstLoan;
+
+		#endregion fields
 
 		#endregion private
 	} // class MainStrategy
