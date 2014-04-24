@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.Experian;
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies {
+﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;

@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies {
+﻿namespace EzBob.Backend.Strategies.Experian {
 	using System.Data;
 	using ExperianLib.Ebusiness;
 	using Ezbob.Database;

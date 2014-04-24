@@ -5,6 +5,7 @@
 	using System.Data;
 	using System.Globalization;
 	using System.Xml;
+	using Experian;
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.Models.Marketplaces.Yodlee;

@@ -3,6 +3,7 @@
 	using System.Data;
 	using System.Globalization;
 	using System.Xml;
+	using Experian;
 	using EzServiceConfiguration;
 	using EzServiceConfigurationLoader;
 	using Ezbob.Database;
