@@ -17,7 +17,7 @@ namespace EzBob.Models.Marketplaces {
 	#endregion class ChannelGrabberHmrcData
 
 	#region class BankStatementDataModel
-
+	[Serializable]
 	public class BankStatementDataModel
 	{
 		public int PeriodMonthsNum { get; set; }
