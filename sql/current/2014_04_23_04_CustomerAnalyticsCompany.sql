@@ -1,3 +1,6 @@
+SET QUOTED_IDENTIFIER ON;
+GO
+
 IF OBJECT_ID('CustomerAnalyticsCompany') IS NULL
 BEGIN
 	CREATE TABLE CustomerAnalyticsCompany (
@@ -12,7 +15,9 @@ BEGIN
 		CONSTRAINT PK_CustomerAnalyticsCompany PRIMARY KEY (CustomerAnalyticsCompanyID),
 		CONSTRAINT FK_CustomerAnalyticsCompany_Customer FOREIGN KEY (CustomerID) REFERENCES Customer(Id)
 	)
-
-	CREATE NONCLUSTERED INDEX IDX_CustomerAnalyticsCompany ON CustomerAnalyticsCompany(CustomerID) WHERE IsActive = 1
 END
+GO
+
+IF NOT EXISTS(SELECT * FROM sys.indexes WHERE name = 'IDX_CustomerAnalyticsCompany')
+	CREATE NONCLUSTERED INDEX IDX_CustomerAnalyticsCompany ON CustomerAnalyticsCompany(CustomerID) WHERE IsActive = 1
 GO
