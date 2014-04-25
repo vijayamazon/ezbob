@@ -1,17 +1,15 @@
-﻿namespace Scorto.RegistryScanner {
-	public interface IRequiresConfigurationOnStartup {
-		void Configure();
-	} // interface
-} // namespace
-
-namespace Ezbob.RegistryScanner {
+﻿namespace Ezbob.RegistryScanner {
 	using System.Reflection;
 
 	using StructureMap;
 	using StructureMap.Graph;
 
-	using Scorto.RegistryScanner;
 	using log4net;
+
+	public interface IRequiresConfigurationOnStartup
+	{
+		void Configure();
+	} // interface
 
 	public class Scanner {
 		public static void Register() {

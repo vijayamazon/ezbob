@@ -1,9 +1,7 @@
-using Microsoft.Build.Utilities;
-using System;
-using System.IO;
-using System.Xml;
-namespace Scorto.BuildTasks
+namespace BuildTasks
 {
+	using Microsoft.Build.Utilities;
+
 	public class XmlUpdate : Task
 	{
 		public string XPath
