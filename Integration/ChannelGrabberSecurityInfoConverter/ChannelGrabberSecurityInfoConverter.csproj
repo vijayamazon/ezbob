@@ -44,9 +44,8 @@
     <Reference Include="EzEnvironment">
       <HintPath>..\..\Lib\Ezbob\EzEnvironment.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\Scorto.Core\log4net.dll</HintPath>
+    <Reference Include="log4net">
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Logger">
       <HintPath>..\..\Lib\Ezbob\Logger.dll</HintPath>
@@ -64,7 +63,9 @@
     <Compile Include="FileSaver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
