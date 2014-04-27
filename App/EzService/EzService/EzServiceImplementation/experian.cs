@@ -1,8 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
-	using System.Collections.Generic;
 	using System.Data;
-	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.Experian;
 	using Ezbob.Database;
 
@@ -15,43 +13,25 @@
 			return Execute(nCustomerID, null, typeof(ExperianConsumerCheck), nCustomerID, nDirectorID, bForceCheck);
 		} // ExperianConsumerCheck
 		
-		public DateTimeActionResult GetExperianConsumerCacheDate(List<int> ids)
+		public DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId)
 		{
 			DateTime cacheDate = DateTime.UtcNow;
 			try
 			{
-				bool doneCustomer = false;
-				foreach (int id in ids)
+				DataTable dt = DB.ExecuteReader(
+					"GetExperianConsumerCacheDate",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", customerId),
+					new QueryParameter("DirectorId", directorId)
+				);
+
+				if (dt.Rows.Count > 0)
 				{
-					int customerId, directorId;
-
-					if (!doneCustomer)
+					var sr = new SafeReader(dt.Rows[0]);
+					DateTime tmpCacheDate = sr["LastUpdateDate"];
+					if (cacheDate > tmpCacheDate)
 					{
-						customerId = id;
-						directorId = 0;
-						doneCustomer = true;
-					}
-					else
-					{
-						customerId = ids[0];
-						directorId = id;
-					}
-
-					DataTable dt = DB.ExecuteReader(
-						"GetExperianConsumerCacheDate",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerId", customerId),
-						new QueryParameter("DirectorId", directorId)
-					);
-
-					if (dt.Rows.Count > 0)
-					{
-						var sr = new SafeReader(dt.Rows[0]);
-						DateTime tmpCacheDate = sr["LastUpdateDate"];
-						if (cacheDate > tmpCacheDate)
-						{
-							cacheDate = tmpCacheDate;
-						}
+						cacheDate = tmpCacheDate;
 					}
 				}
 			}

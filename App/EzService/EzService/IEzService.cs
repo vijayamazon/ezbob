@@ -341,7 +341,7 @@
 		ActionMetaData CreateUnderwriter(string name, string password, string role);
 
 		[OperationContract]
-		DateTimeActionResult GetExperianConsumerCacheDate(List<int> ids);
+		DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId);
 
 		[OperationContract]
 		DateTimeActionResult GetExperianCompanyCacheDate(int customerId);

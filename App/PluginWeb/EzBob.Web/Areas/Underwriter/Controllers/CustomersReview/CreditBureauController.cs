@@ -1,14 +1,11 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzServiceReference;
@@ -23,13 +20,11 @@
 		private readonly ServiceClient m_oServiceClient;
         private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
         private readonly ConcentAgreementHelper _concentAgreementHelper;
-		private readonly DirectorRepository directorRepository;
 		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 
         public CreditBureauController(
 			CustomerRepository customers,
 			CreditBureauModelBuilder creditBureauModelBuilder,
-			DirectorRepository directorRepository,
 			ConfigurationVariablesRepository configurationVariablesRepository
 		) 
 		{
@@ -37,20 +32,14 @@
 	        m_oServiceClient = new ServiceClient();
             _creditBureauModelBuilder = creditBureauModelBuilder;
             _concentAgreementHelper = new ConcentAgreementHelper();
-	        this.directorRepository = directorRepository;
 	        this.configurationVariablesRepository = configurationVariablesRepository;
 		}
 
 		[HttpPost]
 		[Transactional]
-		public JsonResult RunConsumerCheck(int customerId, bool forceCheck)
+		public JsonResult RunConsumerCheck(int customerId, int directorId, bool forceCheck)
 		{
-			m_oServiceClient.Instance.ExperianConsumerCheck(customerId, 0, forceCheck);
-			List<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId).ToList();
-			foreach (Director director in directors)
-			{
-				m_oServiceClient.Instance.ExperianConsumerCheck(customerId, director.Id, forceCheck);
-			}
+			m_oServiceClient.Instance.ExperianConsumerCheck(customerId, directorId, forceCheck);
 			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
 
@@ -165,12 +154,9 @@
 
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonResult IsConsumerCacheRelevant(int customerId)
+		public JsonResult IsConsumerCacheRelevant(int customerId, int directorId)
 		{
-			var ids = new List<int> { customerId };
-			IQueryable<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId);
-			ids.AddRange(directors.Select(d => d.Id));
-			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianConsumerCacheDate(ids.ToArray());
+			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianConsumerCacheDate(customerId, directorId);
 			DateTime cacheDate = result.Value;
 			int cacheValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateConsumerDataPeriodDays");
 			string isRelevant = (DateTime.UtcNow - cacheDate).TotalDays > cacheValidForDays ? "False" : "True";

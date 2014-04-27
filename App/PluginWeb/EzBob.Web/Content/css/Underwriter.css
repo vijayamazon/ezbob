@@ -199,6 +199,10 @@ select.selectheight {
     height: 30px;
 }
 
+select.higherselectheight {
+    height: 34px;
+}
+
 .reportDiv {
     display: inline-block;
     margin-top: -5px;

@@ -89,6 +89,12 @@
     <div class="row-fluid">
         <div class="pull-left">
             <a class="btn btn-primary" href="#" id="RunConsumerCheckBtn">Run Consumer check</a>
+            <select id="ConsumerCheckTarget" class="higherselectheight btn btn-primary">
+                <option selected="selected" value="<%- experianInfo.Id %>"><%- experianInfo.Name %> <%- experianInfo.Surname %></option>
+                <% _.each(experianInfo.directorsModels, function(directorsModel) { %>
+                    <option value="<%- directorsModel.Id %>"><%- directorsModel.Name %> <%- directorsModel.Surname %></option>
+                <% }); %>
+            </select>
             <a class="btn btn-primary" href="#" id="RunCompanyCheckBtn">Run Company check</a>
             <a class="btn btn-primary" href="#" id="RunAmlCheckBtn">Run AML check</a>
             <a class="btn btn-primary" href="#" id="RunBwaCheckBtn">Run BWA check</a>

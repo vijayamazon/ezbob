@@ -48,20 +48,28 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
     },
     RunConsumerCheckBtnClick: function (e) {
         if ($(e.currentTarget).hasClass("disabled")) return false;
+        
+        var customerId = this.model.get("Id");
+        var directorId = 0;
+
+        var selectedElem = $('#ConsumerCheckTarget').find('option:selected')[0];
+        if (selectedElem != $('#ConsumerCheckTarget').find('option')[0]) {
+            directorId = selectedElem.value;
+        }
 
         var that = this;
         BlockUi("on");
-        $.post(window.gRootPath + "Underwriter/CreditBureau/IsConsumerCacheRelevant", { customerId: this.model.get("Id") })
+        $.post(window.gRootPath + "Underwriter/CreditBureau/IsConsumerCacheRelevant", { customerId: customerId, directorId: directorId })
             .done(function (response) {
                 if (response.IsRelevant == "True") {
                     EzBob.ShowMessage("Last check was done at " + response.LastCheckDate +" and cache is valid for " + response.CacheValidForDays + " days. Run check anyway?", "No need for check warning",
                         function () {
-                            that.RunConsumerCheck(true);
+                            that.RunConsumerCheck(customerId, directorId, true);
                             return true;
                         },
                         "Yes", null, "No");
                 } else {
-                    that.RunConsumerCheck(false);
+                    that.RunConsumerCheck(customerId, directorId, false);
                 }
             })
             .complete(function () {
@@ -70,9 +78,9 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
 
         return false;
     },
-    RunConsumerCheck: function (forceCheck) {
+    RunConsumerCheck: function (customerId, directorId, forceCheck) {
         BlockUi("on");
-        $.post(window.gRootPath + "Underwriter/CreditBureau/RunConsumerCheck", { customerId: this.model.get("Id"), forceCheck: forceCheck })
+        $.post(window.gRootPath + "Underwriter/CreditBureau/RunConsumerCheck", { customerId: customerId, directorId: directorId, forceCheck: forceCheck })
             .done(function (response) {
                 EzBob.ShowMessage(response.Message, "Information");
             })
