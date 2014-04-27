@@ -62,7 +62,7 @@
             var digest = CalculateMD5Hash(transactionId + amountStr + remotePassword);
 
 	        var dateOfBirthFormatted = dateOfBirth.HasValue? dateOfBirth.Value.ToString("yyyyMMdd") : "";
-	        var surnameFormatted = surname.Substring(0, 6);
+	        var surnameFormatted = surname.Length > 6 ? surname.Substring(0, 6) : surname;
 	        var accountNumberFormatted = accountNumber.Length >= 10
 		                                     ? accountNumber.Substring(0, 10)
 		                                     : string.Format("{0}{1}", accountNumber, sortCode).Substring(0, 10);
