@@ -10,13 +10,13 @@ if (m.CGData && m.CGData.VatReturn) {
 		var oEntry = m.CGData.VatReturn[nIdx];
 
 		if (typeof(oEntry.DateFrom) === 'string')
-			oEntry.DateFrom = Date.parse(oEntry.DateFrom);
+			oEntry.DateFrom = moment(oEntry.DateFrom).toDate();
 
 		if (typeof(oEntry.DateTo) === 'string')
-			oEntry.DateTo = Date.parse(oEntry.DateTo);
+			oEntry.DateTo = moment(oEntry.DateTo).toDate();
 
 		if (typeof(oEntry.DateDue) === 'string')
-			oEntry.DateDue = Date.parse(oEntry.DateDue);
+			oEntry.DateDue = moment(oEntry.DateDue).toDate();
 
 		oEntry.UniqueBusinessID = oEntry.RegistrationNo + '\n' + oEntry.BusinessName + '\n' + oEntry.BusinessAddress.join('\n');
 
