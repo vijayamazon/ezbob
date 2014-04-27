@@ -2,6 +2,7 @@
 {
 	public enum Source
 	{
+		Ezbob,
 		GooglePpc,
 		Adroll,
 		Amazon,

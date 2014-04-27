@@ -45,6 +45,13 @@
 			spAnalytics.ForEachResult<AnalyticsData.ResultRow>(row =>
 			{
 				Source source = SourceRefMapper.GetSourceByAnalytics(row.Source);
+				
+				//exclude all ezbob analytics as irrelevant
+				if (source == Source.Ezbob)
+				{
+					return ActionResult.Continue;
+				}
+
 				if (traficReportDict.ContainsKey(source))
 				{
 					traficReportDict[source].Visitors += row.Visitors;

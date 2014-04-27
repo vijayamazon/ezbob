@@ -129,14 +129,29 @@ namespace EzReportToEMail
 
 								case ReportType.RPT_TRAFFIC_REPORT:
 									var trafficReport = new TrafficReport(DB);
-									KeyValuePair<ReportQuery, DataTable> oData = trafficReport.CreateTrafficReport(report, dYesterday.AddDays(-1), dYesterday);
+									if (report.IsDaily)
+									{
+										KeyValuePair<ReportQuery, DataTable> oData = trafficReport.CreateTrafficReport(report, dYesterday, dToday);
 
-									sender.Dispatch(
-										report.Title,
-										dYesterday,
-										BuildTrafficReport(report, dYesterday, dToday, oData),
-										BuildTrafficReportXls(report, dYesterday, dToday, oData),
-										report.ToEmail);
+										sender.Dispatch(
+											report.Title,
+											dYesterday,
+											BuildTrafficReport(report, dYesterday, dToday, oData),
+											BuildTrafficReportXls(report, dYesterday, dToday, oData),
+											report.ToEmail);
+									}
+									if (report.IsMonthToDate)
+									{
+										var dFirstOfMonth = new DateTime(dToday.Year, dToday.Month, 1);
+										KeyValuePair<ReportQuery, DataTable> oData = trafficReport.CreateTrafficReport(report, dFirstOfMonth, dToday);
+
+										sender.Dispatch(
+											report.Title,
+											dYesterday,
+											BuildTrafficReport(report, dFirstOfMonth, dToday, oData),
+											BuildTrafficReportXls(report, dFirstOfMonth, dToday, oData),
+											report.ToEmail);
+									}
 									break;
 
 								default:

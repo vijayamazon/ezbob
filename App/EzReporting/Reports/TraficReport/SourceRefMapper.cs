@@ -161,7 +161,11 @@
 			{
 				return Source.GooglePpc;
 			}
-			
+			if (analytics.Contains("ezbob"))
+			{
+				return Source.Ezbob;
+			}
+
 			return Source.Other;
 		}
 	}
