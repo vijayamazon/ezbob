@@ -44,11 +44,15 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 
 		for (var i = 0; i < onAfterRender.length; i++)
 			onAfterRender[i].call(undefined);
+
+		this.redisplayAccordion();
 	}, // render
 
-	showAccordion: function() {
-		if (this.list)
-			return;
+	redisplayAccordion: function() {
+		if (this.list) {
+			this.list.accordion('destroy');
+			this.list = null;
+		} // if
 
 		this.list = this.$el.accordion({
 			heightStyle: 'content',
@@ -56,15 +60,7 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 			active: this.activePanel
 		});
 
-	    this.list.addClass('box');
-	    this.list.find('.ui-state-default').addClass('box-title');
-	},
-	
-	hideAccordion: function() {
-		if (!this.list)
-			return;
-
-		this.list.accordion('destroy');
-		this.list = null;
-	} // hideAccordion
+		this.list.addClass('box');
+		this.list.find('.ui-state-default').addClass('box-title');
+	}, // redisplayAccordion
 });

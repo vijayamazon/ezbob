@@ -88,7 +88,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         )
 
         that.$el.find('a.company-score-tab').on('shown.bs.tab', (evt) ->
-            that.companyScoreView.showAccordion()
+            that.companyScoreView.redisplayAccordion()
         )
 
         @crossCheckView = new EzBob.Underwriter.CrossCheckView(
@@ -318,8 +318,6 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         BlockUi "on"
         scrollTop()
         that = this
-
-        this.companyScoreView.hideAccordion()
 
         @customerId = id
         fullModel = new EzBob.Underwriter.CustomerFullModel(customerId: id, history: (EzBob.parseDate(history) ? history : null))
