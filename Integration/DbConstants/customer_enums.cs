@@ -51,22 +51,27 @@ namespace EZBob.DatabaseLib.Model.Database {
 	#region enum IndustryType
 
 	public enum IndustryType {
-		Manufacturing = 0,
-		[Description("Construction services")]
-		ConstructionServices = 1,
-		Construction = 2,
-		Wholesale = 3,
-		Retail = 4,
-		Online = 5,
 		[Description("Accommodation / food")]
-		AccommodationOrFood = 6,
-		Transportation = 7,
+		AccommodationOrFood = 0,
+		Automotive = 1,
 		[Description("Business services")]
-		BusinessServices = 8,
+		BusinessServices = 2,
+		Construction = 3,
+		[Description("Construction services")]
+		ConstructionServices = 4,
 		[Description("Consumer services")]
-		ConsumerServices = 9,
-		Healthcare = 10,
-		Other = 11
+		ConsumerServices = 5,
+		Education = 6,
+		Food = 7,
+		[Description("Health & Beauty")]
+		HealthBeauty = 8,
+		Healthcare = 9,
+		Manufacturing = 10,
+		Online = 11,
+		Retail = 12,
+		Transportation = 13,
+		Wholesale = 14,
+		Other = 15
 	} // enum IndustryType
 
 	#endregion enum IndustryType
