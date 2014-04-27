@@ -63,10 +63,12 @@
                         <span>Marital status</span>
                         <select class="form_field" id="MaritalStatus" name="MaritalStatus" ui-event-control-id="personal-info:marital_status">
                             <option></option>
-                            <option value="Single">Single</option>
                             <option value="Married">Married</option>
+                            <option value="Single">Single</option>
                             <option value="Divorced">Divorced</option>
-                            <option value="Widow/er">Widow/er</option>
+                            <option value="Widowed">Widowed</option>
+                            <option value="LivingTogether">Living Together</option>
+                            <option value="Separated">Separated</option>
                             <option value="Other">Other</option>
                         </select>
                         <img id="MaritalStatusImage" class="field_status required" />
@@ -185,13 +187,18 @@
                             <span>Industry type</span>
                             <select id="IndustryType" name="IndustryType" class="select form_field" ui-event-control-id="personal-info:industry_type">
                                 <option selected="selected" value=""></option>
-                                <option value="0">Automotive</option>
-                                <option value="1">Construction</option>
-                                <option value="2">Education</option>
-                                <option value="3">Health and Beauty</option>
-                                <option value="4">High Street or Online Retail</option>
-                                <option value="5">Food</option>
-                                <option value="6">Other</option>
+                                <option value="0">Manufacturing</option>
+                                <option value="1">Construction services</option>
+                                <option value="2">Construction</option>
+                                <option value="3">Wholesale</option>
+                                <option value="4">Retail</option>
+                                <option value="5">Online</option>
+                                <option value="6">Accommodation / food</option>
+                                <option value="7">Transportation</option>
+                                <option value="8">Business services</option>
+                                <option value="9">Consumer services</option>
+                                <option value="10">Healthcare</option>
+                                <option value="11">Other</option>
                             </select>
                             <img id="IndustryTypeImage" class="field_status required" />
                         </label>

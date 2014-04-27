@@ -87,8 +87,16 @@ namespace Reports {
 						lre.FamilyStatus = 2;
 						break;
 
-					case MaritalStatus.Widower:
+					case MaritalStatus.Widowed:
 						lre.FamilyStatus = 3;
+						break;
+
+					case MaritalStatus.LivingTogether:
+						lre.FamilyStatus = 1;
+						break;
+
+					case MaritalStatus.Separated:
+						lre.FamilyStatus = 2;
 						break;
 
 					case MaritalStatus.Other:

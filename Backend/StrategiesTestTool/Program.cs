@@ -69,7 +69,7 @@
 		{
 			Console.WriteLine("Usage: StrategiesTestTool.exe <strategy name> [parameters...]");
 			Console.WriteLine("Strategy Score Medal Calculation: name: medal, parameters: annualTurnover experianScore mpSeniorityYears positiveFeedbackCount maritalStatus gender numberOfStores firstRepaymentDatePassed ezbobSeniority ezbobNumOfLoans ezbobNumOfLateRepayments ezbobNumOfEarlyReayments");
-			Console.WriteLine("maritalStatus: Married=0,Single=1,Divorced=2,Widower=3,Other=4 \n gender: M=0,F=1, firstRepaymentDatePassed: true/false");
+			Console.WriteLine("maritalStatus: Married=0,Single=1,Divorced=2,Widowed=3,LivingTogether=4,Separated=5,Other=6 \n gender: M=0,F=1, firstRepaymentDatePassed: true/false");
 			Console.WriteLine("Example: medal 125000 740 8 10000 0 0 0 false 1.2 0 0 0");
 		}
 	}

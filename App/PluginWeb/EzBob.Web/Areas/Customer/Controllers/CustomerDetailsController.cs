@@ -26,7 +26,6 @@
 	using Iesi.Collections.Generic;
 	using NHibernate;
 	using EzServiceReference;
-	using StructureMap;
 	using log4net;
 
 	#endregion using
@@ -607,7 +606,7 @@
 			customer.PersonalInfo.IndustryType = eIndustryType;
 			customer.PersonalInfo.OverallTurnOver = companyAdditionalInfo.OverallTurnOver;
 
-			if (eIndustryType == IndustryType.HighStreetOrOnlineRetail || companyAdditionalInfo.PartBusinessOnline)
+			if (eIndustryType == IndustryType.Retail || eIndustryType == IndustryType.Online || companyAdditionalInfo.PartBusinessOnline)
 				customer.IsOffline = false;
 			else
 				customer.IsOffline = true;

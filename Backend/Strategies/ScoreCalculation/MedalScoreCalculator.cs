@@ -303,8 +303,14 @@
 				case MaritalStatus.Other:
 					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_Single;
 					break;
-				case MaritalStatus.Widower:
-					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_Widower;
+				case MaritalStatus.Widowed:
+					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_Widowed;
+					break;
+				case MaritalStatus.LivingTogether:
+					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_LivingTogether;
+					break;
+				case MaritalStatus.Separated:
+					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_Separated;
 					break;
 			}
 

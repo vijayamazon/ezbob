@@ -16,7 +16,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 		Married,
 		Single,
 		Divorced,
-		Widower,
+		Widowed,
+		LivingTogether,
+		Separated,
 		Other
 	} // enum MaritalStatus
 
@@ -49,15 +51,22 @@ namespace EZBob.DatabaseLib.Model.Database {
 	#region enum IndustryType
 
 	public enum IndustryType {
-		Automotive = 0,
-		Construction = 1,
-		Education = 2,
-		[Description("Health & Beauty")]
-		HealthBeauty = 3,
-		[Description("High street or Online retail")]
-		HighStreetOrOnlineRetail = 4, //online
-		Food = 5,
-		Other = 6
+		Manufacturing = 0,
+		[Description("Construction services")]
+		ConstructionServices = 1,
+		Construction = 2,
+		Wholesale = 3,
+		Retail = 4,
+		Online = 5,
+		[Description("Accommodation / food")]
+		AccommodationOrFood = 6,
+		Transportation = 7,
+		[Description("Business services")]
+		BusinessServices = 8,
+		[Description("Consumer services")]
+		ConsumerServices = 9,
+		Healthcare = 10,
+		Other = 11
 	} // enum IndustryType
 
 	#endregion enum IndustryType

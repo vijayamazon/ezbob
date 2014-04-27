@@ -153,7 +153,9 @@ namespace EzBob.Backend.Strategies.ScoreCalculation
 		public static readonly int MaritalStatusGrade_Married = 4;
 		public static readonly int MaritalStatusGrade_Divorced = 3;
 		public static readonly int MaritalStatusGrade_Single = 2;
-		public static readonly int MaritalStatusGrade_Widower = 4;
+		public static readonly int MaritalStatusGrade_Widowed = 4;
+		public static readonly int MaritalStatusGrade_LivingTogether = 4;
+		public static readonly int MaritalStatusGrade_Separated = 3;
 
 		#endregion Grade Ranges
 
