@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<script>
+    function CTIsPlayback() {
+        try { return parent && parent.WebPlayer; }
+        catch (e) { return false; }
+    }
+    if (!CTIsPlayback())
+        if (top != self)
+            top.location = location;
+</script>
+    
+            <!--prod-->
+            <base href="https://app.ezbob.com/" />
+    <script type="text/javascript">
+        var EzBob = EzBob || {};
+        EzBob.Config = EzBob.Config || {};
+        EzBob.GA = EzBob.GA || function () {
+        };
+    </script>
+    <style>
+        .error h3 {
+            font-size: 14px;
+            margin-bottom: 0px;
+            color: red;
+        }
+
+        .paypont-form .control-label {
+            font-weight: normal;
+        }
+
+        body header + .inner, .main-page {
+            margin: 0 auto !important;
+        }
+
+        #paypal {
+            margin: 5px auto;
+            clear: both;
+            text-align: left;
+        }
+
+        #container p {
+            float: left;
+            font-size: 12pt;
+        }
+
+        #paypal_table {
+            width: 50%;
+        }
+
+        #paypal_button {
+            text-align: right;
+        }
+
+        #paypal_link {
+            text-align: center;
+        }
+    </style>
+
+
+
+    <title>PayPoint: Fill Debit Card Details | EZBOB</title>
+
+    <meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
+
+    <meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
+
+
+<link rel="icon shortcut" type="image/png" href="/Content/img/favicon32x32.png" />
+    <!-- for mobile -->
+<link rel="apple-touch-icon" href="/Content/img/favicon57x57.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/Content/img/favicon72x72.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/Content/img/favicon114x114.png" />
+<!--[if IE]>
+<link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+<![endif]-->
+    <link href='https://fonts.googleapis.com/css?family=Sanchez' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" type="text/css" href="/Content/css/jquery-ui-1.8.16.custom.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/jquery.ui.1.8.16.ie.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/style.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/notifications.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/wizard.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/wizard-header.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/coin-slider-styles.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/sidebar.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/customer.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/captcha.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/postcode.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/popover.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/shops.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/choosen/chosen.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/app.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/attardi.labels.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/loan-type-selector.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/amount-period-sliders.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/dropzone.css" />
+<link rel="stylesheet" type="text/css" href="/Content/css/flaty/font-awesome.min.css" />
+
+    <link rel="stylesheet" type="text/css" media="print" href="/Content/css/print.css" />
+
+    <!--[if lt IE 9]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
+        <![endif]-->
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    var pluginUrl =
+     '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+    _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+    _gaq.push(['_setAccount', 'UA-32583191-1']);
+    _gaq.push(['_setDomainName', 'ezbob.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+</script><script type="text/javascript">
+     dn = "www.ezbob.com";
+     lang = "en";
+     tpt = "opaque";
+     vrsn_style = "WW";
+     splash_url = "https://trustsealinfo.verisign.com";
+     rStr = "";
+     seal_url = "https://seal.verisign.com";
+
+     u1 = splash_url + "/splash?form_file=fdf/splash.fdf&dn=" + dn + "&lang=" + lang;
+     u2 = seal_url + "/getseal?at=0&sealid=2&dn=" + dn + "&lang=" + lang + rStr;
+     var sopener;
+
+     function vrsn_splash() {
+         if (sopener && !sopener.closed) {
+             sopener.focus();
+         } else {
+             tbar = "location=yes,status=yes,resizable=yes,scrollbars=yes,width=560,height=500";
+             var sw = window.open(u1, 'VRSN_Splash', tbar);
+             if (sw) {
+                 sw.focus();
+                 sopener = sw;
+             }
+         }
+     }
+
+     var ver = -1;
+     var v_ua = navigator.userAgent.toLowerCase();
+     var re = new RegExp("msie ([0-9]{1,}[\.0-9]{0,})");
+     if (re.exec(v_ua) !== null) {
+         ver = parseFloat(RegExp.$1);
+     }
+     var v_old_ie = (v_ua.indexOf("msie") != -1);
+     if (v_old_ie) {
+         v_old_ie = ver < 5;
+     }
+
+     function v_mact(e) {
+         var s;
+         if (document.addEventListener) {
+             s = (e.target.name == "seal");
+             if (s) {
+                 vrsn_splash();
+                 return false;
+             }
+         } else if (document.captureEvents) {
+             var tgt = e.target.toString();
+             s = (tgt.indexOf("splash") != -1);
+             if (s) {
+                 vrsn_splash();
+                 return false;
+             }
+         }
+         return true;
+     }
+
+     function v_mDown(event) {
+         if (document.addEventListener) {
+             return true;
+         }
+         event = event || window.event;
+         if (event) {
+             if (event.button == 1) {
+                 if (v_old_ie) {
+                     return true;
+                 } else {
+                     vrsn_splash();
+                     return false;
+                 }
+             } else if (event.button == 2) {
+                 vrsn_splash();
+                 return false;
+             }
+         } else {
+             return true;
+         }
+     }
+
+     if (document.addEventListener) {
+         document.addEventListener('mouseup', v_mact, true);
+     } else {
+         if (document.layers) {
+             document.captureEvents(Event.MOUSEDOWN);
+             document.onmousedown = v_mact;
+         }
+     }
+
+     function v_resized() {
+         if (pageWidth != innerWidth || pageHeight != innerHeight) {
+             self.history.go(0);
+         }
+     }
+
+     if (document.layers) {
+         pageWidth = innerWidth;
+         pageHeight = innerHeight;
+         window.onresize = v_resized;
+     }
+ </script></head>
+
+<body auth="" data-user-name="">
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-NQVH6M"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NQVH6M');</script>
+<!-- End Google Tag Manager -->
+    
+
+<!-- BEGIN LivePerson Monitor. -->
+<script type="text/javascript">
+    window.lpTag = {
+        site: '13658382',
+        _v: '1.1',
+        protocol: location.protocol,
+        events: {
+            bind: function (app, ev, fn) {
+                lpTag.defer(function () {
+                    lpTag.events.bind(app, ev, fn);
+                });
+            },
+            trigger: function (app, ev, json) {
+                lpTag.defer(function () {
+                    lpTag.events.trigger(app, ev, json);
+                });
+            }
+        },
+        defer: function (fn) {
+            this._defL = this._defL || [];
+            this._defL.push(fn);
+        },
+        load: function (src, chr, id) {
+            var t = this;
+            setTimeout(function () {
+                t._load(src, chr, id);
+            }, 0);
+        },
+        _load: function (src, chr, id) {
+            var url = src;
+            if (!src) {
+                url = this.protocol + '//' + ((this.ovr && this.ovr.domain) ? this.ovr.domain : 'lptag.liveperson.net') + '/tag/tag.js?site=' + this.site;
+            }
+            var s = document.createElement('script');
+            s.setAttribute('charset', chr ? chr : 'UTF-8');
+            if (id) {
+                s.setAttribute('id', id);
+            }
+            s.setAttribute('src', url);
+            document.getElementsByTagName('head')
+                .item(0)
+                .appendChild(s);
+        },
+        init: function () {
+            this._timing = this._timing || {};
+            this._timing.start = (new Date())
+                .getTime();
+            var that = this;
+            if (window.attachEvent) {
+                window.attachEvent('onload', function () {
+                    that._domReady('domReady');
+                });
+            } else {
+                window.addEventListener('DOMContentLoaded', function () {
+                    that._domReady('contReady');
+                }, false);
+                window.addEventListener('load', function () {
+                    that._domReady('domReady');
+                }, false);
+            }
+            if (typeof (window._lptStop) == 'undefined') {
+                this.load();
+            }
+        },
+        _domReady: function (n) {
+            if (!this.isDom) {
+                this.isDom = true;
+                this.events.trigger('LPT', 'DOM_READY', {
+                    t: n
+                });
+            }
+            this._timing[n] = (new Date())
+                .getTime();
+        }
+    };
+    lpTag.init();
+</script>
+<!-- END LivePerson Monitor. -->
+    <input name="__RequestVerificationToken" type="hidden" value="8dpNZTPlh2Orxrzazq1y6xA/jjdhn0MITNYvXj0gFFIvy+oMDhnT3pIgbZ9bVnhJZQIFV2iSjjw6MLt08432w2hBJDeoeGyw/wFbtE7RBrcP2Lfm6eB1Q1nlG7RAgKZAkdBaQLcoRe1NXC0GR3QHoGMqD31tKQYQlscoqriLcbo=" />
+
+    <div id="wrapper">
+		<div id="header">
+			<div class="header-inner">
+				<a href="http://www.ezbob.com">
+					<img src="/Content/img/ezbob-logo-2014.png" class="newlogo"></a>
+
+				<div class="header-phone">0800-011-4787</div>
+
+				<div class="eu-menu">
+					<img src="/Content/img/eu-menu.png"><br>
+					Authorised by the European Union
+				</div>
+
+				<ul id="user-menu">
+					<li id="logoff-li" class="login" style="display: none;">
+						<a href="/Account/LogOff">LOG OFF</a>
+					</li>
+					<li class="login login_btn" style="display: none;"><a href="/Account/LogOn">LOGIN</a></li>
+					<li class="sign-up signup_btn" style="display: none"><a href="https://localhost:44300/Customer/Wizard#SignUp">SIGN UP</a></li>
+				</ul>
+			</div>
+		</div>
+
+        <div class="inner main-page">
+            <section id="full_width">
+                
+
+
+
+<div class="dashboard-steps narrow-dashboard-header">
+    <ul class="application_steps">
+        <li data-step-num="0" class="completed complete">
+            <span class="step_label">Step 1:<br/>Choose Loan Term</span>
+        </li>
+        <li data-step-num="1" class="active current">
+            <span class="step_label">Step 2:<br/>Enter Bank &amp; Debit</span>
+        </li>
+        <li data-step-num="2" class="">
+            <span class="step_label">Step 3:<br/>Get Cash</span>
+        </li>
+    </ul>
+</div>
+
+<div style="padding: 0 30px;">
+    <div class="row-fluid">
+        <div class="pages">
+            <div>
+                <div class="row-fluid">
+                    <div class="pages" style="padding-top: 16px;">
+                        
+                        <div class="PayPointHeader">
+                            <h2>Enter your debit card details</h2>
+                            <h3>For automatic loan repayment</h3>
+                        </div>
+
+                        <div class="error">
+                            ${error_table}
+                        </div>
+                        <form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
+                                <div class="form_field_container control-group">
+        <div class="controls">
+            <label class="attardi-input">
+                <span>${customer_Text:=Name of Cardholder}</span>
+                <input 
+                    type="text" 
+                    name="customer" 
+                    id="customer" 
+                    class="form_field" 
+                    value="${customer}"
+                        tabindex="1"
+                    />
+                    <img id="customerImage" class="field_status required"/>
+            </label>
+        </div>
+    </div>
+
+
+                            ${start_card_type}
+                            <div class="form_field_container control-group controls">
+                                <label class="attardi-input">
+                                    <span>${card_type_Text:=Card Type}</span>
+                                    <select name="card_type" class="selectheight form_field" tabindex="2">
+                                        <option value></option>
+                                        <option value="Visa" ${card_type="Visa"}>${Visa_Text:=Visa}</option>
+                                        <option value="Debit Master Card" ${card_type="Debit" master="" card=""}>${Debit_Master_Card_Text:=Debit Master Card}</option>
+                                        <option value="Delta" ${card_type="Delta"}>${Delta_Text:=Visa Debit Delta or Connect}</option>
+                                        ${StartIssue}
+                                        <option value="Maestro" ${card_type="Maestro"}>${Maestro_Text:=Maestro}</option>
+                                        <option value="Solo" ${card_type="Solo"}>${Solo_Text:=Solo}</option>
+                                        ${EndIssue}
+                                        ${card_types} 
+                                    </select>
+                                    <img id="card_typeImage" class="field_status required" />
+                                </label>
+                            </div>
+                            ${end_card_type}
+                            
+                                <div class="form_field_container control-group">
+        <div class="controls">
+            <label class="attardi-input">
+                <span>${card_no_Text:=Card Number}</span>
+                <input 
+                    type="text" 
+                    name="card_no" 
+                    id="card_no" 
+                    class="form_field" 
+                    value="${card_no}"
+                        tabindex="3"
+                        maxlength="16"
+                    />
+                    <img id="card_noImage" class="field_status required"/>
+            </label>
+        </div>
+    </div>
+
+                            
+                                <div class="form_field_container control-group">
+        <div class="controls">
+            <label class="attardi-input">
+                <span>${cv2_Text:=CV2 (security code)}</span>
+                <input 
+                    type="password" 
+                    name="cv2" 
+                    id="cv2" 
+                    class="form_field" 
+                    value="${cv2}"
+                        tabindex="4"
+                        maxlength="4"
+                    />
+                    <img id="cv2Image" class="field_status required"/>
+            </label>
+        </div>
+    </div>
+
+                            
+                                <div class="form_field_container control-group">
+        <div class="controls">
+            <label class="attardi-input">
+                <span>${expiry_Text:=Expiry Date (MM/YY)}</span>
+                <input 
+                    type="text" 
+                    name="expiry" 
+                    id="expiry" 
+                    class="form_field" 
+                    value="${expiry}"
+                        tabindex="5"
+                        maxlength="5"
+                    />
+                    <img id="expiryImage" class="field_status required"/>
+            </label>
+        </div>
+    </div>
+
+
+                            <div id="amount-group" class="control-group" style="display: none">
+                                <label class="control-label" for="amount">Amount</label>
+                                <div class="controls">
+                                    <label class="control-label" id="amount">${amount} ${currency:=GBP}</label>
+                                </div>
+                            </div>
+
+                            
+
+                            <div class="form_buttons_container">
+                                <input 
+                                    type="submit"
+                                    name="accept" 
+                                    value="Confirm" 
+                                    class="submit pull-right button orange disabled confirm" tabindex="6" />
+                                
+                                <a href="#"class="button grey pull-right back">Back</a>
+                            </div>
+
+                                <input type="hidden" name="merchant" value="${merchant}">
+          <input type="hidden" name="trans_id" value="${trans_id}">
+          <input type="hidden" name="callback" value="${callback}">
+          <input type="hidden" name="backcallback" value="${backcallback}">
+          <input type="hidden" name="order" value="${order}">
+          <input type="hidden" name="shipping" value="${shipping}">
+          <input type="hidden" name="billing" value="${billing}">
+          <input type="hidden" name="template" value="${template}">
+          <input type="hidden" name="err_template" value="${err_template}">
+          <input type="hidden" name="options" value="${options}">
+          <input type="hidden" class="amount" name="amount" value="${amount}">
+          <input type="hidden" name="currency" value="${currency}">
+          <input type="hidden" name="cb_list" value="${cb_list}">
+          <input type="hidden" name="cb_flds" value="${cb_flds}">
+          <input type="hidden" name="map_flds" value="${map_flds}">
+          <input type="hidden" name="md_flds" value="${md_flds}">
+          <input type="hidden" name="background" value="${background}">
+          <input type="hidden" name="bgcolor" value="${bgcolor}">
+          <input type="hidden" name="font_face" value="${font_face}">
+          <input type="hidden" name="font_color" value="${font_color}">
+          <input type="hidden" name="font_size" value="${font_size}">
+          <input type="hidden" name="branding" value="${branding}">
+          <input type="hidden" name="mail_message" value="${mail_message}">
+          <input type="hidden" name="cb_message" value="${cb_message}">
+          <input type="hidden" name="cb_fail_message" value="${cb_fail_message}">
+          <input type="hidden" name="mandatory_Text" value="${mandatory_Text}">
+          <input type="hidden" name="customer_Text" value="${customer_Text}">
+          <input type="hidden" name="card_type_Text" value="${card_type_Text}">
+          <input type="hidden" name="card_no_Text" value="${card_no_Text}">
+          <input type="hidden" name="expiry_Text" value="${expiry_Text}">
+          <input type="hidden" name="issue_Text" value="${issue_Text}">
+          <input type="hidden" name="start_date_Text" value="${start_date_Text}">
+          <input type="hidden" name="authorise_Text" value="${authorise_Text}">
+          <input type="hidden" name="wait_Text" value="${wait_Text}">
+          <input type="hidden" name="error_table_Text" value="${error_table_Text}">
+          <input type="hidden" name="Master_Card_Text" value="${Master_Card_Text}">
+          <input type="hidden" name="Delta_Text" value="${Delta_Text}">
+          <input type="hidden" name="Visa_Text" value="${Visa_Text}">
+          <input type="hidden" name="JCB_Text" value="${JCB_Text}">
+          <input type="hidden" name="Solo_Text" value="${Solo_Text}">
+          <input type="hidden" name="Switch_Text" value="${Switch_Text}">
+          <input type="hidden" name="Maestro_Text" value="${Maestro_Text}">
+          <input type="hidden" name="American_Express_Text" value="${American_Express_Text}">
+          <input type="hidden" name="Diners_Club_Text" value="${Diners_Club_Text}">
+          <input type="hidden" name="cv2_Text" value="${cv2_Text}">
+          <input type="hidden" name="start_date_Error" value="${start_date_Error}">
+          <input type="hidden" name="card_no_Error" value="${card_no_Error}">
+          <input type="hidden" name="card_type_Error" value="${card_type_Error}">
+          <input type="hidden" name="customer_name_Error" value="${customer_name_Error}">
+          <input type="hidden" name="expiry_date_Error" value="${expiry_date_Error}">
+          <input type="hidden" name="issue_Error" value="${issue_Error}">
+          <input type="hidden" name="email_Error" value="${email_Error}">
+          <input type="hidden" name="cv2_Error" value="${cv2_Error}">
+          <input type="hidden" name="save_other_pay" value="${save_other_pay}">
+          <input type="hidden" name="usercallback" value="${usercallback}">
+          <input type="hidden" name="token" value="${token}">
+          <input type="hidden" name="error_table">
+          <input type="hidden" name="error_list">
+          
+
+
+                        </form>
+
+                        <div id="buttons" align="center" class="span7">
+                            ${other_pay}<br>
+                        </div>
+                        <div class="row">
+                            <div class="span7" align="center">
+                                ${3ds}
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <hr>
+                    ${paypal:=<table id="paypal_table">
+                                  <tr>
+                                      <td id="paypal_text">
+                                          <p>Pay with PayPal</p>
+                                      </td>
+                                      <td id="paypal_link">
+                                          <a href="javascript:PPHelp()">What is PayPal?</a>
+                                      </td>
+                                      <td id="paypal_button">
+                                          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" value="PayByPayPal" name="paypal_transaction">
+                                      </td>
+                                  </tr>
+                              </table><hr id="paypal_line">
+                    }
+
+                    <div id="secure">
+                        <table border="0" width="100%" class="secure_table">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: center; width: 150px;">
+                                        <a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
+                                            <img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
+                                        </a>
+                                    </td>
+                                    <td valign="top" rowspan="2">
+                                        ${wait_Text:=You have now entered a secure transaction environment. Your personal
+                                        information will be encrypted before transmission. Please check that the address
+                                        bar of your browser is visible and that the address begins with <b>https://</b>.
+                                        For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
+                                        incorporates the SECPay service.}
+                                    </td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">
+                                        Secure Payment<br>
+                                                      <img src="https://www.secpay.com/users/lock.png" alt="The secure padlock" width="16" height="16">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+            </section>
+        </div>
+
+        <div id="modalRegion" class="modal hide fade">
+        </div>
+        <div class="push"></div>
+    </div>
+
+    <!--wraper-->
+    <footer>
+<div id="copyrights">
+	<div class="copyrights-inner">
+		<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687
+		ICO Registration Number: Z2946778.<br/>
+		<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br/>
+		Registered Address: 145 – 157 John Street, London EC1V 4PW Business Address: 39-41 North Road, London N7 9DP<br/>
+		&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
+
+		<ul id="menu-sub_footer_menu" class="sub_footer_nav">
+			<li><a href="http://www.ezbob.com/terms-and-conditions/" target="_blank">Terms &#038; Conditions</a></li>
+			<li><a href="http://www.ezbob.com/about-us/responsible-lending/" target="_blank">Responsible Lending</a></li>
+			<li><a href="http://www.ezbob.com/privacy-and-cookies/" target="_blank">Privacy &#038; Cookies</a></li>
+			<li><a href="http://www.ezbob.com/blog/" target="_blank">Blog</a></li>
+			<li><a href="http://www.ezbob.com/contact-us/" target="_blank">Contact</a></li>
+		</ul>
+	</div>
+</div>
+    </footer>
+    <script type="text/javascript">
+        window.gRootPath = '/';
+    </script>
+    <script id="login-template" type="text/template">
+<form action="/Account/AdminLogOn" class="simple-login" method="post">    <div class="notifications"></div>
+    <div>
+        <div class="pager"><h3>Login to <a href="#" class="ezbob-logo ezbob-logo-login"></a></h3></div>
+        <hr />
+        <div class="form-group">
+            <div class="controls">
+                <input autofocus="autofocus" class="form_control" id="UserName" name="UserName" placeholder="user name" tabindex="11" type="text" value="" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="controls">
+                <input autocomplete="off" class="form_control" id="Password" name="Password" placeholder="password" tabindex="12" type="password" value="" />
+            </div>
+        </div>
+        <input id="returnUrl" name="returnUrl" type="hidden" value="" />
+        <br />
+        <div class="form-group">
+            <div class="controls">
+                <input class="btn btn-login form-control" type="submit" value="Log In" tabindex="13" id="loginSubmitBtn" />
+            </div>
+        </div>
+        <hr/>
+    </div>
+</form>    </script>
+
+
+    <script type="text/javascript">var EzBob = EzBob || {};EzBob.dbStrings = {"EmailAddressAlreadyExists":"This email adress already exists in our system.  Please try to log-in or request new password.","NotValidEmailAddress":"This is not a valid email address","PasswordPolicyCheck":"Please enter a password that is 6 characters or more.","PasswordDoesNotMatch":"Passwords don't match, please re-enter","StoreAlreadyExistsInDb":"This store already added. If you have another store please add it now.","StoreAdded":"Congratulations. Your store was added successfully.","AccountAlreadyExixtsInDb":"This PayPal account already exists in our system under a different user.","PayPalAddedByYou":"You've already added this PayPal account","StoreAddedByYou":"You've already added this store. If you have another store please add it now.","QuickSignUpTopNotification":"You are now opening a FREE, SECURE, and PERSONAL account and minutes away from receiving monies.","QuickSignUpSecurityStatement":"You are under no obligation, there is no cost to this service.  EZBOB uses state of the art security : all your data is kept secure!!!","QuickSignUpNeedHelp":"Need Help?  Try live chat, email, or call ####","QuickSignUpCommonQuestions":"<ul><li>What is EZBOB?</li><li>How long is the Process?</li><li>When will I receive my money?</li></ul>","QuickSignUpNotifications":"As part of the appilcation process, you are opening your own, private, EZBOB account.   The entire applicatin process takes no more than 10 minutes to complete. ","StoreInfoSecurityStatement":"Security and Privacy are  paramount at EZBOB. Your information is not shared with any 3rd party.","StoreInfoCommonQuestions":"<ul><li>Does EZBOB have access to my store?</li><li>Benefits of adding a store?</li><li>What information does EZBOB collect?</li></ul>","AmazonTutorial":"We have created a simple visual tutorial to guide you through the process.","AmazonCommonQuestions":"If I add another store how much more money can I get?  Does EZBOB have access to my store?","AmazonSecurityStatement":"EZBOB never sees your store passwords.  We have read only access to your details.","StoreNotification":"EZBOB does not have access to your passwords and cannot alter your store data in anyway.  EZBOB analyzes our online store data in order to make you a financing offer.","EbayTutorial":"We have created a simple visual tutorial to guide you through the process.","PaymentAccountAdded":"Congratulations. Your payment account was addded successfully.","StoreInfoTopNotification":"EZBOB finances based on your online business.  Add your best store first.","StoreInfoAddMore":"Add more stores get more money!","NoPayPalOrBankAccount":"Now we need your payment details so we can send you money!","NoBankAccount":"We need your Bank Account details so we can send you money!","AccountsAdded":"The registration process is almost completed.","NoPayPalAccount":"Since you are an Ebay seller we require your PayPal details.","PayPalTopNotification":"Since you are an ebay seller, you must fill out your PayPal details.","PayPalTutorial":"We have created a simple visual tutorial to guide you through the process.","PayPalQuestions":"What happens if I don't have / fill out my PayPal details?  What does EZBOB do with my PayPal account details?  Do I get more money if I add my Paypal","AccountAddedByYou":"You've already added this account. If you have another account please add it now.","MarketingDefault":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep1":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep2":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep3":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep35":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep4":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboard":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardMakePayment":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardGetCash":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardLoanDetails":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardAccountActivity":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardYourDetails":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardYourStores":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardPaymentAccounts":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardPayEarly":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardSettings":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepSignup":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepLinkAccounts":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepPersonalInfo":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepCompanyInfo":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepDone":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>"};</script>
+<script type="text/javascript" src="/Content/js/lib/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.browser.min.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.scrollTo.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.mask.min.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.validate.js"></script>
+<script type="text/javascript" src="/Content/js/lib/moment.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jsuri-1.1.1.js"></script>
+<script type="text/javascript" src="/Content/js/lib/bootstrap.js"></script>
+<script type="text/javascript" src="/Content/js/lib/cookies.js"></script>
+<script type="text/javascript" src="/Content/js/lib/underscore.js"></script>
+<script type="text/javascript" src="/Content/js/lib/backbone.js"></script>
+<script type="text/javascript" src="/Content/js/contactUs/ezbo.contactUs.js"></script>
+<script type="text/javascript" src="/Content/js/App/ezbob.validation.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.field_status.js"></script>
+<script type="text/javascript" src="/Content/js/lib/attardi.labels.js"></script>
+
+    
+	<script type="text/javascript">
+	    function PPHelp() {
+	        helpwindow = window.open('https://www.paypal.com/uk/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside', 'olcwhatispaypal', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');
+	    }
+
+	    $(document).ready(function () {
+	        var oFieldStatusIcons = $('img.field_status');
+	        oFieldStatusIcons.filter('.required').field_status({ required: true });
+	        oFieldStatusIcons.not('.required').field_status({ required: false });
+	    });
+
+	    EzBob.Config.HeartBeatEnabled = false;
+	    EzBob.Config.SessionTimeout = -1;
+
+	    function submitPaypointForm() {
+	        $('form').data("validator").cancelSubmit = true;
+	        $('form').submit();
+	    }
+
+	    function getCallbackValue(key) {
+	        var uri = new Uri(decodeURIComponent(new Uri(document.location).getQueryParamValue('callback')));
+	        return uri.getQueryParamValue(key);
+	    }
+
+	    function getOptionsValue() {
+	        var uri = new Uri(document.location);
+	        return decodeURIComponent(uri.getQueryParamValue('options'));
+	    }
+
+	    var uri = new Uri(decodeURIComponent(new Uri(document.location).getQueryParamValue('options')));
+
+	    function inputChanged(validator) {
+	        var isValid = EzBob.Validation.checkForm(validator);
+	        return $('.submit').toggleClass('disabled', !isValid);
+	    }
+
+	    (function () {
+	        var sSegmentType = decodeURIComponent(new Uri(document.location).getQueryParamValue('segmenttype'));
+	        var sLogoClassExt = (sSegmentType === 'offline') ? 'ezbob_logo_offline' : 'ezbob_logo_online';
+	        $('.ezbob_logo').removeClass('ezbob_logo_online ezbob_logo_offline').addClass(sLogoClassExt);
+	    })();
+
+	    $(function () {
+	        $('form').attr('action', document.location.href);
+	        var amount = $('.amount').val();
+	        var isPayEarly = amount != 5;
+	        var lastDateOfPayment;
+
+	        if (isPayEarly) {
+	            lastDateOfPayment = moment();
+	        }
+	        else {
+	            var param = decodeURIComponent(getCallbackValue('lastDatePayment') || "");
+	            lastDateOfPayment = moment(param || moment().add("months", 3), "DD/MM/YYYY");
+	        }
+	        var isTest = getOptionsValue().indexOf('test_status=true') != -1;
+
+	        //set user email in top bar
+	        var html = '<span id="logged-in-user-name">' + decodeURIComponent(getCallbackValue('username') || "") + '</span><a href="/Account/LogOff" class="button grey medium_btn">Log off</a>';
+	        $("#header_description").html(html);
+
+	        //set url for back button
+	        var ulrBack = !isPayEarly ? 'https://app.ezbob.com/Customer/Profile#GetCash' : "https://app.ezbob.com/Customer/Profile#PayEarly";
+	        var testUrlBack = !isPayEarly ? 'https://192.168.0.99/EzBob/EzBob.Web/Customer/Profile#GetCash' : "https://192.168.0.99/EzBob/EzBob.Web/Customer/Profile#PayEarly";
+
+	        $(".btn-back").attr("href", isTest ? testUrlBack : ulrBack);
+
+	        if (!isTest) {
+	            $("select option[value='Visa']").remove();
+	        }
+	        $("#expiry").mask("99/99");
+	        $("#card_no").mask("9999999999999999");
+
+	        if (isPayEarly) {
+	            $('#amount-group').show();
+	            $('.PayPointHeader h3').hide();
+	            $(".dashboard-steps").hide();
+	        }
+
+	        $('li[rel]').popover({ placement: 'left' });
+
+	        $('input[name="back"]').click(function () {
+	            history.go(-1);
+	        });
+
+	        var contactUs = new EzBob.ContactUsView();
+	        contactUs.template = $(".contactUs").html();
+	        contactUs.render();
+
+	        $('input[type="submit"]').click(function (e) {
+	            if (EzBob.Validation.checkForm(validator)) {
+	                if (!isTest) {
+	                    _gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']);
+	                    setTimeout(function () { submitPaypointForm(); }, 500);
+	                }
+	                else {
+	                    submitPaypointForm();
+	                }
+	            }
+	            else {
+	                validator.form();
+	            }
+	            return false;
+	        });
+
+	        $('input[type="text"]').change(function (e) {
+	            return inputChanged(validator);
+	        });
+	        $('input[type="text"]').keyup(function (e) {
+	            return inputChanged(validator);
+	        });
+	        $('input[type="password"]').change(function (e) {
+	            return inputChanged(validator);
+	        });
+	        $('input[type="password"]').keyup(function (e) {
+	            return inputChanged(validator);
+	        });
+	        $('select').change(function (e) {
+	            return inputChanged(validator);
+	        });
+	        $('select').keyup(function (e) {
+	            return inputChanged(validator);
+	        });
+	        $('select').click(function (e) {
+	            return inputChanged(validator);
+	        });
+
+	        var validator = $('.paypont-form').validate({
+	            rules: {
+	                customer: { required: true, minlength: 2 },
+	                card_no: { required: true, digits: true, maxlength: 16, minlength: 16 },
+	                cv2: { required: true, minlength: 3 },
+	                expiry: { required: true, validateLastDateOfPayment: lastDateOfPayment, regex: "^(0[1-9]|1[012])/\([0-9]{2})" },
+	                card_type: { required: true }
+	            },
+	            messages: {
+	                card_no: { digits: "Please enter a valid credit card number" }
+	            },
+	            errorPlacement: EzBob.Validation.errorPlacement,
+	            unhighlight:
+					EzBob.Validation.unhighlightFS,
+	            highlight:
+					EzBob.Validation.highlightFS
+	        });
+
+	        $.validator.addMethod(
+				"validateLastDateOfPayment", function (value, element, date) {
+				    date = $.browser.msie ? date._d : date;
+				    var expirydate = moment(value, "MM/YY");
+				    var res = expirydate >= date;
+				    return res;
+				}, "Debit card expires before the loan term. Please use another card."
+			);
+	    });
+	</script>
+	<script type="text/javascript">
+	    adroll_adv_id = "PLSVG5WCDVB33CAAP2HAAG";
+	    adroll_pix_id = "VXRFC42DQVGXFOJMAXOXFA";
+	    (function () {
+	        var oldonload = window.onload;
+	        window.onload = function () {
+	            __adroll_loaded = true;
+	            var scr = document.createElement("script");
+	            var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
+	            scr.setAttribute('async', 'true');
+	            scr.type = "text/javascript";
+	            scr.src = host + "/j/roundtrip.js";
+	            ((document.getElementsByTagName('head') || [null])[0] ||
+					document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
+	            if (oldonload) {
+	                oldonload();
+	            }
+	        };
+	    }());
+	</script>
+
+    
+	<script type="text/javascript">
+		function ShowHideSignLogOnOff() {
+			var sEmail = $('body').attr('data-user-name');
+			if (sEmail) {
+				$('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
+				$('#user-menu .login_btn, .signup_btn').hide();
+			}
+			else {
+				$('#logoff-li').hide();
+
+				if ($('.login-form-user-name').length) {
+					$('.login_btn').hide();
+					$('.signup_btn').show();
+				}
+				else {
+					$('.login_btn').show();
+					$('.signup_btn').hide();
+				} // if
+			} // if
+		} // ShowHideSignLogOnOff
+
+		$(document).ready(function() {
+			$('body').attr('data-user-name', '');
+			ShowHideSignLogOnOff();
+		});
+	</script>
+
+
+<script type="text/javascript">
+adroll_adv_id = "PLSVG5WCDVB33CAAP2HAAG";
+adroll_pix_id = "VXRFC42DQVGXFOJMAXOXFA";
+(function () {
+    var oldonload = window.onload;
+    window.onload = function () {
+        __adroll_loaded = true;
+        var scr = document.createElement("script");
+        var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
+        scr.setAttribute('async', 'true');
+        scr.type = "text/javascript";
+        scr.src = host + "/j/roundtrip.js";
+        ((document.getElementsByTagName('head') || [null])[0] ||
+         document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
+        if (oldonload) { oldonload() }
+    };
+}());
+</script>
+    <div style="display: none;" class="hide" id="cg-account-model-template">{&quot;id&quot;:0,&quot;name&quot;:null,&quot;url&quot;:null,&quot;login&quot;:null,&quot;password&quot;:null,&quot;limitDays&quot;:0,&quot;auxLogin&quot;:null,&quot;auxPassword&quot;:null,&quot;realmId&quot;:0,&quot;accountTypeName&quot;:null,&quot;displayName&quot;:null}</div>
+    <div style="display: none;" class="hide" id="cg-account-list">{&quot;Volusion&quot;:{&quot;Name&quot;:&quot;Volusion&quot;,&quot;DisplayName&quot;:&quot;Volusion&quot;,&quot;Description&quot;:&quot;Volusion&quot;,&quot;InternalID&quot;:&quot;{afca0e18-05e3-400f-8af4-b1bcae09375c}&quot;,&quot;HasExpenses&quot;:false,&quot;IsPaymentAccount&quot;:false,&quot;Behaviour&quot;:0,&quot;SecurityData&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;name&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;endpoint&quot;,&quot;UniqueIDPosition&quot;:0,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;username&quot;,&quot;UniqueIDPosition&quot;:1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;password&quot;,&quot;UniqueIDPosition&quot;:2,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]}],&quot;ToStringArguments&quot;:[&quot;{0} ({1} @ {2})&quot;,&quot;Name&quot;,&quot;Login&quot;,&quot;URL&quot;]},&quot;Aggregators&quot;:[{&quot;FunctionTypeName&quot;:&quot;NumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{e512f12d-207c-46f8-8d61-b1199bc34555}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{b28f5acb-7d54-48f9-a7ff-bb2861ad1900}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{b3c96690-c061-42da-bfba-8176137e149d}&quot;},{&quot;FunctionTypeName&quot;:&quot;NumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{C93A575D-F536-456E-8F8F-4D4C745FD868}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C45298CD-CAFF-49B0-BEE6-6E8E3281F63C}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{CD2F52DA-8CDC-4302-B76F-562A44F3103A}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrdersAnnualized&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{98116835-CEC0-451D-9221-BC79882A2409}&quot;}],&quot;ClientSide&quot;:{&quot;StoreInfoStepModelShops&quot;:&quot;volusionShops&quot;,&quot;LinkForm&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;Volusion Shop URL&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:true,&quot;minlength&quot;:0,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[{&quot;PropertyName&quot;:&quot;url&quot;,&quot;Message&quot;:&quot;Please enter a valid URL&quot;}]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;Email associated with the Volusion account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;Encrypted password for the Volusion account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]}],&quot;Notes&quot;:[&quot;&lt;strong&gt;* Please notice that only Gold store subscribers and higher can link their Volusion store.&lt;/strong&gt;&quot;,&quot;&lt;br&gt;&lt;br&gt;&quot;,&quot;You need to enter the Encrypted Password for your Admin Area.&quot;,&quot;You can find your encrypted password in the Volusion API section of your store.&quot;,&quot;Volusion support direct number: 0800.520.0312.&quot;,&quot;&lt;div&gt;&quot;,&quot;To retrieve your Encrypted Password:&quot;,&quot;&lt;ol&gt;&quot;,&quot;&lt;li&gt;Login to your shop admin area.&lt;/li&gt;&quot;,&quot;&lt;li&gt;Go to &lt;strong&gt;Inventory&lt;/strong&gt; &amp;raquo; &lt;strong&gt;Import/Export&lt;/strong&gt; &amp;raquo; &lt;strong&gt;Volusion API&lt;/strong&gt; &amp;raquo; &lt;strong&gt;Get Help&lt;/strong&gt;.&lt;/li&gt;&quot;,&quot;&lt;li&gt;Scroll the page down and follow the link &lt;strong&gt;Volusion API Integration Help&lt;/strong&gt;.&lt;/li&gt;&quot;,&quot;&lt;li&gt;Open the &lt;strong&gt;URL with Query String and General Information for Importing and Exporting&lt;/strong&gt; section.&lt;/li&gt;&quot;,&quot;&lt;li&gt;Your Encrypted Password is the part of the address between &lt;strong&gt;EncryptedPassword=&lt;/strong&gt; and &lt;strong&gt;&amp;amp;&lt;/strong&gt;.&lt;/li&gt;&quot;,&quot;&lt;/ol&gt;&quot;,&quot;&lt;/div&gt;&quot;],&quot;HasUploadFiles&quot;:false,&quot;UploadFilesHandler&quot;:&quot;&quot;,&quot;OnBeforeLink&quot;:[&quot;var aryDisplayName = /^http[s]?:\\/\\/([^\\/\\?]+)/.exec(accountModel.url);&quot;,&quot;accountModel.name = (aryDisplayName &amp;&amp; aryDisplayName.length &amp;&amp; aryDisplayName.length == 2) ? aryDisplayName[1] : accountModel.url;&quot;,&quot;accountModel.name = accountModel.name || accountModel.url;&quot;,&quot;return accountModel;&quot;]},&quot;ErrorMessages&quot;:[]}},&quot;Play&quot;:{&quot;Name&quot;:&quot;Play&quot;,&quot;DisplayName&quot;:&quot;Play.com&quot;,&quot;Description&quot;:&quot;Play.com&quot;,&quot;InternalID&quot;:&quot;{A5E96D38-FD2E-4E54-9E0C-276493C950A6}&quot;,&quot;HasExpenses&quot;:false,&quot;IsPaymentAccount&quot;:false,&quot;Behaviour&quot;:0,&quot;SecurityData&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;name&quot;,&quot;UniqueIDPosition&quot;:0,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;username&quot;,&quot;UniqueIDPosition&quot;:1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;password&quot;,&quot;UniqueIDPosition&quot;:2,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;LimitDays&quot;,&quot;NodeName&quot;:&quot;limitDays&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;-1&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]}],&quot;ToStringArguments&quot;:[&quot;{0} as {1}&quot;,&quot;Name&quot;,&quot;Login&quot;]},&quot;Aggregators&quot;:[{&quot;FunctionTypeName&quot;:&quot;NumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{B85A8CCB-4CC0-4D93-A216-C2B4D06326D1}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{BEA6E606-EA64-4903-BF10-82CF16D6220A}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{B59DEC6F-38FC-4304-AB7C-6DF60A580A08}&quot;},{&quot;FunctionTypeName&quot;:&quot;NumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{C58BC831-5BDB-414A-9C1E-A1EBB31DAC27}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C1CFA9FD-AEC9-443E-B04D-3C69F416BA7C}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C6FDF05A-022D-4F1C-A0E8-F598A220B7C0}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrdersAnnualized&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{81E79DDF-65B1-4E73-B90C-3C4380893B73}&quot;}],&quot;ClientSide&quot;:{&quot;StoreInfoStepModelShops&quot;:&quot;playShops&quot;,&quot;LinkForm&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The name of the account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;Email associated with the PlayTrade account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Password&quot;,&quot;Caption&quot;:&quot;The password for the PlayTrade account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]}],&quot;Notes&quot;:[&quot;&lt;strong&gt;* Please notice that only ProTrader users (full merchant account) &lt;br&gt;can link their Play.com store.&lt;/strong&gt;&quot;,&quot;&lt;BR&gt;&lt;BR&gt;&quot;],&quot;HasUploadFiles&quot;:false,&quot;UploadFilesHandler&quot;:&quot;&quot;,&quot;OnBeforeLink&quot;:[&quot;var aryMatch = /^(http:\\/\\/|https:\\/\\/)?(www\\.)?play\\.com\\/stores\\/([^#\\?\\/]+)/.exec(accountModel.name);&quot;,&quot;if (aryMatch) accountModel.name = aryMatch[3];&quot;,&quot;return accountModel;&quot;]},&quot;ErrorMessages&quot;:[]}},&quot;Shopify&quot;:{&quot;Name&quot;:&quot;Shopify&quot;,&quot;DisplayName&quot;:&quot;Shopify.com&quot;,&quot;Description&quot;:&quot;Shopify.com&quot;,&quot;InternalID&quot;:&quot;{A386F349-8E41-4BA9-B709-90332466D42D}&quot;,&quot;HasExpenses&quot;:false,&quot;IsPaymentAccount&quot;:false,&quot;Behaviour&quot;:0,&quot;SecurityData&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;name&quot;,&quot;UniqueIDPosition&quot;:0,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;endpoint&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;LimitDays&quot;,&quot;NodeName&quot;:&quot;limitDays&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;30&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]}],&quot;ToStringArguments&quot;:[&quot;{0} @ {1}&quot;,&quot;Name&quot;,&quot;URL&quot;]},&quot;Aggregators&quot;:[{&quot;FunctionTypeName&quot;:&quot;NumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{B547E0B7-0C29-4172-8D35-C8D0F2966FA9}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{BAF770CD-1A53-49BD-A9BF-087B1BB82F4C}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{B1B0C576-1AAC-4CD1-BFA6-CDC081FCB306}&quot;},{&quot;FunctionTypeName&quot;:&quot;NumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{C2764AC3-B368-454F-872E-FF2B97A61092}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C3DBE341-1A0F-4076-B3F9-6C7460D82D37}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{CD649144-1638-423D-868A-0D7063EF8A7C}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrdersAnnualized&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{548392C1-AA45-459B-9E65-EFE2A109070B}&quot;}],&quot;ClientSide&quot;:{&quot;StoreInfoStepModelShops&quot;:&quot;shopifyShops&quot;,&quot;LinkForm&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The URL to the shop&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:true,&quot;minlength&quot;:89,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]}],&quot;Notes&quot;:[&quot;&lt;p&gt;You should provide URL to a private application connected to your shop. &quot;,&quot;&lt;a href=&#39;http://docs.shopify.com/api/tutorials/creating-a-private-app&#39; target=_blank ui-event-control-id=\&quot;link-account:shopify_help_link\&quot;&gt;Instructions on creating a private application.&lt;/a&gt;&lt;/p&gt;&quot;,&quot;&lt;p&gt;When you generate a new private application beside ApiKey, Password, SharedSecret and Url you get an example URL which looks like this:&quot;,&quot;&lt;blockquote&gt;https://a5a18488246744828f621d0073eda:b02ffd5b4025af3ed570353c5d56b@test-shop.myshopify.com/admin/orders.xml&lt;/blockquote&gt;&quot;,&quot;Enter your example URL in the above field.&lt;/p&gt;&quot;],&quot;HasUploadFiles&quot;:false,&quot;UploadFilesHandler&quot;:&quot;&quot;,&quot;OnBeforeLink&quot;:[&quot;var aryMatch = /^(https:\\/\\/[0-9A-Za-z]{32}:[0-9A-Za-z]{32}@(.+)\\.myshopify\\.com)(\\/admin\\/orders\\.xml)?$/.exec(accountModel.url);&quot;,&quot;if (!aryMatch) return null;&quot;,&quot;accountModel.name = aryMatch[2];&quot;,&quot;accountModel.url = aryMatch[1];&quot;,&quot;return accountModel;&quot;]},&quot;ErrorMessages&quot;:[]}},&quot;Xero&quot;:{&quot;Name&quot;:&quot;Xero&quot;,&quot;DisplayName&quot;:&quot;Xero.com&quot;,&quot;Description&quot;:&quot;Xero.com&quot;,&quot;InternalID&quot;:&quot;{AAFEBF1F-C4BD-4AFA-80ED-037AACFA392C}&quot;,&quot;HasExpenses&quot;:true,&quot;IsPaymentAccount&quot;:false,&quot;Behaviour&quot;:0,&quot;SecurityData&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;name&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;apikey&quot;,&quot;UniqueIDPosition&quot;:0,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;secret&quot;,&quot;UniqueIDPosition&quot;:1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;LimitDays&quot;,&quot;NodeName&quot;:&quot;limitDays&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;30&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;AuxLogin&quot;,&quot;NodeName&quot;:&quot;publicCert&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;-----BEGIN CERTIFICATE-----\nMIICWDCCAcGgAwIBAgIJAKo3mil8ODXFMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV\nBAYTAlVLMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX\naWRnaXRzIFB0eSBMdGQwHhcNMTMwNzA4MDgxNzQ0WhcNMTQwNzA4MDgxNzQ0WjBF\nMQswCQYDVQQGEwJVSzETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50\nZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKB\ngQCpOfXJC3UTjMbs8Hnrele81QLn1uXGHVOErlWzMy1thOTIuW5Xor1dfj3+85VT\nBXHJjL6UdRaGVhLkYBRQGZJWrNeLcOQCmO44zTVPwWw0sP+2awYmxYYzwA1orxBR\nByE9sifPCPDBMxNetzTQK+AZwgmklcCm3D+e3o/5ETRAywIDAQABo1AwTjAdBgNV\nHQ4EFgQUuu8sLgGsj2xj/TZHLJf9c1Br7e8wHwYDVR0jBBgwFoAUuu8sLgGsj2xj\n/TZHLJf9c1Br7e8wDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOBgQBz8N+U\nFfbuoJjwXJccsAaTe4EH4o1UkwrEBGrIKEW55Ky/+CrlHuG6l1NmIACDsP5ymuIf\nujLLGg70Wo71YqBSyer/cppyliPyc3cu2C+uv9DJ7fLWsQGW8waU+Y9xHW0IY68f\n6JjtVv80SiZ+fL32goxFUWuWcM2KryeQEZ3fHw==\n-----END CERTIFICATE-----&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;AuxPassword&quot;,&quot;NodeName&quot;:&quot;privateKey&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;-----BEGIN RSA PRIVATE KEY-----\nMIICXgIBAAKBgQCpOfXJC3UTjMbs8Hnrele81QLn1uXGHVOErlWzMy1thOTIuW5X\nor1dfj3+85VTBXHJjL6UdRaGVhLkYBRQGZJWrNeLcOQCmO44zTVPwWw0sP+2awYm\nxYYzwA1orxBRByE9sifPCPDBMxNetzTQK+AZwgmklcCm3D+e3o/5ETRAywIDAQAB\nAoGAY0yXZPlMIcShlbcmU37erPdxVQlMmwvqThjeQODu7yzj8sSccuATriC90DSu\nkqDHPDVSP1rVdM5dF5UpVjcrHqyO6Ke2KOxmGIts8Qgd2h97xg2rB52uPwnttLEn\nEbLK1UWmlYtEumMgLktgu4ZViP80vkrz223cnNoia6u428ECQQDafb76WMY/P1S1\n4wZX57AaCY64GyzEmWWHTVXdhW61QoA01xQlFV/qyv/ZvBvY5U4PpGhSIVehmJ+j\nhoMeoSPXAkEAxkcf3uEvqI+0GP01MdHUi1ADh1j3tXnZMPGBAxk3rR7AycPLVW+o\nzkHB5aBH2Trrgx6U79Y6Ez4r+UVjUggsLQJBAKAy2rhMJu9wy/egwaHqaqBsqYwr\nwKNVpa+S8IY/s3CLld0oZcja5z0MIpPO7MwXNSka7rJpaAtAEKyhj7oBhHkCQQCC\n1bntCzC0jKatep/YUPpsNw8tB4Lk6BNuHV4hGknH3awfNyh8JuL/vxpgGGRwrlVr\nvwlOPVEzE2pW4PeJ0MS9AkEAkXX5SkYz6Fhy/pwdvltCY5h0Xu6hWgNc4WzM5Sv8\nJmtC2H7zSnaiZfu5DkjD4+4kneKj5Vh8s760GzK8yCqrIg==\n-----END RSA PRIVATE KEY-----&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]}],&quot;ToStringArguments&quot;:[&quot;{0} @ {1}&quot;,&quot;Login&quot;,&quot;Name&quot;]},&quot;Aggregators&quot;:[{&quot;FunctionTypeName&quot;:&quot;NumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{B1676D81-160E-4AEA-BCDC-B5CD20812E3B}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{BE5D278C-5337-4C25-8EBA-537E67EFD133}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{B4EEAA5F-00CB-4AE9-B1C8-2123BA3A3FEC}&quot;},{&quot;FunctionTypeName&quot;:&quot;NumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{CBC5655B-6CC2-4D86-ABB7-E37057A5F892}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{CBA06EBD-E58E-4312-AF61-4AFD07A2C828}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{CA17192B-8B1D-4C15-9157-78CBDD318897}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrdersAnnualized&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{2AA83171-13F2-4C05-9B91-A5F4B5336403}&quot;}],&quot;ClientSide&quot;:{&quot;StoreInfoStepModelShops&quot;:&quot;xeroShops&quot;,&quot;LinkForm&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The name of Xero account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The Consumer Key to access Xero API&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The Consumer Secret to access Xero API&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]}],&quot;Notes&quot;:[&quot;To retrieve your Consumer Key and Consumer Secret:&quot;,&quot;&lt;ol&gt;&quot;,&quot;&lt;li&gt;Download &lt;a href=\&quot;/Content/xero/ezbob_xero_public_key.cer\&quot; target=_blank ui-event-control-id=\&quot;link-account:xero_public_key\&quot;&gt;this key file&lt;/a&gt; to your desktop.&lt;/li&gt;&quot;,&quot;&lt;li&gt;Follow &lt;a target=_blank href=\&quot;https://api.xero.com/Application/Add\&quot; ui-event-control-id=\&quot;link-account:xero_api\&quot;&gt;this link to your Xero API area&lt;/a&gt;&lt;/li&gt;&quot;,&quot;&lt;li&gt;Choose &lt;strong&gt;Private&lt;/strong&gt;&lt;/li&gt;&quot;,&quot;&lt;li&gt;Enter application name: &lt;span class=&#39;bold&#39;&gt;ezbob&lt;/span&gt;&lt;/li&gt;&quot;,&quot;&lt;li&gt;Click &lt;strong&gt;Choose File&lt;/strong&gt; and select the file you downloaded on the step 1.&lt;/li&gt;&quot;,&quot;&lt;li&gt;Press &lt;strong&gt;Save&lt;/strong&gt;&lt;/li&gt;&quot;,&quot;&lt;li&gt;You will get the OAuth Credentials: copy &lt;strong&gt;Consumer Key&lt;/strong&gt; and &lt;strong&gt;Consumer Secret&lt;/strong&gt; to the above fields&lt;/li&gt;&quot;,&quot;&lt;/ol&gt;&quot;,&quot;&lt;img src=\&quot;/Content/xero/instructions.jpg\&quot;&gt;&quot;],&quot;HasUploadFiles&quot;:false,&quot;UploadFilesHandler&quot;:&quot;&quot;,&quot;OnBeforeLink&quot;:[&quot;accountModel.auxLogin = accountModel.publicCert;&quot;,&quot;accountModel.auxPassword = accountModel.privateKey;&quot;,&quot;delete accountModel.publicCert;&quot;,&quot;delete accountModel.privateKey;&quot;,&quot;return accountModel;&quot;]},&quot;ErrorMessages&quot;:[]}},&quot;KashFlow&quot;:{&quot;Name&quot;:&quot;KashFlow&quot;,&quot;DisplayName&quot;:&quot;KashFlow.com&quot;,&quot;Description&quot;:&quot;KashFlow.com&quot;,&quot;InternalID&quot;:&quot;{A755B4F6-D4EC-4D80-96A2-B2849BD800AC}&quot;,&quot;HasExpenses&quot;:true,&quot;IsPaymentAccount&quot;:false,&quot;Behaviour&quot;:0,&quot;SecurityData&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;name&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;username&quot;,&quot;UniqueIDPosition&quot;:0,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;password&quot;,&quot;UniqueIDPosition&quot;:1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;LimitDays&quot;,&quot;NodeName&quot;:&quot;limitDays&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;30&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]}],&quot;ToStringArguments&quot;:[&quot;{0} @ {1}&quot;,&quot;Login&quot;,&quot;Name&quot;]},&quot;Aggregators&quot;:[{&quot;FunctionTypeName&quot;:&quot;NumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{B727EF60-0FBB-48EE-90BE-D2E9BB3F2030}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{BB11E959-F47B-4D05-80F6-C319BE19CB92}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{BBF3F3E8-2317-45E2-9A21-2EFF620936B2}&quot;},{&quot;FunctionTypeName&quot;:&quot;NumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{CC16E1DF-B882-4FC4-BD8D-A533A6A98B78}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{CF7DD5EB-1D6D-4D43-ABEF-FC074A19B0FC}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C80F2543-CF30-49B9-90D5-5BB77C608B42}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrdersAnnualized&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{D08CD898-ACB6-48F7-B514-4011C00E569F}&quot;}],&quot;ClientSide&quot;:{&quot;StoreInfoStepModelShops&quot;:&quot;kashflowShops&quot;,&quot;LinkForm&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The name of KashFlow account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The username to access KashFlow account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Password&quot;,&quot;Caption&quot;:&quot;The password to access KashFlow account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]}],&quot;Notes&quot;:[],&quot;HasUploadFiles&quot;:false,&quot;UploadFilesHandler&quot;:&quot;&quot;,&quot;OnBeforeLink&quot;:[&quot;return accountModel;&quot;]},&quot;ErrorMessages&quot;:[]}},&quot;HMRC&quot;:{&quot;Name&quot;:&quot;HMRC&quot;,&quot;DisplayName&quot;:&quot;HMRC&quot;,&quot;Description&quot;:&quot;HM Revenue and Customs&quot;,&quot;InternalID&quot;:&quot;{AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA}&quot;,&quot;HasExpenses&quot;:false,&quot;IsPaymentAccount&quot;:false,&quot;Behaviour&quot;:1,&quot;SecurityData&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;username&quot;,&quot;UniqueIDPosition&quot;:0,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;password&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]}],&quot;ToStringArguments&quot;:[&quot;{0}&quot;,&quot;Login&quot;]},&quot;Aggregators&quot;:[{&quot;FunctionTypeName&quot;:&quot;NumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{BC9E71F7-55C3-4F92-86A9-18EF000890F0}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{B81B7727-BBCF-4731-9975-CE402F94B8B3}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{BCA489F8-847A-46EC-BE2D-35ABFEDD0D76}&quot;},{&quot;FunctionTypeName&quot;:&quot;NumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{C6847E6E-D4DF-4FD9-B0B4-0BC0235DB428}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{CCF67CC1-18F5-4547-86A7-5B159C2462A0}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C206B422-CDB3-4361-89EC-673B5753FA06}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrdersAnnualized&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C3AA2A90-DD3E-407E-9016-A5D12798310D}&quot;}],&quot;ClientSide&quot;:{&quot;StoreInfoStepModelShops&quot;:&quot;hmrcAccounts&quot;,&quot;LinkForm&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The username to access HMRC account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Password&quot;,&quot;Caption&quot;:&quot;The password to access HMRC account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]}],&quot;Notes&quot;:[&quot;&lt;h2 class=\&quot;hmrc-or\&quot;&gt;or&lt;/h2&gt;&lt;h2 style=\&quot;padding-left: 0\&quot;&gt;Upload VAT files&lt;/h2&gt;&lt;p style=\&quot;margin-top: -15px;\&quot;&gt;Upload a copy of your last 5 VAT returns; only upload files titled &lt;strong&gt;Printed Copy of Submitted VAT return for your records&lt;/strong&gt; which you should have received automatically from the HMRC. Files can be uploaded in any order of dates.&lt;/p&gt;&lt;p&gt;Don&#39;t have the file? ask your accountant for them, it will take him 5 minutes to send them to you.&lt;/p&gt;&quot;,&quot;&lt;div&gt;&lt;input type=\&quot;button\&quot; class=\&quot;upload-files rc-button green\&quot; value=\&quot;Upload\&quot; ui-event-control-id=\&quot;link-account:upload-files\&quot;&gt;&lt;/div&gt;&quot;],&quot;HasUploadFiles&quot;:true,&quot;UploadFilesHandler&quot;:&quot;HandleUploadedHmrcVatReturn&quot;,&quot;OnBeforeLink&quot;:[&quot;if (bUploadMode) {&quot;,&quot;accountModel.name = $.trim($(&#39;#logged-in-user-name&#39;).text());&quot;,&quot;accountModel.login = accountModel.name;&quot;,&quot;accountModel.password = &#39;topsecret&#39;;&quot;,&quot;}&quot;,&quot;else&quot;,&quot;accountModel.name = accountModel.login;&quot;,&quot;return accountModel;&quot;]},&quot;ErrorMessages&quot;:[]}},&quot;Magento&quot;:{&quot;Name&quot;:&quot;Magento&quot;,&quot;DisplayName&quot;:&quot;Magento.com&quot;,&quot;Description&quot;:&quot;Magento.com&quot;,&quot;InternalID&quot;:&quot;{A660B9CC-8BB1-4A37-9597-507622AEBF9E}&quot;,&quot;HasExpenses&quot;:false,&quot;IsPaymentAccount&quot;:false,&quot;Behaviour&quot;:0,&quot;SecurityData&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;name&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;endpoint&quot;,&quot;UniqueIDPosition&quot;:0,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;apiUser&quot;,&quot;UniqueIDPosition&quot;:1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;apiKey&quot;,&quot;UniqueIDPosition&quot;:2,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;LimitDays&quot;,&quot;NodeName&quot;:&quot;limitDays&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;30&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]}],&quot;ToStringArguments&quot;:[&quot;{0} @ {1}&quot;,&quot;Login&quot;,&quot;Name&quot;]},&quot;Aggregators&quot;:[{&quot;FunctionTypeName&quot;:&quot;NumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{B712A57A-816C-46D6-9283-804390D715AC}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{B85A6035-59D4-4155-9EE2-AF925A9893D7}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{BCD30FB2-7C1D-4D50-A0AC-D11FD8477ED0}&quot;},{&quot;FunctionTypeName&quot;:&quot;NumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{C8DF63FC-7DB3-4F75-AD40-97A556225042}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C3669B1A-9B21-4C31-B535-C7E542DD8BCC}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C06CCAA8-8946-4B4A-92C3-55AF0FFC2C35}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrdersAnnualized&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{307BAEE4-73F2-404A-BDE3-0A407B01CE93}&quot;}],&quot;ClientSide&quot;:{&quot;StoreInfoStepModelShops&quot;:&quot;magentoShops&quot;,&quot;LinkForm&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The name of Magento Shop&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The URL to the shop&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:true,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The API username to access Magento account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Password&quot;,&quot;Caption&quot;:&quot;The API password to access Magento account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]}],&quot;Notes&quot;:[],&quot;HasUploadFiles&quot;:false,&quot;UploadFilesHandler&quot;:&quot;&quot;,&quot;OnBeforeLink&quot;:[&quot;var aryMatch = /^(http(s)?:\\/\\/([^\\.]+)\\.[^#\\?\\/]+(:\\d+)?)/.exec(accountModel.url);&quot;,&quot;if (!aryMatch) return null;&quot;,&quot;accountModel.name = aryMatch[3];&quot;,&quot;accountModel.url = aryMatch[1] + &#39;/api/v2_soap?wsdl=1&#39;;&quot;,&quot;return accountModel;&quot;]},&quot;ErrorMessages&quot;:[]}},&quot;Prestashop&quot;:{&quot;Name&quot;:&quot;Prestashop&quot;,&quot;DisplayName&quot;:&quot;Prestashop.com&quot;,&quot;Description&quot;:&quot;Prestashop.com&quot;,&quot;InternalID&quot;:&quot;{AE0BC89A-9884-4025-9D96-2755A6CD10EE}&quot;,&quot;HasExpenses&quot;:false,&quot;IsPaymentAccount&quot;:false,&quot;Behaviour&quot;:0,&quot;SecurityData&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;name&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;endpoint&quot;,&quot;UniqueIDPosition&quot;:0,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;apikey&quot;,&quot;UniqueIDPosition&quot;:1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;LimitDays&quot;,&quot;NodeName&quot;:&quot;limitDays&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;30&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]}],&quot;ToStringArguments&quot;:[&quot;{0} @ {1}&quot;,&quot;Login&quot;,&quot;Name&quot;]},&quot;Aggregators&quot;:[{&quot;FunctionTypeName&quot;:&quot;NumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{BA962184-7F24-4C05-81F9-B8E1C9067F6B}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{B3ED3FC2-38CF-443B-8EAF-794D7F0FC341}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{BCADB388-8C7A-47F6-B6D4-348A390635E8}&quot;},{&quot;FunctionTypeName&quot;:&quot;NumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{C64761DB-D075-40A1-ABF7-E07FD07ED11C}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C2D5B62B-43CF-4FA1-9128-3242007401FB}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{CCA07C01-88F6-4A53-8CAB-361489DD2E14}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrdersAnnualized&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{A3B26621-F007-4AF4-B669-3BADFFA2851C}&quot;}],&quot;ClientSide&quot;:{&quot;StoreInfoStepModelShops&quot;:&quot;prestashopShops&quot;,&quot;LinkForm&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The name of Prestashop Shop&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The URL to the shop&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:true,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The API key to access Prestashop account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]}],&quot;Notes&quot;:[],&quot;HasUploadFiles&quot;:false,&quot;UploadFilesHandler&quot;:&quot;&quot;,&quot;OnBeforeLink&quot;:[&quot;var aryMatch = /^(http(s)?:\\/\\/([^\\.]+)\\.[^#\\?\\/]+(:\\d+)?)/.exec(accountModel.url);&quot;,&quot;if (!aryMatch) return null;&quot;,&quot;accountModel.name = aryMatch[3];&quot;,&quot;accountModel.url = aryMatch[1];&quot;,&quot;return accountModel;&quot;]},&quot;ErrorMessages&quot;:[]}},&quot;Bigcommerce&quot;:{&quot;Name&quot;:&quot;Bigcommerce&quot;,&quot;DisplayName&quot;:&quot;Bigcommerce.com&quot;,&quot;Description&quot;:&quot;Bigcommerce.com&quot;,&quot;InternalID&quot;:&quot;{A5FC4B43-EBB7-4C6B-BC23-3C162CB61996}&quot;,&quot;HasExpenses&quot;:false,&quot;IsPaymentAccount&quot;:false,&quot;Behaviour&quot;:0,&quot;SecurityData&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;name&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;endpoint&quot;,&quot;UniqueIDPosition&quot;:0,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;username&quot;,&quot;UniqueIDPosition&quot;:1,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;apikey&quot;,&quot;UniqueIDPosition&quot;:2,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;LimitDays&quot;,&quot;NodeName&quot;:&quot;limitDays&quot;,&quot;UniqueIDPosition&quot;:-8,&quot;Type&quot;:&quot;&quot;,&quot;Caption&quot;:&quot;&quot;,&quot;Default&quot;:&quot;30&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:false,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:0},&quot;ValidationMessages&quot;:[]}],&quot;ToStringArguments&quot;:[&quot;{0} @ {1}&quot;,&quot;Login&quot;,&quot;Name&quot;]},&quot;Aggregators&quot;:[{&quot;FunctionTypeName&quot;:&quot;NumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{B60B03E0-AB11-4952-97BA-D6F751EF795D}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{BDF566A9-62D9-4D56-B219-C3A09B3D8DD7}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfOrders&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{B68A64A4-40DA-45D1-9F70-B9010A97C3E7}&quot;},{&quot;FunctionTypeName&quot;:&quot;NumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Integer&quot;,&quot;ID&quot;:&quot;{C94C7DED-4B3B-4598-8D6F-4C6D75D93BFA}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C960B241-D67F-453D-BF04-647A0B9C752B}&quot;},{&quot;FunctionTypeName&quot;:&quot;AverageSumOfExpenses&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{C54B4BFD-B5E0-4D0A-8C4E-365EAEB3E584}&quot;},{&quot;FunctionTypeName&quot;:&quot;TotalSumOfOrdersAnnualized&quot;,&quot;ValueTypeName&quot;:&quot;Double&quot;,&quot;ID&quot;:&quot;{06AEBBE3-2856-4CB3-8939-CD8618701E7A}&quot;}],&quot;ClientSide&quot;:{&quot;StoreInfoStepModelShops&quot;:&quot;bigcommerceShops&quot;,&quot;LinkForm&quot;:{&quot;Fields&quot;:[{&quot;PropertyName&quot;:&quot;Name&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The name of Bigcommerce Shop&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:0,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;URL&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The API path to access Bigcommerce account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:true,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Login&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The API user to access Bigcommerce account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]},{&quot;PropertyName&quot;:&quot;Password&quot;,&quot;NodeName&quot;:&quot;&quot;,&quot;UniqueIDPosition&quot;:-1,&quot;Type&quot;:&quot;Text&quot;,&quot;Caption&quot;:&quot;The API token to access Bigcommerce account&quot;,&quot;Default&quot;:&quot;&quot;,&quot;ValidationRules&quot;:{&quot;required&quot;:true,&quot;url&quot;:false,&quot;minlength&quot;:2,&quot;maxlength&quot;:300},&quot;ValidationMessages&quot;:[]}],&quot;Notes&quot;:[],&quot;HasUploadFiles&quot;:false,&quot;UploadFilesHandler&quot;:&quot;&quot;,&quot;OnBeforeLink&quot;:[&quot;var aryMatch = /^(http[s]?:\\/\\/([^\\.]+)\\.mybigcommerce\\.com)(\\/api\\/v2\\/)?$/.exec(accountModel.url);&quot;,&quot;if (!aryMatch) return null;&quot;,&quot;accountModel.name = aryMatch[2];&quot;,&quot;accountModel.url = aryMatch[1];&quot;,&quot;return accountModel;&quot;]},&quot;ErrorMessages&quot;:[]}}}</div>
+    <div style="display: none;" class="hide" id="current-server-time-zone">+03:00</div>
+    <div style="display: none;" class="hide" id="yodlee-banks">{&quot;ImageBanks&quot;:[{&quot;parentBankName&quot;:&quot;HSBC&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4567,&quot;displayName&quot;:&quot;HSBC Bank (UK)&quot;},{&quot;csId&quot;:17583,&quot;displayName&quot;:&quot;HSBC Business Bank (UK)&quot;},{&quot;csId&quot;:12279,&quot;displayName&quot;:&quot;HSBC Private Bank (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;Barclays&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4721,&quot;displayName&quot;:&quot;Barclays (non Pin Sentry Users) (UK)&quot;},{&quot;csId&quot;:18539,&quot;displayName&quot;:&quot;Barclays (Basic Access) (UK)&quot;},{&quot;csId&quot;:16265,&quot;displayName&quot;:&quot;Barclays Direct( formerly ING Direct) (UK))&quot;}]},{&quot;parentBankName&quot;:&quot;Lloyds&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:16284,&quot;displayName&quot;:&quot;Lloyds TSB Business Banking (UK)&quot;},{&quot;csId&quot;:4495,&quot;displayName&quot;:&quot;Lloyds TSB (UK)&quot;},{&quot;csId&quot;:16445,&quot;displayName&quot;:&quot;Lloyds TSB Offshore (UK) International&quot;}]},{&quot;parentBankName&quot;:&quot;RBS&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:19505,&quot;displayName&quot;:&quot;Royal Bank of Scotland Offshore Digital Banking (UK)&quot;},{&quot;csId&quot;:13203,&quot;displayName&quot;:&quot;Royal Bank of Scotland (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;Santander&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4416,&quot;displayName&quot;:&quot;Santander (UK)&quot;},{&quot;csId&quot;:20344,&quot;displayName&quot;:&quot;Santander Business Banking (UK)&quot;},{&quot;csId&quot;:19345,&quot;displayName&quot;:&quot;Santander A&amp;L Business Banking (UK)&quot;},{&quot;csId&quot;:19345,&quot;displayName&quot;:&quot;Santander A&amp;L Business Banking (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;NatWest&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:19008,&quot;displayName&quot;:&quot;NatWest Bank Business Bankline (UK)&quot;},{&quot;csId&quot;:10249,&quot;displayName&quot;:&quot;NatWest Bank (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;DAG&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:11195,&quot;displayName&quot;:&quot;DAG&quot;}]},{&quot;parentBankName&quot;:&quot;Halifax&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4569,&quot;displayName&quot;:&quot;Halifax Online (UK)&quot;},{&quot;csId&quot;:19356,&quot;displayName&quot;:&quot;Halifax Business Banking (UK)&quot;},{&quot;csId&quot;:13126,&quot;displayName&quot;:&quot;Bank of Scotland (Cust. without Token) (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;Nationwide&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4419,&quot;displayName&quot;:&quot;Nationwide Building Society (UK)&quot;},{&quot;csId&quot;:19344,&quot;displayName&quot;:&quot;Nationwide Building Society (Mysave)&quot;}]}],&quot;DropDownBanks&quot;:[{&quot;csId&quot;:19538,&quot;displayName&quot;:&quot;AA (UK) - Savings&quot;},{&quot;csId&quot;:15821,&quot;displayName&quot;:&quot;Adam &amp; Company (UK)&quot;},{&quot;csId&quot;:19507,&quot;displayName&quot;:&quot;Alliance &amp; Leicester (UK) - MyBankOffshore&quot;},{&quot;csId&quot;:9990,&quot;displayName&quot;:&quot;Allied Irish Bank (Ireland)&quot;},{&quot;csId&quot;:19317,&quot;displayName&quot;:&quot;Allied Irish Bank (UK) - Business&quot;},{&quot;csId&quot;:18217,&quot;displayName&quot;:&quot;Bank of Ireland (Ireland)&quot;},{&quot;csId&quot;:11916,&quot;displayName&quot;:&quot;Bank of Ireland (UK)&quot;},{&quot;csId&quot;:19346,&quot;displayName&quot;:&quot;Bank of Scotland (UK) Internet - Business&quot;},{&quot;csId&quot;:18283,&quot;displayName&quot;:&quot;BM Savings (UK)&quot;},{&quot;csId&quot;:19550,&quot;displayName&quot;:&quot;Bradford &amp; Bingley (UK)&quot;},{&quot;csId&quot;:4459,&quot;displayName&quot;:&quot;Cahoot (UK)&quot;},{&quot;csId&quot;:19456,&quot;displayName&quot;:&quot;Cater Allen (UK) - Banking&quot;},{&quot;csId&quot;:19457,&quot;displayName&quot;:&quot;Cater Allen (UK) - Business&quot;},{&quot;csId&quot;:4665,&quot;displayName&quot;:&quot;Citibank Internet Banking (UK)&quot;},{&quot;csId&quot;:11918,&quot;displayName&quot;:&quot;Clydesdale Bank (UK)&quot;},{&quot;csId&quot;:16275,&quot;displayName&quot;:&quot;Coutts (UK) - Online Banking&quot;},{&quot;csId&quot;:18286,&quot;displayName&quot;:&quot;Coventry Building Society (UK)&quot;},{&quot;csId&quot;:19533,&quot;displayName&quot;:&quot;Derbyshire Building Society (UK)&quot;},{&quot;csId&quot;:19554,&quot;displayName&quot;:&quot;FairFX (UK)&quot;},{&quot;csId&quot;:4848,&quot;displayName&quot;:&quot;First Direct (UK)&quot;},{&quot;csId&quot;:11905,&quot;displayName&quot;:&quot;First Trust Bank (UK)&quot;},{&quot;csId&quot;:19410,&quot;displayName&quot;:&quot;First Trust Bank (UK) - iBusiness&quot;},{&quot;csId&quot;:13668,&quot;displayName&quot;:&quot;ICICI Bank (UK)&quot;},{&quot;csId&quot;:19354,&quot;displayName&quot;:&quot;ICICI Bank (UK) - Business&quot;},{&quot;csId&quot;:11890,&quot;displayName&quot;:&quot;Intelligent Finance (UK)&quot;},{&quot;csId&quot;:19357,&quot;displayName&quot;:&quot;Investec.com (UK)&quot;},{&quot;csId&quot;:16514,&quot;displayName&quot;:&quot;Leeds Building Society (UK)&quot;},{&quot;csId&quot;:9856,&quot;displayName&quot;:&quot;Merrill Lynch HSBC (UK) - Banking&quot;},{&quot;csId&quot;:19540,&quot;displayName&quot;:&quot;Metro Bank (UK)&quot;},{&quot;csId&quot;:19262,&quot;displayName&quot;:&quot;Newcastle Building Society (UK)&quot;},{&quot;csId&quot;:11989,&quot;displayName&quot;:&quot;Virgin Money (Northern Rock) (UK)&quot;},{&quot;csId&quot;:19290,&quot;displayName&quot;:&quot;Norwich and Peterborough BS (UK)&quot;},{&quot;csId&quot;:19529,&quot;displayName&quot;:&quot;NS&amp;I (UK)&quot;},{&quot;csId&quot;:19343,&quot;displayName&quot;:&quot;Post Office (UK) - Savings ( Post Office (UK))&quot;},{&quot;csId&quot;:19377,&quot;displayName&quot;:&quot;Principality Building Society (UK)&quot;},{&quot;csId&quot;:18920,&quot;displayName&quot;:&quot;Royal Bank of Scotland (UK) - Business Bankline&quot;},{&quot;csId&quot;:18925,&quot;displayName&quot;:&quot;Royal Bank of Scotland (UK) - Business Digital&quot;},{&quot;csId&quot;:19536,&quot;displayName&quot;:&quot;Saffron Building Society (UK)&quot;},{&quot;csId&quot;:20003,&quot;displayName&quot;:&quot;Scottish Widows Bank (UK)&quot;},{&quot;csId&quot;:5647,&quot;displayName&quot;:&quot;Smile (UK)&quot;},{&quot;csId&quot;:16517,&quot;displayName&quot;:&quot;St James&#39;s Place Bank (UK)&quot;},{&quot;csId&quot;:10787,&quot;displayName&quot;:&quot;Standard Life (UK)&quot;},{&quot;csId&quot;:18282,&quot;displayName&quot;:&quot;Tesco (UK) - Savings&quot;},{&quot;csId&quot;:10781,&quot;displayName&quot;:&quot;The Co-operative Bank (UK)&quot;},{&quot;csId&quot;:16520,&quot;displayName&quot;:&quot;The National Lottery (UK)&quot;},{&quot;csId&quot;:20230,&quot;displayName&quot;:&quot;The One Account (UK) - Banking&quot;},{&quot;csId&quot;:10773,&quot;displayName&quot;:&quot;The Woolwich (UK)&quot;},{&quot;csId&quot;:11892,&quot;displayName&quot;:&quot;Ulster Bank (UK)&quot;},{&quot;csId&quot;:11849,&quot;displayName&quot;:&quot;Yorkshire Bank (UK)&quot;},{&quot;csId&quot;:19405,&quot;displayName&quot;:&quot;Yorkshire Bank (UK) Offshore - Business&quot;},{&quot;csId&quot;:19058,&quot;displayName&quot;:&quot;Yorkshire Building Society (UK)&quot;}]}</div>
+    <div style="display: none;" class="hide" id="customer-name"></div>
+</body>
+</html>
