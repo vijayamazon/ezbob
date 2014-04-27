@@ -1,22 +1,24 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetCompanyData]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetCompanyData]
+IF OBJECT_ID('GetCompanyData') IS NULL
+	EXECUTE('CREATE PROCEDURE GetCompanyData AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetCompanyData] 
-	(@CustomerId INT)
+
+ALTER PROCEDURE GetCompanyData 
+@CustomerId INT
 AS
 BEGIN
 	SELECT
 		Company.TypeOfBusiness AS CompanyType,		
 		Company.ExperianRefNum
 	FROM
-		Customer,
-		Company
+		Customer
+		INNER JOIN Company ON Customer.CompanyId = Company.Id
 	WHERE
-		Customer.Id = @CustomerId AND
-		Customer.CompanyId = Company.Id
+		Customer.Id = @CustomerId
 END
 GO

@@ -659,7 +659,7 @@
 			int customerId, directorId;
 			bool forceCheck;
 
-			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId) || !bool.TryParse(args[2], out forceCheck))
+			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId) || !bool.TryParse(args[3], out forceCheck))
 			{
 				m_oLog.Msg("Usage: ExperianConsumerCheck <CustomerId> <DirectorId> <ForceCheck>");
 				return;

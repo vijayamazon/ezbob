@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml.Linq;
-using System.Xml.XPath;
+﻿namespace ExperianLib.Ebusiness {
+	using System;
+	using System.Collections.Generic;
+	using System.Xml.Linq;
+	using System.Xml.XPath;
 
-namespace ExperianLib.Ebusiness {
 	public class LimitedResults : BusinessReturnData {
 		#region public
 
@@ -37,53 +37,43 @@ namespace ExperianLib.Ebusiness {
 			else
 				BureauScore = Convert.ToDecimal(node.Value);
 
+			node = root.XPathSelectElement("./REQUEST/DL78/CREDITLIMIT");
+			if (node != null)
+				CreditLimit = Convert.ToDecimal(node.Value);
+
 			node = root.XPathSelectElement("./REQUEST/DL95/NUMACTIVEACCS");
 
 			if (node != null)
 				ExistingBusinessLoans = Convert.ToDecimal(node.Value);
 
-
 			node = root.XPathSelectElement("./REQUEST/DL12/COMPANYNAME");
 			if (node != null)
-			{
 				CompanyName = node.Value;
-			}
 
 			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR1");
 			if (node != null)
-			{
 				AddressLine1 = node.Value;
-			}
 
 			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR2");
 			if (node != null)
-			{
 				AddressLine2 = node.Value;
-			}
 
 			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR3");
 			if (node != null)
-			{
 				AddressLine3 = node.Value;
-			}
 
 			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR4");
 			if (node != null)
-			{
 				AddressLine4 = node.Value;
-			}
 
 			node = root.XPathSelectElement("./REQUEST/DL12/REGPOSTCODE");
 			if (node != null)
-			{
 				PostCode = node.Value;
-			}
 
 			if (Owners == null)
 				Owners = new SortedSet<string>();
 
 			node = root.XPathSelectElement("./REQUEST/DL23/ULTPARREGNUM");
-
 			if (node != null)
 				Owners.Add(node.Value.Trim());
 
@@ -91,6 +81,10 @@ namespace ExperianLib.Ebusiness {
 
 			foreach (XElement oNode in oNodes)
 				Owners.Add(oNode.Value.Trim());
+
+			node = root.XPathSelectElement("./REQUEST/DL12");
+			if (node != null)
+				IncorporationDate = ExtractDate(node, "DATEINCORP", "incorporation date");
 		} // Parse
 
 		#endregion method Parse

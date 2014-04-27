@@ -163,7 +163,8 @@
 				new QueryParameter("IndebtednessIndex", nCii),
 				new QueryParameter("NumOfAccounts", cais.Length),
 				new QueryParameter("NumOfDefaults", nDefaultCount),
-				new QueryParameter("NumOfLastDefaults", nLastDefaultCount)
+				new QueryParameter("NumOfLastDefaults", nLastDefaultCount),
+				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
 			);
 		} // UpdateCustomerAnalytics
 
@@ -178,8 +179,8 @@
 				"CustomerAnalyticsUpdateDirector",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", m_nCustomerID),
-				new QueryParameter("DirectorID", m_nDirectorID),
-				new QueryParameter("Score", Score)
+				new QueryParameter("Score", Score),
+				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
 			);
 		} // UpdateDirectorAnalytics
 
