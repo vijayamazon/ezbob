@@ -38,7 +38,6 @@
 		private readonly ICustomerStatusHistoryRepository customerStatusHistoryRepository;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IUsersRepository _users;
-		private readonly bool useNewMainStrategy;
 		private readonly IEzbobWorkplaceContext context;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ApplicationInfoController));
@@ -74,7 +73,6 @@
 			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
 			_loanSources = loanSources;
 			_users = users;
-			useNewMainStrategy = this.configurationVariablesRepository.GetByNameAsBool("UseNewMainStrategy");
 			this.context = context;
 		}
 
@@ -456,30 +454,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "NewCreditLineButton")]
 		public JsonResult RunNewCreditLine(int Id, int newCreditLineOption) {
-			if (useNewMainStrategy)
-			{
-				return Json(new {Message = "Go to new mode"});
-			}
-
-			if (!CurrentValues.Instance.SkipServiceOnNewCreditLine) {
-				var anyApps = StrategyChecker.IsStrategyRunning(Id, true);
-				if (anyApps)
-					return Json(new { Message = "The evaluation strategy is already running. Please wait..." });
-			}
-
-			var customer = _customerRepository.Get(Id);
-
-			var cashRequest = _crBuilder.CreateCashRequest(customer, CashRequestOriginator.NewCreditLineBtn);
-			cashRequest.LoanType = _loanTypes.GetDefault();
-
-			var underwriter = _users.GetUserByLogin(User.Identity.Name);
-
-			_crBuilder.ForceEvaluate(underwriter.Id, customer, (NewCreditLineOption)newCreditLineOption, false, true);
-
-			customer.CreditResult = null;
-			customer.OfferStart = cashRequest.OfferStart;
-			customer.OfferValidUntil = cashRequest.OfferValidUntil;
-			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
+			return Json(new {Message = "Go to new mode"});
 		}
 
 		[HttpPost]
