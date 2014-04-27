@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using ExperianLib.Ebusiness;
+	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -114,7 +115,7 @@
 				new QueryParameter("CustomerID", m_nCustomerID),
 				new QueryParameter("Score", m_oExperianData.BureauScore),
 				new QueryParameter("SuggestedAmount", m_oExperianData.CreditLimit),
-				new QueryParameter("AnnualTurnover", 0), // TODO
+				new QueryParameter("AnnualTurnover", new StrategyHelper().GetTotalSumOfOrdersForLoanOffer(m_nCustomerID)),
 				new QueryParameter("IncorporationDate", m_oExperianData.IncorporationDate),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
 			);
