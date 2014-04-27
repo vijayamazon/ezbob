@@ -156,6 +156,9 @@ EzBob.WizardView = EzBob.View.extend({
 		var notifications = new EzBob.NotificationsView({ el: this.$el.find('.notifications') });
 		notifications.render();
 
+		if ($('.broker-finish-wizard-later').length)
+			$('#user-menu').hide();
+
 		return this;
 	}, // render
 
