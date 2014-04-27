@@ -1,15 +1,18 @@
-﻿namespace Ezbob.RegistryScanner {
+﻿namespace Scorto.RegistryScanner {
+	public interface IRequiresConfigurationOnStartup {
+		void Configure();
+	} // interface
+} // namespace
+
+namespace Ezbob.RegistryScanner {
 	using System.Reflection;
+
+	using Scorto.RegistryScanner;
 
 	using StructureMap;
 	using StructureMap.Graph;
 
 	using log4net;
-
-	public interface IRequiresConfigurationOnStartup
-	{
-		void Configure();
-	} // interface
 
 	public class Scanner {
 		public static void Register() {
@@ -37,7 +40,7 @@
 			oLog.Debug("Ezbob.RegistryScanner.Scanner.Register - configure list - begin");
 
 			foreach (IRequiresConfigurationOnStartup current in ObjectFactory.GetAllInstances<IRequiresConfigurationOnStartup>()) {
-				// This loop should never be enetered but just in case...
+				// This loop should never be entered but just in case...
 				// It should be debug, but Error was chosen in order to receive an email.
 				oLog.ErrorFormat("Ezbob.RegistryScanner.Scanner.Register - configure {0}.", current.GetType());
 
