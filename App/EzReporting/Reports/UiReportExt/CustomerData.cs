@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using EZBob.DatabaseLib.Model.Database;
-
-namespace Reports {
-	#region class CustomerData
+﻿namespace Reports {
+	using System;
+	using System.Data;
 
 	public class CustomerData : Extractor, IComparable<CustomerData> {
 		#region public
@@ -19,7 +15,9 @@ namespace Reports {
 			WizardStepName = Retrieve("WizardStepTypeName");
 			WizardStepIsLast = Convert.ToBoolean(oRow["TheLastOne"]);
 
-			IsOffline = Convert.ToBoolean(oRow["IsOffline"]);
+			bool? bIsOffline = Retrieve<bool>("IsOffline");
+
+			IsOffline = bIsOffline.HasValue && bIsOffline.Value;
 		} // constructor
 
 		#endregion constructor
@@ -79,5 +77,4 @@ namespace Reports {
 		#endregion protected
 	} // class CustomerData
 
-	#endregion class CustomerData
 } // namespace Reports
