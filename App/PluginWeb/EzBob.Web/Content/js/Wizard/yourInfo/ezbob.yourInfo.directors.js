@@ -2,6 +2,8 @@
 
 EzBob.DirectorMainView = Backbone.View.extend({
 	initialize: function(options) {
+		this.customerInfo = options.customerInfo;
+
 		this.preffix = options.name || 'directors';
 
 		this.template = _.template($('#director-edit-template').html());
@@ -96,6 +98,64 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		this.$el.attardi_labels('toggle_all');
 		this.trigger('director:change');
 	}, // renderDirector
+
+	validateDuplicates: function() {
+		this.updateModel();
+
+		var bResult = true;
+
+		var oKeyList = {};
+
+		var sCustomerKey = this.detailsToKey(
+			this.customerInfo.FirstName,
+			this.customerInfo.Surname,
+			this.customerInfo.DateOfBirth,
+			null,
+			this.customerInfo.PostCode
+		);
+
+		oKeyList[sCustomerKey] = 1;
+
+		var self = this;
+
+		$.each(this.model.models, function(i, val) {
+			var sPostCode = '';
+
+			if (val.get('Address').length)
+				sPostCode = val.get('Address').models[0].get('Rawpostcode');
+
+			var sDirKey = self.detailsToKey(
+				val.get('Name'),
+				val.get('Surname'),
+				val.get('DateOfBirth'),
+				'D/M/YYYY',
+				sPostCode
+			);
+
+			if (oKeyList[sDirKey]) {
+				EzBob.App.trigger('clear');
+				EzBob.App.trigger('error', 'Duplicate director name detected.');
+				bResult = false;
+				return false;
+			} // if
+
+			oKeyList[sDirKey] = 1;
+
+			return true;
+		});
+
+		return bResult;
+	}, // validateDuplicates
+
+	detailsToKey: function(sFirstName, sLastName, oBirthDate, sDateFormat, sPostCode) {
+		var oDate = sDateFormat ? moment(oBirthDate, sDateFormat) : moment(oBirthDate);
+		var sBirthDate = '';
+
+		if (oDate != null)
+			sBirthDate = oDate.utc().format('YYYY-MM-DD');
+
+		return JSON.stringify({ f: sFirstName, l: sLastName, b: sBirthDate, p: sPostCode, });
+	}, // detailsToKey
 
 	validateAddresses: function() {
 		var result = true;

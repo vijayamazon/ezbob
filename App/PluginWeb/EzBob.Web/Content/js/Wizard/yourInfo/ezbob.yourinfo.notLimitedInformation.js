@@ -12,6 +12,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
     readyToContinue: function() {
         return this.companyAddressValidator &&
+            this.directorsView.validateDuplicates() &&
             this.directorsView.validateAddresses() &&
             (!this.employeeCountView || this.employeeCountView.isValid());
     }, // readyToContinue
@@ -59,7 +60,14 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         });
         this.employeeCountView.render().$el.appendTo(this.$el.find('.employee-count'));
 
-        this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('NonLimitedDirectors'), name: "nonlimitedDirectors", });
+	    this.directorsView = new EzBob.DirectorMainView({
+	    	model: this.model.get('NonLimitedDirectors'),
+	    	name: "nonlimitedDirectors",
+        	customerInfo: _.extend({},
+				this.model.get('CustomerPersonalInfo'),
+				{ PostCode: this.model.get('PersonalAddress').models[0].get('Rawpostcode'), }
+			),
+	    });
         this.directorsView.on("director:change", this.inputChanged, this);
         this.directorsView.on("director:addressChanged", this.inputChanged, this);
         this.directorsView.render().$el.appendTo(this.$el.find('.directors'));
