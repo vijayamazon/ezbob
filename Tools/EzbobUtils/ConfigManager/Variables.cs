@@ -204,12 +204,6 @@
 		UnderwriterSite,
 		UpdateCompanyDataPeriodDays,
 		UpdateConsumerDataPeriodDays,
-		UseNewCaisStrategies,
-		UseNewFraudCheckerStrategy,
-		UseNewMailStrategies,
-		UseNewMainStrategy,
-		UseNewUpdateCustomerMpsStrategy,
-		UseNewUpdateMpStrategy,
 		VerboseConfigurationLogging,
 		YodleeAccountPrefix,
 

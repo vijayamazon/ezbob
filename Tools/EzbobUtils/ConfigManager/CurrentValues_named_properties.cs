@@ -1632,55 +1632,7 @@
 		} // UpdateConsumerDataPeriodDays
 
 		#endregion property UpdateConsumerDataPeriodDays
-
-		#region property UseNewCaisStrategies
-
-		public virtual VariableValue UseNewCaisStrategies {
-			get { return this[Variables.UseNewCaisStrategies]; } // get
-		} // UseNewCaisStrategies
-
-		#endregion property UseNewCaisStrategies
-
-		#region property UseNewFraudCheckerStrategy
-
-		public virtual VariableValue UseNewFraudCheckerStrategy {
-			get { return this[Variables.UseNewFraudCheckerStrategy]; } // get
-		} // UseNewFraudCheckerStrategy
-
-		#endregion property UseNewFraudCheckerStrategy
-
-		#region property UseNewMailStrategies
-
-		public virtual VariableValue UseNewMailStrategies {
-			get { return this[Variables.UseNewMailStrategies]; } // get
-		} // UseNewMailStrategies
-
-		#endregion property UseNewMailStrategies
-
-		#region property UseNewMainStrategy
-
-		public virtual VariableValue UseNewMainStrategy {
-			get { return this[Variables.UseNewMainStrategy]; } // get
-		} // UseNewMainStrategy
-
-		#endregion property UseNewMainStrategy
-
-		#region property UseNewUpdateCustomerMpsStrategy
-
-		public virtual VariableValue UseNewUpdateCustomerMpsStrategy {
-			get { return this[Variables.UseNewUpdateCustomerMpsStrategy]; } // get
-		} // UseNewUpdateCustomerMpsStrategy
-
-		#endregion property UseNewUpdateCustomerMpsStrategy
-
-		#region property UseNewUpdateMpStrategy
-
-		public virtual VariableValue UseNewUpdateMpStrategy {
-			get { return this[Variables.UseNewUpdateMpStrategy]; } // get
-		} // UseNewUpdateMpStrategy
-
-		#endregion property UseNewUpdateMpStrategy
-
+		
 		#region property VerboseConfigurationLogging
 
 		public virtual VariableValue VerboseConfigurationLogging{
