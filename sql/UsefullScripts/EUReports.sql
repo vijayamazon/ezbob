@@ -1,8 +1,8 @@
-DECLARE @DateStart DATETIME = '2014-01-01'
+DECLARE @DateStart DATETIME = '2013-09-01'
 DECLARE @DateEnd DATETIME = '2014-04-01'
 
 ------------------A1_Borrowers---------------------------------------------------
-SELECT DISTINCT c.Id AS 'Borrower ID', CASE 
+SELECT DISTINCT c.RefNumber AS 'Borrower ID', CASE 
 	--Midland east
 	WHEN a.Postcode LIKE 'AL%' THEN 'UKF' 
 	WHEN a.Postcode LIKE 'CB%' THEN 'UKF' 
@@ -160,7 +160,7 @@ AND c.IsTest=0
 AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
 
 -----------------A2_Loans--------------------------------------------------------------
-SELECT DISTINCT c.Id AS 'Borrower ID', l.Id AS 'Loan reference' , 'GBP' AS Currency,  l.LoanAmount AS 'Loan amount', 12 AS 'Loan maturity (months)', CONVERT(VARCHAR(10), l.[Date], 103) AS 'Loan signature date', CONVERT(VARCHAR(10),dateadd(month, 1, l.[Date]), 103) AS 'First disbursement date'
+SELECT DISTINCT c.RefNumber AS 'Borrower ID', l.RefNum AS 'Loan reference' , 'GBP' AS Currency,  l.LoanAmount AS 'Loan amount', 12 AS 'Loan maturity (months)', CONVERT(VARCHAR(10), l.[Date], 103) AS 'Loan signature date', CONVERT(VARCHAR(10),dateadd(month, 1, l.[Date]), 103) AS 'First disbursement date'
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
@@ -171,13 +171,13 @@ AND c.IsTest=0
 AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
 
 -----------------A.4. Number of MC requests/rejections----------------------------------------------------------------------
-SELECT COUNT(cr.Id) AS 'A.4.1 Total Number of formal micro-credit requests'
+SELECT COUNT(DISTINCT cr.Id) AS 'A.4.1 Total Number of formal micro-credit requests'
 FROM CashRequests cr INNER JOIN Customer c ON cr.IdCustomer=c.Id
 WHERE c.IsTest=0
 AND cr.CreationDate>=@DateStart 
 AND cr.CreationDate<@DateEnd
 
-SELECT COUNT(cr.Id) AS 'A.4.2 Total Number of formal micro-credit rejections' 
+SELECT COUNT(DISTINCT cr.Id) AS 'A.4.2 Total Number of formal micro-credit rejections' 
 FROM CashRequests cr INNER JOIN Customer c ON cr.IdCustomer=c.Id
 WHERE c.IsTest=0 
 AND cr.CreationDate>=@DateStart 
@@ -185,7 +185,7 @@ AND cr.CreationDate<@DateEnd
 AND cr.UnderwriterDecision='Rejected'
 
 ----------------Part B - List of included operations-------------------------------------------------------------------------
-SELECT c.Id AS 'Borrower ID', l.Id AS 'Loan reference' , 'GBP' AS Currency,  l.LoanAmount AS 'Nominal loan amount', l.Repayments AS 'Total repayment of loan amount', l.Balance AS 'Outstanding - loan amount', 0 'Remaining loan amount to be disbursed', CASE WHEN l.DateClosed IS NULL THEN 'No' ELSE 'Yes' END AS 'End of disbursement period'
+SELECT c.RefNumber AS 'Borrower ID', l.RefNum AS 'Loan reference' , 'GBP' AS Currency,  l.LoanAmount AS 'Nominal loan amount', l.Repayments AS 'Total repayment of loan amount', l.Balance AS 'Outstanding - loan amount', 0 'Remaining loan amount to be disbursed', CASE WHEN l.DateClosed IS NULL THEN 'No' ELSE 'Yes' END AS 'End of disbursement period'
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
