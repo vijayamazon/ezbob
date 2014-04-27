@@ -266,14 +266,14 @@
             $('form').attr('action', document.location.href);
             var amount = $('.amount').val();
             var isPayEarly = amount != 5;
-            var lastDateOfPayment;
+            var cardMinExpiryDate;
 
             if (isPayEarly) {
-                lastDateOfPayment = moment();
+                cardMinExpiryDate = moment();
             }
             else {
-                var param = decodeURIComponent(getCallbackValue('lastDatePayment') || "");
-                lastDateOfPayment = moment(param || moment().add("months", 3), "DD/MM/YYYY");
+                var param = decodeURIComponent(getCallbackValue('cardMinExpiryDate') || "");
+                cardMinExpiryDate = moment(param || moment().add("months", 3), "DD/MM/YYYY");
             }
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
@@ -346,7 +346,7 @@
                     customer: { required: true, minlength: 2 },
                     card_no: { required: true, digits: true, maxlength: 16, minlength: 16 },
                     cv2: { required: true, minlength: 3 },
-                    expiry: { required: true, validateLastDateOfPayment: lastDateOfPayment, regex: "^(0[1-9]|1[012])/\([0-9]{2})" },
+                    expiry: { required: true, validateCardMinExpiryDate: cardMinExpiryDate, regex: "^(0[1-9]|1[012])/\([0-9]{2})" },
                     card_type: { required: true }
                 },
                 messages: {
@@ -360,12 +360,12 @@
             });
 
             $.validator.addMethod(
-                "validateLastDateOfPayment", function(value, element, date) {
+                "validateCardMinExpiryDate", function (value, element, date) {
                     date = $.browser.msie ? date._d : date;
                     var expirydate = moment(value, "MM/YY");
                     var res = expirydate >= date;
                     return res;
-                }, "Debit card expires before the loan term. Please use another card."
+                }, "Debit card expires too soon. Please use another card."
             );
         });
     </script>

@@ -40,6 +40,8 @@ namespace EzBob.Web.Controllers
 		    {
 				case "Prod":
 					return File(bytes, "text/plain", "ezbob-template.html");
+				case "Dev":
+					return File(bytes, "text/plain", "ezbob-template-dev.html");
 				default:
 					return File(bytes, "text/plain", "ezbob-template-test.html");
 		    }

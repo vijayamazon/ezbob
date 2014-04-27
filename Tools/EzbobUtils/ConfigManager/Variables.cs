@@ -165,6 +165,7 @@
 		PayPointTemplateUrl,
 		PayPointValidateName,
 		PayPointVpnPassword,
+		PayPointCardExpiryMonths,
 		RecentCustomersToKeep,
 		Recon_Paypoint_Include_Five,
 		Reject_Defaults_AccountsNum,

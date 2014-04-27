@@ -17,6 +17,7 @@
 	using PaymentServices.PacNet;
 	using StructureMap;
 	using log4net;
+	using ConfigManager;
 
 	public class GetCashController : Controller {
 		private readonly ServiceClient m_oServiceClient;
@@ -64,8 +65,8 @@
 				cr.RepaymentPeriod = repaymentPeriod;
 				cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
 			} // if
-
-			DateTime lastDateOfPayment = DateTime.UtcNow.AddMonths(cr.RepaymentPeriod);
+			int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
+			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 
 			var fee = (new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent)).Calculate(loan_amount);
 
@@ -76,7 +77,7 @@
 												 loan_amount,
 												 fee,
 												 username = _context.User.Name,
-												 lastDatePayment = FormattingUtils.FormatDateToString(lastDateOfPayment)
+												 cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate)
 											 },
 										 "https");
 

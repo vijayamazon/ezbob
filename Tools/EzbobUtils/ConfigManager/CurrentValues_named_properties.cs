@@ -1321,6 +1321,15 @@
 
 		#endregion property PayPointVpnPassword
 
+		#region property PayPointCardExpiryMonths
+
+		public virtual VariableValue PayPointCardExpiryMonths
+		{
+			get { return this[Variables.PayPointCardExpiryMonths]; } // get
+		} // PayPointCardExpiryMonths
+
+		#endregion property PayPointVpnPassword
+		
 		#region property RecentCustomersToKeep
 
 		public virtual VariableValue RecentCustomersToKeep {
