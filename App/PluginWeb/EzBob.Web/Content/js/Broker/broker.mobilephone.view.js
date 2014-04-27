@@ -52,6 +52,8 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 			145: 'Scroll Lock',
 		};
 
+		this.isCaptchaShown = false;
+
 		SetCaptchaMode();
 	}, // initialize
 
@@ -102,7 +104,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 			var sPhoneNumber = this.$el.find('#' + this.PhoneFieldID).val();
 
 			if ((sPhoneNumber === this.getLastCodeTarget()) || this.currentCount(sPhoneNumber)) {
-				var bEnabled =
+				var bEnabled = !this.isCaptchaShown &&
 					(this.currentCount(sPhoneNumber) < this.maxSendToCurrentCount()) &&
 					(this.sendAttemptsCount < this.maxSendAttemptsCount());
 
@@ -127,7 +129,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 	mobilePhoneChanged: function() {
 		this.setSomethingEnabled(
-			'#' + this.GenerateCodeBtnID, this.validator.check(this.$el.find('#' + this.PhoneFieldID))
+			'#' + this.GenerateCodeBtnID, !this.isCaptchaShown && this.validator.check(this.$el.find('#' + this.PhoneFieldID))
 		).val('Send activation code');
 
 		this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
@@ -177,6 +179,8 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 	}, // handleTooManyAttempts
 
 	showCaptcha: function() {
+		this.isCaptchaShown = true;
+
 		this.setSomethingEnabled('#' + this.GenerateCodeBtnID, false);
 
 		this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
