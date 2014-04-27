@@ -157,9 +157,9 @@
 				if (yodleeModel != null && yodleeModel.CashFlowReportModel != null && yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict != null)
 				{
 					if (yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict.ContainsKey("5aLoan Repayments") &&
-					    yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"].ContainsKey(999999))
+					    yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"].ContainsKey(YodleeCashFlowReportModelBuilder.TotalColumn))
 					{
-						sumOfLoanTransactions += (decimal) yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][999999];
+						sumOfLoanTransactions += (decimal)yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][YodleeCashFlowReportModelBuilder.TotalColumn];
 					}
 				}
 			}

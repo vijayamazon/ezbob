@@ -31,11 +31,6 @@
 			Dictionary<BankData, List<BankTransactionData>> orders;
 			displayBankData.GetBankDataForItem(yodlee.UserContext, itemId, out itemSummaryInfo, out error, out orders);
 			lu.logoutUser(yodlee.UserContext);
-			if (!string.IsNullOrEmpty(error))
-			{
-				Log.ErrorFormat("Yodlee GetOrders error: {0}", error);
-			}
-
 			return orders;
 		}
 	}

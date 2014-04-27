@@ -11,7 +11,7 @@
 	public class YodleeSearchWordsModel
 	{
 		public SortedDictionary<string /*word*/, SortedDictionary<string /*Income/Expense*/, double /*amount/Count*/>> YodleeSearchWordModelDict { get; set; }
-		public SortedDictionary<int /*id*/, string /*word*/> WordsDict;
+		public SortedDictionary<string /*id*/, string /*word*/> WordsDict;
 	}
 
 	public class YodleeSearchWordsModelBuilder
@@ -28,13 +28,13 @@
 			yodlee = new YodleeSearchWordsModel
 				{
 					YodleeSearchWordModelDict = new SortedDictionary<string, SortedDictionary<string, double>>(),
-					WordsDict = new SortedDictionary<int, string>()
+					WordsDict = new SortedDictionary<string, string>()
 				};
 			var words = new YodleeSearchWordsRepository(session).GetAll();
 
 			foreach (var word in words)
 			{
-				yodlee.WordsDict.Add(word.Id, word.SearchWords);
+				yodlee.WordsDict.Add(word.Id.ToString(), word.SearchWords);
 			}
 
 			_yodleeSearchWords = words.Select(x => string.Format("{0}{1}", SearchWord, x.SearchWords)).ToList();

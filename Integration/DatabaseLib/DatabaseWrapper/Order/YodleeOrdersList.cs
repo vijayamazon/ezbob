@@ -7,6 +7,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 {
 	using System.Linq;
 
+	[Serializable]
 	public class YodleeOrderDictionary
 	{
 		public Dictionary<BankData, List<BankTransactionData>> Data { get; set; }

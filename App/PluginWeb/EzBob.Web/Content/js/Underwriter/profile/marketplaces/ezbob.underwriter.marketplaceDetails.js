@@ -55,15 +55,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
         this.$el.html(this.template(data));
 
-    	// TODO: story EZ-1971 fix it. The issue: when this tooltip is enabled moving mouse over (or out) the
-    	// element with the tooltip causes entire dialog window content to shake a bit.
+        // TODO: story EZ-1971 fix it. The issue: when this tooltip is enabled moving mouse over (or out) the
+        // element with the tooltip causes entire dialog window content to shake a bit.
 
         // this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
         // this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
         // this.$el.find('.clear-filter').tooltip({ title: 'Clear all filters', placement: 'bottom' });
 
         if (this.shop.get('Name') == 'Yodlee') {
-
             that.renderYodlee();
         }
 
@@ -140,7 +139,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
             iDisplayLength: -1,
             asSorting: [],
-            aoColumns: [{ sType: "numeric" }, { sType: "string" }, { sType: "date-uk" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" },{ sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }],
+            aoColumns: [{ sType: "numeric" }, { sType: "string" }, { sType: "date-uk" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 //calculate totals per selection
                 //var iTotalMarket = 0;
@@ -176,7 +175,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
         if ($.fn.dataTableExt.afnFiltering.length == 0) {
             $.fn.dataTableExt.afnFiltering.push(
-                function(oSettings, aData, iDataIndex) {
+                function (oSettings, aData, iDataIndex) {
                     if (oSettings.nTable !== document.getElementById("YodleeTransactionsTable")) {
                         // if not table should be ignored
                         return true;
@@ -204,8 +203,8 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                     return false;
                 }
             );
-        }        
-        
+        }
+
 
         this.$el.find("#DataTables_Table_1_length").after(this.$el.find('#range-filter'));
         this.$el.find("#date-range").keyup(function () { oTable.fnDraw(); });
@@ -254,17 +253,17 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var runningBalanceLine = [];
         var bankFrameLine = [];
         for (var monthYear1 in lowRunningBalance) {
-            lowBalanceLine.push([new Date(Date.parse(lowRunningBalance[monthYear1].Date)), parseInt(lowRunningBalance[monthYear1].Balance, 10)]);
+            lowBalanceLine.push([new Date(moment(lowRunningBalance[monthYear1].Date)), parseInt(lowRunningBalance[monthYear1].Balance, 10)]);
         }
 
         for (var monthYear2 in highRunningBalance) {
-            highBalanceLine.push([new Date(Date.parse(highRunningBalance[monthYear2].Date)), parseInt(highRunningBalance[monthYear2].Balance, 10)]);
+            highBalanceLine.push([new Date(moment(highRunningBalance[monthYear2].Date)), parseInt(highRunningBalance[monthYear2].Balance, 10)]);
 
         }
 
         for (var date in runningBalance) {
-            runningBalanceLine.push([new Date(Date.parse(date)), parseInt(runningBalance[date], 10)]);
-            bankFrameLine.push([new Date(Date.parse(date)), parseInt(bankFrame, 10)]);
+            runningBalanceLine.push([new Date(moment(date)), parseInt(runningBalance[date], 10)]);
+            bankFrameLine.push([new Date(moment(date)), parseInt(bankFrame, 10)]);
         }
 
         if (lowBalanceLine.length && highBalanceLine.length && !this.runningBalancePlot) {

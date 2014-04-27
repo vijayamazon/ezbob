@@ -30,6 +30,6 @@
 		public DateTime? asOfDate { get; set; }
 		public bool isDeleted { get; set; }
 
-		public IEnumerable<YodleeTransactionModel> transactions { get; set; }
+		public List<YodleeTransactionModel> transactions { get; set; }
 	}
 }

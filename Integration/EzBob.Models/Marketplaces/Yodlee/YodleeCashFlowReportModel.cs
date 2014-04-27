@@ -11,18 +11,18 @@
 	public class YodleeCashFlowReportModel
 	{
 
-		public SortedDictionary<string /*type,name*/, SortedDictionary<int /*yearmonth*/, double /*amount*/>>
+		public SortedDictionary<string /*type,name*/, SortedDictionary<string /*yearmonth*/, double /*amount*/>>
 			YodleeCashFlowReportModelDict { get; set; }
 
-		public SortedDictionary<int /*yearmonth*/, int /*minday*/> MinDateDict { get; set; }
-		public SortedDictionary<int /*yearmonth*/, int /*maxday*/> MaxDateDict { get; set; }
+		public SortedDictionary<string /*yearmonth*/, int /*minday*/> MinDateDict { get; set; }
+		public SortedDictionary<string /*yearmonth*/, int /*maxday*/> MaxDateDict { get; set; }
 		public double MonthInPayments = 0;
 		public DateTime AsOfDate;
 	}
 
 	public class YodleeCashFlowReportModelBuilder
 	{
-		private const int TotalColumn = 999999;
+		public const string TotalColumn = "999999";
 
 		private const string TotalIncomeCat = "Total Income";
 		private const string TotalExpensesCat = "Total Expenses";
@@ -57,9 +57,9 @@
 		{
 			yodlee = new YodleeCashFlowReportModel
 				{
-					YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<int, double>>(),
-					MinDateDict = new SortedDictionary<int, int>(),
-					MaxDateDict = new SortedDictionary<int, int>(),
+					YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<string, double>>(),
+					MinDateDict = new SortedDictionary<string, int>(),
+					MaxDateDict = new SortedDictionary<string, int>(),
 
 				};
 			_configVariables = new ConfigurationVariablesRepository(session);
@@ -74,7 +74,7 @@
 			var date = transaction.transactionDate;
 			var cat = string.Format("{0}{1}{2}", transaction.ezbobGroupPriority, Minor, catName);
 			var major = string.Format("{0}{1}{2}", transaction.ezbobGroupPriority, Major, transaction.ezbobGroup);
-			var yearmonth = date.Year * 100 + date.Month;
+			string yearmonth = (date.Year * 100 + date.Month).ToString();
 
 			//var runningBalance = transaction.runningBalance.HasValue ? transaction.runningBalance.Value: 0;
 
@@ -107,7 +107,7 @@
 			}
 		}
 
-		private void UpdateMinMaxDay(int yearmonth, DateTime? date)
+		private void UpdateMinMaxDay(string yearmonth, DateTime? date)
 		{
 			if (!date.HasValue) return;
 
@@ -185,7 +185,7 @@
 		{
 			if (!yodlee.YodleeCashFlowReportModelDict.ContainsKey(string.Format("{0}{1}", catPrefix, cat)))
 			{
-				var total = new SortedDictionary<int, double> { { TotalColumn, 0 } };
+				var total = new SortedDictionary<string, double> { { TotalColumn, 0 } };
 				yodlee.YodleeCashFlowReportModelDict[string.Format("{0}{1}", catPrefix, cat)] = total;
 			}
 		}
@@ -253,17 +253,17 @@
 			}
 		}
 
-		private void Add(string cat, double amount, bool isCredit, int yearmonth)
+		private void Add(string cat, double amount, bool isCredit, string yearmonth)
 		{
 			if (!yodlee.YodleeCashFlowReportModelDict.ContainsKey(cat))
 			{
-				yodlee.YodleeCashFlowReportModelDict[cat] = new SortedDictionary<int, double>();
+				yodlee.YodleeCashFlowReportModelDict[cat] = new SortedDictionary<string, double>();
 			}
 
 			Sum(cat, yearmonth, amount, isCredit);
 		}
 
-		private void Sum(string cat, int yearmonth, double amount, bool isCredit)
+		private void Sum(string cat, string yearmonth, double amount, bool isCredit)
 		{
 			var x = yodlee.YodleeCashFlowReportModelDict[cat];
 			if (!isCredit)
@@ -295,8 +295,10 @@
 			var bankStatementDataModel = new BankStatementDataModel();
 			if (yodlee.MinDateDict.Any() && yodlee.MinDateDict.Any())
 			{
-				var from = new DateTime(yodlee.MinDateDict.First().Key / 100, yodlee.MinDateDict.First().Key % 100, yodlee.MinDateDict.Last().Value);
-				var to = new DateTime(yodlee.MaxDateDict.Last().Key / 100, yodlee.MaxDateDict.Last().Key % 100, yodlee.MaxDateDict.Last().Value);
+				var minDate = int.Parse(yodlee.MinDateDict.First().Key);
+				var maxDate = int.Parse(yodlee.MaxDateDict.Last().Key);
+				var from = new DateTime(minDate / 100, minDate % 100, yodlee.MinDateDict.Last().Value);
+				var to = new DateTime(maxDate / 100, maxDate % 100, yodlee.MaxDateDict.Last().Value);
 				bankStatementDataModel.PeriodMonthsNum = ((to.Year - from.Year) * 12) + to.Month - from.Month;
 				bankStatementDataModel.Period = string.Format("{0} - {1}", from.ToString("MMM yy", CultureInfo.InvariantCulture), to.ToString("MMM yy", CultureInfo.InvariantCulture));
 

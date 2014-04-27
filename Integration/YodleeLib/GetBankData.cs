@@ -81,7 +81,7 @@ namespace YodleeLib
 				object[] accounts = itemData.accounts;
 				if (accounts == null || accounts.Length == 0)
 				{
-					error += "\tNo accounts";
+					Log.Warn("Yodlee get bank data: No accounts");
 				}
 				else
 				{
@@ -92,7 +92,7 @@ namespace YodleeLib
 						object[] bankTransactions = bankData.bankTransactions;
 						if (bankTransactions == null || bankTransactions.Length == 0)
 						{
-							error += "\t\tNo bank transactions";
+							Log.Warn("Yodlee get bank data: No bank transactions");
 						}
 						else
 						{
@@ -127,7 +127,7 @@ namespace YodleeLib
 						object[] histories = acctHistory.history;
 						if (histories == null || histories.Length == 0)
 						{
-							error += "\t\tNo History";
+							Log.Warn("Yodlee get bank data: No History");
 						}
 						else
 						{

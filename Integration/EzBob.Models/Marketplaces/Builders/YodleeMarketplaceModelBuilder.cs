@@ -170,7 +170,7 @@ namespace EzBob.Models.Marketplaces.Builders
 						};
 					transactions.Add(yodleeTransactionModel);
 				}
-				yodleeBankModel.transactions = transactions.OrderByDescending(t => t.transactionDate);
+				yodleeBankModel.transactions = transactions.OrderByDescending(t => t.transactionDate).ToList();
 				banks.Add(yodleeBankModel);
 			}
 			model.banks = banks;
