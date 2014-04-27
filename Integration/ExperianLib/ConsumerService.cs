@@ -22,46 +22,47 @@
 	public class ConsumerService {
 		#region public
 
-		#region method ShifLocation
+		#region method ShiftLocation
 
-		public static InputLocationDetailsMultiLineLocation ShifLocation(InputLocationDetailsMultiLineLocation mlLocation) {
-			//shift of order location line
-			if (mlLocation != null) {
-				var lines = new List<string>();
+		public static InputLocationDetailsMultiLineLocation ShiftLocation(InputLocationDetailsMultiLineLocation mlLocation) {
+			if (mlLocation == null)
+				return null;
 
-				//if one of lines is "Flat"(without numbers) we got an error 'Location not resolved'
-				if (!string.IsNullOrEmpty(mlLocation.LocationLine1) && mlLocation.LocationLine1.ToLower() != "flat")
-					lines.Add(mlLocation.LocationLine1);
-				if (!string.IsNullOrEmpty(mlLocation.LocationLine2) && mlLocation.LocationLine2.ToLower() != "flat")
-					lines.Add(mlLocation.LocationLine2);
-				if (!string.IsNullOrEmpty(mlLocation.LocationLine3) && mlLocation.LocationLine3.ToLower() != "flat")
-					lines.Add(mlLocation.LocationLine3);
-				if (!string.IsNullOrEmpty(mlLocation.LocationLine4) && mlLocation.LocationLine4.ToLower() != "flat")
-					lines.Add(mlLocation.LocationLine4);
-				if (!string.IsNullOrEmpty(mlLocation.LocationLine5) && mlLocation.LocationLine5.ToLower() != "flat")
-					lines.Add(mlLocation.LocationLine5);
-				if (!string.IsNullOrEmpty(mlLocation.LocationLine6) && mlLocation.LocationLine6.ToLower() != "flat")
-					lines.Add(mlLocation.LocationLine6);
+			var oSrcLines = new List<string> {
+				mlLocation.LocationLine1,
+				mlLocation.LocationLine2,
+				mlLocation.LocationLine3,
+				mlLocation.LocationLine4,
+				mlLocation.LocationLine5,
+				mlLocation.LocationLine6,
+			};
 
-				mlLocation = new InputLocationDetailsMultiLineLocation();
+			var oDstLines = new List<string>();
 
-				if (lines.Count > 0)
-					mlLocation.LocationLine1 = lines[0];
-				if (lines.Count > 1)
-					mlLocation.LocationLine2 = lines[1];
-				if (lines.Count > 2)
-					mlLocation.LocationLine3 = lines[2];
-				if (lines.Count > 3)
-					mlLocation.LocationLine4 = lines[3];
-				if (lines.Count > 4)
-					mlLocation.LocationLine5 = lines[4];
-				if (lines.Count > 5)
-					mlLocation.LocationLine6 = lines[5];
-			}
+			// If one of lines is "Flat" (without numbers) we got an error 'Location not resolved'.
+
+			foreach (string sLine in oSrcLines)
+				if (!string.IsNullOrEmpty(sLine) && sLine.ToLower() != "flat")
+					oDstLines.Add(sLine);
+
+			while (oDstLines.Count < 6)
+				oDstLines.Add(null);
+
+			string[] lines = oDstLines.ToArray();
+
+			mlLocation = new InputLocationDetailsMultiLineLocation {
+				LocationLine1 = lines[0],
+				LocationLine2 = lines[1],
+				LocationLine3 = lines[2],
+				LocationLine4 = lines[3],
+				LocationLine5 = lines[4],
+				LocationLine6 = lines[5],
+			};
+
 			return mlLocation;
-		} // ShifLocation
+		} // ShiftLocation
 
-		#endregion method ShifLocation
+		#endregion method ShiftLocation
 
 		#region constructor
 
@@ -91,47 +92,47 @@
 			bool isDirector,
 			bool forceCheck
 		) {
-			try
-			{
-				var postcode = GetPostcode(ukLocation, mlLocation);
+			try {
+				string postcode = GetPostcode(ukLocation, mlLocation);
 
-				//debug mode
-				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
-				{
-					MP_ExperianDataCache experianDataCacheEntry = _repo.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.DirectorId == directorId && x.CompanyRefNumber == null);
-					if (experianDataCacheEntry == null)
-					{
-						var newExperianDataCacheEntry = new MP_ExperianDataCache
-							{
-								Name = firstName,
-								Surname = surname,
-								BirthDate = birthDate,
-								PostCode = postcode,
-								LastUpdateDate = DateTime.UtcNow,
-								CustomerId = customerId,
-								DirectorId = directorId
-							};
+				// debug mode
+				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile") {
+					MP_ExperianDataCache experianDataCacheEntry = _repo.GetAll()
+						.FirstOrDefault(x => x.CustomerId == customerId && x.DirectorId == directorId && x.CompanyRefNumber == null);
+
+					if (experianDataCacheEntry == null) {
+						var newExperianDataCacheEntry = new MP_ExperianDataCache {
+							Name = firstName,
+							Surname = surname,
+							BirthDate = birthDate,
+							PostCode = postcode,
+							LastUpdateDate = DateTime.UtcNow,
+							CustomerId = customerId,
+							DirectorId = directorId,
+						};
+
 						_repo.SaveOrUpdate(newExperianDataCacheEntry);
-					}
-					return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
-				}
+					} // if
 
-				mlLocation = ShifLocation(mlLocation);
+					return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
+				} // if test
+
+				mlLocation = ShiftLocation(mlLocation);
 
 				Log.InfoFormat("GetConsumerInfo: checking cache for {2} id {3} firstName: {0}, surname: {1} birthday: {4}, postcode: {5}", firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode);
 				
-				MP_ExperianDataCache cachedResponse = isDirector ? _repo.GetDirectorFromCache(directorId, firstName, surname, birthDate, postcode) : _repo.GetCustomerFromCache(customerId, firstName, surname, birthDate, postcode);
+				MP_ExperianDataCache cachedResponse = isDirector
+					? _repo.GetDirectorFromCache(directorId, firstName, surname, birthDate, postcode)
+					: _repo.GetCustomerFromCache(customerId, firstName, surname, birthDate, postcode);
 
-				if (!forceCheck)
-				{
-					if (cachedResponse != null)
-					{
+				if (!forceCheck) {
+					if (cachedResponse != null) {
 						if (CacheNotExpired(cachedResponse) || checkInCacheOnly)
 							return ParseCache(cachedResponse);
 					}
 					else if (checkInCacheOnly)
 						return null;
-				}
+				} // if
 
 				cachedResponse = cachedResponse ?? new MP_ExperianDataCache {
 					Name = firstName,

@@ -18,7 +18,7 @@ namespace ExperianLib.Tests
                 LocationLine5 = "Kent".ToUpper(),
                 LocationLine6 = "CT18 8BJ".ToUpper(),
             };
-            loc = ConsumerService.ShifLocation(loc);
+            loc = ConsumerService.ShiftLocation(loc);
 
             Assert.That(loc.LocationLine1 != null);
             Assert.That(loc.LocationLine2 != null);
