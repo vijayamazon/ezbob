@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoView = (function(_super) {
-
     __extends(StoreInfoView, _super);
 
     function StoreInfoView() {
-      return StoreInfoView.__super__.constructor.apply(this, arguments);
+      _ref = StoreInfoView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     StoreInfoView.prototype.attributes = {
@@ -29,6 +29,7 @@
 
     StoreInfoView.prototype.fromCustomer = function(sPropName) {
       var oCustomer;
+
       oCustomer = this.model.get('customer');
       if (!oCustomer) {
         return false;
@@ -41,6 +42,7 @@
 
     StoreInfoView.prototype.initialize = function() {
       var acc, accountTypeName, aryCGAccounts, ignore, lc, ordpi, vendorInfo;
+
       this.renderExecuted = false;
       this.ebayStores = new EzBob.EbayStoreModels();
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
@@ -162,6 +164,7 @@
 
     StoreInfoView.prototype.takeQuickOffer = function() {
       var xhr;
+
       xhr = $.post(window.gRootPath + 'CustomerDetails/TakeQuickOffer');
       xhr.done(function() {
         EzBob.App.trigger('clear');
@@ -178,17 +181,19 @@
     };
 
     StoreInfoView.prototype.render = function() {
-      var accountsList, bFirst, grp, grpid, grpui, j, name, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, shop, showMoreBtn, sortedShopsByPriority, store, storeTypeName, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
+      var accountsList, bFirst, grp, grpid, grpui, j, name, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, shop, showMoreBtn, sortedShopsByPriority, store, storeTypeName, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref1, _ref2, _ref3, _ref4;
+
+      UnBlockUi();
       this.mpGroups = {};
-      _ref = EzBob.Config.MarketPlaceGroups;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        grp = _ref[_i];
+      _ref1 = EzBob.Config.MarketPlaceGroups;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        grp = _ref1[_i];
         this.mpGroups[grp.Id] = grp;
         grp.ui = null;
       }
-      _ref1 = EzBob.Config.MarketPlaces;
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        j = _ref1[_j];
+      _ref2 = EzBob.Config.MarketPlaces;
+      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+        j = _ref2[_j];
         storeTypeName = j.Name === "Pay Pal" ? "paypal" : j.Name;
         if (this.stores[storeTypeName]) {
           this.stores[storeTypeName].active = this.isProfile() ? (this.isOffline() ? j.ActiveDashboardOffline : j.ActiveDashboardOnline) : (this.isOffline() ? j.ActiveWizardOffline : j.ActiveWizardOnline);
@@ -203,9 +208,9 @@
           this.stores[storeTypeName].groupid = j.Group != null ? j.Group.Id : 0;
         }
       }
-      _ref2 = this.stores;
-      for (name in _ref2) {
-        store = _ref2[name];
+      _ref3 = this.stores;
+      for (name in _ref3) {
+        store = _ref3[name];
         store.button.on("selected", this.connect, this);
         store.view.on("completed", _.bind(this.completed, this, store.button.name));
         store.view.on("back", this.back, this);
@@ -236,9 +241,9 @@
       sActiveField = 'Active' + (this.isProfile() ? 'Dashboard' : 'Wizard') + (this.isOffline() ? 'Offline' : 'Online');
       sPriorityField = 'Priority' + (this.isOffline() ? 'Offline' : 'Online');
       relevantMpGroups = [];
-      _ref3 = this.mpGroups;
-      for (grpid in _ref3) {
-        grp = _ref3[grpid];
+      _ref4 = this.mpGroups;
+      for (grpid in _ref4) {
+        grp = _ref4[grpid];
         if (grp[sActiveField]) {
           relevantMpGroups.push(grp);
         }
@@ -316,6 +321,7 @@
     StoreInfoView.prototype.setQuickOfferFormOnHover = function(oLinkBtn) {
       return oLinkBtn.hover((function(evt) {
         var nHeight, onHover;
+
         oLinkBtn = $(this);
         nHeight = oLinkBtn.outerHeight();
         nHeight = oLinkBtn.outerWidth();
@@ -334,6 +340,7 @@
         });
       }), (function(evt) {
         var nHeight, onHover;
+
         oLinkBtn = $(this);
         onHover = oLinkBtn.parent().find('.onhover');
         nHeight = oLinkBtn.outerHeight();
@@ -368,6 +375,7 @@
 
     StoreInfoView.prototype.showOrRemove = function() {
       var isOffline, isProfile, sRemove, sShow;
+
       isOffline = this.isOffline();
       isProfile = this.isProfile();
       $(this.storeList).find('.back-store').remove();
@@ -405,6 +413,7 @@
 
     StoreInfoView.prototype.toggleShowMoreAccounts = function() {
       var oBtn;
+
       oBtn = this.storeList.find('.btn-showmore');
       if (oBtn.attr('data-current') === 'more') {
         return this.showMoreAccounts();
@@ -415,6 +424,7 @@
 
     StoreInfoView.prototype.showLessAccounts = function() {
       var oBtn;
+
       oBtn = this.storeList.find('.btn-showmore');
       oBtn.attr('data-current', 'more');
       oBtn.find('.caption').text('Show more account types');
@@ -427,6 +437,7 @@
 
     StoreInfoView.prototype.showMoreAccounts = function() {
       var oBtn;
+
       oBtn = this.storeList.find('.btn-showmore');
       oBtn.attr('data-current', 'less');
       oBtn.find('.caption').text('Show less account types');
@@ -438,11 +449,12 @@
     };
 
     StoreInfoView.prototype.canContinue = function() {
-      var canContinue, hasEbay, hasFilledShops, hasPaypal, mpType, oStore, sAttrName, _ref;
+      var canContinue, hasEbay, hasFilledShops, hasPaypal, mpType, oStore, sAttrName, _ref1;
+
       hasFilledShops = false;
-      _ref = this.stores;
-      for (mpType in _ref) {
-        oStore = _ref[mpType];
+      _ref1 = this.stores;
+      for (mpType in _ref1) {
+        oStore = _ref1[mpType];
         if (oStore.button.shops.length) {
           hasFilledShops = true;
           break;
@@ -469,6 +481,7 @@
 
     StoreInfoView.prototype.extractBtnClass = function(jqTarget) {
       var sClass;
+
       sClass = 'pull-left';
       if ($('.marketplace-button-less', jqTarget).length < 3) {
         sClass += ' marketplace-button-less';
@@ -489,6 +502,7 @@
 
     StoreInfoView.prototype.connect = function(storeName) {
       var oFieldStatusIcons, storeView;
+
       EzBob.CT.recordEvent("ct:storebase.shops.connect", storeName);
       this.$el.find(">div").hide();
       storeView = this.stores[storeName].view;
@@ -510,6 +524,7 @@
 
     StoreInfoView.prototype.setFocus = function(storeName) {
       var aryCGAccounts;
+
       $.colorbox.close();
       switch (storeName) {
         case "EKM":
@@ -526,6 +541,7 @@
 
     StoreInfoView.prototype.setDocumentTitle = function(view) {
       var title;
+
       title = view.getDocumentTitle();
       if (title) {
         return $(document).attr("title", "Step 4: " + title + " | EZBOB");
@@ -550,6 +566,7 @@
 
     StoreInfoView.prototype.next = function() {
       var btn, xhr;
+
       btn = this.$el.find(".continue");
       if (btn.hasClass("disabled")) {
         return;
@@ -559,14 +576,10 @@
       xhr = $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
       xhr.done(function() {
         EzBob.App.trigger("clear");
-        return setTimeout((function() {
-          return window.location = window.gRootPath + 'CustomerDetails/Dashboard';
-        }), 500);
+        return window.location = window.gRootPath + 'CustomerDetails/Dashboard';
       });
       xhr.error(function() {
-        return setTimeout((function() {
-          return BlockUi('off');
-        }), 500);
+        return UnBlockUi();
       });
       return false;
     };
@@ -581,6 +594,7 @@
 
     StoreInfoView.prototype.shopConnected = function(name) {
       var _this = this;
+
       return this.model.get('customer').safeFetch().done(function() {
         _this.stores[name].button.update(_this.fromCustomer('mpAccounts'));
         return _this.render();

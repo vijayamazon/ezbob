@@ -289,8 +289,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                     that.captcha.reload();
                 }
                 that.$el.find(':submit').addClass('disabled');
+                that.blockBtn(false);
             }
-            that.blockBtn(false);
         });
 
         xhr.fail(function () {

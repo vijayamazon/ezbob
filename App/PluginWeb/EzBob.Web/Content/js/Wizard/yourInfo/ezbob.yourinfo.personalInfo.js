@@ -124,6 +124,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
     }, // prevModelChange
 
     render: function () {
+        UnBlockUi();
         this.constructor.__super__.render.call(this);
 
         var oAddressContainer = this.$el.find('#PersonalAddress');
@@ -221,6 +222,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
             if (res.error) {
                 EzBob.App.trigger('error', res.error);
+                UnBlockUi();
                 return;
             } // if
 
@@ -228,10 +230,6 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
                 self.trigger('ready');
                 self.trigger('next');
             });
-        });
-
-        request.complete(function () {
-            UnBlockUi();
         });
 
         return false;

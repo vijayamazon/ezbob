@@ -115,6 +115,7 @@ class EzBob.StoreInfoView extends Backbone.View
     # end of showLinkAccountsForm
 
     render: ->
+        UnBlockUi()
         @mpGroups = {}
         for grp in EzBob.Config.MarketPlaceGroups
             @mpGroups[grp.Id] = grp
@@ -470,9 +471,9 @@ class EzBob.StoreInfoView extends Backbone.View
         xhr = $.post window.gRootPath + 'CustomerDetails/LinkAccountsComplete'
         xhr.done ->
             EzBob.App.trigger "clear"
-            setTimeout((-> window.location = window.gRootPath + 'CustomerDetails/Dashboard'), 500)
+            window.location = window.gRootPath + 'CustomerDetails/Dashboard'
         xhr.error ->
-            setTimeout((-> BlockUi 'off'), 500)
+            UnBlockUi()
         false
 
     ready: (name) ->

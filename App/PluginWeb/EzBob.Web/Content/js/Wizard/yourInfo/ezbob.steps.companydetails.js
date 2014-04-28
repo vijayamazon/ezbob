@@ -161,7 +161,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 	webSiteTurnOverFocus: function() { $('#WebSiteTurnOver').change(); }, // webSiteTurnOverFocus
 
-	render: function() {
+	render: function () {
+	    UnBlockUi();
 		this.$el.html(this.template(this.model.toJSON()));
 
 		var oFieldStatusIcons = this.$el.find('IMG.field_status');
@@ -210,7 +211,9 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		if ($('.btn-continue').hasClass('disabled'))
 			return false;
-
+	    
+		BlockUi();
+	    
 		var form = this.$el.find('form.CompanyDetailForm'),
 			data = form.serializeArray();
 
@@ -257,22 +260,19 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		} // if
 
 		if (EzBob.Config.TargetsEnabled && bDoTargeting)
-			this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum, typeOfBussiness);
+			this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum);
 		else
-			this.saveDataRequest(action, data, typeOfBussiness);
+			this.saveDataRequest(action, data);
 
 		return false;
 	}, // next
 
-	handleTargeting: function(form, action, data, postcode, companyName, sCompanyFilter, refNum, typeOfBussiness) {
-		var that = this;
+	handleTargeting: function(form, action, data, postcode, companyName, sCompanyFilter, refNum) {
+	    var that = this;
 
 		var req = $.get(window.gRootPath + 'Account/CheckingCompany', { companyName: companyName, postcode: postcode, filter: sCompanyFilter, refNum: refNum });
 
 		scrollTop();
-
-		BlockUi();
-
 		req.done(function(reqData) {
 			if (!reqData)
 				that.saveDataRequest(action, data);
@@ -282,6 +282,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 						if (that.targetingTries === 0) {
 							EzBob.App.trigger('warning', 'Company ' + companyName + ' ' + postcode + ' was not found. Please check your input and try again.');
 							that.targetingTries++;
+							UnBlockUi();
 						}
 						else
 							that.saveTargeting(null, action, form);
@@ -295,7 +296,9 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 					default:
 						var companyTargets = new EzBob.companyTargets({ model: reqData });
 						companyTargets.render();
-						companyTargets.on('BusRefNumGetted', function(targetingData) {
+						UnBlockUi();
+						companyTargets.on('BusRefNumGetted', function (targetingData) {
+						    BlockUi();
 							that.saveTargeting(targetingData, action, form);
 						});
 						break;
@@ -303,12 +306,12 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			} // if
 		}); // on done
 
-		req.always(function() {
+		req.error(function() {
 			UnBlockUi();
 		});
 	}, // handleTargeting
 
-	saveTargeting: function(targetingData, action, form) {
+	saveTargeting: function (targetingData, action, form) {
 		var data = form.serializeArray();
 
 		if (targetingData) {
@@ -325,8 +328,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		this.saveDataRequest(action, data);
 	}, // saveTargeting
 
-	saveDataRequest: function(action, data, typeOfBussiness) {
-		BlockUi();
+	saveDataRequest: function(action, data) {
 
 		var that = this;
 		if (this.$el.find('#OverallTurnOver').is(":visible")) {
@@ -362,7 +364,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			} // if
 
 			that.model.fetch().done(function() {
-				UnBlockUi();
 				that.trigger('ready');
 				EzBob.App.trigger('clear');
 				that.trigger('next');
