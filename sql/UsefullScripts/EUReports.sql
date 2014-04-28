@@ -171,13 +171,13 @@ AND c.IsTest=0
 AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
 
 -----------------A.4. Number of MC requests/rejections----------------------------------------------------------------------
-SELECT COUNT(DISTINCT cr.Id) AS 'A.4.1 Total Number of formal micro-credit requests'
+SELECT COUNT(DISTINCT cr.IdCustomer) AS 'A.4.1 Total Number of formal micro-credit requests'
 FROM CashRequests cr INNER JOIN Customer c ON cr.IdCustomer=c.Id
 WHERE c.IsTest=0
 AND cr.CreationDate>=@DateStart 
 AND cr.CreationDate<@DateEnd
 
-SELECT COUNT(DISTINCT cr.Id) AS 'A.4.2 Total Number of formal micro-credit rejections' 
+SELECT COUNT(DISTINCT cr.IdCustomer) AS 'A.4.2 Total Number of formal micro-credit rejections' 
 FROM CashRequests cr INNER JOIN Customer c ON cr.IdCustomer=c.Id
 WHERE c.IsTest=0 
 AND cr.CreationDate>=@DateStart 
