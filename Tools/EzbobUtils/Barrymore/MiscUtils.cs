@@ -78,14 +78,12 @@
 			months = DateTime.UtcNow.Month - date.Month;
 			if (months < 0)
 			{
-				months = 0;
+				months = 12 - date.Month + DateTime.UtcNow.Month;
 			}
-			else if (months > 0)
+
+			if (months > 0 && DateTime.UtcNow.Day < date.Day)
 			{
-				if (DateTime.UtcNow.Day < date.Day)
-				{
-					months--;
-				}
+				months--;
 			}
 		}
 	} // class MiscUtils
