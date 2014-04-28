@@ -76,14 +76,18 @@
 		{
 			years = GetFullYears(date);
 			months = DateTime.UtcNow.Month - date.Month;
+
 			if (months < 0)
 			{
 				months = 12 - date.Month + DateTime.UtcNow.Month;
 			}
-
-			if (months > 0 && DateTime.UtcNow.Day < date.Day)
+			else if (months > 0 && DateTime.UtcNow.Day < date.Day)
 			{
 				months--;
+			}
+			else if (months == 0 && DateTime.UtcNow.Day < date.Day)
+			{
+				months = 11;
 			}
 		}
 	} // class MiscUtils
