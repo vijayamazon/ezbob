@@ -66,9 +66,9 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 		if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
 			return;
 
-		var oSampleLink = function(sSourceRef, sNewLine, nWidth, nHeight) {
+		var oSampleLink = function(sSourceRef, sImagePath, sNewLine, nWidth, nHeight) {
 		    return '<a target=_blank href="http://www.ezbob.com?sourceref=' + sSourceRef + '" rel="nofollow">' + sNewLine +
-				'\t<img src="http://www.ezbob.com/wp-content/themes/ezbob-new/images/new-ezbob-logo.png" ' +
+				'\t<img src="' + sImagePath + '" ' +
 				'width=' + nWidth + ' height=' + nHeight +
 				' alt="business loans">' + sNewLine +
 				'</a>';
@@ -101,7 +101,11 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 
 				var aryMatch = /^SourceRefTo(.{4})_(\d+)x(\d+)$/.exec(sFieldName);
 
-				return oSampleLink(oFieldValue, (aryMatch[1] === 'Text' ? '\n' : ''), parseInt(aryMatch[2], 10), parseInt(aryMatch[3], 10));
+				return oSampleLink(oFieldValue,
+				    (aryMatch[1] === 'Text' ? "http://www.ezbob.com/wp-content/themes/ezbob-new/images/new-ezbob-logo.png" : "/Content/img/ezbob-logo-2014.png"),
+				    (aryMatch[1] === 'Text' ? '\n' : ''),
+				    parseInt(aryMatch[2], 10),
+				    parseInt(aryMatch[3], 10));
 			}, // callback
 
 			fieldNameSetText: function(sFieldName) {
