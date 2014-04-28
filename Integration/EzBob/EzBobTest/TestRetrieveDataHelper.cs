@@ -3,6 +3,7 @@ namespace EzBobTest
 	using System;
 	using System.Collections.Concurrent;
 	using System.Linq;
+	using System.Text.RegularExpressions;
 	using System.Threading;
 	using System.Xml;
 	using CompanyFiles;
@@ -398,6 +399,14 @@ namespace EzBobTest
             WriteLoggerHelper.Write("Test: Write to Specific log", WriteLogType.Debug);
         }
 
+		[Test]
+		public void regexTest()
+		{
+			var regex = new Regex("[^a-zA-Z -]");
+			var surname = "O'Hare";
+			surname = regex.Replace(surname, String.Empty);
+			Assert.AreEqual("OHare", surname);
+		}
     }
 
     internal class TestOrderItemData
