@@ -4,6 +4,7 @@
 	using System.Linq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
+	using EzBob.Models;
 	using Ezbob.Utils;
 	using Infrastructure;
 	using NHibernate;
@@ -17,6 +18,8 @@
 
 		public int Id { get; set; }
 		public string Name { get; set; }
+		public string FirstName { get; set; }
+		public string Surname { get; set; }
 		public string Email { get; set; }
 		public string EmailState { get; set; }
 		public string MobilePhone { get; set; }
@@ -45,6 +48,7 @@
 		public bool IsAmlInAlertMode { get; set; }
 		public string AmlResult { get; set; }
 		public int Age { get; set; }
+		public DateTime DateOfBirth { get; set; }
 		public string Gender { get; set; }
 		public string FamilyStatus { get; set; }
 		public string ResidentalStatus { get; set; }
@@ -57,6 +61,8 @@
 		public string PromoCodeCss { get; set; }
 		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
 		public string ActiveCampaign { get; set; }
+		public string PostCode { get; set; }
+		public DirectorModel[] Directors { get; set; }
 
 		public PersonalInfoModel() {
 			IndustryFields = new List<string>();
@@ -80,8 +86,8 @@
 
 			if (customer.PersonalInfo != null)
 			{
-				if (customer.PersonalInfo.DateOfBirth.HasValue)
-				{
+				if (customer.PersonalInfo.DateOfBirth.HasValue) {
+					DateOfBirth = customer.PersonalInfo.DateOfBirth.Value;
 					Age = MiscUtils.GetFullYears(customer.PersonalInfo.DateOfBirth.Value);
 
 					Gender = customer.PersonalInfo.Gender.ToString();
@@ -90,10 +96,19 @@
 				}
 			}
 
-			if (customer.Company != null)
-			{
+			if (customer.Company != null) {
 				CompanyType = customer.Company.TypeOfBusiness.ToString();
-			}
+
+				if (customer.Company.Directors != null) {
+					List<Director> oDirList = customer.Company.Directors.ToList();
+
+					if (oDirList.Count > 0)
+						Directors = customer.Company.Directors.Select(d => DirectorModel.FromDirector(d, oDirList)).ToArray();
+				} // if
+			} // if
+
+			if (Directors == null)
+				Directors = new DirectorModel[0];
 
 			ExperianParserOutput parsedExperian = customer.ParseExperian(ExperianParserFacade.Target.Company);
 			int numOfShareholders = 0;
@@ -133,6 +148,8 @@
 
 			if (customer.PersonalInfo != null) {
 				Name = customer.PersonalInfo.Fullname;
+				FirstName = customer.PersonalInfo.FirstName;
+				Surname = customer.PersonalInfo.Surname;
 				MobilePhone = customer.PersonalInfo.MobilePhone;
 				DaytimePhone = customer.PersonalInfo.DaytimePhone;
 			} // if
@@ -200,6 +217,10 @@
 
 			BrokerID = customer.Broker == null ? 0 : customer.Broker.ID;
 			BrokerName = customer.Broker == null ? "" : customer.Broker.FirmName;
+
+			CustomerAddress oAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			if (oAddress != null)
+				PostCode = oAddress.Rawpostcode;
 		} // InitFromCustomer
 
 		public bool IsAvoid { get; set; }

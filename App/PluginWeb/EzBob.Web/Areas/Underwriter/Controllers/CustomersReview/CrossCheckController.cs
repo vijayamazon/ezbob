@@ -183,7 +183,7 @@
 			if (customer == null)
 				return Json(new { error = "Customer not found" });
 
-			return Json(CustomerDetailsController.AddDirectorToCustomer(director, customer, m_oSession));
+			return Json(CustomerDetailsController.AddDirectorToCustomer(director, customer, m_oSession, false));
 		} // AddDirector
 
 		#endregion method AddDirector

@@ -111,6 +111,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			this.customerInfo.Surname,
 			this.customerInfo.DateOfBirth,
 			null,
+			this.customerInfo.Gender,
 			this.customerInfo.PostCode
 		);
 
@@ -129,12 +130,11 @@ EzBob.DirectorMainView = Backbone.View.extend({
 				val.get('Surname'),
 				val.get('DateOfBirth'),
 				'D/M/YYYY',
+				val.get('Gender'),
 				sPostCode
 			);
 
 			if (oKeyList[sDirKey]) {
-				EzBob.App.trigger('clear');
-				EzBob.App.trigger('error', 'Duplicate director name detected.');
 				bResult = false;
 				return false;
 			} // if
@@ -147,14 +147,30 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		return bResult;
 	}, // validateDuplicates
 
-	detailsToKey: function(sFirstName, sLastName, oBirthDate, sDateFormat, sPostCode) {
+	detailsToKey: function(sFirstName, sLastName, oBirthDate, sDateFormat, sGender, sPostCode) {
 		var oDate = sDateFormat ? moment(oBirthDate, sDateFormat) : moment(oBirthDate);
 		var sBirthDate = '';
 
-		if (oDate != null)
+		if (oDate)
 			sBirthDate = oDate.utc().format('YYYY-MM-DD');
 
-		return JSON.stringify({ f: sFirstName, l: sLastName, b: sBirthDate, p: sPostCode, });
+		switch (sGender) {
+			case 0:
+			case '0':
+			case 'm':
+			case 'M':
+				sGender = 'M';
+				break;
+
+			case 1:
+			case '1':
+			case 'f':
+			case 'F':
+				sGender = 'F';
+				break;
+		} // switch
+
+		return JSON.stringify({ f: sFirstName, l: sLastName, b: sBirthDate, g: sGender, p: sPostCode, });
 	}, // detailsToKey
 
 	validateAddresses: function() {

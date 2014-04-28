@@ -35,11 +35,18 @@
 
 		#region static method AddDirectorToCustomer
 
-		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session) {
+		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session, bool bFailOnDuplicate) {
 			if (customer.Company == null)
 				return new { error = "Customer doesn't have a company" };
 
 			Director dbDirector = director.FromModel();
+
+			string sDirKey = DetailsToKey(dbDirector);
+
+			if (sDirKey == DetailsToKey(customer))
+				if (bFailOnDuplicate)
+					return new { error = "This director already added" };
+
 			dbDirector.Customer = customer;
 			dbDirector.Company = customer.Company;
 
@@ -54,8 +61,9 @@
 
 			if (customer.Company.Directors.Any()) {
 				foreach (var dir in customer.Company.Directors) {
-					if (dir.Name == director.Name && dir.Surname == director.Surname)
-						return new { error = "This director already added" };
+					if (sDirKey == DetailsToKey(dir))
+						if (bFailOnDuplicate)
+							return new { error = "This director already added" };
 				} // for each existing director
 			} // if customer has director(s)
 
@@ -243,7 +251,7 @@
 			if (!Enum.TryParse(companyAdditionalInfo.IndustryType, true, out eIndustryType))
 				return Json(new { error = "Failed to parse industry type: " + companyAdditionalInfo.IndustryType });
 
-			ProcessCompanyInfoTemporary(
+			string sErrorMsg = ProcessCompanyInfoTemporary(
 				nBusinessType,
 				companyAdditionalInfo.VatReporting,
 				limitedInfo,
@@ -259,6 +267,9 @@
 				nBusinessType,
 				eIndustryType
 			);
+
+			if (!string.IsNullOrWhiteSpace(sErrorMsg))
+				return Json(new { error = sErrorMsg });
 
 			if (nBusinessType != TypeOfBusiness.Entrepreneur) {
 				IQueryable<Director> directors = _directorRepository.GetAll().Where(x => x.Customer.Id == customer.Id);
@@ -350,7 +361,7 @@
 			if (customer == null)
 				return Json(new { error = "Customer not found" });
 
-			return Json(AddDirectorToCustomer(director, customer, _session));
+			return Json(AddDirectorToCustomer(director, customer, _session, true));
 		} // AddDirector
 
 		#endregion method AddDirector
@@ -584,7 +595,7 @@
 		#region static method ProcessCompanyInfoTemporary
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		private void ProcessCompanyInfoTemporary(
+		private string ProcessCompanyInfoTemporary(
 			TypeOfBusiness businessType,
 			string vat,
 			LimitedInfo limitedInfo,
@@ -670,7 +681,11 @@
 				};
 
 				companyData.VatReporting = vat != null ? (VatReporting?)Enum.Parse(typeof(VatReporting), vat) : null;
-				ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
+
+				string sErrorMsg = ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
+
+				if (!string.IsNullOrWhiteSpace(sErrorMsg))
+					return sErrorMsg;
 			} // if
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
@@ -680,13 +695,15 @@
 				"Customer {1} ({0}): wizard step has been updated to {2}",
 				customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.CompanyDetails
 			);
+
+			return null;
 		} // ProcessCompanyInfoTemporary
 
 		#endregion static method ProcessCompanyInfoTemporary
 
 		#region static method ProcessCompanyInfo
 
-		private static void ProcessCompanyInfo(
+		private static string ProcessCompanyInfo(
 			CompanyInfoMap companyData,
 			ICollection<CustomerAddress> companyAddress,
 			ICollection<CustomerAddress> experianCompanyAddress,
@@ -734,6 +751,19 @@
 					})
 					.Where(d => d != null).ToList()
 				); // AddAll
+
+				var oKeys = new System.Collections.Generic.SortedSet<string>();
+
+				oKeys.Add(DetailsToKey(customer));
+
+				foreach (Director oDir in company.Directors) {
+					string sKey = DetailsToKey(oDir);
+
+					if (oKeys.Contains(sKey))
+						return "Duplicate director detected.";
+
+					oKeys.Add(sKey);
+				} // for each director
 			} // if
 
 			if (companyAddress != null) {
@@ -777,6 +807,8 @@
 				TotalMonthlySalary = companyEmployeeCount.TotalMonthlySalary,
 				Company = company
 			});
+
+			return null;
 		} // ProcessCompanyInfo
 
 		#endregion static method ProcessCompanyInfo
@@ -939,6 +971,38 @@
 		} // PersonalInfoEditHistoryParametersBuilder
 
 		#endregion method PersonalInfoEditHistoryParametersBuilder
+
+		#region method DetailsToKey
+
+		private static string DetailsToKey(Director oDir) {
+			return DetailsToKey(
+				oDir.Name,
+				oDir.Surname,
+				oDir.DateOfBirth,
+				oDir.Gender,
+				oDir.DirectorAddressInfo.AllAddresses.First().Rawpostcode
+			);
+		} // DetailsToKey
+
+		private static string DetailsToKey(Customer customer) {
+			return DetailsToKey(
+				customer.PersonalInfo.FirstName,
+				customer.PersonalInfo.Surname,
+				customer.PersonalInfo.DateOfBirth,
+				customer.PersonalInfo.Gender,
+				customer.AddressInfo.PersonalAddress.First().Rawpostcode
+			);
+		} // DetailsToKey
+
+		private static string DetailsToKey(string sFirstName, string sLastName, DateTime? oBirthDate, Gender nGender, string sPostCode) {
+			string sBirthDate = oBirthDate.HasValue
+				? oBirthDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+				: string.Empty;
+
+			return string.Format("f:{0}|l:{1}|b:{2}|g:{3}|p:{4}", sFirstName, sLastName, sBirthDate, nGender, sPostCode);
+		} // DetailsToKey
+
+		#endregion method DetailsToKey
 
 		#region private properties
 

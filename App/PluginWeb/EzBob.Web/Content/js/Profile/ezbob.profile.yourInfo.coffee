@@ -164,7 +164,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         @personal.show(personalInfoView)
 
     renderNonLimited: ->
-        view = new EzBob.Profile.NonLimitedInfoView({ model: @model });
+        view = new EzBob.Profile.NonLimitedInfoView({ model: @model, parentView: @ });
         @model.get('CompanyAddress').on 'all', @addressModelChange, @
         @company.show(view)
 
@@ -207,12 +207,17 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
 class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
     template: '#nonlimited-info-template'
 
+    initialize: (options) ->
+        @parentView = options.parentView
+
     regions: 
         nonlimitedAddress: '#NonLimitedAddress'
         director: '.director-container' 
 
+    events:
+        "click .add-director": "addDirectorClicked"
+
     onRender: ->
-        
         address = new EzBob.AddressView({
             model: @model.get('CompanyAddress'),
             name: 'NonLimitedCompanyAddress',
@@ -234,6 +239,36 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
             @$el.find('.notoffline').remove()
 
         @
+
+    addDirectorClicked: (event) ->
+        event.stopPropagation()
+        event.preventDefault()
+
+        @parentView.onAddingDirector()
+
+        director = new EzBob.DirectorModel()
+        directorEl = $('.add-director-container')
+
+        customerInfo = _.extend({},
+            @model.get('CustomerPersonalInfo'),
+            { PostCode: @model.get('PersonalAddress').models[0].get('Rawpostcode'), },
+            { Directors: @model.get('CompanyInfo').Directors }
+        )
+
+        if(!@addDirector)
+            @addDirector = new EzBob.AddDirectorInfoView({ model: director, el: directorEl, customerInfo: customerInfo, failOnDuplicate: true })
+            @addDirector.setBackHandler ( =>
+                directorEl.hide()
+                @parentView.onBackFromDirector()
+            )
+            @addDirector.setSuccessHandler ( =>
+                directorEl.hide()
+                @parentView.onDirectorAdded()
+            )
+            @addDirector.render()
+
+        directorEl.show()
+        false
 
 class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
     template: '#limited-info-template'
@@ -278,10 +313,22 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
         director = new EzBob.DirectorModel()
         directorEl = $('.add-director-container')
 
+        customerInfo = _.extend({},
+            @model.get('CustomerPersonalInfo'),
+            { PostCode: @model.get('PersonalAddress').models[0].get('Rawpostcode'), },
+            { Directors: @model.get('CompanyInfo').Directors }
+        )
+
         if(!@addDirector)
-            @addDirector = new EzBob.AddDirectorInfoView({ model: director, el: directorEl })
-            @addDirector.setBackHandler ( => @parentView.onBackFromDirector() )
-            @addDirector.setSuccessHandler ( => @parentView.onDirectorAdded() )
+            @addDirector = new EzBob.AddDirectorInfoView({ model: director, el: directorEl, customerInfo: customerInfo, failOnDuplicate: true })
+            @addDirector.setBackHandler ( =>
+                directorEl.hide()
+                @parentView.onBackFromDirector()
+            )
+            @addDirector.setSuccessHandler ( =>
+                directorEl.hide()
+                @parentView.onDirectorAdded()
+            )
             @addDirector.render()
 
         directorEl.show()

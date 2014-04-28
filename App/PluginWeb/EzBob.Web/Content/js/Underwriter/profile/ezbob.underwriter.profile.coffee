@@ -181,13 +181,26 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
         directorEl = @$el.find '.add-director-container'
 
+        console.log 'this is me', @
+
+        customerInfo =
+            FirstName: @personalInfoModel.get 'FirstName'
+            Surname: @personalInfoModel.get 'Surname'
+            DateOfBirth: @personalInfoModel.get 'DateOfBirth'
+            Gender: @personalInfoModel.get 'Gender'
+            PostCode: @personalInfoModel.get 'PostCode'
+            Directors: @personalInfoModel.get 'Directors'
+
         addDirectorView = new EzBob.AddDirectorInfoView
             model: director
             el: directorEl
             backButtonCaption: 'Cancel'
+            failOnDuplicate: false
+            customerInfo: customerInfo
 
         addDirectorView.setBackHandler ( => @onDirectorAddCanceled() )
         addDirectorView.setSuccessHandler ( => @onDirectorAdded() )
+        addDirectorView.setDupCheckCompleteHandler ( (bDupFound) => @onDuplicateCheckComplete(bDupFound) )
         addDirectorView.render()
         addDirectorView.setCustomerID @customerId
 
@@ -195,6 +208,13 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
         false
     # end of addDirectorClicked
+
+    onDuplicateCheckComplete: (bDupFound) ->
+        if bDupFound
+            @$el.find('.duplicate-director-detected').show()
+        else
+            @$el.find('.duplicate-director-detected').hide()
+    # end of onDuplicateCheckComplete
 
     onDirectorAddCanceled: ->
         @$el.find('.add-director-container').hide().empty()

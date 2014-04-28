@@ -176,17 +176,28 @@
     };
 
     ProfileView.prototype.addDirectorClicked = function(event) {
-      var addDirectorView, director, directorEl,
+      var addDirectorView, customerInfo, director, directorEl,
         _this = this;
       event.stopPropagation();
       event.preventDefault();
       this.$el.find('.add-director').hide();
       director = new EzBob.DirectorModel();
       directorEl = this.$el.find('.add-director-container');
+      console.log('this is me', this);
+      customerInfo = {
+        FirstName: this.personalInfoModel.get('FirstName'),
+        Surname: this.personalInfoModel.get('Surname'),
+        DateOfBirth: this.personalInfoModel.get('DateOfBirth'),
+        Gender: this.personalInfoModel.get('Gender'),
+        PostCode: this.personalInfoModel.get('PostCode'),
+        Directors: this.personalInfoModel.get('Directors')
+      };
       addDirectorView = new EzBob.AddDirectorInfoView({
         model: director,
         el: directorEl,
-        backButtonCaption: 'Cancel'
+        backButtonCaption: 'Cancel',
+        failOnDuplicate: false,
+        customerInfo: customerInfo
       });
       addDirectorView.setBackHandler((function() {
         return _this.onDirectorAddCanceled();
@@ -194,10 +205,21 @@
       addDirectorView.setSuccessHandler((function() {
         return _this.onDirectorAdded();
       }));
+      addDirectorView.setDupCheckCompleteHandler((function(bDupFound) {
+        return _this.onDuplicateCheckComplete(bDupFound);
+      }));
       addDirectorView.render();
       addDirectorView.setCustomerID(this.customerId);
       directorEl.show();
       return false;
+    };
+
+    ProfileView.prototype.onDuplicateCheckComplete = function(bDupFound) {
+      if (bDupFound) {
+        return this.$el.find('.duplicate-director-detected').show();
+      } else {
+        return this.$el.find('.duplicate-director-detected').hide();
+      }
     };
 
     ProfileView.prototype.onDirectorAddCanceled = function() {

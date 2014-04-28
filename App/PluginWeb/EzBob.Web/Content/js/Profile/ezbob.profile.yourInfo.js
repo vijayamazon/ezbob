@@ -209,7 +209,8 @@
     YourInfoMainView.prototype.renderNonLimited = function() {
       var view;
       view = new EzBob.Profile.NonLimitedInfoView({
-        model: this.model
+        model: this.model,
+        parentView: this
       });
       this.model.get('CompanyAddress').on('all', this.addressModelChange, this);
       return this.company.show(view);
@@ -283,9 +284,17 @@
 
     NonLimitedInfoView.prototype.template = '#nonlimited-info-template';
 
+    NonLimitedInfoView.prototype.initialize = function(options) {
+      return this.parentView = options.parentView;
+    };
+
     NonLimitedInfoView.prototype.regions = {
       nonlimitedAddress: '#NonLimitedAddress',
       director: '.director-container'
+    };
+
+    NonLimitedInfoView.prototype.events = {
+      "click .add-director": "addDirectorClicked"
     };
 
     NonLimitedInfoView.prototype.onRender = function() {
@@ -311,6 +320,40 @@
         this.$el.find('.notoffline').remove();
       }
       return this;
+    };
+
+    NonLimitedInfoView.prototype.addDirectorClicked = function(event) {
+      var customerInfo, director, directorEl,
+        _this = this;
+      event.stopPropagation();
+      event.preventDefault();
+      this.parentView.onAddingDirector();
+      director = new EzBob.DirectorModel();
+      directorEl = $('.add-director-container');
+      customerInfo = _.extend({}, this.model.get('CustomerPersonalInfo'), {
+        PostCode: this.model.get('PersonalAddress').models[0].get('Rawpostcode')
+      }, {
+        Directors: this.model.get('CompanyInfo').Directors
+      });
+      if (!this.addDirector) {
+        this.addDirector = new EzBob.AddDirectorInfoView({
+          model: director,
+          el: directorEl,
+          customerInfo: customerInfo,
+          failOnDuplicate: true
+        });
+        this.addDirector.setBackHandler((function() {
+          directorEl.hide();
+          return _this.parentView.onBackFromDirector();
+        }));
+        this.addDirector.setSuccessHandler((function() {
+          directorEl.hide();
+          return _this.parentView.onDirectorAdded();
+        }));
+        this.addDirector.render();
+      }
+      directorEl.show();
+      return false;
     };
 
     return NonLimitedInfoView;
@@ -364,22 +407,31 @@
     };
 
     LimitedInfoView.prototype.addDirectorClicked = function(event) {
-      var director, directorEl,
+      var customerInfo, director, directorEl,
         _this = this;
       event.stopPropagation();
       event.preventDefault();
       this.parentView.onAddingDirector();
       director = new EzBob.DirectorModel();
       directorEl = $('.add-director-container');
+      customerInfo = _.extend({}, this.model.get('CustomerPersonalInfo'), {
+        PostCode: this.model.get('PersonalAddress').models[0].get('Rawpostcode')
+      }, {
+        Directors: this.model.get('CompanyInfo').Directors
+      });
       if (!this.addDirector) {
         this.addDirector = new EzBob.AddDirectorInfoView({
           model: director,
-          el: directorEl
+          el: directorEl,
+          customerInfo: customerInfo,
+          failOnDuplicate: true
         });
         this.addDirector.setBackHandler((function() {
+          directorEl.hide();
           return _this.parentView.onBackFromDirector();
         }));
         this.addDirector.setSuccessHandler((function() {
+          directorEl.hide();
           return _this.parentView.onDirectorAdded();
         }));
         this.addDirector.render();

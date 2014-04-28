@@ -5,7 +5,72 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 
 	initialize: function(options) {
 		this.backButtonCaption = options.backButtonCaption || 'Back';
+
+		this.failOnDuplicate = options.failOnDuplicate;
+
+		this.initDupCheck(options);
 	}, // initialize
+
+	initDupCheck: function(options) {
+		this.dupCheckKeys = {};
+
+		var sKey = this.detailsToKey(
+			options.customerInfo.FirstName,
+			options.customerInfo.Surname,
+			options.customerInfo.DateOfBirth,
+			null,
+			options.customerInfo.Gender,
+			options.customerInfo.PostCode
+		);
+
+		this.dupCheckKeys[sKey] = 1;
+
+		_.each(options.customerInfo.Directors, function(oDir) {
+			var sKey = this.detailsToKey(
+				oDir.Name,
+				oDir.Surname,
+				oDir.DateOfBirth,
+				'DD/MM/YYYY',
+				oDir.Gender,
+				oDir.DirectorAddress[0].Rawpostcode
+			);
+
+			this.dupCheckKeys[sKey] = 1;
+		}, this);
+
+		var self = this;
+
+		this.DupCheckModel = function(ary) {
+			this.Name = '';
+			this.Surname = '';
+			this.Gender = '';
+			this.DateOfBirth = '';
+			this.PostCode = '';
+
+			this.init(ary);
+		};
+
+		this.DupCheckModel.prototype = {
+			init: function(ary) {
+				_.each(ary, function(obj) { this.setProp(obj); }, this);
+			}, // init
+
+			readyForCheck: function() {
+				return this.Name && this.Surname && this.Gender && this.DateOfBirth && this.PostCode;
+			}, // readyForCheck
+
+			setProp: function(obj) {
+				if (this.hasOwnProperty(obj.name))
+					this[obj.name] = obj.value;
+				else if (obj.name.match(/\.Rawpostcode$/))
+					this.PostCode = obj.value;
+			}, // setProp
+
+			toDetails: function() {
+				return self.detailsToKey(this.Name, this.Surname, this.DateOfBirth, 'D/M/YYYY', this.Gender, this.PostCode);
+			}, // toDetails
+		};
+	}, // initDupCheck
 
 	region: {
 		directorAddress: '.director_address'
@@ -20,15 +85,15 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		'click .directorBack': 'directorBack',
 		'click .addDirector': 'directorAdd',
 
-		'change   input': 'canSubmit',
-		'click    input': 'canSubmit',
-		'focusout input': 'canSubmit',
-		'keyup    input': 'canSubmit',
+		'change   input': 'handleUiEvent',
+		'click    input': 'handleUiEvent',
+		'focusout input': 'handleUiEvent',
+		'keyup    input': 'handleUiEvent',
 
-		'change   select': 'canSubmit',
-		'click    select': 'canSubmit',
-		'focusout select': 'canSubmit',
-		'keyup    select': 'canSubmit',
+		'change   select': 'handleUiEvent',
+		'click    select': 'handleUiEvent',
+		'focusout select': 'handleUiEvent',
+		'keyup    select': 'handleUiEvent',
 	}, // events
 
 	addressModelChange: function() {
@@ -118,15 +183,24 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		return false;
 	}, // directorAdd
 
+	handleUiEvent: function() {
+		this.canSubmit();
+	}, // handleUiEvent
+
 	canSubmit: function() {
-		var bEnabled = this.validator.checkForm() && (this.addressView.model.length > 0);
+		var bEnabled = this.validator.checkForm() &&
+			(this.addressView.model.length > 0) &&
+			this.validateDuplicates();
+
 		this.setSomethingEnabled(this.ui.addButton, bEnabled);
+
 		return bEnabled;
 	}, // canSubmit
 
 	backEvtName: function() { return 'go-back'; }, // backEvtName
 	successEvtName: function() { return 'success'; }, // successEvtName
 	failEvtName: function() { return 'fail'; }, // failEvtName
+	dupCheckCompleteName: function() { return 'dup-check-done'; }, // dupCheckCompleteName
 
 	setBackHandler: function(oHandler) {
 		if (oHandler && (typeof oHandler === 'function'))
@@ -142,4 +216,48 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		if (oHandler && (typeof oHandler === 'function'))
 			this.on(this.failEvtName(), oHandler);
 	}, // setFailHandler
+
+	setDupCheckCompleteHandler: function(oHandler) {
+		if (oHandler && (typeof oHandler === 'function'))
+			this.on(this.dupCheckCompleteName(), oHandler);
+	}, // setDupCheckCompleteHandler
+
+	validateDuplicates: function() {
+		var oModel = new this.DupCheckModel(this.ui.form.serializeArray());
+
+		if (!oModel.readyForCheck())
+			return false;
+
+		var bDupFound = this.dupCheckKeys.hasOwnProperty(oModel.toDetails());
+
+		this.trigger(this.dupCheckCompleteName(), bDupFound);
+
+		return bDupFound ? !this.failOnDuplicate : true;
+	}, // validateDuplicates
+
+	detailsToKey: function(sFirstName, sLastName, oBirthDate, sDateFormat, sGender, sPostCode) {
+		var oDate = sDateFormat ? moment(oBirthDate, sDateFormat) : moment(oBirthDate);
+		var sBirthDate = '';
+
+		if (oDate)
+			sBirthDate = oDate.utc().format('YYYY-MM-DD');
+
+		switch (sGender) {
+			case 0:
+			case '0':
+			case 'm':
+			case 'M':
+				sGender = 'M';
+				break;
+
+			case 1:
+			case '1':
+			case 'f':
+			case 'F':
+				sGender = 'F';
+				break;
+		} // switch
+
+		return JSON.stringify({ f: sFirstName, l: sLastName, b: sBirthDate, g: sGender, p: sPostCode, });
+	}, // detailsToKey
 }); // EzBob.AddDirectorInfoView
