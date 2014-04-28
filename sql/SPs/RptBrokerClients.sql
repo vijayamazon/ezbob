@@ -9,6 +9,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+SELECT x.Id, x.Status, x.FullName, x.Name, x.DaytimePhone, x.MobilePhone, x.GreetingMailSentDate, x.ContactName, x.ContactMobile, x.FirmName, 
+   CASE WHEN x.ManagerApprovedSum = 0 THEN NULL ELSE x.ManagerApprovedSum END ApprovedAmount, 
+   CASE WHEN x.AmountTaken = 0 THEN NULL ELSE x.AmountTaken END TakenAmount FROM
+(
 	SELECT 
 		C.Id,
 		CASE 
@@ -20,11 +24,27 @@ BEGIN
 			 			WHEN C.NumApproves > 0 THEN 'Approved'
 			 		ELSE C.CreditResult END
 			 	END	
-			WHEN W.WizardStepTypeName = 'link' THEN 'Step 4: Link Accounts'
-			WHEN W.WizardStepTypeName = 'companydetails' THEN 'Step 3: Company Details'
-			WHEN W.WizardStepTypeName = 'details' THEN 'Step 2: Personal Details'
-			WHEN W.WizardStepTypeName = 'signup' THEN 'Step 1: Application'
+			WHEN W.WizardStepTypeName = 'link' THEN 'Link Accounts'
+			WHEN W.WizardStepTypeName = 'companydetails' THEN 'Company Details'
+			WHEN W.WizardStepTypeName = 'details' THEN 'Personal Details'
+			WHEN W.WizardStepTypeName = 'signup' THEN 'Application Step 1'
+			ELSE 'Unknown: ' + W.WizardStepTypeName
 			END AS Status,
+		CASE 
+			WHEN W.WizardStepTypeName = 'success' THEN
+			 	CASE
+			 		WHEN C.LastLoanDate IS NOT NULL THEN 10
+			 	ELSE 
+			 		CASE 
+			 			WHEN C.NumApproves > 0 THEN 9
+			 		ELSE 8 END
+			 	END	
+			WHEN W.WizardStepTypeName = 'link' THEN 7
+			WHEN W.WizardStepTypeName = 'companydetails' THEN 6
+			WHEN W.WizardStepTypeName = 'details' THEN 5
+			WHEN W.WizardStepTypeName = 'signup' THEN 4
+			ELSE 3
+			END AS StatusNum,	
 		C.FullName,
 		C.Name,
 		C.DaytimePhone,
@@ -33,15 +53,19 @@ BEGIN
 		B.ContactName,
 		B.ContactMobile,
 		B.FirmName,
-		CASE B.IsTest WHEN 1 THEN 'test' ELSE '' END AS TestBroker
+		CAST(C.ManagerApprovedSum AS INT) ManagerApprovedSum,
+		CAST(C.AmountTaken AS INT) AmountTaken
+		
 	FROM
 		Customer C
 		INNER JOIN Broker B ON B.BrokerID = C.BrokerID
 		INNER JOIN WizardStepTypes W ON W.WizardStepTypeID = C.WizardStep
 		
 	WHERE
-		C.istest = 0
+		C.IsTest = 0
 		AND
 		@DateStart <= C.GreetingMailSentDate AND C.GreetingMailSentDate < @DateEnd
+) x
+ORDER BY x.StatusNum DESC, x.Status		
 END
 GO
