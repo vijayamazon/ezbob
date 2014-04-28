@@ -16,10 +16,10 @@ BEGIN
 		B.ContactOtherPhone Phone,
 		B.ContactEmail Email,
 		B.AgreedToTermsDate SignUpDate,
-		count(DISTINCT C.Id) NumOfClients,
-		count(L.Id) NumOfLoans,
-		sum(L.LoanAmount) ValueOfLoans,
-		sum(L.SetupFee) ValueOfCommission
+		CASE WHEN count(DISTINCT C.Id) = 0 THEN NULL ELSE count(DISTINCT C.Id) END NumOfClients,
+		CASE WHEN count(L.Id) = 0 THEN NULL ELSE count(L.Id) END NumOfLoans,
+		CAST(sum(L.LoanAmount) AS INT) ValueOfLoans,
+		CAST(sum(L.SetupFee) AS INT) ValueOfCommission
 	FROM 
 		Broker B LEFT JOIN Customer C ON C.BrokerID = B.BrokerID LEFT JOIN Loan L ON L.CustomerId = C.Id
 	WHERE
