@@ -304,26 +304,16 @@
 			Log.DebugFormat("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
 		}
 
-
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
-		[Permission(Name = "TestUser")]
-		public void ChangeTestStatus(int id, bool enbaled) {
-			var cust = _customerRepository.Get(id);
-			cust.IsTest = enbaled;
-			Log.DebugFormat("Customer({0}).IsTest = {1}", id, enbaled);
-		}
-
-		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		public JsonResult ToggleCciMark(int id) {
+		public JsonResult ToggleCciMark(int id)
+		{
 			Customer oCustomer = _customerRepository.Get(id);
 
-			if (oCustomer == null) {
+			if (oCustomer == null)
+			{
 				Log.DebugFormat("Customer({0}) not found", id);
 				return Json(new { error = "Customer not found.", id = id });
 			} // if
@@ -333,6 +323,28 @@
 
 			return Json(new { error = (string)null, id = id, mark = oCustomer.CciMark });
 		} // ToggleCciMark
+
+
+
+		[HttpPost]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		public JsonResult ToggleIsTest(int id)
+		{
+			Customer oCustomer = _customerRepository.Get(id);
+
+			if (oCustomer == null)
+			{
+				Log.DebugFormat("Customer({0}) not found", id);
+				return Json(new { error = "Customer not found.", id = id });
+			} // if
+
+			oCustomer.IsTest = !oCustomer.IsTest;
+			Log.DebugFormat("Customer({0}).IsTest set to {1}", id, oCustomer.IsTest);
+
+			return Json(new { error = (string)null, id = id, isTest = oCustomer.IsTest });
+		} // ToggleIsTest
 
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]

@@ -44,8 +44,21 @@
             </tr>
         </thead>
         <tbody>
-            @RawCellWithButtonNear("Fraud Status:", "<%= data.FraudCheckStatus %>", "changeFraudStatusManualy", "<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>")
-            @RawCellWithButtonNear("Test User:", "<%= data.IsTestInAlertMode ? 'Yes' : 'No' %>", "isTestEditButton", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %>")
+            <tr>
+                <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %> customer-column-width-50 fraud-status-td">Fraud Status</td>
+                <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">
+                    <span class="fraud-status"><%= data.FraudCheckStatus %> </span>
+                    <button class="btn btn-mini btn-primary left-pane-button" name="changeFraudStatusManualy"><i class="fa fa-pencil" /></button>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %> customer-column-width-50 is-test-td">Test User</td>
+                <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %>">
+                    <span class="is-test"><%= data.IsTestInAlertMode ? 'Yes' : 'No' %></span>
+                    <button type="button" class="btn btn-mini btn-primary istest-toggle left-pane-button">Toggle</button>
+                </td>
+            </tr>
 
             <tr>
                 <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> customer-column-width-50 cci-mark-td">CCI mark</td>

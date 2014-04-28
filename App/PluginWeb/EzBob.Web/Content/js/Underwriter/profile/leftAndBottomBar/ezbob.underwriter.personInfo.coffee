@@ -26,30 +26,49 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             if result.error
                 EzBob.App.trigger 'error', result.error
             else
-                @model.set('CciMark', result.mark)
-                @setCciMark(result.mark)
+                @setAlertStatus(result.mark, '.cci-mark','.cci-mark-td', 'on', 'off')
         ).always( ->
             UnBlockUi()
         )
 
-    setCciMark: (cciMark) ->
-        oSpan = @$el.find '.cci-mark'
-        oTd = @$el.find '.cci-mark-td'
+    toggleIsTest: ->
+        id = @model.get 'Id'
 
-        if cciMark
-            oSpan.text('on').closest('td').addClass 'red_cell'
+        BlockUi()
+
+        $.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleIsTest',
+            id: id
+        ).done( (result) =>
+            if result.error
+                EzBob.App.trigger 'error', result.error
+            else
+                @setAlertStatus(result.isTest, '.is-test', '.is-test-td', 'Yes', 'No')
+        ).always( ->
+            UnBlockUi()
+        )
+
+    setAlertStatus: (isAlert, span, td, alertText = '', okText = '') ->
+        oSpan = @$el.find span
+        oTd = @$el.find td
+
+        if isAlert
+            if alertText != ''
+                oSpan.text(alertText)
+            oSpan.closest('td').addClass 'red_cell'
             oTd.addClass 'red_cell'
         else
-            oSpan.text('off').closest('td').removeClass 'red_cell'
+            if okText != ''
+                oSpan.text(okText)
+            oSpan.closest('td').removeClass 'red_cell'
             oTd.removeClass 'red_cell'
 
     events:
         "click button[name=\"changeDisabledState\"]": "changeDisabledState"
         "click button[name=\"editEmail\"]": "editEmail"
-        "click [name=\"isTestEditButton\"]": "isTestEditButton"
         "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton"
         "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
         'click button.cci-mark-toggle': 'toggleCciMark'
+        'click button.istest-toggle': 'toggleIsTest'
         'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus'
         'click #MainStrategyHidden': 'activateMainStratgey'
         'click #FinishWizardHidden': 'activateFinishWizard'
@@ -84,6 +103,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             currentStatus : @model.get('FraudCheckStatusId')
             )
         BlockUi "on"
+        that = this
         xhr = fraudStatusModel.fetch();
         xhr.done =>
             fraudStatusLayout = new EzBob.Underwriter.FraudStatusLayout model: fraudStatusModel
@@ -91,8 +111,10 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             EzBob.App.jqmodal.show(fraudStatusLayout)
             BlockUi "off"
             fraudStatusLayout.on 'saved', () =>
-                @model.set 'FraudCheckStatusId', fraudStatusModel.get ('currentStatus')
+                currentStatus = fraudStatusModel.get ('currentStatus')
+                @model.set 'FraudCheckStatusId', currentStatus
                 @model.set 'FraudCheckStatus', fraudStatusModel.get ('currentStatusText')
+                that.setAlertStatus(currentStatus != 0, '.fraud-status', '.fraud-status-td')
 
     templateHelpers:
         getIcon: ->
@@ -131,21 +153,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                     xhr2 = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/LogStatusChange", {newStatus: newStatus, prevStatus: prevStatus, customerId: customerId}
                     xhr2.done () =>
                         BlockUi "off"
-
-    isTestEditButton: ->
-        d = new EzBob.Dialogs.CheckBoxEdit(
-            model: @model
-            propertyName: "IsTest"
-            title: "Is Testing User"
-            width: 350
-            postValueName: "enbaled"
-            checkboxName: "Test"
-            url: "Underwriter/ApplicationInfo/ChangeTestStatus"
-            data:
-                id: @model.get("Id")
-        )
-        d.render()
-        return
 
     avoidAutomaticDecisionButton: ->
         d = new EzBob.Dialogs.CheckBoxEdit(

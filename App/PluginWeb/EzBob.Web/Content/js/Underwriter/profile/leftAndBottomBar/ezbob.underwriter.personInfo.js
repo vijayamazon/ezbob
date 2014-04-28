@@ -45,24 +45,54 @@
         if (result.error) {
           return EzBob.App.trigger('error', result.error);
         } else {
-          _this.model.set('CciMark', result.mark);
-          return _this.setCciMark(result.mark);
+          return _this.setAlertStatus(result.mark, '.cci-mark', '.cci-mark-td', 'on', 'off');
         }
       }).always(function() {
         return UnBlockUi();
       });
     };
 
-    PersonInfoView.prototype.setCciMark = function(cciMark) {
+    PersonInfoView.prototype.toggleIsTest = function() {
+      var id,
+        _this = this;
+
+      id = this.model.get('Id');
+      BlockUi();
+      return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleIsTest', {
+        id: id
+      }).done(function(result) {
+        if (result.error) {
+          return EzBob.App.trigger('error', result.error);
+        } else {
+          return _this.setAlertStatus(result.isTest, '.is-test', '.is-test-td', 'Yes', 'No');
+        }
+      }).always(function() {
+        return UnBlockUi();
+      });
+    };
+
+    PersonInfoView.prototype.setAlertStatus = function(isAlert, span, td, alertText, okText) {
       var oSpan, oTd;
 
-      oSpan = this.$el.find('.cci-mark');
-      oTd = this.$el.find('.cci-mark-td');
-      if (cciMark) {
-        oSpan.text('on').closest('td').addClass('red_cell');
+      if (alertText == null) {
+        alertText = '';
+      }
+      if (okText == null) {
+        okText = '';
+      }
+      oSpan = this.$el.find(span);
+      oTd = this.$el.find(td);
+      if (isAlert) {
+        if (alertText !== '') {
+          oSpan.text(alertText);
+        }
+        oSpan.closest('td').addClass('red_cell');
         return oTd.addClass('red_cell');
       } else {
-        oSpan.text('off').closest('td').removeClass('red_cell');
+        if (okText !== '') {
+          oSpan.text(okText);
+        }
+        oSpan.closest('td').removeClass('red_cell');
         return oTd.removeClass('red_cell');
       }
     };
@@ -70,10 +100,10 @@
     PersonInfoView.prototype.events = {
       "click button[name=\"changeDisabledState\"]": "changeDisabledState",
       "click button[name=\"editEmail\"]": "editEmail",
-      "click [name=\"isTestEditButton\"]": "isTestEditButton",
       "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton",
       "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
       'click button.cci-mark-toggle': 'toggleCciMark',
+      'click button.istest-toggle': 'toggleIsTest',
       'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus',
       'click #MainStrategyHidden': 'activateMainStratgey',
       'click #FinishWizardHidden': 'activateFinishWizard'
@@ -118,7 +148,7 @@
     };
 
     PersonInfoView.prototype.changeFraudStatusManualyClicked = function() {
-      var fraudStatusModel, xhr,
+      var fraudStatusModel, that, xhr,
         _this = this;
 
       fraudStatusModel = new EzBob.Underwriter.FraudStatusModel({
@@ -126,6 +156,7 @@
         currentStatus: this.model.get('FraudCheckStatusId')
       });
       BlockUi("on");
+      that = this;
       xhr = fraudStatusModel.fetch();
       return xhr.done(function() {
         var fraudStatusLayout;
@@ -137,8 +168,12 @@
         EzBob.App.jqmodal.show(fraudStatusLayout);
         BlockUi("off");
         return fraudStatusLayout.on('saved', function() {
-          _this.model.set('FraudCheckStatusId', fraudStatusModel.get('currentStatus'));
-          return _this.model.set('FraudCheckStatus', fraudStatusModel.get('currentStatusText'));
+          var currentStatus;
+
+          currentStatus = fraudStatusModel.get('currentStatus');
+          _this.model.set('FraudCheckStatusId', currentStatus);
+          _this.model.set('FraudCheckStatus', fraudStatusModel.get('currentStatusText'));
+          return that.setAlertStatus(currentStatus !== 0, '.fraud-status', '.fraud-status-td');
         });
       });
     };
@@ -208,24 +243,6 @@
           });
         });
       });
-    };
-
-    PersonInfoView.prototype.isTestEditButton = function() {
-      var d;
-
-      d = new EzBob.Dialogs.CheckBoxEdit({
-        model: this.model,
-        propertyName: "IsTest",
-        title: "Is Testing User",
-        width: 350,
-        postValueName: "enbaled",
-        checkboxName: "Test",
-        url: "Underwriter/ApplicationInfo/ChangeTestStatus",
-        data: {
-          id: this.model.get("Id")
-        }
-      });
-      d.render();
     };
 
     PersonInfoView.prototype.avoidAutomaticDecisionButton = function() {
