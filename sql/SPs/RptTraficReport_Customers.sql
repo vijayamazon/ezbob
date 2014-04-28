@@ -11,7 +11,12 @@ ALTER PROCEDURE [dbo].[RptTraficReport_Customers]
 AS
 BEGIN
 
-SELECT count(DISTINCT c.Id) Customers, count(l.Id) NumOfLoans, sum(l.LoanAmount) LoanAmount, c.ReferenceSource, c.GoogleCookie 
+SELECT count(DISTINCT c.Id) Customers, 
+       sum(CASE WHEN c.WizardStep=4 THEN 1 ELSE 0 END) AS Applications, 
+       sum(CASE WHEN c.NumApproves > 0 THEN 1 ELSE 0 END) AS NumOfApproved,
+       sum(CASE WHEN c.NumRejects > 0 AND c.NumApproves=0 THEN 1 ELSE 0 END) AS NumOfRejected, 
+       count(l.Id) NumOfLoans, 
+       sum(l.LoanAmount) LoanAmount, c.ReferenceSource, c.GoogleCookie 
 FROM Customer c LEFT JOIN Loan l ON l.CustomerId=c.Id 
 WHERE c.GreetingMailSentDate>=@DateStart AND c.GreetingMailSentDate<@DateEnd AND c.IsTest=0
 GROUP BY c.ReferenceSource, c.GoogleCookie

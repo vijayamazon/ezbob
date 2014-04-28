@@ -22,6 +22,9 @@
 		public class ResultRow : AResultRow
 		{
 			public int Customers { get; set; }
+			public int Applications { get; set; }
+			public int NumOfApproved { get; set; }
+			public int NumOfRejected { get; set; }
 			public int NumOfLoans { get; set; }
 			public int LoanAmount { get; set; }
 			public string ReferenceSource { get; set; }

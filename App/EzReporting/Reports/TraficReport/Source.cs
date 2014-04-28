@@ -24,6 +24,7 @@
 		MoneySupermarket,
 		Seo,
 		Direct,
-		Other
+		Other,
+		Total
 	}
 }

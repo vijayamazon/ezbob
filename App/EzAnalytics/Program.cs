@@ -321,7 +321,7 @@ namespace EzAnalyticsConsoleClient {
 				m_oService,
 				m_oReportDate,
 				m_oReportDate,
-				new GoogleReportDimensions[] { GoogleReportDimensions.sourceMedium, },
+				new GoogleReportDimensions[] { GoogleReportDimensions.sourceMedium, GoogleReportDimensions.country, },
 				new GoogleReportMetrics[] { GoogleReportMetrics.visitors, GoogleReportMetrics.newVisits },
 				null
 				/*GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==ezbob.com"*/, 
@@ -332,6 +332,12 @@ namespace EzAnalyticsConsoleClient {
 
 			foreach (GoogleDataItem oItem in oFetchResult)
 			{
+				string country = oItem[GoogleReportDimensions.country];
+				if (country != GoogleDataFetcher.UK)
+				{
+					continue;
+				}
+
 				string source = oItem[GoogleReportDimensions.sourceMedium];
 
 				int nVisitors = oItem[GoogleReportMetrics.visitors];
@@ -353,12 +359,6 @@ namespace EzAnalyticsConsoleClient {
 					
 				Log.Debug("source: {0}, visitors: {1}, new visits: {2}", source, nVisitors, nNewVisits);
 			} // for each item
-
-			Log.Debug("By page - begin");
-
-			
-
-			Log.Debug("By page - end");
 
 			Log.Debug("Fetching by source complete.");
 
