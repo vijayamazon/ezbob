@@ -16,7 +16,7 @@ BEGIN
 		Company,
 		Customer
 	WHERE 
-		MP_ExperianDataCache.CompanyRefNumber = Company.CompanyNumber AND 
+		MP_ExperianDataCache.CompanyRefNumber = Company.ExperianRefNum AND 
 		Company.Id = Customer.CompanyId AND
 		Customer.Id = @CustomerId		
 END
