@@ -542,6 +542,7 @@
     <Content Include="Content\css\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\css\images\ui-bg_glass_95_fef1ec_1x400.png" />
     <Content Include="Content\css\images\verisign_seal.gif" />
+    <Content Include="Content\css\images\vip.PNG" />
     <Content Include="Content\css\images\volusion-logo.png" />
     <Content Include="Content\css\images\whatsnew.png" />
     <Content Include="Content\css\images\xero-logo.png" />

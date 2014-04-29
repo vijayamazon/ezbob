@@ -1,22 +1,35 @@
 ﻿@using EzBob.Web.Infrastructure
 @model dynamic
-
 <script type="text/template" id="wizard-template">
-	<div class="wizard-progress"></div>
-	<section id="content">
-		<div class="row-fluid notifications"></div>
-		<div class='pages'></div>
-	</section>
-	<aside class="customer-sidebar wizard">
-		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
-	</aside>
-	<div class="clear" />
+    <div class="wizard-progress"></div>
+
+    <div class="vip-conteiner">
+        <div class="vip-image vip-box"></div>
+        <div class="vip-text vip-box">
+            <h4>Want VIP service?</h4>
+            <h4>Just press the request callback</h4>
+            <h4>We will guide you through the application</h4>
+        </div>
+        <div class="vip-button">
+            <button type="button" class="rc-button green vip-req-button" id="vipRequestBtn">Request callback</button>
+        </div>
+    </div>
+
+    <section id="content">
+        <div class="row-fluid notifications"></div>
+        <div class='pages'></div>
+    </section>
+    <aside class="customer-sidebar wizard">
+        @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
+    </aside>
+    <div class="clear" />
 </script>
 
 <script type="text/template" id="progress-indicator">
-	<div class="wizard-steps">
-		<div class="progress-time"><span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span></div>
-		<ul class="application_steps"><%
+    <div class="wizard-steps">
+        <div class="progress-time"><span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span></div>
+        <ul class="application_steps">
+            <%
 		(function() {
 			var nVisibleStepNum = 0;
 
@@ -44,23 +57,25 @@
 					css += 'hide';
 
 				%><li class="<%- css %> <%-lastcss%>" data-step-num="<%= step.num %>">
-					<span class="step_label"><% print(step.title) %></span>
-					<div class="progress-circle @*timer fill*@">
-						<div class="percent"><%=(i+1)%></div>
-						@*<div id="slice" class="gt50">
+                    <span class="step_label"><% print(step.title) %></span>
+                    <div class="progress-circle @*timer fill*@">
+                        <div class="percent"><%=(i+1)%></div>
+                        @*<div id="slice" class="gt50">
 							<div class="pie" style="-webkit-transform: rotate(360deg);"></div>
 							<div class="pie fill" style="-webkit-transform: rotate(360deg);"></div>
 						</div>*@
-					</div>
-					<div class="progress-line">
-						<div class="progress-line-<%-css%>"></div>
-					</div>
-				</li><%
+                    </div>
+                    <div class="progress-line">
+                        <div class="progress-line-<%-css%>"></div>
+                    </div>
+                </li>
+            <%
 			}); // for each step
 		})(); // inline function - local scope
-		%></ul>
+		%>
+        </ul>
 
-		@*<div class="ez_progress_bar active">
+        @*<div class="ez_progress_bar active">
 			<div class="ez_bar bar_step<%= progress %>"><%
 				if(progress > 0) {
 					%><div class="bar_content" style="color: white;"><%= progress %>% Completed</div><%
@@ -70,22 +85,23 @@
 				}
 			%></div>
 		</div>*@
-	</div>
+    </div>
 
-	@{
-		var blm = new WizardBrokerLeadModel(Session);
+    @{
+        var blm = new WizardBrokerLeadModel(Session);
 
-		if (blm.BrokerFillsForCustomer) {
-		<div class="broker-finish-wizard-later">
-			<div>Dear Broker,</div>
-			<div>
-				You are filling the loan application forms for your customer, @blm.FirstName @blm.LastName.
-			</div>
-			<div class="button-container">
-				For any assistance, please contact us.
+        if (blm.BrokerFillsForCustomer)
+        {
+        <div class="broker-finish-wizard-later">
+            <div>Dear Broker,</div>
+            <div>
+                You are filling the loan application forms for your customer, @blm.FirstName @blm.LastName.
+            </div>
+            <div class="button-container">
+                For any assistance, please contact us.
 				<button class="green" title="Click to finish sign up process later and return to dashboard.">Finish later</button>
-			</div>
-		</div>
-		}
-	}
+            </div>
+        </div>
+        }
+    }
 </script>

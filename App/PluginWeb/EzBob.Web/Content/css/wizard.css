@@ -389,3 +389,30 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 .quick-offer-form-item {
 	margin-top: 1em;
 }
+
+.vip-conteiner {
+    height: 164px;
+    border: 5px solid #5c6373; 
+}
+
+.vip-button {
+    float: right;
+    height: 100%;
+}
+.vip-box {
+    float: left;
+    display: block;
+}
+
+.vip-req-button {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.vip-image {
+    background-image: url(images/vip.PNG);
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 20%;
+}

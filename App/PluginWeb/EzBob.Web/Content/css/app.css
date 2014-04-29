@@ -1902,5 +1902,9 @@ input.form_field_right_side_signup_phone { float: right; margin-right: 10px; wid
 		padding: 4px;
 		font-size: 16px;
 	}
+
+    .vip-conteiner {
+        display: none;
+    }
 }
 
