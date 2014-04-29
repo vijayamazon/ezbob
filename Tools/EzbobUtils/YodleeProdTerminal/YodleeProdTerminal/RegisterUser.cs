@@ -18,6 +18,10 @@ namespace com.yodlee.sampleapps
             registerService.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + registerService.GetType().FullName;
 		}
 		
+		public void UnregisterUser(UserContext user)
+		{
+			registerService.unregister(user);
+		}
         public UserContext registerUser(String loginName,
                                      String password,
                                      String email)
