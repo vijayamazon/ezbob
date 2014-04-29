@@ -116,6 +116,7 @@
 		FreeAgentOAuthTokenEndpoint,
 		FreeAgentUsersRequest,
 		GreetingMailSendViaMandrill,
+		GoogleTagManagementProd,
 		HmrcUploadedFilesSavePath,
 		HmrcSalariesMultiplier,
 		IntervalWaitForAmlCheck,

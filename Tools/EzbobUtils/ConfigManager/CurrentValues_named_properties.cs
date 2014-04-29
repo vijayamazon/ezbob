@@ -929,6 +929,15 @@
 
 		#endregion property GreetingMailSendViaMandrill
 
+		#region property GoogleTagManagementProd
+
+		public virtual VariableValue GoogleTagManagementProd
+		{
+			get { return this[Variables.GoogleTagManagementProd]; } // get
+		} // GoogleTagManagementProd
+
+		#endregion property GreetingMailSendViaMandrill
+		
 		#region property HmrcUploadedFilesSavePath
 
 		public virtual VariableValue HmrcUploadedFilesSavePath {
