@@ -169,7 +169,7 @@
 
 			FormsAuthentication.SetAuthCookie(ContactEmail, true);
 
-			m_oLog.Debug("Broker signup succeded for: {0}", ContactEmail);
+			m_oLog.Debug("Broker signup succeeded for: {0}", ContactEmail);
 
 			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties);
 		} // Signup
