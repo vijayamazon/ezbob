@@ -25,7 +25,8 @@
 	using System.Linq;
 	using EZBob.DatabaseLib.Model;
 
-	public class ProfileController : Controller {
+	public class ProfileController : Controller
+	{
 		private readonly CustomerModelBuilder _customerModelBuilder;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ServiceClient m_oServiceClient;
@@ -39,7 +40,8 @@
 			CashRequestBuilder crBuilder,
 			ISession session,
 			IConfigurationVariablesRepository configurationVariablesRepository
-		) {
+		)
+		{
 			_customerModelBuilder = customerModelBuilder;
 			_context = context;
 			m_oServiceClient = new ServiceClient();
@@ -63,7 +65,7 @@
 			ViewData["MarketPlaceGroups"] = _session
 				.Query<MP_MarketplaceGroup>()
 				.ToArray();
-			
+
 			bool wizardComplete = (TempData["WizardComplete"] != null && (bool)TempData["WizardComplete"]) || (Session["WizardComplete"] != null && (bool)Session["WizardComplete"]);
 			ViewData["WizardComplete"] = wizardComplete;
 			Session["WizardComplete"] = false;
@@ -86,13 +88,15 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult ClaimsTrustPilotReview() {
+		public JsonResult ClaimsTrustPilotReview()
+		{
 			var customer = _context.Customer;
 
 			if (customer == null)
 				return Json(new { status = "error", error = "Customer not found." });
 
-			if (ReferenceEquals(customer.TrustPilotStatus, null) || customer.TrustPilotStatus.IsMe(TrustPilotStauses.Nether)) {
+			if (ReferenceEquals(customer.TrustPilotStatus, null) || customer.TrustPilotStatus.IsMe(TrustPilotStauses.Nether))
+			{
 				var oHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
 
 				customer.TrustPilotStatus = oHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Claims);
@@ -116,10 +120,33 @@
 
 			if (customer.PersonalInfo.TypeOfBusiness == TypeOfBusiness.Entrepreneur && customer.Company == null)
 			{
-				return Json(new { entrepreneurTargeting = true });
+				var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+				return Json(new
+					{
+						companyTargeting = true,
+						companyName = string.Format("{0} {1}", customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname),
+						companyPostcode = address != null ? address.Postcode : "",
+						companyNumber = "",
+						companyType = "N"
+					});
 			}
 
-			return Json(new { entrepreneurTargeting = false });
+			if (customer.Company != null &&
+				string.IsNullOrEmpty(customer.Company.ExperianRefNum) &&
+				!string.IsNullOrEmpty(customer.Company.CompanyName) &&
+				customer.Company.TypeOfBusiness.Reduce() != TypeOfBusinessReduced.Personal)
+			{
+				var companyAddress = customer.Company.CompanyAddress.FirstOrDefault();
+				return Json(new
+							{
+								companyTargeting = true,
+								companyName = customer.Company.CompanyName,
+								companyNumber = customer.Company.CompanyNumber ?? String.Empty,
+								companyPostcode = companyAddress != null ? companyAddress.Postcode : "",
+								companyType = customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? "L" : "N"
+							});
+			}
+			return Json(new { companyTargeting = false });
 		} // EntrepreneurTargeting
 
 		[Transactional]
@@ -130,12 +157,12 @@
 		{
 			var customer = _context.Customer;
 
-			customer.Company = new Company
-				{
-					ExperianRefNum = company.BusRefNum,
-					ExperianCompanyName = company.BusName,
-					
-				};
+			if (customer.Company == null)
+			{
+				customer.Company = new Company { TypeOfBusiness = customer.PersonalInfo.TypeOfBusiness };
+			}
+			customer.Company.ExperianRefNum = company.BusRefNum;
+			customer.Company.ExperianCompanyName = company.BusName;
 
 			customer.Company.ExperianCompanyAddress =
 				new HashedSet<CustomerAddress>
@@ -152,8 +179,7 @@
 								Company = customer.Company
 							}
 					};
-
-			return Json(new {});
+			return Json(new { });
 		}
 
 		[Transactional]
@@ -200,7 +226,7 @@
 					var isValid = validator.Validate(name, password, out error);
 					if (!isValid)
 					{
-						return Json(new {hasBadEkm = true, error = error, ekm = ekm.DisplayName});
+						return Json(new { hasBadEkm = true, error = error, ekm = ekm.DisplayName });
 					}
 				}
 

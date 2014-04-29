@@ -179,17 +179,9 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
         $.post(window.gRootPath + 'Customer/Profile/EntrepreneurTargeting')
             .done(function (result) {
-                if (result.entrepreneurTargeting) {
-                    var postcode, companyName, sCompanyFilter;
+                if (result.companyTargeting) {
                     if (EzBob.Config.TargetsEnabledEntrepreneur) {
-                        console.log(that.model);
-                        postcode = that.model.get('customer').get('PersonalAddress').models[0].get('Postcode');
-                        companyName = (function () {
-                            var cpi = that.model.get('customer').get('CustomerPersonalInfo');
-                            return cpi.FirstName + ' ' + cpi.Surname;
-                        })(this.model);
-                        sCompanyFilter = 'N';
-                        var req = $.get(window.gRootPath + 'Account/CheckingCompany', { companyName: companyName, postcode: postcode, filter: sCompanyFilter, refNum: '' });
+                        var req = $.get(window.gRootPath + 'Account/CheckingCompany', { companyName: result.companyName, postcode: result.companyPostcode, filter: result.companyType, refNum: result.companyNumber });
                         scrollTop();
                         BlockUi();
 
@@ -217,7 +209,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
             });
     },
     saveTargeting: function(targetingData) {
-        if (!targetingData) {
+        if (!targetingData || targetingData.BusRefNum == 'skip') {
             targetingData = { BusRefNum: "NotFound" };
         }
         $.post(window.gRootPath + 'Customer/Profile/SaveTargeting', targetingData);

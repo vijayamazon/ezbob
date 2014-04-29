@@ -314,7 +314,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	saveTargeting: function (targetingData, action, form) {
 		var data = form.serializeArray();
 
-		if (targetingData) {
+		if (targetingData && targetingData.BusRefNum != 'skip') {
 			data.push({ name: "AddrLine1", value: targetingData.AddrLine1 });
 			data.push({ name: "AddrLine2", value: targetingData.AddrLine2 });
 			data.push({ name: "AddrLine3", value: targetingData.AddrLine3 });
