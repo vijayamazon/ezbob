@@ -96,6 +96,7 @@
 				Log.Alert("Failed to parse customer indebtedness index '{0}' (integer expected).", sCii);
 
 			OutputFullConsumerDataConsumerDataCAIS[] cais = null;
+			int nNumOfAccounts = 0;
 			int nDefaultCount = 0;
 			int nLastDefaultCount = 0;
 
@@ -115,7 +116,12 @@
 				if (caisData.CAISDetails == null)
 					continue;
 
-				foreach (var detail in caisData.CAISDetails.Where(detail => detail.AccountStatus == "F")) {
+				foreach (OutputFullConsumerDataConsumerDataCAISCAISDetails detail in caisData.CAISDetails) {
+					nNumOfAccounts++;
+
+					if (detail.AccountStatus != "F")
+						continue;
+
 					nDefaultCount++;
 
 					int relevantYear, relevantMonth, relevantDay;
@@ -149,7 +155,7 @@
 				m_nCustomerID,
 				Score,
 				nCii,
-				cais.Length,
+				nNumOfAccounts,
 				nDefaultCount,
 				nLastDefaultCount,
 				dThen.ToString("MMMM d yyyy", CultureInfo.InvariantCulture)
@@ -161,7 +167,7 @@
 				new QueryParameter("CustomerID", m_nCustomerID),
 				new QueryParameter("Score", Score),
 				new QueryParameter("IndebtednessIndex", nCii),
-				new QueryParameter("NumOfAccounts", cais.Length),
+				new QueryParameter("NumOfAccounts", nNumOfAccounts),
 				new QueryParameter("NumOfDefaults", nDefaultCount),
 				new QueryParameter("NumOfLastDefaults", nLastDefaultCount),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow)

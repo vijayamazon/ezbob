@@ -1,5 +1,3 @@
-select * from CustomerAnalyticsCompany
-
 IF OBJECT_ID('CustomerAnalyticsUpdateCompany') IS NULL
 	EXECUTE('CREATE PROCEDURE CustomerAnalyticsUpdateCompany AS SELECT 1')
 GO
@@ -11,7 +9,6 @@ ALTER PROCEDURE CustomerAnalyticsUpdateCompany
 @CustomerID BIGINT,
 @Score INT,
 @SuggestedAmount DECIMAL(18, 6),
-@AnnualTurnover DECIMAL(18, 6),
 @IncorporationDate DATETIME,
 @AnalyticsDate DATETIME
 AS
@@ -29,8 +26,8 @@ BEGIN
 		AND
 		ISActive = 1
 
-	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score, SuggestedAmount, AnnualTurnover, IncorporationDate)
-		VALUES (@CustomerID, @AnalyticsDate, 1, @Score, @SuggestedAmount, @AnnualTurnover, @IncorporationDate)
+	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score, SuggestedAmount, IncorporationDate)
+		VALUES (@CustomerID, @AnalyticsDate, 1, @Score, @SuggestedAmount, @IncorporationDate)
 	
 	COMMIT TRANSACTION
 END

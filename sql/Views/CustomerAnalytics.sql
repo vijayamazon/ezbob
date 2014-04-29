@@ -6,17 +6,23 @@ ALTER VIEW CustomerAnalytics AS
 SELECT
 	ISNULL(
 		ISNULL(
-			p.CustomerID,
-			c.CustomerID
+			ISNULL(
+				p.CustomerID,
+				c.CustomerID
+			),
+			d.CustomerID
 		),
-		d.CustomerID
+		l.CustomerID
 	)                               AS CustomerID,
 	dbo.udfMaxDate(
 		dbo.udfMaxDate(
-			p.AnalyticsDate,
-			c.AnalyticsDate
+			dbo.udfMaxDate(
+				p.AnalyticsDate,
+				c.AnalyticsDate
+			),
+			d.AnalyticsDate
 		),
-		d.AnalyticsDate
+		l.AnalyticsDate
 	)                               AS AnalyticsDate,
 	ISNULL(p.Score, 0)              AS PersonalScore,
 	ISNULL(d.MinScore, 0)           AS PersonalMinScore,
@@ -31,7 +37,7 @@ SELECT
 	ISNULL(p.NumOfLastDefaults, 0)  AS NumOfLastDefaults,
 	ISNULL(c.Score, 0)              AS CompanyScore,
 	ISNULL(c.SuggestedAmount, 0)    AS SuggestedAmount,
-	ISNULL(c.AnnualTurnover, 0)     AS AnnualTurnover,
+	ISNULL(l.AnnualTurnover, 0)     AS AnnualTurnover,
 	c.IncorporationDate             AS IncorporationDate
 FROM (
 		SELECT
@@ -52,7 +58,6 @@ FROM (
 			AnalyticsDate,
 			Score,
 			SuggestedAmount,
-			AnnualTurnover,
 			IncorporationDate
 		FROM
 			CustomerAnalyticsCompany
@@ -70,4 +75,14 @@ FROM (
 		WHERE
 			IsActive = 1
 	) d ON ISNULL(p.CustomerID, c.CustomerID) = d.CustomerID
+	FULL OUTER JOIN (
+		SELECT
+			CustomerID,
+			AnalyticsDate,
+			AnnualTurnover
+		FROM
+			CustomerAnalyticsLocalData
+		WHERE
+			IsActive = 1
+	) l ON ISNULL(p.CustomerID, ISNULL(c.CustomerID, d.CustomerID)) = l.CustomerID
 GO

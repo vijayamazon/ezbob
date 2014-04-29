@@ -572,6 +572,22 @@
 				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
 			);
 
+			DB.ExecuteNonQuery(
+				"CustomerAnalyticsUpdateLocalData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", customerId),
+				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
+				new QueryParameter("AnnualTurnover", totalSumOfOrders1YTotal),
+				new QueryParameter("TotalSumOfOrdersForLoanOffer", totalSumOfOrdersForLoanOffer),
+				new QueryParameter("MarketplaceSeniorityYears", marketplaceSeniorityYears),
+				new QueryParameter("MaxFeedback", modelMaxFeedback),
+				new QueryParameter("MPsNumber", modelMPsNumber),
+				new QueryParameter("FirstRepaymentDatePassed", firstRepaymentDatePassed),
+				new QueryParameter("EzbobSeniorityMonths", ezbobSeniorityMonths),
+				new QueryParameter("OnTimeLoans", modelOnTimeLoans),
+				new QueryParameter("LatePayments", modelLatePayments),
+				new QueryParameter("EarlyPayments", modelEarlyPayments)
+			);
 			return scoringResult;
 		} // CalculateScoreAndMedal
 
