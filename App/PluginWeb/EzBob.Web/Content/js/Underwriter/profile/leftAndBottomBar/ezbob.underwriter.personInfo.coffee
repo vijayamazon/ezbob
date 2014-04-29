@@ -14,7 +14,10 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
 
         @$el.find(".tltp").tooltip()
         @$el.find(".tltp-left").tooltip({placement: "left"})
-        
+
+        if @model.get 'IsWizardComplete'
+            @$el.find('#ForceFinishWizard').addClass 'hide'
+
     toggleCciMark: ->
         id = @model.get 'Id'
 
@@ -71,7 +74,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         'click button.istest-toggle': 'toggleIsTest'
         'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus'
         'click #MainStrategyHidden': 'activateMainStratgey'
-        'click #FinishWizardHidden': 'activateFinishWizard'
+        'click #ForceFinishWizard': 'activateFinishWizard'
         
     activateMainStratgey: ->
         xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/ActivateMainStrategy", customerId: @model.get('Id')

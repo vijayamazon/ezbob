@@ -63,6 +63,7 @@
 		public string ActiveCampaign { get; set; }
 		public string PostCode { get; set; }
 		public DirectorModel[] Directors { get; set; }
+		public bool IsWizardComplete { get; set; }
 
 		public PersonalInfoModel() {
 			IndustryFields = new List<string>();
@@ -74,6 +75,8 @@
 		public void InitFromCustomer(Customer customer, ISession session) {
 			if (customer == null)
 				return;
+
+			IsWizardComplete = (customer.WizardStep != null) && customer.WizardStep.TheLastOne;
 
 			Id = customer.Id;
 			SegmentType = customer.SegmentType();
