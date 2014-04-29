@@ -66,9 +66,8 @@
 			var regex = new Regex("[^a-zA-Z -]");
 			surname = regex.Replace(surname, String.Empty);
 			var surnameFormatted = surname.Length > 6 ? surname.Substring(0, 6) : surname;
-			var accountNumberFormatted = accountNumber.Length >= 10
-											 ? accountNumber.Substring(0, 10)
-											 : string.Format("{0}{1}", accountNumber, sortCode).Substring(0, 10);
+			var accountNumSortCode = string.Format("{0}{1}", accountNumber, sortCode);
+			var accountNumberFormatted = accountNumSortCode.Length >= 10 ? accountNumSortCode.Substring(0, 10) : accountNumSortCode;
 			var postCodeFormatted = postcode.Split(' ')[0];
 			var options = string.Format("{0};fin_serv_birth_date={1};fin_serv_surname={2};fin_serv_postcode={3};fin_serv_account={4}", paypointOptions, dateOfBirthFormatted, surnameFormatted, postCodeFormatted, accountNumberFormatted);
 			if (deferred)

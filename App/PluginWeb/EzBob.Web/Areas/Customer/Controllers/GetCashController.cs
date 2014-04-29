@@ -84,8 +84,8 @@
 			var isOffline = customer.IsOffline.HasValue && customer.IsOffline.Value;
 			var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			var postCode = address != null ? address.Postcode : "";
-			var accountNumber = customer.BankAccount != null ? customer.BankAccount.AccountNumber : "";
-			var sortCode = customer.BankAccount != null ? customer.BankAccount.SortCode : "";
+			var accountNumber = customer.BankAccount != null && customer.BankAccount.AccountNumber != null ? customer.BankAccount.AccountNumber : "";
+			var sortCode = customer.BankAccount != null && customer.BankAccount.SortCode != null ? customer.BankAccount.SortCode : "";
 			DateTime? dateOfBirth = customer.PersonalInfo != null ? customer.PersonalInfo.DateOfBirth : null;
 			var surname = customer.PersonalInfo != null ? customer.PersonalInfo.Surname : "";
 

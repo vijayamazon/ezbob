@@ -70,8 +70,8 @@
 				var isOffline = oCustomer.IsOffline.HasValue && oCustomer.IsOffline.Value;
 				var address = oCustomer.AddressInfo.PersonalAddress.FirstOrDefault();
 				var postCode = address != null ? address.Postcode : "";
-				var accountNumber = oCustomer.BankAccount != null ? oCustomer.BankAccount.AccountNumber : "";
-				var sortCode = oCustomer.BankAccount != null ? oCustomer.BankAccount.SortCode : "";
+				var accountNumber = oCustomer.BankAccount != null && oCustomer.BankAccount.AccountNumber != null ? oCustomer.BankAccount.AccountNumber : "";
+				var sortCode = oCustomer.BankAccount != null && oCustomer.BankAccount.SortCode != null ? oCustomer.BankAccount.SortCode : "";
 				DateTime? dateOfBirth = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.DateOfBirth : null;
 				var surname = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.Surname : "";
 				
