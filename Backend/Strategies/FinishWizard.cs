@@ -35,7 +35,7 @@
 					m_oArgs.IsUnderwriterForced,
 					DB,
 					Log
-				).Execute();
+				).SetOverrideApprovedRejected(false).Execute();
 			} // if
 
 			if (m_oArgs.DoFraud) {

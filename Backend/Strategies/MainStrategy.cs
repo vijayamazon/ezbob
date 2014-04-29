@@ -49,6 +49,7 @@
 			newCreditLineOption = newCreditLine;
 			avoidAutomaticDecision = avoidAutoDecision;
 			underwriterCheck = isUnderwriterForced;
+			m_bOverrideApprovedRejected = true;
 		} // constructor
 
 		#endregion constructor
@@ -185,6 +186,15 @@
 
 		#endregion method Execute
 
+		#region method SetOverrideApproved
+
+		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
+			m_bOverrideApprovedRejected = bOverrideApprovedRejected;
+			return this;
+		} // SetOverrideApprovedRejected
+
+		#endregion method SetOverrideApproved
+
 		#endregion public
 
 		#region private
@@ -236,7 +246,8 @@
 				new QueryParameter("Status", autoDecisionResponse.UserStatus),
 				new QueryParameter("Medal", medalType.ToString()),
 				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor),
-				new QueryParameter("Now", DateTime.UtcNow)
+				new QueryParameter("Now", DateTime.UtcNow),
+				new QueryParameter("OverrideApprovedRejected", m_bOverrideApprovedRejected)
 			);
 
 			DB.ExecuteNonQuery(
@@ -998,6 +1009,13 @@
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly bool underwriterCheck;
 		private readonly int avoidAutomaticDecision;
+
+		/// <summary>
+		/// Default: true. However when Main strategy is executed as a part of
+		/// Finish Wizard strategy and customer is already approved/rejected
+		/// then customer's status should not change.
+		/// </summary>
+		private bool m_bOverrideApprovedRejected;
 
 		// Configs
 		private int rejectDefaultsCreditScore;
