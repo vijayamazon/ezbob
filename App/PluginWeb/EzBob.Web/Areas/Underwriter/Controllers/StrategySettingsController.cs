@@ -51,11 +51,13 @@
 		{
 			var bwaBusinessCheck = _configurationVariablesRepository.GetByName("BWABusinessCheck");
 			//var displayEarnedPoints = _configurationVariablesRepository.GetByName("DisplayEarnedPoints");
-
+			var hmrcSalariesMultiplier = _configurationVariablesRepository.GetByName(ConfigManager.Variables.HmrcSalariesMultiplier.ToString());
 			var st = new
 				{
 					BWABusinessCheck = bwaBusinessCheck.Value,
 					BWABusinessCheckDesc = bwaBusinessCheck.Description,
+					HmrcSalariesMultiplier = hmrcSalariesMultiplier.Value,
+					HmrcSalariesMultiplierDesc = hmrcSalariesMultiplier.Description,
 					//DisplayEarnedPoints = displayEarnedPoints.Value,
 					//DisplayEarnedPointsDesc = displayEarnedPoints.Description
 				};
@@ -65,12 +67,24 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonResult SettingsGeneral(string BWABusinessCheck/*, string DisplayEarnedPoints*/)
+		public JsonResult SettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier/*, string DisplayEarnedPoints*/)
+		{
+			UpdateSettingsGeneral(BWABusinessCheck, HmrcSalariesMultiplier);
+
+			UpdateConfigVars();
+			return SettingsGeneral();
+		}
+
+		[Transactional]
+		private void UpdateSettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier)
 		{
 			_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
+			if (HmrcSalariesMultiplier >= 0 && HmrcSalariesMultiplier <= 1)
+			{
+				_configurationVariablesRepository.SetByName(ConfigManager.Variables.HmrcSalariesMultiplier.ToString(),
+															HmrcSalariesMultiplier.ToString());
+			}
 			//_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
-			return SettingsGeneral();
 		}
 
 		[Ajax]
@@ -107,7 +121,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+
 		public JsonResult SettingsCharges(string administrationCharge,
 			string latePaymentCharge,
 			string otherCharge,
@@ -116,13 +130,22 @@
 			string amountToChargeFrom
 			)
 		{
+			UpdateSettingsCharges(administrationCharge, latePaymentCharge, otherCharge, partialPaymentCharge, rolloverCharge, amountToChargeFrom);
+
+			UpdateConfigVars();
+			return SettingsCharges();
+		}
+
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		private void UpdateSettingsCharges(string administrationCharge, string latePaymentCharge, string otherCharge,
+										   string partialPaymentCharge, string rolloverCharge, string amountToChargeFrom)
+		{
 			_configurationVariablesRepository.SetByName("AdministrationCharge", administrationCharge);
 			_configurationVariablesRepository.SetByName("LatePaymentCharge", latePaymentCharge);
 			_configurationVariablesRepository.SetByName("OtherCharge", otherCharge);
 			_configurationVariablesRepository.SetByName("PartialPaymentCharge", partialPaymentCharge);
 			_configurationVariablesRepository.SetByName("RolloverCharge", rolloverCharge);
 			_configurationVariablesRepository.SetByName("AmountToChargeFrom", amountToChargeFrom);
-			return SettingsCharges();
 		}
 
 		[Ajax]
@@ -171,7 +194,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+
 		public JsonResult AutomationApproval(
 												string EnableAutomaticApproval,
 												string EnableAutomaticReApproval,
@@ -179,11 +202,20 @@
 												string MaxCapNotHomeOwner
 			)
 		{
+			UpdateAutomationApproval(EnableAutomaticApproval, EnableAutomaticReApproval, MaxCapHomeOwner, MaxCapNotHomeOwner);
+
+			UpdateConfigVars();
+			return AutomationApproval();
+		}
+
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		private void UpdateAutomationApproval(string EnableAutomaticApproval, string EnableAutomaticReApproval,
+											  string MaxCapHomeOwner, string MaxCapNotHomeOwner)
+		{
 			_configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
 			_configurationVariablesRepository.SetByName("EnableAutomaticReApproval", EnableAutomaticReApproval);
 			_configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
 			_configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
-			return AutomationApproval();
 		}
 
 		[Ajax]
@@ -241,7 +273,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+
 		public JsonResult AutomationRejection(string EnableAutomaticRejection,
 												 string LowCreditScore,
 												 string Reject_Defaults_AccountsNum,
@@ -255,6 +287,20 @@
 												 string AutoRejectionException_CreditScore,
 												 string AutoRejectionException_AnualTurnover)
 		{
+			UpdateAutomationRejection(EnableAutomaticRejection, LowCreditScore, Reject_Defaults_AccountsNum, Reject_Defaults_Amount, Reject_Defaults_CreditScore, Reject_Defaults_MonthsNum, Reject_Minimal_Seniority, TotalAnnualTurnover, TotalThreeMonthTurnover, EnableAutomaticReRejection, AutoRejectionException_CreditScore, AutoRejectionException_AnualTurnover);
+			UpdateConfigVars();
+			return AutomationRejection();
+		}
+
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		private void UpdateAutomationRejection(string EnableAutomaticRejection, string LowCreditScore,
+											   string Reject_Defaults_AccountsNum, string Reject_Defaults_Amount,
+											   string Reject_Defaults_CreditScore, string Reject_Defaults_MonthsNum,
+											   string Reject_Minimal_Seniority, string TotalAnnualTurnover,
+											   string TotalThreeMonthTurnover, string EnableAutomaticReRejection,
+											   string AutoRejectionException_CreditScore,
+											   string AutoRejectionException_AnualTurnover)
+		{
 			_configurationVariablesRepository.SetByName("EnableAutomaticRejection", EnableAutomaticRejection);
 			_configurationVariablesRepository.SetByName("LowCreditScore", LowCreditScore);
 			_configurationVariablesRepository.SetByName("Reject_Defaults_AccountsNum", Reject_Defaults_AccountsNum);
@@ -266,9 +312,8 @@
 			_configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", TotalThreeMonthTurnover);
 			_configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
 			_configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
-			_configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover", AutoRejectionException_AnualTurnover);
-
-			return AutomationRejection();
+			_configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover",
+														AutoRejectionException_AnualTurnover);
 		}
 
 		[Ajax]
@@ -299,7 +344,7 @@
 		// ReSharper disable  InconsistentNaming
 		[Ajax]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+
 		public JsonResult SettingsExperian(
 
 			string FinancialAccounts_MainApplicant,
@@ -310,14 +355,31 @@
 			string FinancialAccounts_AssociationOfJointApplicant,
 			string FinancialAccounts_No_Match)
 		{
-			_configurationVariablesRepository.SetByName("FinancialAccounts_MainApplicant", FinancialAccounts_MainApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfMainApplicant", FinancialAccounts_AliasOfMainApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfMainApplicant", FinancialAccounts_AssociationOfMainApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_JointApplicant", FinancialAccounts_JointApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfJointApplicant", FinancialAccounts_AliasOfJointApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfJointApplicant", FinancialAccounts_AssociationOfJointApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_No_Match", FinancialAccounts_No_Match);
+			UpdateSettingsExperian(FinancialAccounts_MainApplicant, FinancialAccounts_AliasOfMainApplicant, FinancialAccounts_AssociationOfMainApplicant, FinancialAccounts_JointApplicant, FinancialAccounts_AliasOfJointApplicant, FinancialAccounts_AssociationOfJointApplicant, FinancialAccounts_No_Match);
+			UpdateConfigVars();
 			return SettingsGeneral();
+		}
+
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		private void UpdateSettingsExperian(string FinancialAccounts_MainApplicant,
+											string FinancialAccounts_AliasOfMainApplicant,
+											string FinancialAccounts_AssociationOfMainApplicant,
+											string FinancialAccounts_JointApplicant,
+											string FinancialAccounts_AliasOfJointApplicant,
+											string FinancialAccounts_AssociationOfJointApplicant,
+											string FinancialAccounts_No_Match)
+		{
+			_configurationVariablesRepository.SetByName("FinancialAccounts_MainApplicant", FinancialAccounts_MainApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfMainApplicant",
+														FinancialAccounts_AliasOfMainApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfMainApplicant",
+														FinancialAccounts_AssociationOfMainApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_JointApplicant", FinancialAccounts_JointApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfJointApplicant",
+														FinancialAccounts_AliasOfJointApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfJointApplicant",
+														FinancialAccounts_AssociationOfJointApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_No_Match", FinancialAccounts_No_Match);
 		}
 
 		[Ajax]
@@ -341,10 +403,10 @@
 						.OrderBy(cc => cc.Customer.Id)
 						.Select(cc => new CampaignCustomerModel
 							{
-								Id = cc.Customer.Id, 
+								Id = cc.Customer.Id,
 								Email = cc.Customer.Name,
 								Name = cc.Customer.PersonalInfo == null ? "" : cc.Customer.PersonalInfo.Fullname
-							}).ToList() 
+							}).ToList()
 					})
 				.ToList();
 
@@ -357,7 +419,7 @@
 						Description = ct.Description
 					})
 				.ToList();
-			
+
 			return Json(new { campaigns, campaignTypes }, JsonRequestBehavior.AllowGet);
 		}
 
@@ -440,7 +502,7 @@
 				Log.WarnFormat(errorMessage);
 				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 			}
-			
+
 			if (highestSoFar > 100000000)
 			{
 				const string errorMessage = "Maximum allowed number is 100000000";
@@ -578,14 +640,14 @@
 			campaign.StartDate = startDate;
 			campaign.EndDate = endDate;
 			campaign.Description = campaignDescription;
-			
-			
+
+
 			var campClients = campaign.Clients.ToArray();
 			foreach (var client in campClients)
 			{
 				campaign.Clients.Remove(client);
 			}
-			
+
 			_campaignRepository.SaveOrUpdate(campaign);
 
 			if (string.IsNullOrEmpty(campaignCustomers))
@@ -596,7 +658,7 @@
 			var clients = campaignCustomers.Trim().Split(' ');
 			foreach (string client in clients)
 			{
-				if(string.IsNullOrWhiteSpace(client)) continue;
+				if (string.IsNullOrWhiteSpace(client)) continue;
 
 				int customerId;
 				if (int.TryParse(client, out customerId))
@@ -606,7 +668,7 @@
 						var customer = _customerRepository.TryGet(customerId);
 						if (customer != null && campaign.Clients.All(cc => cc.Customer != customer))
 						{
-							campaign.Clients.Add(new CampaignClients {Campaign = campaign, Customer = customer});
+							campaign.Clients.Add(new CampaignClients { Campaign = campaign, Customer = customer });
 						}
 						else
 						{
@@ -625,6 +687,13 @@
 			}
 			Log.DebugFormat("{0}, {1}, {2}, {3}, {4}, {5}. ", campaignName, campaignDescription, campaignType, startDate, endDate, campaignCustomers);
 			return Json(new { success = true, errorText = error }, JsonRequestBehavior.AllowGet);
+		}
+
+		private void UpdateConfigVars()
+		{
+			var c = new ServiceClient();
+			c.Instance.UpdateConfigurationVariables();
+			ConfigManager.CurrentValues.ReInit();
 		}
 	}
 }

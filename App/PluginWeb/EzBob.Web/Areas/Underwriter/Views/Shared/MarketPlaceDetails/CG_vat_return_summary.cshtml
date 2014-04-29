@@ -211,20 +211,20 @@ if (m.CGData && m.CGData.VatReturn) {
 			    <td><%=EzBob.formatPercents(m.CGData.BankStatement.PercentOfRevenues,2)%></td>
                 <td>-</td>
 			</tr>
-			<tr>
-				<th>Salaries</th><td></td><%
+		      <tr>
+		          <%
+                    var nSalarySum = 0;
+					for (var i = (arySalary.length <= 4 ? 0 : arySalary.length - 4); i < arySalary.length; i++)
+		                nSalarySum += arySalary[i].salary;
+                    var nSalarySumCalculated = nSalarySum * m.CGData.SalariesMultiplier;
+                  %>
+				<th>Salaries (<%-EzBob.formatPercents(m.CGData.SalariesMultiplier)%> of <%-EzBob.formatPoundsAsInt(nSalarySum)%>)</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					%><td class=r><%- EzBob.formatPoundsAsInt(arySalary[i].salary) %></td><%
 				} // for each relevant data item
-				%><td class=r><%
-					var nSalarySum = 0;
-
-					for (var i = (arySalary.length <= 4 ? 0 : arySalary.length - 4); i < arySalary.length; i++)
-						nSalarySum += arySalary[i].salary;
-
-				%><%- EzBob.formatPoundsAsInt(nSalarySum) %></td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(nSalarySumCalculated) %></td>
 			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Salaries)%></td>
-                <td><%=EzBob.formatPercents(m.CGData.BankStatementAnnualized.Salaries / nSalarySum - 1,2)%></td>
+                <td><%=EzBob.formatPercents(m.CGData.BankStatementAnnualized.Salaries / nSalarySumCalculated - 1,2)%></td>
 			</tr>
 			<tr>
 				<th>Tax</th><td></td><%

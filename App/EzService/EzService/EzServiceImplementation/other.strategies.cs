@@ -52,6 +52,12 @@
 			return Execute(null, null, typeof(UpdateCurrencyRates));
 		} // UpdateCurrencyRates
 
+
+		public ActionMetaData UpdateConfigurationVariables()
+		{
+			return Execute(null, null, typeof (UpdateConfigurationVariables));
+		}//UpdateConfigurationVariables
+
 		#region method PostcodeSaveLog
 
 		public ActionMetaData PostcodeSaveLog(

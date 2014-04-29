@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.SettingsGeneralModel = (function(_super) {
+
     __extends(SettingsGeneralModel, _super);
 
     function SettingsGeneralModel() {
-      _ref = SettingsGeneralModel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return SettingsGeneralModel.__super__.constructor.apply(this, arguments);
     }
 
     SettingsGeneralModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/SettingsGeneral";
@@ -24,11 +24,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.SettingsGeneralView = (function(_super) {
+
     __extends(SettingsGeneralView, _super);
 
     function SettingsGeneralView() {
-      _ref1 = SettingsGeneralView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return SettingsGeneralView.__super__.constructor.apply(this, arguments);
     }
 
     SettingsGeneralView.prototype.template = "#general-settings-template";
@@ -41,7 +41,11 @@
     };
 
     SettingsGeneralView.prototype.bindings = {
-      BWABusinessCheck: "select[name='bwaBusinessCheck']"
+      BWABusinessCheck: "select[name='bwaBusinessCheck']",
+      HmrcSalariesMultiplier: {
+        selector: "input[name='HmrcSalariesMultiplier']",
+        converter: EzBob.BindingConverters.percentsFormat
+      }
     };
 
     SettingsGeneralView.prototype.events = {
@@ -51,6 +55,7 @@
 
     SettingsGeneralView.prototype.saveSettings = function() {
       BlockUi("on");
+      console.log;
       this.model.save().done(function() {
         return EzBob.ShowMessage("Saved successfully", "Successful");
       });
@@ -64,7 +69,6 @@
     SettingsGeneralView.prototype.update = function() {
       var xhr,
         _this = this;
-
       xhr = this.model.fetch();
       return xhr.done(function() {
         return _this.render();
@@ -78,8 +82,9 @@
     SettingsGeneralView.prototype.onRender = function() {
       this.modelBinder.bind(this.model, this.el, this.bindings);
       if (!$("body").hasClass("role-manager")) {
-        return this.$el.find("button[name='SaveGeneralSettings'], button[name='CancelGeneralSettings']").hide();
+        this.$el.find("button[name='SaveGeneralSettings'], button[name='CancelGeneralSettings']").hide();
       }
+      return this.$el.find("input[name='HmrcSalariesMultiplier']").percentFormat();
     };
 
     SettingsGeneralView.prototype.show = function(type) {

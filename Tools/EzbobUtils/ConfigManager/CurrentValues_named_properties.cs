@@ -937,6 +937,15 @@
 
 		#endregion property HmrcUploadedFilesSavePath
 
+		#region property HmrcSalariesMultiplier
+
+		public virtual VariableValue HmrcSalariesMultiplier
+		{
+			get { return this[Variables.HmrcSalariesMultiplier]; } // get
+		} // HmrcSalariesMultiplier
+
+		#endregion property HmrcSalariesMultiplier
+
 		#region property IntervalWaitForAmlCheck
 
 		public virtual VariableValue IntervalWaitForAmlCheck {

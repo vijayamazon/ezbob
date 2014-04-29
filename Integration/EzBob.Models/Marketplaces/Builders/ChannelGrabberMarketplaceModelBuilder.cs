@@ -1,6 +1,7 @@
 namespace EzBob.Models.Marketplaces.Builders {
 	using System;
 	using System.Linq;
+	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
@@ -8,6 +9,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using Integration.ChannelGrabberConfig;
 	using NHibernate;
 	using NHibernate.Linq;
+	using StructureMap;
 
 	class ChannelGrabberMarketplaceModelBuilder : MarketplaceModelBuilder {
 		#region public
@@ -104,13 +106,15 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 				oVatReturn.Sort(VatReturnEntry.CompareForSort);
 				oRtiTaxMonths.Sort(RtiTaxMonthEntry.CompareForSort);
-
+					//var configurationVariables = ObjectFactory.GetInstance<EZBob.DatabaseLib.Model.ConfigurationVariablesRepository>();
+				
 
 				model.CGData = new ChannelGrabberHmrcData {
 					VatReturn = oVatReturn,
 					RtiTaxMonths = oRtiTaxMonths,
 					BankStatement = new BankStatementDataModel(),
-					BankStatementAnnualized = new BankStatementDataModel()
+					BankStatementAnnualized = new BankStatementDataModel(),
+					SalariesMultiplier = CurrentValues.Instance.HmrcSalariesMultiplier
 				};
 
 				break;

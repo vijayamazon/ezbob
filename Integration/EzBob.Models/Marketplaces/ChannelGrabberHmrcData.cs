@@ -12,6 +12,7 @@ namespace EzBob.Models.Marketplaces {
 		public IEnumerable<RtiTaxMonthEntry> RtiTaxMonths { get; set; }
 		public BankStatementDataModel BankStatement { get; set; }
 		public BankStatementDataModel BankStatementAnnualized { get; set; }
+		public decimal SalariesMultiplier { get; set; }
 	} // class ChannelGrabberHmrcData
 
 	#endregion class ChannelGrabberHmrcData

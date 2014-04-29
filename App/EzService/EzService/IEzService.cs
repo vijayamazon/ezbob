@@ -300,6 +300,9 @@
 		BoolActionResult SaveLoanOfferMultiplier(List<LoanOfferMultiplier> loanOfferMultipliers);
 
 		[OperationContract]
+		ActionMetaData UpdateConfigurationVariables();
+
+		[OperationContract]
 		ActionMetaData PostcodeSaveLog(
 			string sRequestType,
 			string sUrl,

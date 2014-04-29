@@ -117,6 +117,7 @@
 		FreeAgentUsersRequest,
 		GreetingMailSendViaMandrill,
 		HmrcUploadedFilesSavePath,
+		HmrcSalariesMultiplier,
 		IntervalWaitForAmlCheck,
 		IntervalWaitForExperianCompanyCheck,
 		IntervalWaitForExperianConsumerCheck,

@@ -230,10 +230,9 @@ $(function () {
     };
 
     $.fn.percentFormat = function () {
-        this.each(function () {
+        return this.each(function () {
             $(this).autoNumeric(EzBob.percentFormat);
         });
-        return this;
     };
 
     $.fn.serialFill = function () {

@@ -15,8 +15,11 @@ class EzBob.Underwriter.SettingsGeneralView extends Backbone.Marionette.ItemView
         @
 
     bindings:
-        BWABusinessCheck:   "select[name='bwaBusinessCheck']"
-        #DisplayEarnedPoints:    "select[name='displayEarnedPoints']"
+        BWABusinessCheck: "select[name='bwaBusinessCheck']"
+        #DisplayEarnedPoints: "select[name='displayEarnedPoints']"
+        HmrcSalariesMultiplier:
+            selector: "input[name='HmrcSalariesMultiplier']"
+            converter: EzBob.BindingConverters.percentsFormat
 
     events:
         "click button[name='SaveGeneralSettings']":     "saveSettings"
@@ -24,6 +27,7 @@ class EzBob.Underwriter.SettingsGeneralView extends Backbone.Marionette.ItemView
 
     saveSettings: ->
         BlockUi "on"
+        console.log
         @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
         @model.save().complete -> BlockUi "off"
         @model.save()
@@ -40,7 +44,8 @@ class EzBob.Underwriter.SettingsGeneralView extends Backbone.Marionette.ItemView
         @modelBinder.bind @model, @el, @bindings
         if !$("body").hasClass("role-manager") 
             #@$el.find("select[name='bwaBusinessCheck'], select[name='displayEarnedPoints']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
-            @$el.find("button[name='SaveGeneralSettings'], button[name='CancelGeneralSettings']").hide();
+            @$el.find("button[name='SaveGeneralSettings'], button[name='CancelGeneralSettings']").hide()
+        @$el.find("input[name='HmrcSalariesMultiplier']").percentFormat()
 
     show: (type) ->
         this.$el.show()

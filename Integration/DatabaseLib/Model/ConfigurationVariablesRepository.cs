@@ -290,6 +290,7 @@
 			var property = _session.QueryOver<ConfigurationVariable>().Where(c => c.Name == name).SingleOrDefault<ConfigurationVariable>();
 			property.Value = value;
 			_session.Update(property);
+			_session.Flush();
 		} // SetByName
 
 		public ConfigurationVariable this[ConfigurationVariables nVariableName] {
