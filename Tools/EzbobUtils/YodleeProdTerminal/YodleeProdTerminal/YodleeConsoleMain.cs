@@ -30,6 +30,7 @@ namespace com.yodlee.sampleapps
 		private static int NAV_REG_USER = OPTION_CNT++;
 		private static int NAV_SSO_REG_USER = OPTION_CNT++;
 		private static int NAV_LOGIN_USER = OPTION_CNT++;
+		private static int NAV_LOGIN_USER2 = OPTION_CNT++;
 		private static int NAV_SSO_LOGIN_USER = OPTION_CNT++;
 		private static int NAV_SESSIONLESSCALL_SUBMENU = OPTION_CNT++;
 		private static int NAV_UNREGISTER_USER = OPTION_CNT++;
@@ -122,7 +123,8 @@ namespace com.yodlee.sampleapps
 
 			System.Console.WriteLine(NAV_REG_USER + ". Register User");
 			System.Console.WriteLine(NAV_SSO_REG_USER + ". SSO Register User");
-			System.Console.WriteLine(NAV_LOGIN_USER + ". Login User");
+			System.Console.WriteLine(NAV_LOGIN_USER + ". Login User (from db)");
+			System.Console.WriteLine(NAV_LOGIN_USER2 + ". Login User creds");
 			System.Console.WriteLine(NAV_SSO_LOGIN_USER + ". SSO Login User");
 			System.Console.WriteLine(NAV_SESSIONLESSCALL_SUBMENU + ". Sessionless Call [sub menu]");
 
@@ -161,6 +163,10 @@ namespace com.yodlee.sampleapps
 					else if (choice == NAV_LOGIN_USER)
 					{
 						loginUser();
+					}
+					else if (choice == NAV_LOGIN_USER2)
+					{
+						loginUser("","");
 					}
 					else if (choice == NAV_SSO_LOGIN_USER)
 					{
@@ -342,6 +348,11 @@ namespace com.yodlee.sampleapps
 
 		public void loginUser(string userName, string password)
 		{
+			Console.Write("username:");
+			userName = Console.ReadLine();
+
+			Console.Write("password:");
+			password = Console.ReadLine();
 
 			LoginUser loginUser = new LoginUser();
 			try
