@@ -252,12 +252,6 @@ var EzBob = EzBob || {};
 			});
 		}, // save
 
-		domProps: function (sEventName, oDomElement, b) {
-			var oElm = $(oDomElement);
-
-			return ;
-		}, // domProps
-
 		flush: function (bSync) {
 			//console.log('UiAction.flush', this);
 

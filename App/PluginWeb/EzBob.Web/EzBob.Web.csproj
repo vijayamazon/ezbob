@@ -176,6 +176,9 @@
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\LoanCreatorNoChecks.cs" />
+    <Compile Include="Code\ServerLog\ServerLogCachePkgModel.cs" />
+    <Compile Include="Code\ServerLog\ServerLogEntryModel.cs" />
+    <Compile Include="Controllers\ServerLogController.cs" />
     <Compile Include="Models\PersonalInfoModel.cs" />
     <Compile Include="Code\StrategyChecker.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
@@ -925,6 +928,7 @@
       <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
+    <Content Include="Content\js\ezbob.serverLog.js" />
     <Content Include="Content\js\lib\date.interval.js" />
     <Content Include="Content\js\ezbob.addDirectorInfoView.js" />
     <Content Include="Content\js\EzBob.DataTables.Helper.js" />

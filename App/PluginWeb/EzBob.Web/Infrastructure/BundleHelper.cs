@@ -53,6 +53,7 @@
 				.Add("~/Content/js/contactUs/ezbo.contactUs.js")
 				.Add("~/Content/js/ezbob.design.js")
 				.Add("~/Content/js/ezbob.uiaction.js")
+				.Add("~/Content/js/ezbob.serverlog.js")
 				.Add("~/Content/js/App/ezbob.bindings.coffee")
 				.Add("~/Content/js/App/ezbob.validation.js")
 				.Add("~/Content/js/lib/coin-slider.js")
