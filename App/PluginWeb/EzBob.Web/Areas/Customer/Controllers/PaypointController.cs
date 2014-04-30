@@ -5,6 +5,7 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using Code;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -64,7 +65,18 @@
 					return View("Error");
 				}
 
-				var callback = Url.Action("Callback", "Paypoint", new { Area = "Customer", loanId, type, username = (_context.User != null ? _context.User.Name : "") }, "https");
+				int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
+				DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
+
+				var callback = Url.Action("Callback", "Paypoint", new
+					{
+						Area = "Customer", 
+						loanId, 
+						type, 
+						username = (_context.User != null ? _context.User.Name : ""),
+						cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate)
+
+					}, "https");
 
 				var oCustomer = _context.Customer;
 				var isOffline = oCustomer.IsOffline.HasValue && oCustomer.IsOffline.Value;
