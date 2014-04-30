@@ -2140,5 +2140,10 @@
 		{
 			get { return this[Variables.AddSageIntervalMinutes]; }
 		}
+
+		public virtual VariableValue FCFFactor
+		{
+			get { return this[Variables.FCFFactor]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

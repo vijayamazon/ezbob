@@ -246,7 +246,8 @@
 		YodleeEditAccountURL,
 		TeraPeakApiKey,
 		TeraPeakUrl,
-		AddSageIntervalMinutes
+		AddSageIntervalMinutes,
+		FCFFactor
 	} // enum ConfigurationVariables
 
 	#endregion enum ConfigurationVariables

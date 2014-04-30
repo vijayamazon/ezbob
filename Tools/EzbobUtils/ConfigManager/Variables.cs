@@ -302,6 +302,7 @@
 		TeraPeakApiKey,
 		TeraPeakUrl,
 		TrustPilotBccMail,
-		AddSageIntervalMinutes
+		AddSageIntervalMinutes,
+		FCFFactor
 	} // enum Variables
 } // namespace ConfigManager
