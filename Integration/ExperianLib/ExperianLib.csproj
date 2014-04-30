@@ -80,7 +80,7 @@
     <Compile Include="CaisFile\Utils.cs" />
     <Compile Include="ConsumerService.cs" />
     <Compile Include="ConsumerServiceResult.cs" />
-    <Compile Include="Dictionaries\AccountStatusHistory.cs" />
+    <Compile Include="Dictionaries\AccountStatusDictionary.cs" />
     <Compile Include="Dictionaries\AccountTypeDictionary.cs" />
     <Compile Include="Dictionaries\PaymentFrequencyDictionary.cs" />
     <Compile Include="Ebusiness\CompanyInfo.cs" />

@@ -304,24 +304,30 @@
 			if (string.IsNullOrEmpty(model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag))
 				model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag = "-";
 
-			var ndhac05 = string.Empty;
-			var ndhac09 = string.Empty;
-			// ReSharper disable ImplicitlyCapturedClosure
-			TryRead(() => ndhac05 = eInfo.Output.Output.ConsumerSummary.Summary.CAIS.NDHAC05,
-					"Current Worst status (fine) on active non revolving CAIS");
-			TryRead(() => { ndhac09 = eInfo.Output.Output.ConsumerSummary.Summary.CAIS.NDHAC09; },
-					"Worst status (fine) in last 6m on mortgage accounts");
+			TryRead(() =>
+				model.ConsumerSummaryCharacteristics.WorstCurrentStatus =
+					eInfo.Output.Output.FullConsumerData.ConsumerDataSummary.SummaryDetails.CAISSummary.WorstCurrent,
+				"Worst Current Status"
+			);
 
-			var worst = GetWorstStatus((ndhac05 ?? string.Empty).Trim(), (ndhac09 ?? string.Empty).Trim());
-			model.ConsumerSummaryCharacteristics.WorstCurrentStatus = AccountStatusDictionary.GetDetailedAccountStatusString(worst);
+			string sWorstCurrent = model.ConsumerSummaryCharacteristics.WorstCurrentStatus;
+
+			model.ConsumerSummaryCharacteristics.WorstCurrentStatus =
+				AccountStatusDictionary.GetDetailedAccountStatusString(model.ConsumerSummaryCharacteristics.WorstCurrentStatus);
 
 			TryRead(() =>
-					model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M =
+				model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M =
 					eInfo.Output.Output.FullConsumerData.ConsumerDataSummary.SummaryDetails.CAISSummary.WorstHistorical,
-					"Worst Historical Status");
+				"Worst Historical Status"
+			);
+
+			string sWorstHistorical = model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M;
+
 			model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M =
 				AccountStatusDictionary.GetDetailedAccountStatusString(model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M);
-			// ReSharper enable ImplicitlyCapturedClosure
+
+			Log.DebugFormat("Worst current status is: {0} - {1}", sWorstCurrent, model.ConsumerSummaryCharacteristics.WorstCurrentStatus);
+			Log.DebugFormat("Worst historical status is: {0} - {1}", sWorstHistorical, model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M);
 
 			var accList = new List<AccountInfo>();
 
@@ -988,7 +994,7 @@
 			}
 			catch
 			{
-				Errors.Add("Can`t read value for: " + key);
+				Errors.Add("Can't read value for: " + key);
 			}
 		}
 
