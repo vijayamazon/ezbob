@@ -81,15 +81,9 @@
 											 },
 										 "https");
 
-			var isOffline = customer.IsOffline.HasValue && customer.IsOffline.Value;
-			var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
-			var postCode = address != null ? address.Postcode : "";
-			var accountNumber = customer.BankAccount != null && customer.BankAccount.AccountNumber != null ? customer.BankAccount.AccountNumber : "";
-			var sortCode = customer.BankAccount != null && customer.BankAccount.SortCode != null ? customer.BankAccount.SortCode : "";
-			DateTime? dateOfBirth = customer.PersonalInfo != null ? customer.PersonalInfo.DateOfBirth : null;
-			var surname = customer.PersonalInfo != null ? customer.PersonalInfo.Surname : "";
+			
 
-			string url = _payPointFacade.GeneratePaymentUrl(isOffline, 5.00m, callback, dateOfBirth, surname, postCode, accountNumber, sortCode);
+			string url = _payPointFacade.GeneratePaymentUrl(customer, 5.00m, callback);
 			_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Redirect to " + url, "Successful", "");
 			return Redirect(url);
 		}

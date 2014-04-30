@@ -154,17 +154,8 @@
 			var oCustomer = _customers.Get(id);
 			int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
-
 			var callback = Url.Action("PayPointCallback", "PaymentAccounts", new { Area = "Underwriter", customerId = id, cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate) }, "https");
-			var isOffline = oCustomer.IsOffline.HasValue && oCustomer.IsOffline.Value;
-			var address = oCustomer.AddressInfo.PersonalAddress.FirstOrDefault();
-			var postCode = address != null ? address.Postcode : "";
-			var accountNumber = oCustomer.BankAccount != null && oCustomer.BankAccount.AccountNumber != null ? oCustomer.BankAccount.AccountNumber : "";
-			var sortCode = oCustomer.BankAccount != null && oCustomer.BankAccount.SortCode != null ? oCustomer.BankAccount.SortCode : "";
-			DateTime? dateOfBirth = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.DateOfBirth : null;
-			var surname = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.Surname : "";
-
-			var url = _payPointFacade.GeneratePaymentUrl(isOffline, 5m, callback, dateOfBirth, surname, postCode, accountNumber, sortCode);
+			var url = _payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
 
 			return Redirect(url);
 		}

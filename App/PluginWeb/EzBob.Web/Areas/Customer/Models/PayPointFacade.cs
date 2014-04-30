@@ -2,17 +2,19 @@
 {
 	using System;
 	using System.Globalization;
+	using System.Linq;
 	using System.Security.Cryptography;
 	using System.Text;
 	using System.Text.RegularExpressions;
 	using System.Web;
 	using EZBob.DatabaseLib.Model;
 	using StructureMap;
-
+	using EZBob.DatabaseLib.Model.Database;
 	public interface IPayPointFacade
 	{
 		bool CheckHash(string hash, Uri url);
-		string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, DateTime? dateOfBirth, string surname, string postcode, string accountNumber, string sortCode, bool deferred = false);
+		string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, DateTime? dateOfBirth, string surname, string postcode, string accountNumber, bool deferred = false);
+		string GeneratePaymentUrl(Customer customer, decimal amount, string callback, bool deferred = false);
 	}
 
 	public class PayPointFacade : IPayPointFacade
@@ -55,7 +57,18 @@
 			return sb.ToString().ToLowerInvariant();
 		}
 
-		public string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, DateTime? dateOfBirth, string surname, string postcode, string accountNumber, string sortCode, bool deferred = false)
+		public string GeneratePaymentUrl(Customer customer, decimal amount, string callback, bool deferred = false)
+		{
+			var isOffline = customer.IsOffline.HasValue && customer.IsOffline.Value;
+			var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			var postCode = address != null ? address.Postcode : "";
+			var accountNumber = customer.BankAccount != null && customer.BankAccount.AccountNumber != null ? customer.BankAccount.AccountNumber : "";
+			DateTime? dateOfBirth = customer.PersonalInfo != null ? customer.PersonalInfo.DateOfBirth : null;
+			var surname = customer.PersonalInfo != null ? customer.PersonalInfo.Surname : "";
+			return GeneratePaymentUrl(isOffline, amount, callback, dateOfBirth, surname, postCode, accountNumber, deferred);
+		}
+
+		public string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, DateTime? dateOfBirth, string surname, string postcode, string accountNumber, bool deferred = false)
 		{
 			var transactionId = Guid.NewGuid().ToString();
 			var merchantId = mid;
@@ -66,8 +79,7 @@
 			var regex = new Regex("[^a-zA-Z -]");
 			surname = regex.Replace(surname, String.Empty);
 			var surnameFormatted = surname.Length > 6 ? surname.Substring(0, 6) : surname;
-			var accountNumSortCode = string.Format("{0}{1}", accountNumber, sortCode);
-			var accountNumberFormatted = accountNumSortCode.Length >= 10 ? accountNumSortCode.Substring(0, 10) : accountNumSortCode;
+			var accountNumberFormatted = accountNumber.Length >= 10 ? accountNumber.Substring(0, 10) : accountNumber;
 			var postCodeFormatted = postcode.Split(' ')[0];
 			var options = string.Format("{0};fin_serv_birth_date={1};fin_serv_surname={2};fin_serv_postcode={3};fin_serv_account={4}", paypointOptions, dateOfBirthFormatted, surnameFormatted, postCodeFormatted, accountNumberFormatted);
 			if (deferred)

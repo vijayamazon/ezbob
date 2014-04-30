@@ -79,16 +79,7 @@
 					}, "https");
 
 				var oCustomer = _context.Customer;
-				var isOffline = oCustomer.IsOffline.HasValue && oCustomer.IsOffline.Value;
-				var address = oCustomer.AddressInfo.PersonalAddress.FirstOrDefault();
-				var postCode = address != null ? address.Postcode : "";
-				var accountNumber = oCustomer.BankAccount != null && oCustomer.BankAccount.AccountNumber != null ? oCustomer.BankAccount.AccountNumber : "";
-				var sortCode = oCustomer.BankAccount != null && oCustomer.BankAccount.SortCode != null ? oCustomer.BankAccount.SortCode : "";
-				DateTime? dateOfBirth = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.DateOfBirth : null;
-				var surname = oCustomer.PersonalInfo != null ? oCustomer.PersonalInfo.Surname : "";
-				
-				var url = _payPointFacade.GeneratePaymentUrl(isOffline, amount, callback, dateOfBirth, surname, postCode, accountNumber, sortCode);
-
+				var url = _payPointFacade.GeneratePaymentUrl(oCustomer, amount, callback);
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to " + url, "Successful", "");
 
 				return Redirect(url);
