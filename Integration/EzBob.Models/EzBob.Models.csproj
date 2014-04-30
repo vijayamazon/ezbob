@@ -85,6 +85,7 @@
     <Compile Include="EditLoanDetailsModel.cs" />
     <Compile Include="FormattingUtils.cs" />
     <Compile Include="BasicInterestRate.cs" />
+    <Compile Include="Marketplaces\MarketPlacesFacade.cs" />
     <Compile Include="Marketplaces\Builders\ChannelGrabberMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\CompanyFilesMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\EKMMarketplaceModelBuilder.cs" />
@@ -121,7 +122,6 @@
     <Compile Include="LoanScheduleItemModel.cs" />
     <Compile Include="LoanTransactionModel.cs" />
     <Compile Include="Marketplaces\Builders\MarketplaceModelBuilder.cs" />
-    <Compile Include="Marketplaces\MarketPlacesFacade.cs" />
     <Compile Include="Marketplaces\Builders\MPRegistry.cs" />
     <Compile Include="Marketplaces\Builders\PayPalMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\PayPointMarketplaceModelBuilder.cs" />

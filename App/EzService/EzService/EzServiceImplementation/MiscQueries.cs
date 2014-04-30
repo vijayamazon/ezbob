@@ -186,5 +186,18 @@
 				Value = instance.CompanyIncorporationDate.HasValue ? instance.CompanyIncorporationDate.Value : DateTime.UtcNow
 			};
 		}
+
+		public IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId)
+		{
+			GetExperianAccountsCurrentBalance instance;
+
+			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
+
+			return new IntActionResult
+			{
+				MetaData = result,
+				Value = instance.CurrentBalance
+			};
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

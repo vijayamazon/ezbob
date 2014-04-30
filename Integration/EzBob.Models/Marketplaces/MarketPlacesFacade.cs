@@ -62,6 +62,33 @@
 
 						if (hmrcData != null) {
 							hmrcData.BankStatement = oYodleeModel.Yodlee.BankStatementDataModel;
+
+							//ServiceClient serviceClient = new ServiceClient();
+							//IntActionResult result = serviceClient.Instance.GetExperianAccountsCurrentBalance(customer.Id);
+							//decimal factor = ConfigManager.CurrentValues.Instance.FCFFactor;
+
+							//double newActualLoansRepayment = result.Value / factor;
+							//double newFreeCashFlow = oYodleeModel.Yodlee.BankStatementDataModel.FreeCashFlow -
+							//						 oYodleeModel.Yodlee.BankStatementDataModel.ActualLoansRepayment +
+							//						 newActualLoansRepayment;
+
+							//hmrcData.BankStatement = new BankStatementDataModel
+							//	{
+							//		PeriodMonthsNum = oYodleeModel.Yodlee.BankStatementDataModel.PeriodMonthsNum,
+							//		Period = oYodleeModel.Yodlee.BankStatementDataModel.Period,
+							//		PercentOfAnnual = oYodleeModel.Yodlee.BankStatementDataModel.PercentOfAnnual,
+							//		Revenues = oYodleeModel.Yodlee.BankStatementDataModel.Revenues,
+							//		Opex = oYodleeModel.Yodlee.BankStatementDataModel.Opex,
+							//		TotalValueAdded = oYodleeModel.Yodlee.BankStatementDataModel.TotalValueAdded,
+							//		PercentOfRevenues = oYodleeModel.Yodlee.BankStatementDataModel.PercentOfRevenues,
+							//		Salaries = oYodleeModel.Yodlee.BankStatementDataModel.Salaries,
+							//		Tax = oYodleeModel.Yodlee.BankStatementDataModel.Tax,
+							//		Ebida = oYodleeModel.Yodlee.BankStatementDataModel.Ebida,
+							//		PercentOfAnnual2 = oYodleeModel.Yodlee.BankStatementDataModel.PercentOfAnnual2,
+							//		ActualLoansRepayment = newActualLoansRepayment,
+							//		FreeCashFlow = newFreeCashFlow
+							//	};
+
 							hmrcData.BankStatementAnnualized = CalculateAnnualizedBankStatement(hmrcData);
 						} // if
 					}

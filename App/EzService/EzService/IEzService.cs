@@ -2,11 +2,9 @@
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using ActionResults;
-	using EzBob.Backend.Strategies;
 	using EzBob.Models.Agreements;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using Ezbob.Backend.Models;
-	using FraudChecker;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
@@ -354,6 +352,9 @@
 
 		[OperationContract]
 		DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
+
+		[OperationContract]
+		IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId);
 	} // interface IEzService
 } // namespace EzService
 
