@@ -209,6 +209,7 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
 
     initialize: (options) ->
         @parentView = options.parentView
+        @lastTimeDupDirFound = false
 
     regions: 
         nonlimitedAddress: '#NonLimitedAddress'
@@ -266,8 +267,15 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
                 @parentView.onDirectorAdded()
             )
             @addDirector.setDupCheckCompleteHandler ( (bDupFound) =>
-                EzBob.App.trigger 'clear'
-                EzBob.App.trigger 'error', 'Duplicate director detected.' if bDupFound
+                if bDupFound
+                    unless @lastTimeDupDirFound
+                        EzBob.App.trigger 'clear'
+                        EzBob.App.trigger 'error', 'Duplicate director detected.'
+
+                    @lastTimeDupDirFound = true
+                else
+                    EzBob.App.trigger 'clear'
+                    @lastTimeDupDirFound = false
             )
             @addDirector.render()
 
@@ -279,6 +287,7 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
 
     initialize: (options) ->
         @parentView = options.parentView
+        @lastTimeDupDirFound = false
 
     regions: 
         limitedAddress: '#LimitedCompanyAddress'
@@ -334,8 +343,15 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
                 @parentView.onDirectorAdded()
             )
             @addDirector.setDupCheckCompleteHandler ( (bDupFound) =>
-                EzBob.App.trigger 'clear'
-                EzBob.App.trigger 'error', 'Duplicate director detected.' if bDupFound
+                if bDupFound
+                    unless @lastTimeDupDirFound
+                        EzBob.App.trigger 'clear'
+                        EzBob.App.trigger 'error', 'Duplicate director detected.'
+
+                    @lastTimeDupDirFound = true
+                else
+                    EzBob.App.trigger 'clear'
+                    @lastTimeDupDirFound = false
             )
             @addDirector.render()
 

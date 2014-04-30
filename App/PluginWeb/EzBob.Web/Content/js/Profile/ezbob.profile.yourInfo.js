@@ -285,7 +285,8 @@
     NonLimitedInfoView.prototype.template = '#nonlimited-info-template';
 
     NonLimitedInfoView.prototype.initialize = function(options) {
-      return this.parentView = options.parentView;
+      this.parentView = options.parentView;
+      return this.lastTimeDupDirFound = false;
     };
 
     NonLimitedInfoView.prototype.regions = {
@@ -351,9 +352,15 @@
           return _this.parentView.onDirectorAdded();
         }));
         this.addDirector.setDupCheckCompleteHandler((function(bDupFound) {
-          EzBob.App.trigger('clear');
           if (bDupFound) {
-            return EzBob.App.trigger('error', 'Duplicate director detected.');
+            if (!_this.lastTimeDupDirFound) {
+              EzBob.App.trigger('clear');
+              EzBob.App.trigger('error', 'Duplicate director detected.');
+            }
+            return _this.lastTimeDupDirFound = true;
+          } else {
+            EzBob.App.trigger('clear');
+            return _this.lastTimeDupDirFound = false;
           }
         }));
         this.addDirector.render();
@@ -377,7 +384,8 @@
     LimitedInfoView.prototype.template = '#limited-info-template';
 
     LimitedInfoView.prototype.initialize = function(options) {
-      return this.parentView = options.parentView;
+      this.parentView = options.parentView;
+      return this.lastTimeDupDirFound = false;
     };
 
     LimitedInfoView.prototype.regions = {
@@ -441,9 +449,15 @@
           return _this.parentView.onDirectorAdded();
         }));
         this.addDirector.setDupCheckCompleteHandler((function(bDupFound) {
-          EzBob.App.trigger('clear');
           if (bDupFound) {
-            return EzBob.App.trigger('error', 'Duplicate director detected.');
+            if (!_this.lastTimeDupDirFound) {
+              EzBob.App.trigger('clear');
+              EzBob.App.trigger('error', 'Duplicate director detected.');
+            }
+            return _this.lastTimeDupDirFound = true;
+          } else {
+            EzBob.App.trigger('clear');
+            return _this.lastTimeDupDirFound = false;
           }
         }));
         this.addDirector.render();

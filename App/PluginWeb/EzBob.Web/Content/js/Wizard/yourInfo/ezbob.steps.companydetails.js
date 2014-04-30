@@ -71,6 +71,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		evt.preventDefault();
 		evt.stopPropagation();
 
+		this.inputChanged();
 		this.next();
 
 		return false;

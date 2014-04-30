@@ -13,6 +13,8 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		this.model = new EzBob.DirectorsModels();
 
 		this.name = 'DirectorAddress';
+
+		this.lastTimeDupFound = false;
 	}, // initialize
 
 	events: {
@@ -135,8 +137,11 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			);
 
 			if (oKeyList[sDirKey]) {
-				EzBob.App.trigger('clear');
-				EzBob.App.trigger('error', 'Duplicate director detected.');
+				if (!self.lastTimeDupFound) {
+					EzBob.App.trigger('clear');
+					EzBob.App.trigger('error', 'Duplicate director detected.');
+				} // if
+
 				bResult = false;
 				return false;
 			} // if
@@ -145,6 +150,11 @@ EzBob.DirectorMainView = Backbone.View.extend({
 
 			return true;
 		});
+
+		this.lastTimeDupFound = !bResult;
+
+		if (bResult)
+			EzBob.App.trigger('clear');
 
 		return bResult;
 	}, // validateDuplicates
