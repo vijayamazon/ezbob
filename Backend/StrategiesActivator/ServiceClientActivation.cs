@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Reflection;
 	using System.ServiceModel;
+	using System.Text;
 	using ConfigManager;
 	using EzServiceConfigurationLoader;
 	using System;
@@ -11,6 +12,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
 	using Newtonsoft.Json;
 	using log4net;
 
@@ -872,6 +874,34 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			adminClient.Terminate(new Guid(args[1]));
 		} // TerminateAction
+
+		[Activation]
+		private void GeneratePassword() {
+			if (args.Length < 2) {
+				m_oLog.Msg(@"Usage: GeneratePassword <arg 1> <arg 2> ... <arg N>
+
+Generates password hash by concatenating all the arguments in the order of appearance.
+
+I.e. to generate broker password call
+GeneratePassword broker-contact-email@example.com password-itself
+
+");
+				return;
+			} // if
+
+			var os = new StringBuilder();
+			for (int i = 1; i < args.Length; i++)
+				os.Append(args[i]);
+
+			string sOriginalPassword = os.ToString();
+
+			string sHash = SecurityUtils.HashPassword(sOriginalPassword);
+
+			m_oLog.Msg(
+				"\n\nOriginal string:\n\t{0}\n\ngenerated hash:\n\t{1}\n\nquery:\n\tUPDATE Broker SET Password = '{1}' WHERE ContactEmail = '{2}'\n",
+				sOriginalPassword, sHash, args[1]
+			);
+		} // GeneratePassword
 
 		// ReSharper restore UnusedMember.Local
 
