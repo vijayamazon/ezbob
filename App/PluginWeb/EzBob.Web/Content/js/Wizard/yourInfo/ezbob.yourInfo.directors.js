@@ -135,6 +135,8 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			);
 
 			if (oKeyList[sDirKey]) {
+				EzBob.App.trigger('clear');
+				EzBob.App.trigger('error', 'Duplicate director detected.');
 				bResult = false;
 				return false;
 			} // if
