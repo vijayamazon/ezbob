@@ -28,7 +28,7 @@ EzBob.CompanyFilesAccountInfoView = Backbone.Marionette.ItemView.extend({
 
 	render: function() {
 		EzBob.CompanyFilesAccountInfoView.__super__.render.call(this);
-
+	    EzBob.UiAction.registerView(this);
 		this.initDropzone();
 
 		return this;
