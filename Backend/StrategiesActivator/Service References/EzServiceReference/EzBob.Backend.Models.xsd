@@ -1,61 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:simpleType name="FraudMode">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="FullCheck" />
-      <xs:enumeration value="PersonalDetaisCheck" />
-      <xs:enumeration value="CompanyDetailsCheck" />
-      <xs:enumeration value="MarketplacesCheck" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
-  <xs:complexType name="FinishWizardArgs">
+  <xs:complexType name="BrokerCustomerDetails">
     <xs:sequence>
-      <xs:element minOccurs="0" name="AvoidAutoDecision" type="xs:int" />
-      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
-      <xs:element minOccurs="0" name="DoFraud" type="xs:boolean" />
-      <xs:element minOccurs="0" name="DoMain" type="xs:boolean" />
-      <xs:element minOccurs="0" name="DoSendEmail" type="xs:boolean" />
-      <xs:element minOccurs="0" name="FraudMode" type="tns:FraudMode" />
-      <xs:element minOccurs="0" name="IsUnderwriterForced" type="xs:boolean" />
-      <xs:element minOccurs="0" name="NewCreditLineOption" type="tns:NewCreditLineOption" />
+      <xs:element minOccurs="0" name="CrmData" nillable="true" type="tns:ArrayOfBrokerCustomerCrmEntry" />
+      <xs:element minOccurs="0" name="PersonalData" nillable="true" type="tns:BrokerCustomerPersonalData" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="FinishWizardArgs" nillable="true" type="tns:FinishWizardArgs" />
-  <xs:simpleType name="NewCreditLineOption">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="SkipEverything">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="UpdateEverythingExceptMp">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="UpdateEverythingAndApplyAutoRules">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="UpdateEverythingAndGoToManualDecision">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
+  <xs:element name="BrokerCustomerDetails" nillable="true" type="tns:BrokerCustomerDetails" />
+  <xs:complexType name="ArrayOfBrokerCustomerCrmEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BrokerCustomerCrmEntry" nillable="true" type="tns:BrokerCustomerCrmEntry" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBrokerCustomerCrmEntry" nillable="true" type="tns:ArrayOfBrokerCustomerCrmEntry" />
+  <xs:complexType name="BrokerCustomerCrmEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActionName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CrDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="StatusName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BrokerCustomerCrmEntry" nillable="true" type="tns:BrokerCustomerCrmEntry" />
+  <xs:complexType name="BrokerCustomerPersonalData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="birthdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="daytimephone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="gender" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="maritalstatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mobilephone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BrokerCustomerPersonalData" nillable="true" type="tns:BrokerCustomerPersonalData" />
   <xs:complexType name="BrokerProperties">
     <xs:sequence>
       <xs:element minOccurs="0" name="BrokerID" type="xs:int" />
@@ -97,42 +78,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="BrokerCustomerEntry" nillable="true" type="tns:BrokerCustomerEntry" />
-  <xs:complexType name="BrokerCustomerDetails">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="CrmData" nillable="true" type="tns:ArrayOfBrokerCustomerCrmEntry" />
-      <xs:element minOccurs="0" name="PersonalData" nillable="true" type="tns:BrokerCustomerPersonalData" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="BrokerCustomerDetails" nillable="true" type="tns:BrokerCustomerDetails" />
-  <xs:complexType name="ArrayOfBrokerCustomerCrmEntry">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="BrokerCustomerCrmEntry" nillable="true" type="tns:BrokerCustomerCrmEntry" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfBrokerCustomerCrmEntry" nillable="true" type="tns:ArrayOfBrokerCustomerCrmEntry" />
-  <xs:complexType name="BrokerCustomerCrmEntry">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ActionName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CrDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="StatusName" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="BrokerCustomerCrmEntry" nillable="true" type="tns:BrokerCustomerCrmEntry" />
-  <xs:complexType name="BrokerCustomerPersonalData">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="address" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="birthdate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="daytimephone" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="gender" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="id" type="xs:int" />
-      <xs:element minOccurs="0" name="maritalstatus" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="mobilephone" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="BrokerCustomerPersonalData" nillable="true" type="tns:BrokerCustomerPersonalData" />
   <xs:complexType name="ArrayOfBrokerCustomerFile">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="BrokerCustomerFile" nillable="true" type="tns:BrokerCustomerFile" />
@@ -165,4 +110,59 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="FileDescription" nillable="true" type="tns:FileDescription" />
+  <xs:simpleType name="NewCreditLineOption">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SkipEverything">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UpdateEverythingExceptMp">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UpdateEverythingAndApplyAutoRules">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UpdateEverythingAndGoToManualDecision">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
+  <xs:simpleType name="FraudMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FullCheck" />
+      <xs:enumeration value="PersonalDetaisCheck" />
+      <xs:enumeration value="CompanyDetailsCheck" />
+      <xs:enumeration value="MarketplacesCheck" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
+  <xs:complexType name="FinishWizardArgs">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AvoidAutoDecision" type="xs:int" />
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="DoFraud" type="xs:boolean" />
+      <xs:element minOccurs="0" name="DoMain" type="xs:boolean" />
+      <xs:element minOccurs="0" name="DoSendEmail" type="xs:boolean" />
+      <xs:element minOccurs="0" name="FraudMode" type="tns:FraudMode" />
+      <xs:element minOccurs="0" name="IsUnderwriterForced" type="xs:boolean" />
+      <xs:element minOccurs="0" name="NewCreditLineOption" type="tns:NewCreditLineOption" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FinishWizardArgs" nillable="true" type="tns:FinishWizardArgs" />
 </xs:schema>

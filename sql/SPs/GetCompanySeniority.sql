@@ -1,23 +1,26 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetCompanySeniority]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetCompanySeniority]
+IF OBJECT_ID('GetCompanySeniority') IS NULL
+	EXECUTE('CREATE PROCEDURE GetCompanySeniority AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetCompanySeniority] 
-	(@CustomerId INT)
+
+ALTER PROCEDURE GetCompanySeniority
+@CustomerId INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	SELECT 
-		MP_ExperianDataCache.JsonPacket AS CompanyData
+		eda.JsonPacket AS CompanyData
 	FROM 
-		MP_ExperianDataCache, 
-		Company,
-		Customer
+		MP_ExperianDataCache eda
+		INNER JOIN Company co ON eda.CompanyRefNumber = co.ExperianRefNum
+		INNER JOIN Customer cu ON co.Id = cu.CompanyId
 	WHERE 
-		MP_ExperianDataCache.CompanyRefNumber = Company.ExperianRefNum AND 
-		Company.Id = Customer.CompanyId AND
-		Customer.Id = @CustomerId		
+		cu.Id = @CustomerId		
 END
 GO
