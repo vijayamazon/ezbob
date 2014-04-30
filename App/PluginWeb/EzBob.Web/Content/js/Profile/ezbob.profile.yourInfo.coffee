@@ -265,6 +265,10 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
                 directorEl.hide()
                 @parentView.onDirectorAdded()
             )
+            @addDirector.setDupCheckCompleteHandler ( (bDupFound) =>
+                EzBob.App.trigger 'clear'
+                EzBob.App.trigger 'error', 'Duplicate director detected.' if bDupFound
+            )
             @addDirector.render()
 
         directorEl.show()
@@ -328,6 +332,10 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
             @addDirector.setSuccessHandler ( =>
                 directorEl.hide()
                 @parentView.onDirectorAdded()
+            )
+            @addDirector.setDupCheckCompleteHandler ( (bDupFound) =>
+                EzBob.App.trigger 'clear'
+                EzBob.App.trigger 'error', 'Duplicate director detected.' if bDupFound
             )
             @addDirector.render()
 

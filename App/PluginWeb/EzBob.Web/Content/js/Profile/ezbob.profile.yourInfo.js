@@ -350,6 +350,12 @@
           directorEl.hide();
           return _this.parentView.onDirectorAdded();
         }));
+        this.addDirector.setDupCheckCompleteHandler((function(bDupFound) {
+          EzBob.App.trigger('clear');
+          if (bDupFound) {
+            return EzBob.App.trigger('error', 'Duplicate director detected.');
+          }
+        }));
         this.addDirector.render();
       }
       directorEl.show();
@@ -433,6 +439,12 @@
         this.addDirector.setSuccessHandler((function() {
           directorEl.hide();
           return _this.parentView.onDirectorAdded();
+        }));
+        this.addDirector.setDupCheckCompleteHandler((function(bDupFound) {
+          EzBob.App.trigger('clear');
+          if (bDupFound) {
+            return EzBob.App.trigger('error', 'Duplicate director detected.');
+          }
         }));
         this.addDirector.render();
       }
