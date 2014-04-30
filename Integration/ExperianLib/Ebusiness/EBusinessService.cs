@@ -6,9 +6,11 @@
 	using System.Reflection;
 	using System.Text;
 	using System.Web;
+	using System.Xml;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using StructureMap;
@@ -23,6 +25,7 @@
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
 			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
 			eSeriesUrl = configurationVariablesRepository.GetByName("ExperianESeriesUrl");
+			experianDL97AccountsRepository = ObjectFactory.GetInstance<ExperianDL97AccountsRepository>();
 		} // constructor
 
 		#endregion constructor
@@ -228,10 +231,120 @@
 				cacheVal.JsonPacket = response;
 
 				repo.SaveOrUpdate(cacheVal);
+
+				try
+				{
+					ParseToDb(cacheVal.JsonPacket, cacheVal);
+				}
+				catch (Exception e)
+				{
+					Log.ErrorFormat("Error parsing response:{0}. The error:{1}", cacheVal.Id, e);
+				}
+
 			}, "EBusinessService.AddToCache(" + refNumber + ")");
 		} // AddToCache
 
 		#endregion method AddToCache
+
+		public void ParseToDb(string response, MP_ExperianDataCache cache)
+		{
+			var xmlDoc = new XmlDocument();
+
+			var stream = new MemoryStream();
+			var writer = new StreamWriter(stream);
+			writer.Write(response);
+			writer.Flush();
+			stream.Position = 0;
+			xmlDoc.Load(stream);
+
+			int totalCurrentBalanceOfActiveAccounts = 0;
+
+			// Remove old entries
+			ExperianDL97Accounts oldEntry = experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.DataCache.Id == cache.Id);
+			while (oldEntry != null)
+			{
+				experianDL97AccountsRepository.Delete(oldEntry);
+				oldEntry = experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.DataCache.Id == cache.Id);
+			}
+
+			XmlNodeList dl97List = xmlDoc.SelectNodes("//DL97");
+			if (dl97List != null)
+			{
+				foreach (XmlElement dl97 in dl97List)
+				{
+					XmlNode stateNode = dl97.SelectSingleNode("ACCTSTATE");
+					XmlNode typeNode = dl97.SelectSingleNode("ACCTTYPE");
+					XmlNode status12MonthsNode = dl97.SelectSingleNode("ACCTSTATUS12");
+					XmlNode lastUpdatedYearNode = dl97.SelectSingleNode("CAISLASTUPDATED-YYYY");
+					XmlNode lastUpdatedMonthNode = dl97.SelectSingleNode("CAISLASTUPDATED-MM");
+					XmlNode lastUpdatedDayNode = dl97.SelectSingleNode("CAISLASTUPDATED-DD");
+					XmlNode companyTypeNode = dl97.SelectSingleNode("COMPANYTYPE");
+					XmlNode currentBalanceNode = dl97.SelectSingleNode("CURRBALANCE");
+					XmlNode monthsDataNode = dl97.SelectSingleNode("MONTHSDATA");
+					XmlNode status1To2Node = dl97.SelectSingleNode("STATUS1TO2");
+					XmlNode status3To9Node = dl97.SelectSingleNode("STATUS3TO9");
+
+					string state = stateNode != null ? stateNode.InnerText : string.Empty;
+					string type = typeNode != null ? typeNode.InnerText : string.Empty;
+					string status12Months = status12MonthsNode != null ? status12MonthsNode.InnerText : string.Empty;
+					DateTime? lastUpdated = null;
+					if (lastUpdatedYearNode != null && lastUpdatedMonthNode != null && lastUpdatedDayNode != null)
+					{
+						int year, month, day;
+						if (int.TryParse(lastUpdatedYearNode.InnerText, out year) &&
+							int.TryParse(lastUpdatedMonthNode.InnerText, out month) &&
+							int.TryParse(lastUpdatedDayNode.InnerText, out day))
+						{
+							lastUpdated = new DateTime(year, month, day);
+						}
+					}
+					string companyType = companyTypeNode != null ? companyTypeNode.InnerText : string.Empty;
+					int currentBalance = 0;
+					if (currentBalanceNode != null)
+					{
+						int.TryParse(currentBalanceNode.InnerText, out currentBalance);
+					}
+					int monthsData = 0;
+					if (monthsDataNode != null)
+					{
+						int.TryParse(monthsDataNode.InnerText, out monthsData);
+					}
+					int status1To2 = 0;
+					if (status1To2Node != null)
+					{
+						int.TryParse(status1To2Node.InnerText, out status1To2);
+					}
+					int status3To9 = 0;
+					if (status3To9Node != null)
+					{
+						int.TryParse(status3To9Node.InnerText, out status3To9);
+					}
+
+					var tmp = new ExperianDL97Accounts
+					{
+						DataCache = cache,
+						State = state,
+						Type = type,
+						Status12Months = status12Months,
+						LastUpdated = lastUpdated,
+						CompanyType = companyType,
+						CurrentBalance = currentBalance,
+						MonthsData = monthsData,
+						Status1To2 = status1To2,
+						Status3To9 = status3To9
+					};
+
+					experianDL97AccountsRepository.SaveOrUpdate(tmp);
+
+					if (stateNode != null && stateNode.InnerText == "A")
+					{
+						totalCurrentBalanceOfActiveAccounts += currentBalance;
+					}
+				}
+			}
+
+			//SaveTotalCurrentBalanceOfActiveAccountsIntoAnalytics(totalCurrentBalanceOfActiveAccounts);
+		}
 
 		#region method MakeRequest
 
@@ -284,6 +397,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EBusinessService));
 		private readonly SqlRetryer m_oRetryer;
 		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
+		private readonly ExperianDL97AccountsRepository experianDL97AccountsRepository;
 		private readonly string eSeriesUrl;
 
 		#endregion properties

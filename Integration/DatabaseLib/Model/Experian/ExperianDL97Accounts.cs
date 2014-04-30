@@ -10,7 +10,7 @@
 	public class ExperianDL97Accounts
 	{
 		public virtual int Id { get; set; }
-		public virtual MP_ExperianDataCache DataCacheId { get; set; }
+		public virtual MP_ExperianDataCache DataCache { get; set; }
 		public virtual string State { get; set; }
 		public virtual string Type { get; set; }
 		public virtual string Status12Months { get; set; }
@@ -27,8 +27,8 @@
 		public ExperianDL97AccountsMap()
 		{
 			Table("ExperianDL97Accounts");
-			Id(x => x.Id).GeneratedBy.HiLo("1000");
-			References(x => x.DataCacheId);
+			Id(x => x.Id);
+			References(x => x.DataCache, "DataCacheId");
 			Map(x => x.State).Length(1);
 			Map(x => x.Type).Length(2);
 			Map(x => x.Status12Months).Length(12);
