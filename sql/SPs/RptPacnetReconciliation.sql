@@ -70,7 +70,7 @@ BEGIN
 
 	INSERT INTO #ezbob
 	SELECT
-		Amount,
+		Amount - ISNULL(Fees, 0),
 		0,
 		COUNT(*)
 	FROM
@@ -82,7 +82,7 @@ BEGIN
 		AND
 		CONVERT(DATE, PostDate) = @Date
 	GROUP BY
-		Amount
+		Amount - ISNULL(Fees, 0)
 
 	INSERT INTO #res
 	SELECT
