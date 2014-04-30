@@ -173,6 +173,7 @@
     <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
+    <Compile Include="Areas\Customer\Models\VipModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\LoanCreatorNoChecks.cs" />
@@ -1282,6 +1283,7 @@
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.min.js">
       <DependentUpon>ezbob.underwriter.support.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\ezbob.vipView.js" />
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.min.js">
       <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
     </Content>

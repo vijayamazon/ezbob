@@ -219,6 +219,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			References(x => x.Broker, "BrokerID").Cascade.None();
 
 			Map(x => x.FilledByBroker);
+			Map(x => x.Vip);
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

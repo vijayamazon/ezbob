@@ -1,18 +1,20 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
+	using System;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using Infrastructure.Attributes;
+	using Infrastructure.csrf;
 	using Models;
 	using Infrastructure;
 	using Infrastructure.Filters;
 	using NHibernate;
 	using NHibernate.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using StructureMap;
 
 	public class WizardController : Controller {
 		#region public
@@ -25,15 +27,16 @@
 			CustomerModelBuilder customerModelBuilder,
 			ISession session,
 			ICustomerReasonRepository customerReasonRepository,
-			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository
-		) {
+			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository,
+			IVipRequestRepository vipRequestRepository) {
 			_context = context;
 			_questions = questions;
 			_customerModelBuilder = customerModelBuilder;
 			_session = session;
 			_reasons = customerReasonRepository;
 			_sourcesOfRepayment = customerSourceOfRepaymentRepository;
-		} // constructor
+			_vipRequestRepository = vipRequestRepository;
+			} // constructor
 
 		#endregion constructor
 
@@ -86,6 +89,65 @@
 		//} // EarnedPointsStr
 
 		#endregion action EarnedPointsStr
+		
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult Vip()
+		{
+			var vipModel = new VipModel {VipEnabled = CurrentValues.Instance.VipEnabled};
+
+			if (vipModel.VipEnabled)
+			{
+				vipModel.Ip = Request.ServerVariables["REMOTE_ADDR"];
+				if (_context.Customer != null)
+				{
+					vipModel.VipEmail = _context.Customer.Name;
+					vipModel.RequestedVip = _context.Customer.Vip;
+
+					if (_context.Customer.PersonalInfo != null)
+					{
+						vipModel.VipFullName = _context.Customer.PersonalInfo.Fullname;
+						vipModel.VipPhone = _context.Customer.PersonalInfo.DaytimePhone;
+					}
+				}
+				else
+				{
+					var numOfRequests = _vipRequestRepository.CountRequestsPerIp(vipModel.Ip);
+					if (numOfRequests >= CurrentValues.Instance.VipMaxRequests)
+					{
+						vipModel.RequestedVip = true;
+					}
+				}
+			}
+
+			return Json(vipModel, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult Vip(VipModel model)
+		{
+			var customer = _context.Customer;
+			var vip = new VipRequest
+				{
+					Customer = customer,
+					Email = model.VipEmail,
+					FullName = model.VipFullName,
+					Ip = Request.ServerVariables["REMOTE_ADDR"],
+					Phone = model.VipPhone,
+					RequestDate = DateTime.UtcNow
+				};
+			_vipRequestRepository.SaveOrUpdate(vip);
+			if (customer != null)
+			{
+				customer.Vip = true;
+			}
+			return Json(new {});
+		}
 
 		#endregion public
 
@@ -97,6 +159,7 @@
 		private readonly ISession _session;
 		private readonly ICustomerReasonRepository _reasons;
 		private readonly ICustomerSourceOfRepaymentRepository _sourcesOfRepayment;
+		private readonly IVipRequestRepository _vipRequestRepository;
 
 		#endregion private
 	} // class WizardController

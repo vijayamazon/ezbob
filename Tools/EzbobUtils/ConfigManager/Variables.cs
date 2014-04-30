@@ -208,6 +208,9 @@
 		UpdateCompanyDataPeriodDays,
 		UpdateConsumerDataPeriodDays,
 		VerboseConfigurationLogging,
+		VipEnabled,
+		VipMaxRequests,
+		VipMailReceiver,
 		YodleeAccountPrefix,
 
 		AmazonEnableRetrying,

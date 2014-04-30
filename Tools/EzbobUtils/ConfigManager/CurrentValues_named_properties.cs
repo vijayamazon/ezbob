@@ -1668,6 +1668,34 @@
 
 		#endregion property VerboseConfigurationLogging
 
+		#region property VipEnabled
+
+		public virtual VariableValue VipEnabled
+		{
+			get { return this[Variables.VipEnabled]; } // get
+		} // VipEnabled
+
+		#endregion property VipEnabled
+
+		#region property VipMaxRequests
+
+		public virtual VariableValue VipMaxRequests
+		{
+			get { return this[Variables.VipMaxRequests]; } // get
+		} // VipMaxRequests
+
+		#endregion property VipMaxRequests
+
+		#region property VipMailReceiver
+
+		public virtual VariableValue VipMailReceiver
+		{
+			get { return this[Variables.VipMailReceiver]; } // get
+		} // VipMailReceiver
+
+		#endregion property VipMailReceiver
+
+
 		#region property YodleeAccountPrefix
 
 		public virtual VariableValue YodleeAccountPrefix {

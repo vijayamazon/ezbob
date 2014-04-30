@@ -48,13 +48,12 @@ namespace EzBob.Web.Controllers {
 		private readonly IEmailConfirmation _confirmation;
 		private readonly ICustomerSessionsRepository _sessionIpLog;
 		private readonly ITestCustomerRepository _testCustomers;
-		private readonly IConfigurationVariablesRepository _configurationVariables;
 		private readonly ICustomerStatusesRepository _customerStatusesRepository;
 		private readonly DatabaseDataHelper _helper;
 		private readonly BrokerHelper m_oBrokerHelper;
 		private readonly SessionRepository sessionRepository;
 		private readonly LogOffMode logOffMode;
-
+		private readonly IVipRequestRepository _vipRequestRepository;
 		public AccountController() {
 			_helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
 			_membershipProvider = ObjectFactory.GetInstance<MembershipProvider>();
@@ -65,11 +64,11 @@ namespace EzBob.Web.Controllers {
 			_confirmation = ObjectFactory.GetInstance<IEmailConfirmation>();
 			_sessionIpLog = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
 			_testCustomers = ObjectFactory.GetInstance<ITestCustomerRepository>();
-			_configurationVariables = ObjectFactory.GetInstance<IConfigurationVariablesRepository>();
 			_customerStatusesRepository = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
 			m_oBrokerHelper = new BrokerHelper();
 			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
-			logOffMode = (LogOffMode)_configurationVariables.GetByNameAsInt("LogOffMode");
+			logOffMode = (LogOffMode)(int)ConfigManager.CurrentValues.Instance.LogOffMode;
+			_vipRequestRepository = ObjectFactory.GetInstance<IVipRequestRepository>();
 		}
 
 		//------------------------------------------------------------------------
@@ -335,7 +334,7 @@ namespace EzBob.Web.Controllers {
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 
 				var user = _users.GetUserByLogin(model.EMail);
-				_sessionIpLog.AddSessionIpLog(new CustomerSession() {
+				_sessionIpLog.AddSessionIpLog(new CustomerSession {
 					CustomerId = user.Id,
 					StartSession = DateTime.Now,
 					Ip = customerIp,
@@ -387,7 +386,7 @@ namespace EzBob.Web.Controllers {
 				var user = _users.GetUserByLogin(email);
 				var g = new RefNumberGenerator(_customers);
 				var isAutomaticTest = IsAutomaticTest(email);
-
+				var vip = _vipRequestRepository.RequestedVip(email);
 				var customer = new Customer {
 					Name = email,
 					Id = user.Id,
@@ -402,6 +401,7 @@ namespace EzBob.Web.Controllers {
 					PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone, },
 					TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
 					GreetingMailSentDate = DateTime.UtcNow,
+					Vip = vip
 				};
 
 				_log.DebugFormat("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
@@ -462,8 +462,8 @@ namespace EzBob.Web.Controllers {
 
 		private bool IsAutomaticTest(string email) {
 			bool isAutomaticTest = false;
-			var isAutomaticTestCustomerMark = _configurationVariables.GetByName("AutomaticTestCustomerMark");
-			if (isAutomaticTestCustomerMark.Value == "1") {
+			if (CurrentValues.Instance.AutomaticTestCustomerMark == "1")
+			{
 				var patterns = _testCustomers.GetAllPatterns();
 				if (patterns.Any(email.Contains)) {
 					isAutomaticTest = true;
