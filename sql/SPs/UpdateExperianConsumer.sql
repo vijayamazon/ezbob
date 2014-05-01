@@ -9,7 +9,8 @@ ALTER PROCEDURE UpdateExperianConsumer
 @ExperianError NVARCHAR(max),
 @ExperianScore INT, 
 @CustomerID BIGINT,
-@DirectorID BIGINT
+@DirectorID BIGINT,
+@BirthDate DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -20,10 +21,12 @@ BEGIN
 		CustomerId    = @CustomerID,
 		DirectorId    = @DirectorID 
 	WHERE
-		Name     = @Name
+		Name      = @Name
 		AND
-		Surname  = @Surname
+		Surname   = @Surname
 		AND
-		PostCode = @PostCode
+		PostCode  = @PostCode
+		AND
+		BirthDate = @BirthDate
 END
 GO

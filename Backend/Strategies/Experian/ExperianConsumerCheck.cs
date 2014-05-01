@@ -225,6 +225,7 @@
 				ExperianScore = Score,
 				CustomerID = m_nCustomerID,
 				DirectorID = m_nDirectorID,
+				BirthDate = m_oPersonalData.DateOfBirth,
 			};
 
 			sp.ExecuteNonQuery();
@@ -387,6 +388,7 @@
 			public int ExperianScore { get; set; }
 			public long CustomerID { get; set; }
 			public long DirectorID { get; set; }
+			public DateTime BirthDate { get; set; }
 		} // class UpdateExperianConsumer
 
 		#endregion class UpdateExperianConsumer
