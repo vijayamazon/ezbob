@@ -43,7 +43,7 @@ EzBob.VipView = Backbone.Marionette.ItemView.extend({
     submitRequest: function() {
         this.model.save();
         this.$el.hide();
-        EzBob.App.trigger('info', 'Your VIP request submited. We will contact you asap.');
+        EzBob.App.trigger('info', 'Your VIP request was submitted. We will contact you asap.');
     }
 });
 
