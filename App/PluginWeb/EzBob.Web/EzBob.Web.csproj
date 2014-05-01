@@ -257,7 +257,6 @@
     <Compile Include="Code\Bank\YodleeAccountChecker.cs" />
     <Compile Include="Code\Bank\IYodleeAccountChecker.cs" />
     <Compile Include="Code\ConcentAgreementHelper.cs" />
-    <Compile Include="Code\DbConnectionGenerator.cs" />
     <Compile Include="Code\Email\EmailConfirmation.cs" />
     <Compile Include="Code\Email\EmailConfirmationRequestInvalidStateException.cs" />
     <Compile Include="Code\Email\EmailConfirmationRequestNotFoundException.cs" />

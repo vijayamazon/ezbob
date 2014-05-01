@@ -1,6 +1,6 @@
-﻿namespace EzBob.Web.Code {
-	using Ezbob.Database;
-	using Ezbob.Logger;
+﻿namespace Ezbob.Database
+{
+	using Logger;
 	using log4net;
 
 	public static class DbConnectionGenerator {
@@ -15,10 +15,10 @@
 			if (oLog == null)
 				oLog = new SafeILog(LogManager.GetLogger(typeof (DbConnectionGenerator)));
 
-			var env = new Ezbob.Context.Environment(oLog);
+			var env = new Context.Environment(oLog);
 
 			lock (ms_oLock) {
-				ms_oDB = new Ezbob.Database.SqlConnection(env, oLog);
+				ms_oDB = new SqlConnection(env, oLog);
 			} // lock
 
 			return ms_oDB;

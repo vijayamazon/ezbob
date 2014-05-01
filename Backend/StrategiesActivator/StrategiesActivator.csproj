@@ -35,7 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ezbob.Backend.Models, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -60,11 +59,6 @@
   <ItemGroup>
     <Compile Include="ActivationAttribute.cs" />
     <Compile Include="ExitException.cs" />
-    <Compile Include="Service References\EzServiceReference\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="ServiceClientActivation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +67,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
+      <Project>{a473e5c1-6385-4e43-b909-e9c228de39db}</Project>
+      <Name>EzServiceClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
       <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>
       <Name>EzServiceConfigurationLoader</Name>
@@ -124,112 +122,9 @@
     </None>
     <None Include="Properties\DataSources\EzService.ActionMetaData.datasource" />
     <None Include="Properties\DataSources\EzService.StringListActionResult.datasource" />
-    <None Include="Service References\EzServiceReference\Arrays.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Models1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzBob.Models.Agreements.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Customer.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Underwriter.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\service.wsdl" />
-    <None Include="Service References\EzServiceReference\service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\service1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.ActionMetaData.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BoolActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerCustomersActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerLeadDetailsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerStaticDataActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.CrmLookupsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.DataActionResultOfBrokerCustomerDetails9CEqAwMi.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.DateTimeActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.DecimalActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.IntActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.QuickOfferActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.SerializedDataTableActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.StringActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.StringListActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.WizardConfigsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\EzServiceReference\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\EzServiceReference\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\EzServiceReference\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

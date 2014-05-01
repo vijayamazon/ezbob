@@ -52,6 +52,7 @@
     <Compile Include="AResultRow.cs" />
     <Compile Include="AStoredProcedure.cs" />
     <Compile Include="DbCommandExt.cs" />
+    <Compile Include="DbConnectionGenerator.cs" />
     <Compile Include="IResultRow.cs" />
     <Compile Include="IStoredProcedure.cs" />
     <Compile Include="SafeReader.cs" />

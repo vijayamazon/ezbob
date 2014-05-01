@@ -4,12 +4,10 @@
 	using System.Configuration;
 	using System.Web.Configuration;
 	using System.Web.Mvc;
-
 	using Newtonsoft.Json;
 	using log4net;
-
 	using Ezbob.Database;
-	using EzBob.Web.Code.UiEvents;
+	using Code.UiEvents;
 
 	public class UiActionController : Controller {
 		#region public
@@ -21,7 +19,7 @@
 
 			m_sSessionCookieName = sessionStateSection.CookieName;
 
-			m_oDB = EzBob.Web.Code.DbConnectionGenerator.Get();
+			m_oDB = DbConnectionGenerator.Get();
 		} // constructor
 
 		#endregion constructor

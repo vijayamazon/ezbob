@@ -9,7 +9,6 @@
 	using EzServiceConfigurationLoader;
 	using System;
 	using EzServiceReference;
-	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;

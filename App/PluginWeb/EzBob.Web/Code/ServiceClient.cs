@@ -2,6 +2,7 @@
 	using System;
 	using System.ServiceModel;
 	using EzServiceReference;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 	using log4net;
 
