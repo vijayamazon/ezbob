@@ -14,7 +14,7 @@
         <td class="@Html.Raw(css) customer-column-width-50">@Html.Raw(title)</td>
         <td class="@Html.Raw(css)">
             <span>@Html.Raw(val1) </span>
-            <button class="btn btn-mini btn-primary left-pane-button" name="@Html.Raw(val2)"><i class="fa fa-pencil" /></button>
+            <button class="btn btn-mini btn-primary" name="@Html.Raw(val2)"><i class="fa fa-pencil" /></button>
             @{ WriteLiteral(sRawHtmlUnder); }
         </td>
     </tr>
@@ -33,8 +33,8 @@
     </select>
 </script>
 
-<script id="profile-person-info-template" type="text/template">    
-    <table class="table extra-squeezed rright">
+<script id="profile-person-info-template" type="text/template">
+    <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
                 <th colspan="2">Customer Details
@@ -47,7 +47,7 @@
                 <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %> customer-column-width-50 fraud-status-td">Fraud Status</td>
                 <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">
                     <span class="fraud-status"><%= data.FraudCheckStatus %> </span>
-                    <button class="btn btn-mini btn-primary left-pane-button" name="changeFraudStatusManualy"><i class="fa fa-pencil" /></button>
+                    <button class="btn btn-mini btn-primary" name="changeFraudStatusManualy"><i class="fa fa-pencil" /></button>
                 </td>
             </tr>
 
@@ -55,7 +55,7 @@
                 <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %> customer-column-width-50 is-test-td">Test User</td>
                 <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %>">
                     <span class="is-test"><%= data.IsTestInAlertMode ? 'Yes' : 'No' %></span>
-                    <button type="button" class="btn btn-mini btn-primary istest-toggle left-pane-button">Toggle</button>
+                    <button type="button" class="btn btn-mini btn-primary istest-toggle">Toggle</button>
                 </td>
             </tr>
 
@@ -63,7 +63,7 @@
                 <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> customer-column-width-50 cci-mark-td">CCI mark</td>
                 <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %>">
                     <span class="cci-mark"><%= data.IsCciMarkInAlertMode ? 'on' : 'off' %></span>
-                    <button type="button" class="btn btn-mini btn-primary cci-mark-toggle left-pane-button">Toggle</button>
+                    <button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button>
                 </td>
             </tr>
 
@@ -123,7 +123,7 @@
                 </td>
                 <td><%- data.Email.length <= 20 ? data.Email : data.Email.substring(0,17)+'...' %>
 					<i data-title="<%- data.Email %>" class="tltp-left <%=getIcon()%>"></i>
-                    <button class="btn btn-mini btn-primary left-pane-button" name="editEmail"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-mini btn-primary" name="editEmail"><i class="fa fa-pencil"></i></button>
                 </td>
             </tr>
         </tbody>
@@ -138,7 +138,7 @@
 
 <script id="profile-loan-info-template" type="text/template">
     <% (function(m) { %>
-	<table class="table extra-squeezed rright">
+	<table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
                 <th colspan="2">Offer Details</th>
@@ -221,8 +221,8 @@
                 <td>
                     <span>£ <%= m.ManualSetupFeeAmount ? m.ManualSetupFeeAmount : '' %> | <%= m.ManualSetupFeePercent ? EzBob.formatPercents(m.ManualSetupFeePercent) : '%' %></span>
                      <%if(m.Editable){%>
-                    <button class="btn btn-mini btn-primary couple_buttons left-pane-button" name="manualSetupFeeEditAmountButton" <%= m.UseSetupFee || m.UseBrokerSetupFee ? '' : 'disabled="disabled"' %> ><i class="fa fa-gbp"></i></button>
-                    <button class="btn btn-mini btn-primary couple_buttons left-pane-button" name="manualSetupFeeEditPercentButton" <%= m.UseSetupFee || m.UseBrokerSetupFee ? '' : 'disabled="disabled"' %> >%</button>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="manualSetupFeeEditAmountButton" <%= m.UseSetupFee || m.UseBrokerSetupFee ? '' : 'disabled="disabled"' %> ><i class="fa fa-gbp"></i></button>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="manualSetupFeeEditPercentButton" <%= m.UseSetupFee || m.UseBrokerSetupFee ? '' : 'disabled="disabled"' %> >%</button>
                     <%}%>
                 </td>
             </tr>
@@ -231,8 +231,8 @@
                 <td class="<%- m.FundsAvailableUnderLimitClass %>">Funds available:</td>
                 <td class="<%- m.FundsAvailableUnderLimitClass %>">
                     <span>£ <%- m.FundsAvaliable %></span>
-                    <button class="btn btn-mini btn-primary couple_buttons left-pane-button" name="openPacnetManualButton"><i class="fa fa-plus"></i></button>
-                    <button class="btn btn-mini btn-primary couple_buttons left-pane-button" name="clearPacnetManualButton"><i class="fa fa-ban"></i></button>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="openPacnetManualButton"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="clearPacnetManualButton"><i class="fa fa-ban"></i></button>
                 </td>
             </tr>
 
@@ -249,7 +249,7 @@
                 <td><%= m.DiscountPlan %>
                     <i data-title="" class="tltp-left icon-question-sign" data-original-title=""></i> 
                     <% if (m.Editable) { %>
-                        <button class="btn btn-mini btn-primary left-pane-button" name="discountPlan">
+                        <button class="btn btn-mini btn-primary" name="discountPlan">
                             <i class="fa fa-pencil"></i>
                         </button>
                     <% } %>

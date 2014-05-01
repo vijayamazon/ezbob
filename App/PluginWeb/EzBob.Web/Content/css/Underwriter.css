@@ -286,13 +286,6 @@ table.squeezed tbody tr td {
     padding-bottom: 4px;
 }
 
-table.extra-squeezed tbody tr td {
-    padding-top: 0px;
-    padding-bottom: 1px;
-    padding-right: 0px;
-    padding-left: 3px;
-}
-
 .api-check-first-column {
     width: 140px;
 }
@@ -1040,14 +1033,6 @@ div.hmrc-enter-data-holder .add-one-period {
 }
 
 .hmrc-enter-data .value-container { padding-top: 13px; }
-
-.left-pane-button {
-    padding-top: 1px;
-    padding-bottom: 1px;
-    padding-right: 4px;
-    padding-left: 4px;
-    font-size: 10px;
-}
 
 .customer-column-width-50 {
     width: 50%;
