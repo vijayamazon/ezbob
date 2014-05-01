@@ -166,7 +166,7 @@
 		[Permission(Name = "PacnetManualButton")]
 		public JsonResult DisableTodaysPacnetManual(bool isSure) {
 			if (isSure) {
-				_pacNetManualBalanceRepository.DisableTodays();
+				_pacNetManualBalanceRepository.DisableCurrents();
 			}
 			return Json(true);
 		}

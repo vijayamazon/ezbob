@@ -34,34 +34,37 @@
 	public interface IPacNetManualBalanceRepository : IRepository<PacNetManualBalance>
 	{
 		int GetBalance();
-		void DisableTodays();
+		void DisableCurrents();
 	}
 
     public class PacNetManualBalanceRepository : NHibernateRepositoryBase<PacNetManualBalance>, IPacNetManualBalanceRepository
     {
+	    private PacNetBalanceRepository pacNetBalanceRepository;
+
 		public PacNetManualBalanceRepository(ISession session)
 			: base(session)
         {
+			pacNetBalanceRepository = new PacNetBalanceRepository(session);
         }
 
 		public int GetBalance()
 		{
-			return GetTodaysActive().Sum(row => row.Amount);
+			return GetCureentActive().Sum(row => row.Amount);
 		}
 
-		public void DisableTodays()
+		public void DisableCurrents()
 		{
-			foreach (PacNetManualBalance manualBalance in GetTodaysActive())
+			foreach (PacNetManualBalance manualBalance in GetCureentActive())
 			{  
 				manualBalance.Enabled = false;
 				SaveOrUpdate(manualBalance);
 			}
 		}
 
-		private IEnumerable<PacNetManualBalance> GetTodaysActive()
+		private IEnumerable<PacNetManualBalance> GetCureentActive()
 		{
-			DateTime today = DateTime.UtcNow;
-			return _session.Query<PacNetManualBalance>().Where(a => a.Enabled && a.Date.Year == today.Year && a.Date.Month == today.Month && a.Date.Day == today.Day);
+			DateTime lastNonManual = pacNetBalanceRepository.GetAll().Max(a => a.Date) ?? DateTime.Today;
+			return _session.Query<PacNetManualBalance>().Where(a => a.Enabled && a.Date >= lastNonManual);
 		}
     }
 }
