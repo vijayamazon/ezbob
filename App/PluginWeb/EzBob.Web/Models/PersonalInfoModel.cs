@@ -9,8 +9,8 @@
 	using Infrastructure;
 	using NHibernate;
 	using CommonLib;
+	using ServiceClientProxy;
 	using StructureMap;
-	using Code;
 
 	public class PersonalInfoModel {
 

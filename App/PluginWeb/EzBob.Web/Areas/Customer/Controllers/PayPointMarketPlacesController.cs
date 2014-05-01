@@ -3,14 +3,13 @@
     using System;
     using System.Linq;
     using System.Web.Mvc;
-    using ApplicationMng.Repository;
-    using Code;
     using EZBob.DatabaseLib.Model.Database;
     using EZBob.DatabaseLib.Model.Database.Repository;
     using Infrastructure;
     using Infrastructure.Attributes;
     using PayPoint;
     using Code.MpUniq;
+    using ServiceClientProxy;
     using Web.Models.Strings;
     using log4net;
     using EZBob.DatabaseLib;

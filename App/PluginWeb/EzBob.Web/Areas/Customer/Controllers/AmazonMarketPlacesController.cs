@@ -3,7 +3,6 @@
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Code;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -17,6 +16,7 @@
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
+	using ServiceClientProxy;
 	using Web.Models.Strings;
 	using NHibernate;
 	using log4net;

@@ -3,10 +3,9 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Web.Mvc;
-	using Code;
+	using Backend.Models;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzServiceReference;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using Models;
@@ -14,6 +13,8 @@
 	using System;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using log4net;
 
 	public class StrategySettingsController : Controller

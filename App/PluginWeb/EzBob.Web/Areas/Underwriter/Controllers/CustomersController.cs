@@ -15,6 +15,7 @@
 	using NHibernate;
 	using NHibernate.Linq;
 	using Newtonsoft.Json;
+	using ServiceClientProxy;
 	using StructureMap;
 	using Models;
 	using Code;

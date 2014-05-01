@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgreementModel.cs" />
+    <Compile Include="BasicInterestRate.cs" />
     <Compile Include="BrokerCustomerEntryModel.cs" />
     <Compile Include="BrokerCustomerCrmEntryModel.cs" />
     <Compile Include="BrokerCustomerPersonalDataModel.cs" />
@@ -54,12 +56,16 @@
     <Compile Include="enums.cs" />
     <Compile Include="FileDescriptionModel.cs" />
     <Compile Include="FinishWizardArgs.cs" />
+    <Compile Include="FormattedSchedule.cs" />
+    <Compile Include="LoanOfferMultiplier.cs" />
+    <Compile Include="LoanScheduleItemModel.cs" />
     <Compile Include="MpsTotals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="QuickOfferModel.cs" />
+    <Compile Include="TemplateModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">

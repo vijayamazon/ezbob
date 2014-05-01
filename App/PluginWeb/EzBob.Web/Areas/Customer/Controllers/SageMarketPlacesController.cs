@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
-	using Code;
 	using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
 	using System.Linq;
@@ -11,6 +10,7 @@
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Sage;
+	using ServiceClientProxy;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 

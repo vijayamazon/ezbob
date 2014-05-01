@@ -2,14 +2,13 @@
 {
 	using System.Data;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
-	using Code;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code.Email;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.Membership;
+	using ServiceClientProxy;
 
 	public class EmailVerificationController : Controller
     {

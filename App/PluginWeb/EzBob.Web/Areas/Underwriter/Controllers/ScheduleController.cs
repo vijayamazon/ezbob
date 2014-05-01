@@ -5,11 +5,11 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EzBob.Models;
 	using Code;
 	using Code.ReportGenerator;
 	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
+	using Web.Models;
 
 	public class ScheduleController : Controller
     {

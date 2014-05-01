@@ -3,8 +3,8 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using ActionResults;
+	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies;
-	using EzBob.Web.Areas.Underwriter.Models;
 	using Ezbob.Database;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;

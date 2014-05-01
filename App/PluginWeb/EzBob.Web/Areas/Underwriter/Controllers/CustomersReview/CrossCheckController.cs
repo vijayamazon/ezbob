@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Data;
 	using System.Web.Mvc;
-	using Code;
 	using CommonLib;
 	using Customer.Controllers;
 	using EZBob.DatabaseLib.Model.Database;
@@ -13,6 +12,7 @@
 	using NHibernate;
 	using System.Linq;
 	using EzBob.Models;
+	using ServiceClientProxy;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 	using LandRegistryResponseType = LandRegistryLib.LandRegistryResponseType;

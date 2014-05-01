@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System.Collections.Generic;
-	using Code;
 	using CommonLib;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib;
@@ -9,6 +8,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using Infrastructure.Attributes;
+	using ServiceClientProxy;
 	using Web.Models.Strings;
 	using YodleeLib;
 	using YodleeLib.connector;

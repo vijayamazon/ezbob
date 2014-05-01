@@ -4,7 +4,6 @@
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Code;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure.Attributes;
@@ -12,6 +11,7 @@
 	using Code.MpUniq;
 	using Infrastructure;
 	using Infrastructure.csrf;
+	using ServiceClientProxy;
 	using Web.Models.Strings;
 	using eBayLib;
 	using eBayServiceLib;

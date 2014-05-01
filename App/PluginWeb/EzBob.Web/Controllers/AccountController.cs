@@ -18,7 +18,6 @@ namespace EzBob.Web.Controllers {
 	using ExperianLib.Ebusiness;
 	using Code;
 	using Code.Email;
-	using EzServiceReference;
 	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -27,6 +26,8 @@ namespace EzBob.Web.Controllers {
 	using Infrastructure.csrf;
 	using Models;
 	using Models.Strings;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 	using log4net;
 	using EZBob.DatabaseLib;

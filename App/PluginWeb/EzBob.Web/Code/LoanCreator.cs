@@ -6,7 +6,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EzServiceReference;
 	using NHibernate;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Controllers.Exceptions;
@@ -14,6 +13,7 @@
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
+	using ServiceClientProxy;
 	using log4net;
 
 	public interface ILoanCreator

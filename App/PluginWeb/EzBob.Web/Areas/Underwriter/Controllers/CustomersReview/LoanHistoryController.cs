@@ -4,7 +4,6 @@
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -19,6 +18,7 @@
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
+	using ServiceClientProxy;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 

@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Models;
-
 namespace EzBob.Web.Areas.Customer.Models
 {
-	using EzBob.Backend.Models;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Models;
+	using Ezbob.Backend.Models;
 
 	[Serializable]
 	public class CustomerModel

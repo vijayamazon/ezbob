@@ -2,7 +2,6 @@
 {
 	using System.Collections.Generic;
 	using Areas.Customer.Controllers.Exceptions;
-	using Code;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Utils;
 	using NHibernate;
@@ -12,6 +11,7 @@
 	using System.Text.RegularExpressions;
 	using System.Web;
 	using System.Web.Security;
+	using ServiceClientProxy;
 	using StructureMap;
 	using log4net;
 

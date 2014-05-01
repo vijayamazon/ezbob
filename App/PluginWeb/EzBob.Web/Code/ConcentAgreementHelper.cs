@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Code
 {
+	using Backend.Models;
 	using ConfigManager;
 	using System;
 	using System.Globalization;
@@ -7,8 +8,9 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Agreements;
+	using Ezbob.Backend.Models;
+	using ServiceClientProxy;
 	using StructureMap;
-
 
 	public interface IConcentAgreementHelper
 	{

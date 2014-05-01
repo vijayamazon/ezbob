@@ -6,8 +6,10 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models.Agreements;
+	using Ezbob.Backend.Models;
 	using Newtonsoft.Json;
 	using System.IO;
+	using ServiceClientProxy;
 
 	public interface IAgreementsGenerator
 	{

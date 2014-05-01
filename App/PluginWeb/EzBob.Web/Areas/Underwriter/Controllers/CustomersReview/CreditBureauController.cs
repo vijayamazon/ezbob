@@ -8,10 +8,11 @@
 	using EZBob.DatabaseLib.Model;
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzServiceReference;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CreditBureauController : Controller

@@ -3,14 +3,14 @@
 	using System.Data;
 	using System.Web;
 	using System.Web.Mvc;
-	using Code;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib;
-	using EzServiceReference;
 	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Attributes;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 

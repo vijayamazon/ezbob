@@ -1,18 +1,17 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System.Data;
-	using Code;
 	using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using FreeAgent;
 	using Infrastructure;
 	using Infrastructure.Attributes;
+	using ServiceClientProxy;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 

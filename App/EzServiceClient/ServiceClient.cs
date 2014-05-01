@@ -1,4 +1,4 @@
-﻿namespace EzServiceClient {
+﻿namespace ServiceClientProxy {
 	using System;
 	using System.ServiceModel;
 	using EzServiceReference;

@@ -9,7 +9,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using ExperianLib.Ebusiness;
-	using EzServiceReference;
 	using Ezbob.Backend.Models;
 	using Iesi.Collections.Generic;
 	using Infrastructure.Attributes;
@@ -18,6 +17,7 @@
 	using Infrastructure;
 	using Infrastructure.Filters;
 	using Infrastructure.csrf;
+	using ServiceClientProxy;
 	using StructureMap;
 	using Web.Models;
 	using NHibernate;

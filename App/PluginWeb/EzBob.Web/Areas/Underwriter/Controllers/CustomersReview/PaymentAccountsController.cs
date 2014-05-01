@@ -14,6 +14,7 @@
 	using Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Customer.Models;
+	using ServiceClientProxy;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class PaymentAccountsController : Controller

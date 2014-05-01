@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using EZBob.DatabaseLib.Model.Loans;
-
-namespace EzBob.Web.Areas.Customer.Models
+﻿namespace EzBob.Web.Areas.Customer.Models
 {
-    public class LoanDetails
+	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Loans;
+	using Ezbob.Backend.Models;
+
+	public class LoanDetails
     {
         public IEnumerable<LoanTransactionModel> Transactions { get; set; }
         public IEnumerable<LoanTransactionModel> PacnetTransactions { get; set; }

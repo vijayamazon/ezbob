@@ -10,10 +10,9 @@
 	using System.Web.Mvc;
 	using System.Web.Security;
 
-	using EzBob.Web.Code;
-	using EzBob.Web.Infrastructure;
-	using EzBob.Web.Infrastructure.csrf;
-	using EzServiceReference;
+	using Code;
+	using Infrastructure;
+	using Infrastructure.csrf;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 
@@ -21,6 +20,8 @@
 	using Infrastructure.Attributes;
 	using Infrastructure.Filters;
 	using Models;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using log4net;
 
 	#endregion using

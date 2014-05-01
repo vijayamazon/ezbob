@@ -14,7 +14,7 @@
 	using NHibernate;
 	using NHibernate.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Code;
+	using ServiceClientProxy;
 
 	public class WizardController : Controller {
 		#region public

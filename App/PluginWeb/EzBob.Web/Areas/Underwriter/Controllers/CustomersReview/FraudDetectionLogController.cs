@@ -1,15 +1,13 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Linq;
 	using System.Web.Mvc;
-	using Code;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Repository;
-	using EzBob.Web.Areas.Underwriter.Models;
+	using Models;
 	using System;
-	using ApplicationMng.Repository;
 	using Ezbob.Backend.Models;
-	using FraudChecker;
 	using Infrastructure.Attributes;
+	using ServiceClientProxy;
 
 	public class FraudDetectionLogController : Controller {
 		private readonly FraudDetectionRepository _fraudDetectionLog;

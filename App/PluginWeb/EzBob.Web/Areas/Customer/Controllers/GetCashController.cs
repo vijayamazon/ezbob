@@ -15,6 +15,7 @@
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
+	using ServiceClientProxy;
 	using StructureMap;
 	using log4net;
 	using ConfigManager;

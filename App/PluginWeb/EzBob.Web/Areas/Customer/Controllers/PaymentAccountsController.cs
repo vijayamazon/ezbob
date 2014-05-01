@@ -5,7 +5,6 @@
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Web.Mvc;
-	using Code;
 	using Code.Bank;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
@@ -19,6 +18,7 @@
 	using Code.MpUniq;
 	using Infrastructure;
 	using Infrastructure.csrf;
+	using ServiceClientProxy;
 	using Web.Models.Strings;
 	using NHibernate;
 	using PostcodeAnywhere;

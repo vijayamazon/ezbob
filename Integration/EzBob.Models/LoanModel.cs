@@ -6,9 +6,10 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EzBob.Web.Areas.Customer.Models;
+	using Web.Areas.Customer.Models;
+	using Ezbob.Backend.Models;
 
-    [Serializable]
+	[Serializable]
     public class LoanModel
     {
         public int Id { get; set; }

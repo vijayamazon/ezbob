@@ -6,13 +6,13 @@
 	using Experian;
 	using EzServiceConfiguration;
 	using EzServiceConfigurationLoader;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.JsonUtils;
 	using Ezbob.Utils.XmlUtils;
-	using Models;
 	using Newtonsoft.Json.Linq;
 
 	#region class QuickOfferData

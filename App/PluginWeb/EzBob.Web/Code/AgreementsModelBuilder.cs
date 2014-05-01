@@ -3,14 +3,14 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models;
-	using EzBob.Web.Areas.Customer.Models;
+	using Ezbob.Backend.Models;
 	using PaymentServices.Calculators;
 	using EZBob.DatabaseLib.Model;
-	using EzBob.Models.Agreements;
 	using StructureMap;
 
 	public class AgreementsModelBuilder
@@ -22,7 +22,6 @@
 		{
 			_aprCalc = new APRCalculator();
 		}
-
 
 		/// <summary>
 		/// Either customer.LastCashRequest or Loan should be available
@@ -46,11 +45,58 @@
 			return GenerateAgreementModel(customer, loan, loan.Date, (double)loan.APR);
 		}
 
+		/*public static LoanScheduleItemModel FromLoanScheduleItem(LoanScheduleItem s)
+		{
+			return new LoanScheduleItemModel
+				{
+					Id = s.Id,
+					AmountDue = s.AmountDue,
+					Date = s.Date,
+					PrevInstallmentDate = s.PrevInstallmentDate,
+					Interest = s.Interest,
+					InterestPaid = s.InterestPaid,
+					LateCharges = s.LateCharges,
+					RepaymentAmount = s.RepaymentAmount,
+					Status = s.Status.ToString(),
+					StatusDescription = s.Status.ToDescription(),
+					LoanRepayment = s.LoanRepayment,
+					Balance = s.Balance,
+					BalanceBeforeRepayment = s.BalanceBeforeRepayment,
+					Fees = s.Fees,
+					InterestRate = s.InterestRate
+				};
+		}*/
+
 		private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr)
 		{
 			var model = new AgreementModel();
 
-			model.Schedule = loan.Schedule.Select(LoanScheduleItemModel.FromLoanScheduleItem).ToList();
+			List<LoanScheduleItemModel> l = new List<LoanScheduleItemModel>();
+			foreach (var s in loan.Schedule)
+			{
+				LoanScheduleItemModel n1 = new LoanScheduleItemModel()
+					{
+						Id = s.Id,
+						AmountDue = s.AmountDue,
+						Date = s.Date,
+						PrevInstallmentDate = s.PrevInstallmentDate,
+						Interest = s.Interest,
+						InterestPaid = s.InterestPaid,
+						LateCharges = s.LateCharges,
+						RepaymentAmount = s.RepaymentAmount,
+						Status = s.Status.ToString(),
+						StatusDescription = s.Status.ToDescription(),
+						LoanRepayment = s.LoanRepayment,
+						Balance = s.Balance,
+						BalanceBeforeRepayment = s.BalanceBeforeRepayment,
+						Fees = s.Fees,
+						InterestRate = s.InterestRate
+					};
+
+				l.Add(n1);
+			}
+
+			model.Schedule = l;
 
 			model.CustomerEmail = customer.Name;
 			model.FullName = customer.PersonalInfo.Fullname;

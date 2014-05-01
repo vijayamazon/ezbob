@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Models {
-	using System;
 	using System.Runtime.Serialization;
-	using Ezbob.Utils;
+	using Utils;
 
 	#region class BrokerProperties
 

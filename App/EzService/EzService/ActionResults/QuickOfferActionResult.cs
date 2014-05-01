@@ -1,6 +1,6 @@
 ﻿namespace EzService {
 	using System.Runtime.Serialization;
-	using EzBob.Backend.Models;
+	using Ezbob.Backend.Models;
 
 	#region class QuickOfferActionResult
 

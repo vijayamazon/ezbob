@@ -25,7 +25,8 @@
 	using Infrastructure.csrf;
 	using Iesi.Collections.Generic;
 	using NHibernate;
-	using EzServiceReference;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using log4net;
 
 	#endregion using

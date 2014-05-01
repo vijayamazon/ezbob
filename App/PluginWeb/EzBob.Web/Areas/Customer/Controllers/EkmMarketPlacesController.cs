@@ -2,13 +2,13 @@
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Code;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure;
 	using EKM;
 	using Code.MpUniq;
 	using Infrastructure.Attributes;
+	using ServiceClientProxy;
 	using Web.Models.Strings;
 	using log4net;
 	using NHibernate;

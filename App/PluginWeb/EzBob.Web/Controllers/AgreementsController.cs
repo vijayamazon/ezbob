@@ -2,13 +2,13 @@
 {
 	using System.Linq;
 	using System.Web.Mvc;
+	using Backend.Models;
+	using Code;
 	using EZBob.DatabaseLib.Exceptions;
 	using EZBob.DatabaseLib.Model.Loans;
-	using Areas.Customer.Models;
-	using Code.Agreements;
-	using EzBob.Models.Agreements;
 	using Infrastructure;
 	using Newtonsoft.Json;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	[Authorize]
     public class AgreementsController : Controller

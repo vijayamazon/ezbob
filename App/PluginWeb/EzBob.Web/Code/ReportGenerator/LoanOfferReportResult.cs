@@ -1,10 +1,10 @@
-﻿using System.Web.Mvc; 
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.Models;
-
-namespace EzBob.Web.Code.ReportGenerator
+﻿namespace EzBob.Web.Code.ReportGenerator
 {
-    public class LoanOfferReportResult:ActionResult
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database;
+	using Models;
+
+	public class LoanOfferReportResult:ActionResult
     {
          private readonly LoanOffer _loanOffer; 
          private readonly bool _isExcel;

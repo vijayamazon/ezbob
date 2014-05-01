@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Code;
 	using Code.MpUniq;
 	using Customer.Controllers;
 	using EZBob.DatabaseLib;
@@ -18,6 +17,7 @@
 	using Integration.ChannelGrabberFrontend;
 	using NHibernate;
 	using Newtonsoft.Json;
+	using ServiceClientProxy;
 	using Web.Models.Strings;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;

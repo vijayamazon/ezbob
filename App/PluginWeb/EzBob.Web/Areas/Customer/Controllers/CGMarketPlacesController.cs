@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System.Data;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzBob.Web.Code;
 	using Infrastructure.Attributes;
 	using NHibernate;
 	using System;
@@ -11,6 +10,7 @@
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using Infrastructure;
 	using Code.MpUniq;
+	using ServiceClientProxy;
 	using Web.Models.Strings;
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;

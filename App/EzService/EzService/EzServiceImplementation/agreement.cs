@@ -1,7 +1,8 @@
 ﻿namespace EzService.EzServiceImplementation
 {
+	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies;
-	using EzBob.Models.Agreements;
+	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation
 	{

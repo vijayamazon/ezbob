@@ -1,13 +1,13 @@
-﻿using System;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using Aspose.Cells;
-using EzBob.Models;
-
-namespace EzBob.Web.Code.ReportGenerator
+﻿namespace EzBob.Web.Code.ReportGenerator
 {
-    public class LoanOfferReportGenerator
+	using System;
+	using System.Drawing;
+	using System.Globalization;
+	using System.IO;
+	using Aspose.Cells;
+	using Models;
+
+	public class LoanOfferReportGenerator
     {
         private readonly Workbook _workbook;
 

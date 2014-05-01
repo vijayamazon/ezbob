@@ -3,9 +3,9 @@
 	using System.Text.RegularExpressions;
 	using EzServiceConfiguration;
 	using EzServiceConfigurationLoader;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Models;
 
 	#region class QuickOffer
 

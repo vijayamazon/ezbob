@@ -70,13 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountSettingsModel.cs" />
-    <Compile Include="Agreements\AgreementModel.cs" />
-    <Compile Include="Agreements\AgreementRenderer.cs" />
-    <Compile Include="Agreements\AgreementsTemplatesProvider.cs" />
     <Compile Include="ChangeLoanDetailsModelBuilder.cs" />
     <Compile Include="ConfigurationVariableModel.cs" />
     <Compile Include="HmrcManualDataModel.cs" />
-    <Compile Include="LoanOfferMultiplier.cs" />
     <Compile Include="FirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="CustomerModel.cs" />
@@ -84,7 +80,6 @@
     <Compile Include="DirectorModel.cs" />
     <Compile Include="EditLoanDetailsModel.cs" />
     <Compile Include="FormattingUtils.cs" />
-    <Compile Include="BasicInterestRate.cs" />
     <Compile Include="Marketplaces\MarketPlacesFacade.cs" />
     <Compile Include="Marketplaces\Builders\ChannelGrabberMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\CompanyFilesMarketplaceModelBuilder.cs" />
@@ -118,8 +113,6 @@
     <Compile Include="LoanChargesModel.cs" />
     <Compile Include="LoanDetails.cs" />
     <Compile Include="LoanModel.cs" />
-    <Compile Include="LoanOffer.cs" />
-    <Compile Include="LoanScheduleItemModel.cs" />
     <Compile Include="LoanTransactionModel.cs" />
     <Compile Include="Marketplaces\Builders\MarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\MPRegistry.cs" />
@@ -243,6 +236,9 @@
       <Project>{0b829475-8239-498a-8454-ac5d91272235}</Project>
       <Name>ZooplaLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Agreements\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

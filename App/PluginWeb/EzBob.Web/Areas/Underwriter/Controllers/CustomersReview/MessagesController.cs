@@ -12,6 +12,7 @@
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
+	using ServiceClientProxy;
 	using StructureMap;
 
 	public class MessagesController : Controller

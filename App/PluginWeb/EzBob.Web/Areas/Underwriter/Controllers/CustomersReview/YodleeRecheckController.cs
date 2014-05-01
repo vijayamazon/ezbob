@@ -1,9 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Data;
 	using System.Web.Mvc;
-	using Code;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure.Attributes;
+	using ServiceClientProxy;
 
 	public class YodleeRecheckController : Controller {
 		private readonly CustomerMarketPlaceRepository _customerMarketplaces;

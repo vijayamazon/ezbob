@@ -3,9 +3,10 @@
 	using System.Security.Principal;
 	using System.Web;
 	using System.Web.Security;
-	using EzServiceReference;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using log4net;
 
 	public class BrokerHelper {

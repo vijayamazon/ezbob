@@ -12,8 +12,9 @@
 	using Code;
 	using System.Text;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EzServiceReference;
 	using Infrastructure;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
 	public class ApplicationInfoModelBuilder

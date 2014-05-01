@@ -2,8 +2,7 @@
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using ActionResults;
-	using EzBob.Models.Agreements;
-	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Backend.Models;
 	using Ezbob.Backend.Models;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]

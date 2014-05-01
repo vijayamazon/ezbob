@@ -55,6 +55,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Backend\Models\Models.csproj">
+      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\backend\Strategies\Strategies.csproj">
+      <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
+      <Name>Strategies</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EzBob.Models\EzBob.Models.csproj">
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>

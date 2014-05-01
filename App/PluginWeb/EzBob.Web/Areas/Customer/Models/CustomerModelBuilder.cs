@@ -1,21 +1,19 @@
-﻿using System;
-using System.Linq;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Loans;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Models;
-using EzBob.Web.Areas.Underwriter.Models;
-using PaymentServices.Calculators;
-
-namespace EzBob.Web.Areas.Customer.Models
+﻿namespace EzBob.Web.Areas.Customer.Models
 {
+	using System;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
+	using EzBob.Models;
+	using Underwriter.Models;
+	using PaymentServices.Calculators;
 	using System.Collections.Generic;
-	using Backend.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using System.Web;
 

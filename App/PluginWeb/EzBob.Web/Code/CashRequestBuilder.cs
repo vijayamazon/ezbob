@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Models;
+	using ServiceClientProxy;
 
 	public class CashRequestBuilder
 	{

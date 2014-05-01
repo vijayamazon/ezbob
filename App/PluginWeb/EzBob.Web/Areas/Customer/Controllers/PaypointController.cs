@@ -13,6 +13,7 @@
 	using Models;
 	using Infrastructure;
 	using Infrastructure.csrf;
+	using ServiceClientProxy;
 	using Web.Models;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;

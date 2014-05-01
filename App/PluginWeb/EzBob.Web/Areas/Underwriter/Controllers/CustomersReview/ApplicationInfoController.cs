@@ -20,6 +20,7 @@
 	using Infrastructure.csrf;
 	using NHibernate;
 	using PaymentServices.PacNet;
+	using ServiceClientProxy;
 	using StructureMap;
 	using log4net;
 

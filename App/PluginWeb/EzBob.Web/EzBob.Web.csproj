@@ -175,8 +175,11 @@
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Customer\Models\VipModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
+    <Compile Include="Code\AgreementRenderer.cs" />
+    <Compile Include="Code\AgreementsTemplatesProvider.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\LoanCreatorNoChecks.cs" />
+    <Compile Include="Models\LoanOffer.cs" />
     <Compile Include="Code\ServerLog\ServerLogCachePkgModel.cs" />
     <Compile Include="Code\ServerLog\ServerLogEntryModel.cs" />
     <Compile Include="Controllers\ServerLogController.cs" />
@@ -350,7 +353,6 @@
     <Compile Include="Areas\Underwriter\Models\Reports\ReportTableColumn.cs" />
     <Compile Include="Areas\Underwriter\Models\Reports\ReportTableModel.cs" />
     <Compile Include="Areas\Underwriter\UnderwriterAreaRegistration.cs" />
-    <Compile Include="Code\ServiceClient.cs" />
     <Compile Include="Code\CashRequestBuilder.cs" />
     <Compile Include="Code\LoanDetailsBuilder.cs" />
     <Compile Include="Code\PayPal\PersonalData.cs" />
@@ -410,11 +412,6 @@
     <Compile Include="Models\Strings\DbStrings.cs" />
     <Compile Include="Models\WizardModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\EzServiceReference\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\alertify.css" />
@@ -1360,67 +1357,7 @@
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.BasicInterestRate.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.enterHmrc.js" />
-    <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
-    <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js" />
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BoolActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomersActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.CrmLookupsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.IntActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.QuickOfferActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.SerializedDataTableActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.WizardConfigsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.DateTimeActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerPropertiesActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerStaticDataActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.DecimalActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Service References\EzServiceReference\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1658,37 +1595,6 @@
     <Content Include="Views\Shared\_OnlineSellers.cshtml" />
     <Content Include="Views\Shared\security_template.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
-    <None Include="Service References\EzServiceReference\Arrays.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Models1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzBob.Models.Agreements.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Customer.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Underwriter.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\service.wsdl" />
-    <None Include="Service References\EzServiceReference\service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\service1.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="App_Code\AddDirectorInfoTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -1895,6 +1801,10 @@
       <Project>{90cc3a5f-5bea-4c13-82b7-992adc41f854}</Project>
       <Name>ValueIntervals</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\EzServiceClient\EzServiceClient.csproj">
+      <Project>{a473e5c1-6385-4e43-b909-e9c228de39db}</Project>
+      <Name>EzServiceClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
       <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>
       <Name>EzServiceConfigurationLoader</Name>
@@ -2081,9 +1991,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Broker\Views\Shared\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\EzServiceReference\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

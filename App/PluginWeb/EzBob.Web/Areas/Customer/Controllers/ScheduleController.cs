@@ -5,13 +5,13 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using CommonLib;
-	using EzBob.Models;
 	using Code;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using PaymentServices.Calculators;
 	using StructureMap;
+	using Web.Models;
 
 	public class ScheduleController : Controller {
 		public static readonly int[] LoanPeriods = { 6, 10 };

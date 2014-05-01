@@ -3,7 +3,6 @@
 	using System.Linq;
 	using System.Web;
 	using System.Web.Mvc;
-	using Code;
 	using Code.MpUniq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
@@ -13,6 +12,7 @@
 	using Infrastructure;
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;
+	using ServiceClientProxy;
 	using log4net;
 	using NHibernate;
 	using Web.Models.Strings;

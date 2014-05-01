@@ -5,7 +5,6 @@
 	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Code;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
@@ -17,6 +16,7 @@
 	using CommonLib;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
+	using ServiceClientProxy;
 	using YodleeLib;
 	using YodleeLib.connector;
 	using log4net;

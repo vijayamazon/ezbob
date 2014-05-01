@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Models {
+﻿namespace Ezbob.Backend.Models {
 	using System;
 	using System.Runtime.Serialization;
 
