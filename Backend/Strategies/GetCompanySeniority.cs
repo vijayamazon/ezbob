@@ -1,10 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies {
 	using System;
-	using System.Xml;
-	using Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils.XmlUtils;
 
 	public class GetCompanySeniority : AStrategy {
 		#region public
@@ -34,18 +31,11 @@
 		#region method Execute
 
 		public override void Execute() {
-			string sCompanyDataXml = DB.ExecuteScalar<string>(
+			CompanyIncorporationDate = DB.ExecuteScalar<DateTime?>(
 				"GetCompanySeniority",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", m_nCustomerID)
+				new QueryParameter("CustomerID", m_nCustomerID)
 			);
-
-			if (!string.IsNullOrWhiteSpace(sCompanyDataXml)) {
-				XmlNode companyInfo = Xml.ParseRoot(sCompanyDataXml);
-
-				if (companyInfo != null)
-					CompanyIncorporationDate = new ExperianUtils(Log).DetectIncorporationDate(companyInfo);
-			} // if
 		} // Execute
 
 		#endregion method Execute

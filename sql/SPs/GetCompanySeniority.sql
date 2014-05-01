@@ -9,18 +9,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE GetCompanySeniority
-@CustomerId INT
+@CustomerID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT 
-		eda.JsonPacket AS CompanyData
-	FROM 
-		MP_ExperianDataCache eda
-		INNER JOIN Company co ON eda.CompanyRefNumber = co.ExperianRefNum
-		INNER JOIN Customer cu ON co.Id = cu.CompanyId
-	WHERE 
-		cu.Id = @CustomerId		
+	SELECT
+		IncorporationDate
+	FROM
+		CustomerAnalyticsCompany
+	WHERE
+		CustomerID = @CustomerID
+		AND
+		IsActive = 1
 END
 GO
