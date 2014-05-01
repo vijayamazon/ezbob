@@ -160,20 +160,17 @@ EzBob.WizardView = EzBob.View.extend({
         if ($('.broker-finish-wizard-later').length)
             $('#user-menu').hide();
         var that = this;
-        console.log('render wizard');
-        this.vip.fetch().done(function() {
-            console.log('vip this', that.vip);
-            if (that.vip.get('VipEnabled') && !that.vip.get('RequestedVip')) {
-                that.VipView = new EzBob.VipView({ model: that.vip, el: that.$el.find('.vip-container') });
-                that.VipView.render();
-            }
-        });
+
+        if (!this.customer.get('IsBrokerFill')) {
+            this.vip.fetch().done(function() {
+                if (that.vip.get('VipEnabled') && !that.vip.get('RequestedVip')) {
+                    that.VipView = new EzBob.VipView({ model: that.vip, el: that.$el.find('.vip-container') });
+                    that.VipView.render();
+                }
+            });
+        }
         return this;
     }, // render
-    
-    handleVip:function() {
-        console.log('this.vip',this.vip);
-    },//handleVip
     
     handleTopNavigation: function (e) {
         if (!this.topNavigationEnabled)

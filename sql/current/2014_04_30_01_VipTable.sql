@@ -40,7 +40,7 @@ BEGIN
 
 IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name='VipMailReceiver')
 BEGIN
-	INSERT INTO ConfigurationVariables(Name,Value,Description) VALUES ('VipMailReceiver', '', 'max num of vip requests per Ip allowed')
+	INSERT INTO ConfigurationVariables(Name,Value,Description) VALUES ('VipMailReceiver', '', 'email of the receiver of the VIP requests')
 END
 
 END
@@ -50,9 +50,14 @@ BEGIN
 
 IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name='VipMailReceiver')
 BEGIN
-	INSERT INTO ConfigurationVariables(Name,Value,Description) VALUES ('VipMailReceiver', 'rosb@ezbob.com', 'max num of vip requests per Ip allowed')
+	INSERT INTO ConfigurationVariables(Name,Value,Description) VALUES ('VipMailReceiver', 'rosb@ezbob.com', 'email of the receiver of the VIP requests')
 END
 
 END
+GO
 
+IF EXISTS (SELECT * FROM ConfigurationVariables WHERE Name='VipMailReceiver' AND Description='max num of vip requests per Ip allowed')
+BEGIN
+	UPDATE ConfigurationVariables SET Description = 'email of the receiver of the VIP requests' WHERE Name='VipMailReceiver'
+END 
 GO

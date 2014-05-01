@@ -10,7 +10,7 @@ EzBob.VipView = Backbone.Marionette.ItemView.extend({
     events: {
         "click #vipRequestBtn": "vipClicked"
     }, // events
-    
+
     vipClicked: function () {
         var that = this;
         this.model.fetch().done(function() {
@@ -18,8 +18,9 @@ EzBob.VipView = Backbone.Marionette.ItemView.extend({
                 that.submitRequest();
             } else {
                 $.colorbox({ href: '#vip_help', inline: true, open: true, returnFocus: true, trapFocus: true, });
+                $('input[name="VipPhone"]').numericOnly(11);
                 if (that.model.get('VipPhone')) {
-                    $('input[name="VipPhone"]').val(that.model.get('VipPhone')).change();
+                    $('input[name="VipPhone"]').val(that.model.get('VipPhone')).change().attr('readonly', 'readonly');
                 }
 
                 if (that.model.get('VipEmail')) {
@@ -28,20 +29,17 @@ EzBob.VipView = Backbone.Marionette.ItemView.extend({
             }
         });
     },
-    
+
     onRender: function() {
         EzBob.UiAction.registerView(this);
-        this.$el.find('input[name="VipPhone"]').numericOnly(11);
-        
-        
     },
-    
+
     requestVipBtnClicked: function (data) {
         var that = this;
         _.each(data, function (obj) { that.model.set(obj.name, obj.value); });
         this.submitRequest();
     },
-    
+
     submitRequest: function() {
         this.model.save();
         this.$el.hide();

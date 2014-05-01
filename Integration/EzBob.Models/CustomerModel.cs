@@ -121,6 +121,7 @@ namespace EzBob.Web.Areas.Customer.Models
 		public bool IsCurrentCashRequestFromQuickOffer { get; set; }
 		public QuickOfferModel QuickOffer { get; set; }
 		public decimal RequestedAmount { get; set; }
+		public bool IsBrokerFill { get; set; }
 	} // class CustomerModel
 
 	public class SimpleMarketPlaceModel

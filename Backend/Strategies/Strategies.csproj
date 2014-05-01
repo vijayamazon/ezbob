@@ -87,6 +87,7 @@
     <Compile Include="Broker\BrokerUpdatePassword.cs" />
     <Compile Include="Broker\SpBrokerLoadOwnProperties.cs" />
     <Compile Include="GetExperianAccountsCurrentBalance.cs" />
+    <Compile Include="MailStrategies\VipRequest.cs" />
     <Compile Include="UpdateConfigurationVariables.cs" />
     <Compile Include="GetCompanySeniority.cs" />
     <Compile Include="GetLatestInterestRate.cs" />

@@ -211,6 +211,9 @@
 		[OperationContract]
 		ActionMetaData NotifySalesOnNewCustomer(int nCustomerID);
 
+		[OperationContract]
+		ActionMetaData VipRequest(int customerId, string fullname, string email, string phone);
+		
 		#endregion email strategies
 
 		#region Experian

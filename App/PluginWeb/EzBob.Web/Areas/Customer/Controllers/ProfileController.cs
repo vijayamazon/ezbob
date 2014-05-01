@@ -55,7 +55,7 @@
 		[Transactional]
 		public ViewResult Index()
 		{
-			var wizardModel = new WizardModel { Customer = _customerModelBuilder.BuildWizardModel(_context.Customer) };
+			var wizardModel = new WizardModel { Customer = _customerModelBuilder.BuildWizardModel(_context.Customer, Session) };
 			ViewData["ShowChangePasswordPage"] = _context.User.IsPasswordRestored;
 
 			ViewData["MarketPlaces"] = _session
@@ -80,7 +80,7 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Details()
 		{
-			var details = _customerModelBuilder.BuildWizardModel(_context.Customer);
+			var details = _customerModelBuilder.BuildWizardModel(_context.Customer, Session);
 			return Json(details, JsonRequestBehavior.AllowGet);
 		}
 

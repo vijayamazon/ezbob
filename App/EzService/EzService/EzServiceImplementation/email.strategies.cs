@@ -92,6 +92,11 @@
 			return Execute(customerId, null, typeof(TransferCashFailed), customerId);
 		} // TransferCashFailed
 
+		public ActionMetaData VipRequest(int customerId, string fullname, string email, string phone)
+		{
+			return Execute(customerId, null, typeof(VipRequest), customerId, fullname, email, phone);
+		} // TransferCashFailed
+		
 		public ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID, string sNewPassword) {
 			return Execute<BrokerForceResetCustomerPassword>(nCustomerID, nUserID, nCustomerID, sNewPassword);
 		} // BrokerForceResetCustomerPassword

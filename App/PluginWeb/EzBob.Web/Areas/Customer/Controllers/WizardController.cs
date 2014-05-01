@@ -14,7 +14,7 @@
 	using NHibernate;
 	using NHibernate.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using StructureMap;
+	using Code;
 
 	public class WizardController : Controller {
 		#region public
@@ -64,7 +64,7 @@
 				.Query<MP_MarketplaceGroup>()
 				.ToArray();
 
-			var wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer);
+			var wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer, Session);
 
 			return View(wizardModel);
 		} // Index
@@ -109,7 +109,7 @@
 					if (_context.Customer.PersonalInfo != null)
 					{
 						vipModel.VipFullName = _context.Customer.PersonalInfo.Fullname;
-						vipModel.VipPhone = _context.Customer.PersonalInfo.DaytimePhone;
+						vipModel.VipPhone = string.IsNullOrEmpty(_context.Customer.PersonalInfo.DaytimePhone) ? _context.Customer.PersonalInfo.MobilePhone : _context.Customer.PersonalInfo.DaytimePhone;
 					}
 				}
 				else
@@ -146,6 +146,8 @@
 			{
 				customer.Vip = true;
 			}
+			var c = new ServiceClient();
+			c.Instance.VipRequest(customer != null ? customer.Id : 0, model.VipFullName, model.VipEmail, model.VipPhone);
 			return Json(new {});
 		}
 
