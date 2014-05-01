@@ -210,6 +210,7 @@ li.active > .progress_tip {
     border-bottom-left-radius: 15px;
     -moz-border-radius-bottomleft: 15px;
     z-index: 2;
+	white-space: nowrap;
 }
 
 

@@ -131,7 +131,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 			} // if
 
 			var theTableOpts = self.initDataTablesOptions(
-				'FirstName,LastName,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,$SetupFee,^LoanDate,@LastInvitationSent',
+				'FirstName,LastName,Status,Marketplaces,^ApplyDate,$LoanAmount,$SetupFee,^LoanDate,@LastInvitationSent',
 				'brk-grid-state-' + self.router.getAuth() + '-customer-list'
 			);
 
@@ -204,6 +204,23 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 				sClass: 'center',
 				asSorting: [],
 				mRender: function(oData, sAction, oFullSource) {
+					if ((oFullSource.LeadID <= 0) || oFullSource.IsLeadDeleted || (oFullSource.WizardStep === 'Wizard complete'))
+						return '';
+
+					if (sAction === 'display')
+						return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Complete the application on behalf of the client.">' +
+							'<i class="fa fa-desktop"></i> Fill' +
+							'</button>';
+
+					return '';
+				}, // mRender
+			});
+
+			theTableOpts.aoColumns.push({
+				mData: null,
+				sClass: 'center',
+				asSorting: [],
+				mRender: function(oData, sAction, oFullSource) {
 					if (sAction !== 'display')
 						return '';
 
@@ -213,30 +230,13 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 					var sTitle = '';
 
 					if (moment([1976, 7]).utc().diff(moment(oFullSource.DateLastInvitationSent)) > 0)
-						sTitle = 'Send invitation to this lead.';
+						sTitle = 'Send an invitation to the client to fill himself.';
 					else
-						sTitle = 'Send another invitation to this lead.';
+						sTitle = 'Send another invitation to the client to fill himself.';
 
 					return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' +
-						'<i class="fa fa-envelope-o"></i>' +
+						'<i class="fa fa-envelope-o"></i> Send' +
 						'</button>';
-				}, // mRender
-			});
-
-			theTableOpts.aoColumns.push({
-				mData: null,
-				sClass: 'center',
-				asSorting: [],
-				mRender: function(oData, sAction, oFullSource) {
-					if ((oFullSource.LeadID <= 0) || oFullSource.IsLeadDeleted || (oFullSource.WizardStep === 'Wizard complete'))
-						return '';
-
-					if (sAction === 'display')
-						return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Fill all the data for this lead.">' +
-							'<i class="fa fa-desktop"></i>' +
-							'</button>';
-
-					return '';
 				}, // mRender
 			});
 

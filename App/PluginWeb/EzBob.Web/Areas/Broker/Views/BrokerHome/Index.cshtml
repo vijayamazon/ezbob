@@ -71,15 +71,14 @@
 	<div id="wrapper">
 		<div id="header">
 			<div class="header-inner">
-				<a href="http://www.ezbob.com">
-					<img src="@Model.LogoUrl" class="newlogo"></a>
+				<div class="broker-logo">
+					<a href="http://www.ezbob.com"><img src="@Model.LogoUrl" class="logo-broker"></a> 
+					for broker
+				</div>
 
 				<div class="header-phone">0800-011-4787</div>
 
-				<div class="eu-menu">
-					<img src="@Model.EuIconUrl"><br>
-					Authorised by the European Union
-				</div>
+				<div class="eu-menu"><img src="@Model.EuIconUrl"><br>Authorised by the<br />European Union</div>
 
 				<ul id="user-menu" class="hide">
 					<li class="menu-btn login log-off"><a href="#">LOG OFF</a></li>
@@ -100,7 +99,7 @@
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Broker name</span>
+								<span>Company name</span>
 								<input type="text" name="FirmName" id="FirmName" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-name" />
 								<img id="FirmNameImage" class="field_status required" />
 							</label>
@@ -108,7 +107,7 @@
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Broker registration number</span>
+								<span>Company registration number</span>
 								<input type="text" name="FirmRegNum" id="FirmRegNum" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-regnum" />
 								<img id="FirmRegNumImage" class="field_status" />
 							</label>
@@ -116,7 +115,7 @@
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Broker web site</span>
+								<span>Company web site</span>
 								<input type="text" name="FirmWebSite" id="FirmWebSite" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-web-site" />
 								<img id="FirmWebSiteImage" class="field_status" />
 							</label>
@@ -183,7 +182,7 @@
 
 						<div id="strength-password-view" class="form_field_container">
 							<label class="attardi-input">
-								<span>Password</span>
+								<span>Create password</span>
 								<input type="password" name="Password" id="Password" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-password" />
 								<img id="PasswordImage" class="field_status required" />
 							</label>
@@ -296,21 +295,20 @@
 
 				<div class="page-section hide section-dashboard">
 					<ul>
-						<li><a href="#section-dashboard-customers">Customers</a></li>
-						<li><a href="#section-dashboard-marketing">Marketing</a></li>
+						<li><a href="#section-dashboard-customers">Clients</a></li>
+						<li><a href="#section-dashboard-marketing">Marketing materials</a></li>
 						<li><a href="#section-dashboard-account-info">Account information</a></li>
 					</ul>
 					
 					<div id="section-dashboard-customers">
-						<button type="button" id="AddNewCustomer" class="rc-button green pull-right">Add customer lead</button>
-						<h2 class="form-start">Customer list</h2>
+						<button type="button" id="AddNewCustomer" class="rc-button green pull-right">Add a new client</button>
+						<h2 class="form-start">Client list</h2>
 
 						<div class="table-responsive table-big">
 							<table class="customer-list table">
 								<thead><tr>
 									<th>First name</th>
 									<th>Last name</th>
-									<th>Wizard step</th>
 									<th>Status</th>
 									<th>Accounts</th>
 									<th>Applied date</th>
@@ -333,10 +331,8 @@
 									<td></td>
 									<td></td>
 									<td></td>
-									<td></td>
 								</tr></tbody>
 								<tfoot><tr>
-									<td></td>
 									<td></td>
 									<td></td>
 									<td></td>
@@ -419,7 +415,7 @@
 								<div class="aka-column">
 									<div class="aka-table">
 										<div class="aka-row">
-											<span class="value-title">Broker name:</span>
+											<span class="value-title">Company name:</span>
 											<span class="value" data-field-name="BrokerName"></span>
 										</div>
 										<div class="aka-row">
@@ -432,7 +428,7 @@
 								<div class="aka-column">
 									<div class="aka-table">
 										<div class="aka-row">
-											<span class="value-title">Broker registration number:</span>
+											<span class="value-title">Company registration number:</span>
 											<span class="value" data-field-name="BrokerRegNum"></span>
 										</div>
 										<div class="aka-row">
@@ -449,7 +445,7 @@
 								<div class="aka-column">
 									<div class="aka-table">
 										<div class="aka-row">
-											<span class="value-title">Broker web site:</span>
+											<span class="value-title">Company web site:</span>
 											<span class="value" data-field-name="BrokerWebSiteUrl"></span>
 										</div>
 										<div class="aka-row">
@@ -499,7 +495,6 @@
 												<button type="submit" id="UpdatePassword" class="rc-button disabled pull-right" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
 											</div>
 										</div>
-
 									</form>
 								</div>
 							</div>
@@ -509,15 +504,15 @@
 				<!-- section-customer-list -->
 
 				<div class="page-section hide section-add-customer">
-					<button type="button" class="back-to-list rc-button green pull-right">Back to customer list</button>
-					<h2 class="form-start">Add customer lead</h2>
+					<button type="button" class="back-to-list rc-button green pull-right">Back to client list</button>
+					<h2 class="form-start">Add a new client</h2>
 
 					<form class="new-lead-form broker-form" novalidate="novalidate">
 						@{ int nLeadTabIdx = 1; }
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Customer first name</span>
+								<span>Client first name</span>
 								<input type="text" name="LeadFirstName" id="LeadFirstName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-first-name" />
 								<img id="LeadFirstNameImage" class="field_status required" />
 							</label>
@@ -525,7 +520,7 @@
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Customer surname</span>
+								<span>Client surname</span>
 								<input type="text" name="LeadLastName" id="LeadLastName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-last-name" />
 								<img id="LeadLastNameImage" class="field_status required" />
 							</label>
@@ -533,7 +528,7 @@
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Customer email</span>
+								<span>Client email</span>
 								<input type="email" name="LeadEmail" id="LeadEmail" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-email" />
 								<img id="LeadEmailImage" class="field_status required" />
 							</label>
@@ -541,8 +536,16 @@
 
 						<div class="form_buttons_container">
 							<div class="attardi-button">
-								<button type="submit" id="LeadFillWizard" data-add-mode="fill" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">Fill all the details</button>
-								<button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">Send invitation only</button>
+								<button type="submit" id="LeadFillWizard" data-add-mode="fill" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">
+									<i class="fa fa-desktop"></i>
+									<div>Complete the application</div>
+									<div>on behalf of your client</div>
+								</button>
+								<button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">
+									<i class="fa fa-envelope"></i>
+									<div>Send an invitation to</div>
+									<div>the client to fill himself</div>
+								</button>
 							</div>
 						</div>
 					</form>

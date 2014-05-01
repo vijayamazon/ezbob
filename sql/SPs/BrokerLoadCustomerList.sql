@@ -19,7 +19,22 @@ BEGIN
 		c.Name AS Email,
 		c.RefNumber,
 		w.WizardStepTypeDescription AS WizardStep,
-		ISNULL(c.CreditResult, 'In process') AS Status,
+		CASE
+			WHEN W.WizardStepTypeName = 'success' THEN
+				CASE
+					WHEN C.LastLoanDate IS NOT NULL THEN 'Loan'
+				ELSE
+					CASE
+						WHEN C.NumApproves > 0 THEN 'Approved'
+						ELSE ISNULL(c.CreditResult, 'In process')
+					END
+				END
+			WHEN W.WizardStepTypeName = 'link' THEN 'Link Accounts'
+			WHEN W.WizardStepTypeName = 'companydetails' THEN 'Company Details'
+			WHEN W.WizardStepTypeName = 'details' THEN 'Personal Details'
+			WHEN W.WizardStepTypeName = 'signup' THEN 'Application Step 1'
+			ELSE 'Unknown: ' + W.WizardStepTypeName
+		END AS Status,
 		c.GreetingMailSentDate AS ApplyDate,
 		ISNULL(t.Name, '') AS MpTypeName,
 		ISNULL(l.LoanAmount, 0) AS LoanAmount,
