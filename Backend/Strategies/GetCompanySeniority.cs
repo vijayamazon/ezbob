@@ -9,7 +9,7 @@
 		#region constructor
 
 		public GetCompanySeniority(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_nCustomerID = nCustomerID;
+			m_oSp = new SpGetCompanySeniority(nCustomerID, DB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -31,11 +31,7 @@
 		#region method Execute
 
 		public override void Execute() {
-			CompanyIncorporationDate = DB.ExecuteScalar<DateTime?>(
-				"GetCompanySeniority",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", m_nCustomerID)
-			);
+			CompanyIncorporationDate = m_oSp.ExecuteScalar<DateTime?>();
 		} // Execute
 
 		#endregion method Execute
@@ -44,7 +40,23 @@
 
 		#region private
 
-		private readonly int m_nCustomerID;
+		private readonly SpGetCompanySeniority m_oSp;
+
+		#region class SpGetCompanySeniority
+
+		private class SpGetCompanySeniority : AStoredProc {
+			public SpGetCompanySeniority(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+				CustomerID = nCustomerID;
+			} // constructor
+
+			public override bool HasValidParameters() {
+				return CustomerID > 0;
+			} // HasValidParameters
+
+			public int CustomerID { get; set; }
+		} // class SpGetCompanySeniority
+
+		#endregion class SpGetCompanySeniority
 
 		#endregion private
 	} // class GetCompanySeniority
