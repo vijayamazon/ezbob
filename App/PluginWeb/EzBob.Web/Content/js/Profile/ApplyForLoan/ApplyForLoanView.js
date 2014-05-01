@@ -47,10 +47,14 @@
 
     ApplyForLoanView.prototype.events = {
       "click .submit": "submit",
-      "change .preAgreementTermsRead": "showSubmit",
+      "change .preAgreementTermsRead": "preAgreementTermsReadChange",
       "change .agreementTermsRead": "showSubmit",
       "change .euAgreementTermsRead": "showSubmit",
       "change .directorConsentRead": "showSubmit",
+      "change #signedName": "showSubmit",
+      "blur #signedName": "showSubmit",
+      "keyup #signedName": "showSubmit",
+      "paste #signedName": "showSubmit",
       "click .download": "download",
       "click .print": "print"
     };
@@ -59,6 +63,19 @@
       submit: ".submit",
       agreement: ".agreement",
       form: "form"
+    };
+
+    ApplyForLoanView.prototype.preAgreementTermsReadChange = function() {
+      var readPreAgreement;
+      readPreAgreement = $(".preAgreementTermsRead").is(":checked");
+      $(".agreementTermsRead").attr("disabled", !readPreAgreement);
+      if (readPreAgreement) {
+        this.$el.find("a[href=\"#tab4\"]").tab("show");
+      } else {
+        this.$el.find("a[href=\"#tab3\"]").tab("show");
+        $(".agreementTermsRead").attr("checked", false);
+      }
+      return this.showSubmit();
     };
 
     ApplyForLoanView.prototype.loanSelectionChanged = function(e) {
@@ -126,7 +143,7 @@
     };
 
     ApplyForLoanView.prototype.onRender = function() {
-      var _ref, _ref1,
+      var pi, _ref, _ref1,
         _this = this;
       if (this.fixed) {
         this.$(".cash-question").hide();
@@ -140,7 +157,7 @@
       if (this.model.get('isCurrentCashRequestFromQuickOffer')) {
         this.$('.loan-amount-header-start').text('Confirm loan amount');
       } else {
-        this.$('.quick-offer-section').hide();
+        this.$('.quick-offer-section').remove();
         InitAmountPeriodSliders({
           container: this.$('#loan-sliders'),
           amount: {
@@ -166,7 +183,9 @@
       this.neededCashChanged();
       this.$el.find("img[rel]").setPopover('right');
       this.$el.find("li[rel]").setPopover('left');
-      this.validator = EzBob.validateLoanLegalForm(this.ui.form);
+      pi = this.customer.get('CustomerPersonalInfo');
+      this.$el.find('#signedName').attr('maxlength', pi.Fullname.length + 10);
+      this.validator = EzBob.validateLoanLegalForm(this.ui.form, [pi.FirstName, pi.Surname]);
       return this;
     };
 

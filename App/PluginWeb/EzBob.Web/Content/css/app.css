@@ -1617,6 +1617,24 @@ input.form_field_right_side_signup_phone { float: right; margin-right: 10px; wid
 	right: 0;
 }
 
+.LoanLegal .attardi-input {
+	display: inline;
+}
+
+.LoanLegal .form_field_container span {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.LoanLegal #signedName {
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 2px solid black;
+	box-shadow: none;
+	width: 400px;
+}
+
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 
 	.marketplace-button { width: 95%; float: left; }

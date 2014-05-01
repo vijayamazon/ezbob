@@ -53,12 +53,21 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
 
     amountSelected: () ->
         form = @$el.find('form')
-        validator = EzBob.validateLoanLegalForm(form)
-        enabled = EzBob.Validation.checkForm(validator)
-        return if not enabled
+
+        pi = @customer.get 'CustomerPersonalInfo'
+        
+        @$el.find('#signedName').attr('maxlength', pi.Fullname.length + 10)
+
+        enabled = EzBob.Validation.checkForm EzBob.validateLoanLegalForm(form, [ pi.FirstName, pi.Surname ])
+
+        return unless enabled
+
         data = form.serialize()
+
         BlockUi "on"
+
         xhr = $.post "#{window.gRootPath}Customer/GetCash/LoanLegalSigned", data
+
         xhr.done (res) =>
             if res.error
                  EzBob.App.trigger('error', res.error)

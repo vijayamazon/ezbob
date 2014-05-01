@@ -93,11 +93,12 @@
     };
 
     ApplyForLoanTopView.prototype.amountSelected = function() {
-      var data, enabled, form, validator, xhr,
+      var data, enabled, form, pi, xhr,
         _this = this;
       form = this.$el.find('form');
-      validator = EzBob.validateLoanLegalForm(form);
-      enabled = EzBob.Validation.checkForm(validator);
+      pi = this.customer.get('CustomerPersonalInfo');
+      this.$el.find('#signedName').attr('maxlength', pi.Fullname.length + 10);
+      enabled = EzBob.Validation.checkForm(EzBob.validateLoanLegalForm(form, [pi.FirstName, pi.Surname]));
       if (!enabled) {
         return;
       }

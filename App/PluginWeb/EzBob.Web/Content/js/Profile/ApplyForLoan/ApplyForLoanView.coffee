@@ -38,6 +38,10 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     "change .agreementTermsRead": "showSubmit"
     "change .euAgreementTermsRead": "showSubmit"
     "change .directorConsentRead": "showSubmit"
+    "change #signedName": "showSubmit"
+    "blur #signedName": "showSubmit"
+    "keyup #signedName": "showSubmit"
+    "paste #signedName": "showSubmit"
     "click .download": "download"
     "click .print": "print"
 
@@ -134,8 +138,10 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
 
     @$el.find("img[rel]").setPopover 'right'
     @$el.find("li[rel]").setPopover 'left'
-    
-    @validator = EzBob.validateLoanLegalForm(@ui.form)
+
+    pi = @customer.get 'CustomerPersonalInfo'
+    @$el.find('#signedName').attr('maxlength', pi.Fullname.length + 10)
+    @validator = EzBob.validateLoanLegalForm(@ui.form, [ pi.FirstName, pi.Surname ])
     this
 
   refreshTimer: ->
@@ -152,6 +158,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     return false  if creditSum > max or creditSum < min
     
     enabled = EzBob.Validation.checkForm(@validator)
+
     if not enabled
         @showSubmit()
         return false 

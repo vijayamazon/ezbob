@@ -41,16 +41,16 @@
 	</div>
 
 	@using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" })) {
-	    <div class="controls">
+		<div class="controls">
 			<label class="checkbox">
 				<input type="checkbox" id="preAgreementTermsRead" class="preAgreementTermsRead" name="preAgreementTermsRead" value="true" />
-                <span class="company-preAgreement">I have read and agree to the agreement terms</span>
-                <span style="display:none" class="consumer-preAgreement">I have read and agree to the pre-contract terms</span>
+				<span class="company-preAgreement">I have read and agree to the agreement terms</span>
+				<span style="display: none" class="consumer-preAgreement">I have read and agree to the pre-contract terms</span>
 			</label>
 			<label class="checkbox">
 				<input type="checkbox" id="agreementTermsRead" class="agreementTermsRead" name="agreementTermsRead" value="true" />
 				<span class="company-preAgreement">I have read and agree to the guaranty terms</span>
-                <span style="display:none" class="consumer-preAgreement">I have read and agree to the contract terms</span>
+				<span style="display: none" class="consumer-preAgreement">I have read and agree to the contract terms</span>
 			</label>
 			<label class="checkbox eu-agreement-section">
 				<input type="checkbox" id="euAgreementTermsRead" name="euAgreementTermsRead" class="euAgreementTermsRead" value="true" />
@@ -60,11 +60,21 @@
 				<input type="checkbox" id="directorConsentRead" class="directorConsentRead" name="directorConsentRead" value="true" />
 				I have read and agree to the directors' consent declaration
 			</label -->
+
+			<div class="form_field_container"></div>
+
+			<div class="form_field_container">
+				<span>Signature:</span>
+				<label class="attardi-input">
+					<span>Sign your name</span>
+					<input type="text" name="signedName" id="signedName" class="form_field" ui-event-control-id="loan-legal:signer-name" />
+				</label>
+			</div>
 		</div>
 
 		<a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
-        <a href="#" class="btn-back button grey pull-right">Back</a>
-	}
+		<a href="#" class="btn-back button grey pull-right">Back</a>
+ }
 </script>
 
 <script id="consumers-agreement-template" type="text/template">

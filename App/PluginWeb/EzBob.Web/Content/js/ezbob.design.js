@@ -1373,7 +1373,30 @@ EzBob.validateCGShopForm = function (el, accountType) {
     return el.validate(v);
 };
 
-EzBob.validateLoanLegalForm = function (el) {
+EzBob.escapeRegExp = function(str) {
+	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}; // EzBob.escapeRegExp
+
+$.validator.addMethod('validateSignerName', function(value, element, params) {
+	var sSignature = $.trim(value);
+
+	if (sSignature === '')
+		return false;
+
+	var sFirstName = EzBob.escapeRegExp(params[0]);
+	var sLastName = EzBob.escapeRegExp(params[1]);
+
+	var re = new RegExp('^' + sFirstName + ' (.+ )?' + sLastName + '$', 'i');
+
+	if (sSignature.match(re))
+		return true;
+
+	re = new RegExp('^' + sLastName + ' (.+ )?' + sFirstName + '$', 'i');
+
+	return sSignature.match(re) ? true : false;
+}, 'Please sign your name.');
+
+EzBob.validateLoanLegalForm = function (el, aryCustomerName) {
     var e = el || $(".LoanLegal");
 
     return e.validate({
@@ -1382,6 +1405,7 @@ EzBob.validateLoanLegalForm = function (el) {
             "agreementTermsRead": { required: true },
             "euAgreementTermsRead": { required: true },
             "directorConsentRead": { required: true },
+            'signedName': { validateSignerName: aryCustomerName, },
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,

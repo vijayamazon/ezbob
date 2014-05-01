@@ -269,7 +269,7 @@
 
 		[Transactional]
 		[HttpPost]
-		public JsonResult LoanLegalSigned(bool preAgreementTermsRead = false, bool agreementTermsRead = false, bool euAgreementTermsRead = false)
+		public JsonResult LoanLegalSigned(bool preAgreementTermsRead = false, bool agreementTermsRead = false, bool euAgreementTermsRead = false, string signedName = "")
 		{
 			_log.DebugFormat("LoanLegalModel agreementTermsRead: {0} preAgreementTermsRead: {1} euAgreementTermsRead: {2}", agreementTermsRead, preAgreementTermsRead, euAgreementTermsRead);
 
@@ -291,6 +291,7 @@
 					PreContractAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
 					PrivateCompanyLoanAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
 					GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
+					SignedName = signedName,
 				});
 
 			return Json(new { });
