@@ -410,6 +410,7 @@
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\Repository\DbStringRepository.cs" />
     <Compile Include="Models\Strings\DbStrings.cs" />
+    <Compile Include="Models\WebMarketPlacesFacade.cs" />
     <Compile Include="Models\WizardModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

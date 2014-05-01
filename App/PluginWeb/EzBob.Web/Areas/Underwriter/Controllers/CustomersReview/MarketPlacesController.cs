@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
 	using Infrastructure.Attributes;
+	using Marketplaces;
 	using Models;
 	using EzBob.Models.Marketplaces;
 	using NHibernate;
@@ -27,7 +28,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(MarketPlacesController));
 		private readonly CustomerRepository _customers;
 		private readonly AnalyisisFunctionValueRepository _functions;
-		private readonly MarketPlacesFacade _marketPlaces;
+		private readonly WebMarketPlacesFacade _marketPlaces;
 		private readonly CustomerMarketPlaceRepository _customerMarketplaces;
 		private readonly MP_TeraPeakOrderItemRepository _teraPeakOrderItems;
 		private readonly YodleeAccountsRepository _yodleeAccountsRepository;
@@ -42,7 +43,7 @@
 		public MarketPlacesController(CustomerRepository customers,
 			AnalyisisFunctionValueRepository functions,
 			CustomerMarketPlaceRepository customerMarketplaces,
-			MarketPlacesFacade marketPlaces,
+			WebMarketPlacesFacade marketPlaces,
 			MP_TeraPeakOrderItemRepository teraPeakOrderItems,
 			YodleeAccountsRepository yodleeAccountsRepository,
 			YodleeSearchWordsRepository yodleeSearchWordsRepository,

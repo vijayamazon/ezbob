@@ -13,6 +13,7 @@
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
 	using Infrastructure.Attributes;
+	using Marketplaces;
 	using Models;
 	using Web.Models;
 	using NHibernate;
@@ -24,7 +25,7 @@
 		private readonly ICustomerRepository _customers;
 		private readonly ISession _session;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
-		private readonly MarketPlacesFacade _marketPlaces;
+		private readonly WebMarketPlacesFacade _marketPlaces;
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
 		private readonly ProfileSummaryModelBuilder _summaryModelBuilder;
 		private readonly FraudDetectionRepository _fraudDetectionLog;
@@ -39,7 +40,7 @@
 											ICustomerRepository customers,
 											ISession session,
 											ApplicationInfoModelBuilder infoModelBuilder,
-											MarketPlacesFacade marketPlaces,
+											WebMarketPlacesFacade marketPlaces,
 											CreditBureauModelBuilder creditBureauModelBuilder,
 											ProfileSummaryModelBuilder summaryModelBuilder,
 											FraudDetectionRepository fraudDetectionLog,
