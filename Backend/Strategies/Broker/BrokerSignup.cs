@@ -6,8 +6,6 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
 
-	#region class BrokerSignup
-
 	public class BrokerSignup : AStrategy {
 		#region public
 
@@ -155,7 +153,7 @@
 			#region property Password
 
 			public string Password {
-				get { return SecurityUtils.HashPassword(ContactEmail + m_sPassword); } // get
+				get { return SecurityUtils.HashPassword(ContactEmail, m_sPassword); } // get
 				set { m_sPassword = value; } // set
 			} // Password
 
@@ -220,6 +218,4 @@
 
 		#endregion private
 	} // class BrokerSignup
-
-	#endregion class BrokerSignup
 } // namespace EzBob.Backend.Strategies.Broker

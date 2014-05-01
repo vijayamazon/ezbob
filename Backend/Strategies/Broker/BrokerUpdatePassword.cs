@@ -77,13 +77,13 @@
 			public string ContactEmail { get; set; }
 
 			public string OldPassword {
-				get { return SecurityUtils.HashPassword(ContactEmail + m_sOldPassword); }
+				get { return SecurityUtils.HashPassword(ContactEmail, m_sOldPassword); }
 				set { m_sOldPassword = value; }
 			}
 			private string m_sOldPassword;
 
 			public string NewPassword {
-				get { return SecurityUtils.HashPassword(ContactEmail + m_sNewPassword); }
+				get { return SecurityUtils.HashPassword(ContactEmail, m_sNewPassword); }
 				set { m_sNewPassword = value; }
 			}
 			private string m_sNewPassword;

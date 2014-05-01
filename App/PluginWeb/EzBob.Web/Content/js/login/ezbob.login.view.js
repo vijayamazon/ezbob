@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.CustomerLoginView = (function(_super) {
+
     __extends(CustomerLoginView, _super);
 
     function CustomerLoginView() {
-      _ref = CustomerLoginView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return CustomerLoginView.__super__.constructor.apply(this, arguments);
     }
 
     CustomerLoginView.prototype.initialize = function() {
@@ -27,7 +27,6 @@
 
     CustomerLoginView.prototype.render = function() {
       var oFieldStatusIcons;
-
       this.$el.html(this.template());
       this.form = this.$el.find(".simple-login");
       this.validator = EzBob.validateLoginForm(this.form);
@@ -47,7 +46,6 @@
 
     CustomerLoginView.prototype.inputChanged = function() {
       var enabled;
-
       enabled = EzBob.Validation.checkForm(this.validator);
       return $("#loginSubmit").toggleClass('disabled', !enabled);
     };
@@ -55,7 +53,6 @@
     CustomerLoginView.prototype.submit = function() {
       var xhr,
         _this = this;
-
       if (this.$el.find(":submit").hasClass("disabled")) {
         return false;
       }
@@ -69,6 +66,7 @@
       }
       xhr = $.post(this.form.attr("action"), this.form.serialize());
       xhr.done(function(result, status) {
+        EzBob.ServerLog.debug('login request completed with status', status);
         if (status === "success") {
           if (result.success) {
             if (result.broker) {

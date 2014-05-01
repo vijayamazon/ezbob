@@ -38,11 +38,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		xhr.always(function() {
 			if (that.twilioEnabled) {
 				that.$el.find('#twilioDiv').removeClass('hide');
-				$.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is mobile code' });
-			} else {
-			    that.$el.find('#captchaDiv').removeClass('hide');
-				$.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is captcha' });
+				EzBob.ServerLog.debug('The visible object is mobile code');
 			}
+			else {
+				that.$el.find('#captchaDiv').removeClass('hide');
+				EzBob.ServerLog.debug('The visible object is captcha');
+			} // if
+
 			return false;
 		});
     },
@@ -268,8 +270,11 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         var that = this;
 
         xhr.done(function (result) {
+			var sEmail = $('#Email').val();
+
             if (result.success) {
-                $.post(window.gRootPath + "Account/DebugLog_Message", { message: 'Success' });
+				console.log('success');
+                EzBob.ServerLog.debug('Customer', sEmail, 'signed up successfully.');
                 $('body').attr('auth', 'auth');
 
                 that.$el.find('input[type="password"], input[type="text"]').tooltip('hide');
@@ -277,28 +282,36 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                 EzBob.App.trigger('customerLoggedIn');
                 EzBob.App.trigger('clear');
 
-                $('body').attr('data-user-name', $('#Email').val());
+                $('body').attr('data-user-name', sEmail);
 
                 ShowHideSignLogOnOff();
 
                 that.model.set('loggedIn', true); // triggers 'ready' and 'next'
-            } else {
-                $.post(window.gRootPath + "Account/DebugLog_Message", { message: result.errorMessage });
-                if (result.errorMessage) EzBob.App.trigger('error', result.errorMessage);
-                if (isInCaptchaMode) {
+            }
+            else {
+                EzBob.ServerLog.alert('Customer', sEmail, 'failed to sign up with error message:', result.errorMessage);
+
+                if (result.errorMessage)
+                	EzBob.App.trigger('error', result.errorMessage);
+
+                if (isInCaptchaMode)
                     that.captcha.reload();
-                }
+
                 that.$el.find(':submit').addClass('disabled');
                 that.blockBtn(false);
             }
         });
 
         xhr.fail(function () {
-            $.post(window.gRootPath + "Account/DebugLog_Message", { message: 'Something went wrong' });
+			var sEmail = $('#Email').val();
+
+            EzBob.ServerLog.alert('Something went wrong while customer', sEmail, 'tried to sign up.');
+
             EzBob.App.trigger('error', 'Something went wrong');
-            if (isInCaptchaMode) {
+
+            if (isInCaptchaMode)
                 that.captcha.reload();
-            }
+
             that.blockBtn(false);
         });
 

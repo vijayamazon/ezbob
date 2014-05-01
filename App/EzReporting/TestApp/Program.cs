@@ -73,7 +73,7 @@ namespace TestApp {
 				(sr, bRowsetStart) => {
 					oQueries.Add(string.Format(
 						"UPDATE Broker SET Password = '{0}' WHERE BrokerID = {1}",
-						SecurityUtils.HashPassword((string)sr["ContactEmail"] + "123456"),
+						SecurityUtils.HashPassword((string)sr["ContactEmail"], "123456"),
 						(int)sr["BrokerID"]
 					));
 					return ActionResult.Continue;

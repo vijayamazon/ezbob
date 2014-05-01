@@ -7,8 +7,6 @@
 	using Ezbob.Utils.Security;
 	using MailStrategies;
 
-	#region class BrokerRestorePassword
-
 	public class BrokerRestorePassword : AStrategy {
 		#region public
 
@@ -69,7 +67,7 @@
 				"BrokerResetPassword",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@BrokerID", oProperties.BrokerID),
-				new QueryParameter("@Password", SecurityUtils.HashPassword(oProperties.ContactEmail + osPassword.ToString()))
+				new QueryParameter("@Password", SecurityUtils.HashPassword(oProperties.ContactEmail, osPassword.ToString()))
 			);
 
 			new BrokerPasswordRestored(oProperties.BrokerID, osPassword.ToString(), DB, Log).Execute();
@@ -110,6 +108,4 @@
 
 		#endregion private
 	} // class BrokerRestorePassword
-
-	#endregion class BrokerRestorePassword
 } // namespace EzBob.Backend.Strategies.Broker

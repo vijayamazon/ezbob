@@ -1,12 +1,7 @@
 ﻿namespace Ezbob.Utils.Security {
-	using System;
 	using System.Text;
 
-	#region class SecurityUtils
-
 	public class SecurityUtils {
-		#region public
-
 		#region method MD5
 
 		public static string MD5(string input) {
@@ -29,6 +24,10 @@
 
 		#region method HashPassword
 
+		public static string HashPassword(string sUserName, string sPassword) {
+			return HashPassword(sUserName + sPassword);
+		} // HashPassword
+
 		public static string HashPassword(string sPassword) {
 			var sha = System.Security.Cryptography.SHA512.Create();
 
@@ -47,9 +46,5 @@
 		} // HashPassword
 
 		#endregion method HashPassword
-
-		#endregion public
 	} // class SecurityUtils
-
-	#endregion class SecurityUtils
 } // namespace Ezbob.Utils.Security

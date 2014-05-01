@@ -82,7 +82,7 @@
 			#region property Password
 
 			public string Password {
-				get { return SecurityUtils.HashPassword(Email + m_sPassword); }
+				get { return SecurityUtils.HashPassword(Email, m_sPassword); }
 				set { m_sPassword = value; }
 			} // Password
 

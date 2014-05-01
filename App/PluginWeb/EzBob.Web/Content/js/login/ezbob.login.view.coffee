@@ -43,6 +43,8 @@ class EzBob.CustomerLoginView extends Backbone.View
     xhr = $.post @form.attr("action"), @form.serialize()
     
     xhr.done (result, status) =>
+        EzBob.ServerLog.debug 'login request completed with status', status
+
         if status is "success"
             if result.success
                 if result.broker

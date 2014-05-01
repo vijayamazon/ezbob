@@ -57,7 +57,7 @@
 				bp = m_oServiceClient.Instance.BrokerLogin(sLoginEmail, sPassword);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to login as a broker '{0}'.", sLoginEmail);
+				m_oLog.Alert(e, "Error encountered while trying to login as a broker '{0}'.", sLoginEmail);
 				return null;
 			} // try
 
