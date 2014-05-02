@@ -2,8 +2,10 @@
 {
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Globalization;
 	using System.Web.Mvc;
 	using Backend.Models;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure.Attributes;
@@ -52,13 +54,16 @@
 		{
 			var bwaBusinessCheck = _configurationVariablesRepository.GetByName("BWABusinessCheck");
 			//var displayEarnedPoints = _configurationVariablesRepository.GetByName("DisplayEarnedPoints");
-			var hmrcSalariesMultiplier = _configurationVariablesRepository.GetByName(ConfigManager.Variables.HmrcSalariesMultiplier.ToString());
+			var hmrcSalariesMultiplier = _configurationVariablesRepository.GetByName(Variables.HmrcSalariesMultiplier.ToString());
+			var fcfFactor = _configurationVariablesRepository.GetByName(Variables.FCFFactor.ToString());
 			var st = new
 				{
 					BWABusinessCheck = bwaBusinessCheck.Value,
 					BWABusinessCheckDesc = bwaBusinessCheck.Description,
 					HmrcSalariesMultiplier = hmrcSalariesMultiplier.Value,
 					HmrcSalariesMultiplierDesc = hmrcSalariesMultiplier.Description,
+					FCFFactor = fcfFactor.Value,
+					FCFFactorDesc = fcfFactor.Description
 					//DisplayEarnedPoints = displayEarnedPoints.Value,
 					//DisplayEarnedPointsDesc = displayEarnedPoints.Description
 				};
@@ -68,23 +73,24 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		public JsonResult SettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier/*, string DisplayEarnedPoints*/)
+		public JsonResult SettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier, decimal fcfFactor/*, string DisplayEarnedPoints*/)
 		{
-			UpdateSettingsGeneral(BWABusinessCheck, HmrcSalariesMultiplier);
+			UpdateSettingsGeneral(BWABusinessCheck, HmrcSalariesMultiplier, fcfFactor);
 
 			UpdateConfigVars();
 			return SettingsGeneral();
 		}
 
 		[Transactional]
-		private void UpdateSettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier)
+		private void UpdateSettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier, decimal fcfFactor)
 		{
 			_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
 			if (HmrcSalariesMultiplier >= 0 && HmrcSalariesMultiplier <= 1)
 			{
-				_configurationVariablesRepository.SetByName(ConfigManager.Variables.HmrcSalariesMultiplier.ToString(),
-															HmrcSalariesMultiplier.ToString());
+				_configurationVariablesRepository.SetByName(Variables.HmrcSalariesMultiplier.ToString(),
+															HmrcSalariesMultiplier.ToString(CultureInfo.InvariantCulture));
 			}
+			_configurationVariablesRepository.SetByName(Variables.FCFFactor.ToString(), fcfFactor.ToString(CultureInfo.InvariantCulture));
 			//_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
 		}
 
@@ -694,7 +700,7 @@
 		{
 			var c = new ServiceClient();
 			c.Instance.UpdateConfigurationVariables();
-			ConfigManager.CurrentValues.ReInit();
+			CurrentValues.ReInit();
 		}
 	}
 }

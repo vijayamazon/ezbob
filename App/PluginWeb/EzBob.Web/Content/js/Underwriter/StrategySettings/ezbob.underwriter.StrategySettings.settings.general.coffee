@@ -20,6 +20,8 @@ class EzBob.Underwriter.SettingsGeneralView extends Backbone.Marionette.ItemView
         HmrcSalariesMultiplier:
             selector: "input[name='HmrcSalariesMultiplier']"
             converter: EzBob.BindingConverters.percentsFormat
+        FCFFactor:
+            selector: "input[name='FCFFactor']"
 
     events:
         "click button[name='SaveGeneralSettings']":     "saveSettings"

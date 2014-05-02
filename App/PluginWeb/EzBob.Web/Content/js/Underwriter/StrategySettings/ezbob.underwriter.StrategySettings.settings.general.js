@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.SettingsGeneralModel = (function(_super) {
-
     __extends(SettingsGeneralModel, _super);
 
     function SettingsGeneralModel() {
-      return SettingsGeneralModel.__super__.constructor.apply(this, arguments);
+      _ref = SettingsGeneralModel.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     SettingsGeneralModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/SettingsGeneral";
@@ -24,11 +24,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.SettingsGeneralView = (function(_super) {
-
     __extends(SettingsGeneralView, _super);
 
     function SettingsGeneralView() {
-      return SettingsGeneralView.__super__.constructor.apply(this, arguments);
+      _ref1 = SettingsGeneralView.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     SettingsGeneralView.prototype.template = "#general-settings-template";
@@ -45,6 +45,9 @@
       HmrcSalariesMultiplier: {
         selector: "input[name='HmrcSalariesMultiplier']",
         converter: EzBob.BindingConverters.percentsFormat
+      },
+      FCFFactor: {
+        selector: "input[name='FCFFactor']"
       }
     };
 
@@ -69,6 +72,7 @@
     SettingsGeneralView.prototype.update = function() {
       var xhr,
         _this = this;
+
       xhr = this.model.fetch();
       return xhr.done(function() {
         return _this.render();
