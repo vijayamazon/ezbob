@@ -92,11 +92,11 @@ namespace Reports {
 						break;
 
 					case MaritalStatus.LivingTogether:
-						lre.FamilyStatus = 1;
+						lre.FamilyStatus = 4;
 						break;
 
 					case MaritalStatus.Separated:
-						lre.FamilyStatus = 2;
+						lre.FamilyStatus = 5;
 						break;
 
 					case MaritalStatus.Other:
