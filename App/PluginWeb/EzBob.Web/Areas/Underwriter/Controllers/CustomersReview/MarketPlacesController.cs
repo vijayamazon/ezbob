@@ -10,7 +10,6 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
 	using Infrastructure.Attributes;
-	using Marketplaces;
 	using Models;
 	using EzBob.Models.Marketplaces;
 	using NHibernate;
@@ -18,6 +17,7 @@
 	using CommonLib.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using ServiceClientProxy;
+	using Web.Models;
 	using YodleeLib;
 	using YodleeLib.connector;
 	using log4net;

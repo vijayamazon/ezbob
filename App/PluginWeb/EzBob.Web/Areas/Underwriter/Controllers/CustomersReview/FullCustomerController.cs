@@ -13,7 +13,6 @@
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
 	using Infrastructure.Attributes;
-	using Marketplaces;
 	using Models;
 	using Web.Models;
 	using NHibernate;
