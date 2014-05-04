@@ -66,13 +66,9 @@
     <Compile Include="connector\YodleeRetriveDataHelper.cs" />
     <Compile Include="connector\YodleeSecurityInfo.cs" />
     <Compile Include="connector\YodleeServiceInfo.cs" />
-    <Compile Include="datatypes\AccountType.cs" />
     <Compile Include="ApplicationSuper.cs" />
     <Compile Include="CobrandContextSingleton.cs" />
-    <Compile Include="datatypes\ContainerTypes.cs" />
-    <Compile Include="datatypes\Currency.cs" />
     <Compile Include="datatypes\TransactionBaseType.cs" />
-    <Compile Include="datatypes\TransactionCategory.cs" />
     <Compile Include="datatypes\TransactionStatus.cs" />
     <Compile Include="GetBankData.cs" />
     <Compile Include="DisplayItemInfo.cs" />
@@ -85,7 +81,6 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="StringTokenizer.cs" />
     <Compile Include="YodleeAccountPool.cs" />
     <Compile Include="YodleeMain.cs" />
     <Compile Include="YodleePasswordGenerator.cs" />
@@ -113,9 +108,7 @@
       <Name>DatabaseLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="util\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
