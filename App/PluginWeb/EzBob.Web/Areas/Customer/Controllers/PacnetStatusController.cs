@@ -1,13 +1,10 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
-	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
-	using Models;
 	using Code;
 	using Infrastructure;
 
@@ -28,34 +25,7 @@
 			ViewData["LoanId"] = loan.Id;
 			ViewData["Amount"] = FormattingUtils.FormatPounds(_context.Customer.Loans.Last().LoanAmount);
 			ViewData["bankNumber"] = customer.BankAccount.AccountNumber;
-
-
-			List<LoanScheduleItemModel> l = new List<LoanScheduleItemModel>();
-			foreach (var s in loan.Schedule)
-			{
-				LoanScheduleItemModel n = new LoanScheduleItemModel
-				{
-					Id = s.Id,
-					AmountDue = s.AmountDue,
-					Date = s.Date,
-					PrevInstallmentDate = s.PrevInstallmentDate,
-					Interest = s.Interest,
-					InterestPaid = s.InterestPaid,
-					LateCharges = s.LateCharges,
-					RepaymentAmount = s.RepaymentAmount,
-					Status = s.Status.ToString(),
-					StatusDescription = s.Status.ToDescription(),
-					LoanRepayment = s.LoanRepayment,
-					Balance = s.Balance,
-					BalanceBeforeRepayment = s.BalanceBeforeRepayment,
-					Fees = s.Fees,
-					InterestRate = s.InterestRate
-				};
-
-				l.Add(n);
-			}
-
-			ViewData["schedule"] = l;
+			ViewData["schedule"] = loan.Schedule.ToModel();
 			ViewData["name"] = customer.PersonalInfo.FirstName + " " + customer.PersonalInfo.Surname;
 			ViewData["email"] = customer.Name;
 			ViewData["loanNo"] = loan.RefNumber;

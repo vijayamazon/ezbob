@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Models
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using Backend.Models;
@@ -89,32 +88,7 @@
             var timestamp = DateTime.UtcNow.Ticks;
 
 	        var offer = new LoanOffer();
-
-			List<LoanScheduleItemModel> l = new List<LoanScheduleItemModel>();
-			foreach (var s in loan.Schedule)
-			{
-				LoanScheduleItemModel n = new LoanScheduleItemModel
-				{
-					Id = s.Id,
-					AmountDue = s.AmountDue,
-					Date = s.Date,
-					PrevInstallmentDate = s.PrevInstallmentDate,
-					Interest = s.Interest,
-					InterestPaid = s.InterestPaid,
-					LateCharges = s.LateCharges,
-					RepaymentAmount = s.RepaymentAmount,
-					Status = s.Status.ToString(),
-					StatusDescription = s.Status.ToDescription(),
-					LoanRepayment = s.LoanRepayment,
-					Balance = s.Balance,
-					BalanceBeforeRepayment = s.BalanceBeforeRepayment,
-					Fees = s.Fees,
-					InterestRate = s.InterestRate
-				};
-				l.Add(n);
-			}
-
-			offer.Schedule = l.ToArray();
+			offer.Schedule = loan.Schedule.Select(LoanScheduleItemModel.FromLoanScheduleItem).ToArray();
 			offer.Apr = apr;
 			offer.SetupFee = loan.SetupFee;
 			offer.Total = total;
