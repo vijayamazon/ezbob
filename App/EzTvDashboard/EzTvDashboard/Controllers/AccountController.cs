@@ -17,15 +17,13 @@ namespace EzTvDashboard.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				//var user = _users.GetUserByLogin(model.UserName);
-
-				if (true/*_membershipProvider.ValidateUser(model.UserName, model.Password)*/)
+				if (model.UserName == "TvDashboard" && model.Password == "123456")
 				{
-					//user.LoginFailedCount = 0;
+					ModelState.Clear();
 					return SetCookieAndRedirectAdmin(model);
 				}
 			}
-			ModelState.AddModelError("", "Wrong user name/password.");
+			ModelState.AddModelError("LoginError", "Wrong user name/password.");
 			return View(model);
 		}
 

@@ -2,30 +2,68 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Database;
 	using Models;
 
 	public class DashboardModelBuilder
 	{
+		private AConnection Db { get; set; }
+		private static DateTime LastChecked { get; set; }
+		public DashboardModelBuilder()
+		{
+			Db = new SqlConnection();
+		}
+
+		public bool SomethingChanged()
+		{
+			var changed = Db.ExecuteScalar<bool>("EzTvIsChanged", new QueryParameter("@Date", LastChecked));
+			return changed;
+		}
+
 		public DashboardModel BuildModel()
 		{
-			var model = new DashboardModel();
+			LastChecked = DateTime.UtcNow;
+			var model = new DashboardModel()
+				{
+					CollectionStatus = new List<CollectionStatusModel>(),
+					ExistingCustomers = new List<ExistingCustomersModel>(),
+					FunnelNumbers = new List<FunnelNumbersModel>(),
+					MonthlyBoard = new List<MonthlyBoardModel>(),
+					MonthlyCollection = new List<MonthlyCollectionModel>(),
+					MonthlyTraffic = new List<MonthlyTrafficModel>(),
+					Stats = new Dictionary<string, decimal>()
+				};
+			
+
+			Db.ForEachRow(
+				(oReader, bRowsetStart) =>
+					{
+						model.Stats.Add(oReader["Key"].ToString(), (decimal) oReader["Value"]);
+						return ActionResult.Continue;
+					}
+				,
+				"EzTvGetStats",
+				CommandSpecies.StoredProcedure
+			);
 			//todo implement
 			return model;
 		}
 
 		public DashboardModel BuildFakeModel()
 		{
-			var model = new DashboardModel();
-			model.AvgDailyLoans = 55000;
-			model.DefaultRate = 0.038M;
-			model.TotalLoans = 12500000;
-			model.BookSize = 5600000;
-			model.AvgInterest = 0.039M;
-			model.AvgLoanSize = 10000;
-			model.AvgNewLoan = 12000;
-			model.OpenBugs = 3;
-			model.TodayLoans = 65000;
+			LastChecked = DateTime.UtcNow;
+			var model = new DashboardModel() { Stats = new Dictionary<string, decimal>()};
 
+			model.Stats.Add("AvgDailyLoans", 55000);
+			model.Stats.Add("DefaultRate", 0.038M);
+			model.Stats.Add("TotalLoans", 12500000);
+			model.Stats.Add("BookSize", 5600000);
+			model.Stats.Add("AvgInterest", 0.039M);
+			model.Stats.Add("AvgLoanSize", 10000);
+			model.Stats.Add("AvgNewLoan", 12000);
+			model.Stats.Add("OpenBugs", 3);
+			model.Stats.Add("TodayLoans", 65000);
+			
 			model.MonthlyBoard = new List<MonthlyBoardModel>
 				{
 					new MonthlyBoardModel
@@ -282,11 +320,5 @@
 			return model;
 		}
 
-		public bool SomethingChanged()
-		{
-			var r = new Random();
-			var a = r.Next(0, 1);
-			return a != 0;
-		}
 	}
 }

@@ -4,15 +4,8 @@
 
 	public class DashboardModel
 	{
-		public decimal AvgDailyLoans { get; set; }
-		public decimal DefaultRate { get; set; }
-		public decimal TotalLoans { get; set; }
-		public decimal BookSize { get; set; }
-		public decimal AvgInterest { get; set; }
-		public decimal AvgLoanSize { get; set; }
-		public decimal AvgNewLoan { get; set; }
-		public int OpenBugs { get; set; }
-		public decimal TodayLoans { get; set; }
+		public Dictionary<string, decimal> Stats { get; set; }
+
 		public List<MonthlyBoardModel> MonthlyBoard { get; set; }
 		public List<MonthlyTrafficModel> MonthlyTraffic { get; set; }
 		public List<MonthlyCollectionModel> MonthlyCollection { get; set; }

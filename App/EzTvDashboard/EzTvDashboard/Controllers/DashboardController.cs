@@ -5,21 +5,32 @@ namespace EzTvDashboard.Controllers
 	using Code;
 	using Models;
 
+	[Authorize]
 	public class DashboardController : Controller
 	{
 		//
 		// GET: /Dashboard/
 		static DashboardModel _model;
-		
+		private DashboardModelBuilder _modelBuilder;
+
+		public DashboardController()
+		{
+			this._modelBuilder = new DashboardModelBuilder();
+		}
+
 		public ActionResult Index()
 		{
-			var b = new DashboardModelBuilder();
-			if (b.SomethingChanged() || _model == null)
-			{
-				_model = b.BuildFakeModel();
-			}
-			Response.AddHeader("Refresh", "2");
+			_model = _modelBuilder.BuildModel();
+			
+			//Response.AddHeader("Refresh", "2");
 			return View(_model);
+		}
+
+		
+		[HttpGet]
+		public JsonResult IsSomethingChanged()
+		{
+			return Json(new {changed = _modelBuilder.SomethingChanged()}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

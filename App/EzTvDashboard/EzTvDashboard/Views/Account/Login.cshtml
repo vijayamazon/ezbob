@@ -9,7 +9,7 @@
     <div class="login-wrapper">
         @using (Html.BeginForm("Login", "Account", new { Area = "" }, FormMethod.Post, new { @class = "form-login" }))
         {
-            <div class="notifications"></div>
+            <div class="notifications">@Html.ValidationMessage("LoginError")</div>
             <h3>Login to EzTvDashboard</h3>
             <hr />
             <div class="form-group">
