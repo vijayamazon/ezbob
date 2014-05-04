@@ -19,6 +19,7 @@
 		<ItemGroup>
 			<ProjectToBuild Include="$(Src)\ezbob.sln"/>
 			<ProjectToBuild Include="$(Src)\App\EzAutoResponder\EzAutoResponder.sln"/>
+			<ProjectToBuild Include="$(Src)\App\EzTvDashboard\EzTvDashboard.sln"/>
 		</ItemGroup>		
 		
 		<DynamicExecute TaskAction="Run" Outputs="string result" UsingNamespaces="System.Text.RegularExpressions" Code='Match match = Regex.Match("$(CCNetLabel)", "[\\d]+\\.[\\d]+\\.[\\d]+\\.[\\d]+"); if (match.Success) result = match.Value; else result="$(CCNetLabel)";'>
@@ -42,6 +43,8 @@
 		<!-- Exec Command="unlocker.exe $(BuildBin) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
 				
 		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
+		
+		<WebCopy CopyFrom="$(Src)\App\EzTvDashboard\EzTvDashboard\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzTvDashboard\"/>
 		
 		<MultiCopy CopyFrom="$(Src)\sql\current\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\current\" />
 		<MultiCopy CopyFrom="$(Src)\sql\SPs\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\SPs\" />
