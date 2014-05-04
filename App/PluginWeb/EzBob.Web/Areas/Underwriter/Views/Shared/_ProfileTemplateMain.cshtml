@@ -14,7 +14,7 @@
                         Marketplaces</a></li>
                     <li><a href="#payment-accounts" data-toggle="tab">Payment accounts</a></li>
                     <li><a href="#credit-bureau" data-toggle="tab">Credit bureau</a></li>
-                    <li><a href="#medal-calculator" data-toggle="tab">Medal calculator</a></li>
+                    <li><a href="#calculator" data-toggle="tab">Calculator</a></li>
                     <li><a href="#loanhistorys" data-toggle="tab">Loan history</a></li>
                     <li><a href="#customer-info" class="cross-check-tab" data-toggle="tab">Cross check</a></li>
                     <li><a href="#company-score" class="company-score-tab" data-toggle="tab">Company score</a></li>
@@ -28,7 +28,10 @@
                     <div class="tab-pane" id="marketplaces"></div>
                     <div class="tab-pane" id="payment-accounts"></div>
                     <div class="tab-pane" id="credit-bureau"></div>
-                    <div class="tab-pane" id="medal-calculator"></div>
+                    <div class="tab-pane" id="calculator">
+                        <div id="pricing-calc"></div>
+                        <div id="medal-calc" style="margin-top: 30px;" ></div>
+                    </div>
                     <div class="tab-pane" id="loanhistorys"></div>
                     <div class="tab-pane" id="customer-info"></div>
                     <div class="tab-pane" id="company-score">
@@ -75,6 +78,7 @@
     Html.RenderPartial("ProfileSummary");
     Html.RenderPartial("CreditBureau");
     Html.RenderPartial("_MedalCalculationTemplate");
+    Html.RenderPartial("PricingModelCalculationTemplate");
     Html.RenderPartial("_ApiChecksLog");
     Html.RenderPartial("_CompanyScore");
     Html.RenderPartial("_FraudDetectionLog");

@@ -15,7 +15,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         experianInfo = @$el.find("#credit-bureau")
         paymentAccounts = @$el.find("#payment-accounts")
         loanhistorys = @$el.find("#loanhistorys")
-        medalCalculations = @$el.find("#medal-calculator")
+        medalCalculations = @$el.find("#medal-calc")
         messages = @$el.find("#messages")
         apiChecks = @$el.find("#apiChecks")
         customerRelations = @$el.find("#customerRelations")
@@ -79,6 +79,12 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         @medalCalculationView = new EzBob.Underwriter.MedalCalculationView(
             el: medalCalculations
             model: @medalCalculationModel
+        )
+
+        @pricingModelCalculationModel = new EzBob.Underwriter.PricingModelCalculationModel()
+        @pricingModelCalculationView = new EzBob.Underwriter.PricingModelCalculationView(
+            el: @$el.find("#pricing-calc")
+            model: @pricingModelCalculationModel
         )
 
         @companyScoreModel = new EzBob.Underwriter.CompanyScoreModel()
@@ -393,6 +399,10 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @medalCalculationModel.set {Id: id}, {silent: true}
             @medalCalculationModel.set fullModel.get("MedalCalculations"), silent: true
             @medalCalculationModel.trigger "sync"
+
+            @pricingModelCalculationModel.set {Id: id}, {silent: true}
+            @pricingModelCalculationModel.set fullModel.get("PricingModelCalculations"), silent: true
+            @pricingModelCalculationModel.trigger "sync"
 
             @FraudDetectionLogs.customerId = id
             @FraudDetectionLogView.customerId = id

@@ -1,0 +1,53 @@
+﻿@model dynamic
+
+<script id="pricing-model-calculation-template" type="text/template">
+    <table class="table centered">
+       @* <thead class="box">
+            <%
+            model.Score = model.Score || {};
+            %>
+            <tr class="box-title">
+                <th>Medal</th>
+                <th>Points</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><%-model.Score.Medal%></td>
+                <td><%-model.Score.Points%></td>
+                <td><%- EzBob.formatPercents(model.Score.Result, 1) %></td>
+            </tr>
+        </tbody>*@
+    </table>
+
+    @*<table class="table centered">
+        <thead class="box">
+            <tr class="box-title">
+                <th>Customer Characteristic</th>
+                <th>Weight Used</th>
+                <th>Points Obtained</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <%
+                _.each( model.MedalCharacteristics, function(medal, i){%> 
+                <td><%-medal.CustomerCharacteristic%></td>
+                <td><%-Math.round(medal.WeightUsed)%>%</td>
+                <td><%-Math.round(medal.ACParameters)+' from ' + Math.round(medal.MaxPoss)%> (<%-EzBob.roundNumber(medal.PointsObtainedPercent, 1) %>%)</td>
+            </tr>
+            <%}) %>
+        </tbody>
+        <tfoot>
+            <tr> 
+                <td>Total (not normalized)</td>
+                <td><%-model.TotalWeightUsed != undefined ? model.TotalWeightUsed : "-"%>%</td>
+                <td>
+                    <%-(model.TotalACParameters != undefined ? EzBob.roundNumber(model.TotalACParameters, 1) : "-") + ' from ' + (model.TotalMaxPoss != undefined ? EzBob.roundNumber(model.TotalMaxPoss, 1) : "-")%> 
+                    (<%-(model.TotalPointsObtainedPercent != undefined ? EzBob.roundNumber(model.TotalPointsObtainedPercent, 1) : "-")%>%)
+                </td>
+            </tr>
+        </tfoot>
+    </table>*@
+</script>

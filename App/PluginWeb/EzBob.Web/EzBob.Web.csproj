@@ -174,7 +174,9 @@
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Customer\Models\VipModel.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\PricingModelCalculationsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
+    <Compile Include="Areas\Underwriter\Models\PricingModelCalculator.cs" />
     <Compile Include="Code\AgreementRenderer.cs" />
     <Compile Include="Code\AgreementsTemplatesProvider.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
@@ -590,6 +592,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_LoanOfferMultiplierSettings.cshtml" />
     <Content Include="Areas\Broker\Files\credit.file.release.and.consent.2014-03-25.doc" />
     <Content Include="Areas\Broker\Files\credit.file.release.and.consent.doc" />
+    <Content Include="Areas\Underwriter\Views\Shared\PricingModelCalculationTemplate.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1229,6 +1232,7 @@
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.min.js">
       <DependentUpon>ezbob.underwriter.uploadHmrc.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.pricingModelCalculations.js" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.js">
       <DependentUpon>ezbob.underwriter.bankAccountDetails.coffee</DependentUpon>
     </Content>
@@ -1537,7 +1541,7 @@
     <Content Include="Content\js\Profile\Settings\ezbob.profile.settingsMaster.js" />
     <Content Include="Content\js\Underwriter\profile\APIChecksLog\ezbob.underwriter.apiChecksLog.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.crosscheck.js" />
-    <Content Include="Content\js\Underwriter\profile\medalCalculator\ezbob.underwriter.medalCalculations.js" />
+    <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.medalCalculations.js" />
     <Content Include="Content\js\Underwriter\profile\messages\ezbob.undewriter.messages.js" />
     <Content Include="Content\js\Profile\ApplyForLoan\ezbob.accounts.bank.js" />
     <Content Include="Content\js\controls\ezbob.address.js" />
