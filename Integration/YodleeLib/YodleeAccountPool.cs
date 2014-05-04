@@ -15,7 +15,7 @@
 		private static readonly List<YodleeAccounts> accounts;
 		private static readonly YodleeMain yodleeMain = new YodleeMain();
 		private static readonly object accountsLock = new object();
-		
+
 		static YodleeAccountPool()
 		{
 			accounts = AccountRepository.SearchNotAllocated();
@@ -26,16 +26,19 @@
 			}
 		}
 
-	    public static YodleeAccountsRepository AccountRepository
-	    {
-            get { return ObjectFactory.GetInstance<YodleeAccountsRepository>(); }
-	    }
+		public static YodleeAccountsRepository AccountRepository
+		{
+			get { return ObjectFactory.GetInstance<YodleeAccountsRepository>(); }
+		}
 
-	    private static YodleeAccounts CreateUnallocatedAccount()
+		private static YodleeAccounts CreateUnallocatedAccount()
 		{
 			YodleeAccounts account = AccountRepository.CreateAccount(YodleePasswordGenerator.GenerateRandomPassword);
 			log.InfoFormat("Registering yodlee user: {0}", account.Username);
-			yodleeMain.RegisterUser(account.Username, Encryptor.Decrypt(account.Password), account.Username);
+			if (!yodleeMain.RegisterUser(account.Username, Encryptor.Decrypt(account.Password), account.Username))
+			{
+				AccountRepository.Delete(account);
+			}
 
 			return account;
 		}

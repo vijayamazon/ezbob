@@ -82,5 +82,13 @@
 			UserInfo1 ui = registerService.register3(GetCobrandContext(), pc, up, nvPairs);
 			return ui.userContext;
 		}
+
+		internal void UnregisterUser(UserContext userContext)
+		{
+			if (userContext != null)
+			{
+				registerService.unregister(userContext);
+			}
+		}
 	}
 }

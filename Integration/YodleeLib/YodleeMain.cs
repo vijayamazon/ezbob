@@ -28,18 +28,30 @@
 			return null;
 		}
 
-		public void RegisterUser(string userName, string password, string email)
+		public bool RegisterUser(string userName, string password, string email)
 		{
+			var isSuccess = false;
 			var registerUser = new RegisterUser();
 			try
 			{
 				UserContext = registerUser.DoRegisterUser(userName, password, email);
-				Log.InfoFormat("Yodlee user '{0}' registered successfully", userName);
+				if (UserContext != null && UserContext.valid)
+				{
+					Log.InfoFormat("Yodlee user '{0}' registered successfully", userName);
+					isSuccess = true;
+				}
+				else
+				{
+					registerUser.UnregisterUser(UserContext);
+					Log.WarnFormat("Yodlee user '{0}' registered unsuccessfully, UserContext is: {1}", userName, UserContext == null ? "null" : "invalid");
+				}
 			}
 			catch (Exception e)
 			{
 				Log.WarnFormat("Yodlee user '{0}' registration failed: {1}", userName, e.Message);
 			}
+
+			return isSuccess;
 		}
 
 		public string GetAddAccountUrl(int csId, string callback, string username, string password)
