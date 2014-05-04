@@ -107,6 +107,9 @@
 			if ((m_oExperianData == null) || m_oExperianData.IsError)
 				return;
 
+			if (m_oExperianData.CacheHit)
+				return;
+
 			Log.Debug("Updating customer analytics for customer {0} and company '{1}'...", m_nCustomerID, m_sExperianRefNum);
 
 			DB.ExecuteNonQuery(

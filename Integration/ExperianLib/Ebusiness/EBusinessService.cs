@@ -140,7 +140,7 @@
 
 					AddToCache(regNumber, requestXml, newResponse);
 
-					return new LimitedResults(newResponse, DateTime.UtcNow);
+					return new LimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false };
 				} // if
 
 				if (response == null)
@@ -148,7 +148,7 @@
 					return null;
 				}
 
-				return new LimitedResults(response.JsonPacket, response.LastUpdateDate);
+				return new LimitedResults(response.JsonPacket, response.LastUpdateDate) { CacheHit = true };
 			}
 			catch (Exception e) {
 				Log.Error(e);
@@ -176,7 +176,7 @@
 
 					AddToCache(regNumber, requestXml, newResponse);
 
-					return new NonLimitedResults(newResponse, DateTime.UtcNow);
+					return new NonLimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false };
 				} // if
 
 				if (response == null)
@@ -184,7 +184,7 @@
 					return null;
 				}
 
-				return new NonLimitedResults(response.JsonPacket, response.LastUpdateDate);
+				return new NonLimitedResults(response.JsonPacket, response.LastUpdateDate) { CacheHit = true };
 			}
 			catch (Exception e) {
 				Log.Error(e);

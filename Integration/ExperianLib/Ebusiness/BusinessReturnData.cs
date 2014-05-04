@@ -33,6 +33,7 @@
 		public string PostCode { get; set; }
 
 		public DateTime? IncorporationDate { get; protected set; }
+		public bool CacheHit { get; set; }
 
 		#endregion public
 
