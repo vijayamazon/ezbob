@@ -357,6 +357,14 @@
 
 		[OperationContract]
 		IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId);
+
+
+
+
+
+
+		[OperationContract]
+		ActionMetaData Temp_BackfillCompanyAnalytics();
 	} // interface IEzService
 } // namespace EzService
 

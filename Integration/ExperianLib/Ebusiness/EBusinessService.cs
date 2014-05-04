@@ -216,6 +216,11 @@
 
 		#endregion method CheckCache
 
+		public MP_ExperianDataCache Temp_CheckCache(string refNumber)
+		{
+			return CheckCache(refNumber);
+		}
+
 		#region method AddToCache
 
 		private int AddToCache(string refNumber, string request, string response) {
@@ -233,7 +238,7 @@
 				int currentBalanceSum = 0;
 				try
 				{
-					currentBalanceSum = ParseToDb(cacheVal.JsonPacket, cacheVal);
+					currentBalanceSum = ParseToDb(cacheVal);
 				}
 				catch (Exception e)
 				{
@@ -249,13 +254,13 @@
 
 		#endregion method AddToCache
 
-		public int ParseToDb(string response, MP_ExperianDataCache cache)
+		public int ParseToDb(MP_ExperianDataCache cache)
 		{
 			var xmlDoc = new XmlDocument();
 
 			var stream = new MemoryStream();
 			var writer = new StreamWriter(stream);
-			writer.Write(response);
+			writer.Write(cache.JsonPacket);
 			writer.Flush();
 			stream.Position = 0;
 			xmlDoc.Load(stream);
