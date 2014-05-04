@@ -235,7 +235,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 						sTitle = 'Send another invitation to the client to fill himself.';
 
 					return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' +
-						'<i class="fa fa-envelope-o"></i> Send' +
+						'<i class="fa fa-envelope"></i> Send' +
 						'</button>';
 				}, // mRender
 			});
