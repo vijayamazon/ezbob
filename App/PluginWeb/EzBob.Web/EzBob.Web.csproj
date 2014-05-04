@@ -434,10 +434,10 @@
     <Content Include="Content\css\flaty\DT_bootstrap.css" />
     <Content Include="Content\css\flaty\flaty-responsive.css" />
     <Content Include="Content\css\flaty\flaty.css" />
-    <Content Include="Content\css\flaty\font-awesome.min.css" />
     <Content Include="Content\css\flaty\images\sort_asc.png" />
     <Content Include="Content\css\flaty\images\sort_both.png" />
     <Content Include="Content\css\flaty\images\sort_desc.png" />
+    <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\css\images\300x250.jpg" />
     <Content Include="Content\css\images\accounts\amazon.png" />

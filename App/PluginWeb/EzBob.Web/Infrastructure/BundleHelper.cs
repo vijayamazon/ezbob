@@ -128,7 +128,7 @@
 				//.Add("~/Content/css/flaty/flaty-responsive.css")
 				//.Add("~/Content/css/flaty/bootstrap-responsive.min.css")
 				.Add("~/Content/css/flaty/flaty.css")
-				.Add("~/Content/css/flaty/font-awesome.min.css")
+				.Add("~/Content/css/font-awesome.min.css")
 				.Add("~/Content/css/flaty/bootstrap3-modal-patch.css")
 				.Add("~/Content/css/bootstrap-modal.css")
 				.Add("~/Content/css/jquery.jqplot.css")
@@ -329,7 +329,7 @@
 				.Add("~/Content/css/loan-type-selector.css")
 				.Add("~/Content/css/amount-period-sliders.css")
 				.Add("~/Content/css/dropzone.css")
-				.Add("~/Content/css/flaty/font-awesome.min.css")
+				.Add("~/Content/css/font-awesome.min.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // CustomerCss
 

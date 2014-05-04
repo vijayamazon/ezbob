@@ -62,6 +62,10 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         // this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
         // this.$el.find('.clear-filter').tooltip({ title: 'Clear all filters', placement: 'bottom' });
 
+        if (this.shop.get('Name') == 'eBay') {
+            //drawChart(this.shop.get('Id'));
+        }
+        
         if (this.shop.get('Name') == 'Yodlee') {
             that.renderYodlee();
         }
