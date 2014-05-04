@@ -241,7 +241,6 @@
     <Content Include="Content\js\underscore.js" />
     <Content Include="Content\js\_references.js" />
     <Content Include="Global.asax" />
-    <Content Include="packages.config" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
