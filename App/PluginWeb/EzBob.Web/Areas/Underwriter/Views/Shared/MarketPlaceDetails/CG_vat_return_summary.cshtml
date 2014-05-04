@@ -191,12 +191,14 @@ if (m.CGData && m.CGData.VatReturn) {
 				<th>Total value added</th><td></td><%
 				var oTotalValueAdded = {};
 				var nTotalValueAdded = aryTotals[7];
-
+                
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					oTotalValueAdded[i] = aryBusiness[i].BoxData[6].amount - aryBusiness[i].BoxData[7].amount;
 					%><td class=r><%- EzBob.formatPoundsAsInt(oTotalValueAdded[i]) %></td><%
-				} // for each relevant data item
-				%><td class=r><%- EzBob.formatPoundsAsInt(nRevenuesSum - nTotalValueAdded) %></td>
+			    } // for each relevant data item
+			    
+                var nTotalValueAddedSum = nRevenuesSum - nTotalValueAdded;
+				%><td class=r><%- EzBob.formatPoundsAsInt(nTotalValueAddedSum) %></td>
 			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.TotalValueAdded)%></td>
                 <td><%=EzBob.formatPercents(m.CGData.BankStatementAnnualized.TotalValueAdded / nTotalValueAdded - 1 ,2)%></td>
 			</tr>
@@ -238,17 +240,13 @@ if (m.CGData && m.CGData.VatReturn) {
 			<tr class=chkpt>
 				<th>EBIDA</th><td></td><%
 				var oEBIDA = {};
-				var nEBIDASum = 0;
+				var nEBIDASum = nTotalValueAddedSum - nSalarySumCalculated;
 
 				var nSumStartIdx = aryBusiness.length <= 4 ? 0 : aryBusiness.length - 4;
 
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					oEBIDA[i] = oTotalValueAdded[i] - arySalary[i].salary; // TODO: subtract Tax from the previous row.
-
-					if (i >= nSumStartIdx)
-						nEBIDASum += oEBIDA[i];
-
-					%><td class=r><%- EzBob.formatPoundsAsInt(oEBIDA[i]) %></td><%
+                %><td class=r><%- EzBob.formatPoundsAsInt(oEBIDA[i]) %></td><%
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPoundsAsInt(nEBIDASum) %></td>
 			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Ebida)%></td>
