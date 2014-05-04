@@ -138,9 +138,9 @@
 
 					Utils.WriteLog(requestXml, newResponse, "E-SeriesLimitedData", customerId);
 
-					AddToCache(regNumber, requestXml, newResponse);
+					int currentBalanceSum = AddToCache(regNumber, requestXml, newResponse);
 
-					return new LimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false };
+					return new LimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false, CurrentBalanceSum = currentBalanceSum };
 				} // if
 
 				if (response == null)
@@ -148,7 +148,7 @@
 					return null;
 				}
 
-				return new LimitedResults(response.JsonPacket, response.LastUpdateDate) { CacheHit = true };
+				return new LimitedResults(response.JsonPacket, response.LastUpdateDate) { CacheHit = true, CurrentBalanceSum = response.CurrentBalanceSum };
 			}
 			catch (Exception e) {
 				Log.Error(e);
@@ -218,8 +218,8 @@
 
 		#region method AddToCache
 
-		private void AddToCache(string refNumber, string request, string response) {
-			m_oRetryer.Retry(() => {
+		private int AddToCache(string refNumber, string request, string response) {
+			return m_oRetryer.Retry(() => {
 				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
 
 				MP_ExperianDataCache cacheVal =
@@ -229,24 +229,27 @@
 				cacheVal.LastUpdateDate = DateTime.UtcNow;
 				cacheVal.JsonPacketInput = request;
 				cacheVal.JsonPacket = response;
-
-				repo.SaveOrUpdate(cacheVal);
-
+				
+				int currentBalanceSum = 0;
 				try
 				{
-					ParseToDb(cacheVal.JsonPacket, cacheVal);
+					currentBalanceSum = ParseToDb(cacheVal.JsonPacket, cacheVal);
 				}
 				catch (Exception e)
 				{
 					Log.ErrorFormat("Error parsing response:{0}. The error:{1}", cacheVal.Id, e);
 				}
 
+				cacheVal.CurrentBalanceSum = currentBalanceSum;
+
+				repo.SaveOrUpdate(cacheVal);
+				return currentBalanceSum;
 			}, "EBusinessService.AddToCache(" + refNumber + ")");
 		} // AddToCache
 
 		#endregion method AddToCache
 
-		public void ParseToDb(string response, MP_ExperianDataCache cache)
+		public int ParseToDb(string response, MP_ExperianDataCache cache)
 		{
 			var xmlDoc = new XmlDocument();
 
@@ -343,7 +346,7 @@
 				}
 			}
 
-			//SaveTotalCurrentBalanceOfActiveAccountsIntoAnalytics(totalCurrentBalanceOfActiveAccounts);
+			return totalCurrentBalanceOfActiveAccounts;
 		}
 
 		#region method MakeRequest

@@ -33,6 +33,7 @@
 		public string PostCode { get; set; }
 
 		public DateTime? IncorporationDate { get; protected set; }
+		public int? CurrentBalanceSum { get; set; }
 		public bool CacheHit { get; set; }
 
 		#endregion public

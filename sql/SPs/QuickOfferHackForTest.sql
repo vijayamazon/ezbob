@@ -42,6 +42,7 @@ BEGIN
 		NULL,
 		NULL,
 		@CustomerID,
+		0,
 		0
 	FROM
 		QuickOfferConfiguration qoc
