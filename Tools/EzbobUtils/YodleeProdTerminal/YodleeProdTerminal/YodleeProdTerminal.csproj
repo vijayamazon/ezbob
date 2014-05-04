@@ -67,6 +67,7 @@
     <Compile Include="ContainerTypes.cs" />
     <Compile Include="ContainerTypesHelper.cs" />
     <Compile Include="ContentServiceHelper.cs" />
+    <Compile Include="UpdateUserInfo.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="Currency.cs" />
     <Compile Include="DisplayBankData.cs" />
