@@ -1,65 +1,91 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
+EzBob.Profile = EzBob.Profile || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Profile.PayPointCardSelectView = Backbone.Marionette.ItemView.extend({
+	template: '#PayPointCardSelectViewTemplate',
 
-  root.EzBob = root.EzBob || {};
+	initialize: function() {
+		this.cards = [];
 
-  EzBob.Profile = EzBob.Profile || {};
+		var oAllCards = this.model.get('PayPointCards');
 
-  EzBob.Profile.PayPointCardSelectView = (function(_super) {
+		var len = oAllCards.length;
 
-    __extends(PayPointCardSelectView, _super);
+		for (var i = 0; i < len; i++) {
+			var oCard = oAllCards[i];
 
-    function PayPointCardSelectView() {
-      return PayPointCardSelectView.__super__.constructor.apply(this, arguments);
-    }
+			if ((oCard.ExpireDate != null) && (moment(oCard.ExpireDate).toDate() > moment(this.options.date).toDate()))
+				this.cards.push(oCard);
+		} // for
+	}, // initialize
 
-    PayPointCardSelectView.prototype.template = '#PayPointCardSelectViewTemplate';
+	ui: {
+		cont: '.btn-continue',
+	}, // ui
 
-    PayPointCardSelectView.prototype.events = {
-      'change input[name="cardOptions"]': 'optionsChanged',
-      'click .btn-continue': 'continue'
-    };
+	events: {
+		'change input[name="cardOptions"]': 'optionsChanged',
+		'click .btn-continue': 'next',
+		'click .cancel': 'cancel',
+	}, // events
 
-    PayPointCardSelectView.prototype.optionsChanged = function() {
-      return this.onRender();
-    };
+	optionsChanged: function() {
+		this.onRender();
+	}, // optionsChanged
 
-    PayPointCardSelectView.prototype.onRender = function() {
-      var select, val;
-      val = this.getCardType();
-      select = this.$el.find('select');
-      if (val === 'useExisting') {
-        return select.removeAttr('readonly disabled');
-      } else {
-        return select.attr({
-          'readonly': 'readonly',
-          'disabled': 'disabled'
-        });
-      }
-    };
+	onRender: function() {
+		var val = this.getCardType();
+		var select = this.$el.find('select');
 
-    PayPointCardSelectView.prototype.getCardType = function() {
-      return this.$el.find('input[name="cardOptions"]:checked').val();
-    };
+		if (val === 'useExisting') {
+			select.removeAttr('readonly disabled');
+			this.ui.cont.text('Confirm');
+		}
+		else {
+			this.ui.cont.text('Continue');
+			select.attr({
+				'readonly': 'readonly',
+				'disabled': 'disabled',
+			});
+		} // if
 
-    PayPointCardSelectView.prototype["continue"] = function() {
-      var val;
-      val = this.getCardType();
-      if (val === 'useExisting') {
-        this.trigger('existing');
-      } else {
-        this.trigger('select', this.$el.find('option:selected').val());
-      }
-      this.close();
-      return false;
-    };
+		EzBob.UiAction.registerView(this);
 
-    return PayPointCardSelectView;
+		return this;
+	}, // onRender
 
-  })(Backbone.Marionette.ItemView);
+	getCardType: function() {
+		return this.$el.find('input[name="cardOptions"]:checked').val();
+	}, // getCardType
 
-}).call(this);
+	hasCards: function() {
+		return this.cards.length > 1;
+	}, // hasCards
+
+	serializeData: function() {
+		return {
+			cards: this.cards,
+		};
+	}, // serializeData
+
+	next: function() {
+		var val = this.getCardType();
+
+		if (val === 'useExisting')
+			this.trigger('select', this.$el.find('option:selected').val());
+		else
+			this.trigger('existing');
+
+		this.close();
+
+		return false;
+	}, // next
+
+	cancel: function() {
+		this.trigger('cancel');
+
+		this.close();
+
+		return false;
+	}, // cancel
+}); // EzBob.Profile.PayPointCardSelectView

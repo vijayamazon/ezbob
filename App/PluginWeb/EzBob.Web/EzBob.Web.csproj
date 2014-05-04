@@ -928,7 +928,9 @@
     <Content Include="Content\js\controls\ezbob.jqmodal.min.js">
       <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\controls\ezbob.LoanScheduleView.js" />
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
+    <Content Include="Content\js\ezbob.internal.debug.js" />
     <Content Include="Content\js\ezbob.serverLog.js" />
     <Content Include="Content\js\lib\date.interval.js" />
     <Content Include="Content\js\ezbob.addDirectorInfoView.js" />
@@ -946,9 +948,6 @@
       <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\controls\ezbob.livechat.livechatrouter.js" />
-    <Content Include="Content\js\controls\ezbob.LoanScheduleView.js">
-      <DependentUpon>ezbob.LoanScheduleView.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\controls\ezbob.simpleValueEditDlg.js" />
     <Content Include="Content\js\ezbob.csrf.js" />
     <Content Include="Content\js\ezbob.customerModel.js" />
@@ -1079,27 +1078,20 @@
     <Content Include="Content\js\login\ezbob.restorePassword.js">
       <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanModel.js">
-      <DependentUpon>ApplyForLoanModel.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanModel.min.js">
-      <DependentUpon>ApplyForLoanModel.coffee</DependentUpon>
-    </Content>
+    <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanModel.js" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanTopView.js">
       <DependentUpon>ApplyForLoanTopView.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.js">
-      <DependentUpon>ApplyForLoanView.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Profile\ezbob.profile.Agreements.min.js">
-      <DependentUpon>ezbob.profile.Agreements.coffee</DependentUpon>
-    </Content>
+    <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.js" />
+    <Content Include="Content\js\Profile\ApplyForLoan\ezbob.profile.PayPointCardSelectView.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.Agreements.js" />
     <Content Include="Content\js\Profile\ezbob.profile.inviteFriend.js">
       <DependentUpon>ezbob.profile.inviteFriend.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Profile\ezbob.profile.inviteFriend.min.js">
       <DependentUpon>ezbob.profile.inviteFriend.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Profile\ezbob.profile.loanTaken.js" />
     <Content Include="Content\js\Profile\ezbob.profile.perks.js">
       <DependentUpon>ezbob.profile.perks.coffee</DependentUpon>
     </Content>
@@ -1479,9 +1471,6 @@
     <Content Include="Content\js\lib\jsuri-1.1.1.js" />
     <Content Include="Content\js\lib\moment.js" />
     <Content Include="Content\js\lib\notifications.js" />
-    <Content Include="Content\js\Profile\ezbob.profile.Agreements.js">
-      <DependentUpon>ezbob.profile.Agreements.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\creditBureau\ezbob.underwriter.idHubCustomAddress.js" />
     <Content Include="Content\PIE_uncompressed.htc" />
     <Content Include="Content\js\login\ezbob.login.js" />
@@ -1493,7 +1482,6 @@
     <Content Include="Content\js\App\ezbob.bindings.coffee" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\_loan_editor.cshtml" />
     <Content Include="Content\css\editLoan.less" />
-    <Content Include="Content\js\controls\ezbob.LoanScheduleView.coffee" />
     <Content Include="Areas\Customer\Views\Paypoint\ErrorOfferDate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Profile\_PayPointCardSelectViewTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\PaymentAccounts\PayPointAdded.cshtml" />
@@ -1514,12 +1502,9 @@
     <Content Include="Areas\Customer\Views\Shared\Shops\EKMAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Consent\Agreed.cshtml" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.coffee" />
-    <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanModel.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\GetCashConfirmationView.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\ThankyouLoanView.coffee" />
-    <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.inviteFriend.coffee" />
-    <Content Include="Content\js\Profile\ezbob.profile.Agreements.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.paypointSchedule.js" />
     <Content Include="Content\js\Profile\ezbob.profile.signWidget.js" />
     <Content Include="Content\js\Profile\ezbob.profile.smallNotification.js" />
@@ -1921,7 +1906,6 @@
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.paymentAccounts.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.payPalAccountDetails.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.coffee" />
-    <Content Include="Content\js\Profile\ApplyForLoan\ezbob.profile.PayPointCardSelectView.coffee" />
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.coffee" />
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentView.coffee" />
     <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.coffee" />

@@ -1,70 +1,52 @@
-﻿(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+﻿var EzBob = EzBob || {};
+EzBob.Profile = EzBob.Profile || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Profile.ApplyForLoanModel = Backbone.Model.extend({
+	defaults: {
+		neededCash: 100,
+		maxCash: 15000,
+		minCash: EzBob.Config.MinLoan,
+		agree: false,
+		agreement: false,
+		CreditSum: 0,
+		OfferValid: 0,
+		OfferValidMintes: 0,
+		loanType: 0,
+		repaymentPeriod: 0,
+		isLoanSourceEU: false,
+	}, // defaults
 
-  root.EzBob = root.EzBob || {};
+	validate: function(attrs) {
+		if (typeof attrs.neededCash === "undefined")
+			return false;
 
-  EzBob.Profile = EzBob.Profile || {};
+		var val = attrs.neededCash;
 
-  EzBob.Profile.ApplyForLoanModel = (function(_super) {
+		if (isNaN(val))
+			attrs.neededCash = this.get("minCash");
 
-    __extends(ApplyForLoanModel, _super);
+		if (val > this.get("maxCash"))
+			attrs.neededCash = this.get("maxCash");
 
-    function ApplyForLoanModel() {
-      return ApplyForLoanModel.__super__.constructor.apply(this, arguments);
-    }
+		if (val < this.get("minCash"))
+			attrs.neededCash = this.get("minCash");
 
-    ApplyForLoanModel.prototype.defaults = {
-      neededCash: 100,
-      maxCash: 15000,
-      minCash: EzBob.Config.MinLoan,
-      agree: false,
-      agreement: false,
-      CreditSum: 0,
-      OfferValid: 0,
-      OfferValidMintes: 0,
-      loanType: 0,
-      repaymentPeriod: 0,
-      isLoanSourceEU: false
-    };
+		return false;
+	}, // validate
 
-    ApplyForLoanModel.prototype.validate = function(attrs) {
-      var val;
-      if (typeof attrs.neededCash !== "undefined") {
-        val = attrs.neededCash;
-        if (isNaN(val)) {
-          attrs.neededCash = this.get("minCash");
-        }
-        if (val > this.get("maxCash")) {
-          attrs.neededCash = this.get("maxCash");
-        }
-        if (val < this.get("minCash")) {
-          attrs.neededCash = this.get("minCash");
-        }
-      }
-      return false;
-    };
+	initialize: function() {
+		this.on("change:neededCash", this.buildUrl, this);
 
-    ApplyForLoanModel.prototype.initialize = function() {
-      this.on("change:neededCash", this.buildUrl, this);
-      return this.set({
-        neededCash: this.get("maxCash"),
-        minCash: (this.get("maxCash") > EzBob.Config.MinLoan ? EzBob.Config.MinLoan : EzBob.Config.XMinLoan),
-        loanType: this.get("loanType"),
-        repaymentPeriod: this.get("repaymentPeriod"),
-        isLoanSourceEU: this.get("isLoanSourceEU")
-      });
-    };
+		this.set({
+			neededCash: this.get("maxCash"),
+			minCash: (this.get("maxCash") > EzBob.Config.MinLoan ? EzBob.Config.MinLoan : EzBob.Config.XMinLoan),
+			loanType: this.get("loanType"),
+			repaymentPeriod: this.get("repaymentPeriod"),
+			isLoanSourceEU: this.get("isLoanSourceEU"),
+		});
+	}, // initialize
 
-    ApplyForLoanModel.prototype.buildUrl = function() {
-      return this.set("url", "GetCash/GetTransactionId?loan_amount=" + (this.get('neededCash')) + "&loanType=" + (this.get('loanType')) + "&repaymentPeriod=" + (this.get('repaymentPeriod')));
-    };
-
-    return ApplyForLoanModel;
-
-  })(Backbone.Model);
-
-}).call(this);
+	buildUrl: function() {
+		return this.set("url", "GetCash/GetTransactionId?loan_amount=" + (this.get('neededCash')) + "&loanType=" + (this.get('loanType')) + "&repaymentPeriod=" + (this.get('repaymentPeriod')));
+	}, // buildUrl
+}); // EzBob.Profile.ApplyForLoanModel

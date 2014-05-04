@@ -44,7 +44,10 @@ var EzBob = EzBob || {};
 		}; // add
 	} // UiCachePkg
 
-	EzBob.UiAction = EzBob.UiAction || {
+	EzBob.UiAction = EzBob.UiAction || _.extend({}, EzBob.InternalDebug, {
+		internalDebugEnabled: true,
+		internalDebugName: 'UiAction',
+
 		flushInterval: 30, // seconds
 
 		evtLinked: function () { return 'linked'; }, // linked
@@ -52,6 +55,9 @@ var EzBob = EzBob || {};
 		evtClick: function () { return 'click'; }, // click
 		evtFocusIn: function() { return 'focusin'; }, // focus in
 		evtFocusOut: function() { return 'focusout'; }, // focus out
+		evtSlideStart: function() { return 'slidestart'; }, // slide start
+		evtSlideStop: function() { return 'slidestop'; }, // slide stop
+		evtSlide: function() { return 'slide'; }, // slide
 
 		evtListenerAttr: function () { return 'ezbob:ui-action:event-listener'; }, // listener attr
 
@@ -170,10 +176,10 @@ var EzBob = EzBob || {};
 		writeDown: function (bSync) {
 			var self = this;
 
-			//console.log('write down, sync:', bSync ? 'yes' : 'no', 'history:', self.cache.history);
+			self.internalDebug('write down, sync:', bSync ? 'yes' : 'no', 'history:', self.cache.history);
 
 			if (!self.cache.history || self.cache.history.hasNoData()) {
-				//console.log('No data in cache, nothing to save.');
+				self.internalDebug('No data in cache, nothing to save.');
 				return;
 			} // if
 
@@ -187,7 +193,7 @@ var EzBob = EzBob || {};
 					history: JSON.stringify(self.cache.history),
 				},
 				success: function(oData, sStatus, jqXHR) {
-					//console.log('status:', sStatus, 'saved:', oData, 'jqXHR:', jqXHR);
+					self.internalDebug('status:', sStatus, 'saved:', oData, 'jqXHR:', jqXHR);
 
 					if (oData) {
 						var i;
@@ -223,7 +229,7 @@ var EzBob = EzBob || {};
 		}, // saveOne
 
 		save: function (evt) {
-			// console.log('ui event save(', evt.type, $(evt.target).attr('ui-event-control-id'), evt.target, evt.data.saveValue, ')');
+			this.internalDebug('ui event save(', evt.type, $(evt.target).attr('ui-event-control-id'), evt.target, evt.data.saveValue, ')');
 
 			var oElm = $(evt.currentTarget);
 
@@ -253,7 +259,7 @@ var EzBob = EzBob || {};
 		}, // save
 
 		flush: function (bSync) {
-			//console.log('UiAction.flush', this);
+			this.internalDebug('UiAction.flush', this);
 
 			if (this.isFranFleischman)
 				return;
@@ -296,12 +302,12 @@ var EzBob = EzBob || {};
 		}, // cache
 
 		handleUnload: function () {
-			//console.log('unload');
+			this.internalDebug('unload');
 			this.flush(true);
 		}, // handleUnload
 
 		handleTimer: function () {
-			//console.log('timer');
+			this.internalDebug('timer');
 			this.flush();
 			this.startTimer();
 		}, // handleTimer
@@ -311,5 +317,5 @@ var EzBob = EzBob || {};
 		ontimer: null,
 
 		isFranFleischman: false,
-	}; // EzBob.UiAction
+	}); // EzBob.UiAction
 })();

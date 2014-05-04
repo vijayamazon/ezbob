@@ -18,23 +18,33 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         this.customerModel = options.customerModel;
         this.model = new EzBob.Profile.SignModel();
         this.model.on('change', this.render, this);
-        this.customerModel.on('change:TotalBalance', this.balanceChanged, this);
-        this.customerModel.on('change:state', this.balanceChanged, this);
-        this.customerModel.on('change:HasRollovers', this.balanceChanged, this);
+        this.customerModel.on('change:TotalBalance', this.processBalanceChanged, this);
+        this.customerModel.on('change:state', this.processBalanceChanged, this);
+        this.customerModel.on('change:HasRollovers', this.processBalanceChanged, this);
         this.balanceChanged();
-    },
+    }, // initialize
+
     render: function () {
         this.$el.html(this.templates[this.model.get("signTemplate")](this.model.toJSON()));
+        EzBob.UiAction.registerView(this);
         return this;
-    },
+    }, // render
+
     events: {
         "click a.pay-early": "click"
-    },
+    }, // events
+
     click: function () {
         this.trigger('payEarly');
         window.location.href = "#PayEarly";
         return false;
-    },
+    }, // click
+
+    processBalanceChanged: function() {
+        this.balanceChanged();
+        EzBob.UiAction.registerView(this);
+    }, // processBalanceChanged
+
     balanceChanged: function () {
         var balance = this.customerModel.get('TotalBalance'),
             state = this.customerModel.get('state'),
@@ -65,9 +75,9 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (balance > 0) {
             var valueOfText;
             if (isEarly) {
-                valueOfText = '<span><a href="#" class="pay-early">Pay Early &amp; Save</a></span>';
+                valueOfText = '<span><a href="#" class="pay-early" ui-event-control-id="dashboard:pay-early-and-save">Pay Early &amp; Save</a></span>';
             } else {
-                valueOfText = '<span><a href="#" class="pay-early">' + name + ',<br/>Payment is Required</a></span>';
+                valueOfText = '<span><a href="#" class="pay-early" ui-event-control-id="dashboard:payment-is-required">' + name + ',<br/>Payment is Required</a></span>';
             }
             this.model.set({
                 color: 'green',
@@ -145,5 +155,5 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
             text: '<span>Apply &amp; get funds</span>',
             signTemplate: "welcome"
         });
-    }
+    }, // balanceChanged
 });

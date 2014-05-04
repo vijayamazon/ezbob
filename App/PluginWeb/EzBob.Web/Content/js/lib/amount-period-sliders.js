@@ -39,7 +39,7 @@ function InitAmountPeriodSliders(options)
 				.append($('<div />').addClass(sAreaName + '-max slider-label'))
 				.append($('<div />').addClass(sAreaName + '-tooltip'))
 				.append($('<div />').addClass(sAreaName + '-slider'))
-				.append($('<input />').addClass(sAreaName + '-textbox').val(oDefinitions.start))
+				.append($('<input />').addClass(sAreaName + '-textbox').attr('ui-event-control-id', 'loan-legal:' + sAreaName.toLowerCase()).val(oDefinitions.start))
 		);
 
 		var oTooltip = $('.' + sAreaName + '-tooltip', oParent);
@@ -70,6 +70,7 @@ function InitAmountPeriodSliders(options)
 			}, // create
 			start: function() {
 				oTooltip.fadeIn('fast');
+				EzBob.UiAction.saveOne(EzBob.UiAction.evtSlideStart(), oTextbox, true);
 			}, // start
 			slide: function(event, ui) {
 				oTooltip.css('left', oLeftFunc.call(null, ui.value, oSlider) + 'px').text(oTextFunc.call(null, ui.value));
@@ -77,6 +78,8 @@ function InitAmountPeriodSliders(options)
 
 				if ($(oParent).data('status') == 'ready')
 					options.callback.call(this, options.container, 'slide');
+
+				EzBob.UiAction.saveOne(EzBob.UiAction.evtSlide(), oTextbox, true);
 			}, // slide
 			change: function(event, ui) {
 				if (ui.value == oDefinitions.min || ui.value == oDefinitions.max)
@@ -89,6 +92,8 @@ function InitAmountPeriodSliders(options)
 
 				if ($(oParent).data('status') == 'ready')
 					options.callback.call(this, options.container, 'change');
+
+				EzBob.UiAction.saveOne(EzBob.UiAction.evtChange(), oTextbox, true);
 			}, // change
 			stop: function(event, ui){
 				oTextbox.autoNumericSet(ui.value);
@@ -98,6 +103,8 @@ function InitAmountPeriodSliders(options)
 
 				if ($(oParent).data('status') == 'ready')
 					options.callback.call(this, options.container, 'stop');
+
+				EzBob.UiAction.saveOne(EzBob.UiAction.evtSlideStop(), oTextbox, true);
 			} // stop
 		}); // init slider
 

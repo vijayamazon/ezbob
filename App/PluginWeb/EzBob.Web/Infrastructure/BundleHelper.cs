@@ -52,6 +52,7 @@
 				.Add("~/Content/js/App/ezbob.clicktale.js")
 				.Add("~/Content/js/contactUs/ezbo.contactUs.js")
 				.Add("~/Content/js/ezbob.design.js")
+				.Add("~/Content/js/ezbob.internal.debug.js")
 				.Add("~/Content/js/ezbob.uiaction.js")
 				.Add("~/Content/js/ezbob.serverlog.js")
 				.Add("~/Content/js/App/ezbob.bindings.coffee")
@@ -287,7 +288,7 @@
 				.Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
 
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
-				.Add("~/Content/js/controls/ezbob.LoanScheduleView.coffee")
+				.Add("~/Content/js/controls/ezbob.LoanScheduleView.js")
 				.Add("~/Content/js/controls/ezbob.simpleValueEditDlg.js")
 				.Add("~/Content/js/controls/ezbob.notifications.js")
 
@@ -422,7 +423,7 @@
 				.Add("~/Content/js/controls/ezbob.notifications.js")
 				.Add("~/Content/js/controls/ezbob.whatsnew.js")
 				.Add("~/Content/js/controls/ezbob.livechat.livechatrouter.js")
-				.Add("~/Content/js/controls/ezbob.LoanScheduleView.coffee")
+				.Add("~/Content/js/controls/ezbob.LoanScheduleView.js")
 
 				//Wizard
 				.Add("~/Content/js/Profile/ezbob.profile.payEarly.js")
@@ -451,9 +452,9 @@
 
 				//Profile
 				.Add("~/Content/js/Profile/ezbob.profile.smallNotification.js")
-				.Add("~/Content/js/Profile/ApplyForLoan/ezbob.profile.PayPointCardSelectView.coffee")
-				.Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanModel.coffee")
-				.Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanView.coffee")
+				.Add("~/Content/js/Profile/ApplyForLoan/ezbob.profile.PayPointCardSelectView.js")
+				.Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanModel.js")
+				.Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanView.js")
 				.Add("~/Content/js/Profile/ApplyForLoan/ezbob.accounts.bank.js")
 				.Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanTopView.coffee")
 				.Add("~/Content/js/Profile/ezbob.profile.profileView.js")
@@ -466,13 +467,14 @@
 				.Add("~/Content/js/Profile/ezbob.profile.AccountSummary.js")
 				.Add("~/Content/js/Profile/ezbob.profile.yourInfo.coffee")
 				.Add("~/Content/js/Profile/ezbob.profile.paypointSchedule.js")
+				.Add("~/Content/js/Profile/ezbob.profile.loanTaken.js")
 				.Add("~/Content/js/Profile/ezbob.profile.inviteFriend.coffee")
 				.Add("~/Content/js/Profile/ezbob.profile.perks.coffee")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMain.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMaster.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsQuestion.js")
-				.Add("~/Content/js/Profile/ezbob.profile.Agreements.coffee")
+				.Add("~/Content/js/Profile/ezbob.profile.Agreements.js")
 
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderProfileJs

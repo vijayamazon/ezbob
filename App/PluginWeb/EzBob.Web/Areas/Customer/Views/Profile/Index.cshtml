@@ -121,7 +121,7 @@
             </dd>
         </dl>
 
-        <button class="button orange get-cash">Choose Amount</button>
+        <button class="button orange get-cash" ui-event-control-id="dashboard:choose-amount">Choose Amount</button>
     </script>
 
     <script id="d-getCash-template-late" type="text/template">
@@ -168,8 +168,8 @@
                 </p>
                 <br>
                 <div class="alignright" style="padding: 0 10px 0 0;">
-                    <a href="#" target="_blank" class="button orange pull-right" id="refreshYodleeBtn" onclick="$.colorbox.close();">Continue</a>
-                    <a href="#" class="button grey pull-right" id="cancelYodleeBtn" onclick="$.colorbox.close();">Cancel</a>
+                    <a href="#" target="_blank" class="button orange pull-right" id="refreshYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee">Continue</a>
+                    <a href="#" class="button grey pull-right" id="cancelYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee-cancel">Cancel</a>
                 </div>
                 <div class="clear"></div>
                 <hr>
@@ -186,8 +186,8 @@
 
                 <div class="form_buttons_container">
                     <div class="attardi-button">
-                        <a href="#" class="button orange pull-right" id="refreshEkmBtn" onclick="updateEkm();">Continue</a>
-                        <a href="#" class="button grey pull-right" id="cancelEkmBtn" onclick="$.colorbox.close();">Cancel</a>
+                        <a href="#" class="button orange pull-right" id="refreshEkmBtn" onclick="updateEkm();" ui-event-control-id="refresh-account:ekm">Continue</a>
+                        <a href="#" class="button grey pull-right" id="cancelEkmBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:ekm-cancel">Cancel</a>
                     </div>
                 </div>
                 <div class="clear"></div>

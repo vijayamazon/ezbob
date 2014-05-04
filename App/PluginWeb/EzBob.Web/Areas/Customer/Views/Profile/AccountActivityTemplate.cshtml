@@ -1,44 +1,37 @@
 ﻿@model dynamic
-
-@helper AccountActivityContent()
-    {   
-    
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Ref. Number</th>
-                <th width="20%">Origination<br/>Date</th>
-                <th width="20%">Loan<br/>Amount</th>
-                <th width="20%">Status</th>
-                <th width="20%">Open<br/>Balance</th>
-                <th width="20%"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <% _.each(loans, function(loan, i){%>
-                <%var last = loans.length - 1 == i;%>
-                <tr class="<%- last ? 'last' : '' %>">
-                    <td class="first"><%- loan.RefNumber  %></td>
-                    <td ><%- EzBob.formatDate(loan.Date) %></td>
-                    <td><%-EzBob.formatPounds(loan.LoanAmount)%></td>
-                    <td class="status<%-loan.Status%>"><%-loan.StatusDescription%></td>
-                    <td><%-EzBob.formatPounds(loan.TotalBalance)%></td>
-                    <td class="last" width="100">
-                        <a href="#LoanDetails/<%-loan.Id%>" class="btn-details button orange loanbtn-<%-loan.Status%>" >Details</a>
-                    </td>
-                </tr>
-            <%}) %>
-        </tbody>
-    </table> 
-}
-
 <script id="account-activity-template" type="text/template">
-    <%if(loans.length){%>
-        @AccountActivityContent()
-        <div class="clearfix">
-            <a style="margin-right: 25px; margin-top: 5px;" href="#" class="pull-right print-link" onClick="window.print();return false;"> Print</a>
-        </div>
-    <%} else{%>
-        There is no activity in your account.
-    <%}%>
+	<% if (loans.length) { %>
+		<table class="table">
+		<thead>
+			<tr>
+				<th>Ref. Number</th>
+				<th width="20%">Origination<br />Date</th>
+				<th width="20%">Loan<br />Amount</th>
+				<th width="20%">Status</th>
+				<th width="20%">Open<br />Balance</th>
+				<th width="20%"></th>
+			</tr>
+		</thead>
+		<tbody><%
+			_.each(loans, function(loan, i) {
+				var last = loans.length - 1 == i;
+				%><tr class="<%- last ? 'last' : '' %>">
+					<td class="first"><%- loan.RefNumber  %></td>
+					<td><%- EzBob.formatDate(loan.Date) %></td>
+					<td><%-EzBob.formatPounds(loan.LoanAmount)%></td>
+					<td class="status<%-loan.Status%>"><%-loan.StatusDescription%></td>
+					<td><%-EzBob.formatPounds(loan.TotalBalance)%></td>
+					<td class="last" width="100">
+						<a href="#LoanDetails/<%-loan.Id%>" class="btn-details button orange loanbtn-<%-loan.Status%>" ui-event-control-id="dashboard:loan-details">Details</a>
+					</td>
+				</tr><%
+			});
+		%></tbody>
+	</table>
+	<div class="clearfix">
+		<a style="margin-right: 25px; margin-top: 5px;" href="#" class="pull-right print-link" onclick="window.print();return false;" ui-event-control-id="dashboard:print-account-activity">Print</a>
+	</div>
+	<% } else { %>
+		There is no activity in your account.
+	<% } %>
 </script>

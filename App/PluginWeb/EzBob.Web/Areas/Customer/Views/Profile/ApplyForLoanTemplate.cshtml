@@ -37,27 +37,26 @@
 				<li>Not involved in the following sectors: arms production and trading; human cloning; tobacco; gambling.</li>
 			</ol>
 		</div>
-
 	</div>
 
 	@using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" })) {
 		<div class="controls">
 			<label class="checkbox">
-				<input type="checkbox" id="preAgreementTermsRead" class="preAgreementTermsRead" name="preAgreementTermsRead" value="true" />
+				<input type="checkbox" id="preAgreementTermsRead" class="preAgreementTermsRead" name="preAgreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-pre-agreement" />
 				<span class="company-preAgreement">I have read and agree to the agreement terms</span>
 				<span style="display: none" class="consumer-preAgreement">I have read and agree to the pre-contract terms</span>
 			</label>
 			<label class="checkbox">
-				<input type="checkbox" id="agreementTermsRead" class="agreementTermsRead" name="agreementTermsRead" value="true" />
+				<input type="checkbox" id="agreementTermsRead" class="agreementTermsRead" name="agreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-agreement" />
 				<span class="company-preAgreement">I have read and agree to the guaranty terms</span>
 				<span style="display: none" class="consumer-preAgreement">I have read and agree to the contract terms</span>
 			</label>
 			<label class="checkbox eu-agreement-section">
-				<input type="checkbox" id="euAgreementTermsRead" name="euAgreementTermsRead" class="euAgreementTermsRead" value="true" />
+				<input type="checkbox" id="euAgreementTermsRead" name="euAgreementTermsRead" class="euAgreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-eu-agreement" />
 				I agree to the EU program terms
 			</label>
 			<!-- label class="checkbox quick-offer-section">
-				<input type="checkbox" id="directorConsentRead" class="directorConsentRead" name="directorConsentRead" value="true" />
+				<input type="checkbox" id="directorConsentRead" class="directorConsentRead" name="directorConsentRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-director" />
 				I have read and agree to the directors' consent declaration
 			</label -->
 
@@ -67,14 +66,14 @@
 				<span>Signature:</span>
 				<label class="attardi-input">
 					<span>Sign your name</span>
-					<input type="text" name="signedName" id="signedName" class="form_field" ui-event-control-id="loan-legal:signer-name" />
+					<input type="text" name="signedName" id="signedName" class="form_field" ui-event-control-id="loan-legal:signed-name" />
 				</label>
 			</div>
 		</div>
 
-		<a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
-		<a href="#" class="btn-back button grey pull-right">Back</a>
- }
+		<a class="btn-continue button orange pull-right submit <% if (!agree) { %>disabled<% } %>" href="url" ui-event-control-id="loan-legal:continue">Continue</a>
+		<a href="#" class="btn-back button grey pull-right" ui-event-control-id="loan-legal:back">Back</a>
+	 }
 </script>
 
 <script id="consumers-agreement-template" type="text/template">
@@ -136,7 +135,7 @@
 
 @helper PrintDownload() {
 	<div style="padding-top: 25px; padding-right: 25px;">
-		<a href="#" class="pull-right print print-link">Print</a>
-		<a href="#" style="margin-right: 20px;" class="pull-right download pdf-link">Download</a>
+		<a href="#" class="pull-right print print-link" ui-event-control-id="loan-legal:print-agreement">Print</a>
+		<a href="#" target="_blank" style="margin-right: 20px;" class="pull-right download pdf-link" ui-event-control-id="loan-legal:download-agreement">Download</a>
 	</div>  
 }

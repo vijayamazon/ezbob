@@ -37,7 +37,10 @@ var EzBob = EzBob || {};
 		}; // add
 	} // tCachePkg
 
-	EzBob.ServerLog = EzBob.ServerLog || {
+	EzBob.ServerLog = EzBob.ServerLog || _.extend({}, EzBob.InternalDebug, {
+		internalDebugEnabled: false,
+		internalDebugName: 'ServerLog',
+
 		flushInterval: 30, // seconds
 
 		init: function() {
@@ -191,19 +194,12 @@ var EzBob = EzBob || {};
 			this.startTimer();
 		}, // handleTimer
 
-		internalDebug: function() {
-			if (!console.__proto__ || !console.__proto__.log)
-				return;
-
-			// console.__proto__.log.apply(console, ['ServerLog:'].concat(Array.prototype.slice.call(arguments)));
-		}, // internalDebug
-
 		onbeforeunload: null,
 
 		ontimer: null,
 
 		isFranFleischman: false,
-	}; // EzBob.ServerLog
+	}); // EzBob.ServerLog
 
 	EzBob.ServerLog.init();
 })();

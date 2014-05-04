@@ -1,80 +1,51 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
+EzBob.Profile = EzBob.Profile || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Profile.AgreementViewBase = Backbone.View.extend({
+	initialize: function() {
+		this.template = Handlebars.compile($(this.getTemplate()).html());
+		this.onTabSwitch = this.options.onTabSwitch;
+	}, // initialize
 
-  root.EzBob = root.EzBob || {};
+	render: function(data) {
+		this.$el.html(this.template(data));
 
-  EzBob.Profile = EzBob.Profile || {};
+		this.addScroll();
 
-  EzBob.Profile.AgreementViewBase = (function(_super) {
+		var self = this;
 
-    __extends(AgreementViewBase, _super);
+		this.$el.find("a[data-toggle=\"tab\"]").on("shown", function() {
+			if (self.onTabSwitch)
+				self.onTabSwitch();
 
-    function AgreementViewBase() {
-      return AgreementViewBase.__super__.constructor.apply(this, arguments);
-    }
+			return self.addScroll();
+		});
 
-    AgreementViewBase.prototype.initialize = function() {
-      return this.template = Handlebars.compile($(this.getTemplate()).html());
-    };
+		EzBob.UiAction.registerView(this);
 
-    AgreementViewBase.prototype.render = function(data) {
-      var _this = this;
-      this.$el.html(this.template(data));
-      this.addScroll();
-      this.$el.find("a[data-toggle=\"tab\"]").on("shown", function(e) {
-        return _this.addScroll();
-      });
-      return this;
-    };
+		return this;
+	}, // render
 
-    AgreementViewBase.prototype.addScroll = function() {
-      return this.$el.find(".overview").jScrollPane();
-    };
+	addScroll: function() {
+		return this.$el.find(".overview").jScrollPane();
+	}, // addScroll
+}); // EzBob.Profile.AgreementViewBase
 
-    return AgreementViewBase;
+EzBob.Profile.CompaniesAgreementView = EzBob.Profile.AgreementViewBase.extend({
+	getTemplate: function() {
+		return "#companies-agreement-template";
+	}, // getTemplate
+}); // EzBob.Profile.CompaniesAgreementView
 
-  })(Backbone.View);
+EzBob.Profile.ConsumersAgreementView = EzBob.Profile.AgreementViewBase.extend({
+	getTemplate: function() {
+		return "#consumers-agreement-template";
+	}, // getTemplate
 
-  EzBob.Profile.CompaniesAgreementView = (function(_super) {
+	render: function(data) {
+		$(".company-preAgreement").hide();
+		$(".consumer-preAgreement").show();
+		return ConsumersAgreementView.__super__.render.call(this, data);
+	}, // render
+}); // EzBob.Profile.ConsumersAgreementView
 
-    __extends(CompaniesAgreementView, _super);
-
-    function CompaniesAgreementView() {
-      return CompaniesAgreementView.__super__.constructor.apply(this, arguments);
-    }
-
-    CompaniesAgreementView.prototype.getTemplate = function() {
-      return "#companies-agreement-template";
-    };
-
-    return CompaniesAgreementView;
-
-  })(EzBob.Profile.AgreementViewBase);
-
-  EzBob.Profile.ConsumersAgreementView = (function(_super) {
-
-    __extends(ConsumersAgreementView, _super);
-
-    function ConsumersAgreementView() {
-      return ConsumersAgreementView.__super__.constructor.apply(this, arguments);
-    }
-
-    ConsumersAgreementView.prototype.getTemplate = function() {
-      return "#consumers-agreement-template";
-    };
-
-    ConsumersAgreementView.prototype.render = function(data) {
-      $(".company-preAgreement").hide();
-      $(".consumer-preAgreement").show();
-      return ConsumersAgreementView.__super__.render.call(this, data);
-    };
-
-    return ConsumersAgreementView;
-
-  })(EzBob.Profile.AgreementViewBase);
-
-}).call(this);
