@@ -76,12 +76,9 @@
     <Compile Include="datatypes\TransactionStatus.cs" />
     <Compile Include="GetBankData.cs" />
     <Compile Include="DisplayItemInfo.cs" />
-    <Compile Include="FormFieldsVisitor.cs" />
     <Compile Include="RefreshNotMFAItem.cs" />
     <Compile Include="RefreshYodleeException.cs" />
     <Compile Include="RegisterUser.cs" />
-    <Compile Include="util\FormUtil.cs" />
-    <Compile Include="util\IOUtils.cs" />
     <Compile Include="LoginUser.cs" />
     <Compile Include="OAuthBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,6 +112,9 @@
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="util\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
