@@ -9,8 +9,8 @@ CREATE PROCEDURE [dbo].[Temp_GetAllCustomersWithCompany]
 AS
 BEGIN
 	SELECT 
-		Customer.Id,
-		Company.ExperianRefNum
+		Customer.Id AS CustomerId,
+		Company.ExperianRefNum AS RefNumber
 	FROM 
 		Customer,
 		Company
@@ -20,6 +20,9 @@ BEGIN
 		(
 			Company.TypeOfBusiness = 'Limited' OR 
 			Company.TypeOfBusiness = 'LLP'
-		)
+		) AND
+		ExperianRefNum != 'NotFound' AND
+		ExperianRefNum != 'skip' AND
+		ExperianRefNum != 'exception'
 END
 GO
