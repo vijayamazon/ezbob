@@ -1,5 +1,6 @@
 ﻿namespace EzTvDashboard.Code
 {
+	using System;
 	using System.Collections.Generic;
 	using Models;
 
@@ -279,6 +280,13 @@
 						},
 				};
 			return model;
+		}
+
+		public bool SomethingChanged()
+		{
+			var r = new Random();
+			var a = r.Next(0, 1);
+			return a != 0;
 		}
 	}
 }
