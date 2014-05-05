@@ -126,22 +126,13 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
 
     editOfferedCreditLine: ->
         that = this
-        d = new EzBob.Dialogs.OfferedCreditLineEdit(
+        view = new EzBob.Underwriter.CreditLineEditDialog(
             model: @model
-            propertyName: "OfferedCreditLine"
-            title: "Offer credit line edit"
-            width: 400
-            postValueName: "amount"
-            url: "Underwriter/ApplicationInfo/ChangeCashRequestOpenCreditLine"
-            data:
-                id: @model.get("CashRequestId")
-
-            min: EzBob.Config.XMinLoan
-            max: EzBob.Config.MaxLoan
-            required: true
         )
-        d.render()
-        d.on "done", ->
+        EzBob.App.jqmodal.show view
+        view.on "showed", ->
+            view.$el.find("input").focus()
+        view.on "done", ->
             that.model.fetch()
 
         return

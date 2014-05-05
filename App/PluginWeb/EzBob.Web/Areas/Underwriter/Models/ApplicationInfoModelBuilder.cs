@@ -189,6 +189,36 @@
 
 				model.CustomerReason = os.ToString().Trim();
 			} // if
-		} // InitApplicationInfo
+
+			//todo populate with real values
+			model.SuggestedAmounts = new[]
+				{
+					new SuggestedAmountModel
+						{
+							Method = CalculationMethod.FCF.DescriptionAttr(),
+							Silver = 234,
+							Gold = 335,
+							Diamond = 431,
+							Platinum = 734
+						},
+					new SuggestedAmountModel
+						{
+							Method = CalculationMethod.Turnover.DescriptionAttr(),
+							Silver = 123,
+							Gold = 345,
+							Diamond = 664,
+							Platinum = 1232
+						},
+					new SuggestedAmountModel
+						{
+							Method = CalculationMethod.ValueAdded.DescriptionAttr(),
+							Silver = 841,
+							Gold = 1325,
+							Diamond = 2447,
+							Platinum = 5464
+						},
+				};
+
+        } // InitApplicationInfo
 	}
 }

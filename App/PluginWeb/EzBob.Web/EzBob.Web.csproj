@@ -176,6 +176,7 @@
     <Compile Include="Areas\Customer\Models\VipModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\PricingModelCalculationsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
+    <Compile Include="Areas\Underwriter\Models\SuggestedAmountModel.cs" />
     <Compile Include="Areas\Underwriter\Models\PricingModelCalculator.cs" />
     <Compile Include="Code\AgreementRenderer.cs" />
     <Compile Include="Code\AgreementsTemplatesProvider.cs" />
@@ -1149,6 +1150,12 @@
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js">
       <DependentUpon>ezbob.underwriter.fraudStatus.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\Copy of ezbob.underwriter.creditLineDialog.js">
+      <DependentUpon>ezbob.underwriter.creditLineEditDialog.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\Copy of ezbob.underwriter.creditLineDialog.min.js">
+      <DependentUpon>ezbob.underwriter.creditLineEditDialog.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js">
       <DependentUpon>ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee</DependentUpon>
     </Content>
@@ -1169,6 +1176,12 @@
     </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.min.js">
       <DependentUpon>ezbob.underwriter.creditLineDialog.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.js">
+      <DependentUpon>ezbob.underwriter.creditLineEditDialog.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.min.js">
+      <DependentUpon>ezbob.underwriter.creditLineEditDialog.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.js">
       <DependentUpon>ezbob.underwriter.emaileditview.coffee</DependentUpon>
@@ -1960,6 +1973,7 @@
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.min.js.map">
       <DependentUpon>ezbob.wizard.shops.js</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />
