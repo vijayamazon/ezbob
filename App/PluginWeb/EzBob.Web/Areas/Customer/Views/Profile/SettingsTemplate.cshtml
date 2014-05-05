@@ -1,133 +1,129 @@
 ﻿@model dynamic
 
-@helper MainContent(){
-    <div class="form-horizontal settings-form">
-        <%
-        var questionName = settings.SecurityQuestions!=null && settings.SecurityQuestions.get(settings.SecurityQuestionId) ?
-             settings.SecurityQuestions.get(settings.SecurityQuestionId).get('Name') : null;
-        %>
-
-        <div class="row">
-            <div class="span8">
-                <div class="control-group">
-                    <label class="control-label">Password</label>
-                    <div class="controls">
-                        <input type="text" readonly="readonly" value="**********" class="form_field" />
-                        <a href="#" class="btn-details button orange edit-password">Edit</a>
-                    </div>
-                </div>
-    
-                <div class="control-group">
-                    <label class="control-label">Security Question</label>
-                    <div class="controls">
-                        <input type="text" readonly="readonly" class="security-answer form_field" value="<%-questionName%>" />
-                        <a href="#" class="btn-details button orange edit-question">Edit</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-@helper PasswordContent(){
-
-            <form id="change-password" action="" method ="POST">
-                <fieldset>
-                    <h2>Select your new password</h2>
-                        <div class="span8">
-                            <div class="control-group form_field_container">
-                                <div class="controls">
-                                    <label class="control-label attardi-input">
-                                        <span class="">Current password</span>
-                                        <input id="password" type="password" name="password" class="form_field" value="" autocomplete="off"/>
-                                    </label>
-                                </div>
-                            </div>
-            
-                            <div class="control-group form_field_container">
-                                <div class="controls">
-                                    <label class="control-label attardi-input">
-                                        <span class="">New password</span>
-                                        <input id="new_password" type="password" name="new_password" class="form_field" value="" autocomplete="off"/>
-                                    </label>
-                                </div>
-                            </div>
-            
-                            <div class="control-group form_field_container">
-                                <div class="controls">
-                                    <label class="control-label attardi-input">
-                                        <span class="">Confirm password</span>
-                                        <input id="new_password2" type="password" name="new_password2" class="form_field" value="" autocomplete="off"/>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="form_buttons_container">
-                                <div class="attardi-button">
-                                    <a href="#" class="btn-continue button orange  submit">Submit</a>
-                                    <a href="#" class="btn-back button grey back">Back</a>
-                                </div>
-                            </div>
-                        </div>
-                </fieldset>
-            </form>
-}
-
-
 <script id="settings-main-template" type="text/template">
-    @MainContent()
+	<div class="form-horizontal settings-form">
+		<%
+		var questionName = null;
+		
+		if (settings.SecurityQuestions && settings.SecurityQuestions.get(settings.SecurityQuestionId))
+			 questionName = settings.SecurityQuestions.get(settings.SecurityQuestionId).get('Name');
+		%>
+
+		<div class="row">
+			<div class="span8">
+				<div class="control-group">
+					<label class="control-label">Password</label>
+					<div class="controls">
+						<input type="text" readonly="readonly" value="**********" class="form_field" />
+						<a href="#" class="btn-details button orange edit-password" ui-event-control-id="setting:edit-password">Edit</a>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Security Question</label>
+					<div class="controls">
+						<input type="text" readonly="readonly" class="security-answer form_field" value="<%- questionName %>" />
+						<a href="#" class="btn-details button orange edit-question" ui-event-control-id="settings:edit-question">Edit</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>
 
 <script id="settings-password-template" type="text/template">
-    @PasswordContent()
+	<form id="change-password" action="" method="POST">
+		<fieldset>
+			<h2>Select your new password</h2>
+			<div class="span8">
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span class="">Current password</span>
+							<input id="password" type="password" name="password" class="form_field" value="" autocomplete="off" ui-event-control-id="settings:current-password" />
+						</label>
+					</div>
+				</div>
+
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span class="">New password</span>
+							<input id="new_password" type="password" name="new_password" class="form_field" value="" autocomplete="off" ui-event-control-id="settings:new-password" />
+						</label>
+					</div>
+				</div>
+
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span class="">Confirm password</span>
+							<input id="new_password2" type="password" name="new_password2" class="form_field" value="" autocomplete="off" ui-event-control-id="settings:new-password-confirm" />
+						</label>
+					</div>
+				</div>
+
+				<div class="form_buttons_container">
+					<div class="attardi-button">
+						<a href="#" class="btn-continue button orange submit" ui-event-control-id="settings:submit-password">Submit</a>
+						<a href="#" class="btn-back button grey back" ui-event-control-id="settings:password-back">Back</a>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</form>
 </script>
 
 <script id="settings-question-template" type="text/template">
-    <form class="changePassword">
-        <fieldset>
-            <h2>Security question</h2>
-                <div class="span8">
-                    <div class="control-group form_field_container">
-                        <div class="controls">
-                            <label class="control-label attardi-input">
-                                <span class="">Current password</span>
-                                <input type="password" name="password" class="form_field" value="" autocomplete="off"/>
-                            </label>
-                        </div>
-                    </div>
+	<form class="changePassword">
+		<fieldset>
+			<h2>Security question</h2>
 
-                    <div class="control-group form_field_container">
-                        <div class="controls">
-                            <label class="control-label attardi-input">
-                                <span class="">Question</span>
-                                <select class="form_field">
-                                    <%_.each(settings.SecurityQuestions.toJSON(), function(question){%>
-                                    <%if(settings.SecurityQuestionId!=undefined){%>
-                                    <option value="<%-question.Id%>" <%if ( question.Id == settings.SecurityQuestionId){%> selected="selected" <%}%>  ><%-question.Name%></option>
-                                    <%}else{%>
-                                    <option value="<%-question.Id%>"><%-question.Name%></option>
-                                    <%}%>
-                                    <%});%>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
+			<div class="span8">
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span class="">Current password</span>
+							<input type="password" name="password" class="form_field" value="" autocomplete="off" ui-event-control-id="settings:question-current-password" />
+						</label>
+					</div>
+				</div>
 
-                    <div class="control-group form_field_container">
-                        <div class="controls">
-                            <label class="control-label attardi-input">
-                                <span class="">Answer</span>
-                                <input type="text" name="answer" class="form_field" value=""/>
-                            </label>
-                        </div>
-                    </div>
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span class="">Question</span>
 
-                    <div class="form_buttons_container">
-                        <div class="attardi-button">
-                            <a href="#" class="btn-continue button orange submit disabled">Submit</a>
-                            <a href="#" class="btn-back back button grey">Back</a>
-                        </div>
-                    </div>
-                </div>
-        </fieldset>
-    </form>
+							<select class="form_field" ui-event-control-id="settings:question"><%
+								_.each(settings.SecurityQuestions.toJSON(), function(question) {
+									if (settings.SecurityQuestionId !== undefined) {
+										%><option value="<%- question.Id %>" <% if (question.Id == settings.SecurityQuestionId) { %>selected="selected"<% } %>><%- question.Name %></option><%
+									}
+									else {
+										%><option value="<%- question.Id %>"><%- question.Name %></option><%
+									}
+								});
+							%></select>
+						</label>
+					</div>
+				</div>
+
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span class="">Answer</span>
+							<input type="text" name="answer" class="form_field" value="" ui-event-control-id="settings:question-answer" />
+						</label>
+					</div>
+				</div>
+
+				<div class="form_buttons_container">
+					<div class="attardi-button">
+						<a href="#" class="btn-continue button orange submit disabled" ui-event-control-id="settings:submit-question">Submit</a>
+						<a href="#" class="btn-back back button grey" ui-event-control-id="settings:question-back">Back</a>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</form>
 </script>

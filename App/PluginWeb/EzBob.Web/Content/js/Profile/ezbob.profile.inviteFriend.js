@@ -1,46 +1,31 @@
-﻿(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
+EzBob.Profile = EzBob.Profile || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Profile.InviteFriendView = Backbone.Marionette.Layout.extend({
+	template: "#invite-friend-template",
 
-  root.EzBob = root.EzBob || {};
+	events: {
+		'click .inviteFriendHelp': 'inviteFriendHelpClicked'
+	}, // events
 
-  EzBob.Profile = EzBob.Profile || {};
+	inviteFriendHelpClicked: function() {
+		var oBox = this.$el.find('.inviteFriendHelp');
 
-  EzBob.Profile.InviteFriendView = (function(_super) {
+		EzBob.UiAction.registerChildren(oBox);
 
-    __extends(InviteFriendView, _super);
+		oBox.colorbox({
+			href: "#inviteFriendHelp",
+			inline: true,
+			open: true,
+		});
+	}, // inviteFriendHelpClicked
 
-    function InviteFriendView() {
-      return InviteFriendView.__super__.constructor.apply(this, arguments);
-    }
+	reload: function() {
+		var self = this;
 
-    InviteFriendView.prototype.template = "#invite-friend-template";
-
-    InviteFriendView.prototype.events = {
-      'click .inviteFriendHelp': 'inviteFriendHelpClicked'
-    };
-
-    InviteFriendView.prototype.inviteFriendHelpClicked = function() {
-      return this.$el.find('.inviteFriendHelp').colorbox({
-        href: "#inviteFriendHelp",
-        inline: true,
-        open: true
-      });
-    };
-
-    InviteFriendView.prototype.reload = function() {
-      var _this = this;
-      return this.model.fetch().done(function() {
-        _this.render();
-        return scrollTop();
-      });
-    };
-
-    return InviteFriendView;
-
-  })(Backbone.Marionette.Layout);
-
-}).call(this);
+		this.model.fetch().done(function() {
+			self.render();
+			return scrollTop();
+		});
+	}, // reload
+}); // EzBob.Profile.InviteFriendView

@@ -157,6 +157,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         @.$el.find('.phonenumber').numericOnly(11);
         @.$el.find('.cashInput').numericOnly(15);
         $('input.form_field_right_side').css 'margin-left', '3px'
+        EzBob.UiAction.registerView @
 
     renderPersonal: ->
         personalInfoView = new EzBob.Profile.PersonalInfoView({ model: @model })
