@@ -1,39 +1,37 @@
 ﻿@model dynamic
 
-@helper InfoPage()
-    {
-    <div class="row-fluid " style="padding-top:  20px;">
-    <div class="span2">&nbsp;</div>
-    <div class="span8">
-        <h1>Confirmation</h1>
-        <%if (hasLateLoans){%>
-            <h2 style="margin-bottom: 35px">Thank You for Your Payment</h2>
-        <%} else { var paymentPrefix = !this.model ? "an Early" : "a" %>
-            <h2 style="margin-bottom: 35px">Thank You for Making <%=paymentPrefix%> Payment</h2>
-        <%}%>
-        <%if(isRolloverPaid){%>
-            <h3>Your loan has been rolled over</h3>
-        <%}%>
-        <p>
-            <strong>Payment Amount:</strong> <%-EzBob.formatPounds(amount)%><br/>
-            <strong>Payment Date:</strong> <%-EzBob.currentDateFormatted()%> <br/>
-            <strong>Payment Ref:</strong> <%-transRefnums%><br/>
-            <strong>Loan Ref. Number:</strong> <%-refnum%><br/>
-            <strong>Payment made by:</strong> xxxx-<%- card_no %> Debit card<br/>
-        </p>
-        <p style="margin-top: 25px">
-            A confirmation email is being sent to <%- email %>
-        </p>
-        <% if (savedPounds > 0 && !hasLateLoans && !this.model){%>
-            <p align="left" class="by-paying-early">
-                <strong>By paying early you saved <%= EzBob.formatPounds(savedPounds)%></strong>
-            </p>
-        <%}%>
-        <a href='@Url.Action("Index", "Profile", new { Area = "Customer" })'  class="btn-continue button orange back-to-profile" style="margin-left: 290px;">Go to My Account</a>
-    </div>
-</div>
-}
-
 <script type="text/template" id="infoPageTemplate">
-    @InfoPage()
+	<div class="row-fluid " style="padding-top: 20px;">
+		<div class="span2">&nbsp;</div>
+		<div class="span8">
+			<h1>Confirmation</h1>
+
+			<% if (hasLateLoans) {
+				%><h2 style="margin-bottom: 35px">Thank You for Your Payment</h2><%
+			} else {
+				var paymentPrefix = !this.model ? "an Early" : "a";
+				%><h2 style="margin-bottom: 35px">Thank You for Making <%= paymentPrefix %> Payment</h2><%
+			}
+
+			if (isRolloverPaid) {
+				%><h3>Your loan has been rolled over</h3><%
+			} %>
+
+			<p>
+				<div><strong>Payment Amount:</strong> <%- EzBob.formatPounds(amount) %></div>
+				<div><strong>Payment Date:</strong> <%- EzBob.currentDateFormatted() %></div>
+				<div><strong>Payment Ref:</strong> <%- transRefnums %></div>
+				<div><strong>Loan Ref. Number:</strong> <%- refnum %></div>
+				<div><strong>Payment made by:</strong> xxxx-<%- card_no %> Debit card</div>
+			</p>
+
+			<p style="margin-top: 25px">A confirmation email is being sent to <%- email %></p>
+
+			<% if (savedPounds > 0 && !hasLateLoans && !this.model) {
+				%><p align="left" class="by-paying-early"><strong>By paying early you saved <%= EzBob.formatPounds(savedPounds) %></strong></p><%
+			} %>
+
+			<a href="@Url.Action("Index", "Profile", new { Area = "Customer" })" ui-event-control-id="payment-info:back-to-profile" class="btn-continue button orange back-to-profile" style="margin-left: 290px;">Go to My Account</a>
+		</div>
+	</div>
 </script>

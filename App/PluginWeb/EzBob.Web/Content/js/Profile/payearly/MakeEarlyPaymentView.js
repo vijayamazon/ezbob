@@ -1,280 +1,262 @@
-(function() {
-  var root, _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
+EzBob.Profile = EzBob.Profile || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Profile.MakeEarlyPayment = Backbone.Marionette.ItemView.extend({
+	template: "#payEaryly-template",
 
-  root.EzBob = root.EzBob || {};
+	initialize: function(options) {
+		var currentLoanId, firstLate;
 
-  EzBob.Profile = EzBob.Profile || {};
+		this.infoPage = _.template($("#infoPageTemplate").html());
 
-  EzBob.Profile.MakeEarlyPayment = (function(_super) {
-    __extends(MakeEarlyPayment, _super);
+		this.customerModel = options.customerModel;
 
-    function MakeEarlyPayment() {
-      _ref = MakeEarlyPayment.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
+		this.bindTo(
+			this.customerModel,
+			"change:LateLoans change:TotalBalance change:NextPayment change:ActiveLoans change:hasLateLoans",
+			this.render,
+			this
+		);
 
-    MakeEarlyPayment.prototype.template = "#payEaryly-template";
+		this.loans = this.customerModel.get("Loans");
 
-    MakeEarlyPayment.prototype.initialize = function(options) {
-      var currentLoanId, firstLate;
+		this.model = new EzBob.Profile.MakeEarlyPaymentModel({
+			customer: this.customerModel
+		});
 
-      this.infoPage = _.template($("#infoPageTemplate").html());
-      this.customerModel = options.customerModel;
-      this.bindTo(this.customerModel, "change:LateLoans change:TotalBalance change:NextPayment change:ActiveLoans change:hasLateLoans", this.render, this);
-      this.loans = this.customerModel.get("Loans");
-      this.model = new EzBob.Profile.MakeEarlyPaymentModel({
-        customer: this.customerModel
-      });
-      firstLate = _.find(this.loans.toJSON(), function(val, i) {
-        return val.Status === "Late";
-      });
-      currentLoanId = void 0;
-      if (this.model.get('rollovers').length > 0) {
-        currentLoanId = this.model.get('rollovers').toJSON()[0].LoanId;
-      } else {
-        if (firstLate) {
-          currentLoanId = firstLate.Id;
-        } else {
-          if (options.loanId) {
-            currentLoanId = options.loanId;
-          }
-        }
-      }
-      if (currentLoanId) {
-        this.model.set({
-          loan: this.loans.get(currentLoanId)
-        });
-      }
-      this.bindTo(this.model, "change", this.render, this);
-      return this;
-    };
+		firstLate = _.find(this.loans.toJSON(), function(val, i) {
+			return val.Status === "Late";
+		});
 
-    MakeEarlyPayment.prototype.serializeData = function() {
-      var data;
+		currentLoanId = void 0;
 
-      data = this.model.toJSON();
-      data.hasLateLoans = this.customerModel.get("hasLateLoans");
-      return data;
-    };
+		if (this.model.get('rollovers').length > 0)
+			currentLoanId = this.model.get('rollovers').toJSON()[0].LoanId;
+		else {
+			if (firstLate)
+				currentLoanId = firstLate.Id;
+			else {
+				if (options.loanId)
+					currentLoanId = options.loanId;
+			} // if
+		} // if
 
-    MakeEarlyPayment.prototype.onRender = function() {
-      this.$el.find("li[rel]").setPopover('left');
-      return this;
-    };
+		if (currentLoanId)
+			this.model.set({ loan: this.loans.get(currentLoanId) });
 
-    MakeEarlyPayment.prototype.events = {
-      "click .submit": "submit",
-      "change input[name='paymentAmount']": "paymentAmountChanged",
-      "change input[name='rolloverAmount']": "rolloverAmountChanged",
-      "change input[name='loanPaymentType']": "loanPaymentTypeChanged",
-      "change input[name='rolloverPaymentType']": "rolloverPaymentTypeChanged",
-      "change input[name='defaultCard']": "defaultCardChanged",
-      "change select": "loanChanged",
-      "click .back": "back",
-      "click .back-to-profile": "backToProfile",
-      "change input[name='paymentType']": "paymentTypeChanged"
-    };
+		this.bindTo(this.model, "change", this.render, this);
 
-    MakeEarlyPayment.prototype.ui = {
-      submit: ".submit"
-    };
+		return this;
+	}, // initialize
 
-    MakeEarlyPayment.prototype.defaultCardChanged = function() {
-      return this.model.set("defaultCard", !this.model.get("defaultCard"));
-    };
+	serializeData: function() {
+		var data;
+		data = this.model.toJSON();
+		data.hasLateLoans = this.customerModel.get("hasLateLoans");
+		return data;
+	}, // serializeData
 
-    MakeEarlyPayment.prototype.submit = function() {
-      var view,
-        _this = this;
+	onRender: function() {
+		this.$el.find("li[rel]").setPopover('left');
+		EzBob.UiAction.registerView(this);
+		return this;
+	}, // onRender
 
-      if (this.ui.submit.hasClass("disabled")) {
-        return false;
-      }
-      if (this.model.get("defaultCard")) {
-        this.payFast();
-        return false;
-      }
-      view = new EzBob.Profile.PayPointCardSelectView({
-        model: this.customerModel,
-        date: moment()
-      });
-      if (!view.hasCards()) {
-        return;
-      }
-      view.on('select', function(cardId) {
-        return _this.payFast(cardId);
-      });
-      view.on('existing', function() {
-        return document.location.href = _this.ui.submit.attr("href");
-      });
-      EzBob.App.modal.show(view);
-      return false;
-    };
+	events: {
+		"click .submit": "submit",
+		"change input[name='paymentAmount']": "paymentAmountChanged",
+		"change input[name='rolloverAmount']": "rolloverAmountChanged",
+		"change input[name='loanPaymentType']": "loanPaymentTypeChanged",
+		"change input[name='rolloverPaymentType']": "rolloverPaymentTypeChanged",
+		"change input[name='defaultCard']": "defaultCardChanged",
+		"change select": "loanChanged",
+		"click .back": "back",
+		"click .back-to-profile": "backToProfile",
+		"change input[name='paymentType']": "paymentTypeChanged"
+	}, // events
 
-    MakeEarlyPayment.prototype.payFast = function(cardId) {
-      var data,
-        _this = this;
+	ui: { submit: ".submit" }, // ui
 
-      if (cardId == null) {
-        cardId = -1;
-      }
-      this.ui.submit.addClass("disabled");
-      data = {
-        amount: parseFloat(this.model.get("amount")),
-        type: this.model.get("paymentType"),
-        paymentType: this.model.getPaymentType(),
-        loanId: this.model.get("loan").id,
-        cardId: cardId,
-        rolloverId: this.model.get("currentRollover") && this.model.get("currentRollover").Id
-      };
-      BlockUi("on");
-      return $.post(window.gRootPath + "Customer/Paypoint/PayFast", data).done(function(res) {
-        var hadRollover, loan;
+	defaultCardChanged: function() {
+		return this.model.set("defaultCard", !this.model.get("defaultCard"));
+	}, // defaultCardChanged
 
-        if (res.error) {
-          EzBob.App.trigger("error", res.error);
-          _this.back();
-          return;
-        }
-        loan = _this.model.get("loan");
-        hadRollover = _this.model.get("currentRollover");
-        _this.$el.html(_this.infoPage({
-          amount: res.PaymentAmount,
-          card_no: res.CardNo,
-          email: _this.customerModel.get("Email"),
-          name: _this.customerModel.get("CustomerPersonalInfo").FirstName,
-          surname: _this.customerModel.get("CustomerPersonalInfo").Surname,
-          refnum: (loan ? loan.get("RefNumber") : ""),
-          transRefnums: res.TransactionRefNumbersFormatted,
-          saved: res.Saved,
-          savedPounds: res.SavedPounds,
-          hasLateLoans: _this.customerModel.get("hasLateLoans"),
-          isRolloverPaid: res.RolloverWasPaid,
-          IsEarly: res.IsEarly
-        }));
-        return EzBob.App.trigger("clear");
-      }).complete(function() {
-        _this.ui.submit.removeClass("disabled");
-        return BlockUi("off");
-      });
-    };
+	submit: function() {
 
-    MakeEarlyPayment.prototype.backToProfile = function() {
-      this.customerModel.fetch();
-      this.trigger("submit");
-      return false;
-    };
+		if (this.ui.submit.hasClass("disabled"))
+			return false;
 
-    MakeEarlyPayment.prototype.paymentAmountChanged = function() {
-      var amount, maxAmount, minAmount;
+		if (this.model.get("defaultCard")) {
+			this.payFast();
+			return false;
+		} // if
 
-      amount = this.$el.find("[name='paymentAmount']").autoNumericGet();
-      maxAmount = this.model.get("loan").get("TotalEarlyPayment");
-      minAmount = this.model.get("currentRollover") === null ? 30 : this.model.get("currentRollover").RolloverPayValue;
-      if (maxAmount < minAmount) {
-        amount = maxAmount;
-      } else if (amount < minAmount) {
-        amount = minAmount;
-      } else if (amount > maxAmount) {
-        amount = maxAmount;
-      }
-      this.model.set("amount", parseFloat(amount));
-      return this.render();
-    };
+		var view = new EzBob.Profile.PayPointCardSelectView({
+			model: this.customerModel,
+			date: moment()
+		});
 
-    MakeEarlyPayment.prototype.rolloverAmountChanged = function() {
-      var amount, maxAmount, minAmount;
+		if (!view.hasCards())
+			return;
 
-      amount = this.$el.find("[name='rolloverAmount']").autoNumericGet();
-      maxAmount = this.model.get("total");
-      minAmount = this.model.get("currentRollover").RolloverPayValue;
-      if (amount < minAmount) {
-        amount = minAmount;
-      }
-      if (amount > maxAmount) {
-        amount = maxAmount;
-      }
-      this.model.set("amount", parseFloat(amount));
-      return this.render();
-    };
+		var self = this;
 
-    MakeEarlyPayment.prototype.paymentTypeChanged = function() {
-      var type;
+		view.on('select', function(cardId) { return self.payFast(cardId); });
+		view.on('existing', function() { document.location.href = self.ui.submit.attr("href"); });
 
-      type = this.$el.find("input[name='paymentType']:checked").val();
-      this.model.set({
-        paymentType: type
-      });
-      return this.loanChanged();
-    };
+		EzBob.App.modal.show(view);
 
-    MakeEarlyPayment.prototype.loanPaymentTypeChanged = function() {
-      var type;
+		return false;
+	}, // submit
 
-      type = this.$el.find("input[name='loanPaymentType']:checked").val();
-      if (this.model.get("paymentType") !== "loan") {
-        this.model.set({
-          paymentType: "loan"
-        }, {
-          silent: true
-        });
-      }
-      return this.model.set({
-        loanPaymentType: type
-      });
-    };
+	payFast: function(cardId) {
+		if (cardId == null)
+			cardId = -1;
 
-    MakeEarlyPayment.prototype.rolloverPaymentTypeChanged = function() {
-      var type;
+		this.ui.submit.addClass("disabled");
 
-      type = this.$el.find("input[name='rolloverPaymentType']:checked").val();
-      return this.model.set({
-        rolloverPaymentType: type
-      });
-    };
+		var data = {
+			amount: parseFloat(this.model.get("amount")),
+			type: this.model.get("paymentType"),
+			paymentType: this.model.getPaymentType(),
+			loanId: this.model.get("loan").id,
+			cardId: cardId,
+			rolloverId: this.model.get("currentRollover") && this.model.get("currentRollover").Id
+		};
 
-    MakeEarlyPayment.prototype.loanChanged = function() {
-      var loan, loanId;
+		BlockUi("on");
+		var self = this;
 
-      loanId = $("select:NOT(:disabled):visible").val();
-      if (loanId !== void 0) {
-        loan = this.customerModel.get("Loans").get(loanId);
-        return this.model.set({
-          loan: loan
-        });
-      }
-    };
+		return $.post(window.gRootPath + "Customer/Paypoint/PayFast", data).done(function(res) {
+			if (res.error) {
+				EzBob.App.trigger("error", res.error);
+				self.back();
+				return;
+			} // if
 
-    MakeEarlyPayment.prototype.back = function() {
-      this.trigger("back");
-      return false;
-    };
+			var loan = self.model.get("loan");
 
-    return MakeEarlyPayment;
+			self.$el.html(self.infoPage({
+				amount: res.PaymentAmount,
+				card_no: res.CardNo,
+				email: self.customerModel.get("Email"),
+				name: self.customerModel.get("CustomerPersonalInfo").FirstName,
+				surname: self.customerModel.get("CustomerPersonalInfo").Surname,
+				refnum: (loan ? loan.get("RefNumber") : ""),
+				transRefnums: res.TransactionRefNumbersFormatted,
+				saved: res.Saved,
+				savedPounds: res.SavedPounds,
+				hasLateLoans: self.customerModel.get("hasLateLoans"),
+				isRolloverPaid: res.RolloverWasPaid,
+				IsEarly: res.IsEarly
+			}));
 
-  })(Backbone.Marionette.ItemView);
+			EzBob.UiAction.registerView(self);
 
-  EzBob.PayEarlyConfirmation = Backbone.Marionette.ItemView.extend({
-    template: "#pay-early-confirmation",
-    events: {
-      "click a.cancel": "btnClose",
-      "click a.save": "btnSave"
-    },
-    btnClose: function() {
-      this.close();
-      return false;
-    },
-    btnSave: function() {
-      this.trigger("modal:save");
-      this.onOk();
-      this.close();
-      return false;
-    },
-    onOk: function() {}
-  });
+			EzBob.App.trigger("clear");
+		}).complete(function() {
+			self.ui.submit.removeClass("disabled");
+			BlockUi("off");
+		});
+	}, // payFast
 
-}).call(this);
+	backToProfile: function() {
+		this.customerModel.fetch();
+		this.trigger("submit");
+		return false;
+	}, // backToProfile
+
+	paymentAmountChanged: function() {
+		var amount = this.$el.find("[name='paymentAmount']").autoNumericGet();
+		var maxAmount = this.model.get("loan").get("TotalEarlyPayment");
+		var minAmount = this.model.get("currentRollover") === null ? 30 : this.model.get("currentRollover").RolloverPayValue;
+
+		if (maxAmount < minAmount)
+			amount = maxAmount;
+		else if (amount < minAmount)
+			amount = minAmount;
+		else if (amount > maxAmount)
+			amount = maxAmount;
+
+		this.model.set("amount", parseFloat(amount));
+
+		this.render();
+	}, // paymentAmountChanged
+
+	rolloverAmountChanged: function() {
+		var amount = this.$el.find("[name='rolloverAmount']").autoNumericGet();
+		var maxAmount = this.model.get("total");
+		var minAmount = this.model.get("currentRollover").RolloverPayValue;
+
+		if (amount < minAmount)
+			amount = minAmount;
+
+		if (amount > maxAmount)
+			amount = maxAmount;
+
+		this.model.set("amount", parseFloat(amount));
+
+		return this.render();
+	}, // rolloverAmountChanged
+
+	paymentTypeChanged: function() {
+		var type = this.$el.find("input[name='paymentType']:checked").val();
+
+		this.model.set({ paymentType: type });
+
+		this.loanChanged();
+	}, // paymentTypeChanged
+
+	loanPaymentTypeChanged: function() {
+		var type = this.$el.find("input[name='loanPaymentType']:checked").val();
+
+		if (this.model.get("paymentType") !== "loan")
+			this.model.set({ paymentType: "loan" }, { silent: true });
+
+		this.model.set({ loanPaymentType: type });
+	}, // loanPaymentTypeChanged
+
+	rolloverPaymentTypeChanged: function() {
+		var type = this.$el.find("input[name='rolloverPaymentType']:checked").val();
+
+		this.model.set({ rolloverPaymentType: type });
+	}, // rolloverPaymentTypeChanged
+
+	loanChanged: function() {
+		var loanId = parseInt($("select:NOT(:disabled):visible").val(), 10);
+
+		if (loanId !== 0) {
+			var loan = this.customerModel.get("Loans").get(loanId);
+			this.model.set({ loan: loan });
+		} // if
+	}, // loanChanged
+
+	back: function() {
+		this.trigger("back");
+		return false;
+	}, // back
+}); // EzBob.Profile.MakeEarlyPayment
+
+EzBob.PayEarlyConfirmation = Backbone.Marionette.ItemView.extend({
+	template: "#pay-early-confirmation",
+
+	events: {
+		"click a.cancel": "btnClose",
+		"click a.save": "btnSave"
+	}, // events
+
+	btnClose: function() {
+		this.close();
+		return false;
+	}, // btnClose
+
+	btnSave: function() {
+		this.trigger("modal:save");
+		this.onOk();
+		this.close();
+		return false;
+	}, // btnSave
+
+	onOk: function() {
+	}, // onOk
+}); // EzBob.PayEarlyConfirmation

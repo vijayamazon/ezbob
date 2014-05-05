@@ -1,183 +1,171 @@
-(function() {
-  var root, _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
+EzBob.Profile = EzBob.Profile || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Profile.MakeEarlyPaymentModel = Backbone.Model.extend({
+	defaults: {
+		amount: 0,
+		paymentType: 'loan',
+		loanPaymentType: 'full',
+		rolloverPaymentType: 'minimum',
+		defaultCard: true,
+		url: '#',
+		isPayTotal: true,
+		isPayRollover: false,
+		isPayLoan: false,
+		isPayTotalLate: false,
+		isNextInterest: false,
+	}, // defaults
 
-  root.EzBob = root.EzBob || {};
+	initialize: function() {
+		this.get('customer').on('fetch', this.recalculate, this);
+		this.on('change:amount change:paymentType change:loan change:loanPaymentType', this.changed, this);
+		this.on('change:paymentType', this.paymentTypeChanged, this);
+		this.on('change:loanPaymentType', this.loanPaymentTypeChanged, this);
+		this.on('change:rolloverPaymentType', this.rolloverPaymentTypeChanged, this);
+		this.on('change:loan', this.loanChanged, this);
+		this.recalculate();
+	}, // initialize
 
-  EzBob.Profile = EzBob.Profile || {};
+	recalculate: function() {
+		var customer = this.get('customer');
+		var liveRollovers = customer.get('ActiveRollovers');
+		var liveLoans = customer.get('ActiveLoans');
+		var total = customer.get('TotalEarlyPayment');
+		var loan = (liveLoans ? liveLoans[0] : null);
+		var currentRollover = this.calcCurrentRollover(loan);
 
-  EzBob.Profile.MakeEarlyPaymentModel = (function(_super) {
-    __extends(MakeEarlyPaymentModel, _super);
+		this.set({
+			total: total,
+			liveLoans: liveLoans,
+			rollovers: liveRollovers,
+			loan: loan,
+			amount: customer.get('TotalEarlyPayment'),
+			currentRollover: currentRollover,
+			hasLateLoans: customer.get('hasLateLoans'),
+			totalLatePayment: customer.get('TotalLatePayment'),
+			paymentType: liveRollovers.length > 0 ? 'rollover' : 'loan',
+			isEarly: customer.get('IsEarly')
+		});
+	}, // recalculate
 
-    function MakeEarlyPaymentModel() {
-      _ref = MakeEarlyPaymentModel.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
+	calcCurrentRollover: function(loan) {
+		var rollovers = this.get('customer').get('ActiveRollovers').toJSON();
 
-    MakeEarlyPaymentModel.prototype.defaults = {
-      amount: 0,
-      paymentType: "loan",
-      loanPaymentType: "full",
-      rolloverPaymentType: "minimum",
-      defaultCard: true,
-      url: "#",
-      isPayTotal: true,
-      isPayRollover: false,
-      isPayLoan: false,
-      isPayTotalLate: false,
-      isNextInterest: false
-    };
+		var currentRollover = _.where(rollovers, { LoanId: loan && loan.get('Id') })[0] || null;
 
-    MakeEarlyPaymentModel.prototype.initialize = function() {
-      this.get("customer").on("fetch", this.recalculate, this);
-      this.on("change:amount change:paymentType change:loan change:loanPaymentType", this.changed, this);
-      this.on("change:paymentType", this.paymentTypeChanged, this);
-      this.on("change:loanPaymentType", this.loanPaymentTypeChanged, this);
-      this.on("change:rolloverPaymentType", this.rolloverPaymentTypeChanged, this);
-      this.on("change:loan", this.loanChanged, this);
-      return this.recalculate();
-    };
+		return currentRollover;
+	}, // calcCurrentRollover
 
-    MakeEarlyPaymentModel.prototype.recalculate = function() {
-      var currentRollover, customer, liveLoans, liveRollovers, loan, total;
+	paymentTypeChanged: function(e) {
+		var loan;
+		var type = this.get('paymentType');
 
-      customer = this.get("customer");
-      liveRollovers = customer.get("ActiveRollovers");
-      liveLoans = customer.get("ActiveLoans");
-      total = customer.get("TotalEarlyPayment");
-      loan = (liveLoans ? liveLoans[0] : null);
-      currentRollover = this.calcCurrentRollover(loan);
-      return this.set({
-        total: total,
-        liveLoans: liveLoans,
-        rollovers: liveRollovers,
-        loan: loan,
-        amount: customer.get("TotalEarlyPayment"),
-        currentRollover: currentRollover,
-        hasLateLoans: customer.get("hasLateLoans"),
-        totalLatePayment: customer.get("TotalLatePayment"),
-        paymentType: liveRollovers.length > 0 ? "rollover" : "loan",
-        isEarly: customer.get("IsEarly")
-      });
-    };
+		switch (type) {
+		case 'total':
+			this.set('amount', this.get('customer').get('TotalEarlyPayment'));
+			break;
 
-    MakeEarlyPaymentModel.prototype.calcCurrentRollover = function(loan) {
-      var currentRollover, rollovers;
+		case 'totalLate':
+			this.set('amount', this.get('customer').get('TotalLatePayment'));
+			break;
 
-      rollovers = this.get("customer").get("ActiveRollovers").toJSON();
-      currentRollover = _.where(rollovers, {
-        LoanId: loan && loan.get('Id')
-      })[0] || null;
-      return currentRollover;
-    };
+		case 'loan':
+			loan = this.get('loan');
 
-    MakeEarlyPaymentModel.prototype.paymentTypeChanged = function(e) {
-      var loan, type;
+			if (loan && this.get('liveLoans').length > 1)
+				this.set('loanPaymentType', 'full');
 
-      type = this.get("paymentType");
-      switch (type) {
-        case "total":
-          return this.set("amount", this.get("customer").get("TotalEarlyPayment"));
-        case "totalLate":
-          return this.set("amount", this.get("customer").get("TotalLatePayment"));
-        case "loan":
-          loan = this.get("loan");
-          if (loan && this.get("liveLoans").length > 1) {
-            return this.set("loanPaymentType", "full");
-          }
-          break;
-        case "rollover":
-          return this.set("rolloverPaymentType", "minimum");
-      }
-    };
+			break;
 
-    MakeEarlyPaymentModel.prototype.loanChanged = function() {
-      var currentRollover, status;
+		case 'rollover':
+			this.set('rolloverPaymentType', 'minimum');
+			break;
+		} // switch
+	}, // paymentTypeChanged
 
-      currentRollover = (this.calcCurrentRollover(this.get("loan"))) || null;
-      status = this.get("loan") && this.get("loan").get("Status");
-      this.set({
-        currentRollover: currentRollover,
-        loanPaymentType: status === "Late" ? "late" : "full"
-      });
-      if (currentRollover) {
-        return this.set({
-          amount: currentRollover && currentRollover.RolloverPayValue
-        });
-      }
-    };
+	loanChanged: function() {
+		var currentRollover = (this.calcCurrentRollover(this.get('loan'))) || null;
+		var status = this.get('loan') && this.get('loan').get('Status');
 
-    MakeEarlyPaymentModel.prototype.rolloverPaymentTypeChanged = function() {
-      return this.set("amount", this.get("currentRollover") && this.get("currentRollover").RolloverPayValue);
-    };
+		this.set({
+			currentRollover: currentRollover,
+			loanPaymentType: status === 'Late' ? 'late' : 'full'
+		});
 
-    MakeEarlyPaymentModel.prototype.loanPaymentTypeChanged = function() {
-      var amount, loan, type;
+		if (currentRollover) {
+			this.set({
+				amount: currentRollover && currentRollover.RolloverPayValue
+			});
+		} // if
+	}, // loanChanged
 
-      type = this.get("loanPaymentType");
-      loan = this.get("loan");
-      amount = 0;
-      if (!loan) {
-        return;
-      }
-      switch (type) {
-        case "full":
-          amount = loan.get("TotalEarlyPayment");
-          break;
-        case "next":
-          amount = loan.get("NextEarlyPayment");
-          break;
-        case "late":
-          amount = loan.get("AmountDue");
-          break;
-        case "nextInterest":
-          amount = loan.get("NextInterestPayment");
-          break;
-        case "other":
-          amount = loan.get("TotalEarlyPayment");
-          break;
-      }
-      return this.set("amount", amount);
-    };
+	rolloverPaymentTypeChanged: function() {
+		this.set('amount', this.get('currentRollover') && this.get('currentRollover').RolloverPayValue);
+	}, // rolloverPaymentTypeChanged
 
-    MakeEarlyPaymentModel.prototype.changed = function() {
-      var loan, paymentType, url;
+	loanPaymentTypeChanged: function() {
+		var loan = this.get('loan');
 
-      loan = this.get("loan");
-      if (!loan) {
-        return;
-      }
-      url = window.gRootPath + "Customer/Paypoint/Pay?amount=" + this.get("amount");
-      url += "&type=" + this.get("paymentType");
-      url += "&paymentType=" + this.getPaymentType();
-      url += "&loanId=" + loan.id;
-      url += "&rolloverId=" + (this.get("currentRollover") === !null ? this.get("currentRollover").Id : -1);
-      this.set({
-        url: url
-      });
-      paymentType = this.get('paymentType');
-      return this.set({
-        'isPayTotal': paymentType === 'total',
-        'isPayRollover': paymentType === 'rollover',
-        'isPayLoan': paymentType === 'loan',
-        'isPayTotalLate': paymentType === 'totalLate',
-        'isNextInterest': paymentType === 'nextInterest'
-      });
-    };
+		if (!loan)
+			return;
 
-    MakeEarlyPaymentModel.prototype.getPaymentType = function() {
-      if (this.get("paymentType") !== "rollover") {
-        return this.get("loanPaymentType");
-      } else {
-        return this.get("rolloverPaymentType");
-      }
-    };
+		var amount = 0;
+		var type = this.get('loanPaymentType');
 
-    return MakeEarlyPaymentModel;
+		switch (type) {
+		case 'full':
+			amount = loan.get('TotalEarlyPayment');
+			break;
 
-  })(Backbone.Model);
+		case 'next':
+			amount = loan.get('NextEarlyPayment');
+			break;
 
-}).call(this);
+		case 'late':
+			amount = loan.get('AmountDue');
+			break;
+
+		case 'nextInterest':
+			amount = loan.get('NextInterestPayment');
+			break;
+
+		case 'other':
+			amount = loan.get('TotalEarlyPayment');
+			break;
+		} // switch
+
+		this.set('amount', amount);
+	}, // loanPaymentTypeChanged
+
+	changed: function() {
+		var loan = this.get('loan');
+
+		if (!loan)
+			return;
+
+		var url = window.gRootPath + 'Customer/Paypoint/Pay?amount=' + this.get('amount');
+		url += '&type=' + this.get('paymentType');
+		url += '&paymentType=' + this.getPaymentType();
+		url += '&loanId=' + loan.id;
+		url += '&rolloverId=' + (this.get('currentRollover') ? this.get('currentRollover').Id : -1);
+
+		this.set({ url: url });
+
+		var paymentType = this.get('paymentType');
+
+		this.set({
+			'isPayTotal': paymentType === 'total',
+			'isPayRollover': paymentType === 'rollover',
+			'isPayLoan': paymentType === 'loan',
+			'isPayTotalLate': paymentType === 'totalLate',
+			'isNextInterest': paymentType === 'nextInterest'
+		});
+	}, // changed
+
+	getPaymentType: function() {
+		if (this.get('paymentType') === 'rollover')
+			this.get('rolloverPaymentType');
+		else
+			this.get('loanPaymentType');
+	}, // getPaymentType
+});

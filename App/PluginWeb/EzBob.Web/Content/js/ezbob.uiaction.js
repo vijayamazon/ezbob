@@ -61,6 +61,9 @@ var EzBob = EzBob || {};
 
 		evtListenerAttr: function () { return 'ezbob:ui-action:event-listener'; }, // listener attr
 
+		uiAttr: function() { return 'ui-event-control-id'; }, // ui attribute name
+		uiAttrVal: function(x) { return $(x).attr(this.uiAttr()); }, // ui attribute value
+
 		f: function (n) { return (n < 10) ? ('0' + n) : ('' + n); }, // f
 
 		now: function () {
@@ -82,8 +85,15 @@ var EzBob = EzBob || {};
 			if (!oView || !oView.$el)
 				return;
 
-			this.register(oView.$el.find('[ui-event-control-id][ui-event-control-id!=""]'));
+			this.registerChildren(oView.$el);
 		}, // registerView
+
+		registerChildren: function(oParent) {
+			if (!oParent)
+				return;
+
+			this.register($(oParent).find('[' + this.uiAttr() + '][' + this.uiAttr() + '!=""]'));
+		}, // registerChildren
 
 		register: function (jqElementList) {
 			if (!jqElementList)
@@ -102,6 +112,7 @@ var EzBob = EzBob || {};
 				case 'button':
 				case 'div':
 				case 'img':
+				case 'label':
 				case 'span':
 					self.attach(self.evtClick(), this);
 					break;
@@ -162,8 +173,10 @@ var EzBob = EzBob || {};
 		attach: function (sEventName, oDomElement, bSaveValue) {
 			var jqElement = $(oDomElement);
 
-			if (jqElement.data(this.evtListenerAttr()))
+			if (jqElement.data(this.evtListenerAttr())) {
+				this.internalDebug('attach:', this.uiAttrVal(jqElement), 'already listens to', sEventName);
 				return;
+			} // if
 
 			if (sEventName === this.evtChange())
 				sEventName += ' ' + this.evtFocusIn() + ' ' + this.evtFocusOut();
@@ -171,6 +184,8 @@ var EzBob = EzBob || {};
 			jqElement
 				.on(sEventName, { saveValue: bSaveValue || false }, $.proxy(this.save, this))
 				.data(this.evtListenerAttr(), true);
+
+			this.internalDebug('attach:', this.uiAttrVal(jqElement), 'now listens to', sEventName);
 		}, // attach
 
 		writeDown: function (bSync) {
@@ -229,11 +244,11 @@ var EzBob = EzBob || {};
 		}, // saveOne
 
 		save: function (evt) {
-			this.internalDebug('ui event save(', evt.type, $(evt.target).attr('ui-event-control-id'), evt.target, evt.data.saveValue, ')');
+			this.internalDebug('ui event save(', evt.type, this.uiAttrVal(evt.target), evt.target, evt.data.saveValue, ')');
 
 			var oElm = $(evt.currentTarget);
 
-			var oControlName = oElm.attr('ui-event-control-id');
+			var oControlName = this.uiAttrVal(oElm);
 
 			if (!oControlName)
 				return;

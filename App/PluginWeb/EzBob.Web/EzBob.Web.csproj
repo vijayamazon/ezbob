@@ -1099,6 +1099,9 @@
     <Content Include="Content\js\Profile\ezbob.profile.perks.min.js">
       <DependentUpon>ezbob.profile.perks.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Profile\ezbob.profile.profileRouter.js" />
+    <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.js" />
+    <Content Include="Content\js\Profile\PayEarly\MakeEarlyPaymentView.js" />
     <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.js">
       <DependentUpon>ezbob.underwriter.bugs.reporter.coffee</DependentUpon>
     </Content>
@@ -1428,12 +1431,6 @@
     <Content Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.js">
-      <DependentUpon>makeEarlyPaymentModel.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Profile\PayEarly\MakeEarlyPaymentView.js">
-      <DependentUpon>makeEarlyPaymentView.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\editLoan\editLoanView.js">
       <DependentUpon>editLoanView.coffee</DependentUpon>
@@ -1919,8 +1916,6 @@
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.paymentAccounts.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.payPalAccountDetails.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.coffee" />
-    <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.coffee" />
-    <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentView.coffee" />
     <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.coffee" />

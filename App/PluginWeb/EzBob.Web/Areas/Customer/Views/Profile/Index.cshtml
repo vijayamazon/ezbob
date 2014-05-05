@@ -13,13 +13,10 @@
     @BundleHelper.RenderProfileCss()
 }
 
-@helper ProfileMain()
-{
+<script id="profile-main-template" type="text/template">
     <div id="profile-main">
         <div class="clearfix">
-            <div class="cart-logo @{ if (Model.Customer.Medal != null)
-                                     { @Model.Customer.Medal.ToLower()}}-cart">
-            </div>
+            <div class="cart-logo @{ if (Model.Customer.Medal != null) { @Model.Customer.Medal.ToLower()}}-cart"></div>
             <div class="profile-headlines">
                 <div id="message-sign" class=""></div>
                 <h1 style="margin-top: -10px;">My Account</h1>
@@ -27,7 +24,7 @@
             </div>
             <div class="whats-new-main notification_lightblue" style="display: none">
                 <div class="whats-new-buttons">
-                    <input type="button" value="Got it" class="btn-link" id="btnGotIt" />
+                    <input type="button" value="Got it" class="btn-link" id="btnGotIt" ui-event-control-id="dashboard:whats-new-dismiss"/>
                 </div>
             </div>
             <div class="notifications"></div>
@@ -39,21 +36,21 @@
         <div class="navbar profile-menu">
             <div class="navbar-inner">
                 <ul class="nav">
-                    <li><a href="#AccountActivity">Account Activity</a></li>
+                    <li><a href="#AccountActivity" ui-event-control-id="dashboard:tab-account-acitvity">Account Activity</a></li>
                     <li class="divider-vertical"></li>
-                    <li class="active"><a href="#YourStores">Accounts</a></li>
+                    <li class="active"><a href="#YourStores" ui-event-control-id="dashboard:tab-accounts">Accounts</a></li>
                     <li class="divider-vertical"></li>
-                    <li><a href="#PaymentAccounts">Payment Accounts</a></li>
+                    <li><a href="#PaymentAccounts" ui-event-control-id="dashboard:tab-payment-accounts">Payment Accounts</a></li>
                     <li class="divider-vertical"></li>
-                    <li><a href="#YourDetails">My Information</a></li>
+                    <li><a href="#YourDetails" ui-event-control-id="dashboard:tab-my-information">My Information</a></li>
                     <li class="divider-vertical"></li>
-                    <li><a href="#Settings">Settings</a></li>
+                    <li><a href="#Settings" ui-event-control-id="dashboard:tab-settings">Settings</a></li>
                     <li class="divider-vertical"></li>
-                    <li><a href="#InviteFriend">Refer A Friend</a></li>
+                    <li><a href="#InviteFriend" ui-event-control-id="dashboard:tab-refer-a-friend">Refer A Friend</a></li>
                     @if (Model.Customer.Perks != null)
                     {
                         <li class="divider-vertical"></li>
-                        <li><a href="#Perks">Perks</a></li>
+                        <li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
                     }
                 </ul>
             </div>
@@ -62,10 +59,6 @@
         <div class="profile-widgets">
         </div>
     </div>
-}
-
-<script id="profile-main-template" type="text/template">
-    @ProfileMain()
 </script>
 
 <div id="profile-content">
@@ -90,7 +83,7 @@
             </dd>
         </dl>
         <% var paymentSuffix = IsEarly ? "Early" : "Now" %>
-            <button class="button orange">Pay <%=paymentSuffix%></button>
+            <button class="button orange" ui-event-control-id="dashboard:top-pay-early">Pay <%=paymentSuffix%></button>
     </script>
 
     <script id="d-lateLoan-template" type="text/template">
@@ -104,7 +97,7 @@
             <dd style="color: red;"><%-EzBob.formatPounds(TotalDue)%>
             </dd>
         </dl>
-        <button class="button orange pay-late">Pay Now</button>
+        <button class="button orange pay-late" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
     </script>
 
     <script id="d-getCash-template" type="text/template">
@@ -121,7 +114,7 @@
             </dd>
         </dl>
 
-        <button class="button orange get-cash" ui-event-control-id="dashboard:choose-amount">Choose Amount</button>
+        <button class="button orange get-cash" ui-event-control-id="dashboard:top-choose-amount">Choose Amount</button>
     </script>
 
     <script id="d-getCash-template-late" type="text/template">
@@ -139,7 +132,8 @@
             rel="popover"
             data-content="To get more cash, please pay your minimum amount due."
             data-original-title="Get More Cash"
-            class="button orange disabled get-cash">
+            class="button orange disabled get-cash"
+			ui-event-control-id="dashboard:get-more-cash">
             Get More Cash
         </button>
     </script>
@@ -213,7 +207,6 @@
                     <div>ezbob will help</div>
                     <div class="strong">your business</div>
                     <div class="strong">grow too!</div>
-
                 </div>
 
                 <a class="image-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-image">
@@ -241,8 +234,7 @@
             <dd class="dashes">---
             </dd>
         </dl>
-        <button
-            class="button orange disabled">
+        <button class="button orange disabled" ui-event-control-id="dashboard:choose-amount-wait">
             Choose Amount
         </button>
     </script>
@@ -259,28 +251,27 @@
             <dd class="dashes">---
             </dd>
         </dl>
-        <button
-            class="button orange apply-for-loan disabled">
+        <button class="button orange apply-for-loan disabled" ui-event-control-id="dashboard:choose-amount-bad">
             Choose Amount
         </button>
     </script>
 
     <div class="modal" id="payEarly-modal" style="display: none;">
         <div class="modal-header">
-            <button class="close" data-dismiss="modal">×</button>
+            <button class="close" data-dismiss="modal" ui-event-control-id="pay-early-modal:x">×</button>
             <h3>Information</h3>
         </div>
         <div class="modal-body">
             <p>Your don't have any loan to repay</p>
         </div>
         <div class="modal-footer">
-            <a href="#" class="btn-back" data-dismiss="modal">Close</a>
+            <a href="#" class="btn-back" data-dismiss="modal" ui-event-control-id="pay-early-modal:dismiss">Close</a>
         </div>
     </div>
 
     <script id="sign-template" type="text/template">
         <div class="<%-color%>-sign pull-right">
-            <a href="#"><%=text%></a>
+            <a href="#" ui-event-control-id="sign-template:link"><%=text%></a>
         </div>
     </script>
 
@@ -318,7 +309,6 @@
     @{Html.RenderPartial("Shops/CompanyFilesAccountInfoTemplate");}
 
     <script type="text/javascript">
-
         EzBob.Config.GetCashSliderStep = @currVals.GetCashSliderStep.Value;
         EzBob.Config.MinLoan = @currVals.MinLoan.Value;
         EzBob.Config.XMinLoan = @currVals.XMinLoan.Value;
@@ -340,8 +330,7 @@
             }
             
             var finishedWizard = @wizardComplete;
-            if (finishedWizard == true)
-            {
+            if (finishedWizard == true) {
                 var oDialog = $('#thankyou_help');
                 if (oDialog.length > 0)
                     var x = $.colorbox({ inline: true, transition: 'elastic',href: oDialog, open: true, show: true, width: 600, scrolling: false });
@@ -385,8 +374,6 @@
     </script>
 
     @BundleHelper.RenderProfileJs()
-
-
 }
 
 <div class="hide">

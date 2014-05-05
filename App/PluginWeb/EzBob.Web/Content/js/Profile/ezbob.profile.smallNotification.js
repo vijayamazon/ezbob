@@ -1,7 +1,6 @@
 ﻿var EzBob = EzBob || {};
 EzBob.Profile = EzBob.Profile || {};
 
-
 EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
     className: "processing-header",
     initialize: function (options) {
@@ -114,6 +113,7 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
         cls = "hm_" + cls;
 
         this.$el.html(this.template({ Message: message, cls: cls }));
+	    EzBob.UiAction.registerView(this);
         return this;
     }
 });
