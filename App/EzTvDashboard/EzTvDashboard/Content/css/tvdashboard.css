@@ -1,7 +1,23 @@
-﻿table.table {
+﻿.ezbob-logo {
+    background-image: url(../img/new-ezbob-logo.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 150px;
+    height: 100%;
+}
+
+table.table {
     font-size: 18px;
 }
 
 .notifications {
     color: red;
+}
+
+.tile-grey      {background-color: #a1a1a1;}
+.tile-black      {background-color: #000000;}
+
+.navbar-brand {
+    font-size: 35px !important;
 }

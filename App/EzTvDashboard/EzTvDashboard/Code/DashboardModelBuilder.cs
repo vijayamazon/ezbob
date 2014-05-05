@@ -43,7 +43,8 @@
 					}
 				,
 				"EzTvGetStats",
-				CommandSpecies.StoredProcedure
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@MonthAgo", DateTime.Today.AddMonths(-1))
 			);
 			//todo implement
 			return model;

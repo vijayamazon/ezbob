@@ -5,7 +5,7 @@
     <div class="col-md-1">
         <div class="tile tile-green">
             <div class="caption">
-                <i class="fa fa-shopping-cart"></i>Avg Daily Loans
+                <i class="fa fa-flash"></i>&nbsp;Avg Daily Loans
             </div>
             <p class="title text-center">@Model.Stats["AvgDailyLoans"].ToK()</p>
         </div>
@@ -13,15 +13,15 @@
     <div class="col-md-1">
         <div class="tile tile-orange">
             <div class="caption">
-                <i class="fa fa-shopping-cart"></i>Default Rate
+                <i class="fa fa-star-o"></i>&nbsp;Default Rate
             </div>
             <p class="title text-center">@Model.Stats["DefaultRate"].ToPercent()</p>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="tile tile-magenta">
+        <div class="tile tile-grey">
             <div class="caption">
-                <i class="fa fa-shopping-cart"></i>Total Loans
+                <i class="fa fa-money"></i>&nbsp;Total Loans
             </div>
             <p class="title text-center">@Model.Stats["TotalLoans"].ToM()</p>
         </div>
@@ -29,7 +29,7 @@
     <div class="col-md-1">
         <div class="tile tile-green">
             <div class="caption">
-                <i class="fa fa-shopping-cart"></i>Book Size
+                <i class="fa fa-book"></i>&nbsp;Book Size
             </div>
             <p class="title text-center">@Model.Stats["BookSize"].ToM()</p>
         </div>
@@ -37,39 +37,39 @@
     <div class="col-md-1">
         <div class="tile tile-blue">
             <div class="caption">
-                <i class="fa fa-shopping-cart"></i>Avg Interest
+                <i class="fa fa-heart-o"></i>&nbsp;Avg Interest
             </div>
             <p class="title text-center">@Model.Stats["AvgInterest"].ToPercent()</p>
         </div>
     </div>
     <div class="col-md-1">
-        <div class="tile tile-lime">
+        <div class="tile tile-orange">
             <div class="caption">
-                <i class="fa fa-shopping-cart"></i>Avg Loan Size
+                <i class="fa fa-flag"></i>&nbsp;Avg Loan Size
             </div>
             <p class="title text-center">@Model.Stats["AvgLoanSize"].ToK()</p>
         </div>
     </div>
     <div class="col-md-1">
-        <div class="tile tile-dark-blue">
+        <div class="tile tile-blue">
             <div class="caption">
-                <i class="fa fa-shopping-cart"></i>Avg New Loans
+                <i class="fa fa-eye"></i>&nbsp;Avg New Loans
             </div>
             <p class="title text-center">@Model.Stats["AvgNewLoan"].ToK()</p>
         </div>
     </div>
     <div class="col-md-1">
-        <div class="tile tile-red">
+        <div class="tile tile-black">
             <div class="caption">
-                <i class="fa fa-shopping-cart"></i>Open Bugs
+                <i class="fa fa-bug"></i>&nbsp;Open Bugs
             </div>
             <p class="title text-center">@Model.Stats["OpenBugs"].ToInt()</p>
         </div>
     </div>
     <div class="col-md-2">
-        <div class="tile tile-lime">
+        <div class="tile tile-green">
             <div class="caption">
-                <i class="fa fa-shopping-cart"></i>Today
+                <i class="fa fa-level-down"></i>&nbsp;Today
             </div>
             <p class="title text-center">@Model.Stats["TodayLoans"].ToK()</p>
         </div>
@@ -79,206 +79,224 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div class="box box-blue">
-            <div class="box-title">
-                <h3><i class="fa fa-bar-chart-o"></i>Monthly Dashboard</h3>
-                <div class="box-tool">
-                    <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                    <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+        @if (Model.MonthlyBoard.Any())
+        {
+            <div class="box box-blue">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Monthly Dashboard</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table table-condensed fill-head table-striped">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>Count</td>
+                                <td>Values</td>
+                                <td>Benchmark</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var el in Model.MonthlyBoard)
+                            {
+                                <tr>
+                                    <td>@el.Caption</td>
+                                    <td>@el.Count</td>
+                                    <td>@el.Value</td>
+                                    <td>@el.Benchmark.ToPercent()</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="box-content">
-                <table class="table table-condensed fill-head table-striped">
-                    <thead>
-                        <tr>
-                            <td></td>
-                            <td>Count</td>
-                            <td>Values</td>
-                            <td>Benchmark</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var el in Model.MonthlyBoard)
-                        {
-                            <tr>
-                                <td>@el.Caption</td>
-                                <td>@el.Count</td>
-                                <td>@el.Value</td>
-                                <td>@el.Benchmark.ToPercent()</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        }
     </div>
     <div class="col-md-6">
-        <div class="box box-blue">
-            <div class="box-title">
-                <h3><i class="fa fa-bar-chart-o"></i>Monthly Traffic</h3>
-                <div class="box-tool">
-                    <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                    <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                </div>
-            </div>
-            <div class="box-content">
-                <table class="table table-condensed fill-head table-striped">
-                    <thead>
-                        <tr>
-                            <td></td>
-                            <td>Visits</td>
-                            <td>Applications</td>
-                            <td>Approvals</td>
-                            <td>Loans</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var el in Model.MonthlyTraffic)
-                        {
-                            <tr>
-                                <td>@el.Caption</td>
-                                <td>@el.Visits</td>
-                                <td>@el.Applications</td>
-                                <td>@el.Approvals</td>
-                                <td>@el.Loans</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+         @if (Model.MonthlyTraffic.Any())
+         {
+             <div class="box box-blue">
+                 <div class="box-title">
+                     <h3><i class="fa fa-bar-chart-o"></i>Monthly Traffic</h3>
+                     <div class="box-tool">
+                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                     </div>
+                 </div>
+                 <div class="box-content">
+                     <table class="table table-condensed fill-head table-striped">
+                         <thead>
+                             <tr>
+                                 <td></td>
+                                 <td>Visits</td>
+                                 <td>Applications</td>
+                                 <td>Approvals</td>
+                                 <td>Loans</td>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             @foreach (var el in Model.MonthlyTraffic)
+                             {
+                                 <tr>
+                                     <td>@el.Caption</td>
+                                     <td>@el.Visits</td>
+                                     <td>@el.Applications</td>
+                                     <td>@el.Approvals</td>
+                                     <td>@el.Loans</td>
+                                 </tr>
+                             }
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         }
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-3">
-        <div class="box box-red">
-            <div class="box-title">
-                <h3><i class="fa fa-bar-chart-o"></i>Monthly Collection</h3>
-                <div class="box-tool">
-                    <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                    <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                </div>
-            </div>
-            <div class="box-content">
-                <table class="table table-condensed fill-head table-striped">
-                    <thead>
-                        <tr>
-                            <td></td>
-                            <td>Count</td>
-                            <td>Value</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var el in Model.MonthlyCollection)
-                        {
-                            <tr>
-                                <td>@el.Caption</td>
-                                <td>@el.Count</td>
-                                <td>@el.Value.ToK()</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+         @if (Model.MonthlyCollection.Any())
+         {
+             <div class="box box-red">
+                 <div class="box-title">
+                     <h3><i class="fa fa-bar-chart-o"></i>Monthly Collection</h3>
+                     <div class="box-tool">
+                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                     </div>
+                 </div>
+                 <div class="box-content">
+                     <table class="table table-condensed fill-head table-striped">
+                         <thead>
+                             <tr>
+                                 <td></td>
+                                 <td>Count</td>
+                                 <td>Value</td>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             @foreach (var el in Model.MonthlyCollection)
+                             {
+                                 <tr>
+                                     <td>@el.Caption</td>
+                                     <td>@el.Count</td>
+                                     <td>@el.Value.ToK()</td>
+                                 </tr>
+                             }
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         }
     </div>
     <div class="col-md-3">
-        <div class="box box-red">
-            <div class="box-title">
-                <h3><i class="fa fa-bar-chart-o"></i>Collection Status</h3>
-                <div class="box-tool">
-                    <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                    <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                </div>
-            </div>
-            <div class="box-content">
-                <table class="table table-condensed fill-head table-striped">
-                    <thead>
-                        <tr>
-                            <td></td>
-                            <td>Clients</td>
-                            <td>Value</td>
-                            <td>Percent</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var el in Model.CollectionStatus)
-                        {
-                            <tr>
-                                <td>@el.Caption</td>
-                                <td>@el.Clients</td>
-                                <td>@el.Value.ToK()</td>
-                                <td>@el.Percent.ToPercent()</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+         @if (Model.CollectionStatus.Any())
+         {
+             <div class="box box-red">
+                 <div class="box-title">
+                     <h3><i class="fa fa-bar-chart-o"></i>Collection Status</h3>
+                     <div class="box-tool">
+                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                     </div>
+                 </div>
+                 <div class="box-content">
+                     <table class="table table-condensed fill-head table-striped">
+                         <thead>
+                             <tr>
+                                 <td></td>
+                                 <td>Clients</td>
+                                 <td>Value</td>
+                                 <td>Percent</td>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             @foreach (var el in Model.CollectionStatus)
+                             {
+                                 <tr>
+                                     <td>@el.Caption</td>
+                                     <td>@el.Clients</td>
+                                     <td>@el.Value.ToK()</td>
+                                     <td>@el.Percent.ToPercent()</td>
+                                 </tr>
+                             }
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         }
     </div>
     <div class="col-md-3">
-        <div class="box box-green">
-            <div class="box-title">
-                <h3><i class="fa fa-bar-chart-o"></i>Funnel Numbers</h3>
-                <div class="box-tool">
-                    <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                    <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                </div>
-            </div>
-            <div class="box-content">
-                <table class="table table-condensed fill-head table-striped">
-                    <thead>
-                        <tr>
-                            <td></td>
-                            <td>Count</td>
-                            <td>Percent</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var el in Model.FunnelNumbers)
-                        {
-                            <tr>
-                                <td>@el.Caption</td>
-                                <td>@el.Count</td>
-                                <td>@el.Percent.ToPercent()</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+         @if (Model.FunnelNumbers.Any())
+         {
+             <div class="box box-green">
+                 <div class="box-title">
+                     <h3><i class="fa fa-bar-chart-o"></i>Funnel Numbers</h3>
+                     <div class="box-tool">
+                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                     </div>
+                 </div>
+                 <div class="box-content">
+                     <table class="table table-condensed fill-head table-striped">
+                         <thead>
+                             <tr>
+                                 <td></td>
+                                 <td>Count</td>
+                                 <td>Percent</td>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             @foreach (var el in Model.FunnelNumbers)
+                             {
+                                 <tr>
+                                     <td>@el.Caption</td>
+                                     <td>@el.Count</td>
+                                     <td>@el.Percent.ToPercent()</td>
+                                 </tr>
+                             }
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         }
     </div>
     <div class="col-md-3">
-        <div class="box box-green">
-            <div class="box-title">
-                <h3><i class="fa fa-bar-chart-o"></i>Existing Customers</h3>
-                <div class="box-tool">
-                    <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                    <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                </div>
-            </div>
-            <div class="box-content">
-                <table class="table table-condensed fill-head table-striped">
-                    <thead>
-                        <tr>
-                            <td></td>
-                            <td>Count</td>
-                            <td>Potential</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var el in Model.ExistingCustomers)
-                        {
-                            <tr>
-                                <td>@el.Caption</td>
-                                <td>@el.Count</td>
-                                <td>@el.Potential.ToK()</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+         @if (Model.ExistingCustomers.Any())
+         {
+             <div class="box box-green">
+                 <div class="box-title">
+                     <h3><i class="fa fa-bar-chart-o"></i>Existing Customers</h3>
+                     <div class="box-tool">
+                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                     </div>
+                 </div>
+                 <div class="box-content">
+                     <table class="table table-condensed fill-head table-striped">
+                         <thead>
+                             <tr>
+                                 <td></td>
+                                 <td>Count</td>
+                                 <td>Potential</td>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             @foreach (var el in Model.ExistingCustomers)
+                             {
+                                 <tr>
+                                     <td>@el.Caption</td>
+                                     <td>@el.Count</td>
+                                     <td>@el.Potential.ToK()</td>
+                                 </tr>
+                             }
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         }
     </div>
 </div>
