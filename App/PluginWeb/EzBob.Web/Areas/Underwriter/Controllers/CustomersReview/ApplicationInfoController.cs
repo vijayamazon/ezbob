@@ -207,7 +207,7 @@
 				cr.IsCustomerRepaymentPeriodSelectionAllowed = true;
 			else {
 				cr.IsCustomerRepaymentPeriodSelectionAllowed = cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed;
-
+				cr.IsLoanTypeSelectionAllowed = cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed ? 1 : 0;
 				if (cr.LoanSource.DefaultRepaymentPeriod.HasValue)
 					cr.RepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod.Value;
 			} // if
