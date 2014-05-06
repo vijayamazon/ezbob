@@ -103,7 +103,7 @@
 			model.PaymentAccountModel = new PaymentsAccountModel(customer);
 
 			model.MedalCalculations = new MedalCalculators(customer);
-			model.PricingModelCalculations = new PricingModelCalculator(customer);
+			model.PricingModelCalculations = new PricingModelModel(customer.Id);
 
 			DateTime? lastDateCheck = null;
 			model.FraudDetectionLog = new FraudDetectionLogModel
@@ -153,7 +153,7 @@
 			public ProfileSummaryModel SummaryModel { get; set; }
 			public PaymentsAccountModel PaymentAccountModel { get; set; }
 			public MedalCalculators MedalCalculations { get; set; }
-			public PricingModelCalculator PricingModelCalculations { get; set; }
+			public PricingModelModel PricingModelCalculations { get; set; }
 			public FraudDetectionLogModel FraudDetectionLog { get; set; }
 			public List<ApiChecksLogModel> ApiCheckLogs { get; set; }
 			public List<MessagesModel> Messages { get; set; }

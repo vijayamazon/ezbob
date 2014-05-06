@@ -263,7 +263,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         } else {
             data.push({ name: "isInCaptchaMode", value: "False" });
         }
-        
 
         var xhr = $.post(this.form.attr('action'), data);
 

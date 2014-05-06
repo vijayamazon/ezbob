@@ -81,10 +81,10 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             model: @medalCalculationModel
         )
 
-        @pricingModelCalculationModel = new EzBob.Underwriter.PricingModelCalculationModel()
-        @pricingModelCalculationView = new EzBob.Underwriter.PricingModelCalculationView(
+        @pricingModelCalculationsModel = new EzBob.Underwriter.PricingModelCalculationsModel()
+        @pricingModelCalculationsView = new EzBob.Underwriter.PricingModelCalculationsView(
             el: @$el.find("#pricing-calc")
-            model: @pricingModelCalculationModel
+            model: @pricingModelCalculationsModel
         )
 
         @companyScoreModel = new EzBob.Underwriter.CompanyScoreModel()
@@ -400,9 +400,9 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @medalCalculationModel.set fullModel.get("MedalCalculations"), silent: true
             @medalCalculationModel.trigger "sync"
 
-            @pricingModelCalculationModel.set {Id: id}, {silent: true}
-            @pricingModelCalculationModel.set fullModel.get("PricingModelCalculations"), silent: true
-            @pricingModelCalculationModel.trigger "sync"
+            @pricingModelCalculationsModel.set {Id: id}, {silent: true}
+            @pricingModelCalculationsModel.set fullModel.get("PricingModelCalculations"), silent: true
+            @pricingModelCalculationsModel.trigger "sync"
 
             @FraudDetectionLogs.customerId = id
             @FraudDetectionLogView.customerId = id

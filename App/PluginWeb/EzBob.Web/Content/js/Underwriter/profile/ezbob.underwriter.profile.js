@@ -94,10 +94,10 @@
         el: medalCalculations,
         model: this.medalCalculationModel
       });
-      this.pricingModelCalculationModel = new EzBob.Underwriter.PricingModelCalculationModel();
-      this.pricingModelCalculationView = new EzBob.Underwriter.PricingModelCalculationView({
+      this.pricingModelCalculationsModel = new EzBob.Underwriter.PricingModelCalculationsModel();
+      this.pricingModelCalculationsView = new EzBob.Underwriter.PricingModelCalculationsView({
         el: this.$el.find("#pricing-calc"),
-        model: this.pricingModelCalculationModel
+        model: this.pricingModelCalculationsModel
       });
       this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
       this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
@@ -519,15 +519,15 @@
           silent: true
         });
         _this.medalCalculationModel.trigger("sync");
-        _this.pricingModelCalculationModel.set({
+        _this.pricingModelCalculationsModel.set({
           Id: id
         }, {
           silent: true
         });
-        _this.pricingModelCalculationModel.set(fullModel.get("PricingModelCalculations"), {
+        _this.pricingModelCalculationsModel.set(fullModel.get("PricingModelCalculations"), {
           silent: true
         });
-        _this.pricingModelCalculationModel.trigger("sync");
+        _this.pricingModelCalculationsModel.trigger("sync");
         _this.FraudDetectionLogs.customerId = id;
         _this.FraudDetectionLogView.customerId = id;
         _this.FraudDetectionLogs.set(fullModel.get("FraudDetectionLog"), {
