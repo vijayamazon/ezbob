@@ -3,7 +3,7 @@
 <script id="pricing-model-calculation-template" type="text/template">
     <div class="row-fluid">
         <div class="span6">
-            <table class="table centered">
+            <table class="table">
                 <thead class="box">
                     <tr class="box-title">
                         <th>Model inputs</th>
@@ -12,59 +12,65 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Loan Amount</td>
+                        <td class="pricing-model-left-td">Loan Amount</td>
                         <td><input type="text" id="loanAmount" value="<%-GBPValues(model.LoanAmount, true)%>"/></td>
                     </tr>
                     <tr>
-                        <td>Interest Rate</td>
+                        <td class="pricing-model-left-td">Interest Rate</td>
                         <td><input type="text" id="interestRate" value="<%-model.InterestRate%>"/></td>
                     </tr>
                     <tr>
-                        <td>Default Rate</td>
+                        <td class="pricing-model-left-td">Default Rate</td>
                         <td><input type="text" id="defaultRate" value="<%-model.DefaultRate%>"/></td>
                     </tr>
                     <tr>
-                        <td>Initiation Fee</td>
+                        <td class="pricing-model-left-td">Initiation Fee</td>
                         <td><input type="text" id="initiationFee" value="<%-GBPValues(model.InitiationFee, true)%>"/></td>
                     </tr>
+    
                     <tr>
-                        <td>Loan Term</td>
+	                    <td class="pricing-model-left-td"><button class="btn btn-primary" id="expandCollapseInputsButton"><span id="expandInputsSign">+</span><span class="hide" id="collapseInputsSign">-</span></button></td>
+                        <td></td>
+                    </tr>
+
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Loan Term</td>
                         <td><input type="text" id="loanTerm" value="<%-model.LoanTerm%>"/> months</td>
                     </tr>
-                    <tr>
-                        <td>Interest Only Period</td>
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Interest Only Period</td>
                         <td><input type="text" id="interestOnlyPeriod" value="<%-model.InterestOnlyPeriod%>"/> months</td>
                     </tr>
-                    <tr>
-                        <td>Tenure As Percent Of Loan Term</td>
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Tenure As Percent Of Loan Term</td>
                         <td><input type="text" id="tenureAsPercentOfLoanTerm" value="<%-model.TenureAsPercentOfLoanTerm%>"/></td>
                     </tr>
-                    <tr>
-                        <td>Tenure As Months Of Loan Term</td>
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Tenure As Months Of Loan Term</td>
                         <td><input type="text" id="tenureAsMonthsOfLoanTerm" value="<%-model.TenureAsMonthsOfLoanTerm%>"/> months</td>
                     </tr>
-                    <tr>
-                        <td>Collection Rate</td>
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Collection Rate</td>
                         <td><input type="text" id="collectionRate" value="<%-model.CollectionRate%>"/></td>
                     </tr>
-                    <tr>
-                        <td>Cogs</td>
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Cogs</td>
                         <td><input type="text" id="cogs" value="<%-GBPValues(model.Cogs, true)%>"/></td>
                     </tr>
-                    <tr>
-                        <td>Debt Percent Of Capital</td>
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Debt Percent Of Capital</td>
                         <td><input type="text" id="debtPercentOfCapital" value="<%-model.DebtPercentOfCapital%>"/></td>
                     </tr>
-                    <tr>
-                        <td>Cost Of Debt</td>
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Cost Of Debt</td>
                         <td><input type="text" id="costOfDebt" value="<%-model.CostOfDebt%>"/></td>
                     </tr>
-                    <tr>
-                        <td>Opex And Capex</td>
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Opex And Capex</td>
                         <td><input type="text" id="opexAndCapex" value="<%-GBPValues(model.OpexAndCapex, true)%>"/></td>
                     </tr>
-                    <tr>
-                        <td>Profit Before Tax</td>
+                    <tr class="minor-input-row hide">
+                        <td class="pricing-model-left-td">Profit Before Tax</td>
                         <td><input type="text" id="profitBeforeTax" value="<%-GBPValues(model.ProfitBeforeTax, true)%>"/></td>
                     </tr>
                 </tbody>
@@ -72,7 +78,7 @@
         </div>
     
         <div class="span6">
-            <table class="table centered">
+            <table class="table">
                 <thead class="box">
                     <tr class="box-title">
                         <th>Model outputs</th>
@@ -81,59 +87,65 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Monthly Interest To Charge</td>
+                        <td class="pricing-model-left-td">Monthly Interest To Charge</td>
                         <td><%-model.MonthlyInterestToCharge%>%</td>
                     </tr>
                     <tr>
-                        <td>Setup Fee For Eu Loan</td>
+                        <td class="pricing-model-left-td">Setup Fee For Eu Loan</td>
                         <td><%-GBPValues(model.SetupFeeForEuLoan, true)%></td>
                     </tr>
                     <tr>
-                        <td>EuLoanPercentages</td>
+                        <td class="pricing-model-left-td">EuLoanPercentages</td>
                         <td><%-model.EuLoanPercentages%>%</td>
                     </tr>
+    
                     <tr>
-                        <td>Average Loan Amount</td>
+	                    <td class="pricing-model-left-td"><button class="btn btn-primary" id="expandCollapseOutputsButton"><span id="expandOutputsSign">+</span><span class="hide" id="collapseOutputsSign">-</span></button></td>
+                        <td></td>
+                    </tr>
+
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Average Loan Amount</td>
                         <td><%-GBPValues(model.AverageLoanAmount)%></td>
                     </tr>
-                    <tr>
-                        <td>Average Revenue Per Loan</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Average Revenue Per Loan</td>
                         <td><%-GBPValues(model.AverageRevenuePerLoan)%></td>
                     </tr>
-                    <tr>
-                        <td>Cogs</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Cogs</td>
                         <td><%-GBPValues(model.CogsOutput)%></td>
                     </tr>
-                    <tr>
-                        <td>Gross Profit</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Gross Profit</td>
                         <td><%-GBPValues(model.GrossProfit)%></td>
                     </tr>
-                    <tr>
-                        <td>Opex And Capex</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Opex And Capex</td>
                         <td><%-GBPValues(model.OpexAndCapexOutput)%></td>
                     </tr>
-                    <tr>
-                        <td>Ebitda</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Ebitda</td>
                         <td><%-GBPValues(model.Ebitda)%></td>
                     </tr>
-                    <tr>
-                        <td>Net Loss From Defaults</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Net Loss From Defaults</td>
                         <td><%-GBPValues(model.NetLossFromDefaults)%></td>
                     </tr>
-                    <tr>
-                        <td>Cost Of Debt</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Cost Of Debt</td>
                         <td><%-GBPValues(model.CostOfDebtOutput)%></td>
                     </tr>
-                    <tr>
-                        <td>Total Cost</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Total Cost</td>
                         <td><%-GBPValues(model.TotalCost)%></td>
                     </tr>
-                    <tr>
-                        <td>Profit Before Tax</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Profit Before Tax</td>
                         <td><%-GBPValues(model.ProfitBeforeTaxOutput, true)%></td>
                     </tr>
-                    <tr>
-                        <td>Balance</td>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Balance</td>
                         <td><%-GBPValues(model.Balance, true)%></td>
                     </tr>
                 </tbody>

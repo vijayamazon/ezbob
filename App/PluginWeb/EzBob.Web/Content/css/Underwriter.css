@@ -1041,3 +1041,7 @@ div.hmrc-enter-data-holder .add-one-period {
 .suggested-amount-link {
     text-decoration: underline;
 }
+
+.pricing-model-left-td {
+    width: 50%;
+}

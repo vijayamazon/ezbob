@@ -2,14 +2,15 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.PricingModelCalculationsModel = Backbone.Model.extend({
-    idAttribute: "Id",
-    urlRoot: window.gRootPath + "Underwriter/PricingModelCalculations/Index/"
+    url: window.gRootPath + "Underwriter/PricingModelCalculations/Index/"
 });
 
 EzBob.Underwriter.PricingModelCalculationsView = Backbone.View.extend({
     initialize: function () {
         this.template = _.template($('#pricing-model-calculation-template').html());
         this.model.on('change reset fetch sync', this.render, this);
+        this.inputsExpanded = false;
+        this.outputsExpanded = false;
     },
 
     events: {
@@ -28,7 +29,37 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.View.extend({
         'focusout #interestOnlyPeriod': 'interestOnlyPeriodChanged',
         'focusout #tenureAsMonthsOfLoanTerm': 'tenureAsMonthsOfLoanTermChanged',
         'click #pricingModelResetButton': 'resetClicked',
-        'click #pricingModelCalculateButton': 'calculateClicked'
+        'click #pricingModelCalculateButton': 'calculateClicked',
+        'click #expandCollapseInputsButton': 'expandCollapseInputsClicked',
+        'click #expandCollapseOutputsButton': 'expandCollapseOutputsClicked'
+    },
+
+    expandCollapseOutputsClicked: function () {
+        if (this.outputsExpanded) {
+            this.outputsExpanded = false;
+            this.$el.find('.minor-output-row').addClass('hide');
+            this.$el.find('#expandOutputsSign').removeClass('hide');
+            this.$el.find('#collapseOutputsSign').addClass('hide');
+        } else {
+            this.outputsExpanded = true;
+            this.$el.find('.minor-output-row').removeClass('hide');
+            this.$el.find('#expandOutputsSign').addClass('hide');
+            this.$el.find('#collapseOutputsSign').removeClass('hide');
+        }
+    },
+
+    expandCollapseInputsClicked: function () {
+        if (this.inputsExpanded) {
+            this.inputsExpanded = false;
+            this.$el.find('.minor-input-row').addClass('hide');
+            this.$el.find('#expandInputsSign').removeClass('hide');
+            this.$el.find('#collapseInputsSign').addClass('hide');
+        } else {
+            this.inputsExpanded = true;
+            this.$el.find('.minor-input-row').removeClass('hide');
+            this.$el.find('#expandInputsSign').addClass('hide');
+            this.$el.find('#collapseInputsSign').removeClass('hide');
+        }
     },
 
     resetClicked: function () {
