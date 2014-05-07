@@ -40,10 +40,14 @@
 		#region method Execute
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
-
-			foreach (DataRow row in dt.Rows)
-				HandleOnePayment(row);
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					HandleOnePayment(sr);
+					return ActionResult.Continue;
+				},
+				"GetCustomersForPayPoint",
+				CommandSpecies.StoredProcedure
+			);
 		} // Execute
 
 		#endregion method Execute
@@ -62,8 +66,7 @@
 
 		#region method HandleOnePayment
 
-		private void HandleOnePayment(DataRow row) {
-			var sr = new SafeReader(row);
+		private void HandleOnePayment(SafeReader sr) {
 			int loanScheduleId = sr["id"];
 			int loanId = sr["LoanId"];
 			string firstName = sr["FirstName"];
@@ -77,14 +80,20 @@
 			decimal amountDue = payPointApi.GetAmountToPay(loanScheduleId);
 
 			if (!ShouldCharge(lastInstallment, amountDue)) {
-				Log.Info("Will not charge loan schedule id:{0} (The amount was:{1}). The minimal amount for collection is:{2}", loanScheduleId, amountDue, amountToChargeFrom);
+				Log.Info("Will not charge loan schedule id {0} (amount {1}): the minimal amount for collection is {2}.", loanScheduleId, amountDue, amountToChargeFrom);
 				return;
 			} // if
 
 			decimal initialAmountDue = amountDue;
 
-			AutoPaymentResult autoPaymentResult = TryToMakeAutoPayment(loanScheduleId, initialAmountDue, customerId, customerMail,
-				fullname, reductionFee);
+			AutoPaymentResult autoPaymentResult = TryToMakeAutoPayment(
+				loanScheduleId,
+				initialAmountDue,
+				customerId,
+				customerMail,
+				fullname,
+				reductionFee
+			);
 
 			if (autoPaymentResult.IsException)
 				return;
