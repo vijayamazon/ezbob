@@ -1,7 +1,7 @@
 ﻿@model dynamic
 <script id="dashboard-template" type="text/template">
     <div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Offer</h3>
@@ -46,7 +46,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <%if(m.Alerts && m.Alerts.length > 0){%>
+        <div class="col-md-5">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Alerts</h3>
@@ -56,28 +57,20 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <div class="alert alert-danger hidden-xs">
+                    <%_.each(m.Alerts, function(item) {%>
+                    <div class="alert alert-<%-item.AlertType%> hidden-xs">
                         <button class="close" data-dismiss="alert">&times;</button>
-                        <h4>Error</h4>
-                        <p>some error.</p>
+                        <h4><%-item.Alert%></h4>
                     </div>
-                    <div class="alert alert-danger hidden-xs">
-                        <button class="close" data-dismiss="alert">&times;</button>
-                        <h4>Error</h4>
-                        <p>some other error.</p>
-                    </div>
-                    <div class="alert alert-warning hidden-xs">
-                        <button class="close" data-dismiss="alert">&times;</button>
-                        <h4>Warning</h4>
-                        <p>some warning.</p>
-                    </div>
+                    <%});%>
                 </div>
             </div>
         </div>
+        <%}%>
     </div>
 
     <div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Customer & Directors</h3>
@@ -91,7 +84,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-green">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Score
+                                    Score
                                 </div>
                                 <p class="title text-center">759</p>
                             </div>
@@ -99,7 +92,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-orange">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Indebtedness
+                                    Indebtedness
                                 </div>
                                 <p class="title text-center">35</p>
                             </div>
@@ -107,7 +100,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-green">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Accounts
+                                    Accounts
                                 </div>
                                 <p class="title text-center">7</p>
                             </div>
@@ -115,7 +108,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-green">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;CCJ/Recent CCJ
+                                    CCJ/Recent CCJ
                                 </div>
                                 <p class="title text-center">0/0</p>
                             </div>
@@ -123,7 +116,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-green">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Defaults
+                                    Defaults
                                 </div>
                                 <p class="title text-center">0</p>
                             </div>
@@ -131,7 +124,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-green">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Balance
+                                    Balance
                                 </div>
                                 <p class="title text-center">219K</p>
                             </div>
@@ -146,7 +139,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-red">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Director 1
+                                    Director 1
                                 </div>
                                 <p class="title text-center">330</p>
                             </div>
@@ -154,7 +147,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-orange">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Director 2
+                                    Director 2
                                 </div>
                                 <p class="title text-center">550</p>
                             </div>
@@ -163,7 +156,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Data Sources</h3>
@@ -195,7 +188,7 @@
     </div>
 
     <div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Company</h3>
@@ -209,7 +202,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-green">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Score
+                                    Score
                                 </div>
                                 <p class="title text-center">92</p>
                             </div>
@@ -217,7 +210,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-green">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;CCJ/Recent CCJ
+                                    CCJ/Recent CCJ
                                 </div>
                                 <p class="title text-center">0/0</p>
                             </div>
@@ -225,7 +218,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-orange">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Tangible equity
+                                    Tangible equity
                                 </div>
                                 <p class="title text-center">56,250</p>
                             </div>
@@ -233,7 +226,7 @@
                         <div class="col-md-2">
                             <div class="tile tile-green">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Adjusted profit
+                                    Adjusted profit
                                 </div>
                                 <p class="title text-center">18,340</p>
                             </div>
@@ -249,7 +242,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Assets & Worth</h3>
@@ -263,7 +256,7 @@
                         <div class="col-md-6">
                             <div class="tile tile-grey">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Properties
+                                    Properties
                                 </div>
                                 <p class="title text-center">3</p>
                             </div>
@@ -271,7 +264,7 @@
                         <div class="col-md-6">
                             <div class="tile tile-lightgrey">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Net Worth
+                                    Net Worth
                                 </div>
                                 <p class="title text-center blue">269K</p>
                                 <p class="title-small text-center">(33%)</p>
@@ -280,7 +273,7 @@
                         <div class="col-md-6">
                             <div class="tile tile-grey">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Market value
+                                    Market value
                                 </div>
                                 <p class="title text-center">825K</p>
                             </div>
@@ -288,7 +281,7 @@
                         <div class="col-md-6">
                             <div class="tile tile-lightgrey">
                                 <div class="caption">
-                                    <i class="fa fa-flash"></i>&nbsp;Mortgages (2)
+                                    Mortgages (2)
                                 </div>
                                 <p class="title text-center">556K</p>
                                 <p class="title-small text-center">(TLV: 67%)</p>
@@ -301,7 +294,7 @@
     </div>
 
     <div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Affordability</h3>
@@ -363,7 +356,7 @@
     </div>
 
     <div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Customer History</h3>
@@ -454,7 +447,7 @@
             </div>
         </div>
         <%if(crm && crm.length > 0) {%>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Customer Relations</h3>

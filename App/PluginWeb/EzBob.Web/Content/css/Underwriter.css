@@ -1051,9 +1051,13 @@ div.hmrc-enter-data-holder .add-one-period {
     padding-top: 12px;
 }
 
+.tile {
+    height: 80px;
+}
+
 .tile p.title {
     font-size: 30px;
-    padding-top: 15px;
+    padding-top: 10px;
 }
 
 .tile p.title-small {
@@ -1064,5 +1068,9 @@ div.hmrc-enter-data-holder .add-one-period {
 .tile-white     {background-color: #ffffff; color: black}
 .tile-lightgrey {background-color: #d1d1d1; color: black}
 
+.alert {
+    padding: 5px !important;
+    margin-bottom: 10px !important;
+}
 
 

@@ -4,6 +4,7 @@ using EZBob.DatabaseLib.Model.Database;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System.ComponentModel;
 	using Customer.Models;
 
 	public class BaseProfileSummaryModel
@@ -100,6 +101,25 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public CustomerRequestedLoanModel RequestedLoan { get; set; }
 		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
 		public CompanyInfoMap CompanyInfo { get; set; }
+		public List<AlertModel> Alerts { get; set; } 
+	}
+
+	public class AlertModel
+	{
+		public string AlertType { get; set; }
+		public string Alert { get; set; }
+	}
+	
+	public enum AlertType
+	{
+		[Description("danger")]
+		Error,
+		[Description("warning")]
+		Warning,
+		[Description("info")]
+		Info,
+		[Description("success")]
+		Success
 	}
 
 	public class FraudCheck

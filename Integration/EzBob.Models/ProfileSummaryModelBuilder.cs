@@ -5,12 +5,12 @@
 	using System.Globalization;
 	using System.Linq;
 	using ExperianLib;
-	using EzBob.CommonLib.TimePeriodLogic;
+	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EzBob.Web.Areas.Customer.Models;
-	using EzBob.Web.Areas.Underwriter.Models;
-	using EzBob.Models.Marketplaces;
+	using Web.Areas.Customer.Models;
+	using Web.Areas.Underwriter.Models;
+	using Marketplaces;
 	using NHibernate;
 	using StructureMap;
 	using log4net;
@@ -67,7 +67,57 @@
 			summary.CompanyInfo = CompanyInfoMap.FromCompany(customer.Company);
 			summary.IsOffline = customer.IsOffline;
 
+			BuildAlerts(summary, customer);
 			return summary;
+		}
+
+		private void BuildAlerts(ProfileSummaryModel summary, Customer customer)
+		{
+			summary.Alerts = new List<AlertModel>();
+			if (customer.IsTest)
+			{
+				summary.Alerts.Add(new AlertModel{ Alert = "Is test", AlertType = AlertType.Info.DescriptionAttr() });
+			}
+
+			if (customer.CciMark)
+			{
+				summary.Alerts.Add(new AlertModel { Alert = "CCI Mark", AlertType = AlertType.Error.DescriptionAttr() });
+			}
+			
+			if (customer.CollectionStatus.CurrentStatus.IsDefault)
+			{
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("Collection Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Error.DescriptionAttr() });
+			}
+
+			if (customer.CollectionStatus.CurrentStatus.IsWarning)
+			{
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("Collection Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Warning.DescriptionAttr() });
+			}
+
+			if (customer.FraudStatus != FraudStatus.Ok)
+			{
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("Fraud Status : {0}", customer.FraudStatus), AlertType = AlertType.Error.DescriptionAttr() });
+			}
+
+			if (customer.AMLResult == "Rejected")
+			{
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Error.DescriptionAttr() });
+			}
+			
+			if (customer.BWAResult == "Rejected")
+			{
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Error.DescriptionAttr() });
+			}
+			
+			if (customer.AMLResult == "Warning" || customer.AMLResult == "Not performed")
+			{
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Warning.DescriptionAttr() });
+			}
+			
+			if(customer.BWAResult == "Warning" || customer.BWAResult == "Not performed")
+			{
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Warning.DescriptionAttr() });
+			}
 		}
 
 		private static void BuildRequestedLoan(ProfileSummaryModel summary, Customer customer)
