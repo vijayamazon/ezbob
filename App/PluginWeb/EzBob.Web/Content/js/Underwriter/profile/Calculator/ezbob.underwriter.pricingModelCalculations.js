@@ -112,7 +112,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     },
 
     resetClicked: function () {
-        //this.model.fetch(); // TODO: make it work
+        this.model.fetch({ data: { customerId: this.model.get('Id') } });
     },
 
     calculateClicked: function () {
