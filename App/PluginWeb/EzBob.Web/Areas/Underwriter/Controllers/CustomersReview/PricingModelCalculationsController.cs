@@ -35,20 +35,21 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult Calculate(int customerId, string loanAmountModel) {
+		public JsonResult Calculate(int customerId, string pricingModelModel)
+		{
 			var oLog = new SafeILog(this);
 
-			oLog.Debug("Model received: {0}", loanAmountModel);
+			oLog.Debug("Model received: {0}", pricingModelModel);
 
-			PricingModelModel inputModel = JsonConvert.DeserializeObject<PricingModelModel>(loanAmountModel);
+			PricingModelModel inputModel = JsonConvert.DeserializeObject<PricingModelModel>(pricingModelModel);
 
 			oLog.Debug("Parsed model: {0}", JsonConvert.SerializeObject(inputModel));
 
-			PricingModelModelActionResult pricingModelCalculateesponse = serviceClient.Instance.PricingModelCalculate(
+			PricingModelModelActionResult pricingModelCalculateResponse = serviceClient.Instance.PricingModelCalculate(
 				customerId, context.UserId, inputModel
 			);
 
-			return Json(pricingModelCalculateesponse.Value, JsonRequestBehavior.AllowGet);
+			return Json(pricingModelCalculateResponse.Value, JsonRequestBehavior.AllowGet);
 		}
     }
 }

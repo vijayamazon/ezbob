@@ -119,26 +119,14 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 			window.gRootPath + 'Underwriter/PricingModelCalculations/Calculate',
 			{
 				customerId: this.model.get('Id'),
-				loanAmountModel: JSON.stringify(this.model.toJSON()),
+				pricingModelModel: JSON.stringify(this.model.toJSON()),
 			}
 		);
 
         request.success(function (res) {
-            that.model.set('MonthlyInterestToCharge', res.MonthlyInterestToCharge);
-            that.model.set('SetupFeeForEuLoan', res.SetupFeeForEuLoan);
-            that.model.set('EuLoanPercentages', res.EuLoanPercentages);
-            that.model.set('InterestRate', res.InterestRate);
-            that.model.set('AverageLoanAmount', res.AverageLoanAmount);
-            that.model.set('AverageRevenuePerLoan', res.AverageRevenuePerLoan);
-            that.model.set('CogsOutput', res.CogsOutput);
-            that.model.set('GrossProfit', res.GrossProfit);
-            that.model.set('OpexAndCapexOutput', res.OpexAndCapexOutput);
-            that.model.set('Ebitda', res.Ebitda);
-            that.model.set('NetLossFromDefaults', res.NetLossFromDefaults);
-            that.model.set('CostOfDebtOutput', res.CostOfDebtOutput);
-            that.model.set('TotalCost', res.TotalCost);
-            that.model.set('ProfitBeforeTaxOutput', res.ProfitBeforeTaxOutput);
-            that.model.set('Balance', res.Balance);
+            var id = that.model.get('Id');
+            that.model.attributes = res;
+            that.model.set("Id", id);
             UnBlockUi();
         });
     },
