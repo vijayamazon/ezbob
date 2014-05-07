@@ -1,4 +1,4 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Backend.Strategies.PricingModel
 {
 	public class PricingModelModel
 	{
@@ -37,10 +37,5 @@
 		public int TotalCost { get; set; }
 		public int ProfitBeforeTaxOutput { get; set; }
 		public int Balance { get; set; }
-		
-		public PricingModelModel(int customerId)
-		{
-			LoanAmount = customerId;
-		}
 	}
 }

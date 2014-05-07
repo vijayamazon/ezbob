@@ -72,6 +72,7 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
@@ -148,6 +149,18 @@
   </wsdl:message>
   <wsdl:message name="IEzService_GetExperianAccountsCurrentBalance_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetExperianAccountsCurrentBalanceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelModel_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelModel" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelModel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelModelResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PricingModelCalculate_InputMessage">
+    <wsdl:part name="parameters" element="tns:PricingModelCalculate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PricingModelCalculate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PricingModelCalculateResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_Temp_BackfillCompanyAnalytics_InputMessage">
     <wsdl:part name="parameters" element="tns:Temp_BackfillCompanyAnalytics" />
@@ -716,6 +729,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalance" message="tns:IEzService_GetExperianAccountsCurrentBalance_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalanceResponse" message="tns:IEzService_GetExperianAccountsCurrentBalance_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPricingModelModel">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPricingModelModel" message="tns:IEzService_GetPricingModelModel_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPricingModelModelResponse" message="tns:IEzService_GetPricingModelModel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PricingModelCalculate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PricingModelCalculate" message="tns:IEzService_PricingModelCalculate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PricingModelCalculateResponse" message="tns:IEzService_PricingModelCalculate_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="Temp_BackfillCompanyAnalytics">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalytics" message="tns:IEzService_Temp_BackfillCompanyAnalytics_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalyticsResponse" message="tns:IEzService_Temp_BackfillCompanyAnalytics_OutputMessage" />
@@ -1171,6 +1192,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetExperianAccountsCurrentBalance">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalance" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelModel">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetPricingModelModel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PricingModelCalculate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PricingModelCalculate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

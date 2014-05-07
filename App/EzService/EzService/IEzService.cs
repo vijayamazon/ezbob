@@ -3,6 +3,7 @@
 	using System.ServiceModel;
 	using ActionResults;
 	using EzBob.Backend.Models;
+	using EzBob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Models;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -358,7 +359,11 @@
 		[OperationContract]
 		IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId);
 
+		[OperationContract]
+		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId);
 
+		[OperationContract]
+		PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model);
 
 
 

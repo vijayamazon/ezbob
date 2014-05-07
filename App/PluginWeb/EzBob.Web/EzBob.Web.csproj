@@ -177,7 +177,6 @@
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\PricingModelCalculationsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
     <Compile Include="Areas\Underwriter\Models\SuggestedAmountModel.cs" />
-    <Compile Include="Areas\Underwriter\Models\PricingModelModel.cs" />
     <Compile Include="Code\AgreementRenderer.cs" />
     <Compile Include="Code\AgreementsTemplatesProvider.cs" />
     <Compile Include="Code\BrokerHelper.cs" />

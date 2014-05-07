@@ -74,6 +74,7 @@
     <Compile Include="ActionResults\BrokerCustomerFilesActionResult.cs" />
     <Compile Include="ActionResults\BrokerLeadDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerPropertiesActionResult.cs" />
+    <Compile Include="ActionResults\PricingModelModelActionResult.cs" />
     <Compile Include="ActionResults\DateTimeActionResult.cs" />
     <Compile Include="ActionResults\BrokerStaticDataActionResult.cs" />
     <Compile Include="ActionResults\IntActionResult.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
+    <Compile Include="EzServiceImplementation\PricingModel.cs" />
     <Compile Include="EzServiceImplementation\UserManagement.cs" />
     <Compile Include="EzServiceImplementation\MiscQueries.cs" />
     <Compile Include="EzServiceImplementation\wizard.cs" />

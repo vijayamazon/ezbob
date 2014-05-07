@@ -187,6 +187,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PricingModelModelActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult))]
@@ -320,6 +321,29 @@ namespace ServiceClientProxy.EzServiceReference {
             }
             set {
                 if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PricingModelModelActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class PricingModelModelActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ServiceClientProxy.EzServiceReference.PricingModelModel ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ServiceClientProxy.EzServiceReference.PricingModelModel Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
                 }
@@ -873,6 +897,483 @@ namespace ServiceClientProxy.EzServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PricingModelModel", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel")]
+    [System.SerializableAttribute()]
+    public partial class PricingModelModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AverageLoanAmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AverageRevenuePerLoanField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BalanceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int CogsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int CogsOutputField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal CollectionRateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal CostOfDebtField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int CostOfDebtOutputField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal DebtPercentOfCapitalField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal DefaultRateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int EbitdaField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal EuLoanPercentagesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int GrossProfitField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal InitiationFeeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int InterestOnlyPeriodField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal InterestRateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LoanAmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LoanTermField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal MonthlyInterestToChargeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NetLossFromDefaultsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int OpexAndCapexField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int OpexAndCapexOutputField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ProfitBeforeTaxField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ProfitBeforeTaxOutputField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int SetupFeeForEuLoanField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TenureAsMonthsOfLoanTermField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal TenureAsPercentOfLoanTermField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TotalCostField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AverageLoanAmount {
+            get {
+                return this.AverageLoanAmountField;
+            }
+            set {
+                if ((this.AverageLoanAmountField.Equals(value) != true)) {
+                    this.AverageLoanAmountField = value;
+                    this.RaisePropertyChanged("AverageLoanAmount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AverageRevenuePerLoan {
+            get {
+                return this.AverageRevenuePerLoanField;
+            }
+            set {
+                if ((this.AverageRevenuePerLoanField.Equals(value) != true)) {
+                    this.AverageRevenuePerLoanField = value;
+                    this.RaisePropertyChanged("AverageRevenuePerLoan");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Balance {
+            get {
+                return this.BalanceField;
+            }
+            set {
+                if ((this.BalanceField.Equals(value) != true)) {
+                    this.BalanceField = value;
+                    this.RaisePropertyChanged("Balance");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Cogs {
+            get {
+                return this.CogsField;
+            }
+            set {
+                if ((this.CogsField.Equals(value) != true)) {
+                    this.CogsField = value;
+                    this.RaisePropertyChanged("Cogs");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int CogsOutput {
+            get {
+                return this.CogsOutputField;
+            }
+            set {
+                if ((this.CogsOutputField.Equals(value) != true)) {
+                    this.CogsOutputField = value;
+                    this.RaisePropertyChanged("CogsOutput");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal CollectionRate {
+            get {
+                return this.CollectionRateField;
+            }
+            set {
+                if ((this.CollectionRateField.Equals(value) != true)) {
+                    this.CollectionRateField = value;
+                    this.RaisePropertyChanged("CollectionRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal CostOfDebt {
+            get {
+                return this.CostOfDebtField;
+            }
+            set {
+                if ((this.CostOfDebtField.Equals(value) != true)) {
+                    this.CostOfDebtField = value;
+                    this.RaisePropertyChanged("CostOfDebt");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int CostOfDebtOutput {
+            get {
+                return this.CostOfDebtOutputField;
+            }
+            set {
+                if ((this.CostOfDebtOutputField.Equals(value) != true)) {
+                    this.CostOfDebtOutputField = value;
+                    this.RaisePropertyChanged("CostOfDebtOutput");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal DebtPercentOfCapital {
+            get {
+                return this.DebtPercentOfCapitalField;
+            }
+            set {
+                if ((this.DebtPercentOfCapitalField.Equals(value) != true)) {
+                    this.DebtPercentOfCapitalField = value;
+                    this.RaisePropertyChanged("DebtPercentOfCapital");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal DefaultRate {
+            get {
+                return this.DefaultRateField;
+            }
+            set {
+                if ((this.DefaultRateField.Equals(value) != true)) {
+                    this.DefaultRateField = value;
+                    this.RaisePropertyChanged("DefaultRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Ebitda {
+            get {
+                return this.EbitdaField;
+            }
+            set {
+                if ((this.EbitdaField.Equals(value) != true)) {
+                    this.EbitdaField = value;
+                    this.RaisePropertyChanged("Ebitda");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal EuLoanPercentages {
+            get {
+                return this.EuLoanPercentagesField;
+            }
+            set {
+                if ((this.EuLoanPercentagesField.Equals(value) != true)) {
+                    this.EuLoanPercentagesField = value;
+                    this.RaisePropertyChanged("EuLoanPercentages");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int GrossProfit {
+            get {
+                return this.GrossProfitField;
+            }
+            set {
+                if ((this.GrossProfitField.Equals(value) != true)) {
+                    this.GrossProfitField = value;
+                    this.RaisePropertyChanged("GrossProfit");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal InitiationFee {
+            get {
+                return this.InitiationFeeField;
+            }
+            set {
+                if ((this.InitiationFeeField.Equals(value) != true)) {
+                    this.InitiationFeeField = value;
+                    this.RaisePropertyChanged("InitiationFee");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int InterestOnlyPeriod {
+            get {
+                return this.InterestOnlyPeriodField;
+            }
+            set {
+                if ((this.InterestOnlyPeriodField.Equals(value) != true)) {
+                    this.InterestOnlyPeriodField = value;
+                    this.RaisePropertyChanged("InterestOnlyPeriod");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal InterestRate {
+            get {
+                return this.InterestRateField;
+            }
+            set {
+                if ((this.InterestRateField.Equals(value) != true)) {
+                    this.InterestRateField = value;
+                    this.RaisePropertyChanged("InterestRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LoanAmount {
+            get {
+                return this.LoanAmountField;
+            }
+            set {
+                if ((this.LoanAmountField.Equals(value) != true)) {
+                    this.LoanAmountField = value;
+                    this.RaisePropertyChanged("LoanAmount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LoanTerm {
+            get {
+                return this.LoanTermField;
+            }
+            set {
+                if ((this.LoanTermField.Equals(value) != true)) {
+                    this.LoanTermField = value;
+                    this.RaisePropertyChanged("LoanTerm");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal MonthlyInterestToCharge {
+            get {
+                return this.MonthlyInterestToChargeField;
+            }
+            set {
+                if ((this.MonthlyInterestToChargeField.Equals(value) != true)) {
+                    this.MonthlyInterestToChargeField = value;
+                    this.RaisePropertyChanged("MonthlyInterestToCharge");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int NetLossFromDefaults {
+            get {
+                return this.NetLossFromDefaultsField;
+            }
+            set {
+                if ((this.NetLossFromDefaultsField.Equals(value) != true)) {
+                    this.NetLossFromDefaultsField = value;
+                    this.RaisePropertyChanged("NetLossFromDefaults");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int OpexAndCapex {
+            get {
+                return this.OpexAndCapexField;
+            }
+            set {
+                if ((this.OpexAndCapexField.Equals(value) != true)) {
+                    this.OpexAndCapexField = value;
+                    this.RaisePropertyChanged("OpexAndCapex");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int OpexAndCapexOutput {
+            get {
+                return this.OpexAndCapexOutputField;
+            }
+            set {
+                if ((this.OpexAndCapexOutputField.Equals(value) != true)) {
+                    this.OpexAndCapexOutputField = value;
+                    this.RaisePropertyChanged("OpexAndCapexOutput");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ProfitBeforeTax {
+            get {
+                return this.ProfitBeforeTaxField;
+            }
+            set {
+                if ((this.ProfitBeforeTaxField.Equals(value) != true)) {
+                    this.ProfitBeforeTaxField = value;
+                    this.RaisePropertyChanged("ProfitBeforeTax");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ProfitBeforeTaxOutput {
+            get {
+                return this.ProfitBeforeTaxOutputField;
+            }
+            set {
+                if ((this.ProfitBeforeTaxOutputField.Equals(value) != true)) {
+                    this.ProfitBeforeTaxOutputField = value;
+                    this.RaisePropertyChanged("ProfitBeforeTaxOutput");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int SetupFeeForEuLoan {
+            get {
+                return this.SetupFeeForEuLoanField;
+            }
+            set {
+                if ((this.SetupFeeForEuLoanField.Equals(value) != true)) {
+                    this.SetupFeeForEuLoanField = value;
+                    this.RaisePropertyChanged("SetupFeeForEuLoan");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TenureAsMonthsOfLoanTerm {
+            get {
+                return this.TenureAsMonthsOfLoanTermField;
+            }
+            set {
+                if ((this.TenureAsMonthsOfLoanTermField.Equals(value) != true)) {
+                    this.TenureAsMonthsOfLoanTermField = value;
+                    this.RaisePropertyChanged("TenureAsMonthsOfLoanTerm");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal TenureAsPercentOfLoanTerm {
+            get {
+                return this.TenureAsPercentOfLoanTermField;
+            }
+            set {
+                if ((this.TenureAsPercentOfLoanTermField.Equals(value) != true)) {
+                    this.TenureAsPercentOfLoanTermField = value;
+                    this.RaisePropertyChanged("TenureAsPercentOfLoanTerm");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TotalCost {
+            get {
+                return this.TotalCostField;
+            }
+            set {
+                if ((this.TotalCostField.Equals(value) != true)) {
+                    this.TotalCostField = value;
+                    this.RaisePropertyChanged("TotalCost");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzServiceAdmin")]
     public interface IEzServiceAdmin {
@@ -965,6 +1466,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalance", ReplyAction="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalanceResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPricingModelModel", ReplyAction="http://tempuri.org/IEzService/GetPricingModelModelResponse")]
+        ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PricingModelCalculate", ReplyAction="http://tempuri.org/IEzService/PricingModelCalculateResponse")]
+        ServiceClientProxy.EzServiceReference.PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, ServiceClientProxy.EzServiceReference.PricingModelModel model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalytics", ReplyAction="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalyticsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackfillCompanyAnalytics();
@@ -1278,6 +1785,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId) {
             return base.Channel.GetExperianAccountsCurrentBalance(customerId, underwriterId);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId) {
+            return base.Channel.GetPricingModelModel(customerId, underwriterId);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, ServiceClientProxy.EzServiceReference.PricingModelModel model) {
+            return base.Channel.PricingModelCalculate(customerId, underwriterId, model);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackfillCompanyAnalytics() {

@@ -12,15 +12,18 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 	using Web.Models;
 	using NHibernate;
 	using System;
 
 	public class FullCustomerController : Controller
 	{
-
 		private readonly ICustomerRepository _customers;
 		private readonly ISession _session;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
@@ -34,6 +37,7 @@
 		private readonly LoanRepository _loanRepository;
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
+		private readonly ServiceClient serviceClient;
 
 		public FullCustomerController(
 											ICustomerRepository customers,
@@ -63,6 +67,7 @@
 			_docRepo = docRepo;
 			_bugs = bugs;
 			_loanRepository = loanRepository;
+			serviceClient = new ServiceClient();
 		}
 
 		//[Ajax]
@@ -103,7 +108,9 @@
 			model.PaymentAccountModel = new PaymentsAccountModel(customer);
 
 			model.MedalCalculations = new MedalCalculators(customer);
-			model.PricingModelCalculations = new PricingModelModel(customer.Id);
+			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customer.Id, context.UserId);
+			model.PricingModelCalculations = getPricingModelModelResponse.Value;
 
 			DateTime? lastDateCheck = null;
 			model.FraudDetectionLog = new FraudDetectionLogModel
@@ -141,7 +148,6 @@
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
-
 		private class FullCustomerModel
 		{
 			public PersonalInfoModel PersonalInfoModel { get; set; }
@@ -164,6 +170,5 @@
 			public CompanyScoreModel CompanyScore { get; set; }
 			public SortedSet<string> ExperianDirectors { get; set; }
 		}
-
 	}
 }

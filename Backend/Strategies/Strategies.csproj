@@ -87,6 +87,9 @@
     <Compile Include="Broker\BrokerLoadMarketingFiles.cs" />
     <Compile Include="Broker\BrokerUpdatePassword.cs" />
     <Compile Include="Broker\SpBrokerLoadOwnProperties.cs" />
+    <Compile Include="PricingModel\PricingModelCalculate.cs" />
+    <Compile Include="PricingModel\GetPricingModelModel.cs" />
+    <Compile Include="PricingModel\PricingModelModel.cs" />
     <Compile Include="Temp_BackfillCompanyAnalytics.cs" />
     <Compile Include="GetExperianAccountsCurrentBalance.cs" />
     <Compile Include="MailStrategies\VipRequest.cs" />
