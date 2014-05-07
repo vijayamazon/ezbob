@@ -7,6 +7,8 @@ using log4net.Layout;
 using log4net.Repository.Hierarchy;
 
 namespace Ezbob.Logger {
+	using JetBrains.Annotations;
+
 	#region class LegacyLog
 
 	public class LegacyLog : ASafeLog {
@@ -63,6 +65,7 @@ namespace Ezbob.Logger {
 
 		#region method OwnSay
 
+		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
 			switch (nSeverity) {
 			case Severity.Debug:
@@ -92,6 +95,7 @@ namespace Ezbob.Logger {
 			} // switch
 		} // OwnSay
 
+		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
 			switch (nSeverity) {
 			case Severity.Debug:

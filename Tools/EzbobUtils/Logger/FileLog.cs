@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Text;
 
 namespace Ezbob.Logger {
+	using JetBrains.Annotations;
+
 	#region class FileLog
 
 	public class FileLog : ASafeLog {
@@ -76,6 +78,7 @@ namespace Ezbob.Logger {
 
 		#region method OwnSay
 
+		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
 			lock (m_oLock) {
 				m_oLogFile.Write("{0} {1} ", CurrentTime, nSeverity.ToString());
@@ -86,6 +89,7 @@ namespace Ezbob.Logger {
 			} // lock
 		} // OwnSay
 
+		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
 			lock (m_oLock) {
 				m_oLogFile.Write("{0} {1} ", CurrentTime, nSeverity.ToString());

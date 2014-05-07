@@ -1,6 +1,8 @@
 ﻿using System;
 
 namespace Ezbob.Logger {
+	using JetBrains.Annotations;
+
 	#region class SafeLog
 
 	public class SafeLog : ASafeLog {
@@ -14,10 +16,12 @@ namespace Ezbob.Logger {
 
 		#region method OwnSay
 
+		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
 			// nothing here
 		} // OwnSay
 
+		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
 			// nothing here
 		} // OwnSay

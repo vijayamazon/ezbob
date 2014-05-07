@@ -2,6 +2,8 @@
 using log4net;
 
 namespace Ezbob.Logger {
+	using JetBrains.Annotations;
+
 	#region class SafeILog
 
 	public class SafeILog : ASafeLog {
@@ -21,6 +23,7 @@ namespace Ezbob.Logger {
 
 		#region method OwnSay
 
+		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
 			if (m_oiLog == null)
 				return;
@@ -73,6 +76,7 @@ namespace Ezbob.Logger {
 			} // switch
 		} // OwnSay
 
+		[StringFormatMethod("format")]
 		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
 			if (m_oiLog == null)
 				return;
