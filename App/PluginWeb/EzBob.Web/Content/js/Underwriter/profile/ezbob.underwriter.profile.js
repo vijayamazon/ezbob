@@ -77,10 +77,6 @@
         el: summaryInfo,
         model: this.summaryInfoModel
       });
-      this.dashboardInfoView = new EzBob.Underwriter.DashboardView({
-        el: dashboardInfo,
-        model: this.summaryInfoModel
-      });
       EzBob.App.vent.on('newCreditLine:done', function() {
         return _this.summaryInfoModel.fetch();
       });
@@ -139,6 +135,11 @@
       this.FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView({
         el: fraudDetection,
         model: this.FraudDetectionLogs
+      });
+      this.dashboardInfoView = new EzBob.Underwriter.DashboardView({
+        el: dashboardInfo,
+        model: this.summaryInfoModel,
+        crmModel: this.CustomerRelationsData
       });
       this.showed = true;
       this.controlButtons = new EzBob.Underwriter.ControlButtonsView({

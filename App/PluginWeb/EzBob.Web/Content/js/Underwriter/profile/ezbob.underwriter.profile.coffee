@@ -66,10 +66,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             el: summaryInfo
             model: @summaryInfoModel
         )
-        @dashboardInfoView = new EzBob.Underwriter.DashboardView(
-            el: dashboardInfo
-            model: @summaryInfoModel
-        )
+        
         EzBob.App.vent.on 'newCreditLine:done', => @summaryInfoModel.fetch()
         EzBob.App.vent.on 'newCreditLine:pass', => @summaryInfoModel.fetch()
 
@@ -130,6 +127,13 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             el: fraudDetection
             model: @FraudDetectionLogs
         )
+        
+        @dashboardInfoView = new EzBob.Underwriter.DashboardView(
+            el: dashboardInfo
+            model: @summaryInfoModel
+            crmModel: @CustomerRelationsData
+        )
+
         @showed = true
         @controlButtons = new EzBob.Underwriter.ControlButtonsView(
             el: controlButtons

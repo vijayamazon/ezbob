@@ -453,6 +453,7 @@
                 </div>
             </div>
         </div>
+        <%if(crm && crm.length > 0) {%>
         <div class="col-md-4">
             <div class="box">
                 <div class="box-title">
@@ -474,18 +475,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <% var count = 0;
+                            _.each(crm, function(item, i){
+                                if(item.User != 'System' && count < 5) { 
+                                    count++;%>
                             <tr>
-                                <td>Oct 1 2013</td>
-                                <td>rosb</td>
-                                <td>Call</td>
-                                <td>NoSale</td>
-                                <td>close loan send 3 last quarters of VAT</td>
+                                <td><%-EzBob.formatDate(new Date(moment(item.DateTime)))%></td>
+                                <td><%-item.User%></td>
+                                <td><%-item.Action%></td>
+                                <td><%-item.InOut%></td>
+                                <td><%-item.Comment%></td>
                             </tr>
+                            <%}});%>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+        <%}%>
     </div>
 </script>
 

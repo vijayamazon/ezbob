@@ -5,11 +5,14 @@ EzBob.Underwriter = EzBob.Underwriter or {}
 class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
     template: "#dashboard-template"
 
-    initialize: ->
+    initialize: (options) ->
+        @crmModel = options.crmModel
         @bindTo @model, "change sync", @render, this
+        @bindTo @crmModel, "change sync", @render, this
 
     serializeData: ->
         m: @model.toJSON()
+        crm: @crmModel.toJSON()
 
     events:
         'click a[data-action="collapse"]' : "boxToolClick"

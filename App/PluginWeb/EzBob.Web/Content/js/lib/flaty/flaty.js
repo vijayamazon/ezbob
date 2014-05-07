@@ -58,7 +58,7 @@ $(function () {
     EzBob.handleUserLayoutSetting();
     //Disable certain links
     $('a[href^=#]').click(function (e) {
-        return false;
+        e.preventDefault();
     });
 
     //slimScroll to fixed height tags
