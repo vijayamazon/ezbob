@@ -65,6 +65,20 @@
     }
   };
 
+  EzBob.BindingConverters.numericOnlyFormat = function (direction, value) {
+      var result;
+      debugger;
+      if (direction === 'ModelToView') {
+          value = EzBob.BindingConverters.floatNumbers(direction, value);
+          result = EzBob.BindingConverters.autonumericFormat(EzBob.numericOnlyFormat(2))(direction, value);
+          return result;
+      } else {
+          value = EzBob.BindingConverters.autonumericFormat(EzBob.numericOnlyFormat(2))(direction, value);
+          result = EzBob.BindingConverters.floatNumbers(direction, value);
+          return result;
+      }
+  };
+
   EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumericFormat(EzBob.moneyFormat);
 
   Backbone.Collection.prototype.safeFetch = function() {

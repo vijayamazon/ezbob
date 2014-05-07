@@ -64,15 +64,15 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 
         LoanTerm: {
             selector: "#loanTerm",
-            converter: EzBob.BindingConverters.autonumericFormat
+            converter: EzBob.BindingConverters.numericOnlyFormat
         },
         InterestOnlyPeriod: {
             selector: "#interestOnlyPeriod",
-            converter: EzBob.BindingConverters.autonumericFormat
+            converter: EzBob.BindingConverters.numericOnlyFormat
         },
         TenureAsMonthsOfLoanTerm: {
             selector: "#tenureAsMonthsOfLoanTerm",
-            converter: EzBob.BindingConverters.autonumericFormat
+            converter: EzBob.BindingConverters.numericOnlyFormat
         }
     },
 

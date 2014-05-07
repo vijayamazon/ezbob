@@ -2,7 +2,6 @@
 {
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Models;
 
 	public class GetPricingModelModel : AStrategy
 	{
@@ -22,9 +21,23 @@
 		
 		public override void Execute() {
 			// TODO: Fill model with real data
-			Model = new PricingModelModel();
-			Model.LoanAmount = customerId;
-			Model.InterestRate = 3.21m;
+			Model = new PricingModelModel
+				{
+					LoanAmount = customerId,
+					InterestRate = 3.21m,
+					DefaultRate = 1.3m,
+					InitiationFee = 150,
+					LoanTerm = 12,
+					InterestOnlyPeriod = 3,
+					TenureAsPercentOfLoanTerm = 55,
+					TenureAsMonthsOfLoanTerm = 2,
+					CollectionRate = 6.88m,
+					Cogs = 1000,
+					DebtPercentOfCapital = 6.51m,
+					CostOfDebt = 0.65m,
+					OpexAndCapex = 180,
+					ProfitBeforeTax = 291
+				};
 		}
 	}
 }
