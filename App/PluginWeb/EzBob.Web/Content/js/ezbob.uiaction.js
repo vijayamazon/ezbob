@@ -45,7 +45,7 @@ var EzBob = EzBob || {};
 	} // UiCachePkg
 
 	EzBob.UiAction = EzBob.UiAction || _.extend({}, EzBob.InternalDebug, {
-		internalDebugEnabled: true,
+		internalDebugEnabled: false,
 		internalDebugName: 'UiAction',
 
 		flushInterval: 30, // seconds

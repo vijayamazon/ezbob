@@ -65,6 +65,8 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
 
         this.$el.find('.field_status').field_status({ required: true });
 
+	    EzBob.UiAction.registerView(this);
+
         return this;
     },
 

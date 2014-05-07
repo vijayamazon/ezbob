@@ -45,7 +45,7 @@ EzBob.Profile.ConsumersAgreementView = EzBob.Profile.AgreementViewBase.extend({
 	render: function(data) {
 		$(".company-preAgreement").hide();
 		$(".consumer-preAgreement").show();
-		return ConsumersAgreementView.__super__.render.call(this, data);
+		EzBob.Profile.ConsumersAgreementView.__super__.render.call(this, data);
 	}, // render
 }); // EzBob.Profile.ConsumersAgreementView
 

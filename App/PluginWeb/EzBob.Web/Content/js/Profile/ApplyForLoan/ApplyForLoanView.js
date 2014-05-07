@@ -196,6 +196,10 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		this.validator = EzBob.validateLoanLegalForm(this.ui.form, [pi.FirstName, pi.Surname]);
 
+		this.$el.find('form.LoanLegal').submit(function(evt) {
+			return self.submit(evt);
+		});
+
 		EzBob.UiAction.registerView(this);
 
 		return this;
