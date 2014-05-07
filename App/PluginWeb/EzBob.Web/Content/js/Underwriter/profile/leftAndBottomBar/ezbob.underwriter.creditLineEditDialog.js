@@ -21,7 +21,10 @@
 
     CreditLineEditDialog.prototype.initialize = function(options) {
       this.model = options.model;
-      return this.modelBinder = new Backbone.ModelBinder();
+      this.modelBinder = new Backbone.ModelBinder();
+      this.method = null;
+      this.medal = null;
+      return this.value = null;
     };
 
     CreditLineEditDialog.prototype.events = {
@@ -61,12 +64,13 @@
     };
 
     CreditLineEditDialog.prototype.suggestedAmountClicked = function(el) {
-      var $elem, medal, method, value;
+      var $elem;
       $elem = $(el.currentTarget);
-      method = $elem.data('method');
-      medal = $elem.data('medal');
-      value = $elem.data('value');
-      this.ui.amount.val(value).change();
+      this.method = $elem.data('method');
+      this.medal = $elem.data('medal');
+      this.value = $elem.data('value');
+      this.ui.amount.val(this.value).change();
+      this.save();
       return false;
     };
 
@@ -75,7 +79,10 @@
       m = this.model.toJSON();
       data = {
         id: m.CashRequestId,
-        amount: m.amount
+        amount: m.amount,
+        method: this.method,
+        medal: this.medal,
+        value: this.value
       };
       return data;
     };

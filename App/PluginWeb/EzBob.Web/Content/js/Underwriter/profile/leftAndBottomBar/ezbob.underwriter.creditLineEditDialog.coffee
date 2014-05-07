@@ -8,6 +8,10 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
     initialize: (options) ->
         @model = options.model
         @modelBinder = new Backbone.ModelBinder()
+        
+        @method = null
+        @medal = null
+        @value = null
 
     events: 
         'click .btnOk': 'save'
@@ -36,18 +40,23 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
 
     suggestedAmountClicked: (el) ->
         $elem = $(el.currentTarget)
-        method = $elem.data('method')
-        medal = $elem.data('medal')
-        value = $elem.data('value')
-        @ui.amount.val(value).change()
+        @method = $elem.data('method')
+        @medal = $elem.data('medal')
+        @value = $elem.data('value')
+        @ui.amount.val(@value).change()
+        
+        @save()
         false
 
     getPostData:->
         m = @model.toJSON()
         
         data =
-            id                          : m.CashRequestId
-            amount                      : m.amount
+            id     : m.CashRequestId
+            amount : m.amount
+            method : @method
+            medal  : @medal
+            value  : @value
 
         return data
             

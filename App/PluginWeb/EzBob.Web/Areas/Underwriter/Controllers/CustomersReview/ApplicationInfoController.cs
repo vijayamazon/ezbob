@@ -1,4 +1,5 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+{
 	using System.Data;
 	using System.Globalization;
 	using Code.Agreements;
@@ -24,7 +25,8 @@
 	using StructureMap;
 	using log4net;
 
-	public class ApplicationInfoController : Controller {
+	public class ApplicationInfoController : Controller
+	{
 		private readonly ICustomerRepository _customerRepository;
 		private readonly ICashRequestsRepository _cashRequestsRepository;
 		private readonly ILoanTypeRepository _loanTypes;
@@ -33,13 +35,14 @@
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly IPacNetManualBalanceRepository _pacNetManualBalanceRepository;
-		private readonly ICustomerStatusesRepository customerStatusesRepository;
-		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
-		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
-		private readonly ICustomerStatusHistoryRepository customerStatusHistoryRepository;
+		private readonly ICustomerStatusesRepository _customerStatusesRepository;
+		private readonly IApprovalsWithoutAMLRepository _approvalsWithoutAmlRepository;
+		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
+		private readonly ICustomerStatusHistoryRepository _customerStatusHistoryRepository;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IUsersRepository _users;
-		private readonly IEzbobWorkplaceContext context;
+		private readonly IEzbobWorkplaceContext _context;
+		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ApplicationInfoController));
 
@@ -58,8 +61,9 @@
 			ICustomerStatusHistoryRepository customerStatusHistoryRepository,
 			ILoanSourceRepository loanSources,
 			IUsersRepository users,
-			IEzbobWorkplaceContext context
-		) {
+			IEzbobWorkplaceContext context,
+			ISuggestedAmountRepository suggestedAmountRepository)
+		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
 			_loanTypes = loanTypes;
@@ -68,20 +72,22 @@
 			_crBuilder = crBuilder;
 			_infoModelBuilder = infoModelBuilder;
 			_pacNetManualBalanceRepository = pacNetManualBalanceRepository;
-			this.customerStatusesRepository = customerStatusesRepository;
-			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
-			this.configurationVariablesRepository = configurationVariablesRepository;
-			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
+			_customerStatusesRepository = customerStatusesRepository;
+			_approvalsWithoutAmlRepository = approvalsWithoutAMLRepository;
+			_configurationVariablesRepository = configurationVariablesRepository;
+			_customerStatusHistoryRepository = customerStatusHistoryRepository;
 			_loanSources = loanSources;
 			_users = users;
-			this.context = context;
+			_context = context;
+			_suggestedAmountRepository = suggestedAmountRepository;
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonResult Index(int id) {
+		public JsonResult Index(int id)
+		{
 			var customer = _customerRepository.Get(id);
 			var m = new ApplicationInfoModel();
 			var cr = customer.LastCashRequest;
@@ -91,21 +97,23 @@
 
 		[Ajax]
 		[OutputCache(VaryByParam = "status", Duration = int.MaxValue)]
-		public JsonResult GetIsStatusWarning(int status) {
-			bool res = customerStatusesRepository.GetIsWarning(status);
+		public JsonResult GetIsStatusWarning(int status)
+		{
+			bool res = _customerStatusesRepository.GetIsWarning(status);
 			return Json(res, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public void LogStatusChange(int newStatus, int prevStatus, int customerId) {
+		public void LogStatusChange(int newStatus, int prevStatus, int customerId)
+		{
 			var newEntry = new CustomerStatusHistory();
 			newEntry.Username = User.Identity.Name;
 			newEntry.Timestamp = DateTime.UtcNow;
 			newEntry.CustomerId = customerId;
 			newEntry.PreviousStatus = prevStatus;
 			newEntry.NewStatus = newStatus;
-			customerStatusHistoryRepository.SaveOrUpdate(newEntry);
+			_customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 		}
 
 		[HttpPost]
@@ -113,7 +121,8 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeCashRequestOpenCreditLine(long id, double amount) {
+		public JsonResult ChangeCashRequestOpenCreditLine(long id, double amount, string method, string medal, decimal? value)
+		{
 			_limit.Check(amount);
 			var cr = _cashRequestsRepository.Get(id);
 			int step = CurrentValues.Instance.GetCashSliderStep;
@@ -123,23 +132,40 @@
 
 			Log.DebugFormat("CashRequest({0}).ManagerApprovedSum = {1}", id, cr.ManagerApprovedSum);
 
+			if (value.HasValue && value.Value > 0)
+			{
+				var underwriter = _context.User;
+				var sa = new SuggestedAmount
+					{
+						InsertDate = DateTime.UtcNow,
+						Customer = cr.Customer,
+						Underwriter = underwriter,
+						CashRequest = cr,
+						Amount = value.Value,
+						Medal = medal,
+						Method = method
+					};
+				_suggestedAmountRepository.SaveOrUpdate(sa);
+			}
 			return Json(true);
 		}
 
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
-		public void SaveApproveWithoutAML(int customerId, bool doNotShowAgain) {
+		public void SaveApproveWithoutAML(int customerId, bool doNotShowAgain)
+		{
 			Log.DebugFormat("Saving approve without AML. Customer:{0} doNotShowAgain = {1}", customerId, doNotShowAgain);
 
-			var entry = new ApprovalsWithoutAML {
+			var entry = new ApprovalsWithoutAML
+			{
 				CustomerId = customerId,
 				DoNotShowAgain = doNotShowAgain,
 				Timestamp = DateTime.UtcNow,
 				Username = User.Identity.Name
 			};
 
-			approvalsWithoutAMLRepository.SaveOrUpdate(entry);
+			_approvalsWithoutAmlRepository.SaveOrUpdate(entry);
 		}
 
 		[HttpPost]
@@ -147,8 +173,10 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "PacnetManualButton")]
-		public JsonResult SavePacnetManual(int amount, int limit) {
-			var newEntry = new PacNetManualBalance {
+		public JsonResult SavePacnetManual(int amount, int limit)
+		{
+			var newEntry = new PacNetManualBalance
+			{
 				Date = DateTime.UtcNow,
 				Enabled = true,
 				Amount = amount,
@@ -164,8 +192,10 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "PacnetManualButton")]
-		public JsonResult DisableTodaysPacnetManual(bool isSure) {
-			if (isSure) {
+		public JsonResult DisableTodaysPacnetManual(bool isSure)
+		{
+			if (isSure)
+			{
 				_pacNetManualBalanceRepository.DisableCurrents();
 			}
 			return Json(true);
@@ -175,7 +205,8 @@
 		[Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Permission(Name = "CreditLineFields")]
-		public void LoanType(long id, int loanType) {
+		public void LoanType(long id, int loanType)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			var loanT = _loanTypes.Get(loanType);
 			cr.LoanType = loanT;
@@ -187,7 +218,8 @@
 		[HttpPost]
 		[Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonResult DiscountPlan(long id, int discountPlanId) {
+		public JsonResult DiscountPlan(long id, int discountPlanId)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			var discount = _discounts.Get(discountPlanId);
 			cr.DiscountPlan = discount;
@@ -199,13 +231,15 @@
 		[HttpPost]
 		[Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonResult LoanSource(long id, int LoanSourceID) {
+		public JsonResult LoanSource(long id, int LoanSourceID)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.LoanSource = _loanSources.Get(LoanSourceID);
 
 			if (cr.LoanSource == null)
 				cr.IsCustomerRepaymentPeriodSelectionAllowed = true;
-			else {
+			else
+			{
 				cr.IsCustomerRepaymentPeriodSelectionAllowed = cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed;
 				cr.IsLoanTypeSelectionAllowed = cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed ? 1 : 0;
 				if (cr.LoanSource.DefaultRepaymentPeriod.HasValue)
@@ -220,7 +254,8 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeCashRequestInterestRate(long id, decimal interestRate) {
+		public JsonResult ChangeCashRequestInterestRate(long id, decimal interestRate)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.InterestRate = interestRate / 100;
 			cr.LoanTemplate = null;
@@ -235,7 +270,8 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeCashRequestRepaymentPeriod(long id, int period) {
+		public JsonResult ChangeCashRequestRepaymentPeriod(long id, int period)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.RepaymentPeriod = period;
 			cr.LoanTemplate = null;
@@ -249,7 +285,8 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
-		public void SaveDetails(int id, string details) {
+		public void SaveDetails(int id, string details)
+		{
 			var cust = _customerRepository.Get(id);
 			if (cust == null)
 				return;
@@ -262,7 +299,8 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public void ChangeSetupFee(long id, bool enbaled) {
+		public void ChangeSetupFee(long id, bool enbaled)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.UseSetupFee = enbaled;
 			cr.LoanTemplate = null;
@@ -271,7 +309,8 @@
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public void ChangeBrokerSetupFee(long id, bool enbaled) {
+		public void ChangeBrokerSetupFee(long id, bool enbaled)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.UseBrokerSetupFee = enbaled;
 			cr.LoanTemplate = null;
@@ -351,10 +390,12 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
-		public JsonResult UpdateTrustPilotStatus(int id, string status) {
+		public JsonResult UpdateTrustPilotStatus(int id, string status)
+		{
 			Customer oCustomer = _customerRepository.Get(id);
 
-			if (oCustomer == null) {
+			if (oCustomer == null)
+			{
 				Log.DebugFormat("Customer({0}) not found", id);
 				return Json(new { error = "Customer not found.", id = id, status = status });
 			} // if
@@ -363,14 +404,16 @@
 
 			TrustPilotStauses nStatus;
 
-			if (!Enum.TryParse<TrustPilotStauses>(status, true, out nStatus)) {
+			if (!Enum.TryParse<TrustPilotStauses>(status, true, out nStatus))
+			{
 				Log.DebugFormat("Status({0}) not found", status);
 				return Json(new { error = "Failed to parse status.", id = id, status = status });
 			} // if
 
 			var oTsp = oHelper.TrustPilotStatusRepository.Find(nStatus);
 
-			if (oTsp == null) {
+			if (oTsp == null)
+			{
 				Log.DebugFormat("Status({0}) not found in the DB repository.", status);
 				return Json(new { error = "Status not found in the DB repository.", id = id, status = status });
 			} // if
@@ -386,7 +429,8 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public void AvoidAutomaticDecision(int id, bool enbaled) {
+		public void AvoidAutomaticDecision(int id, bool enbaled)
+		{
 			var cust = _customerRepository.Get(id);
 			cust.IsAvoid = enbaled;
 			Log.DebugFormat("Customer({0}).IsAvoided = {1}", id, enbaled);
@@ -397,7 +441,8 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public void AllowSendingEmails(long id, bool enbaled) {
+		public void AllowSendingEmails(long id, bool enbaled)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.EmailSendingBanned = !enbaled;
 			cr.LoanTemplate = null;
@@ -409,7 +454,8 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public void IsLoanTypeSelectionAllowed(long id, int loanTypeSelection) {
+		public void IsLoanTypeSelectionAllowed(long id, int loanTypeSelection)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.IsLoanTypeSelectionAllowed = loanTypeSelection;
 			Log.DebugFormat("CashRequest({0}).IsLoanTypeSelectionAllowed = {1}", id, cr.IsLoanTypeSelectionAllowed);
@@ -420,7 +466,8 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public void ChangeOferValid(int id, string date) {
+		public void ChangeOferValid(int id, string date)
+		{
 			var cust = _customerRepository.Get(id);
 			if (cust == null)
 				return;
@@ -439,7 +486,8 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public void ChangeStartingDate(int id, string date) {
+		public void ChangeStartingDate(int id, string date)
+		{
 			var cust = _customerRepository.Get(id);
 			if (cust == null)
 				return;
@@ -449,7 +497,7 @@
 
 			var dt = FormattingUtils.ParseDateWithCurrentTime(date);
 
-			int offerValidForHours = (int)configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
+			int offerValidForHours = (int)_configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
 
 			var cr = cust.LastCashRequest;
 			cust.OfferStart = dt;
@@ -466,8 +514,9 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "NewCreditLineButton")]
-		public JsonResult RunNewCreditLine(int Id, int newCreditLineOption) {
-			return Json(new {Message = "Go to new mode"});
+		public JsonResult RunNewCreditLine(int Id, int newCreditLineOption)
+		{
+			return Json(new { Message = "Go to new mode" });
 		}
 
 		[HttpPost]
@@ -486,7 +535,7 @@
 			customer.OfferStart = cashRequest.OfferStart;
 			customer.OfferValidUntil = cashRequest.OfferValidUntil;
 
-			return Json(new {});
+			return Json(new { });
 		}
 
 		[HttpPost]
@@ -501,7 +550,7 @@
 			_crBuilder.ForceEvaluate(underwriter.Id, customer, (NewCreditLineOption)newCreditLineOption, false, true);
 			return Json(new { });
 		}
-		
+
 		[HttpPost, Transactional, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool useBrokerSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed, int discountPlan, decimal? manualSetupFeeAmount, decimal? manualSetupFeePercent)
 		{
@@ -534,7 +583,7 @@
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ActivateMainStrategy(int customerId)
 		{
-			int underwriterId = context.User.Id;
+			int underwriterId = _context.User.Id;
 
 			new ServiceClient().Instance.MainStrategy1(underwriterId, customerId, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0);
 
@@ -544,7 +593,7 @@
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ActivateFinishWizard(int customerId)
 		{
-			int underwriterId = context.User.Id;
+			int underwriterId = _context.User.Id;
 
 			var oArgs = new FinishWizardArgs { CustomerID = customerId, };
 
@@ -554,8 +603,10 @@
 		}
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
-		public JsonResult CreateLoanHidden(int nCustomerID, decimal nAmount, string sDate) {
-			try {
+		public JsonResult CreateLoanHidden(int nCustomerID, decimal nAmount, string sDate)
+		{
+			try
+			{
 				var lc = new LoanCreatorNoChecks(
 					ObjectFactory.GetInstance<ILoanHistoryRepository>(),
 					ObjectFactory.GetInstance<IPacnetService>(),
@@ -574,7 +625,8 @@
 
 				return Json(new { success = true, error = false, });
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Log.Warn("Could not create a hidden loan.", e);
 				return Json(new { success = false, error = e.Message, });
 			} // try

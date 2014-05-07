@@ -114,6 +114,7 @@ namespace EzBob.Web.Infrastructure
 			For<IUsersRepository>().Use<UsersRepository>();
 			For<IRolesRepository>().Use<RolesRepository>();
 			For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
+			For<ISuggestedAmountRepository>().Use<SuggestedAmountRepository>();
 		}
 	}
 }
