@@ -1394,7 +1394,7 @@ $.validator.addMethod('validateSignerName', function(value, element, params) {
 	re = new RegExp('^' + sLastName + ' (.+ )?' + sFirstName + '$', 'i');
 
 	return sSignature.match(re) ? true : false;
-}, 'Please sign your name.');
+}, 'Please type your full name as it appears in the agreement.');
 
 EzBob.validateLoanLegalForm = function (el, aryCustomerName) {
     var e = el || $(".LoanLegal");
