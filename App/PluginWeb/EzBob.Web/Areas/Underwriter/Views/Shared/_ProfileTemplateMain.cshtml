@@ -1,13 +1,14 @@
 ﻿@model dynamic
 <script id="profile-template-main" type="text/template">
-    <div id="spl">
-        <div class="left-underwriter-pane">
+    <div class="container" id="main-container">
+        <div id="sidebar-dashboard" class="navbar-collapse collapse">
             <div class="profile-person-info"/>
             <div class="profile-loan-info"/>
         </div>
-        <div class="profile-tabs">
+        <div id="main-content" class="profile-tabs">
             <div class="tabbable">
                 <ul class="nav nav-tabs">
+                    <li><a href="#dashboard" data-toggle="tab">Dashboard</a></li>
                     <li><a href="#profile-summary" data-toggle="tab">Profile Summary</a></li>
                     <li><a href="#marketplaces" data-toggle="tab">
                         <div class="source_labels new-ribbon" id="new-ribbon-marketplaces"></div>
@@ -22,8 +23,10 @@
                     <li><a href="#apiChecks" data-toggle="tab">API checks log</a></li>
                     <li><a href="#customerRelations" data-toggle="tab">Customer relations</a></li>
                     <li><a href="#fraudDetection" data-toggle="tab">Fraud detection</a></li>
+
                 </ul>
                 <div class="tab-content">
+                    <div class="tab-pane" id="dashboard"></div>
                     <div class="tab-pane" id="profile-summary"></div>
                     <div class="tab-pane" id="marketplaces"></div>
                     <div class="tab-pane" id="payment-accounts"></div>
@@ -76,6 +79,7 @@
     Html.RenderPartial("~/Areas/Underwriter/Views/Shared/PaymentAccounts/_PaymentAccountsTemplate.cshtml");
     Html.RenderPartial("ProfileLoanInfoTemplate");
     Html.RenderPartial("ProfileSummary");
+    Html.RenderPartial("Dashboard");
     Html.RenderPartial("CreditBureau");
     Html.RenderPartial("_MedalCalculationTemplate");
     Html.RenderPartial("PricingModelCalculationTemplate");

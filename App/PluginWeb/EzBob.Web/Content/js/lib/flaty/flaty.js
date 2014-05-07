@@ -58,7 +58,7 @@ $(function () {
     EzBob.handleUserLayoutSetting();
     //Disable certain links
     $('a[href^=#]').click(function (e) {
-        e.preventDefault()
+        return false;
     });
 
     //slimScroll to fixed height tags
@@ -317,7 +317,7 @@ $(function () {
                 $('#' + $(this).data('modal')).modal('show');
                 break;
         }
-        e.preventDefault();
+        return false;
     });
 
     //-------------------------- Mail Page -----------------------------//

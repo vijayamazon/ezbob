@@ -1,0 +1,491 @@
+﻿@model dynamic
+<script id="dashboard-template" type="text/template">
+    <div>
+        <div class="col-md-8">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Offer</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <ul class="summary-offer">
+                        <li>
+                            <p>
+                                <span>Amount</span>
+                                <span class="light-green">30,000</span>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <span>Monthly interest</span>
+                                <span class="light-green">3.2%</span>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <span>Term</span>
+                                <span class="light-green">12 months</span>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <span>Setup fee</span>
+                                <span class="light-green">3.5%</span>
+                            </p>
+                        </li>
+                    </ul>
+
+                    <div class="form-group">
+                        <button class="btn btn-primary" id="offer-edit">edit</button>
+                        <button class="btn btn-primary" id="offer-calculate">calculate</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Alerts</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <div class="alert alert-danger hidden-xs">
+                        <button class="close" data-dismiss="alert">&times;</button>
+                        <h4>Error</h4>
+                        <p>some error.</p>
+                    </div>
+                    <div class="alert alert-danger hidden-xs">
+                        <button class="close" data-dismiss="alert">&times;</button>
+                        <h4>Error</h4>
+                        <p>some other error.</p>
+                    </div>
+                    <div class="alert alert-warning hidden-xs">
+                        <button class="close" data-dismiss="alert">&times;</button>
+                        <h4>Warning</h4>
+                        <p>some warning.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="col-md-8">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Customer & Directors</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="tile tile-green">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Score
+                                </div>
+                                <p class="title text-center">759</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-orange">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Indebtedness
+                                </div>
+                                <p class="title text-center">35</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-green">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Accounts
+                                </div>
+                                <p class="title text-center">7</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-green">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;CCJ/Recent CCJ
+                                </div>
+                                <p class="title text-center">0/0</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-green">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Defaults
+                                </div>
+                                <p class="title text-center">0</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-green">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Balance
+                                </div>
+                                <p class="title text-center">219K</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="tile">
+                                graph
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-red">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Director 1
+                                </div>
+                                <p class="title text-center">330</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-orange">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Director 2
+                                </div>
+                                <p class="title text-center">550</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Data Sources</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Bank(1)</td>
+                                <td>HSBC</td>
+                                <td>10M</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="col-md-8">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Company</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="tile tile-green">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Score
+                                </div>
+                                <p class="title text-center">92</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-green">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;CCJ/Recent CCJ
+                                </div>
+                                <p class="title text-center">0/0</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-orange">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Tangible equity
+                                </div>
+                                <p class="title text-center">56,250</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="tile tile-green">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Adjusted profit
+                                </div>
+                                <p class="title text-center">18,340</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="tile">
+                                graph
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Assets & Worth</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="tile tile-grey">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Properties
+                                </div>
+                                <p class="title text-center">3</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="tile tile-lightgrey">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Net Worth
+                                </div>
+                                <p class="title text-center blue">269K</p>
+                                <p class="title-small text-center">(33%)</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="tile tile-grey">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Market value
+                                </div>
+                                <p class="title text-center">825K</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="tile tile-lightgrey">
+                                <div class="caption">
+                                    <i class="fa fa-flash"></i>&nbsp;Mortgages (2)
+                                </div>
+                                <p class="title text-center">556K</p>
+                                <p class="title-small text-center">(TLV: 67%)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="col-md-8">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Affordability</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Caption</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>annual</td>
+                                <td>in 000</td>
+                            </tr>
+                            <tr>
+                                <td>revenues</td>
+                                <td>333</td>
+                            </tr>
+                            <tr>
+                                <td>opex</td>
+                                <td>300</td>
+                            </tr>
+                            <tr class="chkpt">
+                                <td>gross profit</td>
+                                <td>33</td>
+                            </tr>
+                            <tr>
+                                <td>salaries</td>
+                                <td>30</td>
+                            </tr>
+                            <tr>
+                                <td>tax</td>
+                                <td>3</td>
+                            </tr>
+                            <tr class="chkpt">
+                                <td>EBITDA</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>loan repayment</td>
+                                <td>15</td>
+                            </tr>
+                            <tr class="chkpt">
+                                <td>FCF</td>
+                                <td><span class="label label-large label-important">(500K)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="col-md-8">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Customer History</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <div class="tabbable tabs-left">
+                        <ul class="nav nav-tabs active-red">
+                            <li class="active"><a href="#loans" data-toggle="tab"><span class="label label-large label-warning">0 </span>Loans</a></li>
+                            <li><a href="#approves" data-toggle="tab"><span class="label label-large label-success">5 </span>Approves</a></li>
+                            <li><a href="#rejects" data-toggle="tab"><span class="label label-large label-important">10</span> Rejects</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="loans">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Amount</th>
+                                            <th>Repaid</th>
+                                            <th>Given</th>
+                                            <th>Closed</th>
+                                            <th>Outstanding</th>
+                                            <th>Outstanding Principal</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>200</td>
+                                            <td>232.78</td>
+                                            <td>Aug 31 2012</td>
+                                            <td>Sep 1 2012</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>Paid</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="approves">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Start date</th>
+                                            <th>End date</th>
+                                            <th>Amount</th>
+                                            <th>Interest rate</th>
+                                            <th>Setup fee</th>
+                                            <th>Repayment period</th>
+                                            <th>Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Oct 1 2013</td>
+                                            <td>Oct 2 2013</td>
+                                            <td>900</td>
+                                            <td>6%</td>
+                                            <td></td>
+                                            <td>3</td>
+                                            <td>Standard</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="rejects">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Oct 1 2013</td>
+                                            <td>low sales</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Customer Relations</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>In\Out</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Oct 1 2013</td>
+                                <td>rosb</td>
+                                <td>Call</td>
+                                <td>NoSale</td>
+                                <td>close loan send 3 last quarters of VAT</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+

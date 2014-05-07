@@ -517,6 +517,26 @@ hr.margin-0  {margin: 0;}
 #sidebar+#main-content {
     margin-left: 200px;
 }
+
+#sidebar-dashboard {
+    width: 250px;
+    position: absolute;
+    z-index: 5;
+}
+#sidebar-dashboard:before {
+    content: "";
+    display: block;
+    width: 250px;
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    z-index: 0;
+}
+#sidebar-dashboard+#main-content {
+    margin-left: 250px;
+}
+
+
 .navbar-collapse {
     padding-right: 0;
     padding-left: 0;
@@ -4713,7 +4733,7 @@ div.tagsinput .not_valid {
     border-color: #4ca4ee;
 }
 
-#sidebar:before,
+#sidebar.bg:before,
 .nav-list .search-form,
 .nav-list .search-pan input,
 #nav-horizontal.nav-xs > li > a,

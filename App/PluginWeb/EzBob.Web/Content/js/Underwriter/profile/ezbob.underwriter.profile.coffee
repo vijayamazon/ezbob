@@ -11,6 +11,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         profileInfo = @$el.find(".profile-person-info")
         loanInfo = @$el.find(".profile-loan-info")
         summaryInfo = @$el.find("#profile-summary")
+        dashboardInfo = @$el.find("#dashboard")
         marketplaces = @$el.find("#marketplaces")
         experianInfo = @$el.find("#credit-bureau")
         paymentAccounts = @$el.find("#payment-accounts")
@@ -22,7 +23,6 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         alertPassed = @$el.find("#alerts-passed")
         controlButtons = @$el.find "#controlButtons"
         fraudDetection = @$el.find("#fraudDetection")
-
         @personalInfoModel = new EzBob.Underwriter.PersonalInfoModel()
         @profileInfoView = new EzBob.Underwriter.PersonInfoView(
             el: profileInfo
@@ -64,6 +64,10 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         @summaryInfoModel = new EzBob.Underwriter.SummaryInfoModel()
         @summaryInfoView = new EzBob.Underwriter.SummaryInfoView(
             el: summaryInfo
+            model: @summaryInfoModel
+        )
+        @dashboardInfoView = new EzBob.Underwriter.DashboardView(
+            el: dashboardInfo
             model: @summaryInfoModel
         )
         EzBob.App.vent.on 'newCreditLine:done', => @summaryInfoModel.fetch()
@@ -381,13 +385,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @recordRecentCustomers(id)
             
             EzBob.UpdateBugsIcons fullModel.get("Bugs")
-            
-            if that.$el.find(".vsplitbar").length is 0
-                $("#spl").splitter
-                    minLeft: 280
-                    sizeLeft: 300
-                    minRight: 600
-        
+
             @experianInfoModel.set {Id: id} , {silent: true}
             @experianInfoModel.set fullModel.get("CreditBureauModel"), silent: true
             @experianInfoModel.trigger "sync"

@@ -593,6 +593,7 @@
     <Content Include="Areas\Broker\Files\credit.file.release.and.consent.2014-03-25.doc" />
     <Content Include="Areas\Broker\Files\credit.file.release.and.consent.doc" />
     <Content Include="Areas\Underwriter\Views\Shared\PricingModelCalculationTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\Dashboard.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1234,6 +1235,12 @@
     </Content>
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.min.js">
       <DependentUpon>ezbob.underwriter.bankAccountDetails.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js">
+      <DependentUpon>ezbob.underwriter.dashboard.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.min.js">
+      <DependentUpon>ezbob.underwriter.dashboard.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
@@ -1956,6 +1963,7 @@
       <DependentUpon>ezbob.wizard.shops.js</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.coffee" />
+    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />
