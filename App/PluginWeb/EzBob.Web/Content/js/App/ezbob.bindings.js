@@ -67,7 +67,6 @@
 
   EzBob.BindingConverters.numericOnlyFormat = function (direction, value) {
       var result;
-      debugger;
       if (direction === 'ModelToView') {
           value = EzBob.BindingConverters.floatNumbers(direction, value);
           result = EzBob.BindingConverters.autonumericFormat(EzBob.numericOnlyFormat(2))(direction, value);
