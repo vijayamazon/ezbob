@@ -380,6 +380,11 @@ table tr.editing td {
 
 .profile-person-info {
     margin-top: 21px;
+    position: relative;
+}
+
+.profile-loan-info {
+    position: relative;
 }
 
 .left-underwriter-menu {

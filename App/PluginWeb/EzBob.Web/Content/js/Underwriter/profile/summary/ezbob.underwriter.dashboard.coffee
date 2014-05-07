@@ -7,12 +7,17 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
 
     initialize: (options) ->
         @crmModel = options.crmModel
+        @personalModel = options.personalModel
+        @experianModel = options.experianModel
         @bindTo @model, "change sync", @render, this
         @bindTo @crmModel, "change sync", @render, this
+        @bindTo @personalModel, "change sync", @render, this
+        @bindTo @experianModel, "change sync", @render, this
 
     serializeData: ->
         m: @model.toJSON()
         crm: @crmModel.toJSON()
+        experian: @experianModel.toJSON()
 
     events:
         'click a[data-action="collapse"]' : "boxToolClick"
@@ -43,6 +48,6 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
       false
 
     onRender: ->
-        console.log 'render', @model
+        #console.log 'render', @model
 
 

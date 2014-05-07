@@ -139,7 +139,9 @@
       this.dashboardInfoView = new EzBob.Underwriter.DashboardView({
         el: dashboardInfo,
         model: this.summaryInfoModel,
-        crmModel: this.CustomerRelationsData
+        crmModel: this.CustomerRelationsData,
+        personalModel: this.personalInfoModel,
+        experianModel: this.experianInfoModel
       });
       this.showed = true;
       this.controlButtons = new EzBob.Underwriter.ControlButtonsView({

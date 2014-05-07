@@ -21,14 +21,19 @@
 
     DashboardView.prototype.initialize = function(options) {
       this.crmModel = options.crmModel;
+      this.personalModel = options.personalModel;
+      this.experianModel = options.experianModel;
       this.bindTo(this.model, "change sync", this.render, this);
-      return this.bindTo(this.crmModel, "change sync", this.render, this);
+      this.bindTo(this.crmModel, "change sync", this.render, this);
+      this.bindTo(this.personalModel, "change sync", this.render, this);
+      return this.bindTo(this.experianModel, "change sync", this.render, this);
     };
 
     DashboardView.prototype.serializeData = function() {
       return {
         m: this.model.toJSON(),
-        crm: this.crmModel.toJSON()
+        crm: this.crmModel.toJSON(),
+        experian: this.experianModel.toJSON()
       };
     };
 
@@ -69,9 +74,7 @@
       return false;
     };
 
-    DashboardView.prototype.onRender = function() {
-      return console.log('render', this.model);
-    };
+    DashboardView.prototype.onRender = function() {};
 
     return DashboardView;
 

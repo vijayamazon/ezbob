@@ -132,6 +132,8 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             el: dashboardInfo
             model: @summaryInfoModel
             crmModel: @CustomerRelationsData
+            personalModel: @personalInfoModel
+            experianModel: @experianInfoModel
         )
 
         @showed = true
