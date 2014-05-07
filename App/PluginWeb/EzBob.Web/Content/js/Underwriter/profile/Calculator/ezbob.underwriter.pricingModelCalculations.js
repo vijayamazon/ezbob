@@ -114,7 +114,15 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     calculateClicked: function () {
         BlockUi();
         var that = this;
-        var request = $.post(window.gRootPath + 'Underwriter/PricingModelCalculations/Calculate', { loanAmount: this.model.get('LoanAmount') }); // TODO: pass the entire model
+
+        var request = $.post(
+			window.gRootPath + 'Underwriter/PricingModelCalculations/Calculate',
+			{
+				customerId: this.model.get('Id'),
+				loanAmountModel: JSON.stringify(this.model.toJSON()),
+			}
+		);
+
         request.success(function (res) {
             that.model.set('MonthlyInterestToCharge', res.MonthlyInterestToCharge);
             that.model.set('SetupFeeForEuLoan', res.SetupFeeForEuLoan);

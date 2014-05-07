@@ -1,7 +1,6 @@
-﻿using System;
-using log4net;
-
-namespace Ezbob.Logger {
+﻿namespace Ezbob.Logger {
+	using System;
+	using log4net;
 	using JetBrains.Annotations;
 
 	#region class SafeILog
@@ -11,8 +10,21 @@ namespace Ezbob.Logger {
 
 		#region constructor
 
-		public SafeILog(ILog oiLog, ASafeLog oLog = null) : base(oLog) {
-			m_oiLog = oiLog;
+		public SafeILog(object oCaller, ASafeLog oLog = null) : base(oLog) {
+			if (ReferenceEquals(oCaller, null))
+				return;
+
+			if (oCaller.GetType() == typeof(Type)) {
+				m_oiLog = LogManager.GetLogger(oCaller as Type);
+				return;
+			} // if
+
+			if (oCaller is ILog) {
+				m_oiLog = oCaller as ILog;
+				return;
+			} // if
+
+			m_oiLog = LogManager.GetLogger(oCaller.GetType());
 		} // constructor
 
 		#endregion constructor

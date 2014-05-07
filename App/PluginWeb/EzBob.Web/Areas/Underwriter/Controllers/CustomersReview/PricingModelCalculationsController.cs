@@ -2,9 +2,11 @@
 {
 	using System.Data;
 	using System.Web.Mvc;
+	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
+	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
@@ -33,12 +35,19 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult Calculate(decimal loanAmount)
-		{
-			int customerId = 889; // TODO: Should be input param
-			var inputModel = new PricingModelModel(); // TODO: Should be input param
+		public JsonResult Calculate(int customerId, string loanAmountModel) {
+			var oLog = new SafeILog(this);
 
-			PricingModelModelActionResult pricingModelCalculateesponse = serviceClient.Instance.PricingModelCalculate(customerId, context.UserId, inputModel);
+			oLog.Debug("Model received: {0}", loanAmountModel);
+
+			PricingModelModel inputModel = JsonConvert.DeserializeObject<PricingModelModel>(loanAmountModel);
+
+			oLog.Debug("Parsed model: {0}", JsonConvert.SerializeObject(inputModel));
+
+			PricingModelModelActionResult pricingModelCalculateesponse = serviceClient.Instance.PricingModelCalculate(
+				customerId, context.UserId, inputModel
+			);
+
 			return Json(pricingModelCalculateesponse.Value, JsonRequestBehavior.AllowGet);
 		}
     }
