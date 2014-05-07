@@ -17,7 +17,7 @@
 		public PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model)
 		{
 			PricingModelCalculate instance;
-			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
+			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, model);
 
 			return new PricingModelModelActionResult
 			{

@@ -27,11 +27,6 @@
                         <td class="pricing-model-left-td">Initiation Fee</td>
                         <td><input type="text" id="initiationFee"/></td>
                     </tr>
-    
-                    <tr>
-	                    <td class="pricing-model-left-td"><button class="btn btn-primary" id="expandCollapseInputsButton"><span id="expandInputsSign">+</span><span class="hide" id="collapseInputsSign">-</span></button></td>
-                        <td></td>
-                    </tr>
 
                     <tr class="minor-input-row hide">
                         <td class="pricing-model-left-td">Loan Term</td>
@@ -73,6 +68,11 @@
                         <td class="pricing-model-left-td">Profit Before Tax</td>
                         <td><input type="text" id="profitBeforeTax"/></td>
                     </tr>
+    
+                    <tr>
+	                    <td class="pricing-model-left-td"><button class="btn btn-primary" id="expandCollapseInputsButton"><span id="expandInputsSign">+</span><span class="hide" id="collapseInputsSign">-</span></button></td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -97,11 +97,6 @@
                     <tr>
                         <td class="pricing-model-left-td">EuLoanPercentages</td>
                         <td><%-model.EuLoanPercentages%>%</td>
-                    </tr>
-    
-                    <tr>
-	                    <td class="pricing-model-left-td"><button class="btn btn-primary" id="expandCollapseOutputsButton"><span id="expandOutputsSign">+</span><span class="hide" id="collapseOutputsSign">-</span></button></td>
-                        <td></td>
                     </tr>
 
                     <tr class="minor-output-row hide">
@@ -147,6 +142,11 @@
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Balance</td>
                         <td><%-GBPValues(model.Balance, true)%></td>
+                    </tr>
+    
+                    <tr>
+	                    <td class="pricing-model-left-td"><button class="btn btn-primary" id="expandCollapseOutputsButton"><span id="expandOutputsSign">+</span><span class="hide" id="collapseOutputsSign">-</span></button></td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>

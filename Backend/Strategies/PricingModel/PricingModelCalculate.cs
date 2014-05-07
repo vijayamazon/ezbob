@@ -2,16 +2,13 @@
 {
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Models;
 
 	public class PricingModelCalculate : AStrategy
 	{
-		private readonly int customerId;
-
-		public PricingModelCalculate(int customerId, AConnection oDb, ASafeLog oLog)
+		public PricingModelCalculate(PricingModelModel model, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
-			this.customerId = customerId;
+			Model = model;
 		}
 
 		public override string Name {
@@ -22,23 +19,20 @@
 		
 		public override void Execute() {
 			// TODO: Calculation logic
-			Model = new PricingModelModel
-				{
-					MonthlyInterestToCharge = 1.23m,
-					SetupFeeForEuLoan = 400,
-					EuLoanPercentages = 1.75m,
-					AverageLoanAmount = 4500,
-					AverageRevenuePerLoan = 87,
-					CogsOutput = 50,
-					GrossProfit = 432,
-					OpexAndCapexOutput = 66844,
-					Ebitda = 11332,
-					NetLossFromDefaults = 8912,
-					CostOfDebtOutput = 345,
-					TotalCost = 34700,
-					ProfitBeforeTaxOutput = 5000,
-					Balance = 4567
-				};
+			Model.MonthlyInterestToCharge = 1.23m;
+			Model.SetupFeeForEuLoan = 400;
+			Model.EuLoanPercentages = 1.75m;
+			Model.AverageLoanAmount = 4500;
+			Model.AverageRevenuePerLoan = 87;
+			Model.CogsOutput = 50;
+			Model.GrossProfit = 432;
+			Model.OpexAndCapexOutput = 66844;
+			Model.Ebitda = 11332;
+			Model.NetLossFromDefaults = 8912;
+			Model.CostOfDebtOutput = 345;
+			Model.TotalCost = 34700;
+			Model.ProfitBeforeTaxOutput = 5000;
+			Model.Balance = 4567;
 		}
 	}
 }
