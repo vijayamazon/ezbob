@@ -528,7 +528,7 @@
 				.Where(e => e.UserName == underwriter).OrderByDescending(e => e.Id);
 
 			foreach (var recentCustomer in recentCustomers) {
-				var customer = _customers.TryGet(recentCustomer.CustomerId);
+				var customer = _customers.ReallyTryGet(recentCustomer.CustomerId);
 
 				if (customer != null)
 					recentCustomersMap.Add(new System.Tuple<int, string>(recentCustomer.CustomerId, string.Format("{0}, {1}, {2}", recentCustomer.CustomerId, customer.PersonalInfo == null ? null : customer.PersonalInfo.Fullname, customer.Name)));

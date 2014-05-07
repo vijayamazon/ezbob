@@ -1,5 +1,6 @@
 namespace EzBob.Models.Marketplaces.Builders {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
@@ -77,13 +78,13 @@ namespace EzBob.Models.Marketplaces.Builders {
 				break;
 
 			case Behaviour.HMRC:
-				var oVatReturn = DatabaseDataHelper
+				List<VatReturnEntry> oVatReturn = DatabaseDataHelper
 					.GetAllHmrcVatReturnData(DateTime.UtcNow, mp)
 					.Distinct(new InternalOrderComparer())
 					.Select(x => (VatReturnEntry)x)
 					.ToList();
 
-				var oRtiTaxMonths = DatabaseDataHelper
+				List<RtiTaxMonthEntry> oRtiTaxMonths = DatabaseDataHelper
 					.GetAllHmrcRtiTaxMonthData(DateTime.UtcNow, mp)
 					.GroupBy(
 						x => x.NativeOrderId, // key selector - split into groups having the same key

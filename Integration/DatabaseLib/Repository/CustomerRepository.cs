@@ -39,6 +39,18 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 			return customer;
 		}
 
+		public Customer ReallyTryGet(int clientId)
+		{
+			try {
+				return Get(clientId);
+			}
+			catch (Exception e) {
+				var oLog = new SafeILog(this);
+				oLog.Warn(e, "Could not retrieve customer by id {0}.", clientId);
+				return null;
+			}
+		}
+
 		public Customer TryGet(int clientId)
 		{
 			return Get(clientId);
