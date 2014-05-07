@@ -37,10 +37,6 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             converter: EzBob.BindingConverters.moneyFormat
         },
 
-        InterestRate: {
-            selector: "#interestRate",
-            converter: EzBob.BindingConverters.percentsFormat
-        },
         DefaultRate: {
             selector: "#defaultRate",
             converter: EzBob.BindingConverters.percentsFormat
@@ -123,6 +119,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             that.model.set('MonthlyInterestToCharge', res.MonthlyInterestToCharge);
             that.model.set('SetupFeeForEuLoan', res.SetupFeeForEuLoan);
             that.model.set('EuLoanPercentages', res.EuLoanPercentages);
+            that.model.set('InterestRate', res.InterestRate);
             that.model.set('AverageLoanAmount', res.AverageLoanAmount);
             that.model.set('AverageRevenuePerLoan', res.AverageRevenuePerLoan);
             that.model.set('CogsOutput', res.CogsOutput);

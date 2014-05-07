@@ -19,6 +19,7 @@
 		
 		public override void Execute() {
 			// TODO: Calculation logic
+			Model.InterestRate = 4.03m;
 			Model.MonthlyInterestToCharge = 1.23m;
 			Model.SetupFeeForEuLoan = 400;
 			Model.EuLoanPercentages = 1.75m;

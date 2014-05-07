@@ -16,10 +16,6 @@
                         <td><input type="text" id="loanAmount"/></td>
                     </tr>
                     <tr>
-                        <td class="pricing-model-left-td">Interest Rate</td>
-                        <td><input type="text" id="interestRate"/></td>
-                    </tr>
-                    <tr>
                         <td class="pricing-model-left-td">Default Rate</td>
                         <td><input type="text" id="defaultRate"/></td>
                     </tr>
@@ -98,7 +94,11 @@
                         <td class="pricing-model-left-td">EuLoanPercentages</td>
                         <td><%-model.EuLoanPercentages%>%</td>
                     </tr>
-
+    
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Interest Rate</td>
+                        <td><input type="text" id="interestRate"/></td>
+                    </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Average Loan Amount</td>
                         <td><%-GBPValues(model.AverageLoanAmount)%></td>

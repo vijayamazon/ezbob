@@ -24,7 +24,6 @@
 			Model = new PricingModelModel
 				{
 					LoanAmount = customerId,
-					InterestRate = 3.21m,
 					DefaultRate = 1.3m,
 					InitiationFee = 150,
 					LoanTerm = 12,

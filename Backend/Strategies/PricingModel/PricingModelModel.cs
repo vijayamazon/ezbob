@@ -4,7 +4,6 @@
 	{
 		// Main input fields
 		public int LoanAmount { get; set; }
-		public decimal InterestRate { get; set; }
 		public decimal DefaultRate { get; set; }
 		public decimal InitiationFee { get; set; }
 
@@ -26,6 +25,7 @@
 		public decimal EuLoanPercentages { get; set; } // 1.75 or 2
 
 		// Other output fields
+		public decimal InterestRate { get; set; }
 		public int AverageLoanAmount { get; set; }
 		public int AverageRevenuePerLoan { get; set; }
 		public int CogsOutput { get; set; }
