@@ -168,6 +168,7 @@
             </div>
         </div>
         <%}%>
+        <%if(mps && mps.length > 0) { console.log('mps', mps);%>
         <div class="col-md-5">
             <div class="box">
                 <div class="box-title">
@@ -181,22 +182,31 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Type</th>
-                                <th>Name</th>
-                                <th>Data</th>
+                                <th></th>
+                                <th>Month sales</th>
+                                <th>Annual sales</th>
+                                <th>Annual payments</th>
+                                <th>Seniority</th>
+                                <th>Updated</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Bank(1)</td>
-                                <td>HSBC</td>
-                                <td>10M</td>
-                            </tr>
+                            <%_.each(mps, function(mp){console.log(mp);%>
+                                <tr>
+                                    <td style="width:70px"><div class="source_labels_on <%-mp.Name.replace(' ', '').toLowerCase()%>"></div></td>
+                                    <td><%- EzBob.formatPoundsNoDecimals( m.monthSales) %></td>
+                                    <td><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><%- m.UpdatingStatus %> <%- m.LastChecked%></td>
+                                </tr>
+                            <%});%>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+        <%}%>
     </div>
 
     <div>

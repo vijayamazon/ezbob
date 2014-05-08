@@ -137,6 +137,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             personalModel: @personalInfoModel
             experianModel: @experianInfoModel
             propertiesModel: @PropertiesModel
+            mpsModel: @marketPlaces
         )
 
         @showed = true

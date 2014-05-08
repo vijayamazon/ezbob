@@ -10,17 +10,21 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
         @personalModel = options.personalModel
         @experianModel = options.experianModel
         @propertiesModel = options.propertiesModel
+        @mpsModel = options.mpsModel
+        
         @bindTo @model, "change sync", @render, this
         @bindTo @crmModel, "change sync", @render, this
         @bindTo @personalModel, "change sync", @render, this
         @bindTo @experianModel, "change sync", @render, this
         @bindTo @propertiesModel, "change sync", @render, this
+        @bindTo @mpsModel, "change sync", @render, this
 
     serializeData: ->
         m: @model.toJSON()
         crm: _.first(_.filter(@crmModel.toJSON(), (crm) -> crm.User isnt 'System'), 5) #taking first 5 non System CRMs
         experian: @experianModel.toJSON()
         properties: @propertiesModel.toJSON()
+        mps: @mpsModel.toJSON()
 
     events:
         'click a[data-action="collapse"]' : "boxToolClick"

@@ -24,11 +24,13 @@
       this.personalModel = options.personalModel;
       this.experianModel = options.experianModel;
       this.propertiesModel = options.propertiesModel;
+      this.mpsModel = options.mpsModel;
       this.bindTo(this.model, "change sync", this.render, this);
       this.bindTo(this.crmModel, "change sync", this.render, this);
       this.bindTo(this.personalModel, "change sync", this.render, this);
       this.bindTo(this.experianModel, "change sync", this.render, this);
-      return this.bindTo(this.propertiesModel, "change sync", this.render, this);
+      this.bindTo(this.propertiesModel, "change sync", this.render, this);
+      return this.bindTo(this.mpsModel, "change sync", this.render, this);
     };
 
     DashboardView.prototype.serializeData = function() {
@@ -38,7 +40,8 @@
           return crm.User !== 'System';
         }), 5),
         experian: this.experianModel.toJSON(),
-        properties: this.propertiesModel.toJSON()
+        properties: this.propertiesModel.toJSON(),
+        mps: this.mpsModel.toJSON()
       };
     };
 
