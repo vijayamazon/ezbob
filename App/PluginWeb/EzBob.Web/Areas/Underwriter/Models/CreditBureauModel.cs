@@ -6,7 +6,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 {
 	public class CreditBureauModel
 	{
-		public IOrderedEnumerable<CheckHistoryModel> CheckHistorys { get; set; }
+		public IOrderedEnumerable<CheckHistoryModel> ConsumerHistory { get; set; }
+		public IOrderedEnumerable<CheckHistoryModel> CompanyHistory { get; set; }
 		private readonly List<string> _errorList = new List<string>();
 		public int Id { get; set; }
 		public string Name { get; set; }

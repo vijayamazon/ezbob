@@ -51,6 +51,28 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
       false
 
     onRender: ->
-        #console.log 'render', @model
+        if(@experianModel && @experianModel.get('ConsumerHistory'))
+            historyScoresSorted = _.sortBy(@experianModel.get('ConsumerHistory'), (history) ->
+                return history.Date)
+            consumerHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',')
+            @$el.find(".consumerScoreGraph").html(consumerHistoryScores)
+
+        if(@experianModel && @experianModel.get('CompanyHistory'))
+            historyScoresSorted = _.sortBy(@experianModel.get('CompanyHistory'), (history) ->
+                return history.Date)
+            companyHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',')
+            @$el.find(".companyScoreGraph").html(companyHistoryScores)
+            
+        @$el.find(".inline-sparkline").sparkline "html",
+          width: "100%"
+          height: "100%"
+          lineWidth: 2
+          spotRadius: 3
+          lineColor: "#88bbc8"
+          fillColor: "#f2f7f9"
+          spotColor: "#14ae48"
+          maxSpotColor: "#e72828"
+          minSpotColor: "#f7941d"
+
 
 

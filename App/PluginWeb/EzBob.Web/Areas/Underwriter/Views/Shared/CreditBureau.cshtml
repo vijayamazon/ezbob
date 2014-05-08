@@ -1025,13 +1025,13 @@
                     @RawCell("Existing business loans", "<%- experianInfo.Summary.Existingbusinessloans  %>", "")
                 </tbody>
             </table>
-            <table class="table rright check-history">
+            <table class="table check-history">
                 <thead class="box">
                     @RawHeaderCell("Check history", "", "")
                     @EzForm.RawCellBold("Id", "Date insert", "Score")
                 </thead>
                 <tbody>
-                    <% _.each(experianInfo.CheckHistorys, function(val, i){%>
+                    <% _.each(experianInfo.ConsumerHistory, function(val, i){%>
                         @RawCell("<%-val.Id%>", "<%-EzBob.formatDateTime(val.Date)%>", "<%-val.Score%>")
                     <%})%>
                 </tbody>

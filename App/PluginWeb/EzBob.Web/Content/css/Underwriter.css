@@ -1065,15 +1065,21 @@ div.hmrc-enter-data-holder .add-one-period {
     padding-top: 10px;
 }
 
+.tile p.title.text-small {
+    font-size: 20px;
+}
+
+
 .tile p.title-small {
     padding-top: 0;
 }
 
 .tile-grey      {background-color: #a1a1a1;}
-.tile-white     {background-color: #ffffff; color: black}
-.tile-lightgrey {background-color: #d1d1d1; color: black}
+.tile-white     {background-color: #ffffff; color: #000;}
+.tile-lightgrey {background-color: #d1d1d1; color: #000;}
+.tile-light { color: #000;}
 .tile-high { height: 110px;}
-
+.tile-transparant{ background-color: transparent;border: #000 1px solid;}
 .alert {
     padding: 5px !important;
     margin-bottom: 10px !important;

@@ -555,7 +555,7 @@
 {
     var d = Model.Directors[i];
     var addressInfo = d.DirectorAddressInfo;
-    var address = addressInfo != null && addressInfo.AllAddresses.Any() ? addressInfo.AllAddresses.First() : new CustomerAddress();
+    var address = addressInfo != null && addressInfo.AllAddresses.Any() ? addressInfo.AllAddresses.First() : new CustomerAddress() { Id = String.Empty};
 
     CrossCheckModel.TriState nIsKnownDirector = Model.IsExperianDirector(d);
 

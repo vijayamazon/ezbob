@@ -78,7 +78,34 @@
       return false;
     };
 
-    DashboardView.prototype.onRender = function() {};
+    DashboardView.prototype.onRender = function() {
+      var companyHistoryScores, consumerHistoryScores, historyScoresSorted;
+      if (this.experianModel && this.experianModel.get('ConsumerHistory')) {
+        historyScoresSorted = _.sortBy(this.experianModel.get('ConsumerHistory'), function(history) {
+          return history.Date;
+        });
+        consumerHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
+        this.$el.find(".consumerScoreGraph").html(consumerHistoryScores);
+      }
+      if (this.experianModel && this.experianModel.get('CompanyHistory')) {
+        historyScoresSorted = _.sortBy(this.experianModel.get('CompanyHistory'), function(history) {
+          return history.Date;
+        });
+        companyHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
+        this.$el.find(".companyScoreGraph").html(companyHistoryScores);
+      }
+      return this.$el.find(".inline-sparkline").sparkline("html", {
+        width: "100%",
+        height: "100%",
+        lineWidth: 2,
+        spotRadius: 3,
+        lineColor: "#88bbc8",
+        fillColor: "#f2f7f9",
+        spotColor: "#14ae48",
+        maxSpotColor: "#e72828",
+        minSpotColor: "#f7941d"
+      });
+    };
 
     return DashboardView;
 

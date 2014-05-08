@@ -172,6 +172,7 @@
 				.Add("~/Content/js/lib/jquery.field_status.js")
 				.Add("~/Content/js/lib/jquery.cookie.js")
 				.Add("~/Content/js/lib/jquery.slimscroll.min.js")
+				.Add("~/Content/js/lib/jquery.sparkline.min.js")
 				.Add("~/Content/js/lib/jqplot/jquery.jqplot.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.dateAxisRenderer.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasTextRenderer.js")

@@ -119,7 +119,7 @@
 
 		private void BuildHistoryModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
 		{
-			var checkHistoryModels = (from s in _session.Query<MP_ServiceLog>()
+			var checkConsumerHistoryModels = (from s in _session.Query<MP_ServiceLog>()
 									  where s.Director == null
 									  where s.Customer.Id == customer.Id
 									  where s.ServiceType == "Consumer Request"
@@ -129,9 +129,23 @@
 											  Id = s.Id,
 											  Score = s.ResponseData == null ? -1 : GetScoreFromXml(s.ResponseData)
 										  }).ToList();
+			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
+			var checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
+									  where s.Director == null
+									  where s.Customer.Id == customer.Id
+									  where s.ServiceType == (isLimited ?  "E-SeriesLimitedData" : "E-SeriesNonLimitedData")
+									  select new CheckHistoryModel
+									  {
+										  Date = s.InsertDate.ToUniversalTime(),
+										  Id = s.Id,
+										  Score = s.ResponseData == null ? -1 : (isLimited ? GetLimitedScoreFromXml(s.ResponseData) : GetNonLimitedScoreFromXml(s.ResponseData))
+									  }).ToList();
 
-			model.CheckHistorys = checkHistoryModels.OrderByDescending(h => h.Date);
+			model.ConsumerHistory = checkConsumerHistoryModels.OrderByDescending(h => h.Date);
+			model.CompanyHistory = checkCompanyHistoryModels.OrderByDescending(h => h.Date);
 		}
+
+		
 
 		private void CreatePersonalDataModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
 		{
@@ -888,6 +902,34 @@
 			{
 				var doc = XDocument.Parse(xml);
 				var score = doc.XPathSelectElement("//PremiumValueData/Scoring/E5S051").Value;
+				return Convert.ToInt32(score);
+			}
+			catch (Exception)
+			{
+				return -1;
+			}
+		}
+
+		private static int GetNonLimitedScoreFromXml(string xml)
+		{
+			try
+			{
+				var doc = XDocument.Parse(xml);
+				var score = doc.XPathSelectElement("//REQUEST/DN73/NLCDSCORE").Value;
+				return Convert.ToInt32(score);
+			}
+			catch (Exception)
+			{
+				return -1;
+			}
+		}
+
+		private static int GetLimitedScoreFromXml(string xml)
+		{
+			try
+			{
+				var doc = XDocument.Parse(xml);
+				var score = doc.XPathSelectElement("//REQUEST/DL76/RISKSCORE").Value;
 				return Convert.ToInt32(score);
 			}
 			catch (Exception)

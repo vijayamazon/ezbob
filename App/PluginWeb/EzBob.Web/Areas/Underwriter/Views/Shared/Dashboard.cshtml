@@ -75,12 +75,12 @@
             experian.Summary.ConsumerAccountsOverview = experian.Summary.ConsumerAccountsOverview || {};
             experian.ConsumerSummaryCharacteristics = experian.ConsumerSummaryCharacteristics || {};
             experian.ConsumerAccountsOverview = experian.ConsumerAccountsOverview || {};
+            var experianCompany = experian.LimitedInfo || experian.NonLimitedInfo || {};
         %>
         <div class="col-md-7">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Customer & Directors</h3>
-                    <%console.log(experian);%>
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
@@ -89,7 +89,12 @@
                 <div class="box-content">
                     <div class="row">
                         <div class="col-md-2">
-                            <div class="tile tile-green">
+                            <%var tileColor='';
+                              if(!EzBob.isDarkColor(experian.ScoreColor)){
+                                tileColor = 'tile-light';
+                              }
+                            %>
+                            <div class="tile <%-tileColor%>" style="background-color: <%-experian.ScoreColor%>">
                                 <div class="caption">
                                     Score
                                 </div>
@@ -133,32 +138,31 @@
                                 <div class="caption">
                                     Balance
                                 </div>
-                                <p class="title text-center"><%-experian.ConsumerAccountsOverview.Balance_Total%></p>
+                                <% var balance = EzBob.formatPoundsAsThousands(experian.ConsumerAccountsOverview.Balance_Total);
+                                   var textSize = '';
+                                if(balance.length > 5){ textSize = 'text-small';} %>
+                                <p class="title text-center <%- textSize%>"><%-EzBob.formatPoundsAsThousands(experian.ConsumerAccountsOverview.Balance_Total)%></p>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-2">
-                            <div class="tile">
-                                graph
+                            <div class="tile tile-transparant">
+                                <span class="inline-sparkline consumerScoreGraph"></span>
                             </div>
                         </div>
+                        <%if(experian.directorsModels && experian.directorsModels.length > 0){
+                            _.each(experian.directorsModels, function(item, i){%>
                         <div class="col-md-2">
-                            <div class="tile tile-red">
+                            <div class="tile" style="background-color : <%-item.ScoreColor%>">
                                 <div class="caption">
-                                    Director 1
+                                    Director <%-(i+1)%>
                                 </div>
-                                <p class="title text-center">330</p>
+                                <p class="title text-center"><%-item.Score%></p>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="tile tile-orange">
-                                <div class="caption">
-                                    Director 2
-                                </div>
-                                <p class="title text-center">550</p>
-                            </div>
-                        </div>
+                        <%});}%>
+                        
                     </div>
                 </div>
             </div>
@@ -212,7 +216,7 @@
                                 <div class="caption">
                                     Score
                                 </div>
-                                <p class="title text-center">92</p>
+                                <p class="title text-center"><%-experianCompany.BureauScore%></p>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -220,7 +224,7 @@
                                 <div class="caption">
                                     CCJ/Recent CCJ
                                 </div>
-                                <p class="title text-center">0/0</p>
+                                <p class="title text-center">?</p>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -228,7 +232,7 @@
                                 <div class="caption">
                                     Tangible equity
                                 </div>
-                                <p class="title text-center">56,250</p>
+                                <p class="title text-center">?</p>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -236,14 +240,14 @@
                                 <div class="caption">
                                     Adjusted profit
                                 </div>
-                                <p class="title text-center">18,340</p>
+                                <p class="title text-center">?</p>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-2">
-                            <div class="tile">
-                                graph
+                            <div class="tile tile-transparant">
+                                <span class="inline-sparkline companyScoreGraph"></span>
                             </div>
                         </div>
                     </div>
@@ -376,9 +380,9 @@
                 <div class="box-content">
                     <div class="tabbable tabs-left">
                         <ul class="nav nav-tabs active-red">
-                            <li class="active"><a href="#loans" data-toggle="tab"><span class="label label-large label-warning">0 </span>Loans</a></li>
-                            <li><a href="#approves" data-toggle="tab"><span class="label label-large label-success">5 </span>Approves</a></li>
-                            <li><a href="#rejects" data-toggle="tab"><span class="label label-large label-important">10</span> Rejects</a></li>
+                            <li class="active"><a href="#loans" data-toggle="tab"><span class="label label-large label-warning">0</span>&nbsp;Loans</a></li>
+                            <li><a href="#approves" data-toggle="tab"><span class="label label-large label-success">5</span>&nbsp;Approves</a></li>
+                            <li><a href="#rejects" data-toggle="tab"><span class="label label-large label-important">10</span>&nbsp;Rejects</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade active in" id="loans">

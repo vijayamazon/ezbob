@@ -1063,6 +1063,8 @@
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\js\lib\jquery.scrollTo.js" />
     <Content Include="Content\js\lib\jquery.set_display_value.js" />
+    <Content Include="Content\js\lib\jquery.slimscroll.min.js" />
+    <Content Include="Content\js\lib\jquery.sparkline.min.js" />
     <Content Include="Content\js\lib\jquery.zclip.js" />
     <Content Include="Content\js\lib\splitter.js" />
     <Content Include="Areas\Underwriter\Views\CAIS\Index.cshtml" />
