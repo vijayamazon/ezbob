@@ -108,11 +108,11 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ValidateMobileCode_InputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateMobileCode" />
+  <wsdl:message name="IEzService_GetCustomerState_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerState" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
+  <wsdl:message name="IEzService_GetCustomerState_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerStateResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_InputMessage">
     <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifier" />
@@ -678,6 +678,12 @@
   <wsdl:message name="IEzService_GenerateMobileCode_OutputMessage">
     <wsdl:part name="parameters" element="tns:GenerateMobileCodeResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_CalculateVatReturnSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummary" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CalculateVatReturnSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummaryResponse" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -701,9 +707,9 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
-    <wsdl:operation name="ValidateMobileCode">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
+    <wsdl:operation name="GetCustomerState">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerState" message="tns:IEzService_GetCustomerState_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStateResponse" message="tns:IEzService_GetCustomerState_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="FirstOfMonthStatusNotifier">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
@@ -1280,6 +1286,10 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="CalculateVatReturnSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummary" message="tns:IEzService_CalculateVatReturnSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse" message="tns:IEzService_CalculateVatReturnSummary_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="QuickOffer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
       <wsdl:input>
@@ -1309,6 +1319,15 @@
     </wsdl:operation>
     <wsdl:operation name="FinishWizard">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FinishWizard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerState">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCustomerState" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1991,23 +2010,32 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="CalculateVatReturnSummary">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateVatReturnSummary" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

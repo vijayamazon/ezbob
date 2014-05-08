@@ -915,6 +915,18 @@ GeneratePassword broker-contact-email@example.com password-itself
 			serviceClient.Temp_BackfillCompanyAnalytics();
 		}
 
+		[Activation]
+		private void CalculateVatReturnSummary() {
+			int nCustomerID = 0;
+
+			if ((args.Length != 2) || !int.TryParse(args[1], out nCustomerID)) {
+				m_oLog.Msg("Usage: CalculateVatReturnSummary <nCustomerID>");
+				return;
+			} // if
+
+			serviceClient.CalculateVatReturnSummary(nCustomerID);
+		} // CalculateVatReturnSummary
+
 		// ReSharper restore UnusedMember.Local
 
 		#endregion strategy activators

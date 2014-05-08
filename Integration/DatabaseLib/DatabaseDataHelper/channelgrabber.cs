@@ -19,19 +19,15 @@
 
 		#region method GetAllHmrcVatReturnData
 
-		public InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			return GetAllHmrcVatReturnData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
 		} // GetAllHmrcVatReturnData
 
-		public static InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace)
-		{
+		public static InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
 			var orders = new InternalDataList(submittedDate);
 
-			customerMarketPlace.VatReturnRecords.ForEach(rec =>
-			{
-				var vre = new VatReturnEntry
-				{
+			customerMarketPlace.VatReturnRecords.ForEach(rec => {
+				var vre = new VatReturnEntry {
 					BusinessAddress = rec.Business.Address.Split('\n'),
 					BusinessName = rec.Business.Name,
 					DateDue = rec.DateDue,
@@ -54,8 +50,7 @@
 
 		#region method StoreHmrcVatReturnData
 
-		public void StoreHmrcVatReturnData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void StoreHmrcVatReturnData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			LogData("HMRC VAT Return Data", customerMarketPlace, ordersData);
@@ -65,18 +60,15 @@
 
 			DateTime submittedDate = DateTime.UtcNow;
 
-			ordersData.ForEach(ve =>
-			{
+			ordersData.ForEach(ve => {
 				var dataItem = (VatReturnEntry)ve;
 
 				string sBizAddr = string.Join("\n", dataItem.BusinessAddress);
 
 				Business biz = _businessRepository.GetAll().FirstOrDefault(b => (b.Name == dataItem.BusinessName) && (b.Address == sBizAddr));
 
-				if (biz == null)
-				{
-					biz = new Business
-					{
+				if (biz == null) {
+					biz = new Business {
 						Name = dataItem.BusinessName,
 						Address = sBizAddr
 					};
@@ -84,8 +76,7 @@
 					_businessRepository.SaveOrUpdate(biz);
 				} // if
 
-				var oRecord = new MP_VatReturnRecord
-				{
+				var oRecord = new MP_VatReturnRecord {
 					CustomerMarketPlace = customerMarketPlace,
 					Created = submittedDate,
 					HistoryRecord = historyRecord,
@@ -97,24 +88,20 @@
 					RegistrationNo = dataItem.RegistrationNo
 				};
 
-				foreach (KeyValuePair<string, Coin> pair in dataItem.Data)
-				{
+				foreach (KeyValuePair<string, Coin> pair in dataItem.Data) {
 					string sName = pair.Key;
 
 					MP_VatReturnEntryName oVreName = _vatReturnEntryNameRepositry.GetAll().FirstOrDefault(n => n.Name == sName);
 
-					if (oVreName == null)
-					{
-						oVreName = new MP_VatReturnEntryName
-						{
+					if (oVreName == null) {
+						oVreName = new MP_VatReturnEntryName {
 							Name = sName
 						};
 
 						_vatReturnEntryNameRepositry.SaveOrUpdate(oVreName);
 					} // if
 
-					oRecord.Entries.Add(new MP_VatReturnEntry
-					{
+					oRecord.Entries.Add(new MP_VatReturnEntry {
 						Amount = pair.Value.Amount,
 						CurrencyCode = pair.Value.CurrencyCode,
 						Name = oVreName,
@@ -132,21 +119,16 @@
 
 		#region method GetAllHmrcRtiTaxMonthData
 
-		public InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			return GetAllHmrcRtiTaxMonthData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
 		} // GetAllHmrcRtiTaxMonthData
 
-		public static InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace)
-		{
+		public static InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
 			var orders = new InternalDataList(submittedDate);
 
-			customerMarketPlace.RtiTaxMonthRecords.ForEach(rec =>
-			{
-				foreach (var entry in rec.Entries)
-				{
-					orders.Add(new RtiTaxMonthEntry
-					{
+			customerMarketPlace.RtiTaxMonthRecords.ForEach(rec => {
+				foreach (var entry in rec.Entries) {
+					orders.Add(new RtiTaxMonthEntry {
 						DateStart = entry.DateStart,
 						DateEnd = entry.DateEnd,
 						AmountPaid = new Coin(entry.AmountPaid, entry.CurrencyCode),
@@ -163,8 +145,7 @@
 
 		#region method StoreHmrcRtiTaxMonthData
 
-		public void StoreHmrcRtiTaxMonthData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void StoreHmrcRtiTaxMonthData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			LogData("HMRC RTI Tax Months Data", customerMarketPlace, ordersData);
@@ -174,19 +155,16 @@
 
 			DateTime submittedDate = DateTime.UtcNow;
 
-			var oRecord = new MP_RtiTaxMonthRecord
-			{
+			var oRecord = new MP_RtiTaxMonthRecord {
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord,
 			};
 
-			ordersData.ForEach(vx =>
-			{
+			ordersData.ForEach(vx => {
 				var dataItem = (RtiTaxMonthEntry)vx;
 
-				oRecord.Entries.Add(new MP_RtiTaxMonthEntry
-				{
+				oRecord.Entries.Add(new MP_RtiTaxMonthEntry {
 					DateStart = dataItem.DateStart,
 					DateEnd = dataItem.DateEnd,
 					AmountPaid = dataItem.AmountPaid.Amount,
@@ -208,14 +186,12 @@
 
 		#region method GetAllChannelGrabberOrdersData
 
-		public InternalDataList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public InternalDataList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			var orders = new InternalDataList(submittedDate);
 
-			orders.AddRange(customerMarketPlace.ChannelGrabberOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new ChannelGrabberOrderItem
-			{
+			orders.AddRange(customerMarketPlace.ChannelGrabberOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new ChannelGrabberOrderItem {
 				CurrencyCode = o.CurrencyCode,
 				OrderStatus = o.OrderStatus,
 				NativeOrderId = o.NativeOrderId,
@@ -232,8 +208,7 @@
 
 		#region method StoreChannelGrabberOrdersData
 
-		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			LogData("ChannelGrabber Orders Data", customerMarketPlace, ordersData);
@@ -242,19 +217,16 @@
 				return;
 
 			DateTime submittedDate = DateTime.UtcNow;
-			var mpOrder = new MP_ChannelGrabberOrder
-			{
+			var mpOrder = new MP_ChannelGrabberOrder {
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
 
-			ordersData.ForEach(di =>
-			{
+			ordersData.ForEach(di => {
 				var dataItem = (ChannelGrabberOrderItem)di;
 
-				var mpOrderItem = new MP_ChannelGrabberOrderItem
-				{
+				var mpOrderItem = new MP_ChannelGrabberOrderItem {
 					Order = mpOrder,
 					NativeOrderId = dataItem.NativeOrderId,
 					TotalCost = dataItem.TotalCost,

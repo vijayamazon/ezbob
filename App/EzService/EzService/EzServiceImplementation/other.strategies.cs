@@ -79,5 +79,13 @@
 		} // PostcodeSaveLog
 
 		#endregion method PostcodeSaveLog
+
+		#region method CalculateVatReturnSummary
+
+		public ActionMetaData CalculateVatReturnSummary(int nCustomerID) {
+			return Execute<CalculateVatReturnSummary>(nCustomerID, null, nCustomerID);
+		} // CalculateVatReturnSummary
+
+		#endregion method CalculateVatReturnSummary
 	} // class EzServiceImplementation
 } // namespace EzService

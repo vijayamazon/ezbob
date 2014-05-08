@@ -313,6 +313,9 @@
 			int nUserID
 		);
 
+		[OperationContract]
+		ActionMetaData CalculateVatReturnSummary(int nCustomerID);
+
 		#endregion other strategies
 
 		#region Quick offer

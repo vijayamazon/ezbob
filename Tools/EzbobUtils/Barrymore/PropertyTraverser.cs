@@ -66,7 +66,10 @@
 		#region private
 
 		private static void Traverse(ITraversable oInstance, Type oRealType, Action<ITraversable, PropertyInfo> oCallback) {
-			PropertyInfo[] oPropertyList = oRealType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty);
+			PropertyInfo[] oPropertyList = oRealType
+				.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+				.Where(p => p.GetSetMethod() != null)
+				.ToArray();
 
 			var oSelected = new List<PropertyInfo>();
 
