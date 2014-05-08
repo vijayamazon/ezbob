@@ -1072,6 +1072,7 @@ div.hmrc-enter-data-holder .add-one-period {
 .tile-grey      {background-color: #a1a1a1;}
 .tile-white     {background-color: #ffffff; color: black}
 .tile-lightgrey {background-color: #d1d1d1; color: black}
+.tile-high { height: 110px;}
 
 .alert {
     padding: 5px !important;

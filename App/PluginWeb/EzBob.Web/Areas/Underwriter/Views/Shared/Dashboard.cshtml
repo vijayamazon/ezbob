@@ -266,16 +266,7 @@
                                 <div class="caption">
                                     Properties
                                 </div>
-                                <p class="title text-center">3</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="tile tile-lightgrey">
-                                <div class="caption">
-                                    Net Worth
-                                </div>
-                                <p class="title text-center blue">269K</p>
-                                <p class="title-small text-center">(33%)</p>
+                                <p class="title text-center"><%- properties.NumberOfProperties %></p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -283,16 +274,25 @@
                                 <div class="caption">
                                     Market value
                                 </div>
-                                <p class="title text-center">825K</p>
+                                <p class="title text-center"><%- properties.MarketValue %>K</p>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="tile tile-lightgrey">
+                            <div class="tile tile-lightgrey tile-high">
                                 <div class="caption">
-                                    Mortgages (2)
+                                    Net Worth
                                 </div>
-                                <p class="title text-center">556K</p>
-                                <p class="title-small text-center">(TLV: 67%)</p>
+                                <p class="title text-center blue"><%- properties.NetWorth %>K</p>
+                                <p class="title-small text-center">(<%- properties.NetWorthPercentages %>%)</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="tile tile-lightgrey tile-high">
+                                <div class="caption">
+                                    Mortgages (<%- properties.NumberOfMortgages %>)
+                                </div>
+                                <p class="title text-center"><%- properties.SumOfMortgages %>K</p>
+                                <p class="title-small text-center">(LTV: <%- properties.Ltv %>%)</p>
                             </div>
                         </div>
                     </div>
