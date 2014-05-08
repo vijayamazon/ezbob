@@ -234,6 +234,8 @@
 				cacheVal.LastUpdateDate = DateTime.UtcNow;
 				cacheVal.JsonPacketInput = request;
 				cacheVal.JsonPacket = response;
+
+				repo.SaveOrUpdate(cacheVal);
 				
 				int currentBalanceSum = 0;
 				try
