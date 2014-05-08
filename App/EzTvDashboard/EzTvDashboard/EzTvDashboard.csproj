@@ -153,6 +153,7 @@
     <Content Include="Content\images\sort_desc_disabled.png" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\new-ezbob-logo.png" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_both.png" />
     <Content Include="Content\img\sort_desc.png" />

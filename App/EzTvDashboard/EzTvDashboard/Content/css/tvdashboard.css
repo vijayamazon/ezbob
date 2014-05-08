@@ -14,10 +14,23 @@ table.table {
 .notifications {
     color: red;
 }
-
-.tile-grey      {background-color: #a1a1a1;}
+.skin-orange .navbar{ background-color: #fc8e00;}
+.tile-ezgreen      {background-color: #67c10b;}
+.tile-ezorange      {background-color: #fc8e00;}
+.tile-ezgrey      {background-color: #8d8d8d;}
 .tile-black      {background-color: #000000;}
 
 .navbar-brand {
     font-size: 35px !important;
+    text-align: center;
+}
+
+.navbar {
+    height: 100px;
+}
+
+.flaty-nav {
+    position: absolute;
+    right: 10px;
+    top: 5px;
 }
