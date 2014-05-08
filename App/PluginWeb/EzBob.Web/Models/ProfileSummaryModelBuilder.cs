@@ -405,18 +405,18 @@
 			summary.DecisionHistory = _decisions.ByCustomer(customer).Select(DecisionHistoryModel.Create).OrderBy(x => x.Date).ToList();
 
 			//Dashboard
-			summary.Decisions = new DecisionsModel();
-			summary.Decisions.TotalDecisionsCount = summary.DecisionHistory.Count;
-			summary.Decisions.TotalApprovedAmount = summary.DecisionHistory.Sum(dh => dh.ApprovedSum);
-			summary.Decisions.RejectsCount = summary.DecisionHistory.Count(dh => dh.Action == "Reject");
-			var decisionHistoryModel = summary.DecisionHistory.OrderByDescending(dh => dh.Date).FirstOrDefault();
-			if (decisionHistoryModel != null)
+			summary.Decisions = new DecisionsModel
+				{
+					TotalDecisionsCount = summary.DecisionHistory.Count,
+					TotalApprovedAmount = summary.DecisionHistory.Sum(dh => dh.ApprovedSum),
+					RejectsCount = summary.DecisionHistory.Count(dh => dh.Action == "Reject")
+				};
+			var lastApprove = summary.DecisionHistory.OrderByDescending(dh => dh.Date).FirstOrDefault(dh => dh.Action == "Approve");
+			if (lastApprove != null)
 			{
-				summary.Decisions.LastInterestRate = decisionHistoryModel.InterestRate;
-				summary.Decisions.LastDecisionDate = decisionHistoryModel.Date;
+				summary.Decisions.LastInterestRate = lastApprove.InterestRate;
+				summary.Decisions.LastDecisionDate = lastApprove.Date;
 			}
-
-			summary.Decisions.TimePast = "?";
 		}
 
 

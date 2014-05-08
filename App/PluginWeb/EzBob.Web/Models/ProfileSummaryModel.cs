@@ -94,7 +94,6 @@
 		public int RejectsCount { get; set; }
 		public decimal LastInterestRate { get; set; }
 		public DateTime LastDecisionDate { get; set; }
-		public string TimePast { get; set; }
 	}
 
 	public class ProfileSummaryModel

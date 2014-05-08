@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.DashboardView = (function(_super) {
+
     __extends(DashboardView, _super);
 
     function DashboardView() {
-      _ref = DashboardView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return DashboardView.__super__.constructor.apply(this, arguments);
     }
 
     DashboardView.prototype.template = "#dashboard-template";
@@ -34,7 +34,9 @@
     DashboardView.prototype.serializeData = function() {
       return {
         m: this.model.toJSON(),
-        crm: this.crmModel.toJSON(),
+        crm: _.first(_.filter(this.crmModel.toJSON(), function(crm) {
+          return crm.User !== 'System';
+        }), 5),
         experian: this.experianModel.toJSON(),
         properties: this.propertiesModel.toJSON()
       };
@@ -47,7 +49,6 @@
 
     DashboardView.prototype.boxToolClick = function(e) {
       var action, btn, obj;
-
       obj = e.currentTarget;
       if ($(obj).data("action") === undefined) {
         false;
