@@ -124,9 +124,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 		);
 
         request.success(function (res) {
-            var id = that.model.get('Id');
-            that.model.attributes = res;
-            that.model.set("Id", id);
+            that.model.set(res);
             UnBlockUi();
         });
     },
