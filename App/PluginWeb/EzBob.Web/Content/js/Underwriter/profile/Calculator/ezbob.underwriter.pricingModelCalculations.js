@@ -153,6 +153,19 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     onRender: function () {
         this.modelBinder.bind(this.model, this.el, this.bindings);
 
+        this.$el.find('#interestRate').percentFormat();
+        this.$el.find('#defaultRate').percentFormat();
+        this.$el.find('#tenureAsPercentOfLoanTerm').percentFormat();
+        this.$el.find('#collectionRate').percentFormat();
+        this.$el.find('#debtPercentOfCapital').percentFormat();
+        this.$el.find('#costOfDebt').percentFormat();
+
+        this.$el.find('#loanAmount').moneyFormat();
+        this.$el.find('#initiationFee').moneyFormat();
+        this.$el.find('#cogs').moneyFormat();
+        this.$el.find('#opexAndCapex').moneyFormat();
+        this.$el.find('#profitBeforeTax').moneyFormat();
+        
         this.$el.find('#loanTerm').numericOnly(2);
         this.$el.find('#interestOnlyPeriod').numericOnly(2);
         this.$el.find('#tenureAsMonthsOfLoanTerm').numericOnly(2);
