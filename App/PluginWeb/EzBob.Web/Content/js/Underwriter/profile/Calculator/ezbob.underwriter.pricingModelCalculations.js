@@ -152,6 +152,11 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     
     onRender: function () {
         this.modelBinder.bind(this.model, this.el, this.bindings);
+
+        this.$el.find('#loanTerm').numericOnly(2);
+        this.$el.find('#interestOnlyPeriod').numericOnly(2);
+        this.$el.find('#tenureAsMonthsOfLoanTerm').numericOnly(2);
+        
         return this;
     }
 });
