@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
-using EZBob.DatabaseLib.Model.Database;
-using System.Linq;
-using EZBob.DatabaseLib;
-using EzBob.Web.Areas.Customer.Models;
-using Ezbob.ExperianParser;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Text;
+	using AutoMapper;
+	using EZBob.DatabaseLib.Model.Database;
+	using System.Linq;
+	using EZBob.DatabaseLib;
+	using Customer.Models;
+	using Ezbob.ExperianParser;
 	using System.Text.RegularExpressions;
 	using ExperianLib;
+	using StructureMap;
 
 	public class CrossCheckModel
 	{
@@ -27,13 +27,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public CrossCheckStatus CrossCheckStatus { get; set; }
 
 		public List<Director> Directors { get; set; }
-		public EZBob.DatabaseLib.Model.Database.Customer Customer { get; set; }
+		public Customer Customer { get; set; }
 		public SortedSet<string> ExperianDirectors { get; set; }
 
 		public int ExperianMortgage { get; set; }
 		public int ExperianMortgageCount { get; set; }
 		public int AssetWorth { get; set; }
-
+		
 		static CrossCheckModel()
 		{
 			Mapper.CreateMap<EZBob.DatabaseLib.Model.Database.PersonalInfo, PersonalInfo>();
@@ -57,7 +57,40 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				.ForMember(x => x.Town, y => y.MapFrom(z => z.City));
 		}
 
-		public CrossCheckModel(EZBob.DatabaseLib.Model.Database.Customer customer, CreditBureauModelBuilder creditBureauModelBuilder)
+		public static void GetZooplaAndMortgagesData(Customer customer, string zooplaEstimateStr, int zoopla1YearAvg, out int zooplaValue, out int mortgageBalance, out int mortgageCount)
+		{
+			var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
+			mortgageBalance = 0;
+			mortgageCount = 0;
+			var regexObj = new Regex(@"[^\d]");
+			var stringVal = string.IsNullOrEmpty(zooplaEstimateStr) ? "" : regexObj.Replace(zooplaEstimateStr.Trim(), "");
+			int intVal;
+			if (!int.TryParse(stringVal, out intVal))
+			{
+				intVal = zoopla1YearAvg;
+			}
+			zooplaValue = intVal;
+			try
+			{
+				ConsumerServiceResult result;
+				CreditBureauModelBuilder creditBureauModelBuilder = ObjectFactory.GetInstance<CreditBureauModelBuilder>();
+				creditBureauModelBuilder.GetConsumerInfo(customer, false, null, currentAddress, out result);
+				var experian = creditBureauModelBuilder.GenerateConsumerModel(customer.Id, result);
+				if (experian != null && experian.ConsumerAccountsOverview != null)
+				{
+					int mtg;
+					int.TryParse(experian.ConsumerAccountsOverview.Balance_Mtg, out mtg);
+					mortgageBalance = mtg;
+
+					int mtgCount;
+					int.TryParse(experian.ConsumerAccountsOverview.OpenAccounts_Mtg, out mtgCount);
+					mortgageCount = mtgCount;
+				}
+			}
+			catch { }
+		}
+
+		public CrossCheckModel(Customer customer, CreditBureauModelBuilder creditBureauModelBuilder)
 		{
 			Customer = customer;
 			
@@ -83,33 +116,15 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			if (zoopla != null)
 			{
 				current.ZooplaEstimate = zoopla.ZooplaEstimate;
+
+				int zooplaValue, experianMortgage, experianMortgageCount;
+				GetZooplaAndMortgagesData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue, out experianMortgage, out experianMortgageCount);
+				current.ZooplaValue = zooplaValue;
+				ExperianMortgage = experianMortgage;
+				ExperianMortgageCount = experianMortgageCount;
+
 				current.ZooplaUpdateDate = zoopla.UpdateDate;
 				current.ZooplaAverage = zoopla.AverageSoldPrice1Year.ToString("N0");
-				var regexObj = new Regex(@"[^\d]");
-				var stringVal = string.IsNullOrEmpty(zoopla.ZooplaEstimate) ? "" : regexObj.Replace(zoopla.ZooplaEstimate.Trim(), "");
-				int intVal;
-				if (!int.TryParse(stringVal, out intVal))
-				{
-					intVal = zoopla.AverageSoldPrice1Year;
-				}
-				current.ZooplaValue = intVal;
-				try
-				{
-					ConsumerServiceResult result;
-					creditBureauModelBuilder.GetConsumerInfo(customer, false, null, current, out result);
-					var experian = creditBureauModelBuilder.GenerateConsumerModel(customer.Id, result);
-					if (experian != null && experian.ConsumerAccountsOverview != null)
-					{
-						int mtg = 0;
-						int.TryParse(experian.ConsumerAccountsOverview.Balance_Mtg, out mtg);
-						ExperianMortgage = mtg;
-
-						int mtgCount = 0;
-						int.TryParse(experian.ConsumerAccountsOverview.OpenAccounts_Mtg, out mtgCount);
-						ExperianMortgageCount = mtgCount;
-					}
-				}
-				catch { }
 
 				AssetWorth = current.ZooplaValue - ExperianMortgage;
 			}

@@ -10,7 +10,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
-	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -35,6 +34,7 @@
 		private readonly MessagesModelBuilder _messagesModelBuilder;
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly LoanRepository _loanRepository;
+		private readonly CustomerAddressRepository customerAddressRepository;
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
 		private readonly ServiceClient serviceClient;
@@ -52,7 +52,8 @@
 											CustomerRelationsRepository customerRelationsRepository,
 											NHibernateRepositoryBase<MP_AlertDocument> docRepo,
 											IBugRepository bugs, 
-											LoanRepository loanRepository)
+											LoanRepository loanRepository,
+											CustomerAddressRepository customerAddressRepository)
 		{
 			_customers = customers;
 			_session = session;
@@ -67,6 +68,7 @@
 			_docRepo = docRepo;
 			_bugs = bugs;
 			_loanRepository = loanRepository;
+			this.customerAddressRepository = customerAddressRepository;
 			serviceClient = new ServiceClient();
 		}
 
@@ -112,7 +114,24 @@
 			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customer.Id, context.UserId);
 			model.PricingModelCalculations = getPricingModelModelResponse.Value;
 
-			model.Properties = new PropertiesModel(11,2, 700000, 150000);
+			int numberOfProperties = customer.PersonalInfo.ResidentialStatus == "Home owner" ? 1 : 0;
+			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
+				                         a.AddressType == CustomerAddressType.OtherPropertyAddress ||
+				                         a.AddressType == CustomerAddressType.OtherPropertyAddressPrev);
+
+			numberOfProperties += otherPropertiesCount;
+			var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
+			Zoopla zoopla = null;
+			if (currentAddress != null) zoopla = currentAddress.Zoopla.LastOrDefault();
+			int zooplaValue = 0; 
+			int experianMortgage = 0;
+			int experianMortgageCount = 0;
+			if (zoopla != null)
+			{
+				CrossCheckModel.GetZooplaAndMortgagesData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue, out experianMortgage, out experianMortgageCount);
+			}
+
+			model.Properties = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage);
 
 			DateTime? lastDateCheck = null;
 			model.FraudDetectionLog = new FraudDetectionLogModel

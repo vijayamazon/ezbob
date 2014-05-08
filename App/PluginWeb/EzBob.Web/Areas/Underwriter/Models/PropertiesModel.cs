@@ -11,6 +11,8 @@
 			NetWorth = MarketValue - SumOfMortgages;
 			Ltv = MarketValue == 0 ? 0 : SumOfMortgages*100/MarketValue;
 			NetWorthPercentages = 100 - Ltv;
+			MarketValue /= 1000;
+			SumOfMortgages /= 1000;
 		}
 
 		public int NumberOfProperties { get; set; }
