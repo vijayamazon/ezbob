@@ -10,7 +10,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     
     initialize: function () {
         this.modelBinder = new Backbone.ModelBinder();
-        this.model.on('change reset fetch sync', this.render, this);
+        this.model.on('reset fetch sync', this.render, this);
         this.inputsExpanded = false;
         this.outputsExpanded = false;
     },
@@ -108,7 +108,10 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     },
 
     resetClicked: function () {
-        this.model.fetch({ data: { customerId: this.model.get('Id') } });
+        var that = this;
+        this.model.fetch({ data: { customerId: this.model.get('Id') } }).done(function () {
+            that.renderAndRememberExpanded();
+        });
     },
 
     calculateClicked: function () {
@@ -125,6 +128,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 
         request.success(function (res) {
             that.model.set(res);
+            that.renderAndRememberExpanded();
             UnBlockUi();
         });
     },
@@ -134,6 +138,18 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         return { model: data };
     },
 
+    renderAndRememberExpanded: function() {
+        this.render();
+        if (this.inputsExpanded) {
+            this.inputsExpanded = false;
+            this.expandCollapseInputsClicked();
+        }
+        if (this.outputsExpanded) {
+            this.outputsExpanded = false;
+            this.expandCollapseOutputsClicked();
+        }
+    },
+    
     onRender: function () {
         this.modelBinder.bind(this.model, this.el, this.bindings);
         return this;
