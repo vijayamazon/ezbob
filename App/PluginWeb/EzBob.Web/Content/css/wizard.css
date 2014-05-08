@@ -391,13 +391,18 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .vip-main {
-    height: 164px;
-    border: 5px solid #5c6373; 
+    height: 115px;
+    border: 1px solid #5c6373;
+    color: #5c6373;
+    position: relative;
 }
 
 .vip-button {
-    float: right;
     height: 100%;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    height: 40px;
 }
 .vip-box {
     float: left;
