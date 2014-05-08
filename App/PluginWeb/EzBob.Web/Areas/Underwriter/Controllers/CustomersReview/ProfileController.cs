@@ -3,8 +3,8 @@
 	using System.Data;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzBob.Models;
 	using Infrastructure.Attributes;
+	using Web.Models;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class ProfileController : Controller

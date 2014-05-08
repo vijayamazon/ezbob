@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using EZBob.DatabaseLib.Model.Database;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using Areas.Customer.Models;
+	using Areas.Underwriter.Models;
+	using EZBob.DatabaseLib.Model.Database;
 	using System.ComponentModel;
-	using Customer.Models;
 
 	public class BaseProfileSummaryModel
 	{

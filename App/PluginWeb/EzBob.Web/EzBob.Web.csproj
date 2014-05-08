@@ -407,6 +407,8 @@
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\NewsItem.cs" />
     <Compile Include="Models\PaymentConfirmationModel.cs" />
+    <Compile Include="Models\ProfileSummaryModel.cs" />
+    <Compile Include="Models\ProfileSummaryModelBuilder.cs" />
     <Compile Include="Models\Strings\DbString.cs" />
     <Compile Include="Models\ForgotPasswordModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />

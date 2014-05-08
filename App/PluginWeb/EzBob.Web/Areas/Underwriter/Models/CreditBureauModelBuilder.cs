@@ -38,7 +38,7 @@
 			_variablesRepository = variablesRepository;
 		}
 
-		public CreditBureauModel Create(EZBob.DatabaseLib.Model.Database.Customer customer, bool getFromLog = false, long? logId = null)
+		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
 		{
 			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
 			var model = new CreditBureauModel();
@@ -72,7 +72,7 @@
 			return model;
 		}
 
-		public void GetConsumerInfo(EZBob.DatabaseLib.Model.Database.Customer customer,
+		public void GetConsumerInfo(Customer customer,
 			bool getFromLog, long? logId, CustomerAddress customerMainAddress, out ConsumerServiceResult result)
 		{
 

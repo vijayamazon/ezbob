@@ -1,4 +1,4 @@
-﻿namespace EzBob.Models
+﻿namespace EzBob.Web.Models
 {
 	using System;
 	using System.Collections.Generic;
@@ -8,9 +8,9 @@
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using Web.Areas.Customer.Models;
-	using Web.Areas.Underwriter.Models;
-	using Marketplaces;
+	using Areas.Customer.Models;
+	using Areas.Underwriter.Models;
+	using EzBob.Models.Marketplaces;
 	using NHibernate;
 	using StructureMap;
 	using log4net;
@@ -26,7 +26,6 @@
 			_mpFacade = mpFacade;
 		}
 
-
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ProfileSummaryModelBuilder));
 
 		public ProfileSummaryModel CreateProfile(Customer customer)
@@ -36,7 +35,6 @@
 			BuildCreditBureau(customer, summary);
 			BuildPaymentAccounts(customer, summary);
 			AddDecisionHistory(summary, customer);
-
 
 			BuildRequestedLoan(summary, customer);
 
@@ -88,8 +86,7 @@
 			{
 				summary.Alerts.Add(new AlertModel { Alert = string.Format("Collection Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Error.DescriptionAttr() });
 			}
-
-			if (customer.CollectionStatus.CurrentStatus.IsWarning)
+			else if (customer.CollectionStatus.CurrentStatus.IsWarning)
 			{
 				summary.Alerts.Add(new AlertModel { Alert = string.Format("Collection Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Warning.DescriptionAttr() });
 			}
@@ -103,21 +100,29 @@
 			{
 				summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Error.DescriptionAttr() });
 			}
+			else if (customer.AMLResult == "Warning" || customer.AMLResult == "Not performed")
+			{
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Warning.DescriptionAttr() });
+			}
 			
 			if (customer.BWAResult == "Rejected")
 			{
 				summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Error.DescriptionAttr() });
 			}
-			
-			if (customer.AMLResult == "Warning" || customer.AMLResult == "Not performed")
-			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Warning.DescriptionAttr() });
-			}
-			
-			if(customer.BWAResult == "Warning" || customer.BWAResult == "Not performed")
+			else if(customer.BWAResult == "Warning" || customer.BWAResult == "Not performed")
 			{
 				summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Warning.DescriptionAttr() });
 			}
+
+			if (summary.CreditBureau.ThinFile == "Yes")
+			{
+				summary.Alerts.Add(new AlertModel { Alert = "Thin file", AlertType = AlertType.Error.DescriptionAttr() });
+			}
+			else if (summary.CreditBureau.ThinFile == "N/A")
+			{
+				summary.Alerts.Add(new AlertModel { Alert = "Couldn't get financial accounts", AlertType = AlertType.Warning.DescriptionAttr() });
+			}
+			//TODO: add approve button alerts
 		}
 
 		private static void BuildRequestedLoan(ProfileSummaryModel summary, Customer customer)
@@ -187,7 +192,6 @@
 				{
 					creditBureau.ThinFile = "N/A";
 				}
-
 			}
 			catch (Exception e)
 			{
