@@ -174,8 +174,10 @@
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Customer\Models\VipModel.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\PropertiesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\PricingModelCalculationsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
+    <Compile Include="Areas\Underwriter\Models\PropertiesModel.cs" />
     <Compile Include="Areas\Underwriter\Models\SuggestedAmountModel.cs" />
     <Compile Include="Code\AgreementRenderer.cs" />
     <Compile Include="Code\AgreementsTemplatesProvider.cs" />
@@ -1144,6 +1146,7 @@
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js">
       <DependentUpon>ezbob.underwriter.customerFullModel.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.properties.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.js">
       <DependentUpon>ezbob.underwriter.profile.coffee</DependentUpon>
     </Content>
@@ -1239,9 +1242,6 @@
       <DependentUpon>ezbob.underwriter.bankAccountDetails.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js">
-      <DependentUpon>ezbob.underwriter.dashboard.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.min.js">
       <DependentUpon>ezbob.underwriter.dashboard.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">

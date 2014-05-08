@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.DashboardView = (function(_super) {
-
     __extends(DashboardView, _super);
 
     function DashboardView() {
-      return DashboardView.__super__.constructor.apply(this, arguments);
+      _ref = DashboardView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     DashboardView.prototype.template = "#dashboard-template";
@@ -23,17 +23,20 @@
       this.crmModel = options.crmModel;
       this.personalModel = options.personalModel;
       this.experianModel = options.experianModel;
+      this.propertiesModel = options.propertiesModel;
       this.bindTo(this.model, "change sync", this.render, this);
       this.bindTo(this.crmModel, "change sync", this.render, this);
       this.bindTo(this.personalModel, "change sync", this.render, this);
-      return this.bindTo(this.experianModel, "change sync", this.render, this);
+      this.bindTo(this.experianModel, "change sync", this.render, this);
+      return this.bindTo(this.propertiesModel, "change sync", this.render, this);
     };
 
     DashboardView.prototype.serializeData = function() {
       return {
         m: this.model.toJSON(),
         crm: this.crmModel.toJSON(),
-        experian: this.experianModel.toJSON()
+        experian: this.experianModel.toJSON(),
+        properties: this.propertiesModel.toJSON()
       };
     };
 
@@ -44,6 +47,7 @@
 
     DashboardView.prototype.boxToolClick = function(e) {
       var action, btn, obj;
+
       obj = e.currentTarget;
       if ($(obj).data("action") === undefined) {
         false;

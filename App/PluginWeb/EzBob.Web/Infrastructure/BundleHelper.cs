@@ -217,7 +217,7 @@
 				.Add("~/Content/js/Underwriter/Fraud/ezbob.underwriter.fraud.coffee")
 				.Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudDetectionLog.js")
 				.Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudStatus.coffee")
-
+				
 				// Configuration Variables
 				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.coffee")
 				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.coffee")
@@ -281,6 +281,7 @@
 				.Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")
 				.Add("~/Content/js/Underwriter/profile/CustomerRelations/ezbob.underwriter.customerRelations.js")
 				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.coffee")
+				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.properties.js")
 
 				//----
 				.Add("~/Content/js/Underwriter/editLoan/loanModel.coffee")

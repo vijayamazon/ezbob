@@ -127,13 +127,16 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             el: fraudDetection
             model: @FraudDetectionLogs
         )
-        
+
+        @PropertiesModel = new EzBob.Underwriter.Properties()
+
         @dashboardInfoView = new EzBob.Underwriter.DashboardView(
             el: dashboardInfo
             model: @summaryInfoModel
             crmModel: @CustomerRelationsData
             personalModel: @personalInfoModel
             experianModel: @experianInfoModel
+            propertiesModel: @PropertiesModel
         )
 
         @showed = true
@@ -403,10 +406,14 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @medalCalculationModel.set {Id: id}, {silent: true}
             @medalCalculationModel.set fullModel.get("MedalCalculations"), silent: true
             @medalCalculationModel.trigger "sync"
-
+            
             @pricingModelCalculationsModel.set {Id: id}, {silent: true}
             @pricingModelCalculationsModel.set fullModel.get("PricingModelCalculations"), silent: true
             @pricingModelCalculationsModel.trigger "sync"
+
+            @PropertiesModel.set {Id: id}, {silent: true}
+            @PropertiesModel.set fullModel.get("Properties"), silent: true
+            @PropertiesModel.trigger "sync"
 
             @FraudDetectionLogs.customerId = id
             @FraudDetectionLogView.customerId = id

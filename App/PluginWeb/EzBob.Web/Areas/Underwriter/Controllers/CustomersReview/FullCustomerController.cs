@@ -112,6 +112,8 @@
 			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customer.Id, context.UserId);
 			model.PricingModelCalculations = getPricingModelModelResponse.Value;
 
+			model.Properties = new PropertiesModel(11,2, 700000, 150000);
+
 			DateTime? lastDateCheck = null;
 			model.FraudDetectionLog = new FraudDetectionLogModel
 				{
@@ -160,6 +162,7 @@
 			public PaymentsAccountModel PaymentAccountModel { get; set; }
 			public MedalCalculators MedalCalculations { get; set; }
 			public PricingModelModel PricingModelCalculations { get; set; }
+			public PropertiesModel Properties { get; set; }
 			public FraudDetectionLogModel FraudDetectionLog { get; set; }
 			public List<ApiChecksLogModel> ApiCheckLogs { get; set; }
 			public List<MessagesModel> Messages { get; set; }
