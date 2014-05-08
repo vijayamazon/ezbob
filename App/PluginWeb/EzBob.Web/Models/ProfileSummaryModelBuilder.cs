@@ -84,11 +84,11 @@
 			
 			if (customer.CollectionStatus.CurrentStatus.IsDefault)
 			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("Collection Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Error.DescriptionAttr() });
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Error.DescriptionAttr() });
 			}
 			else if (customer.CollectionStatus.CurrentStatus.IsWarning)
 			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("Collection Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Warning.DescriptionAttr() });
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Warning.DescriptionAttr() });
 			}
 
 			if (customer.FraudStatus != FraudStatus.Ok)
