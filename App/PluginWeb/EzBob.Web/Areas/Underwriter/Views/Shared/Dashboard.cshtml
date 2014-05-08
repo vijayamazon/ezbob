@@ -154,7 +154,7 @@
                         <%if(experian.directorsModels && experian.directorsModels.length > 0){
                             _.each(experian.directorsModels, function(item, i){%>
                         <div class="col-md-2">
-                            <div class="tile" style="background-color : <%-item.ScoreColor%>">
+                            <div class="tile" style="background-color: <%-item.ScoreColor%>">
                                 <div class="caption">
                                     Director <%-(i+1)%>
                                 </div>
@@ -368,6 +368,7 @@
     </div>
 
     <div>
+        <%if(m.LoanActivity && m.Decisions){%>
         <div class="col-md-7">
             <div class="box">
                 <div class="box-title">
@@ -380,62 +381,80 @@
                 <div class="box-content">
                     <div class="tabbable tabs-left">
                         <ul class="nav nav-tabs active-red">
-                            <li class="active"><a href="#loans" data-toggle="tab"><span class="label label-large label-warning">0</span>&nbsp;Loans</a></li>
-                            <li><a href="#approves" data-toggle="tab"><span class="label label-large label-success">5</span>&nbsp;Approves</a></li>
-                            <li><a href="#rejects" data-toggle="tab"><span class="label label-large label-important">10</span>&nbsp;Rejects</a></li>
+                            <li class="active"><a href="#loans" data-toggle="tab"><span class="label label-large label-warning"><%-m.LoanActivity.TotalIssuesCount%></span>&nbsp;Loans</a></li>
+                            <li><a href="#decisions" data-toggle="tab"><span class="label label-large label-success"><%-m.Decisions.TotalDecisionsCount%></span>&nbsp;Decisions</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade active in" id="loans">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Amount</th>
-                                            <th>Repaid</th>
-                                            <th>Given</th>
-                                            <th>Closed</th>
-                                            <th>Outstanding</th>
-                                            <th>Outstanding Principal</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>232.78</td>
-                                            <td>Aug 31 2012</td>
-                                            <td>Sep 1 2012</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>Paid</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <ul class="summary-offer">
+                                    <li>
+                                        <p>
+                                            <span>Total issues</span>
+                                            <span><%-m.LoanActivity.TotalIssuesSum%></span>
+                                            <span><%-m.LoanActivity.TotalIssuesCount%></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Repaid</span>
+                                            <span><%-m.LoanActivity.RepaidSum%></span>
+                                            <span><%-m.LoanActivity.RepaidCount%></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Active</span>
+                                            <span><%-m.LoanActivity.ActiveSum%></span>
+                                            <span><%-m.LoanActivity.ActiveCount%></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Earned interest</span>
+                                            <span><%-m.LoanActivity.EarnedInterest%></span>
+                                        </p>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="tab-pane fade" id="approves">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Start date</th>
-                                            <th>End date</th>
-                                            <th>Amount</th>
-                                            <th>Interest rate</th>
-                                            <th>Setup fee</th>
-                                            <th>Repayment period</th>
-                                            <th>Type</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Oct 1 2013</td>
-                                            <td>Oct 2 2013</td>
-                                            <td>900</td>
-                                            <td>6%</td>
-                                            <td></td>
-                                            <td>3</td>
-                                            <td>Standard</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="tab-pane fade" id="decisions">
+                                <ul class="summary-offer">
+                                    <li>
+                                        <p>
+                                            <span># Decisions</span>
+                                            <span><%-m.Decisions.TotalDecisionsCount%></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Total approved</span>
+                                            <span><%-m.Decisions.TotalApprovedAmount%></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span># Rejects</span>
+                                            <span><%-m.Decisions.RejectsCount%></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Last interest rate</span>
+                                            <span><%-EzBob.formatPercents(m.Decisions.LastInterestRate)%></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Last decision date</span>
+                                            <span><%-EzBob.formatDate(new Date(moment(m.Decisions.LastDecisionDate)))%></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Time past</span>
+                                            <span><%-m.Decisions.TimePast%></span>
+                                        </p>
+                                    </li>
+                                </ul>
                             </div>
                             <div class="tab-pane fade" id="rejects">
                                 <table class="table table-striped">
@@ -458,6 +477,7 @@
                 </div>
             </div>
         </div>
+        <%}%>
         <%if(crm && crm.length > 0) {%>
         <div class="col-md-5">
             <div class="box">

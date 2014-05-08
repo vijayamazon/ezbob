@@ -49,6 +49,15 @@
 		public string CurrentLateDays { get; set; }
 		public string TotalFees { get; set; }
 		public string FeesCount { get; set; }
+
+		//Dashboard
+		public decimal TotalIssuesSum { get; set; }
+		public int TotalIssuesCount { get; set; }
+		public decimal RepaidSum { get; set; }
+		public int RepaidCount { get; set; }
+		public decimal ActiveSum { get; set; }
+		public int ActiveCount { get; set; }
+		public decimal EarnedInterest { get; set; }
 	}
 
 	public class AffordabilityAnalysis
@@ -77,6 +86,16 @@
 		public string OtherReason { get; set; }
 		public string OtherSourceOfRepayment { get; set; }
 	}
+	
+	public class DecisionsModel
+	{
+		public int TotalDecisionsCount { get; set; }
+		public decimal TotalApprovedAmount { get; set; }
+		public int RejectsCount { get; set; }
+		public decimal LastInterestRate { get; set; }
+		public DateTime LastDecisionDate { get; set; }
+		public string TimePast { get; set; }
+	}
 
 	public class ProfileSummaryModel
 	{
@@ -84,6 +103,7 @@
 		public PaymentAccounts PaymentAccounts { get; set; }
 		public AmlBwa AmlBwa { get; set; }
 		public LoanActivity LoanActivity { get; set; }
+		public DecisionsModel Decisions { get; set; }
 		public AffordabilityAnalysis AffordabilityAnalysis { get; set; }
 		public CreditBureau CreditBureau { get; set; }
 		public FraudCheck FraudCheck { get; set; }

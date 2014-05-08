@@ -93,7 +93,7 @@
 
 			if (customer.FraudStatus != FraudStatus.Ok)
 			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("Fraud Status : {0}", customer.FraudStatus), AlertType = AlertType.Error.DescriptionAttr() });
+				summary.Alerts.Add(new AlertModel { Alert = string.Format("Fraud Status : {0}", customer.FraudStatus.DescriptionAttr()), AlertType = AlertType.Error.DescriptionAttr() });
 			}
 
 			if (customer.AMLResult == "Rejected")
@@ -351,6 +351,15 @@
 				 where c.Amount > 0
 				 select c.Amount).Count();
 
+			//Dashboard
+			var totalIssues = customer.Loans.Sum(l => l.LoanAmount);
+			var totalIssuesCount = customer.Loans.Count();
+			var repaid = customer.Loans.Sum(l => l.Repayments);
+			var repaidCount = customer.Loans.Count(l => l.DateClosed.HasValue);
+			var active = customer.Loans.Sum(l => l.Balance);
+			var activeCount = customer.Loans.Count(l => !l.DateClosed.HasValue);
+			var earnedInterest = customer.Loans.Sum(l => l.InterestPaid);
+
 			return new LoanActivity
 				{
 					PreviousLoans = Money(previousLoans),
@@ -362,7 +371,17 @@
 					CurrentLateDays = currentLateDays.ToString(CultureInfo.InvariantCulture),
 					PaymentDemeanor = lateStatus,
 					TotalFees = Money(totalFees),
-					FeesCount = Money(feesCount)
+					FeesCount = Money(feesCount),
+
+					//Dashboard
+
+					TotalIssuesSum = totalIssues,
+					TotalIssuesCount = totalIssuesCount,
+					RepaidSum = repaid,
+					RepaidCount = repaidCount,
+					ActiveSum = active,
+					ActiveCount = activeCount,
+					EarnedInterest = earnedInterest
 				};
 		}
 
@@ -384,6 +403,20 @@
 		private void AddDecisionHistory(ProfileSummaryModel summary, Customer customer)
 		{
 			summary.DecisionHistory = _decisions.ByCustomer(customer).Select(DecisionHistoryModel.Create).OrderBy(x => x.Date).ToList();
+
+			//Dashboard
+			summary.Decisions = new DecisionsModel();
+			summary.Decisions.TotalDecisionsCount = summary.DecisionHistory.Count;
+			summary.Decisions.TotalApprovedAmount = summary.DecisionHistory.Sum(dh => dh.ApprovedSum);
+			summary.Decisions.RejectsCount = summary.DecisionHistory.Count(dh => dh.Action == "Reject");
+			var decisionHistoryModel = summary.DecisionHistory.OrderByDescending(dh => dh.Date).FirstOrDefault();
+			if (decisionHistoryModel != null)
+			{
+				summary.Decisions.LastInterestRate = decisionHistoryModel.InterestRate;
+				summary.Decisions.LastDecisionDate = decisionHistoryModel.Date;
+			}
+
+			summary.Decisions.TimePast = "?";
 		}
 
 
