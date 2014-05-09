@@ -41,8 +41,8 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             selector: "#defaultRate",
             converter: EzBob.BindingConverters.percentsFormat
         },
-        TenureAsPercentOfLoanTerm: {
-            selector: "#tenureAsPercentOfLoanTerm",
+        TenurePercents: {
+            selector: "#tenurePercents",
             converter: EzBob.BindingConverters.percentsFormat
         },
         CollectionRate: {
@@ -66,19 +66,33 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             selector: "#interestOnlyPeriod",
             converter: EzBob.BindingConverters.numericOnlyFormat
         },
-        TenureAsMonthsOfLoanTerm: {
-            selector: "#tenureAsMonthsOfLoanTerm",
+        TenureMonths: {
+            selector: "#tenureMonths",
             converter: EzBob.BindingConverters.numericOnlyFormat
         }
     },
 
     events: {
+        'focusout #tenurePercents': 'tenurePercentsChanged',
+        'focusout #tenureMonths': 'tenureMonthsChanged',
         'click #pricingModelResetButton': 'resetClicked',
         'click #pricingModelCalculateButton': 'calculateClicked',
         'click #expandCollapseInputsButton': 'expandCollapseInputsClicked',
         'click #expandCollapseOutputsButton': 'expandCollapseOutputsClicked'
     },
 
+    tenurePercentsChanged: function () {
+        debugger;
+        var tenureMonths = this.model.get('TenurePercents') * this.model.get('LoanTerm');
+        this.model.set('TenureMonths', tenureMonths);
+    },
+
+    tenureMonthsChanged: function () {
+        debugger;
+        var tenurePercents = this.model.get('TenureMonths') / this.model.get('LoanTerm');
+        this.model.set('TenurePercents', tenurePercents);
+    },
+    
     expandCollapseOutputsClicked: function () {
         if (this.outputsExpanded) {
             this.outputsExpanded = false;
@@ -155,7 +169,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 
         this.$el.find('#interestRate').percentFormat();
         this.$el.find('#defaultRate').percentFormat();
-        this.$el.find('#tenureAsPercentOfLoanTerm').percentFormat();
+        this.$el.find('#tenurePercents').percentFormat();
         this.$el.find('#collectionRate').percentFormat();
         this.$el.find('#debtPercentOfCapital').percentFormat();
         this.$el.find('#costOfDebt').percentFormat();
@@ -168,7 +182,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         
         this.$el.find('#loanTerm').numericOnly(2);
         this.$el.find('#interestOnlyPeriod').numericOnly(2);
-        this.$el.find('#tenureAsMonthsOfLoanTerm').numericOnly(2);
+        this.$el.find('#tenureMonths').numericOnlyWithDecimal();
         
         return this;
     }

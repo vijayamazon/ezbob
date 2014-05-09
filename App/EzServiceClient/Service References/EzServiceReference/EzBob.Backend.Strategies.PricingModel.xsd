@@ -27,8 +27,8 @@
       <xs:element minOccurs="0" name="ProfitBeforeTax" type="xs:decimal" />
       <xs:element minOccurs="0" name="ProfitBeforeTaxOutput" type="xs:decimal" />
       <xs:element minOccurs="0" name="SetupFeeForEuLoan" type="xs:decimal" />
-      <xs:element minOccurs="0" name="TenureAsMonthsOfLoanTerm" type="xs:int" />
-      <xs:element minOccurs="0" name="TenureAsPercentOfLoanTerm" type="xs:decimal" />
+      <xs:element minOccurs="0" name="TenureMonths" type="xs:decimal" />
+      <xs:element minOccurs="0" name="TenurePercents" type="xs:decimal" />
       <xs:element minOccurs="0" name="TotalCost" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>

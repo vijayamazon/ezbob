@@ -10,8 +10,8 @@
 		// Other input fields
 		public int LoanTerm { get; set; }
 		public int InterestOnlyPeriod { get; set; }
-		public decimal TenureAsPercentOfLoanTerm { get; set; }
-		public int TenureAsMonthsOfLoanTerm { get; set; }
+		public decimal TenurePercents { get; set; }
+		public decimal TenureMonths { get; set; }
 		public decimal CollectionRate { get; set; }
 		public decimal Cogs { get; set; }
 		public decimal DebtPercentOfCapital { get; set; }

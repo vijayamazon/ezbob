@@ -1069,7 +1069,6 @@ div.hmrc-enter-data-holder .add-one-period {
     font-size: 20px;
 }
 
-
 .tile p.title-small {
     padding-top: 0;
 }
@@ -1083,6 +1082,14 @@ div.hmrc-enter-data-holder .add-one-period {
 .alert {
     padding: 5px !important;
     margin-bottom: 10px !important;
+}
+
+.tenure-percents-width {
+    width: 90px;
+}
+
+.tenure-months-width {
+    width: 50px;
 }
 
 
