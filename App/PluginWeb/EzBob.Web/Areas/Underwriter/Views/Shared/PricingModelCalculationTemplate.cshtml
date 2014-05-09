@@ -57,8 +57,8 @@
                         <td><input type="text" id="opexAndCapex"/></td>
                     </tr>
                     <tr class="minor-input-row hide">
-                        <td class="pricing-model-left-td">Profit Before Tax</td>
-                        <td><input type="text" id="profitBeforeTax"/></td>
+                        <td class="pricing-model-left-td">Profit Markup As % Of Revenue</td>
+                        <td><input type="text" id="profitMarkup"/></td>
                     </tr>
 
                     <tr>
@@ -132,8 +132,8 @@
                         <td><%-GBPValues(model.TotalCost)%></td>
                     </tr>
                     <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">Profit Before Tax</td>
-                        <td><%-GBPValues(model.ProfitBeforeTaxOutput, true)%></td>
+                        <td class="pricing-model-left-td">Profit Markup As % Of Revenue</td>
+                        <td><%-GBPValues(model.ProfitMarkupOutput, true)%></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Balance</td>

@@ -30,13 +30,13 @@
 					LoanTerm = 12,
 					InterestOnlyPeriod = 3,
 					TenurePercents = 0.5m,
-					TenureMonths = 0.223m,
+					TenureMonths = 0.22m,
 					CollectionRate = 6.88m,
 					Cogs = 1000,
 					DebtPercentOfCapital = 0.65m,
 					CostOfDebt = 0.65m,
 					OpexAndCapex = 180,
-					ProfitBeforeTax = 291
+					ProfitMarkup = 0.29m
 				};
 		}
 	}

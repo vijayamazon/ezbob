@@ -32,11 +32,11 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             selector: "#opexAndCapex",
             converter: EzBob.BindingConverters.moneyFormat
         },
-        ProfitBeforeTax: {
-            selector: "#profitBeforeTax",
-            converter: EzBob.BindingConverters.moneyFormat
+        
+        ProfitMarkup: {
+            selector: "#profitMarkup",
+            converter: EzBob.BindingConverters.percentsFormat
         },
-
         SetupFeePercents: {
             selector: "#setupFeePercents",
             converter: EzBob.BindingConverters.percentsFormat
@@ -196,12 +196,12 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         this.$el.find('#debtPercentOfCapital').percentFormat();
         this.$el.find('#costOfDebt').percentFormat();
         this.$el.find('#setupFeePercents').percentFormat();
+        this.$el.find('#profitMarkup').percentFormat();
 
         this.$el.find('#loanAmount').moneyFormat();
         this.$el.find('#setupFeePounds').moneyFormat();
         this.$el.find('#cogs').moneyFormat();
         this.$el.find('#opexAndCapex').moneyFormat();
-        this.$el.find('#profitBeforeTax').moneyFormat();
         
         this.$el.find('#loanTerm').numericOnly(2);
         this.$el.find('#interestOnlyPeriod').numericOnly(2);

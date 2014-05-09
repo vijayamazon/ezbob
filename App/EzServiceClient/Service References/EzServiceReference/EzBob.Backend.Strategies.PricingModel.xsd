@@ -23,8 +23,8 @@
       <xs:element minOccurs="0" name="NetLossFromDefaults" type="xs:decimal" />
       <xs:element minOccurs="0" name="OpexAndCapex" type="xs:decimal" />
       <xs:element minOccurs="0" name="OpexAndCapexOutput" type="xs:decimal" />
-      <xs:element minOccurs="0" name="ProfitBeforeTax" type="xs:decimal" />
-      <xs:element minOccurs="0" name="ProfitBeforeTaxOutput" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ProfitMarkup" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ProfitMarkupOutput" type="xs:decimal" />
       <xs:element minOccurs="0" name="SetupFeeForEuLoan" type="xs:decimal" />
       <xs:element minOccurs="0" name="SetupFeePercents" type="xs:decimal" />
       <xs:element minOccurs="0" name="SetupFeePounds" type="xs:decimal" />

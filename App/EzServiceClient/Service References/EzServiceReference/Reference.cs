@@ -970,10 +970,10 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal OpexAndCapexOutputField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal ProfitBeforeTaxField;
+        private decimal ProfitMarkupField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal ProfitBeforeTaxOutputField;
+        private decimal ProfitMarkupOutputField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal SetupFeeForEuLoanField;
@@ -1277,27 +1277,27 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal ProfitBeforeTax {
+        public decimal ProfitMarkup {
             get {
-                return this.ProfitBeforeTaxField;
+                return this.ProfitMarkupField;
             }
             set {
-                if ((this.ProfitBeforeTaxField.Equals(value) != true)) {
-                    this.ProfitBeforeTaxField = value;
-                    this.RaisePropertyChanged("ProfitBeforeTax");
+                if ((this.ProfitMarkupField.Equals(value) != true)) {
+                    this.ProfitMarkupField = value;
+                    this.RaisePropertyChanged("ProfitMarkup");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal ProfitBeforeTaxOutput {
+        public decimal ProfitMarkupOutput {
             get {
-                return this.ProfitBeforeTaxOutputField;
+                return this.ProfitMarkupOutputField;
             }
             set {
-                if ((this.ProfitBeforeTaxOutputField.Equals(value) != true)) {
-                    this.ProfitBeforeTaxOutputField = value;
-                    this.RaisePropertyChanged("ProfitBeforeTaxOutput");
+                if ((this.ProfitMarkupOutputField.Equals(value) != true)) {
+                    this.ProfitMarkupOutputField = value;
+                    this.RaisePropertyChanged("ProfitMarkupOutput");
                 }
             }
         }

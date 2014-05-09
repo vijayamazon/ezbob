@@ -18,7 +18,7 @@
 		public decimal DebtPercentOfCapital { get; set; }
 		public decimal CostOfDebt { get; set; }
 		public decimal OpexAndCapex { get; set; }
-		public decimal ProfitBeforeTax { get; set; }
+		public decimal ProfitMarkup { get; set; }
 
 		// Main output fields
 		public decimal MonthlyInterestToCharge { get; set; }
@@ -36,7 +36,7 @@
 		public decimal NetLossFromDefaults { get; set; }
 		public decimal CostOfDebtOutput { get; set; }
 		public decimal TotalCost { get; set; }
-		public decimal ProfitBeforeTaxOutput { get; set; }
+		public decimal ProfitMarkupOutput { get; set; }
 		public decimal Balance { get; set; }
 	}
 }
