@@ -2173,5 +2173,49 @@
 		{
 			get { return this[Variables.FCFFactor]; }
 		}
+		public virtual VariableValue PricingModelTenurePercents
+		{
+			get { return this[Variables.PricingModelTenurePercents]; }
+		}
+
+		public virtual VariableValue PricingModelDefaultRateCompanyShare
+		{
+			get { return this[Variables.PricingModelDefaultRateCompanyShare]; }
+		}
+
+		public virtual VariableValue PricingModelInterestOnlyPeriod
+		{
+			get { return this[Variables.PricingModelInterestOnlyPeriod]; }
+		}
+
+		public virtual VariableValue PricingModelCollectionRate
+		{
+			get { return this[Variables.PricingModelCollectionRate]; }
+		}
+
+		public virtual VariableValue PricingModelCogs
+		{
+			get { return this[Variables.PricingModelCogs]; }
+		}
+		
+		public virtual VariableValue PricingModelDebtOutOfTotalCapital
+		{
+			get { return this[Variables.PricingModelDebtOutOfTotalCapital]; }
+		}
+
+		public virtual VariableValue PricingModelCostOfDebtPA
+		{
+			get { return this[Variables.PricingModelCostOfDebtPA]; }
+		}
+
+		public virtual VariableValue PricingModelOpexAndCapex
+		{
+			get { return this[Variables.PricingModelOpexAndCapex]; }
+		}
+
+		public virtual VariableValue PricingModelProfitMarkupPercentsOfRevenue
+		{
+			get { return this[Variables.PricingModelProfitMarkupPercentsOfRevenue]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

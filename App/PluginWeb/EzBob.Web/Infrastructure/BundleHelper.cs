@@ -231,6 +231,7 @@
 				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Campaign.coffee")
 				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.BasicInterestRate.coffee")
 				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee")
+				.Add("~/Content/js/underwriter/StrategySettings/Ezbob.underwriter.Settings.PricingModel.coffee")
 
 				//Customer grid
 				// .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customerGrid.coffee")

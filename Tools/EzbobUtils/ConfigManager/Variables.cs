@@ -306,6 +306,15 @@
 		TeraPeakUrl,
 		TrustPilotBccMail,
 		AddSageIntervalMinutes,
-		FCFFactor
+		FCFFactor,
+		PricingModelTenurePercents,
+		PricingModelDefaultRateCompanyShare,
+		PricingModelInterestOnlyPeriod,
+		PricingModelCollectionRate,
+		PricingModelCogs,
+		PricingModelDebtOutOfTotalCapital,
+		PricingModelCostOfDebtPA,
+		PricingModelOpexAndCapex,
+		PricingModelProfitMarkupPercentsOfRevenue
 	} // enum Variables
 } // namespace ConfigManager

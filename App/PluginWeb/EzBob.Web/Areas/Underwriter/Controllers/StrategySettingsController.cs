@@ -69,6 +69,82 @@
 				};
 			return Json(st, JsonRequestBehavior.AllowGet);
 		}
+		
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		public JsonResult SettingsPricingModel()
+		{
+			var pricingModelTenurePercents = _configurationVariablesRepository.GetByName(Variables.PricingModelTenurePercents.ToString());
+			var pricingModelDefaultRateCompanyShare = _configurationVariablesRepository.GetByName(Variables.PricingModelDefaultRateCompanyShare.ToString());
+			var pricingModelInterestOnlyPeriod = _configurationVariablesRepository.GetByName(Variables.PricingModelInterestOnlyPeriod.ToString());
+			var pricingModelCollectionRate = _configurationVariablesRepository.GetByName(Variables.PricingModelCollectionRate.ToString());
+			var pricingModelCogs = _configurationVariablesRepository.GetByName(Variables.PricingModelCogs.ToString());
+			var pricingModelDebtOutOfTotalCapital = _configurationVariablesRepository.GetByName(Variables.PricingModelDebtOutOfTotalCapital.ToString());
+			var pricingModelCostOfDebtPA = _configurationVariablesRepository.GetByName(Variables.PricingModelCostOfDebtPA.ToString());
+			var pricingModelOpexAndCapex = _configurationVariablesRepository.GetByName(Variables.PricingModelOpexAndCapex.ToString());
+			var pricingModelProfitMarkupPercentsOfRevenue = _configurationVariablesRepository.GetByName(Variables.PricingModelProfitMarkupPercentsOfRevenue.ToString());
+			
+			var pricingModelSettings = new
+			{
+				PricingModelTenurePercents = pricingModelTenurePercents.Value,
+				PricingModelTenurePercentsDesc = pricingModelTenurePercents.Description,
+				PricingModelDefaultRateCompanyShare = pricingModelDefaultRateCompanyShare.Value,
+				PricingModelDefaultRateCompanyShareDesc = pricingModelDefaultRateCompanyShare.Description,
+				PricingModelInterestOnlyPeriod = pricingModelInterestOnlyPeriod.Value,
+				PricingModelInterestOnlyPeriodDesc = pricingModelInterestOnlyPeriod.Description,
+				PricingModelCollectionRate = pricingModelCollectionRate.Value,
+				PricingModelCollectionRateDesc = pricingModelCollectionRate.Description,
+				PricingModelCogs = pricingModelCogs.Value,
+				PricingModelCogsDesc = pricingModelCogs.Description,
+				PricingModelDebtOutOfTotalCapital = pricingModelDebtOutOfTotalCapital.Value,
+				PricingModelDebtOutOfTotalCapitalDesc = pricingModelDebtOutOfTotalCapital.Description,
+				PricingModelCostOfDebtPA = pricingModelCostOfDebtPA.Value,
+				PricingModelCostOfDebtPADesc = pricingModelCostOfDebtPA.Description,
+				PricingModelOpexAndCapex = pricingModelOpexAndCapex.Value,
+				PricingModelOpexAndCapexDesc = pricingModelOpexAndCapex.Description,
+				PricingModelProfitMarkupPercentsOfRevenue = pricingModelProfitMarkupPercentsOfRevenue.Value,
+				PricingModelProfitMarkupPercentsOfRevenueDesc = pricingModelProfitMarkupPercentsOfRevenue.Description,
+			};
+			return Json(pricingModelSettings, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpPost]
+		public JsonResult SettingsPricingModel(decimal pricingModelTenurePercents, decimal pricingModelDefaultRateCompanyShare,
+		                                       int pricingModelInterestOnlyPeriod, decimal pricingModelCollectionRate,
+		                                       decimal pricingModelCogs, decimal pricingModelDebtOutOfTotalCapital,
+		                                       decimal pricingModelCostOfDebtPA, decimal pricingModelOpexAndCapex,
+		                                       decimal pricingModelProfitMarkupPercentsOfRevenue)
+		{
+			UpdateSettingsPricingModel(pricingModelTenurePercents, pricingModelDefaultRateCompanyShare,
+			                           pricingModelInterestOnlyPeriod, pricingModelCollectionRate, pricingModelCogs,
+			                           pricingModelDebtOutOfTotalCapital, pricingModelCostOfDebtPA, pricingModelOpexAndCapex,
+			                           pricingModelProfitMarkupPercentsOfRevenue);
+
+			UpdateConfigVars();
+			return SettingsPricingModel();
+		}
+
+		[Transactional]
+		private void UpdateSettingsPricingModel(decimal pricingModelTenurePercents, decimal pricingModelDefaultRateCompanyShare,
+		                                        int pricingModelInterestOnlyPeriod, decimal pricingModelCollectionRate,
+		                                        decimal pricingModelCogs, decimal pricingModelDebtOutOfTotalCapital,
+		                                        decimal pricingModelCostOfDebtPA, decimal pricingModelOpexAndCapex,
+		                                        decimal pricingModelProfitMarkupPercentsOfRevenue)
+		{
+			_configurationVariablesRepository.SetByName("PricingModelTenurePercents", pricingModelTenurePercents.ToString(CultureInfo.InvariantCulture));
+			_configurationVariablesRepository.SetByName("PricingModelDefaultRateCompanyShare", pricingModelDefaultRateCompanyShare.ToString(CultureInfo.InvariantCulture));
+			_configurationVariablesRepository.SetByName("PricingModelInterestOnlyPeriod", pricingModelInterestOnlyPeriod.ToString(CultureInfo.InvariantCulture));
+			_configurationVariablesRepository.SetByName("PricingModelCollectionRate", pricingModelCollectionRate.ToString(CultureInfo.InvariantCulture));
+			_configurationVariablesRepository.SetByName("PricingModelCogs", pricingModelCogs.ToString(CultureInfo.InvariantCulture));
+			_configurationVariablesRepository.SetByName("PricingModelDebtOutOfTotalCapital", pricingModelDebtOutOfTotalCapital.ToString(CultureInfo.InvariantCulture));
+			_configurationVariablesRepository.SetByName("PricingModelCostOfDebtPA", pricingModelCostOfDebtPA.ToString(CultureInfo.InvariantCulture));
+			_configurationVariablesRepository.SetByName("PricingModelOpexAndCapex", pricingModelOpexAndCapex.ToString(CultureInfo.InvariantCulture));
+			_configurationVariablesRepository.SetByName("PricingModelProfitMarkupPercentsOfRevenue", pricingModelProfitMarkupPercentsOfRevenue.ToString(CultureInfo.InvariantCulture));
+		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]

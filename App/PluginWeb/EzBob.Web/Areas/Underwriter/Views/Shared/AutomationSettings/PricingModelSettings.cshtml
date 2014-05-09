@@ -1,0 +1,87 @@
+﻿@model dynamic
+
+<script type="text/template" id="pricing-model-settings-template">
+    @PricingModelSettings()
+</script>
+
+@helper PricingModelSettings()
+{
+    <div class="alert-block">
+        <table class="table squeezed">
+            <thead class="box">
+                <tr class="box-title">
+                    <th colspan="3">Pricing Model Settings</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>PricingModelTenurePercents: </td>
+                    <td>
+                        <input type="text" name="PricingModelTenurePercents" class="form-control" value="<%-PricingModelTenurePercents%>"/>
+                    </td>
+                    <td class="left"><%-PricingModelTenurePercentsDesc%></td>
+                </tr>
+                <tr>
+                    <td>PricingModelDefaultRateCompanyShare: </td>
+                    <td>
+                        <input type="text" name="PricingModelDefaultRateCompanyShare" class="form-control" value="<%-PricingModelDefaultRateCompanyShare%>"/>
+                    </td>
+                    <td class="left"><%-PricingModelDefaultRateCompanyShareDesc%></td>
+                </tr>
+                <tr>
+                    <td>PricingModelInterestOnlyPeriod: </td>
+                    <td>
+                        <input type="text" name="PricingModelInterestOnlyPeriod" class="form-control" value="<%-PricingModelInterestOnlyPeriod%>"/>
+                    </td>
+                    <td class="left"><%-PricingModelInterestOnlyPeriodDesc%></td>
+                </tr>
+                <tr>
+                    <td>PricingModelCollectionRate: </td>
+                    <td>
+                        <input type="text" name="PricingModelCollectionRate" class="form-control" value="<%-PricingModelCollectionRate%>"/>
+                    </td>
+                    <td class="left"><%-PricingModelCollectionRateDesc%></td>
+                </tr>
+                <tr>
+                    <td>PricingModelCogs: </td>
+                    <td>
+                        <input type="text" name="PricingModelCogs" class="form-control" value="<%-PricingModelCogs%>"/>
+                    </td>
+                    <td class="left"><%-PricingModelCogsDesc%></td>
+                </tr>
+                <tr>
+                    <td>PricingModelDebtOutOfTotalCapital: </td>
+                    <td>
+                        <input type="text" name="PricingModelDebtOutOfTotalCapital" class="form-control" value="<%-PricingModelDebtOutOfTotalCapital%>"/>
+                    </td>
+                    <td class="left"><%-PricingModelDebtOutOfTotalCapitalDesc%></td>
+                </tr>
+                <tr>
+                    <td>PricingModelCostOfDebtPA: </td>
+                    <td>
+                        <input type="text" name="PricingModelCostOfDebtPA" class="form-control" value="<%-PricingModelCostOfDebtPA%>"/>
+                    </td>
+                    <td class="left"><%-PricingModelCostOfDebtPADesc%></td>
+                </tr>
+                <tr>
+                    <td>PricingModelOpexAndCapex: </td>
+                    <td>
+                        <input type="text" name="PricingModelOpexAndCapex" class="form-control" value="<%-PricingModelOpexAndCapex%>"/>
+                    </td>
+                    <td class="left"><%-PricingModelOpexAndCapexDesc%></td>
+                </tr>
+                <tr>
+                    <td>PricingModelProfitMarkupPercentsOfRevenue: </td>
+                    <td>
+                        <input type="text" name="PricingModelProfitMarkupPercentsOfRevenue" class="form-control" value="<%-PricingModelProfitMarkupPercentsOfRevenue%>"/>
+                    </td>
+                    <td class="left"><%-PricingModelProfitMarkupPercentsOfRevenueDesc%></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="pull-right">
+            <button class="btn btn-primary" name="SavePricingModelSettings" ><i class="fa fa-check-circle" />Save</button> 
+            <button class="btn btn-primary" name="CancelPricingModelSettings" ><i class="fa fa-refresh" />Reset</button> 
+        </div>
+    </div>
+}

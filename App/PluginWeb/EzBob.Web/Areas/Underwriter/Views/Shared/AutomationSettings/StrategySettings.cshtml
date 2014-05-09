@@ -11,6 +11,7 @@
                 <li><a href="#campaign-settings" data-toggle="tab">Campaign</a></li>
                 <li><a href="#basic-interest-rate-settings" data-toggle="tab">Basic Interest Rate</a></li>
                 <li><a href="#loan-offer-multiplier-settings" data-toggle="tab">Loan Offer Multiplier</a></li>
+                <li><a href="#pricing-model-settings" data-toggle="tab">Pricing Model</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="general-settings"></div>
@@ -19,6 +20,7 @@
                 <div class="tab-pane" id="campaign-settings"></div>
                 <div class="tab-pane" id="basic-interest-rate-settings"></div>
                 <div class="tab-pane" id="loan-offer-multiplier-settings"></div>
+                <div class="tab-pane" id="pricing-model-settings"></div>
             </div>
         </div>  
     </div>
@@ -34,3 +36,4 @@
 @{ Html.RenderPartial("AutomationSettings/_CampaignSettings"); }
 @{ Html.RenderPartial("AutomationSettings/_BasicInterestRateSettings"); }
 @{ Html.RenderPartial("AutomationSettings/_LoanOfferMultiplierSettings"); }
+@{ Html.RenderPartial("AutomationSettings/PricingModelSettings"); }

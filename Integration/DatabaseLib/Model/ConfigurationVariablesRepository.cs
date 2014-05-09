@@ -247,7 +247,16 @@
 		TeraPeakApiKey,
 		TeraPeakUrl,
 		AddSageIntervalMinutes,
-		FCFFactor
+		FCFFactor,
+		PricingModelTenurePercents,
+		PricingModelDefaultRateCompanyShare,
+		PricingModelInterestOnlyPeriod,
+		PricingModelCollectionRate,
+		PricingModelCogs,
+		PricingModelDebtOutOfTotalCapital,
+		PricingModelCostOfDebtPA,
+		PricingModelOpexAndCapex,
+		PricingModelProfitMarkupPercentsOfRevenue
 	} // enum ConfigurationVariables
 
 	#endregion enum ConfigurationVariables
