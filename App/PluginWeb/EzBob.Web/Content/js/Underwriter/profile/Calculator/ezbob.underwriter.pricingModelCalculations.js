@@ -20,8 +20,8 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             selector: "#loanAmount",
             converter: EzBob.BindingConverters.moneyFormat
         },
-        InitiationFee: {
-            selector: "#initiationFee",
+        SetupFeePounds: {
+            selector: "#setupFeePounds",
             converter: EzBob.BindingConverters.moneyFormat
         },
         Cogs: {
@@ -37,6 +37,10 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             converter: EzBob.BindingConverters.moneyFormat
         },
 
+        SetupFeePercents: {
+            selector: "#setupFeePercents",
+            converter: EzBob.BindingConverters.percentsFormat
+        },
         DefaultRate: {
             selector: "#defaultRate",
             converter: EzBob.BindingConverters.percentsFormat
@@ -75,21 +79,39 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     events: {
         'focusout #tenurePercents': 'tenurePercentsChanged',
         'focusout #tenureMonths': 'tenureMonthsChanged',
+        'focusout #setupFeePounds': 'setupFeePoundsChanged',
+        'focusout #setupFeePercents': 'setupFeePercentsChanged',
         'click #pricingModelResetButton': 'resetClicked',
         'click #pricingModelCalculateButton': 'calculateClicked',
         'click #expandCollapseInputsButton': 'expandCollapseInputsClicked',
         'click #expandCollapseOutputsButton': 'expandCollapseOutputsClicked'
     },
 
+    setupFeePoundsChanged: function () {
+        var setupFeePercents = 0;
+        var loanAmount = this.model.get('LoanAmount');
+        if (loanAmount != 0) {
+            setupFeePercents = this.model.get('SetupFeePounds') / loanAmount;
+        }
+        this.model.set('SetupFeePercents', setupFeePercents);
+    },
+
+    setupFeePercentsChanged: function () {
+        var setupFeePounds = this.model.get('SetupFeePercents') * this.model.get('LoanAmount');
+        this.model.set('SetupFeePounds', setupFeePounds);
+    },
+
     tenurePercentsChanged: function () {
-        debugger;
         var tenureMonths = this.model.get('TenurePercents') * this.model.get('LoanTerm');
         this.model.set('TenureMonths', tenureMonths);
     },
 
     tenureMonthsChanged: function () {
-        debugger;
-        var tenurePercents = this.model.get('TenureMonths') / this.model.get('LoanTerm');
+        var tenurePercents = 0;
+        var loanTerm = this.model.get('LoanTerm');
+        if (loanTerm != 0) {
+            tenurePercents = this.model.get('TenureMonths') / loanTerm;
+        }
         this.model.set('TenurePercents', tenurePercents);
     },
     
@@ -173,9 +195,10 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         this.$el.find('#collectionRate').percentFormat();
         this.$el.find('#debtPercentOfCapital').percentFormat();
         this.$el.find('#costOfDebt').percentFormat();
+        this.$el.find('#setupFeePercents').percentFormat();
 
         this.$el.find('#loanAmount').moneyFormat();
-        this.$el.find('#initiationFee').moneyFormat();
+        this.$el.find('#setupFeePounds').moneyFormat();
         this.$el.find('#cogs').moneyFormat();
         this.$el.find('#opexAndCapex').moneyFormat();
         this.$el.find('#profitBeforeTax').moneyFormat();

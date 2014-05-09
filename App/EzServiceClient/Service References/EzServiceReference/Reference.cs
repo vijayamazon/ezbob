@@ -946,9 +946,6 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal GrossProfitField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal InitiationFeeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int InterestOnlyPeriodField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -980,6 +977,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal SetupFeeForEuLoanField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal SetupFeePercentsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal SetupFeePoundsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal TenureMonthsField;
@@ -1170,19 +1173,6 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal InitiationFee {
-            get {
-                return this.InitiationFeeField;
-            }
-            set {
-                if ((this.InitiationFeeField.Equals(value) != true)) {
-                    this.InitiationFeeField = value;
-                    this.RaisePropertyChanged("InitiationFee");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
         public int InterestOnlyPeriod {
             get {
                 return this.InterestOnlyPeriodField;
@@ -1321,6 +1311,32 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.SetupFeeForEuLoanField.Equals(value) != true)) {
                     this.SetupFeeForEuLoanField = value;
                     this.RaisePropertyChanged("SetupFeeForEuLoan");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal SetupFeePercents {
+            get {
+                return this.SetupFeePercentsField;
+            }
+            set {
+                if ((this.SetupFeePercentsField.Equals(value) != true)) {
+                    this.SetupFeePercentsField = value;
+                    this.RaisePropertyChanged("SetupFeePercents");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal SetupFeePounds {
+            get {
+                return this.SetupFeePoundsField;
+            }
+            set {
+                if ((this.SetupFeePoundsField.Equals(value) != true)) {
+                    this.SetupFeePoundsField = value;
+                    this.RaisePropertyChanged("SetupFeePounds");
                 }
             }
         }

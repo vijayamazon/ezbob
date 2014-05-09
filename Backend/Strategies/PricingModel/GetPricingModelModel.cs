@@ -24,15 +24,16 @@
 			Model = new PricingModelModel
 				{
 					LoanAmount = customerId,
-					DefaultRate = 1.3m,
-					InitiationFee = 150,
+					DefaultRate = 0.04m,
+					SetupFeePounds = 150,
+					SetupFeePercents = 0.07m,
 					LoanTerm = 12,
 					InterestOnlyPeriod = 3,
-					TenurePercents = 55.1m,
-					TenureMonths = 2.2m,
+					TenurePercents = 0.5m,
+					TenureMonths = 0.223m,
 					CollectionRate = 6.88m,
 					Cogs = 1000,
-					DebtPercentOfCapital = 6.51m,
+					DebtPercentOfCapital = 0.65m,
 					CostOfDebt = 0.65m,
 					OpexAndCapex = 180,
 					ProfitBeforeTax = 291

@@ -15,7 +15,6 @@
       <xs:element minOccurs="0" name="Ebitda" type="xs:decimal" />
       <xs:element minOccurs="0" name="EuLoanPercentages" type="xs:decimal" />
       <xs:element minOccurs="0" name="GrossProfit" type="xs:decimal" />
-      <xs:element minOccurs="0" name="InitiationFee" type="xs:decimal" />
       <xs:element minOccurs="0" name="InterestOnlyPeriod" type="xs:int" />
       <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
       <xs:element minOccurs="0" name="LoanAmount" type="xs:decimal" />
@@ -27,6 +26,8 @@
       <xs:element minOccurs="0" name="ProfitBeforeTax" type="xs:decimal" />
       <xs:element minOccurs="0" name="ProfitBeforeTaxOutput" type="xs:decimal" />
       <xs:element minOccurs="0" name="SetupFeeForEuLoan" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SetupFeePercents" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SetupFeePounds" type="xs:decimal" />
       <xs:element minOccurs="0" name="TenureMonths" type="xs:decimal" />
       <xs:element minOccurs="0" name="TenurePercents" type="xs:decimal" />
       <xs:element minOccurs="0" name="TotalCost" type="xs:decimal" />

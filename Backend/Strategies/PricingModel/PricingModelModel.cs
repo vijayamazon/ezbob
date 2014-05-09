@@ -5,7 +5,8 @@
 		// Main input fields
 		public decimal LoanAmount { get; set; }
 		public decimal DefaultRate { get; set; }
-		public decimal InitiationFee { get; set; }
+		public decimal SetupFeePounds { get; set; }
+		public decimal SetupFeePercents { get; set; }
 
 		// Other input fields
 		public int LoanTerm { get; set; }
