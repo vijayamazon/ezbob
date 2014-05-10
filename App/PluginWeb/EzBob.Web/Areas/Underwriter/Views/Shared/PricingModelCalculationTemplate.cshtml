@@ -84,7 +84,7 @@
                     </tr>
                     <tr>
                         <td class="pricing-model-left-td">Setup Fee For Eu Loan</td>
-                        <td><%-GBPValues(model.SetupFeeForEuLoan, true)%></td>
+                        <td><%-model.SetupFeeForEuLoan%>%</td>
                     </tr>
                     <tr>
                         <td class="pricing-model-left-td">Eu Loan Percentages</td>
@@ -126,6 +126,14 @@
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Profit Markup As % Of Revenue</td>
                         <td><%-GBPValues(model.ProfitMarkupOutput, true)%></td>
+                    </tr>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Annualized Interest Rate</td>
+                        <td><%-model.AnnualizedInterestRate%>%</td>
+                    </tr>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">Apr</td>
+                        <td><%-model.Apr%>%</td>
                     </tr>
 
                     <tr>

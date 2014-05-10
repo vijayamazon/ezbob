@@ -35,5 +35,7 @@
 		public decimal CostOfDebtOutput { get; set; }
 		public decimal TotalCost { get; set; }
 		public decimal ProfitMarkupOutput { get; set; }
+		public decimal AnnualizedInterestRate { get; set; }
+		public decimal Apr { get; set; }
 	}
 }

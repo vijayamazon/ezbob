@@ -907,6 +907,12 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal AnnualizedInterestRateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal AprField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal CogsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -991,6 +997,32 @@ namespace ServiceClientProxy.EzServiceReference {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal AnnualizedInterestRate {
+            get {
+                return this.AnnualizedInterestRateField;
+            }
+            set {
+                if ((this.AnnualizedInterestRateField.Equals(value) != true)) {
+                    this.AnnualizedInterestRateField = value;
+                    this.RaisePropertyChanged("AnnualizedInterestRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Apr {
+            get {
+                return this.AprField;
+            }
+            set {
+                if ((this.AprField.Equals(value) != true)) {
+                    this.AprField = value;
+                    this.RaisePropertyChanged("Apr");
+                }
             }
         }
         
