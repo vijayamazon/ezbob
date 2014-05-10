@@ -21,14 +21,12 @@
 		public decimal ProfitMarkup { get; set; }
 
 		// Main output fields
-		public decimal MonthlyInterestToCharge { get; set; }
+		public decimal MonthlyInterestRate { get; set; }
 		public decimal SetupFeeForEuLoan { get; set; }
 		public decimal EuLoanPercentages { get; set; } // 1.75 or 2
 
 		// Other output fields
-		public decimal InterestRate { get; set; }
-		public decimal AverageLoanAmount { get; set; }
-		public decimal AverageRevenuePerLoan { get; set; }
+		public decimal Revenue { get; set; }
 		public decimal CogsOutput { get; set; }
 		public decimal GrossProfit { get; set; }
 		public decimal OpexAndCapexOutput { get; set; }
@@ -37,6 +35,5 @@
 		public decimal CostOfDebtOutput { get; set; }
 		public decimal TotalCost { get; set; }
 		public decimal ProfitMarkupOutput { get; set; }
-		public decimal Balance { get; set; }
 	}
 }

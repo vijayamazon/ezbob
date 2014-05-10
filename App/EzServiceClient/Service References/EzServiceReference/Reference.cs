@@ -907,15 +907,6 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AverageLoanAmountField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AverageRevenuePerLoanField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal BalanceField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal CogsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -949,16 +940,13 @@ namespace ServiceClientProxy.EzServiceReference {
         private int InterestOnlyPeriodField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal InterestRateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal LoanAmountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int LoanTermField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal MonthlyInterestToChargeField;
+        private decimal MonthlyInterestRateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal NetLossFromDefaultsField;
@@ -974,6 +962,9 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal ProfitMarkupOutputField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal RevenueField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal SetupFeeForEuLoanField;
@@ -1000,45 +991,6 @@ namespace ServiceClientProxy.EzServiceReference {
             }
             set {
                 this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal AverageLoanAmount {
-            get {
-                return this.AverageLoanAmountField;
-            }
-            set {
-                if ((this.AverageLoanAmountField.Equals(value) != true)) {
-                    this.AverageLoanAmountField = value;
-                    this.RaisePropertyChanged("AverageLoanAmount");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal AverageRevenuePerLoan {
-            get {
-                return this.AverageRevenuePerLoanField;
-            }
-            set {
-                if ((this.AverageRevenuePerLoanField.Equals(value) != true)) {
-                    this.AverageRevenuePerLoanField = value;
-                    this.RaisePropertyChanged("AverageRevenuePerLoan");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal Balance {
-            get {
-                return this.BalanceField;
-            }
-            set {
-                if ((this.BalanceField.Equals(value) != true)) {
-                    this.BalanceField = value;
-                    this.RaisePropertyChanged("Balance");
-                }
             }
         }
         
@@ -1186,19 +1138,6 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal InterestRate {
-            get {
-                return this.InterestRateField;
-            }
-            set {
-                if ((this.InterestRateField.Equals(value) != true)) {
-                    this.InterestRateField = value;
-                    this.RaisePropertyChanged("InterestRate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal LoanAmount {
             get {
                 return this.LoanAmountField;
@@ -1225,14 +1164,14 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal MonthlyInterestToCharge {
+        public decimal MonthlyInterestRate {
             get {
-                return this.MonthlyInterestToChargeField;
+                return this.MonthlyInterestRateField;
             }
             set {
-                if ((this.MonthlyInterestToChargeField.Equals(value) != true)) {
-                    this.MonthlyInterestToChargeField = value;
-                    this.RaisePropertyChanged("MonthlyInterestToCharge");
+                if ((this.MonthlyInterestRateField.Equals(value) != true)) {
+                    this.MonthlyInterestRateField = value;
+                    this.RaisePropertyChanged("MonthlyInterestRate");
                 }
             }
         }
@@ -1298,6 +1237,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.ProfitMarkupOutputField.Equals(value) != true)) {
                     this.ProfitMarkupOutputField = value;
                     this.RaisePropertyChanged("ProfitMarkupOutput");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Revenue {
+            get {
+                return this.RevenueField;
+            }
+            set {
+                if ((this.RevenueField.Equals(value) != true)) {
+                    this.RevenueField = value;
+                    this.RaisePropertyChanged("Revenue");
                 }
             }
         }

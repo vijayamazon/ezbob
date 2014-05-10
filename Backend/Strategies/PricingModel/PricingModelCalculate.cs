@@ -19,12 +19,10 @@
 		
 		public override void Execute() {
 			// TODO: Calculation logic
-			Model.InterestRate = 0.14m;
-			Model.MonthlyInterestToCharge = 0.34m;
+			Model.MonthlyInterestRate = 0.34m;
 			Model.SetupFeeForEuLoan = 400;
 			Model.EuLoanPercentages = 0.75m;
-			Model.AverageLoanAmount = 4500;
-			Model.AverageRevenuePerLoan = 87;
+			Model.Revenue = 87;
 			Model.CogsOutput = 50;
 			Model.GrossProfit = 432;
 			Model.OpexAndCapexOutput = 66844;
@@ -33,7 +31,6 @@
 			Model.CostOfDebtOutput = 345;
 			Model.TotalCost = 34700;
 			Model.ProfitMarkupOutput = 5000;
-			Model.Balance = 4567;
 		}
 	}
 }
