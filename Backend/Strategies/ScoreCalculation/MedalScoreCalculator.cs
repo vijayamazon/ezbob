@@ -92,14 +92,14 @@
 
 		public decimal GetBasicInterestRate(int experianScore)
 		{
-			DataTable dt = db.ExecuteReader("GetBasicInterestRate", CommandSpecies.StoredProcedure, new QueryParameter("Score", experianScore));
+			DataTable dt = db.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "BasicInterestRate"), new QueryParameter("Key", experianScore));
 			var sr = new SafeReader(dt.Rows[0]);
 			return sr["Value"];
 		}
 
 		public decimal GetLoanOfferMultiplier(int experianScore)
 		{
-			DataTable dt = db.ExecuteReader("GetLoanOfferMultiplier", CommandSpecies.StoredProcedure, new QueryParameter("Score", experianScore));
+			DataTable dt = db.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "LoanOfferMultiplier"), new QueryParameter("Key", experianScore));
 			var sr = new SafeReader(dt.Rows[0]);
 			return sr["Value"];
 		}
