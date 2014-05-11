@@ -40,7 +40,7 @@ class EzBob.EditLoanView extends Backbone.Marionette.ItemView
         "click .remove-freeze-interval" : "onRemoveFreezeInterval"
 
     addInstallment: ->
-        date = new Date @model.get("Items").last().get("Date")
+        date = new Date (moment(@model.get("Items").last().get("Date")).utc())
         date.setMonth date.getMonth()+1
         installment = new EzBob.Installment({
             "Editable"                  : true

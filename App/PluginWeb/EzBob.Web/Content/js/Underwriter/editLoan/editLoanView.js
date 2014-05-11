@@ -58,7 +58,7 @@
 
     EditLoanView.prototype.addInstallment = function() {
       var add, date, editor, installment, view;
-      date = new Date(this.model.get("Items").last().get("Date"));
+      date = new Date(moment(this.model.get("Items").last().get("Date")).utc());
       date.setMonth(date.getMonth() + 1);
       installment = new EzBob.Installment({
         "Editable": true,

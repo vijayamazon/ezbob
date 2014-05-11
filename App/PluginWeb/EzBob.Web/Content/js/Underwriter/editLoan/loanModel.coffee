@@ -43,7 +43,8 @@ class EzBob.Installment extends Backbone.Model
         @set {'Total': @get('Principal') + @get('Interest') + @get('Fees')}
 
     dateChanged: ->
-        #console.log(@get("Date"))
+        @set("Date", new Date(moment.utc(@get("Date"))))
+
     round: (number) ->
             number = Math.round(number * 100)
             number = number / 100
@@ -100,8 +101,13 @@ class EzBob.LoanModel extends Backbone.Model
 
 
     parse : (r, o) ->
+        _.each(r.Items, (item) ->
+            item.Date =  new Date(moment.utc(item.Date))
+        )
+
         @get("Items").reset(r.Items)
         delete r.Items
+        r.Date = new Date(moment.utc(r.Date))
         return r
 
     toJSON: ->

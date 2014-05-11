@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1, _ref2, _ref3,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice;
@@ -9,11 +9,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.Installment = (function(_super) {
+
     __extends(Installment, _super);
 
     function Installment() {
-      _ref = Installment.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Installment.__super__.constructor.apply(this, arguments);
     }
 
     Installment.prototype.defaults = {
@@ -31,7 +31,6 @@
     Installment.prototype.balanceChanged = function() {
       return this.safeRecalculate(function() {
         var principal;
-
         if (this.get('Balance') === this.previous('Balance')) {
           return;
         }
@@ -44,7 +43,6 @@
     Installment.prototype.totalChanged = function() {
       return this.safeRecalculate(function() {
         var diff;
-
         diff = this.get("Total") - this.previous("Total");
         if (diff === 0) {
           return;
@@ -57,7 +55,6 @@
     Installment.prototype.principalChanged = function() {
       return this.safeRecalculate(function() {
         var diff;
-
         diff = this.get("Principal") - this.previous("Principal");
         if (diff === 0) {
           return;
@@ -69,7 +66,6 @@
 
     Installment.prototype.safeRecalculate = function() {
       var func, params;
-
       func = arguments[0], params = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       if (this.skipRecalculations) {
         return;
@@ -85,7 +81,9 @@
       });
     };
 
-    Installment.prototype.dateChanged = function() {};
+    Installment.prototype.dateChanged = function() {
+      return this.set("Date", new Date(moment.utc(this.get("Date"))));
+    };
 
     Installment.prototype.round = function(number) {
       number = Math.round(number * 100);
@@ -97,18 +95,17 @@
   })(Backbone.Model);
 
   EzBob.Installments = (function(_super) {
+
     __extends(Installments, _super);
 
     function Installments() {
-      _ref1 = Installments.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return Installments.__super__.constructor.apply(this, arguments);
     }
 
     Installments.prototype.model = EzBob.Installment;
 
     Installments.prototype.comparator = function(m1, m2) {
       var d, d1, d2, r;
-
       d1 = moment.utc(m1.get('Date')).startOf('day');
       d2 = moment.utc(m2.get('Date')).startOf('day');
       d = d1.diff(d2, "days");
@@ -134,11 +131,11 @@
   })(Backbone.Collection);
 
   EzBob.LoanModel = (function(_super) {
+
     __extends(LoanModel, _super);
 
     function LoanModel() {
-      _ref2 = LoanModel.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return LoanModel.__super__.constructor.apply(this, arguments);
     }
 
     LoanModel.prototype.url = function() {
@@ -147,7 +144,6 @@
 
     LoanModel.prototype.initialize = function() {
       var items;
-
       items = new EzBob.Installments();
       items.on("change", this.itemsChanged, this);
       return this.set("Items", items);
@@ -158,15 +154,14 @@
     };
 
     LoanModel.prototype.shiftDate = function(installment, newDate, oldDate) {
-      var d1, d2, diff, i, index, item, _i, _len, _ref3;
-
+      var d1, d2, diff, i, index, item, _i, _len, _ref;
       newDate = moment.utc(newDate);
       oldDate = moment.utc(oldDate);
       diff = newDate - oldDate;
       index = this.get("Items").indexOf(installment);
-      _ref3 = this.get("Items").models;
-      for (i = _i = 0, _len = _ref3.length; _i < _len; i = ++_i) {
-        item = _ref3[i];
+      _ref = this.get("Items").models;
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        item = _ref[i];
         if (!(i > index)) {
           continue;
         }
@@ -178,12 +173,11 @@
     };
 
     LoanModel.prototype.shiftInterestRate = function(installment, rate) {
-      var i, index, item, _i, _len, _ref3;
-
+      var i, index, item, _i, _len, _ref;
       index = this.get("Items").indexOf(installment);
-      _ref3 = this.get("Items").models;
-      for (i = _i = 0, _len = _ref3.length; _i < _len; i = ++_i) {
-        item = _ref3[i];
+      _ref = this.get("Items").models;
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        item = _ref[i];
         if (i > index) {
           item.set("InterestRate", rate);
         }
@@ -192,14 +186,17 @@
     };
 
     LoanModel.prototype.parse = function(r, o) {
+      _.each(r.Items, function(item) {
+        return item.Date = new Date(moment.utc(item.Date));
+      });
       this.get("Items").reset(r.Items);
       delete r.Items;
+      r.Date = new Date(moment.utc(r.Date));
       return r;
     };
 
     LoanModel.prototype.toJSON = function() {
       var r;
-
       r = LoanModel.__super__.toJSON.call(this);
       r.Items = r.Items.toJSON();
       return r;
@@ -207,7 +204,6 @@
 
     LoanModel.prototype.removeItem = function(index) {
       var items;
-
       items = this.get("Items");
       items.remove(items.at(index));
       return this.recalculate();
@@ -242,13 +238,12 @@
     };
 
     LoanModel.prototype.getInstallmentBefore = function(date) {
-      var installment, item, _i, _len, _ref3;
-
+      var installment, item, _i, _len, _ref;
       date = moment.utc(date).toDate();
       installment = null;
-      _ref3 = this.get("Items").models;
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        item = _ref3[_i];
+      _ref = this.get("Items").models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
         if (item.get("Type") === "Installment" && moment.utc(item.get("Date")).toDate() < date) {
           installment = item;
         }
@@ -257,12 +252,11 @@
     };
 
     LoanModel.prototype.getInstallmentAfter = function(date) {
-      var item, _i, _len, _ref3;
-
+      var item, _i, _len, _ref;
       date = moment.utc(date).toDate();
-      _ref3 = this.get("Items").models;
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        item = _ref3[_i];
+      _ref = this.get("Items").models;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
         if (item.get("Type") === "Installment" && moment.utc(item.get("Date")).toDate() > date) {
           return item;
         }
@@ -275,11 +269,11 @@
   })(Backbone.Model);
 
   EzBob.LoanModelTemplate = (function(_super) {
+
     __extends(LoanModelTemplate, _super);
 
     function LoanModelTemplate() {
-      _ref3 = LoanModelTemplate.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      return LoanModelTemplate.__super__.constructor.apply(this, arguments);
     }
 
     LoanModelTemplate.prototype.url = function() {

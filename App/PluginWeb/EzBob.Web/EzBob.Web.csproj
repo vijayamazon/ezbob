@@ -1111,6 +1111,9 @@
       <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.index.js" />
+    <Content Include="Content\js\Underwriter\editLoan\loanModel.min.js">
+      <DependentUpon>loanModel.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\NewCreditLine\ezbob.underwriter.newCreditLine.js">
       <DependentUpon>ezbob.underwriter.newCreditLine.coffee</DependentUpon>
     </Content>
