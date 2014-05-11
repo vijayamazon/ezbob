@@ -59,13 +59,13 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
             historyScoresSorted = _.sortBy(@experianModel.get('ConsumerHistory'), (history) ->
                 return history.Date)
             consumerHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',')
-            @$el.find(".consumerScoreGraph").html(consumerHistoryScores)
+            @$el.find(".consumerScoreGraph").attr('values',consumerHistoryScores)
 
         if(@experianModel && @experianModel.get('CompanyHistory'))
             historyScoresSorted = _.sortBy(@experianModel.get('CompanyHistory'), (history) ->
                 return history.Date)
             companyHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',')
-            @$el.find(".companyScoreGraph").html(companyHistoryScores)
+            @$el.find(".companyScoreGraph").attr('values', companyHistoryScores)
             
         @$el.find(".inline-sparkline").sparkline "html",
           width: "100%"
@@ -77,6 +77,7 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
           spotColor: "#14ae48"
           maxSpotColor: "#e72828"
           minSpotColor: "#f7941d"
+          valueSpots: { ':549' : 'red', '550:749' : 'yellow', '750:' : 'green' }
 
 
 

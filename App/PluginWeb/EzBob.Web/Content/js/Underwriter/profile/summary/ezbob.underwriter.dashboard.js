@@ -89,14 +89,14 @@
           return history.Date;
         });
         consumerHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
-        this.$el.find(".consumerScoreGraph").html(consumerHistoryScores);
+        this.$el.find(".consumerScoreGraph").attr('values', consumerHistoryScores);
       }
       if (this.experianModel && this.experianModel.get('CompanyHistory')) {
         historyScoresSorted = _.sortBy(this.experianModel.get('CompanyHistory'), function(history) {
           return history.Date;
         });
         companyHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
-        this.$el.find(".companyScoreGraph").html(companyHistoryScores);
+        this.$el.find(".companyScoreGraph").attr('values', companyHistoryScores);
       }
       return this.$el.find(".inline-sparkline").sparkline("html", {
         width: "100%",
@@ -107,7 +107,12 @@
         fillColor: "#f2f7f9",
         spotColor: "#14ae48",
         maxSpotColor: "#e72828",
-        minSpotColor: "#f7941d"
+        minSpotColor: "#f7941d",
+        valueSpots: {
+          ':549': 'red',
+          '550:749': 'yellow',
+          '750:': 'green'
+        }
       });
     };
 
