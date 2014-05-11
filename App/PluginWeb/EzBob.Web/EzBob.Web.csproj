@@ -183,6 +183,7 @@
     <Compile Include="Code\AgreementsTemplatesProvider.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\LoanCreatorNoChecks.cs" />
+    <Compile Include="Models\BugModel.cs" />
     <Compile Include="Models\LoanOffer.cs" />
     <Compile Include="Code\ServerLog\ServerLogCachePkgModel.cs" />
     <Compile Include="Code\ServerLog\ServerLogEntryModel.cs" />
