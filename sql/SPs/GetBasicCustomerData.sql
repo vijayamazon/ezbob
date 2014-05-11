@@ -26,10 +26,14 @@ BEGIN
 		c.RefNumber,
 		c.MobilePhone,
 		c.DaytimePhone,
-		c.IsTest
+		c.IsTest,
+		a.Postcode,
+		a.Town AS City
 	FROM
-		Customer c
+		Customer c LEFT JOIN CustomerAddress a ON c.Id=a.CustomerId
 	WHERE
 		c.Id = @CustomerId
+	AND
+		a.addressType=1	
 END
 GO

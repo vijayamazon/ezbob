@@ -12,8 +12,16 @@
 		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
-			TemplateName = "Mandrill - Rejection email";
-
+			if (ConfigManager.CurrentValues.Instance.RejectionPartnersCities.Value.Contains("all") ||
+			    ConfigManager.CurrentValues.Instance.RejectionPartnersCities.Value.Contains(CustomerData.City))
+			{
+				TemplateName = "Mandrill - Rejection partners email";
+			}
+			else
+			{
+				TemplateName = "Mandrill - Rejection email";
+			}
+			
 			Variables = new Dictionary<string, string>
 				{
 					{"FirstName", CustomerData.FirstName},

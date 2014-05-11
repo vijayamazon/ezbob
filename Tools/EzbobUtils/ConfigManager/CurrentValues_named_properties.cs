@@ -1404,6 +1404,14 @@
 
 		#endregion property Reject_Minimal_Seniority
 
+		#region property RejectionPartnersCities
+
+		public virtual VariableValue RejectionPartnersCities {
+			get { return this[Variables.RejectionPartnersCities]; } // get
+		} // RejectionPartnersCities
+
+		#endregion property RejectionPartnersCities
+		
 		#region property ReportsSite
 
 		public virtual VariableValue ReportsSite {

@@ -175,6 +175,7 @@
 		Reject_Defaults_CreditScore,
 		Reject_Defaults_MonthsNum,
 		Reject_Minimal_Seniority,
+		RejectionPartnersCities,
 		ReportsSite,
 		RolloverCharge,
 		SageExpendituresRequest,
