@@ -10,11 +10,11 @@ CREATE PROCEDURE [dbo].[GetBasicInterestRate]
 AS
 BEGIN
 	SELECT 
-		LoanInterestBase
+		Value
 	FROM 
 		BasicInterestRate
 	WHERE 
-		@Score >= FromScore AND 
-		@Score <= ToScore
+		@Score >= Start AND 
+		@Score <= [End]
 END
 GO

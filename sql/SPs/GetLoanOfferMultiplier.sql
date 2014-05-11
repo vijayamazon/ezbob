@@ -10,11 +10,11 @@ CREATE PROCEDURE [dbo].[GetLoanOfferMultiplier]
 AS
 BEGIN
 	SELECT 
-		Multiplier
+		Value
 	FROM 
 		LoanOfferMultiplier
 	WHERE 
-		@Score >= StartScore AND 
-		@Score <= EndScore
+		@Score >= Start AND 
+		@Score <= [End]
 END
 GO

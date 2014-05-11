@@ -92,12 +92,12 @@ namespace TestApp {
 		private static void TestTableSpArgument(AConnection oDB, ASafeLog oLog) {
 			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
 
-			var lst = new List<BasicInterestRate> {
-				new BasicInterestRate { FromScore = 1, ToScore = 2, LoanInterestBase = 1.2m, },
-				new BasicInterestRate { FromScore = 2, ToScore = 3, LoanInterestBase = 2.3m, },
-				new BasicInterestRate { FromScore = 3, ToScore = 4, LoanInterestBase = 3.4m, },
-				new BasicInterestRate { FromScore = 4, ToScore = 5, LoanInterestBase = 4.5m, },
-				new BasicInterestRate { FromScore = 5, ToScore = 6, LoanInterestBase = 5.6m, },
+			var lst = new List<ConfigTable> {
+				new ConfigTable { Start = 1, End = 2, Value = 1.2m, },
+				new ConfigTable { Start = 2, End = 3, Value = 2.3m, },
+				new ConfigTable { Start = 3, End = 4, Value = 3.4m, },
+				new ConfigTable { Start = 4, End = 5, Value = 4.5m, },
+				new ConfigTable { Start = 5, End = 6, Value = 5.6m, },
 			};
 
 			oLog.Debug("Results - begin:");
@@ -109,9 +109,10 @@ namespace TestApp {
 				},
 				"TestIntIntDecimalListType",
 				CommandSpecies.StoredProcedure,
-				oDB.CreateTableParameter<BasicInterestRate>("@TheList", lst, objbir => {
-					var bir = (BasicInterestRate)objbir;
-					return new object[] { bir.FromScore, bir.ToScore, bir.LoanInterestBase, };
+				oDB.CreateTableParameter<ConfigTable>("@TheList", lst, objbir =>
+				{
+					var bir = (ConfigTable)objbir;
+					return new object[] { bir.Start, bir.End, bir.Value, };
 				})
 			);
 

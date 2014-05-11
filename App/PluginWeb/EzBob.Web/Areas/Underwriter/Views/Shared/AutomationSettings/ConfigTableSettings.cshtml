@@ -1,0 +1,72 @@
+﻿@using EzBob.Web.Infrastructure.Html
+
+<script type="text/template" id="loan-offer-multiplier-settings-template">
+    <h3>Loan Offer Multiplier Settings</h3>
+    <%if(loanOfferMultipliers && loanOfferMultipliers.length > 0) {%>
+   
+    <table class="table squeezed">
+        <thead class="box">
+            <tr class="box-title">
+                <th>Start Score</th>
+                <th>End Score</th>
+                <th>Multiplier</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(loanOfferMultipliers, function(loanOfferMultiplier, i){%>
+            <tr id="loanOfferMultiplierRow_<%=loanOfferMultiplier.Id%>">
+                <td><input type="text" id="start_<%=loanOfferMultiplier.Id%>" class="range-field" value="<%= loanOfferMultiplier.Start %>"></td>
+                <td><input type="text" id="end_<%=loanOfferMultiplier.Id%>" class="range-field" value="<%= loanOfferMultiplier.End %>"></td>
+                <td><input type="text" id="value_<%=loanOfferMultiplier.Id%>" class="range-field" value="<%= loanOfferMultiplier.Value %>"></td>
+                <td>
+                    <button class="btn btn-primary removeRange" loan-offer-multiplier-id="<%= loanOfferMultiplier.Id %>">Remove</button>
+                </td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <%}%>
+   
+    <button class="btn btn-primary addRange">Add Range</button>
+    <div class="pull-right">
+        <button class="btn btn-primary" id="SaveLoanOfferMultiplierSettings"><i class="fa fa-check-circle" />Save</button>
+        <button class="btn btn-primary" id="CancelLoanOfferMultiplierSettings"><i class="fa fa-refresh" />Reset</button>
+    </div>
+</script>
+
+<script type="text/template" id="basic-interest-rate-settings-template">
+    <h3>Basic Interest Rate Settings</h3>
+    <%if(basicInterestRates && basicInterestRates.length > 0) {%>
+   
+    <table class="table squeezed">
+        <thead class="box">
+            <tr class="box-title">
+                <th>Start Value</th>
+                <th>End Value</th>
+                <th>Interest</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(basicInterestRates, function(basicInterestRate, i){%>
+            <tr id="basicInterestRateRow_<%=basicInterestRate.Id%>">
+                <td><input type="text" id="start_<%=basicInterestRate.Id%>" class="range-field" value="<%= basicInterestRate.Start %>"></td>
+                <td><input type="text" id="end_<%=basicInterestRate.Id%>" class="range-field" value="<%= basicInterestRate.End %>"></td>
+                <td><input type="text" id="value_<%=basicInterestRate.Id%>" class="range-field" value="<%= basicInterestRate.Value %>"></td>
+                <td>
+                    <button class="btn btn-primary removeRange" basic-interest-rate-id="<%= basicInterestRate.Id %>">Remove</button>
+                </td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <%}%>
+   
+    <button class="btn btn-primary addRange">Add Range</button>
+    <div class="pull-right">
+        <button class="btn btn-primary" id="SaveBasicInterestRateSettings"><i class="fa fa-check-circle" />Save</button>
+        <button class="btn btn-primary" id="CancelBasicInterestRateSettings"><i class="fa fa-refresh" />Reset</button>
+    </div>
+</script>
+

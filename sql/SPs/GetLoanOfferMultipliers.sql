@@ -10,9 +10,9 @@ AS
 BEGIN
 	SELECT 
 		Id,
-		StartScore,
-		EndScore,
-		Multiplier 
+		Start,
+		[End],
+		Value 
 	FROM 
 		LoanOfferMultiplier
 END

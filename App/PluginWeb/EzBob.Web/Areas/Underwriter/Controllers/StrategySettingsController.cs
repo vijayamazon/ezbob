@@ -512,13 +512,13 @@
 		public JsonResult SettingsBasicInterestRate()
 		{
 			var basicInterestRatesList = serviceClient.Instance.GetSpResultTable("GetBasicInterestRates", null);
-			var deserializedArray = JsonConvert.DeserializeObject<BasicInterestRate[]>(basicInterestRatesList.SerializedDataTable);
+			var deserializedArray = JsonConvert.DeserializeObject<ConfigTable[]>(basicInterestRatesList.SerializedDataTable);
 			var basicInterestRates = deserializedArray == null ? null : deserializedArray.ToList();
 			if (basicInterestRates != null)
 			{
-				foreach (BasicInterestRate basicInterestRate in basicInterestRates)
+				foreach (ConfigTable basicInterestRate in basicInterestRates)
 				{
-					basicInterestRate.LoanInterestBase *= 100; // Convert to percent
+					basicInterestRate.Value *= 100; // Convert to percent
 				}
 			}
 
@@ -530,85 +530,22 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult SaveBasicInterestRate(string serializedModels)
 		{
-			var deserializedModels = JsonConvert.DeserializeObject<List<BasicInterestRate>>(serializedModels);
-			var sortedModels = new SortedDictionary<int, BasicInterestRate>();
-			var sortedList = new List<BasicInterestRate>();
-			foreach (BasicInterestRate model in deserializedModels)
-			{
-				if (sortedModels.ContainsKey(model.FromScore))
-				{
-					string errorMessage = string.Format("FromScore must be unique:{0}", model.FromScore);
-					Log.WarnFormat(errorMessage);
-					return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-				}
-				sortedModels.Add(model.FromScore, model);
-			}
-
-			bool isFirst = true;
-			int highestSoFar = 0;
-			foreach (int key in sortedModels.Keys)
-			{
-				BasicInterestRate model = sortedModels[key];
-				sortedList.Add(model);
-				model.LoanInterestBase /= 100; // Convert to decimal number
-				if (isFirst)
-				{
-					if (model.FromScore != 0)
-					{
-						const string errorMessage = "FromScore must start at 0";
-						Log.WarnFormat(errorMessage);
-						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-					}
-					isFirst = false;
-				}
-				else
-				{
-					if (highestSoFar + 1 < model.FromScore)
-					{
-						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, model.FromScore - 1);
-						Log.WarnFormat(errorMessage);
-						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-					}
-					if (highestSoFar + 1 > model.FromScore)
-					{
-						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", model.FromScore, highestSoFar);
-						Log.WarnFormat(errorMessage);
-						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-					}
-				}
-				highestSoFar = model.ToScore;
-			}
-
-			if (highestSoFar < 100000000)
-			{
-				string errorMessage = string.Format("No range covers the numbers {0}-100000000", highestSoFar);
-				Log.WarnFormat(errorMessage);
-				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-			}
-
-			if (highestSoFar > 100000000)
-			{
-				const string errorMessage = "Maximum allowed number is 100000000";
-				Log.WarnFormat(errorMessage);
-				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-			}
-
-			BoolActionResult result = serviceClient.Instance.SaveBasicInterestRate(sortedList.ToArray());
-			return Json(new { error = result.Value ? "Error occurred during save" : null }, JsonRequestBehavior.AllowGet);
+			return SaveConfigTable(serializedModels, "BasicInterestRate");
 		}
+
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult SettingsLoanOfferMultiplier()
 		{
 			var loanOfferMultipliersList = serviceClient.Instance.GetSpResultTable("GetLoanOfferMultipliers", null);
-			var deserializedArray = JsonConvert.DeserializeObject<LoanOfferMultiplier[]>(loanOfferMultipliersList.SerializedDataTable);
+			var deserializedArray = JsonConvert.DeserializeObject<ConfigTable[]>(loanOfferMultipliersList.SerializedDataTable);
 			var loanOfferMultipliers = deserializedArray == null ? null : deserializedArray.ToList();
 			if (loanOfferMultipliers != null)
 			{
-				foreach (LoanOfferMultiplier loanOfferMultiplier in loanOfferMultipliers)
+				foreach (ConfigTable loanOfferMultiplier in loanOfferMultipliers)
 				{
-					loanOfferMultiplier.Multiplier *= 100; // Convert to percent
+					loanOfferMultiplier.Value *= 100; // Convert to percent
 				}
 			}
 
@@ -620,32 +557,51 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult SaveLoanOfferMultiplier(string serializedModels)
 		{
-			var deserializedModels = JsonConvert.DeserializeObject<List<LoanOfferMultiplier>>(serializedModels);
-			var sortedModels = new SortedDictionary<int, LoanOfferMultiplier>();
-			var sortedList = new List<LoanOfferMultiplier>();
-			foreach (LoanOfferMultiplier model in deserializedModels)
+			return SaveConfigTable(serializedModels, "LoanOfferMultiplier");
+		}
+
+		[Ajax]
+		[HttpPost]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		public JsonResult SaveConfigTable(string serializedModels, string configTableType)
+		{
+			ConfigTableType c;
+			switch (configTableType)
 			{
-				if (sortedModels.ContainsKey(model.StartScore))
+				case "LoanOfferMultiplier":
+					c = ConfigTableType.LoanOfferMultiplier;
+					break;
+				case "BasicInterestRate":
+				default:
+					c = ConfigTableType.BasicInterestRate;
+					break;
+			}
+			var deserializedModels = JsonConvert.DeserializeObject<List<ConfigTable>>(serializedModels);
+			var sortedModels = new SortedDictionary<int, ConfigTable>();
+			var sortedList = new List<ConfigTable>();
+			foreach (ConfigTable model in deserializedModels)
+			{
+				if (sortedModels.ContainsKey(model.Start))
 				{
-					string errorMessage = string.Format("StartScore must be unique:{0}", model.StartScore);
+					string errorMessage = string.Format("Start must be unique:{0}", model.Start);
 					Log.WarnFormat(errorMessage);
 					return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 				}
-				sortedModels.Add(model.StartScore, model);
+				sortedModels.Add(model.Start, model);
 			}
 
 			bool isFirst = true;
 			int highestSoFar = 0;
 			foreach (int key in sortedModels.Keys)
 			{
-				LoanOfferMultiplier model = sortedModels[key];
+				ConfigTable model = sortedModels[key];
 				sortedList.Add(model);
-				model.Multiplier /= 100; // Convert to decimal number
+				model.Value /= 100; // Convert to decimal number
 				if (isFirst)
 				{
-					if (model.StartScore != 0)
+					if (model.Start != 0)
 					{
-						const string errorMessage = "StartScore must start at 0";
+						const string errorMessage = "Start must start at 0";
 						Log.WarnFormat(errorMessage);
 						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 					}
@@ -653,37 +609,37 @@
 				}
 				else
 				{
-					if (highestSoFar + 1 < model.StartScore)
+					if (highestSoFar + 1 < model.Start)
 					{
-						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, model.StartScore - 1);
+						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, model.Start - 1);
 						Log.WarnFormat(errorMessage);
 						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 					}
-					if (highestSoFar + 1 > model.StartScore)
+					if (highestSoFar + 1 > model.Start)
 					{
-						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", model.StartScore, highestSoFar);
+						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", model.Start, highestSoFar);
 						Log.WarnFormat(errorMessage);
 						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 					}
 				}
-				highestSoFar = model.EndScore;
+				highestSoFar = model.End;
 			}
 
-			if (highestSoFar < 100000000)
+			if (highestSoFar < 10000000)
 			{
-				string errorMessage = string.Format("No range covers the numbers {0}-100000000", highestSoFar);
+				string errorMessage = string.Format("No range covers the numbers {0}-10000000", highestSoFar);
 				Log.WarnFormat(errorMessage);
 				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 			}
 
-			if (highestSoFar > 100000000)
+			if (highestSoFar > 10000000)
 			{
-				const string errorMessage = "Maximum allowed number is 100000000";
+				const string errorMessage = "Maximum allowed number is 10000000";
 				Log.WarnFormat(errorMessage);
 				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 			}
 
-			BoolActionResult result = serviceClient.Instance.SaveLoanOfferMultiplier(sortedList.ToArray());
+			BoolActionResult result = serviceClient.Instance.SaveConfigTable(sortedList.ToArray(), c);
 			return Json(new { error = result.Value ? "Error occurred during save" : null }, JsonRequestBehavior.AllowGet);
 		}
 

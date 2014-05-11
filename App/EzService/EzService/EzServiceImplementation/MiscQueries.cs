@@ -21,51 +21,26 @@
 			};
 		} // GetSpResultTable
 
-		public BoolActionResult SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates)
+		public BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType)
 		{
+			// TODO: Move validation in here instead of StrategySettingsController
 			bool isError = false;
 			try
 			{
 				DB.ExecuteNonQuery(
-					"BasicInterestRate_Refill",
+					"ConfigTable_Refill",
 					CommandSpecies.StoredProcedure,
-					DB.CreateTableParameter<BasicInterestRate>("@TheList", basicInterestRates, objbir =>
+					DB.CreateTableParameter<ConfigTable>("@TheList", configTableEntries, objbir =>
 					{
-						var bir = (BasicInterestRate)objbir;
-						return new object[] { bir.FromScore, bir.ToScore, bir.LoanInterestBase };
-					})
+						var bir = (ConfigTable)objbir;
+						return new object[] { bir.Start, bir.End, bir.Value };
+					}),
+					new QueryParameter("TableName", configTableType.ToString())
 				);
 			}
 			catch (Exception e)
 			{
-				Log.Error("Exception occurred during execution of BasicInterestRate_Refill. The exception:{0}", e);
-				isError = true;
-			}
-
-			return new BoolActionResult
-			{
-				Value = isError
-			};
-		}
-
-		public BoolActionResult SaveLoanOfferMultiplier(List<LoanOfferMultiplier> loanOfferMultipliers)
-		{
-			bool isError = false;
-			try
-			{
-				DB.ExecuteNonQuery(
-					"LoanOfferMultiplier_Refill",
-					CommandSpecies.StoredProcedure,
-					DB.CreateTableParameter<LoanOfferMultiplier>("@TheList", loanOfferMultipliers, objbir =>
-					{
-						var bir = (LoanOfferMultiplier)objbir;
-						return new object[] { bir.StartScore, bir.EndScore, bir.Multiplier };
-					})
-				);
-			}
-			catch (Exception e)
-			{
-				Log.Error("Exception occurred during execution of LoanOfferMultiplier_Refill. The exception:{0}", e);
+				Log.Error("Exception occurred during execution of {0}. The exception:{1}", configTableType, e);
 				isError = true;
 			}
 

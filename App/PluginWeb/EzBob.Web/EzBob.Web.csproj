@@ -592,13 +592,12 @@
     <Content Include="Content\img\customer-sidebar\fast.png" />
     <Content Include="Areas\Customer\Views\Shared\Shops\CompanyFilesAccountInfoTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CompanyFiles.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_BasicInterestRateSettings.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_LoanOfferMultiplierSettings.cshtml" />
     <Content Include="Areas\Broker\Files\credit.file.release.and.consent.2014-03-25.doc" />
     <Content Include="Areas\Broker\Files\credit.file.release.and.consent.doc" />
     <Content Include="Areas\Underwriter\Views\Shared\PricingModelCalculationTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\PricingModelSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\ConfigTableSettings.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1250,20 +1249,17 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.BasicInterestRate.js">
-      <DependentUpon>EzBob.Underwriter.Settings.BasicInterestRate.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.ConfigTables.js">
+      <DependentUpon>EzBob.Underwriter.Settings.ConfigTables.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Experian.js">
       <DependentUpon>EzBob.Underwriter.Settings.Experian.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.min.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferMultiplier.js">
-      <DependentUpon>EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.Settings.PricingModel.js">
       <DependentUpon>ezbob.underwriter.Settings.PricingModel.coffee</DependentUpon>
@@ -1370,8 +1366,6 @@
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1.psd" />
     <None Include="Content\img\customer-sidebar\icons-source\Preview Image Set_v1.0.psd" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.coffee" />
-    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.BasicInterestRate.coffee" />
-    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.enterHmrc.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js" />
     <Content Include="Views\Shared\_Copyright.cshtml">
@@ -1973,6 +1967,7 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.Settings.PricingModel.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.ConfigTables.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />

@@ -61,34 +61,26 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="FormattedSchedule" nillable="true" type="tns:FormattedSchedule" />
-  <xs:complexType name="ArrayOfBasicInterestRate">
+  <xs:complexType name="ArrayOfConfigTable">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="BasicInterestRate" nillable="true" type="tns:BasicInterestRate" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConfigTable" nillable="true" type="tns:ConfigTable" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfBasicInterestRate" nillable="true" type="tns:ArrayOfBasicInterestRate" />
-  <xs:complexType name="BasicInterestRate">
+  <xs:element name="ArrayOfConfigTable" nillable="true" type="tns:ArrayOfConfigTable" />
+  <xs:complexType name="ConfigTable">
     <xs:sequence>
-      <xs:element minOccurs="0" name="FromScore" type="xs:int" />
+      <xs:element minOccurs="0" name="End" type="xs:int" />
       <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanInterestBase" type="xs:decimal" />
-      <xs:element minOccurs="0" name="ToScore" type="xs:int" />
+      <xs:element minOccurs="0" name="Start" type="xs:int" />
+      <xs:element minOccurs="0" name="Value" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="BasicInterestRate" nillable="true" type="tns:BasicInterestRate" />
-  <xs:complexType name="ArrayOfLoanOfferMultiplier">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanOfferMultiplier" nillable="true" type="tns:LoanOfferMultiplier" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfLoanOfferMultiplier" nillable="true" type="tns:ArrayOfLoanOfferMultiplier" />
-  <xs:complexType name="LoanOfferMultiplier">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="EndScore" type="xs:int" />
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="Multiplier" type="xs:decimal" />
-      <xs:element minOccurs="0" name="StartScore" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="LoanOfferMultiplier" nillable="true" type="tns:LoanOfferMultiplier" />
+  <xs:element name="ConfigTable" nillable="true" type="tns:ConfigTable" />
+  <xs:simpleType name="ConfigTableType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LoanOfferMultiplier" />
+      <xs:enumeration value="BasicInterestRate" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ConfigTableType" nillable="true" type="tns:ConfigTableType" />
 </xs:schema>

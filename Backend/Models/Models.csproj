@@ -46,18 +46,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgreementModel.cs" />
-    <Compile Include="BasicInterestRate.cs" />
     <Compile Include="BrokerCustomerEntryModel.cs" />
     <Compile Include="BrokerCustomerCrmEntryModel.cs" />
     <Compile Include="BrokerCustomerPersonalDataModel.cs" />
     <Compile Include="BrokerCustomerDetailsModel.cs" />
     <Compile Include="BrokerCustomerFileModel.cs" />
     <Compile Include="BrokerPropertiesModel.cs" />
+    <Compile Include="ConfigTable.cs" />
     <Compile Include="enums.cs" />
     <Compile Include="FileDescriptionModel.cs" />
     <Compile Include="FinishWizardArgs.cs" />
     <Compile Include="FormattedSchedule.cs" />
-    <Compile Include="LoanOfferMultiplier.cs" />
     <Compile Include="LoanScheduleItemModel.cs" />
     <Compile Include="MpsTotals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -108,12 +108,6 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetCustomerState_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCustomerState" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCustomerState_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCustomerStateResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_GetCustomerStatusRefreshInterval_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCustomerStatusRefreshInterval" />
   </wsdl:message>
@@ -630,17 +624,11 @@
   <wsdl:message name="IEzService_GetSpResultTable_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetSpResultTableResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_SaveBasicInterestRate_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveBasicInterestRate" />
+  <wsdl:message name="IEzService_SaveConfigTable_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveConfigTable" />
   </wsdl:message>
-  <wsdl:message name="IEzService_SaveBasicInterestRate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveBasicInterestRateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaveLoanOfferMultiplier_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveLoanOfferMultiplier" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaveLoanOfferMultiplier_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveLoanOfferMultiplierResponse" />
+  <wsdl:message name="IEzService_SaveConfigTable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveConfigTableResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_UpdateConfigurationVariables_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateConfigurationVariables" />
@@ -684,6 +672,12 @@
   <wsdl:message name="IEzService_FinishWizard_OutputMessage">
     <wsdl:part name="parameters" element="tns:FinishWizardResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerState_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerState" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerState_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerStateResponse" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -707,10 +701,6 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
-    <wsdl:operation name="GetCustomerState">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerState" message="tns:IEzService_GetCustomerState_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStateResponse" message="tns:IEzService_GetCustomerState_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetCustomerStatusRefreshInterval">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval" message="tns:IEzService_GetCustomerStatusRefreshInterval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse" message="tns:IEzService_GetCustomerStatusRefreshInterval_OutputMessage" />
@@ -1055,13 +1045,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSpResultTable" message="tns:IEzService_GetSpResultTable_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSpResultTableResponse" message="tns:IEzService_GetSpResultTable_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="SaveBasicInterestRate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveBasicInterestRate" message="tns:IEzService_SaveBasicInterestRate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveBasicInterestRateResponse" message="tns:IEzService_SaveBasicInterestRate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveLoanOfferMultiplier">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveLoanOfferMultiplier" message="tns:IEzService_SaveLoanOfferMultiplier_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveLoanOfferMultiplierResponse" message="tns:IEzService_SaveLoanOfferMultiplier_OutputMessage" />
+    <wsdl:operation name="SaveConfigTable">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveConfigTable" message="tns:IEzService_SaveConfigTable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveConfigTableResponse" message="tns:IEzService_SaveConfigTable_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateConfigurationVariables">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateConfigurationVariables" message="tns:IEzService_UpdateConfigurationVariables_InputMessage" />
@@ -1090,6 +1076,10 @@
     <wsdl:operation name="FinishWizard">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FinishWizard" message="tns:IEzService_FinishWizard_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FinishWizardResponse" message="tns:IEzService_FinishWizard_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerState">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerState" message="tns:IEzService_GetCustomerState_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStateResponse" message="tns:IEzService_GetCustomerState_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1146,15 +1136,6 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="GetCustomerState">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCustomerState" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetCustomerStatusRefreshInterval">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval" style="document" />
       <wsdl:input>
@@ -1929,17 +1910,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SaveBasicInterestRate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveBasicInterestRate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaveLoanOfferMultiplier">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveLoanOfferMultiplier" style="document" />
+    <wsdl:operation name="SaveConfigTable">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveConfigTable" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2003,6 +1975,15 @@
     </wsdl:operation>
     <wsdl:operation name="FinishWizard">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FinishWizard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerState">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCustomerState" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

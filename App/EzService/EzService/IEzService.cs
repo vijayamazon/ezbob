@@ -293,12 +293,9 @@
 
 		[OperationContract]
 		SerializedDataTableActionResult GetSpResultTable(string spName, params string[] parameters);
-
+		
 		[OperationContract]
-		BoolActionResult SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates);
-
-		[OperationContract]
-		BoolActionResult SaveLoanOfferMultiplier(List<LoanOfferMultiplier> loanOfferMultipliers);
+		BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType);
 
 		[OperationContract]
 		ActionMetaData UpdateConfigurationVariables();

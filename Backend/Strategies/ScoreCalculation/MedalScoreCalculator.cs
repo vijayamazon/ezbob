@@ -94,14 +94,14 @@
 		{
 			DataTable dt = db.ExecuteReader("GetBasicInterestRate", CommandSpecies.StoredProcedure, new QueryParameter("Score", experianScore));
 			var sr = new SafeReader(dt.Rows[0]);
-			return sr["LoanInterestBase"];
+			return sr["Value"];
 		}
 
 		public decimal GetLoanOfferMultiplier(int experianScore)
 		{
 			DataTable dt = db.ExecuteReader("GetLoanOfferMultiplier", CommandSpecies.StoredProcedure, new QueryParameter("Score", experianScore));
 			var sr = new SafeReader(dt.Rows[0]);
-			return sr["Multiplier"];
+			return sr["Value"];
 		}
 
 		private string BuildMaxPoints(Dictionary<Parameter, Weight> dict)

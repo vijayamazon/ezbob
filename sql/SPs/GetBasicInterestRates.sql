@@ -10,9 +10,9 @@ AS
 BEGIN
 	SELECT 
 		Id,
-		FromScore,
-		ToScore,
-		LoanInterestBase
+		Start,
+		[End],
+		Value
 	FROM 
 		BasicInterestRate
 END
