@@ -93,7 +93,7 @@
 		public decimal TotalApprovedAmount { get; set; }
 		public int RejectsCount { get; set; }
 		public decimal LastInterestRate { get; set; }
-		public DateTime LastDecisionDate { get; set; }
+		public DateTime? LastDecisionDate { get; set; }
 	}
 
 	public class ProfileSummaryModel

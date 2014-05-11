@@ -451,6 +451,7 @@
                                             <span><%-m.Decisions.RejectsCount%></span>
                                         </p>
                                     </li>
+                                    <%if(m.Decisions.LastInterestRate > 0){%>
                                     <li>
                                         <p>
                                             <span>Last interest rate</span>
@@ -459,16 +460,17 @@
                                     </li>
                                     <li>
                                         <p>
-                                            <span>Last decision date</span>
+                                            <span>Last approval date</span>
                                             <span><%-EzBob.formatDate(new Date(moment(m.Decisions.LastDecisionDate)))%></span>
                                         </p>
                                     </li>
                                     <li>
                                         <p>
-                                            <span>Time past</span>
+                                            <span>Time past from last approval</span>
                                             <span><%-moment(m.Decisions.LastDecisionDate).fromNow()%></span>
                                         </p>
                                     </li>
+                                    <%}%>
                                 </ul>
                             </div>
                             <div class="tab-pane fade" id="rejects">
