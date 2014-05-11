@@ -81,6 +81,8 @@
       <xs:enumeration value="LoanOfferMultiplier" />
       <xs:enumeration value="BasicInterestRate" />
       <xs:enumeration value="EuLoanMonthlyInterest" />
+      <xs:enumeration value="DefaultRateCompany" />
+      <xs:enumeration value="DefaultRateCustomer" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ConfigTableType" nillable="true" type="tns:ConfigTableType" />

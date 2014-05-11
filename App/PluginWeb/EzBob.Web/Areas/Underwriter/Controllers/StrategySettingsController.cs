@@ -539,6 +539,12 @@
 				case "EuLoanMonthlyInterest":
 					c = ConfigTableType.EuLoanMonthlyInterest;
 					break;
+				case "DefaultRateCompany":
+					c = ConfigTableType.DefaultRateCompany;
+					break;
+				case "DefaultRateCustomer":
+					c = ConfigTableType.DefaultRateCustomer;
+					break;
 				case "BasicInterestRate":
 				default:
 					c = ConfigTableType.BasicInterestRate;

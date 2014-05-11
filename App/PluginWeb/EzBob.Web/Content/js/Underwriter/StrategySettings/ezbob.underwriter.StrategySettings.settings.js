@@ -22,7 +22,7 @@
     };
 
     StrategySettingsView.prototype.render = function() {
-      var basicInterestRates, campaign, charges, euLoanMonthlyInterest, experian, general, loanOfferMultipliers, pricingModel;
+      var basicInterestRates, campaign, charges, defaultRateCompany, defaultRateCustomer, euLoanMonthlyInterest, experian, general, loanOfferMultipliers, pricingModel;
 
       this.$el.html(this.template());
       general = this.$el.find("#general-settings");
@@ -33,6 +33,8 @@
       loanOfferMultipliers = this.$el.find("#loan-offer-multiplier-settings");
       pricingModel = this.$el.find("#pricing-model-settings");
       euLoanMonthlyInterest = this.$el.find("#eu-loan-monthly-interest-settings");
+      defaultRateCompany = this.$el.find("#default-rate-company-settings");
+      defaultRateCustomer = this.$el.find("#default-rate-customer-settings");
       this.generalModel = new EzBob.Underwriter.SettingsGeneralModel();
       this.generalView = new EzBob.Underwriter.SettingsGeneralView({
         el: general,
@@ -72,6 +74,16 @@
       this.euLoanMonthlyInterestView = new EzBob.Underwriter.Settings.EuLoanMonthlyInterestView({
         el: euLoanMonthlyInterest,
         model: this.euLoanMonthlyInterestModel
+      });
+      this.defaultRateCompanyModel = new EzBob.Underwriter.Settings.DefaultRateCompanyModel();
+      this.defaultRateCompanyView = new EzBob.Underwriter.Settings.DefaultRateCompanyView({
+        el: defaultRateCompany,
+        model: this.defaultRateCompanyModel
+      });
+      this.defaultRateCustomerModel = new EzBob.Underwriter.Settings.DefaultRateCustomerModel();
+      this.defaultRateCustomerView = new EzBob.Underwriter.Settings.DefaultRateCustomerView({
+        el: defaultRateCustomer,
+        model: this.defaultRateCustomerModel
       });
       return EzBob.handleUserLayoutSetting();
     };

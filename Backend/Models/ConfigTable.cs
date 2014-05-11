@@ -5,7 +5,9 @@
 	{
 		LoanOfferMultiplier,
 		BasicInterestRate,
-		EuLoanMonthlyInterest
+		EuLoanMonthlyInterest,
+		DefaultRateCompany,
+		DefaultRateCustomer
 	}
 
 	public class ConfigTable : ITraversable

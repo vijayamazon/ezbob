@@ -105,3 +105,75 @@
         <button class="btn btn-primary" id="CancelEuLoanMonthlyInterestSettings"><i class="fa fa-refresh" />Reset</button>
     </div>
 </script>
+
+
+<script type="text/template" id="default-rate-company-settings-template">
+    <h3>Default Rate Company Settings</h3>
+    <%if(configTableEntries && configTableEntries.length > 0) {%>
+   
+    <table class="table squeezed">
+        <thead class="box">
+            <tr class="box-title">
+                <th>Start</th>
+                <th>End</th>
+                <th>Value</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(configTableEntries, function(configTableEntry, i){%>
+            <tr id="defaultRateCompanyRow_<%=configTableEntry.Id%>">
+                <td><input type="text" id="start_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Start %>"></td>
+                <td><input type="text" id="end_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.End %>"></td>
+                <td><input type="text" id="value_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Value %>"></td>
+                <td>
+                    <button class="btn btn-primary removeRange" default-rate-company-id="<%= configTableEntry.Id %>">Remove</button>
+                </td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <%}%>
+   
+    <button class="btn btn-primary addRange">Add Range</button>
+    <div class="pull-right">
+        <button class="btn btn-primary" id="SaveDefaultRateCompanySettings"><i class="fa fa-check-circle" />Save</button>
+        <button class="btn btn-primary" id="CancelDefaultRateCompanySettings"><i class="fa fa-refresh" />Reset</button>
+    </div>
+</script>
+
+
+<script type="text/template" id="default-rate-customer-settings-template">
+    <h3>Default Rate Customer Settings</h3>
+    <%if(configTableEntries && configTableEntries.length > 0) {%>
+   
+    <table class="table squeezed">
+        <thead class="box">
+            <tr class="box-title">
+                <th>Start</th>
+                <th>End</th>
+                <th>Value</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(configTableEntries, function(configTableEntry, i){%>
+            <tr id="defaultRateCustomerRow_<%=configTableEntry.Id%>">
+                <td><input type="text" id="start_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Start %>"></td>
+                <td><input type="text" id="end_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.End %>"></td>
+                <td><input type="text" id="value_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Value %>"></td>
+                <td>
+                    <button class="btn btn-primary removeRange" default-rate-customer-id="<%= configTableEntry.Id %>">Remove</button>
+                </td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <%}%>
+   
+    <button class="btn btn-primary addRange">Add Range</button>
+    <div class="pull-right">
+        <button class="btn btn-primary" id="SaveDefaultRateCustomerSettings"><i class="fa fa-check-circle" />Save</button>
+        <button class="btn btn-primary" id="CancelDefaultRateCustomerSettings"><i class="fa fa-refresh" />Reset</button>
+    </div>
+</script>
