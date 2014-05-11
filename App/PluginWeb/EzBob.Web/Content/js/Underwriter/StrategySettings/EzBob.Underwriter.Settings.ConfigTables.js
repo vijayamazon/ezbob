@@ -19,7 +19,7 @@
       return _ref;
     }
 
-    LoanOfferMultiplierModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/SettingsLoanOfferMultiplier";
+    LoanOfferMultiplierModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/SettingsConfigTable?tableName=LoanOfferMultiplier";
 
     return LoanOfferMultiplierModel;
 
@@ -61,7 +61,7 @@
         id = eventObject.target.id.substring(6);
         newValue = parseInt(eventObject.target.value);
       }
-      ranges = this.model.get('loanOfferMultipliers');
+      ranges = this.model.get('configTableEntries');
       for (_i = 0, _len = ranges.length; _i < _len; _i++) {
         row = ranges[_i];
         if (row.Id.toString() === id) {
@@ -85,8 +85,9 @@
         _this = this;
 
       BlockUi("on");
-      xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/SaveLoanOfferMultiplier", {
-        serializedModels: JSON.stringify(this.model.get('loanOfferMultipliers'))
+      xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/SaveConfigTable", {
+        serializedModels: JSON.stringify(this.model.get('configTableEntries')),
+        configTableType: 'LoanOfferMultiplier'
       });
       xhr.done(function(res) {
         if (res.error) {
@@ -104,7 +105,7 @@
 
       rangeId = eventObject.target.getAttribute('loan-offer-multiplier-id');
       index = 0;
-      ranges = this.model.get('loanOfferMultipliers');
+      ranges = this.model.get('configTableEntries');
       for (_i = 0, _len = ranges.length; _i < _len; _i++) {
         row = ranges[_i];
         if (row.Id.toString() === rangeId) {
@@ -129,7 +130,7 @@
           freeId--;
         }
       }
-      this.model.get('loanOfferMultipliers').push({
+      this.model.get('configTableEntries').push({
         Start: 0,
         Id: freeId,
         End: 0,
@@ -142,7 +143,7 @@
       var data;
 
       data = {
-        loanOfferMultipliers: this.model.get('loanOfferMultipliers')
+        configTableEntries: this.model.get('configTableEntries')
       };
       return data;
     };
@@ -169,7 +170,7 @@
           disabled: "disabled"
         });
       }
-      ranges = this.model.get('loanOfferMultipliers');
+      ranges = this.model.get('configTableEntries');
       for (_i = 0, _len = ranges.length; _i < _len; _i++) {
         row = ranges[_i];
         startObject = this.$el.find('#start_' + row.Id);
@@ -216,7 +217,7 @@
       return _ref2;
     }
 
-    BasicInterestRateModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/SettingsBasicInterestRate";
+    BasicInterestRateModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/SettingsConfigTable?tableName=BasicInterestRate";
 
     return BasicInterestRateModel;
 
@@ -258,7 +259,7 @@
         id = eventObject.target.id.substring(6);
         newValue = parseInt(eventObject.target.value);
       }
-      ranges = this.model.get('basicInterestRates');
+      ranges = this.model.get('configTableEntries');
       for (_i = 0, _len = ranges.length; _i < _len; _i++) {
         row = ranges[_i];
         if (row.Id.toString() === id) {
@@ -282,8 +283,9 @@
         _this = this;
 
       BlockUi("on");
-      xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/SaveBasicInterestRate", {
-        serializedModels: JSON.stringify(this.model.get('basicInterestRates'))
+      xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/SaveConfigTable", {
+        serializedModels: JSON.stringify(this.model.get('configTableEntries')),
+        configTableType: 'BasicInterestRate'
       });
       xhr.done(function(res) {
         if (res.error) {
@@ -301,7 +303,7 @@
 
       rangeId = eventObject.target.getAttribute('basic-interest-rate-id');
       index = 0;
-      ranges = this.model.get('basicInterestRates');
+      ranges = this.model.get('configTableEntries');
       for (_i = 0, _len = ranges.length; _i < _len; _i++) {
         row = ranges[_i];
         if (row.Id.toString() === rangeId) {
@@ -326,7 +328,7 @@
           freeId--;
         }
       }
-      this.model.get('basicInterestRates').push({
+      this.model.get('configTableEntries').push({
         Start: 0,
         Id: freeId,
         End: 0,
@@ -339,7 +341,7 @@
       var data;
 
       data = {
-        basicInterestRates: this.model.get('basicInterestRates')
+        configTableEntries: this.model.get('configTableEntries')
       };
       return data;
     };
@@ -366,7 +368,7 @@
           disabled: "disabled"
         });
       }
-      ranges = this.model.get('basicInterestRates');
+      ranges = this.model.get('configTableEntries');
       for (_i = 0, _len = ranges.length; _i < _len; _i++) {
         row = ranges[_i];
         startObject = this.$el.find('#start_' + row.Id);

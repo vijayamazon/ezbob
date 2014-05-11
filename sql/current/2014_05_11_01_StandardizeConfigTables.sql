@@ -60,6 +60,13 @@ IF OBJECT_ID('LoanOfferMultiplier_Refill') IS NOT NULL
 	DROP PROCEDURE LoanOfferMultiplier_Refill
 GO
 
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetBasicInterestRates]') AND TYPE IN (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GetBasicInterestRates]
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetLoanOfferMultipliers]') AND TYPE IN (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GetLoanOfferMultipliers]
+GO
 
 
 

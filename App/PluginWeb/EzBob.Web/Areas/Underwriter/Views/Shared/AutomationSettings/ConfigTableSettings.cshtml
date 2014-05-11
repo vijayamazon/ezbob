@@ -2,7 +2,7 @@
 
 <script type="text/template" id="loan-offer-multiplier-settings-template">
     <h3>Loan Offer Multiplier Settings</h3>
-    <%if(loanOfferMultipliers && loanOfferMultipliers.length > 0) {%>
+    <%if(configTableEntries && configTableEntries.length > 0) {%>
    
     <table class="table squeezed">
         <thead class="box">
@@ -14,13 +14,13 @@
             </tr>
         </thead>
         <tbody>
-            <%_.each(loanOfferMultipliers, function(loanOfferMultiplier, i){%>
-            <tr id="loanOfferMultiplierRow_<%=loanOfferMultiplier.Id%>">
-                <td><input type="text" id="start_<%=loanOfferMultiplier.Id%>" class="range-field" value="<%= loanOfferMultiplier.Start %>"></td>
-                <td><input type="text" id="end_<%=loanOfferMultiplier.Id%>" class="range-field" value="<%= loanOfferMultiplier.End %>"></td>
-                <td><input type="text" id="value_<%=loanOfferMultiplier.Id%>" class="range-field" value="<%= loanOfferMultiplier.Value %>"></td>
+            <%_.each(configTableEntries, function(configTableEntry, i){%>
+            <tr id="loanOfferMultiplierRow_<%=configTableEntry.Id%>">
+                <td><input type="text" id="start_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Start %>"></td>
+                <td><input type="text" id="end_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.End %>"></td>
+                <td><input type="text" id="value_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Value %>"></td>
                 <td>
-                    <button class="btn btn-primary removeRange" loan-offer-multiplier-id="<%= loanOfferMultiplier.Id %>">Remove</button>
+                    <button class="btn btn-primary removeRange" loan-offer-multiplier-id="<%= configTableEntry.Id %>">Remove</button>
                 </td>
             </tr>
             <%});%>
@@ -37,7 +37,7 @@
 
 <script type="text/template" id="basic-interest-rate-settings-template">
     <h3>Basic Interest Rate Settings</h3>
-    <%if(basicInterestRates && basicInterestRates.length > 0) {%>
+    <%if(configTableEntries && configTableEntries.length > 0) {%>
    
     <table class="table squeezed">
         <thead class="box">
@@ -49,13 +49,13 @@
             </tr>
         </thead>
         <tbody>
-            <%_.each(basicInterestRates, function(basicInterestRate, i){%>
-            <tr id="basicInterestRateRow_<%=basicInterestRate.Id%>">
-                <td><input type="text" id="start_<%=basicInterestRate.Id%>" class="range-field" value="<%= basicInterestRate.Start %>"></td>
-                <td><input type="text" id="end_<%=basicInterestRate.Id%>" class="range-field" value="<%= basicInterestRate.End %>"></td>
-                <td><input type="text" id="value_<%=basicInterestRate.Id%>" class="range-field" value="<%= basicInterestRate.Value %>"></td>
+            <%_.each(configTableEntries, function(configTableEntry, i){%>
+            <tr id="basicInterestRateRow_<%=configTableEntry.Id%>">
+                <td><input type="text" id="start_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Start %>"></td>
+                <td><input type="text" id="end_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.End %>"></td>
+                <td><input type="text" id="value_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Value %>"></td>
                 <td>
-                    <button class="btn btn-primary removeRange" basic-interest-rate-id="<%= basicInterestRate.Id %>">Remove</button>
+                    <button class="btn btn-primary removeRange" basic-interest-rate-id="<%= configTableEntry.Id %>">Remove</button>
                 </td>
             </tr>
             <%});%>

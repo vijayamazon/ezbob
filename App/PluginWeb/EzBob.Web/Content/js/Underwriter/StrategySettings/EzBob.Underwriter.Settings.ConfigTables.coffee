@@ -4,7 +4,7 @@ EzBob.Underwriter = EzBob.Underwriter or {}
 EzBob.Underwriter.Settings = EzBob.Underwriter.Settings or {}
 
 class EzBob.Underwriter.Settings.LoanOfferMultiplierModel extends Backbone.Model
-    url: window.gRootPath + "Underwriter/StrategySettings/SettingsLoanOfferMultiplier"
+    url: window.gRootPath + "Underwriter/StrategySettings/SettingsConfigTable?tableName=LoanOfferMultiplier"
 
 class EzBob.Underwriter.Settings.LoanOfferMultiplierView extends Backbone.Marionette.ItemView
     template: "#loan-offer-multiplier-settings-template"
@@ -31,7 +31,7 @@ class EzBob.Underwriter.Settings.LoanOfferMultiplierView extends Backbone.Marion
             id = eventObject.target.id.substring(6)
             newValue = parseInt(eventObject.target.value)
 
-        ranges = @model.get('loanOfferMultipliers')
+        ranges = @model.get('configTableEntries')
         for row in ranges
             if (row.Id.toString() == id)
                 if (typeIdentifier == "end")
@@ -45,7 +45,7 @@ class EzBob.Underwriter.Settings.LoanOfferMultiplierView extends Backbone.Marion
 
     saveLoanOfferMultiplierSettings: ->
         BlockUi "on"
-        xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SaveLoanOfferMultiplier", serializedModels: JSON.stringify(@model.get('loanOfferMultipliers'))
+        xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SaveConfigTable", serializedModels: JSON.stringify(@model.get('configTableEntries')), configTableType: 'LoanOfferMultiplier'
         xhr.done (res) =>
             if res.error
                  EzBob.App.trigger('error', res.error)
@@ -56,7 +56,7 @@ class EzBob.Underwriter.Settings.LoanOfferMultiplierView extends Backbone.Marion
     removeRange: (eventObject) ->
         rangeId = eventObject.target.getAttribute('loan-offer-multiplier-id')
         index = 0
-        ranges = @model.get('loanOfferMultipliers')
+        ranges = @model.get('configTableEntries')
         for row in ranges
             if (row.Id.toString() == rangeId)
                 ranges.splice(index, 1)
@@ -76,12 +76,12 @@ class EzBob.Underwriter.Settings.LoanOfferMultiplierView extends Backbone.Marion
             else
                 freeId--
 
-        this.model.get('loanOfferMultipliers').push( {Start: 0, Id: freeId, End: 0, Value:0.0})
+        this.model.get('configTableEntries').push( {Start: 0, Id: freeId, End: 0, Value:0.0})
         @render()
         return
 
     serializeData: ->
-        data = loanOfferMultipliers: @model.get('loanOfferMultipliers')
+        data = configTableEntries: @model.get('configTableEntries')
         return data
 
     update: ->
@@ -94,7 +94,7 @@ class EzBob.Underwriter.Settings.LoanOfferMultiplierView extends Backbone.Marion
             @$el.find("button").hide()
             @$el.find("input").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
 
-        ranges = @model.get('loanOfferMultipliers')
+        ranges = @model.get('configTableEntries')
         for row in ranges
             startObject = @$el.find('#start_' + row.Id)
             if (startObject.length == 1)
@@ -120,7 +120,7 @@ EzBob.Underwriter = EzBob.Underwriter or {}
 EzBob.Underwriter.Settings = EzBob.Underwriter.Settings or {}
 
 class EzBob.Underwriter.Settings.BasicInterestRateModel extends Backbone.Model
-    url: window.gRootPath + "Underwriter/StrategySettings/SettingsBasicInterestRate"
+    url: window.gRootPath + "Underwriter/StrategySettings/SettingsConfigTable?tableName=BasicInterestRate"
 
 class EzBob.Underwriter.Settings.BasicInterestRateView extends Backbone.Marionette.ItemView
     template: "#basic-interest-rate-settings-template"
@@ -147,7 +147,7 @@ class EzBob.Underwriter.Settings.BasicInterestRateView extends Backbone.Marionet
             id = eventObject.target.id.substring(6)
             newValue = parseInt(eventObject.target.value)
 
-        ranges = @model.get('basicInterestRates')
+        ranges = @model.get('configTableEntries')
         for row in ranges
             if (row.Id.toString() == id)
                 if (typeIdentifier == "end")
@@ -161,7 +161,7 @@ class EzBob.Underwriter.Settings.BasicInterestRateView extends Backbone.Marionet
 
     saveBasicInterestRateSettings: ->
         BlockUi "on"
-        xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SaveBasicInterestRate", serializedModels: JSON.stringify(@model.get('basicInterestRates'))
+        xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SaveConfigTable", serializedModels: JSON.stringify(@model.get('configTableEntries')), configTableType: 'BasicInterestRate'
         xhr.done (res) =>
             if res.error
                  EzBob.App.trigger('error', res.error)
@@ -172,7 +172,7 @@ class EzBob.Underwriter.Settings.BasicInterestRateView extends Backbone.Marionet
     removeRange: (eventObject) ->
         rangeId = eventObject.target.getAttribute('basic-interest-rate-id')
         index = 0
-        ranges = @model.get('basicInterestRates')
+        ranges = @model.get('configTableEntries')
         for row in ranges
             if (row.Id.toString() == rangeId)
                 ranges.splice(index, 1)
@@ -192,12 +192,12 @@ class EzBob.Underwriter.Settings.BasicInterestRateView extends Backbone.Marionet
             else
                 freeId--
 
-        this.model.get('basicInterestRates').push( {Start: 0, Id: freeId, End: 0, Value:0.0})
+        this.model.get('configTableEntries').push( {Start: 0, Id: freeId, End: 0, Value:0.0})
         @render()
         return
 
     serializeData: ->
-        data = basicInterestRates: @model.get('basicInterestRates')
+        data = configTableEntries: @model.get('configTableEntries')
         return data
 
     update: ->
@@ -210,7 +210,7 @@ class EzBob.Underwriter.Settings.BasicInterestRateView extends Backbone.Marionet
             @$el.find("button").hide()
             @$el.find("input").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
 
-        ranges = @model.get('basicInterestRates')
+        ranges = @model.get('configTableEntries')
         for row in ranges
             startObject = @$el.find('#start_' + row.Id)
             if (startObject.length == 1)

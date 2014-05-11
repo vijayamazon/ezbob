@@ -509,55 +509,20 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonResult SettingsBasicInterestRate()
+		public JsonResult SettingsConfigTable(string tableName)
 		{
-			var basicInterestRatesList = serviceClient.Instance.GetSpResultTable("GetBasicInterestRates", null);
-			var deserializedArray = JsonConvert.DeserializeObject<ConfigTable[]>(basicInterestRatesList.SerializedDataTable);
-			var basicInterestRates = deserializedArray == null ? null : deserializedArray.ToList();
-			if (basicInterestRates != null)
+			var entriesList = serviceClient.Instance.GetSpResultTable("GetConfigTable", new []{"TableName", tableName});
+			var deserializedArray = JsonConvert.DeserializeObject<ConfigTable[]>(entriesList.SerializedDataTable);
+			var configTableEntries = deserializedArray == null ? null : deserializedArray.ToList();
+			if (configTableEntries != null)
 			{
-				foreach (ConfigTable basicInterestRate in basicInterestRates)
+				foreach (ConfigTable entry in configTableEntries)
 				{
-					basicInterestRate.Value *= 100; // Convert to percent
+					entry.Value *= 100; // Convert to percent
 				}
 			}
 
-			return Json(new { basicInterestRates }, JsonRequestBehavior.AllowGet);
-		}
-
-		[Ajax]
-		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonResult SaveBasicInterestRate(string serializedModels)
-		{
-			return SaveConfigTable(serializedModels, "BasicInterestRate");
-		}
-
-		[Ajax]
-		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonResult SettingsLoanOfferMultiplier()
-		{
-			var loanOfferMultipliersList = serviceClient.Instance.GetSpResultTable("GetLoanOfferMultipliers", null);
-			var deserializedArray = JsonConvert.DeserializeObject<ConfigTable[]>(loanOfferMultipliersList.SerializedDataTable);
-			var loanOfferMultipliers = deserializedArray == null ? null : deserializedArray.ToList();
-			if (loanOfferMultipliers != null)
-			{
-				foreach (ConfigTable loanOfferMultiplier in loanOfferMultipliers)
-				{
-					loanOfferMultiplier.Value *= 100; // Convert to percent
-				}
-			}
-
-			return Json(new { loanOfferMultipliers }, JsonRequestBehavior.AllowGet);
-		}
-
-		[Ajax]
-		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonResult SaveLoanOfferMultiplier(string serializedModels)
-		{
-			return SaveConfigTable(serializedModels, "LoanOfferMultiplier");
+			return Json(new { configTableEntries = configTableEntries }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
