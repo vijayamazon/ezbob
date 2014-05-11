@@ -71,13 +71,10 @@ $('body').on 'click', 'a[data-bug-type]', (e) ->
     bugCustomer = $e.data 'bug-customer'
     director = $e.data 'credit-bureau-director-id'
 
-    console.log 'clicked', $e, bugCustomer
-
     return false unless bugType? && bugCustomer?
 
     xhr = $.getJSON "#{window.gRootPath}Underwriter/Bugs/TryGet", {MP: bugMP, CustomerId: bugCustomer, BugType: bugType, Director: director}
     xhr.done (data) =>
-        console.log('return', data)
         return if (data?.error)
 
         view = null
