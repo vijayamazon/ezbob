@@ -41,8 +41,9 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
         @okBtn = $(".ok-button")
         @ui.input.autocomplete
             source: "#{gRootPath}Underwriter/Customers/FindCustomer"
-            autoFocus: true
+            autoFocus: false
             minLength: 3
+            delay: 500
 
     okTrigger: ->
         val = @ui.input.val()

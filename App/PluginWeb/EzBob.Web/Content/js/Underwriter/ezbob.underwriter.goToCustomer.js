@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.RecentCustomersModel = (function(_super) {
+
     __extends(RecentCustomersModel, _super);
 
     function RecentCustomersModel() {
-      _ref = RecentCustomersModel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return RecentCustomersModel.__super__.constructor.apply(this, arguments);
     }
 
     RecentCustomersModel.prototype.url = window.gRootPath + "Underwriter/Customers/GetRecentCustomers";
@@ -24,16 +24,15 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.goToCustomerId = (function(_super) {
+
     __extends(goToCustomerId, _super);
 
     function goToCustomerId() {
-      _ref1 = goToCustomerId.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return goToCustomerId.__super__.constructor.apply(this, arguments);
     }
 
     goToCustomerId.prototype.initialize = function() {
       var _this = this;
-
       Mousetrap.bind("ctrl+g", function() {
         _this.render();
         return false;
@@ -43,7 +42,6 @@
 
     goToCustomerId.prototype.template = function() {
       var allOptions, customer, el, recentCustomers, _i, _len;
-
       recentCustomers = JSON.parse(localStorage.getItem('RecentCustomers'));
       allOptions = '';
       for (_i = 0, _len = recentCustomers.length; _i < _len; _i++) {
@@ -64,7 +62,6 @@
 
     goToCustomerId.prototype.onRender = function() {
       var _this = this;
-
       this.dialog = EzBob.ShowMessage(this.ui.template, "Customer ID?", (function() {
         return _this.okTrigger();
       }), "OK", null, "Cancel");
@@ -74,14 +71,14 @@
       this.okBtn = $(".ok-button");
       return this.ui.input.autocomplete({
         source: "" + gRootPath + "Underwriter/Customers/FindCustomer",
-        autoFocus: true,
-        minLength: 3
+        autoFocus: false,
+        minLength: 3,
+        delay: 500
       });
     };
 
     goToCustomerId.prototype.okTrigger = function() {
       var selectVal, val;
-
       val = this.ui.input.val();
       if (!IsInt(val, true)) {
         val = val.substring(0, val.indexOf(','));
@@ -118,7 +115,6 @@
     goToCustomerId.prototype.checkCustomer = function(id) {
       var xhr,
         _this = this;
-
       this.okBtn.attr("disabled", "disabled");
       xhr = $.get("" + window.gRootPath + "Underwriter/Customers/CheckCustomer?customerId=" + id);
       xhr.done(function(res) {
