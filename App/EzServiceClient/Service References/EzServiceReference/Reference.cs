@@ -934,6 +934,12 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal DefaultRateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal DefaultRateCompanyShareField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal DefaultRateCustomerShareField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal EbitdaField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -1113,6 +1119,32 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.DefaultRateField.Equals(value) != true)) {
                     this.DefaultRateField = value;
                     this.RaisePropertyChanged("DefaultRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal DefaultRateCompanyShare {
+            get {
+                return this.DefaultRateCompanyShareField;
+            }
+            set {
+                if ((this.DefaultRateCompanyShareField.Equals(value) != true)) {
+                    this.DefaultRateCompanyShareField = value;
+                    this.RaisePropertyChanged("DefaultRateCompanyShare");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal DefaultRateCustomerShare {
+            get {
+                return this.DefaultRateCustomerShareField;
+            }
+            set {
+                if ((this.DefaultRateCustomerShareField.Equals(value) != true)) {
+                    this.DefaultRateCustomerShareField = value;
+                    this.RaisePropertyChanged("DefaultRateCustomerShare");
                 }
             }
         }

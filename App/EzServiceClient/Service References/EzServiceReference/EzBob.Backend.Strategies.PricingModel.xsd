@@ -11,6 +11,8 @@
       <xs:element minOccurs="0" name="CostOfDebtOutput" type="xs:decimal" />
       <xs:element minOccurs="0" name="DebtPercentOfCapital" type="xs:decimal" />
       <xs:element minOccurs="0" name="DefaultRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="DefaultRateCompanyShare" type="xs:decimal" />
+      <xs:element minOccurs="0" name="DefaultRateCustomerShare" type="xs:decimal" />
       <xs:element minOccurs="0" name="Ebitda" type="xs:decimal" />
       <xs:element minOccurs="0" name="EuLoanPercentages" type="xs:decimal" />
       <xs:element minOccurs="0" name="GrossProfit" type="xs:decimal" />

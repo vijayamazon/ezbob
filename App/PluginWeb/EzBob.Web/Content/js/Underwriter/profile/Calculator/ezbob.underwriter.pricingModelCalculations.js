@@ -41,8 +41,12 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             selector: "#setupFeePercents",
             converter: EzBob.BindingConverters.percentsFormat
         },
-        DefaultRate: {
-            selector: "#defaultRate",
+        DefaultRateCompanyShare: {
+            selector: "#defaultRateCompanyShare",
+            converter: EzBob.BindingConverters.percentsFormat
+        },
+        DefaultRateCustomerShare: {
+            selector: "#defaultRateCustomerShare",
             converter: EzBob.BindingConverters.percentsFormat
         },
         TenurePercents: {
@@ -81,10 +85,22 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         'focusout #tenureMonths': 'tenureMonthsChanged',
         'focusout #setupFeePounds': 'setupFeePoundsChanged',
         'focusout #setupFeePercents': 'setupFeePercentsChanged',
+        'focusout #defaultRateCompanyShare': 'defaultRateCompanyShareChanged',
+        'focusout #defaultRateCustomerShare': 'defaultRateCustomerShareChanged',
         'click #pricingModelResetButton': 'resetClicked',
         'click #pricingModelCalculateButton': 'calculateClicked',
         'click #expandCollapseInputsButton': 'expandCollapseInputsClicked',
         'click #expandCollapseOutputsButton': 'expandCollapseOutputsClicked'
+    },
+
+    defaultRateCompanyShareChanged: function () {
+        var customerShare = 1 - this.model.get('DefaultRateCompanyShare');
+        this.model.set('DefaultRateCustomerShare', customerShare);
+    },
+
+    defaultRateCustomerShareChanged: function () {
+        var companyShare = 1 - this.model.get('DefaultRateCustomerShare');
+        this.model.set('DefaultRateCompanyShare', companyShare);
     },
 
     setupFeePoundsChanged: function () {
@@ -190,7 +206,8 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         this.modelBinder.bind(this.model, this.el, this.bindings);
 
         this.$el.find('#interestRate').percentFormat();
-        this.$el.find('#defaultRate').percentFormat();
+        this.$el.find('#defaultRateCompanyShare').percentFormat();
+        this.$el.find('#defaultRateCustomerShare').percentFormat();
         this.$el.find('#tenurePercents').percentFormat();
         this.$el.find('#collectionRate').percentFormat();
         this.$el.find('#debtPercentOfCapital').percentFormat();

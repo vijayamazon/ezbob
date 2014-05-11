@@ -24,7 +24,9 @@
 			Model = new PricingModelModel
 				{
 					LoanAmount = customerId,
-					DefaultRate = 0.04m,
+					DefaultRate = 5,
+					DefaultRateCompanyShare = 0.04m,
+					DefaultRateCustomerShare = 1 - 0.04m,
 					SetupFeePounds = 150,
 					SetupFeePercents = 0.07m,
 					LoanTerm = 12,
