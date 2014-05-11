@@ -25,26 +25,49 @@
 		{
 			decimal defaultRateCompanyShare, defaultRateCustomerShare;
 			decimal defaultRate = GetDefaultRate(out defaultRateCompanyShare, out defaultRateCustomerShare);
+			int loanAmount, loanTerm;
+			GetDataFromCashRequest(out loanAmount, out loanTerm);
+			int interestOnlyPeriod = CurrentValues.Instance.PricingModelInterestOnlyPeriod;
+			decimal tenurePercents = CurrentValues.Instance.PricingModelTenurePercents;
+			decimal tenureMonths = tenurePercents * loanTerm;
 
 			Model = new PricingModelModel
 				{
-					LoanAmount = customerId,
+					LoanAmount = loanAmount,
 					DefaultRate = defaultRate,
 					DefaultRateCompanyShare = defaultRateCompanyShare,
 					DefaultRateCustomerShare = defaultRateCustomerShare,
 					SetupFeePounds = 150,
 					SetupFeePercents = 0.07m,
-					LoanTerm = 12,
-					InterestOnlyPeriod = 3,
-					TenurePercents = 0.5m,
-					TenureMonths = 0.22m,
-					CollectionRate = 6.88m,
-					Cogs = 1000,
-					DebtPercentOfCapital = 0.65m,
-					CostOfDebt = 0.65m,
-					OpexAndCapex = 180,
-					ProfitMarkup = 0.29m
+					LoanTerm = loanTerm,
+					InterestOnlyPeriod = interestOnlyPeriod,
+					TenurePercents = tenurePercents,
+					TenureMonths = tenureMonths,
+					CollectionRate = CurrentValues.Instance.PricingModelCollectionRate,
+					Cogs = CurrentValues.Instance.PricingModelCogs,
+					DebtPercentOfCapital = CurrentValues.Instance.PricingModelDebtOutOfTotalCapital,
+					CostOfDebt = CurrentValues.Instance.PricingModelCostOfDebtPA,
+					OpexAndCapex = CurrentValues.Instance.PricingModelOpexAndCapex,
+					ProfitMarkup = CurrentValues.Instance.PricingModelProfitMarkupPercentsOfRevenue
 				};
+		}
+
+		private void GetDataFromCashRequest(out int loanAmount, out int loanTerm)
+		{
+			loanAmount = 0;
+			loanTerm = 12;
+			DataTable dt = DB.ExecuteReader(
+				"GetLastCashRequestForPricingModel",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+
+			if (dt.Rows.Count == 1)
+			{
+				var sr = new SafeReader(dt.Rows[0]);
+				loanAmount = sr["SystemCalculatedSum"];
+				loanTerm = sr["RepaymentPeriod"];
+			}
 		}
 
 		private decimal GetDefaultRate(out decimal defaultRateCompanyShare, out decimal defaultRateCustomerShare)
