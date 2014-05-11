@@ -15,6 +15,7 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.View
         basicInterestRates = @$el.find "#basic-interest-rate-settings"
         loanOfferMultipliers = @$el.find "#loan-offer-multiplier-settings"
         pricingModel = @$el.find "#pricing-model-settings"
+        euLoanMonthlyInterest = @$el.find "#eu-loan-monthly-interest-settings"
 
         @generalModel =  new EzBob.Underwriter.SettingsGeneralModel()
         @generalView =  new EzBob.Underwriter.SettingsGeneralView(
@@ -53,6 +54,12 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.View
         @pricingModelView =  new EzBob.Underwriter.SettingsPricingModelView(
             el: pricingModel
             model: @pricingModelModel
+        )
+
+        @euLoanMonthlyInterestModel = new EzBob.Underwriter.Settings.EuLoanMonthlyInterestModel()
+        @euLoanMonthlyInterestView =  new EzBob.Underwriter.Settings.EuLoanMonthlyInterestView(
+            el: euLoanMonthlyInterest
+            model: @euLoanMonthlyInterestModel
         )
 
         EzBob.handleUserLayoutSetting()

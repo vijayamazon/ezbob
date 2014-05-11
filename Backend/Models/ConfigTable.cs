@@ -4,7 +4,8 @@
 	public enum ConfigTableType
 	{
 		LoanOfferMultiplier,
-		BasicInterestRate
+		BasicInterestRate,
+		EuLoanMonthlyInterest
 	}
 
 	public class ConfigTable : ITraversable

@@ -70,3 +70,38 @@
     </div>
 </script>
 
+
+<script type="text/template" id="eu-loan-monthly-interest-settings-template">
+    <h3>Eu Loan Monthly Interest Settings</h3>
+    <%if(configTableEntries && configTableEntries.length > 0) {%>
+   
+    <table class="table squeezed">
+        <thead class="box">
+            <tr class="box-title">
+                <th>Start</th>
+                <th>End</th>
+                <th>Value</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(configTableEntries, function(configTableEntry, i){%>
+            <tr id="euLoanMonthlyInterestRow_<%=configTableEntry.Id%>">
+                <td><input type="text" id="start_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Start %>"></td>
+                <td><input type="text" id="end_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.End %>"></td>
+                <td><input type="text" id="value_<%=configTableEntry.Id%>" class="range-field" value="<%= configTableEntry.Value %>"></td>
+                <td>
+                    <button class="btn btn-primary removeRange" eu-loan-monthly-interest-id="<%= configTableEntry.Id %>">Remove</button>
+                </td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <%}%>
+   
+    <button class="btn btn-primary addRange">Add Range</button>
+    <div class="pull-right">
+        <button class="btn btn-primary" id="SaveEuLoanMonthlyInterestSettings"><i class="fa fa-check-circle" />Save</button>
+        <button class="btn btn-primary" id="CancelEuLoanMonthlyInterestSettings"><i class="fa fa-refresh" />Reset</button>
+    </div>
+</script>

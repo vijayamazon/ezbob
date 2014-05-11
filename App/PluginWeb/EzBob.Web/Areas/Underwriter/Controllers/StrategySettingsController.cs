@@ -536,6 +536,9 @@
 				case "LoanOfferMultiplier":
 					c = ConfigTableType.LoanOfferMultiplier;
 					break;
+				case "EuLoanMonthlyInterest":
+					c = ConfigTableType.EuLoanMonthlyInterest;
+					break;
 				case "BasicInterestRate":
 				default:
 					c = ConfigTableType.BasicInterestRate;

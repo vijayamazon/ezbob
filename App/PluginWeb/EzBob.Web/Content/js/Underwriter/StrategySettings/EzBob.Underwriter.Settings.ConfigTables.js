@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1, _ref2, _ref3,
+  var root, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -59,7 +59,11 @@
         newValue = parseInt(eventObject.target.value);
       } else {
         id = eventObject.target.id.substring(6);
-        newValue = parseInt(eventObject.target.value);
+        if (typeIdentifier === "sta") {
+          newValue = parseInt(eventObject.target.value);
+        } else {
+          newValue = parseFloat(eventObject.target.value);
+        }
       }
       ranges = this.model.get('configTableEntries');
       for (_i = 0, _len = ranges.length; _i < _len; _i++) {
@@ -201,14 +205,6 @@
 
   })(Backbone.Marionette.ItemView);
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
-
-  root.EzBob = root.EzBob || {};
-
-  EzBob.Underwriter = EzBob.Underwriter || {};
-
-  EzBob.Underwriter.Settings = EzBob.Underwriter.Settings || {};
-
   EzBob.Underwriter.Settings.BasicInterestRateModel = (function(_super) {
     __extends(BasicInterestRateModel, _super);
 
@@ -257,7 +253,11 @@
         newValue = parseInt(eventObject.target.value);
       } else {
         id = eventObject.target.id.substring(6);
-        newValue = parseInt(eventObject.target.value);
+        if (typeIdentifier === "sta") {
+          newValue = parseInt(eventObject.target.value);
+        } else {
+          newValue = parseFloat(eventObject.target.value);
+        }
       }
       ranges = this.model.get('configTableEntries');
       for (_i = 0, _len = ranges.length; _i < _len; _i++) {
@@ -396,6 +396,202 @@
     };
 
     return BasicInterestRateView;
+
+  })(Backbone.Marionette.ItemView);
+
+  EzBob.Underwriter.Settings.EuLoanMonthlyInterestModel = (function(_super) {
+    __extends(EuLoanMonthlyInterestModel, _super);
+
+    function EuLoanMonthlyInterestModel() {
+      _ref4 = EuLoanMonthlyInterestModel.__super__.constructor.apply(this, arguments);
+      return _ref4;
+    }
+
+    EuLoanMonthlyInterestModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/SettingsConfigTable?tableName=EuLoanMonthlyInterest";
+
+    return EuLoanMonthlyInterestModel;
+
+  })(Backbone.Model);
+
+  EzBob.Underwriter.Settings.EuLoanMonthlyInterestView = (function(_super) {
+    __extends(EuLoanMonthlyInterestView, _super);
+
+    function EuLoanMonthlyInterestView() {
+      _ref5 = EuLoanMonthlyInterestView.__super__.constructor.apply(this, arguments);
+      return _ref5;
+    }
+
+    EuLoanMonthlyInterestView.prototype.template = "#eu-loan-monthly-interest-settings-template";
+
+    EuLoanMonthlyInterestView.prototype.initialize = function(options) {
+      this.modelBinder = new Backbone.ModelBinder();
+      this.model.on("reset", this.render, this);
+      this.update();
+      return this;
+    };
+
+    EuLoanMonthlyInterestView.prototype.events = {
+      "click .addRange": "addRange",
+      "click .removeRange": "removeRange",
+      "click #SaveEuLoanMonthlyInterestSettings": "saveEuLoanMonthlyInterestSettings",
+      "click #CancelEuLoanMonthlyInterestSettings": "update",
+      "change .range-field": "valueChanged"
+    };
+
+    EuLoanMonthlyInterestView.prototype.valueChanged = function(eventObject) {
+      var id, newValue, ranges, row, typeIdentifier, _i, _len;
+
+      typeIdentifier = eventObject.target.id.substring(0, 3);
+      if (typeIdentifier === "end") {
+        id = eventObject.target.id.substring(4);
+        newValue = parseInt(eventObject.target.value);
+      } else {
+        id = eventObject.target.id.substring(6);
+        if (typeIdentifier === "sta") {
+          newValue = parseInt(eventObject.target.value);
+        } else {
+          newValue = parseFloat(eventObject.target.value);
+        }
+      }
+      ranges = this.model.get('configTableEntries');
+      for (_i = 0, _len = ranges.length; _i < _len; _i++) {
+        row = ranges[_i];
+        if (row.Id.toString() === id) {
+          if (typeIdentifier === "end") {
+            row.End = newValue;
+          }
+          if (typeIdentifier === "sta") {
+            row.Start = newValue;
+          }
+          if (typeIdentifier === "val") {
+            row.Value = newValue;
+          }
+          return false;
+        }
+      }
+      return false;
+    };
+
+    EuLoanMonthlyInterestView.prototype.saveEuLoanMonthlyInterestSettings = function() {
+      debugger;
+      var xhr,
+        _this = this;
+
+      BlockUi("on");
+      xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/SaveConfigTable", {
+        serializedModels: JSON.stringify(this.model.get('configTableEntries')),
+        configTableType: 'EuLoanMonthlyInterest'
+      });
+      xhr.done(function(res) {
+        if (res.error) {
+          return EzBob.App.trigger('error', res.error);
+        }
+      });
+      xhr.always(function() {
+        return BlockUi("off");
+      });
+      return false;
+    };
+
+    EuLoanMonthlyInterestView.prototype.removeRange = function(eventObject) {
+      var index, rangeId, ranges, row, _i, _len;
+
+      rangeId = eventObject.target.getAttribute('eu-loan-monthly-interest-id');
+      index = 0;
+      ranges = this.model.get('configTableEntries');
+      for (_i = 0, _len = ranges.length; _i < _len; _i++) {
+        row = ranges[_i];
+        if (row.Id.toString() === rangeId) {
+          ranges.splice(index, 1);
+          this.render();
+          return false;
+        }
+        index++;
+      }
+    };
+
+    EuLoanMonthlyInterestView.prototype.addRange = function(e, range) {
+      var freeId, t, verified;
+
+      freeId = -1;
+      verified = false;
+      while (!verified) {
+        t = this.$el.find('#euLoanMonthlyInterestRow_' + freeId);
+        if (t.length === 0) {
+          verified = true;
+        } else {
+          freeId--;
+        }
+      }
+      this.model.get('configTableEntries').push({
+        Start: 0,
+        Id: freeId,
+        End: 0,
+        Value: 0.0
+      });
+      this.render();
+    };
+
+    EuLoanMonthlyInterestView.prototype.serializeData = function() {
+      debugger;
+      var data;
+
+      data = {
+        configTableEntries: this.model.get('configTableEntries')
+      };
+      return data;
+    };
+
+    EuLoanMonthlyInterestView.prototype.update = function() {
+      var _this = this;
+
+      return this.model.fetch().done(function() {
+        return _this.render();
+      });
+    };
+
+    EuLoanMonthlyInterestView.prototype.onRender = function() {
+      var endObject, ranges, row, startObject, valueObject, _i, _len;
+
+      if (!$("body").hasClass("role-manager")) {
+        this.$el.find("select").addClass("disabled").attr({
+          readonly: "readonly",
+          disabled: "disabled"
+        });
+        this.$el.find("button").hide();
+        this.$el.find("input").addClass("disabled").attr({
+          readonly: "readonly",
+          disabled: "disabled"
+        });
+      }
+      ranges = this.model.get('configTableEntries');
+      for (_i = 0, _len = ranges.length; _i < _len; _i++) {
+        row = ranges[_i];
+        startObject = this.$el.find('#start_' + row.Id);
+        if (startObject.length === 1) {
+          startObject.numericOnly();
+        }
+        endObject = this.$el.find('#end_' + row.Id);
+        if (endObject.length === 1) {
+          endObject.numericOnly();
+        }
+        valueObject = this.$el.find('#value_' + row.Id);
+        if (valueObject.length === 1) {
+          valueObject.autoNumeric(EzBob.percentFormat).blur();
+        }
+      }
+      return false;
+    };
+
+    EuLoanMonthlyInterestView.prototype.show = function(type) {
+      return this.$el.show();
+    };
+
+    EuLoanMonthlyInterestView.prototype.hide = function() {
+      return this.$el.hide();
+    };
+
+    return EuLoanMonthlyInterestView;
 
   })(Backbone.Marionette.ItemView);
 
