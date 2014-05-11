@@ -311,7 +311,7 @@
 		);
 
 		[OperationContract]
-		ActionMetaData CalculateVatReturnSummary(int nCustomerID);
+		ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
 
 		#endregion other strategies
 

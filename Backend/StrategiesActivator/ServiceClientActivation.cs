@@ -917,14 +917,14 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 		[Activation]
 		private void CalculateVatReturnSummary() {
-			int nCustomerID = 0;
+			int nCustomerMarketplaceID = 0;
 
-			if ((args.Length != 2) || !int.TryParse(args[1], out nCustomerID)) {
-				m_oLog.Msg("Usage: CalculateVatReturnSummary <nCustomerID>");
+			if ((args.Length != 2) || !int.TryParse(args[1], out nCustomerMarketplaceID)) {
+				m_oLog.Msg("Usage: CalculateVatReturnSummary <Customer Marketplace ID>");
 				return;
 			} // if
 
-			serviceClient.CalculateVatReturnSummary(nCustomerID);
+			serviceClient.CalculateVatReturnSummary(nCustomerMarketplaceID);
 		} // CalculateVatReturnSummary
 
 		// ReSharper restore UnusedMember.Local

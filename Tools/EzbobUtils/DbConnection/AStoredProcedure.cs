@@ -252,6 +252,15 @@
 
 		#endregion property Species
 
+		#region method PrepareCustomParameters
+
+		protected virtual void PrepareCustomParameters(List<QueryParameter> args) {
+			// Nothing here.
+			// In derived class: manipulate the args list: add, remove, do something non-standard.
+		} // PrepareCustomParameters
+
+		#endregion method PrepareCustomParameters
+
 		#region method PrepareParameters
 
 		protected virtual QueryParameter[] PrepareParameters() {
@@ -279,23 +288,31 @@
 						};
 					}
 					else {
-						if (null == oPropertyInfo.PropertyType.GetInterface(typeof (ITraversable).ToString()))
-							throw new NotImplementedException("Type " + oPropertyInfo.PropertyType + " does not implement " + typeof (ITraversable));
+						if (oPropertyInfo.PropertyType.IsGenericType && oPropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)) {
+							Type oUnderlyingType = oPropertyInfo.PropertyType.GetGenericArguments()[0];
 
-						if (null == oPropertyInfo.PropertyType.GetInterface(typeof (IParametrisable).ToString()))
-							throw new NotImplementedException("Type " + oPropertyInfo.PropertyType + " does not implement " + typeof (IParametrisable));
+							if (null == oUnderlyingType.GetInterface(typeof (ITraversable).ToString()))
+								throw new NotImplementedException("Type " + oUnderlyingType + " does not implement " + typeof (ITraversable));
 
-						qp = DB.CreateTableParameter(
-							oPropertyInfo.PropertyType,
-							sFieldName,
-							(IEnumerable)oPropertyInfo.GetValue(oInstance, null),
-							o => ((IParametrisable)o).ToParameter(),
-							nDirection
+							if (null == oUnderlyingType.GetInterface(typeof (IParametrisable).ToString()))
+								throw new NotImplementedException("Type " + oUnderlyingType + " does not implement " + typeof (IParametrisable));
+
+							qp = DB.CreateTableParameter(
+								oUnderlyingType,
+								sFieldName,
+								(IEnumerable)oPropertyInfo.GetValue(oInstance, null),
+								o => ((IParametrisable)o).ToParameter(),
+								nDirection
 							);
+						}
+						else
+							throw new NotImplementedException("Type " + oPropertyInfo.PropertyType + " does not implement IEnumerable<T>");
 					} // if
 
 					args.Add(qp);
 				});
+
+				PrepareCustomParameters(args);
 
 				m_aryArgs = args.ToArray();
 			} // if

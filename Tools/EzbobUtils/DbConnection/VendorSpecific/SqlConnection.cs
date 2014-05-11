@@ -33,20 +33,9 @@
 
 		#region method CreateTableParameter
 
-		public override QueryParameter CreateTableParameter(Type oColumnInfo, string sFieldName, IEnumerable oValues, Func<object, object[]> oValueToRow, ParameterDirection nDirection = ParameterDirection.Input) {
-			var tbl = new DataTable();
-
-			PropertyTraverser.Traverse(
-				oColumnInfo,
-				(oIgnoredInstance, oPropertyInfo) => tbl.Columns.Add(string.Empty, oPropertyInfo.PropertyType)
-			);
-
-			if (oValues != null)
-				foreach (object v in oValues)
-					tbl.Rows.Add(oValueToRow(v));
-
+		public override QueryParameter BuildTableParameter(string sFieldName, DataTable oValues, ParameterDirection nDirection = ParameterDirection.Input) {
 			return new QueryParameter(new SqlParameter(sFieldName, SqlDbType.Structured) {
-				Value = tbl,
+				Value = oValues,
 				Direction = nDirection,
 			});
 		} // CreateTableParameter

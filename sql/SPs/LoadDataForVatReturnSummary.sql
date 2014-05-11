@@ -3,7 +3,7 @@ IF OBJECT_ID('LoadDataForVatReturnSummary') IS NULL
 GO
 
 ALTER PROCEDURE LoadDataForVatReturnSummary
-@CustomerID INT
+@CustomerMarketplaceID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -26,9 +26,8 @@ BEGIN
 		#recs
 	FROM
 		MP_VatReturnRecords r
-		INNER JOIN MP_CustomerMarketPlace m
-			ON r.CustomerMarketPlaceId = m.Id
-			AND m.CustomerID = @CustomerID
+	WHERE
+		r.CustomerMarketPlaceId = @CustomerMarketplaceID
 	GROUP BY
 		r.Period,
 		CONVERT(DATE, r.DateFrom),

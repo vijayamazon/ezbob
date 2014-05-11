@@ -82,8 +82,8 @@
 
 		#region method CalculateVatReturnSummary
 
-		public ActionMetaData CalculateVatReturnSummary(int nCustomerID) {
-			return Execute<CalculateVatReturnSummary>(nCustomerID, null, nCustomerID);
+		public ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID) {
+			return Execute<CalculateVatReturnSummary>(null, null, nCustomerMarketplaceID);
 		} // CalculateVatReturnSummary
 
 		#endregion method CalculateVatReturnSummary

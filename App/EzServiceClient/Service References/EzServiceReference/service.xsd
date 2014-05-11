@@ -1440,7 +1440,7 @@
   <xs:element name="CalculateVatReturnSummary">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="nCustomerMarketplaceID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

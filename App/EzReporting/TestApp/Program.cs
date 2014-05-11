@@ -16,6 +16,20 @@ namespace TestApp {
 	using SqlConnection = Ezbob.Database.SqlConnection;
 
 	class Program {
+		private class A : ITraversable {
+			public int F1 { get; set; }
+			public int F2 { get; private set; }
+			public virtual int V1 { get; set; }
+			public virtual int V2 { get; private set; }
+		} // class A
+
+		private class B : A {
+			public int F3 { get; set; }
+			public int F4 { get; private set; }
+			public virtual int V3 { get; set; }
+			public virtual int V4 { get; private set; }
+		} // class B
+
 		#region method Main
 
 		private static ASafeLog ms_oLog;
@@ -27,7 +41,12 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
-			UpdateBrokerPasswords(oDB, log);
+			PropertyTraverser.Traverse<B>((oInstance, oInfo) => {
+				ms_oLog.Msg("Instance is {0}", oInstance);
+				ms_oLog.Msg("Property name is {0}", oInfo.Name);
+			});
+
+			// UpdateBrokerPasswords(oDB, log);
 
 			// TestTableSpArgument(oDB, log);
 

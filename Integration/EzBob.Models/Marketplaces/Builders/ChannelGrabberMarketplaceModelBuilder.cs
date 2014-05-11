@@ -107,8 +107,6 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 				oVatReturn.Sort(VatReturnEntry.CompareForSort);
 				oRtiTaxMonths.Sort(RtiTaxMonthEntry.CompareForSort);
-					//var configurationVariables = ObjectFactory.GetInstance<EZBob.DatabaseLib.Model.ConfigurationVariablesRepository>();
-				
 
 				model.CGData = new ChannelGrabberHmrcData {
 					VatReturn = oVatReturn,

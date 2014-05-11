@@ -222,9 +222,30 @@
 			return CreateTableParameter(typeof (TColumnInfo), sFieldName, oValues, oValueToRow, nDirection);
 		} // CreateTableParameter
 
-		public abstract QueryParameter CreateTableParameter(Type oColumnInfo, string sFieldName, IEnumerable oValues, Func<object, object[]> oValueToRow, ParameterDirection nDirection = ParameterDirection.Input);
+		public virtual QueryParameter CreateTableParameter(Type oColumnInfo, string sFieldName, IEnumerable oValues, Func<object, object[]> oValueToRow, ParameterDirection nDirection = ParameterDirection.Input) {
+			var tbl = new DataTable();
+
+			PropertyTraverser.Traverse(oColumnInfo, (oIgnoredInstance, oPropertyInfo) => {
+				bool bIsNullable =
+					oPropertyInfo.PropertyType.IsGenericType &&
+					oPropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
+
+				tbl.Columns.Add(
+					string.Empty,
+					bIsNullable ? Nullable.GetUnderlyingType(oPropertyInfo.PropertyType) : oPropertyInfo.PropertyType
+				);
+			});
+
+			if (oValues != null)
+				foreach (object v in oValues)
+					tbl.Rows.Add(oValueToRow(v));
+
+			return BuildTableParameter(sFieldName, tbl, nDirection);
+		} // CreateTableParameter
 
 		#endregion method CreateTableParameter
+
+		public abstract QueryParameter BuildTableParameter(string sFieldName, DataTable oValues, ParameterDirection nDirection = ParameterDirection.Input);
 
 		public abstract string DateToString(DateTime oDate);
 
