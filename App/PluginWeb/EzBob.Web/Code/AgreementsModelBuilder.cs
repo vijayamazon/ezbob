@@ -56,17 +56,18 @@
 			var businessType = customer.PersonalInfo.TypeOfBusiness;
 			var company = customer.Company;
 			CustomerAddress companyAddress = null;
-			if (businessType.Reduce() != TypeOfBusinessReduced.Limited && company != null)
+			if (company != null)
 			{
-				model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
-				model.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
-				companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
-				
-			}
-			else if (businessType.Reduce() == TypeOfBusinessReduced.NonLimited && company != null)
-			{
-				model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
-				companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
+				switch (businessType.Reduce())
+				{
+					case TypeOfBusinessReduced.Limited:
+						model.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
+						goto case TypeOfBusinessReduced.NonLimited;
+					case TypeOfBusinessReduced.NonLimited:
+						model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
+						companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
+						break;
+				}
 			}
 
 			model.CompanyAdress = companyAddress.GetFormatted();
