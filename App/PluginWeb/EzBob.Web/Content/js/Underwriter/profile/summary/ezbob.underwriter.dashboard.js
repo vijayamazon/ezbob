@@ -25,12 +25,14 @@
       this.experianModel = options.experianModel;
       this.propertiesModel = options.propertiesModel;
       this.mpsModel = options.mpsModel;
+      this.loanModel = options.loanModel;
       this.bindTo(this.model, "change sync", this.render, this);
       this.bindTo(this.crmModel, "change sync", this.render, this);
       this.bindTo(this.personalModel, "change sync", this.render, this);
       this.bindTo(this.experianModel, "change sync", this.render, this);
       this.bindTo(this.propertiesModel, "change sync", this.render, this);
-      return this.bindTo(this.mpsModel, "change sync", this.render, this);
+      this.bindTo(this.mpsModel, "change sync", this.render, this);
+      return this.bindTo(this.loanModel, "change sync", this.render, this);
     };
 
     DashboardView.prototype.serializeData = function() {
@@ -41,7 +43,9 @@
         }), 5),
         experian: this.experianModel.toJSON(),
         properties: this.propertiesModel.toJSON(),
-        mps: this.mpsModel.toJSON()
+        mps: this.mpsModel.toJSON(),
+        loan: this.loanModel.toJSON(),
+        affordability: null
       };
     };
 

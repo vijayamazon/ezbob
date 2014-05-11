@@ -1088,7 +1088,7 @@ div.hmrc-enter-data-holder .add-one-period {
     width: 90px;
 }
 
-.box .box-title {
+#dashboard .box .box-title {
     padding: 3px;
 }
 

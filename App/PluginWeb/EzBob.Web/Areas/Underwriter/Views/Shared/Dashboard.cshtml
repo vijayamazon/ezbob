@@ -1,6 +1,7 @@
 ﻿@model dynamic
 <script id="dashboard-template" type="text/template">
     <div>
+        <%if(loan){ %>
         <div class="col-md-7">
             <div class="box">
                 <div class="box-title">
@@ -15,30 +16,30 @@
                         <li>
                             <p>
                                 <span>Amount</span>
-                                <span class="light-green">30,000</span>
+                                <span class="light-green"><%-EzBob.formatPoundsNoDecimals(loan.OfferedCreditLine)%></span>
                             </p>
                         </li>
                         <li>
                             <p>
                                 <span>Monthly interest</span>
-                                <span class="light-green">3.2%</span>
+                                <span class="light-green"><%-EzBob.formatPercents(loan.InterestRate)%></span>
                             </p>
                         </li>
                         <li>
                             <p>
                                 <span>Term</span>
-                                <span class="light-green">12 months</span>
+                                <span class="light-green"><%-loan.RepaymentPerion%> months</span>
                             </p>
                         </li>
                         <li>
                             <p>
                                 <span>Setup fee</span>
-                                <span class="light-green">3.5%</span>
+                                <span class="light-green"><%-loan.SetupFee%></span>
                             </p>
                         </li>
                     </ul>
 
-                    <div class="form-group">
+                    <div class="form-group hide">
                         <button class="btn btn-primary" id="offer-edit">edit</button>
                         <button class="btn btn-primary" id="offer-calculate">calculate</button>
                     </div>
@@ -46,6 +47,7 @@
                 </div>
             </div>
         </div>
+        <%}%>
         <%if(m.Alerts && m.Alerts.length > 0){%>
         <div class="col-md-5">
             <div class="box">
@@ -314,6 +316,7 @@
     </div>
 
     <div>
+        <%if(affordability){%>
         <div class="col-md-7">
             <div class="box">
                 <div class="box-title">
@@ -373,6 +376,7 @@
                 </div>
             </div>
         </div>
+        <%}%>
     </div>
 
     <div>

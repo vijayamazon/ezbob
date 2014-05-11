@@ -11,13 +11,15 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
         @experianModel = options.experianModel
         @propertiesModel = options.propertiesModel
         @mpsModel = options.mpsModel
-        
+        @loanModel = options.loanModel
+
         @bindTo @model, "change sync", @render, this
         @bindTo @crmModel, "change sync", @render, this
         @bindTo @personalModel, "change sync", @render, this
         @bindTo @experianModel, "change sync", @render, this
         @bindTo @propertiesModel, "change sync", @render, this
         @bindTo @mpsModel, "change sync", @render, this
+        @bindTo @loanModel, "change sync", @render, this
 
     serializeData: ->
         m: @model.toJSON()
@@ -25,7 +27,8 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
         experian: @experianModel.toJSON()
         properties: @propertiesModel.toJSON()
         mps: @mpsModel.toJSON()
-
+        loan: @loanModel.toJSON()
+        affordability: null
     events:
         'click a[data-action="collapse"]' : "boxToolClick"
         'click a[data-action="close"]' : "boxToolClick"
