@@ -577,69 +577,8 @@
 					break;
 			}
 			var deserializedModels = JsonConvert.DeserializeObject<List<ConfigTable>>(serializedModels);
-			var sortedModels = new SortedDictionary<int, ConfigTable>();
-			var sortedList = new List<ConfigTable>();
-			foreach (ConfigTable model in deserializedModels)
-			{
-				if (sortedModels.ContainsKey(model.Start))
-				{
-					string errorMessage = string.Format("Start must be unique:{0}", model.Start);
-					Log.WarnFormat(errorMessage);
-					return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-				}
-				sortedModels.Add(model.Start, model);
-			}
 
-			bool isFirst = true;
-			int highestSoFar = 0;
-			foreach (int key in sortedModels.Keys)
-			{
-				ConfigTable model = sortedModels[key];
-				sortedList.Add(model);
-				model.Value /= 100; // Convert to decimal number
-				if (isFirst)
-				{
-					if (model.Start != 0)
-					{
-						const string errorMessage = "Start must start at 0";
-						Log.WarnFormat(errorMessage);
-						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-					}
-					isFirst = false;
-				}
-				else
-				{
-					if (highestSoFar + 1 < model.Start)
-					{
-						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, model.Start - 1);
-						Log.WarnFormat(errorMessage);
-						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-					}
-					if (highestSoFar + 1 > model.Start)
-					{
-						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", model.Start, highestSoFar);
-						Log.WarnFormat(errorMessage);
-						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-					}
-				}
-				highestSoFar = model.End;
-			}
-
-			if (highestSoFar < 10000000)
-			{
-				string errorMessage = string.Format("No range covers the numbers {0}-10000000", highestSoFar);
-				Log.WarnFormat(errorMessage);
-				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-			}
-
-			if (highestSoFar > 10000000)
-			{
-				const string errorMessage = "Maximum allowed number is 10000000";
-				Log.WarnFormat(errorMessage);
-				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
-			}
-
-			BoolActionResult result = serviceClient.Instance.SaveConfigTable(sortedList.ToArray(), c);
+			BoolActionResult result = serviceClient.Instance.SaveConfigTable(deserializedModels.ToArray(), c);
 			return Json(new { error = result.Value ? "Error occurred during save" : null }, JsonRequestBehavior.AllowGet);
 		}
 

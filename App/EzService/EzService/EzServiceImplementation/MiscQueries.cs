@@ -21,32 +21,103 @@
 			};
 		} // GetSpResultTable
 
+		private bool IsValidConfigTableInput(List<ConfigTable> configTableEntries, out SortedDictionary<int, ConfigTable> sortedEntries)
+		{
+			sortedEntries = new SortedDictionary<int, ConfigTable>();
+			var sortedList = new List<ConfigTable>();
+			foreach (ConfigTable entry in configTableEntries)
+			{
+				if (sortedEntries.ContainsKey(entry.Start))
+				{
+					string errorMessage = string.Format("Start must be unique:{0}", entry.Start);
+					Log.Warn(errorMessage);
+					return false;
+				}
+				sortedEntries.Add(entry.Start, entry);
+			}
+
+			bool isFirst = true;
+			int highestSoFar = 0;
+			foreach (int key in sortedEntries.Keys)
+			{
+				ConfigTable entry = sortedEntries[key];
+				sortedList.Add(entry);
+				entry.Value /= 100; // Convert to decimal number
+				if (isFirst)
+				{
+					if (entry.Start != 0)
+					{
+						const string errorMessage = "Start must start at 0";
+						Log.Warn(errorMessage);
+						return false;
+					}
+					isFirst = false;
+				}
+				else
+				{
+					if (highestSoFar + 1 < entry.Start)
+					{
+						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, entry.Start - 1);
+						Log.Warn(errorMessage);
+						return false;
+					}
+					if (highestSoFar + 1 > entry.Start)
+					{
+						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", entry.Start, highestSoFar);
+						Log.Warn(errorMessage);
+						return false;
+					}
+				}
+				highestSoFar = entry.End;
+			}
+
+			if (highestSoFar < 10000000)
+			{
+				string errorMessage = string.Format("No range covers the numbers {0}-10000000", highestSoFar);
+				Log.Warn(errorMessage);
+				return false;
+			}
+
+			if (highestSoFar > 10000000)
+			{
+				const string errorMessage = "Maximum allowed number is 10000000";
+				Log.Warn(errorMessage);
+				return false;
+			}
+
+			return true;
+		}
+
 		public BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType)
 		{
-			// TODO: Move validation in here instead of StrategySettingsController
-			bool isError = false;
-			try
+			SortedDictionary<int, ConfigTable> sortedEntries;
+			bool isValid = IsValidConfigTableInput(configTableEntries, out sortedEntries);
+
+			if (isValid)
 			{
-				DB.ExecuteNonQuery(
-					"ConfigTable_Refill",
-					CommandSpecies.StoredProcedure,
-					DB.CreateTableParameter<ConfigTable>("@TheList", configTableEntries, objbir =>
-					{
-						var bir = (ConfigTable)objbir;
-						return new object[] { bir.Start, bir.End, bir.Value };
-					}),
-					new QueryParameter("TableName", configTableType.ToString())
-				);
-			}
-			catch (Exception e)
-			{
-				Log.Error("Exception occurred during execution of {0}. The exception:{1}", configTableType, e);
-				isError = true;
+				try
+				{
+					DB.ExecuteNonQuery(
+						"ConfigTable_Refill",
+						CommandSpecies.StoredProcedure,
+						DB.CreateTableParameter<ConfigTable>("@TheList", sortedEntries.Values, objbir =>
+							{
+								var bir = (ConfigTable) objbir;
+								return new object[] {bir.Start, bir.End, bir.Value};
+							}),
+						new QueryParameter("TableName", configTableType.ToString())
+						);
+				}
+				catch (Exception e)
+				{
+					Log.Error("Exception occurred during execution of {0}. The exception:{1}", configTableType, e);
+					isValid = false;
+				}
 			}
 
 			return new BoolActionResult
 			{
-				Value = isError
+				Value = !isValid
 			};
 		}
 
