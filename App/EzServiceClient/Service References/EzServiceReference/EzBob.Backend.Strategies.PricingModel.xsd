@@ -15,8 +15,10 @@
       <xs:element minOccurs="0" name="DefaultRateCustomerShare" type="xs:decimal" />
       <xs:element minOccurs="0" name="Ebitda" type="xs:decimal" />
       <xs:element minOccurs="0" name="EuLoanPercentages" type="xs:decimal" />
+      <xs:element minOccurs="0" name="FeesRevenue" type="xs:decimal" />
       <xs:element minOccurs="0" name="GrossProfit" type="xs:decimal" />
       <xs:element minOccurs="0" name="InterestOnlyPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="InterestRevenue" type="xs:decimal" />
       <xs:element minOccurs="0" name="LoanAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="LoanTerm" type="xs:int" />
       <xs:element minOccurs="0" name="MonthlyInterestRate" type="xs:decimal" />

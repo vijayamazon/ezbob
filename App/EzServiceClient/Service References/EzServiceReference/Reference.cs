@@ -946,10 +946,16 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal EuLoanPercentagesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal FeesRevenueField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal GrossProfitField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int InterestOnlyPeriodField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal InterestRevenueField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal LoanAmountField;
@@ -1176,6 +1182,19 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal FeesRevenue {
+            get {
+                return this.FeesRevenueField;
+            }
+            set {
+                if ((this.FeesRevenueField.Equals(value) != true)) {
+                    this.FeesRevenueField = value;
+                    this.RaisePropertyChanged("FeesRevenue");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal GrossProfit {
             get {
                 return this.GrossProfitField;
@@ -1197,6 +1216,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.InterestOnlyPeriodField.Equals(value) != true)) {
                     this.InterestOnlyPeriodField = value;
                     this.RaisePropertyChanged("InterestOnlyPeriod");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal InterestRevenue {
+            get {
+                return this.InterestRevenueField;
+            }
+            set {
+                if ((this.InterestRevenueField.Equals(value) != true)) {
+                    this.InterestRevenueField = value;
+                    this.RaisePropertyChanged("InterestRevenue");
                 }
             }
         }

@@ -29,6 +29,8 @@
 
 		// Other output fields
 		public decimal Revenue { get; set; }
+		public decimal InterestRevenue { get; set; }
+		public decimal FeesRevenue { get; set; }
 		public decimal CogsOutput { get; set; }
 		public decimal GrossProfit { get; set; }
 		public decimal OpexAndCapexOutput { get; set; }
