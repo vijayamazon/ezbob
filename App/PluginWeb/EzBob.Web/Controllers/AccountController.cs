@@ -64,11 +64,18 @@ namespace EzBob.Web.Controllers {
 		public ActionResult AdminLogOn(LogOnModel model) {
 			if (ModelState.IsValid) {
 				var user = _users.GetUserByLogin(model.UserName);
-
-				if (_membershipProvider.ValidateUser(model.UserName, model.Password)) {
-					user.LoginFailedCount = 0;
-					return SetCookieAndRedirect(model, "Underwriter", "Customers");
-				} // if
+				try
+				{
+					if (_membershipProvider.ValidateUser(model.UserName, model.Password))
+					{
+						user.LoginFailedCount = 0;
+						return SetCookieAndRedirect(model, "Underwriter", "Customers");
+					} // if
+				}
+				catch (UserNotFoundException ex)
+				{
+					
+				}
 			} // if
 
 			ModelState.AddModelError("", "Wrong user name/password.");
