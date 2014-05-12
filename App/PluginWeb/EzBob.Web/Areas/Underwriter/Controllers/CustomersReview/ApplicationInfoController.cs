@@ -20,6 +20,7 @@
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using NHibernate;
+	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using StructureMap;
@@ -301,27 +302,34 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public void ChangeSetupFee(long id, bool enbaled)
+		public JsonResult ChangeSetupFee(long id, bool enbaled)
 		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.UseSetupFee = enbaled;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).UseSetupFee = {1}", id, enbaled);
+
+			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
+			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
+			return Json(new {setupFee = setupFee});
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public void ChangeBrokerSetupFee(long id, bool enbaled)
+		public JsonResult ChangeBrokerSetupFee(long id, bool enbaled)
 		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.UseBrokerSetupFee = enbaled;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).UseBrokerSetupFee = {1}", id, enbaled);
+			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
+			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
+			return Json(new { setupFee = setupFee });
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public void ChangeManualSetupFeePercent(long id, decimal? manualPercent)
+		public JsonResult ChangeManualSetupFeePercent(long id, decimal? manualPercent)
 		{
 			var cr = _cashRequestsRepository.Get(id);
 			if (manualPercent.HasValue && manualPercent > 0)
@@ -334,16 +342,22 @@
 			}
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).ManualSetupFee percent: {1}", id, cr.ManualSetupFeePercent);
+			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
+			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
+			return Json(new { setupFee = setupFee });
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public void ChangeManualSetupFeeAmount(long id, int? manualAmount)
+		public JsonResult ChangeManualSetupFeeAmount(long id, int? manualAmount)
 		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.ManualSetupFeeAmount = manualAmount.HasValue && manualAmount.Value > 0 ? manualAmount.Value : (int?)null;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
+			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
+			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
+			return Json(new { setupFee = setupFee });
 		}
 
 		[HttpPost]

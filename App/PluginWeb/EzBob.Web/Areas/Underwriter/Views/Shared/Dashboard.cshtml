@@ -34,7 +34,7 @@
                         <li>
                             <p>
                                 <span>Setup fee</span>
-                                <span class="light-green"><%-loan.SetupFee%></span>
+                                <span class="light-green"><%-EzBob.formatPoundsNoDecimals(loan.SetupFee)%></span>
                             </p>
                         </li>
                     </ul>
@@ -156,7 +156,12 @@
                         <%if(experian.directorsModels && experian.directorsModels.length > 0){
                             _.each(experian.directorsModels, function(item, i){%>
                         <div class="col-md-2">
-                            <div class="tile" style="background-color: <%-item.ScoreColor%>">
+                            <%var tileColor='';
+                              if(!EzBob.isDarkColor(item.ScoreColor)){
+                                tileColor = 'tile-light';
+                              }
+                            %>
+                            <div class="tile <%-tileColor%>" style="background-color: <%-item.ScoreColor%>">
                                 <div class="caption text-center">
                                     Director <%-(i+1)%>
                                 </div>

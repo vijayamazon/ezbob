@@ -68,6 +68,11 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
                 console.log(res.error);
                 return;
             }
+            
+            if (!isNaN(res.setupFee)) {
+                that.model.set("SetupFee", res.setupFee);
+            }
+            
             val = that.onBeforeUpdateModel(val);
             that.model.set(that.options.propertyName, val);
             that.$el.dialog('close');

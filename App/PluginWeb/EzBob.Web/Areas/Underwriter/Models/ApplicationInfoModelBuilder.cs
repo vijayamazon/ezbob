@@ -13,6 +13,7 @@
 	using System.Text;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Infrastructure;
+	using PaymentServices.Calculators;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
@@ -21,7 +22,7 @@
 	{
 		private readonly IPacNetBalanceRepository _funds;
 		private readonly IPacNetManualBalanceRepository _manualFunds;
-        private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
+		private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
@@ -33,16 +34,16 @@
 			IPacNetBalanceRepository funds,
 			IPacNetManualBalanceRepository manualFunds,
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
-            IDiscountPlanRepository discounts,
-			ILoanTypeRepository loanTypes, 
+			IDiscountPlanRepository discounts,
+			ILoanTypeRepository loanTypes,
 			IConfigurationVariablesRepository configurationVariablesRepository,
 			ILoanSourceRepository loanSources
 		)
 		{
 			_funds = funds;
 			_manualFunds = manualFunds;
-            _discounts = discounts;
-            _loanTypes = loanTypes;
+			_discounts = discounts;
+			_loanTypes = loanTypes;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 			this.configurationVariablesRepository = configurationVariablesRepository;
 			_loanSources = loanSources;
@@ -50,29 +51,28 @@
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
-        {
-            if (customer == null) return;
+		{
+			if (customer == null) return;
 
-            model.Id = customer.Id;
+			model.Id = customer.Id;
 
-            if (cr != null)
+			if (cr != null)
 			{
 				var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 				DecimalActionResult result = serviceClient.Instance.GetLatestInterestRate(customer.Id, context.UserId);
 				model.InterestRate = result.Value == -1 ? cr.InterestRate : result.Value;
-                model.CashRequestId = cr.Id;
-                
+				model.CashRequestId = cr.Id;
+
 				model.UseSetupFee = cr.UseSetupFee;
 				model.UseBrokerSetupFee = cr.UseBrokerSetupFee;
 				model.ManualSetupFeeAmount = cr.ManualSetupFeeAmount;
 				model.ManualSetupFeePercent = cr.ManualSetupFeePercent;
+				model.AllowSendingEmail = !cr.EmailSendingBanned;
 
-                model.AllowSendingEmail = !cr.EmailSendingBanned;
+				var loanType = cr.LoanType ?? _loanTypes.GetDefault();
 
-                var loanType = cr.LoanType ?? _loanTypes.GetDefault();
-
-                model.LoanType = loanType.Name;
-                model.LoanTypeId = loanType.Id;
+				model.LoanType = loanType.Name;
+				model.LoanTypeId = loanType.Id;
 
 				cr.OfferStart = cr.OfferStart ?? customer.OfferStart;
 				cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
@@ -85,6 +85,9 @@
 				}
 
 				model.OfferedCreditLine = Convert.ToDecimal(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum);
+
+				var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
+				model.SetupFee = calc.Calculate(model.OfferedCreditLine);
 
 				model.BorrowedAmount = customer.Loans.Where(x => x.CashRequest != null && x.CashRequest.Id == cr.Id).Sum(x => x.LoanAmount);
 
@@ -100,45 +103,45 @@
 
 			model.LoanSource = new LoanSourceModel(cr != null && cr.LoanSource != null ? cr.LoanSource : _loanSources.GetDefault());
 
-            model.CustomerId = customer.Id;
-            model.IsTest = customer.IsTest;
+			model.CustomerId = customer.Id;
+			model.IsTest = customer.IsTest;
 			model.IsOffline = customer.IsOffline;
 			model.HasYodlee = customer.GetYodleeAccounts().ToList().Any();
-            model.IsAvoid = customer.IsAvoid;
-            model.SystemDecision = customer.Status.ToString();
+			model.IsAvoid = customer.IsAvoid;
+			model.SystemDecision = customer.Status.ToString();
 
-            model.AvaliableAmount = customer.CreditSum ?? 0M;
+			model.AvaliableAmount = customer.CreditSum ?? 0M;
 			model.OfferExpired = customer.OfferValidUntil <= DateTime.UtcNow;
 
 
 			var balance = _funds.GetBalance();
 			var manualBalance = _manualFunds.GetBalance();
-	        var fundsAvailable = balance.Adjusted + manualBalance;
+			var fundsAvailable = balance.Adjusted + manualBalance;
 			model.FundsAvaliable = FormattingUtils.FormatPounds(fundsAvailable);
 
-	        DateTime today = DateTime.UtcNow;
-	        model.FundsAvailableUnderLimitClass = string.Empty;
+			DateTime today = DateTime.UtcNow;
+			model.FundsAvailableUnderLimitClass = string.Empty;
 			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
-	        if (fundsAvailable < relevantLimit)
+			if (fundsAvailable < relevantLimit)
 			{
 				model.FundsAvailableUnderLimitClass = "red_cell";
 			}
 
-	        model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
-            //Status = "Active";
-            model.Details = customer.Details;
-            var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
-                                       customer.CreditResult == CreditResultStatus.Escalated;
+			model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
+			//Status = "Active";
+			model.Details = customer.Details;
+			var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
+									   customer.CreditResult == CreditResultStatus.Escalated;
 
 			model.Editable = isWaitingOrEscalated && cr != null && customer.CollectionStatus.CurrentStatus.IsEnabled;
 
-            model.IsModified = cr != null && !string.IsNullOrEmpty(cr.LoanTemplate);
+			model.IsModified = cr != null && !string.IsNullOrEmpty(cr.LoanTemplate);
 
-            model.LoanTypes = _loanTypes.GetAll().Select(t => LoanTypesModel.Create(t)).ToArray();
+			model.LoanTypes = _loanTypes.GetAll().Select(t => LoanTypesModel.Create(t)).ToArray();
 
-            model.DiscountPlans = _discounts.GetAll().Select(d => DiscountPlanModel.Create(d)).ToArray();
-            DiscountPlan discountPlan;
-			
+			model.DiscountPlans = _discounts.GetAll().Select(d => DiscountPlanModel.Create(d)).ToArray();
+			DiscountPlan discountPlan;
+
 			if (cr != null && cr.DiscountPlan != null)
 			{
 				discountPlan = cr.DiscountPlan;
@@ -148,14 +151,14 @@
 				discountPlan = _discounts.GetDefault();
 			}
 
-            model.DiscountPlan = discountPlan.Name;
-            model.DiscountPlanPercents = discountPlan.Discounts.Any(d => d != 0) ? string.Format("({0})", discountPlan.ValuesStr) : "";
-            model.DiscountPlanId = discountPlan.Id;
+			model.DiscountPlan = discountPlan.Name;
+			model.DiscountPlanPercents = discountPlan.Discounts.Any(d => d != 0) ? string.Format("({0})", discountPlan.ValuesStr) : "";
+			model.DiscountPlanId = discountPlan.Id;
 
 			model.AllLoanSources = _loanSources.GetAll().Select(ls => new LoanSourceModel(ls)).ToArray();
-			
+
 			model.OfferValidForHours = (int)configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
-            
+
 			model.AMLResult = customer.AMLResult;
 			model.SkipPopupForApprovalWithoutAML = approvalsWithoutAMLRepository.ShouldSkipById(customer.Id);
 
@@ -165,14 +168,16 @@
 			{
 				model.EmployeeCount = (company.CompanyEmployeeCount.OrderBy(x => x.Created).LastOrDefault() ?? new CompanyEmployeeCount()).EmployeeCount;
 			}
-			
+
 			CustomerRequestedLoan oRequest = customer.CustomerRequestedLoan.OrderBy(x => x.Created).LastOrDefault();
 
-			if ((oRequest == null) || (oRequest.CustomerReason == null)) {
+			if ((oRequest == null) || (oRequest.CustomerReason == null))
+			{
 				model.CustomerReasonType = -1;
 				model.CustomerReason = "";
 			}
-			else {
+			else
+			{
 				model.CustomerReasonType = oRequest.CustomerReason.ReasonType ?? -1;
 
 				var os = new StringBuilder();
@@ -180,7 +185,8 @@
 				if (!string.IsNullOrWhiteSpace(oRequest.CustomerReason.Reason))
 					os.Append(oRequest.CustomerReason.Reason.Trim());
 
-				if (!string.IsNullOrWhiteSpace(oRequest.OtherReason)) {
+				if (!string.IsNullOrWhiteSpace(oRequest.OtherReason))
+				{
 					if (!string.IsNullOrWhiteSpace(oRequest.CustomerReason.Reason))
 						os.Append(": ");
 
@@ -219,6 +225,6 @@
 						},
 				};
 
-        } // InitApplicationInfo
+		} // InitApplicationInfo
 	}
 }
