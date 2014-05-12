@@ -3,6 +3,8 @@ IF OBJECT_ID('EzTvGetStats') IS NULL
 GO
 
 ALTER PROCEDURE EzTvGetStats
+@Now DATETIME,
+@FirstOfMonth DATETIME,
 @MonthAgo DATETIME
 AS
 BEGIN
@@ -10,19 +12,19 @@ BEGIN
 DECLARE @DefaultCustomerCount INT = (SELECT count(*) FROM Customer c JOIN CustomerStatuses s ON s.Id = c.CollectionStatus WHERE s.IsDefault=1 AND c.IsTest=0)
 DECLARE @CustomerCount INT = (SELECT count(*) FROM Customer c JOIN Loan l ON c.Id=l.CustomerId WHERE c.IsTest=0)
 
-SELECT 'DefaultRate' AS 'Key', @DefaultCustomerCount / CAST(@CustomerCount AS DECIMAL(18,6)) AS Value 
+SELECT 'G_DefaultRate' AS 'Key', @DefaultCustomerCount / CAST(@CustomerCount AS DECIMAL(18,6)) AS Value 
 
 UNION
 
-SELECT 'AvgDailyLoans' AS 'Key', sum(Amount) / CAST(count(*) AS DECIMAL(18,6)) AS Value  FROM vw_LoansAmountByDay
+SELECT 'G_AvgDailyLoans' AS 'Key', sum(Amount) / CAST(count(*) AS DECIMAL(18,6)) AS Value  FROM vw_LoansAmountByDay
 
 UNION
 
-SELECT 'TotalLoans' AS 'Key', CAST(sum(Amount) AS DECIMAL(18,6)) AS Value  FROM vw_LoansAmountByDay
+SELECT 'G_TotalLoans' AS 'Key', CAST(sum(Amount) AS DECIMAL(18,6)) AS Value  FROM vw_LoansAmountByDay
 
 UNION
 
-SELECT 'AvgNewLoan' AS 'Key', sum(LoanAmount) / CAST(count(*) AS DECIMAL(18,6)) AS Value FROM Loan WHERE [Date]>=@MonthAgo AND CustomerId IN (
+SELECT 'G_AvgNewLoan' AS 'Key', sum(LoanAmount) / CAST(count(*) AS DECIMAL(18,6)) AS Value FROM Loan WHERE [Date]>=@MonthAgo AND CustomerId IN (
 	SELECT c.Id
 	FROM Loan l JOIN Customer c ON l.CustomerId=c.Id 
 	JOIN CustomerStatuses s ON s.Id = c.CollectionStatus
@@ -33,15 +35,11 @@ SELECT 'AvgNewLoan' AS 'Key', sum(LoanAmount) / CAST(count(*) AS DECIMAL(18,6)) 
 )	
 UNION
 
-SELECT 'AvgInterest' AS 'Key', sum(l.InterestRate) / CAST(count(*) AS DECIMAL(18,6)) AS Value FROM Loan l JOIN Customer c ON l.CustomerId=c.Id WHERE c.IsTest=0
+SELECT 'G_AvgLoanSize' AS 'Key', sum(l.LoanAmount) / CAST(count(*) AS DECIMAL(18,6)) AS Value FROM Loan l JOIN Customer c ON l.CustomerId=c.Id WHERE c.IsTest=0
 
 UNION
 
-SELECT 'AvgLoanSize' AS 'Key', sum(l.LoanAmount) / CAST(count(*) AS DECIMAL(18,6)) AS Value FROM Loan l JOIN Customer c ON l.CustomerId=c.Id WHERE c.IsTest=0
-
-UNION
-
-SELECT 'BookSize' AS 'Key', CAST(sum(l.Balance) AS DECIMAL(18,6)) AS Value 
+SELECT 'G_BookSize' AS 'Key', CAST(sum(l.Balance) AS DECIMAL(18,6)) AS Value 
 FROM Loan l JOIN Customer c ON l.CustomerId=c.Id 
 JOIN CustomerStatuses s ON s.Id = c.CollectionStatus
 WHERE s.IsDefault=0
@@ -49,13 +47,81 @@ AND c.IsTest=0
 
 UNION
 
-SELECT 'OpenBugs' AS 'Key', CAST(count(*) AS DECIMAL(18,6)) AS Value  FROM Bug WHERE State='Opened'
+SELECT 'T_Registration' AS 'Key', CAST(COALESCE(count(c.Id),0) AS DECIMAL(18,6)) AS Value  FROM Customer c WHERE datediff(day, c.GreetingMailSentDate, @Now) = 0 AND c.IsTest=0
 
 UNION
 
-SELECT 'TodayLoans' AS 'Key', CAST(COALESCE(sum(l.LoanAmount),0) AS DECIMAL(18,6)) AS Value  FROM Loan l JOIN Customer c ON l.CustomerId=c.Id WHERE datediff(day, [Date], getdate()) = 0 AND c.IsTest=0
+SELECT 'T_Application' AS 'Key', CAST(COALESCE(count(c.Id),0) AS DECIMAL(18,6)) AS Value  FROM Customer c WHERE datediff(day, c.GreetingMailSentDate, @Now) = 0 AND c.IsTest=0 AND c.WizardStep=4
 
+UNION
+
+SELECT 'T_Approved' AS 'Key', CAST(COALESCE(sum(cr.ManagerApprovedSum),0) AS DECIMAL(18,6)) AS Value 
+FROM Customer c JOIN CashRequests cr ON c.Id=cr.IdCustomer 
+WHERE datediff(day, cr.UnderwriterDecisionDate, @Now) = 0 AND c.IsTest=0 
+
+UNION
+
+SELECT 'T_LoansOut' AS 'Key', CAST(COALESCE(sum(l.LoanAmount),0) AS DECIMAL(18,6)) AS Value  FROM Loan l JOIN Customer c ON l.CustomerId=c.Id WHERE datediff(day, l.[Date], @Now) = 0 AND c.IsTest=0
+
+UNION
+
+SELECT 'T_Repayments' AS 'Key', CAST(COALESCE(sum(t.Amount),0) AS DECIMAL(18,6)) AS Value  
+FROM LoanTransaction t JOIN Loan l ON t.LoanId = l.Id 
+JOIN Customer c ON l.CustomerId=c.Id 
+WHERE datediff(day, t.PostDate, @Now) = 0 
+AND c.IsTest=0
+AND t.Type='PaypointTransaction'
+AND t.Status='Done'
+
+UNION
+
+SELECT 'M_Registration' AS 'Key', CAST(COALESCE(count(c.Id),0) AS DECIMAL(18,6)) AS Value  FROM Customer c WHERE c.GreetingMailSentDate >= @FirstOfMonth AND c.IsTest=0
+
+UNION
+
+SELECT 'M_Application' AS 'Key', CAST(COALESCE(count(c.Id),0) AS DECIMAL(18,6)) AS Value  FROM Customer c WHERE c.GreetingMailSentDate >= @FirstOfMonth AND c.IsTest=0 AND c.WizardStep=4
+
+UNION
+
+SELECT 'M_Approved' AS 'Key', CAST(COALESCE(sum(cr.ManagerApprovedSum),0) AS DECIMAL(18,6)) AS Value 
+FROM Customer c JOIN CashRequests cr ON c.Id=cr.IdCustomer 
+WHERE cr.UnderwriterDecisionDate >= @FirstOfMonth AND c.IsTest=0
+
+UNION
+
+SELECT 'M_LoansOut' AS 'Key', CAST(COALESCE(sum(l.LoanAmount),0) AS DECIMAL(18,6)) AS Value  FROM Loan l JOIN Customer c ON l.CustomerId=c.Id WHERE l.[Date] >= @FirstOfMonth AND c.IsTest=0
+
+UNION
+
+SELECT 'M_Repayments' AS 'Key', CAST(COALESCE(sum(t.Amount),0) AS DECIMAL(18,6)) AS Value  
+FROM LoanTransaction t JOIN Loan l ON t.LoanId = l.Id 
+JOIN Customer c ON l.CustomerId=c.Id 
+WHERE t.PostDate >= @FirstOfMonth 
+AND c.IsTest=0
+AND t.Type='PaypointTransaction'
+AND t.Status='Done'
+
+UNION
+
+SELECT 'M_AvgLoanSize' AS 'Key', COALESCE(sum(l.LoanAmount) / CAST(count(*) AS DECIMAL(18,6)),0) AS Value FROM Loan l JOIN Customer c ON l.CustomerId=c.Id WHERE l.[Date] >= @FirstOfMonth AND c.IsTest=0
+
+UNION
+
+SELECT 'M_AvgDailyLoans' AS 'Key', COALESCE(sum(Amount) / CAST(count(*) AS DECIMAL(18,6)),0) AS Value  FROM vw_LoansAmountByDay WHERE [Date] >= @FirstOfMonth
+
+UNION
+
+SELECT 'M_AvgInterest' AS 'Key', COALESCE(sum(l.InterestRate) / CAST(count(*) AS DECIMAL(18,6)),0) AS Value FROM Loan l JOIN Customer c ON l.CustomerId=c.Id WHERE l.[Date] >= @FirstOfMonth AND c.IsTest=0
+
+UNION
+
+SELECT 'T_UkVisitors' AS 'Key', CAST(COALESCE(0,0) AS DECIMAL(18,6)) AS Value -- from ga api
+
+UNION
+
+SELECT 'M_UkVisitors' AS 'Key', CAST(COALESCE(0,0) AS DECIMAL(18,6)) AS Value -- from ga api
 
 END 
 
 GO
+
