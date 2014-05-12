@@ -3,17 +3,28 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using PaymentServices.Calculators;
-
+	
 	public class PricingModelCalculate : AStrategy
 	{
+		private readonly int customerId;
+
 		public PricingModelCalculate(int customerId, PricingModelModel model, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
+			if (model.LoanAmount <= 0)
+			{
+				throw new Exception("LoanAmount must be positive");
+			}
+			if (model.TenureMonths <= 0)
+			{
+				throw new Exception("TenureMonths must be positive");
+			}
 			Model = model;
 			this.customerId = customerId;
 		}
@@ -22,8 +33,47 @@
 			get { return "Pricing model calculate"; }
 		}
 
-		private readonly int customerId;
 		public PricingModelModel Model { get; private set; }
+
+		public override void Execute()
+		{
+			Model.FeesRevenue = Model.SetupFeePounds;
+			Model.MonthlyInterestRate = GetMonthlyInterestRate();
+			
+			Loan loan = CreateLoan(Model.MonthlyInterestRate);
+			var aprCalc = new APRCalculator();
+			Model.Apr = (decimal)(loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date));
+
+			Model.CostOfDebtOutput = 0;
+			Model.InterestRevenue = 0;
+			foreach (LoanScheduleItem scheuldeItem in loan.Schedule)
+			{
+				Model.InterestRevenue += scheuldeItem.Interest;
+				Model.CostOfDebtOutput += scheuldeItem.AmountDue * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
+			}
+			Model.InterestRevenue *= (100 - Model.DefaultRate) / 100;
+
+			Model.Revenue = Model.FeesRevenue + Model.InterestRevenue;
+
+			int consumerScore = DB.ExecuteScalar<int>(
+				"GetExperianScore",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+
+			Model.EuLoanPercentages = GetEuLoanMonthlyInterest(consumerScore) * 100;
+			Model.CogsOutput = Model.Cogs;
+			Model.OpexAndCapexOutput = Model.OpexAndCapex;
+			Model.GrossProfit = Model.Revenue - Model.Cogs;
+			Model.Ebitda = Model.GrossProfit - Model.OpexAndCapex;
+			Model.NetLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate / 100;
+			Model.ProfitMarkupOutput = Model.ProfitMarkup * Model.Revenue;
+			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0;
+			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
+
+			Model.SetupFeeForEuLoanHigh = GetSetupFeeForEu(2);
+			Model.SetupFeeForEuLoanLow = GetSetupFeeForEu(1.75m);
+		}
 
 		private Loan CreateLoan(decimal interestRate)
 		{
@@ -42,70 +92,32 @@
 				LoanLegalId = 1
 			};
 			calculator.Calculate(Model.LoanAmount, loan, loan.Date, Model.InterestOnlyPeriod);
-			return loan;
-		}
-		public override void Execute()
-		{
-			Model.FeesRevenue = Model.SetupFeePounds;
-			Model.MonthlyInterestRate = GetMonthlyInterestRate();
 
-			// Algorithm logic:
-			// 1. Find MonthlyInterestRate that will result in balance = 0 (balance = ebitda - net loss from default - cost of debt - profit before tax)
-			// 2. Remember the profit before tax that was calculated.
-			// 3. FeesRevenue = Guessed setup fee for eu (use eu collection rate as collection rate and use eu loan percentages as monthly interest)
-			// 4. Find a setup fee that yeilds the same profit as the one remembered on #3
-
-			Model.SetupFeeForEuLoanHigh = 0.03m;
-			Model.SetupFeeForEuLoanLow = 0.03m;
-
-			Loan loan = CreateLoan(Model.MonthlyInterestRate);
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
 			calc.GetState();
-			var aprCalc = new APRCalculator();
-			Model.Apr = (decimal)(loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date));
 
-			Model.CostOfDebtOutput = 0;
-			Model.InterestRevenue = 0;
-			foreach (LoanScheduleItem scheuldeItem in loan.Schedule)
-			{
-				Model.InterestRevenue += scheuldeItem.Interest;
-				Model.CostOfDebtOutput += scheuldeItem.AmountDue * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
-			}
-			Model.InterestRevenue *= 1 - Model.DefaultRate;
+			return loan;
+		}
 
-			Model.Revenue = Model.FeesRevenue + Model.InterestRevenue;
-
-			int consumerScore = DB.ExecuteScalar<int>(
-				"GetExperianScore",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-
-			Model.EuLoanPercentages = GetEuLoanMonthlyInterest(consumerScore);
-			
-			Model.CogsOutput = Model.Cogs;
-			Model.OpexAndCapexOutput = Model.OpexAndCapex;
-			Model.GrossProfit = Model.Revenue - Model.Cogs;
-			Model.Ebitda = Model.GrossProfit - Model.OpexAndCapex;
-			Model.NetLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
-			Model.ProfitMarkupOutput = Model.ProfitMarkup * Model.Revenue;
-			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0;
-
-			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
+		private decimal GetSetupFeeForEu(decimal monthlyInterestRate)
+		{
+			Loan loan = CreateLoan(monthlyInterestRate);
+			decimal interestRevenue = loan.Schedule.Sum(scheuldeItem => scheuldeItem.Interest);
+			interestRevenue *= (100 - Model.DefaultRate) / 100;
+			return (Model.ProfitMarkupOutput/Model.ProfitMarkup - interestRevenue)/Model.LoanAmount;
 		}
 
 		private decimal GetMonthlyInterestRate()
 		{
 			decimal guessInterval = 1;
 			decimal monthlyInterestRate = 1;
-			decimal balance = 1;
 			var calculations = new Dictionary<decimal, decimal>();
 			decimal minBalanceAbsValue = decimal.MaxValue;
 			decimal interestRateForMinBalanceAbs = 1;
 
-			while (balance != 0)
+			while (minBalanceAbsValue != 0)
 			{
-				balance = CalculateBalance(monthlyInterestRate);
+				decimal balance = CalculateBalance(monthlyInterestRate);
 				if (Math.Abs(balance) < minBalanceAbsValue)
 				{
 					minBalanceAbsValue = Math.Abs(balance);
@@ -138,13 +150,9 @@
 			return interestRateForMinBalanceAbs;
 		}
 
-
-
 		private decimal CalculateBalance(decimal interestRate)
 		{
 			Loan loan = CreateLoan(interestRate);
-			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
-			calc.GetState();
 
 			decimal costOfDebtOutput = 0;
 			decimal interestRevenue = 0;
