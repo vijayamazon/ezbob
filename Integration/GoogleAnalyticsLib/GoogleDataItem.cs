@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace EzAnalyticsConsoleClient {
+namespace GoogleAnalyticsLib
+{
 	#region class GoogleDataItem
 
 	class GoogleDataItem {

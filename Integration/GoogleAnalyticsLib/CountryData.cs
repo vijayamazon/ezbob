@@ -1,7 +1,8 @@
-﻿namespace EzAnalyticsConsoleClient {
+﻿namespace GoogleAnalyticsLib
+{
 	#region class CountryData
 
-	internal class CountryData {
+	public class CountryData {
 		#region public
 
 		#region constructor

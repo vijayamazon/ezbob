@@ -1,4 +1,5 @@
-﻿namespace EzAnalyticsConsoleClient {
+﻿namespace GoogleAnalyticsLib
+{
 
 	#region GoogleReportMetrics
 

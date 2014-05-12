@@ -33,7 +33,7 @@
 					MonthlyTraffic = new List<MonthlyTrafficModel>(),
 					Stats = new Dictionary<string, decimal>()
 				};
-			
+
 
 			Db.ForEachRow(
 				(oReader, bRowsetStart) =>
@@ -44,6 +44,8 @@
 				,
 				"EzTvGetStats",
 				CommandSpecies.StoredProcedure,
+				new QueryParameter("@Now", LastChecked),
+				new QueryParameter("@FirstOfMonth", new DateTime(LastChecked.Year, LastChecked.Month, 1)),
 				new QueryParameter("@MonthAgo", DateTime.Today.AddMonths(-1))
 			);
 			//todo implement
@@ -57,14 +59,14 @@
 				{
 					Stats = new Dictionary<string, decimal>
 						{
-							{"T_UkVisitors", 30},
+							{"T_UkVisitors", 30},//-api
 							{"T_Registration", 5},
 							{"T_Application", 3},
 							{"T_Approved", 1},
 							{"T_LoansOut", 10000},
 							{"T_Repayments", 12000},
 
-							{"M_UkSiteVisitors", 500},
+							{"M_UkVisitors", 500},//-api
 							{"M_Registration", 50},
 							{"M_Application", 10},
 							{"M_Approved", 5},
@@ -74,12 +76,12 @@
 							{"M_AvgDailyLoans", 5000},
 							{"M_AvgInterest", 0.4M},
 
-							{"G_AvgDailyLoans", 5000},
-							{"G_DefaultRate", 0.038M},
-							{"G_TotalLoans", 12500000},
-							{"G_BookSize", 5600000},
-							{"G_AvgLoanSize", 10000},
-							{"G_AvgNewLoan", 12000}
+							{"G_AvgDailyLoans", 5000},//
+							{"G_DefaultRate", 0.038M},//
+							{"G_TotalLoans", 12500000},//
+							{"G_BookSize", 5600000},//
+							{"G_AvgLoanSize", 10000},//
+							{"G_AvgNewLoan", 12000}//
 						},
 					MonthlyBoard = new List<MonthlyBoardModel>
 						{

@@ -6,7 +6,8 @@ using Ezbob.Logger;
 using Google.Apis.Analytics.v3;
 using Google.Apis.Analytics.v3.Data;
 
-namespace EzAnalyticsConsoleClient {
+namespace GoogleAnalyticsLib
+{
 	#region class GoogleDataFetcher
 
 	class GoogleDataFetcher : SafeLog {

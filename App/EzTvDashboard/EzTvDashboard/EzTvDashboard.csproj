@@ -265,6 +265,10 @@
     <Content Include="Content\images\Sorting icons.psd" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Integration\GoogleAnalyticsLib\GoogleAnalyticsLib.csproj">
+      <Project>{47a4a5a8-ac7c-4f76-acab-be61eaee1f50}</Project>
+      <Name>GoogleAnalyticsLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>

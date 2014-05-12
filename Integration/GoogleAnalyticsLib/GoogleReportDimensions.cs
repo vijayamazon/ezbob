@@ -1,4 +1,5 @@
-﻿namespace EzAnalyticsConsoleClient {
+﻿namespace GoogleAnalyticsLib
+{
 	#region enum GoogleReportDimensions
 
 	enum GoogleReportDimensions {

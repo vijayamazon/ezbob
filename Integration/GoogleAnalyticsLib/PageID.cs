@@ -1,7 +1,8 @@
-﻿namespace EzAnalyticsConsoleClient {
+﻿namespace GoogleAnalyticsLib
+{
 	#region enum PageID
 
-	enum PageID {
+	public enum PageID {
 		Other,
 		Dashboard,
 		Logon,

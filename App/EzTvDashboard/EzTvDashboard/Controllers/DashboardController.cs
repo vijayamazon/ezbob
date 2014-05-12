@@ -20,7 +20,7 @@ namespace EzTvDashboard.Controllers
 
 		public ActionResult Index()
 		{
-			_model = _modelBuilder.BuildFakeModel();
+			_model = _modelBuilder.BuildModel();
 			
 			//Response.AddHeader("Refresh", "2");
 			return View(_model);

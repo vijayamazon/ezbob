@@ -1,7 +1,8 @@
-﻿namespace EzAnalyticsConsoleClient {
+﻿namespace GoogleAnalyticsLib
+{
 	#region class DbConsts
 
-	internal static class DbConsts {
+	public static class DbConsts {
 		public const string InsertSiteAnalyticsSP = "InsertSiteAnalytics";
 		public const string IsaspDate = "@Date";
 		public const string IsaspCodeName = "@CodeName";
