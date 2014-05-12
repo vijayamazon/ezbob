@@ -3,8 +3,6 @@
 	using System.Runtime.Serialization;
 	using Utils;
 
-	#region class BrokerCustomerCrmEntry
-
 	[DataContract]
 	public class BrokerCustomerCrmEntry : ITraversable {
 		[DataMember]
@@ -19,6 +17,4 @@
 		[DataMember]
 		public string Comment { get; set; }
 	} // class BrokerCustomerCrmEntry
-
-	#endregion class BrokerCustomerCrmEntry
 } // namespace EzBob.Backend.Strategies.Broker

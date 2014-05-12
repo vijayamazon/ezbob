@@ -8,6 +8,7 @@
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using Models;

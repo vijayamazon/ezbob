@@ -2,8 +2,6 @@
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 
-	#region class BrokerCustomerDetails
-
 	[DataContract]
 	public class BrokerCustomerDetails {
 		public BrokerCustomerDetails() {
@@ -17,6 +15,4 @@
 		[DataMember]
 		public BrokerCustomerPersonalData PersonalData { get; set; }
 	} // class BrokerCustomerDetails
-
-	#endregion class BrokerCustomerDetails
 } // namespace EzBob.Backend.Strategies.Broker

@@ -4,8 +4,6 @@
 	using System.Linq;
 	using System.Runtime.Serialization;
 
-	#region class BrokerCustomerEntry
-
 	[DataContract]
 	public class BrokerCustomerEntry {
 		#region public
@@ -124,6 +122,4 @@
 
 		#endregion private
 	} // class BrokerCustomerEntry
-
-	#endregion class BrokerCustomerEntry
 } // namespace EzBob.Backend.Strategies.Broker

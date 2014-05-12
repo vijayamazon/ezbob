@@ -2,8 +2,6 @@
 	using System.Runtime.Serialization;
 	using Utils;
 
-	#region class BrokerProperties
-
 	[DataContract]
 	public class BrokerProperties : ITraversable {
 		[DataMember]
@@ -62,6 +60,4 @@
 			);
 		} // ToString
 	} // class BrokerProperties
-
-	#endregion class BrokerProperties
 } // namespace EzBob.Backend.Strategies.Broker

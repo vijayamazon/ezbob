@@ -184,6 +184,16 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
+  <xs:simpleType name="ConfigTableType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LoanOfferMultiplier" />
+      <xs:enumeration value="BasicInterestRate" />
+      <xs:enumeration value="EuLoanMonthlyInterest" />
+      <xs:enumeration value="DefaultRateCompany" />
+      <xs:enumeration value="DefaultRateCustomer" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ConfigTableType" nillable="true" type="tns:ConfigTableType" />
   <xs:complexType name="QuickOfferModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Aml" type="xs:int" />

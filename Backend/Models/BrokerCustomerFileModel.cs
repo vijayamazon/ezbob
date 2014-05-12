@@ -3,8 +3,6 @@
 	using System.Runtime.Serialization;
 	using Utils;
 
-	#region class BrokerCustomerFile
-
 	[DataContract]
 	public class BrokerCustomerFile : ITraversable {
 		[DataMember]
@@ -19,6 +17,4 @@
 		[DataMember]
 		public string FileDescription { get; set; }
 	} // class BrokerCustomerFile
-
-	#endregion class BrokerCustomerFile
 } // namespace EzBob.Backend.Strategies.Broker

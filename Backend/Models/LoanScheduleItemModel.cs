@@ -1,5 +1,4 @@
-﻿namespace Ezbob.Backend.Models
-{
+﻿namespace Ezbob.Backend.Models {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -7,8 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	[DataContract]
-    public class LoanScheduleItemModel
-    {
+	public class LoanScheduleItemModel {
 		[DataMember]
 		public int Id { get; set; }
 
@@ -54,33 +52,29 @@
 		[DataMember]
 		public decimal InterestRate { get; set; }
 
-		public static LoanScheduleItemModel FromLoanScheduleItem(LoanScheduleItem s)
-		{
-			return new LoanScheduleItemModel
-				{
-					Id = s.Id,
-					AmountDue = s.AmountDue,
-					Date = s.Date,
-					PrevInstallmentDate = s.PrevInstallmentDate,
-					Interest = s.Interest,
-					InterestPaid = s.InterestPaid,
-					LateCharges = s.LateCharges,
-					RepaymentAmount = s.RepaymentAmount,
-					Status = s.Status.ToString(),
-					StatusDescription = s.Status.ToDescription(),
-					LoanRepayment = s.LoanRepayment,
-					Balance = s.Balance,
-					BalanceBeforeRepayment = s.BalanceBeforeRepayment,
-					Fees = s.Fees,
-					InterestRate = s.InterestRate
-				};
+		public static LoanScheduleItemModel FromLoanScheduleItem(LoanScheduleItem s) {
+			return new LoanScheduleItemModel {
+				Id = s.Id,
+				AmountDue = s.AmountDue,
+				Date = s.Date,
+				PrevInstallmentDate = s.PrevInstallmentDate,
+				Interest = s.Interest,
+				InterestPaid = s.InterestPaid,
+				LateCharges = s.LateCharges,
+				RepaymentAmount = s.RepaymentAmount,
+				Status = s.Status.ToString(),
+				StatusDescription = s.Status.ToDescription(),
+				LoanRepayment = s.LoanRepayment,
+				Balance = s.Balance,
+				BalanceBeforeRepayment = s.BalanceBeforeRepayment,
+				Fees = s.Fees,
+				InterestRate = s.InterestRate
+			};
 		}
 	}
 
-	public static class LoanScheduleExtension
-	{
-		public static IEnumerable<LoanScheduleItemModel> ToModel(this IEnumerable<LoanScheduleItem> items)
-		{
+	public static class LoanScheduleExtension {
+		public static IEnumerable<LoanScheduleItemModel> ToModel(this IEnumerable<LoanScheduleItem> items) {
 			return items.Select(LoanScheduleItemModel.FromLoanScheduleItem);
 		}
 	}

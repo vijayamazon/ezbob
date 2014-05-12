@@ -2,12 +2,8 @@
 	using System;
 	using System.Runtime.Serialization;
 
-	#region class QuickOfferModel
-
 	[DataContract]
 	public class QuickOfferModel {
-		#region public
-
 		[DataMember]
 		public int ID { get; set; }
 
@@ -55,9 +51,5 @@
 
 		[DataMember]
 		public decimal PotentialSetupFee { get; set; }
-
-		#endregion public
 	} // class QuickOfferModel
-
-	#endregion class QuickOfferModel
 } // namespace EzBob.Backend.Models

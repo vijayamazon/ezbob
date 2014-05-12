@@ -5,6 +5,7 @@
 	using ActionResults;
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
@@ -63,7 +64,7 @@
 					}
 					if (highestSoFar + 1 > entry.Start)
 					{
-						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", entry.Start, highestSoFar);
+						string errorMessage = string.Format("The numbers {0}-{1} are covered by more than one range", entry.Start, highestSoFar);
 						Log.Warn(errorMessage);
 						return false;
 					}

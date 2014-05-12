@@ -2,6 +2,7 @@
 	using System.Runtime.Serialization;
 	using Utils;
 
+	[DataContract]
 	public class FileDescription : ITraversable {
 		[DataMember]
 		public string ID { get; set; }

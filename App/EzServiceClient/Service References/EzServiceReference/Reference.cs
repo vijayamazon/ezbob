@@ -1801,7 +1801,7 @@ namespace ServiceClientProxy.EzServiceReference {
         ServiceClientProxy.EzServiceReference.SerializedDataTableActionResult GetSpResultTable(string spName, string[] parameters);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveConfigTable", ReplyAction="http://tempuri.org/IEzService/SaveConfigTableResponse")]
-        ServiceClientProxy.EzServiceReference.BoolActionResult SaveConfigTable(EzBob.Backend.Models.ConfigTable[] configTableEntries, EzBob.Backend.Models.ConfigTableType configTableType);
+        ServiceClientProxy.EzServiceReference.BoolActionResult SaveConfigTable(EzBob.Backend.Models.ConfigTable[] configTableEntries, Ezbob.Backend.Models.ConfigTableType configTableType);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateConfigurationVariables", ReplyAction="http://tempuri.org/IEzService/UpdateConfigurationVariablesResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UpdateConfigurationVariables();
@@ -2199,7 +2199,7 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetSpResultTable(spName, parameters);
         }
         
-        public ServiceClientProxy.EzServiceReference.BoolActionResult SaveConfigTable(EzBob.Backend.Models.ConfigTable[] configTableEntries, EzBob.Backend.Models.ConfigTableType configTableType) {
+        public ServiceClientProxy.EzServiceReference.BoolActionResult SaveConfigTable(EzBob.Backend.Models.ConfigTable[] configTableEntries, Ezbob.Backend.Models.ConfigTableType configTableType) {
             return base.Channel.SaveConfigTable(configTableEntries, configTableType);
         }
         

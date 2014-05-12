@@ -3,31 +3,11 @@
 	using Ezbob.Utils;
 
 	[DataContract]
-	public enum ConfigTableType
-	{
-		[EnumMember]
-		LoanOfferMultiplier,
-
-		[EnumMember]
-		BasicInterestRate,
-
-		[EnumMember]
-		EuLoanMonthlyInterest,
-
-		[EnumMember]
-		DefaultRateCompany,
-
-		[EnumMember]
-		DefaultRateCustomer,
-	}
-
-	[DataContract]
-	public class ConfigTable : ITraversable
-	{
+	public class ConfigTable : ITraversable {
 		[DataMember]
 		[NonTraversable]
 		public int Id { get; set; }
-		
+
 		[DataMember]
 		public int Start { get; set; }
 

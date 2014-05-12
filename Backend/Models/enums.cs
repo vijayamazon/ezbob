@@ -38,4 +38,26 @@
 	} // enum FraudMode
 
 	#endregion enum FraudMode
+
+	#region enum ConfigTableType
+
+	[DataContract]
+	public enum ConfigTableType {
+		[EnumMember]
+		LoanOfferMultiplier,
+
+		[EnumMember]
+		BasicInterestRate,
+
+		[EnumMember]
+		EuLoanMonthlyInterest,
+
+		[EnumMember]
+		DefaultRateCompany,
+
+		[EnumMember]
+		DefaultRateCustomer,
+	} // enum ConfigTableType
+
+	#endregion enum ConfigTableType
 } // namespace Ezbob.Backend.Models

@@ -1,5 +1,4 @@
-﻿namespace EzBob.Backend.Models
-{
+﻿namespace EzBob.Backend.Models {
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
@@ -7,8 +6,7 @@
 
 	[Serializable]
 	[DataContract]
-	public class AgreementModel
-	{
+	public class AgreementModel {
 		[DataMember]
 		public List<FormattedSchedule> FormattedSchedules { get; set; }
 		[DataMember]
@@ -90,8 +88,7 @@
 		[DataMember]
 		public string TotalPrincipalWithSetupFee { get; set; }
 
-		public override string ToString()
-		{
+		public override string ToString() {
 			return "AgreementModel";
 		}
 	}
