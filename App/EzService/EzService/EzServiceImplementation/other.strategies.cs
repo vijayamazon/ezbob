@@ -96,5 +96,19 @@
 
 		#endregion method MarketplaceInstantUpdate
 
+		#region method LoadVatReturnSummary
+
+		public VatReturnSummaryActionResult LoadVatReturnSummary(int nMarketplaceID) {
+			LoadVatReturnSummary oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nMarketplaceID);
+
+			return new VatReturnSummaryActionResult {
+				MetaData = oMetaData,
+				Summary = oInstance.Summary,
+			};
+		} // LoadVatReturnSummary
+
+		#endregion method LoadVatReturnSummary
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -53,6 +53,7 @@
     <Compile Include="BrokerCustomerFileModel.cs" />
     <Compile Include="BrokerPropertiesModel.cs" />
     <Compile Include="ConfigTable.cs" />
+    <Compile Include="VatReturnSummaryQuarterModel.cs" />
     <Compile Include="enums.cs" />
     <Compile Include="FileDescriptionModel.cs" />
     <Compile Include="FinishWizardArgs.cs" />
@@ -65,6 +66,8 @@
     </Compile>
     <Compile Include="QuickOfferModel.cs" />
     <Compile Include="TemplateModel.cs" />
+    <Compile Include="VatReturnSummaryBaseModel.cs" />
+    <Compile Include="VatReturnSummaryModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">

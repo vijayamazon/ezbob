@@ -138,6 +138,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.StringListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.WizardConfigsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

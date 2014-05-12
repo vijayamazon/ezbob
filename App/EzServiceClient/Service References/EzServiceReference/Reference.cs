@@ -198,6 +198,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerLeadDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CrmLookupsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SerializedDataTableActionResult))]
@@ -768,6 +769,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.StatusesField, value) != true)) {
                     this.StatusesField = value;
                     this.RaisePropertyChanged("Statuses");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VatReturnSummaryActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class VatReturnSummaryActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ServiceClientProxy.EzServiceReference.VatReturnSummary SummaryField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ServiceClientProxy.EzServiceReference.VatReturnSummary Summary {
+            get {
+                return this.SummaryField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SummaryField, value) != true)) {
+                    this.SummaryField = value;
+                    this.RaisePropertyChanged("Summary");
                 }
             }
         }
@@ -1470,6 +1494,323 @@ namespace ServiceClientProxy.EzServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VatReturnSummary", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
+    [System.SerializableAttribute()]
+    public partial class VatReturnSummary : ServiceClientProxy.EzServiceReference.VatReturnSummaryBase {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BusinessIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CurrencyCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ServiceClientProxy.EzServiceReference.VatReturnQuarter[] QuartersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> SalariesMultiplierField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BusinessID {
+            get {
+                return this.BusinessIDField;
+            }
+            set {
+                if ((this.BusinessIDField.Equals(value) != true)) {
+                    this.BusinessIDField = value;
+                    this.RaisePropertyChanged("BusinessID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CurrencyCode {
+            get {
+                return this.CurrencyCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CurrencyCodeField, value) != true)) {
+                    this.CurrencyCodeField = value;
+                    this.RaisePropertyChanged("CurrencyCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ServiceClientProxy.EzServiceReference.VatReturnQuarter[] Quarters {
+            get {
+                return this.QuartersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.QuartersField, value) != true)) {
+                    this.QuartersField = value;
+                    this.RaisePropertyChanged("Quarters");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> SalariesMultiplier {
+            get {
+                return this.SalariesMultiplierField;
+            }
+            set {
+                if ((this.SalariesMultiplierField.Equals(value) != true)) {
+                    this.SalariesMultiplierField = value;
+                    this.RaisePropertyChanged("SalariesMultiplier");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VatReturnSummaryBase", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnQuarter))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnSummary))]
+    public partial class VatReturnSummaryBase : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> ActualLoanRepaymentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> EbidaField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> FreeCashFlowField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> OpexField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> PctOfAnnualField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> PctOfAnnualRevenuesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> PctOfRevenuesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> RevenuesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> SalariesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> TaxField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<decimal> TotalValueAddedField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> ActualLoanRepayment {
+            get {
+                return this.ActualLoanRepaymentField;
+            }
+            set {
+                if ((this.ActualLoanRepaymentField.Equals(value) != true)) {
+                    this.ActualLoanRepaymentField = value;
+                    this.RaisePropertyChanged("ActualLoanRepayment");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> Ebida {
+            get {
+                return this.EbidaField;
+            }
+            set {
+                if ((this.EbidaField.Equals(value) != true)) {
+                    this.EbidaField = value;
+                    this.RaisePropertyChanged("Ebida");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> FreeCashFlow {
+            get {
+                return this.FreeCashFlowField;
+            }
+            set {
+                if ((this.FreeCashFlowField.Equals(value) != true)) {
+                    this.FreeCashFlowField = value;
+                    this.RaisePropertyChanged("FreeCashFlow");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> Opex {
+            get {
+                return this.OpexField;
+            }
+            set {
+                if ((this.OpexField.Equals(value) != true)) {
+                    this.OpexField = value;
+                    this.RaisePropertyChanged("Opex");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> PctOfAnnual {
+            get {
+                return this.PctOfAnnualField;
+            }
+            set {
+                if ((this.PctOfAnnualField.Equals(value) != true)) {
+                    this.PctOfAnnualField = value;
+                    this.RaisePropertyChanged("PctOfAnnual");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> PctOfAnnualRevenues {
+            get {
+                return this.PctOfAnnualRevenuesField;
+            }
+            set {
+                if ((this.PctOfAnnualRevenuesField.Equals(value) != true)) {
+                    this.PctOfAnnualRevenuesField = value;
+                    this.RaisePropertyChanged("PctOfAnnualRevenues");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> PctOfRevenues {
+            get {
+                return this.PctOfRevenuesField;
+            }
+            set {
+                if ((this.PctOfRevenuesField.Equals(value) != true)) {
+                    this.PctOfRevenuesField = value;
+                    this.RaisePropertyChanged("PctOfRevenues");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> Revenues {
+            get {
+                return this.RevenuesField;
+            }
+            set {
+                if ((this.RevenuesField.Equals(value) != true)) {
+                    this.RevenuesField = value;
+                    this.RaisePropertyChanged("Revenues");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> Salaries {
+            get {
+                return this.SalariesField;
+            }
+            set {
+                if ((this.SalariesField.Equals(value) != true)) {
+                    this.SalariesField = value;
+                    this.RaisePropertyChanged("Salaries");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> Tax {
+            get {
+                return this.TaxField;
+            }
+            set {
+                if ((this.TaxField.Equals(value) != true)) {
+                    this.TaxField = value;
+                    this.RaisePropertyChanged("Tax");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<decimal> TotalValueAdded {
+            get {
+                return this.TotalValueAddedField;
+            }
+            set {
+                if ((this.TotalValueAddedField.Equals(value) != true)) {
+                    this.TotalValueAddedField = value;
+                    this.RaisePropertyChanged("TotalValueAdded");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VatReturnQuarter", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
+    [System.SerializableAttribute()]
+    public partial class VatReturnQuarter : ServiceClientProxy.EzServiceReference.VatReturnSummaryBase {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime DateFromField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime DateToField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime DateFrom {
+            get {
+                return this.DateFromField;
+            }
+            set {
+                if ((this.DateFromField.Equals(value) != true)) {
+                    this.DateFromField = value;
+                    this.RaisePropertyChanged("DateFrom");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime DateTo {
+            get {
+                return this.DateToField;
+            }
+            set {
+                if ((this.DateToField.Equals(value) != true)) {
+                    this.DateToField = value;
+                    this.RaisePropertyChanged("DateTo");
+                }
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzServiceAdmin")]
     public interface IEzServiceAdmin {
@@ -1541,6 +1882,9 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerState", ReplyAction="http://tempuri.org/IEzService/GetCustomerStateResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult GetCustomerState(int customerId);
@@ -1815,6 +2159,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateVatReturnSummary", ReplyAction="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnSummary", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnSummaryResponse")]
+        ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult LoadVatReturnSummary(int nMarketplaceID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate", ReplyAction="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
         
@@ -1826,9 +2173,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
         ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1856,6 +2200,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId) {
+            return base.Channel.FinishWizard(oArgs, underwriterId);
         }
         
         public ServiceClientProxy.EzServiceReference.StringActionResult GetCustomerState(int customerId) {
@@ -2222,6 +2570,10 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CalculateVatReturnSummary(nCustomerMarketplaceID);
         }
         
+        public ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult LoadVatReturnSummary(int nMarketplaceID) {
+            return base.Channel.LoadVatReturnSummary(nMarketplaceID);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID) {
             return base.Channel.MarketplaceInstantUpdate(nMarketplaceID);
         }
@@ -2236,10 +2588,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
             return base.Channel.GetWizardConfigs();
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId) {
-            return base.Channel.FinishWizard(oArgs, underwriterId);
         }
     }
 }

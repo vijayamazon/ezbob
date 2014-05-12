@@ -171,6 +171,33 @@
 
 		#endregion indexer
 
+		#region method ContainsField
+
+		public object ContainsField(string sIdx) {
+			if (!ReferenceEquals(m_oRow, null))
+				return m_oRow.Table.Columns.Contains(sIdx);
+
+			if (!ReferenceEquals(m_oReader, null)) {
+				for (var i = 0; i < m_oReader.FieldCount; i++)
+					if (m_oReader.GetName(i) == sIdx)
+						return true;
+			} // if
+
+			return false;
+		} // ContainsField
+
+		public object ContainsField(int nIdx) {
+			if (!ReferenceEquals(m_oRow, null))
+				return ((0 <= nIdx) && (nIdx < m_oRow.Table.Columns.Count));
+
+			if (!ReferenceEquals(m_oReader, null))
+				return ((0 <= nIdx) && (nIdx < m_oReader.FieldCount));
+
+			return false;
+		} // ContainsField
+
+		#endregion method ContainsField
+
 		#region method Fill
 
 		public T Fill<T>() where T: ITraversable, new() {

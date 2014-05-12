@@ -239,12 +239,22 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="CrmLookupsActionResult" nillable="true" type="tns:CrmLookupsActionResult" />
+  <xs:complexType name="VatReturnSummaryActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Summary" nillable="true" type="q12:VatReturnSummary" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="VatReturnSummaryActionResult" nillable="true" type="tns:VatReturnSummaryActionResult" />
   <xs:complexType name="QuickOfferActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
           <xs:element minOccurs="0" name="HasValue" type="xs:boolean" />
-          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q12:QuickOfferModel" />
+          <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q13:QuickOfferModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

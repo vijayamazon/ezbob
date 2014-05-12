@@ -314,6 +314,9 @@
 		ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
 
 		[OperationContract]
+		VatReturnSummaryActionResult LoadVatReturnSummary(int nMarketplaceID);
+
+		[OperationContract]
 		ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
 
 		#endregion other strategies

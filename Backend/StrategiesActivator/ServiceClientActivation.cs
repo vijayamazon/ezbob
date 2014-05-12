@@ -941,7 +941,21 @@ GeneratePassword broker-contact-email@example.com password-itself
 			} // if
 
 			serviceClient.MarketplaceInstantUpdate(nCustomerMarketplaceID);
-		} // CalculateVatReturnSummary
+		} // MarketplaceInstantUpdate
+
+		[Activation]
+		private void LoadVatReturnSummary() {
+			int nCustomerMarketplaceID = 0;
+
+			if ((args.Length != 2) || !int.TryParse(args[1], out nCustomerMarketplaceID)) {
+				m_oLog.Msg("Usage: LoadVatReturnSummary <Customer Marketplace ID>");
+				return;
+			} // if
+
+			VatReturnSummaryActionResult oResult = serviceClient.LoadVatReturnSummary(nCustomerMarketplaceID);
+
+			m_oLog.Msg("Result is: {0}", oResult.Summary);
+		} // LoadVatReturnSummary
 
 		// ReSharper restore UnusedMember.Local
 
