@@ -42,54 +42,31 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %> customer-column-width-50 fraud-status-td">Fraud Status</td>
-                <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">
-                    <span class="fraud-status"><%= data.FraudCheckStatus %> </span>
-                    <button class="btn btn-mini btn-primary" name="changeFraudStatusManualy"><i class="fa fa-pencil" /></button>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %> customer-column-width-50 is-test-td">Test User</td>
-                <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %>">
-                    <span class="is-test"><%= data.IsTestInAlertMode ? 'Yes' : 'No' %></span>
-                    <button type="button" class="btn btn-mini btn-primary istest-toggle">Toggle</button>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> customer-column-width-50 cci-mark-td">CCI mark</td>
-                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %>">
-                    <span class="cci-mark"><%= data.IsCciMarkInAlertMode ? 'on' : 'off' %></span>
-                    <button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button>
-                </td>
-            </tr>
-
-            @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
-
-            <tr>
-                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %> customer-column-width-50">AML</td>
-                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %>"><%- data.AmlResult %></td>
-            </tr>
-
             @RawCell("Id", "<%- data.Id %>")
             @RawCell("Name", "<%- data.Name %>")
+            @RawCell("Reg date", "<%- data.RegistrationDate %>")
             @RawCell("Age", "<%- data.Age %>")
             @RawCell("Gender", "<%- data.Gender %>")
-            @RawCell("Marital Status", "<%- data.FamilyStatus %>")
-            @RawCell("Residental Status", "<%- data.ResidentalStatus %>")
-            @RawCell("Business Type", "<%- data.CompanyType %>")
-            @RawCell("Company Seniority", "<%- data.CompanySeniority %>")
-            @RawCell("# Directors\\# Shareholders", "<%- data.NumOfDirectorsAndShareholders %>")
-            @RawCell("Website", "<%- data.Website %>")
-
-            @RawCell("Segment Type", "<%- data.SegmentType %>")
-
+        </tbody>
+    </table>
+    <table class="table squeezed rright">
+        <thead class="box">
+            <tr class="box-title">
+                <th colspan="2">Source</th>
+            </tr>
+        </thead>
+        <tbody>
             <tr id="with-broker">
                 <td class="customer-column-width-50">Broker name</td>
                 <td><%- data.BrokerName %></td>
             </tr>
+            <tr>
+                <td class="<%= data.PromoCodeCss %>">Promo</td>
+                <td class="<%= data.PromoCodeCss %>">
+                    <span><%= data.PromoCode %></span>
+                </td>
+            </tr>
+            @RawCell("Campaigns", "<%- data.ActiveCampaign %>")
 
             <tr>
                 <td>Ref Source</td>
@@ -98,23 +75,18 @@
                 </td>
             </tr>
 
-            @RawCell("A/B Testing", "<%- data.ABTesting || '-' %>")
-            @RawCell("User score", "<%- data.CreditScore %>")
-            @RawCell("Reg date", "<%- data.RegistrationDate %>")
-            @RawCell("User status", "<%- data.UserStatus %>")
-            @RawCellWithButtonNear("Manual Decision:", "<%= data.IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
-            
-            <tr>
-                <td class="<%= data.PromoCodeCss %>">Promo Code:</td>
-                <td class="<%= data.PromoCodeCss %>">
-                    <span><%= data.PromoCode %></span>
-                </td>
+            @RawCell("Segment", "<%- data.SegmentType %>")
+        </tbody>
+    </table>
+    <table class="table squeezed rright">
+        <thead class="box">
+            <tr class="box-title">
+                <th colspan="2">Contact Details</th>
             </tr>
-            @RawCell("Active Campaigns:", "<%- data.ActiveCampaign %>")
-
-            @RawCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusDescription %>", "TrustPilotStatusUpdate")
-            @RawCell("Mobile Phone #", "<%- data.MobilePhone %>")
-            @RawCell("Daytime Phone #", "<%- data.DaytimePhone %>")
+        </thead>
+        <tbody>
+            @RawCell("Mobile", "<%- data.MobilePhone %>")
+            @RawCell("Daytime", "<%- data.DaytimePhone %>")
 
             <tr>
                 <td>E-mail 
@@ -125,6 +97,67 @@
                     <button class="btn btn-mini btn-primary" name="editEmail"><i class="fa fa-pencil"></i></button>
                 </td>
             </tr>
+
+            @RawCell("Website", "<%- data.Website %>")
+        </tbody>
+    </table>
+    <table class="table squeezed rright">
+        <thead class="box">
+            <tr class="box-title">
+                <th colspan="2">Scoring</th>
+            </tr>
+        </thead>
+        <tbody>
+            @RawCell("Cart", "<%- data.Medal %>")
+            @RawCell("User score", "<%- data.CreditScore %>")
+            @RawCell("Marital Status", "<%- data.FamilyStatus %>")
+            @RawCell("Residental Status", "<%- data.ResidentalStatus %>")
+            @RawCell("Business Type", "<%- data.CompanyType %>")
+            @RawCell("Company Seniority", "<%- data.CompanySeniority %>")
+            @RawCell("# Directors\\# Shareholders", "<%- data.NumOfDirectorsAndShareholders %>")
+        </tbody>
+    </table>
+    <table class="table squeezed rright">
+        <thead class="box">
+            <tr class="box-title">
+                <th colspan="2">Statuses</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> customer-column-width-50 cci-mark-td">CCI mark</td>
+                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %>">
+                    <span class="cci-mark"><%= data.IsCciMarkInAlertMode ? 'on' : 'off' %></span>
+                    <button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %> customer-column-width-50 fraud-status-td">Fraud Status</td>
+                <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">
+                    <span class="fraud-status"><%= data.FraudCheckStatus %> </span>
+                    <button class="btn btn-mini btn-primary" name="changeFraudStatusManualy"><i class="fa fa-pencil" /></button>
+                </td>
+            </tr>
+
+            @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
+
+            <tr>
+                <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %> customer-column-width-50 is-test-td">Test User</td>
+                <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %>">
+                    <span class="is-test"><%= data.IsTestInAlertMode ? 'Yes' : 'No' %></span>
+                    <button type="button" class="btn btn-mini btn-primary istest-toggle">Toggle</button>
+                </td>
+            </tr>
+
+            @RawCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusDescription %>", "TrustPilotStatusUpdate")
+            @RawCellWithButtonNear("Manual Decision:", "<%= data.IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
+            @RawCell("User status", "<%- data.UserStatus %>")
+
+            <tr>
+                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %> customer-column-width-50">AML</td>
+                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %>"><%- data.AmlResult %></td>
+            </tr>
         </tbody>
         <tfoot>
             <tr>
@@ -132,7 +165,6 @@
             </tr>
         </tfoot>
     </table>
-
 </script>
 
 <script id="profile-loan-info-template" type="text/template">
@@ -145,12 +177,12 @@
         </thead>
         <tbody>
             @RawCell("System decision", "<%- m.SystemDecision %>")
-            @RawCell("System calculated amount", "<%- EzBob.formatPounds(m.SystemCalculatedAmount) %>")
+            @RawCell("System amount", "<%- EzBob.formatPounds(m.SystemCalculatedAmount) %>")
 
             <%if(m.Editable){%>
-                @RawCellWithButtonNear("<span class=create-loan-hidden-toggle>Offered credit line</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
+                @RawCellWithButtonNear("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
             <%} else{%>
-                @RawCell("<span class=create-loan-hidden-toggle>Offered credit line</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
+                @RawCell("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
             <%}%>
 
             <tr class="hide" id="create-loan-hidden">
@@ -174,27 +206,6 @@
                 </td>
             </tr>
 
-            @RawCell("Borrowed amount", "<%- EzBob.formatPounds(m.BorrowedAmount) %>")
-            @RawCell("Avaliable amount", "<%- m.OfferExpired ? '-' : EzBob.formatPounds(m.AvaliableAmount) %>")
-
-            <%if(m.Editable){%>
-                @RawCellWithButtonNear("Repayment period", "<%- m.RepaymentPerion %>", "repaymentPeriodChangeButton")
-            <%} else{%>
-                @RawCell("Repayment period", "<%- m.RepaymentPerion %>")
-            <%}%>
-
-            <%if(m.Editable){%>
-                @RawCellWithButtonNear("Starting from date", "<%- m.StartingFromDate %>", "startingDateChangeButton")
-            <%} else{%>
-                @RawCell("Starting from date", "<%- m.StartingFromDate %>")
-            <%}%>
-
-            <%if(m.Editable){%>
-                @RawCellWithButtonNear("Offer valid until", "<%- m.OfferValidateUntil %>", "offerValidUntilDateChangeButton")
-            <%} else{%>
-                @RawCell("Offer valid until", "<%- m.OfferValidateUntil %>")
-            <%}%>
-
             <%if (m.Editable) { %>
                 @RawCellWithButtonNear(
                     "Interest Rate",
@@ -210,16 +221,41 @@
                     </td>
                 </tr>
             <%}%>
+
+            @RawCell("Borrowed amount", "<%- EzBob.formatPounds(m.BorrowedAmount) %>")
+            @RawCell("Avaliable amount", "<%- m.OfferExpired ? '-' : EzBob.formatPounds(m.AvaliableAmount) %>")
+
             <%if(m.Editable){%>
-            @RawCellWithButtonNear("Enable setup fee:", "<%= m.UseSetupFee ? 'Yes' : 'No' %>", "setupFeeEditButton")
-            @RawCellWithButtonNear("Enable broker commission:", "<%= m.UseBrokerSetupFee ? 'Yes' : 'No' %>", "brokerSetupFeeEditButton")
+                @RawCellWithButtonNear("Starting from date", "<%- m.StartingFromDate %>", "startingDateChangeButton")
             <%} else{%>
-            @RawCell("Setup fee:", "<%= m.UseSetupFee ? 'Enabled' : 'Disabled' %>")
-            @RawCell("Broker commission:", "<%= m.UseBrokerSetupFee ? 'Enabled' : 'Disabled' %>")
+                @RawCell("Starting from date", "<%- m.StartingFromDate %>")
+            <%}%>
+
+            <%if(m.Editable){%>
+                @RawCellWithButtonNear("Offer valid until", "<%- m.OfferValidateUntil %>", "offerValidUntilDateChangeButton")
+            <%} else{%>
+                @RawCell("Offer valid until", "<%- m.OfferValidateUntil %>")
+            <%}%>
+        </tbody>
+    </table>
+
+    <table class="table squeezed rright">
+        <thead class="box">
+            <tr class="box-title">
+                <th colspan="2">Setup Fee</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Setup fee", "<%= m.UseSetupFee ? 'Yes' : 'No' %>", "setupFeeEditButton")
+            @RawCellWithButtonNear("Broker commission", "<%= m.UseBrokerSetupFee ? 'Yes' : 'No' %>", "brokerSetupFeeEditButton")
+            <%} else{%>
+            @RawCell("Setup fee", "<%= m.UseSetupFee ? 'Enabled' : 'Disabled' %>")
+            @RawCell("Broker commission", "<%= m.UseBrokerSetupFee ? 'Enabled' : 'Disabled' %>")
             <%}%>
     
             <tr>
-                <td>Manual setup fee:</td>
+                <td>Manual setup fee</td>
                 <td>
                     <span>£ <%= m.ManualSetupFeeAmount ? m.ManualSetupFeeAmount : '' %> | <%= m.ManualSetupFeePercent ? EzBob.formatPercents(m.ManualSetupFeePercent) : '%' %></span>
                      <%if(m.Editable){%>
@@ -228,26 +264,30 @@
                     <%}%>
                 </td>
             </tr>
+        </tbody>
+    </table>
 
-            <tr>
-                <td class="<%- m.FundsAvailableUnderLimitClass %>">Funds available:</td>
-                <td class="<%- m.FundsAvailableUnderLimitClass %>">
-                    <span>£ <%- m.FundsAvaliable %></span>
-                    <button class="btn btn-mini btn-primary couple_buttons" name="openPacnetManualButton"><i class="fa fa-plus"></i></button>
-                    <button class="btn btn-mini btn-primary couple_buttons" name="clearPacnetManualButton"><i class="fa fa-ban"></i></button>
-                </td>
+    <table class="table squeezed rright">
+        <thead class="box">
+            <tr class="box-title">
+                <th colspan="2">Other Properties</th>
             </tr>
-
-            @RawCell("Open offers", "<%- EzBob.formatPounds(m.FundsReserved) %>")
+        </thead>
+        <tbody>
+            <%if(m.Editable){%>
+                @RawCellWithButtonNear("Repayment period", "<%- m.RepaymentPerion %>", "repaymentPeriodChangeButton")
+            <%} else{%>
+                @RawCell("Repayment period", "<%- m.RepaymentPerion %>")
+            <%}%>
 
             <%if(m.Editable){%>
-                @RawCellWithButtonNear("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>", "allowSendingEmail")
+                @RawCellWithButtonNear("Send Emails", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>", "allowSendingEmail")
             <%} else{%>
-                @RawCell("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
+                @RawCell("Send Emails", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
             <%}%>
 
             <tr>
-                <td>Discount plan:</td>
+                <td>Discount plan</td>
                 <td><%= m.DiscountPlan %>
                     <i data-title="" class="tltp-left icon-question-sign" data-original-title=""></i> 
                     <% if (m.Editable) { %>
@@ -260,23 +300,42 @@
             </tr>
 
             <%if(m.Editable){%>
-                @RawCellWithButtonNear("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>", "loanType")
+                @RawCellWithButtonNear("Loan Type", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>", "loanType")
             <%} else{%>
-                @RawCell("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>")
+                @RawCell("Loan Type", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>")
             <%}%>
 
             <% if (m.Editable) { %>
-                @RawCellWithButtonNear("Loan Source:", "<%- EzBob.formatLoanSource(m) %>", "loanSource")
+                @RawCellWithButtonNear("Loan Source", "<%- EzBob.formatLoanSource(m) %>", "loanSource")
             <% } else { %>
-                @RawCell("Loan Source:", "<%- EzBob.formatLoanSource(m) %>")
+                @RawCell("Loan Source", "<%- EzBob.formatLoanSource(m) %>")
             <% } %>
 
             <%if(m.Editable){%>
-                @RawCellWithButtonNear("Customer selection:", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>", "isLoanTypeSelectionAllowed")
+                @RawCellWithButtonNear("Customer selection", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>", "isLoanTypeSelectionAllowed")
             <%} else{%>
-                @RawCell("Customer selection:", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>")
+                @RawCell("Customer selection", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>")
             <%}%>
+        </tbody>
+    </table>
 
+    <table class="table squeezed rright">
+        <thead class="box">
+            <tr class="box-title">
+                <th colspan="2">Ezbob Funding</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="<%- m.FundsAvailableUnderLimitClass %>">Funds available</td>
+                <td class="<%- m.FundsAvailableUnderLimitClass %>">
+                    <span>£ <%- m.FundsAvaliable %></span>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="openPacnetManualButton"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="clearPacnetManualButton"><i class="fa fa-ban"></i></button>
+                </td>
+            </tr>
+
+            @RawCell("Open offers", "<%- EzBob.formatPounds(m.FundsReserved) %>")
         </tbody>
     </table>
     <div class="control-group hide">

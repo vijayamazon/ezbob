@@ -22,6 +22,7 @@
 		public string Surname { get; set; }
 		public string Email { get; set; }
 		public string EmailState { get; set; }
+		public string Medal { get; set; }
 		public string MobilePhone { get; set; }
 		public string DaytimePhone { get; set; }
 		public string RegistrationDate { get; set; }
@@ -157,6 +158,7 @@
 				DaytimePhone = customer.PersonalInfo.DaytimePhone;
 			} // if
 
+			Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 			Email = customer.Name;
 			EmailState = customer.EmailState.ToString();
 
