@@ -26,7 +26,7 @@ table.table {
 }
 
 .navbar {
-    height: 100px;
+    height: 80px;
 }
 
 .flaty-nav {
@@ -34,3 +34,21 @@ table.table {
     right: 10px;
     top: 5px;
 }
+
+.row {
+    margin-bottom: 0;
+}
+
+.box {
+    margin-bottom: 0;
+}
+
+.tile {
+    margin-bottom: 5px;
+}
+
+.box .box-title h3 {
+    color: #000;
+}
+
+
