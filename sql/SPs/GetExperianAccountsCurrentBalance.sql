@@ -7,12 +7,10 @@ ALTER PROCEDURE GetExperianAccountsCurrentBalance
 AS
 BEGIN
 	SELECT 
-		SUM(ExperianDL97Accounts.CurrentBalance) AS CurrentBalance
+		CurrentBalanceSum AS CurrentBalance
 	FROM 
-		ExperianDL97Accounts, 
 		MP_ExperianDataCache 
-	WHERE 
-		ExperianDL97Accounts.DataCacheId = MP_ExperianDataCache.Id AND
+	WHERE
 		MP_ExperianDataCache.CustomerId = @CustomerId AND
 		MP_ExperianDataCache.CompanyRefNumber IS NOT NULL
 END
