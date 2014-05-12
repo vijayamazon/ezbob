@@ -13,6 +13,7 @@ namespace EzBob.Web.Infrastructure
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Agreements;
+	using EzServiceAccessor;
 	using Membership;
 	using PayPalServiceLib.Common;
 	using Areas.Customer.Controllers;
@@ -23,6 +24,7 @@ namespace EzBob.Web.Infrastructure
 	using Code.MpUniq;
 	using Models.Repository;
 	using MailApi;
+	using ServiceClientProxy;
 	using StructureMap.Configuration.DSL;
 	using ConfigManager;
 
@@ -115,6 +117,7 @@ namespace EzBob.Web.Infrastructure
 			For<IRolesRepository>().Use<RolesRepository>();
 			For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
 			For<ISuggestedAmountRepository>().Use<SuggestedAmountRepository>();
+			For<IEzServiceAccessor>().Use<EzServiceAccessorLong>();
 		}
 	}
 }

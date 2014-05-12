@@ -1,8 +1,10 @@
 ﻿namespace StrategiesActivator {
 	using System;
+	using EzServiceAccessor;
 	using NHibernate;
 	using NHibernateWrapper.NHibernate;
 	using Ezbob.RegistryScanner;
+	using ServiceClientProxy;
 	using StructureMap;
 	using StructureMap.Pipeline;
 
@@ -15,7 +17,13 @@
 				return;
 			} // if
 
-			LoadConfigurations();
+			Scanner.Register();
+
+			ObjectFactory.Configure(x => {
+				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
+				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
+				x.For<IEzServiceAccessor>().Use<EzServiceAccessorLong>();
+			});
 
 			try {
 				var strategiesActivator = new ServiceClientActivation(args);
@@ -25,15 +33,5 @@
 				// do nothing here
 			} // try
 		} // Main
-
-		private static void LoadConfigurations() {
-
-			Scanner.Register();
-
-			ObjectFactory.Configure(x => {
-				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
-				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
-			});
-		} // LoadConfigurations
 	} // class Program
 } // namespace

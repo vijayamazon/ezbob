@@ -1645,6 +1645,10 @@
     <Content Include="Views\Shared\_Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\Models\Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
       <Name>Models</Name>

@@ -74,12 +74,14 @@
 			}
 
 			int tokenExpired = 0;
-			int historyItemId = 0;
 
-			Log.Info("Activating retrieve data helper of:{0}", marketplaceName);
-			try
-			{
-				historyItemId = UpdateCustomerMarketPlaceDataStart(marketplaceDisplayName);
+			var oMpUpdateTimesSetter = new MarketplaceInstantUpdate(marketplaceId, DB, Log);
+
+			Log.Info("Start Update Data for Customer Market Place: id: {0}, name: {1} ", marketplaceId, marketplaceDisplayName);
+
+			try {
+				oMpUpdateTimesSetter.Start();
+
 				if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName))
 				{
 					switch (marketplaceName)
@@ -126,7 +128,7 @@
 			catch (Exception e)
 			{
 				errorMessage = e.Message;
-				Log.Warn("Exception occured during mp update. id:{0}", marketplaceId);
+				Log.Warn("Exception occurred during marketplace update, id: {0}.", marketplaceId);
 
 				var variables = new Dictionary<string, string>
 					{
@@ -164,10 +166,11 @@
 
 				mailer.Send(sTemplateName, variables);
 			} // try
-			finally
-			{
-				UpdateCustomerMarketPlaceDataEnd(historyItemId, errorMessage, marketplaceDisplayName, tokenExpired);
-			}
+			finally {
+				Log.Info("End update data for umi: id: {0}, name: {1}. {2}", marketplaceId, marketplaceDisplayName, string.IsNullOrEmpty(errorMessage) ? "Successfully" : "With error!");
+
+				oMpUpdateTimesSetter.End(errorMessage, tokenExpired);
+			} // try
 		} // Execute
 
 		#endregion method Execute
@@ -175,30 +178,6 @@
 		#endregion public
 
 		#region private
-
-		private int UpdateCustomerMarketPlaceDataStart(string marketplaceDisplayName)
-		{
-			Log.Info("Start Update Data for Customer Market Place: id: {0}, name: {1} ", marketplaceId, marketplaceDisplayName);
-			DateTime updatingStart = DateTime.UtcNow;
-			DataTable dt = DB.ExecuteReader("StartMarketplaceUpdate", CommandSpecies.StoredProcedure, 
-				new QueryParameter("MarketplaceId", marketplaceId), 
-				new QueryParameter("UpdatingStart", updatingStart));
-
-			var sr = new SafeReader(dt.Rows[0]);
-			return sr["HistoryRecordId"];
-		}
-
-		private void UpdateCustomerMarketPlaceDataEnd(int historyItemId, string errorMessage, string marketplaceDisplayName, int tokenExpired)
-		{
-			Log.Info("End update data for umi: id: {0}, name: {1}. {2}", marketplaceId, marketplaceDisplayName, string.IsNullOrEmpty(errorMessage) ? "Successfully" : "With error!");
-			DateTime updatingEnd = DateTime.UtcNow;
-			DB.ExecuteNonQuery("EndMarketplaceUpdate", CommandSpecies.StoredProcedure,
-				new QueryParameter("MarketplaceId", marketplaceId),
-				new QueryParameter("HistoryRecordId", historyItemId),
-				new QueryParameter("UpdatingEnd", updatingEnd),
-				new QueryParameter("ErrorMessage", errorMessage),
-				new QueryParameter("TokenExpired", tokenExpired));
-		}
 
 		#region property Helper
 

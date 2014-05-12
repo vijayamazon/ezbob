@@ -112,6 +112,7 @@
 			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oValidateResult.Hopper);
 
 			try {
+				m_oServiceClient.Instance.MarketplaceInstantUpdate(oState.CustomerMarketPlace.Id);
 				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
 			}
 			catch (Exception e) {

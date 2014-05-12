@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ezbob.Backend.Models, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -44,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EzServiceAccessorLong.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\EzServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -141,6 +143,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Backend\Models\Models.csproj">
       <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
       <Name>Models</Name>

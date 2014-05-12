@@ -4,7 +4,6 @@
 	using EzServiceReference;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using log4net;
 
 	public class ServiceClient {
 		#region property ServiceClient
@@ -14,15 +13,15 @@
 				lock (ms_oInstanceLock) {
 					if (ReferenceEquals(ms_oServiceClient, null) || (ms_oServiceClient.State != CommunicationState.Opened && ms_oServiceClient.State != CommunicationState.Created)) {
 						if (ms_oServiceClient != null)
-							ms_oLog.DebugFormat("ServiceClient State: {0}", ms_oServiceClient.State);
+							ms_oLog.Debug("ServiceClient State: {0}.", ms_oServiceClient.State);
 						else
-							ms_oLog.DebugFormat("ServiceClient is null creating new");
+							ms_oLog.Debug("ServiceClient is null, creating new.");
 
 						try {
 							var cfg = new EzServiceConfigurationLoader.DefaultConfiguration(
 								Environment.MachineName,
 								DbConnectionGenerator.Get(),
-								new SafeILog(ms_oLog)
+								ms_oLog
 							);
 
 							cfg.Init();
@@ -41,7 +40,7 @@
 							ms_oServiceClient.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(cfg.ClientTimeoutSeconds);
 						}
 						catch (Exception e) {
-							ms_oLog.Debug("Failed to connect to EzService", e);
+							ms_oLog.Debug(e, "Failed to connect to EzService.");
 
 							// TODO: save to DB failed request to run it later...
 
@@ -59,6 +58,6 @@
 
 		#endregion property ServiceClient
 
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(ServiceClient));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(ServiceClient));
 	} // class ServiceClient
 } // namespace

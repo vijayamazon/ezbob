@@ -6,6 +6,7 @@
 	using System.ServiceModel;
 	using System.Text;
 	using ConfigManager;
+	using EzServiceAccessor;
 	using EzServiceConfigurationLoader;
 	using System;
 	using Ezbob.Backend.Models;
@@ -14,6 +15,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using Newtonsoft.Json;
+	using StructureMap;
 	using log4net;
 
 	public class ServiceClientActivation
@@ -924,7 +926,21 @@ GeneratePassword broker-contact-email@example.com password-itself
 				return;
 			} // if
 
-			serviceClient.CalculateVatReturnSummary(nCustomerMarketplaceID);
+			var serviceAccessor = ObjectFactory.GetInstance<IEzServiceAccessor>();
+
+			serviceAccessor.CalculateVatReturnSummary(nCustomerMarketplaceID);
+		} // CalculateVatReturnSummary
+
+		[Activation]
+		private void MarketplaceInstantUpdate() {
+			int nCustomerMarketplaceID = 0;
+
+			if ((args.Length != 2) || !int.TryParse(args[1], out nCustomerMarketplaceID)) {
+				m_oLog.Msg("Usage: MarketplaceInstantUpdate <Customer Marketplace ID>");
+				return;
+			} // if
+
+			serviceClient.MarketplaceInstantUpdate(nCustomerMarketplaceID);
 		} // CalculateVatReturnSummary
 
 		// ReSharper restore UnusedMember.Local

@@ -14,6 +14,8 @@
 	using EzBob.PayPal;
 	using EzBob.eBayLib;
 	using EzService;
+	using EzServiceAccessor;
+	using EzServiceShortcut;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using FreeAgent;
@@ -134,6 +136,7 @@
 			ObjectFactory.Configure(x => {
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
+				x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>();
 			});
 
 			ObjectFactory.Configure(x => x.AddRegistry<EzBobRegistry>());
@@ -190,6 +193,8 @@
 
 			if (!InitInstanceName())
 				return false;
+
+			EzServiceAccessorShort.Set(m_oDB, m_oLog);
 
 			m_oCfg = new Configuration(m_sInstanceName, m_oDB, m_oLog);
 

@@ -81,6 +81,10 @@
       <Project>{dfc5b190-afa4-40a7-8237-8404687b4513}</Project>
       <Name>HmrcHarvester</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
       <Name>Logger</Name>

@@ -18,6 +18,8 @@ using Coin = EZBob.DatabaseLib.Common.Coin;
 namespace Integration.ChannelGrabberFrontend {
 	using System.Diagnostics;
 	using System.Text;
+	using EzServiceAccessor;
+	using StructureMap;
 
 	#region class RetrieveDataHelper
 
@@ -154,6 +156,8 @@ namespace Integration.ChannelGrabberFrontend {
 							Helper.StoreHmrcRtiTaxMonthData,
 							Helper.GetAllHmrcRtiTaxMonthData
 						);
+
+						ObjectFactory.GetInstance<IEzServiceAccessor>().CalculateVatReturnSummary(databaseCustomerMarketPlace.Id);
 
 						break;
 

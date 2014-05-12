@@ -313,6 +313,9 @@
 		[OperationContract]
 		ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
 
+		[OperationContract]
+		ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
+
 		#endregion other strategies
 
 		#region Quick offer

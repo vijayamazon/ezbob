@@ -1,20 +1,34 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EndMarketplaceUpdate]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[EndMarketplaceUpdate]
+IF OBJECT_ID('EndMarketplaceUpdate') IS NULL
+	EXECUTE('CREATE PROCEDURE EndMarketplaceUpdate AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[EndMarketplaceUpdate] 
-	(@MarketplaceId INT,
-	 @HistoryRecordId INT,
-	 @UpdatingEnd DATETIME,
-	 @ErrorMessage NVARCHAR(MAX),
-	 @TokenExpired INT)
+
+ALTER PROCEDURE EndMarketplaceUpdate
+@MarketplaceID INT,
+@HistoryRecordID INT,
+@UpdatingEnd DATETIME,
+@ErrorMessage NVARCHAR(MAX),
+@TokenExpired INT
 AS
 BEGIN
-	UPDATE MP_CustomerMarketPlace SET UpdatingEnd = @UpdatingEnd, UpdateError = @ErrorMessage, TokenExpired = @TokenExpired WHERE Id = @MarketplaceId
-		
-	UPDATE MP_CustomerMarketPlaceUpdatingHistory SET UpdatingEnd = @UpdatingEnd, Error = @ErrorMessage WHERE Id = @HistoryRecordId
+	SET NOCOUNT ON;
+
+	UPDATE MP_CustomerMarketPlace SET
+		UpdatingEnd = @UpdatingEnd,
+		UpdateError = @ErrorMessage,
+		TokenExpired = @TokenExpired
+	WHERE
+		Id = @MarketplaceID
+
+	UPDATE MP_CustomerMarketPlaceUpdatingHistory SET
+		UpdatingEnd = @UpdatingEnd,
+		Error = @ErrorMessage
+	WHERE
+		Id = @HistoryRecordID
 END
 GO

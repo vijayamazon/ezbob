@@ -88,6 +88,7 @@
 				_session.Flush();
 				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
+				m_oServiceClient.Instance.MarketplaceInstantUpdate(mp.Id);
 				mp.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(mp.Id);
 			}
 			catch (Exception e)

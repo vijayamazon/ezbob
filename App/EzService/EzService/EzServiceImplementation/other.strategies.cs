@@ -87,5 +87,14 @@
 		} // CalculateVatReturnSummary
 
 		#endregion method CalculateVatReturnSummary
+
+		#region method MarketplaceInstantUpdate
+
+		public ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID) {
+			return ExecuteSync<MarketplaceInstantUpdate>(null, null, nMarketplaceID);
+		} // MarketplaceInstantUpdate
+
+		#endregion method MarketplaceInstantUpdate
+
 	} // class EzServiceImplementation
 } // namespace EzService

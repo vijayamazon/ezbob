@@ -92,6 +92,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Backend\EzServiceAccessorShort\EzServiceShortcut.csproj">
+      <Project>{3d162d7e-c8ea-4a97-af1a-58e728093ad0}</Project>
+      <Name>EzServiceShortcut</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\backend\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>

@@ -108,6 +108,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerState_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerState" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCustomerState_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerStateResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetCustomerStatusRefreshInterval_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCustomerStatusRefreshInterval" />
   </wsdl:message>
@@ -648,6 +654,12 @@
   <wsdl:message name="IEzService_CalculateVatReturnSummary_OutputMessage">
     <wsdl:part name="parameters" element="tns:CalculateVatReturnSummaryResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_QuickOffer_InputMessage">
     <wsdl:part name="parameters" element="tns:QuickOffer" />
   </wsdl:message>
@@ -672,12 +684,6 @@
   <wsdl:message name="IEzService_FinishWizard_OutputMessage">
     <wsdl:part name="parameters" element="tns:FinishWizardResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetCustomerState_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCustomerState" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCustomerState_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCustomerStateResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -701,6 +707,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="GetCustomerState">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerState" message="tns:IEzService_GetCustomerState_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStateResponse" message="tns:IEzService_GetCustomerState_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetCustomerStatusRefreshInterval">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval" message="tns:IEzService_GetCustomerStatusRefreshInterval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse" message="tns:IEzService_GetCustomerStatusRefreshInterval_OutputMessage" />
@@ -1061,6 +1071,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummary" message="tns:IEzService_CalculateVatReturnSummary_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse" message="tns:IEzService_CalculateVatReturnSummary_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="QuickOffer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferResponse" message="tns:IEzService_QuickOffer_OutputMessage" />
@@ -1076,10 +1090,6 @@
     <wsdl:operation name="FinishWizard">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FinishWizard" message="tns:IEzService_FinishWizard_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FinishWizardResponse" message="tns:IEzService_FinishWizard_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetCustomerState">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerState" message="tns:IEzService_GetCustomerState_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStateResponse" message="tns:IEzService_GetCustomerState_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1136,6 +1146,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetCustomerState">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCustomerState" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetCustomerStatusRefreshInterval">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval" style="document" />
       <wsdl:input>
@@ -1946,6 +1965,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="QuickOffer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
       <wsdl:input>
@@ -1975,15 +2003,6 @@
     </wsdl:operation>
     <wsdl:operation name="FinishWizard">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FinishWizard" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetCustomerState">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCustomerState" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

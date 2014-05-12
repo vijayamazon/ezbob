@@ -111,6 +111,10 @@
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
       <Name>Models</Name>

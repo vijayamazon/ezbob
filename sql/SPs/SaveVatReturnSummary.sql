@@ -2,6 +2,9 @@ IF OBJECT_ID('SaveVatReturnSummary') IS NULL
 	EXECUTE('CREATE PROCEDURE SaveVatReturnSummary AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE SaveVatReturnSummary
 @CustomerID INT,
 @CustomerMarketplaceID INT,
