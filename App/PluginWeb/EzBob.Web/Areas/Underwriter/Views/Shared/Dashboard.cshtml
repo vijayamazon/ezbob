@@ -288,7 +288,7 @@
                                 <div class="caption text-center">
                                     Market value
                                 </div>
-                                <p class="title text-center"><%- properties.MarketValue %>K</p>
+                                <p class="title text-center"><%- GBPValues(properties.MarketValue, false) %>K</p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -296,7 +296,7 @@
                                 <div class="caption text-center">
                                     Net Worth
                                 </div>
-                                <p class="title text-center blue"><%- properties.NetWorth %>K</p>
+                                <p class="title text-center blue"><%- GBPValues(properties.NetWorth, false) %>K</p>
                                 <p class="title-small text-center">(<%- properties.NetWorthPercentages %>%)</p>
                             </div>
                         </div>
@@ -305,7 +305,7 @@
                                 <div class="caption text-center">
                                     Mortgages (<%- properties.NumberOfMortgages %>)
                                 </div>
-                                <p class="title text-center"><%- properties.SumOfMortgages %>K</p>
+                                <p class="title text-center"><%- GBPValues(properties.SumOfMortgages, false) %>K</p>
                                 <p class="title-small text-center">(LTV: <%- properties.Ltv %>%)</p>
                             </div>
                         </div>
