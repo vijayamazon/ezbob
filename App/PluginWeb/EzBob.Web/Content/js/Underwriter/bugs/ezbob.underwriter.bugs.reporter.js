@@ -37,6 +37,7 @@
           url: "" + window.gRootPath + "Underwriter/Bugs/CreateBug"
         });
       } else {
+        this.set("DateOpened", new Date(moment.utc(this.get("DateOpened"))));
         return BugModel.__super__.save.call(this, {}, {
           url: "" + window.gRootPath + "Underwriter/Bugs/UpdateBug"
         });
@@ -71,18 +72,10 @@
 
     ReportBugView.prototype.template = '#bug-report-template';
 
-    ReportBugView.prototype.events = {
-      'click  [data-dismiss="modal"]': "closed"
-    };
-
     ReportBugView.prototype.bindings = {
       TextOpened: {
         selector: "textarea[name='description']"
       }
-    };
-
-    ReportBugView.prototype.closed = function() {
-      return this.trigger("closed");
     };
 
     return ReportBugView;
@@ -99,8 +92,7 @@
 
     EditBugView.prototype.events = {
       'click .closeBug': 'closeBug',
-      'click .reopenBug': 'reopenBug',
-      'click  [data-dismiss="modal"]': "closed"
+      'click .reopenBug': 'reopenBug'
     };
 
     EditBugView.prototype.template = '#bug-edit-template';
@@ -158,10 +150,6 @@
       return this.trigger("reopenBug");
     };
 
-    EditBugView.prototype.closed = function() {
-      return this.trigger("closed");
-    };
-
     return EditBugView;
 
   })(EzBob.BoundItemView);
@@ -174,7 +162,6 @@
     bugMP = $e.data('bug-mp');
     bugCustomer = $e.data('bug-customer');
     director = $e.data('credit-bureau-director-id');
-    console.log('clicked', $e, bugCustomer);
     if (!((bugType != null) && (bugCustomer != null))) {
       return false;
     }
@@ -186,7 +173,6 @@
     });
     xhr.done(function(data) {
       var model, view;
-      console.log('return', data);
       if ((data != null ? data.error : void 0)) {
         return;
       }

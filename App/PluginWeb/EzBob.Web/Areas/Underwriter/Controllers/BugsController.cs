@@ -48,6 +48,7 @@
 
 			bug.UnderwriterOpened = _context.User;
 			bug.TextOpened = bugModel.TextOpened;
+			bug.TextClosed = bugModel.TextClosed;
 			_bugs.Update(bug);
 			return Json(new { }, JsonRequestBehavior.AllowGet);
 		}

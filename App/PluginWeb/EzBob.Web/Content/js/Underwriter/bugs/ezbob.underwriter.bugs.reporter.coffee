@@ -16,6 +16,7 @@ class EzBob.Underwriter.BugModel extends Backbone.Model
         if @isNew()
             super({}, {url: "#{window.gRootPath}Underwriter/Bugs/CreateBug"})
         else
+            @set("DateOpened", new Date(moment.utc(@get("DateOpened"))))
             super({}, {url: "#{window.gRootPath}Underwriter/Bugs/UpdateBug"})
 
 class EzBob.Underwriter.Bugs extends Backbone.Collection
