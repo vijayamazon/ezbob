@@ -1,4 +1,5 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace EzBob.Backend.Strategies.MailStrategies
+{
 	using System;
 	using System.Data;
 	using System.Globalization;
@@ -6,10 +7,13 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class ApprovedUser : ABrokerMailToo {
+	public class ApprovedUser : ABrokerMailToo
+	{
 		#region constructor
 
-		public ApprovedUser(int customerId, decimal loanAmount, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public ApprovedUser(int customerId, decimal loanAmount, AConnection oDb, ASafeLog oLog)
+			: base(customerId, true, oDb, oLog)
+		{
 			this.loanAmount = loanAmount;
 		} // constructor
 
@@ -19,7 +23,8 @@
 
 		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndVariables() {
+		protected override void SetTemplateAndVariables()
+		{
 			DataTable dt = DB.ExecuteReader(
 				"GetApprovalData",
 				CommandSpecies.StoredProcedure,
@@ -42,18 +47,11 @@
 				{"ValidFor", ((int)validHours).ToString(CultureInfo.InvariantCulture)}
 			};
 
-			if (CustomerData.IsOffline)
-			{
-				TemplateName = numOfApprovals == 0
-					? "Mandrill - Approval Offline (1st time)"
-					: "Mandrill - Approval Offline (not 1st time)";
-			}
-			else
-			{
-				TemplateName = numOfApprovals == 0
-					? "Mandrill - Approval (1st time)"
-					: "Mandrill - Approval (not 1st time)";
-			}
+
+			TemplateName = numOfApprovals == 0
+				? "Mandrill - Approval (1st time)"
+				: "Mandrill - Approval (not 1st time)";
+
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables

@@ -27,14 +27,10 @@
 				{"LOANREFNUM", loanRefNum}
 			};
 
-			if (CustomerData.NumOfLoans == 1)
-			{
-				TemplateName = CustomerData.IsOffline ? "Mandrill - Took Offline Loan (1st loan)" : "Mandrill - Took Loan (1st loan)";
-			}
-			else
-			{
-				TemplateName = CustomerData.IsOffline ? "Mandrill - Took Offline Loan (not 1st loan)" : "Mandrill - Took Loan (not 1st loan)";
-			}
+			TemplateName = CustomerData.NumOfLoans == 1
+				               ? "Mandrill - Took Loan (1st loan)"
+				               : "Mandrill - Took Loan (not 1st loan)";
+
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables
