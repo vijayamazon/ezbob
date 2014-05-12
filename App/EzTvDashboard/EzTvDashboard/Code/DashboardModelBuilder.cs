@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Database;
+	using GoogleAnalyticsLib;
 	using Models;
 
 	public class DashboardModelBuilder
@@ -34,7 +35,7 @@
 					Stats = new Dictionary<string, decimal>()
 				};
 
-
+			var firstOfMonth = new DateTime(LastChecked.Year, LastChecked.Month, 1);
 			Db.ForEachRow(
 				(oReader, bRowsetStart) =>
 					{
@@ -45,10 +46,26 @@
 				"EzTvGetStats",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@Now", LastChecked),
-				new QueryParameter("@FirstOfMonth", new DateTime(LastChecked.Year, LastChecked.Month, 1)),
+				new QueryParameter("@FirstOfMonth", firstOfMonth),
 				new QueryParameter("@MonthAgo", DateTime.Today.AddMonths(-1))
 			);
-			//todo implement
+			try
+			{
+				var ga = new GoogleAnalytics();
+				ga.Init(DateTime.UtcNow, @"C:\Temp\"); //todo put the cert in the mmc
+				var todayAnalytics = ga.FetchByCountry(DateTime.Today, LastChecked);
+				var monthToDateAnalytics = ga.FetchByCountry(firstOfMonth, LastChecked);
+				if (todayAnalytics.ContainsKey("United Kingdom"))
+				{
+					model.Stats["T_UkVisitors"] = todayAnalytics["United Kingdom"].Visitors;
+				}
+
+				if (monthToDateAnalytics.ContainsKey("United Kingdom"))
+				{
+					model.Stats["M_UkVisitors"] = monthToDateAnalytics["United Kingdom"].Visitors;
+				}
+			}catch{}
+
 			return model;
 		}
 

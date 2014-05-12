@@ -37,7 +37,7 @@ namespace EzAnalyticsConsoleClient {
 			}
 			else {
 				try {
-					if (app.Init(DateTime.Today.AddDays(-1)))
+					if (app.Init(DateTime.Today))
 						Run(app);
 
 					Done();
@@ -65,7 +65,7 @@ namespace EzAnalyticsConsoleClient {
 		private static void Run(GoogleAnalytics app) {
 			Log.Debug("Program.Run started...");
 
-			var oRawByCountry = app.FetchByCountry();
+			var oRawByCountry = app.FetchByCountry(m_oReportDate, m_oReportDate);
 			var oRawByPage = app.FetchByPage();
 
 			var oStats = new SortedDictionary<string, int>();

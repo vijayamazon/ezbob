@@ -24,17 +24,20 @@
 
 		#region method Init
 
-		public bool Init(DateTime oDate) {
+		public bool Init(DateTime oDate, string path = null) {
 			Log.Debug("Program.Init started...");
 
 			m_oReportDate = oDate;
 
 			Log.Debug("Processing analytics for {0}", m_oReportDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
 
-			string strKeyFile = Path.Combine(
-				Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-				GoogleDataFetcher.KeyFileName
-			);
+			string strKeyFile =
+				Path.Combine(
+					string.IsNullOrEmpty(path)
+						? Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+						: path,
+					GoogleDataFetcher.KeyFileName
+					);
 
 			Log.Debug("Creating authentication data...");
 
@@ -105,13 +108,13 @@
 		
 		#region method FetchByCountry
 
-		public SortedDictionary<string, CountryData> FetchByCountry() {
+		public SortedDictionary<string, CountryData> FetchByCountry(DateTime startDate, DateTime endDate) {
 			Log.Debug("Fetching by country started...");
 
 			var oFetcher = new GoogleDataFetcher(
 				m_oService,
-				m_oReportDate,
-				m_oReportDate, 
+				startDate,
+				endDate, 
 				new GoogleReportDimensions[] { GoogleReportDimensions.country, },
 				new GoogleReportMetrics[] { GoogleReportMetrics.visitors, GoogleReportMetrics.newVisits },
 				null
