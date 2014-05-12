@@ -27,6 +27,7 @@
 
 	public class ApplicationInfoController : Controller
 	{
+		private readonly ServiceClient serviceClient;
 		private readonly ICustomerRepository _customerRepository;
 		private readonly ICashRequestsRepository _cashRequestsRepository;
 		private readonly ILoanTypeRepository _loanTypes;
@@ -80,6 +81,7 @@
 			_users = users;
 			_context = context;
 			_suggestedAmountRepository = suggestedAmountRepository;
+			serviceClient = new ServiceClient();
 		}
 
 		[Ajax]
@@ -359,6 +361,8 @@
 			} // if
 
 			oCustomer.CciMark = !oCustomer.CciMark;
+			serviceClient.Instance.GetSpResultTable("AddCciHistory", new[] { "CustomerId", id.ToString(CultureInfo.InvariantCulture), "CciMark", oCustomer.CciMark.ToString() });
+
 			Log.DebugFormat("Customer({0}).CciMark set to {1}", id, oCustomer.CciMark);
 
 			return Json(new { error = (string)null, id = id, mark = oCustomer.CciMark });
