@@ -45,6 +45,7 @@
 		}
 		public override void Execute()
 		{
+			//GetMonthlyInterestRate();
 			Model.FeesRevenue = Model.SetupFeePounds;
 
 			// Algorithm logic:
@@ -91,6 +92,69 @@
 			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0;
 
 			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
+		}
+
+		private void GetMonthlyInterestRate()
+		{
+			decimal guessInterval = 1;
+			Model.MonthlyInterestRate = 1;
+			decimal balance = CalculateBalance();
+			decimal prevBalance = -1000000;
+			decimal prevPrevBalance = -1000000;
+			while (balance < -1 || balance > 1)
+			{
+				if (prevPrevBalance == balance)
+				{
+					if (guessInterval == 1)
+					{
+						guessInterval = 0.1m;
+					}
+					else if (guessInterval == 0.1m)
+					{
+						guessInterval = 0.01m;
+					}
+					else
+					{
+						return;
+					}
+				}
+				if (balance < 0)
+				{
+					Model.MonthlyInterestRate += guessInterval;
+				}
+				else
+				{
+					Model.MonthlyInterestRate -= guessInterval;
+				}
+
+				prevPrevBalance = prevBalance;
+				prevBalance = balance;
+				balance = CalculateBalance();
+			}
+		}
+
+		private decimal CalculateBalance()
+		{
+			Model.FeesRevenue = Model.SetupFeePounds; // Can be done outside...
+			Loan loan = CreateLoan();
+			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
+			calc.GetState();
+
+			Model.CostOfDebtOutput = 0;
+			Model.InterestRevenue = 0;
+			foreach (LoanScheduleItem scheuldeItem in loan.Schedule)
+			{
+				Model.InterestRevenue += scheuldeItem.Interest;
+				Model.CostOfDebtOutput += scheuldeItem.AmountDue * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
+			}
+			Model.InterestRevenue *= 1 - Model.DefaultRate;
+
+			Model.Revenue = Model.FeesRevenue + Model.InterestRevenue;
+			Model.GrossProfit = Model.Revenue - Model.Cogs;
+			Model.Ebitda = Model.GrossProfit - Model.OpexAndCapex;
+			Model.NetLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
+			Model.ProfitMarkupOutput = Model.ProfitMarkup * Model.Revenue;
+			return Model.Ebitda - Model.NetLossFromDefaults - Model.CostOfDebtOutput - Model.ProfitMarkupOutput;
 		}
 
 		private decimal GetEuLoanMonthlyInterest(int key)
