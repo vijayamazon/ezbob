@@ -26,8 +26,9 @@
 			var customer = customerRepository.TryGet(id);
 			int numberOfProperties = customer.PersonalInfo.ResidentialStatus == "Home owner" ? 1 : 0;
 			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
-										 a.AddressType == CustomerAddressType.OtherPropertyAddress ||
-										 a.AddressType == CustomerAddressType.OtherPropertyAddressPrev);
+										 a.Customer.Id == customer.Id &&
+										 (a.AddressType == CustomerAddressType.OtherPropertyAddress ||
+										 a.AddressType == CustomerAddressType.OtherPropertyAddressPrev));
 
 			numberOfProperties += otherPropertiesCount;
 			var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
