@@ -561,7 +561,8 @@
 			var cr = _cashRequestsRepository.Get(id);
 			var loanT = _loanTypes.Get(loanType);
 			cr.LoanType = loanT;
-			cr.ManagerApprovedSum = amount;
+			int step = CurrentValues.Instance.GetCashSliderStep;
+			cr.ManagerApprovedSum = cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step; 
 			cr.InterestRate = interestRate;
 			cr.RepaymentPeriod = repaymentPeriod;
 			cr.OfferStart = FormattingUtils.ParseDateWithCurrentTime(offerStart);
