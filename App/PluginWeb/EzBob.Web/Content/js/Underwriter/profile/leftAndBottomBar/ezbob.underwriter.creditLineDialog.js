@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.CreditLineDialog = (function(_super) {
+
     __extends(CreditLineDialog, _super);
 
     function CreditLineDialog() {
-      _ref = CreditLineDialog.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return CreditLineDialog.__super__.constructor.apply(this, arguments);
     }
 
     CreditLineDialog.prototype.template = '#credit-line-dialog-template';
@@ -22,7 +22,8 @@
     CreditLineDialog.prototype.initialize = function() {
       this.cloneModel = this.model.clone();
       this.modelBinder = new Backbone.ModelBinder();
-      return this.bindTo(this.cloneModel, "change:StartingFromDate", this.onChangeStartingDate, this);
+      this.bindTo(this.cloneModel, "change:StartingFromDate", this.onChangeStartingDate, this);
+      return this.bind('close', this.closeDialog);
     };
 
     CreditLineDialog.prototype.events = {
@@ -48,11 +49,14 @@
       };
     };
 
-    CreditLineDialog.prototype.onChangeLoanTypeSelectionAllowed = function() {
-      var controlledElements, _ref1;
+    CreditLineDialog.prototype.closeDialog = function() {
+      return this.model.fetch();
+    };
 
+    CreditLineDialog.prototype.onChangeLoanTypeSelectionAllowed = function() {
+      var controlledElements, _ref;
       controlledElements = '#loan-type, #repaymentPeriod';
-      if ((_ref1 = this.cloneModel.get('IsLoanTypeSelectionAllowed')) === 1 || _ref1 === '1') {
+      if ((_ref = this.cloneModel.get('IsLoanTypeSelectionAllowed')) === 1 || _ref === '1') {
         this.$el.find(controlledElements).attr('disabled', 'disabled');
         if (this.cloneModel.get('LoanTypeId') !== 1) {
           return this.cloneModel.set('LoanTypeId', 1);
@@ -64,7 +68,6 @@
 
     CreditLineDialog.prototype.onChangeStartingDate = function() {
       var endDate, startingDate;
-
       startingDate = moment.utc(this.cloneModel.get("StartingFromDate"), "DD/MM/YYYY");
       if (startingDate !== null) {
         endDate = startingDate.add('hours', this.cloneModel.get('OfferValidForHours'));
@@ -74,7 +77,6 @@
 
     CreditLineDialog.prototype.onChangeLoanType = function() {
       var currentLoanType, loanTypeId;
-
       loanTypeId = +this.$el.find("#loan-type option:selected").val();
       currentLoanType = _.find(this.cloneModel.get("LoanTypes"), function(l) {
         return l.Id === loanTypeId;
@@ -89,22 +91,19 @@
     CreditLineDialog.prototype.save = function() {
       var action, post, postData,
         _this = this;
-
       if (!this.ui.form.valid()) {
         return;
       }
       postData = this.getPostData();
       action = "" + window.gRootPath + "Underwriter/ApplicationInfo/ChangeCreditLine";
       post = $.post(action, postData);
-      post.done(function() {
-        return _this.model.fetch();
+      return post.done(function() {
+        return _this.close();
       });
-      return this.close();
     };
 
     CreditLineDialog.prototype.getPostData = function() {
       var data, m;
-
       m = this.cloneModel.toJSON();
       data = {
         id: m.CashRequestId,

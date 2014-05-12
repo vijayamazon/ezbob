@@ -9,15 +9,17 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         @cloneModel = @model.clone()
         @modelBinder = new Backbone.ModelBinder()
         @bindTo @cloneModel, "change:StartingFromDate", @onChangeStartingDate, this
-    
+        @bind('close', @closeDialog)
+
     events: 
         'click .btnOk': 'save'
         'change #loan-type ' : 'onChangeLoanType'
         'click #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed'
         'change #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed'
+
     ui:
         form: "form"
-    
+
     jqoptions: ->
         modal: true
         resizable: false
@@ -26,6 +28,9 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         draggable: false
         dialogClass: "creditline-popup"
         width: 840
+
+    closeDialog : ->
+        @model.fetch()
 
     onChangeLoanTypeSelectionAllowed: ->
         controlledElements = '#loan-type, #repaymentPeriod'
@@ -58,9 +63,9 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         postData = @getPostData()
         action = "#{window.gRootPath}Underwriter/ApplicationInfo/ChangeCreditLine"
         post = $.post action, postData
-        post.done => @model.fetch()
-        @close()
-    
+        post.done => 
+            @close()
+
     getPostData:->
         m = @cloneModel.toJSON()
         
@@ -81,7 +86,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             isLoanTypeSelectionAllowed  : m.IsLoanTypeSelectionAllowed
 
         return data
-            
+
     bindings:
         InterestRate:
             selector: "input[name='interestRate']"
@@ -113,7 +118,6 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             selector: "input[name='manualSetupFeeAmount']"
             converter: EzBob.BindingConverters.moneyFormat
 
-
     onRender: -> 
         @modelBinder.bind @cloneModel, @el, @bindings
         @$el.find("#startingFromDate, #offerValidUntil").mask("99/99/9999").datepicker({ autoclose: true, format: 'dd/mm/yyyy' })
@@ -126,7 +130,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         @$el.find("#manualSetupFeeAmount").autoNumeric(EzBob.moneyFormat)
         @$el.find("#repaymentPeriod").numericOnly()
         @setValidator()
-        
+
     setValidator: ->
         @ui.form.validate
             rules:
