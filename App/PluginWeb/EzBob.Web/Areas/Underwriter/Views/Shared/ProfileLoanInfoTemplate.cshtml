@@ -150,7 +150,7 @@
                 </td>
             </tr>
 
-            @RawCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusDescription %>", "TrustPilotStatusUpdate")
+            @RawCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusName %>", "TrustPilotStatusUpdate")
             @RawCellWithButtonNear("Manual Decision:", "<%= data.IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
             @RawCell("User status", "<%- data.UserStatus %>")
 
