@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.PricingModel
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Data;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -24,12 +25,12 @@
 		private readonly int customerId;
 		public PricingModelModel Model { get; private set; }
 
-		private Loan CreateLoan()
+		private Loan CreateLoan(decimal interestRate)
 		{
 			var sfc = new SetupFeeCalculator(false, false, 0, 0);
 			var setupFee = sfc.Calculate(Model.LoanAmount);
 
-			var calculator = new LoanScheduleCalculator { Interest = Model.MonthlyInterestRate, Term = Model.LoanTerm };
+			var calculator = new LoanScheduleCalculator { Interest = interestRate, Term = Model.LoanTerm };
 			LoanType lt = new StandardLoanType();
 			var loan = new Loan
 			{
@@ -45,8 +46,8 @@
 		}
 		public override void Execute()
 		{
-			//GetMonthlyInterestRate();
 			Model.FeesRevenue = Model.SetupFeePounds;
+			Model.MonthlyInterestRate = GetMonthlyInterestRate();
 
 			// Algorithm logic:
 			// 1. Find MonthlyInterestRate that will result in balance = 0 (balance = ebitda - net loss from default - cost of debt - profit before tax)
@@ -54,11 +55,10 @@
 			// 3. FeesRevenue = Guessed setup fee for eu (use eu collection rate as collection rate and use eu loan percentages as monthly interest)
 			// 4. Find a setup fee that yeilds the same profit as the one remembered on #3
 
-			Model.MonthlyInterestRate = 0.34m; // TODO: implement calc
 			Model.SetupFeeForEuLoanHigh = 0.03m;
 			Model.SetupFeeForEuLoanLow = 0.03m;
 
-			Loan loan = CreateLoan();
+			Loan loan = CreateLoan(Model.MonthlyInterestRate);
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
 			calc.GetState();
 			var aprCalc = new APRCalculator();
@@ -94,67 +94,73 @@
 			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
 		}
 
-		private void GetMonthlyInterestRate()
+		private decimal GetMonthlyInterestRate()
 		{
 			decimal guessInterval = 1;
-			Model.MonthlyInterestRate = 1;
-			decimal balance = CalculateBalance();
-			decimal prevBalance = -1000000;
-			decimal prevPrevBalance = -1000000;
-			while (balance < -1 || balance > 1)
+			decimal monthlyInterestRate = 1;
+			decimal balance = 1;
+			var calculations = new Dictionary<decimal, decimal>();
+			decimal minBalanceAbsValue = decimal.MaxValue;
+			decimal interestRateForMinBalanceAbs = 1;
+
+			while (balance != 0)
 			{
-				if (prevPrevBalance == balance)
+				balance = CalculateBalance(monthlyInterestRate);
+				if (Math.Abs(balance) < minBalanceAbsValue)
+				{
+					minBalanceAbsValue = Math.Abs(balance);
+					interestRateForMinBalanceAbs = monthlyInterestRate;
+				}
+
+				calculations.Add(monthlyInterestRate, balance);
+
+				decimal nextMonthlyInterestRate = balance < 0 ? monthlyInterestRate + guessInterval : monthlyInterestRate - guessInterval;
+				if (calculations.ContainsKey(nextMonthlyInterestRate))
 				{
 					if (guessInterval == 1)
 					{
 						guessInterval = 0.1m;
+						nextMonthlyInterestRate = balance < 0 ? monthlyInterestRate + guessInterval : monthlyInterestRate - guessInterval;
 					}
 					else if (guessInterval == 0.1m)
 					{
 						guessInterval = 0.01m;
+						nextMonthlyInterestRate = balance < 0 ? monthlyInterestRate + guessInterval : monthlyInterestRate - guessInterval;
 					}
 					else
 					{
-						return;
+						break;
 					}
 				}
-				if (balance < 0)
-				{
-					Model.MonthlyInterestRate += guessInterval;
-				}
-				else
-				{
-					Model.MonthlyInterestRate -= guessInterval;
-				}
-
-				prevPrevBalance = prevBalance;
-				prevBalance = balance;
-				balance = CalculateBalance();
+				monthlyInterestRate = nextMonthlyInterestRate;
 			}
+
+			return interestRateForMinBalanceAbs;
 		}
 
-		private decimal CalculateBalance()
+
+
+		private decimal CalculateBalance(decimal interestRate)
 		{
-			Model.FeesRevenue = Model.SetupFeePounds; // Can be done outside...
-			Loan loan = CreateLoan();
+			Loan loan = CreateLoan(interestRate);
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
 			calc.GetState();
 
-			Model.CostOfDebtOutput = 0;
-			Model.InterestRevenue = 0;
+			decimal costOfDebtOutput = 0;
+			decimal interestRevenue = 0;
 			foreach (LoanScheduleItem scheuldeItem in loan.Schedule)
 			{
-				Model.InterestRevenue += scheuldeItem.Interest;
-				Model.CostOfDebtOutput += scheuldeItem.AmountDue * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
+				interestRevenue += scheuldeItem.Interest;
+				costOfDebtOutput += scheuldeItem.AmountDue * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
 			}
-			Model.InterestRevenue *= 1 - Model.DefaultRate;
+			interestRevenue *= (100 - Model.DefaultRate) / 100;
 
-			Model.Revenue = Model.FeesRevenue + Model.InterestRevenue;
-			Model.GrossProfit = Model.Revenue - Model.Cogs;
-			Model.Ebitda = Model.GrossProfit - Model.OpexAndCapex;
-			Model.NetLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
-			Model.ProfitMarkupOutput = Model.ProfitMarkup * Model.Revenue;
-			return Model.Ebitda - Model.NetLossFromDefaults - Model.CostOfDebtOutput - Model.ProfitMarkupOutput;
+			decimal revenue = Model.SetupFeePounds + interestRevenue;
+			decimal grossProfit = revenue - Model.Cogs;
+			decimal ebitda = grossProfit - Model.OpexAndCapex;
+			decimal netLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate / 100;
+			decimal profitMarkupOutput = Model.ProfitMarkup * revenue;
+			return ebitda - netLossFromDefaults - costOfDebtOutput - profitMarkupOutput;
 		}
 
 		private decimal GetEuLoanMonthlyInterest(int key)
