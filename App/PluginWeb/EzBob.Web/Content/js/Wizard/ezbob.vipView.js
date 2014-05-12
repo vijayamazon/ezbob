@@ -45,7 +45,7 @@ EzBob.VipView = Backbone.Marionette.ItemView.extend({
         this.$el.hide();
         var now = moment.utc();
         //19:00-7:00 and weekend Friday 13:00 - Sunday 7:00 off hours
-        if ((now.hours() > 19 || now.hours() < 7) || (now.day() == 6 && now.hours() > 13) || (now.day() == 7)) {
+        if ((now.hours() > 19 || now.hours() < 7) || (now.day() == 5 && now.hours() > 13) || (now.day() == 6)) {
             EzBob.App.trigger('info', 'Your VIP request was submitted. We will contact you during office hours.');
         } else {
             EzBob.App.trigger('info', 'Your VIP request was submitted. We will contact you asap.');
