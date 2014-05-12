@@ -3,10 +3,11 @@ IF OBJECT_ID('AddCciHistory') IS NULL
 GO
 
 ALTER PROCEDURE AddCciHistory
-	(@CustomerId INT,
+	(@Username VARCHAR(100),
+	 @CustomerId INT,
 	 @CciMark BIT)
 AS
 BEGIN
-	INSERT INTO CciHistory (CustomerId, ChangeDate, CciMark) VALUES (@CustomerId, GETUTCDATE(), @CciMark)	
+	INSERT INTO CciHistory (Username, CustomerId, ChangeDate, CciMark) VALUES (@Username, @CustomerId, GETUTCDATE(), @CciMark)	
 END
 GO
