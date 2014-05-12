@@ -1028,6 +1028,14 @@ div.hmrc-enter-data-holder .add-one-period {
     width: 50%;
 }
 
+.left-pane-button {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-right: 4px;
+    padding-left: 4px;
+    font-size: 10px;
+}
+
 .suggested-amount-link {
     text-decoration: underline;
 }
