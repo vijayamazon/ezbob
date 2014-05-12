@@ -140,10 +140,10 @@
                                 <div class="caption text-center">
                                     Balance
                                 </div>
-                                <% var balance = EzBob.formatPoundsAsThousands(experian.ConsumerAccountsOverview.Balance_Total);
+                                <% var balance = EzBob.formatPoundsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total);
                                    var textSize = '';
                                 if(balance.length > 5){ textSize = 'text-small';} %>
-                                <p class="title text-center <%- textSize%>"><%-EzBob.formatPoundsAsThousands(experian.ConsumerAccountsOverview.Balance_Total)%></p>
+                                <p class="title text-center <%- textSize%>"><%-EzBob.formatPoundsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total)%>K</p>
                             </div>
                         </div>
                     </div>
