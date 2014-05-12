@@ -22,6 +22,12 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PricingModelEuCollectionRate')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PricingModelEuCollectionRate', '0.75', 'Pricing model EU collection rate in percentages (0-1)')
+END
+GO
+
 IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PricingModelCogs')
 BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PricingModelCogs', '1000', 'Pricing model cogs in pounds')
@@ -49,5 +55,11 @@ GO
 IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PricingModelProfitMarkupPercentsOfRevenue')
 BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PricingModelProfitMarkupPercentsOfRevenue', '0.25', 'Pricing model profit markup percents of revenue in percentages (0-1)')
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PricingModelSetupFee')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PricingModelSetupFee', '0.015', 'Pricing model setup fee in percentages (0-1)')
 END
 GO

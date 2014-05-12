@@ -14,6 +14,7 @@
       <xs:element minOccurs="0" name="DefaultRateCompanyShare" type="xs:decimal" />
       <xs:element minOccurs="0" name="DefaultRateCustomerShare" type="xs:decimal" />
       <xs:element minOccurs="0" name="Ebitda" type="xs:decimal" />
+      <xs:element minOccurs="0" name="EuCollectionRate" type="xs:decimal" />
       <xs:element minOccurs="0" name="EuLoanPercentages" type="xs:decimal" />
       <xs:element minOccurs="0" name="FeesRevenue" type="xs:decimal" />
       <xs:element minOccurs="0" name="GrossProfit" type="xs:decimal" />
@@ -28,7 +29,8 @@
       <xs:element minOccurs="0" name="ProfitMarkup" type="xs:decimal" />
       <xs:element minOccurs="0" name="ProfitMarkupOutput" type="xs:decimal" />
       <xs:element minOccurs="0" name="Revenue" type="xs:decimal" />
-      <xs:element minOccurs="0" name="SetupFeeForEuLoan" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SetupFeeForEuLoanHigh" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SetupFeeForEuLoanLow" type="xs:decimal" />
       <xs:element minOccurs="0" name="SetupFeePercents" type="xs:decimal" />
       <xs:element minOccurs="0" name="SetupFeePounds" type="xs:decimal" />
       <xs:element minOccurs="0" name="TenureMonths" type="xs:decimal" />

@@ -16,6 +16,7 @@
 		public decimal TenurePercents { get; set; }
 		public decimal TenureMonths { get; set; }
 		public decimal CollectionRate { get; set; }
+		public decimal EuCollectionRate { get; set; }
 		public decimal Cogs { get; set; }
 		public decimal DebtPercentOfCapital { get; set; }
 		public decimal CostOfDebt { get; set; }
@@ -24,7 +25,8 @@
 
 		// Main output fields
 		public decimal MonthlyInterestRate { get; set; }
-		public decimal SetupFeeForEuLoan { get; set; }
+		public decimal SetupFeeForEuLoanHigh { get; set; } // Fee for 2%
+		public decimal SetupFeeForEuLoanLow { get; set; } // Fee for 1.75%
 		public decimal EuLoanPercentages { get; set; } // 1.75 or 2
 
 		// Other output fields

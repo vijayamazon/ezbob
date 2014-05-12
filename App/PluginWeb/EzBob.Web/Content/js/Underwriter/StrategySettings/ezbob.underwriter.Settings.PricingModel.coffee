@@ -27,6 +27,10 @@ class EzBob.Underwriter.SettingsPricingModelView extends Backbone.Marionette.Ite
             selector: "input[name='PricingModelCollectionRate']"
             converter: EzBob.BindingConverters.percentsFormat
 
+        PricingModelEuCollectionRate:
+            selector: "input[name='PricingModelEuCollectionRate']"
+            converter: EzBob.BindingConverters.percentsFormat
+
         PricingModelDebtOutOfTotalCapital:
             selector: "input[name='PricingModelDebtOutOfTotalCapital']"
             converter: EzBob.BindingConverters.percentsFormat
@@ -37,7 +41,11 @@ class EzBob.Underwriter.SettingsPricingModelView extends Backbone.Marionette.Ite
 
         PricingModelProfitMarkupPercentsOfRevenue:
             selector: "input[name='PricingModelProfitMarkupPercentsOfRevenue']"
-            converter: EzBob.BindingConverters.percentsFormat		
+            converter: EzBob.BindingConverters.percentsFormat
+
+        PricingModelSetupFee:
+            selector: "input[name='PricingModelSetupFee']"
+            converter: EzBob.BindingConverters.percentsFormat
         
         PricingModelOpexAndCapex:
             selector: "input[name='PricingModelOpexAndCapex']"
@@ -73,9 +81,10 @@ class EzBob.Underwriter.SettingsPricingModelView extends Backbone.Marionette.Ite
         @$el.find("input[name='PricingModelTenurePercents']").percentFormat()
         @$el.find("input[name='PricingModelDefaultRateCompanyShare']").percentFormat()
         @$el.find("input[name='PricingModelCollectionRate']").percentFormat()
+        @$el.find("input[name='PricingModelEuCollectionRate']").percentFormat()
         @$el.find("input[name='PricingModelDebtOutOfTotalCapital']").percentFormat()
         @$el.find("input[name='PricingModelCostOfDebtPA']").percentFormat()
-        @$el.find("input[name='PricingModelProfitMarkupPercentsOfRevenue']").percentFormat()        
+        @$el.find("input[name='PricingModelProfitMarkupPercentsOfRevenue']").percentFormat()
         @$el.find("input[name='PricingModelOpexAndCapex']").numericOnlyWithDecimal()
         @$el.find("input[name='PricingModelCogs']").numericOnlyWithDecimal()
         @$el.find("input[name='PricingModelInterestOnlyPeriod']").numericOnly(2)

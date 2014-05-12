@@ -312,10 +312,12 @@
 		PricingModelDefaultRateCompanyShare,
 		PricingModelInterestOnlyPeriod,
 		PricingModelCollectionRate,
+		PricingModelEuCollectionRate,
 		PricingModelCogs,
 		PricingModelDebtOutOfTotalCapital,
 		PricingModelCostOfDebtPA,
 		PricingModelOpexAndCapex,
-		PricingModelProfitMarkupPercentsOfRevenue
+		PricingModelProfitMarkupPercentsOfRevenue,
+		PricingModelSetupFee
 	} // enum Variables
 } // namespace ConfigManager

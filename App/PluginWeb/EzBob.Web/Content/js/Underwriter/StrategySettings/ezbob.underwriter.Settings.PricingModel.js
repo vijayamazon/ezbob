@@ -53,6 +53,10 @@
         selector: "input[name='PricingModelCollectionRate']",
         converter: EzBob.BindingConverters.percentsFormat
       },
+      PricingModelEuCollectionRate: {
+        selector: "input[name='PricingModelEuCollectionRate']",
+        converter: EzBob.BindingConverters.percentsFormat
+      },
       PricingModelDebtOutOfTotalCapital: {
         selector: "input[name='PricingModelDebtOutOfTotalCapital']",
         converter: EzBob.BindingConverters.percentsFormat
@@ -63,6 +67,10 @@
       },
       PricingModelProfitMarkupPercentsOfRevenue: {
         selector: "input[name='PricingModelProfitMarkupPercentsOfRevenue']",
+        converter: EzBob.BindingConverters.percentsFormat
+      },
+      PricingModelSetupFee: {
+        selector: "input[name='PricingModelSetupFee']",
         converter: EzBob.BindingConverters.percentsFormat
       },
       PricingModelOpexAndCapex: {
@@ -113,6 +121,7 @@
       this.$el.find("input[name='PricingModelTenurePercents']").percentFormat();
       this.$el.find("input[name='PricingModelDefaultRateCompanyShare']").percentFormat();
       this.$el.find("input[name='PricingModelCollectionRate']").percentFormat();
+      this.$el.find("input[name='PricingModelEuCollectionRate']").percentFormat();
       this.$el.find("input[name='PricingModelDebtOutOfTotalCapital']").percentFormat();
       this.$el.find("input[name='PricingModelCostOfDebtPA']").percentFormat();
       this.$el.find("input[name='PricingModelProfitMarkupPercentsOfRevenue']").percentFormat();

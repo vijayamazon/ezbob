@@ -30,6 +30,7 @@
 			int interestOnlyPeriod = CurrentValues.Instance.PricingModelInterestOnlyPeriod;
 			decimal tenurePercents = CurrentValues.Instance.PricingModelTenurePercents;
 			decimal tenureMonths = tenurePercents * loanTerm;
+			decimal setupFeePercents = CurrentValues.Instance.PricingModelSetupFee;
 
 			Model = new PricingModelModel
 				{
@@ -37,13 +38,14 @@
 					DefaultRate = defaultRate,
 					DefaultRateCompanyShare = defaultRateCompanyShare,
 					DefaultRateCustomerShare = defaultRateCustomerShare,
-					SetupFeePounds = 150,
-					SetupFeePercents = 0.07m,
+					SetupFeePounds = setupFeePercents * loanAmount,
+					SetupFeePercents = setupFeePercents,
 					LoanTerm = loanTerm,
 					InterestOnlyPeriod = interestOnlyPeriod,
 					TenurePercents = tenurePercents,
 					TenureMonths = tenureMonths,
 					CollectionRate = CurrentValues.Instance.PricingModelCollectionRate,
+					EuCollectionRate = CurrentValues.Instance.PricingModelEuCollectionRate,
 					Cogs = CurrentValues.Instance.PricingModelCogs,
 					DebtPercentOfCapital = CurrentValues.Instance.PricingModelDebtOutOfTotalCapital,
 					CostOfDebt = CurrentValues.Instance.PricingModelCostOfDebtPA,

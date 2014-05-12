@@ -47,8 +47,15 @@
 		{
 			Model.FeesRevenue = Model.SetupFeePounds;
 
+			// Algorithm logic:
+			// 1. Find MonthlyInterestRate that will result in balance = 0 (balance = ebitda - net loss from default - cost of debt - profit before tax)
+			// 2. Remember the profit before tax that was calculated.
+			// 3. FeesRevenue = Guessed setup fee for eu (use eu collection rate as collection rate and use eu loan percentages as monthly interest)
+			// 4. Find a setup fee that yeilds the same profit as the one remembered on #3
+
 			Model.MonthlyInterestRate = 0.34m; // TODO: implement calc
-			Model.SetupFeeForEuLoan = 0.03m;
+			Model.SetupFeeForEuLoanHigh = 0.03m;
+			Model.SetupFeeForEuLoanLow = 0.03m;
 
 			Loan loan = CreateLoan();
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
@@ -77,8 +84,8 @@
 			
 			Model.CogsOutput = Model.Cogs;
 			Model.OpexAndCapexOutput = Model.OpexAndCapex;
-			Model.Ebitda = Model.GrossProfit - Model.OpexAndCapex;
 			Model.GrossProfit = Model.Revenue - Model.Cogs;
+			Model.Ebitda = Model.GrossProfit - Model.OpexAndCapex;
 			Model.NetLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
 			Model.ProfitMarkupOutput = Model.ProfitMarkup * Model.Revenue;
 			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0;

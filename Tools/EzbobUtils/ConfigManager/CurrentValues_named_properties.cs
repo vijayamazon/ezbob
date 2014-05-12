@@ -2201,6 +2201,11 @@
 			get { return this[Variables.PricingModelCollectionRate]; }
 		}
 
+		public virtual VariableValue PricingModelEuCollectionRate
+		{
+			get { return this[Variables.PricingModelEuCollectionRate]; }
+		}
+
 		public virtual VariableValue PricingModelCogs
 		{
 			get { return this[Variables.PricingModelCogs]; }
@@ -2224,6 +2229,11 @@
 		public virtual VariableValue PricingModelProfitMarkupPercentsOfRevenue
 		{
 			get { return this[Variables.PricingModelProfitMarkupPercentsOfRevenue]; }
+		}
+
+		public virtual VariableValue PricingModelSetupFee
+		{
+			get { return this[Variables.PricingModelSetupFee]; }
 		}
 	} // class CurrentValues
 } // namespace ConfigManager

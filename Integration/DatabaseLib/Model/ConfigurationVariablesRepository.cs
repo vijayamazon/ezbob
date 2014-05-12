@@ -252,11 +252,13 @@
 		PricingModelDefaultRateCompanyShare,
 		PricingModelInterestOnlyPeriod,
 		PricingModelCollectionRate,
+		PricingModelEuCollectionRate,
 		PricingModelCogs,
 		PricingModelDebtOutOfTotalCapital,
 		PricingModelCostOfDebtPA,
 		PricingModelOpexAndCapex,
-		PricingModelProfitMarkupPercentsOfRevenue
+		PricingModelProfitMarkupPercentsOfRevenue,
+		PricingModelSetupFee
 	} // enum ConfigurationVariables
 
 	#endregion enum ConfigurationVariables
