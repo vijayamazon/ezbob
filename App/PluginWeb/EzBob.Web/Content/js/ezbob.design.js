@@ -792,6 +792,10 @@ EzBob.formatPoundsAsThousands = function (val) {
     return EzBob.formatPoundsFormat(val / 1000, EzBob.moneyFormatAsThousands) + ' K';
 };
 
+EzBob.formatPoundsAsThousandsNoDecimals = function (val) {
+    return EzBob.formatPoundsFormat(val / 1000, EzBob.moneyFormatNoDecimals) + 'K';
+};
+
 EzBob.formatPoundsFormat = function (val, format) {
     if (!val && val != 0) {
         return '-';

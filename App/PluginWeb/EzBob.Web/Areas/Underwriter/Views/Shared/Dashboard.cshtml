@@ -140,10 +140,10 @@
                                 <div class="caption text-center">
                                     Balance
                                 </div>
-                                <% var balance = EzBob.formatPoundsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total);
+                                <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total);
                                    var textSize = '';
                                 if(balance.length > 5){ textSize = 'text-small';} %>
-                                <p class="title text-center <%- textSize%>"><%-EzBob.formatPoundsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total)%>K</p>
+                                <p class="title text-center <%- textSize%>"><%-EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total)%></p>
                             </div>
                         </div>
                     </div>
@@ -288,7 +288,7 @@
                                 <div class="caption text-center">
                                     Market value
                                 </div>
-                                <p class="title text-center"><%- EzBob.formatPoundsNoDecimals(properties.MarketValue) %>K</p>
+                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -296,7 +296,7 @@
                                 <div class="caption text-center">
                                     Net Worth
                                 </div>
-                                <p class="title text-center blue"><%- EzBob.formatPoundsNoDecimals(properties.NetWorth) %>K</p>
+                                <p class="title text-center blue"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.NetWorth) %></p>
                                 <p class="title-small text-center">(<%- properties.NetWorthPercentages %>%)</p>
                             </div>
                         </div>
@@ -305,7 +305,7 @@
                                 <div class="caption text-center">
                                     Mortgages (<%- properties.NumberOfMortgages %>)
                                 </div>
-                                <p class="title text-center"><%- EzBob.formatPoundsNoDecimals(properties.SumOfMortgages) %>K</p>
+                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %></p>
                                 <p class="title-small text-center">(LTV: <%- properties.Ltv %>%)</p>
                             </div>
                         </div>
