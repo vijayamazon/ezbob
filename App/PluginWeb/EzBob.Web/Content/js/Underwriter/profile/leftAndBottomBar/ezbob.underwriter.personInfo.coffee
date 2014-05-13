@@ -9,6 +9,9 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         @bindTo @model, "change sync", @render, this
 
     onRender: ->
+        if (this.$el.find('.red_cell').length != 0)
+            this.$el.parent().parent().find('#customer-label-span').removeClass('label-success').addClass('label-warning')
+
         if @model.get('BrokerID')
             @$el.find('#with-broker').addClass 'with-broker'
 
