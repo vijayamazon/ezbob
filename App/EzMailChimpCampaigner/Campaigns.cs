@@ -48,12 +48,12 @@
 							Subject = Constants.FirstStepCustomersDayAfterSubject,
 						});
 					//week
-					dayList.Add(new Day
-						{
-							Condition = Constants.WeekConditionField,
-							TemplateId = Constants.FirstStepCustomersWeekTemplateId,
-							Subject = Constants.FirstStepCustomersWeekSubject
-						});
+					//dayList.Add(new Day
+					//	{
+					//		Condition = Constants.WeekConditionField,
+					//		TemplateId = Constants.FirstStepCustomersWeekTemplateId,
+					//		Subject = Constants.FirstStepCustomersWeekSubject
+					//	});
 					//dayList.Add(new Day
 					//{
 					//	Condition = Constants.ThreeDaysConditionField,
@@ -90,12 +90,12 @@
 							Subject = Constants.SecondStepCustomersTwoWeeksSubject,
 						});
 					//month
-					dayList.Add(new Day
-						{
-							Condition = Constants.MonthConditionField,
-							TemplateId = Constants.SecondStepCustomersMonthTemplateId,
-							Subject = Constants.SecondStepCustomersMonthSubject,
-						});
+					//dayList.Add(new Day
+					//	{
+					//		Condition = Constants.MonthConditionField,
+					//		TemplateId = Constants.SecondStepCustomersMonthTemplateId,
+					//		Subject = Constants.SecondStepCustomersMonthSubject,
+					//	});
 					break;
 				case Constants.CampaignsType.DidntTakeLoan:
 					//day after
