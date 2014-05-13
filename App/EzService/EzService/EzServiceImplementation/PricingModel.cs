@@ -25,5 +25,17 @@
 				Value = instance.Model
 			};
 		}
+
+		public DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare)
+		{
+			GetPricingModelDefaultRate instance;
+			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId, companyShare);
+
+			return new DecimalActionResult
+			{
+				MetaData = result,
+				Value = instance.DefaultRate
+			};
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

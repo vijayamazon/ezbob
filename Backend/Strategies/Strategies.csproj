@@ -90,6 +90,7 @@
     <Compile Include="CalculateVatReturnSummary.cs" />
     <Compile Include="LoadVatReturnSummary.cs" />
     <Compile Include="MarketplaceInstantUpdate.cs" />
+    <Compile Include="PricingModel\GetPricingModelDefaultRate.cs" />
     <Compile Include="PricingModel\PricingModelCalculate.cs" />
     <Compile Include="PricingModel\GetPricingModelModel.cs" />
     <Compile Include="PricingModel\PricingModelModel.cs" />

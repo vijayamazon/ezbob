@@ -67,7 +67,7 @@
 			if (dt.Rows.Count == 1)
 			{
 				var sr = new SafeReader(dt.Rows[0]);
-				loanAmount = sr["SystemCalculatedSum"];
+				loanAmount = sr["ApprovedAmount"];
 				loanTerm = sr["RepaymentPeriod"];
 			}
 		}
@@ -77,36 +77,9 @@
 			defaultRateCompanyShare = CurrentValues.Instance.PricingModelDefaultRateCompanyShare;
 			defaultRateCustomerShare = 1 - defaultRateCompanyShare;
 
-			int consumerScore = DB.ExecuteScalar<int>(
-				"GetExperianScore",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-
-			int companyScore = DB.ExecuteScalar<int>(
-				"GetCompanyScore",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-
-			decimal companyValue = GetDefaultRateCompany(companyScore);
-			decimal customerValue = GetDefaultRateCustomer(consumerScore);
-
-			return defaultRateCompanyShare*companyValue + defaultRateCustomerShare*customerValue;
-		}
-
-		private decimal GetDefaultRateCompany(int key)
-		{
-			DataTable dt = DB.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "DefaultRateCompany"), new QueryParameter("Key", key));
-			var sr = new SafeReader(dt.Rows[0]);
-			return sr["Value"];
-		}
-
-		private decimal GetDefaultRateCustomer(int key)
-		{
-			DataTable dt = DB.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "DefaultRateCustomer"), new QueryParameter("Key", key));
-			var sr = new SafeReader(dt.Rows[0]);
-			return sr["Value"];
+			var instance = new GetPricingModelDefaultRate(customerId, defaultRateCompanyShare, DB, Log);
+			instance.Execute();
+			return instance.DefaultRate;
 		}
 	}
 }

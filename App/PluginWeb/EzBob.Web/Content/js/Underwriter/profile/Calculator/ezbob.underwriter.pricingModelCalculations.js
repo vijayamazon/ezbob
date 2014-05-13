@@ -104,15 +104,34 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         var tenureMonths = this.model.get('LoanTerm') * this.model.get('TenurePercents');
         this.model.set('TenureMonths', tenureMonths);
     },
+    
+    getDefaultRateFromServer: function() {
+        var that = this;
+        var request = $.post(
+			window.gRootPath + 'Underwriter/PricingModelCalculations/GetDefaultRate',
+			{
+			    customerId: this.model.get('Id'),
+			    companyShare: this.model.get('DefaultRateCompanyShare')
+			}
+		);
+
+        request.success(function (res) {
+            that.model.set('DefaultRate', res);
+            that.renderAndRememberExpanded();
+            UnBlockUi();
+        });
+    },
 
     defaultRateCompanyShareChanged: function () {
         var customerShare = 1 - this.model.get('DefaultRateCompanyShare');
         this.model.set('DefaultRateCustomerShare', customerShare);
+        this.getDefaultRateFromServer();
     },
 
     defaultRateCustomerShareChanged: function () {
         var companyShare = 1 - this.model.get('DefaultRateCustomerShare');
         this.model.set('DefaultRateCompanyShare', companyShare);
+        this.getDefaultRateFromServer();
     },
 
     setupFeePoundsChanged: function () {

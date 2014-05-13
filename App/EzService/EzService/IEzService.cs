@@ -371,6 +371,8 @@
 		[OperationContract]
 		PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model);
 
+		[OperationContract]
+		DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare);
 
 
 

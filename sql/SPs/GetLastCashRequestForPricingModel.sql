@@ -14,7 +14,7 @@ BEGIN
 	SELECT @LatestCashRequest = MAX(Id) FROM CashRequests WHERE IdCustomer = @CustomerId
 	
 	SELECT 
-		SystemCalculatedSum,
+		CASE WHEN ManagerApprovedSum IS NULL THEN SystemCalculatedSum ELSE ManagerApprovedSum END AS ApprovedAmount,
 		RepaymentPeriod
 	FROM 
 		CashRequests 
