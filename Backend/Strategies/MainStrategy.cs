@@ -14,6 +14,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EzBob.Backend.Strategies.MailStrategies;
 
 	#region class MainStrategy
 
@@ -168,12 +169,8 @@
 				else {
 					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy");
 
-					var variables = new Dictionary<string, string> {
-						{"FirstName", appFirstName},
-						{"EzbobAccount", "https://app.ezbob.com/Customer/Profile"}
-					};
+					new RejectUser(customerId, DB, Log).Execute();
 
-					mailer.Send("Mandrill - Rejection email", variables, new Addressee(appEmail));
 					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
 				} // if
 			}
