@@ -150,6 +150,20 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
         @$el.find('.profile-tabs a[data-toggle="tab"]').on('shown.bs.tab', ((e) =>
             @setLastShownProfileSection $(e.target).attr('href').substr(1)
+            if($(e.currentTarget).attr("href") is "#dashboard")
+                $(".inline-sparkline").sparkline("html",
+                      width: "100%"
+                      height: "100%"
+                      lineWidth: 2
+                      spotRadius: 3
+                      lineColor: "#88bbc8"
+                      fillColor: "#f2f7f9"
+                      spotColor: "#14ae48"
+                      maxSpotColor: "#e72828"
+                      minSpotColor: "#f7941d"
+                      chartRangeMin: -1
+                      valueSpots: { ':549' : 'red', '550:749' : 'yellow', '750:' : 'green' }
+                )
         ))
 
         this
