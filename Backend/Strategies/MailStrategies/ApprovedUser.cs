@@ -48,7 +48,7 @@
 			};
 
 
-			TemplateName = numOfApprovals == 0
+			TemplateName = numOfApprovals == 1
 				? "Mandrill - Approval (1st time)"
 				: "Mandrill - Approval (not 1st time)";
 
