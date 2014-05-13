@@ -110,5 +110,13 @@
 		} // LoadVatReturnSummary
 
 		#endregion method LoadVatReturnSummary
+
+		#region method AndRecalculateVatReturnSummaryForAll
+
+		public ActionMetaData AndRecalculateVatReturnSummaryForAll() {
+			return Execute<AndRecalculateVatReturnSummaryForAll>(null, null);
+		} // AndRecalculateVatReturnSummaryForAll
+
+		#endregion method AndRecalculateVatReturnSummaryForAll
 	} // class EzServiceImplementation
 } // namespace EzService

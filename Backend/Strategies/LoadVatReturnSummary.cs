@@ -27,13 +27,9 @@
 		public override void Execute() {
 			Summary = new VatReturnSummary();
 
-			bool bTotalRow = true;
-
 			m_oSp.ForEachRowSafe((sr, bRowsetStart) => {
-				if (bTotalRow) {
+				if (sr.ContainsField("SummaryID", sNotFoundIndicator: "SummaryPeriodID"))
 					sr.Fill(Summary);
-					bTotalRow = false;
-				}
 				else
 					Summary.Quarters.Add(sr.Fill<VatReturnQuarter>());
 

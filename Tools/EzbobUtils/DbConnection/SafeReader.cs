@@ -173,7 +173,7 @@
 
 		#region method ContainsField
 
-		public object ContainsField(string sIdx) {
+		public bool ContainsField(string sIdx) {
 			if (!ReferenceEquals(m_oRow, null))
 				return m_oRow.Table.Columns.Contains(sIdx);
 
@@ -186,7 +186,26 @@
 			return false;
 		} // ContainsField
 
-		public object ContainsField(int nIdx) {
+		public bool ContainsField(string sIdx, string sNotFoundIndicator) {
+			if (!ReferenceEquals(m_oRow, null))
+				return m_oRow.Table.Columns.Contains(sIdx);
+
+			if (!ReferenceEquals(m_oReader, null)) {
+				for (var i = 0; i < m_oReader.FieldCount; i++) {
+					string sName = m_oReader.GetName(i);
+
+					if (sName == sIdx)
+						return true;
+
+					if (sName == sNotFoundIndicator)
+						return false;
+				} // for
+			} // if
+
+			return false;
+		} // ContainsField
+
+		public bool ContainsField(int nIdx) {
 			if (!ReferenceEquals(m_oRow, null))
 				return ((0 <= nIdx) && (nIdx < m_oRow.Table.Columns.Count));
 

@@ -70,7 +70,8 @@
 				if (biz == null) {
 					biz = new Business {
 						Name = dataItem.BusinessName,
-						Address = sBizAddr
+						Address = sBizAddr,
+						RegistrationNo = dataItem.RegistrationNo, 
 					};
 
 					_businessRepository.SaveOrUpdate(biz);

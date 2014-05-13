@@ -709,6 +709,10 @@ table.internal-table {
     border-bottom: 3px solid black!important;
 }
 
+.vat-return-summary .bank {
+    border-left: 1px solid #dddddd;
+}
+
 .fraud-form .control-group {
     margin-bottom: 5px;
 }

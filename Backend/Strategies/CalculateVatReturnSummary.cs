@@ -669,7 +669,7 @@
 
 				Tax = null; // TODO: some day...
 
-				Ebida = TotalValueAdded - Salaries - (Tax ?? 0);
+				Ebida = (TotalValueAdded ?? 0) - (Salaries ?? 0) - (Tax ?? 0);
 
 				PctOfAnnual = Div(Ebida, Revenues);
 

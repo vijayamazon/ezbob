@@ -231,9 +231,12 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:VatReturnSummaryBase">
         <xs:sequence>
+          <xs:element minOccurs="0" name="BusinessAddress" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="BusinessID" type="xs:int" />
+          <xs:element minOccurs="0" name="BusinessName" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="CurrencyCode" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Quarters" nillable="true" type="tns:ArrayOfVatReturnQuarter" />
+          <xs:element minOccurs="0" name="RegistrationNo" nillable="true" type="xs:long" />
           <xs:element minOccurs="0" name="SalariesMultiplier" nillable="true" type="xs:decimal" />
         </xs:sequence>
       </xs:extension>

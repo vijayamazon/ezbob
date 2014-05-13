@@ -15,6 +15,15 @@
 		public int BusinessID { get; set; }
 
 		[DataMember]
+		public long? RegistrationNo { get; set; }
+
+		[DataMember]
+		public string BusinessName { get; set; }
+
+		[DataMember]
+		public string BusinessAddress { get; set; }
+
+		[DataMember]
 		public string CurrencyCode { get; set; }
 
 		[DataMember]
@@ -29,9 +38,17 @@
 		public override string ToString() {
 			var os = new StringBuilder();
 
-			os.AppendFormat(
-				"\n\n\tBusiness ID: {0}\n\tCurrency code: {1}\n\tSalaries multiplier: {2}\n\n\t*** Quarters:\n\t{3}\n",
+			string sBusiness = string.Format(
+				"{0} - {1}: {2}\n{3}",
 				BusinessID,
+				RegistrationNo,
+				BusinessName,
+				BusinessAddress
+			);
+
+			os.AppendFormat(
+				"\n\n\tBusiness: {0}\n\tCurrency code: {1}\n\tSalaries multiplier: {2}\n\n\t*** Quarters:\n\t{3}\n",
+				sBusiness,
 				CurrencyCode,
 				SalariesMultiplier,
 				string.Join("\n\t", Quarters.Select(x => x.ToString("\t\t")))

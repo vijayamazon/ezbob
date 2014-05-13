@@ -957,6 +957,11 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oLog.Msg("Result is: {0}", oResult.Summary);
 		} // LoadVatReturnSummary
 
+		[Activation]
+		private void AndRecalculateVatReturnSummaryForAll() {
+			serviceClient.AndRecalculateVatReturnSummaryForAll();
+		} // AndRecalculateVatReturnSummaryForAll
+
 		// ReSharper restore UnusedMember.Local
 
 		#endregion strategy activators

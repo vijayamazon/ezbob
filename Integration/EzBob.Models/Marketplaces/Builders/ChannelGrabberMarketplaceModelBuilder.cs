@@ -10,7 +10,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using Integration.ChannelGrabberConfig;
 	using NHibernate;
 	using NHibernate.Linq;
-	using StructureMap;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 
 	class ChannelGrabberMarketplaceModelBuilder : MarketplaceModelBuilder {
 		#region public
@@ -108,12 +109,16 @@ namespace EzBob.Models.Marketplaces.Builders {
 				oVatReturn.Sort(VatReturnEntry.CompareForSort);
 				oRtiTaxMonths.Sort(RtiTaxMonthEntry.CompareForSort);
 
+				var oServiceClient = new ServiceClient();
+				VatReturnSummaryActionResult vrsar = oServiceClient.Instance.LoadVatReturnSummary(mp.Id);
+
 				model.CGData = new ChannelGrabberHmrcData {
 					VatReturn = oVatReturn,
 					RtiTaxMonths = oRtiTaxMonths,
 					BankStatement = new BankStatementDataModel(),
 					BankStatementAnnualized = new BankStatementDataModel(),
-					SalariesMultiplier = CurrentValues.Instance.HmrcSalariesMultiplier
+					SalariesMultiplier = CurrentValues.Instance.HmrcSalariesMultiplier,
+					VatReturnSummary = vrsar.Summary,
 				};
 
 				break;

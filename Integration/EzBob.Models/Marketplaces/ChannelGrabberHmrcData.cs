@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-
-namespace EzBob.Models.Marketplaces {
+﻿namespace EzBob.Models.Marketplaces {
 	using System;
+	using System.Collections.Generic;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using Ezbob.Backend.Models;
 
 	#region class ChannelGrabberHmrcData
 
@@ -13,14 +13,15 @@ namespace EzBob.Models.Marketplaces {
 		public BankStatementDataModel BankStatement { get; set; }
 		public BankStatementDataModel BankStatementAnnualized { get; set; }
 		public decimal SalariesMultiplier { get; set; }
+		public VatReturnSummary VatReturnSummary { get; set; }
 	} // class ChannelGrabberHmrcData
 
 	#endregion class ChannelGrabberHmrcData
 
 	#region class BankStatementDataModel
+
 	[Serializable]
-	public class BankStatementDataModel
-	{
+	public class BankStatementDataModel {
 		public int PeriodMonthsNum { get; set; }
 		public string Period { get; set; }
 		public double PercentOfAnnual { get; set; }
@@ -34,7 +35,7 @@ namespace EzBob.Models.Marketplaces {
 		public double PercentOfAnnual2 { get; set; }
 		public double ActualLoansRepayment { get; set; }
 		public double FreeCashFlow { get; set; }
-	}
+	} // class BankStatementDataModel
 	
 	#endregion class BankStatementDataModel
 } // namespace EzBob.Models.Marketplaces

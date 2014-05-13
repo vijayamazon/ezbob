@@ -26,6 +26,9 @@ BEGIN
 		s.SummaryID,
 		s.CustomerID,
 		s.BusinessID,
+		b.RegistrationNo,
+		b.Name AS BusinessName,
+		b.Address AS BusinessAddress,
 		s.CreationDate,
 		s.SalariesMultiplier,
 		s.CustomerMarketplaceID,
@@ -43,6 +46,7 @@ BEGIN
 		s.FreeCashFlow
 	FROM
 		MP_VatReturnSummary s
+		INNER JOIN Business b ON s.BusinessID = b.Id
 	WHERE
 		s.SummaryID = @SummaryID
 	

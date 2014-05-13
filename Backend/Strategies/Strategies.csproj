@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agreement.cs" />
+    <Compile Include="AndRecalculateVatReturnSummaryForAll.cs" />
     <Compile Include="AStrategy.cs" />
     <Compile Include="AmlChecker.cs" />
     <Compile Include="AutoDecisions\Approval.cs" />

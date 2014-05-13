@@ -55,6 +55,8 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
         this.$el.html(this.template(data));
 
+		this.renderHmrcSummary(data);
+
         // TODO: story EZ-1971 fix it. The issue: when this tooltip is enabled moving mouse over (or out) the
         // element with the tooltip causes entire dialog window content to shake a bit.
 
@@ -77,6 +79,146 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         });
         return this;
     },
+
+	renderHmrcSummary: function(data) {
+		var oMp = data.marketplaces[0] || data.accounts[0];
+
+		if (!oMp || !oMp.CGData || !oMp.CGData.VatReturnSummary) {
+			this.$el.find('.vat-return-summary').hide();
+			this.$el.find('.vat-return-no-summary').show();
+			return;
+		} // if
+
+		var oBank = oMp.CGData.BankStatement || {};
+		var oAnalBank = oMp.CGData.BankStatementAnnualized || {};
+
+		this.$el.find('.vat-return-no-summary').hide();
+		var oTbl = this.$el.find('.vat-return-summary').show();
+
+		var oSummary = oMp.CGData.VatReturnSummary;
+
+		var oColumns = { total: '.vrs-total', };
+
+		for (var i = 0; i < 5; i++) {
+			var oQuarter = oSummary.Quarters[i];
+			var sQclass = '.vrs-q' + i;
+
+			if (!oQuarter) {
+				oTbl.find(sQclass).remove();
+				continue;
+			} // if
+
+			oColumns[i] = sQclass;
+
+			oTbl.find(sQclass + '.qtr-dates').text(
+				EzBob.formatDateMY(moment(oQuarter.DateFrom).toDate()) + ' - ' +
+				EzBob.formatDateMY(moment(oQuarter.DateTo).toDate())
+			);
+
+			if (oBank.Period)
+				oTbl.find('.bank-period').text(oBank.Period);
+		} // for
+
+		if (oSummary.RegistrationNo)
+			oTbl.find('.business-reg-no').text(oSummary.RegistrationNo);
+		else
+			oTbl.find('.business-reg-no').html('&ndash;');
+
+		var aryDetails = [ oSummary.BusinessName ].concat((oSummary.BusinessAddress || '').split('\n'));
+		var oDetails = oTbl.find('.business-details');
+
+		_.each(aryDetails, function(s) {
+			var t = $.trim(s);
+
+			if (t)
+				oDetails.append($('<div />').text(t));
+		}); // for
+
+		oTbl.find('tr[data-summary-field]').each(function() {
+			var oTR = $(this);
+			var sFieldName = oTR.attr('data-summary-field');
+			var sFormat = oTR.attr('data-summary-format');
+
+			for (var i in oColumns) {
+				var sQclass = oColumns[i];
+
+				var oValue = (i == 'total') ? oSummary[sFieldName] : oSummary.Quarters[i][sFieldName];
+
+				var sDisplayValue = null;
+
+				if (oValue) {
+					switch (sFormat) {
+					case '%':
+						sDisplayValue = EzBob.formatPercents(oValue);
+						break;
+
+					case '%0':
+						sDisplayValue = EzBob.formatPercents0(oValue);
+						break;
+
+					case '£i':
+						sDisplayValue = EzBob.formatPoundsAsInt(oValue);
+						break;
+					} // switch
+				} // if
+
+				// console.log(i, ':', sFieldName, '=', oValue, '->', sDisplayValue);
+
+				if (sDisplayValue)
+					oTR.find(sQclass).text(sDisplayValue);
+				else
+					oTR.find(sQclass).html('&ndash;');
+			} // for each quarter/total column
+
+			switch (sFieldName) {
+			case 'Revenues':
+				oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Revenues));
+				oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.Revenues / oSummary.Revenues - 1, 2));
+				break;
+
+			case 'Opex':
+				oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Opex));
+				oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.Opex / oSummary.Opex - 1, 2));
+				break;
+
+			case 'TotalValueAdded':
+				oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.TotalValueAdded));
+				oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.TotalValueAdded / oSummary.TotalValueAdded - 1, 2));
+				break;
+
+			case 'PctOfRevenues':
+				oTR.find('.bank').text(EzBob.formatPercents(oBank.PercentOfRevenues, 2));
+				break;
+
+			case 'Salaries':
+				var nCalcd = (oSummary.Salaries || 0) * oSummary.SalariesMultiplier;
+				oTR.find('.multiplier').text(EzBob.formatPercents(oSummary.SalariesMultiplier));
+				oTR.find('.total').text(EzBob.formatPoundsAsInt(oSummary.Salaries || 0));
+				oTR.find('.vrs-total').text(EzBob.formatPoundsAsInt(nCalcd));
+				oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Salaries));
+				oTR.find('.annualized').text(EzBob.formatPercents((nCalcd ? oAnalBank.Salaries / nCalcd : 0) - 1, 2));
+				break;
+
+			case 'Tax':
+				oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Tax));
+				break;
+
+			case 'Ebida':
+				oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Ebida));
+				oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.Ebida / oSummary.Ebida - 1, 2));
+				break;
+
+			case 'ActualLoanRepayment':
+				oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.ActualLoansRepayment));
+				break;
+
+			case 'FreeCashFlow':
+				oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.FreeCashFlow));
+				oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.FreeCashFlow / oSummary.Ebida - 1, 2));
+				break;
+			} // switch
+		}); // for each row
+	}, // renderHmrcSummary
 
     events: {
         "click .reCheckMP": "reCheck",

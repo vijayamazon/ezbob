@@ -108,6 +108,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetWizardConfigs_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetWizardConfigs" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetWizardConfigs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetWizardConfigsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_FinishWizard_InputMessage">
     <wsdl:part name="parameters" element="tns:FinishWizard" />
   </wsdl:message>
@@ -678,6 +684,12 @@
   <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
     <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAll" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAllResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_QuickOffer_InputMessage">
     <wsdl:part name="parameters" element="tns:QuickOffer" />
   </wsdl:message>
@@ -689,12 +701,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_QuickOfferWithPrerequisites_OutputMessage">
     <wsdl:part name="parameters" element="tns:QuickOfferWithPrerequisitesResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetWizardConfigs_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetWizardConfigs" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetWizardConfigs_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetWizardConfigsResponse" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -719,6 +725,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="GetWizardConfigs">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="FinishWizard">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FinishWizard" message="tns:IEzService_FinishWizard_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FinishWizardResponse" message="tns:IEzService_FinishWizard_OutputMessage" />
@@ -1099,6 +1109,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="QuickOffer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferResponse" message="tns:IEzService_QuickOffer_OutputMessage" />
@@ -1106,10 +1120,6 @@
     <wsdl:operation name="QuickOfferWithPrerequisites">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites" message="tns:IEzService_QuickOfferWithPrerequisites_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse" message="tns:IEzService_QuickOfferWithPrerequisites_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetWizardConfigs">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1166,6 +1176,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetWizardConfigs">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetWizardConfigs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="FinishWizard">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FinishWizard" style="document" />
       <wsdl:input>
@@ -2021,6 +2040,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="QuickOffer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
       <wsdl:input>
@@ -2032,15 +2060,6 @@
     </wsdl:operation>
     <wsdl:operation name="QuickOfferWithPrerequisites">
       <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisites" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetWizardConfigs">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetWizardConfigs" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -879,20 +879,9 @@ EzBob.formatPercents1 = function (num) {
     return s;
 };
 
-EzBob.formatPercents0 = function (numerator, denominator) {
-    if (numerator === undefined || numerator == null || numerator === '')
+EzBob.formatPercents0 = function (num) {
+    if (num === undefined || num == null || num === '')
         return '';
-
-    var num = numerator;
-
-    if (denominator !== undefined && denominator != null && denominator !== '') {
-        var x = parseFloat(denominator);
-
-        if (x == 0)
-            return '';
-
-        num /= x;
-    } // if
 
     return EzBob.formatIntWithCommas(parseInt(num * 100)) + "%";
 };

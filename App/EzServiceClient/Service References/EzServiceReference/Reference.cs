@@ -184,6 +184,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DateTimeActionResult))]
@@ -200,7 +201,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.QuickOfferActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SerializedDataTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -240,6 +240,45 @@ namespace ServiceClientProxy.EzServiceReference {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="WizardConfigsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class WizardConfigsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsSmsValidationActiveField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NumberOfMobileCodeAttemptsField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsSmsValidationActive {
+            get {
+                return this.IsSmsValidationActiveField;
+            }
+            set {
+                if ((this.IsSmsValidationActiveField.Equals(value) != true)) {
+                    this.IsSmsValidationActiveField = value;
+                    this.RaisePropertyChanged("IsSmsValidationActive");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int NumberOfMobileCodeAttempts {
+            get {
+                return this.NumberOfMobileCodeAttemptsField;
+            }
+            set {
+                if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
+                    this.NumberOfMobileCodeAttemptsField = value;
+                    this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
+                }
             }
         }
     }
@@ -831,45 +870,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="WizardConfigsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class WizardConfigsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsSmsValidationActiveField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int NumberOfMobileCodeAttemptsField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsSmsValidationActive {
-            get {
-                return this.IsSmsValidationActiveField;
-            }
-            set {
-                if ((this.IsSmsValidationActiveField.Equals(value) != true)) {
-                    this.IsSmsValidationActiveField = value;
-                    this.RaisePropertyChanged("IsSmsValidationActive");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int NumberOfMobileCodeAttempts {
-            get {
-                return this.NumberOfMobileCodeAttemptsField;
-            }
-            set {
-                if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
-                    this.NumberOfMobileCodeAttemptsField = value;
-                    this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
                 }
             }
         }
@@ -1566,6 +1566,9 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
+        ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId);
         
@@ -1851,14 +1854,14 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate", ReplyAction="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll", ReplyAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData AndRecalculateVatReturnSummaryForAll();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
         ServiceClientProxy.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites", ReplyAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse")]
         ServiceClientProxy.EzServiceReference.QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
-        ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1886,6 +1889,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
+            return base.Channel.GetWizardConfigs();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData FinishWizard(Ezbob.Backend.Models.FinishWizardArgs oArgs, int underwriterId) {
@@ -2268,16 +2275,16 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.MarketplaceInstantUpdate(nMarketplaceID);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData AndRecalculateVatReturnSummaryForAll() {
+            return base.Channel.AndRecalculateVatReturnSummaryForAll();
+        }
+        
         public ServiceClientProxy.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
             return base.Channel.QuickOffer(customerId, saveOfferToDB);
         }
         
         public ServiceClientProxy.EzServiceReference.QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB) {
             return base.Channel.QuickOfferWithPrerequisites(customerId, saveOfferToDB);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
-            return base.Channel.GetWizardConfigs();
         }
     }
 }

@@ -74,10 +74,22 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetWizardConfigs">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetWizardConfigsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetWizardConfigsResult" nillable="true" type="q7:WizardConfigsActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="FinishWizard">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="oArgs" nillable="true" type="q7:FinishWizardArgs" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="oArgs" nillable="true" type="q8:FinishWizardArgs" />
         <xs:element minOccurs="0" name="underwriterId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -85,7 +97,7 @@
   <xs:element name="FinishWizardResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="FinishWizardResult" nillable="true" type="q8:ActionMetaData" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="FinishWizardResult" nillable="true" type="q9:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -99,7 +111,7 @@
   <xs:element name="GetCustomerStateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStateResult" nillable="true" type="q9:StringActionResult" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStateResult" nillable="true" type="q10:StringActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -111,7 +123,7 @@
   <xs:element name="GetCustomerStatusRefreshIntervalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStatusRefreshIntervalResult" nillable="true" type="q10:IntActionResult" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStatusRefreshIntervalResult" nillable="true" type="q11:IntActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -127,7 +139,7 @@
   <xs:element name="CreateUnderwriterResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="CreateUnderwriterResult" nillable="true" type="q11:ActionMetaData" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="CreateUnderwriterResult" nillable="true" type="q12:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -142,7 +154,7 @@
   <xs:element name="GetExperianConsumerCacheDateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetExperianConsumerCacheDateResult" nillable="true" type="q12:DateTimeActionResult" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetExperianConsumerCacheDateResult" nillable="true" type="q13:DateTimeActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -156,7 +168,7 @@
   <xs:element name="GetExperianCompanyCacheDateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetExperianCompanyCacheDateResult" nillable="true" type="q13:DateTimeActionResult" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetExperianCompanyCacheDateResult" nillable="true" type="q14:DateTimeActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -171,7 +183,7 @@
   <xs:element name="GetLatestInterestRateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetLatestInterestRateResult" nillable="true" type="q14:DecimalActionResult" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetLatestInterestRateResult" nillable="true" type="q15:DecimalActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -186,7 +198,7 @@
   <xs:element name="GetCompanySeniorityResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCompanySeniorityResult" nillable="true" type="q15:DateTimeActionResult" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCompanySeniorityResult" nillable="true" type="q16:DateTimeActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -201,7 +213,7 @@
   <xs:element name="GetExperianAccountsCurrentBalanceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetExperianAccountsCurrentBalanceResult" nillable="true" type="q16:IntActionResult" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetExperianAccountsCurrentBalanceResult" nillable="true" type="q17:IntActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -216,7 +228,7 @@
   <xs:element name="GetPricingModelModelResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetPricingModelModelResult" nillable="true" type="q17:PricingModelModelActionResult" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetPricingModelModelResult" nillable="true" type="q18:PricingModelModelActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -225,14 +237,14 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="underwriterId" type="xs:int" />
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" minOccurs="0" name="model" nillable="true" type="q18:PricingModelModel" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" minOccurs="0" name="model" nillable="true" type="q19:PricingModelModel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PricingModelCalculateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="PricingModelCalculateResult" nillable="true" type="q19:PricingModelModelActionResult" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="PricingModelCalculateResult" nillable="true" type="q20:PricingModelModelActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1524,6 +1536,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="AndRecalculateVatReturnSummaryForAll">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AndRecalculateVatReturnSummaryForAllResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q111="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AndRecalculateVatReturnSummaryForAllResult" nillable="true" type="q111:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="QuickOffer">
     <xs:complexType>
       <xs:sequence>
@@ -1535,7 +1559,7 @@
   <xs:element name="QuickOfferResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q111="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferResult" nillable="true" type="q111:QuickOfferActionResult" />
+        <xs:element xmlns:q112="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferResult" nillable="true" type="q112:QuickOfferActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1550,19 +1574,7 @@
   <xs:element name="QuickOfferWithPrerequisitesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q112="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferWithPrerequisitesResult" nillable="true" type="q112:QuickOfferActionResult" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetWizardConfigs">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetWizardConfigsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q113="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetWizardConfigsResult" nillable="true" type="q113:WizardConfigsActionResult" />
+        <xs:element xmlns:q113="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferWithPrerequisitesResult" nillable="true" type="q113:QuickOfferActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
