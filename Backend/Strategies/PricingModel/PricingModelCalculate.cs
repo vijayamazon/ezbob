@@ -44,14 +44,8 @@
 			var aprCalc = new APRCalculator();
 			Model.Apr = (decimal)(loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date) / 100);
 
-			Model.CostOfDebtOutput = 0;
-			Model.InterestRevenue = 0;
-			foreach (LoanScheduleItem scheuldeItem in loan.Schedule)
-			{
-				Model.InterestRevenue += scheuldeItem.Interest;
-				Model.CostOfDebtOutput += scheuldeItem.AmountDue * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
-			}
-			Model.InterestRevenue *= (100 - Model.DefaultRate) / 100;
+			Model.CostOfDebtOutput = GetCostOfDebt(loan.Schedule);
+			Model.InterestRevenue = GetInterestRevenue(loan.Schedule);
 
 			Model.Revenue = Model.FeesRevenue + Model.InterestRevenue;
 
@@ -147,19 +141,31 @@
 			return interestRateForMinBalanceAbs;
 		}
 
+		private decimal GetCostOfDebt(IEnumerable<LoanScheduleItem> schedule)
+		{
+			decimal costOfDebtOutput = 0;
+			decimal balanceAtBeginningOfMonth = Model.LoanAmount;
+			foreach (LoanScheduleItem scheuldeItem in schedule)
+			{
+				costOfDebtOutput += balanceAtBeginningOfMonth * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
+				balanceAtBeginningOfMonth = scheuldeItem.Balance;
+			}
+
+			return costOfDebtOutput;
+		}
+
+		private decimal GetInterestRevenue(IEnumerable<LoanScheduleItem> schedule)
+		{
+			decimal interestRevenue = schedule.Sum(scheuldeItem => scheuldeItem.Interest);
+			interestRevenue *= (100 - Model.DefaultRate) / 100;
+			return interestRevenue;
+		}
+
 		private decimal CalculateBalance(decimal interestRate)
 		{
 			Loan loan = CreateLoan(interestRate);
-
-			decimal costOfDebtOutput = 0;
-			decimal interestRevenue = 0;
-			foreach (LoanScheduleItem scheuldeItem in loan.Schedule)
-			{
-				interestRevenue += scheuldeItem.Interest;
-				costOfDebtOutput += scheuldeItem.Balance * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
-			}
-			interestRevenue *= (100 - Model.DefaultRate) / 100;
-
+			decimal costOfDebtOutput = GetCostOfDebt(loan.Schedule);
+			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
 			decimal revenue = Model.SetupFeePounds + interestRevenue;
 			decimal grossProfit = revenue - Model.Cogs;
 			decimal ebitda = grossProfit - Model.OpexAndCapex;
