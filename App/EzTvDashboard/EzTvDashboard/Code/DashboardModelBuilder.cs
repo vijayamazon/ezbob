@@ -11,6 +11,8 @@
 		private AConnection Db { get; set; }
 		private static DateTime LastChecked { get; set; }
 		private static string GaCertThumb { get; set; }
+		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(DashboardModelBuilder));
+
 		public DashboardModelBuilder()
 		{
 			Db = new SqlConnection();
@@ -66,7 +68,11 @@
 				{
 					model.Stats["M_UkVisitors"] = monthToDateAnalytics["United Kingdom"].Visitors;
 				}
-			}catch{}
+			}
+			catch (Exception ex)
+			{
+				Log.ErrorFormat("Failed to load google analytics values \n{0}",ex);
+			}
 
 			return model;
 		}

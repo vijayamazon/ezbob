@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barrymore", "..\..\Tools\Ez
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleAnalyticsLib", "..\..\Integration\GoogleAnalyticsLib\GoogleAnalyticsLib.csproj", "{47A4A5A8-AC7C-4F76-ACAB-BE61EAEE1F50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigManager", "..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj", "{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{47A4A5A8-AC7C-4F76-ACAB-BE61EAEE1F50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A4A5A8-AC7C-4F76-ACAB-BE61EAEE1F50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47A4A5A8-AC7C-4F76-ACAB-BE61EAEE1F50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
