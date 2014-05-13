@@ -283,7 +283,7 @@
 			
 			AuthorizationServerDescription objAuthServerDesc = GoogleAuthenticationServer.Description;
 			
-			var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+			var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
 			store.Open(OpenFlags.ReadOnly);
 			var cert = store.Certificates.Find(X509FindType.FindByThumbprint, thumb, false);
 			if (cert.Count == 0)
@@ -291,6 +291,8 @@
 				Log.Error("GA Certificate not found");
 				throw new Exception("Certificate not found");
 			}
+
+			Log.Debug("certs found {0}, first: {1}", cert.Count, cert[0].FriendlyName);
 			var objClient = new AssertionFlowClient(objAuthServerDesc, cert[0]) { ServiceAccountId = strSrvAccEmailId, Scope = scopeUrl };
 			var objAuth = new OAuth2Authenticator<AssertionFlowClient>(objClient, AssertionFlowClient.GetState);
 			return objAuth;
