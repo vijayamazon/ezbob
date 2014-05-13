@@ -14,10 +14,10 @@ namespace EzAnalyticsConsoleClient {
 
 		static void Main(string[] args) {
 			var oLog = new LegacyLog();
-
 			var app = new GoogleAnalytics(oLog);
 			Environment = new EzEnv(oLog);
-
+			string thumb = System.Configuration.ConfigurationManager.AppSettings["gaCertThumb"];
+			
 			if (Environment.Name == Name.Dev) {
 				Log = new ConsoleLog(oLog);
 
@@ -26,7 +26,8 @@ namespace EzAnalyticsConsoleClient {
 				if ((args.Length > 1) && (args[0] == "--date"))
 					DateTime.TryParseExact(args[1], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out oDate);
 
-				if (app.Init(oDate))
+				
+				if (app.Init(oDate, thumb))
 				{
 					m_oReportDate = oDate;
 					Run(app);
@@ -37,7 +38,7 @@ namespace EzAnalyticsConsoleClient {
 			}
 			else {
 				try {
-					if (app.Init(DateTime.Today))
+					if (app.Init(DateTime.Today, thumb))
 						Run(app);
 
 					Done();

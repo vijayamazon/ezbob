@@ -24,24 +24,16 @@
 
 		#region method Init
 
-		public bool Init(DateTime oDate, string path = null) {
+		public bool Init(DateTime oDate, string thumb) {
 			Log.Debug("Program.Init started...");
 
 			m_oReportDate = oDate;
 
 			Log.Debug("Processing analytics for {0}", m_oReportDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
-
-			string strKeyFile =
-				Path.Combine(
-					string.IsNullOrEmpty(path)
-						? Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-						: path,
-					GoogleDataFetcher.KeyFileName
-					);
-
+			
 			Log.Debug("Creating authentication data...");
-
-			var objAuth = ObjGetOAuth2(strKeyFile, string.Empty, GoogleDataFetcher.ServiceAccountUser, GoogleDataFetcher.Scope); //Authentication data returned
+			
+			var objAuth = ObjGetOAuth2(thumb, GoogleDataFetcher.ServiceAccountUser, GoogleDataFetcher.Scope); //Authentication data returned
 
 			Log.Debug("Creating initialser...");
 
@@ -285,15 +277,21 @@
 
 		#region method ObjGetOAuth2
 
-		private OAuth2Authenticator<AssertionFlowClient> ObjGetOAuth2(string strPrivateFilePath, string strPrivateFilePassword, string strServiceAccEmailId, string strScope) {
+		private OAuth2Authenticator<AssertionFlowClient> ObjGetOAuth2(string thumb, string strServiceAccEmailId, string strScope) {
 			string scopeUrl = "https://www.googleapis.com/auth/" + strScope;
 			string strSrvAccEmailId = strServiceAccEmailId;
-			string strKeyFile = strPrivateFilePath; //KeyFile: This is the physical path to the key file you downloaded when you created your Service Account.
-			string strKeyPassword = (strPrivateFilePassword != "") ? strPrivateFilePassword : "notasecret"; //key_pass: This is probably the password for all key files, but if you're given a different one, use that.
-
+			
 			AuthorizationServerDescription objAuthServerDesc = GoogleAuthenticationServer.Description;
-			var objKey = new X509Certificate2(strKeyFile, strKeyPassword, X509KeyStorageFlags.Exportable);
-			var objClient = new AssertionFlowClient(objAuthServerDesc, objKey) { ServiceAccountId = strSrvAccEmailId, Scope = scopeUrl };
+			
+			var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+			store.Open(OpenFlags.ReadOnly);
+			var cert = store.Certificates.Find(X509FindType.FindByThumbprint, thumb, false);
+			if (cert.Count == 0)
+			{
+				Log.Error("GA Certificate not found");
+				throw new Exception("Certificate not found");
+			}
+			var objClient = new AssertionFlowClient(objAuthServerDesc, cert[0]) { ServiceAccountId = strSrvAccEmailId, Scope = scopeUrl };
 			var objAuth = new OAuth2Authenticator<AssertionFlowClient>(objClient, AssertionFlowClient.GetState);
 			return objAuth;
 		} // ObjGetOAuth2

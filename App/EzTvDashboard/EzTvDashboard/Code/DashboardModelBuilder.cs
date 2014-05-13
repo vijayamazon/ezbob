@@ -10,9 +10,11 @@
 	{
 		private AConnection Db { get; set; }
 		private static DateTime LastChecked { get; set; }
+		private static string GaCertThumb { get; set; }
 		public DashboardModelBuilder()
 		{
 			Db = new SqlConnection();
+			GaCertThumb = System.Configuration.ConfigurationManager.AppSettings["gaCertThumb"];
 		}
 
 		public bool SomethingChanged()
@@ -52,7 +54,7 @@
 			try
 			{
 				var ga = new GoogleAnalytics();
-				ga.Init(DateTime.UtcNow, @"C:\Temp\"); //todo put the cert in the mmc
+				ga.Init(DateTime.UtcNow, GaCertThumb);
 				var todayAnalytics = ga.FetchByCountry(DateTime.Today, LastChecked);
 				var monthToDateAnalytics = ga.FetchByCountry(firstOfMonth, LastChecked);
 				if (todayAnalytics.ContainsKey("United Kingdom"))
