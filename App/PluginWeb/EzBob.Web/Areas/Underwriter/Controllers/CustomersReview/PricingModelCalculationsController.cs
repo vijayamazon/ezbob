@@ -51,5 +51,17 @@
 
 			return Json(pricingModelCalculateResponse.Value, JsonRequestBehavior.AllowGet);
 		}
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult GetDefaultRate(int customerId, decimal companyShare)
+		{
+			DecimalActionResult getDefaultRateResponse = serviceClient.Instance.GetPricingModelDefaultRate(
+				customerId, context.UserId, companyShare
+			);
+
+			return Json(getDefaultRateResponse.Value, JsonRequestBehavior.AllowGet);
+		}
     }
 }
