@@ -16,6 +16,7 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
     events: 
         'click .btnOk': 'save'
         'click .suggested-amount-link': 'suggestedAmountClicked'
+        "keydown" : "onEnterKeydown"
 
     ui:
         form: "form"
@@ -30,7 +31,14 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
         dialogClass: "credit-line-edit-popup"
         width: 550
 
-    save:-> 
+    onEnterKeydown: (event) ->
+        if event.keyCode is 13
+            @ui.amount.change().blur()
+            @save()
+            return false
+        true
+
+    save:->
         return unless @ui.form.valid()
         post = $.post "#{window.gRootPath}ApplicationInfo/ChangeCashRequestOpenCreditLine", @getPostData()
         post.done => 

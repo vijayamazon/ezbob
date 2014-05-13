@@ -29,7 +29,8 @@
 
     CreditLineEditDialog.prototype.events = {
       'click .btnOk': 'save',
-      'click .suggested-amount-link': 'suggestedAmountClicked'
+      'click .suggested-amount-link': 'suggestedAmountClicked',
+      "keydown": "onEnterKeydown"
     };
 
     CreditLineEditDialog.prototype.ui = {
@@ -47,6 +48,15 @@
         dialogClass: "credit-line-edit-popup",
         width: 550
       };
+    };
+
+    CreditLineEditDialog.prototype.onEnterKeydown = function(event) {
+      if (event.keyCode === 13) {
+        this.ui.amount.change().blur();
+        this.save();
+        return false;
+      }
+      return true;
     };
 
     CreditLineEditDialog.prototype.save = function() {

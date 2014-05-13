@@ -79,7 +79,7 @@
             experian.ConsumerAccountsOverview = experian.ConsumerAccountsOverview || {};
             var experianCompany = experian.LimitedInfo || experian.NonLimitedInfo || {};
         %>
-        <div class="col-md-7">
+        <div class="col-md-7 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Customer & Directors</h3>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="box-content">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <%var tileColor='';
                               if(!EzBob.isDarkColor(experian.ScoreColor)){
                                 tileColor = 'tile-light';
@@ -103,7 +103,7 @@
                                 <p class="title text-center"><%-experian.Score%></p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-orange">
                                 <div class="caption text-center">
                                     Indebtedness
@@ -111,7 +111,7 @@
                                 <p class="title text-center"><%-experian.CII%></p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-green">
                                 <div class="caption text-center">
                                     Accounts
@@ -119,7 +119,7 @@
                                 <p class="title text-center"><%-experian.ConsumerAccountsOverview.OpenAccounts_Total%></p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-green">
                                 <div class="caption text-center">
                                     CCJ/Recent CCJ
@@ -127,7 +127,7 @@
                                 <p class="title text-center"><%-experian.Summary.CCJs%>/<%-experian.Summary.MostrecentCCJ%></p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-green">
                                 <div class="caption text-center">
                                     Defaults
@@ -135,7 +135,7 @@
                                 <p class="title text-center"><%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%></p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-green">
                                 <div class="caption text-center">
                                     Balance
@@ -148,14 +148,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-transparant">
                                 <span class="inline-sparkline consumerScoreGraph"></span>
                             </div>
                         </div>
                         <%if(experian.directorsModels && experian.directorsModels.length > 0){
                             _.each(experian.directorsModels, function(item, i){%>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <%var tileColor='';
                               if(!EzBob.isDarkColor(item.ScoreColor)){
                                 tileColor = 'tile-light';
@@ -176,7 +176,7 @@
         </div>
         <%}%>
         <%if(mps && mps.length > 0) { %>
-        <div class="col-md-5">
+        <div class="col-md-5 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Data Sources</h3>
@@ -217,7 +217,7 @@
     </div>
 
     <div>
-        <div class="col-md-7">
+        <div class="col-md-7 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Company</h3>
@@ -228,7 +228,7 @@
                 </div>
                 <div class="box-content">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-green">
                                 <div class="caption text-center">
                                     Score
@@ -236,7 +236,7 @@
                                 <p class="title text-center"><%-experianCompany.BureauScore%></p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-green">
                                 <div class="caption text-center">
                                     CCJ
@@ -244,7 +244,7 @@
                                 <p class="title text-center">N/A</p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-orange">
                                 <div class="caption text-center">
                                     Tangible equity
@@ -252,7 +252,7 @@
                                 <p class="title text-center">N/A</p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-green">
                                 <div class="caption text-center">
                                     Adjusted profit
@@ -260,7 +260,7 @@
                                 <p class="title text-center">N/A</p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4">
                             <div class="tile tile-transparant">
                                 <span class="inline-sparkline companyScoreGraph"></span>
                             </div>
@@ -269,7 +269,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Assets & Worth</h3>
@@ -280,7 +280,7 @@
                 </div>
                 <div class="box-content">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-sm-6">
                             <div class="tile tile-grey">
                                 <div class="caption text-center">
                                     Properties
@@ -288,7 +288,7 @@
                                 <p class="title text-center"><%- properties.NumberOfProperties %></p>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-sm-6">
                             <div class="tile tile-grey">
                                 <div class="caption text-center">
                                     Market value
@@ -296,7 +296,7 @@
                                 <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></p>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-sm-6">
                             <div class="tile tile-lightgrey tile-high">
                                 <div class="caption text-center">
                                     Net Worth
@@ -305,7 +305,7 @@
                                 <p class="title-small text-center">(<%- properties.NetWorthPercentages %>%)</p>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-sm-6">
                             <div class="tile tile-lightgrey tile-high">
                                 <div class="caption text-center">
                                     Mortgages (<%- properties.NumberOfMortgages %>)

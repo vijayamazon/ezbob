@@ -80,6 +80,7 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
           spotColor: "#14ae48"
           maxSpotColor: "#e72828"
           minSpotColor: "#f7941d"
+          chartRangeMin: -1
           valueSpots: { ':549' : 'red', '550:749' : 'yellow', '750:' : 'green' }
 
 
