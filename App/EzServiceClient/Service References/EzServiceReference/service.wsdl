@@ -180,6 +180,12 @@
   <wsdl:message name="IEzService_PricingModelCalculate_OutputMessage">
     <wsdl:part name="parameters" element="tns:PricingModelCalculateResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelDefaultRate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelDefaultRate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelDefaultRate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelDefaultRateResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_Temp_BackfillCompanyAnalytics_InputMessage">
     <wsdl:part name="parameters" element="tns:Temp_BackfillCompanyAnalytics" />
   </wsdl:message>
@@ -767,6 +773,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PricingModelCalculate" message="tns:IEzService_PricingModelCalculate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PricingModelCalculateResponse" message="tns:IEzService_PricingModelCalculate_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPricingModelDefaultRate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPricingModelDefaultRate" message="tns:IEzService_GetPricingModelDefaultRate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPricingModelDefaultRateResponse" message="tns:IEzService_GetPricingModelDefaultRate_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="Temp_BackfillCompanyAnalytics">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalytics" message="tns:IEzService_Temp_BackfillCompanyAnalytics_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalyticsResponse" message="tns:IEzService_Temp_BackfillCompanyAnalytics_OutputMessage" />
@@ -1267,6 +1277,15 @@
     </wsdl:operation>
     <wsdl:operation name="PricingModelCalculate">
       <soap12:operation soapAction="http://tempuri.org/IEzService/PricingModelCalculate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelDefaultRate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetPricingModelDefaultRate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -1602,6 +1602,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PricingModelCalculate", ReplyAction="http://tempuri.org/IEzService/PricingModelCalculateResponse")]
         ServiceClientProxy.EzServiceReference.PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, ServiceClientProxy.EzServiceReference.PricingModelModel model);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPricingModelDefaultRate", ReplyAction="http://tempuri.org/IEzService/GetPricingModelDefaultRateResponse")]
+        ServiceClientProxy.EzServiceReference.DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalytics", ReplyAction="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalyticsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackfillCompanyAnalytics();
         
@@ -1934,6 +1937,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, ServiceClientProxy.EzServiceReference.PricingModelModel model) {
             return base.Channel.PricingModelCalculate(customerId, underwriterId, model);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare) {
+            return base.Channel.GetPricingModelDefaultRate(customerId, underwriterId, companyShare);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData Temp_BackfillCompanyAnalytics() {
