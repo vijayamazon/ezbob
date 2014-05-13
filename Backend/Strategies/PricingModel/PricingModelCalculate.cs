@@ -61,7 +61,7 @@
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			Model.EuLoanPercentages = GetEuLoanMonthlyInterest(consumerScore) * 100;
+			Model.EuLoanPercentages = GetEuLoanMonthlyInterest(consumerScore);
 			Model.CogsOutput = Model.Cogs;
 			Model.OpexAndCapexOutput = Model.OpexAndCapex;
 			Model.GrossProfit = Model.Revenue - Model.Cogs;
