@@ -65,8 +65,8 @@
 			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0;
 			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
 
-			Model.SetupFeeForEuLoanHigh = GetSetupFeeForEu(2);
-			Model.SetupFeeForEuLoanLow = GetSetupFeeForEu(1.75m);
+			Model.SetupFeeForEuLoanHigh = GetSetupFeeForEu(0.02m);
+			Model.SetupFeeForEuLoanLow = GetSetupFeeForEu(0.0175m);
 		}
 
 		private Loan CreateLoan(decimal interestRate)
@@ -93,8 +93,7 @@
 		private decimal GetSetupFeeForEu(decimal monthlyInterestRate)
 		{
 			Loan loan = CreateLoan(monthlyInterestRate);
-			decimal interestRevenue = loan.Schedule.Sum(scheuldeItem => scheuldeItem.Interest);
-			interestRevenue *= (100 - Model.DefaultRate) / 100;
+			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
 			return (Model.ProfitMarkupOutput/Model.ProfitMarkup - interestRevenue)/Model.LoanAmount;
 		}
 
