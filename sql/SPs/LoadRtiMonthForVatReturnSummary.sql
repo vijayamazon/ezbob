@@ -8,7 +8,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	DECLARE @OneMonthSalary DECIMAL(18, 6)
+	DECLARE @OneMonthSalary DECIMAL(18, 0)
 	DECLARE @CustomerID INT
 	DECLARE @RecordID INT
 
