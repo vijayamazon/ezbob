@@ -2,7 +2,7 @@
 	using System.Runtime.Serialization;
 	using Ezbob.Utils;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class ConfigTable : ITraversable {
 		[DataMember]
 		[NonTraversable]

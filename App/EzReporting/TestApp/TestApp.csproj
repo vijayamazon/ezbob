@@ -55,9 +55,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Backend\Models\Models.csproj">
+    <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
-      <Name>Models</Name>
+      <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\backend\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>

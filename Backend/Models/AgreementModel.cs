@@ -5,7 +5,7 @@
 	using Ezbob.Backend.Models;
 
 	[Serializable]
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class AgreementModel {
 		[DataMember]
 		public List<FormattedSchedule> FormattedSchedules { get; set; }

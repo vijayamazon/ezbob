@@ -2,7 +2,7 @@
 	using System.Runtime.Serialization;
 	using Utils;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class BrokerProperties : ITraversable {
 		[DataMember]
 		public string ErrorMsg { get; set; }

@@ -29,7 +29,7 @@ BEGIN
 		s.CreationDate,
 		s.SalariesMultiplier,
 		s.CustomerMarketplaceID,
-		s.Currency,
+		s.Currency AS CurrencyCode,
 		s.PctOfAnnualRevenues,
 		s.Revenues,
 		s.Opex,

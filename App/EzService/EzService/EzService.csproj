@@ -121,9 +121,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Backend\Models\Models.csproj">
+    <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
-      <Name>Models</Name>
+      <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\backend\Strategies\Strategies.csproj">
       <Project>{7E526927-9849-4E6E-BBFF-D0D780F81A05}</Project>

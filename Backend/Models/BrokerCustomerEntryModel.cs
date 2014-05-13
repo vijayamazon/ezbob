@@ -4,7 +4,7 @@
 	using System.Linq;
 	using System.Runtime.Serialization;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class BrokerCustomerEntry {
 		#region public
 

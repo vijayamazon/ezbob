@@ -3,7 +3,7 @@
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class FinishWizardArgs {
 		public FinishWizardArgs() {
 			DoSendEmail = true;

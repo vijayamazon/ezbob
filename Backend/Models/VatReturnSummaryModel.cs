@@ -5,7 +5,7 @@
 	using System.Text;
 	using Utils;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class VatReturnSummary : VatReturnSummaryBase {
 		public VatReturnSummary() {
 			Quarters = new List<VatReturnQuarter>();

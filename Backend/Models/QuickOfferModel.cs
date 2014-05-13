@@ -2,7 +2,7 @@
 	using System;
 	using System.Runtime.Serialization;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class QuickOfferModel {
 		[DataMember]
 		public int ID { get; set; }

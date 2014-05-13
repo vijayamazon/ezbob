@@ -3,7 +3,7 @@
 	using System.Runtime.Serialization;
 	using Utils;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class BrokerCustomerFile : ITraversable {
 		[DataMember]
 		public int FileID { get; set; }

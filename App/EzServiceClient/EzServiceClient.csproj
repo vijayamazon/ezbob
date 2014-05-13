@@ -61,10 +61,10 @@
     <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models1.xsd">
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Models1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.PricingModel.xsd">
@@ -149,9 +149,9 @@
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Backend\Models\Models.csproj">
+    <ProjectReference Include="..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
-      <Name>Models</Name>
+      <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>

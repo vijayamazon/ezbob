@@ -2,7 +2,7 @@
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class BrokerCustomerDetails {
 		public BrokerCustomerDetails() {
 			CrmData = new List<BrokerCustomerCrmEntry>();

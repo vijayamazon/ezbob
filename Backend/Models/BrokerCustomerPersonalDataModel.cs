@@ -4,7 +4,7 @@
 
 	#region class BrokerCustomerCrmEntry
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class BrokerCustomerPersonalData {
 		[DataMember]
 		public int id { get; set; }

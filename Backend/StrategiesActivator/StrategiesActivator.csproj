@@ -115,9 +115,9 @@
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models\Models.csproj">
+    <ProjectReference Include="..\Models\Ezbob.Backend.Models.csproj">
       <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
-      <Name>Models</Name>
+      <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

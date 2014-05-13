@@ -3,7 +3,7 @@
 	using System.Text;
 	using Utils;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class VatReturnSummaryBase : ITraversable {
 		[DataMember]
 		public virtual decimal? PctOfAnnualRevenues { get; set; }

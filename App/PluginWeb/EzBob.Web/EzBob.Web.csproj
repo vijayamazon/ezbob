@@ -1649,9 +1649,9 @@
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Backend\Models\Models.csproj">
+    <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
-      <Name>Models</Name>
+      <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>

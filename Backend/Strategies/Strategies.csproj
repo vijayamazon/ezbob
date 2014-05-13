@@ -324,9 +324,9 @@
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models\Models.csproj">
+    <ProjectReference Include="..\Models\Ezbob.Backend.Models.csproj">
       <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
-      <Name>Models</Name>
+      <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

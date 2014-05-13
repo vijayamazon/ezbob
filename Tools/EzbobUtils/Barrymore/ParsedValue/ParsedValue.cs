@@ -25,6 +25,21 @@
 			ms_oTypeConvertors[typeof (decimal).ToString()] = ParsedValue.ToDecimal;
 			ms_oTypeConvertors[typeof (DateTime).ToString()] = ParsedValue.ToDateTime;
 			ms_oTypeConvertors[typeof (string).ToString()] = ParsedValue.ToString;
+
+			ms_oTypeConvertors[typeof (bool?).ToString()] = ParsedValue.ToBooleanOrNull;
+			ms_oTypeConvertors[typeof (char?).ToString()] = ParsedValue.ToCharOrNull;
+			ms_oTypeConvertors[typeof (sbyte?).ToString()] = ParsedValue.ToSByteOrNull; 
+			ms_oTypeConvertors[typeof (byte?).ToString()] = ParsedValue.ToByteOrNull; 
+			ms_oTypeConvertors[typeof (short?).ToString()] = ParsedValue.ToInt16OrNull; 
+			ms_oTypeConvertors[typeof (ushort?).ToString()] = ParsedValue.ToUInt16OrNull; 
+			ms_oTypeConvertors[typeof (int?).ToString()] = ParsedValue.ToInt32OrNull; 
+			ms_oTypeConvertors[typeof (uint?).ToString()] = ParsedValue.ToUInt32OrNull; 
+			ms_oTypeConvertors[typeof (long?).ToString()] = ParsedValue.ToInt64OrNull; 
+			ms_oTypeConvertors[typeof (ulong?).ToString()] = ParsedValue.ToUInt64OrNull; 
+			ms_oTypeConvertors[typeof (float?).ToString()] = ParsedValue.ToSingleOrNull; 
+			ms_oTypeConvertors[typeof (double?).ToString()] = ParsedValue.ToDoubleOrNull; 
+			ms_oTypeConvertors[typeof (decimal?).ToString()] = ParsedValue.ToDecimalOrNull; 
+			ms_oTypeConvertors[typeof (DateTime?).ToString()] = ParsedValue.ToDateTimeOrNull; 
 		} // static constructor
 
 		#endregion static constructor
@@ -441,6 +456,234 @@
 
 		#endregion interface IConvertible and type cast operators
 
+		#region Nullable types
+
+		#region to boolean?
+
+		public static implicit operator bool?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToBooleanOrNull();
+		} // operator bool?
+
+		private static void ToBooleanOrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToBooleanOrNull(provider);
+		} // ToBooleanOrNull
+
+		public bool? ToBooleanOrNull(IFormatProvider provider = null) {
+			return new NullableValue<bool>(m_oValue, m_oDefault, provider);
+		} // ToBooleanOrNull
+
+		#endregion to boolean?
+
+		#region to char?
+
+		public static implicit operator char?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToCharOrNull();
+		} // operator char?
+
+		private static void ToCharOrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToCharOrNull(provider);
+		} // ToCharOrNull
+
+		public char? ToCharOrNull(IFormatProvider provider = null) {
+			return new NullableValue<char>(m_oValue, m_oDefault, provider);
+		} // ToCharOrNull
+
+		#endregion to char?
+
+		#region to sbyte?
+
+		public static implicit operator sbyte?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToSByteOrNull();
+		} // operator sbyte?
+
+		private static void ToSByteOrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToSByteOrNull(provider);
+		} // ToSByteOrNull
+
+		public sbyte? ToSByteOrNull(IFormatProvider provider = null) {
+			return new NullableValue<sbyte>(m_oValue, m_oDefault, provider);
+		} // ToSByteOrNull
+
+		#endregion to sbyte?
+
+		#region to byte?
+
+		public static implicit operator byte?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToByteOrNull();
+		} // operator byte?
+
+		private static void ToByteOrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToByteOrNull(provider);
+		} // ToByteOrNull
+
+		public byte? ToByteOrNull(IFormatProvider provider = null) {
+			return new NullableValue<byte>(m_oValue, m_oDefault, provider);
+		} // ToByteOrNull
+
+		#endregion to byte?
+
+		#region to short?
+
+		public static implicit operator short?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToInt16OrNull();
+		} // operator short?
+
+		private static void ToInt16OrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToInt16OrNull(provider);
+		} // ToInt16OrNull
+
+		public short? ToInt16OrNull(IFormatProvider provider = null) {
+			return new NullableValue<short>(m_oValue, m_oDefault, provider);
+		} // ToInt16OrNull
+
+		#endregion to short?
+
+		#region to ushort?
+
+		public static implicit operator ushort?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToUInt16OrNull();
+		} // operator ushort?
+
+		private static void ToUInt16OrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToUInt16OrNull(provider);
+		} // ToUInt16OrNull
+
+		public ushort? ToUInt16OrNull(IFormatProvider provider = null) {
+			return new NullableValue<ushort>(m_oValue, m_oDefault, provider);
+		} // ToUInt16OrNull
+
+		#endregion to ushort?
+
+		#region to int?
+
+		public static implicit operator int?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToInt32OrNull();
+		} // operator int?
+
+		private static void ToInt32OrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToInt32OrNull(provider);
+		} // ToInt32OrNull
+
+		public int? ToInt32OrNull(IFormatProvider provider = null) {
+			return new NullableValue<int>(m_oValue, m_oDefault, provider);
+		} // ToInt32OrNull
+
+		#endregion to int?
+
+		#region to uint?
+
+		public static implicit operator uint?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToUInt32OrNull();
+		} // operator uint?
+
+		private static void ToUInt32OrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToUInt32OrNull(provider);
+		} // ToUInt32OrNull
+
+		public uint? ToUInt32OrNull(IFormatProvider provider = null) {
+			return new NullableValue<uint>(m_oValue, m_oDefault, provider);
+		} // ToUInt32OrNull
+
+		#endregion to uint?
+
+		#region to long?
+
+		public static implicit operator long?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToInt64OrNull();
+		} // operator long?
+
+		private static void ToInt64OrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToInt64OrNull(provider);
+		} // ToInt64OrNull
+
+		public long? ToInt64OrNull(IFormatProvider provider = null) {
+			return new NullableValue<long>(m_oValue, m_oDefault, provider);
+		} // ToInt64OrNull
+
+		#endregion to long?
+
+		#region to ulong?
+
+		public static implicit operator ulong?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToUInt64OrNull();
+		} // operator ulong?
+
+		private static void ToUInt64OrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToUInt64OrNull(provider);
+		} // ToUInt64OrNull
+
+		public ulong? ToUInt64OrNull(IFormatProvider provider = null) {
+			return new NullableValue<ulong>(m_oValue, m_oDefault, provider);
+		} // ToUInt64OrNull
+
+		#endregion to ulong?
+
+		#region to float?
+
+		public static implicit operator float?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToSingleOrNull();
+		} // operator float?
+
+		private static void ToSingleOrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToSingleOrNull(provider);
+		} // ToSingleOrNull
+
+		public float? ToSingleOrNull(IFormatProvider provider = null) {
+			return new NullableValue<float>(m_oValue, m_oDefault, provider);
+		} // ToSingleOrNull
+
+		#endregion to float?
+
+		#region to double?
+
+		public static implicit operator double?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToDoubleOrNull();
+		} // operator double?
+
+		private static void ToDoubleOrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToDoubleOrNull(provider);
+		} // ToDoubleOrNull
+
+		public double? ToDoubleOrNull(IFormatProvider provider = null) {
+			return new NullableValue<double>(m_oValue, m_oDefault, provider);
+		} // ToDoubleOrNull
+
+		#endregion to double?
+
+		#region to decimal?
+
+		public static implicit operator decimal?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToDecimalOrNull();
+		} // operator decimal?
+
+		private static void ToDecimalOrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToDecimalOrNull(provider);
+		} // ToDecimalOrNull
+
+		public decimal? ToDecimalOrNull(IFormatProvider provider = null) {
+			return new NullableValue<decimal>(m_oValue, m_oDefault, provider);
+		} // ToDecimalOrNull
+
+		#endregion to decimal?
+
+		#region to DateTime?
+
+		public static implicit operator DateTime?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToDateTimeOrNull();
+		} // operator DateTime?
+
+		private static void ToDateTimeOrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToDateTimeOrNull(provider);
+		} // ToDateTimeOrNull
+
+		public DateTime? ToDateTimeOrNull(IFormatProvider provider = null) {
+			return new NullableValue<DateTime>(m_oValue, m_oDefault, provider);
+		} // ToDateTimeOrNull
+
+		#endregion to DateTime?
+
+		#endregion Nullable types
+
 		#endregion public
 
 		#region private
@@ -451,6 +694,145 @@
 		private delegate void Convertor(ParsedValue a, out object b, IFormatProvider c);
 
 		private static readonly SortedDictionary<string, Convertor> ms_oTypeConvertors;
+
+		#region class NullableValue
+
+		private class NullableValue<T> where T: struct {
+			#region operator to T?
+
+			public static implicit operator T?(NullableValue<T> val) {
+				return val.m_oParsedValue;
+			} // to T?
+
+			#endregion operator to T?
+
+			#region constructor
+
+			public NullableValue(object oValue, object oDefault, IFormatProvider provider = null) {
+				m_oParsedValue = null;
+
+				if (!ReferenceEquals(oValue, null)) {
+					if (oValue == DBNull.Value)
+						return;
+
+					TryParse(oValue);
+				} // if
+
+				if (!ReferenceEquals(oDefault, null))
+					TryParse(oDefault);
+			} // constructor
+
+			#endregion constructor
+
+			#region method TryParse
+
+			private void TryParse(object oValue) {
+				string sValue = oValue.ToString();
+
+				object oParsed = null;
+				bool bSuccess = false;
+
+				if (typeof(T) == typeof(bool)) {
+					bool v;
+					bSuccess = bool.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(char)) {
+					char v;
+					bSuccess = char.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(sbyte)) {
+					sbyte v;
+					bSuccess = sbyte.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(byte)) {
+					byte v;
+					bSuccess = byte.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(short)) {
+					short v;
+					bSuccess = short.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(ushort)) {
+					ushort v;
+					bSuccess = ushort.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(int)) {
+					int v;
+					bSuccess = int.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(uint)) {
+					uint v;
+					bSuccess = uint.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(long)) {
+					long v;
+					bSuccess = long.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(ulong)) {
+					ulong v;
+					bSuccess = ulong.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(float)) {
+					float v;
+					bSuccess = float.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(double)) {
+					double v;
+					bSuccess = double.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof(T) == typeof(decimal)) {
+					decimal v;
+					bSuccess = decimal.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
+				}
+				else if (typeof (T) == typeof (DateTime)) {
+					if (oValue is DateTime) {
+						oParsed = oValue;
+						bSuccess = true;
+					}
+					else {
+						DateTime v;
+						bSuccess = DateTime.TryParse(oValue.ToString(), out v);
+						if (bSuccess)
+							oParsed = v;
+					}
+				} // if
+
+				if (bSuccess)
+					m_oParsedValue = (T?)oParsed;
+			} // TryParse
+
+			#endregion method TryParse
+
+			private T? m_oParsedValue;
+		} // class NullableValue
+
+		#endregion class NullableValue
 
 		#endregion private
 	} // class ParsedValue

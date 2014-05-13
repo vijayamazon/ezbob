@@ -3,7 +3,7 @@
 	using System.Runtime.Serialization;
 	using Utils;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class BrokerCustomerCrmEntry : ITraversable {
 		[DataMember]
 		public DateTime CrDate { get; set; }

@@ -5,7 +5,7 @@
 	using System.Runtime.Serialization;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class LoanScheduleItemModel {
 		[DataMember]
 		public int Id { get; set; }

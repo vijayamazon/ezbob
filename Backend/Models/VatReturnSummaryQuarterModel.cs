@@ -4,7 +4,7 @@
 	using System.Runtime.Serialization;
 	using System.Text;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class VatReturnQuarter : VatReturnSummaryBase {
 		[DataMember]
 		public DateTime DateFrom { get; set; }
