@@ -40,7 +40,6 @@
 		}
 
 		[Ajax]
-		[HttpPut]
 		[Transactional]
 		public JsonResult UpdateBug(BugModel bugModel)
 		{
