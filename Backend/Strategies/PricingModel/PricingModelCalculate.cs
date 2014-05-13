@@ -42,7 +42,7 @@
 			
 			Loan loan = CreateLoan(Model.MonthlyInterestRate);
 			var aprCalc = new APRCalculator();
-			Model.Apr = (decimal)(loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date));
+			Model.Apr = (decimal)(loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date) / 100);
 
 			Model.CostOfDebtOutput = 0;
 			Model.InterestRevenue = 0;
@@ -77,10 +77,7 @@
 
 		private Loan CreateLoan(decimal interestRate)
 		{
-			var sfc = new SetupFeeCalculator(false, false, 0, 0);
-			var setupFee = sfc.Calculate(Model.LoanAmount);
-
-			var calculator = new LoanScheduleCalculator { Interest = interestRate, Term = Model.LoanTerm };
+			var calculator = new LoanScheduleCalculator { Interest = interestRate, Term = (int)Model.TenureMonths };
 			LoanType lt = new StandardLoanType();
 			var loan = new Loan
 			{
@@ -88,7 +85,7 @@
 				Date = DateTime.UtcNow,
 				LoanType = lt,
 				CashRequest = null,
-				SetupFee = setupFee,
+				SetupFee = Model.SetupFeePounds,
 				LoanLegalId = 1
 			};
 			calculator.Calculate(Model.LoanAmount, loan, loan.Date, Model.InterestOnlyPeriod);
@@ -109,11 +106,11 @@
 
 		private decimal GetMonthlyInterestRate()
 		{
-			decimal guessInterval = 1;
-			decimal monthlyInterestRate = 1;
+			decimal guessInterval = 0.01m;
+			decimal monthlyInterestRate = 0.01m;
 			var calculations = new Dictionary<decimal, decimal>();
 			decimal minBalanceAbsValue = decimal.MaxValue;
-			decimal interestRateForMinBalanceAbs = 1;
+			decimal interestRateForMinBalanceAbs = 0.01m;
 
 			while (minBalanceAbsValue != 0)
 			{
@@ -129,14 +126,14 @@
 				decimal nextMonthlyInterestRate = balance < 0 ? monthlyInterestRate + guessInterval : monthlyInterestRate - guessInterval;
 				if (calculations.ContainsKey(nextMonthlyInterestRate))
 				{
-					if (guessInterval == 1)
+					if (guessInterval == 0.01m)
 					{
-						guessInterval = 0.1m;
+						guessInterval = 0.001m;
 						nextMonthlyInterestRate = balance < 0 ? monthlyInterestRate + guessInterval : monthlyInterestRate - guessInterval;
 					}
-					else if (guessInterval == 0.1m)
+					else if (guessInterval == 0.001m)
 					{
-						guessInterval = 0.01m;
+						guessInterval = 0.0001m;
 						nextMonthlyInterestRate = balance < 0 ? monthlyInterestRate + guessInterval : monthlyInterestRate - guessInterval;
 					}
 					else
@@ -159,7 +156,7 @@
 			foreach (LoanScheduleItem scheuldeItem in loan.Schedule)
 			{
 				interestRevenue += scheuldeItem.Interest;
-				costOfDebtOutput += scheuldeItem.AmountDue * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
+				costOfDebtOutput += scheuldeItem.Balance * Model.DebtPercentOfCapital * Model.CostOfDebt / 12;
 			}
 			interestRevenue *= (100 - Model.DefaultRate) / 100;
 

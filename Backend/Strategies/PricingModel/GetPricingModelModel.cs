@@ -77,29 +77,22 @@
 			defaultRateCompanyShare = CurrentValues.Instance.PricingModelDefaultRateCompanyShare;
 			defaultRateCustomerShare = 1 - defaultRateCompanyShare;
 
-			int companyScore = 0;
 			int consumerScore = DB.ExecuteScalar<int>(
 				"GetExperianScore",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			DataTable dt = DB.ExecuteReader(
+			int companyScore = DB.ExecuteScalar<int>(
 				"GetCompanyScore",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			if (dt.Rows.Count == 1)
-			{
-				var sr = new SafeReader(dt.Rows[0]);
-				companyScore = sr["Score"];
-			}
-
 			decimal companyValue = GetDefaultRateCompany(companyScore);
 			decimal customerValue = GetDefaultRateCustomer(consumerScore);
 
-			return 100 * (defaultRateCompanyShare*companyValue + defaultRateCustomerShare*customerValue);
+			return defaultRateCompanyShare*companyValue + defaultRateCustomerShare*customerValue;
 		}
 
 		private decimal GetDefaultRateCompany(int key)
