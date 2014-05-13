@@ -198,12 +198,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%_.each(mps, function(mp){ mp.PaymentAccountBasic = mp.PaymentAccountBasic || {}; %>
+                            <%_.each(mps, function(mp){ var accountData = mp.PaymentAccountBasic || {}; %>
                                 <tr>
                                     <td style="width:70px"><div class="source_labels_on <%-mp.Name.replace(' ', '').toLowerCase()%>"></div></td>
-                                    <td><%- EzBob.formatPoundsNoDecimals(mp.monthSales || mp.PaymentAccountBasic.MonthInPayments) %></td>
-                                    <td><%- EzBob.formatPoundsNoDecimals(mp.anualSales || mp.PaymentAccountBasic.TotalNetInPayments) %></td>
-                                    <td><%- EzBob.formatPoundsNoDecimals(mp.PaymentAccountBasic.TotalNetOutPayments) %></td>
+                                    <td><%- EzBob.formatPoundsNoDecimals(mp.monthSales || accountData.MonthInPayments) %></td>
+                                    <td><%- EzBob.formatPoundsNoDecimals(mp.anualSales || accountData.TotalNetInPayments) %></td>
+                                    <td><%- EzBob.formatPoundsNoDecimals(accountData.TotalNetOutPayments) %></td>
                                     <td><%-mp.age%></td>
                                     <td><%- mp.UpdatingStatus %> <%- mp.LastChecked%></td>
                                 </tr>
