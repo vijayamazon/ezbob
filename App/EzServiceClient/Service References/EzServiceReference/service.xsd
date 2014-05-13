@@ -248,22 +248,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetPricingModelDefaultRate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="customerId" type="xs:int" />
-        <xs:element minOccurs="0" name="underwriterId" type="xs:int" />
-        <xs:element minOccurs="0" name="companyShare" type="xs:decimal" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetPricingModelDefaultRateResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetPricingModelDefaultRateResult" nillable="true" type="q20:DecimalActionResult" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="Temp_BackfillCompanyAnalytics">
     <xs:complexType>
       <xs:sequence />
