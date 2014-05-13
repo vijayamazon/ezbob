@@ -30,10 +30,8 @@ BEGIN
 		a.Postcode,
 		a.Town AS City
 	FROM
-		Customer c LEFT JOIN CustomerAddress a ON c.Id=a.CustomerId
+		Customer c LEFT JOIN CustomerAddress a ON c.Id=a.CustomerId AND a.addressType=1
 	WHERE
 		c.Id = @CustomerId
-	AND
-		a.addressType=1	
 END
 GO
