@@ -81,6 +81,8 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     },
 
     events: {
+        'focusout #loanAmount': 'loanAmountChanged',
+        'focusout #loanTerm': 'loanTermChanged',
         'focusout #tenurePercents': 'tenurePercentsChanged',
         'focusout #tenureMonths': 'tenureMonthsChanged',
         'focusout #setupFeePounds': 'setupFeePoundsChanged',
@@ -91,6 +93,16 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         'click #pricingModelCalculateButton': 'calculateClicked',
         'click #expandCollapseInputsButton': 'expandCollapseInputsClicked',
         'click #expandCollapseOutputsButton': 'expandCollapseOutputsClicked'
+    },
+
+    loanAmountChanged: function () {
+        var setupFeePounds = this.model.get('LoanAmount') * this.model.get('SetupFeePercents');
+        this.model.set('SetupFeePounds', setupFeePounds);
+    },
+
+    loanTermChanged: function () {
+        var tenureMonths = this.model.get('LoanTerm') * this.model.get('TenurePercents');
+        this.model.set('TenureMonths', tenureMonths);
     },
 
     defaultRateCompanyShareChanged: function () {
