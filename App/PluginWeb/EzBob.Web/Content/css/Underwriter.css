@@ -1099,4 +1099,7 @@ div.hmrc-enter-data-holder .add-one-period {
     padding: 3px;
 }
 
-
+.left-pane-header {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
