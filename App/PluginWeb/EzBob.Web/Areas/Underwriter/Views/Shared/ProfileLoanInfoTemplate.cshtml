@@ -370,6 +370,11 @@
         </form>
         
         <div>
+            <ul>
+                <li>Revenue: <%-EzBob.formatPoundsNoDecimals(m.Turnover)%></li>
+                <li>FCF: <%-EzBob.formatPoundsNoDecimals(m.FreeCashFlow)%></li>
+                <li>VA: <%-EzBob.formatPoundsNoDecimals(m.ValueAdded)%></li>
+            </ul>
             <table class="table">
                 <thead class="box">
                     <tr class="box-title">
@@ -384,10 +389,10 @@
                     <%_.each(m.SuggestedAmounts, function(s) { %>
                         <tr>
                             <td><%-s.Method%></td>
-                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Silver" data-value="<%-s.Silver%>"><%-s.Silver%></a></td>
-                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Gold" data-value="<%-s.Gold%>"><%-s.Gold%></a></td>
-                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Platinum" data-value="<%-s.Platinum%>"><%-s.Platinum%></a></td>
-                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Diamond" data-value="<%-s.Diamond%>"><%-s.Diamond%></a></td>
+                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Silver" data-value="<%-(s.Silver*s.Value)%>"><%-EzBob.formatPoundsNoDecimals(s.Silver*s.Value)%> (<%-EzBob.formatPercents(s.Silver)%>)</a></td>
+                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Gold" data-value="<%-(s.Gold*s.Value)%>"><%-EzBob.formatPoundsNoDecimals(s.Gold*s.Value)%> (<%-EzBob.formatPercents(s.Gold)%>)</a></td>
+                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Platinum" data-value="<%-(s.Platinum*s.Value)%>"><%-EzBob.formatPoundsNoDecimals(s.Platinum*s.Value)%> (<%-EzBob.formatPercents(s.Platinum)%>)</a></td>
+                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Diamond" data-value="<%-(s.Diamond*s.Value)%>"><%-EzBob.formatPoundsNoDecimals(s.Diamond*s.Value)%> (<%-EzBob.formatPercents(s.Diamond)%>)</a></td>
                         </tr>
                     <%});%>
                 </tbody>

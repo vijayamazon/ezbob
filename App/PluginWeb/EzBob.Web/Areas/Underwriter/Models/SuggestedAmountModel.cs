@@ -14,11 +14,11 @@
 	public class SuggestedAmountModel {
 		public int Id { get; set; }
 		public string Method { get; set; }
-		public int Silver { get; set; }
-		public int Gold { get; set; }
-		public int Diamond { get; set; }
-		public int Platinum { get; set; }
-
+		public decimal Silver { get; set; }
+		public decimal Gold { get; set; }
+		public decimal Diamond { get; set; }
+		public decimal Platinum { get; set; }
+		public decimal Value { get; set; }
 		public SuggestedAmountModel()
 		{
 			Id = -1;

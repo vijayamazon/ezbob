@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models;
 	using Code;
@@ -29,7 +30,8 @@
 		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly ServiceClient serviceClient;
-
+		private readonly VatReturnSummaryRepository _vatReturnSummaryRepository;
+		private readonly CustomerAnalyticsRepository _customerAnalyticsRepository;
 		public ApplicationInfoModelBuilder(
 			IPacNetBalanceRepository funds,
 			IPacNetManualBalanceRepository manualFunds,
@@ -37,8 +39,9 @@
 			IDiscountPlanRepository discounts,
 			ILoanTypeRepository loanTypes,
 			IConfigurationVariablesRepository configurationVariablesRepository,
-			ILoanSourceRepository loanSources
-		)
+			ILoanSourceRepository loanSources, 
+			VatReturnSummaryRepository vatReturnSummaryRepository,
+			CustomerAnalyticsRepository customerAnalyticsRepository)
 		{
 			_funds = funds;
 			_manualFunds = manualFunds;
@@ -47,6 +50,8 @@
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 			this.configurationVariablesRepository = configurationVariablesRepository;
 			_loanSources = loanSources;
+			_vatReturnSummaryRepository = vatReturnSummaryRepository;
+			_customerAnalyticsRepository = customerAnalyticsRepository;
 			serviceClient = new ServiceClient();
 		}
 
@@ -196,32 +201,51 @@
 				model.CustomerReason = os.ToString().Trim();
 			} // if
 
-			//todo populate with real values
+			if (customer.CustomerMarketPlaces.Any(x => x.Marketplace.Name == "HMRC"))
+			{
+				var hmrc = customer.CustomerMarketPlaces.First(x => x.Marketplace.Name == "HMRC").Id;
+				var summary = _vatReturnSummaryRepository.GetLastSummary(hmrc);
+				if (summary != null)
+				{
+					model.ValueAdded = summary.TotalValueAdded;
+					model.FreeCashFlow = summary.FreeCashFlow;
+				}
+			}
+
+			var analytics = _customerAnalyticsRepository.Get(customer.Id);
+			if (analytics != null)
+			{
+				model.Turnover = analytics.AnnualTurnover;
+			}
+
 			model.SuggestedAmounts = new[]
 				{
 					new SuggestedAmountModel
 						{
-							Method = CalculationMethod.FCF.DescriptionAttr(),
-							Silver = 234,
-							Gold = 335,
-							Diamond = 431,
-							Platinum = 734
+							Method = CalculationMethod.Turnover.DescriptionAttr(),
+							Silver = 0.06M,
+							Gold = 0.08M,
+							Diamond = 0.1M,
+							Platinum = 0.12M,
+							Value = model.Turnover
 						},
 					new SuggestedAmountModel
 						{
-							Method = CalculationMethod.Turnover.DescriptionAttr(),
-							Silver = 123,
-							Gold = 345,
-							Diamond = 664,
-							Platinum = 1232
+							Method = CalculationMethod.FCF.DescriptionAttr(),
+							Silver = 0.21M,
+							Gold = 0.28M,
+							Diamond = 0.35M,
+							Platinum = 0.42M,
+							Value = model.FreeCashFlow
 						},
 					new SuggestedAmountModel
 						{
 							Method = CalculationMethod.ValueAdded.DescriptionAttr(),
-							Silver = 841,
-							Gold = 1325,
-							Diamond = 2447,
-							Platinum = 5464
+							Silver = 0.14M,
+							Gold = 0.19M,
+							Diamond = 0.23M,
+							Platinum = 0.28M,
+							Value = model.ValueAdded
 						},
 				};
 

@@ -65,6 +65,11 @@
 		public int CustomerReasonType { get; set; }
 		public string CustomerReason { get; set; }
 
+
+		public decimal Turnover { get; set; }
+		public decimal FreeCashFlow { get; set; }
+		public decimal ValueAdded { get; set; }
+
 		public SuggestedAmountModel[] SuggestedAmounts { get; set; }
     }
 }
