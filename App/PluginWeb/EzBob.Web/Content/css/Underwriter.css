@@ -1103,3 +1103,15 @@ div.hmrc-enter-data-holder .add-one-period {
     padding-top: 0px !important;
     padding-bottom: 0px !important;
 }
+
+.pricing-model-bold {
+    font-weight: bold;
+}
+
+.pricing-model-italic {
+    font-style: italic;
+}
+
+.pricing-model-underline {
+    text-decoration: underline;
+}

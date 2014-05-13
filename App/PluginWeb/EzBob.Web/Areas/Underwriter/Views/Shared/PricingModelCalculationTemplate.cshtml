@@ -91,13 +91,13 @@
                         <td><%-EzBob.formatPercents(model.SetupFeeForEuLoanLow)%></td>
                     </tr>
                     <tr>
-                        <td class="pricing-model-left-td">Eu Loan Percentages</td>
+                        <td class="pricing-model-left-td">Eu Loan Monthly Interest Rate</td>
                         <td><%-EzBob.formatPercents(model.EuLoanPercentages)%></td>
                     </tr>
 
                     <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">Revenue</td>
-                        <td><%-GBPValues(model.Revenue, true)%></td>
+                        <td class="pricing-model-left-td pricing-model-bold">Revenue</td>
+                        <td class="pricing-model-bold"><%-GBPValues(model.Revenue, true)%></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Interest Revenue</td>
@@ -109,19 +109,19 @@
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">COGS (incl. acq. costs)</td>
-                        <td><%-GBPValues(model.CogsOutput, true)%></td>
+                        <td class="pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.CogsOutput, true)%>&nbsp;&nbsp;&nbsp;</td>
                     </tr>
                     <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">Gross Profit</td>
-                        <td><%-GBPValues(model.GrossProfit, true)%></td>
+                        <td class="pricing-model-left-td pricing-model-bold">Gross Profit</td>
+                        <td class="pricing-model-bold"><%-GBPValues(model.GrossProfit, true)%></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Opex And Capex</td>
-                        <td><%-GBPValues(model.OpexAndCapexOutput, true)%></td>
+                        <td class="pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.OpexAndCapexOutput, true)%>&nbsp;&nbsp;&nbsp;</td>
                     </tr>
                     <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">EBITDA</td>
-                        <td><%-GBPValues(model.Ebitda, true)%></td>
+                        <td class="pricing-model-left-td pricing-model-bold">EBITDA</td>
+                        <td class="pricing-model-bold"><%-GBPValues(model.Ebitda, true)%></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Net Loss From Defaults</td>
@@ -132,12 +132,12 @@
                         <td><%-GBPValues(model.CostOfDebtOutput, true)%></td>
                     </tr>
                     <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">Total Cost</td>
-                        <td><%-GBPValues(model.TotalCost, true)%></td>
+                        <td class="pricing-model-left-td pricing-model-italic">(Note: Total Cost</td>
+                        <td class="pricing-model-italic pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.TotalCost, true)%>)&nbsp;&nbsp;&nbsp;</td>
                     </tr>
                     <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">Profit Before Tax</td>
-                        <td><%-GBPValues(model.ProfitMarkupOutput, true)%></td>
+                        <td class="pricing-model-left-td pricing-model-bold">Profit Before Tax</td>
+                        <td class="pricing-model-bold"><%-GBPValues(model.ProfitMarkupOutput, true)%></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Annualized Interest Rate</td>
