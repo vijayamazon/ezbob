@@ -102,7 +102,7 @@
         companyHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
         this.$el.find(".companyScoreGraph").attr('values', companyHistoryScores);
       }
-      return this.$el.find(".inline-sparkline").sparkline("html", {
+      return $(".inline-sparkline").sparkline("html", {
         width: "100%",
         height: "100%",
         lineWidth: 2,
@@ -112,6 +112,7 @@
         spotColor: "#14ae48",
         maxSpotColor: "#e72828",
         minSpotColor: "#f7941d",
+        chartRangeMin: -1,
         valueSpots: {
           ':549': 'red',
           '550:749': 'yellow',
