@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.DashboardView = (function(_super) {
-
     __extends(DashboardView, _super);
 
     function DashboardView() {
-      return DashboardView.__super__.constructor.apply(this, arguments);
+      _ref = DashboardView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     DashboardView.prototype.template = "#dashboard-template";
@@ -56,6 +56,7 @@
 
     DashboardView.prototype.boxToolClick = function(e) {
       var action, btn, obj;
+
       obj = e.currentTarget;
       if ($(obj).data("action") === undefined) {
         false;
@@ -88,6 +89,14 @@
 
     DashboardView.prototype.onRender = function() {
       var companyHistoryScores, consumerHistoryScores, historyScoresSorted;
+
+      if (this.model.get('Alerts') !== void 0) {
+        if (this.model.get('Alerts').length === 0) {
+          this.$el.parent().parent().parent().parent().find('#customer-label-span').removeClass('label-warning').addClass('label-success');
+        } else {
+          this.$el.parent().parent().parent().parent().find('#customer-label-span').removeClass('label-success').addClass('label-warning');
+        }
+      }
       if (this.experianModel && this.experianModel.get('ConsumerHistory')) {
         historyScoresSorted = _.sortBy(this.experianModel.get('ConsumerHistory'), function(history) {
           return history.Date;

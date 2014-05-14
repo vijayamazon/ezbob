@@ -58,6 +58,13 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
       false
 
     onRender: ->
+        if (this.model.get('Alerts') != undefined) 
+            if (this.model.get('Alerts').length == 0) 
+                this.$el.parent().parent().parent().parent().find('#customer-label-span').removeClass('label-warning').addClass('label-success')
+            else
+                this.$el.parent().parent().parent().parent().find('#customer-label-span').removeClass('label-success').addClass('label-warning')
+
+
         if(@experianModel && @experianModel.get('ConsumerHistory'))
             historyScoresSorted = _.sortBy(@experianModel.get('ConsumerHistory'), (history) ->
                 return history.Date)

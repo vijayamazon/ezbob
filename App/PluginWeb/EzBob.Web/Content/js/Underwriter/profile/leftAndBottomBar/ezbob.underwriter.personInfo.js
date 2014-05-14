@@ -24,9 +24,6 @@
     };
 
     PersonInfoView.prototype.onRender = function() {
-      if (this.$el.find('.red_cell').length !== 0) {
-        this.$el.parent().parent().find('#customer-label-span').removeClass('label-success').addClass('label-warning');
-      }
       if (this.model.get('BrokerID')) {
         this.$el.find('#with-broker').addClass('with-broker');
       }
