@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
+	using System.Data;
 	using ExperianLib.Ebusiness;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -107,7 +108,14 @@
 				return;
 
 			if (m_oExperianData.CacheHit)
-				return;
+			{
+				// This check is required to allow multiple customers have the same company
+				// While the cache works with RefNumber the analytics table works with customer
+				if (IsCustomerAlreadyInAnalytics())
+				{
+					return;
+				}
+			}
 
 			Log.Debug("Updating customer analytics for customer {0} and company '{1}'...", m_nCustomerID, m_sExperianRefNum);
 
@@ -126,6 +134,22 @@
 		} // UpdateAnalytics
 
 		#endregion method UpdateAnalytics
+		
+		private bool IsCustomerAlreadyInAnalytics()
+		{
+			DataTable dt = DB.ExecuteReader(
+				"GetCompanyScore",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", m_nCustomerID)
+			);
+
+			if (dt.Rows.Count == 1)
+			{
+				return true;
+			}
+
+			return false;
+		}
 
 		#region fields
 
