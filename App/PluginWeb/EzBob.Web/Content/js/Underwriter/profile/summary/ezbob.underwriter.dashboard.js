@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.DashboardView = (function(_super) {
+
     __extends(DashboardView, _super);
 
     function DashboardView() {
-      _ref = DashboardView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return DashboardView.__super__.constructor.apply(this, arguments);
     }
 
     DashboardView.prototype.template = "#dashboard-template";
@@ -28,7 +28,7 @@
       this.loanModel = options.loanModel;
       this.bindTo(this.model, "change sync", this.render, this);
       this.bindTo(this.crmModel, "change sync", this.render, this);
-      this.bindTo(this.personalModel, "change sync", this.render, this);
+      this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
       this.bindTo(this.experianModel, "change sync", this.render, this);
       this.bindTo(this.propertiesModel, "change sync", this.render, this);
       this.bindTo(this.mpsModel, "change sync", this.render, this);
@@ -56,7 +56,6 @@
 
     DashboardView.prototype.boxToolClick = function(e) {
       var action, btn, obj;
-
       obj = e.currentTarget;
       if ($(obj).data("action") === undefined) {
         false;
@@ -87,14 +86,25 @@
       return false;
     };
 
+    DashboardView.prototype.personalModelChanged = function(e, a) {
+      if (e && a && this.model) {
+        return this.model.fetch();
+      }
+    };
+
     DashboardView.prototype.onRender = function() {
       var companyHistoryScores, consumerHistoryScores, historyScoresSorted;
-
       if (this.model.get('Alerts') !== void 0) {
         if (this.model.get('Alerts').length === 0) {
-          this.$el.parent().parent().parent().parent().find('#customer-label-span').removeClass('label-warning').addClass('label-success');
+          $('#customer-label-span').removeClass('label-warning').removeClass('label-important').addClass('label-success');
         } else {
-          this.$el.parent().parent().parent().parent().find('#customer-label-span').removeClass('label-success').addClass('label-warning');
+          if (_.some(this.model.get('Alerts'), function(alert) {
+            return alert.AlertType === 'danger';
+          })) {
+            $('#customer-label-span').removeClass('label-success').removeClass('label-warning').addClass('label-important');
+          } else {
+            $('#customer-label-span').removeClass('label-success').removeClass('label-important').addClass('label-warning');
+          }
         }
       }
       if (this.experianModel && this.experianModel.get('ConsumerHistory')) {

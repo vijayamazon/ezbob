@@ -15,7 +15,7 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
 
         @bindTo @model, "change sync", @render, this
         @bindTo @crmModel, "change sync", @render, this
-        @bindTo @personalModel, "change sync", @render, this
+        @bindTo @personalModel, "change sync", @personalModelChanged, this
         @bindTo @experianModel, "change sync", @render, this
         @bindTo @propertiesModel, "change sync", @render, this
         @bindTo @mpsModel, "change sync", @render, this
@@ -57,13 +57,19 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
           $("#" + $(obj).data("modal")).modal "show"
       false
 
-    onRender: ->
-        if (this.model.get('Alerts') != undefined) 
-            if (this.model.get('Alerts').length == 0) 
-                this.$el.parent().parent().parent().parent().find('#customer-label-span').removeClass('label-warning').addClass('label-success')
-            else
-                this.$el.parent().parent().parent().parent().find('#customer-label-span').removeClass('label-success').addClass('label-warning')
+    personalModelChanged: (e, a)->
+        if(e and a and @model)
+            @model.fetch()
 
+    onRender: ->
+        if (@model.get('Alerts') != undefined)
+            if (@model.get('Alerts').length == 0) 
+                $('#customer-label-span').removeClass('label-warning').removeClass('label-important').addClass('label-success')
+            else
+                if(_.some(@model.get('Alerts'), (alert) -> return alert.AlertType is 'danger'))
+                    $('#customer-label-span').removeClass('label-success').removeClass('label-warning').addClass('label-important')
+                else
+                    $('#customer-label-span').removeClass('label-success').removeClass('label-important').addClass('label-warning')
 
         if(@experianModel && @experianModel.get('ConsumerHistory'))
             historyScoresSorted = _.sortBy(@experianModel.get('ConsumerHistory'), (history) ->
