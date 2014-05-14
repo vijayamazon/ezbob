@@ -68,15 +68,15 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 
         LoanTerm: {
             selector: "#loanTerm",
-            converter: EzBob.BindingConverters.numericOnlyFormat
+            converter: EzBob.BindingConverters.monthsFormatNoDecimals
         },
         InterestOnlyPeriod: {
             selector: "#interestOnlyPeriod",
-            converter: EzBob.BindingConverters.numericOnlyFormat
+            converter: EzBob.BindingConverters.monthsFormatNoDecimals
         },
         TenureMonths: {
             selector: "#tenureMonths",
-            converter: EzBob.BindingConverters.numericOnlyFormat
+            converter: EzBob.BindingConverters.monthsFormat
         }
     },
 
@@ -251,9 +251,9 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         this.$el.find('#cogs').moneyFormat();
         this.$el.find('#opexAndCapex').moneyFormat();
         
-        this.$el.find('#loanTerm').numericOnly(2);
-        this.$el.find('#interestOnlyPeriod').numericOnly(2);
-        this.$el.find('#tenureMonths').numericOnlyWithDecimal();
+        this.$el.find('#loanTerm').monthFormatNoDecimals();
+        this.$el.find('#interestOnlyPeriod').monthFormatNoDecimals();
+        this.$el.find('#tenureMonths').monthFormat();
         
         return this;
     }

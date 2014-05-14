@@ -16,6 +16,26 @@ EzBob.BindingConverters.percents = (direction, value) ->
     else
         return value / 100
 
+EzBob.BindingConverters.months = (direction, value) ->
+    console.log('bla')
+    if value is "" or value is null
+        value = 0
+    value = parseFloat(value)
+    if direction == 'ModelToView'
+        return Math.round(value * 100)/100
+    else
+        return value
+
+EzBob.BindingConverters.monthsNoDecimals = (direction, value) ->
+    console.log('bla')
+    if value is "" or value is null
+        value = 0
+    value = parseInt(value)
+    if direction == 'ModelToView'
+        return value
+    else
+        return value
+
 EzBob.BindingConverters.notNull = (direction, value) ->
     if value is "" or value is null
         value = 0
@@ -42,6 +62,26 @@ EzBob.BindingConverters.percentsFormat = (direction, value) ->
         else
             value = EzBob.BindingConverters.autonumericFormat(EzBob.percentFormat)(direction, value)
             result = EzBob.BindingConverters.percents(direction, value)
+            return result
+            
+EzBob.BindingConverters.monthsFormat = (direction, value) ->
+        if direction == 'ModelToView'
+            value = EzBob.BindingConverters.months(direction, value)
+            result = EzBob.BindingConverters.autonumericFormat(EzBob.monthFormat)(direction, value)
+            return result
+        else
+            value = EzBob.BindingConverters.autonumericFormat(EzBob.monthFormat)(direction, value)
+            result = EzBob.BindingConverters.months(direction, value)
+            return result
+            
+EzBob.BindingConverters.monthsFormatNoDecimals = (direction, value) ->
+        if direction == 'ModelToView'
+            value = EzBob.BindingConverters.monthsNoDecimals(direction, value)
+            result = EzBob.BindingConverters.autonumericFormat(EzBob.monthFormatNoDecimals)(direction, value)
+            return result
+        else
+            value = EzBob.BindingConverters.autonumericFormat(EzBob.monthFormatNoDecimals)(direction, value)
+            result = EzBob.BindingConverters.monthsNoDecimals(direction, value)
             return result
 
 EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumericFormat(EzBob.moneyFormat)

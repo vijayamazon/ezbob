@@ -26,6 +26,32 @@
     }
   };
 
+  EzBob.BindingConverters.months = function(direction, value) {
+    console.log('bla');
+    if (value === "" || value === null) {
+      value = 0;
+    }
+    value = parseFloat(value);
+    if (direction === 'ModelToView') {
+      return Math.round(value * 100) / 100;
+    } else {
+      return value;
+    }
+  };
+
+  EzBob.BindingConverters.monthsNoDecimals = function(direction, value) {
+    console.log('bla');
+    if (value === "" || value === null) {
+      value = 0;
+    }
+    value = parseInt(value);
+    if (direction === 'ModelToView') {
+      return value;
+    } else {
+      return value;
+    }
+  };
+
   EzBob.BindingConverters.notNull = function(direction, value) {
     if (value === "" || value === null) {
       value = 0;
@@ -65,17 +91,32 @@
     }
   };
 
-  EzBob.BindingConverters.numericOnlyFormat = function (direction, value) {
-      var result;
-      if (direction === 'ModelToView') {
-          value = EzBob.BindingConverters.floatNumbers(direction, value);
-          result = EzBob.BindingConverters.autonumericFormat(EzBob.numericOnlyFormat(2))(direction, value);
-          return result;
-      } else {
-          value = EzBob.BindingConverters.autonumericFormat(EzBob.numericOnlyFormat(2))(direction, value);
-          result = EzBob.BindingConverters.floatNumbers(direction, value);
-          return result;
-      }
+  EzBob.BindingConverters.monthsFormat = function(direction, value) {
+    var result;
+
+    if (direction === 'ModelToView') {
+      value = EzBob.BindingConverters.months(direction, value);
+      result = EzBob.BindingConverters.autonumericFormat(EzBob.monthFormat)(direction, value);
+      return result;
+    } else {
+      value = EzBob.BindingConverters.autonumericFormat(EzBob.monthFormat)(direction, value);
+      result = EzBob.BindingConverters.months(direction, value);
+      return result;
+    }
+  };
+
+  EzBob.BindingConverters.monthsFormatNoDecimals = function(direction, value) {
+    var result;
+
+    if (direction === 'ModelToView') {
+      value = EzBob.BindingConverters.monthsNoDecimals(direction, value);
+      result = EzBob.BindingConverters.autonumericFormat(EzBob.monthFormatNoDecimals)(direction, value);
+      return result;
+    } else {
+      value = EzBob.BindingConverters.autonumericFormat(EzBob.monthFormatNoDecimals)(direction, value);
+      result = EzBob.BindingConverters.monthsNoDecimals(direction, value);
+      return result;
+    }
   };
 
   EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumericFormat(EzBob.moneyFormat);

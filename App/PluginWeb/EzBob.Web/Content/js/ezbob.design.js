@@ -246,6 +246,18 @@ $(function () {
         });
     };
 
+    $.fn.monthFormat = function () {
+        return this.each(function () {
+            $(this).autoNumeric(EzBob.monthFormat);
+        });
+    };
+
+    $.fn.monthFormatNoDecimals = function () {
+        return this.each(function () {
+            $(this).autoNumeric(EzBob.monthFormatNoDecimals);
+        });
+    };
+
     $.fn.serialFill = function () {
         this.each(function () {
             var el = $(this);
@@ -756,6 +768,8 @@ EzBob.moneyFormatAsInt = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, '
 EzBob.moneyFormatAsThousands = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '1', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-', pSign: "p" };
 EzBob.percentFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
 EzBob.percentFormat1 = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '1', vMax: '9999999', pSign: 's' };
+EzBob.monthFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: ' Months', mDec: '2', vMax: '9999999', pSign: 's' };
+EzBob.monthFormatNoDecimals = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: ' Months', mDec: '2', vMax: '9999999', pSign: 's' };
 
 EzBob.formatPoundsNoSign = function (val) {
     return EzBob.formatPoundsFormat(val, EzBob.moneyFormatNoSign);
