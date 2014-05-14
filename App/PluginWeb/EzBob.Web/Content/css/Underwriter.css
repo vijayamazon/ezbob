@@ -1089,7 +1089,16 @@ div.hmrc-enter-data-holder .add-one-period {
 .tile-lightgrey {background-color: #d1d1d1; color: #000;}
 .tile-light { color: #000;}
 .tile-high { height: 110px;}
-.tile-transparant{ background-color: transparent;padding: 0;}
+.tile-transparant{ 
+    background-color: transparent;
+    color: #000000;
+}
+.tile-lightgreen{ background-color: #EEFFB8;color: #000;}
+.tile {
+    padding-left: 0;
+    padding-right: 0;
+    margin: 2px -13px 2px -13px;
+}
 .alert {
     padding: 5px !important;
     margin-bottom: 10px !important;
@@ -1118,4 +1127,8 @@ div.hmrc-enter-data-holder .add-one-period {
 
 .pricing-model-underline {
     text-decoration: underline;
+}
+
+.table-narrow.table > tbody > tr > td {
+    padding: 0;
 }

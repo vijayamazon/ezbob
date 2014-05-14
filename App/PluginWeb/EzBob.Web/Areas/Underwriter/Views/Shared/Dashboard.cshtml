@@ -1,8 +1,8 @@
 ﻿@model dynamic
 <script id="dashboard-template" type="text/template">
-    <div>
+    <div class="row">
         <%if(loan){ %>
-        <div class="col-md-7">
+        <div class="col-md-3">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Offer</h3>
@@ -48,8 +48,69 @@
             </div>
         </div>
         <%}%>
+        @*  <%if(affordability){%>*@
+        <div class="col-md-3">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Affordability</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table table-striped table-narrow">
+                        <thead>
+                            <tr>
+                                <th>caption text-center</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>annual</td>
+                                <td>in 0</td>
+                            </tr>
+                            <tr>
+                                <td>revenues</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>opex</td>
+                                <td>0</td>
+                            </tr>
+                            <tr class="chkpt">
+                                <td>gross profit</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>salaries</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>tax</td>
+                                <td>3</td>
+                            </tr>
+                            <tr class="chkpt">
+                                <td>EBITDA</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>loan repayment</td>
+                                <td>0</td>
+                            </tr>
+                            <tr class="chkpt">
+                                <td>FCF</td>
+                                <td><span class="label label-large label-important">(0K)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        @*  <%}%>*@
         <%if(m.Alerts && m.Alerts.length > 0){%>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Alerts</h3>
@@ -71,15 +132,19 @@
         <%}%>
     </div>
 
-    <div>
+    <div class="row">
         <%if(experian) {
             experian.Summary = experian.Summary || {};
             experian.Summary.ConsumerAccountsOverview = experian.Summary.ConsumerAccountsOverview || {};
             experian.ConsumerSummaryCharacteristics = experian.ConsumerSummaryCharacteristics || {};
             experian.ConsumerAccountsOverview = experian.ConsumerAccountsOverview || {};
             var experianCompany = experian.LimitedInfo || experian.NonLimitedInfo || {};
+            var tileColor='';
+            if(!EzBob.isDarkColor(experian.ScoreColor)){
+            tileColor = 'tile-light';
+            }
         %>
-        <div class="col-md-7 col-sm-12">
+        <div class="col-md-5 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Customer & Directors</h3>
@@ -89,87 +154,166 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <div class="row">
-                        <div class="col-md-2 col-sm-4">
-                            <%var tileColor='';
-                              if(!EzBob.isDarkColor(experian.ScoreColor)){
-                                tileColor = 'tile-light';
-                              }
+                    <div class="tabbable tabs-left">
+                        <ul class="nav nav-tabs active active-red">
+                            <li class="active"><a href="#customerExperian" data-toggle="tab"><span class="<%-tileColor%>" style="background-color: <%-experian.ScoreColor%>;"><%-experian.Score%></span>&nbsp;Applicant</a></li>
+                            <%if(experian.directorsModels && experian.directorsModels.length > 0){
+                                _.each(experian.directorsModels, function(item, i){
+                                    var directorTileColor='';
+                                    if(!EzBob.isDarkColor(item.ScoreColor)){
+                                        directorTileColor = 'tile-light';
+                                    }
                             %>
-                            <div class="tile <%-tileColor%>" style="background-color: <%-experian.ScoreColor%>">
-                                <div class="caption text-center">
-                                    Score
-                                </div>
-                                <p class="title text-center"><%-experian.Score%></p>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-orange">
-                                <div class="caption text-center">
-                                    Indebtedness
-                                </div>
-                                <p class="title text-center"><%-experian.CII%></p>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-green">
-                                <div class="caption text-center">
-                                    Accounts
-                                </div>
-                                <p class="title text-center"><%-experian.ConsumerAccountsOverview.OpenAccounts_Total%></p>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-green">
-                                <div class="caption text-center">
-                                    CCJ/Recent CCJ
-                                </div>
-                                <p class="title text-center"><%-experian.Summary.CCJs%>/<%-experian.Summary.MostrecentCCJ%></p>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-green">
-                                <div class="caption text-center">
-                                    Defaults
-                                </div>
-                                <p class="title text-center"><%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%></p>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-green">
-                                <div class="caption text-center">
-                                    Balance
-                                </div>
-                                <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total);
+                            <li><a href="#director<%-i%>" data-toggle="tab"><span class="<%-directorTileColor%>" style="background-color: <%-item.ScoreColor%>;"><%-item.Score%></span> Director <%-(i+1)%></a></li>
+                            <%});}%>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="customerExperian">
+                                <div class="">
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile <%-tileColor%>" style="background-color: <%-experian.ScoreColor%>">
+                                            <div class="caption text-center">
+                                                Score
+                                            </div>
+                                            <p class="title text-center"><%-experian.Score%></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile tile-lightgrey">
+                                            <div class="caption text-center">
+                                                Indebtedness index
+                                            </div>
+                                            <p class="title text-center"><%-experian.CII%></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile tile-transparant">
+                                            <div class="caption text-center">
+                                                Total CAIS balance:
+                                            </div>
+                                            <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total);
                                    var textSize = '';
                                 if(balance.length > 5){ textSize = 'text-small';} %>
                                 <p class="title text-center <%- textSize%>"><%-EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total)%></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-transparant">
-                                <span class="inline-sparkline consumerScoreGraph"></span>
-                            </div>
-                        </div>
-                        <%if(experian.directorsModels && experian.directorsModels.length > 0){
-                            _.each(experian.directorsModels, function(item, i){%>
-                        <div class="col-md-2 col-sm-4">
-                            <%var tileColor='';
-                              if(!EzBob.isDarkColor(item.ScoreColor)){
-                                tileColor = 'tile-light';
-                              }
-                            %>
-                            <div class="tile <%-tileColor%>" style="background-color: <%-item.ScoreColor%>">
-                                <div class="caption text-center">
-                                    Director <%-(i+1)%>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile <%- experian.ConsumerSummaryCharacteristics.NumberOfDefaults == 0 ? 'tile-lightgreen' : 'tile-red' %>">
+                                            <div class="caption text-center">
+                                                Defaults
+                                            </div>
+                                            <p class="title text-center"><%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%></p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <p class="title text-center"><%-item.Score%></p>
+                                <div class="">
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile tile-transparant">
+                                            <span class="inline-sparkline consumerScoreGraph"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile tile-transparant">
+                                            <span class="inline-sparkline consumerScoreGraph"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile <%- experian.ConsumerAccountsOverview.OpenAccounts_Total==0 ? 'tile-red' : 'tile-lightgreen' %>">
+                                            <div class="caption text-center">
+                                                CAIS Accounts:
+                                            </div>
+                                            <p class="title text-center"><%-experian.ConsumerAccountsOverview.OpenAccounts_Total%></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile <%- experian.Summary.CCJs == 0 ? 'tile-lightgreen' : 'tile-red' %>">
+                                            <div class="caption text-center">
+                                                CCJ/Recent CCJ(m)
+                                            </div>
+                                            <p class="title text-center"><%-experian.Summary.CCJs%> / <%-experian.Summary.MostrecentCCJ%>m</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <%if(experian.directorsModels && experian.directorsModels.length > 0){
+                    _.each(experian.directorsModels, function(item, i){
+                            item.Summary = item.Summary || {};
+                            item.Summary.ConsumerAccountsOverview = item.Summary.ConsumerAccountsOverview || {};
+                            item.ConsumerSummaryCharacteristics = item.ConsumerSummaryCharacteristics || {};
+                            item.ConsumerAccountsOverview = item.ConsumerAccountsOverview || {};%>
+                        <div class="tab-pane fade in" id="director<%-i%>">
+                            <div class="">
+                                <div class="col-md-3 col-sm-4">
+                                    <%var tileColor='';
+                                    if(!EzBob.isDarkColor(item.ScoreColor)){
+                                        tileColor = 'tile-light';
+                                    }%>
+                                    <div class="tile <%-tileColor%>" style="background-color: <%-item.ScoreColor%>">
+                                        <div class="caption text-center">
+                                            Director <%-(i+1)%>
+                                        </div>
+                                        <p class="title text-center"><%-item.Score%></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile tile-lightgrey">
+                                        <div class="caption text-center">
+                                            Indebtedness index
+                                        </div>
+                                        <p class="title text-center"><%-item.CII%></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile tile-transparant">
+                                        <div class="caption text-center">
+                                            Total CAIS balance:
+                                        </div>
+                                        <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(item.ConsumerAccountsOverview.Balance_Total);
+                                            var textSize = '';
+                                        if(balance.length > 5){ textSize = 'text-small';} %>
+                                        <p class="title text-center <%- textSize%>"><%-EzBob.formatPoundsAsThousandsNoDecimals(item.ConsumerAccountsOverview.Balance_Total)%></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile <%- item.ConsumerSummaryCharacteristics.NumberOfDefaults == 0 ? 'tile-lightgreen' : 'tile-red' %>">
+                                        <div class="caption text-center">
+                                            Defaults
+                                        </div>
+                                        <p class="title text-center"><%-item.ConsumerSummaryCharacteristics.NumberOfDefaults%></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile tile-transparant">
+                                        score trend N/A
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile tile-transparant">
+                                        CII trend N/A
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile <%- item.ConsumerAccountsOverview.OpenAccounts_Total==0 ? 'tile-red' : 'tile-lightgreen' %>">
+                                        <div class="caption text-center">
+                                            CAIS Accounts:
+                                        </div>
+                                        <p class="title text-center"><%-item.ConsumerAccountsOverview.OpenAccounts_Total%></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile <%- item.Summary.CCJs == 0 ? 'tile-lightgreen' : 'tile-red' %>">
+                                        <div class="caption text-center">
+                                            CCJ/Recent CCJ(m)
+                                        </div>
+                                        <p class="title text-center"><%-item.Summary.CCJs%> / <%-item.Summary.MostrecentCCJ%>m</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <%});}%>
-                        
+                            <%});}%>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -200,7 +344,9 @@
                         <tbody>
                             <%_.each(mps, function(mp){ var accountData = mp.PaymentAccountBasic || {}; %>
                                 <tr>
-                                    <td style="width:70px"><div class="source_labels_on <%-mp.Name.replace(' ', '').toLowerCase()%>"></div></td>
+                                    <td style="width: 70px">
+                                        <div class="source_labels_on <%-mp.Name.replace(' ', '').toLowerCase()%>"></div>
+                                    </td>
                                     <td><%- EzBob.formatPoundsNoDecimals(mp.monthSales || accountData.MonthInPayments) %></td>
                                     <td><%- EzBob.formatPoundsNoDecimals(mp.anualSales || accountData.TotalNetInPayments) %></td>
                                     <td><%- EzBob.formatPoundsNoDecimals(accountData.TotalNetOutPayments) %></td>
@@ -215,9 +361,8 @@
         </div>
         <%}%>
     </div>
-
-    <div>
-        <div class="col-md-7 col-sm-12">
+    <div class="row">
+        <div class="col-md-5 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Company</h3>
@@ -271,6 +416,8 @@
                 </div>
             </div>
         </div>
+        
+        <%if(properties){%>
         <div class="col-md-5 col-sm-12">
             <div class="box">
                 <div class="box-title">
@@ -320,78 +467,13 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div>
-        <%if(affordability){%>
-        <div class="col-md-7">
-            <div class="box">
-                <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Affordability</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
-                </div>
-                <div class="box-content">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>caption text-center</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>annual</td>
-                                <td>in 000</td>
-                            </tr>
-                            <tr>
-                                <td>revenues</td>
-                                <td>333</td>
-                            </tr>
-                            <tr>
-                                <td>opex</td>
-                                <td>300</td>
-                            </tr>
-                            <tr class="chkpt">
-                                <td>gross profit</td>
-                                <td>33</td>
-                            </tr>
-                            <tr>
-                                <td>salaries</td>
-                                <td>30</td>
-                            </tr>
-                            <tr>
-                                <td>tax</td>
-                                <td>3</td>
-                            </tr>
-                            <tr class="chkpt">
-                                <td>EBITDA</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>loan repayment</td>
-                                <td>15</td>
-                            </tr>
-                            <tr class="chkpt">
-                                <td>FCF</td>
-                                <td><span class="label label-large label-important">(500K)</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
         <%}%>
-    </div>
 
-    <div>
         <%if(m.LoanActivity && m.Decisions && m.Decisions.TotalDecisionsCount > 0){
             var activeLoans = m.LoanActivity.TotalIssuesCount > 0 ? "active" : "";
             var activeDecisions = activeLoans == "" ? "active" : "";
         %>
-        <div class="col-md-7">
+        <div class="col-md-5">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Customer History</h3>
