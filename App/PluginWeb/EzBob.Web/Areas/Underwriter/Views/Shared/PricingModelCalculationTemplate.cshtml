@@ -17,17 +17,17 @@
                     </tr>
                     <tr>
                         <td class="pricing-model-left-td">Default Rate</td>
-                        <td>Company:<input type="text" id="defaultRateCompanyShare" class="pricing-model-double-input-width"/> Customer:<input type="text" id="defaultRateCustomerShare" class="pricing-model-double-input-width"/> <%-model.DefaultRate%>%</td>
+                        <td><%-model.DefaultRate%>%&nbsp;Company:<input type="text" id="defaultRateCompanyShare" class="pricing-model-double-input-width"/> Applicant:<input type="text" id="defaultRateCustomerShare" class="pricing-model-double-input-width"/></td>
                     </tr>
                     <tr>
                         <td class="pricing-model-left-td">Setup Fee</td>
-                        <td><input type="text" id="setupFeePounds" class="pricing-model-double-input-width"/> = <input type="text" id="setupFeePercents" class="pricing-model-double-input-width"/></td>
+                        <td><input type="text" id="setupFeePercents" class="pricing-model-double-input-width"/> = <input type="text" id="setupFeePounds" class="pricing-model-double-input-width"/></td>
                     </tr>
-
-                    <tr class="minor-input-row hide">
+                    <tr>
                         <td class="pricing-model-left-td">Loan Term</td>
                         <td><input type="text" id="loanTerm"/> months</td>
                     </tr>
+
                     <tr class="minor-input-row hide">
                         <td class="pricing-model-left-td">Interest Only Period</td>
                         <td><input type="text" id="interestOnlyPeriod"/> months</td>
@@ -75,81 +75,113 @@
                     <tr class="box-title">
                         <th>Model outputs</th>
                         <th>Values</th>
+                        <th>AIR</th>
+                        <th>APR</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td class="pricing-model-left-td">Monthly Interest Rate</td>
                         <td><%-EzBob.formatPercents(model.MonthlyInterestRate)%></td>
-                    </tr>
-                    <tr>
-                        <td class="pricing-model-left-td">Setup Fee For Eu Loan (2%)</td>
-                        <td><%-EzBob.formatPercents(model.SetupFeeForEuLoanHigh)%></td>
-                    </tr>
-                    <tr>
-                        <td class="pricing-model-left-td">Setup Fee For Eu Loan (1.75%)</td>
-                        <td><%-EzBob.formatPercents(model.SetupFeeForEuLoanLow)%></td>
+                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRate)%></td>
+                        <td><%-EzBob.formatPercents(model.Apr)%></td>
                     </tr>
                     <tr>
                         <td class="pricing-model-left-td">Eu Loan Monthly Interest Rate</td>
                         <td><%-EzBob.formatPercents(model.EuLoanPercentages)%></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="pricing-model-left-td">Setup Fee For Eu Loan (2%)</td>
+                        <td><%-EzBob.formatPercents(model.SetupFeeForEuLoanHigh)%></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="pricing-model-left-td">Setup Fee For Eu Loan (1.75%)</td>
+                        <td><%-EzBob.formatPercents(model.SetupFeeForEuLoanLow)%></td>
+                        <td></td>
+                        <td></td>
                     </tr>
 
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td pricing-model-bold">Revenue</td>
                         <td class="pricing-model-bold"><%-GBPValues(model.Revenue, true)%></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">Interest Revenue</td>
+                        <td class="pricing-model-left-td pricing-model-italic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Including:</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="minor-output-row hide">
+                        <td class="pricing-model-left-td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interest Revenue</td>
                         <td><%-GBPValues(model.InterestRevenue, true)%></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">Fees Revenue</td>
+                        <td class="pricing-model-left-td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fees Revenue</td>
                         <td><%-GBPValues(model.FeesRevenue, true)%></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">COGS (incl. acq. costs)</td>
                         <td class="pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.CogsOutput, true)%>&nbsp;&nbsp;&nbsp;</td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td pricing-model-bold">Gross Profit</td>
                         <td class="pricing-model-bold"><%-GBPValues(model.GrossProfit, true)%></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Opex And Capex</td>
                         <td class="pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.OpexAndCapexOutput, true)%>&nbsp;&nbsp;&nbsp;</td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td pricing-model-bold">EBITDA</td>
                         <td class="pricing-model-bold"><%-GBPValues(model.Ebitda, true)%></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Net Loss From Defaults</td>
                         <td><%-GBPValues(model.NetLossFromDefaults, true)%></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td">Cost Of Debt (incl. fees)</td>
                         <td><%-GBPValues(model.CostOfDebtOutput, true)%></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td pricing-model-italic">(Note: Total Cost</td>
                         <td class="pricing-model-italic pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.TotalCost, true)%>)&nbsp;&nbsp;&nbsp;</td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="minor-output-row hide">
                         <td class="pricing-model-left-td pricing-model-bold">Profit Before Tax</td>
                         <td class="pricing-model-bold"><%-GBPValues(model.ProfitMarkupOutput, true)%></td>
-                    </tr>
-                    <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">Annualized Interest Rate</td>
-                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRate)%></td>
-                    </tr>
-                    <tr class="minor-output-row hide">
-                        <td class="pricing-model-left-td">Apr</td>
-                        <td><%-EzBob.formatPercents(model.Apr)%></td>
+                        <td></td>
+                        <td></td>
                     </tr>
 
                     <tr>
 	                    <td class="pricing-model-left-td"><button class="btn btn-primary" id="expandCollapseOutputsButton"><span id="expandOutputsSign">+</span><span class="hide" id="collapseOutputsSign">-</span></button></td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                     </tr>
                 </tbody>
