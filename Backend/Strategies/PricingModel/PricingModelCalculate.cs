@@ -39,10 +39,9 @@
 		{
 			Model.FeesRevenue = Model.SetupFeePounds;
 			Model.MonthlyInterestRate = GetMonthlyInterestRate();
-			
-			Loan loan = CreateLoan(Model.MonthlyInterestRate);
-			var aprCalc = new APRCalculator();
-			Model.Apr = (decimal)(loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date) / 100);
+
+			Loan loan = CreateLoan(Model.MonthlyInterestRate, Model.SetupFeePounds);
+			Model.Apr = GetApr(loan);
 
 			Model.CostOfDebtOutput = GetCostOfDebt(loan.Schedule);
 			Model.InterestRevenue = GetInterestRevenue(loan.Schedule);
@@ -65,16 +64,24 @@
 			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0;
 			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
 
-			Model.SetupFeeForEuLoanHigh = GetSetupFeeForEu(0.02m);
-			Model.SetupFeeForEuLoanLow = GetSetupFeeForEu(0.0175m);
+			decimal annualizedInterestRateEu2, aprEu2;
+			Model.SetupFeeForEuLoanHigh = GetSetupFeeForEu(0.02m, out annualizedInterestRateEu2, out aprEu2);
+			Model.AnnualizedInterestRateEu2 = annualizedInterestRateEu2;
+			Model.AprEu2 = aprEu2;
 
-			Model.AnnualizedInterestRateEu2 = 4.4m;
-			Model.AprEu2 = 5;
-			Model.AnnualizedInterestRateEu175 = 14.4m;
-			Model.AprEu175 = 15;
+			decimal annualizedInterestRateEu175, aprEu175;
+			Model.SetupFeeForEuLoanLow = GetSetupFeeForEu(0.0175m, out annualizedInterestRateEu175, out aprEu175);
+			Model.AnnualizedInterestRateEu175 = annualizedInterestRateEu175;
+			Model.AprEu175 = aprEu175;
 		}
 
-		private Loan CreateLoan(decimal interestRate)
+		private decimal GetApr(Loan loan)
+		{
+			var aprCalc = new APRCalculator();
+			return (decimal)(loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date) / 100);
+		}
+
+		private Loan CreateLoan(decimal interestRate, decimal setupFee)
 		{
 			var calculator = new LoanScheduleCalculator { Interest = interestRate, Term = (int)Model.TenureMonths };
 			LoanType lt = new StandardLoanType();
@@ -84,7 +91,7 @@
 				Date = DateTime.UtcNow,
 				LoanType = lt,
 				CashRequest = null,
-				SetupFee = Model.SetupFeePounds,
+				SetupFee = setupFee,
 				LoanLegalId = 1
 			};
 			calculator.Calculate(Model.LoanAmount, loan, loan.Date, Model.InterestOnlyPeriod);
@@ -95,13 +102,18 @@
 			return loan;
 		}
 
-		private decimal GetSetupFeeForEu(decimal monthlyInterestRate)
+		private decimal GetSetupFeeForEu(decimal monthlyInterestRate, out decimal annualizedInterestRate, out decimal apr)
 		{
-			Loan loan = CreateLoan(monthlyInterestRate);
+			Loan loan = CreateLoan(monthlyInterestRate, Model.SetupFeePounds);
 			decimal costOfDebtEu = GetCostOfDebt(loan.Schedule);
 			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
 			decimal netLossFromDefaults = (1 - Model.EuCollectionRate) * Model.LoanAmount * Model.DefaultRate / 100;
-			return (Model.ProfitMarkupOutput - interestRevenue + Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu)/Model.LoanAmount;
+			decimal setupFeePounds = Model.ProfitMarkupOutput - interestRevenue + Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
+			decimal setupFee = setupFeePounds / Model.LoanAmount;
+			loan = CreateLoan(monthlyInterestRate, setupFeePounds);
+			apr = GetApr(loan);
+			annualizedInterestRate = Model.TenureMonths != 0 ? (monthlyInterestRate * 12) + (setupFee * 12 / Model.TenureMonths) : 0;
+			return setupFee;
 		}
 
 		private decimal GetMonthlyInterestRate()
@@ -169,7 +181,7 @@
 
 		private decimal CalculateBalance(decimal interestRate)
 		{
-			Loan loan = CreateLoan(interestRate);
+			Loan loan = CreateLoan(interestRate, Model.SetupFeePounds);
 			decimal costOfDebtOutput = GetCostOfDebt(loan.Schedule);
 			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
 			decimal revenue = Model.SetupFeePounds + interestRevenue;
