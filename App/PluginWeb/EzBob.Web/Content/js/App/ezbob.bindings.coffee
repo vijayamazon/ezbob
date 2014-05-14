@@ -17,7 +17,6 @@ EzBob.BindingConverters.percents = (direction, value) ->
         return value / 100
 
 EzBob.BindingConverters.months = (direction, value) ->
-    console.log('bla')
     if value is "" or value is null
         value = 0
     value = parseFloat(value)
@@ -27,7 +26,6 @@ EzBob.BindingConverters.months = (direction, value) ->
         return value
 
 EzBob.BindingConverters.monthsNoDecimals = (direction, value) ->
-    console.log('bla')
     if value is "" or value is null
         value = 0
     value = parseInt(value)

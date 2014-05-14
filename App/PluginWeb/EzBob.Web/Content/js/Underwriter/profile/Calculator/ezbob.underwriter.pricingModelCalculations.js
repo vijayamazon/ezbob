@@ -211,6 +211,14 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 
         request.success(function (res) {
             that.model.set(res);
+            if (that.model.get('EuLoanPercentages') == 0.02) {
+                that.model.set('SetupFee2Class', '');
+                that.model.set('SetupFee175Class', 'pricing-model-gray');
+            } else {
+                that.model.set('SetupFee2Class', 'pricing-model-gray');
+                that.model.set('SetupFee175Class', '');
+            }
+
             that.renderAndRememberExpanded();
             UnBlockUi();
         });

@@ -27,7 +27,6 @@
   };
 
   EzBob.BindingConverters.months = function(direction, value) {
-    console.log('bla');
     if (value === "" || value === null) {
       value = 0;
     }
@@ -40,7 +39,6 @@
   };
 
   EzBob.BindingConverters.monthsNoDecimals = function(direction, value) {
-    console.log('bla');
     if (value === "" || value === null) {
       value = 0;
     }

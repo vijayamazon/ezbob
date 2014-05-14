@@ -1136,3 +1136,7 @@ div.hmrc-enter-data-holder .add-one-period {
 .table-narrow.table > tbody > tr > td {
     padding: 0;
 }
+
+.pricing-model-gray {
+    color: lightgray;
+}
