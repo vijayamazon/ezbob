@@ -1054,12 +1054,13 @@ div.hmrc-enter-data-holder .add-one-period {
     margin: 0;
 }
 
+.summary-offer > li span:first-child {
+    width: 40%;
+}
+
 .summary-offer > li span {
-    font-size: 20px;
-    margin: 0 10px;
     display: inline-block;
-    width: 30%;
-    
+    width: 25%;
 }
 
 .summary-offer > li {
@@ -1137,6 +1138,9 @@ div.hmrc-enter-data-holder .add-one-period {
     padding: 0;
 }
 
+.blue-special {
+    color: #00AEEF;
+}
 .pricing-model-gray {
     color: lightgray;
 }

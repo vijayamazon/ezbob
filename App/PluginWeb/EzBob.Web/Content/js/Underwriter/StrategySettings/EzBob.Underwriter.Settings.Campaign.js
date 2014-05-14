@@ -102,7 +102,7 @@
     };
 
     CampaignView.prototype.onRender = function() {
-      if (!$("body").hasClass("role-manager")) {
+      if (!$("body").hasClass("role-manager") && !$("body").hasClass("role-Underwriter")) {
         this.$el.find("select").addClass("disabled").attr({
           readonly: "readonly",
           disabled: "disabled"

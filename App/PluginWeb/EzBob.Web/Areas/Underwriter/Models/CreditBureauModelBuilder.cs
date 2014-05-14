@@ -127,7 +127,8 @@
 										  {
 											  Date = s.InsertDate.ToUniversalTime(),
 											  Id = s.Id,
-											  Score = s.ResponseData == null ? -1 : GetScoreFromXml(s.ResponseData)
+											  Score = GetScoreFromXml(s.ResponseData),
+											  CII = GetCIIFromXml(s.ResponseData)
 										  }).ToList();
 			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
 			var checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
@@ -144,9 +145,7 @@
 			model.ConsumerHistory = checkConsumerHistoryModels.OrderByDescending(h => h.Date);
 			model.CompanyHistory = checkCompanyHistoryModels.OrderByDescending(h => h.Date);
 		}
-
 		
-
 		private void CreatePersonalDataModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
 		{
 			model.Name = customer.PersonalInfo.FirstName;
@@ -903,6 +902,20 @@
 				var doc = XDocument.Parse(xml);
 				var score = doc.XPathSelectElement("//PremiumValueData/Scoring/E5S051").Value;
 				return Convert.ToInt32(score);
+			}
+			catch (Exception)
+			{
+				return -1;
+			}
+		}
+
+		private static int GetCIIFromXml(string xml)
+		{
+			try
+			{
+				var doc = XDocument.Parse(xml);
+				var cii = doc.XPathSelectElement("//PremiumValueData/CII/NDSPCII").Value;
+				return Convert.ToInt32(cii);
 			}
 			catch (Exception)
 			{

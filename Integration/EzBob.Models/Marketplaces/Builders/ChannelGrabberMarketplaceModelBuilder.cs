@@ -111,6 +111,14 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 				var oServiceClient = new ServiceClient();
 				VatReturnSummaryActionResult vrsar = oServiceClient.Instance.LoadVatReturnSummary(mp.Id);
+				var datesSummary = new VatReturnSummaryDates();
+				
+				if (vrsar.Summary != null && vrsar.Summary.Quarters.Any())
+				{
+					datesSummary.DateFrom = vrsar.Summary.Quarters.Min(x => x.DateFrom);
+					datesSummary.DateTo = vrsar.Summary.Quarters.Max(x => x.DateTo);
+					datesSummary.TotalSummaryDays = (datesSummary.DateTo - datesSummary.DateFrom).Days;
+				}
 
 				model.CGData = new ChannelGrabberHmrcData {
 					VatReturn = oVatReturn,
@@ -119,6 +127,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 					BankStatementAnnualized = new BankStatementDataModel(),
 					SalariesMultiplier = CurrentValues.Instance.HmrcSalariesMultiplier,
 					VatReturnSummary = vrsar.Summary,
+					VatReturnSummaryDates = datesSummary
 				};
 
 				break;

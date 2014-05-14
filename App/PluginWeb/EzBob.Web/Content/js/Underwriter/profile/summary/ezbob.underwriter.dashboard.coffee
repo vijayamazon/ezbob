@@ -28,7 +28,7 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
         properties: @propertiesModel.toJSON()
         mps: @mpsModel.toJSON()
         loan: @loanModel.toJSON()
-        affordability: null
+        affordability: _.first(_.filter(@mpsModel.toJSON(), (mp) -> mp.Name is 'HMRC'), 1)
     events:
         'click a[data-action="collapse"]' : "boxToolClick"
         'click a[data-action="close"]' : "boxToolClick"
@@ -76,6 +76,9 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
                 return history.Date)
             consumerHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',')
             @$el.find(".consumerScoreGraph").attr('values',consumerHistoryScores)
+            
+            consumerHistoryCIIs = _.pluck(historyScoresSorted, 'CII').join(',')
+            @$el.find(".consumerCIIGraph").attr('values',consumerHistoryCIIs)
 
         if(@experianModel && @experianModel.get('CompanyHistory'))
             historyScoresSorted = _.sortBy(@experianModel.get('CompanyHistory'), (history) ->

@@ -45,7 +45,9 @@
         properties: this.propertiesModel.toJSON(),
         mps: this.mpsModel.toJSON(),
         loan: this.loanModel.toJSON(),
-        affordability: null
+        affordability: _.first(_.filter(this.mpsModel.toJSON(), function(mp) {
+          return mp.Name === 'HMRC';
+        }), 1)
       };
     };
 
@@ -93,7 +95,7 @@
     };
 
     DashboardView.prototype.onRender = function() {
-      var companyHistoryScores, consumerHistoryScores, historyScoresSorted;
+      var companyHistoryScores, consumerHistoryCIIs, consumerHistoryScores, historyScoresSorted;
       if (this.model.get('Alerts') !== void 0) {
         if (this.model.get('Alerts').length === 0) {
           $('#customer-label-span').removeClass('label-warning').removeClass('label-important').addClass('label-success');
@@ -113,6 +115,8 @@
         });
         consumerHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
         this.$el.find(".consumerScoreGraph").attr('values', consumerHistoryScores);
+        consumerHistoryCIIs = _.pluck(historyScoresSorted, 'CII').join(',');
+        this.$el.find(".consumerCIIGraph").attr('values', consumerHistoryCIIs);
       }
       if (this.experianModel && this.experianModel.get('CompanyHistory')) {
         historyScoresSorted = _.sortBy(this.experianModel.get('CompanyHistory'), function(history) {

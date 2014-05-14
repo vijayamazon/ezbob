@@ -55,7 +55,7 @@ class EzBob.Underwriter.Settings.CampaignView extends Backbone.Marionette.ItemVi
             @render()
 
     onRender: -> 
-        if !$("body").hasClass("role-manager") 
+        if !$("body").hasClass("role-manager") and !$("body").hasClass("role-Underwriter")
             @$el.find("select").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
             @$el.find("button").hide()
 
