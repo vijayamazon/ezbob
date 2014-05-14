@@ -11,6 +11,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     initialize: function () {
         this.modelBinder = new Backbone.ModelBinder();
         this.model.on('reset fetch sync', this.render, this);
+        this.model.on('reset fetch sync', this.makeInitialCalculation, this);
         this.inputsExpanded = false;
         this.outputsExpanded = false;
     },
@@ -196,7 +197,13 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             that.renderAndRememberExpanded();
         });
     },
-
+    
+    makeInitialCalculation: function () {
+        if (this.model.get('LoanAmount') > 0 && this.model.get('TenureMonths') > 0) {
+            this.calculateClicked();
+        }
+    },
+    
     calculateClicked: function () {
         BlockUi();
         var that = this;
