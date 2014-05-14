@@ -93,8 +93,10 @@
 		private decimal GetSetupFeeForEu(decimal monthlyInterestRate)
 		{
 			Loan loan = CreateLoan(monthlyInterestRate);
+			decimal costOfDebtEu = GetCostOfDebt(loan.Schedule);
 			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
-			return (Model.ProfitMarkupOutput/Model.ProfitMarkup - interestRevenue)/Model.LoanAmount;
+			decimal netLossFromDefaults = (1 - Model.EuCollectionRate) * Model.LoanAmount * Model.DefaultRate / 100;
+			return (Model.ProfitMarkupOutput - interestRevenue + Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu)/Model.LoanAmount;
 		}
 
 		private decimal GetMonthlyInterestRate()
