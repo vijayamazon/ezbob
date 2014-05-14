@@ -67,6 +67,11 @@
 
 			Model.SetupFeeForEuLoanHigh = GetSetupFeeForEu(0.02m);
 			Model.SetupFeeForEuLoanLow = GetSetupFeeForEu(0.0175m);
+
+			Model.AnnualizedInterestRateEu2 = 4.4m;
+			Model.AprEu2 = 5;
+			Model.AnnualizedInterestRateEu175 = 14.4m;
+			Model.AprEu175 = 15;
 		}
 
 		private Loan CreateLoan(decimal interestRate)

@@ -3,7 +3,11 @@
   <xs:complexType name="PricingModelModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="AnnualizedInterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="AnnualizedInterestRateEu175" type="xs:decimal" />
+      <xs:element minOccurs="0" name="AnnualizedInterestRateEu2" type="xs:decimal" />
       <xs:element minOccurs="0" name="Apr" type="xs:decimal" />
+      <xs:element minOccurs="0" name="AprEu175" type="xs:decimal" />
+      <xs:element minOccurs="0" name="AprEu2" type="xs:decimal" />
       <xs:element minOccurs="0" name="Cogs" type="xs:decimal" />
       <xs:element minOccurs="0" name="CogsOutput" type="xs:decimal" />
       <xs:element minOccurs="0" name="CollectionRate" type="xs:decimal" />

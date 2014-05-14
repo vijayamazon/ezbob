@@ -41,7 +41,15 @@
 		public decimal CostOfDebtOutput { get; set; }
 		public decimal TotalCost { get; set; }
 		public decimal ProfitMarkupOutput { get; set; }
+
+		// AIR + APR
 		public decimal AnnualizedInterestRate { get; set; }
 		public decimal Apr { get; set; }
+
+		public decimal AnnualizedInterestRateEu2 { get; set; }
+		public decimal AprEu2 { get; set; }
+
+		public decimal AnnualizedInterestRateEu175 { get; set; }
+		public decimal AprEu175 { get; set; }
 	}
 }
