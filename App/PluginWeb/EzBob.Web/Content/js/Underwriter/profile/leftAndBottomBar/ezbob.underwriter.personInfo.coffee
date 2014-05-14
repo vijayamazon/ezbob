@@ -30,6 +30,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                 EzBob.App.trigger 'error', result.error
             else
                 @setAlertStatus(result.mark, '.cci-mark','.cci-mark-td', 'on', 'off')
+                @model.set('IsCciMarkInAlertMode', result.mark)
         ).always( ->
             UnBlockUi()
         )
@@ -46,6 +47,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                 EzBob.App.trigger 'error', result.error
             else
                 @setAlertStatus(result.isTest, '.is-test', '.is-test-td', 'Yes', 'No')
+                @model.set('IsTestInAlertMode', result.isTest)
         ).always( ->
             UnBlockUi()
         )
