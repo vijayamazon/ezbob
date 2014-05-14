@@ -86,6 +86,14 @@
     SettingsGeneralView.prototype.onRender = function() {
       this.modelBinder.bind(this.model, this.el, this.bindings);
       if (!$("body").hasClass("role-manager")) {
+        this.$el.find("input").addClass("disabled").attr({
+          readonly: "readonly",
+          disabled: "disabled"
+        });
+        this.$el.find("select").addClass("disabled").attr({
+          readonly: "readonly",
+          disabled: "disabled"
+        });
         this.$el.find("button[name='SaveGeneralSettings'], button[name='CancelGeneralSettings']").hide();
       }
       return this.$el.find("input[name='HmrcSalariesMultiplier']").percentFormat();

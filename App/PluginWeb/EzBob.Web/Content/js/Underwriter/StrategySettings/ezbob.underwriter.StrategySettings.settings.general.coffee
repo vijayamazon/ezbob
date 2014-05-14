@@ -45,6 +45,8 @@ class EzBob.Underwriter.SettingsGeneralView extends Backbone.Marionette.ItemView
     onRender: ->
         @modelBinder.bind @model, @el, @bindings
         if !$("body").hasClass("role-manager") 
+            @$el.find("input").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
+            @$el.find("select").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
             #@$el.find("select[name='bwaBusinessCheck'], select[name='displayEarnedPoints']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
             @$el.find("button[name='SaveGeneralSettings'], button[name='CancelGeneralSettings']").hide()
         @$el.find("input[name='HmrcSalariesMultiplier']").percentFormat()

@@ -89,6 +89,10 @@ class EzBob.Underwriter.SettingsPricingModelView extends Backbone.Marionette.Ite
         @$el.find("input[name='PricingModelCogs']").numericOnlyWithDecimal()
         @$el.find("input[name='PricingModelInterestOnlyPeriod']").numericOnly(2)
 
+        if !$("body").hasClass("role-manager") 
+            @$el.find("input").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
+            @$el.find("button").hide()
+
     show: (type) ->
         this.$el.show()
 

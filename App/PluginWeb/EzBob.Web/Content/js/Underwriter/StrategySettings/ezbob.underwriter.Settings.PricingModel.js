@@ -127,7 +127,14 @@
       this.$el.find("input[name='PricingModelProfitMarkupPercentsOfRevenue']").percentFormat();
       this.$el.find("input[name='PricingModelOpexAndCapex']").numericOnlyWithDecimal();
       this.$el.find("input[name='PricingModelCogs']").numericOnlyWithDecimal();
-      return this.$el.find("input[name='PricingModelInterestOnlyPeriod']").numericOnly(2);
+      this.$el.find("input[name='PricingModelInterestOnlyPeriod']").numericOnly(2);
+      if (!$("body").hasClass("role-manager")) {
+        this.$el.find("input").addClass("disabled").attr({
+          readonly: "readonly",
+          disabled: "disabled"
+        });
+        return this.$el.find("button").hide();
+      }
     };
 
     SettingsPricingModelView.prototype.show = function(type) {
