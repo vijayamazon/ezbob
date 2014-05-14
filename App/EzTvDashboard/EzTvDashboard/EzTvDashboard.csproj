@@ -231,6 +231,7 @@
     <Content Include="Content\js\jquery.slimscroll.js" />
     <Content Include="Content\js\underscore.js" />
     <Content Include="Content\js\_references.js" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
