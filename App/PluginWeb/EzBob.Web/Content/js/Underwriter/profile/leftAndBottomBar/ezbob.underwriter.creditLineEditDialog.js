@@ -30,7 +30,8 @@
     CreditLineEditDialog.prototype.events = {
       'click .btnOk': 'save',
       'click .suggested-amount-link': 'suggestedAmountClicked',
-      "keydown": "onEnterKeydown"
+      "keydown": "onEnterKeydown",
+      'change .percent': 'percentChanged'
     };
 
     CreditLineEditDialog.prototype.ui = {
@@ -46,8 +47,18 @@
         position: "center",
         draggable: true,
         dialogClass: "credit-line-edit-popup",
-        width: 550
+        width: 800
       };
+    };
+
+    CreditLineEditDialog.prototype.percentChanged = function(event) {
+      var $elem, link, method, percent, value;
+      $elem = $(event.target);
+      percent = $elem.autoNumericGet() / 100;
+      method = $elem.data('method');
+      value = $elem.data('value');
+      link = this.$el.find('a.Manual' + method);
+      return link.text("Manual offer " + EzBob.formatPoundsNoDecimals(value * percent) + " (" + EzBob.formatPercents(percent) + ")").data('value', value * percent).data('percent', percent);
     };
 
     CreditLineEditDialog.prototype.onEnterKeydown = function(event) {
@@ -62,7 +73,7 @@
     CreditLineEditDialog.prototype.save = function() {
       var post,
         _this = this;
-      if (!this.ui.form.valid()) {
+      if (!this.validator.checkForm()) {
         return;
       }
       post = $.post("" + window.gRootPath + "ApplicationInfo/ChangeCashRequestOpenCreditLine", this.getPostData());
@@ -79,7 +90,8 @@
       this.method = $elem.data('method');
       this.medal = $elem.data('medal');
       this.value = $elem.data('value');
-      this.ui.amount.val(this.value).change();
+      this.percent = $elem.data('percent');
+      this.ui.amount.val(this.value).change().blur();
       this.save();
       return false;
     };
@@ -92,7 +104,8 @@
         amount: m.amount,
         method: this.method,
         medal: this.medal,
-        value: this.value
+        value: this.value,
+        percent: this.percent
       };
       return data;
     };
@@ -107,10 +120,11 @@
     CreditLineEditDialog.prototype.onRender = function() {
       this.modelBinder.bind(this.model, this.el, this.bindings);
       this.$el.find("#edit-offer-amount").autoNumeric(EzBob.moneyFormat);
+      this.$el.find(".percent").autoNumeric(EzBob.percentFormat).blur();
       if (this.$el.find("#edit-offer-amount").val() === "-") {
         this.$el.find("#edit-offer-amount").val("");
       }
-      return this.setValidator();
+      return this.validator = this.setValidator();
     };
 
     CreditLineEditDialog.prototype.serializeData = function() {
@@ -122,14 +136,14 @@
     CreditLineEditDialog.prototype.setValidator = function() {
       return this.ui.form.validate({
         rules: {
-          offeredCreditLine: {
+          editOfferAmount: {
             required: true,
             autonumericMin: EzBob.Config.XMinLoan,
             autonumericMax: EzBob.Config.MaxLoan
           }
         },
         messages: {
-          offeredCreditLine: {
+          editOfferAmount: {
             autonumericMin: "Offer is below limit.",
             autonumericMax: "Offer is above limit."
           }

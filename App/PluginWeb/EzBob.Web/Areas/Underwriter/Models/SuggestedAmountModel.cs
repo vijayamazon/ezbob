@@ -8,7 +8,9 @@
 		[Description("Turnover")]
 		Turnover,
 		[Description("Value added")]
-		ValueAdded
+		ValueAdded,
+		[Description("Manual")]
+		Manual
 	}
 
 	public class SuggestedAmountModel {

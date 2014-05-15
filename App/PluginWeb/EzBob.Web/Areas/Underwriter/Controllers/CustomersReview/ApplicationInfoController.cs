@@ -124,7 +124,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeCashRequestOpenCreditLine(long id, double amount, string method, string medal, decimal? value)
+		public JsonResult ChangeCashRequestOpenCreditLine(long id, double amount, string method, string medal, decimal? value, decimal? percent)
 		{
 			_limit.Check(amount);
 			var cr = _cashRequestsRepository.Get(id);
@@ -146,7 +146,8 @@
 						CashRequest = cr,
 						Amount = value.Value,
 						Medal = medal,
-						Method = method
+						Method = method,
+						Percents = percent.HasValue ? percent.Value : 0
 					};
 				_suggestedAmountRepository.SaveOrUpdate(sa);
 			}

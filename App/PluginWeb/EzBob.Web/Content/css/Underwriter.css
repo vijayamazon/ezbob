@@ -1040,7 +1040,7 @@ div.hmrc-enter-data-holder .add-one-period {
 }
 
 .suggested-amount-link {
-    text-decoration: underline;
+    color: #428bca !important;
 }
 
 .pricing-model-left-td {

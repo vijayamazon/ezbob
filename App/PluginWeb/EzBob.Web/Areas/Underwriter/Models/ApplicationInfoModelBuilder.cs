@@ -225,26 +225,26 @@
 							Method = CalculationMethod.Turnover.DescriptionAttr(),
 							Silver = 0.06M,
 							Gold = 0.08M,
-							Diamond = 0.1M,
-							Platinum = 0.12M,
+							Platinum = 0.1M,
+							Diamond = 0.12M,
 							Value = model.Turnover
 						},
 					new SuggestedAmountModel
 						{
 							Method = CalculationMethod.FCF.DescriptionAttr(),
-							Silver = 0.21M,
-							Gold = 0.28M,
-							Diamond = 0.35M,
-							Platinum = 0.42M,
+							Silver = 0.29M,
+							Gold = 0.38M,
+							Platinum = 0.48M,
+							Diamond = 0.58M,
 							Value = model.FreeCashFlow
 						},
 					new SuggestedAmountModel
 						{
 							Method = CalculationMethod.ValueAdded.DescriptionAttr(),
-							Silver = 0.14M,
-							Gold = 0.19M,
-							Diamond = 0.23M,
-							Platinum = 0.28M,
+							Silver = 0.15M,
+							Gold = 0.20M,
+							Platinum = 0.25M,
+							Diamond = 0.30M,
 							Value = model.ValueAdded
 						},
 				};

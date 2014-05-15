@@ -13,6 +13,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string Medal { get; set; }
 		public virtual string Method { get; set; }
 		public virtual decimal Amount { get; set; }
+		public virtual decimal Percents { get; set; }
 	}
 }
 
@@ -31,6 +32,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.Medal);
 			Map(x => x.Method);
 			Map(x => x.Amount);
+			Map(x => x.Percents);
 			Map(x => x.InsertDate).CustomType<UtcDateTimeType>();
 
 			References(x => x.Customer, "CustomerId");

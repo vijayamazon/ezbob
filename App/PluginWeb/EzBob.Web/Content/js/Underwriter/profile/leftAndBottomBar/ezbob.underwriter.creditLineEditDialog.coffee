@@ -17,6 +17,7 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
         'click .btnOk': 'save'
         'click .suggested-amount-link': 'suggestedAmountClicked'
         "keydown" : "onEnterKeydown"
+        'change .percent' : 'percentChanged'
 
     ui:
         form: "form"
@@ -31,6 +32,16 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
         dialogClass: "credit-line-edit-popup"
         width: 800
 
+    percentChanged: (event) ->
+        $elem = $(event.target)
+        percent = $elem.autoNumericGet() / 100
+        method = $elem.data('method')
+        value = $elem.data('value')
+        link = @$el.find('a.Manual' + method)
+        link.text("Manual offer " + EzBob.formatPoundsNoDecimals(value * percent) + " (" + EzBob.formatPercents(percent) + ")")
+            .data('value', value * percent)
+            .data('percent', percent)
+
     onEnterKeydown: (event) ->
         if event.keyCode is 13
             @ui.amount.change().blur()
@@ -39,7 +50,7 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
         true
 
     save:->
-        return unless @ui.form.valid()
+        return unless @validator.checkForm()
         post = $.post "#{window.gRootPath}ApplicationInfo/ChangeCashRequestOpenCreditLine", @getPostData()
         post.done => 
             @model.fetch()
@@ -51,7 +62,8 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
         @method = $elem.data('method')
         @medal = $elem.data('medal')
         @value = $elem.data('value')
-        @ui.amount.val(@value).change()
+        @percent = $elem.data('percent')
+        @ui.amount.val(@value).change().blur()
         
         @save()
         false
@@ -65,6 +77,7 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
             method : @method
             medal  : @medal
             value  : @value
+            percent : @percent
 
         return data
             
@@ -76,10 +89,11 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
     onRender: -> 
         @modelBinder.bind @model, @el, @bindings
         @$el.find("#edit-offer-amount").autoNumeric(EzBob.moneyFormat)
+        @$el.find(".percent").autoNumeric(EzBob.percentFormat).blur()
         if(@$el.find("#edit-offer-amount").val() == "-")
             @$el.find("#edit-offer-amount").val("")
 
-        @setValidator()
+        @validator = @setValidator()
 
     serializeData: ->
         m: @model.toJSON()
@@ -87,12 +101,12 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
     setValidator: ->
         @ui.form.validate
             rules:
-                offeredCreditLine:
+                editOfferAmount:
                     required:true
                     autonumericMin: EzBob.Config.XMinLoan
                     autonumericMax: EzBob.Config.MaxLoan
              messages:
-                offeredCreditLine:
+                editOfferAmount:
                     autonumericMin: "Offer is below limit."
                     autonumericMax: "Offer is above limit."
             errorPlacement: EzBob.Validation.errorPlacement,
