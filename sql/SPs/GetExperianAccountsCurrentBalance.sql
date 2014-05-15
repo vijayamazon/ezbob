@@ -9,9 +9,9 @@ BEGIN
 	SELECT 
 		CurrentBalanceSum AS CurrentBalance
 	FROM 
-		MP_ExperianDataCache 
+		CustomerAnalyticsCompany 
 	WHERE
-		MP_ExperianDataCache.CustomerId = @CustomerId AND
-		MP_ExperianDataCache.CompanyRefNumber IS NOT NULL
+		CustomerAnalyticsCompany.CustomerID = @CustomerId AND
+		CustomerAnalyticsCompany.IsActive = 1
 END
 GO

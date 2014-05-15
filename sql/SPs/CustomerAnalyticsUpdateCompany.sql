@@ -10,8 +10,7 @@ ALTER PROCEDURE CustomerAnalyticsUpdateCompany
 @Score INT,
 @SuggestedAmount DECIMAL(18, 6),
 @IncorporationDate DATETIME,
-@AnalyticsDate DATETIME,
-@CurrentBalanceSum INT
+@AnalyticsDate DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -26,6 +25,19 @@ BEGIN
 		CustomerID = @CustomerID
 		AND
 		ISActive = 1
+		
+	DECLARE @CurrentBalanceSum INT
+	
+	SELECT 
+		@CurrentBalanceSum = SUM(CurrentBalance) 
+	FROM 
+		ExperianDL97Accounts 
+	WHERE 
+		CustomerId = @CustomerId AND 
+		State = 'A'
+		
+	IF @CurrentBalanceSum IS NULL
+		SET @CurrentBalanceSum = 0
 
 	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score, SuggestedAmount, IncorporationDate, CurrentBalanceSum)
 		VALUES (@CustomerID, @AnalyticsDate, 1, @Score, @SuggestedAmount, @IncorporationDate, @CurrentBalanceSum)

@@ -138,9 +138,9 @@
 
 					Utils.WriteLog(requestXml, newResponse, "E-SeriesLimitedData", customerId);
 
-					int currentBalanceSum = AddToCache(regNumber, requestXml, newResponse);
+					AddToCache(regNumber, requestXml, newResponse);
 
-					return new LimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false, CurrentBalanceSum = currentBalanceSum };
+					return new LimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false };
 				} // if
 
 				if (response == null)
@@ -148,7 +148,9 @@
 					return null;
 				}
 
-				return new LimitedResults(response.JsonPacket, response.LastUpdateDate) { CacheHit = true, CurrentBalanceSum = response.CurrentBalanceSum };
+				MakeSureDl97IsFilled(customerId, response);
+
+				return new LimitedResults(response.JsonPacket, response.LastUpdateDate) { CacheHit = true };
 			}
 			catch (Exception e) {
 				Log.Error(e);
@@ -157,6 +159,32 @@
 		} // GetOneLimitedBusinessData
 
 		#endregion method GetOneLimitedBusinessData
+
+		private void MakeSureDl97IsFilled(int customerId, MP_ExperianDataCache cachedEntry)
+		{
+			if (experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId) == null)
+			{
+				// Customer doesn't have Dl97 entries - we should insert all the entries like the customer from the cache entry
+				foreach (ExperianDL97Accounts accountEntry in experianDL97AccountsRepository.GetAll().Where(x => x.CustomerId == cachedEntry.CustomerId))
+				{
+					var newAccountEntry = new ExperianDL97Accounts
+					{
+						CustomerId = customerId,
+						State = accountEntry.State,
+						Type = accountEntry.Type,
+						Status12Months = accountEntry.Status12Months,
+						LastUpdated = accountEntry.LastUpdated,
+						CompanyType = accountEntry.CompanyType,
+						CurrentBalance = accountEntry.CurrentBalance,
+						MonthsData = accountEntry.MonthsData,
+						Status1To2 = accountEntry.Status1To2,
+						Status3To9 = accountEntry.Status3To9
+					};
+
+					experianDL97AccountsRepository.SaveOrUpdate(newAccountEntry);
+				}
+			}
+		}
 
 		#region method GetOneNotLimitedBusinessData
 
@@ -216,15 +244,10 @@
 
 		#endregion method CheckCache
 
-		public MP_ExperianDataCache Temp_CheckCache(string refNumber)
-		{
-			return CheckCache(refNumber);
-		}
-
 		#region method AddToCache
 
-		private int AddToCache(string refNumber, string request, string response) {
-			return m_oRetryer.Retry(() => {
+		private void AddToCache(string refNumber, string request, string response) {
+			m_oRetryer.Retry(() => {
 				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
 
 				MP_ExperianDataCache cacheVal =
@@ -237,44 +260,38 @@
 
 				repo.SaveOrUpdate(cacheVal);
 				
-				int currentBalanceSum = 0;
 				try
 				{
-					currentBalanceSum = ParseToDb(cacheVal);
+					ParseToDb(cacheVal.CustomerId.HasValue ? (int)cacheVal.CustomerId.Value : 0, cacheVal.JsonPacket);
 				}
 				catch (Exception e)
 				{
 					Log.ErrorFormat("Error parsing response:{0}. The error:{1}", cacheVal.Id, e);
 				}
 
-				cacheVal.CurrentBalanceSum = currentBalanceSum;
-
 				repo.SaveOrUpdate(cacheVal);
-				return currentBalanceSum;
 			}, "EBusinessService.AddToCache(" + refNumber + ")");
 		} // AddToCache
 
 		#endregion method AddToCache
 
-		public int ParseToDb(MP_ExperianDataCache cache)
+		public void ParseToDb(int customerId, string responseXml)
 		{
 			var xmlDoc = new XmlDocument();
 
 			var stream = new MemoryStream();
 			var writer = new StreamWriter(stream);
-			writer.Write(cache.JsonPacket);
+			writer.Write(responseXml);
 			writer.Flush();
 			stream.Position = 0;
 			xmlDoc.Load(stream);
 
-			int totalCurrentBalanceOfActiveAccounts = 0;
-
 			// Remove old entries
-			ExperianDL97Accounts oldEntry = experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.DataCache.Id == cache.Id);
+			ExperianDL97Accounts oldEntry = experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId);
 			while (oldEntry != null)
 			{
 				experianDL97AccountsRepository.Delete(oldEntry);
-				oldEntry = experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.DataCache.Id == cache.Id);
+				oldEntry = experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId);
 			}
 
 			XmlNodeList dl97List = xmlDoc.SelectNodes("//DL97");
@@ -332,7 +349,7 @@
 
 					var tmp = new ExperianDL97Accounts
 					{
-						DataCache = cache,
+						CustomerId = customerId,
 						State = state,
 						Type = type,
 						Status12Months = status12Months,
@@ -345,15 +362,8 @@
 					};
 
 					experianDL97AccountsRepository.SaveOrUpdate(tmp);
-
-					if (stateNode != null && stateNode.InnerText == "A")
-					{
-						totalCurrentBalanceOfActiveAccounts += currentBalance;
-					}
 				}
 			}
-
-			return totalCurrentBalanceOfActiveAccounts;
 		}
 
 		#region method MakeRequest

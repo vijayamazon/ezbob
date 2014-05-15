@@ -126,9 +126,7 @@
 				new QueryParameter("Score", m_oExperianData.BureauScore),
 				new QueryParameter("SuggestedAmount", m_oExperianData.CreditLimit),
 				new QueryParameter("IncorporationDate", m_oExperianData.IncorporationDate),
-				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
-				new QueryParameter("CurrentBalanceSum", m_oExperianData.CurrentBalanceSum ?? 0)
-			);
+				new QueryParameter("AnalyticsDate", DateTime.UtcNow));
 
 			Log.Debug("Updating customer analytics for customer {0} and company '{1}' complete.", m_nCustomerID, m_sExperianRefNum);
 		} // UpdateAnalytics

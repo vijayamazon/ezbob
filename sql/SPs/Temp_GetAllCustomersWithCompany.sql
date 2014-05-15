@@ -10,19 +10,19 @@ AS
 BEGIN
 	SELECT 
 		Customer.Id AS CustomerId,
-		Company.ExperianRefNum AS RefNumber
+		Company.ExperianRefNum AS RefNumber,
+		Company.TypeOfBusiness,
+		MP_ExperianDataCache.JsonPacket AS Response		
 	FROM 
 		Customer,
-		Company
+		Company,
+		MP_ExperianDataCache
 	WHERE
 		Customer.CompanyId = Company.Id AND
 		Company.ExperianRefNum IS NOT NULL AND
-		(
-			Company.TypeOfBusiness = 'Limited' OR 
-			Company.TypeOfBusiness = 'LLP'
-		) AND
 		ExperianRefNum != 'NotFound' AND
 		ExperianRefNum != 'skip' AND
-		ExperianRefNum != 'exception'
+		ExperianRefNum != 'exception' AND
+		MP_ExperianDataCache.CompanyRefNumber = Company.ExperianRefNum
 END
 GO
