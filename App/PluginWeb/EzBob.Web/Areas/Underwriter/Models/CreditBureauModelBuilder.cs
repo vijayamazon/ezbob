@@ -135,6 +135,7 @@
 													  CII = GetCIIFromXml(s.ResponseData)
 												  }).ToList();
 			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
+			Log.DebugFormat("BuildHistoryModel company type: {0}", isLimited ? "Limited" : "NonLimited");
 			var checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
 											 where s.Director == null
 											 where s.Customer.Id == customer.Id
@@ -143,7 +144,7 @@
 											 {
 												 Date = s.InsertDate.ToUniversalTime(),
 												 Id = s.Id,
-												 Score = s.ResponseData == null ? -1 : (isLimited ? GetLimitedScoreFromXml(s.ResponseData) : GetNonLimitedScoreFromXml(s.ResponseData))
+												 Score = (isLimited ? GetLimitedScoreFromXml(s.ResponseData) : GetNonLimitedScoreFromXml(s.ResponseData))
 											 }).ToList();
 
 			model.ConsumerHistory = checkConsumerHistoryModels.OrderByDescending(h => h.Date);
@@ -941,8 +942,9 @@
 				var score = doc.XPathSelectElement("//REQUEST/DN73/NLCDSCORE").Value;
 				return Convert.ToInt32(score);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				Log.WarnFormat("Failed to retrieve nonlimited score from xml {0}", ex);
 				return -1;
 			}
 		}
@@ -955,8 +957,9 @@
 				var score = doc.XPathSelectElement("//REQUEST/DL76/RISKSCORE").Value;
 				return Convert.ToInt32(score);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				Log.WarnFormat("Failed to retrieve limited score from xml {0}", ex);
 				return -1;
 			}
 		}

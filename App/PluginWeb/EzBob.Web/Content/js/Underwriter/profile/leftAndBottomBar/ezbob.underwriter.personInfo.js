@@ -93,7 +93,6 @@
       var id,
         _this = this;
       id = this.model.get('Id');
-      console.log('toggle', state.value);
       BlockUi();
       return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/AvoidAutomaticDecision', {
         id: id,

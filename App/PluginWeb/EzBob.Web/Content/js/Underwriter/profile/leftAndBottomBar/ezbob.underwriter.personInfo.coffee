@@ -31,7 +31,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         @$el.find(elemClass).on('switch-change', (event, state) ->
             func.call(that, event, state)
         )
-        
 
     toggleCciMark: (event, state) ->
         id = @model.get 'Id'
@@ -63,7 +62,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             else
                 @setAlertStatus(result.isTest, '.is-test-td')
                 @model.set('IsTestInAlertMode', result.isTest)
-        ).always( ->t
+        ).always( ->
             UnBlockUi()
         )
         

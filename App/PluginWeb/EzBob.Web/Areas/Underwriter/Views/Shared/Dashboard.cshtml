@@ -317,43 +317,54 @@
             </div>
         </div>
         <%}%>
-        <%if(mps && mps.length > 0) { %>
+        
+        <%if(properties){%>
         <div class="col-md-5 col-sm-12">
             <div class="box">
                 <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Data Sources</h3>
+                    <h3><i class="fa fa-bar-chart-o"></i>Assets & Worth</h3>
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
                 <div class="box-content">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Month sales</th>
-                                <th>Annual sales</th>
-                                <th>Annual payments</th>
-                                <th>Seniority</th>
-                                <th>Updated</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%_.each(mps, function(mp){ var accountData = mp.PaymentAccountBasic || {}; %>
-                                <tr>
-                                    <td style="width: 70px">
-                                        <div class="source_labels_on <%-mp.Name.replace(' ', '').toLowerCase()%>"></div>
-                                    </td>
-                                    <td><%- EzBob.formatPoundsNoDecimals(mp.monthSales || accountData.MonthInPayments) %></td>
-                                    <td><%- EzBob.formatPoundsNoDecimals(mp.anualSales || accountData.TotalNetInPayments) %></td>
-                                    <td><%- EzBob.formatPoundsNoDecimals(accountData.TotalNetOutPayments) %></td>
-                                    <td><%-mp.age%></td>
-                                    <td><%- mp.UpdatingStatus %> <%- mp.LastChecked%></td>
-                                </tr>
-                            <%});%>
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="tile tile-grey">
+                                <div class="caption text-center">
+                                    Properties
+                                </div>
+                                <p class="title text-center"><strong><%- properties.NumberOfProperties %></strong></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="tile tile-grey">
+                                <div class="caption text-center">
+                                    Market value
+                                </div>
+                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="tile tile-lightgrey tile-high">
+                                <div class="caption text-center">
+                                    Net Worth
+                                </div>
+                                <p class="title text-center blue-special"><strong><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.NetWorth) %></strong></p>
+                                <p class="title-small text-center">(<%- properties.NetWorthPercentages %>%)</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="tile tile-lightgrey tile-high">
+                                <div class="caption text-center">
+                                    Mortgages (<%- properties.NumberOfMortgages %>)
+                                </div>
+                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %></p>
+                                <p class="title-small text-center">(LTV: <%- properties.Ltv %>%)</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -414,59 +425,50 @@
                 </div>
             </div>
         </div>
-        
-        <%if(properties){%>
+
+        <%if(mps && mps.length > 0) { %>
         <div class="col-md-5 col-sm-12">
             <div class="box">
                 <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Assets & Worth</h3>
+                    <h3><i class="fa fa-bar-chart-o"></i>Data Sources</h3>
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
                 <div class="box-content">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-grey">
-                                <div class="caption text-center">
-                                    Properties
-                                </div>
-                                <p class="title text-center"><strong><%- properties.NumberOfProperties %></strong></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-grey">
-                                <div class="caption text-center">
-                                    Market value
-                                </div>
-                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-lightgrey tile-high">
-                                <div class="caption text-center">
-                                    Net Worth
-                                </div>
-                                <p class="title text-center blue-special"><strong><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.NetWorth) %></strong></p>
-                                <p class="title-small text-center">(<%- properties.NetWorthPercentages %>%)</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-lightgrey tile-high">
-                                <div class="caption text-center">
-                                    Mortgages (<%- properties.NumberOfMortgages %>)
-                                </div>
-                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %></p>
-                                <p class="title-small text-center">(LTV: <%- properties.Ltv %>%)</p>
-                            </div>
-                        </div>
-                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Month sales</th>
+                                <th>Annual sales</th>
+                                <th>Annual payments</th>
+                                <th>Seniority</th>
+                                <th>Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%_.each(mps, function(mp){ var accountData = mp.PaymentAccountBasic || {}; %>
+                                <tr>
+                                    <td style="width: 70px">
+                                        <div class="source_labels_on <%-mp.Name.replace(' ', '').toLowerCase()%>"></div>
+                                    </td>
+                                    <td><%- EzBob.formatPoundsNoDecimals(mp.monthSales || accountData.MonthInPayments) %></td>
+                                    <td><%- EzBob.formatPoundsNoDecimals(mp.anualSales || accountData.TotalNetInPayments) %></td>
+                                    <td><%- EzBob.formatPoundsNoDecimals(accountData.TotalNetOutPayments) %></td>
+                                    <td><%-mp.age%></td>
+                                    <td><%- mp.UpdatingStatus %> <%- mp.LastChecked%></td>
+                                </tr>
+                            <%});%>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
         <%}%>
-
+    </div>
+    <div class="row">
         <%if(m.LoanActivity && m.Decisions && m.Decisions.TotalDecisionsCount > 0){
             var activeLoans = m.LoanActivity.TotalIssuesCount > 0 ? "active" : "";
             var activeDecisions = activeLoans == "" ? "active" : "";
@@ -620,5 +622,68 @@
         </div>
         <%}%>
     </div>
+    <%m.DecisionHistory = m.DecisionHistory || {};%>
+    <%if(m.DecisionHistory.length > 0){%>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Decisions Details</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    
+                    <table class="table centered">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <th>Action </th>
+                                <th style="width: 100px;">Date </th>
+                                <th>ApprovedSum </th>
+                                <th>Interest </th>
+                                <th>Repayment Period </th>
+                                <th>Loan Type </th>
+                                <th>Use SetupFee </th>
+                                <th>Discount Plan </th>
+                                <th>Customer Selection </th>
+                                <th>Loan Source </th>
+                                <th>Originator </th>
+                                <th>Underwriter </th>
+                                <th>Comment </th>
+                                <th>ID </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%_.each(m.DecisionHistory, function(d){%>
+                            <tr>
+                                <td><%- d.Action %></td>
+                                <td><%- EzBob.formatDate(d.Date) %></td>
+                                <% if (d.Action == "Reject") {%>
+                                    <td colspan="8"></td>
+                                <%} else {%>
+                                    <td><%- EzBob.formatPounds(d.ApprovedSum) %></td>
+                                <td><%- EzBob.formatPercents(d.InterestRate) %></td>
+                                <td><%- d.RepaymentPeriod %></td>
+                                <td><%- EzBob.formatLoanType(d.IsLoanTypeSelectionAllowed, d.LoanType) %></td>
+                                <td><%- (d.ManualSetupFeeAmount || d.ManualSetupFeePercent) ? 'Manual' : (d.UseBrokerSetupFee ? 'Broker' : (d.UseSetupFee ? 'Setup Fee' : 'No')) %></td>
+                                <td><%- d.DiscountPlan %></td>
+                                <td><%- EzBob.formatLoanTypeSelection(d.IsLoanTypeSelectionAllowed) %></td>
+                                <td><%- d.LoanSourceName %></td>
+                                <%}%>
+                                <td><%- d.Originator %></td>
+                                <td><%- d.UnderwriterName %></td>
+                                <td><%- d.Comment %></td>
+                                <td><%- d.Id %></td>
+                            </tr>
+                            <%});%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%}%>
 </script>
 
