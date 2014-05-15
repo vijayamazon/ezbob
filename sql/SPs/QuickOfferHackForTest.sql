@@ -1,15 +1,20 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[QuickOfferHackForTest]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[QuickOfferHackForTest]
+IF OBJECT_ID('QuickOfferHackForTest') IS NULL
+	EXECUTE('CREATE PROCEDURE QuickOfferHackForTest AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[QuickOfferHackForTest] 
-	(@CustomerID INT,
-@BusinessScore INT)
+
+ALTER PROCEDURE QuickOfferHackForTest
+@CustomerID INT,
+@BusinessScore INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	IF NOT EXISTS (SELECT * FROM Customer WHERE Id = @CustomerID AND IsTest = 1)
 	BEGIN
 		RAISERROR('Customer %d was not found or is not a test customer.', 11, 1, @CustomerID)
@@ -26,24 +31,27 @@ BEGIN
 	WHERE
 		ID = 1
 
-	INSERT INTO MP_ExperianDataCache
+	INSERT INTO MP_ExperianDataCache (
+		Name, Surname, PostCode,
+		BirthDate,
+		LastUpdateDate,
+		JsonPacket,
+		JsonPacketInput,
+		ExperianError,
+		ExperianScore,
+		ExperianResult, ExperianWarning, ExperianReject, CompanyRefNumber,
+		CustomerId, DirectorId
+	)
 	SELECT
-		c.FirstName,
-		c.Surname,
-		'AB101BA',
+		c.FirstName, c.Surname, 'AB101BA',
 		DATEADD(year, - qoc.ApplicantMinAgeYears - 6, GETUTCDATE()),
 		DATEADD(hour, 8, GETUTCDATE()),
 		'{"Output":{"FullConsumerData":{"ConsumerData":{"CAIS":[{"CAISDetails":[{}]}]}}}}',
 		'{"Request":"Quick Offer Hack for Test"}',
 		NULL,
 		qoc.PersonalScoreMin + 36,
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		@CustomerID,
-		0,
-		0
+		NULL, NULL, NULL, NULL,
+		@CustomerID, 0
 	FROM
 		QuickOfferConfiguration qoc
 		INNER JOIN Customer c ON c.Id = @CustomerID
