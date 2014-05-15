@@ -18,6 +18,7 @@
 	using ExperianLib.Ebusiness;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
+	using Ezbob.Logger;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
@@ -27,7 +28,6 @@
 	using NHibernate;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
-	using log4net;
 
 	#endregion using
 
@@ -79,20 +79,20 @@
 		#region constructor
 
 		public CustomerDetailsController(
-			IEzbobWorkplaceContext context,
-			DatabaseDataHelper helper,
-			IPersonalInfoHistoryRepository personalInfoHistoryRepository,
-			ISession session,
-			CashRequestBuilder crBuilder,
-			DirectorRepository directorRepository
+			IEzbobWorkplaceContext oContext,
+			DatabaseDataHelper oDatabaseHelper,
+			IPersonalInfoHistoryRepository oPersonalInfoHistoryRepository,
+			ISession oSession,
+			CashRequestBuilder oCashRequestBuilder,
+			DirectorRepository oDirectorRepository
 		) {
-			_context = context;
-			_helper = helper;
-			_personalInfoHistoryRepository = personalInfoHistoryRepository;
+			m_oContext = oContext;
+			m_oDatabaseHelper = oDatabaseHelper;
+			m_oPersonalInfoHistoryRepository = oPersonalInfoHistoryRepository;
 			m_oServiceClient = new ServiceClient();
-			_session = session;
-			_crBuilder = crBuilder;
-			_directorRepository = directorRepository;
+			m_oSession = oSession;
+			m_oCashRequestBuilder = oCashRequestBuilder;
+			m_oDirectorRepository = oDirectorRepository;
 		} // constructor
 
 		#endregion constructor
@@ -110,7 +110,7 @@
 					sar = m_oServiceClient.Instance.BrokerBackFromCustomerWizard(blm.LeadID);
 				}
 				catch (Exception e) {
-					ms_oLog.Warn("Failed to retrieve broker details, falling back to customer's dashboard.", e);
+					ms_oLog.Warn(e, "Failed to retrieve broker details, falling back to customer's dashboard.");
 				} // try
 
 				if (sar != null) {
@@ -154,26 +154,26 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult TakeQuickOffer() {
-			var customer = _context.Customer;
+			var customer = m_oContext.Customer;
 
 			Session["WizardComplete"] = false;
 			TempData["WizardComplete"] = false;
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): has completed wizard by taking a quick offer.", customer.Id, customer.PersonalInfo.Fullname);
+			ms_oLog.Debug("Customer {1} ({0}): has completed wizard by taking a quick offer.", customer.Id, customer.PersonalInfo.Fullname);
 
-			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
+			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
 
-			_session.Flush();
+			m_oSession.Flush();
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
+			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 
-			_crBuilder.CreateQuickOfferCashRequest(customer);
+			m_oCashRequestBuilder.CreateQuickOfferCashRequest(customer);
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
+			ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
-			_concentAgreementHelper.Save(customer, DateTime.UtcNow);
+			m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
+			ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
 			return Json(new { });
 		} // TakeQuickOffer
@@ -189,36 +189,36 @@
 		public JsonResult WizardComplete() {
 			Session["WizardComplete"] = true;
 			TempData["WizardComplete"] = true;
-			var customer = _context.Customer;
+			var customer = m_oContext.Customer;
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): has completed wizard.", customer.Id, customer.PersonalInfo.Fullname);
+			ms_oLog.Debug("Customer {1} ({0}): has completed wizard.", customer.Id, customer.PersonalInfo.Fullname);
 
-			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
+			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
 
-			_session.Flush();
+			m_oSession.Flush();
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
+			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 
-			_crBuilder.CreateCashRequest(customer, CashRequestOriginator.FinishedWizard);
+			m_oCashRequestBuilder.CreateCashRequest(customer, CashRequestOriginator.FinishedWizard);
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
+			ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
 			// Updates broker lead state if needed and sends "Email Under Review".
 			m_oServiceClient.Instance.BrokerCustomerWizardComplete(customer.Id);
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
+			ms_oLog.Debug("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
-			m_oServiceClient.Instance.MainStrategy1(_context.User.Id, _context.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
+			m_oServiceClient.Instance.MainStrategy1(m_oContext.User.Id, m_oContext.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
+			ms_oLog.Debug("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
 
 			if (!customer.IsTest) {
-				m_oServiceClient.Instance.FraudChecker(_context.User.Id, FraudMode.FullCheck);
-				ms_oLog.DebugFormat("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
+				m_oServiceClient.Instance.FraudChecker(m_oContext.User.Id, FraudMode.FullCheck);
+				ms_oLog.Debug("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
 			} // if
 
-			_concentAgreementHelper.Save(customer, DateTime.UtcNow);
-			ms_oLog.DebugFormat("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
+			m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
+			ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
 			return Json(new { });
 		} // WizardComplete
@@ -241,7 +241,7 @@
 			CompanyEmployeeCountInfo companyEmployeeCountInfo,
 			CompanyInfo experianInfo
 		) {
-			var customer = _context.Customer;
+			var customer = m_oContext.Customer;
 
 			TypeOfBusiness nBusinessType;
 			IndustryType eIndustryType;
@@ -273,17 +273,17 @@
 				return Json(new { error = sErrorMsg });
 
 			if (nBusinessType != TypeOfBusiness.Entrepreneur) {
-				IQueryable<Director> directors = _directorRepository.GetAll().Where(x => x.Customer.Id == customer.Id);
+				IQueryable<Director> directors = m_oDirectorRepository.GetAll().Where(x => x.Customer.Id == customer.Id);
 
 				foreach (Director director in directors) {
 					try {
 						m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, director.Id, false);
 					}
 					catch (Exception e) {
-						ms_oLog.Error(
+						ms_oLog.Error(e,
 							"Something went pretty not so excellent while starting " +
-							"an Experian consumer check for customer " + customer.Id + " and director " + director.Id + ".",
-							e
+							"an Experian consumer check for customer {0} and director {1}.",
+							customer.Id, director.Id
 						);
 					} // try
 				} // for each director
@@ -295,12 +295,12 @@
 				qoar = m_oServiceClient.Instance.QuickOfferWithPrerequisites(customer.Id, true);
 			}
 			catch (Exception e) {
-				ms_oLog.Error("Failed to get a quick offer from the service.", e);
+				ms_oLog.Error(e, "Failed to get a quick offer from the service.");
 			} // try
 
 			if ((qoar != null) && qoar.HasValue) {
-				ms_oLog.DebugFormat("Quick offer is {0} for customer {1}.", qoar.Value.Amount, customer.Id);
-				_session.Refresh(customer);
+				ms_oLog.Debug("Quick offer is {0} for customer {1}.", qoar.Value.Amount, customer.Id);
+				m_oSession.Refresh(customer);
 			} // if
 
 			return Json(new { });
@@ -321,20 +321,20 @@
 		) {
 			SaveCustomerToDB(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth);
 
-			var customer = _context.Customer;
+			var customer = m_oContext.Customer;
 
 			try {
 				m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, 0, false);
 			}
 			catch (Exception e) {
-				ms_oLog.Error("Something went pretty not so excellent while starting an Experian consumer check for customer " + customer.Id + ".", e);
+				ms_oLog.Error(e, "Something went pretty not so excellent while starting an Experian consumer check for customer {0}.", customer.Id);
 			} // try
 
 			try {
 				m_oServiceClient.Instance.CheckAml(customer.Id);
 			}
 			catch (Exception e) {
-				ms_oLog.Error("Something went pretty not so excellent while starting an AML check for customer " + customer.Id + ".", e);
+				ms_oLog.Error(e, "Something went pretty not so excellent while starting an AML check for customer {0}.", + customer.Id);
 			} // try
 
 			if (!customer.IsTest) {
@@ -342,7 +342,7 @@
 					m_oServiceClient.Instance.NotifySalesOnNewCustomer(customer.Id);
 				}
 				catch (Exception e) {
-					ms_oLog.Error("Something went pretty not so excellent while sending notification to sales for customer " + customer.Id + ".", e);
+					ms_oLog.Error(e, "Something went pretty not so excellent while sending notification to sales for customer {0}.", customer.Id);
 				} // try
 			} // if
 
@@ -357,12 +357,12 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult AddDirector(DirectorModel director) {
-			var customer = _context.Customer;
+			var customer = m_oContext.Customer;
 
 			if (customer == null)
 				return Json(new { error = "Customer not found" });
 
-			return Json(AddDirectorToCustomer(director, customer, _session, true));
+			return Json(AddDirectorToCustomer(director, customer, m_oSession, true));
 		} // AddDirector
 
 		#endregion method AddDirector
@@ -385,7 +385,7 @@
 			List<DirectorAddressModel>[] directorAddress,
 			List<CustomerAddress> otherPropertyAddress
 		) {
-			var customer = _context.Customer;
+			var customer = m_oContext.Customer;
 
 			var oldPersonalInfo = PersonalInfoEditHistoryParametersBuilder(customer);
 
@@ -485,7 +485,7 @@
 
 		[NonAction]
 		public void SaveEditHistory(PersonalInfoHistoryParameter oldPersonalInfo, PersonalInfoHistoryParameter newPersonalInfo) {
-			var customer = _context.Customer;
+			var customer = m_oContext.Customer;
 
 			if (oldPersonalInfo.DaytimePhone != newPersonalInfo.DaytimePhone) {
 				var personalInfoEditHistory = new PersonalInfoHistory {
@@ -496,7 +496,7 @@
 					DateModifed = DateTime.Now
 				};
 
-				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
+				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
 			if (oldPersonalInfo.MobilePhone != newPersonalInfo.MobilePhone) {
@@ -507,7 +507,7 @@
 					NewValue = newPersonalInfo.MobilePhone,
 					DateModifed = DateTime.Now
 				};
-				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
+				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
 			if (oldPersonalInfo.BusinessPhone != newPersonalInfo.BusinessPhone) {
@@ -519,7 +519,7 @@
 					DateModifed = DateTime.Now
 				};
 
-				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
+				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
 			if (oldPersonalInfo.OverallTurnOver != newPersonalInfo.OverallTurnOver) {
@@ -531,7 +531,7 @@
 					DateModifed = DateTime.Now
 				};
 
-				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
+				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
 			if (oldPersonalInfo.WebSiteTurnover != newPersonalInfo.WebSiteTurnover) {
@@ -543,7 +543,7 @@
 					DateModifed = DateTime.Now
 				};
 
-				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
+				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
 			AddAddressInfoToHistory(oldPersonalInfo.PersonalAddress, newPersonalInfo.PersonalAddress, customer, "Personal Address");
@@ -689,10 +689,10 @@
 					return sErrorMsg;
 			} // if
 
-			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
-			_session.Flush();
+			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
+			m_oSession.Flush();
 
-			ms_oLog.DebugFormat(
+			ms_oLog.Debug(
 				"Customer {1} ({0}): wizard step has been updated to {2}",
 				customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.CompanyDetails
 			);
@@ -713,21 +713,21 @@
 			CompanyInfo experianInfo,
 			Customer customer
 		) {
-			Company company = new Company();
-
-			company.ExperianCompanyName = experianInfo.BusName;
-			company.ExperianRefNum = experianInfo.BusRefNum == "skip" ? "NotFound" : experianInfo.BusRefNum;
-			company.TypeOfBusiness = companyData.TypeOfBusiness;
-			company.CompanyName = companyData.CompanyName;
-			company.CompanyNumber = companyData.CompanyNumber;
-			company.TimeAtAddress = companyData.TimeAtAddress;
-			company.TimeInBusiness = companyData.TimeInBusiness;
-			company.BusinessPhone = companyData.BusinessPhone;
-			company.PropertyOwnedByCompany = companyData.PropertyOwnedByCompany;
-			company.YearsInCompany = companyData.YearsInCompany;
-			company.RentMonthLeft = companyData.RentMonthLeft;
-			company.CapitalExpenditure = companyData.CapitalExpenditure;
-			company.VatReporting = companyData.VatReporting;
+			var company = new Company {
+				ExperianCompanyName = experianInfo.BusName,
+				ExperianRefNum = experianInfo.BusRefNum == "skip" ? "NotFound" : experianInfo.BusRefNum,
+				TypeOfBusiness = companyData.TypeOfBusiness,
+				CompanyName = companyData.CompanyName,
+				CompanyNumber = companyData.CompanyNumber,
+				TimeAtAddress = companyData.TimeAtAddress,
+				TimeInBusiness = companyData.TimeInBusiness,
+				BusinessPhone = companyData.BusinessPhone,
+				PropertyOwnedByCompany = companyData.PropertyOwnedByCompany,
+				YearsInCompany = companyData.YearsInCompany,
+				RentMonthLeft = companyData.RentMonthLeft,
+				CapitalExpenditure = companyData.CapitalExpenditure,
+				VatReporting = companyData.VatReporting,
+			};
 
 			customer.Company = company;
 
@@ -741,7 +741,7 @@
 								foreach (var address in dir.DirectorAddressInfo.AllAddresses) {
 									address.AddressType = CustomerAddressType.LimitedDirectorHomeAddress;
 									address.Director = dir;
-								} // foreach
+								} // for each
 							} // if
 
 							dir.Customer = customer;
@@ -753,9 +753,9 @@
 					.Where(d => d != null).ToList()
 				); // AddAll
 
-				var oKeys = new System.Collections.Generic.SortedSet<string>();
-
-				oKeys.Add(DetailsToKey(customer));
+				var oKeys = new System.Collections.Generic.SortedSet<string> {
+					DetailsToKey(customer)
+				};
 
 				foreach (Director oDir in company.Directors) {
 					string sKey = DetailsToKey(oDir);
@@ -772,31 +772,30 @@
 					val.AddressType = CustomerAddressType.LimitedCompanyAddress; //TODO
 					val.Customer = customer;
 					val.Company = company;
-				} // foreach
+				} // for each
 
 				company.CompanyAddress = new HashedSet<CustomerAddress>(companyAddress);
 			} // if
 
 			if (experianInfo != null) {
-				experianCompanyAddress = new Collection<CustomerAddress>
-					{
-						new CustomerAddress
-							{
-								Line1 = experianInfo.AddrLine1,
-								Line2 = experianInfo.AddrLine2,
-								Line3 = experianInfo.AddrLine3,
-								Town = experianInfo.AddrLine4,
-								Postcode = experianInfo.PostCode
-							}
-					};
+				experianCompanyAddress = new Collection<CustomerAddress> {
+					new CustomerAddress {
+						Line1 = experianInfo.AddrLine1,
+						Line2 = experianInfo.AddrLine2,
+						Line3 = experianInfo.AddrLine3,
+						Town = experianInfo.AddrLine4,
+						Postcode = experianInfo.PostCode
+					}
+				};
+
 				foreach (var val in experianCompanyAddress) {
 					val.AddressType = CustomerAddressType.ExperianCompanyAddress;
 					val.Customer = customer;
 					val.Company = company;
-				} // foreach
+				} // for each
 
 				company.ExperianCompanyAddress = new HashedSet<CustomerAddress>(experianCompanyAddress);
-			}
+			} // if
 
 			company.CompanyEmployeeCount.Add(new CompanyEmployeeCount {
 				BottomEarningEmployeeCount = companyEmployeeCount.BottomEarningEmployeeCount,
@@ -816,14 +815,31 @@
 
 		#region method SaveCustomerToDB
 
+		/// <summary>
+		/// Saves customer's details to DB.
+		/// </summary>
+		/// <param name="personalInfo">Customer's personal info.</param>
+		/// <param name="personalAddress">Customer's current address.</param>
+		/// <param name="prevPersonAddresses">Customer's previous address(es).</param>
+		/// <param name="dateOfBirth">Customer's date of birth in format d/M/yyyy.</param>
+		/// <remarks>
+		/// Passing a date is kinda tricky therefore external string parameter is used for
+		/// date of birth. Depending on connection method (GET/POST) different (local/invariant)
+		/// culture information are used to parse date.
+		/// </remarks>
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		private void SaveCustomerToDB(
 			PersonalInfo personalInfo,
 			IEnumerable<CustomerAddress> personalAddress,
 			IEnumerable<CustomerAddress> prevPersonAddresses,
-			string dateOfBirth
+			string dateOfBirth // do not remove this argument, see remarks above
 		) {
-			var customer = _context.Customer;
+			ms_oLog.Debug("SaveCustomerToDB(personalInfo.birthdate = {0}, dateOfBirth = {1}.",
+				personalInfo.DateOfBirth.HasValue ? personalInfo.DateOfBirth.Value.ToString("d-MMMM-yyyy", CultureInfo.InvariantCulture) : "NULL",
+				dateOfBirth
+			);
+
+			var customer = m_oContext.Customer;
 
 			if (personalInfo == null)
 				throw new ArgumentNullException("personalInfo");
@@ -857,10 +873,10 @@
 				lst => customer.AddressInfo.PrevPersonAddresses = lst
 			);
 
-			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
-			_session.Flush();
+			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
+			m_oSession.Flush();
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
+			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
 		} // SaveCustomerToDB
 
 		#endregion method SaveCustomerToDB
@@ -925,7 +941,7 @@
 					DateModifed = DateTime.Now
 				};
 
-				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
+				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // for each removed address
 
 			foreach (var customerAddress in addedAddress) {
@@ -939,7 +955,7 @@
 
 				};
 
-				_personalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
+				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // for each added address
 		} // AddressInfoToHistory
 
@@ -1007,15 +1023,15 @@
 
 		#region private properties
 
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly IPersonalInfoHistoryRepository _personalInfoHistoryRepository;
+		private readonly IEzbobWorkplaceContext m_oContext;
+		private readonly IPersonalInfoHistoryRepository m_oPersonalInfoHistoryRepository;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly ISession _session;
-		private readonly CashRequestBuilder _crBuilder;
-		private readonly IConcentAgreementHelper _concentAgreementHelper = new ConcentAgreementHelper();
-		private readonly DatabaseDataHelper _helper;
-		private readonly DirectorRepository _directorRepository;
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(CustomerDetailsController));
+		private readonly ISession m_oSession;
+		private readonly CashRequestBuilder m_oCashRequestBuilder;
+		private readonly IConcentAgreementHelper m_oConcentAgreementHelper = new ConcentAgreementHelper();
+		private readonly DatabaseDataHelper m_oDatabaseHelper;
+		private readonly DirectorRepository m_oDirectorRepository;
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(CustomerDetailsController));
 
 		#endregion private properties
 

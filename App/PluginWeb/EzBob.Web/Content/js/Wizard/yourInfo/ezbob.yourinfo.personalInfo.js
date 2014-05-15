@@ -211,9 +211,8 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
         var form = this.$el.find('form.PersonalDetailsForm');
         var data = form.serializeArray();
         
-        if (this.$el.find('#ConsentToSearch').is(":checked")) {
+        if (this.$el.find('#ConsentToSearch').is(":checked"))
             _.find(data, function (d) { return d.name === 'ConsentToSearch'; }).value = true;
-        }
 
         var request = $.post(form.attr('action'), data);
 
