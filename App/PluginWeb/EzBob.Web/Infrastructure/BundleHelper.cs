@@ -125,6 +125,7 @@
 				.Add("~/Content/css/bootstrap.css")
 				.Add("~/Content/css/flaty/bootstrap3.css")
 				.Add("~/Content/css/flaty/dataTables.bootstrap.css")
+				.Add("~/Content/css/flaty/bootstrap-switch.css")
 				.Add("~/Content/css/flaty/DT_bootstrap.css")
 				//.Add("~/Content/css/flaty/flaty-responsive.css")
 				//.Add("~/Content/css/flaty/bootstrap-responsive.min.css")
@@ -196,6 +197,7 @@
 				.Add("~/Content/js/lib/bootstrap-modal.js")
 				.Add("~/Content/js/lib/bootstrap-modalmanager.js")
 				.Add("~/Content/js/lib/flaty/dataTables.bootstrap.js")
+				.Add("~/Content/js/lib/flaty/bootstrap-switch.js")
 				.Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
 				.Add("~/Content/js/lib/flaty/flaty.js")
 

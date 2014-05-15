@@ -18,7 +18,20 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         if @model.get 'IsWizardComplete'
             @$el.find('#ForceFinishWizard').addClass 'hide'
 
-    toggleCciMark: ->
+        that = this
+        @$el.find(".cciMarkSwitch").bootstrapSwitch()
+        @$el.find(".cciMarkSwitch").bootstrapSwitch('setState', @model.get('IsCciMarkInAlertMode'))
+        @$el.find(".cciMarkSwitch").on('switch-change', (event, state) ->
+            that.toggleCciMark(event, state)
+        )
+        
+        @$el.find(".testUserSwitch").bootstrapSwitch()
+        @$el.find(".testUserSwitch").bootstrapSwitch('setState', @model.get('IsTestInAlertMode'))
+        @$el.find(".testUserSwitch").on('switch-change', (event, state) ->
+            that.toggleIsTest(event, state)
+        )
+
+    toggleCciMark: (event, state) ->
         id = @model.get 'Id'
 
         BlockUi()
@@ -29,13 +42,13 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             if result.error
                 EzBob.App.trigger 'error', result.error
             else
-                @setAlertStatus(result.mark, '.cci-mark','.cci-mark-td', 'on', 'off')
+                @setAlertStatus(result.mark, '.cci-mark-td')
                 @model.set('IsCciMarkInAlertMode', result.mark)
         ).always( ->
             UnBlockUi()
         )
 
-    toggleIsTest: ->
+    toggleIsTest: (event, state)->
         id = @model.get 'Id'
 
         BlockUi()
@@ -46,25 +59,18 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             if result.error
                 EzBob.App.trigger 'error', result.error
             else
-                @setAlertStatus(result.isTest, '.is-test', '.is-test-td', 'Yes', 'No')
+                @setAlertStatus(result.isTest, '.is-test-td')
                 @model.set('IsTestInAlertMode', result.isTest)
         ).always( ->
             UnBlockUi()
         )
 
-    setAlertStatus: (isAlert, span, td, alertText = '', okText = '') ->
-        oSpan = @$el.find span
+    setAlertStatus: (isAlert, td) ->
         oTd = @$el.find td
 
         if isAlert
-            if alertText != ''
-                oSpan.text(alertText)
-            oSpan.closest('td').addClass 'red_cell'
             oTd.addClass 'red_cell'
         else
-            if okText != ''
-                oSpan.text(okText)
-            oSpan.closest('td').removeClass 'red_cell'
             oTd.removeClass 'red_cell'
 
     events:
@@ -72,8 +78,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         "click button[name=\"editEmail\"]": "editEmail"
         "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton"
         "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
-        'click button.cci-mark-toggle': 'toggleCciMark'
-        'click button.istest-toggle': 'toggleIsTest'
         'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus'
         'click #MainStrategyHidden': 'activateMainStratgey'
         'click #ForceFinishWizard': 'activateFinishWizard'

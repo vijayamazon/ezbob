@@ -127,8 +127,9 @@
             <tr>
                 <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> customer-column-width-50 cci-mark-td">CCI mark</td>
                 <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %>">
-                    <span class="cci-mark"><%= data.IsCciMarkInAlertMode ? 'on' : 'off' %></span>
-                    <button type="button" class="btn btn-mini btn-primary cci-mark-toggle left-pane-button">Toggle</button>
+                    <div class="cciMarkSwitch make-switch switch-mini" data-on="danger" data-off="default" data-animated="true">
+                        <input type="checkbox" checked/>
+                    </div>
                 </td>
             </tr>
 
@@ -145,8 +146,10 @@
             <tr>
                 <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %> customer-column-width-50 is-test-td">Test User</td>
                 <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %>">
-                    <span class="is-test"><%= data.IsTestInAlertMode ? 'Yes' : 'No' %></span>
-                    <button type="button" class="btn btn-mini btn-primary istest-toggle left-pane-button">Toggle</button>
+                    <div class="testUserSwitch make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                        <input type="checkbox" checked/>
+                    </div>
+
                 </td>
             </tr>
 

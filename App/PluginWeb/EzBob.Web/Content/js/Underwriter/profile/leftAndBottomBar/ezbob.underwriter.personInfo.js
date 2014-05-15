@@ -24,6 +24,7 @@
     };
 
     PersonInfoView.prototype.onRender = function() {
+      var that;
       if (this.model.get('BrokerID')) {
         this.$el.find('#with-broker').addClass('with-broker');
       }
@@ -32,11 +33,22 @@
         placement: "left"
       });
       if (this.model.get('IsWizardComplete')) {
-        return this.$el.find('#ForceFinishWizard').addClass('hide');
+        this.$el.find('#ForceFinishWizard').addClass('hide');
       }
+      that = this;
+      this.$el.find(".cciMarkSwitch").bootstrapSwitch();
+      this.$el.find(".cciMarkSwitch").bootstrapSwitch('setState', this.model.get('IsCciMarkInAlertMode'));
+      this.$el.find(".cciMarkSwitch").on('switch-change', function(event, state) {
+        return that.toggleCciMark(event, state);
+      });
+      this.$el.find(".testUserSwitch").bootstrapSwitch();
+      this.$el.find(".testUserSwitch").bootstrapSwitch('setState', this.model.get('IsTestInAlertMode'));
+      return this.$el.find(".testUserSwitch").on('switch-change', function(event, state) {
+        return that.toggleIsTest(event, state);
+      });
     };
 
-    PersonInfoView.prototype.toggleCciMark = function() {
+    PersonInfoView.prototype.toggleCciMark = function(event, state) {
       var id,
         _this = this;
       id = this.model.get('Id');
@@ -47,7 +59,7 @@
         if (result.error) {
           return EzBob.App.trigger('error', result.error);
         } else {
-          _this.setAlertStatus(result.mark, '.cci-mark', '.cci-mark-td', 'on', 'off');
+          _this.setAlertStatus(result.mark, '.cci-mark-td');
           return _this.model.set('IsCciMarkInAlertMode', result.mark);
         }
       }).always(function() {
@@ -55,7 +67,7 @@
       });
     };
 
-    PersonInfoView.prototype.toggleIsTest = function() {
+    PersonInfoView.prototype.toggleIsTest = function(event, state) {
       var id,
         _this = this;
       id = this.model.get('Id');
@@ -66,7 +78,7 @@
         if (result.error) {
           return EzBob.App.trigger('error', result.error);
         } else {
-          _this.setAlertStatus(result.isTest, '.is-test', '.is-test-td', 'Yes', 'No');
+          _this.setAlertStatus(result.isTest, '.is-test-td');
           return _this.model.set('IsTestInAlertMode', result.isTest);
         }
       }).always(function() {
@@ -74,27 +86,12 @@
       });
     };
 
-    PersonInfoView.prototype.setAlertStatus = function(isAlert, span, td, alertText, okText) {
-      var oSpan, oTd;
-      if (alertText == null) {
-        alertText = '';
-      }
-      if (okText == null) {
-        okText = '';
-      }
-      oSpan = this.$el.find(span);
+    PersonInfoView.prototype.setAlertStatus = function(isAlert, td) {
+      var oTd;
       oTd = this.$el.find(td);
       if (isAlert) {
-        if (alertText !== '') {
-          oSpan.text(alertText);
-        }
-        oSpan.closest('td').addClass('red_cell');
         return oTd.addClass('red_cell');
       } else {
-        if (okText !== '') {
-          oSpan.text(okText);
-        }
-        oSpan.closest('td').removeClass('red_cell');
         return oTd.removeClass('red_cell');
       }
     };
@@ -104,8 +101,6 @@
       "click button[name=\"editEmail\"]": "editEmail",
       "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton",
       "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
-      'click button.cci-mark-toggle': 'toggleCciMark',
-      'click button.istest-toggle': 'toggleIsTest',
       'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus',
       'click #MainStrategyHidden': 'activateMainStratgey',
       'click #ForceFinishWizard': 'activateFinishWizard'
