@@ -73,6 +73,45 @@
             <table class="table">
                 <thead class="box">
                     <tr class="box-title">
+                        <th>Loan Type</th>
+                        <th>Setup Fee</th>
+                        <th>Monthly Interest Rate</th>
+                        <th>AIR</th>
+                        <th>APR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ezbob Loan</td>
+                        <td class="pricing-model-highlight-ezbob-loan"><%-EzBob.formatPercents(model.SetupFeePercents)%></td>
+                        <td class="pricing-model-highlight-ezbob-loan"><%-EzBob.formatPercents(model.MonthlyInterestRate)%></td>
+                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRate)%></td>
+                        <td><%-EzBob.formatPercents(model.Apr)%></td>
+                    </tr>
+                    <tr>
+                        <td>EU Loan (2%)</td>
+                        <td class="<%-model.EuLoan2MainFieldsClass%>"><%-EzBob.formatPercents(model.SetupFeeForEuLoanHigh)%></td>
+                        <td class="<%-model.EuLoan2MainFieldsClass%>">2.00%</td>
+                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRateEu2)%></td>
+                        <td><%-EzBob.formatPercents(model.AprEu2)%></td>
+                    </tr>
+                    <tr>
+                        <td>EU Loan (1.75%)</td>
+                        <td class="<%-model.EuLoan175MainFieldsClass%>"><%-EzBob.formatPercents(model.SetupFeeForEuLoanLow)%></td>
+                        <td class="<%-model.EuLoan175MainFieldsClass%>">1.75%</td>
+                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRateEu175)%></td>
+                        <td><%-EzBob.formatPercents(model.AprEu175)%></td>
+                    </tr>
+                </tbody>
+            </table>
+    
+    
+    
+    
+
+            <table class="table">
+                <thead class="box">
+                    <tr class="box-title">
                         <th>Model outputs</th>
                         <th>Values</th>
                         <th>AIR</th>

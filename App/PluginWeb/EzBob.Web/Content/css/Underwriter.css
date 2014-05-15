@@ -1146,6 +1146,18 @@ div.hmrc-enter-data-holder .add-one-period {
     color: lightgray;
 }
 
+.pricing-model-highlight-eu-loan {
+    color: darkblue;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.pricing-model-highlight-ezbob-loan {
+    color: darkorange;
+    font-weight: bold;
+    font-size: 15px;
+}
+
 .tab-content.no-border {
     border: none;
 }
