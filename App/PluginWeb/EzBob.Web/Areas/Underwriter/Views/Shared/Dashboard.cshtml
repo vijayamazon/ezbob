@@ -165,7 +165,7 @@
                             <li><a href="#director<%-i%>" data-toggle="tab"><span class="<%-directorTileColor%>" style="background-color: <%-item.ScoreColor%>;"><%-item.Score%></span> Director <%-(i+1)%></a></li>
                             <%});}%>
                         </ul>
-                        <div class="tab-content">
+                        <div class="tab-content no-border">
                             <div class="tab-pane fade active in" id="customerExperian">
                                 <div class="">
                                     <div class="col-md-3 col-sm-4">
@@ -187,7 +187,7 @@
                                     <div class="col-md-3 col-sm-4">
                                         <div class="tile tile-transparant">
                                             <div class="caption text-center">
-                                                Total CAIS balance:
+                                                Total CAIS balance
                                             </div>
                                             <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total);
                                    var textSize = '';
@@ -218,7 +218,7 @@
                                     <div class="col-md-3 col-sm-4">
                                         <div class="tile <%- experian.ConsumerAccountsOverview.OpenAccounts_Total==0 ? 'tile-red' : 'tile-lightgreen' %>">
                                             <div class="caption text-center">
-                                                CAIS Accounts:
+                                                CAIS Accounts
                                             </div>
                                             <p class="title text-center"><%-experian.ConsumerAccountsOverview.OpenAccounts_Total%></p>
                                         </div>
@@ -372,7 +372,7 @@
                 <div class="box-content">
                     <div class="row">
                         <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-green">
+                            <div class="tile" style="background-color: <%-experianCompany.ScoreColor%>">
                                 <div class="caption text-center">
                                     Score
                                 </div>
@@ -380,7 +380,7 @@
                             </div>
                         </div>
                         <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-green">
+                            <div class="tile tile-lightgrey">
                                 <div class="caption text-center">
                                     CCJ
                                 </div>
@@ -388,7 +388,7 @@
                             </div>
                         </div>
                         <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-orange">
+                            <div class="tile tile-lightgrey">
                                 <div class="caption text-center">
                                     Tangible equity
                                 </div>
@@ -396,7 +396,7 @@
                             </div>
                         </div>
                         <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-green">
+                            <div class="tile tile-lightgrey">
                                 <div class="caption text-center">
                                     Adjusted profit
                                 </div>

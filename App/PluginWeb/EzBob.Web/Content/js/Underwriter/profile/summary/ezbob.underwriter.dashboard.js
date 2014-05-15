@@ -132,14 +132,12 @@
         spotRadius: 3,
         lineColor: "#88bbc8",
         fillColor: "#f2f7f9",
-        spotColor: "#14ae48",
-        maxSpotColor: "#e72828",
-        minSpotColor: "#f7941d",
+        spotColor: "green",
+        maxSpotColor: "#00AEEF",
+        minSpotColor: "red",
         chartRangeMin: -1,
         valueSpots: {
-          ':549': 'red',
-          '550:749': 'yellow',
-          '750:': 'green'
+          ':': 'green'
         }
       });
     };

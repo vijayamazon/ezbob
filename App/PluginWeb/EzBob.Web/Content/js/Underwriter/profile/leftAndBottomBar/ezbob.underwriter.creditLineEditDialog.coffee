@@ -29,7 +29,7 @@ class EzBob.Underwriter.CreditLineEditDialog extends Backbone.Marionette.ItemVie
         position: "center"
         draggable: true
         dialogClass: "credit-line-edit-popup"
-        width: 550
+        width: 800
 
     onEnterKeydown: (event) ->
         if event.keyCode is 13

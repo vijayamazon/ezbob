@@ -1099,6 +1099,7 @@ div.hmrc-enter-data-holder .add-one-period {
     padding-left: 0;
     padding-right: 0;
     margin: 2px -13px 2px -13px;
+    font-size: 11px;
 }
 .alert {
     padding: 5px !important;
@@ -1143,4 +1144,8 @@ div.hmrc-enter-data-holder .add-one-period {
 }
 .pricing-model-gray {
     color: lightgray;
+}
+
+.tab-content.no-border {
+    border: none;
 }

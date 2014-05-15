@@ -16,19 +16,24 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string FullName { get; set; }
 		public string CompanyName { get; set; }
 		public bool IsExperianError { get; set; }
+
 		public bool IsError
 		{
 			get { return _errorList.Count > 0; }
 		}
+
 		public List<string> ErrorList
 		{
 			get { return _errorList; }
 		}
+
 		public string ModelType { get; set; }
+
 		public bool CheckFailed
 		{
 			get { return CheckStatus == "Error"; }
 		}
+
 		public string CheckStatus { get; set; } // done
 		public string CheckIcon { get; set; } // done
 		public string ButtonStyle { get; set; } // done
@@ -45,10 +50,12 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public ConsumerSummaryCharacteristics ConsumerSummaryCharacteristics { get; set; }
 		public ConsumerAccountsOverview ConsumerAccountsOverview { get; set; }
 		public AccountInfo[] AccountsInformation { get; set; }
+
 		public bool HasNOCs
 		{
 			get { return (NOCs != null) && (NOCs.Length > 0); }
 		}
+
 		public NOCInfo[] NOCs { get; set; }
 		public AMLInfo AmlInfo { get; set; }
 		public BankAccountVerificationInfo BavInfo { get; set; }
@@ -170,6 +177,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 	public class ExperianCompanyInfo
 	{
 		public decimal BureauScore { get; set; }
+		public string ScoreColor { get; set; }
 		public bool IsDataExpired { get; set; }
 		public bool IsError { get; set; }
 		public string Error { get; set; }
@@ -221,6 +229,14 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public int Score { get; set; }
 		public int CII { get; set; }
 		public long Id { get; set; }
+	}
+
+	public class DelphiModel
+	{
+		public string Position { get; set; }
+		public string Align { get; set; }
+		public string ValPosition { get; set; }
+		public string Color { get; set; }
 	}
 
 	// ReSharper disable  InconsistentNaming

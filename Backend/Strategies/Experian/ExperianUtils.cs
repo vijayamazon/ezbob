@@ -22,7 +22,11 @@
 
 		public int DetectAml(string sAmlData) {
 			XmlNode aml;
-
+			if (string.IsNullOrEmpty(sAmlData))
+			{
+				Log.Warn("Aml data is null or empty");
+				return 0;
+			}
 			try {
 				aml = Xml.ParseRoot(sAmlData);
 			}
@@ -210,14 +214,14 @@
 			XmlNode oNode = oCompanyInfo.Offspring(oPath);
 
 			if (ReferenceEquals(oNode, null)) {
-				Log.Alert("Could not find business score tag {0} in company data.", oPath);
+				Log.Warn("Could not find business score tag {0} in company data.", oPath);
 				return 0;
 			} // if
 
 			int nScore;
 
 			if (!int.TryParse(oNode.InnerText, out nScore)) {
-				Log.Alert("Failed to parse business score content '{0}' as int.", oNode.InnerText);
+				Log.Warn("Failed to parse business score content '{0}' as int.", oNode.InnerText);
 				return 0;
 			} // if
 

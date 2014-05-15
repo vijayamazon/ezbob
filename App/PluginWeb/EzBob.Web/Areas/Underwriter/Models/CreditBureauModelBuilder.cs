@@ -30,6 +30,10 @@
 		private readonly ICustomerRepository _customers;
 		private readonly ConfigurationVariablesRepository _variablesRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CreditBureauModelBuilder));
+		private static readonly int ConsumerScoreMax = 1400;
+		private static readonly int ConsumerScoreMin = 120;
+		private static readonly int CompanyScoreMax = 100;
+		private static readonly int CompanyScoreMin = 0;
 
 		public CreditBureauModelBuilder(ISession session, ICustomerRepository customers, ConfigurationVariablesRepository variablesRepository)
 		{
@@ -43,7 +47,7 @@
 			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
 			var model = new CreditBureauModel();
 			var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
-			
+
 			//registered customer
 			if (customerMainAddress == null)
 			{
@@ -120,32 +124,32 @@
 		private void BuildHistoryModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
 		{
 			var checkConsumerHistoryModels = (from s in _session.Query<MP_ServiceLog>()
-									  where s.Director == null
-									  where s.Customer.Id == customer.Id
-									  where s.ServiceType == "Consumer Request"
-									  select new CheckHistoryModel
-										  {
-											  Date = s.InsertDate.ToUniversalTime(),
-											  Id = s.Id,
-											  Score = GetScoreFromXml(s.ResponseData),
-											  CII = GetCIIFromXml(s.ResponseData)
-										  }).ToList();
+											  where s.Director == null
+											  where s.Customer.Id == customer.Id
+											  where s.ServiceType == "Consumer Request"
+											  select new CheckHistoryModel
+												  {
+													  Date = s.InsertDate.ToUniversalTime(),
+													  Id = s.Id,
+													  Score = GetScoreFromXml(s.ResponseData),
+													  CII = GetCIIFromXml(s.ResponseData)
+												  }).ToList();
 			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
 			var checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
-									  where s.Director == null
-									  where s.Customer.Id == customer.Id
-									  where s.ServiceType == (isLimited ?  "E-SeriesLimitedData" : "E-SeriesNonLimitedData")
-									  select new CheckHistoryModel
-									  {
-										  Date = s.InsertDate.ToUniversalTime(),
-										  Id = s.Id,
-										  Score = s.ResponseData == null ? -1 : (isLimited ? GetLimitedScoreFromXml(s.ResponseData) : GetNonLimitedScoreFromXml(s.ResponseData))
-									  }).ToList();
+											 where s.Director == null
+											 where s.Customer.Id == customer.Id
+											 where s.ServiceType == (isLimited ? "E-SeriesLimitedData" : "E-SeriesNonLimitedData")
+											 select new CheckHistoryModel
+											 {
+												 Date = s.InsertDate.ToUniversalTime(),
+												 Id = s.Id,
+												 Score = s.ResponseData == null ? -1 : (isLimited ? GetLimitedScoreFromXml(s.ResponseData) : GetNonLimitedScoreFromXml(s.ResponseData))
+											 }).ToList();
 
 			model.ConsumerHistory = checkConsumerHistoryModels.OrderByDescending(h => h.Date);
 			model.CompanyHistory = checkCompanyHistoryModels.OrderByDescending(h => h.Date);
 		}
-		
+
 		private void CreatePersonalDataModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
 		{
 			model.Name = customer.PersonalInfo.FirstName;
@@ -184,7 +188,7 @@
 			string valPos;
 			string color;
 
-			GetScorePositionAndColor(score, out pos, out align, out valPos, out color);
+			var scorePosColor = GetScorePositionAndColor(score, ConsumerScoreMax, ConsumerScoreMin);
 
 			var checkStatus = ((eInfo == null) || !string.IsNullOrEmpty(eInfo.Error))
 								  ? "Error"
@@ -230,10 +234,10 @@
 
 				Score = score,
 				Odds = odds,
-				ScorePosition = pos,
-				ScoreAlign = align,
-				ScoreValuePosition = valPos,
-				ScoreColor = color,
+				ScorePosition = scorePosColor.Position,
+				ScoreAlign = scorePosColor.Align,
+				ScoreValuePosition = scorePosColor.ValPosition,
+				ScoreColor = scorePosColor.Color,
 
 				ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics(),
 				ConsumerAccountsOverview = new ConsumerAccountsOverview(),
@@ -672,7 +676,7 @@
 		{
 			var srv = new EBusinessService();
 			var company = customer.Company;
-			if(company == null) return;
+			if (company == null) return;
 			int updateCompanyDataPeriodDays;
 			switch (company.TypeOfBusiness.Reduce())
 			{
@@ -680,7 +684,7 @@
 					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
 					updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
 					if (limitedBusinessData != null && limitedBusinessData.LastCheckDate.HasValue &&
-						(DateTime.UtcNow - limitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays) 
+						(DateTime.UtcNow - limitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays)
 					{
 						limitedBusinessData.IsDataExpired = true;
 					}
@@ -703,17 +707,21 @@
 					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
 					break;
 			}
+
+
+
 		}
 
 		protected void AppendLimitedInfo(CreditBureauModel model, LimitedResults eInfo)
 		{
 			if (eInfo == null)
 				return;
-
+			var spc = GetScorePositionAndColor((double)eInfo.BureauScore, CompanyScoreMax, CompanyScoreMin);
 			model.ModelType = "Limited";
 			model.LimitedInfo = new ExperianLimitedInfo
 			{
 				BureauScore = eInfo.BureauScore,
+				ScoreColor = spc.Color,
 				RiskLevel = (eInfo.BureauScore > 90) ? "Low Risk" : ((eInfo.BureauScore < 40) ? "High Risk" : "Medium Risk"),
 				ExistingBusinessLoans = eInfo.ExistingBusinessLoans,
 				Error = eInfo.Error,
@@ -733,9 +741,11 @@
 			if (eInfo == null)
 				return;
 			model.ModelType = "NonLimited";
+			var spc = GetScorePositionAndColor((double)eInfo.BureauScore, CompanyScoreMax, CompanyScoreMin);
 			model.NonLimitedInfo = new ExperianNonLimitedInfo
 			{
 				BureauScore = eInfo.BureauScore,
+				ScoreColor = spc.Color,
 				CompanyNotFoundOnBureau = eInfo.CompanyNotFoundOnBureau,
 				Error = eInfo.Error,
 				IsDataExpired = eInfo.IsDataExpired,
@@ -951,8 +961,7 @@
 			}
 		}
 
-		protected void GetScorePositionAndColor(double score, out string position, out string align,
-												out string valPosition, out string color)
+		protected DelphiModel GetScorePositionAndColor(double score, int scoreMax, int scoreMin)
 		{
 			const int w = 640;
 
@@ -963,8 +972,6 @@
 			const int yellowX = 240;
 			const int greenWidth = 240;
 
-			const int scoreMax = 1400;
-			const int scoreMin = 120;
 
 			var s = (int)((score - scoreMin) / (scoreMax - scoreMin) * barCount);
 			s = (s < 0) ? 0 : s;
@@ -990,12 +997,15 @@
 			int barPos = s * (barWidth + spaceWidth);
 			int scorePos = (s < barCount / 2) ? barPos : barPos - 120;
 			int valPos = (s < barCount / 2) ? barPos : barPos - 120;
-			align = (s < barCount / 2) ? "none" : "left";
 
-			position = string.Format("{0}px;", scorePos);
-			valPosition = string.Format("{0}px;", valPos);
+			return new DelphiModel
+				{
+					Align = (s < barCount / 2) ? "none" : "left",
+					Position = string.Format("{0}px;", scorePos),
+					ValPosition = string.Format("{0}px;", valPos),
+					Color = string.Format("#{0:X2}{1:X2}{2:X2};", c.R, c.G, c.B),
+				};
 
-			color = string.Format("#{0:X2}{1:X2}{2:X2};", c.R, c.G, c.B);
 		}
 
 		private static double Cup(double x)
@@ -1007,20 +1017,16 @@
 		{
 			var r = new Random();
 			var score = r.Next(-200, 1600);
-			string pos;
-			string align;
-			string valPos;
-			string color;
-			GetScorePositionAndColor(score, out pos, out align, out valPos, out color);
+			var spc = GetScorePositionAndColor(score, ConsumerScoreMax, ConsumerScoreMin);
 
 			return new CreditBureauModel
 			{
 				Id = id,
 				Score = score,
-				ScorePosition = pos,
-				ScoreAlign = align,
-				ScoreValuePosition = valPos,
-				ScoreColor = color,
+				ScorePosition = spc.Position,
+				ScoreAlign = spc.Align,
+				ScoreValuePosition = spc.ValPosition,
+				ScoreColor = spc.Color,
 				CheckStatus = "Passed",
 				CheckIcon = "icon-white icon-ok",
 				ButtonStyle = "btn-success"
