@@ -303,29 +303,29 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeSetupFee(long id, bool enbaled)
+		public JsonResult ChangeSetupFee(long id, bool enabled)
 		{
 			var cr = _cashRequestsRepository.Get(id);
-			cr.UseSetupFee = enbaled;
+			cr.UseSetupFee = enabled;
 			cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).UseSetupFee = {1}", id, enbaled);
+			Log.DebugFormat("CashRequest({0}).UseSetupFee = {1}", id, enabled);
 
 			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
 			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
-			return Json(new {setupFee = setupFee});
+			return Json(new { error = (string)null, id = id, status = enabled, setupFee = setupFee });
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeBrokerSetupFee(long id, bool enbaled)
+		public JsonResult ChangeBrokerSetupFee(long id, bool enabled)
 		{
 			var cr = _cashRequestsRepository.Get(id);
-			cr.UseBrokerSetupFee = enbaled;
+			cr.UseBrokerSetupFee = enabled;
 			cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).UseBrokerSetupFee = {1}", id, enbaled);
+			Log.DebugFormat("CashRequest({0}).UseBrokerSetupFee = {1}", id, enabled);
 			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
 			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
-			return Json(new { setupFee = setupFee });
+			return Json(new { error = (string)null, id = id, status = enabled, setupFee = setupFee });
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
@@ -448,11 +448,12 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public void AvoidAutomaticDecision(int id, bool enbaled)
+		public JsonResult AvoidAutomaticDecision(int id, bool enabled)
 		{
 			var cust = _customerRepository.Get(id);
-			cust.IsAvoid = enbaled;
-			Log.DebugFormat("Customer({0}).IsAvoided = {1}", id, enbaled);
+			cust.IsAvoid = enabled;
+			Log.DebugFormat("Customer({0}).IsAvoided = {1}", id, enabled);
+			return Json(new { error = (string)null, id = id, status = cust.IsAvoid });
 		}
 
 		[HttpPost]
@@ -460,12 +461,13 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public void AllowSendingEmails(long id, bool enbaled)
+		public JsonResult AllowSendingEmails(long id, bool enabled)
 		{
 			var cr = _cashRequestsRepository.Get(id);
-			cr.EmailSendingBanned = !enbaled;
+			cr.EmailSendingBanned = !enabled;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).EmailSendingBanned = {1}", id, cr.EmailSendingBanned);
+			return Json(new { error = (string)null, id = id, status = enabled });
 		}
 
 		[HttpPost]

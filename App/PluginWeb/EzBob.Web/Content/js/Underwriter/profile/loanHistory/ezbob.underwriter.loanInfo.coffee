@@ -24,12 +24,9 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         "click [name='openPacnetManualButton']"             : "openPacnetManual"
         "click [name='clearPacnetManualButton']"            : "clearPacnetManual"
         "click [name='editDetails']"                        : "editDetails"
-        "click [name='setupFeeEditButton']"                 : "editSetupFee"
-        "click [name='brokerSetupFeeEditButton']"           : "editBrokerSetupFee"
         "click [name='manualSetupFeeEditAmountButton']"     : "editManualSetupFeeAmount"
         "click [name='manualSetupFeeEditPercentButton']"    : "editManualSetupFeePercent"
         "click [name='newCreditLineBtn']"                   : "runNewCreditLine"
-        'click [name="allowSendingEmail"]'                  : 'allowSendingEmail'
         'click [name="loanType"]'                           : 'loanType'
         'click [name="isLoanTypeSelectionAllowed"]'         : 'isLoanTypeSelectionAllowed'
         'click [name="discountPlan"]'                       : 'discountPlan'
@@ -207,35 +204,6 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         d.render()
         return
 
-    editSetupFee: ->
-        d = new EzBob.Dialogs.CheckBoxEdit(
-            model: @model
-            propertyName: "UseSetupFee"
-            title: "Setup fee"
-            width: 400
-            postValueName: "enbaled"
-            checkboxName: "Enable Setup Fee"
-            url: "Underwriter/ApplicationInfo/ChangeSetupFee"
-            data:
-                id: @model.get("CashRequestId")
-        )
-        d.render()
-        return
-
-    editBrokerSetupFee: ->
-        d = new EzBob.Dialogs.CheckBoxEdit(
-            model: @model
-            propertyName: "UseBrokerSetupFee"
-            title: "Broker Commission"
-            width: 400
-            postValueName: "enbaled"
-            checkboxName: "Enable broker commission"
-            url: "Underwriter/ApplicationInfo/ChangeBrokerSetupFee"
-            data:
-                id: @model.get("CashRequestId")
-        )
-        d.render()
-        return
     editManualSetupFeeAmount: ->
         d = new EzBob.Dialogs.PoundsNoDecimalsEdit(
             model: @model
@@ -312,19 +280,6 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
                 updater.start()
         ).fail (data) ->
             console.error data.responseText
-
-    allowSendingEmail: ->
-        d = new EzBob.Dialogs.CheckBoxEdit
-            model: @model
-            propertyName: "AllowSendingEmail"
-            title: "Allow sending emails"
-            width: 400
-            postValueName: "enbaled"
-            checkboxName: "Allow"
-            url: "Underwriter/ApplicationInfo/AllowSendingEmails"
-            data: {id: @model.get("CashRequestId")}
-        d.render()
-        return
 
     isLoanTypeSelectionAllowed: ->
         d = new EzBob.Dialogs.ComboEdit
@@ -477,12 +432,45 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         @UpdateNewCreditLineState()
         @LoanTypeSelectionAllowedChanged()
 
+        @initSwitch(".brokerCommisionSwitch", 'UseBrokerSetupFee', @toggleValue, 'ChangeBrokerSetupFee')
+        @initSwitch(".setupFeeSwitch", 'UseSetupFee', @toggleValue, 'ChangeSetupFee')
+        @initSwitch(".sendEmailsSwitch", 'AllowSendingEmail', @toggleValue, 'AllowSendingEmails')
+
         if @model.get('IsLoanTypeSelectionAllowed') in [ 2, '2' ]
             @$el.find('button[name=isLoanTypeSelectionAllowed]').attr('disabled', 'disabled')
         else
             @$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled')
 
         @validateLoanSourceRelated()
+
+    initSwitch: (elemClass, param, func, method) ->
+        that = this
+        state = @model.get(param)
+        @$el.find(elemClass).bootstrapSwitch()
+        @$el.find(elemClass).bootstrapSwitch('setState', state)
+        @$el.find(elemClass).on('switch-change', (event, state) ->
+            func.call(that, event, state, method, param)
+        )
+
+    toggleValue: (event, state, method, param) ->
+        id = @model.get 'CashRequestId'
+        BlockUi()
+
+        $.post(window.gRootPath + 'Underwriter/ApplicationInfo/' + method,
+            id: id
+            enabled: state.value
+        ).done( (result) =>
+            if result.error
+                EzBob.App.trigger 'error', result.error
+            else
+                @model.set(param, result.status)
+                
+            if (!isNaN(result.setupFee))
+                @model.set("SetupFee", result.setupFee)
+            
+        ).always( ->
+            UnBlockUi()
+        )
 
     changeCreditResult: ->
         @model.fetch()

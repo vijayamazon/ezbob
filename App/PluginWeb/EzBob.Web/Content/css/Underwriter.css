@@ -1158,3 +1158,7 @@ div.hmrc-enter-data-holder .add-one-period {
 .tab-content.no-border {
     border: none;
 }
+
+.row {
+    max-width: 100%;
+}

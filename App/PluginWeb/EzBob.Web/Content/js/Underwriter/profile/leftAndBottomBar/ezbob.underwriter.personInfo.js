@@ -36,15 +36,18 @@
         this.$el.find('#ForceFinishWizard').addClass('hide');
       }
       that = this;
-      this.$el.find(".cciMarkSwitch").bootstrapSwitch();
-      this.$el.find(".cciMarkSwitch").bootstrapSwitch('setState', this.model.get('IsCciMarkInAlertMode'));
-      this.$el.find(".cciMarkSwitch").on('switch-change', function(event, state) {
-        return that.toggleCciMark(event, state);
-      });
-      this.$el.find(".testUserSwitch").bootstrapSwitch();
-      this.$el.find(".testUserSwitch").bootstrapSwitch('setState', this.model.get('IsTestInAlertMode'));
-      return this.$el.find(".testUserSwitch").on('switch-change', function(event, state) {
-        return that.toggleIsTest(event, state);
+      this.initSwitch(".cciMarkSwitch", this.model.get('IsCciMarkInAlertMode'), this.toggleCciMark);
+      this.initSwitch(".testUserSwitch", this.model.get('IsTestInAlertMode'), this.toggleIsTest);
+      return this.initSwitch(".manualDecisionSwitch", this.model.get('IsAvoid'), this.toggleManualDecision);
+    };
+
+    PersonInfoView.prototype.initSwitch = function(elemClass, state, func) {
+      var that;
+      that = this;
+      this.$el.find(elemClass).bootstrapSwitch();
+      this.$el.find(elemClass).bootstrapSwitch('setState', state);
+      return this.$el.find(elemClass).on('switch-change', function(event, state) {
+        return func.call(that, event, state);
       });
     };
 
@@ -86,6 +89,26 @@
       });
     };
 
+    PersonInfoView.prototype.toggleManualDecision = function(event, state) {
+      var id,
+        _this = this;
+      id = this.model.get('Id');
+      console.log('toggle', state.value);
+      BlockUi();
+      return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/AvoidAutomaticDecision', {
+        id: id,
+        enabled: state.value
+      }).done(function(result) {
+        if (result.error) {
+          return EzBob.App.trigger('error', result.error);
+        } else {
+          return _this.model.set('IsAvoid', result.status);
+        }
+      }).always(function() {
+        return UnBlockUi();
+      });
+    };
+
     PersonInfoView.prototype.setAlertStatus = function(isAlert, td) {
       var oTd;
       oTd = this.$el.find(td);
@@ -99,7 +122,6 @@
     PersonInfoView.prototype.events = {
       "click button[name=\"changeDisabledState\"]": "changeDisabledState",
       "click button[name=\"editEmail\"]": "editEmail",
-      "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton",
       "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
       'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus',
       'click #MainStrategyHidden': 'activateMainStratgey',
@@ -229,23 +251,6 @@
           });
         });
       });
-    };
-
-    PersonInfoView.prototype.avoidAutomaticDecisionButton = function() {
-      var d;
-      d = new EzBob.Dialogs.CheckBoxEdit({
-        model: this.model,
-        propertyName: "IsAvoid",
-        title: "Manual Decision",
-        width: 350,
-        postValueName: "enbaled",
-        checkboxName: "Enable Manual Decision",
-        url: "Underwriter/ApplicationInfo/AvoidAutomaticDecision",
-        data: {
-          id: this.model.get("Id")
-        }
-      });
-      d.render();
     };
 
     PersonInfoView.prototype.editEmail = function() {

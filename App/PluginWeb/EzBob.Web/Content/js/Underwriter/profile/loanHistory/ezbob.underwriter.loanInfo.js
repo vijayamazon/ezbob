@@ -41,14 +41,10 @@
       "click [name='openPacnetManualButton']": "openPacnetManual",
       "click [name='clearPacnetManualButton']": "clearPacnetManual",
       "click [name='editDetails']": "editDetails",
-      "click [name='setupFeeEditButton']": "editSetupFee",
-      "click [name='brokerSetupFeeEditButton']": "editBrokerSetupFee",
       "click [name='manualSetupFeeEditAmountButton']": "editManualSetupFeeAmount",
       "click [name='manualSetupFeeEditPercentButton']": "editManualSetupFeePercent",
       "click [name='newCreditLineBtn']": "runNewCreditLine",
-      'click [name="allowSendingEmail"]': 'allowSendingEmail',
       'click [name="loanType"]': 'loanType',
-      'click [name="isLoanTypeSelectionAllowed"]': 'isLoanTypeSelectionAllowed',
       'click [name="discountPlan"]': 'discountPlan',
       'click [name="loanSource"]': 'loanSource',
       'click .create-loan-hidden-toggle': 'toggleCreateLoanHidden',
@@ -243,40 +239,6 @@
       d.render();
     };
 
-    LoanInfoView.prototype.editSetupFee = function() {
-      var d;
-      d = new EzBob.Dialogs.CheckBoxEdit({
-        model: this.model,
-        propertyName: "UseSetupFee",
-        title: "Setup fee",
-        width: 400,
-        postValueName: "enbaled",
-        checkboxName: "Enable Setup Fee",
-        url: "Underwriter/ApplicationInfo/ChangeSetupFee",
-        data: {
-          id: this.model.get("CashRequestId")
-        }
-      });
-      d.render();
-    };
-
-    LoanInfoView.prototype.editBrokerSetupFee = function() {
-      var d;
-      d = new EzBob.Dialogs.CheckBoxEdit({
-        model: this.model,
-        propertyName: "UseBrokerSetupFee",
-        title: "Broker Commission",
-        width: 400,
-        postValueName: "enbaled",
-        checkboxName: "Enable broker commission",
-        url: "Underwriter/ApplicationInfo/ChangeBrokerSetupFee",
-        data: {
-          id: this.model.get("CashRequestId")
-        }
-      });
-      d.render();
-    };
-
     LoanInfoView.prototype.editManualSetupFeeAmount = function() {
       var d;
       d = new EzBob.Dialogs.PoundsNoDecimalsEdit({
@@ -364,23 +326,6 @@
       }).fail(function(data) {
         return console.error(data.responseText);
       });
-    };
-
-    LoanInfoView.prototype.allowSendingEmail = function() {
-      var d;
-      d = new EzBob.Dialogs.CheckBoxEdit({
-        model: this.model,
-        propertyName: "AllowSendingEmail",
-        title: "Allow sending emails",
-        width: 400,
-        postValueName: "enbaled",
-        checkboxName: "Allow",
-        url: "Underwriter/ApplicationInfo/AllowSendingEmails",
-        data: {
-          id: this.model.get("CashRequestId")
-        }
-      });
-      d.render();
     };
 
     LoanInfoView.prototype.isLoanTypeSelectionAllowed = function() {
@@ -584,12 +529,48 @@
       });
       this.UpdateNewCreditLineState();
       this.LoanTypeSelectionAllowedChanged();
+      this.initSwitch(".brokerCommisionSwitch", 'UseBrokerSetupFee', this.toggleValue, 'ChangeBrokerSetupFee');
+      this.initSwitch(".setupFeeSwitch", 'UseSetupFee', this.toggleValue, 'ChangeSetupFee');
+      this.initSwitch(".sendEmailsSwitch", 'AllowSendingEmail', this.toggleValue, 'AllowSendingEmails');
       if ((_ref = this.model.get('IsLoanTypeSelectionAllowed')) === 2 || _ref === '2') {
         this.$el.find('button[name=isLoanTypeSelectionAllowed]').attr('disabled', 'disabled');
       } else {
         this.$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled');
       }
       return this.validateLoanSourceRelated();
+    };
+
+    LoanInfoView.prototype.initSwitch = function(elemClass, param, func, method) {
+      var state, that;
+      that = this;
+      state = this.model.get(param);
+      this.$el.find(elemClass).bootstrapSwitch();
+      this.$el.find(elemClass).bootstrapSwitch('setState', state);
+      return this.$el.find(elemClass).on('switch-change', function(event, state) {
+        return func.call(that, event, state, method, param);
+      });
+    };
+
+    LoanInfoView.prototype.toggleValue = function(event, state, method, param) {
+      var id,
+        _this = this;
+      id = this.model.get('CashRequestId');
+      BlockUi();
+      return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/' + method, {
+        id: id,
+        enabled: state.value
+      }).done(function(result) {
+        if (result.error) {
+          EzBob.App.trigger('error', result.error);
+        } else {
+          _this.model.set(param, result.status);
+        }
+        if (!isNaN(result.setupFee)) {
+          return _this.model.set("SetupFee", result.setupFee);
+        }
+      }).always(function() {
+        return UnBlockUi();
+      });
     };
 
     LoanInfoView.prototype.changeCreditResult = function() {

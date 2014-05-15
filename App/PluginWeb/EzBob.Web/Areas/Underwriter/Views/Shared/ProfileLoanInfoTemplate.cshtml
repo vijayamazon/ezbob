@@ -19,6 +19,19 @@
     </tr>
 }
 
+@helper RawCellWithSlider(string title, string className, string labelOff, string labelOn, string css = "", string dataOn = "danger")
+{
+    <tr>
+        <td class="@Html.Raw(css) customer-column-width-50">@Html.Raw(title)</td>
+        <td class="@Html.Raw(css)">
+            <div class="@Html.Raw(className) make-switch switch-mini" data-on="@Html.Raw(dataOn)" data-off="default" data-animated="true" data-off-label="@Html.Raw(labelOff)" data-on-label="@Html.Raw(labelOn)">
+                <input type="checkbox" checked/>
+            </div>
+        </td>
+    </tr>
+}
+
+
 <div id="simpleEditDlg" name="simpleEditDlg" style="display: none">
     <form name="simpleEditDlg">
     </form>
@@ -124,14 +137,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> customer-column-width-50 cci-mark-td">CCI mark</td>
-                <td class="<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %>">
-                    <div class="cciMarkSwitch make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="Off" data-on-label="On">
-                        <input type="checkbox" checked/>
-                    </div>
-                </td>
-            </tr>
+            @RawCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td")
 
             <tr>
                 <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %> customer-column-width-50 fraud-status-td">Fraud Status</td>
@@ -142,19 +148,13 @@
             </tr>
 
             @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
-
-            <tr>
-                <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %> customer-column-width-50 is-test-td">Test User</td>
-                <td class="<%= data.IsTestInAlertMode ? 'red_cell' : '' %>">
-                    <div class="testUserSwitch make-switch switch-mini" data-on="danger" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
-                        <input type="checkbox" checked/>
-                    </div>
-
-                </td>
-            </tr>
+            
+            @RawCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td")
 
             @RawCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusName %>", "TrustPilotStatusUpdate")
-            @RawCellWithButtonNear("Manual Decision:", "<%= data.IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
+            
+            @RawCellWithSlider("Manual Decision", "manualDecisionSwitch", "No", "Yes")
+
             @RawCell("User status", "<%- data.UserStatus %>")
 
             <tr>
@@ -250,8 +250,8 @@
         </thead>
         <tbody>
             <%if(m.Editable){%>
-            @RawCellWithButtonNear("Setup fee", "<%= m.UseSetupFee ? 'Yes' : 'No' %>", "setupFeeEditButton")
-            @RawCellWithButtonNear("Broker commission", "<%= m.UseBrokerSetupFee ? 'Yes' : 'No' %>", "brokerSetupFeeEditButton")
+            @RawCellWithSlider("Setup fee", "setupFeeSwitch", "No", "Yes", "", "info")
+            @RawCellWithSlider("Broker commission", "brokerCommisionSwitch", "No", "Yes", "", "info")
             <%} else{%>
             @RawCell("Setup fee", "<%= m.UseSetupFee ? 'Enabled' : 'Disabled' %>")
             @RawCell("Broker commission", "<%= m.UseBrokerSetupFee ? 'Enabled' : 'Disabled' %>")
@@ -284,7 +284,7 @@
             <%}%>
 
             <%if(m.Editable){%>
-                @RawCellWithButtonNear("Send Emails", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>", "allowSendingEmail")
+                @RawCellWithSlider("Send Emails", "sendEmailsSwitch", "No", "Yes", "", "info")
             <%} else{%>
                 @RawCell("Send Emails", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
             <%}%>

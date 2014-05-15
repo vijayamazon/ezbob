@@ -19,17 +19,19 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             @$el.find('#ForceFinishWizard').addClass 'hide'
 
         that = this
-        @$el.find(".cciMarkSwitch").bootstrapSwitch()
-        @$el.find(".cciMarkSwitch").bootstrapSwitch('setState', @model.get('IsCciMarkInAlertMode'))
-        @$el.find(".cciMarkSwitch").on('switch-change', (event, state) ->
-            that.toggleCciMark(event, state)
+        @initSwitch(".cciMarkSwitch", @model.get('IsCciMarkInAlertMode'), @toggleCciMark)
+        @initSwitch(".testUserSwitch", @model.get('IsTestInAlertMode'), @toggleIsTest)
+        @initSwitch(".manualDecisionSwitch", @model.get('IsAvoid'), @toggleManualDecision)
+        
+
+    initSwitch: (elemClass, state, func) ->
+        that = this
+        @$el.find(elemClass).bootstrapSwitch()
+        @$el.find(elemClass).bootstrapSwitch('setState', state)
+        @$el.find(elemClass).on('switch-change', (event, state) ->
+            func.call(that, event, state)
         )
         
-        @$el.find(".testUserSwitch").bootstrapSwitch()
-        @$el.find(".testUserSwitch").bootstrapSwitch('setState', @model.get('IsTestInAlertMode'))
-        @$el.find(".testUserSwitch").on('switch-change', (event, state) ->
-            that.toggleIsTest(event, state)
-        )
 
     toggleCciMark: (event, state) ->
         id = @model.get 'Id'
@@ -61,6 +63,22 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             else
                 @setAlertStatus(result.isTest, '.is-test-td')
                 @model.set('IsTestInAlertMode', result.isTest)
+        ).always( ->t
+            UnBlockUi()
+        )
+        
+    toggleManualDecision: (event, state) ->
+        id = @model.get 'Id'
+        BlockUi()
+
+        $.post(window.gRootPath + 'Underwriter/ApplicationInfo/AvoidAutomaticDecision',
+            id: id
+            enabled: state.value
+        ).done( (result) =>
+            if result.error
+                EzBob.App.trigger 'error', result.error
+            else
+                @model.set('IsAvoid', result.status)
         ).always( ->
             UnBlockUi()
         )
@@ -76,12 +94,11 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
     events:
         "click button[name=\"changeDisabledState\"]": "changeDisabledState"
         "click button[name=\"editEmail\"]": "editEmail"
-        "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton"
         "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
         'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus'
         'click #MainStrategyHidden': 'activateMainStratgey'
         'click #ForceFinishWizard': 'activateFinishWizard'
-        
+
     activateMainStratgey: ->
         xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/ActivateMainStrategy", customerId: @model.get('Id')
 
@@ -162,21 +179,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                     xhr2 = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/LogStatusChange", {newStatus: newStatus, prevStatus: prevStatus, customerId: customerId}
                     xhr2.done () =>
                         BlockUi "off"
-
-    avoidAutomaticDecisionButton: ->
-        d = new EzBob.Dialogs.CheckBoxEdit(
-            model: @model
-            propertyName: "IsAvoid"
-            title: "Manual Decision"
-            width: 350
-            postValueName: "enbaled"
-            checkboxName: "Enable Manual Decision"
-            url: "Underwriter/ApplicationInfo/AvoidAutomaticDecision"
-            data:
-                id: @model.get("Id")
-        )
-        d.render()
-        return
 
     editEmail: ->
         view = new EzBob.EmailEditView(model: @model)
