@@ -50,7 +50,7 @@ BEGIN
 
 IF NOT EXISTS (SELECT * FROM ConfigurationVariables WHERE Name='VipMailReceiver')
 BEGIN
-	INSERT INTO ConfigurationVariables(Name,Value,Description) VALUES ('VipMailReceiver', 'rosb@ezbob.com', 'email of the receiver of the VIP requests')
+	INSERT INTO ConfigurationVariables(Name,Value,Description) VALUES ('VipMailReceiver', 'sales@ezbob.com', 'email of the receiver of the VIP requests')
 END
 
 END
