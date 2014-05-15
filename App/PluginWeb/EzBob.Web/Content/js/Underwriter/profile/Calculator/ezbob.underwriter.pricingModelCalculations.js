@@ -93,7 +93,6 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         'click #pricingModelResetButton': 'resetClicked',
         'click #pricingModelCalculateButton': 'calculateClicked',
         'click #expandCollapseInputsButton': 'expandCollapseInputsClicked',
-        'click #expandCollapseOutputsButton': 'expandCollapseOutputsClicked'
     },
 
     loanAmountChanged: function () {
@@ -162,20 +161,6 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         }
         this.model.set('TenurePercents', tenurePercents);
     },
-    
-    expandCollapseOutputsClicked: function () {
-        if (this.outputsExpanded) {
-            this.outputsExpanded = false;
-            this.$el.find('.minor-output-row').addClass('hide');
-            this.$el.find('#expandOutputsSign').removeClass('hide');
-            this.$el.find('#collapseOutputsSign').addClass('hide');
-        } else {
-            this.outputsExpanded = true;
-            this.$el.find('.minor-output-row').removeClass('hide');
-            this.$el.find('#expandOutputsSign').addClass('hide');
-            this.$el.find('#collapseOutputsSign').removeClass('hide');
-        }
-    },
 
     expandCollapseInputsClicked: function () {
         if (this.inputsExpanded) {
@@ -221,13 +206,9 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             if (that.model.get('EuLoanPercentages') == 0.02) {
                 that.model.set('EuLoan2MainFieldsClass', 'pricing-model-highlight-eu-loan');
                 that.model.set('EuLoan175MainFieldsClass', '');
-                that.model.set('SetupFee2Class', '');
-                that.model.set('SetupFee175Class', 'pricing-model-gray');
             } else {
                 that.model.set('EuLoan2MainFieldsClass', '');
                 that.model.set('EuLoan175MainFieldsClass', 'pricing-model-highlight-eu-loan');
-                that.model.set('SetupFee2Class', 'pricing-model-gray');
-                that.model.set('SetupFee175Class', '');
             }
 
             that.renderAndRememberExpanded();
