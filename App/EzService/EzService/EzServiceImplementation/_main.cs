@@ -189,14 +189,21 @@
 
 				return amd;
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
+				Exception mostInnerException = e;
+				while (mostInnerException.InnerException != null)
+				{
+					mostInnerException = mostInnerException.InnerException;
+				}
+
 				if (amd != null) {
-					amd.Comment = e.Message;
+					amd.Comment = mostInnerException.Message;
 					SaveActionStatus(amd, ActionStatus.Failed);
 				} // if
 
-				Log.Alert(e, "Exception during executing " + typeof(T) + " strategy.");
-				throw new FaultException(e.Message);
+				Log.Alert(mostInnerException, "Exception during executing " + typeof(T) + " strategy.");
+				throw new FaultException(mostInnerException.Message);
 			} // try
 		} // ExecuteSync
 		#endregion method ExecuteSync
