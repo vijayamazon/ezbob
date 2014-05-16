@@ -69,7 +69,7 @@
 
 							double newActualLoansRepayment = (double)(result.Value / factor);
 							double newFreeCashFlow = oYodleeModel.Yodlee.BankStatementDataModel.FreeCashFlow -
-													 oYodleeModel.Yodlee.BankStatementDataModel.ActualLoansRepayment -
+													 oYodleeModel.Yodlee.BankStatementDataModel.ActualLoansRepayment +
 													 newActualLoansRepayment;
 
 							hmrcData.BankStatement = new BankStatementDataModel
@@ -172,7 +172,7 @@
 			bankStat.TotalValueAdded = bankStat.Revenues - bankStat.Opex;
 			bankStat.PercentOfRevenues = Math.Abs(bankStat.Revenues - 0) < 0.01 ? 0 : bankStat.TotalValueAdded / bankStat.Revenues;
 			bankStat.Ebida = bankStat.TotalValueAdded + (bankStat.Salaries + bankStat.Tax);
-			bankStat.FreeCashFlow = bankStat.Ebida + bankStat.ActualLoansRepayment;
+			bankStat.FreeCashFlow = bankStat.Ebida - bankStat.ActualLoansRepayment;
 
 			if (bankStat.PeriodMonthsNum == 0)
 				return annualized;
@@ -187,7 +187,7 @@
 			annualized.Tax = (bankStat.Tax / bankStat.PeriodMonthsNum * year);
 			annualized.Ebida = annualized.TotalValueAdded + (annualized.Salaries + annualized.Tax);
 			annualized.ActualLoansRepayment = (bankStat.ActualLoansRepayment / bankStat.PeriodMonthsNum * year);
-			annualized.FreeCashFlow = annualized.Ebida + annualized.ActualLoansRepayment;
+			annualized.FreeCashFlow = annualized.Ebida - annualized.ActualLoansRepayment;
 
 			return annualized;
 		} // CalculateAnnualizedBankStatement
