@@ -371,6 +371,11 @@
         <%}%>
     </div>
     <div class="row">
+        <%if(experianCompany){
+            var tileColor='';
+            if(!EzBob.isDarkColor(experianCompany.ScoreColor)){
+                tileColor = 'tile-light';
+            }%>
         <div class="col-md-5 col-sm-12">
             <div class="box">
                 <div class="box-title">
@@ -383,7 +388,7 @@
                 <div class="box-content">
                     <div class="row">
                         <div class="col-md-2 col-sm-4">
-                            <div class="tile" style="background-color: <%-experianCompany.ScoreColor%>">
+                            <div class="tile <%-tileColor%>" style="background-color: <%-experianCompany.ScoreColor%>">
                                 <div class="caption text-center">
                                     Score
                                 </div>
@@ -425,7 +430,7 @@
                 </div>
             </div>
         </div>
-
+        <%}%>
         <%if(mps && mps.length > 0) { %>
         <div class="col-md-5 col-sm-12">
             <div class="box">
