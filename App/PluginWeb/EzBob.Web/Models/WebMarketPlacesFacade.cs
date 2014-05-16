@@ -69,7 +69,7 @@
 
 							double newActualLoansRepayment = (double)(result.Value / factor);
 							double newFreeCashFlow = oYodleeModel.Yodlee.BankStatementDataModel.FreeCashFlow -
-													 oYodleeModel.Yodlee.BankStatementDataModel.ActualLoansRepayment +
+													 oYodleeModel.Yodlee.BankStatementDataModel.ActualLoansRepayment -
 													 newActualLoansRepayment;
 
 							hmrcData.BankStatement = new BankStatementDataModel
