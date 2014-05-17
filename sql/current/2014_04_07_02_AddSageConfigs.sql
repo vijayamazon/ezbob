@@ -1,6 +1,6 @@
 DECLARE @Environment NVARCHAR(256)
 SELECT @Environment = Value FROM ConfigurationVariables WHERE Name = 'Environment'
-
+ 
 IF @Environment = 'Dev' OR @Environment IS NULL
 BEGIN
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SageOAuthIdentifier')
