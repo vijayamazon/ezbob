@@ -58,3 +58,22 @@ IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[App_Hi
 DROP PROCEDURE [dbo].[App_History_UnlockEvent]
 GO
 
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SPNAME]') AND TYPE IN (N'P', N'PC'))
+DROP PROCEDURE [dbo].[SPNAME]
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[App_NodeDataSign_Insert]') AND TYPE IN (N'P', N'PC'))
+DROP PROCEDURE [dbo].[App_NodeDataSign_Insert]
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[App_NodeDataSign_Select]') AND TYPE IN (N'P', N'PC'))
+DROP PROCEDURE [dbo].[App_NodeDataSign_Select]
+GO
+
+IF OBJECT_ID (N'dbo.AllLockedApplications') IS NOT NULL
+	DROP VIEW dbo.AllLockedApplications
+GO
+IF OBJECT_ID (N'dbo.Strategy_vStrategy') IS NOT NULL
+	DROP VIEW dbo.Strategy_vStrategy
+GO
+

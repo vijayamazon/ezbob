@@ -124,65 +124,6 @@ END
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[App_NodeDataSign_Insert]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[App_NodeDataSign_Insert]
-	@pApplicationId bigint,
-	@pNodeId bigint,
-	@pOutletName nvarchar(50),
-	@pSignedData ntext,
-	@pData ntext,
-	@pNodeName nvarchar(250),
-        @pUserName nvarchar(30)
-AS
-BEGIN
-INSERT INTO [Application_NodeDataSign]
-           ([applicationId]
-           ,[nodeId]
-           ,[outletName]
-           ,[signedData]
-           ,[data]
-           ,[dateAdded]
-           ,[nodeName]
-           ,[userName])
-     VALUES
-           (@pApplicationId
-           ,@pNodeId
-           ,@pOutletName
-           ,@pSignedData
-           ,@pData
-           ,getDate()
-           ,@pNodeName
-           ,@pUserName)
-
-SELECT SCOPE_IDENTITY();
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[App_NodeDataSign_Select]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[App_NodeDataSign_Select]
-    @pSignedDocumentId bigint
-AS
-BEGIN
-    SELECT
-        [signedData]
-        ,[data]
-        ,[outletName]
-        ,[nodeId]
-        ,[userName]
-    FROM  [Application_NodeDataSign]
-    WHERE id = @pSignedDocumentId;
-END
-
-GO
 /****** Object:  StoredProcedure [dbo].[App_RaiseAppNotExistError]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -24391,36 +24332,6 @@ FROM         application_application aa LEFT JOIN
 WHERE     aa.parentappid IS NULL;
 
 GO
-/****** Object:  View [dbo].[AllLockedApplications]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE VIEW [dbo].[AllLockedApplications]
-AS
-SELECT     aa.ApplicationId, aa.AppCounter, aa.CreationDate,
-                          (SELECT     MAX(ActionDateTime) AS Expr1
-                            FROM          dbo.Application_History AS ah
-                            WHERE      (ApplicationId = aa.ApplicationId) AND (UserId = aa.LockedByUserId) AND (CurrentNodeID = sn.NodeId) AND (ActionType = 0)) AS LockedDate, aa.Version, 
-                      sn.Name AS NodeName, sn.DisplayName AS NodeDisplayName, sn.NodeId, cu.UserId AS CreatorUserId, cu.UserName AS CreatorUserName, 
-                      cu.FullName AS CreatorUserFullName, lu.UserId AS LockedByUserId, lu.UserName AS LockedByUserName, lu.FullName AS LockedByUserFullName, 
-                      ss.DisplayName AS strategyname, ss.StrategyId
-                      ,(select cpp.name + '' + ';' 
-					from creditproduct_products cpp, creditproduct_strategyrel cps
-					where cpp.id = cps.creditproductid and cps.strategyid = aa.strategyid 
-					group by cpp.name for xml path('')) as CreditProductName
-                      , 
-                      NULL AS GCRecord, aa.ApplicationId AS OID, 0 AS OptimisticLockField, 
-                      0 AS Checked
-FROM         dbo.Application_Application AS aa LEFT OUTER JOIN
-                      dbo.StrategyEngine_ExecutionState AS se ON aa.ApplicationId = se.ApplicationId LEFT OUTER JOIN
-                      dbo.Strategy_Node AS sn ON sn.NodeId = se.CurrentNodeId LEFT OUTER JOIN
-                      dbo.Strategy_Strategy AS ss ON ss.StrategyId = aa.StrategyId LEFT OUTER JOIN
-                      dbo.Security_User AS cu ON cu.UserId = aa.CreatorUserId LEFT OUTER JOIN
-                      dbo.Security_User AS lu ON lu.UserId = aa.LockedByUserId
-WHERE     (aa.LockedByUserId IS NOT NULL)
-
-GO
 /****** Object:  View [dbo].[APPLICATION_VSDELINQ]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -24736,27 +24647,7 @@ FROM         Security_User AS u LEFT OUTER JOIN
                             GROUP BY UserId) AS s ON s.UserId = u.UserId
 
 GO
-/****** Object:  View [dbo].[Strategy_vStrategy]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE VIEW [dbo].[Strategy_vStrategy]
-AS
-SELECT     dbo.Strategy_Strategy.StrategyId, dbo.Strategy_Strategy.CurrentVersionId, dbo.Strategy_Strategy.Name, dbo.Strategy_Strategy.Description, 
-                      dbo.Strategy_Strategy.Icon, dbo.Strategy_Strategy.IsEmbeddingAllowed, dbo.Strategy_Strategy.UserId, dbo.Strategy_Strategy.AuthorId, 
-                      dbo.Strategy_Strategy.State, dbo.Strategy_Strategy.SubState, dbo.Strategy_Strategy.StrategyType,
-                      dbo.Strategy_Strategy.IsDeleted, dbo.Security_User.FullName, 
-                      User_1.FullName AS AuthorName, dbo.Strategy_Strategy.ExecutionDuration,
-                      dbo.Strategy_Strategy.DisplayName, dbo.Strategy_Strategy.TermDate,
-                          (SELECT     COUNT(STRATEGYID) AS Expr1
-                            FROM          dbo.STRATEGY_PUBLICREL
-                            WHERE      (STRATEGYID = dbo.Strategy_Strategy.StrategyId)) AS STRATEGYCOUNT
-FROM         dbo.Strategy_Strategy LEFT OUTER JOIN
-                      dbo.Security_User ON dbo.Strategy_Strategy.UserId = dbo.Security_User.UserId LEFT OUTER JOIN
-                      dbo.Security_User AS User_1 ON dbo.Strategy_Strategy.AuthorId = User_1.UserId
 
-GO
 /****** Object:  View [dbo].[SuspendedApplications]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
