@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
-	using System.Data;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure.Attributes;
 	using NHibernate;
@@ -170,11 +169,11 @@
 
 			if (oState.Error != null)
 				return oState.Error;
-			var mpId = SaveMarketplace(oState, model);
+
+			int mpId = SaveMarketplace(oState, model);
+
 			if (mpId != -1)
-			{
 				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
-			}
 
 			if (oState.Error != null)
 				return oState.Error;
@@ -297,7 +296,12 @@
 				model.id = _mpTypes.GetAll().First(a => a.InternalId == oState.VendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
-				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, oState.Marketplace, model, _context.Customer);
+				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(
+					model.name,
+					oState.Marketplace,
+					model,
+					_context.Customer
+				);
 
 				oState.Model = Json(AccountModel.ToModel(mp), JsonRequestBehavior.AllowGet);
 				oState.CustomerMarketPlace = mp;

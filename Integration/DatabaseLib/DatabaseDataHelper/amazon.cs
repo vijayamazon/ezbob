@@ -24,7 +24,7 @@
 
 		public void StoreAmazonOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,/* AmazonOrdersList ordersData,*/ AmazonOrdersList2 ordersData2, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			//LogData( "Old Orders Data", customerMarketPlace, ordersData );
 			LogData("Orders Data", customerMarketPlace, ordersData2);
@@ -180,7 +180,7 @@
 				return;
 			}
 
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var feedBack = new MP_AmazonFeedback
 			{
@@ -210,7 +210,7 @@
 
 		public AmazonOrdersList2 GetAllAmazonOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var orders = new AmazonOrdersList2(submittedDate);
 
@@ -262,7 +262,7 @@
 			{
 				CategoryId = amazonProductCategory.CategoryId,
 				Name = amazonProductCategory.CategoryName,
-				Marketplace = GetMarketPlace(marketplace),
+				Marketplace = _MarketPlaceRepository.Get(marketplace.InternalId),
 				Parent = amazonProductCategory.Parent == null ? null : FindEBayAmazonCategory(marketplace, amazonProductCategory.Parent.CategoryId, elapsedTimeInfo) ?? AddAmazonCategory(marketplace, amazonProductCategory.Parent, elapsedTimeInfo)
 			};
 

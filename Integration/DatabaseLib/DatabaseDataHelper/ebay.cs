@@ -35,7 +35,7 @@
 
 		public void StoreToDatabaseInventoryData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, DatabaseInventoryList data, MP_CustomerMarketplaceUpdatingHistory updatingHistoryRecord)
 		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("Inventory Data", customerMarketPlace, data);
 
@@ -79,7 +79,7 @@
 
 		public void AddEbayOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EbayDatabaseOrdersList data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("Orders Data", customerMarketPlace, data);
 
@@ -240,7 +240,7 @@
 				return;
 			}
 
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var userData = new MP_EbayUserData
 			{
@@ -341,7 +341,7 @@
 				return;
 			}
 
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 			try
 			{
 				var accountData = new MP_EbayUserAccountData
@@ -395,7 +395,7 @@
 				return;
 			}
 
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var feedBack = new MP_EbayFeedback
 			{
@@ -633,7 +633,7 @@
 				CategoryId = data.CategoryId,
 				IsVirtual = data.IsVirtual,
 				Name = data.Name,
-				Marketplace = GetMarketPlace(marketplace)
+				Marketplace = _MarketPlaceRepository.Get(marketplace.InternalId)
 			};
 
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,

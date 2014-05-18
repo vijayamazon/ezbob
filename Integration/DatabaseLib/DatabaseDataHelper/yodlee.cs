@@ -61,7 +61,7 @@
 		#region method StoreYodleeOrdersData
 
 		public void StoreYodleeOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeOrderDictionary ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			// var yodleeGroupRepository = new YodleeGroupRepository(_session).GetAll().ToList();
 			// var yodleeGroupRuleMapRepository = new YodleeGroupRuleMapRepository(_session).GetAll().ToList();
@@ -419,7 +419,7 @@
 		private List<MP_YodleeOrderItemBankTransaction> GetTransactions(IDatabaseCustomerMarketPlace dmp, string sourceId, out MP_CustomerMarketPlace mp,
 		                             out List<string> directors)
 		{
-			mp = GetCustomerMarketPlace(dmp);
+			mp = GetCustomerMarketPlace(dmp.Id);
 
 			if (mp == null)
 			{
@@ -448,7 +448,7 @@
 		#region method GetAllYodleeOrdersData
 
 		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime = false) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var orders = new YodleeOrderDictionary { Data = new Dictionary<BankData, List<BankTransactionData>>() };
 
@@ -548,7 +548,7 @@
 		#region method HasYodleeOrders
 
 		public bool HasYodleeOrders(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			return !GetCustomerMarketPlace(databaseCustomerMarketPlace).YodleeOrders.IsEmpty;
+			return !GetCustomerMarketPlace(databaseCustomerMarketPlace.Id).YodleeOrders.IsEmpty;
 		} // HasYodleeOrders
 
 		#endregion method HasYodleeOrders

@@ -75,6 +75,7 @@
     <Compile Include="DatabaseDataHelper\amazon.cs" />
     <Compile Include="DatabaseDataHelper\channelgrabber.cs" />
     <Compile Include="DatabaseDataHelper\ebay.cs" />
+    <Compile Include="DatabaseDataHelper\save_update_mp_in_db.cs" />
     <Compile Include="DatabaseDataHelper\yodlee.cs" />
     <Compile Include="DatabaseWrapper\Order\AInternalOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\RtiTaxMonthEntry.cs" />

@@ -20,7 +20,7 @@
 		#region method GetAllHmrcVatReturnData
 
 		public InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			return GetAllHmrcVatReturnData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
+			return GetAllHmrcVatReturnData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace.Id));
 		} // GetAllHmrcVatReturnData
 
 		public static InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
@@ -51,7 +51,7 @@
 		#region method StoreHmrcVatReturnData
 
 		public void StoreHmrcVatReturnData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("HMRC VAT Return Data", customerMarketPlace, ordersData);
 
@@ -121,7 +121,7 @@
 		#region method GetAllHmrcRtiTaxMonthData
 
 		public InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			return GetAllHmrcRtiTaxMonthData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
+			return GetAllHmrcRtiTaxMonthData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace.Id));
 		} // GetAllHmrcRtiTaxMonthData
 
 		public static InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
@@ -147,7 +147,7 @@
 		#region method StoreHmrcRtiTaxMonthData
 
 		public void StoreHmrcRtiTaxMonthData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("HMRC RTI Tax Months Data", customerMarketPlace, ordersData);
 
@@ -188,7 +188,7 @@
 		#region method GetAllChannelGrabberOrdersData
 
 		public InternalDataList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var orders = new InternalDataList(submittedDate);
 
@@ -210,7 +210,7 @@
 		#region method StoreChannelGrabberOrdersData
 
 		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("ChannelGrabber Orders Data", customerMarketPlace, ordersData);
 
