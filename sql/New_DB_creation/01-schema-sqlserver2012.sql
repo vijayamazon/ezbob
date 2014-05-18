@@ -123,136 +123,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[App_DetailInsertNewNames]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[App_DetailInsertNewNames]
-	@pDetailName    NVARCHAR(255)
-AS
-BEGIN
-        SET NOCOUNT ON;
 
-        INSERT INTO [Application_DetailName]([Name]) VALUES(@pDetailName); 
-        SELECT @@IDENTITY;
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[App_DetailInsertStrategyVar]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[App_DetailInsertStrategyVar]
-	@pApplicationId BIGINT,
-	@pBodyId        int,
-	@pDetailNameID  int,
-	@pValueStr      NVARCHAR(MAX),
-	@pDetailID  int output
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	DECLARE @id int;
-
-	INSERT INTO [Application_Detail] WITH (ROWLOCK)
-        ([ApplicationId] 
-        ,[DetailNameId] 
-        ,[ParentDetailId] 
-        ,[ValueStr] 
-        ,[ValueNum] 
-        ,[ValueDateTime] 
-        ,[IsBinary]) 
-	VALUES ( @pApplicationId
-            ,@pDetailNameID
-            ,@pBodyId
-            ,@pValueStr
-            ,null
-            ,null
-            ,null);
-            
-  SET @id = @@IDENTITY;
-  SET @pDetailID = @id;
-  SELECT @id;
-  RETURN @id;
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[App_DetailSelectChildIDs]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		Igor Borzenkov
--- Create date: 05.05.2007
--- Description:	Select ID's of given @ParentDetailID direct child's
--- =============================================
-CREATE PROCEDURE [dbo].[App_DetailSelectChildIDs]
-	@pName NVARCHAR(255),
-    @pApplicationId BIGINT,
-	@pParentDetailID BIGINT
-
-AS
-BEGIN
-    IF @pParentDetailID IS NULL 
-    SELECT [Application_Detail].[DetailID] DetailID
-      FROM [Application_Detail] 
-      JOIN [Application_DetailName]ON [Application_Detail].[DetailNameID] = [Application_DetailName].[DetailNameId] 
-     WHERE [Application_DetailName].[Name] = @pName 
-       AND [Application_Detail].[ApplicationID] = @pApplicationId 
-       AND [Application_Detail].[ParentDetailID] IS NULL 
-     ORDER BY DetailID 
-     
-    ELSE 
-     
-    SELECT [Application_Detail].[DetailID] DetailID
-      FROM [Application_Detail] 
-      JOIN [Application_DetailName]ON [Application_Detail].[DetailNameID] = [Application_DetailName].[DetailNameId] 
-     WHERE [Application_DetailName].[Name] = @pName 
-       AND [Application_Detail].[ApplicationID] = @pApplicationId 
-       AND [Application_Detail].[ParentDetailID] = @pParentDetailID 
-     ORDER BY DetailID
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[App_DetailSelectNewNames]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[App_DetailSelectNewNames]
-	@pLastParameterId BIGINT
-AS
-BEGIN
-     SET NOCOUNT ON;
-
-     SELECT
-          [Application_DetailName].[DetailNameID] AS [id],
-          [Application_DetailName].[Name] AS [name]
-     FROM [Application_DetailName] WITH (NOLOCK)
-     WHERE [Application_DetailName].[DetailNameID] > @pLastParameterId;
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[App_ExecutionPathUpdate]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[App_ExecutionPathUpdate]
-	@pApplicationId  BIGINT,
-	@pExecutionPathBin  varbinary(max)
-AS
-BEGIN
-    UPDATE Application_Application
-    SET ExecutionPathBin = @pExecutionPathBin, ExecutionPath = null
-    WHERE ApplicationId = @pApplicationId;
-END
-
-GO
 /****** Object:  StoredProcedure [dbo].[App_History_ComingEvent]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -14739,37 +14610,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[StrategyEngine_ExecStatePush]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[StrategyEngine_ExecStatePush] 
-	@pExecutionState ntext,
-	@pCurrentNodeType nvarchar(max),
-	@pCurrentNodePostfix nvarchar(max),
-	@pApplicationId bigint,
-	@pExecutionPathBin varbinary(max)
-AS
-BEGIN
-	SET NOCOUNT ON;
-	
-    declare @CurrentNodeId int;
-	
-    SELECT @CurrentNodeId = Strategy_Node.NodeId
-    FROM   Strategy_Node INNER JOIN
-           Strategy_NodeStrategyRel ON Strategy_Node.NodeId = Strategy_NodeStrategyRel.NodeId INNER JOIN
-           Application_Application ON Strategy_NodeStrategyRel.StrategyId = Application_Application.StrategyId
-    WHERE Application_Application.ApplicationId = @pApplicationId and Strategy_Node.[Name]+Strategy_Node.[Guid] = @pCurrentNodeType;
 
-    execute App_ExecutionPathUpdate @pApplicationId, @pExecutionPathBin
-   
-    INSERT INTO [StrategyEngine_ExecutionState]( [Data], [ApplicationId], CurrentNodeId, CurrentNodePostfix)
-    VALUES( @pExecutionState, @pApplicationId, @CurrentNodeId, @pCurrentNodePostfix)
-
-END
-
-GO
 /****** Object:  StoredProcedure [dbo].[StrategyEngine_FinishStrategy]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -24246,31 +24087,6 @@ FROM         (SELECT     loanID, CustomerId, StartDate, DateClose, MaxDelinquenc
                                                                            dbo.vw_collection AS vc ON nc.DateClose = vc.DateClosed AND nc.MaxDelinquencyDays = vc.MaxDelinquencyDays))) 
                       AS a
 GROUP BY CustomerId
-
-GO
-/****** Object:  UserDefinedFunction [dbo].[fnInspector_GetTuskListOld]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE function [dbo].[fnInspector_GetTuskListOld]
-(
-	@UserId int
-)
-RETURNS 
-TABLE 
-AS
-return(
-select a.ApplicationId, a.Param1, a.Param2, n.Name CurrentNodeName, n.NodeId CurrentNodeId, t.Name StrategyName, Version from application_Application a, Strategy_Node n,
-StrategyEngine_ExecutionState s, Strategy_Strategy t,
-(SELECT max(id) as id, applicationId
- FROM [StrategyEngine_ExecutionState]
- Group by applicationId) ids
- where ids.id = s.id and ids.applicationId = a.applicationId
- and n.NodeId = s.CurrentNodeId
- and (a.LockedByUserId is null or a.LockedByUserId = @UserId)
-and t.StrategyId = a.StrategyId and a.state = 1
-)
 
 GO
 /****** Object:  UserDefinedFunction [dbo].[GetAmazonReviews]    Script Date: 04-Nov-13 5:03:46 PM ******/
