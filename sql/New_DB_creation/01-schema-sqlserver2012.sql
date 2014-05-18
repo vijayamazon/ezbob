@@ -25389,18 +25389,7 @@ FROM         (SELECT     a.ApplicationId, a.AppCounter, a.CreationDate, a.State,
                                              a.State = 7) AND (a.ParentAppID IS NULL)) AS allapp
 
 GO
-/****** Object:  View [dbo].[AuditingLog]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE VIEW [dbo].[AuditingLog]
-AS
-SELECT        Id, Date AS [Date], Message, Exception
-FROM            dbo.Log4Net
-WHERE        (Logger = 'Scorto.Security.UserManagement.Sessions.SessionManager')
 
-GO
 /****** Object:  View [dbo].[CustomerLoyaltyProgramPoints]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
