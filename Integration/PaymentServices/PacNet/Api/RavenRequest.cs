@@ -112,10 +112,10 @@ namespace Raven.API
             {
                 this.paramValuesByKey["RequestID"] = Guid.NewGuid().ToString();
             }
-
+			this.paramValuesByKey["UserName"] = this.userName;
             this.paramValuesByKey["Timestamp"] = TimestampProvider.GetFormattedTimestamp();
             this.paramValuesByKey["Signature"] = this.GetSignature();
-
+	        
             NameValueCollection data = new NameValueCollection();
 
             foreach (KeyValuePair<string, string> keyValuePair in this.paramValuesByKey)
