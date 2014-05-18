@@ -195,7 +195,6 @@
 		TaboolaPixelEnabled,
 		PayPalEnabled,
 		TargetsEnabledEntrepreneur,
-		ManagementPartEnabled,
 		GetSatisfactionEnabled,
 		NotEnoughFundsToAddress,
 		NotEnoughFundsTemplateName,

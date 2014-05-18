@@ -63,10 +63,6 @@ SELECT @Environment = Value FROM ConfigurationVariables WHERE Name = 'Environmen
 
 IF @Environment = 'Dev' OR @Environment IS NULL OR @Environment = 'QA' OR @Environment = 'UAT'
 BEGIN
-	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='ManagementPartEnabled')
-	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('ManagementPartEnabled', 'True', 'Management part enabled')
-	END
 	IF @Environment = 'QA' OR @Environment = 'UAT'
 	BEGIN
 		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='NotEnoughFundsToAddress')
@@ -81,15 +77,9 @@ BEGIN
 			INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('NotEnoughFundsToAddress', 'dev@ezbob.com', 'NotEnoughFundsToAddress')
 		END
 	END
-	
-	
 END
 ELSE
 BEGIN
-	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='ManagementPartEnabled')
-	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('ManagementPartEnabled', 'False', 'Management part enabled')
-	END	
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='NotEnoughFundsToAddress')
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('NotEnoughFundsToAddress', 'ops@ezbob.com;shirik@ezbob.com', 'NotEnoughFundsToAddress')

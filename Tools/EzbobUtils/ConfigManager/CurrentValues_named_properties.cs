@@ -1912,11 +1912,6 @@
 			get { return this[Variables.TargetsEnabledEntrepreneur]; }
 		}
 
-		public virtual VariableValue ManagementPartEnabled
-		{
-			get { return this[Variables.ManagementPartEnabled]; }
-		}
-
 		public virtual VariableValue GetSatisfactionEnabled
 		{
 			get { return this[Variables.GetSatisfactionEnabled]; }
