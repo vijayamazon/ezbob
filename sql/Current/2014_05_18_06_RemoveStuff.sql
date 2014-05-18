@@ -62,7 +62,7 @@ IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Suspen
 DROP PROCEDURE [dbo].[SuspendApplicationById]
 GO
 
-IF OBJECT_ID('Signal') IS NULL
+IF OBJECT_ID('Signal') IS NOT NULL
 BEGIN
 	DROP TABLE Signal
 END
