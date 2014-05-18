@@ -98,10 +98,10 @@
 
 		#region method LoadVatReturnSummary
 
-		public VatReturnSummaryActionResult LoadVatReturnSummary(int nMarketplaceID) {
+		public VatReturnSummaryActionResult LoadVatReturnSummary(int customerId, int nMarketplaceID) {
 			LoadVatReturnSummary oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nMarketplaceID);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, customerId, nMarketplaceID);
 
 			return new VatReturnSummaryActionResult {
 				MetaData = oMetaData,

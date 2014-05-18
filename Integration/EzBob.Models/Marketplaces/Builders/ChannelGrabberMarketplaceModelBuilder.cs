@@ -6,7 +6,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Web.Areas.Customer.Models;
+	using Web.Areas.Customer.Models;
 	using Integration.ChannelGrabberConfig;
 	using NHibernate;
 	using NHibernate.Linq;
@@ -26,7 +26,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 		#region method GetPaymentAccountModel
 
 		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
-			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
+			VendorInfo vi = Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
 
 			if (!vi.HasExpenses && (vi.Behaviour == Behaviour.Default))
 				return null;
@@ -72,7 +72,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 		#region method InitializeSpecificData
 
 		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
-			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
+			VendorInfo vi = Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
 
 			switch (vi.Behaviour) {
 			case Behaviour.Default: // nothing here
@@ -110,7 +110,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 				oRtiTaxMonths.Sort(RtiTaxMonthEntry.CompareForSort);
 
 				var oServiceClient = new ServiceClient();
-				VatReturnSummaryActionResult vrsar = oServiceClient.Instance.LoadVatReturnSummary(mp.Id);
+				VatReturnSummaryActionResult vrsar = oServiceClient.Instance.LoadVatReturnSummary(mp.Customer.Id, mp.Id);
 				var datesSummary = new VatReturnSummaryDates();
 				
 				if (vrsar.Summary != null && vrsar.Summary.Quarters.Any())
@@ -162,7 +162,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 		#region method GetDateFromList
 
 		private DateTime? GetDateFromList(MP_CustomerMarketPlace mp, Func<IQueryable<DateTime>, DateTime> oExtractDate) {
-			if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
+			if (null == Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
 				return null;
 
 			IQueryable<DateTime> oListOfDates = _session
