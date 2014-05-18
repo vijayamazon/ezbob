@@ -256,9 +256,6 @@ IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_PayPointBalance_date' AND ob
 IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='PostcodeServiceLog_CustId' AND object_id = OBJECT_ID('PostcodeServiceLog'))
 	drop index PostcodeServiceLog_CustId on PostcodeServiceLog;
 
-IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='i_se_es_1' AND object_id = OBJECT_ID('StrategyEngine_ExecutionState'))
-	drop index i_se_es_1 on StrategyEngine_ExecutionState;
-
 IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_UiEvents_EventTime' AND object_id = OBJECT_ID('UiEvents'))
 	drop index IX_UiEvents_EventTime on UiEvents;
 

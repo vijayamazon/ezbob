@@ -187,9 +187,6 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_PayPointBalance_date' AN
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='PostcodeServiceLog_CustId' AND object_id = OBJECT_ID('PostcodeServiceLog'))
 	create index PostcodeServiceLog_CustId on PostcodeServiceLog(CustomerId);
 
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='i_se_es_1' AND object_id = OBJECT_ID('StrategyEngine_ExecutionState'))
-	create index i_se_es_1 on StrategyEngine_ExecutionState(ApplicationId);
-
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_UiEvents_EventTime' AND object_id = OBJECT_ID('UiEvents'))
 	create index IX_UiEvents_EventTime on UiEvents(EventTime);
 
