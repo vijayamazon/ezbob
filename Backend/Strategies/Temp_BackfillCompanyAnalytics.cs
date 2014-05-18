@@ -25,43 +25,51 @@
 				CommandSpecies.StoredProcedure
 				);
 
+			int customerId = 0;
 			foreach (DataRow row in dt.Rows)
 			{
-				var sr = new SafeReader(row);
-				int customerId = sr["CustomerId"];
-				string refNumber = sr["RefNumber"];
-				string typeOfBusiness = sr["TypeOfBusiness"];
-				string response = sr["Response"];
-				BusinessReturnData experianResults;
-
-				if (typeOfBusiness == "Limited" || typeOfBusiness == "LLP")
+				try
 				{
-					businessService.ParseToDb(customerId, response);
-					experianResults = new LimitedResults(response, DateTime.UtcNow)
+					var sr = new SafeReader(row);
+					customerId = sr["CustomerId"];
+					string refNumber = sr["RefNumber"];
+					string typeOfBusiness = sr["TypeOfBusiness"];
+					string response = sr["Response"];
+					BusinessReturnData experianResults;
+
+					if (typeOfBusiness == "Limited" || typeOfBusiness == "LLP")
 					{
-						CacheHit = false
-					};
+						businessService.ParseToDb(customerId, response);
+						experianResults = new LimitedResults(response, DateTime.UtcNow)
+							{
+								CacheHit = false
+							};
+					}
+					else
+					{
+						experianResults = new NonLimitedResults(response, DateTime.UtcNow)
+							{
+								CacheHit = false
+							};
+					}
+
+					Log.Debug("Backfilling customer analytics for customer {0} and company '{1}'...", customerId, refNumber);
+
+					DB.ExecuteNonQuery(
+						"CustomerAnalyticsUpdateCompany",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("CustomerID", customerId),
+						new QueryParameter("Score", experianResults.BureauScore),
+						new QueryParameter("SuggestedAmount", experianResults.CreditLimit),
+						new QueryParameter("IncorporationDate", experianResults.IncorporationDate),
+						new QueryParameter("AnalyticsDate", DateTime.UtcNow));
+
+					Log.Debug("Backfilling customer analytics for customer {0} and company '{1}' complete.", customerId, refNumber);
 				}
-				else
+				catch (Exception ex)
 				{
-					experianResults = new NonLimitedResults(response, DateTime.UtcNow)
-					{
-						CacheHit = false
-					};
+					Log.Error("The backfill for customer:{0} failed with exception:{1}", customerId, ex);
 				}
-
-				Log.Debug("Backfilling customer analytics for customer {0} and company '{1}'...", customerId, refNumber);
-
-				DB.ExecuteNonQuery(
-					"CustomerAnalyticsUpdateCompany",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", customerId),
-					new QueryParameter("Score", experianResults.BureauScore),
-					new QueryParameter("SuggestedAmount", experianResults.CreditLimit),
-					new QueryParameter("IncorporationDate", experianResults.IncorporationDate),
-					new QueryParameter("AnalyticsDate", DateTime.UtcNow));
-
-				Log.Debug("Backfilling customer analytics for customer {0} and company '{1}' complete.", customerId, refNumber);
 			}
 		}
 	}
