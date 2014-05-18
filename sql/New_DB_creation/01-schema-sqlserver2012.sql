@@ -18411,22 +18411,6 @@ CREATE TABLE [dbo].[ApprovalsWithoutAML](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[AppStatus]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[AppStatus](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](128) NULL,
-	[Description] [nvarchar](1024) NULL,
- CONSTRAINT [PK_AppStatus] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
 /****** Object:  Table [dbo].[Askville]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -20603,44 +20587,6 @@ GO
 CREATE TABLE [dbo].[Medals](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[Medal] [nvarchar](50) NOT NULL
-) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[MenuItem]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[MenuItem](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Caption] [nvarchar](256) NOT NULL,
-	[Description] [nvarchar](256) NULL,
-	[Url] [nvarchar](512) NOT NULL,
-	[SecAppId] [int] NULL,
-	[Position] [int] NULL,
-	[FilterId] [int] NULL,
-	[Filter] [ntext] NULL,
-	[ParentId] [int] NULL,
- CONSTRAINT [Id] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[MenuItem_Status_Rel]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[MenuItem_Status_Rel](
-	[MenuItemId] [int] NOT NULL,
-	[StatusId] [int] NOT NULL,
- CONSTRAINT [PK_MenuItem_Status_Rel] PRIMARY KEY CLUSTERED 
-(
-	[MenuItemId] ASC,
-	[StatusId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 GO
@@ -27260,16 +27206,6 @@ ALTER TABLE [dbo].[MailTemplateRelation]  WITH CHECK ADD  CONSTRAINT [FK_MailTem
 REFERENCES [dbo].[MandrillTemplate] ([Id])
 GO
 ALTER TABLE [dbo].[MailTemplateRelation] CHECK CONSTRAINT [FK_MailTemplateRelation_MandrillTemplateId]
-GO
-ALTER TABLE [dbo].[MenuItem_Status_Rel]  WITH CHECK ADD  CONSTRAINT [FK_MenuItem_Status] FOREIGN KEY([MenuItemId])
-REFERENCES [dbo].[MenuItem] ([Id])
-GO
-ALTER TABLE [dbo].[MenuItem_Status_Rel] CHECK CONSTRAINT [FK_MenuItem_Status]
-GO
-ALTER TABLE [dbo].[MenuItem_Status_Rel]  WITH CHECK ADD  CONSTRAINT [FK_Status_MenuItem] FOREIGN KEY([StatusId])
-REFERENCES [dbo].[AppStatus] ([Id])
-GO
-ALTER TABLE [dbo].[MenuItem_Status_Rel] CHECK CONSTRAINT [FK_Status_MenuItem]
 GO
 ALTER TABLE [dbo].[MP_AmazonFeedback]  WITH CHECK ADD  CONSTRAINT [FK_MP_AmazonFeedback_MP_CustomerMarketPlace] FOREIGN KEY([CustomerMarketPlaceId])
 REFERENCES [dbo].[MP_CustomerMarketPlace] ([Id])
