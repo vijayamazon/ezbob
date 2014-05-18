@@ -20,66 +20,68 @@
 	using Web.Models.Strings;
 	using NHibernate;
 	using log4net;
-	using System.Data;
 	using ConfigManager;
 
 	public class AmazonMarketPlacesController : Controller
-    {
-        private readonly IEzbobWorkplaceContext _context;
-        private readonly DatabaseDataHelper _helper;
+	{
+		private readonly IEzbobWorkplaceContext _context;
+		private readonly DatabaseDataHelper _helper;
 		private readonly ServiceClient m_oServiceClient;
-        private readonly ISession _session;
-        private readonly CustomerMarketPlaceRepository _customerMarketPlaceRepository;
-        private readonly AskvilleRepository _askvilleRepository;
-        private readonly IMPUniqChecker _mpChecker;
+		private readonly ISession _session;
+		private readonly CustomerMarketPlaceRepository _customerMarketPlaceRepository;
+		private readonly AskvilleRepository _askvilleRepository;
+		private readonly IMPUniqChecker _mpChecker;
 
-        private static readonly ILog Log = LogManager.GetLogger(typeof(AmazonMarketPlacesController));
-        private readonly AmazonServiceAskville _askvilleService;
-        private readonly CustomerRepository _customerRepository;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(AmazonMarketPlacesController));
+		private readonly AmazonServiceAskville _askvilleService;
+		private readonly CustomerRepository _customerRepository;
 
-        public AmazonMarketPlacesController(
-            IEzbobWorkplaceContext context, 
-            DatabaseDataHelper helper, 
-            ISession session, 
-            CustomerMarketPlaceRepository customerMarketPlaceRepository, 
-            AskvilleRepository askvilleRepository,
-            IMPUniqChecker mpChecker,
-            CustomerRepository customerRepository)
-        {
-            _context = context;
-            _helper = helper;
-	        m_oServiceClient = new ServiceClient();
-            _session = session;
-            _customerMarketPlaceRepository = customerMarketPlaceRepository;
-            _askvilleRepository = askvilleRepository;
-            _mpChecker = mpChecker;
-	        _askvilleService = new AmazonServiceAskville(CurrentValues.Instance.AmazonAskvilleLogin,
-	                                                     CurrentValues.Instance.AmazonAskvillePassword);
-	        _customerRepository = customerRepository;
-        }
-        //--------------------------------------------------------
-        [Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        [Authorize]
-        public AskvilleStatus Askville(int? customerMarketPlaceId, string merchantId, string marketplaceId, string askvilleGuid = "")
-        {
-            var marketplace = _customerMarketPlaceRepository.GetAll().FirstOrDefault(x => x.Id == customerMarketPlaceId);
-            if (marketplace == null)
-            {
-                throw new Exception(string.Format("Marketplace {0} does not found", customerMarketPlaceId));
-            }
+		public AmazonMarketPlacesController(
+			IEzbobWorkplaceContext context,
+			DatabaseDataHelper helper,
+			ISession session,
+			CustomerMarketPlaceRepository customerMarketPlaceRepository,
+			AskvilleRepository askvilleRepository,
+			IMPUniqChecker mpChecker,
+			CustomerRepository customerRepository)
+		{
+			_context = context;
+			_helper = helper;
+			m_oServiceClient = new ServiceClient();
+			_session = session;
+			_customerMarketPlaceRepository = customerMarketPlaceRepository;
+			_askvilleRepository = askvilleRepository;
+			_mpChecker = mpChecker;
+			_askvilleService = new AmazonServiceAskville(CurrentValues.Instance.AmazonAskvilleLogin,
+														 CurrentValues.Instance.AmazonAskvillePassword);
+			_customerRepository = customerRepository;
+		}
+		//--------------------------------------------------------
+		[Ajax]
+		[Transactional]
+		[Authorize]
+		public AskvilleStatus Askville(int? customerMarketPlaceId, string merchantId, string marketplaceId,
+		                               string askvilleGuid = "")
+		{
+			var marketplace = _customerMarketPlaceRepository.GetAll().FirstOrDefault(x => x.Id == customerMarketPlaceId);
+			if (marketplace == null)
+			{
+				throw new Exception(string.Format("Marketplace {0} does not found", customerMarketPlaceId));
+			}
 
-            var securityInfo = (AmazonSecurityInfo) RetrieveDataHelper.RetrieveCustomerSecurityInfo(marketplace.Id);
+			var securityInfo = (AmazonSecurityInfo) RetrieveDataHelper.RetrieveCustomerSecurityInfo(marketplace.Id);
 
-            merchantId = merchantId ?? securityInfo.MerchantId;
-            marketplaceId = marketplaceId ?? securityInfo.MarketplaceId[0];
+			merchantId = merchantId ?? securityInfo.MerchantId;
+			marketplaceId = marketplaceId ?? securityInfo.MarketplaceId[0];
 
-            var guid = askvilleGuid == "" ? Guid.NewGuid().ToString() : askvilleGuid;
+			var guid = askvilleGuid == "" ? Guid.NewGuid().ToString() : askvilleGuid;
 
-            var acceptUrl = Url.Action("ActivateStore", "Home", new { Area = "", id = guid, approve = true.ToString().ToLower() }, "https");
-            var disAcceptUrl = Url.Action("ActivateStore", "Home", new { Area = "", id = guid, approve = false.ToString().ToLower() }, "https");
+			var acceptUrl = Url.Action("ActivateStore", "Home", new {Area = "", id = guid, approve = true.ToString().ToLower()},
+			                           "https");
+			var disAcceptUrl = Url.Action("ActivateStore", "Home",
+			                              new {Area = "", id = guid, approve = false.ToString().ToLower()}, "https");
 
-            var message = @"
+			var message = @"
             Confirm your store on Amazon.
 
             Your Amazon shop has been added on EZBOB (www.ezbob.com).
@@ -96,92 +98,104 @@
             www.ezbob.com
             contacts@ezbob.com
             +44.800.011.4787";
-            
-            var sendingStatus = _askvilleService.AskQuestion(merchantId, marketplaceId, 31, message);
-            var askville = askvilleGuid == ""
-                               ? (new Askville
-                               {
-                                   Guid = guid,
-                                   IsPassed = false,
-                                   MarketPlace = marketplace,
-                                   SendStatus = sendingStatus,
-                                   MessageBody = message,
-                                   CreationDate = DateTime.UtcNow
-                               })
-                               : _askvilleRepository.GetAskvilleByGuid(askvilleGuid);
 
-            askville.Status = askvilleGuid == "" ? AskvilleStatus.NotPerformed : AskvilleStatus.ReCheck;
-            _askvilleRepository.SaveOrUpdate(askville);
-			Utils.WriteLog("Send askville message", sendingStatus.ToString(), ExperianServiceType.Askville, marketplace.Customer.Id);
-            return askville.Status;
-        }
-        
-        //--------------------------------------------------------
-        [HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [Authorize]
-        public string IsAmazonUserCorrect(string amazonMerchantId)
-        {
-			return RetrieveDataHelper.IsAmazonUserCorrect( new AmazonUserInfo { MerchantId = amazonMerchantId } ) ? "true" : "false";
-        }
+			var sendingStatus = _askvilleService.AskQuestion(merchantId, marketplaceId, 31, message);
+			var askville = askvilleGuid == ""
+				               ? (new Askville
+					               {
+						               Guid = guid,
+						               IsPassed = false,
+						               MarketPlace = marketplace,
+						               SendStatus = sendingStatus,
+						               MessageBody = message,
+						               CreationDate = DateTime.UtcNow
+					               })
+				               : _askvilleRepository.GetAskvilleByGuid(askvilleGuid);
 
-        //-------------------------------------------------------
-        [HttpPost]
-        [Authorize]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        public JsonResult ConnectAmazon(string marketplaceId, string merchantId)
-        {
-            try
-            {
-                Log.InfoFormat("Adding Marketplace '{0}' to customer {1} with MerchantId '{2}'", marketplaceId, _context.User.Id, merchantId);
+			askville.Status = askvilleGuid == "" ? AskvilleStatus.NotPerformed : AskvilleStatus.ReCheck;
+			_askvilleRepository.SaveOrUpdate(askville);
+			Utils.WriteLog("Send askville message", sendingStatus.ToString(), ExperianServiceType.Askville,
+			               marketplace.Customer.Id);
+			return askville.Status;
+		}
 
-                if (string.IsNullOrEmpty(marketplaceId) || string.IsNullOrEmpty(merchantId))
-                {
-                    return Json(new{});
-                }
+		//--------------------------------------------------------
+		[HttpGet]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[Authorize]
+		public string IsAmazonUserCorrect(string amazonMerchantId)
+		{
+			return RetrieveDataHelper.IsAmazonUserCorrect(new AmazonUserInfo { MerchantId = amazonMerchantId }) ? "true" : "false";
+		}
 
-                var customer = _context.Customer;
+		//-------------------------------------------------------
+		[HttpPost]
+		[Authorize]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult ConnectAmazon(string marketplaceId, string merchantId)
+		{
+			try
+			{
+				int mpId = ConnectAmazonTrn(marketplaceId, merchantId);
+				if (mpId == -1)
+				{
+					return Json(new {});
+				}
+				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
+				return Json(new { msg = "Congratulations. Amazon account was linked successfully." });
+			}
+			catch (MarketPlaceAddedByThisCustomerException)
+			{
+				return Json(new { error = DbStrings.StoreAddedByYou }, JsonRequestBehavior.AllowGet);
+			}
+			catch (MarketPlaceIsAlreadyAddedException)
+			{
+				return Json(new { error = DbStrings.StoreAlreadyExistsInDb }, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception e)
+			{
+				Log.Error(e);
+				throw;
+			}
+		}
 
-                var amazon = new AmazonDatabaseMarketPlace();
-                
-                var sellerInfo = AmazonRateInfo.GetUserRatingInfo(merchantId);
+		[NonAction]
+		[Transactional]
+		private int ConnectAmazonTrn(string marketplaceId, string merchantId)
+		{
+			Log.InfoFormat("Adding Marketplace '{0}' to customer {1} with MerchantId '{2}'", marketplaceId, _context.User.Id, merchantId);
 
-                _mpChecker.Check(amazon.InternalId, customer, sellerInfo.Name);
+			if (string.IsNullOrEmpty(marketplaceId) || string.IsNullOrEmpty(merchantId))
+			{
+				return -1;
+			}
 
-                var amazonSecurityInfo = new AmazonSecurityInfo(merchantId);
-                amazonSecurityInfo.AddMarketplace(marketplaceId);
+			var customer = _context.Customer;
 
-				var marketplace = _helper.SaveOrUpdateCustomerMarketplace(sellerInfo.Name, amazon, amazonSecurityInfo, customer, marketplaceId);
+			var amazon = new AmazonDatabaseMarketPlace();
 
-                _session.Flush();
-                m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, marketplace.Id, true);
+			var sellerInfo = AmazonRateInfo.GetUserRatingInfo(merchantId);
 
-				if (CurrentValues.Instance.AskvilleEnabled)
-                {
-                    Askville(marketplace.Id, merchantId, marketplaceId);
-                }
+			_mpChecker.Check(amazon.InternalId, customer, sellerInfo.Name);
 
-                _customerRepository.SaveOrUpdate(customer);
+			var amazonSecurityInfo = new AmazonSecurityInfo(merchantId);
+			amazonSecurityInfo.AddMarketplace(marketplaceId);
 
-                return Json(new { msg = "Congratulations. Amazon account was linked successfully." });
-            }
-            catch (MarketPlaceAddedByThisCustomerException)
-            {
-                return Json(new { error = DbStrings.StoreAddedByYou }, JsonRequestBehavior.AllowGet);
-            }
-            catch (MarketPlaceIsAlreadyAddedException)
-            {
-                return Json(new { error = DbStrings.StoreAlreadyExistsInDb }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-                throw;
-            }
-        }
-    }
+			var marketplace = _helper.SaveOrUpdateCustomerMarketplace(sellerInfo.Name, amazon, amazonSecurityInfo, customer, marketplaceId);
+
+			_session.Flush();
+
+
+			if (CurrentValues.Instance.AskvilleEnabled)
+			{
+				Askville(marketplace.Id, merchantId, marketplaceId);
+			}
+
+			_customerRepository.SaveOrUpdate(customer);
+
+			return marketplace.Id;
+		}
+	}
 }

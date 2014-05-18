@@ -35,7 +35,6 @@
 			m_oServiceClient = new ServiceClient();
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult Accounts()
 		{
 			var oEsi = new CompanyFilesServiceInfo();
@@ -80,16 +79,12 @@
 		{
 			try
 			{
-				var serviceInfo = new CompanyFilesServiceInfo();
-				var name = serviceInfo.DisplayName;
-				var cf = new CompanyFilesDatabaseMarketPlace();
-				var mp = _helper.SaveOrUpdateCustomerMarketplace(_context.Customer.Name + "_" + name, cf, null, _context.Customer);
-
-				_session.Flush();
-				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
-
-				m_oServiceClient.Instance.MarketplaceInstantUpdate(mp.Id);
-				mp.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(mp.Id);
+				var mpId = ConnectTrn();
+				if (mpId != -1)
+				{
+					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
+					m_oServiceClient.Instance.MarketplaceInstantUpdate(mpId);
+				}
 			}
 			catch (Exception e)
 			{
@@ -97,6 +92,26 @@
 			} // try
 
 			return Json(new { });
+		}
+
+		[NonAction]
+		[Transactional]
+		private int ConnectTrn()
+		{
+			try
+			{
+				var serviceInfo = new CompanyFilesServiceInfo();
+				var name = serviceInfo.DisplayName;
+				var cf = new CompanyFilesDatabaseMarketPlace();
+				var mp = _helper.SaveOrUpdateCustomerMarketplace(_context.Customer.Name + "_" + name, cf, null, _context.Customer);
+				mp.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(mp.Id);
+				return mp.Id;
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex);
+				return -1;
+			}
 		}
 	}
 }

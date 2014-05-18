@@ -98,7 +98,7 @@
 				return View();
 			} // if
 
-			SaveMarketplace(oState, model, false);
+			SaveMarketplace(oState, model);
 
 			if (oState.Error != null) {
 				ViewError = oState.Error;
@@ -142,7 +142,6 @@
 
 		#region method Accounts (account list by type)
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult Accounts(string atn) {
 			var oVsi = Configuration.Instance.GetVendorInfo(atn);
 
@@ -159,7 +158,6 @@
 
 		#region method Accounts (add new account)
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		public JsonResult Accounts(AccountModel model) {
@@ -172,8 +170,11 @@
 
 			if (oState.Error != null)
 				return oState.Error;
-
-			SaveMarketplace(oState, model, true);
+			var mpId = SaveMarketplace(oState, model);
+			if (mpId != -1)
+			{
+				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
+			}
 
 			if (oState.Error != null)
 				return oState.Error;
@@ -289,23 +290,23 @@
 		#endregion method ValidateAccount
 
 		#region method SaveMarketplace
-
-		private void SaveMarketplace(AddAccountState oState, AccountModel model, bool shouldUpdateInServer) {
+		[NonAction]
+		[Transactional]
+		private int SaveMarketplace(AddAccountState oState, AccountModel model) {
 			try {
 				model.id = _mpTypes.GetAll().First(a => a.InternalId == oState.VendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, oState.Marketplace, model, _context.Customer);
-				_session.Flush();
-				if (shouldUpdateInServer)
-					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
 				oState.Model = Json(AccountModel.ToModel(mp), JsonRequestBehavior.AllowGet);
 				oState.CustomerMarketPlace = mp;
+				return mp.Id;
 			}
 			catch (Exception e) {
 				Log.Error(e);
 				oState.Error = CreateError(e);
+				return -1;
 			} // try
 		} // SaveMarketplace
 

@@ -8,14 +8,14 @@
 	using EKM;
 	using Code.MpUniq;
 	using Infrastructure.Attributes;
+	using Infrastructure.csrf;
+	using Models;
 	using ServiceClientProxy;
 	using Web.Models.Strings;
 	using log4net;
 	using NHibernate;
 	using System.Data;
-	using CommonLib.Security;
 	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.DatabaseWrapper;
 
 	public class EkmMarketPlacesController : Controller
 	{
@@ -26,26 +26,25 @@
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly EkmConnector _validator = new EkmConnector();
-		private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
 
 		public EkmMarketPlacesController(
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
 			MarketPlaceRepository mpTypes,
-			IMPUniqChecker mpChecker,
-			ISession session
+			IMPUniqChecker mpChecker
 		) {
 			_context = context;
 			_mpTypes = mpTypes;
 			_customer = context.Customer;
 			_mpChecker = mpChecker;
 			m_oServiceClient = new ServiceClient();
-			_session = session;
 			_helper = helper;
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult Accounts()
 		{
 			var oEsi = new EkmServiceInfo();
@@ -53,14 +52,14 @@
 			var ekms = _customer
 				.CustomerMarketPlaces
 				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
-				.Select(EkmAccountModel.ToModel)
+				.Select(mp => new EkmAccountModel{ id = mp.Id, login = mp.DisplayName})
 				.ToList();
 			return Json(ekms, JsonRequestBehavior.AllowGet);
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult Accounts(EkmAccountModel model)
 		{
 			string errorMsg;
@@ -72,24 +71,9 @@
 			try
 			{
 				var customer = _context.Customer;
-				var username = model.login;
-				var ekm = new EkmDatabaseMarketPlace();
-				_mpChecker.Check(ekm.InternalId, customer, username);
-				var oEsi = new EkmServiceInfo();
-				int marketPlaceId = _mpTypes
-					.GetAll()
-					.First(a => a.InternalId == oEsi.InternalId)
-					.Id;
-
-				var ekmSecurityInfo = new EkmSecurityInfo { MarketplaceId = marketPlaceId, Name = username, Password = model.password };
-
-				var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo.Password, customer);
-
-				_session.Flush();
-
-				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, true);
-
-				return Json(EkmAccountModel.ToModel(mp), JsonRequestBehavior.AllowGet);
+				var mpId = SaveAccountTrn(customer, model.login, model.password);
+				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true);
+				return Json(new EkmAccountModel { id = mpId, login = model.login }, JsonRequestBehavior.AllowGet);
 			}
 			catch (MarketPlaceAddedByThisCustomerException e) {
 				Log.Debug(e);
@@ -105,9 +89,31 @@
 			}
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[NonAction]
+		[Transactional]
+		private int SaveAccountTrn(Customer customer, string login, string password)
+		{
+			
+			var username = login;
+			var ekm = new EkmDatabaseMarketPlace();
+			_mpChecker.Check(ekm.InternalId, customer, username);
+			var oEsi = new EkmServiceInfo();
+			int marketPlaceId = _mpTypes
+				.GetAll()
+				.First(a => a.InternalId == oEsi.InternalId)
+				.Id;
+
+			var ekmSecurityInfo = new EkmSecurityInfo { MarketplaceId = marketPlaceId, Name = username, Password = password };
+
+			var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo.Password, customer);
+
+			return mp.Id;
+		}
+
+		[Transactional]
 		[Ajax]
 		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult Update(string name, string password)
 		{
 			string errorMsg;
@@ -121,7 +127,6 @@
 				var customer = _context.Customer;
 				var ekm = new EkmDatabaseMarketPlace();
 				_helper.SaveOrUpdateCustomerMarketplace(name, ekm, password, customer);
-				_session.Flush();
 				return Json(new { success = true }, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception e)
@@ -130,33 +135,5 @@
 				return Json(new { error = e.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
-	}
-
-	public class EkmAccountModel
-	{
-		public int id { get; set; }
-		public string login { get; set; }
-		public string password { get; set; }
-		public string displayName { get { return login; } }
-
-		public static EkmAccountModel ToModel(IDatabaseCustomerMarketPlace account)
-		{
-			return new EkmAccountModel
-					   {
-						   id = account.Id,
-						   login = account.DisplayName,
-						   password = Encryptor.Decrypt(account.SecurityData),
-					   };
-		}
-
-		public static EkmAccountModel ToModel(MP_CustomerMarketPlace account)
-		{
-			return new EkmAccountModel
-			{
-				id = account.Id,
-				login = account.DisplayName,
-				password = Encryptor.Decrypt(account.SecurityData),
-			};
-		} // ToModel
 	}
 }

@@ -2,7 +2,6 @@
 {
 	using System.Data;
 	using EZBob.DatabaseLib;
-    using EZBob.DatabaseLib.DatabaseWrapper;
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -11,44 +10,48 @@
 	using FreeAgent;
 	using Infrastructure;
 	using Infrastructure.Attributes;
+	using Infrastructure.csrf;
+	using Models;
 	using ServiceClientProxy;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class FreeAgentMarketPlacesController : Controller
-    {
-        private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentMarketPlacesController));
+	{
+		private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentMarketPlacesController));
 		private readonly MarketPlaceRepository _mpTypes;
-        private readonly Customer _customer;
-        private readonly ServiceClient m_oServiceClient;
-        private readonly DatabaseDataHelper _helper;
+		private readonly Customer _customer;
+		private readonly ServiceClient m_oServiceClient;
+		private readonly DatabaseDataHelper _helper;
 
 
 		public FreeAgentMarketPlacesController(
-            IEzbobWorkplaceContext context,
-            DatabaseDataHelper helper,
+			IEzbobWorkplaceContext context,
+			DatabaseDataHelper helper,
 			MarketPlaceRepository mpTypes)
-        {
-            _mpTypes = mpTypes;
-            _customer = context.Customer;
+		{
+			_mpTypes = mpTypes;
+			_customer = context.Customer;
 			m_oServiceClient = new ServiceClient();
-            _helper = helper;
-        }
+			_helper = helper;
+		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonResult Accounts()
-        {
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult Accounts()
+		{
 			var oEsi = new FreeAgentServiceInfo();
 
-            var freeagents = _customer
-                .CustomerMarketPlaces
-                .Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
-                .Select(FreeAgentAccountModel.ToModel)
-                .ToList();
-            return Json(freeagents, JsonRequestBehavior.AllowGet);
-        }
+			var freeagents = _customer
+				.CustomerMarketPlaces
+				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
+				.Select(FreeAgentAccountModel.ToModel)
+				.ToList();
+			return Json(freeagents, JsonRequestBehavior.AllowGet);
+		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[ValidateJsonAntiForgeryToken]
 		public ActionResult AttachFreeAgent()
 		{
 			log.Info("Attaching FreeAgent");
@@ -56,7 +59,6 @@
 			return Redirect(FreeAgentConnector.GetApprovalRequest(callback));
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public ActionResult FreeAgentCallback()
 		{
 			log.Info("Arrived to FreeAgent callback, will try to get access token...");
@@ -70,6 +72,18 @@
 				return View(new { error = errorMessage ?? "Failure getting access token" });
 			}
 
+			var model = SaveFreeAgentTrn(accessTokenContainer, approvalToken);
+			
+
+			m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, model.id, true);
+
+			return View(model);
+		}
+
+		[NonAction]
+		[Transactional]
+		private FreeAgentAccountModel SaveFreeAgentTrn(AccessTokenContainer accessTokenContainer, string approvalToken)
+		{
 			var oEsi = new FreeAgentServiceInfo();
 			int marketPlaceId = _mpTypes
 				.GetAll()
@@ -104,33 +118,7 @@
 			log.Info("Saving marketplace data...");
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(securityData.Name, freeAgentDatabaseMarketPlace, securityData, _customer);
 
-			m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, marketPlace.Id, true);
-
-			return View(FreeAgentAccountModel.ToModel(marketPlace));
+			return FreeAgentAccountModel.ToModel(marketPlace);
 		}
-    }
-
-	public class FreeAgentAccountModel
-    {
-        public int id { get; set; }
-		public string displayName { get; set; }
-
-		public static FreeAgentAccountModel ToModel(IDatabaseCustomerMarketPlace account)
-		{
-			return new FreeAgentAccountModel
-				{
-					id = account.Id,
-					displayName = account.DisplayName
-				};
-		}
-
-		public static FreeAgentAccountModel ToModel(MP_CustomerMarketPlace account)
-		{
-			return new FreeAgentAccountModel
-				{
-					id = account.Id,
-					displayName = account.DisplayName
-				};
-		} // ToModel
-    }
+	}
 }

@@ -45,7 +45,6 @@
 			_mpChecker = mpChecker;
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
