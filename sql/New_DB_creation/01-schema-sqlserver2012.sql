@@ -550,48 +550,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[Application_GetStatus]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[Application_GetStatus]
-(
-   @pApplicationId bigint
-)
 
-AS
-
-begin
-       select signal.target,
-       signal.label,
-       signal.status,
-       signal.starttime,
-       signal.appspecific,
-       strategyengine_executionstate.currentnodeid,
-       strategy_node.name,
-       strategyengine_executionstate.currentnodepostfix,
-       application_application.executionPath,
-       application_application.executionPathBin,
-       application_application.lockedbyuserid,
-       application_application.state,
-       application_application.istimelimitexceeded,
-       application_application.version,
-       application_application.strategyid
-
-       from application_application with (nolock)
-        left outer join signal with (nolock) on
-           application_application.applicationid = signal.applicationid 
-        left outer join strategyengine_executionstate with (nolock) on 
-           application_application.applicationid = strategyengine_executionstate.applicationid 
-        left outer join strategy_node with (nolock) on 
-           strategy_node.nodeid = strategyengine_executionstate.currentnodeid 
-       
-       where application_application.applicationid = @pApplicationId;
-
-end;
-
-GO
 /****** Object:  StoredProcedure [dbo].[Application_Insert]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -2120,52 +2079,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[DeleteSignalByAppId]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DeleteSignalByAppId]
-(
-    @pApplicationId bigint,
-    @pAppSpecific bigint output,
-    @pStrategyId bigint output
-)
-as
-begin
-    DECLARE @SignalId INT
 
-    SET TRANSACTION ISOLATION LEVEL READ COMMITTED 
-    select @SignalId = Id, @pAppSpecific = AppSpecific,  @pStrategyId = APPLICATION_APPLICATION.STRATEGYID
-    from Signal WITH (NOLOCK) inner join Application_Application WITH (NOLOCK)
-      on SIGNAL.APPLICATIONID = APPLICATION_APPLICATION.APPLICATIONID
-    where
-		SIGNAL.Label like '%[_]' + CAST(@pApplicationId as nvarchar) and
-		SIGNAL.ApplicationId = @pApplicationId;
-
-    delete from Signal WITH (ROWLOCK)
-    where Id = @SignalId;
-
-END;
-
-GO
-/****** Object:  StoredProcedure [dbo].[DeleteSignalById]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DeleteSignalById]
-(
-    @pId bigint
-)
-as
-begin
-    delete from Signal WITH(ROWLOCK)
-    where Id = @pId;
-
-END;
-
-GO
 /****** Object:  StoredProcedure [dbo].[Dump_Application_Variables]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -2297,82 +2211,7 @@ BEGIN
 END;
 
 GO
-/****** Object:  StoredProcedure [dbo].[ExpiredNodeExecutionsList]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[ExpiredNodeExecutionsList]
-AS
 
-BEGIN
-
-SELECT
-    STRATEGYENGINE_EXECUTIONSTATE.ID,
-    STRATEGY_NODE.NODEID,
-    STRATEGYENGINE_EXECUTIONSTATE.APPLICATIONID,
-    APPLICATION_APPLICATION.CREATORUSERID,
-    APPLICATION_APPLICATION.VERSION,
-    STRATEGY_NODE.ISHARDREACTION,
-    S.ID as SignalId,
-    STRATEGYENGINE_EXECUTIONSTATE.STARTTIME as StartTime,
-    STRATEGY_NODE.EXECUTIONDURATION as ExecutionDuration,
-    APPLICATION_APPLICATION.AppCounter as OwnerApplicationId
-FROM
-    STRATEGYENGINE_EXECUTIONSTATE
-    INNER JOIN STRATEGY_NODE WITH(NOLOCK)
-        ON STRATEGY_NODE.NODEID = STRATEGYENGINE_EXECUTIONSTATE.CURRENTNODEID
-    INNER JOIN APPLICATION_APPLICATION WITH(NOLOCK)
-        ON STRATEGYENGINE_EXECUTIONSTATE.APPLICATIONID = APPLICATION_APPLICATION.APPLICATIONID
-    LEFT OUTER JOIN Application_NodeSetting WITH(NOLOCK)
-        ON STRATEGYENGINE_EXECUTIONSTATE.APPLICATIONID = Application_NodeSetting.APPLICATIONID 
-           AND STRATEGYENGINE_EXECUTIONSTATE.CURRENTNODEID = Application_NodeSetting.NODEID
-           AND STRATEGYENGINE_EXECUTIONSTATE.CURRENTNODEPOSTFIX = Application_NodeSetting.NODEPOSTFIX
-           AND Application_NodeSetting.Name='timelimit'
-    INNER JOIN Signal S WITH(NOLOCK)
-        ON S.APPLICATIONID = APPLICATION_APPLICATION.APPLICATIONID
-WHERE
-    ((NOT(Application_NodeSetting.VALUE IS NULL)
-      AND (getdate() > DATEADD(second, Application_NodeSetting.VALUE, STRATEGYENGINE_EXECUTIONSTATE.STARTTIME)))
-     OR
-     ((Application_NodeSetting.VALUE IS NULL)
-      AND NOT(STRATEGY_NODE.ExecutionDURATION IS NULL OR STRATEGY_NODE.ExecutionDURATION = -1)
-    AND getdate() > DATEADD(second, STRATEGY_NODE.ExecutionDURATION, STRATEGYENGINE_EXECUTIONSTATE.STARTTIME)))
-    AND STRATEGYENGINE_EXECUTIONSTATE.ISTIMEOUTREPORTED IS NULL
-
-UNION
-
-SELECT
-    STRATEGYENGINE_EXECUTIONSTATE.ID,
-    NULL AS NODEID,
-    STRATEGYENGINE_EXECUTIONSTATE.APPLICATIONID,
-    APPLICATION_APPLICATION.CREATORUSERID,
-    APPLICATION_APPLICATION.VERSION,
-    1 AS ISHARDREACTION,
-    S.ID as SignalId,
-    STRATEGYENGINE_EXECUTIONSTATE.STARTTIME as StartTime,
-    NULL as ExecutionDuration,
-    APPLICATION_APPLICATION.AppCounter as OwnerApplicationId
-FROM
-    STRATEGYENGINE_EXECUTIONSTATE
-    INNER JOIN APPLICATION_APPLICATION WITH(NOLOCK)
-        ON STRATEGYENGINE_EXECUTIONSTATE.APPLICATIONID = APPLICATION_APPLICATION.APPLICATIONID
-    INNER JOIN Application_NodeSetting WITH(NOLOCK)
-        ON STRATEGYENGINE_EXECUTIONSTATE.APPLICATIONID = Application_NodeSetting.APPLICATIONID 
-           AND STRATEGYENGINE_EXECUTIONSTATE.CURRENTNODEID IS NULL
-           AND Application_NodeSetting.NODEID IS NULL
-           AND STRATEGYENGINE_EXECUTIONSTATE.CURRENTNODEPOSTFIX = Application_NodeSetting.NODEPOSTFIX
-           AND Application_NodeSetting.Name='timelimit'
-    INNER JOIN Signal S WITH(NOLOCK)
-        ON S.APPLICATIONID = APPLICATION_APPLICATION.APPLICATIONID
-WHERE
-    (NOT(Application_NodeSetting.VALUE IS NULL)
-      AND (getdate() > DATEADD(second, Application_NodeSetting.VALUE, STRATEGYENGINE_EXECUTIONSTATE.STARTTIME)))
-    AND STRATEGYENGINE_EXECUTIONSTATE.ISTIMEOUTREPORTED IS NULL
-
-END;
-
-GO
 /****** Object:  StoredProcedure [dbo].[Export_AddExportResult]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -4222,25 +4061,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[GetMessageBySignalId]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetMessageBySignalId]
 
-		@pApplicationId bigint,
-		@pMessage image output
-AS
-BEGIN
-    select @pMessage = Message 
-    from Signal WITH (NOLOCK)
-    where Label like '%[_]' + cast(@pApplicationId as nvarchar)
-          and Applicationid = @pApplicationId;
-
-END
-
-GO
 /****** Object:  StoredProcedure [dbo].[GetMonitoredSites]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -4639,48 +4460,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[GetPrioritySignals]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetPrioritySignals]
-(
-    @pPriority bigint,
-    @pOwnerAppId bigint,
-    @pCount int 
-)
-AS
-  
-BEGIN
-  update Signal 
-  set Status = -1
-  where id in
-    (select TOP(@pCount) id 
-     from Signal 
-     where status= 0
-       and ((priority is null) or (priority <= @pPriority))
-       and ((ownerApplicationId is null) or (ownerApplicationId <= @pOwnerAppId))
-       and (IsExternal is null or IsExternal = 0) 
-    );
 
-  SELECT 
-    applicationId,
-    appSpecific,
-    id,
-    label,
-    priority,
-    ownerApplicationId,
-    executionType,
-    message body
-  FROM
-    signal WITH (NOLOCK)
-  WHERE
-    status = -1
-  order by priority;
-END
-
-GO
 /****** Object:  StoredProcedure [dbo].[GetReassignApplications]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -4882,68 +4662,7 @@ GROUP BY A.Id,C.Shops,D.Paypal, A.Name, A.FirstName, A.Surname
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[GetSignalParameters]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetSignalParameters]
-(
-    @pSignalId bigint,
-    @pApplicationId bigint,
-    @pAppSpecific bigint output,
-    @pStrategyId bigint output
-)
-as
-begin
-    select top 1 @pAppSpecific = AppSpecific
-          ,@pStrategyId = APPLICATION_APPLICATION.STRATEGYID
-    from Signal inner join Application_Application
-      on SIGNAL.APPLICATIONID = APPLICATION_APPLICATION.APPLICATIONID
-    where
-		SIGNAL.Label like '%[_]' + cast(@pApplicationId as nvarchar)
-		and SIGNAL.Id = @pSignalId;
-end
 
-GO
-/****** Object:  StoredProcedure [dbo].[GetSignals]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetSignals]
-(
-    @pCount int 
-)
-AS
-  
-BEGIN
-  update Signal 
-  set Status = -1
-  where id in
-    (select TOP(@pCount) id 
-     from Signal 
-     where status= 0 and (IsExternal is null or IsExternal = 0) 
-     order by priority);
-
-  SELECT 
-    applicationId,
-    appSpecific,
-    id,
-    label,
-    priority,
-    ownerApplicationId,
-    executionType,
-    message body
-  FROM
-    signal WITH (NOLOCK)
-  WHERE
-    status = -1
-  order by priority;
-
-END
-
-GO
 /****** Object:  StoredProcedure [dbo].[GetStoredParametersByAppId]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -6793,101 +6512,8 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[ResetAllSignals]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[ResetAllSignals]
-as
-begin
-    update Signal
-    set Status = 0 
-    where IsExternal is null or IsExternal = 0 
-END;
 
-GO
-/****** Object:  StoredProcedure [dbo].[ResetSignal]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[ResetSignal]
-	@pSignalId INT
-AS
-BEGIN
-	UPDATE Signal
-	SET    STATUS = 0
-	WHERE  id = @pSignalId;
-END;
 
-GO
-/****** Object:  StoredProcedure [dbo].[RestoreApplicationFromSuspend]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[RestoreApplicationFromSuspend]
-	@pApplicationId BIGINT
-AS
-BEGIN
-        DECLARE @AppSpecific int;
-
-        DELETE FROM [STRATEGYENGINE_EXECUTIONSTATE] WHERE ApplicationId = @pApplicationId;
-        INSERT INTO [STRATEGYENGINE_EXECUTIONSTATE]
-                       ([APPLICATIONID]
-                       ,[CURRENTNODEID]
-                       ,[CURRENTNODEPOSTFIX]
-                       ,[DATA]
-                       ,[STARTTIME]
-                       ,[ISTIMEOUTREPORTED])
-        SELECT 
-                        [ApplicationId]
-                       ,null
-                       ,[Postfix]
-                       ,[ExecutionState]
-                       ,GETDATE()
-                       ,null
-        FROM Application_Suspended
-        WHERE ApplicationId = @pApplicationId
-          AND NOT(Postfix is null OR ExecutionState is null);
-
-        SELECT @AppSpecific = [Version]
-        FROM Application_Application
-        WHERE ApplicationId = @pApplicationId
-          
-        DELETE FROM [SIGNAL] WHERE ApplicationId = @pApplicationId;
-        INSERT INTO [SIGNAL]
-                       ([TARGET]
-                       ,[LABEL]
-                       ,[STATUS]
-                       ,[STARTTIME]
-                       ,[APPSPECIFIC]
-                       ,[APPLICATIONID]
-                       ,[ExecutionType]
-                       ,[MESSAGE])
-        SELECT 
-                        [Target]
-                       ,[Label]
-                       ,0
-                       ,GETDATE()
-                       ,@AppSpecific
-                       ,[ApplicationId]
-                       ,[ExecutionType]
-                       ,[Message]
-        FROM Application_Suspended
-        WHERE ApplicationId = @pApplicationId;
-
-        DELETE
-        FROM Application_Suspended
-        WHERE ApplicationId = @pApplicationId;
-
-        UPDATE Application_Application
-        SET State = 0
-        WHERE ApplicationId = @pApplicationId
-END
-
-GO
 /****** Object:  StoredProcedure [dbo].[RptAddReportUser]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -12713,32 +12339,7 @@ BEGIN
 	UPDATE Loan SET Is14DaysLate = 1 WHERE Id = @LoanId
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Signal_Insert]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[Signal_Insert]
-    @pTarget        nvarchar(50),
-    @pLabel         nvarchar(250),
-    @pAppSpecific   int,
-    @pApplicationId bigint,
-    @pPriority      bigint,
-    @pOwnerAppId    bigint,
-    @pMessage       varbinary(max)
-AS
-BEGIN
-  declare @executionType bigint;
-  select @executionType = ExecutionType
-  from Application_ExecutionType WITH(NOLOCK)
-  where ApplicationId = @pApplicationId;
-  insert into Signal
-    (Target, Label, Status, StartTime, AppSpecific, ApplicationId, Priority, OwnerApplicationId, Message, ExecutionType)
-  values
-    (@pTarget, @pLabel, 0, getdate(), @pAppSpecific, @pApplicationId, @pPriority, @pOwnerAppId, @pMessage, @executionType);
-END
 
-GO
 /****** Object:  StoredProcedure [dbo].[Strategy_AssignEmbedded]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -14417,133 +14018,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SuspendApplication]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[SuspendApplication]
-	@pApplicationId         BIGINT,
-	@pExecutionState        ntext,
-	@pPostfix               NVARCHAR(512),
-	@pTarget                NVARCHAR(50),
-	@pLabel                 NVARCHAR(250),
-	@pExecutionPathCurrentItemId  BIGINT,
-	@pExecutionType         SMALLINT,
-	@pMessage               varbinary(max)
-AS
-BEGIN
 
-        DECLARE @pAppSpecific bigint;
-        DECLARE @pStrategyId int;
-
-        exec DeleteSignalByAppId @pApplicationId, @pAppSpecific OUTPUT, @pStrategyId OUTPUT;
-		
-		DECLARE @pCurrentNodeId int;
-		exec DeleteExecutionStateByAppId @pApplicationId, @pCurrentNodeId OUTPUT;
-
-        INSERT INTO [Application_Suspended]
-               ([ApplicationId]
-               ,[ExecutionState]
-               ,[Postfix]
-               ,[Target]
-               ,[Label]
-               ,[ExecutionPathCurrentItemId]
-               ,[ExecutionType]
-               ,[Message]
-               ,[AppSpecific]
-               ,[Date])
-        VALUES 
-               ( @pApplicationId
-               , @pExecutionState
-               , @pPostfix
-               , @pTarget
-               , @pLabel
-               , @pExecutionPathCurrentItemId
-               , @pExecutionType
-               , @pMessage
-               , @pAppSpecific
-               , GETDATE());
-
-
-        SELECT @@IDENTITY;
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[SuspendApplicationById]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[SuspendApplicationById]
-	@pApplicationId BIGINT,
-	@pExecutionPathCurrentItemId BIGINT
-AS
-BEGIN
-	DECLARE @pExecutionState  NVARCHAR(MAX);
-	DECLARE @pPostfix         NVARCHAR(MAX);
-	
-	SELECT @pExecutionState = DATA,
-	       @pPostfix = CurrentNodePostfix
-	FROM   StrategyEngine_ExecutionState
-	WHERE  applicationId = @pApplicationId;
-	
-	DECLARE @pTarget         NVARCHAR(MAX);
-	DECLARE @pLabel          NVARCHAR(MAX);
-	DECLARE @pMessage        VARBINARY(MAX);
-	DECLARE @pExecutionType  NVARCHAR(MAX);
-	
-	SELECT @pTarget = s.Target,
-	       @pLabel = s.Label,
-	       @pMessage = s.Message,
-	       @pExecutionType = s.ExecutionType
-	FROM   Signal s
-	WHERE  s.applicationId = @pApplicationId;
-	
-	DECLARE @pAppSpecific  BIGINT;
-	DECLARE @pStrategyId   INT;
-	
-	EXEC DeleteSignalByAppId @pApplicationId,
-	     @pAppSpecific OUTPUT,
-	     @pStrategyId OUTPUT;
-	
-	DECLARE @pCurrentNodeId INT;
-	EXEC DeleteExecutionStateByAppId @pApplicationId,
-	     @pCurrentNodeId OUTPUT;
-	
-	DELETE FROM Application_Suspended
-	WHERE [ApplicationId] = @pApplicationId;
-	INSERT INTO [Application_Suspended]
-	  (
-	    [ApplicationId],
-	    [ExecutionState],
-	    [Postfix],
-	    [Target],
-	    [Label],
-	    [ExecutionPathCurrentItemId],
-	    [Message],
-	    [AppSpecific],
-	    [ExecutionType],
-	    [Date]
-	  )
-	VALUES
-	  (
-	    @pApplicationId,
-	    @pExecutionState,
-	    @pPostfix,
-	    @pTarget,
-	    @pLabel,
-	    @pExecutionPathCurrentItemId,
-	    @pMessage,
-	    @pAppSpecific,
-	    @pExecutionType,
-	    GETDATE()
-	  );
-	
-	SELECT @@IDENTITY;
-END;
-
-GO
 /****** Object:  StoredProcedure [dbo].[TaskedStrategy_LabelExist]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -15059,22 +14534,7 @@ SELECT @@IDENTITY;
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateIsExternal]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[UpdateIsExternal]
-	@pSignalId INT
-	,@pIsExternal bit
-AS
-BEGIN
-	UPDATE Signal
-	SET    IsExternal = @pIsExternal
-	WHERE  id = @pSignalId;
-END;
 
-GO
 /****** Object:  StoredProcedure [dbo].[UpdateIsTimeoutReported]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -15380,18 +14840,7 @@ SELECT @@IDENTITY;
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateSignalsSelectingStatus]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[UpdateSignalsSelectingStatus]
-as
-begin
-    update Signal set Status = 1 where Status=-1
-END;
 
-GO
 /****** Object:  StoredProcedure [dbo].[UpdateTransactionStatus]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -22447,35 +21896,7 @@ CREATE TABLE [dbo].[ServiceRegistration](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Signal]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
-GO
-CREATE TABLE [dbo].[Signal](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Target] [nvarchar](50) NOT NULL,
-	[label] [nvarchar](250) NOT NULL,
-	[Status] [int] NOT NULL,
-	[StartTime] [datetime] NOT NULL,
-	[AppSpecific] [int] NOT NULL,
-	[ApplicationId] [bigint] NOT NULL,
-	[Priority] [bigint] NULL,
-	[ExecutionType] [smallint] NULL,
-	[Message] [varbinary](max) NOT NULL,
-	[OwnerApplicationId] [bigint] NULL,
-	[IsExternal] [bit] NULL,
- CONSTRAINT [PK_Signal] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-GO
-SET ANSI_PADDING OFF
-GO
 /****** Object:  Table [dbo].[SingleRunApplication]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -25546,20 +24967,6 @@ CREATE UNIQUE NONCLUSTERED INDEX [IDX_ReportArgument] ON [dbo].[ReportArguments]
 	[ReportId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Object:  Index [i_signal_appid]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [i_signal_appid] ON [dbo].[Signal]
-(
-	[ApplicationId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-/****** Object:  Index [IX_Signal_IsExternal]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Signal_IsExternal] ON [dbo].[Signal]
-(
-	[IsExternal] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-
 GO
 /****** Object:  Index [IX_Strategy_Node]    Script Date: 04-Nov-13 5:03:46 PM ******/
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Strategy_Node] ON [dbo].[Strategy_Node]
