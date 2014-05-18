@@ -49,7 +49,7 @@
 
 				var response = MakeRequest("POST", "application/xml", requestXml);
 
-				Utils.WriteLog(requestXml, response, "ESeriesTargeting", customerId);
+				Utils.WriteLog(requestXml, response, ExperianServiceType.Targeting, customerId);
 
 				return new TargetResults(response);
 			}
@@ -136,7 +136,7 @@
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
 
-					Utils.WriteLog(requestXml, newResponse, "E-SeriesLimitedData", customerId);
+					Utils.WriteLog(requestXml, newResponse, ExperianServiceType.LimitedData, customerId);
 
 					AddToCache(regNumber, requestXml, newResponse);
 
@@ -200,7 +200,7 @@
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
 
-					Utils.WriteLog(requestXml, newResponse, "E-SeriesNonLimitedData", customerId);
+					Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
 
 					AddToCache(regNumber, requestXml, newResponse);
 

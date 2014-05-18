@@ -342,7 +342,7 @@
 
 			var output = service.GetOutput(input);
 
-			var serviceLog = Utils.WriteLog(input, output, "Consumer Request", customerId, directorId);
+			var serviceLog = Utils.WriteLog(input, output, ExperianServiceType.Consumer, customerId, directorId);
 
 			if (output != null && output.Output.Error == null) {
 				cachedResponse.LastUpdateDate = DateTime.Now;

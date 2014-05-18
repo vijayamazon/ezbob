@@ -26,6 +26,7 @@
 	using ZooplaLib;
 	using log4net;
 	using MailApi;
+	using EnumDescription = Ezbob.Utils.Extensions.EnumDescription;
 	using LandRegistryResponseType = LandRegistryLib.LandRegistryResponseType;
 
 	public class StrategyHelper
@@ -651,7 +652,7 @@
 		{
 			log.InfoFormat("checking worst cais status");
 
-			MP_ServiceLog serviceLog = serviceLogRepository.GetByCustomer(customer).Where(sl => sl.ServiceType == "Consumer Request").OrderByDescending(sl => sl.InsertDate).FirstOrDefault();
+			MP_ServiceLog serviceLog = serviceLogRepository.GetByCustomer(customer).Where(sl => sl.ServiceType == EnumDescription.DescriptionAttr(ExperianServiceType.Consumer)).OrderByDescending(sl => sl.InsertDate).FirstOrDefault();
 			if (serviceLog == null)
 			{
 				log.InfoFormat("No auto approval: Can't find worst CAIS status in MP_ServiceLog");

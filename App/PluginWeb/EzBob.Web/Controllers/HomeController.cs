@@ -68,7 +68,7 @@
 					askville.Status = confirmStatus;
 					askville.IsPassed = true;
 					m_oAskvilleRepository.SaveOrUpdate(askville);
-					Utils.WriteLog("Askville confirmation", "Confirmation status " + confirmStatus.ToString(), "Askville", askville.MarketPlace.Customer.Id);
+					Utils.WriteLog("Askville confirmation", "Confirmation status " + confirmStatus.ToString(), ExperianServiceType.Askville, askville.MarketPlace.Customer.Id);
 				} // if
 
 				ViewData["Approve"] = approve;

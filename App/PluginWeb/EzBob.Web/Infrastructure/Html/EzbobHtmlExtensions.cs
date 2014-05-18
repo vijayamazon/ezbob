@@ -4,7 +4,7 @@
 	using System.Text;
 	using System.Web;
 	using System.Web.Mvc;
-	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.Utils.Extensions;
 
 	public static class EzbobHtmlExtensions {
 		public static MvcHtmlString EnumToOptions<T>(this HtmlHelper helper, params T[] args) where T : struct, IComparable, IFormattable, IConvertible {

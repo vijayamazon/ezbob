@@ -19,10 +19,12 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code;
 	using EzBobIntegration.Web_References.Consumer;
+	using Ezbob.Utils.Extensions;
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Text;
 	using log4net;
+using EZBob.DatabaseLib.Model.Experian;
 
 	public class CreditBureauModelBuilder
 	{
@@ -30,16 +32,21 @@
 		private readonly ICustomerRepository _customers;
 		private readonly ConfigurationVariablesRepository _variablesRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CreditBureauModelBuilder));
-		private static readonly int ConsumerScoreMax = 1400;
-		private static readonly int ConsumerScoreMin = 120;
-		private static readonly int CompanyScoreMax = 100;
-		private static readonly int CompanyScoreMin = 0;
+		private readonly IExperianHistoryRepository _experianHistoryRepository;
+		private const int ConsumerScoreMax = 1400;
+		private const int ConsumerScoreMin = 120;
+		private const int CompanyScoreMax = 100;
+		private const int CompanyScoreMin = 0;
 
-		public CreditBureauModelBuilder(ISession session, ICustomerRepository customers, ConfigurationVariablesRepository variablesRepository)
+		public CreditBureauModelBuilder(ISession session, 
+			ICustomerRepository customers, 
+			ConfigurationVariablesRepository variablesRepository, 
+			IExperianHistoryRepository experianHistoryRepository)
 		{
 			_session = session;
 			_customers = customers;
 			_variablesRepository = variablesRepository;
+			_experianHistoryRepository = experianHistoryRepository;
 		}
 
 		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
@@ -83,14 +90,12 @@
 			if (getFromLog && logId.HasValue)
 			{
 				var dob = customer.PersonalInfo.DateOfBirth;
-				var logs =
-					_session.Query<MP_ServiceLog>()
-						.Where(x => x.Customer == customer && x.ServiceType == "Consumer Request")
-						.ToList();
-				var response = logs.FirstOrDefault(x => x.Id == logId.Value);
+				var response =
+					_session.Query<MP_ServiceLog>().FirstOrDefault(x => x.Id == logId.Value);
+				
 				if (response == null)
 				{
-					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} id: {1} existing dates are: {2}", customer.Id, logId.Value, PrintDates(logs));
+					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} id: {1}", customer.Id, logId.Value);
 					result = null;
 					return;
 				}
@@ -121,37 +126,91 @@
 			return sb.ToString();
 		}
 
-		private void BuildHistoryModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
+		private void BuildHistoryModel(CreditBureauModel model, Customer customer)
 		{
-			var checkConsumerHistoryModels = (from s in _session.Query<MP_ServiceLog>()
-											  where s.Director == null
-											  where s.Customer.Id == customer.Id
-											  where s.ServiceType == "Consumer Request"
-											  select new CheckHistoryModel
+			var consumerHistory = _experianHistoryRepository.GetConsumerHistory(customer).ToList();
+			if (consumerHistory.Any())
+			{
+				model.ConsumerHistory = consumerHistory.Select(x => new CheckHistoryModel
+				{
+					Date = x.Date.ToUniversalTime(),
+					Id = x.Id,
+					Score = x.Score,
+					CII = x.CII.HasValue ? x.CII.Value : -1
+				}).OrderByDescending(h => h.Date);
+			}
+			else
+			{
+				var checkConsumerHistoryModels = (from s in _session.Query<MP_ServiceLog>()
+												  where s.Director == null
+												  where s.Customer.Id == customer.Id
+												  where s.ServiceType == ExperianServiceType.Consumer.DescriptionAttr()
+												  select new CheckHistoryModel
 												  {
 													  Date = s.InsertDate.ToUniversalTime(),
 													  Id = s.Id,
 													  Score = GetScoreFromXml(s.ResponseData),
 													  CII = GetCIIFromXml(s.ResponseData)
 												  }).ToList();
+				model.ConsumerHistory = checkConsumerHistoryModels.OrderByDescending(h => h.Date);
+
+				foreach (var cModel in checkConsumerHistoryModels)
+				{
+					_experianHistoryRepository.Save(new MP_ExperianHistory
+					{
+						Customer = customer,
+						ServiceLogId = cModel.Id,
+						Type = ExperianServiceType.Consumer.DescriptionAttr(),
+						Date = cModel.Date,
+						Score = cModel.Score,
+						CII = cModel.CII
+					});
+				}
+			}
+
 			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
 			Log.DebugFormat("BuildHistoryModel company type: {0}", isLimited ? "Limited" : "NonLimited");
-			var checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
-											 where s.Director == null
-											 where s.Customer.Id == customer.Id
-											 where s.ServiceType == (isLimited ? "E-SeriesLimitedData" : "E-SeriesNonLimitedData")
-											 select new CheckHistoryModel
-											 {
-												 Date = s.InsertDate.ToUniversalTime(),
-												 Id = s.Id,
-												 Score = (isLimited ? GetLimitedScoreFromXml(s.ResponseData) : GetNonLimitedScoreFromXml(s.ResponseData))
-											 }).ToList();
+			var companyHistory = _experianHistoryRepository.GetCompanyHistory(customer, isLimited).ToList();
+			if (companyHistory.Any())
+			{
+				model.CompanyHistory = companyHistory.Select(x => new CheckHistoryModel
+				{
+					Date = x.Date.ToUniversalTime(),
+					Id = x.Id,
+					Score = x.Score,
+				}).OrderByDescending(h => h.Date);
+			}
+			else
+			{
+				var type = (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr());
+				var checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
+												 where s.Director == null
+												 where s.Customer.Id == customer.Id
+												 where s.ServiceType == type
+												 select new CheckHistoryModel
+												 {
+													 Date = s.InsertDate.ToUniversalTime(),
+													 Id = s.Id,
+													 Score = (isLimited ? GetLimitedScoreFromXml(s.ResponseData) : GetNonLimitedScoreFromXml(s.ResponseData))
+												 }).ToList();
 
-			model.ConsumerHistory = checkConsumerHistoryModels.OrderByDescending(h => h.Date);
-			model.CompanyHistory = checkCompanyHistoryModels.OrderByDescending(h => h.Date);
+
+				model.CompanyHistory = checkCompanyHistoryModels.OrderByDescending(h => h.Date);
+				foreach (var cModel in checkCompanyHistoryModels)
+				{
+					_experianHistoryRepository.Save(new MP_ExperianHistory
+					{
+						Customer = customer,
+						ServiceLogId = cModel.Id,
+						Type = type,
+						Date = cModel.Date,
+						Score = cModel.Score,
+					});
+				}
+			}
 		}
 
-		private void CreatePersonalDataModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
+		private void CreatePersonalDataModel(CreditBureauModel model, Customer customer)
 		{
 			model.Name = customer.PersonalInfo.FirstName;
 			model.MiddleName = customer.PersonalInfo.MiddleInitial;
@@ -626,7 +685,7 @@
 			return sb.ToString();
 		}
 
-		protected void AppendAmlInfo(AMLInfo data, EZBob.DatabaseLib.Model.Database.Customer customer, CustomerAddress customerAddress)
+		protected void AppendAmlInfo(AMLInfo data, Customer customer, CustomerAddress customerAddress)
 		{
 			var srv = new IdHubService();
 			var result = srv.Authenticate(customer.PersonalInfo.FirstName, string.Empty, customer.PersonalInfo.Surname,
@@ -647,7 +706,7 @@
 			data.StartDateOldestSec = result.StartDateOldestSec;
 		}
 
-		protected void AppendBavInfo(BankAccountVerificationInfo data, EZBob.DatabaseLib.Model.Database.Customer customer, CustomerAddress customerAddress)
+		protected void AppendBavInfo(BankAccountVerificationInfo data, Customer customer, CustomerAddress customerAddress)
 		{
 			var srv = new IdHubService();
 
@@ -672,7 +731,7 @@
 		}
 
 
-		private void BuildEBusinessModel(EZBob.DatabaseLib.Model.Database.Customer customer, CreditBureauModel model,
+		private void BuildEBusinessModel(Customer customer, CreditBureauModel model,
 										 bool getFromLog = false, long? logId = null)
 		{
 			var srv = new EBusinessService();
@@ -825,7 +884,7 @@
 			return "-";
 		}
 
-		public CreditBureauModel[] GenerateDirectorsModels(EZBob.DatabaseLib.Model.Database.Customer customer, IEnumerable<Director> directors, bool getFromLog = false, long? logId = null)
+		public CreditBureauModel[] GenerateDirectorsModels(Customer customer, IEnumerable<Director> directors, bool getFromLog = false, long? logId = null)
 		{
 			var consumerSrv = new ConsumerService();
 			var dirModelList = new List<CreditBureauModel>();
@@ -837,7 +896,7 @@
 					var directorCopy = director;
 					var logs =
 						_session.Query<MP_ServiceLog>()
-							.Where(x => x.Director.Id == directorCopy.Id && x.ServiceType == "Consumer Request")
+							.Where(x => x.Director.Id == directorCopy.Id && x.ServiceType == ExperianServiceType.Consumer.DescriptionAttr())
 							.ToList();
 					var date = _session.Query<MP_ServiceLog>().First(x => x.Id == logId).InsertDate.ToUniversalTime().Date;
 					var response = logs.FirstOrDefault(x => x.InsertDate >= date && x.InsertDate < date.AddDays(1));

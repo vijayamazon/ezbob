@@ -11,6 +11,7 @@
 	using Areas.Customer.Models;
 	using Areas.Underwriter.Models;
 	using EzBob.Models.Marketplaces;
+	using Ezbob.Utils.Extensions;
 	using NHibernate;
 	using StructureMap;
 	using log4net;

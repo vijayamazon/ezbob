@@ -13,6 +13,7 @@
 	using Code;
 	using System.Text;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using Ezbob.Utils.Extensions;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using ServiceClientProxy;

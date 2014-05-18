@@ -3,6 +3,8 @@ using EZBob.DatabaseLib.Model.Database;
 
 namespace EzBob.Web.Areas.Customer.Models
 {
+	using Ezbob.Utils.Extensions;
+
 	public class CashRequestModel
 	{
 		public virtual long Id { get; set; }

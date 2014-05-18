@@ -6,6 +6,7 @@
 	using System.Text.RegularExpressions;
 	using System.Xml;
 	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using Web_References.IDHubService;
 	using StructureMap;
@@ -106,7 +107,7 @@
 				{
 					r = GetRequestFromXml(xmlForDebug);
 				}
-				var logItem = Utils.WriteLog(execRequest, r, "AML A check", customerId);
+				var logItem = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
 				_bankCacheRepository.Set(key, r, logItem);
 
 				result.Parse(r);
@@ -115,7 +116,7 @@
 			{
 				Log.Error(exception);
 				result.Error = exception.Message;
-				Utils.WriteLog(execRequest, string.Format("Excecption: {0}", exception.Message), "AML A check", customerId);
+				Utils.WriteLog(execRequest, string.Format("Excecption: {0}", exception.Message), ExperianServiceType.Aml, customerId);
 			}
 
 			return result;
@@ -194,7 +195,7 @@
 				{
 					r = GetRequestFromXml(xmlForDebug);
 				}
-				var logItem = Utils.WriteLog(execRequest, r, "AML A check", customerId);
+				var logItem = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
 				_bankCacheRepository.Set(key, r, logItem);
 
 				result.Parse(r);
@@ -203,7 +204,7 @@
 			{
 				Log.Error(exception);
 				result.Error = exception.Message;
-				Utils.WriteLog(execRequest, string.Format("Excecption: {0}", exception.Message), "AML A check", customerId);
+				Utils.WriteLog(execRequest, string.Format("Excecption: {0}", exception.Message), ExperianServiceType.Aml, customerId);
 			}
 
 			return result;
@@ -413,7 +414,7 @@
 				{
 					r = GetRequestFromXml(xmlForDebug);
 				}
-				var logItem = Utils.WriteLog(execRequestBwa, r, "BWA check", customerId);
+				var logItem = Utils.WriteLog(execRequestBwa, r, ExperianServiceType.Bwa, customerId);
 				_bankCacheRepository.Set(key, r, logItem);
 
 				result.Parse(r);
@@ -422,7 +423,7 @@
 			{
 				Log.Error(exception);
 				result.Error = exception.Message;
-				Utils.WriteLog(execRequestBwa, string.Format("Excecption: {0}", exception.Message), "BWA check", customerId);
+				Utils.WriteLog(execRequestBwa, string.Format("Excecption: {0}", exception.Message), ExperianServiceType.Bwa, customerId);
 			}
 
 			return result;
@@ -513,7 +514,7 @@
 					r = GetRequestFromXml(xmlForDebug);
 				}
 
-				var logItem = Utils.WriteLog(execRequestBwa, r, "BWA check", customerId);
+				var logItem = Utils.WriteLog(execRequestBwa, r, ExperianServiceType.Bwa, customerId);
 				_bankCacheRepository.Set(key, r, logItem);
 
 				result.Parse(r);
@@ -522,7 +523,7 @@
 			{
 				Log.Error(exception);
 				result.Error = exception.Message;
-				Utils.WriteLog(execRequestBwa, string.Format("Excecption: {0}", exception.Message), "BWA check", customerId);
+				Utils.WriteLog(execRequestBwa, string.Format("Excecption: {0}", exception.Message), ExperianServiceType.Bwa, customerId);
 			}
 
 			return result;

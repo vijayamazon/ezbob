@@ -1,9 +1,10 @@
-﻿using System;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.Models;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System;
+	using EZBob.DatabaseLib.Model.Database;
+	using EzBob.Models;
+	using Ezbob.Utils.Extensions;
+
 	public class DecisionHistoryModel
 	{
 		public int Id { get; set; }

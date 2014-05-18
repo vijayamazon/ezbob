@@ -10,6 +10,7 @@ namespace EzBob.Web.Infrastructure
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Email;
+	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Agreements;
@@ -118,6 +119,7 @@ namespace EzBob.Web.Infrastructure
 			For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
 			For<ISuggestedAmountRepository>().Use<SuggestedAmountRepository>();
 			For<IEzServiceAccessor>().Use<EzServiceAccessorLong>();
+			For<IExperianHistoryRepository>().Use<ExperianHistoryRepository>();
 		}
 	}
 }

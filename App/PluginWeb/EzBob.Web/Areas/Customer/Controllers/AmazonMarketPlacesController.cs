@@ -112,7 +112,7 @@
 
             askville.Status = askvilleGuid == "" ? AskvilleStatus.NotPerformed : AskvilleStatus.ReCheck;
             _askvilleRepository.SaveOrUpdate(askville);
-            Utils.WriteLog("Send askville message", sendingStatus.ToString(), "Askville", marketplace.Customer.Id);
+			Utils.WriteLog("Send askville message", sendingStatus.ToString(), ExperianServiceType.Askville, marketplace.Customer.Id);
             return askville.Status;
         }
         

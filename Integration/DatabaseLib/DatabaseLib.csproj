@@ -133,6 +133,7 @@
     <Compile Include="Model\Database\TestCustomer.cs" />
     <Compile Include="Model\Database\UnderwriterRecentCustomers.cs" />
     <Compile Include="Model\Database\UnderwriterRecentCustomersMap.cs" />
+    <Compile Include="Model\Experian\MP_ExperianHistory.cs" />
     <Compile Include="Model\Experian\ExperianDL97Accounts.cs" />
     <Compile Include="Model\Fraud\FraudRequest.cs" />
     <Compile Include="Model\Loans\BrokerSetupFeeMap.cs" />
