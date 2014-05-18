@@ -93,3 +93,11 @@ GO
 IF OBJECT_ID (N'dbo.GetMeasurReport') IS NOT NULL
 	DROP FUNCTION dbo.GetMeasurReport
 GO
+
+IF OBJECT_ID (N'dbo.SuspendedApplications') IS NOT NULL
+	DROP VIEW dbo.SuspendedApplications
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetSuspendedApplications]') AND TYPE IN (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GetSuspendedApplications]
+GO
