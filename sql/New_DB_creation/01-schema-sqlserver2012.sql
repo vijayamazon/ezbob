@@ -2652,54 +2652,7 @@ WHERE  EntityLink.EntityType = @pEntityType
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[GeApplicationById]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GeApplicationById]
-	@iApplicationId bigint
-AS
-BEGIN
-	select
-      aa.applicationid
-     ,aa.appcounter
-     ,aa.creationdate
-     ,ss.displayname as strategyname
-     ,cpp.name as creditproduct_name
-     ,Version
-     ,ISNULL(aa.childcount, 0) as childcount
-     ,aa.state   
-     ,ae.ErrorMessage as errorMessage     
-     ,su.userid as userId
-     ,su.username as userName
-     ,su.fullname as userFullName
-     ,su1.userid as LockedByUserId
-     ,su1.username as LockedByUserName
-     ,su1.fullname as LockedByUserFullName
-     ,(select max(ah.actiondatetime) from application_history ah
-              where ah.applicationid = aa.applicationid and ah.userid = aa.lockedbyuserid and ah.currentnodeid = sn.nodeid and ah.actiontype = 0) as LockedDate
-     ,sn.nodeid as NodeId
-     ,sn.name as NodeName
-     ,sn.displayname as NodeDisplayName
-     
-     ,susp.date as ActionDate
-    from
-     application_application aa
-     left join security_user su on su.userid = aa.creatoruserid
-     left join strategy_strategy ss on ss.strategyid = aa.strategyid
-     left join creditproduct_strategyrel cps on cps.strategyid = aa.strategyid
-     left join creditproduct_products cpp on cpp.id = cps.creditproductid 
-     left join security_user su1 on su1.userid = aa.lockedbyuserid
-     left join strategyengine_executionstate se on aa.applicationid = se.applicationid
-     left join strategy_node sn on sn.nodeid = se.currentnodeid
-     left join Application_Error ae on ae.applicationid = aa.applicationid
-     left join Application_Suspended susp on aa.applicationid = susp.applicationid and (aa.state = 5 OR aa.state = 6  OR aa.state = 7)
-    where
-     aa.applicationid = @iApplicationId;
-END
 
-GO
 /****** Object:  StoredProcedure [dbo].[Get_Application_Results]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -2711,123 +2664,6 @@ AS
 BEGIN
      select * from Application_Result
      where ApplicationId = @pApplicationId
-END
-
-GO
-
-/****** Object:  StoredProcedure [dbo].[GetApplicationByAppCounter]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetApplicationByAppCounter]
-(
-	@iAppCounter bigint
-)
-AS
-BEGIN
-     select
-      aa.applicationid
-     ,aa.parentappid
-     ,aa.appcounter
-     ,aa.creationdate
-     ,ss.displayname as strategyname
-     ,ss.strategyId     
-     ,(select cpp.name + '' + ';' 
-					from creditproduct_products cpp, creditproduct_strategyrel cps
-					where cpp.id = cps.creditproductid and cps.strategyid = aa.strategyid 
-					group by cpp.name for xml path('')) as CreditProductName
-     ,Version
-     ,ISNULL(aa.childcount, 0) as childcount
-     ,aa.state   
-     ,ae.ErrorMessage as errorMessage     
-     ,su.userid as userId
-     ,su.username as userName
-     ,su.fullname as userFullName
-     ,su1.userid as LockedByUserId
-     ,su1.username as LockedByUserName
-     ,su1.fullname as LockedByUserFullName
-     ,(select max(ah.actiondatetime) from application_history ah
-              where ah.applicationid = aa.applicationid and ah.userid = aa.lockedbyuserid and ah.currentnodeid = sn.nodeid and ah.actiontype = 0) as LockedDate
-     ,sn.nodeid as NodeId
-     ,sn.name as NodeName
-     ,sn.displayname as NodeDisplayName
-     
-,isnull(
-       (select 1
-        from Application_Application aa1     
-        where aa1.ApplicationId = aa.ApplicationId
-            and (aa1.state = 3 OR aa1.state = 4 OR aa1.state = 5 OR aa1.state = 6  OR aa1.state = 7 )     
-        ), 0) as CanRestart
-     ,(select count(surr.RoleId)
-     from Security_UserRoleRelation surr 
-     where surr.UserId = su.UserId
-      ) as RolesCount
-    from
-     application_application aa
-     left join security_user su on su.userid = aa.creatoruserid
-     left join strategy_strategy ss on ss.strategyid = aa.strategyid
-     left join security_user su1 on su1.userid = aa.lockedbyuserid
-     left join strategyengine_executionstate se on aa.applicationid = se.applicationid
-     left join strategy_node sn on sn.nodeid = se.currentnodeid
-     left join Application_Error ae on ae.applicationid = aa.applicationid
-
-    where
-     aa.appcounter = @iAppCounter and aa.ParentAppId is null;
-END;
-
-GO
-/****** Object:  StoredProcedure [dbo].[GetApplicationById]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetApplicationById]
-	@iApplicationId bigint
-AS
-BEGIN
-	select
-      aa.applicationid
-     ,aa.appcounter
-     ,aa.creationdate
-     ,aa.strategyid
-     ,ss.displayname as strategyname
-     ,(select cpp.name + '' + ';' 
-					from creditproduct_products cpp, creditproduct_strategyrel cps
-					where cpp.id = cps.creditproductid and cps.strategyid = aa.strategyid 
-					group by cpp.name for xml path('')) as CreditproductName
-     ,Version
-     ,ISNULL(aa.childcount, 0) as childcount
-     ,aa.state   
-     ,ae.ErrorMessage as errorMessage     
-     ,su.userid as userId
-     ,su.username as userName
-     ,su.fullname as userFullName
-     ,su1.userid as LockedByUserId
-     ,su1.username as LockedByUserName
-     ,su1.fullname as LockedByUserFullName
-     ,(select max(ah.actiondatetime) from application_history ah
-              where ah.applicationid = aa.applicationid and ah.userid = aa.lockedbyuserid and ah.currentnodeid = sn.nodeid and ah.actiontype = 0) as LockedDate
-     ,sn.nodeid as NodeId
-     ,sn.name as NodeName
-     ,sn.displayname as NodeDisplayName
-     
-     ,susp.date as ActionDate,
-     (select count(surr.RoleId)
-     from Security_UserRoleRelation surr 
-     where surr.UserId = su.UserId
-      ) as RolesCount
-    from
-     application_application aa
-     left join security_user su on su.userid = aa.creatoruserid
-     left join strategy_strategy ss on ss.strategyid = aa.strategyid
-     left join security_user su1 on su1.userid = aa.lockedbyuserid
-     left join strategyengine_executionstate se on aa.applicationid = se.applicationid
-     left join strategy_node sn on sn.nodeid = se.currentnodeid
-     left join Application_Error ae on ae.applicationid = aa.applicationid
-     left join Application_Suspended susp on aa.applicationid = susp.applicationid and (aa.state = 5 OR aa.state = 6  OR aa.state = 7)
-    where
-     aa.applicationid = @iApplicationId;
 END
 
 GO
@@ -2868,135 +2704,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[GetChildApplicationInfo]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetChildApplicationInfo]
-(
-  @iUserId int,
-  @iAppCounter bigint
-)
-AS
-BEGIN
-    select * 
-from
-(
-select a.ApplicationId,
-           a.appcounter,
-           a.creationdate,
-           ISNULL((select sn.displayname from strategy_node sn where sn.nodeid = idn.currentnodeid), 'SE') CurrentNodeName,
-           (select sn.nodeid from strategy_node sn where sn.nodeid = idn.currentnodeid) CurrentNodeId,
-           (select ss.displayname from strategy_strategy ss where ss.strategyid = a.strategyid) as strategyname,
-           (select cpp.name from creditproduct_products cpp, creditproduct_strategyrel cps where cpp.id = cps.creditproductid and cps.strategyid = a.strategyid) as creditproduct_name,
-           Version,
-           ISNULL(a.childcount, 0) as childcount,
-           (select su.userid from security_user su where su.userid = a.creatoruserid) as userId,
-           (select su.username from security_user su where su.userid = a.creatoruserid) as userName,
-           (select su.fullname from security_user su where su.userid = a.creatoruserid) as userFullName
-    from application_Application a,
-         StrategyEngine_ExecutionState s,
-         Strategy_Strategy t,
-         (SELECT max(id) as id, applicationId
-              FROM StrategyEngine_ExecutionState
-          GROUP BY applicationId) ids
-        ,(SELECT max(id) as id, applicationId, currentnodeid
-              FROM StrategyEngine_ExecutionState
-          GROUP BY applicationId, currentnodeid) idn
-     where ids.id = s.id
-           and idn.id = s.id
-           and ids.applicationId = a.applicationId
-           and t.StrategyId = a.StrategyId
-           and a.parentappid is not null
-           and a.appcounter = @iAppCounter
-union all
-select
-      a.ApplicationId
-     ,a.appcounter
-     ,a.creationdate
-     ,ISNULL((SELECT sn.Name FROM Application_History ah,Strategy_Node sn
-              WHERE (ah.ApplicationId = a.applicationid) and ah.AppHistoryId = (SELECT MAX(AppHistoryId)FROM Application_History WHERE ApplicationId = ah.ApplicationId) and sn.nodeId = ah.CurrentNodeID), 'SE') as CurrentNodeName
-     ,(SELECT ah.CurrentNodeID FROM Application_History ah,Strategy_Node sn
-              WHERE (ah.ApplicationId = a.applicationid) and ah.AppHistoryId = (SELECT MAX(AppHistoryId)FROM Application_History WHERE ApplicationId = ah.ApplicationId) and sn.nodeId = ah.CurrentNodeID) as CurrentNodeId
-     ,(select ss.displayname from strategy_strategy ss where ss.strategyid = a.strategyid) as strategyname
-     ,(select cpp.name from creditproduct_products cpp, creditproduct_strategyrel cps where cpp.id = cps.creditproductid and cps.strategyid = a.strategyid) as creditproduct_name
-     ,Version
-     ,ISNULL(a.childcount, 0) as childcount
-     ,(select su.userid from security_user su where su.userid = a.creatoruserid) as userId
-     ,(select su.username from security_user su where su.userid = a.creatoruserid) as userName
-     ,(select su.fullname from security_user su where su.userid = a.creatoruserid) as userFullName
-    from
-        application_application a
-       ,Application_Suspended susp
-    where
-        a.state = 5
-        and a.applicationid = susp.applicationid
-        and a.appcounter = @iAppCounter
-		and a.parentappid is not null
-) allapp
-order by allapp.appcounter;
-END;
 
-GO
-/****** Object:  StoredProcedure [dbo].[GetChildApplicationsByParentId]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetChildApplicationsByParentId]
-(
-	@iParentAppId bigint
-)
-AS
-BEGIN
-     select
-      aa.applicationid
-     ,aa.parentappid
-     ,aa.appcounter
-     ,aa.creationdate
-     ,ss.displayname as strategyname
-     ,(select cpp.name + '' + ';' 
-					from creditproduct_products cpp, creditproduct_strategyrel cps
-					where cpp.id = cps.creditproductid and cps.strategyid = aa.strategyid 
-					group by cpp.name for xml path('')) as CreditProductName
-     ,Version
-     ,ISNULL(aa.childcount, 0) as childcount
-     ,aa.state   
-     ,ae.ErrorMessage as errorMessage     
-     ,su.userid as userId
-     ,su.username as userName
-     ,su.fullname as userFullName
-     ,su1.userid as LockedByUserId
-     ,su1.username as LockedByUserName
-     ,su1.fullname as LockedByUserFullName
-     ,(select max(ah.actiondatetime) from application_history ah
-              where ah.applicationid = aa.applicationid and ah.userid = aa.lockedbyuserid and ah.currentnodeid = sn.nodeid and ah.actiontype = 0) as LockedDate
-     ,sn.nodeid as NodeId
-     ,sn.name as NodeName
-     ,sn.displayname as NodeDisplayName
-     
-     ,susp.date as ActionDate,
-     (select count(surr.RoleId)
-     from Security_UserRoleRelation surr 
-     where surr.UserId = su.UserId
-      ) as RolesCount
-    from
-     application_application aa
-     left join security_user su on su.userid = aa.creatoruserid
-     left join strategy_strategy ss on ss.strategyid = aa.strategyid
-     left join creditproduct_strategyrel cps on cps.strategyid = aa.strategyid
-     left join creditproduct_products cpp on cpp.id = cps.creditproductid 
-     left join security_user su1 on su1.userid = aa.lockedbyuserid
-     left join strategyengine_executionstate se on aa.applicationid = se.applicationid
-     left join strategy_node sn on sn.nodeid = se.currentnodeid
-     left join Application_Error ae on ae.applicationid = aa.applicationid
-     left join Application_Suspended susp on aa.applicationid = susp.applicationid and (aa.state = 5 OR aa.state = 6  OR aa.state = 7)
-    where
-     aa.ParentAppId = @iParentAppId;
-END;
-
-GO
 /****** Object:  StoredProcedure [dbo].[GetCreditProductParams]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -3242,37 +2950,6 @@ END;
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[GetExecAppParams]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetExecAppParams]
-(
-  @pApplicationId int
-)
-AS
-
-BEGIN
-
-SELECT
-    STRATEGYENGINE_EXECUTIONSTATE.ID,
-    STRATEGY_NODE.NODEID,
-    STRATEGYENGINE_EXECUTIONSTATE.APPLICATIONID,
-    APPLICATION_APPLICATION.CREATORUSERID,
-    APPLICATION_APPLICATION.VERSION,
-    STRATEGY_NODE.ISHARDREACTION
-FROM
-    STRATEGY_NODE
-    INNER JOIN STRATEGYENGINE_EXECUTIONSTATE
-        ON STRATEGY_NODE.NODEID = STRATEGYENGINE_EXECUTIONSTATE.CURRENTNODEID
-    INNER JOIN APPLICATION_APPLICATION
-        ON STRATEGYENGINE_EXECUTIONSTATE.APPLICATIONID = APPLICATION_APPLICATION.APPLICATIONID
-WHERE
-    STRATEGYENGINE_EXECUTIONSTATE.APPLICATIONID=@pApplicationId;
-END;
-
-GO
 /****** Object:  StoredProcedure [dbo].[GetExperianData]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -3583,62 +3260,7 @@ WHERE
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[GetLinksForAppOnUserInput]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetLinksForAppOnUserInput]
-       @pApplicationId [bigint]
-      ,@pEntityType [nvarchar](100)
-AS	
-BEGIN
-SELECT
-    StrategyEngine_ExecutionState.CurrentNodePostfix AS NodeName
-FROM  StrategyEngine_ExecutionState INNER JOIN
-   Application_Application ON StrategyEngine_ExecutionState.ApplicationId = Application_Application.ApplicationId
-    INNER JOIN EntityLink ON Application_Application.StrategyId = EntityLink.EntityId
-WHERE (EntityLink.IsDeleted = 0 OR EntityLink.IsDeleted is null) 
-  AND (EntityLink.IsApproved = 1)
-  AND (EntityType = @pEntityType)
-  AND (StrategyEngine_ExecutionState.ApplicationId = @pApplicationId);
-END
 
-GO
-/****** Object:  StoredProcedure [dbo].[GetLockedApplications]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetLockedApplications]
-AS
-BEGIN
-      select
-             aa.applicationid,
-             aa.appcounter,
-             aa.creationdate,
-             (select max(ah.actiondatetime) from application_history ah
-              where ah.applicationid = aa.applicationid and ah.userid = aa.lockedbyuserid and ah.currentnodeid = sn.nodeid and ah.actiontype = 0) as LockedDate,
-             aa.version,
-             sn.name as NodeName,
-             sn.displayname as NodeDisplayName,
-             sn.nodeid as NodeId,
-             (SELECT su.userid   FROM security_user su WHERE su.userid = aa.creatoruserid) CreatorUserId,
-             (SELECT su.username FROM security_user su WHERE su.userid = aa.creatoruserid) CreatorUserName,
-             (SELECT su.fullname FROM security_user su WHERE su.userid = aa.creatoruserid) CreatorUserFullName,
-             (SELECT su.userid   FROM security_user su WHERE su.userid = aa.lockedbyuserid) LockedByUserId,
-             (SELECT su.username FROM security_user su WHERE su.userid = aa.lockedbyuserid) LockedByUserName,
-             (SELECT su.fullname FROM security_user su WHERE su.userid = aa.lockedbyuserid) LockedByUserFullName
-        from application_application aa,
-             strategyengine_executionstate se,
-             strategy_node sn
-       where
-                 aa.applicationid = se.applicationid
-             and sn.nodeid = se.currentnodeid
-             and aa.lockedbyuserid is not null;
-END;
-
-GO
 /****** Object:  StoredProcedure [dbo].[GetMaxServiceLogId]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -4146,46 +3768,7 @@ END
 
 GO
 
-/****** Object:  StoredProcedure [dbo].[GetReassignApplications]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetReassignApplications]
-(
-  @iUserId int
-)
-AS
-BEGIN
-    select a.ApplicationId,
-           a.appcounter,
-           a.creationdate,
-           (select sn.displayname from strategy_node sn where sn.nodeid = idn.currentnodeid) CurrentNodeName,
-           (select sn.nodeid from strategy_node sn where sn.nodeid = idn.currentnodeid) CurrentNodeId,
-           (select ss.displayname from strategy_strategy ss where ss.strategyid = a.strategyid) as strategyname,
-           (select TOP(1) cpp.name from creditproduct_products cpp, creditproduct_strategyrel cps where cpp.id = cps.creditproductid and cps.strategyid = a.strategyid) as creditproduct_name,
-           Version,
-           ISNULL(a.childcount, 0) childcount
-    from application_Application a,
-         StrategyEngine_ExecutionState s,
-         Strategy_Strategy t,
-         (SELECT max(id) as id, applicationId
-              FROM StrategyEngine_ExecutionState
-          GROUP BY applicationId) ids
-        ,(SELECT max(id) as id, applicationId, currentnodeid
-              FROM StrategyEngine_ExecutionState
-          GROUP BY applicationId, currentnodeid) idn
-     where ids.id = s.id
-           and idn.id = s.id
-           and ids.applicationId = a.applicationId
-           and a.creatoruserid = @iUserId
-           and (a.LockedByUserId is null or a.LockedByUserId = @iUserId)
-           and t.StrategyId = a.StrategyId
-           and a.parentappid is null
-    order by a.appcounter;
-END;
 
-GO
 /****** Object:  StoredProcedure [dbo].[GetSecirityRolesByUserId]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -11837,30 +11420,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SE_ExecStateStackDepth]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE PROCEDURE [dbo].[SE_ExecStateStackDepth]
-	-- Add the parameters for the stored procedure here
-   @pStackDepth int OUTPUT,
-   @pApplicationId bigint
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-	SELECT @pStackDepth = COUNT(*) FROM [StrategyEngine_ExecutionState] 
-    WHERE ApplicationId = @pApplicationId;
-END
 
-GO
 /****** Object:  StoredProcedure [dbo].[Security_ChangePassword]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -13772,95 +13332,7 @@ SELECT @@IDENTITY;
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateAppAttachmentsState]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[UpdateAppAttachmentsState]
-   @pApplicationId  bigint
-AS
-BEGIN
 
-UPDATE Application_Detail_1
-SET [ValueStr] = 
-  CASE
-    WHEN Application_Detail_1.ValueStr = N'New' THEN N'Saved'
-    WHEN Application_Detail_1.ValueStr = N'Deleting' THEN N'Deleted'
-  END
-FROM Application_DetailName INNER JOIN
-     Application_Detail AS Application_Detail_1 ON Application_DetailName.DetailNameId = Application_Detail_1.DetailNameId INNER JOIN
-     Application_Attachment INNER JOIN
-     Application_Detail ON Application_Attachment.DetailId = Application_Detail.DetailId ON 
-     Application_Detail_1.ParentDetailId = Application_Detail.ParentDetailId
-WHERE Application_DetailName.Name = N'State'
-  AND  (Application_Detail_1.ValueStr = N'New'
-    OR  Application_Detail_1.ValueStr = N'Deleting')
-  AND Application_Detail_1.ApplicationId = @pApplicationId
-  AND Application_Detail.ApplicationId = @pApplicationId
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[UpdateApplicationNodeSetting]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[UpdateApplicationNodeSetting]
-   @pApplicationId  bigint,
-   @pNodeName       nVARCHAR(150),
-   @pNodePostfix    nvarchar(100),
-   @pSettingName    nvarchar(150),
-   @pValue          bigint
-AS
-BEGIN
-  DECLARE @l_data_exists as int;
-  DECLARE @l_node_id as int;
-
-  SELECT @l_node_id = NodeId
-  FROM STRATEGY_NODE
-  WHERE Name = @pNodeName
-    AND IsDeleted = 0;
-
-  SELECT @l_data_exists = count(*)
-  FROM Application_NodeSetting
-  WHERE  ApplicationId = @pApplicationId
-    AND  (NodeId = @l_node_id OR NodeId IS NULL)
-    AND  NODEPOSTFIX = @pNodePostfix;
-
-  If @l_data_exists = 0
-    INSERT INTO Application_NodeSetting
-      (ApplicationId, NodeId, NODEPOSTFIX, [Name], [Value])
-    VALUES
-      (@pApplicationId, @l_node_id, @pNodePostfix, @pSettingName, @pValue);
-  else
-    UPDATE Application_NodeSetting
-    SET
-      [Name] = @pSettingName,
-      [Value] = @pValue
-    WHERE  ApplicationId = @pApplicationId
-      AND  (NodeId = @l_node_id OR NodeId IS NULL)
-      AND  NODEPOSTFIX = @pNodePostfix;
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[UpdateApplicationStrategyId]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[UpdateApplicationStrategyId]
-      @pApplicationId [bigint],
-      @pNewStrategyId [bigint]
-AS	
-BEGIN
-   UPDATE [dbo].[Application_Application]
-      SET [StrategyId] = @pNewStrategyId
-   WHERE ApplicationId = @pApplicationId;
-END
-
-GO
 /****** Object:  StoredProcedure [dbo].[UpdateAutoApproval]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -14044,24 +13516,7 @@ SELECT @@IDENTITY;
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateCreatorUser]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[UpdateCreatorUser]
-(
-  @pCreatorUserId int,
-  @pAppId bigint
-)
-AS
-BEGIN
-     Update Application_Application
-     set CreatorUserId = @pCreatorUserId
-     where ApplicationId=@pAppId;
-END;
 
-GO
 /****** Object:  StoredProcedure [dbo].[UpdateExperianBusiness]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -14216,22 +13671,6 @@ UPDATE [dbo].[LoanSchedule]
 
  SET NOCOUNT ON;
 SELECT @@IDENTITY;
-END
-
-GO
-
-/****** Object:  StoredProcedure [dbo].[UpdateIsTimeoutReported]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[UpdateIsTimeoutReported]
-       @pExecutionStateId bigint
-AS
-BEGIN
-   UPDATE STRATEGYENGINE_EXECUTIONSTATE
-   SET ISTIMEOUTREPORTED = 1
-   WHERE STRATEGYENGINE_EXECUTIONSTATE.ID = @pExecutionStateId;
 END
 
 GO
