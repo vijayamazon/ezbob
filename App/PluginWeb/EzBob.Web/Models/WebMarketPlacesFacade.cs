@@ -2,13 +2,9 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models.Marketplaces;
 	using EzBob.Models.Marketplaces.Builders;
-	using Infrastructure;
-	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 	using Areas.Customer.Models;
 	using log4net;
@@ -61,34 +57,9 @@
 					try {
 						var hmrcData = (ChannelGrabberHmrcData)oModel.CGData;
 
-						if (hmrcData != null) {
-							var serviceClient = new ServiceClient();
-							var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-							IntActionResult result = serviceClient.Instance.GetExperianAccountsCurrentBalance(customer.Id, context.UserId);
-							decimal factor = CurrentValues.Instance.FCFFactor;
-
-							double newActualLoansRepayment = (double)(result.Value / factor);
-							double newFreeCashFlow = oYodleeModel.Yodlee.BankStatementDataModel.FreeCashFlow -
-													 oYodleeModel.Yodlee.BankStatementDataModel.ActualLoansRepayment +
-													 newActualLoansRepayment;
-
-							hmrcData.BankStatement = new BankStatementDataModel
-								{
-									PeriodMonthsNum = oYodleeModel.Yodlee.BankStatementDataModel.PeriodMonthsNum,
-									Period = oYodleeModel.Yodlee.BankStatementDataModel.Period,
-									PercentOfAnnual = oYodleeModel.Yodlee.BankStatementDataModel.PercentOfAnnual,
-									Revenues = oYodleeModel.Yodlee.BankStatementDataModel.Revenues,
-									Opex = oYodleeModel.Yodlee.BankStatementDataModel.Opex,
-									TotalValueAdded = oYodleeModel.Yodlee.BankStatementDataModel.TotalValueAdded,
-									PercentOfRevenues = oYodleeModel.Yodlee.BankStatementDataModel.PercentOfRevenues,
-									Salaries = oYodleeModel.Yodlee.BankStatementDataModel.Salaries,
-									Tax = oYodleeModel.Yodlee.BankStatementDataModel.Tax,
-									Ebida = oYodleeModel.Yodlee.BankStatementDataModel.Ebida,
-									PercentOfAnnual2 = oYodleeModel.Yodlee.BankStatementDataModel.PercentOfAnnual2,
-									ActualLoansRepayment = newActualLoansRepayment,
-									FreeCashFlow = newFreeCashFlow
-								};
-
+						if (hmrcData != null)
+						{
+							hmrcData.BankStatement = oYodleeModel.Yodlee.BankStatementDataModel;
 							hmrcData.BankStatementAnnualized = CalculateAnnualizedBankStatement(hmrcData);
 						} // if
 					}

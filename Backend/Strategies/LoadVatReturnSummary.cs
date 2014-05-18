@@ -1,4 +1,6 @@
-﻿namespace EzBob.Backend.Strategies {
+﻿namespace EzBob.Backend.Strategies
+{
+	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -8,8 +10,11 @@
 
 		#region constructor
 
-		public LoadVatReturnSummary(int nMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadVatReturnSummary(int customerId, int nMarketplaceID, AConnection oDB, ASafeLog oLog)
+			: base(oDB, oLog)
+		{
 			m_oSp = new SpLoadVatReturnSummary(nMarketplaceID, DB, Log);
+			this.customerId = customerId;
 		} // constructor
 
 		#endregion constructor
@@ -35,6 +40,13 @@
 
 				return ActionResult.Continue;
 			});
+
+			var getExperianAccountsCurrentBalance = new GetExperianAccountsCurrentBalance(customerId, DB, Log);
+			getExperianAccountsCurrentBalance.Execute();
+			decimal factor = CurrentValues.Instance.FCFFactor;
+			decimal newActualLoansRepayment = (getExperianAccountsCurrentBalance.CurrentBalance / factor);
+			Summary.ActualLoanRepayment = newActualLoansRepayment;
+			Summary.FreeCashFlow -= newActualLoansRepayment;
 		} // Execute
 
 		#endregion method Execute
@@ -42,6 +54,7 @@
 		#region property Summary
 
 		public VatReturnSummary Summary { get; private set; }
+		private readonly int customerId;
 
 		#endregion property Summary
 
