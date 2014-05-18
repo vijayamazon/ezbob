@@ -5,7 +5,7 @@
 	{
 		[Description("FCF")]
 		FCF,
-		[Description("Turnover")]
+		[Description("Revenue")]
 		Turnover,
 		[Description("Value added")]
 		ValueAdded,

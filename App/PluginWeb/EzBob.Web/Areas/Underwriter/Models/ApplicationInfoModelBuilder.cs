@@ -39,7 +39,7 @@
 			IDiscountPlanRepository discounts,
 			ILoanTypeRepository loanTypes,
 			IConfigurationVariablesRepository configurationVariablesRepository,
-			ILoanSourceRepository loanSources, 
+			ILoanSourceRepository loanSources,
 			VatReturnSummaryRepository vatReturnSummaryRepository,
 			CustomerAnalyticsRepository customerAnalyticsRepository)
 		{
@@ -229,15 +229,7 @@
 							Diamond = 0.12M,
 							Value = model.Turnover
 						},
-					new SuggestedAmountModel
-						{
-							Method = CalculationMethod.FCF.DescriptionAttr(),
-							Silver = 0.29M,
-							Gold = 0.38M,
-							Platinum = 0.48M,
-							Diamond = 0.58M,
-							Value = model.FreeCashFlow
-						},
+
 					new SuggestedAmountModel
 						{
 							Method = CalculationMethod.ValueAdded.DescriptionAttr(),
@@ -246,6 +238,15 @@
 							Platinum = 0.25M,
 							Diamond = 0.30M,
 							Value = model.ValueAdded
+						},
+					new SuggestedAmountModel
+						{
+							Method = CalculationMethod.FCF.DescriptionAttr(),
+							Silver = 0.29M,
+							Gold = 0.38M,
+							Platinum = 0.48M,
+							Diamond = 0.58M,
+							Value = model.FreeCashFlow
 						},
 				};
 
