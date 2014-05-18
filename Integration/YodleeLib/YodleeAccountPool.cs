@@ -5,7 +5,7 @@
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
-	using EzBob.CommonLib.Security;
+	using Ezbob.Utils.Security;
 	using StructureMap;
 	using log4net;
 
@@ -35,7 +35,7 @@
 		{
 			YodleeAccounts account = AccountRepository.CreateAccount(YodleePasswordGenerator.GenerateRandomPassword);
 			log.InfoFormat("Registering yodlee user: {0}", account.Username);
-			if (!yodleeMain.RegisterUser(account.Username, Encryptor.Decrypt(account.Password), account.Username))
+			if (!yodleeMain.RegisterUser(account.Username, SecurityUtils.Decrypt(account.Password), account.Username))
 			{
 				AccountRepository.Delete(account);
 			}
@@ -82,7 +82,7 @@
 			LoginUser lu = null;
 			try
 			{
-				lu = yodleeMain.LoginUser(res.Username, Encryptor.Decrypt(res.Password));
+				lu = yodleeMain.LoginUser(res.Username, SecurityUtils.Decrypt(res.Password));
 			}
 			catch (Exception e)
 			{

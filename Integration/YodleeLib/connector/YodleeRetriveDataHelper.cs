@@ -2,7 +2,7 @@
 {
 	using System;
 	using EzBob.CommonLib;
-	using EzBob.CommonLib.Security;
+	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper;
@@ -31,7 +31,7 @@
 		{
 
 			//retreive data from Yodlee api
-			Dictionary<BankData, List<BankTransactionData>> ordersList = YodleeConnector.GetOrders(securityInfo.Name, Encryptor.Decrypt(securityInfo.Password), securityInfo.ItemId);
+			Dictionary<BankData, List<BankTransactionData>> ordersList = YodleeConnector.GetOrders(securityInfo.Name, SecurityUtils.Decrypt(securityInfo.Password), securityInfo.ItemId);
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
 

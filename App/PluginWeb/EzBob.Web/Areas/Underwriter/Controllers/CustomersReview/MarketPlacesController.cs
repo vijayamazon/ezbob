@@ -14,7 +14,7 @@
 	using EzBob.Models.Marketplaces;
 	using NHibernate;
 	using CommonLib;
-	using CommonLib.Security;
+	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using ServiceClientProxy;
 	using Web.Models;
@@ -175,7 +175,7 @@
 
 			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mp.SecurityData);
 			long itemId = securityInfo.ItemId;
-			var lu = yodleeMain.LoginUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			var lu = yodleeMain.LoginUser(yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
 			if (lu == null)
 			{
 				return View(new { error = "Error Loging to Yodlee Account" });
@@ -206,7 +206,7 @@
 			else //MFA Account for testing redirecting to Yodlee LAW
 			{
 				var callback = Url.Action("YodleeCallback", "YodleeRecheck", new { Area = "Underwriter" }, "https") + "/" + umi;
-				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
 				return Redirect(finalUrl);
 			}
 		} // TryRecheckYodlee

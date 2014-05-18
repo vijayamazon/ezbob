@@ -2,7 +2,7 @@
 {
 	using System;
 	using System.Web.Mvc;
-	using CommonLib.Security;
+	using Ezbob.Utils.Security;
 	using ConfigManager;
 	using EKM;
 	using EZBob.DatabaseLib;
@@ -221,7 +221,7 @@
 				foreach (var ekm in ekms)
 				{
 					var name = ekm.DisplayName;
-					var password = Encryptor.Decrypt(ekm.SecurityData);
+					var password = SecurityUtils.Decrypt(ekm.SecurityData);
 					string error;
 					var isValid = validator.Validate(name, password, out error);
 					if (!isValid)

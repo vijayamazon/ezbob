@@ -271,6 +271,10 @@
       <Project>{241A8BAF-F486-44B9-93BD-BAA5CA8091F3}</Project>
       <Name>YodleeLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>

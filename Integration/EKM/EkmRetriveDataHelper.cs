@@ -1,5 +1,5 @@
 ﻿using EzBob.CommonLib;
-using EzBob.CommonLib.Security;
+using Ezbob.Utils.Security;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
@@ -29,7 +29,7 @@ namespace EKM
             // Retreive data from ekm api
             var ordersList = EkmConnector.GetOrders(
 				databaseCustomerMarketPlace.DisplayName,
-				Encryptor.Decrypt(databaseCustomerMarketPlace.SecurityData),
+				SecurityUtils.Decrypt(databaseCustomerMarketPlace.SecurityData),
 				Helper.GetEkmDeltaPeriod(databaseCustomerMarketPlace)
 			);
 

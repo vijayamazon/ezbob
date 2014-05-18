@@ -30,7 +30,7 @@ namespace EZBob.DatabaseLib {
 	using StructureMap;
 	using log4net;
 	using Iesi.Collections.Generic;
-	using EzBob.CommonLib.Security;
+	using Ezbob.Utils.Security;
 	using Model.Marketplaces.FreeAgent;
 	using Model.Marketplaces.Sage;
 	using Model.Marketplaces.Yodlee;
@@ -325,7 +325,7 @@ namespace EZBob.DatabaseLib {
 																			string password,
 																			Customer customer)
 		{
-			var serializedSecurityData = Encryptor.EncryptBytes(password);
+			var serializedSecurityData = SecurityUtils.EncryptBytes(password);
 			return SaveOrUpdateCustomerMarketplace(displayname, marketplaceType, serializedSecurityData, customer);
 		}
 

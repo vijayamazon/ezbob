@@ -15,6 +15,7 @@
 	using log4net;
 	using NHibernate;
 	using System.Data;
+	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib;
 
 	public class EkmMarketPlacesController : Controller
@@ -136,4 +137,6 @@
 			}
 		}
 	}
+						   password = SecurityUtils.Decrypt(account.SecurityData),
+				password = SecurityUtils.Decrypt(account.SecurityData),
 }

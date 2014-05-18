@@ -2,7 +2,7 @@
 {
 	using System.Collections.Generic;
 	using CommonLib;
-	using CommonLib.Security;
+	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -80,7 +80,7 @@
 			var repository = new YodleeAccountsRepository(_session);
 			var yodleeAccount = repository.Search(customer.Id);
 
-			string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
+			string decryptedPassword = SecurityUtils.Decrypt(yodleeAccount.Password);
 			string displayname;
 			long csId;
 
@@ -152,7 +152,7 @@
 			}
 
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
-			string finalUrl = yodleeMain.GetAddAccountUrl(csId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			string finalUrl = yodleeMain.GetAddAccountUrl(csId, callback, yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
 
 			Log.InfoFormat("Redirecting to yodlee: {0}", finalUrl);
 			return Redirect(finalUrl);
@@ -181,7 +181,7 @@
 				return View(new { error = "Error Loanding Bank Accounts" });
 			}
 			
-			var lu = yodleeMain.LoginUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			var lu = yodleeMain.LoginUser(yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
 			if (lu == null)
 			{
 				return View(new { error = "Error Loging to Yodlee Account" });
@@ -193,7 +193,7 @@
 				return View(new {error = "Account not found"});
 			}
 			var callback = Url.Action("RecheckYodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https") + "/" + umi.Id;
-			string finalUrl = yodleeMain.GetEditAccountUrl(SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(umi.SecurityData).ItemId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			string finalUrl = yodleeMain.GetEditAccountUrl(SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(umi.SecurityData).ItemId, callback, yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
 			return Redirect(finalUrl);
 		}
 
