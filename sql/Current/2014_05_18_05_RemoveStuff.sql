@@ -73,7 +73,23 @@ GO
 IF OBJECT_ID (N'dbo.AllLockedApplications') IS NOT NULL
 	DROP VIEW dbo.AllLockedApplications
 GO
+
 IF OBJECT_ID (N'dbo.Strategy_vStrategy') IS NOT NULL
 	DROP VIEW dbo.Strategy_vStrategy
 GO
 
+IF OBJECT_ID (N'dbo.GetAttachmentsCount') IS NOT NULL
+	DROP FUNCTION dbo.GetAttachmentsCount
+GO
+
+IF OBJECT_ID (N'dbo.fnGetAttachmentsDetails') IS NOT NULL
+	DROP FUNCTION dbo.fnGetAttachmentsDetails
+GO
+
+IF OBJECT_ID (N'dbo.vAppDetails') IS NOT NULL
+	DROP VIEW dbo.vAppDetails
+GO
+
+IF OBJECT_ID (N'dbo.GetMeasurReport') IS NOT NULL
+	DROP FUNCTION dbo.GetMeasurReport
+GO

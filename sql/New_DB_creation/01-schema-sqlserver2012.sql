@@ -15895,42 +15895,7 @@ BEGIN
 END
 
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetAttachmentsCount]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		Alexey Gorbach
--- Create date: 21.05.2010
--- Description:	Returns attachments count for specific attachments control
--- =============================================
-CREATE FUNCTION [dbo].[GetAttachmentsCount] 
-(
-	@appId int,
-	@name nvarchar(max)
-)
-RETURNS INT
-AS
-BEGIN
-	DECLARE @cnt INT;
-	
-	select @cnt = count(*) from vAppDetails
-	where ParentDetailId = 
-		(
-			select DetailId from vAppDetails
-			where ParentDetailId = 
-			(
-				SELECT DetailId
-					from vAppDetails
-				  where ApplicationId = @appId and Name = 'Attachments'
-			  ) and Name = @name
-		);
-		RETURN @cnt;
-	
-END
 
-GO
 /****** Object:  UserDefinedFunction [dbo].[GetExpensesPayPalTransactionsByPayer]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -23240,46 +23205,7 @@ CREATE TABLE [dbo].[yuly_CustomerLoansSummary](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  View [dbo].[vAppDetails]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE VIEW [dbo].[vAppDetails]
-AS
-SELECT ad.*, dn.Name
-  FROM [dbo].[Application_Detail] ad
-  inner join [dbo].[Application_DetailName] dn on dn.DetailNameId = ad.DetailNameId
 
-GO
-/****** Object:  UserDefinedFunction [dbo].[fnGetAttachmentsDetails]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE function [dbo].[fnGetAttachmentsDetails]
-(
-	@appId int
-)
-RETURNS 
-TABLE 
-AS
-return(
-	select attachments.* 
-	from vAppDetails attachments
-	where attachments.ParentDetailId in 
-	(
-		select det.DetailId 
-		from vAppDetails det 
-		where det.ParentDetailId = 
-			(
-				select detroot.DetailId from vAppDetails detroot where detroot.Name = 'Root' and detroot.ApplicationId = @appId
-			)
-		and Name = 'Attachments'
-	)
-)
-
-GO
 /****** Object:  UserDefinedFunction [dbo].[GetLatePaymentsGrouped]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -24007,53 +23933,7 @@ RETURN
 )
 
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetMeasurReport]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		Oleg Zemskyi
--- Create date: 29.11.2012
--- Description:	CMeasurement report
--- =============================================
-CREATE FUNCTION [dbo].[GetMeasurReport]()
-RETURNS TABLE 
-AS
-RETURN 
-(
-SELECT TOP 100 PERCENT c.Id AS 'Customer ID', c.Name AS ClientName, 
-mcmp.DisplayName AS Store, 
-       mmt.Name AS Type,      
-       Sum(Cast(mcmual.ControlValue AS INT)) AS RowsNumber,       
-       dbo.IntToTime(Sum(mcmual.ElapsedRetrieveDataFromExternalService)) AS GetData,
-       dbo.IntToTime(Sum(mcmual.ElapsedStoreAggregatedData + mcmual.ElapsedStoreDataToDatabase)) AS StoreData,
-       dbo.IntToTime(Sum(mcmual.ElapsedAggregateData)) AS AggregateData,        
-       dbo.IntToTime((SUM(mcmual.ElapsedRetrieveDataFromExternalService + 
-         mcmual.ElapsedStoreAggregatedData + mcmual.ElapsedStoreDataToDatabase + 
-         mcmual.ElapsedAggregateData))) AS Total,
-         scuh.StartDate AS 'Customer Strategy Updating Start', 
-         scuh.EndDate AS 'Customer Strategy Updating End' ,
-         smpuh.StartDate AS 'MarketPlace Strategy Updating Start',
-         smpuh.EndDate AS 'MarketPlace Strategy Updating End'      
-       
-FROM MP_CustomerMarketplaceUpdatingActionLog mcmual
-LEFT JOIN MP_CustomerMarketPlaceUpdatingHistory h ON h.Id = mcmual.CustomerMarketplaceUpdatingHistoryRecordId
-LEFT JOIN MP_CustomerMarketPlace mcmp ON mcmp.Id = h.CustomerMarketPlaceId
-LEFT JOIN Customer c ON c.Id = mcmp.CustomerId
-LEFT JOIN MP_MarketplaceType mmt ON mmt.Id = mcmp.MarketPlaceId
-LEFT JOIN Strategy_CustomerUpdateHistory scuh ON scuh.CustomerId=c.Id
-LEFT JOIN Strategy_MarketPlaceUpdateHistory smpuh ON smpuh.MarketPlaceId=mcmp.Id
 
-WHERE mcmual.ControlValueName = 'TransactionItemsCount'
-OR (mcmual.ControlValueName = 'OrdersCount' AND mmt.InternalId = 'A4920125-411F-4BB9-A52D-27E8A00D0A3B')
-OR mcmual.ControlValueName = 'TeraPeakOrdersCount'
-OR mcmual.ControlValueName = 'eBayOrdersCount'
-GROUP BY c.Name, mmt.Name, mcmp.DisplayName, scuh.StartDate, scuh.EndDate, smpuh.StartDate, smpuh.EndDate, c.Id
-ORDER by c.Id
-)
-
-GO
 /****** Object:  UserDefinedFunction [dbo].[GetNotPaid]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO

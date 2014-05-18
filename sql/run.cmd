@@ -17,7 +17,6 @@ for %%d in (
 	%MY_PATH%Views
 	%MY_PATH%SPs
 
-	%MY_PATH%Functions_2
 	%MY_PATH%Views_2
 ) do @( call %RUN_ONE_DIR% %RUN_ONE_DIR% %BASH% %SCRIPT% %%d )
 
