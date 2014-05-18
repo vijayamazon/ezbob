@@ -42,7 +42,7 @@
 		<div class="red">@sBodyClassesException</div>
 	}
 
-    @Html.AntiForgeryTokenNoUserCheck()
+    @AntiForgery.GetHtml() 
 
     @{
         var sRoleImageUrl = "crm.png";

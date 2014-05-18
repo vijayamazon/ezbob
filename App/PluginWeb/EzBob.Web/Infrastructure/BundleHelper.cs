@@ -14,6 +14,7 @@
 		public static MvcHtmlString RenderJs() {
 			return Bundle.JavaScript()
 				.Add("~/Content/js/lib/jquery-1.8.3.js")
+				.Add("~/Content/js/ezbob.csrf.js")
 				.Add("~/Content/js/lib/jquery.browser.min.js")
 				.Add("~/Content/js/lib/dropzone.js")
 				.Add("~/Content/js/lib/jquery.hoverIntent.min.js")
@@ -62,7 +63,6 @@
 				.Add("~/Content/js/controls/captcha.js")
 				.Add("~/Content/js/lib/log.coffee")
 				.Add("~/Content/js/lib/jquery.placeholder.js")
-				.Add("~/Content/js/ezbob.csrf.js")
 				.Add("~/Content/js/login/ezbob.restorePassword.coffee")
 				.Add("~/Content/js/lib/attardi.labels.js")
 				.Add("~/Content/js/lib/amount-period-sliders.js")

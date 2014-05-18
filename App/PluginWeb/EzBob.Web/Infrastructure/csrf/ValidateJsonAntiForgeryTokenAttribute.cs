@@ -1,32 +1,23 @@
-﻿using System;
-using System.Web;
-using System.Web.Helpers;
-using System.Web.Mvc;
+﻿namespace EzBob.Web.Infrastructure.csrf {
+	using System;
+	using System.Web;
+	using System.Web.Helpers;
+	using System.Web.Mvc;
 
-namespace EzBob.Web.Infrastructure.csrf
-{
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class,
-        AllowMultiple = false, Inherited = true)]
-    public class ValidateJsonAntiForgeryTokenAttribute :
-        FilterAttribute, IAuthorizationFilter
-    {
-        public void OnAuthorization(AuthorizationContext filterContext)
-        {
-            if (filterContext == null)
-            {
-                throw new ArgumentNullException("filterContext");
-            }
+	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+	public class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter {
+		public void OnAuthorization(AuthorizationContext filterContext) {
+			if (filterContext == null)
+				throw new ArgumentNullException("filterContext");
 
-            var httpContext = new JsonAntiForgeryHttpContextWrapper(HttpContext.Current);
-            AntiForgery.Validate(httpContext, Salt ?? string.Empty);
-        }
+			string sToken = HttpContext.Current.Request.Headers["X-Request-Verification-Token"];
 
-        public string Salt
-        {
-            get;
-            set;
-        }
-
-        // The private context classes go here
-    }
-}
+			if (string.IsNullOrWhiteSpace(sToken))
+				AntiForgery.Validate();
+			else {
+				HttpCookie antiForgeryCookie = HttpContext.Current.Request.Cookies[AntiForgeryConfig.CookieName];
+				AntiForgery.Validate(antiForgeryCookie == null ? null : antiForgeryCookie.Value, sToken);
+			} // if
+		} // OnAuthorization
+	} // class ValidateJsonAntiForgeryTokenAttribute
+} // namespace

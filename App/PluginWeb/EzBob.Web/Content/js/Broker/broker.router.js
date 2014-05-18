@@ -137,9 +137,15 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (this.views.dashboard)
 			this.views.dashboard.clear();
 
-		$.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff?sContactEmail=' + encodeURIComponent(this.getAuth()));
 		this.setAuth();
 		this.login();
+
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff?sContactEmail=' + encodeURIComponent(this.getAuth()));
+
+		oRequest.success(function(res) {
+			if (res.antiforgery_token)
+				EzBob.Csrf.updateToken(res.antiforgery_token);
+		}); // on success
 	}, // logoff
 
 	signup: function() {

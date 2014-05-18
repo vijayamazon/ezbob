@@ -1,12 +1,13 @@
 ﻿@model dynamic
 
-            
-@{Html.RenderPartial("PaymentAccounts/BankAccountDetails");}
-@{Html.RenderPartial("PaymentAccounts/AddDebitCard");}
-@{Html.RenderPartial("PaymentAccounts/AddBankAccount");}
+@{
+	Html.RenderPartial("PaymentAccounts/BankAccountDetails");
+	Html.RenderPartial("PaymentAccounts/AddDebitCard");
+	Html.RenderPartial("PaymentAccounts/AddBankAccount");
+}
 
 <script id="payment-accounts-template" type="text/template">
-    @{ Html.RenderPartial("PaymentAccounts/BankAccounts"); }
-    <div style="height: 20px;"></div>
-    @{ Html.RenderPartial("PaymentAccounts/DebitCards"); }
+	@{ Html.RenderPartial("PaymentAccounts/BankAccounts"); }
+	<div style="height: 20px;"></div>
+	@{ Html.RenderPartial("PaymentAccounts/DebitCards"); }
 </script>

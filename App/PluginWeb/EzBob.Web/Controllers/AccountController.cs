@@ -6,7 +6,9 @@ namespace EzBob.Web.Controllers {
 	using System.Data;
 	using System.Linq;
 	using System.Net;
+	using System.Security.Principal;
 	using System.Web;
+	using System.Web.Helpers;
 	using System.Web.Mvc;
 	using System.Web.Security;
 	using Areas.Customer.Controllers.Exceptions;
@@ -69,7 +71,20 @@ namespace EzBob.Web.Controllers {
 					if (_membershipProvider.ValidateUser(model.UserName, model.Password))
 					{
 						user.LoginFailedCount = 0;
-						return SetCookieAndRedirect(model, "Underwriter", "Customers");
+
+						model.SetCookie("Underwriter");
+
+						bool bRedirectToUrl =
+							Url.IsLocalUrl(model.ReturnUrl) &&
+							(model.ReturnUrl.Length > 1) &&
+							model.ReturnUrl.StartsWith("/") &&
+							!model.ReturnUrl.StartsWith("//") &&
+							!model.ReturnUrl.StartsWith("/\\");
+
+						if (bRedirectToUrl)
+							return Redirect(model.ReturnUrl);
+
+						return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 					} // if
 				}
 				catch (UserNotFoundException ex)
@@ -186,7 +201,7 @@ namespace EzBob.Web.Controllers {
 				});
 
 				user.LoginFailedCount = 0;
-				model.SetCookie();
+				model.SetCookie("Customer");
 
 				_log.DebugFormat(
 					"Customer log on attempt from remote IP {0} with user name '{1}': success.",
@@ -194,7 +209,7 @@ namespace EzBob.Web.Controllers {
 					model.UserName
 				);
 
-				return Json(new { success = true, model }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = true, model, }, JsonRequestBehavior.AllowGet);
 			} // if logged in successfully
 
 			if (user.LoginFailedCount < 3) {
@@ -245,6 +260,7 @@ namespace EzBob.Web.Controllers {
 
 			_context.SessionId = null;
 			FormsAuthentication.SignOut();
+			HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
 
 			if (isUnderwriterPage)
 				return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
@@ -285,6 +301,7 @@ namespace EzBob.Web.Controllers {
 				SignUpInternal(model.EMail, signupPass1, signupPass2, securityQuestion, model.SecurityAnswer, promoCode, amount, mobilePhone, mobileCode, isInCaptchaMode == "True");
 
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
+				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
 
 				var user = _users.GetUserByLogin(model.EMail);
 
@@ -296,7 +313,7 @@ namespace EzBob.Web.Controllers {
 					ErrorMessage = "Registration"
 				});
 
-				return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = true, antiforgery_token = AntiForgery.GetHtml().ToString() }, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception e) {
 				if (e.Message == MembershipCreateStatus.DuplicateEmail.ToString())
@@ -446,26 +463,6 @@ namespace EzBob.Web.Controllers {
 		} // GetTwilioConfig
 
 		#region private
-
-		#region method SetCookieAndRedirect
-
-		public ActionResult SetCookieAndRedirect(LogOnModel model, string sArea, string sControllerName) {
-			model.SetCookie();
-
-			bool bRedirectToUrl =
-				Url.IsLocalUrl(model.ReturnUrl) &&
-				(model.ReturnUrl.Length > 1) &&
-				model.ReturnUrl.StartsWith("/") &&
-				!model.ReturnUrl.StartsWith("//") &&
-				!model.ReturnUrl.StartsWith("/\\");
-
-			if (bRedirectToUrl)
-				return Redirect(model.ReturnUrl);
-
-			return RedirectToAction("Index", sControllerName, new { Area = sArea });
-		} // SetCookieAndRedirect
-
-		#endregion method SetCookieAndRedirect
 
 		private void SignUpInternal(
 			string email,

@@ -22,7 +22,7 @@
     <div id="wizard"></div>
 </div>
 
-<div style="display: none;" class="hide" id="allowFinishWizardWithoutMarketplaces" online="@configVars.GetByNameAsBool("AllowFinishOnlineWizardWithoutMarketplaces")" offline="@configVars.GetByNameAsBool("AllowFinishOfflineWizardWithoutMarketplaces")"></div>
+<div style="display: none;" class="hide" id="allowFinishWizardWithoutMarketplaces" data-online="@configVars.GetByNameAsBool("AllowFinishOnlineWizardWithoutMarketplaces")" data-offline="@configVars.GetByNameAsBool("AllowFinishOfflineWizardWithoutMarketplaces")"></div>
 <div style="display: none;" class="hide" id="wizard-step-sequence">@oDBHelper.WizardStepSequence</div>
 
 @section Js{

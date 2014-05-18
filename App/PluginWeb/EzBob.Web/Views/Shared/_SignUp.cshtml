@@ -3,12 +3,12 @@
 @using ConfigManager
 @model dynamic
 @{
-    var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
-    string captchamode = CurrentValues.Instance.CaptchaMode;
-    bool instructionsEnabled = CurrentValues.Instance.WizardInstructionsEnabled;
-    var bml = new WizardBrokerLeadModel(Session);
-    var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
-    var sBrokerForCustomerIndicator = bml.BrokerFillsForCustomer ? "broker-for-customer" : string.Empty;
+	var securityQuestions = ViewData["Questions"] as List<SecurityQuestion>;
+	string captchamode = CurrentValues.Instance.CaptchaMode;
+	bool instructionsEnabled = CurrentValues.Instance.WizardInstructionsEnabled;
+	var bml = new WizardBrokerLeadModel(Session);
+	var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
+	var sBrokerForCustomerIndicator = bml.BrokerFillsForCustomer ? "broker-for-customer" : string.Empty;
 }
 
 @using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" }))

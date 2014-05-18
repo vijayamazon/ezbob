@@ -13,7 +13,7 @@ BEGIN
 
 	SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail
 
-	SELECT
+	SELECT DISTINCT
 		cr.Id,
 		cr.Timestamp AS CrDate,
 		a.Name AS ActionName,

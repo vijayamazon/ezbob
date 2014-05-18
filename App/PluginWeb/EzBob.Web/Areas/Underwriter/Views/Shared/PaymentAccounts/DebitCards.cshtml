@@ -1,38 +1,39 @@
 ﻿@model dynamic
 
 <table class="table centered">
-    <thead class="box">
-        <tr class="box-title">
-            <th>Date Added</th>
-            <th>PayPoint Card Transaction ID</th>
-            <th>Card No</th>
-            <th>Expire Date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <% _.each(paymentAccounts.PayPointCards, function(pp, i){%>
-        <tr>
-            <td>
-                <% if(pp.IsDefault){%><i class="icon-ok"></i><%}%>
-                <%- EzBob.formatDateHumanFull(pp.DateAdded) %>
-            </td>
-            <td><%- pp.TransactionId %></td>
-            <td><%- pp.CardNo %></td>
-            <td><%- EzBob.formatDateHumanFull(pp.ExpireDate) || 'Unknown'%></td>
-            <td>
-                <% if(!pp.IsDefault){%>
-                <button class="btn btn-mini btn-primary set-paypoint-default" data-transactionid="<%- pp.TransactionId %>">
-                    <i class="fa fa-check"></i>Set Default
-                </button>
-                <%}%>
-            </td>
-        </tr>
-        <%}) %>
-       
-    </tbody>
+	<thead class="box">
+		<tr class="box-title">
+			<th>Date Added</th>
+			<th>PayPoint Card Transaction ID</th>
+			<th>Card No</th>
+			<th>Expire Date</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody><%
+		_.each(paymentAccounts.PayPointCards, function(pp) {
+			%><tr>
+				<td><%
+					if (pp.IsDefault) {
+						%><i class="icon-ok"></i><%
+					}
+					%><%- EzBob.formatDateHumanFull(pp.DateAdded)
+				%></td>
+				<td><%- pp.TransactionId %></td>
+				<td><%- pp.CardNo %></td>
+				<td><%- EzBob.formatDateHumanFull(pp.ExpireDate) || 'Unknown'%></td>
+				<td><%
+					if (!pp.IsDefault) {
+						%><button class="btn btn-mini btn-primary set-paypoint-default" data-transactionid="<%- pp.TransactionId %>">
+							<i class="fa fa-check"></i>Set Default
+						</button><%
+					}
+				%></td>
+			</tr><%
+		});
+	%></tbody>
 </table>
 <div class="payment-cards-buttons">
-    <a class="btn btn-primary" href="@Url.Action("AddPayPoint", "PaymentAccounts", new{Area = "Underwriter"})/<%-customerId%>" target="_blank">Add New</a>
-    <button class="btn btn-primary add-existing" >Add Existing</button>
+	<a class="btn btn-primary" href="@Url.Action("AddPayPoint", "PaymentAccounts", new { Area = "Underwriter" })/<%- customerId %>" target="_blank">Add New</a>
+	<button class="btn btn-primary add-existing">Add Existing</button>
 </div>

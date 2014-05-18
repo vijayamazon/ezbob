@@ -12,6 +12,28 @@
 	public class BrokerHelper {
 		#region public
 
+		#region method SetAuth
+
+		public static void SetAuth(string sLoginEmail, HttpContextBase oContext = null, string sRole = "Broker") {
+			GenericPrincipal oNewUser;
+
+			if (string.IsNullOrWhiteSpace(sLoginEmail)) {
+				FormsAuthentication.SignOut();
+				oNewUser = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+			}
+			else {
+				FormsAuthentication.SetAuthCookie(sLoginEmail, true);
+				oNewUser = new GenericPrincipal(new GenericIdentity(sLoginEmail), new [] { sRole });
+			} // if
+
+			if (oContext == null)
+				HttpContext.Current.User = oNewUser;
+			else
+				oContext.User = oNewUser;
+		} // SetAuth
+
+		#endregion method SetAuth
+
 		#region constructor
 
 		public BrokerHelper(ServiceClient oServiceClient = null, ASafeLog oLog = null) {
@@ -62,8 +84,8 @@
 			} // try
 
 			if ((bp != null) && (bp.Properties != null) && (bp.Properties.BrokerID > 0)) {
-				FormsAuthentication.SetAuthCookie(sLoginEmail, true);
-				m_oLog.Debug("Succeeded to login as broker '{0}'.", sLoginEmail);
+				SetAuth(sLoginEmail);
+				m_oLog.Debug("Succeeded to login as broker '{0}', authenticated name is '{1}'.", sLoginEmail, HttpContext.Current.User.Identity.Name);
 				return bp.Properties;
 			} // if
 
@@ -77,8 +99,7 @@
 
 		public void Logoff(string sCurrentLogin, HttpContextBase oContext) {
 			m_oLog.Debug("Broker {0} signed out.", sCurrentLogin);
-			FormsAuthentication.SignOut();
-			oContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+			SetAuth(null, oContext);
 		} // Logoff
 
 		#endregion method Logoff

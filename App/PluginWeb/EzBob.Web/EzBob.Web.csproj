@@ -8,12 +8,12 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{829AA60E-CC9F-4BE6-95E1-BC7990147D15}</ProjectGuid>
-    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EzBob.Web</RootNamespace>
     <AssemblyName>EzBob.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
@@ -98,7 +98,8 @@
     <Reference Include="MsieJavaScriptEngine">
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\MsieJavaScriptEngine.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
@@ -137,9 +138,6 @@
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -150,6 +148,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -375,7 +376,6 @@
     <Compile Include="Infrastructure\CachingPreprocessor.cs" />
     <Compile Include="Infrastructure\DecimalModelBinder.cs" />
     <Compile Include="Infrastructure\Filters\CaptchaValidationFilter.cs" />
-    <Compile Include="Infrastructure\csrf\AntiForgeryHtmlHelper.cs" />
     <Compile Include="Infrastructure\BundleHelper.cs" />
     <Compile Include="Infrastructure\EzBobContext.cs" />
     <Compile Include="Infrastructure\EzBobHandleErrorAttribute.cs" />
@@ -387,7 +387,6 @@
     <Compile Include="Infrastructure\Html\RawCellBuilder.cs" />
     <Compile Include="Infrastructure\IEzbobWorkplaceContext.cs" />
     <Compile Include="Infrastructure\Filters\IsSuccessfullyRegisteredFilter.cs" />
-    <Compile Include="Infrastructure\csrf\JsonAntiForgeryHttpContextWrapper.cs" />
     <Compile Include="Infrastructure\Filters\LoggingContextFilter.cs" />
     <Compile Include="Infrastructure\IWorkplaceContext.cs" />
     <Compile Include="Infrastructure\Membership\EmptyAnswerExeption.cs" />

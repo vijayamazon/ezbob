@@ -67,7 +67,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 			return;
 
 		var oSampleLink = function(sSourceRef, sImagePath, sNewLine, nWidth, nHeight) {
-		    return '<a target=_blank href="http://www.ezbob.com?sourceref=' + sSourceRef + '" rel="nofollow">' + sNewLine +
+			return '<a target=_blank href="http://www.ezbob.com?sourceref=' + sSourceRef + '" rel="nofollow">' + sNewLine +
 				'\t<img src="' + sImagePath + '" ' +
 				'width=' + nWidth + ' height=' + nHeight +
 				' alt="business loans">' + sNewLine +

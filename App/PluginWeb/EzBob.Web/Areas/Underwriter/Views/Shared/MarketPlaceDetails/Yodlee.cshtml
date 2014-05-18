@@ -56,10 +56,10 @@
                     if(cat[1] == 'c' && obj[cat][month] >= 0){ css='credit';}
                     %>
                     <td class="<%=css%>"><%= obj[cat][month] == 0 ? '-' : (isPound ? EzBob.formatPoundsAsInt(obj[cat][month]) : parseInt(obj[cat][month]))  %></td>
-                    <%}/*for*/%>
+                    <%}%>
                 </tr>
                 <%if(cat[1] == 'c') {%><tr><td colspan="<%=count%>"></td></tr> <%}%>
-                <%}/*for*/%>
+                <%}%>
             </tbody>
         </table>
         <%} else { print('No data to show'); } })();%>

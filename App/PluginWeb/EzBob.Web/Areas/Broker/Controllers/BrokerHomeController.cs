@@ -7,6 +7,7 @@
 	using System.Reflection;
 	using System.Security.Principal;
 	using System.Web;
+	using System.Web.Helpers;
 	using System.Web.Mvc;
 	using System.Web.Security;
 
@@ -168,11 +169,11 @@
 				return new BrokerForJsonResult("Registration failed. Please contact customer care.");
 			} // try
 
-			FormsAuthentication.SetAuthCookie(ContactEmail, true);
+			BrokerHelper.SetAuth(ContactEmail);
 
 			m_oLog.Debug("Broker signup succeeded for: {0}", ContactEmail);
 
-			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties);
+			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties) { antiforgery_token = AntiForgery.GetHtml().ToString() };
 		} // Signup
 
 		#endregion action Signup
@@ -189,7 +190,7 @@
 
 			if (bGoodToLogOff) {
 				m_oHelper.Logoff(User.Identity.Name, HttpContext);
-				return new BrokerForJsonResult();
+				return new BrokerForJsonResult { antiforgery_token = AntiForgery.GetHtml().ToString() };
 			} // if
 
 			m_oLog.Warn(
@@ -221,9 +222,9 @@
 			if (bp == null)
 				return new BrokerForJsonResult("Failed to log in.");
 
-			m_oLog.Debug("Broker login succeded for: {0}", LoginEmail);
+			m_oLog.Debug("Broker login succeeded for: {0}", LoginEmail);
 
-			return new PropertiesBrokerForJsonResult(oProperties: bp);
+			return new PropertiesBrokerForJsonResult(oProperties: bp) { antiforgery_token = AntiForgery.GetHtml().ToString() };
 		} // Login
 
 		#endregion action Login
@@ -709,7 +710,7 @@
 
 			m_oHelper.Logoff(User.Identity.Name, HttpContext);
 			if (bld.CustomerID > 0)
-				FormsAuthentication.SetAuthCookie(bld.LeadEmail, false);
+				BrokerHelper.SetAuth(bld.LeadEmail, HttpContext, "Customer");
 
 			// This constructor sets Session data.
 			new WizardBrokerLeadModel(
@@ -749,11 +750,10 @@
 				if (sar == null)
 					m_oLog.Debug("Failed to retrieve broker details.");
 				else {
-					FormsAuthentication.SignOut();
-					HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+					BrokerHelper.SetAuth(null, HttpContext);
 
 					m_oLog.Debug("Restoring broker identity after filling customer wizard: '{0}'.", sar.Value);
-					FormsAuthentication.SetAuthCookie(sar.Value, true);
+					BrokerHelper.SetAuth(sar.Value);
 
 					blm.Unset();
 					return RedirectToAction("Index", "BrokerHome", new {Area = "Broker"});
@@ -932,7 +932,7 @@
 
 			#endregion constructor
 
-			#region proprety success
+			#region property success
 
 			public virtual bool success {
 				get { return m_bSuccess.HasValue ? m_bSuccess.Value : string.IsNullOrWhiteSpace(error); } 
@@ -940,9 +940,9 @@
 
 			private bool? m_bSuccess;
 
-			#endregion proprety success
+			#endregion property success
 
-			#region proprety error
+			#region property error
 
 			public virtual string error {
 				get { return m_sError; }
@@ -953,11 +953,17 @@
 
 			#endregion proprety error
 
-			#region proprety is_auth
+			#region property is_auth
 
 			public virtual bool is_auth { get; set; } // is_auth
 
-			#endregion proprety is_auth
+			#endregion property is_auth
+
+			#region property antiforgery_token
+
+			public virtual string antiforgery_token { get; set; } // antiforgery_token
+
+			#endregion property antiforgery_token
 		} // BrokerForJsonResult
 
 		#endregion class BrokerForJsonResult

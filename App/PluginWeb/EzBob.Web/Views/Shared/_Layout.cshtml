@@ -58,7 +58,7 @@
     @{Html.RenderPartial("_GoogleTagManager");}
     @RenderSection("afterHead", false)
 
-    @Html.AntiForgeryTokenNoUserCheck()
+    @AntiForgery.GetHtml() 
 
     <div id="wrapper">
         <div id="header">

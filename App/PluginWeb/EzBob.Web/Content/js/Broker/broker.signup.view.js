@@ -80,6 +80,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			UnBlockUi();
 
 			if (res.success) {
+				EzBob.Csrf.updateToken(res.antiforgery_token);
 				EzBob.App.trigger('clear');
 				self.clear();
 				self.router.setAuth(sEmail, res.properties);

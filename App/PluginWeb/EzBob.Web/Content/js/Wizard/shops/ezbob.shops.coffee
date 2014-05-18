@@ -387,7 +387,7 @@ class EzBob.StoreInfoView extends Backbone.View
                 canContinue = true
             else
                 sAttrName = if @isOffline() then 'offline' else 'online'
-                canContinue = $('#allowFinishWizardWithoutMarketplaces').attr(sAttrName).toLowerCase() == 'true'
+                canContinue = $('#allowFinishWizardWithoutMarketplaces').data(sAttrName).toLowerCase() == 'true'
 
         @storeList.find('.continue').toggleClass 'disabled', not canContinue
         @storeList.find('.AddMoreRule').toggleClass 'hide', canContinue

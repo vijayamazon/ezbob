@@ -1,27 +1,27 @@
 ﻿@model dynamic
 
 <script type="text/template" id="add-bank-account-template">
-    <div class="modal-header">
-        <h3>Add Bank Account</h3>
-    </div>
-    <div class="modal-body">
-        <form id="paypoint-edit-form">
-            <label>Account Number</label>
-            <input type="text" id="ba-edit-account-number" name="number"  maxlength="8" class="form-control">
+	<div class="modal-header">
+		<h3>Add Bank Account</h3>
+	</div>
+	<div class="modal-body">
+		<form id="paypoint-edit-form">
+			<label>Account Number</label>
+			<input type="text" id="ba-edit-account-number" name="number" maxlength="8" class="form-control">
 
-            <label>Sort Code</label>
-            <input type="text" id="ba-edit-sort-code" name="sortcode" maxlength="6" class="form-control">
-    
-            <label>Account Type</label>
-            <select name="accountType" class="form-control selectheight">
-                <option value="">-</option>
-                <option value="Personal">Personal</option>
-                <option value="Business">Business</option>
-            </select>
-        </form>
-    </div>
-    <div class="pull-right">
-        <button class="btn btn-primary">Save changes</button>
-        <button class="btn btn-primary check-account" >Check</button>
-    </div>
+			<label>Sort Code</label>
+			<input type="text" id="ba-edit-sort-code" name="sortcode" maxlength="6" class="form-control">
+
+			<label>Account Type</label>
+			<select name="accountType" class="form-control selectheight">
+				<option value="">-</option>
+				<option value="Personal">Personal</option>
+				<option value="Business">Business</option>
+			</select>
+		</form>
+	</div>
+	<div class="pull-right">
+		<button class="btn btn-primary">Save changes</button>
+		<button class="btn btn-primary check-account">Check</button>
+	</div>
 </script>

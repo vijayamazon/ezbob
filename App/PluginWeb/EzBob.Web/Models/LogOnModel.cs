@@ -1,5 +1,7 @@
 ﻿namespace EzBob.Web.Models {
 	using System.ComponentModel.DataAnnotations;
+	using System.Security.Principal;
+	using System.Web;
 	using System.Web.Security;
 
 	public class LogOnModel {
@@ -35,8 +37,9 @@
 
 		#region method SetCookie
 
-		public void SetCookie() {
+		public void SetCookie(string sRole) {
 			FormsAuthentication.SetAuthCookie(UserName, RememberMe);
+			HttpContext.Current.User = new GenericPrincipal(new GenericIdentity(UserName), new[] { sRole });
 		} // SetCookie
 
 		#endregion method SetCookie

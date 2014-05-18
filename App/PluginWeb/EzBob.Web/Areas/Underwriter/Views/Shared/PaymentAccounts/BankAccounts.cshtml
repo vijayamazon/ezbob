@@ -1,44 +1,40 @@
 ﻿@model dynamic
 
 <table class="table table-selected bankAccounts centered">
-    <thead class="box">
-        <tr class="box-title">
-            <th>Bank Account</th>
-            <th>Sort Code</th>
-            <th>Bank Account Check</th>
-            <th>Type</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <% _.each(bankAccounts, function(ba, i){%>
-            @BankAccountLine("ba")
-        <%})%>
-    </tbody>
+	<thead class="box">
+		<tr class="box-title">
+			<th>Bank Account</th>
+			<th>Sort Code</th>
+			<th>Bank Account Check</th>
+			<th>Type</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody><%
+		_.each(bankAccounts, function(ba) {
+			%><tr data-card-id="<%- ba.Id %>" >
+				<td><%
+					if(!ba.StatusInformation) {
+						%><i class="icon-question-sign" data-title="Not validated"></i><%
+					} else if(ba.StatusInformation == "OK") {
+						%><i class="icon-ok" data-title="Validated"></i><%
+					} else {
+						%><i class="icon-exclamation-sign" data-title="<%- ba.StatusInformation %>"></i><%
+					}
+					%> <%- ba.BankAccount %>
+				</td>
+				<td><%- ba.SortCode %></td>
+				<td><%- ba.StatusInformation || "-" %></td>
+				<td><%- ba.Type %></td>
+				<td>
+					<button class="btn btn-primary btn-mini checkeBankAccount">Check</button><%
+					if (!ba.isDefault) {
+						%><button class="btn btn-primary btn-mini setDefault">Set Default</button><%
+					}
+				%></td>
+			</tr><%
+		});
+	%></tbody>
 </table>
-    
-<button class="btn btn-primary addNewDebitCard">Add New</button>
 
-@helper BankAccountLine(string current){
-    <tr data-card-id="<%-(@current).Id%>" >
-        <td>
-            <%if(!(@current).StatusInformation){%>
-                <i class="icon-question-sign" data-title="Not validated"></i>
-            <%} else if((@current).StatusInformation == "OK"){%>
-                <i class="icon-ok" data-title="Validated"></i>
-            <%} else {%>
-                <i class="icon-exclamation-sign" data-title="<%- (@current).StatusInformation %>"></i>
-            <%}%>
-            <%-(@current).BankAccount%>
-        </td>
-        <td><%-(@current).SortCode%></td>
-        <td><%-(@current).StatusInformation || "-"%></td>
-        <td><%-(@current).Type%></td>
-        <td>
-            <button class="btn btn-primary btn-mini checkeBankAccount">Check</button>
-            <% if(!(@current).isDefault){%>
-                <button class="btn btn-primary btn-mini setDefault">Set Default</button>
-            <%}%>
-        </td>
-    </tr>
-}
+<button class="btn btn-primary addNewDebitCard">Add New</button>

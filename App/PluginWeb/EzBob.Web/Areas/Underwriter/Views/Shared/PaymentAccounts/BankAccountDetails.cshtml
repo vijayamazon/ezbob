@@ -1,88 +1,81 @@
 ﻿@model dynamic
 
 <script id="bank-account-details-template" type="text/template">
-    @BankAccountDetails()
+	<div class="modal-header">
+		<h3>Bank Account Details</h3>
+	</div>
+	<div class="modal-body">
+		<table class="table centered">
+			<thead class="box">
+				<tr class="box-title">
+					<th>Field</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Bank</td>
+					<td><%- Bank %></td>
+				</tr>
+				<tr>
+					<td>BankBIC</td>
+					<td><%- BankBIC %></td>
+				</tr>
+				<tr>
+					<td>Branch</td>
+					<td><%- Branch %></td>
+				</tr>
+				<tr>
+					<td>BranchBIC</td>
+					<td><%- BranchBIC %></td>
+				</tr>
+				<tr>
+					<td>ContactAddressLine1</td>
+					<td><%- ContactAddressLine1 %></td>
+				</tr>
+				<tr>
+					<td>ContactAddressLine2</td>
+					<td><%- ContactAddressLine2 %></td>
+				</tr>
+				<tr>
+					<td>ContactPostTown</td>
+					<td><%- ContactAddressLine2 %></td>
+				</tr>
+				<tr>
+					<td>ContactPostcode</td>
+					<td><%- ContactPostcode %></td>
+				</tr>
+				<tr>
+					<td>ContactPhone</td>
+					<td><%- ContactPhone %></td>
+				</tr>
+				<tr>
+					<td>ContactFax</td>
+					<td><%- ContactFax %></td>
+				</tr>
+				<tr>
+					<td>FasterPaymentsSupported</td>
+					<td><%- FasterPaymentsSupported %></td>
+				</tr>
+				<tr>
+					<td>CHAPSSupported</td>
+					<td><%- CHAPSSupported %></td>
+				</tr>
+				<tr>
+					<td>IBAN</td>
+					<td><%- CHAPSSupported %></td>
+				</tr>
+				<tr>
+					<td>IsDirectDebitCapable</td>
+					<td><%- IsDirectDebitCapable %></td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td><b>StatusInformation</b></td>
+					<td><b><%- StatusInformation %></b></td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
 </script>
-
-@helper BankAccountDetails(){
-
-<div class="modal-header">
-    <h3>Bank Account Details</h3>
-</div>
-<div class="modal-body">
-    <table class="table centered">
-        <thead  class="box">
-            <tr class="box-title">
-                <th>Field</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Bank</td>
-                <td><%- Bank %></td>
-
-            </tr>
-            <tr>
-                <td>BankBIC</td>
-                <td><%- BankBIC %></td>                
-            </tr>
-            <tr>
-                <td>Branch</td>
-                <td><%- Branch %></td>                
-            </tr>
-            <tr>
-                <td>BranchBIC</td>
-                <td><%- BranchBIC %></td>                
-            </tr>
-            <tr>
-                <td>ContactAddressLine1</td>
-                <td><%- ContactAddressLine1 %></td>
-            </tr>
-            <tr>
-                <td>ContactAddressLine2</td>
-                <td><%- ContactAddressLine2 %></td>                
-            </tr>
-            <tr>
-                <td>ContactPostTown</td>
-                <td><%- ContactAddressLine2 %></td>
-            </tr>
-            <tr>
-                <td>ContactPostcode</td>
-                <td><%- ContactPostcode %></td>
-            </tr>
-            <tr>
-                <td>ContactPhone</td>
-                <td><%- ContactPhone %></td>                
-            </tr>
-            <tr>
-                <td>ContactFax</td>
-                <td><%- ContactFax %></td>
-            </tr>
-            <tr>
-                <td>FasterPaymentsSupported</td>
-                <td><%- FasterPaymentsSupported %></td>
-            </tr>
-            <tr>
-                <td>CHAPSSupported</td>
-                <td><%- CHAPSSupported %></td>
-            </tr>
-            <tr>
-                <td>IBAN</td>
-                <td><%- CHAPSSupported %></td>
-            </tr>
-            <tr>
-                <td>IsDirectDebitCapable</td>
-                <td><%- IsDirectDebitCapable %></td>
-            </tr>
-        </tbody>
-        <tfoot>
-             <tr>
-                 <td><b>StatusInformation</b></td>
-                <td><b><%- StatusInformation %></b></td>
-            </tr>
-        </tfoot>
-    </table>
-</div>
-
-}
