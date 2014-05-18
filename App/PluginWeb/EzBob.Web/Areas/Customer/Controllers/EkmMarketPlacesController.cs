@@ -137,6 +137,4 @@
 			}
 		}
 	}
-						   password = SecurityUtils.Decrypt(account.SecurityData),
-				password = SecurityUtils.Decrypt(account.SecurityData),
 }
