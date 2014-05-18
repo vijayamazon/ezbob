@@ -2230,5 +2230,15 @@
 		{
 			get { return this[Variables.PricingModelSetupFee]; }
 		}
+
+		public virtual VariableValue ReportDaemonDropboxCredentials
+		{
+			get { return this[Variables.ReportDaemonDropboxCredentials]; }
+		}
+
+		public virtual VariableValue ReportDaemonDropboxRootPath
+		{
+			get { return this[Variables.ReportDaemonDropboxRootPath]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

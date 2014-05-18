@@ -317,6 +317,8 @@
 		PricingModelCostOfDebtPA,
 		PricingModelOpexAndCapex,
 		PricingModelProfitMarkupPercentsOfRevenue,
-		PricingModelSetupFee
+		PricingModelSetupFee,
+		ReportDaemonDropboxCredentials,
+		ReportDaemonDropboxRootPath
 	} // enum Variables
 } // namespace ConfigManager

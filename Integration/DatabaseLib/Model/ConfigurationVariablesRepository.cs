@@ -257,7 +257,9 @@
 		PricingModelCostOfDebtPA,
 		PricingModelOpexAndCapex,
 		PricingModelProfitMarkupPercentsOfRevenue,
-		PricingModelSetupFee
+		PricingModelSetupFee,
+		ReportDaemonDropboxCredentials,
+		ReportDaemonDropboxRootPath
 	} // enum ConfigurationVariables
 
 	#endregion enum ConfigurationVariables
