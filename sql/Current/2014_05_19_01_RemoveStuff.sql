@@ -1,12 +1,12 @@
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Dump_Application_Variables]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Dump_Application_Variables]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Dump_Application_Variables]
 GO
 
 
 
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[App_RaiseAppNotExistError]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[App_RaiseAppNotExistError]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[App_RaiseAppNotExistError]
 GO
 
@@ -15,31 +15,31 @@ GO
 
 
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AppDetail_DeleteSubTree]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AppDetail_DeleteSubTree]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[AppDetail_DeleteSubTree]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AppDetail_DeleteSubTreeByName]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AppDetail_DeleteSubTreeByName]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[AppDetail_DeleteSubTreeByName]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AppDetail_UpdateAttach]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AppDetail_UpdateAttach]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[AppDetail_UpdateAttach]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_Attachment_Insert]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_Attachment_Insert]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Application_Attachment_Insert]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_DetailInsert]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_DetailInsert]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Application_DetailInsert]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_DetailSelect]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_DetailSelect]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Application_DetailSelect]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BankBranch_Sign_Add]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BankBranch_Sign_Add]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[BankBranch_Sign_Add]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AddLink]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AddLink]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[AddLink]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_DetailUpdate]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_DetailUpdate]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Application_DetailUpdate]
 GO
 
@@ -50,28 +50,28 @@ GO
 
 
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_GET_CHILDCOUNT]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_GET_CHILDCOUNT]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[APPLICATION_GET_CHILDCOUNT]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_GET_PARRENT]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_GET_PARRENT]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[APPLICATION_GET_PARRENT]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_GET_STRATEGY]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_GET_STRATEGY]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[APPLICATION_GET_STRATEGY]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_GET_VERSION]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_GET_VERSION]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[APPLICATION_GET_VERSION]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_Insert]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Application_Insert]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Application_Insert]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_UPDATE_CHILDCOUNT]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[APPLICATION_UPDATE_CHILDCOUNT]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[APPLICATION_UPDATE_CHILDCOUNT]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ApplicationDetail_Delete]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ApplicationDetail_Delete]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[ApplicationDetail_Delete]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ApproveLinksBySourceId]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ApproveLinksBySourceId]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[ApproveLinksBySourceId]
 GO
 
@@ -81,64 +81,64 @@ GO
 
 
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Export_GetEntityLinkSeries]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Export_GetEntityLinkSeries]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP FUNCTION [dbo].[Export_GetEntityLinkSeries]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DeleteLinksBySourceId]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DeleteLinksBySourceId]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[DeleteLinksBySourceId]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Export_AddExportResult]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Export_AddExportResult]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Export_AddExportResult]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Export_GetExportResults]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Export_GetExportResults]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Export_GetExportResults]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Export_GetTemplates]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Export_GetTemplates]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Export_GetTemplates]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetEntityLink]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetEntityLink]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[GetEntityLink]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetEntityLinks]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetEntityLinks]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[GetEntityLinks]
 GO
 
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CreateDump]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CreateDump]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[CreateDump]
 GO
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Get_Application_Results]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Get_Application_Results]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Get_Application_Results]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Save_Application_Results]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Save_Application_Results]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Save_Application_Results]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetExceededNodes]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetExceededNodes]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[GetExceededNodes]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetNodeDataJournal]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetNodeDataJournal]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[GetNodeDataJournal]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ErrorMessageSave]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ErrorMessageSave]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[ErrorMessageSave]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetElementId]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetElementId]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[GetElementId]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetStoredParametersByAppId]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetStoredParametersByAppId]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[GetStoredParametersByAppId]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetAttachmentByParentDetail]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetAttachmentByParentDetail]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[GetAttachmentByParentDetail]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ChangeLockedUser]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ChangeLockedUser]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[ChangeLockedUser]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Strategy_CheckStrategyState]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Strategy_CheckStrategyState]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Strategy_CheckStrategyState]
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Strategy_GetStrategyInfo]') AND TYPE IN (N'P', N'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Strategy_GetStrategyInfo]') AND TYPE IN (N'P', N'PC', N'FN', N'TF'))
 DROP PROCEDURE [dbo].[Strategy_GetStrategyInfo]
 GO
 
