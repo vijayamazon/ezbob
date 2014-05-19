@@ -9,6 +9,6 @@
 		public IEnumerable<SagePurchaseInvoice> PurchaseInvoices { get; set; }
 		public IEnumerable<SageIncome> Incomes { get; set; }
 		public IEnumerable<SageExpenditure> Expenditures { get; set; }
-		public Dictionary<int, string> InvoicesStatuses { get; set; }
-    }
+		public Dictionary<string, string> InvoicesStatuses { get; set; }
+	}
 }
