@@ -9508,37 +9508,6 @@ CREATE TABLE [dbo].[LoyaltyProgramActionTypes](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[MailTemplateRelation]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[MailTemplateRelation](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[InternalTemplateName] [nvarchar](200) NOT NULL,
-	[MandrillTemplateId] [int] NOT NULL,
- CONSTRAINT [UNIQUE_InternalTemplateName] UNIQUE NONCLUSTERED 
-(
-	[InternalTemplateName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[MandrillTemplate]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[MandrillTemplate](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[NAME] [nvarchar](200) NULL,
- CONSTRAINT [PK_MandrillTemplate] PRIMARY KEY NONCLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
 /****** Object:  Table [dbo].[MC_CampaignClicks]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -14886,11 +14855,6 @@ ALTER TABLE [dbo].[LoyaltyProgramActions]  WITH CHECK ADD  CONSTRAINT [FK_Loyalt
 REFERENCES [dbo].[LoyaltyProgramActionTypes] ([ActionTypeID])
 GO
 ALTER TABLE [dbo].[LoyaltyProgramActions] CHECK CONSTRAINT [FK_LoyaltyProgramActionType]
-GO
-ALTER TABLE [dbo].[MailTemplateRelation]  WITH CHECK ADD  CONSTRAINT [FK_MailTemplateRelation_MandrillTemplateId] FOREIGN KEY([MandrillTemplateId])
-REFERENCES [dbo].[MandrillTemplate] ([Id])
-GO
-ALTER TABLE [dbo].[MailTemplateRelation] CHECK CONSTRAINT [FK_MailTemplateRelation_MandrillTemplateId]
 GO
 ALTER TABLE [dbo].[MP_AmazonFeedback]  WITH CHECK ADD  CONSTRAINT [FK_MP_AmazonFeedback_MP_CustomerMarketPlace] FOREIGN KEY([CustomerMarketPlaceId])
 REFERENCES [dbo].[MP_CustomerMarketPlace] ([Id])

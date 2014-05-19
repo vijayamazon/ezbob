@@ -204,8 +204,6 @@
     <Compile Include="Model\Database\LoyaltyProgramAction.cs" />
     <Compile Include="Model\Database\LoyaltyProgramActionTypeMap.cs" />
     <Compile Include="Model\Database\LoyaltyProgramActionType.cs" />
-    <Compile Include="Model\Database\MailTemplateRelation.cs" />
-    <Compile Include="Model\Database\MandrillTemplate.cs" />
     <Compile Include="Model\Experian\ExperianDefaultAccount.cs" />
     <Compile Include="Model\Loans\DiscountPlan.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentExpenseCategoryMap.cs" />
