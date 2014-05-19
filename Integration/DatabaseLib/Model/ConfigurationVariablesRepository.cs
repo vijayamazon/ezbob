@@ -1,4 +1,4 @@
-﻿namespace EZBob.DatabaseLib.Model {
+namespace EZBob.DatabaseLib.Model {
 	using System;
 	using System.Globalization;
 	using ApplicationMng.Repository;
@@ -259,7 +259,12 @@
 		PricingModelProfitMarkupPercentsOfRevenue,
 		PricingModelSetupFee,
 		ReportDaemonDropboxCredentials,
-		ReportDaemonDropboxRootPath
+		ReportDaemonDropboxRootPath,
+		EbayServiceType,
+		EbayDevId,
+		EbayAppId,
+		EbayCertId,
+		EbayRuName
 	} // enum ConfigurationVariables
 
 	#endregion enum ConfigurationVariables

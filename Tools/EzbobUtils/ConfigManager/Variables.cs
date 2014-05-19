@@ -1,4 +1,4 @@
-﻿namespace ConfigManager {
+namespace ConfigManager {
 	public enum Variables {
 		AdministrationCharge,
 		AllowFinishOfflineWizardWithoutMarketplaces,
@@ -318,6 +318,11 @@
 		PricingModelOpexAndCapex,
 		PricingModelProfitMarkupPercentsOfRevenue,
 		PricingModelSetupFee,
+		EbayServiceType,
+		EbayDevId,
+		EbayAppId,
+		EbayCertId,
+		EbayRuName,
 		ReportDaemonDropboxCredentials,
 		ReportDaemonDropboxRootPath
 	} // enum Variables
