@@ -52,6 +52,7 @@ class EzBob.CustomerLoginView extends Backbone.View
                 else
                     document.location.href = "#{window.gRootPath}Customer/Profile"
             else
+                console.log('err', result)
                 EzBob.App.trigger "error", result.errorMessage
                 @blockBtn false
         else

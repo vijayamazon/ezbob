@@ -3,7 +3,6 @@ namespace EzBob.Web.Controllers {
 
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Linq;
 	using System.Net;
 	using System.Security.Principal;
@@ -107,10 +106,10 @@ namespace EzBob.Web.Controllers {
 		public JsonResult CustomerLogOn(LogOnModel model) {
 			var customerIp = RemoteIp();
 
-			if (!ModelState.IsValid) {
-				_log.DebugFormat("Customer log on attempt from remote IP {0}: model state is invalid.", customerIp);
-				return Json(new { success = false, errorMessage = (string)null }, JsonRequestBehavior.AllowGet);
-			} // if
+			//if (!ModelState.IsValid) {
+			//	_log.DebugFormat("Customer log on attempt from remote IP {0}: model state is invalid.", customerIp);
+			//	return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
+			//} // if
 
 			_log.DebugFormat(
 				"Customer log on attempt from remote IP {0} received with user name '{1}' and hash '{2}'...",
@@ -125,7 +124,7 @@ namespace EzBob.Web.Controllers {
 
 					return Json(new {
 						success = (bp != null),
-						errorMessage = (bp == null) ? "User not found or incorrect password." : "",
+						errorMessage = (bp == null) ? "User not found or incorrect password." : String.Empty,
 						broker = true,
 					});
 				} // if is broker

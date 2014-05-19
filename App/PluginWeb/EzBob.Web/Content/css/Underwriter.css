@@ -1162,3 +1162,34 @@ div.hmrc-enter-data-holder .add-one-period {
 .row {
     max-width: 100%;
 }
+
+ul.ScheduleList {
+  list-style: none;
+}
+.installment-properties {
+  display: inline-block;
+}
+.installment-actions {
+  display: inline-block;
+}
+.installment-properties ul li,
+.schedule-header li {
+  list-style: none;
+  display: inline-block;
+  width: 100px;
+  border-bottom: 1px solid #CCC;
+}
+.schedule-header {
+  padding-left: 100px;
+}
+td a.edit-loan {
+  margin-left: 10px;
+}
+.common-params dt {
+  float: left;
+  width: 150px;
+}
+.common-params dd {
+  width: 100px;
+  padding-left: 150px;
+}

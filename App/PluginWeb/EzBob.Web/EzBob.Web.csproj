@@ -426,17 +426,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\css\alertify.css" />
-    <Content Include="Content\css\amount-period-sliders.css" />
-    <Content Include="Content\css\app.css" />
-    <Content Include="Content\css\bootstrap-modal.css" />
     <Content Include="Content\css\broker.css" />
-    <Content Include="Content\css\captcha.css" />
     <Content Include="Content\css\choosen\chosen-sprite.png" />
     <Content Include="Content\css\choosen\chosen.css" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
-    <Content Include="Content\css\dropzone.css" />
     <Content Include="Content\css\flaty\bootstrap-responsive.min.css" />
     <Content Include="Content\css\flaty\bootstrap-switch.css" />
     <Content Include="Content\css\flaty\bootstrap.min.css" />
@@ -449,7 +443,6 @@
     <Content Include="Content\css\flaty\images\sort_asc.png" />
     <Content Include="Content\css\flaty\images\sort_both.png" />
     <Content Include="Content\css\flaty\images\sort_desc.png" />
-    <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\css\images\300x250.jpg" />
     <Content Include="Content\css\images\accounts\amazon.png" />
@@ -563,19 +556,37 @@
     <Content Include="Content\css\images\yodlee\banks_sprite.png" />
     <Content Include="Content\css\images\yodlee\dag_off.png" />
     <Content Include="Content\css\images\yodlee\dag_on.png" />
-    <Content Include="Content\css\jquery.dataTables.css" />
-    <Content Include="Content\css\jquery.dataTables_themeroller.css" />
-    <Content Include="Content\css\jquery.jqplot.css" />
-    <Content Include="Content\css\loan-type-selector.css" />
-    <Content Include="Content\css\loanDetails.css">
-      <DependentUpon>loanDetails.less</DependentUpon>
-    </Content>
+    <Content Include="Content\css\lib\alertify.css" />
+    <Content Include="Content\css\lib\bootstrap-modal.css" />
+    <Content Include="Content\css\lib\bootstrap-switch.css" />
+    <Content Include="Content\css\lib\bootstrap2-responsive.css" />
+    <Content Include="Content\css\lib\bootstrap2.css" />
+    <Content Include="Content\css\lib\bootstrap3-modal-patch.css" />
+    <Content Include="Content\css\lib\bootstrap3.css" />
+    <Content Include="Content\css\lib\chosen-sprite.png" />
+    <Content Include="Content\css\lib\chosen.css" />
+    <Content Include="Content\css\lib\coin-slider-styles.css" />
+    <Content Include="Content\css\lib\dataTables.bootstrap.css" />
+    <Content Include="Content\css\lib\datepicker.css" />
+    <Content Include="Content\css\lib\dropzone.css" />
+    <Content Include="Content\css\lib\DT_bootstrap.css" />
+    <Content Include="Content\css\lib\flaty-responsive.css" />
+    <Content Include="Content\css\lib\flaty.css" />
+    <Content Include="Content\css\lib\font-awesome.min.css" />
+    <Content Include="Content\css\lib\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\css\lib\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\css\lib\images\glyphicons-halflings.png" />
+    <Content Include="Content\css\lib\images\sort_asc.png" />
+    <Content Include="Content\css\lib\images\sort_both.png" />
+    <Content Include="Content\css\lib\images\sort_desc.png" />
+    <Content Include="Content\css\lib\jquery-ui-1.8.16.custom.css" />
+    <Content Include="Content\css\lib\jquery.dataTables.css" />
+    <Content Include="Content\css\lib\jquery.jqplot.css" />
+    <Content Include="Content\css\lib\jquery.jscrollpane.css" />
+    <Content Include="Content\css\lib\jquery.ui.1.8.16.ie.css" />
+    <Content Include="Content\css\lib\notifications.css" />
+    <Content Include="Content\css\mobile.css" />
     <Content Include="Content\css\Permission.css" />
-    <Content Include="Content\css\popover.css" />
-    <Content Include="Content\css\shops.css" />
-    <Content Include="Content\css\sidebar.css" />
-    <Content Include="Content\css\style.css" />
-    <Content Include="Content\css\attardi.labels.css" />
     <Content Include="Content\css\wizard-header.css" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
     <Content Include="Content\img\basket-diamond-32.png" />
@@ -604,6 +615,10 @@
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\PricingModelSettings.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\ConfigTableSettings.cshtml" />
+    <Content Include="Content\css\lib\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\css\lib\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\css\lib\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\css\lib\fonts\FontAwesome.otf" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -647,12 +662,7 @@
     <Content Include="Content\img\roles\underwriter.png" />
     <Content Include="Content\img\securedisclaimer-new.png" />
     <Content Include="ClickTaleScripts.xml" />
-    <Content Include="Content\css\addition.css" />
-    <Content Include="Content\css\overview.css" />
-    <Content Include="Content\css\coin-slider-styles.css" />
     <Content Include="Content\css\images\ajax-loader.gif" />
-    <Content Include="Content\css\jquery.jscrollpane.css" />
-    <Content Include="Content\css\notifications.css" />
     <Content Include="Content\css\print.css" />
     <Content Include="Content\css\Underwriter.css" />
     <Content Include="Content\img\1-how-it-works-steps.jpg" />
@@ -950,7 +960,6 @@
     <Content Include="Content\js\ezbob.uiaction.js" />
     <Content Include="Content\js\ezbob.view.js" />
     <Content Include="Content\js\lib\Backbone.EzBob.js" />
-    <Content Include="Content\js\contactUs\ezbo.contactUs.js" />
     <Content Include="Content\js\controls\Captcha.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js">
       <DependentUpon>ezbob.BoundItemView.coffee</DependentUpon>
@@ -1027,10 +1036,6 @@
     <Content Include="Content\js\lib\jquery.mousewheel.js" />
     <Content Include="Content\js\lib\autoNumeric-1.7.4.js" />
     <Content Include="Content\js\Calculator.js" />
-    <Content Include="Content\css\bootstrap-responsive.css" />
-    <Content Include="Content\css\bootstrap.css" />
-    <Content Include="Content\css\datepicker.css" />
-    <Content Include="Content\css\ellipsis-xbl.xml" />
     <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\css\images\ui-bg_glass_55_fbf9ee_1x400.png" />
     <Content Include="Content\css\images\ui-bg_glass_65_ffffff_1x400.png" />
@@ -1045,8 +1050,6 @@
     <Content Include="Content\css\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\css\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\css\images\ui-icons_f6cf3b_256x240.png" />
-    <Content Include="Content\css\jquery-ui-1.8.16.custom.css" />
-    <Content Include="Content\css\jquery.ui.1.8.16.ie.css" />
     <Content Include="Content\css\wizard.css" />
     <Content Include="Content\img\apply-now-gradient.png" />
     <Content Include="Content\img\arrow-blue-left.png" />
@@ -1067,7 +1070,6 @@
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\graphy.png" />
-    <Content Include="Content\css\styles.css" />
     <Content Include="Content\js\lib\jquery.scrollTo.js" />
     <Content Include="Content\js\lib\jquery.set_display_value.js" />
     <Content Include="Content\js\lib\jquery.slimscroll.min.js" />
@@ -1451,7 +1453,6 @@
     <Content Include="Content\js\Underwriter\editLoan\loanModel.js">
       <DependentUpon>loanModel.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\css\postcode.css" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudDetectionLog.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.js">
       <DependentUpon>ezbob.underwriter.functionsDialog.coffee</DependentUpon>
@@ -1493,7 +1494,6 @@
     <Content Include="Content\js\lib\notifications.js" />
     <Content Include="Content\js\Underwriter\profile\creditBureau\ezbob.underwriter.idHubCustomAddress.js" />
     <Content Include="Content\PIE_uncompressed.htc" />
-    <Content Include="Content\js\login\ezbob.login.js" />
     <Content Include="Content\js\ezbob.strengthPassword.js" />
     <Content Include="Views\Shared\_FBSDK.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_DocsTemplate.cshtml" />
@@ -1501,7 +1501,6 @@
     <Content Include="Content\js\App\ezbob.GA.coffee" />
     <Content Include="Content\js\App\ezbob.bindings.coffee" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\_loan_editor.cshtml" />
-    <Content Include="Content\css\editLoan.less" />
     <Content Include="Areas\Customer\Views\Paypoint\ErrorOfferDate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Profile\_PayPointCardSelectViewTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\PaymentAccounts\PayPointAdded.cshtml" />
@@ -1533,7 +1532,6 @@
     <Content Include="Content\js\Profile\ezbob.profile.accountActivity.js" />
     <Content Include="Content\js\Profile\ezbob.profile.profileView.js" />
     <Content Include="Areas\Underwriter\Views\Reports\ExpectationReport.cshtml" />
-    <Content Include="Content\css\loanDetails.less" />
     <Content Include="Areas\Underwriter\Views\GenerateAgreements\Index.cshtml" />
     <Content Include="Areas\Underwriter\Views\LoanAmountPerDay\Index.cshtml" />
     <Content Include="Content\js\Profile\ezbob.profile.getCash.js" />
@@ -1649,9 +1647,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_SignUp.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\_Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
@@ -1996,7 +1991,6 @@
     <Content Include="Views\Shared\_Truste.cshtml" />
     <Content Include="Views\Shared\_FavIcon.cshtml" />
     <None Include="Properties\PublishProfiles\EzBob.Release.pubxml" />
-    <Content Include="Views\Shared\_StaticPageLayout.cshtml" />
     <None Include="Properties\PublishProfiles\EzBob.Test.pubxml" />
     <Content Include="Views\PaypointTemplate\Index.cshtml" />
     <Content Include="Views\PaypointTemplate\DownloadPage.cshtml" />

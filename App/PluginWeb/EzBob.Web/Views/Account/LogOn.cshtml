@@ -30,10 +30,9 @@
         var loginPage = new EzBob.CustomerLoginView({ el: $('.loginTemplate') });
         loginPage.render();
 
-        $(function () {
-            EzBob.validateSignUpForm();
+        $(function() {
+            //EzBob.validateSignUpForm();
             var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
-            EzBob.App.trigger('error', '@Html.ValidationMessage("")');
         });
     </script>
 }

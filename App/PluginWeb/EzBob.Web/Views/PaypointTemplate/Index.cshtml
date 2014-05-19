@@ -305,10 +305,6 @@
                 history.go(-1);
             });
 
-            var contactUs = new EzBob.ContactUsView();
-            contactUs.template = $(".contactUs").html();
-            contactUs.render();
-
             $('input[type="submit"]').click(function (e) {
                 if (EzBob.Validation.checkForm(validator)) {
                     submitPaypointForm();
@@ -433,9 +429,4 @@
     <input type="hidden" name="error_table">
     <input type="hidden" name="error_list">
     </text>
-}
-
-
-@section customJs{
-    @BundleHelper.RenderPaypointTemplateJs()
 }

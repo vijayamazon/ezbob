@@ -13,10 +13,13 @@
 @section Js{
 
     <script type="text/javascript">
-        $(function () {
+        $(function() {
+            var isValid = @ViewData.ModelState.IsValid.ToString().ToLowerInvariant();
             EzBob.validateAdminLoginForm();
             var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
-            EzBob.App.trigger('error', '@Html.ValidationMessage("")');
+            if (!isValid) {
+                EzBob.App.trigger('error', '@Html.ValidationMessage("")');
+            }
         });
     </script>
 }

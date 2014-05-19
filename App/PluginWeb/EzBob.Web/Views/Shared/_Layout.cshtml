@@ -3,16 +3,12 @@
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
 @using EzBob.Web.Infrastructure
-@using EzBob.Web.Infrastructure.csrf
 @using Integration.ChannelGrabberConfig
 @using Newtonsoft.Json
 @using StructureMap
 @{
     var controller = (string)ViewContext.RouteData.Values["controller"];
-    bool getSatisfactionEnabled = CurrentValues.Instance.GetSatisfactionEnabled;
-    var showGetSatisfaction = controller == "Wizard" && getSatisfactionEnabled;
     var authCookie = Request.IsAuthenticated ? "auth" : "";
-
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 }
 <!DOCTYPE html>
@@ -38,16 +34,10 @@
 
     <link href='https://fonts.googleapis.com/css?family=Sanchez' rel='stylesheet' type='text/css'>
 
-    @if (IsSectionDefined("css"))
-    {
-        @RenderSection("css", false)
-    }
-    else
-    {
-        @BundleHelper.CustomerCss()
-    }
-
     @BundleHelper.RenderPrintCss()
+    @BundleHelper.CustomerCss()
+    @RenderSection("css", false)
+
     <!--[if lt IE 9]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
         <![endif]-->
