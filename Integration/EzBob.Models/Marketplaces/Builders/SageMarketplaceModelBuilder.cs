@@ -14,14 +14,14 @@ namespace EzBob.Models.Marketplaces.Builders
 
 	class SageMarketplaceModelBuilder : MarketplaceModelBuilder
 	{
-		readonly Dictionary<int, string> _invoiceStatuses = new Dictionary<int, string>();
+		readonly Dictionary<string, string> _invoiceStatuses = new Dictionary<string, string>();
 
 		public SageMarketplaceModelBuilder(MP_SagePaymentStatusRepository sagePaymentStatusRepository, ISession session)
 			: base(session)
 		{
 			foreach (var status in sagePaymentStatusRepository.GetAll())
 			{
-				_invoiceStatuses.Add(status.SageId, status.name);
+				_invoiceStatuses.Add(status.SageId.ToString(), status.name);
 			}
 		}
 
