@@ -911,7 +911,10 @@ EzBob.formatLoanType = function (loanTypeSelection, loanType) {
 }; // formatLoanType
 
 EzBob.formatLoanSource = function (model) {
-    return model.LoanSource.Name || '--';
+    if (model && model.LoanSource && model.LoanSource.Name) {
+        return model.LoanSource.Name;
+    }
+    return '--';
 }; // formatLoanSource
 
 EzBob.formatLoanTypeSelection = function (num) {

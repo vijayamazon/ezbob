@@ -296,7 +296,8 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     LoanTypeSelectionAllowedChanged: =>
-        isCustomerRepaymentPeriodSelectionAllowed = @model.get('LoanSource').IsCustomerRepaymentPeriodSelectionAllowed
+        loanSource = @model.get('LoanSource') or {}
+        isCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed
 
         if !isCustomerRepaymentPeriodSelectionAllowed || @model.get('IsLoanTypeSelectionAllowed') in [ 1, '1' ]
             @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled')
@@ -334,7 +335,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     validateLoanSourceRelated: ->
-        loanSourceModel = @model.get 'LoanSource'
+        loanSourceModel = @model.get('LoanSource') or {}
 
         @validateInterestVsSource loanSourceModel.MaxInterest
 
@@ -377,7 +378,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
 
         sPercentList = @model.get 'DiscountPlanPercents'
 
-        if sPercentList == ''
+        if not sPercentList?
             return
 
         nBaseRate = @model.get 'InterestRate'
@@ -529,4 +530,5 @@ class EzBob.Underwriter.LoanInfoModel extends Backbone.Model
         types = @get 'LoanTypes'
         id = parseInt @get('LoanTypeId'), 10
         type = _.find(types, (t) -> t.value is id)
-        @set "LoanType", type.text
+        if(type)
+            @set "LoanType", type.text

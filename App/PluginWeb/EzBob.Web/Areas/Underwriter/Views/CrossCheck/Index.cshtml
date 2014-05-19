@@ -1,8 +1,10 @@
 ﻿@using EZBob.DatabaseLib.Model.Database
 @using EzBob.Web.Areas.Underwriter.Models
 @using EzBob.Web.Code
+@using Ezbob.Utils.Extensions
 @using PersonalInfo = EZBob.DatabaseLib.Model.Database.PersonalInfo
 @model CrossCheckModel
+
 @{
     Layout = null;
     Model.PayPal = Model.PayPal ?? new EzBob.Web.Areas.Underwriter.Models.PersonalInfo();
@@ -139,7 +141,7 @@
         </tr>
         <tr>
             <td><b>Industry Type</b><b class="marking pull-right  @Model.CrossCheckStatus.TypeOfBussnes"></b></td>
-            <td>@Model.Customer.PersonalInfo.IndustryType.ToString()</td>
+            <td>@Model.Customer.PersonalInfo.IndustryType.DescriptionAttr()</td>
             <td></td>
             <td></td>
         </tr>
@@ -404,13 +406,12 @@
                         @(String.IsNullOrEmpty(companyRefNum) ? "Not performed" : "Performed")
                     </a>
                     <a id="recheck-targeting"
-					class="btn btn-mini btn-primary pull-right"
-					href="#"
-					data-postcode="@postcode.Select(x => x.Postcode).FirstOrDefault()"
-					data-company-name="@companyName"
-				    data-company-legal-status="@companyType"
-                    data-company-number="@companyNum"
-				>Recheck</a>
+                    class="btn btn-mini btn-primary pull-right"
+                    href="#"
+                    data-postcode="@postcode.Select(x => x.Postcode).FirstOrDefault()"
+                    data-company-name="@companyName"
+                    data-company-legal-status="@companyType"
+                    data-company-number="@companyNum">Recheck</a>
                 </td>
                 <td></td>
                 <td class="hmrc"></td>
@@ -532,9 +533,9 @@
 </table>
 
 <h3 id="cross-check-directors-section">Directors
-	@if (Model.Customer.PersonalInfo.TypeOfBusiness != TypeOfBusiness.Entrepreneur) {
-		<button class="btn btn-mini btn-primary add-director">Add director</button>
-	}
+    @if (Model.Customer.PersonalInfo.TypeOfBusiness != TypeOfBusiness.Entrepreneur) {
+        <button class="btn btn-mini btn-primary add-director">Add director</button>
+    }
 </h3>
 
 <div class="alert duplicate-director-detected" style="display: none;">You are going to add a duplicate director.</div>
@@ -702,10 +703,10 @@
 @AddDirectorInfoTemplate.Render(Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
 
 <script id="address-popup-template" type="text/template">
-	@{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressPopupTemplate.cshtml");}
+    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressPopupTemplate.cshtml");}
 </script>
 
 <script id="address-template" type="text/template">
-	@{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressTemplate.cshtml");}
+    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressTemplate.cshtml");}
 </script>
 

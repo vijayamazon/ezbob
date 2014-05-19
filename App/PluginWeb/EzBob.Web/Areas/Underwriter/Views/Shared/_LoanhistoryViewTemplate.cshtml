@@ -43,15 +43,14 @@
                 <th>Source</th>
             </tr>
         </thead>
+        <%if(typeof loans !== "undefined" && loans !== null && loans.length > 0){
+                var sumLoanAmount = 0,
+                sumRepayments = 0,
+                sumBalance = 0;
+                sumPrincipal = 0;%>
         <tbody>
-            <%    var sumLoanAmount = 0,
-            sumRepayments = 0,
-            sumBalance = 0;
-            sumPrincipal = 0;
-            %>
-            <%
-            _.each(loans, function(loan){
-            %>   
+            
+            <%_.each(loans, function(loan){%>
             <tr data-id="<%- loan.Id %>" class="loans tr-link">
                 <td>
                     <%- loan.RefNumber %>
@@ -76,8 +75,7 @@
             sumRepayments += !isNaN(loan.Repayments)?loan.Repayments:0;
             sumBalance += !isNaN(loan.TotalBalance)?loan.TotalBalance:0;
             sumPrincipal += !isNaN(loan.Principal)?loan.Principal:0;
-            });
-            %>
+            });%>
         </tbody>
         <tfoot>
             <tr> 
@@ -90,6 +88,7 @@
                 <td colspan="4"></td>
             </tr>
         </tfoot>
+         <%}%>
     </table>
 }
 

@@ -45,6 +45,7 @@
       "click [name='manualSetupFeeEditPercentButton']": "editManualSetupFeePercent",
       "click [name='newCreditLineBtn']": "runNewCreditLine",
       'click [name="loanType"]': 'loanType',
+      'click [name="isLoanTypeSelectionAllowed"]': 'isLoanTypeSelectionAllowed',
       'click [name="discountPlan"]': 'discountPlan',
       'click [name="loanSource"]': 'loanSource',
       'click .create-loan-hidden-toggle': 'toggleCreateLoanHidden',
@@ -358,8 +359,9 @@
     };
 
     LoanInfoView.prototype.LoanTypeSelectionAllowedChanged = function() {
-      var isCustomerRepaymentPeriodSelectionAllowed, _ref;
-      isCustomerRepaymentPeriodSelectionAllowed = this.model.get('LoanSource').IsCustomerRepaymentPeriodSelectionAllowed;
+      var isCustomerRepaymentPeriodSelectionAllowed, loanSource, _ref;
+      loanSource = this.model.get('LoanSource') || {};
+      isCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed;
       if (!isCustomerRepaymentPeriodSelectionAllowed || ((_ref = this.model.get('IsLoanTypeSelectionAllowed')) === 1 || _ref === '1')) {
         this.$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled');
         if (this.model.get('LoanTypeId') !== 1) {
@@ -419,7 +421,7 @@
 
     LoanInfoView.prototype.validateLoanSourceRelated = function() {
       var loanSourceModel, nAnnualTurnover, nCustomerReasonType, nEmployeeCount;
-      loanSourceModel = this.model.get('LoanSource');
+      loanSourceModel = this.model.get('LoanSource') || {};
       this.validateInterestVsSource(loanSourceModel.MaxInterest);
       if (loanSourceModel.DefaultRepaymentPeriod === -1) {
         this.$el.find('button[name=repaymentPeriodChangeButton]').removeAttr('disabled');
@@ -455,7 +457,7 @@
       this.$el.find('.interest-exceeds-max-by-loan-source').toggleClass('hide', this.model.get('InterestRate') <= nMaxInterest);
       this.$el.find('.discount-exceeds-max-by-loan-source').addClass('hide');
       sPercentList = this.model.get('DiscountPlanPercents');
-      if (sPercentList === '') {
+      if (!(sPercentList != null)) {
         return;
       }
       nBaseRate = this.model.get('InterestRate');
@@ -677,7 +679,9 @@
       type = _.find(types, function(t) {
         return t.value === id;
       });
-      return this.set("LoanType", type.text);
+      if (type) {
+        return this.set("LoanType", type.text);
+      }
     };
 
     return LoanInfoModel;

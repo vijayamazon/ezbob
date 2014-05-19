@@ -3,7 +3,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
     initialize: function () {
-        this.segmentType = '';
+        //this.segmentType = '';
         this.marketPlaces = null;
         this.companyScore = null;
         this.experianDirectors = null;
@@ -160,10 +160,10 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
     }, // crossCheckOne
 
     setHmrcData: function () {
-        if (this.segmentType != 'Offline') {
-            this.$el.find('.hmrc').addClass('hide').hide();
-            return;
-        } // if
+        //if (this.segmentType != 'Offline') {
+        //    this.$el.find('.hmrc').addClass('hide').hide();
+        //    return;
+        //} // if
 
         this.$el.find('.hmrc').removeClass('hide').show();
 

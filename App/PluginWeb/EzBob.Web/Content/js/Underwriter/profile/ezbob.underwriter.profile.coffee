@@ -458,7 +458,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @companyScoreModel.set fullModel.get("CompanyScore"), silent: true
             @companyScoreModel.trigger "sync"
 
-            @crossCheckView.segmentType = fullModel.get('PersonalInfoModel').SegmentType
+            #@crossCheckView.segmentType = fullModel.get('PersonalInfoModel').SegmentType
             @crossCheckView.marketPlaces = @marketPlaces
             @crossCheckView.companyScore = @companyScoreModel
             @crossCheckView.experianDirectors = fullModel.get("ExperianDirectors")
