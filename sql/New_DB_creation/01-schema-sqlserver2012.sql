@@ -87,141 +87,6 @@ CREATE TYPE [dbo].[LoanIdListTable] AS TABLE(
 	[LoanID] [int] NOT NULL
 )
 GO
-
-
-
-
-
-
-/****** Object:  StoredProcedure [dbo].[Cert_Thumbprint_By_UserName]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[Cert_Thumbprint_By_UserName]
-(
-    @pLogin        nvarchar(30)
-)
-AS
-BEGIN
-    select  certificateThumbprint as thumbprint, domainUserName
-    from security_user
-    WHERE UserName=@pLogin AND isdeleted != 2;
-END;
-
-GO
-
-/****** Object:  StoredProcedure [dbo].[ClearErrorForOtherMarketplaces]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[ClearErrorForOtherMarketplaces]
-@MarketPlacesWithErrors VARCHAR(500),
-@CustomerId INT
-AS
-BEGIN
-	DECLARE @Delimiter VARCHAR(500),
-		@TempValue VARCHAR(500),
-        @TempIntValue INT
-
-	SET @Delimiter = ','
-
-	CREATE TABLE #tmp
-	(
-        id INT
-	)
-
-	SET @MarketPlacesWithErrors = isnull(@MarketPlacesWithErrors,'')
-
-	DECLARE @TempString VARCHAR(500),
-		@Ordinal INT,
-		@CharIndex INT
-
-	SET @TempString = @MarketPlacesWithErrors
-	SET @CharIndex = charindex(@Delimiter, @TempString)
-	SET @Ordinal = 0
-
-	WHILE @CharIndex != 0 
-	BEGIN     
-		SET @Ordinal += 1        
-		SET @TempIntValue = 0
-		SET @TempValue = substring(@TempString, 0, @CharIndex)
-		SET @TempIntValue = convert(INT, @TempValue) 
-
-		IF @TempIntValue IS NOT NULL AND @TempIntValue != 0
-		BEGIN
-			INSERT INTO #tmp VALUES (@TempIntValue)
-		END
-
-		SET @TempString = substring(@TempString, @CharIndex + 1, len(@TempString) - @CharIndex)     
-		SET @CharIndex = charindex(@Delimiter, @TempString)
-	END
-
-	IF @TempString != '' 
-	BEGIN
-		SET @Ordinal += 1 
-		SET @TempIntValue = 0
-		SET @TempIntValue = convert(INT, @TempString) 
-
-		IF @TempIntValue IS NOT NULL AND @TempIntValue != 0
-		BEGIN
-			INSERT INTO #tmp VALUES (@TempIntValue)
-		END
-	END
-
-	UPDATE MP_CustomerMarketPlace SET UpdateError = NULL WHERE CustomerId = @CustomerId AND Id NOT IN (SELECT Id FROM #tmp)
-	DROP TABLE #tmp
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[CONTROL_HISTORY_INSERT]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[CONTROL_HISTORY_INSERT] 
-(
-    @pApplicationId  BIGINT,
-    @pUserId         BIGINT,
-    @pSecurityAppId  BIGINT,
-    @pStrategyId     BIGINT,
-    @pCurrentNodeId     BIGINT,
-    @pCurrentNodePostfix NVARCHAR(MAX),
-    @pDetailName     NVARCHAR(MAX),
-    @pValue          NVARCHAR(MAX)
-)
-AS
-BEGIN
-   
-    INSERT INTO control_history
-      (
-        applicationid,
-        strategyid,
-        userid,
-        nodeid,
-        currentnodepostfix,
-        controlname,
-        controlvalue,
-        securityappid
-      )
-    VALUES
-      (
-        @pApplicationId,
-        @pStrategyId,
-        @pUserId,
-        @pCurrentNodeId,
-        @pCurrentNodePostfix,
-        @pDetailName,
-        @pValue,
-        @pSecurityAppId
-      );
-END
-
-GO
-
-
-
 /****** Object:  StoredProcedure [dbo].[CustomerScoringResult_Insert]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -265,310 +130,18 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[DataSource_GetDataSourceByName]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_GetDataSourceByName]
-(
-  @pDataSourceName nvarchar(max)
-)
-AS
-BEGIN
-
-  SELECT *
-  FROM DataSource_Sources
-  WHERE Name = @pDataSourceName
-    AND (DataSource_Sources.IsDeleted IS NULL OR DataSource_Sources.IsDeleted = 0);
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_GetDataSourcesList]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_GetDataSourcesList]
-(
-  @pDataSourceType nvarchar(255)
-)
-AS
-BEGIN
-  select
-   ds.ID,
-   ds.NAME,
-   ds.Description,
-   ds.TYPE,
-   ds.CREATIONDATE,
-   ds.TERMINATIONDATE,
-   ds.DISPLAYNAME,
-   usr.username
-  from datasource_sources ds 
-  left outer join security_user usr on ds.userid = usr.userid
-  WHERE ((ds.IsDeleted = 0) OR (ds.IsDeleted IS NULL))
-   AND ds.Type=@pDataSourceType;
-	
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_GetDSByDispName]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_GetDSByDispName]
-(
-  @pDisplayName nvarchar(max)
-)
-AS
-BEGIN
-
-  SELECT *
-  FROM DataSource_Sources
-  WHERE DisplayName = @pDisplayName
-    AND (DataSource_Sources.IsDeleted IS NULL OR DataSource_Sources.IsDeleted = 0)
-    AND DataSource_Sources.TerminationDate IS NULL;
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_GetDSByName]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_GetDSByName]
-(
-  @pDataSourceName nvarchar(max)
-)
-AS
-BEGIN
-
-  select * from datasource_sources
-  where (isdeleted is null) AND DisplayName =  @pDataSourceName;
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_GetKeyNames]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_GetKeyNames]
-
-AS
-BEGIN
-	SELECT * FROM [DataSource_KeyFields];
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_GetLinkedStr]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_GetLinkedStr]
-(
-  @pDataSourceName nvarchar(255)
-)
-AS
-BEGIN
-
-  SELECT [Strategy_Strategy].[StrategyId] as [ID], 
-         [Strategy_Strategy].[displayname] as [Name]
-  FROM [Strategy_Strategy], [DataSource_StrategyRel]
-  WHERE [DataSource_StrategyRel].[DataSourceName] = @pDataSourceName
-    AND [Strategy_Strategy].[StrategyId] = [DataSource_StrategyRel].[StrategyId]
-    AND ([Strategy_Strategy].[IsDeleted] IS NULL OR [Strategy_Strategy].[IsDeleted] = 0);
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_InsertKeyName]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_InsertKeyName]
-(
-  @pKeyName nvarchar(max)
-)
-AS
-BEGIN
-
-  IF NOT EXISTS(SELECT KeyNameId FROM dbo.DataSource_KeyFields
-  WHERE KeyName = @pKeyName)
-  BEGIN
-	INSERT INTO [dbo].[DataSource_KeyFields]([KeyName])
-     VALUES(@pKeyName)
-  END
 
 
-END
 
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_InsertNew]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_InsertNew]
-(
- @pDataSourceName nvarchar(max),
- @pDataSourceType nvarchar(max),
- @pDocument nvarchar(max),
- @pSignedData nvarchar(max),
- @pDisplayName nvarchar(max),
- @pDescription nvarchar(max),
- @pUserId int
-)
-AS
-BEGIN
 
-  DECLARE @id int;
 
-  UPDATE DataSource_Sources
-  SET [TerminationDate] = GETDATE()
-  WHERE [TerminationDate] IS NULL and [DisplayName] = @pDisplayName;
-  
-  INSERT INTO DataSource_Sources
-   ([Name],
-    [Description],
-    [Type],
-    [Document],
-    [SignedDocument],
-    [CreationDate],
-    [DisplayName],
-    [UserId])
-  values
-   (@pDataSourceName,
-    @pDescription,
-    @pDataSourceType,
-    @pDocument,
-    @pSignedData,
-    GETDATE(),
-    @pDisplayName,
-    @pUserId);
 
-  set @id = @@IDENTITY;
 
-  SELECT @id;
-  RETURN @id;
 
-END
 
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_SaveKey]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_SaveKey]
-(
-	@pRequestId bigint,
-	@pKeyNameId bigint,
-	@pKeyValue nvarchar(max)
-)
 
-AS
-BEGIN
-	INSERT INTO [dbo].[DataSource_KeyData]
-           ([RequestId],[KeyNameId],[Value])
-     VALUES
-           (@pRequestId, @pKeyNameId, @pKeyValue)
-END
 
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_SaveRequest]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_SaveRequest]
-(
-  @pAppId bigint,
-  @pRequest nvarchar(max),
-  @pReqId bigint out
-)
-AS
-BEGIN
-	INSERT INTO [dbo].[DataSource_Requests]
-           ([ApplicationId],[Request])
-     VALUES (@pAppId, @pRequest);
-     SET @pReqId = @@IDENTITY;
-END
 
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_SaveResponse]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_SaveResponse]
-(
-	@pReqId bigint,
-	@pResponse nvarchar(max)
-)
-
-AS
-BEGIN
-	INSERT INTO [dbo].[DataSource_Responses]
-           ([RequestId],[Response])
-     VALUES
-           (@pReqId, @pResponse);
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[DataSource_Update]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DataSource_Update]
-(
-  @pId bigint,
-  @pDescription nvarchar(max),
-  @pUserId int,
-  @pSignedData nvarchar(max),
-  @pDocument nvarchar(max)
-)
-AS
-BEGIN
-
-  UPDATE DataSource_Sources
-  SET
-    [Description] = @pDescription,
-    [UserId] = @pUserId,
-    [Document] = @pDocument,
-    [SIGNEDDOCUMENT] = @pSignedData
-  WHERE [Id] = @pId;
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[Delete_DS_Strategy_Rel]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[Delete_DS_Strategy_Rel]
-  @pStrategyId int
-AS
-BEGIN
-
-  if @pStrategyId > 0
-  begin
-       DELETE FROM DataSource_StrategyRel WHERE StrategyId = @pStrategyId;
-  end;
-
-END
-
-GO
 /****** Object:  StoredProcedure [dbo].[DeleteCustomer]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -767,27 +340,6 @@ BEGIN TRANSACTION DeleteCustomer
 	DELETE FROM CardInfo WHERE CardInfo.CustomerId = @CustomerID
 	
 COMMIT TRANSACTION DeleteCustomer
-
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[DeleteDataSource]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[DeleteDataSource]
-  @pDataSourceId int,
-  @pSignedData [nvarchar](max)
-AS
-BEGIN
-
-  UPDATE DataSource_Sources
-  SET 
-     IsDeleted = Id,
-     SignedDocumentDelete = @pSignedData
-  WHERE DisplayName = (SELECT DisplayName FROM
-  DataSource_Sources WHERE  Id = @pDataSourceId);
 
 END
 
@@ -2373,37 +1925,6 @@ UPDATE [dbo].[Customer]
 
 SET NOCOUNT ON;
 SELECT @@IDENTITY;
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[Insert_DS_Strategy_Rel]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[Insert_DS_Strategy_Rel]
-(
-    @pDataSourceName nvarchar(255),
-    @pStrategyId int
-)
-AS
-BEGIN
-  DECLARE @newId int;
-  set @newId = null
-
-  SELECT @newId = Id 
-  FROM DataSource_StrategyRel 
-    WHERE DataSourceName = @pDataSourceName 
-	  AND StrategyId = @pStrategyId;
-
-  if @newId is null
-  begin
-  	insert into DATASOURCE_STRATEGYREL
-	(DataSourceName, StrategyId)
-  	values
-  	(@pDataSourceName, @pStrategyId);
-  end;
-
 END
 
 GO
@@ -13737,117 +13258,6 @@ CREATE TABLE [dbo].[CustomerStatusHistory](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[DataSource_KeyData]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[DataSource_KeyData](
-	[KeyValueId] [int] IDENTITY(1,1) NOT NULL,
-	[RequestId] [int] NULL,
-	[KeyNameId] [int] NULL,
-	[Value] [nvarchar](max) NULL,
- CONSTRAINT [PK_DataSource_KeyData] PRIMARY KEY CLUSTERED 
-(
-	[KeyValueId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[DataSource_KeyFields]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[DataSource_KeyFields](
-	[KeyNameId] [int] IDENTITY(1,1) NOT NULL,
-	[KeyName] [nvarchar](512) NULL,
- CONSTRAINT [PK_DataSource_KeyFields] PRIMARY KEY CLUSTERED 
-(
-	[KeyNameId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[DataSource_Requests]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[DataSource_Requests](
-	[RequestId] [int] IDENTITY(1,1) NOT NULL,
-	[ApplicationId] [int] NULL,
-	[Request] [nvarchar](max) NULL,
-	[CreationDate] [datetime] NULL,
- CONSTRAINT [PK_DataSource_Requests] PRIMARY KEY CLUSTERED 
-(
-	[RequestId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[DataSource_Responses]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[DataSource_Responses](
-	[RequestId] [int] NOT NULL,
-	[Response] [nvarchar](max) NULL,
-	[CreationDate] [datetime] NULL,
- CONSTRAINT [PK_DataSource_Responses_1] PRIMARY KEY CLUSTERED 
-(
-	[RequestId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[DataSource_Sources]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[DataSource_Sources](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](255) NOT NULL,
-	[Description] [nvarchar](500) NOT NULL,
-	[Type] [nvarchar](20) NOT NULL,
-	[Document] [nvarchar](max) NOT NULL,
-	[SignedDocument] [nvarchar](max) NULL,
-	[UserId] [int] NULL,
-	[IsDeleted] [int] NULL,
-	[CreationDate] [datetime] NULL,
-	[TerminationDate] [datetime] NULL,
-	[DisplayName] [nvarchar](255) NULL,
-	[SignedDocumentDelete] [nvarchar](max) NULL,
- CONSTRAINT [PK_DATASOURCE_SOURCES] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [IX_DATASOURCE_SOURCES] UNIQUE NONCLUSTERED 
-(
-	[Name] ASC,
-	[IsDeleted] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[DataSource_StrategyRel]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[DataSource_StrategyRel](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[DataSourceName] [nvarchar](1024) NOT NULL,
-	[StrategyId] [int] NOT NULL,
- CONSTRAINT [PK_DATASOURCE_STRATEGYREL] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
 /****** Object:  Table [dbo].[DbString]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -19632,17 +19042,6 @@ GO
 SET ANSI_PADDING ON
 
 GO
-/****** Object:  Index [IX_1]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [IX_1] ON [dbo].[DataSource_Sources]
-(
-	[IsDeleted] ASC,
-	[DisplayName] ASC,
-	[TerminationDate] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-
-GO
 /****** Object:  Index [IX_DbString_Key]    Script Date: 04-Nov-13 5:03:46 PM ******/
 CREATE UNIQUE NONCLUSTERED INDEX [IX_DbString_Key] ON [dbo].[DbString]
 (
@@ -20443,10 +19842,6 @@ ALTER TABLE [dbo].[CustomerStatuses] ADD  DEFAULT ((0)) FOR [IsEnabled]
 GO
 ALTER TABLE [dbo].[CustomerStatuses] ADD  DEFAULT ((0)) FOR [IsWarning]
 GO
-ALTER TABLE [dbo].[DataSource_Requests] ADD  CONSTRAINT [DF_DataSource_Requests_CreationDate]  DEFAULT (getdate()) FOR [CreationDate]
-GO
-ALTER TABLE [dbo].[DataSource_Responses] ADD  CONSTRAINT [DF_DataSource_Responses_CreationDate]  DEFAULT (getdate()) FOR [CreationDate]
-GO
 ALTER TABLE [dbo].[Director] ADD  CONSTRAINT [DF_Director_Email]  DEFAULT ('') FOR [Email]
 GO
 ALTER TABLE [dbo].[Director] ADD  CONSTRAINT [DF_Director_Phone]  DEFAULT ('') FOR [Phone]
@@ -20659,11 +20054,6 @@ ALTER TABLE [dbo].[CustomerRequestedLoan]  WITH CHECK ADD  CONSTRAINT [FK_Custom
 REFERENCES [dbo].[CustomerSourceOfRepayment] ([Id])
 GO
 ALTER TABLE [dbo].[CustomerRequestedLoan] CHECK CONSTRAINT [FK_CustomerRequestedLoan_CustomerSourceOfRepayment]
-GO
-ALTER TABLE [dbo].[DataSource_StrategyRel]  WITH NOCHECK ADD  CONSTRAINT [FK_DSSTR_STRATEGY_STRATEGYID] FOREIGN KEY([StrategyId])
-REFERENCES [dbo].[Strategy_Strategy] ([StrategyId])
-GO
-ALTER TABLE [dbo].[DataSource_StrategyRel] CHECK CONSTRAINT [FK_DSSTR_STRATEGY_STRATEGYID]
 GO
 ALTER TABLE [dbo].[ExperianConsentAgreement]  WITH CHECK ADD  CONSTRAINT [FK_ExperianConsentAgreement_Customer] FOREIGN KEY([CustomerId])
 REFERENCES [dbo].[Customer] ([Id])
