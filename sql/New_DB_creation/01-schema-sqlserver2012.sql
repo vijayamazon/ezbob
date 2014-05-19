@@ -9539,24 +9539,6 @@ CREATE TABLE [dbo].[Medals](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[MonitoredSites]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
-GO
-CREATE TABLE [dbo].[MonitoredSites](
-	[Site] [varchar](300) NOT NULL,
- CONSTRAINT [PK_MonitoredSites] PRIMARY KEY CLUSTERED 
-(
-	[Site] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-SET ANSI_PADDING OFF
-GO
 /****** Object:  Table [dbo].[MP_AlertDocument]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -12019,52 +12001,6 @@ CREATE TABLE [dbo].[ReportUsers](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[ScoringModel]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[ScoringModel](
-	[Id] [int] NOT NULL,
-	[Guid] [nvarchar](1024) NULL,
-	[DisplayName] [nvarchar](1024) NULL,
-	[UserId] [int] NULL,
-	[ModelTypeName] [nvarchar](250) NULL,
-	[CreationDate] [datetime] NULL,
-	[IsDeleted] [int] NULL,
-	[TerminationDate] [datetime] NULL,
-	[Description] [nvarchar](1024) NULL,
-	[Cutoffpoint] [decimal](5, 5) NULL,
-	[AllowWeightsEdit] [int] NULL,
-	[AllowSaveResults] [int] NULL,
-	[PmmlFile] [nvarchar](max) NULL,
-	[SignedDocument] [nvarchar](max) NULL,
-	[SignedDocumentDelete] [nvarchar](max) NULL,
- CONSTRAINT [PK_Models] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[Security_AccountLog]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Security_AccountLog](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[EventDate] [datetime] NULL,
-	[EventType] [int] NULL,
-	[UserId] [int] NULL,
-	[Data] [nvarchar](2048) NULL,
- CONSTRAINT [PK_Security_AccountLog] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
 /****** Object:  Table [dbo].[Security_Application]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -12080,49 +12016,6 @@ CREATE TABLE [dbo].[Security_Application](
 	[ApplicationId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[Security_Branch]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Security_Branch](
-	[BranchId] [int] NOT NULL,
-	[Name] [nvarchar](255) NULL,
-	[Description] [ntext] NULL,
-	[Identifier] [nvarchar](255) NULL,
-	[CreationDate]  AS (getdate()),
-	[ModifyDate]  AS (getdate()),
- CONSTRAINT [PK_SECURITY_BRANCH] PRIMARY KEY CLUSTERED 
-(
-	[BranchId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[Security_log4net]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Security_log4net](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[Message] [nvarchar](max) NULL,
-	[EventDate] [datetime] NULL,
-	[EventJournal] [int] NULL,
-	[EventType] [int] NULL,
-	[UserName] [nvarchar](1024) NULL,
-	[Level] [nvarchar](50) NULL,
-	[Thread] [nvarchar](16) NULL,
-	[AppID] [nvarchar](20) NULL,
-	[Logger] [nvarchar](256) NULL,
-	[Exception] [nvarchar](max) NULL,
- CONSTRAINT [PK_Security_log4net] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
 /****** Object:  Table [dbo].[Security_Permission]    Script Date: 04-Nov-13 5:03:46 PM ******/
@@ -12281,37 +12174,7 @@ CREATE TABLE [dbo].[Security_UserRoleRelation](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[ServiceRegistration]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[ServiceRegistration](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[key] [nvarchar](255) NOT NULL,
- CONSTRAINT [PK_ServiceRegistration] PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
 
-GO
-
-/****** Object:  Table [dbo].[SingleRunApplication]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[SingleRunApplication](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[ApplicationExecutionTypeId] [bigint] NOT NULL,
- CONSTRAINT [PK_SingleRunApplication] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
 /****** Object:  Table [dbo].[SiteAnalytics]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -12339,106 +12202,6 @@ CREATE TABLE [dbo].[SiteAnalyticsCodes](
 	[Name] [nvarchar](300) NOT NULL,
 	[Description] [nvarchar](300) NULL,
  CONSTRAINT [PK_SiteAnalyticsCodes] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-
-/****** Object:  Table [dbo].[SV_ReportingInfo]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[SV_ReportingInfo](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[PathDir] [nvarchar](max) NOT NULL,
-	[UserId] [int] NOT NULL,
-	[CreationDate] [datetime] NOT NULL,
-	[CreatingState] [int] NOT NULL,
-	[ErrorMessage] [nvarchar](1000) NULL,
-	[TimeCreationCube] [bigint] NOT NULL,
- CONSTRAINT [PK_DirectoryInfo] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[SystemCalendar_BaseRelation]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[SystemCalendar_BaseRelation](
-	[CalendarId] [int] NOT NULL,
-	[BaseCalendarId] [int] NOT NULL
-) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[SystemCalendar_Calendar]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[SystemCalendar_Calendar](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[IsDeleted] [int] NULL,
-	[IsBase] [bit] NOT NULL,
-	[DisplayName] [nvarchar](255) NOT NULL,
-	[Description] [nvarchar](255) NULL,
-	[UserId] [int] NOT NULL,
-	[Name] [nvarchar](255) NOT NULL,
-	[TerminationDate] [datetime] NULL,
-	[SignedDocument] [nvarchar](max) NULL,
-	[SignedDocumentDelete] [nvarchar](max) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-UNIQUE NONCLUSTERED 
-(
-	[IsDeleted] ASC,
-	[DisplayName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[SystemCalendar_Day]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[SystemCalendar_Day](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[DayOfWeek] [nvarchar](255) NOT NULL,
-	[IsWorkDay] [bit] NOT NULL,
-	[BeginsAt] [datetime] NULL,
-	[Duration] [int] NULL,
-	[LunchBeginsAt] [datetime] NULL,
-	[LunchDuration] [int] NULL,
-	[HostCalendarId] [int] NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[SystemCalendar_Entry]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[SystemCalendar_Entry](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[EntryDate] [datetime] NOT NULL,
-	[Description] [nvarchar](255) NOT NULL,
-	[EntryMode] [nvarchar](255) NOT NULL,
-	[HostCalendarId] [int] NULL,
-	[HostEntryId] [int] NULL,
-PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -12515,19 +12278,6 @@ CREATE TABLE [dbo].[YodleeBanks](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[yuly_CustomerLoansSummary]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[yuly_CustomerLoansSummary](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[CustomerId] [int] NULL,
-	[TotalBalance] [int] NULL,
-	[NumOfLoans] [int] NULL
-) ON [PRIMARY]
-
-GO
 
 /****** Object:  UserDefinedFunction [dbo].[GetLatePaymentsGrouped]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
@@ -12566,20 +12316,6 @@ RETURN
 	dbo.Loan LEFT OUTER JOIN GetLatePaymentsGrouped() as lp on lp.LoanId = dbo.Loan.Id
 	Group by dbo.Loan.RequestCashId
 )
-
-GO
-/****** Object:  View [dbo].[MinLoanSchedule]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-create view [dbo].[MinLoanSchedule]
-as 
-select MIN(ls.date) as lsdate, l.Id
-FROM LoanSchedule ls 
-  LEFT OUTER JOIN dbo.Loan AS l ON l.Id = ls.LoanId
-where ls.Status = 'Late'
-GROUP BY l.Id
 
 GO
 /****** Object:  View [dbo].[vw_NotClose]    Script Date: 04-Nov-13 5:03:46 PM ******/
@@ -12650,39 +12386,6 @@ WHERE c.IsTest <> 1 and
  GROUP BY l.Id, l.CustomerId, l.[Date], l.DateClosed, l.MaxDelinquencyDays, l.RepaymentsNum, l.Balance, c.Gender, c.FirstName, c.MiddleInitial, c.Surname, c.RefNumber, ca.Line1, ca.Line2, ca.Line3, ca.Town, ca.County
  , ca.Postcode, c.DateOfBirth, ld.lsdate, LoanAmount.am, LoanAmount.SceduledRepayments, c.TypeOfBusiness, c.LimitedRefNum, c.NonLimitedRefNum, c.CreditResult
  , c.SortCode, l.IsDefaulted, lo.CaisAccountStatus, cs.IsEnabled, c.CollectionStatus, c.MartialStatus, lo.ManualCaisFlag, cs.Name
-
-GO
-/****** Object:  View [dbo].[vw_collection]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE VIEW [dbo].[vw_collection]
-AS
-select distinct (CustomerID), ISNULL(MAX (MaxDelinquencyDays), 0) as MaxDelinquencyDays,
-ISNULL(MAX (DateClose),0) as DateClosed
-from vw_NotClose
-group by CustomerID
-
-GO
-/****** Object:  View [dbo].[vw_CollectionFinal]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE VIEW [dbo].[vw_CollectionFinal]
-AS
-SELECT DISTINCT CustomerId, MIN(StartDate) AS StartDate
-FROM         (SELECT     loanID, CustomerId, StartDate, DateClose, MaxDelinquencyDays, RepaymentPeriod, CurrentBalance, Gender, FirstName, MiddleInitial, 
-                                              Surname, RefNumber, Line1, Line2, Line3, Town, County, Postcode, DateOfBirth, LoanAmount,
-                                              CompanyType, LimitedRefNum, NonLimitedRefNum, CustomerState, SortCode
-                       FROM          dbo.vw_NotClose
-                       WHERE      (loanID IN
-                                                  (SELECT DISTINCT nc.loanID
-                                                    FROM          dbo.vw_NotClose AS nc INNER JOIN
-                                                                           dbo.vw_collection AS vc ON nc.DateClose = vc.DateClosed AND nc.MaxDelinquencyDays = vc.MaxDelinquencyDays))) 
-                      AS a
-GROUP BY CustomerId
 
 GO
 /****** Object:  UserDefinedFunction [dbo].[GetAmazonReviews]    Script Date: 04-Nov-13 5:03:46 PM ******/
@@ -12813,31 +12516,6 @@ RETURN
 )
 
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetCustomerMarketplaceUpdatingCounters]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-/*
-2012-11-01 O.Zemskyi Customer Marketplace Updating Counters
-*/
-CREATE FUNCTION [dbo].[GetCustomerMarketplaceUpdatingCounters]
-(	
-  @marketplaceId int
-)
-RETURNS TABLE 
-AS
-RETURN 
-(
-	SELECT c.Method, COUNT(*) AS Counter
-  FROM MP_CustomerMarketplaceUpdatingCounter c
-  left join MP_CustomerMarketplaceUpdatingActionLog l on l.Id = c.CustomerMarketplaceUpdatingActionLogId
-  left join MP_CustomerMarketPlaceUpdatingHistory h on l.CustomerMarketplaceUpdatingHistoryRecordId = h.Id
-  where h.CustomerMarketPlaceId = @marketplaceId--149
-  group by c.method	
-)
-
-GO
 /****** Object:  UserDefinedFunction [dbo].[GetEbayReviews]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -12909,60 +12587,6 @@ RETURN
 				AND UnderwriterDecisionDate <= @dateEnd
 				AND UnderwriterDecision = 'Escalated') as res
 	Group by Medal
-)
-
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetExpensesPayPalTransactionsByPayerAndRange]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE FUNCTION [dbo].[GetExpensesPayPalTransactionsByPayerAndRange]
-(	
-  @payer nvarchar(255),
-  @marketplaceId int,
-  @startDate DateTime,
-  @endDate DateTime
-)
-RETURNS TABLE 
-AS
-RETURN 
-(
-	SELECT 
-		ISNULL( -Sum(pi.NetAmountAmount), 0) Income
-		FROM [dbo].MP_PayPalTransactionItem pi, [dbo].MP_PayPalTransaction pt
-		Where Status = 'Completed' AND Type = 'Payment' AND
-			pi.TransactionId = pt.Id AND pi.Payer = @payer AND pt.CustomerMarketPlaceId = @marketplaceId AND
-			pi.NetAmountAmount < 0 AND pi.Created BETWEEN @startDate AND @endDate 
-		Group BY Payer
-)
-
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetExpensesPayPalTransactionsByRange]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-/*
-2012-10-08 O.Zemskyi Change status an set NetAmountAmount > 0
-*/
-CREATE FUNCTION [dbo].[GetExpensesPayPalTransactionsByRange]
-(	
-  @marketplaceId int,
-  @startDate DateTime,
-  @endDate DateTime
-)
-RETURNS TABLE 
-AS
-RETURN 
-(
-	SELECT 
-		ISNULL(Sum(pi.NetAmountAmount), 0) Income
-		FROM [dbo].MP_PayPalTransactionItem pi, [dbo].MP_PayPalTransaction pt
-		Where Status = 'Completed' AND Type = 'Transfer' AND
-			pi.TransactionId = pt.Id AND pt.CustomerMarketPlaceId = @marketplaceId AND
-			pi.NetAmountAmount > 0 AND pi.Created BETWEEN @startDate AND @endDate 
-		Group BY pt.CustomerMarketPlaceId
 )
 
 GO
@@ -13100,57 +12724,6 @@ inner join
 
 ) maxHistory on h.CustomerMarketPlaceId = maxHistory.CustomerMarketPlaceId 
 and h.UpdatingStart = maxHistory.MaxUpdatedDate
-)
-
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetIncomePayPalTransactionsByPayerAndRange]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE FUNCTION [dbo].[GetIncomePayPalTransactionsByPayerAndRange]
-(	
-  @payer nvarchar(255),
-  @marketplaceId int,
-  @startDate DateTime,
-  @endDate DateTime
-)
-RETURNS TABLE 
-AS
-RETURN 
-(
-	SELECT 
-		ISNULL( Sum(pi.NetAmountAmount), 0) Income
-		FROM [dbo].MP_PayPalTransactionItem pi, [dbo].MP_PayPalTransaction pt
-		Where Status = 'Completed' AND Type = 'Payment' AND
-			pi.TransactionId = pt.Id AND pi.Payer = @payer AND pt.CustomerMarketPlaceId = @marketplaceId AND
-			pi.NetAmountAmount > 0 AND pi.Created BETWEEN @startDate AND @endDate 
-		Group BY Payer
-)
-
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetIncomePayPalTransactionsByRange]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE FUNCTION [dbo].[GetIncomePayPalTransactionsByRange]
-(	
-  @marketplaceId int,
-  @startDate DateTime,
-  @endDate DateTime
-)
-RETURNS TABLE 
-AS
-RETURN 
-(
-	SELECT 
-		ISNULL( Sum(pi.NetAmountAmount), 0) Income
-		FROM [dbo].MP_PayPalTransactionItem pi, [dbo].MP_PayPalTransaction pt
-		Where Status = 'Completed' AND Type = 'Payment' AND
-			pi.TransactionId = pt.Id AND pt.CustomerMarketPlaceId = @marketplaceId AND
-			pi.NetAmountAmount > 0 AND pi.Created BETWEEN @startDate AND @endDate 
-		Group BY pt.CustomerMarketPlaceId
 )
 
 GO
@@ -13479,36 +13052,6 @@ RETURN
 )
 
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetTransactionsCountPayPalTransactionsByRange]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-/*
-19.10.2012 O.Zemskyi Поменял условие отбора транзакций с pi.NetAmountAmount < 0 на pi.NetAmountAmount > 0
-*/
-CREATE FUNCTION [dbo].[GetTransactionsCountPayPalTransactionsByRange]
-(	
-  @marketplaceId int,
-  @startDate DateTime,
-  @endDate DateTime
-)
-RETURNS TABLE 
-AS
-RETURN 
-(
-	SELECT 
-		Count(pi.NetAmountAmount) Income
-		FROM [dbo].MP_PayPalTransactionItem pi, [dbo].MP_PayPalTransaction pt
-		Where Status = 'Completed' AND Type = 'Payment' AND
-			pi.TransactionId = pt.Id AND pt.CustomerMarketPlaceId = @marketplaceId AND
-			pi.NetAmountAmount > 0 AND pi.Created BETWEEN @startDate AND @endDate 
-		Group BY pt.CustomerMarketPlaceId
-)
-
-GO
-
-
 /****** Object:  View [dbo].[CustomerLoyaltyProgramPoints]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -13585,69 +13128,6 @@ SELECT ll.Date, sum(ll.LoanAmount) as Amount
 	  FROM [dbo].[Loan] l
   ) ll
   group by Date
-
-GO
-/****** Object:  View [dbo].[vw_UpdateUsersMarketPlaces]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE VIEW [dbo].[vw_UpdateUsersMarketPlaces]
-as
-SELECT c.Id AS 'CustomerId', c.RefNumber, c.Fullname,  
-cmp.DisplayName AS 'MarketplaceName', 
-mt.name AS 'TypeOfStore',
-cmpuhal.UpdatingStart,cmpuhal.UpdatingEnd, --cmpuh.[Error],--cmpuh.UpdatingTimePassInSeconds,
-cmpuhal.ActionName, cmpuhal.ControlValueName,cmpuhal.ControlValue,
-[Result]=
-CASE
-WHEN cmpuhal.[Error] IS NULL
-THEN 'Passed'
-ELSE
-cmpuhal.[Error]
-END,	
-cmpuhal.UpdatingTimePassInSeconds 
-from dbo.MP_CustomerMarketPlace cmp
-RIGHT JOIN dbo.MP_CustomerMarketPlaceUpdatingHistory cmpuh
-ON cmpuh.CustomerMarketPlaceId = cmp.Id
-RIGHT join dbo.MP_MarketplaceType as mt
-on cmp.MarketPlaceId=mt.Id
-right JOIN Customer c
-ON c.Id = cmp.CustomerId
-RIGHT JOIN MP_CustomerMarketplaceUpdatingActionLog cmpuhal 
-ON cmpuhal.CustomerMarketplaceUpdatingHistoryRecordId = cmpuh.Id
---ORDER BY cmpuhal.UpdatingStart asc
-
-GO
-/****** Object:  View [dbo].[vw_UsersMarketPlaces]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-create VIEW [dbo].[vw_UsersMarketPlaces]
-as
-SELECT
-c.Id 'Customer ID', 
-c.RefNumber 'RefNumber',
-FullName=
-CASE WHEN c.FullName is NULL
-THEN 'Wizard is not finished'
-ELSE c.FullName
-END,  
-cmp.DisplayName 'Marketplace name', 
-mt.name 'Type of store', 
-cmp.UpdatingStart 'Time Start', 
-cmp.UpdatingEnd 'Time End',
-datediff(mi, cmp.UpdatingStart, cmp.UpdatingEnd) 'Time in min',
-Result=
-CASE WHEN cmp.UpdateError is not NULL
-THEN 'passed'
-ELSE 'not passed'
-end
-  FROM Customer as c RIGHT join MP_CustomerMarketPlace as cmp on c.Id=cmp.CustomerId
-  RIGHT join MP_MarketplaceType as mt
-on cmp.MarketPlaceId=mt.Id
-AND cmp.UpdatingEnd IS NOT NULL
 
 GO
 
