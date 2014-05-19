@@ -12,67 +12,69 @@
 	using Newtonsoft.Json;
 
 	public class GenerateAgreementsController : Controller
-    {
-        private readonly AgreementsGenerator _agreementsGenerator;
-        private readonly ILoanRepository _loanRepository;
-        private readonly IConcentAgreementHelper _concentAgreementHelper;
-        private readonly CustomerRepository _customersRepository;
+	{
+		private readonly AgreementsGenerator _agreementsGenerator;
+		private readonly ILoanRepository _loanRepository;
+		private readonly IConcentAgreementHelper _concentAgreementHelper;
+		private readonly CustomerRepository _customersRepository;
 
-        public GenerateAgreementsController(AgreementsGenerator agreementsGenerator, ILoanRepository loanRepository, CustomerRepository customersRepository)
-        {
-            _agreementsGenerator = agreementsGenerator;
-            _loanRepository = loanRepository;
-            _concentAgreementHelper = new ConcentAgreementHelper();
-            _customersRepository = customersRepository;
-        }
+		public GenerateAgreementsController(AgreementsGenerator agreementsGenerator,
+			ILoanRepository loanRepository,
+			CustomerRepository customersRepository)
+		{
+			_agreementsGenerator = agreementsGenerator;
+			_loanRepository = loanRepository;
+			_concentAgreementHelper = new ConcentAgreementHelper();
+			_customersRepository = customersRepository;
+		}
 
-        public ViewResult Index()
-        {
-            return View();
-        }
+		public ViewResult Index()
+		{
+			return View();
+		}
 
-        [HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public ActionResult Generate()
-        {
-            var loans = _loanRepository.GetLoansWithoutAgreements();
+		[HttpPost]
+		[Transactional]
+		public ActionResult Generate()
+		{
+			var loans = _loanRepository.GetLoansWithoutAgreements();
 
-            foreach (var loan in loans)
-            {
-                _agreementsGenerator.RenderAgreements(loan, true);
-            }
-           
-            return View("Index");
-        }
+			foreach (var loan in loans)
+			{
+				_agreementsGenerator.RenderAgreements(loan, true);
+			}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        [NoCache]
-        public RedirectToRouteResult ReloadAgreementsModel()
-        {
-            var agreementsModelBuilder = new AgreementsModelBuilder();
-            var loans = _loanRepository.GetAll();
+			return View("Index");
+		}
 
-            foreach (var loan in loans)
-            {
-                var agreement = agreementsModelBuilder.ReBuild(loan.Customer, loan);
-                loan.AgreementModel = JsonConvert.SerializeObject(agreement);
-            }
-            return RedirectToAction("Index", "GenerateAgreements", new { Area = "Underwriter" });
-        }
+		[Transactional]
+		[NoCache]
+		public RedirectToRouteResult ReloadAgreementsModel()
+		{
+			var agreementsModelBuilder = new AgreementsModelBuilder();
+			var loans = _loanRepository.GetAll();
 
-        
-        [Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        [NoCache]
-        public RedirectToRouteResult GenerateConsentAgreement()
-        {
-            var customers = _customersRepository.GetAll().Where(x => x.WizardStep.TheLastOne).ToList() ;
+			foreach (var loan in loans)
+			{
+				var agreement = agreementsModelBuilder.ReBuild(loan.Customer, loan);
+				loan.AgreementModel = JsonConvert.SerializeObject(agreement);
+			}
+			return RedirectToAction("Index", "GenerateAgreements", new { Area = "Underwriter" });
+		}
 
-            foreach (var customer in customers.Where(customer => customer.PersonalInfo !=null))
-            {
-                _concentAgreementHelper.Save(customer, customer.GreetingMailSentDate ?? DateTime.UtcNow);
-            }
-            
-            return RedirectToAction("Index", "GenerateAgreements", new { Area = "Underwriter" });
-        }
-    }
+
+		[Transactional]
+		[NoCache]
+		public RedirectToRouteResult GenerateConsentAgreement()
+		{
+			var customers = _customersRepository.GetAll().Where(x => x.WizardStep.TheLastOne).ToList();
+
+			foreach (var customer in customers.Where(customer => customer.PersonalInfo != null))
+			{
+				_concentAgreementHelper.Save(customer, customer.GreetingMailSentDate ?? DateTime.UtcNow);
+			}
+
+			return RedirectToAction("Index", "GenerateAgreements", new { Area = "Underwriter" });
+		}
+	}
 }

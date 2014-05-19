@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-	using System.Data;
 	using CommonLib;
 	using Infrastructure.Attributes;
 	using Models.Fraud;
@@ -17,7 +16,6 @@
 			_customerRepository = customerRepository;
 		}
 
-
 		public JsonResult Index(int id)
 		{
 			var customer = _customerRepository.Get(id);
@@ -31,7 +29,7 @@
 		}
 
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[Ajax]
 		public JsonResult Save(int customerId, int currentStatus)
 		{

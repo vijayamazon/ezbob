@@ -32,7 +32,6 @@
 		private readonly CustomerRepository _customers;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly ISession _session;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly ISortCodeChecker _sortCodeChecker;
 		private readonly IYodleeAccountChecker _yodleeAccountChecker;
@@ -42,7 +41,6 @@
 			DatabaseDataHelper helper,
 			CustomerRepository customers,
 			IEzbobWorkplaceContext context,
-			ISession session,
 			IMPUniqChecker mpChecker,
 			IYodleeAccountChecker yodleeAccountChecker
 		) {
@@ -50,7 +48,6 @@
 			_customers = customers;
 			_context = context;
 			m_oServiceClient = new ServiceClient();
-			_session = session;
 			_mpChecker = mpChecker;
 			_yodleeAccountChecker = yodleeAccountChecker;
 			if (CurrentValues.Instance.PostcodeAnywhereEnabled)
@@ -63,7 +60,7 @@
 			}
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public ViewResult Success(string request_token, string verification_code)
 		{
 			if (string.IsNullOrEmpty(verification_code) && string.IsNullOrEmpty(request_token))
@@ -97,18 +94,25 @@
 				return View("Error", (object)DbStrings.AccountAlreadyExixtsInDb);
 			}
 
+			var mpId = SavePayPal(customer, permissionsGranted, personalData, paypal);
+			m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true);
+
+			return View(permissionsGranted);
+		}
+
+		[NonAction]
+		[Transactional]
+		private int SavePayPal(Customer customer, PayPalPermissionsGranted permissionsGranted, PayPalPersonalData personalData, PayPalDatabaseMarketPlace paypal)
+		{
 			var securityData = new PayPalSecurityData
-				{
-					PermissionsGranted = permissionsGranted,
-					UserId = personalData.Email
-				};
+			{
+				PermissionsGranted = permissionsGranted,
+				UserId = personalData.Email
+			};
 
 			var mp = _helper.SaveOrUpdateCustomerMarketplace(personalData.Email, paypal, securityData, customer);
 			_helper.SaveOrUpdateAcctountInfo(mp, personalData);
-			_session.Flush();
-			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
-
-			return View(permissionsGranted);
+			return mp.Id;
 		}
 
 		public JsonResult GetRequestPermissionsUrl()
@@ -145,7 +149,6 @@
 			}
 		}
 
-		[Transactional]
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -159,22 +162,6 @@
 				.Select(m => new { displayName = m.DisplayName }).ToArray(),
 				JsonRequestBehavior.AllowGet
 			);
-		}
-
-		[Transactional]
-		[HttpGet]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult BankAccountsList()
-		{
-			var customer = _context.Customer;
-
-			if (!customer.HasBankAccount)
-			{
-				return Json(new[] { new { } }, JsonRequestBehavior.AllowGet);
-			}
-
-			return Json(new[] { new { displayName = customer.BankAccount.AccountNumber } }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Transactional]
@@ -221,7 +208,7 @@
 
 				_yodleeAccountChecker.Check(customer, accountNumber, sortCode, BankAccountType);
 
-				customer.BankAccount = new BankAccount()
+				customer.BankAccount = new BankAccount
 					{
 						AccountNumber = accountNumber,
 						SortCode = sortCode,

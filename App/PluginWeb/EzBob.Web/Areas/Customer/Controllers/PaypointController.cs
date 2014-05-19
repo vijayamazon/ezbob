@@ -256,7 +256,7 @@
 			}
 		}
 
-		private void SendEmails(int loanId, decimal realAmount, EZBob.DatabaseLib.Model.Database.Customer customer)
+		private void SendEmails(int loanId, decimal realAmount, Customer customer)
 		{
 			var loan = customer.GetLoan(loanId);
 

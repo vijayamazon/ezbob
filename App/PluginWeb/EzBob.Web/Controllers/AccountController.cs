@@ -276,7 +276,7 @@ namespace EzBob.Web.Controllers {
 		} // LogOff
 
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[CaptchaValidationFilter(Order = 999999)]
@@ -349,7 +349,7 @@ namespace EzBob.Web.Controllers {
 				Json(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" }, JsonRequestBehavior.AllowGet);
 		} // QuestionForEmail
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult RestorePassword(string email = "", string answer = "") {
 			if (!ModelState.IsValid)
 				return GetModelStateErrors(ModelState);

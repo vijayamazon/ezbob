@@ -31,7 +31,6 @@
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		[Transactional]
 		public JsonResult Index()
 		{
 			var sawWhatsNew =

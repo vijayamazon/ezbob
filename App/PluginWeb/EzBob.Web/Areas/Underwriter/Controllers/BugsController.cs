@@ -54,7 +54,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
 		public JsonResult TryGet(int customerid, string bugtype, int? mp, int? director)
 		{
 			var bug = _bugs.Search(customerid, bugtype, mp, director);

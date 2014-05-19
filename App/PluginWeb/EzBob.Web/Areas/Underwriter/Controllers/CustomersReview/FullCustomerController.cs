@@ -73,7 +73,6 @@
 		}
 
 		//[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpGet]
 		public JsonResult Index(int id, string history = null)
 		{

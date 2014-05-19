@@ -70,7 +70,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult Index(int id, DateTime? history = null)
 		{
 			var customer = _customers.Get(id);
@@ -80,7 +79,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult GetTeraPeakOrderItems(int customerMarketPlaceId)
 		{
 			var data = _teraPeakOrderItems.GetTeraPeakOrderItems(customerMarketPlaceId);
@@ -111,7 +109,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult Details(int id)
 		{
 			var cm = _customerMarketplaces.Get(id);
@@ -121,7 +118,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult YodleeDetails(int id)
 		{
 			var mp = _customerMarketplaces.Get(id);
@@ -130,7 +126,7 @@
 		}
 
 		[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public void ReCheckMarketplaces(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -161,7 +157,7 @@
 			} // switch
 		} // ReCheckMarketplaces
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public ActionResult TryRecheckYodlee(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -213,7 +209,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult CheckForUpdatedStatus(int mpId)
 		{
 			return Json(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() }, JsonRequestBehavior.AllowGet);
@@ -221,7 +216,6 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public void RenewEbayToken(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -235,7 +229,7 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult Disable(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -245,7 +239,7 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult Enable(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -253,14 +247,14 @@
 			return Json(new { });
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[Ajax]
 		public void AddSearchWord(string word)
 		{
 			_yodleeSearchWordsRepository.AddWord(word);
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[Ajax]
 		public void AddYodleeRule(int group, int rule, string literal)
 		{
@@ -298,7 +292,7 @@
 			}
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[Ajax]
 		public void DeleteSearchWord(string word)
 		{

@@ -18,19 +18,18 @@
 		private readonly IWorkplaceContext context;
 
 		public PricingModelCalculationsController()
-        {
+		{
 			context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			serviceClient = new ServiceClient();
-        }
+		}
 
-        [Ajax]
-        [HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public ActionResult Index(int customerId)
-        {
+		[Ajax]
+		[HttpGet]
+		public ActionResult Index(int customerId)
+		{
 			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customerId, context.UserId);
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
-        }
+		}
 
 		[HttpPost]
 		[Ajax]
@@ -63,5 +62,5 @@
 
 			return Json(getDefaultRateResponse.Value, JsonRequestBehavior.AllowGet);
 		}
-    }
+	}
 }

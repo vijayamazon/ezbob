@@ -101,7 +101,7 @@
 			}
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[HttpPost]
 		[Ajax]
 		public void MoreAMLInformation(int id)
@@ -113,7 +113,7 @@
 			LogPending(customer, PendingStatus.AML);
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[HttpPost]
 		[Ajax]
 		public void MoreAMLandBWAInformation(int id)
@@ -125,7 +125,7 @@
 			LogPending(customer, PendingStatus.Bank_AML);
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[HttpPost]
 		[Ajax]
 		public void MoreBWAInformation(int id)
@@ -137,6 +137,7 @@
 			LogPending(customer, PendingStatus.Bank);
 		}
 
+		[NonAction]
 		private void LogPending(Customer customer, PendingStatus status)
 		{
 			var workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();

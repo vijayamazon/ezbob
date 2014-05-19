@@ -42,7 +42,6 @@
 
 		#region action Index
 
-		[Transactional]
 		[IsSuccessfullyRegisteredFilter]
 		public ActionResult Index() {
 			ViewData["Questions"] = _questions.GetAll().ToList();
@@ -92,7 +91,6 @@
 		
 		[Ajax]
 		[HttpGet]
-		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Vip()
 		{
@@ -109,7 +107,9 @@
 					if (_context.Customer.PersonalInfo != null)
 					{
 						vipModel.VipFullName = _context.Customer.PersonalInfo.Fullname;
-						vipModel.VipPhone = string.IsNullOrEmpty(_context.Customer.PersonalInfo.DaytimePhone) ? _context.Customer.PersonalInfo.MobilePhone : _context.Customer.PersonalInfo.DaytimePhone;
+						vipModel.VipPhone = string.IsNullOrEmpty(_context.Customer.PersonalInfo.DaytimePhone)
+							                    ? _context.Customer.PersonalInfo.MobilePhone
+							                    : _context.Customer.PersonalInfo.DaytimePhone;
 					}
 				}
 				else

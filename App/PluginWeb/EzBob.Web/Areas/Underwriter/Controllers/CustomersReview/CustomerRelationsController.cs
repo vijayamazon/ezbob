@@ -33,7 +33,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Index(int id) {
 			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository);
@@ -46,7 +45,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Actions() {
 			var actions = _crmActionsRepository.GetAll();
@@ -59,7 +57,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Statuses() {
 			var actions = _crmStatusesRepository.GetAll();
@@ -72,7 +69,7 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult SaveEntry(bool isIncoming, int action, int status, string comment, int customerId) {
 			try {
 				var newEntry = new CustomerRelations {

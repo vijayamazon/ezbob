@@ -41,7 +41,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult Index()
 		{
 			return Json(string.Empty, JsonRequestBehavior.AllowGet);
@@ -50,7 +49,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult SettingsGeneral()
 		{
 			var bwaBusinessCheck = _configurationVariablesRepository.GetByName("BWABusinessCheck");
@@ -74,7 +72,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult SettingsPricingModel()
 		{
 			var pricingModelTenurePercents = _configurationVariablesRepository.GetByName(Variables.PricingModelTenurePercents.ToString());
@@ -182,7 +179,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult SettingsCharges()
 		{
 			var latePaymentCharge = _configurationVariablesRepository.GetByName("LatePaymentCharge");
@@ -213,7 +209,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-
 		public JsonResult SettingsCharges(string administrationCharge,
 			string latePaymentCharge,
 			string otherCharge,
@@ -243,7 +238,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult AutomationGeneral()
 		{
 			return Json(string.Empty, JsonRequestBehavior.AllowGet);
@@ -252,7 +246,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult AutomationGeneral(string[] newSettings)
 		{
 			return Json(string.Empty, JsonRequestBehavior.AllowGet);
@@ -261,7 +254,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult AutomationApproval()
 		{
 			var enableAutomaticApproval = _configurationVariablesRepository.GetByName("EnableAutomaticApproval");
@@ -286,7 +278,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-
 		public JsonResult AutomationApproval(
 												string EnableAutomaticApproval,
 												string EnableAutomaticReApproval,
@@ -300,7 +291,7 @@
 			return AutomationApproval();
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		private void UpdateAutomationApproval(string EnableAutomaticApproval, string EnableAutomaticReApproval,
 											  string MaxCapHomeOwner, string MaxCapNotHomeOwner)
 		{
@@ -313,7 +304,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult AutomationRejection()
 		{
 			var enableAutomaticRejection = _configurationVariablesRepository.GetByName("EnableAutomaticRejection");
@@ -365,7 +355,6 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-
 		public JsonResult AutomationRejection(string EnableAutomaticRejection,
 												 string LowCreditScore,
 												 string Reject_Defaults_AccountsNum,
@@ -384,7 +373,7 @@
 			return AutomationRejection();
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		private void UpdateAutomationRejection(string EnableAutomaticRejection, string LowCreditScore,
 											   string Reject_Defaults_AccountsNum, string Reject_Defaults_Amount,
 											   string Reject_Defaults_CreditScore, string Reject_Defaults_MonthsNum,
@@ -436,7 +425,6 @@
 		// ReSharper disable  InconsistentNaming
 		[Ajax]
 		[HttpPost]
-
 		public JsonResult SettingsExperian(
 
 			string FinancialAccounts_MainApplicant,
@@ -452,7 +440,7 @@
 			return SettingsGeneral();
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		private void UpdateSettingsExperian(string FinancialAccounts_MainApplicant,
 											string FinancialAccounts_AliasOfMainApplicant,
 											string FinancialAccounts_AssociationOfMainApplicant,
@@ -476,7 +464,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult SettingsCampaign()
 		{
 			var campaignsList = _campaignRepository
@@ -517,7 +504,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult SettingsConfigTable(string tableName)
 		{
 			var entriesList = serviceClient.Instance.GetSpResultTable("GetConfigTable", new []{"TableName", tableName});
@@ -536,7 +523,7 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult SaveConfigTable(string serializedModels, string configTableType)
 		{
 			ConfigTableType c;
@@ -567,7 +554,7 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult AddCampaign(
 
 			string campaignName,

@@ -40,7 +40,7 @@
 		#region action Index
 
 		[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[HttpGet]
 		public ActionResult Index(int id) {
 			var model = new CrossCheckModel(_customerRepository.Get(id), _creditBureauModelBuilder);
 			return View(model);
@@ -51,7 +51,7 @@
 		#region action Zoopla
 
 		[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[HttpGet]
 		public JsonResult Zoopla(int customerId, bool recheck) {
 			var address = _customerAddressRepository.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
@@ -115,7 +115,6 @@
 
 			ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1} completed successfully.", customerId, titleNumber ?? "--null--");
 
-			//todo return the full model 
 			return Json(
 				new {
 					response = landregistry.Res,
@@ -133,7 +132,7 @@
 		#region action SaveTargetingData
 
 		[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[HttpPost]
 		public void SaveTargetingData(
 			int customerId,
@@ -177,6 +176,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		[Transactional]
 		public JsonResult AddDirector(int nCustomerID, DirectorModel director) {
 			var customer = _customerRepository.Get(nCustomerID);
 

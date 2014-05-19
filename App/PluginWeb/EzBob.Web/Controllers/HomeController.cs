@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Controllers {
 	using System;
-	using System.Data;
 	using System.Web;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
@@ -58,7 +57,7 @@
 
 		#region action ActivateStore
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public ActionResult ActivateStore(string id, bool? approve) {
 			if (approve != null) {
 				var askville = m_oAskvilleRepository.GetAskvilleByGuid(id);

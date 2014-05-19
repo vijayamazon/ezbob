@@ -12,68 +12,68 @@
 	using Infrastructure.csrf;
 	using StructureMap;
 
-    public class LoanOptionsController : Controller
+	public class LoanOptionsController : Controller
 	{
 		private readonly ICustomerStatusHistoryRepository customerStatusHistoryRepository;
 		private readonly CustomerStatusesRepository customerStatusesRepository;
-        private readonly ILoanOptionsRepository _loanOptionsRepository;
-        private readonly ILoanRepository _loanRepository;
+		private readonly ILoanOptionsRepository _loanOptionsRepository;
+		private readonly ILoanRepository _loanRepository;
 		private readonly ICaisFlagRepository _caisFlagRepository;
-	    private ConfigurationVariablesRepository configurationVariablesRepository;
+		private ConfigurationVariablesRepository configurationVariablesRepository;
 
 		public LoanOptionsController(ILoanOptionsRepository loanOptionsRepository, ILoanRepository loanRepository, ICustomerStatusHistoryRepository customerStatusHistoryRepository, CustomerStatusesRepository customerStatusesRepository, ConfigurationVariablesRepository configurationVariablesRepository)
-        {
-            _loanOptionsRepository = loanOptionsRepository;
-            _loanRepository = loanRepository;
-            _caisFlagRepository = ObjectFactory.GetInstance<CaisFlagRepository>();
+		{
+			_loanOptionsRepository = loanOptionsRepository;
+			_loanRepository = loanRepository;
+			_caisFlagRepository = ObjectFactory.GetInstance<CaisFlagRepository>();
 			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
 			this.customerStatusesRepository = customerStatusesRepository;
 			this.configurationVariablesRepository = configurationVariablesRepository;
-        }
+		}
 
-        [Ajax]
-        [HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonResult Index(int loanId)
-        {
-            var options = _loanOptionsRepository.GetByLoanId(loanId) ?? SetDefaultStatus(loanId);
-            var loan = _loanRepository.Get(loanId);
-            var flags = _caisFlagRepository.GetForStatusType();
-            var model = new LoanOptionsViewModel(options, loan, flags);
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
+		[Ajax]
+		[HttpGet]
+		public JsonResult Index(int loanId)
+		{
+			var options = _loanOptionsRepository.GetByLoanId(loanId) ?? SetDefaultStatus(loanId);
+			var loan = _loanRepository.Get(loanId);
+			var flags = _caisFlagRepository.GetForStatusType();
+			var model = new LoanOptionsViewModel(options, loan, flags);
+			return Json(model, JsonRequestBehavior.AllowGet);
+		}
 
-        private LoanOptions SetDefaultStatus(int loanid)
-        {
-            var options = new LoanOptions
-                              {
-                                  AutoPayment = true,
-                                  LatePaymentNotification = true,
-                                  ReductionFee = true,
-                                  StopSendingEmails = true,
-                                  CaisAccountStatus = "Calculated value",
-                                  LoanId = loanid
-                              };
-            return options;
-        }
+		[NonAction]
+		private LoanOptions SetDefaultStatus(int loanid)
+		{
+			var options = new LoanOptions
+							  {
+								  AutoPayment = true,
+								  LatePaymentNotification = true,
+								  ReductionFee = true,
+								  StopSendingEmails = true,
+								  CaisAccountStatus = "Calculated value",
+								  LoanId = loanid
+							  };
+			return options;
+		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        [Ajax]
-        [HttpPost]
-        [ValidateJsonAntiForgeryToken]
-        public JsonResult Save(LoanOptions options)
-         {
-             if (options.ManulCaisFlag == "T")
-                 options.ManulCaisFlag = "Calculated value";
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult Save(LoanOptions options)
+		{
+			if (options.ManulCaisFlag == "T")
+				options.ManulCaisFlag = "Calculated value";
 
-             _loanOptionsRepository.SaveOrUpdate(options);
+			_loanOptionsRepository.SaveOrUpdate(options);
 
 			if (options.CaisAccountStatus == "8")
 			{
 				int minDectForDefault = configurationVariablesRepository.GetByNameAsInt("MinDectForDefault");
 				Customer customer = _loanRepository.Get(options.LoanId).Customer;
 				Loan triggeringLoan = null;
-				
+
 				// Update loan options
 				foreach (Loan loan in customer.Loans)
 				{
@@ -123,7 +123,7 @@
 				customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 			}
 
-             return Json(new { });
-         }
-    }
+			return Json(new { });
+		}
+	}
 }

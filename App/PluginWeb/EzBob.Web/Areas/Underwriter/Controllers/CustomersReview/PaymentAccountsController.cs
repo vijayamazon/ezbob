@@ -53,7 +53,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult Index(int id)
 		{
 			var customer = _customers.Get(id);
@@ -62,7 +61,7 @@
 		}
 
 		[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult SetDefaultCard(int customerId, int cardId)
 		{
 			var customer = _customers.Get(customerId);
@@ -72,7 +71,7 @@
 		}
 
 		[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult PerformCheckBankAccount(int id, int cardid)
 		{
 			var customer = _customers.Get(id);
@@ -81,7 +80,7 @@
 		}
 
 		[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult CheckBankAccount(string bankAccount, string sortCode)
 		{
 			var card = new CardInfo(bankAccount, sortCode);
@@ -118,7 +117,7 @@
 		}
 
 		[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		public JsonResult TryAddBankAccount(int customerId, string bankAccount, string sortCode, BankAccountType accountType)
 		{
 			var customer = _customers.Get(customerId);
@@ -149,7 +148,6 @@
 			return Json(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() }, JsonRequestBehavior.AllowGet);
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public RedirectResult AddPayPoint(int id)
 		{
 			var oCustomer = _customers.Get(id);
@@ -161,7 +159,7 @@
 			return Redirect(url);
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[HttpGet]
 		public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string customer, string expiry, int customerId)
 		{
@@ -195,7 +193,7 @@
 			return View("PayPointAdded", amount ?? 0);
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[HttpPost]
 		public JsonResult AddPayPointCard(int customerId, string transactionid, string cardno, DateTime expiredate)
 		{
@@ -220,7 +218,7 @@
 		}
 
 		[Ajax]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[Transactional]
 		[HttpPost]
 		public void SetPaypointDefaultCard(string transactionid, int customerId, string cardNo)
 		{

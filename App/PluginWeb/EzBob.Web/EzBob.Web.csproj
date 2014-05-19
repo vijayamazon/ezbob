@@ -176,7 +176,10 @@
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Customer\Models\EkmAccountModel.cs" />
     <Compile Include="Areas\Customer\Models\FreeAgentModel.cs" />
+    <Compile Include="Areas\Customer\Models\PayPointAccountModel.cs" />
+    <Compile Include="Areas\Customer\Models\SageAccountModel.cs" />
     <Compile Include="Areas\Customer\Models\VipModel.cs" />
+    <Compile Include="Areas\Customer\Models\YodleeAccountModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\PropertiesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\PricingModelCalculationsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />

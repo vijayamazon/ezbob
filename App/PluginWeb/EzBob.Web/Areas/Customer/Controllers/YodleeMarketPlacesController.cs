@@ -4,10 +4,11 @@
 	using CommonLib;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using Infrastructure.Attributes;
+	using Infrastructure.csrf;
+	using Models;
 	using ServiceClientProxy;
 	using Web.Models.Strings;
 	using YodleeLib;
@@ -48,7 +49,9 @@
 			_session = session;
 		}
 
-		[Transactional]
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult Accounts()
 		{
 			var oEsi = new YodleeServiceInfo();
@@ -207,38 +210,6 @@
 
 			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, id, true);
 			return View(new {success = true});
-		}
-	}
-
-	
-
-	public class YodleeAccountModel
-	{
-		public int bankId { get; set; }
-		public string displayName { get; set; }
-
-		public static YodleeAccountModel ToModel(IDatabaseCustomerMarketPlace marketplace, YodleeBanksRepository yodleeBanksRepository)
-		{
-			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(marketplace.SecurityData);
-
-			var yodleeBank = yodleeBanksRepository.Search(securityInfo.CsId);
-			return new YodleeAccountModel
-			{
-				bankId = yodleeBank.Id,
-				displayName = yodleeBank.Name
-			};
-		}
-
-		public static YodleeAccountModel ToModel(MP_CustomerMarketPlace marketplace, YodleeBanksRepository yodleeBanksRepository)
-		{
-			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(marketplace.SecurityData);
-
-			var yodleeBank = yodleeBanksRepository.Search(securityInfo.CsId);
-			return new YodleeAccountModel
-			{
-				bankId = yodleeBank.Id,
-				displayName = yodleeBank.Name
-			};
 		}
 	}
 }

@@ -61,7 +61,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult Index(int id)
 		{
 			Customer customer = _customerRepository.Get(id);
@@ -70,7 +69,6 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonResult Details(int customerid, int loanid)
 		{
 			var customer = _customerRepository.Get(customerid);
@@ -105,7 +103,7 @@
 		[HttpGet]
 		public ActionResult ExportToExel(int id)
 		{
-			EZBob.DatabaseLib.Model.Database.Customer customer = _customerRepository.Get(id);
+			Customer customer = _customerRepository.Get(id);
 			return new LoanHistoryExelReportResult(customer);
 		}
 
@@ -172,6 +170,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Transactional]
 		public void ManualPayment(ManualPaymentModel model)
 		{
 			var realAmount = model.TotalSumPaid;

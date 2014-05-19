@@ -32,7 +32,6 @@
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		[Transactional]
 		public JsonResult CalculateAll(int amount) {
 			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 

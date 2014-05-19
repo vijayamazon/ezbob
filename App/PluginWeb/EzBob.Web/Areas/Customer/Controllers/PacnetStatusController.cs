@@ -1,25 +1,22 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
 	using Ezbob.Backend.Models;
-	using Infrastructure.Attributes;
 	using Code;
 	using Infrastructure;
 
-    public class PacnetStatusController : Controller
-    {
-        private readonly IEzbobWorkplaceContext _context;
+	public class PacnetStatusController : Controller
+	{
+		private readonly IEzbobWorkplaceContext _context;
 
-        public PacnetStatusController(IEzbobWorkplaceContext context)
-        {
-            _context = context;
-        }
+		public PacnetStatusController(IEzbobWorkplaceContext context)
+		{
+			_context = context;
+		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public ActionResult Index()
-        {
+		public ActionResult Index()
+		{
 			var customer = _context.Customer;
 			var loan = customer.Loans.Last();
 			ViewData["LoanId"] = loan.Id;
@@ -32,12 +29,12 @@
 			ViewData["SetupFee"] = loan.SetupFee > 0 ? FormattingUtils.FormatPounds(loan.SetupFee) : "";
 			ViewData["Total"] = FormattingUtils.FormatPounds(loan.Balance + loan.SetupFee);
 
-            return View("Index" );
-        }
+			return View("Index");
+		}
 
 		public ViewResult TradeTrackerConversion()
 		{
 			return View();
 		}
-    }
+	}
 }

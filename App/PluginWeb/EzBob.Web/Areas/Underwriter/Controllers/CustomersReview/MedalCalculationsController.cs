@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-	using System.Data;
 	using Code;
 	using System.Web.Mvc;
 	using Infrastructure.Attributes;
@@ -8,29 +7,29 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 
 	public class MedalCalculationsController : Controller
-    {
-        private readonly CustomerRepository _customerRepository;
-       
-        public MedalCalculationsController(CustomerRepository customersRepository)
-        {
-            _customerRepository = customersRepository;
-        }
+	{
+		private readonly CustomerRepository _customerRepository;
 
-        [Ajax]
-        [HttpGet]
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public ActionResult Index(int id)
-        {
-            var customer = _customerRepository.Get(id);
-            var medalCalculator = new MedalCalculators(customer);
-            return Json(medalCalculator, JsonRequestBehavior.AllowGet);
-        }
+		public MedalCalculationsController(CustomerRepository customersRepository)
+		{
+			_customerRepository = customersRepository;
+		}
 
-        [HttpGet]
-        public ActionResult ExportToExel(int id)
-        {
-            var customer = _customerRepository.Get(id);
-            return new MedalExcelReportResult(customer);
-        }
-    }
+		[Ajax]
+		[HttpGet]
+		public ActionResult Index(int id)
+		{
+			var customer = _customerRepository.Get(id);
+			var medalCalculator = new MedalCalculators(customer);
+			return Json(medalCalculator, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpGet]
+		public ActionResult ExportToExel(int id)
+		{
+			var customer = _customerRepository.Get(id);
+			return new MedalExcelReportResult(customer);
+		}
+	}
 }

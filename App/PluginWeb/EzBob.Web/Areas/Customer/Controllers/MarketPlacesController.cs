@@ -2,6 +2,7 @@
 	using System.Web.Mvc;
 	using Infrastructure;
 	using Infrastructure.Attributes;
+	using Infrastructure.csrf;
 	using log4net;
 	using Models;
 
@@ -18,7 +19,8 @@
 
 		#region method Accounts (account list by type)
 
-		[Transactional, HttpGet, Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet, Ajax]
 		public JsonResult Accounts() {
 
 			return Json(new { mpAccounts = _context.Customer.GetMarketPlaces() }, JsonRequestBehavior.AllowGet);

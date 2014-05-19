@@ -52,7 +52,6 @@
 
 		//----------------------------------------------------------------------
 		[IsSuccessfullyRegisteredFilter]
-		[Transactional]
 		public ViewResult Index()
 		{
 			var wizardModel = new WizardModel { Customer = _customerModelBuilder.BuildWizardModel(_context.Customer, Session) };
@@ -74,7 +73,6 @@
 			return View("Index", wizardModel);
 		}
 
-		[Transactional]
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
@@ -182,7 +180,6 @@
 			return Json(new { });
 		}
 
-		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -192,7 +189,6 @@
 			return Json(new { Interval = refreshInterval });
 		}
 
-		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]

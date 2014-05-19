@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-	using System.Data;
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -14,47 +13,50 @@
 	using PaymentServices.Calculators;
 
 	public class LoanController : Controller
-    {
-        private readonly IEzbobWorkplaceContext _context;
-        private readonly PaymentRolloverRepository _rolloverRepository;
+	{
+		private readonly IEzbobWorkplaceContext _context;
+		private readonly PaymentRolloverRepository _rolloverRepository;
 
-        public LoanController(IEzbobWorkplaceContext context, PaymentRolloverRepository rolloverRepository)
-        {
-            _context = context;
-            _rolloverRepository = rolloverRepository;
-        }
+		public LoanController(IEzbobWorkplaceContext context, PaymentRolloverRepository rolloverRepository)
+		{
+			_context = context;
+			_rolloverRepository = rolloverRepository;
+		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        [ValidateJsonAntiForgeryToken]
-        [HttpGet]
-        public JsonResult Details(int id)
-        {
-            var customer = _context.Customer;
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		[Ajax]
+		public JsonResult Details(int id)
+		{
+			var customer = _context.Customer;
 
-            var loan = customer.Loans.SingleOrDefault(l => l.Id == id);
-            
-            if (loan == null)
-            {
-                return Json(new { error = "loan does not exists" }, JsonRequestBehavior.AllowGet);
-            }
+			var loan = customer.Loans.SingleOrDefault(l => l.Id == id);
 
-            var loansDetailsBuilder= new LoansDetailsBuilder();
-            var details = loansDetailsBuilder.Build(loan, _rolloverRepository.GetByLoanId(loan.Id));
+			if (loan == null)
+			{
+				return Json(new { error = "loan does not exists" }, JsonRequestBehavior.AllowGet);
+			}
 
-            return Json(details, JsonRequestBehavior.AllowGet);
-        }
+			var loansDetailsBuilder = new LoansDetailsBuilder();
+			var details = loansDetailsBuilder.Build(loan, _rolloverRepository.GetByLoanId(loan.Id));
 
-        public JsonResult Get(int id)
-        {
-            var customer = _context.Customer;
-            var loan = customer.Loans.SingleOrDefault(l => l.Id == id);
+			return Json(details, JsonRequestBehavior.AllowGet);
+		}
 
-            ILoanRepaymentScheduleCalculator calculator = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		[Ajax]
+		public JsonResult Get(int id)
+		{
+			var customer = _context.Customer;
+			var loan = customer.Loans.SingleOrDefault(l => l.Id == id);
 
-            var loanModel = LoanModel.FromLoan(loan, calculator);
+			ILoanRepaymentScheduleCalculator calculator = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
 
-            return Json(loanModel, JsonRequestBehavior.AllowGet);
-            
-        }
-    }
+			var loanModel = LoanModel.FromLoan(loan, calculator);
+
+			return Json(loanModel, JsonRequestBehavior.AllowGet);
+
+		}
+	}
 }
