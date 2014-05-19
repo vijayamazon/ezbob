@@ -25,9 +25,6 @@ GO
 IF OBJECT_ID (N'dbo.GetTransactionsCountPayPalTransactionsByRange') IS NOT NULL
 	DROP FUNCTION dbo.GetTransactionsCountPayPalTransactionsByRange
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MP_GetPayPalActivity]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[MP_GetPayPalActivity]
-GO
 IF OBJECT_ID (N'dbo.GetBiggestExpensesPayPalTransactions') IS NOT NULL
 	DROP FUNCTION dbo.GetBiggestExpensesPayPalTransactions
 GO
