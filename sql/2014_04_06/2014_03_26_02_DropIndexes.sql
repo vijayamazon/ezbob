@@ -1,24 +1,6 @@
 -- Drop indexes on prod
 
 -- Done on QA and should be done on prod
-IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Application_Application_LBU' AND object_id = OBJECT_ID('Application_Application'))
-	drop index IX_Application_Application_LBU on Application_Application;
-
-IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='i1' AND object_id = OBJECT_ID('Application_Detail'))
-	drop index i1 on Application_Detail;
-
-IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='i3' AND object_id = OBJECT_ID('Application_Detail'))
-	drop index i3 on Application_Detail;
-
-IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='i_app_hist_1' AND object_id = OBJECT_ID('Application_History'))
-	drop index i_app_hist_1 on Application_History;
-
-IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Application_HistorySumm' AND object_id = OBJECT_ID('Application_HistorySumm'))
-	drop index IX_Application_HistorySumm on Application_HistorySumm;
-
-IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Application_NodeTime_Application' AND object_id = OBJECT_ID('Application_NodeTime'))
-	drop index IX_Application_NodeTime_Application on Application_NodeTime;
-
 IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Askville_MarketPlaceId_GISSC' AND object_id = OBJECT_ID('Askville'))
 	drop index IX_Askville_MarketPlaceId_GISSC on Askville;
 

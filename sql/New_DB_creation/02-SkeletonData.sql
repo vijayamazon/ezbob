@@ -1,69 +1,6 @@
 use [ezbob]
 GO
 
-INSERT INTO dbo.App_Attach_DocType
- (
- AttachmentType
- , AttachmentGroup
- )
-VALUES
- (
- '<Неопределен>'
- , NULL
- )
-GO
-
-INSERT INTO dbo.App_Attach_DocType
- (
- AttachmentType
- , AttachmentGroup
- )
-VALUES
- (
- 'Идентификационный код'
- , NULL
- )
-GO
-
-INSERT INTO dbo.App_Attach_DocType
- (
- AttachmentType
- , AttachmentGroup
- )
-VALUES
- (
- 'Водительское удостоверение'
- , NULL
- )
-GO
-
-INSERT INTO dbo.App_Attach_DocType
- (
- AttachmentType
- , AttachmentGroup
- )
-VALUES
- (
- 'Воинский билет'
- , NULL
- )
-GO
-
-INSERT INTO dbo.App_Attach_DocType
- (
- AttachmentType
- , AttachmentGroup
- )
-VALUES
- (
- 'Паспорт'
- , NULL
- )
-GO
-
-
-
-
 INSERT INTO dbo.BasicInterestRate
 	(
 	FromScore
@@ -29671,16 +29608,6 @@ VALUES
 	)
 GO
 
-
-SET IDENTITY_INSERT Application_DetailName ON
-INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1, 'Root')
-INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (2, 'Body')
-INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1001, 'refNum')
-INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1002, 'TimeToSuspend')
-INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1003, 'NodeOutletName')
-INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1004, 'userId')
-SET IDENTITY_INSERT Application_DetailName OFF
-GO
 
 
 

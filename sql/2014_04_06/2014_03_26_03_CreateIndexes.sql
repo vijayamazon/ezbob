@@ -1,24 +1,6 @@
 -- Create indexes on prod
 
 -- Created on QA and should be done on prod
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Application_Application_LBU' AND object_id = OBJECT_ID('Application_Application'))
-	create index IX_Application_Application_LBU on Application_Application(LockedByUserId);
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='i1' AND object_id = OBJECT_ID('Application_Detail'))
-	create index i1 on Application_Detail(ApplicationId);
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='i3' AND object_id = OBJECT_ID('Application_Detail'))
-	create index i3 on Application_Detail(ParentDetailId);
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='i_app_hist_1' AND object_id = OBJECT_ID('Application_History'))
-	create index i_app_hist_1 on Application_History(UserId);
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Application_HistorySumm' AND object_id = OBJECT_ID('Application_HistorySumm'))
-	create index IX_Application_HistorySumm on Application_HistorySumm(ApplicationId, NodeId);
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Application_NodeTime_Application' AND object_id = OBJECT_ID('Application_NodeTime'))
-	create index IX_Application_NodeTime_Application on Application_NodeTime(ApplicationId, NodeId, FirstTimeOutage, ExitTime);
-
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Askville_MarketPlaceId_GISSC' AND object_id = OBJECT_ID('Askville'))
 	create index IX_Askville_MarketPlaceId_GISSC on Askville(MarketPlaceId);
 

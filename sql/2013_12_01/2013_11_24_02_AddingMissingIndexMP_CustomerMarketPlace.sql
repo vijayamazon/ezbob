@@ -14,14 +14,6 @@ ON [dbo].[CashRequests] ([IdCustomer])
 END
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name='IX_Application_NodeTime_Application' AND object_id = OBJECT_ID('Application_NodeTime'))
-BEGIN
-CREATE NONCLUSTERED INDEX IX_Application_NodeTime_Application
-ON [dbo].[Application_NodeTime] ([ApplicationId],[NodeId],[FirstTimeOutage],[ExitTime])
-INCLUDE ([Id],[ComingTime])
-END
-GO
-
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name='IX_EzbobMailNodeAttachRelation_ToField' AND object_id = OBJECT_ID('EzbobMailNodeAttachRelation'))
 BEGIN
 CREATE NONCLUSTERED INDEX IX_EzbobMailNodeAttachRelation_ToField
