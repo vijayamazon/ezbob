@@ -63,7 +63,8 @@
 
 		private IEnumerable<PacNetManualBalance> GetCureentActive()
 		{
-			DateTime lastNonManual = pacNetBalanceRepository.GetAll().Max(a => a.Date) ?? DateTime.Today;
+			DateTime? lastReportTime = pacNetBalanceRepository.GetAll().Max(a => a.Date);
+			DateTime lastNonManual = lastReportTime != null ? lastReportTime.Value.AddDays(1) : DateTime.Today;
 			return _session.Query<PacNetManualBalance>().Where(a => a.Enabled && a.Date >= lastNonManual);
 		}
     }
