@@ -380,7 +380,7 @@
 
 
 		[OperationContract]
-		ActionMetaData Temp_BackfillCompanyAnalytics();
+		ActionMetaData BackfillCompanyAnalytics();
 	} // interface IEzService
 } // namespace EzService
 

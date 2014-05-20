@@ -312,11 +312,11 @@
   <wsdl:message name="IEzService_GetPricingModelDefaultRate_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPricingModelDefaultRateResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_Temp_BackfillCompanyAnalytics_InputMessage">
-    <wsdl:part name="parameters" element="tns:Temp_BackfillCompanyAnalytics" />
+  <wsdl:message name="IEzService_BackfillCompanyAnalytics_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillCompanyAnalytics" />
   </wsdl:message>
-  <wsdl:message name="IEzService_Temp_BackfillCompanyAnalytics_OutputMessage">
-    <wsdl:part name="parameters" element="tns:Temp_BackfillCompanyAnalyticsResponse" />
+  <wsdl:message name="IEzService_BackfillCompanyAnalytics_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillCompanyAnalyticsResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
@@ -861,9 +861,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPricingModelDefaultRate" message="tns:IEzService_GetPricingModelDefaultRate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPricingModelDefaultRateResponse" message="tns:IEzService_GetPricingModelDefaultRate_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="Temp_BackfillCompanyAnalytics">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalytics" message="tns:IEzService_Temp_BackfillCompanyAnalytics_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalyticsResponse" message="tns:IEzService_Temp_BackfillCompanyAnalytics_OutputMessage" />
+    <wsdl:operation name="BackfillCompanyAnalytics">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillCompanyAnalytics" message="tns:IEzService_BackfillCompanyAnalytics_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillCompanyAnalyticsResponse" message="tns:IEzService_BackfillCompanyAnalytics_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
@@ -1482,8 +1482,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Temp_BackfillCompanyAnalytics">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/Temp_BackfillCompanyAnalytics" style="document" />
+    <wsdl:operation name="BackfillCompanyAnalytics">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillCompanyAnalytics" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2070,20 +2070,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

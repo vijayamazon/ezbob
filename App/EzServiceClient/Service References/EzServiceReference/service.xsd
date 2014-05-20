@@ -552,15 +552,15 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Temp_BackfillCompanyAnalytics">
+  <xs:element name="BackfillCompanyAnalytics">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="Temp_BackfillCompanyAnalyticsResponse">
+  <xs:element name="BackfillCompanyAnalyticsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="Temp_BackfillCompanyAnalyticsResult" nillable="true" type="q47:ActionMetaData" />
+        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BackfillCompanyAnalyticsResult" nillable="true" type="q47:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

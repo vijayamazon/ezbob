@@ -247,14 +247,9 @@
 			};
 		}
 
-
-
-
-
-		// This code is temporary, and will be only used to backfill data in the 18/2/2014 release - after that it can be deleted
-		public ActionMetaData Temp_BackfillCompanyAnalytics()
+		public ActionMetaData BackfillCompanyAnalytics()
 		{
-			Temp_BackfillCompanyAnalytics instance;
+			BackfillCompanyAnalytics instance;
 			return ExecuteSync(out instance, 0, 0);
 		}
 	} // class EzServiceImplementation

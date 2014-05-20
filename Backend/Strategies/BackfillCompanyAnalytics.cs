@@ -6,22 +6,22 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class Temp_BackfillCompanyAnalytics : AStrategy
+	public class BackfillCompanyAnalytics : AStrategy
 	{
-		public Temp_BackfillCompanyAnalytics(AConnection oDb, ASafeLog oLog)
+		public BackfillCompanyAnalytics(AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
 		}
 
 		public override string Name {
-			get { return "Temp_BackfillCompanyAnalytics"; }
+			get { return "BackfillCompanyAnalytics"; }
 		}
 
 		public override void Execute()
 		{
 			var businessService = new EBusinessService();
 			DataTable dt = DB.ExecuteReader(
-				"Temp_GetAllCustomersWithCompany",
+				"GetAllCustomersWithCompany",
 				CommandSpecies.StoredProcedure
 				);
 

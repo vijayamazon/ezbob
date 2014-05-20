@@ -906,15 +906,15 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // GeneratePassword
 
 		[Activation]
-		private void Temp_BackfillCompanyAnalytics()
+		private void BackfillCompanyAnalytics()
 		{
 			if ((args.Length != 1))
 			{
-				m_oLog.Msg("Usage: Temp_BackfillCompanyAnalytics");
+				m_oLog.Msg("Usage: BackfillCompanyAnalytics");
 				return;
 			} // if
 
-			serviceClient.Temp_BackfillCompanyAnalytics();
+			serviceClient.BackfillCompanyAnalytics();
 		}
 
 		[Activation]
