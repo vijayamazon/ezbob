@@ -248,6 +248,24 @@ END
 GO
 IF OBJECT_ID('Application_Detail') IS NOT NULL
 BEGIN
+	DECLARE @DropStatement NVARCHAR(MAX)
+	DECLARE cur CURSOR FOR 
+		SELECT 
+			'ALTER TABLE ' +  OBJECT_SCHEMA_NAME(parent_object_id) +
+			'.[' + OBJECT_NAME(parent_object_id) + 
+			'] DROP CONSTRAINT ' + name AS DropStatement
+		FROM sys.foreign_keys
+		WHERE referenced_object_id = object_id('Application_Detail')
+	OPEN cur
+	FETCH NEXT FROM cur INTO @DropStatement
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		EXECUTE(@DropStatement)
+
+		FETCH NEXT FROM cur INTO @DropStatement
+	END
+	CLOSE cur
+	DEALLOCATE cur
 	DROP TABLE Application_Detail
 END
 GO

@@ -87,9 +87,6 @@ GO
 
 
 
-IF OBJECT_ID (N'dbo.MinLoanSchedule') IS NOT NULL
-	DROP VIEW dbo.MinLoanSchedule
-GO
 IF OBJECT_ID (N'dbo.vw_collection') IS NOT NULL
 	DROP VIEW dbo.vw_collection
 GO
