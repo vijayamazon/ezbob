@@ -22,14 +22,13 @@
 		private readonly AmazonOrderItemDetailRepository _AmazonOrderItemDetailRepository;
 		private readonly AmazonMarketPlaceTypeRepository _amazonMarketPlaceTypeRepository;
 
-		public void StoreAmazonOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,/* AmazonOrdersList ordersData,*/ AmazonOrdersList2 ordersData2, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		public void StoreAmazonOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonOrdersList2 ordersData2, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
-			//LogData( "Old Orders Data", customerMarketPlace, ordersData );
 			LogData("Orders Data", customerMarketPlace, ordersData2);
 
-			if ( /*ordersData == null &&*/ ordersData2 == null)
+			if (ordersData2 == null)
 			{
 				return;
 			}
@@ -42,57 +41,6 @@
 				Created = submittedDate.ToUniversalTime(),
 				HistoryRecord = historyRecord
 			};
-
-
-			#region not used
-			/*if ( ordersData != null && ordersData.Count != 0 )
-			{
-				ordersData.ForEach(
-					dataItem =>
-						{
-							var mpOrderItem = new MP_AmazonOrderItem
-							    {
-							        Order = mpOrder,
-							        BayerEmail = dataItem.BayerEmail,
-							        BayerPhone = dataItem.BayerPhone,
-							        Currency = dataItem.Currency,
-							        BayerName = dataItem.BayerName,
-							        DeliveryEndDate = dataItem.DeliveryEndDate,
-							        DeliveryInstructions = dataItem.DeliveryInstructions,
-							        DeliveryStartDate = dataItem.DeliveryStartDate,
-							        DeliveryTimeZone = dataItem.DeliveryTimeZone,
-							        ItemPrice = dataItem.ItemPrice,
-							        ItemTax = dataItem.ItemTax,
-							        OrderId = dataItem.OrderId,
-							        OrderItemId = dataItem.OrderItemId,
-							        PaymentsDate = dataItem.PaymentsDate,
-							        ProductName = dataItem.ProductName,
-							        PurchaseDate = dataItem.PurchaseDate,
-							        QuantityPurchased = dataItem.QuantityPurchased,
-							        RecipientName = dataItem.RecipientName,
-							        SalesChennel = dataItem.SalesChennel,
-							        ShipCityName = dataItem.ShipCityName,
-							        ShipCountryName = dataItem.ShipCountryName,
-							        ShipPhone = dataItem.ShipPhone,
-							        ShipPostalCode = dataItem.ShipPostalCode,
-							        ShipRecipient = dataItem.ShipRecipient,
-							        ShipServiceLevel = dataItem.ShipServiceLevel,
-							        ShipStateOrProvince = dataItem.ShipStateOrProvince,
-							        ShipStreet = dataItem.ShipStreet,
-							        ShipStreet1 = dataItem.ShipStreet1,
-							        ShipStreet2 = dataItem.ShipStreet2,
-							        ShipingPrice = dataItem.ShipingPrice,
-							        ShipingTax = dataItem.ShipingTax,
-							        Sku = dataItem.Sku
-							    };
-
-							mpOrder.OrderItems.Add(mpOrderItem);
-						}
-					);
-
-				
-			}*/
-			#endregion
 
 			if (ordersData2.Count > 0)
 			{

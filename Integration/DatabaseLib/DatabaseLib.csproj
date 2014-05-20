@@ -449,8 +449,6 @@
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackItemMap.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackMap.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrder.cs" />
-    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem.cs" />
-    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemMap.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderMap.cs" />
     <Compile Include="Model\Marketplaces\MP_AnalyisisFunction.cs" />
     <Compile Include="Model\Marketplaces\MP_AnalyisisFunctionMap.cs" />
