@@ -108,8 +108,6 @@
     <Compile Include="Model\Database\UserManagement\Role.cs" />
     <Compile Include="Model\Database\UserManagement\RoleMap.cs" />
     <Compile Include="Model\Database\UserManagement\RolesRepository.cs" />
-    <Compile Include="Model\Database\UserManagement\SecurityApplication.cs" />
-    <Compile Include="Model\Database\UserManagement\SecurityApplicationMap.cs" />
     <Compile Include="Model\Database\UserManagement\SecurityQuestion.cs" />
     <Compile Include="Model\Database\UserManagement\SecurityQuestionMap.cs" />
     <Compile Include="Model\Database\UserManagement\SecurityQuestionRepository.cs" />

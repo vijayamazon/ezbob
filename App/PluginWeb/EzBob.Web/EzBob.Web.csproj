@@ -398,7 +398,6 @@
     <Compile Include="Infrastructure\Membership\RoleNotFoundException.cs" />
     <Compile Include="Infrastructure\Membership\EzbobMembershipProvider.cs" />
     <Compile Include="Infrastructure\Membership\EzbobRoleProvider.cs" />
-    <Compile Include="Infrastructure\Membership\SimpleMembershipProvider.cs" />
     <Compile Include="Infrastructure\NoIISHeaderModule.cs" />
     <Compile Include="Infrastructure\csrf\ValidateJsonAntiForgeryTokenAttribute.cs" />
     <Compile Include="Infrastructure\Filters\WhiteListFilter.cs" />
@@ -1780,6 +1779,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\MiniResharper\MiniResharper.csproj">
+      <Project>{805F29C1-D575-49C5-A95D-4D393E65481F}</Project>
+      <Name>MiniResharper</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>

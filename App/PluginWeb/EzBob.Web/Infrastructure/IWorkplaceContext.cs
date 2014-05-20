@@ -4,10 +4,6 @@ namespace EzBob.Web.Infrastructure
 
 	public interface IWorkplaceContext
 	{
-		int SecAppId
-		{
-			get;
-		}
 		User User
 		{
 			get;

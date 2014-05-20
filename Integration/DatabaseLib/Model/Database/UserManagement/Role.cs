@@ -10,13 +10,11 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement
 		public virtual string Name { get; set; }
 		public virtual string Description { get; set; }
 		public virtual ISet<User> Users { get; set; }
-		public virtual ISet<SecurityApplication> Applications { get; set; }
 		public virtual ISet<Permission> Permissions { get; set; }
 
 		public Role()
 		{
 			Users = new HashedSet<User>();
-			Applications = new HashedSet<SecurityApplication>();
 			Permissions = new HashedSet<Permission>();
 		}
 

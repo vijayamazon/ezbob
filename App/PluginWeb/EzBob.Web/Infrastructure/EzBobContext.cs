@@ -17,11 +17,6 @@
 			_customers = customers;
 		}
 
-		public int SecAppId
-		{
-			get { return 1; }
-		}
-
 		public User User
 		{
 			get

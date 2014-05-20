@@ -9,7 +9,6 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement
 			Id(ss => ss.Id).GeneratedBy.UuidHex("").Column("SessionId");
 			Table("Security_Session");
 			References(ss => ss.User).Column("UserId").Not.Nullable();
-			References(ss => ss.SecApp).Column("AppId").Not.Nullable();
 			Map(ss => (object)ss.CreationDate);
 			Map(ss  => (object)ss.LastAccessTime);
 			Map(ss => ss.HostAddress);

@@ -1,11 +1,8 @@
-namespace EZBob.DatabaseLib.Model.Database.UserManagement
-{
+namespace EZBob.DatabaseLib.Model.Database.UserManagement {
 	using FluentNHibernate.Mapping;
 
-	public class UserMap : ClassMap<User>
-	{
-		public UserMap()
-		{
+	public class UserMap : ClassMap<User> {
+		public UserMap() {
 			Cache.Region("LongTerm").ReadWrite();
 			Table("Security_User");
 			Id(u => (object)u.Id).Column("UserId").GeneratedBy.Native("SEQ_INSERT_SECURITY_USER");
@@ -33,6 +30,7 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement
 			HasManyToMany(u => u.Roles).AsSet().Table("Security_UserRoleRelation").ParentKeyColumn("UserId").ChildKeyColumn("RoleId").Cascade.All().Cache.Region("LongTerm").ReadWrite();
 			References(u => u.SecurityQuestion, "SecurityQuestion1Id").LazyLoad();
 			Map(u => u.SecurityAnswer, "SecurityAnswer1").Length(200);
-		}
-	}
-}
+			Map(u => u.EzPassword).Length(255);
+		} // constructor
+	} // class UserMap
+} // namespace

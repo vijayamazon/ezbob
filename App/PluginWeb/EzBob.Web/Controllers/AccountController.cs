@@ -73,11 +73,26 @@ namespace EzBob.Web.Controllers {
 		[HttpPost]
 		public ActionResult AdminLogOn(LogOnModel model) {
 			if (ModelState.IsValid) {
-				var user = m_oUsers.GetUserByLogin(model.UserName);
+				try {
+					if (m_oBrokerHelper.IsBroker(model.UserName)) {
+						ms_oLog.Alert("Broker '{0}' tried to log in as an underwriter!", model.UserName);
+						ModelState.AddModelError("", "Wrong user name/password.");
+						return View(model);
+					} // if is broker
+				}
+				catch (Exception e) {
+					ms_oLog.Warn(e, "Failed to check whether '{0}' is a broker login, continuing as an underwriter.", model.UserName);
+				} // try
+
+				if (m_oCustomers.TryGetByEmail(model.UserName) != null) {
+					ms_oLog.Alert("Customer '{0}' tried to log in as an underwriter!", model.UserName);
+					ModelState.AddModelError("", "Wrong user name/password.");
+					return View(model);
+				} // if
 
 				try {
 					if (m_oMembershipProvider.ValidateUser(model.UserName, model.Password)) {
-						user.LoginFailedCount = 0;
+						m_oUsers.GetUserByLogin(model.UserName).LoginFailedCount = 0;
 
 						model.SetCookie("Underwriter");
 

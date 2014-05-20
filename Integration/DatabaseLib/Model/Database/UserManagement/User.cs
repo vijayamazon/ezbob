@@ -1,12 +1,10 @@
-namespace EZBob.DatabaseLib.Model.Database.UserManagement
-{
+namespace EZBob.DatabaseLib.Model.Database.UserManagement {
 	using System.Collections.Generic;
 	using Iesi.Collections.Generic;
 	using System.Linq;
 
 	[System.Serializable]
-	public class User
-	{
+	public class User {
 		public virtual int Id { get; set; }
 		public virtual string Name { get; set; }
 		public virtual string FullName { get; set; }
@@ -32,19 +30,15 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement
 		public virtual SecurityQuestion SecurityQuestion { get; set; }
 		public virtual string SecurityAnswer { get; set; }
 		public virtual bool IsPasswordRestored { get; set; }
+		public virtual string EzPassword { get; set; }
 
-		public virtual IEnumerable<Permission> Permissions
-		{
-			get
-			{
-				return Roles.SelectMany(r => r.Permissions);
-			}
-		}
+		public virtual IEnumerable<Permission> Permissions {
+			get { return Roles.SelectMany(r => r.Permissions); } // get
+		} // Permisssions
 
-		public User()
-		{
+		public User() {
 			Roles = new HashedSet<Role>();
 			CreationDate = System.DateTime.Now;
-		}
-	}
-}
+		} // constructor
+	} // class User
+} // namespace
