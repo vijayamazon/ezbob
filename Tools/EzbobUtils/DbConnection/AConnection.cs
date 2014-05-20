@@ -249,6 +249,14 @@
 
 		public abstract string DateToString(DateTime oDate);
 
+		public abstract DbCommand NewCommand { get; }
+
+		#region property CommandTimeout
+
+		public virtual int CommandTimeout { get; set; }
+
+		#endregion property CommandTimeout
+
 		#endregion IConnection implementation
 
 		#region property LogVerbosityLevel
@@ -272,6 +280,7 @@
 			Env = new Ezbob.Context.Environment(log);
 			m_sConnectionString = sConnectionString;
 			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
+			CommandTimeout = 30;
 		} // constructor
 
 		protected AConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null) : base(log) {
@@ -286,7 +295,7 @@
 
 		protected abstract DbConnection CreateConnection();
 		protected abstract DbCommand CreateCommand(string sCommand, DbConnection oConnection);
-		protected abstract DbParameter CreateParameter(QueryParameter prm);
+		protected abstract void AppendParameter(DbCommand cmd, QueryParameter prm);
 
 		protected abstract ARetryer CreateRetryer();
 
@@ -449,29 +458,32 @@
 
 		protected virtual DbCommand BuildCommand(string spName, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			DbCommand command = CreateCommand(spName, null);
-				switch (nSpecies) {
-				case CommandSpecies.Auto:
-					command.CommandType = aryParams.Length == 0 ? CommandType.Text : CommandType.StoredProcedure;
-					break;
 
-				case CommandSpecies.StoredProcedure:
-					command.CommandType = CommandType.StoredProcedure;
-					break;
+			switch (nSpecies) {
+			case CommandSpecies.Auto:
+				command.CommandType = aryParams.Length == 0 ? CommandType.Text : CommandType.StoredProcedure;
+				break;
 
-				case CommandSpecies.Text:
-					command.CommandType = CommandType.Text;
-					break;
+			case CommandSpecies.StoredProcedure:
+				command.CommandType = CommandType.StoredProcedure;
+				break;
 
-				case CommandSpecies.TableDirect:
-					command.CommandType = CommandType.TableDirect;
-					break;
+			case CommandSpecies.Text:
+				command.CommandType = CommandType.Text;
+				break;
 
-				default:
-					throw new ArgumentOutOfRangeException("nSpecies");
-				} // switch
+			case CommandSpecies.TableDirect:
+				command.CommandType = CommandType.TableDirect;
+				break;
 
-				foreach (var prm in aryParams)
-					command.Parameters.Add(CreateParameter(prm));
+			default:
+				throw new ArgumentOutOfRangeException("nSpecies");
+			} // switch
+
+			command.CommandTimeout = CommandTimeout;
+
+			foreach (var prm in aryParams)
+				AppendParameter(command, prm);
 
 			return command;
 		} // BuildCommand

@@ -79,8 +79,6 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="RequestsCounterData.cs" />
-    <Compile Include="SerializeDataHelper.cs" />
-    <Compile Include="SerializerCache.cs" />
     <Compile Include="TimePeriodLogic\ITimePeriod.cs" />
     <Compile Include="TimePeriodLogic\TimePeriodBase.cs" />
     <Compile Include="TimePeriodLogic\TimePeriodFactory.cs" />

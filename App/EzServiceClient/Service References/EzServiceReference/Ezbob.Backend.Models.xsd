@@ -1,76 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:simpleType name="FraudMode">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="FullCheck" />
-      <xs:enumeration value="PersonalDetaisCheck" />
-      <xs:enumeration value="CompanyDetailsCheck" />
-      <xs:enumeration value="MarketplacesCheck" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
-  <xs:simpleType name="ConfigTableType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="LoanOfferMultiplier" />
-      <xs:enumeration value="BasicInterestRate" />
-      <xs:enumeration value="EuLoanMonthlyInterest" />
-      <xs:enumeration value="DefaultRateCompany" />
-      <xs:enumeration value="DefaultRateCustomer" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="ConfigTableType" nillable="true" type="tns:ConfigTableType" />
-  <xs:complexType name="VatReturnSummary">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:VatReturnSummaryBase">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="BusinessAddress" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="BusinessID" type="xs:int" />
-          <xs:element minOccurs="0" name="BusinessName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CurrencyCode" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Quarters" nillable="true" type="tns:ArrayOfVatReturnQuarter" />
-          <xs:element minOccurs="0" name="RegistrationNo" nillable="true" type="xs:long" />
-          <xs:element minOccurs="0" name="SalariesMultiplier" nillable="true" type="xs:decimal" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="VatReturnSummary" nillable="true" type="tns:VatReturnSummary" />
-  <xs:complexType name="VatReturnSummaryBase">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ActualLoanRepayment" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Ebida" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="FreeCashFlow" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Opex" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="PctOfAnnual" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="PctOfAnnualRevenues" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="PctOfRevenues" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Revenues" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Salaries" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Tax" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="TotalValueAdded" nillable="true" type="xs:decimal" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="VatReturnSummaryBase" nillable="true" type="tns:VatReturnSummaryBase" />
-  <xs:complexType name="ArrayOfVatReturnQuarter">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="VatReturnQuarter" nillable="true" type="tns:VatReturnQuarter" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfVatReturnQuarter" nillable="true" type="tns:ArrayOfVatReturnQuarter" />
-  <xs:complexType name="VatReturnQuarter">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:VatReturnSummaryBase">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="DateFrom" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="DateTo" type="xs:dateTime" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="VatReturnQuarter" nillable="true" type="tns:VatReturnQuarter" />
   <xs:complexType name="QuickOfferModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Aml" type="xs:int" />
@@ -109,6 +39,15 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="FinishWizardArgs" nillable="true" type="tns:FinishWizardArgs" />
+  <xs:simpleType name="FraudMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FullCheck" />
+      <xs:enumeration value="PersonalDetaisCheck" />
+      <xs:enumeration value="CompanyDetailsCheck" />
+      <xs:enumeration value="MarketplacesCheck" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
   <xs:simpleType name="NewCreditLineOption">
     <xs:restriction base="xs:string">
       <xs:enumeration value="SkipEverything">
@@ -301,4 +240,65 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="FileDescription" nillable="true" type="tns:FileDescription" />
+  <xs:simpleType name="ConfigTableType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LoanOfferMultiplier" />
+      <xs:enumeration value="BasicInterestRate" />
+      <xs:enumeration value="EuLoanMonthlyInterest" />
+      <xs:enumeration value="DefaultRateCompany" />
+      <xs:enumeration value="DefaultRateCustomer" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ConfigTableType" nillable="true" type="tns:ConfigTableType" />
+  <xs:complexType name="VatReturnSummary">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:VatReturnSummaryBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="BusinessAddress" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BusinessID" type="xs:int" />
+          <xs:element minOccurs="0" name="BusinessName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CurrencyCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Quarters" nillable="true" type="tns:ArrayOfVatReturnQuarter" />
+          <xs:element minOccurs="0" name="RegistrationNo" nillable="true" type="xs:long" />
+          <xs:element minOccurs="0" name="SalariesMultiplier" nillable="true" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="VatReturnSummary" nillable="true" type="tns:VatReturnSummary" />
+  <xs:complexType name="VatReturnSummaryBase">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActualLoanRepayment" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Ebida" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="FreeCashFlow" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Opex" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PctOfAnnual" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PctOfAnnualRevenues" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PctOfRevenues" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Revenues" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Salaries" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Tax" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="TotalValueAdded" nillable="true" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="VatReturnSummaryBase" nillable="true" type="tns:VatReturnSummaryBase" />
+  <xs:complexType name="ArrayOfVatReturnQuarter">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="VatReturnQuarter" nillable="true" type="tns:VatReturnQuarter" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfVatReturnQuarter" nillable="true" type="tns:ArrayOfVatReturnQuarter" />
+  <xs:complexType name="VatReturnQuarter">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:VatReturnSummaryBase">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DateFrom" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DateTo" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="VatReturnQuarter" nillable="true" type="tns:VatReturnQuarter" />
 </xs:schema>

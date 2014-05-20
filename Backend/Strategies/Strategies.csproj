@@ -89,6 +89,7 @@
     <Compile Include="Broker\BrokerUpdatePassword.cs" />
     <Compile Include="Broker\SpBrokerLoadOwnProperties.cs" />
     <Compile Include="CalculateVatReturnSummary.cs" />
+    <Compile Include="EncryptChannelGrabberMarketplaces.cs" />
     <Compile Include="LoadVatReturnSummary.cs" />
     <Compile Include="MarketplaceInstantUpdate.cs" />
     <Compile Include="PricingModel\GetPricingModelDefaultRate.cs" />

@@ -118,5 +118,13 @@
 		} // AndRecalculateVatReturnSummaryForAll
 
 		#endregion method AndRecalculateVatReturnSummaryForAll
+
+		#region method EncryptChannelGrabberMarketplaces
+
+		public ActionMetaData EncryptChannelGrabberMarketplaces() {
+			return Execute<EncryptChannelGrabberMarketplaces>(null, null);
+		} // EncryptChannelGrabberMarketplaces
+
+		#endregion method EncryptChannelGrabberMarketplaces
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -29,7 +29,7 @@ namespace EKM
             // Retreive data from ekm api
             var ordersList = EkmConnector.GetOrders(
 				databaseCustomerMarketPlace.DisplayName,
-				SecurityUtils.Decrypt(databaseCustomerMarketPlace.SecurityData),
+				Encrypted.Decrypt(databaseCustomerMarketPlace.SecurityData),
 				Helper.GetEkmDeltaPeriod(databaseCustomerMarketPlace)
 			);
 

@@ -76,6 +76,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>

@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Utils.Serialization;
 	using log4net;
 
 	public class FreeAgentRetrieveDataHelper : MarketplaceRetrieveDataHelperBase<FreeAgentDatabaseFunctionType>
@@ -28,7 +29,7 @@
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
 			log.InfoFormat("Starting to update FreeAgent marketplace. Id:{0} Name:{1}", databaseCustomerMarketPlace.Id, databaseCustomerMarketPlace.DisplayName);
-	        var freeAgentSecurityInfo = (SerializeDataHelper.DeserializeType<FreeAgentSecurityInfo>(databaseCustomerMarketPlace.SecurityData));
+	        var freeAgentSecurityInfo = (Serialized.Deserialize<FreeAgentSecurityInfo>(databaseCustomerMarketPlace.SecurityData));
 			string accessToken = freeAgentSecurityInfo.AccessToken;
 
 			if (DateTime.UtcNow > freeAgentSecurityInfo.ValidUntil)
@@ -53,7 +54,7 @@
 					Name = freeAgentSecurityInfo.Name,
 					ValidUntil = DateTime.UtcNow.AddSeconds(tokenContainer.expires_in - 60)
 				};
-				var serializedSecurityData = SerializeDataHelper.Serialize(securityData);
+				var serializedSecurityData = new Serialized(securityData);
 				Helper.SaveOrUpdateCustomerMarketplace(
 					databaseCustomerMarketPlace.DisplayName,
 					new FreeAgentDatabaseMarketPlace(), 

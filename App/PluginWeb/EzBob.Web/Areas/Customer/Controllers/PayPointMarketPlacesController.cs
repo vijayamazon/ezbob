@@ -5,6 +5,7 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+    using Ezbob.Utils.Serialization;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;

@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
+	using Ezbob.Utils.Serialization;
 	using Infrastructure.Attributes;
 	using Models;
 	using EzBob.Models.Marketplaces;
@@ -169,9 +170,9 @@
 				return View(new { error = "Yodlee Account was not found" });
 			}
 
-			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mp.SecurityData);
+			var securityInfo = Serialized.Deserialize<YodleeSecurityInfo>(mp.SecurityData);
 			long itemId = securityInfo.ItemId;
-			var lu = yodleeMain.LoginUser(yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
+			var lu = yodleeMain.LoginUser(yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
 			if (lu == null)
 			{
 				return View(new { error = "Error Loging to Yodlee Account" });
@@ -202,7 +203,7 @@
 			else //MFA Account for testing redirecting to Yodlee LAW
 			{
 				var callback = Url.Action("YodleeCallback", "YodleeRecheck", new { Area = "Underwriter" }, "https") + "/" + umi;
-				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
+				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
 				return Redirect(finalUrl);
 			}
 		} // TryRecheckYodlee

@@ -73,9 +73,9 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IEzServiceAdmin_Shutdown_InputMessage">
@@ -107,126 +107,6 @@
   </wsdl:message>
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ValidateMobileCode_InputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateMobileCode" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_InputMessage">
-    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifier" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_OutputMessage">
-    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifierResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_FraudChecker_InputMessage">
-    <wsdl:part name="parameters" element="tns:FraudChecker" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_FraudChecker_OutputMessage">
-    <wsdl:part name="parameters" element="tns:FraudCheckerResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LateBy14Days_InputMessage">
-    <wsdl:part name="parameters" element="tns:LateBy14Days" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LateBy14Days_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LateBy14DaysResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_PayPointCharger_InputMessage">
-    <wsdl:part name="parameters" element="tns:PayPointCharger" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_PayPointCharger_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PayPointChargerResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SetLateLoanStatus_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetLateLoanStatus" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SetLateLoanStatus_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetLateLoanStatusResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateMarketplace_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateMarketplace" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateMarketplace_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateMarketplaceResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateTransactionStatus_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateTransactionStatus" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateTransactionStatus_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateTransactionStatusResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_XDaysDue_InputMessage">
-    <wsdl:part name="parameters" element="tns:XDaysDue" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_XDaysDue_OutputMessage">
-    <wsdl:part name="parameters" element="tns:XDaysDueResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateCurrencyRates_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateCurrencyRates" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateCurrencyRates_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateCurrencyRatesResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CrmLoadLookups_InputMessage">
-    <wsdl:part name="parameters" element="tns:CrmLoadLookups" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CrmLoadLookups_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CrmLoadLookupsResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetSpResultTable_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetSpResultTable" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetSpResultTable_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetSpResultTableResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaveConfigTable_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveConfigTable" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaveConfigTable_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveConfigTableResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateConfigurationVariables_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateConfigurationVariables" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateConfigurationVariables_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateConfigurationVariablesResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_PostcodeSaveLog_InputMessage">
-    <wsdl:part name="parameters" element="tns:PostcodeSaveLog" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_PostcodeSaveLog_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PostcodeSaveLogResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CalculateVatReturnSummary_InputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummary" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CalculateVatReturnSummary_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummaryResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoadVatReturnSummary_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoadVatReturnSummary" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoadVatReturnSummary_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoadVatReturnSummaryResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage">
-    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAll" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage">
-    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAllResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_QuickOffer_InputMessage">
-    <wsdl:part name="parameters" element="tns:QuickOffer" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_QuickOffer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:QuickOfferResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_QuickOfferWithPrerequisites_InputMessage">
     <wsdl:part name="parameters" element="tns:QuickOfferWithPrerequisites" />
@@ -702,6 +582,132 @@
   <wsdl:message name="IEzService_GenerateMobileCode_OutputMessage">
     <wsdl:part name="parameters" element="tns:GenerateMobileCodeResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_ValidateMobileCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateMobileCode" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_InputMessage">
+    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifier" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifierResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FraudChecker_InputMessage">
+    <wsdl:part name="parameters" element="tns:FraudChecker" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FraudChecker_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FraudCheckerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LateBy14Days_InputMessage">
+    <wsdl:part name="parameters" element="tns:LateBy14Days" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LateBy14Days_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LateBy14DaysResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointCharger_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointCharger" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointCharger_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointChargerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SetLateLoanStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetLateLoanStatus" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SetLateLoanStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetLateLoanStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateMarketplace_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMarketplace" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateMarketplace_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMarketplaceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateTransactionStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTransactionStatus" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateTransactionStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTransactionStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_XDaysDue_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDaysDue" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_XDaysDue_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDaysDueResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateCurrencyRates_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateCurrencyRates" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateCurrencyRates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateCurrencyRatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CrmLoadLookups_InputMessage">
+    <wsdl:part name="parameters" element="tns:CrmLoadLookups" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CrmLoadLookups_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CrmLoadLookupsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetSpResultTable_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSpResultTable" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetSpResultTable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSpResultTableResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaveConfigTable_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveConfigTable" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaveConfigTable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveConfigTableResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateConfigurationVariables_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateConfigurationVariables" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateConfigurationVariables_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateConfigurationVariablesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeSaveLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeSaveLog" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeSaveLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeSaveLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CalculateVatReturnSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummary" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CalculateVatReturnSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnSummary" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAll" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EncryptChannelGrabberMarketplaces_InputMessage">
+    <wsdl:part name="parameters" element="tns:EncryptChannelGrabberMarketplaces" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EncryptChannelGrabberMarketplaces_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EncryptChannelGrabberMarketplacesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_QuickOffer_InputMessage">
+    <wsdl:part name="parameters" element="tns:QuickOffer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_QuickOffer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:QuickOfferResponse" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -725,86 +731,6 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
-    <wsdl:operation name="ValidateMobileCode">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="FirstOfMonthStatusNotifier">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse" message="tns:IEzService_FirstOfMonthStatusNotifier_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="FraudChecker">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LateBy14Days">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LateBy14Days" message="tns:IEzService_LateBy14Days_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LateBy14DaysResponse" message="tns:IEzService_LateBy14Days_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="PayPointCharger">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointCharger" message="tns:IEzService_PayPointCharger_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointChargerResponse" message="tns:IEzService_PayPointCharger_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetLateLoanStatus">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetLateLoanStatus" message="tns:IEzService_SetLateLoanStatus_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetLateLoanStatusResponse" message="tns:IEzService_SetLateLoanStatus_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UpdateMarketplace">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplace" message="tns:IEzService_UpdateMarketplace_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplaceResponse" message="tns:IEzService_UpdateMarketplace_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UpdateTransactionStatus">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatus" message="tns:IEzService_UpdateTransactionStatus_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatusResponse" message="tns:IEzService_UpdateTransactionStatus_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="XDaysDue">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/XDaysDue" message="tns:IEzService_XDaysDue_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/XDaysDueResponse" message="tns:IEzService_XDaysDue_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UpdateCurrencyRates">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRates" message="tns:IEzService_UpdateCurrencyRates_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse" message="tns:IEzService_UpdateCurrencyRates_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CrmLoadLookups">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookups" message="tns:IEzService_CrmLoadLookups_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookupsResponse" message="tns:IEzService_CrmLoadLookups_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetSpResultTable">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSpResultTable" message="tns:IEzService_GetSpResultTable_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSpResultTableResponse" message="tns:IEzService_GetSpResultTable_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveConfigTable">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveConfigTable" message="tns:IEzService_SaveConfigTable_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveConfigTableResponse" message="tns:IEzService_SaveConfigTable_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UpdateConfigurationVariables">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateConfigurationVariables" message="tns:IEzService_UpdateConfigurationVariables_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateConfigurationVariablesResponse" message="tns:IEzService_UpdateConfigurationVariables_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="PostcodeSaveLog">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLog" message="tns:IEzService_PostcodeSaveLog_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLogResponse" message="tns:IEzService_PostcodeSaveLog_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CalculateVatReturnSummary">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummary" message="tns:IEzService_CalculateVatReturnSummary_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse" message="tns:IEzService_CalculateVatReturnSummary_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LoadVatReturnSummary">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummary" message="tns:IEzService_LoadVatReturnSummary_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummaryResponse" message="tns:IEzService_LoadVatReturnSummary_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="QuickOffer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferResponse" message="tns:IEzService_QuickOffer_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="QuickOfferWithPrerequisites">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites" message="tns:IEzService_QuickOfferWithPrerequisites_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse" message="tns:IEzService_QuickOfferWithPrerequisites_OutputMessage" />
@@ -1121,6 +1047,90 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCode" message="tns:IEzService_GenerateMobileCode_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCodeResponse" message="tns:IEzService_GenerateMobileCode_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ValidateMobileCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FirstOfMonthStatusNotifier">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse" message="tns:IEzService_FirstOfMonthStatusNotifier_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FraudChecker">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LateBy14Days">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LateBy14Days" message="tns:IEzService_LateBy14Days_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LateBy14DaysResponse" message="tns:IEzService_LateBy14Days_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PayPointCharger">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointCharger" message="tns:IEzService_PayPointCharger_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointChargerResponse" message="tns:IEzService_PayPointCharger_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetLateLoanStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetLateLoanStatus" message="tns:IEzService_SetLateLoanStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetLateLoanStatusResponse" message="tns:IEzService_SetLateLoanStatus_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMarketplace">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplace" message="tns:IEzService_UpdateMarketplace_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplaceResponse" message="tns:IEzService_UpdateMarketplace_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTransactionStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatus" message="tns:IEzService_UpdateTransactionStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatusResponse" message="tns:IEzService_UpdateTransactionStatus_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDaysDue">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/XDaysDue" message="tns:IEzService_XDaysDue_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/XDaysDueResponse" message="tns:IEzService_XDaysDue_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCurrencyRates">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRates" message="tns:IEzService_UpdateCurrencyRates_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse" message="tns:IEzService_UpdateCurrencyRates_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CrmLoadLookups">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookups" message="tns:IEzService_CrmLoadLookups_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookupsResponse" message="tns:IEzService_CrmLoadLookups_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSpResultTable">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSpResultTable" message="tns:IEzService_GetSpResultTable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSpResultTableResponse" message="tns:IEzService_GetSpResultTable_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveConfigTable">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveConfigTable" message="tns:IEzService_SaveConfigTable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveConfigTableResponse" message="tns:IEzService_SaveConfigTable_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateConfigurationVariables">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateConfigurationVariables" message="tns:IEzService_UpdateConfigurationVariables_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateConfigurationVariablesResponse" message="tns:IEzService_UpdateConfigurationVariables_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PostcodeSaveLog">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLog" message="tns:IEzService_PostcodeSaveLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLogResponse" message="tns:IEzService_PostcodeSaveLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculateVatReturnSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummary" message="tns:IEzService_CalculateVatReturnSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse" message="tns:IEzService_CalculateVatReturnSummary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummary" message="tns:IEzService_LoadVatReturnSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummaryResponse" message="tns:IEzService_LoadVatReturnSummary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EncryptChannelGrabberMarketplaces">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplaces" message="tns:IEzService_EncryptChannelGrabberMarketplaces_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplacesResponse" message="tns:IEzService_EncryptChannelGrabberMarketplaces_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="QuickOffer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferResponse" message="tns:IEzService_QuickOffer_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1176,186 +1186,6 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="ValidateMobileCode">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="FirstOfMonthStatusNotifier">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="FraudChecker">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LateBy14Days">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LateBy14Days" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PayPointCharger">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointCharger" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetLateLoanStatus">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SetLateLoanStatus" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UpdateMarketplace">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateMarketplace" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UpdateTransactionStatus">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateTransactionStatus" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="XDaysDue">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/XDaysDue" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UpdateCurrencyRates">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateCurrencyRates" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CrmLoadLookups">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CrmLoadLookups" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetSpResultTable">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetSpResultTable" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaveConfigTable">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveConfigTable" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UpdateConfigurationVariables">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateConfigurationVariables" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PostcodeSaveLog">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeSaveLog" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CalculateVatReturnSummary">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateVatReturnSummary" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LoadVatReturnSummary">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadVatReturnSummary" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="QuickOffer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="QuickOfferWithPrerequisites">
       <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisites" style="document" />
       <wsdl:input>
@@ -2060,6 +1890,195 @@
     </wsdl:operation>
     <wsdl:operation name="GenerateMobileCode">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GenerateMobileCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMobileCode">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstOfMonthStatusNotifier">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FraudChecker">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LateBy14Days">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LateBy14Days" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayPointCharger">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointCharger" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetLateLoanStatus">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SetLateLoanStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMarketplace">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateMarketplace" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTransactionStatus">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateTransactionStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDaysDue">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/XDaysDue" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCurrencyRates">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateCurrencyRates" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CrmLoadLookups">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CrmLoadLookups" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpResultTable">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetSpResultTable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveConfigTable">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveConfigTable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateConfigurationVariables">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateConfigurationVariables" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostcodeSaveLog">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeSaveLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculateVatReturnSummary">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateVatReturnSummary" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnSummary">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadVatReturnSummary" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EncryptChannelGrabberMarketplaces">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplaces" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QuickOffer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -217,7 +217,7 @@
 				foreach (var ekm in ekms)
 				{
 					var name = ekm.DisplayName;
-					var password = SecurityUtils.Decrypt(ekm.SecurityData);
+					var password = Encrypted.Decrypt(ekm.SecurityData);
 					string error;
 					var isValid = validator.Validate(name, password, out error);
 					if (!isValid)

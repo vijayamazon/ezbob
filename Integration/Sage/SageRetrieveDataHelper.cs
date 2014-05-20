@@ -11,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Utils.Serialization;
 	using log4net;
 
 	public class SageRetrieveDataHelper : MarketplaceRetrieveDataHelperBase<SageDatabaseFunctionType>
@@ -26,7 +27,7 @@
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
 			log.InfoFormat("Starting to update Sage marketplace. Id:{0} Name:{1}", databaseCustomerMarketPlace.Id, databaseCustomerMarketPlace.DisplayName);
-	        var sageSecurityInfo = (SerializeDataHelper.DeserializeType<SageSecurityInfo>(databaseCustomerMarketPlace.SecurityData));
+	        var sageSecurityInfo = (Serialized.Deserialize<SageSecurityInfo>(databaseCustomerMarketPlace.SecurityData));
 			string accessToken = sageSecurityInfo.AccessToken;
 
 			log.Info("Getting sales invoices...");

@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
 	using System.Collections.Generic;
+	using Ezbob.Utils.Serialization;
 
 	public class YodleeRetriveDataHelper : MarketplaceRetrieveDataHelperBase<YodleeDatabaseFunctionType>
 	{
@@ -31,7 +32,7 @@
 		{
 
 			//retreive data from Yodlee api
-			Dictionary<BankData, List<BankTransactionData>> ordersList = YodleeConnector.GetOrders(securityInfo.Name, SecurityUtils.Decrypt(securityInfo.Password), securityInfo.ItemId);
+			Dictionary<BankData, List<BankTransactionData>> ordersList = YodleeConnector.GetOrders(securityInfo.Name, Encrypted.Decrypt(securityInfo.Password), securityInfo.ItemId);
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
 
@@ -74,7 +75,7 @@
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
 		{
-			return SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(
+			return Serialized.Deserialize<YodleeSecurityInfo>(
 				GetDatabaseCustomerMarketPlace(customerMarketPlaceId).SecurityData);
 
 		}

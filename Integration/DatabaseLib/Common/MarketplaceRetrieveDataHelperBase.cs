@@ -9,6 +9,8 @@ using EzBob.CommonLib;
 
 namespace EZBob.DatabaseLib.Common
 {
+	using Ezbob.Utils.Serialization;
+
 	public abstract class MarketplaceRetrieveDataHelperBase<TEnum> : IMarketplaceRetrieveDataHelper
 	{
 		protected DatabaseDataHelper Helper { get; private set; }
@@ -108,7 +110,7 @@ namespace EZBob.DatabaseLib.Common
 		protected TSecurityData RetrieveCustomerSecurityInfo<TSecurityData>( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace )
 			where TSecurityData : IMarketPlaceSecurityInfo
 		{
-			return SerializeDataHelper.DeserializeType<TSecurityData>( databaseCustomerMarketPlace.SecurityData );
+			return Serialized.Deserialize<TSecurityData>( databaseCustomerMarketPlace.SecurityData );
 		}
 
 		private IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaces( Customer customer )

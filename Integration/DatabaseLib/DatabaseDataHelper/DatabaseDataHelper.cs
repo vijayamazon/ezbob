@@ -302,7 +302,7 @@ namespace EZBob.DatabaseLib {
 
 		public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(string marketPlaceName, IMarketplaceType databaseMarketplace, Customer databaseCustomer)
 		{
-			MP_CustomerMarketPlace mpCustomerMarketPlace = GetExistsCustomerMarketPlace(marketPlaceName, databaseMarketplace, databaseCustomer);
+			MP_CustomerMarketPlace mpCustomerMarketPlace = _CustomerMarketplaceRepository.Get(databaseCustomer.Id, databaseMarketplace.InternalId, marketPlaceName);
 			return CreateDatabaseCustomerMarketPlace(databaseCustomer, databaseMarketplace, mpCustomerMarketPlace, mpCustomerMarketPlace.Id);
 		}
 

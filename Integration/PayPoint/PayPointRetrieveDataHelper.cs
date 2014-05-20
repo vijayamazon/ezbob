@@ -10,8 +10,9 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using Ezbob.Utils.Serialization;
 
-    public static class StringToStreamExtension
+	public static class StringToStreamExtension
     {
         public static Stream ToStream(this string str)
         {
@@ -114,7 +115,7 @@
         public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
         {
             IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
-            return SerializeDataHelper.DeserializeType<PayPointSecurityInfo>(customerMarketPlace.SecurityData);
+            return Serialized.Deserialize<PayPointSecurityInfo>(customerMarketPlace.SecurityData);
         }
 
         private IEnumerable<IWriteDataInfo<PayPointDatabaseFunctionType>> CreateOrdersAggregationInfo(PayPointOrdersList orders, ICurrencyConvertor currencyConverter)

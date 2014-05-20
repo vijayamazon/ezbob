@@ -40,6 +40,7 @@
 			ms_oTypeConvertors[typeof (double?).ToString()] = ParsedValue.ToDoubleOrNull; 
 			ms_oTypeConvertors[typeof (decimal?).ToString()] = ParsedValue.ToDecimalOrNull; 
 			ms_oTypeConvertors[typeof (DateTime?).ToString()] = ParsedValue.ToDateTimeOrNull; 
+			ms_oTypeConvertors[typeof (byte[]).ToString()] = ParsedValue.ToByteArray; 
 		} // static constructor
 
 		#endregion static constructor
@@ -681,6 +682,22 @@
 		} // ToDateTimeOrNull
 
 		#endregion to DateTime?
+
+		#region to byte[]
+
+		public static implicit operator byte[](ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToByteArray();
+		} // operator byte[]
+
+		private static void ToByteArray(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToByteArray(provider);
+		} // ToDecimalOrNull
+
+		public byte[] ToByteArray(IFormatProvider provider = null) {
+			return (byte[])m_oValue;
+		} // ToByteArray
+
+		#endregion to byte[]
 
 		#endregion Nullable types
 

@@ -16,6 +16,7 @@ using ConfigManager;
 
 namespace AmazonStandaloneApp
 {
+	using Ezbob.Utils.Serialization;
 	using NHibernateWrapper.NHibernate;
 
 	class Program
@@ -59,7 +60,7 @@ namespace AmazonStandaloneApp
 
             var marketplace = session.Get<MP_CustomerMarketPlace>(umi);
 
-            var securityInfo = SerializeDataHelper.DeserializeType<AmazonSecurityInfo>(marketplace.SecurityData);
+            var securityInfo = Serialized.Deserialize<AmazonSecurityInfo>(marketplace.SecurityData);
 
             var endDate = DateTime.UtcNow;
             var startDate = endDate.AddDays(-days);

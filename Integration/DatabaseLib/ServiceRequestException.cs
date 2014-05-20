@@ -4,6 +4,8 @@ using EzBob.CommonLib;
 
 namespace EZBob.DatabaseLib
 {
+	using Ezbob.Utils.Serialization;
+
 	public interface IServiceResponceExceptionWrapper
 	{
 		ServiceErrorType[] Errors { get; }
@@ -45,7 +47,7 @@ namespace EZBob.DatabaseLib
 
 			try
 			{
-				fault = SerializeDataHelper.DeserializeTypeFromString<ServiceFaultDetail>( ex.Detail.InnerXml );
+				fault = Serialized.Deserialize<ServiceFaultDetail>( ex.Detail.InnerXml );
 			}
 			catch
 			{

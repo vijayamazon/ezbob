@@ -5,6 +5,8 @@ using NUnit.Framework;
 
 namespace EzBobTest
 {
+	using Ezbob.Utils.Serialization;
+
 	[TestFixture]
 	public class ErrorRetryingFixture
 	{
@@ -22,7 +24,7 @@ namespace EzBobTest
 
 			};
 
-			SerializeDataHelper.SerializeToFile( @"d:/temp/ErrorRetryingInfo.xml", info );
+			Serialized.Serialize( @"d:/temp/ErrorRetryingInfo.xml", info );
 		}
 
 		[Test]

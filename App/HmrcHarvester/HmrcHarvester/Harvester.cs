@@ -375,12 +375,12 @@ namespace Ezbob.HmrcHarvester {
 				const int nMaxPasswordLength = 12;
 
 				if (sPassword.Length > nMaxPasswordLength) {
-					Warn("Supplied password ({0}) is too long, truncating to {1} characters.", SecurityUtils.Encrypt(Password), nMaxPasswordLength);
+					Warn("Supplied password ({0}) is too long, truncating to {1} characters.", new Encrypted(Password), nMaxPasswordLength);
 					sPassword = sPassword.Substring(0, nMaxPasswordLength);
 				} // if
 
 				Info("Login URL: {0}", lrd.Url);
-				Info("Logging in as {0}:{1}...", UserName, SecurityUtils.Encrypt(sPassword));
+				Info("Logging in as {0}:{1}...", UserName, new Encrypted(sPassword));
 
 				if (lrd.Method.ToUpper() != "POST")
 					throw new HarvesterException("Unsupported login method: " + lrd.Method);

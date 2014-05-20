@@ -4,6 +4,7 @@
 	using Customer.Controllers;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Ezbob.Utils.Serialization;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using LandRegistryLib;
@@ -82,7 +83,7 @@
 		[HttpGet]
 		public JsonResult LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
 			var landregistryXml = m_oServiceClient.Instance.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
-			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
+			var landregistry = Serialized.Deserialize<LandRegistryDataModel>(landregistryXml);
 
 			return Json(
 				new {
@@ -105,7 +106,7 @@
 
 			var landregistryXml = m_oServiceClient.Instance.LandRegistryRes(customerId, titleNumber);
 
-			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
+			var landregistry = Serialized.Deserialize<LandRegistryDataModel>(landregistryXml);
 
 			if (landregistry.ResponseType == LandRegistryResponseType.None) {
 				ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1} completed without result.", customerId, titleNumber ?? "--null--");

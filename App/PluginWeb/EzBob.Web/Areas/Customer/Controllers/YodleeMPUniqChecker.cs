@@ -8,6 +8,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using Code.MpUniq;
+	using Ezbob.Utils.Serialization;
 	using NHibernate;
 	using YodleeLib.connector;
 
@@ -47,7 +48,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 				.JoinQueryOver(m => m.Marketplace)
 				.Where(m => m.InternalId == marketplaceType)
 				.List()
-				.Select(m => SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(m.SecurityData))
+				.Select(m => Serialized.Deserialize<YodleeSecurityInfo>(m.SecurityData))
 				.Any(s => s.CsId == csId);
 
 			if (alreadyAdded)

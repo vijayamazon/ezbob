@@ -322,6 +322,9 @@
 		[OperationContract]
 		ActionMetaData AndRecalculateVatReturnSummaryForAll();
 
+		[OperationContract]
+		ActionMetaData EncryptChannelGrabberMarketplaces();
+
 		#endregion other strategies
 
 		#region Quick offer

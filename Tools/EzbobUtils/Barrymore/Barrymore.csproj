@@ -64,8 +64,10 @@
     <Compile Include="ProgressCounter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyTraverser.cs" />
+    <Compile Include="Security\Encrypted.cs" />
     <Compile Include="Security\SecurityUtils.cs" />
     <Compile Include="SeldenException.cs" />
+    <Compile Include="Serialization\Serialized.cs" />
     <Compile Include="SortedTable.cs" />
     <Compile Include="MiscUtils.cs" />
     <Compile Include="NameList.cs" />

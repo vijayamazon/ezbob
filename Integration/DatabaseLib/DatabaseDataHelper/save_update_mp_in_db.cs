@@ -5,8 +5,24 @@
 	using DatabaseWrapper;
 	using Model.Database;
 	using Ezbob.Utils.Security;
+	using Ezbob.Utils.Serialization;
 
 	public partial class DatabaseDataHelper : IDatabaseDataHelper {
+		public IDatabaseCustomerMarketPlace SaveOrUpdateEncryptedCustomerMarketplace(
+			string displayName,
+			IMarketplaceType marketplaceType,
+			IMarketPlaceSecurityInfo securityData,
+			Customer customer
+		) {
+			return SaveOrUpdateCustomerMarketplace(
+				displayName,
+				marketplaceType,
+				new Encrypted(new Serialized(securityData)),
+				customer,
+				null
+			);
+		} // SaveOrUpdateCEncryptedustomerMarketplace
+
 		public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(
 			string displayName,
 			IMarketplaceType marketplaceType,
@@ -17,7 +33,7 @@
 			return SaveOrUpdateCustomerMarketplace(
 				displayName,
 				marketplaceType,
-				SerializeDataHelper.Serialize(securityData),
+				new Serialized(securityData),
 				customer,
 				amazonMarketPlaceId
 			);
@@ -32,8 +48,9 @@
 			return SaveOrUpdateCustomerMarketplace(
 				displayName,
 				marketplaceType,
-				SecurityUtils.EncryptBytes(password),
-				customer
+				new Encrypted(password),
+				customer,
+				null
 			);
 		} // SaveOrUpdateCustomerMarketplace
 

@@ -16,6 +16,8 @@ using Ionic.Zip;
 
 namespace EzBob.eBayServiceLib.LargeMerchantServiceCore.Requests
 {
+	using Ezbob.Utils.Serialization;
+
 	public class ActiveInventoryReport
 	{
 		[XmlElement]
@@ -72,7 +74,7 @@ namespace EzBob.eBayServiceLib.LargeMerchantServiceCore.Requests
 						rezMem.Flush();
 						rezMem.Seek( 0, SeekOrigin.Begin);
 
-						var item = SerializeDataHelper.DeserializeType<T>( rezMem );
+						var item = Serialized.Deserialize<T>( rezMem );
 
 						list.Add( item );
 					}

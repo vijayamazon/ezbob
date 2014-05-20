@@ -12,6 +12,8 @@ using log4net;
 
 namespace EzBob.TeraPeakServiceLib
 {
+	using Ezbob.Utils.Serialization;
+
 	public interface ITeraPeakService
 	{
 		GetSellerResearchResults SearchBySeller(string sellerId, ResultSellerInfo resultSellerInfo, SearchQueryDatesRange searchQueryDates);
@@ -79,10 +81,8 @@ namespace EzBob.TeraPeakServiceLib
 		}*/
 
 
-		private string CreateRequestString<T>( T req )
-			where T : ServiceRequestDataBase
-		{
-			return SerializeDataHelper.SerializeToString( req );
+		private string CreateRequestString<T>( T req ) where T : ServiceRequestDataBase {
+			return new Serialized( req );
 		}
 
 		private string DoRequest( string requestString )			
@@ -135,7 +135,7 @@ namespace EzBob.TeraPeakServiceLib
 
 		private GetSellerResearchResults ParseResult( string resultString )
 		{
-			return SerializeDataHelper.DeserializeTypeFromString<GetSellerResearchResults>( resultString );
+			return Serialized.Deserialize<GetSellerResearchResults>( resultString );
 		}
 
 		protected void WriteToLog( string message, WriteLogType messageType = WriteLogType.Info, Exception ex = null )

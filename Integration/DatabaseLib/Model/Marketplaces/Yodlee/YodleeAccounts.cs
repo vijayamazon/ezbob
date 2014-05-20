@@ -58,7 +58,7 @@
 				CreationDate = DateTime.UtcNow,
 				Customer = null,
 				Username = string.Format("{0}+{1}@ezbob.com", accountPrefix, maxId + 1),
-				Password = SecurityUtils.Encrypt(generatePassword()),
+				Password = new Encrypted(generatePassword()),
 				Bank = null
 			};
 

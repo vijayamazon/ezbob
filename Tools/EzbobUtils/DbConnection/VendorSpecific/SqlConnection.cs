@@ -1,12 +1,10 @@
 ﻿namespace Ezbob.Database {
 	using System;
-	using System.Collections;
 	using System.Data;
 	using System.Data.Common;
 	using System.Data.SqlClient;
 	using System.Globalization;
 	using Ezbob.Logger;
-	using Utils;
 
 	#region class SqlConnection
 
@@ -42,6 +40,14 @@
 
 		#endregion method CreateTableParameter
 
+		public override DbCommand NewCommand {
+			get {
+				var oCmd = new SqlCommand();
+				oCmd.Connection = new System.Data.SqlClient.SqlConnection(ConnectionString);
+				return oCmd;
+			} // get
+		} // NewCommand
+
 		#endregion public
 
 		#region protected
@@ -68,19 +74,54 @@
 
 		#endregion method CreateCommand
 
-		#region method CreateParameter
+		#region method AppendParameter
 
-		protected override DbParameter CreateParameter(QueryParameter prm) {
-			if (!ReferenceEquals(prm.UnderlyingParameter, null) && (prm.UnderlyingParameter is SqlParameter))
-				return prm.UnderlyingParameter;
+		protected override void AppendParameter(DbCommand cmd, QueryParameter prm) {
+			var oCmd = cmd as SqlCommand;
 
-			var oParam = (SqlParameter)CreateParameter(prm.Name, prm.Value);
+			if (oCmd == null)
+				throw new DbException("Something went terribly wrong: SQL Server command argument contains non-SQL Server underlying parameter.");
 
-			if (prm.Size != null)
-				oParam.Size = prm.Size.Value;
+			if (!ReferenceEquals(prm.UnderlyingParameter, null) && (prm.UnderlyingParameter is SqlParameter)) {
+				oCmd.Parameters.Add(prm.UnderlyingParameter);
+				return;
+			} // if
 
-			if (prm.Type != null)
-				oParam.DbType = prm.Type.Value;
+			SqlParameter oParam = null;
+
+			if (prm.Type == DbType.Binary) {
+				oParam = oCmd.Parameters.Add(prm.Name, SqlDbType.VarBinary);
+
+				byte[] oValue = (prm.Value == DBNull.Value) ? null : (prm.Value as byte[]);
+
+				if ((oValue == null) || (oValue.Length < 1)) {
+					oParam.Size = 0;
+					oParam.Value = DBNull.Value;
+				}
+				else {
+					oParam.Size = oValue.Length;
+					oParam.Value = oValue;
+				} // if
+
+				oParam.Precision = 0;
+				oParam.Scale = 0;
+			}
+			else {
+				object oValue;
+
+				if (prm.Value is int && (int)prm.Value == 0)
+					oValue = (int)0;
+				else
+					oValue = prm.Value;
+
+				oParam = oCmd.Parameters.AddWithValue(prm.Name, oValue);
+
+				if (prm.Type != null)
+					oParam.DbType = prm.Type.Value;
+
+				if (prm.Size != null)
+					oParam.Size = prm.Size.Value;
+			} // if
 
 			if (!string.IsNullOrWhiteSpace(prm.UnderlyingTypeName))
 				oParam.TypeName = prm.UnderlyingTypeName;
@@ -88,17 +129,9 @@
 			oParam.Direction = prm.Direction;
 
 			prm.UnderlyingParameter = oParam;
+		} // AppendParameter
 
-			return oParam;
-		} // CreateParameter
-
-		protected virtual DbParameter CreateParameter(string sName, object oValue) {
-			return (oValue is int && (int)oValue == 0)
-					? new SqlParameter(sName, Convert.ToInt32(0))
-					: new SqlParameter(sName, oValue);
-		} // CreateParameter
-
-		#endregion method CreateParameter
+		#endregion method AppendParameter
 
 		#region method CreateRetryer
 

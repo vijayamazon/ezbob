@@ -71,6 +71,7 @@
 		void FillFirst<T>(T oInstance, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable;
 
 		string DateToString(DateTime oDate);
+		int CommandTimeout { get; set; }
 
 		QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues);
 		QueryParameter CreateVectorParameter<T>(string sFieldName, params T[] oValues);

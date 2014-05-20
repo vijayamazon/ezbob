@@ -19,6 +19,8 @@ namespace Integration.ChannelGrabberFrontend {
 	using System.Diagnostics;
 	using System.Text;
 	using EzServiceAccessor;
+	using Ezbob.Utils.Security;
+	using Ezbob.Utils.Serialization;
 	using StructureMap;
 
 	#region class RetrieveDataHelper
@@ -46,10 +48,10 @@ namespace Integration.ChannelGrabberFrontend {
 			var account = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
 
 			try {
-				return SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+				return Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(account.SecurityData));
 			}
 			catch (Exception e) {
-				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})",
+				throw new ApiException(string.Format("Failed to de-serialise security data for marketplace {0} ({1})",
 					account.DisplayName, account.Id), e);
 			}
 		} // RetrieveSecurityInfo
@@ -89,10 +91,10 @@ namespace Integration.ChannelGrabberFrontend {
 			AccountModel oSecInfo = null;
 
 			try {
-				oSecInfo = SerializeDataHelper.DeserializeType<AccountModel>(databaseCustomerMarketPlace.SecurityData);
+				oSecInfo = Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(databaseCustomerMarketPlace.SecurityData));
 			}
 			catch (Exception e) {
-				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})",
+				throw new ApiException(string.Format("Failed to de-serialise security data for marketplace {0} ({1})",
 					databaseCustomerMarketPlace.DisplayName, databaseCustomerMarketPlace.Id), e);
 			} // try
 

@@ -13,6 +13,7 @@ namespace EzBobTest
 	using EzBob.eBayLib.Config;
 	using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant;
 	using Ezbob.RegistryScanner;
+	using Ezbob.Utils.Serialization;
 	using FreeAgent;
 	using Sage;
 	using EZBob.DatabaseLib;
@@ -204,7 +205,7 @@ namespace EzBobTest
 
             var list = listData.ToArray();
 
-            SerializeDataHelper.SerializeToFile(@"d:\temp\umi\umiList.xml", list);
+            Serialized.Serialize(@"d:\temp\umi\umiList.xml", list);
 
         }
 

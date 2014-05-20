@@ -6,6 +6,9 @@ using EzBob.CommonLib;
 using Integration.ChannelGrabberConfig;
 
 namespace Integration.ChannelGrabberFrontend {
+	using Ezbob.Utils.Security;
+	using Ezbob.Utils.Serialization;
+
 	/// <summary>
 	/// This class is used to communicate with UI using json.
 	/// </summary>
@@ -16,23 +19,23 @@ namespace Integration.ChannelGrabberFrontend {
 
 		public static AccountModel ToModel(MP_CustomerMarketPlace account) {
 			try {
-				var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+				var m = Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(account.SecurityData));
 				m.id = account.Id;
 				return m;
 			}
 			catch (Exception e) {
-				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
+				throw new ApiException(string.Format("Failed to de-serialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
 			}
 		} // ToModel
 
 		public static AccountModel ToModel(IDatabaseCustomerMarketPlace account) {
 			try {
-				var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+				var m = Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(account.SecurityData));
 				m.id = account.Id;
 				return m;
 			}
 			catch (Exception e) {
-				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
+				throw new ApiException(string.Format("Failed to de-serialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
 			}
 		} // ToModel
 

@@ -289,6 +289,7 @@
 		#endregion method ValidateAccount
 
 		#region method SaveMarketplace
+
 		[NonAction]
 		[Transactional]
 		private int SaveMarketplace(AddAccountState oState, AccountModel model) {
@@ -296,7 +297,7 @@
 				model.id = _mpTypes.GetAll().First(a => a.InternalId == oState.VendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
-				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(
+				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateEncryptedCustomerMarketplace(
 					model.name,
 					oState.Marketplace,
 					model,

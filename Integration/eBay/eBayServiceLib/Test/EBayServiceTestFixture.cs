@@ -1,44 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EzBob.CommonLib;
-using EzBob.eBayServiceLib.LargeMerchantServiceCore.Requests;
-using EzBob.eBayServiceLib.com.ebay.developer.soap;
-using NUnit.Framework;
+﻿namespace EzBob.eBayServiceLib.Test {
+	using System.Collections.Generic;
+	using EzBob.eBayServiceLib.LargeMerchantServiceCore.Requests;
+	using EzBob.eBayServiceLib.com.ebay.developer.soap;
+	using NUnit.Framework;
 
-namespace EzBob.eBayServiceLib.Test
-{
+	using System.IO;
+	using Ezbob.Utils.Serialization;
+
 	[TestFixture]
-	class EBayServiceTestFixture
-	{
+	class EBayServiceTestFixture {
 		[Test]
-		public void Deserialize()
-		{
-			string fileName = @"D:\5055375325_report.xml";
-
-			var data = SerializeDataHelper.DeserializeTypeFromFile<FileAttachmentDataInfo>( fileName );
-
-			Assert.IsNotNull( data );
+		public void Deserialize() {
+			using (var fs = new FileStream(@"D:\5055375325_report.xml", FileMode.Open)) {
+				var data = Serialized.Deserialize<FileAttachmentDataInfo>(fs);
+				Assert.IsNotNull(data);
+			}
 		}
 
 		[Test]
-		public void Deserialize2()
-		{
-			string fileName = @"d:\attach1.xml";
-
-			var data = SerializeDataHelper.DeserializeTypeFromFile<FileAttachmentDataInfo>( fileName );
-
-			Assert.IsNotNull( data );
+		public void Deserialize2() {
+			using (var fs = new FileStream(@"d:\attach1.xml", FileMode.Open)) {
+				var data = Serialized.Deserialize<FileAttachmentDataInfo>(fs);
+				Assert.IsNotNull(data);
+			}
 		}
 
 		[Test]
-		public void Serialize()
-		{
-			var attach = new FileAttachmentDataInfo
-			{
-				ActiveInventoryReport = new ActiveInventoryReport
-				{
+		public void Serialize() {
+			var attach = new FileAttachmentDataInfo {
+				ActiveInventoryReport = new ActiveInventoryReport {
 					SKUDetails = new List<SKUDetails>
 					{
 						new SKUDetails
@@ -67,9 +57,9 @@ namespace EzBob.eBayServiceLib.Test
 					}
 				}
 			};
-			SerializeDataHelper.SerializeToFile( @"d:\attach1.xml", attach );
+			Serialized.Serialize(@"d:\attach1.xml", attach);
 		}
 
-		
+
 	}
 }

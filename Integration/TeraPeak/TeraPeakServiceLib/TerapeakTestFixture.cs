@@ -7,6 +7,8 @@ using NUnit.Framework;
 
 namespace EzBob.TeraPeakServiceLib
 {
+	using Ezbob.Utils.Serialization;
+
 	[TestFixture]
 	internal class TerapeakTestFixture
 	{
@@ -27,7 +29,7 @@ namespace EzBob.TeraPeakServiceLib
 	</Errors>
 </GetSellerResearchResults>";
 
-			var rez = SerializeDataHelper.DeserializeTypeFromString<GetSellerResearchResults>( resultString );
+			var rez = Serialized.Deserialize<GetSellerResearchResults>( resultString );
 
 			Assert.NotNull( rez );
 			Assert.IsNull( rez.SearchResults );
@@ -72,7 +74,7 @@ namespace EzBob.TeraPeakServiceLib
 </GetSellerResearchResults>
 ";
 
-			var rez = SerializeDataHelper.DeserializeTypeFromString<GetSellerResearchResults>(resultString);
+			var rez = Serialized.Deserialize<GetSellerResearchResults>(resultString);
 
 			Assert.NotNull(rez);
 			Assert.NotNull(rez.SearchResults);
@@ -612,7 +614,7 @@ namespace EzBob.TeraPeakServiceLib
 </GetSellerResearchResults>
 ";
 
-			var rez = SerializeDataHelper.DeserializeTypeFromString<GetSellerResearchResults>(resultString);
+			var rez = Serialized.Deserialize<GetSellerResearchResults>(resultString);
 
 			Assert.NotNull(rez);
 			Assert.NotNull(rez.SearchResults);
@@ -652,7 +654,7 @@ namespace EzBob.TeraPeakServiceLib
 ";
 
 
-			var rezEmpty = SerializeDataHelper.DeserializeTypeFromString<GetSellerResearchResults>( resultStringEmpty );
+			var rezEmpty = Serialized.Deserialize<GetSellerResearchResults>( resultStringEmpty );
 
 			Assert.NotNull( rezEmpty );
 			

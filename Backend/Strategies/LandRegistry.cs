@@ -3,6 +3,7 @@
 	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Serialization;
 	using LandRegistryLib;
 
 	#region class LandRegistryEnquiry
@@ -49,7 +50,7 @@
 
 			LandRegistryDataModel response = helper.GetLandRegistryEnquiryData(m_nCustomerID, m_sBuildingNumber, m_sStreetName, m_sCityName, m_sPostCode );
 
-			Result = SerializeDataHelper.SerializeToString(response);
+			Result = new Serialized(response);
 		} // Execute
 
 		#endregion method Execute
@@ -102,7 +103,7 @@
 
 			LandRegistryDataModel response = helper.GetLandRegistryData(m_nCustomerID, m_sTitleNumber);
 
-			Result = SerializeDataHelper.SerializeToString(response);
+			Result = new Serialized(response);
 		} // Execute
 
 		#endregion method Execute

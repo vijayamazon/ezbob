@@ -35,7 +35,7 @@
 		{
 			YodleeAccounts account = AccountRepository.CreateAccount(YodleePasswordGenerator.GenerateRandomPassword);
 			log.InfoFormat("Registering yodlee user: {0}", account.Username);
-			if (!yodleeMain.RegisterUser(account.Username, SecurityUtils.Decrypt(account.Password), account.Username))
+			if (!yodleeMain.RegisterUser(account.Username, Encrypted.Decrypt(account.Password), account.Username))
 			{
 				AccountRepository.Delete(account);
 			}
@@ -82,7 +82,7 @@
 			LoginUser lu = null;
 			try
 			{
-				lu = yodleeMain.LoginUser(res.Username, SecurityUtils.Decrypt(res.Password));
+				lu = yodleeMain.LoginUser(res.Username, Encrypted.Decrypt(res.Password));
 			}
 			catch (Exception e)
 			{

@@ -965,6 +965,11 @@ GeneratePassword broker-contact-email@example.com password-itself
 			serviceClient.AndRecalculateVatReturnSummaryForAll();
 		} // AndRecalculateVatReturnSummaryForAll
 
+		[Activation]
+		private void EncryptChannelGrabberMarketplaces() {
+			serviceClient.EncryptChannelGrabberMarketplaces();
+		} // EncryptChannelGrabberMarketplaces
+
 		// ReSharper restore UnusedMember.Local
 
 		#endregion strategy activators

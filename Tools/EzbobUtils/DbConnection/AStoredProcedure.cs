@@ -225,7 +225,7 @@
 
 				if (oAttr.Direction == ParameterDirection.ReturnValue) {
 					if (bReturnFound)
-						throw new Exception("Multiple 'return value' parameters configured for stored procedure " + GetName());
+						throw new DbException("Multiple 'return value' parameters configured for stored procedure " + GetName());
 
 					bReturnFound = true;
 				} // if
@@ -278,17 +278,26 @@
 
 					QueryParameter qp = null;
 
-					bool bIsSimpleType =
-						(oPropertyInfo.PropertyType == typeof (string)) ||
-						(null == oPropertyInfo.PropertyType.GetInterface(typeof (IEnumerable).ToString()));
+					bool bIsByteArray = oPropertyInfo.PropertyType == typeof (byte[]);
 
-					if (bIsSimpleType) {
+					bool bIsSimpleType = !bIsByteArray && (
+						(oPropertyInfo.PropertyType == typeof (string)) ||
+						(null == oPropertyInfo.PropertyType.GetInterface(typeof (IEnumerable).ToString()))
+					);
+
+					if (bIsByteArray) {
+						qp = new QueryParameter(sFieldName, oPropertyInfo.GetValue(oInstance, null)) {
+							Direction = nDirection,
+							Type = DbType.Binary,
+						};
+					}
+					else if (bIsSimpleType) {
 						qp = new QueryParameter(sFieldName, oPropertyInfo.GetValue(oInstance, null)) {
 							Direction = nDirection,
 						};
 					}
 					else {
-						if (oPropertyInfo.PropertyType.IsGenericType && oPropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)) {
+						if (oPropertyInfo.PropertyType.IsGenericType && oPropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof (IEnumerable<>)) {
 							Type oUnderlyingType = oPropertyInfo.PropertyType.GetGenericArguments()[0];
 
 							if (null == oUnderlyingType.GetInterface(typeof (ITraversable).ToString()))

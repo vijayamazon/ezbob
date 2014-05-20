@@ -74,6 +74,12 @@
   <ItemGroup>
     <None Include="channelgrabber.json.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>rem copy /y $(ProjectDir)channelgrabber.json "C:\Program Files (x86)\Ezbob"</PostBuildEvent>

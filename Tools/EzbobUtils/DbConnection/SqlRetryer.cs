@@ -69,7 +69,7 @@
 				} // try
 
 				if ((sErrName == null) && (ex != null))
-					throw ex;
+					throw new DbException(ex.Message, ex);
 
 				if (nCount < RetryCount) {
 					Log.Warn(ex, "{2} encountered on attempt {0} of {1}, retrying after {3} milliseconds.", nCount, RetryCount, sErrName, SleepBeforeRetry);
@@ -80,9 +80,9 @@
 			} // for
 
 			if (ex == null)
-				throw new Exception("All the attempts failed, no further error information available.");
+				throw new DbException("All the attempts failed, no further error information available.");
 
-			throw ex;
+			throw new DbException("Out of retry attempts.", ex);
 		} // Retry
 
 		#endregion method Retry

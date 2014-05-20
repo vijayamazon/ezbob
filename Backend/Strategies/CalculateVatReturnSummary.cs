@@ -58,7 +58,7 @@
 				var oSp = new SaveVatReturnSummary(DB, Log) {
 					CustomerID = m_nCustomerID,
 					CustomerMarketplaceID = m_nCustomerMarketplaceID,
-					Totals = new BusinessData[] { pair.Value },
+					Totals = new [] { pair.Value },
 					Quarters = pair.Value.QuartersToSave(),
 				};
 

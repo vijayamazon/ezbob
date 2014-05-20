@@ -5,17 +5,21 @@
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
-	using CommonLib;
+	using Ezbob.Logger;
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;
-	using log4net;
+	using Ezbob.Utils.Security;
+	using Ezbob.Utils.Serialization;
 
 	public class CGMPUniqChecker : MPUniqChecker {
 		#region constructor
 
-		public CGMPUniqChecker(ICustomerMarketPlaceRepository customerMarketPlaceRepository, IMP_WhiteListRepository whiteList, MarketPlaceRepository mpTypes)
-			: base(customerMarketPlaceRepository, whiteList) {
-			_mpTypes = mpTypes;
+		public CGMPUniqChecker(
+			ICustomerMarketPlaceRepository customerMarketPlaceRepository,
+			IMP_WhiteListRepository whiteList,
+			MarketPlaceRepository mpTypes
+		) : base(customerMarketPlaceRepository, whiteList) {
+			m_oMpTypes = mpTypes;
 		} // constructor
 
 		#endregion constructor
@@ -26,9 +30,7 @@
 			if (_whiteList.IsMarketPlaceInWhiteList(marketplaceType, token))
 				return;
 
-			ILog oLog = LogManager.GetLogger(typeof(CGMPUniqChecker));
-
-			var oMp = _mpTypes.Get(marketplaceType);
+			var oMp = m_oMpTypes.Get(marketplaceType);
 
 			if (oMp == null)
 				return;
@@ -38,7 +40,7 @@
 				.Select(mp => new { mp_id = mp.Id, customer_id = mp.Customer.Id, secdata = mp.SecurityData });
 
 			foreach (var m in oMpList) {
-				if (!IsSameMarketPlace(m.mp_id, m.secdata, oMp, token, oLog))
+				if (!IsSameMarketPlace(m.mp_id, m.secdata, oMp, token))
 					continue;
 
 				if (m.customer_id == customer.Id)
@@ -52,26 +54,25 @@
 
 		#region method IsSameMarketPlace
 
-		private bool IsSameMarketPlace(int nMpID, byte[] oSecData, MP_MarketplaceType oMp, string sShopID, ILog oLog) {
+		private bool IsSameMarketPlace(int nMpID, byte[] oSecData, MP_MarketplaceType oMp, string sShopID) {
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(oMp.Name);
 
 			if (vi == null)
 				return false;
 
 			try {
-				var am = SerializeDataHelper.DeserializeType<AccountModel>(oSecData);
+				var am = Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(oSecData));
 				return am.Fill().UniqueID() == sShopID;
 			}
 			catch (Exception e) {
 				string sXml = System.Text.Encoding.Default.GetString(oSecData);
-				string s = string.Format("Failed to deserialise security data. Marketplace ID = {0}, Security data: {1}", nMpID, sXml);
-				oLog.Error(s, e);
+				new SafeILog(this).Error(e, "Failed to de-serialise security data. Marketplace ID = {0}, Security data: {1}", nMpID, sXml);
 				return false;
 			}
 		} // IsSameMarketPlace
 
 		#endregion method IsSameMarketPlace
 
-		private readonly MarketPlaceRepository _mpTypes;
+		private readonly MarketPlaceRepository m_oMpTypes;
 	} // class CGMPUniqChecker
 } // namespace

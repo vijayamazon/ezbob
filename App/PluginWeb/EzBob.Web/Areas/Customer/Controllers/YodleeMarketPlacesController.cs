@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
+	using Ezbob.Utils.Serialization;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using Models;
@@ -83,7 +84,7 @@
 			var repository = new YodleeAccountsRepository(_session);
 			var yodleeAccount = repository.Search(customer.Id);
 
-			string decryptedPassword = SecurityUtils.Decrypt(yodleeAccount.Password);
+			string decryptedPassword = Encrypted.Decrypt(yodleeAccount.Password);
 			string displayname;
 			long csId;
 
@@ -96,7 +97,7 @@
 				.JoinQueryOver(m => m.Marketplace)
 				.Where(m => m.InternalId == oEsi.InternalId)
 				.List()
-				.Select(m => SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(m.SecurityData).ItemId).ToList();
+				.Select(m => Serialized.Deserialize<YodleeSecurityInfo>(m.SecurityData).ItemId).ToList();
 				
 			long itemId = yodleeMain.GetItemId(yodleeAccount.Username, decryptedPassword, items, out displayname, out csId);
 
@@ -155,7 +156,7 @@
 			}
 
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
-			string finalUrl = yodleeMain.GetAddAccountUrl(csId, callback, yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
+			string finalUrl = yodleeMain.GetAddAccountUrl(csId, callback, yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
 
 			Log.InfoFormat("Redirecting to yodlee: {0}", finalUrl);
 			return Redirect(finalUrl);
@@ -184,7 +185,7 @@
 				return View(new { error = "Error Loanding Bank Accounts" });
 			}
 			
-			var lu = yodleeMain.LoginUser(yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
+			var lu = yodleeMain.LoginUser(yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
 			if (lu == null)
 			{
 				return View(new { error = "Error Loging to Yodlee Account" });
@@ -196,7 +197,7 @@
 				return View(new {error = "Account not found"});
 			}
 			var callback = Url.Action("RecheckYodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https") + "/" + umi.Id;
-			string finalUrl = yodleeMain.GetEditAccountUrl(SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(umi.SecurityData).ItemId, callback, yodleeAccount.Username, SecurityUtils.Decrypt(yodleeAccount.Password));
+			string finalUrl = yodleeMain.GetEditAccountUrl(Serialized.Deserialize<YodleeSecurityInfo>(umi.SecurityData).ItemId, callback, yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
 			return Redirect(finalUrl);
 		}
 

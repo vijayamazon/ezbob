@@ -7,11 +7,11 @@
 		[Test]
 		public void can_encrypt_and_decrypt() {
 			const string text = "Hello World";
-			var encrypted = SecurityUtils.Encrypt(text);
-			var decrypted = SecurityUtils.Decrypt(encrypted);
+			var encrypted = new Encrypted(text);
+			var decrypted = encrypted.Decrypt();
 
 			Assert.That(decrypted, Is.EqualTo(text));
-			Assert.That(encrypted, Is.Not.EqualTo(text));
+			Assert.That(encrypted.ToString(), Is.Not.EqualTo(text));
 		} // can_encrypt_and_decrypt() {
 	} // class EncryptorFxiture
 } // namespace

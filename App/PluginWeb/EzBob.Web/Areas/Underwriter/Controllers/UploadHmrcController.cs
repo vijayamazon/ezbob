@@ -295,7 +295,12 @@
 				model.id = _mpTypes.GetAll().First(a => a.InternalId == oState.VendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
-				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, oState.Marketplace, model, customer);
+				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateEncryptedCustomerMarketplace(
+					model.name,
+					oState.Marketplace,
+					model,
+					customer
+				);
 				_session.Flush();
 
 				oState.CustomerMarketPlace = mp;
