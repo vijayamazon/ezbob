@@ -139,7 +139,7 @@
 					if (Enum.TryParse<Variables>(sName, out nVar))
 						m_oData[nVar] = new VariableValue(nVar, sr["Value"], Log);
 					else
-						Log.Alert("Unknown configuration variable detected: {0}", sName);
+						Log.Warn("Unknown configuration variable detected: {0}", sName);
 
 					return ActionResult.Continue;
 				},

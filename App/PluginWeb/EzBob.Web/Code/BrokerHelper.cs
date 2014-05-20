@@ -89,7 +89,7 @@
 				return bp.Properties;
 			} // if
 
-			m_oLog.Alert("Failed to login as a broker '{0}'.", sLoginEmail);
+			m_oLog.Warn("Failed to login as a broker '{0}'.", sLoginEmail);
 			return null;
 		} // TryLogin
 
