@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System.Collections.Generic;
-	using CommonLib;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Repository;

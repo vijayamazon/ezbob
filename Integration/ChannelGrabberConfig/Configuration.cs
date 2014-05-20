@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using log4net;
-using Newtonsoft.Json;
-
-namespace Integration.ChannelGrabberConfig {
+﻿namespace Integration.ChannelGrabberConfig {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Text;
+	using log4net;
+	using Newtonsoft.Json;
 	using Ezbob.Logger;
 
 	#region class Configuration

@@ -5,7 +5,6 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-    using Ezbob.Utils.Serialization;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
@@ -69,7 +68,7 @@
 			}
 			try
 			{
-				var mpId = SavePapoint(model);
+				var mpId = SavePaypoint(model);
 				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
 				return Json(model);
 			}
@@ -90,9 +89,7 @@
 			}
 		}
 
-		[NonAction]
-		[Transactional]
-		private int SavePapoint(PayPointAccountModel model)
+		private int SavePaypoint(PayPointAccountModel model)
 		{
 			var customer = _context.Customer;
 			var username = model.mid;
