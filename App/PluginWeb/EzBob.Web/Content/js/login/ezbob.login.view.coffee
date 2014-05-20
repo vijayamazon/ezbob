@@ -40,8 +40,12 @@ class EzBob.CustomerLoginView extends Backbone.View
         @blockBtn false
         return false
 
-    xhr = $.post @form.attr("action"), @form.serialize()
-    
+    data = @form.serialize()
+
+    console.log 'data is', data
+
+    xhr = $.post @form.attr("action"), data
+
     xhr.done (result, status) =>
         EzBob.ServerLog.debug 'login request completed with status', status
 
@@ -52,7 +56,6 @@ class EzBob.CustomerLoginView extends Backbone.View
                 else
                     document.location.href = "#{window.gRootPath}Customer/Profile"
             else
-                console.log('err', result)
                 EzBob.App.trigger "error", result.errorMessage
                 @blockBtn false
         else

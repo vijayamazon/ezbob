@@ -55,31 +55,70 @@
 
 		#region method CreateUser
 
-		public override MembershipUser CreateUser(string userName, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status) {
+		public override MembershipUser CreateUser(string ignoredUserName, string password, string email, string passwordQuestion, string passwordAnswer, bool ignoredIsApproved, object ignoredProviderUserKey, out MembershipCreateStatus status) {
 			try {
 				var webRoles = roles.GetAll().Where(r => r.Name == "Web").ToList();
 
 				if (!webRoles.Any())
 					throw new RoleNotFoundException("Web");
 
-				if (!Regex.IsMatch(userName.ToLower(), configs.LoginValidationStringForWeb))
-					throw new Exception("Login does not conform to the passwordsecurity policy");
+				if (!Regex.IsMatch(email.ToLower(), configs.LoginValidationStringForWeb))
+					throw new Exception("Login does not conform to the password security policy.");
 
-				UpdateUser(userName, password, email, userName, webRoles, 0, null, null, null, false, false, null, passwordQuestion, passwordAnswer);
+				var user = new User {
+					PassSetTime = DateTime.UtcNow
+				};
+
+				if (!PolicyValidateLogin(email.ToLower()))
+					throw new Exception("Can't validate login");
+
+				if (!PolicyValidatePassword(password))
+					throw new Exception("Can't validate password");
+
+				user.EzPassword = Ezbob.Utils.Security.SecurityUtils.HashPassword(email, password);
+
+				password = PasswordEncryptor.EncodePassword(password, email, user.CreationDate);
+
+				if (!usersRepository.CheckUserLogin(0, email) || !usersRepository.CheckUserDomainName(0, email))
+					throw new UserAlreadyExistsException(string.Format("The email {0} already exists.", email));
+
+				user.Roles.Clear();
+				user.Roles.AddAll(webRoles);
+
+				user.Name = email;
+				user.FullName = email;
+				user.CertificateThumbprint = null;
+				user.DomainUserName = null;
+
+				if (password != null)
+					user.Password = password;
+
+				user.EMail = email;
+				user.Creator = usersRepository.Get(user.Id);
+				user.PassExpPeriod = null;
+
+				if (!string.IsNullOrEmpty(passwordQuestion)) {
+					user.SecurityQuestion = ObjectFactory.GetInstance<ISession>().Load<SecurityQuestion>(Convert.ToInt32(passwordQuestion));
+					user.SecurityAnswer = passwordAnswer;
+				} // if
+
+				user.DisablePassChange = null;
+				user.ForcePassChange = null;
+				usersRepository.Save(user);
 
 				status = MembershipCreateStatus.Success;
-				return null;
 			}
 			catch (UserAlreadyExistsException) {
-				log.Warn("User with email {0} already exists", userName);
+				log.Warn("User with email {0} already exists.", email);
 				status = MembershipCreateStatus.DuplicateEmail;
-				return null;
 			}
 			catch (Exception e) {
-				log.Error(e, "Failed to Create/Update user.");
+				log.Error(e, "Failed to create user.");
 				status = MembershipCreateStatus.ProviderError;
 				throw;
 			} // try
+
+			return null;
 		} // CreateUser
 
 		#endregion method CreateUser
@@ -311,65 +350,6 @@
 		} // GenerateSimplePassword
 
 		#endregion method GenerateSimplePassword
-
-		#region method UpdateUser
-
-		private User UpdateUser(string userName, string password, string fullName, string eMail, List<Role> webRoles, int userId, string certificateThumbprint, string ownerUserName, int? passwordTerm, bool? forcePasswordChange, bool? disablePasswordChange, string domainUserName, string securityQuestion, string securityAnswer) {
-			bool flag = userId == 0;
-
-			User result;
-
-			try {
-				User user = flag ? new User { PassSetTime = DateTime.UtcNow } : usersRepository.Get(userId);
-
-				certificateThumbprint = (string.IsNullOrEmpty(domainUserName) ? certificateThumbprint : null);
-
-				if (!PolicyValidateLogin(userName.ToLower()))
-					throw new Exception("Can't validate login");
-
-				if ((password != null && userId > 0) || flag) {
-					if (!PolicyValidatePassword(password))
-						throw new Exception("Can't validate password");
-
-					password = PasswordEncryptor.EncodePassword(password, userName, user.CreationDate);
-				} // if
-
-				if (!usersRepository.CheckUserLogin(userId, userName) || !usersRepository.CheckUserDomainName(userId, userName))
-					throw new UserAlreadyExistsException(string.Format("The email {0} already exists", userName));
-
-				user.Roles.Clear();
-				user.Roles.AddAll(webRoles);
-				user.Name = userName;
-				user.FullName = fullName;
-				user.CertificateThumbprint = certificateThumbprint;
-				user.DomainUserName = domainUserName;
-				if (password != null)
-					user.Password = password;
-
-				user.EMail = eMail;
-				int fetchedUserId = user.Id;
-				user.Creator = usersRepository.Get(fetchedUserId);
-				user.PassExpPeriod = passwordTerm;
-
-				if (!string.IsNullOrEmpty(securityQuestion)) {
-					user.SecurityQuestion = ObjectFactory.GetInstance<ISession>().Load<SecurityQuestion>(Convert.ToInt32(securityQuestion));
-					user.SecurityAnswer = securityAnswer;
-				}
-
-				user.DisablePassChange = ((disablePasswordChange == true) ? new bool?(true) : null);
-				user.ForcePassChange = ((forcePasswordChange == true) ? new bool?(true) : null);
-				usersRepository.Save(user);
-				result = user;
-			}
-			catch (Exception e) {
-				log.Error(e, "Error while creating a user '{0}'.", eMail);
-				throw;
-			} // try
-
-			return result;
-		} // UpdateUser
-
-		#endregion method UpdateUser
 
 		#region method PolicyValidateLogin
 

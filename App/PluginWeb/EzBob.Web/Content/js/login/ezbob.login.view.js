@@ -51,7 +51,7 @@
     };
 
     CustomerLoginView.prototype.submit = function() {
-      var xhr,
+      var data, xhr,
         _this = this;
       if (this.$el.find(":submit").hasClass("disabled")) {
         return false;
@@ -64,7 +64,9 @@
         this.blockBtn(false);
         return false;
       }
-      xhr = $.post(this.form.attr("action"), this.form.serialize());
+      data = this.form.serialize();
+      console.log('data is', data);
+      xhr = $.post(this.form.attr("action"), data);
       xhr.done(function(result, status) {
         EzBob.ServerLog.debug('login request completed with status', status);
         if (status === "success") {

@@ -1365,7 +1365,6 @@
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Views\Shared\_LoginTemplate.cshtml" />
     <Content Include="Content\js\login\ezbob.login.view.coffee" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />

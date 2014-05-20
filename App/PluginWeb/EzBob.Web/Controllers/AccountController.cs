@@ -133,7 +133,18 @@ namespace EzBob.Web.Controllers {
 			var customerIp = RemoteIp();
 
 			if (!ModelState.IsValid) {
-				ms_oLog.Debug("Customer log on attempt from remote IP {0}: model state is invalid.", customerIp);
+				ms_oLog.Debug("Customer log on attempt from remote IP {0}: model state is invalid, list of errors:", customerIp);
+
+				foreach (var val in ModelState.Values) {
+					if (val.Errors.Count < 1)
+						continue;
+
+					foreach (var err in val.Errors)
+						ms_oLog.Debug("Model value '{0}' with error '{1}'.", val.Value, err.ErrorMessage);
+				} // for each value
+
+				ms_oLog.Debug("End of list of errors.");
+
 				return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
 			} // if
 
