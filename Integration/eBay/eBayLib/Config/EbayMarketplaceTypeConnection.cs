@@ -1,7 +1,6 @@
-using EzBob.eBayServiceLib.Common;
-
 namespace EzBob.eBayLib.Config
 {
+	using eBayServiceLib.Common;
 	using ConfigManager;
 
 	public class EbayMarketplaceTypeConnection : EbayMarketplaceTypeConnectionBase

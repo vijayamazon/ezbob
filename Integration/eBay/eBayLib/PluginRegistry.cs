@@ -1,6 +1,6 @@
-using EZBob.DatabaseLib.Common;
 namespace EzBob.eBayLib
 {
+	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using eBayDbLib;
 	using Config;
@@ -14,7 +14,7 @@ namespace EzBob.eBayLib
 		    var ebay = new eBayServiceInfo();
             For<IMarketplaceType>().Use<eBayDatabaseMarketPlace>().Named(ebay.DisplayName);
             For<DatabaseMarketplaceBase<eBayDatabaseFunctionType>>().Use<eBayDatabaseMarketPlace>();
-            For<IEbayMarketplaceTypeConnection>().Use(new EbayMarketplaceTypeConnection());
+            For<IEbayMarketplaceTypeConnection>().Use<EbayMarketplaceTypeConnection>();
 			For<IEbayMarketplaceSettings>().Use( new EbayMarketPlaceTypeSettings() );
             For<IMarketplaceRetrieveDataHelper>().Use<eBayRetriveDataHelper>().Named(ebay.DisplayName);
 		}
