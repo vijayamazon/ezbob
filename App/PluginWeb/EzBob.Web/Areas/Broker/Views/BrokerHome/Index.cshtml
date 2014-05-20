@@ -1,6 +1,4 @@
 ﻿@using EzBob.Web.Infrastructure
-@using SquishIt.Framework
-@using SquishIt.Mvc
 @model EzBob.Web.Areas.Broker.Models.BrokerHomeModel
 @{
 	Layout = null;
@@ -33,8 +31,8 @@
 
 	@{
 		Html.RenderPartial("_FavIcon");
-	    BundleHelper.RenderBrokerCss();
 	}
+	@BundleHelper.RenderBrokerCss()
 </head>
 
 <body
@@ -671,10 +669,10 @@
 	@{
 		Html.RenderPartial("_GoogleTagManager");
 		Html.RenderPartial("security_template");
-
-	    BundleHelper.RenderBrokerJs();
-
 	}
+
+	@BundleHelper.RenderCommonJs()
+	@BundleHelper.RenderBrokerJs()
 	<script>
 		var EzBob = EzBob || {};
 		EzBob.LoadedConfig = EzBob.LoadedConfig || {};

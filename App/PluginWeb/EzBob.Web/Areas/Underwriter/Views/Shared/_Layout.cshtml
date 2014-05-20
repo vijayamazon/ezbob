@@ -226,7 +226,7 @@
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';
     </script>
-    @BundleHelper.RenderJs()
+    @BundleHelper.RenderCommonJs()
     @BundleHelper.RenderUnderwriterJs()
     <script id="login-template" type="text/template">
         @{ Html.RenderPartial("_LoginSimple"); }

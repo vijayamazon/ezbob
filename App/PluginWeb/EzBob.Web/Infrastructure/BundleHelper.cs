@@ -1,4 +1,5 @@
-﻿namespace EzBob.Web.Infrastructure {
+﻿namespace EzBob.Web.Infrastructure
+{
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -8,10 +9,145 @@
 	using SquishIt.Mvc;
 	using StructureMap;
 
-	public class BundleHelper {
-		#region common
+	public class BundleHelper
+	{
+		#region CSS
 
-		public static MvcHtmlString RenderJs() {
+		public static MvcHtmlString RenderCustomerCss()
+		{
+			return Bundle.Css()
+				//libs
+				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+				.Add("~/Content/css/lib/bootstrap2.css")
+				.Add("~/Content/css/lib/dropzone.css")
+				.Add("~/Content/css/lib/font-awesome.min.css")
+				.Add("~/Content/css/lib/notifications.css")
+				.Add("~/Content/css/lib/coin-slider-styles.css")
+				.Add("~/Content/css/lib/chosen.css")
+
+				//custom css
+				.Add("~/Content/css/common.css")
+				.Add("~/Content/css/customer.css")
+				.Add("~/Content/css/mobile.css")
+				.MvcRender("~/Content/css/min/customer_#.css");
+		} // RenderCustomerCss
+
+		public static MvcHtmlString RenderProfileCss()
+		{
+			return Bundle.Css()
+				//libs
+				.Add("~/Content/css/lib/jquery.jscrollpane.css")
+
+				//custom css
+				.Add("~/Content/css/profile.css")
+				.MvcRender("~/Content/css/min/profile_combined_#.css");
+		} // RenderProfileCss
+
+		public static MvcHtmlString RenderWizardCss()
+		{
+			return Bundle.Css()
+				//custom css
+				.Add("~/Content/css/wizard.css")
+				.MvcRender("~/Content/css/min/wizard_combined_#.css");
+		} // RenderProfileCss
+
+		public static MvcHtmlString RenderBrokerCss()
+		{
+			/*
+			 .Add("~/Content/css/jquery-ui-1.8.16.custom.css")
+			.Add("~/Content/css/jquery.ui.1.8.16.ie.css")
+			.Add("~/Content/css/bootstrap.css")
+			.Add("~/Content/css/flaty/bootstrap.min.css")
+			.Add("~/Content/css/flaty/dataTables.bootstrap.css")
+			.Add("~/Content/css/flaty/DT_bootstrap.css")
+			.Add("~/Content/css/flaty/flaty-responsive.css")
+			.Add("~/Content/css/flaty/flaty.css")
+			.Add("~/Content/css/font-awesome.min.css")
+			.Add("~/Content/css/flaty/bootstrap3-modal-patch.css")
+			.Add("~/Content/css/broker.css")
+			.Add("~/Content/css/app.css")
+			.Add("~/Content/css/sidebar.css")
+			.Add("~/Content/css/wizard-header.css")
+			.Add("~/Content/css/notifications.css")
+			.Add("~/Content/css/captcha.css")
+			.Add("~/Content/css/postcode.css")
+			.Add("~/Content/css/popover.css")
+			.Add("~/Content/css/choosen/chosen.css")
+			.Add("~/Content/css/attardi.labels.css")
+			.Add("~/Content/css/dropzone.css")
+			 */
+
+			return Bundle
+				.Css()
+				//libs
+				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+				.Add("~/Content/css/lib/bootstrap2.css")
+				.Add("~/Content/css/lib/bootstrap3.css")
+				.Add("~/Content/css/lib/bootstrap3-modal-patch.css")
+				.Add("~/Content/css/lib/dataTables.bootstrap.css")
+				.Add("~/Content/css/lib/DT_bootstrap.css")
+				.Add("~/Content/css/lib/font-awesome.min.css")
+				.Add("~/Content/css/lib/dropzone.css")
+				.Add("~/Content/css/lib/flaty.css")
+				.Add("~/Content/css/lib/flaty-responsive.css")
+				.Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/notifications.css")
+
+				//custom css
+				.Add("~/Content/css/common.css")
+				.Add("~/Content/css/broker.css")
+				.MvcRender("~/Content/css/min/broker_#.css");
+		}
+
+		public static MvcHtmlString RenderUnderwriterCss()
+		{
+			return Bundle.Css()
+				//libs
+				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+				.Add("~/Content/css/lib/jquery.jscrollpane.css")
+				.Add("~/Content/css/lib/font-awesome.min.css")
+				.Add("~/Content/css/lib/bootstrap2.css")
+				.Add("~/Content/css/lib/bootstrap3.css")
+				.Add("~/Content/css/lib/datepicker.css")
+				.Add("~/Content/css/lib/dataTables.bootstrap.css")
+				.Add("~/Content/css/lib/bootstrap-switch.css")
+				.Add("~/Content/css/lib/DT_bootstrap.css")
+				.Add("~/Content/css/lib/bootstrap3-modal-patch.css")
+				.Add("~/Content/css/lib/bootstrap-modal.css")
+				.Add("~/Content/css/lib/flaty.css")
+				.Add("~/Content/css/lib/jquery.jqplot.css")
+				.Add("~/Content/css/lib/notifications.css")
+				.Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/alertify.css")
+				.Add("~/Content/css/lib/dropzone.css")
+
+				//custom css
+				.Add("~/Content/css/common.css")
+				.Add("~/Content/css/underwriter.css")
+				.Add("~/Content/css/Permission.css")
+
+				.MvcRender("~/Content/css/min/combined_#.css");
+		} // RenderUnderwriterCss
+
+		public static MvcHtmlString RenderPrintCss()
+		{
+			return Bundle.Css()
+				.Add("~/Content/css/print.css")
+				.WithAttribute("media", "print")
+				.MvcRender("~/Content/css/min/print_combined_#.css");
+		} // RenderPrintCss
+
+		#endregion CSS
+
+		#region JS
+
+		#region Common JS
+
+		public static MvcHtmlString RenderCommonJs()
+		{
 			return Bundle.JavaScript()
 				//libs
 				.Add("~/Content/js/lib/jquery-1.8.3.js")
@@ -47,23 +183,27 @@
 				.Add("~/Content/js/lib/jquery.field_status.js")
 				.Add("~/Content/js/lib/mousetrap_1.4.0.js")
 				.Add("~/Content/js/lib/jquery.colorbox-min.js")
-				
+				.Add("~/Content/js/lib/jquery.dataTables.min.js")
+
 				//controls
 				.Add("~/Content/js/controls/ezbob.modal.js")
 				.Add("~/Content/js/controls/ezbob.jqmodal.coffee")
 				.Add("~/Content/js/controls/ezbob.BoundItemView.coffee")
 				.Add("~/Content/js/controls/captcha.js")
 				
+
 				//login
 				.Add("~/Content/js/login/ezbob.restorePassword.coffee")
-				
+
 				//App
 				.Add("~/Content/js/App/ezbob.GA.coffee")
 				.Add("~/Content/js/App/ezbob.app.js")
 				.Add("~/Content/js/App/ezbob.clicktale.js")
 				.Add("~/Content/js/App/ezbob.bindings.coffee")
 				.Add("~/Content/js/App/ezbob.validation.js")
-				
+
+				.Add("~/Content/js/controls/ezbob.notifications.js")
+
 				//custom 
 				.Add("~/Content/js/ezbob.csrf.js")
 				.Add("~/Content/js/ezbob.view.js")
@@ -72,66 +212,26 @@
 				.Add("~/Content/js/ezbob.uiaction.js")
 				.Add("~/Content/js/ezbob.serverlog.js")
 				.Add("~/Content/js/ezbob.strengthPassword.js")
+
 				.AddString(GetDbStrings())
 				//.ForceRelease()
 				.MvcRender("~/Content/js/min/jslib_#.js");
-		} // RenderJs
+		} // RenderCommonJs
 
-		public static MvcHtmlString RenderPrintCss() {
-			return Bundle.Css()
-				.Add("~/Content/css/print.css")
-				.WithAttribute("media", "print")
-				.MvcRender("~/Content/css/min/print_combined_#.css");
-		} // RenderPrintCss
-		
-		public static string GetDbStrings() {
+		public static string GetDbStrings()
+		{
 			var strings = ObjectFactory.GetInstance<IDbStringRepository>();
 			Dictionary<string, string> dict = strings.GetAllStrings().ToDictionary(s => s.Key, s => s.Value);
 			string json = JsonConvert.SerializeObject(dict);
 			return "var EzBob = EzBob || {};" + "EzBob.dbStrings = " + json + ";";
 		} // GetDbStrings
 
-		#endregion common
-
-		#region Underwriter
-
-		#region underwriter css
-
-		public static MvcHtmlString RenderUnderwriterCss() {
-			return Bundle.Css()
-				//libs
-				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
-				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
-				.Add("~/Content/css/lib/jquery.jscrollpane.css")
-				.Add("~/Content/css/lib/font-awesome.min.css")
-				.Add("~/Content/css/lib/bootstrap2.css")
-				.Add("~/Content/css/lib/bootstrap3.css")
-				.Add("~/Content/css/lib/datepicker.css")
-				.Add("~/Content/css/lib/dataTables.bootstrap.css")
-				.Add("~/Content/css/lib/bootstrap-switch.css")
-				.Add("~/Content/css/lib/DT_bootstrap.css")
-				.Add("~/Content/css/lib/bootstrap3-modal-patch.css")
-				.Add("~/Content/css/lib/bootstrap-modal.css")
-				.Add("~/Content/css/lib/flaty.css")
-				.Add("~/Content/css/lib/jquery.jqplot.css")
-				.Add("~/Content/css/lib/notifications.css")
-				.Add("~/Content/css/lib/chosen.css")
-				.Add("~/Content/css/lib/alertify.css")
-				.Add("~/Content/css/lib/dropzone.css")
-				
-				//custom css
-				.Add("~/Content/css/common.css")
-				.Add("~/Content/css/underwriter.css")
-				.Add("~/Content/css/Permission.css")
-				
-				.MvcRender("~/Content/css/min/combined_#.css");
-		} // RenderUnderwriterCss
-
-		#endregion underwriter css
+		#endregion Common JS
 
 		#region underwriter js
 
-		public static MvcHtmlString RenderUnderwriterJs() {
+		public static MvcHtmlString RenderUnderwriterJs()
+		{
 			return Bundle.JavaScript()
 				//3rd party libs
 				.Add("~/Content/js/lib/alertify.js")
@@ -139,9 +239,6 @@
 				.Add("~/Content/js/lib/jquery.zclip.js")
 				.Add("~/Content/js/lib/jquery.form.js")
 				.Add("~/Content/js/lib/splitter.js")
-				.Add("~/Content/js/lib/attardi.labels.js")
-				.Add("~/Content/js/lib/amount-period-sliders.js")
-				.Add("~/Content/js/lib/jquery.field_status.js")
 				.Add("~/Content/js/lib/jquery.cookie.js")
 				.Add("~/Content/js/lib/jquery.slimscroll.min.js")
 				.Add("~/Content/js/lib/jquery.sparkline.min.js")
@@ -159,8 +256,7 @@
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.barRenderer.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasOverlay.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.pointLabels.js")
-				.Add("~/Content/js/lib/jquery.dataTables.min.js")
-
+				
 				//Flaty
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")
 				.Add("~/Content/js/lib/bootstrap-datepicker.js")
@@ -190,7 +286,7 @@
 				.Add("~/Content/js/Underwriter/Fraud/ezbob.underwriter.fraud.coffee")
 				.Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudDetectionLog.js")
 				.Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudStatus.coffee")
-				
+
 				// Configuration Variables
 				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.coffee")
 				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.coffee")
@@ -264,7 +360,6 @@
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
 				.Add("~/Content/js/controls/ezbob.LoanScheduleView.js")
 				.Add("~/Content/js/controls/ezbob.simpleValueEditDlg.js")
-				.Add("~/Content/js/controls/ezbob.notifications.js")
 
 				.Add("~/Content/js/controls/ezbob.address.js")
 				.Add("~/Content/js/ezbob.models.js")
@@ -276,50 +371,11 @@
 
 		#endregion underwriter js
 
-		#endregion underwriter
-
-		#region Customer
-
-		#region customer css
-
-		public static MvcHtmlString CustomerCss() {
-			return Bundle.Css()
-				//libs
-				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
-				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
-				.Add("~/Content/css/lib/bootstrap2.css")
-				.Add("~/Content/css/lib/dropzone.css")
-				.Add("~/Content/css/lib/font-awesome.min.css")
-				.Add("~/Content/css/lib/notifications.css")
-				.Add("~/Content/css/lib/coin-slider-styles.css")
-				.Add("~/Content/css/lib/chosen.css")
-
-				//custom css
-				.Add("~/Content/css/common.css")
-				.Add("~/Content/css/wizard.css")
-				.Add("~/Content/css/wizard-header.css")
-				.Add("~/Content/css/customer.css")
-				.Add("~/Content/css/mobile.css")
-				.MvcRender("~/Content/css/min/customer_#.css");
-		} // CustomerCss
-
-		public static MvcHtmlString RenderProfileCss() {
-			return Bundle.Css()
-				//libs
-				.Add("~/Content/css/lib/jquery.jscrollpane.css")
-				
-				//custoom css
-				.Add("~/Content/css/profile.css")
-				.MvcRender("~/Content/css/min/profile_combined_#.css");
-		} // RenderProfileCss
-
-		#endregion customer css
-
 		#region customer js
 
-		public static MvcHtmlString RenderWizardJs() {
+		public static MvcHtmlString RenderWizardJs()
+		{
 			return Bundle.JavaScript()
-				.Add("~/Content/js/controls/ezbob.notifications.js")
 				.Add("~/Content/js/ezbob.customerModel.js")
 				.Add("~/Content/js/Wizard/wizardStepSequence.js")
 				.Add("~/Content/js/Wizard/ezbob.wizardStepsModel.js")
@@ -357,21 +413,20 @@
 				.MvcRender("~/Content/js/min/wizard_#.js");
 		} // RenderWizardJs
 
-		public static MvcHtmlString RenderProfileJs() {
+		public static MvcHtmlString RenderProfileJs()
+		{
 			return Bundle.JavaScript()
 				//3rd party
 				.Add("~/Content/js/lib/bootstrap.js")
 				.Add("~/Content/js/lib/bootstrap-datepicker.js")
 				.Add("~/Content/js/lib/bootstrap-modal.js")
 				.Add("~/Content/js/lib/bootstrap-modalmanager.js")
-				.Add("~/Content/js/lib/jquery.colorbox-min.js")
 
 				//Customer Model
 				.Add("~/Content/js/ezbob.customerModel.js")
 
 				//Controls
 				.Add("~/Content/js/controls/ezbob.address.js")
-				.Add("~/Content/js/controls/ezbob.notifications.js")
 				.Add("~/Content/js/controls/ezbob.whatsnew.js")
 				.Add("~/Content/js/controls/ezbob.livechat.livechatrouter.js")
 				.Add("~/Content/js/controls/ezbob.LoanScheduleView.js")
@@ -431,7 +486,8 @@
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderProfileJs
 
-		public static MvcHtmlString RenderLoginJs() {
+		public static MvcHtmlString RenderLoginJs()
+		{
 			return Bundle.JavaScript()
 				.Add("~/Content/js/login/ezbob.login.view.coffee")
 				.MvcRender("~/Content/js/min/profile_#.js");
@@ -439,75 +495,29 @@
 
 		#endregion customer js
 
-		#endregion customer
-
-		#region Broker
-		
-		#region js
+		#region broker js
 
 		public static MvcHtmlString RenderBrokerJs()
 		{
 			return Bundle
 				.JavaScript()
-				.Add("~/Content/js/lib/jquery-1.8.3.js")
-				.Add("~/Content/js/ezbob.csrf.js")
-				.Add("~/Content/js/lib/jquery.browser.min.js")
-				.Add("~/Content/js/lib/dropzone.js")
-				.Add("~/Content/js/lib/jquery.hoverIntent.min.js")
-				.Add("~/Content/js/lib/jquery.scrollTo.js")
-				.Add("~/Content/js/lib/jquery.blockUI.js")
-				.Add("~/Content/js/lib/jquery.mousewheel.js")
-				.Add("~/Content/js/lib/jquery.jscrollpane.js")
-				.Add("~/Content/js/lib/jquery.validate.js")
-				.Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
-				.Add("~/Content/js/lib/jsuri-1.1.1.js")
+				//libs
 				.Add("~/Content/js/lib/jquery.cookie.js")
-				.Add("~/Content/js/lib/jquery.slimscroll.min.js")
-				.Add("~/Content/js/lib/cookies.js")
-				.Add("~/Content/js/lib/underscore.js")
-				.Add("~/Content/js/lib/backbone.js")
-				.Add("~/Content/js/lib/backbone.marionette.js")
-				.Add("~/Content/js/lib/Backbone.ModelBinder.js")
-				.Add("~/Content/js/lib/moment.js")
-				.Add("~/Content/js/lib/jquery.numeric.js")
-				.Add("~/Content/js/lib/recaptcha_ajax.js")
-				.Add("~/Content/js/lib/autoNumeric-1.7.4.js")
-				.Add("~/Content/js/lib/chosen.jquery.js")
-				.Add("~/Content/js/lib/jquery.maskedinput-1.2.2.js")
-				.Add("~/Content/js/lib/notifications.js")
-				.Add("~/Content/js/lib/coin-slider.js")
-				.Add("~/Content/js/lib/jquery.placeholder.js")
-				.Add("~/Content/js/lib/attardi.labels.js")
-				.Add("~/Content/js/lib/amount-period-sliders.js")
-				.Add("~/Content/js/lib/jquery.field_status.js")
 				.Add("~/Content/js/lib/jquery.set_display_value.js")
 				.Add("~/Content/js/lib/jquery.load_display_value.js")
-				.Add("~/Content/js/lib/mousetrap_1.4.0.js")
-				.Add("~/Content/js/lib/jquery.colorbox-min.js")
-				.Add("~/Content/js/controls/ezbob.modal.js")
-				.Add("~/Content/js/controls/ezbob.jqmodal.coffee")
-				.Add("~/Content/js/App/ezbob.app.js")
-				.Add("~/Content/js/App/ezbob.validation.js")
-				.Add("~/Content/js/controls/captcha.js")
-				.Add("~/Content/js/controls/ezbob.notifications.js")
-				.Add("~/Content/js/ezbob.design.js")
-				.Add("~/Content/js/ezbob.internal.debug.js")
-				.Add("~/Content/js/ezbob.uiaction.js")
-				.Add("~/Content/js/ezbob.serverlog.js")
-				.Add("~/Content/js/ezbob.strengthPassword.js")
-				.Add("~/Content/js/lib/jquery.dataTables.js")
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")
 				.Add("~/Content/js/lib/bootstrap-datepicker.js")
 				.Add("~/Content/js/lib/bootstrap-modal.js")
 				.Add("~/Content/js/lib/bootstrap-modalmanager.js")
 				.Add("~/Content/js/lib/flaty/dataTables.bootstrap.js")
 				.Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
+				.Add("~/Content/js/lib/jquery.slimscroll.min.js")
+				.Add("~/Content/js/lib/jquery.sparkline.min.js")
 				.Add("~/Content/js/lib/flaty/flaty.js")
+				
+				//custom
 				.Add("~/Content/js/EzBob.DataTables.Helper.js")
-				.Add("~/Content/js/controls/ezbob.BoundItemView.coffee")
 				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.coffee")
-				.AddString(GetDbStrings())
-				.Add("~/Content/js/ezbob.view.js")
 				.Add("~/Content/js/Broker/broker.base.view.js")
 				.Add("~/Content/js/Broker/broker.submit.view.js")
 				.Add("~/Content/js/Broker/broker.mobilephone.view.js")
@@ -522,35 +532,8 @@
 				.MvcRender("~/Content/js/min/jslib_#.js");
 		}
 
-		#endregion
-		#region css
+		#endregion broker js
 
-		public static MvcHtmlString RenderBrokerCss()
-		{
-			return Bundle
-				.Css()
-				//libs
-				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
-				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
-				.Add("~/Content/css/lib/bootstrap3.css")
-				.Add("~/Content/css/lib/bootstrap3-modal-patch.css")
-				.Add("~/Content/css/lib/dataTables.bootstrap.css")
-				.Add("~/Content/css/lib/DT_bootstrap.css")
-				.Add("~/Content/css/lib/font-awesome.min.css")
-				.Add("~/Content/css/lib/dropzone.css")
-				.Add("~/Content/css/lib/flaty.css")
-				.Add("~/Content/css/lib/flaty-responsive.css")
-				.Add("~/Content/css/lib/chosen.css")
-				.Add("~/Content/css/lib/notifications.css")
-
-				//custom css
-				.Add("~/Content/css/common.css")
-				.Add("~/Content/css/wizard-header.css")
-				.Add("~/Content/css/broker.css")
-				.MvcRender("~/Content/css/min/broker_#.css");
-		}
-
-		#endregion
-		#endregion
+		#endregion JS
 	} // class BundleHelper
 } // namespace

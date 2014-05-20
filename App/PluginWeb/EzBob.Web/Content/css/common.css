@@ -2416,3 +2416,369 @@ img.help-btn {
 	box-shadow: 0 0 3px rgba(0, 0, 0, .7) inset;
 }
 
+/*wizard-header*/
+#header {
+    position: relative;
+    width: 1212px;
+    height: 72px;
+    padding: 0 10px;
+    margin: 0 auto;
+}
+
+.header-inner {
+    background: #eceff1;
+    height: 100%;
+}
+
+#logged-in-user-name {
+    right: 50% !important;
+}
+
+.eu-menu {
+    width: 100px;
+    height: 80px;
+    color: #ffffff;
+    font-size: 10px;
+    text-align: center;
+    background: #283897;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    right: 120px;
+    border-bottom-right-radius: 15px;
+    -moz-border-radius-bottomright: 15px;
+    border-bottom-left-radius: 15px;
+    -moz-border-radius-bottomleft: 15px;
+    z-index: 2;
+	white-space: nowrap;
+}
+
+
+ul#menu {
+    position: absolute;
+    top: 10px;
+    right: 430px;
+    z-index: 99999;
+}
+
+    ul#menu li {
+        display: inline;
+        list-style: none;
+        margin: 0 6px;
+    }
+
+
+ul#user-menu {
+    position: absolute;
+    top: 19px;
+    right: 5px;
+}
+
+    ul#user-menu li {
+        display: inline;
+        list-style: none;
+        margin: 0 7px;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 15px;
+        line-height: 30px;
+        padding: 5px 12px;
+    }
+
+        ul#user-menu li.sign-up {
+            background: #ec8b0b;
+        }
+
+            ul#user-menu li.sign-up a {
+                text-align: center;
+                color: #ffffff;
+            }
+
+        ul#user-menu li.login {
+            background: #d4d4d4;
+        }
+
+            ul#user-menu li.login a {
+                text-align: center;
+                color: #000000;
+            }
+
+    ul#user-menu a:hover {
+        text-decoration: underline;
+    }
+
+img.newlogo {
+    position: absolute;
+    top: 20px;
+    left: 130px;
+    width: 13%;
+    height: auto;
+}
+
+.header-phone {
+    position: absolute;
+    right: 250px;
+    top: 26px;
+    font-weight: bold;
+}
+
+.wizard-steps {
+    background-color: #5c6373;
+    color: #fff;
+}
+
+    .wizard-steps .progress-time {
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 10px;
+        padding-top: 30px;
+        padding-bottom: 10px;
+    }
+
+        .wizard-steps .progress-time .progress-time-remainig {
+            color: #ec8b0b;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+.progress-circle {
+    width: 34px;
+    height: 34px;
+    -webkit-border-radius: 17px;
+    -moz-border-radius: 17px;
+    border-radius: 17px;
+    background-color: #B9B9B9;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 5px;
+    border: #B9B9B9 1px solid;
+    color: #5C5C5C;
+    margin-left: 9px;
+}
+
+    .progress-circle .percent {
+        padding-top: 2px;
+    }
+
+.progress-line {
+    content: "";
+    background-color: #5B5B5B;
+    z-index: -1;
+    margin-top: -22px;
+    height: 6px;
+    width: 100%;
+    position: absolute;
+    margin-left: 10px;
+}
+
+ul.application_steps {
+    overflow: hidden;
+    list-style: none;
+    padding-top: 30px;
+    padding-bottom: 10px;
+}
+
+    ul.application_steps li.last .progress-line {
+        display: none;
+    }
+
+    ul.application_steps li {
+        float: left;
+        font-size: 16px;
+        position: relative;
+        width: 30%;
+        z-index: 2;
+        overflow: visible;
+    }
+
+        ul.application_steps li.last {
+            width: 10%;
+        }
+
+        ul.application_steps li.current {
+            font-weight: bold;
+        }
+
+            ul.application_steps li.current .progress-line .progress-line-current {
+                background-color: #7bb224;
+                width: 20%;
+                height: 100%;
+                position: absolute;
+                left: 30px;
+                top: 0;
+            }
+
+            ul.application_steps li.current .progress-circle {
+                background-color: #e1e1e1;
+                border: #e1e1e1 1px solid;
+                color: #000;
+                
+                -moz-transform: scale(1.1);
+                -webkit-transform: scale(1.1);
+                -o-transform: scale(1.1);
+                -ms-transform: scale(1.1);
+                transform: scale(1.1);
+            }
+
+    ul.application_steps .timer > #slice {
+        position: absolute;
+        width: 1em;
+        height: 1em;
+        clip: rect(0px,1em,1em,0.5em);
+    }
+
+    ul.application_steps .timer {
+        position: relative;
+        font-size: 45px;
+        width: 1em;
+        height: 1em;
+        z-index: 2;
+    }
+
+        ul.application_steps .timer > #slice.gt50 {
+            clip: rect(auto, auto, auto, auto);
+        }
+
+        ul.application_steps .timer > #slice > .pie {
+            border: 0.1em solid #c0c0c0;
+            position: absolute;
+            width: 0.8em; /* 1 - (2 * border width) */
+            height: 0.8em; /* 1 - (2 * border width) */
+            clip: rect(0em,0.5em,1em,0em);
+            -moz-border-radius: 0.5em;
+            -webkit-border-radius: 0.5em;
+            border-radius: 0.5em;
+        }
+
+            ul.application_steps .timer > #slice > .pie.fill {
+                -moz-transform: rotate(180deg) !important;
+                -webkit-transform: rotate(180deg) !important;
+                -o-transform: rotate(180deg) !important;
+                transform: rotate(180deg) !important;
+            }
+
+        ul.application_steps .timer.fill > .percent {
+            display: none;
+        }
+
+        ul.application_steps .timer.fill > #slice > .pie {
+            border: transparent;
+            background-color: #c0c0c0;
+            width: 1em;
+            height: 1em;
+        }
+
+
+    ul.application_steps li.complete .progress-circle {
+        color: #fff;
+    }
+
+    ul.application_steps li.complete .progress-line-complete {
+        background-color: #7bb224;
+        height: 100%;
+    }
+
+    ul.application_steps li.complete .progress-circle {
+        background-color: #7bb224;
+        border: #7bb224 1px solid;
+    }
+
+
+
+    ul.application_steps li .step_label {
+        display: block;
+        line-height: 17px;
+        padding-bottom: 5px;
+    }
+
+.dashboard-steps {
+    background-color: #5c6373;
+    color: #fff;
+    margin-top: -15px;
+    height: 100px;
+}
+
+    .dashboard-steps li {
+        background: url(images/arrow.png) no-repeat 15px 0;
+    }
+
+        .dashboard-steps li.active {
+            background: url(images/current_arrow.png) no-repeat 15px 0;
+        }
+
+        .dashboard-steps li.complete {
+            background: url(images/tick.png) no-repeat 0 5px;
+        }
+
+    .dashboard-steps .step_label {
+        padding-left: 35px;
+    }
+
+
+/*side bar*/
+.customer-sidebar {
+    float: right;
+    width: 37%;
+    border-left: 2px solid #f1f1f1;
+}
+
+div.customer-sidebar-content {
+    margin-top: 50px;
+    width: 70%;
+    float: right;
+    overflow: visible;
+}
+
+    div.customer-sidebar-content div.item {
+        min-height: 70px;
+        padding: 0 5px;
+        color: #5c6373;
+        font-size: 12px;
+        position: relative;
+        border-bottom: none;
+        margin-bottom: 15px;
+    }
+
+    div.customer-sidebar-content div.item.last {
+        margin-bottom: 0;
+    }
+
+        div.customer-sidebar-content div.item div.icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            text-align: center;
+        }
+
+            div.customer-sidebar-content div.item div.icon img.sb-icon {
+                margin-top: 10px;
+                width: 60%;
+                border: 0;
+            }
+
+        div.customer-sidebar-content div.item div.text {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 74%;
+            padding-left: 30px;
+        }
+
+            div.customer-sidebar-content div.item div.text h3 {
+                font-weight: bold;
+                font-size: 1.2em;
+                margin: 0 0 0.1em 0;
+            }
+
+    div.customer-sidebar-content div.item-security-seals div.verisign {
+        background: url(images/verisign_seal.gif) no-repeat 30px 0;
+        height: 72px;
+    }
+
+        div.customer-sidebar-content div.item-security-seals div.verisign a {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }

@@ -1,5 +1,4 @@
 ﻿@using System.Globalization
-@using ConfigManager
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
 @using EzBob.Web.Infrastructure
@@ -35,7 +34,7 @@
     <link href='https://fonts.googleapis.com/css?family=Sanchez' rel='stylesheet' type='text/css'>
 
     @BundleHelper.RenderPrintCss()
-    @BundleHelper.CustomerCss()
+    @BundleHelper.RenderCustomerCss()
     @RenderSection("css", false)
 
     <!--[if lt IE 9]>
@@ -98,7 +97,7 @@
     }
     else
     {
-        @BundleHelper.RenderJs()
+        @BundleHelper.RenderCommonJs()
         @BundleHelper.RenderProfileJs()
     }
     @RenderSection("Js", false)

@@ -586,7 +586,6 @@
     <Content Include="Content\css\lib\notifications.css" />
     <Content Include="Content\css\mobile.css" />
     <Content Include="Content\css\Permission.css" />
-    <Content Include="Content\css\wizard-header.css" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
     <Content Include="Content\img\basket-diamond-32.png" />
     <Content Include="Content\img\basket-gold-32.png" />
