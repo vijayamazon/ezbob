@@ -76,8 +76,7 @@
 			var digest = CalculateMD5Hash(transactionId + amountStr + remotePassword);
 
 			var dateOfBirthFormatted = dateOfBirth.HasValue ? dateOfBirth.Value.ToString("yyyyMMdd") : "";
-			var regex = new Regex("[^a-zA-Z -]");
-			surname = regex.Replace(surname, String.Empty);
+			surname = Regex.Replace(surname, "[^a-zA-Z]", String.Empty);
 			var surnameFormatted = surname.Length > 6 ? surname.Substring(0, 6) : surname;
 			var accountNumberFormatted = accountNumber.Length >= 10 ? accountNumber.Substring(0, 10) : accountNumber;
 			var postCodeFormatted = postcode.Split(' ')[0];
