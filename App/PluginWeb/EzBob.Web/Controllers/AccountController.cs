@@ -22,39 +22,48 @@ namespace EzBob.Web.Controllers {
 	using Code;
 	using Code.Email;
 	using Ezbob.Backend.Models;
+	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.Filters;
 	using Infrastructure.Membership;
 	using Infrastructure.csrf;
+	using JetBrains.Annotations;
 	using Models;
 	using Models.Strings;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
-	using log4net;
 	using EZBob.DatabaseLib;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	#endregion using
 
 	public class AccountController : Controller {
+		#region public
+
+		#region constructor
+
 		public AccountController() {
-			_helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
-			_membershipProvider = ObjectFactory.GetInstance<MembershipProvider>();
-			_users = ObjectFactory.GetInstance<IUsersRepository>();
-			_customers = ObjectFactory.GetInstance<CustomerRepository>();
+			m_oDatabaseHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
+			m_oMembershipProvider = ObjectFactory.GetInstance<MembershipProvider>();
+			m_oUsers = ObjectFactory.GetInstance<IUsersRepository>();
+			m_oCustomers = ObjectFactory.GetInstance<CustomerRepository>();
 			m_oServiceClient = new ServiceClient();
-			_context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
-			_confirmation = ObjectFactory.GetInstance<IEmailConfirmation>();
-			_sessionIpLog = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
-			_testCustomers = ObjectFactory.GetInstance<ITestCustomerRepository>();
-			_customerStatusesRepository = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
+			m_oContext = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
+			m_oConfirmation = ObjectFactory.GetInstance<IEmailConfirmation>();
+			m_oSessionIpLog = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
+			m_oTestCustomers = ObjectFactory.GetInstance<ITestCustomerRepository>();
+			m_oCustomerStatusesRepository = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
 			m_oBrokerHelper = new BrokerHelper();
-			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
-			logOffMode = (LogOffMode)(int)ConfigManager.CurrentValues.Instance.LogOffMode;
-			_vipRequestRepository = ObjectFactory.GetInstance<IVipRequestRepository>();
+			m_oSessionRepository = ObjectFactory.GetInstance<SessionRepository>();
+			m_oLogOffMode = (LogOffMode)(int)ConfigManager.CurrentValues.Instance.LogOffMode;
+			m_oVipRequestRepository = ObjectFactory.GetInstance<IVipRequestRepository>();
 		} // constructor
+
+		#endregion constructor
+
+		#region action AdminLogOn
 
 		public ActionResult AdminLogOn(string returnUrl) {
 			ViewData["returnUrl"] = returnUrl;
@@ -64,11 +73,10 @@ namespace EzBob.Web.Controllers {
 		[HttpPost]
 		public ActionResult AdminLogOn(LogOnModel model) {
 			if (ModelState.IsValid) {
-				var user = _users.GetUserByLogin(model.UserName);
-				try
-				{
-					if (_membershipProvider.ValidateUser(model.UserName, model.Password))
-					{
+				var user = m_oUsers.GetUserByLogin(model.UserName);
+
+				try {
+					if (m_oMembershipProvider.ValidateUser(model.UserName, model.Password)) {
 						user.LoginFailedCount = 0;
 
 						model.SetCookie("Underwriter");
@@ -86,15 +94,18 @@ namespace EzBob.Web.Controllers {
 						return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 					} // if
 				}
-				catch (UserNotFoundException ex)
-				{
-					
-				}
+				catch (UserNotFoundException ex) {
+					ms_oLog.Warn(ex, "Failed to log in as underwriter '{0}'.", model.UserName);
+				} // try
 			} // if
 
 			ModelState.AddModelError("", "Wrong user name/password.");
 			return View(model);
 		} // AdminLogOn
+
+		#endregion action AdminLogOn
+
+		#region action LogOn
 
 		[IsSuccessfullyRegisteredFilter]
 		public ActionResult LogOn(string returnUrl) {
@@ -106,12 +117,12 @@ namespace EzBob.Web.Controllers {
 		public JsonResult CustomerLogOn(LogOnModel model) {
 			var customerIp = RemoteIp();
 
-			//if (!ModelState.IsValid) {
-			//	_log.DebugFormat("Customer log on attempt from remote IP {0}: model state is invalid.", customerIp);
-			//	return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
-			//} // if
+			if (!ModelState.IsValid) {
+				ms_oLog.Debug("Customer log on attempt from remote IP {0}: model state is invalid.", customerIp);
+				return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
+			} // if
 
-			_log.DebugFormat(
+			ms_oLog.Debug(
 				"Customer log on attempt from remote IP {0} received with user name '{1}' and hash '{2}'...",
 				customerIp,
 				model.UserName,
@@ -124,19 +135,19 @@ namespace EzBob.Web.Controllers {
 
 					return Json(new {
 						success = (bp != null),
-						errorMessage = (bp == null) ? "User not found or incorrect password." : String.Empty,
+						errorMessage = (bp == null) ? "User not found or incorrect password." : string.Empty,
 						broker = true,
 					});
 				} // if is broker
 			}
 			catch (Exception e) {
-				_log.Warn("Failed to check whether '" + model.UserName + "' is a broker login, continuing as a customer.", e);
+				ms_oLog.Warn(e, "Failed to check whether '{0}' is a broker login, continuing as a customer.", model.UserName);
 			} // try
 
-			var user = _users.GetUserByLogin(model.UserName);
+			var user = m_oUsers.GetUserByLogin(model.UserName);
 
 			if (user == null) {
-				_log.WarnFormat(
+				ms_oLog.Warn(
 					"Customer log on attempt from remote IP {0} with user name '{1}': could not find a user entry.",
 					customerIp,
 					model.UserName
@@ -147,9 +158,9 @@ namespace EzBob.Web.Controllers {
 
 			var isUnderwriter = user.Roles.Any(r => r.Id == 31 || r.Id == 32 || r.Id == 33);
 
-			_log.DebugFormat("{1} log on attempt with login '{0}'.", model.UserName, isUnderwriter ? "Underwriter" : "Customer");
+			ms_oLog.Debug("{1} log on attempt with login '{0}'.", model.UserName, isUnderwriter ? "Underwriter" : "Customer");
 
-			_log.DebugFormat(
+			ms_oLog.Debug(
 				"{2} log on attempt from remote IP {0} with user name '{1}': log on attempt #{3}.",
 				customerIp,
 				model.UserName,
@@ -158,23 +169,25 @@ namespace EzBob.Web.Controllers {
 			);
 
 			if (isUnderwriter) {
-				_log.DebugFormat(
+				ms_oLog.Debug(
 					"Underwriter log on attempt from remote IP {0} with user name '{1}': failed, underwriters should use a dedicated log on page.",
 					customerIp,
 					model.UserName
 				);
 
-				return Json(new {success = false, errorMessage = "Please use dedicated underwriter log on page."}, JsonRequestBehavior.AllowGet);
+				return Json(new { success = false, errorMessage = "Please use dedicated underwriter log on page." }, JsonRequestBehavior.AllowGet);
 			} // if
 
+// ReSharper disable RedundantAssignment
 			string errorMessage = null;
+// ReSharper restore RedundantAssignment
 
-			var customer = _customers.Get(user.Id);
+			var customer = m_oCustomers.Get(user.Id);
 
 			if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
 				errorMessage = @"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> customercare@ezbob.com";
 
-				_sessionIpLog.AddSessionIpLog(new CustomerSession {
+				m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
 					CustomerId = user.Id,
 					StartSession = DateTime.Now,
 					Ip = customerIp,
@@ -182,7 +195,7 @@ namespace EzBob.Web.Controllers {
 					ErrorMessage = errorMessage
 				});
 
-				_log.WarnFormat(
+				ms_oLog.Warn(
 					"Customer log on attempt from remote IP {0} with user name '{1}': the customer is disabled.",
 					customerIp,
 					model.UserName
@@ -191,8 +204,8 @@ namespace EzBob.Web.Controllers {
 				return Json(new { success = false, errorMessage }, JsonRequestBehavior.AllowGet);
 			} // if user is disabled
 
-			if (_membershipProvider.ValidateUser(model.UserName, model.Password)) {
-				_sessionIpLog.AddSessionIpLog(new CustomerSession {
+			if (m_oMembershipProvider.ValidateUser(model.UserName, model.Password)) {
+				m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
 					CustomerId = user.Id,
 					StartSession = DateTime.Now,
 					Ip = customerIp,
@@ -202,7 +215,7 @@ namespace EzBob.Web.Controllers {
 				user.LoginFailedCount = 0;
 				model.SetCookie("Customer");
 
-				_log.DebugFormat(
+				ms_oLog.Debug(
 					"Customer log on attempt from remote IP {0} with user name '{1}': success.",
 					customerIp,
 					model.UserName
@@ -212,7 +225,7 @@ namespace EzBob.Web.Controllers {
 			} // if logged in successfully
 
 			if (user.LoginFailedCount < 3) {
-				_sessionIpLog.AddSessionIpLog(new CustomerSession {
+				m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
 					CustomerId = user.Id,
 					StartSession = DateTime.Now,
 					Ip = customerIp,
@@ -222,7 +235,7 @@ namespace EzBob.Web.Controllers {
 				errorMessage = @"User not found or incorrect password.";
 			} // if login failed count is still ok
 			else {
-				_sessionIpLog.AddSessionIpLog(new CustomerSession {
+				m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
 					CustomerId = user.Id,
 					StartSession = DateTime.Now,
 					Ip = customerIp,
@@ -230,7 +243,7 @@ namespace EzBob.Web.Controllers {
 					ErrorMessage = "More than 3 unsuccessful login attempts have been made. Resetting user password.",
 				});
 
-				var password = _membershipProvider.ResetPassword(user.EMail, "");
+				var password = m_oMembershipProvider.ResetPassword(user.EMail, "");
 				m_oServiceClient.Instance.ThreeInvalidAttempts(user.Id, password);
 				user.IsPasswordRestored = true;
 				user.LoginFailedCount = 0;
@@ -238,7 +251,7 @@ namespace EzBob.Web.Controllers {
 				errorMessage = @"Three unsuccessful login attempts have been made. <span class='bold'>ezbob</span> has issued you with a temporary password. Please check your e-mail.";
 			} // if
 
-			_log.WarnFormat(
+			ms_oLog.Warn(
 				"Customer log on attempt from remote IP {0} with user name '{1}': failed {2}.",
 				customerIp,
 				model.UserName,
@@ -249,22 +262,26 @@ namespace EzBob.Web.Controllers {
 			return Json(new { success = false, errorMessage }, JsonRequestBehavior.AllowGet);
 		} // CustomerLogOn
 
+		#endregion action LogOn
+
+		#region action LogOff
+
 		public ActionResult LogOff(bool isUnderwriterPage = false) {
-			SecuritySession securitySession = sessionRepository.Get(_context.SessionId);
+			SecuritySession securitySession = m_oSessionRepository.Get(m_oContext.SessionId);
 
 			if (securitySession != null) {
 				securitySession.State = 0;
-				sessionRepository.SaveOrUpdate(securitySession);
+				m_oSessionRepository.SaveOrUpdate(securitySession);
 			} // if
 
-			_context.SessionId = null;
+			m_oContext.SessionId = null;
 			FormsAuthentication.SignOut();
 			HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
 
 			if (isUnderwriterPage)
 				return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 
-			switch (logOffMode) {
+			switch (m_oLogOffMode) {
 			case LogOffMode.SignUpOfEnv:
 				return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
 			case LogOffMode.LogOnOfEnv:
@@ -273,6 +290,10 @@ namespace EzBob.Web.Controllers {
 				return Redirect(@"http://www.ezbob.com");
 			} // switch
 		} // LogOff
+
+		#endregion action LogOff
+
+		#region action SignUp
 
 		[HttpPost]
 		[Transactional]
@@ -302,9 +323,9 @@ namespace EzBob.Web.Controllers {
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
 
-				var user = _users.GetUserByLogin(model.EMail);
+				var user = m_oUsers.GetUserByLogin(model.EMail);
 
-				_sessionIpLog.AddSessionIpLog(new CustomerSession {
+				m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
 					CustomerId = user.Id,
 					StartSession = DateTime.Now,
 					Ip = RemoteIp(),
@@ -322,10 +343,18 @@ namespace EzBob.Web.Controllers {
 			} // try
 		} // SignUp
 
+		#endregion action SignUp
+
+		#region action ForgotPassword
+
 		public ActionResult ForgotPassword() {
 			ViewData["CaptchaMode"] = CurrentValues.Instance.CaptchaMode.Value;
 			return View("ForgotPassword");
 		} // ForgotPassword
+
+		#endregion action ForgotPassword
+
+		#region action QuestionForEmail
 
 		[CaptchaValidationFilter(Order = 999999)]
 		[Ajax]
@@ -338,40 +367,48 @@ namespace EzBob.Web.Controllers {
 					return Json(new { broker = true }, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception e) {
-				_log.Warn("Failed to check whether the email '" + email + "' is a broker email, continuing as a customer.", e);
+				ms_oLog.Warn(e, "Failed to check whether the email '{0}' is a broker email, continuing as a customer.", email);
 			} // try
 
-			var user = _users.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
+			var user = m_oUsers.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
 
 			return user == null ?
 				Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet) :
 				Json(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" }, JsonRequestBehavior.AllowGet);
 		} // QuestionForEmail
 
+		#endregion action QuestionForEmail
+
+		#region action RestorePassword
+
 		[Transactional]
 		public JsonResult RestorePassword(string email = "", string answer = "") {
 			if (!ModelState.IsValid)
 				return GetModelStateErrors(ModelState);
 
-			if (_users.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email) == null || string.IsNullOrEmpty(email))
+			if (m_oUsers.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email) == null || string.IsNullOrEmpty(email))
 				throw new UserNotFoundException(string.Format("User {0} not found", email));
 
 			if (string.IsNullOrEmpty(answer))
 				throw new EmptyAnswerExeption("Answer is empty");
 
-			var user = _users.GetAll().FirstOrDefault(x => (x.EMail == email || x.Name == email) && (x.SecurityAnswer == answer));
+			var user = m_oUsers.GetAll().FirstOrDefault(x => (x.EMail == email || x.Name == email) && (x.SecurityAnswer == answer));
 
 			if (user == null)
 				return Json(new { error = "Wrong answer to secret questions" }, JsonRequestBehavior.AllowGet);
 
-			var password = _membershipProvider.ResetPassword(email, "");
+			var password = m_oMembershipProvider.ResetPassword(email, "");
 
-			user = _users.GetUserByLogin(email);
+			user = m_oUsers.GetUserByLogin(email);
 			m_oServiceClient.Instance.PasswordRestored(user.Id, password);
 			user.IsPasswordRestored = true;
 
 			return Json(new { result = true }, JsonRequestBehavior.AllowGet);
 		} // RestorePassword
+
+		#endregion action RestorePassword
+
+		#region action Captcha
 
 		public ActionResult SimpleCaptcha() {
 			return View("SimpleCaptcha");
@@ -380,6 +417,10 @@ namespace EzBob.Web.Controllers {
 		public ActionResult Recaptcha() {
 			return View("Recaptcha");
 		} // Recaptcha
+
+		#endregion action Captcha
+
+		#region action CheckingCompany
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
@@ -402,7 +443,7 @@ namespace EzBob.Web.Controllers {
 			try {
 				var service = new EBusinessService();
 
-				result = service.TargetBusiness(companyName, postcode, _context.UserId, nFilter, refNum);
+				result = service.TargetBusiness(companyName, postcode, m_oContext.UserId, nFilter, refNum);
 
 				if (result.Targets.Any()) {
 					foreach (var t in result.Targets) {
@@ -430,6 +471,7 @@ namespace EzBob.Web.Controllers {
 				return Json(result.Targets, JsonRequestBehavior.AllowGet);
 			}
 			catch (WebException we) {
+				ms_oLog.Debug(we, "WebException caught while executing company targeting.");
 				result.Targets.Add(new CompanyInfo { BusName = "", BusRefNum = "exception" });
 				return Json(result.Targets, JsonRequestBehavior.AllowGet);
 			}
@@ -437,10 +479,14 @@ namespace EzBob.Web.Controllers {
 				if (companyName.ToLower() == "asd" && postcode.ToLower() == "ab10 1ba")
 					return Json(GenerateFakeTargetingData(companyName, postcode), JsonRequestBehavior.AllowGet);
 
-				_log.Error("Target Bussiness failed", e);
+				ms_oLog.Alert(e, "Target Business failed.");
 				throw;
 			} // try
 		} // CheckingCompany
+
+		#endregion action CheckingCompany
+
+		#region action GenerateMobileCode
 
 		[Ajax]
 		[HttpPost]
@@ -448,11 +494,15 @@ namespace EzBob.Web.Controllers {
 			return m_oServiceClient.Instance.GenerateMobileCode(mobilePhone).Value;
 		} // GenerateMobileCode
 
+		#endregion action GenerateMobileCode
+
+		#region action GetTwilioConfig
+
 		[HttpPost]
 		public JsonResult GetTwilioConfig() {
 			WizardConfigsActionResult wizardConfigsActionResult = m_oServiceClient.Instance.GetWizardConfigs();
 
-			_log.InfoFormat("Mobile code visibility related values are: IsSmsValidationActive:{0} NumberOfMobileCodeAttempts:{1}",
+			ms_oLog.Msg("Mobile code visibility related values are: IsSmsValidationActive:{0} NumberOfMobileCodeAttempts:{1}",
 				wizardConfigsActionResult.IsSmsValidationActive, wizardConfigsActionResult.NumberOfMobileCodeAttempts);
 
 			return Json(new {
@@ -461,8 +511,15 @@ namespace EzBob.Web.Controllers {
 			}, JsonRequestBehavior.AllowGet);
 		} // GetTwilioConfig
 
+		#endregion action GetTwilioConfig
+
+		#endregion public
+
 		#region private
 
+		#region method SignUpInternal
+
+		// ReSharper disable UnusedParameter.Local
 		private void SignUpInternal(
 			string email,
 			string signupPass1,
@@ -493,32 +550,32 @@ namespace EzBob.Web.Controllers {
 					throw new Exception("Invalid code");
 			} // if
 
-			_membershipProvider.CreateUser(email, signupPass1, email, securityQuestion, securityAnswer, false, null, out status);
+			m_oMembershipProvider.CreateUser(email, signupPass1, email, securityQuestion, securityAnswer, false, null, out status);
 
 			if (status == MembershipCreateStatus.Success) {
-				var user = _users.GetUserByLogin(email);
-				var g = new RefNumberGenerator(_customers);
+				var user = m_oUsers.GetUserByLogin(email);
+				var g = new RefNumberGenerator(m_oCustomers);
 				var isAutomaticTest = IsAutomaticTest(email);
-				var vip = _vipRequestRepository.RequestedVip(email);
+				var vip = m_oVipRequestRepository.RequestedVip(email);
 
 				var customer = new Customer {
 					Name = email,
 					Id = user.Id,
 					Status = Status.Registered,
 					RefNumber = g.GenerateForCustomer(),
-					WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
-					CollectionStatus = new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
+					WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
+					CollectionStatus = new CollectionStatus { CurrentStatus = m_oCustomerStatusesRepository.GetByName("Enabled") },
 					IsTest = isAutomaticTest,
-					IsOffline = (bool?)null,
+					IsOffline = null,
 					PromoCode = promoCode,
 					CustomerInviteFriend = new List<CustomerInviteFriend>(),
 					PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone, },
-					TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
+					TrustPilotStatus = m_oDatabaseHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
 					GreetingMailSentDate = DateTime.UtcNow,
 					Vip = vip
 				};
 
-				_log.DebugFormat("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
+				ms_oLog.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
 
 				var sourceref = Request.Cookies["sourceref"];
 				if (sourceref != null) {
@@ -553,8 +610,8 @@ namespace EzBob.Web.Controllers {
 				if (Request.Cookies["istest"] != null)
 					customer.IsTest = true;
 
-				_customers.Save(customer);
-				string link = _confirmation.GenerateLink(customer);
+				m_oCustomers.Save(customer);
+				string link = m_oConfirmation.GenerateLink(customer);
 
 				customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
 					Customer = customer,
@@ -573,18 +630,27 @@ namespace EzBob.Web.Controllers {
 			if (status == MembershipCreateStatus.DuplicateEmail)
 				throw new Exception("This email is already registered");
 		} // SignupInternal
+		// ReSharper restore UnusedParameter.Local
+
+		#endregion method SignUpInternal
+
+		#region method IsAutomaticTest
 
 		private bool IsAutomaticTest(string email) {
 			bool isAutomaticTest = false;
 
 			if (CurrentValues.Instance.AutomaticTestCustomerMark == "1") {
-				var patterns = _testCustomers.GetAllPatterns();
+				var patterns = m_oTestCustomers.GetAllPatterns();
 				if (patterns.Any(email.Contains))
 					isAutomaticTest = true;
 			} // if
 
 			return isAutomaticTest;
 		} // IsAutomaticTest
+
+		#endregion method IsAutomaticTest
+
+		#region method GenerateFakeTargetingData
 
 		private static List<CompanyInfo> GenerateFakeTargetingData(string companyName, string postcode) {
 			var data = new List<CompanyInfo>();
@@ -612,6 +678,10 @@ namespace EzBob.Web.Controllers {
 			return data;
 		} // GenerateFakeTargetingData
 
+		#endregion method GenerateFakeTargetingData
+
+		#region method GetModelStateErrors
+
 		private JsonResult GetModelStateErrors(ModelStateDictionary modelStateDictionary) {
 			return Json(
 				new {
@@ -624,11 +694,20 @@ namespace EzBob.Web.Controllers {
 				}, JsonRequestBehavior.AllowGet);
 		} // GetModelStateErrors
 
+		#endregion method GetModelStateErrors
+
+		#region enum LogOffMode {
+
 		private enum LogOffMode {
+			[UsedImplicitly]
 			WebProd = 0,
+
 			LogOnOfEnv = 1,
+
 			SignUpOfEnv = 2
 		} // enum LogOffMode
+
+		#endregion enum LogOffMode {
 
 		#region method RemoteIp
 
@@ -643,21 +722,26 @@ namespace EzBob.Web.Controllers {
 
 		#endregion method RemoteIp
 
-		private static readonly ILog _log = LogManager.GetLogger(typeof(AccountController));
-		private readonly MembershipProvider _membershipProvider;
-		private readonly IUsersRepository _users;
-		private readonly CustomerRepository _customers;
+		#region fields
+
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(AccountController));
+
+		private readonly MembershipProvider m_oMembershipProvider;
+		private readonly IUsersRepository m_oUsers;
+		private readonly CustomerRepository m_oCustomers;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly IEmailConfirmation _confirmation;
-		private readonly ICustomerSessionsRepository _sessionIpLog;
-		private readonly ITestCustomerRepository _testCustomers;
-		private readonly ICustomerStatusesRepository _customerStatusesRepository;
-		private readonly DatabaseDataHelper _helper;
+		private readonly IEzbobWorkplaceContext m_oContext;
+		private readonly IEmailConfirmation m_oConfirmation;
+		private readonly ICustomerSessionsRepository m_oSessionIpLog;
+		private readonly ITestCustomerRepository m_oTestCustomers;
+		private readonly ICustomerStatusesRepository m_oCustomerStatusesRepository;
+		private readonly DatabaseDataHelper m_oDatabaseHelper;
 		private readonly BrokerHelper m_oBrokerHelper;
-		private readonly SessionRepository sessionRepository;
-		private readonly LogOffMode logOffMode;
-		private readonly IVipRequestRepository _vipRequestRepository;
+		private readonly SessionRepository m_oSessionRepository;
+		private readonly LogOffMode m_oLogOffMode;
+		private readonly IVipRequestRepository m_oVipRequestRepository;
+
+		#endregion fields
 
 		#endregion private
 	} // class AccountController
