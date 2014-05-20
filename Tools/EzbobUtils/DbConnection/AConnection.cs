@@ -386,8 +386,9 @@
 
 				object oResult = null;
 
+				DbCommand localCommand = command;
 				oRetryer.Retry(() =>
-					oResult = RunOnce(oAction, nMode, command, nLogVerbosityLevel, spName, sArgsForLog, guid)
+					oResult = RunOnce(oAction, nMode, localCommand, nLogVerbosityLevel, spName, sArgsForLog, guid)
 				); // Retry
 
 				return oResult;

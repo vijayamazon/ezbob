@@ -10,7 +10,7 @@
 
 		public static XmlNode Offspring(this XmlNode oRoot, NameList oChildNames) {
 			if (ReferenceEquals(oRoot, null))
-				return oRoot;
+				return null;
 
 			if (ReferenceEquals(oChildNames, null))
 				return oRoot;

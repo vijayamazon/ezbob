@@ -150,7 +150,7 @@ namespace Ezbob.Utils {
 			string sLineColSeparator = string.Format("{0}{1}{0}", cLineChar, cLineColSeparator);
 
 			int nLength = 0;
-			int nFirstLength = sTitle.Length;
+			int[] nFirstLength = {sTitle.Length};
 
 			if (ReferenceEquals(oRowKeyToString, null))
 				oRowKeyToString = x => x.ToString();
@@ -170,7 +170,7 @@ namespace Ezbob.Utils {
 			ForEachRow((oRowKey, pcts) => {
 				string s = oRowKeyToString(oRowKey);
 				oRowKeyStr[oRowKey] = s;
-				nFirstLength = nFirstLength.Max(s.Length);
+				nFirstLength[0] = nFirstLength[0].Max(s.Length);
 
 				var oRowValues = new List<string>();
 
@@ -183,13 +183,13 @@ namespace Ezbob.Utils {
 				oOtherRows[oRowKey] = oRowValues;
 			}); // for each row
 
-			nFirstLength++;
+			nFirstLength[0]++;
 
-			string sFirstColFormat = string.Format("{{0,{0}}}", nFirstLength);
+			string sFirstColFormat = string.Format("{{0,{0}}}", nFirstLength[0]);
 			string sOtherColsFormat = string.Format("{{0,{0}}}", nLength);
 
 			var oLine = new StringBuilder();
-			oLine.Append(new string(cLineChar, nFirstLength));
+			oLine.Append(new string(cLineChar, nFirstLength[0]));
 			for (var i = 0; i < oFirstRow.Count; i++) {
 				oLine.Append(sLineColSeparator);
 				oLine.Append(new string(cLineChar, nLength));

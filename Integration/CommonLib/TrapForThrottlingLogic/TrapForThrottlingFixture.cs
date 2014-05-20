@@ -57,19 +57,19 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 			var tasks = new List<Task>();
 			using ( var t = TrapForThrottlingController.Create( "test", requestQuota, 5 ) )
 			{
-				
+				var localTrapForThrottling = t;
 				for (int i = 0; i < countRequests; i++)
 				{
 					var counter = i + 1;
-					tasks.Add( new Task( () => t.Execute( CreateAction( string.Format( "Action #{0}", counter + 1 ) ) ) ) );
-					tasks.Add( new Task( () => t.Execute( CreateAction( string.Format( "Limit Action #{0}", counter + 1 ), ActionAccessType.Limit ) ) ) );
+					tasks.Add(new Task(() => localTrapForThrottling.Execute(CreateAction(string.Format("Action #{0}", counter + 1)))));
+					tasks.Add(new Task(() => localTrapForThrottling.Execute(CreateAction(string.Format("Limit Action #{0}", counter + 1), ActionAccessType.Limit))));
 					//Thread.Sleep( 10 * 1000 );
 				}
 				//Thread.Sleep( requestQuota * 90 * 1000 );
-				tasks.Add( new Task( () => t.Execute( CreateAction( string.Format( "Action #{0}", countRequests + 1 ) ) ) ) );
+				tasks.Add(new Task(() => localTrapForThrottling.Execute(CreateAction(string.Format("Action #{0}", countRequests + 1)))));
 
 				//Thread.Sleep( requestQuota / 3 * 90 * 1000 );
-				tasks.Add( new Task( () => t.Execute( CreateAction( string.Format( "Action #{0}", countRequests + 2 ) ) ) ) );
+				tasks.Add(new Task(() => localTrapForThrottling.Execute(CreateAction(string.Format("Action #{0}", countRequests + 2)))));
 				//Thread.Sleep( 5 * 60 * 1000 );
 				tasks.ForEach( t1 => t1.Start() );
 				tasks.ForEach( t1 => t1.Wait() );

@@ -492,8 +492,7 @@ namespace PayPal.Platform.SDK
             // [
             NextToken(json, ref index);
 
-            bool done = false;
-            while (!done)
+            while (true)
             {
                 int token = LookAhead(json, index);
                 if (token == JSONSerializer.TOKEN_NONE)
