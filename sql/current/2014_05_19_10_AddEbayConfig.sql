@@ -26,7 +26,7 @@ BEGIN
 END
 ELSE
 BEGIN
-	IF @Environment = 'QA' OR @Environment = 'UAT'
+	IF @Environment = 'QA'
 	BEGIN
 		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayServiceType')
 		BEGIN
@@ -47,6 +47,29 @@ BEGIN
 		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayRuName')
 		BEGIN
 			INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayRuName', 'Ezbob-Ezbob342e-6544--arxujwkun', 'Ebay ru name')
+		END
+	END
+	ELSE IF @Environment = 'UAT'
+	BEGIN
+		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayServiceType')
+		BEGIN
+			INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayServiceType', 'Production', 'Ebay service type')
+		END
+		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayDevId')
+		BEGIN
+			INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayDevId', 'b322e279-e402-4435-9f8e-dc3e602a1b72', 'Ebay dev id')
+		END
+		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayAppId')
+		BEGIN
+			INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayAppId', 'Scortoe95-67d5-4848-afe4-99ae20ec497', 'Ebay app id')
+		END
+		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayCertId')
+		BEGIN
+			INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayCertId', '90286b4e-1af1-4844-80f1-a97891583bd8', 'Ebay cert id')
+		END
+		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayRuName')
+		BEGIN
+			INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayRuName', 'Scorto-Scortoe95-67d5--lffmtxnt', 'Ebay ru name')
 		END
 	END
 	ELSE
