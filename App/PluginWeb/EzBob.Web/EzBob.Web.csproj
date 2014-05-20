@@ -535,7 +535,6 @@
     <Content Include="Content\css\lib\bootstrap2.css" />
     <Content Include="Content\css\lib\bootstrap3-modal-patch.css" />
     <Content Include="Content\css\lib\bootstrap3.css" />
-    <Content Include="Content\css\lib\chosen-sprite.png" />
     <Content Include="Content\css\lib\chosen.css" />
     <Content Include="Content\css\lib\coin-slider-styles.css" />
     <Content Include="Content\css\lib\dataTables.bootstrap.css" />
@@ -546,6 +545,7 @@
     <Content Include="Content\css\lib\flaty.css" />
     <Content Include="Content\css\lib\font-awesome.min.css" />
     <Content Include="Content\css\lib\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\css\lib\images\chosen-sprite.png" />
     <Content Include="Content\css\lib\images\dataTables\back_disabled.png" />
     <Content Include="Content\css\lib\images\dataTables\back_enabled.png" />
     <Content Include="Content\css\lib\images\dataTables\back_enabled_hover.png" />
