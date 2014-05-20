@@ -212,7 +212,7 @@
 		private decimal GetInterestRevenue(IEnumerable<LoanScheduleItem> schedule)
 		{
 			decimal interestRevenue = schedule.Sum(scheuldeItem => scheuldeItem.Interest);
-			interestRevenue *= (100 - Model.DefaultRate) / 100;
+			interestRevenue *= 1 - Model.DefaultRate;
 			return interestRevenue;
 		}
 
