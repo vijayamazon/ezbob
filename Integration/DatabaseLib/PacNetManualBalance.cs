@@ -49,21 +49,22 @@
 
 		public int GetBalance()
 		{
-			return GetCureentActive().Sum(row => row.Amount);
+			return GetCurrentActive().Sum(row => row.Amount);
 		}
 
 		public void DisableCurrents()
 		{
-			foreach (PacNetManualBalance manualBalance in GetCureentActive())
+			foreach (PacNetManualBalance manualBalance in GetCurrentActive())
 			{  
 				manualBalance.Enabled = false;
 				SaveOrUpdate(manualBalance);
 			}
 		}
 
-		private IEnumerable<PacNetManualBalance> GetCureentActive()
+		private IEnumerable<PacNetManualBalance> GetCurrentActive()
 		{
-			DateTime lastNonManual = pacNetBalanceRepository.GetAll().Max(a => a.Date) ?? DateTime.Today;
+			DateTime? lastReportTime = pacNetBalanceRepository.GetAll().Max(a => a.Date);
+			DateTime lastNonManual = lastReportTime != null ? lastReportTime.Value.AddDays(1) : DateTime.Today;
 			return _session.Query<PacNetManualBalance>().Where(a => a.Enabled && a.Date >= lastNonManual);
 		}
     }
