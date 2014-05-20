@@ -108,7 +108,7 @@
 			Loan loan = CreateLoan(monthlyInterestRate, Model.SetupFeePounds);
 			decimal costOfDebtEu = GetCostOfDebt(loan.Schedule);
 			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
-			decimal netLossFromDefaults = (1 - Model.EuCollectionRate) * Model.LoanAmount * Model.DefaultRate / 100;
+			decimal netLossFromDefaults = (1 - Model.EuCollectionRate) * Model.LoanAmount * Model.DefaultRate;
 			decimal setupFeePounds = Model.ProfitMarkupOutput - interestRevenue + Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
 			decimal setupFee = setupFeePounds / Model.LoanAmount;
 			loan = CreateLoan(monthlyInterestRate, setupFeePounds);
@@ -224,7 +224,7 @@
 			decimal revenue = Model.SetupFeePounds + interestRevenue;
 			decimal grossProfit = revenue - Model.Cogs;
 			decimal ebitda = grossProfit - Model.OpexAndCapex;
-			decimal netLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate / 100;
+			decimal netLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
 			decimal profitMarkupOutput = Model.ProfitMarkup * revenue;
 			return ebitda - netLossFromDefaults - costOfDebtOutput - profitMarkupOutput;
 		}
