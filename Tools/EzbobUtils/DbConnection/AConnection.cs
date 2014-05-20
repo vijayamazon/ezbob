@@ -379,16 +379,16 @@
 			ARetryer oRetryer = CreateRetryer();
 			oRetryer.LogVerbosityLevel = this.LogVerbosityLevel;
 
-			DbCommand command = null;
+			DbCommand oCmdToDispose = null;
 
 			try {
-				command = BuildCommand(spName, nSpecies, aryParams);
+				DbCommand cmd = BuildCommand(spName, nSpecies, aryParams);
+				oCmdToDispose = cmd;
 
 				object oResult = null;
 
-				DbCommand localCommand = command;
 				oRetryer.Retry(() =>
-					oResult = RunOnce(oAction, nMode, localCommand, nLogVerbosityLevel, spName, sArgsForLog, guid)
+					oResult = RunOnce(oAction, nMode, cmd, nLogVerbosityLevel, spName, sArgsForLog, guid)
 				); // Retry
 
 				return oResult;
@@ -402,9 +402,8 @@
 				throw;
 			}
 			finally {
-				if (command != null) {
-					command.Dispose();
-					command = null;
+				if (oCmdToDispose != null) {
+					oCmdToDispose.Dispose();
 
 					if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
 						Debug("Command has been disposed.");
