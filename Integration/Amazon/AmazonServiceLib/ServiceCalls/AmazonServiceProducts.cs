@@ -1,16 +1,16 @@
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.DatabaseWrapper.Products;
-using EzBob.AmazonServiceLib.Common;
-using EzBob.AmazonServiceLib.Inventory.Model;
-using EzBob.AmazonServiceLib.Products.Configurator;
-using EzBob.CommonLib;
-using EzBob.CommonLib.TrapForThrottlingLogic;
-using MarketplaceWebServiceProducts;
-using MarketplaceWebServiceProducts.Model;
-
 namespace EzBob.AmazonServiceLib.ServiceCalls
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib.DatabaseWrapper.Products;
+	using Common;
+	using Products;
+	using Products.Configurator;
+	using CommonLib;
+	using CommonLib.TrapForThrottlingLogic;
+	using MarketplaceWebServiceProducts;
+	using MarketplaceWebServiceProducts.Model;
+
 	internal class AmazonServiceProducts
 	{
 		private readonly IMarketplaceWebServiceProducts _Service;

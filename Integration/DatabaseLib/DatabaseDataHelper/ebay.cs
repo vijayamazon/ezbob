@@ -9,7 +9,6 @@
 	using DatabaseWrapper;
 	using DatabaseWrapper.AccountInfo;
 	using DatabaseWrapper.EbayFeedbackData;
-	using DatabaseWrapper.Inventory;
 	using DatabaseWrapper.Order;
 	using DatabaseWrapper.UsersData;
 	using Model.Database;
@@ -32,51 +31,7 @@
 		private readonly ConcurrentDictionary<string, MP_EBayOrderItemDetail> _CacheEBayOrderItemInfo = new ConcurrentDictionary<string, MP_EBayOrderItemDetail>();
 		private readonly ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>> _CacheEBayamazonCategory = new ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>>();
 		private readonly ConcurrentDictionary<string, MP_EbayAmazonCategory[]> _CacheAmazonCategoryByProductKey = new ConcurrentDictionary<string, MP_EbayAmazonCategory[]>();
-
-		public void StoreToDatabaseInventoryData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, DatabaseInventoryList data, MP_CustomerMarketplaceUpdatingHistory updatingHistoryRecord)
-		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
-
-			LogData("Inventory Data", customerMarketPlace, data);
-
-			if (data == null)
-			{
-				return;
-			}
-
-			var mpInventory = new MP_EbayAmazonInventory
-			{
-				CustomerMarketPlace = customerMarketPlace,
-				Created = data.SubmittedDate.ToUniversalTime(),
-				AmazonUseAFN = data.UseAFN,
-				HistoryRecord = updatingHistoryRecord
-			};
-
-			if (data.Count != 0)
-			{
-
-				data.ForEach(
-					databaseInventoryItem =>
-					{
-						var mpInventoryItem = new MP_EbayAmazonInventoryItem
-						{
-							Inventory = mpInventory,
-							BidCount = databaseInventoryItem.BidCount,
-							ItemId = databaseInventoryItem.ItemId,
-							Amount = _CurrencyConvertor.ConvertToBaseCurrency(databaseInventoryItem.Amount, data.SubmittedDate),
-							Quantity = databaseInventoryItem.Quantity,
-							Sku = databaseInventoryItem.Sku,
-
-						};
-
-						mpInventory.InventoryItems.Add(mpInventoryItem);
-					}
-					);
-			}
-			customerMarketPlace.Inventory.Add(mpInventory);
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-		}
-
+		
 		public void AddEbayOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EbayDatabaseOrdersList data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);

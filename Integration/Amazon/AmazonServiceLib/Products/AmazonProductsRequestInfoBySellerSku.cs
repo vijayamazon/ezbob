@@ -1,11 +1,10 @@
-using System.Collections.Generic;
-using EZBob.DatabaseLib.DatabaseWrapper.Products;
-using EzBob.AmazonServiceLib.Common;
-using EzBob.AmazonServiceLib.ServiceCalls;
-using EzBob.CommonLib;
-
-namespace EzBob.AmazonServiceLib.Inventory.Model
+namespace EzBob.AmazonServiceLib.Products
 {
+	using EZBob.DatabaseLib.DatabaseWrapper.Products;
+	using Common;
+	using ServiceCalls;
+	using CommonLib;
+
 	public enum AmazonProductRequestType
 	{
 		ByAsin,

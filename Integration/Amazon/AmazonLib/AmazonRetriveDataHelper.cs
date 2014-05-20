@@ -8,7 +8,6 @@
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.DatabaseWrapper.AmazonFeedbackData;
 	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-	using EZBob.DatabaseLib.DatabaseWrapper.Inventory;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.DatabaseWrapper.Products;
 	using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
@@ -17,8 +16,7 @@
 	using AmazonServiceLib;
 	using AmazonServiceLib.Common;
 	using AmazonServiceLib.Config;
-	using AmazonServiceLib.Inventory.Model;
-	using AmazonServiceLib.MarketWebService.Model;
+	using AmazonServiceLib.Products;
 	using AmazonServiceLib.Orders.Model;
 	using AmazonServiceLib.UserInfo;
 	using CommonLib;
@@ -118,62 +116,6 @@
 		{
 			return RetrieveCustomerSecurityInfo<AmazonSecurityInfo>( GetDatabaseCustomerMarketPlace( customerMarketPlaceId ) );
 		}
-
-        /*public void UpdateClientInventoryInfo( IDatabaseCustomer databaseCustomer, ActionAccessType access )
-        {
-            base.UpdateAllDataFor( customerMarketPlace => UpdateClientInventoryInfo(customerMarketPlace, access), databaseCustomer );
-        }
-
-        private void UpdateClientInventoryInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, ActionAccessType access )
-        {
-            var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>( databaseCustomerMarketPlace );
-
-            UpdateClientInventoryInfo( databaseCustomerMarketPlace, securityInfo, _ConnectionInfo, access );
-        }*/
-
-        private void UpdateClientInventoryInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonSecurityInfo securityInfo, ActionAccessType access, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-        {
-            Helper.CustomerMarketplaceUpdateAction(CustomerMarketplaceUpdateActionType.UpdateInventoryInfo, databaseCustomerMarketPlace, historyRecord, () =>
-	            {
-					var elapsedTimeInfo = new ElapsedTimeInfo();
-					DateTime? startDate = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.RetrieveDataFromDatabase,
-									() => Helper.GetLastInventoryRequest( databaseCustomerMarketPlace ) );
-					
-		            var now = DateTime.UtcNow;
-
-		            if (!startDate.HasValue)
-		            {
-			            startDate = now.AddYears(-1);
-		            }
-		            var fromDate = startDate.Value;
-		            var toDate = now;
-
-		            var amazonInventoryRequestInfo = new AmazonInventoryRequestInfo
-			                                            {
-				                                            MarketplaceId = securityInfo.MarketplaceId,
-				                                            MerchantId = securityInfo.MerchantId,
-				                                            StartDate = fromDate,
-															EndDate = toDate,
-															ErrorRetryingInfo = _AmazonSettings
-			                                            };
-
-					var inventories = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.RetrieveDataFromExternalService,
-									() => AmazonServiceHelper.GetUserInventorList( _ConnectionInfo, amazonInventoryRequestInfo, access ) );
-
-		            ParceAndSaveInventoryInfo(databaseCustomerMarketPlace, inventories, historyRecord, elapsedTimeInfo);
-
-					return new UpdateActionResultInfo
-					{
-						Name = UpdateActionResultType.InventoryItemsCount,
-						Value = inventories == null ? null : (object)inventories.Count,
-						RequestsCounter = inventories == null ? null : inventories.RequestsCounter,
-						ElapsedTime = elapsedTimeInfo
-					};
-	            }
-            );
-        }
 
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonSecurityInfo securityInfo, ActionAccessType access, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
@@ -428,70 +370,6 @@
 
 			return DataAggregatorHelper.AggregateData( factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter );
         }
-
-        private void ParceAndSaveInventoryInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonInventoryData data, MP_CustomerMarketplaceUpdatingHistory historyRecord, ElapsedTimeInfo elapsedTimeInfo)
-        {            
-            if (data == null)
-            {
-                return;
-            }
-			
-            var submittedDate = data.SubmittedDate;
-
-			var databaseInventoryItems = data.Select(s => new DatabaseInventoryItem
-                                                            {
-                                                                ItemId = s.ItemID,
-																Amount = new AmountInfo { Value = s.Price, CurrencyCode = CurrencyConvertor.BaseCurrency },
-                                                                Quantity = s.Quantity,
-                                                                Sku = s.SKU
-                                                            });
-
-            var databaseInvetoryList = new DatabaseInventoryList(submittedDate, databaseInventoryItems)
-            {
-                UseAFN = data.UseAFN,
-            };
-
-			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.StoreDataToDatabase,
-									() => Helper.StoreToDatabaseInventoryData( databaseCustomerMarketPlace, databaseInvetoryList, historyRecord ) );
-
-			var totalItemInInventory = new WriteDataInfo<AmazonDatabaseFunctionType>
-			{
-				UpdatedDate = submittedDate,
-				Value = databaseInvetoryList.Count,
-				TimePeriodType = TimePeriodEnum.Lifetime,
-				FunctionType = AmazonDatabaseFunctionType.InventoryTotalItems
-			};
-
-			var sum = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.AggregateData,
-									() => databaseInvetoryList.Sum( i => i.Amount.Value * i.Quantity ) );
-
-	        var totalValueOfInventory = new WriteDataInfo<AmazonDatabaseFunctionType>
-			{
-				UpdatedDate = submittedDate,
-				TimePeriodType = TimePeriodEnum.Lifetime,
-				FunctionType = AmazonDatabaseFunctionType.InventoryTotalValue,
-				Value = sum
-			};
-
-			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.StoreAggregatedData,
-									() => Helper.StoreToDatabaseAggregatedData( databaseCustomerMarketPlace, new[] { totalItemInInventory, totalValueOfInventory, }, historyRecord ) );
-
-        }
-
-        /*public void UpdateClientFeedbackInfo( IDatabaseCustomer databaseCustomer )
-        {
-            base.UpdateAllDataFor( UpdateClientFeedbackInfo, databaseCustomer );
-        }
-
-        public void UpdateClientFeedbackInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketPlaceUpdatingHistory historyRecord )
-        {
-            AmazonSecurityInfo securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>( databaseCustomerMarketPlace );
-
-            UpdateClientFeedbackInfo( databaseCustomerMarketPlace, securityInfo, historyRecord);
-        }*/
 
         private void UpdateClientFeedbackInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonSecurityInfo securityInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {

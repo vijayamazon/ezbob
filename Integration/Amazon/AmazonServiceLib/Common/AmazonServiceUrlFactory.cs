@@ -1,12 +1,11 @@
-using System;
-using System.Security.Policy;
-using EzBob.AmazonServiceLib.Inventory;
-using EzBob.AmazonServiceLib.MarketWebService;
-using EzBob.AmazonServiceLib.Orders;
-using EzBob.AmazonServiceLib.Products;
-
 namespace EzBob.AmazonServiceLib.Common
 {
+	using System;
+	using System.Security.Policy;
+	using MarketWebService;
+	using Orders;
+	using Products;
+
 	internal class AmazonServiceUrlHelper
 	{
 		public static IAmazonServiceUrlFactory CreateFactory( AmazonApiType type )
@@ -15,9 +14,6 @@ namespace EzBob.AmazonServiceLib.Common
 			{
 				case AmazonApiType.Orders:
 					return new AmazonServiceUrlFactoryOrders();
-
-				case AmazonApiType.Inventory:
-					return new AmazonServiceUrlFactoryInventory();
 
 				case AmazonApiType.WebService:
 					return new AmazonWebServiceUrlFactory();

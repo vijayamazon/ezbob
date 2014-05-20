@@ -1,45 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.DatabaseWrapper.EbayFeedbackData;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-using EZBob.DatabaseLib.DatabaseWrapper.Inventory;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.CommonLib;
-using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
-using EzBob.CommonLib.ReceivedDataListLogic;
-using EzBob.CommonLib.TimePeriodLogic;
-using EzBob.TeraPeakServiceLib;
-using EzBob.TeraPeakServiceLib.Requests.SellerResearch;
-using EzBob.eBayDbLib;
-using EzBob.eBayLib.Config;
-using EzBob.eBayServiceLib;
-using EzBob.eBayServiceLib.Common;
-using EzBob.eBayServiceLib.LargeMerchantServiceCore.Requests;
-using EzBob.eBayServiceLib.LargeMerchantServiceCore.ServiceLogic.BulkData;
-using EzBob.eBayServiceLib.LargeMerchantServiceCore.ServiceLogic.FileTransfer;
-using EzBob.eBayServiceLib.TradingServiceCore;
-using EzBob.eBayServiceLib.TradingServiceCore.DataInfos.Orders;
-using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.Base;
-using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant;
-using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant.GetOrders;
-using EzBob.eBayServiceLib.TradingServiceCore.ResultInfos;
-using EzBob.eBayServiceLib.TradingServiceCore.ResultInfos.Orders;
-using EzBob.eBayServiceLib.TradingServiceCore.TokenProvider;
-using EzBob.eBayServiceLib.com.ebay.developer.soap;
-using StructureMap;
-using log4net;
-
-namespace EzBob.eBayLib
+﻿namespace EzBob.eBayLib
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.DatabaseWrapper.EbayFeedbackData;
+	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
+	using EZBob.DatabaseLib.DatabaseWrapper.Inventory;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
+	using EZBob.DatabaseLib.Model.Database;
+	using CommonLib;
+	using CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
+	using CommonLib.ReceivedDataListLogic;
+	using CommonLib.TimePeriodLogic;
+	using TeraPeakServiceLib;
+	using TeraPeakServiceLib.Requests.SellerResearch;
+	using eBayDbLib;
+	using Config;
+	using eBayServiceLib;
+	using eBayServiceLib.Common;
+	using eBayServiceLib.TradingServiceCore;
+	using eBayServiceLib.TradingServiceCore.DataInfos.Orders;
+	using eBayServiceLib.TradingServiceCore.DataProviders.Model.Base;
+	using eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant;
+	using eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant.GetOrders;
+	using eBayServiceLib.TradingServiceCore.ResultInfos;
+	using eBayServiceLib.TradingServiceCore.ResultInfos.Orders;
+	using eBayServiceLib.TradingServiceCore.TokenProvider;
+	using eBayServiceLib.com.ebay.developer.soap;
+	using StructureMap;
+	using log4net;
+
 	public class eBayRetriveDataHelper : MarketplaceRetrieveDataHelperBase<eBayDatabaseFunctionType>
 	{
-
 		#region Nested Types
 
 		internal enum UpdateStrategyType
@@ -383,59 +379,6 @@ namespace EzBob.eBayLib
 
 			Helper.StoreEbayFeedbackData( databaseCustomerMarketPlace, data, historyRecord );
 
-		}
-
-		/*public void UpdateInventoryInfo( IDatabaseCustomer databaseCustomer )
-		{
-			base.UpdateAllDataFor( UpdateInventoryInfo, databaseCustomer );
-		}
-
-		public void UpdateInventoryInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
-			var connectionInfo = _EbayConnectionInfo;
-			DataProviderCreationInfo info = CreateProviderCreationInfo( databaseCustomerMarketPlace, connectionInfo );
-			UpdateInventoryInfo( databaseCustomerMarketPlace, info, connectionInfo );	
-		}*/
-
-		private void UpdateInventoryInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, DataProviderCreationInfo info, MP_CustomerMarketplaceUpdatingHistory historyRecord )
-		{
-
-			Helper.CustomerMarketplaceUpdateAction( CustomerMarketplaceUpdateActionType.UpdateInventoryInfo, databaseCustomerMarketPlace, historyRecord, () =>
-				{
-					var elapsedTimeInfo = new ElapsedTimeInfo();
-
-					var databaseInvetoryList = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.RetrieveDataFromExternalService,
-									() =>
-										{											
-											var ebayBulkDataServiceProvider = new EbayBulkDataServiceProvider(_EbayConnectionInfo);
-											var ebayFileTransferServiceProvider = new EbayFileTransferServiceProvider(_EbayConnectionInfo);
-											var request = new ActiveInventoryReportRequest( ebayBulkDataServiceProvider, ebayFileTransferServiceProvider, info.ServiceTokenProvider );
-											return request.GetReport();
-										});
-
-					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.StoreDataToDatabase,
-									() => Helper.StoreToDatabaseInventoryData( databaseCustomerMarketPlace, databaseInvetoryList, historyRecord ) );
-
-					var aggregates = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.AggregateData,
-									() => CreateInventoryAggregates( databaseInvetoryList ) );
-
-					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.StoreAggregatedData,
-									() => SaveInventoryAggregateData( databaseCustomerMarketPlace, aggregates, historyRecord ) );
-
-					return new UpdateActionResultInfo
-					{
-						Name = UpdateActionResultType.InventoryItemsCount,
-						Value = databaseInvetoryList.Count,
-						RequestsCounter = databaseInvetoryList.RequestsCounter,
-						ElapsedTime = elapsedTimeInfo
-					};	
-				}
-			);
-			
 		}
 
 		private WriteDataInfo<eBayDatabaseFunctionType>[] CreateInventoryAggregates( DatabaseInventoryList databaseInvetoryList )

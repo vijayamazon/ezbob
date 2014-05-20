@@ -1,19 +1,14 @@
-using System.Collections.Generic;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EZBob.DatabaseLib.DatabaseWrapper.Products;
-using EzBob.AmazonServiceLib.Common;
-using EzBob.AmazonServiceLib.Inventory.Configurator;
-using EzBob.AmazonServiceLib.Inventory.Model;
-using EzBob.AmazonServiceLib.MarketWebService.Configurator;
-using EzBob.AmazonServiceLib.MarketWebService.Model;
-using EzBob.AmazonServiceLib.Orders.Configurator;
-using EzBob.AmazonServiceLib.Orders.Model;
-using EzBob.AmazonServiceLib.ServiceCalls;
-using EzBob.AmazonServiceLib.UserInfo;
-using EzBob.CommonLib;
-
 namespace EzBob.AmazonServiceLib
 {
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using EZBob.DatabaseLib.DatabaseWrapper.Products;
+	using Common;
+	using Products;
+	using Orders.Model;
+	using ServiceCalls;
+	using UserInfo;
+	using CommonLib;
+
 	public static class AmazonServiceHelper
 	{
 		public static AmazonOrdersList2 GetListOrders( AmazonServiceConnectionInfo connectionInfo, AmazonOrdersRequestInfo requestInfo, ActionAccessType access )
@@ -28,25 +23,9 @@ namespace EzBob.AmazonServiceLib
 			return AmazonServiceOrders.GetListItemsOrdered( configurator, requestInfo, access, requestCounter );
 		}
 
-		/*public static AmazonInventorySupplyList GetInventoryList( AmazonServiceConnectionInfo connectionInfo, AmazonInventoryRequestInfo requestInfo )
-		{
-			return AmazonServiceInventory.GetInventoryList( configurator, requestInfo );
-		}*/
-
 		public static AmazonUserRatingInfo GetUserStatisticsInfo( AmazonUserInfo request )
 		{
 			return AmazonRateInfo.GetUserRatingInfo( request );
-		}
-
-		/*public static AmazonOrdersList GetOrdersReport( AmazonServiceConnectionInfo connectionInfo, AmazonOrdersRequestInfo requestInfo, ActionAccessType access )
-		{
-			return AmazonServiceReports.GetUserOrders( configurator, requestInfo, access );
-		}*/
-
-		public static AmazonInventoryData GetUserInventorList( AmazonServiceConnectionInfo connectionInfo, AmazonInventoryRequestInfo requestInfo, ActionAccessType access )
-		{
-			var configurator = AmazonServiceConfigurationFactory.CreateServiceReportsConfigurator( connectionInfo );
-			return AmazonServiceReports.GetUserInventory( configurator, requestInfo, access );
 		}
 
 		public static AmazonProductItemBase GetProductCategories(AmazonServiceConnectionInfo connectionInfo, AmazonProductsRequestInfoBySellerSku requestInfo, ActionAccessType access, RequestsCounterData requestCounter)
@@ -54,8 +33,5 @@ namespace EzBob.AmazonServiceLib
 			var configurator = AmazonServiceConfigurationFactory.CreateServiceProductsConfigurator( connectionInfo );
 			return AmazonServiceProducts.GetProductCategories( configurator, requestInfo, access, requestCounter );
 		}
-
 	}
-
-	
 }

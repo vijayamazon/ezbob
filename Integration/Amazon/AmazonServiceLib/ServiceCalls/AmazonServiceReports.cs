@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EzBob.AmazonServiceLib.Common;
-using EzBob.AmazonServiceLib.Inventory.Model;
-using EzBob.AmazonServiceLib.MarketWebService.Configurator;
-using EzBob.AmazonServiceLib.MarketWebService.Model;
-using EzBob.AmazonServiceLib.Orders.Model;
-using EzBob.CommonLib;
-using EzBob.CommonLib.TrapForThrottlingLogic;
-using MarketplaceWebService;
-using MarketplaceWebService.Model;
-
-namespace EzBob.AmazonServiceLib.ServiceCalls
+﻿namespace EzBob.AmazonServiceLib.ServiceCalls
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Concurrent;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Linq;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using Common;
+	using MarketWebService.Configurator;
+	using Orders.Model;
+	using CommonLib;
+	using CommonLib.TrapForThrottlingLogic;
+	using MarketplaceWebService;
+	using MarketplaceWebService.Model;
+
     public class AmazonServiceReports
 	{
 		private readonly IMarketplaceWebService _Service;
@@ -40,19 +34,11 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 			ReportGetReportListTrapForThrottling = TrapForThrottlingController.Create( "GetReportList", 10 );
 			ReportGetReportTrapForThrottling = TrapForThrottlingController.Create( "GetReport", 15 );
 		}
+
 		private AmazonServiceReports( IMarketplaceWebService service )
 		{
 			_Service = service;
 
-		}
-
-		public static AmazonInventoryData GetUserInventory( IAmazonServiceReportsConfigurator configurator, AmazonInventoryRequestInfo requestInfo, ActionAccessType access )
-		{
-			var service = configurator.AmazonService;
-
-			var data = new AmazonServiceReports( service );
-
-			return data.GetUserInventory( requestInfo, access );
 		}
 
 		public static AmazonOrdersList GetUserOrders( IAmazonServiceReportsConfigurator configurator, AmazonOrdersRequestInfo requestInfo, ActionAccessType access )
@@ -100,70 +86,6 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 						ParseOrdersStream(data, stream);
 					}
 				}
-			}
-			return data;
-		}
-
-		private AmazonInventoryData GetUserInventory( AmazonInventoryRequestInfo amazonRequestInfo, ActionAccessType access )
-		{
-			const string merchantListingsDataLiteRequestString = "_GET_MERCHANT_LISTINGS_DATA_LITE_";
-			const string afnInventoryDataRequestString = "_GET_AFN_INVENTORY_DATA_";
-
-			var reportRequestList = new RequestsListInfo( amazonRequestInfo, "GetUserInventory", access, /*timeout: 3 hours*/ amazonRequestInfo.ErrorRetryingInfo, 3 * 60);
-			reportRequestList.AddRequest(merchantListingsDataLiteRequestString);
-			reportRequestList.AddRequest(afnInventoryDataRequestString);
-
-			RequestAndWait( reportRequestList );
-
-			return ParseInventoryResults( reportRequestList, merchantListingsDataLiteRequestString, afnInventoryDataRequestString );
-		}
-
-		private AmazonInventoryData ParseInventoryResults( RequestsListInfo reportRequestList, string merchantListingsDataLiteRequestString, string afnInventoryDataRequestString )
-		{
-			AmazonInventoryData data = null;
-
-			var requestInfo = reportRequestList.GetRequestByName( merchantListingsDataLiteRequestString );
-
-			if ( requestInfo != null && requestInfo.IsDone )
-			{
-				var reportRequestInfo = requestInfo.ReportData;
-				if ( reportRequestInfo != null )
-				{
-					data = new AmazonInventoryData( reportRequestInfo.SubmittedDate );
-
-					using ( var stream = new MemoryStream() )
-					{
-						GetReportData( requestInfo, stream );
-						ParseInventoryStream( data, stream );
-					}
-					data.UseAFN = false;
-				}
-			}
-			else
-			{
-				requestInfo = reportRequestList.GetRequestByName( afnInventoryDataRequestString );
-
-				if ( requestInfo != null && requestInfo.IsDone )
-				{
-					var reportRequestInfoAfn = requestInfo.ReportData;
-					if ( reportRequestInfoAfn != null )
-					{
-						data = new AmazonInventoryData( reportRequestInfoAfn.SubmittedDate );
-
-                        //TODO
-                        /*using (var stream = new MemoryStream())
-                        {
-                            GetReportData(requestInfo, stream);
-                            ParseInventoryStream(data, stream);
-                        }*/
-                        data.UseAFN = true;						
-					}
-				}
-			}
-
-			if ( data != null )
-			{
-				data.RequestsCounter = reportRequestList.RequestsCounter;
 			}
 			return data;
 		}
@@ -306,38 +228,6 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 									requestsListInfo.RequestsCounter,
 									() => _Service.GetReport( requestReport ),
 									"GetReport" );				
-			}
-		}
-
-		private void ParseInventoryStream( AmazonInventoryData data, Stream stream )
-		{
-			using ( var sr = new StreamReader( stream ) )
-			{
-				// заголовок
-				var h = sr.ReadLine();
-
-				while ( sr.Peek() >= 0 )
-				{
-					var str = sr.ReadLine();
-					var list = str.Split( new[] { '\t' } );
-					var item = new InventoryItem();
-
-					item.SKU = list[0];
-					int q;
-					if ( int.TryParse( list[1], out q ) )
-					{
-						item.Quantity = q;
-					}
-					double p;
-					if ( double.TryParse( list[2], out p ) )
-					{
-						item.Price = p;
-					}
-
-					item.ItemID = list[3];
-
-					data.Add( item );
-				}
 			}
 		}
 
