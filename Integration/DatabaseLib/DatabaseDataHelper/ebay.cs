@@ -177,11 +177,6 @@
 					}).ToArray());
 		}
 
-		/*public DateTime? GetLastEbayOrdersRequestWithTerapeak( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace )
-		{
-			return GetLastTeraPeakOrdersRequestData( databaseCustomerMarketPlace )?? GetLastEbayOrdersRequest( databaseCustomerMarketPlace );
-		}*/
-
 		public DateTime? GetLastEbayOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			return _CustomerMarketplaceRepository.GetLastEbayOrdersRequest(databaseCustomerMarketPlace);

@@ -20,7 +20,6 @@ namespace EZBob.DatabaseLib.Model.Database
 			PayPalTransactions = new HashedSet<MP_PayPalTransaction>();
 			EbayOrders = new HashedSet<MP_EbayOrder>();
 			AmazonOrders = new HashedSet<MP_AmazonOrder>();
-			Inventory = new HashedSet<MP_EbayAmazonInventory>();
 			UpdatingHistory = new HashedSet<MP_CustomerMarketplaceUpdatingHistory>();
 			EbayUserData = new HashedSet<MP_EbayUserData>();
 			EbayUserAccountData = new HashedSet<MP_EbayUserAccountData>();
@@ -65,7 +64,6 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual ISet<MP_PayPalTransaction> PayPalTransactions { get; set; }
 		public virtual ISet<MP_EbayOrder> EbayOrders { get; set; }
 		public virtual ISet<MP_AmazonOrder> AmazonOrders { get; set; }
-		public virtual ISet<MP_EbayAmazonInventory> Inventory { get; set; }
 		public virtual ISet<MP_CustomerMarketplaceUpdatingHistory> UpdatingHistory { get; set; }
 		public virtual ISet<MP_EbayUserData> EbayUserData { get; set; }
 		public virtual ISet<MP_EbayUserAccountData> EbayUserAccountData { get; set; }

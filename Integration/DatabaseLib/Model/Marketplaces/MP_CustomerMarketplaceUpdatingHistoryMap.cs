@@ -29,10 +29,6 @@ namespace EZBob.DatabaseLib.Model.Database
                 .PropertyRef(p => p.HistoryRecord)
                 .Cascade.All();
 
-            HasOne(x => x.Inventory)
-                .PropertyRef(p => p.HistoryRecord)
-                .Cascade.All();
-
             HasOne(x => x.EbayFeedback)
                 .PropertyRef(p => p.HistoryRecord)
                 .Cascade.All();

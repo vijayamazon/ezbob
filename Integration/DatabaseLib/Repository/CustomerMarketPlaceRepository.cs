@@ -19,8 +19,6 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
         bool Exists(Guid marketplace, string displayName);
         bool Exists(Guid marketplace, Customer customer, string displayName);
         DateTime? GetLastAmazonOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
-        DateTime? GetLastTeraPeakOrdersRequestData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
-        DateTime? GetLastInventoryRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
         DateTime? GetLastEbayOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
         DateTime? GetLastPayPalTransactionRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
         MP_CustomerMarketPlace GetMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
@@ -124,26 +122,6 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 			return data;
 	    }
-
-	    public DateTime? GetLastTeraPeakOrdersRequestData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-        {
-            var mpCustomerMarketPlace = GetMarketPlace(databaseCustomerMarketPlace);
-            if (mpCustomerMarketPlace == null || mpCustomerMarketPlace.TeraPeakOrders.Count == 0)
-            {
-                return null;
-            }
-            return mpCustomerMarketPlace.TeraPeakOrders.Max(o => o.Created);
-        }
-
-        public DateTime? GetLastInventoryRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-        {
-            var mpCustomerMarketPlace = GetMarketPlace(databaseCustomerMarketPlace);
-            if (mpCustomerMarketPlace == null || mpCustomerMarketPlace.Inventory.Count == 0)
-            {
-                return null;
-            }
-            return mpCustomerMarketPlace.Inventory.Max(o => o.Created);
-        }
 
         public DateTime? GetLastEbayOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
         {

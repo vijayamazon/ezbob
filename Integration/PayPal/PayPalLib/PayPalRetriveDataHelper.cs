@@ -64,17 +64,6 @@ namespace EzBob.PayPal
 			base.UpdateAllDataFor(UpdateAccountInfo, databaseCustomer);
 		}
 
-		/*public void UpdateTransactionInfo( IDatabaseCustomer databaseCustomer )
-		{
-			base.UpdateAllDataFor( UpdateTransactionInfo, databaseCustomer );
-		}
-
-		public void UpdateTransactionInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace )
-		{
-			var securityInfo = RetrieveCustomerSecurityInfo<PayPalSecurityData>( databaseCustomerMarketPlace );
-			UpdateTransactionInfo(databaseCustomerMarketPlace, securityInfo, TODO);
-		}*/
-
 		private void UpdateTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalSecurityData securityInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			Helper.CustomerMarketplaceUpdateAction(CustomerMarketplaceUpdateActionType.UpdateTransactionInfo, databaseCustomerMarketPlace, historyRecord, () =>
@@ -190,15 +179,5 @@ namespace EzBob.PayPal
 		{
 			return PayPalServiceHelper.GetAccountInfo(securityInfo);
 		}
-
-		/*public MP_CustomerMarketPlace SaveOrUpdateCustomerMarketplace( string email, byte[] securityData, Customer customer )
-		{
-			return Helper.SaveOrUpdateCustomerMarketplace( email, MarketPlace, securityData, customer );
-		}
-
-		public ICustomerMarketPlace SaveOrUpdateCustomerMarketplace( string email, byte[] securityData, Customer customer )
-		{
-			return Helper.SaveOrUpdateCustomerMarketplace( email, MarketPlace, securityData, customer );
-		}*/
 	}
 }

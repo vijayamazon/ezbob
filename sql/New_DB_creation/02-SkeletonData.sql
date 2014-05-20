@@ -27635,21 +27635,6 @@ VALUES
 GO
 
 
-INSERT INTO dbo.hibernate_unique_key
-	(
-	next_hi
-	, InventoryItemIdSeed
-	)
-VALUES
-	(
-	5379
-	, 1005333
-	)
-GO
-
-
-
-
 SET IDENTITY_INSERT Security_User ON
 INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
 	VALUES (1,'se', 'se', '+ToHzsMUj9KHoOGKkLhtXPWoM4I=', '2009-01-01 12:00:00', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '3CC20FD087C832CC3066A139616590F3F7444CF6', NULL, NULL, NULL, 0)

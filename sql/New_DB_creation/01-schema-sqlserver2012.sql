@@ -9039,17 +9039,6 @@ CREATE TABLE [dbo].[FraudUser](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[hibernate_unique_key]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[hibernate_unique_key](
-	[next_hi] [int] NULL,
-	[InventoryItemIdSeed] [int] NULL
-) ON [PRIMARY]
-
-GO
 /****** Object:  Table [dbo].[Loan]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -10080,45 +10069,6 @@ CREATE TABLE [dbo].[MP_EbayAmazonCategory](
 	[Name] [nvarchar](256) NULL,
 	[IsVirtual] [bit] NULL,
  CONSTRAINT [PK_MP_EbayAmazonCategory] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[MP_EbayAmazonInventory]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[MP_EbayAmazonInventory](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[CustomerMarketPlaceId] [int] NOT NULL,
-	[Created] [datetime] NOT NULL,
-	[AmazonUseAFN] [bit] NULL,
-	[CustomerMarketPlaceUpdatingHistoryRecordId] [int] NULL,
- CONSTRAINT [PK_MP_Inventory] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[MP_EbayAmazonInventoryItem]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[MP_EbayAmazonInventoryItem](
-	[Id] [int] NOT NULL,
-	[InventoryId] [int] NOT NULL,
-	[BidCount] [int] NULL,
-	[Sku] [nvarchar](128) NULL,
-	[Price] [float] NULL,
-	[Quantity] [int] NULL,
-	[ItemId] [nvarchar](128) NULL,
-	[Currency] [nvarchar](10) NULL,
- CONSTRAINT [PK_MP_InventoryItem] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -13567,58 +13517,6 @@ CREATE NONCLUSTERED INDEX [IX_MP_EbayAmazonCategory] ON [dbo].[MP_EbayAmazonCate
 	[Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Object:  Index [IX_MP_EbayAmazonInventoryCustomerMarketPlaceId]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MP_EbayAmazonInventoryCustomerMarketPlaceId] ON [dbo].[MP_EbayAmazonInventory]
-(
-	[CustomerMarketPlaceId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-/****** Object:  Index [IX_MPEbayAmazonInventoryCreatedIncludeUMI]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MPEbayAmazonInventoryCreatedIncludeUMI] ON [dbo].[MP_EbayAmazonInventory]
-(
-	[Created] DESC
-)
-INCLUDE ( 	[CustomerMarketPlaceId]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-
-GO
-/****** Object:  Index [IX_MP_EbayAmazonInventoryItem_Id]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MP_EbayAmazonInventoryItem_Id] ON [dbo].[MP_EbayAmazonInventoryItem]
-(
-	[InventoryId] ASC
-)
-INCLUDE ( 	[Price],
-	[Quantity],
-	[Currency]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-
-GO
-/****** Object:  Index [IX_MP_EbayAmazonInventoryItemCurrency]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MP_EbayAmazonInventoryItemCurrency] ON [dbo].[MP_EbayAmazonInventoryItem]
-(
-	[Currency] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-/****** Object:  Index [IX_MP_EbayAmazonInventoryItemInventoryId]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MP_EbayAmazonInventoryItemInventoryId] ON [dbo].[MP_EbayAmazonInventoryItem]
-(
-	[InventoryId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-/****** Object:  Index [IX_MP_EbayAmazonInventoryItemPrice]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MP_EbayAmazonInventoryItemPrice] ON [dbo].[MP_EbayAmazonInventoryItem]
-(
-	[Price] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-/****** Object:  Index [IX_MP_EbayAmazonInventoryItemQuantity]    Script Date: 04-Nov-13 5:03:46 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MP_EbayAmazonInventoryItemQuantity] ON [dbo].[MP_EbayAmazonInventoryItem]
-(
-	[Quantity] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
 /****** Object:  Index [IX_MP_EbayFeedbackCreated]    Script Date: 04-Nov-13 5:03:46 PM ******/
 CREATE NONCLUSTERED INDEX [IX_MP_EbayFeedbackCreated] ON [dbo].[MP_EbayFeedback]
 (
@@ -14465,16 +14363,6 @@ ALTER TABLE [dbo].[MP_EbayAmazonCategory]  WITH CHECK ADD  CONSTRAINT [FK_MP_Eba
 REFERENCES [dbo].[MP_MarketplaceType] ([Id])
 GO
 ALTER TABLE [dbo].[MP_EbayAmazonCategory] CHECK CONSTRAINT [FK_MP_EbayAmazonCategory_MP_MarketplaceType]
-GO
-ALTER TABLE [dbo].[MP_EbayAmazonInventory]  WITH CHECK ADD  CONSTRAINT [FK_MP_Inventory_MP_CustomerMarketPlace] FOREIGN KEY([CustomerMarketPlaceId])
-REFERENCES [dbo].[MP_CustomerMarketPlace] ([Id])
-GO
-ALTER TABLE [dbo].[MP_EbayAmazonInventory] CHECK CONSTRAINT [FK_MP_Inventory_MP_CustomerMarketPlace]
-GO
-ALTER TABLE [dbo].[MP_EbayAmazonInventoryItem]  WITH CHECK ADD  CONSTRAINT [FK_MP_InventoryItem_MP_Inventory] FOREIGN KEY([InventoryId])
-REFERENCES [dbo].[MP_EbayAmazonInventory] ([Id])
-GO
-ALTER TABLE [dbo].[MP_EbayAmazonInventoryItem] CHECK CONSTRAINT [FK_MP_InventoryItem_MP_Inventory]
 GO
 ALTER TABLE [dbo].[MP_EbayExternalTransaction]  WITH CHECK ADD  CONSTRAINT [FK_MP_EbayExternalTransaction_MP_EbayOrderItem] FOREIGN KEY([OrderItemId])
 REFERENCES [dbo].[MP_EbayOrderItem] ([Id])

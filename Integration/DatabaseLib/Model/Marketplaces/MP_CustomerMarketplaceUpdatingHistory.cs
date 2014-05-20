@@ -24,7 +24,6 @@
 		public virtual MP_AmazonFeedback AmazonFeedback { get; set; }
 		public virtual ISet<MP_AnalyisisFunctionValue> AnalyisisFunctionValue { get; set; }
 		public virtual ISet<MP_CustomerMarketplaceUpdatingActionLog> ActionLog { get; set; }
-		public virtual MP_EbayAmazonInventory Inventory { get; set; }
 		public virtual MP_EbayFeedback EbayFeedback { get; set; }
 		public virtual MP_EbayOrder EbayOrder { get; set; }
 		public virtual MP_TeraPeakOrder TeraPeakOrder { get; set; }

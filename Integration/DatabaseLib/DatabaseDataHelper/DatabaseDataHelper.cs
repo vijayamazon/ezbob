@@ -834,16 +834,6 @@ namespace EZBob.DatabaseLib {
 		{
 			return _CustomerMarketplaceRepository.GetLastPayPalTransactionRequest(databaseCustomerMarketPlace);
 		}
-
-		public DateTime? GetLastTeraPeakOrdersRequestData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
-			return _CustomerMarketplaceRepository.GetLastTeraPeakOrdersRequestData(databaseCustomerMarketPlace);
-		}
-
-		public DateTime? GetLastInventoryRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
-			return _CustomerMarketplaceRepository.GetLastInventoryRequest(databaseCustomerMarketPlace);
-		}
 		#endregion
 
 		public void StoretoDatabaseTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TeraPeakDatabaseSellerData data, MP_CustomerMarketplaceUpdatingHistory historyRecord)

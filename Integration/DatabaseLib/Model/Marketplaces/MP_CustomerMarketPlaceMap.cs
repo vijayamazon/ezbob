@@ -37,10 +37,6 @@ namespace EZBob.DatabaseLib.Model.Database
 				KeyColumn("CustomerMarketPlaceId")
 				.Cascade.All();
 
-			HasMany(x => x.Inventory).
-				KeyColumn("CustomerMarketPlaceId")
-				.Cascade.All();
-
 			HasMany(x => x.UpdatingHistory).
 				KeyColumn("CustomerMarketPlaceId")
 				.Cascade.All();

@@ -478,10 +478,6 @@
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserAddressDataMap.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserData.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserDataMap.cs" />
-    <Compile Include="Model\Marketplaces\MP_EbayAmazonInventory.cs" />
-    <Compile Include="Model\Marketplaces\MP_EbayAmazonInventoryItem.cs" />
-    <Compile Include="Model\Marketplaces\MP_EbayAmazonInventoryItemMap.cs" />
-    <Compile Include="Model\Marketplaces\MP_EbayAmazonInventoryMap.cs" />
     <Compile Include="Model\Marketplaces\MP_MarketplaceType.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayOrder.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayOrderItem.cs" />
