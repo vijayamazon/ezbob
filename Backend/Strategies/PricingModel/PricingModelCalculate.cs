@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
+	using System.Text;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Database;
@@ -123,9 +124,45 @@
 			var calculations = new Dictionary<decimal, decimal>();
 			decimal minBalanceAbsValue = decimal.MaxValue;
 			decimal interestRateForMinBalanceAbs = 0.01m;
+			int counter = 0;
 
 			while (minBalanceAbsValue != 0)
 			{
+				counter++;
+				if (counter > 100)
+				{
+					Log.Warn("Pricing model calculation reached 100 cycles and will stop.");
+					
+					var inputs = new StringBuilder();
+					inputs.Append("LoanAmount:").Append(Model.LoanAmount).Append("\r\n");
+					inputs.Append("DefaultRate:").Append(Model.DefaultRate).Append("\r\n");
+					inputs.Append("DefaultRateCompanyShare:").Append(Model.DefaultRateCompanyShare).Append("\r\n");
+					inputs.Append("DefaultRateCustomerShare:").Append(Model.DefaultRateCustomerShare).Append("\r\n");
+					inputs.Append("SetupFeePounds:").Append(Model.SetupFeePounds).Append("\r\n");
+					inputs.Append("SetupFeePercents:").Append(Model.SetupFeePercents).Append("\r\n");
+					inputs.Append("LoanTerm:").Append(Model.LoanTerm).Append("\r\n");
+					inputs.Append("InterestOnlyPeriod:").Append(Model.InterestOnlyPeriod).Append("\r\n");
+					inputs.Append("TenurePercents:").Append(Model.TenurePercents).Append("\r\n");
+					inputs.Append("TenureMonths:").Append(Model.TenureMonths).Append("\r\n");
+					inputs.Append("CollectionRate:").Append(Model.CollectionRate).Append("\r\n");
+					inputs.Append("EuCollectionRate:").Append(Model.EuCollectionRate).Append("\r\n");
+					inputs.Append("Cogs:").Append(Model.Cogs).Append("\r\n");
+					inputs.Append("DebtPercentOfCapital:").Append(Model.DebtPercentOfCapital).Append("\r\n");
+					inputs.Append("CostOfDebt:").Append(Model.CostOfDebt).Append("\r\n");
+					inputs.Append("OpexAndCapex:").Append(Model.OpexAndCapex).Append("\r\n");
+					inputs.Append("ProfitMarkup:").Append(Model.ProfitMarkup).Append("\r\n");
+
+					Log.Warn("Inputs were:\r\n{0}", inputs);
+					var balances = new StringBuilder();
+					foreach (decimal interest in calculations.Keys)
+					{
+						balances.Append("Interest:").Append(interest).Append(" Balance:").Append(calculations[interest]).Append("\r\n");
+					}
+					Log.Warn("Calculated Balances:\r\n{0}", balances);
+
+					throw new Exception("Pricing model calculation reached 100 cycles and will stop");
+				}
+
 				decimal balance = CalculateBalance(monthlyInterestRate);
 				if (Math.Abs(balance) < minBalanceAbsValue)
 				{
