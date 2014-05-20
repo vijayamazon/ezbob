@@ -9,19 +9,19 @@ BEGIN
 	END
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayDevId')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayDevId', '86135fbd-a367-4f81-ba05-d6f52a80c2dd', 'Ebay dev id')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayDevId', '87cffac6-4c2c-4352-bc88-7cdba02b8085', 'Ebay dev id')
 	END
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayAppId')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayAppId', 'purposed8-055a-4c39-b776-07367eef3c7', 'Ebay app id')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayAppId', 'test8f473-e17f-4c46-8ee7-22418d11dd2', 'Ebay app id')
 	END
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayCertId')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayCertId', '381f4b0b-5794-4d80-a5e2-6b6a08beffe8', 'Ebay cert id')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayCertId', 'aea6ac5f-7a80-48ff-820d-355f1979a6e5', 'Ebay cert id')
 	END
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayRuName')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayRuName', 'purpose-purposed8-055a--wtsog', 'Ebay ru name')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EbayRuName', 'test-test8f473-e17f--xjwup', 'Ebay ru name')
 	END
 END
 ELSE
