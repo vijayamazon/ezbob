@@ -60,7 +60,7 @@
 			Model.OpexAndCapexOutput = Model.OpexAndCapex;
 			Model.GrossProfit = Model.Revenue - Model.Cogs;
 			Model.Ebitda = Model.GrossProfit - Model.OpexAndCapex;
-			Model.NetLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate / 100;
+			Model.NetLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
 			Model.ProfitMarkupOutput = Model.ProfitMarkup * Model.Revenue;
 			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0;
 			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
