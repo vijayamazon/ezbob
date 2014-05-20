@@ -6,7 +6,6 @@
 	using System.Globalization;
 	using System.Xml;
 	using Experian;
-	using EzBob.Models;
 	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.Models.Marketplaces.Yodlee;
 	using Ezbob.Database;
@@ -66,7 +65,6 @@
 		private readonly List<string> payerNames = new List<string>();
 		private bool hasNonYodleeMarketplace;
 		private readonly StrategiesMailer mailer;
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private bool isSilent;
 		private string silentTemplateName;
 		private string silentToAddress;

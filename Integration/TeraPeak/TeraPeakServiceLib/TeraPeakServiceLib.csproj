@@ -57,9 +57,6 @@
     <Compile Include="Requests\SellerResearch\QueryResultStatistic.cs" />
     <Compile Include="Requests\SellerResearch\ResultSellerInfo.cs" />
     <Compile Include="Requests\SellerResearch\SearchQueryDates.cs" />
-    <Compile Include="Requests\SellerResearch\SearchQueryDatesCount.cs" />
-    <Compile Include="Requests\SellerResearch\SearchQueryDatesCountWithEnd.cs" />
-    <Compile Include="Requests\SellerResearch\SearchQueryDatesFor.cs" />
     <Compile Include="Requests\SellerResearch\SearchQueryDatesRange.cs" />
     <Compile Include="Requests\SellerResearch\SearchQueryParamCountDates.cs" />
     <Compile Include="Requests\SellerResearch\SearchQuerySeller.cs" />

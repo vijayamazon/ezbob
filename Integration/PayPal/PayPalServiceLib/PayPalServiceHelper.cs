@@ -1,29 +1,17 @@
-using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
-using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
-using EzBob.PayPalDbLib.Models;
-using EzBob.PayPalServiceLib.Common;
-using log4net;
-
 namespace EzBob.PayPalServiceLib
 {
+	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
+	using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
+	using PayPalDbLib.Models;
+	using Common;
+
 	public class PayPalServiceHelper
 	{
-		private static readonly ILog _log = log4net.LogManager.GetLogger( typeof( PayPalServiceHelper ) );
-
-		private PayPalServiceHelper()
-		{
-		}
-
 		public static PayPalPersonalData GetAccountInfo(PayPalPermissionsGranted securityData )
 		{
 			var payPalServiceHelper = new PayPalServiceHelper();
 			var info = payPalServiceHelper.GetAccountInfoInternal(securityData);
 			return info;
-		}
-
-		private PayPalAccountStatusInfo GetVerifiedStatus( string userFirstName, string userLastName, string userEMail)
-		{
-			return PayPalAdaptiveAccountsServiceHelper.GetVerifiedStatus(userFirstName, userLastName, userEMail);			
 		}
 
 		private PayPalPersonalData GetAccountInfoInternal( PayPalPermissionsGranted securityData )

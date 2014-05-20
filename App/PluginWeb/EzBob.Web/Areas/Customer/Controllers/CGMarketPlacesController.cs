@@ -214,7 +214,7 @@
 		private AddAccountState ValidateModel(AccountModel model) {
 			var oResult = new AddAccountState();
 
-			oResult.VendorInfo = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(model.accountTypeName);
+			oResult.VendorInfo = Configuration.Instance.GetVendorInfo(model.accountTypeName);
 
 			if (oResult.VendorInfo == null) {
 				var sError = "Unsupported account type: " + model.accountTypeName;

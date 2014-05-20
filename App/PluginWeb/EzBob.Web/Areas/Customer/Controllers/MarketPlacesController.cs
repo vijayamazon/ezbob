@@ -3,7 +3,6 @@
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
-	using log4net;
 	using Models;
 
 	public class MarketPlacesController : Controller {
@@ -35,7 +34,6 @@
 		#region fields
 
 		private readonly IEzbobWorkplaceContext _context;
-		private static readonly ILog Log = LogManager.GetLogger(typeof(CGMarketPlacesController));
 
 		#endregion fields
 

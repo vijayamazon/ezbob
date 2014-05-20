@@ -6,7 +6,6 @@ namespace Sage
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EzBob.CommonLib.TimePeriodLogic;
-	using log4net;
 
 	internal class SageExpenditureAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<SageExpenditure>, SageExpenditure, SageDatabaseFunctionType>
     {
@@ -18,8 +17,6 @@ namespace Sage
 
 	internal class SageExpenditureAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<SageExpenditure>, SageExpenditure, SageDatabaseFunctionType>
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SageExpenditureAggregator));
-
 		public SageExpenditureAggregator(ReceivedDataListTimeDependentInfo<SageExpenditure> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
         {

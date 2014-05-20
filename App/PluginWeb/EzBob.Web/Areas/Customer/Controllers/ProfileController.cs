@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Web.Mvc;
+	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Security;
 	using ConfigManager;
 	using EKM;
@@ -9,7 +10,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using ExperianLib.Ebusiness;
-	using Ezbob.Backend.Models;
 	using Iesi.Collections.Generic;
 	using Infrastructure.Attributes;
 	using Models;

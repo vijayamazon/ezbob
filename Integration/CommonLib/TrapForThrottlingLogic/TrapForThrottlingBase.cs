@@ -1,13 +1,10 @@
-using System;
-using System.Diagnostics;
-using log4net;
-
 namespace EzBob.CommonLib.TrapForThrottlingLogic
 {
+	using System;
+	using System.Diagnostics;
+
 	abstract class TrapForThrottlingBase : ITrapForThrottling
 	{
-		private static readonly ILog _Log = LogManager.GetLogger( typeof( TrapForThrottlingBase ) );
-
 		protected string Name { get; private set; }
 
 		protected TrapForThrottlingBase(string name)

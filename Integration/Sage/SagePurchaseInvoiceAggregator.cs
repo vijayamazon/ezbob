@@ -7,7 +7,6 @@ namespace Sage
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Marketplaces.Sage;
 	using EzBob.CommonLib.TimePeriodLogic;
-	using log4net;
 
 	internal class SagePurchaseInvoiceAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<SagePurchaseInvoice>, SagePurchaseInvoice, SageDatabaseFunctionType>
 	{
@@ -21,7 +20,6 @@ namespace Sage
 
 	internal class SagePurchaseInvoiceAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<SagePurchaseInvoice>, SagePurchaseInvoice, SageDatabaseFunctionType>
     {
-		private static readonly ILog Log = LogManager.GetLogger(typeof(SagePurchaseInvoiceAggregator));
 		private readonly Dictionary<int, string> sagePaymentStatusesMap = new Dictionary<int, string>();
 
 		public SagePurchaseInvoiceAggregator(ReceivedDataListTimeDependentInfo<SagePurchaseInvoice> orders, ICurrencyConvertor currencyConvertor, IEnumerable<MP_SagePaymentStatus> sagePaymentStatuses)

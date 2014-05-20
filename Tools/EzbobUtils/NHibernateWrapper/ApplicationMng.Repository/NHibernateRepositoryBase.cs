@@ -1,11 +1,9 @@
-using NHibernate;
-using NHibernate.Linq;
-using System;
-using System.Data;
-using System.Linq;
 namespace ApplicationMng.Repository
 {
-	public class NHibernateRepositoryBase<T> : IRepository<T>, System.IDisposable where T : class
+	using NHibernate;
+	using NHibernate.Linq;
+
+	public class NHibernateRepositoryBase<T> : IRepository<T> where T : class
 	{
 		protected ISession _session;
 		protected ITransaction _tx;

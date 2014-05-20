@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-	using System.Data;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -12,7 +11,6 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces;
 	using Infrastructure;
-	using Infrastructure.Attributes;
 	using Models;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
@@ -133,7 +131,7 @@
 
 			model.Properties = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage);
 
-			DateTime? lastDateCheck = null;
+			DateTime? lastDateCheck;
 			model.FraudDetectionLog = new FraudDetectionLogModel
 				{
 					FraudDetectionLogRows = _fraudDetectionLog.GetLastDetections(id, out lastDateCheck)

@@ -1,17 +1,14 @@
-using System;
-using System.Diagnostics;
-using EzBob.CommonLib;
-using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.Base;
-using EzBob.eBayServiceLib.TradingServiceCore.ResultInfos.Orders;
-using EzBob.eBayServiceLib.com.ebay.developer.soap;
-using log4net;
-
 namespace EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant.GetOrders
 {
+	using System;
+	using System.Diagnostics;
+	using CommonLib;
+	using Base;
+	using ResultInfos.Orders;
+	using com.ebay.developer.soap;
+
 	abstract class GetOrdersExecutorBase : IGetOrdersExecutor
 	{
-		private static readonly ILog _Log = LogManager.GetLogger( typeof( GetOrdersExecutorBase ) );
-
 		protected GetOrdersExecutorBase( DataProviderCreationInfo info)
 		{
 			DataProvider = new InternalDataProviderGetOrders( info );

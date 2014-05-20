@@ -8,7 +8,6 @@
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.DatabaseWrapper.EbayFeedbackData;
 	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-	using EZBob.DatabaseLib.DatabaseWrapper.Inventory;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 	using EZBob.DatabaseLib.Model.Database;
@@ -32,7 +31,6 @@
 	using eBayServiceLib.TradingServiceCore.TokenProvider;
 	using eBayServiceLib.com.ebay.developer.soap;
 	using StructureMap;
-	using log4net;
 
 	public class eBayRetriveDataHelper : MarketplaceRetrieveDataHelperBase<eBayDatabaseFunctionType>
 	{
@@ -87,7 +85,6 @@
 				Helper.UpdateAccountInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateUserInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateFeedbackInfo(databaseCustomerMarketPlace, info, historyRecord);
-				//Helper.UpdateInventoryInfo(databaseCustomerMarketPlace, info, historyRecord);
 			}
 		}
 
@@ -104,7 +101,6 @@
 				Helper.UpdateAccountInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateUserInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateFeedbackInfo(databaseCustomerMarketPlace, info, historyRecord);
-				//Helper.UpdateInventoryInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateTeraPeakOrdersThenEbayOrders(databaseCustomerMarketPlace, info, databaseCustomerMarketPlace.DisplayName, historyRecord);
 			}
 		}
@@ -112,7 +108,6 @@
 
 		#region Fields
 		private static readonly int MaxPossibleRetriveMonthsFromTeraPeak = 12;
-		private static readonly ILog _Log = LogManager.GetLogger( typeof( eBayRetriveDataHelper ) );
 
 		private readonly EbayServiceConnectionInfo _EbayConnectionInfo;
 		private readonly IEbayMarketplaceSettings _Settings;
@@ -378,35 +373,6 @@
 			}
 
 			Helper.StoreEbayFeedbackData( databaseCustomerMarketPlace, data, historyRecord );
-
-		}
-
-		private WriteDataInfo<eBayDatabaseFunctionType>[] CreateInventoryAggregates( DatabaseInventoryList databaseInvetoryList )
-		{
-			DateTime submittedDate = databaseInvetoryList.SubmittedDate;
-
-			var totalItemInInventory = new WriteDataInfo<eBayDatabaseFunctionType>
-			{
-				UpdatedDate = submittedDate,
-				Value = databaseInvetoryList.Count,
-				TimePeriodType = TimePeriodEnum.Lifetime,
-				FunctionType = eBayDatabaseFunctionType.InventoryTotalItems
-			};
-
-			var totalValueOfInventory = new WriteDataInfo<eBayDatabaseFunctionType>
-			{
-				UpdatedDate = submittedDate,
-				TimePeriodType = TimePeriodEnum.Lifetime,
-				FunctionType = eBayDatabaseFunctionType.InventoryTotalValue,
-				Value = databaseInvetoryList.Sum( i => i.Amount.Value * i.Quantity )
-			};
-
-			return new[] { totalItemInInventory, totalValueOfInventory };
-		}
-
-		private void SaveInventoryAggregateData( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IEnumerable<WriteDataInfo<eBayDatabaseFunctionType>> data, MP_CustomerMarketplaceUpdatingHistory historyRecord )
-		{
-			Helper.StoreToDatabaseAggregatedData( databaseCustomerMarketPlace, data, historyRecord );
 		}
 
 		private void UpdateTeraPeakOrdersThenEbayOrders(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -852,74 +818,6 @@
 			}
 
 			return rez;
-			/*var items = data.Orders.Select( o => new EbayDatabaseOrderItem
-					{
-
-						CreatedTime = o.CreatedTimeSpecified ? o.CreatedTime.ToUniversalTime() : (DateTime?)null,
-						ShippedTime = o.ShippedTimeSpecified ? o.ShippedTime.ToUniversalTime() : (DateTime?)null,
-						PaymentTime = o.PaidTimeSpecified ? o.PaidTime.ToUniversalTime() : (DateTime?)null,
-						BuyerName = o.BuyerUserID,
-						AdjustmentAmount = ConvertToBaseCurrency( o.AdjustmentAmount, o.CreatedTime ),
-						AmountPaid = ConvertToBaseCurrency( o.AmountPaid, o.CreatedTime ),
-						SubTotal = ConvertToBaseCurrency( o.Subtotal, o.CreatedTime ),
-						Total = ConvertToBaseCurrency( o.Total, o.CreatedTime ),
-						OrderStatus = ConvertOrderStatus( o.OrderStatus ),
-						PaymentHoldStatus = o.PaymentHoldStatus.ToString(),
-						CheckoutStatus = o.CheckoutStatus.Status.ToString(),
-						PaymentMethod = o.CheckoutStatus.PaymentMethod.ToString(),
-						PaymentStatus = o.CheckoutStatus.eBayPaymentStatus.ToString(),
-						PaymentMethods = o.PaymentMethods == null? null: string.Join( ",", o.PaymentMethods ),
-						ShippingAddressData = o.ShippingAddress == null? null : o.ShippingAddress.ConvertToDatabaseType(),
-						ExternalTransactionData = o.ExternalTransaction == null? null :
-								new EBayDatabaseExternalTransactionList( 
-									o.ExternalTransaction.Select(
-									et =>
-										{
-											var item = new EBayDatabaseExternalTransactionItem
-											{
-												TransactionID = et.ExternalTransactionID,
-												TransactionTime = et.ExternalTransactionTimeSpecified? et.ExternalTransactionTime: (DateTime?)null,
-												FeeOrCreditAmount = ConvertToBaseCurrency(et.FeeOrCreditAmount, et.ExternalTransactionTime),
-												PaymentOrRefundAmount = ConvertToBaseCurrency(et.PaymentOrRefundAmount,et.ExternalTransactionTime)
-											};
-
-											return item;
-
-										})),
-						TransactionData = o.TransactionArray == null? null :
-								new EbayDatabaseTransactionDataList
-								(
-								
-									o.TransactionArray.Where(td => td.Item != null).Select
-									(
-										td =>
-											{
-												var itemType = td.Item;
-
-												return new EbayDatabaseTransactionDataItem
-										      	       	{
-										      	       		CreatedDate = td.CreatedDate,
-										      	       		QuantityPurchased = td.QuantityPurchased,
-										      	       		PaymentHoldStatus = td.Status.PaymentHoldStatus.ToString(),
-										      	       		PaymentMethodUsed = td.Status.PaymentMethodUsed.ToString(),
-										      	       		TransactionPrice = ConvertToBaseCurrency(td.TransactionPrice, td.CreatedDate),
-										      	       		ItemSKU  = itemType.SKU,
-										      	       		ItemID = itemType.ItemID,
-										      	       		ItemPrivateNotes = itemType.PrivateNotes,
-										      	       		ItemSellerInventoryID = itemType.SellerInventoryID,
-										      	       		eBayTransactionId = td.TransactionID,
-										      	       	};
-											})
-								)
-
-
-					} );
-
-			return new EbayDatabaseOrdersList(data.SubmittedDate, items) 
-				{
-					RequestsCounter = data.RequestsCounter
-				};
-			*/
 		}
 
 		private AmountInfo ConvertToBaseCurrency(AmountType sourceAmaontType, DateTime createdTime)

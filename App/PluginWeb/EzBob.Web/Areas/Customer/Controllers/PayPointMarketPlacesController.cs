@@ -15,7 +15,6 @@
 	using Web.Models.Strings;
 	using log4net;
 	using EZBob.DatabaseLib;
-	using CommonLib;
 
 	public class PayPointMarketPlacesController : Controller
 	{

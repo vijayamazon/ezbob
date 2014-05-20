@@ -552,10 +552,6 @@ Data: {3}
 		private const string CustomerXpath = "/resource/resource";
 		private const string ServiceValidateXpath = "/resource/link[@rel]";
 
-		private const string ServiceUrlCfg = "ChannelGrabberServiceUrl";
-		private const string SleepTimeCfg = "ChannelGrabberSleepTime";
-		private const string CycleCountCfg = "ChannelGrabberCycleCount";
-
 		#endregion private const
 
 		#endregion infrastructure

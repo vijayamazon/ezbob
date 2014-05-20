@@ -6,7 +6,6 @@ namespace FreeAgent
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EzBob.CommonLib.TimePeriodLogic;
-	using log4net;
 
 	internal class FreeAgentInvoiceAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType>
     {
@@ -18,8 +17,6 @@ namespace FreeAgent
 
 	internal class FreeAgentInvoiceAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType>
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(FreeAgentInvoiceAggregator));
-
 		public FreeAgentInvoiceAggregator(ReceivedDataListTimeDependentInfo<FreeAgentInvoice> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
         {

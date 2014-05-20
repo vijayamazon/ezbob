@@ -12,7 +12,6 @@
 		private string fileName;
 		private byte[] fileContent;
 		private string fileContentType;
-		private int mpId;
 
 		public SaveCompanyFile(int customerId, string fileName, byte[] fileContent, string fileContentType, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)

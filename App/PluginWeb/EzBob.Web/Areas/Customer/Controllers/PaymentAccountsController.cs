@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
-	using System.Data;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Web.Mvc;
@@ -20,7 +19,6 @@
 	using Infrastructure.csrf;
 	using ServiceClientProxy;
 	using Web.Models.Strings;
-	using NHibernate;
 	using PostcodeAnywhere;
 	using StructureMap;
 	using log4net;

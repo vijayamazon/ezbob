@@ -45,7 +45,7 @@
 			_changeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
 		}
 
-		public CustomerModel BuildWizardModel(EZBob.DatabaseLib.Model.Database.Customer cus, HttpSessionStateBase session)
+		public CustomerModel BuildWizardModel(Customer cus, HttpSessionStateBase session)
 		{
 			var customerModel = new CustomerModel { loggedIn = cus != null, bankAccountAdded = false };
 
@@ -239,7 +239,7 @@
 			return customerModel;
 		}
 
-		private QuickOfferModel BuildQuickOfferModel(EZBob.DatabaseLib.Model.Database.Customer c)
+		private QuickOfferModel BuildQuickOfferModel(Customer c)
 		{
 			if (ReferenceEquals(c, null) || ReferenceEquals(c.QuickOffer, null) || (c.QuickOffer.ExpirationDate < DateTime.UtcNow))
 				return null;
@@ -273,7 +273,7 @@
 			return state.Fees + state.Interest;
 		}
 
-		private PayPointCardModel[] FillPayPointCards(EZBob.DatabaseLib.Model.Database.Customer customer)
+		private PayPointCardModel[] FillPayPointCards(Customer customer)
 		{
 			//Add paypoint cards for old customers
 			if (!string.IsNullOrEmpty(customer.PayPointTransactionId) && !customer.PayPointCards.Any())

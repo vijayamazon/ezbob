@@ -1,9 +1,9 @@
 ﻿namespace EZBob.DatabaseLib {
 	using System;
 	using EzBob.CommonLib;
-	using EZBob.DatabaseLib.Common;
-	using EZBob.DatabaseLib.DatabaseWrapper;
-	using EZBob.DatabaseLib.Model.Database;
+	using Common;
+	using DatabaseWrapper;
+	using Model.Database;
 	using Ezbob.Utils.Security;
 
 	public partial class DatabaseDataHelper : IDatabaseDataHelper {

@@ -25,7 +25,7 @@
 		[HttpGet]
 		public JsonResult Index(int id)
 		{
-			DateTime? lastCheckDate = null;
+			DateTime? lastCheckDate;
 			var rows = _fraudDetectionLog.GetLastDetections(id, out lastCheckDate).Select(x => new FraudDetectionLogRowModel(x)).OrderByDescending(x => x.Id).ToList();
 			var model = new FraudDetectionLogModel
 				{

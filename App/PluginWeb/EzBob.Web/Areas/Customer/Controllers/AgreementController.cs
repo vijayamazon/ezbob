@@ -3,9 +3,9 @@
 	using System.Web.Mvc;
 	using StructureMap;
 	using EZBob.DatabaseLib;
-	using EzBob.CommonLib;
-	using EzBob.Web.Code;
-	using EzBob.Web.Infrastructure;
+	using CommonLib;
+	using Code;
+	using Infrastructure;
 	using EzBob.Models.Agreements;
 	using Ezbob.Logger;
 
@@ -26,7 +26,7 @@
 		} // constructor
 
 		public ActionResult Download(decimal amount, string viewName, int loanType, int repaymentPeriod) {
-			var oLog = new SafeILog(log4net.LogManager.GetLogger(this.GetType()));
+			var oLog = new SafeILog(log4net.LogManager.GetLogger(GetType()));
 
 			oLog.Debug("Download agreement: amount = {0}, view = {1}, loan type = {2}, repayment period = {3}", amount, viewName, loanType, repaymentPeriod);
 

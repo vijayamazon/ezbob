@@ -67,15 +67,6 @@
 
 			#endregion property Token
 
-			#region property DateDeleted
-
-			public DateTime DateDeleted {
-				get { return DateTime.UtcNow; }
-				set { } // keep it here
-			} // DateDeleted
-
-			#endregion property DateDeleted
-
 			#region method GetName
 
 			protected override string GetName() {

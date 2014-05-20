@@ -1,22 +1,14 @@
-using System;
-using System.Reflection;
-using System.Collections;
-using System.Globalization;
-using System.Collections.Specialized;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Xml;
-
-
-
-
 namespace PayPal.Platform.SDK
 {
-    
+	using System;
+	using System.Reflection;
+	using System.Collections;
+	using System.Globalization;
+	using System.Text;
+	using System.Xml;
+
     public class JSONSerializer
     {
-
         public static String result;
 
         public const int TOKEN_NONE = 0;
@@ -31,8 +23,6 @@ namespace PayPal.Platform.SDK
         public const int TOKEN_TRUE = 9;
         public const int TOKEN_FALSE = 10;
         public const int TOKEN_NULL = 11;
-
-        private const int BUILDER_CAPACITY = 2000;
 
         protected static JSONSerializer instance = new JSONSerializer();
 

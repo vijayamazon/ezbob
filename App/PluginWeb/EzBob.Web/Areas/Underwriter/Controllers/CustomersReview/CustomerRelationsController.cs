@@ -1,12 +1,10 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
-	using System.Data;
 	using System.Web.Mvc;
-
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EzBob.Web.Areas.Underwriter.Models;
-	using EzBob.Web.Infrastructure.csrf;
+	using Models;
+	using Infrastructure.csrf;
 	using Infrastructure.Attributes;
 	using log4net;
 

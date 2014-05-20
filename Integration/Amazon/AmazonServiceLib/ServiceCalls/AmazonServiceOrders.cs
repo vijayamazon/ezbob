@@ -7,22 +7,19 @@ using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EzBob.AmazonServiceLib.Common;
 using EzBob.AmazonServiceLib.Orders.Configurator;
-using EzBob.AmazonServiceLib.Orders.Model;
-using EzBob.CommonLib;
-using EzBob.CommonLib.TrapForThrottlingLogic;
-using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders;
-using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders.Model;
-using log4net;
-
 namespace EzBob.AmazonServiceLib.ServiceCalls
 {
+	using Orders.Model;
+	using CommonLib;
+	using CommonLib.TrapForThrottlingLogic;
+	using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders;
+	using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders.Model;
+
 	internal class AmazonServiceOrders
 	{
 		private readonly IMarketplaceWebServiceOrders _Service;
 		private readonly static ITrapForThrottling ListOrdersTrapForThrottling;
 		private readonly static ITrapForThrottling ListOrderItemsTrapForThrottling;
-
-		private static readonly ILog _Log = LogManager.GetLogger( typeof( AmazonServiceOrders ) );
 
 		static AmazonServiceOrders()
 		{

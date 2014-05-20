@@ -6,7 +6,6 @@ namespace YodleeLib.connector
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EzBob.CommonLib.TimePeriodLogic;
-	using log4net;
 
 	internal class YodleeTransactionsAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<YodleeTransactionItem>, YodleeTransactionItem, YodleeDatabaseFunctionType>
 	{
@@ -18,8 +17,6 @@ namespace YodleeLib.connector
 
 	internal class YodleeTransactionsAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<YodleeTransactionItem>, YodleeTransactionItem, YodleeDatabaseFunctionType>
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeTransactionsAggregator));
-
 		public YodleeTransactionsAggregator(ReceivedDataListTimeDependentInfo<YodleeTransactionItem> orders, ICurrencyConvertor currencyConvertor)
 			: base(orders, currencyConvertor)
 		{

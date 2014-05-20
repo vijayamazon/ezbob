@@ -1,17 +1,14 @@
-﻿
-namespace EzBob.Tests.LoanScheduleCalculatorTests
+﻿namespace EzBob.Tests.LoanScheduleCalculatorTests
 {
 	using System;
 	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
-	using log4net;
 
 	[TestFixture]
 	class APRCalculatorTest
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(APRCalculatorTest));
 		[Test]
 		public void calculateApr1()
 		{

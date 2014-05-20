@@ -80,7 +80,7 @@
 		[Ajax]
 		[HttpPost]
 		public JsonResult AddLogbookEntry(int type, string content) {
-			bool bSuccess = false;
+			bool bSuccess;
 			string sMsg = string.Empty;
 
 			try {

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
-using EzBob.CommonLib;
-using Integration.ChannelGrabberConfig;
-using Integration.ChannelGrabberFrontend;
-using log4net;
-
-namespace EzBob.Web.Areas.Customer.Controllers {
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using Code.MpUniq;
 	using EZBob.DatabaseLib.Model.Database;
+	using System;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
+	using CommonLib;
+	using Integration.ChannelGrabberConfig;
+	using Integration.ChannelGrabberFrontend;
+	using log4net;
 
 	public class CGMPUniqChecker : MPUniqChecker {
 		#region constructor

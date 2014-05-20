@@ -163,8 +163,6 @@ namespace Integration.ChannelGrabberConfig {
 
 		#endregion constructor
 
-		#region method Debug
-
 		private void Debug(string sFormat, params object[] args) {
 			if (Log == null)
 				return;
@@ -174,22 +172,6 @@ namespace Integration.ChannelGrabberConfig {
 			else
 				Log.DebugFormat(sFormat, args);
 		} // Debug
-
-		#endregion method Error
-
-		#region method Error
-
-		private void Error(string sFormat, params object[] args) {
-			if (Log == null)
-				return;
-
-			if (args.Length == 0)
-				Log.Error(sFormat);
-			else
-				Log.ErrorFormat(sFormat, args);
-		} // Error
-
-		#endregion method Error
 
 		#region property Log
 

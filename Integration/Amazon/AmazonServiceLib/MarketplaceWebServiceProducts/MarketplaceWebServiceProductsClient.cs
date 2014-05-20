@@ -15,38 +15,33 @@
  */
 
 
-using System;
-using System.Reflection;
-using System.Web;
-using System.Net;
-using System.Text;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Security.Cryptography;
-using System.Globalization;
-using System.Xml.Serialization;
-using System.Collections.Generic;
-using MarketplaceWebServiceProducts.Model;
-using MarketplaceWebServiceProducts;
+
 
 
 namespace MarketplaceWebServiceProducts
 {
-
+	using System;
+	using System.Reflection;
+	using System.Net;
+	using System.Text;
+	using System.IO;
+	using System.Text.RegularExpressions;
+	using System.Security.Cryptography;
+	using System.Globalization;
+	using System.Xml.Serialization;
+	using System.Collections.Generic;
+	using Model;
 
    /**
-
     *
     * MarketplaceWebServiceProductsClient is an implementation of MarketplaceWebServiceProducts
     *
     */
     public class MarketplaceWebServiceProductsClient : IMarketplaceWebServiceProducts
     {
-
         private String awsAccessKeyId = null;
         private String awsSecretAccessKey = null;
         private MarketplaceWebServiceProductsConfig config = null;
-        private const String REQUEST_THROTTLED_ERROR_CODE = "RequestThrottled";
 
         /// <summary>
         /// Constructs MarketplaceWebServiceProductsClient with AWS Access Key ID and AWS Secret Key
@@ -444,22 +439,6 @@ namespace MarketplaceWebServiceProducts
                 ex = new MarketplaceWebServiceProductsException("Internal Error", status, rhm);
             }
             return ex;
-        }
-
-        /**
-         * Exponential sleep on failed request
-         */
-        private void PauseOnRetry(int retries, HttpStatusCode status, ResponseHeaderMetadata rhm)
-        {
-            if (retries <= config.MaxErrorRetry)
-            {
-                int delay = (int)Math.Pow(4, retries) * 100;
-                System.Threading.Thread.Sleep(delay);
-            }
-            else
-            {
-                throw new MarketplaceWebServiceProductsException("Maximum number of retry attempts reached : " + (retries - 1), status, rhm);
-            }
         }
 
         /**

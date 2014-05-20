@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using log4net;
-
 namespace EzBob.CommonLib.TrapForThrottlingLogic
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
 
 	public static class TrapForThrottlingController
 	{
-		private static readonly ILog _Log = LogManager.GetLogger( typeof( TrapForThrottlingController ) );
 		private static readonly object _Locker = new object();
 		private static readonly List<ITrapForThrottling> _Items = new List<ITrapForThrottling>();
 

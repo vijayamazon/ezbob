@@ -1,15 +1,12 @@
-using System;
-using System.Diagnostics;
-using EzBob.CommonLib;
-using EzBob.RequestsQueueCore.RequestStates;
-using log4net;
-
 namespace EzBob.RequestsQueueCore.RequestTasks.States
 {
+	using System;
+	using System.Diagnostics;
+	using CommonLib;
+	using RequestStates;
+
 	abstract class RequestTaskState : IRequestTaskState
 	{
-		private static readonly ILog _Log = LogManager.GetLogger( typeof( RequestTaskState ) );
-
 		public static readonly IRequestTaskState New = new RequestTaskStateNew();
 		public static readonly IRequestTaskState InQueue = new RequestTaskStateInQueue();
 		public static readonly IRequestTaskState Canceled = new RequestTaskStateCanceled();

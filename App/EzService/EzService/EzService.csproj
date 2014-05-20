@@ -102,7 +102,6 @@
     <Compile Include="EzServiceImplementation\_implement.IEzServiceAdmin.cs" />
     <Compile Include="EzServiceImplementation\_main.cs" />
     <Compile Include="EzServiceImplementation\quick.offer.cs" />
-    <Compile Include="NewCreditLineOption.cs" />
     <Compile Include="SafeValue.cs" />
     <Compile Include="ActionResults\StringListActionResult.cs" />
     <Compile Include="EzServiceInstanceRuntimeData.cs" />

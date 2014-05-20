@@ -42,7 +42,7 @@
 		private void RegenerateLoan(Loan loan)
 		{
 			log.InfoFormat("Recalculating loan:{1}{0}", loan, Environment.NewLine);
-			var c = new LoanScheduleCalculator() { Interest = loan.InterestRate, SetUpFee = loan.SetupFee, Term = loan.Schedule.Count };
+			var c = new LoanScheduleCalculator { Interest = loan.InterestRate, SetUpFee = loan.SetupFee, Term = loan.Schedule.Count };
 			c.Calculate(loan.LoanAmount, loan, loan.Date);
 			log.InfoFormat("Done:{1}{0}", loan, Environment.NewLine);
 		}

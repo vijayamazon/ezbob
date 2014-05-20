@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-	using System.Data;
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;

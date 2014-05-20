@@ -3,7 +3,6 @@
 	using Newtonsoft.Json.Linq;
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
 	using Ezbob.Database;
 
 	internal class LoanStatsDataEntry {
@@ -112,12 +111,5 @@
 		#endregion method Update
 
 		#endregion public
-
-		#region private
-
-		private readonly CultureInfo ms_oCulture = CultureInfo.InvariantCulture;
-		private const string ms_sDateFormat = "MMM dd yyyy HH:mm:ss";
-
-		#endregion private
 	} // class LoanStatsDataEntry
 } // namespace

@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-using System.Linq;
-using EzBob.CommonLib;
-using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
-using EzBob.CommonLib.TrapForThrottlingLogic;
-using EzBob.TeraPeakServiceLib.Requests.SellerResearch;
-using log4net;
-
 namespace EzBob.TeraPeakServiceLib
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Diagnostics.Contracts;
+	using System.Linq;
+	using CommonLib;
+	using CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
+	using CommonLib.TrapForThrottlingLogic;
+	using Requests.SellerResearch;
+
 	public class TeraPeakRequestInfo
 	{
 		public TeraPeakSellerInfo SellerInfo { get; private set; }
@@ -34,7 +32,6 @@ namespace EzBob.TeraPeakServiceLib
 
 	public class TeraPeakSearchBySellerRequester : TeraPeakRequester
 	{
-		private static readonly ILog _Log = LogManager.GetLogger( typeof( TeraPeakSearchBySellerRequester ) );
 		private readonly static ITrapForThrottling _SearchBySellerTrapForThrottling;
 
 		static TeraPeakSearchBySellerRequester()

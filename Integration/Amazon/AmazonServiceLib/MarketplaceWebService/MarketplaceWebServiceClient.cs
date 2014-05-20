@@ -953,15 +953,6 @@ namespace MarketplaceWebService
         }
 
         /**
-         * Exponential sleep on failed request
-         */
-        private void PauseOnRetry(int retries)
-        {
-            int delay = (int)Math.Pow(4, retries) * 100;
-            System.Threading.Thread.Sleep(delay);
-        }
-
-        /**
          * Add authentication related and version parameters
          */
         private void AddRequiredParameters(IDictionary<String, String> parameters)

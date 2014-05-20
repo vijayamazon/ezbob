@@ -40,7 +40,6 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
         private String awsSecretAccessKey = null;
         private MarketplaceWebServiceOrdersConfig config = null;
 
-        private const String REQUEST_THROTTLED_ERROR_CODE = "RequestThrottled";
         private static ILog _log = LogManager.GetLogger(typeof(MarketplaceWebServiceOrdersClient));
 
         /// <summary>
