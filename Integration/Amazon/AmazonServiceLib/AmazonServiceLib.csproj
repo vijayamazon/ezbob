@@ -298,10 +298,6 @@
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FBAInventoryServiceMWS\FBAInventoryServiceMWS.csproj">
-      <Project>{329D8BC9-D820-37CA-9B18-098625CA0158}</Project>
-      <Name>FBAInventoryServiceMWS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MarketplaceWebServiceOrders\MarketplaceWebServiceOrders.csproj">
       <Project>{09CE7DF4-1B19-47A5-847E-FE7C72263D8D}</Project>
       <Name>MarketplaceWebServiceOrders</Name>

@@ -203,15 +203,16 @@ namespace EzBob.Web.Code
         }
         private String changeToWords(String numb, bool isCurrency)
         {
-            String val = "", wholeNo = numb, points = "", andStr = "", pointStr = "";
-            String endStr = (isCurrency) ? ("Only") : ("");
+	        String val = "", wholeNo = numb;
+	        String andStr = "", pointStr = "";
+	        String endStr = (isCurrency) ? ("Only") : ("");
             try
             {
                 int decimalPlace = numb.IndexOf(".");
                 if (decimalPlace > 0)
                 {
                     wholeNo = numb.Substring(0, decimalPlace);
-                    points = numb.Substring(decimalPlace + 1);
+                    string points = numb.Substring(decimalPlace + 1);
                     if (Convert.ToInt32(points) > 0)
                     {
                         andStr = (isCurrency) ? ("and") : ("point");// just to separate whole numbers from > points/cents
@@ -230,13 +231,12 @@ namespace EzBob.Web.Code
             string word = "";
             try
             {
-                bool beginsZero = false;//tests for 0XX
-                bool isDone = false;//test if already translated
+	            bool isDone = false;//test if already translated
                 double dblAmt = (Convert.ToDouble(number));
                 //if ((dblAmt > 0) && number.StartsWith("0"))
                 if (dblAmt > 0)
                 {//test for zero or digit zero in a nuemric
-                    beginsZero = number.StartsWith("0");
+                    bool beginsZero = number.StartsWith("0");//tests for 0XX
 
                     int numDigits = number.Length;
                     int pos = 0;//store digit grouping
@@ -394,24 +394,18 @@ namespace EzBob.Web.Code
             }
             return name;
         }
+
         private String translateCents(String cents)
         {
-            String cts = "", digit = "", engOne = "";
-            for (int i = 0; i < cents.Length; i++)
+	        string cts = "";
+	        for (int i = 0; i < cents.Length; i++)
             {
-                digit = cents[i].ToString();
-                if (digit.Equals("0"))
-                {
-                    engOne = "Zero";
-                }
-                else
-                {
-                    engOne = ones(digit);
-                }
+                string digit = cents[i].ToString(CultureInfo.InvariantCulture);
+	            string engOne = "";
+	            engOne = digit.Equals("0") ? "Zero" : ones(digit);
                 cts += " " + engOne;
             }
             return cts;
         }
     }
-
 }

@@ -1,7 +1,4 @@
 ﻿@using System.Web.Mvc
-@using EZBob.DatabaseLib.Model.Database
-@using EzBob.Web.Infrastructure
-@using StructureMap
 @using ConfigManager
 @*Renders select*@
 @helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
@@ -161,7 +158,7 @@
     </div>
 }
 
-@helper InputTextWithHelp(System.Web.Mvc.HtmlHelper page, string id, string caption, string value, string help, string cls = "")
+@helper InputTextWithHelp(HtmlHelper page, string id, string caption, string value, string help, string cls = "")
 {
     <div class="control-group">
         <label for="@id" class="control-label">@page.Raw(caption) </label>

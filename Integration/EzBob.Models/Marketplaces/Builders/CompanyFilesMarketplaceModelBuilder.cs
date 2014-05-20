@@ -49,12 +49,12 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		private CompanyFilesModel BuildCompanyFiles(MP_CustomerMarketPlace mp)
 		{
-			var model = new CompanyFilesModel() { Files = new List<CompanyFile>()};
+			var model = new CompanyFilesModel { Files = new List<CompanyFile>()};
 			var files = _companyFiles.GetByCustomerId(mp.Customer.Id);
 			
 			foreach (var file in files)
 			{
-				model.Files.Add(new CompanyFile()
+				model.Files.Add(new CompanyFile
 					{
 						FileName = file.FileName,
 						Id =  file.Id,

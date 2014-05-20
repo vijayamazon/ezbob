@@ -224,7 +224,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			var s = _session.Query<MP_YodleeOrderItemBankTransaction>().Where(t => t.YodleeOrderItem.Order.CustomerMarketPlace.Id == mp.Id)
 				.Where(t => t.postDate.HasValue || t.transactionDate.HasValue)
 				.Select(oi => oi.postDate ?? oi.transactionDate);
-			return !s.Any() ? (DateTime?)null : s.Min();
+			return !s.Any() ? null : s.Min();
 		}
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)

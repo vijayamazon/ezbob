@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EzBob.Web.Areas.Customer.Models
+﻿namespace EzBob.Web.Areas.Customer.Models
 {
     public class SecurityQuestionModel
     {

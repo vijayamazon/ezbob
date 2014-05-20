@@ -172,9 +172,6 @@ namespace EzBob.Models.Marketplaces.Builders {
 				)
 				.Select(oi => oi.PaymentDate);
 
-			if (oListOfDates == null)
-				return null;
-
 			return oListOfDates.Any() ? oExtractDate(oListOfDates) : (DateTime?)null;
 		} // GetDateFromList
 

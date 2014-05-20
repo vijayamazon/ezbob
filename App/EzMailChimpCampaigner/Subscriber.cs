@@ -9,24 +9,22 @@
 		public string LastName { get; set; }
 		public decimal LoanOffer { get; set; }
 		public DateTime? DayAfter { get; set; }
-		//public DateTime? ThreeDays { get; set; }
 		public DateTime? Week { get; set; }
 		public DateTime? TwoWeeks { get; set; }
 		public DateTime? Month { get; set; }
 
 		public Subscriber Clone() {
 			return new Subscriber {
-				Email = this.Email,
-				BrokerEmail = this.BrokerEmail,
-				Group = this.Group,
-				FirstName = this.FirstName,
-				LastName = this.LastName,
-				LoanOffer = this.LoanOffer,
-				DayAfter = this.DayAfter,
-				//ThreeDays = this.ThreeDays,
-				Week = this.Week,
-				TwoWeeks = this.TwoWeeks,
-				Month = this.Month,
+				Email = Email,
+				BrokerEmail = BrokerEmail,
+				Group = Group,
+				FirstName = FirstName,
+				LastName = LastName,
+				LoanOffer = LoanOffer,
+				DayAfter = DayAfter,
+				Week = Week,
+				TwoWeeks = TwoWeeks,
+				Month = Month,
 			};
 		} // Clone
 

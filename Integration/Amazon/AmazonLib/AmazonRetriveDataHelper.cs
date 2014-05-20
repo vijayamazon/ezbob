@@ -324,30 +324,6 @@
 			return categories;
 		}
 
-		//private readonly ConcurrentDictionary<string, AmazonProductItemBase> _ProductsCache = new ConcurrentDictionary<string, AmazonProductItemBase>();
-
-		/*public void UpdateClientOrdersInfo( IDatabaseCustomer databaseCustomer, ActionAccessType access )
-        {
-            base.UpdateAllDataFor( customerMarketPlace => UpdateClientOrdersInfo(customerMarketPlace , access ), databaseCustomer );
-        }
-
-        private void UpdateClientOrdersInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, ActionAccessType access )
-        {
-            var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>( databaseCustomerMarketPlace );
-
-            UpdateClientOrdersInfo( databaseCustomerMarketPlace, securityInfo, _ConnectionInfo, access);
-        }*/
-
-		/*public void StoreCustomerMarketPlace( ICustomerMarketPlace databaseCustomerMarketPlace )
-		{
-			var marketPlace = databaseCustomerMarketPlace.MarketPlace;
-			var databaseCustomer = databaseCustomerMarketPlace.Customer;
-			var securityInfo = databaseCustomerMarketPlace.SecurityData;
-			var securityData = SerializeDataHelper.Serialize( securityInfo );
-
-			Helper.AddCustomerMarketPlace(databaseCustomer, marketPlace, securityData, "");
-		}*/
-
 		private IEnumerable<IWriteDataInfo<AmazonDatabaseFunctionType>> CreateOrdersAggregationInfo(AmazonOrdersList2 orders,  ICurrencyConvertor currencyConverter)
         {
 
@@ -400,7 +376,6 @@
 	            }
             );
         }
-
 
         private void ParceAndSaveUserFeedbackInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonUserRatingInfo ratingInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
@@ -462,5 +437,4 @@
 
         }
     }
-
 }

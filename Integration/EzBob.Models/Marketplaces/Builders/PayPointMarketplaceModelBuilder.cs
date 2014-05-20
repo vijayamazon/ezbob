@@ -60,7 +60,7 @@ namespace EzBob.Models.Marketplaces.Builders
 				.Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
 				.Where(oi => oi.date != null)
 				.Select(oi => oi.date);
-			return !s.Any() ? (DateTime?)null : s.Min();
+			return !s.Any() ? null : s.Min();
 		}
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)

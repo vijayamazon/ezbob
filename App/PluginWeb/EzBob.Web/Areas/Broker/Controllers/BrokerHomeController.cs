@@ -3,20 +3,17 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using System.Reflection;
-	using System.Security.Principal;
 	using System.Web;
 	using System.Web.Helpers;
 	using System.Web.Mvc;
-	using System.Web.Security;
-
 	using Code;
+	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Infrastructure.csrf;
-	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
-
 	using Ezbob.Utils;
 	using Infrastructure.Attributes;
 	using Infrastructure.Filters;
@@ -50,7 +47,7 @@
 		#region action Index (default)
 
 		// GET: /Broker/BrokerHome/
-		public System.Web.Mvc.ViewResult Index(string sourceref = "") {
+		public ViewResult Index(string sourceref = "") {
 			var oModel = new BrokerHomeModel();
 
 			if (!string.IsNullOrWhiteSpace(sourceref)) {
@@ -143,7 +140,7 @@
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
-			BrokerPropertiesActionResult bp = null;
+			BrokerPropertiesActionResult bp;
 
 			try {
 				bp = m_oServiceClient.Instance.BrokerSignup(
@@ -352,7 +349,7 @@
 		public JsonResult LoadStaticData() {
 			m_oLog.Debug("Broker loading CRM details started...");
 
-			BrokerStaticDataActionResult oResult = null;
+			BrokerStaticDataActionResult oResult;
 
 			try {
 				oResult = m_oServiceClient.Instance.BrokerLoadStaticData(false);
@@ -399,7 +396,7 @@
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
-			StringActionResult oResult = null;
+			StringActionResult oResult;
 
 			try {
 				oResult = m_oServiceClient.Instance.BrokerSaveCrmEntry(isIncoming, action, status, comment, customerId, sContactEmail);
@@ -448,7 +445,7 @@
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
-			BrokerCustomerFilesActionResult oFiles = null;
+			BrokerCustomerFilesActionResult oFiles;
 
 			try {
 				oFiles = m_oServiceClient.Instance.BrokerLoadCustomerFiles(sCustomerID, sContactEmail);
@@ -536,7 +533,7 @@
 			if (oIsAuthResult != null)
 				throw new Exception(oIsAuthResult.error);
 
-			BrokerCustomerFileContentsActionResult oFile = null;
+			BrokerCustomerFileContentsActionResult oFile;
 
 			try {
 				oFile = m_oServiceClient.Instance.BrokerDownloadCustomerFile(sCustomerID, sContactEmail, nFileID);
@@ -685,7 +682,7 @@
 				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 			} // if
 
-			BrokerLeadDetailsActionResult bld = null;
+			BrokerLeadDetailsActionResult bld;
 
 			try {
 				bld = m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID.Value, sLeadEmail, sContactEmail);
@@ -826,7 +823,7 @@
 				return new BrokerForJsonResult("Cannot update password: new password is equal to the old one.");
 			} // if
 
-			ActionMetaData oResult = null;
+			ActionMetaData oResult;
 
 			try {
 				oResult = m_oServiceClient.Instance.BrokerUpdatePassword(ContactEmail, OldPassword, NewPassword, NewPassword2);
@@ -907,7 +904,7 @@
 			#region operator cast to JsonResult
 
 			public static implicit operator JsonResult(BrokerForJsonResult oResult) {
-				BrokerHomeController.m_oLog.Debug(
+				m_oLog.Debug(
 					"Controller output:\n\ttype: {0}\n\terror msg: {1}",
 					oResult.GetType(), oResult.error
 				);
@@ -1027,8 +1024,8 @@
 
 				statuses = oResult.Statuses.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value);
 
-				broker_terms = new Dictionary<string, string>() {
-					{ "id", oResult.TermsID.ToString() },
+				broker_terms = new Dictionary<string, string> {
+					{ "id", oResult.TermsID.ToString(CultureInfo.InvariantCulture) },
 					{ "text", oResult.Terms },
 				};
 

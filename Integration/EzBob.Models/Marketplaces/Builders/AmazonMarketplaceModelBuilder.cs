@@ -1,16 +1,14 @@
-using System;
-using System.Linq;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Repository;
-using EzBob.AmazonServiceLib;
-using EzBob.Web.Areas.Underwriter.Models;
-using NHibernate;
-using NHibernate.Linq;
-using StructureMap;
-
 namespace EzBob.Models.Marketplaces.Builders
 {
+	using System;
+	using System.Linq;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Repository;
+	using AmazonServiceLib;
+	using NHibernate;
+	using NHibernate.Linq;
+	using StructureMap;
 	using EZBob.DatabaseLib.Model.Marketplaces.Amazon;
 
 	class AmazonMarketplaceModelBuilder : MarketplaceModelBuilder
@@ -78,7 +76,7 @@ namespace EzBob.Models.Marketplaces.Builders
                                            .Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
                                            .Where(oi => oi.PurchaseDate != null)
                                            .Select(oi => oi.PurchaseDate);
-            return !s.Any() ? (DateTime?)null : s.Min();
+            return !s.Any() ? null : s.Min();
         }
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)

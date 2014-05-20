@@ -32,7 +32,7 @@
 
         public int CalculateCountRepayment(Loan loan)
         {
-            var result = 0;
+            int result;
             if (string.IsNullOrEmpty(loan.CashRequest.LoanTemplate))
             {
                 result = loan.Schedule.Count;

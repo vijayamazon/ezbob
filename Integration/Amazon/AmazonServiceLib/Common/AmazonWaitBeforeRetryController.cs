@@ -1,13 +1,12 @@
-﻿using System;
-using System.Net;
-using EzBob.CommonLib;
-using FBAInventoryServiceMWS.Service;
-using MarketplaceWebService;
-using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders;
-using MarketplaceWebServiceProducts;
-
-namespace EzBob.AmazonServiceLib.Common
+﻿namespace EzBob.AmazonServiceLib.Common
 {
+	using System;
+	using System.Net;
+	using CommonLib;
+	using MarketplaceWebService;
+	using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders;
+	using MarketplaceWebServiceProducts;
+
 	class AmazonWaitBeforeRetryHelper
 	{
 		private readonly WaitBeforeRetryController _WaitBeforeRetryController;
@@ -87,21 +86,6 @@ namespace EzBob.AmazonServiceLib.Common
 							return true;
 						}
 						else if (repEx.StatusCode == HttpStatusCode.Unauthorized)
-						{
-							return false;
-						}
-					}
-					else if ( ex is FBAInventoryServiceMWSException )
-					{
-						var invEx = ex as FBAInventoryServiceMWSException;
-
-						if ( invEx.StatusCode == HttpStatusCode.InternalServerError ||
-							invEx.StatusCode == HttpStatusCode.ServiceUnavailable ||
-							string.Equals( invEx.ErrorCode, _RequestThrottledString, StringComparison.InvariantCultureIgnoreCase ) )
-						{
-							return true;
-						}
-						else if (invEx.StatusCode == HttpStatusCode.Unauthorized)
 						{
 							return false;
 						}

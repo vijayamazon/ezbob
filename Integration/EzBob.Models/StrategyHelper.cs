@@ -780,7 +780,7 @@
 			if (cache != null)
 			{
 				var b = new LandRegistryModelBuilder();
-				var cacheModel = new LandRegistryDataModel()
+				var cacheModel = new LandRegistryDataModel
 				{
 					Request = cache.Request,
 					Response = cache.Response,
