@@ -1,5 +1,4 @@
-﻿@using System.Web.Mvc
-@using ConfigManager
+﻿@using ConfigManager
 @*Renders select*@
 @helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
 {
@@ -154,19 +153,6 @@
         <label for="@id" class="control-label">@caption (£)</label>
         <div class="controls cashControlls">
             <input id="@id" name="@id" type="text" value="@value" class="@cls cashInput" />
-        </div>
-    </div>
-}
-
-@helper InputTextWithHelp(HtmlHelper page, string id, string caption, string value, string help, string cls = "")
-{
-    <div class="control-group">
-        <label for="@id" class="control-label">@page.Raw(caption) </label>
-        <div class="controls cashControlls ">
-            <div>
-                <input id="@id" name="@id" type="text" value="@value" class="@cls cashInput" data-content="We require 3 years of residence addresses as part of your credit profile analysis." rel="popover" />
-                <img class="help-btn" style="float: right;margin-right: 10px;" width="25" height="25" src="@UrlHelper.GenerateContentUrl("~/Content/img/question.png", page.ViewContext.HttpContext)" rel="popover" data-content="@help" alt="" />
-            </div>
         </div>
     </div>
 }
