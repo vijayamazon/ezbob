@@ -1,6 +1,8 @@
 DECLARE @DateStart DATETIME = '2013-09-01'
 DECLARE @DateEnd DATETIME = '2014-04-01'
 
+
+--TODO use SicNaceCodeMap table to retrieve Nace code when the sic code is parsed and stored
 ------------------A1_Borrowers---------------------------------------------------
 SELECT DISTINCT c.RefNumber AS 'Borrower ID', CASE 
 	--Midland east
@@ -147,13 +149,14 @@ SELECT DISTINCT c.RefNumber AS 'Borrower ID', CASE
 	--Ireland
 	WHEN a.Postcode LIKE 'BT%' THEN 'UKN' 
 		
-	ELSE 'n/i' END AS 'Region', 'GB' AS Country,  'n/i' AS 'Date of establishment', 'n/i' AS 'Sector (NACE code)', 'Employed' AS 'Employment status', coc.EmployeeCount AS 'Current number of employees', c.OverallTurnOver AS 'Annual turn-over', 1 AS 'Total Assets', c.IndustryType AS 'Comments'
+	ELSE 'n/i' END AS 'Region', 'GB' AS Country,  CONVERT(VARCHAR(10),ca.IncorporationDate, 103) AS 'Date of establishment', 'n/i' AS 'Sector (NACE code)', CASE WHEN ca.IncorporationDate IS NULL THEN 5 ELSE 1 END AS 'Employment status', coc.EmployeeCount AS 'Current number of employees', c.OverallTurnOver AS 'Annual turn-over', 1 AS 'Total Assets', c.IndustryType AS 'Comments'
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
 JOIN CustomerAddress a ON a.CustomerId = c.Id 
 LEFT JOIN Company co ON c.CompanyId = co.Id
 LEFT JOIN CompanyEmployeeCount coc ON coc.CompanyId = co.Id
+LEFT JOIN CustomerAnalytics ca ON c.Id = ca.CustomerID
 WHERE s.LoanSourceName='EU'
 AND a.addressType=1
 AND c.IsTest=0
@@ -185,7 +188,7 @@ AND cr.CreationDate<@DateEnd
 AND cr.UnderwriterDecision='Rejected'
 
 ----------------Part B - List of included operations-------------------------------------------------------------------------
-SELECT c.RefNumber AS 'Borrower ID', l.RefNum AS 'Loan reference' , 'GBP' AS Currency,  l.LoanAmount AS 'Nominal loan amount', l.Repayments AS 'Total repayment of loan amount', l.Balance AS 'Outstanding - loan amount', 0 'Remaining loan amount to be disbursed', CASE WHEN l.DateClosed IS NULL THEN 'No' ELSE 'Yes' END AS 'End of disbursement period'
+SELECT c.RefNumber AS 'Borrower ID', l.RefNum AS 'Loan reference' , 'GBP' AS Currency,  l.LoanAmount AS 'Nominal loan amount', (l.LoanAmount - l.Principal) AS 'Total repayment of loan amount', l.Principal AS 'Outstanding - loan amount', 0 'Remaining loan amount to be disbursed', CASE WHEN l.DateClosed IS NULL THEN 'No' ELSE 'Yes' END AS 'End of disbursement period'
 FROM Loan l 
 JOIN LoanSource s ON s.LoanSourceID = l.LoanSourceID
 JOIN Customer c ON l.CustomerId = c.Id 
@@ -205,4 +208,5 @@ AND l.[Date]>=@DateStart AND l.[Date]<@DateEnd
 -- 3. Change of loan ID
 -- 4. Change Loan amount
 --What is it?
+
 
