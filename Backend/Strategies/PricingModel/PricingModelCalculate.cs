@@ -117,52 +117,51 @@
 			return setupFee;
 		}
 
+		private decimal FindUpperBoundary(out decimal balance)
+		{
+			balance = -1;
+			decimal monthlyInterestRate = 1;
+			while (balance < 0)
+			{
+				if (monthlyInterestRate > 1000000)
+				{
+					LogInputs();
+					throw new Exception("Monthly interest rate should be over 1000000, aborting calculation");
+				}
+				monthlyInterestRate *= 10;
+				balance = CalculateBalance(monthlyInterestRate);
+			}
+
+			return monthlyInterestRate;
+		}
+
 		private decimal GetMonthlyInterestRate()
 		{
-			decimal guessInterval = 0.01m;
-			decimal monthlyInterestRate = 0.01m;
+			decimal lowerBoundary = 0;
+			decimal balanceForUpperBoundary;
+			decimal upperBoundary = FindUpperBoundary(out balanceForUpperBoundary);
+			decimal interestRateForMinBalanceAbs;
+			decimal minBalanceAbsValue;
 			var calculations = new Dictionary<decimal, decimal>();
-			decimal minBalanceAbsValue = decimal.MaxValue;
-			decimal interestRateForMinBalanceAbs = 0.01m;
-			int counter = 0;
+			decimal balanceForLowerBoundary = CalculateBalance(lowerBoundary);
+			calculations.Add(upperBoundary, balanceForUpperBoundary);
+			calculations.Add(lowerBoundary, balanceForLowerBoundary);
+
+			if (Math.Abs(balanceForUpperBoundary) < Math.Abs(balanceForLowerBoundary))
+			{
+				minBalanceAbsValue = Math.Abs(balanceForUpperBoundary);
+				interestRateForMinBalanceAbs = upperBoundary;
+			}
+			else
+			{
+				minBalanceAbsValue = Math.Abs(balanceForLowerBoundary);
+				interestRateForMinBalanceAbs = lowerBoundary;
+			}
+
+			decimal monthlyInterestRate = Math.Round((lowerBoundary + upperBoundary) / 2, 4, MidpointRounding.AwayFromZero);
 
 			while (minBalanceAbsValue != 0)
 			{
-				counter++;
-				if (counter > 100)
-				{
-					Log.Warn("Pricing model calculation reached 100 cycles and will stop.");
-					
-					var inputs = new StringBuilder();
-					inputs.Append("LoanAmount:").Append(Model.LoanAmount).Append("\r\n");
-					inputs.Append("DefaultRate:").Append(Model.DefaultRate).Append("\r\n");
-					inputs.Append("DefaultRateCompanyShare:").Append(Model.DefaultRateCompanyShare).Append("\r\n");
-					inputs.Append("DefaultRateCustomerShare:").Append(Model.DefaultRateCustomerShare).Append("\r\n");
-					inputs.Append("SetupFeePounds:").Append(Model.SetupFeePounds).Append("\r\n");
-					inputs.Append("SetupFeePercents:").Append(Model.SetupFeePercents).Append("\r\n");
-					inputs.Append("LoanTerm:").Append(Model.LoanTerm).Append("\r\n");
-					inputs.Append("InterestOnlyPeriod:").Append(Model.InterestOnlyPeriod).Append("\r\n");
-					inputs.Append("TenurePercents:").Append(Model.TenurePercents).Append("\r\n");
-					inputs.Append("TenureMonths:").Append(Model.TenureMonths).Append("\r\n");
-					inputs.Append("CollectionRate:").Append(Model.CollectionRate).Append("\r\n");
-					inputs.Append("EuCollectionRate:").Append(Model.EuCollectionRate).Append("\r\n");
-					inputs.Append("Cogs:").Append(Model.Cogs).Append("\r\n");
-					inputs.Append("DebtPercentOfCapital:").Append(Model.DebtPercentOfCapital).Append("\r\n");
-					inputs.Append("CostOfDebt:").Append(Model.CostOfDebt).Append("\r\n");
-					inputs.Append("OpexAndCapex:").Append(Model.OpexAndCapex).Append("\r\n");
-					inputs.Append("ProfitMarkup:").Append(Model.ProfitMarkup).Append("\r\n");
-
-					Log.Warn("Inputs were:\r\n{0}", inputs);
-					var balances = new StringBuilder();
-					foreach (decimal interest in calculations.Keys)
-					{
-						balances.Append("Interest:").Append(interest).Append(" Balance:").Append(calculations[interest]).Append("\r\n");
-					}
-					Log.Warn("Calculated Balances:\r\n{0}", balances);
-
-					throw new Exception("Pricing model calculation reached 100 cycles and will stop");
-				}
-
 				decimal balance = CalculateBalance(monthlyInterestRate);
 				if (Math.Abs(balance) < minBalanceAbsValue)
 				{
@@ -170,30 +169,57 @@
 					interestRateForMinBalanceAbs = monthlyInterestRate;
 				}
 
-				calculations.Add(monthlyInterestRate, balance);
-
-				decimal nextMonthlyInterestRate = balance < 0 ? monthlyInterestRate + guessInterval : monthlyInterestRate - guessInterval;
-				if (calculations.ContainsKey(nextMonthlyInterestRate))
+				if (lowerBoundary + 0.0001m == upperBoundary)
 				{
-					if (guessInterval == 0.01m)
+					return interestRateForMinBalanceAbs;
+				}
+
+				if (!calculations.ContainsKey(monthlyInterestRate)) // Can be optimized and avoid calculating balances that were already calculated
+				{
+					calculations.Add(monthlyInterestRate, balance);
+				}
+
+				if (balance < 0)
+				{
+					lowerBoundary = monthlyInterestRate;
+					monthlyInterestRate = Math.Round((lowerBoundary + upperBoundary) / 2, 5, MidpointRounding.AwayFromZero);
+					if ((monthlyInterestRate*100000)%10 != 0)
 					{
-						guessInterval = 0.001m;
-						nextMonthlyInterestRate = balance < 0 ? monthlyInterestRate + guessInterval : monthlyInterestRate - guessInterval;
-					}
-					else if (guessInterval == 0.001m)
-					{
-						guessInterval = 0.0001m;
-						nextMonthlyInterestRate = balance < 0 ? monthlyInterestRate + guessInterval : monthlyInterestRate - guessInterval;
-					}
-					else
-					{
-						break;
+						monthlyInterestRate -= 0.00005m;
 					}
 				}
-				monthlyInterestRate = nextMonthlyInterestRate;
+				else
+				{
+					upperBoundary = monthlyInterestRate;
+					monthlyInterestRate = Math.Round((lowerBoundary + upperBoundary) / 2, 4, MidpointRounding.AwayFromZero);
+				}
 			}
 
 			return interestRateForMinBalanceAbs;
+		}
+
+		private void LogInputs()
+		{
+			var inputs = new StringBuilder();
+			inputs.Append("LoanAmount:").Append(Model.LoanAmount).Append("\r\n");
+			inputs.Append("DefaultRate:").Append(Model.DefaultRate).Append("\r\n");
+			inputs.Append("DefaultRateCompanyShare:").Append(Model.DefaultRateCompanyShare).Append("\r\n");
+			inputs.Append("DefaultRateCustomerShare:").Append(Model.DefaultRateCustomerShare).Append("\r\n");
+			inputs.Append("SetupFeePounds:").Append(Model.SetupFeePounds).Append("\r\n");
+			inputs.Append("SetupFeePercents:").Append(Model.SetupFeePercents).Append("\r\n");
+			inputs.Append("LoanTerm:").Append(Model.LoanTerm).Append("\r\n");
+			inputs.Append("InterestOnlyPeriod:").Append(Model.InterestOnlyPeriod).Append("\r\n");
+			inputs.Append("TenurePercents:").Append(Model.TenurePercents).Append("\r\n");
+			inputs.Append("TenureMonths:").Append(Model.TenureMonths).Append("\r\n");
+			inputs.Append("CollectionRate:").Append(Model.CollectionRate).Append("\r\n");
+			inputs.Append("EuCollectionRate:").Append(Model.EuCollectionRate).Append("\r\n");
+			inputs.Append("Cogs:").Append(Model.Cogs).Append("\r\n");
+			inputs.Append("DebtPercentOfCapital:").Append(Model.DebtPercentOfCapital).Append("\r\n");
+			inputs.Append("CostOfDebt:").Append(Model.CostOfDebt).Append("\r\n");
+			inputs.Append("OpexAndCapex:").Append(Model.OpexAndCapex).Append("\r\n");
+			inputs.Append("ProfitMarkup:").Append(Model.ProfitMarkup).Append("\r\n");
+
+			Log.Warn("Inputs were:\r\n{0}", inputs);
 		}
 
 		private decimal GetCostOfDebt(IEnumerable<LoanScheduleItem> schedule)
