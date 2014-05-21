@@ -1,13 +1,13 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptFinancialStats]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptFinancialStats]
+IF OBJECT_ID('RptFinancialStats') IS NULL
+	EXECUTE('CREATE PROCEDURE RptFinancialStats AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[RptFinancialStats] 
-	(@DateStart DATETIME,
-@DateEnd DATETIME)
+ALTER PROCEDURE [dbo].[RptFinancialStats] 
+	(@DateStart DATETIME, @DateEnd DATETIME)
 AS
 BEGIN
 	DECLARE @TotalGivenLoanValueOpen NUMERIC(18, 2)
@@ -21,6 +21,9 @@ BEGIN
 	DECLARE @InterestReceived NUMERIC(18, 2)
 
 	DECLARE @Defaults NUMERIC(18, 2)
+	DECLARE @TotalDefaults NUMERIC(18, 2)
+	DECLARE @TotalBadDebt NUMERIC(18, 2)
+	
 	DECLARE @SetupFee NUMERIC(18, 2)
 
 	DECLARE @PACNET NVARCHAR(32)
@@ -29,8 +32,6 @@ BEGIN
 
 	DECLARE @Indent NVARCHAR(64)
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -42,8 +43,6 @@ BEGIN
 		@Indent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
 	CREATE TABLE #output (
 		SortOrder NUMERIC(18, 6) NOT NULL,
@@ -51,8 +50,6 @@ BEGIN
 		Value NUMERIC(18, 2) NULL
 	)
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -67,8 +64,6 @@ BEGIN
 		t.PostDate < @DateStart
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
 	SELECT
 		@TotalGivenLoanValueClose = ISNULL( SUM(ISNULL(t.Amount, 0)), 0 )
@@ -81,8 +76,6 @@ BEGIN
 		AND
 		t.PostDate < @DateEnd
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -97,8 +90,6 @@ BEGIN
 		t.PostDate < @DateStart
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
 	SELECT
 		@TotalRepaidPrincipalClose = ISNULL( SUM(ISNULL(t.LoanRepayment, 0)), 0 )
@@ -112,15 +103,11 @@ BEGIN
 		t.PostDate < @DateEnd
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
 	SET @TotalBalanceSum = 
 		@TotalGivenLoanValueOpen  - @TotalRepaidPrincipalOpen +
 		@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose
 		
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -134,8 +121,6 @@ BEGIN
 		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -154,7 +139,35 @@ BEGIN
 		cs.IsDefault = 1
 
 	------------------------------------------------------------------------------
+	
+	SELECT
+		@TotalDefaults = ISNULL(SUM(t.Amount), 0)
+	FROM
+		Loan l
+		INNER JOIN LoanTransaction t
+			ON l.Id = t.LoanId
+			AND t.Status = @DONE
+			AND t.Type = @PACNET
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 
+		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
+	WHERE
+		cs.IsDefault = 1
+
 	------------------------------------------------------------------------------
+	
+	SELECT
+		@TotalBadDebt = ISNULL(SUM(t.Amount), 0)
+	FROM
+		Loan l
+		INNER JOIN LoanTransaction t
+			ON l.Id = t.LoanId
+			AND t.Status = @DONE
+			AND t.Type = @PACNET
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 
+		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
+	WHERE
+		cs.IsWarning = 1
+
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -165,8 +178,6 @@ BEGIN
 	WHERE
 		@DateStart <= l.Date AND l.Date < @DateEnd
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	CREATE TABLE #known_tran_time_status (
@@ -223,8 +234,6 @@ BEGIN
 		LEFT JOIN #grouped_tran_time_status g ON t.Id = g.TransactionID
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
 	INSERT INTO #output
 	SELECT
@@ -232,8 +241,6 @@ BEGIN
 		'Opening Balance',
 		@TotalGivenLoanValueOpen - @TotalRepaidPrincipalOpen
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	INSERT INTO #output
@@ -251,8 +258,6 @@ BEGIN
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
 	INSERT INTO #output
 	SELECT
@@ -268,8 +273,6 @@ BEGIN
 		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	INSERT INTO #output
@@ -288,8 +291,6 @@ BEGIN
 		t.Type = @PAYPOINT AND t.Status = @DONE
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
 	INSERT INTO #output
 	SELECT
@@ -306,8 +307,6 @@ BEGIN
 		AND
 		t.Type = @PAYPOINT AND t.Status = @DONE
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	INSERT INTO #output
@@ -326,38 +325,33 @@ BEGIN
 		t.Type = @PAYPOINT AND t.Status = @DONE
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
+	
 	INSERT INTO #output
-	SELECT
-		3,
-		'Principal Repaid',
-		SUM(Value)
+	SELECT 3, 'Principal Repaid', SUM(Value)
 	FROM
 		#output
 	WHERE
 		SortOrder IN (3.1, 3.2, 3.3)
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
+	
 	INSERT INTO #output
-	SELECT
-		5,
-		'Defaults',
-		@Defaults
+	SELECT 5, 'Defaults in period',	@Defaults
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
+	
 	INSERT INTO #output
-	SELECT
-		8,
-		'Average Loan Amount',
-		ISNULL(AVG(t.Amount), 0)
+	SELECT 5.1, 'Total defaults', @TotalDefaults
+
+	------------------------------------------------------------------------------
+	
+	INSERT INTO #output
+	SELECT 5.1, 'Total bad debt', @TotalBadDebt
+
+	------------------------------------------------------------------------------
+	
+	INSERT INTO #output
+	SELECT 8, 'Average Loan Amount', ISNULL(AVG(t.Amount), 0)
 	FROM
 		Loan l
 		INNER JOIN LoanTransaction t
@@ -369,37 +363,19 @@ BEGIN
 		@DateStart <= l.Date AND l.Date < @DateEnd
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
+	
+	INSERT INTO #output
+	SELECT 9, 'Interest Received', @InterestReceived
+
 	------------------------------------------------------------------------------
 
 	INSERT INTO #output
-	SELECT
-		9,
-		'Interest Received',
-		@InterestReceived
+	SELECT 10, 'Yield %', CASE @TotalBalanceSum	WHEN 0 THEN 0 ELSE 100 * 2 * @InterestReceived / @TotalBalanceSum END
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	INSERT INTO #output
-	SELECT
-		10,
-		'Yield %',
-		CASE @TotalBalanceSum
-			WHEN 0 THEN 0
-			ELSE 100 * 2 * @InterestReceived / @TotalBalanceSum
-		END
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	INSERT INTO #output
-	SELECT
-		11,
-		'Fees Paid',
-		@SetupFee + ISNULL(SUM(t.Fees), 0)
+	SELECT 11, 'Fees Paid',	@SetupFee + ISNULL(SUM(t.Fees), 0)
 	FROM
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
@@ -410,19 +386,13 @@ BEGIN
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
 	INSERT INTO #output
 	VALUES (11.1, 'Setup Fee', @SetupFee)
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
+	
 	------------------------------------------------------------------------------
 
-	SELECT
-		Name,
-		CONVERT(DECIMAL(18, 6), 0) AS Charge
+	SELECT Name, CONVERT(DECIMAL(18, 6), 0) AS Charge
 	INTO
 		#c
 	FROM
@@ -470,39 +440,49 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO #output
-	SELECT
-		12,
-		'Total charges',
-		ISNULL(SUM(Charge), 0)
-	FROM
-		#c
+	SELECT 12, 'Total charges',	ISNULL(SUM(Charge), 0)
+	FROM #c
 
 	------------------------------------------------------------------------------
 
 	DROP TABLE #c
 
 	------------------------------------------------------------------------------
+
+	INSERT INTO #output
+	SELECT 6, 'Closing Balance', @TotalGivenLoanValueClose - @TotalRepaidPrincipalClose - @Defaults
+
 	------------------------------------------------------------------------------
+	
+	INSERT INTO #output
+	SELECT 6.1, 'Net portfolio', (@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose) - @TotalBadDebt - @TotalDefaults
+
+	------------------------------------------------------------------------------
+
+	
+	
+	INSERT INTO #output
+	SELECT 4, 'Closing Balance before Defaults', @TotalGivenLoanValueClose - @TotalRepaidPrincipalClose
+
 	------------------------------------------------------------------------------
 
 	INSERT INTO #output
-	SELECT
-		6,
-		'Closing Balance',
-		@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose - @Defaults
+	SELECT 4.1,	'Portfolio grows', (@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose - @Defaults) - (@TotalGivenLoanValueOpen - @TotalRepaidPrincipalOpen)
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
+	
 	INSERT INTO #output
-	SELECT
-		4,
-		'Closing Balance before Defaults',
-		@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose
+	SELECT 6.2, 'Avarage interest rate', 0.00 --todo
 
 	------------------------------------------------------------------------------
+	
+	INSERT INTO #output
+	SELECT 6.3, 'Projected income',	0.00 --todo
+
 	------------------------------------------------------------------------------
+	INSERT INTO #output
+	SELECT 15,	'Average days early payment', 0.00 --todo
+
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -514,8 +494,6 @@ BEGIN
 	ORDER BY
 		SortOrder
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	DROP TABLE #tran_time_status
