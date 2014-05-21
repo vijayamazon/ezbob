@@ -1,7 +1,3 @@
-EXEC RptCurrentLiens '2014-01-01', '2014-01-01'
-EXEC RptPaymentToLiensLoans '2014-01-01', '2014-05-01'
-
-
 IF NOT EXISTS (SELECT 1 FROM ReportScheduler WHERE Type = 'RPT_CURRENT_LIENS') 
 BEGIN
 	INSERT INTO dbo.ReportScheduler (
