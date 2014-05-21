@@ -11951,23 +11951,6 @@ CREATE TABLE [dbo].[ReportUsers](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Security_Application]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Security_Application](
-	[ApplicationId] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](256) NOT NULL,
-	[Description] [nvarchar](256) NULL,
-	[ApplicationType] [tinyint] NULL,
- CONSTRAINT [PK_Security_Application] PRIMARY KEY CLUSTERED 
-(
-	[ApplicationId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
 /****** Object:  Table [dbo].[Security_Permission]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -12011,22 +11994,6 @@ CREATE TABLE [dbo].[Security_Role](
  CONSTRAINT [PK_Security_Role] PRIMARY KEY CLUSTERED 
 (
 	[RoleId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[Security_RoleAppRel]    Script Date: 04-Nov-13 5:03:46 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Security_RoleAppRel](
-	[RoleId] [int] NOT NULL,
-	[AppId] [int] NOT NULL,
- CONSTRAINT [PK_Security_RoleAppRel] PRIMARY KEY CLUSTERED 
-(
-	[RoleId] ASC,
-	[AppId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
@@ -14685,21 +14652,6 @@ ALTER TABLE [dbo].[ReportsUsersMap]  WITH CHECK ADD  CONSTRAINT [FK_ReportUsers_
 REFERENCES [dbo].[ReportUsers] ([Id])
 GO
 ALTER TABLE [dbo].[ReportsUsersMap] CHECK CONSTRAINT [FK_ReportUsers_UserID]
-GO
-ALTER TABLE [dbo].[Security_RoleAppRel]  WITH NOCHECK ADD  CONSTRAINT [FK_RoleAppRel_Application] FOREIGN KEY([AppId])
-REFERENCES [dbo].[Security_Application] ([ApplicationId])
-GO
-ALTER TABLE [dbo].[Security_RoleAppRel] CHECK CONSTRAINT [FK_RoleAppRel_Application]
-GO
-ALTER TABLE [dbo].[Security_RoleAppRel]  WITH NOCHECK ADD  CONSTRAINT [FK_RoleAppRel_Role] FOREIGN KEY([RoleId])
-REFERENCES [dbo].[Security_Role] ([RoleId])
-GO
-ALTER TABLE [dbo].[Security_RoleAppRel] CHECK CONSTRAINT [FK_RoleAppRel_Role]
-GO
-ALTER TABLE [dbo].[Security_Session]  WITH NOCHECK ADD  CONSTRAINT [FK_Security_Session_Security_Application] FOREIGN KEY([AppId])
-REFERENCES [dbo].[Security_Application] ([ApplicationId])
-GO
-ALTER TABLE [dbo].[Security_Session] CHECK CONSTRAINT [FK_Security_Session_Security_Application]
 GO
 ALTER TABLE [dbo].[Security_Session]  WITH CHECK ADD  CONSTRAINT [FK_Security_Session_Security_User] FOREIGN KEY([UserId])
 REFERENCES [dbo].[Security_User] ([UserId])
