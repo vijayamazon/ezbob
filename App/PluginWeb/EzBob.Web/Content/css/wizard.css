@@ -391,22 +391,17 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .vip-main {
-    height: 115px;
-    border: 1px solid #5c6373;
+    height: 140px;
     color: #5c6373;
     position: relative;
+    width: 100%;
 }
 
 .vip-button {
-    height: 100%;
     position: absolute;
     right: 5px;
-    bottom: 5px;
+    bottom: 30px;
     height: 40px;
-}
-.vip-box {
-    float: left;
-    display: block;
 }
 
 .vip-req-button {
@@ -418,6 +413,5 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
     background-image: url(images/vip.PNG);
     background-size: contain;
     background-repeat: no-repeat;
-    height: 100%;
-    width: 20%;
+    height: 140px;
 }
