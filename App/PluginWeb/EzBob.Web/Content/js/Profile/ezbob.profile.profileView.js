@@ -3,11 +3,8 @@ EzBob.Profile = EzBob.Profile || {};
 
 EzBob.Profile.ProfileView = Backbone.View.extend({
     initialize: function (options) {
-        if (typeof orddb == 'undefined')
-            orddb = Math.random() * 10000000000000000;
-
         $('#profile-main-to-be-replaced').html(
-            $(_.template($("#profile-main-template").html(), { orddb: orddb }))
+            $(_.template($("#profile-main-template").html(), { }))
         );
 
         this.profileMain = $('#profile-main');
