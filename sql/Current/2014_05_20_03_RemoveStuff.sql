@@ -9,10 +9,6 @@ BEGIN
 END
 GO
 
-IF OBJECT_ID (N'dbo.hibernate_unique_key') IS NOT NULL
-	DROP TABLE dbo.hibernate_unique_key
-GO
-
 IF OBJECT_ID('MP_AmazonOrderItem') IS NOT NULL
 	DROP TABLE MP_AmazonOrderItem
 GO

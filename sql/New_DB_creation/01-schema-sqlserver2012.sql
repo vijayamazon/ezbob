@@ -9039,6 +9039,18 @@ CREATE TABLE [dbo].[FraudUser](
 ) ON [PRIMARY]
 
 GO
+
+/****** Object:  Table [dbo].[hibernate_unique_key]    Script Date: 04-Nov-13 5:03:46 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[hibernate_unique_key](
+	[next_hi] [int] NULL,
+	[InventoryItemIdSeed] [int] NULL
+) ON [PRIMARY]
+
+GO
 /****** Object:  Table [dbo].[Loan]    Script Date: 04-Nov-13 5:03:46 PM ******/
 SET ANSI_NULLS ON
 GO
