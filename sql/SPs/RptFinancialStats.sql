@@ -141,32 +141,27 @@ BEGIN
 	------------------------------------------------------------------------------
 	
 	SELECT
-		@TotalDefaults = ISNULL(SUM(t.Amount), 0)
+		@TotalDefaults = ISNULL(SUM(l.Principal), 0)
 	FROM
 		Loan l
-		INNER JOIN LoanTransaction t
-			ON l.Id = t.LoanId
-			AND t.Status = @DONE
-			AND t.Type = @PACNET
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 
 		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 	WHERE
 		cs.IsDefault = 1
+	AND 
+		l.Status<>'PaidOff'
 
 	------------------------------------------------------------------------------
 	
 	SELECT
-		@TotalBadDebt = ISNULL(SUM(t.Amount), 0)
+		@TotalBadDebt = ISNULL(SUM(l.Principal), 0)
 	FROM
 		Loan l
-		INNER JOIN LoanTransaction t
-			ON l.Id = t.LoanId
-			AND t.Status = @DONE
-			AND t.Type = @PACNET
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 
 		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 	WHERE
 		cs.IsWarning = 1
+	AND l.Status<>'PaidOff'	
 
 	------------------------------------------------------------------------------
 
@@ -341,12 +336,12 @@ BEGIN
 	------------------------------------------------------------------------------
 	
 	INSERT INTO #output
-	SELECT 5.1, 'Total defaults', @TotalDefaults
+	SELECT 5.3, 'Total defaults', @TotalDefaults
 
 	------------------------------------------------------------------------------
 	
 	INSERT INTO #output
-	SELECT 5.1, 'Total bad debt', @TotalBadDebt
+	SELECT 5.4, 'Total bad debt', @TotalBadDebt
 
 	------------------------------------------------------------------------------
 	
@@ -450,7 +445,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO #output
-	SELECT 6, 'Closing Balance', @TotalGivenLoanValueClose - @TotalRepaidPrincipalClose - @Defaults
+	SELECT 5.1, 'Closing Balance', @TotalGivenLoanValueClose - @TotalRepaidPrincipalClose - @Defaults
 
 	------------------------------------------------------------------------------
 	
