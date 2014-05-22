@@ -1198,6 +1198,10 @@ td a.edit-loan {
 /*
  * Styles common for mail and web application
  */
+.blue-header thead tr {
+        background-color: #9ab1d1;
+        color: #fff;
+    }
 
 .unmatched {
     color: red;
@@ -1209,8 +1213,8 @@ td a.edit-loan {
 
 .total {
     font-weight: bold;
-    color: white;
-    background-color: navy!important;
+    color: black;
+    background-color: #B6D1F2!important;
 }
 
 .total2 {
@@ -1236,3 +1240,4 @@ td a.edit-loan {
     padding: 0 10px;
     margin-top: -15px;
 }
+
