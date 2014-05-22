@@ -60,8 +60,6 @@
 		
 		<ItemGroup><SqlRelatedFiles Include="$(Src)\sql\*.*"/></ItemGroup>
 		<Copy SourceFiles="@(SqlRelatedFiles)" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\" SkipUnchangedFiles="true" />
-
-		<MultiCopy CopyFrom="$(Src)\App\ezmanage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ezmanage\" />
 		
 		<Copy SourceFiles="$(Src)\Integration\ChannelGrabberConfig\channelgrabber.json" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 				
@@ -108,14 +106,6 @@
 		<Exec Command="xcopy %22$(BuildBin)\$(UsedEdition)%22 $(ServerBaseFolder) /E /C /I /Q /R /Y"/>
 		<Copy SourceFiles="$(BuildBin)\$(UsedEdition)\channelgrabber.json" DestinationFolder="C:\Program Files (x86)\EZBOB\"/>
 	</Target>
-	
-	<Target Name="ConfigureEzManage">
-		  <!-- EzManage AppConfig setting -->
-		<XmlUpdate
-		  XPath="/configuration/appSettings/add/@value"
-		  FilePath="$(ServerBaseFolder)\$(ToolsFolder)\ezmanage\ezmanage.exe.config"
-		  Value="$(EMConnection)"/>		
-	</Target>	
 	
 	<Target Name="EnvironmentConfigure">
 			<PropertyGroup>
