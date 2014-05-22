@@ -16,10 +16,12 @@ EzBob.Profile.GetCashModel = Backbone.Model.extend({
 
     refresh: function () {
         var that = this;
-        if (this.customer.get('state') === 'wait' && !that.isRequestInProgress) {
+        if (!that.isRequestInProgress) {
+            that.isRequestInProgress = true;
             $.post(window.gRootPath + 'Customer/Profile/GetCustomerStatus', { customerId: that.customer.get('Id') })
-                .done(function(result) {
-                    if (result.State !== 'wait') {
+                .done(function (result) {
+                    if (result.State !== that.previousState) {
+                        that.previousState = result.State;
                         that.customer.fetch({
                             success: function() {
                                 that.isRequestInProgress = false;
@@ -217,6 +219,9 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
     
     render: function () {
         var state = this.customer.get('state');
+        if (this.previousState == undefined) {
+            this.previousState = state;
+        }
         var data = this.model.toJSON();
         data.state = state;
         data.countDown = this.customer.offerValidFormatted();
