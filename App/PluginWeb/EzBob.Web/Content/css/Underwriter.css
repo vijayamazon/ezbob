@@ -1230,3 +1230,9 @@ td a.edit-loan {
     color: black;
     background-color: #ffbfbf!important;
 }
+
+.report-button {
+    font-size: 20px;
+    padding: 0 10px;
+    margin-top: -15px;
+}

@@ -79,5 +79,47 @@
 
 			return Json(new {report = data.ToString(), columns = oColumnTypes });
 		}
+
+		public FileResult DownloadReport(int reportId, ReportDate reportDate)
+		{
+			if (reportDate == ReportDate.Custom)
+			{
+				throw new NotImplementedException("Custom Date is not implemented");
+			}
+
+			var dates = ReporDateRanges.GetDates(reportDate);
+			var dbReport = _reportRepository.Get(reportId);
+
+			if (dbReport.Arguments.Count != 1)
+			{
+				throw new NotImplementedException("Report with multiple argument types is not implemented");
+			}
+
+			var oDB = new SqlConnection();
+			ReportType type;
+			if (!Enum.TryParse(dbReport.Type, out type))
+			{
+				type = ReportType.RPT_GENERIC;
+			}
+			var report = new Report
+			{
+				Title = dbReport.Title,
+				Type = type,
+				StoredProcedure = dbReport.StoredProcedure,
+				Columns = Report.ParseHeaderAndFields(dbReport.Header, dbReport.Fields),
+			};
+
+			report.AddArgument(dbReport.Arguments.First().ReportArgument.Name);
+			var rptDef = new ReportQuery(report, dates.From, dates.To);
+			var reportHandler = new ReportHandler(oDB);
+
+			var excel = reportHandler.GetWorkBook(report, rptDef);
+			var fc = new FileContentResult(excel.GetAsByteArray(), "Application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+				{
+					FileDownloadName = report.Title.Replace(" ", "")
+				};
+
+			return fc;
+		}
 	}
 }

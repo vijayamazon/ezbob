@@ -24,6 +24,7 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
     events:
         "change #reportsDdl" : "reportChanged"
         "click #getReportBtn" : "getReportClicked"
+        "click #downloadReportBtn" : "downloadReportClicked"
 
     onRender: ->
          @ui.reportsDdl.chosen();
@@ -32,8 +33,18 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
     reportChanged: ->
         console.log("report changed")
 
+    downloadReportClicked: ->
+        if(@ui.reportsDdl.val() == '0' or @ui.datesDdl.val() == '0')
+            alertify.error 'Select report and/or date range'
+            return false
+
+        window.location = "#{window.gRootPath}Underwriter/Report/DownloadReport/?reportId=#{@ui.reportsDdl.val()}&reportDate=#{@ui.datesDdl.val()}" 
+
     getReportClicked: ->
-        console.log('get report clicked', @ui.reportsDdl.val(), @ui.datesDdl.val())
+        if(@ui.reportsDdl.val() == '0' or @ui.datesDdl.val() == '0')
+            alertify.error 'Select report and/or date range'
+            return false
+
         xhr = $.post("#{window.gRootPath}Underwriter/Report/GetReport", 
             reportId : @ui.reportsDdl.val()
             reportDate : @ui.datesDdl.val()

@@ -53,7 +53,8 @@
 
     ReportView.prototype.events = {
       "change #reportsDdl": "reportChanged",
-      "click #getReportBtn": "getReportClicked"
+      "click #getReportBtn": "getReportClicked",
+      "click #downloadReportBtn": "downloadReportClicked"
     };
 
     ReportView.prototype.onRender = function() {
@@ -65,10 +66,22 @@
       return console.log("report changed");
     };
 
+    ReportView.prototype.downloadReportClicked = function() {
+      console.log('download clicked');
+      if (this.ui.reportsDdl.val() === '0' || this.ui.datesDdl.val() === '0') {
+        alertify.error('Select report and/or date range');
+        return false;
+      }
+      return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReport/?reportId=" + (this.ui.reportsDdl.val()) + "&reportDate=" + (this.ui.datesDdl.val());
+    };
+
     ReportView.prototype.getReportClicked = function() {
       var xhr,
         _this = this;
-      console.log('get report clicked', this.ui.reportsDdl.val(), this.ui.datesDdl.val());
+      if (this.ui.reportsDdl.val() === '0' || this.ui.datesDdl.val() === '0') {
+        alertify.error('Select report and/or date range');
+        return false;
+      }
       xhr = $.post("" + window.gRootPath + "Underwriter/Report/GetReport", {
         reportId: this.ui.reportsDdl.val(),
         reportDate: this.ui.datesDdl.val()

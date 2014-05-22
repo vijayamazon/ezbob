@@ -7,6 +7,7 @@
 	using Ezbob.Logger;
 	using Html;
 	using Html.Tags;
+	using OfficeOpenXml;
 	using Reports;
 	using Reports.TraficReport;
 
@@ -59,5 +60,43 @@
 						.Append(TableReport(rptDef, oColumnTypes: oColumnTypes));
 			} // switch
 		} // GetReportData
+
+		internal ExcelPackage GetWorkBook(Report report, ReportQuery rptDef)
+		{
+			if (report == null)
+				return ErrorXlsReport("Type reports for this customer cannot be obtained !!!");
+
+			rptDef.Report = report;
+			rptDef.StoredProcedure = report.StoredProcedure;
+
+			switch (report.Type)
+			{
+
+				case ReportType.RPT_PLANNED_PAYTMENT:
+					return BuildPlainedPaymentXls(report, (DateTime)rptDef.DateStart);
+
+				case ReportType.RPT_EARNED_INTEREST:
+					return BuildEarnedInterestXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+				case ReportType.RPT_LOANS_GIVEN:
+					return BuildLoansIssuedXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+				case ReportType.RPT_CCI:
+					return BuildCciXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+				case ReportType.RPT_UI_REPORT:
+					return BuildUiXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+				case ReportType.RPT_UI_EXT_REPORT:
+					return BuildUiExtXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+				case ReportType.RPT_ACCOUNTING_LOAN_BALANCE:
+					return BuildAccountingLoanBalanceXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+				default:
+					var xlsTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);
+					return XlsReport(rptDef, xlsTitle);
+			} // switch
+		} // GetWorkBook
 	}
 }
