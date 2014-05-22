@@ -4,7 +4,7 @@
     <div class="col-md-12">
         <div class="box">
             <div class="box-title">
-                <%if(reports){%>
+                <%if(reports){ %>
                     <select id="reportsDdl" data-placeholder="Select report">
                         <option selected="selected" value="0"></option>
                         <%_.each(reports.reports, function(report){ if(report.Id){%>
@@ -17,9 +17,9 @@
                         <option value="<%-date.key%>"><%-date.value%></option>
                         <%}});%>
                     </select>
-                <%}%>
                 <button id="getReportBtn" class="btn btn-primary report-button"><i class="fa fa-play-circle-o"></i></button>
                 <button id="downloadReportBtn" class="btn btn-primary report-button"><i class="fa fa-file-excel-o"></i></button>
+                <%}
             </div>
             <div id="reportDiv"></div>
         </div>
