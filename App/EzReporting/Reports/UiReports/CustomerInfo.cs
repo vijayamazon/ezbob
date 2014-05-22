@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using EZBob.DatabaseLib.Model.Database;
 
 namespace Reports {
+	using EZBob.DatabaseLib.Model.Database;
+	using MainAppReferences;
+
 	#region class CustomerInfo
 
 	public class CustomerInfo : CustomerData {

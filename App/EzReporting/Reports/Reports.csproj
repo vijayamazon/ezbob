@@ -73,9 +73,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Integration\DatabaseLib\Model\Database\CustomerAddressType.cs">
-      <Link>MainAppReferences\CustomerAddressType.cs</Link>
-    </Compile>
     <Compile Include="AAttribute.cs" />
     <Compile Include="ATag.cs" />
     <Compile Include="attributes.cs" />
@@ -101,6 +98,7 @@
     <Compile Include="LoanStats\LoanStatsMarketplaces.cs" />
     <Compile Include="LoanStats\LoanStatsPaypalTotal.cs" />
     <Compile Include="LoanStats\LoanStatsReportEntry.cs" />
+    <Compile Include="MainAppReferences\CustomerAddressType.cs" />
     <Compile Include="ReportEmail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">

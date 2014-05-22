@@ -97,12 +97,17 @@
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
     <Compile Include="Model\Database\Company.cs" />
     <Compile Include="Model\Database\CustomerAnalytics.cs" />
+    <Compile Include="Model\Database\Report\ReportArgumentsNames.cs" />
+    <Compile Include="Model\Database\Report\ReportArguments.cs" />
+    <Compile Include="Model\Database\Report\ReportUserMap.cs" />
+    <Compile Include="Model\Database\Report\Report.cs" />
     <Compile Include="Model\Database\SuggestedAmount.cs" />
     <Compile Include="Model\Database\Customer\VipRequest.cs" />
     <Compile Include="Model\Database\LandRegistry.cs" />
     <Compile Include="Model\Database\CustomerAddressType.cs" />
     <Compile Include="Model\Database\QuickOffer.cs" />
     <Compile Include="Model\Database\TrustPilotStatus.cs" />
+    <Compile Include="Model\Database\Report\ReportUser.cs" />
     <Compile Include="Model\Database\UserManagement\Permission.cs" />
     <Compile Include="Model\Database\UserManagement\PermissionMap.cs" />
     <Compile Include="Model\Database\UserManagement\Role.cs" />

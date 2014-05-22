@@ -46,6 +46,11 @@
 					isRendered: false,
 					menuItem: 'liFraud',
 				},
+				report: {
+				    view: new EzBob.Underwriter.ReportView({ el: $('#report-view') }),
+				    isRendered: false,
+				    menuItem: 'liReports',
+				},
 			}; // views
 		}, // initialize
 
@@ -60,6 +65,7 @@
 			'automation': 'automation',
 			'support': 'support',
 			'fraud': 'fraud',
+			'report': 'report',
 			'*z': 'customers',
 		}, // routes
 
@@ -113,6 +119,10 @@
 
 		fraud: function() {
 			this.handleRoute('fraud');
+		}, // fraud
+		
+		report: function () {
+		    this.handleRoute('report');
 		}, // fraud
 
 		switchMenuTo: function(name) {

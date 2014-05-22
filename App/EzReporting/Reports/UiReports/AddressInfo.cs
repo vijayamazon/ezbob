@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using EZBob.DatabaseLib.Model.Database;
 
 namespace Reports {
+	using MainAppReferences;
+
 	#region class AddressInfo
 
 	public class AddressInfo {

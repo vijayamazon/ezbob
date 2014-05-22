@@ -1,0 +1,27 @@
+﻿@model dynamic
+
+<script type="text/template" id="report-template">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-title">
+                <%if(reports){%>
+        <select id="reportsDdl" data-placeholder="Select report">
+            <option selected="selected" value="0"></option>
+            <%_.each(reports.reports, function(report){ if(report.Id){%>
+            <option value="<%-report.Id%>"><%-report.Title%></option>
+            <%}});%>
+        </select>
+                <%}%>
+        <select id="datesDdl" data-placeholder="Select date range">
+            <option selected="selected" value="0"></option>
+            <%_.each(reports.dates, function(date){ if(date.key){%>
+            <option value="<%-date.key%>"><%-date.value%></option>
+            <%}});%>
+        </select>
+
+                <button id="getReportBtn" class="btn btn-primary">Get report</button>
+            </div>
+            <div id="reportDiv"></div>
+        </div>
+    </div>
+</script>

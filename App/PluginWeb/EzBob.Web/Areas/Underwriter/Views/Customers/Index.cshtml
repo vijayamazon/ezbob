@@ -573,6 +573,7 @@
 <div id="automation-view" style="display: none;"></div>
 <div id="support-area" style="display: none;"></div>
 <div id="fraud-area" style="display: none;"></div>
+<div id="report-view" style="display: none;"></div>
 
 @{
     Html.RenderPartial("_ProfileTemplateMain");
@@ -581,6 +582,7 @@
     Html.RenderPartial("AutomationSettings/StrategyAutomation");
     Html.RenderPartial("Support/_Support");
     Html.RenderPartial("Fraud/Fraud");
+    Html.RenderPartial("../Reports/Report");
 }
 @section Js{
     <script type="text/javascript">

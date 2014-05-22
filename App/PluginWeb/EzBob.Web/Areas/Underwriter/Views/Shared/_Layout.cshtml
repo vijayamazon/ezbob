@@ -97,10 +97,13 @@
                 <li id="liReports" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports</a>
                     <ul class="dropdown-menu">
+                        <li id="liReport">
+                            <a href="Customers#report">Reports</a>
+                        </li>
                         <li id="liCustomerReports">
                             @{
-          var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-          var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
+                                var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+                                var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
                                 <a href="@reportsIp" target="_blank">Reports Site</a>
                             }
                         </li>

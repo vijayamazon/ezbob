@@ -74,6 +74,18 @@
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\EcmaScript.NET.modified.dll</HintPath>
     </Reference>
     <Reference Include="Ezbob.Backend.Models, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="Fizzler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4ebff4844e382110, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.dll</HintPath>
+    </Reference>
+    <Reference Include="Fizzler.Sandbox, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Sandbox.dll</HintPath>
+    </Reference>
+    <Reference Include="Fizzler.Systems.HtmlAgilityPack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
     </Reference>
@@ -180,16 +192,19 @@
     <Compile Include="Areas\Customer\Models\SageAccountModel.cs" />
     <Compile Include="Areas\Customer\Models\VipModel.cs" />
     <Compile Include="Areas\Customer\Models\YodleeAccountModel.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\ReportController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\PropertiesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\PricingModelCalculationsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
     <Compile Include="Areas\Underwriter\Models\PropertiesModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\ReportModel.cs" />
     <Compile Include="Areas\Underwriter\Models\SuggestedAmountModel.cs" />
     <Compile Include="Code\AgreementRenderer.cs" />
     <Compile Include="Code\AgreementsTemplatesProvider.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\LoanCreatorNoChecks.cs" />
     <Compile Include="Areas\Underwriter\Models\BugModel.cs" />
+    <Compile Include="Code\ReportGenerator\ReportHandler.cs" />
     <Compile Include="Models\LoanOffer.cs" />
     <Compile Include="Code\ServerLog\ServerLogCachePkgModel.cs" />
     <Compile Include="Code\ServerLog\ServerLogEntryModel.cs" />
@@ -616,6 +631,7 @@
     <Content Include="Content\css\lib\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\css\lib\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\css\lib\fonts\FontAwesome.otf" />
+    <Content Include="Areas\Underwriter\Views\Reports\Report.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1247,6 +1263,12 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.js">
+      <DependentUpon>ezbob.underwriter.report.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.min.js">
+      <DependentUpon>ezbob.underwriter.report.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
     </Content>
@@ -1791,6 +1813,10 @@
       <Project>{90cc3a5f-5bea-4c13-82b7-992adc41f854}</Project>
       <Name>ValueIntervals</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\EzReporting\Reports\Reports.csproj">
+      <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
+      <Name>Reports</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\EzServiceClient\EzServiceClient.csproj">
       <Project>{a473e5c1-6385-4e43-b909-e9c228de39db}</Project>
       <Name>EzServiceClient</Name>
@@ -1962,6 +1988,7 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.Settings.PricingModel.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.ConfigTables.coffee" />
+    <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />

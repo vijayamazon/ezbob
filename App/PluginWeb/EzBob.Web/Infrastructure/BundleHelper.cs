@@ -287,6 +287,9 @@
 				.Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudDetectionLog.js")
 				.Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudStatus.coffee")
 
+				//report
+				.Add("~/Content/js/Underwriter/report/ezbob.underwriter.report.coffee")
+
 				// Configuration Variables
 				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.coffee")
 				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.coffee")
