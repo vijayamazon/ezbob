@@ -31,7 +31,7 @@
 				aml = Xml.ParseRoot(sAmlData);
 			}
 			catch (SeldenException e) {
-				Log.Alert(e, "Could not parse AML data.");
+				Log.Warn(e, "Could not parse AML data.");
 				return 0;
 			} // try
 
