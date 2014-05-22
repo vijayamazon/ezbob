@@ -55,23 +55,6 @@ namespace EzBob.RequestsQueueCore
 					} );
 				} );
 
-			/*IEnumerable<IRequestData> infoList = mpList.Select( mp =>
-				
-					RequestInfoFactory.CreateSingleRequest( mp, () => 
-						{
-							var databaseDataHelper = Helper;
-							var retrieveDataHelper = mp.GetRetrieveDataHelper( databaseDataHelper );
-							try
-							{
-								retrieveDataHelper.UpdateCustomer( customerId );
-							}
-							catch ( NoMarketPlaceForCustomerException )
-							{
-
-							}
-						})
-				 );
-			*/
 			IRequestData info = RequestInfoFactory.CreateCompositeRequest( infoList );
 
 			return CreateRequest( info );

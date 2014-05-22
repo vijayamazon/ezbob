@@ -59,11 +59,6 @@ namespace EzBob.PayPal
 			Helper.SaveOrUpdateAcctountInfo(databaseCustomerMarketPlace, personalData);
 		}
 
-		public void UpdateAccountInfo(Customer databaseCustomer)
-		{
-			base.UpdateAllDataFor(UpdateAccountInfo, databaseCustomer);
-		}
-
 		private void UpdateTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalSecurityData securityInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			Helper.CustomerMarketplaceUpdateAction(CustomerMarketplaceUpdateActionType.UpdateTransactionInfo, databaseCustomerMarketPlace, historyRecord, () =>

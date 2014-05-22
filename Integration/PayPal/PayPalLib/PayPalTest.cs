@@ -73,13 +73,6 @@ namespace EzBob.PayPal
 			return PayPalRetriveDataHelper.GetCustomerInfo( customerId );
 		}
 
-		public static void UpdateCustomerPayPalAccountsInfo( int customerId )
-		{
-			var customer = GetCustomerInfo( customerId );
-
-			PayPalRetriveDataHelper.UpdateAccountInfo( customer );
-		}
-
 		public static void UpdateTransactionInfo( int customerId )
 		{
 			var customer = GetCustomerInfo( customerId );

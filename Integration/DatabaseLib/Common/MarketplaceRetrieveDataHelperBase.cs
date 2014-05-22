@@ -98,13 +98,6 @@ namespace EZBob.DatabaseLib.Common
 			Helper.AddEbayOrdersData( databaseCustomerMarketPlace, databaseOrdersList, historyRecord );
 		}
 
-		protected void UpdateAllDataFor( Action<IDatabaseCustomerMarketPlace> action, Customer databaseCustomer )
-		{
-			IEnumerable<IDatabaseCustomerMarketPlace> customerMarketPlaces = GetCustomerMarketPlaces( databaseCustomer );
-
-			customerMarketPlaces.ToList().ForEach( action );
-		}
-
 		public abstract IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId);			
 
 		protected TSecurityData RetrieveCustomerSecurityInfo<TSecurityData>( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace )
@@ -112,18 +105,5 @@ namespace EZBob.DatabaseLib.Common
 		{
 			return Serialized.Deserialize<TSecurityData>( databaseCustomerMarketPlace.SecurityData );
 		}
-
-		private IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaces( Customer customer )
-		{
-			var marketPlaces = Helper.GetCustomerMarketPlaceList( customer, _Marketplace );
-
-			if ( marketPlaces == null || !marketPlaces.Any() )
-			{
-				throw new NoMarketPlaceForCustomerException( customer, _Marketplace );
-			}
-			return marketPlaces;
-		}
-
 	}
-
 }
