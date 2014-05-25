@@ -71,7 +71,7 @@
         </thead>
         <tbody>
             <tr id="with-broker">
-                <td class="customer-column-width-50">Broker name</td>
+                <td class="customer-column-width-50">Broker name&nbsp;<button class="btn btn-mini btn-primary left-pane-button" id="brokerDetailsBtn" name="brokerDetails">details</button></td>
                 <td><%- data.BrokerName %></td>
             </tr>
             <tr>
@@ -90,6 +90,28 @@
             </tr>
 
             @RawCell("Segment", "<%- data.SegmentType %>")
+        </tbody>
+    </table>
+    <table id="brokerDetailsTable" class="hide table squeezed rright">
+        <thead class="box">
+            <tr class="box-title">
+                <th class="left-pane-header" colspan="2">Broker Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Firm name</td>
+                <td><%- data.BrokerFirmName %></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><%- data.BrokerContactEmail.length <= 20 ? data.BrokerContactEmail : data.BrokerContactEmail.substring(0,17)+'...' %>
+                    <i data-title="<%- data.BrokerContactEmail %>" class="tltp-left <%=getIcon()%>"></i>
+                </td>
+            </tr>
+                <td>Mobile</td>
+                <td><%- data.BrokerContactMobile %></td>
+            </tr>
         </tbody>
     </table>
     <table class="table squeezed rright">

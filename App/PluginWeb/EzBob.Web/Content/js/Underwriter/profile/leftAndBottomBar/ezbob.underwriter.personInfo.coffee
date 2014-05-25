@@ -93,6 +93,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
     events:
         "click button[name=\"changeDisabledState\"]": "changeDisabledState"
         "click button[name=\"editEmail\"]": "editEmail"
+        "click button[name=\"brokerDetails\"]": "brokerDetails"
         "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
         'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus'
         'click #MainStrategyHidden': 'activateMainStratgey'
@@ -178,6 +179,15 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                     xhr2 = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/LogStatusChange", {newStatus: newStatus, prevStatus: prevStatus, customerId: customerId}
                     xhr2.done () =>
                         BlockUi "off"
+
+    brokerDetails: ->
+        table = @$el.find('#brokerDetailsTable')
+        if table.hasClass('hide')
+            table.removeClass('hide')
+            @$el.find('#brokerDetailsBtn').text('hide details')
+        else
+            table.addClass('hide')
+            @$el.find('#brokerDetailsBtn').text('details')
 
     editEmail: ->
         view = new EzBob.EmailEditView(model: @model)

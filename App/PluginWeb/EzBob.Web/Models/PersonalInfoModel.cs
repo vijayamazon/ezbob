@@ -221,7 +221,10 @@
 			}
 
 			BrokerID = customer.Broker == null ? 0 : customer.Broker.ID;
-			BrokerName = customer.Broker == null ? "" : customer.Broker.FirmName;
+			BrokerName = customer.Broker == null ? "" : customer.Broker.ContactName;
+			BrokerFirmName = customer.Broker == null ? "" : customer.Broker.FirmName;
+			BrokerContactEmail = customer.Broker == null ? "" : customer.Broker.ContactEmail;
+			BrokerContactMobile = customer.Broker == null ? "" : customer.Broker.ContactMobile;
 
 			CustomerAddress oAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			if (oAddress != null)
@@ -236,6 +239,9 @@
 
 		public int BrokerID { get; set; }
 		public string BrokerName { get; set; }
+		public string BrokerFirmName { get; set; }
+		public string BrokerContactEmail { get; set; }
+		public string BrokerContactMobile { get; set; }
 
 		public List<object> TrustPilotStatusList {
 			get {
