@@ -918,6 +918,18 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
+		private void BackfillConsumerAnalytics()
+		{
+			if ((args.Length != 1))
+			{
+				m_oLog.Msg("Usage: BackfillConsumerAnalytics");
+				return;
+			} // if
+
+			serviceClient.BackfillConsumerAnalytics();
+		}
+
+		[Activation]
 		private void CalculateVatReturnSummary() {
 			int nCustomerMarketplaceID = 0;
 

@@ -287,12 +287,12 @@
 
 		#region class GetCustomerAddresses
 
-		private enum AddressCurrency {
+		public enum AddressCurrency {
 			Current,
 			Previous,
 		} // enum AddressCurrency
 
-		private class GetCustomerAddresses : AStoredProcedure {
+		public class GetCustomerAddresses : AStoredProcedure {
 			public GetCustomerAddresses(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				CustomerID = nCustomerID;
 			} // constructor

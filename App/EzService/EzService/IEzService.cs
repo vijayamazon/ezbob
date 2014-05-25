@@ -380,10 +380,11 @@
 		[OperationContract]
 		DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare);
 
-
-
 		[OperationContract]
 		ActionMetaData BackfillCompanyAnalytics();
+
+		[OperationContract]
+		ActionMetaData BackfillConsumerAnalytics();
 	} // interface IEzService
 } // namespace EzService
 

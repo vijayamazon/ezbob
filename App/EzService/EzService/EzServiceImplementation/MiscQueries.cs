@@ -252,5 +252,11 @@
 			BackfillCompanyAnalytics instance;
 			return ExecuteSync(out instance, 0, 0);
 		}
+
+		public ActionMetaData BackfillConsumerAnalytics()
+		{
+			BackfillConsumerAnalytics instance;
+			return ExecuteSync(out instance, 0, 0);
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

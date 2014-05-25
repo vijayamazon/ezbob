@@ -198,6 +198,12 @@
   <wsdl:message name="IEzService_BackfillCompanyAnalytics_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillCompanyAnalyticsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BackfillConsumerAnalytics_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillConsumerAnalytics" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillConsumerAnalytics_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillConsumerAnalyticsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
@@ -791,6 +797,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillCompanyAnalytics" message="tns:IEzService_BackfillCompanyAnalytics_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillCompanyAnalyticsResponse" message="tns:IEzService_BackfillCompanyAnalytics_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BackfillConsumerAnalytics">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillConsumerAnalytics" message="tns:IEzService_BackfillConsumerAnalytics_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillConsumerAnalyticsResponse" message="tns:IEzService_BackfillConsumerAnalytics_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveAgreementResponse" message="tns:IEzService_SaveAgreement_OutputMessage" />
@@ -1314,6 +1324,15 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillCompanyAnalytics">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillCompanyAnalytics" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackfillConsumerAnalytics">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillConsumerAnalytics" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -1675,6 +1675,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillCompanyAnalytics", ReplyAction="http://tempuri.org/IEzService/BackfillCompanyAnalyticsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BackfillCompanyAnalytics();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillConsumerAnalytics", ReplyAction="http://tempuri.org/IEzService/BackfillConsumerAnalyticsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillConsumerAnalytics();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2);
         
@@ -2016,6 +2019,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillCompanyAnalytics() {
             return base.Channel.BackfillCompanyAnalytics();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillConsumerAnalytics() {
+            return base.Channel.BackfillConsumerAnalytics();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2) {
