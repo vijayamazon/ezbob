@@ -3,11 +3,10 @@
 	using System;
 	using System.IO;
 	using Aspose.Words;
-	using Backend.Models;
+	using EzBob.Backend.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Models;
 	using Nustache.Core;
 
 	public class SaveAgreement : AStrategy

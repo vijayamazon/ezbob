@@ -145,7 +145,7 @@
 					);
 			}
 			catch (Exception e) {
-				Log.Alert("QuickOffer.HackForTest for customer {0} complete: failed to load customer email.", m_nCustomerID);
+				Log.Alert(e, "QuickOffer.HackForTest for customer {0} complete: failed to load customer email.", m_nCustomerID);
 				return;
 			} // try
 

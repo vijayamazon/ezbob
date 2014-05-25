@@ -29,7 +29,7 @@ namespace NHibernateWrapper.NHibernate
 						NHibernateManager._config = new global::NHibernate.Cfg.Configuration();
 						NHibernateManager.Configure();
 					}
-					catch (System.Exception var_0_25)
+					catch
 					{
 						NHibernateManager._config = null;
 						throw;

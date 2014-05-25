@@ -4,10 +4,11 @@
 	using System.Collections.Generic;
 	using LREnquiryServiceNS;
 	using LRResServiceNS;
+	using log4net;
 	using Q1AddressType = LRResServiceNS.Q1AddressType;
 
-	public class LandRegistryModelBuilder
-	{
+	public class LandRegistryModelBuilder {
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (LandRegistryModelBuilder));
 
 		public LandRegistryResponseType GetResponseType(int value)
 		{
@@ -218,8 +219,8 @@
 
 					model.Indicators.AddRange(GetIndicators(data.RegisterEntryIndicators));
 				}
-				catch (Exception ex)
-				{
+				catch (Exception ex) {
+					ms_oLog.Debug("Error parsing the data (tell dev)", ex);
 					model.Indicators.Add("Error parsing the data (tell dev)");
 				}
 

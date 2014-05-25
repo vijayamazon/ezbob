@@ -80,12 +80,9 @@ namespace Reports {
 
 			case UiItemGroups.LinkAccounts:
 				return AccountCount > 0;
-
-			default:
-				throw new ArgumentOutOfRangeException("nItemGroup");
 			} // switch
 
-			return false;
+			throw new ArgumentOutOfRangeException("nItemGroup");
 		} // HasAllData
 
 		#endregion method HasAllData

@@ -48,9 +48,9 @@ namespace EzWinServiceHost
 				//perform your action here 
 				// It will be occur on each time elapsed
 			}
-			catch (Exception ex)
+			catch
 			{
-
+				// Silently ignore for now.
 			}
 			finally
 			{

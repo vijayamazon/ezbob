@@ -12,7 +12,6 @@ namespace EzBob.RequestsQueueCore.RequestTasks.States
 
 		#region Fields
 		private TStateType _State;
-		private TStateType _PrevState;
 		#endregion
 
 		#region Properties
@@ -20,11 +19,6 @@ namespace EzBob.RequestsQueueCore.RequestTasks.States
 		public TStateType State
 		{
 			get { return _State; }
-		}
-
-		public TStateType PrevState
-		{
-			get { return _PrevState; }
 		}
 
 		#endregion

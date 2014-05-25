@@ -88,10 +88,9 @@ namespace Reports
 				OfficeAdress = oRow["OfficeAddress"].ToString();
 				ResidentialStatus = oRow["ResidentialStatus"].ToString();
 			}
-			catch (Exception ex)
-			{
-				return;
-			}
+			catch {
+				// Silently ignore.
+			} // try
 		} // constructor
 
 		#endregion constructor

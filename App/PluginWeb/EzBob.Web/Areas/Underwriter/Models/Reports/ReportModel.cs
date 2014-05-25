@@ -129,7 +129,6 @@
 
 				case ReportDate.Custom:
 					return null;
-					break;
 			} // switch
 			return date;
 		}

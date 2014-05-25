@@ -137,7 +137,7 @@ namespace PayPal.Platform.SDK
                 }
 
             }
-            catch (FATALException FATALEx)
+            catch (FATALException)
             {
                 throw;
             }
@@ -236,7 +236,7 @@ namespace PayPal.Platform.SDK
                 }
 
             }
-            catch (FATALException FATALEx)
+            catch (FATALException)
             {
                 throw;
             }
@@ -335,7 +335,7 @@ namespace PayPal.Platform.SDK
                 }
 
             }
-            catch (FATALException FATALEx)
+            catch (FATALException)
             {
                 throw;
             }
@@ -435,7 +435,7 @@ namespace PayPal.Platform.SDK
                 }
 
             }
-            catch (FATALException FATALEx)
+            catch (FATALException)
             {
                 throw;
             }
@@ -532,7 +532,7 @@ namespace PayPal.Platform.SDK
                 }
 
             }
-            catch (FATALException FATALEx)
+            catch (FATALException)
             {
                 throw;
             }
@@ -634,7 +634,7 @@ namespace PayPal.Platform.SDK
                 }
 
             }
-            catch (FATALException FATALEx)
+            catch (FATALException)
             {
                 throw;
             }

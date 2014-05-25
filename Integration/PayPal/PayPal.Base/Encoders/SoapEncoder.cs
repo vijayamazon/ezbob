@@ -50,7 +50,7 @@ namespace PayPal.Platform.SDK
 						
 				return SoapRequest;
 			}
-			catch(FATALException FATALEx)
+			catch(FATALException)
 			{
 				throw;
 			}
@@ -99,7 +99,7 @@ namespace PayPal.Platform.SDK
 				return (object)serializer.Deserialize(reader);
 						
 			}
-			catch(FATALException FATALEx)
+			catch(FATALException)
 			{
 				throw;
 			}

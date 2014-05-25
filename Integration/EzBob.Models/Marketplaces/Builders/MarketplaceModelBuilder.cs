@@ -124,9 +124,9 @@ namespace EzBob.Models.Marketplaces.Builders
 										   .Value
 						 : analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
 			}
-			catch (Exception ex)
+			catch
 			{
-
+				// Silently ignore for now.
 			}
 			return av;
 		}

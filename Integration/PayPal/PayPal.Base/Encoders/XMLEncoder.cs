@@ -30,7 +30,7 @@ namespace PayPal.Platform.SDK
                 serializer.Serialize(Output, obj);
                 return Output.ToString();
             }
-            catch (FATALException FATALEx)
+            catch (FATALException)
             {
                 throw;
             }
@@ -73,7 +73,7 @@ namespace PayPal.Platform.SDK
 
 
             }
-            catch (FATALException FATALEx)
+            catch (FATALException)
             {
                 throw;
             }

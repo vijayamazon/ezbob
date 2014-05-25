@@ -96,20 +96,13 @@ namespace EzBobTest
 			int counter = 0;
 			int maxCounter = 2;
 			bool rez = false;
-			rez = retryingController.Do( () =>
-					{
-						if ( counter < maxCounter )
-						{
+			rez = retryingController.Do<bool>( () => {
+						if ( counter < maxCounter ) {
 							++counter;
 							throw new TimeoutException();
 						}
-						else
-						{
-							throw new ArgumentException();
-						}
 
-						return true;
-
+						throw new ArgumentException();
 					}, ex => !(ex is ArgumentException));
 
 			Assert.IsFalse( rez );

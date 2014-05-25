@@ -243,10 +243,6 @@ using EZBob.DatabaseLib.Model.Experian;
 			double score = (eInfo != null) ? eInfo.BureauScore : 0.0;
 
 			double odds = Math.Pow(2, (score - 600) / 80);
-			string pos;
-			string align;
-			string valPos;
-			string color;
 
 			var scorePosColor = GetScorePositionAndColor(score, ConsumerScoreMax, ConsumerScoreMin);
 

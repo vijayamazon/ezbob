@@ -23,7 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,53 +52,137 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\EzBobRegistry.cs" />
-    <Compile Include="RequestsQueueCore\DatabaseMarketPlaceTest.cs" />
-    <Compile Include="RequestsQueueCore\ExternalRequestsController.cs" />
-    <Compile Include="RequestsQueueCore\ExternalRequestsManager.cs" />
-    <Compile Include="RequestsQueueCore\EzBobIntegrationWorkflowsBase.cs" />
-    <Compile Include="RequestsQueueCore\EzBobIntegrationWorkflowsMock.cs" />
-    <Compile Include="RequestsQueueCore\IExternalRequestsController.cs" />
-    <Compile Include="RequestsQueueCore\Handle\IRequestHandle.cs" />
-    <Compile Include="RequestsQueueCore\IEzBobIntegrationWorkflows.cs" />
-    <Compile Include="RequestsQueueCore\MarketPlaceInfoTest.cs" />
-    <Compile Include="RequestsQueueCore\RequestStates\IRequestState.cs" />
-    <Compile Include="RequestsQueueCore\RequestStates\RequestErorrInfo.cs" />
-    <Compile Include="RequestsQueueCore\TaskExecutors\ITaskExecutor.cs" />
-    <Compile Include="RequestsQueueCore\RequestInfos\IRequestData.cs" />
-    <Compile Include="RequestsQueueCore\RequestInfos\RequestDataBase.cs" />
-    <Compile Include="RequestsQueueCore\RequestInfos\RequestDataComposite.cs" />
-    <Compile Include="RequestsQueueCore\RequestInfos\RequestInfoFactory.cs" />
-    <Compile Include="RequestsQueueCore\RequestInfos\RequestDataSingle.cs" />
-    <Compile Include="RequestsQueueCore\Handle\RequestHandle.cs" />
-    <Compile Include="RequestsQueueCore\RequestsManagerStorage.cs" />
-    <Compile Include="RequestsQueueCore\RequestStates\RequestStateFactory.cs" />
-    <Compile Include="RequestsQueueCore\RequestStates\RequestStateSingle.cs" />
-    <Compile Include="RequestsQueueCore\RequestStates\RequestStateBase.cs" />
-    <Compile Include="RequestsQueueCore\RequestStates\RequestStateComposite.cs" />
-    <Compile Include="RequestsQueueCore\RequestStates\RequestStateEnum.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\IExecutionTask.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\IRequestTask.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\IStateOriented.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\IRequestTaskState.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\RequestTask.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskState.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateCanceled.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateError.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateInQueue.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateNew.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateNotFound.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateProcessing.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateSuccess.cs" />
-    <Compile Include="RequestsQueueCore\TestExternalRequestsController.cs" />
+    <Compile Include="RequestsQueueCore\DatabaseMarketPlaceTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\ExternalRequestsController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\ExternalRequestsManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\EzBobIntegrationWorkflows.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\EzBobIntegrationWorkflowsBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\EzBobIntegrationWorkflowsMock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\Handle\IRequestHandle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\Handle\RequestHandle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\IExternalRequestsController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\IEzBobIntegrationWorkflows.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\MarketPlaceInfoTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestInfos\IRequestData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestInfos\RequestDataBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestInfos\RequestDataComposite.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestInfos\RequestDataSingle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestInfos\RequestInfoFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestsManagerStorage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestStates\IRequestState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestStates\RequestErorrInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestStates\RequestStateBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestStates\RequestStateComposite.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestStates\RequestStateEnum.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestStates\RequestStateFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestStates\RequestStateSingle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\IExecutionTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\IRequestTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\RequestTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\IRequestTaskState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\IStateOriented.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateCanceled.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateInQueue.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateNew.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateNotFound.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateProcessing.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\RequestTaskStateSuccess.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\StateEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\RequestTasks\States\StateOriented.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\TaskExecutors\ITaskExecutor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\TaskExecutors\TaskExecutor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RequestsQueueCore\TestExternalRequestsController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RetrieveDataHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="RequestsQueueCore\RequestTasks\States\StateEventArgs.cs" />
-    <Compile Include="RequestsQueueCore\RequestTasks\States\StateOriented.cs" />
-    <Compile Include="RequestsQueueCore\TaskExecutors\TaskExecutor.cs" />
-    <Compile Include="RequestsQueueCore\EzBobIntegrationWorkflows.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
