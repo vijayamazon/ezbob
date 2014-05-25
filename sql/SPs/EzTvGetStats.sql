@@ -1,3 +1,4 @@
+
 IF OBJECT_ID('EzTvGetStats') IS NULL
 	EXECUTE('CREATE PROCEDURE EzTvGetStats AS SELECT 1')
 GO
@@ -11,6 +12,37 @@ BEGIN
 
 DECLARE @DefaultCustomerCount INT = (SELECT count(*) FROM Customer c JOIN CustomerStatuses s ON s.Id = c.CollectionStatus WHERE s.IsDefault=1 AND c.IsTest=0)
 DECLARE @CustomerCount INT = (SELECT count(*) FROM Customer c JOIN Loan l ON c.Id=l.CustomerId WHERE c.IsTest=0)
+
+DECLARE @TotalGivenLoanValueClose DECIMAL(18,6)
+DECLARE @TotalRepaidPrincipalClose DECIMAL(18,6)
+
+SELECT
+	@TotalGivenLoanValueClose = ISNULL( SUM(ISNULL(t.Amount, 0)), 0 )
+FROM
+	LoanTransaction t
+	INNER JOIN Loan l ON t.LoanId = l.Id
+	INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+WHERE
+	t.Type = 'PacnetTransaction' AND t.Status = 'Done'
+	AND
+	t.PostDate < @Now
+
+------------------------------------------------------------------------------
+
+SELECT
+	@TotalRepaidPrincipalClose = ISNULL( SUM(ISNULL(t.LoanRepayment, 0)), 0 )
+FROM
+	LoanTransaction t
+	INNER JOIN Loan l ON t.LoanId = l.Id
+	INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+WHERE
+	t.Type = 'PaypointTransaction' AND t.Status = 'Done'
+	AND
+	t.PostDate < @Now
+		
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 SELECT 'G_DefaultRate' AS 'Key', @DefaultCustomerCount / CAST(@CustomerCount AS DECIMAL(18,6)) AS Value 
 
@@ -39,11 +71,7 @@ SELECT 'G_AvgLoanSize' AS 'Key', sum(l.LoanAmount) / CAST(count(*) AS DECIMAL(18
 
 UNION
 
-SELECT 'G_BookSize' AS 'Key', CAST(sum(l.Balance) AS DECIMAL(18,6)) AS Value 
-FROM Loan l JOIN Customer c ON l.CustomerId=c.Id 
-JOIN CustomerStatuses s ON s.Id = c.CollectionStatus
-WHERE s.IsDefault=0
-AND c.IsTest=0
+SELECT 'G_BookSize' AS 'Key', CAST(@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose AS DECIMAL(18,6)) AS Value 
 
 UNION
 
@@ -57,7 +85,7 @@ UNION
 
 SELECT 'T_Approved' AS 'Key', CAST(COALESCE(sum(cr.ManagerApprovedSum),0) AS DECIMAL(18,6)) AS Value 
 FROM Customer c JOIN CashRequests cr ON c.Id=cr.IdCustomer 
-WHERE datediff(day, cr.UnderwriterDecisionDate, @Now) = 0 AND c.IsTest=0 
+WHERE datediff(day, cr.UnderwriterDecisionDate, @Now) = 0 AND c.IsTest=0 AND UnderwriterDecision='Approved'
 
 UNION
 
@@ -83,9 +111,13 @@ SELECT 'M_Application' AS 'Key', CAST(COALESCE(count(c.Id),0) AS DECIMAL(18,6)) 
 
 UNION
 
-SELECT 'M_Approved' AS 'Key', CAST(COALESCE(sum(cr.ManagerApprovedSum),0) AS DECIMAL(18,6)) AS Value 
+SELECT 'M_Approved' AS 'Key', CAST(COALESCE(sum(x.Value),0) AS DECIMAL(18,6)) AS Value 
+FROM (
+SELECT max(cr.ManagerApprovedSum) AS Value 
 FROM Customer c JOIN CashRequests cr ON c.Id=cr.IdCustomer 
-WHERE cr.UnderwriterDecisionDate >= @FirstOfMonth AND c.IsTest=0
+WHERE cr.CreationDate >= @FirstOfMonth AND c.IsTest=0 AND UnderwriterDecision='Approved'
+GROUP BY cr.IdCustomer
+) x
 
 UNION
 
