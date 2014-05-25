@@ -6,6 +6,8 @@ using Ezbob.Database;
 using Ezbob.Logger;
 
 namespace EzBob.Backend.Strategies.MailStrategies {
+	using Exceptions;
+
 	public class Escalated : AMailStrategyBase {
 		#region constructor
 

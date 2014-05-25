@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace EzBob.Backend.Strategies {
+namespace EzBob.Backend.Strategies.Exceptions
+{
 	#region class StrategyException
 
 	public class StrategyException : Exception {

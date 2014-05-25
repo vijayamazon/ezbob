@@ -21,6 +21,7 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using log4net;
+	using System.ComponentModel;
 
 	#endregion using
 
@@ -142,7 +143,8 @@
 
 			BrokerPropertiesActionResult bp;
 
-			try {
+			try
+			{
 				bp = m_oServiceClient.Instance.BrokerSignup(
 					FirmName,
 					FirmRegNum,
@@ -159,7 +161,13 @@
 					IsCaptchaEnabled != 0,
 					TermsID,
 					sReferredBy
-				);
+					);
+
+				if (!string.IsNullOrEmpty(bp.Properties.ErrorMsg))
+				{
+					m_oLog.Warn("Failed to signup as a broker. {0}", bp.Properties.ErrorMsg);
+					return new BrokerForJsonResult(bp.Properties.ErrorMsg);
+				}
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to signup as a broker.");

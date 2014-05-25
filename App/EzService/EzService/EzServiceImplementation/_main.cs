@@ -1,11 +1,13 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Linq;
 	using System.Reflection;
 	using System.ServiceModel;
 	using System.Threading;
 	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -145,8 +147,9 @@
 		private ActionMetaData ExecuteSync<T>(out T oInstance, int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
 			ActionMetaData amd = null;
 
-			try {
-				string sStrategyType = typeof(T).ToString();
+			try
+			{
+				string sStrategyType = typeof (T).ToString();
 
 				Log.Debug("Executing " + sStrategyType + " started in sync...");
 
@@ -155,29 +158,31 @@
 				int nRequestedParamsCount = args.Length + 2;
 
 				ConstructorInfo oCreator =
-					typeof(T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == nRequestedParamsCount);
+					typeof (T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == nRequestedParamsCount);
 
 				if (oCreator == null)
-					throw new Exception("Failed to find a constructor for " + sStrategyType + " with " + nRequestedParamsCount + " arguments.");
+					throw new Exception("Failed to find a constructor for " + sStrategyType + " with " + nRequestedParamsCount +
+					                    " arguments.");
 
 				var aryContructorParamInfos = oCreator.GetParameters();
-				
+
 				bool bStdParamsFirst =
-					aryContructorParamInfos[0].ParameterType.IsAssignableFrom(typeof(AConnection)) &&
-					aryContructorParamInfos[1].ParameterType.IsAssignableFrom(typeof(ASafeLog));
+					aryContructorParamInfos[0].ParameterType.IsAssignableFrom(typeof (AConnection)) &&
+					aryContructorParamInfos[1].ParameterType.IsAssignableFrom(typeof (ASafeLog));
 
 				List<object> oParams;
 
-				if (bStdParamsFirst) {
-					oParams = new List<object> { DB, Log };
+				if (bStdParamsFirst)
+				{
+					oParams = new List<object> {DB, Log};
 					oParams.AddRange(args);
 				}
 				else
-					oParams = new List<object>(args) { DB, Log };
+					oParams = new List<object>(args) {DB, Log};
 
 				Log.Debug(sStrategyType + " constructor found, invoking...");
 
-				oInstance = (T)oCreator.Invoke(oParams.ToArray());
+				oInstance = (T) oCreator.Invoke(oParams.ToArray());
 
 				Log.Debug(sStrategyType + " constructor complete, executing...");
 
@@ -188,6 +193,11 @@
 				SaveActionStatus(amd, ActionStatus.Done);
 
 				return amd;
+			}
+			catch (WarningException we)
+			{
+				Log.Warn(we, "Exception during executing " + typeof(T) + " strategy.");
+				throw;
 			}
 			catch (Exception e)
 			{

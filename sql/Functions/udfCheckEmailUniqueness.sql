@@ -14,13 +14,13 @@ BEGIN
 	IF @CheckUsers = 1
 	BEGIN
 		IF EXISTS (SELECT * FROM Security_User WHERE Email = @ContactEmail)
-			RETURN 'There is already a customer with such email: ' + @ContactEmail
+			RETURN 'email is already being used'
 	END
 
 	IF @CheckBrokers = 1
 	BEGIN
 		IF EXISTS (SELECT * FROM Broker WHERE ContactEmail = @ContactEmail)
-			RETURN 'There is already a broker with such email: ' + @ContactEmail
+			RETURN 'email is already being used'
 	END
 
 	IF @CheckBrokerLeads = 1

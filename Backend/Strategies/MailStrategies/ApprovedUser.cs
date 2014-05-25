@@ -4,6 +4,7 @@
 	using System.Data;
 	using System.Globalization;
 	using System.Collections.Generic;
+	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

@@ -73,14 +73,16 @@
 				var oValidator = new ValidateMobileCode(m_oCreateSp.ContactMobile, m_sMobileCode, DB, Log);
 				oValidator.Execute();
 				if (!oValidator.IsValidatedSuccessfully())
-					throw new Exception("Failed to validate mobile code.");
+				{
+					Properties.ErrorMsg = "Failed to validate mobile code.";
+				}
 			} // if
 
 			m_oCreateSp.FillFirst(Properties);
 
 			if (!string.IsNullOrWhiteSpace(Properties.ErrorMsg)) {
-				Log.Alert("Failed to create a broker: {0}", Properties.ErrorMsg);
-				throw new Exception(Properties.ErrorMsg);
+				Log.Warn("Failed to create a broker: {0}", Properties.ErrorMsg);
+				return;
 			} // if
 
 			if (Properties.BrokerID < 1) {

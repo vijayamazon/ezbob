@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies {
 	using System;
+	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
