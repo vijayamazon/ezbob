@@ -244,14 +244,21 @@ var EzBob = EzBob || {};
 		}, // saveOne
 
 		save: function (evt) {
-			this.internalDebug('ui event save(', evt.type, this.uiAttrVal(evt.target), evt.target, evt.data.saveValue, ')');
-
 			var oElm = $(evt.currentTarget);
 
 			var oControlName = this.uiAttrVal(oElm);
 
-			if (!oControlName)
+			if (!oControlName) {
+				oElm = $(evt.target);
+				oControlName = this.uiAttrVal(oElm);
+			} // if
+
+			if (!oControlName) {
+				this.internalDebug('NOT SAVING BECAUSE THERE IS NO CONTROL NAME: ui event save(', evt.type, 'current target:', evt.currentTarget, 'target:', evt.target, evt.data.saveValue, ')');
 				return;
+			} // if
+
+			this.internalDebug('ui event save(', evt.type, oControlName, oElm, evt.data.saveValue, ')');
 
 			if (this.cache.current && this.cache.current.isFull()) {
 				this.cache.history[this.cache.current.id] = this.cache.current;
