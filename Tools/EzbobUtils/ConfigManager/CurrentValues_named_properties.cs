@@ -2265,5 +2265,10 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.EbayRuName]; }
 		}
+
+		public virtual VariableValue MinAuthenticationIndexToPassAml
+		{
+			get { return this[Variables.MinAuthenticationIndexToPassAml]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager
