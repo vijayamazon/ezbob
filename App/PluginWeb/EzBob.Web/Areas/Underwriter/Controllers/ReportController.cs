@@ -39,33 +39,12 @@
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult GetReportDates(int reportId, DateTime from, DateTime to)
+		public JsonResult GetReportDates(int reportId, DateTime from, DateTime to, string customer, bool? nonCash)
 		{
-			var dbReport = _reportRepository.Get(reportId);
-
-			if (dbReport.Arguments.Count != 1)
-			{
-				throw new NotImplementedException("Report with multiple argument types is not implemented");
-			}
-
-			var oDB = new SqlConnection();
-			ReportType type;
-			if (!Enum.TryParse(dbReport.Type, out type))
-			{
-				type = ReportType.RPT_GENERIC;
-			}
-			var report = new Report
-			{
-				Title = dbReport.Title,
-				Type = type,
-				StoredProcedure = dbReport.StoredProcedure,
-				Columns = Report.ParseHeaderAndFields(dbReport.Header, dbReport.Fields),
-			};
-
-			report.AddArgument(dbReport.Arguments.First().ReportArgument.Name);
-
-			var rptDef = new ReportQuery(report, from, to);
+			var report = GetReport(reportId);
+			var rptDef = new ReportQuery(report, from, to, customer, nonCash);
 			var oColumnTypes = new List<string>();
+			var oDB = new SqlConnection();
 			var reportHandler = new ReportHandler(oDB);
 			bool isError;
 
@@ -76,37 +55,17 @@
 		}
 		[Ajax]
 		[HttpPost]
-		public JsonResult GetReport(int reportId, ReportDate reportDate)
+		public JsonResult GetReport(int reportId, ReportDate reportDate, string customer, bool? nonCash)
 		{
 			var dates = ReporDateRanges.GetDates(reportDate);
-			return GetReportDates(reportId, dates.From, dates.To);
+			return GetReportDates(reportId, dates.From, dates.To, customer, nonCash);
 		}
 
-		public FileResult DownloadReportDates(int reportId, DateTime from, DateTime to)
+		public FileResult DownloadReportDates(int reportId, DateTime from, DateTime to, string customer, bool? nonCash)
 		{
-			var dbReport = _reportRepository.Get(reportId);
-
-			if (dbReport.Arguments.Count != 1)
-			{
-				throw new NotImplementedException("Report with multiple argument types is not implemented");
-			}
-
+			var report = GetReport(reportId);
+			var rptDef = new ReportQuery(report, from, to, customer, nonCash);
 			var oDB = new SqlConnection();
-			ReportType type;
-			if (!Enum.TryParse(dbReport.Type, out type))
-			{
-				type = ReportType.RPT_GENERIC;
-			}
-			var report = new Report
-			{
-				Title = dbReport.Title,
-				Type = type,
-				StoredProcedure = dbReport.StoredProcedure,
-				Columns = Report.ParseHeaderAndFields(dbReport.Header, dbReport.Fields),
-			};
-
-			report.AddArgument(dbReport.Arguments.First().ReportArgument.Name);
-			var rptDef = new ReportQuery(report, from, to);
 			var reportHandler = new ReportHandler(oDB);
 
 			var excel = reportHandler.GetWorkBook(report, rptDef);
@@ -118,10 +77,36 @@
 			return fc;
 		}
 
-		public FileResult DownloadReport(int reportId, ReportDate reportDate)
+		public FileResult DownloadReport(int reportId, ReportDate reportDate, string customer, bool? nonCash)
 		{
 			var dates = ReporDateRanges.GetDates(reportDate);
-			return DownloadReportDates(reportId, dates.From, dates.To);
+			return DownloadReportDates(reportId, dates.From, dates.To, customer, nonCash);
+		}
+
+		[NonAction]
+		private Report GetReport(int reportId)
+		{
+			var dbReport = _reportRepository.Get(reportId);
+
+			
+			ReportType type;
+			if (!Enum.TryParse(dbReport.Type, out type))
+			{
+				type = ReportType.RPT_GENERIC;
+			}
+			var report = new Report
+			{
+				Title = dbReport.Title,
+				Type = type,
+				StoredProcedure = dbReport.StoredProcedure,
+				Columns = Report.ParseHeaderAndFields(dbReport.Header, dbReport.Fields),
+			};
+			foreach (var arg in dbReport.Arguments)
+			{
+				report.AddArgument(arg.ReportArgument.Name);
+			}
+
+			return report;
 		}
 	}
 }

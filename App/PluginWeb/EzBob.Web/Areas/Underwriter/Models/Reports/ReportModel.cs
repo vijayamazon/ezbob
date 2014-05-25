@@ -4,7 +4,6 @@
 	using System.ComponentModel;
 	using System.Globalization;
 	using EZBob.DatabaseLib.Model.Database.Report;
-	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Utils;
 
@@ -12,21 +11,28 @@
 	{
 		public int Id { get; set; }
 		public string Title { get; set; }
-		public IEnumerable<ArgumentModel> Arguments { get; set; }
+		public bool IsCustomer { get; set; }
+		public bool ShowNonCash { get; set; }
 		public ReportModel ToModel(DbReport report)
 		{
-			return new ReportModel
+			var model = new ReportModel
 				{
 					Id = report.Id,
 					Title = report.Title,
-					Arguments = report.Arguments.Select(x => new ArgumentModel { Argument = x.ReportArgument.Name })
 				};
-		}
-	}
 
-	public class ArgumentModel
-	{
-		public string Argument { get; set; }
+			if (report.Arguments.Any(x => x.ReportArgument.Name == "Customer"))
+			{
+				model.IsCustomer = true;
+			}
+
+			if (report.Arguments.Any(x => x.ReportArgument.Name == "ShowNonCashTransactions"))
+			{
+				model.ShowNonCash = true;
+			}
+
+			return model;
+		}
 	}
 
 	public class ReportDateModel

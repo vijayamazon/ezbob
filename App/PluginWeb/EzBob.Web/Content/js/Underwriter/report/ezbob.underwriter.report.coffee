@@ -18,6 +18,11 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
         "datesDdl" : "#datesDdl"
         "reportArea" : "#reportDiv"
         "dateRange" : "#form-date-range"
+        "customerDiv" : "#reportCustomerDiv"
+        "nonCashDiv" : "#reportNonCashDiv"
+        "customer" : "#reportCustomer"
+        "nonCash" : "#reportNonCash"
+        
         
 
     serializeData: ->
@@ -26,6 +31,7 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
     events:
         "change #reportsDdl" : "reportChanged"
         "change #datesDdl" : "dateChanged"
+        "change #reportNonCash" : "nonCashChanged"
         "click #getReportBtn" : "getReportClicked"
         "click #downloadReportBtn" : "downloadReportClicked"
 
@@ -34,7 +40,23 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
          @ui.datesDdl.chosen()
 
     reportChanged: ->
-        console.log(@ui.reportsDdl.val(), 'report')
+        reportId = parseInt(@ui.reportsDdl.val())
+        rep = _.find(@model.toJSON().reports, (report) =>
+            return report.Id == reportId
+        )
+        
+        if(rep? and rep.IsCustomer)
+            @ui.customerDiv.show()
+        else
+            @ui.customerDiv.hide()
+
+        if(rep? and rep.ShowNonCash)
+            @ui.nonCashDiv.show()
+            @nonCashChanged()
+        else
+            @ui.nonCashDiv.hide()
+            @ui.nonCash.val("")
+
 
     dateChanged: ->
         if(@ui.datesDdl.val() == 'Custom')
@@ -42,6 +64,8 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
         else
             @destroyDateRange()
 
+    nonCashChanged: ->
+        @ui.nonCash.val(if @ui.nonCash.is(':checked') then 'true' else 'false')
 
     downloadReportClicked: ->
         if(@ui.reportsDdl.val() == '0' or @ui.datesDdl.val() == '0')
@@ -51,9 +75,10 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
         if(@ui.datesDdl.val() == 'Custom')
             from = EzBob.formatDateTimeCS(@ui.dateRange.data('daterangepicker').startDate)
             to = EzBob.formatDateTimeCS(@ui.dateRange.data('daterangepicker').endDate)
-            window.location = "#{window.gRootPath}Underwriter/Report/DownloadReportDates/?reportId=#{@ui.reportsDdl.val()}&from=#{from}&to=#{to}" 
+            
+            window.location = "#{window.gRootPath}Underwriter/Report/DownloadReportDates/?reportId=#{@ui.reportsDdl.val()}&from=#{from}&to=#{to}&customer=#{@ui.customer.val()}&nonCash=#{@ui.nonCash.val()}" 
         else
-            window.location = "#{window.gRootPath}Underwriter/Report/DownloadReport/?reportId=#{@ui.reportsDdl.val()}&reportDate=#{@ui.datesDdl.val()}" 
+            window.location = "#{window.gRootPath}Underwriter/Report/DownloadReport/?reportId=#{@ui.reportsDdl.val()}&reportDate=#{@ui.datesDdl.val()}&customer=#{@ui.customer.val()}&nonCash=#{@ui.nonCash.val()}" 
 
     getReportClicked: ->
         if(@ui.reportsDdl.val() == '0' or @ui.datesDdl.val() == '0')
@@ -67,11 +92,15 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
                 reportId : @ui.reportsDdl.val()
                 from : fromDate
                 to : toDate
+                customer: @ui.customer.val()
+                nonCash: @ui.nonCash.val()
             )
         else
             xhr = $.post("#{window.gRootPath}Underwriter/Report/GetReport", 
                 reportId : @ui.reportsDdl.val()
                 reportDate : @ui.datesDdl.val()
+                customer: @ui.customer.val()
+                nonCash: @ui.nonCash.val()
             )
 
         xhr.done (res) =>

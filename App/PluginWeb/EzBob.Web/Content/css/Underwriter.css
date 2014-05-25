@@ -1239,6 +1239,11 @@ td a.edit-loan {
     font-size: 20px;
     padding: 0 10px;
     margin-top: -15px;
+    display: inline-block;
+}
+
+.report-button input {
+    margin-bottom: 0;
 }
 
 .btn-fullwidth {

@@ -17,14 +17,21 @@
                         <option value="<%-date.key%>"><%-date.value%></option>
                         <%}});%>
                     </select>
-                    <div id="form-date-range" class="btn" style="display: none">
+                    <div id="form-date-range" class="btn report-button" style="display: none">
                         <i class="fa fa-calendar"></i>
                         &nbsp;<span></span> 
                         <b class="caret"></b>
                     </div>
-                
-                <button id="getReportBtn" class="btn btn-primary report-button"><i class="fa fa-play-circle-o"></i></button>
-                <button id="downloadReportBtn" class="btn btn-primary report-button"><i class="fa fa-file-excel-o"></i></button>
+                    <div id="reportCustomerDiv" class="report-button md-col-3" style="display: none;">
+                        <input id="reportCustomer" type="text" class="form-control" placeholder="Customer Id/Name/Email" />
+                    </div>
+                    <div id="reportNonCashDiv" class="report-button md-col-3" style="display: none;">
+                        <label>
+                            <input id="reportNonCash" type="checkbox" value="false">Show Non cash
+                        </label>
+                    </div>
+                    <button id="getReportBtn" class="btn btn-primary report-button"><i class="fa fa-play-circle-o"></i></button>
+                    <button id="downloadReportBtn" class="btn btn-primary report-button"><i class="fa fa-file-excel-o"></i></button>
                 <%}%>
             </div>
             <div id="reportDiv"></div>

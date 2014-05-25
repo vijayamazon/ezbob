@@ -32,6 +32,32 @@ namespace Reports {
 			DateEnd = dateEnd;
 		} // constructor
 
+		public ReportQuery(Report rpt, DateTime dateStart, DateTime dateEnd, string customer, bool? nonCash)
+			: this(rpt)
+		{
+			DateStart = dateStart;
+			DateEnd = dateEnd;
+
+			string sUserKey = customer.Trim();
+
+			if (sUserKey != string.Empty)
+			{
+				int nUserID = 0;
+
+				if (int.TryParse(sUserKey, out nUserID))
+					UserID = nUserID;
+				else
+					UserID = null;
+
+				UserNameOrEmail = sUserKey;
+			} // if sUserKey is not empty
+
+			if (nonCash.HasValue)
+			{
+				ShowNonCashTransactions = nonCash.Value ? 1 : 0;
+			}
+		} // constructor
+
 		public string StoredProcedure { get; set; }
 
 		public ColumnInfo[] Columns { get; set; }

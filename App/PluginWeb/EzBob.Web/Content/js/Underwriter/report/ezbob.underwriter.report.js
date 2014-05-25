@@ -43,7 +43,11 @@
       "reportsDdl": "#reportsDdl",
       "datesDdl": "#datesDdl",
       "reportArea": "#reportDiv",
-      "dateRange": "#form-date-range"
+      "dateRange": "#form-date-range",
+      "customerDiv": "#reportCustomerDiv",
+      "nonCashDiv": "#reportNonCashDiv",
+      "customer": "#reportCustomer",
+      "nonCash": "#reportNonCash"
     };
 
     ReportView.prototype.serializeData = function() {
@@ -55,6 +59,7 @@
     ReportView.prototype.events = {
       "change #reportsDdl": "reportChanged",
       "change #datesDdl": "dateChanged",
+      "change #reportNonCash": "nonCashChanged",
       "click #getReportBtn": "getReportClicked",
       "click #downloadReportBtn": "downloadReportClicked"
     };
@@ -65,16 +70,34 @@
     };
 
     ReportView.prototype.reportChanged = function() {
-      return console.log(this.ui.reportsDdl.val(), 'report');
+      var rep, reportId,
+        _this = this;
+      reportId = parseInt(this.ui.reportsDdl.val());
+      rep = _.find(this.model.toJSON().reports, function(report) {
+        return report.Id === reportId;
+      });
+      if ((rep != null) && rep.IsCustomer) {
+        this.ui.customerDiv.show();
+      } else {
+        this.ui.customerDiv.hide();
+      }
+      if ((rep != null) && rep.ShowNonCash) {
+        return this.ui.nonCashDiv.show();
+      } else {
+        return this.ui.nonCashDiv.hide();
+      }
     };
 
     ReportView.prototype.dateChanged = function() {
-      console.log(this.ui.datesDdl.val(), 'date');
       if (this.ui.datesDdl.val() === 'Custom') {
         return this.initDateRange();
       } else {
         return this.destroyDateRange();
       }
+    };
+
+    ReportView.prototype.nonCashChanged = function() {
+      return this.ui.nonCash.val(this.ui.nonCash.is(':checked') ? 'true' : 'false');
     };
 
     ReportView.prototype.downloadReportClicked = function() {
@@ -86,9 +109,9 @@
       if (this.ui.datesDdl.val() === 'Custom') {
         from = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').startDate);
         to = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').endDate);
-        return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReportDates/?reportId=" + (this.ui.reportsDdl.val()) + "&from=" + from + "&to=" + to;
+        return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReportDates/?reportId=" + (this.ui.reportsDdl.val()) + "&from=" + from + "&to=" + to + "&customer=" + (this.ui.customer.val()) + "&nonCash=" + (this.ui.nonCash.val());
       } else {
-        return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReport/?reportId=" + (this.ui.reportsDdl.val()) + "&reportDate=" + (this.ui.datesDdl.val());
+        return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReport/?reportId=" + (this.ui.reportsDdl.val()) + "&reportDate=" + (this.ui.datesDdl.val()) + "&customer=" + (this.ui.customer.val()) + "&nonCash=" + (this.ui.nonCash.val());
       }
     };
 
@@ -99,18 +122,23 @@
         alertify.error('Select report and/or date range');
         return false;
       }
+      console.log('@ui.nonCash.val()', this.ui.nonCash.val(), this.ui.nonCash.is(":visible"));
       if (this.ui.datesDdl.val() === 'Custom') {
         fromDate = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').startDate);
         toDate = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').endDate);
         xhr = $.post("" + window.gRootPath + "Underwriter/Report/GetReportDates", {
           reportId: this.ui.reportsDdl.val(),
           from: fromDate,
-          to: toDate
+          to: toDate,
+          customer: this.ui.customer.val(),
+          nonCash: this.ui.nonCash.val()
         });
       } else {
         xhr = $.post("" + window.gRootPath + "Underwriter/Report/GetReport", {
           reportId: this.ui.reportsDdl.val(),
-          reportDate: this.ui.datesDdl.val()
+          reportDate: this.ui.datesDdl.val(),
+          customer: this.ui.customer.val(),
+          nonCash: this.ui.nonCash.val()
         });
       }
       return xhr.done(function(res) {
