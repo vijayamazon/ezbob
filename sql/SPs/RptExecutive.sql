@@ -50,29 +50,35 @@ BEGIN
 
 	SELECT
 		0 AS SortOrder,
-		Name
+		Name, 
+		s.Description AS Caption
 	INTO
 		#t
 	FROM
-		SiteAnalyticsCodes
+		SiteAnalyticsCodes s
 	WHERE
 		1 = 0
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO #t (SortOrder, Name) VALUES (1, 'UKVisitors')
-	INSERT INTO #t (SortOrder, Name) VALUES (2, 'ReturningVisitors')
-	INSERT INTO #t (SortOrder, Name) VALUES (3, 'NewVisitors')
-	INSERT INTO #t (SortOrder, Name) VALUES (4, 'PageDashboard')
-	INSERT INTO #t (SortOrder, Name) VALUES (5, 'PageLogon')
-	INSERT INTO #t (SortOrder, Name) VALUES (6, 'PagePacnet')
-	INSERT INTO #t (SortOrder, Name) VALUES (7, 'PageGetCash')
+	
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (1, 'WorldWideVisits', 'Total visits')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (2, 'WorldWideVisitors', 'Total visitors')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (3, 'UKVisits', 'UK visits')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (4, 'UKVisitors', 'UK visitors')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (5, 'NewVisitors', 'New visitors')
+	
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (6, 'PageLogon', 'Login page visitors')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (7, 'PageDashboard', 'Customer dashboard page visitors')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (8, 'PageGetCash', 'Get cash page visitors')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (9, 'PagePacnet', 'Pacnet page visitors')
+	
 
 	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number)
 	SELECT
-		c.Description,
+		#t.Caption,
 		ISNULL(SUM(ISNULL(a.SiteAnalyticsValue, 0)), 0)
 	FROM
 		#t
@@ -83,7 +89,7 @@ BEGIN
 		AND
 		@DateStart <= a.Date AND a.Date < @DateEnd
 	GROUP BY
-		c.Description,
+		#t.Caption,
 		#t.SortOrder
 	ORDER BY
 		#t.SortOrder
