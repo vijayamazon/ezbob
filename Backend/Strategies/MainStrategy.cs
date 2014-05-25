@@ -14,7 +14,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EzBob.Backend.Strategies.MailStrategies;
+	using MailStrategies;
 
 	#region class MainStrategy
 

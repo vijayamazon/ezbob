@@ -13,22 +13,6 @@ IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptCus
 DROP PROCEDURE [dbo].[RptCustomerReport]
 GO
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClients]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptNewClients]
-GO
-
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClientsStep1]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptNewClientsStep1]
-GO
-
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClientsFull]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptNewClientsFull]
-GO
-
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClientsFullEx]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptNewClientsFullEx]
-GO
-
 IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptMarketPlacesStats]') AND TYPE IN (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptMarketPlacesStats]
 GO

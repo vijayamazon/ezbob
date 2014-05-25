@@ -24475,34 +24475,6 @@ INSERT INTO dbo.ReportScheduler
 	)
 VALUES
 	(
-	'RPT_MARKETING'
-	, 'Marketing Report'
-	, 'RptNewClientsFull'
-	, 1
-	, 1
-	, 1
-	, 'eMail,Day Of Week,Register Date,Source,#Shops,Did Payment,Did Personal,Did Complete,Wizard,Status,Medal,Approved,Loan,Open Credit,Loan Date,Loan Day of week'
-	, 'Name,DayOfWeek,DateRegister,ReferenceSource,Shops,Payment,Personal,Complete,IsSuccessfullyRegistered,Status,MedalType,MaxApproved,LoanAmount,CreditLeft,Date,LoanDayOfWeek'
-	, 'adic@ezbob.com,alecm@ezbob.com,alexbo+rpt@ezbob.com,nimrodk@ezbob.com'
-	, 0
-	)
-GO
-
-INSERT INTO dbo.ReportScheduler
-	(
-	Type
-	, Title
-	, StoredProcedure
-	, IsDaily
-	, IsWeekly
-	, IsMonthly
-	, Header
-	, Fields
-	, ToEmail
-	, IsMonthToDate
-	)
-VALUES
-	(
 	'RPT_NEW_CLIENT'
 	, 'New Registration Report'
 	, ''
@@ -24596,34 +24568,6 @@ VALUES
 	, 'eMail,Date,Shops,Payment,Personal,Complete'
 	, 'name,DateRegister,Shops,Payment,Personal,Complete'
 	, 'alexbo+rpt@ezbob.com,nimrodk@ezbob.com'
-	, 0
-	)
-GO
-
-INSERT INTO dbo.ReportScheduler
-	(
-	Type
-	, Title
-	, StoredProcedure
-	, IsDaily
-	, IsWeekly
-	, IsMonthly
-	, Header
-	, Fields
-	, ToEmail
-	, IsMonthToDate
-	)
-VALUES
-	(
-	'RPT_LINGER_CLIENT'
-	, 'Lingering Customers Report'
-	, 'RptNewClientsFullEx'
-	, 1
-	, 0
-	, 0
-	, 'CustomerId,EMail,Register Date,First Name,SurName,Phone,Mobile,#Shops,Max Approved,Total Loans,Annual Turnover,Credit Score,Medal,Offer To Client'
-	, 'Id,eMail,DateRegister,FirstName,SurName,DaytimePhone,MobilePhone,Shops,MaxApproved,SumOfLoans,AnualTurnover,ExpirianRating,MedalType,PhoneOffer'
-	, 'alecm@ezbob.com,alexbo+rpt@ezbob.com,nimrodk@ezbob.com'
 	, 0
 	)
 GO
