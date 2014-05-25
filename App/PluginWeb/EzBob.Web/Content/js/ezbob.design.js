@@ -853,6 +853,12 @@ EzBob.formatDateTimeAsIs = function (date) {
     return moment.utc(date).format("DD/MM/YYYY HH:mm:ss");
 };
 
+EzBob.formatDateTimeCS = function (date) {
+    if (!date) return "";
+    return moment.utc(date).format("YYYY-MM-DDTHH:mm:ss");
+};
+
+
 EzBob.datetimeToDate = function (date) {
     if (!date) return "";
     return new Date(date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));

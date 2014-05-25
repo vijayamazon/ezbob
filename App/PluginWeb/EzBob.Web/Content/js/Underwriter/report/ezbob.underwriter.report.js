@@ -42,7 +42,8 @@
     ReportView.prototype.ui = {
       "reportsDdl": "#reportsDdl",
       "datesDdl": "#datesDdl",
-      "reportArea": "#reportDiv"
+      "reportArea": "#reportDiv",
+      "dateRange": "#form-date-range"
     };
 
     ReportView.prototype.serializeData = function() {
@@ -53,6 +54,7 @@
 
     ReportView.prototype.events = {
       "change #reportsDdl": "reportChanged",
+      "change #datesDdl": "dateChanged",
       "click #getReportBtn": "getReportClicked",
       "click #downloadReportBtn": "downloadReportClicked"
     };
@@ -63,29 +65,54 @@
     };
 
     ReportView.prototype.reportChanged = function() {
-      return console.log("report changed");
+      return console.log(this.ui.reportsDdl.val(), 'report');
+    };
+
+    ReportView.prototype.dateChanged = function() {
+      console.log(this.ui.datesDdl.val(), 'date');
+      if (this.ui.datesDdl.val() === 'Custom') {
+        return this.initDateRange();
+      } else {
+        return this.destroyDateRange();
+      }
     };
 
     ReportView.prototype.downloadReportClicked = function() {
-      console.log('download clicked');
+      var from, to;
       if (this.ui.reportsDdl.val() === '0' || this.ui.datesDdl.val() === '0') {
         alertify.error('Select report and/or date range');
         return false;
       }
-      return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReport/?reportId=" + (this.ui.reportsDdl.val()) + "&reportDate=" + (this.ui.datesDdl.val());
+      if (this.ui.datesDdl.val() === 'Custom') {
+        from = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').startDate);
+        to = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').endDate);
+        return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReportDates/?reportId=" + (this.ui.reportsDdl.val()) + "&from=" + from + "&to=" + to;
+      } else {
+        return window.location = "" + window.gRootPath + "Underwriter/Report/DownloadReport/?reportId=" + (this.ui.reportsDdl.val()) + "&reportDate=" + (this.ui.datesDdl.val());
+      }
     };
 
     ReportView.prototype.getReportClicked = function() {
-      var xhr,
+      var fromDate, toDate, xhr,
         _this = this;
       if (this.ui.reportsDdl.val() === '0' || this.ui.datesDdl.val() === '0') {
         alertify.error('Select report and/or date range');
         return false;
       }
-      xhr = $.post("" + window.gRootPath + "Underwriter/Report/GetReport", {
-        reportId: this.ui.reportsDdl.val(),
-        reportDate: this.ui.datesDdl.val()
-      });
+      if (this.ui.datesDdl.val() === 'Custom') {
+        fromDate = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').startDate);
+        toDate = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').endDate);
+        xhr = $.post("" + window.gRootPath + "Underwriter/Report/GetReportDates", {
+          reportId: this.ui.reportsDdl.val(),
+          from: fromDate,
+          to: toDate
+        });
+      } else {
+        xhr = $.post("" + window.gRootPath + "Underwriter/Report/GetReport", {
+          reportId: this.ui.reportsDdl.val(),
+          reportDate: this.ui.datesDdl.val()
+        });
+      }
       return xhr.done(function(res) {
         if (res.report != null) {
           _this.ui.reportArea.html(res.report);
@@ -104,6 +131,34 @@
         aoColumns: columns
       };
       return $("#tableReportData").dataTable(oDataTableArgs);
+    };
+
+    ReportView.prototype.initDateRange = function() {
+      this.ui.dateRange.show();
+      this.ui.dateRange.daterangepicker({
+        format: "MM/dd/yyyy",
+        startDate: Date.today().add({
+          days: -29
+        }),
+        endDate: Date.today(),
+        minDate: "01/01/2012",
+        locale: {
+          applyLabel: "Select",
+          fromLabel: "From",
+          toLabel: "To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+        },
+        showWeekNumbers: true,
+        buttonClasses: ['btn-success', 'btn-fullwidth']
+      }, function(start, end) {
+        $("#form-date-range span").html(start.toString("MMMM d, yyyy") + " - " + end.toString("MMMM d, yyyy"));
+      });
+      return this.$el.find("#form-date-range span").html(Date.today().add({
+        days: -29
+      }).toString("MMMM d, yyyy") + " - " + Date.today().toString("MMMM d, yyyy"));
+    };
+
+    ReportView.prototype.destroyDateRange = function() {
+      this.ui.dateRange.hide();
     };
 
     ReportView.prototype.show = function() {

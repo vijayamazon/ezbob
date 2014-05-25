@@ -545,6 +545,7 @@
     <Content Include="Content\css\lib\coin-slider-styles.css" />
     <Content Include="Content\css\lib\dataTables.bootstrap.css" />
     <Content Include="Content\css\lib\datepicker.css" />
+    <Content Include="Content\css\lib\daterangepicker.css" />
     <Content Include="Content\css\lib\dropzone.css" />
     <Content Include="Content\css\lib\DT_bootstrap.css" />
     <Content Include="Content\css\lib\flaty-responsive.css" />
@@ -983,6 +984,8 @@
     <Content Include="Content\js\lib\bootstrap-modal.js" />
     <Content Include="Content\js\lib\bootstrap-modalmanager.js" />
     <Content Include="Content\js\lib\cookies.js" />
+    <Content Include="Content\js\lib\date.js" />
+    <Content Include="Content\js\lib\daterangepicker.js" />
     <Content Include="Content\js\lib\dropzone.js" />
     <Content Include="Content\js\lib\flaty\bootstrap-switch.js" />
     <Content Include="Content\js\lib\flaty\bootstrap3.js" />

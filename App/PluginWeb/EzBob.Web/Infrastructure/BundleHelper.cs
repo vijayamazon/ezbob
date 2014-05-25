@@ -54,30 +54,6 @@
 
 		public static MvcHtmlString RenderBrokerCss()
 		{
-			/*
-			 .Add("~/Content/css/jquery-ui-1.8.16.custom.css")
-			.Add("~/Content/css/jquery.ui.1.8.16.ie.css")
-			.Add("~/Content/css/bootstrap.css")
-			.Add("~/Content/css/flaty/bootstrap.min.css")
-			.Add("~/Content/css/flaty/dataTables.bootstrap.css")
-			.Add("~/Content/css/flaty/DT_bootstrap.css")
-			.Add("~/Content/css/flaty/flaty-responsive.css")
-			.Add("~/Content/css/flaty/flaty.css")
-			.Add("~/Content/css/font-awesome.min.css")
-			.Add("~/Content/css/flaty/bootstrap3-modal-patch.css")
-			.Add("~/Content/css/broker.css")
-			.Add("~/Content/css/app.css")
-			.Add("~/Content/css/sidebar.css")
-			.Add("~/Content/css/wizard-header.css")
-			.Add("~/Content/css/notifications.css")
-			.Add("~/Content/css/captcha.css")
-			.Add("~/Content/css/postcode.css")
-			.Add("~/Content/css/popover.css")
-			.Add("~/Content/css/choosen/chosen.css")
-			.Add("~/Content/css/attardi.labels.css")
-			.Add("~/Content/css/dropzone.css")
-			 */
-
 			return Bundle
 				.Css()
 				//libs
@@ -112,6 +88,7 @@
 				.Add("~/Content/css/lib/bootstrap2.css")
 				.Add("~/Content/css/lib/bootstrap3.css")
 				.Add("~/Content/css/lib/datepicker.css")
+				.Add("~/Content/css/lib/daterangepicker.css")
 				.Add("~/Content/css/lib/dataTables.bootstrap.css")
 				.Add("~/Content/css/lib/bootstrap-switch.css")
 				.Add("~/Content/css/lib/DT_bootstrap.css")
@@ -259,6 +236,8 @@
 				
 				//Flaty
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")
+				.Add("~/Content/js/lib/date.js")
+				.Add("~/Content/js/lib/daterangepicker.js")
 				.Add("~/Content/js/lib/bootstrap-datepicker.js")
 				.Add("~/Content/js/lib/bootstrap-modal.js")
 				.Add("~/Content/js/lib/bootstrap-modalmanager.js")

@@ -1241,3 +1241,6 @@ td a.edit-loan {
     margin-top: -15px;
 }
 
+.btn-fullwidth {
+    width: 100%;
+}
