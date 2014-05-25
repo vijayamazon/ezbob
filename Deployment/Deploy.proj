@@ -106,34 +106,6 @@
 		<Exec Command="xcopy %22$(BuildBin)\$(UsedEdition)%22 $(ServerBaseFolder) /E /C /I /Q /R /Y"/>
 		<Copy SourceFiles="$(BuildBin)\$(UsedEdition)\channelgrabber.json" DestinationFolder="C:\Program Files (x86)\EZBOB\"/>
 	</Target>
-	
-	<Target Name="EnvironmentConfigure">
-			<PropertyGroup>
-				<EnvConfigXml><![CDATA[<data>
-						<culture>$(Culture)</culture>
-						<serverBaseFolder>$(ServerBaseFolder)</serverBaseFolder>
-						<serviceDeployFolder>$(ServerBaseFolder)\$(ServicesFolder)\agent\</serviceDeployFolder>
-						<clientDeployFolder>$(ServerBaseFolder)\$(ClientsFolder)\</clientDeployFolder>
-						<webDeployFolder>$(ServerBaseFolder)\$(WebFolder)\</webDeployFolder>      
-						<serviceName>$(serviceName)</serviceName>      
-						<url>$(WebBaseUrl)</url>
-						<environmentId>$(EnvId)</environmentId>
-						<messageQueuePath></messageQueuePath>
-						<culture>$(Culture)</culture>
-						<connectionString>$(MainConnectionString)</connectionString>
-						<connectionStringWarehouse>$(WarehouseConnectionString)</connectionStringWarehouse>
-						<securityDefaultLibPath>$(ServerBaseFolder)\libs\</securityDefaultLibPath>
-						<tempDBPath>$(TempStatesPath)</tempDBPath>
-						<tempReportsPath>$(ServerBaseFolder)\TempResults\Reports</tempReportsPath>
-						<HibernateId>NHibernateConfig_$(DbPrefix)</HibernateId>
-						<sessionConnectionString>$(SessionConnectionString)</sessionConnectionString>
-						<ToolsFolder>$(ServerBaseFolder)\$(ToolsFolder)</ToolsFolder>
-						<DatabaseDir>$(ServerBaseFolder)\$(Database)</DatabaseDir>
-						<MailSubject>$(MailSubject)</MailSubject>
-						<MandrillConfig>$(MandrillConfig)</MandrillConfig>
-				</data>]]></EnvConfigXml>
-		</PropertyGroup>
-	</Target>
 
 	<Target Name="IncrementalUpdateDB">
 		<Message Text="Incremental update database..." Importance="high"/>
@@ -156,13 +128,11 @@
 	<Target Name="DeleteOldBinary">
 		<Message Text="Deleting old binary folder..." Importance="high"/>
 		<RemoveDir Directories="$(BuildBin)" />		
-	</Target>
-	
+	</Target>	
 	
 	<!-- build properties-->
 	<PropertyGroup>
 		<BuildConfiguration>Debug</BuildConfiguration>
-		<ClientsFolder>clients</ClientsFolder>
 		<ServicesFolder>services</ServicesFolder>
 		<WebFolder>websites</WebFolder>
 		<ConfigFolder>configtemplates</ConfigFolder>
