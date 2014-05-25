@@ -79,6 +79,11 @@
 			public string ResponseData { get; set; } 
 			public string ErrorMessage { get; set; } 
 			public int UserID { get; set; }
+			public DateTime InsertDate //don't delete
+			{
+				get { return DateTime.UtcNow; } // get
+				set { } // set, should exist
+			} // InsertDate
 		} // class SpPostcodeSaveLog
 
 		#endregion class SpPostcodeSaveLog
