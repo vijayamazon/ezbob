@@ -94,35 +94,36 @@
 			}
 		}
 
-		[NonAction]
-		[Transactional]
-		private IDatabaseCustomerMarketPlace SaveSage(SageServiceInfo oEsi, AccessTokenContainer accessTokenContainer, string approvalToken)
-		{
-			int marketPlaceId = _mpTypes
+		private IDatabaseCustomerMarketPlace SaveSage(SageServiceInfo oEsi, AccessTokenContainer accessTokenContainer, string approvalToken) {
+			IDatabaseCustomerMarketPlace oResult = null;
+
+			Transactional.Execute(() => {
+				int marketPlaceId = _mpTypes
 					.GetAll()
 					.First(a => a.InternalId == oEsi.InternalId)
 					.Id;
 
-			var securityData = new SageSecurityInfo
-			{
-				ApprovalToken = approvalToken,
-				AccessToken = accessTokenContainer.access_token,
-				TokenType = accessTokenContainer.token_type,
-				MarketplaceId = marketPlaceId
-			};
+				var securityData = new SageSecurityInfo {
+					ApprovalToken = approvalToken,
+					AccessToken = accessTokenContainer.access_token,
+					TokenType = accessTokenContainer.token_type,
+					MarketplaceId = marketPlaceId
+				};
 
-			var sageDatabaseMarketPlace = new SageDatabaseMarketPlace();
+				var sageDatabaseMarketPlace = new SageDatabaseMarketPlace();
 
-			string accountName = string.Format("SageOne Account #{0}",
-											   _customer.CustomerMarketPlaces.Count(
-												   a => a.Marketplace.InternalId == oEsi.InternalId) + 1);
+				string accountName = string.Format("SageOne Account #{0}",
+					_customer.CustomerMarketPlaces.Count(a => a.Marketplace.InternalId == oEsi.InternalId) + 1
+				);
 
-			log.Info("Saving sage marketplace data...");
-			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(accountName, sageDatabaseMarketPlace, securityData,
-																	  _customer);
-			log.Info("Saved sage marketplace data...");
+				log.Info("Saving sage marketplace data...");
+				var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(accountName, sageDatabaseMarketPlace, securityData, _customer);
+				log.Info("Saved sage marketplace data.");
 
-			return marketPlace;
+				oResult = marketPlace;
+			});
+
+			return oResult;
 		}
 	}
 }

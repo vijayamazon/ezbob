@@ -1,106 +1,93 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.EmailEditView = Backbone.Marionette.ItemView.extend({
+	template: "#email-edit-template",
 
-  root.EzBob = root.EzBob || {};
+	events: {
+		'click .email-confirm-manually': 'confirmManually',
+		'click .email-send-new-request': 'sendNewRequest',
+		'click .email-change-address': 'changeEmail',
+		'keypress input[name="edit-email"]': 'editEmailEnterPressed'
+	}, // events
 
-  EzBob.EmailEditView = (function(_super) {
+	ui: {
+		'email': 'input[name="edit-email"]'
+	}, // ui
 
-    __extends(EmailEditView, _super);
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: false,
+			title: "Edit Email",
+			position: "center",
+			draggable: false,
+			width: 530,
+			dialogClass: "edit-email-popup"
+		};
+	}, // jqoptions
 
-    function EmailEditView() {
-      return EmailEditView.__super__.constructor.apply(this, arguments);
-    }
+	confirmManually: function() {
+		var xhr = $.post(window.gRootPath + "Underwriter/EmailVerification/ManuallyConfirm", {
+			id: this.model.id
+		});
 
-    EmailEditView.prototype.template = "#email-edit-template";
+		var self = this;
 
-    EmailEditView.prototype.events = {
-      'click .email-confirm-manually': 'confirmManually',
-      'click .email-send-new-request': 'sendNewRequest',
-      'click .email-change-address': 'changeEmail',
-      'keypress input[name="edit-email"]': 'editEmailEnterPressed'
-    };
+		xhr.success(function() {
+			self.model.fetch();
+			self.close();
+		});
 
-    EmailEditView.prototype.ui = {
-      'email': 'input[name="edit-email"]'
-    };
+		return false;
+	}, // confirmManually
 
-    EmailEditView.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: false,
-        title: "Edit Email",
-        position: "center",
-        draggable: false,
-        width: "73%",
-        height: Math.max(window.innerHeight * 0.9, 600),
-        dialogClass: "edit-email-popup"
-      };
-    };
+	sendNewRequest: function() {
+		var xhr = $.post(window.gRootPath + "Underwriter/EmailVerification/Resend", {
+			id: this.model.id
+		});
 
-    EmailEditView.prototype.confirmManually = function() {
-      var xhr,
-        _this = this;
-      xhr = $.post(window.gRootPath + "Underwriter/EmailVerification/ManuallyConfirm", {
-        id: this.model.id
-      });
-      xhr.success(function() {
-        _this.model.fetch();
-        return _this.close();
-      });
-      return false;
-    };
+		var self = this;
 
-    EmailEditView.prototype.sendNewRequest = function() {
-      var xhr,
-        _this = this;
-      xhr = $.post(window.gRootPath + "Underwriter/EmailVerification/Resend", {
-        id: this.model.id
-      });
-      xhr.success(function() {
-        _this.model.fetch();
-        return _this.close();
-      });
-      return false;
-    };
+		xhr.success(function() {
+			self.model.fetch();
+			self.close();
+		});
 
-    EmailEditView.prototype.changeEmail = function() {
-      var xhr,
-        _this = this;
-      if (!this.validator.form()) {
-        return false;
-      }
-      xhr = $.post(window.gRootPath + "Underwriter/EmailVerification/ChangeEmail", {
-        id: this.model.id,
-        email: this.ui.email.val()
-      });
-      xhr.success(function(response) {
-        if (response.error !== void 0) {
-          EzBob.ShowMessage(response.error);
-        }
-        _this.model.fetch();
-        return _this.close();
-      });
-      return false;
-    };
+		return false;
+	}, // sendNewRequest
 
-    EmailEditView.prototype.onRender = function() {
-      this.form = this.$el.find('#email-edit-form');
-      this.validator = EzBob.validateChangeEmailForm(this.form);
-      return this;
-    };
+	changeEmail: function() {
+		if (!this.validator.form())
+			return false;
 
-    EmailEditView.prototype.editEmailEnterPressed = function(e) {
-      if (e.keyCode === 13) {
-        return false;
-      }
-    };
+		var xhr = $.post(window.gRootPath + "Underwriter/EmailVerification/ChangeEmail", {
+			id: this.model.id,
+			email: this.ui.email.val()
+		});
 
-    return EmailEditView;
+		var self = this;
 
-  })(Backbone.Marionette.ItemView);
+		xhr.success(function(response) {
+			if (!response.success) {
+				if (response.error)
+					EzBob.ShowMessage(response.error);
+			} // if
 
-}).call(this);
+			self.model.fetch();
+			self.close();
+		});
+
+		return false;
+	}, // changeEmail
+
+	onRender: function() {
+		this.form = this.$el.find('#email-edit-form');
+		this.validator = EzBob.validateChangeEmailForm(this.form);
+		return this;
+	}, // onRender
+
+	editEmailEnterPressed: function(e) {
+		if (e.keyCode === 13)
+			return false;
+	}, // editEmailEnterPressed
+}); // EzBob.EmailEditView

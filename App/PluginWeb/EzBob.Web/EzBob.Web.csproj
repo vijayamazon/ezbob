@@ -77,7 +77,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="Ezbob.Backend.Models, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
     </Reference>
@@ -403,7 +402,6 @@
     <Compile Include="Infrastructure\IWorkplaceContext.cs" />
     <Compile Include="Infrastructure\Membership\EmptyAnswerExeption.cs" />
     <Compile Include="Infrastructure\Membership\RoleNotFoundException.cs" />
-    <Compile Include="Infrastructure\Membership\EzbobMembershipProvider.cs" />
     <Compile Include="Infrastructure\Membership\EzbobRoleProvider.cs" />
     <Compile Include="Infrastructure\NoIISHeaderModule.cs" />
     <Compile Include="Infrastructure\csrf\ValidateJsonAntiForgeryTokenAttribute.cs" />
@@ -412,7 +410,7 @@
     <Compile Include="Infrastructure\RestfullErrorHandlingAttribute.cs" />
     <Compile Include="Infrastructure\StructureMapControllerFactory.cs" />
     <Compile Include="Infrastructure\TempDataExtensions.cs" />
-    <Compile Include="Infrastructure\TransactionHelper.cs" />
+    <Compile Include="Infrastructure\Transactional.cs" />
     <Compile Include="Infrastructure\WizardBrokerLeadModel.cs" />
     <Compile Include="Infrastructure\XFrameOptionsModule.cs" />
     <Compile Include="Models\AllowedEmail.cs" />
@@ -1188,12 +1186,7 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.min.js">
       <DependentUpon>ezbob.underwriter.creditLineEditDialog.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.js">
-      <DependentUpon>ezbob.underwriter.emaileditview.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.min.js">
-      <DependentUpon>ezbob.underwriter.emaileditview.coffee</DependentUpon>
-    </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.js">
       <DependentUpon>ezbob.underwriter.personInfo.coffee</DependentUpon>
     </Content>
@@ -1649,6 +1642,10 @@
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
       <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
       <Name>AmazonDbLib</Name>
@@ -1917,7 +1914,6 @@
     <Content Include="Content\js\controls\ezbob.modal.js" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanTopView.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.rollover.coffee" />
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.LoanOptions.coffee" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.coffee" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.coffee" />

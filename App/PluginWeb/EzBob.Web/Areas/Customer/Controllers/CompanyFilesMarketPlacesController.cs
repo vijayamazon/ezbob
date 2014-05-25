@@ -93,24 +93,24 @@
 			return Json(new { });
 		}
 
-		[NonAction]
-		[Transactional]
-		private int ConnectTrn()
-		{
-			try
-			{
-				var serviceInfo = new CompanyFilesServiceInfo();
-				var name = serviceInfo.DisplayName;
-				var cf = new CompanyFilesDatabaseMarketPlace();
-				var mp = _helper.SaveOrUpdateCustomerMarketplace(_context.Customer.Name + "_" + name, cf, null, _context.Customer);
-				mp.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(mp.Id);
-				return mp.Id;
+		private int ConnectTrn() {
+			int nResult = -1;
+
+			try {
+				new Transactional(() => {
+					var serviceInfo = new CompanyFilesServiceInfo();
+					var name = serviceInfo.DisplayName;
+					var cf = new CompanyFilesDatabaseMarketPlace();
+					var mp = _helper.SaveOrUpdateCustomerMarketplace(_context.Customer.Name + "_" + name, cf, null, _context.Customer);
+					mp.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(mp.Id);
+					nResult = mp.Id;
+				}).Execute();
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				Log.Error(ex);
-				return -1;
 			}
+
+			return nResult;
 		}
 	}
 }

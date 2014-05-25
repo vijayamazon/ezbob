@@ -97,6 +97,27 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="QuickOfferActionResult" nillable="true" type="tns:QuickOfferActionResult" />
+  <xs:complexType name="UserLoginActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="SessionID" type="xs:int" />
+          <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="UserLoginActionResult" nillable="true" type="tns:UserLoginActionResult" />
+  <xs:complexType name="StringActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="StringActionResult" nillable="true" type="tns:StringActionResult" />
   <xs:complexType name="WizardConfigsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -108,16 +129,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="WizardConfigsActionResult" nillable="true" type="tns:WizardConfigsActionResult" />
-  <xs:complexType name="StringActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="StringActionResult" nillable="true" type="tns:StringActionResult" />
   <xs:complexType name="IntActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

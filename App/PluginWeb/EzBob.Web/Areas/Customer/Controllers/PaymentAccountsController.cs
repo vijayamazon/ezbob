@@ -92,14 +92,18 @@
 				return View("Error", (object)DbStrings.AccountAlreadyExixtsInDb);
 			}
 
-			var mpId = SavePayPal(customer, permissionsGranted, personalData, paypal);
-			m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true);
+			int mpId = 0;
+
+			Transactional.Execute(() => {
+				mpId = SavePayPal(customer, permissionsGranted, personalData, paypal);
+			});
+
+			if (mpId > 0)
+				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true);
 
 			return View(permissionsGranted);
 		}
 
-		[NonAction]
-		[Transactional]
 		private int SavePayPal(Customer customer, PayPalPermissionsGranted permissionsGranted, PayPalPersonalData personalData, PayPalDatabaseMarketPlace paypal)
 		{
 			var securityData = new PayPalSecurityData

@@ -41,36 +41,16 @@
 
 			Log.Debug("Broker properties search result for mobile phone {0}:\n{1}", m_sMobile, oProperties);
 
-			var osPassword = new StringBuilder();
-
-			const int cLowerMin = 'a';
-			const int cLowerMax = 1 + (int)'z';
-
-			const int cUpperMin = 'A';
-			const int cUpperMax = 1 + (int)'Z';
-
-			const int cDigitMin = '0';
-			const int cDigitMax = 1 + (int)'9';
-
-			var rnd = new Random();
-
-			for (int i = 1; i <= 8; i++) {
-				if (i % 3 == 0)
-					osPassword.Append((char)rnd.Next(cDigitMin, cDigitMax));
-				else if (i % 2 == 0)
-					osPassword.Append((char)rnd.Next(cUpperMin, cUpperMax));
-				else
-					osPassword.Append((char)rnd.Next(cLowerMin, cLowerMax));
-			} // for
+			var oPassword = new SimplePassword(8, oProperties.ContactEmail);
 
 			DB.ExecuteNonQuery(
 				"BrokerResetPassword",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@BrokerID", oProperties.BrokerID),
-				new QueryParameter("@Password", SecurityUtils.HashPassword(oProperties.ContactEmail, osPassword.ToString()))
+				new QueryParameter("@Password", oPassword.Hash)
 			);
 
-			new BrokerPasswordRestored(oProperties.BrokerID, osPassword.ToString(), DB, Log).Execute();
+			new BrokerPasswordRestored(oProperties.BrokerID, oPassword.RawValue, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute

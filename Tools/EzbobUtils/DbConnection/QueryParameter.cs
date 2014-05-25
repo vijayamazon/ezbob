@@ -36,19 +36,23 @@
 		public override string ToString() {
 			switch (Direction) {
 			case ParameterDirection.Input:
-				return string.Format("{0} = {1}", Name, Value);
+				return string.Format("{0} = {1}", Name, ValueStr);
 
 			case ParameterDirection.Output:
 			case ParameterDirection.ReturnValue:
 				return string.Format("{0} {1}", Name, Direction);
 
 			case ParameterDirection.InputOutput:
-				return string.Format("{0} = {1} <bidirectional>", Name, Value);
+				return string.Format("{0} = {1} <bidirectional>", Name, ValueStr);
 
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
 		} // ToString
+
+		private string ValueStr {
+			get { return Value == null ? "-- NULL --" : Value.ToString(); }
+		} // ValueStr
 
 		public object ReturnedValue {
 			get {

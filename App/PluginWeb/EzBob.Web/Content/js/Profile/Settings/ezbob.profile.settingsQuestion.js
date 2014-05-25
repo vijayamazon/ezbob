@@ -42,8 +42,12 @@ EzBob.Profile.SettingsQuestionView = Backbone.View.extend({
 			Answer: answer,
 			Password: password
 		}).done(function(r) {
-			if (r.error) {
-				EzBob.App.trigger('error', r.error);
+			if (!r.success) {
+				if (r.error)
+					EzBob.App.trigger('error', r.error);
+				else
+					EzBob.App.trigger('error', 'Failed to update security question.');
+
 				return false;
 			} // if
 
@@ -52,7 +56,7 @@ EzBob.Profile.SettingsQuestionView = Backbone.View.extend({
 				Answer: answer
 			});
 
-			EzBob.App.trigger('info', 'Security question has been changed');
+			EzBob.App.trigger('info', 'Security question has been updated.');
 			that.trigger("SecurityQuestionUpdated", question);
 			that.$el.find('input[name="answer"]').val("");
 			that.back();

@@ -58,6 +58,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -91,6 +92,10 @@
     <Compile Include="CalculateVatReturnSummary.cs" />
     <Compile Include="BackfillConsumerAnalytics.cs" />
     <Compile Include="EncryptChannelGrabberMarketplaces.cs" />
+    <Compile Include="Exceptions\AStrategyException.cs" />
+    <Compile Include="Exceptions\AStrategyLoggedException.cs" />
+    <Compile Include="Exceptions\StrategyWarning.cs" />
+    <Compile Include="Exceptions\StrategyAlert.cs" />
     <Compile Include="LoadVatReturnSummary.cs" />
     <Compile Include="MarketplaceInstantUpdate.cs" />
     <Compile Include="PricingModel\GetPricingModelDefaultRate.cs" />
@@ -146,6 +151,16 @@
     <Compile Include="QuickOffer\QuickOfferData.cs" />
     <Compile Include="UpdateCurrencyRates.cs" />
     <Compile Include="GetWizardConfigs.cs" />
+    <Compile Include="UserManagement\UserChangeEmail.cs" />
+    <Compile Include="UserManagement\CustomerChangePassword.cs" />
+    <Compile Include="UserManagement\UserChangePassword.cs" />
+    <Compile Include="UserManagement\UserDataForLogin.cs" />
+    <Compile Include="UserManagement\UserLogin.cs" />
+    <Compile Include="UserManagement\UserResetPassword.cs" />
+    <Compile Include="UserManagement\UserSignup.cs" />
+    <Compile Include="UserManagement\UserManagementConfigs.cs" />
+    <Compile Include="UserManagement\UserSecurityData.cs" />
+    <Compile Include="UserManagement\UserUpdateSecurityQuestion.cs" />
     <Compile Include="ValidateMobileCode.cs" />
     <Compile Include="GenerateMobileCode.cs" />
     <Compile Include="UpdateMarketplace.cs" />

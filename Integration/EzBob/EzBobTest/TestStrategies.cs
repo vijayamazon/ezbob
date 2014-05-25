@@ -150,7 +150,7 @@ namespace EzBobTest
 		[Test]
 		public void PasswordRestored()
 		{
-			var s = new PasswordRestored(3060, "dfsgfsdg", m_oDB, m_oLog);
+			var s = new PasswordRestored(3060, m_oDB, m_oLog);
 			s.Execute();
 		}
 
@@ -206,7 +206,7 @@ namespace EzBobTest
 		[Test]
 		public void ThreeInvalidAttempts()
 		{
-			var s = new ThreeInvalidAttempts(3060, "dfg", m_oDB, m_oLog);
+			var s = new ThreeInvalidAttempts(3060, m_oDB, m_oLog);
 			s.Execute();
 		}
 

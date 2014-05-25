@@ -290,29 +290,32 @@
 
 		#region method SaveMarketplace
 
-		[NonAction]
-		[Transactional]
 		private int SaveMarketplace(AddAccountState oState, AccountModel model) {
+			int nResult = -1;
+
 			try {
-				model.id = _mpTypes.GetAll().First(a => a.InternalId == oState.VendorInfo.Guid()).Id;
-				model.displayName = model.displayName ?? model.name;
+				new Transactional(() => {
+					model.id = _mpTypes.GetAll().First(a => a.InternalId == oState.VendorInfo.Guid()).Id;
+					model.displayName = model.displayName ?? model.name;
 
-				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateEncryptedCustomerMarketplace(
-					model.name,
-					oState.Marketplace,
-					model,
-					_context.Customer
-				);
+					IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateEncryptedCustomerMarketplace(
+						model.name,
+						oState.Marketplace,
+						model,
+						_context.Customer
+						);
 
-				oState.Model = Json(AccountModel.ToModel(mp), JsonRequestBehavior.AllowGet);
-				oState.CustomerMarketPlace = mp;
-				return mp.Id;
+					oState.Model = Json(AccountModel.ToModel(mp), JsonRequestBehavior.AllowGet);
+					oState.CustomerMarketPlace = mp;
+					nResult = mp.Id;
+				}).Execute();
 			}
 			catch (Exception e) {
 				Log.Error(e);
 				oState.Error = CreateError(e);
-				return -1;
 			} // try
+
+			return nResult;
 		} // SaveMarketplace
 
 		#endregion method SaveMarketplace

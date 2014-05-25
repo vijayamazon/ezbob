@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
-	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -10,10 +9,9 @@
 
 		public BrokerForceResetCustomerPassword(
 			int nCustomerID,
-			string sPassword,
 			AConnection oDB,
 			ASafeLog oLog
-		) : base(nCustomerID, sPassword, oDB, oLog) {
+		) : base(nCustomerID, oDB, oLog) {
 		} // constructor
 
 		#endregion constructor

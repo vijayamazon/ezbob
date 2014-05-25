@@ -39,19 +39,24 @@ EzBob.Profile.SettingsPasswordView = Backbone.View.extend({
 		if (!this.validator.form())
 			return false;
 
-		$.post(
-			window.gRootPath + "Customer/AccountSettings/ChangePassword",
-			{
-				oldPassword: this.$el.find('input[name="password"]').val(),
-				newPassword: this.$el.find('input[name="new_password"]').val(),
-			}
-		).done(function(result) {
-			if (result.status === "ChangeOk") {
-				EzBob.App.trigger('info', 'Password has been changed');
+		BlockUi();
+
+		var oRequest = $.post(window.gRootPath + "Customer/AccountSettings/ChangePassword", {
+			oldPassword: this.$el.find('input[name="password"]').val(),
+			newPassword: this.$el.find('input[name="new_password"]').val(),
+		});
+		
+		oRequest.done(function(result) {
+			if (result.success) {
+				EzBob.App.trigger('info', 'Password has been changed.');
 				that.back();
 			}
 			else
-				EzBob.App.trigger('error', 'Error occurred while changing password: invalid old password');
+				EzBob.App.trigger('error', 'Error occurred while changing password: ' + (result.error || 'invalid old password.'));
+		});
+
+		oRequest.always(function() {
+			UnBlockUi();
 		});
 
 		return false;

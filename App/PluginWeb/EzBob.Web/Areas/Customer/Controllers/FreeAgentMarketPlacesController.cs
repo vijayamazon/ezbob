@@ -67,57 +67,55 @@
 			AccessTokenContainer accessTokenContainer = FreeAgentConnector.GetToken(approvalToken, callback, out errorMessage);
 
 			if (accessTokenContainer == null)
-			{
 				return View(new { error = errorMessage ?? "Failure getting access token" });
-			}
 
 			var model = SaveFreeAgentTrn(accessTokenContainer, approvalToken);
-			
 
 			m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, model.id, true);
 
 			return View(model);
 		}
 
-		[NonAction]
-		[Transactional]
-		private FreeAgentAccountModel SaveFreeAgentTrn(AccessTokenContainer accessTokenContainer, string approvalToken)
-		{
-			var oEsi = new FreeAgentServiceInfo();
-			int marketPlaceId = _mpTypes
-				.GetAll()
-				.First(a => a.InternalId == oEsi.InternalId)
-				.Id;
+		private FreeAgentAccountModel SaveFreeAgentTrn(AccessTokenContainer accessTokenContainer, string approvalToken) {
+			FreeAgentAccountModel oResult = null;
 
-			log.Info("Fetching company data...");
-			FreeAgentCompany freeAgentCompany = null;
-			try
-			{
-				freeAgentCompany = FreeAgentConnector.GetCompany(accessTokenContainer.access_token);
-			}
-			catch (Exception ex)
-			{
-				log.ErrorFormat("Error getting FreeAgent's company. Will use customer mail as the account display name: {0}", ex);
-			}
+			Transactional.Execute(() => {
+				var oEsi = new FreeAgentServiceInfo();
+				int marketPlaceId = _mpTypes
+					.GetAll()
+					.First(a => a.InternalId == oEsi.InternalId)
+					.Id;
 
-			var securityData = new FreeAgentSecurityInfo
-			{
-				ApprovalToken = approvalToken,
-				AccessToken = accessTokenContainer.access_token,
-				ExpiresIn = accessTokenContainer.expires_in,
-				TokenType = accessTokenContainer.token_type,
-				RefreshToken = accessTokenContainer.refresh_token,
-				MarketplaceId = marketPlaceId,
-				Name = freeAgentCompany != null ? freeAgentCompany.name : _customer.Name,
-				ValidUntil = DateTime.UtcNow.AddSeconds(accessTokenContainer.expires_in - 60)
-			};
+				log.Info("Fetching company data...");
+				FreeAgentCompany freeAgentCompany = null;
 
-			var freeAgentDatabaseMarketPlace = new FreeAgentDatabaseMarketPlace();
+				try {
+					freeAgentCompany = FreeAgentConnector.GetCompany(accessTokenContainer.access_token);
+				}
+				catch (Exception ex) {
+					log.ErrorFormat("Error getting FreeAgent's company. Will use customer mail as the account display name: {0}", ex);
+				}
 
-			log.Info("Saving marketplace data...");
-			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(securityData.Name, freeAgentDatabaseMarketPlace, securityData, _customer);
+				var securityData = new FreeAgentSecurityInfo {
+					ApprovalToken = approvalToken,
+					AccessToken = accessTokenContainer.access_token,
+					ExpiresIn = accessTokenContainer.expires_in,
+					TokenType = accessTokenContainer.token_type,
+					RefreshToken = accessTokenContainer.refresh_token,
+					MarketplaceId = marketPlaceId,
+					Name = freeAgentCompany != null ? freeAgentCompany.name : _customer.Name,
+					ValidUntil = DateTime.UtcNow.AddSeconds(accessTokenContainer.expires_in - 60)
+				};
 
-			return FreeAgentAccountModel.ToModel(marketPlace);
+				var freeAgentDatabaseMarketPlace = new FreeAgentDatabaseMarketPlace();
+
+				log.Info("Saving marketplace data...");
+				var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(securityData.Name, freeAgentDatabaseMarketPlace, securityData, _customer);
+
+				oResult = FreeAgentAccountModel.ToModel(marketPlace);
+			});
+
+			return oResult;
 		}
 	}
 }

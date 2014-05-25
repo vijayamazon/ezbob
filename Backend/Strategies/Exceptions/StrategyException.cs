@@ -1,24 +1,14 @@
-﻿using System;
+﻿namespace EzBob.Backend.Strategies.Exceptions {
+	using System;
 
-namespace EzBob.Backend.Strategies.Exceptions
-{
-	#region class StrategyException
-
-	public class StrategyException : Exception {
-		#region public
-
-		#region constructor
-
-		public StrategyException(AStrategy oSource, string sMsg) : base(oSource.Name + ": " + sMsg) {
+	/// <summary>
+	/// Quiet exception. Writes nothing to log on creation.
+	/// </summary>
+	public class StrategyException : AStrategyException {
+		public StrategyException(AStrategy oSource, string sMsg) : base(oSource, sMsg) {
 		} // constructor
 
-		public StrategyException(AStrategy oSource, string sMsg, Exception oInnerException) : base(oSource.Name + ": " + sMsg, oInnerException) {
+		public StrategyException(AStrategy oSource, string sMsg, Exception oInnerException) : base(oSource, sMsg, oInnerException) {
 		} // constructor
-
-		#endregion constructor
-
-		#endregion public
 	} // class StrategyException
-
-	#endregion class StrategyException
-} // namespace EzBob.Backend.Strategies
+} // namespace

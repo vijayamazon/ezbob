@@ -48,8 +48,8 @@
 			return Execute(customerId, null, typeof(PasswordChanged), customerId, password);
 		} // PasswordChanged
 
-		public ActionMetaData PasswordRestored(int customerId, string password) {
-			return Execute(customerId, null, typeof(PasswordRestored), customerId, password);
+		public ActionMetaData PasswordRestored(int customerId) {
+			return Execute(customerId, null, typeof(PasswordRestored), customerId);
 		} // PasswordRestored
 
 		public ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum) {
@@ -84,21 +84,20 @@
 			return Execute(customerId, customerId, typeof(SendEmailVerification), customerId, email, address);
 		} // SendEmailVerification
 
-		public ActionMetaData ThreeInvalidAttempts(int customerId, string password) {
-			return Execute(customerId, null, typeof(ThreeInvalidAttempts), customerId, password);
+		public ActionMetaData ThreeInvalidAttempts(int customerId) {
+			return Execute(customerId, null, typeof(ThreeInvalidAttempts), customerId);
 		} // ThreeInvalidAttempts
 
 		public ActionMetaData TransferCashFailed(int customerId) {
 			return Execute(customerId, null, typeof(TransferCashFailed), customerId);
 		} // TransferCashFailed
 
-		public ActionMetaData VipRequest(int customerId, string fullname, string email, string phone)
-		{
+		public ActionMetaData VipRequest(int customerId, string fullname, string email, string phone) {
 			return Execute(customerId, null, typeof(VipRequest), customerId, fullname, email, phone);
 		} // TransferCashFailed
-		
-		public ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID, string sNewPassword) {
-			return Execute<BrokerForceResetCustomerPassword>(nCustomerID, nUserID, nCustomerID, sNewPassword);
+
+		public ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID) {
+			return Execute<BrokerForceResetCustomerPassword>(nCustomerID, nUserID, nCustomerID);
 		} // BrokerForceResetCustomerPassword
 
 		public ActionMetaData NotifySalesOnNewCustomer(int nCustomerID) {

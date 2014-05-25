@@ -1043,17 +1043,27 @@ EzBob.validateAdminLoginForm = function (el) {
     });
 };
 
+EzBob.createPasswordValidationPolicy = function() {
+	var passPolicy = { required: true, minlength: 6, maxlength: 60 };
+	var passPolicyText = EzBob.dbStrings.PasswordPolicyCheck;
+
+	if (EzBob.Config.PasswordPolicyType !== 'simple') {
+		passPolicy.regex = "^.*([a-z]+.*[A-Z]+) |([a-z]+.*[^A-Za-z0-9]+)|([a-z]+.*[0-9]+)|([A-Z]+.*[a-z]+)|([A-Z]+.*[^A-Za-z0-9]+)|([A-Z]+.*[0-9]+)|([^A-Za-z0-9]+.*[a-z]+.)|([^A-Za-z0-9]+.*[A-Z]+)|([^A-Za-z0-9]+.*[0-9]+.)|([0-9]+.*[a-z]+)|([0-9]+.*[A-Z]+)|([0-9]+.*[^A-Za-z0-9]+).*$";
+		passPolicy.minlength = 7;
+		passPolicyText = "Password has to have 2 types of characters out of 4 (letters,caps,digits,special chars)";
+	} // if
+
+	return { policy: passPolicy, text: passPolicyText, };
+};
+
 EzBob.validateSignUpForm = function (el) {
     var e = el || $(".signup");
 
-    var passPolicy = { required: true, minlength: 6, maxlength: 20 };
-    var passPolicyText = EzBob.dbStrings.PasswordPolicyCheck;
-    if (EzBob.Config.PasswordPolicyType != 'simple') {
-        passPolicy.regex =
-        "^.*([a-z]+.*[A-Z]+) |([a-z]+.*[^A-Za-z0-9]+)|([a-z]+.*[0-9]+)|([A-Z]+.*[a-z]+)|([A-Z]+.*[^A-Za-z0-9]+)|([A-Z]+.*[0-9]+)|([^A-Za-z0-9]+.*[a-z]+.)|([^A-Za-z0-9]+.*[A-Z]+)|([^A-Za-z0-9]+.*[0-9]+.)|([0-9]+.*[a-z]+)|([0-9]+.*[A-Z]+)|([0-9]+.*[^A-Za-z0-9]+).*$";
-        passPolicy.minlength = 7;
-        passPolicyText = "Password has to have 2 types of characters out of 4 (letters,caps,digits,special chars)";
-    }
+	var oPolicy = EzBob.createPasswordValidationPolicy();
+
+	var passPolicy = oPolicy.policy;
+	var passPolicyText = oPolicy.text;
+
     var passPolicy2 = $.extend({}, passPolicy);
     passPolicy2.equalTo = '#signupPass1';
 
@@ -1094,15 +1104,24 @@ EzBob.validateSignUpForm = function (el) {
 
 EzBob.validateChangePassword = function (el) {
     var e = el || $("#change-password");
+
+	var oPolicy = EzBob.createPasswordValidationPolicy();
+
+	var passPolicy = oPolicy.policy;
+	var passPolicyText = oPolicy.text;
+
+    var passPolicy2 = $.extend({}, passPolicy);
+    passPolicy2.equalTo = '#new_password';
+
     return e.validate({
         rules: {
-            password: { required: true },
-            new_password: { required: true, minlength: 6, remote: { url: window.gRootPath + "AccountSettings/IsEqualsOldPassword" } },
-            new_password2: { required: true, equalTo: '#new_password', minlength: 6 }
+            password: $.extend({}, passPolicy),
+            new_password: $.extend({}, passPolicy),
+            new_password2: passPolicy2,
         },
         messages: {
-            "new_password": { minlength: EzBob.dbStrings.PasswordPolicyCheck, remote: "Equals Old Password" },
-            "new_password2": { minlength: EzBob.dbStrings.PasswordPolicyCheck, equalTo: EzBob.dbStrings.PasswordDoesNotMatch }
+            new_password: { required: passPolicyText, regex: passPolicyText },
+            new_password2: { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,

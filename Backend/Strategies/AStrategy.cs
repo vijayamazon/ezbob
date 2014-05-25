@@ -13,6 +13,9 @@
 
 		public abstract void Execute();
 
+		public virtual AConnection DB { get; private set; }
+		public virtual StrategyLog Log { get; private set; }
+
 		#endregion public
 
 		#region protected
@@ -24,9 +27,6 @@
 			DB = oDb;
 			Log = new StrategyLog(this, oLog);
 		} // constructor
-
-		protected AConnection DB { get; private set; }
-		protected StrategyLog Log { get; private set; }
 
 		#endregion protected
 	} // class AStrategy

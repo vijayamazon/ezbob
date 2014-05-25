@@ -325,13 +325,13 @@
 		private void PasswordRestored()
 		{
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId))
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
 			{
-				m_oLog.Msg("Usage: PasswordRestored <CustomerId> <password>");
+				m_oLog.Msg("Usage: PasswordRestored <CustomerId>");
 				return;
 			}
 
-			serviceClient.PasswordRestored(customerId, args[2]);
+			serviceClient.PasswordRestored(customerId);
 		}
 
 		[Activation]
@@ -432,13 +432,13 @@
 		private void ThreeInvalidAttempts()
 		{
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId))
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
 			{
-				m_oLog.Msg("Usage: ThreeInvalidAttempts <CustomerId> <password>");
+				m_oLog.Msg("Usage: ThreeInvalidAttempts <CustomerId>");
 				return;
 			}
 
-			serviceClient.ThreeInvalidAttempts(customerId, args[2]);
+			serviceClient.ThreeInvalidAttempts(customerId);
 		}
 
 		[Activation]
@@ -790,7 +790,7 @@ crm:           CRM");
 				return;
 			}
 
-			serviceClient.CreateUnderwriter(args[1], args[2], args[3]);
+			serviceClient.UnderwriterSignup(args[1], args[2], args[3]);
 		}
 
 		[Activation]

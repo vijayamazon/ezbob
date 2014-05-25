@@ -197,13 +197,12 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult WizardComplete()
-		{
+		public JsonResult WizardComplete() {
 			Session["WizardComplete"] = true;
 			TempData["WizardComplete"] = true;
 			var customer = m_oContext.Customer;
 
-			WizardCompleteTrn(customer);
+			new Transactional(() => WizardCompleteTrn(customer)).Execute();
 
 			// Updates broker lead state if needed and sends "Email Under Review".
 			m_oServiceClient.Instance.BrokerCustomerWizardComplete(customer.Id);
@@ -214,21 +213,16 @@
 
 			ms_oLog.Debug("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
 
-			if (!customer.IsTest)
-			{
+			if (!customer.IsTest) {
 				m_oServiceClient.Instance.FraudChecker(m_oContext.User.Id, FraudMode.FullCheck);
 				ms_oLog.Debug("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
 			} // if
 
-
-
 			return Json(new { });
 		} // WizardComplete
 
-		[Transactional]
 		private void WizardCompleteTrn(Customer customer)
 		{
-
 			ms_oLog.Debug("Customer {1} ({0}): has completed wizard.", customer.Id, customer.PersonalInfo.Fullname);
 
 			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
@@ -275,22 +269,26 @@
 			if (!Enum.TryParse(companyAdditionalInfo.IndustryType, true, out eIndustryType))
 				return Json(new { error = "Failed to parse industry type: " + companyAdditionalInfo.IndustryType });
 
-			string sErrorMsg = ProcessCompanyInfoTemporary(
-				nBusinessType,
-				companyAdditionalInfo.VatReporting,
-				limitedInfo,
-				nonLimitedInfo,
-				companyAdditionalInfo,
-				limitedCompanyAddress,
-				nonLimitedCompanyAddress,
-				limitedDirectors,
-				nonLimitedDirectors,
-				companyEmployeeCountInfo,
-				experianInfo,
-				customer,
-				nBusinessType,
-				eIndustryType
-			);
+			string sErrorMsg = null;
+
+			new Transactional(() => {
+				sErrorMsg = ProcessCompanyInfoTemporary(
+					nBusinessType,
+					companyAdditionalInfo.VatReporting,
+					limitedInfo,
+					nonLimitedInfo,
+					companyAdditionalInfo,
+					limitedCompanyAddress,
+					nonLimitedCompanyAddress,
+					limitedDirectors,
+					nonLimitedDirectors,
+					companyEmployeeCountInfo,
+					experianInfo,
+					customer,
+					nBusinessType,
+					eIndustryType
+				);
+			}).Execute();
 
 			if (!string.IsNullOrWhiteSpace(sErrorMsg))
 				return Json(new { error = sErrorMsg });
@@ -348,9 +346,10 @@
 			List<CustomerAddress> personalAddress,
 			List<CustomerAddress> prevPersonAddresses,
 			string dateOfBirth
-		)
-		{
-			SaveCustomerToDB(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth);
+			) {
+			new Transactional(
+				() => SaveCustomerToDB(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth)
+			).Execute();
 
 			var customer = m_oContext.Customer;
 
@@ -652,7 +651,6 @@
 
 		#region static method ProcessCompanyInfoTemporary
 
-		[Transactional]
 		private string ProcessCompanyInfoTemporary(
 			TypeOfBusiness businessType,
 			string vat,
@@ -902,7 +900,6 @@
 		/// date of birth. Depending on connection method (GET/POST) different (local/invariant)
 		/// culture information are used to parse date.
 		/// </remarks>
-		[Transactional]
 		private void SaveCustomerToDB(
 			PersonalInfo personalInfo,
 			IEnumerable<CustomerAddress> personalAddress,

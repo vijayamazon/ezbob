@@ -36,8 +36,7 @@
 			IWorkplaceContext context,
 			LoanLimit limit,
 			MarketPlaceRepository mpType,
-			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository,
-			MembershipProvider membershipProvider
+			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository
 		) {
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(CustomersController)));
 			m_oDB = DbConnectionGenerator.Get();
@@ -53,8 +52,6 @@
 			_customerStatusesRepository = customerStatusesRepository;
 
 			this.underwriterRecentCustomersRepository = underwriterRecentCustomersRepository;
-
-			_membershipProvider = membershipProvider;
 		} // constructor
 
 		#endregion constructor
@@ -405,11 +402,7 @@
 
 					if (numOfPreviousApprovals == 0) {
 						try {
-							m_oServiceClient.Instance.BrokerForceResetCustomerPassword(
-								user.Id,
-								customer.Id,
-								_membershipProvider.ResetPassword(customer.Name, "")
-							);
+							m_oServiceClient.Instance.BrokerForceResetCustomerPassword(user.Id, customer.Id);
 						}
 						catch (Exception e) {
 							m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
@@ -626,7 +619,6 @@
 		private readonly LoanLimit _limit;
 		private readonly IWorkplaceContext _context;
 		private readonly MarketPlaceRepository _mpType;
-		private readonly MembershipProvider _membershipProvider;
 
 		private readonly CustomerStatusesRepository _customerStatusesRepository;
 		private readonly IUnderwriterRecentCustomersRepository underwriterRecentCustomersRepository;

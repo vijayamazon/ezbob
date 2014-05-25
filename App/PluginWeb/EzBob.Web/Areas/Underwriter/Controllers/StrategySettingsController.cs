@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.Models;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using Models;
@@ -132,24 +133,26 @@
 			return SettingsPricingModel();
 		}
 
-		[Transactional]
-		private void UpdateSettingsPricingModel(decimal pricingModelTenurePercents, decimal pricingModelDefaultRateCompanyShare,
-												int pricingModelInterestOnlyPeriod, decimal pricingModelCollectionRate, decimal pricingModelEuCollectionRate,
-		                                        decimal pricingModelCogs, decimal pricingModelDebtOutOfTotalCapital,
-		                                        decimal pricingModelCostOfDebtPA, decimal pricingModelOpexAndCapex,
-												decimal pricingModelProfitMarkupPercentsOfRevenue, decimal pricingModelSetupFee)
-		{
-			_configurationVariablesRepository.SetByName("PricingModelTenurePercents", pricingModelTenurePercents.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelDefaultRateCompanyShare", pricingModelDefaultRateCompanyShare.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelInterestOnlyPeriod", pricingModelInterestOnlyPeriod.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelCollectionRate", pricingModelCollectionRate.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelEuCollectionRate", pricingModelEuCollectionRate.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelCogs", pricingModelCogs.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelDebtOutOfTotalCapital", pricingModelDebtOutOfTotalCapital.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelCostOfDebtPA", pricingModelCostOfDebtPA.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelOpexAndCapex", pricingModelOpexAndCapex.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelProfitMarkupPercentsOfRevenue", pricingModelProfitMarkupPercentsOfRevenue.ToString(CultureInfo.InvariantCulture));
-			_configurationVariablesRepository.SetByName("PricingModelSetupFee", pricingModelSetupFee.ToString(CultureInfo.InvariantCulture));
+		private void UpdateSettingsPricingModel(
+			decimal pricingModelTenurePercents, decimal pricingModelDefaultRateCompanyShare,
+			int pricingModelInterestOnlyPeriod, decimal pricingModelCollectionRate, decimal pricingModelEuCollectionRate,
+			decimal pricingModelCogs, decimal pricingModelDebtOutOfTotalCapital,
+			decimal pricingModelCostOfDebtPA, decimal pricingModelOpexAndCapex,
+			decimal pricingModelProfitMarkupPercentsOfRevenue, decimal pricingModelSetupFee
+		) {
+			Transactional.Execute(() => {
+				_configurationVariablesRepository.SetByName("PricingModelTenurePercents", pricingModelTenurePercents.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelDefaultRateCompanyShare", pricingModelDefaultRateCompanyShare.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelInterestOnlyPeriod", pricingModelInterestOnlyPeriod.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelCollectionRate", pricingModelCollectionRate.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelEuCollectionRate", pricingModelEuCollectionRate.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelCogs", pricingModelCogs.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelDebtOutOfTotalCapital", pricingModelDebtOutOfTotalCapital.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelCostOfDebtPA", pricingModelCostOfDebtPA.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelOpexAndCapex", pricingModelOpexAndCapex.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelProfitMarkupPercentsOfRevenue", pricingModelProfitMarkupPercentsOfRevenue.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelSetupFee", pricingModelSetupFee.ToString(CultureInfo.InvariantCulture));
+			});
 		}
 
 		[Ajax]
@@ -163,17 +166,16 @@
 			return SettingsGeneral();
 		}
 
-		[Transactional]
-		private void UpdateSettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier, decimal fcfFactor)
-		{
-			_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
-			if (HmrcSalariesMultiplier >= 0 && HmrcSalariesMultiplier <= 1)
-			{
-				_configurationVariablesRepository.SetByName(Variables.HmrcSalariesMultiplier.ToString(),
-															HmrcSalariesMultiplier.ToString(CultureInfo.InvariantCulture));
-			}
-			_configurationVariablesRepository.SetByName(Variables.FCFFactor.ToString(), fcfFactor.ToString(CultureInfo.InvariantCulture));
-			//_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
+		private void UpdateSettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier, decimal fcfFactor) {
+			Transactional.Execute(() => {
+				_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
+
+				if (HmrcSalariesMultiplier >= 0 && HmrcSalariesMultiplier <= 1)
+					_configurationVariablesRepository.SetByName(Variables.HmrcSalariesMultiplier.ToString(), HmrcSalariesMultiplier.ToString(CultureInfo.InvariantCulture));
+
+				_configurationVariablesRepository.SetByName(Variables.FCFFactor.ToString(), fcfFactor.ToString(CultureInfo.InvariantCulture));
+				//_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
+			});
 		}
 
 		[Ajax]
@@ -223,16 +225,17 @@
 			return SettingsCharges();
 		}
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		private void UpdateSettingsCharges(string administrationCharge, string latePaymentCharge, string otherCharge,
 										   string partialPaymentCharge, string rolloverCharge, string amountToChargeFrom)
 		{
-			_configurationVariablesRepository.SetByName("AdministrationCharge", administrationCharge);
-			_configurationVariablesRepository.SetByName("LatePaymentCharge", latePaymentCharge);
-			_configurationVariablesRepository.SetByName("OtherCharge", otherCharge);
-			_configurationVariablesRepository.SetByName("PartialPaymentCharge", partialPaymentCharge);
-			_configurationVariablesRepository.SetByName("RolloverCharge", rolloverCharge);
-			_configurationVariablesRepository.SetByName("AmountToChargeFrom", amountToChargeFrom);
+			Transactional.Execute(() => {
+				_configurationVariablesRepository.SetByName("AdministrationCharge", administrationCharge);
+				_configurationVariablesRepository.SetByName("LatePaymentCharge", latePaymentCharge);
+				_configurationVariablesRepository.SetByName("OtherCharge", otherCharge);
+				_configurationVariablesRepository.SetByName("PartialPaymentCharge", partialPaymentCharge);
+				_configurationVariablesRepository.SetByName("RolloverCharge", rolloverCharge);
+				_configurationVariablesRepository.SetByName("AmountToChargeFrom", amountToChargeFrom);
+			}, IsolationLevel.ReadUncommitted);
 		}
 
 		[Ajax]
@@ -291,14 +294,14 @@
 			return AutomationApproval();
 		}
 
-		[Transactional]
 		private void UpdateAutomationApproval(string EnableAutomaticApproval, string EnableAutomaticReApproval,
-											  string MaxCapHomeOwner, string MaxCapNotHomeOwner)
-		{
-			_configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
-			_configurationVariablesRepository.SetByName("EnableAutomaticReApproval", EnableAutomaticReApproval);
-			_configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
-			_configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
+											  string MaxCapHomeOwner, string MaxCapNotHomeOwner) {
+			Transactional.Execute(() => {
+				_configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
+				_configurationVariablesRepository.SetByName("EnableAutomaticReApproval", EnableAutomaticReApproval);
+				_configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
+				_configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
+			});
 		}
 
 		[Ajax]
@@ -373,28 +376,29 @@
 			return AutomationRejection();
 		}
 
-		[Transactional]
-		private void UpdateAutomationRejection(string EnableAutomaticRejection, string LowCreditScore,
-											   string Reject_Defaults_AccountsNum, string Reject_Defaults_Amount,
-											   string Reject_Defaults_CreditScore, string Reject_Defaults_MonthsNum,
-											   string Reject_Minimal_Seniority, string TotalAnnualTurnover,
-											   string TotalThreeMonthTurnover, string EnableAutomaticReRejection,
-											   string AutoRejectionException_CreditScore,
-											   string AutoRejectionException_AnualTurnover)
-		{
-			_configurationVariablesRepository.SetByName("EnableAutomaticRejection", EnableAutomaticRejection);
-			_configurationVariablesRepository.SetByName("LowCreditScore", LowCreditScore);
-			_configurationVariablesRepository.SetByName("Reject_Defaults_AccountsNum", Reject_Defaults_AccountsNum);
-			_configurationVariablesRepository.SetByName("Reject_Defaults_Amount", Reject_Defaults_Amount);
-			_configurationVariablesRepository.SetByName("Reject_Defaults_CreditScore", Reject_Defaults_CreditScore);
-			_configurationVariablesRepository.SetByName("Reject_Defaults_MonthsNum", Reject_Defaults_MonthsNum);
-			_configurationVariablesRepository.SetByName("Reject_Minimal_Seniority", Reject_Minimal_Seniority);
-			_configurationVariablesRepository.SetByName("TotalAnnualTurnover", TotalAnnualTurnover);
-			_configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", TotalThreeMonthTurnover);
-			_configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
-			_configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
-			_configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover",
-														AutoRejectionException_AnualTurnover);
+		private void UpdateAutomationRejection(
+			string EnableAutomaticRejection, string LowCreditScore,
+			string Reject_Defaults_AccountsNum, string Reject_Defaults_Amount,
+			string Reject_Defaults_CreditScore, string Reject_Defaults_MonthsNum,
+			string Reject_Minimal_Seniority, string TotalAnnualTurnover,
+			string TotalThreeMonthTurnover, string EnableAutomaticReRejection,
+			string AutoRejectionException_CreditScore,
+			string AutoRejectionException_AnualTurnover
+		) {
+			Transactional.Execute(() => {
+				_configurationVariablesRepository.SetByName("EnableAutomaticRejection", EnableAutomaticRejection);
+				_configurationVariablesRepository.SetByName("LowCreditScore", LowCreditScore);
+				_configurationVariablesRepository.SetByName("Reject_Defaults_AccountsNum", Reject_Defaults_AccountsNum);
+				_configurationVariablesRepository.SetByName("Reject_Defaults_Amount", Reject_Defaults_Amount);
+				_configurationVariablesRepository.SetByName("Reject_Defaults_CreditScore", Reject_Defaults_CreditScore);
+				_configurationVariablesRepository.SetByName("Reject_Defaults_MonthsNum", Reject_Defaults_MonthsNum);
+				_configurationVariablesRepository.SetByName("Reject_Minimal_Seniority", Reject_Minimal_Seniority);
+				_configurationVariablesRepository.SetByName("TotalAnnualTurnover", TotalAnnualTurnover);
+				_configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", TotalThreeMonthTurnover);
+				_configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
+				_configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
+				_configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover", AutoRejectionException_AnualTurnover);
+			});
 		}
 
 		[Ajax]
@@ -440,26 +444,28 @@
 			return SettingsGeneral();
 		}
 
-		[Transactional]
-		private void UpdateSettingsExperian(string FinancialAccounts_MainApplicant,
-											string FinancialAccounts_AliasOfMainApplicant,
-											string FinancialAccounts_AssociationOfMainApplicant,
-											string FinancialAccounts_JointApplicant,
-											string FinancialAccounts_AliasOfJointApplicant,
-											string FinancialAccounts_AssociationOfJointApplicant,
-											string FinancialAccounts_No_Match)
-		{
-			_configurationVariablesRepository.SetByName("FinancialAccounts_MainApplicant", FinancialAccounts_MainApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfMainApplicant",
-														FinancialAccounts_AliasOfMainApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfMainApplicant",
-														FinancialAccounts_AssociationOfMainApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_JointApplicant", FinancialAccounts_JointApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfJointApplicant",
-														FinancialAccounts_AliasOfJointApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfJointApplicant",
-														FinancialAccounts_AssociationOfJointApplicant);
-			_configurationVariablesRepository.SetByName("FinancialAccounts_No_Match", FinancialAccounts_No_Match);
+		private void UpdateSettingsExperian(
+			string FinancialAccounts_MainApplicant,
+			string FinancialAccounts_AliasOfMainApplicant,
+			string FinancialAccounts_AssociationOfMainApplicant,
+			string FinancialAccounts_JointApplicant,
+			string FinancialAccounts_AliasOfJointApplicant,
+			string FinancialAccounts_AssociationOfJointApplicant,
+			string FinancialAccounts_No_Match
+		) {
+			Transactional.Execute(() => {
+				_configurationVariablesRepository.SetByName("FinancialAccounts_MainApplicant", FinancialAccounts_MainApplicant);
+				_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfMainApplicant",
+															FinancialAccounts_AliasOfMainApplicant);
+				_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfMainApplicant",
+															FinancialAccounts_AssociationOfMainApplicant);
+				_configurationVariablesRepository.SetByName("FinancialAccounts_JointApplicant", FinancialAccounts_JointApplicant);
+				_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfJointApplicant",
+															FinancialAccounts_AliasOfJointApplicant);
+				_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfJointApplicant",
+															FinancialAccounts_AssociationOfJointApplicant);
+				_configurationVariablesRepository.SetByName("FinancialAccounts_No_Match", FinancialAccounts_No_Match);
+			});
 		}
 
 		[Ajax]
@@ -637,8 +643,7 @@
 			return Json(new { success = true, errorText = error }, JsonRequestBehavior.AllowGet);
 		}
 
-		private void UpdateConfigVars()
-		{
+		private void UpdateConfigVars() {
 			var c = new ServiceClient();
 			c.Instance.UpdateConfigurationVariables();
 			CurrentValues.ReInit();

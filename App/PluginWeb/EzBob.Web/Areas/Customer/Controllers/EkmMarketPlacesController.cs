@@ -69,8 +69,11 @@
 			try
 			{
 				var customer = _context.Customer;
+
 				var mpId = SaveAccountTrn(customer, model.login, model.password);
-				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true);
+				if (mpId > 0)
+					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true);
+
 				return Json(new EkmAccountModel { id = mpId, login = model.login }, JsonRequestBehavior.AllowGet);
 			}
 			catch (MarketPlaceAddedByThisCustomerException e) {
@@ -87,25 +90,27 @@
 			}
 		}
 
-		[NonAction]
-		[Transactional]
-		private int SaveAccountTrn(Customer customer, string login, string password)
-		{
-			
-			var username = login;
-			var ekm = new EkmDatabaseMarketPlace();
-			_mpChecker.Check(ekm.InternalId, customer, username);
-			var oEsi = new EkmServiceInfo();
-			int marketPlaceId = _mpTypes
-				.GetAll()
-				.First(a => a.InternalId == oEsi.InternalId)
-				.Id;
+		private int SaveAccountTrn(Customer customer, string login, string password) {
+			int nResult = 0;
 
-			var ekmSecurityInfo = new EkmSecurityInfo { MarketplaceId = marketPlaceId, Name = username, Password = password };
+			new Transactional(() => {
+				var username = login;
+				var ekm = new EkmDatabaseMarketPlace();
+				_mpChecker.Check(ekm.InternalId, customer, username);
+				var oEsi = new EkmServiceInfo();
+				int marketPlaceId = _mpTypes
+					.GetAll()
+					.First(a => a.InternalId == oEsi.InternalId)
+					.Id;
 
-			var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo.Password, customer);
+				var ekmSecurityInfo = new EkmSecurityInfo {MarketplaceId = marketPlaceId, Name = username, Password = password};
 
-			return mp.Id;
+				var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo.Password, customer);
+
+				nResult = mp.Id;
+			}).Execute();
+
+			return nResult;
 		}
 
 		[Transactional]

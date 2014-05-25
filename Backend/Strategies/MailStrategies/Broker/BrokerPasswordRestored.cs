@@ -5,7 +5,8 @@
 	public class BrokerPasswordRestored : PasswordRestored {
 		#region constructor
 
-		public BrokerPasswordRestored(int nBrokerID, string password, AConnection oDb, ASafeLog oLog) : base(nBrokerID, password, oDb, oLog) {
+		public BrokerPasswordRestored(int nBrokerID, string password, AConnection oDb, ASafeLog oLog) : base(nBrokerID, oDb, oLog) {
+			ForcedPassword = password;
 		} // constructor
 
 		#endregion constructor

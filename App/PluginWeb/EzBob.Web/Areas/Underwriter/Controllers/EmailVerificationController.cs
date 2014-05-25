@@ -1,30 +1,25 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-	using System.Data;
+	using System;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code.Email;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.Membership;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 
 	public class EmailVerificationController : Controller
 	{
-		private readonly IEmailConfirmation _confirmation;
-		private readonly ICustomerRepository _customers;
-		private readonly ServiceClient m_oServiceClient;
-		private readonly IUsersRepository _users;
-		private readonly EzbobMembershipProvider provider;
-
 		public EmailVerificationController(IEmailConfirmation confirmation, ICustomerRepository customers, IUsersRepository users)
 		{
 			_confirmation = confirmation;
 			_customers = customers;
 			m_oServiceClient = new ServiceClient();
 			_users = users;
-			provider = new EzbobMembershipProvider();
 		}
 
 		[Transactional]
@@ -50,22 +45,28 @@
 			return Json(new { });
 		}
 
-		[Transactional]
 		[HttpPost]
 		[Permission(Name = "EmailConfirmationButton")]
-		public JsonResult ChangeEmail(int id, string email)
-		{
-			var customer = _customers.Get(id);
-			var user = _users.Get(id);
+		public JsonResult ChangeEmail(int id, string email) {
+			string sErrorMessage;
 
-			string newPassword = provider.ChangeEmailAndPassword(user, email);
+			try {
+				StringActionResult sar = m_oServiceClient.Instance.UserChangeEmail(id, email);
+				sErrorMessage = sar.Value;
+			}
+			catch (Exception e) {
+				sErrorMessage = "Failed to change a user email.";
+				ms_oLog.Alert(e, sErrorMessage);
+			} // try
 
-			customer.Name = email;
-			m_oServiceClient.Instance.PasswordChanged(user.Id, newPassword);
-			var address = _confirmation.GenerateLink(customer);
-			m_oServiceClient.Instance.SendEmailVerification(user.Id, customer.Name, address);
+			return Json(new { success = string.IsNullOrWhiteSpace(sErrorMessage), error = sErrorMessage, });
+		} // ChangeEmail
 
-			return Json(new { });
-		}
-	}
-}
+		private readonly IEmailConfirmation _confirmation;
+		private readonly ICustomerRepository _customers;
+		private readonly ServiceClient m_oServiceClient;
+		private readonly IUsersRepository _users;
+
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (EmailVerificationController));
+	} // class EmailVerificationController
+} // namespace

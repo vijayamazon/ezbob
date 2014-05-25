@@ -49,8 +49,11 @@
 
 				Log.Debug("Execute() complete.");
 			}
+			catch (AStrategyException) {
+				throw;
+			} // try
 			catch (Exception e) {
-				throw new StrategyException(this, "Something went terribly wrong during Execute() of " + this.GetType(), e);
+				throw new StrategyAlert(this, "Something went terribly wrong during Execute().", e);
 			} // try
 		} // Execute
 

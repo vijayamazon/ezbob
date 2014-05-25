@@ -170,7 +170,7 @@
 		ActionMetaData PasswordChanged(int customerId, string password);
 
 		[OperationContract]
-		ActionMetaData PasswordRestored(int customerId, string password);
+		ActionMetaData PasswordRestored(int customerId);
 
 		[OperationContract]
 		ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum);
@@ -197,7 +197,7 @@
 		ActionMetaData SendEmailVerification(int customerId, string email, string address);
 
 		[OperationContract]
-		ActionMetaData ThreeInvalidAttempts(int customerId, string password);
+		ActionMetaData ThreeInvalidAttempts(int customerId);
 
 		[OperationContract]
 		ActionMetaData TransferCashFailed(int customerId);
@@ -206,7 +206,7 @@
 		ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail);
 
 		[OperationContract]
-		ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID, string sNewPassword);
+		ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID);
 
 		[OperationContract]
 		ActionMetaData NotifySalesOnNewCustomer(int nCustomerID);
@@ -337,6 +337,34 @@
 		
 		#endregion Quick offer
 
+		#region User Management
+
+		[OperationContract]
+		UserLoginActionResult CustomerSignup(string sEmail, string sPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
+
+		[OperationContract]
+		ActionMetaData UnderwriterSignup(string name, string password, string role);
+
+		[OperationContract]
+		UserLoginActionResult UserLogin(string sEmail, string sPassword, string sRemoteIp);
+
+		[OperationContract]
+		StringActionResult UserResetPassword(string sEmail);
+
+		[OperationContract]
+		StringActionResult UserChangePassword(string sEmail, string sOldPassword, string sNewPassword, bool bForceChangePassword);
+
+		[OperationContract]
+		StringActionResult CustomerChangePassword(string sEmail, string sOldPassword, string sNewPassword);
+
+		[OperationContract]
+		StringActionResult UserUpdateSecurityQuestion(string sEmail, string sPassword, int nQuestionID, string sAnswer);
+
+		[OperationContract]
+		StringActionResult UserChangeEmail(int nUserID, string sNewEmail);
+
+		#endregion User Management
+
 		#region Wizard
 
 		[OperationContract]
@@ -352,9 +380,6 @@
 		IntActionResult GetCustomerStatusRefreshInterval();
 
 		#endregion Wizard
-
-		[OperationContract]
-		ActionMetaData CreateUnderwriter(string name, string password, string role);
 
 		[OperationContract]
 		DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId);

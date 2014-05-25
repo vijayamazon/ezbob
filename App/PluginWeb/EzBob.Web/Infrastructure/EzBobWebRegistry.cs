@@ -33,7 +33,6 @@ namespace EzBob.Web.Infrastructure
 	{
 		public PluginWebRegistry()
 		{
-			For<MembershipProvider>().Use<EzbobMembershipProvider>();
 			For<IWorkplaceContext>().Use<EzBobContext>();
 			For<IEzbobWorkplaceContext>().Use<EzBobContext>();
 			For<ICustomerRepository>().Use<CustomerRepository>();
