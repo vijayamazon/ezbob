@@ -149,11 +149,22 @@ BEGIN
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 		
 	------------------------------------------------------------------------------
+	DECLARE @AddedMpNotFinishedWizard INT = 
+		(SELECT ISNULL(count(DISTINCT m.CustomerId), 0)
+		 FROM Customer c LEFT JOIN MP_CustomerMarketPlace m ON m.CustomerId = c.Id
+		 WHERE c.IsTest = 0 
+		 AND c.WizardStep <> 4 
+		 AND c.CreditResult IS NULL
+		 AND @DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+		 HAVING count(m.Id) > 0
+		)
+
+
 
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Accounts',
-		ISNULL(COUNT(*), 0)
+		ISNULL(COUNT(DISTINCT c.Id) + @AddedMpNotFinishedWizard, 0)
 	FROM
 		Customer c
 	WHERE
@@ -698,7 +709,7 @@ BEGIN
 	------------------------------------------------------------------------------
 	
 	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
-	  	VALUES ('Loans by customer status without CCI mark', 'Customers', 'Loan Amount', 'Balance', '', '', 'total')
+	  	VALUES ('Loans by customer status without CCI mark', 'Customers', 'Loan Amount', 'Principal', '', '', 'total')
 
 	------------------------------------------------------------------------------
 	
@@ -707,7 +718,7 @@ BEGIN
 	 	S.Name,
 		count(1) Customers,
 		sum(L.LoanAmount) LoanAmount,
-		sum(L.Balance) Balance
+		sum(L.Principal) Principal
 	FROM Customer C,
 		 CustomerStatuses S,
 		 Loan L
@@ -722,6 +733,25 @@ BEGIN
 	
 	------------------------------------------------------------------------------
 	
+	INSERT INTO #out (Caption, Number, Amount)
+	SELECT
+	 	'Total money recovered by ezbob',
+		count(DISTINCT C.Id) Customers,
+		sum(T.Amount) LoanAmount
+	FROM Customer C INNER JOIN CustomerStatuses S ON C.CollectionStatus = S.Id
+	LEFT JOIN Loan L ON C.Id = L.CustomerId
+	LEFT JOIN LoanTransaction T ON L.Id = T.LoanId
+	WHERE 
+		C.IsTest = 0 
+		AND 
+		C.CciMark = 0
+		AND 
+		T.Type = @PAYPOINT
+		AND 
+		T.Status = @DONE
+	
+	------------------------------------------------------------------------------
+	
 	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
 		VALUES ('Loans by customer status with CCI mark', 'Customers', 'Loan Amount', 'Balance', '', '', 'total')
 
@@ -732,7 +762,7 @@ BEGIN
 	    S.Name,
 		count(1) Customers,
 		sum(L.LoanAmount) LoanAmount,
-		sum(L.Balance) Balance
+		sum(L.Principal) Principal
 	FROM Customer C,
 		 CustomerStatuses S,
 		 Loan L
@@ -746,6 +776,25 @@ BEGIN
 	ORDER BY sum(L.LoanAmount) DESC	
 	
 	------------------------------------------------------------------------------	
+	
+	INSERT INTO #out (Caption, Number, Amount)
+	SELECT
+	 	'Total money recovered by ezbob',
+		count(DISTINCT C.Id) Customers,
+		sum(T.Amount) LoanAmount
+	FROM Customer C INNER JOIN CustomerStatuses S ON C.CollectionStatus = S.Id
+	LEFT JOIN Loan L ON C.Id = L.CustomerId
+	LEFT JOIN LoanTransaction T ON L.Id = T.LoanId
+	WHERE 
+		C.IsTest = 0 
+		AND 
+		C.CciMark = 1
+		AND 
+		T.Type = @PAYPOINT
+		AND 
+		T.Status = @DONE
+		
+	------------------------------------------------------------------------------		
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
