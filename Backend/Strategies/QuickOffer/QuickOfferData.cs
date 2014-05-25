@@ -73,11 +73,19 @@
 		#region method GetOffer
 
 		public QuickOfferModel GetOffer(bool bSaveOfferToDB, AConnection oDB, StrategyLog oLog) {
+			if (RequestedAmount < Cfg.MinOfferAmount) {
+				oLog.Debug("Requested amount (£{0}) is less than minimal offer amount (£{1}), not offering.", RequestedAmount, Cfg.MinOfferAmount);
+				return null;
+			} // if
 
-			DataTable dt = oDB.ExecuteReader("GetBankBasedApprovalConfigs", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
-			var sr = new SafeReader(results);
-			minLoanAmount = sr["MinLoanAmount"];
+			oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					minLoanAmount = sr["MinLoanAmount"];
+					return ActionResult.SkipAll;
+				},
+				"GetBankBasedApprovalConfigs",
+				CommandSpecies.StoredProcedure
+			);
 
 			decimal? nOffer = Calculate();
 
