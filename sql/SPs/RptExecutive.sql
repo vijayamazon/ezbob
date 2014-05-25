@@ -15,7 +15,9 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	DECLARE @TotalGivenLoanCountClose NUMERIC(18, 2)
+	DECLARE @TotalGivenLoanCountClose INT 
+	DECLARE @TotalGivenLoanCountLive INT
+	
 	DECLARE @TotalGivenLoanValueClose NUMERIC(18, 2)
 	DECLARE @TotalRepaidPrincipalClose NUMERIC(18, 2)
 
@@ -632,6 +634,18 @@ BEGIN
 		t.Type = @PACNET AND t.Status = @DONE
 		AND
 		t.PostDate < @DateEnd
+	
+	------------------------------------------------------------------------------
+	
+	SELECT 
+		@TotalGivenLoanCountLive = ISNULL(COUNT(*), 0) 
+	FROM 
+		Customer c JOIN Loan l ON c.Id = l.CustomerId 
+	WHERE 
+		c.IsTest = 0 
+		AND  
+		l.Status<>'PaidOff'
+		AND l.[Date] < @DateEnd
 
 	------------------------------------------------------------------------------
 
@@ -678,7 +692,7 @@ BEGIN
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Outstanding balance',
-		@TotalGivenLoanCountClose,
+		@TotalGivenLoanCountLive,
 		@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose
 
 	------------------------------------------------------------------------------
