@@ -44,7 +44,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
-		VALUES ('Visitors', 'Number', 'Amount', 'Principal', 'Interest', 'Fees', 'total')
+		VALUES ('Visitors', 'Number', '', '', '', '', 'total')
 
 	------------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
-		VALUES ('Funnel', 'Number', 'Amount', 'Principal', 'Interest', 'Fees', 'total')
+		VALUES ('Funnel', 'Number', '', '', '', '', 'total')
 
 	------------------------------------------------------------------------------
 
@@ -120,14 +120,45 @@ BEGIN
 
 	INSERT INTO #out (Caption, Number)
 	SELECT
-		'Entered data source',
-		ISNULL(COUNT(DISTINCT m.CustomerId), 0)
+		'Person details',
+		ISNULL(COUNT(*), 0)
 	FROM
-		MP_CustomerMarketPlace m
-		INNER JOIN Customer c ON m.CustomerId = c.Id
+		Customer c
 	WHERE
 		c.IsTest = 0
 		AND
+		c.WizardStep IN (4,5,6)
+		AND
+		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+		
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out (Caption, Number)
+	SELECT
+		'Company details',
+		ISNULL(COUNT(*), 0)
+	FROM
+		Customer c
+	WHERE
+		c.IsTest = 0
+		AND
+		c.WizardStep IN (4,6)
+		AND
+		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+		
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out (Caption, Number)
+	SELECT
+		'Accounts',
+		ISNULL(COUNT(*), 0)
+	FROM
+		Customer c
+	WHERE
+		c.IsTest = 0
+		AND
+		c.WizardStep = 4
+		AND 
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
 	------------------------------------------------------------------------------
@@ -139,23 +170,7 @@ BEGIN
 	FROM
 		Customer c
 	WHERE
-		c.WizardStep >= 3
-		AND
-		c.IsTest = 0
-		AND
-		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
-
-	------------------------------------------------------------------------------
-
-	INSERT INTO #out (Caption, Number)
-	SELECT
-		'Approved',
-		ISNULL(COUNT(DISTINCT r.IdCustomer), 0)
-	FROM
-		Customer c
-		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
-	WHERE
-		r.UnderwriterDecision = 'Approved'
+		c.CreditResult IS NOT NULL
 		AND
 		c.IsTest = 0
 		AND
@@ -183,7 +198,39 @@ BEGIN
 		c.IsTest = 0
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+	
+	------------------------------------------------------------------------------
 
+	INSERT INTO #out (Caption, Number)
+	SELECT
+		'Approved',
+		ISNULL(COUNT(DISTINCT r.IdCustomer), 0)
+	FROM
+		Customer c
+		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
+	WHERE
+		r.UnderwriterDecision = 'Approved'
+		AND
+		c.IsTest = 0
+		AND
+		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out (Caption, Number)
+	SELECT
+		'Loans',
+		ISNULL(COUNT(DISTINCT l.CustomerId), 0)
+	FROM
+		Customer c
+		INNER JOIN Loan l ON c.Id = l.CustomerId
+	WHERE
+		c.IsTest = 0
+		AND
+		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+		AND 
+		@DateStart <= l.[Date] AND l.[Date] < @DateEnd
+		
 	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number)
