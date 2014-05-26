@@ -189,58 +189,6 @@ body .agreement-text {
 }
 
 
-.grey-table {
-    color: #565656;
-}
-
-.grey-table th, .grey-table td, .grey-table tr, .grey-table{
-    border-bottom: solid 4px white;
-    border-top: solid 4px white;
-}
-
-.grey-table thead tr, .grey-table thead {
-    background-color: white;
-    border-top: none transparent;
-}
-
-.grey-table tbody tr {
-    background-color: #f7f7f7;
-    position: relative;
-}
-
-.grey-table tbody tr:first-child td.last {
-    -webkit-border-top-right-radius: 8px;
-    -moz-border-radius-topright: 8px;
-    border-top-right-radius: 8px;
-}
-
-.grey-table tbody tr:first-child td.first {
-    -webkit-border-top-left-radius: 8px;
-    -moz-border-radius-topleft: 8px;
-    border-top-left-radius: 8px;
-}
-
-.grey-table tbody tr.last td.first{
-    -webkit-border-bottom-left-radius: 8px;
-    -moz-border-radius-bottomleft: 8px;
-    border-bottom-left-radius: 8px;
-}
-
-.grey-table tbody tr.last td.last {
-    -webkit-border-bottom-right-radius: 8px;
-    -moz-border-radius-bottomright: 8px;
-    border-bottom-right-radius: 8px;    
-}
-
-
-.grey-table tbody tr:hover {
-    /*background-color: red!important;*/
-}
-
-.grey-table th {
-    padding-bottom: 3px;
-}
-
 .cart-logo {
     float: left;
     width: 94px;
@@ -425,11 +373,8 @@ body .statusActive {
     color: #728c2a!important;
 }
 
-body  .grey-table .statusClosed {
-}
-
-body .grey-table .statusLate {
-    color: red;
+body .statusLate {
+    color: red!important;
 }
 
 .personal-info-readonly input[type="text"]{
@@ -446,14 +391,10 @@ body .grey-table .statusLate {
     border-bottom: none;
 }
 
-.grey-table td {
-    vertical-align: middle;
-}
 
 .grey-table .Live {
     color: #8BAC2B;
     font-weight: bold;
-    text-transform:uppercase;
 }
 
 .add-stores-tip {

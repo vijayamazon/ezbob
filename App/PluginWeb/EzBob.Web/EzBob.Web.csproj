@@ -623,6 +623,7 @@
     <Content Include="Content\css\lib\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\css\lib\fonts\FontAwesome.otf" />
     <Content Include="Areas\Underwriter\Views\Reports\Report.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\PayPointCallback.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

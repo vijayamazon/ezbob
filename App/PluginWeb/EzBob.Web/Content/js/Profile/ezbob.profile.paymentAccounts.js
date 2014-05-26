@@ -8,10 +8,19 @@ EzBob.PaymentAccounts = Backbone.Collection.extend({
 });
 
 EzBob.Profile.PaymentAccountsView = Backbone.View.extend({
-    
     initialize: function () {
         this.template = _.template($('#payment-accounts-template').html());
         this.model.on("change", this.render, this);
+        var that = this;
+        window.DebitCardAdded = function(result) {
+            if (result && result.error) {
+                EzBob.App.trigger('error', result.error);
+            } else {
+                EzBob.App.trigger('info', 'Debit card was added successfully.');
+                $.colorbox.close();
+                that.model.fetch();
+            }
+        };
     },
     render: function () {
         var accounts = new EzBob.PaymentAccounts();
@@ -30,7 +39,8 @@ EzBob.Profile.PaymentAccountsView = Backbone.View.extend({
     },
     
     events: {
-        "click .setDefaultCard": "setDefaultCard"
+        "click .setDefaultCard": "setDefaultCard",
+        "click .addDebitCardHelp": "addDebitCardHelp"
     },
     
     setDefaultCard: function(e) {
@@ -51,4 +61,8 @@ EzBob.Profile.PaymentAccountsView = Backbone.View.extend({
             BlockUi("off");
         });
     },
+    
+    addDebitCardHelp: function() {
+        this.$el.find('.addDebitCardHelp').colorbox({ href: "#add_debit_card_help", inline: true, open: true });
+    }
 });

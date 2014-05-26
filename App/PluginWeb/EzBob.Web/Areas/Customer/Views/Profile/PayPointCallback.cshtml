@@ -1,0 +1,16 @@
+﻿@using Newtonsoft.Json
+@model dynamic
+
+@{
+}
+<h2>Trying to add debit card. Please wait a minute.</h2>
+
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            window.opener.DebitCardAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));
+            self.close();
+        });
+    </script>
+}

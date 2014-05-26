@@ -33,14 +33,14 @@
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ISession _session;
 		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
-
+		private readonly IPayPointFacade _payPointFacade;
 		public ProfileController(
 			CustomerModelBuilder customerModelBuilder,
 			IEzbobWorkplaceContext context,
 			CashRequestBuilder crBuilder,
 			ISession session,
-			IConfigurationVariablesRepository configurationVariablesRepository
-		)
+			IConfigurationVariablesRepository configurationVariablesRepository,
+			IPayPointFacade payPointFacade)
 		{
 			_customerModelBuilder = customerModelBuilder;
 			_context = context;
@@ -48,6 +48,7 @@
 			_crBuilder = crBuilder;
 			_session = session;
 			_configurationVariablesRepository = configurationVariablesRepository;
+			_payPointFacade = payPointFacade;
 		} // constructor
 
 		//----------------------------------------------------------------------
@@ -272,6 +273,55 @@
 			customer.CreditCardNo = card.CardNo;
 
 			return Json(new {});
+		}
+
+		public RedirectResult AddPayPoint()
+		{
+			var oCustomer = _context.Customer;
+			int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
+			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
+			var callback = Url.Action("PayPointCallback", "Profile", new { Area = "Customer", customerId = oCustomer.Id, cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate) }, "https");
+			var url = _payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
+
+			return Redirect(url);
+		}
+
+		[Transactional]
+		[HttpGet]
+		public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string customer, string expiry, int customerId)
+		{
+			if (test_status == "true")
+			{
+				// Use last 4 random digits as card number (to enable useful tests)
+				string random4Digits = string.Format("{0}{1}", DateTime.UtcNow.Second, DateTime.UtcNow.Millisecond);
+				if (random4Digits.Length > 4)
+				{
+					random4Digits = random4Digits.Substring(random4Digits.Length - 4);
+				}
+				card_no = random4Digits;
+				expiry = string.Format("{0}{1}", "01", DateTime.Now.AddYears(2).Year.ToString().Substring(2, 2));
+			}
+			if (!valid || code != "A")
+			{
+				TempData["code"] = code;
+				TempData["message"] = message;
+				return View(new { error = "Failed to add debit card"});
+			}
+
+			if (!_payPointFacade.CheckHash(hash, Request.Url))
+			{
+				return View(new { error = "Failed to add debit card" });
+			}
+
+			var cust = _context.Customer;
+			var card = cust.TryAddPayPointCard(trans_id, card_no, expiry, cust.PersonalInfo.Fullname);
+
+			if (string.IsNullOrEmpty(cust.PayPointTransactionId))
+			{
+				SetDefaultCard(card.Id);
+			}
+
+			return View(new {success = true});
 		}
 	}
 }
