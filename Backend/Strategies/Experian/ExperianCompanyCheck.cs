@@ -1,8 +1,11 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Data;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
 	using ExperianLib.Ebusiness;
 	using Ezbob.Database;
+	using Ezbob.ExperianParser;
 	using Ezbob.Logger;
 
 	public class ExperianCompanyCheck : AStrategy {
@@ -15,6 +18,7 @@
 			m_nCustomerID = nCustomerID;
 			m_bForceCheck = bForceCheck;
 			m_bFoundCompany = false;
+			experianUtils = new ExperianUtils(oLog);
 
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
@@ -119,6 +123,51 @@
 
 			Log.Debug("Updating customer analytics for customer {0} and company '{1}'...", m_nCustomerID, m_sExperianRefNum);
 
+			DataTable dt = DB.ExecuteReader("GetPersonalInfoForExperianCompanyCheck",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", m_nCustomerID));
+
+			var sr = new SafeReader(dt.Rows[0]);
+			string experianRefNum = sr["ExperianRefNum"];
+			string experianCompanyName = sr["ExperianCompanyName"];
+			string typeOfBusinessStr = sr["typeOfBusiness"];
+
+
+			TypeOfBusinessReduced typeOfBusiness = ((TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), typeOfBusinessStr)).Reduce();
+			ExperianParserOutput output = ExperianParserFacade.Invoke(
+				experianRefNum,
+				experianCompanyName,
+				ExperianParserFacade.Target.Company,
+				typeOfBusiness
+				);
+
+			decimal tangibleEquity = 0;
+			decimal adjustedProfit = 0;
+			if (output.Dataset.ContainsKey("Limited Company Financial Details IFRS & UK GAAP") &&
+			    output.Dataset["Limited Company Financial Details IFRS & UK GAAP"].Data != null &&
+			    output.Dataset["Limited Company Financial Details IFRS & UK GAAP"].Data.Count != 0)
+			{
+				ParsedDataItem parsedDataItem = output.Dataset["Limited Company Financial Details IFRS & UK GAAP"].Data[0];
+				decimal totalShareFund = GetDecimalValueFromDataItem(parsedDataItem, "TotalShareFund");
+				decimal inTngblAssets = GetDecimalValueFromDataItem(parsedDataItem, "InTngblAssets");
+				decimal debtorsDirLoans = GetDecimalValueFromDataItem(parsedDataItem, "DebtorsDirLoans");
+				decimal credDirLoans = GetDecimalValueFromDataItem(parsedDataItem, "CredDirLoans");
+				decimal onClDirLoans = GetDecimalValueFromDataItem(parsedDataItem, "OnClDirLoans");
+				
+				tangibleEquity =  totalShareFund - inTngblAssets -debtorsDirLoans + credDirLoans + onClDirLoans;
+
+				if (output.Dataset["Limited Company Financial Details IFRS & UK GAAP"].Data.Count != 1)
+				{
+					ParsedDataItem parsedDataItemPrev = output.Dataset["Limited Company Financial Details IFRS & UK GAAP"].Data[1];
+
+					decimal retainedEarnings = GetDecimalValueFromDataItem(parsedDataItem, "RetainedEarnings");
+					decimal retainedEarningsPrev = GetDecimalValueFromDataItem(parsedDataItemPrev, "RetainedEarnings");
+					decimal fixedAssetsPrev = GetDecimalValueFromDataItem(parsedDataItemPrev, "TngblAssets");
+
+					adjustedProfit = retainedEarnings - retainedEarningsPrev + fixedAssetsPrev / 5;
+				}
+			}
+
 			DB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateCompany",
 				CommandSpecies.StoredProcedure,
@@ -126,10 +175,29 @@
 				new QueryParameter("Score", m_oExperianData.BureauScore),
 				new QueryParameter("SuggestedAmount", m_oExperianData.CreditLimit),
 				new QueryParameter("IncorporationDate", m_oExperianData.IncorporationDate),
+				new QueryParameter("TangibleEquity", tangibleEquity),
+				new QueryParameter("AdjustedProfit", adjustedProfit),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow));
 
 			Log.Debug("Updating customer analytics for customer {0} and company '{1}' complete.", m_nCustomerID, m_sExperianRefNum);
 		} // UpdateAnalytics
+
+		private decimal GetDecimalValueFromDataItem(ParsedDataItem parsedDataItem, string requiredValueName)
+		{
+			string strValue = parsedDataItem.Values[requiredValueName];
+			if (strValue.Length > 0)
+			{
+				strValue = strValue.Substring(1); // Remove pound sign
+			}
+
+			decimal result;
+			if (!decimal.TryParse(strValue, out result))
+			{
+				return 0;
+			}
+
+			return result;
+		}
 
 		#endregion method UpdateAnalytics
 		
@@ -157,6 +225,7 @@
 		private bool m_bIsLimited;
 		private string m_sExperianRefNum;
 		private BusinessReturnData m_oExperianData;
+		private readonly ExperianUtils experianUtils;
 
 		#endregion fields
 

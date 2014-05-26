@@ -33,11 +33,11 @@
 			ms_oParsingCfg[Target.Director, TypeOfBusinessReduced.Personal] = Variables.DirectorInfoNonLimitedParserConfiguration;
 		} // static constructor
 
-		private static readonly SortedTable<Target, TypeOfBusinessReduced, EZBob.DatabaseLib.Variables> ms_oParsingCfg;
+		private static readonly SortedTable<Target, TypeOfBusinessReduced, Variables> ms_oParsingCfg;
 		private static readonly object ms_oParsingCfgLock;
 
 		public static ExperianParserOutput Invoke(string sCompanyRefNum, string sCompanyName, Target nTarget, TypeOfBusinessReduced nTypeOfBusiness) {
-			var oLog = LogManager.GetLogger(typeof(Customer));
+			var oLog = LogManager.GetLogger(typeof(ExperianParserFacade));
 
 			if (string.IsNullOrWhiteSpace(sCompanyRefNum)) {
 				string sErrMsg = string.Format("Company ref num not specified.");
@@ -64,7 +64,7 @@
 				nVar = ms_oParsingCfg[nTarget, nTypeOfBusiness];
 			} // lock
 
-			var parser = new Ezbob.ExperianParser.Parser(
+			var parser = new Parser(
 				DBConfigurationValues.Instance[nVar],
 				new SafeILog(oLog)
 			);

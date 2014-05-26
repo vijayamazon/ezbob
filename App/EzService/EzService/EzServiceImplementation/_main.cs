@@ -7,7 +7,6 @@
 	using System.ServiceModel;
 	using System.Threading;
 	using EzBob.Backend.Strategies;
-	using EzBob.Backend.Strategies.Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
