@@ -30,7 +30,5 @@ BEGIN
 	SET @EndSession = CASE @Success WHEN 1 THEN NULL ELSE @Now END
 
 	EXECUTE CreateCustomerSession @UserID, @Now, @Ip, @Success, @ErrorMessage, @EndSession, @SessionID OUTPUT
-
-	SELECT @SessionID AS SessionID
 END
 GO

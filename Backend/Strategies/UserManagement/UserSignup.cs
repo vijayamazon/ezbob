@@ -81,9 +81,12 @@
 
 				int nUserID = 0;
 
-				m_oSp.ForEachResult<CreateWebUser.Result>(oRow => {
-					nUserID = oRow.UserID;
-					SessionID = oRow.SessionID;
+				m_oSp.ForEachRowSafe((sr, bRowsetStart) => {
+					if (!sr.ContainsField("UserID"))
+						return ActionResult.Continue;
+
+					nUserID = sr["UserID"];
+					SessionID = sr["SessionID"];
 					return ActionResult.SkipAll;
 				});
 
@@ -169,15 +172,11 @@
 
 			private string m_sIp;
 
+			[UsedImplicitly]
 			public DateTime Now {
 				get { return DateTime.UtcNow; }
 				set { }
 			} // Now
-
-			public class Result : AResultRow {
-				public int UserID { get; set; }
-				public int SessionID { get; set; }
-			} // class Result
 		} // class CreateWebUser
 
 		#endregion class CreateWebUser

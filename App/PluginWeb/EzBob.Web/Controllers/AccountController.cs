@@ -167,7 +167,15 @@ namespace EzBob.Web.Controllers {
 				ms_oLog.Warn(e, "Failed to check whether '{0}' is a broker login, continuing as a customer.", model.UserName);
 			} // try
 
-			var user = m_oUsers.GetUserByLogin(model.UserName);
+			User user;
+
+			try {
+				user = m_oUsers.GetUserByLogin(model.UserName);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
+				user = null;
+			} // try
 
 			if (user == null) {
 				ms_oLog.Warn(
@@ -203,7 +211,15 @@ namespace EzBob.Web.Controllers {
 
 			string errorMessage = null;
 
-			var customer = m_oCustomers.Get(user.Id);
+			Customer customer = null;
+
+			try {
+				customer = m_oCustomers.Get(user.Id);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to retrieve a customer by id {0}.", user.Id);
+				return Json(new { success = false, errorMessage = "User not found or invalid password." }, JsonRequestBehavior.AllowGet);
+			} // try
 
 			if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
 				errorMessage = @"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> customercare@ezbob.com";

@@ -22,47 +22,51 @@ BEGIN
 	DECLARE @SessionID INT = 0
 	DECLARE @rc INT
 
-	IF EXISTS (SELECT u.UserId FROM Security_User u WHERE LOWER(u.UserName) = LOWER(@Email) AND u.IsDeleted != 0)
+	BEGIN TRANSACTION
+
+	IF EXISTS (SELECT u.UserId FROM Security_User u WHERE LOWER(u.UserName) = LOWER(@Email))
 	BEGIN
 		SET @UserID = -1
 	END
 	ELSE BEGIN
-		BEGIN TRAN
+		BEGIN TRY
+			INSERT INTO Security_User (
+				PassSetTime, EzPassword, UserName, FullName, Email, BranchId,
+				SecurityQuestion1ID, SecurityAnswer1		
+			) VALUES (
+				@Now, @EzPassword, @Email, @Email, @Email, @BranchID,
+				@SecurityQuestionID, @SecurityAnswer
+			)
 
-		INSERT INTO Security_User (
-			PassSetTime, EzPassword, UserName, FullName, Email, BranchId,
-			SecurityQuestion1ID, SecurityAnswer1		
-		) VALUES (
-			@Now, @EzPassword, @Email, @Email, @Email, @BranchID,
-			@SecurityQuestionID, @SecurityAnswer
-		)
-
-		SET @UserID = SCOPE_IDENTITY()
-
-		INSERT INTO Security_UserRoleRelation (UserId, RoleId)
-		SELECT
-			@UserID, r.RoleId
-		FROM
-			Security_Role r
-		WHERE
-			r.Name = @RoleName
-
-		SET @rc = @@ROWCOUNT
-
-		IF @rc IS NULL OR @rc < 1
-		BEGIN
-			ROLLBACK TRAN
-			SET @UserID = -2
-		END
+			SET @UserID = SCOPE_IDENTITY()
+		END TRY
+		BEGIN CATCH
+			SET @UserID = -1
+		END CATCH
 
 		IF @UserID > 0
-			EXECUTE CreateCustomerSession @UserID, @Now, @Ip, 1, 'Registration', NULL, @SessionID OUTPUT
+		BEGIN
+			INSERT INTO Security_UserRoleRelation (UserId, RoleId)
+			SELECT
+				@UserID, r.RoleId
+			FROM
+				Security_Role r
+			WHERE
+				r.Name = @RoleName
 
-		IF @SessionID > 0
-			COMMIT TRAN
-		ELSE
-			ROLLBACK TRAN
+			SET @rc = @@ROWCOUNT
+
+			IF @rc IS NULL OR @rc < 1
+				SET @UserID = -2
+			ELSE
+				EXECUTE CreateCustomerSession @UserID, @Now, @Ip, 1, 'Registration', NULL, @SessionID OUTPUT
+		END
 	END
+
+	IF @SessionID > 0
+		COMMIT TRANSACTION
+	ELSE
+		ROLLBACK TRANSACTION
 
 	SELECT
 		@UserID AS UserID,

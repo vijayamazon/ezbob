@@ -275,7 +275,7 @@
 					sFieldName = fna.Name;
 			} // if
 
-			oPropertyInfo.SetValue(oInstance, this[sFieldName].ToType(oPropertyInfo.PropertyType), null);
+			oPropertyInfo.SetValue(oInstance, this[sFieldName].ToType(oPropertyInfo.PropertyType));
 		} // FillProperty
 
 		#endregion method FillProperty
