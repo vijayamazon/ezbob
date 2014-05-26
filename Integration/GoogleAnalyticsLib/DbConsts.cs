@@ -9,19 +9,21 @@
 		public const string IsaspValue = "@Value";
 		public const string IsaspSource = "@Source";
 
-		public const string UkVisits = "UKVisits";
-		public const string UkVisitors = "UKVisitors";
+		public const string UkUsers = "UKUsers";
+		public const string UkNewUsers = "UKNewUsers";
+		public const string UkReturningUsers = "UKReturningUsers";
 
-		public const string WorldWideVisits = "WorldWideVisits";
-		public const string WorldWideVisitors = "WorldWideVisitors";
+		public const string WorldWideUsers = "WorldWideUsers";
+		public const string WorldWideNewUsers = "WorldWideNewUsers";
+		public const string WorldWideReturningUsers = "WorldWideReturningUsers";
 
-		public const string SourceVisits = "SourceVisits";
-		public const string SourceVisitors = "SourceVisitors";
+		public const string SourceNewUsers = "SourceUsers";
+		public const string SourceUsers = "SourceNewUsers";
 
 		public const string Page = "Page";
 
-		public const string NewVisitors = "NewVisitors";
-		public const string ReturningVisitors = "ReturningVisitors";
+		
+		
 	} // class DbConsts
 
 	#endregion class DbConsts

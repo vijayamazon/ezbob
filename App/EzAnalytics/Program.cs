@@ -13,13 +13,13 @@ namespace EzAnalyticsConsoleClient {
 		#region method Main
 
 		static void Main(string[] args) {
-			var oLog = new LegacyLog();
-			var app = new GoogleAnalytics(oLog);
-			Environment = new EzEnv(oLog);
+			Log = new LegacyLog();
+			var app = new GoogleAnalytics(Log);
+			Environment = new EzEnv(Log);
 			string thumb = System.Configuration.ConfigurationManager.AppSettings["gaCertThumb"];
 			
 			if (Environment.Name == Name.Dev) {
-				Log = new ConsoleLog(oLog);
+				Log = new ConsoleLog();
 
 				DateTime oDate = DateTime.Today;
 
@@ -39,7 +39,17 @@ namespace EzAnalyticsConsoleClient {
 			else {
 				try {
 					if (app.Init(DateTime.Today, thumb))
-						Run(app);
+					{
+						if ((args.Length > 1) && (args[0] == "--backfill"))
+						{
+							RunBackfill(app, args[1], args[2]);
+						}
+						else
+						{
+							Run(app);
+						}
+						
+					}
 
 					Done();
 				}
@@ -48,18 +58,24 @@ namespace EzAnalyticsConsoleClient {
 					app.Log.Error("\nPress enter to exit");
 				} // try
 			} // if dev/non-dev env
-		} // Main
+		}
+
+		private static void RunBackfill(GoogleAnalytics ga, string dateFrom, string dateTo)
+		{
+			DateTime from;
+			DateTime to;
+			DateTime.TryParseExact(dateFrom, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out from);
+			DateTime.TryParseExact(dateTo, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out to);
+			while (from < to)
+			{
+				ga.SetDate(from);
+				m_oReportDate = from;
+				Run(ga);
+				from = from.AddDays(1);
+			}
+		} 
 
 		#endregion method Main
-
-		#region constructor
-
-		private Program(ASafeLog oLog = null) {
-			Log = new SafeLog(oLog);
-			Environment = new EzEnv(Log);
-		} // constructor
-
-		#endregion constructor
 
 		#region method Run
 

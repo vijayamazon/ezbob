@@ -1,5 +1,4 @@
 ﻿namespace GoogleAnalyticsLib  {
-	using System.IO;
 	using System.Linq;
 	using System.Security.Cryptography.X509Certificates;
 	using Ezbob.Logger;
@@ -51,29 +50,40 @@
 		} // Init
 
 		#endregion method Init
+		
+		public void SetDate(DateTime date)
+		{
+			m_oReportDate = date;
+			Log.Debug("Processing analytics for {0}", m_oReportDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
+		}
 
 		#region method ProcessByCountry
 
 		public void ProcessByCountry(SortedDictionary<string, CountryData> oRawByCountry, SortedDictionary<string, int> oRes) {
-			int nAllVisitors = oRawByCountry.Select(x => x.Value.Visitors).Sum();
+			int nAllUsers = oRawByCountry.Select(x => x.Value.Users).Sum();
 
-			int nNewVisitors = oRawByCountry.Select(x => x.Value.New).Sum();
+			int nNewUsers = oRawByCountry.Select(x => x.Value.NewUsers).Sum();
 
-			int nReturningVisitors = oRawByCountry.Select(x => x.Value.Returning).Sum();
+			int nReturningUsers = oRawByCountry.Select(x => x.Value.Returning).Sum();
 
-			Log.Debug("Total unique visitors: {0}", nAllVisitors);
-			Log.Debug("Total new visitors: {0}", nNewVisitors);
-			Log.Debug("Total returning visitors: {0}", nReturningVisitors);
+			Log.Debug("Total unique Users: {0}", nAllUsers);
+			Log.Debug("Total new Users: {0}", nNewUsers);
+			Log.Debug("Total returning Users: {0}", nReturningUsers);
 
-			oRes[DbConsts.UkVisitors] = Visitors(oRawByCountry, GoogleDataFetcher.UK);
+			oRes[DbConsts.UkUsers] = Users(oRawByCountry, GoogleDataFetcher.UK);
+			oRes[DbConsts.UkNewUsers] = NewUsers(oRawByCountry, GoogleDataFetcher.UK);
+			oRes[DbConsts.UkReturningUsers] = Users(oRawByCountry, GoogleDataFetcher.UK) - NewUsers(oRawByCountry, GoogleDataFetcher.UK);
 
-			oRes[DbConsts.WorldWideVisitors] = nAllVisitors -
-				Visitors(oRawByCountry, GoogleDataFetcher.IL) -
-				Visitors(oRawByCountry, GoogleDataFetcher.UA);
+			oRes[DbConsts.WorldWideUsers] = nAllUsers -
+				Users(oRawByCountry, GoogleDataFetcher.IL) -
+				Users(oRawByCountry, GoogleDataFetcher.UA);
 
-			oRes[DbConsts.NewVisitors] = nNewVisitors;
+			oRes[DbConsts.WorldWideNewUsers] = nAllUsers -
+				NewUsers(oRawByCountry, GoogleDataFetcher.IL) -
+				NewUsers(oRawByCountry, GoogleDataFetcher.UA);
 
-			oRes[DbConsts.ReturningVisitors] = nReturningVisitors;
+			oRes[DbConsts.WorldWideReturningUsers] = nReturningUsers;
+
 		} // ProcessByCountry
 
 		#endregion method ProcessByCountry
@@ -87,17 +97,29 @@
 
 		#endregion method ProcessByPage
 
-		#region method Visitors
+		#region method Users
 
-		private int Visitors(SortedDictionary<string, CountryData> oRawStats, string sCountry) {
+		private int Users(SortedDictionary<string, CountryData> oRawStats, string sCountry) {
 			if (oRawStats.ContainsKey(sCountry))
-				return oRawStats[sCountry].Visitors;
+				return oRawStats[sCountry].Users;
 
 			return 0;
-		} // Visitors
+		} // Users
 
-		#endregion method Visitors
-		
+		#endregion method Users
+
+		#region method NewUsers
+
+		private int NewUsers(SortedDictionary<string, CountryData> oRawStats, string sCountry)
+		{
+			if (oRawStats.ContainsKey(sCountry))
+				return oRawStats[sCountry].NewUsers;
+
+			return 0;
+		} // NewUsers
+
+		#endregion method NewUsers
+
 		#region method FetchByCountry
 
 		public SortedDictionary<string, CountryData> FetchByCountry(DateTime startDate, DateTime endDate) {
@@ -108,7 +130,7 @@
 				startDate,
 				endDate, 
 				new GoogleReportDimensions[] { GoogleReportDimensions.country, },
-				new GoogleReportMetrics[] { GoogleReportMetrics.visitors, GoogleReportMetrics.newVisits },
+				new GoogleReportMetrics[] { GoogleReportMetrics.users, GoogleReportMetrics.newUsers },
 				null
 				/*GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==ezbob.com"*/,
 				Log
@@ -120,13 +142,13 @@
 
 			foreach (GoogleDataItem oItem in oFetchResult) {
 				string sCountry = oItem[GoogleReportDimensions.country];
-				int nVisitors = oItem[GoogleReportMetrics.visitors];
-				int nNewVisitors = oItem[GoogleReportMetrics.newVisits];
+				int nUsers = oItem[GoogleReportMetrics.users];
+				int nNewUsers = oItem[GoogleReportMetrics.newUsers];
 
 				if (oByCountry.ContainsKey(sCountry))
-					oByCountry[sCountry].Add(nVisitors, nNewVisitors);
+					oByCountry[sCountry].Add(nUsers, nNewUsers);
 				else
-					oByCountry[sCountry] = new CountryData(nVisitors, nNewVisitors);
+					oByCountry[sCountry] = new CountryData(nUsers, nNewUsers);
 			} // for each item
 
 			Log.Debug("Fetched by country - begin");
@@ -153,7 +175,7 @@
 				m_oReportDate,
 				m_oReportDate, 
 				new GoogleReportDimensions[] { GoogleReportDimensions.pagePath, },
-				new GoogleReportMetrics[] { GoogleReportMetrics.visitors },
+				new GoogleReportMetrics[] { GoogleReportMetrics.users },
 				null
 				/*GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==ezbob.com"*/,
 				Log
@@ -171,12 +193,12 @@
 				if (nPageID == PageID.Other)
 					continue;
 
-				int nVisitors = oItem[GoogleReportMetrics.visitors];
+				int nUsers = oItem[GoogleReportMetrics.users];
 
 				if (oByPage.ContainsKey(nPageID))
-					oByPage[nPageID] += nVisitors;
+					oByPage[nPageID] += nUsers;
 				else
-					oByPage[nPageID] = nVisitors;
+					oByPage[nPageID] = nUsers;
 			} // for each item
 
 			Log.Debug("By page - begin");
@@ -204,7 +226,7 @@
 				m_oReportDate,
 				m_oReportDate,
 				new GoogleReportDimensions[] { GoogleReportDimensions.sourceMedium, GoogleReportDimensions.country, },
-				new GoogleReportMetrics[] { GoogleReportMetrics.visitors, GoogleReportMetrics.newVisits },
+				new GoogleReportMetrics[] { GoogleReportMetrics.users, GoogleReportMetrics.newUsers },
 				null
 				/*GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==ezbob.com"*/, 
 				Log
@@ -222,24 +244,24 @@
 
 				string source = oItem[GoogleReportDimensions.sourceMedium];
 
-				int nVisitors = oItem[GoogleReportMetrics.visitors];
+				int nUsers = oItem[GoogleReportMetrics.users];
 
-				int nNewVisits = oItem[GoogleReportMetrics.newVisits];
+				int nNewUsers = oItem[GoogleReportMetrics.newUsers];
 
 				model.Add(new StatsModel
 					{
-						Code = DbConsts.SourceVisitors,
+						Code = DbConsts.SourceUsers,
 						Source = source,
-						Value = nVisitors
+						Value = nUsers
 					});
 				model.Add(new StatsModel
 					{
-						Code = DbConsts.SourceVisits,
+						Code = DbConsts.SourceNewUsers,
 						Source = source,
-						Value = nNewVisits
+						Value = nNewUsers
 					});
 					
-				Log.Debug("source: {0}, visitors: {1}, new visits: {2}", source, nVisitors, nNewVisits);
+				Log.Debug("source: {0}, Users: {1}, new Users: {2}", source, nUsers, nNewUsers);
 			} // for each item
 
 			Log.Debug("Fetching by source complete.");

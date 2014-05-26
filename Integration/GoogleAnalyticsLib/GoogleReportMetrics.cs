@@ -4,8 +4,9 @@
 	#region GoogleReportMetrics
 
 	enum GoogleReportMetrics {
-		visitors,
-		newVisits
+		users,
+		newUsers,
+		sessions
 	} // enum GoogleReportMetrics
 
 	#endregion GoogleReportMetrics

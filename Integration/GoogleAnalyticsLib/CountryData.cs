@@ -7,37 +7,38 @@
 
 		#region constructor
 
-		public CountryData(int nVisitors, int nNew) {
-			Visitors = nVisitors;
-			New = nNew;
+		public CountryData(int nUsers, int nNewUsers) {
+			Users = nUsers;
+			NewUsers = nNewUsers;
 		} // constructor
 
 		#endregion constructor
 
 		#region method Add
 
-		public void Add(int nVisitors, int nNew) {
-			Visitors += nVisitors;
-			New += nNew;
+		public void Add(int nUsers, int nNewUsers)
+		{
+			Users += nUsers;
+			NewUsers += nNewUsers;
 		} // Add
 
 		#endregion method Add
 
-		#region property Visitors
+		#region property Users
 
-		public int Visitors { get; private set; }
+		public int Users { get; private set; }
 
-		#endregion property Visitors
+		#endregion property Users
 
-		#region property New
+		#region property NewUsers
 
-		public int New { get; private set; }
+		public int NewUsers { get; private set; }
 
-		#endregion property New
+		#endregion property NewUsers
 
 		#region property Returning
 
-		public int Returning { get { return Visitors - New; } }
+		public int Returning { get { return Users - NewUsers; } }
 
 		#endregion property Returning
 
@@ -46,8 +47,8 @@
 		public override string ToString() {
 			return string.Format(
 				"total: {0}, new: {1}, returning: {2}",
-				Visitors,
-				New,
+				Users,
+				NewUsers,
 				Returning
 			);
 		} // ToString
