@@ -9,34 +9,18 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT 
-		CustomerId,
-		l.LoanAmount,
-		C.ReferenceSource,
-		C.IsOffline,
-		datepart(mm,C.GreetingMailSentDate) AS MonthPart,
-		datepart(yy,C.GreetingMailSentDate) AS YearPart,
-		C.GoogleCookie,L.[Date] 
-	FROM 
-		Loan L,
-		Customer C 
+	SELECT
+		L.customerId AS CustomerId,
+		L.loanAmount, 
+		CASE WHEN BrokerID IS NULL THEN C.ReferenceSource ELSE 'Broker' END AS SourceRef,
+		C.GoogleCookie,
+		datepart(mm,C.GreetingMailSentDate) AS MonthPart
+	FROM Loan L,Customer C 
 	WHERE 
 		C.IsTest = 0 AND 
 		C.Id = L.CustomerId AND 
 		L.[Date] > @DateStart AND 
-		L.[Date] < @DateEnd AND 
-		L.CustomerId IN 
-		( 
-			SELECT 
-				customerId 
-			FROM 
-				Loan 
-			GROUP BY 
-				CustomerId 
-			HAVING 
-				count(1) = 1
-		) 
-	ORDER BY 
-		C.ReferenceSource 
+		L.CustomerId NOT IN (SELECT customerId FROM Loan WHERE [Date] < @DateEnd)
+	ORDER BY SourceRef	
 END
 GO
