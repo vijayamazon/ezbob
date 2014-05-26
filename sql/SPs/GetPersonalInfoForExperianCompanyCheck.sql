@@ -10,13 +10,16 @@ CREATE PROCEDURE [dbo].[GetPersonalInfoForExperianCompanyCheck]
 AS
 BEGIN		
 	SELECT 
+		MP_ExperianDataCache.JsonPacket AS CompanyData,
 		Company.ExperianRefNum, 
 		Company.ExperianCompanyName,
 		Company.TypeOfBusiness
 	FROM 
+		MP_ExperianDataCache, 
 		Company,
 		Customer
-	WHERE
+	WHERE 
+		MP_ExperianDataCache.CompanyRefNumber = Company.ExperianRefNum AND 
 		Company.Id = Customer.CompanyId AND
 		Customer.Id = @CustomerId		
 END

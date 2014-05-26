@@ -10,3 +10,26 @@ BEGIN
 END 
 GO
 
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'Sic1980Code1' and Object_ID = Object_ID(N'CustomerAnalyticsCompany'))    
+BEGIN
+	ALTER TABLE CustomerAnalyticsCompany ADD Sic1980Code1 NVARCHAR(4)
+END 
+GO
+
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'Sic1980Desc1' and Object_ID = Object_ID(N'CustomerAnalyticsCompany'))    
+BEGIN
+	ALTER TABLE CustomerAnalyticsCompany ADD Sic1980Desc1 NVARCHAR(75)
+END 
+GO
+
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'Sic1992Code1' and Object_ID = Object_ID(N'CustomerAnalyticsCompany'))    
+BEGIN
+	ALTER TABLE CustomerAnalyticsCompany ADD Sic1992Code1 NVARCHAR(4)
+END 
+GO
+
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'Sic1992Desc1' and Object_ID = Object_ID(N'CustomerAnalyticsCompany'))    
+BEGIN
+	ALTER TABLE CustomerAnalyticsCompany ADD Sic1992Desc1 NVARCHAR(75)
+END 
+GO

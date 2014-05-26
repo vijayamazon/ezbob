@@ -1,6 +1,8 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Data;
+	using System.IO;
+	using System.Xml;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using ExperianLib.Ebusiness;
@@ -128,10 +130,10 @@
 				new QueryParameter("CustomerId", m_nCustomerID));
 
 			var sr = new SafeReader(dt.Rows[0]);
+			string companyData = sr["CompanyData"];
 			string experianRefNum = sr["ExperianRefNum"];
 			string experianCompanyName = sr["ExperianCompanyName"];
 			string typeOfBusinessStr = sr["typeOfBusiness"];
-
 
 			TypeOfBusinessReduced typeOfBusiness = ((TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), typeOfBusinessStr)).Reduce();
 			ExperianParserOutput output = ExperianParserFacade.Invoke(
@@ -167,6 +169,8 @@
 					adjustedProfit = retainedEarnings - retainedEarningsPrev + fixedAssetsPrev / 5;
 				}
 			}
+			string sic1980Code1, sic1980Desc1, sic1992Code1, sic1992Desc1;
+			GetSicCodes(companyData, out sic1980Code1, out sic1980Desc1, out sic1992Code1, out sic1992Desc1);
 
 			DB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateCompany",
@@ -177,10 +181,48 @@
 				new QueryParameter("IncorporationDate", m_oExperianData.IncorporationDate),
 				new QueryParameter("TangibleEquity", tangibleEquity),
 				new QueryParameter("AdjustedProfit", adjustedProfit),
+				new QueryParameter("Sic1980Code1", sic1980Code1),
+				new QueryParameter("Sic1980Desc1", sic1980Desc1),
+				new QueryParameter("Sic1992Code1", sic1992Code1),
+				new QueryParameter("Sic1992Desc1", sic1992Desc1),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow));
 
 			Log.Debug("Updating customer analytics for customer {0} and company '{1}' complete.", m_nCustomerID, m_sExperianRefNum);
 		} // UpdateAnalytics
+
+		public void GetSicCodes(string responseXml, out string sic1980Code1, out string sic1980Desc1, out string sic1992Code1, out string sic1992Desc1)
+		{
+			var xmlDoc = new XmlDocument();
+
+			var stream = new MemoryStream();
+			var writer = new StreamWriter(stream);
+			writer.Write(responseXml);
+			writer.Flush();
+			stream.Position = 0;
+			xmlDoc.Load(stream);
+
+			XmlNodeList dl13Nodes = xmlDoc.SelectNodes("//DL13");
+			if (dl13Nodes != null)
+			{
+				foreach (XmlElement dl13Node in dl13Nodes)
+				{
+					XmlNode sic1980Code1Node = dl13Node.SelectSingleNode("SIC1980CODE1");
+					XmlNode sic1980Desc1Node = dl13Node.SelectSingleNode("SIC1980DESC1");
+					XmlNode sic1992Code1Node = dl13Node.SelectSingleNode("SIC1992CODE1");
+					XmlNode sic1992Desc1Node = dl13Node.SelectSingleNode("SIC1992DESC1");
+					sic1980Code1 = sic1980Code1Node != null ? sic1980Code1Node.InnerText : string.Empty;
+					sic1980Desc1 = sic1980Desc1Node != null ? sic1980Desc1Node.InnerText : string.Empty;
+					sic1992Code1 = sic1992Code1Node != null ? sic1992Code1Node.InnerText : string.Empty;
+					sic1992Desc1 = sic1992Desc1Node != null ? sic1992Desc1Node.InnerText : string.Empty;
+
+					return; // Only use first node
+				}
+			}
+			sic1980Code1 = string.Empty;
+			sic1980Desc1 = string.Empty;
+			sic1992Code1 = string.Empty;
+			sic1992Desc1 = string.Empty;
+		}
 
 		private decimal GetDecimalValueFromDataItem(ParsedDataItem parsedDataItem, string requiredValueName)
 		{

@@ -12,6 +12,10 @@ ALTER PROCEDURE CustomerAnalyticsUpdateCompany
 @IncorporationDate DATETIME,
 @TangibleEquity DECIMAL(18, 6),
 @AdjustedProfit DECIMAL(18, 6),
+@Sic1980Code1 NVARCHAR(4),
+@Sic1980Desc1 NVARCHAR(75),
+@Sic1992Code1 NVARCHAR(4),
+@Sic1992Desc1 NVARCHAR(75),
 @AnalyticsDate DATETIME
 AS
 BEGIN
@@ -41,8 +45,8 @@ BEGIN
 	IF @CurrentBalanceSum IS NULL
 		SET @CurrentBalanceSum = 0
 
-	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score, SuggestedAmount, IncorporationDate, CurrentBalanceSum, TangibleEquity, AdjustedProfit)
-		VALUES (@CustomerID, @AnalyticsDate, 1, @Score, @SuggestedAmount, @IncorporationDate, @CurrentBalanceSum, @TangibleEquity, @AdjustedProfit)
+	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score, SuggestedAmount, IncorporationDate, CurrentBalanceSum, TangibleEquity, AdjustedProfit, Sic1980Code1, Sic1980Desc1, Sic1992Code1, Sic1992Desc1)
+		VALUES (@CustomerID, @AnalyticsDate, 1, @Score, @SuggestedAmount, @IncorporationDate, @CurrentBalanceSum, @TangibleEquity, @AdjustedProfit, @Sic1980Code1, @Sic1980Desc1, @Sic1992Code1, @Sic1992Desc1)
 	
 	COMMIT TRANSACTION
 END
