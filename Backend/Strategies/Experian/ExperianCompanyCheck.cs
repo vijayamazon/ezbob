@@ -20,9 +20,8 @@
 			m_nCustomerID = nCustomerID;
 			m_bForceCheck = bForceCheck;
 			m_bFoundCompany = false;
-			experianUtils = new ExperianUtils(oLog);
 
-			DB.ForEachRowSafe(
+			oDB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					m_bFoundCompany = true;
 
@@ -39,7 +38,7 @@
 			);
 
 			if (!m_bFoundCompany)
-				Log.Info("Can't find company data for customer:{0}. The customer is probably an entrepreneur.");
+				oLog.Info("Can't find company data for customer:{0}. The customer is probably an entrepreneur.");
 		} // constructor
 
 		#endregion constructor
@@ -169,8 +168,13 @@
 					adjustedProfit = retainedEarnings - retainedEarningsPrev + fixedAssetsPrev / 5;
 				}
 			}
+
+			XmlDocument xmlDoc = GetXmlDocumentObject(companyData);
 			string sic1980Code1, sic1980Desc1, sic1992Code1, sic1992Desc1;
-			GetSicCodes(companyData, out sic1980Code1, out sic1980Desc1, out sic1992Code1, out sic1992Desc1);
+			GetSicCodes(xmlDoc, out sic1980Code1, out sic1980Desc1, out sic1992Code1, out sic1992Desc1);
+			
+			int ageOfMostRecentCcj, numOfCcjsInLast24Months, sumOfCcjsInLast24Months;
+			GetCcjs(xmlDoc, typeOfBusiness == TypeOfBusinessReduced.Limited, out ageOfMostRecentCcj, out numOfCcjsInLast24Months, out sumOfCcjsInLast24Months);
 
 			DB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateCompany",
@@ -185,38 +189,92 @@
 				new QueryParameter("Sic1980Desc1", sic1980Desc1),
 				new QueryParameter("Sic1992Code1", sic1992Code1),
 				new QueryParameter("Sic1992Desc1", sic1992Desc1),
+				new QueryParameter("AgeOfMostRecentCcj", ageOfMostRecentCcj),
+				new QueryParameter("NumOfCcjsInLast24Months", numOfCcjsInLast24Months),
+				new QueryParameter("SumOfCcjsInLast24Months", sumOfCcjsInLast24Months),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow));
 
 			Log.Debug("Updating customer analytics for customer {0} and company '{1}' complete.", m_nCustomerID, m_sExperianRefNum);
 		} // UpdateAnalytics
 
-		public void GetSicCodes(string responseXml, out string sic1980Code1, out string sic1980Desc1, out string sic1992Code1, out string sic1992Desc1)
+		private XmlDocument GetXmlDocumentObject(string responseXml)
 		{
 			var xmlDoc = new XmlDocument();
-
 			var stream = new MemoryStream();
 			var writer = new StreamWriter(stream);
 			writer.Write(responseXml);
 			writer.Flush();
 			stream.Position = 0;
 			xmlDoc.Load(stream);
+			return xmlDoc;
+		}
 
-			XmlNodeList dl13Nodes = xmlDoc.SelectNodes("//DL13");
-			if (dl13Nodes != null)
+		private void GetCcjs(XmlDocument xmlDoc, bool isLimited, out int ageOfMostRecentCcj, out int numOfCcjsInLast24Months, out int sumOfCcjsInLast24Months)
+		{
+			if (isLimited)
 			{
-				foreach (XmlElement dl13Node in dl13Nodes)
+				XmlNodeList dl26Nodes = xmlDoc.SelectNodes("//DL26");
+				if (dl26Nodes != null && dl26Nodes.Count == 1)
 				{
-					XmlNode sic1980Code1Node = dl13Node.SelectSingleNode("SIC1980CODE1");
-					XmlNode sic1980Desc1Node = dl13Node.SelectSingleNode("SIC1980DESC1");
-					XmlNode sic1992Code1Node = dl13Node.SelectSingleNode("SIC1992CODE1");
-					XmlNode sic1992Desc1Node = dl13Node.SelectSingleNode("SIC1992DESC1");
-					sic1980Code1 = sic1980Code1Node != null ? sic1980Code1Node.InnerText : string.Empty;
-					sic1980Desc1 = sic1980Desc1Node != null ? sic1980Desc1Node.InnerText : string.Empty;
-					sic1992Code1 = sic1992Code1Node != null ? sic1992Code1Node.InnerText : string.Empty;
-					sic1992Desc1 = sic1992Desc1Node != null ? sic1992Desc1Node.InnerText : string.Empty;
-
-					return; // Only use first node
+					XmlNode dl26Node = dl26Nodes[0];
+					ageOfMostRecentCcj = GetIntValueOrDefault(dl26Node, "AGEMOSTRECENTCCJ");
+					numOfCcjsInLast24Months = GetIntValueOrDefault(dl26Node, "NUMCCJLAST12") + GetIntValueOrDefault(dl26Node, "NUMCCJ13TO24");
+					sumOfCcjsInLast24Months = GetIntValueOrDefault(dl26Node, "VALCCJLAST12") + GetIntValueOrDefault(dl26Node, "VALCCJ13TO24");
+					return;
 				}
+			}
+			else
+			{
+				XmlNodeList dn14Nodes = xmlDoc.SelectNodes("//DN14");
+				if (dn14Nodes != null && dn14Nodes.Count == 1)
+				{
+					XmlNode dn14Node = dn14Nodes[0];
+					ageOfMostRecentCcj = GetIntValueOrDefault(dn14Node, "MAGEMOSTRECJUDGSINCEOWNSHP");
+					numOfCcjsInLast24Months = GetIntValueOrDefault(dn14Node, "MTOTJUDGCOUNTLST24MNTHS") +
+						GetIntValueOrDefault(dn14Node, "ATOTJUDGCOUNTLST24MNTHS");
+					sumOfCcjsInLast24Months = GetIntValueOrDefault(dn14Node, "MTOTJUDGVALUELST24MNTHS") +
+						GetIntValueOrDefault(dn14Node, "ATOTJUDGVALUELST24MNTHS");
+					return;
+				}
+			}
+
+			ageOfMostRecentCcj = 0;
+			numOfCcjsInLast24Months = 0;
+			sumOfCcjsInLast24Months = 0;
+		}
+
+		private int GetIntValueOrDefault(XmlNode element, string nodeName)
+		{
+			XmlNode node = element.SelectSingleNode(nodeName);
+
+			if (node != null)
+			{
+				int result;
+				if (int.TryParse(node.InnerText, out result))
+				{
+					return result;
+				}
+			}
+
+			return 0;
+		}
+
+		public void GetSicCodes(XmlDocument xmlDoc, out string sic1980Code1, out string sic1980Desc1, out string sic1992Code1, out string sic1992Desc1)
+		{
+			XmlNodeList dl13Nodes = xmlDoc.SelectNodes("//DL13");
+			if (dl13Nodes != null && dl13Nodes.Count == 1)
+			{
+				XmlNode dl13Node = dl13Nodes[0];
+				XmlNode sic1980Code1Node = dl13Node.SelectSingleNode("SIC1980CODE1");
+				XmlNode sic1980Desc1Node = dl13Node.SelectSingleNode("SIC1980DESC1");
+				XmlNode sic1992Code1Node = dl13Node.SelectSingleNode("SIC1992CODE1");
+				XmlNode sic1992Desc1Node = dl13Node.SelectSingleNode("SIC1992DESC1");
+				sic1980Code1 = sic1980Code1Node != null ? sic1980Code1Node.InnerText : string.Empty;
+				sic1980Desc1 = sic1980Desc1Node != null ? sic1980Desc1Node.InnerText : string.Empty;
+				sic1992Code1 = sic1992Code1Node != null ? sic1992Code1Node.InnerText : string.Empty;
+				sic1992Desc1 = sic1992Desc1Node != null ? sic1992Desc1Node.InnerText : string.Empty;
+
+				return;
 			}
 			sic1980Code1 = string.Empty;
 			sic1980Desc1 = string.Empty;
@@ -267,7 +325,6 @@
 		private bool m_bIsLimited;
 		private string m_sExperianRefNum;
 		private BusinessReturnData m_oExperianData;
-		private readonly ExperianUtils experianUtils;
 
 		#endregion fields
 

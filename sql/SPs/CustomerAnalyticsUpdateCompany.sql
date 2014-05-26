@@ -16,6 +16,9 @@ ALTER PROCEDURE CustomerAnalyticsUpdateCompany
 @Sic1980Desc1 NVARCHAR(75),
 @Sic1992Code1 NVARCHAR(4),
 @Sic1992Desc1 NVARCHAR(75),
+@AgeOfMostRecentCcj INT,
+@NumOfCcjsInLast24Months INT,
+@SumOfCcjsInLast24Months INT,
 @AnalyticsDate DATETIME
 AS
 BEGIN
@@ -45,8 +48,8 @@ BEGIN
 	IF @CurrentBalanceSum IS NULL
 		SET @CurrentBalanceSum = 0
 
-	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score, SuggestedAmount, IncorporationDate, CurrentBalanceSum, TangibleEquity, AdjustedProfit, Sic1980Code1, Sic1980Desc1, Sic1992Code1, Sic1992Desc1)
-		VALUES (@CustomerID, @AnalyticsDate, 1, @Score, @SuggestedAmount, @IncorporationDate, @CurrentBalanceSum, @TangibleEquity, @AdjustedProfit, @Sic1980Code1, @Sic1980Desc1, @Sic1992Code1, @Sic1992Desc1)
+	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score, SuggestedAmount, IncorporationDate, CurrentBalanceSum, TangibleEquity, AdjustedProfit, Sic1980Code1, Sic1980Desc1, Sic1992Code1, Sic1992Desc1, AgeOfMostRecentCcj, NumOfCcjsInLast24Months, SumOfCcjsInLast24Months)
+		VALUES (@CustomerID, @AnalyticsDate, 1, @Score, @SuggestedAmount, @IncorporationDate, @CurrentBalanceSum, @TangibleEquity, @AdjustedProfit, @Sic1980Code1, @Sic1980Desc1, @Sic1992Code1, @Sic1992Desc1, @AgeOfMostRecentCcj, @NumOfCcjsInLast24Months, @SumOfCcjsInLast24Months)
 	
 	COMMIT TRANSACTION
 END
