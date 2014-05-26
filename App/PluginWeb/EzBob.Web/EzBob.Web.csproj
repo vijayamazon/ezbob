@@ -628,6 +628,7 @@
     <Content Include="Content\img\customer-sidebar\perks.png" />
     <Content Include="Content\img\customer-sidebar\prices.png" />
     <Content Include="Content\img\customer-sidebar\secure.png" />
+    <Content Include="Content\img\debit-card.PNG" />
     <Content Include="Content\img\ebay-small.png" />
     <Content Include="Content\img\ebay.png" />
     <Content Include="Content\img\ecommerce bytes.png" />

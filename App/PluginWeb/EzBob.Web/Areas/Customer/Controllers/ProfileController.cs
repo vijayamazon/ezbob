@@ -256,5 +256,22 @@
 		{
 			return View();
 		}
+
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonResult SetDefaultCard(int cardId)
+		{
+			var customer = _context.Customer;
+			var card = customer.PayPointCards.SingleOrDefault(c => c.Id == cardId);
+			if (card == null)
+			{
+				return Json(new { error = "card not found" });
+			}
+			customer.PayPointTransactionId = card.TransactionId;
+			customer.CreditCardNo = card.CardNo;
+
+			return Json(new {});
+		}
 	}
 }

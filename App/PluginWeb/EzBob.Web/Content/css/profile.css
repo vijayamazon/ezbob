@@ -352,17 +352,18 @@ body .agreement-text {
     margin-top: 60px;
 }
 
-.payment-account-Bank, .payment-account-PayPal {
-    background-image: url(../img/accounts-paypal.png);
-    width: 62px;
+.payment-account-Bank {
+    background-image: url(../img/bank_account.png);
+    background-repeat: no-repeat;
     height: 18px;
 }
 
-.payment-account-Bank {
-    background-image: url(../img/bank_account.png);
-    width: 128px;
-    height: 18px;
+.payment-account-Card {
+    background-image: url(../img/debit-card.png);
+    background-repeat: no-repeat;
+    height: 28px;
 }
+
 
 .summary-table tr td:first-child {
     text-align: left;

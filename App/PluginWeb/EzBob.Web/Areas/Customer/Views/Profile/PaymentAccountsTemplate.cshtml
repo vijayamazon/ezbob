@@ -1,6 +1,6 @@
 ﻿@model dynamic
 
-@helper PaymentAccountsContent(){
+<script id="payment-accounts-template" type="text/template">
     <table class="table grey-table account-activity-table">
         <thead>
             <tr>
@@ -11,17 +11,24 @@
         </thead>
         <tbody>
             <%_.each(accounts, function(account, i){%>
-                <%var last = accounts.length - 1 == i;%>
-                <tr class="<%- last ? 'last' : '' %>" >
-                    <td class="first"><div class="payment-account-<%-account.type%>"></div></td>
+                <%if(account.type == 'Bank'){%>
+                <tr>
+                    <td><div class="payment-account-<%-account.type%>"></div></td>
                     <td>X - <%-account.displayName.substring(4)%></td>
                     <td class="last Live">LIVE</td>
                 </tr>
+                <%} else {%>
+                <tr>
+                    <td><div class="payment-account-<%-account.type%>"></div></td>
+                    <td><%-account.displayName%> (<%-account.expire%>)</td>
+                    <%if(account.isDefault){%>
+                    <td class="last Live">Default</td>
+                    <%}else{%>
+                    <td class="last"><button class="button orange setDefaultCard" data-card-id="<%-account.cardId%>">Set as default</button></td>
+                    <%}%>
+                </tr>
+                <%}%>
             <%});%>
         </tbody>
     </table>
-}
-
-<script id="payment-accounts-template" type="text/template">
-    @PaymentAccountsContent()
 </script>
