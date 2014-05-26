@@ -78,7 +78,7 @@
 				Users(oRawByCountry, GoogleDataFetcher.IL) -
 				Users(oRawByCountry, GoogleDataFetcher.UA);
 
-			oRes[DbConsts.WorldWideNewUsers] = nAllUsers -
+			oRes[DbConsts.WorldWideNewUsers] = nNewUsers -
 				NewUsers(oRawByCountry, GoogleDataFetcher.IL) -
 				NewUsers(oRawByCountry, GoogleDataFetcher.UA);
 

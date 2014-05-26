@@ -20,7 +20,8 @@ BEGIN
 		C.IsTest = 0 AND 
 		C.Id = L.CustomerId AND 
 		L.[Date] > @DateStart AND 
-		L.CustomerId NOT IN (SELECT customerId FROM Loan WHERE [Date] < @DateEnd)
+		L.[Date] < @DateEnd AND 
+		L.CustomerId NOT IN (SELECT customerId FROM Loan WHERE [Date] < @DateStart)
 	ORDER BY SourceRef	
 END
 GO
