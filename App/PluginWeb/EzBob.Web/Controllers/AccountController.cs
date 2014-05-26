@@ -275,7 +275,19 @@ namespace EzBob.Web.Controllers {
 		#region action LogOff
 
 		public ActionResult LogOff(bool isUnderwriterPage = false) {
-			// TODO: if (!string.IsNullOrWhitespace(m_oContext.SessionId)) serviceClient.end_session
+			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId)) {
+				int nSessionID;
+
+				if (int.TryParse(m_oContext.SessionId, out nSessionID)) {
+					try {
+						m_oServiceClient.Instance.MarkSessionEnded(nSessionID);
+					}
+					catch (Exception e) {
+						ms_oLog.Debug(e, "Failed to mark customer session as ended.");
+					} // try
+				} // if
+			} // if
+
 			m_oContext.SessionId = null;
 
 			FormsAuthentication.SignOut();

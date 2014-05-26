@@ -124,5 +124,13 @@
 		} // UserChangeEmail
 
 		#endregion method UserChangeEmail
+
+		#region method MarkSessionEnded
+
+		public ActionMetaData MarkSessionEnded(int nSessionID) {
+			return Execute<MarkSessionEnded>(null, null, nSessionID);
+		} // MarkSessionEnded
+
+		#endregion method MarkSessionEnded
 	} // class EzServiceImplementation
 } // namespace EzService

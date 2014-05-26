@@ -15,6 +15,16 @@
 
 		#endregion Agreements
 
+		#region analytics
+
+		[OperationContract]
+		ActionMetaData BackfillCompanyAnalytics();
+
+		[OperationContract]
+		ActionMetaData BackfillConsumerAnalytics();
+
+		#endregion analytics
+
 		#region AML and BWA
 
 		[OperationContract]
@@ -224,6 +234,21 @@
 		[OperationContract]
 		ActionMetaData ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck);
 
+		[OperationContract]
+		DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId);
+
+		[OperationContract]
+		DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
+
+		[OperationContract]
+		DecimalActionResult GetLatestInterestRate(int customerId, int underwriterId);
+
+		[OperationContract]
+		DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
+
+		[OperationContract]
+		IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId);
+
 		#endregion Experian
 
 		#region Land Registry
@@ -311,21 +336,25 @@
 		);
 
 		[OperationContract]
-		ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
-
-		[OperationContract]
-		VatReturnSummaryActionResult LoadVatReturnSummary(int customerId, int nMarketplaceID);
-
-		[OperationContract]
 		ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
-
-		[OperationContract]
-		ActionMetaData AndRecalculateVatReturnSummaryForAll();
 
 		[OperationContract]
 		ActionMetaData EncryptChannelGrabberMarketplaces();
 
 		#endregion other strategies
+
+		#region pricing model
+
+		[OperationContract]
+		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId);
+
+		[OperationContract]
+		PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model);
+
+		[OperationContract]
+		DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare);
+
+		#endregion pricing model
 
 		#region Quick offer
 
@@ -363,7 +392,23 @@
 		[OperationContract]
 		StringActionResult UserChangeEmail(int nUserID, string sNewEmail);
 
+		[OperationContract]
+		ActionMetaData MarkSessionEnded(int nSessionID);
+
 		#endregion User Management
+
+		#region VAT
+
+		[OperationContract]
+		ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
+
+		[OperationContract]
+		VatReturnSummaryActionResult LoadVatReturnSummary(int customerId, int nMarketplaceID);
+
+		[OperationContract]
+		ActionMetaData AndRecalculateVatReturnSummaryForAll();
+
+		#endregion VAT
 
 		#region Wizard
 
@@ -380,36 +425,6 @@
 		IntActionResult GetCustomerStatusRefreshInterval();
 
 		#endregion Wizard
-
-		[OperationContract]
-		DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId);
-
-		[OperationContract]
-		DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
-
-		[OperationContract]
-		DecimalActionResult GetLatestInterestRate(int customerId, int underwriterId);
-
-		[OperationContract]
-		DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
-
-		[OperationContract]
-		IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId);
-
-		[OperationContract]
-		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId);
-
-		[OperationContract]
-		PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model);
-
-		[OperationContract]
-		DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare);
-
-		[OperationContract]
-		ActionMetaData BackfillCompanyAnalytics();
-
-		[OperationContract]
-		ActionMetaData BackfillConsumerAnalytics();
 	} // interface IEzService
 } // namespace EzService
 

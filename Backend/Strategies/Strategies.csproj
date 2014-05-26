@@ -151,6 +151,7 @@
     <Compile Include="QuickOffer\QuickOfferData.cs" />
     <Compile Include="UpdateCurrencyRates.cs" />
     <Compile Include="GetWizardConfigs.cs" />
+    <Compile Include="UserManagement\MarkSessionEnded.cs" />
     <Compile Include="UserManagement\UserChangeEmail.cs" />
     <Compile Include="UserManagement\CustomerChangePassword.cs" />
     <Compile Include="UserManagement\UserChangePassword.cs" />

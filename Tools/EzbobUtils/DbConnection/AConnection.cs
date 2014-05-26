@@ -12,7 +12,7 @@
 	using Ezbob.Logger;
 	using Utils;
 
-	public abstract class AConnection : SafeLog, IConnection {
+	public abstract class AConnection : SafeLog {
 		#region public
 
 		#region IConnection implementation

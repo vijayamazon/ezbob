@@ -72,8 +72,8 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
     </xsd:schema>
@@ -107,6 +107,48 @@
   </wsdl:message>
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeSaveLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeSaveLog" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeSaveLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeSaveLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EncryptChannelGrabberMarketplaces_InputMessage">
+    <wsdl:part name="parameters" element="tns:EncryptChannelGrabberMarketplaces" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EncryptChannelGrabberMarketplaces_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EncryptChannelGrabberMarketplacesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelModel_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelModel" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelModel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelModelResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PricingModelCalculate_InputMessage">
+    <wsdl:part name="parameters" element="tns:PricingModelCalculate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PricingModelCalculate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PricingModelCalculateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelDefaultRate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelDefaultRate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPricingModelDefaultRate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPricingModelDefaultRateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_QuickOffer_InputMessage">
+    <wsdl:part name="parameters" element="tns:QuickOffer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_QuickOffer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:QuickOfferResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_QuickOfferWithPrerequisites_InputMessage">
     <wsdl:part name="parameters" element="tns:QuickOfferWithPrerequisites" />
@@ -162,6 +204,30 @@
   <wsdl:message name="IEzService_UserChangeEmail_OutputMessage">
     <wsdl:part name="parameters" element="tns:UserChangeEmailResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MarkSessionEnded_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarkSessionEnded" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MarkSessionEnded_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarkSessionEndedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CalculateVatReturnSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummary" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CalculateVatReturnSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnSummary" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAll" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAllResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetWizardConfigs_InputMessage">
     <wsdl:part name="parameters" element="tns:GetWizardConfigs" />
   </wsdl:message>
@@ -186,53 +252,11 @@
   <wsdl:message name="IEzService_GetCustomerStatusRefreshInterval_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCustomerStatusRefreshIntervalResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianConsumerCacheDate_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianConsumerCacheDate" />
+  <wsdl:message name="IEzService_SaveAgreement_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianConsumerCacheDate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianConsumerCacheDateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetLatestInterestRate_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetLatestInterestRate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetLatestInterestRate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetLatestInterestRateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanySeniority_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanySeniority" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanySeniority_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanySeniorityResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianAccountsCurrentBalance_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianAccountsCurrentBalance" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianAccountsCurrentBalance_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianAccountsCurrentBalanceResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetPricingModelModel_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPricingModelModel" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetPricingModelModel_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPricingModelModelResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_PricingModelCalculate_InputMessage">
-    <wsdl:part name="parameters" element="tns:PricingModelCalculate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_PricingModelCalculate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PricingModelCalculateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetPricingModelDefaultRate_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPricingModelDefaultRate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetPricingModelDefaultRate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPricingModelDefaultRateResponse" />
+  <wsdl:message name="IEzService_SaveAgreement_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveAgreementResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillCompanyAnalytics_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillCompanyAnalytics" />
@@ -245,12 +269,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillConsumerAnalytics_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillConsumerAnalyticsResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaveAgreement_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveAgreement" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaveAgreement_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveAgreementResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_CheckAml_InputMessage">
     <wsdl:part name="parameters" element="tns:CheckAml" />
@@ -594,6 +612,36 @@
   <wsdl:message name="IEzService_ExperianConsumerCheck_OutputMessage">
     <wsdl:part name="parameters" element="tns:ExperianConsumerCheckResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianConsumerCacheDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianConsumerCacheDate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianConsumerCacheDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianConsumerCacheDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLatestInterestRate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLatestInterestRate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLatestInterestRate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLatestInterestRateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanySeniority_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanySeniority" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanySeniority_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanySeniorityResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianAccountsCurrentBalance_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianAccountsCurrentBalance" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianAccountsCurrentBalance_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianAccountsCurrentBalanceResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
   </wsdl:message>
@@ -714,48 +762,6 @@
   <wsdl:message name="IEzService_UpdateConfigurationVariables_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateConfigurationVariablesResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PostcodeSaveLog_InputMessage">
-    <wsdl:part name="parameters" element="tns:PostcodeSaveLog" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_PostcodeSaveLog_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PostcodeSaveLogResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CalculateVatReturnSummary_InputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummary" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CalculateVatReturnSummary_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CalculateVatReturnSummaryResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoadVatReturnSummary_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoadVatReturnSummary" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LoadVatReturnSummary_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoadVatReturnSummaryResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage">
-    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAll" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage">
-    <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAllResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_EncryptChannelGrabberMarketplaces_InputMessage">
-    <wsdl:part name="parameters" element="tns:EncryptChannelGrabberMarketplaces" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_EncryptChannelGrabberMarketplaces_OutputMessage">
-    <wsdl:part name="parameters" element="tns:EncryptChannelGrabberMarketplacesResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_QuickOffer_InputMessage">
-    <wsdl:part name="parameters" element="tns:QuickOffer" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_QuickOffer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:QuickOfferResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -779,6 +785,34 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="PostcodeSaveLog">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLog" message="tns:IEzService_PostcodeSaveLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLogResponse" message="tns:IEzService_PostcodeSaveLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EncryptChannelGrabberMarketplaces">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplaces" message="tns:IEzService_EncryptChannelGrabberMarketplaces_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplacesResponse" message="tns:IEzService_EncryptChannelGrabberMarketplaces_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelModel">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPricingModelModel" message="tns:IEzService_GetPricingModelModel_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPricingModelModelResponse" message="tns:IEzService_GetPricingModelModel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PricingModelCalculate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PricingModelCalculate" message="tns:IEzService_PricingModelCalculate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PricingModelCalculateResponse" message="tns:IEzService_PricingModelCalculate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelDefaultRate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPricingModelDefaultRate" message="tns:IEzService_GetPricingModelDefaultRate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPricingModelDefaultRateResponse" message="tns:IEzService_GetPricingModelDefaultRate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="QuickOffer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferResponse" message="tns:IEzService_QuickOffer_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="QuickOfferWithPrerequisites">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites" message="tns:IEzService_QuickOfferWithPrerequisites_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse" message="tns:IEzService_QuickOfferWithPrerequisites_OutputMessage" />
@@ -815,6 +849,22 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserChangeEmail" message="tns:IEzService_UserChangeEmail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserChangeEmailResponse" message="tns:IEzService_UserChangeEmail_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="MarkSessionEnded">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarkSessionEnded" message="tns:IEzService_MarkSessionEnded_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarkSessionEndedResponse" message="tns:IEzService_MarkSessionEnded_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculateVatReturnSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummary" message="tns:IEzService_CalculateVatReturnSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse" message="tns:IEzService_CalculateVatReturnSummary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummary" message="tns:IEzService_LoadVatReturnSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummaryResponse" message="tns:IEzService_LoadVatReturnSummary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetWizardConfigs">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
@@ -831,37 +881,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval" message="tns:IEzService_GetCustomerStatusRefreshInterval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse" message="tns:IEzService_GetCustomerStatusRefreshInterval_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetExperianConsumerCacheDate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" message="tns:IEzService_GetExperianConsumerCacheDate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse" message="tns:IEzService_GetExperianConsumerCacheDate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetExperianCompanyCacheDate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" message="tns:IEzService_GetExperianCompanyCacheDate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse" message="tns:IEzService_GetExperianCompanyCacheDate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetLatestInterestRate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetLatestInterestRate" message="tns:IEzService_GetLatestInterestRate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetLatestInterestRateResponse" message="tns:IEzService_GetLatestInterestRate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanySeniority">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanySeniority" message="tns:IEzService_GetCompanySeniority_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanySeniorityResponse" message="tns:IEzService_GetCompanySeniority_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetExperianAccountsCurrentBalance">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalance" message="tns:IEzService_GetExperianAccountsCurrentBalance_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalanceResponse" message="tns:IEzService_GetExperianAccountsCurrentBalance_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPricingModelModel">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPricingModelModel" message="tns:IEzService_GetPricingModelModel_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPricingModelModelResponse" message="tns:IEzService_GetPricingModelModel_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="PricingModelCalculate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PricingModelCalculate" message="tns:IEzService_PricingModelCalculate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PricingModelCalculateResponse" message="tns:IEzService_PricingModelCalculate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPricingModelDefaultRate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPricingModelDefaultRate" message="tns:IEzService_GetPricingModelDefaultRate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPricingModelDefaultRateResponse" message="tns:IEzService_GetPricingModelDefaultRate_OutputMessage" />
+    <wsdl:operation name="SaveAgreement">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveAgreementResponse" message="tns:IEzService_SaveAgreement_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackfillCompanyAnalytics">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillCompanyAnalytics" message="tns:IEzService_BackfillCompanyAnalytics_InputMessage" />
@@ -870,10 +892,6 @@
     <wsdl:operation name="BackfillConsumerAnalytics">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillConsumerAnalytics" message="tns:IEzService_BackfillConsumerAnalytics_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillConsumerAnalyticsResponse" message="tns:IEzService_BackfillConsumerAnalytics_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveAgreement">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveAgreementResponse" message="tns:IEzService_SaveAgreement_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CheckAml">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAml" message="tns:IEzService_CheckAml_InputMessage" />
@@ -1103,6 +1121,26 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ExperianConsumerCheck" message="tns:IEzService_ExperianConsumerCheck_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ExperianConsumerCheckResponse" message="tns:IEzService_ExperianConsumerCheck_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetExperianConsumerCacheDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" message="tns:IEzService_GetExperianConsumerCacheDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse" message="tns:IEzService_GetExperianConsumerCacheDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetExperianCompanyCacheDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" message="tns:IEzService_GetExperianCompanyCacheDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse" message="tns:IEzService_GetExperianCompanyCacheDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLatestInterestRate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetLatestInterestRate" message="tns:IEzService_GetLatestInterestRate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetLatestInterestRateResponse" message="tns:IEzService_GetLatestInterestRate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanySeniority">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanySeniority" message="tns:IEzService_GetCompanySeniority_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanySeniorityResponse" message="tns:IEzService_GetCompanySeniority_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetExperianAccountsCurrentBalance">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalance" message="tns:IEzService_GetExperianAccountsCurrentBalance_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalanceResponse" message="tns:IEzService_GetExperianAccountsCurrentBalance_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
@@ -1183,34 +1221,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateConfigurationVariables" message="tns:IEzService_UpdateConfigurationVariables_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateConfigurationVariablesResponse" message="tns:IEzService_UpdateConfigurationVariables_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="PostcodeSaveLog">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLog" message="tns:IEzService_PostcodeSaveLog_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLogResponse" message="tns:IEzService_PostcodeSaveLog_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CalculateVatReturnSummary">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummary" message="tns:IEzService_CalculateVatReturnSummary_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse" message="tns:IEzService_CalculateVatReturnSummary_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LoadVatReturnSummary">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummary" message="tns:IEzService_LoadVatReturnSummary_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummaryResponse" message="tns:IEzService_LoadVatReturnSummary_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="EncryptChannelGrabberMarketplaces">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplaces" message="tns:IEzService_EncryptChannelGrabberMarketplaces_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplacesResponse" message="tns:IEzService_EncryptChannelGrabberMarketplaces_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="QuickOffer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferResponse" message="tns:IEzService_QuickOffer_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1266,6 +1276,69 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="PostcodeSaveLog">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeSaveLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EncryptChannelGrabberMarketplaces">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplaces" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelModel">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetPricingModelModel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PricingModelCalculate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PricingModelCalculate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPricingModelDefaultRate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetPricingModelDefaultRate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QuickOffer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="QuickOfferWithPrerequisites">
       <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisites" style="document" />
       <wsdl:input>
@@ -1347,6 +1420,42 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="MarkSessionEnded">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MarkSessionEnded" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculateVatReturnSummary">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateVatReturnSummary" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnSummary">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadVatReturnSummary" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetWizardConfigs">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetWizardConfigs" style="document" />
       <wsdl:input>
@@ -1383,71 +1492,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetExperianConsumerCacheDate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetExperianCompanyCacheDate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetLatestInterestRate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetLatestInterestRate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanySeniority">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanySeniority" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetExperianAccountsCurrentBalance">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalance" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetPricingModelModel">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetPricingModelModel" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PricingModelCalculate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/PricingModelCalculate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetPricingModelDefaultRate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetPricingModelDefaultRate" style="document" />
+    <wsdl:operation name="SaveAgreement">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveAgreement" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1466,15 +1512,6 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillConsumerAnalytics">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillConsumerAnalytics" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaveAgreement">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveAgreement" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1995,6 +2032,51 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetExperianConsumerCacheDate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExperianCompanyCacheDate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLatestInterestRate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetLatestInterestRate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanySeniority">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanySeniority" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExperianAccountsCurrentBalance">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianAccountsCurrentBalance" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
       <wsdl:input>
@@ -2168,69 +2250,6 @@
     </wsdl:operation>
     <wsdl:operation name="UpdateConfigurationVariables">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateConfigurationVariables" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PostcodeSaveLog">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeSaveLog" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CalculateVatReturnSummary">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateVatReturnSummary" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LoadVatReturnSummary">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadVatReturnSummary" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EncryptChannelGrabberMarketplaces">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplaces" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="QuickOffer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
