@@ -64,11 +64,10 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	
-	INSERT INTO #t (SortOrder, Name, Caption) VALUES (1, 'WorldWideVisits', 'Total visits')
-	INSERT INTO #t (SortOrder, Name, Caption) VALUES (2, 'WorldWideVisitors', 'Total visitors')
-	INSERT INTO #t (SortOrder, Name, Caption) VALUES (3, 'UKVisits', 'UK visits')
-	INSERT INTO #t (SortOrder, Name, Caption) VALUES (4, 'UKVisitors', 'UK visitors')
-	INSERT INTO #t (SortOrder, Name, Caption) VALUES (5, 'NewVisitors', 'New visitors')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (1, 'WorldWideUsers', 'Total users')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (2, 'WorldWideNewUsers', 'Total new users')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (3, 'UKUsers', 'UK users')
+	INSERT INTO #t (SortOrder, Name, Caption) VALUES (4, 'UKNewUsers', 'UK new users')
 	
 	INSERT INTO #t (SortOrder, Name, Caption) VALUES (6, 'PageLogon', 'Login page visitors')
 	INSERT INTO #t (SortOrder, Name, Caption) VALUES (7, 'PageDashboard', 'Customer dashboard page visitors')
