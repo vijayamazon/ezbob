@@ -42,8 +42,6 @@
       <xs:element minOccurs="0" name="TenureMonths" type="xs:decimal" />
       <xs:element minOccurs="0" name="TenurePercents" type="xs:decimal" />
       <xs:element minOccurs="0" name="TotalCost" type="xs:decimal" />
-      <xs:element minOccurs="0" name="TotalSetupFeePercents" type="xs:decimal" />
-      <xs:element minOccurs="0" name="TotalSetupFeePounds" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PricingModelModel" nillable="true" type="tns:PricingModelModel" />
