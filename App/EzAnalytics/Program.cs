@@ -17,22 +17,17 @@ namespace EzAnalyticsConsoleClient {
 			var app = new GoogleAnalytics(Log);
 			Environment = new EzEnv(Log);
 			string thumb = System.Configuration.ConfigurationManager.AppSettings["gaCertThumb"];
-			
+			m_oReportDate = DateTime.Today;
 			if (Environment.Name == Name.Dev) {
 				Log = new ConsoleLog();
 
-				DateTime oDate = DateTime.Today;
-
 				if ((args.Length > 1) && (args[0] == "--date"))
-					DateTime.TryParseExact(args[1], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out oDate);
+					DateTime.TryParseExact(args[1], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out m_oReportDate);
 
-				
-				if (app.Init(oDate, thumb))
+				if (app.Init(m_oReportDate, thumb))
 				{
-					m_oReportDate = oDate;
 					Run(app);
 				}
-					
 
 				Done();
 			}
@@ -48,7 +43,6 @@ namespace EzAnalyticsConsoleClient {
 						{
 							Run(app);
 						}
-						
 					}
 
 					Done();
