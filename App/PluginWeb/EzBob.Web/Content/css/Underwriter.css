@@ -705,12 +705,21 @@ table.internal-table {
     border-top: 2px solid black!important;
 }
 
-#hmrc-vat-return-summary .lastchkpt td {
+.vat-return-summary .lastchkpt td {
     border-bottom: 3px solid black!important;
 }
 
+.vat-return-summary .vrs-total,
 .vat-return-summary .bank {
     border-left: 1px solid #dddddd;
+}
+
+.vat-return-summary td.negative-value {
+	color: red;
+}
+
+.vat-return-summary td.not-just-before {
+	border-left: 2px dashed red;
 }
 
 .fraud-form .control-group {

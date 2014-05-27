@@ -285,7 +285,7 @@
 				return oFileCache.Hopper;
 
 			default:
-				stateError = oFileCache.DateIntervals.SortAndCheckSequence();
+				stateError = oFileCache.DateIntervals.SortWithoutCheckSequence();
 				return string.IsNullOrWhiteSpace(stateError) ? oFileCache.Hopper : null;
 			} // switch
 		} // GetProcessedFiles

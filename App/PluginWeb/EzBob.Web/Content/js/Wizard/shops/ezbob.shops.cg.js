@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
@@ -15,8 +15,6 @@
     function CGAccountInfoView() {
       this.render = __bind(this.render, this);
 
-      this.uploadFiles = __bind(this.uploadFiles, this);
-
       this.connect = __bind(this.connect, this);
 
       this.buildModel = __bind(this.buildModel, this);
@@ -28,8 +26,7 @@
     CGAccountInfoView.prototype.events = {
       'click a.back': 'back',
       'change input': 'inputChanged',
-      'keyup input': 'inputChanged',
-      'click .upload-files': 'uploadFiles'
+      'keyup input': 'inputChanged'
     };
 
     CGAccountInfoView.prototype.initialize = function(options) {
@@ -132,56 +129,6 @@
         _this.inputChanged();
         _this.trigger('completed');
         return _this.trigger('back');
-      });
-      return false;
-    };
-
-    CGAccountInfoView.prototype.uploadFiles = function(evt) {
-      var oVendorInfo, sKey, sModelKey,
-        _this = this;
-      evt.preventDefault();
-      sKey = 'f' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
-      sModelKey = 'model' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
-      while (window[sKey]) {
-        sKey += Math.floor(Math.random() * 1000);
-      }
-      while (window[sModelKey]) {
-        sModelKey += Math.floor(Math.random() * 1000);
-      }
-      oVendorInfo = this.getVendorInfo();
-      window[sModelKey] = function() {
-        return _this.buildModel(true);
-      };
-      window[sKey] = function(sResult) {
-        var oResult;
-        delete window[sKey];
-        delete window[sModelKey];
-        _this.uploadFileDlg.dialog('close');
-        _this.uploadFileDlg = null;
-        oResult = JSON.parse(sResult);
-        if (oResult.error) {
-          EzBob.App.trigger('error', 'Problem Linking ' + oVendorInfo.DisplayName + ' Account: ' + oResult.error.Data.error);
-        } else {
-          if (oResult.submitted) {
-            EzBob.App.trigger('info', oVendorInfo.DisplayName + ' Account Added Successfully');
-          }
-        }
-        _this.trigger('completed');
-        return _this.trigger('back');
-      };
-      $('iframe', this.$el.find('div#upload-files-form')).each(function(idx, iframe) {
-        iframe.setAttribute('width', 570);
-        iframe.setAttribute('height', 515);
-        return iframe.setAttribute('src', ("" + window.gRootPath + "Customer/CGMarketPlaces/UploadFilesDialog?key=") + sKey + "&handler=" + oVendorInfo.ClientSide.LinkForm.UploadFilesHandler + '&modelkey=' + sModelKey);
-      });
-      this.uploadFileDlg = this.$el.find('div#upload-files-form').dialog({
-        height: 600,
-        width: 600,
-        modal: true,
-        title: 'Please upload the VAT returns',
-        resizable: false,
-        dialogClass: 'upload-files-dialog',
-        closeOnEscape: false
       });
       return false;
     };

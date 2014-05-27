@@ -1,46 +1,23 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
 	using System.Linq;
-	using System.Web;
 	using System.Web.Mvc;
 	using Code.MpUniq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Ezbob.HmrcHarvester;
-	using Ezbob.ValueIntervals;
+	using Ezbob.Logger;
 	using Infrastructure;
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;
 	using ServiceClientProxy;
-	using log4net;
 	using NHibernate;
 	using Web.Models.Strings;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class HmrcController : Controller {
 		#region public
-
-		#region class ValidateFilesResult
-
-		public class ValidateFilesResult {
-			public Hopper Hopper;
-			public string Error;
-		} // class ValidateFilesResult
-
-		#endregion class ValidateFilesResult
-
-		#region method ValidateFiles
-
-		public static ValidateFilesResult ValidateFiles(int nCustomerID, HttpFileCollectionBase oFiles) {
-			var oProcessor = new LocalHmrcFileProcessor(nCustomerID, oFiles);
-
-			oProcessor.Run();
-
-			return oProcessor;
-		} // ValidateFiles
-
-		#endregion method ValidateFiles
 
 		#region constructor
 
@@ -61,35 +38,92 @@
 
 		#endregion constructor
 
-		#region action UploadFiles
+		#region action SaveFile
 
 		[HttpPost]
-		public ActionResult UploadFiles() {
-			HmrcFileCache oFileCache = HmrcFileCache.Get(Session);
+		public ActionResult SaveFile() {
+			int nCustomerID;
 
-			if ((oFileCache != null) && !string.IsNullOrWhiteSpace(oFileCache.ErrorMsg))
-				return CreateError(oFileCache.ErrorMsg);
+			try {
+				nCustomerID = _context.Customer.Id;
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to fetch current customer.");
+				return CreateError("Please log out and log in again.");
+			} // try
 
-			string customerEmail = _context.Customer.Name;
-			var model = new AccountModel { accountTypeName = "HMRC", displayName = customerEmail, name = customerEmail, login = customerEmail, password = "topsecret" };
+			var oProcessor = new LocalHmrcFileProcessor(nCustomerID, Request.Files);
+			oProcessor.Run();
+
+			if (!string.IsNullOrWhiteSpace(oProcessor.FileCache.ErrorMsg))
+				return CreateError(oProcessor.FileCache.ErrorMsg);
+
+			if (oProcessor.FileCache.AddedCount < 1)
+				return CreateError("No files were accepted.");
+
+			IDatabaseCustomerMarketPlace mp = FindOrCreateMarketplace();
+
+			if (mp == null) {
+				ms_oLog.Alert("Marketplace neither found nor created.");
+				return CreateError(string.Format("Failed to upload VAT return file{0}.", oProcessor.FileCache.AddedCount == 1 ? "" : "s"));
+			} // if
+
+			Connector.SetBackdoorData("HMRC", mp.Id, oProcessor.FileCache.Hopper);
+
+			try {
+				m_oServiceClient.Instance.MarketplaceInstantUpdate(mp.Id);
+				mp.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(mp.Id);
+			}
+			catch (Exception e) {
+				return CreateError("Account has been linked but error occurred while storing uploaded data: " + e.Message);
+			} // try
+
+			return CreateNoError();
+		} // SaveFile
+
+		#endregion action SaveFile
+
+		#endregion public
+
+		#region private
+
+		#region method FindOrCreateMarketplace
+
+		private IDatabaseCustomerMarketPlace FindOrCreateMarketplace() {
+			var oHmrcInternalID = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+
+			MP_CustomerMarketPlace oMp = _context.Customer.CustomerMarketPlaces.FirstOrDefault(mp => {
+				if (mp.Marketplace.InternalId != oHmrcInternalID)
+					return false;
+
+				if (mp.DisplayName != _context.Customer.Name)
+					return false;
+
+				return AccountModel.ToModel(mp).password == "topsecret";
+			});
+
+			if (oMp != null) {
+				oMp.SetIMarketplaceType(new DatabaseMarketPlace("HMRC"));
+				return oMp;
+			} // if
+
+			var model = new AccountModel {
+				accountTypeName = "HMRC",
+				displayName = _context.Customer.Name,
+				name = _context.Customer.Name,
+				login = _context.Customer.Name,
+				password = "topsecret",
+			};
 
 			AddAccountState oState = ValidateModel(model);
 
 			if (oState.Error != null)
-				return oState.Error;
-
-			string stateError;
-			Hopper oSeeds = GetProcessedFiles(out stateError);
-
-			if (stateError != null)
-				return CreateError(stateError);
+				return null;
 
 			SaveMarketplace(oState, model);
 
 			if (oState.Error != null)
-				return oState.Error;
-
-			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
+				return null;
 
 			try {
 				// This is done to for two reasons:
@@ -98,7 +132,7 @@
 				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, oState.CustomerMarketPlace.Id, true);
 			}
 			catch (Exception e) {
-				Log.WarnFormat(
+				ms_oLog.Warn(e,
 					"Failed to start UpdateMarketplace strategy for customer [{0}: {1}] with marketplace id {2}," +
 					" if this is the only customer marketplace underwriter should run this strategy manually" +
 					" (otherwise Main strategy will be stuck).",
@@ -106,98 +140,12 @@
 					_context.Customer.Name,
 					oState.CustomerMarketPlace.Id
 				);
-				Log.Warn(e);
 			} // try
 
-			try {
-				m_oServiceClient.Instance.MarketplaceInstantUpdate(oState.CustomerMarketPlace.Id);
-				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
-			}
-			catch (Exception e) {
-				return CreateError("Account has been linked but error occurred while storing uploaded data: " + e.Message);
-			} // try
+			return oState.CustomerMarketPlace;
+		} // FindOrCreateMarketplace
 
-			return Json(new { });
-		} // UploadFiles
-
-		#endregion action UploadFiles
-
-		#region action UploadedFiles
-
-		[HttpPost]
-		public ActionResult UploadedFiles() {
-			Response.AddHeader("x-frame-options", "SAMEORIGIN");
-
-			int nCustomerID = 0;
-
-			try {
-				nCustomerID = _context.Customer.Id;
-			}
-			catch (Exception e) {
-				Log.Warn("Failed to fetch current customer, files will be saved without customer ID; exception: ", e);
-			} // try
-
-			var oProcessor = new SessionHmrcFileProcessor(Session, nCustomerID, Request.Files);
-
-			oProcessor.Run();
-
-			if (!string.IsNullOrWhiteSpace(oProcessor.FileCache.ErrorMsg))
-				return CreateError(oProcessor.FileCache.ErrorMsg);
-
-			return Json(new { });
-		} // UploadedFiles
-
-		#endregion action UploadedFiles
-
-		#endregion public
-
-		#region private
-
-		#region method GetProcessedFiles
-
-		private Hopper GetProcessedFiles(out string stateError) {
-			stateError = null;
-
-			HmrcFileCache oFileCache = HmrcFileCache.Get(Session);
-
-			if (oFileCache == null) {
-				stateError = "No files were successfully processed";
-				return null;
-			} // if
-
-			switch (oFileCache.AddedCount) {
-			case 0:
-				stateError = "No files were successfully processed";
-				return null;
-
-			case 1:
-				return oFileCache.Hopper;
-
-			default:
-				oFileCache.DateIntervals.Sort((a, b) => a.Left.CompareTo(b.Left));
-
-				DateInterval next = null;
-
-				foreach (DateInterval cur in oFileCache.DateIntervals) {
-					if (next == null) {
-						next = cur;
-						continue;
-					} // if
-
-					DateInterval prev = next;
-					next = cur;
-
-					if (!prev.IsJustBefore(next)) {
-						stateError = "Inconsequent date ranges: " + prev + " and " + next;
-						return null;
-					} // if
-				} // for each interval
-
-				return oFileCache.Hopper;
-			} // switch
-		} // GetProcessedFiles
-
-		#endregion method GetProcessedFiles
+		#endregion method FindOrCreateMarketplace
 
 		#region class AddAccountState
 
@@ -224,7 +172,7 @@
 
 			if (oResult.VendorInfo == null) {
 				var sError = "Unsupported account type: " + model.accountTypeName;
-				Log.Error(sError);
+				ms_oLog.Error(sError);
 				oResult.Error = CreateError(sError);
 				return oResult;
 			} // try
@@ -242,7 +190,7 @@
 				return oResult;
 			}
 			catch (Exception e) {
-				Log.Error(e);
+				ms_oLog.Error(e);
 				oResult.Error = CreateError(e);
 				return oResult;
 			} // try
@@ -270,7 +218,7 @@
 				oState.CustomerMarketPlace = mp;
 			}
 			catch (Exception e) {
-				Log.Error(e);
+				ms_oLog.Error(e);
 				oState.Error = CreateError(e);
 			} // try
 		} // SaveMarketplace
@@ -284,13 +232,20 @@
 		} // CreateError
 
 		private JsonResult CreateError(string sErrorMsg) {
-			Log.WarnFormat("Returning error from HMRC controller to web UI: {0}", sErrorMsg);
-			return Json(new { error = sErrorMsg });
+			if (string.IsNullOrWhiteSpace(sErrorMsg))
+				return Json(new { success = true, error = string.Empty, });
+
+			ms_oLog.Warn("Returning error from HMRC controller to web UI: {0}", sErrorMsg);
+			return Json(new { success = false, error = sErrorMsg, });
 		} // CreateError
+
+		private JsonResult CreateNoError() {
+			return CreateError((string)null);
+		} // CreateNoError
 
 		#endregion method CreateError
 
-		#region properties
+		#region fields
 
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly MarketPlaceRepository _mpTypes;
@@ -299,9 +254,9 @@
 		private readonly ServiceClient m_oServiceClient;
 		private readonly ISession _session;
 
-		private static readonly ILog Log = LogManager.GetLogger(typeof(HmrcController));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(HmrcController));
 
-		#endregion properties
+		#endregion fields
 
 		#endregion private
 	} // class HmrcController

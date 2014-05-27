@@ -6,7 +6,6 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         'click a.back': 'back'
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
-        'click .upload-files': 'uploadFiles'
 
     initialize: (options) ->
         @uploadFilesDlg = null
@@ -101,61 +100,6 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             @trigger 'back'
 
         false
-
-    uploadFiles: (evt) =>
-        evt.preventDefault()
-
-        sKey = 'f' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000)
-        sModelKey = 'model' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000)
-
-        while window[sKey]
-            sKey += Math.floor(Math.random() * 1000)
-
-        while window[sModelKey]
-            sModelKey += Math.floor(Math.random() * 1000)
-
-        oVendorInfo = @getVendorInfo()
-
-        window[sModelKey] = =>
-            return @buildModel true
-
-        window[sKey] = (sResult) =>
-            delete window[sKey]
-            delete window[sModelKey]
-
-            @uploadFileDlg.dialog 'close'
-            @uploadFileDlg = null
-
-            oResult = JSON.parse sResult
-
-            if oResult.error
-                EzBob.App.trigger 'error', 'Problem Linking ' + oVendorInfo.DisplayName + ' Account: ' + oResult.error.Data.error
-            else
-                if oResult.submitted
-                    EzBob.App.trigger 'info', oVendorInfo.DisplayName + ' Account Added Successfully'
-
-            @trigger 'completed'
-            @trigger 'back'
-        # end of sKey handler
-
-        $('iframe', @$el.find('div#upload-files-form')).each (idx, iframe) ->
-            iframe.setAttribute 'width', 570
-            iframe.setAttribute 'height', 515
-            iframe.setAttribute 'src', "#{window.gRootPath}Customer/CGMarketPlaces/UploadFilesDialog?key=" + sKey + "&handler=" + oVendorInfo.ClientSide.LinkForm.UploadFilesHandler + '&modelkey=' + sModelKey
-        # end of each
-
-        @uploadFileDlg = @$el.find('div#upload-files-form').dialog(
-            height: 600,
-            width: 600,
-            modal: true,
-            title: 'Please upload the VAT returns'
-            resizable: false
-            dialogClass: 'upload-files-dialog'
-            closeOnEscape: false
-        )
-
-        false
-    # end of uploadFiles
 
     render: =>
         super()

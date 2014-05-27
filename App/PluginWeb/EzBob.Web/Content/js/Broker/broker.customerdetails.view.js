@@ -335,7 +335,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 				var oDropzone = this;
 
 				oDropzone.on('success', function(oFile, oResponse) {
-					console.log('upload succeded:', oFile, oResponse);
+					// console.log('Upload succeeded:', oFile, oResponse);
 
 					if (oResponse.success) {
 						self.reloadFileList();

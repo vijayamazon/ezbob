@@ -356,7 +356,7 @@
   <xs:element name="LoadVatReturnSummary">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="customerId" type="xs:int" />
+        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
         <xs:element minOccurs="0" name="nMarketplaceID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>

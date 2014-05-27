@@ -1249,14 +1249,6 @@ a.amazonscreenshot {
     border: 1px solid red;
 }
 
-DIV#upload-files-form {
-    display: none;
-}
-
-.upload-files-dialog .ui-dialog-titlebar-close {
-    display: none;
-}
-
 .addr-button {
     display: inline-block;
     text-align: center;

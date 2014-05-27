@@ -88,5 +88,12 @@ var EzBob = EzBob || {};
 
 			return true;
 		}, // isConsequent
+
+		isConsequentNoCheck: function() {
+			if (this.intervals.length >= 2)
+				this.intervals.sort(function(a, b) { return a.compareTo(b); });
+
+			return true;
+		}, // isConsequentNoCheck
 	}); // DateIntervalSet
 })();

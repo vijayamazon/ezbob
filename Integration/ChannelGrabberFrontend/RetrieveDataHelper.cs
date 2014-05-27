@@ -100,28 +100,6 @@ namespace Integration.ChannelGrabberFrontend {
 
 			AccountData ad = oSecInfo.Fill();
 			
-			switch (ad.VendorInfo.Behaviour) {
-			case Behaviour.Default:
-				// nothing to do here
-				break;
-
-			case Behaviour.HMRC:
-				if ((databaseCustomerMarketPlace as MP_CustomerMarketPlace).UpdatingEnd != null)
-				{
-					ms_oLog.DebugFormat(
-						"{0} account with id {1} was created by uploading files, nothing to update, bailing out.",
-						ad.AccountTypeName(), databaseCustomerMarketPlace.Id
-					);
-
-					return;
-				} // if account was created by uploading files
-
-				break;
-
-			default:
-				throw new ArgumentOutOfRangeException();
-			} // switch
-
 			var ctr = new Connector(ad, ms_oLog, databaseCustomerMarketPlace.Customer);
 
 			if (ctr.Init()) {

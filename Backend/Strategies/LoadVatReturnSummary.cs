@@ -1,17 +1,24 @@
 ﻿namespace EzBob.Backend.Strategies {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using JetBrains.Annotations;
+
+	using SafeAction = System.Action<System.Collections.Generic.SortedDictionary<int, Ezbob.Backend.Models.VatReturnSummary>, Ezbob.Database.SafeReader>;
 
 	public class LoadVatReturnSummary : AStrategy {
 		#region public
 
 		#region constructor
 
-		public LoadVatReturnSummary(int customerId, int nMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadVatReturnSummary(int nCustomerID, int nMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSp = new SpLoadVatReturnSummary(nMarketplaceID, DB, Log);
-			this.customerId = customerId;
+			m_nCustomerID = nCustomerID;
+			Summary = new VatReturnSummary[0];
 		} // constructor
 
 		#endregion constructor
@@ -27,31 +34,44 @@
 		#region method Execute
 
 		public override void Execute() {
-			Summary = new VatReturnSummary();
+			var oResults = new SortedDictionary<int, VatReturnSummary>();
+
+			var oProcessors = new Queue<SafeAction>();
+			oProcessors.Enqueue(ProcessSummary);
+			oProcessors.Enqueue(ProcessQuarter);
+
+			SafeAction oCurAction = null;
 
 			m_oSp.ForEachRowSafe((sr, bRowsetStart) => {
-				if (sr.ContainsField("SummaryID", sNotFoundIndicator: "SummaryPeriodID"))
-					sr.Fill(Summary);
-				else
-					Summary.Quarters.Add(sr.Fill<VatReturnQuarter>());
+				if (bRowsetStart)
+					oCurAction = oProcessors.Dequeue();
+
+				oCurAction(oResults, sr);
 
 				return ActionResult.Continue;
 			});
 
-			var getExperianAccountsCurrentBalance = new GetExperianAccountsCurrentBalance(customerId, DB, Log);
-			getExperianAccountsCurrentBalance.Execute();
 			decimal factor = CurrentValues.Instance.FCFFactor;
-			decimal newActualLoansRepayment = (getExperianAccountsCurrentBalance.CurrentBalance / factor);
-			Summary.ActualLoanRepayment = newActualLoansRepayment;
-			Summary.FreeCashFlow -= newActualLoansRepayment;
+
+			if (Math.Abs(factor) > 0.0000001m) {
+				var getExperianAccountsCurrentBalance = new GetExperianAccountsCurrentBalance(m_nCustomerID, DB, Log);
+				getExperianAccountsCurrentBalance.Execute();
+				decimal newActualLoansRepayment = getExperianAccountsCurrentBalance.CurrentBalance / factor;
+
+				foreach (KeyValuePair<int, VatReturnSummary> pair in oResults) {
+					pair.Value.ActualLoanRepayment = newActualLoansRepayment;
+					pair.Value.FreeCashFlow -= newActualLoansRepayment;
+				} // for each summary
+			} // if
+
+			Summary = oResults.Values.ToArray();
 		} // Execute
 
 		#endregion method Execute
 
 		#region property Summary
 
-		public VatReturnSummary Summary { get; private set; }
-		private readonly int customerId;
+		public VatReturnSummary[] Summary { get; private set; }
 
 		#endregion property Summary
 
@@ -59,6 +79,7 @@
 
 		#region private
 
+		private readonly int m_nCustomerID;
 		private readonly SpLoadVatReturnSummary m_oSp;
 
 		#region class SpLoadVatReturnSummary
@@ -72,10 +93,29 @@
 				return MarketplaceID > 0;
 			} // HasValidParameters
 
+			[UsedImplicitly]
 			public int MarketplaceID { get; set; }
 		} // class SpLoadVatReturnSummary
 
 		#endregion class SpLoadVatReturnSummary
+
+		#region method ProcessSummary
+
+		private static void ProcessSummary(SortedDictionary<int, VatReturnSummary> oResults, SafeReader sr) {
+			var oSummary = sr.Fill<VatReturnSummary>();
+			oResults[oSummary.SummaryID] = oSummary;
+		} // ProcessSummary
+
+		#endregion method ProcessSummary
+
+		#region method ProcessQuarter
+
+		private static void ProcessQuarter(SortedDictionary<int, VatReturnSummary> oResults, SafeReader sr) {
+			var oQuarter = sr.Fill<VatReturnQuarter>();
+			oResults[oQuarter.SummaryID].Quarters.Add(oQuarter);
+		} // ProcessQuarter
+
+		#endregion method ProcessQuarter
 
 		#endregion private
 	} // class LoadVatReturnSummary

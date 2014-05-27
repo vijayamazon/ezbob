@@ -16,10 +16,12 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @TotalCount INT
+	DECLARE @BusinessID INT
 	DECLARE @SummaryID BIGINT
 	
 	SELECT
-		@TotalCount = COUNT(*)
+		@TotalCount = COUNT(*),
+		@BusinessID = MAX(BusinessID)
 	FROM
 		@Totals
 
@@ -36,6 +38,8 @@ BEGIN
 		CustomerID = @CustomerID
 		AND
 		CustomerMarketplaceID = @CustomerMarketplaceID
+		AND
+		BusinessID = @BusinessID
 		AND
 		ISActive = 1
 

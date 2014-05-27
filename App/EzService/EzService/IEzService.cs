@@ -403,7 +403,7 @@
 		ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
 
 		[OperationContract]
-		VatReturnSummaryActionResult LoadVatReturnSummary(int customerId, int nMarketplaceID);
+		VatReturnSummaryActionResult LoadVatReturnSummary(int nCustomerID, int nMarketplaceID);
 
 		[OperationContract]
 		ActionMetaData AndRecalculateVatReturnSummaryForAll();
