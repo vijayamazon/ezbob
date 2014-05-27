@@ -1254,3 +1254,11 @@ td a.edit-loan {
     white-space: nowrap;
     width: 15%;
 }
+
+#theme-setting {
+    height: 40px;
+}
+
+.tabbable {
+    margin-top: 0px;
+}
