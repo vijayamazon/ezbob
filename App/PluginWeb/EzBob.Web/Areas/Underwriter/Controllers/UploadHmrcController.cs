@@ -48,6 +48,7 @@
 
 		#region HMRC Upload
 
+		/*
 		[HttpPost]
 		public ActionResult UploadHmrc(int customerId) {
 			if (customerId < 1)
@@ -85,6 +86,7 @@
 
 			return DoSave(oState, model, customerId, oSeeds);
 		} // UploadFiles
+		*/
 
 		[HttpPost]
 		public ActionResult SaveNewManuallyEntered(string sData) {
@@ -184,7 +186,7 @@
 				displayName = customerEmail,
 				name = customerEmail,
 				login = customerEmail,
-				password = "topsecret"
+				password = VendorInfo.TopSecret
 			};
 
 			oState = new AddAccountState { VendorInfo = Configuration.Instance.GetVendorInfo(model.accountTypeName) };
@@ -248,7 +250,7 @@
 				return CreateError("Account has been linked but error occurred while storing uploaded data: " + e.Message);
 			} // try
 
-			HmrcFileCache.Clean(Session, string.Format("HmrcFileCache{0}", nCustomerID));
+			// HmrcFileCache.Clean(Session, string.Format("HmrcFileCache{0}", nCustomerID));
 			return Json(new { success = true, });
 		} // DoSave
 
@@ -266,6 +268,7 @@
 			} // constructor
 		} // class AddAccountState
 
+		/*
 		private Hopper GetProcessedFiles(int customerId, out string stateError) {
 			stateError = null;
 
@@ -289,6 +292,7 @@
 				return string.IsNullOrWhiteSpace(stateError) ? oFileCache.Hopper : null;
 			} // switch
 		} // GetProcessedFiles
+		*/
 
 		private void SaveMarketplace(AddAccountState oState, AccountModel model, Customer customer) {
 			try {

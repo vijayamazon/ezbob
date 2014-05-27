@@ -41,7 +41,7 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 		var self = this;
 
 		this.Dropzone = new Dropzone(this.$el.find('#hmrcAccountUpload').addClass('dropzone dz-clickable')[0], {
-			parallelUploads: 4,
+			parallelUploads: 1,
 			uploadMultiple: true,
 			acceptedFiles: 'application/pdf',
 			autoProcessQueue: true,
@@ -50,16 +50,18 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 				var oDropzone = this;
 
 				oDropzone.on('success', function(oFile, oResponse) {
-					console.log('Upload succeeded:', oFile, oResponse);
+					console.log('Upload', (oResponse.success ? '' : 'NOT'), 'succeeded:', oFile, oResponse);
 
 					if (oResponse.success) {
 						self.reloadFileList();
 						EzBob.App.trigger('info', 'Upload successful: ' + oFile.name);
 					}
-					else if (oResponse.error)
+					else if (oResponse.error) {
 						EzBob.App.trigger('error', oResponse.error);
-					else
+					}
+					else {
 						EzBob.App.trigger('error', 'Failed to upload ' + oFile.name);
+					}
 				}); // on success
 
 				oDropzone.on('error', function(oFile, sErrorMsg, oXhr) {
@@ -80,8 +82,9 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 	}, // reloadFileList
 
 	onRender: function() {
-		if (!this.Dropzone)
-			this.initDropzone();
+		this.clearDropzone();
+
+		this.initDropzone();
 
 		this.reloadFileList();
 

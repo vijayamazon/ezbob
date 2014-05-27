@@ -158,7 +158,7 @@ namespace Ezbob.HmrcHarvester {
 						return;
 					} // if
 
-					if (Password == "topsecret") {
+					if (Password == VendorInfo.TopSecret) {
 						if (null != ObjectFactory.GetInstance<CustomerRepository>().TryGetByEmail(UserName)) {
 							Debug("This HMRC account for customer {0} was created from uploaded files, nothing to retrieve.", UserName);
 							return;

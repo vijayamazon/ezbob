@@ -28,11 +28,18 @@
 			CGMPUniqChecker mpChecker,
 			ISession session
 		) {
-			_context = context;
-			_helper = helper;
-			_mpTypes = mpTypes;
-			_mpChecker = mpChecker;
-			_session = session;
+			lock (ms_oLockVendorInfo) {
+				if (ms_oVendorInfo == null)
+					ms_oVendorInfo = Configuration.Instance.GetVendorInfo("HMRC");
+
+				m_oVendorInfo = ms_oVendorInfo;
+			} // lock
+
+			m_oContext = context;
+			m_oDatabaseHelper = helper;
+			m_oMpTypes = mpTypes;
+			m_oUniquenessChecker = mpChecker;
+			m_oSession = session;
 			m_oServiceClient = new ServiceClient();
 		} // constructor
 
@@ -45,34 +52,34 @@
 			int nCustomerID;
 
 			try {
-				nCustomerID = _context.Customer.Id;
+				nCustomerID = m_oContext.Customer.Id;
 			}
 			catch (Exception e) {
 				ms_oLog.Warn(e, "Failed to fetch current customer.");
 				return CreateError("Please log out and log in again.");
 			} // try
 
-			var oProcessor = new LocalHmrcFileProcessor(nCustomerID, Request.Files);
+			var oProcessor = new HmrcFileProcessor(nCustomerID, Request.Files);
 			oProcessor.Run();
 
-			if (!string.IsNullOrWhiteSpace(oProcessor.FileCache.ErrorMsg))
-				return CreateError(oProcessor.FileCache.ErrorMsg);
+			if (!string.IsNullOrWhiteSpace(oProcessor.ErrorMsg))
+				return CreateError(oProcessor.ErrorMsg);
 
-			if (oProcessor.FileCache.AddedCount < 1)
+			if (oProcessor.AddedCount < 1)
 				return CreateError("No files were accepted.");
 
 			IDatabaseCustomerMarketPlace mp = FindOrCreateMarketplace();
 
 			if (mp == null) {
 				ms_oLog.Alert("Marketplace neither found nor created.");
-				return CreateError(string.Format("Failed to upload VAT return file{0}.", oProcessor.FileCache.AddedCount == 1 ? "" : "s"));
+				return CreateError(string.Format("Failed to upload VAT return file{0}.", oProcessor.AddedCount == 1 ? "" : "s"));
 			} // if
 
-			Connector.SetBackdoorData("HMRC", mp.Id, oProcessor.FileCache.Hopper);
+			Connector.SetBackdoorData(m_oVendorInfo.Name, mp.Id, oProcessor.Hopper);
 
 			try {
 				m_oServiceClient.Instance.MarketplaceInstantUpdate(mp.Id);
-				mp.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(mp.Id);
+				mp.Marketplace.GetRetrieveDataHelper(m_oDatabaseHelper).UpdateCustomerMarketplaceFirst(mp.Id);
 			}
 			catch (Exception e) {
 				return CreateError("Account has been linked but error occurred while storing uploaded data: " + e.Message);
@@ -87,62 +94,60 @@
 
 		#region private
 
-		#region method FindOrCreateMarketplace
+		#region method FindMarketplace
 
-		private IDatabaseCustomerMarketPlace FindOrCreateMarketplace() {
-			var oHmrcInternalID = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
-
-			MP_CustomerMarketPlace oMp = _context.Customer.CustomerMarketPlaces.FirstOrDefault(mp => {
-				if (mp.Marketplace.InternalId != oHmrcInternalID)
+		private IDatabaseCustomerMarketPlace FindMarketplace() {
+			MP_CustomerMarketPlace oMp = m_oContext.Customer.CustomerMarketPlaces.FirstOrDefault(mp => {
+				if (mp.Marketplace.InternalId != m_oVendorInfo.Guid())
 					return false;
 
-				if (mp.DisplayName != _context.Customer.Name)
+				if (mp.DisplayName != m_oContext.Customer.Name)
 					return false;
 
-				return AccountModel.ToModel(mp).password == "topsecret";
+				return AccountModel.ToModel(mp).password == VendorInfo.TopSecret;
 			});
 
 			if (oMp != null) {
-				oMp.SetIMarketplaceType(new DatabaseMarketPlace("HMRC"));
+				oMp.SetIMarketplaceType(new DatabaseMarketPlace(m_oVendorInfo.Name));
 				return oMp;
 			} // if
 
-			var model = new AccountModel {
-				accountTypeName = "HMRC",
-				displayName = _context.Customer.Name,
-				name = _context.Customer.Name,
-				login = _context.Customer.Name,
-				password = "topsecret",
-			};
+			return null;
+		} // FindMarketplace
 
-			AddAccountState oState = ValidateModel(model);
+		#endregion method FindMarketplace
 
-			if (oState.Error != null)
-				return null;
+		#region method FindOrCreateMarketplace
 
-			SaveMarketplace(oState, model);
+		private IDatabaseCustomerMarketPlace FindOrCreateMarketplace() {
+			IDatabaseCustomerMarketPlace oMp = FindMarketplace();
 
-			if (oState.Error != null)
-				return null;
+			if (oMp != null)
+				return oMp;
 
-			try {
-				// This is done to for two reasons:
-				// 1. update Customer.WizardStep to WizardStepType.Marketplace
-				// 2. insert entries into EzServiceActionHistory
-				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, oState.CustomerMarketPlace.Id, true);
-			}
-			catch (Exception e) {
-				ms_oLog.Warn(e,
-					"Failed to start UpdateMarketplace strategy for customer [{0}: {1}] with marketplace id {2}," +
-					" if this is the only customer marketplace underwriter should run this strategy manually" +
-					" (otherwise Main strategy will be stuck).",
-					_context.Customer.Id,
-					_context.Customer.Name,
-					oState.CustomerMarketPlace.Id
-				);
-			} // try
+			lock (ms_oLockCreateMarketplace) {
+				oMp = FindMarketplace();
 
-			return oState.CustomerMarketPlace;
+				if (oMp != null)
+					return oMp;
+
+				var model = new AccountModel {
+					accountTypeName = m_oVendorInfo.Name,
+					displayName = m_oContext.Customer.Name,
+					name = m_oContext.Customer.Name,
+					login = m_oContext.Customer.Name,
+					password = VendorInfo.TopSecret,
+				};
+
+				AddAccountState oState = ValidateMpUniqueness(model);
+
+				if (oState.Error != null)
+					return null;
+
+				SaveMarketplace(oState, model);
+
+				return oState.CustomerMarketPlace;
+			} // lock
 		} // FindOrCreateMarketplace
 
 		#endregion method FindOrCreateMarketplace
@@ -150,13 +155,11 @@
 		#region class AddAccountState
 
 		private class AddAccountState {
-			public VendorInfo VendorInfo;
 			public IMarketplaceType Marketplace;
 			public JsonResult Error;
 			public IDatabaseCustomerMarketPlace CustomerMarketPlace;
 
 			public AddAccountState() {
-				VendorInfo = null;
 				Marketplace = null;
 				Error = null;
 				CustomerMarketPlace = null;
@@ -165,61 +168,71 @@
 
 		#endregion class AddAccountState
 
-		#region method ValidateModel
+		#region method ValidateMpUniqueness
 
-		private AddAccountState ValidateModel(AccountModel model) {
-			var oResult = new AddAccountState { VendorInfo = Configuration.Instance.GetVendorInfo(model.accountTypeName) };
-
-			if (oResult.VendorInfo == null) {
-				var sError = "Unsupported account type: " + model.accountTypeName;
-				ms_oLog.Error(sError);
-				oResult.Error = CreateError(sError);
-				return oResult;
-			} // try
+		private AddAccountState ValidateMpUniqueness(AccountModel model) {
+			var oResult = new AddAccountState();
 
 			try {
 				oResult.Marketplace = new DatabaseMarketPlace(model.accountTypeName);
-				_mpChecker.Check(oResult.Marketplace.InternalId, _context.Customer, model.Fill().UniqueID());
+				m_oUniquenessChecker.Check(oResult.Marketplace.InternalId, m_oContext.Customer, model.Fill().UniqueID());
 			}
 			catch (MarketPlaceAddedByThisCustomerException) {
 				oResult.Error = CreateError(DbStrings.StoreAddedByYou);
-				return oResult;
 			}
 			catch (MarketPlaceIsAlreadyAddedException) {
 				oResult.Error = CreateError(DbStrings.StoreAlreadyExistsInDb);
-				return oResult;
 			}
 			catch (Exception e) {
 				ms_oLog.Error(e);
 				oResult.Error = CreateError(e);
-				return oResult;
 			} // try
 
 			return oResult;
-		} // ValidateModel
+		} // ValidateMpUniqueness
 
-		#endregion method ValidateModel
+		#endregion method ValidateMpUniqueness
 
 		#region method SaveMarketplace
 
 		private void SaveMarketplace(AddAccountState oState, AccountModel model) {
 			try {
-				model.id = _mpTypes.GetAll().First(a => a.InternalId == oState.VendorInfo.Guid()).Id;
+				model.id = m_oMpTypes.GetAll().First(a => a.InternalId == m_oVendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
-				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateEncryptedCustomerMarketplace(
+				IDatabaseCustomerMarketPlace mp = m_oDatabaseHelper.SaveOrUpdateEncryptedCustomerMarketplace(
 					model.name,
 					oState.Marketplace,
 					model,
-					_context.Customer
+					m_oContext.Customer
 				);
-				_session.Flush();
+				m_oSession.Flush();
 
 				oState.CustomerMarketPlace = mp;
 			}
 			catch (Exception e) {
 				ms_oLog.Error(e);
 				oState.Error = CreateError(e);
+			} // try
+
+			if (oState.Error != null)
+				return;
+
+			try {
+				// This is done to for two reasons:
+				// 1. update Customer.WizardStep to WizardStepType.Marketplace
+				// 2. insert entries into EzServiceActionHistory
+				m_oServiceClient.Instance.UpdateMarketplace(m_oContext.Customer.Id, oState.CustomerMarketPlace.Id, true);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e,
+					"Failed to start UpdateMarketplace strategy for customer [{0}: {1}] with marketplace id {2}," +
+					" if this is the only customer marketplace underwriter should run this strategy manually" +
+					" (otherwise Main strategy will be stuck).",
+					m_oContext.Customer.Id,
+					m_oContext.Customer.Name,
+					oState.CustomerMarketPlace.Id
+				);
 			} // try
 		} // SaveMarketplace
 
@@ -247,14 +260,19 @@
 
 		#region fields
 
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly MarketPlaceRepository _mpTypes;
-		private readonly CGMPUniqChecker _mpChecker;
-		private readonly DatabaseDataHelper _helper;
+		private readonly IEzbobWorkplaceContext m_oContext;
+		private readonly MarketPlaceRepository m_oMpTypes;
+		private readonly CGMPUniqChecker m_oUniquenessChecker;
+		private readonly DatabaseDataHelper m_oDatabaseHelper;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly ISession _session;
+		private readonly ISession m_oSession;
+		private readonly VendorInfo m_oVendorInfo;
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(HmrcController));
+		private static VendorInfo ms_oVendorInfo;
+		private static readonly object ms_oLockVendorInfo = new object();
+
+		private static readonly object ms_oLockCreateMarketplace = new object();
 
 		#endregion fields
 

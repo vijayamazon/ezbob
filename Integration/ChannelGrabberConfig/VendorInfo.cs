@@ -7,6 +7,8 @@ namespace Integration.ChannelGrabberConfig {
 	public class VendorInfo {
 		#region public
 
+		public const string TopSecret = "topsecret";
+
 		#region constructor
 
 		public VendorInfo() {
