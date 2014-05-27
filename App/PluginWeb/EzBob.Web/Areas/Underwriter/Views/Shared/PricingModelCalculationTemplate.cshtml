@@ -20,8 +20,16 @@
                         <td><%-EzBob.formatPercents(model.DefaultRate)%>&nbsp;Company:<input type="text" id="defaultRateCompanyShare" class="pricing-model-double-input-width"/> Applicant:<input type="text" id="defaultRateCustomerShare" class="pricing-model-double-input-width"/></td>
                     </tr>
                     <tr>
+                        <td class="pricing-model-left-td">Total Fee</td>
+                        <td><span id="totalSetupFeePercents"/> = <span id="totalSetupFeePounds"/></td>
+                    </tr>
+                    <tr>
                         <td class="pricing-model-left-td">Setup Fee</td>
-                        <td><input type="text" id="setupFeePercents" class="pricing-model-double-input-width"/> = <input type="text" id="setupFeePounds" class="pricing-model-double-input-width"/></td>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="setupFeePercents" class="pricing-model-double-input-width"/> = <input type="text" id="setupFeePounds" class="pricing-model-double-input-width"/></td>
+                    </tr>
+                    <tr>
+                        <td class="pricing-model-left-td">Broker Setup Fee</td>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="brokerSetupFeePercents" class="pricing-model-double-input-width"/> = <input type="text" id="brokerSetupFeePounds" class="pricing-model-double-input-width"/></td>
                     </tr>
                     <tr>
                         <td class="pricing-model-left-td">Loan Term</td>

@@ -2231,6 +2231,11 @@ namespace ConfigManager {
 			get { return this[Variables.PricingModelSetupFee]; }
 		}
 
+		public virtual VariableValue PricingModelBrokerSetupFee
+		{
+			get { return this[Variables.PricingModelBrokerSetupFee]; }
+		}
+
 		public virtual VariableValue ReportDaemonDropboxCredentials
 		{
 			get { return this[Variables.ReportDaemonDropboxCredentials]; }

@@ -31,6 +31,7 @@
 			decimal tenurePercents = CurrentValues.Instance.PricingModelTenurePercents;
 			decimal tenureMonths = tenurePercents * loanTerm;
 			decimal setupFeePercents = CurrentValues.Instance.PricingModelSetupFee;
+			decimal brokerSetupFeePercents = CurrentValues.Instance.PricingModelBrokerSetupFee;
 
 			Model = new PricingModelModel
 				{
@@ -40,6 +41,8 @@
 					DefaultRateCustomerShare = defaultRateCustomerShare,
 					SetupFeePounds = setupFeePercents * loanAmount,
 					SetupFeePercents = setupFeePercents,
+					BrokerSetupFeePounds = brokerSetupFeePercents * loanAmount,
+					BrokerSetupFeePercents = brokerSetupFeePercents,
 					LoanTerm = loanTerm,
 					InterestOnlyPeriod = interestOnlyPeriod,
 					TenurePercents = tenurePercents,

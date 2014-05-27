@@ -318,6 +318,7 @@ namespace ConfigManager {
 		PricingModelOpexAndCapex,
 		PricingModelProfitMarkupPercentsOfRevenue,
 		PricingModelSetupFee,
+		PricingModelBrokerSetupFee,
 		EbayServiceType,
 		EbayDevId,
 		EbayAppId,

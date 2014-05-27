@@ -258,6 +258,7 @@ namespace EZBob.DatabaseLib.Model {
 		PricingModelOpexAndCapex,
 		PricingModelProfitMarkupPercentsOfRevenue,
 		PricingModelSetupFee,
+		PricingModelBrokerSetupFee,
 		ReportDaemonDropboxCredentials,
 		ReportDaemonDropboxRootPath,
 		EbayServiceType,

@@ -25,6 +25,10 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             selector: "#setupFeePounds",
             converter: EzBob.BindingConverters.moneyFormat
         },
+        BrokerSetupFeePounds: {
+            selector: "#brokerSetupFeePounds",
+            converter: EzBob.BindingConverters.moneyFormat
+        },
         Cogs: {
             selector: "#cogs",
             converter: EzBob.BindingConverters.moneyFormat
@@ -40,6 +44,10 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         },
         SetupFeePercents: {
             selector: "#setupFeePercents",
+            converter: EzBob.BindingConverters.percentsFormat
+        },
+        BrokerSetupFeePercents: {
+            selector: "#brokerSetupFeePercents",
             converter: EzBob.BindingConverters.percentsFormat
         },
         DefaultRateCompanyShare: {
@@ -88,6 +96,8 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         'focusout #tenureMonths': 'tenureMonthsChanged',
         'focusout #setupFeePounds': 'setupFeePoundsChanged',
         'focusout #setupFeePercents': 'setupFeePercentsChanged',
+        'focusout #brokerSetupFeePounds': 'brokerSetupFeePoundsChanged',
+        'focusout #brokerSetupFeePercents': 'brokerSetupFeePercentsChanged',
         'focusout #defaultRateCompanyShare': 'defaultRateCompanyShareChanged',
         'focusout #defaultRateCustomerShare': 'defaultRateCustomerShareChanged',
         'click #pricingModelResetButton': 'resetClicked',
@@ -98,6 +108,13 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     loanAmountChanged: function () {
         var setupFeePounds = this.model.get('LoanAmount') * this.model.get('SetupFeePercents');
         this.model.set('SetupFeePounds', setupFeePounds);
+        
+        var brokerSetupFeePounds = this.model.get('LoanAmount') * this.model.get('BrokerSetupFeePercents');
+        this.model.set('BrokerSetupFeePounds', brokerSetupFeePounds);
+        
+        var totalSetupFeePounds = setupFeePounds + brokerSetupFeePounds;
+        var totalSetupFeePercents = (this.model.get('SetupFeePercents') + this.model.get('BrokerSetupFeePercents')) * 100;
+        this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
     },
 
     loanTermChanged: function () {
@@ -133,6 +150,11 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         this.model.set('DefaultRateCompanyShare', companyShare);
         this.getDefaultRateFromServer();
     },
+    
+    setTotalSetupFee: function (percents, pounds) {
+        this.$el.find('#totalSetupFeePercents').text(percents + '%');
+        this.$el.find('#totalSetupFeePounds').text('£ ' + pounds);
+    },
 
     setupFeePoundsChanged: function () {
         var setupFeePercents = 0;
@@ -141,11 +163,41 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
             setupFeePercents = this.model.get('SetupFeePounds') / loanAmount;
         }
         this.model.set('SetupFeePercents', setupFeePercents);
+
+        var totalSetupFeePercents = (this.model.get('BrokerSetupFeePercents') + setupFeePercents) * 100;
+        var totalSetupFeePounds = parseFloat(this.model.get('SetupFeePounds')) + parseFloat(this.model.get('BrokerSetupFeePounds'));
+        this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
     },
 
     setupFeePercentsChanged: function () {
         var setupFeePounds = this.model.get('SetupFeePercents') * this.model.get('LoanAmount');
         this.model.set('SetupFeePounds', setupFeePounds);
+
+        var totalSetupFeePercents = (this.model.get('BrokerSetupFeePercents') + this.model.get('SetupFeePercents')) * 100;
+        var totalSetupFeePounds = setupFeePounds + this.model.get('BrokerSetupFeePounds');
+        this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
+    },
+
+    brokerSetupFeePoundsChanged: function () {
+        var brokerSetupFeePercents = 0;
+        var loanAmount = this.model.get('LoanAmount');
+        if (loanAmount != 0) {
+            brokerSetupFeePercents = this.model.get('BrokerSetupFeePounds') / loanAmount;
+        }
+        this.model.set('BrokerSetupFeePercents', brokerSetupFeePercents);
+        
+        var totalSetupFeePercents = (this.model.get('SetupFeePercents') + brokerSetupFeePercents) * 100;
+        var totalSetupFeePounds = parseFloat(this.model.get('SetupFeePounds')) + parseFloat(this.model.get('BrokerSetupFeePounds'));
+        this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
+    },
+
+    brokerSetupFeePercentsChanged: function () {
+        var brokerSetupFeePounds = this.model.get('BrokerSetupFeePercents') * this.model.get('LoanAmount');
+        this.model.set('BrokerSetupFeePounds', brokerSetupFeePounds);
+
+        var totalSetupFeePercents = (this.model.get('BrokerSetupFeePercents') + this.model.get('SetupFeePercents')) * 100;
+        var totalSetupFeePounds = brokerSetupFeePounds + this.model.get('SetupFeePounds');
+        this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
     },
 
     tenurePercentsChanged: function () {
@@ -244,16 +296,24 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         this.$el.find('#debtPercentOfCapital').percentFormat();
         this.$el.find('#costOfDebt').percentFormat();
         this.$el.find('#setupFeePercents').percentFormat();
+        this.$el.find('#brokerSetupFeePercents').percentFormat();
         this.$el.find('#profitMarkup').percentFormat();
 
         this.$el.find('#loanAmount').moneyFormat();
         this.$el.find('#setupFeePounds').moneyFormat();
+        this.$el.find('#brokerSetupFeePounds').moneyFormat();
         this.$el.find('#cogs').moneyFormat();
         this.$el.find('#opexAndCapex').moneyFormat();
         
         this.$el.find('#loanTerm').monthFormatNoDecimals();
         this.$el.find('#interestOnlyPeriod').monthFormatNoDecimals();
         this.$el.find('#tenureMonths').monthFormat();
+
+        var setupFeePounds = this.model.get('LoanAmount') * this.model.get('SetupFeePercents');
+        var brokerSetupFeePounds = this.model.get('LoanAmount') * this.model.get('BrokerSetupFeePercents');
+        var totalSetupFeePounds = setupFeePounds + brokerSetupFeePounds;
+        var totalSetupFeePercents = (this.model.get('SetupFeePercents') + this.model.get('BrokerSetupFeePercents')) * 100;
+        this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
         
         return this;
     }

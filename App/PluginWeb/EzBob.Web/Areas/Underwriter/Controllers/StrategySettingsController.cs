@@ -86,6 +86,7 @@
 			var pricingModelOpexAndCapex = _configurationVariablesRepository.GetByName(Variables.PricingModelOpexAndCapex.ToString());
 			var pricingModelProfitMarkupPercentsOfRevenue = _configurationVariablesRepository.GetByName(Variables.PricingModelProfitMarkupPercentsOfRevenue.ToString());
 			var pricingModelSetupFee = _configurationVariablesRepository.GetByName(Variables.PricingModelSetupFee.ToString());
+			var pricingModelBrokerSetupFee = _configurationVariablesRepository.GetByName(Variables.PricingModelBrokerSetupFee.ToString());
 			
 			var pricingModelSettings = new
 			{
@@ -110,7 +111,9 @@
 				PricingModelProfitMarkupPercentsOfRevenue = pricingModelProfitMarkupPercentsOfRevenue.Value,
 				PricingModelProfitMarkupPercentsOfRevenueDesc = pricingModelProfitMarkupPercentsOfRevenue.Description,
 				PricingModelSetupFee = pricingModelSetupFee.Value,
-				PricingModelSetupFeeDesc = pricingModelSetupFee.Description
+				PricingModelSetupFeeDesc = pricingModelSetupFee.Description,
+				PricingModelBrokerSetupFee = pricingModelBrokerSetupFee.Value,
+				PricingModelBrokerSetupFeeDesc = pricingModelBrokerSetupFee.Description
 			};
 			return Json(pricingModelSettings, JsonRequestBehavior.AllowGet);
 		}
@@ -122,12 +125,12 @@
 		                                       int pricingModelInterestOnlyPeriod, decimal pricingModelCollectionRate, decimal pricingModelEuCollectionRate,
 		                                       decimal pricingModelCogs, decimal pricingModelDebtOutOfTotalCapital,
 		                                       decimal pricingModelCostOfDebtPA, decimal pricingModelOpexAndCapex,
-											   decimal pricingModelProfitMarkupPercentsOfRevenue, decimal pricingModelSetupFee)
+											   decimal pricingModelProfitMarkupPercentsOfRevenue, decimal pricingModelSetupFee, decimal pricingModelBrokerSetupFee)
 		{
 			UpdateSettingsPricingModel(pricingModelTenurePercents, pricingModelDefaultRateCompanyShare,
 									   pricingModelInterestOnlyPeriod, pricingModelCollectionRate, pricingModelEuCollectionRate, pricingModelCogs,
 			                           pricingModelDebtOutOfTotalCapital, pricingModelCostOfDebtPA, pricingModelOpexAndCapex,
-									   pricingModelProfitMarkupPercentsOfRevenue, pricingModelSetupFee);
+									   pricingModelProfitMarkupPercentsOfRevenue, pricingModelSetupFee, pricingModelBrokerSetupFee);
 
 			UpdateConfigVars();
 			return SettingsPricingModel();
@@ -138,8 +141,8 @@
 			int pricingModelInterestOnlyPeriod, decimal pricingModelCollectionRate, decimal pricingModelEuCollectionRate,
 			decimal pricingModelCogs, decimal pricingModelDebtOutOfTotalCapital,
 			decimal pricingModelCostOfDebtPA, decimal pricingModelOpexAndCapex,
-			decimal pricingModelProfitMarkupPercentsOfRevenue, decimal pricingModelSetupFee
-		) {
+			decimal pricingModelProfitMarkupPercentsOfRevenue, decimal pricingModelSetupFee, decimal pricingModelBrokerSetupFee) 
+		{
 			Transactional.Execute(() => {
 				_configurationVariablesRepository.SetByName("PricingModelTenurePercents", pricingModelTenurePercents.ToString(CultureInfo.InvariantCulture));
 				_configurationVariablesRepository.SetByName("PricingModelDefaultRateCompanyShare", pricingModelDefaultRateCompanyShare.ToString(CultureInfo.InvariantCulture));
@@ -152,6 +155,7 @@
 				_configurationVariablesRepository.SetByName("PricingModelOpexAndCapex", pricingModelOpexAndCapex.ToString(CultureInfo.InvariantCulture));
 				_configurationVariablesRepository.SetByName("PricingModelProfitMarkupPercentsOfRevenue", pricingModelProfitMarkupPercentsOfRevenue.ToString(CultureInfo.InvariantCulture));
 				_configurationVariablesRepository.SetByName("PricingModelSetupFee", pricingModelSetupFee.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName("PricingModelBrokerSetupFee", pricingModelBrokerSetupFee.ToString(CultureInfo.InvariantCulture));
 			});
 		}
 

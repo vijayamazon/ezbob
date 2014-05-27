@@ -73,6 +73,10 @@
         selector: "input[name='PricingModelSetupFee']",
         converter: EzBob.BindingConverters.percentsFormat
       },
+      PricingModelBrokerSetupFee: {
+        selector: "input[name='PricingModelBrokerSetupFee']",
+        converter: EzBob.BindingConverters.percentsFormat
+      },
       PricingModelOpexAndCapex: {
         selector: "input[name='PricingModelOpexAndCapex']"
       },

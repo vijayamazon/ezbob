@@ -9,6 +9,8 @@
 		public decimal DefaultRateCustomerShare { get; set; }
 		public decimal SetupFeePounds { get; set; }
 		public decimal SetupFeePercents { get; set; }
+		public decimal BrokerSetupFeePounds { get; set; }
+		public decimal BrokerSetupFeePercents { get; set; }
 		public int LoanTerm { get; set; }
 
 		// Other input fields
