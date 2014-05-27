@@ -369,8 +369,9 @@
 					MaxPerNumber = 3,
 					MaxPerPage = 10,
 					Files = new FileDescription[0],
-					Actions = new Dictionary<int, string>(),
-					Statuses = new Dictionary<int, string>(),
+					Actions = new IdNameModel[0] ,
+					Statuses = new IdNameModel[0],
+					Ranks = new IdNameModel[0],
 					Terms = "",
 					TermsID = 0,
 				};
@@ -378,7 +379,7 @@
 
 			m_oLog.Debug("Broker loading CRM details complete.");
 
-			return new StaticDataBrokerForJsonResult(oResult);
+			return Json(new {success = true, data = oResult}, JsonRequestBehavior.AllowGet);
 		} // LoadStaticData
 
 		#endregion action LoadStaticData
@@ -1019,44 +1020,6 @@
 		} // CustomerDetailsBrokerForJsonResult
 
 		#endregion class CustomerDetailsBrokerForJsonResult
-
-		#region class StaticDataBrokerForJsonResult
-
-		public class StaticDataBrokerForJsonResult : BrokerForJsonResult {
-			public StaticDataBrokerForJsonResult(
-				BrokerStaticDataActionResult oResult,
-				string sErrorMsg = "",
-				bool? bExplicitSuccess = null
-			) : base(sErrorMsg, bExplicitSuccess) {
-				actions = oResult.Actions.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value);
-
-				statuses = oResult.Statuses.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value);
-
-				broker_terms = new Dictionary<string, string> {
-					{ "id", oResult.TermsID.ToString(CultureInfo.InvariantCulture) },
-					{ "text", oResult.Terms },
-				};
-
-				marketing_files = oResult.Files;
-
-				max_per_number = oResult.MaxPerNumber;
-				max_per_page = oResult.MaxPerPage;
-			} // constructor
-
-			public virtual int max_per_number { get; private set; } // max_per_number
-
-			public virtual int max_per_page { get; private set; } // max_per_page
-
-			public virtual FileDescription[] marketing_files { get; private set; } // marketing_files
-
-			public virtual Dictionary<string, string> actions { get; private set; } // actions
-
-			public virtual Dictionary<string, string> statuses { get; private set; } // statuses
-
-			public virtual Dictionary<string, string> broker_terms { get; private set; } // broker_terms
-		} // StaticDataBrokerForJsonResult
-
-		#endregion class StaticDataBrokerForJsonResult
 
 		#region class FileListBrokerForJsonResult
 

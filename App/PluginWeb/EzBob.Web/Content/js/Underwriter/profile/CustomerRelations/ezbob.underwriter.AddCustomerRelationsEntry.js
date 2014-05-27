@@ -20,62 +20,74 @@
     AddCustomerRelationsEntry.prototype.template = '#add-customer-relations-entry-template';
 
     AddCustomerRelationsEntry.prototype.events = {
-      'keyup textarea': 'commentKeyup'
+      'keyup #Comment': 'commentKeyup'
     };
 
     AddCustomerRelationsEntry.prototype.jqoptions = function() {
       return {
         modal: true,
-        resizable: false,
-        title: 'CRM',
+        resizable: true,
+        title: 'CRM - add entry',
         position: 'center',
-        draggable: false,
+        draggable: true,
         dialogClass: 'customer-relations-popup',
         width: 600
       };
     };
 
     AddCustomerRelationsEntry.prototype.initialize = function(options) {
-      this.model = new Backbone.Model({
-        actions: options.actions,
-        statuses: options.statuses
-      });
-      this.mainTab = options.mainTab;
       this.onsave = options.onsave;
       this.onbeforesave = options.onbeforesave;
-      this.customerId = this.mainTab ? this.mainTab.model.customerId : options.customerId;
-      this.url = options.url || window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/';
+      this.customerId = this.model.customerId;
+      this.url = window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/';
       return AddCustomerRelationsEntry.__super__.initialize.call(this);
     };
 
-    AddCustomerRelationsEntry.prototype.render = function() {
-      AddCustomerRelationsEntry.__super__.render.call(this);
-      this.$el.find('#Action').prop('selectedIndex', 1);
-      return this;
+    AddCustomerRelationsEntry.prototype.onRender = function() {
+      return this.ui.Action.prop('selectedIndex', 1);
+    };
+
+    AddCustomerRelationsEntry.prototype.serializeData = function() {
+      var data;
+      data = {
+        actions: EzBob.CrmActions,
+        statuses: EzBob.CrmStatuses,
+        ranks: EzBob.CrmRanks
+      };
+      return data;
     };
 
     AddCustomerRelationsEntry.prototype.commentKeyup = function(el) {
-      return $(el.target).val($(el.target).val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
+      return this.ui.Comment.val(this.ui.Comment.val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
+    };
+
+    AddCustomerRelationsEntry.prototype.ui = {
+      "Incoming": "#Incoming_I",
+      "Status": "#Status",
+      "Action": "#Action",
+      "Rank": "#Rank",
+      "Comment": "#Comment"
     };
 
     AddCustomerRelationsEntry.prototype.onSave = function() {
       var opts, xhr,
         _this = this;
-      if (!$('#Incoming_I')[0].checked && !$('#Incoming_O')[0].checked) {
+      if (this.ui.Status[0].selectedIndex === 0) {
         return false;
       }
-      if ($('#Status')[0].selectedIndex === 0) {
+      if (this.ui.Action[0].selectedIndex === 0) {
         return false;
       }
-      if ($('#Action')[0].selectedIndex === 0) {
+      if (this.ui.Rank[0].selectedIndex === 0) {
         return false;
       }
       BlockUi();
       opts = {
-        isIncoming: $('#Incoming_I')[0].checked,
-        action: $('#Action')[0].value,
-        status: $('#Status')[0].value,
-        comment: $('#Comment').val(),
+        isIncoming: this.ui.Incoming[0].checked,
+        action: this.ui.Action[0].value,
+        status: this.ui.Status[0].value,
+        rank: this.ui.Rank[0].value,
+        comment: this.ui.Comment.val(),
         customerId: this.customerId
       };
       if (this.onbeforesave) {
@@ -83,21 +95,16 @@
       }
       xhr = $.post(this.url, opts);
       xhr.done(function(r) {
-        UnBlockUi();
         if (r.success) {
-          if (_this.mainTab) {
-            _this.mainTab.model.fetch();
-          } else if (_this.onsave) {
-            _this.onsave();
-          }
+          _this.model.fetch();
         } else {
-          if (r.error != null) {
+          if (r.error) {
             EzBob.ShowMessage(r.error, 'Error');
           }
         }
         return _this.close();
       });
-      xhr.complete(function() {
+      xhr.always(function() {
         return UnBlockUi();
       });
       return false;

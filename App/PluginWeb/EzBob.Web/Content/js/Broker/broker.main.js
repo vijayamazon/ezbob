@@ -1,74 +1,71 @@
 ﻿EzBob = EzBob || {};
 
-$(document).ready(function() {
-	EzBob.Config = $.extend({}, EzBob.Config, EzBob.LoadedConfig);
+$(document).ready(function () {
+    EzBob.Config = $.extend({}, EzBob.Config, EzBob.LoadedConfig);
 
-	$('.page-section').hide().removeClass('hide');
+    $('.page-section').hide().removeClass('hide');
 
-	var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
+    var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
 
-	var oRouter = new EzBob.Broker.Router();
-	Backbone.history.start();
+    var oRouter = new EzBob.Broker.Router();
+    Backbone.history.start();
 
-	if (oRouter.isForbidden()) {
-		oRouter.forbidden();
-		return;
-	} // if
+    if (oRouter.isForbidden()) {
+        oRouter.forbidden();
+        return;
+    } // if
 
-	$('#user-menu .menu-btn').click(function(event) {
-		event.preventDefault();
-		event.stopPropagation();
+    $('#user-menu .menu-btn').click(function (event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-		var o = $(event.currentTarget);
+        var o = $(event.currentTarget);
 
-		if (o.hasClass('log-in'))
-			oRouter.login();
-		else if (o.hasClass('sign-up'))
-			oRouter.signup();
-		else
-			oRouter.logoff();
-	});
+        if (o.hasClass('log-in'))
+            oRouter.login();
+        else if (o.hasClass('sign-up'))
+            oRouter.signup();
+        else
+            oRouter.logoff();
+    });
 
-	var oFieldStatusIcons = $('IMG.field_status');
-	oFieldStatusIcons.filter('.required').field_status({ required: true });
-	oFieldStatusIcons.not('.required').field_status({ required: false });
+    var oFieldStatusIcons = $('IMG.field_status');
+    oFieldStatusIcons.filter('.required').field_status({ required: true });
+    oFieldStatusIcons.not('.required').field_status({ required: false });
 
-	$.getJSON(window.gRootPath + 'Broker/BrokerHome/LoadStaticData', {}, function(oResponse) {
-		if (!oResponse.success)
-			return;
+    $.get(window.gRootPath + 'Broker/BrokerHome/LoadStaticData', function (oResponse) {
+        if (!oResponse.success)
+            return;
+        var data = oResponse.data;
+        EzBob.CrmActions = data.Actions;
+        EzBob.CrmStatuses = data.Statuses;
+        EzBob.CrmRanks = data.Ranks;
+        var oTerms = $('#broker-terms-and-conditions');
+        oTerms.html(data.Terms);
+        oTerms.attr('data-terms-version', data.TermsID);
 
-		$('#crm-lookups .crm-lookup').load_display_value({
-			data_source: oResponse,
-			set_text: true,
-			callback: function(sName, oValue) { return JSON.stringify(oValue); },
-		});
+        var oSmsCounts = $('#broker-sms-count');
+        oSmsCounts.attr('data-max-per-number', data.MaxPerNumber);
+        oSmsCounts.attr('data-max-per-page', data.MaxPerPage);
 
-		var oTerms = $('#broker-terms-and-conditions');
-		oTerms.html(oResponse.broker_terms.text);
-		oTerms.attr('data-terms-version', oResponse.broker_terms.id);
+        var oLinks = $('.marketing-files');
+        var sTemplate = oLinks.attr('data-url-template');
 
-		var oSmsCounts = $('#broker-sms-count');
-		oSmsCounts.attr('data-max-per-number', oResponse.max_per_number);
-		oSmsCounts.attr('data-max-per-page', oResponse.max_per_page);
+        _.each(data.Files, function (fd) {
+            oLinks.append($('<li />').append(
+                $('<a />').attr('href', sTemplate.replace('__FILE_ID__', fd.FileID)).text(fd.DisplayName)
+            ));
+        });
 
-		var oLinks = $('.marketing-files');
-		var sTemplate = oLinks.attr('data-url-template');
+        oLinks.removeAttr('data-url-template').removeClass('marketing-files');
+    });
 
-		_.each(oResponse.marketing_files, function(fd) {
-			oLinks.append($('<li />').append(
-				$('<a />').attr('href', sTemplate.replace('__FILE_ID__', fd.FileID)).text(fd.DisplayName)
-			));
-		});
+    var sMsgOnStart = $('body').attr('data-msg-on-start');
 
-		oLinks.removeAttr('data-url-template').removeClass('marketing-files');
-	});
+    if (sMsgOnStart) {
+        EzBob.App.trigger($('body').attr('data-msg-on-start-severity') || 'error', sMsgOnStart);
 
-	var sMsgOnStart = $('body').attr('data-msg-on-start');
-
-	if (sMsgOnStart) {
-		EzBob.App.trigger($('body').attr('data-msg-on-start-severity') || 'error', sMsgOnStart);
-
-		$('body').removeAttr('data-msg-on-start');
-		$('body').removeAttr('data-msg-on-start-severity');
-	} // if
+        $('body').removeAttr('data-msg-on-start');
+        $('body').removeAttr('data-msg-on-start-severity');
+    } // if
 }); // document.ready

@@ -350,8 +350,9 @@
 				MaxPerNumber = 3,
 				MaxPerPage = 10,
 				Files = new FileDescription[0],
-				Actions = new SortedDictionary<int, string>(),
-				Statuses = new SortedDictionary<int, string>(),
+				Actions = new IdNameModel[0],
+				Statuses = new IdNameModel[0] ,
+				Ranks = new IdNameModel[0],
 				Terms = "",
 				TermsID = 0,
 			};

@@ -6,6 +6,7 @@
 	using Models;
 	using Infrastructure.csrf;
 	using Infrastructure.Attributes;
+	using NHibernate;
 	using log4net;
 
 	public class CustomerRelationsController : Controller {
@@ -15,15 +16,15 @@
 
 		public CustomerRelationsController(
 			CustomerRelationsRepository customerRelationsRepository,
-			CRMActionsRepository crmActionsRepository,
-			CRMStatusesRepository crmStatusesRepository,
-			LoanRepository loanRepository
-		) {
+			LoanRepository loanRepository,
+			ISession session, CRMRanksRepository crmRanksRepository, CRMStatusesRepository crmStatusesRepository, CRMActionsRepository crmActionsRepository) {
 			_customerRelationsRepository = customerRelationsRepository;
-			_crmActionsRepository = crmActionsRepository;
-			_crmStatusesRepository = crmStatusesRepository;
 			_loanRepository = loanRepository;
-		} // constructor
+			_session = session;
+			_crmRanksRepository = crmRanksRepository;
+			_crmStatusesRepository = crmStatusesRepository;
+			_crmActionsRepository = crmActionsRepository;
+			} // constructor
 
 		#endregion constructor
 
@@ -33,42 +34,27 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Index(int id) {
-			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository);
+			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository, _session);
 			return Json(crm.Create(id), JsonRequestBehavior.AllowGet);
 		} // Index
 
 		#endregion action Index
-
-		#region action Actions
-
+		
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult Actions() {
-			var actions = _crmActionsRepository.GetAll();
-			return Json(actions, JsonRequestBehavior.AllowGet);
-		} // Actions
-
-		#endregion action Actions
-
-		#region action Statuses
-
-		[Ajax]
-		[HttpGet]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult Statuses() {
-			var actions = _crmStatusesRepository.GetAll();
-			return Json(actions, JsonRequestBehavior.AllowGet);
-		} // Statuses
-
-		#endregion action Statuses
+		public JsonResult CrmStatic()
+		{
+			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository, _session);
+			return Json(crm.GetStaticCrmModel(), JsonRequestBehavior.AllowGet);
+		} // CrmStatic
 
 		#region action SaveEntry
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult SaveEntry(bool isIncoming, int action, int status, string comment, int customerId) {
+		public JsonResult SaveEntry(bool isIncoming, int action, int status, int rank, string comment, int customerId) {
 			try {
 				var newEntry = new CustomerRelations {
 					CustomerId = customerId,
@@ -76,6 +62,7 @@
 					Incoming = isIncoming,
 					Action = _crmActionsRepository.Get(action),
 					Status = _crmStatusesRepository.Get(status),
+					Rank = _crmRanksRepository.Get(rank),
 					Comment = comment,
 					Timestamp = DateTime.UtcNow
 				};
@@ -99,7 +86,9 @@
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly CRMActionsRepository _crmActionsRepository;
 		private readonly CRMStatusesRepository _crmStatusesRepository;
+		private readonly CRMRanksRepository _crmRanksRepository;
 		private readonly LoanRepository _loanRepository;
+		private readonly ISession _session;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CustomerRelationsController));
 

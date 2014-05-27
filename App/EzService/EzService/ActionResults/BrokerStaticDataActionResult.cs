@@ -1,5 +1,4 @@
 ﻿namespace EzService {
-	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 	using Ezbob.Backend.Models;
 
@@ -9,10 +8,13 @@
 		public FileDescription[] Files { get; set; }
 
 		[DataMember]
-		public SortedDictionary<int, string> Actions { get; set; } // Actions
+		public IdNameModel[] Actions { get; set; } // Actions
 
 		[DataMember]
-		public SortedDictionary<int, string> Statuses { get; set; } // Statuses
+		public IdNameModel[] Statuses { get; set; } // Statuses
+
+		[DataMember]
+		public IdNameModel[] Ranks { get; set; } // Ranks
 
 		[DataMember]
 		public int MaxPerNumber { get; set; }
@@ -26,4 +28,13 @@
 		[DataMember]
 		public string Terms { get; set; }
 	} // class BrokerStaticDataActionResult
+
+	[DataContract]
+	public class IdNameModel
+	{
+		[DataMember]
+		public int Id { get; set; }
+		[DataMember]
+		public string Name { get; set; }
+	}
 } // namespace EzService

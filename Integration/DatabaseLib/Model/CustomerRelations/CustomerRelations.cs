@@ -14,6 +14,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 		public virtual bool Incoming { get; set; }
 		public virtual CRMActions Action { get; set; }
 		public virtual CRMStatuses Status { get; set; }
+		public virtual CRMRanks Rank { get; set; }
 		public virtual string Comment { get; set; }
 		public virtual DateTime Timestamp { get; set; }
 	}

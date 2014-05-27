@@ -8,8 +8,9 @@
 		#region constructor
 
 		public CrmLoadLookups(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			Actions = new SortedDictionary<int, string>();
-			Statuses = new SortedDictionary<int, string>();
+			Actions = new List<Entry>();
+			Statuses = new List<Entry>();
+			Ranks = new List<Entry>();
 		} // constructor
 
 		#endregion constructor
@@ -24,15 +25,21 @@
 
 		#region property Actions
 
-		public virtual SortedDictionary<int, string> Actions { get; private set; } // Actions
+		public virtual List<Entry> Actions { get; private set; } // Actions
 
 		#endregion property Actions
 
 		#region property Statuses
 
-		public virtual SortedDictionary<int, string> Statuses { get; private set; } // Statuses
+		public virtual List<Entry> Statuses { get; private set; } // Statuses
 
 		#endregion property Statuses
+
+		#region property Ranks
+
+		public virtual List<Entry> Ranks { get; private set; } // Statuses
+
+		#endregion property Ranks
 
 		#region class Entry (helper)
 
@@ -49,7 +56,7 @@
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					Entry e = sr.Fill<Entry>();
-					Actions[e.ID] = e.Name;
+					Actions.Add(e);
 					return ActionResult.Continue;
 				},
 				"CrmLoadActions",
@@ -59,10 +66,21 @@
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					Entry e = sr.Fill<Entry>();
-					Statuses[e.ID] = e.Name;
+					Statuses.Add(e);
 					return ActionResult.Continue;
 				},
 				"CrmLoadStatuses",
+				CommandSpecies.StoredProcedure
+			);
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) =>
+				{
+					Entry e = sr.Fill<Entry>();
+					Ranks.Add(e);
+					return ActionResult.Continue;
+				},
+				"CrmLoadRanks",
 				CommandSpecies.StoredProcedure
 			);
 		} // Execute

@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System.Linq;
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.Postcode;
 	using Ezbob.Backend.Models;
@@ -43,8 +44,9 @@
 
 			return new CrmLookupsActionResult {
 				MetaData = oResult,
-				Actions = oInstance.Actions,
-				Statuses = oInstance.Statuses,
+				Actions = oInstance.Actions.Select(x => new IdNameModel{ Id = x.ID, Name = x.Name}).ToArray(),
+				Statuses = oInstance.Statuses.Select(x => new IdNameModel{ Id = x.ID, Name = x.Name}).ToArray(),
+				Ranks = oInstance.Ranks.Select(x => new IdNameModel { Id = x.ID, Name = x.Name }).ToArray(),
 			};
 		} // CrmLoadLookups
 

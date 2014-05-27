@@ -145,9 +145,9 @@
 
 			model.Messages = _messagesModelBuilder.Create(customer);
 
-			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository);
+			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository, _session);
 
-			model.CustomerRelations = crm.Create(customer.Id).ToList();
+			model.CustomerRelations = crm.Create(customer.Id);
 
 			model.AlertDocs =
 				(from d in _docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();
@@ -183,7 +183,7 @@
 			public FraudDetectionLogModel FraudDetectionLog { get; set; }
 			public List<ApiChecksLogModel> ApiCheckLogs { get; set; }
 			public List<MessagesModel> Messages { get; set; }
-			public List<CustomerRelationsModel> CustomerRelations { get; set; }
+			public IOrderedEnumerable<CustomerRelationsModel> CustomerRelations { get; set; }
 			public AlertDoc[] AlertDocs { get; set; }
 			public List<BugModel> Bugs { get; set; }
 			public string State { get; set; }

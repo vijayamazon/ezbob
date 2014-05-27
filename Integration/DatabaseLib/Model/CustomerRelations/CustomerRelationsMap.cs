@@ -14,6 +14,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 			Map(x => x.Incoming);
 			References(x => x.Action, "ActionId");
 			References(x => x.Status, "StatusId");
+			References(x => x.Rank, "RankId");
 			Map(x => x.Comment).Length(1000);
 			Map(x => x.Timestamp);
 		}

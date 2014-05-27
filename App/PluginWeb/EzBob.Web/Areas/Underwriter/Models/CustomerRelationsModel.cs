@@ -1,8 +1,16 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using System;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+
+	public class CrmStaticModel
+	{
+		public IEnumerable<CRMActions> CrmActions { get; set; }
+		public IEnumerable<CRMStatuses> CrmStatuses { get; set; }
+		public IEnumerable<CRMRanks> CrmRanks { get; set; }
+	}
 
 	public class CustomerRelationsModel
 	{
@@ -10,6 +18,7 @@
 		public string User { get; set; }
 		public string Action { get; set; }
 		public string Status { get; set; }
+		public string Rank { get; set; }
 		public string Comment { get; set; }
 		public string InOut { get; set; }
 
@@ -20,6 +29,7 @@
 				User = customerRelations.UserName,
 				Action = customerRelations.Action.Name,
 				Status = customerRelations.Status.Name,
+				Rank = customerRelations.Rank == null ? "-" : customerRelations.Rank.Name,
 				DateTime = customerRelations.Timestamp,
 				Comment = customerRelations.Comment,
 				InOut = customerRelations.Incoming ? "Incoming" : "Outgoing"

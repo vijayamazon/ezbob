@@ -126,10 +126,10 @@
         el: apiChecks,
         model: this.ApicCheckLogs
       });
-      this.CustomerRelationsData = new EzBob.Underwriter.CustomerRelationsData();
+      this.crmModel = new EzBob.Underwriter.CustomerRelationsModel();
       this.CustomerRelationsView = new EzBob.Underwriter.CustomerRelationsView({
         el: customerRelations,
-        model: this.CustomerRelationsData
+        model: this.crmModel
       });
       this.FraudDetectionLogs = new EzBob.Underwriter.fraudDetectionLogModel();
       this.FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView({
@@ -140,7 +140,7 @@
       this.dashboardInfoView = new EzBob.Underwriter.DashboardView({
         el: dashboardInfo,
         model: this.summaryInfoModel,
-        crmModel: this.CustomerRelationsData,
+        crmModel: this.crmModel,
         personalModel: this.personalInfoModel,
         experianModel: this.experianInfoModel,
         propertiesModel: this.PropertiesModel,
@@ -217,7 +217,6 @@
       this.$el.find('.add-director').hide();
       director = new EzBob.DirectorModel();
       directorEl = this.$el.find('.add-director-container');
-      console.log('this is me', this);
       customerInfo = {
         FirstName: this.personalInfoModel.get('FirstName'),
         Surname: this.personalInfoModel.get('Surname'),
@@ -565,12 +564,13 @@
           silent: true
         });
         _this.messagesModel.trigger("sync");
-        _this.CustomerRelationsData.customerId = id;
-        _this.CustomerRelationsView.idCustomer = id;
-        _this.CustomerRelationsData.reset(fullModel.get("CustomerRelations"), {
+        _this.crmModel.set({
+          customerId: id
+        });
+        _this.crmModel.reset(fullModel.get("CustomerRelations"), {
           silent: true
         });
-        _this.CustomerRelationsData.trigger("sync");
+        _this.crmModel.trigger("sync");
         _this.alertDocs.reset(fullModel.get("AlertDocs"), {
           silent: true
         });
@@ -581,7 +581,6 @@
           silent: true
         });
         _this.companyScoreModel.trigger("sync");
-        _this.crossCheckView.segmentType = fullModel.get('PersonalInfoModel').SegmentType;
         _this.crossCheckView.marketPlaces = _this.marketPlaces;
         _this.crossCheckView.companyScore = _this.companyScoreModel;
         _this.crossCheckView.experianDirectors = fullModel.get("ExperianDirectors");

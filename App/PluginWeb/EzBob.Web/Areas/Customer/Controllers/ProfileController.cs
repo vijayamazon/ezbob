@@ -261,6 +261,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult SetDefaultCard(int cardId)
 		{
 			var customer = _context.Customer;

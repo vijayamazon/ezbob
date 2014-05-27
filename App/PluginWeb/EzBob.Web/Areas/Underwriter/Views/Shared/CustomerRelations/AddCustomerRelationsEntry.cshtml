@@ -3,14 +3,11 @@
 @* This file is used in Underwriter and Broker. *@
 
 <script type="text/template" id="add-customer-relations-entry-template">
-    <div class="modal-header">
-        <h3>Add Customer Relations Entry</h3>
-    </div>
-    <div class="modal-body">
+    <div>
         <form id="customer-relations-form">
             <div class="form_field_container FormRadioCtrl">
                 <span>In\Out
-			        <input type="radio" name="Incoming" value="I" id="Incoming_I" class="required"><label for="Incoming_I">Incoming</label>
+                    <input type="radio" name="Incoming" value="I" id="Incoming_I" class="required"><label for="Incoming_I">Incoming</label>
                     <input type="radio" name="Incoming" value="O" id="Incoming_O" checked="checked"><label for="Incoming_O">Outgoing</label>
                 </span>
             </div>
@@ -22,30 +19,39 @@
                         <span style="visibility: hidden;">Action</span>
                         <select class="form_field selectheight" id="Action" name="Action">
                             <option></option>
-                            <% for (var i in actions) { %>
-	                        <option value="<%- i %>"><%- actions[i] %></option>
-                            <%}%>
+                            <% _.each(actions, function(action){ %>
+                                <option value="<%- action.Id %>"><%- action.Name %></option>
+                            <%});%>
                         </select>
                     </label>
                 </div>
             </div>
-            <br />
-
             <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Status</span>
                         <select class="form_field selectheight" id="Status" name="Status">
                             <option></option>
-                            <% for (var i in statuses) { %>
-                                <option value="<%- i %>"><%- statuses[i] %></option>
-                            <%}%>
+                            <% _.each(statuses, function(status) { %>
+                                <option value="<%- status.Id %>"><%- status.Name %></option>
+                            <%});%>
                         </select>
                     </label>
                 </div>
             </div>
-            <br />
-
+            <div class="control-group form_field_container">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span>Potential Rank</span>
+                        <select class="form_field selectheight" id="Rank" name="Rank">
+                            <option></option>
+                            <% _.each(ranks, function(rank) { %>
+                                <option value="<%- rank.Id %>"><%- rank.Name %></option>
+                            <%});%>
+                        </select>
+                    </label>
+                </div>
+            </div>
             <label>Comment</label>
             <textarea id="Comment" class="add-customer-entry-comment-size" />
 

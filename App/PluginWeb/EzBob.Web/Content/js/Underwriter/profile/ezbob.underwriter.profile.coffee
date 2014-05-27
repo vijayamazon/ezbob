@@ -117,10 +117,10 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             el: apiChecks
             model: @ApicCheckLogs
         )
-        @CustomerRelationsData = new EzBob.Underwriter.CustomerRelationsData()
+        @crmModel = new EzBob.Underwriter.CustomerRelationsModel()
         @CustomerRelationsView = new EzBob.Underwriter.CustomerRelationsView(
             el: customerRelations
-            model: @CustomerRelationsData
+            model: @crmModel
         )
         @FraudDetectionLogs = new EzBob.Underwriter.fraudDetectionLogModel()
         @FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView(
@@ -133,7 +133,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         @dashboardInfoView = new EzBob.Underwriter.DashboardView(
             el: dashboardInfo
             model: @summaryInfoModel
-            crmModel: @CustomerRelationsData
+            crmModel: @crmModel
             personalModel: @personalInfoModel
             experianModel: @experianInfoModel
             propertiesModel: @PropertiesModel
@@ -215,8 +215,6 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         director = new EzBob.DirectorModel()
 
         directorEl = @$el.find '.add-director-container'
-
-        console.log 'this is me', @
 
         customerInfo =
             FirstName: @personalInfoModel.get 'FirstName'
@@ -445,10 +443,9 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @messagesModel.set( attaches: fullModel.get("Messages"), silent: true)
             @messagesModel.trigger "sync"
 
-            @CustomerRelationsData.customerId = id
-            @CustomerRelationsView.idCustomer = id
-            @CustomerRelationsData.reset fullModel.get("CustomerRelations"), silent: true
-            @CustomerRelationsData.trigger "sync"
+            @crmModel.customerId = id
+            @crmModel.reset fullModel.get("CustomerRelations"), silent: true
+            @crmModel.trigger "sync"
 
             @alertDocs.reset fullModel.get("AlertDocs"), silent: true
             @alertDocsView.create id
