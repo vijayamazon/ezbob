@@ -257,114 +257,12 @@
 				cacheVal.LastUpdateDate = DateTime.UtcNow;
 				cacheVal.JsonPacketInput = request;
 				cacheVal.JsonPacket = response;
-
-				repo.SaveOrUpdate(cacheVal);
 				
-				try
-				{
-					ParseToDb(cacheVal.CustomerId.HasValue ? (int)cacheVal.CustomerId.Value : 0, cacheVal.JsonPacket);
-				}
-				catch (Exception e)
-				{
-					Log.ErrorFormat("Error parsing response:{0}. The error:{1}", cacheVal.Id, e);
-				}
-
 				repo.SaveOrUpdate(cacheVal);
 			}, "EBusinessService.AddToCache(" + refNumber + ")");
 		} // AddToCache
 
 		#endregion method AddToCache
-
-		public void ParseToDb(int customerId, string responseXml)
-		{
-			var xmlDoc = new XmlDocument();
-
-			var stream = new MemoryStream();
-			var writer = new StreamWriter(stream);
-			writer.Write(responseXml);
-			writer.Flush();
-			stream.Position = 0;
-			xmlDoc.Load(stream);
-
-			// Remove old entries
-			ExperianDL97Accounts oldEntry = experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId);
-			while (oldEntry != null)
-			{
-				experianDL97AccountsRepository.Delete(oldEntry);
-				oldEntry = experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId);
-			}
-
-			XmlNodeList dl97List = xmlDoc.SelectNodes("//DL97");
-			if (dl97List != null)
-			{
-				foreach (XmlElement dl97 in dl97List)
-				{
-					XmlNode stateNode = dl97.SelectSingleNode("ACCTSTATE");
-					XmlNode typeNode = dl97.SelectSingleNode("ACCTTYPE");
-					XmlNode status12MonthsNode = dl97.SelectSingleNode("ACCTSTATUS12");
-					XmlNode lastUpdatedYearNode = dl97.SelectSingleNode("CAISLASTUPDATED-YYYY");
-					XmlNode lastUpdatedMonthNode = dl97.SelectSingleNode("CAISLASTUPDATED-MM");
-					XmlNode lastUpdatedDayNode = dl97.SelectSingleNode("CAISLASTUPDATED-DD");
-					XmlNode companyTypeNode = dl97.SelectSingleNode("COMPANYTYPE");
-					XmlNode currentBalanceNode = dl97.SelectSingleNode("CURRBALANCE");
-					XmlNode monthsDataNode = dl97.SelectSingleNode("MONTHSDATA");
-					XmlNode status1To2Node = dl97.SelectSingleNode("STATUS1TO2");
-					XmlNode status3To9Node = dl97.SelectSingleNode("STATUS3TO9");
-
-					string state = stateNode != null ? stateNode.InnerText : string.Empty;
-					string type = typeNode != null ? typeNode.InnerText : string.Empty;
-					string status12Months = status12MonthsNode != null ? status12MonthsNode.InnerText : string.Empty;
-					DateTime? lastUpdated = null;
-					if (lastUpdatedYearNode != null && lastUpdatedMonthNode != null && lastUpdatedDayNode != null)
-					{
-						int year, month, day;
-						if (int.TryParse(lastUpdatedYearNode.InnerText, out year) &&
-							int.TryParse(lastUpdatedMonthNode.InnerText, out month) &&
-							int.TryParse(lastUpdatedDayNode.InnerText, out day))
-						{
-							lastUpdated = new DateTime(year, month, day);
-						}
-					}
-					string companyType = companyTypeNode != null ? companyTypeNode.InnerText : string.Empty;
-					int currentBalance = 0;
-					if (currentBalanceNode != null)
-					{
-						int.TryParse(currentBalanceNode.InnerText, out currentBalance);
-					}
-					int monthsData = 0;
-					if (monthsDataNode != null)
-					{
-						int.TryParse(monthsDataNode.InnerText, out monthsData);
-					}
-					int status1To2 = 0;
-					if (status1To2Node != null)
-					{
-						int.TryParse(status1To2Node.InnerText, out status1To2);
-					}
-					int status3To9 = 0;
-					if (status3To9Node != null)
-					{
-						int.TryParse(status3To9Node.InnerText, out status3To9);
-					}
-
-					var tmp = new ExperianDL97Accounts
-					{
-						CustomerId = customerId,
-						State = state,
-						Type = type,
-						Status12Months = status12Months,
-						LastUpdated = lastUpdated,
-						CompanyType = companyType,
-						CurrentBalance = currentBalance,
-						MonthsData = monthsData,
-						Status1To2 = status1To2,
-						Status3To9 = status3To9
-					};
-
-					experianDL97AccountsRepository.SaveOrUpdate(tmp);
-				}
-			}
-		}
 
 		#region method MakeRequest
 
