@@ -78,6 +78,10 @@
       };
     };
 
+    PaymentAccountView.prototype.ui = {
+      'allowSelection': '.debitCardCustomerSelection'
+    };
+
     PaymentAccountView.prototype.events = {
       "click .bankAccounts tbody tr": "showBankAccount",
       "click .checkeBankAccount": "checkBanckAccount",
@@ -88,8 +92,30 @@
     };
 
     PaymentAccountView.prototype.onRender = function() {
-      return this.$el.find('.bankAccounts i[data-title]').tooltip({
+      var _this = this;
+      this.$el.find('.bankAccounts i[data-title]').tooltip({
         placement: "right"
+      });
+      this.ui.allowSelection.bootstrapSwitch();
+      this.ui.allowSelection.bootstrapSwitch('setState', this.model.get('CustomerDefaultCardSelectionAllowed'));
+      return this.ui.allowSelection.on('switch-change', function(event, state) {
+        return _this.changeAllowSelection(event, state);
+      });
+    };
+
+    PaymentAccountView.prototype.changeAllowSelection = function(event, state) {
+      var xhr,
+        _this = this;
+      BlockUi("on");
+      xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/ChangeCustomerDefaultCardSelection", {
+        customerId: this.model.customerId,
+        state: state.value
+      });
+      xhr.done(function() {
+        return _this.model.fetch();
+      });
+      return xhr.always(function() {
+        return BlockUi("off");
       });
     };
 

@@ -1,11 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-	using System.Data;
 	using Code;
 	using ConfigManager;
 	using Infrastructure;
 	using Infrastructure.Attributes;
-	using NHibernate;
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using PostcodeAnywhere;
@@ -25,14 +23,12 @@
 		private readonly IPayPointFacade _payPointFacade;
 		private readonly IWorkplaceContext _context;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly ISession session;
 
 		public PaymentAccountsController(
 			CustomerRepository customers,
 			ICustomerMarketPlaceRepository customerMarketplaces,
 			IPayPointFacade payPointFacade,
-			IWorkplaceContext context,
-			ISession session
+			IWorkplaceContext context
 		)
 		{
 			_customers = customers;
@@ -48,7 +44,6 @@
 			}
 			_payPointFacade = payPointFacade;
 			_context = context;
-			this.session = session;
 		}
 
 		[Ajax]
@@ -225,6 +220,15 @@
 			var customer = _customers.GetChecked(customerId);
 			customer.PayPointTransactionId = transactionid;
 			customer.CreditCardNo = cardNo;
+		}
+
+		[Ajax]
+		[Transactional]
+		[HttpPost]
+		public void ChangeCustomerDefaultCardSelection(int customerId, bool state)
+		{
+			var customer = _customers.GetChecked(customerId);
+			customer.DefaultCardSelectionAllowed = state;
 		}
 	}
 }

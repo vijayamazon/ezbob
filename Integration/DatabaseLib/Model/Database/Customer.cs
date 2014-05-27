@@ -697,6 +697,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool FilledByBroker { get; set; }
 
 		public virtual bool Vip { get; set; }
+
+		public virtual bool DefaultCardSelectionAllowed { get; set; }
 	} // class Customer
 
 	#endregion class Customer

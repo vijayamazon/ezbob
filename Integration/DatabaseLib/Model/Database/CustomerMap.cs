@@ -220,6 +220,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			Map(x => x.FilledByBroker);
 			Map(x => x.Vip);
+			Map(x => x.DefaultCardSelectionAllowed);
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

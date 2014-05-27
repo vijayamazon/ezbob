@@ -36,7 +36,8 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
             customerId: @model.customerId
         }
 
-
+    ui:
+        'allowSelection' : '.debitCardCustomerSelection'
     events:
         "click .bankAccounts tbody tr"   : "showBankAccount"
         "click .checkeBankAccount"       : "checkBanckAccount"
@@ -48,6 +49,20 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
     onRender: ->
         #@$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
         @$el.find('.bankAccounts i[data-title]').tooltip({placement: "right"})
+        
+        @ui.allowSelection.bootstrapSwitch()
+        @ui.allowSelection.bootstrapSwitch('setState', @model.get('CustomerDefaultCardSelectionAllowed'))
+        @ui.allowSelection.on('switch-change', (event, state) =>
+            @changeAllowSelection(event, state)
+        )
+
+    changeAllowSelection: (event, state) ->
+        BlockUi "on"
+        xhr = $.post "#{window.gRootPath}Underwriter/PaymentAccounts/ChangeCustomerDefaultCardSelection", {customerId: @model.customerId, state: state.value }
+        xhr.done =>
+            @model.fetch()
+        xhr.always ->
+            BlockUi "off"
 
     setPaypointDefault: (e)->
 

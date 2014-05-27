@@ -1249,3 +1249,8 @@ td a.edit-loan {
 .btn-fullwidth {
     width: 100%;
 }
+
+.debitCardCustomerSelection {
+    white-space: nowrap;
+    width: 15%;
+}

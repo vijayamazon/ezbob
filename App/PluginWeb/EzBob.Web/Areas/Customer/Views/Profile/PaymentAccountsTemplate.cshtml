@@ -29,7 +29,9 @@
                     <td class="last Live">Default</td>
                     <%}else{%>
                     <td class="last">
+                        <%if(selectionAllowed){%>
                         <button class="button orange setDefaultCard" data-card-id="<%-account.cardId%>" ui-event-control-id="profile:set-default-debit-card">Set as default</button></td>
+                        <%}%>
                     <%}%>
                 </tr>
                 <%}%>

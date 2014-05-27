@@ -264,10 +264,14 @@
 		public JsonResult SetDefaultCard(int cardId)
 		{
 			var customer = _context.Customer;
+			if (!customer.DefaultCardSelectionAllowed)
+			{
+				return Json(new { error = "Default card selection is not allowed" });
+			}
 			var card = customer.PayPointCards.SingleOrDefault(c => c.Id == cardId);
 			if (card == null)
 			{
-				return Json(new { error = "card not found" });
+				return Json(new { error = "Card not found" });
 			}
 			customer.PayPointTransactionId = card.TransactionId;
 			customer.CreditCardNo = card.CardNo;

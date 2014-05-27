@@ -35,5 +35,9 @@
 </table>
 <div class="payment-cards-buttons">
 	<a class="btn btn-primary" href="@Url.Action("AddPayPoint", "PaymentAccounts", new { Area = "Underwriter" })/<%- customerId %>" target="_blank">Add New</a>
-	<button class="btn btn-primary add-existing">Add Existing</button>
+    <button class="btn btn-primary add-existing">Add Existing</button>
+    Customer default card selection:
+    <div class="debitCardCustomerSelection make-switch" data-on="default" data-off="danger" data-animated="true" data-off-label="Not Allowed" data-on-label="Allowed">
+        <input type="checkbox" checked/>
+    </div>
 </div>

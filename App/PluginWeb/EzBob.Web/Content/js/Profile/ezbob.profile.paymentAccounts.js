@@ -34,7 +34,8 @@ EzBob.Profile.PaymentAccountsView = Backbone.View.extend({
             });
         }
 
-        this.$el.html(this.template({ accounts: accounts.toJSON() }));
+        var selectionAllowed = this.model.get("DefaultCardSelectionAllowed");
+        this.$el.html(this.template({ accounts: accounts.toJSON(), selectionAllowed: selectionAllowed }));
         return this;
     },
     
