@@ -415,10 +415,10 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class VatReturnSummaryActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.VatReturnSummary[] SummaryField;
+        private Ezbob.Backend.Models.VatReturnSummary SummaryField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.VatReturnSummary[] Summary {
+        public Ezbob.Backend.Models.VatReturnSummary Summary {
             get {
                 return this.SummaryField;
             }
@@ -1789,7 +1789,7 @@ namespace ServiceClientProxy.EzServiceReference {
         ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnSummary", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnSummaryResponse")]
-        ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult LoadVatReturnSummary(int nCustomerID, int nMarketplaceID);
+        ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult LoadVatReturnSummary(int customerId, int nMarketplaceID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll", ReplyAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AndRecalculateVatReturnSummaryForAll();
@@ -2161,8 +2161,8 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CalculateVatReturnSummary(nCustomerMarketplaceID);
         }
         
-        public ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult LoadVatReturnSummary(int nCustomerID, int nMarketplaceID) {
-            return base.Channel.LoadVatReturnSummary(nCustomerID, nMarketplaceID);
+        public ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult LoadVatReturnSummary(int customerId, int nMarketplaceID) {
+            return base.Channel.LoadVatReturnSummary(customerId, nMarketplaceID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AndRecalculateVatReturnSummaryForAll() {

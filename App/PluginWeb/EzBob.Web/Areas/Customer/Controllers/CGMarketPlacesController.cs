@@ -1,7 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Ezbob.Logger;
 	using Infrastructure.Attributes;
+	using NHibernate;
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -14,6 +14,8 @@
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;
 	using Newtonsoft.Json;
+	using log4net;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CGMarketPlacesController : Controller {
 		#region public
@@ -24,16 +26,118 @@
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
 			MarketPlaceRepository mpTypes,
-			CGMPUniqChecker mpChecker
+			CGMPUniqChecker mpChecker,
+			ISession session
 		) {
 			_context = context;
 			_helper = helper;
 			_mpTypes = mpTypes;
 			_mpChecker = mpChecker;
+			_session = session;
 			m_oServiceClient = new ServiceClient();
 		} // constructor
 
 		#endregion constructor
+
+		#region method UploadFilesDialog
+
+		public ActionResult UploadFilesDialog(string key, string handler, string modelkey) {
+			Response.AddHeader("x-frame-options", "SAMEORIGIN");
+
+			ViewData["key"] = key;
+			ViewData["handler"] = handler;
+			ViewData["modelkey"] = modelkey;
+
+			return View();
+		} // UploadFilesDialog
+
+		#endregion method UploadFilesDialog
+
+		#region method HandleUploadedHmrcVatReturn
+
+		[HttpPost]
+		public ActionResult HandleUploadedHmrcVatReturn() {
+			Response.AddHeader("x-frame-options", "SAMEORIGIN");
+			ViewData["key"] = Request["key"];
+			
+			var customerEmail = _context.Customer.Name;
+			var model = new AccountModel { accountTypeName = "HMRC", displayName = customerEmail, name = customerEmail, login = customerEmail, password = "topsecret" };
+			
+			AddAccountState oState = ValidateModel(model);
+
+			if (oState.Error != null) {
+				ViewError = oState.Error;
+				ViewModel = null;
+				return View();
+			} // if
+
+			int nCustomerID = 0;
+
+			try {
+				nCustomerID = _context.Customer.Id;
+			}
+			catch (Exception e) {
+				Log.Warn("Failed to fetch current customer, files will be saved without customer ID; exception: ", e);
+			} // try
+
+			HmrcController.ValidateFilesResult oValidateResult = HmrcController.ValidateFiles(nCustomerID, Request.Files);
+
+			if (!string.IsNullOrWhiteSpace(oValidateResult.Error))
+				oState.Error = CreateError(oValidateResult.Error);
+
+			if (oState.Error != null) {
+				ViewError = oState.Error;
+				ViewModel = null;
+				return View();
+			} // if
+
+			if (oValidateResult.Hopper == null) {
+				ViewError = CreateError("No files accepted.");
+				ViewModel = null;
+				return View();
+			} // if
+
+			SaveMarketplace(oState, model);
+
+			if (oState.Error != null) {
+				ViewError = oState.Error;
+				ViewModel = null;
+				return View();
+			} // if
+
+			ViewModel = JsonConvert.SerializeObject(oState.Model);
+			ViewError = null;
+
+			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oValidateResult.Hopper);
+
+			try {
+				m_oServiceClient.Instance.MarketplaceInstantUpdate(oState.CustomerMarketPlace.Id);
+				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
+			}
+			catch (Exception e) {
+				ViewError = CreateError("Account has been linked but error occurred while storing uploaded data: " + e.Message);
+			} // try
+
+			try {
+				// This is done to insert entries into EzServiceActionHistory
+				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, oState.CustomerMarketPlace.Id, true);
+			}
+			catch (Exception e) {
+				Log.WarnFormat(
+					"Failed to start UpdateMarketplace strategy for customer [{0}: {1}] with marketplace id {2}," +
+					" if this is the only customer marketplace underwriter should run this strategy manually" +
+					" (otherwise Main strategy will be stuck).",
+					_context.Customer.Id,
+					_context.Customer.Name,
+					oState.CustomerMarketPlace.Id
+				);
+				Log.Warn(e);
+			} // try
+
+			return View();
+		} // HandleUploadedHmrcVatReturn
+
+		#endregion method HandleUploadedHmrcVatReturn
 
 		#region method Accounts (account list by type)
 
@@ -68,14 +172,8 @@
 
 			int mpId = SaveMarketplace(oState, model);
 
-			if (mpId != -1) {
-				try {
-					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
-				}
-				catch (Exception e) {
-					ms_oLog.Warn(e, "Something not so excellent while updating CG marketplace with id {0}.", mpId);
-				} // try
-			} // if
+			if (mpId != -1)
+				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
 
 			if (oState.Error != null)
 				return oState.Error;
@@ -120,7 +218,7 @@
 
 			if (oResult.VendorInfo == null) {
 				var sError = "Unsupported account type: " + model.accountTypeName;
-				ms_oLog.Error(sError);
+				Log.Error(sError);
 				oResult.Error = CreateError(sError);
 				return oResult;
 			} // try
@@ -141,7 +239,7 @@
 				return oResult;
 			}
 			catch (Exception e) {
-				ms_oLog.Error(e);
+				Log.Error(e);
 				oResult.Error = CreateError(e);
 				return oResult;
 			} // try
@@ -155,7 +253,7 @@
 
 		private void ValidateAccount(AddAccountState oState, AccountModel model) {
 			try {
-				var ctr = new Connector(oState.AccountData, ms_oLog.InternalLog, _context.Customer);
+				var ctr = new Connector(oState.AccountData, Log, _context.Customer);
 
 				if (ctr.Init()) {
 					ctr.Run(true);
@@ -164,24 +262,26 @@
 			}
 			catch (ConnectionFailException cge) {
 				if (DBConfigurationValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
-					ms_oLog.Error(cge);
+					Log.Error(cge);
 					oState.Error = CreateError(cge);
 				} // if
 
-				ms_oLog.Error(cge, "Failed to validate {0} account, continuing with registration.", model.accountTypeName);
+				Log.ErrorFormat("Failed to validate {0} account, continuing with registration.", model.accountTypeName);
+				Log.Error(cge);
 
 				// Error is logged but not written into state.
 			}
 			catch (ApiException cge) {
-				ms_oLog.Error(cge, "Failed to validate {0} account.", model.accountTypeName);
+				Log.ErrorFormat("Failed to validate {0} account.", model.accountTypeName);
+				Log.Error(cge);
 				oState.Error = CreateError(cge);
 			}
 			catch (InvalidCredentialsException ice) {
-				ms_oLog.Info(ice);
+				Log.Info(ice);
 				oState.Error = CreateError(ice);
 			}
 			catch (Exception e) {
-				ms_oLog.Error(e);
+				Log.Error(e);
 				oState.Error = CreateError(e);
 			} // try
 		} // ValidateAccount
@@ -211,7 +311,7 @@
 				}).Execute();
 			}
 			catch (Exception e) {
-				ms_oLog.Error(e);
+				Log.Error(e);
 				oState.Error = CreateError(e);
 			} // try
 
@@ -253,8 +353,9 @@
 		private readonly CGMPUniqChecker _mpChecker;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly DatabaseDataHelper _helper;
+		private readonly ISession _session;
 
-		private static readonly SafeILog ms_oLog = new SafeILog(typeof(CGMarketPlacesController));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(CGMarketPlacesController));
 
 		#endregion fields
 

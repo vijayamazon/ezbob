@@ -29,14 +29,6 @@
 
 		#endregion constructor
 
-		#region property InternalLog
-
-		public virtual ILog InternalLog {
-			get { return m_oiLog; }
-		} // InternalLog
-
-		#endregion property InternalLog
-
 		#endregion public
 
 		#region protected

@@ -6,9 +6,6 @@
 	[DataContract(IsReference = true)]
 	public class VatReturnSummaryBase : ITraversable {
 		[DataMember]
-		public int SummaryID { get; set; }
-
-		[DataMember]
 		public virtual decimal? PctOfAnnualRevenues { get; set; }
 
 		[DataMember]

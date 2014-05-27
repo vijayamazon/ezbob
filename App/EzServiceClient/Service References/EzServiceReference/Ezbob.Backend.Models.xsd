@@ -24,12 +24,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="QuickOfferModel" nillable="true" type="tns:QuickOfferModel" />
-  <xs:complexType name="ArrayOfVatReturnSummary">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="VatReturnSummary" nillable="true" type="tns:VatReturnSummary" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfVatReturnSummary" nillable="true" type="tns:ArrayOfVatReturnSummary" />
   <xs:complexType name="VatReturnSummary">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:VatReturnSummaryBase">
@@ -57,7 +51,6 @@
       <xs:element minOccurs="0" name="PctOfRevenues" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="Revenues" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="Salaries" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="SummaryID" type="xs:int" />
       <xs:element minOccurs="0" name="Tax" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="TotalValueAdded" nillable="true" type="xs:decimal" />
     </xs:sequence>

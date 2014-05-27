@@ -274,7 +274,7 @@ namespace EzBob.Web.Controllers {
 
 		#region action LogOff
 
-		public ActionResult LogOff() {
+		public ActionResult LogOff(bool isUnderwriterPage = false) {
 			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId)) {
 				int nSessionID;
 
@@ -289,8 +289,6 @@ namespace EzBob.Web.Controllers {
 			} // if
 
 			m_oContext.SessionId = null;
-
-			bool isUnderwriterPage = HttpContext.User.IsInRole("Underwriter");
 
 			FormsAuthentication.SignOut();
 			HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);

@@ -1,10 +1,11 @@
-﻿namespace Integration.ChannelGrabberFrontend {
-	using System;
-	using EZBob.DatabaseLib.Common;
-	using EZBob.DatabaseLib.DatabaseWrapper;
-	using EZBob.DatabaseLib.Model.Database;
-	using Integration.ChannelGrabberConfig;
+﻿using System;
+using EZBob.DatabaseLib.Common;
+using EZBob.DatabaseLib.DatabaseWrapper;
+using EZBob.DatabaseLib.Model.Database;
+using EzBob.CommonLib;
+using Integration.ChannelGrabberConfig;
 
+namespace Integration.ChannelGrabberFrontend {
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 

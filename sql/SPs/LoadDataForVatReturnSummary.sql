@@ -28,8 +28,6 @@ BEGIN
 		MP_VatReturnRecords r
 	WHERE
 		r.CustomerMarketPlaceId = @CustomerMarketplaceID
-		AND
-		ISNULL(r.IsDeleted, 0) = 0
 	GROUP BY
 		r.Period,
 		CONVERT(DATE, r.DateFrom),

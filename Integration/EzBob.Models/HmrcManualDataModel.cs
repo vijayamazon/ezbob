@@ -112,7 +112,7 @@
 						oErrors.AddRange(p.Errors);
 			} // if
 
-			string sSequenceError = oDates.SortWithoutCheckSequence();
+			string sSequenceError = oDates.SortAndCheckSequence();
 
 			if (!string.IsNullOrWhiteSpace(sSequenceError))
 				oErrors.Add(sSequenceError);
