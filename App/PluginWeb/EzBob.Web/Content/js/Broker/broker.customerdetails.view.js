@@ -298,8 +298,6 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		var self = this;
 
 		var options = {
-			actions: JSON.parse($('#crm-lookups .actions').text()),
-			statuses: JSON.parse($('#crm-lookups .statuses').text()),
 			url: window.gRootPath + 'Broker/BrokerHome/SaveCrmEntry',
 			onsave: function() { self.reloadData();  },
 			onbeforesave: function(opts) { opts.sContactEmail = self.router.getAuth(); },
