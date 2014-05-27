@@ -1,6 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
-	using System.Collections.Generic;
 	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Models;
@@ -406,6 +405,7 @@
 				if (oCrm.MetaData.Status == ActionStatus.Done) {
 					oResult.Actions = oCrm.Actions;
 					oResult.Statuses = oCrm.Statuses;
+					oResult.Ranks = oCrm.Ranks;
 				} // if
 			}
 			catch (Exception e) {

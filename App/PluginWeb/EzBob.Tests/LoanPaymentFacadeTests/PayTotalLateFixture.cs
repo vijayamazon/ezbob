@@ -10,7 +10,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 {
     public class PayTotalLateFixture : LoanPaymentsTestBase
     {
-        private LoanScheduleCalculator _calculator;
         private Customer _customer;
 
         protected override void SetUp()

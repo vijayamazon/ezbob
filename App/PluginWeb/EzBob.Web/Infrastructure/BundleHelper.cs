@@ -52,31 +52,6 @@
 				.MvcRender("~/Content/css/min/wizard_combined_#.css");
 		} // RenderProfileCss
 
-		public static MvcHtmlString RenderBrokerCss()
-		{
-			return Bundle
-				.Css()
-				//libs
-				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
-				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
-				.Add("~/Content/css/lib/bootstrap2.css")
-				.Add("~/Content/css/lib/bootstrap3.css")
-				.Add("~/Content/css/lib/bootstrap3-modal-patch.css")
-				.Add("~/Content/css/lib/dataTables.bootstrap.css")
-				.Add("~/Content/css/lib/DT_bootstrap.css")
-				.Add("~/Content/css/lib/font-awesome.min.css")
-				.Add("~/Content/css/lib/dropzone.css")
-				.Add("~/Content/css/lib/flaty.css")
-				.Add("~/Content/css/lib/flaty-responsive.css")
-				.Add("~/Content/css/lib/chosen.css")
-				.Add("~/Content/css/lib/notifications.css")
-
-				//custom css
-				.Add("~/Content/css/common.css")
-				.Add("~/Content/css/broker.css")
-				.MvcRender("~/Content/css/min/broker_#.css");
-		}
-
 		public static MvcHtmlString RenderUnderwriterCss()
 		{
 			return Bundle.Css()
@@ -329,7 +304,7 @@
 				.Add("~/Content/js/Underwriter/profile/companyScore/ezbob.underwriter.companyScore.js")
 				.Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")
 				.Add("~/Content/js/Underwriter/profile/CustomerRelations/ezbob.underwriter.customerRelations.js")
-				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.coffee")
+				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.js")
 				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.properties.js")
 
 				//----
@@ -476,45 +451,6 @@
 		} // RenderLoginJs
 
 		#endregion customer js
-
-		#region broker js
-
-		public static MvcHtmlString RenderBrokerJs()
-		{
-			return Bundle
-				.JavaScript()
-				//libs
-				.Add("~/Content/js/lib/jquery.cookie.js")
-				.Add("~/Content/js/lib/jquery.set_display_value.js")
-				.Add("~/Content/js/lib/jquery.load_display_value.js")
-				.Add("~/Content/js/lib/flaty/bootstrap3.js")
-				.Add("~/Content/js/lib/bootstrap-datepicker.js")
-				.Add("~/Content/js/lib/bootstrap-modal.js")
-				.Add("~/Content/js/lib/bootstrap-modalmanager.js")
-				.Add("~/Content/js/lib/flaty/dataTables.bootstrap.js")
-				.Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
-				.Add("~/Content/js/lib/jquery.slimscroll.min.js")
-				.Add("~/Content/js/lib/jquery.sparkline.min.js")
-				.Add("~/Content/js/lib/flaty/flaty.js")
-				
-				//custom
-				.Add("~/Content/js/EzBob.DataTables.Helper.js")
-				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.coffee")
-				.Add("~/Content/js/Broker/broker.base.view.js")
-				.Add("~/Content/js/Broker/broker.submit.view.js")
-				.Add("~/Content/js/Broker/broker.mobilephone.view.js")
-				.Add("~/Content/js/Broker/broker.forgotten.view.js")
-				.Add("~/Content/js/Broker/broker.dashboard.view.js")
-				.Add("~/Content/js/Broker/broker.login.view.js")
-				.Add("~/Content/js/Broker/broker.signup.view.js")
-				.Add("~/Content/js/Broker/broker.addcustomer.view.js")
-				.Add("~/Content/js/Broker/broker.customerdetails.view.js")
-				.Add("~/Content/js/Broker/broker.router.js")
-				.Add("~/Content/js/Broker/broker.main.js")
-				.MvcRender("~/Content/js/min/jslib_#.js");
-		}
-
-		#endregion broker js
 
 		#endregion JS
 	} // class BundleHelper

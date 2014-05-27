@@ -1,117 +1,102 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
+	template: '#add-customer-relations-entry-template',
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+	events: {
+		'keyup #Comment': 'commentKeyup'
+	}, // events
 
-  EzBob.Underwriter.AddCustomerRelationsEntry = (function(_super) {
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: true,
+			title: 'CRM - add entry',
+			position: 'center',
+			draggable: true,
+			dialogClass: 'customer-relations-popup',
+			width: 600
+		};
+	}, // jqoptions
 
-    __extends(AddCustomerRelationsEntry, _super);
+	initialize: function(options) {
+		this.onsave = options.onsave;
+		this.onbeforesave = options.onbeforesave;
+		this.customerId = this.model.customerId;
+		this.url = window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/';
 
-    function AddCustomerRelationsEntry() {
-      return AddCustomerRelationsEntry.__super__.constructor.apply(this, arguments);
-    }
+		EzBob.Underwriter.AddCustomerRelationsEntry.__super__.initialize.call(this);
+	}, // initialize
 
-    AddCustomerRelationsEntry.prototype.template = '#add-customer-relations-entry-template';
+	onRender: function() {
+		this.ui.Action.prop('selectedIndex', 1);
+	}, // onRender
 
-    AddCustomerRelationsEntry.prototype.events = {
-      'keyup #Comment': 'commentKeyup'
-    };
+	serializeData: function() {
+		return {
+			actions: EzBob.CrmActions,
+			statuses: EzBob.CrmStatuses,
+			ranks: EzBob.CrmRanks,
+		};
+	}, // serializeData
 
-    AddCustomerRelationsEntry.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: true,
-        title: 'CRM - add entry',
-        position: 'center',
-        draggable: true,
-        dialogClass: 'customer-relations-popup',
-        width: 600
-      };
-    };
+	commentKeyup: function(el) {
+		return this.ui.Comment.val(this.ui.Comment.val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
+	}, // commentKeyup
 
-    AddCustomerRelationsEntry.prototype.initialize = function(options) {
-      this.onsave = options.onsave;
-      this.onbeforesave = options.onbeforesave;
-      this.customerId = this.model.customerId;
-      this.url = window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/';
-      return AddCustomerRelationsEntry.__super__.initialize.call(this);
-    };
+	ui: {
+		Incoming: '#Incoming_I',
+		Status: '#Status',
+		Action: '#Action',
+		Rank: '#Rank',
+		Comment: '#Comment',
+	}, // ui
 
-    AddCustomerRelationsEntry.prototype.onRender = function() {
-      return this.ui.Action.prop('selectedIndex', 1);
-    };
+	onSave: function() {
+		if (this.ui.Status[0].selectedIndex === 0)
+			return false;
 
-    AddCustomerRelationsEntry.prototype.serializeData = function() {
-      var data;
-      data = {
-        actions: EzBob.CrmActions,
-        statuses: EzBob.CrmStatuses,
-        ranks: EzBob.CrmRanks
-      };
-      return data;
-    };
+		if (this.ui.Action[0].selectedIndex === 0)
+			return false;
 
-    AddCustomerRelationsEntry.prototype.commentKeyup = function(el) {
-      return this.ui.Comment.val(this.ui.Comment.val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
-    };
+		if (this.ui.Rank[0].selectedIndex === 0)
+			return false;
 
-    AddCustomerRelationsEntry.prototype.ui = {
-      "Incoming": "#Incoming_I",
-      "Status": "#Status",
-      "Action": "#Action",
-      "Rank": "#Rank",
-      "Comment": "#Comment"
-    };
+		BlockUi();
 
-    AddCustomerRelationsEntry.prototype.onSave = function() {
-      var opts, xhr,
-        _this = this;
-      if (this.ui.Status[0].selectedIndex === 0) {
-        return false;
-      }
-      if (this.ui.Action[0].selectedIndex === 0) {
-        return false;
-      }
-      if (this.ui.Rank[0].selectedIndex === 0) {
-        return false;
-      }
-      BlockUi();
-      opts = {
-        isIncoming: this.ui.Incoming[0].checked,
-        action: this.ui.Action[0].value,
-        status: this.ui.Status[0].value,
-        rank: this.ui.Rank[0].value,
-        comment: this.ui.Comment.val(),
-        customerId: this.customerId
-      };
-      if (this.onbeforesave) {
-        this.onbeforesave(opts);
-      }
-      xhr = $.post(this.url, opts);
-      xhr.done(function(r) {
-        if (r.success) {
-          _this.model.fetch();
-        } else {
-          if (r.error) {
-            EzBob.ShowMessage(r.error, 'Error');
-          }
-        }
-        return _this.close();
-      });
-      xhr.always(function() {
-        return UnBlockUi();
-      });
-      return false;
-    };
+		var opts = {
+			isIncoming: this.ui.Incoming[0].checked,
+			action: this.ui.Action[0].value,
+			status: this.ui.Status[0].value,
+			rank: this.ui.Rank[0].value,
+			comment: this.ui.Comment.val(),
+			customerId: this.customerId
+		};
 
-    return AddCustomerRelationsEntry;
+		if (this.onbeforesave)
+			this.onbeforesave(opts);
 
-  })(EzBob.BoundItemView);
+		var self = this;
 
-}).call(this);
+		var xhr = $.post(this.url, opts);
+
+		xhr.done(function(r) {
+			if (r.success)
+				self.model.fetch();
+			else {
+				if (r.error)
+					EzBob.ShowMessage(r.error, 'Error');
+			} // if
+
+			self.close();
+		});
+
+		xhr.always(function() {
+			return UnBlockUi();
+		});
+
+		return false;
+	}, // onSave
+}); // EzBob.Underwriter.AddCustomerRelationsEntry

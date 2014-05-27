@@ -84,9 +84,6 @@
 
 					CurrentValues.Init(DbConnectionGenerator.Get(Log), Log);
 
-					if (CurrentValues.Instance.NHibernateEnableProfiler)
-						HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
-
 					Ezbob.RegistryScanner.Scanner.Register();
 
 					ConfigureStructureMap(ObjectFactory.Container);

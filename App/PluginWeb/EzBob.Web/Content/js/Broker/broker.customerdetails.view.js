@@ -305,6 +305,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			onbeforesave: function(opts) { opts.sContactEmail = self.router.getAuth(); },
 			model : new Backbone.Model({ customerId: this.CustomerID })
 		};
+
 		var view = new EzBob.Underwriter.AddCustomerRelationsEntry(options);
 
 		EzBob.App.jqmodal.show(view);

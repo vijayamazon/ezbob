@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers {
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.Database;
 
 	#region abstract classes
@@ -106,7 +105,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 			IsWasLate = oRow["IsWasLate"];
 		} // Init
 
-		public virtual string CustomerStatus { get; private set; }
+		public virtual string CustomerStatus { get; protected set; }
 		public virtual string Name { get; private set; }
 		public virtual string SegmentType { get; private set; }
 		public virtual string IsWasLate { get; private set; }
@@ -442,7 +441,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		public virtual decimal TotalPrincipalRepaid { get; private set; }
 		public virtual decimal OSBalance { get; private set; }
 		public virtual DateTime NextRepaymentDate { get; private set; }
-		public virtual string CustomerStatus { get; private set; }
 	} // class GridLoansRow
 
 	#endregion class GridLoansRow
