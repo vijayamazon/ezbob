@@ -701,7 +701,7 @@
 			try
 			{
 				log.InfoFormat("Sending silent auto approval mail for: customerId={0} autoApproveAmount={1} autoApproveSilentTemplateName={2} autoApproveSilentToAddress={3}", customerId, autoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
-				var mail = ObjectFactory.GetInstance<IMail>();
+				var mail = new Mail();
 				var vars = new Dictionary<string, string>
 				{
 					{"customerId", customerId.ToString(CultureInfo.InvariantCulture)},

@@ -324,7 +324,7 @@
 		private void SendStatusMail(string toAddress, string firstName, string headerSection, string loanSummarySection, string closedLoansSection, string outstandingLoansSection)
 		{
 			string firstOfMonthStatusMailMandrillTemplateName = configurationVariablesRepository.GetByName("FirstOfMonthStatusMailMandrillTemplateName").Value;
-			var mail = ObjectFactory.GetInstance<IMail>();
+			var mail = new Mail();
 
 			var vars = new Dictionary<string, string>
 				{

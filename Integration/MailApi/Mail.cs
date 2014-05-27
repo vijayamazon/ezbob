@@ -12,7 +12,7 @@
 	using log4net;
 	using EZBob.DatabaseLib.Model;
 
-	public class Mail : IMail
+	public class Mail
 	{
 		private readonly RestClient _client;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Mail));

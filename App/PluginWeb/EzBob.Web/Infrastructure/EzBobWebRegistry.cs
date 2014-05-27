@@ -1,7 +1,5 @@
 namespace EzBob.Web.Infrastructure
 {
-	using System.Web.Security;
-	using ApplicationMng.Repository;
 	using Code.Bank;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
@@ -15,7 +13,6 @@ namespace EzBob.Web.Infrastructure
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Agreements;
 	using EzServiceAccessor;
-	using Membership;
 	using PayPalServiceLib.Common;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Models;
@@ -24,7 +21,6 @@ namespace EzBob.Web.Infrastructure
 	using Code.Email;
 	using Code.MpUniq;
 	using Models.Repository;
-	using MailApi;
 	using ServiceClientProxy;
 	using StructureMap.Configuration.DSL;
 	using ConfigManager;
@@ -98,7 +94,6 @@ namespace EzBob.Web.Infrastructure
 			For<IPacNetManualBalanceRepository>().Use<PacNetManualBalanceRepository>();
 			For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();
 			For<ICurrencyConvertor>().Use<CurrencyConvertor>();
-			For<IMail>().Use<Mail>();
 			For<ICustomerSessionsRepository>().Use<CustomerSessionsRepository>();
 			For<ITestCustomerRepository>().Use<TestCustomerRepository>();
 			For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();

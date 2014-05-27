@@ -58,7 +58,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMail.cs" />
     <Compile Include="Mail.cs" />
     <Compile Include="MailFixture.cs" />
     <Compile Include="Model\EmailAddressModel.cs" />
