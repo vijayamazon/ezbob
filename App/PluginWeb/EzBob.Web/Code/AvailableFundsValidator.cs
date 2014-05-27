@@ -46,7 +46,7 @@
 
 		private void SendMail(decimal currentFunds, int requiredFunds)
 		{
-			var mail = ObjectFactory.GetInstance<IMail>();
+			var mail = new Mail();
 			var vars = new Dictionary<string, string>
 				{
 					{"CurrentFunds", currentFunds.ToString("N2", CultureInfo.InvariantCulture)},
