@@ -11,10 +11,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @SummaryID BIGINT
-	
 	SELECT
-		@SummaryID = s.SummaryID
+		s.SummaryID
+	INTO
+		#s
 	FROM
 		MP_VatReturnSummary s
 	WHERE
@@ -23,9 +23,9 @@ BEGIN
 		s.IsActive = 1
 	
 	SELECT
+		s.BusinessID,
 		s.SummaryID,
 		s.CustomerID,
-		s.BusinessID,
 		b.RegistrationNo,
 		b.Name AS BusinessName,
 		b.Address AS BusinessAddress,
@@ -47,10 +47,10 @@ BEGIN
 	FROM
 		MP_VatReturnSummary s
 		INNER JOIN Business b ON s.BusinessID = b.Id
-	WHERE
-		s.SummaryID = @SummaryID
+		INNER JOIN #s ON s.SummaryID = #s.SummaryID
 	
 	SELECT
+		p.SummaryID,
 		p.SummaryPeriodID,
 		p.DateFrom,
 		p.DateTo,
@@ -67,9 +67,10 @@ BEGIN
 		p.FreeCashFlow
 	FROM
 		MP_VatReturnSummaryPeriods p
-	WHERE
-		p.SummaryID = @SummaryID
+		INNER JOIN #s ON p.SummaryID = #s.SummaryID
 	ORDER BY
 		p.DateFrom
+
+	DROP TABLE #s
 END
 GO
