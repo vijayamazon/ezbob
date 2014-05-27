@@ -141,17 +141,6 @@
 	internal abstract class AHmrcFileProcessor {
 		#region public
 
-		#region opertor cast to HmrcController.ValidateFilesResult
-
-		public static implicit operator HmrcController.ValidateFilesResult(AHmrcFileProcessor hfp) {
-			return new HmrcController.ValidateFilesResult {
-				Hopper = hfp.FileCache.Hopper,
-				Error = hfp.FileCache.ErrorMsg,
-			};
-		} // operator cast to HmrcController.ValidateFilesResult
-
-		#endregion opertor cast to HmrcController.ValidateFilesResult
-
 		public abstract HmrcFileCache FileCache { get; } // FileCache
 
 		#region method Run
@@ -394,25 +383,10 @@
 			if (FileCache.AddedCount < 2)
 				return;
 
-			FileCache.DateIntervals.Sort((a, b) => a.Left.CompareTo(b.Left));
+			string sError = FileCache.DateIntervals.SortWithoutCheckSequence();
 
-			DateInterval next = null;
-
-			foreach (DateInterval cur in FileCache.DateIntervals) {
-				if (next == null) {
-					next = cur;
-					continue;
-				} // if
-
-				DateInterval prev = next;
-				next = cur;
-
-				if (prev.IsJustBefore(next))
-					continue;
-
-				FileCache.SetError("Inconsequent date ranges: " + prev + " and " + next);
-				return;
-			} // for each interval
+			if (!string.IsNullOrWhiteSpace(sError))
+				FileCache.SetError(sError);
 		} // Run
 
 		#endregion method Run

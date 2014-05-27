@@ -234,7 +234,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 					} // if
 				} // for
 
-				if (!oSet.isConsequent())
+				if (!oSet.isConsequentNoCheck())
 					aryErrors.push('In-consequent date intervals detected.');
 			} // if
 

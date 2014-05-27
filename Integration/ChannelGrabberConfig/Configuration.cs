@@ -91,6 +91,19 @@
 			return Vendors.ContainsKey(sAccountTypeName) ? Vendors[sAccountTypeName] : null;
 		} // GetVendorInfo
 
+		public VendorInfo GetVendorInfo(Guid oAccountTypeInternalID) {
+			VendorInfo oResult = null;
+
+			foreach (KeyValuePair<string, VendorInfo> vi in Vendors) {
+				if (new Guid(vi.Value.InternalID) == oAccountTypeInternalID) {
+					oResult = vi.Value;
+					break;
+				} // if
+			} // for each vendor
+
+			return oResult;
+		} // GetVendorInfo
+
 		#endregion method GetVendorInfo
 
 		#region method ForEachVendor

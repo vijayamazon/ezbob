@@ -142,6 +142,13 @@ namespace Ezbob.ValueIntervals {
 
 			return sResult;
 		} // SortAndCheckSequence
+
+		public static string SortWithoutCheckSequence(this List<DateInterval> oDates) {
+			if (oDates.Count > 1)
+				oDates.Sort((a, b) => a.Left.CompareTo(b.Left));
+
+			return null;
+		} // SortWithoutCheckSequence
 	} // class DateIntervalListExt
 
 	#endregion class DateIntervalListExt

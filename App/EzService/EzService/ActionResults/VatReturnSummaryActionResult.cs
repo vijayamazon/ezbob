@@ -5,6 +5,6 @@
 	[DataContract]
 	public class VatReturnSummaryActionResult : ActionResult {
 		[DataMember]
-		public VatReturnSummary Summary { get; set; }
+		public VatReturnSummary[] Summary { get; set; }
 	} // class VatReturnSummaryActionResult
 } // namespace EzService

@@ -50,8 +50,13 @@
         <%}%>
         
         <%if(affordability && affordability.length == 1 && affordability[0].CGData){
-            var aff = affordability[0].CGData.VatReturnSummary || {};
-            var dates = affordability[0].CGData.VatReturnSummaryDates || {};
+			var aff = {};
+			if (affordability[0].CGData.VatReturnSummary && affordability[0].CGData.VatReturnSummary[0])
+				aff = affordability[0].CGData.VatReturnSummary[0];
+
+			var dates = {};
+			if (affordability[0].CGData.VatReturnSummaryDates && affordability[0].CGData.VatReturnSummaryDates[0])
+				dates = affordability[0].CGData.VatReturnSummaryDates[0];
         %>
         <div class="col-md-3">
             <div class="box">
