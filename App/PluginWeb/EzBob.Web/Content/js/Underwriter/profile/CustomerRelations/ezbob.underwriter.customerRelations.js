@@ -16,9 +16,13 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         return { vals: this.model.toJSON() };
     },
     events: {
-        "click .addNewCustomerRelationsEntry": "addNewCustomerRelationsEntry"
+        "click .addNewCustomerRelationsEntry": "addNewCustomerRelationsEntry",
+        "click .toggleSystemCrm": "toggleSystmeCrm"
     },
-
+    ui: {
+        "toggleBtnIcon": ".toggleSystemCrm i",
+        "systemRows": ".crm-system"
+    },
     addNewCustomerRelationsEntry: function () {
         var xhr;
         if (!EzBob.CrmActions || EzBob.CrmActions.length == 0) {
@@ -40,5 +44,11 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         var view = new EzBob.Underwriter.AddCustomerRelationsEntry({ model: this.model });
         EzBob.App.jqmodal.show(view);
         return false;
+    },
+    
+    toggleSystmeCrm: function () {
+        console.log('click', this.ui.toggleBtnIcon);
+        this.ui.toggleBtnIcon.toggleClass('fa-search-plus fa-search-minus');
+        this.ui.systemRows.toggle("fast");
     }
 });

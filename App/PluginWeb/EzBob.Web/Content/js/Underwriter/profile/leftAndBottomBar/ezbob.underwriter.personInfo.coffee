@@ -181,13 +181,8 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                         BlockUi "off"
 
     brokerDetails: ->
-        rows = @$el.find('.broker-details-row')
-        if $(rows[0]).hasClass('hide')
-            rows.removeClass('hide')
-            @$el.find('#brokerDetailsBtn').text('-')
-        else
-            rows.addClass('hide')
-            @$el.find('#brokerDetailsBtn').text('+')
+        @$el.find('.broker-details-rows').toggle("fast")
+        @$el.find('#brokerDetailsBtn i').toggleClass("fa-plus fa-minus")
 
     editEmail: ->
         view = new EzBob.EmailEditView(model: @model)

@@ -283,11 +283,7 @@ table.squeezed tbody tr td {
     width: 65%;
 }
 
-.customer-relations-took-loan {
-    color: #797979;
-}
-
-.customer-relations-repaid-loan {
+.crm-system {
     color: #797979;
 }
 
@@ -910,6 +906,7 @@ div.form_buttons_container a, div.form_buttons_container button { float: right; 
 .with-broker {
 	font-weight: bold;
 	color: #58B8FC;
+    white-space: nowrap;
 }
 
 .experian-account-status.Active {

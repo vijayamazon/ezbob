@@ -6,6 +6,10 @@
 
 @helper CustomerRelations()
 {
+    <div class="col-md-12">
+        <button class="btn btn-primary toggleSystemCrm"><i class="fa fa-search-plus"></i></button>
+        <button class="btn btn-primary addNewCustomerRelationsEntry">Add New Entry</button>
+    </div>
     <table class="table centered">
         <thead class="box">
             <tr class="box-title">
@@ -20,19 +24,19 @@
         </thead>
         <tbody>
             <%_.each(vals, function(val){ %>
-            <tr class="<%if(val.Action == 'Took a Loan') print('customer-relations-took-loan'); if(val.Action == 'Repaid a Loan') print('customer-relations-repaid-loan');%>">
+            <tr class="<%if(val.User == 'System') {print('crm-system');}%>" style="display: <%- (val.User == 'System' ? 'none' : 'table-row')%>">
                 <td><%-EzBob.formatDateTime(val.DateTime)%></td>
                 <td><%-val.User%></td>
                 <td><%-val.Action%></td>
                 <td><%-val.InOut%></td>
                 <td><%-val.Status%></td>
                 <td><%-val.Rank%></td>
-                <td style="word-wrap: break-word"><%-val.Comment%></td>
+                <td style="word-wrap: break-word;"><%-val.Comment%></td>
                 @*The <br/> is being converted in the browser?
                 <td style="word-wrap: break-word"><%-val.Comment.replace(/\r\n/g,'<br/>')%></td>*@
             </tr>
             <%})%>
         </tbody>
     </table>
-    <button class="btn btn-primary pull-right addNewCustomerRelationsEntry">Add New Entry</button>
+    
 }
