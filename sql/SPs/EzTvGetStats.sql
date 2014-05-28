@@ -16,6 +16,9 @@ DECLARE @CustomerCount INT = (SELECT count(*) FROM Customer c JOIN Loan l ON c.I
 DECLARE @TotalGivenLoanValueClose DECIMAL(18,6)
 DECLARE @TotalRepaidPrincipalClose DECIMAL(18,6)
 
+DECLARE @FirstLoanDate DATETIME = (SELECT min([Date]) FROM Loan)
+DECLARE @DaysFromFirstLoan INT = (select DATEDIFF(d, @FirstLoanDate, @Now))
+
 SELECT
 	@TotalGivenLoanValueClose = ISNULL( SUM(ISNULL(t.Amount, 0)), 0 )
 FROM
@@ -48,7 +51,7 @@ SELECT 'G_DefaultRate' AS 'Key', @DefaultCustomerCount / CAST(@CustomerCount AS 
 
 UNION
 
-SELECT 'G_AvgDailyLoans' AS 'Key', sum(Amount) / CAST(count(*) AS DECIMAL(18,6)) AS Value  FROM vw_LoansAmountByDay
+SELECT 'G_AvgDailyLoans' AS 'Key', sum(Amount) / CAST(@DaysFromFirstLoan AS DECIMAL(18,6)) AS Value  FROM vw_LoansAmountByDay
 
 UNION
 
@@ -139,7 +142,7 @@ SELECT 'M_AvgLoanSize' AS 'Key', COALESCE(sum(l.LoanAmount) / CAST(count(*) AS D
 
 UNION
 
-SELECT 'M_AvgDailyLoans' AS 'Key', COALESCE(sum(Amount) / CAST(count(*) AS DECIMAL(18,6)),0) AS Value  FROM vw_LoansAmountByDay WHERE [Date] >= @FirstOfMonth
+SELECT 'M_AvgDailyLoans' AS 'Key', COALESCE(sum(Amount) / CAST(datepart(d,@Now) AS DECIMAL(18,6)),0) AS Value  FROM vw_LoansAmountByDay WHERE [Date] >= @FirstOfMonth
 
 UNION
 
