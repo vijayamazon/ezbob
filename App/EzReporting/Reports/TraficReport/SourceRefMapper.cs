@@ -109,7 +109,7 @@
 			{
 				return Source.Seo;
 			}
-			if (analytics.Equals("google / cpc"))
+			if (analytics.Equals("google / cpc") || analytics.Equals("adwords.google.com / referral"))
 			{
 				return Source.GooglePpc;
 			}

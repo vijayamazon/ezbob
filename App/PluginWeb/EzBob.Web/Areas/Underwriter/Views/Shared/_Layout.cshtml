@@ -237,11 +237,10 @@
     <script type="text/javascript">
         $('.navbar.menu .roleImg').tooltip({ placement: "bottom" });
         var EzBob = EzBob || {};
-        //$.get(window.gRootPath + "Underwriter/CustomerRelations/CrmStatic", function(data) {
-        //    EzBob.CrmActions = data.CrmActions;
-        //    EzBob.CrmStatuses = data.CrmStatuses;
-        //    EzBob.CrmRanks = data.CrmRanks;
-        //});
+            EzBob.CrmActions = [];
+            EzBob.CrmStatuses = [];
+            EzBob.CrmRanks = [];
+
     </script>
     @RenderSection("Js", false)
     <div style="display: none;" class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
