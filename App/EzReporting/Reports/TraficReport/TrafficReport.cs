@@ -116,7 +116,8 @@
 				totalRow.Visitors += row.Visitors;
 				totalRow.Registrations += row.Registrations;
 				totalRow.Applications += row.Applications;
-				totalRow.NumOfRejected += row.NumOfApproved;
+				totalRow.NumOfRejected += row.NumOfRejected;
+				totalRow.NumOfApproved += row.NumOfApproved;
 				totalRow.Loans += row.Loans;
 				totalRow.LoanAmount += row.LoanAmount;
 			}
