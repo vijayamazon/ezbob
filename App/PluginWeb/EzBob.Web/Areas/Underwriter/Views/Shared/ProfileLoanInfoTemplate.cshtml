@@ -125,11 +125,11 @@
         </thead>
         <tbody>
             <tr class="with-broker">
-                <td class="customer-column-width-50"><button class="btn btn-mini btn-primary left-pane-button" id="brokerDetailsBtn" name="brokerDetails"><i class="fa fa-plus"></i></button>&nbsp;Broker name</td>
+                <td class="customer-column-width-50"><button class="btn btn-mini btn-primary left-pane-button hide" id="brokerDetailsBtn" name="brokerDetails"><i class="fa fa-plus"></i></button>&nbsp;Broker name</td>
                 <td><%- data.BrokerName %></td>
             </tr>
         </tbody>
-        <tbody class="broker-details-rows" style="display: none;">
+        <tbody class="broker-details-rows with-broker" style="display: none;">
             <tr>
                 <td>Firm name</td>
                 <td><%- data.BrokerFirmName %></td>

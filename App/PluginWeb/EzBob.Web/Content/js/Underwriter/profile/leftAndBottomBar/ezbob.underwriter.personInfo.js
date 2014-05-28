@@ -36,7 +36,10 @@
       that = this;
       this.initSwitch(".cciMarkSwitch", this.model.get('IsCciMarkInAlertMode'), this.toggleCciMark);
       this.initSwitch(".testUserSwitch", this.model.get('IsTestInAlertMode'), this.toggleIsTest);
-      return this.initSwitch(".manualDecisionSwitch", this.model.get('IsAvoid'), this.toggleManualDecision);
+      this.initSwitch(".manualDecisionSwitch", this.model.get('IsAvoid'), this.toggleManualDecision);
+      if (this.model.get('BrokerName') !== '') {
+        return this.$el.find('#brokerDetailsBtn').removeClass('hide');
+      }
     };
 
     PersonInfoView.prototype.initSwitch = function(elemClass, state, func) {

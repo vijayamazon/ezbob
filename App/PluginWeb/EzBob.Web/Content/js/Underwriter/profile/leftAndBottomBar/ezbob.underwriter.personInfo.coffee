@@ -19,7 +19,9 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         @initSwitch(".cciMarkSwitch", @model.get('IsCciMarkInAlertMode'), @toggleCciMark)
         @initSwitch(".testUserSwitch", @model.get('IsTestInAlertMode'), @toggleIsTest)
         @initSwitch(".manualDecisionSwitch", @model.get('IsAvoid'), @toggleManualDecision)
-        
+
+        if @model.get('BrokerName') != ''
+            @$el.find('#brokerDetailsBtn').removeClass('hide')
 
     initSwitch: (elemClass, state, func) ->
         that = this
