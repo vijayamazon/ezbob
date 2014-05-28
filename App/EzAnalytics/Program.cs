@@ -1,24 +1,25 @@
-﻿using Ezbob.Context;
-using Ezbob.Database;
-using Ezbob.Logger;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using EzEnv = Ezbob.Context.Environment;
-
-namespace EzAnalyticsConsoleClient {
+﻿namespace EzAnalyticsConsoleClient
+{
+	using Ezbob.Context;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using EzEnv = Ezbob.Context.Environment;
 	using GoogleAnalyticsLib;
 
-	class Program {
-		#region method Main
-
-		static void Main(string[] args) {
+	class Program
+	{
+		static void Main(string[] args)
+		{
 			Log = new LegacyLog();
 			var app = new GoogleAnalytics(Log);
 			Environment = new EzEnv(Log);
 			string thumb = System.Configuration.ConfigurationManager.AppSettings["gaCertThumb"];
-			m_oReportDate = DateTime.Today;
-			if (Environment.Name == Name.Dev) {
+			m_oReportDate = DateTime.Today.AddDays(-1);
+			if (Environment.Name == Name.Dev)
+			{
 				Log = new ConsoleLog();
 
 				if ((args.Length > 1) && (args[0] == "--date"))
@@ -31,9 +32,11 @@ namespace EzAnalyticsConsoleClient {
 
 				Done();
 			}
-			else {
-				try {
-					if (app.Init(DateTime.Today, thumb))
+			else
+			{
+				try
+				{
+					if (app.Init(m_oReportDate, thumb))
 					{
 						if ((args.Length > 1) && (args[0] == "--backfill"))
 						{
@@ -47,7 +50,8 @@ namespace EzAnalyticsConsoleClient {
 
 					Done();
 				}
-				catch (Exception ex) {
+				catch (Exception ex)
+				{
 					app.Log.Error("Error Occured!\n\nStatement: {0}\n\nDescription: {1}", ex.Message, ex.ToString());
 					app.Log.Error("\nPress enter to exit");
 				} // try
@@ -67,13 +71,10 @@ namespace EzAnalyticsConsoleClient {
 				Run(ga);
 				from = from.AddDays(1);
 			}
-		} 
+		}
 
-		#endregion method Main
-
-		#region method Run
-
-		private static void Run(GoogleAnalytics app) {
+		private static void Run(GoogleAnalytics app)
+		{
 			Log.Debug("Program.Run started...");
 
 			var oRawByCountry = app.FetchByCountry(m_oReportDate, m_oReportDate);
@@ -93,27 +94,21 @@ namespace EzAnalyticsConsoleClient {
 			Log.Debug("Program.Run complete.");
 		} // Run
 
-		#endregion method Run
-
-		#region method Done
-
-		private static void Done() {
-			Log.Debug("Program.Done started...");
+		private static void Done()
+		{
 			Log.Debug("Program.Done complete.");
 		} // Done
 
-		#endregion method Done
-
-		#region method SaveStats
-
-		private static void SaveStats(SortedDictionary<string, int> oStats) {
+		private static void SaveStats(SortedDictionary<string, int> oStats)
+		{
 			Log.Debug("Saving stats started...");
 
 			var conn = new SqlConnection(Log);
 
 			string dbDate = conn.DateToString(m_oReportDate);
 
-			foreach (KeyValuePair<string, int> pair in oStats) {
+			foreach (KeyValuePair<string, int> pair in oStats)
+			{
 				conn.ExecuteNonQuery(DbConsts.InsertSiteAnalyticsSP,
 					new QueryParameter(DbConsts.IsaspDate, dbDate),
 					new QueryParameter(DbConsts.IsaspCodeName, pair.Key),
@@ -144,19 +139,10 @@ namespace EzAnalyticsConsoleClient {
 
 			Log.Debug("Saving stats complete.");
 		}
-		#endregion method SaveStats
-
-		#region property Environment
 
 		private static Ezbob.Context.Environment Environment { get; set; }
 
-		#endregion property Environment
-
-		#region property Log
-
 		private static ASafeLog Log { get; set; }
-
-		#endregion property Log
 
 		private static DateTime m_oReportDate;
 	} // class Program
