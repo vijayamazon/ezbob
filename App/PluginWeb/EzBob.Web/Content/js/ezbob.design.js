@@ -1154,8 +1154,7 @@ EzBob.validatePersonalDetailsForm = function (el) {
     return e.validate({
         rules: {
             FirstName: EzBob.Validation.NameValidationObject,
-            MiddleInitial: EzBob.Validation.MiddleNameValidationObject,
-            Surname: EzBob.Validation.SurameValidationObject,
+            Surname: { required: true },
             DateOfBirth: { requiredDate: true, yearLimit: 18 },
             DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
             MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
