@@ -6,6 +6,10 @@ EzBob.Validation.NameValidationObjectOld = { regex: "^(([a-zA-Z]*[AEIOUYaeiouy]+
 
 EzBob.Validation.NameValidationObject = { nameValidator: true, required: true, minlength: 2 };
 
+EzBob.Validation.MiddleNameValidationObject = { middleNameValidator: true, minlength: 2 };
+
+EzBob.Validation.SurameValidationObject = { surnameValidator: true, required: true, minlength: 2 };
+
 //-----------------------------------------------------------------
 EzBob.Validation.addressErrorPlacement = function(el, model, nDirectorID, sTypeOfBusiness) {
 	function addressListLength(oModel, nDirID, sBusinessType) {
@@ -191,11 +195,36 @@ $.validator.addMethod(
 $.validator.addMethod(
         "nameValidator",
         function (value, element) {
-            var trimmed = $.trim(value);
             var re = /^(([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))( ([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))*$/;
-            return re.test(trimmed);
+            return re.test(value);
         },
-        "Please check your input."
+        "Please check your input. Name mustn't contain spaces"
+);
+
+$.validator.addMethod(
+        "middleNameValidator",
+        function (value, element) {
+            debugger;
+            if (value == '') {
+                return true;
+            }
+            var re = /^(([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))( ([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))*$/;
+            return re.test(value);
+        },
+        "Please check your input. Name mustn't contain spaces"
+);
+
+$.validator.addMethod(
+        "surnameValidator",
+        function (value, element) {
+            debugger;
+            if (value == '') {
+                return true;
+            }
+            var re = /^(([a-zA-Z_.\:]*[AEIOUYaeiouy]+[a-zA-Z_.\:]*)|(Ng)|(ng))( ([a-zA-Z_.\:]*[AEIOUYaeiouy]+[a-zA-Z_.\:]*)|(Ng)|(ng))*$/;
+            return re.test(value);
+        },
+        "Please check your input. Name mustn't contain spaces"
 );
 
 $.validator.addMethod(
