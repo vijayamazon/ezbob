@@ -9,59 +9,24 @@ EzBob.Underwriter.UploadHmrcView = Backbone.Marionette.ItemView.extend({
 		this.customerId = options.customerId;
 
 		this.uploadUi = new EzBob.HmrcUploadUi({
-			el: this.$el,
-			headers: { 'ezbob-underwriter-customer-id': this.customerId, },
+			el: '.hmrc-upload-ui',
 			formID: 'hmrcUploadZone',
-			uploadSuccess: _.bind(this.reloadFileList, this),
+			uploadUrl: '/Underwriter/UploadHmrc/SaveFile',
+			loadPeriodsUrl: '/Underwriter/UploadHmrc/LoadPeriods',
+			headers: { 'ezbob-underwriter-customer-id': this.customerId, },
+			classes: {
+				backBtn: 'btn btn-primary back',
+				doneBtn: 'btn btn-primary uploadHmrc',
+			},
+			clickBack: function() { EzBob.App.vent.trigger('ct:marketplaces.uploadHmrcBack'); },
+			clickDone: function() { EzBob.App.vent.trigger('ct:marketplaces.history', null); },
 		});
 
 		console.log('upload ui is', this.uploadUi);
 	}, // initialize
 
-	ui: {
-		hmrcUploadZone: '#hmrcUploadZone',
-		uploadHmrcButton: '.uploadHmrc',
-	}, // ui
-
-	events: {
-		'click .uploadHmrc': 'uploadHmrcClicked',
-		'click .back': 'backClicked',
-	}, // events
-
-	serializeData: function() {
-		return { customerId: this.customerId, };
-	}, // serializeData
-
-	reloadFileList: function(oFile, oResponse) {
-		// TODO
-		console.log('reload file list:', oFile, oResponse);
-		this.ui.uploadHmrcButton.toggleClass('disabled'); // , !enabled);
-	}, // reloadFileList
-
 	onRender: function() {
 		this.uploadUi.render();
-
-		this.reloadFileList();
-
 		return this;
 	}, // onRender
-
-	uploadHmrcClicked: function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-
-		if (this.ui.uploadHmrcButton.hasClass('disabled'))
-			return false;
-
-		EzBob.App.vent.trigger('ct:marketplaces.history', null);
-
-		return false;
-	}, // uploadHmrcClicked
-
-	backClicked: function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-
-		EzBob.App.vent.trigger('ct:marketplaces.uploadHmrcBack');
-	}, // backClicked
 }); // EzBob.Underwriter.UploadHmrcView

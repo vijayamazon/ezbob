@@ -900,7 +900,9 @@ GeneratePassword broker-contact-email@example.com password-itself
 			string sHash = SecurityUtils.HashPassword(sOriginalPassword);
 
 			m_oLog.Msg(
-				"\n\nOriginal string:\n\t{0}\n\ngenerated hash:\n\t{1}\n\nquery:\n\tUPDATE Broker SET Password = '{1}' WHERE ContactEmail = '{2}'\n",
+				"\n\nOriginal string:\n\t{0}\n\ngenerated hash:\n\t{1}\n\nquery:\n" +
+				"\tUPDATE Broker SET Password = '{1}' WHERE ContactEmail = '{2}'\n" +
+				"\n\tUPDATE Security_User SET EzPassword = '{1}' WHERE UserName = '{2}'\n",
 				sOriginalPassword, sHash, args[1]
 			);
 		} // GeneratePassword

@@ -4,27 +4,43 @@
 	EzBob.HmrcUploadUi = function(options) { this.init(options); }; // constructor
 
 	_.extend(EzBob.HmrcUploadUi.prototype, EzBob.SimpleView.prototype, {
+		defaults: {
+			classes: { form: null, backBtn: null, doneBtn: null, },
+			clickBack: null,
+			clickDone: null,
+			el: '',
+			formID: '',
+			headers: null,
+			loadPeriodsUrl: null,
+			uiEventControlIDs: { form: null, backBtn: null, doneBtn: null, },
+			uploadAppError: null,
+			uploadComplete: null,
+			uploadSuccess: null,
+			uploadSysError: null,
+			uploadUrl: '',
+		}, // defaults
+
 		init: function(options) {
-			this.options = options || {};
+			this.options = _.defaults(options, this.defaults);
 
 			this.Dropzone = null;
+			this.BackButton = null;
+			this.DoneButton = null;
+			this.Periods = null;
 
-			if (this.options.el)
-				this.$el = this.options.el;
-			else if (this.options.$el)
-				this.$el = this.options.$el;
-			else
-				this.$el = undefined;
+			this.$el = undefined;
 
 			this.eventHandlers = {};
+
+			this.on(this.evtClickBack(), this.options.clickBack);
+			this.on(this.evtClickDone(), this.options.clickDone);
+
+			this.on(this.evtUploadSuccess(), _.bind(this.reloadPeriods, this));
 
 			this.on(this.evtUploadSuccess(), this.options.uploadSuccess);
 			this.on(this.evtUploadAppError(), this.options.uploadAppError);
 			this.on(this.evtUploadSysError(), this.options.uploadSysError);
 			this.on(this.evtUploadComplete(), this.options.uploadComplete);
-
-			if (this.initialize)
-				this.initialize();
 		}, // init
 
 		on: function(sEventName, oEventHandler) {
@@ -60,6 +76,8 @@
 			} // if
 		}, // clearDropzone
 
+		evtClickBack: function () { return 'c-b'; },
+		evtClickDone: function () { return 'c-d'; },
 		evtUploadSuccess: function() { return 'u-ok'; },
 		evtUploadAppError: function() { return 'u-ae'; },
 		evtUploadSysError: function() { return 'u-se'; },
@@ -115,7 +133,58 @@
 		}, // initDropzone
 
 		render: function() {
+			if (this.options.el)
+				this.$el = $(this.options.el);
+			else if (this.options.$el)
+				this.$el = $(this.options.$el);
+
+			this.$el.empty();
+
+			this.initUiForm();
+			this.initUiButtons();
+
+			this.Periods = $('<div />');
+			this.$el.append(this.Periods);
+
 			this.initDropzone();
 		}, // render
+
+		initUiButtons: function() {
+			this.BackButton = $('<button type=button>Back</button>')
+				.attr('ui-event-control-id', this.options.uiEventControlIDs.backBtn)
+				.addClass(this.options.classes.backBtn)
+				.click(_.bind(function() { this.trigger(this.evtClickBack()); }, this));
+
+			this.DoneButton = $('<button type=button>Done</button>')
+				.attr('ui-event-control-id', this.options.uiEventControlIDs.doneBtn)
+				.addClass(this.options.classes.doneBtn)
+				.click(_.bind(function() { this.trigger(this.evtClickDone()); }, this))
+				.hide();
+
+			var oDiv = $('<div class="attardi-button"></div>');
+			oDiv.append(this.BackButton).append(this.DoneButton);
+
+			oDiv = $('<div class="form_buttons_container hmrc_margin_from_header"></div>').append(oDiv);
+
+			oDiv = $('<div class="clearfix"></div>').append(oDiv);
+
+			this.$el.append(oDiv);
+		}, // initUiButtons
+
+		initUiForm: function() {
+			var oForm = $('<form />').attr({
+				id: this.options.formID,
+				action: this.options.uploadUrl,
+			});
+
+			oForm.append($('<div class="dz-message">Drag or Click to upload VAT files</div>'));
+
+			this.$el.append(oForm);
+		}, // initUiForm
+
+		reloadPeriods: function() {
+			this.BackButton.hide();
+			this.DoneButton.show();
+		}, // reloadPeriods
 	}); // extend
 })(); // scope
