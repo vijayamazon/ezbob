@@ -51,11 +51,14 @@
 		public int Age { get; set; }
 		public DateTime DateOfBirth { get; set; }
 		public string Gender { get; set; }
+		public string FullGender { get; set; }
 		public string FamilyStatus { get; set; }
 		public string ResidentalStatus { get; set; }
+		public string CompanyName { get; set; }
 		public string CompanyType { get; set; }
 		public string CompanySeniority { get; set; }
-		public string NumOfDirectorsAndShareholders { get; set; }
+		public int NumOfDirectors { get; set; }
+		public int NumOfShareholders { get; set; }
 		public string Website { get; set; }
 		public bool IsWarning { get; set; }
 		public string PromoCode { get; set; }
@@ -95,12 +98,15 @@
 					Age = MiscUtils.GetFullYears(customer.PersonalInfo.DateOfBirth.Value);
 
 					Gender = customer.PersonalInfo.Gender.ToString();
+					FullGender = Gender == "M" ? "Male" : "Female";
 					FamilyStatus = customer.PersonalInfo.MaritalStatus.ToString();
 					ResidentalStatus = customer.PersonalInfo.ResidentialStatus;
 				}
 			}
 
-			if (customer.Company != null) {
+			if (customer.Company != null)
+			{
+				CompanyName = customer.Company.CompanyName;
 				CompanyType = customer.Company.TypeOfBusiness.ToString();
 
 				if (customer.Company.Directors != null) {
@@ -127,14 +133,15 @@
 			{
 				numOfDirectors = experianDirectors.Count;
 			}
-			NumOfDirectorsAndShareholders = string.Format("{0}/{1}", numOfDirectors, numOfShareholders);
+			NumOfDirectors = numOfDirectors;
+			NumOfShareholders = numOfShareholders;
 			
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			DateTime companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
 			int companySeniorityYears, companySeniorityMonths;
 			MiscUtils.GetFullYearsAndMonths(companySeniority, out companySeniorityYears, out companySeniorityMonths);
 			
-			CompanySeniority = string.Format("{0}Y{1}M", companySeniorityYears, companySeniorityMonths);
+			CompanySeniority = string.Format("{0}y {1}m", companySeniorityYears, companySeniorityMonths);
 
 			if (customer.FraudStatus != FraudStatus.Ok)
 			{
@@ -169,7 +176,7 @@
 				MiscUtils.GetFullYearsAndMonths(registrationDate, out registrationTimeYears, out registrationTimeMonths);
 				
 				RegistrationDate = customer.GreetingMailSentDate.Value.ToString("MMM dd, yyyy") +
-				                   string.Format(" [{0}Y{1}M]", registrationTimeYears, registrationTimeMonths);
+				                   string.Format(" [{0}y {1}m]", registrationTimeYears, registrationTimeMonths);
 			}
 
 			IndustryFields.Add(string.Empty);

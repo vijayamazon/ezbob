@@ -271,15 +271,15 @@
     };
 
     PersonInfoView.prototype.brokerDetails = function() {
-      var table;
+      var rows;
 
-      table = this.$el.find('#brokerDetailsTable');
-      if (table.hasClass('hide')) {
-        table.removeClass('hide');
-        return this.$el.find('#brokerDetailsBtn').text('hide details');
+      rows = this.$el.find('.broker-details-row');
+      if ($(rows[0]).hasClass('hide')) {
+        rows.removeClass('hide');
+        return this.$el.find('#brokerDetailsBtn').text('-');
       } else {
-        table.addClass('hide');
-        return this.$el.find('#brokerDetailsBtn').text('details');
+        rows.addClass('hide');
+        return this.$el.find('#brokerDetailsBtn').text('+');
       }
     };
 

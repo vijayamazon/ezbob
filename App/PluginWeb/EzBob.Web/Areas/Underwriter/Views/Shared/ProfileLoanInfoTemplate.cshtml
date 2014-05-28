@@ -7,6 +7,14 @@
     </tr>
 }
 
+@helper RawCell47(params string[] arguments)
+{
+    <tr>
+        <td class="customer-column-width-47">@Html.Raw(arguments[0])</td>
+        <td>@Html.Raw(arguments[1])</td>
+    </tr>
+}
+
 @helper RawCellWithButtonNear(string title, string val1, string val2, string css = "", string sRawHtmlUnder = "")
 {
     <tr>
@@ -30,7 +38,6 @@
         </td>
     </tr>
 }
-
 
 <div id="simpleEditDlg" name="simpleEditDlg" style="display: none">
     <form name="simpleEditDlg">
@@ -56,62 +63,32 @@
             </tr>
         </thead>
         <tbody>
-            @RawCell("Id", "<%- data.Id %>")
-            @RawCell("Name", "<%- data.Name %>")
-            @RawCell("Reg date", "<%- data.RegistrationDate %>")
-            @RawCell("Age", "<%- data.Age %>")
-            @RawCell("Gender", "<%- data.Gender %>")
+            @RawCell47("Id", "<%- data.Id %>")
+            @RawCell47("Name", "<%- data.Name %>")
+            <tr>
+                <td colspan="2" class="customer-personal-status-alignment"><%- data.FullGender %>, <%- data.FamilyStatus %>, <%- data.Age %></td>
+            </tr>
+            <tr>
+                <td class="customer-column-width-47">Reg date</td>
+                <td class="customer-registration-date-padding"><%- data.RegistrationDate %></td>
+            </tr>
+            @RawCell47("Residental Status", "<%- data.ResidentalStatus %>")
         </tbody>
     </table>
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Source</th>
+                <th class="left-pane-header" colspan="2">Company Details</th>
             </tr>
         </thead>
         <tbody>
-            <tr id="with-broker">
-                <td class="customer-column-width-50">Broker name&nbsp;<button class="btn btn-mini btn-primary left-pane-button" id="brokerDetailsBtn" name="brokerDetails">details</button></td>
-                <td><%- data.BrokerName %></td>
-            </tr>
-            <tr>
-                <td class="<%= data.PromoCodeCss %>">Promo</td>
-                <td class="<%= data.PromoCodeCss %>">
-                    <span><%= data.PromoCode %></span>
-                </td>
-            </tr>
-            @RawCell("Campaigns", "<%- data.ActiveCampaign %>")
-
-            <tr>
-                <td>Ref Source</td>
-                <td><%- data.ReferenceSource ? (data.ReferenceSource.length <= 20 ? data.ReferenceSource : data.ReferenceSource.substring(0,17)+'...') : '-' %>
-                    <i data-title="<%- data.ReferenceSource || 'no source ref' %>" class="tltp icon-question-sign"></i>
-                </td>
-            </tr>
-
-            @RawCell("Segment", "<%- data.SegmentType %>")
-        </tbody>
-    </table>
-    <table id="brokerDetailsTable" class="hide table squeezed rright">
-        <thead class="box">
-            <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Broker Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Firm name</td>
-                <td><%- data.BrokerFirmName %></td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td><%- data.BrokerContactEmail.length <= 20 ? data.BrokerContactEmail : data.BrokerContactEmail.substring(0,17)+'...' %>
-                    <i data-title="<%- data.BrokerContactEmail %>" class="tltp-left <%=getIcon()%>"></i>
-                </td>
-            </tr>
-                <td>Mobile</td>
-                <td><%- data.BrokerContactMobile %></td>
-            </tr>
+            @RawCell("Company Name", "<%- data.CompanyName %>")
+            @RawCell("Cart", "<%- data.Medal %>")
+            @RawCell("User score", "<%- data.CreditScore %>")
+            @RawCell("Business Type", "<%- data.CompanyType %>")
+            @RawCell("Company Seniority", "<%- data.CompanySeniority %>")
+            @RawCell("# Directors", "<%- data.NumOfDirectors %>")
+            @RawCell("# Shareholders", "<%- data.NumOfShareholders %>")
         </tbody>
     </table>
     <table class="table squeezed rright">
@@ -134,23 +111,53 @@
                 </td>
             </tr>
 
-            @RawCell("Website", "<%- data.Website %>")
+            <tr>
+                <td class="customer-column-width-50">Website</td>
+                <td><a href="http://<%- data.Website %>" target="_blank"><%- data.Website %></a></td>
+            </tr>
         </tbody>
     </table>
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Scoring</th>
+                <th class="left-pane-header" colspan="2">Source</th>
             </tr>
         </thead>
         <tbody>
-            @RawCell("Cart", "<%- data.Medal %>")
-            @RawCell("User score", "<%- data.CreditScore %>")
-            @RawCell("Marital Status", "<%- data.FamilyStatus %>")
-            @RawCell("Residental Status", "<%- data.ResidentalStatus %>")
-            @RawCell("Business Type", "<%- data.CompanyType %>")
-            @RawCell("Company Seniority", "<%- data.CompanySeniority %>")
-            @RawCell("# Directors\\# Shareholders", "<%- data.NumOfDirectorsAndShareholders %>")
+            <tr id="with-broker">
+                <td class="customer-column-width-50"><button class="btn btn-mini btn-primary left-pane-button" id="brokerDetailsBtn" name="brokerDetails">+</button>&nbsp;Broker name</td>
+                <td><%- data.BrokerName %></td>
+            </tr>
+            <tr class="hide broker-details-row">
+                <td>Firm name</td>
+                <td><%- data.BrokerFirmName %></td>
+            </tr>
+            <tr class="hide broker-details-row">
+                <td>Email</td>
+                <td><%- data.BrokerContactEmail.length <= 20 ? data.BrokerContactEmail : data.BrokerContactEmail.substring(0,17)+'...' %>
+                    <i data-title="<%- data.BrokerContactEmail %>" class="tltp-left <%=getIcon()%>"></i>
+                </td>
+            </tr>
+            <tr class="hide broker-details-row">
+                <td>Mobile</td>
+                <td><%- data.BrokerContactMobile %></td>
+            </tr>
+            <tr>
+                <td class="<%= data.PromoCodeCss %>">Promo</td>
+                <td class="<%= data.PromoCodeCss %>">
+                    <span><%= data.PromoCode %></span>
+                </td>
+            </tr>
+            @RawCell("Campaigns", "<%- data.ActiveCampaign %>")
+
+            <tr>
+                <td>Ref Source</td>
+                <td><%- data.ReferenceSource ? (data.ReferenceSource.length <= 20 ? data.ReferenceSource : data.ReferenceSource.substring(0,17)+'...') : '-' %>
+                    <i data-title="<%- data.ReferenceSource || 'no source ref' %>" class="tltp icon-question-sign"></i>
+                </td>
+            </tr>
+
+            @RawCell("Segment", "<%- data.SegmentType %>")
         </tbody>
     </table>
     <table class="table squeezed rright">
@@ -160,7 +167,12 @@
             </tr>
         </thead>
         <tbody>
-            @RawCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td")
+            @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
+
+            <tr>
+                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %> customer-column-width-50">AML</td>
+                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %>"><%- data.AmlResult %></td>
+            </tr>
 
             <tr>
                 <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %> customer-column-width-50 fraud-status-td">Fraud Status</td>
@@ -170,20 +182,15 @@
                 </td>
             </tr>
 
-            @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
-            
-            @RawCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td")
+            @RawCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td")
 
-            @RawCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusName %>", "TrustPilotStatusUpdate")
+            @RawCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td")
             
             @RawCellWithSlider("Manual Decision", "manualDecisionSwitch", "No", "Yes")
 
-            @RawCell("User status", "<%- data.UserStatus %>")
+            @RawCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusName %>", "TrustPilotStatusUpdate")
 
-            <tr>
-                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %> customer-column-width-50">AML</td>
-                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %>"><%- data.AmlResult %></td>
-            </tr>
+            @RawCell("User status", "<%- data.UserStatus %>")
         </tbody>
         <tfoot>
             <tr>
