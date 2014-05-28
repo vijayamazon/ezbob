@@ -9,9 +9,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         @bindTo @model, "change sync", @render, this
 
     onRender: ->
-        if @model.get('BrokerID')
-            @$el.find('#with-broker').addClass 'with-broker'
-
         @$el.find(".tltp").tooltip()
         @$el.find(".tltp-left").tooltip({placement: "left"})
 

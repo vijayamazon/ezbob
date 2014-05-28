@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.PersonInfoView = (function(_super) {
-
     __extends(PersonInfoView, _super);
 
     function PersonInfoView() {
-      return PersonInfoView.__super__.constructor.apply(this, arguments);
+      _ref = PersonInfoView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     PersonInfoView.prototype.template = "#profile-person-info-template";
@@ -25,9 +25,7 @@
 
     PersonInfoView.prototype.onRender = function() {
       var that;
-      if (this.model.get('BrokerID')) {
-        this.$el.find('#with-broker').addClass('with-broker');
-      }
+
       this.$el.find(".tltp").tooltip();
       this.$el.find(".tltp-left").tooltip({
         placement: "left"
@@ -43,6 +41,7 @@
 
     PersonInfoView.prototype.initSwitch = function(elemClass, state, func) {
       var that;
+
       that = this;
       this.$el.find(elemClass).bootstrapSwitch();
       this.$el.find(elemClass).bootstrapSwitch('setState', state);
@@ -54,6 +53,7 @@
     PersonInfoView.prototype.toggleCciMark = function(event, state) {
       var id,
         _this = this;
+
       id = this.model.get('Id');
       BlockUi();
       return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleCciMark', {
@@ -73,6 +73,7 @@
     PersonInfoView.prototype.toggleIsTest = function(event, state) {
       var id,
         _this = this;
+
       id = this.model.get('Id');
       BlockUi();
       return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleIsTest', {
@@ -92,6 +93,7 @@
     PersonInfoView.prototype.toggleManualDecision = function(event, state) {
       var id,
         _this = this;
+
       id = this.model.get('Id');
       BlockUi();
       return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/AvoidAutomaticDecision', {
@@ -110,6 +112,7 @@
 
     PersonInfoView.prototype.setAlertStatus = function(isAlert, td) {
       var oTd;
+
       oTd = this.$el.find(td);
       if (isAlert) {
         return oTd.addClass('red_cell');
@@ -130,6 +133,7 @@
 
     PersonInfoView.prototype.activateMainStratgey = function() {
       var xhr;
+
       return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateMainStrategy", {
         customerId: this.model.get('Id')
       });
@@ -137,6 +141,7 @@
 
     PersonInfoView.prototype.activateFinishWizard = function() {
       var xhr;
+
       return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateFinishWizard", {
         customerId: this.model.get('Id')
       });
@@ -145,6 +150,7 @@
     PersonInfoView.prototype.updateTrustPilotStatus = function() {
       var d,
         _this = this;
+
       d = new EzBob.Dialogs.ComboEdit({
         model: this.model,
         propertyName: 'TrustPilotStatusName',
@@ -166,6 +172,7 @@
     PersonInfoView.prototype.changeFraudStatusManualyClicked = function() {
       var fraudStatusModel, that, xhr,
         _this = this;
+
       fraudStatusModel = new EzBob.Underwriter.FraudStatusModel({
         customerId: this.model.get('Id'),
         currentStatus: this.model.get('FraudCheckStatusId')
@@ -175,6 +182,7 @@
       xhr = fraudStatusModel.fetch();
       return xhr.done(function() {
         var fraudStatusLayout;
+
         fraudStatusLayout = new EzBob.Underwriter.FraudStatusLayout({
           model: fraudStatusModel
         });
@@ -183,6 +191,7 @@
         BlockUi("off");
         return fraudStatusLayout.on('saved', function() {
           var currentStatus;
+
           currentStatus = fraudStatusModel.get('currentStatus');
           _this.model.set('FraudCheckStatusId', currentStatus);
           _this.model.set('FraudCheckStatus', fraudStatusModel.get('currentStatusText'));
@@ -202,6 +211,7 @@
 
     PersonInfoView.prototype.serializeData = function() {
       var data;
+
       data = this.model.toJSON();
       return {
         data: data,
@@ -212,6 +222,7 @@
     PersonInfoView.prototype.changeDisabledState = function() {
       var collectionStatusModel, customerId, prevStatus, xhr,
         _this = this;
+
       collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel({
         customerId: this.model.get('Id'),
         currentStatus: this.model.get('CustomerStatusId')
@@ -222,6 +233,7 @@
       xhr = collectionStatusModel.fetch();
       return xhr.done(function() {
         var collectionStatusLayout;
+
         collectionStatusLayout = new EzBob.Underwriter.CollectionStatusLayout({
           model: collectionStatusModel
         });
@@ -230,6 +242,7 @@
         BlockUi("off");
         return collectionStatusLayout.on('saved', function() {
           var newStatus, that;
+
           newStatus = collectionStatusModel.get('currentStatus');
           that = _this;
           xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/GetIsStatusWarning", {
@@ -237,6 +250,7 @@
           });
           return xhr.done(function(result) {
             var isWarning, xhr2;
+
             BlockUi("on");
             isWarning = result;
             that.model.fetch();
@@ -260,6 +274,7 @@
 
     PersonInfoView.prototype.editEmail = function() {
       var view;
+
       view = new EzBob.EmailEditView({
         model: this.model
       });
@@ -275,11 +290,11 @@
   })(Backbone.Marionette.ItemView);
 
   EzBob.Underwriter.PersonalInfoModel = (function(_super) {
-
     __extends(PersonalInfoModel, _super);
 
     function PersonalInfoModel() {
-      return PersonalInfoModel.__super__.constructor.apply(this, arguments);
+      _ref1 = PersonalInfoModel.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     PersonalInfoModel.prototype.idAttribute = "Id";
@@ -287,17 +302,18 @@
     PersonalInfoModel.prototype.urlRoot = window.gRootPath + "Underwriter/CustomerInfo/Index";
 
     PersonalInfoModel.prototype.initialize = function() {
-      var status, _i, _len, _ref, _results;
+      var status, _i, _len, _ref2, _results;
+
       this.on("change:FraudCheckStatusId", this.changeFraudCheckStatus, this);
       this.changeFraudCheckStatus();
       if (this.StatusesArr === void 0) {
         this.statuses = EzBob.Underwriter.StaticData.CollectionStatuses;
       }
       this.StatusesArr = {};
-      _ref = this.statuses.models;
+      _ref2 = this.statuses.models;
       _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        status = _ref[_i];
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        status = _ref2[_i];
         _results.push(this.StatusesArr[status.get('Id')] = status.get('Name'));
       }
       return _results;
@@ -305,6 +321,7 @@
 
     PersonalInfoModel.prototype.changeFraudCheckStatus = function() {
       var fraud, fraudCss;
+
       fraud = this.get("FraudCheckStatusId");
       fraudCss = "";
       switch (fraud) {
