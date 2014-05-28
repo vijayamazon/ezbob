@@ -844,6 +844,10 @@
 			if (personalInfo == null)
 				throw new ArgumentNullException("personalInfo");
 
+			personalInfo.FirstName = personalInfo.FirstName.Trim();
+			personalInfo.MiddleInitial = personalInfo.MiddleInitial.Trim();
+			personalInfo.Surname = personalInfo.Surname.Trim();
+
 			if (string.IsNullOrEmpty(personalInfo.FirstName))
 				throw new ArgumentNullException("personalInfo." + "FirstName");
 
