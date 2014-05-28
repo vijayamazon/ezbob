@@ -408,6 +408,9 @@
 		[OperationContract]
 		ActionMetaData AndRecalculateVatReturnSummaryForAll();
 
+		[OperationContract]
+		VatReturnPeriodsActionResult LoadManualVatReturnPeriods(int nCustomerID);
+
 		#endregion VAT
 
 		#region Wizard

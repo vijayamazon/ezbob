@@ -1,5 +1,5 @@
 ﻿namespace EzServiceShortcut {
-	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.VatReturn;
 	using EzServiceAccessor;
 	using Ezbob.Database;
 	using Ezbob.Logger;

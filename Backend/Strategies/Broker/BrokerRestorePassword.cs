@@ -1,11 +1,11 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using System;
-	using System.Text;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using MailStrategies;
+	using Misc;
 
 	public class BrokerRestorePassword : AStrategy {
 		#region public

@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.Misc;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData CaisGenerate(int underwriterId) {

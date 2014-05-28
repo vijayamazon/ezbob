@@ -5,6 +5,8 @@
 	using ActionResults;
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.Experian;
+	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Newtonsoft.Json;

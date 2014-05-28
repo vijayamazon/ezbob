@@ -74,6 +74,7 @@
     <Compile Include="ActionResults\BrokerCustomerFilesActionResult.cs" />
     <Compile Include="ActionResults\BrokerLeadDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerPropertiesActionResult.cs" />
+    <Compile Include="ActionResults\VatReturnPeriodsActionResult.cs" />
     <Compile Include="ActionResults\UserLoginActionResult.cs" />
     <Compile Include="ActionResults\VatReturnSummaryActionResult.cs" />
     <Compile Include="ActionResults\PricingModelModelActionResult.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
+    <Compile Include="EzServiceImplementation\vat.return.cs" />
     <Compile Include="EzServiceImplementation\PricingModel.cs" />
     <Compile Include="EzServiceImplementation\user.management.cs" />
     <Compile Include="EzServiceImplementation\MiscQueries.cs" />

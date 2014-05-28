@@ -23,10 +23,14 @@
 		init: function(options) {
 			this.options = _.defaults(options, this.defaults);
 
+			this.FirstLoad = true;
+
 			this.Dropzone = null;
 			this.BackButton = null;
 			this.DoneButton = null;
-			this.Periods = null;
+			this.PeriodsChart = null;
+			this.PeriodsDetails = null;
+			this.DetailsDataTable = null;
 
 			this.$el = undefined;
 
@@ -138,22 +142,39 @@
 			else if (this.options.$el)
 				this.$el = $(this.options.$el);
 
+			if (this.DetailsDataTable) {
+				this.DetailsDataTable.fnDestroy();
+				this.DetailsDataTable = null;
+			} // if
+
 			this.$el.empty();
+
+			this.PeriodsChart = $('<div />');
+			this.$el.append(this.PeriodsChart);
 
 			this.initUiForm();
 			this.initUiButtons();
 
-			this.Periods = $('<div />');
-			this.$el.append(this.Periods);
+			this.PeriodsDetails = $('<table>\
+<thead><tr>\
+<th>From</th><th>To</th><th>Registration #</th><th>Company name</th>\
+</tr></thead><tbody><tr>\
+<td></td><td></td><td></td><td></td>\
+</tr></body>\
+</table>');
+			this.$el.append(this.PeriodsDetails);
 
 			this.initDropzone();
+
+			this.reloadPeriods();
 		}, // render
 
 		initUiButtons: function() {
 			this.BackButton = $('<button type=button>Back</button>')
 				.attr('ui-event-control-id', this.options.uiEventControlIDs.backBtn)
 				.addClass(this.options.classes.backBtn)
-				.click(_.bind(function() { this.trigger(this.evtClickBack()); }, this));
+				.click(_.bind(function() { this.trigger(this.evtClickBack()); }, this))
+				.hide();
 
 			this.DoneButton = $('<button type=button>Done</button>')
 				.attr('ui-event-control-id', this.options.uiEventControlIDs.doneBtn)
@@ -184,7 +205,51 @@
 
 		reloadPeriods: function() {
 			this.BackButton.hide();
-			this.DoneButton.show();
+			this.DoneButton.hide();
+
+			var oTableOpts = {
+				bDestroy: true,
+				bProcessing: false,
+				aoColumns: EzBob.DataTables.Helper.extractColumns('^DateFrom,^DateTo,#RegistrationNo,Name'),
+
+				aLengthMenu: [[-1], ['all']],
+				iDisplayLength: -1,
+
+				sPaginationType: 'bootstrap',
+				bJQueryUI: false,
+
+				bAutoWidth: true,
+				sDom: 't',
+
+				bSort: false,
+			}; // dataTable options
+
+			var oXhr = $.getJSON(this.options.loadPeriodsUrl);
+
+			var self = this;
+
+			oXhr.done(function(oResponse) {
+				console.log(oResponse);
+
+				if (self.FirstLoad) {
+					console.log('first time');
+					self.BackButton.show();
+					self.FirstLoad = false;
+				}
+				else {
+					console.log('other time');
+					var bHasRows = oResponse.aaData && oResponse.aaData.length;
+
+					if (bHasRows)
+						self.DoneButton.show();
+					else
+						self.BackButton.show();
+				} // if
+
+				oTableOpts.aaData = oResponse.aaData;
+
+				self.DetailsDataTable = self.PeriodsDetails.dataTable(oTableOpts);
+			});
 		}, // reloadPeriods
 	}); // extend
 })(); // scope

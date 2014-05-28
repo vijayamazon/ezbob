@@ -53,6 +53,7 @@
     <Compile Include="BrokerCustomerFileModel.cs" />
     <Compile Include="BrokerPropertiesModel.cs" />
     <Compile Include="ConfigTable.cs" />
+    <Compile Include="VatReturnPeriodModel.cs" />
     <Compile Include="VatReturnSummaryQuarterModel.cs" />
     <Compile Include="enums.cs" />
     <Compile Include="FileDescriptionModel.cs" />

@@ -8,6 +8,7 @@ namespace EzBobTest
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.MailStrategies;
+	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.RegistryScanner;
 	using FreeAgent;
 	using Sage;

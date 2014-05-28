@@ -190,6 +190,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnSummaryActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
@@ -426,6 +427,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.SummaryField, value) != true)) {
                     this.SummaryField = value;
                     this.RaisePropertyChanged("Summary");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VatReturnPeriodsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class VatReturnPeriodsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.VatReturnPeriod[] PeriodsField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.VatReturnPeriod[] Periods {
+            get {
+                return this.PeriodsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PeriodsField, value) != true)) {
+                    this.PeriodsField = value;
+                    this.RaisePropertyChanged("Periods");
                 }
             }
         }
@@ -1855,6 +1879,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll", ReplyAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AndRecalculateVatReturnSummaryForAll();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadManualVatReturnPeriods", ReplyAction="http://tempuri.org/IEzService/LoadManualVatReturnPeriodsResponse")]
+        ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult LoadManualVatReturnPeriods(int nCustomerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
         ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
         
@@ -2228,6 +2255,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AndRecalculateVatReturnSummaryForAll() {
             return base.Channel.AndRecalculateVatReturnSummaryForAll();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult LoadManualVatReturnPeriods(int nCustomerID) {
+            return base.Channel.LoadManualVatReturnPeriods(nCustomerID);
         }
         
         public ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {

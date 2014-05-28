@@ -82,6 +82,23 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="VatReturnQuarter" nillable="true" type="tns:VatReturnQuarter" />
+  <xs:complexType name="ArrayOfVatReturnPeriod">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="VatReturnPeriod" nillable="true" type="tns:VatReturnPeriod" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfVatReturnPeriod" nillable="true" type="tns:ArrayOfVatReturnPeriod" />
+  <xs:complexType name="VatReturnPeriod">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DateFrom" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateTo" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RegistrationNo" type="xs:long" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="VatReturnPeriod" nillable="true" type="tns:VatReturnPeriod" />
   <xs:complexType name="FinishWizardArgs">
     <xs:sequence>
       <xs:element minOccurs="0" name="AvoidAutoDecision" type="xs:int" />

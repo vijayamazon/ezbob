@@ -1,8 +1,8 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.ServiceModel;
-	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.Experian;
+	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.QuickOffer;
 	using EzServiceConfiguration;
 	using Ezbob.Backend.Models;

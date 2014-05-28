@@ -1,6 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System.Linq;
-	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.Postcode;
 	using Ezbob.Backend.Models;
 
@@ -82,14 +82,6 @@
 
 		#endregion method PostcodeSaveLog
 
-		#region method CalculateVatReturnSummary
-
-		public ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID) {
-			return Execute<CalculateVatReturnSummary>(null, null, nCustomerMarketplaceID);
-		} // CalculateVatReturnSummary
-
-		#endregion method CalculateVatReturnSummary
-
 		#region method MarketplaceInstantUpdate
 
 		public ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID) {
@@ -97,29 +89,6 @@
 		} // MarketplaceInstantUpdate
 
 		#endregion method MarketplaceInstantUpdate
-
-		#region method LoadVatReturnSummary
-
-		public VatReturnSummaryActionResult LoadVatReturnSummary(int nCustomerID, int nMarketplaceID) {
-			LoadVatReturnSummary oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nCustomerID, nMarketplaceID);
-
-			return new VatReturnSummaryActionResult {
-				MetaData = oMetaData,
-				Summary = oInstance.Summary,
-			};
-		} // LoadVatReturnSummary
-
-		#endregion method LoadVatReturnSummary
-
-		#region method AndRecalculateVatReturnSummaryForAll
-
-		public ActionMetaData AndRecalculateVatReturnSummaryForAll() {
-			return Execute<AndRecalculateVatReturnSummaryForAll>(null, null);
-		} // AndRecalculateVatReturnSummaryForAll
-
-		#endregion method AndRecalculateVatReturnSummaryForAll
 
 		#region method EncryptChannelGrabberMarketplaces
 

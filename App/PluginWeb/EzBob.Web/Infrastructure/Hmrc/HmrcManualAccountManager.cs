@@ -11,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Models;
+	using Ezbob.Backend.Models;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
 	using Integration.ChannelGrabberConfig;
@@ -19,6 +20,7 @@
 	using NHibernate;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 
 	public class HmrcManualAccountManager {
 		#region public
@@ -50,6 +52,19 @@
 		} // CreateJsonError
 
 		#endregion static method CreateJsonError
+
+		#region static method CreateJson
+
+		public static JsonResult CreateJson(VatReturnPeriod[] oPeriods) {
+			return new JsonResult {
+				Data = new { aaData = oPeriods, },
+				ContentType = null,
+				ContentEncoding = null,
+				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+			};
+		} // CreateJsonError
+
+		#endregion static method CreateJson
 
 		#region constructor
 
@@ -141,6 +156,21 @@
 		} // SaveNewManuallyEntered
 
 		#endregion method SaveNewManuallyEntered
+
+		#region method LoadPeriods
+
+		public JsonResult LoadPeriods(int nCustomerID) {
+			try {
+				VatReturnPeriodsActionResult vrpar = m_oServiceClient.Instance.LoadManualVatReturnPeriods(nCustomerID);
+				return CreateJson(vrpar.Periods);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to load manual VAT return periods for customer {0}.", nCustomerID);
+				return CreateJson(new VatReturnPeriod[0]);
+			} // try
+		} // LoadPeriods
+
+		#endregion method LoadPeriods
 
 		#endregion public
 

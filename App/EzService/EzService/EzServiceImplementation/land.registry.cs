@@ -1,5 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.Misc;
 
 	partial class EzServiceImplementation {
 		public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {

@@ -31,14 +31,23 @@
 
 		#endregion action SaveFile
 
-		#region method SaveNewManuallyEntered
+		#region action SaveNewManuallyEntered
 
 		[HttpPost]
 		public JsonResult SaveNewManuallyEntered(string sData) {
 			return m_oAccountManager.SaveNewManuallyEntered(sData);
 		} // SaveNewManuallyEntered
 
-		#endregion method SaveNewManuallyEntered
+		#endregion action SaveNewManuallyEntered
+
+		#region action LoadPeriods
+
+		[HttpGet]
+		public JsonResult LoadPeriods([Bind(Prefix = "customerId")] int nCustomerID) {
+			return m_oAccountManager.LoadPeriods(nCustomerID);
+		} // LoadPeriods
+
+		#endregion action LoadPeriods
 
 		#region private
 
