@@ -14,11 +14,26 @@ table.table {
 .notifications {
     color: red;
 }
-.skin-orange .navbar{ background-color: #fc8e00;}
-.tile-ezgreen      {background-color: #67c10b;}
-.tile-ezorange      {background-color: #fc8e00;}
-.tile-ezgrey      {background-color: #8d8d8d;}
-.tile-black      {background-color: #000000;}
+
+.skin-orange .navbar {
+    background-color: #fc8e00;
+}
+
+.tile-ezgreen {
+    background-color: #67c10b;
+}
+
+.tile-ezorange {
+    background-color: #fc8e00;
+}
+
+.tile-ezgrey {
+    background-color: #8d8d8d;
+}
+
+.tile-black {
+    background-color: #000000;
+}
 
 .navbar-brand {
     font-size: 35px !important;
@@ -47,8 +62,25 @@ table.table {
     margin-bottom: 5px;
 }
 
-.box .box-title h3 {
-    color: #000;
+.box .box-title {
+    padding: 0;
 }
 
+    .box .box-title h3 {
+        color: #000;
+        font-size: 35px;
+        line-height: 30px;
+    }
 
+.tile p.title {
+    font-size: 70px;
+    margin: -45px 0 0 0;
+}
+
+.tile .caption {
+    font-size: 40px;
+    text-align: center;
+    min-height: 60px;
+    padding-bottom: 25px;
+    margin: -15px 0 0 0;
+}
