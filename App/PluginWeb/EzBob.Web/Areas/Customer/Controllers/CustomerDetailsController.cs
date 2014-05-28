@@ -345,8 +345,8 @@
 			PersonalInfo personalInfo,
 			List<CustomerAddress> personalAddress,
 			List<CustomerAddress> prevPersonAddresses,
-			string dateOfBirth
-			) {
+			string dateOfBirth) 
+		{
 			new Transactional(
 				() => SaveCustomerToDB(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth)
 			).Execute();
@@ -916,6 +916,10 @@
 
 			if (personalInfo == null)
 				throw new ArgumentNullException("personalInfo");
+
+			personalInfo.FirstName = personalInfo.FirstName.Trim();
+			personalInfo.MiddleInitial = personalInfo.MiddleInitial.Trim();
+			personalInfo.Surname = personalInfo.Surname.Trim();
 
 			if (string.IsNullOrEmpty(personalInfo.FirstName))
 				throw new ArgumentNullException("personalInfo." + "FirstName");

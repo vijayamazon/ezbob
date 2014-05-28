@@ -1435,7 +1435,7 @@ EzBob.escapeRegExp = function(str) {
 	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }; // EzBob.escapeRegExp
 
-$.validator.addMethod('validateSignerName', function(value, element, params) {
+$.validator.addMethod('validateSignerName', function (value, element, params) {
 	var sSignature = $.trim(value);
 
 	if (sSignature === '')
@@ -1450,6 +1450,20 @@ $.validator.addMethod('validateSignerName', function(value, element, params) {
 		return true;
 
 	re = new RegExp('^' + sLastName + ' (.+ )?' + sFirstName + '$', 'i');
+    
+	if (sSignature.match(re))
+	    return true;
+
+	sSignature = sSignature.replace(/\s+/g, '');
+	sFirstName = sFirstName.replace(/\s+/g, '');
+	sLastName = sLastName.replace(/\s+/g, '');
+    
+	re = new RegExp('^' + sFirstName + sLastName + '$', 'i');
+
+	if (sSignature.match(re))
+	    return true;
+
+	re = new RegExp('^' + sLastName + sFirstName + '$', 'i');
 
 	return sSignature.match(re) ? true : false;
 }, 'Please type your full name as it appears in the agreement.');
