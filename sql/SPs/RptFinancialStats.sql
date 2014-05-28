@@ -140,28 +140,34 @@ BEGIN
 
 	------------------------------------------------------------------------------
 	
-	SELECT
-		@TotalDefaults = ISNULL(SUM(l.Principal), 0)
-	FROM
-		Loan l
-		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 
-		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
-	WHERE
-		cs.IsDefault = 1
-	AND 
-		l.Status<>'PaidOff'
+	SET @TotalDefaults = 
+	(SELECT ISNULL(SUM(l.Principal), 0)
+	 FROM Customer C,
+		  CustomerStatuses S,
+		  Loan L
+	 WHERE 
+		C.IsTest = 0 AND 
+		L.CustomerId = c.Id AND
+		L.Status != 'PaidOff' and
+		C.CollectionStatus = S.Id
+		AND S.Name IN ('Default', 'WriteOff')
+	)
+	
 
 	------------------------------------------------------------------------------
 	
-	SELECT
-		@TotalBadDebt = ISNULL(SUM(l.Principal), 0)
-	FROM
-		Loan l
-		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 
-		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
-	WHERE
-		cs.IsWarning = 1
-	AND l.Status<>'PaidOff'	
+	SET @TotalBadDebt = 
+	(SELECT ISNULL(SUM(l.Principal), 0)
+	 FROM Customer C,
+		  CustomerStatuses S,
+		  Loan L
+	 WHERE 
+		C.IsTest = 0 AND 
+		L.CustomerId = c.Id AND
+		L.Status != 'PaidOff' and
+		C.CollectionStatus = S.Id
+		AND S.Name IN ('Bad', 'Debt Management', 'Legal', 'Fraud')
+	)
 
 	------------------------------------------------------------------------------
 
@@ -453,8 +459,6 @@ BEGIN
 	SELECT 6.1, 'Net portfolio', (@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose) - @TotalBadDebt - @TotalDefaults
 
 	------------------------------------------------------------------------------
-
-	
 	
 	INSERT INTO #output
 	SELECT 4, 'Closing Balance before Defaults', @TotalGivenLoanValueClose - @TotalRepaidPrincipalClose
