@@ -1022,9 +1022,6 @@ div.hmrc-enter-data-holder .add-one-period {
 .customer-column-width-50 {
     width: 50%;
 }
-.customer-column-width-47 {
-    width: 47%;
-}
 
 .left-pane-button {
     padding-top: 1px;
@@ -1256,8 +1253,4 @@ td a.edit-loan {
 
 .table td.customer-personal-status-alignment {
     text-align: right;
-}
-
-.table > tbody > tr > td.customer-registration-date-padding {
-    padding-left: 0px;
 }

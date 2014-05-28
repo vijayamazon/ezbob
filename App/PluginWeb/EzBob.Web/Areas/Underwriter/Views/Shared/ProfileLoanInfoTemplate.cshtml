@@ -7,14 +7,6 @@
     </tr>
 }
 
-@helper RawCell47(params string[] arguments)
-{
-    <tr>
-        <td class="customer-column-width-47">@Html.Raw(arguments[0])</td>
-        <td>@Html.Raw(arguments[1])</td>
-    </tr>
-}
-
 @helper RawCellWithButtonNear(string title, string val1, string val2, string css = "", string sRawHtmlUnder = "")
 {
     <tr>
@@ -63,16 +55,18 @@
             </tr>
         </thead>
         <tbody>
-            @RawCell47("Id", "<%- data.Id %>")
-            @RawCell47("Name", "<%- data.Name %>")
+            @RawCell("Id", "<%- data.Id %>")
+            @RawCell("Name", "<%- data.Name %>")
             <tr>
                 <td colspan="2" class="customer-personal-status-alignment"><%- data.FullGender %>, <%- data.FamilyStatus %>, <%- data.Age %></td>
             </tr>
             <tr>
-                <td class="customer-column-width-47">Reg date</td>
-                <td class="customer-registration-date-padding"><%- data.RegistrationDate %></td>
+                <td colspan="2">
+                    <span class="customer-column-width-50">Reg date</span>
+                    <span class="pull-right"><%- data.RegistrationDate %></span>
+                </td>
             </tr>
-            @RawCell47("Residental Status", "<%- data.ResidentalStatus %>")
+            @RawCell("Residental Status", "<%- data.ResidentalStatus %>")
         </tbody>
     </table>
     <table class="table squeezed rright">
