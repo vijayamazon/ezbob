@@ -159,7 +159,8 @@
     <Compile Include="Areas\Broker\Models\BrokerHomeModel.cs" />
     <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
-    <Compile Include="Areas\Customer\Controllers\HmrcFileProcessor.cs" />
+    <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManagerException.cs" />
+    <Compile Include="Infrastructure\Hmrc\HmrcFileProcessor.cs" />
     <Compile Include="Areas\Customer\Models\EkmAccountModel.cs" />
     <Compile Include="Areas\Customer\Models\FreeAgentModel.cs" />
     <Compile Include="Areas\Customer\Models\PayPointAccountModel.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Code\LoanCreatorNoChecks.cs" />
     <Compile Include="Areas\Underwriter\Models\BugModel.cs" />
     <Compile Include="Code\ReportGenerator\ReportHandler.cs" />
+    <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManager.cs" />
     <Compile Include="Models\LoanOffer.cs" />
     <Compile Include="Code\ServerLog\ServerLogCachePkgModel.cs" />
     <Compile Include="Code\ServerLog\ServerLogEntryModel.cs" />
@@ -940,6 +942,7 @@
     </Content>
     <Content Include="Content\js\controls\ezbob.LoanScheduleView.js" />
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
+    <Content Include="Content\js\ezbob.hmrc.upload.ui.js" />
     <Content Include="Content\js\ezbob.internal.debug.js" />
     <Content Include="Content\js\ezbob.serverLog.js" />
     <Content Include="Content\js\lib\date.interval.js" />
@@ -1209,13 +1212,8 @@
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.min.js">
       <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.js">
-      <DependentUpon>ezbob.underwriter.uploadHmrc.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.min.js">
-      <DependentUpon>ezbob.underwriter.uploadHmrc.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.pricingModelCalculations.js" />
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.js" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.js">
       <DependentUpon>ezbob.underwriter.bankAccountDetails.coffee</DependentUpon>
     </Content>
@@ -1343,7 +1341,6 @@
     <None Include="Content\img\customer-sidebar\icons-source\Help.doc" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1.psd" />
     <None Include="Content\img\customer-sidebar\icons-source\Preview Image Set_v1.0.psd" />
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.coffee" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.enterHmrc.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js" />
     <Content Include="Views\Shared\_Copyright.cshtml">

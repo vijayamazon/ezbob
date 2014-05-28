@@ -693,6 +693,18 @@ table.internal-table {
     border-left: 1px solid #dddddd;
 }
 
+#hmrcUploadZone {
+	min-height: 150px;
+}
+
+#hmrcUploadZone .dz-message {
+	margin-top: 35px;
+	font-size: 32px;
+	text-align: center;
+	color: #7bb224;
+	font-weight: normal;
+}
+
 .fraud-form .control-group {
     margin-bottom: 5px;
 }

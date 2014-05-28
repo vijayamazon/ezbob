@@ -1,95 +1,67 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.UploadHmrcView = Backbone.Marionette.ItemView.extend({
+	template: '#hmrc-upload-template',
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+	initialize: function(options) {
+		this.customerId = options.customerId;
 
-  EzBob.Underwriter.UploadHmrcView = (function(_super) {
+		this.uploadUi = new EzBob.HmrcUploadUi({
+			el: this.$el,
+			headers: { 'ezbob-underwriter-customer-id': this.customerId, },
+			formID: 'hmrcUploadZone',
+			uploadSuccess: _.bind(this.reloadFileList, this),
+		});
 
-    __extends(UploadHmrcView, _super);
+		console.log('upload ui is', this.uploadUi);
+	}, // initialize
 
-    function UploadHmrcView() {
-      return UploadHmrcView.__super__.constructor.apply(this, arguments);
-    }
+	ui: {
+		hmrcUploadZone: '#hmrcUploadZone',
+		uploadHmrcButton: '.uploadHmrc',
+	}, // ui
 
-    UploadHmrcView.prototype.template = "#hmrc-upload-template";
+	events: {
+		'click .uploadHmrc': 'uploadHmrcClicked',
+		'click .back': 'backClicked',
+	}, // events
 
-    UploadHmrcView.prototype.initialize = function(options) {
-      return this.customerId = options.customerId;
-    };
+	serializeData: function() {
+		return { customerId: this.customerId, };
+	}, // serializeData
 
-    UploadHmrcView.prototype.ui = {
-      hmrcUploadZone: "#hmrcUploadZone",
-      uploadHmrcButton: ".uploadHmrc"
-    };
+	reloadFileList: function(oFile, oResponse) {
+		// TODO
+		console.log('reload file list:', oFile, oResponse);
+		this.ui.uploadHmrcButton.toggleClass('disabled'); // , !enabled);
+	}, // reloadFileList
 
-    UploadHmrcView.prototype.events = {
-      "click .uploadHmrc": "uploadHmrcClicked",
-      "click .back": "backClicked"
-    };
+	onRender: function() {
+		this.uploadUi.render();
 
-    UploadHmrcView.prototype.serializeData = function() {
-      var data;
-      return data = {
-        customerId: this.customerId
-      };
-    };
+		this.reloadFileList();
 
-    UploadHmrcView.prototype.onRender = function() {
-      var that;
-      that = this;
-      Dropzone.options.hmrcUploadZone = {
-        init: function() {
-          return this.on("complete", function(file) {
-            var enabled;
-            if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-              enabled = this.getAcceptedFiles() !== 0;
-              return that.ui.uploadHmrcButton.toggleClass('disabled', !enabled);
-            }
-          });
-        }
-      };
-      this.ui.hmrcUploadZone.dropzone();
-      return this;
-    };
+		return this;
+	}, // onRender
 
-    UploadHmrcView.prototype.uploadHmrcClicked = function(event) {
-      var that, xhr;
-      event.preventDefault();
-      event.stopPropagation();
-      if (this.ui.uploadHmrcButton.hasClass('disabled')) {
-        return false;
-      }
-      that = this;
-      BlockUi('on');
-      xhr = $.post(window.gRootPath + "UploadHmrc/UploadFiles", {
-        customerId: this.customerId
-      });
-      xhr.done(function(res) {
-        if (res.error !== void 0) {
-          return EzBob.App.trigger('error', 'Failed to Save HMRC Account');
-        } else {
-          return EzBob.App.vent.trigger('ct:marketplaces.history', null);
-        }
-      });
-      return xhr.always(function() {
-        return BlockUi('off');
-      });
-    };
+	uploadHmrcClicked: function(event) {
+		event.preventDefault();
+		event.stopPropagation();
 
-    UploadHmrcView.prototype.backClicked = function(event) {
-      event.preventDefault();
-      event.stopPropagation();
-      return EzBob.App.vent.trigger('ct:marketplaces.uploadHmrcBack');
-    };
+		if (this.ui.uploadHmrcButton.hasClass('disabled'))
+			return false;
 
-    return UploadHmrcView;
+		EzBob.App.vent.trigger('ct:marketplaces.history', null);
 
-  })(Backbone.Marionette.ItemView);
+		return false;
+	}, // uploadHmrcClicked
 
-}).call(this);
+	backClicked: function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		EzBob.App.vent.trigger('ct:marketplaces.uploadHmrcBack');
+	}, // backClicked
+}); // EzBob.Underwriter.UploadHmrcView

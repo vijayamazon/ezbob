@@ -16,13 +16,18 @@
 
 <script id="hmrc-upload-template" type="text/template">
 	<h2>Upload HMRC</h2>
-	<form id="hmrcUploadZone" class="dropzone" action="/Underwriter/UploadHmrc/UploadHmrc?customerId=<%-customerId%>">
-		<div class="dz-message dz-with-text">Drag or Click to upload the last five VAT files</div>
+
+	<form id="hmrcUploadZone" action="/Underwriter/UploadHmrc/SaveFile">
+		<div class="dz-message">Drag or Click to upload VAT files</div>
 	</form>
 
-	<div class="pull-right">
-		<button class="btn btn-primary uploadHmrc disabled">Upload</button>
-		<button class="btn btn-primary back">Back</button>
+	<div class="clearfix">
+		<div class="form_buttons_container hmrc_margin_from_header">
+			<div class="attardi-button">
+				<button class="btn btn-primary uploadHmrc disabled">Upload</button>
+				<button class="btn btn-primary back">Back</button>
+			</div>
+		</div>
 	</div>
 </script>
 

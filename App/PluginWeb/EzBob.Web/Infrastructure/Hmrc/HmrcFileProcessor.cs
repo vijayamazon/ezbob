@@ -1,4 +1,4 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers {
+﻿namespace EzBob.Web.Infrastructure.Hmrc {
 	using System;
 	using System.Collections.Generic;
 	using System.IO;

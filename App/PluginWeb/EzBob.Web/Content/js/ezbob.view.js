@@ -28,4 +28,8 @@
 		isSomethingEnabled: checkIsEnabled,
 		setSomethingEnabled: setEnabled,
 	}); // EzBob.View
+
+	EzBob.SimpleView = function() {};
+	EzBob.SimpleView.prototype.setSomethingEnabled = setEnabled;
+	EzBob.SimpleView.prototype.isSomethingEnabled = checkIsEnabled;
 })(); // scope

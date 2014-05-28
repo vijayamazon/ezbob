@@ -56,12 +56,10 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 						self.reloadFileList();
 						EzBob.App.trigger('info', 'Upload successful: ' + oFile.name);
 					}
-					else if (oResponse.error) {
+					else if (oResponse.error)
 						EzBob.App.trigger('error', oResponse.error);
-					}
-					else {
+					else
 						EzBob.App.trigger('error', 'Failed to upload ' + oFile.name);
-					}
 				}); // on success
 
 				oDropzone.on('error', function(oFile, sErrorMsg, oXhr) {
