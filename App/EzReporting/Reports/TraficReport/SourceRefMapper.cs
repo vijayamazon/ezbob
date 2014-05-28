@@ -105,7 +105,7 @@
 			{
 				return Source.MoneyCoUk;
 			}
-			if (analytics.Equals("google / organic"))
+			if (analytics.Equals("google / organic") || analytics.Equals("google.co.uk / referral"))
 			{
 				return Source.Seo;
 			}
@@ -160,6 +160,14 @@
 			if (analytics.Equals("googleads.g.doubleclick.net / referral"))
 			{
 				return Source.GooglePpc;
+			}
+			if (analytics.Equals("tamebay.com / referral"))
+			{
+				return Source.Tamebay;
+			}
+			if (analytics.Contains("amazon"))
+			{
+				return Source.Amazon;
 			}
 			if (analytics.Contains("ezbob"))
 			{
