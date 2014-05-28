@@ -17,28 +17,20 @@
 				this.$el = undefined;
 
 			this.eventHandlers = {};
-			this.eventHandlers[this.evtUploadSuccess()] = [];
-			this.eventHandlers[this.evtUploadAppError()] = [];
-			this.eventHandlers[this.evtUploadSysError()] = [];
-			this.eventHandlers[this.evtUploadComplete()] = [];
 
-			if (this.options.uploadSuccess)
-				this.eventHandlers[this.evtUploadSuccess()].push(this.options.uploadSuccess);
-
-			if (this.options.uploadAppError)
-				this.eventHandlers[this.evtUploadAppError()].push(this.options.uploadAppError);
-
-			if (this.options.uploadSysError)
-				this.eventHandlers[this.evtUploadSysError()].push(this.options.uploadSysError);
-
-			if (this.options.uploadComplete)
-				this.eventHandlers[this.evtUploadComplete()].push(this.options.uploadComplete);
+			this.on(this.evtUploadSuccess(), this.options.uploadSuccess);
+			this.on(this.evtUploadAppError(), this.options.uploadAppError);
+			this.on(this.evtUploadSysError(), this.options.uploadSysError);
+			this.on(this.evtUploadComplete(), this.options.uploadComplete);
 
 			if (this.initialize)
 				this.initialize();
 		}, // init
 
 		on: function(sEventName, oEventHandler) {
+			if (!oEventHandler)
+				return;
+
 			if (!this.eventHandlers[sEventName])
 				this.eventHandlers[sEventName] = [oEventHandler];
 			else
