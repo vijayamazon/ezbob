@@ -102,7 +102,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
-		VALUES ('Funnel', 'Number', '', '', '', '', 'total')
+		VALUES ('Funnel', 'Number', 'Amount', '', '', '', 'total')
 
 	------------------------------------------------------------------------------
 
@@ -148,30 +148,30 @@ BEGIN
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 		
 	------------------------------------------------------------------------------
-	DECLARE @AddedMpNotFinishedWizard INT = 
-		(SELECT ISNULL(count(DISTINCT m.CustomerId), 0)
+	
+	INSERT INTO #out (Caption, Number)
+	SELECT
+		'Accounts',
+		sum(x.Count) AS Number
+	FROM 
+	(	
+	-- finished wizard
+	SELECT ISNULL(COUNT(c.Id), 0) AS Count
+	FROM Customer c
+	WHERE c.IsTest = 0 AND c.WizardStep = 4	AND 
+		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+	
+	UNION
+	-- inputed mp but not finished wizard
+	SELECT ISNULL(count(DISTINCT m.CustomerId), 0) AS Count
 		 FROM Customer c LEFT JOIN MP_CustomerMarketPlace m ON m.CustomerId = c.Id
 		 WHERE c.IsTest = 0 
 		 AND c.WizardStep <> 4 
 		 AND c.CreditResult IS NULL
 		 AND @DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 		 HAVING count(m.Id) > 0
-		)
-
-
-
-	INSERT INTO #out (Caption, Number)
-	SELECT
-		'Accounts',
-		ISNULL(COUNT(DISTINCT c.Id) + @AddedMpNotFinishedWizard, 0)
-	FROM
-		Customer c
-	WHERE
-		c.IsTest = 0
-		AND
-		c.WizardStep = 4
-		AND 
-		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+		
+	) AS x
 
 	------------------------------------------------------------------------------
 
@@ -213,10 +213,10 @@ BEGIN
 	
 	------------------------------------------------------------------------------
 
-	INSERT INTO #out (Caption, Number)
+	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Approved',
-		ISNULL(COUNT(DISTINCT r.IdCustomer), 0)
+		ISNULL(COUNT(DISTINCT r.IdCustomer), 0), ISNULL(sum(r.ManagerApprovedSum), 0) AS Amount
 	FROM
 		Customer c
 		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
@@ -228,11 +228,50 @@ BEGIN
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
 	------------------------------------------------------------------------------
-
 	INSERT INTO #out (Caption, Number)
 	SELECT
+		'Waiting for decision',
+		ISNULL(COUNT(DISTINCT r.IdCustomer), 0)
+	FROM
+		Customer c
+		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
+	WHERE
+		EXISTS (
+			SELECT acr.Id
+			FROM CashRequests acr
+			WHERE acr.IdCustomer = r.IdCustomer
+			AND acr.UnderwriterDecision IN ('WaitingForDecision', NULL)
+		)
+		AND
+		c.IsTest = 0
+		AND
+		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+
+	------------------------------------------------------------------------------
+	INSERT INTO #out (Caption, Number)
+	SELECT
+		'Pending',
+		ISNULL(COUNT(DISTINCT r.IdCustomer), 0)
+	FROM
+		Customer c
+		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
+	WHERE
+		EXISTS (
+			SELECT acr.Id
+			FROM CashRequests acr
+			WHERE acr.IdCustomer = r.IdCustomer
+			AND acr.UnderwriterDecision IN ('ApprovedPending')
+		)
+		AND
+		c.IsTest = 0
+		AND
+		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+
+	------------------------------------------------------------------------------
+	INSERT INTO #out (Caption, Number, Amount)
+	SELECT
 		'Loans',
-		ISNULL(COUNT(DISTINCT l.CustomerId), 0)
+		ISNULL(COUNT(DISTINCT l.CustomerId), 0), convert(INT, ISNULL(sum(l.LoanAmount), 0)) AS Amount
 	FROM
 		Customer c
 		INNER JOIN Loan l ON c.Id = l.CustomerId
@@ -245,26 +284,7 @@ BEGIN
 		
 	------------------------------------------------------------------------------
 
-	INSERT INTO #out (Caption, Number)
-	SELECT
-		'Pending',
-		ISNULL(COUNT(DISTINCT r.IdCustomer), 0)
-	FROM
-		Customer c
-		INNER JOIN CashRequests r ON c.Id = r.IdCustomer
-	WHERE
-		NOT EXISTS (
-			SELECT acr.Id
-			FROM CashRequests acr
-			WHERE acr.IdCustomer = r.IdCustomer
-			AND acr.UnderwriterDecision IN ('Approved', 'Rejected')
-		)
-		AND
-		c.IsTest = 0
-		AND
-		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
-
-	------------------------------------------------------------------------------
+	
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
@@ -400,7 +420,7 @@ BEGIN
 	SELECT
 		'Total',
 		ISNULL(COUNT(*), 0),
-		ISNULL(SUM(ISNULL(LoanAmount, 0)), 0)
+	    convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 
@@ -410,7 +430,7 @@ BEGIN
 	SELECT
 		@Indent + 'New loans',
 		ISNULL(COUNT(*), 0),
-		ISNULL(SUM(ISNULL(LoanAmount, 0)), 0)
+		convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 	WHERE
@@ -422,7 +442,7 @@ BEGIN
 	SELECT
 		@Indent + 'Existing loans',
 		ISNULL(COUNT(*), 0),
-		ISNULL(SUM(ISNULL(LoanAmount, 0)), 0)
+		convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 	WHERE
@@ -434,7 +454,7 @@ BEGIN
 	SELECT
 		@Indent + @Indent + 'Existing fully paid',
 		ISNULL(COUNT(*), 0),
-		ISNULL(SUM(ISNULL(LoanAmount, 0)), 0)
+		convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 	WHERE
@@ -448,7 +468,7 @@ BEGIN
 	SELECT
 		@Indent + @Indent + 'Existing open loans',
 		ISNULL(COUNT(*), 0),
-		ISNULL(SUM(ISNULL(LoanAmount, 0)), 0)
+		convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 	WHERE
@@ -708,16 +728,17 @@ BEGIN
 	------------------------------------------------------------------------------
 	
 	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
-	  	VALUES ('Loans by customer status without CCI mark', 'Customers', 'Loan Amount', 'Principal', '', '', 'total')
+	  	VALUES ('Loans by customer status', 'Customers', 'Loan Amount', 'Principal', 'Percent', '', 'total')
 
 	------------------------------------------------------------------------------
 	
-	INSERT INTO #out (Caption, Number, Amount, Principal)
+	INSERT INTO #out (Caption, Number, Amount, Principal, Interest)
 	SELECT
 	 	S.Name,
 		count(1) Customers,
 		sum(L.LoanAmount) LoanAmount,
-		sum(L.Principal) Principal
+		sum(L.Principal) Principal,
+		(sum(L.Principal) / @TotalGivenLoanValueClose) AS Interest -- percent
 	FROM Customer C,
 		 CustomerStatuses S,
 		 Loan L
@@ -725,8 +746,8 @@ BEGIN
 		C.IsTest = 0 AND 
 		L.CustomerId = c.Id AND
 		L.Status != 'PaidOff' and
-		C.CollectionStatus = S.Id AND
-		C.CciMark = 0
+		C.CollectionStatus = S.Id
+		--AND C.CciMark IN (0,1)
 	GROUP BY S.Name
 	ORDER BY sum(L.LoanAmount) DESC	
 	
@@ -738,6 +759,13 @@ BEGIN
 		count(DISTINCT C.Id) Customers,
 		sum(T.Amount) LoanAmount
 	FROM Customer C INNER JOIN CustomerStatuses S ON C.CollectionStatus = S.Id
+	INNER JOIN 
+	(
+	SELECT h.CustomerId CustomerId, min(h.TimeStamp) AS BadDate
+	FROM CustomerStatusHistory h
+	WHERE h.PreviousStatus=0
+	GROUP BY h.CustomerId
+	) AS his ON his.CustomerId = C.Id
 	LEFT JOIN Loan L ON C.Id = L.CustomerId
 	LEFT JOIN LoanTransaction T ON L.Id = T.LoanId
 	WHERE 
@@ -748,40 +776,24 @@ BEGIN
 		T.Type = @PAYPOINT
 		AND 
 		T.Status = @DONE
+		AND 
+		T.PostDate > his.BadDate
 	
 	------------------------------------------------------------------------------
-	
-	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
-		VALUES ('Loans by customer status with CCI mark', 'Customers', 'Loan Amount', 'Balance', '', '', 'total')
-
-	------------------------------------------------------------------------------
-	
-	INSERT INTO #out (Caption, Number, Amount, Principal)
-	SELECT 
-	    S.Name,
-		count(1) Customers,
-		sum(L.LoanAmount) LoanAmount,
-		sum(L.Principal) Principal
-	FROM Customer C,
-		 CustomerStatuses S,
-		 Loan L
-	WHERE 
-		C.IsTest = 0 AND 
-		L.CustomerId = c.Id AND
-		L.Status != 'PaidOff' and
-		C.CollectionStatus = S.Id AND
-		C.CciMark = 1
-	GROUP BY S.Name
-	ORDER BY sum(L.LoanAmount) DESC	
-	
-	------------------------------------------------------------------------------	
-	
+		
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
-	 	'Total money recovered by ezbob',
+	 	'Total money recovered by CCI',
 		count(DISTINCT C.Id) Customers,
 		sum(T.Amount) LoanAmount
 	FROM Customer C INNER JOIN CustomerStatuses S ON C.CollectionStatus = S.Id
+	INNER JOIN 
+	(
+	SELECT h.CustomerId CustomerId, min(h.TimeStamp) AS BadDate
+	FROM CustomerStatusHistory h
+	WHERE h.PreviousStatus=0
+	GROUP BY h.CustomerId
+	) AS his ON his.CustomerId = C.Id
 	LEFT JOIN Loan L ON C.Id = L.CustomerId
 	LEFT JOIN LoanTransaction T ON L.Id = T.LoanId
 	WHERE 
@@ -792,6 +804,8 @@ BEGIN
 		T.Type = @PAYPOINT
 		AND 
 		T.Status = @DONE
+		AND 
+		T.PostDate > his.BadDate
 		
 	------------------------------------------------------------------------------		
 	------------------------------------------------------------------------------
