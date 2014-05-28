@@ -61,12 +61,12 @@
 				var monthToDateAnalytics = ga.FetchByCountry(firstOfMonth, LastChecked);
 				if (todayAnalytics.ContainsKey("United Kingdom"))
 				{
-					model.Stats["T_UkVisitors"] = todayAnalytics["United Kingdom"].Visitors;
+					model.Stats["T_UkVisitors"] = todayAnalytics["United Kingdom"].Users;
 				}
 
 				if (monthToDateAnalytics.ContainsKey("United Kingdom"))
 				{
-					model.Stats["M_UkVisitors"] = monthToDateAnalytics["United Kingdom"].Visitors;
+					model.Stats["M_UkVisitors"] = monthToDateAnalytics["United Kingdom"].Users;
 				}
 			}
 			catch (Exception ex)
