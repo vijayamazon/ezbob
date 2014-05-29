@@ -63,8 +63,27 @@
       };
     };
 
-    UploadDocView.prototype.events = {
-      'click .button-upload': 'upload'
+    UploadDocView.prototype.events = function() {
+      return {
+        'click .button-upload': 'upload',
+        'change #uploadFile': 'uploadFilesChanged'
+      };
+    };
+
+    UploadDocView.prototype.uploadFilesChanged = function() {
+      var fileNamesContainer, files, i, name, newdiv;
+
+      fileNamesContainer = document.getElementById('fileNamesContainer');
+      files = this.$el.find('input[type="file"]')[0].files;
+      i = 0;
+      while (i < files.length) {
+        name = this.$el.find('input[type="file"]')[0].files[i].name;
+        newdiv = document.createElement('div');
+        newdiv.innerHTML = '<span>' + name + '</span>';
+        fileNamesContainer.appendChild(newdiv);
+        i++;
+      }
+      return false;
     };
 
     UploadDocView.prototype.upload = function(e) {

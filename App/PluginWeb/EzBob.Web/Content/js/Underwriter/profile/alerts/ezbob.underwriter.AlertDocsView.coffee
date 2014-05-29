@@ -24,8 +24,23 @@ class EzBob.Underwriter.UploadDocView extends Backbone.Marionette.ItemView
         width: 530
         dialogClass: "upload-doc-popup"
 
-    events: {'click .button-upload' : 'upload'}
+    events: ->
+        'click .button-upload' : 'upload'
+        'change #uploadFile': 'uploadFilesChanged'
     
+    uploadFilesChanged: ->
+        fileNamesContainer = document.getElementById('fileNamesContainer');
+        files = @$el.find('input[type="file"]')[0].files
+        i = 0
+        while i < files.length
+            name = @$el.find('input[type="file"]')[0].files[i].name
+            newdiv = document.createElement('div')
+            newdiv.innerHTML = '<span>' + name + '</span>'
+            fileNamesContainer.appendChild(newdiv)
+            i++
+
+        return false
+
     upload: (e) ->
         return if $(e.currentTarget).hasClass "disabled"
         $(e.currentTarget).addClass "disabled"

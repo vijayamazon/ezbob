@@ -39,16 +39,15 @@
     <div class="modal-body">
         <form id="fileForm" action="@Url.Action("UploadDoc", "AlertDocs", new { Area = "Underwriter" })" class="form-horizontal" enctype="multipart/form-data">
 
-            <input type="file" id="uploadFile" name="uploadFile" style="display: none" onchange="$('.tempUpFile').val( this.files ? this.files[0].name : $(this).val());" />
+            <input multiple="multiple" type="file" id="uploadFile" name="uploadFile" style="display: none" />
 
             <div class="control-group">
                 <a class="btn btn-primary" onclick="$('#uploadFile').click(); return false;">Browse</a>
             </div>
 
             <div class="control-group">
-                <label class="control-label">File name:</label>
-                <div class="controls">
-                    <input class="form-control tempUpFile" type="text" disabled="disabled" />
+                <label class="control-label">File name(s):</label>
+                <div class="controls" id="fileNamesContainer">
                 </div>
             </div>
 

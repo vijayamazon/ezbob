@@ -41,26 +41,29 @@
         public void UploadDoc(string description, int customerId)
         {
             var files = Request.Files;
-            if (files.Count != 1) return;
-            var file = Request.Files[0];
-            if (file == null) return;
+            if (files.Count == 0) return;
+	        for (int i = 0; i < files.Count; i++)
+	        {
+		        var file = Request.Files[i];
+		        if (file == null) return;
 
-            var body = new byte[file.InputStream.Length];
-            file.InputStream.Read(body, 0, file.ContentLength);
+		        var body = new byte[file.InputStream.Length];
+		        file.InputStream.Read(body, 0, file.ContentLength);
 
-            var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
-            var customer = customerRepo.Get(customerId);
-            var doc = new MP_AlertDocument
-            {
-                BinaryBody = body,
-                Customer = customer,
-                Employee = _context.User,
-                Description = description,
-                UploadDate = DateTime.UtcNow,
-                DocName = file.FileName
-            };
-            
-            _docRepo.SaveOrUpdate(doc);
+		        var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
+		        var customer = customerRepo.Get(customerId);
+		        var doc = new MP_AlertDocument
+			        {
+				        BinaryBody = body,
+				        Customer = customer,
+				        Employee = _context.User,
+				        Description = description,
+				        UploadDate = DateTime.UtcNow,
+				        DocName = file.FileName
+			        };
+
+		        _docRepo.SaveOrUpdate(doc);
+	        }
         }
 
         //-----------------------------------------------------------------------------------
