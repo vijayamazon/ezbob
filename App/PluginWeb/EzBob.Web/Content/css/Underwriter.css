@@ -1267,13 +1267,20 @@ td a.edit-loan {
 
 #main-content {
     padding: 20px 0 0 0;
+    z-index: 10;
 }
 
 #sidebar-dashboard {
     position: fixed;
     padding-top: 19px;
+    height: 100vh !important;
 }
 
+    #sidebar-dashboard .tabbable {
+        position: absolute;
+        overflow: auto;
+        height: 100% !important;
+    }
 .tabbable .tab-content {
     border-right: transparent;
 }
