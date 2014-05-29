@@ -65,21 +65,10 @@
 	</div>
 
 	<div id="uploadFilesDiv" class="row-fluid hide">
-		<h2>HMRC upload<div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload" ui-event-control-id="hmrc:upload_info_button"></div></h2>
+		<h2>Upload VAT return data<div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload" ui-event-control-id="hmrc:upload_info_button"></div></h2>
 		<h5>Upload your last five  VAT returns. Upload files titled “<strong>Printed Copy of Submitted VAT return for your records</strong>”.</h5>
 
-		<form id="hmrcAccountUpload" action="@Url.Action("SaveFile", "Hmrc", new { Area = "Customer" })" ui-event-control-id="hmrc:dropzone">
-			<div class="dz-message">Drag or Click to upload VAT files</div>
-		</form>
-
-		<div class="clearfix">
-			<div class="form_buttons_container hmrc_margin_from_header">
-				<div class="attardi-button">
-					<a href="#" class="back rc-button green newVatFilesUploadButton disabled" ui-event-control-id="hmrc:do_upload">Upload</a>
-					<a href="#" class="back rc-button grey uploadFilesBack" ui-event-control-id="hmrc:upload_back">Back</a>
-				</div>
-			</div>
-		</div>
+		<div class="hmrc-upload-ui"></div>
 
 		<div class="hmrc-why-question offline_entry_message wizard_message" style="width: 100%;">
 			<div id="uploadHelpButton" class="hmrc-question-button float_left" style="margin-top: 55px;" ui-event-control-id="hmrc:upload_info_button_lower"></div>

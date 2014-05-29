@@ -41,6 +41,7 @@
 
 				//custom css
 				.Add("~/Content/css/profile.css")
+				.Add("~/Content/css/hmrc-upload-ui.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");
 		} // RenderProfileCss
 
@@ -49,6 +50,7 @@
 			return Bundle.Css()
 				//custom css
 				.Add("~/Content/css/wizard.css")
+				.Add("~/Content/css/hmrc-upload-ui.css")
 				.MvcRender("~/Content/css/min/wizard_combined_#.css");
 		} // RenderProfileCss
 
@@ -286,9 +288,9 @@
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaceDetails.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaces.coffee")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplacesHistory.coffee")
+				.Add("~/Content/js/lib/date.interval.js")
 				.Add("~/Content/js/ezbob.hmrc.upload.ui.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.uploadHmrc.js")
-				.Add("~/Content/js/lib/date.interval.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.enterHmrc.js")
 				.Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.experianInfo.js")
 				.Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.idHubCustomAddress.js")
@@ -352,6 +354,8 @@
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.yodlee.coffee")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.cg.coffee")
+				.Add("~/Content/js/EzBob.DataTables.Helper.js")
+				.Add("~/Content/js/lib/date.interval.js")
 				.Add("~/Content/js/ezbob.hmrc.upload.ui.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrc.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
@@ -406,6 +410,8 @@
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.sage.coffee")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.yodlee.coffee")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.cg.coffee")
+				.Add("~/Content/js/lib/date.interval.js")
+				.Add("~/Content/js/EzBob.DataTables.Helper.js")
 				.Add("~/Content/js/ezbob.hmrc.upload.ui.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrc.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")

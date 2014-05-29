@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Web.Mvc;
+	using EzBob.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Security;
 	using ConfigManager;

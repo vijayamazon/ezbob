@@ -1,10 +1,30 @@
 var EzBob = EzBob || {};
 
-EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
-	initialize: function(options) {
+EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
+	initialize: function() {
 		this.template = '#HMRCAccountInfoTemplate';
 		this.activeForm = null;
-		this.Dropzone = null;
+
+		this.uploadUi = new EzBob.HmrcUploadUi({
+			chartMonths: 12,
+			formID: 'hmrcAccountUpload',
+			uploadUrl: '/Customer/Hmrc/SaveFile',
+			loadPeriodsUrl: '/Customer/Hmrc/LoadPeriods',
+			primaryRefNum: this.options.companyRefNum,
+			uiEventControlIDs: {
+				form: 'hmrc:dropzone',
+				backBtn: 'hmrc:upload_back',
+				doneBtn: 'hmrc:do_upload',
+			},
+			classes: {
+				backBtn: 'rc-button grey back',
+				doneBtn: 'rc-button green',
+			},
+			clickBack: _.bind(this.uploadFilesBack, this),
+			clickDone: _.bind(this.doUploadFiles, this),
+		});
+
+		console.log('upload ui is', this.uploadUi);
 	}, // initialize
 
 	events: {
@@ -13,84 +33,29 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 		'click a.hmrcBack': 'back',
 		'click #uploadButton': 'uploadFiles',
 		'click a.linkAccountBack': 'linkAccountBack',
-		'click a.uploadFilesBack': 'uploadFilesBack',
 		'click a.connect-account': 'connect',
 		'click a.connect-account-help': 'connect',
 		'click #linkHelpButton': 'getLinkHelp',
 		'click #uploadHelpButton': 'getUploadHelp',
 		'click #linkButton': 'linkAccount',
-		'click a.newVatFilesUploadButton': 'doUploadFiles',
 		'click #uploadAndLinkHelpButton': 'getUploadAndLinkHelp',
 		'click #uploadAndLinkInfoButton': 'getUploadAndLinkHelp',
 		'click #linkInfoButton': 'getLinkHelp',
-		'click #uploadInfoButton': 'getUploadHelp'
+		'click #uploadInfoButton': 'getUploadHelp',
+
+		'click a.uploadFilesBack': 'uploadFilesBack',
+		'click a.newVatFilesUploadButton': 'doUploadFiles',
 	}, // events
 
-	clearDropzone: function() {
-		if (this.Dropzone) {
-			this.Dropzone.destroy();
-			this.Dropzone = null;
-		} // if
-	}, // clearDropzone
-
-	initDropzone: function() {
-		this.clearDropzone();
-
-		Dropzone.options.hmrcAccountUpload = false;
-
-		var self = this;
-
-		this.Dropzone = new Dropzone(this.$el.find('#hmrcAccountUpload').addClass('dropzone dz-clickable')[0], {
-			parallelUploads: 1,
-			uploadMultiple: true,
-			acceptedFiles: 'application/pdf',
-			autoProcessQueue: true,
-			maxFilesize: 10,
-			init: function() {
-				var oDropzone = this;
-
-				oDropzone.on('success', function(oFile, oResponse) {
-					console.log('Upload', (oResponse.success ? '' : 'NOT'), 'succeeded:', oFile, oResponse);
-
-					if (oResponse.success) {
-						self.reloadFileList();
-						EzBob.App.trigger('info', 'Upload successful: ' + oFile.name);
-					}
-					else if (oResponse.error)
-						EzBob.App.trigger('error', oResponse.error);
-					else
-						EzBob.App.trigger('error', 'Failed to upload ' + oFile.name);
-				}); // on success
-
-				oDropzone.on('error', function(oFile, sErrorMsg, oXhr) {
-					console.log('Upload error:', oFile, sErrorMsg, oXhr);
-					EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
-				}); // always
-
-				oDropzone.on('complete', function(oFile) {
-					oDropzone.removeFile(oFile);
-				}); // always
-			}, // init
-		});
-	}, // initDropzone
-
-	reloadFileList: function() {
-		// TODO
-		this.$el.find('a.newVatFilesUploadButton').toggleClass('disabled'); // , !enabled);
-	}, // reloadFileList
-
 	onRender: function() {
-		this.clearDropzone();
-
-		this.initDropzone();
-
-		this.reloadFileList();
+		this.uploadUi.$el = this.$el.find('.hmrc-upload-ui');
+		this.uploadUi.render();
 
 		var btn = this.$el.find('.hmrcAnimatedButton');
 
 		btn.hoverIntent(
-			function(evt) { $('.onhover', this).animate({ top:      0, opacity: 1 }); },
-			function(evt) { $('.onhover', this).animate({ top: '80px', opacity: 0 }); }
+			function() { $('.onhover', this).animate({ top:      0, opacity: 1 }); },
+			function() { $('.onhover', this).animate({ top: '80px', opacity: 0 }); }
 		);
 
 		return this;
@@ -122,9 +87,6 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 	}, // uploadFiles
 
 	doUploadFiles: function() {
-		if (this.$el.find('.newVatFilesUploadButton').hasClass('disabled'))
-			return false;
-
 		this.trigger('completed');
 		this.trigger('back');
 		this.$el.find('#uploadFilesDiv').hide();
@@ -176,7 +138,7 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 			return false;
 		}
 
-		var acc = new EzBob.CGAccountModel(accountModel);
+		var acc = new EzBob.CgAccountModel(accountModel);
 		var xhr = acc.save();
 
 		if (!xhr) {
@@ -184,13 +146,14 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 			return false;
 		} // if
 
-		var _this = this;
+		var self = this;
 
 		BlockUi('on');
 
 		xhr.always(function() { return BlockUi('off'); });
 
-		xhr.fail(function(jqXHR, textStatus, errorThrown) {
+		xhr.fail(function(jqXhr, textStatus, errorThrown) {
+			EzBob.ServerLog.warn('Failed to link a CG account with status', textStatus, ', jqXHR:', jqXhr, 'error thrown:', errorThrown);
 			return EzBob.App.trigger('error', 'Failed to Save HMRC Account');
 		});
 
@@ -201,27 +164,27 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 			} // if
 
 			try {
-				_this.model.add(acc);
+				self.model.add(acc);
 			}
-			catch (_error) {
+			catch (e) {
 				// Silently ignore.
 			} // try
 
 			EzBob.App.trigger('info', 'HMRC Account Added Successfully');
 
-			_this.$el.find('#hmrc_user_id').val("");
-			_this.$el.find('#hmrc_password').val("");
-			_this.$el.find('#linkAccountDiv').hide();
+			self.$el.find('#hmrc_user_id').val("");
+			self.$el.find('#hmrc_password').val("");
+			self.$el.find('#linkAccountDiv').hide();
 
-			_this.$el.find('#initialDiv').show();
+			self.$el.find('#initialDiv').show();
 
-			_this.activeForm = _this.$el.find('#hmrcLinkAccountForm');
-			_this.validator = EzBob.validateHmrcLinkForm(_this.activeForm);
+			self.activeForm = self.$el.find('#hmrcLinkAccountForm');
+			self.validator = EzBob.validateHmrcLinkForm(self.activeForm);
 
-			_this.inputChanged();
+			self.inputChanged();
 
-			_this.trigger('completed');
-			_this.trigger('back');
+			self.trigger('completed');
+			self.trigger('back');
 
 			return false;
 		});
@@ -278,4 +241,4 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 			});
 		} // if
 	}, // getUploadAndLinkHelp
-}); // EzBob.HMRCAccountInfoView
+}); // EzBob.HmrcAccountInfoView

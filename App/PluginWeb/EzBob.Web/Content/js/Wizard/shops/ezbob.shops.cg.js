@@ -8,11 +8,11 @@
 
   root.EzBob = root.EzBob || {};
 
-  EzBob.CGAccountInfoView = (function(_super) {
+  EzBob.CgAccountInfoView = (function(_super) {
 
-    __extends(CGAccountInfoView, _super);
+    __extends(CgAccountInfoView, _super);
 
-    function CGAccountInfoView() {
+    function CgAccountInfoView() {
       this.render = __bind(this.render, this);
 
       this.connect = __bind(this.connect, this);
@@ -20,28 +20,28 @@
       this.buildModel = __bind(this.buildModel, this);
 
       this.inputChanged = __bind(this.inputChanged, this);
-      return CGAccountInfoView.__super__.constructor.apply(this, arguments);
+      return CgAccountInfoView.__super__.constructor.apply(this, arguments);
     }
 
-    CGAccountInfoView.prototype.events = {
+    CgAccountInfoView.prototype.events = {
       'click a.back': 'back',
       'change input': 'inputChanged',
       'keyup input': 'inputChanged'
     };
 
-    CGAccountInfoView.prototype.initialize = function(options) {
+    CgAccountInfoView.prototype.initialize = function(options) {
       this.uploadFilesDlg = null;
       this.accountType = options.accountType;
       return this.template = '#' + this.accountType + 'AccountInfoTemplate';
     };
 
-    CGAccountInfoView.prototype.inputChanged = function() {
+    CgAccountInfoView.prototype.inputChanged = function() {
       var enabled;
       enabled = EzBob.Validation.checkForm(this.validator);
       return this.$el.find('a.connect-account').toggleClass('disabled', !enabled);
     };
 
-    CGAccountInfoView.prototype.getVendorInfo = function() {
+    CgAccountInfoView.prototype.getVendorInfo = function() {
       var lst;
       if (!this.vendorInfo) {
         lst = $.parseJSON($('div#cg-account-list').text());
@@ -50,7 +50,7 @@
       return this.vendorInfo;
     };
 
-    CGAccountInfoView.prototype.buildModel = function(bUploadMode) {
+    CgAccountInfoView.prototype.buildModel = function(bUploadMode) {
       var accountModel, elm, fi, func, oVendorInfo, propName, propVal, _i, _len, _ref;
       accountModel = $.parseJSON($('div#cg-account-model-template').text());
       oVendorInfo = this.getVendorInfo();
@@ -80,7 +80,7 @@
       return accountModel;
     };
 
-    CGAccountInfoView.prototype.connect = function() {
+    CgAccountInfoView.prototype.connect = function() {
       var acc, accountModel, oVendorInfo, xhr,
         _this = this;
       if (!EzBob.Validation.checkForm(this.validator)) {
@@ -96,7 +96,7 @@
         EzBob.App.trigger('error', oVendorInfo.DisplayName + ' Account Data Validation Error');
         return false;
       }
-      acc = new EzBob.CGAccountModel(accountModel);
+      acc = new EzBob.CgAccountModel(accountModel);
       xhr = acc.save();
       if (!xhr) {
         EzBob.App.trigger('error', oVendorInfo.DisplayName + ' Account Saving Error');
@@ -133,9 +133,9 @@
       return false;
     };
 
-    CGAccountInfoView.prototype.render = function() {
+    CgAccountInfoView.prototype.render = function() {
       var self;
-      CGAccountInfoView.__super__.render.call(this);
+      CgAccountInfoView.__super__.render.call(this);
       self = this;
       this.$el.find('a.connect-account').click(function(evt) {
         return self.connect();
@@ -145,55 +145,55 @@
       return this;
     };
 
-    CGAccountInfoView.prototype.back = function() {
+    CgAccountInfoView.prototype.back = function() {
       this.trigger('back');
       return false;
     };
 
-    CGAccountInfoView.prototype.getDocumentTitle = function() {
+    CgAccountInfoView.prototype.getDocumentTitle = function() {
       EzBob.App.trigger('clear');
       return 'Link ' + this.getVendorInfo().DisplayName + ' Account';
     };
 
-    return CGAccountInfoView;
+    return CgAccountInfoView;
 
   })(Backbone.Marionette.ItemView);
 
-  EzBob.CGAccountModel = (function(_super) {
+  EzBob.CgAccountModel = (function(_super) {
 
-    __extends(CGAccountModel, _super);
+    __extends(CgAccountModel, _super);
 
-    function CGAccountModel() {
-      return CGAccountModel.__super__.constructor.apply(this, arguments);
+    function CgAccountModel() {
+      return CgAccountModel.__super__.constructor.apply(this, arguments);
     }
 
-    CGAccountModel.prototype.urlRoot = "" + window.gRootPath + "Customer/CGMarketPlaces/Accounts";
+    CgAccountModel.prototype.urlRoot = "" + window.gRootPath + "Customer/CGMarketPlaces/Accounts";
 
-    return CGAccountModel;
+    return CgAccountModel;
 
   })(Backbone.Model);
 
-  EzBob.CGAccounts = (function(_super) {
+  EzBob.CgAccounts = (function(_super) {
 
-    __extends(CGAccounts, _super);
+    __extends(CgAccounts, _super);
 
-    function CGAccounts() {
-      return CGAccounts.__super__.constructor.apply(this, arguments);
+    function CgAccounts() {
+      return CgAccounts.__super__.constructor.apply(this, arguments);
     }
 
-    CGAccounts.prototype.model = EzBob.CGAccountModel;
+    CgAccounts.prototype.model = EzBob.CgAccountModel;
 
-    CGAccounts.prototype.accountType = '';
+    CgAccounts.prototype.accountType = '';
 
-    CGAccounts.prototype.url = function() {
+    CgAccounts.prototype.url = function() {
       return ("" + window.gRootPath + "Customer/CGMarketPlaces/Accounts?atn=") + this.accountType;
     };
 
-    CGAccounts.prototype.initialize = function(data, options) {
+    CgAccounts.prototype.initialize = function(data, options) {
       return this.accountType = options.accountType;
     };
 
-    return CGAccounts;
+    return CgAccounts;
 
   })(Backbone.Collection);
 

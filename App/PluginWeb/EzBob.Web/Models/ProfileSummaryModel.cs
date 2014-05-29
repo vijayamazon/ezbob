@@ -1,19 +1,16 @@
-﻿namespace EzBob.Web.Models
-{
+﻿namespace EzBob.Web.Models {
 	using System;
 	using System.Collections.Generic;
-	using Areas.Customer.Models;
 	using Areas.Underwriter.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using System.ComponentModel;
+	using EzBob.Models;
 
-	public class BaseProfileSummaryModel
-	{
+	public class BaseProfileSummaryModel {
 		public Lighter Lighter { get; set; }
 	}
 
-	public class MarketPlaces : BaseProfileSummaryModel
-	{
+	public class MarketPlaces : BaseProfileSummaryModel {
 		public string NumberOfStores { get; set; }
 		public double? AnualTurnOver { get; set; }
 		public string Inventory { get; set; }
@@ -22,8 +19,7 @@
 		public bool IsNew { get; set; }
 	}
 
-	public class PaymentAccounts : BaseProfileSummaryModel
-	{
+	public class PaymentAccounts : BaseProfileSummaryModel {
 		public string NumberOfPayPalAccounts { get; set; }
 		public double NetIncome { get; set; }
 		public string NetExpences { get; set; }
@@ -32,14 +28,12 @@
 		public bool IsNew { get; set; }
 	}
 
-	public class AmlBwa : BaseProfileSummaryModel
-	{
+	public class AmlBwa : BaseProfileSummaryModel {
 		public string Bwa { get; set; }
 		public string Aml { get; set; }
 	}
 
-	public class LoanActivity : BaseProfileSummaryModel
-	{
+	public class LoanActivity : BaseProfileSummaryModel {
 		public string Collection { get; set; }
 		public string CurrentBalance { get; set; }
 		public string LatePaymentsSum { get; set; }
@@ -60,14 +54,12 @@
 		public decimal EarnedInterest { get; set; }
 	}
 
-	public class AffordabilityAnalysis
-	{
+	public class AffordabilityAnalysis {
 		public string EzBobMonthlyRepayment { get; set; }
 		public string CashAvailabilityOrDeficits { get; set; }
 	}
 
-	public class CreditBureau : BaseProfileSummaryModel
-	{
+	public class CreditBureau : BaseProfileSummaryModel {
 		public double CreditBureauScore { get; set; }
 		public double TotalMonthlyRepayments { get; set; }
 		public double TotalDebt { get; set; }
@@ -77,8 +69,7 @@
 		public string ThinFile { get; set; }
 	}
 
-	public class CustomerRequestedLoanModel
-	{
+	public class CustomerRequestedLoanModel {
 		public DateTime Created { get; set; }
 		public string CustomerReason { get; set; }
 		public string CustomerSourceOfRepayment { get; set; }
@@ -86,9 +77,8 @@
 		public string OtherReason { get; set; }
 		public string OtherSourceOfRepayment { get; set; }
 	}
-	
-	public class DecisionsModel
-	{
+
+	public class DecisionsModel {
 		public int TotalDecisionsCount { get; set; }
 		public decimal TotalApprovedAmount { get; set; }
 		public int RejectsCount { get; set; }
@@ -96,8 +86,7 @@
 		public DateTime? LastDecisionDate { get; set; }
 	}
 
-	public class ProfileSummaryModel
-	{
+	public class ProfileSummaryModel {
 		public MarketPlaces MarketPlaces { get; set; }
 		public PaymentAccounts PaymentAccounts { get; set; }
 		public AmlBwa AmlBwa { get; set; }
@@ -120,17 +109,15 @@
 		public CustomerRequestedLoanModel RequestedLoan { get; set; }
 		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
 		public CompanyInfoMap CompanyInfo { get; set; }
-		public List<AlertModel> Alerts { get; set; } 
+		public List<AlertModel> Alerts { get; set; }
 	}
 
-	public class AlertModel
-	{
+	public class AlertModel {
 		public string AlertType { get; set; }
 		public string Alert { get; set; }
 	}
-	
-	public enum AlertType
-	{
+
+	public enum AlertType {
 		[Description("danger")]
 		Error,
 		[Description("warning")]
@@ -141,16 +128,14 @@
 		Success
 	}
 
-	public class FraudCheck
-	{
+	public class FraudCheck {
 		public string Status { get; set; }
 		public string NumOfInternalDetection { get; set; }
 		public string NumOfExternalDetection { get; set; }
 		public string StatusComment { get; set; }
 	}
 
-	public enum LightsState
-	{
+	public enum LightsState {
 		Passed,
 		Warning,
 		Reject,
@@ -159,44 +144,41 @@
 		NotPerformed
 	}
 
-	public class Lighter
-	{
-		public Lighter(LightsState state)
-		{
-			switch (state)
-			{
-				case LightsState.Passed:
-					Icon = "icon-white icon-ok-sign";
-					ButtonStyle = "btn-success";
-					Caption = "Passed";
-					break;
-				case LightsState.Warning:
-					Icon = "icon-white icon-question-sign";
-					ButtonStyle = "btn-warning";
-					Caption = "Warning";
-					break;
-				case LightsState.Reject:
-					Icon = "icon-white icon-remove-sign";
-					ButtonStyle = "btn-danger";
-					Caption = "Reject";
-					break;
-				case LightsState.InProgress:
-					Icon = "icon-white icon-remove-sign";
-					ButtonStyle = "btn-danger btn-more-danger";
-					Caption = "In progress";
-					break;
-				case LightsState.Error:
-					Icon = "icon-white icon-remove-sign";
-					ButtonStyle = "btn-danger btn-more-danger";
-					Caption = "Error";
-					break;
-				case LightsState.NotPerformed:
-					Icon = "icon-white icon-ban-circle";
-					ButtonStyle = "btn";
-					Caption = "Not Performed ";
-					break;
-				default:
-					throw new ArgumentOutOfRangeException("state");
+	public class Lighter {
+		public Lighter(LightsState state) {
+			switch (state) {
+			case LightsState.Passed:
+				Icon = "icon-white icon-ok-sign";
+				ButtonStyle = "btn-success";
+				Caption = "Passed";
+				break;
+			case LightsState.Warning:
+				Icon = "icon-white icon-question-sign";
+				ButtonStyle = "btn-warning";
+				Caption = "Warning";
+				break;
+			case LightsState.Reject:
+				Icon = "icon-white icon-remove-sign";
+				ButtonStyle = "btn-danger";
+				Caption = "Reject";
+				break;
+			case LightsState.InProgress:
+				Icon = "icon-white icon-remove-sign";
+				ButtonStyle = "btn-danger btn-more-danger";
+				Caption = "In progress";
+				break;
+			case LightsState.Error:
+				Icon = "icon-white icon-remove-sign";
+				ButtonStyle = "btn-danger btn-more-danger";
+				Caption = "Error";
+				break;
+			case LightsState.NotPerformed:
+				Icon = "icon-white icon-ban-circle";
+				ButtonStyle = "btn";
+				Caption = "Not Performed ";
+				break;
+			default:
+				throw new ArgumentOutOfRangeException("state");
 			}
 		}
 
@@ -204,5 +186,4 @@
 		public string Caption { get; set; }
 		public string ButtonStyle { get; set; }
 	}
-
 }

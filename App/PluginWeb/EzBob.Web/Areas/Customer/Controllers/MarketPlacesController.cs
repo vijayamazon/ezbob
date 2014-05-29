@@ -1,9 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System.Web.Mvc;
+	using EzBob.Models;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
-	using Models;
 
 	public class MarketPlacesController : Controller {
 		#region public

@@ -7,7 +7,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using System.Linq;
 	using EZBob.DatabaseLib;
-	using Customer.Models;
+	using EzBob.Models;
 	using Ezbob.ExperianParser;
 	using System.Text.RegularExpressions;
 	using ExperianLib;

@@ -1,8 +1,8 @@
 ﻿namespace EzBob.Web.Code.Bank
 {
 	using System.Linq;
-	using Areas.Customer.Models;
 	using EZBob.DatabaseLib.Model.Database;
+	using EzBob.Models;
 	using YodleeLib.connector;
 	using log4net;
 

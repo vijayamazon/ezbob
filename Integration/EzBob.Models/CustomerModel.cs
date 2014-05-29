@@ -1,16 +1,17 @@
-namespace EzBob.Web.Areas.Customer.Models
-{
+// ReSharper disable InconsistentNaming
+namespace EzBob.Models {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EzBob.Models;
 	using Ezbob.Backend.Models;
+	using Web.Areas.Customer.Models;
+
+	#region class CustomerModel
 
 	[Serializable]
-	public class CustomerModel
-	{
+	public class CustomerModel {
 		public int Id { get; set; }
 		public bool loggedIn { get; set; }
 		public bool bankAccountAdded { get; set; }
@@ -55,7 +56,6 @@ namespace EzBob.Web.Areas.Customer.Models
 		public string SortCode { get; set; }
 
 		public PayPointCardModel[] PayPointCards { get; set; }
-
 
 		public string Medal { get; set; }
 
@@ -123,23 +123,31 @@ namespace EzBob.Web.Areas.Customer.Models
 		public bool IsBrokerFill { get; set; }
 	} // class CustomerModel
 
-	public class SimpleMarketPlaceModel
-	{
+	#endregion class CustomerModel
+
+	#region class SimpleMarketPlaceModel
+
+	public class SimpleMarketPlaceModel {
 		public string MpName { get; set; }
 		public int MpId { get; set; }
 		public string displayName { get; set; }
 		//public string storeInfoStepModelShops { get; set; }
 	} // class SimpleMarketPlaceModel
 
-	public class InvitedFriend
-	{
+	#endregion class SimpleMarketPlaceModel
+
+	#region class InvitedFriend
+
+	public class InvitedFriend {
 		public string FriendName { get; set; }
 		public string FriendTookALoan { get; set; }
-	}
+	} // class InvitedFriend
 
+	#endregion class InvitedFriend
 
-	public class CompanyInfoMap
-	{
+	#region class CompanyInfoMap
+
+	public class CompanyInfoMap {
 		public TypeOfBusiness TypeOfBusiness { get; set; }
 		public VatReporting? VatReporting { get; set; }
 		public string CompanyNumber { get; set; }
@@ -156,11 +164,13 @@ namespace EzBob.Web.Areas.Customer.Models
 
 		public virtual DirectorModel[] Directors { get; set; }
 
-		public static CompanyInfoMap FromCompany(Company company)
-		{
-			if (company == null) return new CompanyInfoMap();
-			return new CompanyInfoMap
-			{
+		#region method FromCompany
+
+		public static CompanyInfoMap FromCompany(Company company) {
+			if (company == null)
+				return new CompanyInfoMap();
+
+			return new CompanyInfoMap {
 				CompanyNumber = company.CompanyNumber,
 				CompanyName = company.ExperianCompanyName ?? company.CompanyName,
 				TimeAtAddress = company.TimeAtAddress,
@@ -172,8 +182,14 @@ namespace EzBob.Web.Areas.Customer.Models
 				RentMonthLeft = company.RentMonthLeft,
 				CapitalExpenditure = company.CapitalExpenditure,
 				VatReporting = company.VatReporting,
-				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToArray()
+				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToArray(),
+				ExperianRefNum = company.ExperianRefNum,
 			};
-		}
-	}
-}
+		} // From Company
+
+		#endregion method FromCompany
+	} // class CompanyInfoMap
+
+	#endregion class CompanyInfoMap
+} // namespace
+// ReSharper restore InconsistentNaming

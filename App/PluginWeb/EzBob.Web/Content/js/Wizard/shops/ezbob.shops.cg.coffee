@@ -1,7 +1,7 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
+class EzBob.CgAccountInfoView extends Backbone.Marionette.ItemView
     events:
         'click a.back': 'back'
         'change input': 'inputChanged'
@@ -65,7 +65,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             EzBob.App.trigger 'error', oVendorInfo.DisplayName + ' Account Data Validation Error'
             return false
 
-        acc = new EzBob.CGAccountModel accountModel
+        acc = new EzBob.CgAccountModel accountModel
 
         xhr = acc.save()
         if not xhr
@@ -121,11 +121,11 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         EzBob.App.trigger 'clear'
         'Link ' + @getVendorInfo().DisplayName + ' Account'
 
-class EzBob.CGAccountModel extends Backbone.Model
+class EzBob.CgAccountModel extends Backbone.Model
     urlRoot: "#{window.gRootPath}Customer/CGMarketPlaces/Accounts"
 
-class EzBob.CGAccounts extends Backbone.Collection
-    model: EzBob.CGAccountModel
+class EzBob.CgAccounts extends Backbone.Collection
+    model: EzBob.CgAccountModel
 
     accountType: ''
 

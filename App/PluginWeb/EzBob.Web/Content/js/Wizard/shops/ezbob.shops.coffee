@@ -51,12 +51,12 @@ class EzBob.StoreInfoView extends Backbone.View
 
         for accountTypeName, ignore of aryCGAccounts
             lc = accountTypeName.toLowerCase()
-            acc = new EzBob.CGAccounts [], accountType: accountTypeName
+            acc = new EzBob.CgAccounts [], accountType: accountTypeName
             this[lc + 'Accounts'] = acc
             if (lc == 'hmrc')
-                this[lc + 'AccountInfoView'] = new EzBob.HMRCAccountInfoView model: acc
+                this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView model: acc, companyRefNum: @fromCustomer('CompanyInfo').ExperianRefNum
             else
-                this[lc + 'AccountInfoView'] = new EzBob.CGAccountInfoView model: acc, accountType: accountTypeName
+                this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView model: acc, accountType: accountTypeName
 
         @stores =
             "eBay": view: @EbayStoreView

@@ -31,20 +31,24 @@
 
 		[HttpPost]
 		public JsonResult SaveFile() {
-			int nCustomerID;
+			int nCustomerID = DetectCustomer();
 
-			try {
-				nCustomerID = m_oContext.Customer.Id;
-			}
-			catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to fetch current customer.");
+			if (nCustomerID <= 0)
 				return HmrcManualAccountManager.CreateJsonError("Please log out and log in again.");
-			} // try
 
 			return m_oAccountManager.SaveUploadedFiles(Request.Files, nCustomerID);
 		} // SaveFile
 
 		#endregion action SaveFile
+
+		#region action LoadPeriods
+
+		[HttpGet]
+		public JsonResult LoadPeriods() {
+			return m_oAccountManager.LoadPeriods(DetectCustomer());
+		} // LoadPeriods
+
+		#endregion action LoadPeriods
 
 		#endregion public
 
@@ -54,6 +58,24 @@
 
 		private readonly HmrcManualAccountManager m_oAccountManager;
 		private readonly IEzbobWorkplaceContext m_oContext;
+
+		#region method DetectCustomer
+
+		private int DetectCustomer() {
+			int nCustomerID;
+
+			try {
+				nCustomerID = m_oContext.Customer.Id;
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to fetch current customer.");
+				nCustomerID = 0;
+			} // try
+
+			return nCustomerID;
+		} // DetectCustomer
+
+		#endregion method DetectCustomer
 
 		#endregion private
 	} // class HmrcController

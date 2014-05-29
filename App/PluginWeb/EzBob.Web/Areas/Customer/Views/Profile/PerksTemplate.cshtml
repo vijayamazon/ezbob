@@ -1,13 +1,14 @@
-﻿@using EzBob.Web.Areas.Customer.Models
+﻿@using EzBob.Models
 @model dynamic
+
 @{
-    var customer = (CustomerModel)Model.Customer;
+	var customer = (CustomerModel)Model.Customer;
 }
+
 <script id="perks-template" type="text/template">
-    @if (customer.Perks != null)
-    {
-        <div style="margin-top: 10px">
-            @Html.Raw(customer.Perks)
-        </div>
-    }
+	@if (customer.Perks != null) {
+		<div style="margin-top: 10px">
+			@Html.Raw(customer.Perks)
+		</div>
+ }
 </script>

@@ -5,8 +5,8 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzBob.Models;
 	using Infrastructure.Attributes;
-	using Models;
 	using Code.MpUniq;
 	using Infrastructure;
 	using Infrastructure.csrf;

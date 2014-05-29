@@ -81,16 +81,17 @@
       for (accountTypeName in aryCGAccounts) {
         ignore = aryCGAccounts[accountTypeName];
         lc = accountTypeName.toLowerCase();
-        acc = new EzBob.CGAccounts([], {
+        acc = new EzBob.CgAccounts([], {
           accountType: accountTypeName
         });
         this[lc + 'Accounts'] = acc;
         if (lc === 'hmrc') {
-          this[lc + 'AccountInfoView'] = new EzBob.HMRCAccountInfoView({
-            model: acc
+          this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView({
+            model: acc,
+            companyRefNum: this.fromCustomer('CompanyInfo').ExperianRefNum
           });
         } else {
-          this[lc + 'AccountInfoView'] = new EzBob.CGAccountInfoView({
+          this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView({
             model: acc,
             accountType: accountTypeName
           });

@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Areas.Customer.Models;
 	using Areas.Underwriter.Models;
+	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
 	using Ezbob.Utils.Extensions;
 	using NHibernate;

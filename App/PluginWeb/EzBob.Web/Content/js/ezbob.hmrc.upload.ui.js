@@ -5,6 +5,7 @@
 
 	_.extend(EzBob.HmrcUploadUi.prototype, EzBob.SimpleView.prototype, {
 		defaults: {
+			chartMonths: 18,
 			classes: { form: null, backBtn: null, doneBtn: null, },
 			clickBack: null,
 			clickDone: null,
@@ -109,7 +110,7 @@
 					var oDropzone = this;
 
 					oDropzone.on('success', function(oFile, oResponse) {
-						console.log('Upload', (oResponse.success ? '' : 'NOT'), 'succeeded:', oFile, oResponse);
+						EzBob.ServerLog.debug('Upload', (oResponse.success ? '' : 'NOT'), 'succeeded:', oFile, oResponse);
 
 						if (oResponse.success) {
 							EzBob.App.trigger('info', 'Upload successful: ' + oFile.name);
@@ -126,7 +127,7 @@
 					}); // on success
 
 					oDropzone.on('error', function(oFile, sErrorMsg, oXhr) {
-						console.log('Upload error:', oFile, sErrorMsg, oXhr);
+						EzBob.ServerLog.warn('Upload error:', oFile, sErrorMsg, oXhr);
 						EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
 						self.trigger(self.evtUploadSysError(), oFile, sErrorMsg, oXhr);
 					}); // always
@@ -140,10 +141,12 @@
 		}, // initDropzone
 
 		render: function() {
-			if (this.options.el)
-				this.$el = $(this.options.el);
-			else if (this.options.$el)
-				this.$el = $(this.options.$el);
+			if (!this.$el) {
+				if (this.options.el)
+					this.$el = $(this.options.el);
+				else if (this.options.$el)
+					this.$el = $(this.options.$el);
+			} // if
 
 			if (this.DetailsDataTable) {
 				this.DetailsDataTable.fnDestroy();
@@ -232,15 +235,11 @@
 			var self = this;
 
 			oXhr.done(function(oResponse) {
-				console.log(oResponse);
-
 				if (self.FirstLoad) {
-					console.log('first time');
 					self.BackButton.show();
 					self.FirstLoad = false;
 				}
 				else {
-					console.log('other time');
 					var bHasRows = oResponse.aaData && oResponse.aaData.length;
 
 					if (bHasRows)
@@ -267,7 +266,7 @@
 </table>');
 				/*jshint multistr: false */
 
-				oTableOpts.fnRowCallback = function(oTR, oCur, nDisplayIndex, nDisplayIndexFull) {
+				oTableOpts.fnRowCallback = function(oTR, oCur /*, nDisplayIndex, nDisplayIndexFull */) {
 					if (oCur.IsOtherFirm)
 						$(oTR).addClass('other-firm');
 					else if (oCur.IsGap)
@@ -329,16 +328,12 @@
 
 			var aryData = nPrimaryRefNum ? _.filter(aryPeriods, function(x) { return !x.IsGap && (x.RegistrationNo === nPrimaryRefNum); }) : [];
 
-			console.log('relevant periods', aryData);
-
 			var oTbl = $('<table class=periods-chart><tbody><tr><td class=older>Older</td></tr></tbody></table>');
 			var oTR = oTbl.find('tr');
 
 			this.PeriodsChart.empty().append(oTbl);
 
-			var nWayBack = 18;
-
-			var oCurMonth = moment.utc().date(1).subtract('month', nWayBack);
+			var oCurMonth = moment.utc().date(1).subtract('month', this.options.chartMonths);
 
 			_.any(aryData, function(x) {
 				var bResult = !x.IsGap && moment.utc(x.DateTo).isBefore(oCurMonth);
@@ -351,7 +346,7 @@
 
 			var oFilter = function(x) { return !x.IsGap && x.Interval.contains(oCurMonth); };
 
-			for (var i = 0; i < nWayBack; i++, oCurMonth = oCurMonth.add('month', 1)) {
+			for (var i = 0; i < this.options.chartMonths; i++, oCurMonth = oCurMonth.add('month', 1)) {
 				oTR.append(
 					$('<td />')
 						.text(oCurMonth.format("MMM 'YY"))
