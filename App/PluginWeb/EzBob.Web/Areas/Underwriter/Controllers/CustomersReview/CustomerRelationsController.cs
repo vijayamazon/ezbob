@@ -158,27 +158,27 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult ChangeIsFollowUp(int customerId, bool isFollowUp)
+		public JsonResult CloseFollowUp(int customerId)
 		{
 			try
 			{
-
-
 				var lastFollowUp = _customerRelationFollowUpRepository.GetLastFollowUp(customerId);
 				if (lastFollowUp == null)
 				{
-					return Json(new { success = false, error = "customer don't have any follow ups please add one." });
+					return Json(new { success = false, error = "customer don't have any open follow ups please add one." });
 				}
 
 				var lastCrm = _customerRelationsRepository.GetLastCrm(customerId);
-				_customerRelationStateRepository.SaveUpdateState(customerId, isFollowUp, lastFollowUp, lastCrm);
+				lastFollowUp.IsClosed = true;
+				lastFollowUp.CloseDate = DateTime.UtcNow;
+				_customerRelationStateRepository.SaveUpdateState(customerId, false, lastFollowUp, lastCrm);
 
 				return Json(new { success = true, error = "" });
 			}
 			catch (Exception e)
 			{
-				Log.ErrorFormat("Exception while trying to save customer relations new entry:{0}", e);
-				return Json(new { success = false, error = "Error saving new customer relations followup." });
+				Log.ErrorFormat("Exception while trying to close customer relations follow up:{0}", e);
+				return Json(new { success = false, error = "Error saving new customer relations follow up." });
 			} // try
 		}
 

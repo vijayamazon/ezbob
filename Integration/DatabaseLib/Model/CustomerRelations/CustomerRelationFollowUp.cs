@@ -14,6 +14,8 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 		public virtual DateTime DateAdded { get; set; }
 		public virtual DateTime FollowUpDate { get; set; }
 		public virtual string Comment { get; set; }
+		public virtual bool IsClosed { get; set; }
+		public virtual DateTime? CloseDate { get; set; }
 	}
 
 	public class CustomerRelationFollowUpMap : ClassMap<CustomerRelationFollowUp>
@@ -26,6 +28,8 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 			Map(x => x.FollowUpDate).CustomType<UtcDateTimeType>();
 			Map(x => x.Comment).Length(1000);
 			Map(x => x.CustomerId);
+			Map(x => x.IsClosed);
+			Map(x => x.CloseDate).CustomType<UtcDateTimeType>();
 		}
 	}
 
@@ -42,7 +46,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 
 		public CustomerRelationFollowUp GetLastFollowUp(int customerId)
 		{
-			return GetAll().Where(x => x.CustomerId == customerId).OrderByDescending(x => x.DateAdded).FirstOrDefault();
+			return GetAll().Where(x => x.CustomerId == customerId).OrderByDescending(x => x.DateAdded).FirstOrDefault(x => x.IsClosed == false);
 		}
 	}
 }
