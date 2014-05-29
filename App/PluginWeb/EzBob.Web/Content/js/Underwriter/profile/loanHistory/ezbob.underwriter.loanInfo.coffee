@@ -61,12 +61,11 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
                 @$el.find('#create-loan-hidden-amount').val('')
                 @$el.find('#create-loan-hidden-date').val('')
                 @$el.find('#create-loan-hidden').addClass 'hide'
-                EzBob.ShowMessageTimeout 'A loan has been created.', 'Loan created', 2
 
             if res.error
                 EzBob.ShowMessage res.error, 'Cannot create loan'
             else
-                EzBob.ShowMessage 'Failed to create loan.', 'Cannot create loan'
+                EzBob.ShowMessage 'Loan created successfully', 'Loan created successfully'
         )
 
         oXhr.fail( =>

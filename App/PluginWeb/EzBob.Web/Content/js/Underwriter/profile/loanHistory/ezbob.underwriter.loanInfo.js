@@ -1,5 +1,5 @@
 (function() {
-  var ModelUpdater, root,
+  var ModelUpdater, root, _ref, _ref1,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -11,12 +11,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.LoanInfoView = (function(_super) {
-
     __extends(LoanInfoView, _super);
 
     function LoanInfoView() {
-      this.LoanTypeSelectionAllowedChanged = __bind(this.LoanTypeSelectionAllowedChanged, this);
-      return LoanInfoView.__super__.constructor.apply(this, arguments);
+      this.LoanTypeSelectionAllowedChanged = __bind(this.LoanTypeSelectionAllowedChanged, this);      _ref = LoanInfoView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     LoanInfoView.prototype.template = "#profile-loan-info-template";
@@ -62,6 +61,7 @@
     LoanInfoView.prototype.createLoanHidden = function() {
       var nAmount, nCustomerID, oXhr, sDate,
         _this = this;
+
       nCustomerID = this.model.get('CustomerId');
       nAmount = parseInt(this.$el.find('#create-loan-hidden-amount').val(), 10) || 0;
       sDate = this.$el.find('#create-loan-hidden-date').val();
@@ -83,12 +83,11 @@
           _this.$el.find('#create-loan-hidden-amount').val('');
           _this.$el.find('#create-loan-hidden-date').val('');
           _this.$el.find('#create-loan-hidden').addClass('hide');
-          EzBob.ShowMessageTimeout('A loan has been created.', 'Loan created', 2);
         }
         if (res.error) {
           return EzBob.ShowMessage(res.error, 'Cannot create loan');
         } else {
-          return EzBob.ShowMessage('Failed to create loan.', 'Cannot create loan');
+          return EzBob.ShowMessage('Loan created successfully', 'Loan created successfully');
         }
       });
       return oXhr.fail(function() {
@@ -98,6 +97,7 @@
 
     LoanInfoView.prototype.editOfferValidUntilDate = function() {
       var d;
+
       d = new EzBob.Dialogs.DateEdit({
         model: this.model,
         propertyName: "OfferValidateUntil",
@@ -114,6 +114,7 @@
 
     LoanInfoView.prototype.editStartingDate = function() {
       var d, that;
+
       that = this;
       d = new EzBob.Dialogs.DateEdit({
         model: this.model,
@@ -134,6 +135,7 @@
 
     LoanInfoView.prototype.editRepaymentPeriod = function() {
       var d;
+
       d = new EzBob.Dialogs.IntegerEdit({
         model: this.model,
         propertyName: "RepaymentPerion",
@@ -151,6 +153,7 @@
 
     LoanInfoView.prototype.editOfferedCreditLine = function() {
       var that, view;
+
       that = this;
       view = new EzBob.Underwriter.CreditLineEditDialog({
         model: this.model
@@ -166,6 +169,7 @@
 
     LoanInfoView.prototype.openPacnetManual = function() {
       var d, that;
+
       that = this;
       d = new EzBob.Dialogs.PacentManual({
         model: this.model,
@@ -188,6 +192,7 @@
 
     LoanInfoView.prototype.clearPacnetManual = function() {
       var d, that;
+
       that = this;
       d = new EzBob.Dialogs.CheckBoxEdit({
         model: this.model,
@@ -209,6 +214,7 @@
 
     LoanInfoView.prototype.editInterestRate = function() {
       var d;
+
       d = new EzBob.Dialogs.PercentsEdit({
         model: this.model,
         propertyName: "InterestRate",
@@ -226,6 +232,7 @@
 
     LoanInfoView.prototype.editDetails = function() {
       var d;
+
       d = new EzBob.Dialogs.TextEdit({
         model: this.model,
         propertyName: "Details",
@@ -242,6 +249,7 @@
 
     LoanInfoView.prototype.editManualSetupFeeAmount = function() {
       var d;
+
       d = new EzBob.Dialogs.PoundsNoDecimalsEdit({
         model: this.model,
         propertyName: "ManualSetupFeeAmount",
@@ -259,6 +267,7 @@
 
     LoanInfoView.prototype.editManualSetupFeePercent = function() {
       var d;
+
       d = new EzBob.Dialogs.PercentsEdit({
         model: this.model,
         propertyName: "ManualSetupFeePercent",
@@ -277,6 +286,7 @@
     LoanInfoView.prototype.runNewCreditLine = function(e) {
       var el,
         _this = this;
+
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
@@ -290,6 +300,7 @@
     LoanInfoView.prototype.RunCustomerCheck = function(newCreditLineOption) {
       var that,
         _this = this;
+
       that = this;
       BlockUi("on");
       return $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLine", {
@@ -297,6 +308,7 @@
         NewCreditLineOption: newCreditLineOption
       }).done(function(response) {
         var updater;
+
         if (response.Message === "Go to new mode") {
           return $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLineNewMode1", {
             Id: that.model.get("CustomerId"),
@@ -332,6 +344,7 @@
     LoanInfoView.prototype.isLoanTypeSelectionAllowed = function() {
       var d,
         _this = this;
+
       d = new EzBob.Dialogs.ComboEdit({
         model: this.model,
         propertyName: "IsLoanTypeSelectionAllowed",
@@ -359,10 +372,11 @@
     };
 
     LoanInfoView.prototype.LoanTypeSelectionAllowedChanged = function() {
-      var isCustomerRepaymentPeriodSelectionAllowed, loanSource, _ref;
+      var isCustomerRepaymentPeriodSelectionAllowed, loanSource, _ref1;
+
       loanSource = this.model.get('LoanSource') || {};
       isCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed;
-      if (!isCustomerRepaymentPeriodSelectionAllowed || ((_ref = this.model.get('IsLoanTypeSelectionAllowed')) === 1 || _ref === '1')) {
+      if (!isCustomerRepaymentPeriodSelectionAllowed || ((_ref1 = this.model.get('IsLoanTypeSelectionAllowed')) === 1 || _ref1 === '1')) {
         this.$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled');
         if (this.model.get('LoanTypeId') !== 1) {
           return this.model.set('LoanTypeId', 1);
@@ -375,6 +389,7 @@
     LoanInfoView.prototype.loanType = function() {
       var d,
         _this = this;
+
       d = new EzBob.Dialogs.ComboEdit({
         model: this.model,
         propertyName: "LoanTypeId",
@@ -396,6 +411,7 @@
     LoanInfoView.prototype.loanSource = function() {
       var d,
         _this = this;
+
       d = new EzBob.Dialogs.ComboEdit({
         model: this.model,
         propertyName: "LoanSource.LoanSourceID",
@@ -421,6 +437,7 @@
 
     LoanInfoView.prototype.validateLoanSourceRelated = function() {
       var loanSourceModel, nAnnualTurnover, nCustomerReasonType, nEmployeeCount;
+
       loanSourceModel = this.model.get('LoanSource') || {};
       this.validateInterestVsSource(loanSourceModel.MaxInterest);
       if (loanSourceModel.DefaultRepaymentPeriod === -1) {
@@ -451,13 +468,14 @@
 
     LoanInfoView.prototype.validateInterestVsSource = function(nMaxInterest) {
       var aryPercentList, nBaseRate, nChange, nPct, nRate, pct, sPercentList, _i, _len, _results;
+
       if (nMaxInterest === -1) {
         return;
       }
       this.$el.find('.interest-exceeds-max-by-loan-source').toggleClass('hide', this.model.get('InterestRate') <= nMaxInterest);
       this.$el.find('.discount-exceeds-max-by-loan-source').addClass('hide');
       sPercentList = this.model.get('DiscountPlanPercents');
-      if (!(sPercentList != null)) {
+      if (sPercentList == null) {
         return;
       }
       nBaseRate = this.model.get('InterestRate');
@@ -484,6 +502,7 @@
     LoanInfoView.prototype.discountPlan = function() {
       var d,
         _this = this;
+
       d = new EzBob.Dialogs.ComboEdit({
         model: this.model,
         propertyName: "DiscountPlanId",
@@ -509,6 +528,7 @@
 
     LoanInfoView.prototype.UpdateNewCreditLineState = function() {
       var disabled, waiting;
+
       waiting = this.personalInfo.get("CreditResult") === "WaitingForDecision";
       disabled = waiting || !this.personalInfo.get("IsCustomerInEnabledStatus");
       $("input[name='newCreditLineBtn']").toggleClass("disabled", disabled);
@@ -524,7 +544,8 @@
     };
 
     LoanInfoView.prototype.onRender = function() {
-      var _ref;
+      var _ref1;
+
       this.$el.find(".tltp").tooltip();
       this.$el.find(".tltp-left").tooltip({
         placement: "left"
@@ -534,7 +555,7 @@
       this.initSwitch(".brokerCommisionSwitch", 'UseBrokerSetupFee', this.toggleValue, 'ChangeBrokerSetupFee');
       this.initSwitch(".setupFeeSwitch", 'UseSetupFee', this.toggleValue, 'ChangeSetupFee');
       this.initSwitch(".sendEmailsSwitch", 'AllowSendingEmail', this.toggleValue, 'AllowSendingEmails');
-      if ((_ref = this.model.get('IsLoanTypeSelectionAllowed')) === 2 || _ref === '2') {
+      if ((_ref1 = this.model.get('IsLoanTypeSelectionAllowed')) === 2 || _ref1 === '2') {
         this.$el.find('button[name=isLoanTypeSelectionAllowed]').attr('disabled', 'disabled');
       } else {
         this.$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled');
@@ -544,6 +565,7 @@
 
     LoanInfoView.prototype.initSwitch = function(elemClass, param, func, method) {
       var state, that;
+
       that = this;
       state = this.model.get(param);
       this.$el.find(elemClass).bootstrapSwitch();
@@ -556,6 +578,7 @@
     LoanInfoView.prototype.toggleValue = function(event, state, method, param) {
       var id,
         _this = this;
+
       id = this.model.get('CashRequestId');
       BlockUi();
       return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/' + method, {
@@ -583,9 +606,11 @@
     LoanInfoView.prototype.showCreditLineDialog = function() {
       var xhr,
         _this = this;
+
       xhr = this.model.fetch();
       return xhr.done(function() {
         var dialog;
+
         dialog = new EzBob.Underwriter.CreditLineDialog({
           model: _this.model
         });
@@ -606,17 +631,16 @@
   })(Backbone.Marionette.ItemView);
 
   ModelUpdater = (function() {
-
     function ModelUpdater(model, property) {
       this.model = model;
       this.property = property;
       this.start = __bind(this.start, this);
-
     }
 
     ModelUpdater.prototype.start = function() {
       var xhr,
         _this = this;
+
       xhr = this.model.fetch();
       return xhr.done(function() {
         return _this.check();
@@ -647,11 +671,11 @@
   })();
 
   EzBob.Underwriter.LoanInfoModel = (function(_super) {
-
     __extends(LoanInfoModel, _super);
 
     function LoanInfoModel() {
-      return LoanInfoModel.__super__.constructor.apply(this, arguments);
+      _ref1 = LoanInfoModel.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     LoanInfoModel.prototype.idAttribute = "Id";
@@ -665,6 +689,7 @@
 
     LoanInfoModel.prototype.offerChanged = function() {
       var now, until_;
+
       until_ = moment(this.get("OfferValidateUntil"), "DD/MM/YYYY");
       now = moment();
       return this.set({
@@ -674,6 +699,7 @@
 
     LoanInfoModel.prototype.loanTypeChanged = function() {
       var id, type, types;
+
       types = this.get('LoanTypes');
       id = parseInt(this.get('LoanTypeId'), 10);
       type = _.find(types, function(t) {

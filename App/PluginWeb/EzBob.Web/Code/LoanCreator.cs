@@ -119,7 +119,7 @@
 
 			_session.Flush();
 
-			m_oServiceClient.Instance.CashTransferred(_context.User.Id, transfered, loan.RefNumber);
+			m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber);
 
 			return loan;
 		}
