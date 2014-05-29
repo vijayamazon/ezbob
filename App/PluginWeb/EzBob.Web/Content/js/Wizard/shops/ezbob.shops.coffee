@@ -54,7 +54,10 @@ class EzBob.StoreInfoView extends Backbone.View
             acc = new EzBob.CgAccounts [], accountType: accountTypeName
             this[lc + 'Accounts'] = acc
             if (lc == 'hmrc')
-                this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView model: acc, companyRefNum: @fromCustomer('CompanyInfo').ExperianRefNum
+                this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView
+                    model: acc,
+                    companyRefNum: @fromCustomer('CompanyInfo').ExperianRefNum
+                    chartMonths: if @isProfile() then 18 else 12
             else
                 this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView model: acc, accountType: accountTypeName
 

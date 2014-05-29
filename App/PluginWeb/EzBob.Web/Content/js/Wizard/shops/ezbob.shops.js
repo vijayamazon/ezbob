@@ -88,7 +88,8 @@
         if (lc === 'hmrc') {
           this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView({
             model: acc,
-            companyRefNum: this.fromCustomer('CompanyInfo').ExperianRefNum
+            companyRefNum: this.fromCustomer('CompanyInfo').ExperianRefNum,
+            chartMonths: this.isProfile() ? 18 : 12
           });
         } else {
           this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView({

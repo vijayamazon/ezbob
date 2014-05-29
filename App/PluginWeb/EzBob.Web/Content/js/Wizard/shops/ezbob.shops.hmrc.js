@@ -6,7 +6,7 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 		this.activeForm = null;
 
 		this.uploadUi = new EzBob.HmrcUploadUi({
-			chartMonths: 12,
+			chartMonths: this.options.chartMonths,
 			formID: 'hmrcAccountUpload',
 			uploadUrl: '/Customer/Hmrc/SaveFile',
 			loadPeriodsUrl: '/Customer/Hmrc/LoadPeriods',
