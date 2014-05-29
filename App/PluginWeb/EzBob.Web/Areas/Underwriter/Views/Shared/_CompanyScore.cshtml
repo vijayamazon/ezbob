@@ -116,7 +116,7 @@
 
 			// console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
 
-			var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width' : 'table';
+			var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width table' : 'table';
 
 			if (oMetaData.ID == 'DL23SHAREHOLDING') {
 				var nTotal = 0;
@@ -131,12 +131,19 @@
 						aryData[j].Values['% of Shareholding'] = EzBob.formatPercents(aryData[j].Values['Description of Shareholding'] / nTotal);
 				} // if total
 			} // if
-            
+            var totalBalance = 0;
             if(oMetaData.ID == 'DL97'){
                 aryData = _.sortBy(aryData, function(obj) { return obj.Values["Account State"]; } );
+                totalBalance = _.reduce(aryData, function(memo, data){ 
+                    var balance = 0;
+                    if(data.Values['Account State'][0] == 'A'){
+                        balance = EzBob.poundToNum(data.Values['Current Balance']);
+                    }
+                    return memo + balance;}, 0
+                );
             }
 			if (oMetaData.ID == 'DL41') {
-				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
+				%><div class=tab-content><table class="<%- sTableWidthClass %>">
 					<thead class="box">
 						<tr class="box-title">
 							<th colspan=4><%- i %></th>
@@ -339,7 +346,7 @@
 				var sDivChartID = 'chart' + oMetaData.ID + ('' + Math.random()).replace(/\./, '') + '' + (new Date()).getTime();
 				var sParentDivChartID = 'parent_' + sDivChartID;
 
-				%><table class="<%- sTableWidthClass %> table">
+				%><table class="<%- sTableWidthClass %>">
 					<thead  class="box">
 						<tr class="box-title"><th><%- i %></th></tr>
 					</thead>
@@ -479,7 +486,7 @@
 				if (oMetaData.ID === 'DL65' || oMetaData.ID === 'DL97')
 					nColspan++;
 
-				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
+				%><div class=tab-content><table class="<%- sTableWidthClass %>">
 				<thead  class="box">
 					<tr class="box-title">
 						<th colspan="<%- nColspan %>"><%= i %></th>
@@ -497,6 +504,15 @@
 						}
 					%></tr>
 				</thead>
+                    <%if(oMetaData.ID == 'DL97'){%>
+                    <tbody>
+                        <tr class="total">
+                            <td colspan="<%-arySortOrder.length+1%>">
+                                <span>Num of accounts: <%-aryData.length%> Total balance (active): <%-EzBob.formatPounds(totalBalance)%></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <%}%>
                 <tbody><%
 				for (var j = 0; j < aryData.length; j++) {
 					var obj = aryData[j].Values;
@@ -546,7 +562,7 @@
 			else {
 				var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
 
-				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
+				%><div class=tab-content><table class="<%- sTableWidthClass %>">
 				<thead  class="box"><tr class="box-title"><th colspan=2><%= i %></th></tr></thead>
 				<tbody><%
 				for (var j = 0; j < aryData.length; j++) {
