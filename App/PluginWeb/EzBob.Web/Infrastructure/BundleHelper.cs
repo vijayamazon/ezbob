@@ -79,6 +79,8 @@
 				//custom css
 				.Add("~/Content/css/common.css")
 				.Add("~/Content/css/underwriter.css")
+				.Add("~/Content/css/hmrc-upload-ui.css")
+				.Add("~/Content/css/hmrc-manual-ui.css")
 				.Add("~/Content/css/Permission.css")
 
 				.MvcRender("~/Content/css/min/combined_#.css");

@@ -57,6 +57,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
             uploadHmrcView = new EzBob.Underwriter.UploadHmrcView
                 el: oUploader
                 customerId: @model.customerId
+                companyRefNum: @options.personalInfoModel.get('CompanyExperianRefNum')
 
             uploadHmrcView.render()
 
@@ -71,17 +72,6 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         # end of on uploadHmrcBack
 
         EzBob.App.vent.on 'ct:marketplaces.enterHmrc', () =>
-            hasHmrc = false
-
-            for mod in @model.models
-                if mod.get('Name').toUpperCase() == 'HMRC'
-                    hasHmrc = true
-                    break
-
-            if hasHmrc
-                EzBob.ShowMessageTimeout 'The customer already has an HMRC account.', 'Oops!', 3
-                return
-
             EzBob.Underwriter.EnterHmrcView.execute @model.customerId, @model
         # end of on enterHmrc
 

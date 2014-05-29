@@ -1,6 +1,14 @@
 ﻿var EzBob = EzBob || {};
 
 (function() {
+	var areSameDay = function(oMomentA, oMomentB) {
+		return (oMomentA.year() === oMomentB.year()) && (oMomentA.dayOfYear() === oMomentB.dayOfYear());
+	}; // areSameDay
+
+	var isJustBefore = function(oPrevious, oNext) {
+		return this.areSameDay(moment(oPrevious).add('days', 1), moment(oNext));
+	}; // isJustBefore
+
 	var checkIsEnabled = function(oSomething) {
 		var oElm = (typeof(oSomething) === 'string') ? this.$el.find(oSomething) : oSomething;
 
@@ -22,14 +30,27 @@
 	EzBob.View = Backbone.View.extend({
 		isSomethingEnabled: checkIsEnabled,
 		setSomethingEnabled: setEnabled,
+		areSameDay: areSameDay,
+		isJustBefore: isJustBefore,
 	}); // EzBob.View
+
+	EzBob.MarionetteView = Backbone.Marionette.View.extend({
+		isSomethingEnabled: checkIsEnabled,
+		setSomethingEnabled: setEnabled,
+		areSameDay: areSameDay,
+		isJustBefore: isJustBefore,
+	}); // EzBob.MarionetteView
 
 	EzBob.ItemView = Backbone.Marionette.ItemView.extend({
 		isSomethingEnabled: checkIsEnabled,
 		setSomethingEnabled: setEnabled,
-	}); // EzBob.View
+		areSameDay: areSameDay,
+		isJustBefore: isJustBefore,
+	}); // EzBob.ItemView
 
 	EzBob.SimpleView = function() {};
 	EzBob.SimpleView.prototype.setSomethingEnabled = setEnabled;
 	EzBob.SimpleView.prototype.isSomethingEnabled = checkIsEnabled;
+	EzBob.SimpleView.prototype.isJustBefore = isJustBefore;
+	EzBob.SimpleView.prototype.areSameDay = areSameDay;
 })(); // scope

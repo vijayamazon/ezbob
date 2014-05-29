@@ -18,7 +18,7 @@ EzBob.Underwriter.MarketPlaceYodleeDetailModel = Backbone.Model.extend({
 });
 
 
-EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
+EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
     initialize: function () {
         this.template = _.template($('#marketplace-values-template').html());
     },
@@ -80,14 +80,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         return this;
     },
 
-	areSameDay: function(oMomentA, oMomentB) {
-		return (oMomentA.year() === oMomentB.year()) && (oMomentA.dayOfYear() === oMomentB.dayOfYear());
-	}, // areSameDay
-
-	isJustBefore: function(oPrevious, oNext) {
-		return this.areSameDay(moment(oPrevious).add('days', 1), moment(oNext));
-	}, // isJustBefore
-
 	renderHmrcSummary: function(data) {
 		var oMp = data.marketplaces[0] || data.accounts[0];
 
@@ -134,7 +126,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 					var oPrevQuarter = oSummary.Quarters[i - 1];
 
 					if (!this.isJustBefore(oPrevQuarter.DateTo, oQuarter.DateFrom))
-						oTbl.find(sQclass).addClass('not-just-before').attr('title', 'This period does not immediately follows the previous one.');
+						oTbl.find(sQclass).addClass('not-just-after').attr('title', 'This period does not immediately follow the previous one.');
 				} // if
 			} // for
 

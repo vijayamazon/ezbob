@@ -57,6 +57,7 @@
 		public string CompanyName { get; set; }
 		public string CompanyType { get; set; }
 		public string CompanySeniority { get; set; }
+		public string CompanyExperianRefNum { get; set; }
 		public int NumOfDirectors { get; set; }
 		public int NumOfShareholders { get; set; }
 		public string Website { get; set; }
@@ -108,6 +109,7 @@
 			{
 				CompanyName = customer.Company.CompanyName;
 				CompanyType = customer.Company.TypeOfBusiness.ToString();
+				CompanyExperianRefNum = customer.Company.ExperianRefNum;
 
 				if (customer.Company.Directors != null) {
 					List<Director> oDirList = customer.Company.Directors.ToList();

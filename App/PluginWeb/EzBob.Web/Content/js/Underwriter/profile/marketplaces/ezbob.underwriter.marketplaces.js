@@ -102,7 +102,8 @@
         _this.$el.find('#hmrc-upload-container').empty().append(oUploader);
         uploadHmrcView = new EzBob.Underwriter.UploadHmrcView({
           el: oUploader,
-          customerId: _this.model.customerId
+          customerId: _this.model.customerId,
+          companyRefNum: _this.options.personalInfoModel.get('CompanyExperianRefNum')
         });
         uploadHmrcView.render();
         _this.$el.find('#hmrc-upload-container').show();
@@ -113,21 +114,7 @@
         return _this.$el.find('#hmrc-upload-container').hide().empty();
       });
       EzBob.App.vent.on('ct:marketplaces.enterHmrc', function() {
-        var hasHmrc, mod, _i, _len, _ref;
-        hasHmrc = false;
-        _ref = _this.model.models;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          mod = _ref[_i];
-          if (mod.get('Name').toUpperCase() === 'HMRC') {
-            hasHmrc = true;
-            break;
-          }
-        }
-        if (hasHmrc) {
-          EzBob.ShowMessageTimeout('The customer already has an HMRC account.', 'Oops!', 3);
-          return;
-        }
-        return EzBob.Underwriter.EnterHmrcView.execute(_this.model.customerId);
+        return EzBob.Underwriter.EnterHmrcView.execute(_this.model.customerId, _this.model);
       });
       return this;
     };

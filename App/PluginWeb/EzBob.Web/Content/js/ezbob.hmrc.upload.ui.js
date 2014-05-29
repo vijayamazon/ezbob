@@ -12,6 +12,7 @@
 			formID: '',
 			headers: null,
 			loadPeriodsUrl: null,
+			primaryRefNum: '',
 			uiEventControlIDs: { form: null, backBtn: null, doneBtn: null, },
 			uploadAppError: null,
 			uploadComplete: null,
@@ -22,6 +23,8 @@
 
 		init: function(options) {
 			this.options = _.defaults(options, this.defaults);
+
+			this.options.primaryRefNum = parseInt(this.options.primaryRefNum, 10) || 0;
 
 			this.FirstLoad = true;
 
@@ -155,13 +158,7 @@
 			this.initUiForm();
 			this.initUiButtons();
 
-			this.PeriodsDetails = $('<table>\
-<thead><tr>\
-<th>From</th><th>To</th><th>Registration #</th><th>Company name</th>\
-</tr></thead><tbody><tr>\
-<td></td><td></td><td></td><td></td>\
-</tr></body>\
-</table>');
+			this.PeriodsDetails = $('<div />');
 			this.$el.append(this.PeriodsDetails);
 
 			this.initDropzone();
@@ -182,14 +179,21 @@
 				.click(_.bind(function() { this.trigger(this.evtClickDone()); }, this))
 				.hide();
 
-			var oDiv = $('<div class="attardi-button"></div>');
-			oDiv.append(this.BackButton).append(this.DoneButton);
+			/*jshint multistr: true */
+			var oDivLegend = $('<div class=legend>\
+<table class=periods-chart><tbody><tr>\
+<th>Legend:</th>\
+<td class=found>Data is available</td>\
+<td>Data is not available</td></tr>\
+</tbody></table>\
+</div>');
+			/*jshint multistr: false */
 
-			oDiv = $('<div class="form_buttons_container hmrc_margin_from_header"></div>').append(oDiv);
-
-			oDiv = $('<div class="clearfix"></div>').append(oDiv);
-
-			this.$el.append(oDiv);
+			this.$el.append(
+				$('<div class=buttons-and-legend></div>')
+					.append(oDivLegend)
+					.append($('<div class=buttons></div>').append(this.BackButton).append(this.DoneButton))
+			);
 		}, // initUiButtons
 
 		initUiForm: function() {
@@ -215,7 +219,6 @@
 				aLengthMenu: [[-1], ['all']],
 				iDisplayLength: -1,
 
-				sPaginationType: 'bootstrap',
 				bJQueryUI: false,
 
 				bAutoWidth: true,
@@ -246,10 +249,113 @@
 						self.BackButton.show();
 				} // if
 
-				oTableOpts.aaData = oResponse.aaData;
+				oTableOpts.aaData = self.fillGaps(oResponse.aaData);
 
-				self.DetailsDataTable = self.PeriodsDetails.dataTable(oTableOpts);
+				if (self.DetailsDataTable) {
+					self.DetailsDataTable.fnDestroy();
+					self.DetailsDataTable = null;
+				} // if
+
+				/*jshint multistr: true */
+				var oTable = $('<table class=period-details>\
+<caption>Available VAT return data</caption>\
+<thead><tr>\
+<th>From</th><th>To</th><th>Registration #</th><th>Company name</th>\
+</tr></thead><tbody><tr>\
+<td></td><td></td><td></td><td></td>\
+</tr></body>\
+</table>');
+				/*jshint multistr: false */
+
+				oTableOpts.fnRowCallback = function(oTR, oCur, nDisplayIndex, nDisplayIndexFull) {
+					if (oCur.IsOtherFirm)
+						$(oTR).addClass('other-firm');
+					else if (oCur.IsGap)
+						$(oTR).addClass('not-just-after');
+				}; // row callback
+
+				self.PeriodsDetails.empty().append(oTable);
+
+				self.DetailsDataTable = oTable.dataTable(oTableOpts);
+
+				self.drawPeriodsChart(oTableOpts.aaData);
 			});
 		}, // reloadPeriods
+
+		fillGaps: function(aryData) {
+			var oResult = [];
+
+			for (var i = 0; i < aryData.length; i++) {
+				var oCur = aryData[i];
+				oCur.Interval = new EzBob.DateInterval(moment.utc(oCur.DateFrom), moment.utc(oCur.DateTo));
+				oCur.IsGap = false;
+				oCur.IsOtherFirm = false;
+
+				if (i == 0) {
+					oResult.push(oCur);
+					continue;
+				} // if
+
+				var oPrev = aryData[i - 1];
+
+				if (oPrev.RegistrationNo !== oCur.RegistrationNo) {
+					oCur.IsOtherFirm = true;
+					oResult.push(oCur);
+					continue;
+				} // if
+
+				if (!this.isJustBefore(oPrev.DateTo, oCur.DateFrom)) {
+					var oFrom = moment.utc(oPrev.DateTo).add('days', 1);
+					var oTo = moment.utc(oCur.DateFrom).subtract('days', 1);
+
+					oResult.push({
+						DateFrom: oFrom,
+						DateTo: oTo,
+						Interval: null,
+						IsGap: true,
+						RegistrationNo: 'missing',
+						Name: '',
+					});
+				} // if
+
+				oResult.push(oCur);
+			} // for i
+
+			return oResult;
+		}, // fillGaps
+
+		drawPeriodsChart: function(aryPeriods) {
+			var nPrimaryRefNum = this.options.primaryRefNum;
+
+			var aryData = nPrimaryRefNum ? _.filter(aryPeriods, function(x) { return !x.IsGap && (x.RegistrationNo === nPrimaryRefNum); }) : [];
+
+			console.log('relevant periods', aryData);
+
+			var oTbl = $('<table class=periods-chart><tbody><tr><td class=older>Older</td></tr></tbody></table>');
+			var oTR = oTbl.find('tr');
+
+			this.PeriodsChart.empty().append(oTbl);
+
+			var nWayBack = 18;
+
+			var oCurMonth = moment.utc().date(1).subtract('month', nWayBack);
+
+			_.any(aryData, function(x) {
+				var bResult = !x.IsGap && moment.utc(x.DateTo).isBefore(oCurMonth);
+
+				if (bResult)
+					oTR.find('.older').addClass('found');
+
+				return bResult;
+			});
+
+			for (var i = 0; i < nWayBack; i++, oCurMonth = oCurMonth.add('month', 1)) {
+				var bFound = _.find(aryData, function(x) { return !x.IsGap && x.Interval.contains(oCurMonth); });
+
+				oTR.append(
+					$('<td />').text(oCurMonth.format("MMM 'YY")).addClass(bFound ? 'found' : '')
+				);
+			} // for
+		}, // drawPeriodsChart
 	}); // extend
 })(); // scope

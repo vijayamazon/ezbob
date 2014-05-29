@@ -6,8 +6,8 @@ var EzBob = EzBob || {};
 
 (function() {
 	EzBob.DateInterval = function(sYmdFrom, sYmdTo) {
-		this.start = moment(sYmdFrom, 'YYYY-MM-DD');
-		this.end = moment(sYmdTo, 'YYYY-MM-DD');
+		this.start = this.toMoment(sYmdFrom);
+		this.end = this.toMoment(sYmdTo);
 
 		if (this.areSameDay(this.start, this.end))
 			throw 'Interval start date and end date point to the same day.';
@@ -20,6 +20,21 @@ var EzBob = EzBob || {};
 	}; // DateInterval constructor
 
 	_.extend(EzBob.DateInterval.prototype, {
+		toMoment: function(oValue) {
+			if (typeof(oValue) === 'string')
+				return moment(oValue, 'YYYY-MM-DD');
+
+			try {
+				if (Object.getPrototypeOf(oValue) === Object.getPrototypeOf(moment()))
+					return oValue;
+			}
+			catch(e) {
+				// silently ignore
+			} // try
+
+			return moment(oValue, 'YYYY-MM-DD');
+		}, // toMoment
+
 		intersects: function(oOtherInterval) {
 			return this.contains(oOtherInterval.start) || this.contains(oOtherInterval.end) ||
 				oOtherInterval.contains(this.start) || oOtherInterval.contains(this.end);
@@ -58,7 +73,7 @@ var EzBob = EzBob || {};
 				oInterval = new EzBob.DateInterval(sYmdFrom, sYmdTo);
 			}
 			catch (e) {
-				console.warn('Could not create an interval from', sYmdFrom, 'and', sYmdTo);
+				console.warn('Could not create an interval from', sYmdFrom, 'and', sYmdTo, ':', e);
 				return false;
 			} // try
 

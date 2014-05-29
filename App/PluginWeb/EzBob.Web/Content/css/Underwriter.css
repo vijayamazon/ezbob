@@ -9,17 +9,17 @@ div.uwReason {
 }
 
 .underwriter-body {
-    padding: 10px;
+	padding: 10px;
     background-color: #fefefe;
     background-color: #F9F9F9;
     background-position: right top;
     background-repeat: no-repeat;
-    box-shadow: 0 0 13px rgba(50, 50, 50, 0.75);
+	box-shadow: 0 0 13px #323232;
+	box-shadow: 0 0 13px rgba(50, 50, 50, 0.75);
     min-height: 600px;
     -webkit-border-radius: 7px;
     -moz-border-radius: 7px;
     border-radius: 7px;
-    behavior: url(CSS3PIE);
     position: relative;
 }
 
@@ -29,9 +29,12 @@ div.uwReason {
 }
 
 ::-webkit-scrollbar-track {
-    -moz-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
-    -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
-    box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
+	-moz-box-shadow: inset 0 0 1px #000000; /* fallback colour */
+	-moz-box-shadow: inset 0 0 1px #000000;
+	-webkit-box-shadow: inset 0 0 1px #000000; /* fallback colour */
+	-webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
+	box-shadow: inset 0 0 1px #000000; /* fallback colour */
+	box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
     border: none;
     border-radius: 10px;
 }
@@ -56,7 +59,7 @@ div.uwReason {
     font-weight: bold;
     display: inline;
     padding-right: 20px;
-    padding-left: 0px;
+    padding-left: 0;
     margin-left: -20px;
     border: none;
 }
@@ -117,7 +120,7 @@ div.uwReason {
 }
 
 .marketplaceDetail .ui-dialog-content, .functionsPopup .ui-dialog-content {
-    min-height: 0px !important;
+    min-height: 0 !important;
 }
 
 .marketplaceDetail .marketplaceTitle {
@@ -138,7 +141,7 @@ div.uwReason {
 }
 
 .paypalDetail .ui-dialog-content, .functionsPopup .ui-dialog-content {
-    min-height: 0px !important;
+    min-height: 0 !important;
 }
 
 .paypalDetail .paypalDetailTitle {
@@ -214,7 +217,7 @@ select.higherselectheight {
 
 .underwriter-loan-details h1 {
     display: none;
-    margin-bottom: 0px!important;
+    margin-bottom: 0!important;
 }
 
 td b.marking {
@@ -236,12 +239,6 @@ td b.Checked {
 
 table.rright tbody td:not(:first-child) {
     text-align: right;
-}
-
-
-.profile-person-info .table-bordered,
-.profile-loan-info .table-bordered {
-    behavior: none; /* conflict with overflow: auto. Must be none!*/
 }
 
 .profile-person-info td {
@@ -524,8 +521,9 @@ a.ezbob-logo-login {
 }
 
 .checked td {
-    color: #ffffff;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	color: #ffffff;
+	text-shadow: 0 -1px 0 #000000; /* fallback colour */
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     background-color: #5bb75b;
     border-color: #51a351 #51a351 #387038;
     background-image: -moz-linear-gradient(top, #62c462, #51a351);
@@ -584,7 +582,8 @@ i.ebay { background-image: url(../img/mp-icons-32/icon-ebay-32.png); }
 i.paypal { background-image: url(../img/mp-icons-32/icon-paypal-32.png); }
 */
 .menu .navbar-inner {
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	text-shadow: 0 -1px 0 #000000; /* fallback colour */
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     background-color: #111;
     border-color: #111 #111 #444;
     background-image: -moz-linear-gradient(top, #444, #111);
@@ -628,8 +627,9 @@ span.active {
 }
 
 .ui-menu .ui-menu-item a.ui-state-hover {
-    color: #ffffff !important;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
+	color: #ffffff !important;
+	text-shadow: 0 -1px 0 #000000 !important;/* fallback colour */
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
     background-color: #5bb75b !important;
     border-color: #51a351 #51a351 #387038 !important;
     background-image: -moz-linear-gradient(top, #62c462, #51a351) !important;
@@ -675,17 +675,16 @@ table.internal-table {
         white-space: nowrap !important;
     }
 
-#hmrc-vat-return-summary .r,
-#hmrc-vat-return-details .r {
+.vat-return-summary .r {
     text-align: right !important;
 }
 
-.chkpt td {
+.vat-return-summary .chkpt td {
     font-weight: bold!important;
     border-top: 2px solid black!important;
 }
 
-#hmrc-vat-return-summary .lastchkpt td {
+.vat-return-summary .lastchkpt td {
     border-bottom: 3px solid black!important;
 }
 
@@ -693,16 +692,12 @@ table.internal-table {
     border-left: 1px solid #dddddd;
 }
 
-#hmrcUploadZone {
-	min-height: 150px;
+.vat-return-summary td.not-just-after {
+    border-left: 1px dashed red;
 }
 
-#hmrcUploadZone .dz-message {
-	margin-top: 35px;
-	font-size: 32px;
-	text-align: center;
-	color: #7bb224;
-	font-weight: normal;
+#hmrc-vat-return-details .r {
+    text-align: right !important;
 }
 
 .fraud-form .control-group {
@@ -741,17 +736,17 @@ table.internal-table {
     }
 
 .positive-trend {
-    background-image: url(images/ui-icons_2e83ff_256x240.png);
+    background-image: url(lib/images/ui-icons_2e83ff_256x240.png);
     background-position: -160px -192px;
 }
 
 .negative-trend {
-    background-image: url(images/ui-icons_cd0a0a_256x240.png);
+    background-image: url(lib/images/ui-icons_cd0a0a_256x240.png);
     background-position: -128px -192px;
 }
 
 .stable-trend {
-    background-image: url(images/ui-icons_222222_256x240.png);
+    background-image: url(lib/images/ui-icons_222222_256x240.png);
     background-position: -208px -192px;
 }
 
@@ -900,7 +895,7 @@ div#logbook-new-entry-form textarea#logbook-new-entry {
     border: 1px solid #e2dfe6;
     color: #888;
     float: right;
-    box-shadow: -1px 0px 2px #eee;
+    box-shadow: -1px 0 2px #eee;
     text-align: justify;
 }
 
@@ -949,85 +944,12 @@ textarea.BusinessAddress {
 .validation-result.good { color: #51a351; }
 .validation-result.bad { color: red; }
 
-.aka-table {
-	display: table;
-	width: 100%;
-}
-
-.aka-caption {
-	display: table-caption;
-}
-
-.aka-row {
-	display: table-row;
-}
-
-.aka-column {
-	display: table-cell;
-}
-
-.hmrc-enter-business-data {
-	margin-top: 1em;
-}
-
-.hmrc-enter-business-data .aka-column {
-	width: 50%;
-	vertical-align: top;
-}
-
-div.hmrc-enter-data-holder {
-	overflow-x: auto;
-	width: 99%;
-}
-
-div.hmrc-enter-data-holder .add-one-period {
-	float: right;
-}
-
-.hmrc-enter-data { border-collapse: collapse; }
-
-.hmrc-enter-data th,
-.hmrc-enter-data td {
-	border: 0;
-	padding: 3px;
-	vertical-align: middle;
-}
-
-.hmrc-enter-data th {
-	text-align: left;
-	min-width: 400px;
-}
-
-.hmrc-enter-data tbody td {
-	text-align: right;
-	min-width: 180px;
-}
-
-.hmrc-enter-data .date-holder {
-	text-align: right;
-	white-space: nowrap;
-}
-
-.hmrc-enter-data input {
-	width: 145px;
-}
-
-.hmrc-enter-data tfoot th,
-.hmrc-enter-data tfoot td {
-	text-align: center;
-}
-
-.hmrc-enter-data .value-container { padding-top: 13px; }
-
 .customer-column-width-50 {
     width: 50%;
 }
 
 .left-pane-button {
-    padding-top: 1px;
-    padding-bottom: 1px;
-    padding-right: 4px;
-    padding-left: 4px;
+    padding: 1px 4px;
     font-size: 10px;
 }
 
@@ -1062,7 +984,12 @@ div.hmrc-enter-data-holder .add-one-period {
 
 .tile {
     height: 80px;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 2px -13px 2px -13px;
+    font-size: 11px;
 }
+
 
 .tile p.title {
     font-size: 30px;
@@ -1087,12 +1014,7 @@ div.hmrc-enter-data-holder .add-one-period {
     color: #000000;
 }
 .tile-lightgreen{ background-color: #EEFFB8;color: #000;}
-.tile {
-    padding-left: 0;
-    padding-right: 0;
-    margin: 2px -13px 2px -13px;
-    font-size: 11px;
-}
+
 .alert {
     padding: 5px !important;
     margin-bottom: 10px !important;
@@ -1111,8 +1033,8 @@ div.hmrc-enter-data-holder .add-one-period {
 }
 
 .left-pane-header {
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 .pricing-model-bold {
