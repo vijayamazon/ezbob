@@ -27,30 +27,19 @@
 			return oElm.addClass('disabled').attr('disabled', 'disabled').prop('disabled', 'disabled');
 	}; // setEnabled
 
-	EzBob.View = Backbone.View.extend({
+	var oExtObj = {
 		isSomethingEnabled: checkIsEnabled,
 		setSomethingEnabled: setEnabled,
 		areSameDay: areSameDay,
 		isJustBefore: isJustBefore,
-	}); // EzBob.View
+	};
 
-	EzBob.MarionetteView = Backbone.Marionette.View.extend({
-		isSomethingEnabled: checkIsEnabled,
-		setSomethingEnabled: setEnabled,
-		areSameDay: areSameDay,
-		isJustBefore: isJustBefore,
-	}); // EzBob.MarionetteView
+	EzBob.View = Backbone.View.extend(oExtObj);
 
-	EzBob.ItemView = Backbone.Marionette.ItemView.extend({
-		isSomethingEnabled: checkIsEnabled,
-		setSomethingEnabled: setEnabled,
-		areSameDay: areSameDay,
-		isJustBefore: isJustBefore,
-	}); // EzBob.ItemView
+	EzBob.MarionetteView = Backbone.Marionette.View.extend(oExtObj);
+
+	EzBob.ItemView = Backbone.Marionette.ItemView.extend(oExtObj);
 
 	EzBob.SimpleView = function() {};
-	EzBob.SimpleView.prototype.setSomethingEnabled = setEnabled;
-	EzBob.SimpleView.prototype.isSomethingEnabled = checkIsEnabled;
-	EzBob.SimpleView.prototype.isJustBefore = isJustBefore;
-	EzBob.SimpleView.prototype.areSameDay = areSameDay;
+	_.extend(EzBob.SimpleView.prototype, oExtObj);
 })(); // scope

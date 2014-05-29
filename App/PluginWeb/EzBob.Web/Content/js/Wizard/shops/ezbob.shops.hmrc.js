@@ -23,8 +23,6 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 			clickBack: _.bind(this.uploadFilesBack, this),
 			clickDone: _.bind(this.doUploadFiles, this),
 		});
-
-		console.log('upload ui is', this.uploadUi);
 	}, // initialize
 
 	events: {

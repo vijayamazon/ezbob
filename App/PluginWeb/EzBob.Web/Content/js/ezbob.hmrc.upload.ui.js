@@ -110,7 +110,14 @@
 					var oDropzone = this;
 
 					oDropzone.on('success', function(oFile, oResponse) {
-						EzBob.ServerLog.debug('Upload', (oResponse.success ? '' : 'NOT'), 'succeeded:', oFile, oResponse);
+						EzBob.ServerLog.debug(
+							'Upload',
+							(oResponse.success ? '' : 'NOT'),
+							'succeeded. File name is', oFile.name,
+							' file size is', oFile.size,
+							' file type is', oFile.type,
+							' Error message:', oResponse.error
+						);
 
 						if (oResponse.success) {
 							EzBob.App.trigger('info', 'Upload successful: ' + oFile.name);
@@ -127,7 +134,14 @@
 					}); // on success
 
 					oDropzone.on('error', function(oFile, sErrorMsg, oXhr) {
-						EzBob.ServerLog.warn('Upload error:', oFile, sErrorMsg, oXhr);
+						EzBob.ServerLog.warn(
+							'Upload error.',
+							' File name is', oFile.name,
+							' file size is', oFile.size,
+							' file type is', oFile.type,
+							' Error message:', sErrorMsg
+						);
+
 						EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
 						self.trigger(self.evtUploadSysError(), oFile, sErrorMsg, oXhr);
 					}); // always

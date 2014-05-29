@@ -20,8 +20,6 @@ EzBob.Underwriter.UploadHmrcView = Backbone.Marionette.ItemView.extend({
 			clickBack: function() { EzBob.App.vent.trigger('ct:marketplaces.uploadHmrcBack'); },
 			clickDone: function() { EzBob.App.vent.trigger('ct:marketplaces.history', null); },
 		});
-
-		console.log('upload ui is', this.uploadUi);
 	}, // initialize
 
 	onRender: function() {
