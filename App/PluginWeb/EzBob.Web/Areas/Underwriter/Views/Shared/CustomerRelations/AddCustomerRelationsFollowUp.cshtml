@@ -1,0 +1,28 @@
+﻿@model dynamic
+
+<script type="text/template" id="add-customer-relations-followup-template">
+    <div>
+        <form id="customer-relations-form" class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label">
+                    Follow up date:
+                    <span class="add-on">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </label>
+                <div class="controls controls-row">
+                    <input type="text" id="FollowUpDate" name="FollowUpDate" class="form-control date">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Comment:</label>
+                <div class="controls controls-row">
+                    <textarea id="Comment" name="Comment" maxlength="1000" style="width: 100%; height: 100px;"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="pull-right">
+        <button class="btn btn-primary">OK</button>
+    </div>
+</script>

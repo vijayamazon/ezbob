@@ -83,6 +83,8 @@
     <Compile Include="DBConfigurationValues.cs" />
     <Compile Include="ExperianParserFacade.cs" />
     <Compile Include="ExperianParserOutput.cs" />
+    <Compile Include="Model\CustomerRelations\CustomerRelationState.cs" />
+    <Compile Include="Model\CustomerRelations\CustomerRelationFollowUp.cs" />
     <Compile Include="Model\CustomerRelations\CRMRanks.cs" />
     <Compile Include="Model\CustomerSession.cs" />
     <Compile Include="Model\Database\ApprovalsWithoutAML.cs" />

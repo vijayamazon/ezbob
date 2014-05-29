@@ -23,7 +23,7 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
 
     serializeData: ->
         m: @model.toJSON()
-        crm: _.first(_.filter(@crmModel.toJSON(), (crm) -> crm.User isnt 'System'), 5) #taking first 5 non System CRMs
+        crm: _.first(_.filter(@crmModel.get('CustomerRelations'), (crm) -> crm.User isnt 'System'), 5) #taking first 5 non System CRMs
         experian: @experianModel.toJSON()
         properties: @propertiesModel.toJSON()
         mps: @mpsModel.toJSON()

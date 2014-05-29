@@ -1,4 +1,7 @@
-﻿@{Html.RenderPartial("CustomerRelations/AddCustomerRelationsEntry");}
+﻿@{
+    Html.RenderPartial("CustomerRelations/AddCustomerRelationsEntry");
+    Html.RenderPartial("CustomerRelations/AddCustomerRelationsFollowUp");
+}
 
 <script id="customerRelationsTemplate" type="text/template">
     @CustomerRelations()
@@ -9,6 +12,23 @@
     <div class="col-md-12">
         <button class="btn btn-primary toggleSystemCrm"><i class="fa fa-search-plus"></i></button>
         <button class="btn btn-primary addNewCustomerRelationsEntry">Add New Entry</button>
+        <button class="btn btn-primary addFollowUp">Add Follow up</button>
+        <div style="width: 150px; display: inline-block;">
+            <div class="controls">
+                <label class="control-label attardi-input">
+                    <span>Potential Rank</span>
+                    <select class="form_field selectheight" id="Rank" name="Rank">
+                        <option></option>
+                        <% _.each(ranks, function(rank) { %>
+                        <option value="<%- rank.Id %>"><%- rank.Name %></option>
+                        <%});%>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="FollowedUpSwitch make-switch" style="width: 200px;" data-on="danger" data-off="default" data-animated="true" data-off-label="Not followed" data-on-label="followed">
+            <input type="checkbox" checked/>
+        </div>
     </div>
     <table class="table centered">
         <thead class="box">

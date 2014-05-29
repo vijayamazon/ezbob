@@ -1271,5 +1271,9 @@ td a.edit-loan {
 
 #sidebar-dashboard {
     position: fixed;
-    padding-top: 10px;
+    padding-top: 19px;
+}
+
+.tabbable .tab-content {
+    border-right: transparent;
 }

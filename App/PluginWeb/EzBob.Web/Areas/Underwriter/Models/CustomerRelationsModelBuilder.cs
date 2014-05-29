@@ -12,6 +12,7 @@
 		private readonly CRMActionsRepository _crmActionsRepository;
 		private readonly CRMStatusesRepository _crmStatusesRepository;
 		private readonly CRMRanksRepository _crmRanksRepository;
+		private readonly CustomerRelationStateRepository _customerRelationStateRepository;
 		public CustomerRelationsModelBuilder(LoanRepository loanRepository, CustomerRelationsRepository customerRelationsRepository, ISession session)
 		{
 			_loanRepository = loanRepository;
@@ -19,9 +20,10 @@
 			_crmStatusesRepository = new CRMStatusesRepository(session);
 			_crmActionsRepository = new CRMActionsRepository(session);
 			_crmRanksRepository = new CRMRanksRepository(session);
+			_customerRelationStateRepository = new CustomerRelationStateRepository(session);
 		}
 
-		public IOrderedEnumerable<CustomerRelationsModel> Create(int customerId)
+		public CrmModel Create(int customerId)
 		{
 
 			var crm =
@@ -46,7 +48,19 @@
 			crm.AddRange(tookLoan);
 			crm.AddRange(repaidLoan);
 
-			return crm.OrderByDescending(x => x.DateTime);
+			var crmModel = new CrmModel
+			{
+				CustomerRelations = crm.OrderByDescending(x => x.DateTime)
+			};
+
+			var state = _customerRelationStateRepository.GetByCustomer(customerId);
+			if (state != null)
+			{
+				crmModel.CurrentRank = state.Rank;
+				crmModel.IsFollowed = state.IsFollowUp.HasValue && state.IsFollowUp.Value;
+			}
+
+			return crmModel;
 
 		}
 

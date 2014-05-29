@@ -34,5 +34,13 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 		{
 			return GetAll().Where(r => r.CustomerId == customerId);
 		}
+
+		public CustomerRelations GetLastCrm(int customerId)
+		{
+			return GetAll()
+				.Where(x => x.CustomerId == customerId)
+				.OrderByDescending(x => x.Timestamp)
+				.FirstOrDefault();
+		}
 	}
 }

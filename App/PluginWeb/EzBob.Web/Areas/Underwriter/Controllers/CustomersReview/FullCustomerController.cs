@@ -183,7 +183,7 @@
 			public FraudDetectionLogModel FraudDetectionLog { get; set; }
 			public List<ApiChecksLogModel> ApiCheckLogs { get; set; }
 			public List<MessagesModel> Messages { get; set; }
-			public IOrderedEnumerable<CustomerRelationsModel> CustomerRelations { get; set; }
+			public CrmModel CustomerRelations { get; set; }
 			public AlertDoc[] AlertDocs { get; set; }
 			public List<BugModel> Bugs { get; set; }
 			public string State { get; set; }

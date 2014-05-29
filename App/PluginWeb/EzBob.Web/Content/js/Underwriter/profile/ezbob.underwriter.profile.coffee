@@ -4,6 +4,13 @@ root.EzBob = root.EzBob or {}
 class EzBob.Underwriter.ProfileView extends EzBob.View
     initialize: ->
         @template = _.template($("#profile-template-main").html())
+        if (EzBob.CrmActions? or EzBob.CrmActions.length == 0)
+            xhr = $.get(window.gRootPath + "Underwriter/CustomerRelations/CrmStatic", (data) ->
+                EzBob.CrmActions = data.CrmActions
+                EzBob.CrmStatuses = data.CrmStatuses
+                EzBob.CrmRanks = data.CrmRanks
+            )
+
 
     render: ->
         @$el.html @template()
@@ -444,7 +451,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @messagesModel.trigger "sync"
 
             @crmModel.customerId = id
-            @crmModel.reset fullModel.get("CustomerRelations"), silent: true
+            @crmModel.set fullModel.get("CustomerRelations"), silent: true
             @crmModel.trigger "sync"
 
             @alertDocs.reset fullModel.get("AlertDocs"), silent: true
