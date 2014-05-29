@@ -18,6 +18,16 @@
 
 		public CalculateVatReturnSummary(int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerMarketplaceID = nCustomerMarketplaceID;
+
+			m_oSpLoadBusinesses = new LoadBusinessesForVatReturnSummary(m_nCustomerMarketplaceID, DB, Log);
+			m_oSpLoadSummaryData = new LoadDataForVatReturnSummary(m_nCustomerMarketplaceID, DB, Log);
+			m_oSpLoadRtiMonths = new LoadRtiMonthForVatReturnSummary(m_nCustomerMarketplaceID, DB, Log);
+
+			m_oBusinessRegNums = new SortedDictionary<int, long>();
+			m_oRegNumBusinesses = new SortedDictionary<long, TimedBusinessID>();
+
+			m_oBusinessData = new SortedDictionary<long, BusinessData>();
+			m_oRtiMonths = new SortedDictionary<DateTime, decimal>();
 		} // constructor
 
 		#endregion constructor
@@ -33,23 +43,32 @@
 		#region method Execute
 
 		public override void Execute() {
-			m_oSpLoadSummaryData = new LoadDataForVatReturnSummary(m_nCustomerMarketplaceID, DB, Log);
-			m_oSpLoadRtiMonths = new LoadRtiMonthForVatReturnSummary(m_nCustomerMarketplaceID, DB, Log);
-
-			m_oBusinessData = new SortedDictionary<int, BusinessData>();
-			m_oRtiMonths = new SortedDictionary<DateTime, decimal>();
+			m_oSpLoadBusinesses.ForEachRowSafe((sr, bRowsetStart) => {
+				m_oBusinessRegNums[sr["BusinessID"]] = sr["RegistrationNo"];
+				return ActionResult.Continue;
+			});
 
 			m_oSpLoadSummaryData.ForEachResult<LoadDataForVatReturnSummary.ResultRow>(ProcessSummaryDataItem);
 
 			m_oCurrentRtiMonthAction = SaveCustomerID;
+
 			m_oSpLoadRtiMonths.ForEachResult<LoadRtiMonthForVatReturnSummary.ResultRow>(ProcessRtiMonthItem);
 
 			Log.Debug("Customer ID: {0}", m_nCustomerID);
 
 			Log.Debug("Summary data - begin:");
 
-			foreach (KeyValuePair<int, BusinessData> pair in m_oBusinessData) {
+			foreach (KeyValuePair<long, BusinessData> pair in m_oBusinessData) {
 				pair.Value.Calculate(m_nOneMonthSalary, m_oRtiMonths);
+
+				// Business registration number stays with the company for its entire life
+				// while name and address can change. In our DB BusinessID is bound to
+				// company name, address, and registration number therefore in the following
+				// assignment we look for the most updated business id associated with
+				// company registration number;
+				pair.Value.BusinessID = m_oRegNumBusinesses[
+					m_oBusinessRegNums[pair.Value.BusinessID]
+				].BusinessID;
 
 				Log.Debug(pair.Value);
 
@@ -107,10 +126,22 @@
 			if (oRow.BoxNum < 1)
 				return ActionResult.Continue;
 
-			if (m_oBusinessData.ContainsKey(oRow.BusinessID))
-				m_oBusinessData[oRow.BusinessID].Add(oRow);
+			if (!m_oBusinessRegNums.ContainsKey(oRow.BusinessID)) {
+				Log.Warn("Registration # not found for business with id {0}.", oRow.BusinessID);
+				return ActionResult.Continue;
+			} // if
+
+			long nRegNo = m_oBusinessRegNums[oRow.BusinessID];
+
+			if (m_oRegNumBusinesses.ContainsKey(nRegNo))
+				m_oRegNumBusinesses[nRegNo].Update(oRow.BusinessID, oRow.DateFrom.Date);
 			else
-				m_oBusinessData[oRow.BusinessID] = new BusinessData(oRow);
+				m_oRegNumBusinesses[nRegNo] = new TimedBusinessID { BusinessID = oRow.BusinessID, Since = oRow.DateFrom.Date, };
+
+			if (m_oBusinessData.ContainsKey(nRegNo))
+				m_oBusinessData[nRegNo].Add(oRow);
+			else
+				m_oBusinessData[nRegNo] = new BusinessData(oRow);
 
 			return ActionResult.Continue;
 		} // ProcessSummaryDataItem
@@ -122,15 +153,19 @@
 		private Action<LoadRtiMonthForVatReturnSummary.ResultRow> m_oCurrentRtiMonthAction;
 		private int m_nCustomerID;
 		private readonly int m_nCustomerMarketplaceID;
-		private LoadDataForVatReturnSummary m_oSpLoadSummaryData;
-		private LoadRtiMonthForVatReturnSummary m_oSpLoadRtiMonths;
-		private SortedDictionary<int, BusinessData> m_oBusinessData;
+		private readonly LoadDataForVatReturnSummary m_oSpLoadSummaryData;
+		private readonly LoadRtiMonthForVatReturnSummary m_oSpLoadRtiMonths;
+		private readonly LoadBusinessesForVatReturnSummary m_oSpLoadBusinesses;
+		private readonly SortedDictionary<long, BusinessData> m_oBusinessData;
 		private decimal? m_nOneMonthSalary;
-		private SortedDictionary<DateTime, decimal> m_oRtiMonths;
+		private readonly SortedDictionary<DateTime, decimal> m_oRtiMonths;
+		private readonly SortedDictionary<int, long> m_oBusinessRegNums; 
+		private readonly SortedDictionary<long, TimedBusinessID> m_oRegNumBusinesses; 
 
 		#endregion fields
 
 		#region stored procedure classes
+		// ReSharper disable ValueParameterNotUsed
 
 		#region class LoadRtiMonthForVatReturnSummary
 
@@ -155,6 +190,7 @@
 
 			#region properties
 
+			[UsedImplicitly]
 			public int CustomerMarketplaceID { get; set; }
 
 			#endregion properties
@@ -303,6 +339,24 @@
 
 		#endregion class SaveVatReturnSummary
 
+		#region class LoadBusinessesForVatReturnSummary
+
+		private class LoadBusinessesForVatReturnSummary : AStoredProcedure {
+			public LoadBusinessesForVatReturnSummary(int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+				CustomerMarketplaceID = nCustomerMarketplaceID;
+			} // constructor
+
+			public override bool HasValidParameters() {
+				return CustomerMarketplaceID > 0;
+			} // HasValidParameters
+
+			[UsedImplicitly]
+			public int CustomerMarketplaceID { get; set; }
+		} // class LoadBusinessesForVatReturnSummary
+
+		#endregion class LoadBusinessesForVatReturnSummary
+
+		// ReSharper restore ValueParameterNotUsed
 		#endregion stored procedure classes
 
 		#region internal data classes
@@ -334,9 +388,11 @@
 					return m_nSalariesMultiplier.Value;
 				} // get
 
+				// ReSharper disable ValueParameterNotUsed
 				set {
 					// for ITraversable
 				} // set
+				// ReSharper restore ValueParameterNotUsed
 			} // SalariesMultiplier
 
 			private decimal? m_nSalariesMultiplier;
@@ -416,7 +472,7 @@
 
 			#region method Add
 
-			public virtual void Add(LoadDataForVatReturnSummary.ResultRow oRaw) {
+			public void Add(LoadDataForVatReturnSummary.ResultRow oRaw) {
 				if (Periods.ContainsKey(oRaw.DateFrom))
 					Periods[oRaw.DateFrom].Add(oRaw);
 				else
@@ -448,7 +504,7 @@
 
 			#region method Calculate
 
-			public virtual void Calculate(decimal? nOneMonthSalary, SortedDictionary<DateTime, decimal> oRtiSalary) {
+			public void Calculate(decimal? nOneMonthSalary, SortedDictionary<DateTime, decimal> oRtiSalary) {
 				Quarters = Periods.Values.ToArray();
 				BoxTotals = new SortedDictionary<int, decimal>();
 
@@ -463,8 +519,8 @@
 					});
 				} // for each quarter
 
-				for (int i = 0; i < Quarters.Length; i++)
-					Quarters[i].SetSalary(nOneMonthSalary, oRtiSalary);
+				foreach (var oQuarter in Quarters)
+					oQuarter.SetSalary(nOneMonthSalary, oRtiSalary);
 
 				for (int i = (Quarters.Length <= 4 ? 0 : Quarters.Length - 4); i < Quarters.Length; i++)
 					AddSalary(Quarters[i].Salaries);
@@ -479,8 +535,10 @@
 
 			#region properties saved in DB
 
+			[UsedImplicitly]
 			public int BusinessID { get; set; }
 
+			[UsedImplicitly]
 			public string CurrencyCode { get; set; }
 
 			#endregion properties saved in DB
@@ -582,7 +640,7 @@
 
 			#region method Add
 
-			public virtual void Add(LoadDataForVatReturnSummary.ResultRow oRaw) {
+			public void Add(LoadDataForVatReturnSummary.ResultRow oRaw) {
 				Boxes[oRaw.BoxNum] = oRaw.Amount; // TODO: if oRaw.CurrencyCode is not GBP apply currency conversion.
 			} // Add
 
@@ -590,7 +648,7 @@
 
 			#region method ForEachBox
 
-			public virtual void ForEachBox(Func<int, decimal, bool> oCallback) {
+			public void ForEachBox(Func<int, decimal, bool> oCallback) {
 				if (oCallback == null)
 					return;
 
@@ -606,6 +664,7 @@
 
 			#region method BoxValue
 
+			[UsedImplicitly]
 			public decimal BoxValue(int nBoxNum) {
 				return Boxes.ContainsKey(nBoxNum) ? Boxes[nBoxNum] : 0;
 			} // BoxValue
@@ -618,7 +677,7 @@
 				return ToString("");
 			} // ToString
 
-			public virtual string ToString(string sPrefix) {
+			public string ToString(string sPrefix) {
 				sPrefix = sPrefix ?? "";
 
 				var os = new StringBuilder();
@@ -667,7 +726,7 @@
 
 				Tax = null; // TODO: some day...
 
-				Ebida = (TotalValueAdded ?? 0) - (Salaries ?? 0) - (Tax ?? 0);
+				Ebida = TotalValueAdded - (Salaries ?? 0) - (Tax ?? 0);
 
 				PctOfAnnual = Div(Ebida, Revenues);
 
@@ -680,7 +739,7 @@
 
 			#region method SetSalary
 
-			public virtual void SetSalary(decimal? nOneMonthSalary, SortedDictionary<DateTime, decimal> oRtiSalary) {
+			public void SetSalary(decimal? nOneMonthSalary, SortedDictionary<DateTime, decimal> oRtiSalary) {
 				if (nOneMonthSalary.HasValue) {
 					Salaries = nOneMonthSalary.Value * MonthCount();
 					return;
@@ -699,8 +758,11 @@
 
 			#region properties saved in DB
 
-			public virtual DateTime DateFrom { get; set; }
-			public virtual DateTime DateTo { get; set; }
+			[UsedImplicitly]
+			public DateTime DateFrom { get; set; }
+
+			[UsedImplicitly]
+			public DateTime DateTo { get; set; }
 
 			#endregion properties saved in DB
 
@@ -735,6 +797,22 @@
 
 		#endregion class BusinessDataEntry
 
+		#region class TimedBusinessID
+
+		private class TimedBusinessID {
+			public int BusinessID;
+			public DateTime Since;
+
+			public void Update(int nBusinessID, DateTime oSince) {
+				if (Since < oSince) {
+					BusinessID = nBusinessID;
+					Since = oSince;
+				} //if
+			} // Update
+		} // TimedBusinessID
+
+		#endregion class TimedBusinessID
+
 		#endregion internal data classes
 
 		#region method IsZero
@@ -754,7 +832,9 @@
 			if ((x == null) || IsZero(y))
 				return null;
 
+			// ReSharper disable PossibleInvalidOperationException
 			return x.Value / y.Value;
+			// ReSharper restore PossibleInvalidOperationException
 		} // Div
 
 		#endregion method Div

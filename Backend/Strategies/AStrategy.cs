@@ -13,8 +13,8 @@
 
 		public abstract void Execute();
 
-		public virtual AConnection DB { get; private set; }
-		public virtual StrategyLog Log { get; private set; }
+		public AConnection DB { get; private set; }
+		public StrategyLog Log { get; private set; }
 
 		#endregion public
 

@@ -50,7 +50,6 @@
     <Compile Include="Cache.cs" />
     <Compile Include="Extensions\EnumExt.cs" />
     <Compile Include="NullSeldenException.cs" />
-    <Compile Include="PasswordEncryptor.cs" />
     <Compile Include="Extensions\IntExt.cs" />
     <Compile Include="Extensions\DecimalExt.cs" />
     <Compile Include="Gravatar.cs" />

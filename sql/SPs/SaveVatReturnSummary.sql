@@ -39,8 +39,6 @@ BEGIN
 		AND
 		CustomerMarketplaceID = @CustomerMarketplaceID
 		AND
-		BusinessID = @BusinessID
-		AND
 		ISActive = 1
 
 	INSERT INTO MP_VatReturnSummary (

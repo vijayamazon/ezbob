@@ -16,12 +16,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		MAX(r.Id) AS RecordID,
-		r.Period,
-		CONVERT(DATE, r.DateFrom) AS DateFrom,
-		CONVERT(DATE, r.DateTo) AS DateTo,
-		r.RegistrationNo,
-		r.BusinessId
+		MAX(r.Id) AS RecordID
 	INTO
 		#recs
 	FROM
@@ -31,11 +26,9 @@ BEGIN
 		AND
 		ISNULL(r.IsDeleted, 0) = 0
 	GROUP BY
-		r.Period,
 		CONVERT(DATE, r.DateFrom),
 		CONVERT(DATE, r.DateTo),
-		r.RegistrationNo,
-		r.BusinessId
+		r.RegistrationNo
 
 	------------------------------------------------------------------------------
 
@@ -48,7 +41,8 @@ BEGIN
 		r.BusinessId AS BusinessID
 	FROM
 		MP_VatReturnEntries e
-		INNER JOIN #recs r ON e.RecordId = r.RecordID
+		INNER JOIN #recs ON e.RecordId = #recs.RecordID
+		INNER JOIN MP_VatReturnRecords r ON #recs.RecordID = r.Id
 		INNER JOIN MP_VatReturnEntryNames en ON e.NameId = en.Id
 	ORDER BY
 		r.BusinessId,
