@@ -123,6 +123,15 @@
 			{
 				summary.Alerts.Add(new AlertModel { Alert = "Couldn't get financial accounts", AlertType = AlertType.Warning.DescriptionAttr() });
 			}
+
+			if (customer.CustomerRelationStates.Any())
+			{
+				var state = customer.CustomerRelationStates.First();
+				if (state.IsFollowUp.HasValue && state.IsFollowUp.Value && state.FollowUp.FollowUpDate <= DateTime.UtcNow)
+				{
+					summary.Alerts.Add(new AlertModel { Alert = "Customer relations follow up date is due " + state.FollowUp.FollowUpDate.ToString("dd/MM/yyyy"), AlertType = AlertType.Error.DescriptionAttr() });
+				}
+			}
 			//TODO: add approve button alerts
 		}
 

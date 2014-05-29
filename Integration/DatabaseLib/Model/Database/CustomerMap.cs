@@ -221,6 +221,13 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.FilledByBroker);
 			Map(x => x.Vip);
 			Map(x => x.DefaultCardSelectionAllowed);
+
+			HasMany(x => x.CustomerRelationStates)
+				.AsBag()
+				.KeyColumn("CustomerId")
+				.Cascade.All()
+				.Inverse();
+
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

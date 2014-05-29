@@ -1192,6 +1192,10 @@ td a.edit-loan {
     z-index: 10;
 }
 
+#main-container {
+padding: 20px 0 0 0;
+}
+
 #sidebar-dashboard {
     position: fixed;
     padding-top: 19px;

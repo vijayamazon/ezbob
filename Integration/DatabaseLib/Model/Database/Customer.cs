@@ -4,6 +4,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Script.Serialization;
+	using CustomerRelations;
 	using Loans;
 	using Email;
 	using Ezbob.ExperianParser;
@@ -699,6 +700,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool Vip { get; set; }
 
 		public virtual bool DefaultCardSelectionAllowed { get; set; }
+
+		public virtual IList<CustomerRelationState> CustomerRelationStates { get; set; }
 	} // class Customer
 
 	#endregion class Customer
