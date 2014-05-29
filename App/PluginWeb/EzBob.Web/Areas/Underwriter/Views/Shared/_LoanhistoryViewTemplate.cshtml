@@ -54,9 +54,7 @@
             <tr data-id="<%- loan.Id %>" class="loans tr-link">
                 <td>
                     <%- loan.RefNumber %>
-                    <% if (loan.Modified) {%>
-                    *
-                    <%}%>
+                    <% if (loan.Modified) { print('*')} else { print('&nbsp;&nbsp;'); }%>
                     <a href="#" class="btn btn-primary btn-mini edit-loan" data-id="<%-loan.Id%>" ><i class="fa fa-pencil"></i></a>
                 </td>
                 <td><%- EzBob.formatPounds(loan.LoanAmount) %></td>
