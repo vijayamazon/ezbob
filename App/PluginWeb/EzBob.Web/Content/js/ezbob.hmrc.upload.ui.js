@@ -291,7 +291,7 @@
 				oCur.IsGap = false;
 				oCur.IsOtherFirm = false;
 
-				if (i == 0) {
+				if (i === 0) {
 					oResult.push(oCur);
 					continue;
 				} // if
@@ -349,11 +349,13 @@
 				return bResult;
 			});
 
-			for (var i = 0; i < nWayBack; i++, oCurMonth = oCurMonth.add('month', 1)) {
-				var bFound = _.find(aryData, function(x) { return !x.IsGap && x.Interval.contains(oCurMonth); });
+			var oFilter = function(x) { return !x.IsGap && x.Interval.contains(oCurMonth); };
 
+			for (var i = 0; i < nWayBack; i++, oCurMonth = oCurMonth.add('month', 1)) {
 				oTR.append(
-					$('<td />').text(oCurMonth.format("MMM 'YY")).addClass(bFound ? 'found' : '')
+					$('<td />')
+						.text(oCurMonth.format("MMM 'YY"))
+						.addClass(_.find(aryData, oFilter) ? 'found' : '')
 				);
 			} // for
 		}, // drawPeriodsChart

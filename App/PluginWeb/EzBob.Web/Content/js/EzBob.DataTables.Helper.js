@@ -20,8 +20,14 @@ EzBob.DataTables.Helper = {
 					return EzBob.formatPoundsNoDecimals(oData);
 
 				case 'filter':
+					return oData;
+
 				case 'type':
+					return oData;
+
 				case 'sort':
+					return oData;
+
 				default:
 					return oData;
 			} // switch
@@ -36,7 +42,11 @@ EzBob.DataTables.Helper = {
 					return oData + ' ' + EzBob.formatDate(oData);
 
 				case 'type':
+					return oData;
+
 				case 'sort':
+					return oData;
+
 				default:
 					return oData;
 			} // switch
@@ -51,7 +61,11 @@ EzBob.DataTables.Helper = {
 					return oData + ' ' + EzBob.formatDateTime(oData);
 
 				case 'type':
+					return oData;
+
 				case 'sort':
+					return oData;
+
 				default:
 					return oData;
 			} // switch

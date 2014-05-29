@@ -233,9 +233,9 @@ EzBob.HMRCAccountInfoView = Backbone.Marionette.ItemView.extend({
 		var accountModel;
 		accountModel = $.parseJSON($('div#cg-account-model-template').text());
 		accountModel.accountTypeName = 'HMRC';
-		accountModel['login'] = this.$el.find('#hmrc_user_id').val();
-		accountModel['name'] = this.$el.find('#hmrc_user_id').val();
-		accountModel['password'] = this.$el.find('#hmrc_password').val();
+		accountModel.login = this.$el.find('#hmrc_user_id').val();
+		accountModel.name = this.$el.find('#hmrc_user_id').val();
+		accountModel.password = this.$el.find('#hmrc_password').val();
 		delete accountModel.id;
 		return accountModel;
 	}, // buildModel

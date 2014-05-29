@@ -152,11 +152,17 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 
 					switch (sAction) {
 						case 'display':
+							return '';
+
 						case 'filter':
 							return '';
 
 						case 'type':
+							return 0;
+
 						case 'sort':
+							return 0;
+
 						default:
 							return 0;
 					} // switch
@@ -175,7 +181,11 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
 
 						case 'type':
+							return oData;
+
 						case 'sort':
+							return oData;
+
 						default:
 							return oData;
 					} // switch
@@ -192,7 +202,11 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
 
 						case 'type':
+							return oData;
+
 						case 'sort':
+							return oData;
+
 						default:
 							return oData;
 					} // switch
