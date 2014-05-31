@@ -24,11 +24,27 @@
 		}
 
 		[Ajax]
+		[HttpPost]
+		public ActionResult GetScenarioConfigs(int customerId, string scenarioName)
+		{
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customerId, context.UserId, scenarioName);
+			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
 		[HttpGet]
 		public ActionResult Index(int customerId)
 		{
-			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customerId, context.UserId);
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customerId, context.UserId, "Basic");
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpGet]
+		public ActionResult GetScenarios()
+		{
+			StringListActionResult getPricingModelScenariosResponse = serviceClient.Instance.GetPricingModelScenarios(context.UserId);
+			return Json(getPricingModelScenariosResponse.Records, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpPost]

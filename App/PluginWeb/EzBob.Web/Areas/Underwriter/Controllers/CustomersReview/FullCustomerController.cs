@@ -108,7 +108,7 @@
 
 			model.MedalCalculations = new MedalCalculators(customer);
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customer.Id, context.UserId);
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customer.Id, context.UserId, "Basic");
 			model.PricingModelCalculations = getPricingModelModelResponse.Value;
 
 			int numberOfProperties = customer.PersonalInfo.ResidentialStatus == "Home owner" ? 1 : 0;

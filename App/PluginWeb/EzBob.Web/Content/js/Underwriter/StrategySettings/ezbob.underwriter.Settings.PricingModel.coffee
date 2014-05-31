@@ -9,67 +9,83 @@ class EzBob.Underwriter.SettingsPricingModelView extends Backbone.Marionette.Ite
     template: "#pricing-model-settings-template"
 
     initialize: (options) ->
+        @scenarios = options.scenarios;
         @modelBinder = new Backbone.ModelBinder()
         @model.on "reset", @render, @
         @update()
         @
 
     bindings:
-        PricingModelTenurePercents:
-            selector: "input[name='PricingModelTenurePercents']"
+        TenurePercents:
+            selector: "input[name='TenurePercents']"
             converter: EzBob.BindingConverters.percentsFormat
 
-        PricingModelDefaultRateCompanyShare:
-            selector: "input[name='PricingModelDefaultRateCompanyShare']"
+        DefaultRateCompanyShare:
+            selector: "input[name='DefaultRateCompanyShare']"
             converter: EzBob.BindingConverters.percentsFormat
 
-        PricingModelCollectionRate:
-            selector: "input[name='PricingModelCollectionRate']"
+        CollectionRate:
+            selector: "input[name='CollectionRate']"
             converter: EzBob.BindingConverters.percentsFormat
 
-        PricingModelEuCollectionRate:
-            selector: "input[name='PricingModelEuCollectionRate']"
+        EuCollectionRate:
+            selector: "input[name='EuCollectionRate']"
             converter: EzBob.BindingConverters.percentsFormat
 
-        PricingModelDebtOutOfTotalCapital:
-            selector: "input[name='PricingModelDebtOutOfTotalCapital']"
+        DebtPercentOfCapital:
+            selector: "input[name='DebtPercentOfCapital']"
             converter: EzBob.BindingConverters.percentsFormat
 
-        PricingModelCostOfDebtPA:
-            selector: "input[name='PricingModelCostOfDebtPA']"
+        CostOfDebt:
+            selector: "input[name='CostOfDebt']"
             converter: EzBob.BindingConverters.percentsFormat
 
-        PricingModelProfitMarkupPercentsOfRevenue:
-            selector: "input[name='PricingModelProfitMarkupPercentsOfRevenue']"
+        ProfitMarkup:
+            selector: "input[name='ProfitMarkup']"
             converter: EzBob.BindingConverters.percentsFormat
 
-        PricingModelSetupFee:
-            selector: "input[name='PricingModelSetupFee']"
+        SetupFeePercents:
+            selector: "input[name='SetupFeePercents']"
             converter: EzBob.BindingConverters.percentsFormat
 
-        PricingModelBrokerSetupFee:
-            selector: "input[name='PricingModelBrokerSetupFee']"
+        BrokerSetupFeePercents:
+            selector: "input[name='BrokerSetupFeePercents']"
             converter: EzBob.BindingConverters.percentsFormat
         
-        PricingModelOpexAndCapex:
-            selector: "input[name='PricingModelOpexAndCapex']"
+        OpexAndCapex:
+            selector: "input[name='OpexAndCapex']"
         
-        PricingModelCogs:
-            selector: "input[name='PricingModelCogs']"
+        Cogs:
+            selector: "input[name='Cogs']"
         
-        PricingModelInterestOnlyPeriod:
-            selector: "input[name='PricingModelInterestOnlyPeriod']"
+        InterestOnlyPeriod:
+            selector: "input[name='InterestOnlyPeriod']"
 
     events:
         "click button[name='SavePricingModelSettings']":     "saveSettings"
         "click button[name='CancelPricingModelSettings']":   "cancelSettings"
+        "change #PricingModelScenarioSettings": "scenarioChanged"
+        
+    scenarioChanged: ->
+        @selectedScenario = @$el.find('#PricingModelScenarioSettings').val()
+        BlockUi()
+        that = this
+        xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SettingsPricingModelForScenario", scenarioName: @selectedScenario
+        xhr.done (res) =>
+            that.model.set(res)
+            UnBlockUi()
+            that.render()
 
     saveSettings: ->
         BlockUi "on"
-        console.log
-        @model.save().done -> EzBob.ShowMessage  "Saved successfully", "Successful"
-        @model.save().complete -> BlockUi "off"
-        @model.save()
+        xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SettingsSavePricingModelScenario", 
+            scenarioName: @$el.find('#PricingModelScenarioSettings').val()
+            model: JSON.stringify(this.model.toJSON())
+        xhr.done () =>
+            EzBob.ShowMessage  "Saved successfully", "Successful"
+        xhr.complete () =>
+            BlockUi "off"
+            
         false
 
     update: ->
@@ -82,26 +98,32 @@ class EzBob.Underwriter.SettingsPricingModelView extends Backbone.Marionette.Ite
     onRender: ->
         @modelBinder.bind @model, @el, @bindings
         
-        @$el.find("input[name='PricingModelTenurePercents']").percentFormat()
-        @$el.find("input[name='PricingModelDefaultRateCompanyShare']").percentFormat()
-        @$el.find("input[name='PricingModelCollectionRate']").percentFormat()
-        @$el.find("input[name='PricingModelEuCollectionRate']").percentFormat()
-        @$el.find("input[name='PricingModelDebtOutOfTotalCapital']").percentFormat()
-        @$el.find("input[name='PricingModelCostOfDebtPA']").percentFormat()
-        @$el.find("input[name='PricingModelProfitMarkupPercentsOfRevenue']").percentFormat()
-        @$el.find("input[name='PricingModelOpexAndCapex']").numericOnlyWithDecimal()
-        @$el.find("input[name='PricingModelCogs']").numericOnlyWithDecimal()
-        @$el.find("input[name='PricingModelInterestOnlyPeriod']").numericOnly(2)
+        @$el.find("input[name='TenurePercents']").percentFormat()
+        @$el.find("input[name='DefaultRateCompanyShare']").percentFormat()
+        @$el.find("input[name='CollectionRate']").percentFormat()
+        @$el.find("input[name='EuCollectionRate']").percentFormat()
+        @$el.find("input[name='DebtPercentOfCapital']").percentFormat()
+        @$el.find("input[name='CostOfDebt']").percentFormat()
+        @$el.find("input[name='ProfitMarkup']").percentFormat()
+        @$el.find("input[name='OpexAndCapex']").numericOnlyWithDecimal()
+        @$el.find("input[name='Cogs']").numericOnlyWithDecimal()
+        @$el.find("input[name='InterestOnlyPeriod']").numericOnly(2)
 
         if !$("body").hasClass("role-manager") 
             @$el.find("input").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
             @$el.find("button").hide()
 
+        if (@selectedScenario)
+            @$el.find('#PricingModelScenarioSettings').val(this.selectedScenario);
+
     show: (type) ->
-        this.$el.show()
+        @$el.show()
 
     hide: () ->
-        this.$el.hide()
+        @$el.hide()
 
     onClose: ->
         @modelBinder.unbind()
+        
+    serializeData: ->
+        return { model: @model.toJSON(), scenarios: @scenarios.toJSON() }

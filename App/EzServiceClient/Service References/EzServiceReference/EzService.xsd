@@ -86,6 +86,51 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ActionResult" nillable="true" type="tns:ActionResult" />
+  <xs:complexType name="IntActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
+  <xs:complexType name="BoolActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BoolActionResult" nillable="true" type="tns:BoolActionResult" />
+  <xs:complexType name="CrmLookupsActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Actions" nillable="true" type="tns:ArrayOfIdNameModel" />
+          <xs:element minOccurs="0" name="Ranks" nillable="true" type="tns:ArrayOfIdNameModel" />
+          <xs:element minOccurs="0" name="Statuses" nillable="true" type="tns:ArrayOfIdNameModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CrmLookupsActionResult" nillable="true" type="tns:CrmLookupsActionResult" />
+  <xs:complexType name="ArrayOfIdNameModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="IdNameModel" nillable="true" type="tns:IdNameModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfIdNameModel" nillable="true" type="tns:ArrayOfIdNameModel" />
+  <xs:complexType name="IdNameModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="IdNameModel" nillable="true" type="tns:IdNameModel" />
   <xs:complexType name="PricingModelModelActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -170,26 +215,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="WizardConfigsActionResult" nillable="true" type="tns:WizardConfigsActionResult" />
-  <xs:complexType name="IntActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
-  <xs:complexType name="BoolActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="xs:boolean" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BoolActionResult" nillable="true" type="tns:BoolActionResult" />
   <xs:complexType name="BrokerPropertiesActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -272,19 +297,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BrokerStaticDataActionResult" nillable="true" type="tns:BrokerStaticDataActionResult" />
-  <xs:complexType name="ArrayOfIdNameModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="IdNameModel" nillable="true" type="tns:IdNameModel" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfIdNameModel" nillable="true" type="tns:ArrayOfIdNameModel" />
-  <xs:complexType name="IdNameModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="IdNameModel" nillable="true" type="tns:IdNameModel" />
   <xs:complexType name="DateTimeActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -295,16 +307,4 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="DateTimeActionResult" nillable="true" type="tns:DateTimeActionResult" />
-  <xs:complexType name="CrmLookupsActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Actions" nillable="true" type="tns:ArrayOfIdNameModel" />
-          <xs:element minOccurs="0" name="Ranks" nillable="true" type="tns:ArrayOfIdNameModel" />
-          <xs:element minOccurs="0" name="Statuses" nillable="true" type="tns:ArrayOfIdNameModel" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="CrmLookupsActionResult" nillable="true" type="tns:CrmLookupsActionResult" />
 </xs:schema>

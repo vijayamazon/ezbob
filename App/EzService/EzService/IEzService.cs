@@ -346,7 +346,10 @@
 		#region pricing model
 
 		[OperationContract]
-		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId);
+		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
+
+		[OperationContract]
+		StringListActionResult GetPricingModelScenarios(int underwriterId);
 
 		[OperationContract]
 		PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model);
@@ -354,6 +357,8 @@
 		[OperationContract]
 		DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare);
 
+		[OperationContract]
+		ActionMetaData SavePricingModelSettings(int underwriterId, string scenarioName, PricingModelModel model);
 		#endregion pricing model
 
 		#region Quick offer

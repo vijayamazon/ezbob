@@ -3,6 +3,14 @@
 <script id="pricing-model-calculation-template" type="text/template">
     <div class="row-fluid">
         <div class="span6">
+            <select id="PricingModelScenario" class="selectheight">
+                @* TODO: rewrite this for *@
+                <% for (var i = 0; i < 100; i++) {
+                    if (scenarios.hasOwnProperty(i)) { %>
+                        <option value="<%- scenarios[i]%>"><%- scenarios[i]%></option>
+                    <%}%>
+                <%}%>
+            </select>
             <table class="table">
                 <thead class="box">
                     <tr class="box-title">

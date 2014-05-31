@@ -19,6 +19,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 	using log4net;
 
 	public class StrategySettingsController : Controller
@@ -29,9 +30,11 @@
 		private readonly CampaignTypeRepository _campaignTypeRepository;
 		private readonly CustomerRepository _customerRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(StrategySettingsController));
+		private readonly IWorkplaceContext context;
 
 		public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository, CampaignRepository campaignRepository, CampaignTypeRepository campaignTypeRepository, CustomerRepository customerRepository)
 		{
+			context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			_configurationVariablesRepository = configurationVariablesRepository;
 			_campaignRepository = campaignRepository;
 			_campaignTypeRepository = campaignTypeRepository;
@@ -75,90 +78,29 @@
 		[HttpGet]
 		public JsonResult SettingsPricingModel()
 		{
-			var pricingModelTenurePercents = _configurationVariablesRepository.GetByName(Variables.PricingModelTenurePercents.ToString());
-			var pricingModelDefaultRateCompanyShare = _configurationVariablesRepository.GetByName(Variables.PricingModelDefaultRateCompanyShare.ToString());
-			var pricingModelInterestOnlyPeriod = _configurationVariablesRepository.GetByName(Variables.PricingModelInterestOnlyPeriod.ToString());
-			var pricingModelCollectionRate = _configurationVariablesRepository.GetByName(Variables.PricingModelCollectionRate.ToString());
-			var pricingModelEuCollectionRate = _configurationVariablesRepository.GetByName(Variables.PricingModelEuCollectionRate.ToString());
-			var pricingModelCogs = _configurationVariablesRepository.GetByName(Variables.PricingModelCogs.ToString());
-			var pricingModelDebtOutOfTotalCapital = _configurationVariablesRepository.GetByName(Variables.PricingModelDebtOutOfTotalCapital.ToString());
-			var pricingModelCostOfDebtPA = _configurationVariablesRepository.GetByName(Variables.PricingModelCostOfDebtPA.ToString());
-			var pricingModelOpexAndCapex = _configurationVariablesRepository.GetByName(Variables.PricingModelOpexAndCapex.ToString());
-			var pricingModelProfitMarkupPercentsOfRevenue = _configurationVariablesRepository.GetByName(Variables.PricingModelProfitMarkupPercentsOfRevenue.ToString());
-			var pricingModelSetupFee = _configurationVariablesRepository.GetByName(Variables.PricingModelSetupFee.ToString());
-			var pricingModelBrokerSetupFee = _configurationVariablesRepository.GetByName(Variables.PricingModelBrokerSetupFee.ToString());
-			
-			var pricingModelSettings = new
-			{
-				PricingModelTenurePercents = pricingModelTenurePercents.Value,
-				PricingModelTenurePercentsDesc = pricingModelTenurePercents.Description,
-				PricingModelDefaultRateCompanyShare = pricingModelDefaultRateCompanyShare.Value,
-				PricingModelDefaultRateCompanyShareDesc = pricingModelDefaultRateCompanyShare.Description,
-				PricingModelInterestOnlyPeriod = pricingModelInterestOnlyPeriod.Value,
-				PricingModelInterestOnlyPeriodDesc = pricingModelInterestOnlyPeriod.Description,
-				PricingModelCollectionRate = pricingModelCollectionRate.Value,
-				PricingModelCollectionRateDesc = pricingModelCollectionRate.Description,
-				PricingModelEuCollectionRate = pricingModelEuCollectionRate.Value,
-				PricingModelEuCollectionRateDesc = pricingModelEuCollectionRate.Description,
-				PricingModelCogs = pricingModelCogs.Value,
-				PricingModelCogsDesc = pricingModelCogs.Description,
-				PricingModelDebtOutOfTotalCapital = pricingModelDebtOutOfTotalCapital.Value,
-				PricingModelDebtOutOfTotalCapitalDesc = pricingModelDebtOutOfTotalCapital.Description,
-				PricingModelCostOfDebtPA = pricingModelCostOfDebtPA.Value,
-				PricingModelCostOfDebtPADesc = pricingModelCostOfDebtPA.Description,
-				PricingModelOpexAndCapex = pricingModelOpexAndCapex.Value,
-				PricingModelOpexAndCapexDesc = pricingModelOpexAndCapex.Description,
-				PricingModelProfitMarkupPercentsOfRevenue = pricingModelProfitMarkupPercentsOfRevenue.Value,
-				PricingModelProfitMarkupPercentsOfRevenueDesc = pricingModelProfitMarkupPercentsOfRevenue.Description,
-				PricingModelSetupFee = pricingModelSetupFee.Value,
-				PricingModelSetupFeeDesc = pricingModelSetupFee.Description,
-				PricingModelBrokerSetupFee = pricingModelBrokerSetupFee.Value,
-				PricingModelBrokerSetupFeeDesc = pricingModelBrokerSetupFee.Description
-			};
-			return Json(pricingModelSettings, JsonRequestBehavior.AllowGet);
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(0, context.UserId, "Basic");
+			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		public JsonResult SettingsPricingModel(decimal pricingModelTenurePercents, decimal pricingModelDefaultRateCompanyShare,
-		                                       int pricingModelInterestOnlyPeriod, decimal pricingModelCollectionRate, decimal pricingModelEuCollectionRate,
-		                                       decimal pricingModelCogs, decimal pricingModelDebtOutOfTotalCapital,
-		                                       decimal pricingModelCostOfDebtPA, decimal pricingModelOpexAndCapex,
-											   decimal pricingModelProfitMarkupPercentsOfRevenue, decimal pricingModelSetupFee, decimal pricingModelBrokerSetupFee)
+		public JsonResult SettingsPricingModelForScenario(string scenarioName)
 		{
-			UpdateSettingsPricingModel(pricingModelTenurePercents, pricingModelDefaultRateCompanyShare,
-									   pricingModelInterestOnlyPeriod, pricingModelCollectionRate, pricingModelEuCollectionRate, pricingModelCogs,
-			                           pricingModelDebtOutOfTotalCapital, pricingModelCostOfDebtPA, pricingModelOpexAndCapex,
-									   pricingModelProfitMarkupPercentsOfRevenue, pricingModelSetupFee, pricingModelBrokerSetupFee);
-
-			UpdateConfigVars();
-			return SettingsPricingModel();
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(0, context.UserId, scenarioName);
+			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
 		}
 
-		private void UpdateSettingsPricingModel(
-			decimal pricingModelTenurePercents, decimal pricingModelDefaultRateCompanyShare,
-			int pricingModelInterestOnlyPeriod, decimal pricingModelCollectionRate, decimal pricingModelEuCollectionRate,
-			decimal pricingModelCogs, decimal pricingModelDebtOutOfTotalCapital,
-			decimal pricingModelCostOfDebtPA, decimal pricingModelOpexAndCapex,
-			decimal pricingModelProfitMarkupPercentsOfRevenue, decimal pricingModelSetupFee, decimal pricingModelBrokerSetupFee) 
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpPost]
+		public JsonResult SettingsSavePricingModelScenario(string scenarioName, string model)
 		{
-			Transactional.Execute(() => {
-				_configurationVariablesRepository.SetByName("PricingModelTenurePercents", pricingModelTenurePercents.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelDefaultRateCompanyShare", pricingModelDefaultRateCompanyShare.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelInterestOnlyPeriod", pricingModelInterestOnlyPeriod.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelCollectionRate", pricingModelCollectionRate.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelEuCollectionRate", pricingModelEuCollectionRate.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelCogs", pricingModelCogs.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelDebtOutOfTotalCapital", pricingModelDebtOutOfTotalCapital.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelCostOfDebtPA", pricingModelCostOfDebtPA.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelOpexAndCapex", pricingModelOpexAndCapex.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelProfitMarkupPercentsOfRevenue", pricingModelProfitMarkupPercentsOfRevenue.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelSetupFee", pricingModelSetupFee.ToString(CultureInfo.InvariantCulture));
-				_configurationVariablesRepository.SetByName("PricingModelBrokerSetupFee", pricingModelBrokerSetupFee.ToString(CultureInfo.InvariantCulture));
-			});
+			PricingModelModel inputModel = JsonConvert.DeserializeObject<PricingModelModel>(model);
+			serviceClient.Instance.SavePricingModelSettings(context.UserId, scenarioName, inputModel);
+			return SettingsPricingModelForScenario(scenarioName);
 		}
-
+		
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]

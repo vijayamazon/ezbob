@@ -89,10 +89,13 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             model: @medalCalculationModel
         )
 
+        @pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios()
         @pricingModelCalculationsModel = new EzBob.Underwriter.PricingModelCalculationsModel()
+        @pricingModelScenarios.fetch()
         @pricingModelCalculationsView = new EzBob.Underwriter.PricingModelCalculationsView(
             el: @$el.find("#pricing-calc")
             model: @pricingModelCalculationsModel
+            scenarios: @pricingModelScenarios
         )
 
         @companyScoreModel = new EzBob.Underwriter.CompanyScoreModel()

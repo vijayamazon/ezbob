@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,20 +8,30 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.Underwriter.ProfileView = (function(_super) {
-
     __extends(ProfileView, _super);
 
     function ProfileView() {
-      return ProfileView.__super__.constructor.apply(this, arguments);
+      _ref = ProfileView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     ProfileView.prototype.initialize = function() {
-      return this.template = _.template($("#profile-template-main").html());
+      var xhr;
+
+      this.template = _.template($("#profile-template-main").html());
+      if ((EzBob.CrmActions != null) || EzBob.CrmActions.length === 0) {
+        return xhr = $.get(window.gRootPath + "Underwriter/CustomerRelations/CrmStatic", function(data) {
+          EzBob.CrmActions = data.CrmActions;
+          EzBob.CrmStatuses = data.CrmStatuses;
+          return EzBob.CrmRanks = data.CrmRanks;
+        });
+      }
     };
 
     ProfileView.prototype.render = function() {
       var alertPassed, apiChecks, controlButtons, customerRelations, dashboardInfo, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, summaryInfo, that,
         _this = this;
+
       this.$el.html(this.template());
       profileInfo = this.$el.find(".profile-person-info");
       loanInfo = this.$el.find(".profile-loan-info");
@@ -94,10 +104,13 @@
         el: medalCalculations,
         model: this.medalCalculationModel
       });
+      this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
       this.pricingModelCalculationsModel = new EzBob.Underwriter.PricingModelCalculationsModel();
+      this.pricingModelScenarios.fetch();
       this.pricingModelCalculationsView = new EzBob.Underwriter.PricingModelCalculationsView({
         el: this.$el.find("#pricing-calc"),
-        model: this.pricingModelCalculationsModel
+        model: this.pricingModelCalculationsModel,
+        scenarios: this.pricingModelScenarios
       });
       this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
       this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
@@ -192,6 +205,7 @@
 
     ProfileView.prototype.getLastShownProfileSection = function(sDefault) {
       var sSection;
+
       sSection = localStorage['underwriter.profile.lastShownProfileSection'];
       if (!sSection) {
         sSection = sDefault;
@@ -212,6 +226,7 @@
     ProfileView.prototype.addDirectorClicked = function(event) {
       var addDirectorView, customerInfo, director, directorEl,
         _this = this;
+
       event.stopPropagation();
       event.preventDefault();
       this.$el.find('.add-director').hide();
@@ -267,6 +282,7 @@
 
     ProfileView.prototype.recordRecentCustomers = function(id) {
       var xhr;
+
       xhr = $.post("" + gRootPath + "Underwriter/Customers/SetRecentCustomer", {
         id: id
       });
@@ -277,6 +293,7 @@
 
     ProfileView.prototype.checkCustomerAvailability = function(model) {
       var data;
+
       data = model.toJSON();
       if (data.success === false) {
         EzBob.ShowMessage(data.error, "Error", (function() {
@@ -293,14 +310,17 @@
 
     ProfileView.prototype.mpRechecked = function(parameter) {
       var model, umi;
+
       model = this;
       umi = parameter.umi;
       return model.fetch().done(function() {
         var el, interval;
+
         el = $("#" + parameter.el.attr("id"));
         el.addClass("disabled");
         return interval = setInterval(function() {
           var req;
+
           req = $.get(window.gRootPath + "Underwriter/MarketPlaces/CheckForUpdatedStatus", {
             mpId: umi
           });
@@ -322,6 +342,7 @@
 
     ProfileView.prototype.RejectBtnClick = function(e) {
       var functionPopupView;
+
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
@@ -335,6 +356,7 @@
 
     ProfileView.prototype.ApproveBtnClick = function(e) {
       var approveLoanWithoutAMLDialog;
+
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
@@ -365,6 +387,7 @@
 
     ProfileView.prototype.CheckCustomerStatusAndCreateApproveDialog = function() {
       var approveLoanForWarningStatusCustomer;
+
       if (this.personalInfoModel.get("IsWarning")) {
         approveLoanForWarningStatusCustomer = new EzBob.Underwriter.ApproveLoanForWarningStatusCustomer({
           model: this.personalInfoModel,
@@ -378,6 +401,7 @@
 
     ProfileView.prototype.CreateApproveDialog = function() {
       var dialog;
+
       dialog = new EzBob.Underwriter.ApproveDialog({
         model: this.loanInfoModel
       });
@@ -388,6 +412,7 @@
 
     ProfileView.prototype.EscalateBtnClick = function(e) {
       var functionPopupView;
+
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
@@ -401,6 +426,7 @@
 
     ProfileView.prototype.SuspendBtnClick = function(e) {
       var functionPopupView;
+
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
@@ -414,6 +440,7 @@
 
     ProfileView.prototype.ReturnBtnClick = function(e) {
       var functionPopupView;
+
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
@@ -434,8 +461,9 @@
     };
 
     ProfileView.prototype.show = function(id, isHistory, history) {
-      var fullModel, that, _ref,
+      var fullModel, that, _ref1,
         _this = this;
+
       this.hide();
       BlockUi("on");
       scrollTop();
@@ -443,7 +471,7 @@
       this.customerId = id;
       fullModel = new EzBob.Underwriter.CustomerFullModel({
         customerId: id,
-        history: (_ref = EzBob.parseDate(history)) != null ? _ref : {
+        history: (_ref1 = EzBob.parseDate(history)) != null ? _ref1 : {
           history: null
         }
       });
@@ -564,10 +592,8 @@
           silent: true
         });
         _this.messagesModel.trigger("sync");
-        _this.crmModel.set({
-          customerId: id
-        });
-        _this.crmModel.reset(fullModel.get("CustomerRelations"), {
+        _this.crmModel.customerId = id;
+        _this.crmModel.set(fullModel.get("CustomerRelations"), {
           silent: true
         });
         _this.crmModel.trigger("sync");
@@ -606,6 +632,7 @@
 
     ProfileView.prototype.changeDecisionButtonsState = function(isHideAll) {
       var creditResult, disabled, userStatus;
+
       disabled = !this.personalInfoModel.get("IsCustomerInEnabledStatus");
       creditResult = this.personalInfoModel.get("CreditResult");
       this.$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").toggleClass("disabled", disabled);

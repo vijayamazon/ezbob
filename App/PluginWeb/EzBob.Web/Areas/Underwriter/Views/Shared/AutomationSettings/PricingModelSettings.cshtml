@@ -7,96 +7,92 @@
 @helper PricingModelSettings()
 {
     <div class="alert-block">
+        <select id="PricingModelScenarioSettings" class="selectheight">
+            @* TODO: rewrite this for *@
+            <% for (var i = 0; i < 100; i++) {
+                if (scenarios.hasOwnProperty(i)) { %>
+                    <option value="<%- scenarios[i]%>"><%- scenarios[i]%></option>
+                <%}%>
+            <%}%>
+        </select>
         <table class="table squeezed">
             <thead class="box">
                 <tr class="box-title">
-                    <th colspan="3">Pricing Model Settings</th>
+                    <th colspan="2">Pricing Model Settings</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>PricingModelTenurePercents: </td>
+                    <td>TenurePercents: </td>
                     <td>
-                        <input type="text" name="PricingModelTenurePercents" class="form-control" value="<%-PricingModelTenurePercents%>"/>
+                        <input type="text" name="TenurePercents" class="form-control" value="<%-model.TenurePercents%>"/>
                     </td>
-                    <td class="left"><%-PricingModelTenurePercentsDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelDefaultRateCompanyShare: </td>
+                    <td>DefaultRateCompanyShare: </td>
                     <td>
-                        <input type="text" name="PricingModelDefaultRateCompanyShare" class="form-control" value="<%-PricingModelDefaultRateCompanyShare%>"/>
+                        <input type="text" name="DefaultRateCompanyShare" class="form-control" value="<%-model.DefaultRateCompanyShare%>"/>
                     </td>
-                    <td class="left"><%-PricingModelDefaultRateCompanyShareDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelInterestOnlyPeriod: </td>
+                    <td>InterestOnlyPeriod: </td>
                     <td>
-                        <input type="text" name="PricingModelInterestOnlyPeriod" class="form-control" value="<%-PricingModelInterestOnlyPeriod%>"/>
+                        <input type="text" name="InterestOnlyPeriod" class="form-control" value="<%-model.InterestOnlyPeriod%>"/>
                     </td>
-                    <td class="left"><%-PricingModelInterestOnlyPeriodDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelCollectionRate: </td>
+                    <td>CollectionRate: </td>
                     <td>
-                        <input type="text" name="PricingModelCollectionRate" class="form-control" value="<%-PricingModelCollectionRate%>"/>
+                        <input type="text" name="CollectionRate" class="form-control" value="<%-model.CollectionRate%>"/>
                     </td>
-                    <td class="left"><%-PricingModelCollectionRateDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelEuCollectionRate: </td>
+                    <td>EuCollectionRate: </td>
                     <td>
-                        <input type="text" name="PricingModelEuCollectionRate" class="form-control" value="<%-PricingModelEuCollectionRate%>"/>
+                        <input type="text" name="EuCollectionRate" class="form-control" value="<%-model.EuCollectionRate%>"/>
                     </td>
-                    <td class="left"><%-PricingModelEuCollectionRateDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelCogs: </td>
+                    <td>Cogs: </td>
                     <td>
-                        <input type="text" name="PricingModelCogs" class="form-control" value="<%-PricingModelCogs%>"/>
+                        <input type="text" name="Cogs" class="form-control" value="<%-model.Cogs%>"/>
                     </td>
-                    <td class="left"><%-PricingModelCogsDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelDebtOutOfTotalCapital: </td>
+                    <td>DebtPercentOfCapital: </td>
                     <td>
-                        <input type="text" name="PricingModelDebtOutOfTotalCapital" class="form-control" value="<%-PricingModelDebtOutOfTotalCapital%>"/>
+                        <input type="text" name="DebtPercentOfCapital" class="form-control" value="<%-model.DebtPercentOfCapital%>"/>
                     </td>
-                    <td class="left"><%-PricingModelDebtOutOfTotalCapitalDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelCostOfDebtPA: </td>
+                    <td>CostOfDebt: </td>
                     <td>
-                        <input type="text" name="PricingModelCostOfDebtPA" class="form-control" value="<%-PricingModelCostOfDebtPA%>"/>
+                        <input type="text" name="CostOfDebt" class="form-control" value="<%-model.CostOfDebt%>"/>
                     </td>
-                    <td class="left"><%-PricingModelCostOfDebtPADesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelOpexAndCapex: </td>
+                    <td>OpexAndCapex: </td>
                     <td>
-                        <input type="text" name="PricingModelOpexAndCapex" class="form-control" value="<%-PricingModelOpexAndCapex%>"/>
+                        <input type="text" name="OpexAndCapex" class="form-control" value="<%-model.OpexAndCapex%>"/>
                     </td>
-                    <td class="left"><%-PricingModelOpexAndCapexDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelProfitMarkupPercentsOfRevenue: </td>
+                    <td>ProfitMarkup: </td>
                     <td>
-                        <input type="text" name="PricingModelProfitMarkupPercentsOfRevenue" class="form-control" value="<%-PricingModelProfitMarkupPercentsOfRevenue%>"/>
+                        <input type="text" name="ProfitMarkup" class="form-control" value="<%-model.ProfitMarkup%>"/>
                     </td>
-                    <td class="left"><%-PricingModelProfitMarkupPercentsOfRevenueDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelSetupFee: </td>
+                    <td>SetupFeePercents: </td>
                     <td>
-                        <input type="text" name="PricingModelSetupFee" class="form-control" value="<%-PricingModelSetupFee%>"/>
+                        <input type="text" name="SetupFeePercents" class="form-control" value="<%-model.SetupFeePercents%>"/>
                     </td>
-                    <td class="left"><%-PricingModelSetupFeeDesc%></td>
                 </tr>
                 <tr>
-                    <td>PricingModelBrokerSetupFee: </td>
+                    <td>BrokerSetupFeePercents: </td>
                     <td>
-                        <input type="text" name="PricingModelBrokerSetupFee" class="form-control" value="<%-PricingModelBrokerSetupFee%>"/>
+                        <input type="text" name="BrokerSetupFeePercents" class="form-control" value="<%-model.BrokerSetupFeePercents%>"/>
                     </td>
-                    <td class="left"><%-PricingModelBrokerSetupFeeDesc%></td>
                 </tr>
             </tbody>
         </table>

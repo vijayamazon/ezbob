@@ -5,10 +5,15 @@ EzBob.Underwriter.PricingModelCalculationsModel = Backbone.Model.extend({
     url: window.gRootPath + "Underwriter/PricingModelCalculations/Index/"
 });
 
+EzBob.Underwriter.PricingModelScenarios = Backbone.Model.extend({
+    url: window.gRootPath + "Underwriter/PricingModelCalculations/GetScenarios/"
+});
+
 EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.extend({
     template: "#pricing-model-calculation-template",
     
     initialize: function () {
+        this.scenarios = this.options.scenarios;
         this.modelBinder = new Backbone.ModelBinder();
         this.model.on('reset fetch sync', this.render, this);
         this.model.on('reset fetch sync', this.makeInitialCalculation, this);
@@ -103,8 +108,28 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         'click #pricingModelResetButton': 'resetClicked',
         'click #pricingModelCalculateButton': 'calculateClicked',
         'click #expandCollapseInputsButton': 'expandCollapseInputsClicked',
+        'change #PricingModelScenario': 'scenarioChanged'
     },
+    
+    scenarioChanged: function () {
+        this.selectedScenario = this.$el.find('#PricingModelScenario').val();
+        var that = this;
+        var request = $.post(
+			window.gRootPath + 'Underwriter/PricingModelCalculations/GetScenarioConfigs',
+			{
+			    customerId: this.model.get('Id'),
+			    scenarioName: this.$el.find('#PricingModelScenario').val()
+			}
+		);
 
+        request.success(function (res) {
+            that.model.set(res);
+            that.renderAndRememberExpanded();
+            UnBlockUi();
+            that.calculateClicked();
+        });
+    },
+    
     loanAmountChanged: function () {
         var setupFeePounds = this.model.get('LoanAmount') * this.model.get('SetupFeePercents');
         this.model.set('SetupFeePounds', setupFeePounds);
@@ -244,12 +269,11 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     calculateClicked: function () {
         BlockUi();
         var that = this;
-
         var request = $.post(
 			window.gRootPath + 'Underwriter/PricingModelCalculations/Calculate',
 			{
 				customerId: this.model.get('Id'),
-				pricingModelModel: JSON.stringify(this.model.toJSON()),
+				pricingModelModel: JSON.stringify(this.model.toJSON())
 			}
 		);
 
@@ -268,9 +292,9 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         });
     },
 
-    serializeData: function() {
+    serializeData: function () {
         var data = this.model.toJSON();
-        return { model: data };
+        return { model: data, scenarios: this.scenarios.toJSON() };
     },
 
     renderAndRememberExpanded: function() {
@@ -314,6 +338,9 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         var totalSetupFeePounds = setupFeePounds + brokerSetupFeePounds;
         var totalSetupFeePercents = (this.model.get('SetupFeePercents') + this.model.get('BrokerSetupFeePercents')) * 100;
         this.setTotalSetupFee(totalSetupFeePercents, totalSetupFeePounds);
+        
+        if (this.selectedScenario)
+            this.$el.find('#PricingModelScenario').val(this.selectedScenario);
         
         return this;
     }

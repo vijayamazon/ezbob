@@ -51,11 +51,15 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.View
             el: loanOfferMultipliers
             model: @loanOfferMultiplierModel
         )
-        
+
+        @pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios()
+        @pricingModelScenarios.fetch()
         @pricingModelModel =  new EzBob.Underwriter.SettingsPricingModelModel()
+        @pricingModelModel.fetch()
         @pricingModelView =  new EzBob.Underwriter.SettingsPricingModelView(
             el: pricingModel
             model: @pricingModelModel
+            scenarios: @pricingModelScenarios
         )
 
         @euLoanMonthlyInterestModel = new EzBob.Underwriter.Settings.EuLoanMonthlyInterestModel()

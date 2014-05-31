@@ -65,10 +65,14 @@
         el: loanOfferMultipliers,
         model: this.loanOfferMultiplierModel
       });
+      this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
+      this.pricingModelScenarios.fetch();
       this.pricingModelModel = new EzBob.Underwriter.SettingsPricingModelModel();
+      this.pricingModelModel.fetch();
       this.pricingModelView = new EzBob.Underwriter.SettingsPricingModelView({
         el: pricingModel,
-        model: this.pricingModelModel
+        model: this.pricingModelModel,
+        scenarios: this.pricingModelScenarios
       });
       this.euLoanMonthlyInterestModel = new EzBob.Underwriter.Settings.EuLoanMonthlyInterestModel();
       this.euLoanMonthlyInterestView = new EzBob.Underwriter.Settings.EuLoanMonthlyInterestView({
