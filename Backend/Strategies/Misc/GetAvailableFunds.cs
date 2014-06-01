@@ -23,6 +23,7 @@
 		#endregion property Name
 
 		public decimal AvailableFunds { get; private set; }
+		public decimal ReservedAmount { get; private set; }
 
 		#region property Execute
 
@@ -30,6 +31,7 @@
 			DataTable dt = DB.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(dt.Rows[0]);
 			AvailableFunds = sr["AvailableFunds"];
+			ReservedAmount = sr["ReservedAmount"];
 		} // Execute
 
 		#endregion property Execute

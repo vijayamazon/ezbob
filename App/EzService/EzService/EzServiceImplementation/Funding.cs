@@ -2,15 +2,16 @@
 	using EzBob.Backend.Strategies.Misc;
 
 	partial class EzServiceImplementation {
-		public DecimalActionResult GetAvailableFunds(int underwriterId)
+		public AvailableFundsActionResult GetAvailableFunds(int underwriterId)
 		{
 			GetAvailableFunds instance;
 			ActionMetaData result = ExecuteSync(out instance, 0, underwriterId);
 
-			return new DecimalActionResult
+			return new AvailableFundsActionResult
 			{
 				MetaData = result,
-				Value = instance.AvailableFunds
+				AvailableFunds = instance.AvailableFunds,
+				ReservedAmount = instance.ReservedAmount
 			};
 		}
 	} // class EzServiceImplementation

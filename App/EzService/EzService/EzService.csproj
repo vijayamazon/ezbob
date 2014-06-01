@@ -74,6 +74,7 @@
     <Compile Include="ActionResults\BrokerCustomerFilesActionResult.cs" />
     <Compile Include="ActionResults\BrokerLeadDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerPropertiesActionResult.cs" />
+    <Compile Include="ActionResults\AvailableFundsActionResult.cs" />
     <Compile Include="ActionResults\VatReturnPeriodsActionResult.cs" />
     <Compile Include="ActionResults\UserLoginActionResult.cs" />
     <Compile Include="ActionResults\VatReturnSummaryActionResult.cs" />

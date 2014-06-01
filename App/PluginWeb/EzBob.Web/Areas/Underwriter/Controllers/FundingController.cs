@@ -19,8 +19,8 @@
 
 		public JsonResult GetCurrentFundingStatus()
 		{
-			DecimalActionResult res = serviceClient.Instance.GetAvailableFunds(context.UserId);
-            return Json(new {Funds = res.Value}, JsonRequestBehavior.AllowGet);
+			AvailableFundsActionResult availableFunds = serviceClient.Instance.GetAvailableFunds(context.UserId);
+			return Json(new { AvailableFunds = availableFunds.AvailableFunds, ReservedAmount = availableFunds.ReservedAmount }, JsonRequestBehavior.AllowGet);
         }
     }
 }

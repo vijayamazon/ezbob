@@ -86,6 +86,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AvailableFundsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BoolActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

@@ -23,6 +23,11 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
     cancelManuallyAddedFunds: (e) ->
         console.log('placeholder')
 
+    onRender: ->
+        if !$("body").hasClass("role-manager")
+            @$el.find('#addFundsBtn').hide()
+            @$el.find('#cancelManuallyAddedFundsBtn').hide()
+
     hide: ->
         @$el.hide()
         clearInterval(@modelUpdater)

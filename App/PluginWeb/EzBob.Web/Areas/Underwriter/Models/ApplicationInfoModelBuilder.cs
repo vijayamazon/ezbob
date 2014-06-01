@@ -3,7 +3,6 @@
 	using System;
 	using System.Linq;
 	using ConfigManager;
-	using Customer.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;

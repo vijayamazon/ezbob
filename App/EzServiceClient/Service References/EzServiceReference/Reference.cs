@@ -193,6 +193,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableFundsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult))]
@@ -512,6 +513,45 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AvailableFundsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class AvailableFundsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal AvailableFundsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal ReservedAmountField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal AvailableFunds {
+            get {
+                return this.AvailableFundsField;
+            }
+            set {
+                if ((this.AvailableFundsField.Equals(value) != true)) {
+                    this.AvailableFundsField = value;
+                    this.RaisePropertyChanged("AvailableFunds");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal ReservedAmount {
+            get {
+                return this.ReservedAmountField;
+            }
+            set {
+                if ((this.ReservedAmountField.Equals(value) != true)) {
+                    this.ReservedAmountField = value;
+                    this.RaisePropertyChanged("ReservedAmount");
                 }
             }
         }
@@ -1901,7 +1941,7 @@ namespace ServiceClientProxy.EzServiceReference {
         ServiceClientProxy.EzServiceReference.IntActionResult GetCustomerStatusRefreshInterval();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetAvailableFunds", ReplyAction="http://tempuri.org/IEzService/GetAvailableFundsResponse")]
-        ServiceClientProxy.EzServiceReference.DecimalActionResult GetAvailableFunds(int underwriterId);
+        ServiceClientProxy.EzServiceReference.AvailableFundsActionResult GetAvailableFunds(int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2);
@@ -2294,7 +2334,7 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetCustomerStatusRefreshInterval();
         }
         
-        public ServiceClientProxy.EzServiceReference.DecimalActionResult GetAvailableFunds(int underwriterId) {
+        public ServiceClientProxy.EzServiceReference.AvailableFundsActionResult GetAvailableFunds(int underwriterId) {
             return base.Channel.GetAvailableFunds(underwriterId);
         }
         

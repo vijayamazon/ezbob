@@ -11,15 +11,16 @@ BEGIN
 	DECLARE 
 		@LastReportDate DATETIME,
 		@ManualBalance INT,
-		@AdjustedBalance DECIMAL(18,4)
+		@AdjustedBalance DECIMAL(18,4),
+		@ReservedAmount DECIMAL(18,4)
 
-	SELECT @LastReportDate = Date, @AdjustedBalance = Adjusted FROM fnPacnetBalance()
+	SELECT @LastReportDate = Date, @AdjustedBalance = Adjusted, @ReservedAmount = ReservedAmount FROM fnPacnetBalance()
 
 	IF @LastReportDate IS NOT NULL
 		SELECT @LastReportDate = DATEADD(dd, 1, @LastReportDate)
 
 	SELECT @ManualBalance = SUM(Amount) FROM PacNetManualBalance WHERE Enabled = 1 AND (@LastReportDate IS NULL OR [Date] >= @LastReportDate)
 
-	SELECT @AdjustedBalance + ISNULL(@ManualBalance, 0) AS AvailableFunds
+	SELECT @AdjustedBalance + ISNULL(@ManualBalance, 0) AS AvailableFunds, ISNULL(@ReservedAmount, 0) AS ReservedAmount
 END
 GO

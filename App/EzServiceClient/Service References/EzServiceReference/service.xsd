@@ -488,7 +488,7 @@
   <xs:element name="GetAvailableFundsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetAvailableFundsResult" nillable="true" type="q37:DecimalActionResult" />
+        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetAvailableFundsResult" nillable="true" type="q37:AvailableFundsActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -42,6 +42,13 @@
       return console.log('placeholder');
     };
 
+    FundingView.prototype.onRender = function() {
+      if (!$("body").hasClass("role-manager")) {
+        this.$el.find('#addFundsBtn').hide();
+        return this.$el.find('#cancelManuallyAddedFundsBtn').hide();
+      }
+    };
+
     FundingView.prototype.hide = function() {
       this.$el.hide();
       clearInterval(this.modelUpdater);

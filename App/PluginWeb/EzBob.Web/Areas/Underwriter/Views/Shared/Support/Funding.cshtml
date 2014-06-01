@@ -3,11 +3,18 @@
         <table class="table squeezed">
             <thead class="box">
                 <tr class="box-title">
-                    <th colspan="1">Funding</th>
+                    <th colspan="2">Funding</th>
                 </tr>
             </thead>
             <tbody>
-                <td><%- model.get('Funds') %></td>
+            <tr>
+                <td>Available Funds</td>
+                <td><%- model.get('AvailableFunds') %></td>
+            </tr>
+            <tr>
+                <td>Open Offers</td>
+                <td><%- model.get('ReservedAmount') %></td>
+            </tr>
             </tbody>
         </table>
         <div class="pull-right">

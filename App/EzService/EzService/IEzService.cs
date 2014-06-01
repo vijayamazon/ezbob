@@ -435,7 +435,7 @@
 		#endregion Wizard
 
 		[OperationContract]
-		DecimalActionResult GetAvailableFunds(int underwriterId);
+		AvailableFundsActionResult GetAvailableFunds(int underwriterId);
 	} // interface IEzService
 } // namespace EzService
 
