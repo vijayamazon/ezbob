@@ -124,6 +124,14 @@ namespace Integration.ChannelGrabberFrontend {
 
 		#endregion property DataHarvester
 
+		#region property SourceID
+
+		public int SourceID {
+			get { return DataHarvester.SourceID; } // get
+		} // SourceID
+
+		#endregion property SourceID
+
 		#endregion public
 	} // class Connector
 

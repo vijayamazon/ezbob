@@ -1,19 +1,14 @@
-﻿using FluentNHibernate.Mapping;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Database {
-	#region class MP_VatReturnRecordMap
+﻿namespace EZBob.DatabaseLib.Model.Database {
+	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
 
 	class MP_RtiTaxMonthRecordMap : ClassMap<MP_RtiTaxMonthRecord> {
-		#region public
-
-		#region constructor
-
 		public MP_RtiTaxMonthRecordMap() {
 			Table("MP_RtiTaxMonthRecords");
 			Id(x => x.Id);
 			References(x => x.CustomerMarketPlace, "CustomerMarketPlaceId");
 			Map(x => x.Created).CustomType<UtcDateTimeType>().Not.Nullable();
+			Map(x => x.SourceID);
 
 			HasMany(x => x.Entries).KeyColumn( "RecordId" ).Cascade.All();
 
@@ -23,11 +18,5 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade
 				.None();
 		} // constructor
-
-		#endregion constructor
-
-		#endregion public
 	} // class MP_VatReturnRecordMap
-
-	#endregion class MP_VatReturnRecordMap
 } // namespace

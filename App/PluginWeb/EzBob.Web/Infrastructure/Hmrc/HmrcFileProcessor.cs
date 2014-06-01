@@ -179,7 +179,7 @@
 
 			public HmrcFileCache() {
 				ErrorMsg = string.Empty;
-				Hopper = new Hopper();
+				Hopper = new Hopper(Hopper.SourceType.Uploaded);
 				m_oDateIntervals = new SortedDictionary<long, List<DateInterval>>();
 				AddedCount = 0;
 			} // HmrcFileCache

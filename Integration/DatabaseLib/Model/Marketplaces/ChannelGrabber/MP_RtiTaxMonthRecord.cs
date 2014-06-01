@@ -7,6 +7,8 @@
 		public virtual DateTime Created { get; set; }
 		public virtual MP_CustomerMarketplaceUpdatingHistory HistoryRecord { get; set; }
 
+		public virtual int SourceID { get; set; }
+
 		public virtual Iesi.Collections.Generic.ISet<MP_RtiTaxMonthEntry> Entries { get; set; }
 
 		public MP_RtiTaxMonthRecord() {

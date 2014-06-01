@@ -7,12 +7,23 @@
 	/// Harvest result (retrieved files and errors).
 	/// </summary>
 	public class Hopper {
+		#region enum SourceType
+
+		public enum SourceType {
+			Linked = 1,
+			Uploaded = 2,
+			Manual = 3,
+		} // enum SourceType
+
+		#endregion enum SourceType
+
 		#region constructor
 
 		/// <summary>
 		/// Creates a Hopper object.
 		/// </summary>
-		public Hopper() {
+		public Hopper(SourceType nSource) {
+			Source = nSource;
 			Clear();
 		} // constructor
 
@@ -99,6 +110,8 @@
 				if (oHopper == null)
 					return;
 
+				Source = oHopper.Source;
+
 				ErrorCount = oHopper.ErrorCount;
 
 				var aryDataTypes = (DataType[])Enum.GetValues(typeof (DataType));
@@ -122,6 +135,15 @@
 		} // FetchBackdoorData
 
 		#endregion method FetchBackdoorData
+
+		#region property IsManual
+
+		/// <summary>
+		/// Data source: uploaded, linked, manual.
+		/// </summary>
+		public SourceType Source { get; private set; } // IsManual
+
+		#endregion property IsManual
 
 		#region property Errors
 

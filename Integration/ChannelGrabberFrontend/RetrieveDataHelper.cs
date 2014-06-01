@@ -1,21 +1,19 @@
-﻿using System.Linq;
-using EzBob.CommonLib;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EZBob.DatabaseLib.Model.Database;
-using System;
-using System.Collections.Generic;
-using Ezbob.HmrcHarvester;
-using Ezbob.Logger;
-using Integration.ChannelGrabberAPI;
-using Integration.ChannelGrabberConfig;
-using log4net;
-using Coin = EZBob.DatabaseLib.Common.Coin;
-
-namespace Integration.ChannelGrabberFrontend {
+﻿namespace Integration.ChannelGrabberFrontend {
+	using System.Linq;
+	using EzBob.CommonLib;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using EZBob.DatabaseLib.Model.Database;
+	using System;
+	using System.Collections.Generic;
+	using Ezbob.HmrcHarvester;
+	using Integration.ChannelGrabberAPI;
+	using Integration.ChannelGrabberConfig;
+	using log4net;
+	using Coin = EZBob.DatabaseLib.Common.Coin;
 	using System.Diagnostics;
 	using System.Text;
 	using EzServiceAccessor;
@@ -88,7 +86,7 @@ namespace Integration.ChannelGrabberFrontend {
 				ms_oLog.Error(os.ToString());
 			} // if
 
-			AccountModel oSecInfo = null;
+			AccountModel oSecInfo;
 
 			try {
 				oSecInfo = Serialized.Deserialize<AccountModel>(Encrypted.Decrypt(databaseCustomerMarketPlace.SecurityData));
@@ -177,7 +175,7 @@ namespace Integration.ChannelGrabberFrontend {
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord,
 			Func<IHarvester, List<AInternalOrderItem>> oConversion,
-			Action<IDatabaseCustomerMarketPlace, InternalDataList, MP_CustomerMarketplaceUpdatingHistory> oStoreToDatabaseAction,
+			Action<IDatabaseCustomerMarketPlace, InternalDataList, MP_CustomerMarketplaceUpdatingHistory, int> oStoreToDatabaseAction,
 			Func<DateTime, IDatabaseCustomerMarketPlace, InternalDataList> oLoadAllFromDatabaseFunc
 		) {
 			// Convert orders into internal format.
@@ -192,9 +190,9 @@ namespace Integration.ChannelGrabberFrontend {
 				() => oStoreToDatabaseAction(
 					databaseCustomerMarketPlace,
 					new InternalDataList(DateTime.UtcNow, oChaGraOrders),
-					historyRecord
-				)
-			);
+					historyRecord,
+					oHarvester.SourceID
+			));
 
 			// retrieve ALL the orders from DB
 			InternalDataList allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -254,7 +252,6 @@ namespace Integration.ChannelGrabberFrontend {
 			var oVatEntries = new List<AInternalOrderItem>();
 
 			foreach (KeyValuePair<string, ISeeds> pair in ((Ezbob.HmrcHarvester.Harvester)oHarvester).Hopper.Seeds[DataType.VatReturn]) {
-				string sFileName = pair.Key;
 				var oData = (VatReturnSeeds)pair.Value;
 
 				var oEntry = new VatReturnEntry {

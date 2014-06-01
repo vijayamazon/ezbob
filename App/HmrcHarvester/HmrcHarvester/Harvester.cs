@@ -103,11 +103,19 @@ namespace Ezbob.HmrcHarvester {
 		public Harvester(AccountData oAccountData, ILog log) : base(log) {
 			AccountData = oAccountData;
 			VerboseLogging = false;
-			Hopper = new Hopper();
+			Hopper = new Hopper(Hopper.SourceType.Linked);
 			IsLoggedIn = false;
 		} // constructor
 
 		#endregion constructor
+
+		#region property SourceID
+
+		public int SourceID {
+			get { return (int)Hopper.Source;}
+		} // SourceID
+
+		#endregion property SourceID
 
 		#region property Hopper
 

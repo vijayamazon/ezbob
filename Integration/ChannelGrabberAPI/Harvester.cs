@@ -92,6 +92,14 @@
 
 		#endregion property RetrievedOrders
 
+		#region property SourceID
+
+		public int SourceID {
+			get { return 0;}
+		} // SourceID
+
+		#endregion property SourceID
+
 		#endregion public
 
 		#region private

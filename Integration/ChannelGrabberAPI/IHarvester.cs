@@ -6,6 +6,8 @@
 		void Run(bool bValidateCredentialsOnly);
 		void Run(bool bValidateCredentialsOnly, int nCustomerMarketplaceID);
 		void Done();
+
+		int SourceID { get; }
 	} // interface IHarvester
 
 	#endregion interface IHarvester

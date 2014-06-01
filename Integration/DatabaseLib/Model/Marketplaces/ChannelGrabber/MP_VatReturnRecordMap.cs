@@ -1,14 +1,8 @@
-﻿using FluentNHibernate.Mapping;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Database {
-	#region class MP_VatReturnRecordMap
+﻿namespace EZBob.DatabaseLib.Model.Database {
+	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
 
 	class MP_VatReturnRecordMap : ClassMap<MP_VatReturnRecord> {
-		#region public
-
-		#region constructor
-
 		public MP_VatReturnRecordMap() {
 			Table("MP_VatReturnRecords");
 			Id(x => x.Id);
@@ -26,17 +20,13 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			References(x => x.Business, "BusinessId");
 
+			Map(x => x.SourceID);
+
 			References(x => x.HistoryRecord)
 				.Column("CustomerMarketPlaceUpdatingHistoryRecordId")
 				.Unique()
 				.Cascade
 				.None();
 		} // constructor
-
-		#endregion constructor
-
-		#endregion public
 	} // class MP_VatReturnRecordMap
-
-	#endregion class MP_VatReturnRecordMap
 } // namespace
