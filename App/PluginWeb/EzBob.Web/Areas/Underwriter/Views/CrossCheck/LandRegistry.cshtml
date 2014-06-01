@@ -102,6 +102,64 @@
         </div>
 
         <div class="tab-content">
+            <%if(data.response.Charges && data.response.Charges.length > 0){%>
+            <table class="table centered squeezed">
+                <thead class="box">
+                    <tr class="box-title">
+                        <td colspan="6">Charges</td>
+                    </tr>
+                    <tr class="box-title">
+                        <td>Date</td>
+                        <td>Entry Text</td>
+                        <td>Proprietorship</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(data.response.Charges, function(c) {%>
+                    <tr>
+                        <td><%=moment(c.ChargeDate).format('DD/MM/YYYY')%></td>
+                        <td><%=c.Description%></td>
+                        <td>
+                            <table class="table centered squeezed">
+                                <thead class="box">
+                                    <tr class="box-title">
+                                        <td>Type</td>
+                                        <td>Party Type</td>
+                                        <td>Name</td>
+                                        <td>Proprietorship Addresses</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%_.each(c.Proprietorship.ProprietorshipParties, function(p) {%>
+                                        <tr>
+                                            <td><%=p.ProprietorshipType%></td>
+                                            <td><%=p.ProprietorshipPartyType%></td>
+                                            <td><%=p.CompanyName%><%=p.PrivateIndividualForename%> <%=p.PrivateIndividualSurname%></td>
+                                            <td>
+                                                <table class="table centered squeezed">
+                                                    <tbody>
+                                                        <%_.each(p.ProprietorshipAddresses, function(a) {%>
+                                                        <tr>
+                                                            <td><%=a.Lines%></td>
+                                                            <td><%=a.PostCode%></td>
+                                                        </tr>
+                                                        <%});%>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    <%});%>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <%});%>
+                </tbody>
+            </table>
+            <%}else{print('No charges specified.');}%>
+        </div>
+        
+        <div class="tab-content">
             <%if(data.response.Restrictions && data.response.Restrictions.length > 0){%>
             <table class="table centered squeezed">
                 <thead class="box">

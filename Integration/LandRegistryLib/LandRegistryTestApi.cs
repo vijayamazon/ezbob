@@ -10,7 +10,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LandRegistryApi));
 		private readonly LandRegistryModelBuilder _builder = new LandRegistryModelBuilder();
 		
-		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
+		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string buildingName = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Enquiry };
 			using (var client = new LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0ServiceClient())

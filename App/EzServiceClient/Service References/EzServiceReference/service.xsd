@@ -1508,6 +1508,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="buildingNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="buildingName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="streetName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="cityName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="postCode" nillable="true" type="xs:string" />

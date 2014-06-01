@@ -254,7 +254,7 @@
 		#region Land Registry
 
 		[OperationContract]
-		string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
+		string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
 		
 		[OperationContract]
 		string LandRegistryRes(int customerId, string titleNumber);

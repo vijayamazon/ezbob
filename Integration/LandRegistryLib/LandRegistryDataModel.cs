@@ -143,6 +143,8 @@
 		public LandRegistryProprietorshipModel Proprietorship { get; set; }
 
 		public List<LandRegistryRestrictionModel> Restrictions { get; set; }
+		
+		public List<LandRegistryChargeModel> Charges { get; set; }
 	}
 
 	public class LandRegistryProprietorshipModel
@@ -170,6 +172,13 @@
 	{
 		public string PostCode { get; set; }
 		public string Lines { get; set; }
+	}
+
+	public class LandRegistryChargeModel
+	{
+		public DateTime ChargeDate { get; set; }
+		public string Description { get; set; }
+		public LandRegistryProprietorshipModel Proprietorship { get; set; }
 	}
 
 	[Serializable]

@@ -14,13 +14,14 @@
 		/// <summary>
 		/// Please provide flat/house and postcode OR flat, street and town OR house, street and town.
 		/// </summary>
-		/// <param name="buildingNumber">flat/house</param>
+		/// <param name="buildingNumber">flat/house number</param>
+		/// <param name="buildingName">flat/house name</param>
 		/// <param name="streetName">street</param>
 		/// <param name="cityName">town</param>
 		/// <param name="postCode">postcode</param>
 		/// <param name="customerId">customerId</param>
 		/// <returns></returns>
-		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
+		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null,string buildingName = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Enquiry };
 			using (var client = new LREnquiryServiceNS.PropertyDescriptionEnquiryV2_0ServiceClient())
@@ -30,6 +31,10 @@
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
 
 				var address = new LREnquiryServiceNS.Q1AddressType();
+				if (!string.IsNullOrWhiteSpace(buildingName))
+				{
+					address.BuildingName = buildingName;
+				}
 				if (!string.IsNullOrWhiteSpace(buildingNumber))
 				{
 					address.BuildingNumber = buildingNumber;

@@ -218,9 +218,46 @@
 					}
 
 					model.Indicators.AddRange(GetIndicators(data.RegisterEntryIndicators));
+
+					model.Charges = new List<LandRegistryChargeModel>();
+					if (data.Charge != null && data.Charge.Length > 0)
+					{
+						foreach (var charge in data.Charge)
+						{
+							var lrCharge = new LandRegistryChargeModel();
+							lrCharge.ChargeDate = charge.ChargeDate.Value;
+							lrCharge.Description = charge.RegisteredCharge.EntryDetails.EntryText.Value;
+							var lrProprietorship = new LandRegistryProprietorshipModel
+								{
+									ProprietorshipParties = new List<ProprietorshipPartyModel>()
+								};
+
+							foreach (var proprietorship in charge.ChargeProprietor.ChargeeParty)
+							{
+								var lrProprietor = new ProprietorshipPartyModel();
+								if (proprietorship.Item.GetType() == typeof(Q1PrivateIndividualType))
+								{
+									lrProprietor.ProprietorshipPartyType = "Private Individual";
+									lrProprietor.PrivateIndividualForename =
+										((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName.Value;
+									lrProprietor.PrivateIndividualSurname =
+										((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName.Value;
+								}
+								else if (proprietorship.Item.GetType() == typeof(Q1OrganizationType))
+								{
+									lrProprietor.ProprietorshipPartyType = "Organization";
+									lrProprietor.CompanyName = ((Q1OrganizationType)proprietorship.Item).Name.Value;
+								}
+								lrProprietor.ProprietorshipAddresses = GetAddresses(proprietorship.Address);
+								lrProprietorship.ProprietorshipParties.Add(lrProprietor);
+							}
+							lrCharge.Proprietorship = lrProprietorship;
+							model.Charges.Add(lrCharge);
+						}
+					}
 				}
 				catch (Exception ex) {
-					ms_oLog.Debug("Error parsing the data (tell dev)", ex);
+					ms_oLog.Error("Error parsing lr data", ex);
 					model.Indicators.Add("Error parsing the data (tell dev)");
 				}
 

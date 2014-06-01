@@ -2,9 +2,9 @@
 	using EzBob.Backend.Strategies.Misc;
 
 	partial class EzServiceImplementation {
-		public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
+		public string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
 			LandRegistryEnquiry oInstance;
-			ExecuteSync(out oInstance, customerId, null, customerId, buildingNumber, streetName, cityName, postCode);
+			ExecuteSync(out oInstance, customerId, null, customerId, buildingNumber, buildingName, streetName, cityName, postCode);
 			return oInstance.Result;
 		} // LandRegistryEnquiry
 

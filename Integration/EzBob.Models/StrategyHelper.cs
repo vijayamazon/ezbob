@@ -850,7 +850,7 @@
 		}
 
 
-		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
+		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode)
 		{
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
 
@@ -884,7 +884,7 @@
 				lr = new LandRegistryTestApi();
 			}
 
-			var model = lr.EnquiryByPropertyDescription(buildingNumber, streetName, cityName, postCode, customerId);
+			var model = lr.EnquiryByPropertyDescription(buildingNumber, buildingName, streetName, cityName, postCode, customerId);
 			var customer = _customers.Get(customerId);
 			lrRepo.Save(new LandRegistry
 				{

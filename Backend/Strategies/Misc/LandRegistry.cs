@@ -15,6 +15,7 @@
 		public LandRegistryEnquiry(
 			int customerId,
 			string buildingNumber,
+			string buildingName,
 			string streetName,
 			string cityName,
 			string postCode,
@@ -23,6 +24,7 @@
 		) : base(oDB, oLog) {
 			m_nCustomerID = customerId;
 			m_sBuildingNumber = buildingNumber;
+			m_sBuildingName = buildingName;
 			m_sStreetName = streetName;
 			m_sCityName = cityName;
 			m_sPostCode  = postCode;
@@ -47,7 +49,7 @@
 		public override void Execute() {
 			var helper = new StrategyHelper();
 
-			LandRegistryDataModel response = helper.GetLandRegistryEnquiryData(m_nCustomerID, m_sBuildingNumber, m_sStreetName, m_sCityName, m_sPostCode );
+			LandRegistryDataModel response = helper.GetLandRegistryEnquiryData(m_nCustomerID, m_sBuildingNumber, m_sBuildingName, m_sStreetName, m_sCityName, m_sPostCode );
 
 			Result = new Serialized(response);
 		} // Execute
@@ -60,6 +62,7 @@
 
 		private readonly int m_nCustomerID;
 		private readonly string m_sBuildingNumber;
+		private readonly string m_sBuildingName;
 		private readonly string m_sStreetName;
 		private readonly string m_sCityName;
 		private readonly string m_sPostCode;

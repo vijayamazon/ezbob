@@ -81,8 +81,8 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonResult LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
-			var landregistryXml = m_oServiceClient.Instance.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
+		public JsonResult LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
+			var landregistryXml = m_oServiceClient.Instance.LandRegistryEnquiry(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
 			var landregistry = Serialized.Deserialize<LandRegistryDataModel>(landregistryXml);
 
 			return Json(
