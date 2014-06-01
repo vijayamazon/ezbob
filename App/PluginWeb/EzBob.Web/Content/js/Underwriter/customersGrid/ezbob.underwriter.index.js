@@ -51,6 +51,11 @@
 				    isRendered: false,
 				    menuItem: 'liReports',
 				},
+				funding: {
+				    view: new EzBob.Underwriter.FundingView({ el: $('#funding-view') }),
+				    isRendered: false,
+				    menuItem: 'liFunding',
+				}
 			}; // views
 		}, // initialize
 
@@ -66,6 +71,7 @@
 			'support': 'support',
 			'fraud': 'fraud',
 			'report': 'report',
+			'funding' : 'funding',
 			'*z': 'customers',
 		}, // routes
 
@@ -124,6 +130,10 @@
 		report: function () {
 		    this.handleRoute('report');
 		}, // fraud
+
+		funding: function () {
+		    this.handleRoute('funding');
+		}, // funding
 
 		switchMenuTo: function(name) {
 			$('.navbar ul.nav > li[id]').removeClass('active');

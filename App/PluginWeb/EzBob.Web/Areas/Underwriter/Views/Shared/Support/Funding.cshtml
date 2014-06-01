@@ -1,0 +1,18 @@
+﻿<script type="text/template" id="funding-template">
+    <div id="funding">
+        <table class="table squeezed">
+            <thead class="box">
+                <tr class="box-title">
+                    <th colspan="1">Funding</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td><%- model.get('Funds') %></td>
+            </tbody>
+        </table>
+        <div class="pull-right">
+            <button class="btn btn-primary" id="addFundsBtn" ><i class="fa fa-plus" />Add Funds</button> 
+            <button class="btn btn-primary" id="cancelManuallyAddedFundsBtn" ><i class="fa fa-ban" />Cancel Manually Added Funds</button> 
+        </div>
+    </div>
+</script>
