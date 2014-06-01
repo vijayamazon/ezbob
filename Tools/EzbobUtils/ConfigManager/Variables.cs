@@ -318,6 +318,14 @@
 		PricingModelCostOfDebtPA,
 		PricingModelOpexAndCapex,
 		PricingModelProfitMarkupPercentsOfRevenue,
-		PricingModelSetupFee
+		PricingModelSetupFee,
+		EbayServiceType,
+		EbayDevId,
+		EbayAppId,
+		EbayCertId,
+		EbayRuName,
+		ReportDaemonDropboxCredentials,
+		ReportDaemonDropboxRootPath,
+		MinAuthenticationIndexToPassAml
 	} // enum Variables
 } // namespace ConfigManager

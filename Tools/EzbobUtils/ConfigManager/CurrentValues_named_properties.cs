@@ -2235,5 +2235,45 @@
 		{
 			get { return this[Variables.PricingModelSetupFee]; }
 		}
+
+		public virtual VariableValue ReportDaemonDropboxCredentials
+		{
+			get { return this[Variables.ReportDaemonDropboxCredentials]; }
+		}
+
+		public virtual VariableValue ReportDaemonDropboxRootPath
+		{
+			get { return this[Variables.ReportDaemonDropboxRootPath]; }
+		}
+		
+		public virtual VariableValue EbayServiceType
+		{
+			get { return this[Variables.EbayServiceType]; }
+		}
+
+		public virtual VariableValue EbayDevId
+		{
+			get { return this[Variables.EbayDevId]; }
+		}
+
+		public virtual VariableValue EbayAppId
+		{
+			get { return this[Variables.EbayAppId]; }
+		}
+
+		public virtual VariableValue EbayCertId
+		{
+			get { return this[Variables.EbayCertId]; }
+		}
+
+		public virtual VariableValue EbayRuName
+		{
+			get { return this[Variables.EbayRuName]; }
+		}
+
+		public virtual VariableValue MinAuthenticationIndexToPassAml
+		{
+			get { return this[Variables.MinAuthenticationIndexToPassAml]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

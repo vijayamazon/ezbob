@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using ConfigManager;
 	using ExperianLib.IdIdentityHub;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -86,7 +87,7 @@
 			decimal authentication;
 			bool hasError = isCustom ? GetAmlDataCustom(out result, out authentication) : GetAmlData(out result, out authentication);
 
-			if (hasError || authentication < 40)
+			if (hasError || authentication < CurrentValues.Instance.MinAuthenticationIndexToPassAml)
 			{
 				result = "Warning";
 			}
