@@ -100,7 +100,11 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 			oDisplay.append(oTbl);
 
 			var oSummary = oMp.CGData.VatReturnSummary[nIdx];
-
+			if (!isNaN(this.customSalariesMultiplier)) {
+			    oSummary.SalariesMultiplier = this.customSalariesMultiplier / 100;
+			} else {
+			    var isInit = true;
+			}
 			var oColumns = { total: '.vrs-total', };
 
 			for (var i = 0; i < 5; i++) {
@@ -156,7 +160,16 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 					var oValue = (i == 'total') ? oSummary[sFieldName] : oSummary.Quarters[i][sFieldName];
 
 					var sDisplayValue = null;
-
+					if (sFieldName == 'Salaries') {
+					    oValue = (oValue || 0) * oSummary.SalariesMultiplier;
+					}
+					if (sFieldName == 'Ebida') {
+					    oValue = (i == 'total') ? oSummary['TotalValueAdded'] - (oSummary['Salaries'] * oSummary.SalariesMultiplier) : oSummary.Quarters[i]['TotalValueAdded'] - (oSummary.Quarters[i]['Salaries'] * oSummary.SalariesMultiplier);
+					}
+					if (sFieldName == 'FreeCashFlow') {
+					    oValue = (i == 'total') ? oSummary['TotalValueAdded'] - (oSummary['Salaries'] * oSummary.SalariesMultiplier) - oSummary['ActualLoanRepayment'] : oSummary.Quarters[i]['TotalValueAdded'] - (oSummary.Quarters[i]['Salaries'] * oSummary.SalariesMultiplier) - oSummary.Quarters[i]['ActualLoanRepayment'];
+					}
+				    
 					if (oValue) {
 						switch (sFormat) {
 						case '%':
@@ -199,8 +212,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 				    oTR.find('.bank').text(EzBob.formatPercents(oBank.PercentOfRevenues, 2)).addClass(NegativeNum(oBank.PercentOfRevenues));
 					break;
 				case 'Salaries':
-					var nCalcd = (oSummary.Salaries || 0) * oSummary.SalariesMultiplier;
-					oTR.find('.multiplier').text(EzBob.formatPercents(oSummary.SalariesMultiplier)).addClass(NegativeNum(oSummary.SalariesMultiplier));
+				    var nCalcd = (oSummary.Salaries || 0) * oSummary.SalariesMultiplier;
+				    if (isInit) {
+				        oTR.find('.salaries-multiplier').percentFormat().autoNumericSet(oSummary.SalariesMultiplier*100).blur();
+				    } else {
+				        oTR.find('.salaries-multiplier').percentFormat().autoNumericSet(oSummary.SalariesMultiplier*100);
+				    }
 					oTR.find('.total').text(EzBob.formatPoundsAsInt(oSummary.Salaries || 0)).addClass(NegativeNum(oSummary.Salaries));
 					oTR.find('.vrs-total').text(EzBob.formatPoundsAsInt(nCalcd)).addClass(NegativeNum(nCalcd));
 					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Salaries)).addClass(NegativeNum(oBank.Salaries));
@@ -227,7 +244,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 			}); // for each row
 		} // for each summary item
 	}, // renderHmrcSummary
-
+    hmrcSalariesMultiplierChanged : function(e) {
+        var val = $(e.currentTarget).autoNumericGet();
+        if (this.customSalariesMultiplier != val) {
+            this.customSalariesMultiplier = val;
+            this.render();
+        }
+        
+    },
     events: {
         "click .reCheckMP": "reCheck",
         "click .renew-token": "renewTokenClicked",
@@ -240,6 +264,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
         "click .yodleeAccountsRow": "yodleeAccountsRowClicked",
         "click .yodleeShowTransactionsInRange": "yodleeShowTrnInRangeClicked",
         "click .yodleeRuleAdd": "yodleeRuleAddClicked",
+        "change .salaries-multiplier": "hmrcSalariesMultiplierChanged"
     },
     renewTokenClicked: function (e) {
         var umi = $(e.currentTarget).data("umi");

@@ -1317,3 +1317,7 @@ td a.edit-loan {
     background-color: inherit;
     color: white;
 }
+
+.salaries-multiplier {
+    width: 70px;
+}

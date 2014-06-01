@@ -139,7 +139,15 @@
 			NumOfShareholders = numOfShareholders;
 			
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-			DateTime companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
+			DateTime companySeniority;
+			try
+			{
+				companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
+			}
+			catch (Exception)
+			{
+				companySeniority = DateTime.UtcNow;
+			}
 			int companySeniorityYears, companySeniorityMonths;
 			MiscUtils.GetFullYearsAndMonths(companySeniority, out companySeniorityYears, out companySeniorityMonths);
 			
