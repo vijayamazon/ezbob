@@ -12,6 +12,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils.XmlUtils;
 	using MailStrategies.API;
+	using Misc;
 
 	public class BankBasedApproval
 	{
@@ -224,10 +225,10 @@
 				// Round loan offer
 				int roundedLoanOffer = (int) (Math.Round(loanOffer/minLoanAmount, 0, MidpointRounding.AwayFromZero)*minLoanAmount);
 				response.BankBasedAutoApproveAmount = roundedLoanOffer;
-
-				DataTable dt = db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
-				var sr = new SafeReader(dt.Rows[0]);
-				decimal availableFunds = sr["AvailableFunds"];
+				
+				var instance = new GetAvailableFunds(db, log);
+				instance.Execute();
+				decimal availableFunds = instance.AvailableFunds;
 				if (availableFunds >= response.BankBasedAutoApproveAmount)
 				{
 					if (isSilent)

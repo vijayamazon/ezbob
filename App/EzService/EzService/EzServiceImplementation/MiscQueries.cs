@@ -148,12 +148,12 @@
 			string res = string.Empty;
 			try
 			{
-				DataTable dt = DB.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
-				var sr = new SafeReader(dt.Rows[0]);
-				decimal availableFunds = sr["AvailableFunds"];
+				var instance = new GetAvailableFunds(DB, Log);
+				instance.Execute();
+				decimal availableFunds = instance.AvailableFunds;
 
-				dt = DB.ExecuteReader("GetCustomerDetailsForStateCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-				sr = new SafeReader(dt.Rows[0]);
+				DataTable dt = DB.ExecuteReader("GetCustomerDetailsForStateCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+				var sr = new SafeReader(dt.Rows[0]);
 
 				int minLoanAmount = sr["MinLoanAmount"];
 				string creditResult = sr["CreditResult"];

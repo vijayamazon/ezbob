@@ -1,58 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:simpleType name="NewCreditLineOption">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="SkipEverything">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="UpdateEverythingExceptMp">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="UpdateEverythingAndApplyAutoRules">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="UpdateEverythingAndGoToManualDecision">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
-  <xs:simpleType name="FraudMode">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="FullCheck" />
-      <xs:enumeration value="PersonalDetaisCheck" />
-      <xs:enumeration value="CompanyDetailsCheck" />
-      <xs:enumeration value="MarketplacesCheck" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
-  <xs:simpleType name="ConfigTableType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="LoanOfferMultiplier" />
-      <xs:enumeration value="BasicInterestRate" />
-      <xs:enumeration value="EuLoanMonthlyInterest" />
-      <xs:enumeration value="DefaultRateCompany" />
-      <xs:enumeration value="DefaultRateCustomer" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="ConfigTableType" nillable="true" type="tns:ConfigTableType" />
   <xs:complexType name="QuickOfferModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Aml" type="xs:int" />
@@ -166,6 +114,48 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="FinishWizardArgs" nillable="true" type="tns:FinishWizardArgs" />
+  <xs:simpleType name="FraudMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FullCheck" />
+      <xs:enumeration value="PersonalDetaisCheck" />
+      <xs:enumeration value="CompanyDetailsCheck" />
+      <xs:enumeration value="MarketplacesCheck" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
+  <xs:simpleType name="NewCreditLineOption">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SkipEverything">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UpdateEverythingExceptMp">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UpdateEverythingAndApplyAutoRules">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UpdateEverythingAndGoToManualDecision">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
   <xs:complexType name="ArrayOfLoanScheduleItemModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />
@@ -325,4 +315,14 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="FileDescription" nillable="true" type="tns:FileDescription" />
+  <xs:simpleType name="ConfigTableType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LoanOfferMultiplier" />
+      <xs:enumeration value="BasicInterestRate" />
+      <xs:enumeration value="EuLoanMonthlyInterest" />
+      <xs:enumeration value="DefaultRateCompany" />
+      <xs:enumeration value="DefaultRateCustomer" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ConfigTableType" nillable="true" type="tns:ConfigTableType" />
 </xs:schema>

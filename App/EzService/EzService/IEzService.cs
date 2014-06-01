@@ -433,6 +433,9 @@
 		IntActionResult GetCustomerStatusRefreshInterval();
 
 		#endregion Wizard
+
+		[OperationContract]
+		DecimalActionResult GetAvailableFunds(int underwriterId);
 	} // interface IEzService
 } // namespace EzService
 

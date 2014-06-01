@@ -5,6 +5,7 @@
 	using System;
 	using System.Data;
 	using Ezbob.Logger;
+	using Misc;
 
 	public class ReApproval
 	{
@@ -63,9 +64,10 @@
 				     loanOfferPrincipalPaidAmountOld == 0 && loanOfferSumOfChargesOld == 0 &&
 				     loanOfferNumOfMPsAddedOld == 0))
 				{
-					dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
-					sr = new SafeReader(dt.Rows[0]);
-					decimal availableFunds = sr["AvailableFunds"];
+					var instance = new GetAvailableFunds(Db, log);
+					instance.Execute();
+					decimal availableFunds = instance.AvailableFunds;
+
 					if (availableFunds > loanOfferSystemCalculatedSum)
 					{
 						int numOfOutstandingLoans = strategyHelper.GetOutstandingLoansNum(customerId);

@@ -5,6 +5,7 @@
 	using System;
 	using System.Data;
 	using Ezbob.Logger;
+	using Misc;
 
 	public class Approval
 	{
@@ -45,9 +46,9 @@
 
 					if (response.AutoApproveAmount != 0)
 					{
-						DataTable dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
-						var sr = new SafeReader(dt.Rows[0]);
-						decimal availableFunds = sr["AvailableFunds"];
+						var instance = new GetAvailableFunds(Db, log);
+						instance.Execute();
+						decimal availableFunds = instance.AvailableFunds;
 
 						if (availableFunds > response.AutoApproveAmount)
 						{
@@ -61,14 +62,14 @@
 							}
 							else
 							{
-								dt = Db.ExecuteReader(
+								DataTable dt = Db.ExecuteReader(
 									"GetLastOfferDataForApproval",
 									CommandSpecies.StoredProcedure,
 									new QueryParameter("CustomerId", customerId),
 									new QueryParameter("Now", DateTime.UtcNow)
 									);
 
-								sr = new SafeReader(dt.Rows[0]);
+								var sr = new SafeReader(dt.Rows[0]);
 								bool loanOfferEmailSendingBanned = sr["EmailSendingBanned"];
 								DateTime loanOfferOfferStart = sr["OfferStart"];
 								DateTime loanOfferOfferValidUntil = sr["OfferValidUntil"];

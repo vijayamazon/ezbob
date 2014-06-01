@@ -6,7 +6,6 @@
 	using EZBob.DatabaseLib;
 	using log4net;
 	using MailApi;
-	using StructureMap;
 	using ConfigManager;
 
 	public class AvailableFundsValidator

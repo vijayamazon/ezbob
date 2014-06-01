@@ -88,6 +88,7 @@
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
+    <Compile Include="EzServiceImplementation\Funding.cs" />
     <Compile Include="EzServiceImplementation\vat.return.cs" />
     <Compile Include="EzServiceImplementation\PricingModel.cs" />
     <Compile Include="EzServiceImplementation\user.management.cs" />
