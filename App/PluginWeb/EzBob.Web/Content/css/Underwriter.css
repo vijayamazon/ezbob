@@ -160,7 +160,7 @@ td.credit, .yodleeTabTable tr.credit, .yodleeTabTable tr.credit:nth-child(odd) t
     color: #008000 !important;
 }
 
-td.debit, .yodleeTabTable tr.debit, .yodleeTabTable tr.debit:nth-child(odd) td {
+.negative, td.debit, .yodleeTabTable tr.debit, .yodleeTabTable tr.debit:nth-child(odd) td {
     color: #FF0000 !important;
 }
 

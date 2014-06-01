@@ -53,7 +53,8 @@
                     <%for (var month in obj[cat]) { %>
                     <%var css = "";
                     if(cat[1] == 'c' && obj[cat][month] < 0){ css='debit';}
-                    if(cat[1] == 'c' && obj[cat][month] >= 0){ css='credit';}
+                    else if(cat[1] == 'c' && obj[cat][month] >= 0){ css='credit';}
+                    else if(obj[cat][month] < 0) { css = 'negative';}
                     %>
                     <td class="<%=css%>"><%= obj[cat][month] == 0 ? '-' : (isPound ? EzBob.formatPoundsAsInt(obj[cat][month]) : parseInt(obj[cat][month]))  %></td>
                     <%}%>
@@ -176,8 +177,8 @@
                             <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
                             <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
                             <td><%-bank.accountType!=undefined ? bank.accountType : "-"%></td>
-                            <td><%-bank.currentBalance!=undefined ? GBPValues(bank.currentBalance, true) : "-"%></td>
-                            <td><%-bank.availableBalance!=undefined ? GBPValues(bank.availableBalance, true) : "-"%></td>
+                            <td class="<%-(bank.currentBalance < 0 ? 'negative' : '')%>"><%-bank.currentBalance!=undefined ? GBPValues(bank.currentBalance, true) : "-"%></td>
+                            <td class="<%-(bank.availableBalance < 0 ? 'negative' : '')%>"><%-bank.availableBalance!=undefined ? GBPValues(bank.availableBalance, true) : "-"%></td>
                             <td><%-bank.accountHolder!=undefined ? bank.accountHolder : "-"%></td>
                             <td><%-bank.asOfDate!=undefined ? EzBob.formatDateWithoutTime(bank.asOfDate) : "-"%></td>
                             <td><%-bank.overdraftProtection!=undefined ? GBPValues(bank.overdraftProtection) : "-"%></td>
@@ -313,25 +314,25 @@
                 </tr>
                 <tr>
                     <td>Current Balance</td>
-                    <td><%-ai.CurrentBalance1M!=undefined ? GBPValues(ai.CurrentBalance1M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance3M!=undefined ? GBPValues(ai.CurrentBalance3M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance6M!=undefined ? GBPValues(ai.CurrentBalance6M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance12M!=undefined ? GBPValues(ai.CurrentBalance12M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance15M!=undefined ? GBPValues(ai.CurrentBalance15M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance18M!=undefined ? GBPValues(ai.CurrentBalance18M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance24M!=undefined ? GBPValues(ai.CurrentBalance24M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalanceLifetime!=undefined ? GBPValues(ai.CurrentBalanceLifetime, true) : "-"%></td>
+                    <td class="<%-(ai.CurrentBalance1M!=undefined && ai.CurrentBalance1M < 0 ? 'negative' : '')%>"><%-ai.CurrentBalance1M!=undefined ? GBPValues(ai.CurrentBalance1M, true) : "-"%></td>
+                    <td class="<%-(ai.CurrentBalance3M!=undefined && ai.CurrentBalance3M < 0 ? 'negative' : '')%>"><%-ai.CurrentBalance3M!=undefined ? GBPValues(ai.CurrentBalance3M, true) : "-"%></td>
+                    <td class="<%-(ai.CurrentBalance6M!=undefined && ai.CurrentBalance6M < 0 ? 'negative' : '')%>"><%-ai.CurrentBalance6M!=undefined ? GBPValues(ai.CurrentBalance6M, true) : "-"%></td>
+                    <td class="<%-(ai.CurrentBalance12M!=undefined && ai.CurrentBalance12M < 0 ? 'negative' : '')%>"><%-ai.CurrentBalance12M!=undefined ? GBPValues(ai.CurrentBalance12M, true) : "-"%></td>
+                    <td class="<%-(ai.CurrentBalance15M!=undefined && ai.CurrentBalance15M < 0 ? 'negative' : '')%>"><%-ai.CurrentBalance15M!=undefined ? GBPValues(ai.CurrentBalance15M, true) : "-"%></td>
+                    <td class="<%-(ai.CurrentBalance18M!=undefined && ai.CurrentBalance18M < 0 ? 'negative' : '')%>"><%-ai.CurrentBalance18M!=undefined ? GBPValues(ai.CurrentBalance18M, true) : "-"%></td>
+                    <td class="<%-(ai.CurrentBalance24M!=undefined && ai.CurrentBalance24M < 0 ? 'negative' : '')%>"><%-ai.CurrentBalance24M!=undefined ? GBPValues(ai.CurrentBalance24M, true) : "-"%></td>
+                    <td class="<%-(ai.CurrentBalanceLifetime!=undefined && ai.CurrentBalanceLifetime < 0 ? 'negative' : '')%>"><%-ai.CurrentBalanceLifetime!=undefined ? GBPValues(ai.CurrentBalanceLifetime, true) : "-"%></td>
                 </tr>
                 <tr>
                     <td>Available Balance</td>
-                    <td><%-ai.AvailableBalance1M!=undefined ? GBPValues(ai.AvailableBalance1M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance3M!=undefined ? GBPValues(ai.AvailableBalance3M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance6M!=undefined ? GBPValues(ai.AvailableBalance6M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance12M!=undefined ? GBPValues(ai.AvailableBalance12M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance15M!=undefined ? GBPValues(ai.AvailableBalance15M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance18M!=undefined ? GBPValues(ai.AvailableBalance18M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance24M!=undefined ? GBPValues(ai.AvailableBalance24M, true): "-"%></td>
-                    <td><%-ai.AvailableBalanceLifetime!=undefined ? GBPValues(ai.AvailableBalanceLifetime, true): "-"%></td>
+                    <td class="<%-(ai.AvailableBalance1M!=undefined && ai.AvailableBalance1M < 0 ? 'negative' : '')%>"><%-ai.AvailableBalance1M!=undefined ? GBPValues(ai.AvailableBalance1M, true): "-"%></td>
+                    <td class="<%-(ai.AvailableBalance3M!=undefined && ai.AvailableBalance3M < 0 ? 'negative' : '')%>"><%-ai.AvailableBalance3M!=undefined ? GBPValues(ai.AvailableBalance3M, true): "-"%></td>
+                    <td class="<%-(ai.AvailableBalance6M!=undefined && ai.AvailableBalance6M < 0 ? 'negative' : '')%>"><%-ai.AvailableBalance6M!=undefined ? GBPValues(ai.AvailableBalance6M, true): "-"%></td>
+                    <td class="<%-(ai.AvailableBalance12M!=undefined && ai.AvailableBalance12M < 0 ? 'negative' : '')%>"><%-ai.AvailableBalance12M!=undefined ? GBPValues(ai.AvailableBalance12M, true): "-"%></td>
+                    <td class="<%-(ai.AvailableBalance15M!=undefined && ai.AvailableBalance15M < 0 ? 'negative' : '')%>"><%-ai.AvailableBalance15M!=undefined ? GBPValues(ai.AvailableBalance15M, true): "-"%></td>
+                    <td class="<%-(ai.AvailableBalance18M!=undefined && ai.AvailableBalance18M < 0 ? 'negative' : '')%>"><%-ai.AvailableBalance18M!=undefined ? GBPValues(ai.AvailableBalance18M, true): "-"%></td>
+                    <td class="<%-(ai.AvailableBalance24M!=undefined && ai.AvailableBalance24M < 0 ? 'negative' : '')%>"><%-ai.AvailableBalance24M!=undefined ? GBPValues(ai.AvailableBalance24M, true): "-"%></td>
+                    <td class="<%-(ai.AvailableBalanceLifetime!=undefined && ai.AvailableBalanceLifetime < 0 ? 'negative' : '')%>"><%-ai.AvailableBalanceLifetime!=undefined ? GBPValues(ai.AvailableBalanceLifetime, true): "-"%></td>
                 </tr>
             </tbody>
         </table>

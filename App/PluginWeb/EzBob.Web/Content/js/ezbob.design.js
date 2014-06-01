@@ -463,6 +463,18 @@ GBPValues = function (val, showCurrencySign) {
     return result;
 };
 
+NegativeNum = function(val) {
+    if (val == undefined) {
+        return "";
+    }
+    
+    if (val.indexOf('-') == 0) {
+        return "negative";
+    }
+
+    return "";
+};
+
 IsInt = function (val, isOnlyPositive) {
     var reg = isOnlyPositive ? /^\d+$/ : /^-?\d+$/;
     return reg.test(val);
