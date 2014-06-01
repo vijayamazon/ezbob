@@ -174,48 +174,54 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 					// console.log(i, ':', sFieldName, '=', oValue, '->', sDisplayValue);
 
 					if (sDisplayValue)
-						oTR.find(sQclass).text(sDisplayValue).addClass(oValue < 0 ? 'negative-value' : '');
+					    oTR.find(sQclass).text(sDisplayValue).addClass(NegativeNum(oValue));
 					else
 						oTR.find(sQclass).html('&ndash;');
 				} // for each quarter/total column
 
 				switch (sFieldName) {
 				case 'Revenues':
-					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Revenues));
-					oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.Revenues / oSummary.Revenues - 1, 2));
+				    oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Revenues)).addClass(NegativeNum(oBank.Revenues));
+				    var revenues = oAnalBank.Revenues / oSummary.Revenues - 1;
+				    oTR.find('.annualized').text(EzBob.formatPercents(revenues, 2)).addClass(NegativeNum(revenues));
 					break;
 				case 'Opex':
-					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Opex));
-					oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.Opex / oSummary.Opex - 1, 2));
+				    oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Opex)).addClass(NegativeNum(oBank.Opex));
+				    var opex = oAnalBank.Opex / oSummary.Opex - 1;
+				    oTR.find('.annualized').text(EzBob.formatPercents(opex, 2)).addClass(NegativeNum(opex));
 					break;
 				case 'TotalValueAdded':
-					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.TotalValueAdded));
-					oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.TotalValueAdded / oSummary.TotalValueAdded - 1, 2));
+				    oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.TotalValueAdded)).addClass(NegativeNum(oBank.TotalValueAdded));
+				    var tva = oAnalBank.TotalValueAdded / oSummary.TotalValueAdded - 1;
+				    oTR.find('.annualized').text(EzBob.formatPercents(tva, 2)).addClass(NegativeNum(tva));
 					break;
 				case 'PctOfRevenues':
-					oTR.find('.bank').text(EzBob.formatPercents(oBank.PercentOfRevenues, 2));
+				    oTR.find('.bank').text(EzBob.formatPercents(oBank.PercentOfRevenues, 2)).addClass(NegativeNum(oBank.PercentOfRevenues));
 					break;
 				case 'Salaries':
 					var nCalcd = (oSummary.Salaries || 0) * oSummary.SalariesMultiplier;
-					oTR.find('.multiplier').text(EzBob.formatPercents(oSummary.SalariesMultiplier));
-					oTR.find('.total').text(EzBob.formatPoundsAsInt(oSummary.Salaries || 0));
-					oTR.find('.vrs-total').text(EzBob.formatPoundsAsInt(nCalcd));
-					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Salaries));
-					oTR.find('.annualized').text(EzBob.formatPercents((nCalcd ? oAnalBank.Salaries / nCalcd : 0) - 1, 2));
+					oTR.find('.multiplier').text(EzBob.formatPercents(oSummary.SalariesMultiplier)).addClass(NegativeNum(oSummary.SalariesMultiplier));
+					oTR.find('.total').text(EzBob.formatPoundsAsInt(oSummary.Salaries || 0)).addClass(NegativeNum(oSummary.Salaries));
+					oTR.find('.vrs-total').text(EzBob.formatPoundsAsInt(nCalcd)).addClass(NegativeNum(nCalcd));
+					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Salaries)).addClass(NegativeNum(oBank.Salaries));
+				    var salaries = (nCalcd ? oAnalBank.Salaries / nCalcd : 0) - 1;
+				    oTR.find('.annualized').text(EzBob.formatPercents(salaries, 2)).addClass(NegativeNum(salaries));
 					break;
 				case 'Tax':
-					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Tax));
+				    oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Tax)).addClass(NegativeNum(oBank.Tax));
 					break;
 				case 'Ebida':
-					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Ebida));
-					oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.Ebida / oSummary.Ebida - 1, 2));
+				    oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.Ebida)).addClass(NegativeNum(oBank.Ebida));
+				    var ebida = oAnalBank.Ebida / oSummary.Ebida - 1;
+				    oTR.find('.annualized').text(EzBob.formatPercents(ebida, 2)).addClass(NegativeNum(ebida));
 					break;
 				case 'ActualLoanRepayment':
-					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.ActualLoansRepayment));
+				    oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.ActualLoansRepayment)).addClass(NegativeNum(oBank.ActualLoansRepayment));
 					break;
 				case 'FreeCashFlow':
-					oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.FreeCashFlow));
-					oTR.find('.annualized').text(EzBob.formatPercents(oAnalBank.FreeCashFlow / oSummary.Ebida - 1, 2));
+				    oTR.find('.bank').text(EzBob.formatPoundsAsInt(oBank.FreeCashFlow)).addClass(NegativeNum(oBank.FreeCashFlow));
+				    var fcf = oAnalBank.FreeCashFlow / oSummary.Ebida - 1;
+				    oTR.find('.annualized').text(EzBob.formatPercents(fcf, 2)).addClass(NegativeNum(fcf));
 					break;
 				} // switch
 			}); // for each row

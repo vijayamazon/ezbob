@@ -31,7 +31,7 @@ if (m.CGData && m.CGData.VatReturn) {
 
 				for (var nRDIdx = 0; nRDIdx < oSortable.length; nRDIdx++) {
 					var oDetail = oSortable[nRDIdx];
-					%><tr><td><%= oDetail.caption %>:</td><td class="r"><%= (oDetail.currency_code == 'GBP') ? GBPValues(oDetail.amount, true) : oDetail.amount %></td></tr><%
+					%><tr><td><%= oDetail.caption %>:</td><td class="r <%-NegativeNum(oDetail.amount)%>"><%= (oDetail.currency_code == 'GBP') ? GBPValues(oDetail.amount, true) : oDetail.amount %></td></tr><%
 				} %></table></td>
 		</tr><%
 	} // for each entry

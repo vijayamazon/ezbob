@@ -468,6 +468,10 @@ NegativeNum = function(val) {
         return "";
     }
     
+    if (typeof val == 'number') {
+        return val < 0 ? "negative" : "";
+    }
+    
     if (val.indexOf('-') == 0) {
         return "negative";
     }
