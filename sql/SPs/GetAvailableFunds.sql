@@ -8,25 +8,18 @@ GO
 CREATE PROCEDURE [dbo].[GetAvailableFunds]
 AS
 BEGIN
-	DECLARE @AvailableFunds FLOAT,
-			@AvailableFundsDate DATE,
-			@ManualFundsAdded FLOAT
+	DECLARE 
+		@LastReportDate DATETIME,
+		@ManualBalance INT,
+		@AdjustedBalance DECIMAL(18,4)
 
-	SELECT 
-		@AvailableFundsDate = DATE, 
-		@AvailableFunds = Adjusted 
-	FROM 
-		fnPacnetBalance()
+	SELECT @LastReportDate = Date, @AdjustedBalance = Adjusted FROM fnPacnetBalance()
 
-	 
-	SELECT 
-		@ManualFundsAdded = Sum(Amount) 
-	FROM 
-		PacNetManualBalance pnb
-	WHERE 
-		@AvailableFundsDate <= pnb.Date AND 
-		pnb.Enabled = 1
+	IF @LastReportDate IS NOT NULL
+		SELECT @LastReportDate = DATEADD(dd, 1, @LastReportDate)
 
-	SELECT isnull(@AvailableFunds,0) + isnull(@ManualFundsAdded,0) AS AvailableFunds
+	SELECT @ManualBalance = SUM(Amount) FROM PacNetManualBalance WHERE Enabled = 1 AND (@LastReportDate IS NULL OR [Date] >= @LastReportDate)
+
+	SELECT @AdjustedBalance + ISNULL(@ManualBalance, 0) AS AvailableFunds
 END
 GO
