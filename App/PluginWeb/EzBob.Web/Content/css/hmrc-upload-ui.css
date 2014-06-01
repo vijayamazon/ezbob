@@ -1,5 +1,6 @@
 ﻿.hmrc-upload-ui .dropzone {
 	min-height: 150px;
+	margin-bottom: 20px;
 }
 
 .hmrc-upload-ui .dropzone .dz-message {
@@ -10,7 +11,11 @@
 	font-weight: normal;
 }
 
-.hmrc-upload-ui .period-details { border-collapse: collapse; }
+.hmrc-upload-ui .period-details {
+	border-collapse: collapse;
+	color: #777777;
+	font-size: 12px;
+}
 
 .hmrc-upload-ui .period-details caption {
 	font-weight: bold;
@@ -25,11 +30,13 @@
 }
 
 .hmrc-upload-ui .period-details thead th {
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid #aaaaaa;
+	font-weight: bold;
+	text-align: center;
 }
 
 .hmrc-upload-ui .period-details tbody tr.other-firm td {
-	border-top: 1px solid black;
+	border-top: 1px solid #aaaaaa;
 }
 
 .hmrc-upload-ui .period-details tbody tr.not-just-after td {
@@ -43,8 +50,7 @@
 	margin-bottom: 10px;
 }
 
-.hmrc-upload-ui .buttons-and-legend .buttons
-{
+.hmrc-upload-ui .buttons-and-legend .buttons {
 	display: table-cell;
 	text-align: right;
 }
@@ -52,6 +58,18 @@
 .hmrc-upload-ui .buttons-and-legend .legend {
 	display: table-cell;
 	width: 350px;
+	font-size: 12px;
+	line-height: 14px;
+}
+
+.hmrc-upload-ui .buttons-and-legend .legend > div {
+	margin-top: 3px;
+	vertical-align: baseline;
+}
+
+.hmrc-upload-ui .buttons-and-legend .legend .periods-chart {
+	display: inline-table;
+	max-width: 75px;
 }
 
 .hmrc-upload-ui .periods-chart {
@@ -61,7 +79,18 @@
 
 .hmrc-upload-ui .periods-chart td {
 	border: 1px solid #7bb224;
-	padding: 5px;
+	padding: 3px 0;
+	font-size: 12px;
+	line-height: 14px;
+	text-align: center;
+}
+
+.hmrc-upload-ui .periods-chart td.jan {
+	font-weight: bold;
+}
+
+.hmrc-upload-ui .periods-chart td.older {
+	font-style: italic;
 }
 
 .hmrc-upload-ui .periods-chart td.found {

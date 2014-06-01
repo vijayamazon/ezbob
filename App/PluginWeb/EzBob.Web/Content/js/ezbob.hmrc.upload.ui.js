@@ -196,20 +196,25 @@
 				.click(_.bind(function() { this.trigger(this.evtClickDone()); }, this))
 				.hide();
 
+			var sNow = moment.utc().format("MMM'YY");
+
 			/*jshint multistr: true */
 			var oDivLegend = $('<div class=legend>\
-<table class=periods-chart><tbody><tr>\
-<th>Legend:</th>\
-<td class=found>Data is available</td>\
-<td>Data is not available</td></tr>\
-</tbody></table>\
+<div>Legend:</div>\
+<div><table class=periods-chart><tbody><tr><td class=found>' + sNow + '</td></tbody></table>&nbsp;Uploaded successfully</div>\
+<div><table class=periods-chart><tbody><tr><td>' + sNow + '</td></tbody></table>&nbsp;Missing report</div>\
 </div>');
 			/*jshint multistr: false */
 
 			this.$el.append(
 				$('<div class=buttons-and-legend></div>')
 					.append(oDivLegend)
-					.append($('<div class=buttons></div>').append(this.BackButton).append(this.DoneButton))
+					.append(
+						$('<div class=buttons></div>')
+							.append( // v---- this inner div is for wizard buttons to have normal height
+								$('<div></div>').append(this.BackButton).append(this.DoneButton)
+							)
+					)
 			);
 		}, // initUiButtons
 
@@ -361,11 +366,13 @@
 			var oFilter = function(x) { return !x.IsGap && x.Interval.contains(oCurMonth); };
 
 			for (var i = 0; i < this.options.chartMonths; i++, oCurMonth = oCurMonth.add('month', 1)) {
-				oTR.append(
-					$('<td />')
-						.text(oCurMonth.format("MMM 'YY"))
-						.addClass(_.find(aryData, oFilter) ? 'found' : '')
-				);
+				var bIsJan = oCurMonth.month() === 0;
+
+				var sFormat = bIsJan ? "MMM 'YY" : 'MMM';
+
+				var sClass = (_.find(aryData, oFilter) ? 'found' : '') + (bIsJan ? ' jan' : '');
+
+				oTR.append($('<td />').text(oCurMonth.format(sFormat)).addClass(sClass));
 			} // for
 		}, // drawPeriodsChart
 	}); // extend

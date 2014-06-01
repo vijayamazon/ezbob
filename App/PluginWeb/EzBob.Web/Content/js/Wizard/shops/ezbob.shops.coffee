@@ -57,7 +57,6 @@ class EzBob.StoreInfoView extends Backbone.View
                 this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView
                     model: acc,
                     companyRefNum: (@fromCustomer('CompanyInfo') or {}).ExperianRefNum
-                    chartMonths: if @isProfile() then 18 else 12
             else
                 this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView model: acc, accountType: accountTypeName
 
