@@ -2216,5 +2216,10 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.MinAuthenticationIndexToPassAml]; }
 		}
+
+		public virtual VariableValue AvailableFundsRefreshInterval
+		{
+			get { return this[Variables.AvailableFundsRefreshInterval]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

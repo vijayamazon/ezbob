@@ -314,6 +314,7 @@ namespace ConfigManager {
 		EbayRuName,
 		ReportDaemonDropboxCredentials,
 		ReportDaemonDropboxRootPath,
-		MinAuthenticationIndexToPassAml
+		MinAuthenticationIndexToPassAml,
+		AvailableFundsRefreshInterval
 	} // enum Variables
 } // namespace ConfigManager

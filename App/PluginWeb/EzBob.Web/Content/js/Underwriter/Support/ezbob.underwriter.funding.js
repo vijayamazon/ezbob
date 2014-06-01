@@ -18,9 +18,24 @@
     }
 
     FundingView.prototype.initialize = function() {
+      var xhr, xhr1,
+        _this = this;
+
       this.model = new EzBob.Underwriter.FundingModel();
       this.model.on("change reset", this.render, this);
-      return this.model.fetch();
+      this.model.fetch();
+      this.requiredFunds = -1;
+      xhr1 = $.post("" + window.gRootPath + "Underwriter/Funding/GetRequiredFunds");
+      xhr1.done(function(res) {
+        _this.requiredFunds = res;
+        return _this.render();
+      });
+      xhr = $.post("" + window.gRootPath + "Underwriter/Funding/GetAvailableFundsInterval");
+      return xhr.done(function(res) {
+        return _this.modelUpdater = setInterval(function() {
+          return _this.model.fetch();
+        }, res);
+      });
     };
 
     FundingView.prototype.template = "#funding-template";
@@ -28,10 +43,6 @@
     FundingView.prototype.events = {
       "click #addFundsBtn": "addFunds",
       "click #cancelManuallyAddedFundsBtn": "cancelManuallyAddedFunds"
-    };
-
-    FundingView.prototype.onRender = function() {
-      return console.log('placeholder');
     };
 
     FundingView.prototype.addFunds = function(e) {
@@ -43,25 +54,30 @@
     };
 
     FundingView.prototype.onRender = function() {
+      var li;
+
       if (!$("body").hasClass("role-manager")) {
         this.$el.find('#addFundsBtn').hide();
-        return this.$el.find('#cancelManuallyAddedFundsBtn').hide();
+        this.$el.find('#cancelManuallyAddedFundsBtn').hide();
+      }
+      li = $(document.getElementById("liFunding"));
+      if (this.requiredFunds > this.model.get('AvailableFunds')) {
+        if (!li.hasClass('available-funds-alert')) {
+          return li.addClass('available-funds-alert');
+        }
+      } else {
+        if (li.hasClass('available-funds-alert')) {
+          return li.removeClass('available-funds-alert');
+        }
       }
     };
 
     FundingView.prototype.hide = function() {
-      this.$el.hide();
-      clearInterval(this.modelUpdater);
-      return BlockUi('off');
+      return this.$el.hide();
     };
 
     FundingView.prototype.show = function() {
-      var _this = this;
-
-      this.$el.show();
-      return this.modelUpdater = setInterval(function() {
-        return _this.model.fetch();
-      }, 2000);
+      return this.$el.show();
     };
 
     FundingView.prototype.serializeData = function() {

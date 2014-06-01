@@ -254,7 +254,8 @@ namespace EZBob.DatabaseLib.Model {
 		EbayAppId,
 		EbayCertId,
 		EbayRuName,
-		MinAuthenticationIndexToPassAml
+		MinAuthenticationIndexToPassAml,
+		AvailableFundsRefreshInterval
 	} // enum ConfigurationVariables
 
 	#endregion enum ConfigurationVariables

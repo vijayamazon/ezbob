@@ -1318,6 +1318,9 @@ td a.edit-loan {
     color: white;
 }
 
+.available-funds-alert {
+    background-color: red !important;
+}
 .salaries-multiplier {
     width: 70px;
 }
