@@ -126,4 +126,4 @@ class EzBob.Underwriter.SettingsPricingModelView extends Backbone.Marionette.Ite
         @modelBinder.unbind()
         
     serializeData: ->
-        return { model: @model.toJSON(), scenarios: @scenarios.toJSON() }
+        return { model: @model.toJSON(), scenarios: @scenarios.get('scenarios') }

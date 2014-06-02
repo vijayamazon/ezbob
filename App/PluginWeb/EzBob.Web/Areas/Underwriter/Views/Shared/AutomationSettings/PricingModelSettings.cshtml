@@ -8,12 +8,9 @@
 {
     <div class="alert-block">
         <select id="PricingModelScenarioSettings" class="selectheight">
-            @* TODO: rewrite this for *@
-            <% for (var i = 0; i < 100; i++) {
-                if (scenarios.hasOwnProperty(i)) { %>
-                    <option value="<%- scenarios[i]%>"><%- scenarios[i]%></option>
-                <%}%>
-            <%}%>
+            <% _.each(scenarios, function(scenario) { %>
+                <option value="<%- scenario%>"><%- scenario%></option>
+            <%});%>
         </select>
         <table class="table squeezed">
             <thead class="box">

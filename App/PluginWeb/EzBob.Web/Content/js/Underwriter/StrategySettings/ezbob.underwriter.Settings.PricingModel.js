@@ -183,7 +183,7 @@
     SettingsPricingModelView.prototype.serializeData = function() {
       return {
         model: this.model.toJSON(),
-        scenarios: this.scenarios.toJSON()
+        scenarios: this.scenarios.get('scenarios')
       };
     };
 

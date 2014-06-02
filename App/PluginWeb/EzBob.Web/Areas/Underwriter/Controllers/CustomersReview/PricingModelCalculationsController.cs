@@ -43,7 +43,7 @@
 		public ActionResult GetScenarios()
 		{
 			StringListActionResult getPricingModelScenariosResponse = serviceClient.Instance.GetPricingModelScenarios(context.UserId);
-			return Json(getPricingModelScenariosResponse.Records, JsonRequestBehavior.AllowGet);
+			return Json(new {scenarios = getPricingModelScenariosResponse.Records}, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpPost]

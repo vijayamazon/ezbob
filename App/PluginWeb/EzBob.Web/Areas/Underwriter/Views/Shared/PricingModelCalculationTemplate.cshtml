@@ -4,12 +4,9 @@
     <div class="row-fluid">
         <div class="span6">
             <select id="PricingModelScenario" class="selectheight">
-                @* TODO: rewrite this for *@
-                <% for (var i = 0; i < 100; i++) {
-                    if (scenarios.hasOwnProperty(i)) { %>
-                        <option value="<%- scenarios[i]%>"><%- scenarios[i]%></option>
-                    <%}%>
-                <%}%>
+                <% _.each(scenarios, function(scenario) { %>
+                    <option value="<%- scenario%>"><%- scenario%></option>
+                <%});%>
             </select>
 	        <button class="btn btn-primary pull-right" id="pricingModelCalculateButton">Calculate</button>
 	        <button class="btn btn-primary pull-right reset-button-margin" id="pricingModelResetButton">Reset</button>

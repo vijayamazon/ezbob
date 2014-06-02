@@ -294,7 +294,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
 
     serializeData: function () {
         var data = this.model.toJSON();
-        return { model: data, scenarios: this.scenarios.toJSON() };
+        return { model: data, scenarios: this.scenarios.get('scenarios') };
     },
 
     renderAndRememberExpanded: function() {
