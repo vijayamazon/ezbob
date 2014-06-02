@@ -80,19 +80,17 @@
 		#region action LandRegistryEnquiry
 
 		[Ajax]
-		[HttpGet]
+		[HttpPost]
 		public JsonResult LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
 			var landregistryXml = m_oServiceClient.Instance.LandRegistryEnquiry(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
 			var landregistry = Serialized.Deserialize<LandRegistryDataModel>(landregistryXml);
 
-			return Json(
-				new {
-					titles = landregistry.Enquery.Titles,
-					rejection = landregistry.Enquery.Rejection,
-					ack = landregistry.Enquery.Acknowledgement
-				},
-				JsonRequestBehavior.AllowGet
-			);
+			return Json(new
+					{
+						titles = landregistry.Enquery.Titles,
+						rejection = landregistry.Enquery.Rejection,
+						ack = landregistry.Enquery.Acknowledgement
+					}, JsonRequestBehavior.AllowGet);
 		} // LandRegistryEnquiry
 
 		#endregion action LandRegistryEnquiry
@@ -100,7 +98,7 @@
 		#region action LandRegistry
 
 		[Ajax]
-		[HttpGet]
+		[HttpPost]
 		public JsonResult LandRegistry(int customerId, string titleNumber = null) {
 			ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1}...", customerId, titleNumber ?? "--null--");
 
@@ -115,14 +113,7 @@
 
 			ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1} completed successfully.", customerId, titleNumber ?? "--null--");
 
-			return Json(
-				new {
-					response = landregistry.Res,
-					rejection = landregistry.Res.Rejection,
-					ack = landregistry.Res.Acknowledgement
-				},
-				JsonRequestBehavior.AllowGet
-			);
+			return Json(new {},JsonRequestBehavior.AllowGet);
 		} // LandRegistry
 
 		#endregion action LandRegistry

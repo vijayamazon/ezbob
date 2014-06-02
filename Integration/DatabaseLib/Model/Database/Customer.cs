@@ -702,6 +702,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool DefaultCardSelectionAllowed { get; set; }
 
 		public virtual IList<CustomerRelationState> CustomerRelationStates { get; set; }
+		public virtual IList<LandRegistry> LandRegistries { get; set; }
 	} // class Customer
 
 	#endregion class Customer

@@ -3,14 +3,13 @@
 }
 
 <script type="text/template" id="landregistry-enquiry-results-template">
-    
-    <%if(this.model.rejection){ 
+    <%if(data.rejection){ 
         print("Error occurred: ");
-        print(this.model.rejection.Reason);
-      } else if(this.model.ack) { 
-        print("Acknowledgment: ");
-        print("this.model.ack.Description");
-        print("this.model.ack.PollDate");
+        print(data.rejection.Reason);
+      } else if(data.ack) { 
+        print("Acknowledgment (tell dev): ");
+        print("data.ack.Description");
+        print("data.ack.PollDate");
       } else{%>
     <div class="modal-header">Land Registry Enquiry Results</div>
     <table class="table lr-enquiry-results">
@@ -23,10 +22,10 @@
                 <th>Street name</th>
                 <th>City name</th>
                 <th>Postcode</th>
-            </t>
+            </tr>
         </thead>
         <tbody>
-            <%_.each(this.model.titles, function(title){ %>
+            <%_.each(data.titles, function(title){ %>
             <tr data-titlenumber="<%=title.TitleNumber%>">
                 <td><%=title.TitleNumber%></td>
                 <td><%=title.BuildingName%></td>
@@ -42,6 +41,6 @@
     <div class="pull-right">
             <button class="btn btn-primary btnOk">OK</button>
     </div>
-   <% } %>
+   <%}%>
 
 </script>

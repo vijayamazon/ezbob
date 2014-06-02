@@ -11,6 +11,8 @@
 	using Ezbob.ExperianParser;
 	using System.Text.RegularExpressions;
 	using ExperianLib;
+	using LandRegistryLib;
+	using ServiceClientProxy;
 	using StructureMap;
 
 	public class CrossCheckModel
@@ -33,7 +35,8 @@
 		public int ExperianMortgage { get; set; }
 		public int ExperianMortgageCount { get; set; }
 		public int AssetWorth { get; set; }
-		
+		public List<LandRegistryResModel> LandRegistries { get; set; }
+
 		static CrossCheckModel()
 		{
 			Mapper.CreateMap<EZBob.DatabaseLib.Model.Database.PersonalInfo, PersonalInfo>();
@@ -174,9 +177,17 @@
 
 			CrossCheckStatus.BuildMarkerStatusForPersonalInfo(Application, PayPal, EBay);
 			CrossCheckStatus.BuildMarkerStatusForCustomerAddress(CurrentAddress, EBayAddress, PayPalAddress);
+
+			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res).Select(x => x.Response);
+			var b = new LandRegistryModelBuilder();
+			LandRegistries = new List<LandRegistryResModel>();
+			foreach (var lr in lrs)
+			{
+				LandRegistries.Add(b.BuildResModel(lr));
+			}
 		}
 
-		public static SortedSet<string> GetExperianDirectors(EZBob.DatabaseLib.Model.Database.Customer customer)
+		public static SortedSet<string> GetExperianDirectors(Customer customer)
 		{
 			SortedSet<string> experianDirectors = null;
 			ExperianParserOutput oParseResult = customer.ParseExperian(ExperianParserFacade.Target.Director);

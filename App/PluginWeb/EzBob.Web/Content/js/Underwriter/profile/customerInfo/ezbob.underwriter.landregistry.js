@@ -1,99 +1,59 @@
 ﻿var EzBob = EzBob || {};
 
-EzBob.LandRegistryView = Backbone.Marionette.View.extend({
+EzBob.LandRegistryEnquiryView = Backbone.Marionette.ItemView.extend({
+    template: '#landregistry-enquiry-template',
     initialize: function (options) {
-        this.template = _.template($('#landregistry-template').html());
         this.model = options.model;
-        this.address = options.address;
-        this.postcode = options.postcode;
-        this.customerId = options.customerId;
-    },
-    events: {
-        "click .anotherEnquiry": "anotherEnquiryClicked",
-        "click .anotherTitle": "anotherTitleClicked",
-    },
-    render: function () {
-        this.$el.html(this.template());
         return this;
     },
-    jqoptions: function () {
-        return {
-            modal: true,
-            resizable: true,
-            title: "Land Registry",
-            position: "top",
-            draggable: true,
-            dialogClass: "landregistry",
-            width: "60%"
-        };
-    },
-    anotherEnquiryClicked: function() {
-        var lrEnqView = new EzBob.LandRegistryEnquiryView({ model: { postcode: this.postcode, address: this.address, customerId: this.customerId } });
-        EzBob.App.jqmodal.show(lrEnqView);
-    },
-    anotherTitleClicked: function () {
-        var anotherTitleView = new EzBob.LandRegistryAnotherTitleView({ customerId: this.customerId });
-        EzBob.App.jqmodal.show(anotherTitleView);
-    },
-});
-
-EzBob.LandRegistryEnquiryView = Backbone.Marionette.View.extend({
-    initialize: function (options) {
-        this.template = _.template($('#landregistry-enquiry-template').html());
-        this.model = options.model;
-    },
-    render: function () {
-        this.$el.html(this.template());
+    onRender: function () {
         this.$el.find('input[name="postCode"]').val(this.model.postcode);
         return this;
     },
     events: {
         "click .btnOk": "okClicked",
     },
+    serializeData: function() {
+        return { data: this.model };
+    },
     okClicked: function () {
         var that = this;
         var data = this.$el.find('#landregistry-enquiry-form').serializeArray();
         data.push({ name: "customerId", value: this.model.customerId });
         BlockUi("On");
-        $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistryEnquiry", data, function (response) {
+        $.post(window.gRootPath + "Underwriter/CrossCheck/LandRegistryEnquiry", data, function (response) {
             if (response && response.titles && response.titles.length == 1) {
-                $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + that.model.customerId + "&titleNumber=" + response.titles[0].TitleNumber, function (data) {
-                    var lrView = new EzBob.LandRegistryView({ model: data, customerId: that.model.customerId });
-                    scrollTop();
-                    EzBob.App.jqmodal.show(lrView);
+                $.post(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + that.model.customerId + "&titleNumber=" + response.titles[0].TitleNumber, function (data) {
+                    this.landRegistryRetrieved();
                     BlockUi("Off");
                 });
             } else {
-                var enqRes = new EzBob.LandRegistryEnquiryResultsView({ model: response, customerId: that.model.customerId });
-                EzBob.App.jqmodal.show(enqRes);
+                that.enqRes = new EzBob.LandRegistryEnquiryResultsView({ model:new Backbone.Model(response), customerId: that.model.customerId });
+                EzBob.App.jqmodal.show(that.enqRes);
                 BlockUi("Off");
             }
-            
         });
     },
     jqoptions: function () {
         return {
             modal: true,
             resizable: true,
-            title: "Land Registry",
+            title: "Land Registry Enquiry",
             position: "center",
             draggable: true,
             dialogClass: "landregistryEnquiry",
             width: 900
         };
     },
+    landRegistryRetrieved: function () {
+        EzBob.App.vent.trigger('LandRegistry');
+    },
 });
 
-EzBob.LandRegistryEnquiryResultsView = Backbone.Marionette.View.extend({
+EzBob.LandRegistryEnquiryResultsView = Backbone.Marionette.ItemView.extend({
+    template: '#landregistry-enquiry-results-template',
     initialize: function (options) {
-        this.template = _.template($('#landregistry-enquiry-results-template').html());
-        this.model = options.model;
         this.customerId = options.customerId;
-        
-    },
-    render: function () {
-        this.$el.html(this.template());
-        return this;
     },
     events: {
         "click tr": "trClicked",
@@ -108,16 +68,22 @@ EzBob.LandRegistryEnquiryResultsView = Backbone.Marionette.View.extend({
         if (!this.titleNumber) {
             return false;
         }
-
-	    var that = this;
-
+        var that = this;
         BlockUi("On");
-        return $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.customerId + "&titleNumber=" + this.titleNumber, function (data) {
-            var lrView = new EzBob.LandRegistryView({ model: data, customerId: that.customerId, });
-            scrollTop();
-            EzBob.App.jqmodal.show(lrView);
+        
+        var xhr = $.post(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.customerId + "&titleNumber=" + this.titleNumber);
+        xhr.done(function () {
+            that.close();
+            EzBob.App.vent.trigger('landregistry:retrieved');
+        });
+
+        xhr.always(function () {
             BlockUi("Off");
         });
+        return false;
+    },
+    serializeData: function () {
+        return { data: this.model.toJSON() };
     },
     jqoptions: function () {
         return {
@@ -130,48 +96,4 @@ EzBob.LandRegistryEnquiryResultsView = Backbone.Marionette.View.extend({
             width: 900
         };
     },
-});
-
-EzBob.LandRegistryAnotherTitleView = Backbone.Marionette.ItemView.extend({
-    template: "#another-title-template",
-
-    initialize: function (options) {
-        this.customerId = options.customerId;
-    },
-
-    events: {
-        'click .anotherTitleBtn': 'okClicked',
-    },
-
-    jqoptions: function() {
-        return {
-            modal: true,
-            resizable: false,
-            title: "Another title",
-            position: "center",
-            draggable: false,
-            width: 530,
-            dialogClass: "another-title-popup",
-        };
-    },
-
-    okClicked: function () {
-        BlockUi("On");
-
-	    console.log('Customer id:', this.customerId, 'title number:', this.$el.find('#titleNumber').val());
-
-        var xhr = $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry?customerId=" + this.customerId + "&titleNumber=" + this.$el.find('#titleNumber').val());
-
-	    var that = this;
-
-        xhr.done(function(data) {
-            var lrView = new EzBob.LandRegistryView({ model: data, customerId: that.customerId, });
-            scrollTop();
-            EzBob.App.jqmodal.show(lrView);
-        });
-
-        xhr.always(function() {
-            BlockUi("Off");
-        });
-    }
 });

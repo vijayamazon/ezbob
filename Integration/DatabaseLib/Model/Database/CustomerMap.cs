@@ -228,6 +228,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade.All()
 				.Inverse();
 
+			HasMany(x => x.LandRegistries)
+				.AsBag()
+				.KeyColumn("CustomerId")
+				.Cascade.All()
+				.Inverse();
+
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database
