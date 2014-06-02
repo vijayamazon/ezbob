@@ -8,7 +8,6 @@
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using Areas.Customer.Models;
 	using Areas.Underwriter.Models;
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
@@ -98,31 +97,36 @@
 				summary.Alerts.Add(new AlertModel { Alert = string.Format("Fraud Status : {0}", customer.FraudStatus.DescriptionAttr()), AlertType = AlertType.Error.DescriptionAttr() });
 			}
 
-			if (customer.AMLResult == "Rejected")
+			switch (customer.AMLResult)
 			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Error.DescriptionAttr() });
-			}
-			else if (customer.AMLResult == "Warning" || customer.AMLResult == "Not performed")
-			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Warning.DescriptionAttr() });
+				case "Rejected":
+					summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Error.DescriptionAttr() });
+					break;
+				case "Not performed":
+				case "Warning":
+					summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Warning.DescriptionAttr() });
+					break;
 			}
 			
-			if (customer.BWAResult == "Rejected")
+			switch (customer.BWAResult)
 			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Error.DescriptionAttr() });
-			}
-			else if(customer.BWAResult == "Warning" || customer.BWAResult == "Not performed")
-			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Warning.DescriptionAttr() });
+				case "Rejected":
+					summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Error.DescriptionAttr() });
+					break;
+				case "Not performed":
+				case "Warning":
+					summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Warning.DescriptionAttr() });
+					break;
 			}
 
-			if (summary.CreditBureau.ThinFile == "Yes")
+			switch (summary.CreditBureau.ThinFile)
 			{
-				summary.Alerts.Add(new AlertModel { Alert = "Thin file", AlertType = AlertType.Error.DescriptionAttr() });
-			}
-			else if (summary.CreditBureau.ThinFile == "N/A")
-			{
-				summary.Alerts.Add(new AlertModel { Alert = "Couldn't get financial accounts", AlertType = AlertType.Warning.DescriptionAttr() });
+				case "Yes":
+					summary.Alerts.Add(new AlertModel { Alert = "Thin file", AlertType = AlertType.Error.DescriptionAttr() });
+					break;
+				case "N/A":
+					summary.Alerts.Add(new AlertModel { Alert = "Couldn't get financial accounts", AlertType = AlertType.Warning.DescriptionAttr() });
+					break;
 			}
 
 			if (customer.CustomerRelationStates.Any())
@@ -132,6 +136,11 @@
 				{
 					summary.Alerts.Add(new AlertModel { Alert = "Customer relations follow up date is due " + state.FollowUp.FollowUpDate.ToString("dd/MM/yyyy"), AlertType = AlertType.Error.DescriptionAttr() });
 				}
+			}
+
+			if (!customer.LandRegistries.Any(x => x.RequestType == LandRegistryLib.LandRegistryRequestType.Res && x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success))
+			{
+				summary.Alerts.Add(new AlertModel{Alert = "No land registries retrieved", AlertType = AlertType.Warning.DescriptionAttr()});
 			}
 			//TODO: add approve button alerts
 		}

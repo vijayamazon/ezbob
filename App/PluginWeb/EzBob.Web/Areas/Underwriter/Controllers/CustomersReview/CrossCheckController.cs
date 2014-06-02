@@ -81,16 +81,33 @@
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
-			var landregistryXml = m_oServiceClient.Instance.LandRegistryEnquiry(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
-			var landregistry = Serialized.Deserialize<LandRegistryDataModel>(landregistryXml);
+		public JsonResult LandRegistryEnquiry(int customerId, string titleNumber, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
 
-			return Json(new
+			if (!string.IsNullOrEmpty(titleNumber))
+			{
+				m_oServiceClient.Instance.LandRegistryRes(customerId, titleNumber);
+				return Json(new {isTitle = true});
+			}
+			else
+			{
+				var landregistryXml = m_oServiceClient
+					.Instance
+					.LandRegistryEnquiry(
+						customerId,
+						buildingNumber,
+						buildingName,
+						streetName,
+						cityName,
+						postCode);
+				var landregistry = Serialized.Deserialize<LandRegistryDataModel>(landregistryXml);
+
+				return Json(new
 					{
 						titles = landregistry.Enquery.Titles,
 						rejection = landregistry.Enquery.Rejection,
 						ack = landregistry.Enquery.Acknowledgement
 					}, JsonRequestBehavior.AllowGet);
+			}
 		} // LandRegistryEnquiry
 
 		#endregion action LandRegistryEnquiry
