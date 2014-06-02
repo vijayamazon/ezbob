@@ -1,6 +1,7 @@
 ﻿namespace EzServiceShortcut {
 	using EzBob.Backend.Strategies.VatReturn;
 	using EzServiceAccessor;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -36,6 +37,21 @@
 		} // CalculateVatReturnSummary
 
 		#endregion method CalculateVatReturnSummary
+
+		#region method SaveVatReturnData
+
+		public void SaveVatReturnData(
+			int nCustomerMarketplaceID,
+			int nHistoryRecordID,
+			int nSourceID,
+			VatReturnRawData[] oVatReturn,
+			RtiTaxMonthRawData[] oRtiMonths
+		) {
+			var stra = new SaveVatReturnData(nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths, ms_oDB, ms_oLog);
+			stra.Execute();
+		} // CalculateVatReturnSummary
+
+		#endregion method SaveVatReturnData
 
 		#endregion public
 

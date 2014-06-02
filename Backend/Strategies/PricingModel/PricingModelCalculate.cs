@@ -7,6 +7,7 @@
 	using System.Text;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using PaymentServices.Calculators;
@@ -19,13 +20,11 @@
 			: base(oDb, oLog)
 		{
 			if (model.LoanAmount <= 0)
-			{
-				throw new Exception("LoanAmount must be positive");
-			}
+				throw new StrategyWarning(this, "LoanAmount must be positive");
+
 			if (model.TenureMonths <= 0)
-			{
-				throw new Exception("TenureMonths must be positive");
-			}
+				throw new StrategyWarning(this, "TenureMonths must be positive");
+
 			Model = model;
 			this.customerId = customerId;
 		}
@@ -126,7 +125,7 @@
 				if (monthlyInterestRate > 1000000)
 				{
 					LogInputs();
-					throw new Exception("Monthly interest rate should be over 1000000, aborting calculation");
+					throw new StrategyWarning(this, "Monthly interest rate should be over 1000000, aborting calculation");
 				}
 				monthlyInterestRate *= 10;
 				balance = CalculateBalance(monthlyInterestRate);

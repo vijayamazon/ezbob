@@ -1,5 +1,6 @@
 ﻿namespace ServiceClientProxy {
 	using EzServiceAccessor;
+	using Ezbob.Backend.Models;
 
 	public class EzServiceAccessorLong : IEzServiceAccessor {
 		#region public
@@ -19,6 +20,20 @@
 		} // CalculateVatReturnSummary
 
 		#endregion method CalculateVatReturnSummary
+
+		#region method SaveVatReturnData
+
+		public void SaveVatReturnData(
+			int nCustomerMarketplaceID,
+			int nHistoryRecordID,
+			int nSourceID,
+			VatReturnRawData[] oVatReturn,
+			RtiTaxMonthRawData[] oRtiMonths
+		) {
+			m_oServiceClient.Instance.SaveVatReturnData(nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths);
+		} // CalculateVatReturnSummary
+
+		#endregion method SaveVatReturnData
 
 		#endregion public
 

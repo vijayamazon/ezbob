@@ -1,11 +1,11 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
-	using System;
+	using Exceptions;
 	using Ezbob.Database;
 
 	public class BrokerLeadData : CustomerData {
 		#region constructor
 
-		public BrokerLeadData(string sBrokerContactEmail) {
+		public BrokerLeadData(string sBrokerContactEmail, AStrategy oStrategy) : base(oStrategy) {
 			m_sBrokerContactEmail = sBrokerContactEmail;
 		} // constructor
 
@@ -35,7 +35,7 @@
 			);
 
 			if (LeadID < 1)
-				throw new Exception("Failed to find a lead by id " + nLeadID + " and contact email " + m_sBrokerContactEmail);
+				throw new StrategyWarning(Strategy, "Failed to find a lead by id " + nLeadID + " and contact email " + m_sBrokerContactEmail);
 		} // Load
 
 		#endregion method Load

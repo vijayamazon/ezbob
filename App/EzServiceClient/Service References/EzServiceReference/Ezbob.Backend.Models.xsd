@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:complexType name="QuickOfferModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Aml" type="xs:int" />
@@ -24,6 +25,28 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="QuickOfferModel" nillable="true" type="tns:QuickOfferModel" />
+  <xs:complexType name="ArrayOfRtiTaxMonthRawData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RtiTaxMonthRawData" nillable="true" type="tns:RtiTaxMonthRawData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfRtiTaxMonthRawData" nillable="true" type="tns:ArrayOfRtiTaxMonthRawData" />
+  <xs:complexType name="RtiTaxMonthRawData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AmountDue" nillable="true" type="tns:Coin" />
+      <xs:element minOccurs="0" name="AmountPaid" nillable="true" type="tns:Coin" />
+      <xs:element minOccurs="0" name="DateEnd" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateStart" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RtiTaxMonthRawData" nillable="true" type="tns:RtiTaxMonthRawData" />
+  <xs:complexType name="Coin">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CurrencyCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Coin" nillable="true" type="tns:Coin" />
   <xs:complexType name="ArrayOfVatReturnSummary">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="VatReturnSummary" nillable="true" type="tns:VatReturnSummary" />
@@ -82,6 +105,26 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="VatReturnQuarter" nillable="true" type="tns:VatReturnQuarter" />
+  <xs:complexType name="ArrayOfVatReturnRawData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="VatReturnRawData" nillable="true" type="tns:VatReturnRawData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfVatReturnRawData" nillable="true" type="tns:ArrayOfVatReturnRawData" />
+  <xs:complexType name="VatReturnRawData">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BusinessAddress" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element minOccurs="0" name="BusinessName" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Data" nillable="true" type="q2:ArrayOfKeyValueOfstringCoin96aT1m2k" />
+      <xs:element minOccurs="0" name="DateDue" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateFrom" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateTo" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Period" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RecordID" type="xs:int" />
+      <xs:element minOccurs="0" name="RegistrationNo" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="VatReturnRawData" nillable="true" type="tns:VatReturnRawData" />
   <xs:complexType name="ArrayOfVatReturnPeriod">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="VatReturnPeriod" nillable="true" type="tns:VatReturnPeriod" />

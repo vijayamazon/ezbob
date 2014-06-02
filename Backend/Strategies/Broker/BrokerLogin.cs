@@ -1,5 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
-	using System;
+	using Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -42,7 +42,7 @@
 			m_oSp.FillFirst(Properties);
 
 			if (!string.IsNullOrWhiteSpace(Properties.ErrorMsg))
-				throw new Exception(Properties.ErrorMsg);
+				throw new StrategyWarning(this, Properties.ErrorMsg);
 		} // Execute
 
 		#endregion method Execute

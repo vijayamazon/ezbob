@@ -1,6 +1,8 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.ServiceModel;
+	using Exceptions;
+	using EzBob.Backend.Strategies.Exceptions;
 	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.QuickOffer;
@@ -27,7 +29,7 @@
 				var oCfg = EzBob.Backend.Strategies.QuickOffer.QuickOffer.LoadConfiguration(DB, Log);
 
 				if (ReferenceEquals(oCfg, null))
-					throw new Exception("Failed to load quick offer configuration.");
+					throw new ServiceAlert("Failed to load quick offer configuration.");
 
 				if (oCfg.Enabled == QuickOfferEnabledStatus.Disabled) {
 					return new QuickOfferActionResult {
@@ -47,7 +49,9 @@
 				return QuickOfferProcedure(customerId, saveOfferToDB, true, oCfg);
 			}
 			catch (Exception e) {
-				Log.Alert(e, "Exception during executing QuickOfferWithPrerequisites strategy.");
+				if (!(e is AStrategyException))
+					Log.Alert(e, "Exception during executing QuickOfferWithPrerequisites strategy.");
+
 				throw new FaultException(e.Message);
 			} // try
 		} // QuickOfferWithPrerequisites

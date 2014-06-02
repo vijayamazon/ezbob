@@ -408,13 +408,28 @@
 		ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
 
 		[OperationContract]
-		VatReturnSummaryActionResult LoadVatReturnSummary(int nCustomerID, int nMarketplaceID);
+		VatReturnDataActionResult LoadVatReturnSummary(int nCustomerID, int nMarketplaceID);
 
 		[OperationContract]
 		ActionMetaData AndRecalculateVatReturnSummaryForAll();
 
 		[OperationContract]
 		VatReturnPeriodsActionResult LoadManualVatReturnPeriods(int nCustomerID);
+
+		[OperationContract]
+		ActionMetaData SaveVatReturnData(
+			int nCustomerMarketplaceID,
+			int nHistoryRecordID,
+			int nSourceID,
+			VatReturnRawData[] oVatReturn,
+			RtiTaxMonthRawData[] oRtiMonths
+		);
+
+		[OperationContract]
+		VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID);
+
+		[OperationContract]
+		VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID);
 
 		#endregion VAT
 

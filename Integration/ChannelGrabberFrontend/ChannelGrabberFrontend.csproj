@@ -85,6 +85,10 @@
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Backend\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
       <Name>Barrymore</Name>

@@ -1,10 +1,12 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using System;
+	using Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
+	using JetBrains.Annotations;
 	using Misc;
 
 	public class BrokerSignup : AStrategy {
@@ -48,6 +50,7 @@
 				EstimatedMonthlyApplicationCount = nEstimatedMonthlyApplicationCount,
 				BrokerTermsID = nBrokerTermsID,
 				ReferredBy = sReferredBy,
+				Strategy = this,
 			};
 
 			Properties = new BrokerProperties();
@@ -88,7 +91,7 @@
 
 			if (Properties.BrokerID < 1) {
 				Log.Alert("Failed to create a broker: no error message from DB but broker id is 0.");
-				throw new Exception("Failed to create a broker.");
+				throw new StrategyException(this, "Failed to create a broker.");
 			} // if
 		} // Execute
 
@@ -123,12 +126,12 @@
 				ContactOtherPhone = Validate(ContactOtherPhone, "Contact person other phone", false);
 
 				if (EstimatedMonthlyClientAmount <= 0)
-					throw new Exception("Estimated monthly amount is out of range.");
+					throw new StrategyWarning(Strategy, "Estimated monthly amount is out of range.");
 
 				Password = Validate(m_sPassword, "Password");
 
 				if (m_sPassword != Password2)
-					throw new Exception("Passwords do not match.");
+					throw new StrategyWarning(Strategy, "Passwords do not match.");
 
 				FirmWebSiteUrl = (FirmWebSiteUrl ?? string.Empty).Trim();
 
@@ -139,22 +142,30 @@
 
 			#region properties
 
+			[UsedImplicitly]
 			public string FirmName { get; set; }
 
+			[UsedImplicitly]
 			public string FirmRegNum { get; set; }
 
+			[UsedImplicitly]
 			public string ContactName { get; set; }
 
+			[UsedImplicitly]
 			public string ContactEmail { get; set; }
 
+			[UsedImplicitly]
 			public string ContactMobile { get; set; }
 
+			[UsedImplicitly]
 			public string ContactOtherPhone { get; set; }
 
+			[UsedImplicitly]
 			public decimal EstimatedMonthlyClientAmount { get; set; }
 
 			#region property Password
 
+			[UsedImplicitly]
 			public string Password {
 				get { return SecurityUtils.HashPassword(ContactEmail, m_sPassword); } // get
 				set { m_sPassword = value; } // set
@@ -164,33 +175,44 @@
 
 			#endregion property Password
 
+			[UsedImplicitly]
 			public string TempSourceRef {
 				get { return Guid.NewGuid().ToString("N"); }
 				set { }
 			} // TempSourceRef
 
+			[UsedImplicitly]
 			public string FirmWebSiteUrl { get; set; }
 
+			[UsedImplicitly]
 			public int EstimatedMonthlyApplicationCount { get; set; }
 
+			[UsedImplicitly]
 			public DateTime AgreedToTermsDate {
 				get { return DateTime.UtcNow; }
 				set { }
 			} // AgreedToTermsDate
 
+			[UsedImplicitly]
 			public DateTime AgreedToPrivacyPolicyDate {
 				get { return DateTime.UtcNow; }
 				set { }
 			} // AgreedToPrivacyPolicyDate
 
 			[NonTraversable]
+			[UsedImplicitly]
 			public string Password2 { get; set; }
 
+			[UsedImplicitly]
 			public int BrokerTermsID { get; set; }
 
+			[UsedImplicitly]
 			public string ReferredBy { get; set; }
 
 			#endregion properties
+
+			[NonTraversable]
+			public AStrategy Strategy { private get; set; }
 
 			#region method Validate
 
@@ -199,14 +221,14 @@
 
 				if (sValue.Length == 0) {
 					if (bThrow)
-						throw new ArgumentNullException(sArgName, sArgName + " not specified.");
+						throw new StrategyWarning(Strategy, sArgName + " not specified.");
 
 					return sValue;
 				} // if
 
 				if (sValue.Length > 255) {
 					if (bThrow)
-						throw new Exception(sArgName + " is too long.");
+						throw new StrategyWarning(Strategy, sArgName + " is too long.");
 
 					return sValue.Substring(0, 255);
 				} // if

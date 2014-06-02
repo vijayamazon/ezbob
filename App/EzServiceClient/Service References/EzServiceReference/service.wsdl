@@ -246,6 +246,24 @@
   <wsdl:message name="IEzService_LoadManualVatReturnPeriods_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadManualVatReturnPeriodsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SaveVatReturnData_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveVatReturnData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaveVatReturnData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveVatReturnDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnRawData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnRawData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnRawData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnRawDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnFullData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnFullData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnFullData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnFullDataResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetWizardConfigs_InputMessage">
     <wsdl:part name="parameters" element="tns:GetWizardConfigs" />
   </wsdl:message>
@@ -919,6 +937,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadManualVatReturnPeriods" message="tns:IEzService_LoadManualVatReturnPeriods_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadManualVatReturnPeriodsResponse" message="tns:IEzService_LoadManualVatReturnPeriods_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SaveVatReturnData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveVatReturnData" message="tns:IEzService_SaveVatReturnData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveVatReturnDataResponse" message="tns:IEzService_SaveVatReturnData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnRawData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnRawData" message="tns:IEzService_LoadVatReturnRawData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnRawDataResponse" message="tns:IEzService_LoadVatReturnRawData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnFullData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnFullData" message="tns:IEzService_LoadVatReturnFullData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnFullDataResponse" message="tns:IEzService_LoadVatReturnFullData_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetWizardConfigs">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
@@ -1546,6 +1576,33 @@
     </wsdl:operation>
     <wsdl:operation name="LoadManualVatReturnPeriods">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoadManualVatReturnPeriods" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveVatReturnData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveVatReturnData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnRawData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadVatReturnRawData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnFullData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadVatReturnFullData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2393,20 +2450,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

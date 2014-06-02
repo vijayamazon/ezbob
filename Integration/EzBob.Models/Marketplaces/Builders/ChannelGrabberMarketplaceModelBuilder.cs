@@ -110,7 +110,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 				oRtiTaxMonths.Sort(RtiTaxMonthEntry.CompareForSort);
 
 				var oServiceClient = new ServiceClient();
-				VatReturnSummaryActionResult vrsar = oServiceClient.Instance.LoadVatReturnSummary(mp.Customer.Id, mp.Id);
+				VatReturnDataActionResult vrsar = oServiceClient.Instance.LoadVatReturnSummary(mp.Customer.Id, mp.Id);
 
 				var datesSummary = new List<VatReturnSummaryDates>();
 				

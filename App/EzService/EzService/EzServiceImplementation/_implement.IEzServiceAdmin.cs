@@ -3,6 +3,8 @@
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using System.Threading;
+	using Exceptions;
+	using EzBob.Backend.Strategies.Exceptions;
 	using Ezbob.Logger;
 
 	partial class EzServiceImplementation {
@@ -46,7 +48,9 @@
 					SaveActionStatus(amd, ActionStatus.Failed);
 				} // if
 
-				Log.Alert(e, "Exception during Shutdown() method.");
+				if (!(e is AStrategyException))
+					Log.Alert(e, "Exception during Shutdown() method.");
+
 				throw new FaultException(e.Message);
 			} // try
 		} // Shutdown
@@ -96,7 +100,9 @@
 					return amd;
 				}
 				catch (Exception e) {
-					Log.Alert(e, "Exception during Terminate(Guid) method.");
+					if (!(e is AStrategyException))
+						Log.Alert(e, "Exception during Terminate(Guid) method.");
+
 					throw new FaultException(e.Message);
 				} // try
 			} // lock
@@ -113,7 +119,7 @@
 				ActionMetaData amd = NewAsync("Admin.Nop", comment: nLengthInSeconds + " seconds");
 
 				if (nLengthInSeconds < 1)
-					throw new Exception("Nop length is less than 1 second.");
+					throw new ServiceWarning("Nop length is less than 1 second.");
 
 				Log.Msg("Nop({0}) method: creating a sleeper...", nLengthInSeconds);
 
@@ -141,7 +147,9 @@
 				return amd;
 			}
 			catch (Exception e) {
-				Log.Alert(e, "Exception during Nop() method.");
+				if (!(e is AStrategyException))
+					Log.Alert(e, "Exception during Nop() method.");
+
 				throw new FaultException(e.Message);
 			} // try
 		} // Nop
@@ -170,7 +178,9 @@
 				return new StringListActionResult { MetaData = amd, Records = oResult };
 			}
 			catch (Exception e) {
-				Log.Alert(e, "Exception during ListActiveActions() method.");
+				if (!(e is AStrategyException))
+					Log.Alert(e, "Exception during ListActiveActions() method.");
+
 				throw new FaultException(e.Message);
 			} // try
 		} // ListActiveActions
@@ -207,7 +217,9 @@
 					SaveActionStatus(amd, ActionStatus.Done);
 				} // if
 
-				Log.Alert(e, "Exception during WriteToLog() method.");
+				if (!(e is AStrategyException))
+					Log.Alert(e, "Exception during WriteToLog() method.");
+
 				throw new FaultException(e.Message);
 			} // try
 		} // WriteToLog

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Ezbob.Logger;
-
-namespace Ezbob.HmrcHarvester {
-	#region class VatReturnSeeds
+﻿namespace Ezbob.HmrcHarvester {
+	using System;
+	using System.Collections.Generic;
+	using Ezbob.Logger;
 
 	public class VatReturnSeeds : ISeeds {
 		#region public
@@ -175,6 +173,4 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion private
 	} // class VatReturnSeeds
-
-	#endregion class VatReturnSeeds
 } // namespace Ezbob.HmrcHarvester

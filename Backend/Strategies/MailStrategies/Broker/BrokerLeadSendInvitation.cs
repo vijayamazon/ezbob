@@ -36,7 +36,7 @@
 		protected override void LoadRecipientData() {
 			Log.Debug("Loading broker lead data...");
 
-			LeadData = new BrokerLeadData(m_sBrokerContactEmail);
+			LeadData = new BrokerLeadData(m_sBrokerContactEmail, this);
 
 			LeadData.Load(LeadID, DB);
 

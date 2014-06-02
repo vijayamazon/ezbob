@@ -34,7 +34,7 @@
 		protected override void LoadRecipientData() {
 			Log.Debug("Loading broker data...");
 
-			BrokerData = new BrokerData();
+			BrokerData = new BrokerData(this);
 
 			BrokerData.Load(BrokerID, DB);
 

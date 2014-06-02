@@ -1,7 +1,7 @@
-using System;
-using EZBob.DatabaseLib.Common;
-
 namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
+	using System;
+	using EZBob.DatabaseLib.Common;
+
 	[Serializable]
 	public class RtiTaxMonthEntry : AInternalOrderItem {
 		#region public

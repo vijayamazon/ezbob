@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Backend.Models;
 	using Ezbob.HmrcHarvester;
 	using Integration.ChannelGrabberAPI;
 	using Integration.ChannelGrabberConfig;
@@ -84,6 +85,8 @@
 				} // for
 
 				ms_oLog.Error(os.ToString());
+
+				throw new ApiException("History record is not specified.");
 			} // if
 
 			AccountModel oSecInfo;
@@ -117,6 +120,7 @@
 						break;
 
 					case Behaviour.HMRC:
+						/*
 						ProcessRetrieved(
 							ctr.DataHarvester,
 							databaseCustomerMarketPlace,
@@ -136,6 +140,15 @@
 						);
 
 						ObjectFactory.GetInstance<IEzServiceAccessor>().CalculateVatReturnSummary(databaseCustomerMarketPlace.Id);
+						*/
+
+						ObjectFactory.GetInstance<IEzServiceAccessor>().SaveVatReturnData(
+							databaseCustomerMarketPlace.Id,
+							historyRecord.Id,
+							ctr.SourceID,
+							HmrcVatReturnConversion(ctr.DataHarvester),
+							HmrcRtiTaxMonthConversion(ctr.DataHarvester)
+						);
 
 						break;
 
@@ -248,13 +261,13 @@
 
 		#region method HmrcVatReturnConversion
 
-		private List<AInternalOrderItem> HmrcVatReturnConversion(IHarvester oHarvester) {
-			var oVatEntries = new List<AInternalOrderItem>();
+		private VatReturnRawData[] HmrcVatReturnConversion(IHarvester oHarvester) {
+			var oVatRecords = new List<VatReturnRawData>();
 
 			foreach (KeyValuePair<string, ISeeds> pair in ((Ezbob.HmrcHarvester.Harvester)oHarvester).Hopper.Seeds[DataType.VatReturn]) {
 				var oData = (VatReturnSeeds)pair.Value;
 
-				var oEntry = new VatReturnEntry {
+				var oEntry = new VatReturnRawData {
 					BusinessAddress = oData.BusinessAddress,
 					BusinessName = oData.BusinessName,
 					DateDue = oData.DateDue,
@@ -265,39 +278,39 @@
 				};
 
 				foreach (KeyValuePair<string, Ezbob.HmrcHarvester.Coin> oBoxData in oData.ReturnDetails) {
-					oEntry.Data[oBoxData.Key] = new EZBob.DatabaseLib.Common.Coin(
-						oBoxData.Value.Amount,
-						oBoxData.Value.CurrencyCode
-					);
+					oEntry.Data[oBoxData.Key] = new Ezbob.Backend.Models.Coin {
+						Amount = oBoxData.Value.Amount,
+						CurrencyCode = oBoxData.Value.CurrencyCode,
+					};
 				} // for each box
 
-				oVatEntries.Add(oEntry);
+				oVatRecords.Add(oEntry);
 			} // for each file
 
-			return oVatEntries;
+			return oVatRecords.ToArray();
 		} // HmrcVatReturnConversion
  
 		#endregion method HmrcVatReturnConversion
 
 		#region method HmrcRtiTaxMonthConversion
 
-		private List<AInternalOrderItem> HmrcRtiTaxMonthConversion(IHarvester oHarvester) {
-			var oOutput = new List<AInternalOrderItem>();
+		private RtiTaxMonthRawData[] HmrcRtiTaxMonthConversion(IHarvester oHarvester) {
+			var oOutput = new List<RtiTaxMonthRawData>();
 
 			foreach (KeyValuePair<string, ISeeds> pair in ((Ezbob.HmrcHarvester.Harvester)oHarvester).Hopper.Seeds[DataType.PayeRtiTaxYears]) {
 				var oData = (RtiTaxYearSeeds)pair.Value;
 
 				oOutput.AddRange(
-					oData.Months.Select(rtms => new RtiTaxMonthEntry {
+					oData.Months.Select(rtms => new RtiTaxMonthRawData {
 						DateStart = rtms.DateStart,
 						DateEnd = rtms.DateEnd,
-						AmountPaid = new Coin(rtms.AmountPaid.Amount, rtms.AmountPaid.CurrencyCode),
-						AmountDue = new Coin(rtms.AmountDue.Amount, rtms.AmountDue.CurrencyCode),
+						AmountPaid = new Ezbob.Backend.Models.Coin(rtms.AmountPaid.Amount, rtms.AmountPaid.CurrencyCode),
+						AmountDue = new Ezbob.Backend.Models.Coin(rtms.AmountDue.Amount, rtms.AmountDue.CurrencyCode),
 					})
 				);
 			} // for each file
 
-			return oOutput;
+			return oOutput.ToArray();
 		} // HmrcRtiTaxMonthConversion
  
 		#endregion method HmrcVatReturnConversion

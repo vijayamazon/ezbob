@@ -33,7 +33,7 @@
 			);
 
 			if (dt.Rows.Count < 1)
-				throw new StrategyException(this, "no approval data found for customer " + CustomerData);
+				throw new StrategyWarning(this, "no approval data found for customer " + CustomerData);
 
 			var sr = new SafeReader(dt.Rows[0]);
 			int numOfApprovals = sr["NumOfApprovals"];

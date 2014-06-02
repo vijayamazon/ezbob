@@ -31,7 +31,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 			);
 
 			if (dt.Rows.Count < 1)
-				throw new StrategyException(this, "failed to load escalation data from customer " + CustomerData);
+				throw new StrategyWarning(this, "failed to load escalation data from customer " + CustomerData);
 
 			var sr = new SafeReader(dt.Rows[0]);
 

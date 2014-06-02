@@ -59,7 +59,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
 		public virtual string BusinessName { get; set; }
 		public virtual string[] BusinessAddress { get; set; }
 
-		public virtual SortedDictionary<string, Coin> Data { get; set; }
+		public virtual SortedDictionary<string, Coin> Data { get; private set; }
 
 		public override DateTime RecordTime { get { return DateTo; }} // RecordTime
 

@@ -1,8 +1,14 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
-	using System;
+	using Exceptions;
 	using Ezbob.Database;
 
 	public class BrokerData : CustomerData {
+		#region constructor
+
+		public BrokerData(AStrategy oStrategy) : base(oStrategy) {} // constructor
+
+		#endregion constructor
+
 		#region method Load
 
 		public override void Load(int nBrokerID, AConnection oDB) {
@@ -26,7 +32,7 @@
 			);
 
 			if (BrokerID < 0)
-				throw new Exception("Failed to find a broker by id " + nBrokerID);
+				throw new StrategyWarning(Strategy, "Failed to find a broker by id " + nBrokerID);
 		} // Load
 
 		#endregion method Load

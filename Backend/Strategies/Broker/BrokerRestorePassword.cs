@@ -1,5 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
-	using System;
+	using Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -31,7 +31,7 @@
 			var oValidator = new ValidateMobileCode(m_sMobile, m_sCode, DB, Log);
 			oValidator.Execute();
 			if (!oValidator.IsValidatedSuccessfully())
-				throw new Exception("Failed to validate mobile code.");
+				throw new StrategyWarning(this, "Failed to validate mobile code.");
 
 			var sp = new SpBrokerLoadOwnProperties(DB, Log) {
 				ContactMobile = m_sMobile,
@@ -58,30 +58,6 @@
 		#endregion public
 
 		#region private
-
-		#region method Validate
-
-		private string Validate(string sValue, string sArgName, bool bThrow = true) {
-			sValue = (sValue ?? string.Empty).Trim();
-
-			if (sValue.Length == 0) {
-				if (bThrow)
-					throw new ArgumentNullException(sArgName, sArgName + " not specified.");
-
-				return sValue;
-			} // if
-
-			if (sValue.Length > 255) {
-				if (bThrow)
-					throw new Exception(sArgName + " is too long.");
-
-				return sValue.Substring(0, 255);
-			} // if
-
-			return sValue;
-		} // Validate
-
-		#endregion method Validate
 
 		private readonly string m_sMobile;
 		private readonly string m_sCode;

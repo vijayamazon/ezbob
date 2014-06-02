@@ -30,38 +30,17 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		MAX(r.Id) AS RecordID
-	INTO
-		#recs
-	FROM
-		MP_VatReturnRecords r
-	WHERE
-		r.CustomerMarketPlaceId = @MarketplaceID
-		AND
-		ISNULL(r.IsDeleted, 0) = 0
-	GROUP BY
-		CONVERT(DATE, r.DateFrom),
-		CONVERT(DATE, r.DateTo),
-		r.RegistrationNo
-
-	------------------------------------------------------------------------------
-
-	SELECT
 		CONVERT(DATE, r.DateFrom) AS DateFrom,
 		CONVERT(DATE, r.DateTo) AS DateTo,
 		r.RegistrationNo,
 		b.Name
 	FROM
 		MP_VatReturnRecords r
-		INNER JOIN #recs ON r.Id = #recs.RecordID
+		INNER JOIN dbo.udfLoadActualVatReturnRecords(@MarketPlaceID) re ON r.Id = re.RecordID
 		INNER JOIN Business b ON r.BusinessId = b.Id
 	ORDER BY
 		r.RegistrationNo,
 		r.DateFrom,
 		b.Name
-
-	------------------------------------------------------------------------------
-
-	DROP TABLE #recs
 END
 GO

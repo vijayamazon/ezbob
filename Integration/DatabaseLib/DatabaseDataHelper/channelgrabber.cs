@@ -155,11 +155,9 @@
 			if (ordersData == null)
 				return;
 
-			DateTime submittedDate = DateTime.UtcNow;
-
 			var oRecord = new MP_RtiTaxMonthRecord {
 				CustomerMarketPlace = customerMarketPlace,
-				Created = submittedDate,
+				Created = DateTime.UtcNow,
 				HistoryRecord = historyRecord,
 				SourceID = nSourceID,
 			};

@@ -10,7 +10,6 @@ BEGIN
 	
 	DECLARE @OneMonthSalary DECIMAL(18, 0)
 	DECLARE @CustomerID INT
-	DECLARE @RecordID INT
 
 	------------------------------------------------------------------------------
 
@@ -50,17 +49,6 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SELECT TOP 1
-		@RecordID = Id
-	FROM
-		MP_RtiTaxMonthRecords
-	WHERE
-		CustomerMarketPlaceId = @CustomerMarketplaceID
-	ORDER BY
-		Created DESC
-
-	------------------------------------------------------------------------------
-
 	SELECT
 		@CustomerID AS CustomerID
 
@@ -70,8 +58,6 @@ BEGIN
 		e.AmountPaid,
 		e.CurrencyCode
 	FROM
-		MP_RtiTaxMonthEntries e
-	WHERE
-		e.RecordId = @RecordID
+		dbo.udfLoadRtiMonthRawData(@CustomerMarketplaceID) e
 END
 GO

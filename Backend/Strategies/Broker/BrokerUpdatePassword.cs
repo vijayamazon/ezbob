@@ -1,5 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
-	using System;
+	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -38,7 +38,7 @@
 			BrokerID = m_oSp.ExecuteScalar<int>();
 
 			if (BrokerID < 1)
-				throw new Exception("Failed to update broker password.");
+				throw new StrategyWarning(this, "Failed to update broker password.");
 		} // Execute
 
 		public int BrokerID { get; private set; }

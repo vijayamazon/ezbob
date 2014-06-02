@@ -52,7 +52,10 @@
     <Compile Include="BrokerCustomerDetailsModel.cs" />
     <Compile Include="BrokerCustomerFileModel.cs" />
     <Compile Include="BrokerPropertiesModel.cs" />
+    <Compile Include="Coin.cs" />
     <Compile Include="ConfigTable.cs" />
+    <Compile Include="RtiTaxMonthRawData.cs" />
+    <Compile Include="VatReturnRawDataModel.cs" />
     <Compile Include="VatReturnPeriodModel.cs" />
     <Compile Include="VatReturnSummaryQuarterModel.cs" />
     <Compile Include="enums.cs" />

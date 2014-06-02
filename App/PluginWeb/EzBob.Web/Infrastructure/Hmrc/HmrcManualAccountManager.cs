@@ -21,6 +21,7 @@
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using Coin = Ezbob.HmrcHarvester.Coin;
 
 	public class HmrcManualAccountManager {
 		#region public

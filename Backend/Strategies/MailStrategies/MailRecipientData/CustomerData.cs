@@ -1,16 +1,20 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
-	using System;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using Exceptions;
 	using Ezbob.Database;
 
-	public class CustomerData
-	{
+	public class CustomerData {
+		#region constructor
+
+		public CustomerData(AStrategy oStrategy) {
+			Strategy = oStrategy;
+		} // constructor
+
+		#endregion constructor
+
 		#region method Load
 
-		public virtual void Load(int customerId, AConnection oDb)
-		{
-			oDb.ForEachRowSafe((sr, bRowsetStart) =>
-			{
+		public virtual void Load(int customerId, AConnection oDb) {
+			oDb.ForEachRowSafe((sr, bRowsetStart) => {
 				Id = sr["Id"];
 				FirstName = sr["FirstName"];
 				Surname = sr["Surname"];
@@ -32,15 +36,14 @@
 			);
 
 			if (Id != customerId)
-				throw new Exception("Failed to find a customer by id " + customerId);
+				throw new StrategyWarning(Strategy, "Failed to find a customer by id " + customerId);
 		} // Load
 
 		#endregion method Load
 
 		#region method ToString
 
-		public override string ToString()
-		{
+		public override string ToString() {
 			return string.Format(
 				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, test: {9}",
 				Id,
@@ -75,5 +78,7 @@
 		public virtual string City { get; protected set; }
 
 		#endregion properties
+
+		protected AStrategy Strategy { get; set; }
 	} // class CustomerData
 } // namespace

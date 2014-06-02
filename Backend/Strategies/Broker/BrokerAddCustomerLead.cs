@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using System;
+	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EzBob.Backend.Strategies.MailStrategies;
@@ -40,10 +41,10 @@
 			m_oResultRow = m_oSp.FillFirst<SpBrokerAddCustomerLead.ResultRow>();
 
 			if (!string.IsNullOrWhiteSpace(m_oResultRow.ErrorMsg))
-				throw new Exception(m_oResultRow.ErrorMsg);
+				throw new StrategyWarning(this, m_oResultRow.ErrorMsg);
 
 			if (m_oResultRow.LeadID < 1)
-				throw new Exception("Failed to add a customer lead.");
+				throw new StrategyWarning(this, "Failed to add a customer lead.");
 
 			if (SendEmail)
 				new BrokerLeadSendInvitation(m_oResultRow.LeadID, m_oSp.ContactEmail, DB, Log).Execute();

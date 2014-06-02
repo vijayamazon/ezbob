@@ -107,7 +107,7 @@
 		protected virtual void LoadRecipientData() {
 			Log.Debug("Loading customer data...");
 
-			CustomerData = new CustomerData();
+			CustomerData = new CustomerData(this);
 
 			CustomerData.Load(CustomerId, DB);
 
