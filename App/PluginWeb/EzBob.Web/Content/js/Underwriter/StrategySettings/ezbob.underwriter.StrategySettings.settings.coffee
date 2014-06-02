@@ -53,14 +53,14 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.View
         )
 
         @pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios()
-        @pricingModelScenarios.fetch()
-        @pricingModelModel =  new EzBob.Underwriter.SettingsPricingModelModel()
-        @pricingModelModel.fetch()
-        @pricingModelView =  new EzBob.Underwriter.SettingsPricingModelView(
-            el: pricingModel
-            model: @pricingModelModel
-            scenarios: @pricingModelScenarios
-        )
+        @pricingModelScenarios.fetch().done () =>
+            @pricingModelModel =  new EzBob.Underwriter.SettingsPricingModelModel()
+            @pricingModelModel.fetch().done () =>
+                @pricingModelView =  new EzBob.Underwriter.SettingsPricingModelView(
+                    el: pricingModel
+                    model: @pricingModelModel
+                    scenarios: @pricingModelScenarios
+                )
 
         @euLoanMonthlyInterestModel = new EzBob.Underwriter.Settings.EuLoanMonthlyInterestModel()
         @euLoanMonthlyInterestView =  new EzBob.Underwriter.Settings.EuLoanMonthlyInterestView(
