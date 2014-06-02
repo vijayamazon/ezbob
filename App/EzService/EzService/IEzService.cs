@@ -442,6 +442,9 @@
 
 		[OperationContract]
 		ActionMetaData DisableCurrentManualPacnetDeposits(int underwriterId);
+
+		[OperationContract]
+		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
 	} // interface IEzService
 } // namespace EzService
 

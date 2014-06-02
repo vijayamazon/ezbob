@@ -2,8 +2,6 @@
 {
 	using System;
 	using System.Linq;
-	using ConfigManager;
-	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -21,8 +19,6 @@
 
 	public class ApplicationInfoModelBuilder
 	{
-		private readonly IPacNetBalanceRepository _funds;
-		private readonly IPacNetManualBalanceRepository _manualFunds;
 		private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
@@ -32,9 +28,8 @@
 		private readonly ServiceClient serviceClient;
 		private readonly VatReturnSummaryRepository _vatReturnSummaryRepository;
 		private readonly CustomerAnalyticsRepository _customerAnalyticsRepository;
+
 		public ApplicationInfoModelBuilder(
-			IPacNetBalanceRepository funds,
-			IPacNetManualBalanceRepository manualFunds,
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
 			IDiscountPlanRepository discounts,
 			ILoanTypeRepository loanTypes,
@@ -43,8 +38,6 @@
 			VatReturnSummaryRepository vatReturnSummaryRepository,
 			CustomerAnalyticsRepository customerAnalyticsRepository)
 		{
-			_funds = funds;
-			_manualFunds = manualFunds;
 			_discounts = discounts;
 			_loanTypes = loanTypes;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
@@ -118,21 +111,6 @@
 			model.AvaliableAmount = customer.CreditSum ?? 0M;
 			model.OfferExpired = customer.OfferValidUntil <= DateTime.UtcNow;
 
-
-			var balance = _funds.GetBalance();
-			var manualBalance = _manualFunds.GetBalance();
-			var fundsAvailable = balance.Adjusted + manualBalance;
-			model.FundsAvaliable = FormattingUtils.FormatPounds(fundsAvailable);
-
-			DateTime today = DateTime.UtcNow;
-			model.FundsAvailableUnderLimitClass = string.Empty;
-			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
-			if (fundsAvailable < relevantLimit)
-			{
-				model.FundsAvailableUnderLimitClass = "red_cell";
-			}
-
-			model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
 			//Status = "Active";
 			model.Details = customer.Details;
 			var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||

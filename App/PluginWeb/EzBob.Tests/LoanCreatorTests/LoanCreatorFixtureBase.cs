@@ -30,21 +30,10 @@
             _loanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
             _loanBuilder = new LoanBuilder(_loanDetailsModelBuilder);
 
-            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake(), null);
+            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, agreementsGenerator.Object, context.Object, _loanBuilder, null);
             SetUp();
         }
 
         public virtual void SetUp(){}
-    }
-
-    public class AvailableFundsValidatorFake : AvailableFundsValidator
-    {
-        public AvailableFundsValidatorFake() : base(null, null)
-        {
-        }
-
-        public override void VerifyAvailableFunds(decimal transfered)
-        {
-        }
     }
 }

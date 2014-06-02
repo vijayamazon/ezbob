@@ -21,8 +21,6 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         "click [name='repaymentPeriodChangeButton']"        : "editRepaymentPeriod"
         "click [name='interestRateChangeButton']"           : "editInterestRate"
         "click [name='openCreditLineChangeButton']"         : "editOfferedCreditLine"
-        "click [name='openPacnetManualButton']"             : "openPacnetManual"
-        "click [name='clearPacnetManualButton']"            : "clearPacnetManual"
         "click [name='editDetails']"                        : "editDetails"
         "click [name='manualSetupFeeEditAmountButton']"     : "editManualSetupFeeAmount"
         "click [name='manualSetupFeeEditPercentButton']"    : "editManualSetupFeePercent"
@@ -131,47 +129,6 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         view.on "done", ->
             that.model.fetch()
 
-        return
-
-    openPacnetManual: ->
-        that = this
-        d = new EzBob.Dialogs.PacentManual(
-            model: @model
-            title: "Pacnet Balance - Add Manual Funds"
-            width: 400
-            postValueName: "amount"
-            url: "Underwriter/ApplicationInfo/SavePacnetManual"
-            data:
-                limit: EzBob.Config.PacnetBalanceMaxManualChange
-
-            min: EzBob.Config.PacnetBalanceMaxManualChange * -1
-            max: EzBob.Config.PacnetBalanceMaxManualChange
-            required: true
-        )
-        d.render()
-        d.on "done", ->
-            that.model.fetch()
-
-        return
-
-    clearPacnetManual: ->
-        that = this
-
-        d = new EzBob.Dialogs.CheckBoxEdit(
-            model: @model
-            propertyName: "UseSetupFee"
-            title: "Pacnet Balance - Clear Manual Funds"
-            width: 400
-            checkboxName: "I am sure"
-            postValueName: "isSure"
-            url: "Underwriter/ApplicationInfo/DisableTodaysPacnetManual"
-            data:
-                isSure: @model.get("IsSure")
-        )
-
-        d.render()
-        d.on "done", ->
-            that.model.fetch()
         return
 
     editInterestRate: ->

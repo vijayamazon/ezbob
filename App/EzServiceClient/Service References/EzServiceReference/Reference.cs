@@ -1944,10 +1944,13 @@ namespace ServiceClientProxy.EzServiceReference {
         ServiceClientProxy.EzServiceReference.AvailableFundsActionResult GetAvailableFunds(int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RecordManualPacnetDeposit", ReplyAction="http://tempuri.org/IEzService/RecordManualPacnetDepositResponse")]
-        ServiceClientProxy.EzServiceReference.AvailableFundsActionResult RecordManualPacnetDeposit(int underwriterId, string underwriterName, int amount);
+        ServiceClientProxy.EzServiceReference.ActionMetaData RecordManualPacnetDeposit(int underwriterId, string underwriterName, int amount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/DisableCurrentManualPacnetDeposits", ReplyAction="http://tempuri.org/IEzService/DisableCurrentManualPacnetDepositsResponse")]
-        ServiceClientProxy.EzServiceReference.AvailableFundsActionResult DisableCurrentManualPacnetDeposits(int underwriterId);
+        ServiceClientProxy.EzServiceReference.ActionMetaData DisableCurrentManualPacnetDeposits(int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds", ReplyAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2);
@@ -2344,12 +2347,16 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetAvailableFunds(underwriterId);
         }
         
-        public ServiceClientProxy.EzServiceReference.AvailableFundsActionResult RecordManualPacnetDeposit(int underwriterId, string underwriterName, int amount) {
+        public ServiceClientProxy.EzServiceReference.ActionMetaData RecordManualPacnetDeposit(int underwriterId, string underwriterName, int amount) {
             return base.Channel.RecordManualPacnetDeposit(underwriterId, underwriterName, amount);
         }
         
-        public ServiceClientProxy.EzServiceReference.AvailableFundsActionResult DisableCurrentManualPacnetDeposits(int underwriterId) {
+        public ServiceClientProxy.EzServiceReference.ActionMetaData DisableCurrentManualPacnetDeposits(int underwriterId) {
             return base.Channel.DisableCurrentManualPacnetDeposits(underwriterId);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount) {
+            return base.Channel.VerifyEnoughAvailableFunds(underwriterId, deductAmount);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2) {

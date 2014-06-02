@@ -29,7 +29,6 @@
 		private readonly IAgreementsGenerator _agreementsGenerator;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly LoanBuilder _loanBuilder;
-		private readonly AvailableFundsValidator _availableFundsValidator;
 		private readonly ISession _session;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanCreator));
@@ -40,7 +39,6 @@
 			IAgreementsGenerator agreementsGenerator,
 			IEzbobWorkplaceContext context,
 			LoanBuilder loanBuilder,
-			AvailableFundsValidator availableFundsValidator,
 			ISession session
 		) {
 			_loanHistoryRepository = loanHistoryRepository;
@@ -49,7 +47,6 @@
 			_agreementsGenerator = agreementsGenerator;
 			_context = context;
 			_loanBuilder = loanBuilder;
-			_availableFundsValidator = availableFundsValidator;
 			_session = session;
 		} // constructor
 
@@ -174,7 +171,7 @@
 
 		public virtual void VerifyAvailableFunds(decimal transfered)
 		{
-			_availableFundsValidator.VerifyAvailableFunds(transfered);
+			m_oServiceClient.Instance.VerifyEnoughAvailableFunds(_context.UserId, transfered);
 		}
 
 		public virtual void ValidateCustomer(Customer cus)

@@ -13,9 +13,6 @@
         public string StartingFromDate { get; set; }
         public decimal InterestRate { get; set; }
 		public string OfferValidateUntil { get; set; }
-		public string FundsAvaliable { get; set; }
-		public string FundsAvailableUnderLimitClass { get; set; }
-        public string FundsReserved { get; set; }
         //public string Status { get; set; }
         public string Details { get; set; }
         public bool Editable { get; set; }

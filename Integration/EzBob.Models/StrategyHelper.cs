@@ -37,7 +37,6 @@
 		private readonly ISession _session;
 		private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
 		private readonly MarketPlacesFacade _mpFacade;
-		private readonly PacNetBalanceRepository pacNetBalanceRepository;
 		private readonly LoanRepository loanRepository;
 		private readonly CashRequestsRepository cashRequestsRepository;
 		private readonly ExperianDefaultAccountRepository experianDefaultAccountRepository;
@@ -45,6 +44,7 @@
 		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ServiceLogRepository serviceLogRepository;
 		private readonly CustomerMarketPlaceRepository _marketPlaceRepository;
+
 		public StrategyHelper()
 		{
 			
@@ -53,7 +53,6 @@
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
 			_caisReportsHistoryRepository = ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
 			_mpFacade = ObjectFactory.GetInstance<MarketPlacesFacade>();
-			pacNetBalanceRepository = ObjectFactory.GetInstance<PacNetBalanceRepository>();
 			loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
 			experianDefaultAccountRepository = ObjectFactory.GetInstance<ExperianDefaultAccountRepository>();
@@ -327,7 +326,7 @@
 			return Convert.ToInt32((DateTime.UtcNow - _mpFacade.MarketplacesSeniority(customer)).TotalDays);
 		}
 
-		public int AutoApproveCheck(int customerId, int systemCalculatedAmount, int minExperianScore)
+		public int AutoApproveCheck(int customerId, int systemCalculatedAmount, int minExperianScore, decimal outstandingOffers)
 		{
 			log.InfoFormat("Checking if auto approval should take place...");
 			var customer = _customers.Get(customerId);
@@ -344,7 +343,7 @@
 					!CheckAge(customer) ||
 					!CheckTurnovers(customerId) ||
 					!CheckSeniority(customer) ||
-					!CheckOutstandingOffers() ||
+					!CheckOutstandingOffers(outstandingOffers) ||
 					!CheckTodaysLoans() ||
 					!CheckTodaysApprovals() ||
 					!CheckDefaultAccounts(customerId))
@@ -515,10 +514,9 @@
 			return true;
 		}
 
-		private bool CheckOutstandingOffers()
+		private bool CheckOutstandingOffers(decimal outstandingOffers)
 		{
 			int autoApproveMaxOutstandingOffers = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxOutstandingOffers");
-			decimal outstandingOffers = pacNetBalanceRepository.GetBalance().ReservedAmount;
 			if (outstandingOffers >= autoApproveMaxOutstandingOffers)
 			{
 				log.InfoFormat("No auto approval: Maximal allowed outstanding offers for auto approval is: {0}. Outstanding offers amount is:{1}", autoApproveMaxOutstandingOffers, outstandingOffers);

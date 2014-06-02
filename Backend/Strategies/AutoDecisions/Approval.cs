@@ -40,15 +40,16 @@
 				decimal minLoanAmount = configSafeReader["MinLoanAmount"];
 				if (enableAutomaticApproval)
 				{
-					response.AutoApproveAmount = strategyHelper.AutoApproveCheck(customerId, offeredCreditLine, minExperianScore);
+					var instance = new GetAvailableFunds(Db, log);
+					instance.Execute();
+					decimal availableFunds = instance.AvailableFunds;
+
+					response.AutoApproveAmount = strategyHelper.AutoApproveCheck(customerId, offeredCreditLine, minExperianScore, instance.ReservedAmount);
 					response.AutoApproveAmount = (int)(Math.Round(response.AutoApproveAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount);
 					log.Info("Decided to auto approve rounded amount:{0}", response.AutoApproveAmount);
 
 					if (response.AutoApproveAmount != 0)
 					{
-						var instance = new GetAvailableFunds(Db, log);
-						instance.Execute();
-						decimal availableFunds = instance.AvailableFunds;
 
 						if (availableFunds > response.AutoApproveAmount)
 						{

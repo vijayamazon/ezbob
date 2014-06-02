@@ -2,8 +2,8 @@
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EzBob.Web.Code.Agreements;
-	using EzBob.Web.Infrastructure;
+	using Agreements;
+	using Infrastructure;
 	using NHibernate;
 	using PaymentServices.PacNet;
 
@@ -14,9 +14,8 @@
 			IAgreementsGenerator agreementsGenerator,
 			IEzbobWorkplaceContext context,
 			LoanBuilder loanBuilder,
-			AvailableFundsValidator availableFundsValidator,
 			ISession session
-		) : base(loanHistoryRepository, pacnetService, agreementsGenerator, context, loanBuilder, availableFundsValidator, session) {}
+		) : base(loanHistoryRepository, pacnetService, agreementsGenerator, context, loanBuilder, session) {}
 
 		public override void ValidateCustomer(Customer cus) {
 		}

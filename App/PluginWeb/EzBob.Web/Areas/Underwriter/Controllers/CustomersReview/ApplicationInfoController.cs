@@ -35,7 +35,6 @@
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
-		private readonly IPacNetManualBalanceRepository _pacNetManualBalanceRepository;
 		private readonly ICustomerStatusesRepository _customerStatusesRepository;
 		private readonly IApprovalsWithoutAMLRepository _approvalsWithoutAmlRepository;
 		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
@@ -56,7 +55,6 @@
 			IDiscountPlanRepository discounts,
 			CashRequestBuilder crBuilder,
 			ApplicationInfoModelBuilder infoModelBuilder,
-			IPacNetManualBalanceRepository pacNetManualBalanceRepository,
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
 			IConfigurationVariablesRepository configurationVariablesRepository,
 			ICustomerStatusHistoryRepository customerStatusHistoryRepository,
@@ -72,7 +70,6 @@
 			_discounts = discounts;
 			_crBuilder = crBuilder;
 			_infoModelBuilder = infoModelBuilder;
-			_pacNetManualBalanceRepository = pacNetManualBalanceRepository;
 			_customerStatusesRepository = customerStatusesRepository;
 			_approvalsWithoutAmlRepository = approvalsWithoutAMLRepository;
 			_configurationVariablesRepository = configurationVariablesRepository;
@@ -170,39 +167,6 @@
 			};
 
 			_approvalsWithoutAmlRepository.SaveOrUpdate(entry);
-		}
-
-		[HttpPost]
-		[Transactional]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		[Permission(Name = "PacnetManualButton")]
-		public JsonResult SavePacnetManual(int amount, int limit)
-		{
-			var newEntry = new PacNetManualBalance
-			{
-				Date = DateTime.UtcNow,
-				Enabled = true,
-				Amount = amount,
-				Username = User.Identity.Name
-			};
-
-			_pacNetManualBalanceRepository.SaveOrUpdate(newEntry);
-			return Json(true);
-		}
-
-		[HttpPost]
-		[Transactional]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		[Permission(Name = "PacnetManualButton")]
-		public JsonResult DisableTodaysPacnetManual(bool isSure)
-		{
-			if (isSure)
-			{
-				_pacNetManualBalanceRepository.DisableCurrents();
-			}
-			return Json(true);
 		}
 
 		[HttpPost]
@@ -634,7 +598,6 @@
 					ObjectFactory.GetInstance<IAgreementsGenerator>(),
 					ObjectFactory.GetInstance<IEzbobWorkplaceContext>(),
 					ObjectFactory.GetInstance<LoanBuilder>(),
-					ObjectFactory.GetInstance<AvailableFundsValidator>(),
 					ObjectFactory.GetInstance<ISession>()
 				);
 

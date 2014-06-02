@@ -270,7 +270,6 @@
     <Compile Include="Areas\Underwriter\Models\SupportModel.cs" />
     <Compile Include="Code\AgreementsGenerator.cs" />
     <Compile Include="Code\AgreementsModelBuilder.cs" />
-    <Compile Include="Code\AvailableFundsValidator.cs" />
     <Compile Include="Code\Bank\YodleeAccountNotFoundException.cs" />
     <Compile Include="Code\Bank\YodleeAccountChecker.cs" />
     <Compile Include="Code\Bank\IYodleeAccountChecker.cs" />

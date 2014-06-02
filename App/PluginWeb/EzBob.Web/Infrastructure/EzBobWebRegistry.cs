@@ -90,8 +90,6 @@ namespace EzBob.Web.Infrastructure
 			For<ICashRequestRepository>().Use<CashRequestRepository>();
 			For<IConfigurationVariablesRepository>().Use<ConfigurationVariablesRepository>();
 			For<ILoanChangesHistoryRepository>().Use<LoanChangesHistoryRepository>();
-			For<IPacNetBalanceRepository>().Use<PacNetBalanceRepository>();
-			For<IPacNetManualBalanceRepository>().Use<PacNetManualBalanceRepository>();
 			For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();
 			For<ICurrencyConvertor>().Use<CurrencyConvertor>();
 			For<ICustomerSessionsRepository>().Use<CustomerSessionsRepository>();

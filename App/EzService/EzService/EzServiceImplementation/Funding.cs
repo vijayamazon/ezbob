@@ -24,5 +24,10 @@
 		{
 			return ExecuteSync<DisableCurrentManualPacnetDeposits>(0, underwriterId);
 		}
+
+		public ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount)
+		{
+			return ExecuteSync<VerifyEnoughAvailableFunds>(0, underwriterId, deductAmount);
+		}
 	} // class EzServiceImplementation
 } // namespace EzService
