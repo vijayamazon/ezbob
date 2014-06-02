@@ -436,6 +436,12 @@
 
 		[OperationContract]
 		AvailableFundsActionResult GetAvailableFunds(int underwriterId);
+
+		[OperationContract]
+		ActionMetaData RecordManualPacnetDeposit(int underwriterId, string underwriterName, int amount);
+
+		[OperationContract]
+		ActionMetaData DisableCurrentManualPacnetDeposits(int underwriterId);
 	} // interface IEzService
 } // namespace EzService
 

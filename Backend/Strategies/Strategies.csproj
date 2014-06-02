@@ -70,6 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Misc\Agreement.cs" />
+    <Compile Include="Misc\DisableCurrentManualPacnetDeposits.cs" />
+    <Compile Include="Misc\RecordManualPacnetDeposit.cs" />
     <Compile Include="Misc\GetAvailableFunds.cs" />
     <Compile Include="PricingModel\SavePricingModelSettings.cs" />
     <Compile Include="PricingModel\GetPricingModelScenarios.cs" />

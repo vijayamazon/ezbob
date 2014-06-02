@@ -14,5 +14,15 @@
 				ReservedAmount = instance.ReservedAmount
 			};
 		}
+
+		public ActionMetaData RecordManualPacnetDeposit(int underwriterId, string underwriterName, int amount)
+		{
+			return ExecuteSync<RecordManualPacnetDeposit>(0, underwriterId, underwriterName, amount);
+		}
+
+		public ActionMetaData DisableCurrentManualPacnetDeposits(int underwriterId)
+		{
+			return ExecuteSync<DisableCurrentManualPacnetDeposits>(0, underwriterId);
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

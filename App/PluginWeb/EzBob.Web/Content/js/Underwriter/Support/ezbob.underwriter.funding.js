@@ -46,11 +46,48 @@
     };
 
     FundingView.prototype.addFunds = function(e) {
-      return console.log('placeholder');
+      var d, that;
+
+      that = this;
+      d = new EzBob.Dialogs.PacentManual({
+        model: this.model,
+        title: "Pacnet Balance - Add Manual Funds",
+        width: 400,
+        postValueName: "amount",
+        url: "Underwriter/Funding/SavePacnetManual",
+        data: {
+          limit: EzBob.Config.PacnetBalanceMaxManualChange
+        },
+        min: EzBob.Config.PacnetBalanceMaxManualChange * -1,
+        max: EzBob.Config.PacnetBalanceMaxManualChange,
+        required: true
+      });
+      d.render();
+      return d.on("done", function() {
+        return that.model.fetch();
+      });
     };
 
     FundingView.prototype.cancelManuallyAddedFunds = function(e) {
-      return console.log('placeholder');
+      var d, that;
+
+      that = this;
+      d = new EzBob.Dialogs.CheckBoxEdit({
+        model: this.model,
+        propertyName: "UseSetupFee",
+        title: "Pacnet Balance - Clear Manual Funds",
+        width: 400,
+        checkboxName: "I am sure",
+        postValueName: "isSure",
+        url: "Underwriter/Funding/DisableCurrentManualPacnetDeposits",
+        data: {
+          isSure: this.model.get("IsSure")
+        }
+      });
+      d.render();
+      return d.on("done", function() {
+        return that.model.fetch();
+      });
     };
 
     FundingView.prototype.onRender = function() {

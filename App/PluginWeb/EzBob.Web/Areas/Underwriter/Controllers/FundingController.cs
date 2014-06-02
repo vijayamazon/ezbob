@@ -44,5 +44,26 @@
 			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
 			return Json(relevantLimit, JsonRequestBehavior.AllowGet);
 		}
-    }
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult SavePacnetManual(int amount, int limit) // remove limit from here and from call
+		{
+			serviceClient.Instance.RecordManualPacnetDeposit(context.UserId, User.Identity.Name, amount);
+			return Json(true);
+		}
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult DisableCurrentManualPacnetDeposits(bool isSure)
+		{
+			if (isSure)
+			{
+				serviceClient.Instance.DisableCurrentManualPacnetDeposits(context.UserId);
+			}
+			return Json(true);
+		}
+	}
 }

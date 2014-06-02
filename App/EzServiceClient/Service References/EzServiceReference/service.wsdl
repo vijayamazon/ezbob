@@ -276,6 +276,18 @@
   <wsdl:message name="IEzService_GetAvailableFunds_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAvailableFundsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_RecordManualPacnetDeposit_InputMessage">
+    <wsdl:part name="parameters" element="tns:RecordManualPacnetDeposit" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RecordManualPacnetDeposit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RecordManualPacnetDepositResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_DisableCurrentManualPacnetDeposits_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisableCurrentManualPacnetDeposits" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_DisableCurrentManualPacnetDeposits_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisableCurrentManualPacnetDepositsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
@@ -921,6 +933,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetAvailableFunds" message="tns:IEzService_GetAvailableFunds_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetAvailableFundsResponse" message="tns:IEzService_GetAvailableFunds_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="RecordManualPacnetDeposit">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RecordManualPacnetDeposit" message="tns:IEzService_RecordManualPacnetDeposit_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RecordManualPacnetDepositResponse" message="tns:IEzService_RecordManualPacnetDeposit_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisableCurrentManualPacnetDeposits">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/DisableCurrentManualPacnetDeposits" message="tns:IEzService_DisableCurrentManualPacnetDeposits_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/DisableCurrentManualPacnetDepositsResponse" message="tns:IEzService_DisableCurrentManualPacnetDeposits_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveAgreementResponse" message="tns:IEzService_SaveAgreement_OutputMessage" />
@@ -1561,6 +1581,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetAvailableFunds">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetAvailableFunds" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecordManualPacnetDeposit">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/RecordManualPacnetDeposit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisableCurrentManualPacnetDeposits">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/DisableCurrentManualPacnetDeposits" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2336,20 +2374,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
