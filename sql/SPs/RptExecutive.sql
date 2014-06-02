@@ -372,17 +372,23 @@ BEGIN
 		CustomerID INT,
 		LoanAmount DECIMAL(18, 2),
 		PreviousLoansCount INT,
-		PaidOffLoansCount INT
+		PaidOffLoansCount INT,
+		LoanDate DATETIME,
+		PreviousLoanDate DATETIME,
+		IsFirst BIT
 	)
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO #l (LoanID, CustomerID, LoanAmount, PreviousLoansCount, PaidOffLoansCount)
+	INSERT INTO #l (LoanID, CustomerID, LoanAmount, PreviousLoansCount, PaidOffLoansCount, LoanDate, PreviousLoanDate, IsFirst)
 	SELECT
 		l.Id,
 		l.CustomerId,
 		t.Amount,
+		l.Position,
 		0,
+		l.Date,
+		NULL,
 		0
 	FROM
 		Customer c
@@ -396,11 +402,27 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	UPDATE #l SET
-		PreviousLoansCount = (
-			SELECT ISNULL(COUNT(*), 0)
-			FROM Loan l
-			WHERE #l.CustomerID = l.CustomerId
-			AND #l.LoanID > l.Id
+		PreviousLoanDate = l.Date
+	FROM
+		Loan l
+	WHERE
+		#l.CustomerID = l.CustomerId
+		AND
+		#l.PreviousLoansCount = l.Position
+		AND
+		#l.PreviousLoansCount = 1
+
+	------------------------------------------------------------------------------
+
+	UPDATE #l SET
+		IsFirst = 1
+	WHERE
+		PreviousLoansCount = 0
+		OR
+		(
+			PreviousLoansCount = 1
+			AND
+			DATEDIFF(day, PreviousLoanDate, LoanDate) < 5
 		)
 
 	------------------------------------------------------------------------------
@@ -434,7 +456,7 @@ BEGIN
 	FROM
 		#l
 	WHERE
-		PreviousLoansCount = 0
+		IsFirst = 1
 
 	------------------------------------------------------------------------------
 
@@ -446,7 +468,7 @@ BEGIN
 	FROM
 		#l
 	WHERE
-		PreviousLoansCount != 0
+		IsFirst = 0
 
 	------------------------------------------------------------------------------
 
@@ -458,7 +480,7 @@ BEGIN
 	FROM
 		#l
 	WHERE
-		PreviousLoansCount != 0
+		IsFirst = 0
 		AND
 		PaidOffLoansCount = PreviousLoansCount
 
@@ -472,7 +494,7 @@ BEGIN
 	FROM
 		#l
 	WHERE
-		PreviousLoansCount != 0
+		IsFirst = 0
 		AND
 		PaidOffLoansCount != PreviousLoansCount
 
