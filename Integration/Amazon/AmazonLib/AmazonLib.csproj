@@ -68,6 +68,10 @@
       <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
       <Name>RegistryScanner</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
       <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
       <Name>ConfigManager</Name>

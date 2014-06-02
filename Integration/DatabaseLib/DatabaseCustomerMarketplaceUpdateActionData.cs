@@ -3,6 +3,8 @@ using EzBob.CommonLib;
 
 namespace EZBob.DatabaseLib
 {
+	using Ezbob.Utils;
+
 	internal class DatabaseCustomerMarketplaceUpdateActionData
 	{
 		public CustomerMarketplaceUpdateActionType ActionName { get; set; }

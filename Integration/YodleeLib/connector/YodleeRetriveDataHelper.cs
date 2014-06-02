@@ -2,6 +2,7 @@
 {
 	using System;
 	using EzBob.CommonLib;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;

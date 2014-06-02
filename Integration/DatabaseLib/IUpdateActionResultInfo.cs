@@ -1,8 +1,9 @@
-using System.Collections.Concurrent;
 using EzBob.CommonLib;
 
 namespace EZBob.DatabaseLib
 {
+	using Ezbob.Utils;
+
 	public interface IUpdateActionResultInfo
 	{
 		UpdateActionResultType Name { get; }

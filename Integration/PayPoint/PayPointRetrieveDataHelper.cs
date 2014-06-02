@@ -10,6 +10,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using Ezbob.Utils;
     using Ezbob.Utils.Serialization;
 
 	public static class StringToStreamExtension

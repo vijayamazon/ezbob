@@ -3,7 +3,6 @@ using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EzBob.eBayDbLib;
 using EzBob.eBayServiceLib;
-using StructureMap;
 
 namespace EzBob.eBayLib
 {

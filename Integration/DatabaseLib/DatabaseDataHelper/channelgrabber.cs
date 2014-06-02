@@ -17,37 +17,6 @@
 
 		#region HMRC
 
-		#region method GetAllHmrcVatReturnData
-
-		public InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			return GetAllHmrcVatReturnData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace.Id));
-		} // GetAllHmrcVatReturnData
-
-		public static InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
-			var orders = new InternalDataList(submittedDate);
-
-			customerMarketPlace.VatReturnRecords.ForEach(rec => {
-				var vre = new VatReturnEntry {
-					BusinessAddress = rec.Business.Address.Split('\n'),
-					BusinessName = rec.Business.Name,
-					DateDue = rec.DateDue,
-					DateFrom = rec.DateFrom,
-					DateTo = rec.DateTo,
-					Period = rec.Period,
-					RegistrationNo = rec.RegistrationNo,
-				};
-
-				foreach (MP_VatReturnEntry entry in rec.Entries)
-					vre.Data[entry.Name.Name] = new Coin(entry.Amount, entry.CurrencyCode);
-
-				orders.Add(vre);
-			}); // for each record
-
-			return orders;
-		} // GetAllHmrcVatReturnData
-
-		#endregion method GetAllHmrcVatReturnData
-
 		#region method StoreHmrcVatReturnData
 
 		public void StoreHmrcVatReturnData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord, int nSourceID) {
@@ -118,32 +87,6 @@
 		} // StoreHmrcVatReturnData
 
 		#endregion method StoreHmrcVatReturnData
-
-		#region method GetAllHmrcRtiTaxMonthData
-
-		public InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
-			return GetAllHmrcRtiTaxMonthData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace.Id));
-		} // GetAllHmrcRtiTaxMonthData
-
-		public static InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
-			var orders = new InternalDataList(submittedDate);
-
-			customerMarketPlace.RtiTaxMonthRecords.ForEach(rec => {
-				foreach (var entry in rec.Entries) {
-					orders.Add(new RtiTaxMonthEntry {
-						DateStart = entry.DateStart,
-						DateEnd = entry.DateEnd,
-						AmountPaid = new Coin(entry.AmountPaid, entry.CurrencyCode),
-						AmountDue = new Coin(entry.AmountDue, entry.CurrencyCode),
-						FetchTime = entry.Record.Created
-					});
-				} // for each entry
-			}); // for each record
-
-			return orders;
-		} // GetAllHmrcRtiTaxMonthData
-
-		#endregion method GetAllHmrcRtiTaxMonthData
 
 		#region method StoreHmrcRtiTaxMonthData
 

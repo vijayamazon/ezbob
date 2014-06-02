@@ -16,6 +16,7 @@ using ConfigManager;
 
 namespace AmazonStandaloneApp
 {
+	using Ezbob.Utils;
 	using Ezbob.Utils.Serialization;
 	using NHibernateWrapper.NHibernate;
 

@@ -3,6 +3,7 @@ using System.Diagnostics;
 
 namespace EzBob.CommonLib
 {
+	using Ezbob.Utils;
 	using log4net;
 
 	public static class ElapsedTimeHelper

@@ -48,6 +48,7 @@
     <Compile Include="ARetryer.cs" />
     <Compile Include="BaseConverter.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="ElapsedTimeInfo.cs" />
     <Compile Include="Extensions\EnumExt.cs" />
     <Compile Include="NullSeldenException.cs" />
     <Compile Include="Extensions\IntExt.cs" />

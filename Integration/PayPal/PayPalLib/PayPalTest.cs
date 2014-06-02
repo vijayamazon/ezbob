@@ -70,7 +70,8 @@ namespace EzBob.PayPal
 
 		private static Customer GetCustomerInfo( int customerId )
 		{
-			return PayPalRetriveDataHelper.GetCustomerInfo( customerId );
+			var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
+			return helper.GetCustomerInfo( customerId );
 		}
 
 		public static void UpdateTransactionInfo( int customerId )

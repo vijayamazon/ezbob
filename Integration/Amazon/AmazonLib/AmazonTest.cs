@@ -59,7 +59,8 @@ namespace EzBob.AmazonLib
 
 		private static Customer GetCustomerInfo( int customerId )
 		{
-			return AmazonRetriveDataHelper.GetCustomerInfo( customerId );
+			var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
+			return helper.GetCustomerInfo( customerId );
 		}
 
 		public static void TestRetrieveAmazonOrdersData(int customerId)

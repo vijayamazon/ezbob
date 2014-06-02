@@ -11,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Serialization;
 	using log4net;
 

@@ -11,10 +11,10 @@
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.HmrcHarvester;
+	using Ezbob.Utils;
 	using Integration.ChannelGrabberAPI;
 	using Integration.ChannelGrabberConfig;
 	using log4net;
-	using Coin = EZBob.DatabaseLib.Common.Coin;
 	using System.Diagnostics;
 	using System.Text;
 	using EzServiceAccessor;
@@ -112,36 +112,11 @@
 						ProcessRetrieved(
 							ctr.DataHarvester,
 							databaseCustomerMarketPlace,
-							historyRecord,
-							DefaultConversion,
-							Helper.StoreChannelGrabberOrdersData,
-							Helper.GetAllChannelGrabberOrdersData
+							historyRecord
 						);
 						break;
 
 					case Behaviour.HMRC:
-						/*
-						ProcessRetrieved(
-							ctr.DataHarvester,
-							databaseCustomerMarketPlace,
-							historyRecord,
-							HmrcVatReturnConversion,
-							Helper.StoreHmrcVatReturnData,
-							Helper.GetAllHmrcVatReturnData
-						);
-
-						ProcessRetrieved(
-							ctr.DataHarvester,
-							databaseCustomerMarketPlace,
-							historyRecord,
-							HmrcRtiTaxMonthConversion,
-							Helper.StoreHmrcRtiTaxMonthData,
-							Helper.GetAllHmrcRtiTaxMonthData
-						);
-
-						ObjectFactory.GetInstance<IEzServiceAccessor>().CalculateVatReturnSummary(databaseCustomerMarketPlace.Id);
-						*/
-
 						ObjectFactory.GetInstance<IEzServiceAccessor>().SaveVatReturnData(
 							databaseCustomerMarketPlace.Id,
 							historyRecord.Id,
@@ -186,13 +161,10 @@
 		private void ProcessRetrieved(
 			IHarvester oHarvester,
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-			MP_CustomerMarketplaceUpdatingHistory historyRecord,
-			Func<IHarvester, List<AInternalOrderItem>> oConversion,
-			Action<IDatabaseCustomerMarketPlace, InternalDataList, MP_CustomerMarketplaceUpdatingHistory, int> oStoreToDatabaseAction,
-			Func<DateTime, IDatabaseCustomerMarketPlace, InternalDataList> oLoadAllFromDatabaseFunc
+			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
 			// Convert orders into internal format.
-			List<AInternalOrderItem> oChaGraOrders = oConversion(oHarvester);
+			List<AInternalOrderItem> oChaGraOrders = DefaultConversion(oHarvester);
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
 
@@ -200,7 +172,7 @@
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => oStoreToDatabaseAction(
+				() => Helper.StoreChannelGrabberOrdersData(
 					databaseCustomerMarketPlace,
 					new InternalDataList(DateTime.UtcNow, oChaGraOrders),
 					historyRecord,
@@ -211,7 +183,7 @@
 			InternalDataList allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
-				() => oLoadAllFromDatabaseFunc(DateTime.UtcNow, databaseCustomerMarketPlace)
+				() => Helper.GetAllChannelGrabberOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace)
 			);
 
 			// calculate aggregated

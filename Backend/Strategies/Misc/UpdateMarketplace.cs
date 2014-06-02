@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
+	using EZBob.DatabaseLib.Common;
 	using EzBob.AmazonLib;
 	using EzBob.Backend.Strategies.MailStrategies.API;
 	using EzBob.PayPal;
@@ -19,8 +20,7 @@
 	using StructureMap;
 	using YodleeLib.connector;
 
-	public class UpdateMarketplace : AStrategy
-	{
+	public class UpdateMarketplace : AStrategy {
 		#region public
 
 		#region constructor
@@ -56,22 +56,26 @@
 				);
 			} // if
 
-			DataTable dt = DB.ExecuteReader(
+			string marketplaceName = string.Empty;
+			bool disabled = false;
+			string marketplaceDisplayName = string.Empty;
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					marketplaceName = sr["Name"];
+					disabled = sr["Disabled"];
+					marketplaceDisplayName = sr["DisplayName"];
+					return ActionResult.SkipAll;
+				},
 				"GetMarketplaceDetailsForUpdate",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("MarketplaceId", marketplaceId)
 			);
 
-			var sr = new SafeReader(dt.Rows[0]);
-			string marketplaceName = sr["Name"];
-			bool disabled = sr["Disabled"];
-			string marketplaceDisplayName = sr["DisplayName"];
-
-			if (disabled)
-			{
+			if (disabled) {
 				Log.Info("MP:{0} is disabled and won't be updated", marketplaceId);
 				return;
-			}
+			} // if
 
 			int tokenExpired = 0;
 
@@ -82,73 +86,72 @@
 			try {
 				oMpUpdateTimesSetter.Start();
 
-				if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName))
-				{
-					switch (marketplaceName)
-					{
-						case "eBay":
-							// TODO: make all the constructors empty, create helper and mp inside if needed
-							new eBayRetriveDataHelper(Helper, new eBayDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
-							break;
+				IMarketplaceRetrieveDataHelper oRetrieveDataHelper = null;
+				var vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName);
 
-						case "Amazon":
-							new AmazonRetriveDataHelper(Helper, new AmazonDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
-							break;
+				if (null != vi)
+					oRetrieveDataHelper = new RetrieveDataHelper(Helper, new DatabaseMarketPlace(marketplaceName), vi);
+				else {
+					switch (marketplaceName) {
+					case "eBay":
+						// TODO: make all the constructors empty, create helper and mp inside if needed
+						oRetrieveDataHelper = new eBayRetriveDataHelper(Helper, new eBayDatabaseMarketPlace());
+						break;
 
-						case "Pay Pal":
-							new PayPalRetriveDataHelper(Helper, new PayPalDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
-							break;
+					case "Amazon":
+						oRetrieveDataHelper = new AmazonRetriveDataHelper(Helper, new AmazonDatabaseMarketPlace());
+						break;
 
-						case "EKM":
-							new EkmRetriveDataHelper(Helper, new EkmDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
-							break;
+					case "Pay Pal":
+						oRetrieveDataHelper = new PayPalRetriveDataHelper(Helper, new PayPalDatabaseMarketPlace());
+						break;
 
-						case "FreeAgent":
-							new FreeAgentRetrieveDataHelper(Helper, new FreeAgentDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
-							break;
+					case "EKM":
+						oRetrieveDataHelper = new EkmRetriveDataHelper(Helper, new EkmDatabaseMarketPlace());
+						break;
 
-						case "Sage":
-							new SageRetrieveDataHelper(Helper, new SageDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
-							break;
+					case "FreeAgent":
+						oRetrieveDataHelper = new FreeAgentRetrieveDataHelper(Helper, new FreeAgentDatabaseMarketPlace());
+						break;
 
-						case "PayPoint":
-							new PayPointRetrieveDataHelper(Helper, new PayPointDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
-							break;
+					case "Sage":
+						oRetrieveDataHelper = new SageRetrieveDataHelper(Helper, new SageDatabaseMarketPlace());
+						break;
 
-						case "Yodlee":
-							new YodleeRetriveDataHelper(Helper, new YodleeDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
-							break;
+					case "PayPoint":
+						oRetrieveDataHelper = new PayPointRetrieveDataHelper(Helper, new PayPointDatabaseMarketPlace());
+						break;
+
+					case "Yodlee":
+						oRetrieveDataHelper = new YodleeRetriveDataHelper(Helper, new YodleeDatabaseMarketPlace());
+						break;
 					} // switch
-				}
-				else
-					new RetrieveDataHelper(Helper, new DatabaseMarketPlace(marketplaceName),
-					                       Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName))
-						.UpdateCustomerMarketplaceFirst(marketplaceId);
+				} // if
+
+				if (oRetrieveDataHelper != null)
+					oRetrieveDataHelper.UpdateCustomerMarketplaceFirst(marketplaceId);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				errorMessage = e.Message;
 				Log.Warn("Exception occurred during marketplace update, id: {0}.", marketplaceId);
 
-				var variables = new Dictionary<string, string>
-					{
-						{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-						{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
-					};
+				var variables = new Dictionary<string, string> {
+					{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
+					{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
+				};
 
 				bool bHasEbayMsgNum = marketplaceName == "eBay" && (
-					                                                   e.Message.Contains("16110") ||
-					                                                   e.Message.Contains("931") ||
-					                                                   e.Message.Contains("932") ||
-					                                                   e.Message.Contains("16118") ||
-					                                                   e.Message.Contains("16119") ||
-					                                                   e.Message.Contains("17470")
-				                                                   );
+					e.Message.Contains("16110") ||
+					e.Message.Contains("931") ||
+					e.Message.Contains("932") ||
+					e.Message.Contains("16118") ||
+					e.Message.Contains("16119") ||
+					e.Message.Contains("17470")
+				);
 
 				string sTemplateName;
 
-				if (bHasEbayMsgNum)
-				{
+				if (bHasEbayMsgNum) {
 					tokenExpired = 1;
 
 					variables.Add("MPType", marketplaceName);
@@ -157,10 +160,8 @@
 
 					sTemplateName = "Mandrill - Update MP Error Code";
 				}
-				else
-				{
+				else {
 					variables.Add("UpdateCMP_Error", e.Message);
-
 					sTemplateName = "Mandrill - UpdateCMP Error";
 				} // if
 
@@ -174,7 +175,7 @@
 		} // Execute
 
 		#endregion method Execute
-		
+
 		#endregion public
 
 		#region private

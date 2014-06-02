@@ -20,7 +20,8 @@ namespace EzBob.eBayLib
 
 		public static Customer GetCustomerInfo( int customerId )
 		{
-			return EBayRetriveDataHelper.GetCustomerInfo( customerId );			
+			var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
+			return helper.GetCustomerInfo( customerId );			
 		}
 
 		public static void TestStoreCustomerSecurityData( int customerId, string token, string marketplaceName = null )

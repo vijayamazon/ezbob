@@ -1,6 +1,7 @@
 namespace EzBob.PayPal
 {
 	using ConfigManager;
+	using Ezbob.Utils;
 	using log4net;
 	using System;
 	using System.Collections.Generic;

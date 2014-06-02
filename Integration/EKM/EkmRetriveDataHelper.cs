@@ -12,7 +12,9 @@ using log4net;
 
 namespace EKM
 {
-    public class EkmRetriveDataHelper : MarketplaceRetrieveDataHelperBase<EkmDatabaseFunctionType>
+	using Ezbob.Utils;
+
+	public class EkmRetriveDataHelper : MarketplaceRetrieveDataHelperBase<EkmDatabaseFunctionType>
     {
 
         private static ILog log = LogManager.GetLogger(typeof(EkmRetriveDataHelper));

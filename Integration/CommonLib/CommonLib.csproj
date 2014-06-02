@@ -49,7 +49,6 @@
     <Compile Include="ActionInfo.cs" />
     <Compile Include="ConvertedTypeInfo.cs" />
     <Compile Include="ElapsedTimeHelper.cs" />
-    <Compile Include="ElapsedTimeInfo.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IDatabaseDataHelper.cs" />
     <Compile Include="IDatabaseEnumTypeConverter.cs" />
@@ -96,7 +95,12 @@
     <Compile Include="WaitBeforeRetryHelper.cs" />
     <Compile Include="WriteLoggerHelper.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -15,6 +15,7 @@
 	using CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
 	using CommonLib.ReceivedDataListLogic;
 	using CommonLib.TimePeriodLogic;
+	using Ezbob.Utils;
 	using TeraPeakServiceLib;
 	using TeraPeakServiceLib.Requests.SellerResearch;
 	using eBayDbLib;
@@ -421,7 +422,7 @@
 
 						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
 									ElapsedDataMemberType.StoreDataToDatabase,
-									() => SaveOrdersData( databaseCustomerMarketPlace, databaseOrdersList, historyRecord ) );
+									() => Helper.AddEbayOrdersData( databaseCustomerMarketPlace, databaseOrdersList, historyRecord ) );
 
 						var allEBayOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,

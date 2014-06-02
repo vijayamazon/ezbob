@@ -1,7 +1,7 @@
-using EzBob.CommonLib;
-
 namespace EZBob.DatabaseLib.Model
 {
+	using Ezbob.Utils;
+
 	public class DatabaseElapsedTimeInfo
 	{
 		public DatabaseElapsedTimeInfo()

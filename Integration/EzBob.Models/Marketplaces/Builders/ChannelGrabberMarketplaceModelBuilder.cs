@@ -3,10 +3,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
-	using Web.Areas.Customer.Models;
 	using Integration.ChannelGrabberConfig;
 	using NHibernate;
 	using NHibernate.Linq;
@@ -79,43 +76,12 @@ namespace EzBob.Models.Marketplaces.Builders {
 				break;
 
 			case Behaviour.HMRC:
-				List<VatReturnEntry> oVatReturn = DatabaseDataHelper
-					.GetAllHmrcVatReturnData(DateTime.UtcNow, mp)
-					.Distinct(new InternalOrderComparer())
-					.Select(x => (VatReturnEntry)x)
-					.ToList();
-
-				List<RtiTaxMonthEntry> oRtiTaxMonths = DatabaseDataHelper
-					.GetAllHmrcRtiTaxMonthData(DateTime.UtcNow, mp)
-					.GroupBy(
-						x => x.NativeOrderId, // key selector - split into groups having the same key
-						x => (RtiTaxMonthEntry)x, // element selector - convert each element in each group
-						(oIgnoredKey, lst) => { // result selector - select one element from each group
-							RtiTaxMonthEntry oResult = null;
-
-							lst.ForEach(o => {
-								if ((oResult == null) || (oResult.FetchTime < o.FetchTime))
-									oResult = o;
-							});
-
-							// At this point oResult should not be null because
-							// at least one element with the oIgnoredKey was found...
-
-							return oResult;
-						} // end of result selector
-					)
-					.ToList();
-
-				oVatReturn.Sort(VatReturnEntry.CompareForSort);
-				oRtiTaxMonths.Sort(RtiTaxMonthEntry.CompareForSort);
-
-				var oServiceClient = new ServiceClient();
-				VatReturnDataActionResult vrsar = oServiceClient.Instance.LoadVatReturnSummary(mp.Customer.Id, mp.Id);
+				VatReturnDataActionResult vrd = new ServiceClient().Instance.LoadVatReturnFullData(mp.Customer.Id, mp.Id);
 
 				var datesSummary = new List<VatReturnSummaryDates>();
 				
-				if (vrsar.Summary != null) {
-					foreach (var oSummary in vrsar.Summary) {
+				if (vrd.Summary != null) {
+					foreach (var oSummary in vrd.Summary) {
 						if (oSummary.Quarters.Any()) {
 							datesSummary.Add(new VatReturnSummaryDates(
 								oSummary.Quarters.Min(x => x.DateFrom),
@@ -126,12 +92,12 @@ namespace EzBob.Models.Marketplaces.Builders {
 				} // if has summary items
 
 				model.CGData = new ChannelGrabberHmrcData {
-					VatReturn = oVatReturn,
-					RtiTaxMonths = oRtiTaxMonths,
+					VatReturn = vrd.VatReturnRawData,
+					RtiTaxMonths = vrd.RtiTaxMonthRawData,
 					BankStatement = new BankStatementDataModel(),
 					BankStatementAnnualized = new BankStatementDataModel(),
 					SalariesMultiplier = CurrentValues.Instance.HmrcSalariesMultiplier,
-					VatReturnSummary = vrsar.Summary,
+					VatReturnSummary = vrd.Summary,
 					VatReturnSummaryDates = datesSummary.ToArray(),
 				};
 

@@ -1,15 +1,14 @@
 ﻿namespace EzBob.Models.Marketplaces {
 	using System;
 	using System.Collections.Generic;
-	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using Ezbob.Backend.Models;
 
 	#region class ChannelGrabberHmrcData
 
 	[Serializable]
 	public class ChannelGrabberHmrcData : IChannelGrabberData {
-		public IEnumerable<VatReturnEntry> VatReturn { get; set; }
-		public IEnumerable<RtiTaxMonthEntry> RtiTaxMonths { get; set; }
+		public IEnumerable<VatReturnRawData> VatReturn { get; set; }
+		public IEnumerable<RtiTaxMonthRawData> RtiTaxMonths { get; set; }
 		public BankStatementDataModel BankStatement { get; set; }
 		public BankStatementDataModel BankStatementAnnualized { get; set; }
 		public decimal SalariesMultiplier { get; set; }
