@@ -371,25 +371,25 @@ BEGIN
 		LoanID INT,
 		CustomerID INT,
 		LoanAmount DECIMAL(18, 2),
-		PreviousLoansCount INT,
-		PaidOffLoansCount INT,
+		Position INT,
 		LoanDate DATETIME,
-		PreviousLoanDate DATETIME,
-		IsFirst BIT
+		FirstLoanDate DATETIME,
+		IsFirst BIT,
+		IsPaidOff BIT
 	)
 
 	------------------------------------------------------------------------------
 
-	INSERT INTO #l (LoanID, CustomerID, LoanAmount, PreviousLoansCount, PaidOffLoansCount, LoanDate, PreviousLoanDate, IsFirst)
+	INSERT INTO #l (LoanID, CustomerID, LoanAmount, Position, LoanDate, FirstLoanDate, IsFirst, IsPaidOff)
 	SELECT
 		l.Id,
 		l.CustomerId,
 		t.Amount,
 		l.Position,
-		0,
 		l.Date,
 		NULL,
-		0
+		0,
+		CASE l.Status WHEN 'PaidOff' THEN 1 ELSE 0 END
 	FROM
 		Customer c
 		INNER JOIN Loan l ON c.Id = l.CustomerId AND c.IsTest = 0
@@ -402,38 +402,25 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	UPDATE #l SET
-		PreviousLoanDate = l.Date
+		FirstLoanDate = l.Date
 	FROM
 		Loan l
 	WHERE
 		#l.CustomerID = l.CustomerId
 		AND
-		#l.PreviousLoansCount = l.Position
-		AND
-		#l.PreviousLoansCount = 1
+		0 = l.Position
 
 	------------------------------------------------------------------------------
 
 	UPDATE #l SET
 		IsFirst = 1
 	WHERE
-		PreviousLoansCount = 0
+		Position = 0
 		OR
 		(
-			PreviousLoansCount = 1
+			Position != 0
 			AND
-			DATEDIFF(day, PreviousLoanDate, LoanDate) < 5
-		)
-
-	------------------------------------------------------------------------------
-
-	UPDATE #l SET
-		PaidOffLoansCount = (
-			SELECT ISNULL(COUNT(*), 0)
-			FROM Loan l
-			WHERE #l.CustomerID = l.CustomerId
-			AND #l.LoanID != l.Id
-			AND l.Status = 'PaidOff'
+			DATEDIFF(day, FirstLoanDate, LoanDate) <= 5
 		)
 
 	------------------------------------------------------------------------------
@@ -442,7 +429,7 @@ BEGIN
 	SELECT
 		'Total',
 		ISNULL(COUNT(*), 0),
-	    convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
+		CONVERT(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 
@@ -452,7 +439,7 @@ BEGIN
 	SELECT
 		@Indent + 'New loans',
 		ISNULL(COUNT(*), 0),
-		convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
+		CONVERT(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 	WHERE
@@ -464,7 +451,7 @@ BEGIN
 	SELECT
 		@Indent + 'Existing loans',
 		ISNULL(COUNT(*), 0),
-		convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
+		CONVERT(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 	WHERE
@@ -476,13 +463,13 @@ BEGIN
 	SELECT
 		@Indent + @Indent + 'Existing fully paid',
 		ISNULL(COUNT(*), 0),
-		convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
+		CONVERT(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 	WHERE
 		IsFirst = 0
 		AND
-		PaidOffLoansCount = PreviousLoansCount
+		IsPaidOff = 1
 
 	------------------------------------------------------------------------------
 
@@ -490,13 +477,13 @@ BEGIN
 	SELECT
 		@Indent + @Indent + 'Existing open loans',
 		ISNULL(COUNT(*), 0),
-		convert(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
+		CONVERT(INT, ISNULL(SUM(ISNULL(LoanAmount, 0)), 0))
 	FROM
 		#l
 	WHERE
 		IsFirst = 0
 		AND
-		PaidOffLoansCount != PreviousLoansCount
+		IsPaidOff = 0
 
 	------------------------------------------------------------------------------
 
