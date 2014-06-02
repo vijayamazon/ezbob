@@ -1324,3 +1324,7 @@ td a.edit-loan {
 .salaries-multiplier {
     width: 70px;
 }
+
+.reset-button-margin {
+    margin-right: 20px;
+}
