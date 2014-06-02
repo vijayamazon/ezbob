@@ -12,6 +12,11 @@ EzBob.LandRegistryEnquiryView = Backbone.Marionette.ItemView.extend({
     },
     events: {
         "click .btnOk": "okClicked",
+        "click tr": "trClicked",
+    },
+    ui: {
+        "titleNumber": 'input[name="titleNumber"]',
+        "form": 'form',
     },
     serializeData: function() {
         return { data: this.model };
@@ -39,6 +44,10 @@ EzBob.LandRegistryEnquiryView = Backbone.Marionette.ItemView.extend({
         xhr.always(function() {
             BlockUi("Off");
         });
+    },
+    trClicked: function (el) {
+        this.ui.form.trigger('reset');
+        this.ui.titleNumber.val($(el.currentTarget).data("titlenumber"));
     },
     jqoptions: function () {
         return {
@@ -69,7 +78,7 @@ EzBob.LandRegistryEnquiryResultsView = Backbone.Marionette.ItemView.extend({
     trClicked: function(el) {
         this.$el.find("tbody tr").css("background", "#fff");
         $(el.currentTarget).css("background", "#ddd");
-        this.titleNumber = $(el.currentTarget).attr("data-titlenumber");
+        this.titleNumber = $(el.currentTarget).data("titlenumber");
     },
     btnOkClicked: function() {
         if (!this.titleNumber) {

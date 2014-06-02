@@ -12,7 +12,6 @@
 	using System.Text.RegularExpressions;
 	using ExperianLib;
 	using LandRegistryLib;
-	using ServiceClientProxy;
 	using StructureMap;
 
 	public class CrossCheckModel

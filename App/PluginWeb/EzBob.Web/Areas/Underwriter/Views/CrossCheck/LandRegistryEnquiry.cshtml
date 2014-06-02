@@ -7,6 +7,34 @@
     <div class="modal-body">
         <form id="landregistry-enquiry-form" class="form-horizontal" action="/" method="POST">
             <div class="row">
+                <%if(data.titles && data.titles.length > 0) {%>
+                <table class="table lr-enquiry-results">
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th>Title number (from cache)</th>
+                            <th>Building name</th>
+                            <th>Sub building name</th>
+                            <th>Building number</th>
+                            <th>Street name</th>
+                            <th>City name</th>
+                            <th>Postcode</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%_.each(data.titles, function(title){ %>
+                        <tr data-titlenumber="<%=title.TitleNumber%>">
+                            <td><%=title.TitleNumber%></td>
+                            <td><%=title.BuildingName%></td>
+                            <td><%=title.SubBuildingName%></td>
+                            <td><%=title.BuildingNumber%></td>
+                            <td><%=title.StreetName%></td>
+                            <td><%=title.CityName%></td>
+                            <td><%=title.Postcode%></td>
+                        </tr>
+                        <%});%>
+                    </tbody>
+                </table>
+                <%}%>
                 <div class="control-group">
                     <label for="buildingNumber" class="control-label">Title Number:</label>
                     <div class="controls">

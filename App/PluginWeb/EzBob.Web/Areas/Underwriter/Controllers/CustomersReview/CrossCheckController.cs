@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+	using System.Collections.Generic;
 	using System.Web.Mvc;
 	using CommonLib;
 	using Customer.Controllers;
@@ -9,6 +10,7 @@
 	using Infrastructure.csrf;
 	using LandRegistryLib;
 	using Models;
+	using MoreLinq;
 	using NHibernate;
 	using System.Linq;
 	using EzBob.Models;
@@ -112,6 +114,22 @@
 		} // LandRegistryEnquiry
 
 		#endregion action LandRegistryEnquiry
+		[Ajax]
+		[HttpPost]
+		public JsonResult LandRegistryEnquiries(int customerId)
+		{
+			var customer = _customerRepository.Get(customerId);
+			var b = new LandRegistryModelBuilder();
+			var landRegistryEnquiries = new List<LandRegistryEnquiryTitle>();
+			var lrEnqs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Enquiry).Select(x => x.Response);
+			foreach (var lr in lrEnqs)
+			{
+				landRegistryEnquiries.AddRange(b.BuildEnquiryModel(lr).Titles);
+			}
+
+			landRegistryEnquiries = landRegistryEnquiries.DistinctBy(x => x.TitleNumber).ToList();
+			return Json(new {titles = landRegistryEnquiries});
+		}
 
 		#region action LandRegistry
 
