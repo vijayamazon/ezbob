@@ -18,6 +18,8 @@
 		
 		public LandRegistryResModel Res { get; set; } //RES full response
 		public LandRegistryEnquiryModel Enquery { get; set; } //Enquiry full response
+
+		public LandRegistryDataSource DataSource { get; set; }
 	}
 
 	public enum LandRegistryRequestType
@@ -37,6 +39,12 @@
 		Success = 3,
 		Unkown = 4
 	} // enum 
+
+	public enum LandRegistryDataSource
+	{
+		Cache,
+		Api
+	}
 
 	public enum RestrictionTypeCode //Type of restriction present on the register.
 	{

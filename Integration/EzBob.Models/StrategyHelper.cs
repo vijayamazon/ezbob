@@ -18,7 +18,9 @@
 	using CommonLib.TimePeriodLogic;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
+	using Ezbob.Utils.Serialization;
 	using LandRegistryLib;
+	using LandRegistryLib.LREnquiryServiceNS;
 	using Marketplaces;
 	using Web.Code;
 	using NHibernate;
@@ -47,7 +49,7 @@
 
 		public StrategyHelper()
 		{
-			
+
 			_session = ObjectFactory.GetInstance<ISession>();
 			_decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -771,6 +773,7 @@
 
 		public LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber)
 		{
+
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
 
 			//check cash
@@ -784,13 +787,14 @@
 					Response = cache.Response,
 					Res = b.BuildResModel(cache.Response),
 					RequestType = cache.RequestType,
-					ResponseType = cache.ResponseType
+					ResponseType = cache.ResponseType,
+					DataSource = LandRegistryDataSource.Cache
 				};
 
 				return cacheModel;
 			}
 
-			var isProd = configurationVariablesRepository.GetByNameAsBool("LandRegistryProd");
+			var isProd = ConfigManager.CurrentValues.Instance.LandRegistryProd;
 
 			ILandRegistryApi lr;
 			if (isProd)
@@ -844,33 +848,66 @@
 						ResponseType = LandRegistryResponseType.None
 					};
 			}
+
+			model.DataSource = LandRegistryDataSource.Api;
 			return model;
 		}
 
+		public static bool AreEqual(string a, string b)
+		{
+			if (string.IsNullOrEmpty(a))
+			{
+				return string.IsNullOrEmpty(b);
+			}
+			else
+			{
+				return string.Equals(a, b);
+			}
+		}
 
 		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode)
 		{
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
 
-			//check cash
-			var cache = lrRepo.GetEnquiry(customerId, postCode);
-
-			if (cache != null)
+			try
 			{
-				var b = new LandRegistryModelBuilder();
-				var cacheModel = new LandRegistryDataModel
-					{
-						Request = cache.Request,
-						Response = cache.Response,
-						Enquery = b.BuildEnquiryModel(cache.Response),
-						RequestType = cache.RequestType,
-						ResponseType = cache.ResponseType
-					};
+				//check cache
+				var cache = lrRepo.GetAll().Where(x => x.Customer.Id == customerId && x.RequestType == LandRegistryRequestType.Enquiry);
 
-				return cacheModel;
+				if (cache.Any())
+				{
+					foreach (var landRegistry in cache)
+					{
+						var lrReq = Serialized.Deserialize<RequestSearchByPropertyDescriptionV2_0Type>(landRegistry.Request);
+						var lrAddress = lrReq.Product.SubjectProperty.Address;
+
+						if (AreEqual(lrAddress.BuildingName, buildingName) &&
+							AreEqual(lrAddress.BuildingNumber, buildingNumber) &&
+							AreEqual(lrAddress.CityName, cityName) &&
+							AreEqual(lrAddress.PostcodeZone, postCode) &&
+							AreEqual(lrAddress.StreetName, streetName))
+						{
+							var b = new LandRegistryModelBuilder();
+							var cacheModel = new LandRegistryDataModel
+							{
+								Request = landRegistry.Request,
+								Response = landRegistry.Response,
+								Enquery = b.BuildEnquiryModel(landRegistry.Response),
+								RequestType = landRegistry.RequestType,
+								ResponseType = landRegistry.ResponseType,
+								DataSource = LandRegistryDataSource.Cache,
+							};
+							return cacheModel;
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				log.WarnFormat("Failed to retreive land registry enquiry from cache {0}", ex);
 			}
 
-			var isProd = configurationVariablesRepository.GetByNameAsBool("LandRegistryProd");
+			bool isProd = ConfigManager.CurrentValues.Instance.LandRegistryProd;
 
 			ILandRegistryApi lr;
 			if (isProd)
@@ -894,7 +931,7 @@
 					RequestType = model.RequestType,
 					ResponseType = model.ResponseType,
 				});
-
+			model.DataSource = LandRegistryDataSource.Api;
 			return model;
 		}
 
@@ -911,6 +948,46 @@
 					TotalSumOfOrders3MTotalForRejection = GetTurnoverForRejection(customer.Id, Get3MTurnoverFromValues)
 				};
 			return totals;
+		}
+
+		public void GetLandRegistryData(int customerId, CustomerAddressesModel addresses)
+		{
+			LandRegistryDataModel model = null;
+			if (!string.IsNullOrEmpty(addresses.CurrentAddress.HouseName))
+			{
+				model = GetLandRegistryEnquiryData(customerId, null, addresses.CurrentAddress.HouseName, null, null,
+										   addresses.CurrentAddress.PostCode);
+			}
+
+			else if (!string.IsNullOrEmpty(addresses.CurrentAddress.HouseNumber))
+			{
+				model = GetLandRegistryEnquiryData(customerId, addresses.CurrentAddress.HouseNumber, null, null, null,
+										   addresses.CurrentAddress.PostCode);
+			}
+
+			else if (!string.IsNullOrEmpty(addresses.CurrentAddress.FlatOrApartmentNumber) && string.IsNullOrEmpty(addresses.CurrentAddress.HouseNumber))
+			{
+				model = GetLandRegistryEnquiryData(customerId, addresses.CurrentAddress.FlatOrApartmentNumber, null, null, null,
+										   addresses.CurrentAddress.PostCode);
+			}
+
+			if (model != null && model.Enquery != null && model.ResponseType == LandRegistryResponseType.Success &&
+				model.Enquery.Titles.Any() && model.Enquery.Titles.Count == 1)
+			{
+				GetLandRegistryData(customerId, model.Enquery.Titles[0].TitleNumber);
+			}
+			else
+			{
+				int num = 0;
+				if (model != null && model.Enquery != null && model.Enquery.Titles.Any())
+				{
+					num = model.Enquery.Titles.Count;
+				}
+				log.WarnFormat(
+					"No land registry retrieved for customer id: {5}, house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, num of enquries {4}",
+					addresses.CurrentAddress.HouseName, addresses.CurrentAddress.HouseNumber,
+					addresses.CurrentAddress.FlatOrApartmentNumber, addresses.CurrentAddress.PostCode, num, customerId);
+			}
 		}
 	}
 }

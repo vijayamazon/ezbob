@@ -163,10 +163,15 @@
 						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
 				} // if
 			}
-			else if (autoDecisionResponse.UserStatus == "Rejected") {
-				if ((autoDecisionResponse.IsReRejected && !enableAutomaticReRejection) || (!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
-					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected ? "Mandrill - User supposed to be re-rejected by the strategy" : "Mandrill - User supposed to be rejected by the strategy");
-				else {
+			else if (autoDecisionResponse.UserStatus == "Rejected")
+			{
+				if ((autoDecisionResponse.IsReRejected && !enableAutomaticReRejection) ||
+				    (!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
+					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected
+						                             ? "Mandrill - User supposed to be re-rejected by the strategy"
+						                             : "Mandrill - User supposed to be rejected by the strategy");
+				else
+				{
 					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy");
 
 					new RejectUser(customerId, DB, Log).Execute();
@@ -175,10 +180,24 @@
 				} // if
 			}
 			else
+			{
 				SendWaitingForDecisionMail();
+			}
+
+			if (autoDecisionResponse.CreditResult != "Rejected")
+			{
+				GetLandRegistry();
+			}
 
 			GetZooplaData();
 			SetEndTimestamp();
+		}
+
+		private void GetLandRegistry()
+		{
+			var customerAddressesHelper = new CustomerAddressHelper(customerId, DB, Log);
+			customerAddressesHelper.Execute();
+			strategyHelper.GetLandRegistryData(customerId, customerAddressesHelper.CustomerAddresses);
 		} // Execute
 
 		#endregion method Execute

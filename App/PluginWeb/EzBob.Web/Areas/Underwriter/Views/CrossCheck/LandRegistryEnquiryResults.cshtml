@@ -11,7 +11,7 @@
         print("data.ack.Description");
         print("data.ack.PollDate");
       } else{%>
-    <div class="modal-header">Land Registry Enquiry Results</div>
+    <div class="modal-header">Land Registry Enquiry Results <%if(data.isCache){ print("(from cache)"); }%></div>
     <table class="table lr-enquiry-results">
         <thead class="box">
             <tr class="box-title">
@@ -39,8 +39,9 @@
         </tbody>
     </table>
     <div class="pull-right">
-            <button class="btn btn-primary btnOk">OK</button>
+        <button class="btn btn-primary btnOk">OK</button>
     </div>
-   <%}%>
+    <%}%>
+
 
 </script>

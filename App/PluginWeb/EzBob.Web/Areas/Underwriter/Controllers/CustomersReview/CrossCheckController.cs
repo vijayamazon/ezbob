@@ -81,8 +81,8 @@
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult LandRegistryEnquiry(int customerId, string titleNumber, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
-
+		public JsonResult LandRegistryEnquiry(int customerId, string titleNumber, string buildingNumber, string buildingName, string streetName, string cityName, string postCode)
+		{
 			if (!string.IsNullOrEmpty(titleNumber))
 			{
 				m_oServiceClient.Instance.LandRegistryRes(customerId, titleNumber);
@@ -105,7 +105,8 @@
 					{
 						titles = landregistry.Enquery.Titles,
 						rejection = landregistry.Enquery.Rejection,
-						ack = landregistry.Enquery.Acknowledgement
+						ack = landregistry.Enquery.Acknowledgement,
+						isCache = landregistry.DataSource == LandRegistryDataSource.Cache
 					}, JsonRequestBehavior.AllowGet);
 			}
 		} // LandRegistryEnquiry
@@ -118,18 +119,7 @@
 		[HttpPost]
 		public JsonResult LandRegistry(int customerId, string titleNumber = null) {
 			ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1}...", customerId, titleNumber ?? "--null--");
-
-			var landregistryXml = m_oServiceClient.Instance.LandRegistryRes(customerId, titleNumber);
-
-			var landregistry = Serialized.Deserialize<LandRegistryDataModel>(landregistryXml);
-
-			if (landregistry.ResponseType == LandRegistryResponseType.None) {
-				ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1} completed without result.", customerId, titleNumber ?? "--null--");
-				return Json(new {noRes = true}, JsonRequestBehavior.AllowGet);
-			} // if
-
-			ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1} completed successfully.", customerId, titleNumber ?? "--null--");
-
+			m_oServiceClient.Instance.LandRegistryRes(customerId, titleNumber);
 			return Json(new {},JsonRequestBehavior.AllowGet);
 		} // LandRegistry
 

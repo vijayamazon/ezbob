@@ -54,6 +54,7 @@
     <Compile Include="BrokerPropertiesModel.cs" />
     <Compile Include="Coin.cs" />
     <Compile Include="ConfigTable.cs" />
+    <Compile Include="CustomerAddressModel.cs" />
     <Compile Include="RtiTaxMonthRawData.cs" />
     <Compile Include="VatReturnRawDataModel.cs" />
     <Compile Include="VatReturnPeriodModel.cs" />
