@@ -34,6 +34,8 @@
 				RtiTaxMonthRawData = oRtiMonths,
 			};
 			m_oSp.InitEntries();
+
+			m_oRaw = new LoadVatReturnRawData(nCustomerMarketplaceID, DB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -50,6 +52,8 @@
 
 		public override void Execute() {
 			Log.Debug(m_oSp);
+
+			m_oRaw.Execute();
 
 			// TODO: fill elapsed time
 			// TODO: m_oSp.ExecuteNonQuery();
@@ -69,28 +73,7 @@
 		#region private
 
 		private readonly SpSaveVatReturnSummary m_oSp;
-
-		#region class VatReturnRawEntry
-
-		private class VatReturnRawEntry : ITraversable {
-			[UsedImplicitly]
-			public int RecordID { get; set; }
-
-			[UsedImplicitly]
-			public string BoxName { get; set; }
-
-			[UsedImplicitly]
-			public decimal Amount { get; set; }
-
-			[UsedImplicitly]
-			public string CurrencyCode { get; set; }
-
-			public override string ToString() {
-				return string.Format("{0}: {1} = {2} {3}", RecordID, BoxName, Amount, CurrencyCode);
-			} // ToString
-		} // class VatReturnRawEntry
-
-		#endregion class VatReturnRawEntry
+		private readonly LoadVatReturnRawData m_oRaw;
 
 		#region class SpSaveVatReturnSummary
 		// ReSharper disable ValueParameterNotUsed
@@ -98,7 +81,7 @@
 		private class SpSaveVatReturnSummary : AStoredProc {
 			#region constructor
 
-			public SpSaveVatReturnSummary(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+			public SpSaveVatReturnSummary(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			#endregion constructor
 
@@ -196,6 +179,28 @@
 			} // ToSring
 
 			#endregion method ToString
+
+			#region class VatReturnRawEntry
+
+			public class VatReturnRawEntry : ITraversable {
+				[UsedImplicitly]
+				public int RecordID { get; set; }
+
+				[UsedImplicitly]
+				public string BoxName { get; set; }
+
+				[UsedImplicitly]
+				public decimal Amount { get; set; }
+
+				[UsedImplicitly]
+				public string CurrencyCode { get; set; }
+
+				public override string ToString() {
+					return string.Format("{0}: {1} = {2} {3}", RecordID, BoxName, Amount, CurrencyCode);
+				} // ToString
+			} // class VatReturnRawEntry
+
+			#endregion class VatReturnRawEntry
 		} // class SpSaveVatReturnSummary
 
 		// ReSharper restore ValueParameterNotUsed
