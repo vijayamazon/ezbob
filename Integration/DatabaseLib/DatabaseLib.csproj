@@ -99,6 +99,7 @@
     <Compile Include="Model\Database\CompanyEmployeeCount.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
     <Compile Include="Model\Database\Company.cs" />
+    <Compile Include="Model\Database\LandRegistryOwner.cs" />
     <Compile Include="Model\Database\CustomerAnalytics.cs" />
     <Compile Include="Model\Database\Report\ReportArgumentsNames.cs" />
     <Compile Include="Model\Database\Report\ReportArguments.cs" />

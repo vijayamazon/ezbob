@@ -115,6 +115,7 @@
 	public class AlertModel {
 		public string AlertType { get; set; }
 		public string Alert { get; set; }
+		public string Tooltip { get; set; }
 	}
 
 	public enum AlertType {

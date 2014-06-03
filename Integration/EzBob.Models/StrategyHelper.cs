@@ -18,9 +18,8 @@
 	using CommonLib.TimePeriodLogic;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
+	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Serialization;
-	using LandRegistryLib;
-	using LandRegistryLib.LREnquiryServiceNS;
 	using Marketplaces;
 	using Web.Code;
 	using NHibernate;
@@ -28,8 +27,6 @@
 	using ZooplaLib;
 	using log4net;
 	using MailApi;
-	using EnumDescription = Ezbob.Utils.Extensions.EnumDescription;
-	using LandRegistryResponseType = LandRegistryLib.LandRegistryResponseType;
 
 	public class StrategyHelper
 	{
@@ -652,7 +649,11 @@
 		{
 			log.InfoFormat("checking worst cais status");
 
-			MP_ServiceLog serviceLog = serviceLogRepository.GetByCustomer(customer).Where(sl => sl.ServiceType == EnumDescription.DescriptionAttr(ExperianServiceType.Consumer)).OrderByDescending(sl => sl.InsertDate).FirstOrDefault();
+			MP_ServiceLog serviceLog = serviceLogRepository
+				.GetByCustomer(customer)
+				.Where(sl => sl.ServiceType == ExperianServiceType.Consumer.DescriptionAttr())
+				.OrderByDescending(sl => sl.InsertDate)
+				.FirstOrDefault();
 			if (serviceLog == null)
 			{
 				log.InfoFormat("No auto approval: Can't find worst CAIS status in MP_ServiceLog");
@@ -771,7 +772,7 @@
 			}
 		}
 
-		public LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber)
+		public LandRegistryLib.LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber)
 		{
 
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
@@ -780,39 +781,56 @@
 			var cache = lrRepo.GetRes(customerId, titleNumber);
 			if (cache != null)
 			{
-				var b = new LandRegistryModelBuilder();
-				var cacheModel = new LandRegistryDataModel
+				var b = new LandRegistryLib.LandRegistryModelBuilder();
+				var cacheModel = new LandRegistryLib.LandRegistryDataModel
 				{
 					Request = cache.Request,
 					Response = cache.Response,
 					Res = b.BuildResModel(cache.Response),
 					RequestType = cache.RequestType,
 					ResponseType = cache.ResponseType,
-					DataSource = LandRegistryDataSource.Cache
+					DataSource = LandRegistryLib.LandRegistryDataSource.Cache
 				};
 
+				if (!cache.Owners.Any())
+				{
+					var owners = new List<LandRegistryOwner>();
+					foreach (var owner in cacheModel.Res.Proprietorship.ProprietorshipParties)
+					{
+						owners.Add(new LandRegistryOwner
+						{
+							LandRegistry = cache,
+							FirstName = owner.PrivateIndividualForename,
+							LastName = owner.PrivateIndividualSurname,
+							CompanyName = owner.CompanyName,
+							CompanyRegistrationNumber = owner.CompanyRegistrationNumber,
+						});
+					}
+					cache.Owners = owners;
+
+					lrRepo.SaveOrUpdate(cache);
+				}
 				return cacheModel;
 			}
 
 			var isProd = ConfigManager.CurrentValues.Instance.LandRegistryProd;
 
-			ILandRegistryApi lr;
+			LandRegistryLib.ILandRegistryApi lr;
 			if (isProd)
 			{
-				lr = new LandRegistryApi();
+				lr = new LandRegistryLib.LandRegistryApi();
 			}
 			else
 			{
-				lr = new LandRegistryTestApi();
+				lr = new LandRegistryLib.LandRegistryTestApi();
 			}
 
-			LandRegistryDataModel model;
+			LandRegistryLib.LandRegistryDataModel model;
 			if (titleNumber != null)
 			{
 				model = lr.Res(titleNumber, customerId);
 				var customer = _customers.Get(customerId);
-
-				lrRepo.Save(new LandRegistry
+				var dbLr = new LandRegistry
 					{
 						Customer = customer,
 						InsertDate = DateTime.UtcNow,
@@ -821,7 +839,23 @@
 						Response = model.Response,
 						RequestType = model.RequestType,
 						ResponseType = model.ResponseType,
-					});
+					};
+
+				var owners = new List<LandRegistryOwner>();
+				foreach (var owner in model.Res.Proprietorship.ProprietorshipParties)
+				{
+					owners.Add(new LandRegistryOwner
+						{
+							LandRegistry = dbLr,
+							FirstName = owner.PrivateIndividualForename,
+							LastName = owner.PrivateIndividualSurname,
+							CompanyName = owner.CompanyName,
+							CompanyRegistrationNumber = owner.CompanyRegistrationNumber,
+						});
+				}
+				dbLr.Owners = owners;
+
+				lrRepo.Save(dbLr);
 
 				if (model.Attachment != null)
 				{
@@ -842,14 +876,14 @@
 			}
 			else
 			{
-				model = new LandRegistryDataModel
+				model = new LandRegistryLib.LandRegistryDataModel
 					{
-						Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" } },
-						ResponseType = LandRegistryResponseType.None
+						Res = new LandRegistryLib.LandRegistryResModel { Rejection = new LandRegistryLib.LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" } },
+						ResponseType = LandRegistryLib.LandRegistryResponseType.None
 					};
 			}
 
-			model.DataSource = LandRegistryDataSource.Api;
+			model.DataSource = LandRegistryLib.LandRegistryDataSource.Api;
 			return model;
 		}
 
@@ -865,20 +899,20 @@
 			}
 		}
 
-		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode)
+		public LandRegistryLib.LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode)
 		{
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
 
 			try
 			{
 				//check cache
-				var cache = lrRepo.GetAll().Where(x => x.Customer.Id == customerId && x.RequestType == LandRegistryRequestType.Enquiry);
+				var cache = lrRepo.GetAll().Where(x => x.Customer.Id == customerId && x.RequestType == LandRegistryLib.LandRegistryRequestType.Enquiry);
 
 				if (cache.Any())
 				{
 					foreach (var landRegistry in cache)
 					{
-						var lrReq = Serialized.Deserialize<RequestSearchByPropertyDescriptionV2_0Type>(landRegistry.Request);
+						var lrReq = Serialized.Deserialize<LandRegistryLib.LREnquiryServiceNS.RequestSearchByPropertyDescriptionV2_0Type>(landRegistry.Request);
 						var lrAddress = lrReq.Product.SubjectProperty.Address;
 
 						if (AreEqual(lrAddress.BuildingName, buildingName) &&
@@ -887,15 +921,15 @@
 							AreEqual(lrAddress.PostcodeZone, postCode) &&
 							AreEqual(lrAddress.StreetName, streetName))
 						{
-							var b = new LandRegistryModelBuilder();
-							var cacheModel = new LandRegistryDataModel
+							var b = new LandRegistryLib.LandRegistryModelBuilder();
+							var cacheModel = new LandRegistryLib.LandRegistryDataModel
 							{
 								Request = landRegistry.Request,
 								Response = landRegistry.Response,
 								Enquery = b.BuildEnquiryModel(landRegistry.Response),
 								RequestType = landRegistry.RequestType,
 								ResponseType = landRegistry.ResponseType,
-								DataSource = LandRegistryDataSource.Cache,
+								DataSource = LandRegistryLib.LandRegistryDataSource.Cache,
 							};
 							return cacheModel;
 						}
@@ -909,14 +943,14 @@
 
 			bool isProd = ConfigManager.CurrentValues.Instance.LandRegistryProd;
 
-			ILandRegistryApi lr;
+			LandRegistryLib.ILandRegistryApi lr;
 			if (isProd)
 			{
-				lr = new LandRegistryApi();
+				lr = new LandRegistryLib.LandRegistryApi();
 			}
 			else
 			{
-				lr = new LandRegistryTestApi();
+				lr = new LandRegistryLib.LandRegistryTestApi();
 			}
 
 			var model = lr.EnquiryByPropertyDescription(buildingNumber, buildingName, streetName, cityName, postCode, customerId);
@@ -931,7 +965,7 @@
 					RequestType = model.RequestType,
 					ResponseType = model.ResponseType,
 				});
-			model.DataSource = LandRegistryDataSource.Api;
+			model.DataSource = LandRegistryLib.LandRegistryDataSource.Api;
 			return model;
 		}
 
@@ -952,7 +986,7 @@
 
 		public void GetLandRegistryData(int customerId, CustomerAddressesModel addresses)
 		{
-			LandRegistryDataModel model = null;
+			LandRegistryLib.LandRegistryDataModel model = null;
 			if (!string.IsNullOrEmpty(addresses.CurrentAddress.HouseName))
 			{
 				model = GetLandRegistryEnquiryData(customerId, null, addresses.CurrentAddress.HouseName, null, null,
@@ -971,7 +1005,7 @@
 										   addresses.CurrentAddress.PostCode);
 			}
 
-			if (model != null && model.Enquery != null && model.ResponseType == LandRegistryResponseType.Success &&
+			if (model != null && model.Enquery != null && model.ResponseType == LandRegistryLib.LandRegistryResponseType.Success &&
 				model.Enquery.Titles.Any() && model.Enquery.Titles.Count == 1)
 			{
 				GetLandRegistryData(customerId, model.Enquery.Titles[0].TitleNumber);

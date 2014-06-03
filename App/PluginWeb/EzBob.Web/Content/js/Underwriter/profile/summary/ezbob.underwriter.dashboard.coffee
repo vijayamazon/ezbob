@@ -100,6 +100,8 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
             valueSpots: { ':' : 'green' }
         )
 
+        @$el.find('[data-toggle="tooltip"]').tooltip({'placement': 'bottom'});
+
 
 
 

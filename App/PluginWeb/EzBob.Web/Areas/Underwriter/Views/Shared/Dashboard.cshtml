@@ -124,9 +124,9 @@
                 </div>
                 <div class="box-content">
                     <%_.each(m.Alerts, function(item) {%>
-                    <div class="alert alert-<%-item.AlertType%> hidden-xs">
+                    <div class="col-md-6 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Tooltip%>">
                         <button class="close" data-dismiss="alert">&times;</button>
-                        <h4><%-item.Alert%></h4>
+                        <span><%-item.Alert%></span>
                     </div>
                     <%});%>
                 </div>
@@ -158,7 +158,7 @@
                 </div>
                 <div class="box-content">
                     <div class="tabbable tabs-left">
-                        <ul class="nav nav-tabs active active-red">
+                        <ul class="nav nav-tabs active active-blue">
                             <li class="active"><a href="#customerExperian" data-toggle="tab"><span class="<%-tileColor%>" style="background-color: <%-experian.ScoreColor%>;"><%-experian.Score%></span>&nbsp;Applicant</a></li>
                             <%if(experian.directorsModels && experian.directorsModels.length > 0){
                                 _.each(experian.directorsModels, function(item, i){
@@ -494,7 +494,7 @@
                 </div>
                 <div class="box-content">
                     <div class="tabbable tabs-left">
-                        <ul class="nav nav-tabs active-red">
+                        <ul class="nav nav-tabs active-blue">
                             <li class="<%-activeLoans%>"><a href="#loans" data-toggle="tab"><span class="label label-large label-warning"><%-m.LoanActivity.TotalIssuesCount%></span>&nbsp;Loans</a></li>
                             <li class="<%-activeDecisions%>"><a href="#decisions" data-toggle="tab"><span class="label label-large label-success"><%-m.Decisions.TotalDecisionsCount%></span>&nbsp;Decisions</a></li>
                         </ul>

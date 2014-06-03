@@ -1,5 +1,6 @@
 namespace EZBob.DatabaseLib.Model.Database {
 	using System;
+	using System.Collections.Generic;
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
 	using LandRegistryLib;
@@ -18,6 +19,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string Request { get; set; }
 		public virtual string Response { get; set; }
 		public virtual string AttachmentPath { get; set; }
+		public virtual IList<LandRegistryOwner> Owners { get; set; }
 	} // class LandRegistry
 
 	#endregion class LandRegistry
@@ -40,6 +42,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.Request).CustomType("StringClob");
 			Map(x => x.Response).CustomType("StringClob");
 			Map(x => x.AttachmentPath).Length(300);
+
+			HasMany(x => x.Owners)
+				.AsBag()
+				.KeyColumn("LandRegistryId")
+				.Cascade.All()
+				.Inverse();
 		} // constructor
 	} // class LandRegistryMap
 	#endregion

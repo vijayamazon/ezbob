@@ -38,7 +38,7 @@
     DashboardView.prototype.serializeData = function() {
       return {
         m: this.model.toJSON(),
-        crm: _.first(_.filter(this.crmModel.toJSON(), function(crm) {
+        crm: _.first(_.filter(this.crmModel.get('CustomerRelations'), function(crm) {
           return crm.User !== 'System';
         }), 5),
         experian: this.experianModel.toJSON(),
@@ -125,7 +125,7 @@
         companyHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
         this.$el.find(".companyScoreGraph").attr('values', companyHistoryScores);
       }
-      return $(".inline-sparkline").sparkline("html", {
+      $(".inline-sparkline").sparkline("html", {
         width: "100%",
         height: "100%",
         lineWidth: 2,
@@ -139,6 +139,9 @@
         valueSpots: {
           ':': 'green'
         }
+      });
+      return this.$el.find('[data-toggle="tooltip"]').tooltip({
+        'placement': 'bottom'
       });
     };
 

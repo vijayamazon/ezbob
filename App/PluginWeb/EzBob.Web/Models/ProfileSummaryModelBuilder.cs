@@ -137,12 +137,40 @@
 					summary.Alerts.Add(new AlertModel { Alert = "Customer relations follow up date is due " + state.FollowUp.FollowUpDate.ToString("dd/MM/yyyy"), AlertType = AlertType.Error.DescriptionAttr() });
 				}
 			}
-
-			if (!customer.LandRegistries.Any(x => x.RequestType == LandRegistryLib.LandRegistryRequestType.Res && x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success))
-			{
-				summary.Alerts.Add(new AlertModel{Alert = "No land registries retrieved", AlertType = AlertType.Warning.DescriptionAttr()});
-			}
+			BuildLandRegistryAlerts(customer, summary);
 			//TODO: add approve button alerts
+		}
+
+		private void BuildLandRegistryAlerts(Customer customer, ProfileSummaryModel summary)
+		{
+			var lrs = customer.LandRegistries.Where(x =>
+				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
+				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success).ToList();
+			if (!lrs.Any() && customer.PersonalInfo != null && customer.PersonalInfo.ResidentialStatus == "Home Owner")
+			{
+				summary.Alerts.Add(new AlertModel
+					{
+						Alert = "No land registries retrieved",
+						AlertType = AlertType.Warning.DescriptionAttr()
+					});
+			}
+			
+			if (lrs.Any())
+			{
+				var owners = lrs.SelectMany(x => x.Owners).Select(x => new {firstName = x.FirstName, lastName = x.LastName}).ToList();
+				if (owners.Any() && !owners.Any(owner =>
+						owner.firstName.Contains(customer.PersonalInfo.FirstName) &&
+						owner.lastName.Contains(customer.PersonalInfo.Surname)))
+				{
+					var ownerNames = owners.Select(x => string.Format("{0} {1}", x.firstName, x.lastName)).Aggregate((a, b) => a + ", " + b);
+					summary.Alerts.Add(new AlertModel
+					{
+						Alert = "Not a land registry owner",
+						AlertType = AlertType.Error.DescriptionAttr(),
+						Tooltip = string.Format("Owners list: {0}", ownerNames)
+					});
+				}
+			}
 		}
 
 		private static void BuildRequestedLoan(ProfileSummaryModel summary, Customer customer)
