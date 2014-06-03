@@ -7,7 +7,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Backend.Models;
 
-	internal class CustomerAddressHelper : AStrategy
+	public class CustomerAddressHelper : AStrategy
 	{
 		public CustomerAddressHelper(int customerId, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
@@ -27,8 +27,13 @@
 
 		private CustomerAddressesModel GetAddresses(int customerId)
 		{
+			if (customerId == 0)
+			{
+				return new CustomerAddressesModel();
+			}
+
 			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure,
-			                                new QueryParameter("CustomerId", customerId));
+												new QueryParameter("CustomerId", customerId));
 			var addressesResults = new SafeReader(dt.Rows[0]);
 			var model = new CustomerAddressesModel();
 			model.CurrentAddress = new CustomerAddressModel
@@ -154,6 +159,17 @@
 
 						houseName = model.Line2;
 
+					}
+				}
+				else if (Regex.Match(model.Line1, "^\\d[0-9a-zA-Z ]*$").Success && !model.Line1.ToUpper().Contains("UNIT") && !model.Line1.ToUpper().Contains("BLOCK"))
+				{
+					houseNumber = Regex.Match(model.Line1, "\\d*").Value;
+					if (!string.IsNullOrEmpty(houseNumber))
+					{
+						var line1 = model.Line1.Split(' ');
+						houseNumber = line1[0];
+						address1 = string.Join(" ", line1.Skip(1));
+						address2 = model.Line2;
 					}
 				}
 				else

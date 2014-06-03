@@ -16,6 +16,11 @@
 
 		public string Address1 { get; set; }
 		public string Address2 { get; set; }
+
+		public override string ToString()
+		{
+			return string.Format("1: {0}, 2: {1}, 3: {2}, h# {3}, hn: {4} fa#: {5}", Line1, Line2, Line3, HouseNumber, HouseName, FlatOrApartmentNumber);
+		}
 	}
 
 	public class CustomerAddressesModel

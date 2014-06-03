@@ -312,6 +312,17 @@
 						
 					}
 				}
+				else if (Regex.Match(addressLine1, "^\\d[0-9a-zA-Z ]*$").Success && !addressLine1.ToUpper().Contains("UNIT") && !addressLine1.ToUpper().Contains("BLOCK"))
+				{
+					houseNumber = Regex.Match(addressLine1, "\\d*").Value;
+					if (!string.IsNullOrEmpty(houseNumber))
+					{
+						var line1 = addressLine1.Split(' ');
+						houseNumber = line1[0];
+						address1 = string.Join(" ", line1.Skip(1));
+						address2 = addressLine2;
+					}
+				}
 				else
 				{
 					houseName = addressLine1;

@@ -48,11 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="MedalScoreCalculatorTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Backend\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\backend\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>
