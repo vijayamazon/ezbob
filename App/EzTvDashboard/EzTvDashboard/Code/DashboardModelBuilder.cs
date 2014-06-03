@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using Ezbob.Database;
 	using GoogleAnalyticsLib;
 	using Models;
@@ -12,7 +13,9 @@
 		private static DateTime LastChecked { get; set; }
 		private static string GaCertThumb { get; set; }
 		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(DashboardModelBuilder));
-
+		private static int CustomerId { get; set; }
+		private static int CashRequestsId { get; set; }
+		private static int LoanId { get; set; }
 		public DashboardModelBuilder()
 		{
 			Db = new SqlConnection();
@@ -21,8 +24,33 @@
 
 		public bool SomethingChanged()
 		{
-			var changed = Db.ExecuteScalar<bool>("EzTvIsChanged", new QueryParameter("@Date", LastChecked));
-			return changed;
+			var changed = Db.ExecuteReader("EzTvIsChanged");
+			bool isCustomerChanged = false;
+			bool isCashRequestChanged = false;
+			bool isLoanChanged = false;
+			foreach (DataRow row in changed.Rows)
+			{
+				int val;
+				if (row["Table"].ToString() == "Security_User")
+				{
+					val = int.Parse(row["Val"].ToString());
+					isCustomerChanged = val > CustomerId;
+					CustomerId = val;
+				}
+				if (row["Table"].ToString() == "CashRequests")
+				{
+					val = int.Parse(row["Val"].ToString());
+					isCashRequestChanged = val > CashRequestsId;
+					CashRequestsId = val;
+				}
+				if (row["Table"].ToString() == "Loan")
+				{
+					val = int.Parse(row["Val"].ToString());
+					isLoanChanged = val > LoanId;
+					LoanId = val;
+				}
+			}
+			return isCustomerChanged || isCashRequestChanged || isLoanChanged;
 		}
 
 		public DashboardModel BuildModel()
@@ -36,7 +64,8 @@
 					MonthlyBoard = new List<MonthlyBoardModel>(),
 					MonthlyCollection = new List<MonthlyCollectionModel>(),
 					MonthlyTraffic = new List<MonthlyTrafficModel>(),
-					Stats = new Dictionary<string, decimal>()
+					Stats = new Dictionary<string, decimal>(),
+					LastChanged = LastChecked
 				};
 
 			var firstOfMonth = new DateTime(LastChecked.Year, LastChecked.Month, 1);

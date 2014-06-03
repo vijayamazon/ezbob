@@ -229,6 +229,7 @@
     <Content Include="Content\js\jquery.js" />
     <Content Include="Content\js\jquery.knob.js" />
     <Content Include="Content\js\jquery.slimscroll.js" />
+    <Content Include="Content\js\moment.js" />
     <Content Include="Content\js\underscore.js" />
     <Content Include="Content\js\_references.js" />
     <Content Include="favicon.ico" />

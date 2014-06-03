@@ -12,6 +12,7 @@
             if (res.changed) {
                 location.reload(true);
             }
+            $('.last-updated').text('last updated ' + moment.utc(res.lastChanged).fromNow());
         });
     }, 10000);
 });

@@ -18,7 +18,7 @@
             <ul class="nav flaty-nav pull-right">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <li><a href="@Url.Action("Logout", "Account")">Logout</a></li>
+                    <li class="nav-li"><a class="logout" href="@Url.Action("Logout", "Account")">Logout</a><div class='last-updated'></div></li>
                 }
             </ul>
         </div>

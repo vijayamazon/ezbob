@@ -84,3 +84,19 @@ table.table {
     padding-bottom: 25px;
     margin: -15px 0 0 0;
 }
+
+.nav-li {
+    width: 200px;
+}
+
+.last-updated {
+    position: absolute;
+    top: 20px;
+    right: 0;
+}
+
+a.logout {
+    position: absolute !important;
+    right: 0px;
+    top: -20px;
+}

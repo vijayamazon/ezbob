@@ -15,7 +15,7 @@ namespace EzTvDashboard.Controllers
 
 		public DashboardController()
 		{
-			this._modelBuilder = new DashboardModelBuilder();
+			_modelBuilder = new DashboardModelBuilder();
 		}
 
 		public ActionResult Index()
@@ -30,7 +30,7 @@ namespace EzTvDashboard.Controllers
 		[HttpGet]
 		public JsonResult IsSomethingChanged()
 		{
-			return Json(new {changed = _modelBuilder.SomethingChanged()}, JsonRequestBehavior.AllowGet);
+			return Json(new { changed = _modelBuilder.SomethingChanged(), lastChanged = _model.LastChanged }, JsonRequestBehavior.AllowGet);
 		}
 	}
 }
