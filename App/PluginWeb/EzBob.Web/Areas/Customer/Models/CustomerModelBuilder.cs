@@ -236,6 +236,7 @@
 			customerModel.RequestedAmount = ReferenceEquals(oRequestedAmount, null) || !oRequestedAmount.Amount.HasValue ? 0 : (decimal)oRequestedAmount.Amount;
 
 			customerModel.IsBrokerFill = customer.FilledByBroker;
+			customerModel.DefaultCardSelectionAllowed = customer.DefaultCardSelectionAllowed;
 			return customerModel;
 		}
 

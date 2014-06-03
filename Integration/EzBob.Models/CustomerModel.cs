@@ -121,6 +121,7 @@ namespace EzBob.Models {
 		public QuickOfferModel QuickOffer { get; set; }
 		public decimal RequestedAmount { get; set; }
 		public bool IsBrokerFill { get; set; }
+		public bool DefaultCardSelectionAllowed { get; set; }
 	} // class CustomerModel
 
 	#endregion class CustomerModel
