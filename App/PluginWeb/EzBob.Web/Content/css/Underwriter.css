@@ -1261,7 +1261,7 @@ td a.edit-loan {
 
 #sidebar-dashboard {
     position: fixed;
-    height: 100vh !important;
+    height: 95vh !important;
 }
 
     #sidebar-dashboard .tabbable {
