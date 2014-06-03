@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Loans;
+	using PaymentServices;
 	using Web.Areas.Customer.Models;
 	using Ezbob.Backend.Models;
 

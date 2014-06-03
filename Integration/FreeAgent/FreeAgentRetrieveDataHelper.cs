@@ -26,7 +26,7 @@
 			expenseCategories = Helper.GetExpenseCategories();
         }
 
-        protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+        protected override ElapsedTimeInfo RetrieveAndAggregate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
 			log.InfoFormat("Starting to update FreeAgent marketplace. Id:{0} Name:{1}", databaseCustomerMarketPlace.Id, databaseCustomerMarketPlace.DisplayName);
@@ -98,6 +98,8 @@
 
 			CalculateAndStoreAggregatedInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
 			CalculateAndStoreAggregatedExpenseData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo, accessToken);
+
+	        return elapsedTimeInfo;
         }
 
 		private void FillExpensesCategory(IEnumerable<FreeAgentExpense> freeAgentExpenses, string accessToken)

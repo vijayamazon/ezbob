@@ -25,7 +25,7 @@ namespace EKM
 
         }
 
-        protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+        protected override ElapsedTimeInfo RetrieveAndAggregate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             // Retreive data from ekm api
@@ -72,6 +72,8 @@ namespace EKM
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                             ElapsedDataMemberType.StoreAggregatedData,
                             () => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
+
+	        return elapsedTimeInfo;
         }
 
         protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)

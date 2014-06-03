@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using CommonLib;
+	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;

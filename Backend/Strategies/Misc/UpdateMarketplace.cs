@@ -129,7 +129,7 @@
 				} // if
 
 				if (oRetrieveDataHelper != null)
-					oRetrieveDataHelper.UpdateCustomerMarketplaceFirst(marketplaceId);
+					oRetrieveDataHelper.CustomerMarketplaceUpdateAction(marketplaceId);
 			}
 			catch (Exception e) {
 				errorMessage = e.Message;

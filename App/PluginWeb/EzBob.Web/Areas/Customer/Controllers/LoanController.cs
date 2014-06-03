@@ -6,10 +6,10 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using Infrastructure.Attributes;
-	using Models;
 	using Code;
 	using Infrastructure;
 	using Infrastructure.csrf;
+	using PaymentServices;
 	using PaymentServices.Calculators;
 
 	public class LoanController : Controller

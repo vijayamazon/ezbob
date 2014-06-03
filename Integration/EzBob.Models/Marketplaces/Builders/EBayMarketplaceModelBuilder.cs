@@ -3,13 +3,13 @@ using System.Globalization;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
 using NHibernate;
 using NHibernate.Linq;
 
 namespace EzBob.Models.Marketplaces.Builders
 {
 	using EZBob.DatabaseLib.Repository;
+	using Ezbob.Backend.Models;
 
 	class EBayMarketplaceModelBuilder : MarketplaceModelBuilder
     {

@@ -417,7 +417,7 @@
 		VatReturnPeriodsActionResult LoadManualVatReturnPeriods(int nCustomerID);
 
 		[OperationContract]
-		ActionMetaData SaveVatReturnData(
+		ElapsedTimeInfoActionResult SaveVatReturnData(
 			int nCustomerMarketplaceID,
 			int nHistoryRecordID,
 			int nSourceID,

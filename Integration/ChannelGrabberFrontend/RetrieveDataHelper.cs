@@ -61,9 +61,9 @@
 
 		#region protected
 
-		#region method InternalUpdateInfo
+		#region method RetrieveAndAggregate
 
-		protected override void InternalUpdateInfo(
+		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
@@ -109,23 +109,20 @@
 
 					switch (ad.VendorInfo.Behaviour) {
 					case Behaviour.Default:
-						ProcessRetrieved(
+						return ProcessRetrieved(
 							ctr.DataHarvester,
 							databaseCustomerMarketPlace,
 							historyRecord
 						);
-						break;
 
 					case Behaviour.HMRC:
-						ObjectFactory.GetInstance<IEzServiceAccessor>().SaveVatReturnData(
+						return ObjectFactory.GetInstance<IEzServiceAccessor>().SaveVatReturnData(
 							databaseCustomerMarketPlace.Id,
 							historyRecord.Id,
 							ctr.SourceID,
 							HmrcVatReturnConversion(ctr.DataHarvester),
 							HmrcRtiTaxMonthConversion(ctr.DataHarvester)
 						);
-
-						break;
 
 					default:
 						throw new ApiException("Unsupported behaviour for CG flavour: " + ad.VendorInfo.Behaviour.ToString());
@@ -136,11 +133,11 @@
 					throw;
 				} // try
 			} // if Init succeeded
-			else
-				throw new ApiException("Failed to initialise CG connector.");
-		} // InternalUpdateInfo
 
-		#endregion method InternalUpdateInfo
+			throw new ApiException("Failed to initialise CG connector.");
+		} // RetrieveAndAggregate
+
+		#endregion method RetrieveAndAggregate
 
 		#region method AddAnalysisValues
 
@@ -158,13 +155,27 @@
 
 		#region method ProcessRetrieved
 
-		private void ProcessRetrieved(
+		private ElapsedTimeInfo ProcessRetrieved(
 			IHarvester oHarvester,
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
 			// Convert orders into internal format.
-			List<AInternalOrderItem> oChaGraOrders = DefaultConversion(oHarvester);
+			List<Order> oRawOrders = ((Integration.ChannelGrabberAPI.Harvester)oHarvester).RetrievedOrders;
+
+			var oChaGraOrders = new List<AInternalOrderItem>();
+
+			if (oRawOrders != null) {
+				oChaGraOrders.AddRange(oRawOrders.Select(oRaw => new ChannelGrabberOrderItem {
+					CurrencyCode = oRaw.CurrencyCode,
+					OrderStatus = oRaw.OrderStatus,
+					NativeOrderId = oRaw.NativeOrderId,
+					PaymentDate = oRaw.PaymentDate,
+					PurchaseDate = oRaw.PurchaseDate,
+					TotalCost = oRaw.TotalCost,
+					IsExpense = oRaw.IsExpense,
+				}));
+			} // if
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
 
@@ -199,37 +210,11 @@
 				ElapsedDataMemberType.StoreAggregatedData,
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord)
 			);
+
+			return elapsedTimeInfo;
 		} // ProcessRetrieved
 
 		#endregion method ProcessRetrieved
-
-		#region Orders list: remote to internal conversion
-
-		#region method DefaultConversion
-
-		private List<AInternalOrderItem> DefaultConversion(IHarvester oHarvester) {
-			List<Order> oRawOrders = ((Integration.ChannelGrabberAPI.Harvester)oHarvester).RetrievedOrders;
-
-			var oChaGraOrders = new List<AInternalOrderItem>();
-
-			if (oRawOrders != null) {
-				foreach (var oRaw in oRawOrders) {
-					oChaGraOrders.Add(new ChannelGrabberOrderItem {
-						CurrencyCode = oRaw.CurrencyCode,
-						OrderStatus = oRaw.OrderStatus,
-						NativeOrderId = oRaw.NativeOrderId,
-						PaymentDate = oRaw.PaymentDate,
-						PurchaseDate = oRaw.PurchaseDate,
-						TotalCost = oRaw.TotalCost,
-						IsExpense = oRaw.IsExpense
-					});
-				} // foreach
-			} // if
-
-			return oChaGraOrders;
-		} // DefaultConversion
- 
-		#endregion method DefaultConversion
 
 		#region method HmrcVatReturnConversion
 
@@ -286,8 +271,6 @@
 		} // HmrcRtiTaxMonthConversion
  
 		#endregion method HmrcVatReturnConversion
-
-		#endregion Orders list: remote to internal conversion
 
 		#region method CreateOrdersAggregationInfo
 

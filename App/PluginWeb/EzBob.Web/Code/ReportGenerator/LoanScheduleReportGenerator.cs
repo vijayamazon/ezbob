@@ -8,7 +8,9 @@ using EzBob.Web.Areas.Customer.Models;
 
 namespace EzBob.Web.Code.ReportGenerator
 {
-    public class LoanScheduleReportGenerator
+	using Ezbob.Backend.Models;
+
+	public class LoanScheduleReportGenerator
     {
         private readonly Workbook _workbook;
 

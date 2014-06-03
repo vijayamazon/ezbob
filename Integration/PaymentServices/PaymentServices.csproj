@@ -74,6 +74,7 @@
     <Compile Include="Calculators\LoanRepaymentScheduleCalculatorEvent.cs" />
     <Compile Include="Calculators\PaymentResult.cs" />
     <Compile Include="Calculators\SetupFeeCalculator.cs" />
+    <Compile Include="ILoanRepaymentScheduleCalculator.cs" />
     <Compile Include="PacNet\IPacnetService.cs" />
     <Compile Include="PacNet\FakePacnetService.cs" />
     <Compile Include="PacNet\LogPacnet.cs" />
@@ -142,10 +143,6 @@
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EzBob.Models\EzBob.Models.csproj">
-      <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
-      <Name>EzBob.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\PayPoint\PayPoint.csproj">
       <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>

@@ -2,18 +2,28 @@ namespace Ezbob.Utils {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Runtime.Serialization;
 
+	[DataContract]
 	public enum ElapsedDataMemberType {
+		[EnumMember]
 		RetrieveDataFromExternalService,
+
+		[EnumMember]
 		RetrieveDataFromDatabase,
+
+		[EnumMember]
 		StoreDataToDatabase,
+
+		[EnumMember]
 		AggregateData,
+
+		[EnumMember]
 		StoreAggregatedData
 	} // enum ElapsedDataMemberType
 
+	[DataContract]
 	public class ElapsedTimeInfo : IEnumerable<ElapsedDataMemberType> {
-		private readonly SortedDictionary<ElapsedDataMemberType, long> m_oData;
-
 		public ElapsedTimeInfo() {
 			m_oData = new SortedDictionary<ElapsedDataMemberType, long>();
 
@@ -41,5 +51,8 @@ namespace Ezbob.Utils {
 		IEnumerator IEnumerable.GetEnumerator() {
 			return GetEnumerator();
 		} // GetEnumerator
+
+		[DataMember]
+		private readonly SortedDictionary<ElapsedDataMemberType, long> m_oData;
 	} // class ElapsedTimeInfo
 } // namespace

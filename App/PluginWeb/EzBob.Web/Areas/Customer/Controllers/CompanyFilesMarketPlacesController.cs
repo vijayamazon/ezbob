@@ -102,7 +102,7 @@
 					var name = serviceInfo.DisplayName;
 					var cf = new CompanyFilesDatabaseMarketPlace();
 					var mp = _helper.SaveOrUpdateCustomerMarketplace(_context.Customer.Name + "_" + name, cf, null, _context.Customer);
-					mp.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(mp.Id);
+					mp.Marketplace.GetRetrieveDataHelper(_helper).CustomerMarketplaceUpdateAction(mp.Id);
 					nResult = mp.Id;
 				}).Execute();
 			}

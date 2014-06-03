@@ -5,6 +5,7 @@
 	using System.Globalization;
 	using System.IO;
 	using Aspose.Cells;
+	using Ezbob.Backend.Models;
 	using Models;
 
 	public class LoanOfferReportGenerator

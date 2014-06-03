@@ -8,10 +8,10 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
+	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models;
-	using Code;
 	using ServiceClientProxy;
 	using StructureMap;
 

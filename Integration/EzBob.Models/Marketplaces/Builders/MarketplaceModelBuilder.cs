@@ -7,8 +7,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	using System.Web;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
-	using Web.Areas.Customer.Models;
-	using Web.Code;
+	using Ezbob.Backend.Models;
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib;

@@ -24,6 +24,8 @@
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
+			ElapsedTimeInfo = new ElapsedTimeInfo();
+
 			m_oSp = new SpSaveVatReturnSummary(DB, Log) {
 				CustomerMarketplaceID = nCustomerMarketplaceID,
 				HistoryRecordID = nHistoryRecordID,
@@ -49,11 +51,18 @@
 		public override void Execute() {
 			Log.Debug(m_oSp);
 
+			// TODO: fill elapsed time
 			// TODO: m_oSp.ExecuteNonQuery();
 			// TODO: new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute
+
+		#region property ElapsedTimeInfo
+
+		public ElapsedTimeInfo ElapsedTimeInfo { get; private set; } // ElapsedTimeInfo
+
+		#endregion property ElapsedTimeInfo
 
 		#endregion public
 
@@ -180,7 +189,7 @@
 					foreach (var p in o.Item2)
 						os.AppendLine(p.ToString());
 
-					os.AppendFormat("End of {0}:\n", o.Item1);
+					os.AppendFormat("End of {0}.\n", o.Item1);
 				} // for each
 
 				return os.ToString();

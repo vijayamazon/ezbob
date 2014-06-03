@@ -965,7 +965,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 			if ((args.Length != 3) || !int.TryParse(args[1], out nCustomerMarketplaceID) || !int.TryParse(args[2], out customerId))
 			{
-				m_oLog.Msg("Usage: LoadVatReturnSummary <Customer Marketplace ID>");
+				m_oLog.Msg("Usage: LoadVatReturnSummary <Customer Marketplace ID> <Customer ID>");
 				return;
 			} // if
 
@@ -973,6 +973,42 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 			m_oLog.Msg("Result is:\n{0}", string.Join("\n", oResult.Summary.Select(x => x.ToString())));
 		} // LoadVatReturnSummary
+
+		[Activation]
+		private void LoadVatReturnFullData()
+		{
+			int customerId = 0;
+			int nCustomerMarketplaceID = 0;
+
+			if ((args.Length != 3) || !int.TryParse(args[1], out nCustomerMarketplaceID) || !int.TryParse(args[2], out customerId))
+			{
+				m_oLog.Msg("Usage: LoadVatReturnFullData <Customer Marketplace ID> <Customer ID>");
+				return;
+			} // if
+
+			VatReturnDataActionResult oResult = serviceClient.LoadVatReturnFullData(customerId, nCustomerMarketplaceID);
+
+			m_oLog.Msg("VAT return - begin:");
+
+			foreach (var v in oResult.VatReturnRawData)
+				m_oLog.Msg(v.ToString());
+
+			m_oLog.Msg("VAT return - end.");
+
+			m_oLog.Msg("RTI months - begin:");
+
+			foreach (var v in oResult.RtiTaxMonthRawData)
+				m_oLog.Msg(v.ToString());
+
+			m_oLog.Msg("RTI months - end.");
+
+			m_oLog.Msg("Summary - begin:");
+
+			foreach (var v in oResult.Summary)
+				m_oLog.Msg(v.ToString());
+
+			m_oLog.Msg("Summary - end.");
+		} // LoadVatReturnFullData
 
 		[Activation]
 		private void AndRecalculateVatReturnSummaryForAll() {

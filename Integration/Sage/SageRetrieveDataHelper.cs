@@ -24,7 +24,7 @@
 		{
 		}
 
-        protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+        protected override ElapsedTimeInfo RetrieveAndAggregate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
 			log.InfoFormat("Starting to update Sage marketplace. Id:{0} Name:{1}", databaseCustomerMarketPlace.Id, databaseCustomerMarketPlace.DisplayName);
@@ -67,6 +67,8 @@
 				() => Helper.StoreSagePaymentStatuses(paymentStatuses));
 
 			CalculateAndStoreAggregatedData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
+
+	        return elapsedTimeInfo;
         }
 
 		private void CalculateAndStoreAggregatedData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,

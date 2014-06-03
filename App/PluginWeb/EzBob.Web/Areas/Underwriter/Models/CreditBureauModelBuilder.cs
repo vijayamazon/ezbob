@@ -17,8 +17,8 @@
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Code;
 	using EzBobIntegration.Web_References.Consumer;
+	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
 	using NHibernate;
 	using NHibernate.Linq;

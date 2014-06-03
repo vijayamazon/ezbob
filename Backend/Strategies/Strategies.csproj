@@ -105,6 +105,7 @@
     <Compile Include="Exceptions\StrategyAlert.cs" />
     <Compile Include="Experian\ExperianParserForAnalytics.cs" />
     <Compile Include="VatReturn\LoadManualVatReturnPeriods.cs" />
+    <Compile Include="VatReturn\LoadVatReturnFullData.cs" />
     <Compile Include="VatReturn\LoadVatReturnRawData.cs" />
     <Compile Include="VatReturn\LoadVatReturnSummary.cs" />
     <Compile Include="Misc\MarketplaceInstantUpdate.cs" />

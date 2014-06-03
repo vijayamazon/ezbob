@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using Ezbob.Backend.Models;
 	using NHibernate;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Controllers.Exceptions;

@@ -1,7 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-	using Code;
 	using ConfigManager;
+	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using System;

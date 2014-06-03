@@ -7,9 +7,9 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models;
-	using Code;
 	using System.Text;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
 	using Infrastructure;
 	using PaymentServices.Calculators;

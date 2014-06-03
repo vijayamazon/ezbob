@@ -1,6 +1,8 @@
 ﻿namespace ServiceClientProxy {
 	using EzServiceAccessor;
+	using EzServiceReference;
 	using Ezbob.Backend.Models;
+	using Ezbob.Utils;
 
 	public class EzServiceAccessorLong : IEzServiceAccessor {
 		#region public
@@ -23,17 +25,33 @@
 
 		#region method SaveVatReturnData
 
-		public void SaveVatReturnData(
+		public ElapsedTimeInfo SaveVatReturnData(
 			int nCustomerMarketplaceID,
 			int nHistoryRecordID,
 			int nSourceID,
 			VatReturnRawData[] oVatReturn,
 			RtiTaxMonthRawData[] oRtiMonths
 		) {
-			m_oServiceClient.Instance.SaveVatReturnData(nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths);
+			ElapsedTimeInfoActionResult etiar = m_oServiceClient.Instance.SaveVatReturnData(nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths);
+
+			return etiar.MetaData.Status == ActionStatus.Done ? etiar.Value : new ElapsedTimeInfo();
 		} // CalculateVatReturnSummary
 
 		#endregion method SaveVatReturnData
+
+		#region method LoadVatReturnFullData
+
+		public VatReturnFullData LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID) {
+			VatReturnDataActionResult vrdar = m_oServiceClient.Instance.LoadVatReturnFullData(nCustomerID, nCustomerMarketplaceID);
+
+			return new VatReturnFullData {
+				VatReturnRawData = vrdar.VatReturnRawData,
+				RtiTaxMonthRawData = vrdar.RtiTaxMonthRawData,
+				Summary = vrdar.Summary,
+			};
+		} // LoadVatReturnFullData
+
+		#endregion method LoadVatReturnFullData
 
 		#endregion public
 

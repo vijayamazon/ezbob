@@ -27,6 +27,14 @@ namespace EzBob.PayPal
 		{
 		}
 
+		protected override ElapsedTimeInfo RetrieveAndAggregate(
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			MP_CustomerMarketplaceUpdatingHistory historyRecord
+		) {
+			// This method is not implemented here because elapsed time is got from over source.
+			throw new NotImplementedException();
+		}
+
 		protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			var securityInfo = RetrieveCustomerSecurityInfo<PayPalSecurityData>(databaseCustomerMarketPlace);

@@ -21,7 +21,6 @@
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Serialization;
 	using Marketplaces;
-	using Web.Code;
 	using NHibernate;
 	using StructureMap;
 	using ZooplaLib;

@@ -79,7 +79,6 @@
     <Compile Include="DecisionHistoryModel.cs" />
     <Compile Include="DirectorModel.cs" />
     <Compile Include="EditLoanDetailsModel.cs" />
-    <Compile Include="FormattingUtils.cs" />
     <Compile Include="Marketplaces\MarketPlacesFacade.cs" />
     <Compile Include="Marketplaces\Builders\ChannelGrabberMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\CompanyFilesMarketplaceModelBuilder.cs" />
@@ -108,7 +107,6 @@
     <Compile Include="Marketplaces\Yodlee\YodleeTransactionModel.cs" />
     <Compile Include="Marketplaces\Builders\AmazonMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\IMarketplaceModelBuilder.cs" />
-    <Compile Include="ILoanRepaymentScheduleCalculator.cs" />
     <Compile Include="LoanAgreementModel.cs" />
     <Compile Include="LoanChargesModel.cs" />
     <Compile Include="LoanDetails.cs" />
@@ -130,9 +128,9 @@
     <Compile Include="StrategyHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
-      <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
-      <Name>EzServiceClient</Name>
+    <ProjectReference Include="..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{D283AD52-FE57-4CD8-A928-A7A3AF9F04EC}</Project>
+      <Name>EzServiceAccessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
@@ -217,6 +215,10 @@
     <ProjectReference Include="..\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaymentServices\PaymentServices.csproj">
+      <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
+      <Name>PaymentServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\PayPal\PayPalLib\PayPalLib.csproj">
       <Project>{231243d6-9b1a-43bc-ac7e-fc6ae5ddc006}</Project>

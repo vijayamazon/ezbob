@@ -78,10 +78,6 @@
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EzBob.Models\EzBob.Models.csproj">
-      <Project>{66411FF3-AA26-4B45-96D3-56E5E77BB544}</Project>
-      <Name>EzBob.Models</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

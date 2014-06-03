@@ -11,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;

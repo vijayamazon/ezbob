@@ -7,7 +7,7 @@
 	/// </summary>
 	public abstract class AStrategyLoggedException : AStrategyException {
 		protected AStrategyLoggedException(Severity nSeverity, AStrategy oSource, string sMsg, Exception oInnerException = null) : base(oSource, sMsg, oInnerException) {
-			oSource.Log.Say(nSeverity, this);
+			oSource.Log.Say(nSeverity, this, sMsg);
 		} // constructor
 	} // class AStrategyLoggedException
 } // namespace

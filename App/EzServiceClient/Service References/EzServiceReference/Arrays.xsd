@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
   <xs:complexType name="ArrayOfstring">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xs:string" />
@@ -25,6 +26,24 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfstringCoin96aT1m2k" nillable="true" type="tns:ArrayOfKeyValueOfstringCoin96aT1m2k" />
+  <xs:complexType name="ArrayOfKeyValueOfElapsedDataMemberTypelongpoA0JYJE">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfElapsedDataMemberTypelongpoA0JYJE">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Utils" name="Key" type="q2:ElapsedDataMemberType" />
+            <xs:element name="Value" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfKeyValueOfElapsedDataMemberTypelongpoA0JYJE" nillable="true" type="tns:ArrayOfKeyValueOfElapsedDataMemberTypelongpoA0JYJE" />
   <xs:complexType name="ArrayOfint">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />

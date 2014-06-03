@@ -4,6 +4,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 
 	public class EzServiceAccessorShort : IEzServiceAccessor {
 		#region static constructor
@@ -40,7 +41,7 @@
 
 		#region method SaveVatReturnData
 
-		public void SaveVatReturnData(
+		public ElapsedTimeInfo SaveVatReturnData(
 			int nCustomerMarketplaceID,
 			int nHistoryRecordID,
 			int nSourceID,
@@ -49,9 +50,25 @@
 		) {
 			var stra = new SaveVatReturnData(nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths, ms_oDB, ms_oLog);
 			stra.Execute();
+			return stra.ElapsedTimeInfo;
 		} // CalculateVatReturnSummary
 
 		#endregion method SaveVatReturnData
+
+		#region method LoadVatReturnFullData
+
+		public VatReturnFullData LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID) {
+			var stra = new LoadVatReturnFullData(nCustomerID, nCustomerMarketplaceID, ms_oDB, ms_oLog);
+			stra.Execute();
+
+			return new VatReturnFullData {
+				VatReturnRawData = stra.VatReturnRawData,
+				RtiTaxMonthRawData = stra.RtiTaxMonthRawData,
+				Summary = stra.Summary,
+			};
+		} // LoadVatReturnFullData
+
+		#endregion method LoadVatReturnFullData
 
 		#endregion public
 

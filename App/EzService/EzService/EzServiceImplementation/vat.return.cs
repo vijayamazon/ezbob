@@ -60,14 +60,21 @@
 
 		#region method SaveVatReturnData
 
-		public ActionMetaData SaveVatReturnData(
+		public ElapsedTimeInfoActionResult SaveVatReturnData(
 			int nCustomerMarketplaceID,
 			int nHistoryRecordID,
 			int nSourceID,
 			VatReturnRawData[] oVatReturn,
 			RtiTaxMonthRawData[] oRtiMonths
 		) {
-			return ExecuteSync<SaveVatReturnData>(null, null, nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths);
+			SaveVatReturnData oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths);
+
+			return new ElapsedTimeInfoActionResult {
+				MetaData = oMetaData,
+				Value = oInstance.ElapsedTimeInfo,
+			};
 		} // SaveVatReturnData
 
 		#endregion method SaveVatReturnData
@@ -91,35 +98,16 @@
 		#region method LoadVatReturnFullData
 
 		public VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID) {
-			try {
-				LoadVatReturnRawData oRaw;
+			LoadVatReturnFullData oInstance;
 
-				var oResult = new VatReturnDataActionResult {
-					VatReturnRawData = new VatReturnRawData[0],
-					RtiTaxMonthRawData = new RtiTaxMonthRawData[0],
-					Summary = new VatReturnSummary[0],
-				};
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, null, nCustomerID, nCustomerMarketplaceID);
 
-				oResult.MetaData = ExecuteSync(out oRaw, null, null, nCustomerMarketplaceID);
-
-				if (oResult.MetaData.Status == ActionStatus.Done) {
-					oResult.RtiTaxMonthRawData = oRaw.RtiTaxMonthRawData;
-					oResult.VatReturnRawData = oRaw.VatReturnRawData;
-
-					LoadVatReturnSummary oSummary;
-
-					oResult.MetaData = ExecuteSync(out oSummary, nCustomerID, null, nCustomerID, nCustomerMarketplaceID);
-					oResult.Summary = oSummary.Summary;
-				} // if
-
-				return oResult;
-			}
-			catch (Exception e) {
-				if (!(e is AStrategyException))
-					Log.Alert(e, "Something went exceptional while executing LoadVatReturnFullData.");
-
-				throw new FaultException(e.Message);
-			} // try
+			return new VatReturnDataActionResult {
+				VatReturnRawData = oInstance.VatReturnRawData,
+				RtiTaxMonthRawData = oInstance.RtiTaxMonthRawData,
+				Summary = oInstance.Summary,
+				MetaData = oMetaData,
+			};
 		} // LoadVatReturnFullData
 
 		#endregion method LoadVatReturnFullData

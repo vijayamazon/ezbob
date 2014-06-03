@@ -248,7 +248,7 @@
 
 			try {
 				m_oServiceClient.Instance.MarketplaceInstantUpdate(mp.Id);
-				mp.Marketplace.GetRetrieveDataHelper(m_oDatabaseHelper).UpdateCustomerMarketplaceFirst(mp.Id);
+				mp.Marketplace.GetRetrieveDataHelper(m_oDatabaseHelper).CustomerMarketplaceUpdateAction(mp.Id);
 			}
 			catch (Exception e) {
 				return CreateJsonError("Account has been linked but error occurred while storing the data: " + e.Message);

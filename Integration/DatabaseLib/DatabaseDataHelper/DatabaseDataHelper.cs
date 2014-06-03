@@ -39,8 +39,7 @@ namespace EZBob.DatabaseLib {
 
 	#region enum CustomerMarketplaceUpdateActionType
 
-	public enum CustomerMarketplaceUpdateActionType
-	{
+	public enum CustomerMarketplaceUpdateActionType {
 		UpdateInventoryInfo,
 		UpdateOrdersInfo,
 		UpdateFeedbackInfo,
@@ -55,8 +54,7 @@ namespace EZBob.DatabaseLib {
 
 	#region class DatabaseDataHelper
 
-	public partial class DatabaseDataHelper : IDatabaseDataHelper
-	{
+	public partial class DatabaseDataHelper : IDatabaseDataHelper {
 		private static readonly ILog _Log = LogManager.GetLogger(typeof(DatabaseDataHelper));
 
 		private ISession _session;
@@ -143,18 +141,14 @@ namespace EZBob.DatabaseLib {
 
 		#region property WizardStepSequence
 
-		public string WizardStepSequence
-		{
-			get
-			{
-				var oResult = new
-				{
+		public string WizardStepSequence {
+			get {
+				var oResult = new {
 					online = new Dictionary<string, object>(),
 					offline = new Dictionary<string, object>()
 				};
 
-				_wizardStepSequenceRepository.GetAll().ForEach(wss =>
-				{
+				_wizardStepSequenceRepository.GetAll().ForEach(wss => {
 					if (wss.OnlineProgressBarPct.HasValue)
 						oResult.online[wss.Name()] = new { position = wss.OnlineProgressBarPct.Value, type = wss.WizardStep.ID };
 
@@ -170,8 +164,7 @@ namespace EZBob.DatabaseLib {
 
 		#region property WizardSteps
 
-		public WizardStepRepository WizardSteps
-		{
+		public WizardStepRepository WizardSteps {
 			get { return _wizardStepRepository; }
 		} // WizardSteps
 
@@ -192,11 +185,10 @@ namespace EZBob.DatabaseLib {
 		public ICurrencyConvertor CurrencyConverter { get { return _CurrencyConvertor; } }
 
 		public Customer GetCustomerInfo(int clientId) { return _CustomerRepository.Get(clientId); }
-		
+
 		public Customer FindCustomerByEmail(string sEmail) { return _CustomerRepository.TryGetByEmail(sEmail); } // FindCustomerByEmail
 
-		public IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaceList(Customer customer, IMarketplaceType databaseMarketplace)
-		{
+		public IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaceList(Customer customer, IMarketplaceType databaseMarketplace) {
 			MP_MarketplaceType marketplaceType = _MarketPlaceRepository.Get(databaseMarketplace.InternalId);
 
 			var data = _CustomerMarketplaceRepository.Get(customer, marketplaceType);
@@ -204,8 +196,7 @@ namespace EZBob.DatabaseLib {
 			return data.Select(cm => CreateDatabaseCustomerMarketPlace(customer, databaseMarketplace, cm, cm.Id)).ToList();
 		}
 
-		public IEnumerable<IDatabaseCustomerMarketPlace> GetEnabledCustomerMarketPlaceList(Customer customer, IMarketplaceType databaseMarketplace)
-		{
+		public IEnumerable<IDatabaseCustomerMarketPlace> GetEnabledCustomerMarketPlaceList(Customer customer, IMarketplaceType databaseMarketplace) {
 			MP_MarketplaceType marketplaceType = _MarketPlaceRepository.Get(databaseMarketplace.InternalId);
 
 			var data = _CustomerMarketplaceRepository.Get(customer, marketplaceType);
@@ -216,32 +207,26 @@ namespace EZBob.DatabaseLib {
 					.ToList();
 		}
 
-		public IDatabaseCustomerMarketPlace GetDatabaseCustomerMarketPlace(IMarketplaceType marketplaceType, int customerMarketPlaceId)
-		{
+		public IDatabaseCustomerMarketPlace GetDatabaseCustomerMarketPlace(IMarketplaceType marketplaceType, int customerMarketPlaceId) {
 			MP_CustomerMarketPlace mp = GetCustomerMarketPlace(customerMarketPlaceId);
 			var customer = mp.Customer;
 			return CreateDatabaseCustomerMarketPlace(mp.DisplayName, marketplaceType, customer);
 		}
 
-		public MP_CustomerMarketPlace GetCustomerMarketPlace(int customerMarketPlaceId)
-		{
+		public MP_CustomerMarketPlace GetCustomerMarketPlace(int customerMarketPlaceId) {
 			return _CustomerMarketplaceRepository.Get(customerMarketPlaceId);
 		}
 
-		private MP_AnalysisFunctionTimePeriod GetTimePeriod(ITimePeriod databaseTimePeriod)
-		{
+		private MP_AnalysisFunctionTimePeriod GetTimePeriod(ITimePeriod databaseTimePeriod) {
 			return _AnalysisFunctionTimePeriodRepository.Get(databaseTimePeriod.InternalId);
 		}
 
-		internal MP_AnalyisisFunction GetFunction(IDatabaseFunction databaseFunction)
-		{
+		internal MP_AnalyisisFunction GetFunction(IDatabaseFunction databaseFunction) {
 			return _AnalyisisFunctionRepository.Get(databaseFunction.InternalId);
 		}
 
-		public void InitFunctionTimePeriod()
-		{
-			foreach (var timePeriod in TimePeriodBase.AllTimePeriods)
-			{
+		public void InitFunctionTimePeriod() {
+			foreach (var timePeriod in TimePeriodBase.AllTimePeriods) {
 				var period = _AnalysisFunctionTimePeriodRepository.Get(timePeriod.InternalId) ?? new MP_AnalysisFunctionTimePeriod { InternalId = timePeriod.InternalId };
 
 				period.Name = timePeriod.Name;
@@ -251,27 +236,23 @@ namespace EZBob.DatabaseLib {
 			}
 		}
 
-		private void LogData(string funcName, MP_CustomerMarketPlace customerMarketPlace, IReceivedDataList data)
-		{
-			if (data == null)
-			{
+		private void LogData(string funcName, MP_CustomerMarketPlace customerMarketPlace, IReceivedDataList data) {
+			if (data == null) {
 				WriteToLog(string.Format("{0} - {1}. Customer {2}, Market Place {3}: Invalid Call", funcName, customerMarketPlace.Marketplace.Name, customerMarketPlace.Customer.Name, customerMarketPlace.DisplayName), WriteLogType.Error);
 				return;
 			}
 
-			if (data.Count == 0)
-			{
+			if (data.Count == 0) {
 				WriteToLog(string.Format("{0} - {1} - Request date: {2}. Customer {3}, Market Place {4}: NO Data", funcName, customerMarketPlace.Marketplace.Name, data.SubmittedDate, customerMarketPlace.Customer.Name, customerMarketPlace.DisplayName));
 			}
-			else
-			{
+			else {
 				WriteToLog(string.Format("{0} - {1} - Request date: {2}.Customer {3}, Market Place {4}: Received {5} records", funcName, customerMarketPlace.Marketplace.Name, data.SubmittedDate, customerMarketPlace.Customer.Name, customerMarketPlace.DisplayName, data.Count));
 			}
 		}
 
-		internal void UpdateCustomerMarketplaceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, Action<MP_CustomerMarketplaceUpdatingHistory> a)
-		{
-			MP_CustomerMarketplaceUpdatingHistory historyItem = customerMarketPlaceUpdatingHistoryRepository.GetByMarketplaceId(databaseCustomerMarketPlace.Id).FirstOrDefault();
+		public MP_CustomerMarketplaceUpdatingHistory GetHistoryItem(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			MP_CustomerMarketplaceUpdatingHistory historyItem =
+				customerMarketPlaceUpdatingHistoryRepository.GetByMarketplaceId(databaseCustomerMarketPlace.Id).FirstOrDefault();
 
 			_Log.DebugFormat(
 				"History item for customer market place id {0} is {1}.",
@@ -279,64 +260,59 @@ namespace EZBob.DatabaseLib {
 				historyItem == null ? "NULL" : "not null"
 			);
 
-			try
-			{
+			return historyItem;
+		} // GetHistoryItem
+
+		internal void UpdateCustomerMarketplaceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, Action<MP_CustomerMarketplaceUpdatingHistory> a) {
+			MP_CustomerMarketplaceUpdatingHistory historyItem = GetHistoryItem(databaseCustomerMarketPlace);
+
+			try {
 				a(historyItem);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				throw new MarketplaceException(databaseCustomerMarketPlace, e);
 			}
 		}
 
-		public LoanAgreementTemplate GetOrCreateLoanAgreementTemplate(string template, int type)
-		{
+		public LoanAgreementTemplate GetOrCreateLoanAgreementTemplate(string template, int type) {
 			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template && x.TemplateType == type) ?? new LoanAgreementTemplate { Template = template, TemplateType = type };
 			return loanAgreementTemplate;
 		}
 
-		public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, Customer customer)
-		{
+		public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, Customer customer) {
 			return _CustomerMarketplaceRepository.Get(customer.Id, marketplaceType.InternalId, marketPlaceName);
 		}
 
-		public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(string marketPlaceName, IMarketplaceType databaseMarketplace, Customer databaseCustomer)
-		{
+		public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(string marketPlaceName, IMarketplaceType databaseMarketplace, Customer databaseCustomer) {
 			MP_CustomerMarketPlace mpCustomerMarketPlace = _CustomerMarketplaceRepository.Get(databaseCustomer.Id, databaseMarketplace.InternalId, marketPlaceName);
 			return CreateDatabaseCustomerMarketPlace(databaseCustomer, databaseMarketplace, mpCustomerMarketPlace, mpCustomerMarketPlace.Id);
 		}
 
-		public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(Customer databaseCustomer, IMarketplaceType databaseMarketplace, MP_CustomerMarketPlace cm, int customerMarketPlaceId)
-		{
+		public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(Customer databaseCustomer, IMarketplaceType databaseMarketplace, MP_CustomerMarketPlace cm, int customerMarketPlaceId) {
 			cm.SetIMarketplaceType(databaseMarketplace);
 			return cm;
 			//return new DatabaseCustomerMarketPlace(customerMarketPlaceId, cm.DisplayName, cm.SecurityData, databaseCustomer, databaseMarketplace);
 		}
 
-		public void StorePayPointOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void StorePayPointOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("PayPoint Orders Data", customerMarketPlace, ordersData);
 
-			if (ordersData == null)
-			{
+			if (ordersData == null) {
 				return;
 			}
 
 			DateTime submittedDate = DateTime.UtcNow;
-			var mpOrder = new MP_PayPointOrder
-			{
+			var mpOrder = new MP_PayPointOrder {
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
 
 			ordersData.ForEach(
-				dataItem =>
-				{
-					var mpOrderItem = new MP_PayPointOrderItem
-					{
+				dataItem => {
+					var mpOrderItem = new MP_PayPointOrderItem {
 						Order = mpOrder,
 						acquirer = dataItem.acquirer,
 						amount = dataItem.amount,
@@ -375,30 +351,25 @@ namespace EZBob.DatabaseLib {
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public void StoreEkmOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EkmOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void StoreEkmOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EkmOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("Orders Data", customerMarketPlace, ordersData);
 
-			if (ordersData == null)
-			{
+			if (ordersData == null) {
 				return;
 			}
 
 			DateTime submittedDate = DateTime.UtcNow;
-			var mpOrder = new MP_EkmOrder
-			{
+			var mpOrder = new MP_EkmOrder {
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
 
 			ordersData.ForEach(
-				dataItem =>
-				{
-					var mpOrderItem = new MP_EkmOrderItem
-					{
+				dataItem => {
+					var mpOrderItem = new MP_EkmOrderItem {
 						Order = mpOrder,
 						CompanyName = dataItem.CompanyName,
 						CustomerId = dataItem.CustomerID,
@@ -419,26 +390,22 @@ namespace EZBob.DatabaseLib {
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public MP_FreeAgentRequest StoreFreeAgentRequestAndInvoicesAndExpensesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentInvoicesList invoices, FreeAgentExpensesList expenses, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public MP_FreeAgentRequest StoreFreeAgentRequestAndInvoicesAndExpensesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentInvoicesList invoices, FreeAgentExpensesList expenses, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("Invoices Data", customerMarketPlace, invoices);
 			LogData("Expenses Data", customerMarketPlace, expenses);
 
 			DateTime submittedDate = DateTime.UtcNow;
-			var mpRequest = new MP_FreeAgentRequest
-			{
+			var mpRequest = new MP_FreeAgentRequest {
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
 
 			invoices.ForEach(
-				dataItem =>
-				{
-					var invoice = new MP_FreeAgentInvoice
-					{
+				dataItem => {
+					var invoice = new MP_FreeAgentInvoice {
 						Request = mpRequest,
 						url = dataItem.url,
 						contact = dataItem.contact,
@@ -458,10 +425,8 @@ namespace EZBob.DatabaseLib {
 					};
 
 					invoice.Items = new HashedSet<MP_FreeAgentInvoiceItem>();
-					foreach (var item in dataItem.invoice_items)
-					{
-						var mpItem = new MP_FreeAgentInvoiceItem
-						{
+					foreach (var item in dataItem.invoice_items) {
+						var mpItem = new MP_FreeAgentInvoiceItem {
 							Invoice = invoice,
 							url = item.url,
 							position = item.position,
@@ -478,10 +443,8 @@ namespace EZBob.DatabaseLib {
 				});
 
 			expenses.ForEach(
-				dataItem =>
-				{
-					var expense = new MP_FreeAgentExpense
-					{
+				dataItem => {
+					var expense = new MP_FreeAgentExpense {
 						Request = mpRequest,
 						url = dataItem.url,
 						username = dataItem.user,
@@ -499,8 +462,7 @@ namespace EZBob.DatabaseLib {
 						created_at = dataItem.created_at,
 
 					};
-					if (dataItem.attachment != null)
-					{
+					if (dataItem.attachment != null) {
 						expense.attachment_url = dataItem.attachment.url;
 						expense.attachment_content_src = dataItem.attachment.content_src;
 						expense.attachment_content_type = dataItem.attachment.content_type;
@@ -519,8 +481,7 @@ namespace EZBob.DatabaseLib {
 			return mpRequest;
 		}
 
-		public void StoreSageData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, SageSalesInvoicesList salesInvoices, SagePurchaseInvoicesList purchaseInvoices, SageIncomesList incomes, SageExpendituresList expenditures, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void StoreSageData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, SageSalesInvoicesList salesInvoices, SagePurchaseInvoicesList purchaseInvoices, SageIncomesList incomes, SageExpendituresList expenditures, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("SalesInvoices Data", customerMarketPlace, salesInvoices);
@@ -529,18 +490,15 @@ namespace EZBob.DatabaseLib {
 			LogData("Expenditures Data", customerMarketPlace, expenditures);
 
 			DateTime submittedDate = DateTime.UtcNow;
-			var mpRequest = new MP_SageRequest
-			{
+			var mpRequest = new MP_SageRequest {
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
 
 			salesInvoices.ForEach(
-				dataItem =>
-				{
-					var salesInvoice = new MP_SageSalesInvoice
-					{
+				dataItem => {
+					var salesInvoice = new MP_SageSalesInvoice {
 						Request = mpRequest,
 						SageId = dataItem.SageId,
 						invoice_number = dataItem.invoice_number,
@@ -567,10 +525,8 @@ namespace EZBob.DatabaseLib {
 						Items = new HashedSet<MP_SageSalesInvoiceItem>()
 					};
 
-					foreach (var item in dataItem.line_items)
-					{
-						var mpItem = new MP_SageSalesInvoiceItem
-						{
+					foreach (var item in dataItem.line_items) {
+						var mpItem = new MP_SageSalesInvoiceItem {
 							Invoice = salesInvoice,
 							description = item.description,
 							quantity = item.quantity,
@@ -593,10 +549,8 @@ namespace EZBob.DatabaseLib {
 				});
 
 			purchaseInvoices.ForEach(
-				dataItem =>
-				{
-					var purchaseInvoice = new MP_SagePurchaseInvoice
-					{
+				dataItem => {
+					var purchaseInvoice = new MP_SagePurchaseInvoice {
 						Request = mpRequest,
 						SageId = dataItem.SageId,
 						StatusId = dataItem.status,
@@ -619,10 +573,8 @@ namespace EZBob.DatabaseLib {
 					};
 
 					purchaseInvoice.Items = new HashedSet<MP_SagePurchaseInvoiceItem>();
-					foreach (var item in dataItem.line_items)
-					{
-						var mpItem = new MP_SagePurchaseInvoiceItem
-						{
+					foreach (var item in dataItem.line_items) {
+						var mpItem = new MP_SagePurchaseInvoiceItem {
 							PurchaseInvoice = purchaseInvoice,
 							description = item.description,
 							quantity = item.quantity,
@@ -645,10 +597,8 @@ namespace EZBob.DatabaseLib {
 				});
 
 			incomes.ForEach(
-				dataItem =>
-				{
-					var income = new MP_SageIncome
-					{
+				dataItem => {
+					var income = new MP_SageIncome {
 						Request = mpRequest,
 						SageId = dataItem.SageId,
 						date = dataItem.date,
@@ -672,10 +622,8 @@ namespace EZBob.DatabaseLib {
 				});
 
 			expenditures.ForEach(
-				dataItem =>
-				{
-					var expenditure = new MP_SageExpenditure
-					{
+				dataItem => {
+					var expenditure = new MP_SageExpenditure {
 						Request = mpRequest,
 						SageId = dataItem.SageId,
 						date = dataItem.date,
@@ -702,47 +650,37 @@ namespace EZBob.DatabaseLib {
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public void StoreSagePaymentStatuses(List<SagePaymentStatus> paymentStatuses)
-		{
-			foreach (SagePaymentStatus paymentStatus in paymentStatuses)
-			{
+		public void StoreSagePaymentStatuses(List<SagePaymentStatus> paymentStatuses) {
+			foreach (SagePaymentStatus paymentStatus in paymentStatuses) {
 				MP_SagePaymentStatus dbStatus = _SagePaymentStatusRepository.GetAll().FirstOrDefault(a => a.SageId == paymentStatus.SageId);
-				if (dbStatus == null)
-				{
+				if (dbStatus == null) {
 					dbStatus = new MP_SagePaymentStatus { SageId = paymentStatus.SageId, name = paymentStatus.name };
 				}
 				_SagePaymentStatusRepository.SaveOrUpdate(dbStatus);
 			}
 		}
 
-		public List<MP_SagePaymentStatus> GetSagePaymentStatuses()
-		{
+		public List<MP_SagePaymentStatus> GetSagePaymentStatuses() {
 			var result = new List<MP_SagePaymentStatus>();
 			result.AddRange(_SagePaymentStatusRepository.GetAll());
 			return result;
 		}
 
-		public void StoreFreeAgentCompanyData(MP_FreeAgentCompany company)
-		{
+		public void StoreFreeAgentCompanyData(MP_FreeAgentCompany company) {
 			_FreeAgentCompanyRepository.SaveOrUpdate(company);
 		}
 
-		public void StoreFreeAgentUsersData(List<MP_FreeAgentUsers> users)
-		{
-			foreach (MP_FreeAgentUsers user in users)
-			{
+		public void StoreFreeAgentUsersData(List<MP_FreeAgentUsers> users) {
+			foreach (MP_FreeAgentUsers user in users) {
 				_FreeAgentUsersRepository.SaveOrUpdate(user);
 			}
 		}
 
-		public void SaveOrUpdateAcctountInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalPersonalData data)
-		{
+		public void SaveOrUpdateAcctountInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalPersonalData data) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
-			if (customerMarketPlace.PersonalInfo == null)
-			{
-				customerMarketPlace.PersonalInfo = new MP_PayPalPersonalInfo
-				{
+			if (customerMarketPlace.PersonalInfo == null) {
+				customerMarketPlace.PersonalInfo = new MP_PayPalPersonalInfo {
 					CustomerMarketPlace = customerMarketPlace,
 				};
 
@@ -770,56 +708,48 @@ namespace EZBob.DatabaseLib {
 		}
 
 
-		public void StoreToDatabaseAggregatedData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IEnumerable<IWriteDataInfo<TEnum>> dataInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void StoreToDatabaseAggregatedData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IEnumerable<IWriteDataInfo<TEnum>> dataInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			_FunctionValuesWriterHelper.SetRangeOfData(databaseCustomerMarketPlace, dataInfo, historyRecord);
 		}
 
-		public void SetData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IWriteDataInfo<TEnum> data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void SetData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, IWriteDataInfo<TEnum> data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			_FunctionValuesWriterHelper.SetData(databaseCustomerMarketPlace, data, historyRecord);
 		}
 
-		public void SavePayPalTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalTransactionsList data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void SavePayPalTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalTransactionsList data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			LogData("Transaction Data", customerMarketPlace, data);
 
-			if (data == null)
-			{
+			if (data == null) {
 				return;
 			}
-			var mpTransaction = new MP_PayPalTransaction
-			{
+			var mpTransaction = new MP_PayPalTransaction {
 				CustomerMarketPlace = customerMarketPlace,
 				Created = data.SubmittedDate.ToUniversalTime(),
 				HistoryRecord = historyRecord
 			};
 
-			if (data.Count != 0)
-			{
-				foreach (var dataItem in data)
-				{
-					var mpTransactionItem = new MP_PayPalTransactionItem2
-						{
-							Transaction = mpTransaction,
-							Created = dataItem.Created,
-							Currency = _CurrencyRateRepository.GetCurrencyOrCreate("GBP"),
-							FeeAmount =
-								_CurrencyConvertor.ConvertToBaseCurrency(
-									dataItem.FeeAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
-							GrossAmount =
-								_CurrencyConvertor.ConvertToBaseCurrency(
-									dataItem.GrossAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
-							NetAmount =
-								_CurrencyConvertor.ConvertToBaseCurrency(
-									dataItem.NetAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
-							TimeZone = dataItem.Timezone,
-							Status = dataItem.Status,
-							Type = dataItem.Type,
-							PayPalTransactionId = dataItem.TransactionId
-						};
+			if (data.Count != 0) {
+				foreach (var dataItem in data) {
+					var mpTransactionItem = new MP_PayPalTransactionItem2 {
+						Transaction = mpTransaction,
+						Created = dataItem.Created,
+						Currency = _CurrencyRateRepository.GetCurrencyOrCreate("GBP"),
+						FeeAmount =
+							_CurrencyConvertor.ConvertToBaseCurrency(
+								dataItem.FeeAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
+						GrossAmount =
+							_CurrencyConvertor.ConvertToBaseCurrency(
+								dataItem.GrossAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
+						NetAmount =
+							_CurrencyConvertor.ConvertToBaseCurrency(
+								dataItem.NetAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
+						TimeZone = dataItem.Timezone,
+						Status = dataItem.Status,
+						Type = dataItem.Type,
+						PayPalTransactionId = dataItem.TransactionId
+					};
 
 					mpTransaction.TransactionItems.Add(mpTransactionItem);
 				}
@@ -830,16 +760,13 @@ namespace EZBob.DatabaseLib {
 		}
 
 		#region Last Request Dates
-		public DateTime? GetLastPayPalTransactionRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public DateTime? GetLastPayPalTransactionRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			return _CustomerMarketplaceRepository.GetLastPayPalTransactionRequest(databaseCustomerMarketPlace);
 		}
 		#endregion
 
-		public void StoretoDatabaseTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TeraPeakDatabaseSellerData data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
-			if (data == null)
-			{
+		public void StoretoDatabaseTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TeraPeakDatabaseSellerData data, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+			if (data == null) {
 				WriteToLog("StoreTeraPeakUserData: invalid data to store", WriteLogType.Error);
 				return;
 			}
@@ -852,16 +779,18 @@ namespace EZBob.DatabaseLib {
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public bool ExistsTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public bool ExistsTeraPeakOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 			return customerMarketPlace.TeraPeakOrders.Count > 0;
 		}
 
-		public void CustomerMarketplaceUpdateAction(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord, Func<IUpdateActionResultInfo> action)
-		{
-			var actionData = new DatabaseCustomerMarketplaceUpdateActionData
-			{
+		public void CustomerMarketplaceUpdateAction(
+			CustomerMarketplaceUpdateActionType updateActionType,
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			MP_CustomerMarketplaceUpdatingHistory historyRecord,
+			Func<IUpdateActionResultInfo> action
+		) {
+			var actionData = new DatabaseCustomerMarketplaceUpdateActionData {
 				ActionName = updateActionType,
 				UpdatingStart = DateTime.UtcNow
 			};
@@ -869,18 +798,15 @@ namespace EZBob.DatabaseLib {
 			MP_CustomerMarketplaceUpdatingActionLog actionLog;
 			StoreCustomerMarketplaceUpdateActionDataStart(databaseCustomerMarketPlace, historyRecord, actionData, out actionLog);
 
-			try
-			{
-				try
-				{
+			try {
+				try {
 					LogDataStart(updateActionType, databaseCustomerMarketPlace);
 
 					IUpdateActionResultInfo result = action();
 
 					LogDataEnd(updateActionType, databaseCustomerMarketPlace);
 
-					if (result != null)
-					{
+					if (result != null) {
 						actionData.ControlValueName = result.Name;
 						actionData.ControlValue = result.Value;
 						actionData.RequestsCounter = result.RequestsCounter;
@@ -889,12 +815,9 @@ namespace EZBob.DatabaseLib {
 
 					actionData.UpdatingEnd = DateTime.UtcNow;
 				}
-				catch (WebException ex)
-				{
-					using (var httpWebResponse = ex.Response as HttpWebResponse)
-					{
-						if (httpWebResponse != null)
-						{
+				catch (WebException ex) {
+					using (var httpWebResponse = ex.Response as HttpWebResponse) {
+						if (httpWebResponse != null) {
 							LogDataException(updateActionType, databaseCustomerMarketPlace, string.Format("Headers : {0}", httpWebResponse.Headers));
 							LogDataException(updateActionType, databaseCustomerMarketPlace, string.Format("Status Code : {0}", httpWebResponse.StatusCode));
 							LogDataException(updateActionType, databaseCustomerMarketPlace, string.Format("Status Description : {0}", httpWebResponse.StatusDescription));
@@ -904,24 +827,20 @@ namespace EZBob.DatabaseLib {
 					throw;
 				}
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				actionData.Error = ex.Message;
 				actionData.UpdatingEnd = DateTime.UtcNow;
 
 				LogDataException(updateActionType, databaseCustomerMarketPlace, ex);
 				throw;
 			}
-			finally
-			{
+			finally {
 				StoreCustomerMarketplaceUpdateActionDataEnd(databaseCustomerMarketPlace, historyRecord, actionData, actionLog);
 			}
 		}
 
-		private void StoreCustomerMarketplaceUpdateActionDataStart(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord, DatabaseCustomerMarketplaceUpdateActionData actionData, out MP_CustomerMarketplaceUpdatingActionLog actionLog)
-		{
-			actionLog = new MP_CustomerMarketplaceUpdatingActionLog
-			{
+		private void StoreCustomerMarketplaceUpdateActionDataStart(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord, DatabaseCustomerMarketplaceUpdateActionData actionData, out MP_CustomerMarketplaceUpdatingActionLog actionLog) {
+			actionLog = new MP_CustomerMarketplaceUpdatingActionLog {
 				HistoryRecord = historyRecord,
 				ActionName = actionData.ActionName.ToString(),
 				UpdatingStart = actionData.UpdatingStart,
@@ -934,29 +853,21 @@ namespace EZBob.DatabaseLib {
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		private void StoreCustomerMarketplaceUpdateActionDataEnd(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord, DatabaseCustomerMarketplaceUpdateActionData actionData, MP_CustomerMarketplaceUpdatingActionLog actionLog)
-		{
+		private void StoreCustomerMarketplaceUpdateActionDataEnd(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord, DatabaseCustomerMarketplaceUpdateActionData actionData, MP_CustomerMarketplaceUpdatingActionLog actionLog) {
 			actionLog.UpdatingEnd = actionData.UpdatingEnd;
 			actionLog.ControlValue = actionData.ControlValue == null ? null : actionData.ControlValue.ToString();
 			actionLog.ControlValueName = !actionData.ControlValueName.HasValue ? null : actionData.ControlValueName.Value.ToString();
 			actionLog.Error = actionData.Error;
 			actionLog.ElapsedTime = new DatabaseElapsedTimeInfo(actionData.ElapsedTime);
 
-			if (actionData.RequestsCounter != null && actionData.RequestsCounter.Any())
-			{
-				actionData.RequestsCounter.ForEach(r => actionLog.RequestsCounter.Add(new MP_CustomerMarketplaceUpdatingCounter
-				{
+			if (actionData.RequestsCounter != null && actionData.RequestsCounter.Any()) {
+				actionData.RequestsCounter.ForEach(r => actionLog.RequestsCounter.Add(new MP_CustomerMarketplaceUpdatingCounter {
 					Action = actionLog,
 					Created = r.Created,
 					Details = r.Details,
 					Method = r.Method
-
 				}));
-
-
 			}
-
-
 
 			historyRecord.ActionLog.Add(actionLog);
 
@@ -965,38 +876,31 @@ namespace EZBob.DatabaseLib {
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		private void LogDataException(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, string text)
-		{
+		private void LogDataException(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, string text) {
 			WriteToLog(string.Format("MP = {1} Action = {0} UMI = {2} Text: {3}\n", updateActionType, databaseCustomerMarketPlace.Marketplace.DisplayName, databaseCustomerMarketPlace.Id, text), WriteLogType.Error);
 		}
-		private void LogDataException(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, Exception exception)
-		{
+		private void LogDataException(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, Exception exception) {
 			WriteToLog(string.Format("MP = {1} Action = {0} UMI = {2} Exception\n", updateActionType, databaseCustomerMarketPlace.Marketplace.DisplayName, databaseCustomerMarketPlace.Id), WriteLogType.Error, exception);
 		}
 
-		private void LogDataStart(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		private void LogDataStart(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			WriteToLog(string.Format("MP = {1} Action = {0} UMI = {2} starting...", updateActionType, databaseCustomerMarketPlace.Marketplace.DisplayName, databaseCustomerMarketPlace.Id));
 		}
 
-		private void LogDataEnd(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		private void LogDataEnd(CustomerMarketplaceUpdateActionType updateActionType, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			WriteToLog(string.Format("MP = {1} Action = {0} UMI = {2} ended!", updateActionType, databaseCustomerMarketPlace.Marketplace.DisplayName, databaseCustomerMarketPlace.Id));
 		}
 
-		public TeraPeakDatabaseSellerData GetAllTeraPeakDataWithFullRange(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public TeraPeakDatabaseSellerData GetAllTeraPeakDataWithFullRange(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			return _CustomerMarketplaceRepository.GetAllTeraPeakDataWithFullRange(submittedDate, databaseCustomerMarketPlace);
 		}
 
-		public PayPalTransactionsList GetAllPayPalTransactions(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public PayPalTransactionsList GetAllPayPalTransactions(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var data = new PayPalTransactionsList(submittedDate);
 
-			customerMarketPlace.PayPalTransactions.ForEach(tr => tr.TransactionItems.ForEach(t => data.Add(new PayPalTransactionItem
-			{
+			customerMarketPlace.PayPalTransactions.ForEach(tr => tr.TransactionItems.ForEach(t => data.Add(new PayPalTransactionItem {
 				Created = t.Created,
 				Type = t.Type,
 				FeeAmount = t.Currency == null ? null : _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.FeeAmount, t.Created),
@@ -1011,15 +915,13 @@ namespace EZBob.DatabaseLib {
 
 		}
 
-		private void AddCategoryToCache(IMarketplaceType marketplace, MP_EbayAmazonCategory item)
-		{
+		private void AddCategoryToCache(IMarketplaceType marketplace, MP_EbayAmazonCategory item) {
 			var cache = GetCache(marketplace);
 
 			cache.TryAdd(item.CategoryId, item);
 		}
 
-		public void WriteToLog(string message, WriteLogType messageType = WriteLogType.Info, Exception ex = null)
-		{
+		public void WriteToLog(string message, WriteLogType messageType = WriteLogType.Info, Exception ex = null) {
 			WriteLoggerHelper.Write(message, messageType, null, ex);
 			Debug.WriteLine(message);
 		}
@@ -1028,15 +930,13 @@ namespace EZBob.DatabaseLib {
 
 		#region class AnalysisFunctionData
 
-		private class AnalysisFunctionData
-		{
+		private class AnalysisFunctionData {
 			public Guid fid { get; private set; }
 			public Guid fpid { get; private set; }
 			public string value { get; private set; }
 			public DateTime afDate { get; private set; }
 
-			public AnalysisFunctionData(object[] val)
-			{
+			public AnalysisFunctionData(object[] val) {
 				fid = (Guid)val[0];
 				fpid = (Guid)val[1];
 				value = (string)val[2];
@@ -1046,31 +946,25 @@ namespace EZBob.DatabaseLib {
 
 		#endregion class AnalysisFunctionData
 
-		public Dictionary<DateTime, List<IAnalysisDataParameterInfo>> GetAnalyisisFunctions(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public Dictionary<DateTime, List<IAnalysisDataParameterInfo>> GetAnalyisisFunctions(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			var lst = new List<AnalysisFunctionData>();
 
-			try
-			{
+			try {
 				var analysisVals = _session.CreateSQLQuery("EXEC GetFunctionAnalysisValuesByCustomerMarketPlace " + databaseCustomerMarketPlace.Id).List<object[]>();
-				if (analysisVals != null)
-				{
+				if (analysisVals != null) {
 					lst.AddRange(analysisVals.Select(analysisVal => new AnalysisFunctionData(analysisVal)));
 				} // if readers is not null
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				_Log.Error(string.Format("Failed to GetAnalyisisFunctions(for mp {0})", databaseCustomerMarketPlace.Id), e);
 			} // try
 
 			var oResult = new Dictionary<DateTime, List<IAnalysisDataParameterInfo>>();
 
-			foreach (var afd in lst)
-			{
+			foreach (var afd in lst) {
 				List<IAnalysisDataParameterInfo> paramsList;
 
-				if (!oResult.TryGetValue(afd.afDate, out paramsList))
-				{
+				if (!oResult.TryGetValue(afd.afDate, out paramsList)) {
 					paramsList = new List<IAnalysisDataParameterInfo>();
 					oResult.Add(afd.afDate, paramsList);
 				} // if
@@ -1086,14 +980,12 @@ namespace EZBob.DatabaseLib {
 
 		#endregion method GetAnalyisisfunctions
 
-		public EkmOrdersList GetAllEkmOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public EkmOrdersList GetAllEkmOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var orders = new EkmOrdersList(submittedDate);
 
-			orders.AddRange(customerMarketPlace.EkmOrders.SelectMany(ekmOrder => ekmOrder.OrderItems).Select(o => new EkmOrderItem
-			{
+			orders.AddRange(customerMarketPlace.EkmOrders.SelectMany(ekmOrder => ekmOrder.OrderItems).Select(o => new EkmOrderItem {
 				OrderNumber = o.OrderNumber,
 				CustomerID = o.CustomerId,
 				CompanyName = o.CompanyName,
@@ -1111,16 +1003,14 @@ namespace EZBob.DatabaseLib {
 			return orders;
 		}
 
-		public FreeAgentInvoicesList GetAllFreeAgentInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public FreeAgentInvoicesList GetAllFreeAgentInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var invoices = new FreeAgentInvoicesList(submittedDate);
 
 			var dbInvoices = customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).OrderByDescending(invoice => invoice.Request.Id).Distinct(new FreeAgentInvoiceComparer()).OrderByDescending(invoice => invoice.dated_on);
 
-			invoices.AddRange(dbInvoices.Select(o => new FreeAgentInvoice
-			{
+			invoices.AddRange(dbInvoices.Select(o => new FreeAgentInvoice {
 				url = o.url,
 				contact = o.contact,
 				dated_on = o.dated_on,
@@ -1141,16 +1031,14 @@ namespace EZBob.DatabaseLib {
 			return invoices;
 		}
 
-		public FreeAgentExpensesList GetAllFreeAgentExpensesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public FreeAgentExpensesList GetAllFreeAgentExpensesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var expenses = new FreeAgentExpensesList(submittedDate);
 
 			var dbExpenses = customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Expenses).OrderByDescending(expense => expense.Request.Id).Distinct(new FreeAgentExpenseComparer()).OrderByDescending(expense => expense.dated_on);
 
-			expenses.AddRange(dbExpenses.Select(o => new FreeAgentExpense
-			{
+			expenses.AddRange(dbExpenses.Select(o => new FreeAgentExpense {
 				url = o.url,
 				user = o.username,
 				category = o.category,
@@ -1165,8 +1053,7 @@ namespace EZBob.DatabaseLib {
 				manual_sales_tax_amount = o.manual_sales_tax_amount,
 				updated_at = o.updated_at,
 				created_at = o.created_at,
-				attachment = new FreeAgentExpenseAttachment
-				{
+				attachment = new FreeAgentExpenseAttachment {
 					url = o.attachment_url,
 					content_src = o.attachment_content_src,
 					content_type = o.attachment_content_type,
@@ -1179,8 +1066,7 @@ namespace EZBob.DatabaseLib {
 			return expenses;
 		}
 
-		public SageSalesInvoicesList GetAllSageSalesInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public SageSalesInvoicesList GetAllSageSalesInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var salesInvoices = new SageSalesInvoicesList(submittedDate);
@@ -1192,8 +1078,7 @@ namespace EZBob.DatabaseLib {
 			return salesInvoices;
 		}
 
-		public SagePurchaseInvoicesList GetAllSagePurchaseInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public SagePurchaseInvoicesList GetAllSagePurchaseInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var purchaseInvoices = new SagePurchaseInvoicesList(submittedDate);
@@ -1205,8 +1090,7 @@ namespace EZBob.DatabaseLib {
 			return purchaseInvoices;
 		}
 
-		public SageIncomesList GetAllSageIncomesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public SageIncomesList GetAllSageIncomesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var incomes = new SageIncomesList(submittedDate);
@@ -1218,8 +1102,7 @@ namespace EZBob.DatabaseLib {
 			return incomes;
 		}
 
-		public SageExpendituresList GetAllSageExpendituresData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public SageExpendituresList GetAllSageExpendituresData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var expenditures = new SageExpendituresList(submittedDate);
@@ -1231,30 +1114,25 @@ namespace EZBob.DatabaseLib {
 			return expenditures;
 		}
 
-		public DateTime GetEkmDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public DateTime GetEkmDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var def = DateTime.Today.AddYears(-1);
 
-			try
-			{
+			try {
 				MP_EkmOrder o = customerMarketPlace.EkmOrders.OrderBy(x => x.Id).AsQueryable().Last();
 				return o == null ? def : o.Created.AddMonths(-1);
 			}
-			catch (Exception)
-			{
+			catch (Exception) {
 				return def;
 			}
 		} // GetEkmDeltaPeriod
 
-		public int GetFreeAgentInvoiceDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public int GetFreeAgentInvoiceDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			MP_FreeAgentRequest order = customerMarketPlace.FreeAgentRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
-			if (order == null)
-			{
+			if (order == null) {
 				return -1;
 			}
 
@@ -1263,27 +1141,23 @@ namespace EZBob.DatabaseLib {
 
 			DateTime later = DateTime.UtcNow;
 			int monthDiff = 1;
-			while (later > latestExistingDate)
-			{
+			while (later > latestExistingDate) {
 				later = later.AddMonths(-1);
 				monthDiff++;
 			}
 
-			if (monthDiff == 0)
-			{
+			if (monthDiff == 0) {
 				monthDiff = -1;
 			}
 
 			return monthDiff;
 		} // GetFreeAgentInvoiceDeltaPeriod
 
-		public DateTime? GetSageDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public DateTime? GetSageDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			MP_SageRequest request = customerMarketPlace.SageRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
-			if (request == null)
-			{
+			if (request == null) {
 				return null;
 			}
 
@@ -1293,33 +1167,27 @@ namespace EZBob.DatabaseLib {
 			MP_SageExpenditure lastExpenditure = request.Expenditures.OrderBy(x => x.date).AsQueryable().LastOrDefault();
 
 			DateTime latestDate = request.Created;
-			if (lastSalesInvoice != null && lastSalesInvoice.date.HasValue && lastSalesInvoice.date > latestDate)
-			{
+			if (lastSalesInvoice != null && lastSalesInvoice.date.HasValue && lastSalesInvoice.date > latestDate) {
 				latestDate = lastSalesInvoice.date.Value;
 			}
-			if (lastPurchaseInvoice != null && lastPurchaseInvoice.date.HasValue && lastPurchaseInvoice.date > latestDate)
-			{
+			if (lastPurchaseInvoice != null && lastPurchaseInvoice.date.HasValue && lastPurchaseInvoice.date > latestDate) {
 				latestDate = lastPurchaseInvoice.date.Value;
 			}
-			if (lastIncome != null && lastIncome.date.HasValue && lastIncome.date > latestDate)
-			{
+			if (lastIncome != null && lastIncome.date.HasValue && lastIncome.date > latestDate) {
 				latestDate = lastIncome.date.Value;
 			}
-			if (lastExpenditure != null && lastExpenditure.date.HasValue && lastExpenditure.date > latestDate)
-			{
+			if (lastExpenditure != null && lastExpenditure.date.HasValue && lastExpenditure.date > latestDate) {
 				latestDate = lastExpenditure.date.Value;
 			}
 
 			return latestDate.AddMonths(-1);
 		} // GetSageDeltaPeriod
 
-		public DateTime? GetFreeAgentExpenseDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public DateTime? GetFreeAgentExpenseDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			MP_FreeAgentRequest request = customerMarketPlace.FreeAgentRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
-			if (request == null)
-			{
+			if (request == null) {
 				return null;
 			}
 
@@ -1328,31 +1196,25 @@ namespace EZBob.DatabaseLib {
 			return latestExistingDate.HasValue ? latestExistingDate.Value.AddMonths(-1) : DateTime.UtcNow.AddYears(-1);
 		} // GetFreeAgentExpenseDeltaPeriod
 
-		public string GetPayPointDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public string GetPayPointDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			DateTime dThen = DateTime.Today.AddYears(-1);
 
-			try
-			{
+			try {
 				MP_PayPointOrder ppo = customerMarketPlace.PayPointOrders.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
 
-				if (ppo != null)
-				{
+				if (ppo != null) {
 					MP_PayPointOrderItem item = ppo.OrderItems.OrderBy(x => x.date).AsQueryable().LastOrDefault();
-					if (item != null && item.date.HasValue)
-					{
+					if (item != null && item.date.HasValue) {
 						dThen = item.date.Value.AddMonths(-1);
 					}
-					else
-					{
+					else {
 						dThen = ppo.Created.AddMonths(-1);
 					}
 				}
 			}
-			catch (Exception)
-			{
+			catch (Exception) {
 				// so what? ignored.
 			}
 
@@ -1363,14 +1225,12 @@ namespace EZBob.DatabaseLib {
 				DateTime.Today.Month.ToString("00");
 		} // GetPayPointDeltaPeriod
 
-		public PayPointOrdersList GetAllPayPointOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public PayPointOrdersList GetAllPayPointOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var orders = new PayPointOrdersList(submittedDate);
 
-			orders.AddRange(customerMarketPlace.PayPointOrders.SelectMany(anOrder => anOrder.OrderItems).Select(x => new PayPointOrderItem
-			{
+			orders.AddRange(customerMarketPlace.PayPointOrders.SelectMany(anOrder => anOrder.OrderItems).Select(x => new PayPointOrderItem {
 				acquirer = x.acquirer,
 				amount = x.amount,
 				auth_code = x.auth_code,
@@ -1405,13 +1265,10 @@ namespace EZBob.DatabaseLib {
 			return orders;
 		} // GetAllPayPointOrdersData
 
-		public Dictionary<string, FreeAgentExpenseCategory> GetExpenseCategories()
-		{
+		public Dictionary<string, FreeAgentExpenseCategory> GetExpenseCategories() {
 			var categoriesMap = new Dictionary<string, FreeAgentExpenseCategory>();
-			foreach (MP_FreeAgentExpenseCategory dbCategory in _FreeAgentExpenseCategoryRepository.GetAll())
-			{
-				var category = new FreeAgentExpenseCategory
-				{
+			foreach (MP_FreeAgentExpenseCategory dbCategory in _FreeAgentExpenseCategoryRepository.GetAll()) {
+				var category = new FreeAgentExpenseCategory {
 					Id = dbCategory.Id,
 					category_group = dbCategory.category_group,
 					url = dbCategory.url,
@@ -1428,17 +1285,14 @@ namespace EZBob.DatabaseLib {
 			return categoriesMap;
 		}
 
-		public int AddExpenseCategory(FreeAgentExpenseCategory category)
-		{
+		public int AddExpenseCategory(FreeAgentExpenseCategory category) {
 			MP_FreeAgentExpenseCategory dbCategory = _FreeAgentExpenseCategoryRepository.GetSimilarCategory(category);
 
-			if (dbCategory != null)
-			{
+			if (dbCategory != null) {
 				return dbCategory.Id;
 			}
 
-			dbCategory = new MP_FreeAgentExpenseCategory
-			{
+			dbCategory = new MP_FreeAgentExpenseCategory {
 				category_group = category.category_group,
 				url = category.url,
 				description = category.description,

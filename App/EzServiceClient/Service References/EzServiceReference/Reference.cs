@@ -191,6 +191,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableFundsActionResult))]
@@ -483,6 +484,29 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.PeriodsField, value) != true)) {
                     this.PeriodsField = value;
                     this.RaisePropertyChanged("Periods");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ElapsedTimeInfoActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class ElapsedTimeInfoActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Utils.ElapsedTimeInfo ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Utils.ElapsedTimeInfo Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
                 }
             }
         }
@@ -1961,7 +1985,7 @@ namespace ServiceClientProxy.EzServiceReference {
         ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult LoadManualVatReturnPeriods(int nCustomerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveVatReturnData", ReplyAction="http://tempuri.org/IEzService/SaveVatReturnDataResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData SaveVatReturnData(int nCustomerMarketplaceID, int nHistoryRecordID, int nSourceID, Ezbob.Backend.Models.VatReturnRawData[] oVatReturn, Ezbob.Backend.Models.RtiTaxMonthRawData[] oRtiMonths);
+        ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult SaveVatReturnData(int nCustomerMarketplaceID, int nHistoryRecordID, int nSourceID, Ezbob.Backend.Models.VatReturnRawData[] oVatReturn, Ezbob.Backend.Models.RtiTaxMonthRawData[] oRtiMonths);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnRawData", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnRawDataResponse")]
         ServiceClientProxy.EzServiceReference.VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID);
@@ -2368,7 +2392,7 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoadManualVatReturnPeriods(nCustomerID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData SaveVatReturnData(int nCustomerMarketplaceID, int nHistoryRecordID, int nSourceID, Ezbob.Backend.Models.VatReturnRawData[] oVatReturn, Ezbob.Backend.Models.RtiTaxMonthRawData[] oRtiMonths) {
+        public ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult SaveVatReturnData(int nCustomerMarketplaceID, int nHistoryRecordID, int nSourceID, Ezbob.Backend.Models.VatReturnRawData[] oVatReturn, Ezbob.Backend.Models.RtiTaxMonthRawData[] oRtiMonths) {
             return base.Channel.SaveVatReturnData(nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths);
         }
         

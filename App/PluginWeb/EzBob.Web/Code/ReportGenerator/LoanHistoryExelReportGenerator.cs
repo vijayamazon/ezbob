@@ -7,7 +7,9 @@ using EzBob.Models;
 
 namespace EzBob.Web.Code.ExelReportGenarator
 {
-    public class LoanHistoryExelReportGenerator
+	using Ezbob.Backend.Models;
+
+	public class LoanHistoryExelReportGenerator
     {
         private readonly Workbook _workbook;
 

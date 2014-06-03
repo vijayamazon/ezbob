@@ -282,7 +282,7 @@ namespace EzBobTest
 		{
 			var marketPlace = ObjectFactory.GetInstance<CompanyFilesDatabaseMarketPlace>();
             var r = marketPlace.GetRetrieveDataHelper(_Helper) as CompanyFilesRetriveDataHelper;
-			r.UpdateCustomerMarketplaceFirst(18306);
+			r.CustomerMarketplaceUpdateAction(18306);
 		}
 
         [Test]

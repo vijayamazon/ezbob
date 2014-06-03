@@ -21,18 +21,18 @@
 		{
 		}
 
-		protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+		protected override ElapsedTimeInfo RetrieveAndAggregate(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 												   MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			var securityInfo = (YodleeSecurityInfo)RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
 
-			UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
+			return UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
 		}
 
-		private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		private ElapsedTimeInfo UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 
-			//retreive data from Yodlee api
+			//retrieve data from Yodlee API
 			Dictionary<BankData, List<BankTransactionData>> ordersList = YodleeConnector.GetOrders(securityInfo.Name, Encrypted.Decrypt(securityInfo.Password), securityInfo.ItemId);
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
@@ -72,6 +72,8 @@
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 							ElapsedDataMemberType.StoreAggregatedData,
 							() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, accountsAggregatedData, historyRecord));
+
+			return elapsedTimeInfo;
 		}
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)

@@ -8,6 +8,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib.CaisFile;
+	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models.CAIS;

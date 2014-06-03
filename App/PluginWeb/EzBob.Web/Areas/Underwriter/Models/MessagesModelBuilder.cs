@@ -3,11 +3,12 @@ using System.Globalization;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
-using EzBob.Web.Code;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
-    public class MessagesModelBuilder
+	using Ezbob.Backend.Models;
+
+	public class MessagesModelBuilder
     {
         private readonly EzbobMailNodeAttachRelationRepository _ezbobMailNodeAttachRelationRepository;
         private readonly AskvilleRepository _askvilleRepository;

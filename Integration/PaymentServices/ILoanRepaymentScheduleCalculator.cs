@@ -1,8 +1,8 @@
-using EZBob.DatabaseLib.Model.Database.Loans;
-
-namespace EzBob.Web.Areas.Customer.Models
+namespace PaymentServices
 {
-    public interface ILoanRepaymentScheduleCalculator
+	using EZBob.DatabaseLib.Model.Database.Loans;
+
+	public interface ILoanRepaymentScheduleCalculator
     {
         decimal NextEarlyPayment();
         decimal TotalEarlyPayment();

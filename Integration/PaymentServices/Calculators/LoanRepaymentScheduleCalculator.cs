@@ -6,7 +6,6 @@
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EzBob.Web.Areas.Customer.Models;
 	using StructureMap;
 
     public class LoanRepaymentScheduleCalculator : ILoanRepaymentScheduleCalculator

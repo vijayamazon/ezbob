@@ -4,11 +4,11 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using System.Linq;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
+	using EzServiceAccessor;
 	using Integration.ChannelGrabberConfig;
 	using NHibernate;
 	using NHibernate.Linq;
-	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 
 	class ChannelGrabberMarketplaceModelBuilder : MarketplaceModelBuilder {
 		#region public
@@ -76,7 +76,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 				break;
 
 			case Behaviour.HMRC:
-				VatReturnDataActionResult vrd = new ServiceClient().Instance.LoadVatReturnFullData(mp.Customer.Id, mp.Id);
+				VatReturnFullData vrd = ObjectFactory.GetInstance<IEzServiceAccessor>().LoadVatReturnFullData(mp.Customer.Id, mp.Id);
 
 				var datesSummary = new List<VatReturnSummaryDates>();
 				

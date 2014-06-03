@@ -2,11 +2,12 @@
 using System.Globalization;
 using EZBob.DatabaseLib.Model.Database;
 using System.Linq;
-using EzBob.Web.Code;
 
 namespace EzBob.Web.Areas.Underwriter.Models.CAIS
 {
-    public class CaisModel
+	using Ezbob.Backend.Models;
+
+	public class CaisModel
     {
         public string Date { get; set; }
         public string FileName { get; set; }

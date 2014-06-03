@@ -1,6 +1,8 @@
 ﻿namespace EZBob.DatabaseLib.Common {
+	using System;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Serialization;
 
 	public abstract class MarketplaceRetrieveDataHelperBase<TEnum> : IMarketplaceRetrieveDataHelper {
@@ -13,9 +15,22 @@
 			_Marketplace = marketplace;
 		}
 
-		protected abstract void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord);
+		protected virtual void InternalUpdateInfo(
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			MP_CustomerMarketplaceUpdatingHistory historyRecord
+		) {
+			RetrieveAndAggregate(databaseCustomerMarketPlace, historyRecord);
+		}
 
-		protected abstract void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo value);
+		protected abstract ElapsedTimeInfo RetrieveAndAggregate(
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+			MP_CustomerMarketplaceUpdatingHistory historyRecord
+		);
+
+		protected abstract void AddAnalysisValues(
+			IDatabaseCustomerMarketPlace marketPlace,
+			AnalysisDataInfo value
+		);
 
 		private IAnalysisDataInfo GetAnalysisValuesByCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			var rez = new AnalysisDataInfo(databaseCustomerMarketPlace, Helper.GetAnalyisisFunctions(databaseCustomerMarketPlace));
@@ -31,6 +46,23 @@
 		) {
 			InternalUpdateInfo(databaseCustomerMarketPlace, historyRecord);
 		}
+
+		public void CustomerMarketplaceUpdateAction(int nCustomerMarketplaceID) {
+			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace = GetDatabaseCustomerMarketPlace(nCustomerMarketplaceID);
+
+			MP_CustomerMarketplaceUpdatingHistory historyRecord = Helper.GetHistoryItem(databaseCustomerMarketPlace);
+
+			var action = new Func<IUpdateActionResultInfo>(() => new UpdateActionResultInfo {
+				ElapsedTime = RetrieveAndAggregate(databaseCustomerMarketPlace, historyRecord),
+			});
+
+			Helper.CustomerMarketplaceUpdateAction(
+				CustomerMarketplaceUpdateActionType.UpdateOrdersInfo,
+				databaseCustomerMarketPlace,
+				historyRecord,
+				action
+			);
+		} // CustomerMarketplaceUpdateAction
 
 		public void UpdateCustomerMarketplaceFirst(int customerMarketPlaceId) {
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);

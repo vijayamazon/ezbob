@@ -1,10 +1,10 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
 	using EzBob.Backend.Strategies.MailStrategies.API;
-	using EzBob.Web.Code;
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using PaymentServices.PayPoint;
