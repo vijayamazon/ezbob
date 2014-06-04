@@ -1328,3 +1328,9 @@ td a.edit-loan {
 .reset-button-margin {
     margin-right: 20px;
 }
+
+.funding-main-menu-item {
+    width:47px;
+    line-height:18px;
+    white-space: normal;
+}

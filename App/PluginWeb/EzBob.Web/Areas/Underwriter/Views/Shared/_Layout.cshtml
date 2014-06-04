@@ -1,8 +1,11 @@
 ﻿@using System.Globalization
 @using EZBob.DatabaseLib.Model
 @using EzBob.Web.Infrastructure
+@using Ezbob.Backend.Models
 @using Integration.ChannelGrabberConfig
 @using Newtonsoft.Json
+@using ServiceClientProxy
+@using ServiceClientProxy.EzServiceReference
 @using StructureMap
 
 <!DOCTYPE html>
@@ -19,27 +22,37 @@
 </head>
 
 @{
-	string sBodyClasses = "";
-	string sBodyClassesException = "";
-	
-	try {
-		var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+    string sBodyClasses = "";
+    string sBodyClassesException = "";
 
-		if (context != null && context.User != null) {
-			string sPermissions = context.User.Permissions == null ? "" : string.Join(" ", context.User.Permissions.Select(p => "permission-" + p.Name));
-			string sRoles = context.User.Roles == null ? "" : string.Join(" ", context.User.Roles.Select(p => "role-" + p.Name));
-			sBodyClasses = sRoles + " " + sPermissions;
-		}
-	}
-	catch (Exception e) {
-		sBodyClassesException = "Error fetching user permissions and roles: " + e.Message;
-	}
+    try
+    {
+        var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+
+        if (context != null && context.User != null)
+        {
+            string sPermissions = context.User.Permissions == null ? "" : string.Join(" ", context.User.Permissions.Select(p => "permission-" + p.Name));
+            string sRoles = context.User.Roles == null ? "" : string.Join(" ", context.User.Roles.Select(p => "role-" + p.Name));
+            sBodyClasses = sRoles + " " + sPermissions;
+        }
+    }
+    catch (Exception e)
+    {
+        sBodyClassesException = "Error fetching user permissions and roles: " + e.Message;
+    }
+
+    var serviceClient = new ServiceClient();
+    IWorkplaceContext myContext = ObjectFactory.GetInstance<IWorkplaceContext>();
+    AvailableFundsActionResult availableFundsResponse = serviceClient.Instance.GetAvailableFunds(myContext.UserId);
+    decimal availableFunds = availableFundsResponse.AvailableFunds;
+    string availableFundsStr = FormattingUtils.FormatPoundsNoDecimals(availableFunds).Replace(" ", "");
 }
 
 <body class="@sBodyClasses">
-	@if (!string.IsNullOrWhiteSpace(sBodyClassesException)) {
+	@if (!string.IsNullOrWhiteSpace(sBodyClassesException))
+ {
 		<div class="red">@sBodyClassesException</div>
-	}
+ }
 
     @AntiForgery.GetHtml() 
 
@@ -47,8 +60,8 @@
         var sRoleImageUrl = "crm.png";
         var sRoleImageTitle = "CRM";
         var userName = "";
-	    var userId = 0;
-	    var userEmail = "";
+        var userId = 0;
+        var userEmail = "";
         try
         {
             var context = ObjectFactory.GetInstance<IWorkplaceContext>();
@@ -78,7 +91,7 @@
         {
         }
 
-	    sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
+        sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
     }
 
     @{if (!string.IsNullOrEmpty(userName))
@@ -102,8 +115,8 @@
                         </li>
                         <li id="liCustomerReports">
                             @{
-                                var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-                                var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
+          var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+          var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
                                 <a href="@reportsIp" target="_blank">Reports Site</a>
                             }
                         </li>
@@ -146,7 +159,9 @@
                     <a href="Customers#settings">Settings</a>
                 </li>
                 <li id="liFunding">
-                    <a href="Customers#funding">Funding</a>
+                    <a href="Customers#funding">
+                        <div class="funding-main-menu-item">&nbsp;&nbsp;Funding @availableFundsStr</div>
+                    </a>
                 </li>
             </ul>
             <ul class="nav pull-right">
