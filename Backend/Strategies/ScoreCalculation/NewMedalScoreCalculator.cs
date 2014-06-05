@@ -1,24 +1,19 @@
 ﻿namespace EzBob.Backend.Strategies.ScoreCalculation
 {
 	using System.Data;
+	using System.Text.RegularExpressions;
+	using ExperianLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
-	
+	using Ezbob.Utils;
+	using VatReturn;
+
 	public class NewMedalScoreCalculator
 	{
 		private readonly ASafeLog log;
 		private readonly AConnection db;
-
-		public NewMedalScoreCalculator(AConnection db, ASafeLog log)
-		{
-			this.log = log;
-			this.db = db;
-			Results = new ScoreResult();
-		}
-
-		public ScoreResult Results { get; set; }
 		private decimal annualTurnover;
 		private int businessScore;
 		private decimal freeCashFlow;
@@ -30,19 +25,38 @@
 		private MaritalStatus maritalStatus;
 		private bool firstRepaymentDatePassed;
 		private decimal ezbobSeniorityMonths;
+		private DateTime ezbobSeniority;
 		private int ezbobNumOfLoans;
 		private int ezbobNumOfLateRepayments;
-		private int ezbobNumOfEarlyReayments;
+		private int ezbobNumOfEarlyRepayments;
+
+		public ScoreResult Results { get; set; }
+
+		public NewMedalScoreCalculator(AConnection db, ASafeLog log)
+		{
+			this.log = log;
+			this.db = db;
+			Results = new ScoreResult();
+		}
+
+		public ScoreResult CalculateMedalScore(int customerId)
+		{
+			GatherData(customerId);
+			CalculateWeights();
+			CalculateGrades();
+
+			CalculateCustomerScore();
+			decimal totalScoreMin = CalculateScoreMin();
+			decimal totalScoreMax = CalculateScoreMax();
+			Results.TotalScoreNormalized = (Results.TotalScore - totalScoreMin) / (totalScoreMax - totalScoreMin);
+
+			CalculateMedal();
+
+			return Results;
+		}
 
 		private void GatherData(int customerId)
 		{
-			// TODO: complete logic
-			annualTurnover = 1; // use hmrc if have data, otherwise use bank (12M or annualized)
-			freeCashFlow = 1;
-			freeCashFlowDataAvailable = false;
-			netWorth = 1;
-
-
 			DataTable dt = db.ExecuteReader("GetDataForMedalCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
 			if (dt.Rows.Count != 1)
@@ -59,26 +73,79 @@
 			string maritalStatusStr = sr["MaritalStatus"];
 			maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusStr);
 			firstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
-			ezbobSeniorityMonths = sr["EzbobSeniority"];
+			ezbobSeniority = sr["EzbobSeniority"];
 			ezbobNumOfLoans = sr["OnTimeLoans"];
 			ezbobNumOfLateRepayments = sr["NumOfLatePayments"];
-			ezbobNumOfEarlyReayments = sr["NumOfEarlyPayments"];
+			ezbobNumOfEarlyRepayments = sr["NumOfEarlyPayments"];
+			int hmrcId = sr["HmrcId"];
+			decimal yodleeTurnover = sr["YodleeTurnover"];
+			string zooplaEstimateStr = sr["ZooplaEstimate"];
+			int zoopla1YearAvg = sr["AverageSoldPrice1Year"];
+
+			// TODO: logic assumes 1 hmrc - what should we do if we have more
+
+			if (hmrcId != 0)
+			{
+				var loadVatReturnSummary = new LoadVatReturnSummary(customerId, hmrcId, db, log);
+				loadVatReturnSummary.Execute();
+				var summary = loadVatReturnSummary.Summary;
+
+				freeCashFlowDataAvailable = true;
+				annualTurnover = summary[0].Revenues ?? 0;
+				freeCashFlow = summary[0].FreeCashFlow ?? 0;
+			}
+			else
+			{
+				freeCashFlowDataAvailable = false;
+				annualTurnover = yodleeTurnover;
+				freeCashFlow = 0;
+			}
+
+			var regexObj = new Regex(@"[^\d]");
+			var stringVal = string.IsNullOrEmpty(zooplaEstimateStr) ? "" : regexObj.Replace(zooplaEstimateStr.Trim(), "");
+			int intVal;
+			if (!int.TryParse(stringVal, out intVal))
+			{
+				intVal = zoopla1YearAvg;
+			}
+			int zooplaValue = intVal;
+
+			decimal mortgageBalance = GetMortgages(customerId);
+			netWorth = zooplaValue - mortgageBalance;
 		}
 
-		public ScoreResult CalculateMedalScore(int customerId)
+		private decimal GetMortgages(int customerId)
 		{
-			GatherData(customerId);
-			CalculateWeights();
-			CalculateGrades();
+			ConsumerServiceResult eInfo = ConsumerService.GetParsedCache(customerId);
+			try
+			{
+				double balanceSum = 0;
+				if (eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS != null)
+					foreach (var caisData in eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS)
+					{
+						foreach (var caisDetails in caisData.CAISDetails)
+						{
+							var accStatus = caisDetails.AccountStatus;
+							string MortgageAccounts = "03,16,25,30,31,32,33,34,35,69";
+							if ((accStatus == "D" || accStatus == "A") && MortgageAccounts.IndexOf(caisDetails.AccountType, StringComparison.Ordinal) >= 0) // it is mortgage account
+							{
+								double balance = 0;
+								if ((caisDetails.Balance != null) && (caisDetails.Balance.Amount != null))
+								{
+									string b = caisDetails.Balance.Amount.Replace("£", "");
+									double.TryParse(b, out balance);
+								}
+								balanceSum += balance;
+							}
+						}
+					}
 
-			CalculateCustomerScore();
-			decimal totalScoreMin = CalculateScoreMin();
-			decimal totalScoreMax = CalculateScoreMax();
-			Results.TotalScoreNormalized = (Results.TotalScore - totalScoreMin) / (totalScoreMax - totalScoreMin);
-			
-			CalculateMedal();
-
-			return Results;
+				return (decimal)balanceSum;
+			}
+			catch (Exception e)
+			{
+			}
+			return 0;
 		}
 
 		private void CalculateMedal()
@@ -110,13 +177,11 @@
 			int businessSeniorityMaxGrade = 4;
 			int consumerScoreMaxGrade = 8;
 			int netWorthMaxGrade = 3;
-			
-			// todo: Fill max grades - Vitas should complete tables
-			int maritalStatusMaxGrade = 0;
-			int ezbobSeniorityMonthsMaxGrade = 0;
-			int numOfLoansMaxGrade = 0;
-			int numOfLateRepaymentsMaxGrade = 0;
-			int numOfEarlyReaymentsMaxGrade = 0;
+			int maritalStatusMaxGrade = 4;
+			int ezbobSeniorityMaxGrade = 4;
+			int numOfLoansMaxGrade = 4;
+			int numOfLateRepaymentsMaxGrade = 5;
+			int numOfEarlyReaymentsMaxGrade = 5;
 
 			decimal annualTurnoverScoreMax = Results.AnnualTurnoverWeight * annualTurnoverMaxGrade;
 			decimal businessScoreScoreMax = Results.BusinessScoreWeight * businessScoreMaxGrade;
@@ -126,14 +191,14 @@
 			decimal consumerScoreScoreMax = Results.ConsumerScoreWeight * consumerScoreMaxGrade;
 			decimal netWorthScoreMax = Results.NetWorthWeight * netWorthMaxGrade;
 			decimal maritalStatusScoreMax = Results.MaritalStatusWeight * maritalStatusMaxGrade;
-			decimal ezbobSeniorityMonthsScoreMax = Results.EzbobSeniorityWeight * ezbobSeniorityMonthsMaxGrade;
+			decimal ezbobSeniorityScoreMax = Results.EzbobSeniorityWeight * ezbobSeniorityMaxGrade;
 			decimal ezbobNumOfLoansScoreMax = Results.NumOfLoansWeight * numOfLoansMaxGrade;
 			decimal ezbobNumOfLateRepaymentsScoreMax = Results.NumOfLateRepaymentsWeight * numOfLateRepaymentsMaxGrade;
 			decimal ezbobNumOfEarlyReaymentsScoreMax = Results.NumOfEarlyReaymentsWeight * numOfEarlyReaymentsMaxGrade;
 
 			return annualTurnoverScoreMax + businessScoreScoreMax + freeCashFlowScoreMax + tangibleEquityScoreMax +
 								 businessSeniorityScoreMax + consumerScoreScoreMax + netWorthScoreMax + maritalStatusScoreMax +
-								 ezbobSeniorityMonthsScoreMax + ezbobNumOfLoansScoreMax + ezbobNumOfLateRepaymentsScoreMax +
+								 ezbobSeniorityScoreMax + ezbobNumOfLoansScoreMax + ezbobNumOfLateRepaymentsScoreMax +
 								 ezbobNumOfEarlyReaymentsScoreMax;
 		}
 
@@ -147,11 +212,10 @@
 			int consumerScoreMinGrade = 0;
 			int netWorthMinGrade = 0;
 			int maritalStatusMinGrade = 0;
-			int ezbobSeniorityMonthsMinGrade = 0;
-			int numOfLoansMinGrade = 0;
+			int ezbobSeniorityMinGrade = 0;
+			int numOfLoansMinGrade = 1;
 			int numOfLateRepaymentsMinGrade = 0;
-			int numOfEarlyReaymentsMinGrade = 0;
-
+			int numOfEarlyReaymentsMinGrade = 2;
 
 			decimal annualTurnoverScoreMin = Results.AnnualTurnoverWeight * annualTurnoverMinGrade;
 			decimal businessScoreScoreMin = Results.BusinessScoreWeight * businessScoreMinGrade;
@@ -161,14 +225,14 @@
 			decimal consumerScoreScoreMin = Results.ConsumerScoreWeight * consumerScoreMinGrade;
 			decimal netWorthScoreMin = Results.NetWorthWeight * netWorthMinGrade;
 			decimal maritalStatusScoreMin = Results.MaritalStatusWeight * maritalStatusMinGrade;
-			decimal ezbobSeniorityMonthsScoreMin = Results.EzbobSeniorityWeight * ezbobSeniorityMonthsMinGrade;
+			decimal ezbobSeniorityScoreMin = Results.EzbobSeniorityWeight * ezbobSeniorityMinGrade;
 			decimal ezbobNumOfLoansScoreMin = Results.NumOfLoansWeight * numOfLoansMinGrade;
 			decimal ezbobNumOfLateRepaymentsScoreMin = Results.NumOfLateRepaymentsWeight * numOfLateRepaymentsMinGrade;
 			decimal ezbobNumOfEarlyReaymentsScoreMin = Results.NumOfEarlyReaymentsWeight * numOfEarlyReaymentsMinGrade;
 
 			return annualTurnoverScoreMin + businessScoreScoreMin + freeCashFlowScoreMin + tangibleEquityScoreMin +
 								 businessSeniorityScoreMin + consumerScoreScoreMin + netWorthScoreMin + maritalStatusScoreMin +
-								 ezbobSeniorityMonthsScoreMin + ezbobNumOfLoansScoreMin + ezbobNumOfLateRepaymentsScoreMin +
+								 ezbobSeniorityScoreMin + ezbobNumOfLoansScoreMin + ezbobNumOfLateRepaymentsScoreMin +
 								 ezbobNumOfEarlyReaymentsScoreMin;
 		}
 
@@ -204,13 +268,102 @@
 			CalculateBusinessSeniorityGrade();
 			CalculateConsumerScoreGrade();
 			CalculateNetWorthGrade();
+			CalculateMaritalStatusGrade();
+			CalculateEzbobSeniorityGrade();
+			CalculateNumOfLoansGrade();
+			CalculateNumOfLateRepaymentsGrade();
+			CalculateNumOfEarlyReaymentsGrade();
+		}
 
-			// TODO:Complete 5 tables grading - vitas should send
-			Results.MaritalStatusGrade = 1;
-			Results.EzbobSeniorityGrade = 1;
-			Results.NumOfLoansGrade = 1;
-			Results.NumOfLateRepaymentsGrade = 1;
-			Results.NumOfEarlyReaymentsGrade = 1;
+		private void CalculateNumOfLateRepaymentsGrade()
+		{
+			if (ezbobNumOfLateRepayments == 0)
+			{
+				Results.NumOfLateRepaymentsGrade = 5;
+			}
+			else if (ezbobNumOfLateRepayments == 1)
+			{
+				Results.NumOfLateRepaymentsGrade = 2;
+			}
+			else
+			{
+				Results.NumOfLateRepaymentsGrade = 0;
+			}
+		}
+
+		private void CalculateNumOfEarlyReaymentsGrade()
+		{
+			if (ezbobNumOfEarlyRepayments == 0)
+			{
+				Results.NumOfEarlyReaymentsGrade = 2;
+			}
+			else if (ezbobNumOfEarlyRepayments < 3)
+			{
+				Results.NumOfEarlyReaymentsGrade = 3;
+			}
+			else
+			{
+				Results.NumOfEarlyReaymentsGrade = 5;
+			}
+		}
+
+		private void CalculateNumOfLoansGrade()
+		{
+			if (ezbobNumOfLoans > 3)
+			{
+				Results.NumOfLoansGrade = 4;
+			}
+			else if (ezbobNumOfLoans > 1)
+			{
+				Results.NumOfLoansGrade = 3;
+			}
+			else
+			{
+				Results.NumOfLoansGrade = 1;
+			}
+		}
+
+		private void CalculateEzbobSeniorityGrade()
+		{
+			int ezbobSeniorityMonthsOnly, ezbobSeniorityYearsOnly;
+			MiscUtils.GetFullYearsAndMonths(ezbobSeniority, out ezbobSeniorityMonthsOnly, out ezbobSeniorityYearsOnly);
+			ezbobSeniorityMonths = ezbobSeniorityMonthsOnly + 12 * ezbobSeniorityYearsOnly;
+			if (ezbobSeniorityMonths > 17)
+			{
+				Results.EzbobSeniorityGrade = 4;
+			}
+			else if (ezbobSeniorityMonths > 5)
+			{
+				Results.EzbobSeniorityGrade = 3;
+			}
+			else if (ezbobSeniorityMonths > 0)
+			{
+				Results.EzbobSeniorityGrade = 2;
+			}
+			else
+			{
+				Results.EzbobSeniorityGrade = 0;
+			}
+		}
+
+		private void CalculateMaritalStatusGrade()
+		{
+			if (maritalStatus == MaritalStatus.Married || maritalStatus == MaritalStatus.Widowed)
+			{
+				Results.MaritalStatusGrade = 4;
+			}
+			else if (maritalStatus == MaritalStatus.Divorced)
+			{
+				Results.MaritalStatusGrade = 3;
+			}
+			else if (maritalStatus == MaritalStatus.Single)
+			{
+				Results.MaritalStatusGrade = 2;
+			}
+			else
+			{
+				Results.MaritalStatusGrade = 0;
+			}
 		}
 
 		private void CalculateNetWorthGrade()

@@ -1,10 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.ScoreCalculation
 {
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	using System;
-	using EZBob.DatabaseLib.Model.Database;
-
 	public class ScoreResult
 	{
 		public ScoreResult()

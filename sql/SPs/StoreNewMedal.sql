@@ -45,7 +45,9 @@ ALTER PROCEDURE StoreNewMedal
 	,@Medal NVARCHAR(50))
 AS
 BEGIN
-	INSERT INTO NewScoreStorage (BusinessScoreWeight
+	INSERT INTO NewScoreStorage (
+	 CustomerId
+	,BusinessScoreWeight
 	,BusinessScoreGrade
 	,BusinessScoreScore
 	,FreeCashFlowWeight
@@ -84,7 +86,9 @@ BEGIN
 	,TotalScore
 	,TotalScoreNormalized
 	,Medal)
-	VALUES (@BusinessScoreWeight
+	VALUES (
+	 @BusinessScoreWeight
+	,@CustomerId
 	,@BusinessScoreGrade
 	,@BusinessScoreScore
 	,@FreeCashFlowWeight

@@ -457,6 +457,20 @@
 
 		#endregion method ParseCache
 
+		public static ConsumerServiceResult GetParsedCache(int customerId)
+		{
+			ExperianDataCacheRepository experianDataCacheRepository = ObjectFactory.GetInstance<ExperianDataCacheRepository>();
+			var cacheEntriesForCustomer = experianDataCacheRepository.GetAll().Where(x => x.CustomerId == customerId && x.DirectorId == 0);
+			foreach (var cacheEntry in cacheEntriesForCustomer)
+			{
+				if (!string.IsNullOrEmpty(cacheEntry.Name))
+				{
+					return ParseCache(cacheEntry);
+				}
+			}
+			return null;
+		}
+
 		#region method GetPostcode
 
 		private static string GetPostcode(

@@ -2,11 +2,11 @@ IF OBJECT_ID('GetAllConsumersForNewMedals') IS NULL
 	EXECUTE('CREATE PROCEDURE GetAllConsumersForNewMedals AS SELECT 1')
 GO
 
-ALTER PROCEDURE GetBasicCustomerData
+ALTER PROCEDURE GetAllConsumersForNewMedals
 AS
 BEGIN
 	SELECT 
-		Customer.Id 
+		Customer.Id AS CustomerId
 	FROM 
 		Customer, 
 		WizardStepTypes, 

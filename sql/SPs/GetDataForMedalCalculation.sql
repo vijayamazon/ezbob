@@ -17,7 +17,12 @@ BEGIN
 		@TangibleEquity DECIMAL(18,6),
 		@BusinessSeniority DATETIME,
 		@EzbobSeniority DATETIME,
-		@MaritalStatus NVARCHAR(50)
+		@MaritalStatus NVARCHAR(50),
+		@HmrcId INT,
+		@YodleeTotalAggrgationFuncId INT,
+		@YodleeTurnover DECIMAL(18,6),
+		@ZooplaEstimate NVARCHAR(30), 
+		@AverageSoldPrice1Year INT
 
 	SELECT 
 		@BusinessScore = Score, 
@@ -102,7 +107,36 @@ BEGIN
 		Loan.Id = LoanSchedule.LoanId AND
 		Loan.CustomerId = @CustomerId
 		
+	SELECT TOP 1
+		@HmrcId = MP_CustomerMarketplace.Id
+	FROM
+		MP_CustomerMarketPlace,
+		MP_MarketplaceType
+	WHERE
+		CustomerId = @CustomerId AND
+		MP_CustomerMarketplace.MarketPlaceId = MP_MarketplaceType.Id AND
+		MP_MarketplaceType.Name = 'HMRC'
 		
+	IF @HmrcId IS NULL
+		SELECT @HmrcId = 0
+		
+	SELECT @YodleeTotalAggrgationFuncId = MP_AnalyisisFunction.Id FROM MP_AnalyisisFunction, MP_MarketplaceType WHERE MP_AnalyisisFunction.MarketPlaceId=MP_MarketplaceType.Id AND MP_MarketplaceType.Name = 'Yodlee' AND MP_AnalyisisFunction.Name='TotalIncomeAnnualized'
+	
+	SELECT TOP 1 
+		@YodleeTurnover = ValueFloat 
+	FROM 
+		MP_AnalyisisFunctionValues, 
+		MP_CustomerMarketPlace 
+	WHERE 
+		MP_AnalyisisFunctionValues.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND 
+		MP_CustomerMarketPlace.CustomerId = @CustomerId AND 
+		AnalyisisFunctionId = @YodleeTotalAggrgationFuncId 
+	ORDER BY 
+		AnalysisFunctionTimePeriodId DESC
+	
+	SELECT TOP 1 @ZooplaEstimate = Zoopla.ZooplaEstimate, @AverageSoldPrice1Year = Zoopla.AverageSoldPrice1Year FROM Zoopla, CustomerAddress WHERE CustomerId = @CustomerId AND CustomerAddress.addressId = Zoopla.CustomerAddressId AND CustomerAddress.addressType = 1 ORDER BY UpdateDate DESC 
+			
+			
 	SELECT
 		@FirstRepaymentDatePassed AS FirstRepaymentDatePassed, 
 		@OnTimeLoans AS OnTimeLoans, 
@@ -113,6 +147,10 @@ BEGIN
 		@TangibleEquity AS TangibleEquity,
 		@BusinessSeniority AS BusinessSeniority,
 		@EzbobSeniority AS EzbobSeniority,
-		@MaritalStatus AS MaritalStatus
+		@MaritalStatus AS MaritalStatus,
+		@HmrcId AS HmrcId,
+		@YodleeTurnover AS YodleeTurnover,
+		@ZooplaEstimate AS ZooplaEstimate,
+		@AverageSoldPrice1Year AS AverageSoldPrice1Year
 END
 GO
