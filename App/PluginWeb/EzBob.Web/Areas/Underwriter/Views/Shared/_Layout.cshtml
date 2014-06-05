@@ -24,6 +24,7 @@
 @{
     string sBodyClasses = "";
     string sBodyClassesException = "";
+    string availableFundsStr = "";
 
     try
     {
@@ -35,17 +36,17 @@
             string sRoles = context.User.Roles == null ? "" : string.Join(" ", context.User.Roles.Select(p => "role-" + p.Name));
             sBodyClasses = sRoles + " " + sPermissions;
         }
+
+        var serviceClient = new ServiceClient();
+        AvailableFundsActionResult availableFundsResponse = serviceClient.Instance.GetAvailableFunds(context.UserId);
+
+        decimal availableFunds = availableFundsResponse.AvailableFunds;
+        availableFundsStr = FormattingUtils.FormatPoundsNoDecimals(availableFunds).Replace(" ", "");
     }
     catch (Exception e)
     {
         sBodyClassesException = "Error fetching user permissions and roles: " + e.Message;
     }
-
-    var serviceClient = new ServiceClient();
-    IWorkplaceContext myContext = ObjectFactory.GetInstance<IWorkplaceContext>();
-    AvailableFundsActionResult availableFundsResponse = serviceClient.Instance.GetAvailableFunds(myContext.UserId);
-    decimal availableFunds = availableFundsResponse.AvailableFunds;
-    string availableFundsStr = FormattingUtils.FormatPoundsNoDecimals(availableFunds).Replace(" ", "");
 }
 
 <body class="@sBodyClasses">
