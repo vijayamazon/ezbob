@@ -1,0 +1,86 @@
+﻿namespace EzBob.Backend.Strategies.Misc 
+{
+	using System;
+	using System.Data;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using ScoreCalculation;
+
+	public class CalculateNewMedals : AStrategy
+	{
+		private readonly NewMedalScoreCalculator calculator;
+		public CalculateNewMedals(AConnection oDb, ASafeLog oLog)
+			: base(oDb, oLog)
+		{
+			calculator = new NewMedalScoreCalculator(oDb, oLog);
+		}
+
+		public override string Name {
+			get { return "CalculateNewMedals"; }
+		}
+
+		public override void Execute()
+		{
+			DataTable dt = DB.ExecuteReader(
+				"GetAllConsumersForNewMedals",
+				CommandSpecies.StoredProcedure
+				);
+
+			int customerId = 0;
+			foreach (DataRow row in dt.Rows)
+			{
+				try
+				{
+					var sr = new SafeReader(row);
+					customerId = sr["CustomerId"];
+					ScoreResult result = calculator.CalculateMedalScore(customerId);
+					DB.ExecuteNonQuery("StoreNewMedal", CommandSpecies.StoredProcedure,
+									   new QueryParameter("CustomerId", customerId),
+									   new QueryParameter("BusinessScoreWeight", result.BusinessScoreWeight),
+									   new QueryParameter("BusinessScoreGrade", result.BusinessScoreGrade),
+									   new QueryParameter("BusinessScoreScore", result.BusinessScoreScore),
+									   new QueryParameter("FreeCashFlowWeight", result.FreeCashFlowWeight),
+									   new QueryParameter("FreeCashFlowGrade", result.FreeCashFlowGrade),
+									   new QueryParameter("FreeCashFlowScore", result.FreeCashFlowScore),
+									   new QueryParameter("AnnualTurnoverWeight", result.AnnualTurnoverWeight),
+									   new QueryParameter("AnnualTurnoverGrade", result.AnnualTurnoverGrade),
+									   new QueryParameter("AnnualTurnoverScore", result.AnnualTurnoverScore),
+									   new QueryParameter("TangibleEquityWeight", result.TangibleEquityWeight),
+									   new QueryParameter("TangibleEquityGrade", result.TangibleEquityGrade),
+									   new QueryParameter("TangibleEquityScore", result.TangibleEquityScore),
+									   new QueryParameter("BusinessSeniorityWeight", result.BusinessSeniorityWeight),
+									   new QueryParameter("BusinessSeniorityGrade", result.BusinessSeniorityGrade),
+									   new QueryParameter("BusinessSeniorityScore", result.BusinessSeniorityScore),
+									   new QueryParameter("ConsumerScoreWeight", result.ConsumerScoreWeight),
+									   new QueryParameter("ConsumerScoreGrade", result.ConsumerScoreGrade),
+									   new QueryParameter("ConsumerScoreScore", result.ConsumerScoreScore),
+									   new QueryParameter("NetWorthWeight", result.NetWorthWeight),
+									   new QueryParameter("NetWorthGrade", result.NetWorthGrade),
+									   new QueryParameter("NetWorthScore", result.NetWorthScore),
+									   new QueryParameter("MaritalStatusWeight", result.MaritalStatusWeight),
+									   new QueryParameter("MaritalStatusGrade", result.MaritalStatusGrade),
+									   new QueryParameter("MaritalStatusScore", result.MaritalStatusScore),
+									   new QueryParameter("EzbobSeniorityWeight", result.EzbobSeniorityWeight),
+									   new QueryParameter("EzbobSeniorityGrade", result.EzbobSeniorityGrade),
+									   new QueryParameter("EzbobSeniorityScore", result.EzbobSeniorityScore),
+									   new QueryParameter("NumOfLoansWeight", result.NumOfLoansWeight),
+									   new QueryParameter("NumOfLoansGrade", result.NumOfLoansGrade),
+									   new QueryParameter("NumOfLoansScore", result.NumOfLoansScore),
+									   new QueryParameter("NumOfLateRepaymentsWeight", result.NumOfLateRepaymentsWeight),
+									   new QueryParameter("NumOfLateRepaymentsGrade", result.NumOfLateRepaymentsGrade),
+									   new QueryParameter("NumOfLateRepaymentsScore", result.NumOfLateRepaymentsScore),
+									   new QueryParameter("NumOfEarlyReaymentsWeight", result.NumOfEarlyReaymentsWeight),
+									   new QueryParameter("NumOfEarlyReaymentsGrade", result.NumOfEarlyReaymentsGrade),
+									   new QueryParameter("NumOfEarlyReaymentsScore", result.NumOfEarlyReaymentsScore),
+									   new QueryParameter("TotalScore", result.TotalScore),
+									   new QueryParameter("TotalScoreNormalized", result.TotalScoreNormalized),
+									   new QueryParameter("Medal", result.Medal.ToString()));
+				}
+				catch (Exception ex)
+				{
+					Log.Error("Medal calculation for customer:{0} failed with exception:{1}", customerId, ex);
+				}
+			}
+		}
+	}
+}

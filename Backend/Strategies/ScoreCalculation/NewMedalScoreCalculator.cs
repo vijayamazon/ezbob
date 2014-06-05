@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.ScoreCalculation
 {
+	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
@@ -33,28 +34,40 @@
 		private int ezbobNumOfLateRepayments;
 		private int ezbobNumOfEarlyReayments;
 
-		private void GatherData()
+		private void GatherData(int customerId)
 		{
 			// TODO: complete logic
 			annualTurnover = 1; // use hmrc if have data, otherwise use bank (12M or annualized)
-			businessScore = 1;
 			freeCashFlow = 1;
 			freeCashFlowDataAvailable = false;
-			tangibleEquity = 1;
-			businessSeniority = DateTime.UtcNow;
-			consumerScore = 1;
 			netWorth = 1;
-			maritalStatus = MaritalStatus.Divorced;
-			firstRepaymentDatePassed = false;
-			ezbobSeniorityMonths = 1;
-			ezbobNumOfLoans = 1;
-			ezbobNumOfLateRepayments = 1;
-			ezbobNumOfEarlyReayments = 1;
+
+
+			DataTable dt = db.ExecuteReader("GetDataForMedalCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+
+			if (dt.Rows.Count != 1)
+			{
+				throw new Exception("Couldn't gather required data for the medal calculation");
+			}
+
+			var sr = new SafeReader(dt.Rows[0]);
+
+			businessScore = sr["BusinessScore"];
+			tangibleEquity = sr["TangibleEquity"];
+			businessSeniority = sr["BusinessSeniority"];
+			consumerScore = sr["ConsumerScore"];
+			string maritalStatusStr = sr["MaritalStatus"];
+			maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusStr);
+			firstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
+			ezbobSeniorityMonths = sr["EzbobSeniority"];
+			ezbobNumOfLoans = sr["OnTimeLoans"];
+			ezbobNumOfLateRepayments = sr["NumOfLatePayments"];
+			ezbobNumOfEarlyReayments = sr["NumOfEarlyPayments"];
 		}
 
-		public ScoreResult CalculateMedalScore()
+		public ScoreResult CalculateMedalScore(int customerId)
 		{
-			GatherData();
+			GatherData(customerId);
 			CalculateWeights();
 			CalculateGrades();
 

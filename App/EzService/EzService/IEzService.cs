@@ -460,6 +460,9 @@
 
 		[OperationContract]
 		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
+
+		[OperationContract]
+		ActionMetaData CalculateNewMedals();
 	} // interface IEzService
 } // namespace EzService
 
