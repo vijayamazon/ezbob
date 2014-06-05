@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using Utils.Extensions;
 
 	[DataContract(IsReference = true)]
 	public class LoanScheduleItemModel {
@@ -63,7 +64,7 @@
 				LateCharges = s.LateCharges,
 				RepaymentAmount = s.RepaymentAmount,
 				Status = s.Status.ToString(),
-				StatusDescription = s.Status.ToDescription(),
+				StatusDescription = s.Status.DescriptionAttr(),
 				LoanRepayment = s.LoanRepayment,
 				Balance = s.Balance,
 				BalanceBeforeRepayment = s.BalanceBeforeRepayment,
