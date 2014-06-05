@@ -26,6 +26,8 @@
 			ms_oTypeConvertors[typeof (DateTime).ToString()] = ParsedValue.ToDateTime;
 			ms_oTypeConvertors[typeof (string).ToString()] = ParsedValue.ToString;
 
+			ms_oTypeConvertors[typeof (Guid).ToString()] = ParsedValue.ToGuid; 
+
 			ms_oTypeConvertors[typeof (bool?).ToString()] = ParsedValue.ToBooleanOrNull;
 			ms_oTypeConvertors[typeof (char?).ToString()] = ParsedValue.ToCharOrNull;
 			ms_oTypeConvertors[typeof (sbyte?).ToString()] = ParsedValue.ToSByteOrNull; 
@@ -40,6 +42,7 @@
 			ms_oTypeConvertors[typeof (double?).ToString()] = ParsedValue.ToDoubleOrNull; 
 			ms_oTypeConvertors[typeof (decimal?).ToString()] = ParsedValue.ToDecimalOrNull; 
 			ms_oTypeConvertors[typeof (DateTime?).ToString()] = ParsedValue.ToDateTimeOrNull; 
+
 			ms_oTypeConvertors[typeof (byte[]).ToString()] = ParsedValue.ToByteArray; 
 			ms_oTypeConvertors[typeof (string[]).ToString()] = ParsedValue.ToStringArray; 
 		} // static constructor
@@ -457,6 +460,22 @@
 		#endregion method ToType
 
 		#endregion interface IConvertible and type cast operators
+
+		#region to Guid
+
+		public static implicit operator Guid(ParsedValue val) {
+			return ReferenceEquals(val, null) ? Guid.Empty : val.ToGuid();
+		} // operator Guid
+
+		private static void ToGuid(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToGuid(provider);
+		} // ToGuid
+
+		public Guid ToGuid(IFormatProvider provider = null) {
+			return (Guid)m_oValue;
+		} // ToGuid
+
+		#endregion to Guid
 
 		#region Nullable types
 

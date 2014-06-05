@@ -4,8 +4,8 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
-	using System.Text.RegularExpressions;
 	using ConfigManager;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -272,35 +272,16 @@
 
 				public int BoxNum {
 					get {
-						if (m_nBoxNum.HasValue)
-							return m_nBoxNum.Value;
-
-						m_nBoxNum = 0;
-
-						Match m = ms_oBoxNameRegEx.Match(BoxName);
-
-						if (m.Success) {
-							int nBoxNum;
-
-							if (int.TryParse(m.Groups[1].Value, out nBoxNum))
-								m_nBoxNum = nBoxNum;
-						} // if
+						if (!m_nBoxNum.HasValue)
+							m_nBoxNum = VatReturnUtils.BoxNameToNum(BoxName);
 
 						return m_nBoxNum.Value;
 					} // get
-				}
-
-				// BoxNum
+				} // BoxNum
 
 				private int? m_nBoxNum;
 
 				#endregion property BoxNum
-
-				#region private
-
-				private static readonly Regex ms_oBoxNameRegEx = new Regex(@"\(Box (\d+)\)$");
-
-				#endregion private
 			} // class ResultRow
 
 			#endregion class ResultRow

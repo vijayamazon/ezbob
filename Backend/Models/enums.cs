@@ -60,4 +60,14 @@
 	} // enum ConfigTableType
 
 	#endregion enum ConfigTableType
+
+	#region enum VatReturnSourceType
+
+	public enum VatReturnSourceType {
+		Linked = 1,
+		Uploaded = 2,
+		Manual = 3,
+	} // enum VatReturnSourceType
+
+	#endregion enum VatReturnSourceType
 } // namespace Ezbob.Backend.Models

@@ -83,6 +83,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
       <Project>{189d7477-dee3-4f7b-b703-d24c92352c0c}</Project>
       <Name>ChannelGrabberAPI</Name>

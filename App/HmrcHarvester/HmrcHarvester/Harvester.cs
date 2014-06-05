@@ -14,6 +14,7 @@ using log4net;
 using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 
 namespace Ezbob.HmrcHarvester {
+	using Backend.Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using StructureMap;
 
@@ -67,7 +68,7 @@ namespace Ezbob.HmrcHarvester {
 		private static Hopper FetchBackdoorData(int nCustomerMarketplaceID, ASafeLog log) {
 			log.Debug("Harvester: fetching backdoor data for marketplace {0}...", nCustomerMarketplaceID);
 
-			Hopper oBackdoorData = null;
+			Hopper oBackdoorData;
 
 			lock (typeof(Harvester)) {
 				if ((ms_oBackdoorData == null) || !ms_oBackdoorData.ContainsKey(nCustomerMarketplaceID)) {
@@ -81,7 +82,7 @@ namespace Ezbob.HmrcHarvester {
 				ms_oBackdoorData.Remove(nCustomerMarketplaceID);
 			} // lock
 
-			log.Debug("Harvester: fetching backdoor data for marketplace {0} complete.", nCustomerMarketplaceID);
+			log.Debug("Harvester: fetching back-door data for marketplace {0} complete.", nCustomerMarketplaceID);
 			return oBackdoorData;
 		} // FetchBackdoorData
 
@@ -103,7 +104,7 @@ namespace Ezbob.HmrcHarvester {
 		public Harvester(AccountData oAccountData, ILog log) : base(log) {
 			AccountData = oAccountData;
 			VerboseLogging = false;
-			Hopper = new Hopper(Hopper.SourceType.Linked);
+			Hopper = new Hopper(VatReturnSourceType.Linked);
 			IsLoggedIn = false;
 		} // constructor
 
@@ -693,9 +694,8 @@ namespace Ezbob.HmrcHarvester {
 		/// Adds HarvesterError to the Hopper in case of error.
 		/// </summary>
 		/// <param name="task">HTTP request result.</param>
-		/// <param name="oFileIdentifier">Where to save the file in the Hopper.</param>
 		private void GetFile(Task<HttpResponseMessage> task) {
-			SheafMetaData fi = null;
+			SheafMetaData fi;
 
 			HttpResponseMessage response = task.Result;
 
@@ -753,7 +753,7 @@ namespace Ezbob.HmrcHarvester {
 		#region method ExtractTaxOfficeNumber
 
 		private void ExtractTaxOfficeNumber(HtmlDocument doc) {
-			string sBaseXPath = "//dl[contains(@class, 'known-facts')]";
+			const string sBaseXPath = "//dl[contains(@class, 'known-facts')]";
 
 			HtmlNodeCollection oDataLists = doc.DocumentNode.SelectNodes(sBaseXPath);
 
@@ -832,7 +832,7 @@ namespace Ezbob.HmrcHarvester {
 
 			HtmlNodeCollection oHeadCells = oHeadRows[0].SelectNodes("th | td");
 
-			var aryExpectedColumnHeaders = new string[] {
+			string[] aryExpectedColumnHeaders = new [] {
 				"Date",
 				"Amount paid in period",
 				"Amount due in period",

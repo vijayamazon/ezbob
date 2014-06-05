@@ -31,7 +31,8 @@ BEGIN
 		r.RegistrationNo,
 		b.Name AS BusinessName,
 		b.Address,
-		r.SourceID
+		r.SourceID,
+		r.InternalID
 	FROM
 		MP_VatReturnRecords r
 		INNER JOIN #recs ON r.Id = #recs.RecordID

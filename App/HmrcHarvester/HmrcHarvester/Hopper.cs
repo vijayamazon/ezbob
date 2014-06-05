@@ -2,27 +2,18 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Net.Http;
+	using Backend.Models;
 
 	/// <summary>
 	/// Harvest result (retrieved files and errors).
 	/// </summary>
 	public class Hopper {
-		#region enum SourceType
-
-		public enum SourceType {
-			Linked = 1,
-			Uploaded = 2,
-			Manual = 3,
-		} // enum SourceType
-
-		#endregion enum SourceType
-
 		#region constructor
 
 		/// <summary>
 		/// Creates a Hopper object.
 		/// </summary>
-		public Hopper(SourceType nSource) {
+		public Hopper(VatReturnSourceType nSource) {
 			Source = nSource;
 			Clear();
 		} // constructor
@@ -141,7 +132,7 @@
 		/// <summary>
 		/// Data source: uploaded, linked, manual.
 		/// </summary>
-		public SourceType Source { get; private set; } // IsManual
+		public VatReturnSourceType Source { get; private set; } // IsManual
 
 		#endregion property IsManual
 

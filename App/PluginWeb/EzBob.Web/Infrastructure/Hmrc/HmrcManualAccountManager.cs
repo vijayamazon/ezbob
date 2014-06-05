@@ -182,7 +182,7 @@
 		private Hopper ThrashManualData(HmrcManualDataModel oData, out string sStateError) {
 			sStateError = null;
 
-			var oResult = new Hopper(Hopper.SourceType.Manual);
+			var oResult = new Hopper(VatReturnSourceType.Manual);
 
 			foreach (HmrcManualOnePeriodDataModel oPeriod in oData.VatPeriods) {
 				var smd = new SheafMetaData {

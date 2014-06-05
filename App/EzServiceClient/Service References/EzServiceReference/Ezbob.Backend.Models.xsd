@@ -119,9 +119,12 @@
       <xs:element minOccurs="0" name="DateDue" type="xs:dateTime" />
       <xs:element minOccurs="0" name="DateFrom" type="xs:dateTime" />
       <xs:element minOccurs="0" name="DateTo" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="InternalID" type="ser:guid" />
+      <xs:element minOccurs="0" name="IsDeleted" type="xs:boolean" />
       <xs:element minOccurs="0" name="Period" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RecordID" type="xs:int" />
       <xs:element minOccurs="0" name="RegistrationNo" type="xs:long" />
+      <xs:element minOccurs="0" name="SourceID" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="VatReturnRawData" nillable="true" type="tns:VatReturnRawData" />

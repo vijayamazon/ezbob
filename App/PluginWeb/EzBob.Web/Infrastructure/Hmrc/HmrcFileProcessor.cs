@@ -5,6 +5,7 @@
 	using System.Text;
 	using System.Web;
 	using EZBob.DatabaseLib;
+	using Ezbob.Backend.Models;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
 	using Ezbob.ValueIntervals;
@@ -179,7 +180,7 @@
 
 			public HmrcFileCache() {
 				ErrorMsg = string.Empty;
-				Hopper = new Hopper(Hopper.SourceType.Uploaded);
+				Hopper = new Hopper(VatReturnSourceType.Uploaded);
 				m_oDateIntervals = new SortedDictionary<long, List<DateInterval>>();
 				AddedCount = 0;
 			} // HmrcFileCache

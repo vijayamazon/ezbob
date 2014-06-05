@@ -33,7 +33,7 @@
 				VatReturnRecords = oVatReturn,
 				RtiTaxMonthRawData = oRtiMonths,
 			};
-			m_oSp.InitEntries();
+			m_oSp.InitEntries((VatReturnSourceType)nSourceID);
 
 			m_oRaw = new LoadVatReturnRawData(nCustomerMarketplaceID, DB, Log);
 		} // constructor
@@ -51,9 +51,14 @@
 		#region method Execute
 
 		public override void Execute() {
-			Log.Debug(m_oSp);
-
 			m_oRaw.Execute();
+
+			foreach (var oOld in m_oRaw.VatReturnRawData)
+				foreach (var oNew in m_oSp.VatReturnRecords)
+					if (oOld.Overlaps(oNew))
+						m_oSp.AddHistoryItem(oOld, oNew);
+
+			Log.Debug(m_oSp);
 
 			// TODO: fill elapsed time
 			// TODO: m_oSp.ExecuteNonQuery();
@@ -79,9 +84,27 @@
 		// ReSharper disable ValueParameterNotUsed
 
 		private class SpSaveVatReturnSummary : AStoredProc {
+			#region enum DeleteReasons
+
+			public enum DeleteReasons {
+				UploadedEqual = 1,
+				UploadedNotEqual = 2,
+				OverriddenByUploaded = 3,
+				ManualUpdated = 4,
+				ManualDeleted = 5,
+				ManualRejectedByUploaded = 6,
+				ManualRejectedByLinked = 7,
+				UploadedRejectedByLinked = 8,
+				LinkedUpdated = 9,
+			} // enum DeleteReasons
+
+			#endregion enum DeleteReasons
+
 			#region constructor
 
-			public SpSaveVatReturnSummary(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
+			public SpSaveVatReturnSummary(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+				m_oHistoryItems = new List<HistoryItem>();
+			} // constructor
 
 			#endregion constructor
 
@@ -99,6 +122,93 @@
 			} // HasValidParameters
 
 			#endregion method HasValidParameters
+
+			#region method AddHistoryItem
+
+			public void AddHistoryItem(VatReturnRawData oDeletedItem) {
+				oDeletedItem.IsDeleted = true;
+
+				m_oHistoryItems.Add(new HistoryItem {
+					DeleteRecordInternalID = oDeletedItem.InternalID,
+					ReasonID = (int)DeleteReasons.ManualDeleted,
+				});
+			} // AddHistoryItem
+
+			public void AddHistoryItem(VatReturnRawData oOld, VatReturnRawData oNew) {
+				// At this point oOld and oNew have overlapping date intervals and same registration # and oNew is not deleted.
+
+				DeleteReasons nReason;
+				VatReturnRawData oDeletedItem;
+				VatReturnRawData oReasonItem;
+
+				switch (oOld.SourceType) {
+				case VatReturnSourceType.Linked:
+					if (oNew.SourceType == VatReturnSourceType.Linked) {
+						oDeletedItem = oOld;
+						oReasonItem = oNew;
+						nReason = DeleteReasons.LinkedUpdated;
+					}
+					else {
+						oDeletedItem = oNew;
+						oReasonItem = oOld;
+						nReason = oNew.SourceType == VatReturnSourceType.Manual ? DeleteReasons.ManualRejectedByLinked : DeleteReasons.UploadedRejectedByLinked;
+					}
+					break;
+
+				case VatReturnSourceType.Uploaded:
+					switch (oNew.SourceType) {
+					case VatReturnSourceType.Linked:
+						oDeletedItem = oOld;
+						oReasonItem = oNew;
+						nReason = DeleteReasons.UploadedRejectedByLinked;
+						break;
+
+					case VatReturnSourceType.Uploaded:
+						oDeletedItem = oNew;
+						oReasonItem = oOld;
+						nReason = oOld.SameAs(oNew) ? DeleteReasons.UploadedEqual : DeleteReasons.UploadedNotEqual;
+						break;
+
+					default: // oNew.SourceType is Manual
+						oDeletedItem = oNew;
+						oReasonItem = oOld;
+						nReason = DeleteReasons.ManualRejectedByUploaded;
+						break;
+					} // switch
+
+					break;
+
+				default: // oOld.SourceType is Manual
+					oDeletedItem = oOld;
+					oReasonItem = oNew;
+
+					switch (oNew.SourceType) {
+					case VatReturnSourceType.Linked:
+						nReason = DeleteReasons.ManualRejectedByLinked;
+						break;
+
+					case VatReturnSourceType.Uploaded:
+						nReason = DeleteReasons.OverriddenByUploaded;
+						break;
+
+					default:
+						nReason = DeleteReasons.ManualUpdated;
+						break;
+					} // switch
+
+					break;
+				} // switch
+
+				oDeletedItem.IsDeleted = true;
+
+				m_oHistoryItems.Add(new HistoryItem {
+					DeleteRecordInternalID = oDeletedItem.InternalID,
+					ReasonRecordID = oReasonItem.RecordID,
+					ReasonID = (int)nReason,
+				});
+			} // AddHistoryItem
+
+			#endregion method AddHistoryItem
 
 			#region DB arguments
 
@@ -121,24 +231,35 @@
 			public VatReturnRawData[] VatReturnRecords { get; set; } // VatReturnRecords
 
 			[UsedImplicitly]
-			public VatReturnRawEntry[] VatReturnEntries { get; set; } // VatReturnEntries
+			public Entry[] VatReturnEntries { get; set; } // VatReturnEntries
 
 			[UsedImplicitly]
 			public RtiTaxMonthRawData[] RtiTaxMonthRawData { get; set; } // RtiTaxMonthRawData
+
+			[UsedImplicitly]
+			public HistoryItem[] HistoryItems {
+				get { return m_oHistoryItems.ToArray(); }
+				set { }
+			} // HistoryItems
+
+			private readonly List<HistoryItem> m_oHistoryItems;
 
 			#endregion DB arguments
 
 			#region method InitEntries
 
-			public void InitEntries() {
+			public void InitEntries(VatReturnSourceType nSourceType) {
 				int nRecordID = 1;
-				var lst = new List<VatReturnRawEntry>();
+				var lst = new List<Entry>();
 
 				foreach (VatReturnRawData r in VatReturnRecords) {
+					r.SourceType = nSourceType;
 					r.RecordID = nRecordID;
-					r.IsDeleted = false;
 
-					lst.AddRange(r.Data.Select(e => new VatReturnRawEntry {
+					if (r.IsDeleted)
+						AddHistoryItem(r);
+
+					lst.AddRange(r.Data.Select(e => new Entry {
 						Amount = e.Value.Amount,
 						BoxName = e.Key,
 						CurrencyCode = e.Value.CurrencyCode,
@@ -180,9 +301,9 @@
 
 			#endregion method ToString
 
-			#region class VatReturnRawEntry
+			#region class Entry
 
-			public class VatReturnRawEntry : ITraversable {
+			public class Entry : ITraversable {
 				[UsedImplicitly]
 				public int RecordID { get; set; }
 
@@ -198,9 +319,30 @@
 				public override string ToString() {
 					return string.Format("{0}: {1} = {2} {3}", RecordID, BoxName, Amount, CurrencyCode);
 				} // ToString
-			} // class VatReturnRawEntry
+			} // class Entry
 
-			#endregion class VatReturnRawEntry
+			#endregion class Entry
+
+			#region class HistoryItem
+
+			public class HistoryItem : ITraversable {
+				[UsedImplicitly]
+				public Guid DeleteRecordInternalID { get; set; }
+
+				[UsedImplicitly]
+				public int? ReasonRecordID { get; set; }
+
+				[UsedImplicitly]
+				public int ReasonID { get; set; }
+
+				[UsedImplicitly]
+				public DateTime DeleteTime {
+					get { return DateTime.UtcNow; }
+					set { }
+				} // DeleteTime
+			} // HistoryItem
+
+			#endregion class HistoryItem
 		} // class SpSaveVatReturnSummary
 
 		// ReSharper restore ValueParameterNotUsed
