@@ -1,16 +1,20 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPaymentsReceived]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptPaymentsReceived]
+IF OBJECT_ID('RptPaymentsReceived') IS NULL
+BEGIN
+	EXECUTE('CREATE PROCEDURE RptPaymentsReceived AS SELECT 1')
+END
 GO
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[RptPaymentsReceived] 
+ALTER PROCEDURE [dbo].[RptPaymentsReceived] 
 	(@DateStart DATETIME,
 @DateEnd   DATETIME,
 @ShowNonCashTransactions BIT = NULL)
 AS
 BEGIN
+
 	CREATE TABLE #t (
 		PostDate DATETIME NULL,
 		LoanID INT NOT NULL,
@@ -25,6 +29,7 @@ BEGIN
 		TransactionType NVARCHAR(64) NOT NULL,
 		Description NTEXT,
 		SumMatch NVARCHAR(9) NOT NULL,
+		CustomerStatus NVARCHAR(20),
 		RowLevel NVARCHAR(5) NOT NULL
 	)
 
@@ -47,11 +52,13 @@ BEGIN
 				THEN ''
 			ELSE 'unmatched'
 		END AS SumMatch,
+		cs.Name AS CustomerStatus,
 		'' AS RowLevel
 	FROM
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id
+		LEFT JOIN CustomerStatuses cs ON cs.Id = c.CollectionStatus
 		INNER JOIN LoanTransactionMethod m ON t.LoanTransactionMethodId = m.Id
 	WHERE
 		CONVERT(DATE, @DateStart) <= t.PostDate AND t.PostDate < CONVERT(DATE, @DateEnd)
@@ -85,6 +92,7 @@ BEGIN
 		'',
 		'',
 		'' AS SumMatch,
+		'' AS CustomerStatus,
 		'total' AS RowLevel
 	FROM
 		#t
@@ -92,24 +100,27 @@ BEGIN
 		RowLevel = ''
 
 	SELECT
-		PostDate,
-		LoanId,
-		ClientID,
-		ClientEmail,
-		ClientName,
-		Amount,
-		LoanRepayment,
-		Interest,
-		Fees,
-		Rollover,
-		TransactionType,
-		Description,
-		SumMatch,
-		RowLevel
+		t.PostDate,
+		t.LoanId,
+		t.ClientID,
+		t.ClientEmail,
+		t.ClientName,
+		t.Amount,
+		t.LoanRepayment,
+		t.Interest,
+		t.Fees,
+		t.Rollover,
+		t.TransactionType,
+		t.Description,
+		t.CustomerStatus,
+		t.SumMatch,
+		t.RowLevel
 	FROM
-		#t
+		#t AS t
 	ORDER BY
 		RowLevel DESC,
 		PostDate
+		
+	DROP TABLE #t	
 END
 GO

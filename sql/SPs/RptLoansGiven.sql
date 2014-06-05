@@ -1,13 +1,14 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoansGiven]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptLoansGiven]
+IF OBJECT_ID('RptLoansGiven') IS NULL
+BEGIN
+	EXECUTE('CREATE PROCEDURE RptLoansGiven AS SELECT 1')
+END
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[RptLoansGiven] 
-	(@DateStart DATETIME,
-@DateEnd DATETIME)
+ALTER PROCEDURE [dbo].[RptLoansGiven] 
+	(@DateStart DATETIME,@DateEnd DATETIME)
 AS
 BEGIN
 	SELECT
@@ -32,6 +33,7 @@ BEGIN
 		ISNULL(fc.Charges, 0) AS TotalCharges,
 		l.InterestRate AS BaseInterest,
 		dp.Name AS DiscountPlan,
+		cs.Name AS CustomerStatus,
 		CASE ISNULL(out.Counter, 0)
 			WHEN 1 THEN ''
 			ELSE 'unmatched'
@@ -39,6 +41,7 @@ BEGIN
 	FROM
 		Loan l
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+		LEFT JOIN CustomerStatuses cs ON cs.Id = c.CollectionStatus
 		INNER JOIN LoanType lt ON l.LoanTypeId = lt.Id
 		INNER JOIN (
 			SELECT

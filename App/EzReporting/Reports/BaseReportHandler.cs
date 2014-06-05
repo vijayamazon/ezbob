@@ -11,7 +11,6 @@ using OfficeOpenXml;
 
 namespace Reports {
 	using Ezbob.Utils;
-	using TraficReport;
 
 	public class BaseReportHandler : SafeLog {
 		#region public
@@ -467,7 +466,7 @@ namespace Reports {
 			public decimal LoanAmount;
 			public decimal TotalRepaid;
 			public decimal PrincipalRepaid;
-
+			public string CustomerStatus;
 			#endregion fields
 
 			#region method Compare
@@ -496,7 +495,7 @@ namespace Reports {
 				LoanAmount = 0;
 				TotalRepaid = 0;
 				PrincipalRepaid = 0;
-
+				CustomerStatus = "";
 				ClientCount = new SortedDictionary<int, int>();
 				LoanCount = new SortedDictionary<int, int>();
 			} // constructor
@@ -534,7 +533,7 @@ namespace Reports {
 
 				tbl.Rows.Add(
 					IssueDate, ClientID, LoanID, ClientName, ClientEmail,
-					EarnedInterest, LoanAmount, TotalRepaid, PrincipalRepaid,
+					EarnedInterest, LoanAmount, TotalRepaid, PrincipalRepaid,CustomerStatus,
 					IsTotal ? "total" : ""
 				);
 			} // ToRow
@@ -555,6 +554,7 @@ namespace Reports {
 				oOutput.Columns.Add("LoanAmount", typeof(double));
 				oOutput.Columns.Add("TotalRepaid", typeof(double));
 				oOutput.Columns.Add("PrincipalRepaid", typeof(double));
+				oOutput.Columns.Add("CustomerStatus", typeof(string));
 				oOutput.Columns.Add("RowLevel", typeof(string));
 
 				ToRow(oOutput);
@@ -609,7 +609,8 @@ namespace Reports {
 					EarnedInterest = earned[nLoanID],
 					LoanAmount = f(row, "LoanAmount"),
 					TotalRepaid = f(row, "TotalRepaid"),
-					PrincipalRepaid = f(row, "PrincipalRepaid")
+					PrincipalRepaid = f(row, "PrincipalRepaid"),
+					CustomerStatus = row["CustomerStatus"].ToString(),
 				};
 
 				oTotal.Update(oNewRow);
@@ -867,6 +868,7 @@ namespace Reports {
 			private const string FldTotalCharges = "TotalCharges";
 			private const string FldBaseInterest = "BaseInterest";
 			private const string FldDiscountPlan = "DiscountPlan";
+			private const string FldCustomerStatus = "CustomerStatus";
 			private const string FldRowLevel = "RowLevel";
 
 			#endregion field name constants
@@ -896,6 +898,7 @@ namespace Reports {
 				ms_oFieldNames[FldTotalCharges] = 0;
 				ms_oFieldNames[FldBaseInterest] = 0;
 				ms_oFieldNames[FldDiscountPlan] = "";
+				ms_oFieldNames[FldCustomerStatus] = "";
 				ms_oFieldNames[FldRowLevel] = "";
 
 				ms_oTotalIgnored = new SortedDictionary<string, int>();
@@ -906,6 +909,7 @@ namespace Reports {
 				ms_oTotalIgnored[FldClientName] = 0;
 				ms_oTotalIgnored[FldLoanTypeName] = 0;
 				ms_oTotalIgnored[FldDiscountPlan] = 0;
+				ms_oTotalIgnored[FldCustomerStatus] = 0;
 				ms_oTotalIgnored[FldRowLevel] = 0;
 			} // static constructor
 
@@ -1113,6 +1117,7 @@ namespace Reports {
 			public decimal RolloverRepaid { get; set; }
 			public int FeesEarnedID { get; set; }
 			public int TransactionID { get; set; }
+			public string CustomerStatus { get; set; }
 		} // AccountingLoanBalanceRawData
 
 		#endregion class AccountingLoanBalanceRawData
@@ -1135,7 +1140,7 @@ namespace Reports {
 			public decimal EarnedInterest;
 			public decimal EarnedFees;
 			public decimal CashPaid;
-
+			public string CustomerStatus;
 			#endregion fields
 
 			#region constructor
@@ -1157,7 +1162,7 @@ namespace Reports {
 				SetupFee = raw.SetupFee;
 				EarnedFees = raw.FeesEarned;
 				LoanStatus = raw.LoanStatus;
-
+				CustomerStatus = raw.CustomerStatus;
 				EarnedInterest = nEarnedInterest;
 				CashPaid = 0;
 
@@ -1203,7 +1208,7 @@ namespace Reports {
 				tbl.Rows.Add(
 					IssueDate, ClientID, LoanID, ClientName, ClientEmail, LoanStatus,
 					IssuedAmount, SetupFee, EarnedInterest, EarnedFees,
-					CashPaid, Balance
+					CashPaid, Balance, CustomerStatus
 				);
 			} // ToRow
 
@@ -1226,6 +1231,7 @@ namespace Reports {
 				oOutput.Columns.Add("EarnedFees", typeof(decimal));
 				oOutput.Columns.Add("CashPaid", typeof(decimal));
 				oOutput.Columns.Add("Balance", typeof(decimal));
+				oOutput.Columns.Add("CustomerStatus", typeof(string));
 
 				return oOutput;
 			} // ToTable
