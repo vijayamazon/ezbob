@@ -9,7 +9,7 @@
 	class ZooplaEstimate
 	{
 		private static HttpClient Session { get; set; }
-
+		private const int MaxPages = 10;
 		public string GetEstimate(string address)
 		{
 			var oData = new Dictionary<string, string>();
@@ -37,6 +37,7 @@
 			}
 
 			string nextPage = "one page";
+			int pages = 0;
 			do
 			{
 				var nextPageNode = doc.DocumentNode.SelectSingleNode("//div[@class = 'paginate bg-muted']/a[last()]");
@@ -58,7 +59,8 @@
 						return estimate;
 					}
 				}
-			} while (nextPage == "Next");
+				pages++;
+			} while (nextPage == "Next" && pages < MaxPages);
 
 			return "Address not found";
 		}
