@@ -2,10 +2,22 @@
 {
 	public static class StringExtension
 	{
-		public static string ToK(this decimal num)
+		public static string ToK0(this decimal num)
 		{
 			num = num/1000;
-			return string.Format("{0}K",num.ToString("N2"));
+			return string.Format("{0}K",num.ToString("N0"));
+		}
+
+		public static string ToK1(this decimal num)
+		{
+			num = num / 1000;
+			return string.Format("{0}K", num.ToString("N1"));
+		}
+
+		public static string ToK2(this decimal num)
+		{
+			num = num / 1000;
+			return string.Format("{0}K", num.ToString("N2"));
 		}
 
 		public static string ToM(this decimal num)

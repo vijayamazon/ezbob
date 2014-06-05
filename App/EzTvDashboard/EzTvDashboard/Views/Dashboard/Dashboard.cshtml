@@ -7,7 +7,7 @@
         <div class="col-md-4">
             <div class="tile tile-ezgrey">
                 <div class="caption">
-                    UK Site Visitors
+                    Visitors
                 </div>
                 <p class="title text-center">@Model.Stats["T_UkVisitors"].ToInt()</p>
             </div>
@@ -36,7 +36,7 @@
                 <div class="caption">
                     Approved
                 </div>
-                <p class="title text-center">@Model.Stats["T_Approved"].ToK()</p>
+                <p class="title text-center">@Model.Stats["T_Approved"].ToK0()</p>
             </div>
         </div>
         <div class="col-md-4">
@@ -44,7 +44,7 @@
                 <div class="caption">
                     Loans out
                 </div>
-                <p class="title text-center">@Model.Stats["T_LoansOut"].ToK()</p>
+                <p class="title text-center">@Model.Stats["T_LoansOut"].ToK0()</p>
             </div>
         </div>
         <div class="col-md-4">
@@ -52,7 +52,7 @@
                 <div class="caption">
                     Repayments
                 </div>
-                <p class="title text-center">@Model.Stats["T_Repayments"].ToK()</p>
+                <p class="title text-center">@Model.Stats["T_Repayments"].ToK0()</p>
             </div>
         </div>
     </div>
@@ -64,7 +64,7 @@
         <div class="col-md-4">
             <div class="tile tile-ezgrey">
                 <div class="caption">
-                    UK Site Visitors
+                    Visitors
                 </div>
                 <p class="title text-center">@Model.Stats["M_UkVisitors"].ToInt()</p>
             </div>
@@ -92,7 +92,7 @@
                 <div class="caption">
                     Approved
                 </div>
-                <p class="title text-center">@Model.Stats["M_Approved"].ToK()</p>
+                <p class="title text-center">@Model.Stats["M_Approved"].ToK0()</p>
             </div>
         </div>
         <div class="col-md-4">
@@ -100,7 +100,7 @@
                 <div class="caption">
                     Loans out
                 </div>
-                <p class="title text-center">@Model.Stats["M_LoansOut"].ToK()</p>
+                <p class="title text-center">@Model.Stats["M_LoansOut"].ToK0()</p>
             </div>
         </div>
         <div class="col-md-4">
@@ -108,7 +108,7 @@
                 <div class="caption">
                     Repayments
                 </div>
-                <p class="title text-center">@Model.Stats["M_Repayments"].ToK()</p>
+                <p class="title text-center">@Model.Stats["M_Repayments"].ToK0()</p>
             </div>
         </div>
     </div>
@@ -118,7 +118,7 @@
                 <div class="caption">
                     Avg loan size
                 </div>
-                <p class="title text-center">@Model.Stats["M_AvgLoanSize"].ToK()</p>
+                <p class="title text-center">@Model.Stats["M_AvgLoanSize"].ToK1()</p>
             </div>
         </div>
         <div class="col-md-4">
@@ -126,7 +126,7 @@
                 <div class="caption">
                     Avg daily loans
                 </div>
-                <p class="title text-center">@Model.Stats["M_AvgDailyLoans"].ToK()</p>
+                <p class="title text-center">@Model.Stats["M_AvgDailyLoans"].ToK1()</p>
             </div>
         </div>
         <div class="col-md-4">
@@ -161,35 +161,22 @@
         <div class="col-md-4">
             <div class="tile tile-ezgrey">
                 <div class="caption">
-                    TODO
+                    Avg interest
                 </div>
-                <p class="title text-center">-</p>
+                <p class="title text-center">@Model.Stats["G_AvgInterest"].ToPercent()</p>
             </div>
         </div>
     </div>
+</div>
+<div class="box">
+    <div class="box-title text-center"><h3>TBD...</h3></div>
     <div class="row">
-        <div class="col-md-4">
-            <div class="tile tile-ezgreen">
-                <div class="caption">
-                    Avg daily loans
-                </div>
-                <p class="title text-center">@Model.Stats["G_AvgDailyLoans"].ToK()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-12">
             <div class="tile tile-ezgrey">
                 <div class="caption">
-                    Avg loan size
+                    2014 All rights resereved to ®
                 </div>
-                <p class="title text-center">@Model.Stats["G_AvgLoanSize"].ToK()</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="tile tile-ezgreen">
-                <div class="caption">
-                    Avg new loans
-                </div>
-                <p class="title text-center">@Model.Stats["G_AvgNewLoan"].ToK()</p>
+                <p class="title text-center ezlight">stasd@@<strong>ezbob</strong>.com</p>
             </div>
         </div>
     </div>

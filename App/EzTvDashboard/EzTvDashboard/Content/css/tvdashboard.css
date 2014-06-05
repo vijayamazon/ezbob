@@ -1,10 +1,25 @@
-﻿.ezbob-logo {
+﻿* {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.ezbob-logo {
     background-image: url(../img/new-ezbob-logo.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
     width: 150px;
     height: 100%;
+    margin-left: 10px;
+}
+.tvdashboard {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 60px;
+    width: 78%;
 }
 
 table.table {
@@ -14,9 +29,11 @@ table.table {
 .notifications {
     color: red;
 }
-
+.navbar .nav > li > a {
+    color: #000;
+}
 .skin-orange .navbar {
-    background-color: #fc8e00;
+    background-color: #ddd;
 }
 
 .tile-ezgreen {
@@ -35,9 +52,10 @@ table.table {
     background-color: #000000;
 }
 
-.navbar-brand {
-    font-size: 35px !important;
+.navbar .navbar-brand {
+    font-size: 35px;
     text-align: center;
+    height: 100%;
 }
 
 .navbar {
@@ -48,10 +66,6 @@ table.table {
     position: absolute;
     right: 10px;
     top: 5px;
-}
-
-.row {
-    margin-bottom: 0;
 }
 
 .box {
@@ -68,22 +82,35 @@ table.table {
 
     .box .box-title h3 {
         color: #000;
-        font-size: 35px;
+        font-size: 30px;
         line-height: 30px;
     }
 
 .tile p.title {
-    font-size: 70px;
-    margin: -45px 0 0 0;
+    font-size: 75px;
+    font-weight: bold;
+    position: absolute;
+    right: 10px;
 }
 
 .tile .caption {
-    font-size: 40px;
-    text-align: center;
-    min-height: 60px;
-    padding-bottom: 25px;
-    margin: -15px 0 0 0;
+    font-size: 37px;
+    position: absolute;
+    left: 0;
+    vertical-align: middle;
+    height: 100%;
+    top: 40px;
+    padding-left: 10px;
 }
+
+.tile-ezgrey .caption {
+    color: #ddd;
+}
+
+.tile-ezgreen .caption {
+    color: #D5FF91;
+}
+
 
 .nav-li {
     width: 200px;
@@ -97,6 +124,28 @@ table.table {
 
 a.logout {
     position: absolute !important;
-    right: 0px;
+    right: 0;
     top: -20px;
+}
+
+.skin-orange .box > .box-title {
+    background-color: transparent;
+    padding: 5px;
+    margin-bottom: 15px;
+    margin-left: 40%;
+    margin-right: 40%;
+}
+
+.col-md-4, .col-md-12 {
+    padding-right: 1px;
+    padding-left: 1px;
+}
+
+strong {
+    color: black;
+    font-weight: bold;
+}
+
+.ezlight {
+    color: #888;
 }

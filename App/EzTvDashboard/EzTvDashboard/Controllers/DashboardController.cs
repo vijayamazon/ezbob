@@ -11,7 +11,7 @@ namespace EzTvDashboard.Controllers
 		//
 		// GET: /Dashboard/
 		static DashboardModel _model;
-		private DashboardModelBuilder _modelBuilder;
+		private readonly DashboardModelBuilder _modelBuilder;
 
 		public DashboardController()
 		{

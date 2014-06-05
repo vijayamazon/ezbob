@@ -124,18 +124,19 @@
 							{"M_Registration", 50},
 							{"M_Application", 10},
 							{"M_Approved", 5},
-							{"M_LoansOut", 7},
+							{"M_LoansOut", 283600},
 							{"M_Repayments", 55000},
 							{"M_AvgLoanSize", 5000},
-							{"M_AvgDailyLoans", 5000},
-							{"M_AvgInterest", 0.4M},
+							{"M_AvgDailyLoans", 57720},
+							{"M_AvgInterest", 0.0423M},
 
-							{"G_AvgDailyLoans", 5000},//
-							{"G_DefaultRate", 0.038M},//
+							//{"G_AvgDailyLoans", 5000},//
+							//{"G_DefaultRate", 0.038M},//
 							{"G_TotalLoans", 12500000},//
 							{"G_BookSize", 5600000},//
-							{"G_AvgLoanSize", 10000},//
-							{"G_AvgNewLoan", 12000}//
+							{"G_AvgInterest", 0.023M},//
+							//{"G_AvgLoanSize", 10000},//
+							//{"G_AvgNewLoan", 12000}//
 						},
 					MonthlyBoard = new List<MonthlyBoardModel>
 						{
