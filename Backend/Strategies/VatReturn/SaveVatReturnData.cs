@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
+	using Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -19,19 +20,19 @@
 			int nCustomerMarketplaceID,
 			int nHistoryRecordID,
 			int nSourceID,
-			VatReturnRawData[] oVatReturn,
-			RtiTaxMonthRawData[] oRtiMonths,
+			IEnumerable<VatReturnRawData> oVatReturn,
+			IEnumerable<RtiTaxMonthRawData> oRtiMonths,
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
 			ElapsedTimeInfo = new ElapsedTimeInfo();
 
-			m_oSp = new SpSaveVatReturnSummary(DB, Log) {
+			m_oSp = new SpSaveVatReturnData(this, DB, Log) {
 				CustomerMarketplaceID = nCustomerMarketplaceID,
 				HistoryRecordID = nHistoryRecordID,
 				SourceID = nSourceID,
-				VatReturnRecords = oVatReturn,
-				RtiTaxMonthRawData = oRtiMonths,
+				VatReturnRecords = new List<VatReturnRawData>(oVatReturn),
+				RtiTaxMonthRawData = new List<RtiTaxMonthRawData>(oRtiMonths),
 			};
 			m_oSp.InitEntries((VatReturnSourceType)nSourceID);
 
@@ -61,8 +62,10 @@
 			Log.Debug(m_oSp);
 
 			// TODO: fill elapsed time
-			// TODO: m_oSp.ExecuteNonQuery();
-			// TODO: new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID, DB, Log).Execute();
+
+			m_oSp.ExecuteNonQuery();
+
+			new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute
@@ -77,33 +80,20 @@
 
 		#region private
 
-		private readonly SpSaveVatReturnSummary m_oSp;
+		private readonly SpSaveVatReturnData m_oSp;
 		private readonly LoadVatReturnRawData m_oRaw;
 
-		#region class SpSaveVatReturnSummary
+		#region class SpSaveVatReturnData
 		// ReSharper disable ValueParameterNotUsed
 
-		private class SpSaveVatReturnSummary : AStoredProc {
-			#region enum DeleteReasons
-
-			public enum DeleteReasons {
-				UploadedEqual = 1,
-				UploadedNotEqual = 2,
-				OverriddenByUploaded = 3,
-				ManualUpdated = 4,
-				ManualDeleted = 5,
-				ManualRejectedByUploaded = 6,
-				ManualRejectedByLinked = 7,
-				UploadedRejectedByLinked = 8,
-				LinkedUpdated = 9,
-			} // enum DeleteReasons
-
-			#endregion enum DeleteReasons
-
+		private class SpSaveVatReturnData : AStoredProc {
 			#region constructor
 
-			public SpSaveVatReturnSummary(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-				m_oHistoryItems = new List<HistoryItem>();
+			public SpSaveVatReturnData(AStrategy oStrategy, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+				HistoryItems = new List<HistoryItem>();
+				m_oOldDeletedItems = new SortedSet<int>();
+
+				m_oStrategy = oStrategy;
 			} // constructor
 
 			#endregion constructor
@@ -116,8 +106,8 @@
 					(HistoryRecordID > 0) &&
 					(SourceID > 0) &&
 					(
-						(VatReturnRecords.Length > 0) ||
-						(RtiTaxMonthRawData.Length > 0)
+						(VatReturnRecords.Count > 0) ||
+						(RtiTaxMonthRawData.Count > 0)
 					);
 			} // HasValidParameters
 
@@ -125,10 +115,10 @@
 
 			#region method AddHistoryItem
 
-			public void AddHistoryItem(VatReturnRawData oDeletedItem) {
+			private void AddHistoryItem(VatReturnRawData oDeletedItem) {
 				oDeletedItem.IsDeleted = true;
 
-				m_oHistoryItems.Add(new HistoryItem {
+				HistoryItems.Add(new HistoryItem {
 					DeleteRecordInternalID = oDeletedItem.InternalID,
 					ReasonID = (int)DeleteReasons.ManualDeleted,
 				});
@@ -144,7 +134,7 @@
 				switch (oOld.SourceType) {
 				case VatReturnSourceType.Linked:
 					if (oNew.SourceType == VatReturnSourceType.Linked) {
-						oDeletedItem = oOld;
+						oDeletedItem = Delete(oOld);
 						oReasonItem = oNew;
 						nReason = DeleteReasons.LinkedUpdated;
 					}
@@ -158,7 +148,7 @@
 				case VatReturnSourceType.Uploaded:
 					switch (oNew.SourceType) {
 					case VatReturnSourceType.Linked:
-						oDeletedItem = oOld;
+						oDeletedItem = Delete(oOld);
 						oReasonItem = oNew;
 						nReason = DeleteReasons.UploadedRejectedByLinked;
 						break;
@@ -169,17 +159,20 @@
 						nReason = oOld.SameAs(oNew) ? DeleteReasons.UploadedEqual : DeleteReasons.UploadedNotEqual;
 						break;
 
-					default: // oNew.SourceType is Manual
+					case VatReturnSourceType.Manual:
 						oDeletedItem = oNew;
 						oReasonItem = oOld;
 						nReason = DeleteReasons.ManualRejectedByUploaded;
 						break;
+
+					default:
+						throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType.ToString());
 					} // switch
 
 					break;
 
-				default: // oOld.SourceType is Manual
-					oDeletedItem = oOld;
+				case VatReturnSourceType.Manual:
+					oDeletedItem = Delete(oOld);
 					oReasonItem = oNew;
 
 					switch (oNew.SourceType) {
@@ -191,17 +184,23 @@
 						nReason = DeleteReasons.OverriddenByUploaded;
 						break;
 
-					default:
+					case VatReturnSourceType.Manual:
 						nReason = DeleteReasons.ManualUpdated;
 						break;
+
+					default:
+						throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType.ToString());
 					} // switch
 
 					break;
+
+				default:
+					throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType.ToString());
 				} // switch
 
 				oDeletedItem.IsDeleted = true;
 
-				m_oHistoryItems.Add(new HistoryItem {
+				HistoryItems.Add(new HistoryItem {
 					DeleteRecordInternalID = oDeletedItem.InternalID,
 					ReasonRecordID = oReasonItem.RecordID,
 					ReasonID = (int)nReason,
@@ -212,14 +211,28 @@
 
 			#region DB arguments
 
+			#region property CustomerMarketplaceID
+
 			[UsedImplicitly]
 			public int CustomerMarketplaceID { get; set; } // CustomerMarketplaceID
+
+			#endregion property CustomerMarketplaceID
+
+			#region property HistoryRecordID
 
 			[UsedImplicitly]
 			public int HistoryRecordID { get; set; } // HistoryRecordID
 
+			#endregion property HistoryRecordID
+
+			#region property SourceID
+
 			[UsedImplicitly]
 			public int SourceID { get; set; } // SourceID
+
+			#endregion property SourceID
+
+			#region property Now
 
 			[UsedImplicitly]
 			public DateTime Now {
@@ -227,52 +240,49 @@
 				set { } // set, !!! DO NOT REMOVE, DO NOT MAKE PRIVATE !!!
 			} // Now
 
-			[UsedImplicitly]
-			public VatReturnRawData[] VatReturnRecords { get; set; } // VatReturnRecords
+			#endregion property Now
+
+			#region property VatReturnRecords
 
 			[UsedImplicitly]
-			public Entry[] VatReturnEntries { get; set; } // VatReturnEntries
+			public List<VatReturnRawData> VatReturnRecords { get; set; } // VatReturnRecords
+
+			#endregion property VatReturnRecords
+
+			#region property VatReturnEntries
 
 			[UsedImplicitly]
-			public RtiTaxMonthRawData[] RtiTaxMonthRawData { get; set; } // RtiTaxMonthRawData
+			public List<Entry> VatReturnEntries { get; set; } // VatReturnEntries
+
+			#endregion property VatReturnEntries
+
+			#region property RtiTaxMonthRawData
 
 			[UsedImplicitly]
-			public HistoryItem[] HistoryItems {
-				get { return m_oHistoryItems.ToArray(); }
+			public List<RtiTaxMonthRawData> RtiTaxMonthRawData { get; set; } // RtiTaxMonthRawData
+
+			#endregion property RtiTaxMonthRawData
+
+			#region property HistoryItems
+
+			[UsedImplicitly]
+			public List<HistoryItem> HistoryItems { get; set; } // HistoryItems
+
+			#endregion property HistoryItems
+
+			#region property OldDeletedItems
+
+			[UsedImplicitly]
+			public List<int> OldDeletedItems {
+				get { return m_oOldDeletedItems.ToList(); }
 				set { }
 			} // HistoryItems
 
-			private readonly List<HistoryItem> m_oHistoryItems;
+			private readonly SortedSet<int> m_oOldDeletedItems; 
+
+			#endregion property OldDeletedItems
 
 			#endregion DB arguments
-
-			#region method InitEntries
-
-			public void InitEntries(VatReturnSourceType nSourceType) {
-				int nRecordID = 1;
-				var lst = new List<Entry>();
-
-				foreach (VatReturnRawData r in VatReturnRecords) {
-					r.SourceType = nSourceType;
-					r.RecordID = nRecordID;
-
-					if (r.IsDeleted)
-						AddHistoryItem(r);
-
-					lst.AddRange(r.Data.Select(e => new Entry {
-						Amount = e.Value.Amount,
-						BoxName = e.Key,
-						CurrencyCode = e.Value.CurrencyCode,
-						RecordID = nRecordID,
-					}));
-
-					nRecordID++;
-				} // for each record
-
-				VatReturnEntries = lst.ToArray();
-			} // InitEntries
-
-			#endregion method InitEntries
 
 			#region method ToString
 
@@ -301,11 +311,35 @@
 
 			#endregion method ToString
 
+			#region method InitEntries
+
+			public void InitEntries(VatReturnSourceType nSourceType) {
+				var lst = new List<Entry>();
+
+				foreach (VatReturnRawData r in VatReturnRecords) {
+					r.SourceType = nSourceType;
+
+					if (r.IsDeleted)
+						AddHistoryItem(r);
+
+					lst.AddRange(r.Data.Select(e => new Entry {
+						Amount = e.Value.Amount,
+						BoxName = e.Key,
+						CurrencyCode = e.Value.CurrencyCode,
+						RecordInternalID = r.InternalID,
+					}));
+				} // for each record
+
+				VatReturnEntries = lst.ToList();
+			} // InitEntries
+
+			#endregion method InitEntries
+
 			#region class Entry
 
 			public class Entry : ITraversable {
 				[UsedImplicitly]
-				public int RecordID { get; set; }
+				public Guid RecordInternalID { get; set; }
 
 				[UsedImplicitly]
 				public string BoxName { get; set; }
@@ -317,7 +351,7 @@
 				public string CurrencyCode { get; set; }
 
 				public override string ToString() {
-					return string.Format("{0}: {1} = {2} {3}", RecordID, BoxName, Amount, CurrencyCode);
+					return string.Format("{0}: {1} = {2} {3}", RecordInternalID, BoxName, Amount, CurrencyCode);
 				} // ToString
 			} // class Entry
 
@@ -334,19 +368,44 @@
 
 				[UsedImplicitly]
 				public int ReasonID { get; set; }
-
-				[UsedImplicitly]
-				public DateTime DeleteTime {
-					get { return DateTime.UtcNow; }
-					set { }
-				} // DeleteTime
 			} // HistoryItem
 
 			#endregion class HistoryItem
-		} // class SpSaveVatReturnSummary
+
+			#region private
+
+			private readonly AStrategy m_oStrategy;
+
+			#region method Delete
+
+			private VatReturnRawData Delete(VatReturnRawData oItem) {
+				m_oOldDeletedItems.Add(oItem.RecordID);
+				return oItem;
+			} // Delete
+
+			#endregion method Delete
+
+			#region enum DeleteReasons
+
+			private enum DeleteReasons {
+				UploadedEqual = 1,
+				UploadedNotEqual = 2,
+				OverriddenByUploaded = 3,
+				ManualUpdated = 4,
+				ManualDeleted = 5,
+				ManualRejectedByUploaded = 6,
+				ManualRejectedByLinked = 7,
+				UploadedRejectedByLinked = 8,
+				LinkedUpdated = 9,
+			} // enum DeleteReasons
+
+			#endregion enum DeleteReasons
+
+			#endregion private
+		} // class SpSaveVatReturnData
 
 		// ReSharper restore ValueParameterNotUsed
-		#endregion class SpSaveVatReturnSummary
+		#endregion class SpSaveVatReturnData
 
 		#endregion private
 	} // class SaveVatReturnData

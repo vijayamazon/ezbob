@@ -1,5 +1,5 @@
-﻿namespace Ezbob.Database {
+﻿namespace Ezbob.Utils {
 	public interface IParametrisable {
 		object[] ToParameter();
 	} // interface IParametrisable
-} // namespace Ezbob.Database
+} // namespace

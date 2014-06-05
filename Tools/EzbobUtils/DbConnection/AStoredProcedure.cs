@@ -104,13 +104,13 @@
 			if (oAction == null)
 				throw new ArgumentNullException("oAction", "No action specified for 'ForEachResult' call.");
 
-			var oResultRowType = this.GetType().GetNestedType("ResultRow", BindingFlags.Public);
+			var oResultRowType = GetType().GetNestedType("ResultRow", BindingFlags.Public);
 
 			if (oResultRowType == null)
 				throw new NotImplementedException("This class does not have a nested public ResultRow class.");
 
 			if (null == oResultRowType.GetInterface(typeof (IResultRow).ToString()))
-				throw new NotImplementedException("Nested ResultRow class does not implement " + typeof (IResultRow).ToString());
+				throw new NotImplementedException("Nested ResultRow class does not implement " + typeof (IResultRow));
 
 			var oConstructorInfo = oResultRowType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == 0);
 
@@ -119,7 +119,7 @@
 
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
-					IResultRow oRow = (IResultRow)oConstructorInfo.Invoke(null);
+					var oRow = (IResultRow)oConstructorInfo.Invoke(null);
 					oRow.SetIsFirst(bRowsetStart);
 
 					sr.Fill(oRow);
@@ -136,7 +136,7 @@
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.ForEachResult<T>(oAction, GetName(), Species, PrepareParameters());
+			DB.ForEachResult(oAction, GetName(), Species, PrepareParameters());
 		} // ForEachResult
 
 		#endregion method ForEachResult
@@ -165,7 +165,7 @@
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.FillFirst<T>(oInstance, GetName(), Species, PrepareParameters());
+			DB.FillFirst(oInstance, GetName(), Species, PrepareParameters());
 		} // FillFirst
 
 		#endregion method FillFirst
@@ -276,7 +276,7 @@
 
 					ParameterDirection nDirection = (oDirAttrList.Length > 0) ? ((DirectionAttribute)oDirAttrList[0]).Direction : ParameterDirection.Input;
 
-					QueryParameter qp = null;
+					QueryParameter qp;
 
 					bool bIsByteArray = oPropertyInfo.PropertyType == typeof (byte[]);
 
@@ -297,20 +297,14 @@
 						};
 					}
 					else {
-						if (oPropertyInfo.PropertyType.IsGenericType && oPropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof (IEnumerable<>)) {
+						if (TypeUtils.IsEnumerable(oPropertyInfo.PropertyType)) {
 							Type oUnderlyingType = oPropertyInfo.PropertyType.GetGenericArguments()[0];
-
-							if (null == oUnderlyingType.GetInterface(typeof (ITraversable).ToString()))
-								throw new NotImplementedException("Type " + oUnderlyingType + " does not implement " + typeof (ITraversable));
-
-							if (null == oUnderlyingType.GetInterface(typeof (IParametrisable).ToString()))
-								throw new NotImplementedException("Type " + oUnderlyingType + " does not implement " + typeof (IParametrisable));
 
 							qp = DB.CreateTableParameter(
 								oUnderlyingType,
 								sFieldName,
 								(IEnumerable)oPropertyInfo.GetValue(oInstance, null),
-								o => ((IParametrisable)o).ToParameter(),
+								TypeUtils.GetConvertorToObjectArray(oUnderlyingType),
 								nDirection
 							);
 						}

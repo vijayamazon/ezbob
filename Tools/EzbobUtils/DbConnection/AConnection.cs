@@ -208,9 +208,9 @@
 
 		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, IEnumerable<TSource> oValues, ParameterDirection nDirection = ParameterDirection.Input)
 			where TColumnInfo : ITraversable, new()
-			where TSource : IParametrisable
+			where TSource : ITraversable
 		{
-			return CreateTableParameter<TColumnInfo>(sFieldName, oValues, v => (v as IParametrisable).ToParameter(), nDirection);
+			return CreateTableParameter<TColumnInfo>(sFieldName, oValues, TypeUtils.GetConvertorToObjectArray(typeof(TSource)), nDirection);
 		} // CreateTableParameter
 
 		public virtual QueryParameter CreateTableParameter<TColumnInfo>(
@@ -225,16 +225,24 @@
 		public virtual QueryParameter CreateTableParameter(Type oColumnInfo, string sFieldName, IEnumerable oValues, Func<object, object[]> oValueToRow, ParameterDirection nDirection = ParameterDirection.Input) {
 			var tbl = new DataTable();
 
-			PropertyTraverser.Traverse(oColumnInfo, (oIgnoredInstance, oPropertyInfo) => {
-				bool bIsNullable =
-					oPropertyInfo.PropertyType.IsGenericType &&
-					oPropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
+			if (TypeUtils.IsSimpleType(oColumnInfo)) {
+				bool bIsNullable = TypeUtils.IsNullable(oColumnInfo);
 
 				tbl.Columns.Add(
 					string.Empty,
-					bIsNullable ? Nullable.GetUnderlyingType(oPropertyInfo.PropertyType) : oPropertyInfo.PropertyType
+					bIsNullable ? Nullable.GetUnderlyingType(oColumnInfo) : oColumnInfo
 				);
-			});
+			}
+			else {
+				PropertyTraverser.Traverse(oColumnInfo, (oIgnoredInstance, oPropertyInfo) => {
+					bool bIsNullable = TypeUtils.IsNullable(oPropertyInfo.PropertyType);
+
+					tbl.Columns.Add(
+						string.Empty,
+						bIsNullable ? Nullable.GetUnderlyingType(oPropertyInfo.PropertyType) : oPropertyInfo.PropertyType
+					);
+				});
+			} // if
 
 			if (oValues != null)
 				foreach (object v in oValues)

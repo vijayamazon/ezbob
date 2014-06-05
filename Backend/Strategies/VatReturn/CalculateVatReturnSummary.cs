@@ -437,7 +437,7 @@
 
 		#region class BusinessData
 
-		private class BusinessData : BusinessDataOutput, IParametrisable {
+		private class BusinessData : BusinessDataOutput {
 			#region constructor
 
 			public BusinessData(LoadDataForVatReturnSummary.ResultRow oRaw) {
@@ -524,6 +524,7 @@
 
 			#endregion properties saved in DB
 
+			/*
 			#region method ToParameter
 
 			public object[] ToParameter() {
@@ -546,6 +547,7 @@
 			} // ToParameter
 
 			#endregion method ToParameter
+			*/
 
 			#region method QuartersToSave
 
@@ -605,7 +607,7 @@
 
 		#region class BusinessDataEntry
 
-		private class BusinessDataEntry : BusinessDataOutput, IParametrisable {
+		private class BusinessDataEntry : BusinessDataOutput {
 			#region constructor
 
 			public BusinessDataEntry(LoadDataForVatReturnSummary.ResultRow oRaw) {
@@ -747,6 +749,7 @@
 
 			#endregion properties saved in DB
 
+			/*
 			#region method ToParameter
 
 			public object[] ToParameter() {
@@ -768,6 +771,7 @@
 			} // ToParameter
 
 			#endregion method ToParameter
+			*/
 
 			#region private
 

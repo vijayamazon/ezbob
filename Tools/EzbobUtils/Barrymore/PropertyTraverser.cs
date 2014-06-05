@@ -95,4 +95,21 @@
 	} // class PropertyTraverser
 
 	#endregion class PropertyTraverser
+
+	#region class TraversableExt
+
+	public static class TraversableExt {
+		public static object[] ToObjectArray(this ITraversable oSrc) {
+			if (oSrc == null)
+				return new object[0];
+
+			var oResult = new List<object>();
+
+			oSrc.Traverse((oInstance, oPropertyInfo) => oResult.Add(oPropertyInfo.GetValue(oInstance)));
+
+			return oResult.ToArray();
+		} // ToObjectArray
+	} // class TraversableExt
+
+	#endregion class TraversableExt
 } // namespace Ezbob.Utils

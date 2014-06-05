@@ -25,7 +25,6 @@
 			ms_oTypeConvertors[typeof (decimal).ToString()] = ParsedValue.ToDecimal;
 			ms_oTypeConvertors[typeof (DateTime).ToString()] = ParsedValue.ToDateTime;
 			ms_oTypeConvertors[typeof (string).ToString()] = ParsedValue.ToString;
-
 			ms_oTypeConvertors[typeof (Guid).ToString()] = ParsedValue.ToGuid; 
 
 			ms_oTypeConvertors[typeof (bool?).ToString()] = ParsedValue.ToBooleanOrNull;
@@ -42,6 +41,7 @@
 			ms_oTypeConvertors[typeof (double?).ToString()] = ParsedValue.ToDoubleOrNull; 
 			ms_oTypeConvertors[typeof (decimal?).ToString()] = ParsedValue.ToDecimalOrNull; 
 			ms_oTypeConvertors[typeof (DateTime?).ToString()] = ParsedValue.ToDateTimeOrNull; 
+			ms_oTypeConvertors[typeof (Guid?).ToString()] = ParsedValue.ToGuidOrNull; 
 
 			ms_oTypeConvertors[typeof (byte[]).ToString()] = ParsedValue.ToByteArray; 
 			ms_oTypeConvertors[typeof (string[]).ToString()] = ParsedValue.ToStringArray; 
@@ -737,6 +737,22 @@
 
 		#endregion Nullable types
 
+		#region to Guid?
+
+		public static implicit operator Guid?(ParsedValue val) {
+			return ReferenceEquals(val, null) ? null : val.ToGuidOrNull();
+		} // operator Guid?
+
+		private static void ToGuidOrNull(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToGuidOrNull(provider);
+		} // ToGuidOrNull
+
+		public Guid? ToGuidOrNull(IFormatProvider provider = null) {
+			return new NullableValue<Guid>(m_oValue, m_oDefault, provider);
+		} // ToGuidOrNull
+
+		#endregion to Guid?
+
 		#endregion public
 
 		#region private
@@ -874,6 +890,12 @@
 						if (bSuccess)
 							oParsed = v;
 					}
+				}
+				else if (typeof(T) == typeof(Guid)) {
+					Guid v;
+					bSuccess = Guid.TryParse(sValue, out v);
+					if (bSuccess)
+						oParsed = v;
 				} // if
 
 				if (bSuccess)

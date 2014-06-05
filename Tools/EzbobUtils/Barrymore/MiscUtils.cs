@@ -2,8 +2,6 @@
 	using System;
 	using System.Globalization;
 
-	#region class Utils
-
 	public static class MiscUtils {
 		#region method MD5
 
@@ -61,36 +59,32 @@
 
 		#endregion method WeekStart
 
-		public static int GetFullYears(DateTime date)
-		{
+		#region method GetFullYears
+
+		public static int GetFullYears(DateTime date) {
 			int years = DateTime.UtcNow.Year - date.Year;
 			if (date > DateTime.UtcNow.AddYears(-years))
-			{
 				years--;
-			}
 
 			return years;
-		}
+		} // GetFullYears
 
-		public static void GetFullYearsAndMonths(DateTime date, out int years, out int months)
-		{
+		#endregion method GetFullYears
+
+		#region method GetFullYearsAndMonths
+
+		public static void GetFullYearsAndMonths(DateTime date, out int years, out int months) {
 			years = GetFullYears(date);
 			months = DateTime.UtcNow.Month - date.Month;
 
 			if (months < 0)
-			{
 				months = 12 - date.Month + DateTime.UtcNow.Month;
-			}
 			else if (months > 0 && DateTime.UtcNow.Day < date.Day)
-			{
 				months--;
-			}
 			else if (months == 0 && DateTime.UtcNow.Day < date.Day)
-			{
 				months = 11;
-			}
-		}
-	} // class MiscUtils
+		} // GetFullYearsAndMonths
 
-	#endregion class MiscUtils
+		#endregion method GetFullYearsAndMonths
+	} // class MiscUtils
 } // namespace Ezbob.Utils

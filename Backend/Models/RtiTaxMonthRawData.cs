@@ -24,27 +24,13 @@ namespace Ezbob.Backend.Models {
 
 		#endregion method CompareTo
 
-		#region property DateStart
-
-		[DataMember]
-		public DateTime DateStart {
-			get { return m_oDateStart; }
-			set {
-				m_oDateStart = value;
-				DateCode = GetDateCode();
-			}
-		} // DateStart
-
-		private DateTime m_oDateStart;
-
-		#endregion property DateStart
-
-		[DataMember]
-		public DateTime DateEnd { get; set; }
-
 		[DataMember]
 		[NonTraversable]
 		public Coin AmountPaid { get; set; }
+
+		[DataMember]
+		[NonTraversable]
+		public Coin AmountDue { get; set; }
 
 		#region property DateCode
 
@@ -63,6 +49,26 @@ namespace Ezbob.Backend.Models {
 
 		#endregion property DateCode
 
+		#region DB properties
+
+		#region property DateStart
+
+		[DataMember]
+		public DateTime DateStart {
+			get { return m_oDateStart; }
+			set {
+				m_oDateStart = value;
+				DateCode = GetDateCode();
+			}
+		} // DateStart
+
+		private DateTime m_oDateStart;
+
+		#endregion property DateStart
+
+		[DataMember]
+		public DateTime DateEnd { get; set; }
+
 		public decimal PaidAmount {
 			get { return AmountPaid.Amount; }
 			set { AmountPaid.Amount = value; }
@@ -73,10 +79,6 @@ namespace Ezbob.Backend.Models {
 			set { AmountPaid.CurrencyCode = value; }
 		} // PaidCurrencyCode
 
-		[DataMember]
-		[NonTraversable]
-		public Coin AmountDue { get; set; }
-
 		public decimal DueAmount {
 			get { return AmountDue.Amount; }
 			set { AmountDue.Amount = value; }
@@ -86,6 +88,8 @@ namespace Ezbob.Backend.Models {
 			get { return AmountDue.CurrencyCode; }
 			set { AmountDue.CurrencyCode = value; }
 		} // DueCurrencyCode
+
+		#endregion DB properties
 
 		#region method ToString
 

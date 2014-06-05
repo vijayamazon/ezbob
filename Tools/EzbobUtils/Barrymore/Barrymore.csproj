@@ -51,6 +51,7 @@
     <Compile Include="Cache.cs" />
     <Compile Include="ElapsedTimeInfo.cs" />
     <Compile Include="Extensions\EnumExt.cs" />
+    <Compile Include="IParametrisable.cs" />
     <Compile Include="NullSeldenException.cs" />
     <Compile Include="Extensions\IntExt.cs" />
     <Compile Include="Extensions\DecimalExt.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="SortedTable.cs" />
     <Compile Include="MiscUtils.cs" />
     <Compile Include="NameList.cs" />
+    <Compile Include="TypeUtils.cs" />
     <Compile Include="XmlUtils\Xml.cs" />
     <Compile Include="XmlUtils\XmlNodeExtensions.cs" />
     <Compile Include="XmlUtils\XmlSeldenException.cs" />
