@@ -14,21 +14,8 @@
 	{
 		private readonly ASafeLog log;
 		private readonly AConnection db;
-		private decimal annualTurnover;
-		private int businessScore;
-		private decimal freeCashFlow;
 		private bool freeCashFlowDataAvailable;
-		private decimal tangibleEquity;
-		private DateTime businessSeniority;
-		private int consumerScore;
-		private decimal netWorth;
-		private MaritalStatus maritalStatus;
 		private bool firstRepaymentDatePassed;
-		private decimal ezbobSeniorityMonths;
-		private DateTime ezbobSeniority;
-		private int ezbobNumOfLoans;
-		private int ezbobNumOfLateRepayments;
-		private int ezbobNumOfEarlyRepayments;
 
 		public ScoreResult Results { get; set; }
 
@@ -66,17 +53,17 @@
 
 			var sr = new SafeReader(dt.Rows[0]);
 
-			businessScore = sr["BusinessScore"];
-			tangibleEquity = sr["TangibleEquity"];
-			businessSeniority = sr["BusinessSeniority"];
-			consumerScore = sr["ConsumerScore"];
+			Results.BusinessScore = sr["BusinessScore"];
+			Results.TangibleEquity = sr["TangibleEquity"];
+			Results.BusinessSeniority = sr["BusinessSeniority"];
+			Results.ConsumerScore = sr["ConsumerScore"];
 			string maritalStatusStr = sr["MaritalStatus"];
-			maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusStr);
+			Results.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusStr);
 			firstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
-			ezbobSeniority = sr["EzbobSeniority"];
-			ezbobNumOfLoans = sr["OnTimeLoans"];
-			ezbobNumOfLateRepayments = sr["NumOfLatePayments"];
-			ezbobNumOfEarlyRepayments = sr["NumOfEarlyPayments"];
+			Results.EzbobSeniority = sr["EzbobSeniority"];
+			Results.NumOfLoans = sr["OnTimeLoans"];
+			Results.NumOfLateRepayments = sr["NumOfLatePayments"];
+			Results.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
 			int hmrcId = sr["HmrcId"];
 			decimal yodleeTurnover = sr["YodleeTurnover"];
 			string zooplaEstimateStr = sr["ZooplaEstimate"];
@@ -91,14 +78,14 @@
 				var summary = loadVatReturnSummary.Summary;
 
 				freeCashFlowDataAvailable = true;
-				annualTurnover = summary[0].Revenues ?? 0;
-				freeCashFlow = summary[0].FreeCashFlow ?? 0;
+				Results.AnnualTurnover = summary[0].Revenues ?? 0;
+				Results.FreeCashFlow = summary[0].FreeCashFlow ?? 0;
 			}
 			else
 			{
 				freeCashFlowDataAvailable = false;
-				annualTurnover = yodleeTurnover;
-				freeCashFlow = 0;
+				Results.AnnualTurnover = yodleeTurnover;
+				Results.FreeCashFlow = 0;
 			}
 
 			var regexObj = new Regex(@"[^\d]");
@@ -111,7 +98,7 @@
 			int zooplaValue = intVal;
 
 			decimal mortgageBalance = GetMortgages(customerId);
-			netWorth = zooplaValue - mortgageBalance;
+			Results.NetWorth = zooplaValue - mortgageBalance;
 		}
 
 		private decimal GetMortgages(int customerId)
@@ -181,7 +168,7 @@
 			int ezbobSeniorityMaxGrade = 4;
 			int numOfLoansMaxGrade = 4;
 			int numOfLateRepaymentsMaxGrade = 5;
-			int numOfEarlyReaymentsMaxGrade = 5;
+			int numOfEarlyRepaymentsMaxGrade = 5;
 
 			decimal annualTurnoverScoreMax = Results.AnnualTurnoverWeight * annualTurnoverMaxGrade;
 			decimal businessScoreScoreMax = Results.BusinessScoreWeight * businessScoreMaxGrade;
@@ -194,12 +181,12 @@
 			decimal ezbobSeniorityScoreMax = Results.EzbobSeniorityWeight * ezbobSeniorityMaxGrade;
 			decimal ezbobNumOfLoansScoreMax = Results.NumOfLoansWeight * numOfLoansMaxGrade;
 			decimal ezbobNumOfLateRepaymentsScoreMax = Results.NumOfLateRepaymentsWeight * numOfLateRepaymentsMaxGrade;
-			decimal ezbobNumOfEarlyReaymentsScoreMax = Results.NumOfEarlyReaymentsWeight * numOfEarlyReaymentsMaxGrade;
+			decimal ezbobNumOfEarlyRepaymentsScoreMax = Results.NumOfEarlyRepaymentsWeight * numOfEarlyRepaymentsMaxGrade;
 
 			return annualTurnoverScoreMax + businessScoreScoreMax + freeCashFlowScoreMax + tangibleEquityScoreMax +
 								 businessSeniorityScoreMax + consumerScoreScoreMax + netWorthScoreMax + maritalStatusScoreMax +
 								 ezbobSeniorityScoreMax + ezbobNumOfLoansScoreMax + ezbobNumOfLateRepaymentsScoreMax +
-								 ezbobNumOfEarlyReaymentsScoreMax;
+								 ezbobNumOfEarlyRepaymentsScoreMax;
 		}
 
 		private decimal CalculateScoreMin()
@@ -215,7 +202,7 @@
 			int ezbobSeniorityMinGrade = 0;
 			int numOfLoansMinGrade = 1;
 			int numOfLateRepaymentsMinGrade = 0;
-			int numOfEarlyReaymentsMinGrade = 2;
+			int numOfEarlyRepaymentsMinGrade = 2;
 
 			decimal annualTurnoverScoreMin = Results.AnnualTurnoverWeight * annualTurnoverMinGrade;
 			decimal businessScoreScoreMin = Results.BusinessScoreWeight * businessScoreMinGrade;
@@ -228,12 +215,12 @@
 			decimal ezbobSeniorityScoreMin = Results.EzbobSeniorityWeight * ezbobSeniorityMinGrade;
 			decimal ezbobNumOfLoansScoreMin = Results.NumOfLoansWeight * numOfLoansMinGrade;
 			decimal ezbobNumOfLateRepaymentsScoreMin = Results.NumOfLateRepaymentsWeight * numOfLateRepaymentsMinGrade;
-			decimal ezbobNumOfEarlyReaymentsScoreMin = Results.NumOfEarlyReaymentsWeight * numOfEarlyReaymentsMinGrade;
+			decimal ezbobNumOfEarlyRepaymentsScoreMin = Results.NumOfEarlyRepaymentsWeight * numOfEarlyRepaymentsMinGrade;
 
 			return annualTurnoverScoreMin + businessScoreScoreMin + freeCashFlowScoreMin + tangibleEquityScoreMin +
 								 businessSeniorityScoreMin + consumerScoreScoreMin + netWorthScoreMin + maritalStatusScoreMin +
 								 ezbobSeniorityScoreMin + ezbobNumOfLoansScoreMin + ezbobNumOfLateRepaymentsScoreMin +
-								 ezbobNumOfEarlyReaymentsScoreMin;
+								 ezbobNumOfEarlyRepaymentsScoreMin;
 		}
 
 		private void CalculateCustomerScore()
@@ -249,14 +236,14 @@
 			Results.EzbobSeniorityScore = Results.EzbobSeniorityWeight*Results.EzbobSeniorityGrade;
 			Results.NumOfLoansScore = Results.NumOfLoansWeight*Results.NumOfLoansGrade;
 			Results.NumOfLateRepaymentsScore = Results.NumOfLateRepaymentsWeight*Results.NumOfLateRepaymentsGrade;
-			Results.NumOfEarlyReaymentsScore = Results.NumOfEarlyReaymentsWeight*Results.NumOfEarlyReaymentsGrade;
+			Results.NumOfEarlyRepaymentsScore = Results.NumOfEarlyRepaymentsWeight*Results.NumOfEarlyRepaymentsGrade;
 
 			Results.TotalScore = Results.AnnualTurnoverScore + Results.BusinessScoreScore + Results.FreeCashFlowScore +
 			                     Results.TangibleEquityScore +
 			                     Results.BusinessSeniorityScore + Results.ConsumerScoreScore + Results.NetWorthScore +
 			                     Results.MaritalStatusScore +
 			                     Results.EzbobSeniorityScore + Results.NumOfLoansScore + Results.NumOfLateRepaymentsScore +
-			                     Results.NumOfEarlyReaymentsScore;
+			                     Results.NumOfEarlyRepaymentsScore;
 		}
 
 		private void CalculateGrades()
@@ -272,16 +259,16 @@
 			CalculateEzbobSeniorityGrade();
 			CalculateNumOfLoansGrade();
 			CalculateNumOfLateRepaymentsGrade();
-			CalculateNumOfEarlyReaymentsGrade();
+			CalculateNumOfEarlyRepaymentsGrade();
 		}
 
 		private void CalculateNumOfLateRepaymentsGrade()
 		{
-			if (ezbobNumOfLateRepayments == 0)
+			if (Results.NumOfLateRepayments == 0)
 			{
 				Results.NumOfLateRepaymentsGrade = 5;
 			}
-			else if (ezbobNumOfLateRepayments == 1)
+			else if (Results.NumOfLateRepayments == 1)
 			{
 				Results.NumOfLateRepaymentsGrade = 2;
 			}
@@ -291,29 +278,29 @@
 			}
 		}
 
-		private void CalculateNumOfEarlyReaymentsGrade()
+		private void CalculateNumOfEarlyRepaymentsGrade()
 		{
-			if (ezbobNumOfEarlyRepayments == 0)
+			if (Results.NumOfEarlyRepayments == 0)
 			{
-				Results.NumOfEarlyReaymentsGrade = 2;
+				Results.NumOfEarlyRepaymentsGrade = 2;
 			}
-			else if (ezbobNumOfEarlyRepayments < 3)
+			else if (Results.NumOfEarlyRepayments < 3)
 			{
-				Results.NumOfEarlyReaymentsGrade = 3;
+				Results.NumOfEarlyRepaymentsGrade = 3;
 			}
 			else
 			{
-				Results.NumOfEarlyReaymentsGrade = 5;
+				Results.NumOfEarlyRepaymentsGrade = 5;
 			}
 		}
 
 		private void CalculateNumOfLoansGrade()
 		{
-			if (ezbobNumOfLoans > 3)
+			if (Results.NumOfLoans > 3)
 			{
 				Results.NumOfLoansGrade = 4;
 			}
-			else if (ezbobNumOfLoans > 1)
+			else if (Results.NumOfLoans > 1)
 			{
 				Results.NumOfLoansGrade = 3;
 			}
@@ -326,8 +313,8 @@
 		private void CalculateEzbobSeniorityGrade()
 		{
 			int ezbobSeniorityMonthsOnly, ezbobSeniorityYearsOnly;
-			MiscUtils.GetFullYearsAndMonths(ezbobSeniority, out ezbobSeniorityMonthsOnly, out ezbobSeniorityYearsOnly);
-			ezbobSeniorityMonths = ezbobSeniorityMonthsOnly + 12 * ezbobSeniorityYearsOnly;
+			MiscUtils.GetFullYearsAndMonths(Results.EzbobSeniority, out ezbobSeniorityMonthsOnly, out ezbobSeniorityYearsOnly);
+			decimal ezbobSeniorityMonths = ezbobSeniorityMonthsOnly + 12 * ezbobSeniorityYearsOnly;
 			if (ezbobSeniorityMonths > 17)
 			{
 				Results.EzbobSeniorityGrade = 4;
@@ -348,15 +335,15 @@
 
 		private void CalculateMaritalStatusGrade()
 		{
-			if (maritalStatus == MaritalStatus.Married || maritalStatus == MaritalStatus.Widowed)
+			if (Results.MaritalStatus == MaritalStatus.Married || Results.MaritalStatus == MaritalStatus.Widowed)
 			{
 				Results.MaritalStatusGrade = 4;
 			}
-			else if (maritalStatus == MaritalStatus.Divorced)
+			else if (Results.MaritalStatus == MaritalStatus.Divorced)
 			{
 				Results.MaritalStatusGrade = 3;
 			}
-			else if (maritalStatus == MaritalStatus.Single)
+			else if (Results.MaritalStatus == MaritalStatus.Single)
 			{
 				Results.MaritalStatusGrade = 2;
 			}
@@ -368,15 +355,15 @@
 
 		private void CalculateNetWorthGrade()
 		{
-			if (netWorth < 15)
+			if (Results.NetWorth < 15)
 			{
 				Results.NetWorthGrade = 0;
 			}
-			else if (netWorth < 50)
+			else if (Results.NetWorth < 50)
 			{
 				Results.NetWorthGrade = 1;
 			}
-			else if (netWorth < 100)
+			else if (Results.NetWorth < 100)
 			{
 				Results.NetWorthGrade = 2;
 			}
@@ -388,35 +375,35 @@
 
 		private void CalculateConsumerScoreGrade()
 		{
-			if (consumerScore < 481)
+			if (Results.ConsumerScore < 481)
 			{
 				Results.ConsumerScoreGrade = 0;
 			}
-			else if (consumerScore < 561)
+			else if (Results.ConsumerScore < 561)
 			{
 				Results.ConsumerScoreGrade = 1;
 			}
-			else if (consumerScore < 641)
+			else if (Results.ConsumerScore < 641)
 			{
 				Results.ConsumerScoreGrade = 2;
 			}
-			else if (consumerScore < 721)
+			else if (Results.ConsumerScore < 721)
 			{
 				Results.ConsumerScoreGrade = 3;
 			}
-			else if (consumerScore < 801)
+			else if (Results.ConsumerScore < 801)
 			{
 				Results.ConsumerScoreGrade = 4;
 			}
-			else if (consumerScore < 881)
+			else if (Results.ConsumerScore < 881)
 			{
 				Results.ConsumerScoreGrade = 5;
 			}
-			else if (consumerScore < 961)
+			else if (Results.ConsumerScore < 961)
 			{
 				Results.ConsumerScoreGrade = 6;
 			}
-			else if (consumerScore < 1041)
+			else if (Results.ConsumerScore < 1041)
 			{
 				Results.ConsumerScoreGrade = 7;
 			}
@@ -428,19 +415,19 @@
 
 		private void CalculateBusinessSeniorityGrade()
 		{
-			if (businessSeniority.AddYears(1) > DateTime.UtcNow)
+			if (Results.BusinessSeniority.AddYears(1) > DateTime.UtcNow)
 			{
 				Results.BusinessSeniorityGrade = 0;
 			}
-			else if (businessSeniority.AddYears(3) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.AddYears(3) > DateTime.UtcNow)
 			{
 				Results.BusinessSeniorityGrade = 1;
 			}
-			else if (businessSeniority.AddYears(5) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.AddYears(5) > DateTime.UtcNow)
 			{
 				Results.BusinessSeniorityGrade = 2;
 			}
-			else if (businessSeniority.AddYears(10) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.AddYears(10) > DateTime.UtcNow)
 			{
 				Results.BusinessSeniorityGrade = 3;
 			}
@@ -452,19 +439,19 @@
 
 		private void CalculateTangibleEquityGrade()
 		{
-			if (tangibleEquity < -5)
+			if (Results.TangibleEquity < -5)
 			{
 				Results.TangibleEquityGrade = 0;
 			}
-			else if (tangibleEquity < 0)
+			else if (Results.TangibleEquity < 0)
 			{
 				Results.TangibleEquityGrade = 1;
 			}
-			else if (tangibleEquity < 10)
+			else if (Results.TangibleEquity < 10)
 			{
 				Results.TangibleEquityGrade = 2;
 			}
-			else if (tangibleEquity < 30)
+			else if (Results.TangibleEquity < 30)
 			{
 				Results.TangibleEquityGrade = 3;
 			}
@@ -476,27 +463,27 @@
 
 		private void CalculateAnnualTurnoverGrade()
 		{
-			if (annualTurnover < 30000)
+			if (Results.AnnualTurnover < 30000)
 			{
 				Results.AnnualTurnoverGrade = 0;
 			}
-			else if (annualTurnover < 100000)
+			else if (Results.AnnualTurnover < 100000)
 			{
 				Results.AnnualTurnoverGrade = 1;
 			}
-			else if (annualTurnover < 200000)
+			else if (Results.AnnualTurnover < 200000)
 			{
 				Results.AnnualTurnoverGrade = 2;
 			}
-			else if (annualTurnover < 400000)
+			else if (Results.AnnualTurnover < 400000)
 			{
 				Results.AnnualTurnoverGrade = 3;
 			}
-			else if (annualTurnover < 800000)
+			else if (Results.AnnualTurnover < 800000)
 			{
 				Results.AnnualTurnoverGrade = 4;
 			}
-			else if (annualTurnover < 2000000)
+			else if (Results.AnnualTurnover < 2000000)
 			{
 				Results.AnnualTurnoverGrade = 5;
 			}
@@ -508,27 +495,27 @@
 
 		private void CalculateFreeCashFlowGrade()
 		{
-			if (freeCashFlow < -10)
+			if (Results.FreeCashFlow < -10)
 			{
 				Results.FreeCashFlowGrade = 0;
 			}
-			else if (freeCashFlow < 0)
+			else if (Results.FreeCashFlow < 0)
 			{
 				Results.FreeCashFlowGrade = 1;
 			}
-			else if (freeCashFlow < 10)
+			else if (Results.FreeCashFlow < 10)
 			{
 				Results.FreeCashFlowGrade = 2;
 			}
-			else if (freeCashFlow < 20)
+			else if (Results.FreeCashFlow < 20)
 			{
 				Results.FreeCashFlowGrade = 3;
 			}
-			else if (freeCashFlow < 30)
+			else if (Results.FreeCashFlow < 30)
 			{
 				Results.FreeCashFlowGrade = 4;
 			}
-			else if (freeCashFlow < 40)
+			else if (Results.FreeCashFlow < 40)
 			{
 				Results.FreeCashFlowGrade = 5;
 			}
@@ -540,39 +527,39 @@
 
 		private void CalculateBusinessScoreGrade()
 		{
-			if (businessScore < 11)
+			if (Results.BusinessScore < 11)
 			{
 				Results.BusinessScoreGrade = 0;
 			}
-			else if (businessScore < 21)
+			else if (Results.BusinessScore < 21)
 			{
 				Results.BusinessScoreGrade = 1;
 			}
-			else if (businessScore < 31)
+			else if (Results.BusinessScore < 31)
 			{
 				Results.BusinessScoreGrade = 2;
 			}
-			else if (businessScore < 41)
+			else if (Results.BusinessScore < 41)
 			{
 				Results.BusinessScoreGrade = 3;
 			}
-			else if (businessScore < 51)
+			else if (Results.BusinessScore < 51)
 			{
 				Results.BusinessScoreGrade = 4;
 			}
-			else if (businessScore < 61)
+			else if (Results.BusinessScore < 61)
 			{
 				Results.BusinessScoreGrade = 5;
 			}
-			else if (businessScore < 71)
+			else if (Results.BusinessScore < 71)
 			{
 				Results.BusinessScoreGrade = 6;
 			}
-			else if (businessScore < 81)
+			else if (Results.BusinessScore < 81)
 			{
 				Results.BusinessScoreGrade = 7;
 			}
-			else if (businessScore < 91)
+			else if (Results.BusinessScore < 91)
 			{
 				Results.BusinessScoreGrade = 8;
 			}
@@ -586,13 +573,13 @@
 		{
 			bool sumIs100 = true;
 
-			if (businessScore <= 30)
+			if (Results.BusinessScore <= 30)
 			{
 				Results.BusinessScoreWeight = 41;
 				sumIs100 = false;
 			}
 
-			if (consumerScore <= 800)
+			if (Results.ConsumerScore <= 800)
 			{
 				Results.ConsumerScoreWeight = 14;
 				sumIs100 = false;
@@ -612,7 +599,7 @@
 				Results.EzbobSeniorityWeight = 2;
 				Results.NumOfLoansWeight = 3.33m;
 				Results.NumOfLateRepaymentsWeight = 2.67m;
-				Results.NumOfEarlyReaymentsWeight = 2;
+				Results.NumOfEarlyRepaymentsWeight = 2;
 
 				Results.BusinessScoreWeight -= 6.3m;
 				Results.BusinessSeniorityWeight -= 1.7m;
@@ -626,7 +613,7 @@
 				                       Results.BusinessSeniorityWeight + Results.ConsumerScoreWeight + Results.NetWorthWeight +
 				                       Results.MaritalStatusWeight +
 				                       Results.EzbobSeniorityWeight + Results.NumOfLoansWeight + Results.NumOfLateRepaymentsWeight +
-				                       Results.NumOfEarlyReaymentsWeight;
+				                       Results.NumOfEarlyRepaymentsWeight;
 
 				decimal sumOfNonFixed = Results.TangibleEquityWeight + Results.NetWorthWeight + Results.MaritalStatusWeight;
 
