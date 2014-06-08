@@ -15,13 +15,13 @@
 				.Include("~/Content/js/bootstrap.js")
 				.Include("~/Content/js/dataTables.bootstrap.js")
 				.Include("~/Content/js/moment.js")
-				.IncludeDirectory("~/Content/js/jqplot", "*.js")
-				.IncludeDirectory("~/Content/js/jqplot/plugins", "*.js")
+				//.IncludeDirectory("~/Content/js/jqplot", "*.js")
+				//.IncludeDirectory("~/Content/js/jqplot/plugins", "*.js")
 				.Include("~/Content/js/flaty.js")
 				.Include("~/Content/js/eztvdashboard.js")
 				);
 			
-			bundles.Add(new StyleBundle("~/Content/css")
+			bundles.Add(new StyleBundle("~/bundles/css")
 				.Include("~/Content/Css/bootstrap.css")
 				.Include("~/Content/Css/bootstrap-theme.css")
 				.Include("~/Content/Css/dataTables.bootstrap.css")

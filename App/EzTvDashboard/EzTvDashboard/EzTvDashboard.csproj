@@ -162,68 +162,6 @@
     <Content Include="Content\js\dataTables.bootstrap.js" />
     <Content Include="Content\js\eztvdashboard.js" />
     <Content Include="Content\js\flaty.js" />
-    <Content Include="Content\js\jqplot\excanvas.js" />
-    <Content Include="Content\js\jqplot\jquery.jqplot.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.barRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.barRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.BezierCurveRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.BezierCurveRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.blockRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.blockRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.bubbleRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.bubbleRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.canvasAxisLabelRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.canvasAxisLabelRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.canvasAxisTickRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.canvasAxisTickRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.canvasOverlay.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.canvasOverlay.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.canvasTextRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.canvasTextRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.categoryAxisRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.categoryAxisRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.ciParser.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.ciParser.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.cursor.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.cursor.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.dateAxisRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.dateAxisRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.donutRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.donutRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.dragable.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.dragable.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.enhancedLegendRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.enhancedLegendRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.funnelRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.funnelRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.highlighter.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.highlighter.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.json2.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.json2.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.logAxisRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.logAxisRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.mekkoAxisRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.mekkoAxisRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.mekkoRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.mekkoRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.meterGaugeRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.meterGaugeRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.mobile.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.mobile.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.ohlcRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.ohlcRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pieRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pieRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pointLabels.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pointLabels.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pyramidAxisRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pyramidAxisRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pyramidGridRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pyramidGridRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pyramidRenderer.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.pyramidRenderer.min.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.trendline.js" />
-    <Content Include="Content\js\jqplot\plugins\jqplot.trendline.min.js" />
     <Content Include="Content\js\jquery.cookie.js" />
     <Content Include="Content\js\jquery.dataTables.js" />
     <Content Include="Content\js\jquery.js" />
@@ -297,6 +235,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Dashboard\Footer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\TvDashboard.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
