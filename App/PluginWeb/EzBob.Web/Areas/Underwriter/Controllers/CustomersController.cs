@@ -241,18 +241,7 @@
 		} // GridRejected
 
 		#endregion method GridRejected
-
-		#region method GridOffline
-
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[HttpGet]
-		public JsonResult GridOffline(bool includeTestCustomers) {
-			return LoadGrid("UwGridOffline", includeTestCustomers, () => new GridOfflineRow());
-		} // GridOffline
-
-		#endregion method GridOffline
-
+		
 		#region method GridAll
 
 		[ValidateJsonAntiForgeryToken]

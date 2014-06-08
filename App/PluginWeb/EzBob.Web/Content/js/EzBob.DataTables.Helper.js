@@ -9,7 +9,7 @@ EzBob.DataTables.Helper = {
 		return '<div style="overflow: auto; width: auto;">' + sContent + '</div>';
 	}, // withScrollbar
 
-	extractColumns: function(sColumns) {
+	extractColumns: function (sColumns) {
 		var aryResult = [];
 
 		var aryNames = sColumns.split(',');
@@ -94,8 +94,8 @@ EzBob.DataTables.Helper = {
 				oRenderFunc = renderDate;
 			}
 			else if (sName[0] === '@') {
-				sName = sName.substr(1);
-				oRenderFunc = renderDateTime;
+			    sName = sName.substr(1);
+			    oRenderFunc = renderDateTime;
 			}
 
 			aryResult.push({
@@ -132,5 +132,24 @@ EzBob.DataTables.Helper = {
 
 		return '<div style="overflow: auto; width: 102%;">' + (retVal + ' ') + '</div>';
 	}, // showMPsIcon
+	
 
+	showNewMPsIcon: function (mps, segment) {
+	    var mpsList = mps || '';
+	    mpsList = mpsList.split(',');
+	    var mpsLen = mpsList.length >= 5 ? 5 : mpsList.length;
+	    return '<i data-toggle=tooltip title="' + mps.replace(/,/g, '<br>') + '" class="' + segment + mpsLen + '"></i>';
+    },
+	
+	showEmail: function (email) {
+	    if (email == null || email == "undefined") return "";
+	    return '<span data-toggle=tooltip title="' + email + '">' + email.substr(0, 15) + '</span>';
+	}, // showMPsIcon
+
+    showBroker: function(broker, firstSale) {
+        if (firstSale) {
+            return broker + '<span class="label label-info" data-toggle=tooltip title="First sale">1st</span>';
+        }
+        return broker;
+    }
 }; // EzBob.DataTables.Helper

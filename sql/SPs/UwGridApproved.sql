@@ -27,12 +27,24 @@ BEGIN
 	c.AmountTaken,
 	c.NumApproves AS ApprovesNum,
 	c.NumRejects AS RejectsNum,
-	c.ValidFor AS OfferExpireDate
+	(
+		SELECT TOP 1 ST.NAME
+		FROM [CustomerRelations] AS CR LEFT JOIN [CRMStatuses] AS ST ON CR.StatusId = ST.Id
+		WHERE CR.CustomerId = c.Id
+		ORDER BY CR.Timestamp DESC
+	) AS LastStatus,
+	(SELECT TOP 1 CR.Comment FROM [CustomerRelations] AS CR WHERE CR.CustomerId=c.Id ORDER BY CR.Timestamp DESC) AS CRMcomment,
+	ISNULL(b.ContactName, '') AS Broker,
+	(CASE WHEN c.BrokerID IS NOT NULL THEN
+		(CASE WHEN EXISTS(SELECT * FROM Customer CU INNER JOIN Loan L ON CU.Id = L.CustomerId 
+						  WHERE CU.BrokerID = c.BrokerID) THEN '' ELSE 'FirstSale' END)
+     ELSE '' END) AS FirstSale	
 FROM
 	Customer c
 	INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
 	LEFT JOIN MP_CustomerMarketPlace m ON c.Id = m.CustomerId
 	LEFT JOIN MP_MarketplaceType t ON m.MarketPlaceId = t.Id
+	LEFT JOIN Broker b ON b.BrokerID = c.BrokerID
 WHERE
 	(
 		@WithTest = 1 OR c.IsTest = 0

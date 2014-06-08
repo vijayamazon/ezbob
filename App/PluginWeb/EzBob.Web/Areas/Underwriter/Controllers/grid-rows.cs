@@ -203,28 +203,7 @@
 	#endregion abstract classes
 
 	#region concrete classes
-
-	#region class GridOfflineRow
-
-	class GridOfflineRow : AGridRowBase {
-		public override void Init(long nCustomerID, SafeReader oRow) {
-			base.Init(nCustomerID, oRow);
-
-			RegDate = oRow["RegDate"];
-			Cart = oRow["Medal"];
-			Name = oRow["FullName"];
-			WizardStep = oRow["WizardStep"];
-		} // constructor
-
-		public DateTime RegDate { get; private set; }
-		public string Cart { get; private set; }
-		public string MP_List { get { return m_sMP_List; } }
-		public string Name { get; private set; }
-		public string WizardStep { get; private set; }
-	} // class GridOfflineRow
-
-	#endregion class GridOfflineRow
-
+	
 	#region class GridAllRow
 
 	internal class GridAllRow : AGridRowCommonFull {
@@ -335,6 +314,10 @@
 			ApprovesNum = oRow["ApprovesNum"];
 			RejectsNum = oRow["RejectsNum"];
 			OSBalance = oRow["OSBalance"];
+			LastStatus = oRow["LastStatus"];
+			CRMcomment = oRow["CRMcomment"];
+			Broker = oRow["Broker"];
+			FirstSale = oRow["FirstSale"];
 		} // Init
 
 		#endregion method Init
@@ -344,6 +327,10 @@
 		public virtual int ApprovesNum { get; private set; }
 		public virtual int RejectsNum { get; private set; }
 		public virtual decimal OSBalance { get; private set; }
+		public virtual string LastStatus { get; private set; }
+		public virtual string CRMcomment { get; private set; }
+		public virtual string Broker { get; private set; }
+		public virtual string FirstSale { get; private set; }
 	} // class GridRejectedRow
 
 	#endregion class GridRejectedRow
@@ -422,6 +409,10 @@
 			OSBalance = oRow["OSBalance"];
 			NextRepaymentDate = oRow["NextRepaymentDate"];
 			CustomerStatus = oRow["CustomerStatus"];
+			LastStatus = oRow["LastStatus"];
+			CRMcomment = oRow["CRMcomment"];
+			Broker = oRow["Broker"];
+			FirstSale = oRow["FirstSale"];
 		} // Init
 
 		#endregion method Init
@@ -441,6 +432,10 @@
 		public virtual decimal TotalPrincipalRepaid { get; private set; }
 		public virtual decimal OSBalance { get; private set; }
 		public virtual DateTime NextRepaymentDate { get; private set; }
+		public virtual string LastStatus { get; private set; }
+		public virtual string CRMcomment { get; private set; }
+		public virtual string Broker { get; private set; }
+		public virtual string FirstSale { get; private set; }
 	} // class GridLoansRow
 
 	#endregion class GridLoansRow
@@ -453,12 +448,18 @@
 		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
-			OfferExpireDate = oRow["OfferExpireDate"];
+			LastStatus = oRow["LastStatus"];
+			CRMcomment = oRow["CRMcomment"];
+			Broker = oRow["Broker"];
+			FirstSale = oRow["FirstSale"];
 		} // Init
 
 		#endregion method Init
 
-		public virtual DateTime OfferExpireDate { get; private set; }
+		public virtual string LastStatus { get; private set; }
+		public virtual string CRMcomment { get; private set; }
+		public virtual string Broker { get; private set; }
+		public virtual string FirstSale { get; private set; }
 	} // GridApprovedRow
 
 	#endregion class GridApprovedRow
@@ -501,12 +502,20 @@
 
 			CurrentStatus = oRow["CurrentStatus"];
 			OSBalance = oRow["OSBalance"];
+			LastStatus = oRow["LastStatus"];
+			CRMcomment = oRow["CRMcomment"];
+			Broker = oRow["Broker"];
+			FirstSale = oRow["FirstSale"];
 		} // Init
 
 		#endregion method Init
 
 		public virtual string CurrentStatus { get; private set; }
 		public virtual decimal OSBalance { get; private set; }
+		public virtual string LastStatus { get; private set; }
+		public virtual string CRMcomment { get; private set; }
+		public virtual string Broker { get; private set; }
+		public virtual string FirstSale { get; private set; }
 	} // class GridWaitingRow
 
 	#endregion class GridWaitingRow
@@ -542,10 +551,18 @@
 			base.Init(nCustomerID, oRow);
 
 			Pending = oRow["Pending"];
+			LastStatus = oRow["LastStatus"];
+			CRMcomment = oRow["CRMcomment"];
+			Broker = oRow["Broker"];
+			FirstSale = oRow["FirstSale"];
 		} // Init
 
 		#endregion method Init
 
+		public virtual string LastStatus { get; private set; }
+		public virtual string CRMcomment { get; private set; }
+		public virtual string Broker { get; private set; }
+		public virtual string FirstSale { get; private set; }
 		public virtual string Pending { get; private set; }
 	} // class GridPendingRow
 

@@ -581,6 +581,48 @@ i.ebay { background-image: url(../img/mp-icons-32/icon-ebay-32.png); }
 
 i.paypal { background-image: url(../img/mp-icons-32/icon-paypal-32.png); }
 */
+.table > tbody > tr > td.grid-item-MP_List {
+    padding: 0;
+}
+td.grid-item-MP_List i {
+    display: inline-block;
+    height: 90%;
+    width: 50px;
+    background-repeat: no-repeat;
+    margin: 2px;
+    padding: 0;
+}
+i.Online1 {
+    background-image: url(images/accounts/online1.png);
+}
+i.Online2 {
+    background-image: url(images/accounts/online2.png);
+}
+i.Online3 {
+    background-image: url(images/accounts/online3.png);
+}
+i.Online4 {
+    background-image: url(images/accounts/online4.png);
+}
+i.Online5 {
+    background-image: url(images/accounts/online5.png);
+}
+i.Offline1 {
+    background-image: url(images/accounts/offline1.png);
+}
+i.Offline2 {
+    background-image: url(images/accounts/offline2.png);
+}
+i.Offline3 {
+    background-image: url(images/accounts/offline3.png);
+}
+i.Offline4 {
+    background-image: url(images/accounts/offline4.png);
+}
+i.Offline5 {
+    background-image: url(images/accounts/offline5.png);
+}
+
 .menu .navbar-inner {
     text-shadow: 0 -1px 0 #000000; /* fallback colour */
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
