@@ -593,34 +593,34 @@ td.grid-item-MP_List i {
     padding: 0;
 }
 i.Online1 {
-    background-image: url(images/accounts/online1.png);
+    background-image: url(images/accounts/on1.png);
 }
 i.Online2 {
-    background-image: url(images/accounts/online2.png);
+    background-image: url(images/accounts/on2.png);
 }
 i.Online3 {
-    background-image: url(images/accounts/online3.png);
+    background-image: url(images/accounts/on3.png);
 }
 i.Online4 {
-    background-image: url(images/accounts/online4.png);
+    background-image: url(images/accounts/on4.png);
 }
 i.Online5 {
-    background-image: url(images/accounts/online5.png);
+    background-image: url(images/accounts/on5.png);
 }
 i.Offline1 {
-    background-image: url(images/accounts/offline1.png);
+    background-image: url(images/accounts/off1.png);
 }
 i.Offline2 {
-    background-image: url(images/accounts/offline2.png);
+    background-image: url(images/accounts/off2.png);
 }
 i.Offline3 {
-    background-image: url(images/accounts/offline3.png);
+    background-image: url(images/accounts/off3.png);
 }
 i.Offline4 {
-    background-image: url(images/accounts/offline4.png);
+    background-image: url(images/accounts/off4.png);
 }
 i.Offline5 {
-    background-image: url(images/accounts/offline5.png);
+    background-image: url(images/accounts/off5.png);
 }
 
 .menu .navbar-inner {
