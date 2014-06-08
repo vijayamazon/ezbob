@@ -79,7 +79,8 @@ EzBob.DataTables.Helper = {
 
 			var oRenderFunc = null;
 			var sClass = '';
-
+			var bVisible = true;
+		    
 			if (sName[0] === '#') {
 				sClass = 'numeric';
 				sName = sName.substr(1);
@@ -96,12 +97,17 @@ EzBob.DataTables.Helper = {
 			else if (sName[0] === '@') {
 			    sName = sName.substr(1);
 			    oRenderFunc = renderDateTime;
+			} else if (sName[0] === '~') {
+			    sName = sName.substr(1);
+			    bVisible = false;
 			}
 
 			aryResult.push({
 				mData: sName,
 				sClass: sClass + ' grid-item-' + sName,
 				mRender: oRenderFunc,
+				bVisible: bVisible
+				
 			});
 		} // for
 

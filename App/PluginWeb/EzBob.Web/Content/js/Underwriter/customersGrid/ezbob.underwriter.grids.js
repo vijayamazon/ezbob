@@ -31,8 +31,9 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			if (oData.hasOwnProperty('Cart'))
 				$('.grid-item-Cart', oTR).empty().html(EzBob.Underwriter.GridTools.showMedalIcon(oData.Cart));
 
-			if (oData.hasOwnProperty('MP_List'))
-				$('.grid-item-MP_List', oTR).empty().html(EzBob.DataTables.Helper.showNewMPsIcon(oData.MP_List, oData.SegmentType));
+		    if (oData.hasOwnProperty('MP_List')) {
+		        $('.grid-item-MP_List', oTR).empty().html(EzBob.DataTables.Helper.showNewMPsIcon(oData.MP_List, oData.SegmentType));
+		    }
 
 		    if (oData.hasOwnProperty('Email')) {
 		        $('.grid-item-Email', oTR).empty().html(EzBob.DataTables.Helper.showEmail(oData.Email));
@@ -59,6 +60,8 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				//$(oTR).addClass(oData.IsWasLate);
 				$(oTR).addClass("table-flag-red");
 			} // if
+		    
+			$(oTR).find('[data-toggle="tooltip"]').tooltip({ html: true, placement: "bottom" });
 		}; // fnRowCallback
 
 		this.gridProperties = {
@@ -66,7 +69,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				icon: 'envelope-o',
 				title: 'Waiting for decision',
 				action: 'GridWaiting',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,LastStatus,CRMcomment,Broker',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,LastStatus,CRMcomment,Broker,~SegmentType',
 			}), // waiting
 			escalated: new GridProperties({
 				icon: 'arrow-up',
@@ -76,17 +79,17 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			pending: new GridProperties({
 				icon: 'clock-o',
 				action: 'GridPending',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,Pending,LastStatus,CRMcomment,Broker',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,Pending,LastStatus,CRMcomment,Broker,~SegmentType',
 			}), // pending
 			approved: new GridProperties({
 				icon: 'thumbs-o-up',
 				action: 'GridApproved',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^ApproveDate,^RegDate,$CalcAmount,$ApprovedSum,$AmountTaken,#ApprovesNum,#RejectsNum,LastStatus,CRMcomment,Broker'
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^ApproveDate,^RegDate,$CalcAmount,$ApprovedSum,$AmountTaken,#ApprovesNum,#RejectsNum,LastStatus,CRMcomment,Broker,~SegmentType'
 			}), // approved
 			loans: new GridProperties({
 				icon: 'gbp',
 				action: 'GridLoans',
-				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^FirstLoanDate,^LastLoanDate,$LastLoanAmount,$AmountTaken,$TotalPrincipalRepaid,$OSBalance,^NextRepaymentDate,LastStatus,CRMcomment,Broker',
+				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^FirstLoanDate,^LastLoanDate,$LastLoanAmount,$AmountTaken,$TotalPrincipalRepaid,$OSBalance,^NextRepaymentDate,LastStatus,CRMcomment,Broker,~SegmentType',
 			}), // loans
 			sales: new GridProperties({
 				icon: 'phone',
@@ -106,7 +109,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			rejected: new GridProperties({
 				icon: 'thumbs-o-down',
 				action: 'GridRejected',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,^DateRejected,Reason,#RejectsNum,#ApprovesNum,$OSBalance,LastStatus,CRMcomment,Broker',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,^DateRejected,Reason,#RejectsNum,#ApprovesNum,$OSBalance,LastStatus,CRMcomment,Broker,~SegmentType',
 			}), // rejected
 			all: new GridProperties({
 				icon: 'female',
@@ -320,9 +323,9 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				return oData;
 			}, // fnStateLoad
 			
-		    fnInitComplete:function() {
+			fnInitComplete: function (oSettings, json) {
 		        $('[data-toggle="tooltip"]').tooltip({ html: true, placement: "bottom" });
-		    }
+		    },
 		}); // create data table
 
 		var oTableTitle = this.$el.find(sTableContainer + ' .dataTables_top_left');
