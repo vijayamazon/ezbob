@@ -21,7 +21,7 @@
 				.Include("~/Content/js/eztvdashboard.js")
 				);
 			
-			bundles.Add(new StyleBundle("~/bundles/css")
+			bundles.Add(new StyleBundle("~/Content/CssBundle")
 				.Include("~/Content/Css/bootstrap.css")
 				.Include("~/Content/Css/bootstrap-theme.css")
 				.Include("~/Content/Css/dataTables.bootstrap.css")
