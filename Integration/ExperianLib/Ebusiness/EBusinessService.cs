@@ -6,7 +6,6 @@
 	using System.Reflection;
 	using System.Text;
 	using System.Web;
-	using System.Xml;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
@@ -67,10 +66,15 @@
 		{
 			Log.DebugFormat("Begin GetLimitedBusinessData {0} {1} {2} {3}", regNumber, customerId, checkInCacheOnly, forceCheck);
 			var oRes = GetOneLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
-
+			oRes.MaxBureauScore = oRes.BureauScore;
 			foreach (string sOwnerRegNum in oRes.Owners)
-				GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
-
+			{
+				var parentCompanyResult = GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
+				if (parentCompanyResult.BureauScore > oRes.MaxBureauScore)
+				{
+					oRes.MaxBureauScore = parentCompanyResult.BureauScore;
+				}
+			}
 			return oRes;
 		} // GetLimitedBusinessData
 
@@ -80,9 +84,16 @@
 
 		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
-
+			oRes.MaxBureauScore = oRes.BureauScore;
 			foreach (string sOwnerRegNum in oRes.Owners)
+			{
+				var parentCompanyResult = GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
 				GetOneNotLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
+				if (parentCompanyResult.BureauScore > oRes.MaxBureauScore)
+				{
+					oRes.MaxBureauScore = parentCompanyResult.BureauScore;
+				}
+			}
 
 			return oRes;
 		} // GetNotLimitedBusinessData

@@ -47,6 +47,8 @@
 
 		#endregion property Name
 
+		public decimal MaxScore { get; private set; }
+
 		#region method Execute
 
 		public override void Execute() {
@@ -66,7 +68,10 @@
 				m_oExperianData = GetBusinessDataFromExperian();
 
 				if (!m_oExperianData.IsError)
+				{
 					experianBureauScore = m_oExperianData.BureauScore;
+					MaxScore = m_oExperianData.MaxBureauScore;
+				}
 				else
 					experianError = m_oExperianData.Error;
 			} // if

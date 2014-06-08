@@ -2221,5 +2221,45 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.AvailableFundsRefreshInterval]; }
 		}
+
+		public virtual VariableValue RejectionExceptionMaxConsumerScoreForMpError
+		{
+			get { return this[Variables.RejectionExceptionMaxConsumerScoreForMpError]; }
+		}
+
+		public virtual VariableValue RejectionExceptionMaxCompanyScoreForMpError
+		{
+			get { return this[Variables.RejectionExceptionMaxCompanyScoreForMpError]; }
+		}
+
+		public virtual VariableValue RejectionExceptionMaxCompanyScore
+		{
+			get { return this[Variables.RejectionExceptionMaxCompanyScore]; }
+		}
+
+		public virtual VariableValue RejectionCompanyScore
+		{
+			get { return this[Variables.RejectionCompanyScore]; }
+		}
+
+		public virtual VariableValue RejectByCompanyNumOfDefaultAccounts
+		{
+			get { return this[Variables.RejectByCompanyNumOfDefaultAccounts]; }
+		}
+
+		public virtual VariableValue RejectByCompany_Defaults_MonthsNum
+		{
+			get { return this[Variables.RejectByCompany_Defaults_MonthsNum]; }
+		}
+
+		public virtual VariableValue RejectByCompany_Defaults_Amount
+		{
+			get { return this[Variables.RejectByCompany_Defaults_Amount]; }
+		}
+
+		public virtual VariableValue RejectByCompanyDefaultsScore
+		{
+			get { return this[Variables.RejectByCompanyDefaultsScore]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

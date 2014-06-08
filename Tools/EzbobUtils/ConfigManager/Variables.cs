@@ -315,6 +315,14 @@ namespace ConfigManager {
 		ReportDaemonDropboxCredentials,
 		ReportDaemonDropboxRootPath,
 		MinAuthenticationIndexToPassAml,
-		AvailableFundsRefreshInterval
+		AvailableFundsRefreshInterval,
+		RejectionExceptionMaxConsumerScoreForMpError,
+		RejectionExceptionMaxCompanyScoreForMpError,
+		RejectionExceptionMaxCompanyScore,
+		RejectionCompanyScore,
+		RejectByCompanyNumOfDefaultAccounts,
+		RejectByCompany_Defaults_MonthsNum,
+		RejectByCompany_Defaults_Amount,
+		RejectByCompanyDefaultsScore
 	} // enum Variables
 } // namespace ConfigManager

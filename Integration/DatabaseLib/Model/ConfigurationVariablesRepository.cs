@@ -255,7 +255,15 @@ namespace EZBob.DatabaseLib.Model {
 		EbayCertId,
 		EbayRuName,
 		MinAuthenticationIndexToPassAml,
-		AvailableFundsRefreshInterval
+		AvailableFundsRefreshInterval,
+		RejectionExceptionMaxConsumerScoreForMpError,
+		RejectionExceptionMaxCompanyScoreForMpError,
+		RejectionExceptionMaxCompanyScore,
+		RejectionCompanyScore,
+		RejectByCompanyNumOfDefaultAccounts,
+		RejectByCompany_Defaults_MonthsNum,
+		RejectByCompany_Defaults_Amount,
+		RejectByCompanyDefaultsScore
 	} // enum ConfigurationVariables
 
 	#endregion enum ConfigurationVariables

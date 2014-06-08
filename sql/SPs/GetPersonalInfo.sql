@@ -69,7 +69,8 @@ BEGIN
 		SortCode,
 		GreetingMailSentDate AS RegistrationDate,
 		BankAccountType,
-		@NumOfLoans AS NumOfLoans
+		@NumOfLoans AS NumOfLoans,
+		Customer.TypeOfBusiness
 	FROM
 		Customer
 		LEFT OUTER JOIN Company ON Company.Id = Customer.CompanyId

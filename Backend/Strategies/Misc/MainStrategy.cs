@@ -1,10 +1,10 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
-	using EzBob.Backend.Strategies.AutoDecisions;
-	using EzBob.Backend.Strategies.Experian;
+	using AutoDecisions;
+	using Experian;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
-	using EzBob.Backend.Strategies.MailStrategies.API;
-	using EzBob.Backend.Strategies.ScoreCalculation;
+	using MailStrategies.API;
+	using ScoreCalculation;
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
@@ -14,7 +14,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EzBob.Backend.Strategies.MailStrategies;
+	using MailStrategies;
 
 	#region class MainStrategy
 
@@ -87,6 +87,7 @@
 			}
 			else {
 				experianConsumerScore = GetCurrentExperianScore();
+				GetMaxCompanyExperianScore();
 				minExperianScore = experianConsumerScore;
 				maxExperianScore = experianConsumerScore;
 				initialExperianConsumerScore = experianConsumerScore;
@@ -108,6 +109,7 @@
 				customerId,
 				minExperianScore,
 				maxExperianScore,
+				maxCompanyScore,
 				totalSumOfOrders1YTotalForRejection,
 				totalSumOfOrders3MTotalForRejection,
 				offeredCreditLine,
@@ -120,6 +122,10 @@
 				loanOfferReApprovalFullAmount,
 				loanOfferReApprovalRemainingAmount,
 				loanOfferReApprovalRemainingAmountOld,
+				customerStatusIsEnabled,
+				customerStatusIsWarning,
+				isBrokerCustomer,
+				typeOfBusiness == "Limited" || typeOfBusiness == "LLP",
 				DB,
 				Log
 			);
@@ -684,6 +690,22 @@
 
 		#endregion method GetCurrentExperianScore
 
+		private void GetMaxCompanyExperianScore()
+		{
+			// TODO: implement for EZ-2297: get max company score (consider parent companies)
+			DataTable dt = DB.ExecuteReader(
+				"GetCompanyScore",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+
+			if (dt.Rows.Count == 1)
+			{
+				var sr = new SafeReader(dt.Rows[0]);
+				maxCompanyScore = sr["Score"];
+			}
+		} // GetMaxCompanyExperianScore
+
 		#region method PerformCompanyExperianCheck
 
 		private void PerformCompanyExperianCheck() {
@@ -691,6 +713,8 @@
 				Log.Info("Performing experian company check");
 				var experianCompanyChecker = new ExperianCompanyCheck(customerId, false, DB, Log);
 				experianCompanyChecker.Execute();
+
+				maxCompanyScore = (int)experianCompanyChecker.MaxScore;
 			}
 			else if (!WaitForExperianCompanyCheckToFinishUpdates())
 				Log.Info("No data exist from experian company check for customer:{0}.", customerId);
@@ -730,7 +754,12 @@
 				enableAutomaticApproval = false;
 			} // if
 
-			if (isOffline || isBrokerCustomer) {
+			if (isOffline)
+			{
+				enableAutomaticApproval = false;
+			}
+
+			if (isBrokerCustomer) {
 				enableAutomaticApproval = false;
 				enableAutomaticRejection = false;
 			} // if
@@ -814,6 +843,7 @@
 			initialExperianConsumerScore = results["PrevExperianConsumerScore"];
 			int numOfLoans = results["NumOfLoans"];
 			isFirstLoan = numOfLoans == 0;
+			typeOfBusiness = results["TypeOfBusiness"];
 		} // GetPersonalInfo
 
 		#endregion method GetPersonalInfo
@@ -1092,9 +1122,11 @@
 		private DateTime appRegistrationDate;
 		private string appBankAccountType;
 		private bool wasMainStrategyExecutedBefore;
+		private string typeOfBusiness;
 
 		private int minExperianScore;
 		private int maxExperianScore;
+		private int maxCompanyScore;
 		private int experianConsumerScore;
 		private int allMPsNum;
 		private AutoDecisionResponse autoDecisionResponse;

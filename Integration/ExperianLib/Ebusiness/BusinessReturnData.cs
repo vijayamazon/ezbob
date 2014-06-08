@@ -21,6 +21,7 @@
 		public string OutputXml { get; private set; }
 
 		public decimal BureauScore { get; set; }
+		public decimal MaxBureauScore { get; set; }
 		public decimal CreditLimit { get; set; }
 		public SortedSet<string> Owners { get; protected set; }
 

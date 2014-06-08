@@ -5,9 +5,10 @@
 
 	public class AutoDecisionMaker
 	{
-		public static AutoDecisionResponse MakeDecision(int customerId, int minExperianScore, int maxExperianScore, double totalSumOfOrders1YTotalForRejection, double totalSumOfOrders3MTotalForRejection, int offeredCreditLine, 
+		public static AutoDecisionResponse MakeDecision(int customerId, int minExperianScore, int maxExperianScore, int maxCompanyScore, double totalSumOfOrders1YTotalForRejection, double totalSumOfOrders3MTotalForRejection, int offeredCreditLine, 
 			double marketplaceSeniorityDays, bool enableAutomaticReRejection, bool enableAutomaticRejection, bool enableAutomaticReApproval, 
-			bool enableAutomaticApproval, decimal loanOfferReApprovalFullAmount, decimal loanOfferReApprovalRemainingAmount, decimal loanOfferReApprovalFullAmountOld, decimal loanOfferReApprovalRemainingAmountOld, AConnection oDb, ASafeLog oLog)
+			bool enableAutomaticApproval, decimal loanOfferReApprovalFullAmount, decimal loanOfferReApprovalRemainingAmount, decimal loanOfferReApprovalFullAmountOld, decimal loanOfferReApprovalRemainingAmountOld, bool customerStatusIsEnabled,
+				bool customerStatusIsWarning, bool isBrokerCustomer, bool isLimitedCompany, AConnection oDb, ASafeLog oLog)
 		{
 			oLog.Info("Starting auto decision");
 			var autoDecisionResponse = new AutoDecisionResponse();
@@ -32,7 +33,8 @@
 				return autoDecisionResponse;
 			}
 
-			if (new Rejection(customerId, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection, marketplaceSeniorityDays, enableAutomaticRejection, maxExperianScore, oDb, oLog).MakeDecision(autoDecisionResponse))
+			if (new Rejection(customerId, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection, marketplaceSeniorityDays, enableAutomaticRejection, maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
+				customerStatusIsWarning, isBrokerCustomer, isLimitedCompany, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
