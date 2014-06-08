@@ -20,6 +20,8 @@ BEGIN
 		INNER JOIN dbo.udfLoadActualVatReturnRecords(@CustomerMarketPlaceID) re ON e.RecordId = re.RecordID
 		INNER JOIN MP_VatReturnRecords r ON re.RecordID = r.Id
 		INNER JOIN MP_VatReturnEntryNames en ON e.NameId = en.Id
+	WHERE
+		ISNULL(e.IsDeleted, 0) = 0
 	ORDER BY
 		r.BusinessId,
 		r.DateFrom

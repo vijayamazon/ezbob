@@ -1,7 +1,4 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using System;
-	using System.ServiceModel;
-	using EzBob.Backend.Strategies.Exceptions;
 	using EzBob.Backend.Strategies.VatReturn;
 	using Ezbob.Backend.Models;
 

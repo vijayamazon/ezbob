@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.VatReturn {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
@@ -9,6 +10,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Extensions;
 	using JetBrains.Annotations;
 
 	public class CalculateVatReturnSummary : AStrategy {
@@ -28,6 +30,8 @@
 
 			m_oBusinessData = new SortedDictionary<long, BusinessData>();
 			m_oRtiMonths = new SortedDictionary<DateTime, decimal>();
+
+			Stopper = new Stopper();
 		} // constructor
 
 		#endregion constructor
@@ -45,50 +49,62 @@
 		public override void Execute() {
 			Guid oCalculationID = Guid.NewGuid();
 
-			m_oSpLoadBusinesses.ForEachRowSafe((sr, bRowsetStart) => {
-				m_oBusinessRegNums[sr["BusinessID"]] = sr["RegistrationNo"];
-				return ActionResult.Continue;
+			Stopper.Execute(ElapsedDataMemberType.RetrieveDataFromDatabase, () => {
+				m_oSpLoadBusinesses.ForEachRowSafe((sr, bRowsetStart) => {
+					m_oBusinessRegNums[sr["BusinessID"]] = sr["RegistrationNo"];
+					return ActionResult.Continue;
+				});
+
+				m_oSpLoadSummaryData.ForEachResult<LoadDataForVatReturnSummary.ResultRow>(ProcessSummaryDataItem);
+
+				m_oCurrentRtiMonthAction = SaveCustomerID;
+
+				m_oSpLoadRtiMonths.ForEachResult<LoadRtiMonthForVatReturnSummary.ResultRow>(ProcessRtiMonthItem);
 			});
-
-			m_oSpLoadSummaryData.ForEachResult<LoadDataForVatReturnSummary.ResultRow>(ProcessSummaryDataItem);
-
-			m_oCurrentRtiMonthAction = SaveCustomerID;
-
-			m_oSpLoadRtiMonths.ForEachResult<LoadRtiMonthForVatReturnSummary.ResultRow>(ProcessRtiMonthItem);
 
 			Log.Debug("Customer ID: {0}", m_nCustomerID);
 
 			Log.Debug("Summary data - begin:");
 
 			foreach (KeyValuePair<long, BusinessData> pair in m_oBusinessData) {
-				pair.Value.Calculate(m_nOneMonthSalary, m_oRtiMonths);
+				BusinessData oBusinessData = pair.Value;
 
-				// Business registration number stays with the company for its entire life
-				// while name and address can change. In our DB BusinessID is bound to
-				// company name, address, and registration number therefore in the following
-				// assignment we look for the most updated business id associated with
-				// company registration number;
-				pair.Value.BusinessID = m_oRegNumBusinesses[
-					m_oBusinessRegNums[pair.Value.BusinessID]
-				].BusinessID;
+				Stopper.Execute(ElapsedDataMemberType.AggregateData, () => oBusinessData.Calculate(m_nOneMonthSalary, m_oRtiMonths));
 
-				Log.Debug(pair.Value);
+				Stopper.Execute(ElapsedDataMemberType.StoreAggregatedData, () => {
+					// Business registration number stays with the company for its entire life
+					// while name and address can change. In our DB BusinessID is bound to
+					// company name, address, and registration number therefore in the following
+					// assignment we look for the most updated business id associated with
+					// company registration number;
+					oBusinessData.BusinessID = m_oRegNumBusinesses[
+						m_oBusinessRegNums[oBusinessData.BusinessID]
+					].BusinessID;
 
-				var oSp = new SaveVatReturnSummary(DB, Log) {
-					CustomerID = m_nCustomerID,
-					CustomerMarketplaceID = m_nCustomerMarketplaceID,
-					CalculationID = oCalculationID,
-					Totals = new [] { pair.Value },
-					Quarters = pair.Value.QuartersToSave(),
-				};
+					Log.Debug(oBusinessData);
 
-				oSp.ExecuteNonQuery();
+					var oSp = new SaveVatReturnSummary(DB, Log) {
+						CustomerID = m_nCustomerID,
+						CustomerMarketplaceID = m_nCustomerMarketplaceID,
+						CalculationID = oCalculationID,
+						Totals = new[] { oBusinessData },
+						Quarters = oBusinessData.QuartersToSave(),
+					};
+
+					oSp.ExecuteNonQuery();
+				});
 			} // for each
 
 			Log.Debug("Summary data - end.");
 		} // Execute
 
 		#endregion method Execute
+
+		#region property Stopper
+
+		public Stopper Stopper { get; private set; } // Stopper
+
+		#endregion property Stopper
 
 		#endregion public
 

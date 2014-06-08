@@ -70,6 +70,7 @@ namespace ConfigManager {
 		CustomerSite,
 		CustomerStateRefreshInterval,
 		CustomerAnalyticsDefaultHistoryYears,
+		DEBUG_SaveVatReturnData,
 		DefaultFeedbackValue,
 		DirectorInfoNonLimitedParserConfiguration,
 		DirectorInfoParserConfiguration,

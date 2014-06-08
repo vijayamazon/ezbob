@@ -25,7 +25,7 @@
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
-			ElapsedTimeInfo = new ElapsedTimeInfo();
+			m_oStopper = new Stopper();
 
 			m_oSp = new SpSaveVatReturnData(this, DB, Log) {
 				CustomerMarketplaceID = nCustomerMarketplaceID,
@@ -52,27 +52,59 @@
 		#region method Execute
 
 		public override void Execute() {
-			m_oRaw.Execute();
+			if (m_oSp.IsEmptyInput())
+				return;
 
-			foreach (var oOld in m_oRaw.VatReturnRawData)
-				foreach (var oNew in m_oSp.VatReturnRecords)
-					if (oOld.Overlaps(oNew))
-						m_oSp.AddHistoryItem(oOld, oNew);
+			m_oStopper.Execute(ElapsedDataMemberType.RetrieveDataFromDatabase, () => {
+				m_oRaw.Execute();
+
+				foreach (var oOld in m_oRaw.VatReturnRawData)
+					foreach (var oNew in m_oSp.VatReturnRecords)
+						if (oOld.Overlaps(oNew))
+							m_oSp.AddHistoryItem(oOld, oNew);
+			});
 
 			Log.Debug(m_oSp);
 
-			// TODO: fill elapsed time
+			var os = new StringBuilder();
 
-			m_oSp.ExecuteNonQuery();
+			os.AppendLine("SaveVatReturnData output - begin:");
 
-			new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID, DB, Log).Execute();
+			int nRowNum = 0;
+
+			// ReSharper disable ConvertToLambdaExpression
+			m_oStopper.Execute(ElapsedDataMemberType.StoreDataToDatabase, () => {
+				m_oSp.ForEachRow((oReader, bRowsetStart) => {
+					var vals = new object[oReader.FieldCount];
+
+					int nRead = oReader.GetValues(vals);
+
+					os.AppendFormat("\nRow {0}{3}: {1} fields, {2} read.\n", nRowNum, oReader.FieldCount, nRead, bRowsetStart ? " NEW ROWSET" : string.Empty);
+
+					for (int i = 0; i < nRead; i++)
+						os.AppendFormat("\t{2} - {0}: {1}\n", oReader.GetName(i), vals[i], i);
+
+					nRowNum++;
+					return ActionResult.Continue;
+				});
+			});
+			// ReSharper restore ConvertToLambdaExpression
+
+			os.AppendLine("SaveVatReturnData output - end.");
+
+			Log.Debug("\n{0}\n", os);
+
+			var oSummary = new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID, DB, Log);
+			oSummary.Execute();
+
+			ElapsedTimeInfo.MergeData(oSummary.Stopper.ElapsedTimeInfo);
 		} // Execute
 
 		#endregion method Execute
 
 		#region property ElapsedTimeInfo
 
-		public ElapsedTimeInfo ElapsedTimeInfo { get; private set; } // ElapsedTimeInfo
+		public ElapsedTimeInfo ElapsedTimeInfo { get { return m_oStopper.ElapsedTimeInfo; } } // ElapsedTimeInfo
 
 		#endregion property ElapsedTimeInfo
 
@@ -80,6 +112,7 @@
 
 		#region private
 
+		private readonly Stopper m_oStopper;
 		private readonly SpSaveVatReturnData m_oSp;
 		private readonly LoadVatReturnRawData m_oRaw;
 
@@ -105,13 +138,18 @@
 					(CustomerMarketplaceID > 0) &&
 					(HistoryRecordID > 0) &&
 					(SourceID > 0) &&
-					(
-						(VatReturnRecords.Count > 0) ||
-						(RtiTaxMonthRawData.Count > 0)
-					);
+					!IsEmptyInput();
 			} // HasValidParameters
 
 			#endregion method HasValidParameters
+
+			#region method IsEmptyInput
+
+			public bool IsEmptyInput() {
+				return (VatReturnRecords.Count < 1) && (RtiTaxMonthRawData.Count < 1);
+			} // IsEmptyInput
+
+			#endregion method IsEmptyInput
 
 			#region method AddHistoryItem
 

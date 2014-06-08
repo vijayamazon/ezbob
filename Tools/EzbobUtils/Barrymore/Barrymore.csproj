@@ -74,6 +74,7 @@
     <Compile Include="SortedTable.cs" />
     <Compile Include="MiscUtils.cs" />
     <Compile Include="NameList.cs" />
+    <Compile Include="Stopper.cs" />
     <Compile Include="TypeUtils.cs" />
     <Compile Include="XmlUtils\Xml.cs" />
     <Compile Include="XmlUtils\XmlNodeExtensions.cs" />

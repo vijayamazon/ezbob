@@ -48,6 +48,8 @@ BEGIN
 		MP_VatReturnEntries e
 		INNER JOIN #recs ON e.RecordId = #recs.RecordID
 		INNER JOIN MP_VatReturnEntryNames n ON e.NameId = n.Id
+	WHERE
+		ISNULL(e.IsDeleted, 0) = 0
 
 	SELECT
 		'rti' AS RowType,
