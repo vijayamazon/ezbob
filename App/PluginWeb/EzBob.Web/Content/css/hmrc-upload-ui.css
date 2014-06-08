@@ -72,6 +72,13 @@
 	max-width: 75px;
 }
 
+.hmrc-upload-ui .remove-icon {
+	height: 11px;
+	width: 11px;
+	cursor: pointer;
+	border: 0;
+}
+
 .hmrc-upload-ui .periods-chart {
 	width: 100%;
 	border-collapse: collapse;

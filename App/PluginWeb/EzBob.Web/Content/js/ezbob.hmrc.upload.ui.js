@@ -238,7 +238,7 @@
 				bDestroy: true,
 				bProcessing: false,
 				aoColumns: EzBob.DataTables.Helper.extractColumns('^DateFrom,^DateTo,#RegistrationNo,Name' + (
-					this.options.isUnderwriter ? ',SourceID' : ''
+					this.options.isUnderwriter ? ',IsDeletable' : ''
 				)),
 
 				aLengthMenu: [[-1], ['all']],
@@ -289,10 +289,25 @@
 				/*jshint multistr: false */
 
 				oTableOpts.fnRowCallback = function(oTR, oCur /*, nDisplayIndex, nDisplayIndexFull */) {
+					oTR = $(oTR);
+
 					if (oCur.IsOtherFirm)
-						$(oTR).addClass('other-firm');
+						oTR.addClass('other-firm');
 					else if (oCur.IsGap)
-						$(oTR).addClass('not-just-after');
+						oTR.addClass('not-just-after');
+
+					if (oCur.IsDeletable) {
+						var oIcon = $('<img src="/Content/img/cross.png" class=remove-icon title="Remove this period.">')
+							.data('id', oCur.InternalID);
+
+						oIcon.click(function(evt) {
+							self.removePeriodFor(evt);
+						});
+
+						oTR.find('.grid-item-IsDeletable').empty().append(oIcon);
+					}
+					else
+						oTR.find('.grid-item-IsDeletable').empty();
 				}; // row callback
 
 				self.PeriodsDetails.empty().append(oTable);
@@ -303,6 +318,11 @@
 			});
 		}, // reloadPeriods
 
+		removePeriodFor: function(evt) {
+			var sID = $(evt.currentTarget).data('id');
+			console.log(sID);
+		}, // removePeriodFor
+
 		fillGaps: function(aryData) {
 			var oResult = [];
 
@@ -311,6 +331,7 @@
 				oCur.Interval = new EzBob.DateInterval(moment.utc(oCur.DateFrom), moment.utc(oCur.DateTo));
 				oCur.IsGap = false;
 				oCur.IsOtherFirm = false;
+				oCur.IsDeletable = (oCur.SourceID === 3);
 
 				if (i === 0) {
 					oResult.push(oCur);
@@ -336,6 +357,8 @@
 						IsGap: true,
 						RegistrationNo: 'missing',
 						Name: '',
+						SourceID: 0,
+						InternalID: 0,
 					});
 				} // if
 

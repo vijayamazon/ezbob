@@ -124,7 +124,7 @@ BEGIN
 		BusinessId = tmp.BusinessID,
 		RegistrationNo = tmp.RegistrationNo,
 		IsDeleted = tmp.IsDeleted,
-		SourceID = @SourceID,
+		SourceID = tmp.SourceID,
 		InternalID = tmp.InternalID
 	FROM
 		MP_VatReturnRecords r
@@ -163,7 +163,7 @@ BEGIN
 		tmp.BusinessID,
 		tmp.RegistrationNo,
 		tmp.IsDeleted,
-		@SourceID,
+		tmp.SourceID,
 		tmp.InternalID
 	FROM
 		#VatReturnRecords tmp
