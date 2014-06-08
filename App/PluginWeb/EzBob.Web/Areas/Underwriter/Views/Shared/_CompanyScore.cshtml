@@ -136,7 +136,7 @@
                 aryData = _.sortBy(aryData, function(obj) { return obj.Values["Account State"]; } );
                 totalBalance = _.reduce(aryData, function(memo, data){ 
                     var balance = 0;
-                    if(data.Values['Account State'][0] == 'A'){
+                    if(data.Values['Account State'][0] != 'S'){
                         balance = EzBob.poundToNum(data.Values['Current Balance']);
                     }
                     return memo + balance;}, 0
