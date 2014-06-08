@@ -43,6 +43,8 @@
 		#region method Execute
 
 		public override void Execute() {
+			Guid oCalculationID = Guid.NewGuid();
+
 			m_oSpLoadBusinesses.ForEachRowSafe((sr, bRowsetStart) => {
 				m_oBusinessRegNums[sr["BusinessID"]] = sr["RegistrationNo"];
 				return ActionResult.Continue;
@@ -75,6 +77,7 @@
 				var oSp = new SaveVatReturnSummary(DB, Log) {
 					CustomerID = m_nCustomerID,
 					CustomerMarketplaceID = m_nCustomerMarketplaceID,
+					CalculationID = oCalculationID,
 					Totals = new [] { pair.Value },
 					Quarters = pair.Value.QuartersToSave(),
 				};
@@ -312,6 +315,9 @@
 			} // CreationDate
 
 			[UsedImplicitly]
+			public Guid CalculationID { get; set; }
+
+			[UsedImplicitly]
 			public IEnumerable<BusinessData> Totals { get; set; }
 
 			[UsedImplicitly]
@@ -524,31 +530,6 @@
 
 			#endregion properties saved in DB
 
-			/*
-			#region method ToParameter
-
-			public object[] ToParameter() {
-				return new object[] {
-					BusinessID,
-					CurrencyCode,
-					PctOfAnnualRevenues,
-					Revenues,
-					Opex,
-					TotalValueAdded,
-					PctOfRevenues,
-					Salaries,
-					Tax,
-					Ebida,
-					PctOfAnnual,
-					ActualLoanRepayment,
-					FreeCashFlow,
-					SalariesMultiplier,
-				};
-			} // ToParameter
-
-			#endregion method ToParameter
-			*/
-
 			#region method QuartersToSave
 
 			public IEnumerable<BusinessDataEntry> QuartersToSave() {
@@ -748,30 +729,6 @@
 			public DateTime DateTo { get; set; }
 
 			#endregion properties saved in DB
-
-			/*
-			#region method ToParameter
-
-			public object[] ToParameter() {
-				return new object[] {
-					DateFrom,
-					DateTo,
-					PctOfAnnualRevenues,
-					Revenues,
-					Opex,
-					TotalValueAdded,
-					PctOfRevenues,
-					Salaries,
-					Tax,
-					Ebida,
-					PctOfAnnual,
-					ActualLoanRepayment,
-					FreeCashFlow,
-				};
-			} // ToParameter
-
-			#endregion method ToParameter
-			*/
 
 			#region private
 

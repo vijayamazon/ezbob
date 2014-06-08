@@ -9,6 +9,7 @@ ALTER PROCEDURE SaveVatReturnSummary
 @CustomerID INT,
 @CustomerMarketplaceID INT,
 @CreationDate DATETIME,
+@CalculationID UNIQUEIDENTIFIER,
 @Totals VatReturnSummaryList READONLY,
 @Quarters VatReturnSummaryPeriodList READONLY
 AS
@@ -39,18 +40,20 @@ BEGIN
 		AND
 		CustomerMarketplaceID = @CustomerMarketplaceID
 		AND
+		CalculationID != @CalculationID
+		AND
 		ISActive = 1
 
 	INSERT INTO MP_VatReturnSummary (
 		CustomerID, BusinessID, CreationDate, IsActive, Currency,
 		PctOfAnnualRevenues, Revenues, Opex, TotalValueAdded, PctOfRevenues,
 		Salaries, Tax, Ebida, PctOfAnnual, ActualLoanRepayment, FreeCashFlow,
-		SalariesMultiplier, CustomerMarketplaceID
+		SalariesMultiplier, CustomerMarketplaceID, CalculationID
 	) SELECT
 		@CustomerID, BusinessID, @CreationDate, 1, CurrencyCode,
 		PctOfAnnualRevenues, Revenues, Opex, TotalValueAdded, PctOfRevenues,
 		Salaries, Tax, Ebida, PctOfAnnual, ActualLoanRepayment, FreeCashFlow,
-		SalariesMultiplier, @CustomerMarketplaceID
+		SalariesMultiplier, @CustomerMarketplaceID, @CalculationID
 	FROM
 		@Totals
 
