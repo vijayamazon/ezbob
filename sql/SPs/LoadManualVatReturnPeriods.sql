@@ -33,7 +33,8 @@ BEGIN
 		CONVERT(DATE, r.DateFrom) AS DateFrom,
 		CONVERT(DATE, r.DateTo) AS DateTo,
 		r.RegistrationNo,
-		b.Name
+		b.Name,
+		r.SourceID
 	FROM
 		MP_VatReturnRecords r
 		INNER JOIN dbo.udfLoadActualVatReturnRecords(@MarketPlaceID) re ON r.Id = re.RecordID

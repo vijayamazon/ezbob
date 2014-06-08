@@ -12,9 +12,12 @@
 		public DateTime DateTo { get; set; }
 
 		[DataMember]
-		public virtual long RegistrationNo { get; set; }
+		public long RegistrationNo { get; set; }
 
 		[DataMember]
-		public virtual string Name { get; set; }
+		public string Name { get; set; }
+
+		[DataMember]
+		public int SourceID { get; set; }
 	} // class VatReturnPeriod
 } // namespace Ezbob.Backend.Models

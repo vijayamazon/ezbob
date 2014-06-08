@@ -12,6 +12,7 @@
 			el: '',
 			formID: '',
 			headers: null,
+			isUnderwriter: false,
 			loadPeriodsUrl: null,
 			primaryRefNum: '',
 			uiEventControlIDs: { form: null, backBtn: null, doneBtn: null, },
@@ -236,7 +237,9 @@
 			var oTableOpts = {
 				bDestroy: true,
 				bProcessing: false,
-				aoColumns: EzBob.DataTables.Helper.extractColumns('^DateFrom,^DateTo,#RegistrationNo,Name'),
+				aoColumns: EzBob.DataTables.Helper.extractColumns('^DateFrom,^DateTo,#RegistrationNo,Name' + (
+					this.options.isUnderwriter ? ',SourceID' : ''
+				)),
 
 				aLengthMenu: [[-1], ['all']],
 				iDisplayLength: -1,
@@ -278,10 +281,10 @@
 				var oTable = $('<table class=period-details>\
 <caption>Available VAT return data</caption>\
 <thead><tr>\
-<th>From</th><th>To</th><th>Registration #</th><th>Company name</th>\
-</tr></thead><tbody><tr>\
-<td></td><td></td><td></td><td></td>\
-</tr></body>\
+<th>From</th><th>To</th><th>Registration #</th><th>Company name</th>' + (self.options.isUnderwriter ? '<th></th>' : '') +
+'</tr></thead><tbody><tr>\
+<td></td><td></td><td></td><td></td>' + (self.options.isUnderwriter ? '<td></td>' : '') +
+'</tr></body>\
 </table>');
 				/*jshint multistr: false */
 

@@ -140,6 +140,7 @@
       <xs:element minOccurs="0" name="DateTo" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RegistrationNo" type="xs:long" />
+      <xs:element minOccurs="0" name="SourceID" type="xs:int" />
     </xs:sequence>
     <xs:attribute ref="ser:Id" />
     <xs:attribute ref="ser:Ref" />

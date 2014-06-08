@@ -11,6 +11,7 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 			uploadUrl: '/Customer/Hmrc/SaveFile',
 			loadPeriodsUrl: '/Customer/Hmrc/LoadPeriods',
 			primaryRefNum: this.options.companyRefNum,
+			isUnderwriter: false,
 			uiEventControlIDs: {
 				form: 'hmrc:dropzone',
 				backBtn: 'hmrc:upload_back',
