@@ -449,6 +449,16 @@
     <Content Include="Content\css\images\accounts\hmrc.png" />
     <Content Include="Content\css\images\accounts\kashflow.png" />
     <Content Include="Content\css\images\accounts\magento.png" />
+    <Content Include="Content\css\images\accounts\offline1.png" />
+    <Content Include="Content\css\images\accounts\offline2.png" />
+    <Content Include="Content\css\images\accounts\offline3.png" />
+    <Content Include="Content\css\images\accounts\offline4.png" />
+    <Content Include="Content\css\images\accounts\offline5.png" />
+    <Content Include="Content\css\images\accounts\online1.png" />
+    <Content Include="Content\css\images\accounts\online2.png" />
+    <Content Include="Content\css\images\accounts\online3.png" />
+    <Content Include="Content\css\images\accounts\online4.png" />
+    <Content Include="Content\css\images\accounts\online5.png" />
     <Content Include="Content\css\images\accounts\paypal.png" />
     <Content Include="Content\css\images\accounts\paypoint.png" />
     <Content Include="Content\css\images\accounts\play.png" />
