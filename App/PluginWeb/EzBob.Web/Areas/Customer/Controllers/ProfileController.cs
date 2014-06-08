@@ -1,6 +1,6 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
-{
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
+	using System.Collections.Generic;
 	using System.Web.Mvc;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
@@ -24,38 +24,31 @@
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Linq;
-	using EZBob.DatabaseLib.Model;
 
-	public class ProfileController : Controller
-	{
+	public class ProfileController : Controller {
 		private readonly CustomerModelBuilder _customerModelBuilder;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ISession _session;
-		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
 		private readonly IPayPointFacade _payPointFacade;
+
 		public ProfileController(
 			CustomerModelBuilder customerModelBuilder,
 			IEzbobWorkplaceContext context,
 			CashRequestBuilder crBuilder,
 			ISession session,
-			IConfigurationVariablesRepository configurationVariablesRepository,
-			IPayPointFacade payPointFacade)
-		{
+			IPayPointFacade payPointFacade) {
 			_customerModelBuilder = customerModelBuilder;
 			_context = context;
 			m_oServiceClient = new ServiceClient();
 			_crBuilder = crBuilder;
 			_session = session;
-			_configurationVariablesRepository = configurationVariablesRepository;
 			_payPointFacade = payPointFacade;
 		} // constructor
 
-		//----------------------------------------------------------------------
 		[IsSuccessfullyRegisteredFilter]
-		public ViewResult Index()
-		{
+		public ViewResult Index() {
 			var wizardModel = new WizardModel { Customer = _customerModelBuilder.BuildWizardModel(_context.Customer, Session) };
 			ViewData["ShowChangePasswordPage"] = _context.User.IsPasswordRestored;
 
@@ -78,8 +71,7 @@
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult Details()
-		{
+		public JsonResult Details() {
 			var details = _customerModelBuilder.BuildWizardModel(_context.Customer, Session);
 			return Json(details, JsonRequestBehavior.AllowGet);
 		}
@@ -88,15 +80,13 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult ClaimsTrustPilotReview()
-		{
+		public JsonResult ClaimsTrustPilotReview() {
 			var customer = _context.Customer;
 
 			if (customer == null)
 				return Json(new { status = "error", error = "Customer not found." });
 
-			if (ReferenceEquals(customer.TrustPilotStatus, null) || customer.TrustPilotStatus.IsMe(TrustPilotStauses.Nether))
-			{
+			if (ReferenceEquals(customer.TrustPilotStatus, null) || customer.TrustPilotStatus.IsMe(TrustPilotStauses.Nether)) {
 				var oHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
 
 				customer.TrustPilotStatus = oHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Claims);
@@ -111,40 +101,35 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult EntrepreneurTargeting()
-		{
+		public JsonResult EntrepreneurTargeting() {
 			var customer = _context.Customer;
 
 			if (customer == null)
 				return Json(new { status = "error", error = "Customer not found." });
 
-			if (customer.PersonalInfo.TypeOfBusiness == TypeOfBusiness.Entrepreneur && customer.Company == null)
-			{
+			if (customer.PersonalInfo.TypeOfBusiness == TypeOfBusiness.Entrepreneur && customer.Company == null) {
 				var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
-				return Json(new
-					{
-						companyTargeting = true,
-						companyName = string.Format("{0} {1}", customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname),
-						companyPostcode = address != null ? address.Postcode : "",
-						companyNumber = "",
-						companyType = "N"
-					});
+				return Json(new {
+					companyTargeting = true,
+					companyName = string.Format("{0} {1}", customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname),
+					companyPostcode = address != null ? address.Postcode : "",
+					companyNumber = "",
+					companyType = "N"
+				});
 			}
 
 			if (customer.Company != null &&
 				string.IsNullOrEmpty(customer.Company.ExperianRefNum) &&
 				!string.IsNullOrEmpty(customer.Company.CompanyName) &&
-				customer.Company.TypeOfBusiness.Reduce() != TypeOfBusinessReduced.Personal)
-			{
+				customer.Company.TypeOfBusiness.Reduce() != TypeOfBusinessReduced.Personal) {
 				var companyAddress = customer.Company.CompanyAddress.FirstOrDefault();
-				return Json(new
-							{
-								companyTargeting = true,
-								companyName = customer.Company.CompanyName,
-								companyNumber = customer.Company.CompanyNumber ?? String.Empty,
-								companyPostcode = companyAddress != null ? companyAddress.Postcode : "",
-								companyType = customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? "L" : "N"
-							});
+				return Json(new {
+					companyTargeting = true,
+					companyName = customer.Company.CompanyName,
+					companyNumber = customer.Company.CompanyNumber ?? String.Empty,
+					companyPostcode = companyAddress != null ? companyAddress.Postcode : "",
+					companyType = customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? "L" : "N"
+				});
 			}
 			return Json(new { companyTargeting = false });
 		} // EntrepreneurTargeting
@@ -153,12 +138,10 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult SaveTargeting(CompanyInfo company)
-		{
+		public JsonResult SaveTargeting(CompanyInfo company) {
 			var customer = _context.Customer;
 
-			if (customer.Company == null)
-			{
+			if (customer.Company == null) {
 				customer.Company = new Company { TypeOfBusiness = customer.PersonalInfo.TypeOfBusiness };
 			}
 			customer.Company.ExperianRefNum = company.BusRefNum;
@@ -185,8 +168,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult GetRefreshInterval()
-		{
+		public JsonResult GetRefreshInterval() {
 			int refreshInterval = new ServiceClient().Instance.GetCustomerStatusRefreshInterval().Value;
 			return Json(new { Interval = refreshInterval });
 		}
@@ -194,8 +176,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult GetCustomerStatus(int customerId)
-		{
+		public JsonResult GetCustomerStatus(int customerId) {
 			string state = new ServiceClient().Instance.GetCustomerState(customerId).Value;
 			return Json(new { State = state });
 		}
@@ -204,58 +185,48 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult ApplyForALoan()
-		{
+		public JsonResult ApplyForALoan() {
 			var customer = _context.Customer;
-			if (customer == null)
-			{
-				return Json(new { });
-			}
-			var ekmType = new EkmDatabaseMarketPlace();
-			var ekms = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == ekmType.InternalId).ToList();
-			if (ekms.Any())
-			{
-				var validator = new EkmConnector();
-				foreach (var ekm in ekms)
-				{
-					var name = ekm.DisplayName;
-					var password = Encrypted.Decrypt(ekm.SecurityData);
-					string error;
-					var isValid = validator.Validate(name, password, out error);
-					if (!isValid)
-					{
-						return Json(new { hasBadEkm = true, error = error, ekm = ekm.DisplayName });
-					}
-				}
 
-			}
+			if (customer == null)
+				return Json(new { });
+
+			var ekmType = new EkmDatabaseMarketPlace();
+
+			IEnumerable<MP_CustomerMarketPlace> ekms =
+				customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == ekmType.InternalId);
+
+			EkmConnector validator = null;
+
+			foreach (MP_CustomerMarketPlace ekm in ekms) {
+				validator = validator ?? new EkmConnector();
+
+				string error;
+
+				if (!validator.Validate(ekm.DisplayName, Encrypted.Decrypt(ekm.SecurityData), out error))
+					return Json(new { hasBadEkm = true, error = error, ekm = ekm.DisplayName });
+			} // for each ekm
+
 			customer.CreditResult = null;
 
 			customer.OfferStart = DateTime.UtcNow;
-			int offerValidForHours = (int)_configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
-			customer.OfferValidUntil = DateTime.UtcNow.AddHours(offerValidForHours);
+			customer.OfferValidUntil = DateTime.UtcNow.AddHours(CurrentValues.Instance.OfferValidForHours);
 
-			customer.ApplyCount = customer.ApplyCount + 1;
+			customer.ApplyCount++;
 
-			var oldOffer = customer.LastCashRequest;
-			if (oldOffer != null && oldOffer.HasLoans)
+			if (customer.LastCashRequest != null && customer.LastCashRequest.HasLoans)
 				m_oServiceClient.Instance.RequestCashWithoutTakenLoan(customer.Id);
 
-			var cashRequest = _crBuilder.CreateCashRequest(customer, CashRequestOriginator.RequestCashBtn);
-
+			_crBuilder.CreateCashRequest(customer, CashRequestOriginator.RequestCashBtn);
 			_crBuilder.ForceEvaluate(customer.Id, customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false, false);
 
-			var yodlees = customer.GetYodleeAccounts().ToList();
-			bool refreshYodleeEnabled = CurrentValues.Instance.RefreshYodleeEnabled;
-			if (yodlees.Any() && refreshYodleeEnabled)
+			if (CurrentValues.Instance.RefreshYodleeEnabled && customer.GetYodleeAccounts().Any())
 				return Json(new { hasYodlee = true });
 
 			return Json(new { });
-		}
+		} // ApplyForALoan
 
-
-		public ViewResult RenewEbayToken()
-		{
+		public ViewResult RenewEbayToken() {
 			return View();
 		}
 
@@ -263,26 +234,22 @@
 		[HttpPost]
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult SetDefaultCard(int cardId)
-		{
+		public JsonResult SetDefaultCard(int cardId) {
 			var customer = _context.Customer;
-			if (!customer.DefaultCardSelectionAllowed)
-			{
+			if (!customer.DefaultCardSelectionAllowed) {
 				return Json(new { error = "Default card selection is not allowed" });
 			}
 			var card = customer.PayPointCards.SingleOrDefault(c => c.Id == cardId);
-			if (card == null)
-			{
+			if (card == null) {
 				return Json(new { error = "Card not found" });
 			}
 			customer.PayPointTransactionId = card.TransactionId;
 			customer.CreditCardNo = card.CardNo;
 
-			return Json(new {});
+			return Json(new { });
 		}
 
-		public RedirectResult AddPayPoint()
-		{
+		public RedirectResult AddPayPoint() {
 			var oCustomer = _context.Customer;
 			int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
@@ -294,40 +261,34 @@
 
 		[Transactional]
 		[HttpGet]
-		public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string customer, string expiry, int customerId)
-		{
-			if (test_status == "true")
-			{
+		public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string customer, string expiry, int customerId) {
+			if (test_status == "true") {
 				// Use last 4 random digits as card number (to enable useful tests)
 				string random4Digits = string.Format("{0}{1}", DateTime.UtcNow.Second, DateTime.UtcNow.Millisecond);
-				if (random4Digits.Length > 4)
-				{
+				if (random4Digits.Length > 4) {
 					random4Digits = random4Digits.Substring(random4Digits.Length - 4);
 				}
 				card_no = random4Digits;
 				expiry = string.Format("{0}{1}", "01", DateTime.Now.AddYears(2).Year.ToString().Substring(2, 2));
 			}
-			if (!valid || code != "A")
-			{
+			if (!valid || code != "A") {
 				TempData["code"] = code;
 				TempData["message"] = message;
-				return View(new { error = "Failed to add debit card"});
+				return View(new { error = "Failed to add debit card" });
 			}
 
-			if (!_payPointFacade.CheckHash(hash, Request.Url))
-			{
+			if (!_payPointFacade.CheckHash(hash, Request.Url)) {
 				return View(new { error = "Failed to add debit card" });
 			}
 
 			var cust = _context.Customer;
 			var card = cust.TryAddPayPointCard(trans_id, card_no, expiry, cust.PersonalInfo.Fullname);
 
-			if (string.IsNullOrEmpty(cust.PayPointTransactionId))
-			{
+			if (string.IsNullOrEmpty(cust.PayPointTransactionId)) {
 				SetDefaultCard(card.Id);
 			}
 
-			return View(new {success = true});
+			return View(new { success = true });
 		}
 	}
 }
