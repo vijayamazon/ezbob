@@ -265,6 +265,12 @@
   <wsdl:message name="IEzService_LoadVatReturnFullData_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadVatReturnFullDataResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_RemoveManualVatReturnPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveManualVatReturnPeriod" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RemoveManualVatReturnPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveManualVatReturnPeriodResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetWizardConfigs_InputMessage">
     <wsdl:part name="parameters" element="tns:GetWizardConfigs" />
   </wsdl:message>
@@ -956,6 +962,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnFullData" message="tns:IEzService_LoadVatReturnFullData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnFullDataResponse" message="tns:IEzService_LoadVatReturnFullData_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="RemoveManualVatReturnPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RemoveManualVatReturnPeriod" message="tns:IEzService_RemoveManualVatReturnPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RemoveManualVatReturnPeriodResponse" message="tns:IEzService_RemoveManualVatReturnPeriod_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetWizardConfigs">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
@@ -1614,6 +1624,15 @@
     </wsdl:operation>
     <wsdl:operation name="LoadVatReturnFullData">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoadVatReturnFullData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveManualVatReturnPeriod">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/RemoveManualVatReturnPeriod" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

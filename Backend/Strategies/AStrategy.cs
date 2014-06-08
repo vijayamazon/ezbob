@@ -20,11 +20,11 @@
 
 		#region protected
 
-		protected AStrategy(AConnection oDb, ASafeLog oLog) {
-			if (ReferenceEquals(oDb, null))
-				throw new FailedToInitStrategyException(this, new ArgumentNullException("oDb", "DB connection is not specified for mail strategy."));
+		protected AStrategy(AConnection oDB, ASafeLog oLog) {
+			if (ReferenceEquals(oDB, null))
+				throw new FailedToInitStrategyException(this, new ArgumentNullException("oDB", "DB connection is not specified for mail strategy."));
 
-			DB = oDb;
+			DB = oDB;
 			Log = new StrategyLog(this, oLog);
 		} // constructor
 

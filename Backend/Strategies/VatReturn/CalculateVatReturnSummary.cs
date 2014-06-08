@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.VatReturn {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
@@ -10,7 +9,6 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
-	using Ezbob.Utils.Extensions;
 	using JetBrains.Annotations;
 
 	public class CalculateVatReturnSummary : AStrategy {

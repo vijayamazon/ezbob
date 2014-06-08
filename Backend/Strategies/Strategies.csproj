@@ -99,6 +99,7 @@
     <Compile Include="Broker\BrokerLoadMarketingFiles.cs" />
     <Compile Include="Broker\BrokerUpdatePassword.cs" />
     <Compile Include="Broker\SpBrokerLoadOwnProperties.cs" />
+    <Compile Include="VatReturn\AVatReturnStrategy.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary.cs" />
     <Compile Include="Misc\BackfillConsumerAnalytics.cs" />
     <Compile Include="Misc\EncryptChannelGrabberMarketplaces.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="VatReturn\RemoveManualVatReturnPeriod.cs" />
     <Compile Include="VatReturn\SaveVatReturnData.cs" />
   </ItemGroup>
   <ItemGroup>

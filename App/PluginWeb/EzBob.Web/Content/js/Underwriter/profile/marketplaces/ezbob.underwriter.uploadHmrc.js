@@ -10,6 +10,7 @@ EzBob.Underwriter.UploadHmrcView = Backbone.Marionette.ItemView.extend({
 			el: '.hmrc-upload-ui',
 			formID: 'hmrcUploadZone',
 			uploadUrl: '/Underwriter/UploadHmrc/SaveFile',
+			removePeriodUrl: '/Underwriter/UploadHmrc/RemovePeriod',
 			loadPeriodsUrl: '/Underwriter/UploadHmrc/LoadPeriods?customerId=' + options.customerId,
 			primaryRefNum: options.companyRefNum,
 			isUnderwriter: true,

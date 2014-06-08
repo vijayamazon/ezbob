@@ -1,4 +1,5 @@
 ﻿namespace EzService {
+	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using ActionResults;
@@ -430,6 +431,9 @@
 
 		[OperationContract]
 		VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID);
+
+		[OperationContract]
+		ActionMetaData RemoveManualVatReturnPeriod(Guid oPeriodID);
 
 		#endregion VAT
 

@@ -11,7 +11,7 @@
 	using Ezbob.Utils;
 	using JetBrains.Annotations;
 
-	public class SaveVatReturnData : AStrategy {
+	public class SaveVatReturnData : AVatReturnStrategy {
 		#region public
 
 		#region constructor
@@ -422,22 +422,6 @@
 			} // Delete
 
 			#endregion method Delete
-
-			#region enum DeleteReasons
-
-			private enum DeleteReasons {
-				UploadedEqual = 1,
-				UploadedNotEqual = 2,
-				OverriddenByUploaded = 3,
-				ManualUpdated = 4,
-				ManualDeleted = 5,
-				ManualRejectedByUploaded = 6,
-				ManualRejectedByLinked = 7,
-				UploadedRejectedByLinked = 8,
-				LinkedUpdated = 9,
-			} // enum DeleteReasons
-
-			#endregion enum DeleteReasons
 
 			#endregion private
 		} // class SpSaveVatReturnData

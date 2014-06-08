@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System;
 	using EzBob.Backend.Strategies.VatReturn;
 	using Ezbob.Backend.Models;
 
@@ -108,6 +109,14 @@
 		} // LoadVatReturnFullData
 
 		#endregion method LoadVatReturnFullData
+
+		#region method RemoveManualVatReturnPeriod
+
+		public ActionMetaData RemoveManualVatReturnPeriod(Guid oPeriodID) {
+			return ExecuteSync<RemoveManualVatReturnPeriod>(null, null, oPeriodID);
+		} // /RemoveManualVatReturnPeriod
+
+		#endregion method RemoveManualVatReturnPeriod
 
 		#endregion sync
 	} // class EzServiceImplementation

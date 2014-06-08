@@ -1993,6 +1993,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnFullData", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnFullDataResponse")]
         ServiceClientProxy.EzServiceReference.VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RemoveManualVatReturnPeriod", ReplyAction="http://tempuri.org/IEzService/RemoveManualVatReturnPeriodResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData RemoveManualVatReturnPeriod(System.Guid oPeriodID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
         ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
         
@@ -2405,6 +2408,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID) {
             return base.Channel.LoadVatReturnFullData(nCustomerID, nCustomerMarketplaceID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData RemoveManualVatReturnPeriod(System.Guid oPeriodID) {
+            return base.Channel.RemoveManualVatReturnPeriod(oPeriodID);
         }
         
         public ServiceClientProxy.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {

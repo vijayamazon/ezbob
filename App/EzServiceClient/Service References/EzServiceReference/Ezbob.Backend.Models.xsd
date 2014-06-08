@@ -138,7 +138,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="DateFrom" type="xs:dateTime" />
       <xs:element minOccurs="0" name="DateTo" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ID" type="xs:int" />
+      <xs:element minOccurs="0" name="InternalID" type="ser:guid" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RegistrationNo" type="xs:long" />
       <xs:element minOccurs="0" name="SourceID" type="xs:int" />

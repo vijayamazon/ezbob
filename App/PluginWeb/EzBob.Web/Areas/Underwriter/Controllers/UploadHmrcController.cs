@@ -49,6 +49,15 @@
 
 		#endregion action LoadPeriods
 
+		#region action RemovePeriod
+
+		[HttpPost]
+		public JsonResult RemovePeriod(string period) {
+			return m_oAccountManager.RemovePeriod(period);
+		} // RemovePeriod
+
+		#endregion action RemovePeriod
+
 		#region private
 
 		private readonly HmrcManualAccountManager m_oAccountManager;

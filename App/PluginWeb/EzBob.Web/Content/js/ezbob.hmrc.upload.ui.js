@@ -16,6 +16,7 @@
 			loadPeriodsUrl: null,
 			primaryRefNum: '',
 			uiEventControlIDs: { form: null, backBtn: null, doneBtn: null, },
+			removePeriodUrl: null,
 			uploadAppError: null,
 			uploadComplete: null,
 			uploadSuccess: null,
@@ -319,9 +320,39 @@
 		}, // reloadPeriods
 
 		removePeriodFor: function(evt) {
+			if (!this.options.removePeriodUrl)
+				return;
+
 			var sID = $(evt.currentTarget).data('id');
-			console.log(sID);
+			var self = this;
+
+			EzBob.ShowMessage(
+				'Do you really want to remove this period?',
+				'Please confirm',
+				function() { self.doRemovePeriodFor(sID); },
+				'Remove',
+				null,
+				'Keep'
+			);
 		}, // removePeriodFor
+
+		doRemovePeriodFor: function(sPeriodID) {
+			if (!this.options.removePeriodUrl)
+				return;
+
+			BlockUi();
+
+			console.log('remove', sPeriodID);
+
+			var oRequest = $.post(this.options.removePeriodUrl, { period: sPeriodID, });
+
+			var self = this;
+
+			oRequest.always(function() {
+				UnBlockUi();
+				self.reloadPeriods();
+			});
+		}, // doRemovePeriodFor
 
 		fillGaps: function(aryData) {
 			var oResult = [];
@@ -359,6 +390,7 @@
 						Name: '',
 						SourceID: 0,
 						InternalID: 0,
+						IsDeletable: false,
 					});
 				} // if
 

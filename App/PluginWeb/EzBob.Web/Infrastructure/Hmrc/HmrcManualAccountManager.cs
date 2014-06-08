@@ -173,6 +173,21 @@
 
 		#endregion method LoadPeriods
 
+		#region method RemovePeriod
+
+		public JsonResult RemovePeriod(string sPeriod) {
+			try {
+				m_oServiceClient.Instance.RemoveManualVatReturnPeriod(Guid.Parse(sPeriod));
+				return CreateJsonNoError();
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to remove manual VAT return period for period id '{0}'.", sPeriod);
+				return CreateJsonError("Failed to remove period.");
+			} // try
+		} // RemovePeriod
+
+		#endregion method RemovePeriod
+
 		#endregion public
 
 		#region private
