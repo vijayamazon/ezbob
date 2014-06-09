@@ -1,3 +1,4 @@
+
 IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptStatusChanged]') AND TYPE IN (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptStatusChanged]
 GO
@@ -16,7 +17,7 @@ SELECT
 	H.TimeStamp,
 	S1.Name OldStatus,
 	S.Name NewStatus,
-	sum(L.Balance)
+	sum(L.Balance) AS Balance
 FROM 
 	CustomerStatusHistory H,
 	Customer C,
