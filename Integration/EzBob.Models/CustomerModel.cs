@@ -122,6 +122,7 @@ namespace EzBob.Models {
 		public decimal RequestedAmount { get; set; }
 		public bool IsBrokerFill { get; set; }
 		public bool DefaultCardSelectionAllowed { get; set; }
+
 	} // class CustomerModel
 
 	#endregion class CustomerModel
@@ -163,7 +164,7 @@ namespace EzBob.Models {
 		public string ExperianRefNum { get; set; }
 		public string ExperianCompanyName { get; set; }
 
-		public virtual DirectorModel[] Directors { get; set; }
+		public virtual List<DirectorModel> Directors { get; set; }
 
 		#region method FromCompany
 
@@ -183,7 +184,7 @@ namespace EzBob.Models {
 				RentMonthLeft = company.RentMonthLeft,
 				CapitalExpenditure = company.CapitalExpenditure,
 				VatReporting = company.VatReporting,
-				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToArray(),
+				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToList(),
 				ExperianRefNum = company.ExperianRefNum,
 			};
 		} // From Company

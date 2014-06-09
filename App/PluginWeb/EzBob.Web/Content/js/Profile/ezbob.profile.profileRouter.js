@@ -18,6 +18,8 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.inviteFriendView = new EzBob.Profile.InviteFriendView({ model: options });
 
         this.perksView = new EzBob.Profile.PerksView();
+        
+        this.companyDirectorsView = new EzBob.Profile.CompanyDirectorsView({ model: options });
         //this.accountSummary = new EzBob.Profile.AccountSummaryView({ model: options });
 
         var accountSettings = new EzBob.Profile.AccountSettingsModel(options.get('AccountSettings'));
@@ -34,6 +36,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.widgets.YourDetails = this.YourDetails;
         this.widgets.InviteFriend = this.inviteFriendView;
         this.widgets.Perks = this.perksView;
+        this.widgets.CompanyDirectors = this.companyDirectorsView;
 
         _.each(this.widgets, function (w) {
             w.render().$el.hide().appendTo(that.profileWidgets);
@@ -101,7 +104,8 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         "PayEarly": "payEarly",
         "LoanDetails/:id": "loanDetails",
         "InviteFriend": "inviteFriend",
-        "Perks":"perks"
+        "Perks": "perks",
+        "CompanyDirectors": "companyDirectors"
     },
     decide: function () {
         // Workaround for non-standard navigation
@@ -153,6 +157,9 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         EzBob.CT.recordEvent('ct:profile:loanDetails', id);
         this.trigger('details', id);
         this.marketing("LoanDetails");
+    },
+    companyDirectors: function() {
+        this.activate("CompanyDirectors")
     },
 
     marketing: function (page) {

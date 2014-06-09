@@ -8,6 +8,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
+	using Ezbob.ExperianParser;
 	using Underwriter.Models;
 	using PaymentServices.Calculators;
 	using System.Collections.Generic;
@@ -45,7 +46,7 @@
 			_changeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
 		}
 
-		public CustomerModel BuildWizardModel(Customer cus, HttpSessionStateBase session)
+		public CustomerModel BuildWizardModel(Customer cus, HttpSessionStateBase session, bool isProfile = false)
 		{
 			var customerModel = new CustomerModel { loggedIn = cus != null, bankAccountAdded = false };
 
@@ -154,7 +155,31 @@
 			{
 				customerModel.CompanyInfo = CompanyInfoMap.FromCompany(company);
 				customerModel.CompanyAddress = company.CompanyAddress.ToArray();
-			}
+				var oParseResult = customer.ParseExperian(ExperianParserFacade.Target.Company);
+				if (oParseResult.ParsingResult == ParsingResult.Ok)
+				{
+					var dirs = new List<DirectorModel>();
+
+					if (oParseResult.Dataset.ContainsKey("Limited Company Shareholders"))
+					{
+						foreach (ParsedDataItem shareHolder in oParseResult.Dataset["Limited Company Shareholders"].Data)
+						{
+							dirs.Add(new DirectorModel { Name = shareHolder.Values["Description of Shareholder"], IsExperianShareholder = true });
+						}
+					}
+
+					if (oParseResult.Dataset.ContainsKey("Limited Company Current Directorship Details"))
+					{
+						foreach (ParsedDataItem shareHolder in oParseResult.Dataset["Limited Company Current Directorship Details"].Data)
+						{
+							dirs.Add(new DirectorModel { Name = shareHolder.Values["Name"], IsExperianDirector = true });
+						}
+					}
+
+					customerModel.CompanyInfo.Directors.AddRange(dirs);
+				} // for each group
+			} // if
+
 
 
 			if (customer.AddressInfo != null)

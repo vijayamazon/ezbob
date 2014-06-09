@@ -52,6 +52,11 @@
                         <li class="divider-vertical"></li>
                         <li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
                     }
+                    @if (Model.Customer.CompanyInfo.Directors.Any())
+                    {
+                        <li class="divider-vertical"></li>
+                        <li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors">Company Directors</a></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -299,6 +304,7 @@
     @{Html.RenderPartial("StoreInfoMain");}
     @{Html.RenderPartial("PayPalInstructions");}
     @{Html.RenderPartial("InviteFriendTemplate");}
+    @{Html.RenderPartial("CompanyDirectorsTemplate");}
     @{Html.RenderPartial("PerksTemplate");}
     @{Html.RenderPartial("../Shared/Profile/_PayPointCardSelectViewTemplate");}
     @{Html.RenderPartial("Shops/EKMAccoutInfoTemplate");}

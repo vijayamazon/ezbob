@@ -17,7 +17,6 @@
 	using ServiceClientProxy;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
-	using LandRegistryResponseType = LandRegistryLib.LandRegistryResponseType;
 
 	public class CrossCheckController : Controller {
 		#region public

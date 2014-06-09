@@ -194,7 +194,8 @@
       this.validator = EzBob.validateYourInfoEditForm(this.ui.form);
       this.$el.find('.phonenumber').numericOnly(11);
       this.$el.find('.cashInput').numericOnly(15);
-      return $('input.form_field_right_side').css('margin-left', '3px');
+      $('input.form_field_right_side').css('margin-left', '3px');
+      return EzBob.UiAction.registerView(this);
     };
 
     YourInfoMainView.prototype.renderPersonal = function() {
@@ -409,6 +410,9 @@
       this.limitedAddress.show(address);
       directors = this.model.get('CompanyInfo').Directors;
       if (directors !== null && directors.length !== 0) {
+        directors = _.filter(directors, function(director) {
+          return !director.IsExperianDirector && !director.IsExperianShareholder;
+        });
         directorView = new EzBob.Profile.DirectorCompositeView({
           collection: new EzBob.Directors(directors)
         });

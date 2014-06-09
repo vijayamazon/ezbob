@@ -310,6 +310,9 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
         directors = @model.get('CompanyInfo').Directors;
 
         if directors isnt null and directors.length isnt 0
+            directors = _.filter(directors, (director) ->
+                return not director.IsExperianDirector and not director.IsExperianShareholder;
+            )
             directorView = new EzBob.Profile.DirectorCompositeView ({collection: new EzBob.Directors(directors)}) 
             @director.show (directorView)
 

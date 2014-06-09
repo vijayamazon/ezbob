@@ -25,7 +25,10 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 
 		this.dupCheckKeys[sKey] = 1;
 
-		_.each(options.customerInfo.Directors, function(oDir) {
+		_.each(options.customerInfo.Directors, function (oDir) {
+		    if (oDir.IsExperianDirector || oDir.IsExperianShareholder) {
+		        return;
+		    }
 			var sKey = this.detailsToKey(
 				oDir.Name,
 				oDir.Surname,

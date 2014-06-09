@@ -24,7 +24,8 @@
 
 		public string Email { get; set; }
 		public string Phone { get; set; }
-
+		public bool IsExperianShareholder { get; set; }
+		public bool IsExperianDirector { get; set; }
 		public Director FromModel() {
 			Director director = null;
 

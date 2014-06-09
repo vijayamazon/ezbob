@@ -1,0 +1,32 @@
+﻿@model dynamic
+
+<script id="company-directors-template" type="text/template">
+    <h2>Directors and shareholders</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(data, function(director) {director.DirectorAddress%>
+            <tr>
+                <td><%-director.Name%> <%-director.Middle%> <%-director.Surname%></td>
+                <td><%-director.Email%></td>
+                <td><%-director.Phone%></td>
+                <td><%-director.DirectorAddress == null ? '' : director.DirectorAddress[0].FormattedAddress%></td>
+                <td>todo</td>
+                <td><%-director.IsExperianShareholder ? 'Shareholder' : 'Director'%></td>
+                <td><button class="btn" data-directorId="<%-director.Id%>">edit</button></td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+
+</script>

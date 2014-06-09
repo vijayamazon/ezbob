@@ -452,7 +452,7 @@
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsQuestion.js")
 				.Add("~/Content/js/Profile/ezbob.profile.Agreements.js")
-
+				.Add("~/Content/js/Profile/ezbob.profile.companyDirectorsView.js")
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderProfileJs
 
