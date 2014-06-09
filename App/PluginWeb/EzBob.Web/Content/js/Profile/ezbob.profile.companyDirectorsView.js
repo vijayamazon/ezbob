@@ -12,9 +12,9 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
     },
     
     serializeData: function () {
-        console.log('this.model',this.model);
+        var company = this.model.get("CompanyInfo") || {};
         return {
-            data: this.model.get("CompanyInfo").Directors
+            data: company.Directors || []
         };
     }
 });
