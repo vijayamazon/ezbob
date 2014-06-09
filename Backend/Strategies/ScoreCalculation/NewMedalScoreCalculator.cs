@@ -3,6 +3,7 @@
 	using System.Data;
 	using System.Text.RegularExpressions;
 	using ExperianLib;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
@@ -71,15 +72,25 @@
 
 			// TODO: logic assumes 1 hmrc - what should we do if we have more
 
+			bool wasAbleToGetSummaryData = false;
+			VatReturnSummary[] summaryData = null;
 			if (hmrcId != 0)
 			{
 				var loadVatReturnSummary = new LoadVatReturnSummary(customerId, hmrcId, db, log);
 				loadVatReturnSummary.Execute();
-				var summary = loadVatReturnSummary.Summary;
+				summaryData = loadVatReturnSummary.Summary;
 
+				if (summaryData != null && summaryData.Length != 0)
+				{
+					wasAbleToGetSummaryData = true;
+				}
+			}
+
+			if (wasAbleToGetSummaryData)
+			{
 				freeCashFlowDataAvailable = true;
-				Results.AnnualTurnover = summary[0].Revenues ?? 0;
-				Results.FreeCashFlow = summary[0].FreeCashFlow ?? 0;
+				Results.AnnualTurnover = summaryData[0].Revenues ?? 0;
+				Results.FreeCashFlow = summaryData[0].FreeCashFlow ?? 0;
 			}
 			else
 			{
