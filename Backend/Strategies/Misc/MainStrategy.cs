@@ -1,4 +1,5 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace EzBob.Backend.Strategies.Misc
+{
 	using AutoDecisions;
 	using Experian;
 	using EzBob.Models;
@@ -18,7 +19,8 @@
 
 	#region class MainStrategy
 
-	public class MainStrategy : AStrategy {
+	public class MainStrategy : AStrategy
+	{
 		#region public
 
 		#region constructor
@@ -63,7 +65,8 @@
 
 		#region method Execute
 
-		public override void Execute() {
+		public override void Execute()
+		{
 			ReadConfigurations();
 
 			MakeSureMpDataIsSufficient();
@@ -72,7 +75,8 @@
 
 			SetAutoDecisionAvailability();
 
-			if (newCreditLineOption != NewCreditLineOption.SkipEverything) {
+			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
+			{
 				PerformCompanyExperianCheck();
 				PerformConsumerExperianCheck();
 
@@ -85,9 +89,11 @@
 				GetAml();
 				GetBwa();
 			}
-			else {
+			else
+			{
 				experianConsumerScore = GetCurrentExperianScore();
 				GetMaxCompanyExperianScore();
+				GetCompanySeniorityDays();
 				minExperianScore = experianConsumerScore;
 				maxExperianScore = experianConsumerScore;
 				initialExperianConsumerScore = experianConsumerScore;
@@ -95,7 +101,8 @@
 
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
 
-			if (underwriterCheck) {
+			if (underwriterCheck)
+			{
 				GetZooplaData();
 				SetEndTimestamp();
 				return;
@@ -126,17 +133,21 @@
 				customerStatusIsWarning,
 				isBrokerCustomer,
 				typeOfBusiness == "Limited" || typeOfBusiness == "LLP",
+				companySeniorityDays,
+				isOffline,
 				DB,
 				Log
 			);
 
-			if (autoDecisionResponse.IsAutoApproval) {
+			if (autoDecisionResponse.IsAutoApproval)
+			{
 				modelLoanOffer = autoDecisionResponse.AutoApproveAmount;
 
 				if (modelLoanOffer < offeredCreditLine)
 					offeredCreditLine = modelLoanOffer;
 			}
-			else if (autoDecisionResponse.IsAutoBankBasedApproval) {
+			else if (autoDecisionResponse.IsAutoBankBasedApproval)
+			{
 				modelLoanOffer = autoDecisionResponse.BankBasedAutoApproveAmount;
 
 				if (modelLoanOffer < offeredCreditLine)
@@ -148,20 +159,24 @@
 
 			UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent);
 
-			if (autoDecisionResponse.UserStatus == "Approved") {
-				if (autoDecisionResponse.IsAutoApproval) {
+			if (autoDecisionResponse.UserStatus == "Approved")
+			{
+				if (autoDecisionResponse.IsAutoApproval)
+				{
 					UpdateApprovalData();
 					SendApprovalMails(scoringResult.MaxOfferPercent);
 
 					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
 				}
-				else if (autoDecisionResponse.IsAutoBankBasedApproval) {
+				else if (autoDecisionResponse.IsAutoBankBasedApproval)
+				{
 					UpdateBankBasedApprovalData();
 					SendBankBasedApprovalMails();
 
 					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto bank based approval");
 				}
-				else {
+				else
+				{
 					UpdateReApprovalData();
 					SendReApprovalMails();
 
@@ -172,10 +187,10 @@
 			else if (autoDecisionResponse.UserStatus == "Rejected")
 			{
 				if ((autoDecisionResponse.IsReRejected && !enableAutomaticReRejection) ||
-				    (!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
+					(!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
 					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected
-						                             ? "Mandrill - User supposed to be re-rejected by the strategy"
-						                             : "Mandrill - User supposed to be rejected by the strategy");
+													 ? "Mandrill - User supposed to be re-rejected by the strategy"
+													 : "Mandrill - User supposed to be rejected by the strategy");
 				else
 				{
 					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy");
@@ -190,7 +205,7 @@
 				SendWaitingForDecisionMail();
 			}
 
-			if (autoDecisionResponse.CreditResult != "Rejected")
+			if (autoDecisionResponse.CreditResult != "Rejected" && autoDecisionResponse.SystemDecision != "Reject")
 			{
 				GetLandRegistry();
 			}
@@ -210,7 +225,8 @@
 
 		#region method SetOverrideApproved
 
-		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
+		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected)
+		{
 			m_bOverrideApprovedRejected = bOverrideApprovedRejected;
 			return this;
 		} // SetOverrideApprovedRejected
@@ -223,7 +239,8 @@
 
 		#region method CalcAndCapOffer
 
-		private void CalcAndCapOffer() {
+		private void CalcAndCapOffer()
+		{
 			Log.Info("Finalizing and capping offer");
 
 			if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
@@ -232,7 +249,7 @@
 			if (loanOfferReApprovalRemainingAmountOld < 500) // TODO: make this 500 configurable
 				loanOfferReApprovalRemainingAmountOld = 0;
 
-			loanOfferReApprovalSum = new [] {
+			loanOfferReApprovalSum = new[] {
 				loanOfferReApprovalFullAmount,
 				loanOfferReApprovalRemainingAmount,
 				loanOfferReApprovalFullAmountOld,
@@ -258,7 +275,8 @@
 
 		#region method UpdateCustomerAndCashRequest
 
-		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase) {
+		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase)
+		{
 			DB.ExecuteNonQuery(
 				"UpdateScoringResultsNew",
 				CommandSpecies.StoredProcedure,
@@ -295,7 +313,8 @@
 
 		#region method SendWaitingForDecisionMail
 
-		private void SendWaitingForDecisionMail() {
+		private void SendWaitingForDecisionMail()
+		{
 			mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -312,8 +331,9 @@
 
 		#region method SendReApprovalMails
 
-		private void SendReApprovalMails() {
-			mailer.Send("Mandrill - User is re-approved",  new Dictionary<string, string> {
+		private void SendReApprovalMails()
+		{
+			mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Re-Approved"},
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -333,7 +353,8 @@
 				}
 			});
 
-			if (enableAutomaticReApproval) {
+			if (enableAutomaticReApproval)
+			{
 				var customerMailVariables = new Dictionary<string, string> {
 					{"FirstName", appFirstName},
 					{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
@@ -348,7 +369,8 @@
 
 		#region method UpdateReApprovalData
 
-		private void UpdateReApprovalData() {
+		private void UpdateReApprovalData()
+		{
 			DB.ExecuteNonQuery(
 				"UpdateCashRequestsReApproval",
 				CommandSpecies.StoredProcedure,
@@ -376,7 +398,8 @@
 
 		#region method SendApprovalMails
 
-		private void SendApprovalMails(decimal interestRate) {
+		private void SendApprovalMails(decimal interestRate)
+		{
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
@@ -410,7 +433,8 @@
 
 		#region method UpdateApprovalData
 
-		private void UpdateApprovalData() {
+		private void UpdateApprovalData()
+		{
 			DB.ExecuteNonQuery(
 				"UpdateAutoApproval",
 				CommandSpecies.StoredProcedure,
@@ -423,7 +447,8 @@
 
 		#region method SendBankBasedApprovalMails
 
-		private void SendBankBasedApprovalMails() {
+		private void SendBankBasedApprovalMails()
+		{
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
@@ -457,7 +482,8 @@
 
 		#region method UpdateBankBasedApprovalData
 
-		private void UpdateBankBasedApprovalData() {
+		private void UpdateBankBasedApprovalData()
+		{
 			DB.ExecuteNonQuery(
 				"UpdateBankBasedAutoApproval",
 				CommandSpecies.StoredProcedure,
@@ -471,7 +497,8 @@
 
 		#region method SetEndTimestamp
 
-		private void SetEndTimestamp() {
+		private void SetEndTimestamp()
+		{
 			DB.ExecuteNonQuery("Update_Main_Strat_Finish_Date",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("UserId", customerId),
@@ -483,7 +510,8 @@
 
 		#region method GetLastCashRequestData
 
-		private void GetLastCashRequestData() {
+		private void GetLastCashRequestData()
+		{
 			DataTable lastOfferDataTable = DB.ExecuteReader(
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
@@ -491,7 +519,8 @@
 				new QueryParameter("Now", DateTime.UtcNow)
 			);
 
-			if (lastOfferDataTable.Rows.Count == 1) {
+			if (lastOfferDataTable.Rows.Count == 1)
+			{
 				var lastOfferResults = new SafeReader(lastOfferDataTable.Rows[0]);
 				loanOfferReApprovalFullAmount = lastOfferResults["ReApprovalFullAmountNew"];
 				loanOfferReApprovalRemainingAmount = lastOfferResults["ReApprovalRemainingAmount"];
@@ -516,7 +545,8 @@
 
 		#region method CalculateScoreAndMedal
 
-		private ScoreMedalOffer CalculateScoreAndMedal() {
+		private ScoreMedalOffer CalculateScoreAndMedal()
+		{
 			Log.Info("Starting to calculate score and medal");
 
 			DataTable scoreCardDataTable = DB.ExecuteReader(
@@ -530,7 +560,8 @@
 			string maritalStatusStr = scoreCardResults["MaritalStatus"];
 			MaritalStatus maritalStatus;
 
-			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatus)) {
+			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatus))
+			{
 				Log.Warn("Cant parse marital status:{0}. Will use 'Other'", maritalStatusStr);
 				maritalStatus = MaritalStatus.Other;
 			} // if
@@ -617,7 +648,8 @@
 
 		#region method PerformExperianConsumerCheckForDirectors
 
-		private void PerformExperianConsumerCheckForDirectors() {
+		private void PerformExperianConsumerCheckForDirectors()
+		{
 			if (companyType == "Entrepreneur")
 				return;
 
@@ -627,7 +659,8 @@
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			foreach (DataRow row in dt.Rows) {
+			foreach (DataRow row in dt.Rows)
+			{
 				var sr = new SafeReader(row);
 				int appDirId = sr["DirId"];
 				string appDirName = sr["DirName"];
@@ -650,8 +683,10 @@
 
 		#region method PerformConsumerExperianCheck
 
-		private int PerformConsumerExperianCheck(int directorId = 0) {
-			if (wasMainStrategyExecutedBefore) {
+		private int PerformConsumerExperianCheck(int directorId = 0)
+		{
+			if (wasMainStrategyExecutedBefore)
+			{
 				Log.Info("Performing experian consumer check");
 
 				var strat = new ExperianConsumerCheck(customerId, directorId, false, DB, Log);
@@ -663,12 +698,14 @@
 				return strat.Score;
 			} // if
 
-			if (!WaitForExperianConsumerCheckToFinishUpdates(directorId)) {
+			if (!WaitForExperianConsumerCheckToFinishUpdates(directorId))
+			{
 				Log.Info("No data exist from experian consumer check for customer {0}{1}.", customerId, directorId == 0 ? "" : "director " + directorId);
 				return 0;
 			} // if
 
-			if (directorId == 0) {
+			if (directorId == 0)
+			{
 				experianConsumerScore = GetCurrentExperianScore();
 				return experianConsumerScore;
 			} // if
@@ -680,7 +717,8 @@
 
 		#region method GetCurrentExperianScore
 
-		private int GetCurrentExperianScore() {
+		private int GetCurrentExperianScore()
+		{
 			return DB.ExecuteScalar<int>(
 				"GetExperianScore",
 				CommandSpecies.StoredProcedure,
@@ -690,6 +728,7 @@
 
 		#endregion method GetCurrentExperianScore
 
+		#region method GetMaxCompanyExperianScore
 		private void GetMaxCompanyExperianScore()
 		{
 			// TODO: implement for EZ-2297: get max company score (consider parent companies)
@@ -705,11 +744,25 @@
 				maxCompanyScore = sr["Score"];
 			}
 		} // GetMaxCompanyExperianScore
+		#endregion
+
+		#region method GetCompanySeniorityDays
+		private void GetCompanySeniorityDays()
+		{
+			var seniority = new GetCompanySeniority(customerId, DB, Log);
+			seniority.Execute();
+			companySeniorityDays = seniority.CompanyIncorporationDate.HasValue
+				                   ? (DateTime.UtcNow - seniority.CompanyIncorporationDate.Value).Days
+				                   : 0;
+		} // GetMaxCompanyExperianScore
+		#endregion
 
 		#region method PerformCompanyExperianCheck
 
-		private void PerformCompanyExperianCheck() {
-			if (wasMainStrategyExecutedBefore) {
+		private void PerformCompanyExperianCheck()
+		{
+			if (wasMainStrategyExecutedBefore)
+			{
 				Log.Info("Performing experian company check");
 				var experianCompanyChecker = new ExperianCompanyCheck(customerId, false, DB, Log);
 				experianCompanyChecker.Execute();
@@ -724,13 +777,16 @@
 
 		#region method MakeSureMpDataIsSufficient
 
-		private void MakeSureMpDataIsSufficient() {
+		private void MakeSureMpDataIsSufficient()
+		{
 			bool shouldExpectMpData =
 				newCreditLineOption != NewCreditLineOption.SkipEverything &&
 				newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp;
 
-			if (shouldExpectMpData) {
-				if (!WaitForMarketplacesToFinishUpdates()) {
+			if (shouldExpectMpData)
+			{
+				if (!WaitForMarketplacesToFinishUpdates())
+				{
 					Log.Info("Waiting for marketplace data ended with error");
 
 					mailer.Send("Mandrill - No Information about shops", new Dictionary<string, string> {
@@ -746,10 +802,12 @@
 
 		#region method SetAutoDecisionAvailability
 
-		private void SetAutoDecisionAvailability() {
+		private void SetAutoDecisionAvailability()
+		{
 			Log.Info("Setting auto decision availability");
 
-			if (!customerStatusIsEnabled || customerStatusIsWarning) {
+			if (!customerStatusIsEnabled || customerStatusIsWarning)
+			{
 				enableAutomaticReApproval = false;
 				enableAutomaticApproval = false;
 			} // if
@@ -759,7 +817,8 @@
 				enableAutomaticApproval = false;
 			}
 
-			if (isBrokerCustomer) {
+			if (isBrokerCustomer)
+			{
 				enableAutomaticApproval = false;
 				enableAutomaticRejection = false;
 			} // if
@@ -769,7 +828,8 @@
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
 				avoidAutomaticDecision == 1
-			) {
+			)
+			{
 				enableAutomaticApproval = false;
 				enableAutomaticReApproval = false;
 				enableAutomaticRejection = false;
@@ -896,8 +956,10 @@
 
 		#region method GetBwa
 
-		private void GetBwa() {
-			if (ShouldRunBwa()) {
+		private void GetBwa()
+		{
+			if (ShouldRunBwa())
+			{
 				Log.Info("Getting BWA for customer: {0}", customerId);
 				var bwaChecker = new BwaChecker(customerId, DB, Log);
 				bwaChecker.Execute();
@@ -908,8 +970,10 @@
 
 		#region method GetAml
 
-		private void GetAml() {
-			if (wasMainStrategyExecutedBefore) {
+		private void GetAml()
+		{
+			if (wasMainStrategyExecutedBefore)
+			{
 				Log.Info("Getting AML for customer: {0}", customerId);
 				var amlChecker = new AmlChecker(customerId, DB, Log);
 				amlChecker.Execute();
@@ -931,7 +995,8 @@
 
 		#region method WaitForMarketplacesToFinishUpdates
 
-		private bool WaitForMarketplacesToFinishUpdates() {
+		private bool WaitForMarketplacesToFinishUpdates()
+		{
 			Log.Info("Waiting for marketplace data");
 			return WaitForUpdateToFinish(GetIsMarketPlacesUpdated, totalTimeToWaitForMarketplacesUpdate, intervalWaitForMarketplacesUpdate);
 		} // WaitForMarketplacesToFinishUpdates
@@ -940,7 +1005,8 @@
 
 		#region method WaitForExperianCompanyCheckToFinishUpdates
 
-		private bool WaitForExperianCompanyCheckToFinishUpdates() {
+		private bool WaitForExperianCompanyCheckToFinishUpdates()
+		{
 			Log.Info("Waiting for experian company check");
 
 			if (string.IsNullOrEmpty(experianRefNum))
@@ -953,7 +1019,8 @@
 
 		#region method WaitForExperianConsumerCheckToFinishUpdates
 
-		private bool WaitForExperianConsumerCheckToFinishUpdates(int directorId = 0) {
+		private bool WaitForExperianConsumerCheckToFinishUpdates(int directorId = 0)
+		{
 			Log.Info("Waiting for experian consumer check");
 			return WaitForUpdateToFinish(() => GetIsExperianConsumerUpdated(directorId), totalTimeToWaitForExperianConsumerCheck, intervalWaitForExperianConsumerCheck);
 		} // WaitForExperianConsumerCheckToFinishUpdates
@@ -962,7 +1029,8 @@
 
 		#region method WaitForAmlToFinishUpdates
 
-		private bool WaitForAmlToFinishUpdates() {
+		private bool WaitForAmlToFinishUpdates()
+		{
 			Log.Info("Waiting for AML check");
 			return WaitForUpdateToFinish(GetIsAmlUpdated, totalTimeToWaitForAmlCheck, intervalWaitForAmlCheck);
 		} // WaitForMarketplacesToFinishUpdates
@@ -971,10 +1039,12 @@
 
 		#region method WaitForUpdateToFinish
 
-		private bool WaitForUpdateToFinish(Func<bool> function, int totalSecondsToWait, int intervalBetweenCheck) {
+		private bool WaitForUpdateToFinish(Func<bool> function, int totalSecondsToWait, int intervalBetweenCheck)
+		{
 			DateTime startWaitingTime = DateTime.UtcNow;
 
-			for ( ; ; ) {
+			for (; ; )
+			{
 				if (function())
 					return true;
 
@@ -989,7 +1059,8 @@
 
 		#region method GetIsExperianConsumerUpdated
 
-		private bool GetIsExperianConsumerUpdated(int directorId) {
+		private bool GetIsExperianConsumerUpdated(int directorId)
+		{
 			return DB.ExecuteScalar<bool>(
 				"GetIsConsumerDataUpdated",
 				CommandSpecies.StoredProcedure,
@@ -1003,7 +1074,8 @@
 
 		#region method GetIsAmlUpdated
 
-		private bool GetIsAmlUpdated() {
+		private bool GetIsAmlUpdated()
+		{
 			return DB.ExecuteScalar<bool>("GetIsAmlUpdated",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId));
@@ -1013,7 +1085,8 @@
 
 		#region method GetIsExperianCompanyUpdated
 
-		private bool GetIsExperianCompanyUpdated() {
+		private bool GetIsExperianCompanyUpdated()
+		{
 			return DB.ExecuteScalar<bool>(
 				"GetIsCompanyDataUpdated",
 				CommandSpecies.StoredProcedure,
@@ -1026,14 +1099,17 @@
 
 		#region method GetIsMarketPlacesUpdated
 
-		private bool GetIsMarketPlacesUpdated() {
+		private bool GetIsMarketPlacesUpdated()
+		{
 			bool bResult = true;
 
 			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
+				(sr, bRowsetStart) =>
+				{
 					string lastStatus = sr["CurrentStatus"];
 
-					if (lastStatus != "Done" && lastStatus != "Never Started" && lastStatus != "Finished" && lastStatus != "Failed" && lastStatus != "Terminated") {
+					if (lastStatus != "Done" && lastStatus != "Never Started" && lastStatus != "Finished" && lastStatus != "Failed" && lastStatus != "Terminated")
+					{
 						bResult = false;
 						return ActionResult.SkipAll;
 					} // if
@@ -1052,7 +1128,8 @@
 
 		#region method GetZooplaData
 
-		private void GetZooplaData() {
+		private void GetZooplaData()
+		{
 			Log.Info("Getting zoopla data for customer:{0}", customerId);
 			strategyHelper.GetZooplaData(customerId);
 		} // GetZooplaData
@@ -1127,6 +1204,7 @@
 		private int minExperianScore;
 		private int maxExperianScore;
 		private int maxCompanyScore;
+		private int companySeniorityDays;
 		private int experianConsumerScore;
 		private int allMPsNum;
 		private AutoDecisionResponse autoDecisionResponse;

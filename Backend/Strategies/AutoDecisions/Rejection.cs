@@ -8,110 +8,142 @@
 
 	public class Rejection
 	{
-		private int autoRejectionExceptionAnualTurnover;
-		private int rejectDefaultsCreditScore;
-		private int rejectMinimalSeniority;
-		private int lowCreditScore;
-		private int rejectDefaultsAccountsNum;
-		private int autoRejectionExceptionCreditScore;
-		private int errorMPsNum;
-		private int loanOfferApprovalNum;
-		private int numOfDefaultAccounts;
-		private int numOfDefaultAccountsForCompany;
-		private readonly AConnection db;
-		private readonly ASafeLog log;
-		private readonly double totalSumOfOrders1YTotalForRejection;
-		private readonly double totalSumOfOrders3MTotalForRejection;
-		private readonly double marketplaceSeniorityDays;
-		private readonly bool enableAutomaticRejection;
-		private int lowTotalAnnualTurnover;
-		private int lowTotalThreeMonthTurnover;
-		private readonly double maxExperianConsumerScore;
-		private readonly int customerId;
-		private readonly int maxCompanyScore;
-		private readonly bool customerStatusIsEnabled;
-		private readonly bool customerStatusIsWarning;
-		private readonly bool isBrokerCustomer;
-		private readonly bool isLimitedCompany;
+		private int _autoRejectionExceptionAnualTurnover;
+		private int _rejectDefaultsCreditScore;
+		private int _rejectMinimalSeniority;
+		private int _lowCreditScore;
+		private int _rejectDefaultsAccountsNum;
+		private int _autoRejectionExceptionCreditScore;
+		private int _errorMPsNum;
+		private int _loanOfferApprovalNum;
+		private int _numOfDefaultAccounts;
+		private int _numOfDefaultAccountsForCompany;
+		private readonly AConnection _db;
+		private readonly ASafeLog _log;
+		private readonly double _totalSumOfOrders1YTotalForRejection;
+		private readonly double _totalSumOfOrders3MTotalForRejection;
+		private readonly double _marketplaceSeniorityDays;
+		private readonly bool _enableAutomaticRejection;
+		private int _lowTotalAnnualTurnover;
+		private int _lowTotalThreeMonthTurnover;
+		private readonly double _maxExperianConsumerScore;
+		private readonly int _customerId;
+		private readonly int _maxCompanyScore;
+		private readonly bool _customerStatusIsEnabled;
+		private readonly bool _customerStatusIsWarning;
+		private readonly bool _isBrokerCustomer;
+		private readonly bool _isLimitedCompany;
+		private readonly int _companySeniorityDays;
+		private readonly bool _isOffline;
 
-		public Rejection(int customerId, double totalSumOfOrders1YTotalForRejection, double totalSumOfOrders3MTotalForRejection, double marketplaceSeniorityDays, bool enableAutomaticRejection, double maxExperianConsumerScore, int maxCompanyScore, bool customerStatusIsEnabled,
-				bool customerStatusIsWarning, bool isBrokerCustomer, bool isLimitedCompany, AConnection oDb, ASafeLog oLog)
+		public Rejection(int customerId,
+			double totalSumOfOrders1YTotalForRejection,
+			double totalSumOfOrders3MTotalForRejection,
+			double marketplaceSeniorityDays,
+			bool enableAutomaticRejection,
+			double maxExperianConsumerScore,
+			int maxCompanyScore,
+			bool customerStatusIsEnabled,
+			bool customerStatusIsWarning,
+			bool isBrokerCustomer,
+			bool isLimitedCompany,
+			int companySeniorityDays,
+			bool isOffline,
+			AConnection oDb, ASafeLog oLog)
 		{
-			db = oDb;
-			log = oLog;
-			this.totalSumOfOrders1YTotalForRejection = totalSumOfOrders1YTotalForRejection;
-			this.totalSumOfOrders3MTotalForRejection = totalSumOfOrders3MTotalForRejection;
-			this.marketplaceSeniorityDays = marketplaceSeniorityDays;
-			this.enableAutomaticRejection = enableAutomaticRejection;
-			this.maxExperianConsumerScore = maxExperianConsumerScore;
-			this.customerId = customerId;
-			this.maxCompanyScore = maxCompanyScore;
-			this.customerStatusIsEnabled = customerStatusIsEnabled;
-			this.customerStatusIsWarning = customerStatusIsWarning;
-			this.isBrokerCustomer = isBrokerCustomer;
-			this.isLimitedCompany = isLimitedCompany;
+			_db = oDb;
+			_log = oLog;
+			_totalSumOfOrders1YTotalForRejection = totalSumOfOrders1YTotalForRejection;
+			_totalSumOfOrders3MTotalForRejection = totalSumOfOrders3MTotalForRejection;
+			_marketplaceSeniorityDays = marketplaceSeniorityDays;
+			_enableAutomaticRejection = enableAutomaticRejection;
+			_maxExperianConsumerScore = maxExperianConsumerScore;
+			_customerId = customerId;
+			_maxCompanyScore = maxCompanyScore;
+			_customerStatusIsEnabled = customerStatusIsEnabled;
+			_customerStatusIsWarning = customerStatusIsWarning;
+			_isBrokerCustomer = isBrokerCustomer;
+			_isLimitedCompany = isLimitedCompany;
+			_companySeniorityDays = companySeniorityDays;
+			_isOffline = isOffline;
 		}
 
-		private bool IsException()
+		private bool IsException(out string reason)
 		{
-			if (loanOfferApprovalNum > 0 && customerStatusIsEnabled && !customerStatusIsWarning)
+			reason = "AutoReject: Rejection exception";
+
+			//1. Customers that have been approved at least once before (even if the latest decision was rejection) and in enabled status/fraud suspect
+			if (_loanOfferApprovalNum > 0 && _customerStatusIsEnabled && !_customerStatusIsWarning)
 			{
+				reason = string.Format("{0} : {1}", reason, "Customers that have been approved at least once before");
 				return true;
 			}
-			if (totalSumOfOrders1YTotalForRejection > autoRejectionExceptionAnualTurnover)
+			//2. Annual turnover above 250,000
+			if (_totalSumOfOrders1YTotalForRejection > _autoRejectionExceptionAnualTurnover)
 			{
+				reason = string.Format("{0} : {1} {2} ({3})", reason, "Annual turnover above", _autoRejectionExceptionAnualTurnover, _totalSumOfOrders1YTotalForRejection);
 				return true;
 			}
-			if (maxExperianConsumerScore > autoRejectionExceptionCreditScore)
+			//3. Consumer score (max of applicant and directors) above 800
+			if (_maxExperianConsumerScore > _autoRejectionExceptionCreditScore)
 			{
+				reason = string.Format("{0} : {1} {2} ({3})", reason, "Consumer score above", _autoRejectionExceptionCreditScore, _maxExperianConsumerScore);
 				return true;
 			}
+			//4. Company score (max of company, parent companies) (default >= 40)
+			int rejectionExceptionMaxCompanyScore = CurrentValues.Instance.RejectionExceptionMaxCompanyScore;
+			if (_maxCompanyScore >= rejectionExceptionMaxCompanyScore)
+			{
+				reason = string.Format("{0} : {1} {2} ({3})", reason, "Company score above", rejectionExceptionMaxCompanyScore, _maxCompanyScore);
+				return true;
+			}
+			//5. MP with error AND (consumer score > 500 OR company score > 10)
 			int rejectionExceptionMaxConsumerScoreForMpError = CurrentValues.Instance.RejectionExceptionMaxConsumerScoreForMpError;
 			int rejectionExceptionMaxCompanyScoreForMpError = CurrentValues.Instance.RejectionExceptionMaxCompanyScoreForMpError;
-			if (errorMPsNum > 0 && (maxExperianConsumerScore > rejectionExceptionMaxConsumerScoreForMpError || maxCompanyScore > rejectionExceptionMaxCompanyScoreForMpError))
+			if (_errorMPsNum > 0 && (_maxExperianConsumerScore > rejectionExceptionMaxConsumerScoreForMpError || _maxCompanyScore > rejectionExceptionMaxCompanyScoreForMpError))
 			{
+				reason = string.Format("{0} : {1} {2} {3}", reason, "MP with error and experian scores", _maxExperianConsumerScore, _maxCompanyScore);
 				return true;
 			}
-			if ((decimal)maxExperianConsumerScore == 0)
+			//TODO : unknown rule
+			if ((decimal)_maxExperianConsumerScore == 0)
 			{
+				reason = string.Format("{0} : {1}", reason, "Experian consumer score is 0");
+				return true;
+			}
+			//6. Customer via broker
+			if (_isBrokerCustomer) // TODO: Currently rejections are disabled for broker customers - this logic is in contradiction to it
+			{
+				reason = string.Format("{0} : {1}", reason, "Customer via broker");
 				return true;
 			}
 
-			int rejectionExceptionMaxCompanyScore = CurrentValues.Instance.RejectionExceptionMaxCompanyScore;
-			if (maxCompanyScore >= rejectionExceptionMaxCompanyScore)
-			{
-				return true;
-			}
-			if (isBrokerCustomer) // TODO: Currently rejections are disabled for broker customers - this logic is in contradiction to it
-			{
-				return true;
-			}
-
+			reason = "No rejection exception";
 			return false;
 		}
 
 		private void Init()
 		{
-			DataTable dt = db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
+			DataTable dt = _db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(dt.Rows[0]);
 
-			autoRejectionExceptionAnualTurnover = sr["AutoRejectionException_AnualTurnover"];
-			rejectDefaultsCreditScore = sr["Reject_Defaults_CreditScore"];
-			rejectMinimalSeniority = sr["Reject_Minimal_Seniority"];
-			lowCreditScore = sr["LowCreditScore"];
-			rejectDefaultsAccountsNum = sr["Reject_Defaults_AccountsNum"];
-			autoRejectionExceptionCreditScore = sr["AutoRejectionException_CreditScore"];
+			_autoRejectionExceptionAnualTurnover = sr["AutoRejectionException_AnualTurnover"];
+			_rejectDefaultsCreditScore = sr["Reject_Defaults_CreditScore"];
+			_rejectMinimalSeniority = sr["Reject_Minimal_Seniority"];
+			_lowCreditScore = sr["LowCreditScore"];
+			_rejectDefaultsAccountsNum = sr["Reject_Defaults_AccountsNum"];
+			_autoRejectionExceptionCreditScore = sr["AutoRejectionException_CreditScore"];
 			int rejectDefaultsMonths = sr["Reject_Defaults_MonthsNum"];
 			int rejectDefaultsAmount = sr["Reject_Defaults_Amount"];
 			int rejectByCompanyDefaultsMonths = CurrentValues.Instance.RejectByCompany_Defaults_MonthsNum;
 			int rejectByCompanyDefaultsAmount = CurrentValues.Instance.RejectByCompany_Defaults_Amount;
-			lowTotalAnnualTurnover = sr["LowTotalAnnualTurnover"];
-			lowTotalThreeMonthTurnover = sr["LowTotalThreeMonthTurnover"];
+			_lowTotalAnnualTurnover = sr["LowTotalAnnualTurnover"];
+			_lowTotalThreeMonthTurnover = sr["LowTotalThreeMonthTurnover"];
 
-			dt = db.ExecuteReader(
+			dt = _db.ExecuteReader(
 				"GetCustomerRejectionData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("CustomerId", _customerId),
 				new QueryParameter("Reject_Defaults_Months", rejectDefaultsMonths),
 				new QueryParameter("Reject_Defaults_Amount", rejectDefaultsAmount),
 				new QueryParameter("RejectByCompany_Defaults_Months", rejectByCompanyDefaultsMonths),
@@ -120,10 +152,10 @@
 
 			sr = new SafeReader(dt.Rows[0]);
 
-			errorMPsNum = sr["ErrorMPsNum"];
-			loanOfferApprovalNum = sr["ApprovalNum"];
-			numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
-			numOfDefaultAccountsForCompany = sr["NumOfDefaultAccountsForCompany"];
+			_errorMPsNum = sr["ErrorMPsNum"];
+			_loanOfferApprovalNum = sr["ApprovalNum"];
+			_numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
+			_numOfDefaultAccountsForCompany = sr["NumOfDefaultAccountsForCompany"];
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -131,82 +163,95 @@
 			try
 			{
 				Init();
-				if (IsException())
+				string rejectionExceptionReason;
+				if (IsException(out rejectionExceptionReason))
+				{
+					response.AutoRejectReason = rejectionExceptionReason;
 					return false;
+				}
 
 				int rejectByCompanyNumOfDefaultAccounts = CurrentValues.Instance.RejectByCompanyNumOfDefaultAccounts;
 				int rejectByCompanyDefaultsScore = CurrentValues.Instance.RejectByCompanyDefaultsScore;
 				int rejectionCompanyScore = CurrentValues.Instance.RejectionCompanyScore;
-				FillPayPalFiguresForExplanationMail(db, customerId, response);
+				FillPayPalFiguresForExplanationMail(_db, _customerId, response);
 
-				if (maxExperianConsumerScore < lowCreditScore)
+
+
+				//1. Consumer score < 500
+				if (_maxExperianConsumerScore < _lowCreditScore)
 				{
-					response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + maxExperianConsumerScore + " < " +
-					                            lowCreditScore;
+					response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + _maxExperianConsumerScore + " < " +
+												_lowCreditScore;
 				}
-				else if (maxCompanyScore < rejectionCompanyScore)
+				//2. Business score < 10 (If business score exists)
+				else if (_maxCompanyScore > 0 && _maxCompanyScore < rejectionCompanyScore)
 				{
-					response.AutoRejectReason = "AutoReject: Low company score. Condition not met:" + maxCompanyScore + " < " +
+					response.AutoRejectReason = "AutoReject: Low company score. Condition not met:" + _maxCompanyScore + " < " +
 												rejectionCompanyScore;
 				}
-				else if (maxExperianConsumerScore < rejectDefaultsCreditScore &&
-				    numOfDefaultAccounts >= rejectDefaultsAccountsNum)
+				//3. Credit score < 800 AND at least 1 default of at least 300 in last 24 months
+				else if (_maxExperianConsumerScore < _rejectDefaultsCreditScore &&
+					_numOfDefaultAccounts >= _rejectDefaultsAccountsNum)
 				{
 					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met:" +
-					                            maxExperianConsumerScore +
-					                            " < " + rejectDefaultsCreditScore + " AND " + numOfDefaultAccounts + " >= " +
-					                            rejectDefaultsAccountsNum;
+												_maxExperianConsumerScore +
+												" < " + _rejectDefaultsCreditScore + " AND " + _numOfDefaultAccounts + " >= " +
+												_rejectDefaultsAccountsNum;
 				}
-				else if (maxCompanyScore < rejectByCompanyDefaultsScore && numOfDefaultAccountsForCompany >= rejectByCompanyNumOfDefaultAccounts &&
-				         isLimitedCompany)
+				//4. Business score exists and < 20 AND at least 1 company default of at least 1000 in last 24 months and company is limited
+				else if (_maxCompanyScore > 0 && _maxCompanyScore < rejectByCompanyDefaultsScore && 
+					_numOfDefaultAccountsForCompany >= rejectByCompanyNumOfDefaultAccounts && _isLimitedCompany)
 				{
 					response.AutoRejectReason = "AutoReject: Limited company defaults. Condition not met:" +
-												numOfDefaultAccountsForCompany +
+												_maxCompanyScore + "<" + rejectByCompanyDefaultsScore + " AND " +
+												_numOfDefaultAccountsForCompany +
 												" >= " + rejectByCompanyNumOfDefaultAccounts + " AND is limited company";
 				}
 				// TODO: Add condition:
-				// 5. Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 accounts in last 3 months
+				//5. Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 accounts in last 3 months
 
 				// TODO: Add condition:
-				// 6. max(Marketplace(Ecomm) or company )seniority < 11 months.
-
-				else if (!customerStatusIsEnabled || customerStatusIsWarning)
+				//6. max(Marketplace(Ecomm) or company )seniority < 300 days.
+				else if (Math.Max(_marketplaceSeniorityDays, _companySeniorityDays) < _rejectMinimalSeniority)
+				{
+					response.AutoRejectReason = "AutoReject: Seniority. Condition not met: (max(mp " + _marketplaceSeniorityDays +
+												", company " + _companySeniorityDays + ") < " +
+												_rejectMinimalSeniority + ")";
+				}
+				//7. Customer status != enabled\fraud suspect
+				else if (!_customerStatusIsEnabled || _customerStatusIsWarning)
 				{
 					response.AutoRejectReason = "AutoReject: Customer status. Condition not met:" +
-												!customerStatusIsEnabled +
-												" AND " + customerStatusIsWarning;
-				
+												!_customerStatusIsEnabled +
+												" AND " + _customerStatusIsWarning;
+
 				}
 
 				// TODO: the 2 next conditions are in the previous implementation but are not mentioned in the new story - should they be removed?
-				// TODO: should this next condition be removed (was it replaced by condition #6 in story?)
-				else if (marketplaceSeniorityDays < rejectMinimalSeniority)
-				{
-					response.AutoRejectReason = "AutoReject: Seniority. Condition not met: (" + marketplaceSeniorityDays + " < " +
-												rejectMinimalSeniority + ")";
-				}
 				// TODO: should this next condition be removed (was it replaced by condition #1 (second paragraph) in story?)
-				else if (
-					(response.PayPalNumberOfStores == 0 ||
-					 response.PayPalTotalSumOfOrders3M < lowTotalThreeMonthTurnover ||
-					 response.PayPalTotalSumOfOrders1Y < lowTotalAnnualTurnover)
-					&&
-					(totalSumOfOrders3MTotalForRejection < lowTotalThreeMonthTurnover || totalSumOfOrders1YTotalForRejection < lowTotalAnnualTurnover)
-					)
+				else if (!_isOffline && 
+					(response.PayPalNumberOfStores == 0 || response.PayPalTotalSumOfOrders3M < _lowTotalThreeMonthTurnover || response.PayPalTotalSumOfOrders1Y < _lowTotalAnnualTurnover)
+					&& (_totalSumOfOrders3MTotalForRejection < _lowTotalThreeMonthTurnover || _totalSumOfOrders1YTotalForRejection < _lowTotalAnnualTurnover))
 				{
 					response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR " +
-					                            response.PayPalTotalSumOfOrders3M + " < " +
-					                            lowTotalThreeMonthTurnover + " OR " + response.PayPalTotalSumOfOrders1Y + " < " +
-					                            lowTotalAnnualTurnover + ") AND (" + totalSumOfOrders3MTotalForRejection + " < " +
-					                            lowTotalThreeMonthTurnover + " OR " + totalSumOfOrders1YTotalForRejection + " < " +
-					                            lowTotalAnnualTurnover + ")";
+												response.PayPalTotalSumOfOrders3M + " < " +
+												_lowTotalThreeMonthTurnover + " OR " + response.PayPalTotalSumOfOrders1Y + " < " +
+												_lowTotalAnnualTurnover + ") AND (" + _totalSumOfOrders3MTotalForRejection + " < " +
+												_lowTotalThreeMonthTurnover + " OR " + _totalSumOfOrders1YTotalForRejection + " < " +
+												_lowTotalAnnualTurnover + ")";
+				}
+				
+				//Offline only (hmrc or bank) 1. Have separate turnover configs. Annual - 30000, 3M - 5000
+				else if(true)
+				{
+					
 				}
 				else
 				{
 					return false;
 				}
 
-				response.CreditResult = enableAutomaticRejection ? "Rejected" : "WaitingForDecision";
+				response.CreditResult = _enableAutomaticRejection ? "Rejected" : "WaitingForDecision";
 				response.UserStatus = "Rejected";
 				response.SystemDecision = "Reject";
 
@@ -214,7 +259,7 @@
 			}
 			catch (Exception e)
 			{
-				log.Error("Exception during rejection:{0}", e);
+				_log.Error("Exception during rejection:{0}", e);
 				return false;
 			}
 		}
