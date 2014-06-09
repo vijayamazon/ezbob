@@ -62,6 +62,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
         return this;
     },
+
     loanDetails: function (id) {
         EzBob.App.GA.trackPage('/Customer/Profile/LoanDetails');
 

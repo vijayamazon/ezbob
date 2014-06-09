@@ -6,6 +6,7 @@
 	using System.Web.Mvc;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
+	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using ConfigManager;
 	using EKM;
@@ -30,6 +31,8 @@
 	#endregion using
 
 	public class ProfileController : Controller {
+		#region public
+
 		#region constructor
 
 		public ProfileController(
@@ -234,9 +237,19 @@
 			foreach (MP_CustomerMarketPlace ekm in ekms) {
 				validator = validator ?? new EkmConnector();
 
+				string sPassword;
+
+				try {
+					sPassword = Encrypted.Decrypt(ekm.SecurityData);
+				}
+				catch (Exception e) {
+					ms_oLog.Warn(e, "Failed to parse EKM password for marketplace with id {0}.", ekm.Id);
+					return Json(new { hasBadEkm = true, error = "Invalid password.", ekm = ekm.DisplayName });
+				} // try
+
 				string error;
 
-				if (!validator.Validate(ekm.DisplayName, Encrypted.Decrypt(ekm.SecurityData), out error))
+				if (!validator.Validate(ekm.DisplayName, sPassword, out error))
 					return Json(new { hasBadEkm = true, error = error, ekm = ekm.DisplayName });
 			} // for each ekm
 
@@ -344,6 +357,8 @@
 
 		#endregion action PayPointCallback
 
+		#endregion public
+
 		#region private
 
 		#region fields
@@ -354,6 +369,8 @@
 		private readonly CashRequestBuilder m_oCashRequestBuilder;
 		private readonly ISession m_oSession;
 		private readonly IPayPointFacade m_oPayPointFacade;
+
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (ProfileController));
 
 		#endregion fields
 
