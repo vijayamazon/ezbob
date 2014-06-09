@@ -1,3 +1,7 @@
+IF OBJECT_ID('RptCustomerStatus') IS NULL
+	EXECUTE('CREATE PROCEDURE RptCustomerStatus AS SELECT 1')
+GO
+
 ALTER PROCEDURE RptCustomerStatus
 @DateStart DATETIME,
 @DateEnd DATETIME

@@ -69,7 +69,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				icon: 'envelope-o',
 				title: 'Waiting for decision',
 				action: 'GridWaiting',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,LastStatus,CRMcomment,Broker,~SegmentType',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CustomerStatus,$CalcAmount,$OSBalance,LastStatus,CRMcomment,Broker,~SegmentType',
 			}), // waiting
 			escalated: new GridProperties({
 				icon: 'arrow-up',
