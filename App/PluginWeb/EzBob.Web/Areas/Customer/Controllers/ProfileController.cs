@@ -2,18 +2,14 @@
 	#region using
 
 	using System;
-	using System.Collections.Generic;
 	using System.Web.Mvc;
-	using EzBob.Models;
 	using Ezbob.Backend.Models;
-	using Ezbob.Logger;
-	using Ezbob.Utils.Security;
 	using ConfigManager;
-	using EKM;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using ExperianLib.Ebusiness;
+	using Ezbob.Logger;
 	using Iesi.Collections.Generic;
 	using Infrastructure.Attributes;
 	using Models;
@@ -217,62 +213,35 @@
 
 		#region action ApplyForALoan
 
-		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult ApplyForALoan() {
-			var customer = m_oContext.Customer;
+			var oModel = new ApplyForLoanResultModel(m_oContext.Customer, false);
 
-			if (customer == null)
-				return Json(new { });
+			if (oModel.IsReadyForApply())
+				DoApplyForLoan();
 
-			var ekmType = new EkmDatabaseMarketPlace();
-
-			IEnumerable<MP_CustomerMarketPlace> ekms =
-				customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == ekmType.InternalId);
-
-			EkmConnector validator = null;
-
-			foreach (MP_CustomerMarketPlace ekm in ekms) {
-				validator = validator ?? new EkmConnector();
-
-				string sPassword;
-
-				try {
-					sPassword = Encrypted.Decrypt(ekm.SecurityData);
-				}
-				catch (Exception e) {
-					ms_oLog.Warn(e, "Failed to parse EKM password for marketplace with id {0}.", ekm.Id);
-					return Json(new { hasBadEkm = true, error = "Invalid password.", ekm = ekm.DisplayName });
-				} // try
-
-				string error;
-
-				if (!validator.Validate(ekm.DisplayName, sPassword, out error))
-					return Json(new { hasBadEkm = true, error = error, ekm = ekm.DisplayName });
-			} // for each ekm
-
-			customer.CreditResult = null;
-
-			customer.OfferStart = DateTime.UtcNow;
-			customer.OfferValidUntil = DateTime.UtcNow.AddHours(CurrentValues.Instance.OfferValidForHours);
-
-			customer.ApplyCount++;
-
-			if (customer.LastCashRequest != null && customer.LastCashRequest.HasLoans)
-				m_oServiceClient.Instance.RequestCashWithoutTakenLoan(customer.Id);
-
-			m_oCashRequestBuilder.CreateCashRequest(customer, CashRequestOriginator.RequestCashBtn);
-			m_oCashRequestBuilder.ForceEvaluate(customer.Id, customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false, false);
-
-			if (CurrentValues.Instance.RefreshYodleeEnabled && customer.GetYodleeAccounts().Any())
-				return Json(new { hasYodlee = true });
-
-			return Json(new { });
+			return Json(oModel);
 		} // ApplyForALoan
 
 		#endregion action ApplyForALoan
+
+		#region action DirectApplyForLoan
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult DirectApplyForLoan() {
+			var oModel = new ApplyForLoanResultModel(m_oContext.Customer, true);
+
+			if (oModel.IsReadyForApply())
+				DoApplyForLoan();
+
+			return Json(oModel);
+		} // DirectApplyForLoan
+
+		#endregion action DirectApplyForLoan
 
 		#region action RenewEbayToken
 
@@ -360,6 +329,35 @@
 		#endregion public
 
 		#region private
+
+		#region method DoApplyForLoan
+
+		private void DoApplyForLoan() {
+			Customer customer = m_oContext.Customer;
+
+			ms_oLog.Debug("Customer {0} applied for loan, creating a cash request...", customer.Stringify());
+
+			Transactional.Execute(() => {
+				customer.CreditResult = null;
+
+				customer.OfferStart = DateTime.UtcNow;
+				customer.OfferValidUntil = DateTime.UtcNow.AddHours(CurrentValues.Instance.OfferValidForHours);
+
+				customer.ApplyCount++;
+
+				if (customer.LastCashRequest != null && customer.LastCashRequest.HasLoans)
+					m_oServiceClient.Instance.RequestCashWithoutTakenLoan(customer.Id);
+
+				m_oCashRequestBuilder.CreateCashRequest(customer, CashRequestOriginator.RequestCashBtn);
+				m_oCashRequestBuilder.ForceEvaluate(customer.Id, customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false, false);
+
+				m_oSession.Flush();
+			});
+
+			ms_oLog.Debug("Customer {0} applied for loan, cash request is ready.", customer.Stringify());
+		} // DoApplyForLoan
+
+		#endregion method DoApplyForLoan
 
 		#region fields
 

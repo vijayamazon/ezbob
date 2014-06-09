@@ -2,241 +2,409 @@
 EzBob.Profile = EzBob.Profile || {};
 
 EzBob.Profile.GetCashModel = Backbone.Model.extend({
-    initialize: function (options) {
-        var that = this;
-        this.customer = options.customer;
+	initialize: function(options) {
+		this.customer = options.customer;
 
-        this.isRequestInProgress = false;
+		this.isRequestInProgress = false;
 
-        $.post(window.gRootPath + 'Customer/Profile/GetRefreshInterval')
-            .done(function(result) {
-                setInterval(function() { that.refresh(); }, result.Interval);
-            });
-    }, // initialize
+		var that = this;
 
-    refresh: function () {
-        var that = this;
-        if (!that.isRequestInProgress) {
-            that.isRequestInProgress = true;
-            $.post(window.gRootPath + 'Customer/Profile/GetCustomerStatus', { customerId: that.customer.get('Id') })
-                .done(function (result) {
-                    if (result.State !== that.previousState) {
-                        that.previousState = result.State;
-                        that.customer.fetch({
-                            success: function() {
-                                that.isRequestInProgress = false;
-                            }
-                        });
-                        return;
-                    }
-                    that.isRequestInProgress = false;
-                });
-        } // if
-    }, // refresh
+		$.post(window.gRootPath + 'Customer/Profile/GetRefreshInterval').done(function(result) {
+			setInterval(function() { that.refresh(); }, result.Interval);
+		});
+	}, // initialize
+
+	refresh: function() {
+		var that = this;
+
+		if (!that.isRequestInProgress) {
+			that.isRequestInProgress = true;
+
+			$.post(
+				window.gRootPath + 'Customer/Profile/GetCustomerStatus',
+				{ customerId: that.customer.get('Id') }
+			).done(function(result) {
+				if (result.State !== that.previousState) {
+					that.previousState = result.State;
+
+					that.customer.fetch({
+						success: function() { that.isRequestInProgress = false; },
+					});
+
+					return;
+				} // if
+
+				that.isRequestInProgress = false;
+			});
+		} // if
+	}, // refresh
 }); // EzBob.Profile.GetCashModel
 
 EzBob.Profile.GetCashView = Backbone.View.extend({
-    className: "d-widget",
+	className: "d-widget",
 
-    initialize: function (options) {
-        this.templates = {
-            "get": _.template($('#d-getCash-template').html()),
-            "apply": _.template($('#d-getCash-template-apply').html()),
-            "wait": _.template($('#d-getCash-template-wait').html()),
-            "disabled": _.template($('#d-getCash-template-wait').html()),
-            //"bad": _.template($('#d-getCash-template-bad').html()),
-            "bad": _.template($('#d-getCash-template-apply').html()),
-            "late": _.template($('#d-getCash-template-late').html())
-        };
+	initialize: function(options) {
+		this.templates = {
+			"get": _.template($('#d-getCash-template').html()),
+			"apply": _.template($('#d-getCash-template-apply').html()),
+			"wait": _.template($('#d-getCash-template-wait').html()),
+			"disabled": _.template($('#d-getCash-template-wait').html()),
+			//"bad": _.template($('#d-getCash-template-bad').html()),
+			"bad": _.template($('#d-getCash-template-apply').html()),
+			"late": _.template($('#d-getCash-template-late').html())
+		};
 
-        this.customer = options.customer;
+		this.refreshAccountData = null;
 
-        this.customer.on('change:state', this.render, this);
+		this.customer = options.customer;
 
-        setInterval(_.bind(this.refreshTimer, this), 1000);
+		this.customer.on('change:state', this.render, this);
 
-        var that = this;
+		setInterval(_.bind(this.refreshTimer, this), 1000);
 
-        window.YodleeRefreshAccountRetry = function () {
-            that.attemptsLeft = (that.attemptsLeft || 5) - 1;
-            return {
-                url: that.$el.find('#refreshYodleeBtn').attr('href'),
-                attemptsLeft: that.attemptsLeft
-            };
-        }; // window.YodleeRefreshAccountRetry
+		var that = this;
 
-        window.YodleeAccountUpdateError = function (msg) {
-            $.colorbox.close();
-            EzBob.App.trigger('error', msg);
-        }; // window.YodleeAccountUpdateError
-    }, // initialize
+		window.YodleeRefreshAccountRetry = function() {
+			that.attemptsLeft = (that.attemptsLeft || 5) - 1;
+			return {
+				url: that.$el.find('#refreshYodleeBtn').attr('href'),
+				attemptsLeft: that.attemptsLeft
+			};
+		}; // window.YodleeRefreshAccountRetry
 
-    events: {
-        'click button.get-cash': 'getCash',
-        'click button.apply-for-loan': 'applyForALoan',
-    }, // events
+		window.YodleeAccountUpdateError = function(msg) {
+			$.colorbox.close();
+			EzBob.App.trigger('error', msg);
+		}; // window.YodleeAccountUpdateError
+	}, // initialize
 
-    getCash: function () {
-        if (this.customer.hasLateLoans())
-            return;
+	events: {
+		'click button.get-cash': 'getCash',
+		'click button.apply-for-loan': 'applyForALoan',
+	}, // events
 
-        if (this.customer.get('state') !== 'get')
-            return;
+	getCash: function() {
+		if (this.customer.hasLateLoans())
+			return;
 
-        window.location.href = "#GetCash";
-    }, // getCash
+		if (this.customer.get('state') !== 'get')
+			return;
 
-    applyForALoan: function () {
-        if (this.customer.get('IsDefaultCustomerStatus'))
-            return;
+		window.location.href = "#GetCash";
+	}, // getCash
 
-        if (this.customer.hasLateLoans())
-            return;
+	applyForALoan: function() {
+		if (this.customer.get('IsDefaultCustomerStatus'))
+			return;
 
-        var sState = this.customer.get('state');
+		if (this.customer.hasLateLoans())
+			return;
 
-        if (sState !== 'apply' && sState !== 'bad' && sState !== 'disabled')
-            return;
+		var sState = this.customer.get('state');
 
-        if (this.customer.get('TrustPilotReviewEnabled') && this.customer.get("hasLoans")) {
-            var nTrustPilotStatusID = this.customer.get('TrustPilotStatusID');
+		if (sState !== 'apply' && sState !== 'bad' && sState !== 'disabled')
+			return;
 
-            if (nTrustPilotStatusID === 0) {
-                this.openTrustPilotDlg();
-                return;
-            } // if never left review
-        } // if review enabled
+		if (this.customer.get('TrustPilotReviewEnabled') && this.customer.get("hasLoans")) {
+			var nTrustPilotStatusID = this.customer.get('TrustPilotStatusID');
 
-        this.doApplyForALoan();
-    }, // applyForALoan
+			if (nTrustPilotStatusID === 0) {
+				this.openTrustPilotDlg();
+				return;
+			} // if never left review
+		} // if review enabled
 
-    openTrustPilotDlg: function () {
-        var self = this;
+		this.doApplyForALoan();
+	}, // applyForALoan
 
-        this.$el.find('.trustpilot-ezbob').dialog({
-            autoOpen: true,
-            modal: true,
-            width: 500,
-            resizable: false,
-            closeOnEscape: false,
-            close: function (evt, ui) {
-                $(this).dialog('destroy');
-                self.$el.append(this);
-            }, // on close
-            open: function (evt, ui) {
-                var me = $(this);
+	openTrustPilotDlg: function() {
+		var self = this;
 
-                $('.ui-dialog-titlebar', me.parent()).hide();
+		this.$el.find('.trustpilot-ezbob').dialog({
+			autoOpen: true,
+			modal: true,
+			width: 500,
+			resizable: false,
+			closeOnEscape: false,
+			close: function(evt, ui) {
+				$(this).dialog('destroy');
+				self.$el.append(this);
+			}, // on close
+			open: function(evt, ui) {
+				var me = $(this);
 
-                $('a.trustpilot-rate', me).click(function () {
-                    me.dialog('close');
-                    window.open('http://www.trustpilot.com/evaluate/ezbob.com');
-                    self.doApplyForALoan(true);
-                });
+				$('.ui-dialog-titlebar', me.parent()).hide();
 
-                $('a.trustpilot-skip', me).click(function () {
-                    me.dialog('close');
-                    self.doApplyForALoan();
-                });
+				$('a.trustpilot-rate', me).click(function() {
+					me.dialog('close');
+					window.open('http://www.trustpilot.com/evaluate/ezbob.com');
+					self.doApplyForALoan(true);
+				});
 
-                $('*:focus', me).blur();
-            }, // on open
-        }); // dialog
-    }, // openTrustPilotDlg
+				$('a.trustpilot-skip', me).click(function() {
+					me.dialog('close');
+					self.doApplyForALoan();
+				});
 
-    doApplyForALoan: function (bClaims) {
-        var that = this;
+				$('*:focus', me).blur();
+			}, // on open
+		}); // dialog
+	}, // openTrustPilotDlg
 
-        this.makeTargeting();
-        
-        this.trigger('applyForLoan');
-        BlockUi('on');
-        if (bClaims) {
-            $.post(window.gRootPath + 'Customer/Profile/ClaimsTrustPilotReview');
-        }
+	doApplyForALoan: function(bClaims) {
+		var that = this;
 
-        $.post(window.gRootPath + 'Customer/Profile/ApplyForALoan')
-            .done(function(result) {
-                if (result.hasYodlee) {
-                    var url = '' + window.gRootPath + 'Customer/YodleeMarketPlaces/RefreshYodlee';
-                    that.$el.find('#refreshYodleeBtn').attr('href', url);
-                    that.$el.find('.refresh_yodlee_help').colorbox({ href: '#refresh_yodlee_help', inline: true, open: true });
-                } // if
+		this.makeTargeting();
 
-                if (result.hasBadEkm) {
-                    that.$el.find('#refresh_ekm_login').val(result.ekm).change();
-                    that.$el.find('.refresh_ekm_help').colorbox({ href: '#refresh_ekm_help', inline: true, open: true });
-                    return;
-                } // if
+		this.trigger('applyForLoan');
+		BlockUi('on');
 
-                that.customer.set('state', 'wait');
-            })
-            .always(function() {
-                BlockUi('off');
-            });
-    }, // doApplyForALoan
+		if (bClaims)
+			$.post(window.gRootPath + 'Customer/Profile/ClaimsTrustPilotReview');
 
-    makeTargeting: function() {
-        var that = this;
+		var oRequest = $.post(window.gRootPath + 'Customer/Profile/ApplyForALoan');
 
-        $.post(window.gRootPath + 'Customer/Profile/EntrepreneurTargeting')
-            .done(function (result) {
-                if (result.companyTargeting) {
-                    if (EzBob.Config.TargetsEnabledEntrepreneur) {
-                        var req = $.get(window.gRootPath + 'Account/CheckingCompany', { companyName: result.companyName, postcode: result.companyPostcode, filter: result.companyType, refNum: result.companyNumber });
-                        scrollTop();
-                        BlockUi();
+		oRequest.done(function(oResponse) {
+			console.log('apply result is', oResponse);
 
-                        req.done(function (reqData) {
-                            if (reqData) {
-                                switch (reqData.length) {
-                                    case 0: break;
-                                    case 1: that.saveTargeting(reqData[0]); break;
-                                    default:
-                                        var companyTargets = new EzBob.companyTargets({ model: reqData });
-                                        companyTargets.render();
-                                        companyTargets.on('BusRefNumGetted', function (targetingData) {
-                                            that.saveTargeting(targetingData);
-                                        });
-                                        break;
-                                } // switch reqData.length
-                            } // if
-                        }); // on done
+			if (oResponse.error) {
+				EzBob.App.trigger('error', oResponse.error);
+				return;
+			} // if
 
-                        req.always(function () {
-                            UnBlockUi();
-                        });
-                    } // if
-                }
-            });
-    },
-    saveTargeting: function(targetingData) {
-        if (!targetingData || targetingData.BusRefNum == 'skip') {
-            targetingData = { BusRefNum: "NotFound" };
-        }
-        $.post(window.gRootPath + 'Customer/Profile/SaveTargeting', targetingData);
-    },
-    
-    render: function () {
-        var state = this.customer.get('state');
-        if (this.previousState == undefined) {
-            this.previousState = state;
-        }
-        var data = this.model.toJSON();
-        data.state = state;
-        data.countDown = this.customer.offerValidFormatted();
-        data.availableCredit = this.customer.get('CreditSum');
-        data.offerStart = this.customer.get('OfferStart');
-        data.creditResult = this.customer.get('CreditResult');
+			if (oResponse.has_ekm || oResponse.has_yodlee) {
+				var oDlg = that.$el.find('#refresh-accounts-dlg');
 
-        this.$el.html(this.templates[state](data));
-        this.$el.find('button').popover({ placement: 'top' });
-        EzBob.UiAction.registerView(this);
-        this.$el.find('.trustpilot-ezbob').hide();
-        return this;
-    }, // render
+				oDlg.find('.skip-refresh-accounts').click(function() {
+					event.preventDefault();
+					event.stopPropagation();
 
-    refreshTimer: function () {
-        this.$el.find('.offerValidFor').text(this.customer.offerValidFormatted() + " hrs");
-    }, // refreshTimer
+					EzBob.UiAction.saveOne('click', this);
+
+					that.refreshAccountData = { type: 'skip-refresh', };
+
+					$.colorbox.close();
+				});
+
+				var oList = oDlg.find('.account-list').empty();
+
+				if (oResponse.has_ekm) {
+					for (var sDisplayName in oResponse.ekms) {
+						var sErrorMsg = oResponse.ekms[sDisplayName];
+
+						oList.append(
+							$('<li />').append(
+								$('<a />').text(
+									'Update ekmpowershop account ' + sDisplayName
+								).attr({
+									href: '#',
+									'ui-event-control-id': 'refresh-account:ekm-list-item',
+								}).click((function(sInnerDisplayName, sInnerErrorMsg) {
+									return function() {
+										event.preventDefault();
+										event.stopPropagation();
+
+										EzBob.UiAction.saveOne('click', this);
+
+										that.refreshAccountData = {
+											type: 'ekm',
+											displayName: sInnerDisplayName,
+											errorMsg: sInnerErrorMsg,
+										};
+
+										$.colorbox.close();
+									};
+								})(sDisplayName, sErrorMsg))
+							)
+						);
+					} // for each EKM
+				} // if has EKM
+
+				if (oResponse.has_yodlee) {
+					oList.append(
+						$('<li />').append(
+							$('<a />').text(
+								'Update your bank account'
+							).attr({
+								href: '#',
+								'ui-event-control-id': 'refresh-account:yodlee-list-item',
+							}).click(function() {
+								event.preventDefault();
+								event.stopPropagation();
+
+								EzBob.UiAction.saveOne('click', this);
+
+								that.refreshAccountData = { type: 'bank', };
+
+								$.colorbox.close();
+							})
+						)
+					);
+				} // if has yodlee
+
+				that.$el.find('.refresh-account-help').colorbox({
+					href: '#refresh-accounts-dlg',
+					inline: true,
+					open: true,
+					onClosed: function() {
+						that.refreshAccount();
+					},
+				});
+
+				return;
+			} // if
+
+			that.customer.set('state', 'wait');
+		});
+
+		oRequest.always(function() {
+			UnBlockUi();
+		});
+	}, // doApplyForALoan
+
+	refreshAccount: function() {
+		$.colorbox.remove();
+
+		if (!this.refreshAccountData)
+			return;
+
+		switch (this.refreshAccountData.type) {
+		case 'ekm':
+			this.refreshEkm();
+			break;
+
+		case 'bank':
+			this.refreshYodlee();
+			break;
+
+		case 'skip-refresh':
+			this.directApplyForLoan();
+			break;
+		} // switch
+
+		this.refreshAccountData = null;
+	}, // refreshAccount
+
+	directApplyForLoan: function() {
+		var that = this;
+
+		BlockUi('on');
+
+		var oRequest = $.post(window.gRootPath + 'Customer/Profile/DirectApplyForLoan');
+
+		oRequest.done(function(oResponse) {
+			if (oResponse.error) {
+				EzBob.App.trigger('error', oResponse.error);
+				return;
+			} // if
+
+			that.customer.set('state', 'wait');
+		});
+
+		oRequest.always(function() {
+			UnBlockUi();
+		});
+	}, // directApplyForLoan
+
+	refreshYodlee: function() {
+		this.$el.find('#refreshYodleeBtn').attr('href', '' + window.gRootPath + 'Customer/YodleeMarketPlaces/RefreshYodlee');
+		this.$el.find('.refresh_yodlee_help').colorbox({ href: '#refresh_yodlee_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+	}, // refreshYodlee
+
+	refreshEkm: function() {
+		var oDlg = this.$el.find('.refresh_ekm_help');
+
+		oDlg.find('.error').text(this.refreshAccountData.errorMsg);
+
+		this.$el.find('#refresh_ekm_password').val('').change();
+		this.$el.find('#refresh_ekm_login').val(this.refreshAccountData.displayName).change();
+
+		oDlg.colorbox({ href: '#refresh_ekm_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+	}, // refreshEkm
+
+	makeTargeting: function() {
+		var that = this;
+
+		$.post(window.gRootPath + 'Customer/Profile/EntrepreneurTargeting').done(function(result) {
+			if (result.companyTargeting) {
+				if (EzBob.Config.TargetsEnabledEntrepreneur) {
+					var req = $.get(
+						window.gRootPath + 'Account/CheckingCompany',
+						{
+							companyName: result.companyName,
+							postcode: result.companyPostcode,
+							filter: result.companyType,
+							refNum: result.companyNumber,
+						}
+					);
+
+					scrollTop();
+					BlockUi();
+
+					req.done(function(reqData) {
+						if (reqData) {
+							switch (reqData.length) {
+								case 0:
+									break;
+
+								case 1:
+									that.saveTargeting(reqData[0]);
+									break;
+
+								default:
+									var companyTargets = new EzBob.companyTargets({ model: reqData });
+
+									companyTargets.render();
+
+									companyTargets.on('BusRefNumGetted', function(targetingData) {
+										that.saveTargeting(targetingData);
+									});
+
+									break;
+							} // switch reqData.length
+						} // if
+					}); // on done
+
+					req.always(function() {
+						UnBlockUi();
+					});
+				} // if
+			}
+		});
+	}, // makeTargeting
+
+	saveTargeting: function(targetingData) {
+		if (!targetingData || targetingData.BusRefNum == 'skip')
+			targetingData = { BusRefNum: "NotFound" };
+
+		$.post(window.gRootPath + 'Customer/Profile/SaveTargeting', targetingData);
+	}, // saveTargeting
+
+	render: function() {
+		var state = this.customer.get('state');
+
+		if (this.previousState == undefined)
+			this.previousState = state;
+
+		var data = this.model.toJSON();
+		data.state = state;
+		data.countDown = this.customer.offerValidFormatted();
+		data.availableCredit = this.customer.get('CreditSum');
+		data.offerStart = this.customer.get('OfferStart');
+		data.creditResult = this.customer.get('CreditResult');
+
+		this.$el.html(this.templates[state](data));
+
+		this.$el.find('button').popover({ placement: 'top' });
+
+		EzBob.UiAction.registerView(this);
+
+		this.$el.find('.trustpilot-ezbob').hide();
+
+		return this;
+	}, // render
+
+	refreshTimer: function() {
+		this.$el.find('.offerValidFor').text(this.customer.offerValidFormatted() + " hrs");
+	}, // refreshTimer
 }); // EzBob.Profile.GetCashView

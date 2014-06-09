@@ -132,9 +132,23 @@
 			<dt>Offer Valid:</dt>
 			<dd class="dashes">---</dd>
 		</dl>
-		<button href="#" class="button orange apply-for-loan refresh_yodlee_help refresh_ekm_help" ui-event-control-id="dashboard:request-cash">Request Cash</button>
+		<button href="#" class="button orange apply-for-loan refresh-account-help refresh_yodlee_help refresh_ekm_help" ui-event-control-id="dashboard:request-cash">Request Cash</button>
 
 		<div class="hide">
+			<div id="refresh-accounts-dlg" class="help_window">
+				<h2>Please update the following accounts</h2>
+
+				<p></p>
+
+				<ul class="account-list"></ul>
+
+				<p></p>
+
+				<div><a href="#" class="button orange skip-refresh-accounts" ui-event-control-id="refresh-account:skip">Skip</a></div>
+
+				<p></p>
+			</div>
+
 			<div id="refresh_yodlee_help" class="help_window">
 				<h2>Refresh bank account</h2>
 				<p>
@@ -333,16 +347,16 @@
 		function updateEkm() {
 			$("#update-ekm-error").html('');
 
-			BlockUi('on');
+			BlockUi();
 
 			var url = "" + window.gRootPath + "Customer/EkmMarketPlaces/Update";
 
 			var oRequest = $.post(url, { name: $('#refresh_ekm_login').val(), password: $('#refresh_ekm_password').val() });
 
 			oRequest.done(function(res) {
-				if (res.error) {
+				if (res.error)
 					$("#update-ekm-error").html(res.error);
-				}
+
 				if (res.success) {
 					$.colorbox.close();
 					$('button.apply-for-loan').click();
@@ -350,7 +364,7 @@
 			});
 			
 			oRequest.always(function() {
-				BlockUi('off');
+				UnBlockUi();
 			});
 		}
 	</script>

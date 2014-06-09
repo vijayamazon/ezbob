@@ -231,6 +231,19 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	#endregion class PersonalInfo
 
+	#region class PersonalInfoExt
+
+	public static class PersonalInfoExt {
+		public static string Stringify(this PersonalInfo pi) {
+			if (pi == null)
+				return string.Empty;
+
+			return (pi.FirstName ?? string.Empty).Trim() + " " + (pi.Surname ?? string.Empty).Trim();
+		} // Stringify
+	} // class PersonalInfoExt
+
+	#endregion class PersonalInfoExt
+
 	#region class AddressInfo
 
 	public class AddressInfo {
@@ -706,4 +719,16 @@ namespace EZBob.DatabaseLib.Model.Database {
 	} // class Customer
 
 	#endregion class Customer
+
+	#region class CustomerExt
+
+	public static class CustomerExt {
+		public static string Stringify(this Customer c) {
+			return (c == null)
+				? string.Empty
+				: string.Format("{0} ({1})", c.PersonalInfo.Stringify(), c.Id).Trim();
+		} // Stringify
+	} // class CustomerExt
+
+	#endregion class CustomerExt
 } // namespace EZBob.DatabaseLib.Model.Database

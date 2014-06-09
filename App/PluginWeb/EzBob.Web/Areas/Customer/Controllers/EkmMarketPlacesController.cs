@@ -113,30 +113,30 @@
 			return nResult;
 		}
 
-		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult Update(string name, string password)
-		{
+		public JsonResult Update(string name, string password) {
 			string errorMsg;
-			if (!_validator.Validate(name, password, out errorMsg))
-			{
+
+			if (!_validator.Validate(name, password, out errorMsg)) {
 				var errorObject = new { error = errorMsg };
 				return Json(errorObject);
-			}
-			try
-			{
-				var customer = _context.Customer;
-				var ekm = new EkmDatabaseMarketPlace();
-				_helper.SaveOrUpdateCustomerMarketplace(name, ekm, password, customer);
+			} // if
+
+			try {
+				Transactional.Execute(() => {
+					var customer = _context.Customer;
+					var ekm = new EkmDatabaseMarketPlace();
+					_helper.SaveOrUpdateCustomerMarketplace(name, ekm, password, customer);
+				});
+
 				return Json(new { success = true }, JsonRequestBehavior.AllowGet);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				Log.Error(e);
 				return Json(new { error = e.Message }, JsonRequestBehavior.AllowGet);
-			}
-		}
-	}
-}
+			} // try
+		} // Update
+	} // EkmMarketplacesController
+} // namespace
