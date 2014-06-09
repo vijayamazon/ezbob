@@ -12,6 +12,7 @@ ALTER PROCEDURE UpdateExperianBusiness
 @CompanyRefNumber NVARCHAR(50),
 @ExperianError NVARCHAR(MAX),
 @ExperianScore INT,
+@ExperianMaxScore INT,
 @CustomerId BIGINT
 AS
 BEGIN
@@ -20,8 +21,10 @@ BEGIN
 	UPDATE MP_ExperianDataCache SET
 		ExperianError = @ExperianError, 
 		ExperianScore = @ExperianScore, 
+		ExperianMaxScore = @ExperianMaxScore, 
 		CustomerId = @CustomerId
 	WHERE
 		CompanyRefNumber = @CompanyRefNumber
 END
+
 GO

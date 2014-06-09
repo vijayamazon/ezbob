@@ -90,6 +90,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerId),
 				new QueryParameter("Score", score),
+				new QueryParameter("MaxScore", output.MaxScore),
 				new QueryParameter("SuggestedAmount", creditLimit),
 				new QueryParameter("IncorporationDate", incorporationDate),
 				new QueryParameter("TangibleEquity", tangibleEquity),

@@ -15,7 +15,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		Score
+		CASE WHEN MaxScore IS NULL THEN Score ELSE MaxScore END AS MaxScore
 	FROM
 		CustomerAnalyticsCompany
 	WHERE

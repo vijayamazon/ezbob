@@ -22,6 +22,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual long? CustomerId { get; set; }
 		public virtual long? DirectorId { get; set; }
 		public virtual int? ExperianScore { get; set; }
+		public virtual int? ExperianMaxScore { get; set; }
 	} // class MP_ExperianDataCache
 
 	public interface IExperianDataCacheRepository : IRepository<MP_ExperianDataCache> {
@@ -87,6 +88,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.DirectorId);
 			Map(x => x.CustomerId);
 			Map(x => x.ExperianScore);
+			Map(x => x.ExperianMaxScore);
 		} // constructor
 	} // class MP_ExperianDataCacheMap
 } // namespace

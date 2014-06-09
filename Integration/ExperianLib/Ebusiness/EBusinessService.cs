@@ -149,9 +149,10 @@
 
 					Utils.WriteLog(requestXml, newResponse, ExperianServiceType.LimitedData, customerId);
 
-					AddToCache(regNumber, requestXml, newResponse);
+					var res = new LimitedResults(newResponse, DateTime.UtcNow) {CacheHit = false};
+					AddToCache(regNumber, requestXml, res);
 
-					return new LimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false };
+					return res;
 				} // if
 
 				if (response == null)
@@ -213,9 +214,10 @@
 
 					Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
 
-					AddToCache(regNumber, requestXml, newResponse);
+					var res = new NonLimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false };
+					AddToCache(regNumber, requestXml, res);
 
-					return new NonLimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false };
+					return res;
 				} // if
 
 				if (response == null)
@@ -257,20 +259,41 @@
 
 		#region method AddToCache
 
-		private void AddToCache(string refNumber, string request, string response) {
+		private void AddToCache(string refNum, string input, BusinessReturnData res)
+		{
 			m_oRetryer.Retry(() => {
 				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
 
 				MP_ExperianDataCache cacheVal =
-					repo.GetAll().FirstOrDefault(c => c.CompanyRefNumber == refNumber)
-					?? new MP_ExperianDataCache {CompanyRefNumber = refNumber};
+					repo.GetAll().FirstOrDefault(c => c.CompanyRefNumber == refNum)
+					?? new MP_ExperianDataCache { CompanyRefNumber = refNum };
 
 				cacheVal.LastUpdateDate = DateTime.UtcNow;
-				cacheVal.JsonPacketInput = request;
-				cacheVal.JsonPacket = response;
+				cacheVal.JsonPacketInput = input;
+				cacheVal.JsonPacket = res.OutputXml;
+				cacheVal.ExperianScore = (int)res.BureauScore;
+				cacheVal.ExperianMaxScore = (int)res.MaxBureauScore;
 				
 				repo.SaveOrUpdate(cacheVal);
-			}, "EBusinessService.AddToCache(" + refNumber + ")");
+			}, "EBusinessService.AddToCache(" + refNum + ")");
+			try
+			{
+				if (!res.Owners.Any()) return;
+				var repo = ObjectFactory.GetInstance<ExperianParentCompanyMapRepository>();
+				foreach (var owner in res.Owners)
+				{
+					var map = new MP_ExperianParentCompanyMap
+						{
+							ExperianRefNum = refNum,
+							ExperianParentRefNum = owner
+						};
+					repo.SaveOrUpdate(map);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.ErrorFormat("Failed to save owners map for company {0} \n{1}", refNum, ex);
+			}
 		} // AddToCache
 
 		#endregion method AddToCache

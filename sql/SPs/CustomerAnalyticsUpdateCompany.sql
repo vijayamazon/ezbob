@@ -8,6 +8,7 @@ GO
 ALTER PROCEDURE CustomerAnalyticsUpdateCompany
 @CustomerID BIGINT,
 @Score INT,
+@MaxScore INT,
 @SuggestedAmount DECIMAL(18, 6),
 @IncorporationDate DATETIME,
 @TangibleEquity DECIMAL(18, 6),
@@ -48,8 +49,8 @@ BEGIN
 	IF @CurrentBalanceSum IS NULL
 		SET @CurrentBalanceSum = 0
 
-	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score, SuggestedAmount, IncorporationDate, CurrentBalanceSum, TangibleEquity, AdjustedProfit, Sic1980Code1, Sic1980Desc1, Sic1992Code1, Sic1992Desc1, AgeOfMostRecentCcj, NumOfCcjsInLast24Months, SumOfCcjsInLast24Months)
-		VALUES (@CustomerID, @AnalyticsDate, 1, @Score, @SuggestedAmount, @IncorporationDate, @CurrentBalanceSum, @TangibleEquity, @AdjustedProfit, @Sic1980Code1, @Sic1980Desc1, @Sic1992Code1, @Sic1992Desc1, @AgeOfMostRecentCcj, @NumOfCcjsInLast24Months, @SumOfCcjsInLast24Months)
+	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score,MaxScore, SuggestedAmount, IncorporationDate, CurrentBalanceSum, TangibleEquity, AdjustedProfit, Sic1980Code1, Sic1980Desc1, Sic1992Code1, Sic1992Desc1, AgeOfMostRecentCcj, NumOfCcjsInLast24Months, SumOfCcjsInLast24Months)
+		VALUES (@CustomerID, @AnalyticsDate, 1, @Score,@MaxScore, @SuggestedAmount, @IncorporationDate, @CurrentBalanceSum, @TangibleEquity, @AdjustedProfit, @Sic1980Code1, @Sic1980Desc1, @Sic1992Code1, @Sic1992Desc1, @AgeOfMostRecentCcj, @NumOfCcjsInLast24Months, @SumOfCcjsInLast24Months)
 	
 	COMMIT TRANSACTION
 END

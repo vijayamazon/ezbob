@@ -731,7 +731,6 @@
 		#region method GetMaxCompanyExperianScore
 		private void GetMaxCompanyExperianScore()
 		{
-			// TODO: implement for EZ-2297: get max company score (consider parent companies)
 			DataTable dt = DB.ExecuteReader(
 				"GetCompanyScore",
 				CommandSpecies.StoredProcedure,
@@ -741,7 +740,7 @@
 			if (dt.Rows.Count == 1)
 			{
 				var sr = new SafeReader(dt.Rows[0]);
-				maxCompanyScore = sr["Score"];
+				maxCompanyScore = sr["MaxScore"];
 			}
 		} // GetMaxCompanyExperianScore
 		#endregion

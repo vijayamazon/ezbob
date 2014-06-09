@@ -342,8 +342,6 @@
 
 			BlockUi();
 
-			console.log('remove', sPeriodID);
-
 			var oRequest = $.post(this.options.removePeriodUrl, { period: sPeriodID, });
 
 			var self = this;

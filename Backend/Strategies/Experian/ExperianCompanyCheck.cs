@@ -82,6 +82,7 @@
 				new QueryParameter("CompanyRefNumber", m_sExperianRefNum),
 				new QueryParameter("ExperianError", experianError),
 				new QueryParameter("ExperianScore", experianBureauScore),
+				new QueryParameter("ExperianMaxScore", MaxScore),
 				new QueryParameter("CustomerId", m_nCustomerID)
 			);
 

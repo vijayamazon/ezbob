@@ -82,7 +82,7 @@
 
 			try {
 				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
-				return new ExperianParserOutput(oParsed, ParsingResult.Ok, null, sCompanyRefNum, sCompanyName, nTypeOfBusiness);
+				return new ExperianParserOutput(oParsed, ParsingResult.Ok, null, sCompanyRefNum, sCompanyName, nTypeOfBusiness, oCachedValue.ExperianMaxScore);
 			}
 			catch (Exception e) {
 				string sErrMsg = string.Format("Failed to extract Company Score tab data from Experian data with company ref num = {0}", sCompanyRefNum);
