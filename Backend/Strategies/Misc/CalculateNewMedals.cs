@@ -52,7 +52,7 @@
 									   new QueryParameter("TangibleEquityWeight", result.TangibleEquityWeight),
 									   new QueryParameter("TangibleEquityGrade", result.TangibleEquityGrade),
 									   new QueryParameter("TangibleEquityScore", result.TangibleEquityScore),
-									   new QueryParameter("BusinessSeniority", result.BusinessSeniority),
+									   new QueryParameter("BusinessSeniority", result.BusinessSeniority.HasValue && result.BusinessSeniority.Value.Year > 1800 ? result.BusinessSeniority : null),
 									   new QueryParameter("BusinessSeniorityWeight", result.BusinessSeniorityWeight),
 									   new QueryParameter("BusinessSeniorityGrade", result.BusinessSeniorityGrade),
 									   new QueryParameter("BusinessSeniorityScore", result.BusinessSeniorityScore),

@@ -415,19 +415,23 @@
 
 		private void CalculateBusinessSeniorityGrade()
 		{
-			if (Results.BusinessSeniority.AddYears(1) > DateTime.UtcNow)
+			if (!Results.BusinessSeniority.HasValue)
 			{
 				Results.BusinessSeniorityGrade = 0;
 			}
-			else if (Results.BusinessSeniority.AddYears(3) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.Value.AddYears(1) > DateTime.UtcNow)
+			{
+				Results.BusinessSeniorityGrade = 0;
+			}
+			else if (Results.BusinessSeniority.Value.AddYears(3) > DateTime.UtcNow)
 			{
 				Results.BusinessSeniorityGrade = 1;
 			}
-			else if (Results.BusinessSeniority.AddYears(5) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.Value.AddYears(5) > DateTime.UtcNow)
 			{
 				Results.BusinessSeniorityGrade = 2;
 			}
-			else if (Results.BusinessSeniority.AddYears(10) > DateTime.UtcNow)
+			else if (Results.BusinessSeniority.Value.AddYears(10) > DateTime.UtcNow)
 			{
 				Results.BusinessSeniorityGrade = 3;
 			}

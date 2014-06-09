@@ -40,7 +40,7 @@
 		public decimal TangibleEquityGrade { get; set; }
 		public decimal TangibleEquityScore { get; set; }
 
-		public DateTime BusinessSeniority { get; set; }
+		public DateTime? BusinessSeniority { get; set; }
 		public decimal BusinessSeniorityWeight { get; set; }
 		public decimal BusinessSeniorityGrade { get; set; }
 		public decimal BusinessSeniorityScore { get; set; }
