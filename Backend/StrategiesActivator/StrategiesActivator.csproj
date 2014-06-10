@@ -79,6 +79,10 @@
       <Project>{1F4AB740-E9BB-4448-9C4D-22A191C297B9}</Project>
       <Name>EzServiceConfiguration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\ChannelGrabberConfig\ChannelGrabberConfig.csproj">
+      <Project>{8ad07daa-3f09-4279-a390-17acde79b44f}</Project>
+      <Name>ChannelGrabberConfig</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\EzBob.Models\EzBob.Models.csproj">
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>

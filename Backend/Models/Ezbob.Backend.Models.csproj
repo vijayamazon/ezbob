@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountsToUpdateModel.cs" />
     <Compile Include="AgreementModel.cs" />
     <Compile Include="BrokerCustomerEntryModel.cs" />
     <Compile Include="BrokerCustomerCrmEntryModel.cs" />

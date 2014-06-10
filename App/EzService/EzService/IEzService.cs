@@ -342,6 +342,9 @@
 		[OperationContract]
 		ActionMetaData EncryptChannelGrabberMarketplaces();
 
+		[OperationContract]
+		ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID);
+
 		#endregion other strategies
 
 		#region pricing model

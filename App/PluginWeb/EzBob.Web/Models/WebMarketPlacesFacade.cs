@@ -6,7 +6,6 @@
 	using EzBob.Models.Marketplaces;
 	using EzBob.Models.Marketplaces.Builders;
 	using StructureMap;
-	using Areas.Customer.Models;
 	using log4net;
 
 	public class WebMarketPlacesFacade {
@@ -18,7 +17,7 @@
 			MarketPlaceModel oYodleeModel = null;
 			var oHmrcList = new List<MarketPlaceModel>();
 
-			var oHmrcID = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+			var oHmrcID = Integration.ChannelGrabberConfig.Configuration.Instance.Hmrc.Guid();
 			var oYodleeID = new Guid("107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF");
 
 			List<MarketPlaceModel> models = marketplaces.Select(mp => {

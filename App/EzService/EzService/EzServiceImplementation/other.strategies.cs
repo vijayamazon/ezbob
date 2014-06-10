@@ -97,5 +97,13 @@
 		} // EncryptChannelGrabberMarketplaces
 
 		#endregion method EncryptChannelGrabberMarketplaces
+
+		#region method DisplayMarketplaceSecurityData
+
+		public ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID) {
+			return ExecuteSync<DisplayMarketplaceSecurityData>(nCustomerID, null, nCustomerID);
+		} // DisplayMarketplaceSecurityData
+
+		#endregion method DisplayMarketplaceSecurityData
 	} // class EzServiceImplementation
 } // namespace EzService

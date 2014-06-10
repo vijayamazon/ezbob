@@ -16,6 +16,7 @@
 	using Newtonsoft.Json;
 	using StructureMap;
 	using log4net;
+	using Configuration = EzServiceConfigurationLoader.Configuration;
 
 	public class ServiceClientActivation {
 		#region public
@@ -37,21 +38,21 @@
 			} // if
 
 			var env = new Ezbob.Context.Environment(m_oLog);
-			AConnection db = new SqlConnection(env, m_oLog);
+			m_oDB = new SqlConnection(env, m_oLog);
 
-			ConfigManager.CurrentValues.Init(db, m_oLog);
+			ConfigManager.CurrentValues.Init(m_oDB, m_oLog);
 
 			Configuration cfg;
 
 			if (m_oMethods.ContainsKey(sInstanceName)) {
-				cfg = new DefaultConfiguration(System.Environment.MachineName, db, m_oLog);
+				cfg = new DefaultConfiguration(System.Environment.MachineName, m_oDB, m_oLog);
 				m_aryArgs = args;
 			}
 			else {
 				m_aryArgs = new string[args.Length - 1];
 				Array.Copy(args, 1, m_aryArgs, 0, args.Length - 1);
 
-				cfg = new Configuration(sInstanceName, db, m_oLog);
+				cfg = new Configuration(sInstanceName, m_oDB, m_oLog);
 			} // if
 
 			cfg.Init();
@@ -962,6 +963,18 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oLog.Msg("Result is:\n{0}", string.Join("\n", oResult.Periods.Select(x => x.ToString())));
 		} // LoadManualVatReturnPeriods
 
+		[Activation]
+		private void DisplayMarketplaceSecurityData() {
+			int nCustomerID;
+
+			if ((m_aryArgs.Length != 2) || !int.TryParse(m_aryArgs[1], out nCustomerID)) {
+				m_oLog.Msg("Usage: DisplayMarketplaceSecurityData <Customer ID>");
+				return;
+			} // if
+
+			m_oServiceClient.DisplayMarketplaceSecurityData(nCustomerID);
+		} // DisplayMarketplaceSecurityData
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 
@@ -972,6 +985,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 		private readonly EzServiceAdminClient m_oAdminClient;
 		private SortedDictionary<string, MethodInfo> m_oMethods;
 		private readonly ASafeLog m_oLog;
+		private readonly AConnection m_oDB;
 
 		#endregion fields
 

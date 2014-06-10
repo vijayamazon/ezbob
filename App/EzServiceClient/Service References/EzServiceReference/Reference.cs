@@ -1924,6 +1924,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplaces", ReplyAction="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplacesResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EncryptChannelGrabberMarketplaces();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/DisplayMarketplaceSecurityData", ReplyAction="http://tempuri.org/IEzService/DisplayMarketplaceSecurityDataResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPricingModelModel", ReplyAction="http://tempuri.org/IEzService/GetPricingModelModelResponse")]
         ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
         
@@ -2316,6 +2319,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData EncryptChannelGrabberMarketplaces() {
             return base.Channel.EncryptChannelGrabberMarketplaces();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID) {
+            return base.Channel.DisplayMarketplaceSecurityData(nCustomerID);
         }
         
         public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName) {
