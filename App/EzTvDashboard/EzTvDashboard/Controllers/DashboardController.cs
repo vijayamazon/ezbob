@@ -1,7 +1,6 @@
-﻿using System.Web.Mvc;
-
-namespace EzTvDashboard.Controllers
+﻿namespace EzTvDashboard.Controllers
 {
+	using System.Web.Mvc;
 	using Code;
 	using Models;
 
@@ -18,14 +17,18 @@ namespace EzTvDashboard.Controllers
 			_modelBuilder = new DashboardModelBuilder();
 		}
 
+		[HttpGet]
 		public ActionResult Index()
 		{
 			_model = _modelBuilder.BuildModel();
-			
-			//Response.AddHeader("Refresh", "2");
 			return View(_model);
 		}
 
+		[HttpGet]
+		public ActionResult Redirect()
+		{
+			return RedirectToAction("Index");
+		}
 		
 		[HttpGet]
 		public JsonResult IsSomethingChanged()
