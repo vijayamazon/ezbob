@@ -86,7 +86,7 @@ BEGIN
  	SELECT @NumOfDefaultAccountsForCompany = NumOfDefaultAccounts FROM [GetNumOfDefaultAccounts] (@CustomerId, @RejectByCompany_Defaults_Months, @RejectByCompany_Defaults_Amount)
  	
  	
- 	DECLARE @NumOfLateAccounts = (SELECT ISNULL(SUM(y.late), 0) NumOfLateAccounts
+ 	DECLARE @NumOfLateAccounts INT = (SELECT ISNULL(SUM(y.late), 0) NumOfLateAccounts
 								  FROM 
 								  (
 										SELECT CASE WHEN x.s LIKE '%2%' THEN 1
