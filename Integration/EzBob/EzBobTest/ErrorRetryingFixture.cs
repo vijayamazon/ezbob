@@ -1,10 +1,8 @@
-using System;
-using EzBob.CommonLib;
-using EzBob.PayPalServiceLib.Common;
-using NUnit.Framework;
-
 namespace EzBobTest
 {
+	using System;
+	using EzBob.CommonLib;
+	using NUnit.Framework;
 	using Ezbob.Utils.Serialization;
 
 	[TestFixture]

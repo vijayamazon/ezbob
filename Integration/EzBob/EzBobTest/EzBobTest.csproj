@@ -64,6 +64,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressHelperTestFixture.cs" />
+    <Compile Include="BaseTestFixtue.cs" />
+    <Compile Include="MedalScoreCalculatorTestFixture.cs" />
     <Compile Include="TestStrategies.cs" />
     <Compile Include="TestCurrencyUpdateController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +82,10 @@
       <Project>{DFC5B190-AFA4-40A7-8237-8404687B4513}</Project>
       <Name>HmrcHarvester</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\backend\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>
@@ -90,6 +97,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}</Project>
@@ -147,6 +158,10 @@
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\DbConstants\DbConstants.csproj">
+      <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\eBay\eBayDbLib\eBayDbLib.csproj">
       <Project>{FB3EAC65-AB2B-4A7E-ADA5-AAE0651CAAF6}</Project>
       <Name>eBayDbLib</Name>
@@ -199,9 +214,6 @@
       <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
       <Name>EzBob</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

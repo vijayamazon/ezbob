@@ -1,60 +1,20 @@
-using Ezbob.Database;
-using Ezbob.Logger;
-using log4net;
-
 namespace EzBobTest
 {
-	using EKM;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using EzBob.Backend.Strategies;
+
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.Misc;
-	using Ezbob.RegistryScanner;
-	using FreeAgent;
-	using Sage;
-	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.AmazonLib;
-	using EzBob.PayPal;
-	using EzBob.eBayLib;
-	using NHibernate;
+	using Ezbob.Backend.Models;
 	using NUnit.Framework;
-	using NHibernateWrapper.NHibernate;
-	using StructureMap;
-	using StructureMap.Pipeline;
-    using PayPoint;
-    using YodleeLib.connector;
-	using Integration.ChannelGrabberFrontend;
 
 	[TestFixture]
-	public class TestStrategies
+	public class TestStrategies : BaseTestFixtue
 	{
-		[SetUp]
-		public void Init()
+
+		[Test]
+		public void test_mainstrat()
 		{
-			NHibernateManager.FluentAssemblies.Add(typeof(User).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (Customer).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (eBayDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (AmazonDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (PayPalDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (EkmDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (DatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (YodleeDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (PayPointDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (FreeAgentDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof (SageDatabaseMarketPlace).Assembly);
-			Scanner.Register();
-			ObjectFactory.Configure(x =>
-				{
-					x.For<ISession>()
-					 .LifecycleIs(new ThreadLocalStorageLifecycle())
-					 .Use(ctx => NHibernateManager.SessionFactory.OpenSession());
-					x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
-				});
-
-			m_oLog = new SafeILog(LogManager.GetLogger(typeof(TestStrategies)));
-
-			var env = new Ezbob.Context.Environment(m_oLog);
-			m_oDB = new SqlConnection(env, m_oLog);
+			var ms = new MainStrategy(21370, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, m_oDB, m_oLog);
+			ms.Execute();
 		}
 
 		[Test]
@@ -179,7 +139,7 @@ namespace EzBobTest
 		[Test]
 		public void RejectUser()
 		{
-			var s = new RejectUser(3060, m_oDB, m_oLog);
+			var s = new RejectUser(21370, m_oDB, m_oLog);
 			s.Execute();
 		}
 
@@ -218,7 +178,5 @@ namespace EzBobTest
 			s.Execute();
 		}
 
-		private AConnection m_oDB;
-		private ASafeLog m_oLog;
 	}
 }
