@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System;
+	using Ezbob.Backend.Models;
 
 	public class AutoDecisionResponse
 	{
@@ -15,10 +16,8 @@
 		public bool IsAutoApproval { get; set; }
 		public bool IsAutoBankBasedApproval { get; set; }
 		public int AutoApproveAmount { get; set; }
-		public decimal PayPalTotalSumOfOrders3M { get; set; }
-		public decimal PayPalTotalSumOfOrders1Y { get; set; }
-		public int PayPalNumberOfStores { get; set; }
 		public int RepaymentPeriod { get; set; }
 		public int BankBasedAutoApproveAmount { get; set; }
+		public RejectionModel RejectionModel { get; set; }
 	}
 }

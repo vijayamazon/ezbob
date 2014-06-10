@@ -2,9 +2,11 @@
 {
 	using System;
 	using ConfigManager;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using System.Data;
 	using Ezbob.Logger;
+	using Ezbob.Utils.ParsedValue;
 
 	public class Rejection
 	{
@@ -45,6 +47,9 @@
 		private decimal _lowOfflineAnnualRevenue;
 		private int _numOfLateAccounts;
 		private int _rejectNumOfLateAccounts;
+		private int _payPalNumberOfStores;
+		private decimal _payPalTotalSumOfOrders3M;
+		private decimal _payPalTotalSumOfOrders1Y;
 
 		public Rejection(int customerId,
 			double totalSumOfOrders1YTotalForRejection,
@@ -189,6 +194,18 @@
 			}
 
 			_hasYodlee = _yodlee1YForRejection >= 0 || _yodlee3MForRejection >= 0;
+
+			dt = _db.ExecuteReader(
+				"GetPayPalAggregations",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", _customerId)
+				);
+
+			sr = new SafeReader(dt.Rows[0]);
+
+			_payPalNumberOfStores = sr["PayPal_NumberOfStores"];
+			_payPalTotalSumOfOrders3M = sr["PayPal_TotalSumOfOrders3M"];
+			_payPalTotalSumOfOrders1Y = sr["PayPal_TotalSumOfOrders1Y"];
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -206,8 +223,6 @@
 				int rejectByCompanyNumOfDefaultAccounts = CurrentValues.Instance.RejectByCompanyNumOfDefaultAccounts;
 				int rejectByCompanyDefaultsScore = CurrentValues.Instance.RejectByCompanyDefaultsScore;
 				int rejectionCompanyScore = CurrentValues.Instance.RejectionCompanyScore;
-				FillPayPalFiguresForExplanationMail(_db, _customerId, response);
-
 
 
 				//1. Consumer score < 500
@@ -265,12 +280,12 @@
 				// TODO: the 2 next conditions are in the previous implementation but are not mentioned in the new story - should they be removed?
 				// TODO: should this next condition be removed (was it replaced by condition #1 (second paragraph) in story?)
 				else if (!_isOffline && 
-					(response.PayPalNumberOfStores == 0 || response.PayPalTotalSumOfOrders3M < _lowTotalThreeMonthTurnover || response.PayPalTotalSumOfOrders1Y < _lowTotalAnnualTurnover)
+					(_payPalNumberOfStores == 0 || _payPalTotalSumOfOrders3M < _lowTotalThreeMonthTurnover || _payPalTotalSumOfOrders1Y < _lowTotalAnnualTurnover)
 					&& (_totalSumOfOrders3MTotalForRejection < _lowTotalThreeMonthTurnover || _totalSumOfOrders1YTotalForRejection < _lowTotalAnnualTurnover))
 				{
-					response.AutoRejectReason = "AutoReject: Online Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR " +
-												response.PayPalTotalSumOfOrders3M + " < " +
-												_lowTotalThreeMonthTurnover + " OR " + response.PayPalTotalSumOfOrders1Y + " < " +
+					response.AutoRejectReason = "AutoReject: Online Totals. Condition not met: (" + _payPalNumberOfStores + " < 0 OR " +
+												_payPalTotalSumOfOrders3M + " < " +
+												_lowTotalThreeMonthTurnover + " OR " + _payPalTotalSumOfOrders1Y + " < " +
 												_lowTotalAnnualTurnover + ") AND (" + _totalSumOfOrders3MTotalForRejection + " < " +
 												_lowTotalThreeMonthTurnover + " OR " + _totalSumOfOrders1YTotalForRejection + " < " +
 												_lowTotalAnnualTurnover + ")";
@@ -297,7 +312,7 @@
 				response.CreditResult = _enableAutomaticRejection ? "Rejected" : "WaitingForDecision";
 				response.UserStatus = "Rejected";
 				response.SystemDecision = "Reject";
-
+				FillFiguresForExplanationMail(response);
 				return true;
 			}
 			catch (Exception e)
@@ -307,19 +322,24 @@
 			}
 		}
 
-		public static void FillPayPalFiguresForExplanationMail(AConnection db, int customerId, AutoDecisionResponse response)
+		public void FillFiguresForExplanationMail(AutoDecisionResponse response)
 		{
-			DataTable dt = db.ExecuteReader(
-				"GetPayPalAggregations",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-				);
-
-			var sr = new SafeReader(dt.Rows[0]);
-
-			response.PayPalNumberOfStores = sr["PayPal_NumberOfStores"];
-			response.PayPalTotalSumOfOrders3M = sr["PayPal_TotalSumOfOrders3M"];
-			response.PayPalTotalSumOfOrders1Y = sr["PayPal_TotalSumOfOrders1Y"];
+			response.RejectionModel = new RejectionModel
+				{
+					NumOfDefaultAccounts = _numOfDefaultAccounts,
+					PayPalNumberOfStores = _payPalNumberOfStores,
+					PayPalTotalSumOfOrders1Y = _payPalTotalSumOfOrders1Y,
+					PayPalTotalSumOfOrders3M = _payPalTotalSumOfOrders3M,
+					Yodlee1Y = _yodlee1YForRejection,
+					Yodlee3M = _yodlee3MForRejection,
+					Hmrc1Y = _hmrcAnnualRevenues,
+					Hmrc3M = _hmrcQuarterRevenues,
+					HasYodlee = _hasYodlee,
+					HasHmrc = _hasHmrc,
+					CompanyScore = _maxCompanyScore,
+					LateAccounts = _numOfLateAccounts
+				};
 		}
+
 	}
 }

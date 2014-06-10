@@ -192,10 +192,10 @@
 					(!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
 					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected
 													 ? "Mandrill - User supposed to be re-rejected by the strategy"
-													 : "Mandrill - User supposed to be rejected by the strategy");
+													 : "Mandrill - User supposed to be rejected by the strategy", autoDecisionResponse.RejectionModel);
 				else
 				{
-					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy");
+					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy", autoDecisionResponse.RejectionModel);
 
 					new RejectUser(customerId, DB, Log).Execute();
 
@@ -907,20 +907,31 @@
 
 		#region method SendRejectionExplanationMail
 
-		private void SendRejectionExplanationMail(string templateName)
+		private void SendRejectionExplanationMail(string templateName, RejectionModel rejection)
 		{
-			// TODO: set inside auto decision and get here instead of calculating again
-			DataTable defaultAccountsNumDataTable = DB.ExecuteReader(
-				"GetNumberOfDefaultAccounts",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Months", rejectDefaultsMonthsNum),
-				new QueryParameter("Amount", rejectDefaultsAmount)
-			);
-
-			var defaultAccountsNumResults = new SafeReader(defaultAccountsNumDataTable.Rows[0]);
-			numOfDefaultAccounts = defaultAccountsNumResults["NumOfDefaultAccounts"];
-
+			string additionalValues = string.Empty;
+			if (rejection == null)
+			{
+				rejection = new RejectionModel();
+			}
+			else
+			{
+				additionalValues =
+					string.Format(
+						"\n is offline: {8} \n company score: {0} \n company seniority: {9} \n {1} \n {2} \n {3} \n {4} \n {5} \n {6} \n num of late CAIS accounts: {7}",
+						rejection.CompanyScore,
+						rejection.HasHmrc ? "Hmrc Annual and Quarter: " : "",
+						rejection.HasHmrc ? rejection.Hmrc1Y.ToString("C2") : "",
+						rejection.HasHmrc ? rejection.Hmrc3M.ToString("C2") : "",
+						rejection.HasYodlee ? "Yodlee Annual and Quarter: " : "",
+						rejection.HasHmrc ? rejection.Yodlee1Y.ToString("C2") : "",
+						rejection.HasHmrc ? rejection.Yodlee3M.ToString("C2") : "",
+						rejection.LateAccounts,
+						isOffline,
+						companySeniorityDays
+					);
+			}
+			
 			mailer.Send(templateName, new Dictionary<string, string> {
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -932,20 +943,20 @@
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
 				{"ExperianConsumerScore", initialExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
 				{"CVExperianConsumerScore", lowCreditScore.ToString(CultureInfo.InvariantCulture)},
-				{"TotalAnnualTurnover", totalSumOfOrders1YTotalForRejection.ToString(CultureInfo.InvariantCulture)},
-				{"CVTotalAnnualTurnover", lowTotalAnnualTurnover.ToString(CultureInfo.InvariantCulture)},
-				{"Total3MTurnover", totalSumOfOrders3MTotalForRejection.ToString(CultureInfo.InvariantCulture)},
-				{"CVTotal3MTurnover", lowTotalThreeMonthTurnover.ToString(CultureInfo.InvariantCulture)},
-				{"PayPalStoresNum", autoDecisionResponse.PayPalNumberOfStores.ToString(CultureInfo.InvariantCulture)},
-				{"PayPalAnnualTurnover", autoDecisionResponse.PayPalTotalSumOfOrders1Y.ToString(CultureInfo.InvariantCulture)},
-				{"CVPayPalAnnualTurnover", lowTotalAnnualTurnover.ToString(CultureInfo.InvariantCulture)},
-				{"PayPal3MTurnover", autoDecisionResponse.PayPalTotalSumOfOrders3M.ToString(CultureInfo.InvariantCulture)},
-				{"CVPayPal3MTurnover", lowTotalThreeMonthTurnover.ToString(CultureInfo.InvariantCulture)},
+				{"TotalAnnualTurnover", totalSumOfOrders1YTotalForRejection.ToString("C2")},
+				{"CVTotalAnnualTurnover", lowTotalAnnualTurnover.ToString("C2")},
+				{"Total3MTurnover", totalSumOfOrders3MTotalForRejection.ToString("C2")},
+				{"CVTotal3MTurnover", lowTotalThreeMonthTurnover.ToString("C2")},
+				{"PayPalStoresNum", rejection.PayPalNumberOfStores.ToString(CultureInfo.InvariantCulture)},
+				{"PayPalAnnualTurnover", rejection.PayPalTotalSumOfOrders1Y.ToString("C2")},
+				{"CVPayPalAnnualTurnover", lowTotalAnnualTurnover.ToString("C2")},
+				{"PayPal3MTurnover", rejection.PayPalTotalSumOfOrders3M.ToString("C2")},
+				{"CVPayPal3MTurnover", lowTotalThreeMonthTurnover.ToString("C2")},
 				{"CVExperianConsumerScoreDefAcc", rejectDefaultsCreditScore.ToString(CultureInfo.InvariantCulture)},
-				{"ExperianDefAccNum", numOfDefaultAccounts.ToString(CultureInfo.InvariantCulture)},
+				{"ExperianDefAccNum", rejection.NumOfDefaultAccounts.ToString(CultureInfo.InvariantCulture)},
 				{"CVExperianDefAccNum", rejectDefaultsAccountsNum.ToString(CultureInfo.InvariantCulture)},
 				{"Seniority", marketplaceSeniorityDays.ToString(CultureInfo.InvariantCulture)},
-				{"SeniorityThreshold", rejectMinimalSeniority.ToString(CultureInfo.InvariantCulture)}
+				{"SeniorityThreshold", rejectMinimalSeniority.ToString(CultureInfo.InvariantCulture) + additionalValues}
 			});
 		} // SendRejectionExplanationMail
 
@@ -1205,7 +1216,6 @@
 		private int experianConsumerScore;
 		private int allMPsNum;
 		private AutoDecisionResponse autoDecisionResponse;
-		private int numOfDefaultAccounts;
 		private MedalMultiplier medalType;
 		private decimal loanOfferApr;
 		private int loanOfferRepaymentPeriod;
