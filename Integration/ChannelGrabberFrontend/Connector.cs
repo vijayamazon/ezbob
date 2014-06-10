@@ -1,17 +1,12 @@
-﻿using System;
-using Ezbob.HmrcHarvester;
-using Ezbob.Logger;
-using Integration.ChannelGrabberAPI;
-using Integration.ChannelGrabberConfig;
-using log4net;
-using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
-
-namespace Integration.ChannelGrabberFrontend {
-	#region class Connector
+﻿namespace Integration.ChannelGrabberFrontend {
+	using System;
+	using Ezbob.HmrcHarvester;
+	using Integration.ChannelGrabberAPI;
+	using Integration.ChannelGrabberConfig;
+	using log4net;
+	using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 
 	public class Connector : IHarvester {
-		#region public
-
 		#region method SetBackdoorData
 
 		public static void SetBackdoorData(string sAccountTypeName, int nCustomerMarketplaceID, Hopper oHopper) {
@@ -131,9 +126,5 @@ namespace Integration.ChannelGrabberFrontend {
 		} // SourceID
 
 		#endregion property SourceID
-
-		#endregion public
 	} // class Connector
-
-	#endregion class Connector
 } // namespace Integration.ChannelGrabberFrontend

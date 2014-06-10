@@ -192,54 +192,22 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 					for (var sDisplayName in oResponse.ekms) {
 						var sErrorMsg = oResponse.ekms[sDisplayName];
 
-						oList.append(
-							$('<li />').append(
-								$('<a />').text(
-									'Update ekmpowershop account ' + sDisplayName
-								).attr({
-									href: '#',
-									'ui-event-control-id': 'refresh-account:ekm-list-item',
-								}).click((function(sInnerDisplayName, sInnerErrorMsg) {
-									return function() {
-										event.preventDefault();
-										event.stopPropagation();
-
-										EzBob.UiAction.saveOne('click', this);
-
-										that.refreshAccountData = {
-											type: 'ekm',
-											displayName: sInnerDisplayName,
-											errorMsg: sInnerErrorMsg,
-										};
-
-										$.colorbox.close();
-									};
-								})(sDisplayName, sErrorMsg))
-							)
-						);
+						oList.append(that.createUpdateEntry(
+							'ekmpowershop account <strong>' + sDisplayName + '</strong> password',
+							'ekm-list-item',
+							{
+								type: 'ekm',
+								displayName: sDisplayName,
+								errorMsg: sErrorMsg,
+							}
+						));
 					} // for each EKM
 				} // if has EKM
 
 				if (oResponse.has_yodlee) {
-					oList.append(
-						$('<li />').append(
-							$('<a />').text(
-								'Update your bank account'
-							).attr({
-								href: '#',
-								'ui-event-control-id': 'refresh-account:yodlee-list-item',
-							}).click(function() {
-								event.preventDefault();
-								event.stopPropagation();
-
-								EzBob.UiAction.saveOne('click', this);
-
-								that.refreshAccountData = { type: 'bank', };
-
-								$.colorbox.close();
-							})
-						)
-					);
+					oList.append(that.createUpdateEntry(
+						'your bank account', 'yodlee-list-item', { type: 'bank', }
+					));
 				} // if has yodlee
 
 				that.$el.find('.refresh-account-help').colorbox({
@@ -261,6 +229,27 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			UnBlockUi();
 		});
 	}, // doApplyForALoan
+
+	createUpdateEntry: function(sText, sUiEventControlID, oRefreshData) {
+		var self = this;
+
+		var oBtn = $('<button>Update</button>')
+			.addClass('green')
+			.attr(
+				'ui-event-control-id', 'refresh-account:' + sUiEventControlID
+			).click(function() {
+				event.preventDefault();
+				event.stopPropagation();
+
+				EzBob.UiAction.saveOne('click', this);
+
+				self.refreshAccountData = oRefreshData;
+
+				$.colorbox.close();
+			});
+
+		return $('<li />').append(oBtn).append($('<span />').html(' ' + sText));
+	}, // createUpdateEntry
 
 	refreshAccount: function() {
 		$.colorbox.remove();
@@ -312,14 +301,11 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 	}, // refreshYodlee
 
 	refreshEkm: function() {
-		var oDlg = this.$el.find('.refresh_ekm_help');
-
-		oDlg.find('.error').text(this.refreshAccountData.errorMsg);
-
-		this.$el.find('#refresh_ekm_password').val('').change();
+		this.$el.find('#update-ekm-error').text(this.refreshAccountData.errorMsg);
 		this.$el.find('#refresh_ekm_login').val(this.refreshAccountData.displayName).change();
+		this.$el.find('#refresh_ekm_password').val('').change().focus();
 
-		oDlg.colorbox({ href: '#refresh_ekm_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+		this.$el.find('.refresh_ekm_help').colorbox({ href: '#refresh_ekm_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
 	}, // refreshEkm
 
 	makeTargeting: function() {
