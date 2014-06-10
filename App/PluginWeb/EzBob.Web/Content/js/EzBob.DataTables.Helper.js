@@ -3,8 +3,6 @@
 EzBob.DataTables = EzBob.DataTables || {};
 
 EzBob.DataTables.Helper = {
-	CGAccounts: null,
-
 	withScrollbar: function(sContent) {
 		return '<div style="overflow: auto; width: auto;">' + sContent + '</div>';
 	}, // withScrollbar
@@ -115,13 +113,10 @@ EzBob.DataTables.Helper = {
 	}, // extractColumns
 
 	showMPIcon: function(cellval) {
-		if (!EzBob.DataTables.Helper.CGAccounts)
-			EzBob.DataTables.Helper.CGAccounts = $.parseJSON($('div#cg-account-list').text());
-
 		var className, text;
 		text = cellval || '';
 		className = text.replace(/\s|\d/g, '');
-		className = EzBob.DataTables.Helper.CGAccounts[className] ? 'cgaccount' : className.toLowerCase();
+		className = EzBob.CgVendors.all()[className] ? 'cgaccount' : className.toLowerCase();
 		return '<i data-toggle=tooltip title="' + text + '" class="' + className + '"></i>';
 	}, // showMPIcon
 

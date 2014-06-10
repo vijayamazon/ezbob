@@ -108,19 +108,23 @@
 			case "Pay Pal":
 				%> @{ Html.RenderPartial("MarketPlaceDetails/PayPal"); }<%
 				break;
-            
-            case "CompanyFiles":
+
+			case "CompanyFiles":
 				%> @{ Html.RenderPartial("MarketPlaceDetails/CompanyFiles"); }<%
 				break;
 
+			case "HMRC":
+				%> @{ Html.RenderPartial("MarketPlaceDetails/HMRC"); }<%
+				break;
+
 			default:
-				(function(aryCGAccounts) {
-					if (!aryCGAccounts[marketplaceType])
+				(function() {
+					if (!EzBob.CgVendors.pure()[marketplaceType])
 						return;
 
-					var bHasExpenses = aryCGAccounts[marketplaceType].HasExpenses;
+					var bHasExpenses = EzBob.CgVendors.pure()[marketplaceType].HasExpenses;
 					%>@{ Html.RenderPartial("MarketPlaceDetails/CG"); }<%
-				})($.parseJSON($('div#cg-account-list').text()));
+				})();
 				break;
 			} // switch
 			%>
@@ -161,11 +165,11 @@
 					</tr>
 				<% }
 
-				(function(aryCGAccounts) { _.each(marketplaces, function(m,i){
+				_.each(marketplaces, function(m,i){
 					var sShopName = m.Name.replace(' ', '');
 
-					if (aryCGAccounts[sShopName])
-						if (aryCGAccounts[sShopName].HasExpeneses || (aryCGAccounts[sShopName].Behaviour != 0))
+					if (EzBob.CgVendors.pure()[sShopName])
+						if (EzBob.CgVendors.pure()[sShopName].HasExpeneses)
 							return;
 
 					var sSourceLabels = 'source_labels_on';
@@ -209,7 +213,7 @@
 					        </div>
 					    </td>
 					</tr>
-				<% }); })($.parseJSON($('div#cg-account-list').text())); %>
+				<% }); %>
 			</tbody>
 		</table>
 	</div>
@@ -229,32 +233,31 @@
 				</tr>
 			</thead>
 			<tbody>
-				<% (function(aryCGAccounts) { _.each(accounts, function(m, i) {
+				<% _.each(accounts, function(m, i) {
 				var sShopName = m.Name.replace(' ', '');
 
 				var nBehaviour = 0;
 
-				if (aryCGAccounts[sShopName]) {
-					if (!aryCGAccounts[sShopName].HasExpenses && (aryCGAccounts[sShopName].Behaviour == 0))
+				if (EzBob.CgVendors.all()[sShopName]) {
+					var oCG = EzBob.CgVendors.all()[sShopName];
+
+					if (!oCG.HasExpenses && (oCG.Behaviour == 0))
 						return;
 
-					nBehaviour = aryCGAccounts[sShopName].Behaviour;
+					nBehaviour = oCG.Behaviour;
 				} // if
 
-				function ll(oModel, sPropertyName, nBehaviour) {
+				function ll(sPropertyName) {
 					switch(sPropertyName) {
 					case 'TransactionsNumber':
-						return (nBehaviour == 1) ? '-' : oModel.PaymentAccountBasic[sPropertyName];
-						break;
+						return (nBehaviour == 1) ? '-' : m.PaymentAccountBasic[sPropertyName];
 
 					case 'MonthInPayments':
 					case 'TotalNetInPayments':
-						return (nBehaviour == 1) ? '-' : EzBob.formatPounds(oModel.PaymentAccountBasic[sPropertyName]);
-						break;
+						return (nBehaviour == 1) ? '-' : EzBob.formatPounds(m.PaymentAccountBasic[sPropertyName]);
 
 					case 'TotalNetOutPayments':
-						return (nBehaviour == 1) ? '-' : GBPValues(oModel.PaymentAccountBasic[sPropertyName], true);
-						break;
+						return (nBehaviour == 1) ? '-' : GBPValues(m.PaymentAccountBasic[sPropertyName], true);
 					} // switch
 				}; // function ll
 
@@ -268,10 +271,10 @@
 				    </td>
 					<td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
 					<td class="centered"><%- m.age %></td>
-					<td class="centered"><%- ll(m, 'TransactionsNumber', nBehaviour) %></td>
-					<td class="centered"><%- ll(m, 'MonthInPayments', nBehaviour) %><br/><label class="small-text"><%- m.monthAnnualizedSales != 0 ? EzBob.formatPoundsNoDecimals(m.monthAnnualizedSales) : '' %></label></td>
-					<td class="centered"><%- ll(m, 'TotalNetInPayments', nBehaviour) %></td>
-					<td class="centered"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll(m, 'TotalNetOutPayments', nBehaviour) %></td>
+					<td class="centered"><%- ll('TransactionsNumber') %></td>
+					<td class="centered"><%- ll('MonthInPayments') %><br/><label class="small-text"><%- m.monthAnnualizedSales != 0 ? EzBob.formatPoundsNoDecimals(m.monthAnnualizedSales) : '' %></label></td>
+					<td class="centered"><%- ll('TotalNetInPayments') %></td>
+					<td class="centered"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll('TotalNetOutPayments') %></td>
 					<td><%- m.UpdatingStatus %> <%- m.LastChecked%>
 						<% if(m.UpdateError){%>
 							<button class="btn btn-mini btn-primary mp-error-description" data-title="<%- m.UpdateError %>"><i class="fa fa-comment"></i></button>
@@ -295,7 +298,7 @@
                         <% } %>
 				    </td>
 				</tr>
-				<%}); })($.parseJSON($('div#cg-account-list').text()));%>
+				<% }); %>
 			</tbody>
 		</table>
 	</div>

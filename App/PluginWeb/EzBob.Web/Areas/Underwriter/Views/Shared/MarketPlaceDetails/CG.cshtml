@@ -5,10 +5,10 @@
 	var sOrders = bHasExpenses ? 'Invoices' : 'Orders';
 
 	var aryOrdersTable = [
-		{ caption: 'Sum of ' + sOrders,    field: 'TotalSumofOrders',   display: function(x) { return GBPValues(x, true); } },
-		{ caption: 'Annualized sum of ' + sOrders,    field: 'TotalSumofOrdersAnnualized',   display: function(x) { return GBPValues(x, true); } },
-		{ caption: 'Number of ' + sOrders, field: 'NumofOrders',        display: function(x) { return x; }                  },
-		{ caption: sOrders + ' Average',   field: 'AverageSumofOrders', display: function(x) { return x; }                  }
+		{ caption: 'Sum of ' + sOrders,            field: 'TotalSumofOrders',           display: function(x) { return GBPValues(x, true); } },
+		{ caption: 'Annualized sum of ' + sOrders, field: 'TotalSumofOrdersAnnualized', display: function(x) { return GBPValues(x, true); } },
+		{ caption: 'Number of ' + sOrders,         field: 'NumofOrders',                display: function(x) { return x; }                  },
+		{ caption: sOrders + ' Average',           field: 'AverageSumofOrders',         display: function(x) { return x; }                  }
 	];
 
 	var aryExpensesTable = bHasExpenses ? [
@@ -18,56 +18,44 @@
 	] : null;
 
 	function DrawOneTable(aryTableStruct) {
-		%><table class="table centered rright"><thead class="box"><tr class="box-title"><th></th><%
-			for (var i = 0; i < aryTimePeriods.length; i++) {
-				%><th><%= aryTimePeriods[i] %></th><%
-			} // for
-		%></tr></thead><tbody><%
-			for (var i = 0; i < aryTableStruct.length; i++) {
-				var row = aryTableStruct[i];
-				%><tr><td><%= row.caption %></td><%
-					for (var j = 0; j < aryTimePeriods.length; j++) {
-						var sKey = row.field + aryTimePeriods[j];
-						var nValue = ai.hasOwnProperty(sKey) ? row.display(ai[sKey]) : '-';
-						%><td><%= nValue%></td><%
-					} // for each time period
-				%></tr><%
-			} // for each row
-		%></tbody></table><%
-	}; // DrawOneTable
+		%><table class="table centered rright">
+			<thead class="box">
+				<tr class="box-title">
+					<th></th><%
+					for (var i = 0; i < aryTimePeriods.length; i++) {
+						%><th><%= aryTimePeriods[i] %></th><%
+					}
+				%></tr>
+			</thead>
+			<tbody><%
+				for (var i = 0; i < aryTableStruct.length; i++) {
+					var row = aryTableStruct[i];
+					%><tr>
+						<td><%= row.caption %></td><%
+						for (var j = 0; j < aryTimePeriods.length; j++) {
+							var sKey = row.field + aryTimePeriods[j];
+							var nValue = ai.hasOwnProperty(sKey) ? row.display(ai[sKey]) : '-';
+							%><td><%= nValue%></td><%
+						}
+					%></tr><%
+				}
+			%></tbody>
+		</table><%
+	};
 
-	switch (aryCGAccounts[marketplaceType].Behaviour) {
-	case 0: // Default behaviour
-		%><div class="tabbable">
+	%><div class="tabbable">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#orders-tab1" data-toggle="tab"><% print(bHasExpenses ? 'Invoices' : 'Orders'); %></a></li>
-			<% if (bHasExpenses) { %>
-				<li><a href="#expenses-tab1" data-toggle="tab">Expenses</a></li>
-			<% } %>
-		</ul>
+			<li class="active"><a href="#orders-tab1" data-toggle="tab"><% print(bHasExpenses ? 'Invoices' : 'Orders'); %></a></li><%
+			if (bHasExpenses) {
+				%><li><a href="#expenses-tab1" data-toggle="tab">Expenses</a></li><%
+			}
+		%></ul>
 		<div class="tab-content">
-			<div class="tab-pane active" id="orders-tab1"><% DrawOneTable(aryOrdersTable) %></div>
-			<% if (bHasExpenses) { %>
-				<div class="tab-pane" id="expenses-tab1"><% DrawOneTable(aryExpensesTable) %></div>
-		    <% } %>
-            <div class="last-transaction-date-badge">Last Transaction Date: <%-EzBob.formatDate2(m.LastTransactionDate)%></div>
+			<div class="tab-pane active" id="orders-tab1"><% DrawOneTable(aryOrdersTable) %></div><%
+			if (bHasExpenses) {
+				%><div class="tab-pane" id="expenses-tab1"><% DrawOneTable(aryExpensesTable) %></div><%
+			}
+			%><div class="last-transaction-date-badge">Last Transaction Date: <%-EzBob.formatDate2(m.LastTransactionDate)%></div>
 		</div>
-		</div><%
-		break;
-
-	case 1: // HMRC behaviour
-		%><div class="tabbable">
-		  <ul class="nav nav-tabs">
-		      <li class="active"><a href="#hmrc-vat-return-summary" data-toggle="tab">Financial Analysis Summary</a></li>
-		      <li><a href="#hmrc-vat-return-details" data-toggle="tab">VAT Return Details</a></li>
-		      <li><a href="#hmrc-rti-tax-years" data-toggle="tab">RTI Tax Years</a></li>
-		  </ul>
-        </div>
-		<div class="tab-content">
-			<div class="tab-pane active" id="hmrc-vat-return-summary">@{ Html.RenderPartial("MarketPlaceDetails/CG_vat_return_summary"); }</div>
-			<div class="tab-pane" id="hmrc-vat-return-details">@{ Html.RenderPartial("MarketPlaceDetails/CG_vat_return_details"); }</div>
-			<div class="tab-pane" id="hmrc-rti-tax-years">@{ Html.RenderPartial("MarketPlaceDetails/CG_rti_tax_years"); }</div>
-		</div><%
-		break;
-	} // switch
+	</div><%
 })(); %>

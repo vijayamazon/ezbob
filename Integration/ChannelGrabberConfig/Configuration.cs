@@ -118,11 +118,29 @@
 
 		#endregion method ForEachVendor
 
+		#region method ForEachPureVendor
+
+		public void ForEachPureVendor(Action<VendorInfo> oCallback) {
+			if (oCallback == null)
+				return;
+
+			foreach (KeyValuePair<string, VendorInfo> vi in PureVendors)
+				oCallback.Invoke(vi.Value);
+		} // ForEachPureVendor
+
+		#endregion method ForEachPureVendor
+
 		#region property Vendors
 
 		public Dictionary<string, VendorInfo> Vendors { get; private set; }
 
 		#endregion property Vendors
+
+		#region property PureVendors
+
+		public Dictionary<string, VendorInfo> PureVendors { get; private set; }
+
+		#endregion property PureVendors
 
 		#region GetMarketPlaceDiscrimintor
 
@@ -150,9 +168,16 @@
 			var lst = JsonConvert.DeserializeObject<List<VendorInfo>>(sConfigurationJson);
 
 			Vendors = new Dictionary<string, VendorInfo>();
+			PureVendors = new Dictionary<string, VendorInfo>();
+
+			var oHmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+
 			lst.ForEach(v => {
 				v.Parse();
 				Vendors[v.Name] = v;
+
+				if (v.Guid() != oHmrc)
+					PureVendors[v.Name] = v;
 			});
 
 			// You are welcome to add your machine name here.

@@ -18,8 +18,7 @@ class EzBob.CgAccountInfoView extends Backbone.Marionette.ItemView
 
     getVendorInfo: ->
         if !@vendorInfo
-            lst = $.parseJSON $('div#cg-account-list').text()
-            @vendorInfo = lst[@accountType]
+            @vendorInfo = EzBob.CgVendors.pure()[@accountType]
 
         @vendorInfo
 

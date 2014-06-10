@@ -672,8 +672,6 @@
 			@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
 		</div>
 
-		<div style="display: none;" class="hide" id="cg-account-list">@Model.ChannelGrabberAccounts</div>
-		
 		<div style="display: none;" class="hide" id="broker-sms-count" data-max-per-number="@Model.MaxPerNumber" data-max-per-page="@Model.MaxPerPage"></div>
 
 		<div id="broker-terms-and-conditions" title="Terms and Conditions" data-terms-version="0"></div>
@@ -732,6 +730,7 @@
 			.Add("~/Content/js/ezbob.design.js")
 			.Add("~/Content/js/ezbob.internal.debug.js")
 			.Add("~/Content/js/ezbob.uiaction.js")
+			.Add("~/Content/js/ezbob.cgvendors.js")
 			.Add("~/Content/js/ezbob.serverlog.js")
 			.Add("~/Content/js/ezbob.strengthPassword.js")
 			.Add("~/Content/js/lib/jquery.dataTables.js")
@@ -768,6 +767,14 @@
 		EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';
 		EzBob.LoadedConfig.CaptchaMode = '@Model.CaptchaMode';
 		EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;
+
+		function EzBob_CgVendors_init() {
+			EzBob.CgVendors.init(@{ WriteLiteral(Model.ChannelGrabberAccounts); });
+		} // EzBob_CgVendors_init
+
+		$(document).ready(function() {
+			EzBob_CgVendors_init();
+		});
 	</script>
 	<!-- scripts - end -->
 </body>

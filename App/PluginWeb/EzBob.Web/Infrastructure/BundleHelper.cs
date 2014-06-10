@@ -166,6 +166,7 @@
 				.Add("~/Content/js/ezbob.design.js")
 				.Add("~/Content/js/ezbob.internal.debug.js")
 				.Add("~/Content/js/ezbob.uiaction.js")
+				.Add("~/Content/js/ezbob.cgvendors.js")
 				.Add("~/Content/js/ezbob.serverlog.js")
 				.Add("~/Content/js/ezbob.strengthPassword.js")
 

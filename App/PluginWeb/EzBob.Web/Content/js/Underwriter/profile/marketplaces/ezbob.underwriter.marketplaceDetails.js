@@ -25,7 +25,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 
     render: function () {
         var that = this;
-        var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
         this.shop = this.model.get(this.options.currentId);
 
@@ -42,7 +41,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 
         var sTargetList = '';
 
-        var cg = aryCGAccounts[this.shop.get('Name')];
+        var cg = EzBob.CgVendors.all()[this.shop.get('Name')];
         if (cg)
             sTargetList = ((cg.Behaviour == 0) && !cg.HasExpenses) ? 'marketplaces' : 'accounts';
         else

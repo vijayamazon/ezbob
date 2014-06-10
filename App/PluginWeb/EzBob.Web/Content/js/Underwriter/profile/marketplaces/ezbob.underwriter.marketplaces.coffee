@@ -135,12 +135,10 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     showMPError: -> false
 
     serializeData: ->
-        aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
-
         isMarketplace = (x) ->
-            unless (aryCGAccounts[x.get('Name')])
+            unless (EzBob.CgVendors.all()[x.get('Name')])
                 return not x.get 'IsPaymentAccount'
-            cg = aryCGAccounts[x.get('Name')]
+            cg = EzBob.CgVendors.all()[x.get('Name')]
             (cg.Behaviour == 0) and not cg.HasExpenses
 
         data = 

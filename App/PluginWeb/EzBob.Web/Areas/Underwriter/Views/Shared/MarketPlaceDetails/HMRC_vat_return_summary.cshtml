@@ -1,0 +1,172 @@
+﻿<div class="vat-return-summary-display"></div>
+
+<div class="vat-return-no-summary">No data found.</div>
+
+<div id="vat-return-summary-template" style="display: none;">
+	<table class="table centered vat-return-summary">
+		<thead class="box">
+			<tr class="box-title">
+				<th rowspan="2">Business Details</th>
+				<th rowspan="2">&nbsp;</th>
+				<th rowspan="2">Last Tax Return</th>
+				<th rowspan="2" class="vrs-q0 qtr-dates"></th>
+				<th rowspan="2" class="vrs-q1 qtr-dates"></th>
+				<th rowspan="2" class="vrs-q2 qtr-dates"></th>
+				<th rowspan="2" class="vrs-q3 qtr-dates"></th>
+				<th rowspan="2" class="vrs-q4 qtr-dates"></th>
+				<th rowspan="2">Last Four Periods</th>
+				<th colspan="2" class="bank">Bank Statement</th>
+			</tr>
+			<tr class="box-title">
+				<th class="bank"><span class="bank-period"></span></th>
+				<th>Annualized<br />% Trend</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-summary-field="PctOfAnnualRevenues" data-summary-format="%">
+				<td class="no-padding" rowspan="11">
+					<table class="internal-table">
+						<tr>
+							<td>Registration #:</td>
+							<td class="business-reg-no"></td>
+						</tr>
+						<tr>
+							<td>Business Details:</td>
+							<td class="business-details"></td>
+						</tr>
+					</table>
+				</td>
+				<th>% of annual</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank">&ndash;</td>
+				<td class="r">&ndash;</td>
+			</tr>
+			<tr data-summary-field="Revenues" data-summary-format="£i">
+				<th>Revenues</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank"></td>
+				<td class="r annualized"></td>
+			</tr>
+			<tr data-summary-field="Opex" data-summary-format="£i">
+				<th>Opex</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank"></td>
+				<td class="r annualized"></td>
+			</tr>
+			<tr class="chkpt" data-summary-field="TotalValueAdded" data-summary-format="£i">
+				<th>Total value added</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank"></td>
+				<td class="r annualized"></td>
+			</tr>
+			<tr data-summary-field="PctOfRevenues" data-summary-format="%0">
+				<th>% of revenues</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank"></td>
+				<td class="r">&ndash;</td>
+			</tr>
+			<tr data-summary-field="Salaries" data-summary-format="£i">
+				<th>Salaries (<span class="multiplier"><input type="text" class="salaries-multiplier" /></span> of <span class="total"></span>)</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank"></td>
+				<td class="r annualized"></td>
+			</tr>
+			<tr data-summary-field="Tax">
+				<th>Tax</th>
+				<td></td>
+				<td class="r vrs-q0">&ndash;</td>
+				<td class="r vrs-q1">&ndash;</td>
+				<td class="r vrs-q2">&ndash;</td>
+				<td class="r vrs-q3">&ndash;</td>
+				<td class="r vrs-q4">&ndash;</td>
+				<td class="r vrs-total">&ndash;</td>
+				<td class="r bank"></td>
+				<td class="r">&ndash;</td>
+			</tr>
+			<tr class="chkpt" data-summary-field="Ebida" data-summary-format="£i">
+				<th>EBIDA</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank"></td>
+				<td class="r annualized"></td>
+			</tr>
+			<tr data-summary-field="PctOfAnnual" data-summary-format="%0">
+				<th>% of annual</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank">&ndash;</td>
+				<td class="r">&ndash;</td>
+			</tr>
+			<tr data-summary-field="ActualLoanRepayment" data-summary-format="£i">
+				<th>Actual loans repayment</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank"></td>
+				<td class="r">&ndash;</td>
+			</tr>
+			<tr class="chkpt lastchkpt" data-summary-field="FreeCashFlow" data-summary-format="£i">
+				<th>Free cash flow</th>
+				<td></td>
+				<td class="r vrs-q0"></td>
+				<td class="r vrs-q1"></td>
+				<td class="r vrs-q2"></td>
+				<td class="r vrs-q3"></td>
+				<td class="r vrs-q4"></td>
+				<td class="r vrs-total"></td>
+				<td class="r bank"></td>
+				<td class="r annualized"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

@@ -1,13 +1,9 @@
 ﻿@using Integration.ChannelGrabberConfig
 @model dynamic
 
-@foreach (KeyValuePair<string, VendorInfo> vip in Configuration.Instance.Vendors)
+@foreach (KeyValuePair<string, VendorInfo> vip in Configuration.Instance.PureVendors)
 {
     VendorInfo vi = vip.Value;
-    if (vi.DisplayName == "HMRC")
-    {
-        continue;
-    }
 
     var sTemplateID = new HtmlString(vi.Name + "AccountInfoTemplate");
     var sFormID = new HtmlString(vi.Name.ToLower() + "Account");

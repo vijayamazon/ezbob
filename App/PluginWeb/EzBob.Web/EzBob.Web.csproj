@@ -625,6 +625,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\AddCustomerRelationsFollowUp.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Support\Funding.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\CompanyDirectorsTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\HMRC.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -958,6 +959,7 @@
     </Content>
     <Content Include="Content\js\controls\ezbob.LoanScheduleView.js" />
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
+    <Content Include="Content\js\ezbob.cgvendors.js" />
     <Content Include="Content\js\ezbob.hmrc.upload.ui.js" />
     <Content Include="Content\js\ezbob.internal.debug.js" />
     <Content Include="Content\js\ezbob.serverLog.js" />
@@ -1400,9 +1402,9 @@
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_ExperianSettings.cshtml" />
     <Content Include="Areas\Customer\Views\PaymentAccounts\PayPalCanceled.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Support\_Support.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_vat_return_details.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_vat_return_summary.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_rti_tax_years.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\HMRC_vat_return_details.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\HMRC_vat_return_summary.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\HMRC_rti_tax_years.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_CompanyScore.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ApproveLoanWithoutAML.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ApproveLoanForWarningStatusCustomer.cshtml" />

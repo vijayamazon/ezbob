@@ -42,10 +42,8 @@
     };
 
     CgAccountInfoView.prototype.getVendorInfo = function() {
-      var lst;
       if (!this.vendorInfo) {
-        lst = $.parseJSON($('div#cg-account-list').text());
-        this.vendorInfo = lst[this.accountType];
+        this.vendorInfo = EzBob.CgVendors.pure()[this.accountType];
       }
       return this.vendorInfo;
     };

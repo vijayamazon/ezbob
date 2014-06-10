@@ -47,13 +47,14 @@ class EzBob.StoreInfoView extends Backbone.View
         @companyFilesAccounts = new EzBob.CompanyFilesAccounts(@model.get("companyUploadAccounts"))
         @companyFilesAccountInfoView =  new EzBob.CompanyFilesAccountInfoView(model: @companyFilesAccounts)
 
-        aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
-
-        for accountTypeName, ignore of aryCGAccounts
+        for accountTypeName, ignore of EzBob.CgVendors.all()
             lc = accountTypeName.toLowerCase()
+
             acc = new EzBob.CgAccounts [], accountType: accountTypeName
+
             this[lc + 'Accounts'] = acc
-            if (lc == 'hmrc')
+
+            if lc is 'hmrc'
                 this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView
                     model: acc,
                     companyRefNum: (@fromCustomer('CompanyInfo') or {}).ExperianRefNum
@@ -70,7 +71,8 @@ class EzBob.StoreInfoView extends Backbone.View
             "FreeAgent": view: @FreeAgentAccountInfoView
             "Sage": view: @sageAccountInfoView
             "CompanyFiles": view: @companyFilesAccountInfoView
-        for accountTypeName, vendorInfo of aryCGAccounts
+
+        for accountTypeName, vendorInfo of EzBob.CgVendors.all()
             lc = accountTypeName.toLowerCase()
 
             @stores[accountTypeName] =
@@ -441,8 +443,7 @@ class EzBob.StoreInfoView extends Backbone.View
             when "PayPoint"
                 @$el.find("#payPoint_login").focus()
             else
-                aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
-                if aryCGAccounts[storeName]
+                if EzBob.CgVendors.pure()[storeName]
                     $('.form_field', '#' + storeName.toLowerCase() + 'Account').first().focus()
 
     setDocumentTitle: (view) ->

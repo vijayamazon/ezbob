@@ -40,7 +40,7 @@
     };
 
     StoreInfoView.prototype.initialize = function() {
-      var acc, accountTypeName, aryCGAccounts, ignore, lc, ordpi, vendorInfo;
+      var acc, accountTypeName, ignore, lc, ordpi, vendorInfo, _ref, _ref1;
       this.renderExecuted = false;
       this.ebayStores = new EzBob.EbayStoreModels();
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
@@ -77,9 +77,9 @@
       this.companyFilesAccountInfoView = new EzBob.CompanyFilesAccountInfoView({
         model: this.companyFilesAccounts
       });
-      aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
-      for (accountTypeName in aryCGAccounts) {
-        ignore = aryCGAccounts[accountTypeName];
+      _ref = EzBob.CgVendors.all();
+      for (accountTypeName in _ref) {
+        ignore = _ref[accountTypeName];
         lc = accountTypeName.toLowerCase();
         acc = new EzBob.CgAccounts([], {
           accountType: accountTypeName
@@ -126,8 +126,9 @@
           view: this.companyFilesAccountInfoView
         }
       };
-      for (accountTypeName in aryCGAccounts) {
-        vendorInfo = aryCGAccounts[accountTypeName];
+      _ref1 = EzBob.CgVendors.all();
+      for (accountTypeName in _ref1) {
+        vendorInfo = _ref1[accountTypeName];
         lc = accountTypeName.toLowerCase();
         this.stores[accountTypeName] = {
           view: this[lc + 'AccountInfoView']
@@ -511,7 +512,6 @@
     };
 
     StoreInfoView.prototype.setFocus = function(storeName) {
-      var aryCGAccounts;
       $.colorbox.close();
       switch (storeName) {
         case "EKM":
@@ -519,8 +519,7 @@
         case "PayPoint":
           return this.$el.find("#payPoint_login").focus();
         default:
-          aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
-          if (aryCGAccounts[storeName]) {
+          if (EzBob.CgVendors.pure()[storeName]) {
             return $('.form_field', '#' + storeName.toLowerCase() + 'Account').first().focus();
           }
       }

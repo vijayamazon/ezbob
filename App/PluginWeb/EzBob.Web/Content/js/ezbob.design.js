@@ -1414,9 +1414,7 @@ EzBob.validateCGShopForm = function (el, accountType) {
         highlight: EzBob.Validation.highlightFS
     };
 
-    var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
-
-    var lf = aryCGAccounts[accountType].ClientSide.LinkForm;
+    var lf = EzBob.CgVendors.pure()[accountType].ClientSide.LinkForm;
 
     var atlc = accountType.toLowerCase();
 
