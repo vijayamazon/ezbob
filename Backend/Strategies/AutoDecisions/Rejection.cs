@@ -22,6 +22,8 @@
 		private readonly ASafeLog _log;
 		private readonly double _totalSumOfOrders1YTotalForRejection;
 		private readonly double _totalSumOfOrders3MTotalForRejection;
+		private readonly double _yodlee1YForRejection;
+		private readonly double _yodlee3MForRejection;
 		private readonly double _marketplaceSeniorityDays;
 		private readonly bool _enableAutomaticRejection;
 		private int _lowTotalAnnualTurnover;
@@ -35,10 +37,20 @@
 		private readonly bool _isLimitedCompany;
 		private readonly int _companySeniorityDays;
 		private readonly bool _isOffline;
+		private bool _hasHmrc;
+		private decimal _hmrcAnnualRevenues;
+		private decimal _hmrcQuarterRevenues;
+		private bool _hasYodlee;
+		private decimal _lowOfflineQuarterRevenue;
+		private decimal _lowOfflineAnnualRevenue;
+		private int _numOfLateAccounts;
+		private int _rejectNumOfLateAccounts;
 
 		public Rejection(int customerId,
 			double totalSumOfOrders1YTotalForRejection,
 			double totalSumOfOrders3MTotalForRejection,
+			double yodlee1YForRejection,
+			double yodlee3MForRejection,
 			double marketplaceSeniorityDays,
 			bool enableAutomaticRejection,
 			double maxExperianConsumerScore,
@@ -55,6 +67,8 @@
 			_log = oLog;
 			_totalSumOfOrders1YTotalForRejection = totalSumOfOrders1YTotalForRejection;
 			_totalSumOfOrders3MTotalForRejection = totalSumOfOrders3MTotalForRejection;
+			_yodlee1YForRejection = yodlee1YForRejection;
+			_yodlee3MForRejection = yodlee3MForRejection;
 			_marketplaceSeniorityDays = marketplaceSeniorityDays;
 			_enableAutomaticRejection = enableAutomaticRejection;
 			_maxExperianConsumerScore = maxExperianConsumerScore;
@@ -119,6 +133,7 @@
 			}
 
 			reason = "No rejection exception";
+			_log.Info("customerId {0} {1}", _customerId, reason);
 			return false;
 		}
 
@@ -139,6 +154,11 @@
 			int rejectByCompanyDefaultsAmount = CurrentValues.Instance.RejectByCompany_Defaults_Amount;
 			_lowTotalAnnualTurnover = sr["LowTotalAnnualTurnover"];
 			_lowTotalThreeMonthTurnover = sr["LowTotalThreeMonthTurnover"];
+			_lowOfflineAnnualRevenue = sr["Reject_LowOfflineAnnualRevenue"];
+			_lowOfflineQuarterRevenue = sr["Reject_LowOfflineQuarterRevenue"];
+
+			int rejectLateLastMonth = CurrentValues.Instance.Reject_LateLastMonthsNum;
+			_rejectNumOfLateAccounts = CurrentValues.Instance.Reject_NumOfLateAccounts;
 
 			dt = _db.ExecuteReader(
 				"GetCustomerRejectionData",
@@ -147,7 +167,8 @@
 				new QueryParameter("Reject_Defaults_Months", rejectDefaultsMonths),
 				new QueryParameter("Reject_Defaults_Amount", rejectDefaultsAmount),
 				new QueryParameter("RejectByCompany_Defaults_Months", rejectByCompanyDefaultsMonths),
-				new QueryParameter("RejectByCompany_Defaults_Amount", rejectByCompanyDefaultsAmount)
+				new QueryParameter("RejectByCompany_Defaults_Amount", rejectByCompanyDefaultsAmount),
+				new QueryParameter("Reject_Late_Last_Months", rejectLateLastMonth)
 			);
 
 			sr = new SafeReader(dt.Rows[0]);
@@ -156,6 +177,18 @@
 			_loanOfferApprovalNum = sr["ApprovalNum"];
 			_numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
 			_numOfDefaultAccountsForCompany = sr["NumOfDefaultAccountsForCompany"];
+			_numOfLateAccounts = sr["NumOfLateAccounts"];
+			if (_isOffline)
+			{
+				dt = _db.ExecuteReader("GetHmrcAggregations", CommandSpecies.StoredProcedure,
+				                       new QueryParameter("CustomerId", _customerId));
+				sr = new SafeReader(dt.Rows[0]);
+				_hasHmrc = sr["AnnualRevenues"] != -1 || sr["QuarterRevenues"] != -1;
+				_hmrcAnnualRevenues = sr["AnnualRevenues"];
+				_hmrcQuarterRevenues = sr["QuarterRevenues"];
+			}
+
+			_hasYodlee = _yodlee1YForRejection >= 0 || _yodlee3MForRejection >= 0;
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -199,18 +232,20 @@
 												_rejectDefaultsAccountsNum;
 				}
 				//4. Business score exists and < 20 AND at least 1 company default of at least 1000 in last 24 months and company is limited
-				else if (_maxCompanyScore > 0 && _maxCompanyScore < rejectByCompanyDefaultsScore && 
-					_numOfDefaultAccountsForCompany >= rejectByCompanyNumOfDefaultAccounts && _isLimitedCompany)
+				else if (_maxCompanyScore > 0 && _maxCompanyScore < rejectByCompanyDefaultsScore &&
+				         _numOfDefaultAccountsForCompany >= rejectByCompanyNumOfDefaultAccounts && _isLimitedCompany)
 				{
 					response.AutoRejectReason = "AutoReject: Limited company defaults. Condition not met:" +
-												_maxCompanyScore + "<" + rejectByCompanyDefaultsScore + " AND " +
-												_numOfDefaultAccountsForCompany +
-												" >= " + rejectByCompanyNumOfDefaultAccounts + " AND is limited company";
+					                            _maxCompanyScore + "<" + rejectByCompanyDefaultsScore + " AND " +
+					                            _numOfDefaultAccountsForCompany +
+					                            " >= " + rejectByCompanyNumOfDefaultAccounts + " AND is limited company";
 				}
-				// TODO: Add condition:
 				//5. Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 accounts in last 3 months
-
-				// TODO: Add condition:
+				else if(_numOfLateAccounts >= _rejectNumOfLateAccounts)
+				{
+					response.AutoRejectReason = string.Format("AutoReject: Late CAIS accounts. Condition not met: {0} >= {1}",
+					                                          _numOfLateAccounts, _rejectNumOfLateAccounts);
+				}
 				//6. max(Marketplace(Ecomm) or company )seniority < 300 days.
 				else if (Math.Max(_marketplaceSeniorityDays, _companySeniorityDays) < _rejectMinimalSeniority)
 				{
@@ -233,7 +268,7 @@
 					(response.PayPalNumberOfStores == 0 || response.PayPalTotalSumOfOrders3M < _lowTotalThreeMonthTurnover || response.PayPalTotalSumOfOrders1Y < _lowTotalAnnualTurnover)
 					&& (_totalSumOfOrders3MTotalForRejection < _lowTotalThreeMonthTurnover || _totalSumOfOrders1YTotalForRejection < _lowTotalAnnualTurnover))
 				{
-					response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR " +
+					response.AutoRejectReason = "AutoReject: Online Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR " +
 												response.PayPalTotalSumOfOrders3M + " < " +
 												_lowTotalThreeMonthTurnover + " OR " + response.PayPalTotalSumOfOrders1Y + " < " +
 												_lowTotalAnnualTurnover + ") AND (" + _totalSumOfOrders3MTotalForRejection + " < " +
@@ -242,14 +277,22 @@
 				}
 				
 				//Offline only (hmrc or bank) 1. Have separate turnover configs. Annual - 30000, 3M - 5000
-				else if(true)
+				else if(_isOffline && (_hasHmrc || _hasYodlee) && 
+					(Math.Max((decimal)_yodlee1YForRejection, _hmrcAnnualRevenues) < _lowOfflineAnnualRevenue || 
+					 Math.Max((decimal)_yodlee3MForRejection, _hmrcQuarterRevenues) < _lowOfflineQuarterRevenue))
 				{
-					
+					response.AutoRejectReason =
+						string.Format(
+							"AutoReject: Offline Revenues. Condition not met: max yodlee hmrc annual revenue ({0}, {1}) < {2} OR max yodlee hmrc quarter revenue ({3}, {4}) < {5}",
+							_yodlee1YForRejection, _hmrcAnnualRevenues, _lowOfflineAnnualRevenue, _yodlee3MForRejection, _yodlee1YForRejection, _lowOfflineQuarterRevenue);
 				}
 				else
 				{
+					_log.Info("no auto rejetion for customer {0}", _customerId);
 					return false;
 				}
+
+				_log.Info("customer {0} auto rejected", response.AutoRejectReason);
 
 				response.CreditResult = _enableAutomaticRejection ? "Rejected" : "WaitingForDecision";
 				response.UserStatus = "Rejected";

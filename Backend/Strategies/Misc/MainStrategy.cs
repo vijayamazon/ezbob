@@ -119,6 +119,8 @@
 				maxCompanyScore,
 				totalSumOfOrders1YTotalForRejection,
 				totalSumOfOrders3MTotalForRejection,
+				yodlee1YForRejection,
+				yodlee3MForRejection,
 				offeredCreditLine,
 				marketplaceSeniorityDays,
 				enableAutomaticReRejection,
@@ -586,6 +588,8 @@
 			totalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
 			totalSumOfOrders1YTotalForRejection = totals.TotalSumOfOrders1YTotalForRejection;
 			totalSumOfOrders3MTotalForRejection = totals.TotalSumOfOrders3MTotalForRejection;
+			yodlee1YForRejection = totals.Yodlee1YForRejection;
+			yodlee3MForRejection = totals.Yodlee3MForRejection;
 			marketplaceSeniorityDays = totals.MarketplaceSeniorityDays;
 			decimal totalSumOfOrdersForLoanOffer = totals.TotalSumOfOrdersForLoanOffer;
 			decimal marketplaceSeniorityYears = (decimal)totals.MarketplaceSeniorityDays / 365; // It is done this way to fit to the excel
@@ -1233,6 +1237,8 @@
 		private double totalSumOfOrders1YTotal;
 		private double totalSumOfOrders1YTotalForRejection;
 		private double totalSumOfOrders3MTotalForRejection;
+		private double yodlee1YForRejection;
+		private double yodlee3MForRejection;
 		private bool isFirstLoan;
 
 		#endregion fields

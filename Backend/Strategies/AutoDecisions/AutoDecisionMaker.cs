@@ -12,6 +12,8 @@
 			int maxCompanyScore, 
 			double totalSumOfOrders1YTotalForRejection, 
 			double totalSumOfOrders3MTotalForRejection,
+			double yodlee1YForRejection,
+			double yodlee3MForRejection,
 			int offeredCreditLine, 
 			double marketplaceSeniorityDays,
 			bool enableAutomaticReRejection, 
@@ -38,7 +40,8 @@
 				return autoDecisionResponse;
 			}
 
-			if (new ReApproval(customerId, enableAutomaticReApproval, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalFullAmountOld, loanOfferReApprovalRemainingAmountOld, oDb, oLog).MakeDecision(autoDecisionResponse))
+			if (new ReApproval(customerId, enableAutomaticReApproval, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalFullAmountOld, 
+				loanOfferReApprovalRemainingAmountOld, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
@@ -53,7 +56,8 @@
 				return autoDecisionResponse;
 			}
 
-			if (new Rejection(customerId, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection, marketplaceSeniorityDays, enableAutomaticRejection, maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
+			if (new Rejection(customerId, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection, yodlee1YForRejection,
+				yodlee3MForRejection, marketplaceSeniorityDays, enableAutomaticRejection, maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
 				customerStatusIsWarning, isBrokerCustomer, isLimitedCompany,companySeniorityDays,isOffline, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;

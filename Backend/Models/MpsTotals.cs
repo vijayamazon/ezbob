@@ -1,8 +1,10 @@
-﻿namespace Ezbob.Backend.Models {
+﻿namespace Ezbob.Backend.Models
+{
 	using System.Runtime.Serialization;
 
 	[DataContract(IsReference = true)]
-	public class MpsTotals {
+	public class MpsTotals
+	{
 		[DataMember]
 		public double TotalSumOfOrders1YTotal { get; set; }
 
@@ -20,5 +22,11 @@
 
 		[DataMember]
 		public double TotalSumOfOrders3MTotalForRejection { get; set; }
+
+		[DataMember]
+		public double Yodlee1YForRejection { get; set; }
+
+		[DataMember]
+		public double Yodlee3MForRejection { get; set; }
 	}
 }

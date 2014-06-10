@@ -113,6 +113,26 @@
 			return Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
 		}
 
+		private double GetYodleeForRejection(int customerId, Func<List<IAnalysisDataParameterInfo>, string, double> func)
+		{
+			var analysisVals = GetAllAnalysisValsForCustomer(customerId);
+			bool hasYodlee = false;
+			double bankSum = 0;
+			foreach (var mp in analysisVals)
+			{
+				List<IAnalysisDataParameterInfo> av = mp.Value;
+				if (av != null)
+				{
+					if (mp.Key.Marketplace.Name == "Yodlee")
+					{
+						hasYodlee = true;
+						bankSum += func(av, mp.Key.Marketplace.Name);
+					}
+				}
+			}
+			return hasYodlee ? bankSum : -1;
+		}
+
 		public double GetTurnoverForRejection(int customerId, Func<List<IAnalysisDataParameterInfo>, string, double> func)
 		{
 			var analysisVals = GetAllAnalysisValsForCustomer(customerId);
@@ -978,7 +998,9 @@
 					MarketplaceSeniorityDays = MarketplaceSeniority(customer),
 					TotalSumOfOrdersForLoanOffer = (decimal)GetTotalSumOfOrdersForLoanOffer(customer.Id),
 					TotalSumOfOrders1YTotalForRejection = GetTurnoverForRejection(customer.Id, GetAnnualizedTurnoverFromValues),
-					TotalSumOfOrders3MTotalForRejection = GetTurnoverForRejection(customer.Id, Get3MTurnoverFromValues)
+					TotalSumOfOrders3MTotalForRejection = GetTurnoverForRejection(customer.Id, Get3MTurnoverFromValues),
+					Yodlee1YForRejection = GetYodleeForRejection(customer.Id, GetAnnualizedTurnoverFromValues),
+					Yodlee3MForRejection = GetYodleeForRejection(customer.Id, Get3MTurnoverFromValues)
 				};
 			return totals;
 		}

@@ -2261,5 +2261,26 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.RejectByCompanyDefaultsScore]; }
 		}
+
+		public virtual VariableValue Reject_NumOfLateAccounts
+		{
+			get { return this[Variables.Reject_NumOfLateAccounts]; }
+		}
+
+		public virtual VariableValue Reject_LateLastMonthsNum
+		{
+			get { return this[Variables.Reject_LateLastMonthsNum]; }
+		}
+
+		public virtual VariableValue Reject_LowOfflineQuarterRevenue
+		{
+			get { return this[Variables.Reject_LowOfflineQuarterRevenue]; }
+		}
+
+		public virtual VariableValue Reject_LowOfflineAnnualRevenue
+		{
+			get { return this[Variables.Reject_LowOfflineAnnualRevenue]; }
+		}
+
 	} // class CurrentValues
 } // namespace ConfigManager

@@ -1,11 +1,15 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetRejectionConfigs]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetRejectionConfigs]
+
+IF OBJECT_ID('GetRejectionConfigs') IS NULL
+BEGIN
+	EXECUTE('CREATE PROCEDURE GetRejectionConfigs AS SELECT 1')
+END
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetRejectionConfigs]
+
+ALTER PROCEDURE [dbo].[GetRejectionConfigs]
 AS
 BEGIN
 	SELECT
@@ -18,6 +22,11 @@ BEGIN
 		(SELECT convert(INT, Value) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_MonthsNum') AS Reject_Defaults_MonthsNum,
 		(SELECT convert(INT, Value) FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_Amount') AS Reject_Defaults_Amount,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalAnnualTurnover') AS LowTotalAnnualTurnover,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalThreeMonthTurnover') AS LowTotalThreeMonthTurnover
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalThreeMonthTurnover') AS LowTotalThreeMonthTurnover,
+		(SELECT convert(INT, Value) FROM ConfigurationVariables WHERE Name = 'Reject_LowOfflineAnnualRevenue') AS Reject_LowOfflineAnnualRevenue,
+		(SELECT convert(INT, Value) FROM ConfigurationVariables WHERE Name = 'Reject_LowOfflineQuarterRevenue') AS Reject_LowOfflineQuarterRevenue
+		
 END
+
 GO
+

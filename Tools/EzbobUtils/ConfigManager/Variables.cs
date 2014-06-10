@@ -324,6 +324,10 @@ namespace ConfigManager {
 		RejectByCompanyNumOfDefaultAccounts,
 		RejectByCompany_Defaults_MonthsNum,
 		RejectByCompany_Defaults_Amount,
-		RejectByCompanyDefaultsScore
+		RejectByCompanyDefaultsScore,
+		Reject_NumOfLateAccounts,
+		Reject_LateLastMonthsNum,
+		Reject_LowOfflineQuarterRevenue,
+		Reject_LowOfflineAnnualRevenue
 	} // enum Variables
 } // namespace ConfigManager
