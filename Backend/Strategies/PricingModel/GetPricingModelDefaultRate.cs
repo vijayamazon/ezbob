@@ -32,18 +32,11 @@
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			int companyScore = 0;
-			DataTable dt = DB.ExecuteReader(
+			int companyScore = DB.ExecuteScalar<int>(
 				"GetCompanyScore",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
-
-			if (dt.Rows.Count == 1)
-			{
-				var sr = new SafeReader(dt.Rows[0]);
-				companyScore = sr["Score"];
-			}
 
 			decimal companyValue = GetDefaultRateCompany(companyScore);
 			decimal customerValue = GetDefaultRateCustomer(consumerScore);

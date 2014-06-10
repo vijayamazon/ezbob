@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
-	using System.Data;
 	using ExperianLib.Ebusiness;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -15,7 +14,7 @@
 			m_bForceCheck = bForceCheck;
 			m_bFoundCompany = false;
 
-			experianParserForAnalytics = new ExperianParserForAnalytics(oLog, oDB);
+			m_oParser = new ExperianParserForAnalytics(DB, Log);
 
 			oDB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
@@ -34,7 +33,7 @@
 			);
 
 			if (!m_bFoundCompany)
-				oLog.Info("Can't find company data for customer:{0}. The customer is probably an entrepreneur.");
+				oLog.Info("Can't find company data for customer {0} (is the customer an entrepreneur?).", m_nCustomerID);
 		} // constructor
 
 		#endregion constructor
@@ -67,8 +66,7 @@
 			else {
 				m_oExperianData = GetBusinessDataFromExperian();
 
-				if (!m_oExperianData.IsError)
-				{
+				if (!m_oExperianData.IsError) {
 					experianBureauScore = m_oExperianData.BureauScore;
 					MaxScore = m_oExperianData.MaxBureauScore;
 				}
@@ -86,7 +84,17 @@
 				new QueryParameter("CustomerId", m_nCustomerID)
 			);
 
-			UpdateAnalytics();
+			if ((m_oExperianData == null) || m_oExperianData.IsError)
+				return;
+
+			if (m_oExperianData.CacheHit) {
+				// This check is required to allow multiple customers have the same company
+				// While the cache works with RefNumber the analytics table works with customer
+				if (IsCustomerAlreadyInAnalytics())
+					return;
+			} // if
+
+			m_oParser.UpdateAnalytics(m_nCustomerID);
 		} // Execute
 
 		#endregion method Execute
@@ -95,53 +103,31 @@
 
 		#region private
 
-		#region method UpdateAnalytics
+		#region method IsCustomerAlreadyInAnalytics
 
-		private void UpdateAnalytics()
-		{
-			if ((m_oExperianData == null) || m_oExperianData.IsError)
-				return;
-
-			if (m_oExperianData.CacheHit)
-			{
-				// This check is required to allow multiple customers have the same company
-				// While the cache works with RefNumber the analytics table works with customer
-				if (IsCustomerAlreadyInAnalytics())
-				{
-					return;
-				}
-			}
-
-			experianParserForAnalytics.UpdateAnalytics(m_nCustomerID);
-		}
-
-		#endregion method UpdateAnalytics
-		
-		private bool IsCustomerAlreadyInAnalytics()
-		{
-			DataTable dt = DB.ExecuteReader(
-				"GetCompanyScore",
+		private bool IsCustomerAlreadyInAnalytics() {
+			return DB.ExecuteScalar<bool>(
+				"CustomerHasCompanyAnalytics",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", m_nCustomerID)
 			);
+		} // IsCustomerAlreadyInAnalytics
 
-			if (dt.Rows.Count == 1)
-			{
-				return true;
-			}
+		#endregion method IsCustomerAlreadyInAnalytics
 
-			return false;
-		}
+		#region method GetBusinessDataFromExperian
+		// ReSharper disable RedundantCast
 
-		private BusinessReturnData GetBusinessDataFromExperian()
-		{
+		private BusinessReturnData GetBusinessDataFromExperian() {
 			var service = new EBusinessService();
 
-			if (m_bIsLimited)
-				return service.GetLimitedBusinessData(m_sExperianRefNum, m_nCustomerID, false, m_bForceCheck);
+			return m_bIsLimited
+				? (BusinessReturnData)service.GetLimitedBusinessData(m_sExperianRefNum, m_nCustomerID, false, m_bForceCheck)
+				: (BusinessReturnData)service.GetNotLimitedBusinessData(m_sExperianRefNum, m_nCustomerID, false, m_bForceCheck);
+		} // GetBusinessDataFromExperian
 
-			return service.GetNotLimitedBusinessData(m_sExperianRefNum, m_nCustomerID, false, m_bForceCheck);
-		}
+		// ReSharper restore RedundantCast
+		#endregion method GetBusinessDataFromExperian
 
 		#region fields
 
@@ -151,7 +137,7 @@
 		private bool m_bIsLimited;
 		private string m_sExperianRefNum;
 		private BusinessReturnData m_oExperianData;
-		private ExperianParserForAnalytics experianParserForAnalytics;
+		private readonly ExperianParserForAnalytics m_oParser;
 
 		#endregion fields
 

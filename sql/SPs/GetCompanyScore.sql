@@ -14,13 +14,17 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @MaxScore INT = 0
+
 	SELECT
-		CASE WHEN MaxScore IS NULL THEN Score ELSE MaxScore END AS MaxScore
+		@MaxScore = (CASE WHEN MaxScore IS NULL THEN Score ELSE MaxScore END)
 	FROM
 		CustomerAnalyticsCompany
 	WHERE
 		CustomerID = @CustomerID
 		AND
 		IsActive = 1
+
+	SELECT @MaxScore AS MaxScore
 END
 GO

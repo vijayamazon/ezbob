@@ -1,47 +1,37 @@
-﻿namespace EzBob.Backend.Strategies.Misc 
-{
+﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
-	using System.Data;
 	using EzBob.Backend.Strategies.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class BackfillCompanyAnalytics : AStrategy
-	{
-		private readonly ExperianParserForAnalytics experianParserForAnalytics;
-
-		public BackfillCompanyAnalytics(AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
-			experianParserForAnalytics = new ExperianParserForAnalytics(oLog, oDb);
-		}
+	public class BackfillCompanyAnalytics : AStrategy {
+		public BackfillCompanyAnalytics(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_oParser = new ExperianParserForAnalytics(DB, Log);
+		} // constructor
 
 		public override string Name {
 			get { return "BackfillCompanyAnalytics"; }
-		}
+		} // Name
 
-		public override void Execute()
-		{
-			DataTable dt = DB.ExecuteReader(
+		public override void Execute() {
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int customerId = sr["CustomerId"];
+
+					try {
+						m_oParser.UpdateAnalytics(customerId);
+					}
+					catch (Exception ex) {
+						Log.Error(ex, "The backfill for customer {0} failed.", customerId);
+					} // try
+
+					return ActionResult.Continue;
+				},
 				"GetAllCustomersWithCompany",
 				CommandSpecies.StoredProcedure
-				);
+			);
+		} // Execute
 
-			int customerId = 0;
-			foreach (DataRow row in dt.Rows)
-			{
-				try
-				{
-					var sr = new SafeReader(row);
-					customerId = sr["CustomerId"];
-
-					experianParserForAnalytics.UpdateAnalytics(customerId);
-				}
-				catch (Exception ex)
-				{
-					Log.Error("The backfill for customer:{0} failed with exception:{1}", customerId, ex);
-				}
-			}
-		}
-	}
-}
+		private readonly ExperianParserForAnalytics m_oParser;
+	} // class BackfillCompanyAnalytics
+} // namespace

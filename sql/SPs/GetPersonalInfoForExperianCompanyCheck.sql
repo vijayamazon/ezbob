@@ -1,26 +1,27 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetPersonalInfoForExperianCompanyCheck]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetPersonalInfoForExperianCompanyCheck]
+IF OBJECT_ID('GetPersonalInfoForExperianCompanyCheck') IS NULL
+	EXECUTE('CREATE PROCEDURE GetPersonalInfoForExperianCompanyCheck AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetPersonalInfoForExperianCompanyCheck] 
-	(@CustomerId INT)
+
+ALTER PROCEDURE GetPersonalInfoForExperianCompanyCheck
+@CustomerId INT
 AS
-BEGIN		
+BEGIN
 	SELECT 
 		MP_ExperianDataCache.JsonPacket AS CompanyData,
 		Company.ExperianRefNum, 
 		Company.ExperianCompanyName,
 		Company.TypeOfBusiness
 	FROM 
-		MP_ExperianDataCache, 
-		Company,
-		Customer
+		MP_ExperianDataCache
+		INNER JOIN Company ON MP_ExperianDataCache.CompanyRefNumber = Company.ExperianRefNum
+		INNER JOIN Customer ON Company.Id = Customer.CompanyId
 	WHERE 
-		MP_ExperianDataCache.CompanyRefNumber = Company.ExperianRefNum AND 
-		Company.Id = Customer.CompanyId AND
-		Customer.Id = @CustomerId		
+		Customer.Id = @CustomerId
 END
 GO

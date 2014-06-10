@@ -735,17 +735,11 @@
 		#region method GetMaxCompanyExperianScore
 		private void GetMaxCompanyExperianScore()
 		{
-			DataTable dt = DB.ExecuteReader(
+			maxCompanyScore = DB.ExecuteScalar<int>(
 				"GetCompanyScore",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
-
-			if (dt.Rows.Count == 1)
-			{
-				var sr = new SafeReader(dt.Rows[0]);
-				maxCompanyScore = sr["MaxScore"];
-			}
 		} // GetMaxCompanyExperianScore
 		#endregion
 

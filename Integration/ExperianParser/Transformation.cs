@@ -24,6 +24,22 @@ namespace Ezbob.ExperianParser {
 	public class Transformation {
 		#region public
 
+		#region method ParseMoney
+
+		public static bool ParseMoney(string sMoney, out decimal nValue) {
+			return decimal.TryParse(sMoney, NumberStyles.Currency, Culture, out nValue);
+		} // ParseMoney
+
+		#endregion method ParseMoney
+
+		#region method EncodeMoney
+
+		public static string EncodeMoney(decimal nValue) {
+			return nValue.ToString("C2", Culture);
+		} // EncodeMoney
+
+		#endregion method EncodeMoney
+
 		#region constructor
 
 		public Transformation() {
@@ -94,8 +110,8 @@ namespace Ezbob.ExperianParser {
 				case TransformationType.Money: {
 					decimal nValue;
 
-					if (decimal.TryParse(sResult, NumberStyles.Currency, Culture, out nValue))
-						sResult = nValue.ToString("C2", Culture);
+					if (ParseMoney(sResult, out nValue))
+						sResult = EncodeMoney(nValue);
 
 					} break;
 
