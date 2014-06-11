@@ -5,7 +5,7 @@
 }
 <div id="grids-view" style="display: none;">
     <div id="sidebar" class="bg">
-		<a href="#" id="reload-button-template" class="hide">Reload</a>
+        <a href="#" id="reload-button-template" class="hide">Reload</a>
 
         <ul class="nav nav-list">
             <li class="active"><a href="#waiting-grid" data-toggle="tab"><i class="fa fa-envelope-o"></i><span>Decision(<span id="waiting-count"></span>)</span></a></li>
@@ -52,7 +52,7 @@
         </div>
         <div class="col-md-12">
             <div class="tab-pane active" id="waiting-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -70,33 +70,17 @@
                                 <th>Comment</th>
                                 <th>Broker</th>
                                 <th></th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(15)
                     </table>
                 </div>
             </div>
             @if (Model.IsEscalated)
             {
                 <div class="tab-pane" id="escalated-grid">
-                    <div class="table-responsive table-big" >
+                    <div class="table-responsive table-big">
                         <table class="table grid-data">
                             <thead>
                                 <tr>
@@ -115,29 +99,13 @@
                                     <th>Reason</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
+                            @Tds(13)
                         </table>
                     </div>
                 </div>
             }
             <div class="tab-pane" id="pending-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -156,32 +124,15 @@
                                 <th>Comment</th>
                                 <th>Broker</th>
                                 <th></th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(16)
                     </table>
                 </div>
             </div>
             <div class="tab-pane" id="approved-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -202,34 +153,15 @@
                                 <th>Comment</th>
                                 <th>Broker</th>
                                 <th></th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(18)
                     </table>
                 </div>
             </div>
             <div class="tab-pane" id="loans-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -250,34 +182,15 @@
                                 <th>Comment</th>
                                 <th>Broker</th>
                                 <th></th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(18)
                     </table>
                 </div>
             </div>
             <div class="tab-pane" id="sales-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -296,28 +209,12 @@
                                 <th>Segment</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(13)
                     </table>
                 </div>
             </div>
             <div class="tab-pane" id="collection-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -334,26 +231,12 @@
                                 <th>Segment</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(11)
                     </table>
                 </div>
             </div>
             <div class="tab-pane" id="late-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -379,35 +262,12 @@
                                 <th>CRM comment</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(20)
                     </table>
                 </div>
             </div>
             <div class="tab-pane" id="rejected-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -427,33 +287,15 @@
                                 <th>Comment</th>
                                 <th>Broker</th>
                                 <th></th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(17)
                     </table>
                 </div>
             </div>
             <div class="tab-pane" id="all-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -470,27 +312,12 @@
                                 <th>O/S balance</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(11)
                     </table>
                 </div>
             </div>
             <div class="tab-pane" id="registered-grid">
-                <div class="table-responsive table-big" >
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -503,37 +330,27 @@
                                 <th>Segment</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(7)
                     </table>
                 </div>
             </div>
             <div class="tab-pane" id="logbook-grid">
-				<div id="logbook-new-entry-form" class="hide">
-					<div class="left-column">
-						<h3>New entry</h3>
+                <div id="logbook-new-entry-form" class="hide">
+                    <div class="left-column">
+                        <h3>New entry</h3>
 
-						<div>Entry type</div>
-						<select id="logbook-new-entry-type" tabindex="1">
-							<option></option>
-						</select>
+                        <div>Entry type</div>
+                        <select id="logbook-new-entry-type" tabindex="1">
+                            <option></option>
+                        </select>
 
-						<button type="button" id="logbook-new-entry-save" class="btn btn-primary" tabindex="3">Save</button>
-						<button type="button" id="logbook-new-entry-cancel" class="btn" tabindex="4">Cancel</button>
-					</div>
+                        <button type="button" id="logbook-new-entry-save" class="btn btn-primary" tabindex="3">Save</button>
+                        <button type="button" id="logbook-new-entry-cancel" class="btn" tabindex="4">Cancel</button>
+                    </div>
 
-					<textarea id="logbook-new-entry" placeholder="Entry content" tabindex="2"></textarea>
-				</div>
-                <div class="table-responsive table-big" >
+                    <textarea id="logbook-new-entry" placeholder="Entry content" tabindex="2"></textarea>
+                </div>
+                <div class="table-responsive table-big">
                     <table class="table grid-data">
                         <thead>
                             <tr>
@@ -544,15 +361,7 @@
                                 <th>Content</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        @Tds(5)
                     </table>
                 </div>
             </div>
@@ -592,4 +401,16 @@
     </script>
 
     <script type="text/javascript" src="../Content/js/Underwriter/customersGrid/ezbob.underwriter.index.js"></script>
+}
+
+@helper Tds(int num)
+{
+    <tbody>
+        <tr>
+        @for (int i = 0; i < num; ++i)
+        {
+            <td></td>
+        }
+        </tr>
+    </tbody>
 }

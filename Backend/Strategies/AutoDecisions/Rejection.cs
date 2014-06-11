@@ -6,8 +6,7 @@
 	using Ezbob.Database;
 	using System.Data;
 	using Ezbob.Logger;
-	using Ezbob.Utils.ParsedValue;
-
+	
 	public class Rejection
 	{
 		private int _autoRejectionExceptionAnualTurnover;

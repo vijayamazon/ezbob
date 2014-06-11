@@ -69,7 +69,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				icon: 'envelope-o',
 				title: 'Waiting for decision',
 				action: 'GridWaiting',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CustomerStatus,$CalcAmount,$OSBalance,LastStatus,CRMcomment,Broker,~SegmentType',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CustomerStatus,$CalcAmount,$OSBalance,LastStatus,CRMcomment,Broker,~SegmentType,~FirstSale',
 			}), // waiting
 			escalated: new GridProperties({
 				icon: 'arrow-up',
@@ -79,17 +79,17 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			pending: new GridProperties({
 				icon: 'clock-o',
 				action: 'GridPending',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,Pending,LastStatus,CRMcomment,Broker,~SegmentType',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,Pending,LastStatus,CRMcomment,Broker,~SegmentType,~FirstSale',
 			}), // pending
 			approved: new GridProperties({
 				icon: 'thumbs-o-up',
 				action: 'GridApproved',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^ApproveDate,^RegDate,$CalcAmount,$ApprovedSum,$AmountTaken,#ApprovesNum,#RejectsNum,LastStatus,CRMcomment,Broker,~SegmentType'
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^ApproveDate,^RegDate,$CalcAmount,$ApprovedSum,$AmountTaken,#ApprovesNum,#RejectsNum,LastStatus,CRMcomment,Broker,~SegmentType,~FirstSale'
 			}), // approved
 			loans: new GridProperties({
 				icon: 'gbp',
 				action: 'GridLoans',
-				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^FirstLoanDate,^LastLoanDate,$LastLoanAmount,$AmountTaken,$TotalPrincipalRepaid,$OSBalance,^NextRepaymentDate,LastStatus,CRMcomment,Broker,~SegmentType',
+				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^FirstLoanDate,^LastLoanDate,$LastLoanAmount,$AmountTaken,$TotalPrincipalRepaid,$OSBalance,^NextRepaymentDate,LastStatus,CRMcomment,Broker,~SegmentType,~FirstSale',
 			}), // loans
 			sales: new GridProperties({
 				icon: 'phone',
@@ -109,7 +109,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			rejected: new GridProperties({
 				icon: 'thumbs-o-down',
 				action: 'GridRejected',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,^DateRejected,Reason,#RejectsNum,#ApprovesNum,$OSBalance,LastStatus,CRMcomment,Broker,~SegmentType',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,^DateRejected,Reason,#RejectsNum,#ApprovesNum,$OSBalance,LastStatus,CRMcomment,Broker,~SegmentType,~FirstSale',
 			}), // rejected
 			all: new GridProperties({
 				icon: 'female',
