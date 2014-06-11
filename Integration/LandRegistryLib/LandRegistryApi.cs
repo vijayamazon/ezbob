@@ -8,8 +8,18 @@
 
 	public class LandRegistryApi : ILandRegistryApi
 	{
+		private readonly string _userName;
+		private readonly string _password;
+		private readonly string _filePath;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LandRegistryApi));
 		private readonly LandRegistryModelBuilder _builder = new LandRegistryModelBuilder();
+
+		public LandRegistryApi(string userName, string password, string filePath)
+		{
+			_userName = userName;
+			_password = password;
+			_filePath = filePath;
+		}
 
 		/// <summary>
 		/// Please provide flat/house and postcode OR flat, street and town OR house, street and town.
@@ -26,7 +36,7 @@
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Enquiry };
 			using (var client = new LREnquiryServiceNS.PropertyDescriptionEnquiryV2_0ServiceClient())
 			{
-				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior(_userName, _password));
 				ServicePointManager.Expect100Continue = true;
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
 
@@ -95,7 +105,7 @@
 
 			using (var client = new LREnquiryPollServiceNS.PropertyDescriptionEnquiryV2_0PollServiceClient())
 			{
-				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior(_userName, _password));
 				// create a request object
 				var pollRequest = new LREnquiryPollServiceNS.PollRequestType
 					{
@@ -139,7 +149,7 @@
 			// create an instance of the client
 			using (var client = new LRResServiceNS.OCWithSummaryV2_1ServiceClient())
 			{
-				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior(_userName, _password));
 				// create a request object
 
 				string sMessageID = "RESREQ" + customerId + "-" + Guid.NewGuid().ToString("N");
@@ -185,9 +195,9 @@
 								{
 									AttachmentContent = response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value,
 									FileName = string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks),
-									FilePath = string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", titleNumber, DateTime.Today.Ticks)
+									FilePath = string.Format("{2}{0}_{1}.zip", titleNumber, DateTime.Today.Ticks, _filePath)
 								};
-							File.WriteAllBytes(string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", titleNumber, DateTime.UtcNow.Ticks),
+							File.WriteAllBytes(string.Format("{2}{0}_{1}.zip", titleNumber, DateTime.UtcNow.Ticks, _filePath),
 											   response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 							response.GatewayResponse.Results.Attachment = null;
 						}
@@ -226,7 +236,7 @@
 			// create an instance of the client
 			using (var client = new LRResPollServiceNS.OCWithSummaryV2_0PollServiceClient())
 			{
-				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior(_userName, _password));
 				// create a request object
 				var request = new LRResPollServiceNS.PollRequestType
 				{
@@ -254,9 +264,9 @@
 								{
 									AttachmentContent = response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value,
 									FileName = string.Format("{0}_{1}.zip", pollId, DateTime.Today.Ticks),
-									FilePath = string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", pollId, DateTime.Today.Ticks)
+									FilePath = string.Format("{2}{0}_{1}.zip", pollId, DateTime.Today.Ticks, _filePath)
 								};
-							File.WriteAllBytes(string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", pollId, DateTime.Today.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
+							File.WriteAllBytes(string.Format("{2}{0}_{1}.zip", pollId, DateTime.Today.Ticks, _filePath), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 							response.GatewayResponse.Results.Attachment = null;
 						}
 						catch (Exception) { }

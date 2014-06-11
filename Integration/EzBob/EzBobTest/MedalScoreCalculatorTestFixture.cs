@@ -4,6 +4,7 @@
 	using EzBob.Backend.Strategies.ScoreCalculation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -69,5 +70,13 @@
 			offer = msc.GetBasicInterestRate(1220);
 			Assert.AreEqual(0.02M, offer);
 		}
+
+		[Test]
+		public void encrypt()
+		{
+			var e = new Encrypted("dsgfsdgsdg");
+			var es = e.ToString();
+		}
+
     }
 }

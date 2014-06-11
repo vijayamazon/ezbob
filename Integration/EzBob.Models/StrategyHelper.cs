@@ -19,6 +19,7 @@
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
+	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using Marketplaces;
 	using NHibernate;
@@ -837,7 +838,10 @@
 			LandRegistryLib.ILandRegistryApi lr;
 			if (isProd)
 			{
-				lr = new LandRegistryLib.LandRegistryApi();
+				lr = new LandRegistryLib.LandRegistryApi(
+					ConfigManager.CurrentValues.Instance.LandRegistryUserName, 
+					Encrypted.Decrypt(ConfigManager.CurrentValues.Instance.LandRegistryPassword), 
+					ConfigManager.CurrentValues.Instance.LandRegistryFilePath);
 			}
 			else
 			{
@@ -965,7 +969,10 @@
 			LandRegistryLib.ILandRegistryApi lr;
 			if (isProd)
 			{
-				lr = new LandRegistryLib.LandRegistryApi();
+				lr = new LandRegistryLib.LandRegistryApi(
+					ConfigManager.CurrentValues.Instance.LandRegistryUserName,
+					Encrypted.Decrypt(ConfigManager.CurrentValues.Instance.LandRegistryPassword),
+					ConfigManager.CurrentValues.Instance.LandRegistryFilePath);
 			}
 			else
 			{

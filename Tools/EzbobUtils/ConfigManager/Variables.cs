@@ -1,5 +1,6 @@
 namespace ConfigManager {
-	public enum Variables {
+	public enum Variables
+	{
 		AdministrationCharge,
 		AllowFinishOfflineWizardWithoutMarketplaces,
 		AllowFinishOnlineWizardWithoutMarketplaces,
@@ -328,6 +329,9 @@ namespace ConfigManager {
 		Reject_NumOfLateAccounts,
 		Reject_LateLastMonthsNum,
 		Reject_LowOfflineQuarterRevenue,
-		Reject_LowOfflineAnnualRevenue
+		Reject_LowOfflineAnnualRevenue,
+		LandRegistryUserName,
+		LandRegistryPassword,
+		LandRegistryFilePath
 	} // enum Variables
 } // namespace ConfigManager

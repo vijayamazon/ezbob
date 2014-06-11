@@ -1,4 +1,6 @@
 namespace ConfigManager {
+	using Ezbob.Utils.Security;
+
 	public partial class CurrentValues {
 		#region property AdministrationCharge
 
@@ -2282,5 +2284,19 @@ namespace ConfigManager {
 			get { return this[Variables.Reject_LowOfflineAnnualRevenue]; }
 		}
 
+		public string LandRegistryUserName
+		{
+			get { return this[Variables.LandRegistryUserName]; }
+		}
+
+		public string LandRegistryPassword
+		{
+			get { return this[Variables.LandRegistryPassword]; }
+		}
+
+		public string LandRegistryFilePath
+		{
+			get { return this[Variables.LandRegistryFilePath]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

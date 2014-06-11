@@ -6,7 +6,7 @@
 	[TestFixture]
 	public class LandRegistryTestFixure
 	{
-		private static readonly LandRegistryApi Lr = new LandRegistryApi();
+		private static readonly LandRegistryApi Lr = new LandRegistryApi("SDulman3000", "iOwNcavb8fxu080IEtpg1rmAzb5dsBsw7FhuLsJTxYk=", "c:\\temp\\landregistry\\");
 		private static readonly LandRegistryTestApi LrTest = new LandRegistryTestApi();
 		[Test]
 		public void test_prod_enquiry()
@@ -64,7 +64,7 @@
 			Assert.NotNull(model.Response);
 			Assert.AreEqual(LandRegistryResponseType.Acknowledgement, model.ResponseType);
 		}
-
+		
 		[Test]
 		public void test_res_builder()
 		{
