@@ -68,6 +68,9 @@
 		[Test]
 		public void test_res_builder()
 		{
+
+
+
 			var responseBM253452 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResBM253452);
 			var b = new LandRegistryModelBuilder();
 
@@ -79,7 +82,10 @@
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
-			
+			var resNGL854792 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(lrNGL854792);
+			model = b.BuildResModel(resNGL854792);
+			Assert.IsNotNull(model);
+			Console.WriteLine(XmlHelper.SerializeObject(model));
 
 			var responseNT147249 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResNT147249);
 			model = b.BuildResModel(responseNT147249);
@@ -111,6 +117,9 @@
 			model = b.BuildResModel(responseWYK874430);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
+
+			
+			
 		}
 
 		public const string TestEnquiry = @"<?xml version=""1.0""?>
@@ -2343,6 +2352,448 @@
               <EntryText>facing roof as more           25 years from              </EntryText>
               <EntryText>particularly described in     23.06.2011                 </EntryText>
               <EntryText>the lease.</EntryText>
+            </ScheduleEntry>
+          </Schedule>
+        </ChargesRegister>
+      </OCRegisterData>
+    </Results>
+  </GatewayResponse>
+</ResponseOCWithSummaryV2_1Type>";
+
+		public const string lrNGL854792 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<ResponseOCWithSummaryV2_1Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
+    <TypeCode>30</TypeCode>
+    <Results>
+      <ExternalReference>
+        <Reference>ezbob574</Reference>
+      </ExternalReference>
+      <ActualPrice>
+        <GrossPriceAmount>6.00</GrossPriceAmount>
+      </ActualPrice>
+      <Attachment>
+        <EmbeddedFileBinaryObject format=""ZIP""></EmbeddedFileBinaryObject>
+      </Attachment>
+      <OCSummaryData>
+        <OfficialCopyDateTime>2014-06-11T11:16:03</OfficialCopyDateTime>
+        <EditionDate>2014-02-27</EditionDate>
+        <PropertyAddress>
+          <AddressLine>
+            <Line>Park and Garden House House</Line>
+            <Line>16 and 18 Finsbury Circus and 18 to 31 Eldon Street</Line>
+            <Line>London</Line>
+          </AddressLine>
+        </PropertyAddress>
+        <Title>
+          <TitleNumber>NGL854792</TitleNumber>
+          <ClassOfTitleCode>10</ClassOfTitleCode>
+          <CommonholdIndicator>false</CommonholdIndicator>
+          <TitleRegistrationDetails>
+            <DistrictName>CITY OF LONDON</DistrictName>
+            <AdministrativeArea>GREATER LONDON</AdministrativeArea>
+            <LandRegistryOfficeName>Wales Office</LandRegistryOfficeName>
+            <LatestEditionDate>2014-02-27</LatestEditionDate>
+            <RegistrationDate>2005-10-28</RegistrationDate>
+          </TitleRegistrationDetails>
+        </Title>
+        <RegisterEntryIndicators>
+          <AgreedNoticeIndicator>true</AgreedNoticeIndicator>
+          <BankruptcyIndicator>false</BankruptcyIndicator>
+          <CautionIndicator>false</CautionIndicator>
+          <CCBIIndicator>false</CCBIIndicator>
+          <ChargeeIndicator>false</ChargeeIndicator>
+          <ChargeIndicator>false</ChargeIndicator>
+          <ChargeRelatedRestrictionIndicator>false</ChargeRelatedRestrictionIndicator>
+          <ChargeRestrictionIndicator>false</ChargeRestrictionIndicator>
+          <CreditorsNoticeIndicator>false</CreditorsNoticeIndicator>
+          <DeathOfProprietorIndicator>false</DeathOfProprietorIndicator>
+          <DeedOfPostponementIndicator>false</DeedOfPostponementIndicator>
+          <DiscountChargeIndicator>false</DiscountChargeIndicator>
+          <EquitableChargeIndicator>false</EquitableChargeIndicator>
+          <GreenOutEntryIndicator>false</GreenOutEntryIndicator>
+          <HomeRightsChangeOfAddressIndicator>false</HomeRightsChangeOfAddressIndicator>
+          <HomeRightsIndicator>false</HomeRightsIndicator>
+          <LeaseHoldTitleIndicator>false</LeaseHoldTitleIndicator>
+          <MultipleChargeIndicator>false</MultipleChargeIndicator>
+          <NonChargeRestrictionIndicator>false</NonChargeRestrictionIndicator>
+          <NotedChargeIndicator>false</NotedChargeIndicator>
+          <PricePaidIndicator>false</PricePaidIndicator>
+          <PropertyDescriptionNotesIndicator>true</PropertyDescriptionNotesIndicator>
+          <RentChargeIndicator>false</RentChargeIndicator>
+          <RightOfPreEmptionIndicator>false</RightOfPreEmptionIndicator>
+          <ScheduleOfLeasesIndicator>true</ScheduleOfLeasesIndicator>
+          <SubChargeIndicator>false</SubChargeIndicator>
+          <UnidentifiedEntryIndicator>false</UnidentifiedEntryIndicator>
+          <UnilateralNoticeBeneficiaryIndicator>true</UnilateralNoticeBeneficiaryIndicator>
+          <UnilateralNoticeIndicator>true</UnilateralNoticeIndicator>
+          <VendorsLienIndicator>false</VendorsLienIndicator>
+        </RegisterEntryIndicators>
+        <Proprietorship>
+          <CurrentProprietorshipDate>2005-10-28</CurrentProprietorshipDate>
+          <RegisteredProprietorParty>
+            <Organization>
+              <Name>THE MAYOR AND COMMONALTY AND CITIZENS OF THE CITY OF LONDON</Name>
+            </Organization>
+            <Address>
+              <PostcodeZone>
+                <Postcode>EC2P 2EJ</Postcode>
+              </PostcodeZone>
+              <AddressLine>
+                <Line>Guildhall</Line>
+                <Line>P O Box 270</Line>
+                <Line>London</Line>
+              </AddressLine>
+            </Address>
+            <Address>
+              <AddressLine>
+                <Line>DX121783</Line>
+                <Line>Guildhall</Line>
+              </AddressLine>
+            </Address>
+          </RegisteredProprietorParty>
+        </Proprietorship>
+        <AgreedNotice>
+          <AgreedNoticeEntry>
+            <EntryDetails>
+              <EntryNumber>11</EntryNumber>
+              <EntryText>A Wayleave Agreement dated 24 April 1995 made between (1) The Prudential Assurance Company Limited and (2) MFS Communications Limited relates to installation operation and maintenance of telecommunication apparatus. NOTE: Copy filed under 337567.</EntryText>
+              <SubRegisterCode>C</SubRegisterCode>
+            </EntryDetails>
+          </AgreedNoticeEntry>
+        </AgreedNotice>
+        <DocumentDetails>
+          <Document>
+            <DocumentType>20</DocumentType>
+            <DocumentDate>1916-06-20</DocumentDate>
+            <EntryNumber>C1</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>337567</FiledUnder>
+            <RegisterDescription>Agreement</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>20</DocumentType>
+            <DocumentDate>1944-07-28</DocumentDate>
+            <EntryNumber>C2</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>337567</FiledUnder>
+            <RegisterDescription>Agreement</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>20</DocumentType>
+            <DocumentDate>1995-04-24</DocumentDate>
+            <EntryNumber>C11</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>337567</FiledUnder>
+            <RegisterDescription>Agreement</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>20</DocumentType>
+            <DocumentDate>1936-05-12</DocumentDate>
+            <EntryNumber>C5</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>LN213690</FiledUnder>
+            <RegisterDescription>Agreement relating to rebuilding and right</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>70</DocumentType>
+            <DocumentDate>1947-06-09</DocumentDate>
+            <EntryNumber>C8</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>337567</FiledUnder>
+            <RegisterDescription>Deed</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>70</DocumentType>
+            <DocumentDate>1960-09-19</DocumentDate>
+            <EntryNumber>C9</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>LN213690</FiledUnder>
+            <RegisterDescription>Deed</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>70</DocumentType>
+            <DocumentDate>1964-05-13</DocumentDate>
+            <EntryNumber>C10</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>337567</FiledUnder>
+            <RegisterDescription>Deed</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>70</DocumentType>
+            <DocumentDate>1916-06-20</DocumentDate>
+            <EntryNumber>C4</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>337567</FiledUnder>
+            <RegisterDescription>Deed</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>70</DocumentType>
+            <DocumentDate>1995-02-20</DocumentDate>
+            <EntryNumber>C3</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <RegisterDescription>Deed</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>70</DocumentType>
+            <DocumentDate>2005-09-06</DocumentDate>
+            <EntryNumber>A2</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>247757</FiledUnder>
+            <RegisterDescription>Deed</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>70</DocumentType>
+            <DocumentDate>2013-04-17</DocumentDate>
+            <EntryNumber>A4</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>NGL801035</FiledUnder>
+            <RegisterDescription>Deed</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>90</DocumentType>
+            <DocumentDate>2008-09-16</DocumentDate>
+            <EntryNumber>L1</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>EGL546496</FiledUnder>
+            <RegisterDescription>Lease</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>90</DocumentType>
+            <DocumentDate>2013-04-17</DocumentDate>
+            <EntryNumber>C19</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>AGL283396</FiledUnder>
+            <RegisterDescription>Lease</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>90</DocumentType>
+            <DocumentDate>2012-09-28</DocumentDate>
+            <EntryNumber>A3</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>AGL268621</FiledUnder>
+            <RegisterDescription>Lease</RegisterDescription>
+          </Document>
+        </DocumentDetails>
+        <UnilateralNoticeDetails>
+          <UnilateralNoticeEntry>
+            <UnilateralNotice>
+              <EntryNumber>12</EntryNumber>
+              <EntryText>UNILATERAL NOTICE affecting the part comprising offices on the ground and first floors of the property in respect of a contract for agreement to grant a lease dated 20 March 2008 made between (1) The Prudential Assurance Company Limited and (2) City Index Group Limited. NOTE:-Copy plan filed under NGL778881.</EntryText>
+              <SubRegisterCode>C</SubRegisterCode>
+            </UnilateralNotice>
+            <UnilateralNoticeBeneficiary>
+              <EntryNumber>13</EntryNumber>
+              <EntryText>BENEFICIARY: City Index Group Limited care of Moorhead James of Kildare House, 3 Dorset Rise, London EC4Y 8EN.</EntryText>
+              <SubRegisterCode>C</SubRegisterCode>
+            </UnilateralNoticeBeneficiary>
+          </UnilateralNoticeEntry>
+          <UnilateralNoticeEntry>
+            <UnilateralNotice>
+              <EntryNumber>14</EntryNumber>
+              <EntryText>UNILATERAL NOTICE affecting the land edged in red on plan to application form UN1 dated 8 August 2008 in respect of an Agreement for Lease dated 5 August 2008 of the 7th Floor, Park House, Finsbury Circus, London EC2 to Cisco Systems Limited following the grant of a superior lease in favour of The Prudential Assurance Company Limited pursuant to a Development Agreement and Deed of Variation dated 1 April 2005. NOTE:-Copy plan to UN1 application form filed under NGL778881.</EntryText>
+              <SubRegisterCode>C</SubRegisterCode>
+            </UnilateralNotice>
+            <UnilateralNoticeBeneficiary>
+              <EntryNumber>15</EntryNumber>
+              <EntryText>BENEFICIARY: Cisco Systems Limited (Co. Regn. No. 02558939) of 1 Callaghan Square, Cardiff CF10 5BT and for the attention of Work Place Resources, 9 New Square, Bedfont Lakes, Feltham, Middx TW14 8HA.</EntryText>
+              <SubRegisterCode>C</SubRegisterCode>
+            </UnilateralNoticeBeneficiary>
+          </UnilateralNoticeEntry>
+          <UnilateralNoticeEntry>
+            <UnilateralNotice>
+              <EntryNumber>16</EntryNumber>
+              <EntryText>UNILATERAL NOTICE affecting the land edged in red on plan attached to UN1 application form in respect of a Works Agreement dated 8 August 2008 pursuant to which the registered proprietor is to undertake Generator Works and Electricity Works (defined therein) following which there will be a recalculation of the rent free period to be allowed to the beneficiary to be detailed in the lease of the 7th Floor, Park House, Finsbury Circus, London EC2 pursuant to the Agreement for Lease made between (1) The Prudential Assurance Company Limited and (2) Cisco Systems Limited.NOTE 1:- No copy of the Works Agreement was lodged on registration. NOTE 2: Copy plan filed under NGL778881.</EntryText>
+              <SubRegisterCode>C</SubRegisterCode>
+            </UnilateralNotice>
+            <UnilateralNoticeBeneficiary>
+              <EntryNumber>17</EntryNumber>
+              <EntryText>BENEFICIARY: Cisco Systems Limited (Co. Regn. No. 02558939) of 1 Callaghan Square, Cardiff CF10 5BT and for the attention of Work Place Resources, 9 New Square, Bedfont Lakes, Feltham, Middx TW14 8HA.</EntryText>
+              <SubRegisterCode>C</SubRegisterCode>
+            </UnilateralNoticeBeneficiary>
+          </UnilateralNoticeEntry>
+        </UnilateralNoticeDetails>
+      </OCSummaryData>
+      <OCRegisterData>
+        <PropertyRegister>
+          <DistrictDetails>
+            <EntryText>CITY OF LONDON</EntryText>
+          </DistrictDetails>
+          <RegisterEntry>
+            <EntryNumber>1</EntryNumber>
+            <EntryDate>2005-10-28</EntryDate>
+            <EntryType>Property Description</EntryType>
+            <EntryText>The Freehold land shown edged with red on the plan of the above title filed at the Registry and being Park and Garden House House, 16 and 18 Finsbury Circus and 18 to 31 Eldon Street, London.</EntryText>
+            <EntryText>NOTE: As to the part tinted blue on the title plan only the basement vaults are included in the title.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>2</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Beneficial/Subjective Easements - A Register</EntryType>
+            <EntryText>A Deed dated 6 September 2005 made between (1) Bustoni Limited (2) B.L.C.T. (17839) Limited (3) Finsbury Avenue (Phase IV) Limited (4) B.L.C.T. (12702) Limited (5) B.L.C.T. (PHC2) Limited and (6) The Prudential Assurance Company Limited relates to rights of light and air.</EntryText>
+            <EntryText>NOTE: Copy filed under 247757.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>3</EntryNumber>
+            <EntryDate>2013-05-20</EntryDate>
+            <EntryType>Beneficial/Subjective Easements - A Register</EntryType>
+            <EntryText>The land has the benefit of the rights reserved by a lease of 20 Finsbury Circus dated 28 September 2012 made between (1) The Mayor and Commonality and Citizens of the City of London and (2) UD Europe Limited for a term of 150 years from and including 28 September 2012.</EntryText>
+            <EntryText>̠Note: Copy filed under AGL268621.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>4</EntryNumber>
+            <EntryDate>2013-07-18</EntryDate>
+            <EntryType>Beneficial/Subjective Easements - A Register</EntryType>
+            <EntryText>The land has the benefit of the rights reserved by a lease of 42 New Broad Street dated 17 April 2013 made between (1) The Mayor and Commonalty and Citizens of the City of London and (2) London (R.E.I.) Limited for a term of 125 years from and including 25 March 2013.</EntryText>
+            <EntryText>̠Note: Copy filed under NGL801035.</EntryText>
+          </RegisterEntry>
+        </PropertyRegister>
+        <ProprietorshipRegister>
+          <RegisterEntry>
+            <EntryNumber>1</EntryNumber>
+            <EntryDate>2005-10-28</EntryDate>
+            <EntryType>Proprietor</EntryType>
+            <EntryText>PROPRIETOR: THE MAYOR AND COMMONALTY AND CITIZENS OF THE CITY OF LONDON care of The Comptroller And City Solicitor, The City Of London Corporation, Guildhall, P O Box 270, London EC2P 2EJ and of DX121783, Guildhall.</EntryText>
+          </RegisterEntry>
+        </ProprietorshipRegister>
+        <ChargesRegister>
+          <RegisterEntry>
+            <EntryNumber>1</EntryNumber>
+            <EntryDate>2005-10-28</EntryDate>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>An Agreement dated 20 June 1916 made between (1) The Mayor and Commonalty and Citizens of the City of London (2) William James Miller Burton (3) Finsbury Circus House Limited and (4) Charles Ernest Escreet and others relates to the height of buildings in Eldon Street.</EntryText>
+            <EntryText>NOTE: Copy filed under 337567.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>2</EntryNumber>
+            <EntryDate>2005-10-28</EntryDate>
+            <EntryType>Subjective Easements - C Register</EntryType>
+            <EntryText>An Agreement dated 28 July 1944 made between (1) The King's Most Excellent Majesty (2) The Commissioners of Crown Lands (3) Finsbury Circus Estates Limited (4) The Mayor and Commonalty and Citizens of the City of London and (5) Finsbury Circus House Limited relates to rights of light and air.</EntryText>
+            <EntryText>NOTE: Copy filed under 337567.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>3</EntryNumber>
+            <EntryDate>2005-10-28</EntryDate>
+            <EntryType>Subjective Easements - C Register</EntryType>
+            <EntryText>A Deed dated 20 February 1995 made between (1) The Mayor and Commonalty and Citizens of the City of London (2) The Prudential Assurance Company Limited and (3) The Norwich Union Life Insurance Society relates to rights of light and air.</EntryText>
+            <EntryText>NOTE: Copy filed.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>4</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Subjective Easements - C Register</EntryType>
+            <EntryText>An Agreement dated 20 June 1916 made between (1) Finsbury Circus House Limited and (2) The Trustees Of The Will Of William Goodman (Deceased) relates to rebuilding and rights of light and air.</EntryText>
+            <EntryText>NOTE:-Copy filed under 337567.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>5</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>An Agreement relating to rebuilding and right of light and air dated 12 May 1936 made between (1) Finsbury Circus Estate Limited and (2) The Eagle Oil &amp; Shipping Co.</EntryText>
+            <EntryText>NOTE: Copy filed under LN213690.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>6</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Subjective Easements - C Register</EntryType>
+            <EntryText>Agreement dated 16 May 1945 made between (1) Finsbury Circus House Limited and (2) Anglo Mexican Petroleum Company Limited relates to rights of light and air.  </EntryText>
+            <EntryText>NOTE 1:-The filed copy does not include a copy of an Agreement dated 28 July 1944 as is annexed to the original but a copy of the Agreement dated 28 July 1944 is filed.</EntryText>
+            <EntryText>NOTE 2: Copy filed under LN213690.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>7</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>Deed of Covenant dated 13 May 1946 made between (1) The Mayor and Commonalty and Citizens of the City of London (2) Finsbury Circus House Limited and (3) John Lister Walsh in respect of alterations to the premises comprised in this title.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>8</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>Deed Poll dated 9 June 1947 contains a covenant by Finsbury Circus House Limited with the consent of John Lister Walsh with the Mayor and Commonalty and Citizens of the City of London as to building alterations to and restoration of premises.</EntryText>
+            <EntryText>NOTE: Copy filed under 337567.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>9</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>Licence dated 19 September 1960 as to a fire escape made between (1) Eagle Oil &amp; Shipping Company Limited and (2) Covenant Securities Limited.</EntryText>
+            <EntryText>NOTE: Copy filed under LN213690.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>10</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>A Deed Poll dated 13 May 1964 contains a covenant by Legal and General Assurance Society Limited with The Mayor and Commonalty and Citizens of The City of London as to alterations to and restoration of the premises.</EntryText>
+            <EntryText>NOTE: Copy filed under 337567.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>11</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Agreed Notice/Section 49 - Deed</EntryType>
+            <EntryText>A Wayleave Agreement dated 24 April 1995 made between (1) The Prudential Assurance Company Limited and (2) MFS Communications Limited relates to installation operation and maintenance of telecommunication apparatus.</EntryText>
+            <EntryText>NOTE: Copy filed under 337567.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>12</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Unilateral Notice</EntryType>
+            <EntryText>UNILATERAL NOTICE affecting the part comprising offices on the ground and first floors of the property in respect of a contract for agreement to grant a lease dated 20 March 2008 made between (1) The Prudential Assurance Company Limited and (2) City Index Group Limited.</EntryText>
+            <EntryText>NOTE:-Copy plan filed under NGL778881.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>13</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Beneficiary of Unilateral Notice</EntryType>
+            <EntryText>BENEFICIARY: City Index Group Limited care of Moorhead James of Kildare House, 3 Dorset Rise, London EC4Y 8EN.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>14</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Unilateral Notice</EntryType>
+            <EntryText>UNILATERAL NOTICE affecting the land edged in red on plan to application form UN1 dated 8 August 2008 in respect of an Agreement for Lease dated 5 August 2008 of the 7th Floor, Park House, Finsbury Circus, London EC2 to Cisco Systems Limited following the grant of a superior lease in favour of The Prudential Assurance Company Limited pursuant to a Development Agreement and Deed of Variation dated 1 April 2005.</EntryText>
+            <EntryText>NOTE:-Copy plan to UN1 application form filed under NGL778881.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>15</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Beneficiary of Unilateral Notice</EntryType>
+            <EntryText>BENEFICIARY: Cisco Systems Limited (Co. Regn. No. 02558939) of 1 Callaghan Square, Cardiff CF10 5BT and for the attention of Work Place Resources, 9 New Square, Bedfont Lakes, Feltham, Middx TW14 8HA.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>16</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Unilateral Notice</EntryType>
+            <EntryText>UNILATERAL NOTICE affecting the land edged in red on plan attached to UN1 application form in respect of a Works Agreement dated 8 August 2008 pursuant to which the registered proprietor is to undertake Generator Works and Electricity Works (defined therein) following which there will be a recalculation of the rent free period to be allowed to the beneficiary to be detailed in the lease of the 7th Floor, Park House, Finsbury Circus, London EC2 pursuant to the Agreement for Lease made between (1) The Prudential Assurance Company Limited and (2) Cisco Systems Limited.</EntryText>
+            <EntryText>NOTE 1:- No copy of the Works Agreement was lodged on registration.</EntryText>
+            <EntryText>NOTE 2: Copy plan filed under NGL778881.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>17</EntryNumber>
+            <EntryDate>2008-09-19</EntryDate>
+            <EntryType>Beneficiary of Unilateral Notice</EntryType>
+            <EntryText>BENEFICIARY: Cisco Systems Limited (Co. Regn. No. 02558939) of 1 Callaghan Square, Cardiff CF10 5BT and for the attention of Work Place Resources, 9 New Square, Bedfont Lakes, Feltham, Middx TW14 8HA.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>18</EntryNumber>
+            <EntryDate>2008-10-16</EntryDate>
+            <EntryType>Lease Related - Register</EntryType>
+            <EntryText>The land is subject to the lease set out in the schedule of leases hereto.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>19</EntryNumber>
+            <EntryDate>2013-05-22</EntryDate>
+            <EntryType>Lease Related - Deed</EntryType>
+            <EntryText>The land is subject for a term of 125 years from 25 March 2013 to the easements granted by a lease dated 17 April 2013 of 42 New Broad Street and made between The Mayor and Commonalty and Citizens of the City of London (1) and London (R.E.I.) Limited (2).</EntryText>
+            <EntryText>NOTE: Copy filed under AGL283396.</EntryText>
+          </RegisterEntry>
+          <Schedule>
+            <ScheduleType>SCHEDULE OF NOTICES OF LEASE</ScheduleType>
+            <ScheduleEntry>
+              <EntryNumber>1</EntryNumber>
+              <EntryType>Schedule of Notices of Leases</EntryType>
+              <EntryText>16.10.2008      Park and Garden House         16.09.2008      EGL546496  </EntryText>
+              <EntryText>150 years from             </EntryText>
+              <EntryText>24/06/2008</EntryText>
             </ScheduleEntry>
           </Schedule>
         </ChargesRegister>

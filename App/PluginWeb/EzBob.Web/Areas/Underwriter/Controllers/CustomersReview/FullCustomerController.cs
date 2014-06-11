@@ -18,6 +18,7 @@
 	using Web.Models;
 	using NHibernate;
 	using System;
+	using log4net;
 
 	public class FullCustomerController : Controller
 	{
@@ -36,7 +37,7 @@
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
 		private readonly ServiceClient serviceClient;
-
+		private static readonly ILog Log = LogManager.GetLogger(typeof(FullCustomerController));
 		public FullCustomerController(
 											ICustomerRepository customers,
 											ISession session,
@@ -108,9 +109,16 @@
 
 			model.MedalCalculations = new MedalCalculators(customer);
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(customer.Id, context.UserId, "Basic");
-			model.PricingModelCalculations = getPricingModelModelResponse.Value;
-
+			try
+			{
+				PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(
+					customer.Id, context.UserId, "Basic");
+				model.PricingModelCalculations = getPricingModelModelResponse.Value;
+			}
+			catch (Exception ex)
+			{
+				Log.ErrorFormat("Failed to load pricing model \n{0}", ex);
+			}
 			int numberOfProperties = customer.PersonalInfo.ResidentialStatus == "Home owner" ? 1 : 0;
 			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
 										 a.Customer.Id == customer.Id &&

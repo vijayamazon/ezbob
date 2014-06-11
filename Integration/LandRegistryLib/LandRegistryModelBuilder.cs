@@ -167,9 +167,8 @@
 						else if (proprietorship.Item.GetType() == typeof (Q1OrganizationType))
 						{
 							lrProprietorship.ProprietorshipPartyType = "Organization";
-							lrProprietorship.CompanyRegistrationNumber =
-								((Q1OrganizationType) proprietorship.Item).CompanyRegistrationNumber.Value;
-							lrProprietorship.CompanyName = ((Q1OrganizationType) proprietorship.Item).Name.Value;
+							lrProprietorship.CompanyRegistrationNumber = ((Q1OrganizationType) proprietorship.Item).CompanyRegistrationNumber != null ? ((Q1OrganizationType) proprietorship.Item).CompanyRegistrationNumber.Value : "";
+							lrProprietorship.CompanyName = ((Q1OrganizationType) proprietorship.Item).Name != null ? ((Q1OrganizationType) proprietorship.Item).Name.Value : "";
 						}
 						lrProprietorship.ProprietorshipAddresses = GetAddresses(proprietorship.Address);
 
