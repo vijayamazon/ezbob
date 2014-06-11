@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="Yodlee.NET, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dlls\Yodlee.NET.dll</HintPath>
+      <HintPath>..\..\..\..\Lib\3rdparty\Yodlee\Yodlee.NET.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
