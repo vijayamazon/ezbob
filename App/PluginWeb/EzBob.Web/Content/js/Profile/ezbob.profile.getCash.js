@@ -342,8 +342,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				backBtn: 'rc-button grey back',
 				doneBtn: 'rc-button green',
 			},
-			clickBack: _.bind(this.backFromUploadFiles, this),
-			clickDone: _.bind(this.backFromUploadFiles, this),
+			clickBack: _.bind(this.backFromUploadFiles, this, false),
+			clickDone: _.bind(this.backFromUploadFiles, this, true),
 		});
 
 		console.log(this.$el.width());
@@ -358,9 +358,11 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh-vat-return', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
 	}, // refreshVatReturn
 
-	backFromUploadFiles: function() {
+	backFromUploadFiles: function(bRecheck) {
 		$.colorbox.close();
-		this.applyForALoan();
+
+		if (bRecheck)
+			this.applyForALoan();
 	}, // backFromUploadFiles
 
 	refreshYodlee: function() {
