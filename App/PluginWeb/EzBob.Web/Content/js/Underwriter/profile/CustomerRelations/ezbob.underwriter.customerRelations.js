@@ -12,11 +12,13 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
     initialize: function() {
         this.model.on("change reset sync", this.render, this);
     },
-    serializeData: function() {
+    serializeData: function () {
         return {
             vals: this.model.get("CustomerRelations"), 
             ranks: EzBob.CrmRanks,
-            isFollowedUp : this.model.get("IsFollowed"),
+            followUps: this.model.get("FollowUps"),
+            lastFollowUp: this.model.get("LastFollowUp"),
+            lastStatus: this.model.get("LastStatus")
         };
     },
     events: {
@@ -31,7 +33,8 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         "toggleSystemBtn": ".toggleSystemCrm",
         "systemRows": ".crm-system",
         "closeFollowUpBtn": "#closeFollowUp",
-        "rank" : "#Rank",
+        "rank": "#Rank",
+        "followUp": 'label.followUp'
     },
     addNewCustomerRelationsEntry: function() {
         var view = new EzBob.Underwriter.AddCustomerRelationsEntry({ model: this.model });
@@ -55,8 +58,9 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         if (curRank) {
             this.ui.rank.val(curRank.Id).blur();
         }
-
-        this.ui.toggleSystemBtn.tooltip({ title: "Show/hide system events", placement: "right" });
+        
+        this.ui.toggleSystemBtn.tooltip({ placement: "right" });
+        this.ui.followUp.tooltip({ placement: "bottom" });
     },
 
     changeRank: function () {

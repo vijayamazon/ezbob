@@ -1,6 +1,7 @@
 namespace EZBob.DatabaseLib.Model.CustomerRelations
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using FluentNHibernate.Mapping;
@@ -35,6 +36,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 
 	public interface ICustomerRelationFollowUpRepository : IRepository<CustomerRelationFollowUp>
 	{
+		IEnumerable<CustomerRelationFollowUp> GetByCustomer(int customerId);
 	}
 	
 	public class CustomerRelationFollowUpRepository : NHibernateRepositoryBase<CustomerRelationFollowUp>, ICustomerRelationFollowUpRepository
@@ -47,6 +49,11 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 		public CustomerRelationFollowUp GetLastFollowUp(int customerId)
 		{
 			return GetAll().Where(x => x.CustomerId == customerId).OrderByDescending(x => x.DateAdded).FirstOrDefault(x => x.IsClosed == false);
+		}
+
+		public IEnumerable<CustomerRelationFollowUp> GetByCustomer(int customerId)
+		{
+			return GetAll().Where(x => x.CustomerId == customerId);
 		}
 	}
 }

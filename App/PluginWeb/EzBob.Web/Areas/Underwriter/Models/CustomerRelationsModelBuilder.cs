@@ -13,10 +13,12 @@
 		private readonly CRMStatusesRepository _crmStatusesRepository;
 		private readonly CRMRanksRepository _crmRanksRepository;
 		private readonly CustomerRelationStateRepository _customerRelationStateRepository;
+		private readonly ICustomerRelationFollowUpRepository _customerRelationFollowUpRepository;
 		public CustomerRelationsModelBuilder(LoanRepository loanRepository, CustomerRelationsRepository customerRelationsRepository, ISession session)
 		{
 			_loanRepository = loanRepository;
 			_customerRelationsRepository = customerRelationsRepository;
+			_customerRelationFollowUpRepository = new CustomerRelationFollowUpRepository(session);
 			_crmStatusesRepository = new CRMStatusesRepository(session);
 			_crmActionsRepository = new CRMActionsRepository(session);
 			_crmRanksRepository = new CRMRanksRepository(session);
@@ -57,11 +59,19 @@
 			if (state != null)
 			{
 				crmModel.CurrentRank = state.Rank;
-				crmModel.IsFollowed = state.IsFollowUp.HasValue && state.IsFollowUp.Value;
+				crmModel.LastFollowUp = state.FollowUp;
+				crmModel.LastStatus = state.Status != null ? state.Status.Name : string.Empty;
 			}
 
+			crmModel.FollowUps = _customerRelationFollowUpRepository.GetByCustomer(customerId).Select(x => new FollowUpModel
+				{
+					Comment = x.Comment,
+					Created = x.DateAdded,
+					FollowUpDate = x.FollowUpDate,
+					IsClosed = x.IsClosed,
+					CloseDate = x.CloseDate,
+				}).OrderByDescending(x => x.FollowUpDate);
 			return crmModel;
-
 		}
 
 		public CrmStaticModel GetStaticCrmModel()
@@ -72,7 +82,6 @@
 				CrmStatuses = _crmStatusesRepository.GetAll(),
 				CrmRanks = _crmRanksRepository.GetAll()
 			};
-
 			return model;
 		}
 	}

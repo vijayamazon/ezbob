@@ -16,9 +16,22 @@
 	public class CrmModel
 	{
 		public IOrderedEnumerable<CustomerRelationsModel> CustomerRelations { get; set; }
+		public IOrderedEnumerable<FollowUpModel> FollowUps { get; set; }
 		public CRMRanks CurrentRank { get; set; }
 		public bool IsFollowed { get; set; }
+		public string LastStatus { get; set; }
+		public CustomerRelationFollowUp LastFollowUp { get; set; }
 	}
+
+	public class FollowUpModel
+	{
+		public DateTime Created { get; set; }
+		public DateTime FollowUpDate { get; set; }
+		public bool IsClosed { get; set; }
+		public string Comment { get; set; }
+		public DateTime? CloseDate { get; set; }
+	}
+
 	public class CustomerRelationsModel
 	{
 		public DateTime DateTime { get; set; }
