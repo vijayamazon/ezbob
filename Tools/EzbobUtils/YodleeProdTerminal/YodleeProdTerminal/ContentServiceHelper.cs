@@ -8,7 +8,13 @@ using com.yodlee.sampleapps.datatypes;
 
 namespace com.yodlee.sampleapps
 {
-    public class ContentServiceHelper : ApplicationSuper
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Linq;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+
+	public class ContentServiceHelper : ApplicationSuper
     {
 
         protected ContentServiceTraversalService cst;
@@ -19,6 +25,8 @@ namespace com.yodlee.sampleapps
         private static int NAV_VIEW_SINGLE_SERVICE_DETAILS = OPTION_CNT++;
         private static int NAV_VIEW_ALL_CONTENT_SERVICES = OPTION_CNT++;
         private static int NAV_VIEW_CONTAINER_SERVICES = OPTION_CNT++;
+		private static int NAV_VIEW_UKBANK_SERVICES = OPTION_CNT++;
+		private static int NAV_VIEW_SYSTEM_SERVICES = OPTION_CNT++;
         private static int NAV_QUIT = OPTION_CNT++;
 
         public ContentServiceHelper(UserContext userContext)
@@ -41,6 +49,8 @@ namespace com.yodlee.sampleapps
                 System.Console.WriteLine(NAV_VIEW_SINGLE_SERVICE_DETAILS + ". View Single content servce");
                 System.Console.WriteLine(NAV_VIEW_ALL_CONTENT_SERVICES + ". View all content services (slow)");
                 System.Console.WriteLine(NAV_VIEW_CONTAINER_SERVICES + ". View services for a specific container");
+	            System.Console.WriteLine(NAV_VIEW_UKBANK_SERVICES + ". View UK Bank services");
+				System.Console.WriteLine(NAV_VIEW_SYSTEM_SERVICES + ". Generate Report of services");
                 System.Console.WriteLine(NAV_QUIT + ". Exit Sub-menu");
                 System.Console.WriteLine("********************");
 
@@ -58,7 +68,7 @@ namespace com.yodlee.sampleapps
                         Search s = new Search();
                         s.searchByKeywords(searchString);
                     }
-                    if (choice == NAV_VIEW_SINGLE_SERVICE_DETAILS)
+                    else if (choice == NAV_VIEW_SINGLE_SERVICE_DETAILS)
                     {
                         viewSingleServiceDetails();
                     }
@@ -70,6 +80,18 @@ namespace com.yodlee.sampleapps
                     {
                         viewContainerServices();
                     }
+					else if (choice == NAV_VIEW_UKBANK_SERVICES)
+					{
+						Search s = new Search();
+						s.viewUkBank("UK");
+					}
+					else if (choice == NAV_VIEW_SYSTEM_SERVICES)
+					{
+						Search s = new Search();
+						var yodlee = s.viewUkBank("UK");
+						var system = getAllSystemServices();
+						findMissingBanks(system, yodlee);
+					}
                     else if (choice == NAV_QUIT)
                     {
                         loop = false;
@@ -141,7 +163,57 @@ namespace com.yodlee.sampleapps
             ContentServiceInfo csi = cst.getContentServiceInfo(getCobrandContext(), choice, true);
             printContentServiceInfo(csi);
         }
+
+		public Dictionary<long, string> getAllSystemServices()
+		{
+			var log = new LegacyLog();
+			var conn = new SqlConnection(log);
+
+			DataTable dt = conn.ExecuteReader("GetYodleeBanks");
+			if (dt.Rows.Count == 0)
+			{
+				throw new Exception(string.Format("System Banks not found"));
+			}
+			var banks = new Dictionary<long, string>();
+
+			Console.WriteLine("Found {0} banks", dt.Rows.Count);
+			foreach (DataRow row in dt.Rows)
+			{
+				var csid = long.Parse(row[0].ToString());
+				var name = row[1].ToString();
+				banks.Add(csid, name);
+
+				try
+				{
+					ContentServiceInfo csi = cst.getContentServiceInfo(getCobrandContext(), csid, true);
+					if (csi.contentServiceDisplayName.Split(' ').First().ToLowerInvariant() != name.Split(' ').First().ToLowerInvariant())
+					{
+						Console.WriteLine("{2} Name difference system:{1} yodlee:{0}", csi.contentServiceDisplayName, name, csid);
+					}
+					if (csi.containerInfo.containerName != "bank")
+					{
+						Console.WriteLine("{0} not a bank {1}", csid, csi.containerInfo.containerName);
+					}
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("Error in retrieving data for {0} {1}", csid, name);
+				}
+			}
+
+			return banks;
+		}
         
+		public void findMissingBanks(Dictionary<long, string> system, Dictionary<long, string> yodlee)
+		{
+			foreach (var key in yodlee.Keys)
+			{
+				if (!system.ContainsKey(key))
+				{
+					Console.WriteLine("Missing system bank {0} {1}", key, yodlee[key]);
+				}
+			}
+		}
         /**
          * This method prints a subset of the ContentServiceInfo fields
          * @param csi Content Service info object to show info for
@@ -233,7 +305,7 @@ namespace com.yodlee.sampleapps
                System.Console.WriteLine("\n\n");
 
            }
-   
+			
            public void viewContainerServices()
            {
                System.Console.WriteLine("The following are the containers to get the sites for");

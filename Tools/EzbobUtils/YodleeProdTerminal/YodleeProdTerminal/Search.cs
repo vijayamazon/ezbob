@@ -6,6 +6,8 @@ using System.Collections;
 
 namespace com.yodlee.sampleapps
 {
+	using System.Collections.Generic;
+
 	/// <summary>
 	/// Search
 	/// </summary>
@@ -15,10 +17,62 @@ namespace com.yodlee.sampleapps
 
         public Search()
         {
+
             searchService = new SearchService();
             searchService.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + "SearchService";
         }
 
+		public Dictionary<long, string> viewUkBank(string keywords)
+		{
+			object[] searchResults = null;
+			try
+			{
+				searchResults = searchService.searchContentServicesByContainerType(getCobrandContext(), new string[] { "bank" }, keywords);
+			}
+			catch (Exception ex)
+			{
+
+				System.Console.WriteLine("Exception: " + ex.StackTrace);
+			}
+			var services = new Dictionary<long, string>();
+			if (searchResults != null && searchResults.Length > 0)
+			{
+				XmlNode[] csiNodes = null;
+				for (int i = 0; i < searchResults.Length; i++)
+				{
+					csiNodes = (XmlNode[])searchResults[i];
+					int found = 0;
+					long csid = 0;
+					string csname = string.Empty;
+					for (int j = 0; j < csiNodes.Length; j++)
+					{
+						XmlNode csiNode = csiNodes[j];
+						switch (csiNode.Name.ToLower())
+						{
+							case "contentserviceid":
+								csid = Convert.ToInt64(csiNode.InnerText);
+								found++;
+								break;
+							case "sitedisplayname":
+								csname = csiNode.InnerText;
+								found++;
+								break;
+						}
+						if (found == 2) break;
+						//cs.contentServiceId
+
+					}
+					services.Add(csid, csname);
+					System.Console.WriteLine(i + ".) " + csname + " csId=" + csid);
+				}
+			}
+			else
+			{
+				System.Console.WriteLine("No search results returned");
+			}
+			System.Console.WriteLine("\n");
+			return services;
+		}
         public void searchByKeywords(String keywords)
         {
             object[] searchResults = null; 
@@ -27,7 +81,7 @@ namespace com.yodlee.sampleapps
             {
                 String str = andKeywords(keywords);
                 System.Console.WriteLine("Search String = "+str);
-                searchResults = searchService.searchContentServices(getCobrandContext(),str );               
+                searchResults = searchService.searchContentServices(getCobrandContext(),str );
             }
             catch (SoapException soapEx)
             {
