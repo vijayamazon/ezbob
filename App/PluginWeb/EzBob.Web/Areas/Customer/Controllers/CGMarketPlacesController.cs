@@ -155,7 +155,12 @@
 
 		private void ValidateAccount(AddAccountState oState, AccountModel model) {
 			try {
-				var ctr = new Connector(oState.AccountData, ms_oLog.InternalLog, _context.Customer);
+				var ctr = new Connector(
+					oState.AccountData,
+					ms_oLog,
+					_context.Customer.Id,
+					_context.Customer.Name
+				);
 
 				if (ctr.Init()) {
 					ctr.Run(true);
@@ -164,7 +169,7 @@
 			}
 			catch (ConnectionFailException cge) {
 				if (DBConfigurationValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
-					ms_oLog.Error(cge);
+					ms_oLog.Error(cge, "Connection failure.");
 					oState.Error = CreateError(cge);
 				} // if
 
@@ -177,11 +182,11 @@
 				oState.Error = CreateError(cge);
 			}
 			catch (InvalidCredentialsException ice) {
-				ms_oLog.Info(ice);
+				ms_oLog.Info(ice, "Invalid credentials.");
 				oState.Error = CreateError(ice);
 			}
 			catch (Exception e) {
-				ms_oLog.Error(e);
+				ms_oLog.Error(e, "Unexpected exception.");
 				oState.Error = CreateError(e);
 			} // try
 		} // ValidateAccount
@@ -211,7 +216,7 @@
 				}).Execute();
 			}
 			catch (Exception e) {
-				ms_oLog.Error(e);
+				ms_oLog.Error(e, "Failed to save marketplace.");
 				oState.Error = CreateError(e);
 			} // try
 

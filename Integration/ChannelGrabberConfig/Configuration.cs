@@ -11,14 +11,6 @@
 	#region class Configuration
 
 	public class Configuration {
-		#region static constructor
-
-		private const string CompanyName = "Ezbob";
-		private const string EnvNameFile = "channelgrabber.json";
-		private static readonly Guid ms_oHmrcGuid = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
-
-		#endregion static constructor
-
 		#region public
 
 		#region property Instance
@@ -129,7 +121,7 @@
 			get { return m_oVendors; }
 		} // Vendors
 
-		private IDictionary<string, VendorInfo> m_oVendors; 
+		private readonly IDictionary<string, VendorInfo> m_oVendors; 
 
 		#endregion property Vendors
 
@@ -139,15 +131,17 @@
 			get { return m_oPureVendors; }
 		} // PureVendors
 
-		private IDictionary<string, VendorInfo> m_oPureVendors; 
+		private readonly IDictionary<string, VendorInfo> m_oPureVendors; 
 
 		#endregion property PureVendors
 
 		#region property Hmrc
 
 		public VendorInfo Hmrc {
-			get { return GetVendorInfo(ms_oHmrcGuid); }
+			get { return m_oHmrc; }
 		} // Hmrc
+
+		private VendorInfo m_oHmrc;
 
 		#endregion property Hmrc
 
@@ -185,7 +179,9 @@
 				m_oInternalVendorsByName[v.Name] = v;
 				m_oInternalVendorsByGuid[v.Guid()] = v;
 
-				if (v.Guid() != ms_oHmrcGuid)
+				if (v.Guid() == ms_oHmrcGuid)
+					m_oHmrc = v;
+				else
 					m_oInternalPureVendorsByName[v.Name] = v;
 			});
 
@@ -226,9 +222,21 @@
 
 		#endregion property Configurations
 
+		#region fields
+
 		private readonly SortedDictionary<string, VendorInfo> m_oInternalVendorsByName;
 		private readonly SortedDictionary<Guid, VendorInfo> m_oInternalVendorsByGuid;
 		private readonly SortedDictionary<string, VendorInfo> m_oInternalPureVendorsByName;
+
+		#endregion fields
+
+		#region constants
+
+		private const string CompanyName = "Ezbob";
+		private const string EnvNameFile = "channelgrabber.json";
+		private static readonly Guid ms_oHmrcGuid = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+
+		#endregion constants
 
 		#endregion private
 	} // class Configuration

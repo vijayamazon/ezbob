@@ -13,7 +13,7 @@
 		#region constructor
 
 		public DisplayMarketplaceSecurityData(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_nCustomerID = nCustomerID;
+			m_oStra = new LoadCustomerMarketplaceSecurityData(nCustomerID, DB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -31,49 +31,39 @@
 		public override void Execute() {
 			Integration.ChannelGrabberConfig.Configuration oCgCfg = Integration.ChannelGrabberConfig.Configuration.GetInstance(Log);
 
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					int nID = sr["ID"];
-					string sDisplayName = sr["DisplayName"];
-					string sType = sr["MarketplaceType"];
-					byte[] oSecData = sr["SecurityData"];
-					Guid oType = sr["InternalId"];
+			m_oStra.Execute();
 
-					string sSecData;
+			foreach (var oRes in m_oStra.Result) {
+				string sSecData;
 
-					VendorInfo vi = oCgCfg.GetVendorInfo(oType);
+				VendorInfo vi = oCgCfg.GetVendorInfo(oRes.MarketplaceType);
 
-					if (vi == null) {
-						switch (sType.Trim().ToLower()) {
-						case "ekm":
-							sSecData = TryDecrypt(oSecData);
-							break;
+				if (vi == null) {
+					switch (oRes.MarketplaceType.Trim().ToLower()) {
+					case "ekm":
+						sSecData = TryDecrypt(oRes.SecurityData);
+						break;
 
-						case "yodlee":
-							sSecData = Serialized.Deserialize<YodleeSecurityInfo>(oSecData).Stringify();
-							break;
+					case "yodlee":
+						sSecData = Serialized.Deserialize<YodleeSecurityInfo>(oRes.SecurityData).Stringify();
+						break;
 
-						default:
-							sSecData = oSecData.ToString();
-							break;
-						} // switch
-					}
-					else
-						sSecData = TryDecrypt(oSecData);
+					default:
+						sSecData = oRes.SecurityData.ToString();
+						break;
+					} // switch
+				}
+				else
+					sSecData = TryDecrypt(oRes.SecurityData);
 
-					Log.Info(
-						"Customer market place {0} - ({1}) {2}:\n{3}\n\n",
-						sType,
-						nID,
-						sDisplayName,
-						sSecData
-					);
-
-					return ActionResult.Continue;
-				},
-				"LoadCustomerMarketplaceSecurityData",
-				new QueryParameter("CustomerID", m_nCustomerID)
-			);
+				Log.Info(
+					"Customer market place {0} - ({1}) {2}:\n{3}\n\n",
+					oRes.MarketplaceType,
+					oRes.CustomerMarketplaceID,
+					oRes.DisplayName,
+					sSecData
+				);
+			} // for each result
 		} // Execute
 
 		#endregion method Execute
@@ -82,7 +72,7 @@
 
 		#region private
 
-		private readonly int m_nCustomerID;
+		private readonly LoadCustomerMarketplaceSecurityData m_oStra;
 
 		#region method TryDecrypt
 

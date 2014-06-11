@@ -14,7 +14,6 @@
 			headers: null,
 			isUnderwriter: false,
 			loadPeriodsUrl: null,
-			primaryRefNum: '',
 			uiEventControlIDs: { form: null, backBtn: null, doneBtn: null, },
 			removePeriodUrl: null,
 			uploadAppError: null,
@@ -26,8 +25,6 @@
 
 		init: function(options) {
 			this.options = _.defaults(options, this.defaults);
-
-			this.options.primaryRefNum = parseInt(this.options.primaryRefNum, 10) || 0;
 
 			this.FirstLoad = true;
 
@@ -399,9 +396,7 @@
 		}, // fillGaps
 
 		drawPeriodsChart: function(aryPeriods) {
-			var nPrimaryRefNum = this.options.primaryRefNum;
-
-			var aryData = nPrimaryRefNum ? _.filter(aryPeriods, function(x) { return !x.IsGap && (x.RegistrationNo === nPrimaryRefNum); }) : [];
+			var aryData = _.filter(aryPeriods, function(x) { return !x.IsGap; });
 
 			var oTbl = $('<table class=periods-chart><tbody><tr><td class=older>Older</td></tr></tbody></table>');
 			var oTR = oTbl.find('tr');

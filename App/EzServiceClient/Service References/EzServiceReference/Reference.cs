@@ -184,6 +184,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PricingModelModelActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.QuickOfferActionResult))]
@@ -244,6 +245,29 @@ namespace ServiceClientProxy.EzServiceReference {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountsToUpdateActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class AccountsToUpdateActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.AccountsToUpdate AccountInfoField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.AccountsToUpdate AccountInfo {
+            get {
+                return this.AccountInfoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountInfoField, value) != true)) {
+                    this.AccountInfoField = value;
+                    this.RaisePropertyChanged("AccountInfo");
+                }
             }
         }
     }
@@ -1927,6 +1951,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/DisplayMarketplaceSecurityData", ReplyAction="http://tempuri.org/IEzService/DisplayMarketplaceSecurityDataResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FindAccountsToUpdate", ReplyAction="http://tempuri.org/IEzService/FindAccountsToUpdateResponse")]
+        ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult FindAccountsToUpdate(int nCustomerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPricingModelModel", ReplyAction="http://tempuri.org/IEzService/GetPricingModelModelResponse")]
         ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
         
@@ -2323,6 +2350,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID) {
             return base.Channel.DisplayMarketplaceSecurityData(nCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult FindAccountsToUpdate(int nCustomerID) {
+            return base.Channel.FindAccountsToUpdate(nCustomerID);
         }
         
         public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName) {

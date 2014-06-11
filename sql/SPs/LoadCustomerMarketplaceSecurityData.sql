@@ -12,11 +12,11 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		m.Id AS ID,
+		m.Id AS CustomerMarketplaceID,
 		m.DisplayName,
 		m.SecurityData,
 		mt.Name AS MarketplaceType,
-		mt.InternalId
+		mt.InternalId AS InternalID
 	FROM
 		MP_CustomerMarketPlace m
 		INNER JOIN MP_MarketplaceType mt

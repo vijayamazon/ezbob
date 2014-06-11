@@ -5,16 +5,18 @@
 	public class CustomerData {
 		#region constructor
 
-		public CustomerData(AStrategy oStrategy) {
+		public CustomerData(AStrategy oStrategy, int nCustomerID, AConnection oDB) {
 			Strategy = oStrategy;
+			RequestedID = nCustomerID;
+			DB = oDB;
 		} // constructor
 
 		#endregion constructor
 
 		#region method Load
 
-		public virtual void Load(int customerId, AConnection oDb) {
-			oDb.ForEachRowSafe((sr, bRowsetStart) => {
+		public virtual void Load() {
+			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				Id = sr["Id"];
 				FirstName = sr["FirstName"];
 				Surname = sr["Surname"];
@@ -32,11 +34,11 @@
 			},
 				"GetBasicCustomerData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
+				new QueryParameter("CustomerId", RequestedID)
 			);
 
-			if (Id != customerId)
-				throw new StrategyWarning(Strategy, "Failed to find a customer by id " + customerId);
+			if (Id != RequestedID)
+				throw new StrategyWarning(Strategy, "Failed to find a customer by id " + RequestedID);
 		} // Load
 
 		#endregion method Load
@@ -79,6 +81,8 @@
 
 		#endregion properties
 
-		protected AStrategy Strategy { get; set; }
+		protected AStrategy Strategy { get; private set; }
+		protected AConnection DB { get; private set; }
+		protected int RequestedID { get; private set; }
 	} // class CustomerData
 } // namespace

@@ -101,7 +101,7 @@ namespace Ezbob.HmrcHarvester {
 		/// <summary>
 		/// Constructs the Harvester object. The object is not ready to harvest. Call to Init() first.
 		/// </summary>
-		public Harvester(AccountData oAccountData, ILog log) : base(log) {
+		public Harvester(AccountData oAccountData, ASafeLog log) : base(log) {
 			AccountData = oAccountData;
 			VerboseLogging = false;
 			Hopper = new Hopper(VatReturnSourceType.Linked);

@@ -1,10 +1,9 @@
 ﻿namespace Integration.ChannelGrabberFrontend {
 	using System;
 	using Ezbob.HmrcHarvester;
+	using Ezbob.Logger;
 	using Integration.ChannelGrabberAPI;
 	using Integration.ChannelGrabberConfig;
-	using log4net;
-	using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 
 	public class Connector : IHarvester {
 		#region method SetBackdoorData
@@ -33,7 +32,7 @@
 
 		#region constructor
 
-		public Connector(AccountData oAccountData, ILog log, DBCustomer oCustomer) {
+		public Connector(AccountData oAccountData, ASafeLog log, int nCustomerID, string sCustomerEmail) {
 			if (oAccountData == null)
 				throw new ApiException("Account data not specified.");
 
@@ -43,7 +42,7 @@
 				break;
 
 			case Behaviour.Default:
-				DataHarvester = new Integration.ChannelGrabberAPI.Harvester(oAccountData, log, oCustomer);
+				DataHarvester = new Integration.ChannelGrabberAPI.Harvester(oAccountData, log, nCustomerID, sCustomerEmail);
 				break;
 
 			default:

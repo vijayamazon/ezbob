@@ -105,5 +105,20 @@
 		} // DisplayMarketplaceSecurityData
 
 		#endregion method DisplayMarketplaceSecurityData
+
+		#region method FindAccountsToUpdate
+
+		public AccountsToUpdateActionResult FindAccountsToUpdate(int nCustomerID) {
+			FindAccountsToUpdate oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, null, nCustomerID);
+
+			return new AccountsToUpdateActionResult {
+				MetaData = oMetaData,
+				AccountInfo = oInstance.Result,
+			};
+		} // FindAccountsToUpdate
+
+		#endregion method FindAccountsToUpdate
 	} // class EzServiceImplementation
 } // namespace EzService

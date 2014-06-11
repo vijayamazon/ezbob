@@ -5,14 +5,11 @@
 	using System.Net;
 	using System.Threading;
 	using System.Xml;
+	using ConfigManager;
 	using Ezbob.Logger;
 	using ChannelGrabberConfig;
 	using Newtonsoft.Json;
-	using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 	using RestSharp;
-	using log4net;
-	using EZBob.DatabaseLib.Model;
-	using StructureMap;
 
 	#region class Harvester
 
@@ -21,15 +18,14 @@
 
 		#region constructor
 
-		public Harvester(AccountData oAccountData, ILog log, DBCustomer oCustomer) : base(log) {
+		public Harvester(AccountData oAccountData, ASafeLog log, int nCustomerID, string sCustomerEmail) : base(log) {
 			m_oAccountData = oAccountData;
 
-			if (oCustomer == null)
+			if ((m_nCustomerID < 1) || string.IsNullOrWhiteSpace(sCustomerEmail))
 				throw new ApiException("Customer information not specified.");
 
-			m_oCustomer = oCustomer;
-
-			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+			m_nCustomerID = nCustomerID;
+			m_sCustomerEmail = sCustomerEmail;
 		} // constructor
 
 		#endregion constructor
@@ -41,9 +37,9 @@
 
 			Debug("Creating a ChannelGrabber API Harvester class...");
 
-			string sServiceUrl = configurationVariablesRepository.GetByName("ChannelGrabberServiceUrl");
-			m_nSleepTime = 1000 * configurationVariablesRepository.GetByNameAsInt("ChannelGrabberSleepTime");
-			m_nWaitCycleCount = (ulong)configurationVariablesRepository.GetByNameAsInt("ChannelGrabberCycleCount");
+			string sServiceUrl = CurrentValues.Instance.ChannelGrabberServiceUrl;
+			m_nSleepTime = 1000 * CurrentValues.Instance.ChannelGrabberSleepTime;
+			m_nWaitCycleCount = CurrentValues.Instance.ChannelGrabberCycleCount;
 
 			Debug("Validating ChannelGrabber Service URL {0}", sServiceUrl);
 
@@ -113,13 +109,13 @@
 
 			Customer oCustomer = null;
 
-			if (oCustomers.ContainsKey(m_oCustomer.Name))
-				oCustomer = oCustomers[m_oCustomer.Name];
+			if (oCustomers.ContainsKey(m_sCustomerEmail))
+				oCustomer = oCustomers[m_sCustomerEmail];
 			else {
 				Info("Customer not found.");
 
 				var ri = new RegionInfo(DefaultRegion);
-				oCustomer = CreateCustomer(m_oCustomer.Name, ri.ThreeLetterISORegionName);
+				oCustomer = CreateCustomer(m_sCustomerEmail, ri.ThreeLetterISORegionName);
 			} // if
 
 			if ((oCustomer == null) || !oCustomer.IsValid())
@@ -139,14 +135,14 @@
 		private List<Order> GetOrders() {
 			Info(
 				"GetOrders for {0} customer {1} ({2}) started with parameters [ {3} ]",
-				m_oAccountData.AccountTypeName(), m_oCustomer.Name, m_oCustomer.Id, m_oAccountData
+				m_oAccountData.AccountTypeName(), m_sCustomerEmail, m_nCustomerID, m_oAccountData
 			);
 
 			Dictionary<string, Customer> oCustomers = LoadCustomers();
 
 			Customer oCustomer =
-				oCustomers.ContainsKey(m_oCustomer.Name)
-					? oCustomers[m_oCustomer.Name]
+				oCustomers.ContainsKey(m_sCustomerEmail)
+					? oCustomers[m_sCustomerEmail]
 					: null;
 
 			if ((oCustomer == null) || !oCustomer.IsValid())
@@ -196,7 +192,7 @@
 			} // for
 
 			Info("GetOrders for {0} customer {1} ({2}) complete, {3} {4} received.",
-				m_oAccountData.AccountTypeName(), m_oCustomer.Name, m_oCustomer.Id,
+				m_oAccountData.AccountTypeName(), m_sCustomerEmail, m_nCustomerID,
 				oOrdExpList.Count, oOrdExpList.Count == 1 ? "entry" : "entries"
 			);
 
@@ -534,9 +530,10 @@ Data: {3}
 		
 		#region private fields
 
-		private readonly DBCustomer m_oCustomer;
+		private readonly int m_nCustomerID;
+		private readonly string m_sCustomerEmail;
+
 		private readonly AccountData m_oAccountData;
-		private ConfigurationVariablesRepository configurationVariablesRepository;
 
 		private RestClient m_oRestClient;
 

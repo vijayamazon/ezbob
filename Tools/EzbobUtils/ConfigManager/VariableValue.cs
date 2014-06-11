@@ -71,20 +71,35 @@
 
 		#region operator long
 
-		public static implicit operator long(VariableValue oValue)
-		{
+		public static implicit operator long(VariableValue oValue) {
 			if (oValue == null)
 				throw new NullReferenceException("Long configuration variable not specified.");
 
 			long nValue = Convert.ToInt64(oValue.Value, CultureInfo.InvariantCulture);
 
 			if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
-				oValue.m_oLog.Debug("VariableValue {0} requested as int: '{1}' -> {2}", oValue.Name, oValue.Value, nValue);
+				oValue.m_oLog.Debug("VariableValue {0} requested as long: '{1}' -> {2}", oValue.Name, oValue.Value, nValue);
 
 			return nValue;
 		} // operator to long
 
 		#endregion operator long
+
+		#region operator ulong
+
+		public static implicit operator ulong(VariableValue oValue) {
+			if (oValue == null)
+				throw new NullReferenceException("Long configuration variable not specified.");
+
+			ulong nValue = Convert.ToUInt64(oValue.Value, CultureInfo.InvariantCulture);
+
+			if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
+				oValue.m_oLog.Debug("VariableValue {0} requested as ulong: '{1}' -> {2}", oValue.Name, oValue.Value, nValue);
+
+			return nValue;
+		} // operator to ulong
+
+		#endregion operator ulong
 
 		#region operator double
 

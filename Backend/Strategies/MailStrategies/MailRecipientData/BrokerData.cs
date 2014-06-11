@@ -5,18 +5,18 @@
 	public class BrokerData : CustomerData {
 		#region constructor
 
-		public BrokerData(AStrategy oStrategy) : base(oStrategy) {} // constructor
+		public BrokerData(AStrategy oStrategy, int nBrokerID, AConnection oDB) : base(oStrategy, nBrokerID, oDB) {} // constructor
 
 		#endregion constructor
 
 		#region method Load
 
-		public override void Load(int nBrokerID, AConnection oDB) {
+		public override void Load() {
 			BrokerID = 0;
 			IsOffline = true;
 			NumOfLoans = 0;
 
-			oDB.ForEachRowSafe(
+			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					BrokerID = sr["BrokerID"];
 					FirstName = sr["ContactName"];
@@ -28,11 +28,11 @@
 				},
 				"BrokerLoadContactData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@BrokerID", nBrokerID)
+				new QueryParameter("@BrokerID", RequestedID)
 			);
 
-			if (BrokerID < 0)
-				throw new StrategyWarning(Strategy, "Failed to find a broker by id " + nBrokerID);
+			if (BrokerID != RequestedID)
+				throw new StrategyWarning(Strategy, "Failed to find a broker by id " + RequestedID);
 		} // Load
 
 		#endregion method Load

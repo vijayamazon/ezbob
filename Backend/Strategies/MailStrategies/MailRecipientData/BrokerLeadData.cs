@@ -5,7 +5,7 @@
 	public class BrokerLeadData : CustomerData {
 		#region constructor
 
-		public BrokerLeadData(string sBrokerContactEmail, AStrategy oStrategy) : base(oStrategy) {
+		public BrokerLeadData(string sBrokerContactEmail, AStrategy oStrategy, int nLeadID, AConnection oDB) : base(oStrategy, nLeadID, oDB) {
 			m_sBrokerContactEmail = sBrokerContactEmail;
 		} // constructor
 
@@ -13,12 +13,12 @@
 
 		#region method Load
 
-		public override void Load(int nLeadID, AConnection oDB) {
+		public override void Load() {
 			LeadID = 0;
 			IsOffline = true;
 			NumOfLoans = 0;
 
-			oDB.ForEachRowSafe(
+			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					LeadID = sr["LeadID"];
 					FirstName = sr["FirstName"];
@@ -30,12 +30,12 @@
 				},
 				"BrokerLeadLoadDataForEmail",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@LeadID", nLeadID),
+				new QueryParameter("@LeadID", RequestedID),
 				new QueryParameter("@ContactEmail", m_sBrokerContactEmail)
 			);
 
-			if (LeadID < 1)
-				throw new StrategyWarning(Strategy, "Failed to find a lead by id " + nLeadID + " and contact email " + m_sBrokerContactEmail);
+			if (LeadID != RequestedID)
+				throw new StrategyWarning(Strategy, "Failed to find a lead by id " + RequestedID + " and contact email " + m_sBrokerContactEmail);
 		} // Load
 
 		#endregion method Load

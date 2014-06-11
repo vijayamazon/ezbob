@@ -11,10 +11,10 @@
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.HmrcHarvester;
+	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Integration.ChannelGrabberAPI;
 	using Integration.ChannelGrabberConfig;
-	using log4net;
 	using System.Diagnostics;
 	using System.Text;
 	using EzServiceAccessor;
@@ -84,7 +84,7 @@
 					);
 				} // for
 
-				ms_oLog.Error(os.ToString());
+				ms_oLog.Error("{0}", os.ToString());
 
 				throw new ApiException("History record is not specified.");
 			} // if
@@ -101,7 +101,12 @@
 
 			AccountData ad = oSecInfo.Fill();
 			
-			var ctr = new Connector(ad, ms_oLog, databaseCustomerMarketPlace.Customer);
+			var ctr = new Connector(
+				ad,
+				ms_oLog,
+				databaseCustomerMarketPlace.Customer.Id,
+				databaseCustomerMarketPlace.Customer.Name
+			);
 
 			if (ctr.Init()) {
 				try {
@@ -300,7 +305,7 @@
 
 		#endregion method CreateOrdersAggregationInfo
 
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(RetrieveDataHelper));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(RetrieveDataHelper));
 		private readonly VendorInfo m_oVendorInfo;
 
 		#endregion private

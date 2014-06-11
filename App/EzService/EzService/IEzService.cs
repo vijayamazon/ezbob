@@ -345,6 +345,9 @@
 		[OperationContract]
 		ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID);
 
+		[OperationContract]
+		AccountsToUpdateActionResult FindAccountsToUpdate(int nCustomerID);
+
 		#endregion other strategies
 
 		#region pricing model

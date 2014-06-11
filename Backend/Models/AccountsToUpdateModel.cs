@@ -3,20 +3,24 @@
 	using System.Runtime.Serialization;
 
 	[DataContract]
-	public class AccountsToUpdateModel {
-		public AccountsToUpdateModel() {
+	public class AccountsToUpdate {
+		public AccountsToUpdate() {
+			IsVatReturnUpToDate = false;
 			HasYodlee = false;
-			Ekms = new Dictionary<string, string>();
-			LinkedHmrc = new List<string>();
+			Ekms = new SortedDictionary<string, string>();
+			LinkedHmrc = new SortedSet<string>();
 		} // constructor
 
 		[DataMember]
 		public bool HasYodlee { get; set; }
 
 		[DataMember]
-		public Dictionary<string, string> Ekms { get; set; }
+		public SortedDictionary<string, string> Ekms { get; set; }
 
 		[DataMember]
-		public List<string> LinkedHmrc { get; set; }
-	} // class AccountsToUpdateModel
+		public SortedSet<string> LinkedHmrc { get; set; }
+
+		[DataMember]
+		public bool IsVatReturnUpToDate { get; set; }
+	} // class AccountsToUpdate
 } // namespace

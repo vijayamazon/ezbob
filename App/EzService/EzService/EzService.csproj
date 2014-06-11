@@ -75,6 +75,7 @@
     <Compile Include="ActionResults\BrokerLeadDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerPropertiesActionResult.cs" />
     <Compile Include="ActionResults\AvailableFundsActionResult.cs" />
+    <Compile Include="ActionResults\AccountsToUpdateActionResult.cs" />
     <Compile Include="ActionResults\ElapsedTimeInfoActionResult.cs" />
     <Compile Include="ActionResults\VatReturnDataActionResult.cs" />
     <Compile Include="ActionResults\VatReturnPeriodsActionResult.cs" />

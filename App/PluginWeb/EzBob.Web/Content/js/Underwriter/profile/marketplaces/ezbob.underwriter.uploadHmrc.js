@@ -12,7 +12,6 @@ EzBob.Underwriter.UploadHmrcView = Backbone.Marionette.ItemView.extend({
 			uploadUrl: '/Underwriter/UploadHmrc/SaveFile',
 			removePeriodUrl: '/Underwriter/UploadHmrc/RemovePeriod',
 			loadPeriodsUrl: '/Underwriter/UploadHmrc/LoadPeriods?customerId=' + options.customerId,
-			primaryRefNum: options.companyRefNum,
 			isUnderwriter: true,
 			headers: { 'ezbob-underwriter-customer-id': options.customerId, },
 			classes: {
