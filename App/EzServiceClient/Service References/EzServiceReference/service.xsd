@@ -858,7 +858,7 @@
   <xs:element name="BrokerSaveCrmEntry">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="bIsIncoming" type="xs:boolean" />
+        <xs:element minOccurs="0" name="sType" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="nActionID" type="xs:int" />
         <xs:element minOccurs="0" name="nStatusID" type="xs:int" />
         <xs:element minOccurs="0" name="sComment" nillable="true" type="xs:string" />

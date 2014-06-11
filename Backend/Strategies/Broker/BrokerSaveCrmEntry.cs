@@ -11,7 +11,7 @@
 		#region constructor
 
 		public BrokerSaveCrmEntry(
-			bool bIsIncoming,
+			string sType,
 			int nActionID,
 			int nStatusID,
 			string sComment,
@@ -20,7 +20,7 @@
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
-			m_bIsIncoming = bIsIncoming;
+			m_sType = sType;
 			m_nActionID = nActionID;
 			m_nStatusID = nStatusID;
 			m_sComment = (sComment ?? string.Empty).Trim();
@@ -65,7 +65,7 @@
 				ErrorMsg = DB.ExecuteScalar<string>(
 					"BrokerSaveCrmEntry",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@IsIncoming", m_bIsIncoming),
+					new QueryParameter("@Type", m_sType),
 					new QueryParameter("@ActionID", m_nActionID),
 					new QueryParameter("@StatusID", m_nStatusID),
 					new QueryParameter("@Comment", m_sComment),
@@ -86,12 +86,12 @@
 
 		#region private
 
-		private readonly bool m_bIsIncoming;
 		private readonly int m_nActionID;
 		private readonly int m_nStatusID;
 		private readonly string m_sComment;
 		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
+		private readonly string m_sType;
 
 		#endregion private
 	} // class BrokerSaveCrmEntry

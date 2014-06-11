@@ -6,9 +6,8 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
 	template: '#add-customer-relations-entry-template',
 
 	events: {
-		'keyup #Comment': 'commentKeyup'
+	    'keyup #Comment': 'commentKeyup',
 	}, // events
-
 	jqoptions: function() {
 		return {
 			modal: true,
@@ -47,7 +46,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
 	}, // commentKeyup
 
 	ui: {
-		Incoming: '#Incoming_I',
+	    Type: 'input[name="Type"]:checked',
 		Status: '#Status',
 		Action: '#Action',
 		Rank: '#Rank',
@@ -67,7 +66,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
 		BlockUi();
 
 		var opts = {
-			isIncoming: this.ui.Incoming[0].checked,
+		    type: this.$el.find('input[name="Type"]:checked').data("value"),
 			action: this.ui.Action[0].value,
 			status: this.ui.Status[0].value,
 			rank: this.ui.Rank[0].value,

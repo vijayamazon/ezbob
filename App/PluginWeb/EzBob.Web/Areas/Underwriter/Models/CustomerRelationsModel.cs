@@ -40,7 +40,7 @@
 		public string Status { get; set; }
 		public string Rank { get; set; }
 		public string Comment { get; set; }
-		public string InOut { get; set; }
+		public string Type { get; set; }
 
 		public static CustomerRelationsModel Create(CustomerRelations customerRelations)
 		{
@@ -52,7 +52,7 @@
 				Rank = customerRelations.Rank == null ? "-" : customerRelations.Rank.Name,
 				DateTime = customerRelations.Timestamp,
 				Comment = customerRelations.Comment,
-				InOut = customerRelations.Incoming ? "Incoming" : "Outgoing"
+				Type = customerRelations.Type
 			};
 		}
 

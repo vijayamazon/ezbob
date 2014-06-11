@@ -3,21 +3,18 @@ IF OBJECT_ID('BrokerSaveCrmEntry') IS NULL
 GO
 
 ALTER PROCEDURE BrokerSaveCrmEntry
-@IsIncoming BIT,
+@Type NVARCHAR(20),
 @ActionID INT,
 @StatusID INT,
 @Comment VARCHAR(1000),
-@RefNum NVARCHAR(8),
+@CustomerID INT,
 @ContactEmail NVARCHAR(255),
 @EntryTime DATETIME
 AS
 BEGIN
-	SET NOCOUNT ON;
-
 	DECLARE @ErrorMsg AS NVARCHAR(1024) = ''
 	DECLARE @BrokerID INT
 	DECLARE @BrokerName NVARCHAR(255)
-	DECLARE @CustomerID INT
 
 	IF @ErrorMsg = ''
 	BEGIN
@@ -35,17 +32,15 @@ BEGIN
 
 	IF @ErrorMsg = ''
 	BEGIN
-		SELECT @CustomerID = Id FROM Customer WHERE RefNumber = @RefNum AND BrokerID = @BrokerID
-
-		IF @CustomerID IS NULL
+		IF NOT EXISTS (SELECT Id FROM Customer WHERE Id = @CustomerID AND BrokerID = @BrokerID)
 			SET @ErrorMsg = 'The broker is not authorised to access this customer data.'
 	END
 
 	IF @ErrorMsg = ''
 	BEGIN
 		BEGIN TRY
-			INSERT INTO CustomerRelations(CustomerId, UserName, Incoming, ActionId, StatusId, Comment, Timestamp)
-				VALUES (@CustomerID, @BrokerName, @IsIncoming, @ActionID, @StatusID, @Comment, @EntryTime)
+			INSERT INTO CustomerRelations(CustomerId, UserName, Type, ActionId, StatusId, Comment, Timestamp)
+				VALUES (@CustomerID, @BrokerName, @Type, @ActionID, @StatusID, @Comment, @EntryTime)
 		END TRY
 		BEGIN CATCH
 			SET @ErrorMsg = 'Failed to insert new CRM entry into database.'

@@ -11,7 +11,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 
 		public virtual int CustomerId { get; set; }
 		public virtual string UserName { get; set; }
-		public virtual bool Incoming { get; set; }
+		public virtual string Type { get; set; }
 		public virtual CRMActions Action { get; set; }
 		public virtual CRMStatuses Status { get; set; }
 		public virtual CRMRanks Rank { get; set; }

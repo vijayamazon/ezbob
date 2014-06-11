@@ -161,14 +161,14 @@
 
 		#region method BrokerSaveCrmEntry
 
-		public StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
+		public StringActionResult BrokerSaveCrmEntry(string sType, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
 			BrokerSaveCrmEntry oInstance;
 
 			ActionMetaData oResult = ExecuteSync(
 				out oInstance,
 				null,
 				null,
-				bIsIncoming,
+				sType,
 				nActionID,
 				nStatusID,
 				sComment,

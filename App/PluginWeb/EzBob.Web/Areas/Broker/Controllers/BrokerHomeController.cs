@@ -387,16 +387,16 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult SaveCrmEntry(bool isIncoming, int action, int status, string comment, string customerId, string sContactEmail) {
+		public JsonResult SaveCrmEntry(string type, int action, int status, string comment, string customerId, string sContactEmail) {
 			m_oLog.Debug(
 				"\nBroker saving CRM entry started:" +
-				"\n\tis incoming: {0}" +
+				"\n\ttype: {0}" +
 				"\n\taction: {1}" +
 				"\n\tstatus: {2}" +
 				"\n\tcustomer id: {3}" +
 				"\n\tcontact email: {4}" +
 				"\n\tcomment: {5}\n",
-				isIncoming, action, status, customerId, sContactEmail, comment
+				type, action, status, customerId, sContactEmail, comment
 			);
 
 			BrokerForJsonResult oIsAuthResult = IsAuth("Save CRM entry for customer " + customerId, sContactEmail);
@@ -406,17 +406,17 @@
 			StringActionResult oResult;
 
 			try {
-				oResult = m_oServiceClient.Instance.BrokerSaveCrmEntry(isIncoming, action, status, comment, customerId, sContactEmail);
+				oResult = m_oServiceClient.Instance.BrokerSaveCrmEntry(type, action, status, comment, customerId, sContactEmail);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e,
 					"\nBroker saving CRM entry failed for:" +
-					"\n\tis incoming: {0}" +
+					"\n\ttype: {0}" +
 					"\n\taction: {1}" +
 					"\n\tstatus: {2}" +
 					"\n\tcustomer id: {3}" +
 					"\n\tcontact email: {4}",
-					isIncoming, action, status, customerId, sContactEmail
+					type, action, status, customerId, sContactEmail
 				);
 
 				return new BrokerForJsonResult("Failed to save CRM entry.");
@@ -424,13 +424,13 @@
 
 			m_oLog.Debug(
 				"\nBroker saving CRM entry {5} for:" +
-				"\n\tis incoming: {0}" +
+				"\n\ttype: {0}" +
 				"\n\taction: {1}" +
 				"\n\tstatus: {2}" +
 				"\n\tcustomer id: {3}" +
 				"\n\tcontact email: {4}\n" +
 				"\n\terror message: {6}\n",
-				isIncoming, action, status, customerId, sContactEmail,
+				type, action, status, customerId, sContactEmail,
 				string.IsNullOrWhiteSpace(oResult.Value) ? "complete" : "failed",
 				string.IsNullOrWhiteSpace(oResult.Value) ? "no error" : oResult.Value
 			);

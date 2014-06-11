@@ -2093,7 +2093,7 @@ namespace ServiceClientProxy.EzServiceReference {
         ServiceClientProxy.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry", ReplyAction="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail);
+        ServiceClientProxy.EzServiceReference.StringActionResult BrokerSaveCrmEntry(string sType, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse")]
         ServiceClientProxy.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail);
@@ -2540,8 +2540,8 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerLoadCustomerDetails(sCustomerRefNum, sContactEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
-            return base.Channel.BrokerSaveCrmEntry(bIsIncoming, nActionID, nStatusID, sComment, sCustomerRefNum, sContactEmail);
+        public ServiceClientProxy.EzServiceReference.StringActionResult BrokerSaveCrmEntry(string sType, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerSaveCrmEntry(sType, nActionID, nStatusID, sComment, sCustomerRefNum, sContactEmail);
         }
         
         public ServiceClientProxy.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail) {

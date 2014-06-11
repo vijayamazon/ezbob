@@ -66,7 +66,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult SaveEntry(bool isIncoming, int action, int status, int rank, string comment, int customerId)
+		public JsonResult SaveEntry(string type, int action, int status, int rank, string comment, int customerId)
 		{
 			try
 			{
@@ -74,7 +74,7 @@
 				{
 					CustomerId = customerId,
 					UserName = User.Identity.Name,
-					Incoming = isIncoming,
+					Type = type,
 					Action = _crmActionsRepository.Get(action),
 					Status = _crmStatusesRepository.Get(status),
 					Rank = _crmRanksRepository.Get(rank),

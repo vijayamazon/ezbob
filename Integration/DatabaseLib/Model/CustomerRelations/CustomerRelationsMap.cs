@@ -11,7 +11,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 
 			Map(x => x.CustomerId);
 			Map(x => x.UserName).Length(100);
-			Map(x => x.Incoming);
+			Map(x => x.Type).Length(20);
 			References(x => x.Action, "ActionId");
 			References(x => x.Status, "StatusId");
 			References(x => x.Rank, "RankId");
