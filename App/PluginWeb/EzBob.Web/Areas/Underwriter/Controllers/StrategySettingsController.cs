@@ -72,7 +72,7 @@
 				};
 			return Json(st, JsonRequestBehavior.AllowGet);
 		}
-		
+
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
@@ -100,7 +100,7 @@
 			serviceClient.Instance.SavePricingModelSettings(context.UserId, scenarioName, inputModel);
 			return SettingsPricingModelForScenario(scenarioName);
 		}
-		
+
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
@@ -112,8 +112,10 @@
 			return SettingsGeneral();
 		}
 
-		private void UpdateSettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier, decimal fcfFactor) {
-			Transactional.Execute(() => {
+		private void UpdateSettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier, decimal fcfFactor)
+		{
+			Transactional.Execute(() =>
+			{
 				_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
 
 				if (HmrcSalariesMultiplier >= 0 && HmrcSalariesMultiplier <= 1)
@@ -174,7 +176,8 @@
 		private void UpdateSettingsCharges(string administrationCharge, string latePaymentCharge, string otherCharge,
 										   string partialPaymentCharge, string rolloverCharge, string amountToChargeFrom)
 		{
-			Transactional.Execute(() => {
+			Transactional.Execute(() =>
+			{
 				_configurationVariablesRepository.SetByName("AdministrationCharge", administrationCharge);
 				_configurationVariablesRepository.SetByName("LatePaymentCharge", latePaymentCharge);
 				_configurationVariablesRepository.SetByName("OtherCharge", otherCharge);
@@ -241,8 +244,10 @@
 		}
 
 		private void UpdateAutomationApproval(string EnableAutomaticApproval, string EnableAutomaticReApproval,
-											  string MaxCapHomeOwner, string MaxCapNotHomeOwner) {
-			Transactional.Execute(() => {
+											  string MaxCapHomeOwner, string MaxCapNotHomeOwner)
+		{
+			Transactional.Execute(() =>
+			{
 				_configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
 				_configurationVariablesRepository.SetByName("EnableAutomaticReApproval", EnableAutomaticReApproval);
 				_configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
@@ -270,6 +275,11 @@
 			var autoRejectionExceptionCreditScore = _configurationVariablesRepository.GetByName("AutoRejectionException_CreditScore");
 			var autoRejectionExceptionAnualTurnover = _configurationVariablesRepository.GetByName("AutoRejectionException_AnualTurnover");
 
+			var reject_LowOfflineAnnualRevenue = _configurationVariablesRepository.GetByName("Reject_LowOfflineAnnualRevenue");
+			var reject_LowOfflineQuarterRevenue = _configurationVariablesRepository.GetByName("Reject_LowOfflineQuarterRevenue");
+			var reject_LateLastMonthsNum = _configurationVariablesRepository.GetByName("Reject_LateLastMonthsNum");
+			var reject_NumOfLateAccounts = _configurationVariablesRepository.GetByName("Reject_NumOfLateAccounts");
+
 
 			var sr = new
 				{
@@ -296,7 +306,15 @@
 					AutoRejectionException_CreditScore = autoRejectionExceptionCreditScore.Value,
 					AutoRejectionException_CreditScoreDesc = autoRejectionExceptionCreditScore.Description,
 					AutoRejectionException_AnualTurnover = autoRejectionExceptionAnualTurnover.Value,
-					AutoRejectionException_AnualTurnoverDesc = autoRejectionExceptionAnualTurnover.Description
+					AutoRejectionException_AnualTurnoverDesc = autoRejectionExceptionAnualTurnover.Description,
+					Reject_LowOfflineAnnualRevenue = reject_LowOfflineAnnualRevenue.Value,
+					Reject_LowOfflineAnnualRevenueDesc = reject_LowOfflineAnnualRevenue.Description,
+					Reject_LowOfflineQuarterRevenue = reject_LowOfflineQuarterRevenue.Value,
+					Reject_LowOfflineQuarterRevenueDesc = reject_LowOfflineQuarterRevenue.Description,
+					Reject_LateLastMonthsNum = reject_LateLastMonthsNum.Value,
+					Reject_LateLastMonthsNumDesc = reject_LateLastMonthsNum.Description,
+					Reject_NumOfLateAccounts = reject_NumOfLateAccounts.Value,
+					Reject_NumOfLateAccountsDesc = reject_NumOfLateAccounts.Description,
 				};
 			return Json(sr, JsonRequestBehavior.AllowGet);
 		}
@@ -305,33 +323,24 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		public JsonResult AutomationRejection(string EnableAutomaticRejection,
-												 string LowCreditScore,
-												 string Reject_Defaults_AccountsNum,
-												 string Reject_Defaults_Amount,
-												 string Reject_Defaults_CreditScore,
-												 string Reject_Defaults_MonthsNum,
-												 string Reject_Minimal_Seniority,
-												 string TotalAnnualTurnover,
-												 string TotalThreeMonthTurnover,
-												 string EnableAutomaticReRejection,
-												 string AutoRejectionException_CreditScore,
-												 string AutoRejectionException_AnualTurnover)
+		                                      string LowCreditScore,
+		                                      string Reject_Defaults_AccountsNum,
+		                                      string Reject_Defaults_Amount,
+		                                      string Reject_Defaults_CreditScore,
+		                                      string Reject_Defaults_MonthsNum,
+		                                      string Reject_Minimal_Seniority,
+		                                      string TotalAnnualTurnover,
+		                                      string TotalThreeMonthTurnover,
+		                                      string EnableAutomaticReRejection,
+		                                      string AutoRejectionException_CreditScore,
+		                                      string AutoRejectionException_AnualTurnover,
+		                                      string Reject_LowOfflineAnnualRevenue,
+		                                      string Reject_LowOfflineQuarterRevenue,
+		                                      string Reject_LateLastMonthsNum,
+		                                      string Reject_NumOfLateAccounts)
 		{
-			UpdateAutomationRejection(EnableAutomaticRejection, LowCreditScore, Reject_Defaults_AccountsNum, Reject_Defaults_Amount, Reject_Defaults_CreditScore, Reject_Defaults_MonthsNum, Reject_Minimal_Seniority, TotalAnnualTurnover, TotalThreeMonthTurnover, EnableAutomaticReRejection, AutoRejectionException_CreditScore, AutoRejectionException_AnualTurnover);
-			UpdateConfigVars();
-			return AutomationRejection();
-		}
-
-		private void UpdateAutomationRejection(
-			string EnableAutomaticRejection, string LowCreditScore,
-			string Reject_Defaults_AccountsNum, string Reject_Defaults_Amount,
-			string Reject_Defaults_CreditScore, string Reject_Defaults_MonthsNum,
-			string Reject_Minimal_Seniority, string TotalAnnualTurnover,
-			string TotalThreeMonthTurnover, string EnableAutomaticReRejection,
-			string AutoRejectionException_CreditScore,
-			string AutoRejectionException_AnualTurnover
-		) {
-			Transactional.Execute(() => {
+			Transactional.Execute(() =>
+			{
 				_configurationVariablesRepository.SetByName("EnableAutomaticRejection", EnableAutomaticRejection);
 				_configurationVariablesRepository.SetByName("LowCreditScore", LowCreditScore);
 				_configurationVariablesRepository.SetByName("Reject_Defaults_AccountsNum", Reject_Defaults_AccountsNum);
@@ -344,7 +353,14 @@
 				_configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
 				_configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
 				_configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover", AutoRejectionException_AnualTurnover);
+				_configurationVariablesRepository.SetByName("Reject_LowOfflineAnnualRevenue", Reject_LowOfflineAnnualRevenue);
+				_configurationVariablesRepository.SetByName("Reject_LowOfflineQuarterRevenue", Reject_LowOfflineQuarterRevenue);
+				_configurationVariablesRepository.SetByName("Reject_LateLastMonthsNum", Reject_LateLastMonthsNum);
+				_configurationVariablesRepository.SetByName("Reject_NumOfLateAccounts", Reject_NumOfLateAccounts);
 			});
+
+			UpdateConfigVars();
+			return AutomationRejection();
 		}
 
 		[Ajax]
@@ -398,8 +414,10 @@
 			string FinancialAccounts_AliasOfJointApplicant,
 			string FinancialAccounts_AssociationOfJointApplicant,
 			string FinancialAccounts_No_Match
-		) {
-			Transactional.Execute(() => {
+		)
+		{
+			Transactional.Execute(() =>
+			{
 				_configurationVariablesRepository.SetByName("FinancialAccounts_MainApplicant", FinancialAccounts_MainApplicant);
 				_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfMainApplicant",
 															FinancialAccounts_AliasOfMainApplicant);
@@ -459,7 +477,7 @@
 		[Transactional]
 		public JsonResult SettingsConfigTable(string tableName)
 		{
-			var entriesList = serviceClient.Instance.GetSpResultTable("GetConfigTable", new []{"TableName", tableName});
+			var entriesList = serviceClient.Instance.GetSpResultTable("GetConfigTable", new[] { "TableName", tableName });
 			var deserializedArray = JsonConvert.DeserializeObject<ConfigTable[]>(entriesList.SerializedDataTable);
 			var configTableEntries = deserializedArray == null ? null : deserializedArray.ToList();
 			if (configTableEntries != null)
@@ -589,7 +607,8 @@
 			return Json(new { success = true, errorText = error }, JsonRequestBehavior.AllowGet);
 		}
 
-		private void UpdateConfigVars() {
+		private void UpdateConfigVars()
+		{
 			var c = new ServiceClient();
 			c.Instance.UpdateConfigurationVariables();
 			CurrentValues.ReInit();

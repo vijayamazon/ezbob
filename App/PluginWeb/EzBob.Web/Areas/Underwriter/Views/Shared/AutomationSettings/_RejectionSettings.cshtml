@@ -1,14 +1,9 @@
 ﻿@model dynamic
 
 <script type="text/template" id="rejection-settings-template">
-    @GeneralSettings()
-</script>
-
-@helper GeneralSettings()
-{
     <form>
         <a href="https://www.dropbox.com/s/00m08zo9x6kl0mp/Auto%20rejection%20logic.docx" class="blue-link" target="_blank" title="View logic documentation">View logic documentation</a>
-        <div class="alert-block">    
+        <div class="alert-block">
             <table class="table squeezed">
                 <thead class="box">
                     <tr class="box-title">
@@ -16,77 +11,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td width="20%">EnableAutomaticRejection: </td>
-                        <td width="20%">
-                            <select name="enableAutomaticRejection" class="form-control selectheight">
-                                <option value="0">Disabled</option>
-                                <option value="1">Enabled</option>
-                            </select>
-                        </td>
-                        <td class="left"><%- EnableAutomaticRejectionDesc %></td> 
-                    </tr>                    
-                    <tr>
-                        <td>LowCreditScore: </td>
-                        <td><input name="lowCreditScore" class="form-control"/></td>
-                        <td><%- LowCreditScoreDesc %></td>
-                    </tr>
-                    <tr>
-                        <td>TotalAnnualTurnover: </td>
-                        <td><input name="totalAnnualTurnover" class="form-control"/></td>
-                        <td><%- TotalAnnualTurnoverDesc %></td>
-                    </tr>
-                    <tr>
-                        <td>TotalThreeMonthTurnover: </td>
-                        <td><input name="totalThreeMonthTurnover" class="form-control"/></td>
-                        <td><%- TotalThreeMonthTurnoverDesc %></td>
-                    </tr>
-                    <tr>
-                        <td>Reject_Defaults_CreditScore: </td>
-                        <td><input name="reject_Defaults_CreditScore" class="form-control"/></td>
-                        <td><%- Reject_Defaults_CreditScoreDesc %></td>
-                    </tr>
-                    <tr>
-                        <td>Reject_Defaults_AccountsNum: </td>
-                        <td><input name="reject_Defaults_AccountsNum" class="form-control"/></td>
-                        <td><%- Reject_Defaults_AccountsNumDesc %></td>
-                    </tr>
-                    <tr>
-                        <td>Reject_Defaults_Amount: </td>
-                        <td><input name="reject_Defaults_Amount" class="form-control"/></td>
-                        <td><%- Reject_Defaults_AmountDesc %></td>
-                    </tr>
-                    <tr>
-                        <td>Reject_Defaults_MonthsNum: </td>
-                        <td><input name="reject_Defaults_MonthsNum" class="form-control"/></td>
-                        <td><%- Reject_Defaults_MonthsNumDesc %></td>
-                    </tr>
-                    <tr>
-                        <td>Reject_Minimal_Seniority: </td>
-                        <td><input name="reject_Minimal_Seniority" class="form-control"/></td>
-                        <td><%- Reject_Minimal_SeniorityDesc %></td>
-                    </tr>
-                    <tr>
-                        <td width="20%">EnableAutomaticReRejection: </td>
-                        <td width="20%">
-                            <select name="enableAutomaticReRejection" class="form-control selectheight">
-                                <option value="0">Disabled</option>
-                                <option value="1">Enabled</option>
-                            </select>
-                        </td>
-                        <td class="left"><%- EnableAutomaticReRejectionDesc %></td> 
-                    </tr>                    
-                    <tr>
-                        <td>AutoRejectionException_CreditScore: </td>
-                        <td><input name="autoRejectionException_CreditScore" class="form-control"/></td>
-                        <td ><%- AutoRejectionException_CreditScoreDesc %></td>
-                    </tr>                    
-                    <tr>
-                        <td>AutoRejectionException_AnualTurnover: </td>
-                        <td><input name="autoRejectionException_AnualTurnover" class="form-control"/></td>
-                        <td ><%- AutoRejectionException_AnualTurnoverDesc %></td>
-                    </tr>                    
-
+                    @SelectSetting("EnableAutomaticRejection")
+                    @Setting("LowCreditScore")
+                    @Setting("TotalAnnualTurnover")
+                    @Setting("TotalThreeMonthTurnover")
+                    @Setting("Reject_Defaults_CreditScore")
+                    @Setting("Reject_Defaults_AccountsNum")
+                    @Setting("Reject_Defaults_Amount")
+                    @Setting("Reject_Defaults_MonthsNum")
+                    @Setting("Reject_Minimal_Seniority")
+                    @Setting("Reject_LowOfflineAnnualRevenue")
+                    @Setting("Reject_LowOfflineQuarterRevenue")
+                    @Setting("Reject_LateLastMonthsNum")
+                    @Setting("Reject_NumOfLateAccounts")
+                    @SelectSetting("EnableAutomaticReRejection")
+                    @Setting("AutoRejectionException_CreditScore")
+                    @Setting("AutoRejectionException_AnualTurnover")
                 </tbody>
             </table>
             <div class="pull-right">
@@ -95,4 +35,25 @@
             </div>
         </div>
     </form>
+</script>
+
+@helper Setting(string settingName)
+{
+    <tr>
+        <td>@settingName:</td>
+        <td><input name="@settingName" class="form-control"/></td>
+        <td><%- @string.Format("{0}Desc", settingName)%></td>
+    </tr>
+}
+@helper SelectSetting(string settingName){
+    <tr>
+        <td width="20%">@settingName: </td>
+        <td width="20%">
+            <select name="@settingName" class="form-control selectheight">
+                <option value="0">Disabled</option>
+                <option value="1">Enabled</option>
+            </select>
+        </td>
+        <td class="left"><%- @string.Format("{0}Desc", settingName) %></td> 
+    </tr>
 }

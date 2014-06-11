@@ -15,18 +15,22 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
         @
 
     bindings:
-        EnableAutomaticRejection:   "select[name='enableAutomaticRejection']"
-        LowCreditScore:             "input[name='lowCreditScore']"
-        TotalAnnualTurnover:        "input[name='totalAnnualTurnover']"
-        TotalThreeMonthTurnover:    "input[name='totalThreeMonthTurnover']"
-        Reject_Defaults_CreditScore:"input[name='reject_Defaults_CreditScore']"
-        Reject_Defaults_AccountsNum:"input[name='reject_Defaults_AccountsNum']"
-        Reject_Defaults_Amount:     "input[name='reject_Defaults_Amount']"
-        Reject_Defaults_MonthsNum:  "input[name='reject_Defaults_MonthsNum']"
-        Reject_Minimal_Seniority:   "input[name='reject_Minimal_Seniority']"
-        EnableAutomaticReRejection:             "select[name='enableAutomaticReRejection']"
-        AutoRejectionException_CreditScore:     "input[name='autoRejectionException_CreditScore']"
-        AutoRejectionException_AnualTurnover:   "input[name='autoRejectionException_AnualTurnover']"
+        EnableAutomaticRejection:               "select[name='EnableAutomaticRejection']"
+        LowCreditScore:                         "input[name='LowCreditScore']"
+        TotalAnnualTurnover:                    "input[name='TotalAnnualTurnover']"
+        TotalThreeMonthTurnover:                "input[name='TotalThreeMonthTurnover']"
+        Reject_Defaults_CreditScore:            "input[name='Reject_Defaults_CreditScore']"
+        Reject_Defaults_AccountsNum:            "input[name='Reject_Defaults_AccountsNum']"
+        Reject_Defaults_Amount:                 "input[name='Reject_Defaults_Amount']"
+        Reject_Defaults_MonthsNum:              "input[name='Reject_Defaults_MonthsNum']"
+        Reject_Minimal_Seniority:               "input[name='Reject_Minimal_Seniority']"
+        EnableAutomaticReRejection:             "select[name='EnableAutomaticReRejection']"
+        AutoRejectionException_CreditScore:     "input[name='AutoRejectionException_CreditScore']"
+        AutoRejectionException_AnualTurnover:   "input[name='AutoRejectionException_AnualTurnover']"
+        Reject_LowOfflineAnnualRevenue:         "input[name='Reject_LowOfflineAnnualRevenue']"
+        Reject_LowOfflineQuarterRevenue:        "input[name='Reject_LowOfflineQuarterRevenue']"
+        Reject_LateLastMonthsNum:               "input[name='Reject_LateLastMonthsNum']"
+        Reject_NumOfLateAccounts:               "input[name='Reject_NumOfLateAccounts']"
 
 
     events:
@@ -51,19 +55,8 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
     onRender: ->
         @modelBinder.bind @model, @el, @bindings
         if !$("body").hasClass("role-manager") 
-            @$el.find(" select[name='enableAutomaticRejection'], 
-                        input[name='lowCreditScore'], 
-                        input[name='totalAnnualTurnover'], 
-                        input[name='totalThreeMonthTurnover'], 
-                        input[name='reject_Defaults_CreditScore'], 
-                        input[name='reject_Defaults_AccountsNum'], 
-                        input[name='reject_Defaults_Amount'], 
-                        input[name='reject_Minimal_Seniority'],
-                        select[name='enableAutomaticReRejection'], 
-                        input[name='autoRejectionException_CreditScore'], 
-                        input[name='autoRejectionException_AnualTurnover'],
-                        input[name='reject_Defaults_MonthsNum']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
-            @$el.find("button[name='SaveRejectionSettings'], button[name='CancelRejectionSettings']").hide();
+            @$el.find("select, input").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
+            @$el.find("button").hide();
         @setValidator()
 
     show: (type) ->
@@ -81,33 +74,45 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
             onkeyup: -> return false
             onclick: -> return false
             rules:
-                lowCreditScore:
+                LowCreditScore:
                     required: true
                     min: 0
-                totalAnnualTurnover:
+                TotalAnnualTurnover:
                     required: true
                     min: 0
-                totalThreeMonthTurnover:
+                TotalThreeMonthTurnover:
                     required: true
                     min: 0
-                reject_Defaults_CreditScore:
+                Reject_Defaults_CreditScore:
                     required: true
                     min: 0
-                reject_Defaults_AccountsNum:
+                Reject_Defaults_AccountsNum:
                     required: true
                     min: 0
-                reject_Defaults_Amount:
+                Reject_Defaults_Amount:
                     required: true
                     min: 0
-                reject_Defaults_MonthsNum:
+                Reject_Defaults_MonthsNum:
                     required: true
                     min: 0
-                reject_Minimal_Seniority:
+                Reject_Minimal_Seniority:
                     required: true
                     min: 0
-                autoRejectionException_CreditScore:
+                AutoRejectionException_CreditScore:
                     required: true
                     min: 0
-                autoRejectionException_AnualTurnover:
+                AutoRejectionException_AnualTurnover:
+                    required: true
+                    min: 0
+                Reject_LowOfflineAnnualRevenue:
+                    required: true
+                    min: 0
+                Reject_LowOfflineQuarterRevenue:
+                    required: true
+                    min: 0
+                Reject_LateLastMonthsNum:
+                    required: true
+                    min: 0
+                Reject_NumOfLateAccounts:
                     required: true
                     min: 0
