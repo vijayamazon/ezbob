@@ -512,10 +512,10 @@
 
 		public virtual string CurrentStatus { get; private set; }
 		public virtual decimal OSBalance { get; private set; }
-		public virtual string LastStatus { get; private set; }
-		public virtual string CRMcomment { get; private set; }
-		public virtual string Broker { get; private set; }
-		public virtual string FirstSale { get; private set; }
+		public virtual string LastStatus { get; protected set; }
+		public virtual string CRMcomment { get; protected set; }
+		public virtual string Broker { get; protected set; }
+		public virtual string FirstSale { get; protected set; }
 	} // class GridWaitingRow
 
 	#endregion class GridWaitingRow
@@ -559,10 +559,6 @@
 
 		#endregion method Init
 
-		public virtual string LastStatus { get; private set; }
-		public virtual string CRMcomment { get; private set; }
-		public virtual string Broker { get; private set; }
-		public virtual string FirstSale { get; private set; }
 		public virtual string Pending { get; private set; }
 	} // class GridPendingRow
 

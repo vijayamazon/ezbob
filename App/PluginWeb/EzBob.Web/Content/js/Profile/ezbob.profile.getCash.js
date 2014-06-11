@@ -172,7 +172,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				return;
 			} // if
 
-			if (oResponse.has_ekm || oResponse.has_yodlee) {
+			if (!oResponse.good_to_go) {
 				var oDlg = that.$el.find('#refresh-accounts-dlg');
 
 				oDlg.find('.skip-refresh-accounts').click(function() {
@@ -188,8 +188,31 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 				var oList = oDlg.find('.account-list').empty();
 
+				var sDisplayName;
+
+				if (oResponse.has_hmrc) {
+					for (var i = 0; i < oResponse.linked_hmrc.length; i++) {
+						sDisplayName = oResponse.linked_hmrc[i];
+
+						oList.append(that.createUpdateEntry(
+							'HMRC account <strong>' + sDisplayName + '</strong> password',
+							'hmrc-list-item',
+							{
+								type: 'linked-hmrc',
+								displayName: sDisplayName,
+							}
+						));
+					} // for each linked hmrc
+				} // if
+
+				if (!oResponse.vat_return_is_up_to_date) {
+					oList.append(that.createUpdateEntry(
+						'your VAT return data', 'vat-return-list-item', { type: 'vat-return', }
+					));
+				} // if
+
 				if (oResponse.has_ekm) {
-					for (var sDisplayName in oResponse.ekms) {
+					for (sDisplayName in oResponse.ekms) {
 						var sErrorMsg = oResponse.ekms[sDisplayName];
 
 						oList.append(that.createUpdateEntry(
@@ -266,6 +289,14 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			this.refreshYodlee();
 			break;
 
+		case 'linked-hmrc':
+			this.refreshLinkedHmrc();
+			break;
+
+		case 'vat-return':
+			this.refreshVatReturn();
+			break;
+
 		case 'skip-refresh':
 			this.directApplyForLoan();
 			break;
@@ -295,9 +326,46 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		});
 	}, // directApplyForLoan
 
+	refreshVatReturn: function() {
+		this.uploadUi = new EzBob.HmrcUploadUi({
+			chartMonths: this.options.chartMonths,
+			formID: 'hmrcAccountUpload',
+			uploadUrl: '/Customer/Hmrc/SaveFile',
+			loadPeriodsUrl: '/Customer/Hmrc/LoadPeriods',
+			isUnderwriter: false,
+			uiEventControlIDs: {
+				form: 'hmrc-cash-request:dropzone',
+				backBtn: 'hmrc-cash-request:upload_back',
+				doneBtn: 'hmrc-cash-request:do_upload',
+			},
+			classes: {
+				backBtn: 'rc-button grey back',
+				doneBtn: 'rc-button green',
+			},
+			clickBack: _.bind(this.backFromUploadFiles, this),
+			clickDone: _.bind(this.backFromUploadFiles, this),
+		});
+
+		console.log(this.$el.width());
+
+		this.uploadUi.$el = $('#refresh-vat-return');
+
+		this.uploadUi.$el.outerWidth(this.$el.outerWidth());
+		this.uploadUi.$el.outerHeight($(window).height() * 0.75);
+
+		this.uploadUi.render();
+
+		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh-vat-return', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+	}, // refreshVatReturn
+
+	backFromUploadFiles: function() {
+		$.colorbox.close();
+		this.applyForALoan();
+	}, // backFromUploadFiles
+
 	refreshYodlee: function() {
 		this.$el.find('#refreshYodleeBtn').attr('href', '' + window.gRootPath + 'Customer/YodleeMarketPlaces/RefreshYodlee');
-		this.$el.find('.refresh_yodlee_help').colorbox({ href: '#refresh_yodlee_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh_yodlee_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
 	}, // refreshYodlee
 
 	refreshEkm: function() {
@@ -305,7 +373,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.find('#refresh_ekm_login').val(this.refreshAccountData.displayName).change();
 		this.$el.find('#refresh_ekm_password').val('').change().focus();
 
-		this.$el.find('.refresh_ekm_help').colorbox({ href: '#refresh_ekm_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh_ekm_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
 	}, // refreshEkm
 
 	makeTargeting: function() {

@@ -69,6 +69,10 @@
 
 		public bool has_hmrc { get { return linked_hmrc.Count > 0; } }
 
+		public bool good_to_go {
+			get { return IsReadyForApply(); }
+		} // good_to_go
+
 		// ReSharper restore InconsistentNaming
 		#endregion serialisable
 
