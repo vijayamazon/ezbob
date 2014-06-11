@@ -10,9 +10,22 @@
 
 		#region constructor
 
-		public LoadCustomerMarketplaceSecurityData(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadCustomerMarketplaceSecurityData(int nCustomerID, AConnection oDB, ASafeLog oLog) : this(nCustomerID, "", null, oDB, oLog) {
+		} // constructor
+
+		public LoadCustomerMarketplaceSecurityData(
+			int nCustomerID,
+			string sDisplayName,
+			Guid? oInternalID,
+			AConnection oDB,
+			ASafeLog oLog
+		) : base(oDB, oLog) {
 			Result = new List<ResultRow>();
-			m_oSp = new SpLoadCustomerMarketplaceSecurityData(nCustomerID, DB, Log);
+
+			m_oSp = new SpLoadCustomerMarketplaceSecurityData(nCustomerID, DB, Log) {
+				DisplayName = sDisplayName,
+				InternalID =  oInternalID,
+			};
 		} // constructor
 
 		#endregion constructor
@@ -62,6 +75,7 @@
 		private class SpLoadCustomerMarketplaceSecurityData : AStoredProc {
 			public SpLoadCustomerMarketplaceSecurityData(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				CustomerID = nCustomerID;
+				DisplayName = string.Empty;
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -70,6 +84,30 @@
 
 			[UsedImplicitly]
 			public int CustomerID { get; set; }
+
+			#region property DisplayName
+
+			[UsedImplicitly]
+			public string DisplayName {
+				get { return string.IsNullOrWhiteSpace(m_sDisplayName) ? null : m_sDisplayName; }
+				set { m_sDisplayName = string.IsNullOrWhiteSpace(value) ? null : value; }
+			} // DisplayName
+
+			private string m_sDisplayName;
+
+			#endregion property DisplayName
+
+			#region property InternalID
+
+			[UsedImplicitly]
+			public Guid? InternalID {
+				get { return (m_oInternalID == Guid.Empty) ? null : m_oInternalID; }
+				set { m_oInternalID = (value == Guid.Empty) ? null : value; }
+			} // InternalID
+
+			private Guid? m_oInternalID;
+
+			#endregion property InternalID
 		} // class SpLoadCustomerMarketplaceSecurityData
 
 		#endregion class SpLoadCustomerMarketplaceSecurityData

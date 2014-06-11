@@ -6,7 +6,9 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 ALTER PROCEDURE LoadCustomerMarketplaceSecurityData
-@CustomerID INT
+@CustomerID INT,
+@DisplayName NVARCHAR(512) = NULL,
+@InternalID UNIQUEIDENTIFIER = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -23,5 +25,17 @@ BEGIN
 			ON m.MarketPlaceId = mt.Id
 	WHERE
 		m.CustomerID = @CustomerID
+		AND
+		(
+			@DisplayName IS NULL
+			OR
+			m.DisplayName LIKE @DisplayName
+		)
+		AND
+		(
+			@InternalID IS NULL
+			OR
+			mt.InternalId = @InternalID
+		)
 END
 GO

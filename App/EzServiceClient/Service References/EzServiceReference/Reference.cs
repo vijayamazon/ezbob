@@ -1954,6 +1954,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FindAccountsToUpdate", ReplyAction="http://tempuri.org/IEzService/FindAccountsToUpdateResponse")]
         ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult FindAccountsToUpdate(int nCustomerID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPricingModelModel", ReplyAction="http://tempuri.org/IEzService/GetPricingModelModelResponse")]
         ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
         
@@ -2354,6 +2357,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult FindAccountsToUpdate(int nCustomerID) {
             return base.Channel.FindAccountsToUpdate(nCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
+            return base.Channel.UpdateLinkedHmrcPassword(sCustomerID, sDisplayName, sPassword, sHash);
         }
         
         public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName) {

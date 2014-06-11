@@ -348,6 +348,9 @@
 		[OperationContract]
 		AccountsToUpdateActionResult FindAccountsToUpdate(int nCustomerID);
 
+		[OperationContract]
+		ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+
 		#endregion other strategies
 
 		#region pricing model

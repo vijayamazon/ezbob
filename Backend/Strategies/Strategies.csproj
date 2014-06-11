@@ -230,6 +230,7 @@
     </Compile>
     <Compile Include="VatReturn\RemoveManualVatReturnPeriod.cs" />
     <Compile Include="VatReturn\SaveVatReturnData.cs" />
+    <Compile Include="VatReturn\UpdateLinkedHmrcPassword.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">

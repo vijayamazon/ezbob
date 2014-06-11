@@ -2,6 +2,7 @@
 	using System.Linq;
 	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.Postcode;
+	using EzBob.Backend.Strategies.VatReturn;
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
@@ -120,5 +121,13 @@
 		} // FindAccountsToUpdate
 
 		#endregion method FindAccountsToUpdate
+
+		#region method UpdateLinkedHmrcPassword
+
+		public ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
+			return ExecuteSync<UpdateLinkedHmrcPassword>(null, null, sCustomerID, sDisplayName, sPassword, sHash);
+		} // UpdateLinkedHmrcPassword
+
+		#endregion method UpdateLinkedHmrcPassword
 	} // class EzServiceImplementation
 } // namespace EzService

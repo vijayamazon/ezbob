@@ -975,6 +975,23 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oServiceClient.DisplayMarketplaceSecurityData(nCustomerID);
 		} // DisplayMarketplaceSecurityData
 
+		[Activation]
+		private void UpdateLinkedHmrcPassword() {
+			int nCustomerID;
+
+			if ((m_aryArgs.Length != 4) || !int.TryParse(m_aryArgs[1], out nCustomerID)) {
+				m_oLog.Msg("Usage: UpdateLinkedHmrcPassword <Customer ID> <Display name> <Password>");
+				return;
+			} // if
+
+			string sCustomerID = nCustomerID.ToString();
+			string sDisplayName = m_aryArgs[2];
+			string sPassword = m_aryArgs[3];
+			string sHash = SecurityUtils.Hash(nCustomerID + sPassword + sDisplayName);
+
+			m_oServiceClient.UpdateLinkedHmrcPassword(new Encrypted(sCustomerID), new Encrypted(sDisplayName), new Encrypted(sPassword), sHash);
+		} // UpdateLinkedHmrcPassword
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

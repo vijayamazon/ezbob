@@ -165,8 +165,6 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		var oRequest = $.post(window.gRootPath + 'Customer/Profile/ApplyForALoan');
 
 		oRequest.done(function(oResponse) {
-			console.log('apply result is', oResponse);
-
 			if (oResponse.error) {
 				EzBob.App.trigger('error', oResponse.error);
 				return;
@@ -345,8 +343,6 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			clickBack: _.bind(this.backFromUploadFiles, this, false),
 			clickDone: _.bind(this.backFromUploadFiles, this, true),
 		});
-
-		console.log(this.$el.width());
 
 		this.uploadUi.$el = $('#refresh-vat-return');
 
