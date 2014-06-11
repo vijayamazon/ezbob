@@ -157,12 +157,12 @@
 			
 			if (lrs.Any())
 			{
-				var owners = lrs.SelectMany(x => x.Owners).Select(x => new {firstName = x.FirstName, lastName = x.LastName}).ToList();
+				var owners = lrs.SelectMany(x => x.Owners).Select(x => new {firstName = x.FirstName ?? string.Empty, lastName = x.LastName ?? string.Empty, company = x.CompanyName ?? string.Empty}).ToList();
 				if (owners.Any() && !owners.Any(owner =>
 						owner.firstName.Contains(customer.PersonalInfo.FirstName) &&
 						owner.lastName.Contains(customer.PersonalInfo.Surname)))
 				{
-					var ownerNames = owners.Select(x => string.Format("{0} {1}", x.firstName, x.lastName)).Aggregate((a, b) => a + ", " + b);
+					var ownerNames = owners.Select(x => string.Format("{0} {1} {2}", x.firstName, x.lastName, x.company)).Aggregate((a, b) => a + ", " + b);
 					summary.Alerts.Add(new AlertModel
 					{
 						Alert = "Not a land registry owner",
