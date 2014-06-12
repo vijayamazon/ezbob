@@ -9,6 +9,7 @@ namespace Reports {
 			MarketplaceCount = new SortedDictionary<int, int>();
 		} // constructor
 
+		public string IsFirstLoan { get; set; }
 		public int ClientLoanOrderNo { get; set; }
 		public string TypeOfLoan { get; set; }
 		public int CustomerSelection { get; set; }

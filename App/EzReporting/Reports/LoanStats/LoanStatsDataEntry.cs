@@ -43,16 +43,27 @@
 		public bool IsNewClient { get { return LoanSeqNo == 1; } }
 		public int LoanSeqNo { get; set; }
 
+		public bool IsFirstLoan {
+			get {
+				if (!IsLoanIssued)
+					return false;
+
+				TimeSpan oSpan = IssueDate - ms_oCustomerFirstLoanDates[CustomerID];
+
+				return Math.Abs(oSpan.TotalDays) < 5;
+			} // get
+		} // IsFirstLoan
+
 		#endregion properties - calculated
 
-		#region consturctor
+		#region constructor
 
 		public LoanStatsDataEntry(SafeReader sr) {
 			RequestIDHistory = new List<int>();
 			LoanTerm = 0;
 			Update(sr);
 			FirstDecisionDate = LastDecisionDate;
-		} // consturctor
+		} // constructor
 
 		#endregion consturctor
 
@@ -102,14 +113,26 @@
 			LoanAmount = sr["LoanAmount"];
 			IssueDate = sr["LoanIssueDate"];
 
-			if (LoanID != 0) {
+			if (IsLoanIssued) {
 				JObject jo = JObject.Parse(sr["AgreementModel"]);
 				LoanTerm = (int)jo["Term"];
+
+				if (ms_oCustomerFirstLoanDates == null)
+					ms_oCustomerFirstLoanDates = new SortedDictionary<int, DateTime>();
+
+				if (ms_oCustomerFirstLoanDates.ContainsKey(CustomerID)) {
+					if (ms_oCustomerFirstLoanDates[CustomerID] > IssueDate)
+						ms_oCustomerFirstLoanDates[CustomerID] = IssueDate;
+				}
+				else
+					ms_oCustomerFirstLoanDates[CustomerID] = IssueDate;
 			} // if
 		} // Update
 
 		#endregion method Update
 
 		#endregion public
+
+		private static SortedDictionary<int, DateTime> ms_oCustomerFirstLoanDates;
 	} // class LoanStatsDataEntry
 } // namespace

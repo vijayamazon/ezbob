@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Data;
 
 namespace Reports {
+	using System.IO;
+
 	public class LoanStats : SafeLog {
 		#region public
 
@@ -38,6 +40,8 @@ namespace Reports {
 				foreach (LoanStatsDataEntry lse in pair.Value) {
 					var lre = new LoanStatsReportEntry();
 					oResult.Add(lre);
+
+					lre.IsFirstLoan = lse.IsLoanIssued ? ((lse.IsFirstLoan ? "" : "not ") + "first") : "";
 
 					lre.ClientLoanOrderNo = lse.LoanSeqNo;
 					lre.TypeOfLoan = lse.ApprovedType;
@@ -194,6 +198,7 @@ namespace Reports {
 		#region method FillRow
 
 		private void FillRow(ExcelWorksheet sheet, int nRowNumber, LoanStatsReportEntry lre) {
+			sheet.Cells["A"  + nRowNumber].Value = lre.IsFirstLoan;
 			sheet.Cells["B"  + nRowNumber].Value = lre.ClientLoanOrderNo;
 			sheet.Cells["C"  + nRowNumber].Value = lre.TypeOfLoan;
 			sheet.Cells["D"  + nRowNumber].Value = lre.CustomerSelection;
@@ -267,6 +272,7 @@ namespace Reports {
 		#region method FillTitle
 
 		private void FillTitle(ExcelWorksheet sheet, int nRowNumber) {
+			sheet.Cells["A"  + nRowNumber].Value = "Is this 'a first' loan?";
 			sheet.Cells["B"  + nRowNumber].Value = "Client loan order #";
 			sheet.Cells["C"  + nRowNumber].Value = "Type of loan (s-standard, n-new offer)";
 			sheet.Cells["D"  + nRowNumber].Value = "Customer selection (0-no, 1-yes)";
