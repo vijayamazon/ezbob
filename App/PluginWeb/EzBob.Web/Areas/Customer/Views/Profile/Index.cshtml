@@ -172,13 +172,32 @@
 				<p>Your credentials changed, please provide new credentials below.</p>
 				<p class="error" style="color: red; min-height: 32px;" id="update-ekm-error"></p>
 				<br />
-				@EzForm.InputText("refresh_ekm_login", "ekm login", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_login")
+				@EzForm.InputText("refresh_ekm_login", "ekm login", cls: "form_field", isDisabled: true, isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_login")
 				@EzForm.Password("refresh_ekm_password", "ekm password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_password")
 
 				<div class="form_buttons_container">
 					<div class="attardi-button">
-						<a href="#" class="button orange pull-right" id="refreshEkmBtn" onclick="updateEkm();" ui-event-control-id="refresh-account:ekm">Continue</a>
-						<a href="#" class="button grey pull-right" id="cancelEkmBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:ekm-cancel">Cancel</a>
+						<a href="#" class="button orange pull-right" id="refreshEkmBtn"  ui-event-control-id="refresh-account:ekm">Continue</a>
+						<a href="#" class="button grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:ekm-cancel">Cancel</a>
+					</div>
+				</div>
+				<div class="clear"></div>
+				<hr>
+				<div class="help_security"></div>
+			</div>
+
+			<div id="refresh_hmrc_help" class="help_window">
+				<h2>Update HMRC account credentials</h2>
+				<p>Your credentials changed, please provide new credentials below.</p>
+				<p class="error" style="color: red; min-height: 32px;" id="update-hmrc-error"></p>
+				<br />
+				@EzForm.InputText("refresh_hmrc_login", "User ID", cls: "form_field", isDisabled: true, isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:hmrc_login")
+				@EzForm.Password("refresh_hmrc_password", "Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:hmrc_password")
+
+				<div class="form_buttons_container">
+					<div class="attardi-button">
+						<a href="#" class="button orange pull-right" id="refreshHmrcBtn" ui-event-control-id="refresh-account:hmrc">Continue</a>
+						<a href="#" class="button grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:hmrc-cancel">Cancel</a>
 					</div>
 				</div>
 				<div class="clear"></div>
@@ -345,30 +364,6 @@
 
 			Backbone.history.start();
 		});
-
-		function updateEkm() {
-			$("#update-ekm-error").html('');
-
-			BlockUi();
-
-			var url = "" + window.gRootPath + "Customer/EkmMarketPlaces/Update";
-
-			var oRequest = $.post(url, { name: $('#refresh_ekm_login').val(), password: $('#refresh_ekm_password').val() });
-
-			oRequest.done(function(res) {
-				if (res.error)
-					$("#update-ekm-error").html(res.error);
-
-				if (res.success) {
-					$.colorbox.close();
-					$('button.apply-for-loan').click();
-				}
-			});
-			
-			oRequest.always(function() {
-				UnBlockUi();
-			});
-		}
 	</script>
 
 	@BundleHelper.RenderProfileJs()

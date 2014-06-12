@@ -94,6 +94,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 	}, // getCash
 
 	applyForALoan: function() {
+		UnBlockUi();
+
 		if (this.customer.get('IsDefaultCustomerStatus'))
 			return;
 
@@ -157,7 +159,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.makeTargeting();
 
 		this.trigger('applyForLoan');
-		BlockUi('on');
+
+		BlockUi();
 
 		if (bClaims)
 			$.post(window.gRootPath + 'Customer/Profile/ClaimsTrustPilotReview');
@@ -371,8 +374,80 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.find('#refresh_ekm_login').val(this.refreshAccountData.displayName).change();
 		this.$el.find('#refresh_ekm_password').val('').change().focus();
 
+		if (!this.ekmRefreshButtonEventSet) {
+			this.$el.find('#refreshEkmBtn').click(_.bind(this.validateAndUpdateAccount, this, 'ekm'));
+			this.ekmRefreshButtonEventSet = true;
+		} // if
+
 		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh_ekm_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
 	}, // refreshEkm
+
+	refreshLinkedHmrc: function() {
+		this.$el.find('#update-hmrc-error').text("Invalid username or password.");
+		this.$el.find('#refresh_hmrc_login').val(this.refreshAccountData.displayName).change();
+		this.$el.find('#refresh_hmrc_password').val('').change().focus();
+
+		if (!this.hmrcRefreshButtonEventSet) {
+			this.$el.find('#refreshHmrcBtn').click(_.bind(this.validateAndUpdateAccount, this, 'hmrc'));
+			this.hmrcRefreshButtonEventSet = true;
+		} // if
+
+		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh_hmrc_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+	}, // refreshLinkedHmrc
+
+	validateAndUpdateAccount: function(sAccountType) {
+		var sErrorMsg;
+		var sAction;
+		var sLogin;
+		var sPassword;
+
+		switch (sAccountType) {
+		case 'ekm':
+			sErrorMsg = '#update-ekm-error';
+			sAction = 'Customer/EkmMarketPlaces/Update';
+			sLogin = '#refresh_ekm_login';
+			sPassword = '#refresh_ekm_password';
+			break;
+
+		case 'hmrc':
+			sErrorMsg = '#update-hmrc-error';
+			sAction = 'Customer/CGMarketPlaces/Update';
+			sLogin = '#refresh_hmrc_login';
+			sPassword = '#refresh_hmrc_password';
+			break;
+
+		default:
+			return;
+		} // switch
+
+		$(sErrorMsg).empty();
+
+		BlockUi();
+
+		var oRequest = $.post('' + window.gRootPath + sAction, {
+			name: $(sLogin).val(),
+			password: $(sPassword).val(),
+		});
+
+		var self = this;
+
+		oRequest.done(function(res) {
+			if (res.success) {
+				$.colorbox.close();
+				self.applyForALoan();
+				return;
+			} // if
+
+			if (res.error)
+				$(sErrorMsg).html(res.error);
+
+			UnBlockUi();
+		});
+
+		oRequest.fail(function() {
+			UnBlockUi();
+		});
+	}, // validateAndUpdateAccount
 
 	makeTargeting: function() {
 		var that = this;

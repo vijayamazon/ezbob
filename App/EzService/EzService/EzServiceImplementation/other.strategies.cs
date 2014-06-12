@@ -129,5 +129,20 @@
 		} // UpdateLinkedHmrcPassword
 
 		#endregion method UpdateLinkedHmrcPassword
+
+		#region method ValidateAndUpdateLinkedHmrcPassword
+
+		public StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
+			ValidateAndUpdateLinkedHmrcPassword oInstanse;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstanse, null, null, sCustomerID, sDisplayName, sPassword, sHash);
+
+			return new StringActionResult {
+				MetaData = oMetaData,
+				Value = oInstanse.ErrorMessage,
+			};
+		} // ValidateAndUpdateLinkedHmrcPassword
+
+		#endregion method UpdateLinkedHmrcPassword
 	} // class EzServiceImplementation
 } // namespace EzService

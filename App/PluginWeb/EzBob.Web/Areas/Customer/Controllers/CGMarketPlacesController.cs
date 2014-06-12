@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
 	using Infrastructure.Attributes;
 	using System;
 	using System.Linq;
@@ -9,7 +10,9 @@
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using Infrastructure;
 	using Code.MpUniq;
+	using Infrastructure.csrf;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using Web.Models.Strings;
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;
@@ -35,7 +38,7 @@
 
 		#endregion constructor
 
-		#region method Accounts (account list by type)
+		#region action Accounts (account list by type)
 
 		public JsonResult Accounts(string atn) {
 			var oVsi = Configuration.Instance.GetVendorInfo(atn);
@@ -49,9 +52,9 @@
 			);
 		} // Accounts
 
-		#endregion method Accounts (account list by type)
+		#endregion action Accounts (account list by type)
 
-		#region method Accounts (add new account)
+		#region action Accounts (add new account)
 
 		[Ajax]
 		[HttpPost]
@@ -83,7 +86,31 @@
 			return oState.Model;
 		} // Accounts
 
-		#endregion method Accounts (add new account)
+		#endregion action Accounts (add new account)
+
+		#region action Update
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult Update(string name, string password) {
+			try {
+				StringActionResult ar = m_oServiceClient.Instance.ValidateAndUpdateLinkedHmrcPassword(
+					new Encrypted(_context.Customer.Id.ToString()),
+					new Encrypted(name),
+					new Encrypted(password),
+					SecurityUtils.Hash(_context.Customer.Id + password + name)
+				);
+
+				return Json(new { success = string.IsNullOrWhiteSpace(ar.Value), error = ar.Value, }, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception e) {
+				ms_oLog.Error(e, "Failed to update linked HMRC account password for display name {0}.", name);
+				return Json(new { success = false, error = e.Message, }, JsonRequestBehavior.AllowGet);
+			} // try
+		} // Update
+
+		#endregion action Update
 
 		#endregion public
 

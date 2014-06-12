@@ -41,13 +41,34 @@
 		#region method Execute
 
 		public override void Execute() {
+			UpdatePassword(ValidateInput());
+		} // Execute
+
+		#endregion method Execute
+
+		#endregion public
+
+		#region protected
+
+		#region structure AccountData
+
+		protected class AccountData {
+			public int CustomerMarketplaceID;
+			public AccountModel SecInfo;
+		} // AccountData
+
+		#endregion structure AccountData
+
+		#region method ValidateInput
+
+		protected AccountData ValidateInput() {
 			GetCustomerID();
 			GetDisplayName();
 			GetPassword();
 			ValidateHash();
 
 			var oReader = new LoadCustomerMarketplaceSecurityData(
-				m_nCustomerID,
+				CustomerID,
 				m_sDisplayName,
 				Integration.ChannelGrabberConfig.Configuration.GetInstance(Log).Hmrc.Guid(),
 				DB,
@@ -57,8 +78,8 @@
 			oReader.Execute();
 
 			if (oReader.Result.Count != 1) {
-				Log.Warn("Too many/few HMRC accounts with display name of '{0}' for customer {1}.", m_sDisplayName, m_nCustomerID);
-				return;
+				Log.Warn("Too many/few HMRC accounts with display name of '{0}' for customer {1}.", m_sDisplayName, CustomerID);
+				return null;
 			} // if
 
 			LoadCustomerMarketplaceSecurityData.ResultRow hmrc = oReader.Result[0];
@@ -76,28 +97,43 @@
 					hmrc.CustomerMarketplaceID
 				);
 
-				return;
+				return null;
 			} // try
 
-			oSecInfo.password = m_sPassword;
+			return new AccountData {
+				CustomerMarketplaceID = hmrc.CustomerMarketplaceID,
+				SecInfo = oSecInfo,
+			};
+		} // ValidateInput
+
+		#endregion method ValidateInput
+
+		#region method UpdatePassword
+
+		protected void UpdatePassword(AccountData data) {
+			if (data == null)
+				return;
+
+			data.SecInfo.password = Password;
 
 			var oSaver = new UpdateMarketplaceSecurityData(DB, Log) {
-				CustomerMarketplaceID = hmrc.CustomerMarketplaceID,
-				SecurityData = new Encrypted(new Serialized(oSecInfo)),
+				CustomerMarketplaceID = data.CustomerMarketplaceID,
+				SecurityData = new Encrypted(new Serialized(data.SecInfo)),
 			};
 
 			oSaver.ExecuteNonQuery();
-		} // Execute
+		} // UpdatePassword
 
-		#endregion method Execute
+		#endregion method UpdatePassword
 
-		#endregion public
+		protected int CustomerID { get; set; }
+		protected string Password { get; set; }
+
+		#endregion protected
 
 		#region private
 
-		private int m_nCustomerID;
 		private string m_sDisplayName;
-		private string m_sPassword;
 
 		private readonly string m_sRawCustomerID;
 		private readonly string m_sRawDisplayName;
@@ -108,7 +144,7 @@
 
 		private void GetCustomerID() {
 			try {
-				m_nCustomerID = int.Parse(Encrypted.Decrypt(m_sRawCustomerID));
+				CustomerID = int.Parse(Encrypted.Decrypt(m_sRawCustomerID));
 			}
 			catch (Exception e) {
 				throw new StrategyWarning(this, "Failed to get customer ID from " + m_sRawCustomerID, e);
@@ -134,7 +170,7 @@
 
 		private void GetPassword() {
 			try {
-				m_sPassword = Encrypted.Decrypt(m_sRawPassword);
+				Password = Encrypted.Decrypt(m_sRawPassword);
 			}
 			catch (Exception e) {
 				throw new StrategyWarning(this, "Failed to get password from " + m_sRawPassword, e);
@@ -146,7 +182,7 @@
 		#region method ValidateHash
 
 		private void ValidateHash() {
-			string sHash = SecurityUtils.Hash(m_nCustomerID + m_sPassword + m_sDisplayName);
+			string sHash = SecurityUtils.Hash(CustomerID + Password + m_sDisplayName);
 
 			if (sHash != m_sHash)
 				throw new StrategyAlert(this, "Failed to validate hash: " + sHash + " != " + m_sHash);

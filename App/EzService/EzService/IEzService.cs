@@ -351,6 +351,9 @@
 		[OperationContract]
 		ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
 
+		[OperationContract]
+		StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+
 		#endregion other strategies
 
 		#region pricing model
