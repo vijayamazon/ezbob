@@ -5,63 +5,67 @@
 <script type="text/template" id="add-customer-relations-entry-template">
     <div>
         <form id="customer-relations-form">
-            <div class="FormRadioCtrl">
-                <span>Type</span>
+            <div>
+                <div class="FormRadioCtrl">
+                    <span>Type</span>
+                </div>
+                <div class="FormRadioCtrl">
+                    <input type="radio" name="Type" value="I" id="Type_In" class="required" data-value="In"><label for="Incoming_In">Incoming</label>
+                </div>
+                <div class="FormRadioCtrl">
+                    <input type="radio" name="Type" value="O" id="Type_Out" checked="checked" data-value="Out"><label for="Incoming_Out">Outgoing</label>
+                </div>
+                <div class="FormRadioCtrl">
+                    <input type="radio" name="Type" value="O" id="Type_Internal" data-value="Internal"><label for="Incoming_Internal">Internal</label>
+                </div>
             </div>
-            <div class="FormRadioCtrl">
-                <input type="radio" name="Type" value="I" id="Type_In" class="required" data-value="In"><label for="Incoming_In">Incoming</label>
+            <br />
+            <div class="control-group form_field_container">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span class="active attardi-has-data">Action</span>
+                        <select class="form_field selectheight" id="Action" name="Action">
+                            <option></option>
+                            <% _.each(actions, function(action){ %>
+                                        <option value="<%- action.Id %>"><%- action.Name %></option>
+                            <%});%>
+                        </select>
+                    </label>
+                </div>
             </div>
-            <div class="FormRadioCtrl">
-                <input type="radio" name="Type" value="O" id="Type_Out" checked="checked" data-value="Out"><label for="Incoming_Out">Outgoing</label>
+            <div class="control-group form_field_container">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span>Status</span>
+                        <select class="form_field selectheight" id="Status" name="Status">
+                            <option></option>
+                            <% _.each(statuses, function(sGroup) { console.log(sGroup);%>
+                            <optgroup label="<%- sGroup.Name%>">
+                                <%_.each(sGroup.Statuseses, function(status){%>
+                                    <option value="<%- status.Id %>"><%- status.Name %></option>
+                                <%});%>
+                            </optgroup>
+                            <%});%>
+                        </select>
+                    </label>
+                </div>
             </div>
-            <div class="FormRadioCtrl">
-                <input type="radio" name="Type" value="O" id="Type_Internal" data-value="Internal"><label for="Incoming_Internal">Internal</label>
+            <div class="control-group form_field_container">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span class="rank-span">Potential Rank</span>
+                        <select class="form_field selectheight" id="Rank" name="Rank">
+                            <option></option>
+                            <% _.each(ranks, function(rank) { %>
+                                        <option value="<%- rank.Id %>"><%- rank.Name %></option>
+                            <%});%>
+                        </select>
+                    </label>
+                </div>
             </div>
-    </div>
-
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span style="visibility: hidden;">Action</span>
-                <select class="form_field selectheight" id="Action" name="Action">
-                    <option></option>
-                    <% _.each(actions, function(action){ %>
-                                <option value="<%- action.Id %>"><%- action.Name %></option>
-                    <%});%>
-                </select>
-            </label>
-        </div>
-    </div>
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span>Status</span>
-                <select class="form_field selectheight" id="Status" name="Status">
-                    <option></option>
-                    <% _.each(statuses, function(status) { %>
-                                <option value="<%- status.Id %>"><%- status.Name %></option>
-                    <%});%>
-                </select>
-            </label>
-        </div>
-    </div>
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span>Potential Rank</span>
-                <select class="form_field selectheight" id="Rank" name="Rank">
-                    <option></option>
-                    <% _.each(ranks, function(rank) { %>
-                                <option value="<%- rank.Id %>"><%- rank.Name %></option>
-                    <%});%>
-                </select>
-            </label>
-        </div>
-    </div>
-    <label>Comment</label>
-    <textarea id="Comment" class="add-customer-entry-comment-size" />
-
-    </form>
+            <label>Comment</label>
+            <textarea id="Comment" class="add-customer-entry-comment-size" />
+        </form>
     </div>
     <div class="pull-right">
         <button class="btn btn-primary">OK</button>

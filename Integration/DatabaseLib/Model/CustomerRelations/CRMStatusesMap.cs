@@ -10,6 +10,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 			Id(x => x.Id);
 
 			Map(x => x.Name).Length(100);
+			Map(x => x.GroupId);
 		}
 	}
 }

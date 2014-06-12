@@ -3,91 +3,95 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.AddCustomerRelationsFollowUp = EzBob.BoundItemView.extend({
-	template: '#add-customer-relations-followup-template',
+    template: '#add-customer-relations-followup-template',
 
-	events: {
-		'keyup #Comment': 'commentKeyup'
-	}, // events
+    events: {
+        'keyup #Comment': 'commentKeyup'
+    }, // events
 
-	jqoptions: function() {
-		return {
-			modal: true,
-			resizable: true,
-			title: 'CRM - add follow up',
-			position: 'center',
-			draggable: true,
-			dialogClass: 'customer-relations-popup',
-			width: 600
-		};
-	}, // jqoptions
+    jqoptions: function () {
+        return {
+            modal: true,
+            resizable: true,
+            title: 'CRM - add follow up',
+            position: 'center',
+            draggable: true,
+            dialogClass: 'customer-relations-popup',
+            width: 600
+        };
+    }, // jqoptions
 
-	initialize: function(options) {
-		this.onsave = options.onsave;
-		this.onbeforesave = options.onbeforesave;
-		this.customerId = this.model.customerId;
-		this.url = window.gRootPath + 'Underwriter/CustomerRelations/SaveFollowUp/';
+    initialize: function (options) {
+        this.onsave = options.onsave;
+        this.onbeforesave = options.onbeforesave;
+        this.customerId = this.model.customerId;
+        this.url = window.gRootPath + 'Underwriter/CustomerRelations/SaveFollowUp/';
 
-		EzBob.Underwriter.AddCustomerRelationsEntry.__super__.initialize.call(this);
-	}, // initialize
+        EzBob.Underwriter.AddCustomerRelationsEntry.__super__.initialize.call(this);
+    }, // initialize
 
-	onRender: function() {
-	    this.ui.FollowUpDate.datepicker({ format: 'dd/mm/yyyy', autoclose: true });
-	}, // onRender
+    onRender: function () {
+        var that = this;
+        this.ui.FollowUpDate.datepicker({ format: 'dd/mm/yyyy', autoclose: true, keyboardNavigation: true });
+        this.ui.FollowUpDate.on('changeDate', function () {
+            that.ui.Comment.focus();
+        });
+    }, // onRender
 
-	serializeData: function() {
-		return {
-			actions: EzBob.CrmActions,
-			statuses: EzBob.CrmStatuses,
-			ranks: EzBob.CrmRanks,
-		};
-	}, // serializeData
+    serializeData: function () {
+        return {
+            actions: EzBob.CrmActions,
+            statuses: EzBob.CrmStatuses,
+            ranks: EzBob.CrmRanks,
+        };
+    }, // serializeData
 
-	commentKeyup: function(el) {
-		return this.ui.Comment.val(this.ui.Comment.val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
-	}, // commentKeyup
+    commentKeyup: function (el) {
+        return this.ui.Comment.val(this.ui.Comment.val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
+    }, // commentKeyup
 
-	ui: {
-	    FollowUpDate: '#FollowUpDate',
-		Comment: '#Comment',
-	}, // ui
+    ui: {
+        FollowUpDate: '#FollowUpDate',
+        Comment: '#Comment',
+    }, // ui
 
-	onSave: function() {
-	    if (!this.ui.FollowUpDate.val())
-			return false;
+    onSave: function () {
+        if (!this.ui.FollowUpDate.val())
+            return false;
 
-	    if (!this.ui.Comment.val())
-			return false;
+        if (!this.ui.Comment.val())
+            return false;
 
-		BlockUi();
+        BlockUi();
 
-		var opts = {
-		    followUpDate: EzBob.formatDateTimeCS(moment(this.ui.FollowUpDate.val(), 'DD/MM/YYYY')),
-			comment: this.ui.Comment.val(),
-			customerId: this.customerId
-		};
+        var opts = {
+            followUpDate: EzBob.formatDateTimeCS(moment(this.ui.FollowUpDate.val(), 'DD/MM/YYYY')),
+            comment: this.ui.Comment.val(),
+            customerId: this.customerId
+        };
 
-		if (this.onbeforesave)
-			this.onbeforesave(opts);
+        if (this.onbeforesave)
+            this.onbeforesave(opts);
 
-		var self = this;
+        var self = this;
 
-		var xhr = $.post(this.url, opts);
+        var xhr = $.post(this.url, opts);
 
-		xhr.done(function(r) {
-			if (r.success)
-				self.model.fetch();
-			else {
-				if (r.error)
-					EzBob.ShowMessage(r.error, 'Error');
-			} // if
+        xhr.done(function (r) {
+            if (r.success)
+                self.model.fetch();
+            else {
+                if (r.error)
+                    EzBob.ShowMessage(r.error, 'Error');
+            } // if
 
-			self.close();
-		});
+            self.close();
+        });
 
-		xhr.always(function() {
-			return UnBlockUi();
-		});
+        xhr.always(function () {
+            return UnBlockUi();
+        });
 
-		return false;
-	}, // onSave
+        return false;
+    }, // onSave
 }); // EzBob.Underwriter.AddCustomerRelationsEntry

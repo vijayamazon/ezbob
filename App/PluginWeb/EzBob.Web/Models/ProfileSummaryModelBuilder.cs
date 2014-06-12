@@ -146,7 +146,7 @@
 			var lrs = customer.LandRegistries.Where(x =>
 				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
 				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success).ToList();
-			if (!lrs.Any() && customer.PersonalInfo != null && customer.PersonalInfo.ResidentialStatus == "Home owner")
+			if (!lrs.Any() && customer.PersonalInfo != null && String.Equals(customer.PersonalInfo.ResidentialStatus,"home owner", StringComparison.OrdinalIgnoreCase))
 			{
 				summary.Alerts.Add(new AlertModel
 					{

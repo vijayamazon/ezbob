@@ -9,7 +9,7 @@
 	public class CrmStaticModel
 	{
 		public IEnumerable<CRMActions> CrmActions { get; set; }
-		public IEnumerable<CRMStatuses> CrmStatuses { get; set; }
+		public IOrderedQueryable<CRMStatusGroup> CrmStatuses { get; set; }
 		public IEnumerable<CRMRanks> CrmRanks { get; set; }
 	}
 

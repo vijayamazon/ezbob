@@ -10,7 +10,7 @@
 		private readonly LoanRepository _loanRepository;
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly CRMActionsRepository _crmActionsRepository;
-		private readonly CRMStatusesRepository _crmStatusesRepository;
+		private readonly CRMStatusGroupRepository _crmStatusGroupRepository;
 		private readonly CRMRanksRepository _crmRanksRepository;
 		private readonly CustomerRelationStateRepository _customerRelationStateRepository;
 		private readonly ICustomerRelationFollowUpRepository _customerRelationFollowUpRepository;
@@ -19,7 +19,7 @@
 			_loanRepository = loanRepository;
 			_customerRelationsRepository = customerRelationsRepository;
 			_customerRelationFollowUpRepository = new CustomerRelationFollowUpRepository(session);
-			_crmStatusesRepository = new CRMStatusesRepository(session);
+			_crmStatusGroupRepository = new CRMStatusGroupRepository(session);
 			_crmActionsRepository = new CRMActionsRepository(session);
 			_crmRanksRepository = new CRMRanksRepository(session);
 			_customerRelationStateRepository = new CustomerRelationStateRepository(session);
@@ -79,7 +79,7 @@
 			var model = new CrmStaticModel
 			{
 				CrmActions = _crmActionsRepository.GetAll(),
-				CrmStatuses = _crmStatusesRepository.GetAll(),
+				CrmStatuses = _crmStatusGroupRepository.GetAll().OrderBy(x => x.Priority),
 				CrmRanks = _crmRanksRepository.GetAll()
 			};
 			return model;

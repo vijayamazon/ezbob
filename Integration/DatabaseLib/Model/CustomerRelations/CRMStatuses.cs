@@ -7,6 +7,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 	{
 		public virtual int Id { get; set; }
 		public virtual string Name { get; set; }
+		public virtual int GroupId { get; set; }
 	}
 
 	public interface ICRMStatusesRepository : IRepository<CRMStatuses>

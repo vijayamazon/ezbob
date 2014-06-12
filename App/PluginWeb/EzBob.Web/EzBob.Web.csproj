@@ -1037,13 +1037,17 @@
     <Content Include="Content\js\lib\jquery-1.8.3.js" />
     <Content Include="Content\js\lib\jquery-ui-1.8.24.custom.js" />
     <Content Include="Content\js\lib\jquery.blockUI.js" />
+    <Content Include="Content\js\lib\jquery.browser.min.js" />
     <Content Include="Content\js\lib\jquery.colorbox-min.js" />
+    <Content Include="Content\js\lib\jquery.cookie.js" />
+    <Content Include="Content\js\lib\jquery.dataTables.js" />
     <Content Include="Content\js\lib\jquery.dataTables.min.js" />
     <Content Include="Content\js\lib\jquery.field_status.js" />
     <Content Include="Content\js\lib\jquery.form.js" />
     <Content Include="Content\js\lib\jquery.hoverIntent.min.js" />
     <Content Include="Content\js\lib\jquery.jscrollpane.js" />
     <Content Include="Content\js\lib\jquery.load_display_value.js" />
+    <Content Include="Content\js\lib\jquery.mask.js" />
     <Content Include="Content\js\lib\jquery.mask.min.js" />
     <Content Include="Content\js\lib\jquery.mousewheel.js" />
     <Content Include="Content\js\lib\autoNumeric-1.7.4.js" />
