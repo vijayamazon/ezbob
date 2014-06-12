@@ -4,10 +4,13 @@ GO
 
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROCEDURE [dbo].[RptFinancialStats] 
-	(@DateStart DATETIME, @DateEnd DATETIME)
+
+ALTER PROCEDURE RptFinancialStats
+@DateStart DATETIME,
+@DateEnd DATETIME
 AS
 BEGIN
 	DECLARE @TotalGivenLoanValueOpen NUMERIC(18, 2)
@@ -23,6 +26,9 @@ BEGIN
 	DECLARE @Defaults NUMERIC(18, 2)
 	DECLARE @TotalDefaults NUMERIC(18, 2)
 	DECLARE @TotalBadDebt NUMERIC(18, 2)
+
+	DECLARE @NetPortfolio DECIMAL(18, 2)
+	DECLARE @AvgInterestRate DECIMAL(22, 6)
 	
 	DECLARE @SetupFee NUMERIC(18, 2)
 
@@ -139,35 +145,34 @@ BEGIN
 		cs.IsDefault = 1
 
 	------------------------------------------------------------------------------
-	
-	SET @TotalDefaults = 
-	(SELECT ISNULL(SUM(l.Principal), 0)
-	 FROM Customer C,
-		  CustomerStatuses S,
-		  Loan L
-	 WHERE 
-		C.IsTest = 0 AND 
-		L.CustomerId = c.Id AND
-		L.Status != 'PaidOff' and
-		C.CollectionStatus = S.Id
-		AND S.Name IN ('Default', 'WriteOff')
-	)
-	
+
+	SELECT
+		@TotalDefaults = ISNULL(SUM(l.Principal), 0)
+	FROM
+		Loan L
+		INNER JOIN Customer C
+			ON L.CustomerId = c.Id
+			AND C.IsTest = 0
+		INNER JOIN CustomerStatuses S
+			ON C.CollectionStatus = S.Id
+			AND S.Name IN ('Default', 'WriteOff')
+	WHERE
+		L.Status != 'PaidOff'
 
 	------------------------------------------------------------------------------
-	
-	SET @TotalBadDebt = 
-	(SELECT ISNULL(SUM(l.Principal), 0)
-	 FROM Customer C,
-		  CustomerStatuses S,
-		  Loan L
-	 WHERE 
-		C.IsTest = 0 AND 
-		L.CustomerId = c.Id AND
-		L.Status != 'PaidOff' and
-		C.CollectionStatus = S.Id
-		AND S.Name IN ('Bad', 'Debt Management', 'Legal', 'Fraud')
-	)
+
+	SELECT
+		@TotalBadDebt = ISNULL(SUM(l.Principal), 0)
+	FROM
+		Loan L
+		INNER JOIN Customer C
+			ON L.CustomerId = c.Id
+			AND C.IsTest = 0
+		INNER JOIN CustomerStatuses S
+			ON C.CollectionStatus = S.Id
+			AND S.Name IN ('Bad', 'Debt Management', 'Legal', 'Fraud')
+	WHERE 
+		L.Status != 'PaidOff'
 
 	------------------------------------------------------------------------------
 
@@ -454,9 +459,15 @@ BEGIN
 	SELECT 5.1, 'Closing Balance', @TotalGivenLoanValueClose - @TotalRepaidPrincipalClose - @Defaults
 
 	------------------------------------------------------------------------------
+
+	SET @NetPortfolio =
+		@TotalGivenLoanValueClose -
+		@TotalRepaidPrincipalClose -
+		@TotalBadDebt -
+		@TotalDefaults
 	
 	INSERT INTO #output
-	SELECT 6.1, 'Net portfolio', (@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose) - @TotalBadDebt - @TotalDefaults
+	SELECT 6.1, 'Net portfolio', @NetPortfolio
 
 	------------------------------------------------------------------------------
 	
@@ -466,21 +477,23 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO #output
-	SELECT 4.1,	'Portfolio grows', (@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose - @Defaults) - (@TotalGivenLoanValueOpen - @TotalRepaidPrincipalOpen)
+	SELECT 4.1, 'Portfolio grows', (@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose - @Defaults) - (@TotalGivenLoanValueOpen - @TotalRepaidPrincipalOpen)
+
+	------------------------------------------------------------------------------
+
+	SET @AvgInterestRate = dbo.udfAvgInterestRate(@DateEnd)
+	
+	INSERT INTO #output
+	SELECT 6.2, 'Avarage interest rate', @AvgInterestRate
 
 	------------------------------------------------------------------------------
 	
 	INSERT INTO #output
-	SELECT 6.2, 'Avarage interest rate', 0.00 --todo
-
-	------------------------------------------------------------------------------
-	
-	INSERT INTO #output
-	SELECT 6.3, 'Projected income',	0.00 --todo
+	SELECT 6.3, 'Projected income', @NetPortfolio * @AvgInterestRate
 
 	------------------------------------------------------------------------------
 	INSERT INTO #output
-	SELECT 15,	'Average days early payment', 0.00 --todo
+	SELECT 15, 'Average days early payment', dbo.udfAvgPaidEarlyDays(@DateStart, @DateEnd)
 
 	------------------------------------------------------------------------------
 
