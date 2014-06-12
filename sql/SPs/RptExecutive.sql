@@ -1,12 +1,16 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptExecutive]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptExecutive]
+IF OBJECT_ID('RptExecutive') IS NULL
+	EXECUTE('CREATE PROCEDURE RptExecutive AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[RptExecutive] 
-	(@DateStart DATETIME, @DateEnd DATETIME)
+
+ALTER PROCEDURE RptExecutive
+@DateStart DATETIME,
+@DateEnd DATETIME
 AS
 BEGIN
 	SELECT
@@ -283,8 +287,6 @@ BEGIN
 		@DateStart <= l.[Date] AND l.[Date] < @DateEnd
 		
 	------------------------------------------------------------------------------
-
-	
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
@@ -652,6 +654,16 @@ BEGIN
 		c.IsTest = 0
 		AND
 		@DateStart <= l.DateClosed AND l.DateClosed < @DateEnd
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out (Caption, Number, Amount)
+	SELECT
+		'Finished loans customers',
+		ISNULL(MAX(CustomerCount), 0),
+		ISNULL(MAX(LoanSum), 0)
+	FROM
+		dbo.udfLoanlessCustomers(@DateStart, @DateEnd)
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
