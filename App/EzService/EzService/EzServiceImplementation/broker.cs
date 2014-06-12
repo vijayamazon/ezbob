@@ -349,9 +349,6 @@
 				MaxPerNumber = 3,
 				MaxPerPage = 10,
 				Files = new FileDescription[0],
-				Actions = new IdNameModel[0],
-				Statuses = new IdNameModel[0] ,
-				Ranks = new IdNameModel[0],
 				Terms = "",
 				TermsID = 0,
 			};
@@ -397,19 +394,6 @@
 			}
 			catch (Exception e) {
 				Log.Alert(e, "Failed to retrieve SMS counts.");
-			} // try
-
-			try {
-				CrmLookupsActionResult oCrm = CrmLoadLookups();
-
-				if (oCrm.MetaData.Status == ActionStatus.Done) {
-					oResult.Actions = oCrm.Actions;
-					oResult.Statuses = oCrm.Statuses;
-					oResult.Ranks = oCrm.Ranks;
-				} // if
-			}
-			catch (Exception e) {
-				Log.Alert(e, "Failed to retrieve CRM look up values.");
 			} // try
 
 			return oResult;

@@ -17,8 +17,10 @@
 	using Infrastructure.Attributes;
 	using Infrastructure.Filters;
 	using Models;
+	using NHibernate;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using Underwriter.Models;
 	using log4net;
 
 	#endregion using
@@ -36,7 +38,8 @@
 
 		#region constructor
 
-		public BrokerHomeController() {
+		public BrokerHomeController(ISession session) {
+			_session = session;
 			m_oServiceClient = new ServiceClient();
 			m_oHelper = new BrokerHelper(m_oServiceClient, m_oLog);
 		} // constructor
@@ -367,17 +370,15 @@
 					MaxPerNumber = 3,
 					MaxPerPage = 10,
 					Files = new FileDescription[0],
-					Actions = new IdNameModel[0] ,
-					Statuses = new IdNameModel[0],
-					Ranks = new IdNameModel[0],
 					Terms = "",
 					TermsID = 0,
 				};
 			} // try
-
+			var b = new CustomerRelationsModelBuilder(null, null, _session);
+			var crm = b.GetStaticCrmModel();
 			m_oLog.Debug("Broker loading CRM details complete.");
 
-			return Json(new {success = true, data = oResult}, JsonRequestBehavior.AllowGet);
+			return Json(new {success = true, data = oResult, crm = crm}, JsonRequestBehavior.AllowGet);
 		} // LoadStaticData
 
 		#endregion action LoadStaticData
@@ -899,6 +900,7 @@
 		private readonly BrokerHelper m_oHelper;
 
 		private static readonly ASafeLog m_oLog;
+		private ISession _session;
 
 		#endregion fields
 

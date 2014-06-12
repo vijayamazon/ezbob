@@ -37,7 +37,7 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         "followUp": 'label.followUp'
     },
     addNewCustomerRelationsEntry: function() {
-        var view = new EzBob.Underwriter.AddCustomerRelationsEntry({ model: this.model });
+        var view = new EzBob.Underwriter.AddCustomerRelationsEntry({ model: this.model, url: window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/' });
         EzBob.App.jqmodal.show(view);
         return false;
     },
@@ -57,6 +57,13 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         var curRank = this.model.get('CurrentRank');
         if (curRank) {
             this.ui.rank.val(curRank.Id).blur();
+        }
+
+        var isFollowed = this.model.get("LastFollowUp");
+        if (isFollowed) {
+            $('.crm-tab i').addClass('fa fa-phone');
+        } else {
+            $('.crm-tab i').removeClass('fa fa-phone');
         }
         
         this.ui.toggleSystemBtn.tooltip({ placement: "right" });

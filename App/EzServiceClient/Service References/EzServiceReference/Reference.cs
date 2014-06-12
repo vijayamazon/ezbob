@@ -885,9 +885,6 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class BrokerStaticDataActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ServiceClientProxy.EzServiceReference.IdNameModel[] ActionsField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.Models.FileDescription[] FilesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -897,29 +894,10 @@ namespace ServiceClientProxy.EzServiceReference {
         private int MaxPerPageField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ServiceClientProxy.EzServiceReference.IdNameModel[] RanksField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ServiceClientProxy.EzServiceReference.IdNameModel[] StatusesField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TermsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int TermsIDField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ServiceClientProxy.EzServiceReference.IdNameModel[] Actions {
-            get {
-                return this.ActionsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ActionsField, value) != true)) {
-                    this.ActionsField = value;
-                    this.RaisePropertyChanged("Actions");
-                }
-            }
-        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.FileDescription[] Files {
@@ -956,32 +934,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.MaxPerPageField.Equals(value) != true)) {
                     this.MaxPerPageField = value;
                     this.RaisePropertyChanged("MaxPerPage");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ServiceClientProxy.EzServiceReference.IdNameModel[] Ranks {
-            get {
-                return this.RanksField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.RanksField, value) != true)) {
-                    this.RanksField = value;
-                    this.RaisePropertyChanged("Ranks");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ServiceClientProxy.EzServiceReference.IdNameModel[] Statuses {
-            get {
-                return this.StatusesField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.StatusesField, value) != true)) {
-                    this.StatusesField = value;
-                    this.RaisePropertyChanged("Statuses");
                 }
             }
         }

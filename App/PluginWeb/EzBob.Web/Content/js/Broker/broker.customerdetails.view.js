@@ -296,12 +296,13 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		event.stopPropagation();
 
 		var self = this;
-
+		var model = new Backbone.Model({ isBroker: true });
+		model.customerId = this.CustomerID;
 		var options = {
 			url: window.gRootPath + 'Broker/BrokerHome/SaveCrmEntry',
-			onsave: function() { self.reloadData();  },
+			onsave: function() { self.reloadData(); },
 			onbeforesave: function(opts) { opts.sContactEmail = self.router.getAuth(); },
-			model : new Backbone.Model({ customerId: this.CustomerID })
+			model : model
 		};
 
 		var view = new EzBob.Underwriter.AddCustomerRelationsEntry(options);

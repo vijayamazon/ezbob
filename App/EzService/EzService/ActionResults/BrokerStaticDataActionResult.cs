@@ -8,15 +8,6 @@
 		public FileDescription[] Files { get; set; }
 
 		[DataMember]
-		public IdNameModel[] Actions { get; set; } // Actions
-
-		[DataMember]
-		public IdNameModel[] Statuses { get; set; } // Statuses
-
-		[DataMember]
-		public IdNameModel[] Ranks { get; set; } // Ranks
-
-		[DataMember]
 		public int MaxPerNumber { get; set; }
 
 		[DataMember]

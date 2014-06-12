@@ -33,16 +33,12 @@ $(document).ready(function() {
 	oFieldStatusIcons.filter('.required').field_status({ required: true });
 	oFieldStatusIcons.not('.required').field_status({ required: false });
 
-	$.get(window.gRootPath + 'Broker/BrokerHome/LoadStaticData', function(oResponse) {
+    $.get(window.gRootPath + 'Broker/BrokerHome/LoadStaticData', function(oResponse) {
 		if (!oResponse.success)
 			return;
 
 		var data = oResponse.data;
-
-		EzBob.CrmActions = data.Actions;
-		EzBob.CrmStatuses = data.Statuses;
-		EzBob.CrmRanks = data.Ranks;
-
+        
 		var oTerms = $('#broker-terms-and-conditions');
 		oTerms.html(data.Terms);
 		oTerms.attr('data-terms-version', data.TermsID);
@@ -53,6 +49,11 @@ $(document).ready(function() {
 
 		var oLinks = $('.marketing-files');
 		var sTemplate = oLinks.attr('data-url-template');
+
+        var crm = oResponse.crm;
+		EzBob.CrmActions = crm.CrmActions;
+		EzBob.CrmStatuses = crm.CrmStatuses;
+		EzBob.CrmRanks = crm.CrmRanks;
 
 		_.each(data.Files, function(fd) {
 			oLinks.append($('<li />').append(

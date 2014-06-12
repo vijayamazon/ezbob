@@ -1376,3 +1376,7 @@ td a.edit-loan {
     line-height:18px;
     white-space: normal;
 }
+
+.crm-tab i{
+    color: #58B8FC;
+}

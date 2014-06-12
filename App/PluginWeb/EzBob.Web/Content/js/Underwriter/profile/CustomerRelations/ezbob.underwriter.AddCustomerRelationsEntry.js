@@ -24,7 +24,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         this.onsave = options.onsave;
         this.onbeforesave = options.onbeforesave;
         this.customerId = this.model.customerId;
-        this.url = window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/';
+        this.url = options.url;
 
         EzBob.Underwriter.AddCustomerRelationsEntry.__super__.initialize.call(this);
     }, // initialize
@@ -35,6 +35,10 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         if (rank) {
             this.ui.Rank.val(rank.Id);
             this.ui.RankSpan.addClass('active attardi-has-data');
+        }
+        
+        if(this.model.get('isBroker')) {
+            this.ui.RankDiv.hide();
         }
     }, // onRender
 
@@ -56,6 +60,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         Action: '#Action',
         Rank: '#Rank',
         RankSpan: '.rank-span',
+        RankDiv: '.rank-div',
         Comment: '#Comment',
     }, // ui
 
@@ -67,7 +72,6 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
             return false;
 
         BlockUi();
-
         var opts = {
             type: this.$el.find('input[name="Type"]:checked').data("value"),
             action: this.ui.Action[0].value,
@@ -85,11 +89,14 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         var xhr = $.post(this.url, opts);
 
         xhr.done(function (r) {
-            if (r.success)
+            if (r.success && !self.model.get('isBroker')) {
                 self.model.fetch();
-            else {
-                if (r.error)
+            }else if (r.success && self.onsave) {
+                self.onsave();
+            } else {
+                if (r.error) {
                     EzBob.ShowMessage(r.error, 'Error');
+                }
             } // if
 
             self.close();
