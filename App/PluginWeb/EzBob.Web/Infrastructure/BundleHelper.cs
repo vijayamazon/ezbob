@@ -466,6 +466,31 @@
 
 		#endregion customer js
 
+		#region paypoint js
+		public static MvcHtmlString RenderPaypointTemplateJs()
+		{
+			return Bundle.JavaScript()
+				.AddString(GetDbStrings())
+				.Add("~/Content/js/lib/jquery-1.8.3.js")
+				.Add("~/Content/js/lib/jquery.browser.min.js")
+				.Add("~/Content/js/lib/jquery.scrollTo.js")
+				.Add("~/Content/js/lib/jquery.blockUI.js")
+				.Add("~/Content/js/lib/jquery.mask.min.js")
+				.Add("~/Content/js/lib/jquery.validate.js")
+				.Add("~/Content/js/lib/moment.js")
+				.Add("~/Content/js/lib/jsuri-1.1.1.js")
+				.Add("~/Content/js/lib/bootstrap.js")
+				.Add("~/Content/js/lib/cookies.js")
+				.Add("~/Content/js/lib/underscore.js")
+				.Add("~/Content/js/lib/backbone.js")
+				.Add("~/Content/js/contactUs/ezbo.contactUs.js")
+				.Add("~/Content/js/App/ezbob.validation.js")
+				.Add("~/Content/js/lib/jquery.field_status.js")
+				.Add("~/Content/js/lib/attardi.labels.js")
+				.MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
+		} // RenderPaypointTemplateJs
+		#endregion
+
 		#endregion JS
 	} // class BundleHelper
 } // namespace
