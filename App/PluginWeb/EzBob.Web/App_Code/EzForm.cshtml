@@ -245,9 +245,9 @@
     </tr>
 }
 
-@helper AddressInput(string name, string title, string sUiEventControlID, string css = "")
+@helper AddressInput(WebPageBase page, string name, string title, string sUiEventControlID, string css = "")
 {
-	sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;
+    sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;
 
     var identificator = new HtmlString(name);
 
@@ -260,11 +260,12 @@
         oById = new HtmlString(CurrentValues.Instance.DummyAddressSearchResult.Value);
     } // if
 
+    var input = string.Format("<div id={0} class='address-field' data-ui-event-control-id-prefix='{1}'></div>", identificator, sUiEventControlID);
     <div class="control-group form_field_container @css">
         <label class="control-label addressCaption">@title</label>
         <div class="controls">
             <label class="control-label">
-                <div id="@identificator" class="address-field" data-ui-event-control-id-prefix="@sUiEventControlID"></div>
+                @{ page.WriteLiteral(input);}
             </label>
         </div>
     </div>
@@ -278,7 +279,7 @@
     }
 }
 
-@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false, string css = "", string uiEventControlID = "", string hiddenFieldAuxClass = "", string labelCss = "")
+@helper DateInput(WebPageBase page, string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false, string css = "", string uiEventControlID = "", string hiddenFieldAuxClass = "", string labelCss = "")
 {
     var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
     var validationClass = required ? "requiredDate" : "";
@@ -292,11 +293,11 @@
     var dayIdentificator = new HtmlString(identificator + "Day");
     var monthIdentificator = new HtmlString(identificator + "Month");
     var yearIdentificator = new HtmlString(identificator + "Year");
-
+    
     var sDayUiEventControlID = "";
     var sMonthUiEventControlID = "";
     var sYearUiEventControlID = "";
-
+    
     if (!string.IsNullOrWhiteSpace(uiEventControlID))
     {
         sDayUiEventControlID = "ui-event-control-id=" + uiEventControlID + "_day";
@@ -304,71 +305,82 @@
         sYearUiEventControlID = "ui-event-control-id=" + uiEventControlID + "_year";
     }
 
+    var daySelect = string.Format("<select id='{0}' name='day' class='selectheight form_field form_field_date {1}' empty_value='-' {2}>", dayIdentificator, css, sDayUiEventControlID);
+    var monthSelect = string.Format("<select id='{0}' name='month' class='selectheight form_field form_field_date {1}' empty_value='-' {2}>", monthIdentificator, css, sMonthUiEventControlID);
+    var yearSelect = string.Format("<select id='{0}' name='year' class='selectheight form_field form_field_date {1}' empty_value='-' {2}>", yearIdentificator, css, sYearUiEventControlID);
+    const string endSelect = "</select>";
+    var hidden = string.Format("<input id='{0}' class='{0} {1} hidden-field {2} ' style='display: none !important' name='{0}'/>", identificator, validationClass, hiddenFieldAuxClass);
+    
     <div class="control-group form_field_container">
         <div class="controls ezDateTime">
             <span class="fs16">@title &nbsp;</span>
 
             <label class="attardi-input @labelCss">
                 <span>Day</span>
-                <select id="@dayIdentificator" name="day" class="selectheight form_field form_field_date @css" empty_value="-" @sDayUiEventControlID>
+                    @{ page.WriteLiteral(daySelect); }
+                   
                     <option value="-"></option>
                     @for (var i = 1; i <= 31; i++)
                     {
                         <option
-							@if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
-       {
-								@:selected="selected"
-							}
-							value="@i"
-						>@i</option>
+                            @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
+                            {
+                                @:selected="selected"
+                            }
+                            value="@i"
+                            >@i</option>
                     }
-                </select>
+                 
+                   @{ page.WriteLiteral(endSelect); }
+                 
             </label>
 
             <label class="attardi-input @labelCss">
                 <span>Month</span>
-                <select id='@monthIdentificator' name="month" class="selectheight form_field form_field_date @css" empty_value="-" @sMonthUiEventControlID>
+                @{ page.WriteLiteral(monthSelect); }
                     <option value="-"></option>
                     @for (var i = 1; i <= 12; i++)
                     {
                         <option
-							@if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
-       {
-								@:selected="selected"
-							}
-							value="@i"
-						>@month[i - 1]</option>
+                            @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
+                            {
+                                @:selected="selected"
+                            }
+                            value="@i"
+                            >@month[i - 1]</option>
                     }
-                </select>
+                @{ page.WriteLiteral(endSelect); }
             </label>
 
             <label class="attardi-input @labelCss">
                 <span>Year</span>
-                <select id='@yearIdentificator' name="year" class="selectheight form_field form_field_date @css" empty_value="-" @sYearUiEventControlID>
+                @{ page.WriteLiteral(yearSelect); }
                     <option value="-"></option>
                     @{
                         var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
                         var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
                         for (var i = maxYear; i >= minYear; i--)
                         {
-                        <option
-								@if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
-        {
-									@:selected="selected"
-								}
-								value="@i"
-							>@i</option>
+                            <option
+                                @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
+                                {
+                                    @:selected="selected"
+                                }
+                                value="@i"
+                                >@i</option>
                         }
                     }
-                </select>
+                @{ page.WriteLiteral(endSelect); }
             </label>
-            <input id="@identificator" class="@identificator @validationClass hidden-field @hiddenFieldAuxClass" style="display: none !important" name="@identificator"/>
+            
+            @{ page.WriteLiteral(hidden); }
 
             @if (statusIcon)
             {
                 var sReq = required ? "required" : "";
                 var sId = new HtmlString(identificator + "Image");
-                <img id="@sId" class="field_status @sReq"/>
+                page.WriteLiteral(string.Format("<img id='{0}' class='field_status {1}'/>", sId, sReq));
+                
             }
         </div>
     </div>

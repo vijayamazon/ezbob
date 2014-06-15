@@ -1,4 +1,4 @@
-﻿@helper Render(string sUrl) {
+﻿@helper Render(WebPageBase page, string sUrl) {
 	<script id="add-director-info-template" type="text/template">
 		<div class="director">
 			<form method="post" action="@sUrl" class="addDirectorInfoForm" novalidate="novalidate">
@@ -21,10 +21,10 @@
 				</div>
 
 				<div class="director_address">
-					@EzForm.AddressInput("DirectorAddress", "Address", "director")
+					@EzForm.AddressInput(page, "DirectorAddress", "Address", "director")
 				</div>
 
-				@EzForm.DateInput("DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "dashboard:director_birth_date", hiddenFieldAuxClass: "director_birth_date")
+				@EzForm.DateInput(page, "DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "dashboard:director_birth_date", hiddenFieldAuxClass: "director_birth_date")
 
 				@EzForm.InputText("Email", "Email", type: "email", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_email")
 				@EzForm.InputText("Phone", "Best contact number", cls: "form_field phonenumber", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_phone")

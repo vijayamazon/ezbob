@@ -56,7 +56,7 @@
 
 		<div class="controls">
 			<div class="addressEdit">
-				@EzForm.AddressInput("PersonalAddress", "Address", "personal")
+				@EzForm.AddressInput(this, "PersonalAddress", "Address", "personal")
 			</div>
 		</div>
 
@@ -69,7 +69,7 @@
 
 		<div class="controls offline">
 			<div class="addressEdit">
-				@EzForm.AddressInput("OtherPropertyAddress", "Other property address", "other-property")
+				@EzForm.AddressInput(this,"OtherPropertyAddress", "Other property address", "other-property")
 			</div>
 		</div>
 
@@ -149,7 +149,7 @@
 
 		<div class="controls">
 			<div class="addressEdit" style="display: none;">
-				@EzForm.AddressInput("LimitedCompanyAddress", "Address", "limited")
+				@EzForm.AddressInput(this,"LimitedCompanyAddress", "Address", "limited")
 			</div>
 		</div>
 
@@ -182,7 +182,7 @@
 
 		<div class="controls">
 			<div class="addressEdit">
-				@EzForm.AddressInput("NonLimitedAddress", "Address", "nonlimited")
+				@EzForm.AddressInput(this,"NonLimitedAddress", "Address", "nonlimited")
 			</div>
 		</div>
 
@@ -232,14 +232,14 @@
 				<p>Email: <b><%- Email %></b></p>
 				<p>Phone: <b><%- Phone %></b></p>
 				<div class="addressEdit">
-					@EzForm.AddressInput("DirectorAddress", "Address", "director")
+					@EzForm.AddressInput(this, "DirectorAddress", "Address", "director")
 				</div>
 			</div>
 		</div>
 	</div>
 </script>
 
-@AddDirectorInfoTemplate.Render(Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
+@AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
 
 <script id="directors-info" type="text/template">
 	<div class="accordion page-content-frame" id="accordion-faq-signup"></div>

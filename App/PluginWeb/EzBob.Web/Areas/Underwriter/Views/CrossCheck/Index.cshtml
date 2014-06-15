@@ -723,7 +723,7 @@
     } 
 }
 
-@AddDirectorInfoTemplate.Render(Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
+@AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
 
 <script id="address-popup-template" type="text/template">
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressPopupTemplate.cshtml");}
