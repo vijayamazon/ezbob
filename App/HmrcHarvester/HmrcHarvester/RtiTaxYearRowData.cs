@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-
-namespace Ezbob.HmrcHarvester {
-	#region class RtiTaxYearRowData
+﻿namespace Ezbob.HmrcHarvester {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Text.RegularExpressions;
 
 	class RtiTaxYearRowData {
 		#region public
@@ -56,16 +52,25 @@ namespace Ezbob.HmrcHarvester {
 			if (string.IsNullOrWhiteSpace(sAmount))
 				return "";
 
-			int nPos = sAmount.IndexOfAny(new char[] { Convert.ToChar(65533), Convert.ToChar(163) });
+			sAmount = sAmount.Trim();
+
+			int nPos = sAmount.Length - 1;
+
+			while ((nPos >= 0) && ms_oLegalChars.Contains(sAmount[nPos]))
+				nPos--;
 
 			if (nPos < 0)
 				return sAmount;
 
-			return sAmount.Substring(nPos);
+			return sAmount.Substring(nPos + 1);
 		} // NormaliseAmountStr
+
+		private static readonly SortedSet<char> ms_oLegalChars = new SortedSet<char> {
+			Convert.ToChar(65533), Convert.ToChar(163), // pound sign characters
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+			'-', ',', '.',
+		};
 
 		#endregion private
 	} // class RtiTaxYearRowData
-
-	#endregion class RtiTaxYearRowData
 } // namespace Ezbob.HmrcHarvester
