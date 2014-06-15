@@ -1,13 +1,18 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[QuickOfferLoadConfiguration]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[QuickOfferLoadConfiguration]
+IF OBJECT_ID('QuickOfferLoadConfiguration') IS NULL
+	EXECUTE('CREATE PROCEDURE QuickOfferLoadConfiguration AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[QuickOfferLoadConfiguration]
+
+ALTER PROCEDURE QuickOfferLoadConfiguration
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	IF NOT EXISTS (SELECT * FROM QuickOfferConfiguration WHERE ID = 1)
 		INSERT INTO QuickOfferConfiguration (ID) VALUES (1)
 

@@ -1,12 +1,15 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[QuickOfferDataLoad]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[QuickOfferDataLoad]
+IF OBJECT_ID('QuickOfferDataLoad') IS NULL
+	EXECUTE('CREATE PROCEDURE QuickOfferDataLoad AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[QuickOfferDataLoad] 
-	(@CustomerID INT)
+
+ALTER PROCEDURE QuickOfferDataLoad
+@CustomerID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
