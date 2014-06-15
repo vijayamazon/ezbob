@@ -234,6 +234,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade.All()
 				.Inverse();
 
+			Map(x => x.FirstVisitTime).Length(64);
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

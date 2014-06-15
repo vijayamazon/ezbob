@@ -655,11 +655,19 @@ namespace EzBob.Web.Controllers {
 			} // if
 
 			customer.CustomerInviteFriend.Add(customerInviteFriend);
+
 			var ezbobab = Request.Cookies["ezbobab"];
 			if (ezbobab != null) {
 				var cookie = new HttpCookie("ezbobab", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
 				customer.ABTesting = ezbobab.Value;
+			} // if
+
+			var firstvisit = Request.Cookies["firstvisit"];
+			if (firstvisit != null) {
+				var cookie = new HttpCookie("firstvisit", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
+				Response.Cookies.Add(cookie);
+				customer.FirstVisitTime = firstvisit.Value;
 			} // if
 
 			if (Request.Cookies["istest"] != null)

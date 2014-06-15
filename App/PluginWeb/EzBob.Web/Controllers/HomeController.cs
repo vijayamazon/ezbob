@@ -26,29 +26,38 @@
 
 		#region action Index
 
-		public ActionResult Index(string sourceref = "", string shop = "", string ezbobab = "", string invite = "", string bloken = "") {
+		public ActionResult Index(
+			string sourceref = "",
+			string shop = "",
+			string ezbobab = "",
+			string invite = "",
+			string bloken = "",
+			string firstvisit = ""
+		) {
 			Session["Shop"] = shop;
 
 			if (!string.IsNullOrWhiteSpace(bloken))
 				SetBrokerLeadData(bloken);
 
-			if (!string.IsNullOrEmpty(sourceref))
-			{
+			if (!string.IsNullOrEmpty(sourceref)) {
 				var cookie = new HttpCookie("sourceref", sourceref) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
-			}
+			} // if
 
-			if (!string.IsNullOrEmpty(invite))
-			{
+			if (!string.IsNullOrEmpty(invite)) {
 				var cookie = new HttpCookie("invite", invite) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
-			}
+			} // if
 
-			if (!string.IsNullOrEmpty(ezbobab))
-			{
+			if (!string.IsNullOrEmpty(ezbobab)) {
 				var cookie = new HttpCookie("ezbobab", ezbobab) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
-			}
+			} // if
+
+			if (!string.IsNullOrEmpty(firstvisit)) {
+				var cookie = new HttpCookie("firstvisit", firstvisit) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
+				Response.Cookies.Add(cookie);
+			} // if
 
 			return RedirectToActionPermanent("Index", User.Identity.IsAuthenticated ? "Profile" : "Wizard", new { Area = "Customer" });
 		} // Index
@@ -85,7 +94,7 @@
 		#region method SetBrokerLeadData
 
 		private void SetBrokerLeadData(string sBrokerLeadToken) {
-			ASafeLog oLog = new SafeILog(LogManager.GetLogger(typeof (HomeController)));
+			ASafeLog oLog = new SafeILog(LogManager.GetLogger(typeof(HomeController)));
 
 			new WizardBrokerLeadModel(Session).Unset();
 

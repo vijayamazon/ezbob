@@ -716,6 +716,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual IList<CustomerRelationState> CustomerRelationStates { get; set; }
 		public virtual IList<LandRegistry> LandRegistries { get; set; }
+
+		public virtual string FirstVisitTime { get; set; }
 	} // class Customer
 
 	#endregion class Customer
