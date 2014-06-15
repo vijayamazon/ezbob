@@ -26,6 +26,8 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			el: $('#strength-password-view'),
 			passwordSelector: '#Password',
 		});
+
+		EzBob.App.on('brkr:signup-with-captcha', _.bind(this.switchToCaptcha, this));
 	}, // initialize
 
 	events: function() {

@@ -33,12 +33,12 @@ $(document).ready(function() {
 	oFieldStatusIcons.filter('.required').field_status({ required: true });
 	oFieldStatusIcons.not('.required').field_status({ required: false });
 
-    $.get(window.gRootPath + 'Broker/BrokerHome/LoadStaticData', function(oResponse) {
+	$.get(window.gRootPath + 'Broker/BrokerHome/LoadStaticData', function(oResponse) {
 		if (!oResponse.success)
 			return;
 
 		var data = oResponse.data;
-        
+
 		var oTerms = $('#broker-terms-and-conditions');
 		oTerms.html(data.Terms);
 		oTerms.attr('data-terms-version', data.TermsID);
@@ -47,10 +47,13 @@ $(document).ready(function() {
 		oSmsCounts.attr('data-max-per-number', data.MaxPerNumber);
 		oSmsCounts.attr('data-max-per-page', data.MaxPerPage);
 
+		if ((data.MaxPerNumber === 0) || (data.MaxPerPage === 0))
+			EzBob.App.trigger('brkr:signup-with-captcha');
+
 		var oLinks = $('.marketing-files');
 		var sTemplate = oLinks.attr('data-url-template');
 
-        var crm = oResponse.crm;
+		var crm = oResponse.crm;
 		EzBob.CrmActions = crm.CrmActions;
 		EzBob.CrmStatuses = crm.CrmStatuses;
 		EzBob.CrmRanks = crm.CrmRanks;
