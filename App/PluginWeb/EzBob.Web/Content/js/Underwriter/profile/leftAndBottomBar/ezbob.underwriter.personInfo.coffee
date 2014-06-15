@@ -102,7 +102,9 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/ActivateMainStrategy", customerId: @model.get('Id')
 
     activateFinishWizard: ->
-        xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/ActivateFinishWizard", customerId: @model.get('Id')
+        EzBob.ShowMessage("Finish wizard is in progress, refresh in a couple of seconds", "Ok", () => 
+            xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/ActivateFinishWizard", customerId: @model.get('Id')
+        )
 
     updateTrustPilotStatus: ->
         d = new EzBob.Dialogs.ComboEdit
