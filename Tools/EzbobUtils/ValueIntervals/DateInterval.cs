@@ -1,9 +1,8 @@
-﻿using System;
-
-using EdgeType = Ezbob.ValueIntervals.AIntervalEdge<System.DateTime>.EdgeType;
-
-namespace Ezbob.ValueIntervals {
+﻿namespace Ezbob.ValueIntervals {
+	using System;
 	using System.Collections.Generic;
+
+	using EdgeType = Ezbob.ValueIntervals.AIntervalEdge<System.DateTime>.EdgeType;
 
 	#region class DateInterval
 
@@ -12,6 +11,14 @@ namespace Ezbob.ValueIntervals {
 
 		public static DateTime Min(DateTime a, DateTime b) { return (a.Date <= b.Date) ? a.Date : b.Date; } // Min
 		public static DateTime Max(DateTime a, DateTime b) { return (a.Date >= b.Date) ? a.Date : b.Date; } // Max
+
+		#region method Contains
+
+		public virtual bool Contains(DateTime oDate) {
+			return Contains(new DateIntervalEdge(oDate, EdgeType.Finite));
+		} // Contains
+
+		#endregion method Contains
 
 		#region operator *
 
@@ -43,6 +50,14 @@ namespace Ezbob.ValueIntervals {
 		} // IsJustBefore
 
 		#endregion method IsJustBefore
+
+		#region method ToString
+
+		public override string ToString() {
+			return string.Format("[{0}, {1}]", Left, Right);
+		} // ToString
+
+		#endregion method ToString
 
 		#endregion public
 
@@ -116,33 +131,6 @@ namespace Ezbob.ValueIntervals {
 	#region class DateIntervalListExt
 
 	public static class DateIntervalListExt {
-		public static string SortAndCheckSequence(this List<DateInterval> oDates) {
-			string sResult = null;
-
-			if (oDates.Count > 1) {
-				oDates.Sort((a, b) => a.Left.CompareTo(b.Left));
-
-				DateInterval next = null;
-
-				foreach (DateInterval cur in oDates) {
-					if (next == null) {
-						next = cur;
-						continue;
-					} // if
-
-					DateInterval prev = next;
-					next = cur;
-
-					if (!prev.IsJustBefore(next)) {
-						sResult = "In-consequent date ranges: " + prev + " and " + next + ".";
-						break;
-					} // if
-				} // for each interval
-			} // if
-
-			return sResult;
-		} // SortAndCheckSequence
-
 		public static string SortWithoutCheckSequence(this List<DateInterval> oDates) {
 			if (oDates.Count > 1)
 				oDates.Sort((a, b) => a.Left.CompareTo(b.Left));
@@ -152,4 +140,4 @@ namespace Ezbob.ValueIntervals {
 	} // class DateIntervalListExt
 
 	#endregion class DateIntervalListExt
-} // namespace Ezbob.ValueIntervals
+} // namespace

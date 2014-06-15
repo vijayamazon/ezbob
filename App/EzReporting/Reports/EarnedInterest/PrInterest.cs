@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Reports {
-	#region class PrInterest
+﻿namespace Reports.EarnedInterest {
+	using System;
+	using System.Globalization;
 
 	class PrInterest {
 		public readonly DateTime Date;
@@ -19,14 +14,24 @@ namespace Reports {
 		} // constructor
 
 		public override string ToString() {
-			return string.Format("{0}: {1} * {2} = {3}", Date, Principal, Interest, Principal * Interest);
+			return string.Format(
+				"{0}: {1} * {2} = {3}",
+				Date.ToString("MMM dd yyyy", ms_oCulture),
+				Principal.ToString("C2", ms_oCulture).PadLeft(20, ' '),
+				Interest.ToString(ms_oCulture).PadLeft(30, ' '),
+				(Principal * Interest).ToString("C2", ms_oCulture)
+			);
 		} // ToString
 
-		public bool Update(InterestData oDelta, InterestFreezePeriods ifp) {
-			if (ifp == null)
-				Interest = oDelta.Interest;
+		public bool Update(InterestData oDelta, InterestFreezePeriods ifp, BadPeriods bp) {
+			if (bp == null) {
+				if (ifp == null)
+					Interest = oDelta.Interest;
+				else
+					Interest = ifp.GetInterest(Date) ?? oDelta.Interest;
+			}
 			else
-				Interest = ifp.GetInterest(Date) ?? oDelta.Interest;
+				Interest = bp.Contains(Date) ? 0 : oDelta.Interest;
 
 			return Date == oDelta.Date;
 		} // Update
@@ -35,7 +40,7 @@ namespace Reports {
 			if (Date > oDelta.Date)
 				Principal -= oDelta.Repayment;
 		} // Update
-	} // class PrInterest
 
-	#endregion class PrInterest
+		private static readonly CultureInfo ms_oCulture = new CultureInfo("en-GB", false);
+	} // class PrInterest
 } // namespace Reports

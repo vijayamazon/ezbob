@@ -13,6 +13,7 @@ namespace TestApp {
 	using Ezbob.ValueIntervals;
 	using Html;
 	using Reports;
+	using Reports.EarnedInterest;
 	using SqlConnection = Ezbob.Database.SqlConnection;
 
 	class Program {
@@ -41,10 +42,9 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
-			PropertyTraverser.Traverse<B>((oInstance, oInfo) => {
-				ms_oLog.Msg("Instance is {0}", oInstance);
-				ms_oLog.Msg("Property name is {0}", oInfo.Name);
-			});
+			// TestBadPeriods(oDB, ms_oLog);
+
+			// PropertyTraverser.Traverse<B>((oInstance, oInfo) => { ms_oLog.Msg("Instance is {0}", oInstance); ms_oLog.Msg("Property name is {0}", oInfo.Name); });
 
 			// UpdateBrokerPasswords(oDB, log);
 
@@ -70,7 +70,7 @@ namespace TestApp {
 
 			// TestLoansIssuedReport(oDB, log);
 
-			// TestEarnedInterest(oDB, log);
+			TestEarnedInterest(oDB, log);
 
 			// TestLoanIntegrity(oDB, log);
 
@@ -82,6 +82,23 @@ namespace TestApp {
 		} // Main
 
 		#endregion method Main
+
+		#region method TestBadPeriods
+
+		private static void TestBadPeriods(AConnection oDB, ASafeLog oLog) {
+			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
+
+			var bp = new BadPeriods(new DateTime(2001, 2, 12));
+
+			bp.Add(new DateTime(2002, 3, 13), false);
+			bp.Add(new DateTime(2002, 4, 18), false);
+			bp.Add(new DateTime(2005, 5, 13), true);
+			bp.Add(new DateTime(2006, 5, 13), false);
+
+			oLog.Debug("{0}", bp);
+		} // TestBadPeriods
+
+		#endregion method TestBadPeriods
 
 		#region method UpdateBrokerPasswords
 
@@ -503,8 +520,8 @@ namespace TestApp {
 			var ea = new EarnedInterest(
 				oDB,
 				EarnedInterest.WorkingMode.ByIssuedLoans,
-				new DateTime(2013, 3, 7),
-				new DateTime(2013, 3, 8),
+				new DateTime(2012, 9, 1),
+				new DateTime(2018, 3, 8),
 				log
 			) {
 				VerboseLogging = true

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ezbob.ValueIntervals;
-
-namespace Reports {
-	#region class InterestFreezePeriods
+﻿namespace Reports.EarnedInterest {
+	using System;
+	using Ezbob.ValueIntervals;
 
 	public class InterestFreezePeriods {
 		#region public
@@ -111,6 +105,4 @@ namespace Reports {
 
 		#endregion private
 	} // class InterestFreezePeriods
-
-	#endregion class InterestFreezePeriods
-} // namespace Reports.EarnedInterest
+} // namespace

@@ -88,6 +88,14 @@ namespace Reports {
 		} // DateEnd
 
 		public DataTable Execute(AConnection oDB) {
+			return oDB.ExecuteReader(StoredProcedure, CreateParameters());
+		} // Execute
+
+		public void Execute(AConnection oDB, Func<SafeReader, bool, ActionResult> oFunc) {
+			oDB.ForEachRowSafe(oFunc, StoredProcedure, CreateParameters());
+		} // Execute
+
+		private QueryParameter[] CreateParameters() {
 			var oParams = new List<QueryParameter>();
 
 			foreach (KeyValuePair<string, dynamic> pair in m_oValues) {
@@ -95,8 +103,8 @@ namespace Reports {
 					oParams.Add(new QueryParameter(pair.Key, pair.Value ?? DBNull.Value));
 			} // for each
 
-			return oDB.ExecuteReader(StoredProcedure, oParams.ToArray());
-		} // Execute
+			return oParams.ToArray();
+		} // CreateParameters
 
 		private dynamic this[string sArgName] {
 			get {

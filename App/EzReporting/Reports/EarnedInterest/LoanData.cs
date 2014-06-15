@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Ezbob.Logger;
-
-namespace Reports {
-	#region class LoanData
+﻿namespace Reports.EarnedInterest {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using Ezbob.Logger;
 
 	class LoanData {
 		public DateTime IssueDate;
 		public decimal Amount;
+		public int CustomerID;
 		public readonly SortedDictionary<DateTime, InterestData> Schedule;
 		public readonly SortedDictionary<DateTime, TransactionData> Repayments;
 
 		#region constructor
 
 		public LoanData(int nLoanID, ASafeLog oLog) {
-			LoanID = nLoanID;
-			Log = new SafeLog(oLog);
+			m_nLoanID = nLoanID;
+			m_oLog = oLog ?? new SafeLog();
 
 			Schedule = new SortedDictionary<DateTime, InterestData>();
 			Repayments = new SortedDictionary<DateTime, TransactionData>();
@@ -43,13 +42,14 @@ namespace Reports {
 			DateTime oDateEnd,
 			InterestFreezePeriods ifp,
 			bool bVerboseLogging,
-			EarnedInterest.WorkingMode nMode
+			Reports.EarnedInterest.EarnedInterest.WorkingMode nMode,
+			BadPeriods bp
 		) {
 			DateTime oFirstIncomeDay = IssueDate.AddDays(1);
 
 			// A loan starts to produce interest on the next day.
 			
-			DateTime oDayOne = (nMode == EarnedInterest.WorkingMode.AccountingLoanBalance)
+			DateTime oDayOne = (nMode == Reports.EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance)
 				? oFirstIncomeDay
 				: (
 					(oDateStart < oFirstIncomeDay) ? oFirstIncomeDay : oDateStart
@@ -79,13 +79,13 @@ namespace Reports {
 			PrInterest[] days = oDaysList.Where(pri => pri.Principal > 0).ToArray();
 
 			if (days.Length == 0) {
-				LogAllDetails(0, "no dates found when the loan produced interest during report period", days, ifp, bVerboseLogging);
+				LogAllDetails(0, "no dates found when the loan produced interest during report period", days, ifp, bp, bVerboseLogging);
 				return 0;
 			} // if
 
-			if (nMode == EarnedInterest.WorkingMode.AccountingLoanBalance) {
+			if (nMode == Reports.EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance) {
 				if (days[days.Length - 1].Date < oDateStart) {
-					LogAllDetails(0, "the loan has been completed before the report period", days, ifp, bVerboseLogging);
+					LogAllDetails(0, "the loan has been completed before the report period", days, ifp, bp, bVerboseLogging);
 					return 0;
 				} // if loan got repaid before report period
 			} // if ForAudit mode
@@ -96,7 +96,7 @@ namespace Reports {
 			InterestData oCurDayData = aryDates[nDayDataPtr];
 			
 			foreach (PrInterest pri in days) {
-				if (pri.Update(oCurDayData, ifp)) {
+				if (pri.Update(oCurDayData, ifp, bp)) {
 					nDayDataPtr++;
 
 					if (nDayDataPtr < aryDates.Length)
@@ -106,7 +106,7 @@ namespace Reports {
 
 			decimal nEarnedInterest = days.Sum(pri => pri.Principal * pri.Interest);
 
-			LogAllDetails(nEarnedInterest, "full details are below", days, ifp, bVerboseLogging);
+			LogAllDetails(nEarnedInterest, "full details are below", days, ifp, bp, bVerboseLogging);
 
 			return nEarnedInterest;
 		} // Calculate
@@ -135,7 +135,7 @@ namespace Reports {
 
 		#region method LogAllDetails
 
-		private void LogAllDetails(decimal nEarnedInterest, string sMsg, PrInterest[] days, InterestFreezePeriods ifp, bool bVerboseLogging) {
+		private void LogAllDetails(decimal nEarnedInterest, string sMsg, IEnumerable<PrInterest> days, InterestFreezePeriods ifp, BadPeriods bp, bool bVerboseLogging) {
 			if (!bVerboseLogging)
 				return;
 
@@ -146,8 +146,19 @@ namespace Reports {
 
 			string sDaysList = (nEarnedInterest == 0) ? "none" : string.Join("\n\t", days.Select(pri => pri.ToString()).ToArray());
 
-			Log.Debug("\n\nLoanID: {0}, {1} issued on {2} earned interest is {6}{11}.\nSchedule ({7}):\n\t{3}\nFreeze periods ({10}):\n\t{9}\nTransactions ({8}):\n\t{4}\nPer day:\n\t{5}\n\n",
-				LoanID, Amount, IssueDate,
+			m_oLog.Debug(
+				"\n\nLoanID: {0} for customer {14}, {1} issued on {2} earned interest is {6}{11}.\n" +
+				"Schedule ({7}):\n" +
+				"\t{3}\n" +
+				"Bad periods ({12}):\n" +
+				"\t{13}\n" +
+				"Freeze periods ({10}):\n" +
+				"\t{9}\n" +
+				"Transactions ({8}):\n" +
+				"\t{4}\n" +
+				"Per day:\n" +
+				"\t{5}\n\n",
+				m_nLoanID, Amount, IssueDate,
 				string.Join("\n\t", Schedule.Values.Select(v => v.ToString()).ToArray()),
 				string.Join("\n\t", Repayments.Values.Select(v => v.ToString()).ToArray()),
 				sDaysList,
@@ -156,7 +167,10 @@ namespace Reports {
 				Repayments.Count,
 				IfpToString(ifp),
 				ifp == null ? 0 : ifp.Count,
-				sMsg
+				sMsg,
+				bp == null ? 0 : bp.Count,
+				bp == null ? "none" : bp.ToString(),
+				CustomerID
 			);
 		} // LogAllDetails
 
@@ -164,14 +178,12 @@ namespace Reports {
 
 		#region fields
 
-		private readonly int LoanID;
-		private readonly ASafeLog Log;
+		private readonly int m_nLoanID;
+		private readonly ASafeLog m_oLog;
 
 		#endregion fields
 
 		#endregion private
 	} // LoanData
-
-	#endregion class LoanData
 } // namespace Reports
 

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Ezbob.Database;
-using Ezbob.Logger;
-using Ezbob.ValueIntervals;
-
-namespace Reports {
-	#region class EarnedInterest
+﻿namespace Reports.EarnedInterest {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Ezbob.ValueIntervals;
 
 	public class EarnedInterest : SafeLog {
 		#region public
@@ -67,6 +64,7 @@ namespace Reports {
 
 			m_oLoans = new SortedDictionary<int, LoanData>();
 			m_oFreezePeriods = new SortedDictionary<int, InterestFreezePeriods>();
+			m_oBadPeriods = new SortedDictionary<int, BadPeriods>();
 
 			m_nMode = nMode;
 		} // constructor
@@ -98,6 +96,7 @@ namespace Reports {
 			} // switch
 
 			FillFreezeIntervals();
+			FillCustomerStatuses();
 
 			return ProcessLoans();
 		} // Run
@@ -117,67 +116,123 @@ namespace Reports {
 		#region method FillFreezeIntervals
 
 		private void FillFreezeIntervals() {
-			DataTable tbl = m_oDB.ExecuteReader("RptEarnedInterest_Freeze", CommandSpecies.StoredProcedure);
-			
-			foreach (DataRow row in tbl.Rows) {
-				int nLoanID = Convert.ToInt32(row["LoanId"]);
-				DateTime? oStart = row["StartDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["StartDate"]);
-				DateTime? oEnd = row["EndDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["EndDate"]);
-				decimal nRate = Convert.ToDecimal(row["InterestRate"]);
-				DateTime? oDeactivation = row["DeactivationDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["DeactivationDate"]);
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nLoanID = sr["LoanId"];
+					DateTime? oStart = sr["StartDate"];
+					DateTime? oEnd = sr["EndDate"];
+					decimal nRate = sr["InterestRate"];
+					DateTime? oDeactivation = sr["DeactivationDate"];
 
-				DateTime? oTo = oDeactivation.HasValue
-					? (oEnd.HasValue ? DateInterval.Min(oEnd.Value, oDeactivation.Value) : oDeactivation)
-					: oEnd;
+					DateTime? oTo = oDeactivation.HasValue
+						? (oEnd.HasValue ? DateInterval.Min(oEnd.Value, oDeactivation.Value) : oDeactivation)
+						: oEnd;
 
-				if (!m_oFreezePeriods.ContainsKey(nLoanID))
-					m_oFreezePeriods[nLoanID] = new InterestFreezePeriods();
+					if (!m_oFreezePeriods.ContainsKey(nLoanID))
+						m_oFreezePeriods[nLoanID] = new InterestFreezePeriods();
 
-				m_oFreezePeriods[nLoanID].Add(oStart, oTo, nRate);
-			} // for each
+					m_oFreezePeriods[nLoanID].Add(oStart, oTo, nRate);
+
+					return ActionResult.Continue;
+				},
+				"RptEarnedInterest_Freeze",
+				CommandSpecies.StoredProcedure
+			);
 		} // FillFreezeIntervals
 
 		#endregion method FillFreezeIntervals
 
+		#region method FillCustomerStatuses
+
+		private void FillCustomerStatuses() {
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					try {
+						int nCustomerID = sr["CustomerID"];
+						DateTime oChangeDate = sr["ChangeDate"];
+						CustomerStatus nOldStatus = BadPeriods.ToStatus(sr["OldStatus"]);
+						CustomerStatus nNewStatus = BadPeriods.ToStatus(sr["NewStatus"]);
+
+						bool bAlreadyHas = m_oBadPeriods.ContainsKey(nCustomerID);
+						bool bLastKnown = !bAlreadyHas || m_oBadPeriods[nCustomerID].IsLastKnownGood;
+						bool bIsOldGood = !BadPeriods.IsBad(nOldStatus);
+						bool bIsNewGood = !BadPeriods.IsBad(nNewStatus);
+
+						if (bLastKnown != bIsOldGood) {
+							Alert(
+								"Last known status is '{0}' while previous status is '{1}' for customer {2} on {3}.",
+								(bLastKnown ? "good" : "bad"),
+								(bIsOldGood ? "good" : "bad"),
+								nCustomerID,
+								oChangeDate.ToString("MMM dd yyyy", CultureInfo.InvariantCulture)
+							);
+						} // if
+
+						if (bLastKnown != bIsNewGood) {
+							if (bAlreadyHas)
+								m_oBadPeriods[nCustomerID].Add(oChangeDate, !bIsNewGood);
+							else
+								m_oBadPeriods[nCustomerID] = new BadPeriods(oChangeDate);
+						} // if
+
+					}
+					catch (Exception e) {
+						Alert(e, "Failed to process customer status history entry.");
+					} // try
+
+					return ActionResult.Continue;
+				},
+				"RptEarnedInterest_CustomerStatusHistory",
+				CommandSpecies.StoredProcedure
+			);
+		} // FillCustomerStatuses
+
+		#endregion method FillCustomerStatuses
+
 		#region method ProcessLoans
 
 		private SortedDictionary<int, decimal> ProcessLoans() {
-			DataTable tbl = m_oDB.ExecuteReader("RptEarnedInterest_LoanDates");
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nLoanID = sr[1];
 
-			foreach (DataRow row in tbl.Rows) {
-				int nLoanID = Convert.ToInt32(row[1]);
+					if (!m_oLoans.ContainsKey(nLoanID)) {
+						if (VerboseLogging)
+							Debug("Ignoring loan id {0}", nLoanID);
 
-				if (!m_oLoans.ContainsKey(nLoanID)) {
-					if (VerboseLogging)
-						Debug("Ignoring loan id {0}", nLoanID);
+						return ActionResult.Continue;
+					} // if
 
-					continue;
-				} // if
+					DateTime oDate = sr[2];
 
-				DateTime oDate = Convert.ToDateTime(row[2]);
+					decimal nValue = sr[3];
 
-				decimal nValue = Convert.ToDecimal(row[3]);
+					switch ((string)sr[0]) {
+					case "0":
+						m_oLoans[nLoanID].Schedule[oDate] = new InterestData(oDate, nValue);
 
-				switch (row[0].ToString()) {
-				case "0":
-					m_oLoans[nLoanID].Schedule[oDate] = new InterestData(oDate, nValue);
+						break;
 
-					break;
+					case "1":
+						if (nValue > 0)
+							m_oLoans[nLoanID].Repayments[oDate] = new TransactionData(oDate, nValue);
 
-				case "1":
-					if (nValue > 0)
-						m_oLoans[nLoanID].Repayments[oDate] = new TransactionData(oDate, nValue);
+						break;
+					} // switch
 
-					break;
-				} // switch
-			} // for each row
+					return ActionResult.Continue;
+				},
+				"RptEarnedInterest_LoanDates",
+				CommandSpecies.StoredProcedure
+			);
 
 			var oRes = new SortedDictionary<int, decimal>();
 
 			foreach (KeyValuePair<int, LoanData> pair in m_oLoans) {
 				InterestFreezePeriods ifp = m_oFreezePeriods.ContainsKey(pair.Key) ? m_oFreezePeriods[pair.Key] : null;
+				BadPeriods bp = m_oBadPeriods.ContainsKey(pair.Value.CustomerID) ? m_oBadPeriods[pair.Value.CustomerID] : null;
 
-				decimal nInterest = pair.Value.Calculate(m_oDateStart, m_oDateEnd, ifp, VerboseLogging, m_nMode);
+				decimal nInterest = pair.Value.Calculate(m_oDateStart, m_oDateEnd, ifp, VerboseLogging, m_nMode, bp);
 
 				if (nInterest > 0)
 					oRes[pair.Key] = nInterest;
@@ -191,23 +246,23 @@ namespace Reports {
 		#region method FillForPeriod
 
 		private void FillForPeriod() {
-			DataTable tbl = m_oDB.ExecuteReader(
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nLoanID = sr[0];
+
+					m_oLoans[nLoanID] = new LoanData(nLoanID, this) {
+						IssueDate = sr[1],
+						Amount = sr[2],
+						CustomerID = sr[3],
+					};
+
+					return ActionResult.Continue;
+				},
 				"RptEarnedInterest_ForPeriod", 
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@DateStart", m_oDateStart),
 				new QueryParameter("@DateEnd", m_oDateEnd)
 			);
-
-			foreach (DataRow row in tbl.Rows) {
-				int nLoanID = Convert.ToInt32(row[0]);
-				DateTime oDate = Convert.ToDateTime(row[1]);
-				decimal nAmount = Convert.ToDecimal(row[2]);
-
-				m_oLoans[nLoanID] = new LoanData(nLoanID, this) {
-					IssueDate = oDate,
-					Amount = nAmount
-				};
-			} // for each row
 
 			Info("{0} loans, date range: {1} - {2}", m_oLoans.Count, m_oDateStart, m_oDateEnd);
 		} // FillForPeriod
@@ -217,31 +272,32 @@ namespace Reports {
 		#region method FillBySp
 
 		private void FillBySp(string sSpName, bool bKeepStartDate, bool bKeepEndDate) {
-			DataTable tbl = m_oDB.ExecuteReader(
-				sSpName,
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@DateStart", m_oDateStart),
-				new QueryParameter("@DateEnd", m_oDateEnd)
-			);
-
 			DateTime oDateStart = DateTime.Now.AddYears(1980);
 
 			if (!bKeepEndDate)
 				m_oDateEnd = DateTime.Today.AddDays(1);
 
-			foreach (DataRow row in tbl.Rows) {
-				int nLoanID = Convert.ToInt32(row[0]);
-				DateTime oDate = Convert.ToDateTime(row[1]);
-				decimal nAmount = Convert.ToDecimal(row[2]);
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nLoanID = sr[0];
+					DateTime oDate = sr[1];
 
-				if (oDate < oDateStart)
-					oDateStart = oDate;
+					if (oDate < oDateStart)
+						oDateStart = oDate;
 
-				m_oLoans[nLoanID] = new LoanData(nLoanID, this) {
-					IssueDate = oDate,
-					Amount = nAmount
-				};
-			} // for each row
+					m_oLoans[nLoanID] = new LoanData(nLoanID, this) {
+						IssueDate = oDate,
+						Amount = sr[2],
+						CustomerID = sr[3],
+					};
+
+					return ActionResult.Continue;
+				},
+				sSpName,
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@DateStart", m_oDateStart),
+				new QueryParameter("@DateEnd", m_oDateEnd)
+			);
 
 			if (!bKeepStartDate)
 				m_oDateStart = oDateStart;
@@ -255,6 +311,7 @@ namespace Reports {
 
 		private readonly SortedDictionary<int, LoanData> m_oLoans;
 		private readonly SortedDictionary<int, InterestFreezePeriods> m_oFreezePeriods;
+		private readonly SortedDictionary<int, BadPeriods> m_oBadPeriods;
 
 		private DateTime m_oDateStart;
 		private DateTime m_oDateEnd;
@@ -267,6 +324,4 @@ namespace Reports {
 
 		#endregion private
 	} // class EarnedInterest
-
-	#endregion class EarnedInterest
-} // namespace Reports
+} // namespace

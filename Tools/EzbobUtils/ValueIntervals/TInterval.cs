@@ -1,9 +1,5 @@
-﻿using System;
-
-using EdgeType = Ezbob.ValueIntervals.AIntervalEdge<System.DateTime>.EdgeType;
-
-namespace Ezbob.ValueIntervals {
-	#region class TInterval
+﻿namespace Ezbob.ValueIntervals {
+	using System;
 
 	public class TInterval<TFinite> : IComparable<TInterval<TFinite>> where TFinite : IComparable<TFinite> {
 		#region public
@@ -145,6 +141,4 @@ namespace Ezbob.ValueIntervals {
 
 		#endregion protected
 	} // class TInterval
-
-	#endregion class TInterval
-} // namespace Ezbob.ValueIntervals
+} // namespace

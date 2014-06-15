@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using Ezbob.Database;
-using Ezbob.Logger;
-using Html;
-using Html.Attributes;
-using Html.Tags;
-using OfficeOpenXml;
+﻿namespace Reports {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Html;
+	using Html.Attributes;
+	using Html.Tags;
+	using JetBrains.Annotations;
+	using OfficeOpenXml;
 
-namespace Reports {
+	using Cci;
 	using Ezbob.Utils;
 
-	public class BaseReportHandler : SafeLog {
+	public partial class BaseReportHandler : SafeLog {
 		#region public
 
 		#region constructor
@@ -182,18 +184,6 @@ namespace Reports {
 		}
 		#endregion method BuildTraficReport
 
-		#region method BuildEarnedInterestReport
-
-		public ATag BuildEarnedInterestReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
-			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, today, tomorrow);
-
-			return new Body().Add<Class>("Body")
-				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
-				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
-		} // BuildEarnedInterestReport
-
-		#endregion method BuildEarnedInterestReport
-
 		#region method BuildLoanIntegrityReport
 
 		public ATag BuildLoanIntegrityReport(Report report, List<string> oColumnTypes = null) {
@@ -214,7 +204,7 @@ namespace Reports {
 		public ATag BuildLoansIssuedReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> pair = CreateLoansIssuedReport(report, today, tomorrow);
 
-			return new Html.Tags.Body().Add<Class>("Body")
+			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
 				.Append(new P().Append(TableReport(pair.Key, pair.Value, oColumnTypes: oColumnTypes)));
 		} // BuildLoansIssuedReport
@@ -236,7 +226,7 @@ namespace Reports {
 		public ATag BuildCciReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateCciReport(report, today, tomorrow);
 
-			return new Html.Tags.Body().Add<Class>("Body")
+			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildCciReport
@@ -248,7 +238,7 @@ namespace Reports {
 		public ATag BuildUiReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateUiReport(report, today, tomorrow);
 
-			return new Html.Tags.Body().Add<Class>("Body")
+			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildUiReport
@@ -260,7 +250,7 @@ namespace Reports {
 		public ATag BuildUiExtReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateUiExtReport(report, today, tomorrow);
 
-			return new Html.Tags.Body().Add<Class>("Body")
+			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, isSharones: true, oColumnTypes: oColumnTypes)));
 		} // BuildUiExtReport
@@ -272,7 +262,7 @@ namespace Reports {
 		public ATag BuildAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateAccountingLoanBalanceReport(report, today, tomorrow);
 
-			return new Html.Tags.Body().Add<Class>("Body")
+			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildAccountingLoanBalanceReport
@@ -306,16 +296,6 @@ namespace Reports {
 
 		#endregion method BuildPlainedPaymentXls
 
-		#region method BuildEarnedInterestXls
-
-		public ExcelPackage BuildEarnedInterestXls(Report report, DateTime today, DateTime tomorrow) {
-			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, today, tomorrow);
-
-			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
-		} // BuildEarnedInterestXls
-
-		#endregion method BuildEarnedInterestXls
-
 		#region method BuildLoansIssuedXls
 
 		public ExcelPackage BuildLoansIssuedXls(Report report, DateTime today, DateTime tomorrow) {
@@ -329,12 +309,8 @@ namespace Reports {
 		#region method XlsReport
 
 		public ExcelPackage XlsReport(ReportQuery rptDef, string sRptTitle = "") {
-			var wb = new ExcelPackage();
-
 			try {
-				DataTable dt = rptDef.Execute(DB);
-				wb = AddSheetToExcel(dt, sRptTitle, rptDef.StoredProcedure, String.Empty);
-				return wb;
+				return AddSheetToExcel(rptDef.Execute(DB), sRptTitle, rptDef.StoredProcedure, String.Empty);
 			}
 			catch (Exception e) {
 				Alert(e, "Failed to generate Excel report.");
@@ -428,214 +404,17 @@ namespace Reports {
 
 		#endregion property UnderwriterSite
 
-		#region method GetHeaderAndFields
-
-		private ColumnInfo[] GetHeaderAndFields(ReportType type) {
-			DataTable dt = DB.ExecuteReader("RptScheduler_GetHeaderAndFields", new QueryParameter("@Type", type.ToString()));
-
-			string sHeader = null;
-			string sFields = null;
-
-			foreach (DataRow row in dt.Rows) {
-				sHeader = row[0].ToString();
-				sFields = row[1].ToString();
-			} // for each
-
-			return Report.ParseHeaderAndFields(sHeader, sFields);
-		} // GetHeadersAndFields
-
-		#endregion method GetHeaderAndFields
-		
 		#region report generators
-
-		#region Earned Interest
-
-		#region class EarnedInterestRow
-
-		private class EarnedInterestRow {
-			#region public
-
-			#region fields
-
-			public DateTime? IssueDate;
-			public int ClientID;
-			public int LoanID;
-			public string ClientName;
-			public string ClientEmail;
-			public decimal EarnedInterest;
-			public decimal LoanAmount;
-			public decimal TotalRepaid;
-			public decimal PrincipalRepaid;
-			public string CustomerStatus;
-			#endregion fields
-
-			#region method Compare
-
-			public static int Compare(EarnedInterestRow a, EarnedInterestRow b) {
-				int c = DateTime.Compare((DateTime)a.IssueDate, (DateTime)b.IssueDate);
-
-				if (c != 0)
-					return c;
-
-				return string.CompareOrdinal(a.ClientName, b.ClientName);
-			} // Compare
-
-			#endregion method Compare
-
-			#region constructor
-
-			public EarnedInterestRow(bool bIsTotal) {
-				IsTotal = bIsTotal;
-				IssueDate = null;
-				ClientID = 0;
-				LoanID = 0;
-				ClientName = null;
-				ClientEmail = null;
-				EarnedInterest = 0;
-				LoanAmount = 0;
-				TotalRepaid = 0;
-				PrincipalRepaid = 0;
-				CustomerStatus = "";
-				ClientCount = new SortedDictionary<int, int>();
-				LoanCount = new SortedDictionary<int, int>();
-			} // constructor
-
-			#endregion constructor
-
-			#region method Update
-
-			public void Update(EarnedInterestRow v) {
-				if (ClientCount.ContainsKey(v.ClientID))
-					ClientCount[v.ClientID]++;
-				else
-					ClientCount[v.ClientID] = 1;
-
-				if (LoanCount.ContainsKey(v.LoanID))
-					LoanCount[v.LoanID]++;
-				else
-					LoanCount[v.LoanID] = 1;
-
-				EarnedInterest  += v.EarnedInterest;
-				LoanAmount      += v.LoanAmount;
-				TotalRepaid     += v.TotalRepaid;
-				PrincipalRepaid += v.PrincipalRepaid;
-			} // Update
-
-			#endregion method Update
-
-			#region method ToRow
-
-			public void ToRow(DataTable tbl) {
-				if (IsTotal) {
-					ClientID = ClientCount.Count;
-					LoanID = LoanCount.Count;
-				} // if
-
-				tbl.Rows.Add(
-					IssueDate, ClientID, LoanID, ClientName, ClientEmail,
-					EarnedInterest, LoanAmount, TotalRepaid, PrincipalRepaid,CustomerStatus,
-					IsTotal ? "total" : ""
-				);
-			} // ToRow
-
-			#endregion method ToRow
-
-			#region method ToTable
-
-			public DataTable ToTable() {
-				var oOutput = new DataTable();
-
-				oOutput.Columns.Add("IssueDate", typeof(DateTime));
-				oOutput.Columns.Add("ClientID", typeof(int));
-				oOutput.Columns.Add("LoanID", typeof(int));
-				oOutput.Columns.Add("ClientName", typeof(string));
-				oOutput.Columns.Add("ClientEmail", typeof(string));
-				oOutput.Columns.Add("EarnedInterest", typeof(double));
-				oOutput.Columns.Add("LoanAmount", typeof(double));
-				oOutput.Columns.Add("TotalRepaid", typeof(double));
-				oOutput.Columns.Add("PrincipalRepaid", typeof(double));
-				oOutput.Columns.Add("CustomerStatus", typeof(string));
-				oOutput.Columns.Add("RowLevel", typeof(string));
-
-				ToRow(oOutput);
-
-				return oOutput;
-			} // ToTable
-
-			#endregion method ToTable
-
-			#endregion public
-
-			#region private
-
-			private SortedDictionary<int, int> ClientCount;
-			private SortedDictionary<int, int> LoanCount;
-			private bool IsTotal;
-
-			#endregion private
-		} // class EarnedInterestRow
-
-		#endregion class EarnedInterestRow
-
-		#region method CreateEarnedInterestReport
-
-		private KeyValuePair<ReportQuery, DataTable> CreateEarnedInterestReport(Report report, DateTime today, DateTime tomorrow) {
-			var ea = new EarnedInterest(DB, EarnedInterest.WorkingMode.ForPeriod, today, tomorrow, this);
-			SortedDictionary<int, decimal> earned = ea.Run();
-
-			var rpt = new ReportQuery(report) {
-				DateStart = today,
-				DateEnd = tomorrow
-			};
-
-			DataTable oData = rpt.Execute(DB);
-
-			var oTotal = new EarnedInterestRow(true);
-
-			var oRows = new List<EarnedInterestRow>();
-
-			foreach (DataRow row in oData.Rows) {
-				int nLoanID = Convert.ToInt32(row["LoanID"]);
-
-				if (!earned.ContainsKey(nLoanID))
-					continue;
-
-				var oNewRow = new EarnedInterestRow(false) {
-					IssueDate = Convert.ToDateTime(row["IssueDate"]),
-					ClientID = Convert.ToInt32(row["ClientID"]),
-					LoanID = nLoanID,
-					ClientName = row["ClientName"].ToString(),
-					ClientEmail = row["ClientEmail"].ToString(),
-					EarnedInterest = earned[nLoanID],
-					LoanAmount = f(row, "LoanAmount"),
-					TotalRepaid = f(row, "TotalRepaid"),
-					PrincipalRepaid = f(row, "PrincipalRepaid"),
-					CustomerStatus = row["CustomerStatus"].ToString(),
-				};
-
-				oTotal.Update(oNewRow);
-				oRows.Add(oNewRow);
-			} // for each earned interest
-
-			oRows.Sort(EarnedInterestRow.Compare);
-
-			DataTable oOutput = oTotal.ToTable();
-
-			oRows.ForEach(r => r.ToRow(oOutput));
-
-			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
-		} // CreateEarnedInterestReport
-
-		#endregion method CreateEarnedInterestReport
-
-		#endregion Earned Interest
 
 		#region LoanIntegrity
 
 		#region class LoanIntegrityRow
 
 		private class LoanIntegrityRow {
+			[UsedImplicitly]
 			public int LoanId { get; set; }
+
+			[UsedImplicitly]
 			public decimal Diff { get; set; }
 
 			public static int Compare(LoanIntegrityRow a, LoanIntegrityRow b) {
@@ -699,11 +478,11 @@ namespace Reports {
 			#region constructor
 
 			public LoansIssuedRow(DataRow row) {
-				m_bIsTotal = row == null;
-
 				m_oData = new SortedDictionary<string, dynamic>();
 
-				if (m_bIsTotal) {
+				if (row == null) {
+					m_bIsTotal = true;
+
 					m_oClients = new SortedDictionary<int, int>();
 
 					foreach (KeyValuePair<string, dynamic> pair in ms_oFieldNames)
@@ -713,6 +492,8 @@ namespace Reports {
 					m_oData[FldRowLevel] = "total";
 				}
 				else {
+					m_bIsTotal = false;
+
 					foreach (KeyValuePair<string, dynamic> pair in ms_oFieldNames)
 						m_oData[pair.Key] = row[pair.Key];
 				} // if
@@ -962,7 +743,7 @@ namespace Reports {
 
 			DataTable tbl = rpt.Execute(DB);
 
-			var ea = new EarnedInterest(DB, EarnedInterest.WorkingMode.ByIssuedLoans, today, tomorrow, this);
+			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.ByIssuedLoans, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
 			var oRows = new List<LoansIssuedRow>();
@@ -1129,18 +910,19 @@ namespace Reports {
 
 			#region fields
 
-			public DateTime IssueDate;
-			public int ClientID;
-			public int LoanID;
-			public string ClientName;
-			public string ClientEmail;
-			public decimal IssuedAmount;
-			public decimal SetupFee;
-			public string LoanStatus;
-			public decimal EarnedInterest;
-			public decimal EarnedFees;
-			public decimal CashPaid;
-			public string CustomerStatus;
+			[UsedImplicitly] public DateTime IssueDate;
+			[UsedImplicitly] public int ClientID;
+			[UsedImplicitly] public int LoanID;
+			[UsedImplicitly] public string ClientName;
+			[UsedImplicitly] public string ClientEmail;
+			[UsedImplicitly] public decimal IssuedAmount;
+			[UsedImplicitly] public decimal SetupFee;
+			[UsedImplicitly] public string LoanStatus;
+			[UsedImplicitly] public decimal EarnedInterest;
+			[UsedImplicitly] public decimal EarnedFees;
+			[UsedImplicitly] public decimal CashPaid;
+			[UsedImplicitly] public string CustomerStatus;
+
 			#endregion fields
 
 			#region constructor
@@ -1270,7 +1052,7 @@ namespace Reports {
 		#region method CreateAccountingLoanBalanceReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow) {
-			var ea = new EarnedInterest(DB, EarnedInterest.WorkingMode.AccountingLoanBalance, today, tomorrow, this);
+			var ea = new EarnedInterest.EarnedInterest(DB, EarnedInterest.EarnedInterest.WorkingMode.AccountingLoanBalance, today, tomorrow, this);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
 			var rpt = new ReportQuery(report) {
@@ -1345,17 +1127,17 @@ namespace Reports {
 		#region method NumStr
 
 		private static string NumStr(object oNumber, string sFormat) {
-			if (oNumber is sbyte  ) return ((sbyte  )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is byte   ) return ((byte   )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is short  ) return ((short  )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is ushort ) return ((ushort )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is int    ) return ((int    )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is uint   ) return ((uint   )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is long   ) return ((long   )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is ulong  ) return ((ulong  )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is float  ) return ((float  )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is double ) return ((double )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is decimal) return ((decimal)oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is sbyte  ) return ((sbyte  )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is byte   ) return ((byte   )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is short  ) return ((short  )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is ushort ) return ((ushort )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is int    ) return ((int    )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is uint   ) return ((uint   )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is long   ) return ((long   )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is ulong  ) return ((ulong  )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is float  ) return ((float  )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is double ) return ((double )oNumber).ToString(sFormat, ms_oFormatInfo);
+			if (oNumber is decimal) return ((decimal)oNumber).ToString(sFormat, ms_oFormatInfo);
 
 			throw new Exception(string.Format("Unsupported type: {0}", oNumber.GetType()));
 		} // NumStr
@@ -1365,9 +1147,8 @@ namespace Reports {
 		#region method AddSheetToExcel
 
 		private static ExcelPackage AddSheetToExcel(DataTable dt, string title, string sheetName = "", string someText = "", ExcelPackage wb = null) {
-			if (wb == null) { // first initialization, if we will use it multimple times.
+			if (wb == null) // first initialization, if we will use it multiple times.
 				wb = new ExcelPackage();
-			} // if
 
 			if (string.IsNullOrEmpty(sheetName))
 				sheetName = "Report"; // default sheetName
@@ -1431,15 +1212,7 @@ namespace Reports {
 
 		#endregion method AddSheetToExcel
 
-		#region method f - Extract decimal from data row
-
-		private static decimal f(DataRow row, string sFieldName) {
-			return Convert.ToDecimal(row[sFieldName]);
-		} // f
-
-		#endregion method f - Extract decimal from data row
-
-		private static readonly CultureInfo FormatInfo = new CultureInfo("en-GB");
+		private static readonly CultureInfo ms_oFormatInfo = new CultureInfo("en-GB");
 
 		#endregion private static
 

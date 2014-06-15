@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace Reports {
-	#region class TransactionData
+﻿namespace Reports.EarnedInterest {
+	using System;
+	using System.Globalization;
 
 	class TransactionData {
-		#region public
-
 		public readonly DateTime Date;
 		public decimal Repayment;
 
@@ -21,13 +18,11 @@ namespace Reports {
 		#region method ToStirng
 
 		public override string ToString() {
-			return string.Format("on {0}: {1}", Date, Repayment);
+			return string.Format("on {0}: {1}", Date.ToString("MMM dd yyyy", ms_oCulture), Repayment.ToString("C", ms_oCulture));
 		} // ToString
 
 		#endregion method ToStirng
 
-		#endregion public
+		private static readonly CultureInfo ms_oCulture = new CultureInfo("en-GB", false);
 	} // class TransactionData
-
-	#endregion class TransactionData
 } // namespace Reports

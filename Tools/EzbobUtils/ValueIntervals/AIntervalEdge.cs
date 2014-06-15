@@ -1,6 +1,8 @@
 ﻿using System;
 
 namespace Ezbob.ValueIntervals {
+	using System.Globalization;
+
 	#region class AIntervalEdge
 
 	public abstract class AIntervalEdge<TFinite> : IComparable<AIntervalEdge<TFinite>>, IOrdinal<AIntervalEdge<TFinite>> where TFinite: IComparable<TFinite> {
@@ -184,6 +186,30 @@ namespace Ezbob.ValueIntervals {
 
 		#endregion method CompareTo
 
+		#region method ToString
+
+		public override string ToString() {
+			return ToString(null, CultureInfo.InvariantCulture);
+		} // ToString
+
+		public virtual string ToString(string sFormat, CultureInfo ci) {
+			switch (Type) {
+			case EdgeType.NegativeInfinity:
+				return InfinityToString(false, ci);
+
+			case EdgeType.Finite:
+				return ValueToString(sFormat, ci);
+
+			case EdgeType.PositiveInfinity:
+				return InfinityToString(true, ci);
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // ToString
+
+		#endregion method ToString
+
 		public abstract AIntervalEdge<TFinite> Previous();
 		public abstract AIntervalEdge<TFinite> Next();
 
@@ -203,6 +229,26 @@ namespace Ezbob.ValueIntervals {
 		protected abstract bool IsValueEqualTo(AIntervalEdge<TFinite> other);
 
 		protected abstract bool IsValueLessThan(AIntervalEdge<TFinite> other);
+
+		#region method InfinityToString
+
+		protected virtual string InfinityToString(bool bPositive, CultureInfo oCultureInfo) {
+			return (bPositive ? "+" : "-") + "inf";
+		} // InfinityToString
+
+		#endregion method InfinityToString
+
+		#region method ValueToString
+
+		protected virtual string ValueToString() {
+			return ValueToString(null, CultureInfo.InvariantCulture);
+		} // ValueToString
+
+		protected virtual string ValueToString(string sFormat, CultureInfo ci) {
+			return Value.ToString();
+		} // ValueToString
+
+		#endregion method ValueToString
 
 		#endregion protected
 	} // class AIntervalEdge

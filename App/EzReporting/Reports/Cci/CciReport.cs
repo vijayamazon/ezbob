@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace Reports {
-	#region class CciReport
+﻿namespace Reports.Cci {
+	using System;
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	public class CciReport : SafeLog {
 		#region public
@@ -20,7 +18,7 @@ namespace Reports {
 		#region method Run
 
 		public List<CciReportItem> Run() {
-			var ei = new EarnedInterest(m_oDB, EarnedInterest.WorkingMode.CciCustomers, DateTime.UtcNow, DateTime.UtcNow, this);
+			var ei = new EarnedInterest.EarnedInterest(m_oDB, EarnedInterest.EarnedInterest.WorkingMode.CciCustomers, DateTime.UtcNow, DateTime.UtcNow, this);
 
 			SortedDictionary<int, decimal> oEarnedInterestList = ei.Run();
 			
@@ -45,6 +43,4 @@ namespace Reports {
 
 		#endregion private
 	} // class CciReport
-
-	#endregion class CciReport
-} // namespace Reports
+} // namespace

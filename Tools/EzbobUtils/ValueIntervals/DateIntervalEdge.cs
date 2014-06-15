@@ -1,8 +1,6 @@
-﻿using System;
-using System.Globalization;
-
-namespace Ezbob.ValueIntervals {
-	#region class DateIntervalEdge
+﻿namespace Ezbob.ValueIntervals {
+	using System;
+	using System.Globalization;
 
 	public class DateIntervalEdge : AIntervalEdge<DateTime> {
 		#region public
@@ -21,30 +19,6 @@ namespace Ezbob.ValueIntervals {
 		} // constructor
 
 		#endregion constructor
-
-		#region method ToString
-
-		public override string ToString() {
-			return ToString("MMM dd yyyy", CultureInfo.InvariantCulture);
-		} // ToString
-
-		public virtual string ToString(string sFormat, CultureInfo ci) {
-			switch (Type) {
-			case EdgeType.NegativeInfinity:
-				return "   never   ";
-
-			case EdgeType.Finite:
-				return Value.ToString(sFormat, ci);
-
-			case EdgeType.PositiveInfinity:
-				return "  forever  ";
-
-			default:
-				throw new ArgumentOutOfRangeException();
-			} // switch
-		} // ToString
-
-		#endregion method ToString
 
 		#region method Previous
 
@@ -88,8 +62,26 @@ namespace Ezbob.ValueIntervals {
 
 		#endregion method IsValueLessThan
 
+		#region method ValueToString
+
+		protected override string ValueToString() {
+			return ValueToString(null, null);
+		} // ValueToString
+
+		protected override string ValueToString(string sFormat, CultureInfo ci) {
+			return Value.ToString(sFormat ?? "MMM dd yyyy", ci ?? CultureInfo.InvariantCulture);
+		} // ValueToString
+
+		#endregion method ValueToString
+
+		#region method InfinityToString
+
+		protected override string InfinityToString(bool bPositive, CultureInfo oCultureInfo) {
+			return bPositive ? "  forever  " : "   never   ";
+		} // InfinityToString
+
+		#endregion method InfinityToString
+
 		#endregion protected
 	} // class DateIntervalEdge
-
-	#endregion class DateIntervalEdge
-} // namespace Ezbob.ValueIntervals
+} // namespace
