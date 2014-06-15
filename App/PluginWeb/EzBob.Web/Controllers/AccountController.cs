@@ -3,6 +3,7 @@ namespace EzBob.Web.Controllers {
 
 	using System;
 	using System.Collections.Generic;
+	using System.Configuration;
 	using System.Globalization;
 	using System.Linq;
 	using System.Net;
@@ -65,12 +66,22 @@ namespace EzBob.Web.Controllers {
 		#region action AdminLogOn
 
 		public ActionResult AdminLogOn(string returnUrl) {
+			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"]))
+			{
+				return RedirectToAction("LogOn", "Account");
+			}
+
 			ViewData["returnUrl"] = returnUrl;
 			return View(new LogOnModel { ReturnUrl = returnUrl });
 		} // AdminLogOn
 
 		[HttpPost]
 		public ActionResult AdminLogOn(LogOnModel model) {
+			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"]))
+			{
+				return RedirectToAction("LogOn", "Account");
+			}
+
 			if (ModelState.IsValid) {
 				try {
 					if (m_oBrokerHelper.IsBroker(model.UserName)) {
