@@ -100,7 +100,7 @@
 		private void InternalLastNameRawPostcodeCheck(List<FraudDetection> fraudDetections, Customer customer, IEnumerable<Customer> customers)
 		{
 			var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
-			var postcodes = customerAddresses.Select(a => a.Rawpostcode).Where(rpc => rpc != null).ToList();
+			var postcodes = customerAddresses.Select(a => a.Rawpostcode).Where(rpc => !string.IsNullOrEmpty(rpc)).ToList();
 
 			fraudDetections.AddRange(
 				from ca in customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Rawpostcode))
@@ -252,7 +252,7 @@
 		private void InternalLastNamePostcodeCheck(List<FraudDetection> fraudDetections, Customer customer, IEnumerable<Customer> customers)
 		{
 			var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
-			var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
+			var postcodes = customerAddresses.Select(a => a.Postcode).Where(pc => !string.IsNullOrEmpty(pc)).ToList();
 
 			fraudDetections.AddRange(
 				from ca in customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Postcode))
