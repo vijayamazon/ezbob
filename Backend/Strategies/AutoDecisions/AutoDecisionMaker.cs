@@ -56,9 +56,15 @@
 				return autoDecisionResponse;
 			}
 
-			if (new Rejection(customerId, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection, yodlee1YForRejection,
-				yodlee3MForRejection, marketplaceSeniorityDays, enableAutomaticRejection, maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
-				customerStatusIsWarning, isBrokerCustomer, isLimitedCompany,companySeniorityDays,isOffline, oDb, oLog).MakeDecision(autoDecisionResponse))
+			var rejection = new Rejection(customerId, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection,
+			                              yodlee1YForRejection,
+			                              yodlee3MForRejection, marketplaceSeniorityDays, enableAutomaticRejection,
+			                              maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
+			                              customerStatusIsWarning, isBrokerCustomer, isLimitedCompany, companySeniorityDays,
+			                              isOffline, oDb, oLog);
+			var isRejected = rejection.MakeDecision(autoDecisionResponse);
+			oLog.Debug(rejection.ToString());
+			if (isRejected)
 			{
 				return autoDecisionResponse;
 			}

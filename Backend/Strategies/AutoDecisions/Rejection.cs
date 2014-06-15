@@ -205,6 +205,8 @@
 			_payPalNumberOfStores = sr["PayPal_NumberOfStores"];
 			_payPalTotalSumOfOrders3M = sr["PayPal_TotalSumOfOrders3M"];
 			_payPalTotalSumOfOrders1Y = sr["PayPal_TotalSumOfOrders1Y"];
+
+
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -340,5 +342,73 @@
 				};
 		}
 
+		public override string ToString()
+		{
+			return string.Format(
+				@"Rejection input parameters for customer id {19}: \n 
+					_autoRejectionExceptionAnualTurnover : {0} \n
+					_rejectDefaultsCreditScore : {1} \n
+					_rejectMinimalSeniority : {2} \n 
+					_lowCreditScore : {3} \n 
+					_rejectDefaultsAccountsNum : {4} \n
+					_autoRejectionExceptionCreditScore : {5} \n
+					_errorMPsNum : {6} \n 
+					_loanOfferApprovalNum : {7} \n 
+					_numOfDefaultAccounts : {8} _numOfDefaultAccountsForCompany : {9} \n
+					_totalSumOfOrders1YTotalForRejection : {10} _totalSumOfOrders3MTotalForRejection : {11} \n 
+					_marketplaceSeniorityDays : {14} \n 
+					_enableAutomaticRejection : {15} \n 
+					_lowTotalAnnualTurnover : {16} _lowTotalThreeMonthTurnover : {17} \n 
+					_maxExperianConsumerScore : {18} _maxCompanyScore : {20} \n
+					_customerStatusIsEnabled : {21} _customerStatusIsWarning : {22} \n
+					_isBrokerCustomer : {23} \n
+					_isLimitedCompany : {24} \n
+					_companySeniorityDays : {25} \n
+					_isOffline : {26} \n
+					_hasYodlee: {36} _yodlee1YForRejection : {12} _yodlee3MForRejection : {13} \n
+					_hasHmrc: {37} _hmrcAnnualRevenues : {27} _hmrcQuarterRevenues : {28} \n
+					_lowOfflineQuarterRevenue : {29} \n
+					_lowOfflineAnnualRevenue : {30} \n
+					_numOfLateAccounts : {31} \n
+					_rejectNumOfLateAccounts : {32} \n
+					_payPalNumberOfStores : {33} _payPalTotalSumOfOrders3M : {34} _payPalTotalSumOfOrders1Y : {35} \n",
+				_autoRejectionExceptionAnualTurnover,
+				_rejectDefaultsCreditScore,
+				_rejectMinimalSeniority,
+				_lowCreditScore,
+				_rejectDefaultsAccountsNum,
+				_autoRejectionExceptionCreditScore,
+				_errorMPsNum,
+				_loanOfferApprovalNum,
+				_numOfDefaultAccounts,
+				_numOfDefaultAccountsForCompany,
+				_totalSumOfOrders1YTotalForRejection,
+				_totalSumOfOrders3MTotalForRejection,
+				_yodlee1YForRejection,
+				_yodlee3MForRejection,
+				_marketplaceSeniorityDays,
+				_enableAutomaticRejection,
+				_lowTotalAnnualTurnover,
+				_lowTotalThreeMonthTurnover,
+				_maxExperianConsumerScore,
+				_customerId,
+				_maxCompanyScore,
+				_customerStatusIsEnabled,
+				_customerStatusIsWarning,
+				_isBrokerCustomer,
+				_isLimitedCompany,
+				_companySeniorityDays,
+				_isOffline,
+				_hmrcAnnualRevenues,
+				_hmrcQuarterRevenues,
+				_lowOfflineQuarterRevenue,
+				_lowOfflineAnnualRevenue,
+				_numOfLateAccounts,
+				_rejectNumOfLateAccounts,
+				_payPalNumberOfStores,
+				_payPalTotalSumOfOrders3M,
+				_payPalTotalSumOfOrders1Y,
+				_hasYodlee, _hasHmrc);
+		} 
 	}
 }
