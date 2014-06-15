@@ -1,17 +1,20 @@
-﻿namespace Reports {
+﻿// ReSharper disable InconsistentNaming
+namespace Reports {
 	public enum ReportType {
+		RPT_ACCOUNTING_LOAN_BALANCE,
+		RPT_CCI,
+		RPT_EARNED_INTEREST,
+		RPT_FINANCIAL_STATS,
 		RPT_GENERIC,
+		RPT_IN_WIZARD,
+		RPT_LOAN_INTEGRITY,
+		RPT_LOAN_STATS,
+		RPT_LOANS_GIVEN,
 		RPT_NEW_CLIENT,
 		RPT_PLANNED_PAYTMENT,
-		RPT_IN_WIZARD,
-		RPT_EARNED_INTEREST,
-		RPT_LOAN_INTEGRITY,
-		RPT_LOANS_GIVEN,
-		RPT_LOAN_STATS,
-		RPT_CCI,
-		RPT_UI_REPORT,
+		RPT_TRAFFIC_REPORT,
 		RPT_UI_EXT_REPORT,
-		RPT_ACCOUNTING_LOAN_BALANCE,
-		RPT_TRAFFIC_REPORT
+		RPT_UI_REPORT,
 	} // enum ReportType
 } // namespace Reports
+// ReSharper restore InconsistentNaming

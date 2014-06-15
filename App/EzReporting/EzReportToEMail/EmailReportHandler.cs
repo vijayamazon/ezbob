@@ -64,7 +64,17 @@ namespace EzReportToEMail
 										BuildEarnedInterestReport(report, dToday, dTomorrow),
 										BuildEarnedInterestXls(report, dToday, dTomorrow),
 										report.ToEmail
-										);
+									);
+									break;
+
+								case ReportType.RPT_FINANCIAL_STATS:
+									sender.Dispatch(
+										report.Title,
+										dToday,
+										BuildFinancialStatsReport(report, dToday, dTomorrow),
+										BuildFinancialStatsXls(report, dToday, dTomorrow),
+										report.ToEmail
+									);
 									break;
 
 								case ReportType.RPT_LOANS_GIVEN:

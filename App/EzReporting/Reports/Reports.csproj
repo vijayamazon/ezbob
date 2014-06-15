@@ -78,6 +78,7 @@
     <Compile Include="attributes.cs" />
     <Compile Include="BaseReportHandler\BaseReportHandler.cs" />
     <Compile Include="BaseReportHandler\BaseReportHandler_EarnedInterest.cs" />
+    <Compile Include="BaseReportHandler\BaseReportHandler_FinancialStats.cs" />
     <Compile Include="BaseReportSender.cs" />
     <Compile Include="Cci\CciReport.cs" />
     <Compile Include="Cci\CciReportItem.cs" />

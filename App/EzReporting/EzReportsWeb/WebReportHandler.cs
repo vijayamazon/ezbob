@@ -45,6 +45,9 @@ namespace EzReportsWeb
 				case ReportType.RPT_EARNED_INTEREST:
 					return BuildEarnedInterestReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
+				case ReportType.RPT_FINANCIAL_STATS:
+					return BuildFinancialStatsReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
+
 				case ReportType.RPT_LOAN_INTEGRITY:
 					return BuildLoanIntegrityReport(report, oColumnTypes);
 
@@ -97,6 +100,9 @@ namespace EzReportsWeb
 
 				case ReportType.RPT_EARNED_INTEREST:
 					return BuildEarnedInterestXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+				case ReportType.RPT_FINANCIAL_STATS:
+					return BuildFinancialStatsXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 				case ReportType.RPT_LOANS_GIVEN:
 					return BuildLoansIssuedXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);

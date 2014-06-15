@@ -12,13 +12,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Barrymore.dll">
-      <publishTime>04/27/2014 16:17:45</publishTime>
+      <publishTime>06/15/2014 18:30:14</publishTime>
     </File>
     <File Include="bin/DbConnection.dll">
-      <publishTime>04/27/2014 16:17:46</publishTime>
+      <publishTime>06/15/2014 18:30:14</publishTime>
     </File>
     <File Include="bin/DbConstants.dll">
-      <publishTime>04/27/2014 16:17:45</publishTime>
+      <publishTime>06/15/2014 18:30:12</publishTime>
     </File>
     <File Include="bin/DropNet.dll">
       <publishTime>11/19/2013 22:08:37</publishTime>
@@ -30,34 +30,37 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/19/2013 22:10:52</publishTime>
     </File>
     <File Include="bin/EzReportsWeb.dll">
-      <publishTime>04/27/2014 16:17:48</publishTime>
+      <publishTime>06/15/2014 18:30:16</publishTime>
     </File>
     <File Include="bin/log4net.dll">
       <publishTime>11/19/2013 22:10:51</publishTime>
     </File>
     <File Include="bin/Logger.dll">
-      <publishTime>04/06/2014 14:16:55</publishTime>
+      <publishTime>06/15/2014 18:30:13</publishTime>
     </File>
     <File Include="bin/Mailer.dll">
-      <publishTime>04/13/2014 15:47:46</publishTime>
+      <publishTime>06/15/2014 18:30:13</publishTime>
+    </File>
+    <File Include="bin/MiniResharper.dll">
+      <publishTime>06/15/2014 18:30:12</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>11/19/2013 22:10:46</publishTime>
+      <publishTime>05/18/2014 17:26:30</publishTime>
     </File>
     <File Include="bin/Report.css">
       <publishTime>12/19/2013 12:53:13</publishTime>
     </File>
     <File Include="bin/ReportAuthenticationLib.dll">
-      <publishTime>04/27/2014 16:17:46</publishTime>
+      <publishTime>06/15/2014 18:30:15</publishTime>
     </File>
     <File Include="bin/Reports.dll">
-      <publishTime>04/27/2014 16:17:47</publishTime>
+      <publishTime>06/15/2014 18:30:15</publishTime>
     </File>
     <File Include="bin/RestSharp.dll">
       <publishTime>11/19/2013 22:08:39</publishTime>
     </File>
     <File Include="bin/ValueIntervals.dll">
-      <publishTime>04/27/2014 16:17:45</publishTime>
+      <publishTime>06/15/2014 18:30:12</publishTime>
     </File>
     <File Include="css/admin.css">
       <publishTime>01/09/2014 18:31:14</publishTime>
@@ -207,7 +210,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/29/2014 13:45:24</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/27/2014 16:17:50</publishTime>
+      <publishTime>06/15/2014 18:39:09</publishTime>
     </File>
   </ItemGroup>
 </Project>
