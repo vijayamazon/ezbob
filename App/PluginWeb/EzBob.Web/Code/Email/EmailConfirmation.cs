@@ -25,7 +25,7 @@ namespace EzBob.Web.Code.Email
             _requests.Save(request);
             var guid = request.Id.ToString();
 
-            var address = string.Format("https://{0}/confirm/{1}", "app.ezbob.com", guid);
+            var address = string.Format("<a href='{0}/confirm/{1}'>click here</a>", ConfigManager.CurrentValues.Instance.CustomerSite.Value, guid);
 
             return address;
         }
