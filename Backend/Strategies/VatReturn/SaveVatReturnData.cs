@@ -240,7 +240,7 @@
 
 				HistoryItems.Add(new HistoryItem {
 					DeleteRecordInternalID = oDeletedItem.InternalID,
-					ReasonRecordID = oReasonItem.RecordID,
+					ReasonRecordInternalID = oReasonItem.InternalID,
 					ReasonID = (int)nReason,
 				});
 			} // AddHistoryItem
@@ -333,6 +333,8 @@
 					new Tuple<string, IEnumerable>("records", VatReturnRecords),
 					new Tuple<string, IEnumerable>("entries", VatReturnEntries),
 					new Tuple<string, IEnumerable>("RTI months", RtiTaxMonthRawData),
+					new Tuple<string, IEnumerable>("history items", HistoryItems),
+					new Tuple<string, IEnumerable>("old deleted items", OldDeletedItems),
 				};
 
 				foreach (var o in sd) {
@@ -402,10 +404,19 @@
 				public Guid DeleteRecordInternalID { get; set; }
 
 				[UsedImplicitly]
-				public int? ReasonRecordID { get; set; }
+				public Guid? ReasonRecordInternalID { get; set; }
 
 				[UsedImplicitly]
 				public int ReasonID { get; set; }
+
+				public override string ToString() {
+					return string.Format(
+						"For reason {0} deleted record {1} because of {2}.",
+						ReasonID,
+						DeleteRecordInternalID,
+						ReasonRecordInternalID.HasValue ? "record " + ReasonRecordInternalID.Value.ToString() : "no record"
+					);
+				} // ToString
 			} // HistoryItem
 
 			#endregion class HistoryItem

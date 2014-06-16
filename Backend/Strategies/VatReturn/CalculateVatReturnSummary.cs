@@ -552,7 +552,7 @@
 
 				var slice = new BusinessDataEntry[5];
 
-				Array.Copy(Quarters, Quarters.Length - 6, slice, 0, 5);
+				Array.Copy(Quarters, Quarters.Length - 5, slice, 0, 5);
 
 				return slice;
 			} // QuartersToSave

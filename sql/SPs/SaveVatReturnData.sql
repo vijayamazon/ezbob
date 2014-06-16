@@ -1,11 +1,22 @@
-IF OBJECT_ID('SaveVatReturnData') IS NULL
-	EXECUTE('CREATE PROCEDURE SaveVatReturnData AS SELECT 1')
-GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE SaveVatReturnData
+IF OBJECT_ID('SaveVatReturnData') IS NOT NULL
+	DROP PROCEDURE SaveVatReturnData
+GO
+
+IF TYPE_ID('VatReturnHistoryList') IS NOT NULL
+	DROP TYPE VatReturnHistoryList
+GO
+
+CREATE TYPE VatReturnHistoryList AS TABLE (
+	DeleteRecordInternalID UNIQUEIDENTIFIER,
+	ReasonRecordInternalID UNIQUEIDENTIFIER,
+	ReasonID INT
+)
+GO
+
+CREATE PROCEDURE SaveVatReturnData
 @CustomerMarketplaceID INT,
 @HistoryRecordID INT,
 @SourceID INT,
@@ -370,7 +381,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	IF @DebugMode = 1
-		SELECT 'RTI tax mont entries count is ' + CONVERT(NVARCHAR, @RtiCount) + ', record ID is ' + CONVERT(NVARCHAR, @RtiID) AS DebugMessage
+		SELECT 'RTI tax month entries count is ' + CONVERT(NVARCHAR, @RtiCount) + ', record ID is ' + CONVERT(NVARCHAR, @RtiID) AS DebugMessage
 
 	------------------------------------------------------------------------------
 	--
@@ -386,14 +397,16 @@ BEGIN
 		ReasonID,
 		DeletedTime
 	) SELECT
+		d.Id,
 		r.Id,
-		h.ReasonRecordID,
 		h.ReasonID,
 		@Now
 	FROM
 		@HistoryItems h
-		INNER JOIN MP_VatReturnRecords r
-			ON h.DeleteRecordInternalID = r.InternalID
+		INNER JOIN MP_VatReturnRecords d
+			ON h.DeleteRecordInternalID = d.InternalID
+		LEFT JOIN MP_VatReturnRecords r
+			ON h.ReasonRecordInternalID = r.InternalID
 
 	------------------------------------------------------------------------------
 	--
