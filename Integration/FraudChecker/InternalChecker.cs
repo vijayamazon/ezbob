@@ -319,7 +319,7 @@
 		{
 			//Address (any of home, business, directors, previous addresses)
 			var customerAddresses = customer.AddressInfo.AllAddresses.Where(
-					a => a.County != null || a.Director != null || 
+					a => a.County != null || a.Director != null ||
 						 a.Line1 != null || a.Line2 != null || a.Line3 != null ||
 						 a.Postcode != null || a.Town != null);
 			var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
@@ -345,7 +345,7 @@
 																	 Customer customer,
 																	 bool isSkipLast = false)
 		{
-			
+
 			var directorPortion = customers.Where(c => c.Company != null).SelectMany(c => c.Company.Directors).ToList();
 			// First + Middle + Last
 			fraudDetections.AddRange(
@@ -468,10 +468,24 @@
 				return;
 			}
 
-			fraudDetections.AddRange(
-				from c in customerPortion
-				where c.Session.Select(s => s.Ip).ToList().Contains(customerSession.Ip)
-				select Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, string.Format("{0}", customerSession.Ip)));
+			if (customer.FilledByBroker)
+			{
+				// filled by broker ip like of other that not this brokers client, or ip like non broker client
+				fraudDetections.AddRange(
+					customerPortion
+						.Where(c => (c.FilledByBroker && c.Broker != customer.Broker && c.Session.Any(x => x.Ip == customerSession.Ip))
+							|| (!c.FilledByBroker && c.Session.Any(s => s.Ip == customerSession.Ip)))
+						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null,
+															string.Format("{0}", customerSession.Ip))));
+			}
+			else
+			{
+				fraudDetections.AddRange(
+					from c in customerPortion
+					where c.Session.Select(s => s.Ip).ToList().Contains(customerSession.Ip)
+					select
+						Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, string.Format("{0}", customerSession.Ip)));
+			}
 		}
 	}
 }
