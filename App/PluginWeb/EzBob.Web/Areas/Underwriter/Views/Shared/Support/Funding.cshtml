@@ -1,5 +1,5 @@
 ﻿<script type="text/template" id="funding-template">
-    <div id="funding">
+    <div id="funding" class="funding-width">
         <table class="table squeezed">
             <thead class="box">
                 <tr class="box-title">
@@ -8,8 +8,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Available Funds</td>
-                    <td><%- model.get('AvailableFunds') %></td>
+                    <td id="available-funds-td-header">Available Funds</td>
+                    <td id="available-funds-td-value"><%- model.get('AvailableFunds') %></td>
                 </tr>
                 <tr>
                     <td>Open Offers</td>

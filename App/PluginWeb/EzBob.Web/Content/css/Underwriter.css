@@ -1368,11 +1368,19 @@ td a.edit-loan {
 }
 
 .funding-main-menu-item {
-    width:47px;
+    width:62px;
     line-height:18px;
     white-space: normal;
 }
 
 .crm-tab i{
     color: #58B8FC;
+}
+
+.funding-width {
+    width: 41.55%;
+}
+
+.available-funds-alert-text-color {
+    color: red;
 }

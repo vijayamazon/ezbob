@@ -70,12 +70,23 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
             @$el.find('#cancelManuallyAddedFundsBtn').hide()
 
         li = $(document.getElementById("liFunding"))
+        tdHeader = $(document.getElementById("available-funds-td-header"))
+        tdValue = $(document.getElementById("available-funds-td-value"))
+
         if (@requiredFunds > @model.get('AvailableFunds'))
             if !li.hasClass('available-funds-alert')
                 li.addClass('available-funds-alert')
+            if !tdHeader.hasClass('available-funds-alert-text-color')
+                tdHeader.addClass('available-funds-alert-text-color')
+            if !tdValue.hasClass('available-funds-alert-text-color')
+                tdValue.addClass('available-funds-alert-text-color')
         else
             if li.hasClass('available-funds-alert')
                 li.removeClass('available-funds-alert')
+            if tdHeader.hasClass('available-funds-alert-text-color')
+                tdHeader.removeClass('available-funds-alert-text-color')
+            if tdValue.hasClass('available-funds-alert-text-color')
+                tdValue.removeClass('available-funds-alert-text-color')
 
     hide: ->
         @$el.hide()

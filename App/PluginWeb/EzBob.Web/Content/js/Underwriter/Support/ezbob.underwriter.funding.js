@@ -91,20 +91,34 @@
     };
 
     FundingView.prototype.onRender = function() {
-      var li;
+      var li, tdHeader, tdValue;
 
       if (!$("body").hasClass("role-manager")) {
         this.$el.find('#addFundsBtn').hide();
         this.$el.find('#cancelManuallyAddedFundsBtn').hide();
       }
       li = $(document.getElementById("liFunding"));
+      tdHeader = $(document.getElementById("available-funds-td-header"));
+      tdValue = $(document.getElementById("available-funds-td-value"));
       if (this.requiredFunds > this.model.get('AvailableFunds')) {
         if (!li.hasClass('available-funds-alert')) {
-          return li.addClass('available-funds-alert');
+          li.addClass('available-funds-alert');
+        }
+        if (!tdHeader.hasClass('available-funds-alert-text-color')) {
+          tdHeader.addClass('available-funds-alert-text-color');
+        }
+        if (!tdValue.hasClass('available-funds-alert-text-color')) {
+          return tdValue.addClass('available-funds-alert-text-color');
         }
       } else {
         if (li.hasClass('available-funds-alert')) {
-          return li.removeClass('available-funds-alert');
+          li.removeClass('available-funds-alert');
+        }
+        if (tdHeader.hasClass('available-funds-alert-text-color')) {
+          tdHeader.removeClass('available-funds-alert-text-color');
+        }
+        if (tdValue.hasClass('available-funds-alert-text-color')) {
+          return tdValue.removeClass('available-funds-alert-text-color');
         }
       }
     };
