@@ -1371,6 +1371,7 @@ td a.edit-loan {
     width:62px;
     line-height:18px;
     white-space: normal;
+    text-align: -webkit-center;
 }
 
 .crm-tab i{
