@@ -150,9 +150,10 @@ EzBob.Underwriter.Returned = EzBob.Underwriter.FunctionsDialogView.extend(
 EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
     events: ->
         _.extend {}, EzBob.Underwriter.FunctionsDialogView::events,
-            "click .change-offer-details": "changeLoanDetails",
-            "click .pdf-link": "exportToPdf",
+            "click .change-offer-details": "changeLoanDetails"
+            "click .pdf-link": "exportToPdf"
             "click .excel-link": "exportToExcel"
+            "click .print-link":"exportToPrint"
 
     getType: ->
         "Approved"
@@ -193,6 +194,8 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
                 isShowExportBlock:false
                 isShowExceedMaxInterestForSource: true
                 ManualAddressWarning: data.ManualAddressWarning
+                customer: that.model.get('CustomerName')
+                refNum: that.model.get('CustomerRefNum')
             )
             scheduleView.render()
             that.$el.find("#loan-schedule .simple-well").hide()
@@ -233,5 +236,19 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
     exportToExcel: (e) ->
         $el = $(e.currentTarget);
         $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId")+"&isExcel=true&isShowDetails=true&customerId="+@model.get("CustomerId"));
-    
+        
+    exportToPrint: ->
+        elem = document.getElementsByClassName("loan-schedule")[0]
+        domClone = elem.cloneNode(true)
+        $printSection = document.getElementById("printSection");
+        if (!$printSection)
+            $printSection = document.createElement("div");
+            $printSection.id = "printSection";
+            document.body.appendChild($printSection);
+
+        $printSection.innerHTML = "";
+        $printSection.appendChild(domClone)
+        window.print()
+        return false
+
 )

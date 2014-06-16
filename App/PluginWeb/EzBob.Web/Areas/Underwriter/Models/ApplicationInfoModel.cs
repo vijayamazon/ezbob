@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
+		public string CustomerName { get; set; }
+		public string CustomerRefNum { get; set; }
         public string SystemDecision { get; set; }
         public decimal SystemCalculatedAmount { get; set; }
         public decimal OfferedCreditLine { get; set; }

@@ -21,7 +21,9 @@ EzBob.LoanScheduleView = Backbone.Marionette.ItemView.extend({
 			isShowExceedMaxInterestForSource: this.options.isShowExceedMaxInterestForSource,
 			MaxInterestForSource: this.options.schedule.MaxInterestForSource,
 			LoanSourceName: this.options.schedule.LoanSourceName,
-			ManualAddressWarning: this.options.ManualAddressWarning
+			ManualAddressWarning: this.options.ManualAddressWarning,
+			customer: this.options.customer,
+			refNum: this.options.refNum
 		};
 
 		if (data.MaxInterestForSource === null)
@@ -34,7 +36,8 @@ EzBob.LoanScheduleView = Backbone.Marionette.ItemView.extend({
 EzBob.LoanScheduleViewDlg = EzBob.LoanScheduleView.extend({
 	events: {
 		'click .pdf-link': 'exportToPdf',
-		'click .excel-link': 'exportToExcel'
+		'click .excel-link': 'exportToExcel',
+		'click .print-link': "print"
 	}, // events
 
 	exportToPdf: function(e) {
@@ -47,6 +50,7 @@ EzBob.LoanScheduleViewDlg = EzBob.LoanScheduleView.extend({
 		return $el.attr('href', window.gRootPath + 'Underwriter/Schedule/Export?id=' + this.options.offerId + '&isExcel=true&isShowDetails=false&customerId=' + this.options.customerId);
 	}, // exportToExcel
 
+    
 	jqoptions: function() {
 		return {
 			modal: true,

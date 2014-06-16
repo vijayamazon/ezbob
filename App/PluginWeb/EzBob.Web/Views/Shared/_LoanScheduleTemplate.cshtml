@@ -2,7 +2,8 @@
 <script id="loan-schedule-template" type="text/template">
 <% (function() {
 	var bAtLeastOneExceeds = false; %>
-
+    <div class="print-ezboblogo"></div>
+    <div class="print-customer_details">Loan offer (<%-customer%>, <%-refNum%>, <%-moment().format('DD/MM/YYYY')%>)</div>
 	<div class="simple-well clearfix apply-for-loan-total-block">
 		<div class="formula">
 			<div class="total">Loan: <span class="gelt"><%-EzBob.formatPounds(totalPrincipal)%></span></div>
@@ -18,7 +19,7 @@
 		</div>
 	</div>
 
-	<table class="table table-bordered table-striped payment-schedule-table">
+	<table class="table table-striped payment-schedule-table">
 		<thead>
 			<tr>
 				<th>Due Date</th>

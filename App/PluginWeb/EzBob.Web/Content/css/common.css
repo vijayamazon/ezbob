@@ -1686,7 +1686,7 @@ a.pdf-link {
     padding-left: 32px;
 }
 
-a.print-link {
+button.print-link, a.print-link {
     background-image: url(../img/printer.png);
     background-position: left center;
     background-repeat: no-repeat;
@@ -1694,6 +1694,11 @@ a.print-link {
     height: 28px;
     line-height: 28px;
     padding-left: 32px;
+}
+
+button.print-link {
+    background-color: transparent;
+    border: none;
 }
 
 ul.storelist {
@@ -2843,6 +2848,7 @@ div.customer-sidebar-content {
 
 table.payment-schedule-table {
     background-color: white;
+    border: #c5c5c5 1px solid;
 }
 
 table.payment-schedule-table td{
@@ -2856,18 +2862,6 @@ table.payment-schedule-table td{
 
 .hm_black {
     color: #000!important;
-}
-
-.apply-for-loan-total-block {
-	font-size: 12px;
-	position: relative;
-	font-weight: normal;
-	padding: 20px 10px 0 10px;
-	margin-bottom: 20px;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-	box-sizing: border-box;         /* Opera/IE 8+ */
-	width: 100% !important;
 }
 
 #block-loan-schedule .apply-for-loan-total-block {
@@ -2902,19 +2896,19 @@ table.payment-schedule-table td{
 }
 
 .apply-for-loan-total-block .formula .plus {
-	left: 23%;
+	left: 140px;
 	background-image: url(../img/plus.png);
 	background-position: center center;
 }
 
 .apply-for-loan-total-block .formula .cost {
-	left: 40%;
+	left: 240px;
 	background-image: url(../img/image-money32.png); background-position: 16px 16px;
 	padding-left: 54px;
 }
 
 .apply-for-loan-total-block .formula .eq {
-	left: 60%;
+	left: 365px;
 	background-image: url(../img/arrow-right.png);
 	background-position: center center;
 }

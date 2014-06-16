@@ -175,7 +175,8 @@
       return _.extend({}, EzBob.Underwriter.FunctionsDialogView.prototype.events, {
         "click .change-offer-details": "changeLoanDetails",
         "click .pdf-link": "exportToPdf",
-        "click .excel-link": "exportToExcel"
+        "click .excel-link": "exportToExcel",
+        "click .print-link": "exportToPrint"
       });
     },
     getType: function() {
@@ -214,6 +215,7 @@
     renderSchedule: function() {
       var that;
       that = this;
+      console.log('omdel', this.model);
       return $.getJSON(window.gRootPath + "Underwriter/Schedule/Calculate", {
         id: this.model.get("CashRequestId")
       }).done(function(data) {
@@ -229,7 +231,9 @@
           isShowGift: false,
           isShowExportBlock: false,
           isShowExceedMaxInterestForSource: true,
-          ManualAddressWarning: data.ManualAddressWarning
+          ManualAddressWarning: data.ManualAddressWarning,
+          customer: that.model.get('CustomerName'),
+          refNum: that.model.get('CustomerRefNum')
         });
         scheduleView.render();
         return that.$el.find("#loan-schedule .simple-well").hide();
@@ -278,6 +282,21 @@
       var $el;
       $el = $(e.currentTarget);
       return $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId") + "&isExcel=true&isShowDetails=true&customerId=" + this.model.get("CustomerId"));
+    },
+    exportToPrint: function() {
+      var $printSection, domClone, elem;
+      elem = document.getElementsByClassName("loan-schedule")[0];
+      domClone = elem.cloneNode(true);
+      $printSection = document.getElementById("printSection");
+      if (!$printSection) {
+        $printSection = document.createElement("div");
+        $printSection.id = "printSection";
+        document.body.appendChild($printSection);
+      }
+      $printSection.innerHTML = "";
+      $printSection.appendChild(domClone);
+      window.print();
+      return false;
     }
   });
 

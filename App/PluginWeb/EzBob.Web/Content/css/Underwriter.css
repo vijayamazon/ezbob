@@ -580,6 +580,7 @@ i.paypal { background-image: url(../img/mp-icons-32/icon-paypal-32.png); }
 .table > tbody > tr > td.grid-item-MP_List {
     padding: 0;
 }
+
 td.grid-item-MP_List i {
     display: inline-block;
     height: 90%;
@@ -588,33 +589,43 @@ td.grid-item-MP_List i {
     margin: 2px;
     padding: 0;
 }
+
 i.Online1 {
     background-image: url(images/accounts/on1.png);
 }
+
 i.Online2 {
     background-image: url(images/accounts/on2.png);
 }
+
 i.Online3 {
     background-image: url(images/accounts/on3.png);
 }
+
 i.Online4 {
     background-image: url(images/accounts/on4.png);
 }
+
 i.Online5 {
     background-image: url(images/accounts/on5.png);
 }
+
 i.Offline1 {
     background-image: url(images/accounts/off1.png);
 }
+
 i.Offline2 {
     background-image: url(images/accounts/off2.png);
 }
+
 i.Offline3 {
     background-image: url(images/accounts/off3.png);
 }
+
 i.Offline4 {
     background-image: url(images/accounts/off4.png);
 }
+
 i.Offline5 {
     background-image: url(images/accounts/off5.png);
 }
@@ -1306,7 +1317,6 @@ td a.edit-loan {
         position: absolute;
         overflow: auto;
         height: 100% !important;
-        
     }
 
     #sidebar-dashboard > .tabbable > ul.nav.nav-tabs {
@@ -1349,8 +1359,8 @@ td a.edit-loan {
     padding-bottom: 3px;
 }
 
-.navbar .nav li.dropdown.open > .dropdown-toggle, 
-.navbar .nav li.dropdown.active > .dropdown-toggle, 
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
 .navbar .nav li.dropdown.open.active > .dropdown-toggle {
     background-color: inherit;
     color: white;
@@ -1359,6 +1369,7 @@ td a.edit-loan {
 .available-funds-alert {
     background-color: red !important;
 }
+
 .salaries-multiplier {
     width: 70px;
 }
@@ -1368,13 +1379,13 @@ td a.edit-loan {
 }
 
 .funding-main-menu-item {
-    width:62px;
-    line-height:18px;
+    width: 62px;
+    line-height: 18px;
     white-space: normal;
     text-align: -webkit-center;
 }
 
-.crm-tab i{
+.crm-tab i {
     color: #58B8FC;
 }
 
@@ -1384,4 +1395,53 @@ td a.edit-loan {
 
 .available-funds-alert-text-color {
     color: red;
+}
+
+@media screen {
+    #printSection {
+        display: none;
+    }
+
+    .print-customer_details {
+        display: none;
+    }
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #printSection, #printSection * {
+        visibility: visible;
+        -webkit-print-color-adjust: exact;
+    }
+
+    #printSection {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    #controlButtons {
+        display: none !important;
+    }
+
+    .loan-schedule {
+        width: 620px;
+    }
+
+    .print-ezboblogo {
+        background-image: url(../img/ezbob-logo.png);
+        background-repeat: no-repeat;
+        -moz-background-size: contain;
+        -webkit-background-size: contain;
+        background-size: contain;
+        width: 100px;
+        height: 40px;
+    }
+
+    .print-customer_details {
+        padding: 5px;
+    }
 }

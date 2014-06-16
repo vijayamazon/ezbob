@@ -215,7 +215,7 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-
+/*
 @media print {
   * {
     color: #000 !important;
@@ -290,7 +290,7 @@ table {
     border: 1px solid #ddd !important;
   }
 }
-
+*/
 *,
 *:before,
 *:after {
@@ -7077,7 +7077,7 @@ th.visible-print,
 td.visible-print {
   display: none !important;
 }
-
+/*
 @media print {
   .visible-print {
     display: block !important;
@@ -7096,3 +7096,4 @@ td.visible-print {
     display: none !important;
   }
 }
+*/

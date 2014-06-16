@@ -53,7 +53,8 @@
 			if (customer == null) return;
 
 			model.Id = customer.Id;
-
+			model.CustomerName = customer.PersonalInfo != null ? customer.PersonalInfo.Fullname : "";
+			model.CustomerRefNum = customer.RefNumber;
 			if (cr != null)
 			{
 				var context = ObjectFactory.GetInstance<IWorkplaceContext>();
