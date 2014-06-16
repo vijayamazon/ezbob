@@ -54,8 +54,8 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 			{
 				state.IsFollowUp = isFollowUp;
 				state.FollowUp = followUp;
-				state.Status = lastCrm.Status;
-				state.Rank = lastCrm.Rank;
+				state.Rank = lastCrm == null ? null : lastCrm.Rank;
+				state.Status = lastCrm == null ? null : lastCrm.Status;
 			}
 			else
 			{
@@ -64,8 +64,8 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 						CustomerId = customerId,
 						IsFollowUp = isFollowUp,
 						FollowUp = followUp,
-						Rank = lastCrm.Rank,
-						Status = lastCrm.Status
+						Rank = lastCrm == null ? null : lastCrm.Rank,
+						Status = lastCrm == null ? null : lastCrm.Status
 					};
 			}
 
