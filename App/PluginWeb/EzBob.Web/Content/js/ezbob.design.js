@@ -342,15 +342,12 @@ function CheckForActivity() {
     var minute = EzBob.Config.SessionTimeout;
     var timer;
     var timeoutValue = 1000 * 60 * minute;
-
     if (minute <= 0) return;
 
     var isUnderWriter = document.location.href.indexOf("Underwriter") > -1;
 
     if (EzBob.Config.HeartBeatEnabled)
         setInterval(heartBeat, 10000);
-
-    var underwriterParam = isUnderWriter ? "?isUnderwriterPage=true" : "";
 
     //white list
     if (document.location.href.indexOf("Customer/Start") != -1) {
@@ -367,7 +364,11 @@ function CheckForActivity() {
     }
 
     function timeout() {
-        document.location = window.gRootPath + "Account/LogOff" + underwriterParam;
+        if (isUnderWriter) {
+            document.location = window.gRootPath + "Account/LogOffUnderwriter";
+        } else {
+            document.location = window.gRootPath + "Account/LogOff";
+        }
     }
 
     function reset() {

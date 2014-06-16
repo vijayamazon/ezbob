@@ -286,14 +286,41 @@ namespace EzBob.Web.Controllers {
 		#region action LogOff
 
 		public ActionResult LogOff() {
-			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId)) {
+			EndSession();
+			
+			switch (m_oLogOffMode) {
+				case LogOffMode.SignUpOfEnv:
+					return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
+				case LogOffMode.LogOnOfEnv:
+					return RedirectToAction("LogOn", "Account", new { Area = "" });
+				default:
+					return Redirect(@"http://www.ezbob.com");
+			} // switch
+		} // LogOff
+
+		#endregion action LogOff
+
+		public ActionResult LogOffUnderwriter()
+		{
+			EndSession();
+
+			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
+		}
+
+		private void EndSession()
+		{
+			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId))
+			{
 				int nSessionID;
 
-				if (int.TryParse(m_oContext.SessionId, out nSessionID)) {
-					try {
+				if (int.TryParse(m_oContext.SessionId, out nSessionID))
+				{
+					try
+					{
 						m_oServiceClient.Instance.MarkSessionEnded(nSessionID);
 					}
-					catch (Exception e) {
+					catch (Exception e)
+					{
 						ms_oLog.Debug(e, "Failed to mark customer session as ended.");
 					} // try
 				} // if
@@ -301,25 +328,9 @@ namespace EzBob.Web.Controllers {
 
 			m_oContext.SessionId = null;
 
-			bool isUnderwriterPage = HttpContext.User.IsInRole("Underwriter");
-
 			FormsAuthentication.SignOut();
 			HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
-
-			if (isUnderwriterPage)
-				return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
-
-			switch (m_oLogOffMode) {
-			case LogOffMode.SignUpOfEnv:
-				return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
-			case LogOffMode.LogOnOfEnv:
-				return RedirectToAction("LogOn", "Account", new { Area = "" });
-			default:
-				return Redirect(@"http://www.ezbob.com");
-			} // switch
-		} // LogOff
-
-		#endregion action LogOff
+		}
 
 		#region action SignUp
 
