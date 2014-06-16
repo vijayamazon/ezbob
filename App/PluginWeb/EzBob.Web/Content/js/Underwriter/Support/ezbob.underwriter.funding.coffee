@@ -72,8 +72,13 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
         li = $(document.getElementById("liFunding"))
         tdHeader = $(document.getElementById("available-funds-td-header"))
         tdValue = $(document.getElementById("available-funds-td-value"))
+        fundingDiv = $(document.getElementById("fundingDiv"))
 
-        if (@requiredFunds > @model.get('AvailableFunds'))
+        availableFundsNum = @model.get('AvailableFunds')
+        availableFundsStr = 'Funding ' + EzBob.formatPoundsNoDecimals(availableFundsNum).replace(/\s+/g, '')
+        fundingDiv.text(availableFundsStr)
+
+        if (@requiredFunds > availableFundsNum)
             if !li.hasClass('available-funds-alert')
                 li.addClass('available-funds-alert')
             if !tdHeader.hasClass('available-funds-alert-text-color')
