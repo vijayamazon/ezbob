@@ -92,32 +92,32 @@
 		{
 			reason = "AutoReject: Rejection exception";
 
-			//1. Customers that have been approved at least once before (even if the latest decision was rejection) and in enabled status/fraud suspect
+			// Customers that have been approved at least once before (even if the latest decision was rejection) and in enabled status/fraud suspect
 			if (_loanOfferApprovalNum > 0 && _customerStatusIsEnabled && !_customerStatusIsWarning)
 			{
 				reason = string.Format("{0} : {1}", reason, "Customers that have been approved at least once before");
 				return true;
 			}
-			//2. Annual turnover above 250,000
+			// Annual turnover above 250,000
 			if (_totalSumOfOrders1YTotalForRejection > _autoRejectionExceptionAnualTurnover)
 			{
 				reason = string.Format("{0} : {1} {2} ({3})", reason, "Annual turnover above", _autoRejectionExceptionAnualTurnover, _totalSumOfOrders1YTotalForRejection);
 				return true;
 			}
-			//3. Consumer score (max of applicant and directors) above 800
+			// Consumer score (max of applicant and directors) above 800
 			if (_maxExperianConsumerScore > _autoRejectionExceptionCreditScore)
 			{
 				reason = string.Format("{0} : {1} {2} ({3})", reason, "Consumer score above", _autoRejectionExceptionCreditScore, _maxExperianConsumerScore);
 				return true;
 			}
-			//4. Company score (max of company, parent companies) (default >= 40)
+			// Company score (max of company, parent companies) (default >= 40)
 			int rejectionExceptionMaxCompanyScore = CurrentValues.Instance.RejectionExceptionMaxCompanyScore;
 			if (_maxCompanyScore >= rejectionExceptionMaxCompanyScore)
 			{
 				reason = string.Format("{0} : {1} {2} ({3})", reason, "Company score above", rejectionExceptionMaxCompanyScore, _maxCompanyScore);
 				return true;
 			}
-			//5. MP with error AND (consumer score > 500 OR company score > 10)
+			// MP with error AND (consumer score > 500 OR company score > 10)
 			int rejectionExceptionMaxConsumerScoreForMpError = CurrentValues.Instance.RejectionExceptionMaxConsumerScoreForMpError;
 			int rejectionExceptionMaxCompanyScoreForMpError = CurrentValues.Instance.RejectionExceptionMaxCompanyScoreForMpError;
 			if (_errorMPsNum > 0 && (_maxExperianConsumerScore > rejectionExceptionMaxConsumerScoreForMpError || _maxCompanyScore > rejectionExceptionMaxCompanyScoreForMpError))
@@ -125,14 +125,14 @@
 				reason = string.Format("{0} : {1} {2} {3}", reason, "MP with error and experian scores", _maxExperianConsumerScore, _maxCompanyScore);
 				return true;
 			}
-			//TODO : unknown rule
+			// Couldn't get experian score
 			if ((decimal)_maxExperianConsumerScore == 0)
 			{
 				reason = string.Format("{0} : {1}", reason, "Experian consumer score is 0");
 				return true;
 			}
-			//6. Customer via broker
-			if (_isBrokerCustomer) // TODO: Currently rejections are disabled for broker customers - this logic is in contradiction to it
+			// Customer via broker
+			if (_isBrokerCustomer) // TODO: Currently rejections are disabled for broker customers - this logic is in contradiction to it (should be refactored)
 			{
 				reason = string.Format("{0} : {1}", reason, "Customer via broker");
 				return true;
@@ -145,26 +145,23 @@
 
 		private void Init()
 		{
-			DataTable dt = _db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
-			var sr = new SafeReader(dt.Rows[0]);
-
-			_autoRejectionExceptionAnualTurnover = sr["AutoRejectionException_AnualTurnover"];
-			_rejectDefaultsCreditScore = sr["Reject_Defaults_CreditScore"];
-			_rejectMinimalSeniority = sr["Reject_Minimal_Seniority"];
-			_lowCreditScore = sr["LowCreditScore"];
-			_rejectDefaultsAccountsNum = sr["Reject_Defaults_AccountsNum"];
-			_autoRejectionExceptionCreditScore = sr["AutoRejectionException_CreditScore"];
-			int rejectDefaultsMonths = sr["Reject_Defaults_MonthsNum"];
-			int rejectDefaultsAmount = sr["Reject_Defaults_Amount"];
-			_lowTotalAnnualTurnover = sr["LowTotalAnnualTurnover"];
-			_lowTotalThreeMonthTurnover = sr["LowTotalThreeMonthTurnover"];
-			_lowOfflineAnnualRevenue = sr["Reject_LowOfflineAnnualRevenue"];
-			_lowOfflineQuarterRevenue = sr["Reject_LowOfflineQuarterRevenue"];
+			_autoRejectionExceptionAnualTurnover = CurrentValues.Instance.AutoRejectionException_AnualTurnover;
+			_rejectDefaultsCreditScore = CurrentValues.Instance.Reject_Defaults_CreditScore;
+			_rejectMinimalSeniority = CurrentValues.Instance.Reject_Minimal_Seniority;
+			_lowCreditScore = CurrentValues.Instance.LowCreditScore;
+			_rejectDefaultsAccountsNum = CurrentValues.Instance.Reject_Defaults_AccountsNum;
+			_autoRejectionExceptionCreditScore = CurrentValues.Instance.AutoRejectionException_CreditScore;
+			int rejectDefaultsMonths = CurrentValues.Instance.Reject_Defaults_MonthsNum;
+			int rejectDefaultsAmount = CurrentValues.Instance.Reject_Defaults_Amount;
+			_lowTotalAnnualTurnover = CurrentValues.Instance.TotalAnnualTurnover;
+			_lowTotalThreeMonthTurnover = CurrentValues.Instance.TotalThreeMonthTurnover;
+			_lowOfflineAnnualRevenue =  CurrentValues.Instance.Reject_LowOfflineAnnualRevenue;
+			_lowOfflineQuarterRevenue = CurrentValues.Instance.Reject_LowOfflineQuarterRevenue;
 
 			int rejectLateLastMonth = CurrentValues.Instance.Reject_LateLastMonthsNum;
 			_rejectNumOfLateAccounts = CurrentValues.Instance.Reject_NumOfLateAccounts;
 
-			dt = _db.ExecuteReader(
+			DataTable dt = _db.ExecuteReader(
 				"GetCustomerRejectionData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", _customerId),
@@ -173,7 +170,7 @@
 				new QueryParameter("Reject_Late_Last_Months", rejectLateLastMonth)
 			);
 
-			sr = new SafeReader(dt.Rows[0]);
+			var sr = new SafeReader(dt.Rows[0]);
 
 			_errorMPsNum = sr["ErrorMPsNum"];
 			_loanOfferApprovalNum = sr["ApprovalNum"];
@@ -259,9 +256,7 @@
 					response.AutoRejectReason = "AutoReject: Customer status. Condition not met:" + _customerStatusName;
 
 				}
-
-				// TODO: the 2 next conditions are in the previous implementation but are not mentioned in the new story - should they be removed?
-				// TODO: should this next condition be removed (was it replaced by condition #1 (second paragraph) in story?)
+				// Sufficient annual or quarterly turnover (Pay pal is also being considered by itself)
 				else if (!_isOffline && 
 					(_payPalNumberOfStores == 0 || _payPalTotalSumOfOrders3M < _lowTotalThreeMonthTurnover || _payPalTotalSumOfOrders1Y < _lowTotalAnnualTurnover)
 					&& (_totalSumOfOrders3MTotalForRejection < _lowTotalThreeMonthTurnover || _totalSumOfOrders1YTotalForRejection < _lowTotalAnnualTurnover))
@@ -273,8 +268,7 @@
 												_lowTotalThreeMonthTurnover + " OR " + _totalSumOfOrders1YTotalForRejection + " < " +
 												_lowTotalAnnualTurnover + ")";
 				}
-				
-				//Offline only (hmrc or bank) 1. Have separate turnover configs. Annual - 30000, 3M - 5000
+				// Offline only (hmrc or bank) turnover: Have separate turnover configs. Annual - 30000, 3M - 5000
 				else if(_isOffline && (_hasHmrc || _hasYodlee) && 
 					(Math.Max((decimal)_yodlee1YForRejection, _hmrcAnnualRevenues) < _lowOfflineAnnualRevenue || 
 					 Math.Max((decimal)_yodlee3MForRejection, _hmrcQuarterRevenues) < _lowOfflineQuarterRevenue))
