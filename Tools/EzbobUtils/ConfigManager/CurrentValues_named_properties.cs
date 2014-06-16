@@ -2244,26 +2244,6 @@ namespace ConfigManager {
 			get { return this[Variables.RejectionCompanyScore]; }
 		}
 
-		public virtual VariableValue RejectByCompanyNumOfDefaultAccounts
-		{
-			get { return this[Variables.RejectByCompanyNumOfDefaultAccounts]; }
-		}
-
-		public virtual VariableValue RejectByCompany_Defaults_MonthsNum
-		{
-			get { return this[Variables.RejectByCompany_Defaults_MonthsNum]; }
-		}
-
-		public virtual VariableValue RejectByCompany_Defaults_Amount
-		{
-			get { return this[Variables.RejectByCompany_Defaults_Amount]; }
-		}
-
-		public virtual VariableValue RejectByCompanyDefaultsScore
-		{
-			get { return this[Variables.RejectByCompanyDefaultsScore]; }
-		}
-
 		public virtual VariableValue Reject_NumOfLateAccounts
 		{
 			get { return this[Variables.Reject_NumOfLateAccounts]; }

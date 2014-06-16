@@ -9,8 +9,6 @@ CREATE PROCEDURE [dbo].[GetCustomerRejectionData]
 	(@CustomerId INT,
 	 @Reject_Defaults_Months INT,
 	 @Reject_Defaults_Amount INT,
-	 @RejectByCompany_Defaults_Months INT,
-	 @RejectByCompany_Defaults_Amount INT,
 	 @Reject_Late_Last_Months INT)
 AS
 BEGIN
@@ -18,7 +16,6 @@ BEGIN
 			@Counter INT,
 			@ApprovalNum INT,
 			@NumOfDefaultAccounts INT,
-			@NumOfDefaultAccountsForCompany INT, 
 			@MarketPlaceGroup INT, 
 			@BankGroup INT, 
 			@RowNum INT
@@ -83,9 +80,7 @@ BEGIN
 	END
  
 	SELECT @NumOfDefaultAccounts = NumOfDefaultAccounts FROM [GetNumOfDefaultAccounts] (@CustomerId, @Reject_Defaults_Months, @Reject_Defaults_Amount)
- 	SELECT @NumOfDefaultAccountsForCompany = NumOfDefaultAccounts FROM [GetNumOfDefaultAccounts] (@CustomerId, @RejectByCompany_Defaults_Months, @RejectByCompany_Defaults_Amount)
- 	
- 	
+ 	 	
  	DECLARE @NumOfLateAccounts INT = (SELECT ISNULL(SUM(y.late), 0) NumOfLateAccounts
 								  FROM 
 								  (
@@ -110,7 +105,6 @@ BEGIN
 		@ErrorMPsNum AS ErrorMPsNum, 
 		@ApprovalNum AS ApprovalNum, 
 		@NumOfDefaultAccounts AS NumOfDefaultAccounts,
-		@NumOfDefaultAccountsForCompany AS NumOfDefaultAccountsForCompany,
 		@NumOfLateAccounts AS NumOfLateAccounts
 END
 GO

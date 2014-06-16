@@ -259,11 +259,7 @@ namespace EZBob.DatabaseLib.Model {
 		RejectionExceptionMaxConsumerScoreForMpError,
 		RejectionExceptionMaxCompanyScoreForMpError,
 		RejectionExceptionMaxCompanyScore,
-		RejectionCompanyScore,
-		RejectByCompanyNumOfDefaultAccounts,
-		RejectByCompany_Defaults_MonthsNum,
-		RejectByCompany_Defaults_Amount,
-		RejectByCompanyDefaultsScore
+		RejectionCompanyScore
 	} // enum ConfigurationVariables
 
 	#endregion enum ConfigurationVariables

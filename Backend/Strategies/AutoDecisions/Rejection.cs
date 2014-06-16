@@ -18,7 +18,6 @@
 		private int _errorMPsNum;
 		private int _loanOfferApprovalNum;
 		private int _numOfDefaultAccounts;
-		private int _numOfDefaultAccountsForCompany;
 		private readonly AConnection _db;
 		private readonly ASafeLog _log;
 		private readonly double _totalSumOfOrders1YTotalForRejection;
@@ -157,8 +156,6 @@
 			_autoRejectionExceptionCreditScore = sr["AutoRejectionException_CreditScore"];
 			int rejectDefaultsMonths = sr["Reject_Defaults_MonthsNum"];
 			int rejectDefaultsAmount = sr["Reject_Defaults_Amount"];
-			int rejectByCompanyDefaultsMonths = CurrentValues.Instance.RejectByCompany_Defaults_MonthsNum;
-			int rejectByCompanyDefaultsAmount = CurrentValues.Instance.RejectByCompany_Defaults_Amount;
 			_lowTotalAnnualTurnover = sr["LowTotalAnnualTurnover"];
 			_lowTotalThreeMonthTurnover = sr["LowTotalThreeMonthTurnover"];
 			_lowOfflineAnnualRevenue = sr["Reject_LowOfflineAnnualRevenue"];
@@ -173,8 +170,6 @@
 				new QueryParameter("CustomerId", _customerId),
 				new QueryParameter("Reject_Defaults_Months", rejectDefaultsMonths),
 				new QueryParameter("Reject_Defaults_Amount", rejectDefaultsAmount),
-				new QueryParameter("RejectByCompany_Defaults_Months", rejectByCompanyDefaultsMonths),
-				new QueryParameter("RejectByCompany_Defaults_Amount", rejectByCompanyDefaultsAmount),
 				new QueryParameter("Reject_Late_Last_Months", rejectLateLastMonth)
 			);
 
@@ -183,7 +178,6 @@
 			_errorMPsNum = sr["ErrorMPsNum"];
 			_loanOfferApprovalNum = sr["ApprovalNum"];
 			_numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
-			_numOfDefaultAccountsForCompany = sr["NumOfDefaultAccountsForCompany"]; // TODO: this is wrong, should have logic elsewhere
 			_numOfLateAccounts = sr["NumOfLateAccounts"];
 			if (_isOffline)
 			{
@@ -223,23 +217,21 @@
 					return false;
 				}
 
-				int rejectByCompanyNumOfDefaultAccounts = CurrentValues.Instance.RejectByCompanyNumOfDefaultAccounts;
-				int rejectByCompanyDefaultsScore = CurrentValues.Instance.RejectByCompanyDefaultsScore;
 				int rejectionCompanyScore = CurrentValues.Instance.RejectionCompanyScore;
 
-				//1. Consumer score < 500
+				// Consumer score < 500
 				if (_maxExperianConsumerScore < _lowCreditScore)
 				{
 					response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + _maxExperianConsumerScore + " < " +
 												_lowCreditScore;
 				}
-				//2. Business score < 10 (If business score exists)
+				// Business score < 10 (If business score exists)
 				else if (_maxCompanyScore > 0 && _maxCompanyScore < rejectionCompanyScore)
 				{
 					response.AutoRejectReason = "AutoReject: Low company score. Condition not met:" + _maxCompanyScore + " < " +
 												rejectionCompanyScore;
 				}
-				//3. Credit score < 800 AND at least 1 default of at least 300 in last 24 months
+				// Credit score < 800 AND at least 1 default of at least 300 in last 24 months
 				else if (_maxExperianConsumerScore < _rejectDefaultsCreditScore &&
 					_numOfDefaultAccounts >= _rejectDefaultsAccountsNum)
 				{
@@ -248,29 +240,20 @@
 												" < " + _rejectDefaultsCreditScore + " AND " + _numOfDefaultAccounts + " >= " +
 												_rejectDefaultsAccountsNum;
 				}
-				//4. Business score exists and < 20 AND at least 1 company default of at least 1000 in last 24 months and company is limited
-				else if (_maxCompanyScore > 0 && _maxCompanyScore < rejectByCompanyDefaultsScore &&
-				         _numOfDefaultAccountsForCompany >= rejectByCompanyNumOfDefaultAccounts && _isLimitedCompany)
-				{
-					response.AutoRejectReason = "AutoReject: Limited company defaults. Condition not met:" +
-					                            _maxCompanyScore + "<" + rejectByCompanyDefaultsScore + " AND " +
-					                            _numOfDefaultAccountsForCompany +
-					                            " >= " + rejectByCompanyNumOfDefaultAccounts + " AND is limited company";
-				}
-				//5. Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 accounts in last 3 months
+				// Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 accounts in last 3 months
 				else if(_numOfLateAccounts >= _rejectNumOfLateAccounts)
 				{
 					response.AutoRejectReason = string.Format("AutoReject: Late CAIS accounts. Condition not met: {0} >= {1}",
 					                                          _numOfLateAccounts, _rejectNumOfLateAccounts);
 				}
-				//6. max(Marketplace(Ecomm) or company )seniority < 300 days.
+				// max(Marketplace(Ecomm) or company )seniority < 300 days.
 				else if (Math.Max(_marketplaceSeniorityDays, _companySeniorityDays) < _rejectMinimalSeniority)
 				{
 					response.AutoRejectReason = "AutoReject: Seniority. Condition not met: (max(mp " + _marketplaceSeniorityDays +
 												", company " + _companySeniorityDays + ") < " +
 												_rejectMinimalSeniority + ")";
 				}
-				//7. Customer status != enabled\fraud suspect
+				// Customer status != enabled\fraud suspect
 				else if (!_customerStatusIsEnabled || _customerStatusIsWarning)
 				{
 					response.AutoRejectReason = "AutoReject: Customer status. Condition not met:" + _customerStatusName;
@@ -353,13 +336,13 @@
 					_autoRejectionExceptionCreditScore : {5} \n
 					_errorMPsNum : {6} \n 
 					_loanOfferApprovalNum : {7} \n 
-					_numOfDefaultAccounts : {8} _numOfDefaultAccountsForCompany : {9} \n
+					_numOfDefaultAccounts : {8} \n
 					_totalSumOfOrders1YTotalForRejection : {10} _totalSumOfOrders3MTotalForRejection : {11} \n 
 					_marketplaceSeniorityDays : {14} \n 
 					_enableAutomaticRejection : {15} \n 
 					_lowTotalAnnualTurnover : {16} _lowTotalThreeMonthTurnover : {17} \n 
 					_maxExperianConsumerScore : {18} _maxCompanyScore : {20} \n
-					_customerStatusIsEnabled : {21} _customerStatusIsWarning : {22} _customerStatusName : {38} \n
+					_customerStatusIsEnabled : {21} _customerStatusIsWarning : {22} _customerStatusName : {9} \n
 					_isBrokerCustomer : {23} \n
 					_isLimitedCompany : {24} \n
 					_companySeniorityDays : {25} \n
@@ -380,7 +363,7 @@
 				_errorMPsNum,
 				_loanOfferApprovalNum,
 				_numOfDefaultAccounts,
-				_numOfDefaultAccountsForCompany,
+				_customerStatusName,
 				_totalSumOfOrders1YTotalForRejection,
 				_totalSumOfOrders3MTotalForRejection,
 				_yodlee1YForRejection,
@@ -407,8 +390,7 @@
 				_payPalNumberOfStores,
 				_payPalTotalSumOfOrders3M,
 				_payPalTotalSumOfOrders1Y,
-				_hasYodlee, _hasHmrc,
-				_customerStatusName);
+				_hasYodlee, _hasHmrc);
 		} 
 	}
 }
