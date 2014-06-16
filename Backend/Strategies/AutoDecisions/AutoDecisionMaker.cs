@@ -29,7 +29,8 @@
 			bool isBrokerCustomer,
 			bool isLimitedCompany,
 			int companySeniorityDays,
-			bool isOffline, 
+			bool isOffline,
+			string customerStatusName,
 			AConnection oDb, ASafeLog oLog)
 		{
 			oLog.Info("Starting auto decision");
@@ -61,7 +62,7 @@
 			                              yodlee3MForRejection, marketplaceSeniorityDays, enableAutomaticRejection,
 			                              maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
 			                              customerStatusIsWarning, isBrokerCustomer, isLimitedCompany, companySeniorityDays,
-			                              isOffline, oDb, oLog);
+										  isOffline, customerStatusName, oDb, oLog);
 			var isRejected = rejection.MakeDecision(autoDecisionResponse);
 			oLog.Debug(rejection.ToString());
 			if (isRejected)

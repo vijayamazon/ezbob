@@ -137,6 +137,7 @@
 				typeOfBusiness == "Limited" || typeOfBusiness == "LLP",
 				companySeniorityDays,
 				isOffline,
+				customerStatusName,
 				DB,
 				Log
 			);
@@ -882,6 +883,7 @@
 
 			customerStatusIsEnabled = results["CustomerStatusIsEnabled"];
 			customerStatusIsWarning = results["CustomerStatusIsWarning"];
+			customerStatusName = results["CustomerStatusName"];
 			isOffline = results["IsOffline"];
 			isBrokerCustomer = results["IsBrokerCustomer"];
 			appEmail = results["CustomerEmail"];
@@ -1193,6 +1195,7 @@
 		// Loaded from DB per customer
 		private bool customerStatusIsEnabled;
 		private bool customerStatusIsWarning;
+		private string customerStatusName;
 		private bool isOffline;
 		private bool isBrokerCustomer;
 		private string appEmail;

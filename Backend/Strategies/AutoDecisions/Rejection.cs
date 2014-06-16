@@ -49,6 +49,7 @@
 		private int _payPalNumberOfStores;
 		private decimal _payPalTotalSumOfOrders3M;
 		private decimal _payPalTotalSumOfOrders1Y;
+		private readonly string _customerStatusName;
 
 		public Rejection(int customerId,
 			double totalSumOfOrders1YTotalForRejection,
@@ -65,6 +66,7 @@
 			bool isLimitedCompany,
 			int companySeniorityDays,
 			bool isOffline,
+			string customerStatusName,
 			AConnection oDb, ASafeLog oLog)
 		{
 			_db = oDb;
@@ -84,6 +86,7 @@
 			_isLimitedCompany = isLimitedCompany;
 			_companySeniorityDays = companySeniorityDays;
 			_isOffline = isOffline;
+			_customerStatusName = customerStatusName;
 		}
 
 		private bool IsException(out string reason)
@@ -180,7 +183,7 @@
 			_errorMPsNum = sr["ErrorMPsNum"];
 			_loanOfferApprovalNum = sr["ApprovalNum"];
 			_numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
-			_numOfDefaultAccountsForCompany = sr["NumOfDefaultAccountsForCompany"];
+			_numOfDefaultAccountsForCompany = sr["NumOfDefaultAccountsForCompany"]; // TODO: this is wrong, should have logic elsewhere
 			_numOfLateAccounts = sr["NumOfLateAccounts"];
 			if (_isOffline)
 			{
@@ -205,8 +208,6 @@
 			_payPalNumberOfStores = sr["PayPal_NumberOfStores"];
 			_payPalTotalSumOfOrders3M = sr["PayPal_TotalSumOfOrders3M"];
 			_payPalTotalSumOfOrders1Y = sr["PayPal_TotalSumOfOrders1Y"];
-
-
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -225,7 +226,6 @@
 				int rejectByCompanyNumOfDefaultAccounts = CurrentValues.Instance.RejectByCompanyNumOfDefaultAccounts;
 				int rejectByCompanyDefaultsScore = CurrentValues.Instance.RejectByCompanyDefaultsScore;
 				int rejectionCompanyScore = CurrentValues.Instance.RejectionCompanyScore;
-
 
 				//1. Consumer score < 500
 				if (_maxExperianConsumerScore < _lowCreditScore)
@@ -273,9 +273,7 @@
 				//7. Customer status != enabled\fraud suspect
 				else if (!_customerStatusIsEnabled || _customerStatusIsWarning)
 				{
-					response.AutoRejectReason = "AutoReject: Customer status. Condition not met:" +
-												!_customerStatusIsEnabled +
-												" AND " + _customerStatusIsWarning;
+					response.AutoRejectReason = "AutoReject: Customer status. Condition not met:" + _customerStatusName;
 
 				}
 
@@ -301,7 +299,7 @@
 					response.AutoRejectReason =
 						string.Format(
 							"AutoReject: Offline Revenues. Condition not met: max yodlee hmrc annual revenue ({0}, {1}) < {2} OR max yodlee hmrc quarter revenue ({3}, {4}) < {5}",
-							_yodlee1YForRejection, _hmrcAnnualRevenues, _lowOfflineAnnualRevenue, _yodlee3MForRejection, _yodlee1YForRejection, _lowOfflineQuarterRevenue);
+							_yodlee1YForRejection, _hmrcAnnualRevenues, _lowOfflineAnnualRevenue, _yodlee3MForRejection, _hmrcQuarterRevenues, _lowOfflineQuarterRevenue);
 				}
 				else
 				{
@@ -361,7 +359,7 @@
 					_enableAutomaticRejection : {15} \n 
 					_lowTotalAnnualTurnover : {16} _lowTotalThreeMonthTurnover : {17} \n 
 					_maxExperianConsumerScore : {18} _maxCompanyScore : {20} \n
-					_customerStatusIsEnabled : {21} _customerStatusIsWarning : {22} \n
+					_customerStatusIsEnabled : {21} _customerStatusIsWarning : {22} _customerStatusName : {38} \n
 					_isBrokerCustomer : {23} \n
 					_isLimitedCompany : {24} \n
 					_companySeniorityDays : {25} \n
@@ -409,7 +407,8 @@
 				_payPalNumberOfStores,
 				_payPalTotalSumOfOrders3M,
 				_payPalTotalSumOfOrders1Y,
-				_hasYodlee, _hasHmrc);
+				_hasYodlee, _hasHmrc,
+				_customerStatusName);
 		} 
 	}
 }
