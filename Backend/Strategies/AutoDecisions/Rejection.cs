@@ -218,6 +218,7 @@
 				if (IsException(out rejectionExceptionReason))
 				{
 					response.AutoRejectReason = rejectionExceptionReason;
+					_log.Debug("Customer {0} was not auto rejected because {1}", _customerId, rejectionExceptionReason);
 					return false;
 				}
 

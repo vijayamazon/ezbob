@@ -623,16 +623,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual decimal AmountTaken { get; set; }
 		public virtual decimal LastLoanAmount { get; set; }
 
-		public virtual string RegisteredMpStatuses {
-			get {
-				var mpStatuses = CustomerMarketPlaces.Select(mp => mp.Marketplace.Name + ":" + mp.GetUpdatingStatus()).ToList();
-				return mpStatuses.Any() ? mpStatuses.Aggregate((i, j) => i + ", " + j) : " ";
-			} // get
-		} // RegisteredMpStatuses
-
-		public virtual bool LoanForCurrentOfferIsTaken {
-			get { return Loans.Select(l => l.CashRequest.Id).Contains(LastCashRequest.Id); }
-		} // LoanForCurrentOfferIsTaken
 		/*
 		public virtual long LoyaltyPoints() {
 			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
