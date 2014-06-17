@@ -637,14 +637,24 @@
 		[Activation]
 		private void FinishWizard() {
 			int customerId, underwriterId;
-			if (m_aryArgs.Length != 3 || !int.TryParse(m_aryArgs[1], out customerId) || !int.TryParse(m_aryArgs[2], out underwriterId)) {
-				m_oLog.Msg("Usage: FinishWizard <CustomerId> <UnderwriterId>");
+			if (m_aryArgs.Length < 3 || !int.TryParse(m_aryArgs[1], out customerId) || !int.TryParse(m_aryArgs[2], out underwriterId)) {
+				m_oLog.Msg("Usage: FinishWizard <CustomerId> <UnderwriterId> [<DoSendEmail(true/false)>] [<AvoidAutoDecision(0/1)>]");
 				return;
 			}
 
 			var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(CurrentValues.Instance.FinishWizardForApproved);
 
 			oArgs.CustomerID = customerId;
+			
+			if (m_aryArgs.Length >= 4)
+			{
+				oArgs.DoSendEmail = bool.Parse(m_aryArgs[3]);
+			}
+
+			if (m_aryArgs.Length >= 5)
+			{
+				oArgs.AvoidAutoDecision = int.Parse(m_aryArgs[4]);
+			}
 
 			m_oServiceClient.FinishWizard(oArgs, underwriterId);
 		}
