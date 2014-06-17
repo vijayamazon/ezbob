@@ -47,3 +47,5 @@ App/EzReporting/EzReportsWeb/Properties/PublishProfiles/EzReportingWeb2.pubxml.u
 packages/
 App/PluginWeb/EzBob.Web/Properties/PublishProfiles/EzBob.Release.pubxml.user
 App/PluginWeb/EzBob.Web/Properties/PublishProfiles/EzBob.Test.pubxml.user
+Integration/EchoSign/EchoSoapDemo/EchoSoap.exe
+Integration/EchoSign/EchoSoapDemo/EchoSoap.pdb
