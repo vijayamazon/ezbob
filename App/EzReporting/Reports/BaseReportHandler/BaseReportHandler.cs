@@ -170,18 +170,16 @@
 
 		#region method BuildTraficReport
 		
-		public ATag BuildTrafficReport(Report report, DateTime from, DateTime to, KeyValuePair<ReportQuery, DataTable> oData, List<string> oColumnTypes = null)
-		{
+		public ATag BuildTrafficReport(Report report, DateTime from, DateTime to, KeyValuePair<ReportQuery, DataTable> oData, List<string> oColumnTypes = null) {
 			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(from, oToDate: to))))
 				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildTrafficReport
 
-		public ExcelPackage BuildTrafficReportXls(Report report, DateTime from, DateTime to,
-		                                          KeyValuePair<ReportQuery, DataTable> oData)
-		{
+		public ExcelPackage BuildTrafficReportXls(Report report, DateTime from, DateTime to, KeyValuePair<ReportQuery, DataTable> oData) {
 			return AddSheetToExcel(oData.Value, report.GetTitle(from, oToDate: to), report.Title);
-		}
+		} // BuildTrafficReportXls
+
 		#endregion method BuildTraficReport
 
 		#region method BuildLoanIntegrityReport
@@ -213,7 +211,7 @@
 
 		#region method BuildPlainedPaymentReport
 
-		public ATag BuildPlainedPaymentReport(Report report, DateTime today) {
+		public ATag BuildPlainedPaymentReport(Report report, DateTime today, DateTime ignored, List<string> ignoredAgain = null) {
 			return new Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today))))
 				.Append(PaymentReport(today));
@@ -275,7 +273,7 @@
 
 		#region method BuildPlainedPaymentXls
 
-		public ExcelPackage BuildPlainedPaymentXls(Report report, DateTime today) {
+		public ExcelPackage BuildPlainedPaymentXls(Report report, DateTime today, DateTime ignored) {
 			var title = report.GetTitle(today);
 			var wb = new ExcelPackage();
 

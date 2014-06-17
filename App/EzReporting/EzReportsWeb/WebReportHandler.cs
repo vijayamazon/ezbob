@@ -40,7 +40,7 @@ namespace EzReportsWeb
 			switch (report.Type)
 			{
 				case ReportType.RPT_PLANNED_PAYTMENT:
-					return BuildPlainedPaymentReport(report, (DateTime)rptDef.DateStart);
+					return BuildPlainedPaymentReport(report, (DateTime)rptDef.DateStart, DateTime.UtcNow);
 
 				case ReportType.RPT_EARNED_INTEREST:
 					return BuildEarnedInterestReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
@@ -96,7 +96,7 @@ namespace EzReportsWeb
 			{
 
 				case ReportType.RPT_PLANNED_PAYTMENT:
-					return BuildPlainedPaymentXls(report, (DateTime)rptDef.DateStart);
+					return BuildPlainedPaymentXls(report, (DateTime)rptDef.DateStart, DateTime.UtcNow);
 
 				case ReportType.RPT_EARNED_INTEREST:
 					return BuildEarnedInterestXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
