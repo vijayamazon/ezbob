@@ -79,8 +79,16 @@
 			surname = Regex.Replace(surname, "[^a-zA-Z]", String.Empty);
 			var surnameFormatted = surname.Length > 6 ? surname.Substring(0, 6) : surname;
 			var accountNumberFormatted = accountNumber.Length >= 10 ? accountNumber.Substring(0, 10) : accountNumber;
-			var postCodeFormatted = postcode.Split(' ')[0];
-			var options = string.Format("{0};fin_serv_birth_date={1};fin_serv_surname={2};fin_serv_postcode={3};fin_serv_account={4}", paypointOptions, dateOfBirthFormatted, surnameFormatted, postCodeFormatted, accountNumberFormatted);
+			var postCodeFormatted = "";
+			postCodeFormatted = !postcode.Contains(" ") ? postcode.Substring(0, postcode.Length - 3) : postcode.Split(' ')[0];
+			postCodeFormatted = postCodeFormatted.Length > 6 ? postCodeFormatted.Substring(0, 6) : postCodeFormatted;
+
+			var options = string.Format("{0};fin_serv_birth_date={1};fin_serv_surname={2};fin_serv_postcode={3};fin_serv_account={4}", 
+				paypointOptions, 
+				dateOfBirthFormatted, 
+				surnameFormatted, 
+				postCodeFormatted, 
+				accountNumberFormatted);
 			if (deferred)
 			{
 				if (!string.IsNullOrEmpty(options) && options[options.Length - 1] != ';')
