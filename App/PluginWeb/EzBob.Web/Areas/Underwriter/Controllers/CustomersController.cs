@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
-	using System.Web.Security;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -36,8 +35,8 @@
 			IWorkplaceContext context,
 			LoanLimit limit,
 			MarketPlaceRepository mpType,
-			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository
-		) {
+			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository, 
+			RejectReasonRepository rejectReasonRepository) {
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(CustomersController)));
 			m_oDB = DbConnectionGenerator.Get();
 
@@ -52,7 +51,8 @@
 			_customerStatusesRepository = customerStatusesRepository;
 
 			this.underwriterRecentCustomersRepository = underwriterRecentCustomersRepository;
-		} // constructor
+			_rejectReasonRepository = rejectReasonRepository;
+			} // constructor
 
 		#endregion constructor
 
@@ -341,23 +341,24 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult ChangeStatus(int id, CreditResultStatus status, string reason) {
+		public JsonResult ChangeStatus(DecisionModel model) {
 			var workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
 			var user = workplaceContext.User;
-			var customer = _customers.GetChecked(id);
+			var customer = _customers.GetChecked(model.id);
 
-			customer.CreditResult = status;
+			customer.CreditResult = model.status;
 			customer.UnderwriterName = user.Name;
 
 			var request = customer.LastCashRequest ?? new CashRequest();
 			request.IdUnderwriter = user.Id;
 			request.UnderwriterDecisionDate = DateTime.UtcNow;
-			request.UnderwriterDecision = status;
-			request.UnderwriterComment = reason;
+			request.UnderwriterDecision = model.status;
+			request.UnderwriterComment = model.reason;
 
 			string sWarning = string.Empty;
 
-			switch (status) {
+			switch (model.status)
+			{
 			case CreditResultStatus.Approved:
 				if (!customer.WizardStep.TheLastOne) {
 					try {
@@ -372,7 +373,7 @@
 
 				customer.DateApproved = DateTime.UtcNow;
 				customer.Status = Status.Approved;
-				customer.ApprovedReason = reason;
+				customer.ApprovedReason = model.reason;
 
 				var sum = request.ApprovedSum();
 				if (sum <= 0)
@@ -384,7 +385,7 @@
 				customer.IsLoanTypeSelectionAllowed = request.IsLoanTypeSelectionAllowed;
 				request.ManagerApprovedSum = (double?)sum;
 
-				_historyRepository.LogAction(DecisionActions.Approve, reason, user, customer);
+				_historyRepository.LogAction(DecisionActions.Approve, model.reason, user, customer);
 
 				if (customer.FilledByBroker) {
 					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
@@ -413,10 +414,10 @@
 
 			case CreditResultStatus.Rejected:
 				customer.DateRejected = DateTime.UtcNow;
-				customer.RejectedReason = reason;
+				customer.RejectedReason = model.reason;
 				customer.Status = Status.Rejected;
-
-				_historyRepository.LogAction(DecisionActions.Reject, reason, user, customer);
+				//var rejections = model.rejectionReasons.Select(int.Parse);
+				_historyRepository.LogAction(DecisionActions.Reject, model.reason, user, customer, model.rejectionReasons);
 
 				request.ManagerApprovedSum = null;
 
@@ -435,8 +436,8 @@
 			case CreditResultStatus.Escalated:
 				customer.CreditResult = CreditResultStatus.Escalated;
 				customer.DateEscalated = DateTime.UtcNow;
-				customer.EscalationReason = reason;
-				_historyRepository.LogAction(DecisionActions.Escalate, reason, user, customer);
+				customer.EscalationReason = model.reason;
+				_historyRepository.LogAction(DecisionActions.Escalate, model.reason, user, customer);
 
 				try {
 					m_oServiceClient.Instance.Escalated(customer.Id);
@@ -585,6 +586,14 @@
 
 		#endregion method FindCustomer
 
+		#region RejectReason
+		[Ajax]
+		[HttpGet]
+		public JsonResult RejectReasons()
+		{
+			return Json(new {reasons = _rejectReasonRepository.GetAll().ToList()}, JsonRequestBehavior.AllowGet);
+		}
+		#endregion
 		#endregion public
 
 		#region private
@@ -611,7 +620,7 @@
 
 		private readonly CustomerStatusesRepository _customerStatusesRepository;
 		private readonly IUnderwriterRecentCustomersRepository underwriterRecentCustomersRepository;
-
+		private readonly RejectReasonRepository _rejectReasonRepository;
 		private readonly ASafeLog m_oLog;
 		private readonly AConnection m_oDB;
 

@@ -10,6 +10,10 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
                 EzBob.CrmStatuses = data.CrmStatuses
                 EzBob.CrmRanks = data.CrmRanks
             )
+        if(EzBob.RejectReasons? or EzBob.RejectReasons.length == 0)
+            xhr = $.get(window.gRootPath + "Underwriter/Customers/RejectReasons", (data) ->
+                EzBob.RejectReasons = data.reasons
+            )
 
 
     render: ->

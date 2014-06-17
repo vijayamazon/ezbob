@@ -106,6 +106,8 @@
     <Compile Include="Model\Database\Report\ReportArguments.cs" />
     <Compile Include="Model\Database\Report\ReportUserMap.cs" />
     <Compile Include="Model\Database\Report\Report.cs" />
+    <Compile Include="Model\Database\Request\DecisionHistoryRejectReason.cs" />
+    <Compile Include="Model\Database\Request\RejectReason.cs" />
     <Compile Include="Model\Database\SuggestedAmount.cs" />
     <Compile Include="Model\Database\Customer\VipRequest.cs" />
     <Compile Include="Model\Database\LandRegistry.cs" />
@@ -313,7 +315,7 @@
     <Compile Include="Model\Database\ExperianConsentAgreementMap.cs" />
     <Compile Include="Model\Database\LoanOptions.cs" />
     <Compile Include="Model\Database\LoanOptionsMap.cs" />
-    <Compile Include="Model\Database\DecisionHistory.cs" />
+    <Compile Include="Model\Database\Request\DecisionHistory.cs" />
     <Compile Include="Model\Email\EmailConfirmationRequest.cs" />
     <Compile Include="Model\Email\EmailConfirmationRequestRepository.cs" />
     <Compile Include="Model\Email\IEmailConfirmationRequestRepository.cs" />
@@ -418,8 +420,8 @@
     <Compile Include="IAnalysisDataParameterInfo.cs" />
     <Compile Include="ICurrencyConvertor.cs" />
     <Compile Include="MarketplaceException.cs" />
-    <Compile Include="Model\Database\CashRequest.cs" />
-    <Compile Include="Model\Database\CashRequestMap.cs" />
+    <Compile Include="Model\Database\Request\CashRequest.cs" />
+    <Compile Include="Model\Database\Request\CashRequestMap.cs" />
     <Compile Include="Model\Database\MedalStatisticDataRow.cs" />
     <Compile Include="Model\Database\MedalStatisticDataRowMap.cs" />
     <Compile Include="Model\Marketplaces\MP_AlertDocument.cs" />

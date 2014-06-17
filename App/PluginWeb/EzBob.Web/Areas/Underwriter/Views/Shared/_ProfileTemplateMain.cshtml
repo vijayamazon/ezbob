@@ -103,13 +103,21 @@
     Html.RenderPartial("ApproveLoanForWarningStatusCustomer"); 
 }
 
-
-@helper FunctionsDialog()
-{
+<script id="functionsDialogTemplate" type="text/template">
     <div id="functionsPopup" style="overflow: visible">
         <div class="loan-schedule"></div>
         <div id="details"></div>
         <div>
+            <div class="rejectReasonDiv" style="display:none;">
+                <h3>Reject Reason:</h3>
+                <div style="width:100%">
+                    <select class="rejectReason chosen" data-placeholder=" " multiple="multiple" style="width:100%; min-height:40px;">
+                        <%_.each(EzBob.RejectReasons, function(reason) {%>
+                            <option value="<%-reason.Id%>"><%-reason.Reason%></option>
+                        <%});%>
+                    </select>
+                </div>
+            </div>
             <div class="uwReason">
                 <h3>Reason:</h3>
                 <textarea class="reason" maxlength="200"></textarea>
@@ -122,15 +130,11 @@
             </div>
         </div>
 
-
         <div class="pull-right">
             <input class="btn btn-primary button-ok" type="button" value="OK" />
             <input class="btn btn-primary button-cancel" type="button" value="Cancel" />
         </div>
-    </div>  
-}
-<script id="functionsDialogTemplate" type="text/template">
-    @FunctionsDialog()
+    </div>
 </script>
 
 <script id="approve-details" type="text/template">

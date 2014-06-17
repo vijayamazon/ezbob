@@ -25,11 +25,13 @@
       this.$el.find(".button-ok").val(buttonName);
       this.ReasonField = this.$el.find(".reason");
       this.YodleeReasonField = this.$el.find(".yodleeReason");
+      this.RejectionReason = this.$el.find(".rejectReason");
       if (!this.showReasonField()) {
         this.ReasonField.css("display", "none");
         this.$el.find("h3").css("display", "none");
       }
       this.ReasonField.val(this.model.get("Reason"));
+      console.log('@type', this.type);
       this.$el.dialog({
         autoOpen: true,
         position: ["top", 60],
@@ -71,24 +73,33 @@
       return this.ReasonFieldEmptyError($(field.currentTarget), false);
     },
     BtnOkClicked: function(e) {
-      var data, req, that;
+      var data, rejectionReasons, req, that;
       that = this;
+      console.log('e', e);
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
-      $(e.currentTarget).addClass("disabled");
+      rejectionReasons = this.RejectionReason.val();
       req = false;
-      if (this.ReasonField.val() === "" && this.showReasonField()) {
-        this.ReasonFieldEmptyError(this.ReasonField, true);
+      if (this.type !== 'Rejected') {
+        if (this.ReasonField.val() === "" && this.showReasonField()) {
+          this.ReasonFieldEmptyError(this.ReasonField, true);
+          req = true;
+        }
+        if (this.YodleeReasonField.val() === "" && this.NoYodlee) {
+          this.ReasonFieldEmptyError(this.YodleeReasonField, true);
+          req = true;
+        }
+      }
+      if (this.type === 'Rejected' && !rejectionReasons) {
+        this.ReasonFieldEmptyError(this.$el.find(".rejectReasonDiv"), true);
         req = true;
       }
-      if (this.YodleeReasonField.val() === "" && this.NoYodlee) {
-        this.ReasonFieldEmptyError(this.YodleeReasonField, true);
-        req = true;
-      }
+      console.log('req', req);
       if (req) {
         return false;
       }
+      $(e.currentTarget).addClass("disabled");
       data = {
         id: this.model.get("CustomerId"),
         status: this.type
@@ -96,11 +107,22 @@
       if (this.showReasonField()) {
         data.reason = this.ReasonField.val();
       }
+      if (rejectionReasons && rejectionReasons.length > 0) {
+        rejectionReasons = rejectionReasons.map(Number);
+      }
+      data.rejectionReasons = rejectionReasons;
       if (this.NoYodlee) {
         data.reason += " | " + this.YodleeReasonField.val();
       }
-      req = $.post(window.gRootPath + "Underwriter/Customers/ChangeStatus", data);
+      console.log('data', data);
       BlockUi("on");
+      req = $.ajax({
+        type: "POST",
+        url: window.gRootPath + "Underwriter/Customers/ChangeStatus",
+        data: data,
+        dataType: "json",
+        traditional: true
+      });
       req.done(function(res) {
         if (res.error) {
           EzBob.ShowMessage(res.error, "Error occured");
@@ -114,7 +136,8 @@
         that.trigger("changedSystemDecision");
         return $(".ui-icon-refresh").click();
       });
-      return req.complete(function() {
+      return req.always(function(res) {
+        console.log('always', res);
         BlockUi("off");
         return $(e.currentTarget).removeClass("disabled");
       });
@@ -125,6 +148,11 @@
   });
 
   EzBob.Underwriter.RejectedDialog = EzBob.Underwriter.FunctionsDialogView.extend({
+    onShow: function() {
+      this.$el.find(".rejectReasonDiv").show();
+      return this.$el.find(".chosen").chosen();
+    },
+    dlgHeight: 400,
     getType: function() {
       return "Rejected";
     },
@@ -215,7 +243,6 @@
     renderSchedule: function() {
       var that;
       that = this;
-      console.log('omdel', this.model);
       return $.getJSON(window.gRootPath + "Underwriter/Schedule/Calculate", {
         id: this.model.get("CashRequestId")
       }).done(function(data) {

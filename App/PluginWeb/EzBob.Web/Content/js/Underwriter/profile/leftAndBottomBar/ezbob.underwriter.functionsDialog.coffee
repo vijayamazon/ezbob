@@ -19,10 +19,12 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
         @$el.find(".button-ok").val buttonName
         @ReasonField = @$el.find(".reason")
         @YodleeReasonField = @$el.find(".yodleeReason")
+        @RejectionReason = @$el.find(".rejectReason")
         unless @showReasonField()
             @ReasonField.css "display", "none"
             @$el.find("h3").css "display", "none"
         @ReasonField.val @model.get("Reason")
+        
         @$el.dialog
             autoOpen: true
             position: ["top", 60]
@@ -64,30 +66,46 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
     BtnOkClicked: (e) ->
         that = this
         return false if $(e.currentTarget).hasClass("disabled")
-        $(e.currentTarget).addClass "disabled"
-
-        req = false
-        if @ReasonField.val() is "" and @showReasonField()
-            @ReasonFieldEmptyError(@ReasonField, true)
-            req = true
-
         
-        if @YodleeReasonField.val() is "" and @NoYodlee
-            @ReasonFieldEmptyError(@YodleeReasonField, true)
-            req = true
 
+        rejectionReasons = @RejectionReason.val()
+        req = false
+        if(@type != 'Rejected')
+            if @ReasonField.val() is "" and @showReasonField()
+                @ReasonFieldEmptyError(@ReasonField, true)
+                req = true
+
+            if @YodleeReasonField.val() is "" and @NoYodlee
+                @ReasonFieldEmptyError(@YodleeReasonField, true)
+                req = true
+        if(@type == 'Rejected' and not rejectionReasons)
+            @ReasonFieldEmptyError(@$el.find(".rejectReasonDiv"), true)
+            req=true
         return false if req
-
+        $(e.currentTarget).addClass "disabled"
+        
         data =
             id: @model.get("CustomerId")
             status: @type
 
         data.reason = @ReasonField.val() if @showReasonField()
+        
+        if(rejectionReasons && rejectionReasons.length > 0)
+            rejectionReasons = rejectionReasons.map(Number)
+
+        data.rejectionReasons = rejectionReasons
         if @NoYodlee
             data.reason += " | " + @YodleeReasonField.val()
-
-        req = $.post(window.gRootPath + "Underwriter/Customers/ChangeStatus", data)
+        
         BlockUi "on"
+        req = $.ajax({
+            type: "POST"
+            url: window.gRootPath + "Underwriter/Customers/ChangeStatus"
+            data: data
+            dataType: "json"
+            traditional: true
+        })
+        
         req.done (res) ->
             if res.error
                 EzBob.ShowMessage res.error,"Error occured"
@@ -102,7 +120,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
             that.trigger "changedSystemDecision"
             $(".ui-icon-refresh").click()
 
-        req.complete ->
+        req.always (res) ->
             BlockUi "off"
             $(e.currentTarget).removeClass "disabled"
 
@@ -110,6 +128,11 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
         @$el.dialog "close"
 )
 EzBob.Underwriter.RejectedDialog = EzBob.Underwriter.FunctionsDialogView.extend(
+    onShow: ->
+        @$el.find(".rejectReasonDiv").show()
+        @$el.find(".chosen").chosen()
+        
+    dlgHeight: 400
     getType: ->
         "Rejected"
 
@@ -170,7 +193,6 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
         @$el.find(".change-offer-details").attr 'disabled', 'disabled' if @model.get("IsLoanTypeSelectionAllowed") in [ 1, '1' ]
         @NoYodlee = @model.get('IsOffline') and not @model.get('HasYodlee')
         @$el.find("#noYodleeReasonDiv").toggleClass('hide', !@NoYodlee).toggleClass('uwReason', @NoYodlee)
-
 
     renderDetails: ->
         details = _.template($("#approve-details").html(), @model.toJSON())
