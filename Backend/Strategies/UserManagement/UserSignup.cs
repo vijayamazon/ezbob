@@ -4,6 +4,7 @@
 	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Exceptions;
 	using JetBrains.Annotations;
 
 	public class UserSignup : AStrategy {
@@ -105,7 +106,7 @@
 				else
 					m_oResult = MembershipCreateStatus.Success;
 			}
-			catch (AStrategyException) {
+			catch (AException) {
 				m_oResult = MembershipCreateStatus.ProviderError;
 				throw;
 			}

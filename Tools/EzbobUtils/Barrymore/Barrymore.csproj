@@ -50,9 +50,14 @@
     <Compile Include="BaseConverter.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="ElapsedTimeInfo.cs" />
+    <Compile Include="Exceptions\AException.cs" />
+    <Compile Include="Exceptions\ALoggedException.cs" />
+    <Compile Include="Exceptions\QuietException.cs" />
+    <Compile Include="Exceptions\Alert.cs" />
+    <Compile Include="Exceptions\Warning.cs" />
     <Compile Include="Extensions\EnumExt.cs" />
     <Compile Include="IParametrisable.cs" />
-    <Compile Include="NullSeldenException.cs" />
+    <Compile Include="Exceptions\NullSeldenException.cs" />
     <Compile Include="Extensions\IntExt.cs" />
     <Compile Include="Extensions\DecimalExt.cs" />
     <Compile Include="Gravatar.cs" />
@@ -60,7 +65,6 @@
     <Compile Include="MimeTypeResolver.cs" />
     <Compile Include="ObjList.cs" />
     <Compile Include="ParsedValue\ParsedValue.cs" />
-    <Compile Include="ParsedValue\SafeParser.cs" />
     <Compile Include="OrdinalNumber.cs" />
     <Compile Include="PostcodeToRegion.cs" />
     <Compile Include="ProgressCounter.cs" />
@@ -69,7 +73,7 @@
     <Compile Include="Security\Encrypted.cs" />
     <Compile Include="Security\SecurityUtils.cs" />
     <Compile Include="Security\SimplePassword.cs" />
-    <Compile Include="SeldenException.cs" />
+    <Compile Include="Exceptions\SeldenException.cs" />
     <Compile Include="Serialization\Serialized.cs" />
     <Compile Include="SortedTable.cs" />
     <Compile Include="MiscUtils.cs" />

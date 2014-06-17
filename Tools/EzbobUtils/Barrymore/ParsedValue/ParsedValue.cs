@@ -2,8 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 
-	#region class ParsedValue
-
 	public class ParsedValue : IConvertible {
 		#region static constructor
 
@@ -911,6 +909,4 @@
 
 		#endregion private
 	} // class ParsedValue
-
-	#endregion class ParsedValue
 } // namespace Ezbob.Utils.ParsedValue

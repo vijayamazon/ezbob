@@ -2,8 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 
-	#region class MimeTypeResolver
-
 	public class MimeTypeResolver {
 		#region static constructor
 
@@ -600,6 +598,4 @@
 
 		#endregion private
 	} // class MimeTypeResolver
-
-	#endregion class MimeTypeResolver
-} // namespace Ezbob.Utils
+} // namespace

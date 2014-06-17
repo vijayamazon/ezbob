@@ -2,8 +2,6 @@
 	using System;
 	using System.Diagnostics;
 
-	#region class Stopper
-
 	public class Stopper {
 		#region public
 
@@ -47,6 +45,4 @@
 
 		#endregion private
 	} // class Stopper
-
-	#endregion class Stopper
 } // namespace Ezbob.Utils

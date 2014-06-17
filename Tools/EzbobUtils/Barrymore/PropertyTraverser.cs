@@ -112,4 +112,4 @@
 	} // class TraversableExt
 
 	#endregion class TraversableExt
-} // namespace Ezbob.Utils
+} // namespace

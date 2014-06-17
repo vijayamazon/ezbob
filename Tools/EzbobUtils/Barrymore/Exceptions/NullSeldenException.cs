@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Utils {
+﻿namespace Ezbob.Utils.Exceptions {
 	using System;
 
 	public class NullSeldenException : SeldenException {

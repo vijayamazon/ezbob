@@ -2,8 +2,6 @@
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 
-	#region class ObjList
-
 	public class ObjList<T> {
 		#region public
 
@@ -72,6 +70,4 @@
 
 		#endregion private
 	} // class ObjList
-
-	#endregion class ObjList
 } // namespace Ezbob.Utils

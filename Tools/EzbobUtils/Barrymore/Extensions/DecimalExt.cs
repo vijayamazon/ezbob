@@ -1,11 +1,7 @@
 ﻿namespace Ezbob.Utils.Extensions {
 	using System;
 
-	#region class DecimalExt
-
 	public static class DecimalExt {
-		#region public
-
 		#region method Min
 
 		public static decimal Min(this decimal a, decimal b) {
@@ -37,9 +33,5 @@
 		} // RoundDownToFactor
 
 		#endregion method RoundDownToFactor
-
-		#endregion public
 	} // class DecimalExt
-
-	#endregion class DecimalExt
-} // namespace Ezbob.Utils.Extensions
+} // namespace

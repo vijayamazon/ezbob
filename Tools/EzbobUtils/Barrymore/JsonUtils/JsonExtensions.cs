@@ -1,11 +1,7 @@
 ﻿namespace Ezbob.Utils.JsonUtils {
 	using Newtonsoft.Json.Linq;
 
-	#region class JsonExtensions
-
 	public static class JsonExtensions {
-		#region public
-
 		#region method Offspring
 
 		public static JToken Offspring(this JToken oRoot, NameList oChildNames) {
@@ -26,9 +22,5 @@
 		} // Offspring
 
 		#endregion method Offspring
-
-		#endregion public
 	} // class JsonExtensions
-
-	#endregion class JsonExtensions
 } // namespace Ezbob.Utils.JsonUtils

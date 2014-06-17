@@ -1,12 +1,9 @@
 ﻿namespace Ezbob.Utils.XmlUtils {
 	using System;
 	using System.Xml;
-
-	#region class Xml
+	using Exceptions;
 
 	public static class Xml {
-		#region public
-
 		#region method Parse
 
 		public static XmlDocument Parse(string sXml) {
@@ -37,9 +34,5 @@
 		} // ParseRoot
 
 		#endregion method ParseRoot
-
-		#endregion public
 	} // class Xml
-
-	#endregion class Xml
-} // namespace Ezbob.Utils.XmlUtils
+} // namespace

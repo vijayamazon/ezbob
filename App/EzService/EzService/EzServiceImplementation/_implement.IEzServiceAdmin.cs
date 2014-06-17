@@ -1,11 +1,11 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.ServiceModel;
 	using System.Threading;
-	using Exceptions;
-	using EzBob.Backend.Strategies.Exceptions;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Exceptions;
 
 	partial class EzServiceImplementation {
 		#region method Shutdown
@@ -48,7 +48,7 @@
 					SaveActionStatus(amd, ActionStatus.Failed);
 				} // if
 
-				if (!(e is AStrategyException))
+				if (!(e is AException))
 					Log.Alert(e, "Exception during Shutdown() method.");
 
 				throw new FaultException(e.Message);
@@ -68,30 +68,24 @@
 
 					ActionStatus nNewStatus;
 
-					if (ReferenceEquals(oActionID, null)) {
-						amd.Comment = "Action ID not specified.";
+					ActionMetaData oCondemned = null;
+
+					lock (ms_oLockActiveActions) {
+						if (ms_oActiveActions.ContainsKey(oActionID))
+							oCondemned = ms_oActiveActions[oActionID];
+					} // lock
+
+					if (oCondemned == null) {
+						amd.Comment = "Requested action not found.";
 						nNewStatus = ActionStatus.Finished;
 					}
 					else {
-						ActionMetaData oCondemned = null;
+						oCondemned.UnderlyingThread.Abort();
 
-						lock (ms_oLockActiveActions) {
-							if (ms_oActiveActions.ContainsKey(oActionID))
-								oCondemned = ms_oActiveActions[oActionID];
-						} // lock
+						SaveActionStatus(oCondemned, ActionStatus.Terminated);
 
-						if (oCondemned == null) {
-							amd.Comment = "Requested action not found.";
-							nNewStatus = ActionStatus.Finished;
-						}
-						else {
-							oCondemned.UnderlyingThread.Abort();
-
-							SaveActionStatus(oCondemned, ActionStatus.Terminated);
-
-							nNewStatus = ActionStatus.Done;
-						} // if (not) found action
-					} // if (not) specified id of action to terminate
+						nNewStatus = ActionStatus.Done;
+					} // if (not) found action
 
 					SaveActionStatus(amd, nNewStatus);
 
@@ -100,7 +94,7 @@
 					return amd;
 				}
 				catch (Exception e) {
-					if (!(e is AStrategyException))
+					if (!(e is AException))
 						Log.Alert(e, "Exception during Terminate(Guid) method.");
 
 					throw new FaultException(e.Message);
@@ -119,7 +113,7 @@
 				ActionMetaData amd = NewAsync("Admin.Nop", comment: nLengthInSeconds + " seconds");
 
 				if (nLengthInSeconds < 1)
-					throw new ServiceWarning("Nop length is less than 1 second.");
+					throw new Warning(Log, "Nop length is less than 1 second.");
 
 				Log.Msg("Nop({0}) method: creating a sleeper...", nLengthInSeconds);
 
@@ -147,7 +141,7 @@
 				return amd;
 			}
 			catch (Exception e) {
-				if (!(e is AStrategyException))
+				if (!(e is AException))
 					Log.Alert(e, "Exception during Nop() method.");
 
 				throw new FaultException(e.Message);
@@ -167,8 +161,9 @@
 				var oResult = new List<string>();
 
 				lock (ms_oLockActiveActions) {
-					foreach (KeyValuePair<Guid, ActionMetaData> kv in ms_oActiveActions)
-						oResult.Add(kv.Value + " - thread state: " + kv.Value.UnderlyingThread.ThreadState);
+					oResult.AddRange(ms_oActiveActions.Select(
+						kv => kv.Value + " - thread state: " + kv.Value.UnderlyingThread.ThreadState
+					));
 				} // lock
 
 				SaveActionStatus(amd, ActionStatus.Done);
@@ -178,7 +173,7 @@
 				return new StringListActionResult { MetaData = amd, Records = oResult };
 			}
 			catch (Exception e) {
-				if (!(e is AStrategyException))
+				if (!(e is AException))
 					Log.Alert(e, "Exception during ListActiveActions() method.");
 
 				throw new FaultException(e.Message);
@@ -197,9 +192,10 @@
 
 				Log.Msg("WriteToLog() method started...");
 
-				Severity nSeverity = Severity.Info;
+				Severity nSeverity;
 
-				Severity.TryParse(sSeverity, true, out nSeverity);
+				if (!Enum.TryParse(sSeverity, true, out nSeverity))
+					nSeverity = Severity.Info;
 
 				Log.Debug("Requested severity: {0}, actual severity: {1}", sSeverity, nSeverity);
 
@@ -217,7 +213,7 @@
 					SaveActionStatus(amd, ActionStatus.Done);
 				} // if
 
-				if (!(e is AStrategyException))
+				if (!(e is AException))
 					Log.Alert(e, "Exception during WriteToLog() method.");
 
 				throw new FaultException(e.Message);

@@ -10,6 +10,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Exceptions;
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.JsonUtils;
 	using Ezbob.Utils.XmlUtils;

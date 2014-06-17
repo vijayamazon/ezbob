@@ -1,11 +1,7 @@
 ﻿namespace Ezbob.Utils.XmlUtils {
 	using System.Xml;
 
-	#region class XmlNodeExtensions
-
 	public static class XmlNodeExtensions {
-		#region public
-
 		#region method Offspring
 
 		public static XmlNode Offspring(this XmlNode oRoot, NameList oChildNames) {
@@ -35,9 +31,5 @@
 		} // Offspring
 
 		#endregion method Offspring
-
-		#endregion public
 	} // class XmlNodeExtensions
-
-	#endregion class XmlNodeExtensions
 } // namespace Ezbob.Utils.XmlUtils

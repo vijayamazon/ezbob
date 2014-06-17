@@ -1,8 +1,7 @@
 ﻿namespace Ezbob.Utils {
 	using System;
 	using System.Collections.Generic;
-
-	#region class Cache
+	using Exceptions;
 
 	public class Cache<TKey, TValue> where TValue : class {
 		#region public
@@ -127,6 +126,4 @@
 
 		#endregion private
 	} // class Cache
-
-	#endregion class Cache
-} // namespace Ezbob.Utils
+} // namespace

@@ -1,9 +1,6 @@
 ﻿namespace Ezbob.Utils {
-	using System;
 	using System.Text;
 	using System.Web;
-
-	#region class Gravatar
 
 	public static class Gravatar {
 		#region method Url
@@ -30,6 +27,4 @@
 
 		#endregion method Url
 	} // class Gravatar
-
-	#endregion class Gravatar
-} // namespace Ezbob.Utils
+} // namespace

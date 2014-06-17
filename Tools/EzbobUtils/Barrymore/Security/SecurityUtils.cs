@@ -55,4 +55,4 @@
 
 		#endregion method Hash
 	} // class SecurityUtils
-} // namespace Ezbob.Utils.Security
+} // namespace

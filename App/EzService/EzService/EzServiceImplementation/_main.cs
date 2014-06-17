@@ -5,11 +5,10 @@
 	using System.Reflection;
 	using System.ServiceModel;
 	using System.Threading;
-	using Exceptions;
 	using EzBob.Backend.Strategies;
-	using EzBob.Backend.Strategies.Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Exceptions;
 
 	[ServiceBehavior(
 		InstanceContextMode = InstanceContextMode.PerCall,
@@ -96,7 +95,7 @@
 				ConstructorInfo oCreator = oStrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
 
 				if (oCreator == null)
-					throw new ServiceAlert("Failed to find a constructor for " + oStrategyType + " with " + oParams.Count + " arguments.");
+					throw new Alert(Log, "Failed to find a constructor for " + oStrategyType + " with " + oParams.Count + " arguments.");
 
 				Log.Debug(oStrategyType + " constructor found, invoking...");
 
@@ -130,7 +129,7 @@
 					SaveActionStatus(amd, ActionStatus.Failed);
 				} // if
 
-				if (!(e is AStrategyException))
+				if (!(e is AException))
 					Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
 
 				throw new FaultException(e.Message);
@@ -162,8 +161,7 @@
 					typeof(T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == nRequestedParamsCount);
 
 				if (oCreator == null)
-					throw new ServiceAlert("Failed to find a constructor for " + sStrategyType + " with " + nRequestedParamsCount +
-										" arguments.");
+					throw new Alert(Log, "Failed to find a constructor for " + sStrategyType + " with " + nRequestedParamsCount + " arguments.");
 
 				var aryContructorParamInfos = oCreator.GetParameters();
 
@@ -204,7 +202,7 @@
 					SaveActionStatus(amd, ActionStatus.Failed);
 				} // if
 
-				if (!(e is AStrategyException))
+				if (!(e is AException))
 					Log.Alert(mostInnerException, "Exception during executing " + typeof(T) + " strategy.");
 
 				throw new FaultException(mostInnerException.Message);

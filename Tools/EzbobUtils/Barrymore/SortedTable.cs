@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Ezbob.Utils {
+﻿namespace Ezbob.Utils {
+	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
 	using Extensions;
-
-	#region class SortedTable
 
 	public class SortedTable<TRowKey, TColumnKey, TData> {
 		#region public
@@ -232,6 +229,4 @@ namespace Ezbob.Utils {
 
 		#endregion private
 	} // class SortedTable
-
-	#endregion class SortedTable
 } // namespace Ezbob.Utils

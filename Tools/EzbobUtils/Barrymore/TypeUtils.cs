@@ -138,4 +138,4 @@
 
 		#endregion method GetConvertorToObjectArray
 	} // class TypeUtils
-} // namespace Ezbob.Utils
+} // namespace

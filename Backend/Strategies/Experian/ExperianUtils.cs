@@ -5,6 +5,7 @@
 	using System.Xml;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Exceptions;
 	using Ezbob.Utils.XmlUtils;
 
 	#region class ExperianUtils

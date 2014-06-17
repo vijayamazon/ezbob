@@ -1,15 +1,9 @@
-﻿namespace Ezbob.Utils.Extensions
-{
+﻿namespace Ezbob.Utils.Extensions {
 	using System.ComponentModel;
 
-	#region class EnumDescription
-
-	public static class EnumDescription
-	{
-		public static string DescriptionAttr<T>(this T source)
-		{
-			try
-			{
+	public static class EnumDescription {
+		public static string DescriptionAttr<T>(this T source) {
+			try {
 				System.Reflection.FieldInfo fi = source.GetType().GetField(source.ToString());
 
 				var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(
@@ -20,12 +14,9 @@
 
 				return source.ToString();
 			}
-			catch
-			{
+			catch {
 				return "-";
 			} // try
 		} // DescriptionAttr
 	} // class EnumDescription
-
-	#endregion class EnumDescription
-}
+} // namespace

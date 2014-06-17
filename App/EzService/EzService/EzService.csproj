@@ -89,9 +89,6 @@
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />
     <Compile Include="ActionResults\QuickOfferActionResult.cs" />
     <Compile Include="ActionResults\DecimalActionResult.cs" />
-    <Compile Include="Exceptions\ServiceAlert.cs" />
-    <Compile Include="Exceptions\ServiceException.cs" />
-    <Compile Include="Exceptions\ServiceWarning.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
     <Compile Include="EzServiceImplementation\Funding.cs" />

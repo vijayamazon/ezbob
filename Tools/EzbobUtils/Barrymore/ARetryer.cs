@@ -7,7 +7,7 @@
 	public class ForceRetryException : Exception {
 		public const string Name = "Force retry";
 
-		public ForceRetryException(string sMsg = null, Exception oInner = null) : base(sMsg ?? "Force retry", oInner) {} // constructor
+		public ForceRetryException(string sMsg = null, Exception oInner = null) : base(sMsg ?? Name, oInner) {} // constructor
 	} // class ForceRetryException
 
 	#endregion class ForceRetryException
@@ -95,4 +95,4 @@
 	} // class ARetryer
 
 	#endregion class ARetryer
-} // namespace Ezbob.Utils
+} // namespace

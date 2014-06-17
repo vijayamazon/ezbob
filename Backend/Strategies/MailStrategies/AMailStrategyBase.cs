@@ -8,6 +8,7 @@
 	using Ezbob.Logger;
 
 	using EzBob.Backend.Strategies.MailStrategies.API;
+	using Ezbob.Utils.Exceptions;
 
 	public abstract class AMailStrategyBase : AStrategy {
 		#region static constructor
@@ -49,7 +50,7 @@
 
 				Log.Debug("Execute() complete.");
 			}
-			catch (AStrategyException) {
+			catch (AException) {
 				throw;
 			} // try
 			catch (Exception e) {

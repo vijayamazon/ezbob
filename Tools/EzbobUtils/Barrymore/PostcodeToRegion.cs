@@ -1,9 +1,9 @@
-﻿using Ezbob.Logger;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
+﻿namespace Ezbob.Utils {
+	using Ezbob.Logger;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Reflection;
 
-namespace Ezbob.Utils {
 	public class PostcodeToRegion : SafeLog {
 		#region public
 

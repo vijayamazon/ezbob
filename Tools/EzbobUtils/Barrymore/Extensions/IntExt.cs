@@ -1,11 +1,7 @@
 ﻿namespace Ezbob.Utils.Extensions {
 	using System;
 
-	#region class IntExt
-
 	public static class IntExt {
-		#region public
-
 		#region method Min
 
 		public static int Min(this int a, int b) {
@@ -37,9 +33,5 @@
 		} // RoundDownToFactor
 
 		#endregion method RoundDownToFactor
-
-		#endregion public
 	} // class IntExt
-
-	#endregion class IntExt
-} // namespace Ezbob.Utils.Extensions
+} // namespace

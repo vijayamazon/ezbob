@@ -87,4 +87,4 @@
 
 		#endregion method GetFullYearsAndMonths
 	} // class MiscUtils
-} // namespace Ezbob.Utils
+} // namespace

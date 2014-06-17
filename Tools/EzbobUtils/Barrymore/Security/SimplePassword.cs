@@ -86,4 +86,4 @@
 
 		#endregion method ToString
 	} // class SimplePassword
-} // namespace Ezbob.Utils.Security
+} // namespace

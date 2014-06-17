@@ -107,8 +107,6 @@
     <Compile Include="VatReturn\CalculateVatReturnSummary.cs" />
     <Compile Include="Misc\BackfillConsumerAnalytics.cs" />
     <Compile Include="Misc\EncryptChannelGrabberMarketplaces.cs" />
-    <Compile Include="Exceptions\AStrategyException.cs" />
-    <Compile Include="Exceptions\AStrategyLoggedException.cs" />
     <Compile Include="Exceptions\StrategyWarning.cs" />
     <Compile Include="Exceptions\StrategyAlert.cs" />
     <Compile Include="Experian\ExperianParserForAnalytics.cs" />

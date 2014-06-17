@@ -137,4 +137,4 @@
 
 		#endregion private
 	} // class Encrypted
-} // namespace Ezbob.Utils.Security
+} // namespace

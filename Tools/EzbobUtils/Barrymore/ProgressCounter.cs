@@ -1,6 +1,6 @@
-﻿using Ezbob.Logger;
+﻿namespace Ezbob.Utils {
+	using Ezbob.Logger;
 
-namespace Ezbob.Utils {
 	public class ProgressCounter : SafeLog {
 		#region public
 
