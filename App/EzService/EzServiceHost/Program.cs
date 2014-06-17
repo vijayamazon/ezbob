@@ -111,7 +111,7 @@
 
 			var oLog4NetCfg = new Log4Net(m_oEnv).Init();
 
-			m_oLog = new SafeILog(LogManager.GetLogger(typeof(EzServiceHost)));
+			m_oLog = new SafeILog(this);
 
 			NotifyStartStop("started");
 

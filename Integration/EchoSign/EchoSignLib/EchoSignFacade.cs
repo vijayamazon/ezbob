@@ -1,5 +1,5 @@
 ﻿namespace EchoSignLib {
-	using System;
+	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
@@ -16,6 +16,10 @@
 				throw new Alert(m_oLog, "Cannot create EchoSign façade: database connection not specified.");
 
 			m_oDB = oDB;
+
+			LoadConfiguration();
+
+			m_oLog.Msg("EchoSign façade is ready.");
 		} // constructor
 
 		#endregion constructor
@@ -23,6 +27,28 @@
 		#endregion public
 
 		#region private
+
+		#region method LoadConfiguration
+
+		private void LoadConfiguration() {
+			m_sApiKey = CurrentValues.Instance.EchoSignApiKey;
+
+			m_oLog.Debug("************************************************************************");
+			m_oLog.Debug("*");
+			m_oLog.Debug("* EchoSign façade configuration - begin:");
+			m_oLog.Debug("*");
+			m_oLog.Debug("************************************************************************");
+
+			m_oLog.Debug("API key: {0}", m_sApiKey);
+
+			m_oLog.Debug("************************************************************************");
+			m_oLog.Debug("*");
+			m_oLog.Debug("* EchoSign façade configuration - end.");
+			m_oLog.Debug("*");
+			m_oLog.Debug("************************************************************************");
+		} // LoadConfiguration
+
+		#endregion method LoadConfiguration
 
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;

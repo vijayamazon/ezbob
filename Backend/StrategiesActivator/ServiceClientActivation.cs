@@ -1002,6 +1002,42 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oServiceClient.UpdateLinkedHmrcPassword(new Encrypted(sCustomerID), new Encrypted(sDisplayName), new Encrypted(sPassword), sHash);
 		} // UpdateLinkedHmrcPassword
 
+		[Activation]
+		private void Encrypt() {
+			if (m_aryArgs.Length < 2) {
+				m_oLog.Msg("Usage: Encrypt <what to encrypt>");
+				m_oLog.Msg("Concatenates all the passed arguments, separating them with a space, and encrypts the result.");
+				return;
+			} // if
+
+			var sInput = string.Join(" ", m_aryArgs, 1, m_aryArgs.Length - 1);
+			var oOutput = new Encrypted(sInput);
+
+			m_oLog.Msg("\n\nInput: {0}\nOutput: {1}\n", sInput, oOutput);
+		} // Encrypt
+
+		[Activation]
+		private void Decrypt() {
+			if (m_aryArgs.Length < 2) {
+				m_oLog.Msg("Usage: Decrypt <what to decrypt>");
+				m_oLog.Msg("Concatenates all the passed arguments, separating them with a space, and decrypts the result.");
+				return;
+			} // if
+
+			var sInput = string.Join(" ", m_aryArgs, 1, m_aryArgs.Length - 1);
+			string sOutput;
+
+			try {
+				sOutput = Encrypted.Decrypt(sInput);
+			}
+			catch (Exception e) {
+				m_oLog.Warn(e, "Failed to decrypt.");
+				sOutput = string.Empty;
+			} // try
+
+			m_oLog.Msg("\n\nInput: {0}\nOutput: {1}\n", sInput, sOutput);
+		} // Decrypt
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

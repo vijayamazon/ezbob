@@ -67,6 +67,7 @@
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
     <Compile Include="MedalScoreCalculatorTestFixture.cs" />
+    <Compile Include="TestEchoSign.cs" />
     <Compile Include="TestStrategies.cs" />
     <Compile Include="TestCurrencyUpdateController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -173,6 +174,10 @@
     <ProjectReference Include="..\..\eBay\eBayServiceLib\eBayServiceLib.csproj">
       <Project>{59FB16F3-4CCD-43E9-BBC4-5246E62AC70E}</Project>
       <Name>eBayServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EchoSign\EchoSignLib\EchoSignLib.csproj">
+      <Project>{badde16c-dc34-4a2a-8b08-da0d0cae6fec}</Project>
+      <Name>EchoSignLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\EKM\EKM.csproj">
       <Project>{590C01C7-CF2C-4D5B-A307-3EB7EC61FB0D}</Project>

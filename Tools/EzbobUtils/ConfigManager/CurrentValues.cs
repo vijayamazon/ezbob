@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Security;
 
 	public partial class CurrentValues {
 		#region static constructor
@@ -136,8 +137,20 @@
 					Variables nVar;
 					string sName = sr["Name"];
 
-					if (Enum.TryParse<Variables>(sName, out nVar))
-						m_oData[nVar] = new VariableValue(nVar, sr["Value"], Log);
+					if (Enum.TryParse<Variables>(sName, out nVar)) {
+						string sValue = sr["Value"];
+
+						if (sr["IsEncrypted"]) {
+							try {
+								sValue = Encrypted.Decrypt(sValue);
+							}
+							catch (Exception e) {
+								Log.Alert(e, "Failed to decrypt a value of {0}.", nVar);
+							} // try
+						} // if
+
+						m_oData[nVar] = new VariableValue(nVar, sValue, Log);
+					}
 					else
 						Log.Warn("Unknown configuration variable detected: {0}", sName);
 

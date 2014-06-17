@@ -76,6 +76,7 @@ namespace ConfigManager {
 		DirectorInfoNonLimitedParserConfiguration,
 		DirectorInfoParserConfiguration,
 		DisplayEarnedPoints,
+		EchoSignApiKey,
 		EnableAutomaticApproval,
 		EnableAutomaticReApproval,
 		EnableAutomaticRejection,

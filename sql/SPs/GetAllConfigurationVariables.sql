@@ -1,13 +1,23 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetAllConfigurationVariables]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetAllConfigurationVariables]
+IF OBJECT_ID('GetAllConfigurationVariables') IS NULL
+	EXECUTE('CREATE PROCEDURE GetAllConfigurationVariables AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetAllConfigurationVariables]
+
+ALTER PROCEDURE GetAllConfigurationVariables
 AS
 BEGIN
-	SELECT Name, Value FROM ConfigurationVariables
+	SET NOCOUNT ON;
+
+	SELECT
+		Name,
+		Value,
+		ISNULL(IsEncrypted, 0) AS IsEncrypted
+	FROM
+		ConfigurationVariables
 END
 GO

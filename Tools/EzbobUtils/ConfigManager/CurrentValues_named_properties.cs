@@ -595,6 +595,14 @@ namespace ConfigManager {
 
 		#endregion property DisplayEarnedPoints
 
+		#region property EchoSignApiKey
+
+		public virtual VariableValue EchoSignApiKey {
+			get { return this[Variables.EchoSignApiKey]; } // get
+		} // EchoSignApiKey
+
+		#endregion property EchoSignApiKey
+
 		#region property EnableAutomaticApproval
 
 		public virtual VariableValue EnableAutomaticApproval {
