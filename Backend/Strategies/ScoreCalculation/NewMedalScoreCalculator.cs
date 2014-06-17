@@ -24,11 +24,11 @@
 		{
 			this.log = log;
 			this.db = db;
-			Results = new ScoreResult();
 		}
 
 		public ScoreResult CalculateMedalScore(int customerId)
 		{
+			Results = new ScoreResult();
 			GatherData(customerId);
 			CalculateWeights();
 			CalculateGrades();
