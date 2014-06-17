@@ -92,12 +92,13 @@
 						   };
 			if (rejectionReasons != null)
 			{
+				var repo = new RejectReasonRepository(_session);
 				foreach (var rejectionReason in rejectionReasons)
 				{
 					item.RejectReasons.Add(new DecisionHistoryRejectReason
 						{
 							DecisionHistory = item,
-							RejectReasonId = rejectionReason
+							RejectReason = repo.Get(rejectionReason)
 						});
 				}
 			}

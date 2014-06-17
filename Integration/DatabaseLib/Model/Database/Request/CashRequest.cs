@@ -97,6 +97,8 @@
 		public virtual double? ScorePoints { get; set; }
 
 		public virtual CashRequestOriginator? Originator { get; set; }
+
+		public virtual Iesi.Collections.Generic.ISet<DecisionHistory> DecisionHistories { get; set; }
 	} // class CashRequest
 
 	public class CashRequestOriginatorType : EnumStringType<CashRequestOriginator> { }

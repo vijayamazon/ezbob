@@ -9,7 +9,7 @@ namespace EZBob.DatabaseLib.Model.Database
 	{
 		public virtual int Id { get; set; }
 		public virtual DecisionHistory DecisionHistory { get; set; }
-		public virtual int RejectReasonId { get; set; }
+		public virtual RejectReason RejectReason { get; set; }
 	}
 
 	public class DecisionHistoryRejectReasonMap : ClassMap<DecisionHistoryRejectReason>
@@ -18,7 +18,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		{
 			Id(x => x.Id);
 			References(x => x.DecisionHistory, "DecisionHistoryId");
-			Map(x => x.RejectReasonId);
+			References(x => x.RejectReason, "RejectReasonId");
 		}
 	}
 

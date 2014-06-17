@@ -4,6 +4,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models;
 	using Ezbob.Utils.Extensions;
+	using System.Linq;
 
 	public class DecisionHistoryModel
 	{
@@ -54,6 +55,13 @@
 				dm.ApprovedSum = item.CashRequest.ApprovedSum();
 				dm.IsLoanTypeSelectionAllowed = item.CashRequest.IsLoanTypeSelectionAllowed;
 				dm.Originator = item.CashRequest.Originator.HasValue ? item.CashRequest.Originator.DescriptionAttr() : "";
+			}
+
+			if (item.RejectReasons.Any())
+			{
+				dm.Comment = string.Format("{0} ({1})", 
+					item.RejectReasons.Select(x => x.RejectReason.Reason).Aggregate((a, b) => a + ", " + b),
+					item.Comment);
 			}
 			return dm;
 		}

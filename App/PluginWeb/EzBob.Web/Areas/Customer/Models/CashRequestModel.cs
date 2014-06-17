@@ -3,6 +3,7 @@ using EZBob.DatabaseLib.Model.Database;
 
 namespace EzBob.Web.Areas.Customer.Models
 {
+	using System.Linq;
 	using Ezbob.Utils.Extensions;
 
 	public class CashRequestModel
@@ -22,6 +23,15 @@ namespace EzBob.Web.Areas.Customer.Models
 		public string Originator { get; set; }
 		public static CashRequestModel Create(CashRequest c)
 		{
+			var rejectReasons = "";
+			if (c.DecisionHistories.Any())
+			{
+				var lastDecision = c.DecisionHistories.OrderByDescending(x => x.Date).First();
+				if (lastDecision.RejectReasons.Any())
+				{
+					rejectReasons = lastDecision.RejectReasons.Select(x => x.RejectReason.Reason).Aggregate((a, b) => a + ", " + b);
+				}
+			}
 			return new CashRequestModel
 				{
 					Amount =
@@ -30,7 +40,7 @@ namespace EzBob.Web.Areas.Customer.Models
 							: 0,
 					StartDate = c.OfferStart,
 					EndDate = c.OfferValidUntil,
-					Comments = c.UnderwriterComment,
+					Comments = string.IsNullOrEmpty(rejectReasons) ? c.UnderwriterComment : string.Format("{0} ({1})", rejectReasons,c.UnderwriterComment),
 					InterestRate = c.InterestRate,
 					SetupFee = c.UseSetupFee,
 					Id = c.Id,

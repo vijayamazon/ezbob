@@ -91,11 +91,6 @@
 }
 
 <script id="offrers-template" type="text/template">
-    @Offers()
-</script>
-
-@helper Offers(){
-   
     <table class="table centered">
         <thead class="box">
             <tr class="box-title">
@@ -123,8 +118,9 @@
                 <%}%>
             <%});%>
         </tbody>
-    </table>    
-}
+    </table>
+</script>
+
 
 @helper TableRowsOfferApproved () {
     <tr>
