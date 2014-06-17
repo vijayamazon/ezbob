@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System;
+	using System.Collections.Generic;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -49,8 +50,11 @@
 		private decimal _payPalTotalSumOfOrders3M;
 		private decimal _payPalTotalSumOfOrders1Y;
 		private readonly string _customerStatusName;
+		private List<AutoDecisionCondition> _conditions;
 
-		public Rejection(int customerId,
+		public Rejection(
+			List<AutoDecisionCondition> conditions,
+			int customerId,
 			double totalSumOfOrders1YTotalForRejection,
 			double totalSumOfOrders3MTotalForRejection,
 			double yodlee1YForRejection,
@@ -86,6 +90,7 @@
 			_companySeniorityDays = companySeniorityDays;
 			_isOffline = isOffline;
 			_customerStatusName = customerStatusName;
+			_conditions = conditions;
 		}
 
 		private bool IsException(out string reason)
@@ -93,48 +98,67 @@
 			reason = "AutoReject: Rejection exception";
 
 			// Customers that have been approved at least once before (even if the latest decision was rejection) and in enabled status/fraud suspect
-			if (_loanOfferApprovalNum > 0 && _customerStatusIsEnabled && !_customerStatusIsWarning)
+			bool conditionValue = _loanOfferApprovalNum > 0 && _customerStatusIsEnabled && !_customerStatusIsWarning;
+			string conditionDescription = string.Format("Exception - Has past approval and customer status is enabled and not warning (_loanOfferApprovalNum > 0 && _customerStatusIsEnabled && !_customerStatusIsWarning) [{0} > 0 && {1} && !{2}]", _loanOfferApprovalNum, _customerStatusIsEnabled, _customerStatusIsWarning);
+			_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue});
+			if (conditionValue)
 			{
 				reason = string.Format("{0} : {1}", reason, "Customers that have been approved at least once before");
-				return true;
 			}
 			// Annual turnover above 250,000
-			if (_totalSumOfOrders1YTotalForRejection > _autoRejectionExceptionAnualTurnover)
+			conditionValue = _totalSumOfOrders1YTotalForRejection > _autoRejectionExceptionAnualTurnover;
+			conditionDescription = string.Format("Exception - High annual turnover (_totalSumOfOrders1YTotalForRejection > _autoRejectionExceptionAnualTurnover) [{0} > {1}]", _totalSumOfOrders1YTotalForRejection, _autoRejectionExceptionAnualTurnover);
+			_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+			if (conditionValue)
 			{
 				reason = string.Format("{0} : {1} {2} ({3})", reason, "Annual turnover above", _autoRejectionExceptionAnualTurnover, _totalSumOfOrders1YTotalForRejection);
-				return true;
 			}
 			// Consumer score (max of applicant and directors) above 800
-			if (_maxExperianConsumerScore > _autoRejectionExceptionCreditScore)
+			conditionValue = _maxExperianConsumerScore > _autoRejectionExceptionCreditScore;
+			conditionDescription = string.Format("Exception - High max personal score (_maxExperianConsumerScore > _autoRejectionExceptionCreditScore) [{0} > {1}]", _maxExperianConsumerScore, _autoRejectionExceptionCreditScore);
+			_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+			if (conditionValue)
 			{
 				reason = string.Format("{0} : {1} {2} ({3})", reason, "Consumer score above", _autoRejectionExceptionCreditScore, _maxExperianConsumerScore);
-				return true;
 			}
 			// Company score (max of company, parent companies) (default >= 40)
 			int rejectionExceptionMaxCompanyScore = CurrentValues.Instance.RejectionExceptionMaxCompanyScore;
-			if (_maxCompanyScore >= rejectionExceptionMaxCompanyScore)
+			conditionValue = _maxCompanyScore >= rejectionExceptionMaxCompanyScore;
+			conditionDescription = string.Format("Exception - High max company score (_maxCompanyScore >= rejectionExceptionMaxCompanyScore) [{0} >= {1}]", _maxCompanyScore, rejectionExceptionMaxCompanyScore);
+			_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+			if (conditionValue)
 			{
 				reason = string.Format("{0} : {1} {2} ({3})", reason, "Company score above", rejectionExceptionMaxCompanyScore, _maxCompanyScore);
-				return true;
 			}
 			// MP with error AND (consumer score > 500 OR company score > 10)
 			int rejectionExceptionMaxConsumerScoreForMpError = CurrentValues.Instance.RejectionExceptionMaxConsumerScoreForMpError;
 			int rejectionExceptionMaxCompanyScoreForMpError = CurrentValues.Instance.RejectionExceptionMaxCompanyScoreForMpError;
-			if (_errorMPsNum > 0 && (_maxExperianConsumerScore > rejectionExceptionMaxConsumerScoreForMpError || _maxCompanyScore > rejectionExceptionMaxCompanyScoreForMpError))
+			conditionValue = _errorMPsNum > 0 && (_maxExperianConsumerScore > rejectionExceptionMaxConsumerScoreForMpError || _maxCompanyScore > rejectionExceptionMaxCompanyScoreForMpError);
+			conditionDescription = string.Format("Exception - MP with error and high enough experian score (_errorMPsNum > 0 && (_maxExperianConsumerScore > rejectionExceptionMaxConsumerScoreForMpError || _maxCompanyScore > rejectionExceptionMaxCompanyScoreForMpError)) [{0} > 0 && ({1} > {2} || {3} > {4})]", _errorMPsNum, _maxExperianConsumerScore, rejectionExceptionMaxConsumerScoreForMpError, _maxCompanyScore, rejectionExceptionMaxCompanyScoreForMpError);
+			_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+			if (conditionValue)
 			{
 				reason = string.Format("{0} : {1} {2} {3}", reason, "MP with error and experian scores", _maxExperianConsumerScore, _maxCompanyScore);
-				return true;
 			}
 			// Couldn't get experian score
-			if ((decimal)_maxExperianConsumerScore == 0)
+			conditionValue = (decimal)_maxExperianConsumerScore == 0;
+			conditionDescription = string.Format("Exception - No personal score (_maxExperianConsumerScore == 0) [{0} == 0]", _maxExperianConsumerScore);
+			_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+			if (conditionValue)
 			{
 				reason = string.Format("{0} : {1}", reason, "Experian consumer score is 0");
-				return true;
 			}
 			// Customer via broker
-			if (_isBrokerCustomer) // TODO: Currently rejections are disabled for broker customers - this logic is in contradiction to it (should be refactored)
+			conditionValue = _isBrokerCustomer;
+			conditionDescription = string.Format("Exception - Customer via broker (_isBrokerCustomer) [{0}]", _isBrokerCustomer);
+			_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+			if (conditionValue) // TODO: Currently rejections are disabled for broker customers - this logic is in contradiction to it (should be refactored)
 			{
 				reason = string.Format("{0} : {1}", reason, "Customer via broker");
+			}
+
+			if (reason != "AutoReject: Rejection exception")
+			{
 				return true;
 			}
 
@@ -207,30 +231,33 @@
 			{
 				Init();
 				string rejectionExceptionReason;
-				if (IsException(out rejectionExceptionReason))
-				{
-					response.AutoRejectReason = rejectionExceptionReason;
-					_log.Debug("Customer {0} was not auto rejected because {1}", _customerId, rejectionExceptionReason);
-					return false;
-				}
+				bool isRejectionException = IsException(out rejectionExceptionReason);
 
 				int rejectionCompanyScore = CurrentValues.Instance.RejectionCompanyScore;
 
 				// Consumer score < 500
-				if (_maxExperianConsumerScore < _lowCreditScore)
+				bool conditionValue = _maxExperianConsumerScore < _lowCreditScore;
+				string conditionDescription = string.Format("Low personal score (_maxExperianConsumerScore < _lowCreditScore) [{0} < {1}]", _maxExperianConsumerScore, _lowCreditScore);
+				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+				if (conditionValue)
 				{
 					response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + _maxExperianConsumerScore + " < " +
 												_lowCreditScore;
 				}
 				// Business score < 10 (If business score exists)
-				else if (_maxCompanyScore > 0 && _maxCompanyScore < rejectionCompanyScore)
+				conditionValue = _maxCompanyScore > 0 && _maxCompanyScore < rejectionCompanyScore;
+				conditionDescription = string.Format("Low business score (_maxCompanyScore > 0 && _maxCompanyScore < rejectionCompanyScore) [{0} > 0 && {1} < {2}]", _maxCompanyScore, _maxCompanyScore, rejectionCompanyScore);
+				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
 					response.AutoRejectReason = "AutoReject: Low company score. Condition not met:" + _maxCompanyScore + " < " +
 												rejectionCompanyScore;
 				}
 				// Credit score < 800 AND at least 1 default of at least 300 in last 24 months
-				else if (_maxExperianConsumerScore < _rejectDefaultsCreditScore &&
-					_numOfDefaultAccounts >= _rejectDefaultsAccountsNum)
+				conditionValue = _maxExperianConsumerScore < _rejectDefaultsCreditScore && _numOfDefaultAccounts >= _rejectDefaultsAccountsNum;
+				conditionDescription = string.Format("Pretty low personal score and personal account defaults (_maxExperianConsumerScore < _rejectDefaultsCreditScore && _numOfDefaultAccounts >= _rejectDefaultsAccountsNum) [{0} < {1} && {2} >= {3}]", _maxExperianConsumerScore, _rejectDefaultsCreditScore, _numOfDefaultAccounts, _rejectDefaultsAccountsNum);
+				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
 					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met:" +
 												_maxExperianConsumerScore +
@@ -238,28 +265,41 @@
 												_rejectDefaultsAccountsNum;
 				}
 				// Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 accounts in last 3 months
-				else if(_numOfLateAccounts >= _rejectNumOfLateAccounts)
+				conditionValue = _numOfLateAccounts >= _rejectNumOfLateAccounts;
+				conditionDescription = string.Format("Late in personal accounts (_numOfLateAccounts >= _rejectNumOfLateAccounts) [{0} >= {1}]", _numOfLateAccounts, _rejectNumOfLateAccounts);
+				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
 					response.AutoRejectReason = string.Format("AutoReject: Late CAIS accounts. Condition not met: {0} >= {1}",
 					                                          _numOfLateAccounts, _rejectNumOfLateAccounts);
 				}
 				// max(Marketplace(Ecomm) or company )seniority < 300 days.
-				else if (Math.Max(_marketplaceSeniorityDays, _companySeniorityDays) < _rejectMinimalSeniority)
+				conditionValue = Math.Max(_marketplaceSeniorityDays, _companySeniorityDays) < _rejectMinimalSeniority;
+				conditionDescription = string.Format("Low company or MP seniority (Max(_marketplaceSeniorityDays, _companySeniorityDays) < _rejectMinimalSeniority) [Max({0}, {1}) < {2}]", _marketplaceSeniorityDays, _companySeniorityDays, _rejectMinimalSeniority);
+				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
 					response.AutoRejectReason = "AutoReject: Seniority. Condition not met: (max(mp " + _marketplaceSeniorityDays +
 												", company " + _companySeniorityDays + ") < " +
 												_rejectMinimalSeniority + ")";
 				}
 				// Customer status != enabled\fraud suspect
-				else if (!_customerStatusIsEnabled || _customerStatusIsWarning)
+				conditionValue = !_customerStatusIsEnabled || _customerStatusIsWarning;
+				conditionDescription = string.Format("Customer status (!_customerStatusIsEnabled || _customerStatusIsWarning) [!{0} || {1}]", _customerStatusIsEnabled, _customerStatusIsWarning);
+				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
 					response.AutoRejectReason = "AutoReject: Customer status. Condition not met:" + _customerStatusName;
-
 				}
 				// Sufficient annual or quarterly turnover (Pay pal is also being considered by itself)
-				else if (!_isOffline && 
+				conditionValue = !_isOffline && 
 					(_payPalNumberOfStores == 0 || _payPalTotalSumOfOrders3M < _lowTotalThreeMonthTurnover || _payPalTotalSumOfOrders1Y < _lowTotalAnnualTurnover)
-					&& (_totalSumOfOrders3MTotalForRejection < _lowTotalThreeMonthTurnover || _totalSumOfOrders1YTotalForRejection < _lowTotalAnnualTurnover))
+					&& (_totalSumOfOrders3MTotalForRejection < _lowTotalThreeMonthTurnover || _totalSumOfOrders1YTotalForRejection < _lowTotalAnnualTurnover);
+				conditionDescription = string.Format("Low online turnover (!_isOffline && (_payPalNumberOfStores == 0 || _payPalTotalSumOfOrders3M < _lowTotalThreeMonthTurnover || _payPalTotalSumOfOrders1Y < _lowTotalAnnualTurnover) && (_totalSumOfOrders3MTotalForRejection < _lowTotalThreeMonthTurnover || _totalSumOfOrders1YTotalForRejection < _lowTotalAnnualTurnover)) [!{0} && ({1} == 0 || {2} < {3} || {4} < {5}) && ({6} < {7} || {8} < {9})]", 
+					_isOffline, _payPalNumberOfStores, _payPalTotalSumOfOrders3M, _lowTotalThreeMonthTurnover, _payPalTotalSumOfOrders1Y, _lowTotalAnnualTurnover, 
+					_totalSumOfOrders3MTotalForRejection, _lowTotalThreeMonthTurnover, _totalSumOfOrders1YTotalForRejection, _lowTotalAnnualTurnover);
+				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
 					response.AutoRejectReason = "AutoReject: Online Totals. Condition not met: (" + _payPalNumberOfStores + " < 0 OR " +
 												_payPalTotalSumOfOrders3M + " < " +
@@ -269,16 +309,25 @@
 												_lowTotalAnnualTurnover + ")";
 				}
 				// Offline only (hmrc or bank) turnover: Have separate turnover configs. Annual - 30000, 3M - 5000
-				else if(_isOffline && (_hasHmrc || _hasYodlee) && 
-					(Math.Max((decimal)_yodlee1YForRejection, _hmrcAnnualRevenues) < _lowOfflineAnnualRevenue || 
-					 Math.Max((decimal)_yodlee3MForRejection, _hmrcQuarterRevenues) < _lowOfflineQuarterRevenue))
+				conditionValue = _isOffline && (_hasHmrc || _hasYodlee) && (Math.Max((decimal)_yodlee1YForRejection, _hmrcAnnualRevenues) < _lowOfflineAnnualRevenue || Math.Max((decimal)_yodlee3MForRejection, _hmrcQuarterRevenues) < _lowOfflineQuarterRevenue);
+				conditionDescription = string.Format("Low offline turnover (_isOffline && (_hasHmrc || _hasYodlee) && (Max(_yodlee1YForRejection, _hmrcAnnualRevenues) < _lowOfflineAnnualRevenue || Max(_yodlee3MForRejection, _hmrcQuarterRevenues) < _lowOfflineQuarterRevenue)) [{0} && ({1} || {2}) && (Max({3}, {4}) < {5} || Max({6}, {7}) < {8})]", _isOffline, _hasHmrc, _hasYodlee, (decimal)_yodlee1YForRejection, _hmrcAnnualRevenues, _lowOfflineAnnualRevenue, (decimal)_yodlee3MForRejection, _hmrcQuarterRevenues, _lowOfflineQuarterRevenue);
+				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
 					response.AutoRejectReason =
 						string.Format(
 							"AutoReject: Offline Revenues. Condition not met: max yodlee hmrc annual revenue ({0}, {1}) < {2} OR max yodlee hmrc quarter revenue ({3}, {4}) < {5}",
 							_yodlee1YForRejection, _hmrcAnnualRevenues, _lowOfflineAnnualRevenue, _yodlee3MForRejection, _hmrcQuarterRevenues, _lowOfflineQuarterRevenue);
 				}
-				else
+
+				if (isRejectionException)
+				{
+					response.AutoRejectReason = rejectionExceptionReason;
+					_log.Debug("Customer {0} was not auto rejected because {1}", _customerId, rejectionExceptionReason);
+					return false;
+				}
+
+				if (string.IsNullOrEmpty(response.AutoRejectReason))
 				{
 					_log.Info("no auto rejetion for customer {0}", _customerId);
 					return false;

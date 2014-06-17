@@ -1,5 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using System;
+	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -35,44 +37,69 @@
 		{
 			oLog.Info("Starting auto decision");
 			var autoDecisionResponse = new AutoDecisionResponse();
+			string decisionName = "Manual";
+			var conditions = new List<AutoDecisionCondition>();
 
 			if (new ReRejection(customerId, enableAutomaticReRejection, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
-				return autoDecisionResponse;
+				decisionName = "Re-rejection";
 			}
-
-			if (new ReApproval(customerId, enableAutomaticReApproval, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalFullAmountOld, 
+			else if (new ReApproval(customerId, enableAutomaticReApproval, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalFullAmountOld, 
 				loanOfferReApprovalRemainingAmountOld, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
-				return autoDecisionResponse;
+				decisionName = "Re-Approval";
 			}
-
-			if (new Approval(customerId, minExperianScore, offeredCreditLine, enableAutomaticApproval, oDb, oLog).MakeDecision(autoDecisionResponse))
+			else if (new Approval(customerId, minExperianScore, offeredCreditLine, enableAutomaticApproval, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
-				return autoDecisionResponse;
+				decisionName = "Approval";
 			}
-
-			if (new BankBasedApproval(customerId, oDb, oLog).MakeDecision(autoDecisionResponse))
+			else if (new BankBasedApproval(customerId, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
-				return autoDecisionResponse;
+				decisionName = "Bank Based Approval";
 			}
-
-			var rejection = new Rejection(customerId, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection,
-			                              yodlee1YForRejection,
-			                              yodlee3MForRejection, marketplaceSeniorityDays, enableAutomaticRejection,
-			                              maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
-			                              customerStatusIsWarning, isBrokerCustomer, isLimitedCompany, companySeniorityDays,
-										  isOffline, customerStatusName, oDb, oLog);
-			var isRejected = rejection.MakeDecision(autoDecisionResponse);
-			oLog.Debug(rejection.ToString());
-			if (isRejected)
+			else
 			{
-				return autoDecisionResponse;
+				var rejection = new Rejection(conditions, customerId, totalSumOfOrders1YTotalForRejection,
+				                              totalSumOfOrders3MTotalForRejection,
+				                              yodlee1YForRejection,
+				                              yodlee3MForRejection, marketplaceSeniorityDays, enableAutomaticRejection,
+				                              maxExperianScore, maxCompanyScore, customerStatusIsEnabled,
+				                              customerStatusIsWarning, isBrokerCustomer, isLimitedCompany, companySeniorityDays,
+				                              isOffline, customerStatusName, oDb, oLog);
+				var isRejected = rejection.MakeDecision(autoDecisionResponse);
+				oLog.Debug(rejection.ToString());
+				if (isRejected)
+				{
+					decisionName = "Rejection";
+				}
 			}
 
-			autoDecisionResponse.CreditResult = "WaitingForDecision";
-			autoDecisionResponse.UserStatus = "Manual";
-			autoDecisionResponse.SystemDecision = "Manual";
+			if (decisionName == "Manual")
+			{
+				autoDecisionResponse.CreditResult = "WaitingForDecision";
+				autoDecisionResponse.UserStatus = "Manual";
+				autoDecisionResponse.SystemDecision = "Manual";
+			}
+
+			int decisionId = oDb.ExecuteScalar<int>(
+				"AutoDecisionRecord",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("DecisionName", decisionName),
+				new QueryParameter("Date", DateTime.UtcNow)
+			);
+
+			foreach (AutoDecisionCondition condition in conditions)
+			{
+				oDb.ExecuteNonQuery(
+					"AutoDecisionConditionRecord",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("DecisionId", decisionId),
+					new QueryParameter("DecisionName", condition.DecisionName),
+					new QueryParameter("Satisfied", condition.Satisfied),
+					new QueryParameter("Description", condition.Description)
+				);
+			}
 
 			return autoDecisionResponse;
 		}
