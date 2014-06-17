@@ -1445,3 +1445,7 @@ td a.edit-loan {
         padding: 5px;
     }
 }
+
+.remaining-funds-color {
+    color: lightgray;
+}
