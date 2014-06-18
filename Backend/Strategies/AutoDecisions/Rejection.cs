@@ -305,7 +305,7 @@
 												" < " + _rejectDefaultsCreditScore + " AND " + _numOfDefaultAccounts + " >= " +
 												_rejectDefaultsAccountsNum;
 				}
-				// Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 accounts in last 3 months
+				// Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 months (in one or more accounts) in last 3 months
 				conditionValue = _numOfLateAccounts >= _rejectNumOfLateAccounts;
 				conditionDescription = string.Format("Late in personal accounts (_numOfLateAccounts >= _rejectNumOfLateAccounts) [{0} >= {1}]", _numOfLateAccounts, _rejectNumOfLateAccounts);
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
