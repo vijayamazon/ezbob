@@ -33,6 +33,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         customerRelations = @$el.find("#customerRelations")
         alertPassed = @$el.find("#alerts-passed")
         controlButtons = @$el.find "#controlButtons"
+        profileHead = @$el.find("#profileHead")
         fraudDetection = @$el.find("#fraudDetection")
         @personalInfoModel = new EzBob.Underwriter.PersonalInfoModel()
         @profileInfoView = new EzBob.Underwriter.PersonInfoView(
@@ -152,6 +153,13 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             experianModel: @experianInfoModel
             propertiesModel: @PropertiesModel
             mpsModel: @marketPlaces
+            loanModel: @loanInfoModel
+        )
+        
+        @profileHeadView = new EzBob.Underwriter.ProfileHeadView(
+            el: profileHead
+            model: @summaryInfoModel
+            personalModel: @personalInfoModel
             loanModel: @loanInfoModel
         )
 

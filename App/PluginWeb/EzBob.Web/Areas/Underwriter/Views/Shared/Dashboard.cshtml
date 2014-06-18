@@ -1,64 +1,86 @@
 ﻿@model dynamic
 <script id="dashboard-template" type="text/template">
-    <div class="row">
-        <%if(loan){ %>
         <div class="col-md-3">
+            <div class="row">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-bar-chart-o"></i>Customer Input</h3>
+                        <div class="box-tool">
+                            <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                            <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        TODO
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <%if(properties){%>
             <div class="box">
                 <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Offer</h3>
+                    <h3><i class="fa fa-bar-chart-o"></i>Assets & Worth</h3>
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
                 <div class="box-content">
-                    <ul class="summary-offer">
-                        <li>
-                            <p>
-                                <span>Amount</span>
-                                <span class="light-green"><%-EzBob.formatPoundsNoDecimals(loan.OfferedCreditLine)%></span>
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <span>Monthly interest</span>
-                                <span class="light-green"><%-EzBob.formatPercents(loan.InterestRate)%></span>
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <span>Term</span>
-                                <span class="light-green"><%-loan.RepaymentPerion%> months</span>
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <span>Setup fee</span>
-                                <span class="light-green"><%-EzBob.formatPoundsNoDecimals(loan.SetupFee)%></span>
-                            </p>
-                        </li>
-                    </ul>
-
-                    <div class="form-group hide">
-                        <button class="btn btn-primary" id="offer-edit">edit</button>
-                        <button class="btn btn-primary" id="offer-calculate">calculate</button>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="tile tile-grey">
+                                <div class="caption text-center">
+                                    Properties
+                                </div>
+                                <p class="title text-center"><strong><%- properties.NumberOfProperties %></strong></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="tile tile-grey">
+                                <div class="caption text-center">
+                                    Market value
+                                </div>
+                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="tile tile-lightgrey tile-high">
+                                <div class="caption text-center">
+                                    Net Worth
+                                </div>
+                                <p class="title text-center blue-special"><strong><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.NetWorth) %></strong></p>
+                                <p class="title-small text-center">(<%- properties.NetWorthPercentages %>%)</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="tile tile-lightgrey tile-high">
+                                <div class="caption text-center">
+                                    Mortgages (<%- properties.NumberOfMortgages %>)
+                                </div>
+                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %></p>
+                                <p class="title-small text-center">(LTV: <%- properties.Ltv %>%)</p>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
             </div>
+            <%}%>
+            </div>
         </div>
-        <%}%>
-        
-        <%if(affordability && affordability.length == 1 && affordability[0].CGData){
-			var aff = {};
+
+        <%
+            var aff = {};
+            var dates = {};
+            if(affordability && affordability.length == 1 && affordability[0].CGData){
+			
 			if (affordability[0].CGData.VatReturnSummary && affordability[0].CGData.VatReturnSummary[0])
 				aff = affordability[0].CGData.VatReturnSummary[0];
 
 			var dates = {};
 			if (affordability[0].CGData.VatReturnSummaryDates && affordability[0].CGData.VatReturnSummaryDates[0])
 				dates = affordability[0].CGData.VatReturnSummaryDates[0];
-        %>
-        <div class="col-md-3">
+        }%>
+        <div class="col-md-9">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Affordability</h3>
@@ -68,7 +90,7 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <table class="table table-striped table-narrow">
+                    <table class="table table-striped">
                         <tbody>
                             <tr>
                                 <td><i>annual</i></td>
@@ -111,29 +133,6 @@
                 </div>
             </div>
         </div>
-        <%}%>
-        <%if(m.Alerts && m.Alerts.length > 0){%>
-        <div class="col-md-4">
-            <div class="box">
-                <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Alerts</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
-                </div>
-                <div class="box-content">
-                    <%_.each(m.Alerts, function(item) {%>
-                    <div class="col-md-6 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Tooltip%>">
-                        <button class="close" data-dismiss="alert">&times;</button>
-                        <span><%-item.Alert%></span>
-                    </div>
-                    <%});%>
-                </div>
-            </div>
-        </div>
-        <%}%>
-    </div>
 
     <div class="row">
         <%if(experian) {
@@ -147,7 +146,7 @@
             tileColor = 'tile-light';
             }
         %>
-        <div class="col-md-5 col-sm-12">
+        <div class="col-md-6 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Customer & Directors</h3>
@@ -323,68 +322,15 @@
         </div>
         <%}%>
         
-        <%if(properties){%>
-        <div class="col-md-5 col-sm-12">
-            <div class="box">
-                <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Assets & Worth</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
-                </div>
-                <div class="box-content">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-grey">
-                                <div class="caption text-center">
-                                    Properties
-                                </div>
-                                <p class="title text-center"><strong><%- properties.NumberOfProperties %></strong></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-grey">
-                                <div class="caption text-center">
-                                    Market value
-                                </div>
-                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-lightgrey tile-high">
-                                <div class="caption text-center">
-                                    Net Worth
-                                </div>
-                                <p class="title text-center blue-special"><strong><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.NetWorth) %></strong></p>
-                                <p class="title-small text-center">(<%- properties.NetWorthPercentages %>%)</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-lightgrey tile-high">
-                                <div class="caption text-center">
-                                    Mortgages (<%- properties.NumberOfMortgages %>)
-                                </div>
-                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %></p>
-                                <p class="title-small text-center">(LTV: <%- properties.Ltv %>%)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <%}%>
-    </div>
-    <div class="row">
         <%if(experianCompany){
             var tileColor='';
             if(!EzBob.isDarkColor(experianCompany.ScoreColor)){
                 tileColor = 'tile-light';
             }%>
-        <div class="col-md-5 col-sm-12">
+        <div class="col-md-6 col-sm-12">
             <div class="box">
                 <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Company</h3>
+                    <h3><i class="fa fa-bar-chart-o"></i>Company Credit Profile</h3>
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
@@ -436,54 +382,13 @@
             </div>
         </div>
         <%}%>
-        <%if(mps && mps.length > 0) { %>
-        <div class="col-md-5 col-sm-12">
-            <div class="box">
-                <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Data Sources</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
-                </div>
-                <div class="box-content">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Month sales</th>
-                                <th>Annual sales</th>
-                                <th>Annual payments</th>
-                                <th>Seniority</th>
-                                <th>Updated</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%_.each(mps, function(mp){ var accountData = mp.PaymentAccountBasic || {}; %>
-                                <tr>
-                                    <td style="width: 70px">
-                                        <div class="source_labels_on <%-mp.Name.replace(' ', '').toLowerCase()%>"></div>
-                                    </td>
-                                    <td><%- EzBob.formatPoundsNoDecimals(mp.monthSales || accountData.MonthInPayments) %></td>
-                                    <td><%- EzBob.formatPoundsNoDecimals(mp.anualSales || accountData.TotalNetInPayments) %></td>
-                                    <td><%- EzBob.formatPoundsNoDecimals(accountData.TotalNetOutPayments) %></td>
-                                    <td><%-mp.age%></td>
-                                    <td><%- mp.UpdatingStatus %> <%- mp.LastChecked%></td>
-                                </tr>
-                            <%});%>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <%}%>
     </div>
     <div class="row">
         <%if(m.LoanActivity && m.Decisions && m.Decisions.TotalDecisionsCount > 0){
             var activeLoans = m.LoanActivity.TotalIssuesCount > 0 ? "active" : "";
             var activeDecisions = activeLoans == "" ? "active" : "";
         %>
-        <div class="col-md-5">
+        <div class="col-md-12">
             <div class="box">
                 <div class="box-title">
                     <h3><i class="fa fa-bar-chart-o"></i>Customer History</h3>
@@ -594,58 +499,21 @@
             </div>
         </div>
         <%}%>
-        <%if(crm && crm.length > 0) {%>
-        <div class="col-md-5">
-            <div class="box">
-                <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Customer Relations</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
-                </div>
-                <div class="box-content">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>User</th>
-                                <th>Action</th>
-                                <th>In\Out</th>
-                                <th>Comment</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% _.each(crm, function(item, i){ %>
-                            <tr>
-                                <td><%-EzBob.formatDate(new Date(moment(item.DateTime)))%></td>
-                                <td><%-item.User%></td>
-                                <td><%-item.Action%></td>
-                                <td><%-item.InOut%></td>
-                                <td><%-item.Comment%></td>
-                            </tr>
-                            <%});%>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <%}%>
     </div>
     <%m.DecisionHistory = m.DecisionHistory || {};%>
     <%if(m.DecisionHistory.length > 0){%>
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="box">
                 <div class="box-title">
-                    <h3><i class="fa fa-bar-chart-o"></i>Decisions Details</h3>
+                    <h3><i class="fa fa-bar-chart-o"></i>Journal</h3>
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
                 <div class="box-content">
-                    
+
                     <table class="table centered">
                         <thead class="box">
                             <tr class="box-title">

@@ -636,6 +636,7 @@
     <Content Include="Areas\Customer\Views\Profile\CompanyDirectorsTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\HMRC.cshtml" />
     <Content Include="App_Code\UnderwriterSidebar.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\ProfileHead.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1176,6 +1177,7 @@
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js">
       <DependentUpon>ezbob.underwriter.fraudStatus.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.profileHead.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js">
       <DependentUpon>ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee</DependentUpon>
     </Content>

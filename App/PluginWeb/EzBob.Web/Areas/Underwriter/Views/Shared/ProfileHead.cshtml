@@ -1,0 +1,90 @@
+﻿@model dynamic
+
+<script id="profile-head-template" type="text/template">
+    <div class="row">
+        <div class="col-md-12">
+            <%if(loan){ %>
+        <div class="col-md-4">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Offer</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <ul class="summary-offer">
+                        <li>
+                            <p>
+                                <span>Amount</span>
+                                <span class="light-green"><%-EzBob.formatPoundsNoDecimals(loan.OfferedCreditLine)%></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <span>Monthly interest</span>
+                                <span class="light-green"><%-EzBob.formatPercents(loan.InterestRate)%></span>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <span>Term</span>
+                                <span class="light-green"><%-loan.RepaymentPerion%> months</span>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <span>Setup fee</span>
+                                <span class="light-green"><%-EzBob.formatPoundsNoDecimals(loan.SetupFee)%></span>
+                            </p>
+                        </li>
+                    </ul>
+
+                    <div class="form-group hide">
+                        <button class="btn btn-primary" id="offer-edit">edit</button>
+                        <button class="btn btn-primary" id="offer-calculate">calculate</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+            <%}%>
+        <div class="col-md-4">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Medal</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    TODO
+                </div>
+            </div>
+        </div>
+            <%if(m.Alerts){%>
+        <div class="col-md-4">
+            <div class="box">
+                <div class="box-title">
+                    <h3><i class="fa fa-bar-chart-o"></i>Alerts</h3>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <%_.each(m.Alerts, function(item) {%>
+                    <div class="col-md-6 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Tooltip%>">
+                        <button class="close" data-dismiss="alert">&times;</button>
+                        <span><%-item.Alert%></span>
+                    </div>
+                    <%});%>
+                </div>
+            </div>
+        </div>
+            <%}%>
+        </div>
+    </div>
+</script>

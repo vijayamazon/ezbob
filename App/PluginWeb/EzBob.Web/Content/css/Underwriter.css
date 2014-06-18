@@ -1335,6 +1335,7 @@ td a.edit-loan {
 
     .tabbable .tab-content {
         border-right: transparent;
+        overflow: initial;
     }
 
 .profile-tabs > .tabbable > ul.nav.nav-tabs {
