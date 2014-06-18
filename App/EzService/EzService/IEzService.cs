@@ -26,6 +26,9 @@
 
 		#endregion analytics
 
+		[OperationContract]
+		ActionMetaData BackfillFinancialAccounts();
+
 		#region AML and BWA
 
 		[OperationContract]

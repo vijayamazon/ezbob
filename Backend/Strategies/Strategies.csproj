@@ -72,6 +72,7 @@
     <Compile Include="AutoDecisions\AutoDecisionCondition.cs" />
     <Compile Include="Misc\Agreement.cs" />
     <Compile Include="Misc\CalculateNewMedals.cs" />
+    <Compile Include="Misc\BackfillFinancialAccounts.cs" />
     <Compile Include="Misc\CustomerAddressHelper.cs" />
     <Compile Include="Misc\DisplayMarketplaceSecurityData.cs" />
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
