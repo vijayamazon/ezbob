@@ -2286,5 +2286,12 @@ namespace ConfigManager {
 		{
 			get { return this[Variables.LandRegistryFilePath]; }
 		}
+
+		public int RejectionLastValidLate
+		{
+			get { return this[Variables.RejectionLastValidLate]; }
+		}
+
+		
 	} // class CurrentValues
 } // namespace ConfigManager

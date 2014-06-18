@@ -329,6 +329,7 @@ namespace ConfigManager {
 		Reject_LowOfflineAnnualRevenue,
 		LandRegistryUserName,
 		LandRegistryPassword,
-		LandRegistryFilePath
+		LandRegistryFilePath,
+		RejectionLastValidLate
 	} // enum Variables
 } // namespace ConfigManager

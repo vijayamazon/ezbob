@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -50,7 +51,7 @@
 		private decimal _payPalTotalSumOfOrders3M;
 		private decimal _payPalTotalSumOfOrders1Y;
 		private readonly string _customerStatusName;
-		private List<AutoDecisionCondition> _conditions;
+		private readonly List<AutoDecisionCondition> _conditions;
 
 		public Rejection(
 			List<AutoDecisionCondition> conditions,
@@ -182,7 +183,6 @@
 			_lowOfflineAnnualRevenue =  CurrentValues.Instance.Reject_LowOfflineAnnualRevenue;
 			_lowOfflineQuarterRevenue = CurrentValues.Instance.Reject_LowOfflineQuarterRevenue;
 
-			int rejectLateLastMonth = CurrentValues.Instance.Reject_LateLastMonthsNum;
 			_rejectNumOfLateAccounts = CurrentValues.Instance.Reject_NumOfLateAccounts;
 
 			DataTable dt = _db.ExecuteReader(
@@ -190,8 +190,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", _customerId),
 				new QueryParameter("Reject_Defaults_Months", rejectDefaultsMonths),
-				new QueryParameter("Reject_Defaults_Amount", rejectDefaultsAmount),
-				new QueryParameter("Reject_Late_Last_Months", rejectLateLastMonth)
+				new QueryParameter("Reject_Defaults_Amount", rejectDefaultsAmount)
 			);
 
 			var sr = new SafeReader(dt.Rows[0]);
@@ -199,11 +198,13 @@
 			_errorMPsNum = sr["ErrorMPsNum"];
 			_loanOfferApprovalNum = sr["ApprovalNum"];
 			_numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
-			_numOfLateAccounts = sr["NumOfLateAccounts"];
+
+			_numOfLateAccounts = CountActiveAccounts();
+
 			if (_isOffline)
 			{
 				dt = _db.ExecuteReader("GetHmrcAggregations", CommandSpecies.StoredProcedure,
-				                       new QueryParameter("CustomerId", _customerId));
+										new QueryParameter("CustomerId", _customerId));
 				sr = new SafeReader(dt.Rows[0]);
 				_hasHmrc = sr["AnnualRevenues"] != -1 || sr["QuarterRevenues"] != -1;
 				_hmrcAnnualRevenues = sr["AnnualRevenues"];
@@ -223,6 +224,46 @@
 			_payPalNumberOfStores = sr["PayPal_NumberOfStores"];
 			_payPalTotalSumOfOrders3M = sr["PayPal_TotalSumOfOrders3M"];
 			_payPalTotalSumOfOrders1Y = sr["PayPal_TotalSumOfOrders1Y"];
+		}
+
+		private int CountActiveAccounts()
+		{
+			// Fetch active accounts
+			DataTable activeAccountsDataTable = _db.ExecuteReader(
+				"GetCustomerActiveAccounts",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", _customerId)
+			);
+
+			int rejectLateLastMonth = CurrentValues.Instance.Reject_LateLastMonthsNum;
+			string relevantStatuses = string.Empty;
+			foreach (DataRow row in activeAccountsDataTable.Rows)
+			{
+				var accountSafeReader = new SafeReader(row);
+				DateTime lastUpdateDate = accountSafeReader["LastUpdateDate"];
+
+				if (lastUpdateDate.AddMonths(rejectLateLastMonth) > DateTime.UtcNow) // If not then there is no relevant data
+				{
+					for (int i = 0; i < rejectLateLastMonth - 1; i++)
+					{
+						DateTime tmpDate = DateTime.UtcNow.AddMonths(-1 * i);
+						if (tmpDate < lastUpdateDate || (tmpDate.Year == lastUpdateDate.Year && tmpDate.Month == lastUpdateDate.Month))
+						{
+							string fieldName = string.Format("StatusCode{0}", 11 - i);
+							string monthStatus = accountSafeReader[fieldName];
+							relevantStatuses += monthStatus;
+						}
+					}
+				}
+			}
+
+			int numOfRelevantAccounts = relevantStatuses.Length;
+			for (int i = CurrentValues.Instance.RejectionLastValidLate + 1; i < 10; i++)
+			{
+				relevantStatuses = relevantStatuses.Replace(i.ToString(CultureInfo.InvariantCulture), "");
+			}
+
+			return numOfRelevantAccounts - relevantStatuses.Length;
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)

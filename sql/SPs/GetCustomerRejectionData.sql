@@ -8,8 +8,7 @@ GO
 CREATE PROCEDURE [dbo].[GetCustomerRejectionData] 
 	(@CustomerId INT,
 	 @Reject_Defaults_Months INT,
-	 @Reject_Defaults_Amount INT,
-	 @Reject_Late_Last_Months INT)
+	 @Reject_Defaults_Amount INT)
 AS
 BEGIN
 	DECLARE @ErrorMPsNum INT,
@@ -81,30 +80,9 @@ BEGIN
  
 	SELECT @NumOfDefaultAccounts = NumOfDefaultAccounts FROM [GetNumOfDefaultAccounts] (@CustomerId, @Reject_Defaults_Months, @Reject_Defaults_Amount)
  	 	
- 	DECLARE @NumOfLateAccounts INT = (SELECT ISNULL(SUM(y.late), 0) NumOfLateAccounts
-								  FROM 
-								  (
-										SELECT CASE WHEN x.s LIKE '%2%' THEN 1
-												    WHEN x.s LIKE '%3%' THEN 1
-												    WHEN x.s LIKE '%4%' THEN 1
-												    WHEN x.s LIKE '%5%' THEN 1
-												    WHEN x.s LIKE '%6%' THEN 1
-												    WHEN x.s LIKE '%7%' THEN 1
-												    WHEN x.s LIKE '%8%' THEN 1
-												    WHEN x.s LIKE '%9%' THEN 1
-												    ELSE 0 END AS late
-										FROM
-										(
-											SELECT RIGHT(RTRIM(Status12Months), @Reject_Late_Last_Months) AS s FROM ExperianDL97Accounts 
-											WHERE CustomerId=@CustomerId
-											AND State = 'A'
-										)x
-								  ) y
-								 )
 	SELECT 
 		@ErrorMPsNum AS ErrorMPsNum, 
 		@ApprovalNum AS ApprovalNum, 
-		@NumOfDefaultAccounts AS NumOfDefaultAccounts,
-		@NumOfLateAccounts AS NumOfLateAccounts
+		@NumOfDefaultAccounts AS NumOfDefaultAccounts
 END
 GO
