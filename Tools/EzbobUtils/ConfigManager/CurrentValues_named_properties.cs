@@ -603,6 +603,30 @@ namespace ConfigManager {
 
 		#endregion property EchoSignApiKey
 
+		#region property EchoSignDeadline
+
+		public virtual VariableValue EchoSignDeadline {
+			get { return this[Variables.EchoSignDeadline]; } // get
+		} // EchoSignDeadline
+
+		#endregion property EchoSignDeadline
+
+		#region property EchoSignReminder
+
+		public virtual VariableValue EchoSignReminder {
+			get { return this[Variables.EchoSignReminder]; } // get
+		} // EchoSignReminder
+
+		#endregion property EchoSignReminder
+
+		#region property EchoSignUrl
+
+		public virtual VariableValue EchoSignUrl {
+			get { return this[Variables.EchoSignUrl]; } // get
+		} // EchoSignUrl
+
+		#endregion property EchoSignUrl
+
 		#region property EnableAutomaticApproval
 
 		public virtual VariableValue EnableAutomaticApproval {
