@@ -57,7 +57,7 @@
       Reject_LowOfflineQuarterRevenue: "input[name='Reject_LowOfflineQuarterRevenue']",
       Reject_LateLastMonthsNum: "input[name='Reject_LateLastMonthsNum']",
       Reject_NumOfLateAccounts: "input[name='Reject_NumOfLateAccounts']",
-      RejectionLastValidLate: "input[name='RejectionLastValidLate']",
+      RejectionLastValidLate: "select[name='RejectionLastValidLate']",
       RejectionCompanyScore: "input[name='RejectionCompanyScore']",
       RejectionExceptionMaxConsumerScoreForMpError: "input[name='RejectionExceptionMaxConsumerScoreForMpError']",
       RejectionExceptionMaxCompanyScoreForMpError: "input[name='RejectionExceptionMaxCompanyScoreForMpError']",
