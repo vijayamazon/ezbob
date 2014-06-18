@@ -6,6 +6,8 @@
 	internal sealed class UserSecurityData {
 		#region public
 
+		public const string WebRole = "Web";
+
 		#region constructor
 
 		public UserSecurityData(AStrategy oStrategy) {

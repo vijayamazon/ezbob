@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Web.Security;
-	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
@@ -36,7 +35,7 @@
 				EzPassword = Ezbob.Utils.Security.SecurityUtils.HashPassword(m_oData.Email, m_oData.NewPassword),
 				SecurityQuestionID = m_oData.PasswordQuestion,
 				SecurityAnswer = m_oData.PasswordAnswer,
-				RoleName = "Web",
+				RoleName = UserSecurityData.WebRole,
 				BranchID = 0,
 				Ip = sRemoteIp,
 			};
@@ -146,11 +145,16 @@
 			public CreateWebUser(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
 			public override bool HasValidParameters() {
-				return
-					!string.IsNullOrEmpty(Email) &&
-					!string.IsNullOrEmpty(EzPassword) &&
-					(SecurityQuestionID > 0) &&
-					!string.IsNullOrEmpty(SecurityAnswer);
+				if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(EzPassword))
+					return false;
+
+				if (RoleName.Equals(UserSecurityData.WebRole, StringComparison.InvariantCultureIgnoreCase)) {
+					return
+						(SecurityQuestionID > 0) &&
+						!string.IsNullOrEmpty(SecurityAnswer);
+				} // if
+
+				return true;
 			} // HasValidParameters
 
 			public string Email { [UsedImplicitly] get; set; }
@@ -176,7 +180,9 @@
 			[UsedImplicitly]
 			public DateTime Now {
 				get { return DateTime.UtcNow; }
+				// ReSharper disable ValueParameterNotUsed
 				set { }
+				// ReSharper restore ValueParameterNotUsed
 			} // Now
 		} // class CreateWebUser
 
