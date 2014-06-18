@@ -32,5 +32,13 @@
 			esf.GetDocuments("2AAABLblqZhCLzXHaKf9HRvMQro37ZP6p_tCJjO_hleBEIWOn6NnAGoa64wJ1_nUv3HonlaN1FxQ*");
 			esf.GetDocuments("2AAABLblqZhDm9gTJPe2IQjuTHvLioVbvr2raDTZBx-Yqsummg2hkqycHR0eOD6Tr9yVDjjBzqYo*");
 		} // TestGetDocuments
+
+		[Test]
+		public void TestGetDocumentInfo() {
+			var esf = new EchoSignFacade(m_oDB, m_oLog);
+
+			esf.GetDocumentInfo("2AAABLblqZhCLzXHaKf9HRvMQro37ZP6p_tCJjO_hleBEIWOn6NnAGoa64wJ1_nUv3HonlaN1FxQ*");
+			esf.GetDocumentInfo("2AAABLblqZhDm9gTJPe2IQjuTHvLioVbvr2raDTZBx-Yqsummg2hkqycHR0eOD6Tr9yVDjjBzqYo*");
+		} // TestGetDocumentInfo
 	} // class TestEchoSign
 } // namespace

@@ -2,9 +2,11 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.IO;
 	using System.Linq;
 	using System.ServiceModel;
 	using System.Text;
+	using System.Text.RegularExpressions;
 	using ConfigManager;
 	using EchoSignService;
 	using Ezbob.Database;
@@ -13,6 +15,7 @@
 	using Ezbob.Utils.Serialization;
 
 	using EchoSignClient = EchoSignLib.EchoSignService.EchoSignDocumentService18PortTypeClient;
+	using FileInfo = EchoSignService.FileInfo;
 
 	public class EchoSignFacade {
 		#region public
@@ -114,13 +117,52 @@
 			m_oLog.Debug("Success: {0}.", oResult.success ? "yes" : "no");
 			m_oLog.Debug("Error code: {0}.", oResult.errorCode);
 			m_oLog.Debug("Error message: {0}.", oResult.errorMessage);
-			m_oLog.Debug("Document count: {0}.", oResult.documents == null ? 0 : oResult.documents.Length);
+
+			int nDocumentCount = oResult.documents == null ? 0 : oResult.documents.Length;
+			m_oLog.Debug("Document count: {0}.", nDocumentCount);
 			m_oLog.Debug("Supporting document count: {0}.", oResult.supportingDocuments == null ? 0 : oResult.supportingDocuments.Length);
+
+			if (nDocumentCount > 0) {
+				foreach (DocumentContent doc in oResult.documents) {
+					m_oLog.Debug("Document '{0}' of type '{1}', size {2} bytes.", doc.name, doc.mimetype, doc.bytes.Length);
+
+
+					string sFileName = string.Format(@"c:\temp\{0}.{1}.pdf",
+						DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture),
+						ms_oSpecialChars.Replace(sDocumentKey, "_")
+					);
+
+					File.WriteAllBytes(sFileName, doc.bytes);
+				} // foreach
+			} // if
 
 			m_oLog.Msg("Loading documents for the key '{0}' complete.", sDocumentKey);
 		} // GetDocuments
 
 		#endregion method GetDocuments
+
+		#region method GetDocumentInfo
+
+		public void GetDocumentInfo(string sDocumentKey) {
+			if (!m_bIsReady) {
+				m_oLog.Msg("EchoSign cannot get document info - not ready.");
+				return;
+			} // if
+
+			m_oLog.Msg("Loading document info for the key '{0}' started...", sDocumentKey);
+
+			DocumentInfo oResult = m_oEchoSign.getDocumentInfo(m_sApiKey, sDocumentKey);
+
+			m_oLog.Debug("Loading document info result:");
+
+			m_oLog.Debug("Name: {0}", oResult.name);
+			m_oLog.Debug("Status: {0}", oResult.status);
+			m_oLog.Debug("Expiration: {0}", oResult.expiration.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
+
+			m_oLog.Msg("Loading document info for the key '{0}' complete.", sDocumentKey);
+		} // GetDocumentInfo
+
+		#endregion method GetDocumentInfo
 
 		#endregion public
 
@@ -220,6 +262,7 @@
 
 		private EchoSignClient m_oEchoSign;
 
+		private static readonly Regex ms_oSpecialChars = new Regex(@"[^A-Za-z0-9_-]");
 		private const string ExpectedPong = "It works!";
 
 		#endregion private
