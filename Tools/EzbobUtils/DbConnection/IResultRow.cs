@@ -14,11 +14,5 @@
 		/// </summary>
 		/// <param name="bIsFirst">"Is first" indicator.</param>
 		void SetIsFirst(bool bIsFirst);
-
-		/// <summary>
-		/// Sets "first in row set" indicator.
-		/// </summary>
-		/// <param name="bIsNotFirst">"Is not first" indicator.</param>
-		void SetNotFirst(bool bIsNotFirst);
 	} // interface IResultRow
 } // namespace Ezbob.Database

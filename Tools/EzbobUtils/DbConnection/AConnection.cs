@@ -36,10 +36,12 @@
 
 		#region method ExecuteReader
 
+		[Obsolete]
 		public DataTable ExecuteReader(string sQuery, params QueryParameter[] aryParams) {
 			return ExecuteReader(sQuery, CommandSpecies.Auto, aryParams);
 		} // ExecuteReader
 
+		[Obsolete]
 		public DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			return (DataTable)Run(ExecMode.Reader, nSpecies, sQuery, aryParams);
 		} // ExecuteReader

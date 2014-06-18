@@ -18,14 +18,6 @@
 
 		#endregion method SetIsFirst
 
-		#region method SetNotFirst
-
-		public virtual void SetNotFirst(bool bNotFirst) {
-			SetIsFirst(!bNotFirst);
-		} // SetNotFirst
-
-		#endregion method SetNotFirst
-
 		#endregion public
 
 		#region protected

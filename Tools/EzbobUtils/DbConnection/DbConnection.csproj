@@ -53,7 +53,6 @@
     <Compile Include="DbCommandExt.cs" />
     <Compile Include="DbConnectionGenerator.cs" />
     <Compile Include="IResultRow.cs" />
-    <Compile Include="IStoredProcedure.cs" />
     <Compile Include="SafeReader.cs" />
     <Compile Include="DbException.cs" />
     <Compile Include="enums.cs" />

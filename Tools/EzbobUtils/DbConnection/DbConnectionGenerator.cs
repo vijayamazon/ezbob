@@ -1,7 +1,5 @@
-﻿namespace Ezbob.Database
-{
+﻿namespace Ezbob.Database {
 	using Logger;
-	using log4net;
 
 	public static class DbConnectionGenerator {
 		static DbConnectionGenerator() {
@@ -13,7 +11,7 @@
 				return ms_oDB;
 
 			if (oLog == null)
-				oLog = new SafeILog(LogManager.GetLogger(typeof (DbConnectionGenerator)));
+				oLog = new SafeILog(typeof(DbConnectionGenerator));
 
 			var env = new Context.Environment(oLog);
 

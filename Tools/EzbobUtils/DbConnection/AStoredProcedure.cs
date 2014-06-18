@@ -35,7 +35,7 @@
 
 	#region class AStoredProcedure
 
-	public abstract class AStoredProcedure : ITraversable, IStoredProcedure {
+	public abstract class AStoredProcedure : ITraversable {
 		#region public
 
 		public abstract bool HasValidParameters();

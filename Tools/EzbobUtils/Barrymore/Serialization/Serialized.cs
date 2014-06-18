@@ -7,6 +7,18 @@ namespace Ezbob.Utils.Serialization {
 	using System.Xml.Serialization;
 
 	public class Serialized {
+		#region method AsBase64
+
+		public static string AsBase64String<T>(T oData) {
+			return Convert.ToBase64String(new Serialized(oData));
+		} // AsBase64String
+
+		public static byte[] AsBase64<T>(T oData) {
+			return Convert.FromBase64String(AsBase64String(oData));
+		} // AsBase64
+
+		#endregion method AsBase64
+
 		#region method Serialize
 
 		public static void Serialize<T>(string fileName, T type) {
