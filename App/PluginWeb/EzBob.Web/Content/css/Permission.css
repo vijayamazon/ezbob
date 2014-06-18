@@ -64,6 +64,7 @@ a[data-bug-type],
 
 .role-manager #SuspendBtn,
 .role-Underwriter #SuspendBtn,
+.role-JuniorUnderwriter #SuspendBtn,
 
 .role-manager [name="discountPlan"],
 .role-Underwriter [name="discountPlan"],
