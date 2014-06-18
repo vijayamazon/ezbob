@@ -185,15 +185,15 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
     setState: (nCustomerID, sSection) ->
         @lastShownCustomerID = nCustomerID
-
+        #todo
         unless sSection
-            @getLastShownProfileSection @$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1)
+            @getLastShownProfileSection @$el.find('a.customer-tab:first').attr('href').substr(1)
     # end of setState
 
     restoreState: ->
         @$el.find(
-            '.profile-tabs a[data-toggle="tab"]').filter('[href="#' +
-            @getLastShownProfileSection(@$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1)) +
+            'a.customer-tab').filter('[href="#' +
+            @getLastShownProfileSection(@$el.find('a.customer-tab:first').attr('href').substr(1)) +
             '"]'
         ).tab('show')
     # end of restoreState

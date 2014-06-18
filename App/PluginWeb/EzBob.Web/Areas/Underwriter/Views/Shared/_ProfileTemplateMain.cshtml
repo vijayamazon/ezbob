@@ -1,5 +1,6 @@
 ﻿@model dynamic
 <script id="profile-template-main" type="text/template">
+        @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Customer)
         <div id="sidebar-dashboard" class="navbar-collapse collapse">
             <div class="tabbable tabs-top">
                 <ul class="nav nav-tabs active-blue">
@@ -14,24 +15,6 @@
         </div>
         <div id="main-content" class="profile-tabs">
             <div class="tabbable">
-                <ul class="nav nav-tabs">
-                    <li><a href="#dashboard" data-toggle="tab">Dashboard</a></li>
-                    <li><a href="#profile-summary" data-toggle="tab">Profile Summary</a></li>
-                    <li><a href="#marketplaces" data-toggle="tab">
-                        <div class="source_labels new-ribbon" id="new-ribbon-marketplaces"></div>
-                        Marketplaces</a></li>
-                    <li><a href="#payment-accounts" data-toggle="tab">Payment accounts</a></li>
-                    <li><a href="#credit-bureau" data-toggle="tab">Credit bureau</a></li>
-                    <li><a href="#calculator" data-toggle="tab">Calculator</a></li>
-                    <li><a href="#loanhistorys" data-toggle="tab">Loan history</a></li>
-                    <li><a href="#customer-info" class="cross-check-tab" data-toggle="tab">Cross check</a></li>
-                    <li><a href="#company-score" class="company-score-tab" data-toggle="tab">Company score</a></li>
-                    <li><a href="#messages-tab" data-toggle="tab" class="messages-tab">Messages / Files</a></li>
-                    <li><a href="#apiChecks" data-toggle="tab">API checks log</a></li>
-                    <li><a href="#customerRelations" data-toggle="tab" class="crm-tab"><i class="">&nbsp;</i>Customer relations</a></li>
-                    <li><a href="#fraudDetection" data-toggle="tab">Fraud detection</a></li>
-
-                </ul>
                 <div class="tab-content">
                     <div class="tab-pane" id="dashboard"></div>
                     <div class="tab-pane" id="profile-summary"></div>
@@ -59,6 +42,7 @@
             <div id="controlButtons" style="margin-top: 10px;">
             </div>
         </div>
+
 </script>
 
 <script id="controls-button-template" type="text/template">

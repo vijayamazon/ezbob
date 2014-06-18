@@ -4,46 +4,7 @@
     ViewBag.Title = "Underwriter";
 }
 <div id="grids-view" style="display: none;">
-    <div id="sidebar" class="bg">
-        <a href="#" id="reload-button-template" class="hide">Reload</a>
-
-        <ul class="nav nav-list">
-            <li class="active"><a href="#waiting-grid" data-toggle="tab"><i class="fa fa-envelope-o"></i><span>Decision(<span id="waiting-count"></span>)</span></a></li>
-            @if (Model.IsEscalated)
-            {
-                <li><a href="#escalated-grid" data-toggle="tab"><i class="fa fa-arrow-up"></i><span>Escalated(<span id="escalated-count"></span>)</span></a></li>
-            }
-            <li><a href="#pending-grid" data-toggle="tab"><i class="fa fa-clock-o"></i><span>Pending(<span id="pending-count"></span>)</span></a></li>
-            <li><a href="#approved-grid" data-toggle="tab"><i class="fa fa-thumbs-o-up"></i><span>Approved</span></a></li>
-            <li><a href="#rejected-grid" data-toggle="tab"><i class="fa fa-thumbs-o-down"></i><span>Rejected</span></a></li>
-            <li><a href="#loans-grid" data-toggle="tab"><i class="fa fa-gbp"></i><span>Loans</span></a></li>
-            <li><a href="#sales-grid" data-toggle="tab"><i class="fa fa-phone"></i><span>Sales</span></a></li>
-            <li><a href="#collection-grid" data-toggle="tab"><i class="fa fa-rocket"></i><span>Collection</span></a></li>
-            <li><a href="#late-grid" data-toggle="tab"><i class="fa fa-flag"></i><span>Late</span></a></li>
-            <li><a href="#all-grid" data-toggle="tab"><i class="fa fa-female"></i><span>All customers</span></a></li>
-            <li><a href="#registered-grid" data-toggle="tab"><i class="fa fa-bars"></i><span>Registered(<span id="RegisteredCustomers-count"></span>)</span></a></li>
-            <li class="test-customers" title="Check to include test customers">
-                <i class="fa fa-filter"></i>
-                <label class="checkbox-inline">
-                    <input type="checkbox" class="checkbox" id="include-test-customers" />
-                    Test customers
-                </label>
-            </li>
-            <li>
-                <div class="all-customers hide" title="Check to show all the customers (unchecked shows registered during last week only).">
-                    <i class="fa fa-filter"></i>
-                    <label class="checkbox-inline">
-                        <input type="checkbox" class="checkbox" id="include-all-customers" />
-                        Show all customers
-                    </label>
-                </div>
-            </li>
-            <li><a href="#logbook-grid" data-toggle="tab"><i class="fa fa-file-text-o"></i><span>Logbook</span></a></li>
-        </ul>
-        <div id="sidebar-collapse">
-            <i class="fa fa-angle-double-left"></i>
-        </div>
-    </div>
+    @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Customers, Model.IsEscalated)
     <div id="main-content">
         <div class="page-title">
             <div>
@@ -79,30 +40,30 @@
             </div>
             @if (Model.IsEscalated)
             {
-                <div class="tab-pane" id="escalated-grid">
-                    <div class="table-responsive table-big">
-                        <table class="table grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Cart</th>
-                                    <th>MPs</th>
-                                    <th>Name</th>
-                                    <th>E-mail</th>
-                                    <th>Apply date</th>
-                                    <th>Reg. date</th>
-                                    <th>Current staus</th>
-                                    <th>Calc. amount</th>
-                                    <th>O/S balance</th>
-                                    <th>Escalation date</th>
-                                    <th>Underwriter</th>
-                                    <th>Reason</th>
-                                </tr>
-                            </thead>
-                            @Tds(13)
-                        </table>
-                    </div>
+            <div class="tab-pane" id="escalated-grid">
+                <div class="table-responsive table-big">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cart</th>
+                                <th>MPs</th>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Apply date</th>
+                                <th>Reg. date</th>
+                                <th>Current staus</th>
+                                <th>Calc. amount</th>
+                                <th>O/S balance</th>
+                                <th>Escalation date</th>
+                                <th>Underwriter</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        @Tds(13)
+                    </table>
                 </div>
+            </div>
             }
             <div class="tab-pane" id="pending-grid">
                 <div class="table-responsive table-big">
@@ -407,10 +368,10 @@
 {
     <tbody>
         <tr>
-        @for (int i = 0; i < num; ++i)
-        {
-            <td></td>
-        }
+            @for (int i = 0; i < num; ++i)
+            {
+                <td></td>
+            }
         </tr>
     </tbody>
 }

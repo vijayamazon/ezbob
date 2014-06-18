@@ -1304,13 +1304,10 @@ td a.edit-loan {
     z-index: 10;
 }
 
-#main-container {
-    padding: 40px 0 0 0;
-}
-
 #sidebar-dashboard {
     position: fixed;
     height: 95vh !important;
+    right: 0;
 }
 
     #sidebar-dashboard .tabbable {
@@ -1321,7 +1318,6 @@ td a.edit-loan {
 
     #sidebar-dashboard > .tabbable > ul.nav.nav-tabs {
         position: fixed;
-        margin-top: 38px;
         width: 100%;
         z-index: 20;
         background-color: #ffffff;
@@ -1350,8 +1346,8 @@ td a.edit-loan {
 }
 
 .profile-tabs > .tabbable > .tab-content {
-    margin-top: 20px;
     position: relative;
+    padding: 5px 10px;
 }
 
 .tabbable .nav > li > a {
@@ -1448,4 +1444,23 @@ td a.edit-loan {
 
 .remaining-funds-color {
     color: lightgray;
+}
+
+.sidebar-collapsed .nav > li > a.customers-link {
+    display: block;
+}
+
+.sidebar-collapsed .nav > li > a.more-options-link {
+    display: block;
+    /*position: inherit;*/
+}
+
+.nav > li > a.customers-link {
+    display: inline-block;
+}
+
+.nav > li > a.more-options-link {
+    display: inline-block;
+    /*position: absolute;
+    right: 0;*/
 }

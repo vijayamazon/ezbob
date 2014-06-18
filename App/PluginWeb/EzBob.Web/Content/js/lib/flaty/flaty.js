@@ -48,6 +48,10 @@ EzBob.handleUserLayoutSetting = function () {
     if (color_navbar !== undefined) {
         $('#navbar').addClass('navbar-' + color_navbar);
     }
+    
+    $('a[href^=#]').click(function (e) {
+        e.preventDefault();
+    });
 };
 
 $(function () {
@@ -57,9 +61,7 @@ $(function () {
     //If you want to handle skin color by server-side code, don't forget to comment next line  
     EzBob.handleUserLayoutSetting();
     //Disable certain links
-    $('a[href^=#]').click(function (e) {
-        e.preventDefault();
-    });
+    
 
     //slimScroll to fixed height tags
     $('.nice-scroll, .slimScroll').slimScroll({ touchScrollStep: 30 });

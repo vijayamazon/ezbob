@@ -1,0 +1,222 @@
+﻿@using System.Web.Mvc
+@using EZBob.DatabaseLib.Model
+@using EzBob.Web.Infrastructure
+@using StructureMap
+
+@functions {
+    public enum SideBarType
+    {
+        Customers,
+        Customer,
+        Other
+    }
+}
+
+@helper Menu(WebViewPage page, SideBarType type, bool isEscalate = false)
+{
+    var sRoleImageUrl = "crm.png";
+    var sRoleImageTitle = "CRM";
+    var userName = "";
+    var userId = 0;
+    var userEmail = "";
+
+    try
+    {
+        var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+
+        if (context != null && context.User != null)
+        {
+            var user = context.User;
+            if (user != null)
+            {
+                userName = user.FullName ?? user.Name;
+                userId = user.Id;
+                userEmail = user.EMail;
+
+
+                if (user.Roles.Any(r => r.Name == "manager"))
+                {
+                    sRoleImageUrl = "manager.png";
+                    sRoleImageTitle = "Manager";
+                }
+                else if (user.Roles.Any(r => r.Name == "Underwriter"))
+                {
+                    sRoleImageUrl = "underwriter.png";
+                    sRoleImageTitle = "Underwriter";
+                }
+
+                sRoleImageTitle = user.Roles.Last().Name;
+            }
+        }
+    }
+    catch (Exception e)
+    {
+
+    }
+
+    sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
+
+    <div id="sidebar" class="bg">
+        <a href="#" id="reload-button-template" class="hide">Reload</a>
+        <ul class="nav nav-list">
+            <li>
+                <a href="@page.Url.Action("LogOffUnderwriter", "Account", new { Area = "" })" id="uw-name-and-icon" data-uw-id="@userId">
+                    <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/>@userName (log out)
+                </a>
+            </li>
+            @switch (type)
+            {
+                case SideBarType.Customers:
+                <li>
+                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i>Customers</a>
+                    <a href="#" class="dropdown-toggle more-options-link">
+                        <i class="fa fa-reorder"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li id="liClient">
+                            <a href='#'>Find</a>
+                        </li>
+                        @SubMenu(page)
+                    </ul>
+                </li>
+                <li class="active"><a href="#waiting-grid" data-toggle="tab"><i class="fa fa-envelope-o"></i><span>Decision(<span id="waiting-count"></span>)</span></a></li>
+                if (isEscalate)
+                {
+                    <li><a href="#escalated-grid" data-toggle="tab"><i class="fa fa-arrow-up"></i><span>Escalated(<span id="escalated-count"></span>)</span></a></li>
+                }
+                <li><a href="#pending-grid" data-toggle="tab"><i class="fa fa-clock-o"></i><span>Pending(<span id="pending-count"></span>)</span></a></li>
+                <li><a href="#approved-grid" data-toggle="tab"><i class="fa fa-thumbs-o-up"></i><span>Approved</span></a></li>
+                <li><a href="#rejected-grid" data-toggle="tab"><i class="fa fa-thumbs-o-down"></i><span>Rejected</span></a></li>
+                <li><a href="#loans-grid" data-toggle="tab"><i class="fa fa-gbp"></i><span>Loans</span></a></li>
+                <li><a href="#sales-grid" data-toggle="tab"><i class="fa fa-phone"></i><span>Sales</span></a></li>
+                <li><a href="#collection-grid" data-toggle="tab"><i class="fa fa-rocket"></i><span>Collection</span></a></li>
+                <li><a href="#late-grid" data-toggle="tab"><i class="fa fa-flag"></i><span>Late</span></a></li>
+                <li><a href="#all-grid" data-toggle="tab"><i class="fa fa-female"></i><span>All customers</span></a></li>
+                <li><a href="#registered-grid" data-toggle="tab"><i class="fa fa-bars"></i><span>Registered(<span id="RegisteredCustomers-count"></span>)</span></a></li>
+                <li class="test-customers" title="Check to include test customers">
+                    <i class="fa fa-filter"></i>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" class="checkbox" id="include-test-customers" />
+                        Test customers
+                    </label>
+                </li>
+                <li>
+                    <div class="all-customers hide" title="Check to show all the customers (unchecked shows registered during last week only).">
+                        <i class="fa fa-filter"></i>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" class="checkbox" id="include-all-customers" />
+                            Show all customers
+                        </label>
+                    </div>
+                </li>
+                <li><a href="#logbook-grid" data-toggle="tab"><i class="fa fa-file-text-o"></i><span>Logbook</span></a></li>
+                    break;
+                case SideBarType.Customer:
+                <li>
+                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i>Customers</a>
+                    <a href="#" class="dropdown-toggle more-options-link">
+                        <i class="fa fa-reorder"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li id="liClient">
+                            <a href='#'>Find</a>
+                        </li>
+                        @SubMenu(page)
+                    </ul>
+                </li>
+                <li><a href="#dashboard" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Dashboard</a></li>
+                <li><a href="#profile-summary" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Profile Summary</a></li>
+                <li><a href="#marketplaces" data-toggle="tab" class="customer-tab">
+                    <div class="source_labels new-ribbon" id="new-ribbon-marketplaces"></div>
+                    <i class="fa fa-file-text-o"></i>Marketplaces
+                </a>
+                </li>
+                <li><a href="#payment-accounts" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Payment accounts</a></li>
+                <li><a href="#credit-bureau" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Credit bureau</a></li>
+                <li><a href="#calculator" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Calculator</a></li>
+                <li><a href="#loanhistorys" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Loan history</a></li>
+                <li><a href="#customer-info" class="customer-tab cross-check-tab" data-toggle="tab"><i class="fa fa-file-text-o"></i>Cross check</a></li>
+                <li><a href="#company-score" class="customer-tab company-score-tab" data-toggle="tab"><i class="fa fa-file-text-o"></i>Company score</a></li>
+                <li><a href="#messages-tab" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span class="messages-tab">Messages / Files</span></a></li>
+                <li><a href="#apiChecks" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>API checks log</a></li>
+                <li><a href="#customerRelations" data-toggle="tab" class="customer-tab crm-tab"><i class="fa fa-phone"></i>Customer relations</a></li>
+                <li><a href="#fraudDetection" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Fraud detection</a></li>
+                    break;
+                case SideBarType.Other:
+        
+                <li>
+                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i>Customers</a>
+                </li>
+                @SubMenu(page)
+                    break;
+            }
+        </ul>
+
+        <div id="sidebar-collapse">
+            <i class="fa fa-angle-double-left"></i>
+        </div>
+    </div>
+}
+
+@helper SubMenu(WebViewPage page)
+{
+    <li id="liReports" class="dropdown">
+        <a href="#" class="dropdown-toggle">
+            <i class="fa fa-file-text-o"></i><span>Reports</span>
+            <b class="arrow fa fa-angle-right"></b>
+        </a>
+        <ul class="submenu">
+            <li id="liReport">
+                <a href="Customers#report">Reports</a>
+            </li>
+            <li id="liCustomerReports">
+                @{
+                    var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+                    var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
+                    <a href="@reportsIp" target="_blank"><i class="fa fa-file-text-o"></i>Reports Site</a>
+                }
+            </li>
+            <li id="liPerformenceReportPerUnderWriter">
+                <a href='@page.Url.Action("PerformenceReportPerUnderWriter", "Reports", new { Area = "Underwriter" })'>Performence Report / Underwriter</a>
+            </li>
+            <li id="liPerformenceReportPerMedal">
+                <a href='@page.Url.Action("PerformenceReportPerMedal", "Reports", new { Area = "Underwriter" })'>Performence Report / Medal</a>
+            </li>
+            <li id="liExposureReportPerUnderwriter">
+                <a href='@page.Url.Action("ExposureReportPerUnderwriter", "Reports", new { Area = "Underwriter" })'>Exposure Report / Underwriter</a>
+            </li>
+            <li id="liExposureReportPerMedal">
+                <a href='@page.Url.Action("ExposureReportPerMedal", "Reports", new { Area = "Underwriter" })'>Exposure Report / Medal</a>
+            </li>
+            <li id="liMedalStatisticReport">
+                <a href='@page.Url.Action("MedalStatisticReport", "Reports", new { Area = "Underwriter" })'>Medal Statistic</a>
+            </li>
+            <li id="liDaily">
+                <a href='@page.Url.Action("DailyReport", "Reports", new { Area = "Underwriter" })'>Daily Report</a>
+            </li>
+            <li id="liExtendedDaily">
+                <a href='@page.Url.Action("ExpectationReport", "Reports", new { Area = "Underwriter" })'>Expectation Report</a>
+            </li>
+        </ul>
+    </li>
+    <li id="liSupport">
+        <a href='Customers#support'><i class="fa fa-file-text-o"></i>Support</a>
+    </li>
+    <li id="liFraud">
+        <a href='Customers#fraud'><i class="fa fa-file-text-o"></i>Fraud</a>
+    </li>
+    <li id="liCAIS">
+        <a href="@page.Url.Action("Index", "CAIS")"><i class="fa fa-file-text-o"></i>CAIS</a>
+    </li>
+    <li id="liAutomation">
+        <a href="Customers#automation"><i class="fa fa-file-text-o"></i>Automation</a>
+    </li>
+    <li id="liStrategySettings">
+        <a href="Customers#settings"><i class="fa fa-file-text-o"></i>Settings</a>
+    </li>
+    <li id="liFunding">
+        <a href="Customers#funding">
+            <div id="fundingDiv" class="funding-main-menu-item"><i class="fa fa-file-text-o"></i>Funding</div>
+        </a>
+    </li>
+}

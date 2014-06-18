@@ -522,19 +522,11 @@ hr.margin-0  {margin: 0;}
     width: 275px;
     position: absolute;
 }
-/*#sidebar-dashboard:before {
-    content: "";
-    display: block;
-    width: 275px;
-    position: fixed;
-    bottom: 0;
-    top: 0;
-    z-index: 0;
-}*/
-#sidebar-dashboard+#main-content {
-    margin-left: 275px;
-}
 
+#sidebar-dashboard+#main-content {
+    margin-left: 200px;
+    margin-right: 275px;
+}
 
 .navbar-collapse {
     padding-right: 0;

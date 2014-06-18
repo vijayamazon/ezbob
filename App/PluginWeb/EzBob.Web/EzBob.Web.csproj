@@ -635,6 +635,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\Support\Funding.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\CompanyDirectorsTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\HMRC.cshtml" />
+    <Content Include="App_Code\UnderwriterSidebar.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

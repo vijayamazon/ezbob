@@ -1,11 +1,7 @@
 ﻿@using System.Globalization
-@using EZBob.DatabaseLib.Model
 @using EzBob.Web.Infrastructure
-@using Ezbob.Backend.Models
 @using Integration.ChannelGrabberConfig
 @using Newtonsoft.Json
-@using ServiceClientProxy
-@using ServiceClientProxy.EzServiceReference
 @using StructureMap
 
 <!DOCTYPE html>
@@ -25,6 +21,11 @@
     string sBodyClasses = "";
     string sBodyClassesException = "";
     string availableFundsStr = "";
+    var sRoleImageUrl = "crm.png";
+    var sRoleImageTitle = "CRM";
+    var userName = "";
+    var userId = 0;
+    var userEmail = "";
 
     try
     {
@@ -35,37 +36,6 @@
             string sPermissions = context.User.Permissions == null ? "" : string.Join(" ", context.User.Permissions.Select(p => "permission-" + p.Name));
             string sRoles = context.User.Roles == null ? "" : string.Join(" ", context.User.Roles.Select(p => "role-" + p.Name));
             sBodyClasses = sRoles + " " + sPermissions;
-        }
-
-        var serviceClient = new ServiceClient();
-        AvailableFundsActionResult availableFundsResponse = serviceClient.Instance.GetAvailableFunds(context.UserId);
-
-        decimal availableFunds = availableFundsResponse.AvailableFunds;
-        availableFundsStr = FormattingUtils.FormatPoundsNoDecimals(availableFunds).Replace(" ", "");
-    }
-    catch (Exception e)
-    {
-        sBodyClassesException = "Error fetching user permissions and roles: " + e.Message;
-    }
-}
-
-<body class="@sBodyClasses">
-	@if (!string.IsNullOrWhiteSpace(sBodyClassesException))
- {
-		<div class="red">@sBodyClassesException</div>
- }
-
-    @AntiForgery.GetHtml() 
-
-    @{
-        var sRoleImageUrl = "crm.png";
-        var sRoleImageTitle = "CRM";
-        var userName = "";
-        var userId = 0;
-        var userEmail = "";
-        try
-        {
-            var context = ObjectFactory.GetInstance<IWorkplaceContext>();
             var user = context.User;
             if (user != null)
             {
@@ -88,16 +58,26 @@
                 sRoleImageTitle = user.Roles.Last().Name;
             }
         }
-        catch
-        {
-        }
-
-        sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
+    }
+    catch (Exception e)
+    {
+        sBodyClassesException = "Error fetching user permissions and roles: " + e.Message;
     }
 
-    @{if (!string.IsNullOrEmpty(userName))
-      {
-        <div class="navbar navbar-blue" id="navbar">
+    sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
+    
+}
+
+<body class="@sBodyClasses">
+    @if (!string.IsNullOrWhiteSpace(sBodyClassesException))
+    {
+        <div class="red">@sBodyClassesException</div>
+    }
+
+    @AntiForgery.GetHtml()
+    <div class="container" id="main-container">
+        
+        @*<div class="navbar navbar-blue" id="navbar">
             <a class="navbar-brand" href="#" id="uw-name-and-icon" data-uw-id="@userId" style="float: left">
                 <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/>@userName
             </a>
@@ -237,10 +217,9 @@
                     @Html.ActionLink("Log out", "LogOffUnderwriter", "Account", new { Area = "" }, new { })
                 </li>
             </ul>
-        </div>
-      }
-    }
-    <div class="container" id="main-container">
+        </div>*@
+
+
         @RenderBody()
     </div>
 
@@ -256,17 +235,17 @@
     <script type="text/javascript">
         $('.navbar.menu .roleImg').tooltip({ placement: "bottom" });
         var EzBob = EzBob || {};
-            EzBob.CrmActions = [];
-            EzBob.CrmStatuses = [];
-            EzBob.CrmRanks = [];
-            EzBob.RejectReasons = [];
-		function EzBob_CgVendors_init() {
-			EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
-		} // EzBob_CgVendors_init
+        EzBob.CrmActions = [];
+        EzBob.CrmStatuses = [];
+        EzBob.CrmRanks = [];
+        EzBob.RejectReasons = [];
+        function EzBob_CgVendors_init() {
+            EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
+        } // EzBob_CgVendors_init
 
-		$(document).ready(function() {
-			EzBob_CgVendors_init();
-		});
+        $(document).ready(function () {
+            EzBob_CgVendors_init();
+        });
     </script>
     @RenderSection("Js", false)
     <div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
