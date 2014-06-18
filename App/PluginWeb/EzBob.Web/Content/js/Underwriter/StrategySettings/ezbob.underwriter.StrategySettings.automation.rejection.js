@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.SettingsRejectionModel = (function(_super) {
-
     __extends(SettingsRejectionModel, _super);
 
     function SettingsRejectionModel() {
-      return SettingsRejectionModel.__super__.constructor.apply(this, arguments);
+      _ref = SettingsRejectionModel.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     SettingsRejectionModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/AutomationRejection";
@@ -24,11 +24,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.SettingsRejectionView = (function(_super) {
-
     __extends(SettingsRejectionView, _super);
 
     function SettingsRejectionView() {
-      return SettingsRejectionView.__super__.constructor.apply(this, arguments);
+      _ref1 = SettingsRejectionView.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     SettingsRejectionView.prototype.template = "#rejection-settings-template";
@@ -56,7 +56,12 @@
       Reject_LowOfflineAnnualRevenue: "input[name='Reject_LowOfflineAnnualRevenue']",
       Reject_LowOfflineQuarterRevenue: "input[name='Reject_LowOfflineQuarterRevenue']",
       Reject_LateLastMonthsNum: "input[name='Reject_LateLastMonthsNum']",
-      Reject_NumOfLateAccounts: "input[name='Reject_NumOfLateAccounts']"
+      Reject_NumOfLateAccounts: "input[name='Reject_NumOfLateAccounts']",
+      RejectionLastValidLate: "input[name='RejectionLastValidLate']",
+      RejectionCompanyScore: "input[name='RejectionCompanyScore']",
+      RejectionExceptionMaxConsumerScoreForMpError: "input[name='RejectionExceptionMaxConsumerScoreForMpError']",
+      RejectionExceptionMaxCompanyScoreForMpError: "input[name='RejectionExceptionMaxCompanyScoreForMpError']",
+      RejectionExceptionMaxCompanyScore: "input[name='RejectionExceptionMaxCompanyScore']"
     };
 
     SettingsRejectionView.prototype.events = {
@@ -81,6 +86,7 @@
     SettingsRejectionView.prototype.update = function() {
       var xhr,
         _this = this;
+
       xhr = this.model.fetch();
       return xhr.done(function() {
         return _this.render();
@@ -181,6 +187,26 @@
             min: 0
           },
           Reject_NumOfLateAccounts: {
+            required: true,
+            min: 0
+          },
+          RejectionLastValidLate: {
+            required: true,
+            min: 0
+          },
+          RejectionCompanyScore: {
+            required: true,
+            min: 0
+          },
+          RejectionExceptionMaxConsumerScoreForMpError: {
+            required: true,
+            min: 0
+          },
+          RejectionExceptionMaxCompanyScoreForMpError: {
+            required: true,
+            min: 0
+          },
+          RejectionExceptionMaxCompanyScore: {
             required: true,
             min: 0
           }

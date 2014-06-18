@@ -31,6 +31,11 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
         Reject_LowOfflineQuarterRevenue:        "input[name='Reject_LowOfflineQuarterRevenue']"
         Reject_LateLastMonthsNum:               "input[name='Reject_LateLastMonthsNum']"
         Reject_NumOfLateAccounts:               "input[name='Reject_NumOfLateAccounts']"
+        RejectionLastValidLate:                 "input[name='RejectionLastValidLate']"
+        RejectionCompanyScore:                  "input[name='RejectionCompanyScore']"
+        RejectionExceptionMaxConsumerScoreForMpError: "input[name='RejectionExceptionMaxConsumerScoreForMpError']"
+        RejectionExceptionMaxCompanyScoreForMpError:  "input[name='RejectionExceptionMaxCompanyScoreForMpError']"
+        RejectionExceptionMaxCompanyScore:            "input[name='RejectionExceptionMaxCompanyScore']"
 
 
     events:
@@ -114,5 +119,20 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
                     required: true
                     min: 0
                 Reject_NumOfLateAccounts:
+                    required: true
+                    min: 0
+                RejectionLastValidLate:
+                    required: true
+                    min: 0
+                RejectionCompanyScore:
+                    required: true
+                    min: 0
+                RejectionExceptionMaxConsumerScoreForMpError:
+                    required: true
+                    min: 0
+                RejectionExceptionMaxCompanyScoreForMpError:
+                    required: true
+                    min: 0
+                RejectionExceptionMaxCompanyScore:
                     required: true
                     min: 0

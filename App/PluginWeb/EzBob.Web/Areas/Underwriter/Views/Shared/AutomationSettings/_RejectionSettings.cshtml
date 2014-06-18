@@ -27,6 +27,11 @@
                     @SelectSetting("EnableAutomaticReRejection")
                     @Setting("AutoRejectionException_CreditScore")
                     @Setting("AutoRejectionException_AnualTurnover")
+                    @Setting("RejectionLastValidLate")
+                    @Setting("RejectionCompanyScore")
+                    @Setting("RejectionExceptionMaxConsumerScoreForMpError")
+                    @Setting("RejectionExceptionMaxCompanyScoreForMpError")
+                    @Setting("RejectionExceptionMaxCompanyScore")
                 </tbody>
             </table>
             <div class="pull-right">
@@ -45,7 +50,8 @@
         <td><%- @string.Format("{0}Desc", settingName)%></td>
     </tr>
 }
-@helper SelectSetting(string settingName){
+@helper SelectSetting(string settingName)
+{
     <tr>
         <td width="20%">@settingName: </td>
         <td width="20%">

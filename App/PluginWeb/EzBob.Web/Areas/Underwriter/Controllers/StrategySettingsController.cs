@@ -279,7 +279,12 @@
 			var reject_LowOfflineQuarterRevenue = _configurationVariablesRepository.GetByName("Reject_LowOfflineQuarterRevenue");
 			var reject_LateLastMonthsNum = _configurationVariablesRepository.GetByName("Reject_LateLastMonthsNum");
 			var reject_NumOfLateAccounts = _configurationVariablesRepository.GetByName("Reject_NumOfLateAccounts");
-
+			
+			var rejectionLastValidLate = _configurationVariablesRepository.GetByName("RejectionLastValidLate");
+			var rejectionCompanyScore = _configurationVariablesRepository.GetByName("RejectionCompanyScore");
+			var rejectionExceptionMaxConsumerScoreForMpError = _configurationVariablesRepository.GetByName("RejectionExceptionMaxConsumerScoreForMpError");
+			var rejectionExceptionMaxCompanyScoreForMpError = _configurationVariablesRepository.GetByName("RejectionExceptionMaxCompanyScoreForMpError");
+			var rejectionExceptionMaxCompanyScore = _configurationVariablesRepository.GetByName("RejectionExceptionMaxCompanyScore");
 
 			var sr = new
 				{
@@ -315,6 +320,16 @@
 					Reject_LateLastMonthsNumDesc = reject_LateLastMonthsNum.Description,
 					Reject_NumOfLateAccounts = reject_NumOfLateAccounts.Value,
 					Reject_NumOfLateAccountsDesc = reject_NumOfLateAccounts.Description,
+					RejectionLastValidLate = rejectionLastValidLate.Value,
+					RejectionLastValidLateDesc = rejectionLastValidLate.Description,
+					RejectionCompanyScore = rejectionCompanyScore.Value,
+					RejectionCompanyScoreDesc = rejectionCompanyScore.Description,
+					RejectionExceptionMaxConsumerScoreForMpError = rejectionExceptionMaxConsumerScoreForMpError.Value,
+					RejectionExceptionMaxConsumerScoreForMpErrorDesc = rejectionExceptionMaxConsumerScoreForMpError.Description,
+					RejectionExceptionMaxCompanyScoreForMpError = rejectionExceptionMaxCompanyScoreForMpError.Value,
+					RejectionExceptionMaxCompanyScoreForMpErrorDesc = rejectionExceptionMaxCompanyScoreForMpError.Description,
+					RejectionExceptionMaxCompanyScore = rejectionExceptionMaxCompanyScore.Value,
+					RejectionExceptionMaxCompanyScoreDesc = rejectionExceptionMaxCompanyScore.Description,
 				};
 			return Json(sr, JsonRequestBehavior.AllowGet);
 		}
@@ -337,7 +352,12 @@
 		                                      string Reject_LowOfflineAnnualRevenue,
 		                                      string Reject_LowOfflineQuarterRevenue,
 		                                      string Reject_LateLastMonthsNum,
-		                                      string Reject_NumOfLateAccounts)
+		                                      string Reject_NumOfLateAccounts,
+											  string RejectionLastValidLate,
+											  string RejectionCompanyScore,
+											  string RejectionExceptionMaxConsumerScoreForMpError,
+											  string RejectionExceptionMaxCompanyScoreForMpError,
+											  string RejectionExceptionMaxCompanyScore)
 		{
 			Transactional.Execute(() =>
 			{
@@ -357,6 +377,11 @@
 				_configurationVariablesRepository.SetByName("Reject_LowOfflineQuarterRevenue", Reject_LowOfflineQuarterRevenue);
 				_configurationVariablesRepository.SetByName("Reject_LateLastMonthsNum", Reject_LateLastMonthsNum);
 				_configurationVariablesRepository.SetByName("Reject_NumOfLateAccounts", Reject_NumOfLateAccounts);
+				_configurationVariablesRepository.SetByName("RejectionLastValidLate", RejectionLastValidLate);
+				_configurationVariablesRepository.SetByName("RejectionCompanyScore", RejectionCompanyScore);
+				_configurationVariablesRepository.SetByName("RejectionExceptionMaxConsumerScoreForMpError", RejectionExceptionMaxConsumerScoreForMpError);
+				_configurationVariablesRepository.SetByName("RejectionExceptionMaxCompanyScoreForMpError", RejectionExceptionMaxCompanyScoreForMpError);
+				_configurationVariablesRepository.SetByName("RejectionExceptionMaxCompanyScore", RejectionExceptionMaxCompanyScore);
 			});
 
 			UpdateConfigVars();
