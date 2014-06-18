@@ -15,6 +15,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Newtonsoft.Json;
+	using Parser;
 	using StructureMap;
 	using log4net;
 	using EZBob.DatabaseLib.Repository;
@@ -244,6 +245,7 @@
 				var sl = ObjectFactory.GetInstance<ServiceLogRepository>();
 				MP_ServiceLog oFirst = m_oRetryer.Retry(() => sl.GetFirst());
 				SaveDefaultAccountIntoDb(outputRoot, customerId, oFirst);
+				financialAccountsParser.Parse(oFirst.ResponseData, oFirst.Id, customerId);
 			} // if
 
 			return consumerServiceResult;
@@ -354,8 +356,9 @@
 					cachedResponse.DirectorId = directorId;
 
 				m_oRetryer.Retry(() => _repo.SaveOrUpdate(cachedResponse));
-				
+
 				SaveDefaultAccountIntoDb(output, customerId, serviceLog);
+				financialAccountsParser.Parse(serviceLog.ResponseData, serviceLog.Id, customerId);
 			} // if
 
 			return new ConsumerServiceResult(output, cachedResponse.BirthDate);
@@ -428,6 +431,7 @@
 		private readonly SqlRetryer m_oRetryer;
 		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
+		private FinancialAccountsParser financialAccountsParser = new FinancialAccountsParser();
 		private readonly string interactiveMode;
 
 		#endregion properties
