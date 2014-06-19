@@ -399,6 +399,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             @$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled')
 
         @validateLoanSourceRelated()
+        EzBob.handleUserLayoutSetting()
 
     initSwitch: (elemClass, param, func, method) ->
         that = this

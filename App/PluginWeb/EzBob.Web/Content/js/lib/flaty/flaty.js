@@ -52,6 +52,66 @@ EzBob.handleUserLayoutSetting = function () {
     $('a[href^=#]').click(function (e) {
         e.preventDefault();
     });
+    
+    //-------------------------- Boxes -----------------------------//
+    $('div.box .box-tool > a').click(function (e) {
+        if ($(this).data('action') == undefined) {
+            return;
+        }
+        var action = $(this).data('action');
+        var btn = $(this);
+        switch (action) {
+            case 'collapse':
+                $(btn).children('i').addClass('anim-turn180');
+                $(this).parents('.box').children('.box-content').slideToggle(500, function () {
+                    if ($(this).is(":hidden")) {
+                        $(btn).children('i').attr('class', 'fa fa-chevron-down');
+                    } else {
+                        $(btn).children('i').attr('class', 'fa fa-chevron-up');
+                    }
+                });
+                break;
+            case 'close':
+                $(this).parents('.box').fadeOut(500, function () {
+                    $(this).parent().remove();
+                })
+                break;
+            case 'config':
+                $('#' + $(this).data('modal')).modal('show');
+                break;
+        }
+        return false;
+    });
+    $('thead.box .box-tool > a').click(function (e) {
+        if ($(this).data('action') == undefined) {
+            return;
+        }
+        var action = $(this).data('action');
+        var btn = $(this);
+        switch (action) {
+            case 'collapse':
+                $(btn).children('i').addClass('anim-turn180');
+                console.log('cl', $(this).parents('.box').parent().children('.box-content'), $(this).parents('.box'), $(this).parents('.box').parent());
+                $(this).parents('.box').parent().children('.box-content').slideToggle(500, function () {
+                    if ($(this).is(":hidden")) {
+                        $(btn).children('i').attr('class', 'fa fa-chevron-down');
+                    } else {
+                        $(btn).children('i').attr('class', 'fa fa-chevron-up');
+                    }
+                });
+                break;
+            case 'close':
+                $(this).parents('.box').fadeOut(500, function () {
+                    $(this).parent().remove();
+                })
+                break;
+            case 'config':
+                $('#' + $(this).data('modal')).modal('show');
+                break;
+        }
+        return false;
+    });
+
 };
 
 $(function () {
@@ -292,36 +352,7 @@ $(function () {
         }
     });
 
-    //-------------------------- Boxes -----------------------------//
-    $('.box .box-tool > a').click(function (e) {
-        if ($(this).data('action') == undefined) {
-            return;
-        }
-        var action = $(this).data('action');
-        var btn = $(this);
-        switch (action) {
-            case 'collapse':
-                $(btn).children('i').addClass('anim-turn180');
-                $(this).parents('.box').children('.box-content').slideToggle(500, function () {
-                    if ($(this).is(":hidden")) {
-                        $(btn).children('i').attr('class', 'fa fa-chevron-down');
-                    } else {
-                        $(btn).children('i').attr('class', 'fa fa-chevron-up');
-                    }
-                });
-                break;
-            case 'close':
-                $(this).parents('.box').fadeOut(500, function () {
-                    $(this).parent().remove();
-                })
-                break;
-            case 'config':
-                $('#' + $(this).data('modal')).modal('show');
-                break;
-        }
-        return false;
-    });
-
+    
     //-------------------------- Mail Page -----------------------------//
     //Collapse and Uncollapse
     $('.mail-messages .msg-collapse > a').click(function (e) {

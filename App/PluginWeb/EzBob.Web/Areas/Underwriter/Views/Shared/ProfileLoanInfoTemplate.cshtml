@@ -51,10 +51,15 @@
             <tr class="box-title">
                 <th class="left-pane-header" colspan="2">Customer Details
                     <button id="MainStrategyHidden" class="hide btn btn-mini btn-primary">Run main strategy</button>
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
                 </th>
+
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             @RawCell("Id", "<%- data.Id %>")
             @RawCell("Name", "<%- data.Name %>")
             <tr>
@@ -72,10 +77,15 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Company Details</th>
+                <th class="left-pane-header" colspan="2">Company Details
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             @RawCell("Company Name", "<%- data.CompanyName %>")
             @RawCell("Business Type", "<%- data.CompanyType %>")
             @RawCell("Company Seniority", "<%- data.CompanySeniority %>")
@@ -86,15 +96,20 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Contact Details</th>
+                <th class="left-pane-header" colspan="2">Contact Details
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             @RawCell("Mobile", "<%- data.MobilePhone %>")
             @RawCell("Daytime", "<%- data.DaytimePhone %>")
 
             <tr>
-                <td>E-mail 
+                <td class="customer-column-width-50">E-mail 
                     <i data-title="<%- data.EmailState %>" class="tltp <%=getIcon()%>"></i>
                 </td>
                 <td><%- data.Email.length <= 14 ? data.Email : data.Email.substring(0,11)+'...' %>
@@ -112,10 +127,15 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Source</th>
+                <th class="left-pane-header" colspan="2">Source
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             <tr class="with-broker">
                 <td class="customer-column-width-50"><button class="btn btn-mini btn-primary left-pane-button hide" id="brokerDetailsBtn" name="brokerDetails"><i class="fa fa-plus"></i></button>&nbsp;Broker name</td>
                 <td><%- data.BrokerName %></td>
@@ -137,9 +157,9 @@
                 <td><%- data.BrokerContactMobile %></td>
             </tr>
         </tbody>
-        <tbody>
+        <tbody class="box-content">
             <tr>
-                <td class="<%= data.PromoCodeCss %>">Promo</td>
+                <td class="customer-column-width-50 <%= data.PromoCodeCss %>">Promo</td>
                 <td class="<%= data.PromoCodeCss %>">
                     <span><%= data.PromoCode %></span>
                 </td>
@@ -147,7 +167,7 @@
             @RawCell("Campaigns", "<%- data.ActiveCampaign %>")
 
             <tr>
-                <td>Ref Source</td>
+                <td class="customer-column-width-50">Ref Source</td>
                 <td><%- data.ReferenceSource ? (data.ReferenceSource.length <= 20 ? data.ReferenceSource : data.ReferenceSource.substring(0,17)+'...') : '-' %>
                     <i data-title="<%- data.ReferenceSource || 'no source ref' %>" class="tltp fa fa-question-circle"></i>
                 </td>
@@ -159,10 +179,15 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Statuses</th>
+                <th class="left-pane-header" colspan="2">Statuses
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
 
             <tr>
@@ -201,17 +226,22 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Offer Details</th>
+                <th class="left-pane-header" colspan="2">Offer Details
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             @RawCell("System decision", "<%- m.SystemDecision %>")
             @RawCell("System amount", "<%- EzBob.formatPounds(m.SystemCalculatedAmount) %>")
 
             <%if(m.Editable){%>
-                @RawCellWithButtonNear("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
+                @RawCellWithButtonNear("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='fa fa-exclamation-circle'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
             <%} else{%>
-                @RawCell("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
+                @RawCell("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='fa fa-exclamation-circle'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
             <%}%>
 
             <tr class="hide" id="create-loan-hidden">
@@ -271,10 +301,15 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Setup Fee</th>
+                <th class="left-pane-header" colspan="2">Setup Fee
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             <%if(m.Editable){%>
             @RawCellWithSlider("Setup fee", "setupFeeSwitch", "No", "Yes", "", "info")
             @RawCellWithSlider("Broker commission", "brokerCommisionSwitch", "No", "Yes", "", "info")
@@ -299,10 +334,15 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Other Properties</th>
+                <th class="left-pane-header" colspan="2">Other Properties
+                    <div class="box-tool">
+                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             <%if(m.Editable){%>
                 @RawCellWithButtonNear("Repayment period", "<%- m.RepaymentPerion %>", "repaymentPeriodChangeButton")
             <%} else{%>
@@ -424,7 +464,7 @@
                     <th>Diamond</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="box-content">
                 <%_.each(m.SuggestedAmounts, function(s) { %>
                         <tr>
                             <td><%-s.Method%></td>

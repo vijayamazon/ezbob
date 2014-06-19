@@ -1031,6 +1031,7 @@ textarea.BusinessAddress {
 
 .customer-column-width-50 {
     width: 50%;
+    color: #cdcdcd;;
 }
 
 .left-pane-button {
@@ -1123,7 +1124,7 @@ textarea.BusinessAddress {
 
 .alert {
     padding: 5px !important;
-    margin-bottom: 10px !important;
+    margin: 5px;
 }
 
 .pricing-model-double-input-width {

@@ -77,17 +77,13 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             'placement': 'bottom'
         });
 
-        console.log('model', this.medalModel);
         var medalHistory = this.medalModel.get('History');
         if (medalHistory) {
-            console.log('medalHistory', medalHistory);
             var histData = [];
             for (var hist in medalHistory.MedalHistories) {
                 histData.push([parseInt(hist), medalHistory.MedalHistories[hist].Result]);
             }
-            //var histData = _.map(medalHistory.MedalHistories, function (medal, i) { return [i, medal.Result]; });
-            console.log('medalHistory', histData);
-            var plot3 = $.jqplot('medalHistory', [histData],
+            var mhPlot = $.jqplot('medalHistory', [histData],
                 {
                     title: '',
                     series: [{ markerOptions: { style: "circle" } }],
