@@ -48,46 +48,99 @@
 
 		#region method Send
 
-		public void Send(IEnumerable<string> aryEmails, string sDocumentName, string sFileName, string sMimeType, byte[] oDocument) {
+		public bool Send(int nCustomerID, IEnumerable<int> aryDirectors, int nTemplateID, bool bSendToCustomer) {
 			if (!m_bIsReady) {
 				m_oLog.Msg("EchoSign cannot send - not ready.");
-				return;
+				return false;
 			} // if
 
-			var oRecipients = new List<RecipientInfo>();
-			var sAllRecipients = new StringBuilder();
+			SpLoadDataForEsign sp;
 
-			foreach (var sEmail in aryEmails) {
-				oRecipients.Add(new RecipientInfo {
-					email = sEmail,
-					role = RecipientRole.SIGNER,
-				});
+			try {
+				sp = new SpLoadDataForEsign(m_oDB, m_oLog) {
+					CustomerID = nCustomerID,
+					TemplateID = nTemplateID,
+					DirectorIDs = aryDirectors.ToList(),
+				};
 
-				if (oRecipients.Count != 1)
-					sAllRecipients.Append(", ");
+				sp.Load();
+			}
+			catch (Exception e) {
+				m_oLog.Warn(e, "EchoSign cannot send: failed to load all the data from database.");
+				return false;
+			} // try
 
-				sAllRecipients.Append(sEmail);
-			} // for each
+			if (!sp.IsReady) {
+				m_oLog.Warn("EchoSign cannot send: failed to load all the data from database.");
+				return false;
+			} // if
+
+			List<Person> oRecipients = new List<Person>();
+
+			oRecipients.AddRange(sp.Directors);
+
+			if (bSendToCustomer)
+				oRecipients.Add(sp.Customer);
+
+			if (oRecipients.Count < 1) {
+				m_oLog.Warn("EchoSign cannot send: no recipients specified.");
+				return false;
+			} // if
+
+			switch (sp.Template.TemplateType) {
+			case TemplateType.BoardResolution:
+				return SendOne(sp.Template, null, oRecipients, sp, bSendToCustomer);
+
+			case TemplateType.PersonalGuarantee:
+				bool bAllGood = true;
+
+				foreach (Person oRecipient in oRecipients)
+					if (!SendOne(sp.Template, sp.Template.PersonalGuarantee(oRecipient), new List<Person> { oRecipient }, sp, bSendToCustomer))
+						bAllGood = false;
+
+				return bAllGood;
+
+			default:
+				m_oLog.Warn("EchoSign cannot send: don't know how to send template of type {0}.", sp.Template.TemplateType);
+				return false;
+			} // switch
+		} // Send
+
+		private bool SendOne(Template oTemplate, byte[] oFileContent, List<Person> oAddressee, SpLoadDataForEsign oData, bool bSentToCustomer) {
+			var oRecipients = oAddressee.Select(oPerson => new RecipientInfo {
+				email = oPerson.Email,
+				role = RecipientRole.SIGNER,
+			}).ToArray();
+
+			var sAllRecipients = string.Join(", ", oRecipients.Select(r => r.email));
 
 			var fi = new FileInfo {
-				fileName = sFileName,
-				mimeType = sMimeType,
-				file = oDocument,
+				fileName = oTemplate.FileName,
+				mimeType = oTemplate.MimeType,
+				file = oFileContent ?? oTemplate.FileContent,
 			};
 
 			var dci = new DocumentCreationInfo {
-				name = sDocumentName,
+				name = oTemplate.DocumentName,
 				signatureType = SignatureType.ESIGN,
 				reminderFrequency = m_nReminderFrequency,
 				signatureFlow = SignatureFlow.PARALLEL,
 				daysUntilSigningDeadline = m_nDeadline,
-				recipients = oRecipients.ToArray(),
+				recipients = oRecipients,
 				fileInfos = new [] { fi },
 			};
 
-			m_oLog.Debug("Sending a document '{0}' to {1}...", sDocumentName, sAllRecipients);
+			m_oLog.Debug("Sending a document '{0}' to {1}...", oTemplate.DocumentName, sAllRecipients);
 
-			DocumentKey[] aryResult = m_oEchoSign.sendDocument(m_sApiKey, null, dci);
+			DocumentKey[] aryResult;
+
+			try {
+				aryResult = m_oEchoSign.sendDocument(m_sApiKey, null, dci);
+			}
+			catch (Exception e) {
+				m_oLog.Warn(e, "Something went exceptionally terrible while sending a document '{0}' to {1}.", oTemplate.DocumentName, sAllRecipients);
+				return false;
+			} // try
 
 			if (aryResult.Length != 1) {
 				m_oLog.Alert("Failed to send documents for signing.");
@@ -95,9 +148,19 @@
 			else {
 				m_oLog.Debug("Sending result: document key is '{0}'.", aryResult[0].documentKey);
 
-				// TODO: foreach (var sEmail in aryEmails) save to DB: sEmail, documentKey
+				var sp = new SpSaveEsignSent(m_oDB, m_oLog) {
+					CustomerID = oData.Customer.ID,
+					Directors = oAddressee.Where(x => x.PersonType == PersonType.Director).Select(x => x.ID).ToList(),
+					DocumentKey = aryResult[0].documentKey,
+					SentToCustomer = bSentToCustomer,
+					TemplateID = oData.Template.ID,
+				};
+
+				sp.ExecuteNonQuery();
 			} // if
-		} // Send
+
+			return true;
+		} // SendOne
 
 		#endregion method Send
 

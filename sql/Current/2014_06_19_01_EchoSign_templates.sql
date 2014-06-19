@@ -1,3 +1,6 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF OBJECT_ID('EsignTemplateTypes') IS NULL
 BEGIN
 	CREATE TABLE EsignTemplateTypes (

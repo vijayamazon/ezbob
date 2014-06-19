@@ -12,18 +12,16 @@
 		} // TestConfiguration
 
 		[Test]
-		public void TestSendFile() {
+		public void TestSendBoardResolution() {
 			var esf = new EchoSignFacade(m_oDB, m_oLog);
+			esf.Send(28, new int[] { 2, 3, }, 1, true);
+		} // TestSendBoardResolution
 
-			var aryEmails = new string[] {
-				"alexbo+sign-01@ezbob.com",
-				"alexbo+sign-02@ezbob.com",
-			};
-
-			const string sPath = @"c:\ezbob\test-data\sample_board_resolution.docx";
-
-			esf.Send(aryEmails, "Board resolution", sPath, new MimeTypeResolver()[".docx"], File.ReadAllBytes(sPath));
-		} // TestSendFile
+		[Test]
+		public void TestSendPersonalGuarantee() {
+			var esf = new EchoSignFacade(m_oDB, m_oLog);
+			esf.Send(28, new int[] { 2, 3, }, 2, false);
+		} // TestSendPersonalGuarantee
 
 		[Test]
 		public void TestGetDocuments() {
@@ -31,6 +29,7 @@
 
 			esf.GetDocuments("2AAABLblqZhCLzXHaKf9HRvMQro37ZP6p_tCJjO_hleBEIWOn6NnAGoa64wJ1_nUv3HonlaN1FxQ*");
 			esf.GetDocuments("2AAABLblqZhDm9gTJPe2IQjuTHvLioVbvr2raDTZBx-Yqsummg2hkqycHR0eOD6Tr9yVDjjBzqYo*");
+			esf.GetDocuments("2AAABLblqZhAin59yVaeGKEMrRFv67nQdeMmdOD7vzQ-FQTusV0dCKFo7XtenbUtBNCY1MW1TfC8*");
 		} // TestGetDocuments
 
 		[Test]
@@ -39,6 +38,9 @@
 
 			esf.GetDocumentInfo("2AAABLblqZhCLzXHaKf9HRvMQro37ZP6p_tCJjO_hleBEIWOn6NnAGoa64wJ1_nUv3HonlaN1FxQ*");
 			esf.GetDocumentInfo("2AAABLblqZhDm9gTJPe2IQjuTHvLioVbvr2raDTZBx-Yqsummg2hkqycHR0eOD6Tr9yVDjjBzqYo*");
+			esf.GetDocumentInfo("2AAABLblqZhAin59yVaeGKEMrRFv67nQdeMmdOD7vzQ-FQTusV0dCKFo7XtenbUtBNCY1MW1TfC8*");
+			esf.GetDocumentInfo("AAABLblqZhDijFbJ2Nof3ybm-K9vYa1PKO74QBavqbOr3-eyjNUfQ8rNBQ7TwLkUSQO-4QJrlYM*");
+			esf.GetDocumentInfo("2AAABLblqZhDZnbD0l9bDKx_EcHnJxIcfDBiL0dbFEKg-3qhRy2il0mnf7moJVty83cjdtBReFKs*");
 		} // TestGetDocumentInfo
 	} // class TestEchoSign
 } // namespace
