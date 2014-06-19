@@ -55,7 +55,7 @@
 			var sr = new SafeReader(dt.Rows[0]);
 
 			Results.BusinessScore = sr["BusinessScore"];
-			Results.TangibleEquity = sr["TangibleEquity"];
+			decimal tangibleEquity = sr["TangibleEquity"];
 			Results.BusinessSeniority = sr["BusinessSeniority"];
 			Results.ConsumerScore = sr["ConsumerScore"];
 			string maritalStatusStr = sr["MaritalStatus"];
@@ -90,13 +90,29 @@
 			{
 				freeCashFlowDataAvailable = true;
 				Results.AnnualTurnover = summaryData[0].Revenues ?? 0;
-				Results.FreeCashFlow = summaryData[0].FreeCashFlow ?? 0;
+				if (summaryData[0].FreeCashFlow.HasValue && Results.AnnualTurnover != 0)
+				{
+					Results.FreeCashFlow = summaryData[0].FreeCashFlow.Value / Results.AnnualTurnover;
+				}
+				else
+				{
+					Results.FreeCashFlow = 0;
+				}
 			}
 			else
 			{
 				freeCashFlowDataAvailable = false;
 				Results.AnnualTurnover = yodleeTurnover;
 				Results.FreeCashFlow = 0;
+			}
+
+			if (Results.AnnualTurnover != 0)
+			{
+				Results.TangibleEquity = tangibleEquity/Results.AnnualTurnover;
+			}
+			else
+			{
+				Results.TangibleEquity = 0;
 			}
 
 			var regexObj = new Regex(@"[^\d]");
