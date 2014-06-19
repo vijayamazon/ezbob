@@ -32,7 +32,7 @@
 			string ezbobab = "",
 			string invite = "",
 			string bloken = "",
-			string firstvisit = ""
+			string sourceref_time = ""
 		) {
 			Session["Shop"] = shop;
 
@@ -54,8 +54,8 @@
 				Response.Cookies.Add(cookie);
 			} // if
 
-			if (!string.IsNullOrEmpty(firstvisit)) {
-				var cookie = new HttpCookie("firstvisit", firstvisit) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
+			if (!string.IsNullOrEmpty(sourceref_time)) {
+				var cookie = new HttpCookie("firstvisit", sourceref_time) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
 				Response.Cookies.Add(cookie);
 			} // if
 
