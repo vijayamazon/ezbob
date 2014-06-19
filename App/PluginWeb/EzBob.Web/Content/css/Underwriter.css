@@ -1557,7 +1557,8 @@ body {
 
 #sidebar .nav-list > li > a,
 #sidebar .nav-list > li > label,
-.nav-list > li .submenu {
+.nav-list > li .submenu,
+.sidebar-collapsed .nav-list > li > a > span {
     background-color: #323232;
     color: #fff;
     font-size: 14px;
@@ -1587,6 +1588,17 @@ body {
         margin-left: 10px;
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
+    }
+
+    .sidebar-collapsed .nav-list > li > a:focus,
+    .sidebar-collapsed .nav-list > li > a:hover,
+    .sidebar-collapsed .nav-list > li.active > a,
+    .sidebar-collapsed .nav-list > li.active > a:hover,
+    .sidebar-collapsed .nav-list > li.active > a:focus,
+    .sidebar-collapsed .nav-list > li.active > a:active {
+        margin-left: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
     }
 
 .table-ezbig {

@@ -359,6 +359,7 @@
         EzBob.Underwriter.StaticData.CollectionStatuses = new EzBob.Underwriter.CollectionStatuses(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.CollectionStatuses)));
 
         var escalatedFlag = @(Model.IsEscalated ? 1 : 0);
+        EzBob.handleUserLayoutSetting();
     </script>
 
     <script type="text/javascript" src="../Content/js/Underwriter/customersGrid/ezbob.underwriter.index.js"></script>
