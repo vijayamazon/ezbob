@@ -12,7 +12,7 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
         @propertiesModel = options.propertiesModel
         @mpsModel = options.mpsModel
         @loanModel = options.loanModel
-
+        
         @bindTo @model, "change sync", @render, this
         @bindTo @crmModel, "change sync", @render, this
         @bindTo @personalModel, "change sync", @personalModelChanged, this
@@ -29,6 +29,7 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
         mps: @mpsModel.toJSON()
         loan: @loanModel.toJSON()
         affordability: _.first(_.filter(@mpsModel.toJSON(), (mp) -> mp.Name is 'HMRC'), 1)
+
     events:
         'click a[data-action="collapse"]' : "boxToolClick"
         'click a[data-action="close"]' : "boxToolClick"

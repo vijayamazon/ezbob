@@ -161,6 +161,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             model: @summaryInfoModel
             personalModel: @personalInfoModel
             loanModel: @loanInfoModel
+            medalModel: @medalCalculationModel
         )
 
         @showed = true

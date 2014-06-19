@@ -61,9 +61,9 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
 
         var isFollowed = this.model.get("LastFollowUp");
         if (isFollowed) {
-            $('.crm-tab i').addClass('red');
+            $('.crm-tab').addClass('followed-up');
         } else {
-            $('.crm-tab i').removeClass('red');
+            $('.crm-tab').removeClass('followed-up');
         }
         
         this.ui.toggleSystemBtn.tooltip({ placement: "right" });

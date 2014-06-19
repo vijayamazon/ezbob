@@ -1133,7 +1133,7 @@ textarea.BusinessAddress {
 .pricing-model-double-input-width-wider {
     width: 100px;
 }
-
+#profileHead .box .box-title,
 #dashboard .box .box-title {
     padding: 3px;
 }
@@ -1180,7 +1180,7 @@ textarea.BusinessAddress {
 }
 
 .row {
-    max-width: 100%;
+    margin-left: -5px;
 }
 
 ul.ScheduleList {
@@ -1382,7 +1382,7 @@ td a.edit-loan {
     text-align: -webkit-center;
 }
 
-.crm-tab i {
+.crm-tab.followed-up i {
     color: #58B8FC;
 }
 

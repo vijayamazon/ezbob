@@ -1,5 +1,6 @@
 ﻿@model dynamic
 <script id="dashboard-template" type="text/template">
+    <div class="row">
         <div class="col-md-3">
             <div class="row">
                 <div class="box">
@@ -11,7 +12,14 @@
                         </div>
                     </div>
                     <div class="box-content">
-                        TODO
+                        <%
+                            var rl = m.RequestedLoan || {},
+                            cec = m.CompanyEmployeeCountInfo || {};
+                        %>
+                        <div>Requested loan: <%-rl!=null ? EzBob.formatPoundsNoDecimals(rl.Amount, true) : "-"%></div>
+                        <div>Annual turnover: <%- EzBob.formatPoundsNoDecimals(m.OverallTurnOver) %></div>
+                        <div># of employees: <%- cec.EmployeeCount %> employees</div>
+                        <div>Total Monthly salary cost: <%- EzBob.formatPoundsAsInt(cec.TotalMonthlySalary) %></div>
                     </div>
                 </div>
             </div>
@@ -133,7 +141,7 @@
                 </div>
             </div>
         </div>
-
+    </div>
     <div class="row">
         <%if(experian) {
             experian.Summary = experian.Summary || {};
@@ -563,5 +571,6 @@
         </div>
     </div>
     <%}%>
+
 </script>
 

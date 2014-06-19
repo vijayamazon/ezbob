@@ -80,6 +80,24 @@
 
 		[Ajax]
 		[HttpGet]
+		public JsonResult Affordability(int id)
+		{
+			var customer = _customers.Get(id);
+			var models = GetAffordability(customer);
+
+			return Json(models, JsonRequestBehavior.AllowGet);
+		}
+
+		private IEnumerable<AffordabilityModel> GetAffordability(Customer customer)
+		{
+			//todo implement
+			var model = new List<AffordabilityModel>();
+			return model;
+		}
+
+
+		[Ajax]
+		[HttpGet]
 		public JsonResult GetTeraPeakOrderItems(int customerMarketPlaceId)
 		{
 			var data = _teraPeakOrderItems.GetTeraPeakOrderItems(customerMarketPlaceId);

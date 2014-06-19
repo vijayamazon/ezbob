@@ -33,7 +33,7 @@
     };
 
     ProfileView.prototype.render = function() {
-      var alertPassed, apiChecks, controlButtons, customerRelations, dashboardInfo, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, summaryInfo, that,
+      var alertPassed, apiChecks, controlButtons, customerRelations, dashboardInfo, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileHead, profileInfo, summaryInfo, that,
         _this = this;
       this.$el.html(this.template());
       profileInfo = this.$el.find(".profile-person-info");
@@ -50,6 +50,7 @@
       customerRelations = this.$el.find("#customerRelations");
       alertPassed = this.$el.find("#alerts-passed");
       controlButtons = this.$el.find("#controlButtons");
+      profileHead = this.$el.find("#profileHead");
       fraudDetection = this.$el.find("#fraudDetection");
       this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel();
       this.profileInfoView = new EzBob.Underwriter.PersonInfoView({
@@ -162,6 +163,13 @@
         propertiesModel: this.PropertiesModel,
         mpsModel: this.marketPlaces,
         loanModel: this.loanInfoModel
+      });
+      this.profileHeadView = new EzBob.Underwriter.ProfileHeadView({
+        el: profileHead,
+        model: this.summaryInfoModel,
+        personalModel: this.personalInfoModel,
+        loanModel: this.loanInfoModel,
+        medalModel: this.medalCalculationModel
       });
       this.showed = true;
       this.controlButtons = new EzBob.Underwriter.ControlButtonsView({

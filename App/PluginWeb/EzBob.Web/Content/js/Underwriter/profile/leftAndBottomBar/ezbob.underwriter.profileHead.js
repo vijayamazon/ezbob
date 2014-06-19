@@ -6,14 +6,17 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
     initialize: function (options) {
         this.loanModel = options.loanModel;
         this.personalModel = options.personalModel;
+        this.medalModel = options.medalModel;
         this.bindTo(this.model, "change sync", this.render, this);
         this.bindTo(this.loanModel, "change sync", this.render, this);
+        this.bindTo(this.medalModel, "change sync", this.render, this);
         this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
     },
     serializeData: function () {
         return {
             m: this.model.toJSON(),
-            loan: this.loanModel.toJSON()
+            loan: this.loanModel.toJSON(),
+            medal: this.medalModel.get('Score'),
         };
     },
     events: {
@@ -70,8 +73,40 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 }
             }
         }
-        return this.$el.find('[data-toggle="tooltip"]').tooltip({
+        this.$el.find('[data-toggle="tooltip"]').tooltip({
             'placement': 'bottom'
         });
+
+        console.log('model', this.medalModel);
+        var medalHistory = this.medalModel.get('History');
+        if (medalHistory) {
+            console.log('medalHistory', medalHistory);
+            var histData = [];
+            for (var hist in medalHistory.MedalHistories) {
+                histData.push([parseInt(hist), medalHistory.MedalHistories[hist].Result]);
+            }
+            //var histData = _.map(medalHistory.MedalHistories, function (medal, i) { return [i, medal.Result]; });
+            console.log('medalHistory', histData);
+            var plot3 = $.jqplot('medalHistory', [histData],
+                {
+                    title: '',
+                    series: [{ markerOptions: { style: "circle" } }],
+
+                    axes: {
+                        yaxis: { min: 0, max: 1 },
+                        xaxis: { min: 0, tickOptions: { show: false} }
+                    },
+                    grid: {
+                        drawGridLines: false,
+                        background: 'transparent',
+                        borderWidth: 0,
+                        borderColor: 'transparent',
+                        shadow: false
+                    },
+                    seriesDefaults: {
+                        shadow: false
+                    }
+                });
+        }
     }
 });
