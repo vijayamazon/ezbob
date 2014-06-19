@@ -4,17 +4,18 @@
 
 	public class AffordabilityModel
 	{
-		AffordabilityType Type { get; set; }
-		DateTime DateFrom { get; set; }
-		DateTime DateTo { get; set; }
-		decimal Revenues { get; set; }
-		decimal? Opex { get; set; }
-		decimal? ValueAdded { get; set; }
-		decimal? Salaries { get; set; }
-		decimal? Tax { get; set; }
-		decimal? Ebitda { get; set; }
-		decimal? LoanRepaiment { get; set; }
-		decimal? Fcf { get; set; }
+		public AffordabilityType Type { get; set; }
+		public DateTime DateFrom { get; set; }
+		public DateTime DateTo { get; set; }
+		public decimal Revenues { get; set; }
+		public decimal? Opex { get; set; }
+		public decimal? ValueAdded { get; set; }
+		public decimal? Salaries { get; set; }
+		public decimal? Tax { get; set; }
+		public decimal? Ebitda { get; set; }
+		public decimal? LoanRepayment { get; set; }
+		public decimal? Fcf { get; set; }
+		public bool HasFullYearData { get; set; }
 		// TODO: annualized trend
 		// TODO: quarter trend
 	}
