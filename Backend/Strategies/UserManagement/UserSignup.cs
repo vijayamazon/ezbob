@@ -53,8 +53,8 @@
 			m_oSp = new CreateWebUser(DB, Log) {
 				Email = m_oData.Email,
 				EzPassword = Ezbob.Utils.Security.SecurityUtils.HashPassword(m_oData.Email, m_oData.NewPassword),
-				SecurityQuestionID = m_oData.PasswordQuestion,
-				SecurityAnswer = m_oData.PasswordAnswer,
+				SecurityQuestionID = null,
+				SecurityAnswer = null,
 				RoleName = sRoleName,
 				BranchID = 1,
 			};
@@ -161,7 +161,7 @@
 
 			public string EzPassword { [UsedImplicitly] get; set; }
 
-			public int SecurityQuestionID { [UsedImplicitly] get; set; }
+			public int? SecurityQuestionID { [UsedImplicitly] get; set; }
 
 			public string SecurityAnswer { [UsedImplicitly] get; set; }
 
