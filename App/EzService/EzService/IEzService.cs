@@ -479,6 +479,9 @@
 
 		[OperationContract]
 		ActionMetaData CalculateNewMedals();
+
+		[OperationContract]
+		AffordabilityModelActionResult GetAffordabilityModel(int customerId, int underwriterId);
 	} // interface IEzService
 } // namespace EzService
 

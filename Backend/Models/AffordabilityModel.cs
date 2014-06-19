@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace Ezbob.Backend.Models
 {
+	using System;
+
 	public class AffordabilityModel
 	{
 		AffordabilityType Type { get; set; }
@@ -18,8 +15,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		decimal? Ebitda { get; set; }
 		decimal? LoanRepaiment { get; set; }
 		decimal? Fcf { get; set; }
-		//todo annualized trend
-		//todo quarter trend
+		// TODO: annualized trend
+		// TODO: quarter trend
 	}
 
 	public enum AffordabilityType

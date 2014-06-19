@@ -213,6 +213,16 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
+  <xs:complexType name="ArrayOfAffordabilityModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AffordabilityModel" nillable="true" type="tns:AffordabilityModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAffordabilityModel" nillable="true" type="tns:ArrayOfAffordabilityModel" />
+  <xs:complexType name="AffordabilityModel">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="AffordabilityModel" nillable="true" type="tns:AffordabilityModel" />
   <xs:complexType name="ArrayOfLoanScheduleItemModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />

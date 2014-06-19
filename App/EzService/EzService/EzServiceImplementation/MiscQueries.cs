@@ -265,5 +265,17 @@
 			CalculateNewMedals instance;
 			return ExecuteSync(out instance, 0, 0);
 		}
+
+		public AffordabilityModelActionResult GetAffordabilityModel(int customerId, int underwriterId)
+		{
+			GetAffordabilityModel instance;
+			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId);
+
+			return new AffordabilityModelActionResult
+			{
+				MetaData = result,
+				Value = instance.AffordabilityModels
+			};
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -2,22 +2,24 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
+	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Serialization;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models;
 	using EzBob.Models.Marketplaces;
 	using NHibernate;
-	using CommonLib;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 	using Web.Models;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -90,11 +92,10 @@
 
 		private IEnumerable<AffordabilityModel> GetAffordability(Customer customer)
 		{
-			//todo implement
-			var model = new List<AffordabilityModel>();
-			return model;
+			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+			AffordabilityModelActionResult result = m_oServiceClient.Instance.GetAffordabilityModel(customer.Id, context.UserId);
+			return result.Value;
 		}
-
 
 		[Ajax]
 		[HttpGet]
