@@ -60,8 +60,8 @@
         <a href="#" id="reload-button-template" class="hide">Reload</a>
         <ul class="nav nav-list">
             <li>
-                <a href="@page.Url.Action("LogOffUnderwriter", "Account", new { Area = "" })" id="uw-name-and-icon" data-uw-id="@userId">
-                    <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/>@userName (log out)
+                <a title="click to log out" href="@page.Url.Action("LogOffUnderwriter", "Account", new { Area = "" })" id="uw-name-and-icon" data-uw-id="@userId">
+                    <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/>@userName
                 </a>
             </li>
             @switch (type)

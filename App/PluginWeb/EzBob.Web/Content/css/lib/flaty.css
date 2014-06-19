@@ -4748,10 +4748,10 @@ div.tagsinput .not_valid {
 .sidebar-collapsed .nav-list .search-pan input,
 .sidebar-collapsed .nav-list > li > a > span        {background-color: #0e6390;}    /* LI: Hover */
 .nav-list > li > a:focus,
-.nav-list > li > a:hover                            {background-color: #0e6390!important;}
+.nav-list > li > a:hover                            {background-color: #0e6390}
 #nav-horizontal.nav-xs > li .dropdown-menu,
 #nav-horizontal.nav-xs > li .dropdown-navbar > li:hover,
-.nav-list > li .submenu                             {background-color: #389bcf!important;}    /* Submenu Background */
+.nav-list > li .submenu                             {background-color: #389bcf}    /* Submenu Background */
 #sidebar-collapse > [class*="fa-"],
 #nav-horizontal.nav-xs > li .dropdown-menu > li > a:focus,
 #nav-horizontal.nav-xs > li .dropdown-menu > li > a:hover,

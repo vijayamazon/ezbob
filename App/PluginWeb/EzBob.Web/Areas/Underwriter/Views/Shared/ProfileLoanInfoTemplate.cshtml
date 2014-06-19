@@ -77,8 +77,6 @@
         </thead>
         <tbody>
             @RawCell("Company Name", "<%- data.CompanyName %>")
-            @RawCell("Cart", "<%- data.Medal %>")
-            @RawCell("User score", "<%- data.CreditScore %>")
             @RawCell("Business Type", "<%- data.CompanyType %>")
             @RawCell("Company Seniority", "<%- data.CompanySeniority %>")
             @RawCell("# Directors", "<%- data.NumOfDirectors %>")
@@ -99,7 +97,7 @@
                 <td>E-mail 
                     <i data-title="<%- data.EmailState %>" class="tltp <%=getIcon()%>"></i>
                 </td>
-                <td><%- data.Email.length <= 20 ? data.Email : data.Email.substring(0,17)+'...' %>
+                <td><%- data.Email.length <= 14 ? data.Email : data.Email.substring(0,11)+'...' %>
                     <i data-title="<%- data.Email %>" class="tltp-left <%=getIcon()%>"></i>
                     <button class="btn btn-mini btn-primary left-pane-button" name="editEmail"><i class="fa fa-pencil"></i></button>
                 </td>
@@ -151,7 +149,7 @@
             <tr>
                 <td>Ref Source</td>
                 <td><%- data.ReferenceSource ? (data.ReferenceSource.length <= 20 ? data.ReferenceSource : data.ReferenceSource.substring(0,17)+'...') : '-' %>
-                    <i data-title="<%- data.ReferenceSource || 'no source ref' %>" class="tltp icon-question-sign"></i>
+                    <i data-title="<%- data.ReferenceSource || 'no source ref' %>" class="tltp fa fa-question-circle"></i>
                 </td>
             </tr>
 
@@ -320,7 +318,7 @@
             <tr>
                 <td>Discount plan</td>
                 <td><%= m.DiscountPlan %>
-                    <i data-title="" class="tltp-left icon-question-sign" data-original-title=""></i> 
+                    <i data-title="" class="tltp-left fa fa-question-circle" data-original-title=""></i> 
                     <% if (m.Editable) { %>
                         <button class="btn btn-mini btn-primary left-pane-button" name="discountPlan">
                             <i class="fa fa-pencil"></i>

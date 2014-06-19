@@ -145,8 +145,8 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
 
     templateHelpers:
         getIcon: ->
-            return "icon-ok"  if @EmailState is "Confirmed" or @EmailState is "ManuallyConfirmed"
-            "icon-question-sign"
+            return "fa fa-check-circle"  if @EmailState is "Confirmed" or @EmailState is "ManuallyConfirmed"
+            "fa fa-question-circle"
 
     serializeData: ->
         data = @model.toJSON()

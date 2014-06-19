@@ -691,7 +691,7 @@ span.active {
 }
 
 .table td.red_cell {
-    color: red;
+    color: #f55f60;
     font-weight: bold;
 }
 
@@ -1133,6 +1133,7 @@ textarea.BusinessAddress {
 .pricing-model-double-input-width-wider {
     width: 100px;
 }
+
 #profileHead .box .box-title,
 #dashboard .box .box-title {
     padding: 3px;
@@ -1181,6 +1182,7 @@ textarea.BusinessAddress {
 
 .row {
     margin-left: -5px;
+    margin-right: -5px;
 }
 
 ul.ScheduleList {
@@ -1304,31 +1306,77 @@ td a.edit-loan {
     z-index: 10;
 }
 
+#sidebar-dashboard:before {
+    background-color: #323232;
+    content: "";
+    display: block;
+    width: 275px;
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    z-index: 0;
+}
+
 #sidebar-dashboard {
     position: fixed;
     height: 95vh !important;
     right: 0;
+    background-color: #323232;
+    color: #ffffff;
 }
 
     #sidebar-dashboard .tabbable {
         position: absolute;
         overflow: auto;
         height: 100% !important;
+        width: 100%;
     }
 
     #sidebar-dashboard > .tabbable > ul.nav.nav-tabs {
         position: fixed;
         width: 100%;
         z-index: 20;
-        background-color: #ffffff;
     }
 
     #sidebar-dashboard > .tabbable > .tab-content {
         margin-top: 20px;
         position: relative;
         padding: 5px 0 0 0;
+        border: none;
     }
 
+    #sidebar-dashboard .box {
+        border: none;
+        border-radius: 0 ;
+        box-shadow: none;
+    }
+
+    #sidebar-dashboard .box .box-title {
+        background: linear-gradient(to bottom, #717171, #4c4c4c);
+        height: 25px;
+    }
+
+    #sidebar-dashboard .box .box-title * {
+        color: white;
+        vertical-align: middle;
+    }
+
+    #sidebar-dashboard .table > thead > tr > th,
+    #sidebar-dashboard .table > tbody > tr > th,
+    #sidebar-dashboard .table > tfoot > tr > th,
+    #sidebar-dashboard .table > thead > tr > td,
+    #sidebar-dashboard .table > tbody > tr > td,
+    #sidebar-dashboard .table > tfoot > tr > td {
+        border-top: none;
+        border-top-color: transparent;
+        border-bottom: black 1px solid;
+        box-shadow: 0px 2px 1px -1px #ebebeb;
+        padding-left: 2px;
+        
+    }
+.table > tbody + tbody {
+    border-top: none;
+}
 .tabbable {
     margin: 0;
 }
@@ -1349,6 +1397,7 @@ td a.edit-loan {
 .profile-tabs > .tabbable > .tab-content {
     position: relative;
     padding: 5px 10px;
+    border: none;
 }
 
 .tabbable .nav > li > a {
@@ -1464,4 +1513,105 @@ td a.edit-loan {
     display: inline-block;
     /*position: absolute;
     right: 0;*/
+}
+
+.box .box-title {
+    background: linear-gradient(to bottom, white, #ebebeb);
+    border-bottom: #d3d3d5 1px solid;
+    border-radius: 5px;
+}
+
+.box .box-content {
+    border-radius: 5px;
+}
+
+.box .box-title *, .box .box-title h3 {
+    color: #282828;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.box {
+    border: #d3d3d5 1px solid;
+    border-radius: 5px;
+    box-shadow: 0 3px 2px -2px gray;
+    margin-bottom: 10px;
+}
+
+body {
+    background-color: #ebebeb;
+}
+
+#profileHead {
+    padding-top: 10px;
+}
+
+    #profileHead .box-content {
+        height: 200px;
+    }
+
+#sidebar.bg:before, #sidebar.bg {
+    background-color: #323232;
+}
+
+#sidebar .nav-list > li > a,
+#sidebar .nav-list > li > label,
+.nav-list > li .submenu {
+    background-color: #323232;
+    color: #fff;
+    font-size: 14px;
+    font-weight: normal;
+    margin-top: 1px;
+}
+
+    .nav-list > li > a:focus,
+    .nav-list > li > a:hover,
+    .nav-list > li.active > a,
+    .nav-list > li.active > a:hover,
+    .nav-list > li.active > a:focus,
+    .nav-list > li.active > a:active,
+    #sidebar-collapse > [class*="fa-"],
+    #nav-horizontal.nav-xs > li .dropdown-menu > li > a:focus,
+    #nav-horizontal.nav-xs > li .dropdown-menu > li > a:hover,
+    #nav-horizontal.nav-xs > li .dropdown-menu > li.active > a,
+    #nav-horizontal.nav-xs > li .dropdown-navbar > li.active,
+    .nav-list > li .submenu > li > ul > li > a:focus,
+    .nav-list > li .submenu > li > ul > li > a:hover,
+    .nav-list > li .submenu > li > ul > li.active > a,
+    .nav-list > li .submenu > li > a:focus,
+    .nav-list > li .submenu > li > a:hover,
+    .nav-list > li .submenu > li.active > a {
+        background-color: #ebebeb !important;
+        color: #282828 !important;
+        margin-left: 10px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+
+.table-ezbig {
+    width: 100%;
+    overflow-y: hidden;
+}
+
+    .table-ezbig .box .box-content {
+        overflow-x: auto;
+        width: 100%;
+    }
+
+#sidebar .nav.nav-list li {
+    border-bottom: black 1px solid;
+    box-shadow: 0px 1px 1px -1px #ebebeb;
+}
+
+.box > .box-title {
+    text-shadow: none;
+}
+
+.has-switch label {
+    background: linear-gradient(to bottom, #717171, #4c4c4c);
+}
+
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+    padding-left: 5px;
+    padding-right: 5px;
 }

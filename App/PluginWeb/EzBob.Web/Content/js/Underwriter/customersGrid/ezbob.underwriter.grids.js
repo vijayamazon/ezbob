@@ -307,7 +307,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			aaSorting: [[ 0, 'desc' ]],
 
 			bAutoWidth: true,
-			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"if><"dataTables_top_left">>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">',
+			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"if><"dataTables_top_left">><"box-content"tr<"row"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>>>>>',
 
 			bStateSave: true,
 
