@@ -45,7 +45,11 @@
     <Compile Include="Internal\Address.cs" />
     <Compile Include="Internal\AAddressable.cs" />
     <Compile Include="Internal\Company.cs" />
+    <Compile Include="Internal\Esignature.cs" />
+    <Compile Include="Internal\Esigner.cs" />
+    <Compile Include="Internal\SpLoadPendingEsignatures.cs" />
     <Compile Include="Internal\SpSaveEsignSent.cs" />
+    <Compile Include="Internal\SpSaveSignedDocument.cs" />
     <Compile Include="Internal\Template.cs" />
     <Compile Include="Internal\Person.cs" />
     <Compile Include="Internal\SpLoadDataForEsign.cs" />

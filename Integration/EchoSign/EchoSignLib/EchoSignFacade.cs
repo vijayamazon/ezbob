@@ -2,11 +2,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.IO;
 	using System.Linq;
 	using System.ServiceModel;
-	using System.Text;
-	using System.Text.RegularExpressions;
 	using ConfigManager;
 	using EchoSignService;
 	using Ezbob.Database;
@@ -16,6 +13,18 @@
 
 	using EchoSignClient = EchoSignLib.EchoSignService.EchoSignDocumentService18PortTypeClient;
 	using FileInfo = EchoSignService.FileInfo;
+
+	#region class EchoSignFacadeExt
+
+	internal static class EchoSignFacadeExt {
+		public static bool IsTerminal(this AgreementStatus? nStatus, SortedSet<AgreementStatus> oTerminalStatuses) {
+			return (oTerminalStatuses != null) && nStatus.HasValue && oTerminalStatuses.Contains(nStatus.Value);
+		} // IsTerminal
+	} // class EchoSignFacadeExt
+
+	#endregion class EchoSignFacadeExt
+
+	#region class EchoSignFacade
 
 	public class EchoSignFacade {
 		#region public
@@ -106,6 +115,125 @@
 			} // switch
 		} // Send
 
+		#endregion method Send
+
+		#region method ProcessPending
+
+		public void ProcessPending(int? nCustomerID = null) {
+			if (!m_bIsReady) {
+				m_oLog.Msg("EchoSign cannot process pending - not ready.");
+				return;
+			} // if
+
+			var oSp = new SpLoadPendingEsignatures(nCustomerID, m_oDB, m_oLog);
+			oSp.Load();
+
+			foreach (KeyValuePair<int, Esignature> pair in oSp.Signatures) {
+				var oSignature = pair.Value;
+
+				GetDocumentInfo(oSignature);
+			} // for each signature
+		} // ProcessPending
+
+		#endregion method ProcessPending
+
+		#endregion public
+
+		#region private
+
+		#region method GetDocuments
+
+		private void GetDocuments(Esignature oSignature) {
+			m_oLog.Msg("Loading documents for the key '{0}' started...", oSignature.DocumentKey);
+
+			GetDocumentsResult oResult;
+
+			try {
+				oResult = m_oEchoSign.getDocuments(
+					m_sApiKey,
+					oSignature.DocumentKey,
+					new GetDocumentsOptions {
+						combine = true,
+						attachSupportingDocuments = true,
+					}
+				);
+			}
+			catch (Exception e) {
+				m_oLog.Warn(e, "Failed to load documents for the key '{0}'.", oSignature.DocumentKey);
+				return;
+			} // try
+
+			if (!oResult.success) {
+				m_oLog.Warn(
+					"Error while retrieving documents for the key '{0}': code = {1}, message = {2}.",
+					oSignature.DocumentKey, oResult.errorCode, oResult.errorMessage
+				);
+
+				return;
+			} // if
+
+			int nDocumentCount = oResult.documents == null ? 0 : oResult.documents.Length;
+
+			if (nDocumentCount != 1) {
+				m_oLog.Warn("No documents received for the key '{0}' (document count = {1}).", oSignature.DocumentKey, nDocumentCount);
+				return;
+			} // if
+
+			DocumentContent doc = oResult.documents[0];
+
+			m_oLog.Debug("Document '{0}' of type '{1}', size {2} bytes.", doc.name, doc.mimetype, doc.bytes.Length);
+
+			var sp = new SpSaveSignedDocument(m_oDB, m_oLog) {
+				EsignatureID = oSignature.ID,
+				MimeType = doc.mimetype,
+				DocumentContent = doc.bytes,
+			};
+
+			try {
+				sp.ExecuteNonQuery();
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
+			} // try
+
+			m_oLog.Msg("Loading documents for the key '{0}' complete.", oSignature.DocumentKey);
+		} // GetDocuments
+
+		#endregion method GetDocuments
+
+		#region method GetDocumentInfo
+
+		private void GetDocumentInfo(Esignature oSignature) {
+			m_oLog.Msg("Loading document info for the key '{0}' started...", oSignature.DocumentKey);
+
+			DocumentInfo oResult;
+
+			try {
+				oResult = m_oEchoSign.getDocumentInfo(m_sApiKey, oSignature.DocumentKey);
+			}
+			catch (Exception e) {
+				m_oLog.Warn(e, "Failed to load document info for the '{0}'.", oSignature.DocumentKey);
+				return;
+			} // try
+
+			m_oLog.Debug("Loading document info result:");
+
+			m_oLog.Debug("Name: {0}", oResult.name);
+			m_oLog.Debug("Status: {0}", oResult.status);
+			m_oLog.Debug("Expiration: {0}", oResult.expiration.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
+
+			if (oResult.status.HasValue && oResult.status.IsTerminal(m_oTerminalStatuses)) {
+				GetDocuments(oSignature);
+				// TODO: oSignature.SaveSignerStatus(oResult.events);
+			} // if
+
+			m_oLog.Msg("Loading document info for the key '{0}' complete.", oSignature.DocumentKey);
+		} // GetDocumentInfo
+
+		#endregion method GetDocumentInfo
+
+		#region method SendOne
+
 		private bool SendOne(Template oTemplate, byte[] oFileContent, List<Person> oAddressee, SpLoadDataForEsign oData, bool bSentToCustomer) {
 			var oRecipients = oAddressee.Select(oPerson => new RecipientInfo {
 				email = oPerson.Email,
@@ -162,74 +290,7 @@
 			return true;
 		} // SendOne
 
-		#endregion method Send
-
-		#region method GetDocuments
-
-		public void GetDocuments(string sDocumentKey) {
-			if (!m_bIsReady) {
-				m_oLog.Msg("EchoSign cannot get documents - not ready.");
-				return;
-			} // if
-
-			m_oLog.Msg("Loading documents for the key '{0}' started...", sDocumentKey);
-
-			GetDocumentsResult oResult = m_oEchoSign.getDocuments(m_sApiKey, sDocumentKey, new GetDocumentsOptions());
-
-			m_oLog.Debug("Loading documents result:");
-			m_oLog.Debug("Success: {0}.", oResult.success ? "yes" : "no");
-			m_oLog.Debug("Error code: {0}.", oResult.errorCode);
-			m_oLog.Debug("Error message: {0}.", oResult.errorMessage);
-
-			int nDocumentCount = oResult.documents == null ? 0 : oResult.documents.Length;
-			m_oLog.Debug("Document count: {0}.", nDocumentCount);
-			m_oLog.Debug("Supporting document count: {0}.", oResult.supportingDocuments == null ? 0 : oResult.supportingDocuments.Length);
-
-			if (nDocumentCount > 0) {
-				foreach (DocumentContent doc in oResult.documents) {
-					m_oLog.Debug("Document '{0}' of type '{1}', size {2} bytes.", doc.name, doc.mimetype, doc.bytes.Length);
-
-
-					string sFileName = string.Format(@"c:\temp\{0}.{1}.pdf",
-						DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture),
-						ms_oSpecialChars.Replace(sDocumentKey, "_")
-					);
-
-					File.WriteAllBytes(sFileName, doc.bytes);
-				} // foreach
-			} // if
-
-			m_oLog.Msg("Loading documents for the key '{0}' complete.", sDocumentKey);
-		} // GetDocuments
-
-		#endregion method GetDocuments
-
-		#region method GetDocumentInfo
-
-		public void GetDocumentInfo(string sDocumentKey) {
-			if (!m_bIsReady) {
-				m_oLog.Msg("EchoSign cannot get document info - not ready.");
-				return;
-			} // if
-
-			m_oLog.Msg("Loading document info for the key '{0}' started...", sDocumentKey);
-
-			DocumentInfo oResult = m_oEchoSign.getDocumentInfo(m_sApiKey, sDocumentKey);
-
-			m_oLog.Debug("Loading document info result:");
-
-			m_oLog.Debug("Name: {0}", oResult.name);
-			m_oLog.Debug("Status: {0}", oResult.status);
-			m_oLog.Debug("Expiration: {0}", oResult.expiration.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
-
-			m_oLog.Msg("Loading document info for the key '{0}' complete.", sDocumentKey);
-		} // GetDocumentInfo
-
-		#endregion method GetDocumentInfo
-
-		#endregion public
-
-		#region private
+		#endregion method SendOne
 
 		#region method LoadConfiguration
 
@@ -253,6 +314,24 @@
 			if (m_nDeadline < 0)
 				m_nDeadline = null;
 
+			m_oTerminalStatuses = new SortedSet<AgreementStatus>();
+
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					if (!sr["IsTerminal"])
+						return ActionResult.Continue;
+
+					AgreementStatus nStatus;
+
+					if (Enum.TryParse(sr["StatusName"], out nStatus))
+						m_oTerminalStatuses.Add(nStatus);
+
+					return ActionResult.Continue;
+				},
+				"LoadEsignAgreementStatuses",
+				CommandSpecies.StoredProcedure
+			);
+
 			m_oLog.Debug("************************************************************************");
 			m_oLog.Debug("*");
 			m_oLog.Debug("* EchoSign façade configuration - begin:");
@@ -263,6 +342,7 @@
 			m_oLog.Debug("URL: {0}.", m_sUrl);
 			m_oLog.Debug("Reminder frequency: {0}.", m_nReminderFrequency.HasValue ? m_nReminderFrequency.Value.ToString() : "never");
 			m_oLog.Debug("Signing deadline (days): {0}.", m_nDeadline.HasValue ? m_nDeadline.ToString() : "never");
+			m_oLog.Debug("Terminal statuses: {0}.", string.Join(", ", m_oTerminalStatuses));
 
 			m_oLog.Debug("************************************************************************");
 			m_oLog.Debug("*");
@@ -313,6 +393,8 @@
 
 		#endregion method CreateClient
 
+		private SortedSet<AgreementStatus> m_oTerminalStatuses;
+ 
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;
 
@@ -325,9 +407,10 @@
 
 		private EchoSignClient m_oEchoSign;
 
-		private static readonly Regex ms_oSpecialChars = new Regex(@"[^A-Za-z0-9_-]");
 		private const string ExpectedPong = "It works!";
 
 		#endregion private
 	} // class EchoSignFacade
+
+	#endregion class EchoSignFacade
 } // namespace

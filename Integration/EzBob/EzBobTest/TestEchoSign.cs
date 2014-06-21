@@ -24,6 +24,14 @@
 		} // TestSendPersonalGuarantee
 
 		[Test]
+		public void TestProcessPending() {
+			var esf = new EchoSignFacade(m_oDB, m_oLog);
+			esf.ProcessPending();
+		} // TestProcessPending
+
+		/*
+
+		[Test]
 		public void TestGetDocuments() {
 			var esf = new EchoSignFacade(m_oDB, m_oLog);
 
@@ -42,5 +50,7 @@
 			esf.GetDocumentInfo("AAABLblqZhDijFbJ2Nof3ybm-K9vYa1PKO74QBavqbOr3-eyjNUfQ8rNBQ7TwLkUSQO-4QJrlYM*");
 			esf.GetDocumentInfo("2AAABLblqZhDZnbD0l9bDKx_EcHnJxIcfDBiL0dbFEKg-3qhRy2il0mnf7moJVty83cjdtBReFKs*");
 		} // TestGetDocumentInfo
+
+		 */
 	} // class TestEchoSign
 } // namespace
