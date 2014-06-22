@@ -357,6 +357,9 @@
 		[OperationContract]
 		StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
 
+		[OperationContract]
+		ActionMetaData EsignProcessPending(int? nCustomerID);
+
 		#endregion other strategies
 
 		#region pricing model

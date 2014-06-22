@@ -1050,6 +1050,23 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oLog.Msg("\n\nInput: {0}\nOutput: {1}\n", sInput, sOutput);
 		} // Decrypt
 
+		[Activation]
+		private void EsignProcessPending() {
+			if (m_aryArgs.Length == 1) {
+				m_oServiceClient.EsignProcessPending(null);
+				return;
+			} // if
+
+			int nCustomerID;
+
+			if ((m_aryArgs.Length != 2) || !int.TryParse(m_aryArgs[1], out nCustomerID)) {
+				m_oLog.Msg("Usage: EsignProcessPending [<Customer ID>]");
+				return;
+			} // if
+
+			m_oServiceClient.EsignProcessPending(nCustomerID);
+		} // EsignProcessPending
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

@@ -144,5 +144,13 @@
 		} // ValidateAndUpdateLinkedHmrcPassword
 
 		#endregion method UpdateLinkedHmrcPassword
+
+		#region method EsignProcessPending
+
+		public ActionMetaData EsignProcessPending(int? nCustomerID) {
+			return Execute<EsignProcessPending>(null, null, nCustomerID);
+		} // EsignProcessPending
+
+		#endregion method EsignProcessPending
 	} // class EzServiceImplementation
 } // namespace EzService
