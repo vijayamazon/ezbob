@@ -47,7 +47,7 @@ $(document).ready(function() {
 		oSmsCounts.attr('data-max-per-number', data.MaxPerNumber);
 		oSmsCounts.attr('data-max-per-page', data.MaxPerPage);
 
-		if ((data.MaxPerNumber === 0) || (data.MaxPerPage === 0))
+		if (oSmsCounts.attr('data-force-captcha') === 'yes')
 			EzBob.App.trigger('brkr:signup-with-captcha');
 
 		var oLinks = $('.marketing-files');

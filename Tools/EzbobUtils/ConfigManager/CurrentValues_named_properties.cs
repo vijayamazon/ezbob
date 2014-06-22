@@ -1,6 +1,4 @@
 namespace ConfigManager {
-	using Ezbob.Utils.Security;
-
 	public partial class CurrentValues {
 		#region property AdministrationCharge
 
@@ -410,6 +408,14 @@ namespace ConfigManager {
 		} // BrokerCommissionEnabled
 
 		#endregion property BrokerCommissionEnabled
+
+		#region property BrokerForceCaptcha
+
+		public virtual VariableValue BrokerForceCaptcha {
+			get { return this[Variables.BrokerForceCaptcha]; } // get
+		} // BrokerForceCaptcha
+
+		#endregion property BrokerForceCaptcha
 
 		#region property BrokerMaxPerNumber
 

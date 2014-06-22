@@ -1,6 +1,5 @@
 namespace ConfigManager {
-	public enum Variables
-	{
+	public enum Variables {
 		AdministrationCharge,
 		AllowFinishOfflineWizardWithoutMarketplaces,
 		AllowFinishOnlineWizardWithoutMarketplaces,
@@ -52,6 +51,7 @@ namespace ConfigManager {
 		BankBasedApprovalSilentTemplateName,
 		BankBasedApprovalSilentToAddress,
 		BrokerCommissionEnabled,
+		BrokerForceCaptcha,
 		BrokerMaxPerNumber,
 		BrokerMaxPerPage,
 		BrokerSetupFeeRate,

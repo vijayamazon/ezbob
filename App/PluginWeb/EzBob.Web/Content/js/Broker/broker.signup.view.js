@@ -114,6 +114,9 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		this.$el.find('.phonenumbercode, #EstimatedMonthlyAppCount').numericOnly(6);
 
 		this.passwordStrengthView.render();
+
+		if ($('#broker-sms-count').attr('data-force-captcha') === 'yes')
+			EzBob.App.trigger('brkr:signup-with-captcha');
 	}, // onRender
 
 	onFocus: function() {
