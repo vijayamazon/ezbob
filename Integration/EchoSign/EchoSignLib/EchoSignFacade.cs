@@ -143,7 +143,7 @@
 
 		#region method GetDocuments
 
-		private void GetDocuments(Esignature oSignature) {
+		private SignedDoc GetDocuments(Esignature oSignature) {
 			m_oLog.Msg("Loading documents for the key '{0}' started...", oSignature.DocumentKey);
 
 			GetDocumentsResult oResult;
@@ -160,7 +160,7 @@
 			}
 			catch (Exception e) {
 				m_oLog.Warn(e, "Failed to load documents for the key '{0}'.", oSignature.DocumentKey);
-				return;
+				return new SignedDoc { HasValue = false, };
 			} // try
 
 			if (!oResult.success) {
@@ -169,34 +169,23 @@
 					oSignature.DocumentKey, oResult.errorCode, oResult.errorMessage
 				);
 
-				return;
+				return new SignedDoc { HasValue = false, };
 			} // if
 
 			int nDocumentCount = oResult.documents == null ? 0 : oResult.documents.Length;
 
 			if (nDocumentCount != 1) {
 				m_oLog.Warn("No documents received for the key '{0}' (document count = {1}).", oSignature.DocumentKey, nDocumentCount);
-				return;
+				return new SignedDoc { HasValue = false, };
 			} // if
 
 			DocumentContent doc = oResult.documents[0];
 
 			m_oLog.Debug("Document '{0}' of type '{1}', size {2} bytes.", doc.name, doc.mimetype, doc.bytes.Length);
 
-			var sp = new SpSaveSignedDocument(m_oDB, m_oLog) {
-				EsignatureID = oSignature.ID,
-				MimeType = doc.mimetype,
-				DocumentContent = doc.bytes,
-			};
-
-			try {
-				sp.ExecuteNonQuery();
-			}
-			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
-			} // try
-
 			m_oLog.Msg("Loading documents for the key '{0}' complete.", oSignature.DocumentKey);
+
+			return new SignedDoc { HasValue = true, MimeType = doc.mimetype, Content = doc.bytes, };
 		} // GetDocuments
 
 		#endregion method GetDocuments
@@ -222,9 +211,25 @@
 			m_oLog.Debug("Status: {0}", oResult.status);
 			m_oLog.Debug("Expiration: {0}", oResult.expiration.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
 
-			if (oResult.status.HasValue && oResult.status.IsTerminal(m_oTerminalStatuses)) {
-				GetDocuments(oSignature);
+			if (oResult.status.HasValue) {
 				// TODO: oSignature.SaveSignerStatus(oResult.events);
+
+				SignedDoc doc = GetDocuments(oSignature);
+
+				var sp = new SpSaveSignedDocument(m_oDB, m_oLog) {
+					EsignatureID = oSignature.ID,
+					StatusID = (int)oResult.status.Value,
+					DoSaveDoc = doc.HasValue,
+					MimeType = doc.MimeType,
+					DocumentContent = doc.Content,
+				};
+
+				try {
+					sp.ExecuteNonQuery();
+				}
+				catch (Exception e) {
+					m_oLog.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
+				} // try
 			} // if
 
 			m_oLog.Msg("Loading document info for the key '{0}' complete.", oSignature.DocumentKey);
@@ -392,6 +397,12 @@
 		} // CreateClient
 
 		#endregion method CreateClient
+
+		private class SignedDoc {
+			public bool HasValue { get; set; }
+			public string MimeType { get; set; }
+			public byte[] Content { get; set; }
+		} // class SignedDoc
 
 		private SortedSet<AgreementStatus> m_oTerminalStatuses;
  

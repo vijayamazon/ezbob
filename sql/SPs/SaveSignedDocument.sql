@@ -7,6 +7,8 @@ GO
 
 ALTER PROCEDURE SaveSignedDocument
 @EsignatureID INT,
+@DoSaveDoc BIT,
+@StatusID INT,
 @MimeType NVARCHAR(255),
 @DocumentContent VARBINARY(MAX)
 AS
@@ -14,9 +16,9 @@ BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE Esignatures SET
-		StatusID = 2,
-		SignedDocumentMimeType = @MimeType,
-		SignedDocument = @DocumentContent
+		StatusID = @StatusID,
+		SignedDocumentMimeType = (CASE @DoSaveDoc WHEN 1 THEN @MimeType ELSE SignedDocumentMimeType END),
+		SignedDocument = (CASE @DoSaveDoc WHEN 1 THEN @DocumentContent ELSE SignedDocument END)
 	WHERE
 		EsignatureID = @EsignatureID
 END

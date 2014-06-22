@@ -20,6 +20,10 @@
 
 		public int EsignatureID { get; set; }
 
+		public bool DoSaveDoc { get; set; }
+
+		public int StatusID { get; set; }
+
 		public string MimeType { get; set; }
 
 		public byte[] DocumentContent { get; set; }
