@@ -101,7 +101,69 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
             valueSpots: { ':' : 'green' }
         )
 
+        properties = @propertiesModel.toJSON()
+        
+        if(properties && properties.NetWorth)
+            @drawDonut(@$el.find("#assets-donut"), "#00ab5d", properties.NetWorth / (properties.NetWorth + properties.SumOfMortgages))
+
         @$el.find('[data-toggle="tooltip"]').tooltip({'placement': 'bottom'});
+        
+        cc = @$el.find("#consumerScoreCanvas")
+        @halfDonut(cc, cc.data('color'), cc.data('percent'))
+        cii = @$el.find("#consumerCIICanvas")
+        @halfDonut(cii, cii.data('color'), cii.data('percent'))
+        
+        if(@experianModel and @experianModel.get('directorsModels'))
+            directors = @experianModel.get('directorsModels').length;
+            i = 0
+            while i < directors
+                cc = @$el.find("#directorScoreCanvas" + i)
+                @halfDonut(cc, cc.data('color'), cc.data('percent'))
+                cii = @$el.find("#directorCIICanvas" + i)
+                @halfDonut(cii, cii.data('color'), cii.data('percent'))
+                i++
+
+    halfDonut: (el, fillColor, fillPercent) ->
+        canvas = el[0];
+        context = canvas.getContext('2d');
+        x = canvas.width / 2;
+        y = canvas.height / 2;
+        radius = 40;
+        startAngle = 1 * Math.PI;
+        endAngle = 2 * Math.PI;
+        counterClockwise = false;
+        lineWidth = 15;
+        context.beginPath();
+        context.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+        context.lineWidth = lineWidth;
+        context.strokeStyle = '#ebebeb';
+        context.stroke();
+        context.beginPath();
+        context.arc(x, y, radius, startAngle, Math.PI*(1+fillPercent), counterClockwise);
+        context.strokeStyle = fillColor;
+        context.stroke();
+        
+    drawDonut:  (el, fillColor, fillPercent) ->
+      canvas = el[0];
+      context = canvas.getContext("2d")
+      x = canvas.width / 2
+      y = canvas.height / 2
+      radius = 70
+      startAngle = 1 * Math.PI
+      endAngle = 4 * Math.PI
+      lineWidth = 25
+      context.beginPath()
+      context.arc x, y, radius, startAngle, endAngle, false
+      context.lineWidth = lineWidth
+      context.strokeStyle = "#ebebeb"
+      context.stroke()
+      context.beginPath()
+      context.arc x, y, radius, startAngle, Math.PI * (1 + fillPercent * 2), false
+      context.strokeStyle = fillColor
+      context.stroke()
+      return
+        
+    
 
 
 

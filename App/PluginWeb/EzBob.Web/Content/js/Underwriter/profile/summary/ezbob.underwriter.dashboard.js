@@ -95,7 +95,7 @@
     };
 
     DashboardView.prototype.onRender = function() {
-      var companyHistoryScores, consumerHistoryCIIs, consumerHistoryScores, historyScoresSorted;
+      var cc, cii, companyHistoryScores, consumerHistoryCIIs, consumerHistoryScores, directors, historyScoresSorted, i, properties, _results;
       if (this.model.get('Alerts') !== void 0) {
         if (this.model.get('Alerts').length === 0) {
           $('#customer-label-span').removeClass('label-warning').removeClass('label-important').addClass('label-success');
@@ -140,9 +140,73 @@
           ':': 'green'
         }
       });
-      return this.$el.find('[data-toggle="tooltip"]').tooltip({
+      properties = this.propertiesModel.toJSON();
+      if (properties && properties.NetWorth) {
+        this.drawDonut(this.$el.find("#assets-donut"), "#00ab5d", properties.NetWorth / (properties.NetWorth + properties.SumOfMortgages));
+      }
+      this.$el.find('[data-toggle="tooltip"]').tooltip({
         'placement': 'bottom'
       });
+      cc = this.$el.find("#consumerScoreCanvas");
+      this.halfDonut(cc, cc.data('color'), cc.data('percent'));
+      cii = this.$el.find("#consumerCIICanvas");
+      this.halfDonut(cii, cii.data('color'), cii.data('percent'));
+      if (this.experianModel && this.experianModel.get('directorsModels')) {
+        directors = this.experianModel.get('directorsModels').length;
+        i = 0;
+        _results = [];
+        while (i < directors) {
+          cc = this.$el.find("#directorScoreCanvas" + i);
+          this.halfDonut(cc, cc.data('color'), cc.data('percent'));
+          cii = this.$el.find("#directorCIICanvas" + i);
+          this.halfDonut(cii, cii.data('color'), cii.data('percent'));
+          _results.push(i++);
+        }
+        return _results;
+      }
+    };
+
+    DashboardView.prototype.halfDonut = function(el, fillColor, fillPercent) {
+      var canvas, context, counterClockwise, endAngle, lineWidth, radius, startAngle, x, y;
+      canvas = el[0];
+      context = canvas.getContext('2d');
+      x = canvas.width / 2;
+      y = canvas.height / 2;
+      radius = 40;
+      startAngle = 1 * Math.PI;
+      endAngle = 2 * Math.PI;
+      counterClockwise = false;
+      lineWidth = 15;
+      context.beginPath();
+      context.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+      context.lineWidth = lineWidth;
+      context.strokeStyle = '#ebebeb';
+      context.stroke();
+      context.beginPath();
+      context.arc(x, y, radius, startAngle, Math.PI * (1 + fillPercent), counterClockwise);
+      context.strokeStyle = fillColor;
+      return context.stroke();
+    };
+
+    DashboardView.prototype.drawDonut = function(el, fillColor, fillPercent) {
+      var canvas, context, endAngle, lineWidth, radius, startAngle, x, y;
+      canvas = el[0];
+      context = canvas.getContext("2d");
+      x = canvas.width / 2;
+      y = canvas.height / 2;
+      radius = 70;
+      startAngle = 1 * Math.PI;
+      endAngle = 4 * Math.PI;
+      lineWidth = 25;
+      context.beginPath();
+      context.arc(x, y, radius, startAngle, endAngle, false);
+      context.lineWidth = lineWidth;
+      context.strokeStyle = "#ebebeb";
+      context.stroke();
+      context.beginPath();
+      context.arc(x, y, radius, startAngle, Math.PI * (1 + fillPercent * 2), false);
+      context.strokeStyle = fillColor;
+      context.stroke();
     };
 
     return DashboardView;

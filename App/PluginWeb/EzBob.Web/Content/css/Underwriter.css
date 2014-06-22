@@ -1031,7 +1031,8 @@ textarea.BusinessAddress {
 
 .customer-column-width-50 {
     width: 50%;
-    color: #cdcdcd;;
+    color: #cdcdcd;
+    ;
 }
 
 .left-pane-button {
@@ -1072,7 +1073,7 @@ textarea.BusinessAddress {
     height: 80px;
     padding-left: 0;
     padding-right: 0;
-    margin: 2px -13px 2px -13px;
+    margin: 2px -1px;
     font-size: 11px;
 }
 
@@ -1125,7 +1126,27 @@ textarea.BusinessAddress {
 .alert {
     padding: 5px !important;
     margin: 5px;
+    border-radius: 5px;
 }
+
+.alert-warning {
+    color: #ffffff;
+    background-color: #efcc2a;
+    border-color: #efcc2a;
+}
+
+.alert-danger {
+    color: #ffffff;
+    background-color: #f55f60;
+    border-color: #f55f60;
+}
+
+.alert-info {
+    color: #ffffff;
+    background-color: #39a7e6;
+    border-color: #39a7e6;
+}
+
 
 .pricing-model-double-input-width {
     width: 90px;
@@ -1348,19 +1369,19 @@ td a.edit-loan {
 
     #sidebar-dashboard .box {
         border: none;
-        border-radius: 0 ;
+        border-radius: 0;
         box-shadow: none;
     }
 
-    #sidebar-dashboard .box .box-title {
-        background: linear-gradient(to bottom, #717171, #4c4c4c);
-        height: 25px;
-    }
+        #sidebar-dashboard .box .box-title {
+            background: linear-gradient(to bottom, #717171, #4c4c4c);
+            height: 25px;
+        }
 
-    #sidebar-dashboard .box .box-title * {
-        color: white;
-        vertical-align: middle;
-    }
+            #sidebar-dashboard .box .box-title * {
+                color: white;
+                vertical-align: middle;
+            }
 
     #sidebar-dashboard .table > thead > tr > th,
     #sidebar-dashboard .table > tbody > tr > th,
@@ -1373,11 +1394,12 @@ td a.edit-loan {
         border-bottom: black 1px solid;
         box-shadow: 0px 2px 1px -1px #ebebeb;
         padding-left: 2px;
-        
     }
+
 .table > tbody + tbody {
     border-top: none;
 }
+
 .tabbable {
     margin: 0;
 }
@@ -1386,6 +1408,31 @@ td a.edit-loan {
         border-right: transparent;
         overflow: initial;
     }
+
+#dashboard .tabbable {
+    background-color: #cfcfcf;
+}
+
+    #dashboard .tabbable .tab-content {
+        background-color: #fff;
+    }
+
+    #dashboard .tabbable .nav-tabs > li > a,
+    #dashboard .tabbable .nav-tabs > li > a:focus {
+        background-color: #cfcfcf;
+        line-height: 25px;
+    }
+
+        #dashboard .tabbable .nav-tabs > li.active > a,
+        #dashboard .tabbable .nav-tabs > li.active > a:focus,
+        #dashboard .tabbable .nav-tabs > li > a:hover {
+            background-color: #fff;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            margin-left: 5px;
+            border-color: #cfcfcf;
+            border-right-color: transparent;
+        }
 
 .profile-tabs > .tabbable > ul.nav.nav-tabs {
     position: fixed;
@@ -1572,7 +1619,6 @@ body {
     .nav-list > li.active > a:hover,
     .nav-list > li.active > a:focus,
     .nav-list > li.active > a:active,
-    #sidebar-collapse > [class*="fa-"],
     #nav-horizontal.nav-xs > li .dropdown-menu > li > a:focus,
     #nav-horizontal.nav-xs > li .dropdown-menu > li > a:hover,
     #nav-horizontal.nav-xs > li .dropdown-menu > li.active > a,
@@ -1590,16 +1636,21 @@ body {
         border-bottom-left-radius: 5px;
     }
 
-    .sidebar-collapsed .nav-list > li > a:focus,
-    .sidebar-collapsed .nav-list > li > a:hover,
-    .sidebar-collapsed .nav-list > li.active > a,
-    .sidebar-collapsed .nav-list > li.active > a:hover,
-    .sidebar-collapsed .nav-list > li.active > a:focus,
-    .sidebar-collapsed .nav-list > li.active > a:active {
-        margin-left: 0;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
+#sidebar-collapse > [class*="fa-"] {
+    background-color: #ebebeb !important;
+    color: #282828 !important;
+}
+
+.sidebar-collapsed .nav-list > li > a:focus,
+.sidebar-collapsed .nav-list > li > a:hover,
+.sidebar-collapsed .nav-list > li.active > a,
+.sidebar-collapsed .nav-list > li.active > a:hover,
+.sidebar-collapsed .nav-list > li.active > a:focus,
+.sidebar-collapsed .nav-list > li.active > a:active {
+    margin-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
 
 .table-ezbig {
     width: 100%;
@@ -1627,4 +1678,71 @@ body {
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
     padding-left: 5px;
     padding-right: 5px;
+}
+
+.half-donut-caption {
+    position: absolute;
+    top: 50px;
+    text-align: center;
+    width: 100%;
+    font-size: 20px;
+}
+
+.requested-loan-td {
+    border-right: 1px solid #dddddd;
+    text-align: center;
+}
+
+    .requested-loan-td > span {
+        font-size: 24px;
+        color: #f65f5f;
+    }
+
+.pad-left {
+    padding-left: 5px;
+}
+
+.assets-image {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    top: 50px;
+}
+
+    .assets-image i {
+        font-size: 50px;
+    }
+
+.assets-legend {
+    text-align: center;
+}
+
+.ez-light-grey {
+    color: #a7a7a7;
+}
+
+.ez-green {
+    color: #00ab5d;
+}
+
+.ez-bigtext {
+    font-size: 24px;
+    color: #282828;
+}
+
+.mortgage-div {
+    position: absolute;
+    left: 2px;
+    top: 120px;
+    z-index: 2;
+}
+
+.networth-div {
+    position: absolute;
+    right: 10px;
+    top: 0;
+}
+
+.badge {
+    color: #000000;
 }

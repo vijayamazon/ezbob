@@ -1,7 +1,7 @@
 ﻿@model dynamic
 <script id="dashboard-template" type="text/template">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-12 col-sm-12">
             <div class="row">
                 <div class="box">
                     <div class="box-title">
@@ -16,10 +16,20 @@
                             var rl = m.RequestedLoan || {},
                             cec = m.CompanyEmployeeCountInfo || {};
                         %>
-                        <div>Requested loan: <%-rl!=null ? EzBob.formatPoundsNoDecimals(rl.Amount, true) : "-"%></div>
-                        <div>Annual turnover: <%- EzBob.formatPoundsNoDecimals(m.OverallTurnOver) %></div>
-                        <div># of employees: <%- cec.EmployeeCount %> employees</div>
-                        <div>Total Monthly salary cost: <%- EzBob.formatPoundsAsInt(cec.TotalMonthlySalary) %></div>
+                        <table class="">
+                            <tbody>
+                                <tr>
+                                    <td rowspan="3" class="requested-loan-td">Requested loan: <br /> <span><%-rl!=null ? EzBob.formatPoundsNoDecimals(rl.Amount, true) : "-"%></span></td>
+                                    <td class="pad-left">Annual turnover: <%- EzBob.formatPoundsNoDecimals(m.OverallTurnOver) %></td>
+                                </tr>
+                                <tr>
+                                    <td class="pad-left"># of employees: <%- cec.EmployeeCount %> employees</td>
+                                </tr>
+                                <tr>
+                                    <td class="pad-left">Total Monthly salary cost: <%- EzBob.formatPoundsAsInt(cec.TotalMonthlySalary) %></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -35,44 +45,20 @@
                 </div>
                 <div class="box-content">
                     <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-grey">
-                                <div class="caption text-center">
-                                    Properties
-                                </div>
-                                <p class="title text-center"><strong><%- properties.NumberOfProperties %></strong></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-grey">
-                                <div class="caption text-center">
-                                    Market value
-                                </div>
-                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-lightgrey tile-high">
-                                <div class="caption text-center">
-                                    Net Worth
-                                </div>
-                                <p class="title text-center blue-special"><strong><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.NetWorth) %></strong></p>
-                                <p class="title-small text-center">(<%- properties.NetWorthPercentages %>%)</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="tile tile-lightgrey tile-high">
-                                <div class="caption text-center">
-                                    Mortgages (<%- properties.NumberOfMortgages %>)
-                                </div>
-                                <p class="title text-center"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %></p>
-                                <p class="title-small text-center">(LTV: <%- properties.Ltv %>%)</p>
-                            </div>
+                        <div>Market value: <span class="ez-green"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></span></div>
+                        <div style="position: relative;">
+                            <div class="mortgage-div"><span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %> (<%- properties.NumberOfMortgages %>)</span><br /><span class="badge">(LTV: <%- properties.Ltv %>%)</span></div>
+                            <div class="networth-div" ><span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.NetWorth) %></span><br /><span class="badge">(<%- properties.NetWorthPercentages %>%)</span></div>
+                         </div>
+                        <div style="position: relative; width: 170px; margin: 0 auto;">
+                            <canvas id="assets-donut" width="170" height="170"></canvas>
+                            <div class="assets-image"><i class="fa fa-home"></i><br />X<%- properties.NumberOfProperties %></div>
+                            <div class="assets-legend"><i class="fa fa-square ez-light-grey"></i> Mortgage &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-square ez-green"></i>Net worth</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <%}%>
+                <%}%>
             </div>
         </div>
 
@@ -88,7 +74,7 @@
 			if (affordability[0].CGData.VatReturnSummaryDates && affordability[0].CGData.VatReturnSummaryDates[0])
 				dates = affordability[0].CGData.VatReturnSummaryDates[0];
         }%>
-        <div class="col-md-9">
+        <div class="col-lg-9 col-md-12 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3>Affordability</h3>
@@ -154,7 +140,7 @@
             tileColor = 'tile-light';
             }
         %>
-        <div class="col-md-6 col-sm-12">
+        <div class="col-lg-6 col-md-12 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3>Customer & Directors</h3>
@@ -165,7 +151,7 @@
                 </div>
                 <div class="box-content">
                     <div class="tabbable tabs-left">
-                        <ul class="nav nav-tabs active active-blue">
+                        <ul class="nav nav-tabs active">
                             <li class="active"><a href="#customerExperian" data-toggle="tab"><span class="<%-tileColor%>" style="background-color: <%-experian.ScoreColor%>;"><%-experian.Score%></span>&nbsp;Applicant</a></li>
                             <%if(experian.directorsModels && experian.directorsModels.length > 0){
                                 _.each(experian.directorsModels, function(item, i){
@@ -179,21 +165,24 @@
                         </ul>
                         <div class="tab-content no-border">
                             <div class="tab-pane fade active in" id="customerExperian">
-                                <div class="">
+                                <div class="row">
                                     <div class="col-md-3 col-sm-4">
-                                        <div class="tile <%-tileColor%>" style="background-color: <%-experian.ScoreColor%>">
+                                        <div class="tile tile-transparant">
                                             <div class="caption text-center">
-                                                Score
+                                                <div>Score</div>
+                                                <canvas id="consumerScoreCanvas" width="100" height="100" data-color="<%-experian.ScoreColor%>" data-percent="<%-experian.Score/1200%>"></canvas>
+                                                <div class="half-donut-caption"><%-experian.Score%></div>
                                             </div>
-                                            <p class="title text-center"><%-experian.Score%></p>
+
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-lightgrey">
+                                        <div class="tile tile-transparant">
                                             <div class="caption text-center">
-                                                Indebtedness index
+                                                <div>Indebtedness index</div>
+                                                <canvas id="consumerCIICanvas" width="100" height="100" data-color="#a7a7a7" data-percent="<%-experian.CII/100%>"></canvas>
+                                                <div class="half-donut-caption"><%-experian.CII%></div>
                                             </div>
-                                            <p class="title text-center"><%-experian.CII%></p>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-4">
@@ -258,19 +247,21 @@
                                     if(!EzBob.isDarkColor(item.ScoreColor)){
                                         tileColor = 'tile-light';
                                     }%>
-                                    <div class="tile <%-tileColor%>" style="background-color: <%-item.ScoreColor%>">
+                                    <div class="tile tile-transparant">
                                         <div class="caption text-center">
-                                            Director <%-(i+1)%>
+                                            <div>Score</div>
+                                            <canvas id="directorScoreCanvas<%-i%>" width="100" height="100" data-color="<%-item.ScoreColor%>" data-percent="<%-item.Score/1200%>"></canvas>
+                                            <div class="half-donut-caption"><%-item.Score%></div>
                                         </div>
-                                        <p class="title text-center"><%-item.Score%></p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-4">
-                                    <div class="tile tile-lightgrey">
+                                    <div class="tile tile-transparant">
                                         <div class="caption text-center">
-                                            Indebtedness index
+                                            <div>Indebtedness index</div>
+                                            <canvas id="directorCIICanvas<%-i%>" width="100" height="100" data-color="#a7a7a7" data-percent="<%-item.CII/100%>"></canvas>
+                                            <div class="half-donut-caption"><%-item.CII%></div>
                                         </div>
-                                        <p class="title text-center"><%-item.CII%></p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-4">
@@ -335,7 +326,7 @@
             if(!EzBob.isDarkColor(experianCompany.ScoreColor)){
                 tileColor = 'tile-light';
             }%>
-        <div class="col-md-6 col-sm-12">
+        <div class="col-lg-6 col-md-12 col-sm-12">
             <div class="box">
                 <div class="box-title">
                     <h3>Company Credit Profile</h3>
@@ -345,44 +336,54 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <div class="row">
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile <%-tileColor%>" style="background-color: <%-experianCompany.ScoreColor%>">
-                                <div class="caption text-center">
-                                    Score
+                    <div class="tabbable tabs-left">
+                        <ul class="nav nav-tabs active">
+                            <li class="active"><a href="#companyExperian1" data-toggle="tab">
+                                <span class="<%-tileColor%>" style="background-color: <%-experianCompany.ScoreColor%>;"><%-experianCompany.BureauScore%></span>&nbsp;C1</a></li>
+                        </ul>
+                        <div class="tab-content no-border">
+                            <div class="tab-pane fade active in" id="companyExperian1">
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile <%-tileColor%>" style="background-color: <%-experianCompany.ScoreColor%>">
+                                            <div class="caption text-center">
+                                                Score
+                                            </div>
+                                            <p class="title text-center"><%-experianCompany.BureauScore%></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile tile-lightgrey">
+                                            <div class="caption text-center">
+                                                CCJ
+                                            </div>
+                                            <p class="title text-center">N/A</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile tile-lightgrey">
+                                            <div class="caption text-center">
+                                                Tangible equity
+                                            </div>
+                                            <p class="title text-center">N/A</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile tile-lightgrey">
+                                            <div class="caption text-center">
+                                                Adjusted profit
+                                            </div>
+                                            <p class="title text-center">N/A</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <p class="title text-center"><%-experianCompany.BureauScore%></p>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-lightgrey">
-                                <div class="caption text-center">
-                                    CCJ
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="tile tile-transparant">
+                                            <span class="inline-sparkline companyScoreGraph"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <p class="title text-center">N/A</p>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-lightgrey">
-                                <div class="caption text-center">
-                                    Tangible equity
-                                </div>
-                                <p class="title text-center">N/A</p>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-lightgrey">
-                                <div class="caption text-center">
-                                    Adjusted profit
-                                </div>
-                                <p class="title text-center">N/A</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2 col-sm-4">
-                            <div class="tile tile-transparant">
-                                <span class="inline-sparkline companyScoreGraph"></span>
                             </div>
                         </div>
                     </div>
@@ -396,7 +397,7 @@
             var activeLoans = m.LoanActivity.TotalIssuesCount > 0 ? "active" : "";
             var activeDecisions = activeLoans == "" ? "active" : "";
         %>
-        <div class="col-md-12">
+        <div class="col-lg-12 col-md-12">
             <div class="box">
                 <div class="box-title">
                     <h3>Customer History</h3>
@@ -407,7 +408,7 @@
                 </div>
                 <div class="box-content">
                     <div class="tabbable tabs-left">
-                        <ul class="nav nav-tabs active-blue">
+                        <ul class="nav nav-tabs">
                             <li class="<%-activeLoans%>"><a href="#loans" data-toggle="tab"><span class="label label-large label-warning"><%-m.LoanActivity.TotalIssuesCount%></span>&nbsp;Loans</a></li>
                             <li class="<%-activeDecisions%>"><a href="#decisions" data-toggle="tab"><span class="label label-large label-success"><%-m.Decisions.TotalDecisionsCount%></span>&nbsp;Decisions</a></li>
                         </ul>
@@ -511,7 +512,7 @@
     <%m.DecisionHistory = m.DecisionHistory || {};%>
     <%if(m.DecisionHistory.length > 0){%>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-lg-12 col-md-12">
             <div class="box">
                 <div class="box-title">
                     <h3>Journal</h3>

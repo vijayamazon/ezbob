@@ -119,7 +119,7 @@
 			{
 				Log.ErrorFormat("Failed to load pricing model \n{0}", ex);
 			}
-			int numberOfProperties = customer.PersonalInfo.ResidentialStatus == "Home owner" ? 1 : 0;
+			int numberOfProperties = customer.PersonalInfo == null ? 0 : customer.PersonalInfo.ResidentialStatus == "Home owner" ? 1 : 0;
 			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
 										 a.Customer.Id == customer.Id &&
 				                         (a.AddressType == CustomerAddressType.OtherPropertyAddress ||

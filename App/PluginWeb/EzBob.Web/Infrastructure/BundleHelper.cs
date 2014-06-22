@@ -213,6 +213,7 @@
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.barRenderer.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasOverlay.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.pointLabels.js")
+				.Add("~/Content/js/lib/jqplot/plugins/jqplot.donutRenderer.js")
 				
 				//Flaty
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")
