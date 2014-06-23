@@ -4,8 +4,8 @@
         <div id="sidebar-dashboard" class="navbar-collapse collapse">
             <div class="tabbable tabs-top">
                 <ul class="nav nav-tabs active-blue">
-                    <li class="active"><a href="#profile-person-info-id" data-toggle="tab"><span id="customer-label-span" class="label label-large label-success">Customer</a></li>
-                    <li><a href="#profile-loan-info-id" data-toggle="tab"><span class="label label-large label-success">Offer</a></li>
+                    <li class="active"><a href="#profile-person-info-id" data-toggle="tab"><span id="customer-label-span" class="label label-large label-success">Customer</span></a></li>
+                    <li><a href="#profile-loan-info-id" data-toggle="tab"><span class="label label-large label-success">Offer</span></a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade in profile-person-info active" id="profile-person-info-id"/>
@@ -40,29 +40,13 @@
                     <div class="tab-pane" id="fraudDetection"></div>
                 </div>
             </div>
-            <div id="controlButtons" style="margin-top: 10px;">
-            </div>
+            <div id="DecisionNotes"></div>
         </div>
 
 </script>
 
-<script id="controls-button-template" type="text/template">
-    <div id="DecisionNotes"></div>
-
-    <a class="btn btn-primary back" href="#"><i class="fa fa-arrow-circle-o-left" /> Go back</a>
-    <a href="#" class="btn btn-primary" id="ReportBug" data-bug-customer="<%-customerId%>" data-bug-type="Other"><i class="fa fa-bug" /> Report Bug</a>
-    <button name="newCreditLineLnk" id="newCreditLineLnkId" class="btn btn-primary"><i class="fa fa-bolt" /> New Credit Line</button>
-
-    <div class="pull-right" style="margin-right:50px;">
-        <button class="btn btn-primary" id="ReturnBtn"><i class="fa fa-repeat" /> Return</button>
-        <button class="btn btn-primary" id="SuspendBtn"><i class="fa fa-pause" /> Suspend</button>
-        <button class="btn btn-primary" id="RejectBtn"><i class="fa fa-times-circle-o" /> Reject</button>
-        <button class="btn btn-primary" id="ApproveBtn"><i class="fa fa-check-circle-o" /> Approve</button>
-        <button class="btn btn-primary" id="EscalateBtn"><i class="fa fa-question-circle" /> Escalate</button>
-    </div>
-</script>
-
 @{
+    Html.RenderPartial("ControlButtons");
     Html.RenderPartial("_MarketplaceValuesTemplate");
     Html.RenderPartial("MarketPlacesHistory");
     Html.RenderPartial("_LoanhistoryViewTemplate");

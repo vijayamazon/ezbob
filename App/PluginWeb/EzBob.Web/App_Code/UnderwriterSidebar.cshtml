@@ -61,7 +61,7 @@
         <ul class="nav nav-list">
             <li>
                 <a title="click to log out" href="@page.Url.Action("LogOffUnderwriter", "Account", new { Area = "" })" id="uw-name-and-icon" data-uw-id="@userId">
-                    <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/>@userName
+                    <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/><span>@userName</span>
                 </a>
             </li>
             @switch (type)
@@ -113,7 +113,7 @@
                     break;
                 case SideBarType.Customer:
                 <li>
-                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i>Customers</a>
+                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
                     <a href="#" class="dropdown-toggle more-options-link">
                         <i class="fa fa-reorder"></i>
                     </a>
@@ -124,28 +124,27 @@
                         @SubMenu(page)
                     </ul>
                 </li>
-                <li><a href="#dashboard" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Dashboard</a></li>
-                <li><a href="#profile-summary" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Profile Summary</a></li>
+                <li><a href="#dashboard" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span>Dashboard</span></a></li>
+                <li><a href="#profile-summary" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span>Profile Summary</span></a></li>
                 <li><a href="#marketplaces" data-toggle="tab" class="customer-tab">
                     <div class="source_labels new-ribbon" id="new-ribbon-marketplaces"></div>
-                    <i class="fa fa-file-text-o"></i>Marketplaces
-                </a>
+                    <i class="fa fa-file-text-o"></i><span>Marketplaces</span></a>
                 </li>
-                <li><a href="#payment-accounts" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Payment accounts</a></li>
-                <li><a href="#credit-bureau" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Credit bureau</a></li>
-                <li><a href="#calculator" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Calculator</a></li>
-                <li><a href="#loanhistorys" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Loan history</a></li>
-                <li><a href="#customer-info" class="customer-tab cross-check-tab" data-toggle="tab"><i class="fa fa-file-text-o"></i>Cross check</a></li>
-                <li><a href="#company-score" class="customer-tab company-score-tab" data-toggle="tab"><i class="fa fa-file-text-o"></i>Company score</a></li>
+                <li><a href="#payment-accounts" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span>Payment accounts</span></a></li>
+                <li><a href="#credit-bureau" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span>Credit bureau</span></a></li>
+                <li><a href="#calculator" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span>Calculator</span></a></li>
+                <li><a href="#loanhistorys" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span>Loan history</span></a></li>
+                <li><a href="#customer-info" class="customer-tab cross-check-tab" data-toggle="tab"><i class="fa fa-file-text-o"></i><span>Cross check</span></a></li>
+                <li><a href="#company-score" class="customer-tab company-score-tab" data-toggle="tab"><i class="fa fa-file-text-o"></i><span>Company score</span></a></li>
                 <li><a href="#messages-tab" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span class="messages-tab">Messages / Files</span></a></li>
-                <li><a href="#apiChecks" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>API checks log</a></li>
-                <li><a href="#customerRelations" data-toggle="tab" class="customer-tab crm-tab"><i class="fa fa-phone"></i>Customer relations</a></li>
-                <li><a href="#fraudDetection" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i>Fraud detection</a></li>
+                <li><a href="#apiChecks" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span>API checks log</span></a></li>
+                <li><a href="#customerRelations" data-toggle="tab" class="customer-tab crm-tab"><i class="fa fa-phone"></i><span>Customer relations</span></a></li>
+                <li><a href="#fraudDetection" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span>Fraud detection</span></a></li>
                     break;
                 case SideBarType.Other:
         
                 <li>
-                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i>Customers</a>
+                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
                 </li>
                 @SubMenu(page)
                     break;

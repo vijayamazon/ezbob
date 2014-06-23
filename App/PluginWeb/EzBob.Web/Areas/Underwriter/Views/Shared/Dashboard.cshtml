@@ -6,10 +6,7 @@
                 <div class="box">
                     <div class="box-title">
                         <h3>Customer Input</h3>
-                        <div class="box-tool">
-                            <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                            <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                        </div>
+                        @BoxTools("Customer Input")
                     </div>
                     <div class="box-content">
                         <%
@@ -38,10 +35,7 @@
             <div class="box">
                 <div class="box-title">
                     <h3>Assets & Worth</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
+                    @BoxTools("Assets & Worth", "#customer-info")
                 </div>
                 <div class="box-content">
                     <div class="row">
@@ -74,14 +68,13 @@
 			if (affordability[0].CGData.VatReturnSummaryDates && affordability[0].CGData.VatReturnSummaryDates[0])
 				dates = affordability[0].CGData.VatReturnSummaryDates[0];
         }%>
+        
         <div class="col-lg-9 col-md-12 col-sm-12">
-            <div class="box">
+            <div class="table-ezbig">
+                <div class="box">
                 <div class="box-title">
                     <h3>Affordability</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
+                    @BoxTools("Affordability", "#marketplaces")
                 </div>
                 <div class="box-content">
                     <table class="table table-striped">
@@ -126,6 +119,7 @@
                     </table>
                 </div>
             </div>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -144,10 +138,7 @@
             <div class="box">
                 <div class="box-title">
                     <h3>Customer & Directors</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
+                    @BoxTools("Customer & Directors", "#credit-bureau")
                 </div>
                 <div class="box-content">
                     <div class="tabbable tabs-left">
@@ -165,66 +156,63 @@
                         </ul>
                         <div class="tab-content no-border">
                             <div class="tab-pane fade active in" id="customerExperian">
-                                <div class="row">
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-transparant">
-                                            <div class="caption text-center">
-                                                <div>Score</div>
-                                                <canvas id="consumerScoreCanvas" width="100" height="100" data-color="<%-experian.ScoreColor%>" data-percent="<%-experian.Score/1200%>"></canvas>
-                                                <div class="half-donut-caption"><%-experian.Score%></div>
-                                            </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile tile-transparant">
+                                        <div class="caption text-center">
+                                            <div>Score</div>
+                                            <canvas id="consumerScoreCanvas" width="100" height="100" data-color="<%-experian.ScoreColor%>" data-percent="<%-experian.Score/1200%>"></canvas>
+                                            <div class="half-donut-caption"><%-experian.Score%></div>
+                                        </div>
 
-                                        </div>
                                     </div>
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-transparant">
-                                            <div class="caption text-center">
-                                                <div>Indebtedness index</div>
-                                                <canvas id="consumerCIICanvas" width="100" height="100" data-color="#a7a7a7" data-percent="<%-experian.CII/100%>"></canvas>
-                                                <div class="half-donut-caption"><%-experian.CII%></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-transparant">
-                                            <div class="caption text-center">
-                                                Total CAIS balance
-                                            </div>
-                                            <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total);
-                                   var textSize = '';
-                                if(balance.length > 5){ textSize = 'text-small';} %>
-                                <p class="title text-center <%- textSize%>"><%-EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total)%></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile <%- experian.ConsumerSummaryCharacteristics.NumberOfDefaults == 0 ? 'tile-lightgreen' : 'tile-red' %>">
-                                            <div class="caption text-center">
-                                                Defaults
-                                            </div>
-                                            <p class="title text-center"><%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%></p>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile tile-transparant">
+                                        <div class="caption text-center">
+                                            <div>Indebtedness index</div>
+                                            <canvas id="consumerCIICanvas" width="100" height="100" data-color="#a7a7a7" data-percent="<%-experian.CII/100%>"></canvas>
+                                            <div class="half-donut-caption"><%-experian.CII%></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="">
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-transparant">
-                                            <span class="inline-sparkline consumerScoreGraph"></span>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile tile-transparant">
+                                        <div class="caption text-center">
+                                            Total CAIS balance
                                         </div>
+                                        <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total);
+                                var textSize = '';
+                            if(balance.length > 5){ textSize = 'text-small';} %>
+                            <p class="title text-center <%- textSize%>"><%-EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total)%></p>
                                     </div>
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-transparant">
-                                            <span class="inline-sparkline consumerCIIGraph"></span>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile <%- experian.ConsumerSummaryCharacteristics.NumberOfDefaults == 0 ? 'tile-lightgreen' : 'tile-red' %>">
+                                        <div class="caption text-center">
+                                            Defaults
                                         </div>
+                                        <p class="title text-center"><%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%></p>
                                     </div>
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile <%- experian.ConsumerAccountsOverview.OpenAccounts_Total==0 ? 'tile-red' : 'tile-lightgreen' %>">
-                                            <div class="caption text-center">
-                                                CAIS Accounts
-                                            </div>
-                                            <p class="title text-center"><%-experian.ConsumerAccountsOverview.OpenAccounts_Total%></p>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile tile-transparant">
+                                        <span class="inline-sparkline consumerScoreGraph"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile tile-transparant">
+                                        <span class="inline-sparkline consumerCIIGraph"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="tile <%- experian.ConsumerAccountsOverview.OpenAccounts_Total==0 ? 'tile-red' : 'tile-lightgreen' %>">
+                                        <div class="caption text-center">
+                                            CAIS Accounts
                                         </div>
+                                        <p class="title text-center"><%-experian.ConsumerAccountsOverview.OpenAccounts_Total%></p>
                                     </div>
-                                    <div class="col-md-3 col-sm-4">
+                                </div>
+                                <div class="col-md-3 col-sm-4">
                                         <div class="tile <%- experian.Summary.CCJs == 0 ? 'tile-lightgreen' : 'tile-red' %>">
                                             <div class="caption text-center">
                                                 CCJ/Recent CCJ(m)
@@ -232,7 +220,6 @@
                                             <p class="title text-center"><%-experian.Summary.CCJs%> / <%-experian.Summary.MostrecentCCJ%>m</p>
                                         </div>
                                     </div>
-                                </div>
                             </div>
                             <%if(experian.directorsModels && experian.directorsModels.length > 0){
                     _.each(experian.directorsModels, function(item, i){
@@ -330,10 +317,7 @@
             <div class="box">
                 <div class="box-title">
                     <h3>Company Credit Profile</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
+                    @BoxTools("Company Credit Profile", "#company-score")
                 </div>
                 <div class="box-content">
                     <div class="tabbable tabs-left">
@@ -401,10 +385,7 @@
             <div class="box">
                 <div class="box-title">
                     <h3>Customer History</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
+                    @BoxTools("Customer History", "#loanhistorys")
                 </div>
                 <div class="box-content">
                     <div class="tabbable tabs-left">
@@ -511,15 +492,13 @@
     </div>
     <%m.DecisionHistory = m.DecisionHistory || {};%>
     <%if(m.DecisionHistory.length > 0){%>
-    <div class="row">
+    <div class="table-ezbig">
+        <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="box">
                 <div class="box-title">
                     <h3>Journal</h3>
-                    <div class="box-tool">
-                        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
-                        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
-                    </div>
+                    @BoxTools("Journal", "#customerRelations")
                 </div>
                 <div class="box-content">
 
@@ -571,7 +550,19 @@
             </div>
         </div>
     </div>
+    </div>
     <%}%>
 
 </script>
 
+@helper BoxTools(string bugType, string gotoTab = null){
+    <div class="box-tool">
+        @if (!string.IsNullOrEmpty(gotoTab))
+        {
+            <a href="#" data-toggle="tab" class="btn btn-mini btn-primary" onclick="$('a[href=@gotoTab]').click()"><i class="fa fa-ellipsis-h"></i></a>
+        }
+        <a href="#" class="btn btn-mini btn-primary" data-bug-type="@bugType" data-bug-customer="<%-m.Id%>" data-placement="bottom" data-original-title="" title=""><i class="fa fa-bug"></i></a>
+        <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+        <a data-action="close" href="#"><i class="fa fa-times"></i></a>
+    </div>
+}

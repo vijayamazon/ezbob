@@ -1567,13 +1567,20 @@ td a.edit-loan {
     background: linear-gradient(to bottom, white, #ebebeb);
     border-bottom: #d3d3d5 1px solid;
     border-radius: 5px;
+    color: #282828;
+    font-weight: 500;
+    font-size: 14px;
 }
 
 .box .box-content {
     border-radius: 5px;
+    width: 100%;
 }
 
-.box .box-title *, .box .box-title h3 {
+.box .box-title .box-tool a, 
+.box .box-title th, 
+.box .box-title a, 
+.box .box-title h3 {
     color: #282828;
     font-weight: 500;
     font-size: 14px;
@@ -1655,6 +1662,7 @@ body {
 .table-ezbig {
     width: 100%;
     overflow-y: hidden;
+    overflow-x: hidden;
 }
 
     .table-ezbig .box .box-content {
@@ -1741,8 +1749,34 @@ body {
     position: absolute;
     right: 10px;
     top: 0;
+    z-index: 2;
 }
 
 .badge {
     color: #000000;
+}
+
+.box .box-title .box-tool a.btn {
+    border: none;
+    background-color: transparent;
+    padding: 6px 0;
+}
+
+.box .box-title .box-tool a.btn:hover {
+    background-color: transparent;
+    color: #000000;
+}
+
+.controlButtons {
+    display: inline-block;
+}
+
+.btn.btn-dashboard {
+    font-size: 12px;
+    padding: 3px;
+    margin: 0 1px;
+    border: #d3d3d5 1px solid;
+    border-radius: 5px;
+    background: linear-gradient(to bottom, #eeeeee, #dddddd);
+    box-shadow: 0 1px 1px -1px gray;
 }

@@ -33,7 +33,7 @@
     };
 
     ProfileView.prototype.render = function() {
-      var alertPassed, apiChecks, controlButtons, customerRelations, dashboardInfo, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileHead, profileInfo, summaryInfo, that,
+      var alertPassed, apiChecks, customerRelations, dashboardInfo, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileHead, profileInfo, summaryInfo, that,
         _this = this;
       this.$el.html(this.template());
       profileInfo = this.$el.find(".profile-person-info");
@@ -49,7 +49,6 @@
       apiChecks = this.$el.find("#apiChecks");
       customerRelations = this.$el.find("#customerRelations");
       alertPassed = this.$el.find("#alerts-passed");
-      controlButtons = this.$el.find("#controlButtons");
       profileHead = this.$el.find("#profileHead");
       fraudDetection = this.$el.find("#fraudDetection");
       this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel();
@@ -57,7 +56,6 @@
         el: profileInfo,
         model: this.personalInfoModel
       });
-      this.personalInfoModel.on("change", this.changeDecisionButtonsState, this);
       this.marketPlaces = new EzBob.Underwriter.MarketPlaces();
       this.marketPlaceView = new EzBob.Underwriter.MarketPlacesView({
         el: marketplaces,
@@ -172,9 +170,6 @@
         medalModel: this.medalCalculationModel
       });
       this.showed = true;
-      this.controlButtons = new EzBob.Underwriter.ControlButtonsView({
-        el: controlButtons
-      });
       EzBob.handleUserLayoutSetting();
       this.$el.find('.profile-tabs a[data-toggle="tab"]').on('shown.bs.tab', (function(e) {
         _this.setLastShownProfileSection($(e.target).attr('href').substr(1));
@@ -453,8 +448,7 @@
       this.summaryInfoModel.fetch();
       this.personalInfoModel.fetch();
       this.loanInfoModel.fetch();
-      this.loanHistory.fetch();
-      return this.changeDecisionButtonsState();
+      return this.loanHistory.fetch();
     };
 
     ProfileView.prototype.show = function(id, isHistory, history) {
@@ -489,7 +483,6 @@
         _this.personalInfoModel.set(fullModel.get("PersonalInfoModel"), {
           silent: true
         });
-        _this.changeDecisionButtonsState(_this.personalInfoModel.get("Editable"));
         _this.personalInfoModel.trigger("sync");
         _this.loanInfoModel.set({
           Id: id
@@ -615,10 +608,6 @@
         }
         return BlockUi("Off");
       });
-      this.controlButtons.model = new Backbone.Model({
-        customerId: id
-      });
-      this.controlButtons.render();
       return EzBob.handleUserLayoutSetting();
     };
 
@@ -626,67 +615,8 @@
       return this.$el.hide();
     };
 
-    ProfileView.prototype.changeDecisionButtonsState = function(isHideAll) {
-      var creditResult, disabled, userStatus;
-      disabled = !this.personalInfoModel.get("IsCustomerInEnabledStatus");
-      creditResult = this.personalInfoModel.get("CreditResult");
-      this.$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").toggleClass("disabled", disabled);
-      if (isHideAll) {
-        this.$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").hide();
-      }
-      switch (creditResult) {
-        case "WaitingForDecision":
-          this.$el.find("#ReturnBtn").hide();
-          this.$el.find("#RejectBtn").show();
-          this.$el.find("#ApproveBtn").show();
-          this.$el.find("#SuspendBtn").show();
-          if (!escalatedFlag) {
-            this.$el.find("#EscalateBtn").show();
-          }
-          break;
-        case "Rejected":
-        case "Approved":
-        case "Late":
-          this.$el.find("#ReturnBtn").hide();
-          this.$el.find("#RejectBtn").hide();
-          this.$el.find("#ApproveBtn").hide();
-          this.$el.find("#SuspendBtn").hide();
-          this.$el.find("#EscalateBtn").hide();
-          break;
-        case "Escalated":
-          this.$el.find("#ReturnBtn").hide();
-          this.$el.find("#RejectBtn").show();
-          this.$el.find("#ApproveBtn").show();
-          this.$el.find("#SuspendBtn").show();
-          this.$el.find("#EscalateBtn").hide();
-          break;
-        case "ApprovedPending":
-          this.$el.find("#ReturnBtn").show();
-          this.$el.find("#RejectBtn").hide();
-          this.$el.find("#ApproveBtn").hide();
-          this.$el.find("#SuspendBtn").hide();
-          this.$el.find("#EscalateBtn").hide();
-      }
-      userStatus = this.personalInfoModel.get("UserStatus");
-      if (userStatus === 'Registered') {
-        this.$el.find("#ReturnBtn").hide();
-        this.$el.find("#RejectBtn").hide();
-        this.$el.find("#ApproveBtn").hide();
-        this.$el.find("#SuspendBtn").hide();
-        return this.$el.find("#EscalateBtn").hide();
-      }
-    };
-
     ProfileView.prototype.updateAlerts = function() {
       return this.alertsModel.fetch();
-    };
-
-    ProfileView.prototype.clearDecisionNotes = function() {
-      return this.$el.find('#DecisionNotes').empty();
-    };
-
-    ProfileView.prototype.appendDecisionNote = function(oNote) {
-      return this.$el.find('#DecisionNotes').append(oNote);
     };
 
     return ProfileView;

@@ -32,7 +32,6 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         apiChecks = @$el.find("#apiChecks")
         customerRelations = @$el.find("#customerRelations")
         alertPassed = @$el.find("#alerts-passed")
-        controlButtons = @$el.find "#controlButtons"
         profileHead = @$el.find("#profileHead")
         fraudDetection = @$el.find("#fraudDetection")
         @personalInfoModel = new EzBob.Underwriter.PersonalInfoModel()
@@ -40,8 +39,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             el: profileInfo
             model: @personalInfoModel
         )
-        @personalInfoModel.on "change", @changeDecisionButtonsState, this
-
+        
         @marketPlaces = new EzBob.Underwriter.MarketPlaces()
         @marketPlaceView = new EzBob.Underwriter.MarketPlacesView(
             el: marketplaces
@@ -165,10 +163,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         )
 
         @showed = true
-        @controlButtons = new EzBob.Underwriter.ControlButtonsView(
-            el: controlButtons
-        )
-
+        
         EzBob.handleUserLayoutSetting()
 
         @$el.find('.profile-tabs a[data-toggle="tab"]').on('shown.bs.tab', ((e) =>
@@ -387,7 +382,6 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         @personalInfoModel.fetch()
         @loanInfoModel.fetch() 
         @loanHistory.fetch()
-        @changeDecisionButtonsState()
 
     show: (id, isHistory, history) ->
         @hide()
@@ -406,7 +400,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             
             @personalInfoModel.set {Id: id}, {silent: true}
             @personalInfoModel.set fullModel.get("PersonalInfoModel"), silent: true
-            @changeDecisionButtonsState @personalInfoModel.get("Editable")
+            
             @personalInfoModel.trigger "sync"
 
             @loanInfoModel.set {Id: id}, {silent: true}
@@ -488,55 +482,10 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             $('a[href=#marketplaces]').click() if isHistory
             BlockUi "Off"
 
-        @controlButtons.model = new Backbone.Model(
-            customerId: id
-        )
-        @controlButtons.render()
         EzBob.handleUserLayoutSetting()
 
     hide: ->
         @$el.hide()
-
-    changeDecisionButtonsState: (isHideAll)->
-        disabled = !@personalInfoModel.get("IsCustomerInEnabledStatus")
-        creditResult = @personalInfoModel.get("CreditResult")
-       
-        @$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").toggleClass "disabled", disabled
-        @$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").hide() if isHideAll
-        
-        switch creditResult
-            when  "WaitingForDecision"
-                @$el.find("#ReturnBtn").hide()
-                @$el.find("#RejectBtn").show()
-                @$el.find("#ApproveBtn").show()
-                @$el.find("#SuspendBtn").show()
-                @$el.find("#EscalateBtn").show() if !escalatedFlag
-            when "Rejected", "Approved", "Late"
-                @$el.find("#ReturnBtn").hide()
-                @$el.find("#RejectBtn").hide()
-                @$el.find("#ApproveBtn").hide()
-                @$el.find("#SuspendBtn").hide()
-                @$el.find("#EscalateBtn").hide()
-            when "Escalated"
-                @$el.find("#ReturnBtn").hide()
-                @$el.find("#RejectBtn").show()
-                @$el.find("#ApproveBtn").show()
-                @$el.find("#SuspendBtn").show()
-                @$el.find("#EscalateBtn").hide()
-            when "ApprovedPending"
-                @$el.find("#ReturnBtn").show()
-                @$el.find("#RejectBtn").hide()
-                @$el.find("#ApproveBtn").hide()
-                @$el.find("#SuspendBtn").hide()
-                @$el.find("#EscalateBtn").hide()
-
-        userStatus = @personalInfoModel.get("UserStatus")
-        if userStatus == 'Registered'
-            @$el.find("#ReturnBtn").hide()
-            @$el.find("#RejectBtn").hide()
-            @$el.find("#ApproveBtn").hide()
-            @$el.find("#SuspendBtn").hide()
-            @$el.find("#EscalateBtn").hide()
 
     updateAlerts: ->
         @alertsModel.fetch()

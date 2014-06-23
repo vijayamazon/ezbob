@@ -65,6 +65,18 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         }
     },
     onRender: function () {
+        var controlButtons = this.$el.find("#controlButtons");
+        this.controlButtonsView = new EzBob.Underwriter.ControlButtonsView(
+            {
+                el: controlButtons,
+                model: new Backbone.Model({ customerId: this.model.get("Id") })
+            });
+        this.controlButtonsView.render();
+        
+        if (this.personalModel) {
+            this.changeDecisionButtonsState(this.personalModel.get("Editable"));
+        }
+
         if (this.model.get('Alerts') !== void 0) {
             if (this.model.get('Alerts').length === 0) {
                 $('#customer-label-span').removeClass('label-warning').removeClass('label-important').addClass('label-success');
@@ -199,7 +211,55 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             this.drawDonut('medalCanvas', fillColor, medal.Result);
         }
     },
-
+    
+    changeDecisionButtonsState: function(isHideAll) {
+        var creditResult, disabled, userStatus;
+        disabled = !this.personalModel.get("IsCustomerInEnabledStatus");
+        creditResult = this.personalModel.get("CreditResult");
+        this.$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").toggleClass("disabled", disabled);
+        if (isHideAll) {
+            this.$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").hide();
+        }
+        switch (creditResult) {
+            case "WaitingForDecision":
+                this.$el.find("#ReturnBtn").hide();
+                this.$el.find("#RejectBtn").show();
+                this.$el.find("#ApproveBtn").show();
+                this.$el.find("#SuspendBtn").show();
+                //if (!escalatedFlag) {this.$el.find("#EscalateBtn").show();}
+                break;
+            case "Rejected":
+            case "Approved":
+            case "Late":
+                this.$el.find("#ReturnBtn").hide();
+                this.$el.find("#RejectBtn").hide();
+                this.$el.find("#ApproveBtn").hide();
+                this.$el.find("#SuspendBtn").hide();
+                this.$el.find("#EscalateBtn").hide();
+                break;
+            case "Escalated":
+                this.$el.find("#ReturnBtn").hide();
+                this.$el.find("#RejectBtn").show();
+                this.$el.find("#ApproveBtn").show();
+                this.$el.find("#SuspendBtn").show();
+                this.$el.find("#EscalateBtn").hide();
+                break;
+            case "ApprovedPending":
+                this.$el.find("#ReturnBtn").show();
+                this.$el.find("#RejectBtn").hide();
+                this.$el.find("#ApproveBtn").hide();
+                this.$el.find("#SuspendBtn").hide();
+                this.$el.find("#EscalateBtn").hide();
+        }
+        userStatus = this.personalModel.get("UserStatus");
+        if (userStatus === 'Registered') {
+            this.$el.find("#ReturnBtn").hide();
+            this.$el.find("#RejectBtn").hide();
+            this.$el.find("#ApproveBtn").hide();
+            this.$el.find("#SuspendBtn").hide();
+            return this.$el.find("#EscalateBtn").hide();
+        }
+    },
     drawDonut: function (canvasId, fillColor, fillPercent) {
         var canvas = document.getElementById(canvasId);
         var context = canvas.getContext('2d');

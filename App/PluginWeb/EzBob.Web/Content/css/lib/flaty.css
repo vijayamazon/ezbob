@@ -523,10 +523,15 @@ hr.margin-0  {margin: 0;}
     position: absolute;
 }
 
-#sidebar-dashboard+#main-content {
+#sidebar+#sidebar-dashboard+#main-content {
     margin-left: 200px;
     margin-right: 275px;
 }
+#sidebar.sidebar-collapsed+#sidebar-dashboard+#main-content {
+    margin-left: 43px;
+    margin-right: 275px;
+}
+
 
 .navbar-collapse {
     padding-right: 0;
@@ -1600,7 +1605,7 @@ Bordered form layout
     text-shadow: none;
     -webkit-box-shadow: none;
             box-shadow: none;
-    border-radius: 0!important;
+    border-radius: 0;
 }
 .btn.active,
 .btn:active,
@@ -1714,7 +1719,7 @@ a.btn {
 .btn.btn-primary:hover,
 .btn.btn-primary.hover{
     background-color: #017cdb;
-    color: white !important;
+    color: white;
 }
 .btn.btn-primary.disabled, .btn.btn-primary[disabled="disabled"] {
     color: #888;
@@ -2513,7 +2518,7 @@ a.tile:hover {
     color: #333;
     line-height: 16px;
     margin-top: -1px;
-    z-index: 12;
+    z-index: 4;
 }
 
 .tabbable .nav-tabs > li:first-child > a {

@@ -5,12 +5,12 @@ EzBob.scrollableSidebar = function() {
         $('#sidebar .nav').css('height', 'auto');
         return;
     }
-    if ($('#sidebar.sidebar-fixed.sidebar-collapsed').size() > 0) {
-        $('#sidebar .nav').css('height', 'auto');
+    if ($('div[id="sidebar"].sidebar-fixed.sidebar-collapsed').size() > 0) {
+        $('div[id="sidebar"] .nav').css('height', 'auto');
         return;
     }
     var winHeight = $(window).height() - 90;
-    $('#sidebar.sidebar-fixed .nav').slimScroll({ height: winHeight + 'px', position: 'left' });
+    $('div[id="sidebar"].sidebar-fixed .nav').slimScroll({ height: winHeight + 'px', position: 'left' });
 };
 
 EzBob.handleUserLayoutSetting = function () {
@@ -19,12 +19,12 @@ EzBob.handleUserLayoutSetting = function () {
     }
     //Collapsed sidebar
     if ($.cookie('sidebar-collapsed') == 'true') {
-        $('#sidebar').addClass('sidebar-collapsed');
+        $('div[id="sidebar"]').addClass('sidebar-collapsed');
     }
 
     //Fixed sidebar
     if ($.cookie('sidebar-fixed') == 'true') {
-        $('#sidebar').addClass('sidebar-fixed');
+        $('div[id="sidebar"]').addClass('sidebar-fixed');
     }
 
     //Fixed navbar
@@ -143,7 +143,7 @@ EzBob.handleUserLayoutSetting = function () {
         }
     });
 
-    $('#sidebar').on('show.bs.collapse', function () {
+    $('div[id="sidebar"]').on('show.bs.collapse', function () {
         if ($(this).hasClass('sidebar-collapsed')) {
             $(this).removeClass('sidebar-collapsed');
         }
@@ -203,14 +203,14 @@ $(function () {
     });
 
     //Collapse button
-    $('#sidebar.sidebar-collapsed #sidebar-collapse > i').attr('class', 'fa fa-angle-double-right');
+    $('div[id="sidebar"].sidebar-collapsed div[id="sidebar-collapse"] > i').attr('class', 'fa fa-angle-double-right');
     
 
     //Search Form
     $('#sidebar .search-form').click(function () {
         $('#sidebar .search-form input[type="text"]').focus();
     });
-    $('#sidebar .nav > li.active > a > .arrow').removeClass('fa-angle-right').addClass('fa-angle-down');
+    $('div[id="sidebar"] .nav > li.active > a > .arrow').removeClass('fa-angle-right').addClass('fa-angle-down');
 
     //---------------- Horizontal Menu -------------------------------//
     if ($('#nav-horizontal')) {
