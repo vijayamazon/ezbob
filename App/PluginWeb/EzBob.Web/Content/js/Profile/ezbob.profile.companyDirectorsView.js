@@ -2,19 +2,20 @@
 EzBob.Profile = EzBob.Profile || {};
 
 EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
-    template: "#company-directors-template",
+	template: "#company-directors-template",
 
-    initialize: function () {
+	initialize: function() {
 
-    },
-    onRender: function () {
+	}, // initialize
 
-    },
-    
-    serializeData: function () {
-        var company = this.model.get("CompanyInfo") || {};
-        return {
-            data: company.Directors || []
-        };
-    }
-});
+	onRender: function() {
+		console.log('model is', this.model);
+	}, // onRender
+
+	serializeData: function() {
+		var company = this.model.get("CompanyInfo") || {};
+		return {
+			data: company.Directors || []
+		};
+	}, // serializeData
+}); // EzBob.Profile.CompanyDirectorsView

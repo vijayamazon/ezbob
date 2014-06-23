@@ -16,13 +16,13 @@
             </tr>
         </thead>
         <tbody>
-            <%_.each(data, function(director) {director.DirectorAddress%>
+            <%_.each(data, function(director) { %>
             <tr>
                 <td><%-director.Name%> <%-director.Middle%> <%-director.Surname%></td>
                 <td><%-director.Email%></td>
                 <td><%-director.Phone%></td>
                 <td><%-director.DateOfBirth%></td>
-                <td><%-director.DirectorAddress == null ? '' : director.DirectorAddress[0].FormattedAddress%></td>
+                <td><%- (director.DirectorAddress && director.DirectorAddress[0] ? director.DirectorAddress[0].FormattedAddress : '') %></td>
                 <td>todo</td>
                 <td><%-director.IsExperianShareholder ? 'Shareholder' : 'Director'%></td>
                 <td><button class="btn" data-directorId="<%-director.Id%>">edit</button></td>
