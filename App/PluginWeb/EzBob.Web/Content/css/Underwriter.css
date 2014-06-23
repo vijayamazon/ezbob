@@ -1032,12 +1032,13 @@ textarea.BusinessAddress {
 .customer-column-width-50 {
     width: 50%;
     color: #cdcdcd;
-    ;
 }
 
 .left-pane-button {
     padding: 1px 4px;
     font-size: 10px;
+    background-color: transparent;
+    color: white;
 }
 
 .suggested-amount-link {
@@ -1772,8 +1773,8 @@ body {
 }
 
 .btn.btn-dashboard {
-    font-size: 12px;
-    padding: 3px;
+    font-size: 12px !important;
+    padding: 2px;
     margin: 0 1px;
     border: #d3d3d5 1px solid;
     border-radius: 5px;

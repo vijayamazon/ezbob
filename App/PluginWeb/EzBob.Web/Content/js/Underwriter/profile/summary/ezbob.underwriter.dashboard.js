@@ -96,6 +96,9 @@
 
     DashboardView.prototype.onRender = function() {
       var cc, cii, companyHistoryScores, consumerHistoryCIIs, consumerHistoryScores, directors, historyScoresSorted, i, properties, _results;
+      this.$el.find('a[data-bug-type]').tooltip({
+        title: 'Report bug'
+      });
       if (this.model.get('Alerts') !== void 0) {
         if (this.model.get('Alerts').length === 0) {
           $('#customer-label-span').removeClass('label-warning').removeClass('label-important').addClass('label-success');

@@ -73,6 +73,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             });
         this.controlButtonsView.render();
         
+        this.$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
         if (this.personalModel) {
             this.changeDecisionButtonsState(this.personalModel.get("Editable"));
         }

@@ -63,6 +63,8 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
             @model.fetch()
 
     onRender: ->
+        @$el.find('a[data-bug-type]').tooltip({title: 'Report bug'})
+        
         if (@model.get('Alerts') != undefined)
             if (@model.get('Alerts').length == 0) 
                 $('#customer-label-span').removeClass('label-warning').removeClass('label-important').addClass('label-success')
