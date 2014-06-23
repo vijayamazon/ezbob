@@ -209,8 +209,13 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 case 'Diamond':
                     fillColor = '#39A3E1'; break;
             }
-            this.drawDonut('medalCanvas', fillColor, medal.Result);
+            this.drawDonut('medalCanvas', fillColor, medal.Result, false);
         }
+
+        var offer = this.loanModel.get('OfferedCreditLine') || 0;
+        this.drawDonut("offer-donut", "#00ab5d", offer / 50000, true);
+        var period = this.loanModel.get('RepaymentPerion') || 0;
+        this.drawDi('period-di', "#00ab5d", period / 12);
     },
     
     changeDecisionButtonsState: function(isHideAll) {
@@ -261,23 +266,59 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             return this.$el.find("#EscalateBtn").hide();
         }
     },
-    drawDonut: function (canvasId, fillColor, fillPercent) {
+    drawDonut: function (canvasId, fillColor, fillPercent, isClock) {
         var canvas = document.getElementById(canvasId);
         var context = canvas.getContext('2d');
         var x = canvas.width / 2;
         var y = canvas.height / 2;
-        var radius = 40;
+        var radius = isClock ? 35 : 40;
         var startAngle = 1 * Math.PI;
-        var endAngle = 4 * Math.PI;
-        var lineWidth = 15;
+        var endAngle = (isClock ? 2 : 3) * Math.PI;
+        var lineWidth = isClock ? 25 : 15;
+        var endEngleData = Math.PI * (1 + fillPercent * 2);
         context.beginPath();
         context.arc(x, y, radius, startAngle, endAngle, false);
         context.lineWidth = lineWidth;
         context.strokeStyle = '#ebebeb';
         context.stroke();
         context.beginPath();
-        context.arc(x, y, radius, startAngle, Math.PI * (1 + fillPercent * 2), false);
+        context.arc(x, y, radius, startAngle, endEngleData, false);
         context.strokeStyle = fillColor;
+        context.lineWidth = lineWidth;
         context.stroke();
+
+        if (isClock) {
+            context.beginPath();
+            context.moveTo(x - (radius + lineWidth / 2) * Math.cos(endEngleData - Math.PI), y - (radius + lineWidth / 2) * Math.sin(endEngleData - Math.PI));
+            context.lineTo(x, y);
+            context.strokeStyle = '#000000';
+            context.lineWidth = 2;
+            context.stroke();
+            context.beginPath();
+            context.arc(x, y, 5, startAngle, 3 * Math.PI, false);
+            context.lineWidth = 5;
+            context.strokeStyle = '#ebebeb';
+            context.stroke();
+        }
+    },
+    drawDi: function(canvasId, fillColor, fillPercent) {
+        var canvas = document.getElementById(canvasId);
+        var context = canvas.getContext('2d');
+        var x = canvas.width / 2;
+        var y = canvas.height;
+        context.beginPath();
+        context.moveTo(x, y);
+        context.lineTo(x, 0);
+        context.strokeStyle = '#ebebeb';
+        context.lineWidth = 15;
+        context.stroke();
+        
+        context.beginPath();
+        context.moveTo(x, y-y*fillPercent);
+        context.lineTo(x, y);
+        context.strokeStyle = fillColor;
+        context.lineWidth = 15;
+        context.stroke();
+
     }
 });

@@ -1603,7 +1603,7 @@ body {
 }
 
     #profileHead .box-content {
-        height: 200px;
+        min-height: 200px;
     }
 
 #sidebar.bg:before, #sidebar.bg {
@@ -1737,6 +1737,7 @@ body {
 .ez-bigtext {
     font-size: 24px;
     color: #282828;
+    text-align: center;
 }
 
 .mortgage-div {
@@ -1780,4 +1781,10 @@ body {
     border-radius: 5px;
     background: linear-gradient(to bottom, #eeeeee, #dddddd);
     box-shadow: 0 1px 1px -1px gray;
+}
+
+.right-seperator {
+    border-right: #d3d3d5 1px solid;
+    height: 100%;
+    min-height: 150px;
 }
