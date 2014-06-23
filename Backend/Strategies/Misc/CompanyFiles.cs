@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.Misc
 {
 	using System;
+	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib;
@@ -33,7 +34,7 @@
 			{
 				Log.Debug("Saving file {0} to disc...", fileName);
 
-				string sPath = DBConfigurationValues.Instance.CompanyFilesSavePath;
+				string sPath = CurrentValues.Instance.CompanyFilesSavePath;
 				DirectoryInfo customerDirectory = null;
 				if (string.IsNullOrWhiteSpace(sPath))
 					Log.Debug("Not saving: operation is disabled (CompanyFilesSavePath is empty).");

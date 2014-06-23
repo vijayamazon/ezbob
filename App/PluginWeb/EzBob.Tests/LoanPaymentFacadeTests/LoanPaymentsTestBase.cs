@@ -10,7 +10,9 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
-    /// <summary>
+	using ConfigManager;
+
+	/// <summary>
     /// A base class for all tests cases that tests loan payment logic
     /// </summary>
     public class LoanPaymentsTestBase
@@ -26,11 +28,11 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
         {
 
             var config = new Mock<IConfigurationVariablesRepository>();
-            config.Setup(x => x.GetByNameAsDecimal("AmountToChargeFrom")).Returns(GetAmountToChargeFrom());
+            config.Setup(x => x.GetByNameAsDecimal(Variables.AmountToChargeFrom)).Returns(GetAmountToChargeFrom());
 
             _loan = new Loan();
             _configurationVariablesRepository = config.Object;
-            _facade = new LoanPaymentFacade(null, _configurationVariablesRepository);
+            _facade = new LoanPaymentFacade(null);
             _calculator = new LoanScheduleCalculator() { Interest = 0.06M };
 
             _customer =new Customer();

@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
 	using System.Linq;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Repository;
@@ -18,14 +19,12 @@
 		private readonly ICustomerRepository _customerRepository;
 		private readonly CustomerStatusesRepository _customerStatusesRepository;
 		private readonly LoanOptionsRepository loanOptionsRepository;
-		private ConfigurationVariablesRepository configurationVariablesRepository;
 
-		public CollectionStatusController(ICustomerRepository customerRepository, CustomerStatusesRepository customerStatusesRepository, LoanOptionsRepository loanOptionsRepository, ConfigurationVariablesRepository configurationVariablesRepository)
+		public CollectionStatusController(ICustomerRepository customerRepository, CustomerStatusesRepository customerStatusesRepository, LoanOptionsRepository loanOptionsRepository)
 		{
 			_customerRepository = customerRepository;
 			_customerStatusesRepository = customerStatusesRepository;
 			this.loanOptionsRepository = loanOptionsRepository;
-			this.configurationVariablesRepository = configurationVariablesRepository;
 		}
 
 		[Ajax]
@@ -70,7 +69,7 @@
 		[Permission(Name = "CustomerStatus")]
 		public JsonResult Save(int customerId, int currentStatus, CollectionStatusModel collectionStatus)
 		{
-			int minDectForDefault = configurationVariablesRepository.GetByNameAsInt("MinDectForDefault");
+			int minDectForDefault = CurrentValues.Instance.MinDectForDefault;
 
 			var customer = _customerRepository.Get(customerId);
 			customer.CollectionStatus.CurrentStatus = _customerStatusesRepository.Get(currentStatus);

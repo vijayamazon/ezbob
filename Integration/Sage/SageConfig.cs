@@ -1,24 +1,18 @@
-﻿namespace Sage
-{
-	using EZBob.DatabaseLib.Model;
-	using StructureMap;
+﻿namespace Sage {
+	using ConfigManager;
 
-	public class SageConfig
-    {
-		public SageConfig()
-		{
-			var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-
-			OAuthIdentifier = configurationVariablesRepository.GetByName("SageOAuthIdentifier");
-			OAuthSecret = configurationVariablesRepository.GetByName("SageOAuthSecret");
-			OAuthAuthorizationEndpoint = configurationVariablesRepository.GetByName("SageOAuthAuthorizationEndpoint");
-			OAuthTokenEndpoint = configurationVariablesRepository.GetByName("SageOAuthTokenEndpoint");
-			SalesInvoicesRequest = configurationVariablesRepository.GetByName("SageSalesInvoicesRequest");
-			PurchaseInvoicesRequest = configurationVariablesRepository.GetByName("SagePurchaseInvoicesRequest");
-			IncomesRequest = configurationVariablesRepository.GetByName("SageIncomesRequest");
-			ExpendituresRequest = configurationVariablesRepository.GetByName("SageExpendituresRequest");
-			PaymentStatusesRequest = configurationVariablesRepository.GetByName("SagePaymentStatusesRequest");
-			RequestForDatesPart = configurationVariablesRepository.GetByName("SageRequestForDatesPart");
+	public class SageConfig {
+		public SageConfig() {
+			OAuthIdentifier = CurrentValues.Instance.SageOAuthIdentifier;
+			OAuthSecret = CurrentValues.Instance.SageOAuthSecret;
+			OAuthAuthorizationEndpoint = CurrentValues.Instance.SageOAuthAuthorizationEndpoint;
+			OAuthTokenEndpoint = CurrentValues.Instance.SageOAuthTokenEndpoint;
+			SalesInvoicesRequest = CurrentValues.Instance.SageSalesInvoicesRequest;
+			PurchaseInvoicesRequest = CurrentValues.Instance.SagePurchaseInvoicesRequest;
+			IncomesRequest = CurrentValues.Instance.SageIncomesRequest;
+			ExpendituresRequest = CurrentValues.Instance.SageExpendituresRequest;
+			PaymentStatusesRequest = CurrentValues.Instance.SagePaymentStatusesRequest;
+			RequestForDatesPart = CurrentValues.Instance.SageRequestForDatesPart;
 		}
 
 		public string OAuthIdentifier { get; set; }

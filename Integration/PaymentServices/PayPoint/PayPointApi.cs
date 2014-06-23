@@ -1,5 +1,6 @@
 ﻿namespace PaymentServices.PayPoint
 {
+	using ConfigManager;
 	using global::PayPoint;
 	using System;
 	using System.Globalization;
@@ -15,7 +16,6 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointApi));
 		private readonly SECVPNService _service = new SECVPNService();
 		private readonly ILoanRepository _loans;
-		private readonly ConfigurationVariablesRepository _vars;
 		private readonly string mid;
 		private readonly string vpnPassword;
 		private readonly string remotePassword;
@@ -28,16 +28,15 @@
 		public PayPointApi()
 		{
 			_loans = ObjectFactory.GetInstance<ILoanRepository>();
-			_vars = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-			_service.Url = _vars.GetByName("PayPointServiceUrl");
-			mid = _vars.GetByName("PayPointMid");
-			vpnPassword = _vars.GetByName("PayPointVpnPassword");
-			remotePassword = _vars.GetByName("PayPointRemotePassword");
-			debugMode = _vars.GetByNameAsBool("PayPointDebugMode");
-			isValidCard = _vars.GetByNameAsBool("PayPointIsValidCard");
-			enableCardLimit = _vars.GetByNameAsBool("PayPointEnableCardLimit");
-			enableDebugErrorCodeN = _vars.GetByNameAsBool("PayPointEnableDebugErrorCodeN");
-			cardLimitAmount = _vars.GetByNameAsInt("PayPointCardLimitAmount");
+			_service.Url = CurrentValues.Instance.PayPointServiceUrl;
+			mid = CurrentValues.Instance.PayPointMid;
+			vpnPassword = CurrentValues.Instance.PayPointVpnPassword;
+			remotePassword = CurrentValues.Instance.PayPointRemotePassword;
+			debugMode = CurrentValues.Instance.PayPointDebugMode;
+			isValidCard = CurrentValues.Instance.PayPointIsValidCard;
+			enableCardLimit = CurrentValues.Instance.PayPointEnableCardLimit;
+			enableDebugErrorCodeN = CurrentValues.Instance.PayPointEnableDebugErrorCodeN;
+			cardLimitAmount = CurrentValues.Instance.PayPointCardLimitAmount;
 		}
 
 		public void PayPointPayPal(string notificationUrl, string returnUrl, string cancelUrl, decimal amount, string currency = "GBP", bool isTest = false)
@@ -293,10 +292,12 @@
 
 		public bool ApplyLateCharge(Loan loan, decimal amount, int loanChargesTypeId, DateTime date)
 		{
+			var repo = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+
 			var charge = new LoanCharge
 							 {
 								 Amount = amount,
-								 ChargesType = _vars.Load(loanChargesTypeId),
+								 ChargesType = repo.Load(loanChargesTypeId),
 								 Date = date,
 								 Loan = loan
 							 };

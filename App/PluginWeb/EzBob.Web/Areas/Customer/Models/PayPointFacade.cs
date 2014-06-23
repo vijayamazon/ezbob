@@ -7,8 +7,7 @@
 	using System.Text;
 	using System.Text.RegularExpressions;
 	using System.Web;
-	using EZBob.DatabaseLib.Model;
-	using StructureMap;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	public interface IPayPointFacade
 	{
@@ -26,11 +25,10 @@
 
 		public PayPointFacade()
 		{
-			var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-			remotePassword = configurationVariablesRepository.GetByName("PayPointRemotePassword");
-			mid = configurationVariablesRepository.GetByName("PayPointMid");
-			templateUrl = configurationVariablesRepository.GetByName("PayPointTemplateUrl");
-			paypointOptions = configurationVariablesRepository.GetByName("PayPointOptions");
+			remotePassword = CurrentValues.Instance.PayPointRemotePassword;
+			mid = CurrentValues.Instance.PayPointMid;
+			templateUrl = CurrentValues.Instance.PayPointTemplateUrl;
+			paypointOptions = CurrentValues.Instance.PayPointOptions;
 		}
 
 		public virtual bool CheckHash(string hash, Uri url)

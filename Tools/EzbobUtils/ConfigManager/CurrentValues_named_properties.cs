@@ -1,4 +1,6 @@
 namespace ConfigManager {
+	using System;
+
 	public partial class CurrentValues {
 		#region property AdministrationCharge
 
@@ -480,6 +482,18 @@ namespace ConfigManager {
 		} // ChannelGrabberCycleCount
 
 		#endregion property ChannelGrabberCycleCount
+
+		#region property ChannelGrabberRejectPolicy
+
+		public ChannelGrabberRejectPolicy ChannelGrabberRejectPolicy {
+			get {
+				ChannelGrabberRejectPolicy cgrp = ChannelGrabberRejectPolicy.Never;
+				Enum.TryParse(this[Variables.ChannelGrabberRejectPolicy], true, out cgrp);
+				return cgrp;
+			} // get
+		} // ChannelGrabberRejectPolicy
+
+		#endregion property ChannelGrabberRejectPolicy
 
 		#region property ChannelGrabberServiceUrl
 

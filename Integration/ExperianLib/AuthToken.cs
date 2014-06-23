@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Security;
 	using System.Security.Cryptography.X509Certificates;
+	using ConfigManager;
 	using EzBobIntegration.Web_References.ExpAuth;
 	using EZBob.DatabaseLib.Model;
 	using StructureMap;
@@ -21,15 +22,8 @@
 		{
 			_certificateCache = new Dictionary<string, X509Certificate2>();
 			_certificateToUse = certificateToUse;
-			if (url != null)
-			{
-				_url = url;
-			}
-			else
-			{
-				var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-				_url = configurationVariablesRepository.GetByName("ExperianAuthTokenService");
-			}
+
+			_url = url ?? CurrentValues.Instance.ExperianAuthTokenService;
 
 			_autLevels = authLevels;
 		}

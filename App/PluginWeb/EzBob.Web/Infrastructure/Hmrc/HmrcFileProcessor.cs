@@ -4,6 +4,7 @@
 	using System.IO;
 	using System.Text;
 	using System.Web;
+	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using Ezbob.Backend.Models;
 	using Ezbob.HmrcHarvester;
@@ -139,7 +140,7 @@
 			try {
 				ms_oLog.Debug("Saving file {0} to disc...", sFileOriginalName);
 
-				string sPath = DBConfigurationValues.Instance.HmrcUploadedFilesSavePath;
+				string sPath = CurrentValues.Instance.HmrcUploadedFilesSavePath;
 
 				if (string.IsNullOrWhiteSpace(sPath))
 					ms_oLog.Debug("Not saving: operation is disabled (HmrcUploadedFilesSavePath is empty).");

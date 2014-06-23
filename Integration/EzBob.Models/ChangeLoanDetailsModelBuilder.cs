@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -179,7 +180,7 @@
 		{
 
 			var chargeTypes = ObjectFactory.GetInstance<IConfigurationVariablesRepository>();
-			var charge = chargeTypes.GetByName("OtherCharge") ?? chargeTypes.GetByName("AdministrationCharge");
+			ConfigurationVariable charge = chargeTypes.GetByName(Variables.OtherCharge) ?? chargeTypes.GetByName(Variables.AdministrationCharge);
 
 			return new LoanCharge
 					   {

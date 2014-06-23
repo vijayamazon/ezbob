@@ -6,6 +6,7 @@
 	using System.Text.RegularExpressions;
 	using System.Xml.Serialization;
 	using ApplicationMng.Repository;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -70,9 +71,8 @@
 		public ConsumerService() {
 			_repo = ObjectFactory.GetInstance<ExperianDataCacheRepository>();
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
-			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
 
-			interactiveMode = configurationVariablesRepository.GetByName("ExperianInteractiveMode");
+			interactiveMode = CurrentValues.Instance.ExperianInteractiveMode;
 		} // constructor
 
 		#endregion constructor
@@ -369,7 +369,7 @@
 		#region method CacheNotExpired
 
 		private bool CacheNotExpired(MP_ExperianDataCache cacheEntry) {
-			int cacheIsValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateConsumerDataPeriodDays");
+			int cacheIsValidForDays = CurrentValues.Instance.UpdateConsumerDataPeriodDays;
 			return (DateTime.UtcNow - cacheEntry.LastUpdateDate).TotalDays <= cacheIsValidForDays;
 		} // CacheNotExpired
 
@@ -429,7 +429,6 @@
 
 		private readonly ExperianDataCacheRepository _repo;
 		private readonly SqlRetryer m_oRetryer;
-		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
 		private FinancialAccountsParser financialAccountsParser = new FinancialAccountsParser();
 		private readonly string interactiveMode;

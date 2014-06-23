@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using NHibernate;
 
@@ -50,19 +51,14 @@
 		//private const char OtherCredit = '4';
 		//private const char OtherDedit = '8';
 
-		private readonly IConfigurationVariablesRepository _configVariables;
-
 		private YodleeCashFlowReportModel yodlee;
 		public YodleeCashFlowReportModelBuilder(ISession session)
 		{
-			yodlee = new YodleeCashFlowReportModel
-				{
-					YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<string, double>>(),
-					MinDateDict = new SortedDictionary<string, int>(),
-					MaxDateDict = new SortedDictionary<string, int>(),
-
-				};
-			_configVariables = new ConfigurationVariablesRepository(session);
+			yodlee = new YodleeCashFlowReportModel {
+				YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<string, double>>(),
+				MinDateDict = new SortedDictionary<string, int>(),
+				MaxDateDict = new SortedDictionary<string, int>(),
+			};
 		}
 
 		public void Add(YodleeTransactionModel transaction)
@@ -223,7 +219,7 @@
 		{
 			var otherList = new List<string>();
 			//calculating other (less than 500 pound in totals (configurable)
-			var maxYodleeOtherCategoryAmount = double.Parse(_configVariables.GetByName("MaxYodleeOtherCategoryAmount").Value);
+			double maxYodleeOtherCategoryAmount = CurrentValues.Instance.MaxYodleeOtherCategoryAmount;
 
 			foreach (var cat in yodlee.YodleeCashFlowReportModelDict)
 			{

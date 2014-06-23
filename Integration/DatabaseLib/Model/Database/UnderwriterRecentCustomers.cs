@@ -2,6 +2,7 @@ namespace EZBob.DatabaseLib.Model.Database
 {
 	using System.Linq;
 	using ApplicationMng.Repository;
+	using ConfigManager;
 	using NHibernate;
 
 	public class UnderwriterRecentCustomers
@@ -21,11 +22,9 @@ namespace EZBob.DatabaseLib.Model.Database
 	{
 		private readonly int numOfCustomersToKeep;
 
-		public UnderwriterRecentCustomersRepository(ISession session)
-			: base(session)
+		public UnderwriterRecentCustomersRepository(ISession session) : base(session)
 		{
-			var configurationVariablesRepository = new ConfigurationVariablesRepository(session);
-			numOfCustomersToKeep = configurationVariablesRepository.GetByNameAsInt("RecentCustomersToKeep");
+			numOfCustomersToKeep = CurrentValues.Instance.RecentCustomersToKeep;
 		}
 
 		public void Add(int customerId, string userName)

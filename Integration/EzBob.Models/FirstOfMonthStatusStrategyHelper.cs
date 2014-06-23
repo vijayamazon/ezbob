@@ -5,7 +5,7 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
-	using EZBob.DatabaseLib.Model;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -17,20 +17,18 @@
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(FirstOfMonthStatusStrategyHelper));
         private readonly CustomerRepository _customers;
-		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
 		public FirstOfMonthStatusStrategyHelper()
         {
             _customers = ObjectFactory.GetInstance<CustomerRepository>();
-			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
         }
 		
 		public void SendFirstOfMonthStatusMail()
 		{
-			bool firstOfMonthStatusMailEnabled = configurationVariablesRepository.GetByNameAsBool("FirstOfMonthStatusMailEnabled");
-			string firstOfMonthStatusMailCopyTo = configurationVariablesRepository.GetByName("FirstOfMonthStatusMailCopyTo").Value;
-			bool firstOfMonthEnableCustomerMail = configurationVariablesRepository.GetByNameAsBool("FirstOfMonthEnableCustomerMail");
+			bool firstOfMonthStatusMailEnabled = CurrentValues.Instance.FirstOfMonthStatusMailEnabled;
+			string firstOfMonthStatusMailCopyTo = CurrentValues.Instance.FirstOfMonthStatusMailCopyTo;
+			bool firstOfMonthEnableCustomerMail = CurrentValues.Instance.FirstOfMonthEnableCustomerMail;
 
 			var customersToWorkOn = new List<Customer>();
 			
@@ -321,9 +319,8 @@
 			return tableHeader.ToString();
 		}
 
-		private void SendStatusMail(string toAddress, string firstName, string headerSection, string loanSummarySection, string closedLoansSection, string outstandingLoansSection)
-		{
-			string firstOfMonthStatusMailMandrillTemplateName = configurationVariablesRepository.GetByName("FirstOfMonthStatusMailMandrillTemplateName").Value;
+		private void SendStatusMail(string toAddress, string firstName, string headerSection, string loanSummarySection, string closedLoansSection, string outstandingLoansSection) {
+			string firstOfMonthStatusMailMandrillTemplateName = CurrentValues.Instance.FirstOfMonthStatusMailMandrillTemplateName;
 			var mail = new Mail();
 
 			var vars = new Dictionary<string, string>

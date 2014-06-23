@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
+	using ConfigManager;
 	using Database;
 	using NHibernate;
 	using Ezbob.Utils.Security;
@@ -40,8 +41,7 @@
 		private readonly string accountPrefix;
 
 		public YodleeAccountsRepository(ISession session) : base(session) {
-			var configurationVariables = new ConfigurationVariablesRepository(session);
-			accountPrefix = configurationVariables.GetByName("YodleeAccountPrefix").Value;
+			accountPrefix = CurrentValues.Instance.YodleeAccountPrefix;
 		} // constructor
 
 		public YodleeAccounts Search(int customerId) {

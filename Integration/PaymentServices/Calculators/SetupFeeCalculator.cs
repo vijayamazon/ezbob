@@ -1,5 +1,6 @@
 ﻿namespace PaymentServices.Calculators {
 	using System;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Loans;
 	using StructureMap;
@@ -10,11 +11,9 @@
 		#region constructor
 
 		public SetupFeeCalculator(bool setupFee, bool brokerFee, int? manualAmount, decimal? manualPercent) {
-			m_oCfg = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
-
-			_setupFeeFixed = m_oCfg.GetByNameAsInt("SetupFeeFixed");
-			_setupFeePercent = m_oCfg.GetByNameAsDecimal("SetupFeePercent");
-			_useMax = m_oCfg.GetByNameAsBool("SetupFeeMaxFixedPercent");
+			_setupFeeFixed = CurrentValues.Instance.SetupFeeFixed;
+			_setupFeePercent = CurrentValues.Instance.SetupFeePercent;
+			_useMax = CurrentValues.Instance.SetupFeeMaxFixedPercent;
 
 			_setupFee = setupFee;
 			_brokerFee = brokerFee;
@@ -60,7 +59,7 @@
 		#region method CalculateBroker
 
 		private decimal CalculateBroker(decimal amount) {
-			ConfigurationVariable oVar = m_oCfg[ConfigurationVariables.BrokerSetupFeeRate];
+			var oVar = CurrentValues.Instance.BrokerSetupFeeRate;
 
 			if (oVar.Value.ToUpper() == "TABLE") {
 				var brokerFeeRepository = ObjectFactory.GetInstance<BrokerSetupFeeMapRepository>();
@@ -80,8 +79,6 @@
 		private readonly bool _brokerFee;
 		private readonly int? _manualAmount;
 		private readonly decimal? _manualPercent;
-
-		private readonly IConfigurationVariablesRepository m_oCfg;
 
 		#endregion private
 	} // class SetupFeeCalculator

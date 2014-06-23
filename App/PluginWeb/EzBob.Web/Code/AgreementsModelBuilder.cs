@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Backend.Models;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -83,9 +84,8 @@
 			model.InterestRate = loan.InterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);
 			model.IsBrokerFee = loan.CashRequest.UseBrokerSetupFee;
-			var configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
-			model.SetupFeeAmount = FormattingUtils.NumericFormats(configVariables.GetByNameAsInt("SetupFeeFixed"));
-			model.SetupFeePercent = configVariables.GetByName("SetupFeePercent").Value;
+			model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
+			model.SetupFeePercent = CurrentValues.Instance.SetupFeePercent;
 			bool isManualSetupFee;
 			model.ManualSetupFee = SetupFeeText(loan.CashRequest.ManualSetupFeeAmount, loan.CashRequest.ManualSetupFeePercent, out isManualSetupFee);
 			model.IsManualSetupFee = isManualSetupFee;

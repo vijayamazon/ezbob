@@ -7,8 +7,8 @@
 	using System.Linq;
 	using System.Xml.Serialization;
 	using ApplicationMng.Repository;
+	using ConfigManager;
 	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -40,7 +40,6 @@
 		private readonly CashRequestsRepository cashRequestsRepository;
 		private readonly ExperianDefaultAccountRepository experianDefaultAccountRepository;
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
-		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ServiceLogRepository serviceLogRepository;
 		private readonly CustomerMarketPlaceRepository _marketPlaceRepository;
 
@@ -56,7 +55,6 @@
 			cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
 			experianDefaultAccountRepository = ObjectFactory.GetInstance<ExperianDefaultAccountRepository>();
 			loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
-			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
 			serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
 			_marketPlaceRepository = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
 		}
@@ -349,8 +347,8 @@
 		{
 			log.InfoFormat("Checking if auto approval should take place...");
 			var customer = _customers.Get(customerId);
-			int autoApproveMinAmount = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinAmount");
-			int autoApproveMaxAmount = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxAmount");
+			int autoApproveMinAmount = CurrentValues.Instance.AutoApproveMinAmount;
+			int autoApproveMaxAmount = CurrentValues.Instance.AutoApproveMaxAmount;
 			int autoApprovedAmount = systemCalculatedAmount;
 
 			try
@@ -455,7 +453,7 @@
 
 		private bool CheckExperianScore(int minExperianScore)
 		{
-			int autoApproveExperianScoreThreshold = configurationVariablesRepository.GetByNameAsInt("AutoApproveExperianScoreThreshold");
+			int autoApproveExperianScoreThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold;
 			if (minExperianScore < autoApproveExperianScoreThreshold)
 			{
 				log.InfoFormat("No auto approval: Minimal score threshold is: {0}. Customer minimal score (considering directors) is:{1}", autoApproveExperianScoreThreshold, minExperianScore);
@@ -475,8 +473,8 @@
 				if (now < customer.PersonalInfo.DateOfBirth.Value.AddYears(customerAge.Value)) customerAge--;
 			}
 
-			int autoApproveCustomerMinAge = configurationVariablesRepository.GetByNameAsInt("AutoApproveCustomerMinAge");
-			int autoApproveCustomerMaxAge = configurationVariablesRepository.GetByNameAsInt("AutoApproveCustomerMaxAge");
+			int autoApproveCustomerMinAge = CurrentValues.Instance.AutoApproveCustomerMinAge;
+			int autoApproveCustomerMaxAge = CurrentValues.Instance.AutoApproveCustomerMaxAge;
 
 			if (customerAge == null || customerAge < autoApproveCustomerMinAge || customerAge > autoApproveCustomerMaxAge)
 			{
@@ -489,9 +487,9 @@
 
 		private bool CheckTurnovers(int customerId)
 		{
-			int autoApproveMinTurnover1M = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinTurnover1M");
-			int autoApproveMinTurnover3M = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinTurnover3M");
-			int autoApproveMinTurnover1Y = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinTurnover1Y");
+			int autoApproveMinTurnover1M = CurrentValues.Instance.AutoApproveMinTurnover1M;
+			int autoApproveMinTurnover3M = CurrentValues.Instance.AutoApproveMinTurnover3M;
+			int autoApproveMinTurnover1Y = CurrentValues.Instance.AutoApproveMinTurnover1Y;
 
 			var mpAnalysis = GetAnalysisValsForCustomer(customerId);
 
@@ -521,7 +519,7 @@
 
 		private bool CheckSeniority(Customer customer)
 		{
-			int autoApproveMinMpSeniorityDays = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinMPSeniorityDays");
+			int autoApproveMinMpSeniorityDays = CurrentValues.Instance.AutoApproveMinMPSeniorityDays;
 
 			int marketplaceSeniorityInDays = MarketplaceSeniority(customer);
 			if (marketplaceSeniorityInDays < autoApproveMinMpSeniorityDays)
@@ -535,7 +533,7 @@
 
 		private bool CheckOutstandingOffers(decimal outstandingOffers)
 		{
-			int autoApproveMaxOutstandingOffers = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxOutstandingOffers");
+			int autoApproveMaxOutstandingOffers = CurrentValues.Instance.AutoApproveMaxOutstandingOffers;
 			if (outstandingOffers >= autoApproveMaxOutstandingOffers)
 			{
 				log.InfoFormat("No auto approval: Maximal allowed outstanding offers for auto approval is: {0}. Outstanding offers amount is:{1}", autoApproveMaxOutstandingOffers, outstandingOffers);
@@ -547,7 +545,7 @@
 
 		private bool CheckTodaysLoans()
 		{
-			int autoApproveMaxTodayLoans = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxTodayLoans");
+			int autoApproveMaxTodayLoans = CurrentValues.Instance.AutoApproveMaxTodayLoans;
 			DateTime today = DateTime.UtcNow;
 			var todayLoans = loanRepository.GetAll().Where(l => l.Date.Year == today.Year && l.Date.Month == today.Month && l.Date.Day == today.Day);
 			decimal todayLoansAmount = 0;
@@ -566,7 +564,7 @@
 
 		private bool CheckTodaysApprovals()
 		{
-			int autoApproveMaxDailyApprovals = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxDailyApprovals");
+			int autoApproveMaxDailyApprovals = CurrentValues.Instance.AutoApproveMaxDailyApprovals;
 			DateTime today = DateTime.UtcNow;
 			int numOfApprovalsToday = cashRequestsRepository.GetAll().Count(cr => cr.CreationDate.HasValue && cr.CreationDate.Value.Year == today.Year && cr.CreationDate.Value.Month == today.Month && cr.CreationDate.Value.Day == today.Day && cr.UnderwriterComment == "Auto Approval");
 			if (numOfApprovalsToday >= autoApproveMaxDailyApprovals)
@@ -591,7 +589,7 @@
 
 		private bool CheckLateDays(int customerId)
 		{
-			int autoApproveMaxAllowedDaysLate = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxAllowedDaysLate");
+			int autoApproveMaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate;
 			List<int> customerLoanIds = loanRepository.ByCustomer(customerId).Select(d => d.Id).ToList();
 			foreach (int loanId in customerLoanIds)
 			{
@@ -639,8 +637,8 @@
 
 		private bool CheckOutstandingLoans(int customerId)
 		{
-			int autoApproveMaxNumOfOutstandingLoans = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxNumOfOutstandingLoans");
-			decimal autoApproveMinRepaidPortion = configurationVariablesRepository.GetByNameAsDecimal("AutoApproveMinRepaidPortion");
+			int autoApproveMaxNumOfOutstandingLoans = CurrentValues.Instance.AutoApproveMaxNumOfOutstandingLoans;
+			decimal autoApproveMinRepaidPortion = CurrentValues.Instance.AutoApproveMinRepaidPortion;
 
 			List<Loan> outstandingLoans = GetOutstandingLoans(customerId);
 			if (outstandingLoans.Count > autoApproveMaxNumOfOutstandingLoans)

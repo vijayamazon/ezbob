@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Linq;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -23,7 +24,6 @@
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
-		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly ServiceClient serviceClient;
 		private readonly VatReturnSummaryRepository _vatReturnSummaryRepository;
@@ -33,7 +33,6 @@
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
 			IDiscountPlanRepository discounts,
 			ILoanTypeRepository loanTypes,
-			IConfigurationVariablesRepository configurationVariablesRepository,
 			ILoanSourceRepository loanSources,
 			VatReturnSummaryRepository vatReturnSummaryRepository,
 			CustomerAnalyticsRepository customerAnalyticsRepository)
@@ -41,7 +40,6 @@
 			_discounts = discounts;
 			_loanTypes = loanTypes;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
-			this.configurationVariablesRepository = configurationVariablesRepository;
 			_loanSources = loanSources;
 			_vatReturnSummaryRepository = vatReturnSummaryRepository;
 			_customerAnalyticsRepository = customerAnalyticsRepository;
@@ -141,7 +139,7 @@
 
 			model.AllLoanSources = _loanSources.GetAll().Select(ls => new LoanSourceModel(ls)).ToArray();
 
-			model.OfferValidForHours = (int)configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
+			model.OfferValidForHours = (int)Math.Truncate((decimal)CurrentValues.Instance.OfferValidForHours);
 
 			model.AMLResult = customer.AMLResult;
 			model.SkipPopupForApprovalWithoutAML = approvalsWithoutAMLRepository.ShouldSkipById(customer.Id);

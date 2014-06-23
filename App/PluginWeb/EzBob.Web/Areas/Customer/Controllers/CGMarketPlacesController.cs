@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
@@ -195,7 +196,7 @@
 				} // if
 			}
 			catch (ConnectionFailException cge) {
-				if (DBConfigurationValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
+				if (CurrentValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
 					ms_oLog.Error(cge, "Connection failure.");
 					oState.Error = CreateError(cge);
 				} // if

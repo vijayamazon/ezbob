@@ -1,7 +1,7 @@
-﻿namespace EzBob.Web.Areas.Customer.Models
-{
+﻿namespace EzBob.Web.Areas.Customer.Models {
 	using System;
 	using System.Linq;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -18,48 +18,44 @@
 	using Infrastructure;
 	using System.Web;
 
-	public class CustomerModelBuilder
-	{
-		private readonly ISecurityQuestionRepository _questions;
-		private readonly ICustomerRepository _customerRepository;
-		private readonly IUsersRepository _users;
-		private readonly LoanPaymentFacade _facade;
-		private readonly PaymentRolloverRepository _paymentRolloverRepository;
-		private readonly ChangeLoanDetailsModelBuilder _changeLoanDetailsModelBuilder;
-		private readonly ICustomerInviteFriendRepository _customerInviteFriendRepository;
-		private readonly PerksRepository _perksRepository;
+	public class CustomerModelBuilder {
 		public CustomerModelBuilder(
 			ISecurityQuestionRepository questions,
 			ICustomerRepository customerRepository,
 			IUsersRepository users,
 			PaymentRolloverRepository paymentRolloverRepository,
 			ICustomerInviteFriendRepository customerInviteFriendRepository,
-			PerksRepository perksRepository)
-		{
-			_questions = questions;
-			_customerRepository = customerRepository;
-			_users = users;
-			_paymentRolloverRepository = paymentRolloverRepository;
-			_customerInviteFriendRepository = customerInviteFriendRepository;
-			_perksRepository = perksRepository;
-			_facade = new LoanPaymentFacade();
-			_changeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
-		}
+			PerksRepository perksRepository
+		) {
+			m_oQuestions = questions;
+			m_oCustomerRepository = customerRepository;
+			m_oUsers = users;
+			m_oPaymentRolloverRepository = paymentRolloverRepository;
+			m_oCustomerInviteFriendRepository = customerInviteFriendRepository;
+			m_oPerksRepository = perksRepository;
+			m_oChangeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
+		} // constructor
 
-		public CustomerModel BuildWizardModel(Customer cus, HttpSessionStateBase session, bool isProfile = false)
-		{
-			var customerModel = new CustomerModel { loggedIn = cus != null, bankAccountAdded = false };
+		public CustomerModel BuildWizardModel(Customer cus, HttpSessionStateBase session, bool isProfile = false) {
+			var customerModel = new CustomerModel {
+				loggedIn = cus != null,
+				bankAccountAdded = false,
+			};
 
-			if (!customerModel.loggedIn)
-			{
+			if (!customerModel.loggedIn) {
 				customerModel.IsBrokerFill = (session[Constant.Broker.FillsForCustomer] ?? Constant.No).ToString() == Constant.Yes;
 				return customerModel;
-			}
+			} // if
 
-			var customer = _customerRepository.GetAndInitialize(cus.Id);
-			var user = _users.Get(cus.Id);
+			if (cus == null)
+				return customerModel;
 
-			if (customer == null) return customerModel;
+			var customer = m_oCustomerRepository.GetAndInitialize(cus.Id);
+
+			if (customer == null)
+				return customerModel;
+
+			var user = m_oUsers.Get(cus.Id);
 
 			customerModel.Id = customer.Id;
 			customerModel.userName = user.Name;
@@ -71,14 +67,15 @@
 				TypeOfBusinessReduced.Personal.ToString() : customer.PersonalInfo.TypeOfBusiness.Reduce().ToString();
 
 			customerModel.BirthDateYMD = customerModel.CustomerPersonalInfo == null
-				? "" : customerModel.CustomerPersonalInfo.BirthDateYMD();
+				? ""
+				: customerModel.CustomerPersonalInfo.BirthDateYMD();
 
 			customerModel.bankAccountAdded = customer.HasBankAccount;
-			if (customer.HasBankAccount)
-			{
+
+			if (customer.HasBankAccount) {
 				customerModel.BankAccountNumber = customer.BankAccount.AccountNumber;
 				customerModel.SortCode = customer.BankAccount.SortCode;
-			}
+			} // if
 
 			customerModel.mpAccounts = customer.GetMarketPlaces();
 
@@ -95,10 +92,10 @@
 			customerModel.Status = customer.Status.ToString();
 
 			customerModel.Loans = customer.Loans
-												.OrderBy(l => l.Status)
-												.ThenByDescending(l => l.Date)
-												.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null), new LoanRepaymentScheduleCalculator(l, DateTime.UtcNow)))
-												.ToList();
+				.OrderBy(l => l.Status)
+				.ThenByDescending(l => l.Date)
+				.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null), new LoanRepaymentScheduleCalculator(l, DateTime.UtcNow)))
+				.ToList();
 
 			customerModel.TotalBalance = customerModel.Loans.Sum(l => l.Balance);
 			customerModel.PrincipalBalance = customer.ActiveLoans.Sum(l => l.LoanAmount);
@@ -106,88 +103,88 @@
 			customerModel.TotalLatePayment = customerModel.Loans.Where(l => l.Status == LoanStatus.Late.ToString()).Sum(l => l.Late);
 
 			var nextPayment = (
-								from loan in customer.ActiveLoans
-								from repayment in loan.Schedule
-								where repayment.AmountDue > 0
-								where repayment.Status == LoanScheduleStatus.StillToPay || repayment.Status == LoanScheduleStatus.Late
-								orderby repayment.Date
-								select repayment).FirstOrDefault();
-			if (nextPayment != null)
-			{
+				from loan in customer.ActiveLoans
+				from repayment in loan.Schedule
+				where repayment.AmountDue > 0
+				where repayment.Status == LoanScheduleStatus.StillToPay || repayment.Status == LoanScheduleStatus.Late
+				orderby repayment.Date
+				select repayment
+			).FirstOrDefault();
+
+			if (nextPayment != null) {
 				customerModel.NextPayment = nextPayment.AmountDue;
 				customerModel.NextPaymentDate = nextPayment.Date;
 				customerModel.IsEarly = nextPayment.Date > DateTime.UtcNow && (nextPayment.Date.Year != DateTime.UtcNow.Year || nextPayment.Date.Month != DateTime.UtcNow.Month || nextPayment.Date.Day != DateTime.UtcNow.Day);
-			}
+			} // if
 
-			customerModel.TotalPayEarlySavings = _facade.CalculateSavings(customer, DateTime.UtcNow);
+			customerModel.TotalPayEarlySavings = new LoanPaymentFacade().CalculateSavings(customer, DateTime.UtcNow);
 
-			var account = new AccountSettingsModel();
+			var account = new AccountSettingsModel {
+				SecurityQuestions = m_oQuestions.GetQuestions(),
 
-			account.SecurityQuestions = _questions.GetQuestions();
-
-			account.SecurityQuestionModel = new SecurityQuestionModel
-			{
-				Question = user.SecurityQuestion == null ? 0 : user.SecurityQuestion.Id,
-				Answer = user.SecurityAnswer
+				SecurityQuestionModel = new SecurityQuestionModel {
+					Question = user.SecurityQuestion == null ? 0 : user.SecurityQuestion.Id,
+					Answer = user.SecurityAnswer
+				},
 			};
 
 			customerModel.AccountSettings = account;
 
-			var payments = from loan in customer.Loans
-						   from tran in loan.Transactions
-						   where tran is PaypointTransaction
-						   orderby tran.PostDate descending
-						   select tran;
+			var payments =
+				from loan in customer.Loans
+				from tran in loan.Transactions
+				where tran is PaypointTransaction
+				orderby tran.PostDate descending
+				select tran;
+
 			var lastPayment = payments.OfType<PaypointTransaction>().FirstOrDefault();
 
-			if (lastPayment != null)
-			{
+			if (lastPayment != null) {
 				customerModel.LastPaymentTotal = lastPayment.Amount;
 				customerModel.LastPaymentPrincipal = lastPayment.Principal;
 				customerModel.LastPaymentInterest = lastPayment.Interest;
 				customerModel.LastPaymentFees = lastPayment.Fees;
-			}
+			} // if
 
 			customerModel.GreetingMailSentDate = customer.GreetingMailSentDate;
 
 			var company = customer.Company;
-			if (company != null)
-			{
+
+			if (company != null) {
 				customerModel.CompanyInfo = CompanyInfoMap.FromCompany(company);
 				customerModel.CompanyAddress = company.CompanyAddress.ToArray();
 				var oParseResult = customer.ParseExperian(ExperianParserFacade.Target.Company);
-				if (oParseResult.ParsingResult == ParsingResult.Ok)
-				{
+
+				if (oParseResult.ParsingResult == ParsingResult.Ok) {
 					var dirs = new List<DirectorModel>();
 
-					if (oParseResult.Dataset.ContainsKey("Limited Company Shareholders"))
-					{
-						foreach (ParsedDataItem shareHolder in oParseResult.Dataset["Limited Company Shareholders"].Data)
-						{
-							dirs.Add(new DirectorModel { Name = shareHolder.Values["Description of Shareholder"], IsExperianShareholder = true });
-						}
-					}
+					if (oParseResult.Dataset.ContainsKey("Limited Company Shareholders")) {
+						foreach (ParsedDataItem shareHolder in oParseResult.Dataset["Limited Company Shareholders"].Data) {
+							dirs.Add(new DirectorModel {
+								Name = shareHolder.Values["Description of Shareholder"],
+								IsExperianShareholder = true,
+							});
+						} // for each
+					} // if
 
-					if (oParseResult.Dataset.ContainsKey("Limited Company Current Directorship Details"))
-					{
-						foreach (ParsedDataItem shareHolder in oParseResult.Dataset["Limited Company Current Directorship Details"].Data)
-						{
-							dirs.Add(new DirectorModel { Name = shareHolder.Values["Name"], IsExperianDirector = true });
-						}
-					}
+					if (oParseResult.Dataset.ContainsKey("Limited Company Current Directorship Details")) {
+						foreach (ParsedDataItem shareHolder in oParseResult.Dataset["Limited Company Current Directorship Details"].Data) {
+							dirs.Add(new DirectorModel {
+								Name = shareHolder.Values["Name"],
+								IsExperianDirector = true,
+							});
+						} // for each
+					} // if
 
 					customerModel.CompanyInfo.Directors.AddRange(dirs);
 				} // for each group
 			} // if
 
-
-
-			if (customer.AddressInfo != null)
-			{
+			if (customer.AddressInfo != null) {
 				customerModel.PersonalAddress = customer.AddressInfo.PersonalAddress.ToArray();
 				customerModel.PrevPersonAddresses = customer.AddressInfo.PrevPersonAddresses.ToArray();
 				customerModel.OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.ToArray();
-			}
+			} // if
 
 			customerModel.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
 
@@ -195,25 +192,24 @@
 			customerModel.CreditCardNo = customer.CreditCardNo;
 			customerModel.PayPointCards = FillPayPointCards(customer);
 
-			customerModel.ActiveRollovers = _paymentRolloverRepository
+			customerModel.ActiveRollovers = m_oPaymentRolloverRepository
 				.GetRolloversForCustomer(customer.Id)
 				.Where(x => x.Status == RolloverStatus.New)
-				.Select(x => new RolloverModel
-						{
-							Created = x.Created,
-							CreatorName = x.CreatorName,
-							CustomerConfirmationDate = x.CustomerConfirmationDate,
-							ExpiryDate = x.ExpiryDate,
-							Id = x.Id,
-							LoanScheduleId = x.LoanSchedule.Id,
-							PaidPaymentAmount = x.PaidPaymentAmount,
-							Payment = x.Payment,
-							PaymentDueDate = x.PaymentDueDate,
-							PaymentNewDate = x.PaymentNewDate,
-							Status = x.Status,
-							LoanId = x.LoanSchedule.Loan.Id,
-							RolloverPayValue = GetRolloverPayValue(x.LoanSchedule.Loan)
-						});
+				.Select(x => new RolloverModel {
+					Created = x.Created,
+					CreatorName = x.CreatorName,
+					CustomerConfirmationDate = x.CustomerConfirmationDate,
+					ExpiryDate = x.ExpiryDate,
+					Id = x.Id,
+					LoanScheduleId = x.LoanSchedule.Id,
+					PaidPaymentAmount = x.PaidPaymentAmount,
+					Payment = x.Payment,
+					PaymentDueDate = x.PaymentDueDate,
+					PaymentNewDate = x.PaymentNewDate,
+					Status = x.Status,
+					LoanId = x.LoanSchedule.Loan.Id,
+					RolloverPayValue = GetRolloverPayValue(x.LoanSchedule.Loan)
+				});
 
 
 			customerModel.IsDisabled = !customer.CollectionStatus.CurrentStatus.IsEnabled;
@@ -222,7 +218,7 @@
 			customerModel.HasRollovers = customerModel.ActiveRollovers.Any();
 
 			var cr = cus.LastCashRequest;
-			customerModel.IsLoanDetailsFixed = !_changeLoanDetailsModelBuilder.IsAmountChangingAllowed(cr);
+			customerModel.IsLoanDetailsFixed = !m_oChangeLoanDetailsModelBuilder.IsAmountChangingAllowed(cr);
 
 			customerModel.IsCurrentCashRequestFromQuickOffer = !ReferenceEquals(cr, null) && !ReferenceEquals(cr.QuickOffer, null);
 
@@ -230,30 +226,33 @@
 			customerModel.IsOffline = customer.IsOffline;
 
 			var inviteFriend = customer.CustomerInviteFriend.FirstOrDefault();
-			if (inviteFriend == null)
-			{
+			if (inviteFriend == null) {
 				customer.CustomerInviteFriend = new List<CustomerInviteFriend>();
 				var customerInviteFriend = new CustomerInviteFriend(customer);
 				customer.CustomerInviteFriend.Add(customerInviteFriend);
-			}
+			} // if
+
 			customerModel.InviteFriendSource = customer.CustomerInviteFriend.First().InviteFriendSource;
-			customerModel.InvitedFriends =
-				_customerInviteFriendRepository.GetAll()
-											   .Where(c => c.InvitedByFriendSource == customer.CustomerInviteFriend.First().InviteFriendSource)
-											   .Select(i => new InvitedFriend
-													   {
-														   FriendName = string.IsNullOrEmpty(i.Customer.PersonalInfo.Fullname) ? i.Customer.Name : i.Customer.PersonalInfo.Fullname,
-														   FriendTookALoan = (i.Customer.Loans.Any() ? "Yes" : "No")
-													   });
+
+			customerModel.InvitedFriends = m_oCustomerInviteFriendRepository
+				.GetAll()
+				.Where(c => c.InvitedByFriendSource == customer.CustomerInviteFriend.First().InviteFriendSource)
+				.Select(i => new InvitedFriend {
+					FriendName = string.IsNullOrEmpty(i.Customer.PersonalInfo.Fullname) ? i.Customer.Name : i.Customer.PersonalInfo.Fullname,
+					FriendTookALoan = (i.Customer.Loans.Any() ? "Yes" : "No")
+				});
 
 			customerModel.LastSavedWizardStep = ((customer.WizardStep == null) || customer.WizardStep.TheLastOne) ? "" : customer.WizardStep.Name;
 
-			var isDefault = customer.CollectionStatus != null && customer.CollectionStatus.CurrentStatus != null &&
-							 customer.CollectionStatus.CurrentStatus.IsDefault;
-			customerModel.Perks = isDefault ? null : _perksRepository.GetActivePerk();
+			var isDefault =
+				customer.CollectionStatus != null &&
+				customer.CollectionStatus.CurrentStatus != null &&
+				customer.CollectionStatus.CurrentStatus.IsDefault;
+
+			customerModel.Perks = isDefault ? null : m_oPerksRepository.GetActivePerk();
 
 			customerModel.TrustPilotStatusID = customer.TrustPilotStatus.ID;
-			customerModel.TrustPilotReviewEnabled = DBConfigurationValues.Instance.TrustPilotReviewEnabled;
+			customerModel.TrustPilotReviewEnabled = CurrentValues.Instance.TrustPilotReviewEnabled;
 
 			customerModel.QuickOffer = BuildQuickOfferModel(customer);
 
@@ -262,16 +261,15 @@
 
 			customerModel.IsBrokerFill = customer.FilledByBroker;
 			customerModel.DefaultCardSelectionAllowed = customer.DefaultCardSelectionAllowed;
-			return customerModel;
-		}
 
-		private QuickOfferModel BuildQuickOfferModel(Customer c)
-		{
+			return customerModel;
+		} // BuildWizardModel
+
+		private QuickOfferModel BuildQuickOfferModel(Customer c) {
 			if (ReferenceEquals(c, null) || ReferenceEquals(c.QuickOffer, null) || (c.QuickOffer.ExpirationDate < DateTime.UtcNow))
 				return null;
 
-			return new QuickOfferModel
-			{
+			return new QuickOfferModel {
 				ID = c.QuickOffer.ID,
 				Amount = c.QuickOffer.Amount,
 				CreationDate = c.QuickOffer.CreationDate,
@@ -291,23 +289,27 @@
 			};
 		} // BuildQuickOfferModel
 
-		private decimal GetRolloverPayValue(Loan loan)
-		{
+		private decimal GetRolloverPayValue(Loan loan) {
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
 			var state = payEarlyCalc.GetState();
 
 			return state.Fees + state.Interest;
-		}
+		} // GetRolloverPayValue
 
-		private PayPointCardModel[] FillPayPointCards(Customer customer)
-		{
+		private PayPointCardModel[] FillPayPointCards(Customer customer) {
 			//Add paypoint cards for old customers
 			if (!string.IsNullOrEmpty(customer.PayPointTransactionId) && !customer.PayPointCards.Any())
-			{
 				customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null, customer.PersonalInfo.Fullname);
-			}
 
 			return customer.PayPointCards.Select(PayPointCardModel.FromCard).OrderByDescending(x => x.IsDefault).ToArray();
-		}
-	}
-}
+		} // FillPayPointCards
+
+		private readonly ISecurityQuestionRepository m_oQuestions;
+		private readonly ICustomerRepository m_oCustomerRepository;
+		private readonly IUsersRepository m_oUsers;
+		private readonly PaymentRolloverRepository m_oPaymentRolloverRepository;
+		private readonly ChangeLoanDetailsModelBuilder m_oChangeLoanDetailsModelBuilder;
+		private readonly ICustomerInviteFriendRepository m_oCustomerInviteFriendRepository;
+		private readonly PerksRepository m_oPerksRepository;
+	} // CustomerModelBuilder
+} // namespace

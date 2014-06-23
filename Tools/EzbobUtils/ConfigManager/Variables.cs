@@ -1,4 +1,9 @@
 namespace ConfigManager {
+	public enum ChannelGrabberRejectPolicy {
+		Never,
+		ConnectionFail,
+	} // enum ChannelGrabberRejectPolicy
+
 	public enum Variables {
 		AdministrationCharge,
 		AllowFinishOfflineWizardWithoutMarketplaces,
@@ -60,6 +65,7 @@ namespace ConfigManager {
 		CAISPath,
 		CAISPath2,
 		ChannelGrabberCycleCount,
+		ChannelGrabberRejectPolicy,
 		ChannelGrabberServiceUrl,
 		ChannelGrabberSleepTime,
 		CollectionPeriod1,

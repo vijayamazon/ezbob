@@ -73,6 +73,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{DC706B41-2B3E-4082-B390-51AABAC065D3}</Project>
       <Name>NHibernateWrapper</Name>

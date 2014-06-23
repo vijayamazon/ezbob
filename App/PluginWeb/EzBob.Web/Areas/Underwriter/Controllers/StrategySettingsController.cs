@@ -55,10 +55,10 @@
 		[HttpGet]
 		public JsonResult SettingsGeneral()
 		{
-			var bwaBusinessCheck = _configurationVariablesRepository.GetByName("BWABusinessCheck");
+			var bwaBusinessCheck = _configurationVariablesRepository.GetByName(Variables.BWABusinessCheck);
 			//var displayEarnedPoints = _configurationVariablesRepository.GetByName("DisplayEarnedPoints");
-			var hmrcSalariesMultiplier = _configurationVariablesRepository.GetByName(Variables.HmrcSalariesMultiplier.ToString());
-			var fcfFactor = _configurationVariablesRepository.GetByName(Variables.FCFFactor.ToString());
+			var hmrcSalariesMultiplier = _configurationVariablesRepository.GetByName(Variables.HmrcSalariesMultiplier);
+			var fcfFactor = _configurationVariablesRepository.GetByName(Variables.FCFFactor);
 			var st = new
 				{
 					BWABusinessCheck = bwaBusinessCheck.Value,
@@ -104,7 +104,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		public JsonResult SettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier, decimal fcfFactor/*, string DisplayEarnedPoints*/)
+		public JsonResult SettingsGeneral(string BWABusinessCheck, decimal HmrcSalariesMultiplier, decimal fcfFactor) //, string DisplayEarnedPoints)
 		{
 			UpdateSettingsGeneral(BWABusinessCheck, HmrcSalariesMultiplier, fcfFactor);
 
@@ -116,12 +116,12 @@
 		{
 			Transactional.Execute(() =>
 			{
-				_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
+				_configurationVariablesRepository.SetByName(Variables.BWABusinessCheck, BWABusinessCheck);
 
 				if (HmrcSalariesMultiplier >= 0 && HmrcSalariesMultiplier <= 1)
-					_configurationVariablesRepository.SetByName(Variables.HmrcSalariesMultiplier.ToString(), HmrcSalariesMultiplier.ToString(CultureInfo.InvariantCulture));
+					_configurationVariablesRepository.SetByName(Variables.HmrcSalariesMultiplier, HmrcSalariesMultiplier.ToString(CultureInfo.InvariantCulture));
 
-				_configurationVariablesRepository.SetByName(Variables.FCFFactor.ToString(), fcfFactor.ToString(CultureInfo.InvariantCulture));
+				_configurationVariablesRepository.SetByName(Variables.FCFFactor, fcfFactor.ToString(CultureInfo.InvariantCulture));
 				//_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
 			});
 		}
@@ -131,12 +131,12 @@
 		[HttpGet]
 		public JsonResult SettingsCharges()
 		{
-			var latePaymentCharge = _configurationVariablesRepository.GetByName("LatePaymentCharge");
-			var rolloverCharge = _configurationVariablesRepository.GetByName("RolloverCharge");
-			var partialPaymentCharge = _configurationVariablesRepository.GetByName("PartialPaymentCharge");
-			var administrationCharge = _configurationVariablesRepository.GetByName("AdministrationCharge");
-			var otherCharge = _configurationVariablesRepository.GetByName("OtherCharge");
-			var amountToChargeFrom = _configurationVariablesRepository.GetByName("AmountToChargeFrom");
+			var latePaymentCharge = _configurationVariablesRepository.GetByName(Variables.LatePaymentCharge);
+			var rolloverCharge = _configurationVariablesRepository.GetByName(Variables.RolloverCharge);
+			var partialPaymentCharge = _configurationVariablesRepository.GetByName(Variables.PartialPaymentCharge);
+			var administrationCharge = _configurationVariablesRepository.GetByName(Variables.AdministrationCharge);
+			var otherCharge = _configurationVariablesRepository.GetByName(Variables.OtherCharge);
+			var amountToChargeFrom = _configurationVariablesRepository.GetByName(Variables.AmountToChargeFrom);
 
 			var sc = new
 				{
@@ -178,12 +178,12 @@
 		{
 			Transactional.Execute(() =>
 			{
-				_configurationVariablesRepository.SetByName("AdministrationCharge", administrationCharge);
-				_configurationVariablesRepository.SetByName("LatePaymentCharge", latePaymentCharge);
-				_configurationVariablesRepository.SetByName("OtherCharge", otherCharge);
-				_configurationVariablesRepository.SetByName("PartialPaymentCharge", partialPaymentCharge);
-				_configurationVariablesRepository.SetByName("RolloverCharge", rolloverCharge);
-				_configurationVariablesRepository.SetByName("AmountToChargeFrom", amountToChargeFrom);
+				_configurationVariablesRepository.SetByName(Variables.AdministrationCharge, administrationCharge);
+				_configurationVariablesRepository.SetByName(Variables.LatePaymentCharge, latePaymentCharge);
+				_configurationVariablesRepository.SetByName(Variables.OtherCharge, otherCharge);
+				_configurationVariablesRepository.SetByName(Variables.PartialPaymentCharge, partialPaymentCharge);
+				_configurationVariablesRepository.SetByName(Variables.RolloverCharge, rolloverCharge);
+				_configurationVariablesRepository.SetByName(Variables.AmountToChargeFrom, amountToChargeFrom);
 			}, IsolationLevel.ReadUncommitted);
 		}
 
@@ -208,10 +208,10 @@
 		[HttpGet]
 		public JsonResult AutomationApproval()
 		{
-			var enableAutomaticApproval = _configurationVariablesRepository.GetByName("EnableAutomaticApproval");
-			var enableAutomaticReApproval = _configurationVariablesRepository.GetByName("EnableAutomaticReApproval");
-			var maxCapHomeOwner = _configurationVariablesRepository.GetByName("MaxCapHomeOwner");
-			var maxCapNotHomeOwner = _configurationVariablesRepository.GetByName("MaxCapNotHomeOwner");
+			var enableAutomaticApproval = _configurationVariablesRepository.GetByName(Variables.EnableAutomaticApproval);
+			var enableAutomaticReApproval = _configurationVariablesRepository.GetByName(Variables.EnableAutomaticReApproval);
+			var maxCapHomeOwner = _configurationVariablesRepository.GetByName(Variables.MaxCapHomeOwner);
+			var maxCapNotHomeOwner = _configurationVariablesRepository.GetByName(Variables.MaxCapNotHomeOwner);
 
 			var sa = new
 				{
@@ -248,10 +248,10 @@
 		{
 			Transactional.Execute(() =>
 			{
-				_configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
-				_configurationVariablesRepository.SetByName("EnableAutomaticReApproval", EnableAutomaticReApproval);
-				_configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
-				_configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
+				_configurationVariablesRepository.SetByName(Variables.EnableAutomaticApproval, EnableAutomaticApproval);
+				_configurationVariablesRepository.SetByName(Variables.EnableAutomaticReApproval, EnableAutomaticReApproval);
+				_configurationVariablesRepository.SetByName(Variables.MaxCapHomeOwner, MaxCapHomeOwner);
+				_configurationVariablesRepository.SetByName(Variables.MaxCapNotHomeOwner, MaxCapNotHomeOwner);
 			});
 		}
 
@@ -260,31 +260,31 @@
 		[HttpGet]
 		public JsonResult AutomationRejection()
 		{
-			var enableAutomaticRejection = _configurationVariablesRepository.GetByName("EnableAutomaticRejection");
-			var lowCreditScore = _configurationVariablesRepository.GetByName("LowCreditScore");
-			var totalAnnualTurnover = _configurationVariablesRepository.GetByName("TotalAnnualTurnover");
-			var totalThreeMonthTurnover = _configurationVariablesRepository.GetByName("TotalThreeMonthTurnover");
+			var enableAutomaticRejection = _configurationVariablesRepository.GetByName(Variables.EnableAutomaticRejection);
+			var lowCreditScore = _configurationVariablesRepository.GetByName(Variables.LowCreditScore);
+			var totalAnnualTurnover = _configurationVariablesRepository.GetByName(Variables.TotalAnnualTurnover);
+			var totalThreeMonthTurnover = _configurationVariablesRepository.GetByName(Variables.TotalThreeMonthTurnover);
 
-			var reject_Defaults_CreditScore = _configurationVariablesRepository.GetByName("Reject_Defaults_CreditScore");
-			var reject_Defaults_AccountsNum = _configurationVariablesRepository.GetByName("Reject_Defaults_AccountsNum");
-			var reject_Defaults_Amount = _configurationVariablesRepository.GetByName("Reject_Defaults_Amount");
-			var reject_Defaults_MonthsNum = _configurationVariablesRepository.GetByName("Reject_Defaults_MonthsNum");
-			var reject_Minimal_Seniority = _configurationVariablesRepository.GetByName("Reject_Minimal_Seniority");
+			var reject_Defaults_CreditScore = _configurationVariablesRepository.GetByName(Variables.Reject_Defaults_CreditScore);
+			var reject_Defaults_AccountsNum = _configurationVariablesRepository.GetByName(Variables.Reject_Defaults_AccountsNum);
+			var reject_Defaults_Amount = _configurationVariablesRepository.GetByName(Variables.Reject_Defaults_Amount);
+			var reject_Defaults_MonthsNum = _configurationVariablesRepository.GetByName(Variables.Reject_Defaults_MonthsNum);
+			var reject_Minimal_Seniority = _configurationVariablesRepository.GetByName(Variables.Reject_Minimal_Seniority);
 
-			var enableAutomaticReRejection = _configurationVariablesRepository.GetByName("EnableAutomaticReRejection");
-			var autoRejectionExceptionCreditScore = _configurationVariablesRepository.GetByName("AutoRejectionException_CreditScore");
-			var autoRejectionExceptionAnualTurnover = _configurationVariablesRepository.GetByName("AutoRejectionException_AnualTurnover");
+			var enableAutomaticReRejection = _configurationVariablesRepository.GetByName(Variables.EnableAutomaticReRejection);
+			var autoRejectionExceptionCreditScore = _configurationVariablesRepository.GetByName(Variables.AutoRejectionException_CreditScore);
+			var autoRejectionExceptionAnualTurnover = _configurationVariablesRepository.GetByName(Variables.AutoRejectionException_AnualTurnover);
 
-			var reject_LowOfflineAnnualRevenue = _configurationVariablesRepository.GetByName("Reject_LowOfflineAnnualRevenue");
-			var reject_LowOfflineQuarterRevenue = _configurationVariablesRepository.GetByName("Reject_LowOfflineQuarterRevenue");
-			var reject_LateLastMonthsNum = _configurationVariablesRepository.GetByName("Reject_LateLastMonthsNum");
-			var reject_NumOfLateAccounts = _configurationVariablesRepository.GetByName("Reject_NumOfLateAccounts");
-			
-			var rejectionLastValidLate = _configurationVariablesRepository.GetByName("RejectionLastValidLate");
-			var rejectionCompanyScore = _configurationVariablesRepository.GetByName("RejectionCompanyScore");
-			var rejectionExceptionMaxConsumerScoreForMpError = _configurationVariablesRepository.GetByName("RejectionExceptionMaxConsumerScoreForMpError");
-			var rejectionExceptionMaxCompanyScoreForMpError = _configurationVariablesRepository.GetByName("RejectionExceptionMaxCompanyScoreForMpError");
-			var rejectionExceptionMaxCompanyScore = _configurationVariablesRepository.GetByName("RejectionExceptionMaxCompanyScore");
+			var reject_LowOfflineAnnualRevenue = _configurationVariablesRepository.GetByName(Variables.Reject_LowOfflineAnnualRevenue);
+			var reject_LowOfflineQuarterRevenue = _configurationVariablesRepository.GetByName(Variables.Reject_LowOfflineQuarterRevenue);
+			var reject_LateLastMonthsNum = _configurationVariablesRepository.GetByName(Variables.Reject_LateLastMonthsNum);
+			var reject_NumOfLateAccounts = _configurationVariablesRepository.GetByName(Variables.Reject_NumOfLateAccounts);
+
+			var rejectionLastValidLate = _configurationVariablesRepository.GetByName(Variables.RejectionLastValidLate);
+			var rejectionCompanyScore = _configurationVariablesRepository.GetByName(Variables.RejectionCompanyScore);
+			var rejectionExceptionMaxConsumerScoreForMpError = _configurationVariablesRepository.GetByName(Variables.RejectionExceptionMaxConsumerScoreForMpError);
+			var rejectionExceptionMaxCompanyScoreForMpError = _configurationVariablesRepository.GetByName(Variables.RejectionExceptionMaxCompanyScoreForMpError);
+			var rejectionExceptionMaxCompanyScore = _configurationVariablesRepository.GetByName(Variables.RejectionExceptionMaxCompanyScore);
 
 			var sr = new
 				{
@@ -361,27 +361,27 @@
 		{
 			Transactional.Execute(() =>
 			{
-				_configurationVariablesRepository.SetByName("EnableAutomaticRejection", EnableAutomaticRejection);
-				_configurationVariablesRepository.SetByName("LowCreditScore", LowCreditScore);
-				_configurationVariablesRepository.SetByName("Reject_Defaults_AccountsNum", Reject_Defaults_AccountsNum);
-				_configurationVariablesRepository.SetByName("Reject_Defaults_Amount", Reject_Defaults_Amount);
-				_configurationVariablesRepository.SetByName("Reject_Defaults_CreditScore", Reject_Defaults_CreditScore);
-				_configurationVariablesRepository.SetByName("Reject_Defaults_MonthsNum", Reject_Defaults_MonthsNum);
-				_configurationVariablesRepository.SetByName("Reject_Minimal_Seniority", Reject_Minimal_Seniority);
-				_configurationVariablesRepository.SetByName("TotalAnnualTurnover", TotalAnnualTurnover);
-				_configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", TotalThreeMonthTurnover);
-				_configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
-				_configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
-				_configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover", AutoRejectionException_AnualTurnover);
-				_configurationVariablesRepository.SetByName("Reject_LowOfflineAnnualRevenue", Reject_LowOfflineAnnualRevenue);
-				_configurationVariablesRepository.SetByName("Reject_LowOfflineQuarterRevenue", Reject_LowOfflineQuarterRevenue);
-				_configurationVariablesRepository.SetByName("Reject_LateLastMonthsNum", Reject_LateLastMonthsNum);
-				_configurationVariablesRepository.SetByName("Reject_NumOfLateAccounts", Reject_NumOfLateAccounts);
-				_configurationVariablesRepository.SetByName("RejectionLastValidLate", RejectionLastValidLate);
-				_configurationVariablesRepository.SetByName("RejectionCompanyScore", RejectionCompanyScore);
-				_configurationVariablesRepository.SetByName("RejectionExceptionMaxConsumerScoreForMpError", RejectionExceptionMaxConsumerScoreForMpError);
-				_configurationVariablesRepository.SetByName("RejectionExceptionMaxCompanyScoreForMpError", RejectionExceptionMaxCompanyScoreForMpError);
-				_configurationVariablesRepository.SetByName("RejectionExceptionMaxCompanyScore", RejectionExceptionMaxCompanyScore);
+				_configurationVariablesRepository.SetByName(Variables.EnableAutomaticRejection, EnableAutomaticRejection);
+				_configurationVariablesRepository.SetByName(Variables.LowCreditScore, LowCreditScore);
+				_configurationVariablesRepository.SetByName(Variables.Reject_Defaults_AccountsNum, Reject_Defaults_AccountsNum);
+				_configurationVariablesRepository.SetByName(Variables.Reject_Defaults_Amount, Reject_Defaults_Amount);
+				_configurationVariablesRepository.SetByName(Variables.Reject_Defaults_CreditScore, Reject_Defaults_CreditScore);
+				_configurationVariablesRepository.SetByName(Variables.Reject_Defaults_MonthsNum, Reject_Defaults_MonthsNum);
+				_configurationVariablesRepository.SetByName(Variables.Reject_Minimal_Seniority, Reject_Minimal_Seniority);
+				_configurationVariablesRepository.SetByName(Variables.TotalAnnualTurnover, TotalAnnualTurnover);
+				_configurationVariablesRepository.SetByName(Variables.TotalThreeMonthTurnover, TotalThreeMonthTurnover);
+				_configurationVariablesRepository.SetByName(Variables.EnableAutomaticReRejection, EnableAutomaticReRejection);
+				_configurationVariablesRepository.SetByName(Variables.AutoRejectionException_CreditScore, AutoRejectionException_CreditScore);
+				_configurationVariablesRepository.SetByName(Variables.AutoRejectionException_AnualTurnover, AutoRejectionException_AnualTurnover);
+				_configurationVariablesRepository.SetByName(Variables.Reject_LowOfflineAnnualRevenue, Reject_LowOfflineAnnualRevenue);
+				_configurationVariablesRepository.SetByName(Variables.Reject_LowOfflineQuarterRevenue, Reject_LowOfflineQuarterRevenue);
+				_configurationVariablesRepository.SetByName(Variables.Reject_LateLastMonthsNum, Reject_LateLastMonthsNum);
+				_configurationVariablesRepository.SetByName(Variables.Reject_NumOfLateAccounts, Reject_NumOfLateAccounts);
+				_configurationVariablesRepository.SetByName(Variables.RejectionLastValidLate, RejectionLastValidLate);
+				_configurationVariablesRepository.SetByName(Variables.RejectionCompanyScore, RejectionCompanyScore);
+				_configurationVariablesRepository.SetByName(Variables.RejectionExceptionMaxConsumerScoreForMpError, RejectionExceptionMaxConsumerScoreForMpError);
+				_configurationVariablesRepository.SetByName(Variables.RejectionExceptionMaxCompanyScoreForMpError, RejectionExceptionMaxCompanyScoreForMpError);
+				_configurationVariablesRepository.SetByName(Variables.RejectionExceptionMaxCompanyScore, RejectionExceptionMaxCompanyScore);
 			});
 
 			UpdateConfigVars();
@@ -392,13 +392,13 @@
 		[HttpGet]
 		public JsonResult SettingsExperian()
 		{
-			var mainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_MainApplicant").Value;
-			var aliasOfMainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AliasOfMainApplicant").Value;
-			var associationOfMainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AssociationOfMainApplicant").Value;
-			var jointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_JointApplicant").Value;
-			var aliasOfJointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AliasOfJointApplicant").Value;
-			var associationOfJointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AssociationOfJointApplicant").Value;
-			var noMatch = _configurationVariablesRepository.GetByName("FinancialAccounts_No_Match").Value;
+			var mainApplicant = _configurationVariablesRepository.GetByName(Variables.FinancialAccounts_MainApplicant).Value;
+			var aliasOfMainApplicant = _configurationVariablesRepository.GetByName(Variables.FinancialAccounts_AliasOfMainApplicant).Value;
+			var associationOfMainApplicant = _configurationVariablesRepository.GetByName(Variables.FinancialAccounts_AssociationOfMainApplicant).Value;
+			var jointApplicant = _configurationVariablesRepository.GetByName(Variables.FinancialAccounts_JointApplicant).Value;
+			var aliasOfJointApplicant = _configurationVariablesRepository.GetByName(Variables.FinancialAccounts_AliasOfJointApplicant).Value;
+			var associationOfJointApplicant = _configurationVariablesRepository.GetByName(Variables.FinancialAccounts_AssociationOfJointApplicant).Value;
+			var noMatch = _configurationVariablesRepository.GetByName(Variables.FinancialAccounts_No_Match).Value;
 
 			var model = new
 			{
@@ -443,17 +443,17 @@
 		{
 			Transactional.Execute(() =>
 			{
-				_configurationVariablesRepository.SetByName("FinancialAccounts_MainApplicant", FinancialAccounts_MainApplicant);
-				_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfMainApplicant",
+				_configurationVariablesRepository.SetByName(Variables.FinancialAccounts_MainApplicant, FinancialAccounts_MainApplicant);
+				_configurationVariablesRepository.SetByName(Variables.FinancialAccounts_AliasOfMainApplicant,
 															FinancialAccounts_AliasOfMainApplicant);
-				_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfMainApplicant",
+				_configurationVariablesRepository.SetByName(Variables.FinancialAccounts_AssociationOfMainApplicant,
 															FinancialAccounts_AssociationOfMainApplicant);
-				_configurationVariablesRepository.SetByName("FinancialAccounts_JointApplicant", FinancialAccounts_JointApplicant);
-				_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfJointApplicant",
+				_configurationVariablesRepository.SetByName(Variables.FinancialAccounts_JointApplicant, FinancialAccounts_JointApplicant);
+				_configurationVariablesRepository.SetByName(Variables.FinancialAccounts_AliasOfJointApplicant,
 															FinancialAccounts_AliasOfJointApplicant);
-				_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfJointApplicant",
+				_configurationVariablesRepository.SetByName(Variables.FinancialAccounts_AssociationOfJointApplicant,
 															FinancialAccounts_AssociationOfJointApplicant);
-				_configurationVariablesRepository.SetByName("FinancialAccounts_No_Match", FinancialAccounts_No_Match);
+				_configurationVariablesRepository.SetByName(Variables.FinancialAccounts_No_Match, FinancialAccounts_No_Match);
 			});
 		}
 

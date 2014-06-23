@@ -5,6 +5,7 @@
 	using System.Security.Authentication;
 	using System.Text.RegularExpressions;
 	using System.Xml;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
@@ -36,10 +37,9 @@
 
 		private void GetConfigs()
 		{
-			var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-			uIdCertificateThumb = configurationVariablesRepository.GetByName("ExperianUIdCertificateThumb");
-			authTokenServiceIdHub = configurationVariablesRepository.GetByName("ExperianAuthTokenServiceIdHub");
-			idHubService = configurationVariablesRepository.GetByName("ExperianIdHubService");
+			uIdCertificateThumb = CurrentValues.Instance.ExperianUIdCertificateThumb;
+			authTokenServiceIdHub = CurrentValues.Instance.ExperianAuthTokenServiceIdHub;
+			idHubService = CurrentValues.Instance.ExperianIdHubService;
 		}
 
 		//-----------------------------------------------------------------------------------

@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -80,7 +81,7 @@
         private readonly decimal _amountToChargeFrom = 0;
         
 
-        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term, IConfigurationVariablesRepository configVariables = null)
+        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term)
         {
             _loan = loan;
             _schedule = loan.Schedule;
@@ -92,15 +93,7 @@
             _eventDayStart = new LoanRepaymentScheduleCalculatorEvent(_term);
             _eventDayEnd = new LoanRepaymentScheduleCalculatorEvent(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
 
-            if (configVariables == null)
-            {
-                configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
-            }
-
-            if (configVariables != null)
-            {
-                _amountToChargeFrom = configVariables.GetByNameAsDecimal("AmountToChargeFrom");
-            }
+            _amountToChargeFrom = CurrentValues.Instance.AmountToChargeFrom;
 
             Init();
         }

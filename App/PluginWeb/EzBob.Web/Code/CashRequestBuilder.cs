@@ -19,7 +19,6 @@
 			ILoanTypeRepository loanTypes,
 			IDiscountPlanRepository discounts,
 			IUsersRepository users,
-			IConfigurationVariablesRepository configurationVariables,
 			ILoanSourceRepository loanSources,
 			IDecisionHistoryRepository historyRepository,
 			ExperianDataCacheRepository experianData
@@ -29,7 +28,6 @@
 			_loanTypes = loanTypes;
 			_discounts = discounts;
 			_users = users;
-			this.configurationVariables = configurationVariables;
 			_loanSources = loanSources;
 			_historyRepository = historyRepository;
 			_experianData = experianData;
@@ -58,8 +56,8 @@
 					InterestRate = 0.06M,
 					LoanType = loanType,
 					RepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
-					UseSetupFee = configurationVariables.GetByNameAsBool("SetupFeeEnabled"),
-					UseBrokerSetupFee = (customer.Broker != null) || configurationVariables.GetByNameAsBool("BrokerCommissionEnabled"),
+					UseSetupFee = CurrentValues.Instance.SetupFeeEnabled,
+					UseBrokerSetupFee = (customer.Broker != null) || CurrentValues.Instance.BrokerCommissionEnabled,
 					DiscountPlan = _discounts.GetDefault(),
 					IsLoanTypeSelectionAllowed = 1,
 					OfferValidUntil = DateTime.UtcNow.AddDays(1),
@@ -177,14 +175,15 @@
 		#endregion method ForceEvaluate
 
 		#region private
+
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IUsersRepository _users;
-		private readonly IConfigurationVariablesRepository configurationVariables;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IDecisionHistoryRepository _historyRepository;
 		private readonly IExperianDataCacheRepository _experianData;
 		private readonly ServiceClient m_oServiceClient;
+
 		#endregion private
 	} // class CashRequestBuilder
 } // namespace

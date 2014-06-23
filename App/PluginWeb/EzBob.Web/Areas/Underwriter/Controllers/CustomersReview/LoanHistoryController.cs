@@ -4,6 +4,7 @@
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -27,7 +28,6 @@
 	{
 		private static readonly ILog _log = LogManager.GetLogger("LoanHistoryController");
 		private readonly ServiceClient m_oServiceClient;
-		private readonly ConfigurationVariablesRepository _configurationVariablesRepository;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly CustomerRepository _customerRepository;
 		private readonly LoanPaymentFacade _loanRepaymentFacade;
@@ -43,7 +43,6 @@
 									 LoanScheduleRepository loanScheduleRepository, IEzbobWorkplaceContext context,
 									 LoanPaymentFacade loanRepaymentFacade,
 									 IPacnetPaypointServiceLogRepository logRepository, LoanRepository loanRepository,
-									 ConfigurationVariablesRepository configurationVariablesRepository,
 									 IUsersRepository users,
 									 PayPointApi paypoint)
 		{
@@ -55,7 +54,6 @@
 			m_oServiceClient = new ServiceClient();
 			_logRepository = logRepository;
 			_loanRepository = loanRepository;
-			_configurationVariablesRepository = configurationVariablesRepository;
 			_users = users;
 			_paypoint = paypoint;
 		}
@@ -82,7 +80,7 @@
 
 			var loansDetailsBuilder = new LoansDetailsBuilder();
 			var details = loansDetailsBuilder.Build(loan, _rolloverRepository.GetByLoanId(loan.Id));
-			var rolloverCharge = _configurationVariablesRepository.GetByName("RolloverCharge").Value;
+			decimal rolloverCharge = CurrentValues.Instance.RolloverCharge;
 			var notExperiedRollover =
 				_rolloverRepository.GetByLoanId(loan.Id)
 				.Where(x => x.Status != RolloverStatus.Expired)
@@ -155,7 +153,7 @@
 			rolloverModel.LoanSchedule = currentLoanSchedule;
 			rolloverModel.CreatorName = _context.User.Name;
 			rolloverModel.Created = DateTime.Now;
-			rolloverModel.Payment = Convert.ToDecimal(_configurationVariablesRepository.GetByName("RolloverCharge").Value);
+			rolloverModel.Payment = CurrentValues.Instance.RolloverCharge;
 			rolloverModel.Status = RolloverStatus.New;
 			_rolloverRepository.SaveOrUpdate(rolloverModel);
 
@@ -273,7 +271,7 @@
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
 			var state = payEarlyCalc.GetState();
 
-			var rolloverCharge = Convert.ToDecimal(_configurationVariablesRepository.GetByName("RolloverCharge").Value);
+			var rolloverCharge = CurrentValues.Instance.RolloverCharge;
 
 			var model = new
 							{

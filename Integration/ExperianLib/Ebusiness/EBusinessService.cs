@@ -7,7 +7,7 @@
 	using System.Text;
 	using System.Web;
 	using ApplicationMng.Repository;
-	using EZBob.DatabaseLib.Model;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Experian;
 	using Ezbob.Database;
@@ -22,8 +22,7 @@
 
 		public EBusinessService() {
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
-			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-			eSeriesUrl = configurationVariablesRepository.GetByName("ExperianESeriesUrl");
+			eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
 			experianDL97AccountsRepository = ObjectFactory.GetInstance<ExperianDL97AccountsRepository>();
 		} // constructor
 
@@ -129,7 +128,7 @@
 
 		private bool CacheExpired(MP_ExperianDataCache cacheEntry)
 		{
-			int cacheIsValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
+			int cacheIsValidForDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 			return (DateTime.UtcNow - cacheEntry.LastUpdateDate).TotalDays > cacheIsValidForDays;
 		} // CacheNotExpired
 
@@ -348,7 +347,6 @@
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EBusinessService));
 		private readonly SqlRetryer m_oRetryer;
-		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ExperianDL97AccountsRepository experianDL97AccountsRepository;
 		private readonly string eSeriesUrl;
 

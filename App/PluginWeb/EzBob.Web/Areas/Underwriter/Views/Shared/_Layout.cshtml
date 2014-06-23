@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using ConfigManager
 @using EZBob.DatabaseLib.Model
 @using EzBob.Web.Infrastructure
 @using Ezbob.Backend.Models
@@ -116,8 +117,7 @@
                         </li>
                         <li id="liCustomerReports">
                             @{
-          var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-          var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
+	                            string reportsIp = CurrentValues.Instance.ReportsSite;
                                 <a href="@reportsIp" target="_blank">Reports Site</a>
                             }
                         </li>

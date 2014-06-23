@@ -11,16 +11,13 @@ namespace PaymentServices.Calculators
     public class LoanPaymentFacade
     {
         private readonly ILoanHistoryRepository _historyRepository;
-        private readonly IConfigurationVariablesRepository _configVariables;
 
         public LoanPaymentFacade()
         {
         }
 
-        public LoanPaymentFacade(ILoanHistoryRepository historyRepository, IConfigurationVariablesRepository configVariables)
-        {
+        public LoanPaymentFacade(ILoanHistoryRepository historyRepository) {
             _historyRepository = historyRepository;
-            _configVariables = configVariables;
         }
 
 
@@ -57,7 +54,7 @@ namespace PaymentServices.Calculators
 
 	        List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
-            var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime, _configVariables);
+            var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime);
             calculator.RecalculateSchedule();
 
             if (_historyRepository != null)
@@ -147,7 +144,7 @@ namespace PaymentServices.Calculators
             {
                 if (amount <= 0) break;
 
-                var c = new LoanRepaymentScheduleCalculator(loan, term, _configVariables);
+                var c = new LoanRepaymentScheduleCalculator(loan, term);
                 var state = c.GetState();
                 var late = loan.Schedule.Where(s => s.Status == LoanScheduleStatus.Late).Sum(s => s.LoanRepayment) +
                            state.Interest + state.Fees + state.LateCharges;
@@ -249,13 +246,13 @@ namespace PaymentServices.Calculators
 
         public LoanScheduleItem GetStateAt(Loan loan, DateTime dateTime)
         {
-            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, _configVariables);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime);
             return payEarlyCalc.GetState();
         }
 
         public void Recalculate(Loan loan, DateTime dateTime)
         {
-            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, _configVariables);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime);
             payEarlyCalc.GetState();
         }
     }

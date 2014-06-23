@@ -37,7 +37,6 @@
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly ICustomerStatusesRepository _customerStatusesRepository;
 		private readonly IApprovalsWithoutAMLRepository _approvalsWithoutAmlRepository;
-		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
 		private readonly ICustomerStatusHistoryRepository _customerStatusHistoryRepository;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IUsersRepository _users;
@@ -56,7 +55,6 @@
 			CashRequestBuilder crBuilder,
 			ApplicationInfoModelBuilder infoModelBuilder,
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
-			IConfigurationVariablesRepository configurationVariablesRepository,
 			ICustomerStatusHistoryRepository customerStatusHistoryRepository,
 			ILoanSourceRepository loanSources,
 			IUsersRepository users,
@@ -72,7 +70,6 @@
 			_infoModelBuilder = infoModelBuilder;
 			_customerStatusesRepository = customerStatusesRepository;
 			_approvalsWithoutAmlRepository = approvalsWithoutAMLRepository;
-			_configurationVariablesRepository = configurationVariablesRepository;
 			_customerStatusHistoryRepository = customerStatusHistoryRepository;
 			_loanSources = loanSources;
 			_users = users;
@@ -482,7 +479,7 @@
 
 			var dt = FormattingUtils.ParseDateWithCurrentTime(date);
 
-			int offerValidForHours = (int)_configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
+			int offerValidForHours = (int)Math.Truncate((decimal)CurrentValues.Instance.OfferValidForHours);
 
 			var cr = cust.LastCashRequest;
 			cust.OfferStart = dt;

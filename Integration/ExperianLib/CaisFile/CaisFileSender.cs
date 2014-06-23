@@ -6,10 +6,10 @@
 	using System.Net.Security;
 	using System.Security.Cryptography.X509Certificates;
 	using System.Web;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 	using log4net;
-	using EZBob.DatabaseLib.Model;
 
 	public class CaisFileSender
     {
@@ -22,10 +22,9 @@
 
         public CaisFileSender()
         {
-			var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-			Hostname = configurationVariablesRepository.GetByName("ExperianSecureFtpHostName");
-			UserName = configurationVariablesRepository.GetByName("ExperianSecureFtpUserName");
-			Password = configurationVariablesRepository.GetByName("ExperianSecureFtpUserPassword");
+			Hostname = CurrentValues.Instance.ExperianSecureFtpHostName;
+			UserName = CurrentValues.Instance.ExperianSecureFtpUserName;
+			Password = CurrentValues.Instance.ExperianSecureFtpUserPassword;
 
             ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
         }

@@ -7,7 +7,6 @@
 @using StructureMap
 @model dynamic
 @{
-    var oCfg = ObjectFactory.GetInstance<IConfigurationVariablesRepository>();
     var bIsAuth = User.Identity.IsAuthenticated;
     var marketingDefault = new HtmlString(DbStrings.MarketingDefault); 
 }

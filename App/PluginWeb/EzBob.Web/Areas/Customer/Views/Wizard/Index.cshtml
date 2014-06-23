@@ -11,7 +11,9 @@
     var customer = Model;
     customer.IsProfile = false;
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-    var configVars = oDBHelper.ConfigurationVariables;
+
+	bool bAllowFinishOnlineWizardWithoutMarketplaces = CurrentValues.Instance.AllowFinishOnlineWizardWithoutMarketplaces;
+	bool bAllowFinishOfflineWizardWithoutMarketplaces = CurrentValues.Instance.AllowFinishOfflineWizardWithoutMarketplaces;
 }
 
 @section head{
@@ -26,7 +28,12 @@
     <div id="wizard"></div>
 </div>
 
-<div style="display: none;" class="hide" id="allowFinishWizardWithoutMarketplaces" data-online="@configVars.GetByNameAsBool("AllowFinishOnlineWizardWithoutMarketplaces")" data-offline="@configVars.GetByNameAsBool("AllowFinishOfflineWizardWithoutMarketplaces")"></div>
+<div style="display: none;" class="hide"
+	id="allowFinishWizardWithoutMarketplaces"
+	data-online="@bAllowFinishOnlineWizardWithoutMarketplaces"
+	data-offline="@bAllowFinishOfflineWizardWithoutMarketplaces"
+></div>
+
 <div style="display: none;" class="hide" id="wizard-step-sequence">@oDBHelper.WizardStepSequence</div>
 
 @section Js{

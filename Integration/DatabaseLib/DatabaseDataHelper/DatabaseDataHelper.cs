@@ -77,7 +77,6 @@ namespace EZBob.DatabaseLib {
 		private readonly MP_FreeAgentCompanyRepository _FreeAgentCompanyRepository;
 		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
 		private readonly MP_FreeAgentExpenseCategoryRepository _FreeAgentExpenseCategoryRepository;
-		private readonly IConfigurationVariablesRepository _ConfigurationVariables;
 		private readonly MP_SagePaymentStatusRepository _SagePaymentStatusRepository;
 		private readonly LoanTransactionMethodRepository _loanTransactionMethodRepository;
 		private readonly LoanAgreementTemplateRepository _loanAgreementTemplateRepository;
@@ -118,7 +117,6 @@ namespace EZBob.DatabaseLib {
 			_FreeAgentCompanyRepository = new MP_FreeAgentCompanyRepository(session);
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
-			_ConfigurationVariables = new ConfigurationVariablesRepository(session);
 			_MP_YodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
 			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
@@ -175,8 +173,6 @@ namespace EZBob.DatabaseLib {
 		public TrustPilotStatusRepository TrustPilotStatusRepository { get { return _trustPilotStatusRepository; } }
 
 		public LoanTransactionMethodRepository LoanTransactionMethodRepository { get { return _loanTransactionMethodRepository; } }
-
-		public IConfigurationVariablesRepository ConfigurationVariables { get { return _ConfigurationVariables; } }
 
 		public ILoanTypeRepository LoanTypeRepository { get { return _LoanTypeRepository; } }
 

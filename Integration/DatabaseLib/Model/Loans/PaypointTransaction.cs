@@ -15,7 +15,6 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         /// <summary>
         /// Оставшееся тело кредита
         /// </summary>
-        [Obsolete]
         public virtual decimal Principal { get; set; }
 
         public override string ToString()

@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Xml;
 	using ApplicationMng.Repository;
+	using ConfigManager;
 	using Ezbob.ExperianParser;
 	using Ezbob.Logger;
 	using Model.Database;
@@ -65,7 +66,7 @@
 			} // lock
 
 			var parser = new Parser(
-				DBConfigurationValues.Instance[nVar],
+				CurrentValues.Instance[nVar],
 				new SafeILog(oLog)
 			);
 

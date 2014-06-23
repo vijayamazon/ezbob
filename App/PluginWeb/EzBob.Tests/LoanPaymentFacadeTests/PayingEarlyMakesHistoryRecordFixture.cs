@@ -26,7 +26,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             var calculator = new LoanScheduleCalculator();
             _startDate = new DateTime(2012, 1, 1);
             calculator.Calculate(_takenMoney, _loan, _startDate);
-            _facade = new LoanPaymentFacade(_historyRepoMock.Object, null);
+            _facade = new LoanPaymentFacade(_historyRepoMock.Object);
             _customer = new Customer();
             _customer.Loans.Add(_loan);
             _loan.Customer = _customer;

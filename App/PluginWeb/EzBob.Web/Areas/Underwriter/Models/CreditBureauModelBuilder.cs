@@ -10,6 +10,7 @@
 	using System.Xml.Linq;
 	using System.Xml.Serialization;
 	using System.Xml.XPath;
+	using ConfigManager;
 	using ExperianLib;
 	using ExperianLib.Dictionaries;
 	using ExperianLib.Ebusiness;
@@ -30,7 +31,6 @@ using EZBob.DatabaseLib.Model.Experian;
 	{
 		private readonly ISession _session;
 		private readonly ICustomerRepository _customers;
-		private readonly ConfigurationVariablesRepository _variablesRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CreditBureauModelBuilder));
 		private readonly IExperianHistoryRepository _experianHistoryRepository;
 		private const int ConsumerScoreMax = 1400;
@@ -40,12 +40,10 @@ using EZBob.DatabaseLib.Model.Experian;
 
 		public CreditBureauModelBuilder(ISession session, 
 			ICustomerRepository customers, 
-			ConfigurationVariablesRepository variablesRepository, 
 			IExperianHistoryRepository experianHistoryRepository)
 		{
 			_session = session;
 			_customers = customers;
-			_variablesRepository = variablesRepository;
 			_experianHistoryRepository = experianHistoryRepository;
 		}
 
@@ -451,14 +449,14 @@ using EZBob.DatabaseLib.Model.Experian;
 							var accountInfo = new AccountInfo();
 
 							//check which acccount type show
-							MatchTo matchTo;
+							Variables matchTo;
 							Enum.TryParse(caisDetails.MatchDetails.MatchTo, out matchTo);
-							var isShowThisFinancinalAccount = _variablesRepository.GetByName(matchTo.ToString()).Value;
+
+							var isShowThisFinancinalAccount = CurrentValues.Instance[matchTo];
 							if (isShowThisFinancinalAccount == null || isShowThisFinancinalAccount == "0")
-							{
 								continue;
-							}
-							accountInfo.MatchTo = Helper.MathToToHumanView(matchTo);
+
+							accountInfo.MatchTo = MathToToHumanView(matchTo);
 
 							DateTime? openDate;
 							try
@@ -490,7 +488,7 @@ using EZBob.DatabaseLib.Model.Experian;
 							if (accType < 0)
 								continue;
 
-							if (((accStatus == "D") || (accStatus == "A")) && matchTo == MatchTo.FinancialAccounts_MainApplicant)
+							if (((accStatus == "D") || (accStatus == "A")) && matchTo == Variables.FinancialAccounts_MainApplicant)
 							{
 								accounts[accType]++;
 								var ws = caisDetails.WorstStatus;
@@ -738,7 +736,7 @@ using EZBob.DatabaseLib.Model.Experian;
 			{
 				case TypeOfBusinessReduced.Limited:
 					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
-					updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
+					updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 					if (limitedBusinessData != null && limitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.UtcNow - limitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays)
 					{
@@ -751,7 +749,7 @@ using EZBob.DatabaseLib.Model.Experian;
 					break;
 				case TypeOfBusinessReduced.NonLimited:
 					var notLimitedBusinessData = srv.GetNotLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
-					updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
+					updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 					if (notLimitedBusinessData != null && notLimitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.UtcNow - notLimitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays)
 					{
@@ -1235,6 +1233,20 @@ using EZBob.DatabaseLib.Model.Experian;
 			}
 		}
 
+		private static string MathToToHumanView(Variables input)
+		{
+			switch (input)
+			{
+				case Variables.FinancialAccounts_AliasOfJointApplicant: return "Alias Of Joint Applicant";
+				case Variables.FinancialAccounts_AliasOfMainApplicant: return "Alias Of Main Applicant";
+				case Variables.FinancialAccounts_AssociationOfJointApplicant: return "Association Of Joint Applicant";
+				case Variables.FinancialAccounts_AssociationOfMainApplicant: return "Association Of Main Applicant";
+				case Variables.FinancialAccounts_JointApplicant: return "Joint Applicant";
+				case Variables.FinancialAccounts_MainApplicant: return "Main Applicant";
+				case Variables.FinancialAccounts_No_Match: return "No Match";
+				default: return "-";
+			}
+		}
 	}
 
 }
