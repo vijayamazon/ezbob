@@ -206,15 +206,14 @@
 			} // try
 
 			m_oLog.Debug("Loading document info result:");
-
 			m_oLog.Debug("Name: {0}", oResult.name);
 			m_oLog.Debug("Status: {0}", oResult.status);
 			m_oLog.Debug("Expiration: {0}", oResult.expiration.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
 
 			if (oResult.status.HasValue) {
-				// TODO: oSignature.SaveSignerStatus(oResult.events);
-
 				SignedDoc doc = GetDocuments(oSignature);
+
+				oSignature.SetHistoryAndStatus(oResult.events, oResult.participants);
 
 				var sp = new SpSaveSignedDocument(m_oDB, m_oLog) {
 					EsignatureID = oSignature.ID,
@@ -222,6 +221,8 @@
 					DoSaveDoc = doc.HasValue,
 					MimeType = doc.MimeType,
 					DocumentContent = doc.Content,
+					SignerStatuses = oSignature.SignerStatuses,
+					HistoryEvents = oSignature.HistoryEvents,
 				};
 
 				try {
@@ -398,11 +399,17 @@
 
 		#endregion method CreateClient
 
+		#region class SigedDoc
+
 		private class SignedDoc {
 			public bool HasValue { get; set; }
 			public string MimeType { get; set; }
 			public byte[] Content { get; set; }
 		} // class SignedDoc
+
+		#endregion class SigedDoc
+
+		#region fields & const
 
 		private SortedSet<AgreementStatus> m_oTerminalStatuses;
  
@@ -419,6 +426,8 @@
 		private EchoSignClient m_oEchoSign;
 
 		private const string ExpectedPong = "It works!";
+
+		#endregion fields & const
 
 		#endregion private
 	} // class EchoSignFacade
