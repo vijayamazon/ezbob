@@ -1,6 +1,6 @@
 ﻿@model dynamic
 
-<table class="table centered">
+<table class="table centered box">
 	<thead class="box">
 		<tr class="box-title">
 			<th>Date Added</th>
@@ -10,7 +10,7 @@
 			<th></th>
 		</tr>
 	</thead>
-	<tbody><%
+	<tbody class="box-content"><%
 		_.each(paymentAccounts.PayPointCards, function(pp) {
 			%><tr>
 				<td><%

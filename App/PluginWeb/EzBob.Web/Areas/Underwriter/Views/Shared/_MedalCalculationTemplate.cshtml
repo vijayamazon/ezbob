@@ -1,7 +1,7 @@
 ﻿@model dynamic
 
 <script id="medal-calculation-template" type="text/template">
-    <table class="table centered">
+    <table class="table centered box">
         <thead class="box">
             <%
             medals.Score = medals.Score || {};
@@ -12,7 +12,7 @@
                 <th>Result</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             <tr>
                 <td><%-medals.Score.Medal%></td>
                 <td><%-medals.Score.Points%></td>
@@ -21,7 +21,7 @@
         </tbody>
     </table>
 
-    <table class="table centered">
+    <table class="table centered box">
         <thead class="box">
             <tr class="box-title">
                 <th>Customer Characteristic</th>
@@ -29,7 +29,7 @@
                 <th>Points Obtained</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             <tr>
                 <%
                 _.each( medals.MedalCharacteristics, function(medal, i){%> 
@@ -38,8 +38,6 @@
                 <td><%-Math.round(medal.ACParameters)+' from ' + Math.round(medal.MaxPoss)%> (<%-EzBob.roundNumber(medal.PointsObtainedPercent, 1) %>%)</td>
             </tr>
             <%}) %>
-        </tbody>
-        <tfoot>
             <tr> 
                 <td>Total (not normalized)</td>
                 <td><%-medals.TotalWeightUsed != undefined ? medals.TotalWeightUsed : "-"%>%</td>
@@ -48,7 +46,7 @@
                     (<%-(medals.TotalPointsObtainedPercent != undefined ? EzBob.roundNumber(medals.TotalPointsObtainedPercent, 1) : "-")%>%)
                 </td>
             </tr>
-        </tfoot>
+        </tbody>
     </table>
     @{Html.RenderPartial("_ExportToExcel");}
 </script>

@@ -1,6 +1,6 @@
 ﻿@model dynamic
 
-<table class="table table-selected bankAccounts centered">
+<table class="table table-selected bankAccounts centered box">
 	<thead class="box">
 		<tr class="box-title">
 			<th>Bank Account</th>
@@ -10,7 +10,7 @@
 			<th></th>
 		</tr>
 	</thead>
-	<tbody><%
+	<tbody class="box-content"><%
 		_.each(bankAccounts, function(ba) {
 			%><tr data-card-id="<%- ba.Id %>" >
 				<td><%

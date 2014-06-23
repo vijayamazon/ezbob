@@ -2,19 +2,21 @@
     @ApiChecksLog()
 </script>
 
-@helper ApiChecksLog(){
-    <table class="table centered table-fixed">
-        <thead class="box">
-            <tr class="box-title">
-                <th class="api-check-first-column">Date/time</th>
-                <th class="api-check-seccond-column">API Type</th>
-                <th>Marketplace</th>
-                <th style="width: 130px;">Status</th>
-                <th>Error message</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%_.each(vals, function(val){%>
+@helper ApiChecksLog()
+{
+    <div class="row">
+        <table class="table centered table-fixed box">
+            <thead class="box">
+                <tr class="box-title">
+                    <th class="api-check-first-column">Date/time</th>
+                    <th class="api-check-seccond-column">API Type</th>
+                    <th>Marketplace</th>
+                    <th style="width: 130px;">Status</th>
+                    <th>Error message</th>
+                </tr>
+            </thead>
+            <tbody class="box-content">
+                <%_.each(vals, function(val){%>
             <tr>
                 <td><%-EzBob.formatDateTime(val.DateTime)%></td>
                 <td class="break-word"><%-val.ApiType%></td>
@@ -22,7 +24,8 @@
                 <td><%-val.Status%></td>
                 <td class="break-word"><%-val.ErrorMessage || ''%></td>
             </tr>
-            <%})%>
-        </tbody>
-    </table>
+                <%})%>
+            </tbody>
+        </table>
+    </div>
 }

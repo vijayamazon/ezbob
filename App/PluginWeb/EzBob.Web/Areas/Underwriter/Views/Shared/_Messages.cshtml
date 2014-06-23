@@ -1,12 +1,12 @@
-﻿<div class="messages">
-    <table class="table centered">
+﻿<div class="messages row">
+    <table class="table centered box">
         <thead class="box">
             <tr class="box-title">
                 <th>Sent document name</th>
                 <th>Date created</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="box-content">
             <%_.each(model, function(val, i){%>
             <tr>
                 <td><a href="<%-gRootPath+'Underwriter/Messages/DownloadMessagesDocument/' + val.Id%>"><%-val.FileName%></a></td>
