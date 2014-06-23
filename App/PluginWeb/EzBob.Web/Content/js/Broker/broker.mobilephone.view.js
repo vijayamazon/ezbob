@@ -181,7 +181,8 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 	showCaptcha: function() {
 		this.isCaptchaShown = true;
 
-		this.setSomethingEnabled('#' + this.GenerateCodeBtnID, false);
+		this.setSomethingEnabled('#' + this.GenerateCodeBtnID, false).addClass('hide');
+		this.$el.find('#' + this.PhoneFieldID).removeClass('form_field_left_side').addClass('form_field');
 
 		this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
 		this.$el.find('#' + this.MobileCodeSectionID).addClass('hide').hide();

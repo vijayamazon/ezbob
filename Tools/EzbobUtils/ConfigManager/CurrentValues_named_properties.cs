@@ -409,6 +409,15 @@
 
 		#endregion property BrokerCommissionEnabled
 
+		#region property BrokerForceCaptcha
+
+		public virtual VariableValue BrokerForceCaptcha
+		{
+			get { return this[Variables.BrokerForceCaptcha]; } // get
+		} // BrokerForceCaptcha
+
+		#endregion property BrokerForceCaptcha
+
 		#region property BrokerMaxPerNumber
 
 		public virtual VariableValue BrokerMaxPerNumber {

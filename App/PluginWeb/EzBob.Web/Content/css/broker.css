@@ -60,6 +60,8 @@ footer {
 	clear: both;
 }
 
+.simpleCaptcha > div { padding-top: 1em; }
+
 #AddNewCustomer {
 	font-size: 16px;
 }

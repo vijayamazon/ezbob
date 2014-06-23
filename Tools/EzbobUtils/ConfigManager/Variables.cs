@@ -51,6 +51,7 @@
 		BankBasedApprovalSilentTemplateName,
 		BankBasedApprovalSilentToAddress,
 		BrokerCommissionEnabled,
+		BrokerForceCaptcha,
 		BrokerMaxPerNumber,
 		BrokerMaxPerPage,
 		BrokerSetupFeeRate,

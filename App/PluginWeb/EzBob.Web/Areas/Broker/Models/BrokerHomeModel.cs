@@ -14,6 +14,11 @@
 
 			var oCfg = CurrentValues.Instance;
 
+			ForceCaptcha = ((string)oCfg.BrokerForceCaptcha).ToLower();
+			ForceCaptcha = (
+				(ForceCaptcha == "1") || (ForceCaptcha == "yes") || (ForceCaptcha == "true")
+			) ? "yes" : "no";
+
 			PasswordPolicyType = oCfg.PasswordPolicyType;
 			CaptchaMode = oCfg.CaptchaMode;
 			SessionTimeout = oCfg.SessionTimeout;
@@ -32,6 +37,7 @@
 		public string MessageOnStart { get; set; }
 		public string MessageOnStartSeverity { get; set; }
 
+		public string ForceCaptcha { get; set; }
 		public int MaxPerNumber { get; set; }
 		public int MaxPerPage { get; set; }
 

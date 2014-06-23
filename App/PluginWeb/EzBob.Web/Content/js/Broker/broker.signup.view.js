@@ -26,6 +26,8 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			el: $('#strength-password-view'),
 			passwordSelector: '#Password',
 		});
+	    
+		EzBob.App.on('brkr:signup-with-captcha', _.bind(this.switchToCaptcha, this));
 	}, // initialize
 
 	events: function() {
@@ -111,6 +113,9 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		this.$el.find('.phonenumbercode, #EstimatedMonthlyAppCount').numericOnly(6);
 
 		this.passwordStrengthView.render();
+	    
+		if ($('#broker-sms-count').attr('data-force-captcha') === 'yes')
+		    EzBob.App.trigger('brkr:signup-with-captcha');
 	}, // onRender
 
 	onFocus: function() {
