@@ -7,6 +7,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         this.loanModel = options.loanModel;
         this.personalModel = options.personalModel;
         this.medalModel = options.medalModel;
+        this.parentView = options.parentView;
         this.bindTo(this.model, "change sync", this.render, this);
         this.bindTo(this.loanModel, "change sync", this.render, this);
         this.bindTo(this.medalModel, "change sync", this.render, this);
@@ -21,7 +22,15 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
     },
     events: {
         'click a[data-action="collapse"]': "boxToolClick",
-        'click a[data-action="close"]': "boxToolClick"
+        'click a[data-action="close"]': "boxToolClick",
+        'click #OfferEditBtn': 'editOfferClick'
+    },
+    ui: {
+        editOfferDiv: '.editOfferDiv'
+    },
+    
+    editOfferClick: function() {
+        this.ui.editOfferDiv.toggle();
     },
     boxToolClick: function (e) {
         var action, btn, obj;
@@ -65,6 +74,14 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         }
     },
     onRender: function () {
+        var loanInfo = this.ui.editOfferDiv;
+        this.loanInfoView = new EzBob.Underwriter.LoanInfoView({
+            el: loanInfo,
+            model: this.loanModel,
+            personalInfo: this.personalModel,
+            parentView: this.parentView,
+        });
+        this.loanInfoView.render();
         var controlButtons = this.$el.find("#controlButtons");
         this.controlButtonsView = new EzBob.Underwriter.ControlButtonsView(
             {

@@ -20,7 +20,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         @$el.html @template()
 
         profileInfo = @$el.find(".profile-person-info")
-        loanInfo = @$el.find(".profile-loan-info")
+        
         summaryInfo = @$el.find("#profile-summary")
         dashboardInfo = @$el.find("#dashboard")
         marketplaces = @$el.find("#marketplaces")
@@ -64,12 +64,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         )
 
         @loanInfoModel = new EzBob.Underwriter.LoanInfoModel()
-        @loanInfoView = new EzBob.Underwriter.LoanInfoView(
-            el: loanInfo
-            model: @loanInfoModel
-            personalInfo: @personalInfoModel
-            parentView: @
-        )
+        
 
         @summaryInfoModel = new EzBob.Underwriter.SummaryInfoModel()
         @summaryInfoView = new EzBob.Underwriter.SummaryInfoView(
@@ -160,6 +155,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             personalModel: @personalInfoModel
             loanModel: @loanInfoModel
             medalModel: @medalCalculationModel
+            parentView: @
         )
 
         @showed = true
@@ -480,6 +476,8 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @crossCheckView.render customerId: id
 
             $('a[href=#marketplaces]').click() if isHistory
+            $('a.common-bug').attr('data-bug-customer', id)
+            
             BlockUi "Off"
 
         EzBob.handleUserLayoutSetting()

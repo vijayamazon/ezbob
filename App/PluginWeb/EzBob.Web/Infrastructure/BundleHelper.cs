@@ -236,7 +236,6 @@
 				//Underwriter
 				.Add("~/Content/js/underwriter/ezbob.underwriter.app.coffee")
 				.Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
-				.Add("~/Content/js/underwriter/NewCreditLine/ezbob.underwriter.newCreditLine.coffee")
 				.Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
 
 				//Support

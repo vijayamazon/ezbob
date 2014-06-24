@@ -2,16 +2,8 @@
 <script id="profile-template-main" type="text/template">
         @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Customer)
         <div id="sidebar-dashboard" class="navbar-collapse collapse">
-            <div class="tabbable tabs-top">
-                <ul class="nav nav-tabs active-blue">
-                    <li class="active"><a href="#profile-person-info-id" data-toggle="tab"><span id="customer-label-span" class="label label-large label-success">Customer</span></a></li>
-                    <li><a href="#profile-loan-info-id" data-toggle="tab"><span class="label label-large label-success">Offer</span></a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade in profile-person-info active" id="profile-person-info-id"/>
-                    <div class="tab-pane fade in profile-loan-info" id="profile-loan-info-id"/>
-                </div>
-            </div>
+            <div class="fundingAlert"></div>
+            <div class="profile-person-info" id="profile-person-info-id"/>
         </div>
         <div id="main-content" class="profile-tabs">
             <div id="profileHead"></div>

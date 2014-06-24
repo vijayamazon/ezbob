@@ -69,29 +69,16 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
             @$el.find('#addFundsBtn').hide()
             @$el.find('#cancelManuallyAddedFundsBtn').hide()
 
-        li = $(document.getElementById("liFunding"))
-        tdHeader = $(document.getElementById("available-funds-td-header"))
-        tdValue = $(document.getElementById("available-funds-td-value"))
-        fundingDiv = $(document.getElementById("fundingDiv"))
+        fundingAlert = $(".fundingAlert")
 
         availableFundsNum = @model.get('AvailableFunds')
         availableFundsStr = 'Funding ' + EzBob.formatPoundsNoDecimals(availableFundsNum).replace(/\s+/g, '')
-        fundingDiv.text(availableFundsStr)
+        fundingAlert.html(availableFundsStr)
 
         if (@requiredFunds > availableFundsNum)
-            if !li.hasClass('available-funds-alert')
-                li.addClass('available-funds-alert')
-            if !tdHeader.hasClass('available-funds-alert-text-color')
-                tdHeader.addClass('available-funds-alert-text-color')
-            if !tdValue.hasClass('available-funds-alert-text-color')
-                tdValue.addClass('available-funds-alert-text-color')
+            fundingAlert.addClass('red_cell')
         else
-            if li.hasClass('available-funds-alert')
-                li.removeClass('available-funds-alert')
-            if tdHeader.hasClass('available-funds-alert-text-color')
-                tdHeader.removeClass('available-funds-alert-text-color')
-            if tdValue.hasClass('available-funds-alert-text-color')
-                tdValue.removeClass('available-funds-alert-text-color')
+            fundingAlert.removeClass('red_cell')
 
     hide: ->
         @$el.hide()

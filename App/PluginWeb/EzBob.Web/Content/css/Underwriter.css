@@ -690,7 +690,7 @@ span.active {
     padding-top: 35px;
 }
 
-.table td.red_cell {
+.red_cell {
     color: #f55f60;
     font-weight: bold;
 }
@@ -1029,12 +1029,12 @@ textarea.BusinessAddress {
     color: red;
 }
 
-.customer-column-width-50 {
+.profile-person-info .customer-column-width-50 {
     width: 50%;
     color: #cdcdcd;
 }
 
-.left-pane-button {
+.profile-person-info .left-pane-button {
     padding: 1px 4px;
     font-size: 10px;
     background-color: transparent;
@@ -1603,7 +1603,7 @@ body {
 }
 
     #profileHead .box-content {
-        min-height: 200px;
+        min-height: 140px;
     }
 
 #sidebar.bg:before, #sidebar.bg {
@@ -1786,5 +1786,31 @@ body {
 .right-seperator {
     border-right: #d3d3d5 1px solid;
     height: 100%;
-    min-height: 150px;
+    min-height: 120px;
+}
+
+.offer-donut-div {
+    position: relative;
+    width: 100px; 
+    margin: 0 auto;
+    max-height: 80px;
+}
+
+.period-canvas-div {
+    position: relative; 
+    width: 50px; 
+    margin: 0 auto;
+}
+
+.medal-div {
+    width: 100px; 
+    height: 100px;
+    position: absolute; 
+    top: 30%; 
+    left: 0; 
+    text-align: center
+}
+
+.fundingAlert {
+    position: relative;
 }

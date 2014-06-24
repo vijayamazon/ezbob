@@ -1137,9 +1137,6 @@
     <Content Include="Content\js\Underwriter\editLoan\loanModel.min.js">
       <DependentUpon>loanModel.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\NewCreditLine\ezbob.underwriter.newCreditLine.js">
-      <DependentUpon>ezbob.underwriter.newCreditLine.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.js">
       <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
     </Content>
@@ -1374,7 +1371,6 @@
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.min.js.map">
       <DependentUpon>ezbob.underwriter.fraud.js</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\NewCreditLine\ezbob.underwriter.newCreditLine.coffee" />
     <Content Include="Areas\Customer\Views\Shared\Shops\HMRCAccountInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\DirectorsConsentDeclaration.cshtml" />
     <Content Include="Areas\Broker\Views\Web.config" />

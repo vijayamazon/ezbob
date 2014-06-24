@@ -33,11 +33,10 @@
     };
 
     ProfileView.prototype.render = function() {
-      var alertPassed, apiChecks, customerRelations, dashboardInfo, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileHead, profileInfo, summaryInfo, that,
+      var alertPassed, apiChecks, customerRelations, dashboardInfo, experianInfo, fraudDetection, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileHead, profileInfo, summaryInfo, that,
         _this = this;
       this.$el.html(this.template());
       profileInfo = this.$el.find(".profile-person-info");
-      loanInfo = this.$el.find(".profile-loan-info");
       summaryInfo = this.$el.find("#profile-summary");
       dashboardInfo = this.$el.find("#dashboard");
       marketplaces = this.$el.find("#marketplaces");
@@ -78,12 +77,6 @@
         model: this.experianInfoModel
       });
       this.loanInfoModel = new EzBob.Underwriter.LoanInfoModel();
-      this.loanInfoView = new EzBob.Underwriter.LoanInfoView({
-        el: loanInfo,
-        model: this.loanInfoModel,
-        personalInfo: this.personalInfoModel,
-        parentView: this
-      });
       this.summaryInfoModel = new EzBob.Underwriter.SummaryInfoModel();
       this.summaryInfoView = new EzBob.Underwriter.SummaryInfoView({
         el: summaryInfo,
@@ -167,7 +160,8 @@
         model: this.summaryInfoModel,
         personalModel: this.personalInfoModel,
         loanModel: this.loanInfoModel,
-        medalModel: this.medalCalculationModel
+        medalModel: this.medalCalculationModel,
+        parentView: this
       });
       this.showed = true;
       EzBob.handleUserLayoutSetting();
@@ -606,6 +600,7 @@
         if (isHistory) {
           $('a[href=#marketplaces]').click();
         }
+        $('a.common-bug').attr('data-bug-customer', id);
         return BlockUi("Off");
       });
       return EzBob.handleUserLayoutSetting();
@@ -617,6 +612,14 @@
 
     ProfileView.prototype.updateAlerts = function() {
       return this.alertsModel.fetch();
+    };
+
+    ProfileView.prototype.clearDecisionNotes = function() {
+      return this.$el.find('#DecisionNotes').empty();
+    };
+
+    ProfileView.prototype.appendDecisionNote = function(oNote) {
+      return this.$el.find('#DecisionNotes').append(oNote);
     };
 
     return ProfileView;
