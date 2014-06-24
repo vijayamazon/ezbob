@@ -227,12 +227,12 @@
                                 </div>
                             </div>
                             <%if(experian.directorsModels && experian.directorsModels.length > 0){
-                    _.each(experian.directorsModels, function(item, i){
-                            item.Summary = item.Summary || {};
-                            item.Summary.ConsumerAccountsOverview = item.Summary.ConsumerAccountsOverview || {};
-                            item.ConsumerSummaryCharacteristics = item.ConsumerSummaryCharacteristics || {};
-                            item.ConsumerAccountsOverview = item.ConsumerAccountsOverview || {};%>
-                        <div class="tab-pane fade in" id="director<%-i%>">
+                            _.each(experian.directorsModels, function(item, i){
+                                item.Summary = item.Summary || {};
+                                item.Summary.ConsumerAccountsOverview = item.Summary.ConsumerAccountsOverview || {};
+                                item.ConsumerSummaryCharacteristics = item.ConsumerSummaryCharacteristics || {};
+                                item.ConsumerAccountsOverview = item.ConsumerAccountsOverview || {};%>
+                                <div class="tab-pane fade in" id="director<%-i%>">
                             <div class="col-lg-3 col-md-6">
                                     <div class="right-seperator">
                                         <div class="text-center experian-canvas">
@@ -318,46 +318,68 @@
                         <div class="tab-content no-border">
                             <div class="tab-pane fade active in" id="companyExperian1">
                                 <div class="row">
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile <%-tileColor%>" style="background-color: <%-experianCompany.ScoreColor%>">
-                                            <div class="caption text-center">
-                                                Score
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="right-seperator">
+                                            <div class="text-center experian-canvas">
+                                                <div>Score</div>
+                                                <canvas id="companyScoreCanvas" width="100" height="100" data-color="<%-experianCompany.BureauScore%>" data-percent="<%-experianCompany.BureauScore/100%>"></canvas>
+                                                <div class="half-donut-caption"><%-experianCompany.BureauScore%></div>
                                             </div>
-                                            <p class="title text-center"><%-experianCompany.BureauScore%></p>
+                                            <div class="">
+                                                <span class="inline-sparkline companyScoreGraph">trend N/A</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-lightgrey">
-                                            <div class="caption text-center">
-                                                CCJ
-                                            </div>
-                                            <p class="title text-center">N/A</p>
+                                    <div class="col-lg-3 col-md-6">
+                                    <div class="right-seperator">
+                                        <div class="text-center">
+                                            CAIS balance
+                                            <% var balance = 'N/A'; %>
+                                            <p class="text-small">
+                                                <%-balance%> 
+                                                <br />
+                                                (N/A accounts)
+                                            </p>
                                         </div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-lightgrey">
-                                            <div class="caption text-center">
-                                                Tangible equity
-                                            </div>
-                                            <p class="title text-center">N/A</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-lightgrey">
-                                            <div class="caption text-center">
-                                                Adjusted profit
-                                            </div>
-                                            <p class="title text-center">N/A</p>
+                                        <div style="height:62px;">
+                                            <span>cais trend N/A</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-3 col-sm-4">
-                                        <div class="tile tile-transparant">
-                                            <span class="inline-sparkline companyScoreGraph"></span>
+                                <div class="col-lg-4 col-md-8">
+                                    <div class="right-seperator">
+                                        <div class="text-center">
+                                            <div>Filed financals</div>
+                                            <div>
+                                                <div class="col-lg-6">
+                                                    <div class="text-center">Profit</div>
+                                                    <div class="text-center text-big">N/A</div>
+                                                    <div class="">trend N/A</div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="text-center">Tengible eq'</div>
+                                                    <div class="text-center text-big">N/A</div>
+                                                    <div class="">trend N/A</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-2 col-md-4">
+                                    <% alert = 'alert-warning';%>
+                                    <div class="alert <%-alert%>">
+                                        Delays: N/A
+                                    </div>
+                                    <% alert = 'alert-warning'; /*experian.ConsumerSummaryCharacteristics.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info';*/ %>
+                                    <div class="alert <%-alert%>">
+                                        Defaults: N/A
+                                    </div>
+                                    <% alert = 'alert-warning'; /* experian.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info'; */%>
+                                    <div class="alert <%-alert%>">
+                                        CCJ N/A, N/A months ago
+                                    </div>
+                                </div>
+                               </div>
                             </div>
                         </div>
                     </div>
