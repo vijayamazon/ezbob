@@ -292,12 +292,10 @@
 
 		public bool ApplyLateCharge(Loan loan, decimal amount, int loanChargesTypeId, DateTime date)
 		{
-			var repo = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-
 			var charge = new LoanCharge
 							 {
 								 Amount = amount,
-								 ChargesType = repo.Load(loanChargesTypeId),
+								 ChargesType = new ConfigurationVariable(CurrentValues.Instance.GetByID(loanChargesTypeId)),
 								 Date = date,
 								 Loan = loan
 							 };

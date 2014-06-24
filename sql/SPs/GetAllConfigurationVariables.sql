@@ -14,8 +14,10 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
+		Id AS ID,
 		Name,
 		Value,
+		Description,
 		ISNULL(IsEncrypted, 0) AS IsEncrypted
 	FROM
 		ConfigurationVariables

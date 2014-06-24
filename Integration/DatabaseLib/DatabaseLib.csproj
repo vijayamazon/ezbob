@@ -302,7 +302,6 @@
     <Compile Include="IUpdateActionResultInfo.cs" />
     <Compile Include="MarketPlacesBootstrap.cs" />
     <Compile Include="Model\ConfigurationVariable.cs" />
-    <Compile Include="Model\ConfigurationVariablesRepository.cs" />
     <Compile Include="Model\Database\Bug.cs" />
     <Compile Include="Model\Database\CaisFlag.cs" />
     <Compile Include="Model\Database\CaisFlagMap.cs" />

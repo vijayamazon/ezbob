@@ -88,7 +88,6 @@ namespace EzBob.Web.Infrastructure
 			For<IPaypointTransactionRepository>().Use<PaypointTransactionRepository>();
 			For<IExperianConsentAgreementRepository>().Use<ExperianConsentAgreementRepository>();
 			For<ICashRequestRepository>().Use<CashRequestRepository>();
-			For<IConfigurationVariablesRepository>().Use<ConfigurationVariablesRepository>();
 			For<ILoanChangesHistoryRepository>().Use<LoanChangesHistoryRepository>();
 			For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();
 			For<ICurrencyConvertor>().Use<CurrencyConvertor>();

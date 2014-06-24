@@ -3,7 +3,9 @@
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
+	using JetBrains.Annotations;
 
 	public partial class CurrentValues {
 		#region static constructor
@@ -56,20 +58,23 @@
 
 		#endregion singleton
 
+		#region method GetByID
+
+		public virtual VariableValue GetByID(int nID) {
+			lock (ms_oInstanceLock) {
+				ReloadIfNeeded();
+				return m_oByID.ContainsKey(nID) ? m_oByID[nID] : null;
+			} // lock
+		} // GetByID
+
+		#endregion method GetByID
+
 		#region indexer
 
 		public virtual VariableValue this[Variables nIdx] {
 			get {
 				lock (ms_oInstanceLock) {
-					if (m_nRefreshIntervalMinutes > 0) {
-						double nAge = (DateTime.UtcNow - m_oLastReloadTime).TotalMinutes;
-
-						if (nAge > int.MaxValue)
-							ReLoad();
-						else if (nAge > m_nRefreshIntervalMinutes)
-							ReLoad();
-					} // if
-
+					ReloadIfNeeded();
 					return UnsafeGet(nIdx);
 				} // lock
 			} // get
@@ -101,13 +106,38 @@
 
 		public virtual CurrentValues SetDefault(Variables nName, object oValue) {
 			lock (ms_oInstanceLock) {
-				m_oDefaults[nName] = new VariableValue(nName, (oValue ?? "").ToString(), Log);
+				m_oDefaults[nName] = new VariableValue(0, nName, (oValue ?? "").ToString(), "", Log);
 			} // lock
 
 			return this;
 		} // SetDefault
 
 		#endregion method SetDefault
+
+		#region method Update
+
+		public void Update(SortedDictionary<Variables, string> oPackage) {
+			if (oPackage == null)
+				return;
+
+			if (oPackage.Count < 1)
+				return;
+
+			var sp = new SpUpdateConfigurationVariables(DB, Log) {
+				UpdatePackage = new List<CfgValueUpdate>(),
+			};
+
+			foreach (var pair in oPackage) {
+				VariableValue oValue = UpdateOne(pair.Key, pair.Value);
+
+				if (oValue != null)
+					sp.UpdatePackage.Add(new CfgValueUpdate { ID = oValue.ID, Value = oValue.Value, });
+			} // for each
+
+			sp.ExecuteNonQuery();
+		} // SetByName
+
+		#endregion method Update
 
 		#endregion public
 
@@ -118,6 +148,8 @@
 		protected CurrentValues(AConnection oDB, ASafeLog oLog) {
 			m_oLastReloadTime = new DateTime();
 			m_nRefreshIntervalMinutes = 0;
+
+			m_oByID = new SortedDictionary<int, VariableValue>();
 			m_oData = new SortedDictionary<Variables, VariableValue>();
 			m_oDefaults = new SortedDictionary<Variables, VariableValue>();
 
@@ -131,13 +163,14 @@
 
 		protected virtual void ReLoad() {
 			m_oData.Clear();
+			m_oByID.Clear();
 
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					Variables nVar;
 					string sName = sr["Name"];
 
-					if (Enum.TryParse<Variables>(sName, out nVar)) {
+					if (Enum.TryParse(sName, out nVar)) {
 						string sValue = sr["Value"];
 
 						if (sr["IsEncrypted"]) {
@@ -149,7 +182,10 @@
 							} // try
 						} // if
 
-						m_oData[nVar] = new VariableValue(nVar, sValue, Log);
+						var vv = new VariableValue(sr["ID"], nVar, sValue, sr["Description"], Log);
+
+						m_oData[vv.Name] = vv;
+						m_oByID[vv.ID] = vv;
 					}
 					else
 						Log.Warn("Unknown configuration variable detected: {0}", sName);
@@ -185,6 +221,41 @@
 
 		#region private
 
+		#region method UpdateOne
+
+		public virtual VariableValue UpdateOne(Variables nName, string sValue) {
+			lock (ms_oInstanceLock) {
+				ReloadIfNeeded();
+
+				VariableValue v = m_oData.ContainsKey(nName) ? m_oData[nName] : null;
+
+				if (v != null) {
+					v.Update(sValue);
+					return v.ID > 0 ? v : null;
+				} // if
+
+				return null;
+			} // lock
+		} // UpdateOne
+
+		#endregion method UpdateOne
+
+		#region method ReloadIfNeeded
+
+		private void ReloadIfNeeded() {
+			if (m_nRefreshIntervalMinutes <= 0)
+				return;
+
+			double nAge = (DateTime.UtcNow - m_oLastReloadTime).TotalMinutes;
+
+			if (nAge > int.MaxValue)
+				ReLoad();
+			else if (nAge > m_nRefreshIntervalMinutes)
+				ReLoad();
+		} // ReloadIfNeeded
+
+		#endregion method ReloadIfNeeded
+
 		#region method UnsafeGet
 
 		private VariableValue UnsafeGet(Variables nIdx) {
@@ -196,6 +267,9 @@
 
 		#endregion method UnsafeGet
 
+		#region fields
+
+		private readonly SortedDictionary<int, VariableValue> m_oByID;
 		private readonly SortedDictionary<Variables, VariableValue> m_oData;
 		private readonly SortedDictionary<Variables, VariableValue> m_oDefaults;
 
@@ -203,6 +277,35 @@
 
 		private static CurrentValues ms_oInstance;
 		private static readonly object ms_oInstanceLock;
+
+		#endregion fields
+
+		#region class CfgValueUpdate
+
+		private class CfgValueUpdate : ITraversable {
+			[UsedImplicitly]
+			public int ID { get; set; }
+
+			[UsedImplicitly]
+			public string Value { get; set; }
+		} // CfgValueUpdate
+
+		#endregion class CfgValueUpdate
+
+		#region class SpUpdateConfigurationVariables
+
+		private class SpUpdateConfigurationVariables : AStoredProc {
+			public SpUpdateConfigurationVariables(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+
+			public override bool HasValidParameters() {
+				return (UpdatePackage != null) && (UpdatePackage.Count > 0);
+			} // HasValidParameters
+
+			[UsedImplicitly]
+			public List<CfgValueUpdate> UpdatePackage { get; set; }
+		} // class SpUpdateConfigurationVariables
+
+		#endregion class SpUpdateConfigurationVariables
 
 		#endregion private
 	} // class CurrentValues

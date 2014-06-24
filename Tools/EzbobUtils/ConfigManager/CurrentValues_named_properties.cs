@@ -2316,22 +2316,22 @@ namespace ConfigManager {
 			get { return this[Variables.Reject_LowOfflineAnnualRevenue]; }
 		}
 
-		public string LandRegistryUserName
+		public virtual VariableValue LandRegistryUserName
 		{
 			get { return this[Variables.LandRegistryUserName]; }
 		}
 
-		public string LandRegistryPassword
+		public virtual VariableValue LandRegistryPassword
 		{
 			get { return this[Variables.LandRegistryPassword]; }
 		}
 
-		public string LandRegistryFilePath
+		public virtual VariableValue LandRegistryFilePath
 		{
 			get { return this[Variables.LandRegistryFilePath]; }
 		}
 
-		public int RejectionLastValidLate
+		public virtual VariableValue RejectionLastValidLate
 		{
 			get { return this[Variables.RejectionLastValidLate]; }
 		}

@@ -161,31 +161,54 @@
 
 		#region constructor
 
-		public VariableValue(Variables nName, string sValue, ASafeLog oLog) {
+		public VariableValue(int nID, Variables nName, string sValue, string sDescription, ASafeLog oLog) {
+			ID = nID;
 			Name = nName;
 			Value = sValue;
+			Description = sDescription;
 
 			m_oLog = oLog ?? new SafeLog();
 		} // constructor
 
 		#endregion constructor
 
+		#region method Update
+
+		public VariableValue Update(string sValue) {
+			Value = sValue;
+			return this;
+		} // Update
+
+		#endregion method Update
+
+		#region property ID
+
+		public virtual int ID { get; private set; }
+
+		#endregion property ID
+
 		#region property Name
 
-		public virtual Variables Name { get; protected set; }
+		public virtual Variables Name { get; private set; }
 
 		#endregion property Name
 
 		#region property Value
 
 		public virtual string Value {
-			get { return m_sValue; } // get
-			protected set { m_sValue = value ?? ""; } // set
+			get { return m_sValue ?? ""; } // get
+			private set { m_sValue = value ?? ""; } // set
 		} // Value
 
 		private string m_sValue;
 
 		#endregion property Value
+
+		#region property Description
+
+		public virtual string Description { get; private set; } // Description
+
+		#endregion property Description
 
 		#region private
 
