@@ -1070,58 +1070,13 @@ textarea.BusinessAddress {
         padding-top: 12px;
     }
 
-.tile {
-    height: 80px;
-    padding-left: 0;
-    padding-right: 0;
-    margin: 2px -1px;
-    font-size: 11px;
+
+.text-small {
+    font-size: 15px;
 }
 
-
-    .tile p.title {
-        font-size: 30px;
-        padding-top: 10px;
-    }
-
-        .tile p.title.text-small {
-            font-size: 20px;
-        }
-
-    .tile p.title-small {
-        padding-top: 0;
-    }
-
-.tile-grey {
-    background-color: #a1a1a1;
-}
-
-.tile-white {
-    background-color: #ffffff;
-    color: #000;
-}
-
-.tile-lightgrey {
-    background-color: #d1d1d1;
-    color: #000;
-}
-
-.tile-light {
-    color: #000;
-}
-
-.tile-high {
-    height: 110px;
-}
-
-.tile-transparant {
-    background-color: transparent;
-    color: #000000;
-}
-
-.tile-lightgreen {
-    background-color: #EEFFB8;
-    color: #000;
+.text-big {
+    font-size: 20px;
 }
 
 .alert {
@@ -1578,9 +1533,9 @@ td a.edit-loan {
     width: 100%;
 }
 
-.box .box-title .box-tool a, 
-.box .box-title th, 
-.box .box-title a, 
+.box .box-title .box-tool a,
+.box .box-title th,
+.box .box-title a,
 .box .box-title h3 {
     color: #282828;
     font-weight: 500;
@@ -1690,10 +1645,8 @@ body {
 }
 
 .half-donut-caption {
-    position: absolute;
-    top: 50px;
+    margin-top: -78px;
     text-align: center;
-    width: 100%;
     font-size: 20px;
 }
 
@@ -1764,10 +1717,10 @@ body {
     padding: 6px 0;
 }
 
-.box .box-title .box-tool a.btn:hover {
-    background-color: transparent;
-    color: #000000;
-}
+    .box .box-title .box-tool a.btn:hover {
+        background-color: transparent;
+        color: #000000;
+    }
 
 .controlButtons {
     display: inline-block;
@@ -1791,26 +1744,30 @@ body {
 
 .offer-donut-div {
     position: relative;
-    width: 100px; 
+    width: 100px;
     margin: 0 auto;
     max-height: 80px;
 }
 
 .period-canvas-div {
-    position: relative; 
-    width: 50px; 
+    position: relative;
+    width: 50px;
     margin: 0 auto;
 }
 
 .medal-div {
-    width: 100px; 
+    width: 100px;
     height: 100px;
-    position: absolute; 
-    top: 30%; 
-    left: 0; 
-    text-align: center
+    position: absolute;
+    top: 30%;
+    left: 0;
+    text-align: center;
 }
 
 .fundingAlert {
     position: relative;
+}
+
+.experian-canvas {
+    height: 90px;
 }
