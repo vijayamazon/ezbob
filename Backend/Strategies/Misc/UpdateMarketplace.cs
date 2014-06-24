@@ -7,7 +7,6 @@
 	using DbConstants;
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Globalization;
 	using EKM;
 	using EZBob.DatabaseLib;

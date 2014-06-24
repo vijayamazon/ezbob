@@ -5,8 +5,8 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models.Marketplaces;
 	using EzBob.Models.Marketplaces.Builders;
+	using Ezbob.Logger;
 	using StructureMap;
-	using log4net;
 
 	public class WebMarketPlacesFacade {
 		public IEnumerable<MarketPlaceModel> GetMarketPlaceModels(Customer customer, DateTime? history) {
@@ -37,8 +37,7 @@
 					return model;
 				}
 				catch (Exception e) {
-					ms_oLog.WarnFormat("Something went wrong while building marketplace model for marketplace id {0} of type {1}.", mp.Id, mp.Marketplace.Name);
-					ms_oLog.Warn(e);
+					new SafeILog(this).Warn(e, "Something went wrong while building marketplace model for marketplace id {0} of type {1}.", mp.Id, mp.Marketplace.Name);
 
 					return new MarketPlaceModel {
 						Id = mp.Id,
@@ -62,8 +61,7 @@
 						} // if
 					}
 					catch (Exception e) {
-						ms_oLog.WarnFormat("Something went wrong while building bank statement for marketplace id {0} of type HMRC.", oModel.Id);
-						ms_oLog.Warn(e);
+						new SafeILog(this).Warn(e, "Something went wrong while building bank statement for marketplace id {0} of type HMRC.", oModel.Id);
 					} // try
 				} // for each oModel
 			} // if HMRC or Yodlee
@@ -165,7 +163,5 @@
 			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
 			return builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
 		} // GetBuilderr
-
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(WebMarketPlacesFacade));
 	} // WebMarketPlacesFacade
 } // namespace

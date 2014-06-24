@@ -1,6 +1,6 @@
 namespace EzBobTest
 {
-
+	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
@@ -178,5 +178,9 @@ namespace EzBobTest
 			s.Execute();
 		}
 
+		[Test]
+		public void TestCalculateBankStatement() {
+			new CalculateBankStatement(234, m_oDB, m_oLog).Execute();
+		}
 	}
 }

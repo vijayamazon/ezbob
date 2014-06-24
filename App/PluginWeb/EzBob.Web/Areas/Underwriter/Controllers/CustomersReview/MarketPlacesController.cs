@@ -74,7 +74,7 @@
 		public JsonResult Index(int id, DateTime? history = null)
 		{
 			var customer = _customers.Get(id);
-			var models = GetCustomerMarketplaces(customer, history);
+			var models = _marketPlaces.GetMarketPlaceModels(customer, history).ToList();
 			return Json(models, JsonRequestBehavior.AllowGet);
 		}
 
@@ -93,11 +93,6 @@
 			return (long)duration.TotalSeconds * 1000;
 		}
 
-
-		public IEnumerable<MarketPlaceModel> GetCustomerMarketplaces(Customer customer, DateTime? history)
-		{
-			return _marketPlaces.GetMarketPlaceModels(customer, history).ToList();
-		}
 
 		[HttpGet]
 		public JsonResult GetCustomerMarketplacesHistory(int customerId)
