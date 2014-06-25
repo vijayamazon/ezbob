@@ -302,16 +302,21 @@
         <div class="col-lg-6 col-md-12 col-sm-12">
             <div class="box">
                 <div class="box-title">
-                    <h3>Company Credit Profile <span class="company-name"></span></h3>
+                    <h3>Company Credit Profile <span class="company-name"><%-company[0].CompanyName%> <%-company[0].CompanyRefNum%></span></h3>
                     @BoxTools("Company Credit Profile", "#company-score")
                 </div>
                 <div class="box-content">
+                    <%if(company[0].Error){%>
+                        <h3><%-company[0].Error%></h3>
+                    <%}else{%>
                     <div class="tabbable tabs-left">
                         <ul class="nav nav-tabs active">
                             <%_.each(company, function(c, i){
                                 var tileColor=''; if(!EzBob.isDarkColor(c.ScoreColor)){ tileColor = 'tile-light'; }%>
-                                <li class="<%- (i==0 ? 'active' : '')%>"><a href="#companyExperian<%-i%>" data-toggle="tab">
-                                    <span class="<%-tileColor%>" style="background-color: <%-c.ScoreColor%>;"><%-c.Score%></span>&nbsp;C<%-(i+1)%></a>
+                                <li class="<%- (i==0 ? 'active' : '')%>">
+                                    <a href="#companyExperian<%-i%>" data-toggle="tab" data-companyname="<%-c.CompanyName%>" data-companyref="<%-c.CompanyRefNum%>">
+                                        <span class="<%-tileColor%>" style="background-color: <%-c.ScoreColor%>;"><%-c.Score%></span>&nbsp;C<%-(i+1)%>
+                                    </a>
                                 </li>
                             <%});%>
                         </ul>
@@ -384,6 +389,7 @@
                             <%});%>
                         </div>
                     </div>
+                    <%}%>
                 </div>
             </div>
         </div>

@@ -46,7 +46,12 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
     events:
         'click a[data-action="collapse"]' : "boxToolClick"
         'click a[data-action="close"]' : "boxToolClick"
+        'click a[href^="#companyExperian"]': "companyChanged"
         
+    companyChanged: (e) ->
+        obj = e.currentTarget
+        @$el.find('.company-name').text($(obj).data('companyname') + ' ' + $(obj).data('companyref'))
+
     boxToolClick: (e) ->
       obj = e.currentTarget
       false if $(obj).data("action") is `undefined`
@@ -106,11 +111,13 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
             width: "100%"
             height: "100%"
             lineWidth: 2
-            spotRadius: 3
-            lineColor: "#ebebeb"
-            spotColor: "#ebebeb"
-            chartRangeMin: -1
-            valueSpots: { ':' : '#ebebeb' }
+            spotRadius: 3.5
+            lineColor: "#cfcfcf"
+            fillColor: "transparent"
+            spotColor: "#cfcfcf"
+            maxSpotColor: "#cfcfcf"
+            minSpotColor: "#cfcfcf"
+            valueSpots: { ':' : '#cfcfcf' }
         )
 
         properties = @propertiesModel.toJSON()
@@ -130,14 +137,18 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
                 compC = @$el.find("#companyScoreCanvas" + i)
                 @halfDonut(compC, compC.data('color'), compC.data('percent'))
                 
-                profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').join(',')
+                profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').reverse().join(',')
                 @$el.find("#companyProfit" + i).attr('values',profit)
                 
-                equity = _.pluck(c.FinDataHistories, 'TangibleEquity').join(',')
+                equity = _.pluck(c.FinDataHistories, 'TangibleEquity').reverse().join(',')
                 @$el.find("#companyEquity" + i).attr('values',equity)
             )
         
-        @$el.find('.bar-sparkline').sparkline({ type:'bar', barColor:'#ebebeb' });
+        @$el.find('.bar-sparkline').sparkline("html",
+            type:'bar'
+            barColor:'#cfcfcf'
+            height: "50px"
+        )
         
         if(@experianModel and @experianModel.get('directorsModels'))
             directors = @experianModel.get('directorsModels').length;

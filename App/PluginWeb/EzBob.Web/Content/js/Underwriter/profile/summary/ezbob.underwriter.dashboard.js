@@ -67,7 +67,14 @@
 
     DashboardView.prototype.events = {
       'click a[data-action="collapse"]': "boxToolClick",
-      'click a[data-action="close"]': "boxToolClick"
+      'click a[data-action="close"]': "boxToolClick",
+      'click a[href^="#companyExperian"]': "companyChanged"
+    };
+
+    DashboardView.prototype.companyChanged = function(e) {
+      var obj;
+      obj = e.currentTarget;
+      return this.$el.find('.company-name').text($(obj).data('companyname') + ' ' + $(obj).data('companyref'));
     };
 
     DashboardView.prototype.boxToolClick = function(e) {
@@ -147,12 +154,14 @@
         width: "100%",
         height: "100%",
         lineWidth: 2,
-        spotRadius: 3,
-        lineColor: "#ebebeb",
-        spotColor: "#ebebeb",
-        chartRangeMin: -1,
+        spotRadius: 3.5,
+        lineColor: "#cfcfcf",
+        fillColor: "transparent",
+        spotColor: "#cfcfcf",
+        maxSpotColor: "#cfcfcf",
+        minSpotColor: "#cfcfcf",
         valueSpots: {
-          ':': '#ebebeb'
+          ':': '#cfcfcf'
         }
       });
       properties = this.propertiesModel.toJSON();
@@ -171,15 +180,16 @@
           var compC, equity, profit;
           compC = _this.$el.find("#companyScoreCanvas" + i);
           _this.halfDonut(compC, compC.data('color'), compC.data('percent'));
-          profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').join(',');
+          profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').reverse().join(',');
           _this.$el.find("#companyProfit" + i).attr('values', profit);
-          equity = _.pluck(c.FinDataHistories, 'TangibleEquity').join(',');
+          equity = _.pluck(c.FinDataHistories, 'TangibleEquity').reverse().join(',');
           return _this.$el.find("#companyEquity" + i).attr('values', equity);
         });
       }
-      this.$el.find('.bar-sparkline').sparkline({
+      this.$el.find('.bar-sparkline').sparkline("html", {
         type: 'bar',
-        barColor: '#ebebeb'
+        barColor: '#cfcfcf',
+        height: "50px"
       });
       if (this.experianModel && this.experianModel.get('directorsModels')) {
         directors = this.experianModel.get('directorsModels').length;

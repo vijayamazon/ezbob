@@ -59,6 +59,7 @@
 		public int LateAccounts { get; set; }
 		public int LateAmount { get; set; }
 		public List<FinDataModel> FinDataHistories { get; set; }
+		public string Error { get; set; }
 
 		
 	}
@@ -151,10 +152,16 @@
 					model.DashboardModel = BuildDashboardModel(oResult);
 					return model;
 				case ParsingResult.Fail:
-					return new CompanyScoreModel { result = "Failed to parse Experian response." };
+					return new CompanyScoreModel { result = "Failed to parse Experian response.", DashboardModel = new ComapanyDashboardModel
+						{
+							Error = string.Format("{0} {1}", "Failed to parse Experian response.", oResult.ErrorMsg)
+						}};
 
 				case ParsingResult.NotFound:
-					return new CompanyScoreModel { result = "No data found." };
+					return new CompanyScoreModel { result = "No data found.", DashboardModel = new ComapanyDashboardModel
+						{
+							Error = string.Format("{0} {1}", "No data found.", oResult.ErrorMsg)
+						}};
 
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -163,7 +170,7 @@
 
 		private ComapanyDashboardModel BuildDashboardModel(ExperianParserOutput oResult)
 		{
-			var model = new ComapanyDashboardModel{ FinDataHistories = new List<FinDataModel>()};
+			var model = new ComapanyDashboardModel{ FinDataHistories = new List<FinDataModel>(), LastFinData = new FinDataModel()};
 			
 			if (oResult.TypeOfBusinessReduced == TypeOfBusinessReduced.Limited)
 			{
