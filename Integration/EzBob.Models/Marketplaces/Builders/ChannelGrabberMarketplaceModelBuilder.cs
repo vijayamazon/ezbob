@@ -94,8 +94,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 				model.CGData = new ChannelGrabberHmrcData {
 					VatReturn = vrd.VatReturnRawData,
 					RtiTaxMonths = vrd.RtiTaxMonthRawData,
-					BankStatement = new BankStatementDataModel(),
-					BankStatementAnnualized = new BankStatementDataModel(),
+					BankStatement = vrd.BankStatement,
+					BankStatementAnnualized = vrd.BankStatementAnnualized,
 					SalariesMultiplier = CurrentValues.Instance.HmrcSalariesMultiplier,
 					VatReturnSummary = vrd.Summary,
 					VatReturnSummaryDates = datesSummary.ToArray(),

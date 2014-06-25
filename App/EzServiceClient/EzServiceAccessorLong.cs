@@ -48,6 +48,8 @@
 				VatReturnRawData = vrdar.VatReturnRawData,
 				RtiTaxMonthRawData = vrdar.RtiTaxMonthRawData,
 				Summary = vrdar.Summary,
+				BankStatement = vrdar.BankStatement,
+				BankStatementAnnualized = vrdar.BankStatementAnnualized,
 			};
 		} // LoadVatReturnFullData
 

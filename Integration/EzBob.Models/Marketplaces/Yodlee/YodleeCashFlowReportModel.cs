@@ -6,6 +6,7 @@
 	using System.Linq;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
+	using Ezbob.Backend.Models;
 	using NHibernate;
 
 	[Serializable]

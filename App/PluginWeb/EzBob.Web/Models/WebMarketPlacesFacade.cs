@@ -14,12 +14,6 @@
 				? customer.CustomerMarketPlaces.Where(mp => mp.Created.HasValue && mp.Created.Value.Date <= history.Value.Date).ToList()
 				: customer.CustomerMarketPlaces.ToList();
 
-			MarketPlaceModel oYodleeModel = null;
-			var oHmrcList = new List<MarketPlaceModel>();
-
-			var oHmrcID = Integration.ChannelGrabberConfig.Configuration.Instance.Hmrc.Guid();
-			var oYodleeID = new Guid("107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF");
-
 			List<MarketPlaceModel> models = marketplaces.Select(mp => {
 				try {
 					var builder = GetBuilder(mp);
@@ -27,12 +21,6 @@
 					var model = builder.Create(mp, history);
 
 					model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, history);
-
-					if ((oYodleeModel == null) && (mp.Marketplace.InternalId == oYodleeID))
-						oYodleeModel = model;
-
-					if (mp.Marketplace.InternalId == oHmrcID)
-						oHmrcList.Add(model);
 
 					return model;
 				}
@@ -49,22 +37,6 @@
 					};
 				} // try
 			}).ToList();
-
-			if (oYodleeModel != null) {
-				foreach (var oModel in oHmrcList) {
-					try {
-						var hmrcData = (ChannelGrabberHmrcData)oModel.CGData;
-
-						if (hmrcData != null) {
-							hmrcData.BankStatement = oYodleeModel.Yodlee.BankStatementDataModel;
-							hmrcData.BankStatementAnnualized = CalculateAnnualizedBankStatement(hmrcData);
-						} // if
-					}
-					catch (Exception e) {
-						new SafeILog(this).Warn(e, "Something went wrong while building bank statement for marketplace id {0} of type HMRC.", oModel.Id);
-					} // try
-				} // for each oModel
-			} // if HMRC or Yodlee
 
 			return models;
 		} // GetMarketPlaceModels
@@ -98,66 +70,6 @@
 
 			return models.OrderByDescending(m => m.HistoryDate);
 		} // GetMarketPlaceHistoryModel
-
-		private BankStatementDataModel CalculateAnnualizedBankStatement(ChannelGrabberHmrcData hmrcData) {
-			var annualized = new BankStatementDataModel();
-			var lastVatReturn = hmrcData.VatReturn.LastOrDefault();
-
-			decimal box3 = 0M, box4 = 0M, box6 = 0M, box7 = 0M;
-
-			if (lastVatReturn != null) {
-				foreach (var vat in lastVatReturn.Data) {
-					if (vat.Key.Contains("(Box 3)")) {
-						box3 = vat.Value.Amount;
-						continue;
-					} // if
-
-					if (vat.Key.Contains("(Box 4)")) {
-						box4 = vat.Value.Amount;
-						continue;
-					} // if
-
-					if (vat.Key.Contains("(Box 6)")) {
-						box6 = vat.Value.Amount;
-						continue;
-					} // if
-
-					if (vat.Key.Contains("(Box 7)")) {
-						box7 = vat.Value.Amount;
-						continue;
-					} // if
-				} // foreach
-			} // if
-
-			var vatRevenues = 1 + (box6 == 0 ? 0 : (box3 / (box6)));
-			var vatOpex = 1 + (box7 == 0 ? 0 : (box4 / (box7)));
-
-			var bankStat = hmrcData.BankStatement;
-
-			bankStat.Revenues = vatRevenues == 0M ? bankStat.Revenues : bankStat.Revenues / (double)vatRevenues;
-			bankStat.Opex = Math.Abs(vatOpex == 0M ? bankStat.Opex : bankStat.Opex / (double)vatOpex);
-			bankStat.TotalValueAdded = bankStat.Revenues - bankStat.Opex;
-			bankStat.PercentOfRevenues = Math.Abs(bankStat.Revenues - 0) < 0.01 ? 0 : bankStat.TotalValueAdded / bankStat.Revenues;
-			bankStat.Ebida = bankStat.TotalValueAdded + (bankStat.Salaries + bankStat.Tax);
-			bankStat.FreeCashFlow = bankStat.Ebida - bankStat.ActualLoansRepayment;
-
-			if (bankStat.PeriodMonthsNum == 0)
-				return annualized;
-
-			const int year = 12;
-
-			annualized.Revenues = (bankStat.Revenues / bankStat.PeriodMonthsNum * year);
-			annualized.Opex = (bankStat.Opex / bankStat.PeriodMonthsNum * year);
-			annualized.TotalValueAdded = annualized.Revenues - annualized.Opex;
-			annualized.PercentOfRevenues = Math.Abs(annualized.Revenues) < 0.01 ? 0 : annualized.TotalValueAdded / annualized.Revenues;
-			annualized.Salaries = (bankStat.Salaries / bankStat.PeriodMonthsNum * year);
-			annualized.Tax = (bankStat.Tax / bankStat.PeriodMonthsNum * year);
-			annualized.Ebida = annualized.TotalValueAdded + (annualized.Salaries + annualized.Tax);
-			annualized.ActualLoansRepayment = (bankStat.ActualLoansRepayment / bankStat.PeriodMonthsNum * year);
-			annualized.FreeCashFlow = annualized.Ebida - annualized.ActualLoansRepayment;
-
-			return annualized;
-		} // CalculateAnnualizedBankStatement
 
 		private static IMarketplaceModelBuilder GetBuilder(MP_CustomerMarketPlace mp) {
 			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());

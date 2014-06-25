@@ -34,6 +34,24 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="QuickOfferModel" nillable="true" type="tns:QuickOfferModel" />
+  <xs:complexType name="BankStatementDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActualLoansRepayment" type="xs:double" />
+      <xs:element minOccurs="0" name="Ebida" type="xs:double" />
+      <xs:element minOccurs="0" name="FreeCashFlow" type="xs:double" />
+      <xs:element minOccurs="0" name="Opex" type="xs:double" />
+      <xs:element minOccurs="0" name="PercentOfAnnual" type="xs:double" />
+      <xs:element minOccurs="0" name="PercentOfAnnual2" type="xs:double" />
+      <xs:element minOccurs="0" name="PercentOfRevenues" type="xs:double" />
+      <xs:element minOccurs="0" name="Period" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PeriodMonthsNum" type="xs:int" />
+      <xs:element minOccurs="0" name="Revenues" type="xs:double" />
+      <xs:element minOccurs="0" name="Salaries" type="xs:double" />
+      <xs:element minOccurs="0" name="Tax" type="xs:double" />
+      <xs:element minOccurs="0" name="TotalValueAdded" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BankStatementDataModel" nillable="true" type="tns:BankStatementDataModel" />
   <xs:complexType name="ArrayOfRtiTaxMonthRawData">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="RtiTaxMonthRawData" nillable="true" type="tns:RtiTaxMonthRawData" />

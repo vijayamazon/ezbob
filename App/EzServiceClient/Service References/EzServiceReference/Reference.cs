@@ -442,6 +442,12 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class VatReturnDataActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.BankStatementDataModel BankStatementField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.BankStatementDataModel BankStatementAnnualizedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.Models.RtiTaxMonthRawData[] RtiTaxMonthRawDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -449,6 +455,32 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.Models.VatReturnRawData[] VatReturnRawDataField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.BankStatementDataModel BankStatement {
+            get {
+                return this.BankStatementField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BankStatementField, value) != true)) {
+                    this.BankStatementField = value;
+                    this.RaisePropertyChanged("BankStatement");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.BankStatementDataModel BankStatementAnnualized {
+            get {
+                return this.BankStatementAnnualizedField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BankStatementAnnualizedField, value) != true)) {
+                    this.BankStatementAnnualizedField = value;
+                    this.RaisePropertyChanged("BankStatementAnnualized");
+                }
+            }
+        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.RtiTaxMonthRawData[] RtiTaxMonthRawData {

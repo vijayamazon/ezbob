@@ -163,4 +163,13 @@ namespace EZBob.DatabaseLib.Model.Database
 			return error;
 		}
 	}
+
+	public static class MP_CustomerMarketPlaceExt {
+		public static string Stringify(this MP_CustomerMarketPlace mp) {
+			if (mp == null)
+				return "-- null --";
+
+			return string.Format("{1} ({0} of type {2})", mp.Id, mp.DisplayName, mp.Marketplace == null ? "unknown" : mp.Marketplace.Name);
+		} // Stringify
+	} // class MP_CustomerMarketPlaceExt
 }

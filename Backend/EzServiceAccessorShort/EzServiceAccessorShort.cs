@@ -65,6 +65,8 @@
 				VatReturnRawData = stra.VatReturnRawData,
 				RtiTaxMonthRawData = stra.RtiTaxMonthRawData,
 				Summary = stra.Summary,
+				BankStatement = stra.BankStatement,
+				BankStatementAnnualized = stra.BankStatementAnnualized,
 			};
 		} // LoadVatReturnFullData
 

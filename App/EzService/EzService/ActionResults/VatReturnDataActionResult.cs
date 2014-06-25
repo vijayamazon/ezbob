@@ -12,5 +12,11 @@
 
 		[DataMember]
 		public VatReturnSummary[] Summary { get; set; }
+
+		[DataMember]
+		public BankStatementDataModel BankStatement { get; set; }
+
+		[DataMember]
+		public BankStatementDataModel BankStatementAnnualized { get; set; }
 	} // class VatReturnDataActionResult
 } // namespace EzService

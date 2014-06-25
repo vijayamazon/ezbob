@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies {
+﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
 	using System.Linq;
 	using EZBob.DatabaseLib;
@@ -9,12 +9,12 @@
 	using Ezbob.Logger;
 	using StructureMap;
 
-	public class CalculateBankStatement : AStrategy {
+	public class GetBankModel : AStrategy {
 		#region public
 
 		#region constructor
 
-		public CalculateBankStatement(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public GetBankModel(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
 		} // constructor
 
@@ -23,7 +23,7 @@
 		#region property Name
 
 		public override string Name {
-			get { return "CalculateBankStatement"; }
+			get { return "Get bank model"; }
 		} // Name
 
 		#endregion property Name
@@ -31,6 +31,7 @@
 		#region method Execute
 
 		public override void Execute() {
+			Log.Debug("Getting a bank model for customer {0}...", m_nCustomerID);
 			Result = null;
 
 			try {
@@ -56,6 +57,8 @@
 				model.PaymentAccountBasic = builder.GetPaymentAccountModel(oYodleeMp, model, null);
 
 				Result = model;
+
+				Log.Debug("Getting a bank model for customer {0} complete.", customer.Stringify());
 			}
 			catch (Exception e) {
 				Log.Warn(e, "Something went wrong while building a bank model for customer with id {0}.", m_nCustomerID);
@@ -70,10 +73,14 @@
 
 		#region private
 
+		#region method GetBuilder
+
 		private static IMarketplaceModelBuilder GetBuilder(MP_CustomerMarketPlace mp) {
 			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
 			return builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
 		} // GetBuilder
+
+		#endregion method GetBuilder
 
 		#region property Helper
 
@@ -87,5 +94,5 @@
 		private static readonly Guid ms_oYodleeID = new Guid("107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF");
 
 		#endregion private
-	} // class CalculateBankStatement
+	} // class GetBankModel
 } // namespace

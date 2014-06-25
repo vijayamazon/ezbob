@@ -104,6 +104,8 @@
 				VatReturnRawData = oInstance.VatReturnRawData,
 				RtiTaxMonthRawData = oInstance.RtiTaxMonthRawData,
 				Summary = oInstance.Summary,
+				BankStatement = oInstance.BankStatement,
+				BankStatementAnnualized = oInstance.BankStatementAnnualized,
 				MetaData = oMetaData,
 			};
 		} // LoadVatReturnFullData
