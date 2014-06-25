@@ -70,4 +70,26 @@
 	} // enum VatReturnSourceType
 
 	#endregion enum VatReturnSourceType
+
+	#region enum AffordabilityType
+
+	[DataContract]
+	public enum AffordabilityType {
+		[EnumMember]
+		Hmrc,
+
+		[EnumMember]
+		Bank,
+
+		[EnumMember]
+		Psp,
+
+		[EnumMember]
+		Ecomm, 
+
+		[EnumMember]
+		Accounting,
+	} // AffordabilityType
+
+	#endregion enum AffordabilityType
 } // namespace Ezbob.Backend.Models

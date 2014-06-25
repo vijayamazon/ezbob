@@ -180,6 +180,11 @@ namespace EzBobTest
 		[Test]
 		public void TestGetBankModel() {
 			new GetBankModel(234, m_oDB, m_oLog).Execute();
-		}
+		} // TestGetBankModel
+
+		[Test]
+		public void TestGetAffordabilityData() {
+			new GetAffordabilityData(234, m_oDB, m_oLog).Execute();
+		} // TestAffordabilityData
 	}
 }

@@ -72,6 +72,22 @@
 
   })(Backbone.Collection);
 
+  EzBob.Underwriter.Affordability = (function(_super) {
+
+    __extends(Affordability, _super);
+
+    function Affordability() {
+      return Affordability.__super__.constructor.apply(this, arguments);
+    }
+
+    Affordability.prototype.url = function() {
+      return "" + window.gRootPath + "Underwriter/MarketPlaces/GetAffordabilityData/?id=" + this.customerId;
+    };
+
+    return Affordability;
+
+  })(Backbone.Model);
+
   EzBob.Underwriter.MarketPlacesView = (function(_super) {
 
     __extends(MarketPlacesView, _super);
@@ -190,14 +206,13 @@
     };
 
     MarketPlacesView.prototype.serializeData = function() {
-      var aryCGAccounts, data, isMarketplace, m, total, _i, _len, _ref;
-      aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+      var data, isMarketplace, m, total, _i, _len, _ref;
       isMarketplace = function(x) {
         var cg;
-        if (!aryCGAccounts[x.get('Name')]) {
+        if (!(EzBob.CgVendors.all()[x.get('Name')])) {
           return !x.get('IsPaymentAccount');
         }
-        cg = aryCGAccounts[x.get('Name')];
+        cg = EzBob.CgVendors.all()[x.get('Name')];
         return (cg.Behaviour === 0) && !cg.HasExpenses;
       };
       data = {

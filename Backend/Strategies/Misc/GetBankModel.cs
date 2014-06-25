@@ -1,13 +1,10 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
 	using System.Linq;
-	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models.Marketplaces;
-	using EzBob.Models.Marketplaces.Builders;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using StructureMap;
 
 	public class GetBankModel : AStrategy {
 		#region public
@@ -35,7 +32,7 @@
 			Result = null;
 
 			try {
-				Customer customer = Helper.GetCustomerInfo(m_nCustomerID);
+				Customer customer = DbHelper.GetCustomerInfo(m_nCustomerID);
 
 				if (customer == null) {
 					Log.Warn("Could not find a customer by id {0}.", m_nCustomerID);
@@ -50,7 +47,7 @@
 					return;
 				} // if
 
-				var builder = GetBuilder(oYodleeMp);
+				var builder = GetMpModelBuilder(oYodleeMp);
 
 				var model = builder.Create(oYodleeMp, null);
 
@@ -72,23 +69,6 @@
 		#endregion public
 
 		#region private
-
-		#region method GetBuilder
-
-		private static IMarketplaceModelBuilder GetBuilder(MP_CustomerMarketPlace mp) {
-			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
-			return builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
-		} // GetBuilder
-
-		#endregion method GetBuilder
-
-		#region property Helper
-
-		private DatabaseDataHelper Helper {
-			get { return ObjectFactory.GetInstance<DatabaseDataHelper>(); }
-		} // Helper
-
-		#endregion property Helper
 
 		private readonly int m_nCustomerID;
 		private static readonly Guid ms_oYodleeID = new Guid("107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF");

@@ -134,6 +134,10 @@
         }
 		#endregion
 
+		public override void Update(int nCustomerMarketplaceID) {
+			UpdateCustomerMarketplaceFirst(nCustomerMarketplaceID);
+		} // Update
+
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord

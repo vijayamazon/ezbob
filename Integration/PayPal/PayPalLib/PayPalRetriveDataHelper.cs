@@ -27,6 +27,10 @@ namespace EzBob.PayPal
 		{
 		}
 
+		public override void Update(int nCustomerMarketplaceID) {
+			UpdateCustomerMarketplaceFirst(nCustomerMarketplaceID);
+		} // Update
+
 		protected override ElapsedTimeInfo RetrieveAndAggregate(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
@@ -68,19 +72,23 @@ namespace EzBob.PayPal
 			Helper.SaveOrUpdateAcctountInfo(databaseCustomerMarketPlace, personalData);
 		}
 
-		private void UpdateTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalSecurityData securityInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
-			Helper.CustomerMarketplaceUpdateAction(CustomerMarketplaceUpdateActionType.UpdateTransactionInfo, databaseCustomerMarketPlace, historyRecord, () =>
-				{
+		private void UpdateTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalSecurityData securityInfo, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+			Helper.CustomerMarketplaceUpdateAction(
+				CustomerMarketplaceUpdateActionType.UpdateTransactionInfo,
+				databaseCustomerMarketPlace,
+				historyRecord,
+				() => {
 					var endDate = DateTime.UtcNow;
 					var elapsedTimeInfo = new ElapsedTimeInfo();
-					DateTime? startDate = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									ElapsedDataMemberType.RetrieveDataFromDatabase,
-									() => Helper.GetLastPayPalTransactionRequest(databaseCustomerMarketPlace));
+
+					DateTime? startDate = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+						elapsedTimeInfo,
+						ElapsedDataMemberType.RetrieveDataFromDatabase,
+						() => Helper.GetLastPayPalTransactionRequest(databaseCustomerMarketPlace)
+					);
+
 					if (!startDate.HasValue)
-					{
 						startDate = endDate.AddMonths(-CurrentValues.Instance.PayPalTransactionSearchMonthsBack);
-					}
 
 					var errorRetryingInfo = new ErrorRetryingInfo((bool)CurrentValues.Instance.PayPalEnableRetrying, CurrentValues.Instance.PayPalMinorTimeoutInSeconds, CurrentValues.Instance.PayPalUseLastTimeOut);
 
@@ -89,52 +97,59 @@ namespace EzBob.PayPal
 					errorRetryingInfo.Info[1] = new ErrorRetryingItemInfo(CurrentValues.Instance.PayPalIterationSettings2Index, CurrentValues.Instance.PayPalIterationSettings2CountRequestsExpectError, CurrentValues.Instance.PayPalIterationSettings2TimeOutAfterRetryingExpiredInMinutes);
 					errorRetryingInfo.Info[2] = new ErrorRetryingItemInfo(CurrentValues.Instance.PayPalIterationSettings3Index, CurrentValues.Instance.PayPalIterationSettings3CountRequestsExpectError, CurrentValues.Instance.PayPalIterationSettings3TimeOutAfterRetryingExpiredInMinutes);
 		
-					var reqInfo = new PayPalRequestInfo
-						{
-							SecurityInfo = securityInfo,
-							StartDate = startDate.Value,
-							EndDate = endDate,
-							ErrorRetryingInfo = errorRetryingInfo,
-							OpenTimeOutInMinutes = CurrentValues.Instance.PayPalOpenTimeoutInMinutes,
-							SendTimeoutInMinutes = CurrentValues.Instance.PayPalSendTimeoutInMinutes
-						};
-					var newTransactionsList = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									ElapsedDataMemberType.RetrieveDataFromExternalService,
-									() => PayPalServiceHelper.GetTransactionData(reqInfo));
+					var reqInfo = new PayPalRequestInfo {
+						SecurityInfo = securityInfo,
+						StartDate = startDate.Value,
+						EndDate = endDate,
+						ErrorRetryingInfo = errorRetryingInfo,
+						OpenTimeOutInMinutes = CurrentValues.Instance.PayPalOpenTimeoutInMinutes,
+						SendTimeoutInMinutes = CurrentValues.Instance.PayPalSendTimeoutInMinutes
+					};
 
-					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-									ElapsedDataMemberType.StoreDataToDatabase,
-									() => Helper.SavePayPalTransactionInfo(databaseCustomerMarketPlace, newTransactionsList, historyRecord));
+					var newTransactionsList = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+						elapsedTimeInfo,
+						ElapsedDataMemberType.RetrieveDataFromExternalService,
+						() => PayPalServiceHelper.GetTransactionData(reqInfo)
+					);
 
-					if (newTransactionsList != null)
-					{
-						var allTransactions = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-										ElapsedDataMemberType.RetrieveDataFromDatabase,
-										() => Helper.GetAllPayPalTransactions(newTransactionsList.SubmittedDate, databaseCustomerMarketPlace));
+					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+						elapsedTimeInfo,
+						ElapsedDataMemberType.StoreDataToDatabase,
+						() => Helper.SavePayPalTransactionInfo(databaseCustomerMarketPlace, newTransactionsList, historyRecord)
+					);
 
-						var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-										ElapsedDataMemberType.AggregateData,
-										() => CreateTransactionAggregationInfo(allTransactions, Helper.CurrencyConverter));
+					if (newTransactionsList != null) {
+						var allTransactions = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+							elapsedTimeInfo,
+							ElapsedDataMemberType.RetrieveDataFromDatabase,
+							() => Helper.GetAllPayPalTransactions(newTransactionsList.SubmittedDate, databaseCustomerMarketPlace)
+						);
+
+						var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+							elapsedTimeInfo,
+							ElapsedDataMemberType.AggregateData,
+							() => CreateTransactionAggregationInfo(allTransactions, Helper.CurrencyConverter)
+						);
+
 						// Save
-						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-										ElapsedDataMemberType.StoreAggregatedData,
-										() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
+						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+							elapsedTimeInfo,
+							ElapsedDataMemberType.StoreAggregatedData,
+							() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord)
+						);
 					}
 					else
-					{
 						Log.DebugFormat("PayPal New transactions list is null, skipping aggregation");
-					}
-					return new UpdateActionResultInfo
-					{
+
+					return new UpdateActionResultInfo {
 						Name = UpdateActionResultType.TransactionItemsCount,
 						Value = newTransactionsList == null ? null : (object)newTransactionsList.Count,
 						RequestsCounter = newTransactionsList == null ? null : newTransactionsList.RequestsCounter,
 						ElapsedTime = elapsedTimeInfo
 					};
-
 				}
 			);
-		}
+		} // UpdateTransactionInfo
 
 		private IEnumerable<IWriteDataInfo<PayPalDatabaseFunctionType>> CreateTransactionAggregationInfo(PayPalTransactionsList data, ICurrencyConvertor currencyConverter)
 		{

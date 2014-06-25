@@ -47,6 +47,10 @@
 			InternalUpdateInfo(databaseCustomerMarketPlace, historyRecord);
 		}
 
+		public virtual void Update(int nCustomerMarketplaceID) {
+			CustomerMarketplaceUpdateAction(nCustomerMarketplaceID);
+		} // Update
+
 		public void CustomerMarketplaceUpdateAction(int nCustomerMarketplaceID) {
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace = GetDatabaseCustomerMarketPlace(nCustomerMarketplaceID);
 

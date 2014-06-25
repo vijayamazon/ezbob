@@ -89,46 +89,46 @@
 				var vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName);
 
 				if (null != vi)
-					oRetrieveDataHelper = new RetrieveDataHelper(Helper, new DatabaseMarketPlace(marketplaceName), vi);
+					oRetrieveDataHelper = new RetrieveDataHelper(DbHelper, new DatabaseMarketPlace(marketplaceName), vi);
 				else {
 					switch (marketplaceName) {
 					case "eBay":
 						// TODO: make all the constructors empty, create helper and mp inside if needed
-						oRetrieveDataHelper = new eBayRetriveDataHelper(Helper, new eBayDatabaseMarketPlace());
+						oRetrieveDataHelper = new eBayRetriveDataHelper(DbHelper, new eBayDatabaseMarketPlace());
 						break;
 
 					case "Amazon":
-						oRetrieveDataHelper = new AmazonRetriveDataHelper(Helper, new AmazonDatabaseMarketPlace());
+						oRetrieveDataHelper = new AmazonRetriveDataHelper(DbHelper, new AmazonDatabaseMarketPlace());
 						break;
 
 					case "Pay Pal":
-						oRetrieveDataHelper = new PayPalRetriveDataHelper(Helper, new PayPalDatabaseMarketPlace());
+						oRetrieveDataHelper = new PayPalRetriveDataHelper(DbHelper, new PayPalDatabaseMarketPlace());
 						break;
 
 					case "EKM":
-						oRetrieveDataHelper = new EkmRetriveDataHelper(Helper, new EkmDatabaseMarketPlace());
+						oRetrieveDataHelper = new EkmRetriveDataHelper(DbHelper, new EkmDatabaseMarketPlace());
 						break;
 
 					case "FreeAgent":
-						oRetrieveDataHelper = new FreeAgentRetrieveDataHelper(Helper, new FreeAgentDatabaseMarketPlace());
+						oRetrieveDataHelper = new FreeAgentRetrieveDataHelper(DbHelper, new FreeAgentDatabaseMarketPlace());
 						break;
 
 					case "Sage":
-						oRetrieveDataHelper = new SageRetrieveDataHelper(Helper, new SageDatabaseMarketPlace());
+						oRetrieveDataHelper = new SageRetrieveDataHelper(DbHelper, new SageDatabaseMarketPlace());
 						break;
 
 					case "PayPoint":
-						oRetrieveDataHelper = new PayPointRetrieveDataHelper(Helper, new PayPointDatabaseMarketPlace());
+						oRetrieveDataHelper = new PayPointRetrieveDataHelper(DbHelper, new PayPointDatabaseMarketPlace());
 						break;
 
 					case "Yodlee":
-						oRetrieveDataHelper = new YodleeRetriveDataHelper(Helper, new YodleeDatabaseMarketPlace());
+						oRetrieveDataHelper = new YodleeRetriveDataHelper(DbHelper, new YodleeDatabaseMarketPlace());
 						break;
 					} // switch
 				} // if
 
 				if (oRetrieveDataHelper != null)
-					oRetrieveDataHelper.CustomerMarketplaceUpdateAction(marketplaceId);
+					oRetrieveDataHelper.Update(marketplaceId);
 			}
 			catch (Exception e) {
 				errorMessage = e.Message;
@@ -178,14 +178,6 @@
 		#endregion public
 
 		#region private
-
-		#region property Helper
-
-		private DatabaseDataHelper Helper {
-			get { return ObjectFactory.GetInstance<DatabaseDataHelper>(); }
-		} // Helper
-
-		#endregion property Helper
 
 		private readonly StrategiesMailer mailer;
 		private readonly int customerId;

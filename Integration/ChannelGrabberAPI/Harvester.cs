@@ -21,7 +21,7 @@
 		public Harvester(AccountData oAccountData, ASafeLog log, int nCustomerID, string sCustomerEmail) : base(log) {
 			m_oAccountData = oAccountData;
 
-			if ((m_nCustomerID < 1) || string.IsNullOrWhiteSpace(sCustomerEmail))
+			if ((nCustomerID < 1) || string.IsNullOrWhiteSpace(sCustomerEmail))
 				throw new ApiException("Customer information not specified.");
 
 			m_nCustomerID = nCustomerID;

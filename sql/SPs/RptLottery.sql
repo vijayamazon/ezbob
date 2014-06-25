@@ -19,6 +19,7 @@ BEGIN
 
 	DECLARE @Num INT
 	DECLARE @MinDelta INT
+	DECLARE @Current NVARCHAR(32) = 'Current'
 
 	SELECT
 		@Num = COUNT(*)
@@ -31,6 +32,7 @@ BEGIN
 
 	INSERT INTO #data(Name, Value) VALUES
 		('Nimrod', 55),
+		('Adi', 29),
 		('Shiri', 47),
 		('Ros', 50),
 		('Nir', 33),
@@ -38,8 +40,17 @@ BEGIN
 		('Oran', 36),
 		('Emma', 58),
 		('Stas', 40),
-		('Alex', 44),
-		('-- Actual number --', @Num)
+		('Alex', 44)
+
+	INSERT INTO #data(Name, Value)
+	SELECT
+		'Travis',
+		MAX(Value) + 1
+	FROM
+		#data
+		
+	INSERT INTO #data(Name, Value) VALUES
+		(@Current, @Num)
 
 	UPDATE #data SET
 		Delta = ABS(@Num - Value)
@@ -49,12 +60,12 @@ BEGIN
 	FROM
 		#data
 	WHERE
-		Name NOT LIKE '--%'
+		Name NOT LIKE @Current
 
 	UPDATE #data SET
 		Css = 'total'
 	WHERE
-		Name LIKE '--%'
+		Name LIKE @Current
 
 	UPDATE #data SET
 		Css = 'total2'
