@@ -118,61 +118,61 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             for (var hist in medalHistory.MedalHistories) {
                 histData.push([parseInt(hist), medalHistory.MedalHistories[hist].Result * 100]);
             }
-
-            var mhPlot = $.jqplot('medalHistory', [histData],
-                {
-                    title: '',
-                    axes: {
-                        yaxis: {
-                            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                            min: 0,
-                            max: 100,
-                            tickOptions: {
-                                show: false,
-                                formatString: '%.1f %'
+            if (histData.length > 0) {
+                var mhPlot = $.jqplot('medalHistory', [histData],
+                    {
+                        title: '',
+                        axes: {
+                            yaxis: {
+                                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                                min: 0,
+                                max: 100,
+                                tickOptions: {
+                                    show: false,
+                                    formatString: '%.1f %'
+                                },
+                                rendererOptions: { drawBaseline: false }
                             },
-                            rendererOptions: { drawBaseline: false }
+                            xaxis: {
+                                min: 0,
+                                tickOptions: { show: false },
+                                rendererOptions: { drawBaseline: false }
+                            }
                         },
-                        xaxis: {
-                            min: 0,
-                            tickOptions: { show: false },
-                            rendererOptions: { drawBaseline: false }
-                        }
-                    },
-                    grid: {
-                        drawGridLines: false,
-                        background: 'transparent',
-                        borderWidth: 0,
-                        borderColor: 'transparent',
-                        shadow: false
-                    },
-                    seriesDefaults: {
-                        shadow: false,
-                        color: "#a7a7a7",
-                        markerOptions: {
+                        grid: {
+                            drawGridLines: false,
+                            background: 'transparent',
+                            borderWidth: 0,
+                            borderColor: 'transparent',
+                            shadow: false
+                        },
+                        seriesDefaults: {
+                            shadow: false,
                             color: "#a7a7a7",
-                            style: "circle"
+                            markerOptions: {
+                                color: "#a7a7a7",
+                                style: "circle"
+                            }
+                        },
+                        highlighter: {
+                            show: true,
+                            showTooltip: true,
+                            tooltipAxes: 'y',
+                            useAxesFormatters: true,
+                            tooltipFormatString: '%.1f %'
+                        },
+                        canvasOverlay: {
+                            show: true,
+                            objects: [
+                                { horizontalLine: { name: '', y: 0, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } },
+                                { horizontalLine: { name: 'silver', y: 40, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } },
+                                { horizontalLine: { name: 'gold', y: 62, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } },
+                                { horizontalLine: { name: 'platinum', y: 84, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } },
+                                { horizontalLine: { name: 'diamond', y: 100, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } }
+                            ]
                         }
-                    },
-                    highlighter: {
-                        show: true,
-                        showTooltip: true,
-                        tooltipAxes: 'y',
-                        useAxesFormatters: true,
-                        tooltipFormatString: '%.1f %'
-                    },
-                    canvasOverlay: {
-                        show: true,
-                        objects: [
-                            { horizontalLine: { name: '', y: 0, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } },
-                            { horizontalLine: { name: 'silver', y: 40, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } },
-                            { horizontalLine: { name: 'gold', y: 62, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } },
-                            { horizontalLine: { name: 'platinum', y: 84, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } },
-                            { horizontalLine: { name: 'diamond', y: 100, lineWidth: 1, xOffset: 0, color: '#a7a7a7', shadow: false } }
-                        ]
-                    }
-                });
-
+                    });
+            }
 
             var medalBar = $.jqplot('medalBar', [[40], [22], [22], [16]],
                 {

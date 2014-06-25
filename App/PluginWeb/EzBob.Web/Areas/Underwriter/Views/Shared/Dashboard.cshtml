@@ -298,35 +298,36 @@
         </div>
         <%}%>
         
-        <%if(experianCompany){
-            var tileColor='';
-            if(!EzBob.isDarkColor(experianCompany.ScoreColor)){
-                tileColor = 'tile-light';
-            }%>
+        <%console.log('company', company); if(company && company.length>0){ var alert='';%>
         <div class="col-lg-6 col-md-12 col-sm-12">
             <div class="box">
                 <div class="box-title">
-                    <h3>Company Credit Profile</h3>
+                    <h3>Company Credit Profile <span class="company-name"></span></h3>
                     @BoxTools("Company Credit Profile", "#company-score")
                 </div>
                 <div class="box-content">
                     <div class="tabbable tabs-left">
                         <ul class="nav nav-tabs active">
-                            <li class="active"><a href="#companyExperian1" data-toggle="tab">
-                                <span class="<%-tileColor%>" style="background-color: <%-experianCompany.ScoreColor%>;"><%-experianCompany.BureauScore%></span>&nbsp;C1</a></li>
+                            <%_.each(company, function(c, i){
+                                var tileColor=''; if(!EzBob.isDarkColor(c.ScoreColor)){ tileColor = 'tile-light'; }%>
+                                <li class="<%- (i==0 ? 'active' : '')%>"><a href="#companyExperian<%-i%>" data-toggle="tab">
+                                    <span class="<%-tileColor%>" style="background-color: <%-c.ScoreColor%>;"><%-c.Score%></span>&nbsp;C<%-(i+1)%></a>
+                                </li>
+                            <%});%>
                         </ul>
                         <div class="tab-content no-border">
-                            <div class="tab-pane fade active in" id="companyExperian1">
+                            <%_.each(company, function(c, i){%>
+                            <div class="tab-pane fade <%- (i==0 ? 'active' : '')%> in" id="companyExperian<%-i%>">
                                 <div class="row">
                                     <div class="col-lg-3 col-md-6">
                                         <div class="right-seperator">
                                             <div class="text-center experian-canvas">
                                                 <div>Score</div>
-                                                <canvas id="companyScoreCanvas" width="100" height="100" data-color="<%-experianCompany.BureauScore%>" data-percent="<%-experianCompany.BureauScore/100%>"></canvas>
-                                                <div class="half-donut-caption"><%-experianCompany.BureauScore%></div>
+                                                <canvas id="companyScoreCanvas<%-i%>" width="100" height="100" data-color="<%-c.ScoreColor%>" data-percent="<%-c.Score/100%>"></canvas>
+                                                <div class="half-donut-caption"><%-c.Score%></div>
                                             </div>
                                             <div class="">
-                                                <span class="inline-sparkline companyScoreGraph">trend N/A</span>
+                                                <span class="inline-sparkline companyScoreGraph<%-i%>">trend N/A</span>
                                             </div>
                                         </div>
                                     </div>
@@ -334,11 +335,10 @@
                                     <div class="right-seperator">
                                         <div class="text-center">
                                             CAIS balance
-                                            <% var balance = 'N/A'; %>
                                             <p class="text-small">
-                                                <%-balance%> 
+                                                <%-EzBob.formatPoundsAsThousandsNoDecimals(c.CaisBalance)%> 
                                                 <br />
-                                                (N/A accounts)
+                                                (<%-c.CaisAccounts%> accounts)
                                             </p>
                                         </div>
                                         <div style="height:62px;">
@@ -346,41 +346,42 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-8">
-                                    <div class="right-seperator">
-                                        <div class="text-center">
-                                            <div>Filed financals</div>
-                                            <div>
-                                                <div class="col-lg-6">
-                                                    <div class="text-center">Profit</div>
-                                                    <div class="text-center text-big">N/A</div>
-                                                    <div class="">trend N/A</div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="text-center">Tengible eq'</div>
-                                                    <div class="text-center text-big">N/A</div>
-                                                    <div class="">trend N/A</div>
+                                    <div class="col-lg-4 col-md-8">
+                                        <div class="right-seperator">
+                                            <div class="text-center">
+                                                <div>Filed financals</div>
+                                                <div>
+                                                    <div class="col-lg-6">
+                                                        <div class="text-center">Profit</div>
+                                                        <div class="text-center text-big"><%-EzBob.formatPoundsAsThousandsNoDecimals(c.LastFinData.AdjustedProfit)%></div>
+                                                        <div class=""><span id="companyProfit<%-i%>" class="bar-sparkline">trend N/A</span></div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="text-center">Tengible eq'</div>
+                                                        <div class="text-center text-big"><%-EzBob.formatPoundsAsThousandsNoDecimals(c.LastFinData.TangibleEquity)%></div>
+                                                        <div class=""><span id="companyEquity<%-i%>" class="bar-sparkline">trend N/A</span></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-2 col-md-4">
-                                    <% alert = 'alert-warning';%>
-                                    <div class="alert <%-alert%>">
-                                        Delays: N/A
+                                    <div class="col-lg-2 col-md-4">
+                                        <% alert = 'alert-warning';%>
+                                        <div class="alert <%-alert%>">
+                                            Delays: N/A
+                                        </div>
+                                        <% alert = c.DefaultAccounts > 0 ? 'alert-danger' : 'alert-info'; %>
+                                        <div class="alert <%-alert%>">
+                                            Defaults: <%-c.DefaultAccounts%>
+                                        </div>
+                                        <% alert = 'alert-warning'; /* experian.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info'; */%>
+                                        <div class="alert <%-alert%>">
+                                            CCJ N/A, N/A months ago
+                                        </div>
                                     </div>
-                                    <% alert = 'alert-warning'; /*experian.ConsumerSummaryCharacteristics.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info';*/ %>
-                                    <div class="alert <%-alert%>">
-                                        Defaults: N/A
-                                    </div>
-                                    <% alert = 'alert-warning'; /* experian.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info'; */%>
-                                    <div class="alert <%-alert%>">
-                                        CCJ N/A, N/A months ago
-                                    </div>
-                                </div>
                                </div>
                             </div>
+                            <%});%>
                         </div>
                     </div>
                 </div>

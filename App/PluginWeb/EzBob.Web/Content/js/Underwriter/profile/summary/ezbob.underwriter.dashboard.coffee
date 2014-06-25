@@ -12,19 +12,32 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
         @propertiesModel = options.propertiesModel
         @mpsModel = options.mpsModel
         @loanModel = options.loanModel
+        @companyModel = options.companyModel
         
         @bindTo @model, "change sync", @render, this
         @bindTo @crmModel, "change sync", @render, this
         @bindTo @personalModel, "change sync", @personalModelChanged, this
         @bindTo @experianModel, "change sync", @render, this
+        @bindTo @companyModel, "change sync", @render, this
         @bindTo @propertiesModel, "change sync", @render, this
         @bindTo @mpsModel, "change sync", @render, this
         @bindTo @loanModel, "change sync", @render, this
 
+        @expCompany = []
+        
     serializeData: ->
+        @expCompany = []
+        if(@companyModel.get('DashboardModel'))
+            @expCompany.push(@companyModel.get('DashboardModel'))
+        if(@companyModel.get('Owners'))
+            _.each(@companyModel.get('Owners'), (owner) =>
+                @expCompany.push(owner.DashboardModel)
+            )
+
         m: @model.toJSON()
         crm: _.first(_.filter(@crmModel.get('CustomerRelations'), (crm) -> crm.User isnt 'System'), 5) #taking first 5 non System CRMs
         experian: @experianModel.toJSON()
+        company: @expCompany
         properties: @propertiesModel.toJSON()
         mps: @mpsModel.toJSON()
         loan: @loanModel.toJSON()
@@ -87,20 +100,17 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
             historyScoresSorted = _.sortBy(@experianModel.get('CompanyHistory'), (history) ->
                 return history.Date)
             companyHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',')
-            @$el.find(".companyScoreGraph").attr('values', companyHistoryScores)
+            @$el.find(".companyScoreGraph0").attr('values', companyHistoryScores)
         
-        $(".inline-sparkline").sparkline("html",
+        @$el.find(".inline-sparkline").sparkline("html",
             width: "100%"
             height: "100%"
             lineWidth: 2
             spotRadius: 3
-            lineColor: "#88bbc8"
-            fillColor: "#f2f7f9"
-            spotColor: "green"
-            maxSpotColor: "#00AEEF"
-            minSpotColor: "red"
+            lineColor: "#ebebeb"
+            spotColor: "#ebebeb"
             chartRangeMin: -1
-            valueSpots: { ':' : 'green' }
+            valueSpots: { ':' : '#ebebeb' }
         )
 
         properties = @propertiesModel.toJSON()
@@ -114,6 +124,20 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
         @halfDonut(cc, cc.data('color'), cc.data('percent'))
         cii = @$el.find("#consumerCIICanvas")
         @halfDonut(cii, cii.data('color'), cii.data('percent'))
+        
+        if(@expCompany && @expCompany.length > 0)
+            _.each(@expCompany, (c, i) =>
+                compC = @$el.find("#companyScoreCanvas" + i)
+                @halfDonut(compC, compC.data('color'), compC.data('percent'))
+                
+                profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').join(',')
+                @$el.find("#companyProfit" + i).attr('values',profit)
+                
+                equity = _.pluck(c.FinDataHistories, 'TangibleEquity').join(',')
+                @$el.find("#companyEquity" + i).attr('values',equity)
+            )
+        
+        @$el.find('.bar-sparkline').sparkline({ type:'bar', barColor:'#ebebeb' });
         
         if(@experianModel and @experianModel.get('directorsModels'))
             directors = @experianModel.get('directorsModels').length;

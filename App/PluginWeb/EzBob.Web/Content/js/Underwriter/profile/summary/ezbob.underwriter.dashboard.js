@@ -26,22 +26,36 @@
       this.propertiesModel = options.propertiesModel;
       this.mpsModel = options.mpsModel;
       this.loanModel = options.loanModel;
+      this.companyModel = options.companyModel;
       this.bindTo(this.model, "change sync", this.render, this);
       this.bindTo(this.crmModel, "change sync", this.render, this);
       this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
       this.bindTo(this.experianModel, "change sync", this.render, this);
+      this.bindTo(this.companyModel, "change sync", this.render, this);
       this.bindTo(this.propertiesModel, "change sync", this.render, this);
       this.bindTo(this.mpsModel, "change sync", this.render, this);
-      return this.bindTo(this.loanModel, "change sync", this.render, this);
+      this.bindTo(this.loanModel, "change sync", this.render, this);
+      return this.expCompany = [];
     };
 
     DashboardView.prototype.serializeData = function() {
+      var _this = this;
+      this.expCompany = [];
+      if (this.companyModel.get('DashboardModel')) {
+        this.expCompany.push(this.companyModel.get('DashboardModel'));
+      }
+      if (this.companyModel.get('Owners')) {
+        _.each(this.companyModel.get('Owners'), function(owner) {
+          return _this.expCompany.push(owner.DashboardModel);
+        });
+      }
       return {
         m: this.model.toJSON(),
         crm: _.first(_.filter(this.crmModel.get('CustomerRelations'), function(crm) {
           return crm.User !== 'System';
         }), 5),
         experian: this.experianModel.toJSON(),
+        company: this.expCompany,
         properties: this.propertiesModel.toJSON(),
         mps: this.mpsModel.toJSON(),
         loan: this.loanModel.toJSON(),
@@ -95,7 +109,8 @@
     };
 
     DashboardView.prototype.onRender = function() {
-      var cc, cii, companyHistoryScores, consumerHistoryCIIs, consumerHistoryScores, directors, historyScoresSorted, i, properties, _results;
+      var cc, cii, companyHistoryScores, consumerHistoryCIIs, consumerHistoryScores, directors, historyScoresSorted, i, properties, _results,
+        _this = this;
       this.$el.find('a[data-bug-type]').tooltip({
         title: 'Report bug'
       });
@@ -126,21 +141,18 @@
           return history.Date;
         });
         companyHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
-        this.$el.find(".companyScoreGraph").attr('values', companyHistoryScores);
+        this.$el.find(".companyScoreGraph0").attr('values', companyHistoryScores);
       }
-      $(".inline-sparkline").sparkline("html", {
+      this.$el.find(".inline-sparkline").sparkline("html", {
         width: "100%",
         height: "100%",
         lineWidth: 2,
         spotRadius: 3,
-        lineColor: "#88bbc8",
-        fillColor: "#f2f7f9",
-        spotColor: "green",
-        maxSpotColor: "#00AEEF",
-        minSpotColor: "red",
+        lineColor: "#ebebeb",
+        spotColor: "#ebebeb",
         chartRangeMin: -1,
         valueSpots: {
-          ':': 'green'
+          ':': '#ebebeb'
         }
       });
       properties = this.propertiesModel.toJSON();
@@ -154,6 +166,21 @@
       this.halfDonut(cc, cc.data('color'), cc.data('percent'));
       cii = this.$el.find("#consumerCIICanvas");
       this.halfDonut(cii, cii.data('color'), cii.data('percent'));
+      if (this.expCompany && this.expCompany.length > 0) {
+        _.each(this.expCompany, function(c, i) {
+          var compC, equity, profit;
+          compC = _this.$el.find("#companyScoreCanvas" + i);
+          _this.halfDonut(compC, compC.data('color'), compC.data('percent'));
+          profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').join(',');
+          _this.$el.find("#companyProfit" + i).attr('values', profit);
+          equity = _.pluck(c.FinDataHistories, 'TangibleEquity').join(',');
+          return _this.$el.find("#companyEquity" + i).attr('values', equity);
+        });
+      }
+      this.$el.find('.bar-sparkline').sparkline({
+        type: 'bar',
+        barColor: '#ebebeb'
+      });
       if (this.experianModel && this.experianModel.get('directorsModels')) {
         directors = this.experianModel.get('directorsModels').length;
         i = 0;

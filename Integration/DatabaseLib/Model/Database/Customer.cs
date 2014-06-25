@@ -642,19 +642,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual IList<CustomerRequestedLoan> CustomerRequestedLoan { get; set; }
 		public virtual IList<CustomerInviteFriend> CustomerInviteFriend { get; set; }
 		public virtual Company Company { get; set; }
-
-		public virtual ExperianParserOutput ParseExperian(ExperianParserFacade.Target nTarget) {
-			if (ReferenceEquals(Company, null))
-				return new ExperianParserOutput(null, ParsingResult.NotFound, "Customer has no company", null, null, null);
-
-			return ExperianParserFacade.Invoke(
-				Company.ExperianRefNum,
-				Company.ExperianCompanyName,
-				nTarget,
-				Company.TypeOfBusiness.Reduce()
-			);
-		} // ParseExperian
-
+		
 		public virtual bool Equals(Customer x, Customer y) {
 			return x.Id == y.Id;
 		} // Equals

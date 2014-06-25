@@ -1114,7 +1114,8 @@ textarea.BusinessAddress {
 
 #profileHead .box .box-title,
 #dashboard .box .box-title {
-    padding: 3px;
+    padding: 5px;
+    height: 30px;
 }
 
 .left-pane-header {

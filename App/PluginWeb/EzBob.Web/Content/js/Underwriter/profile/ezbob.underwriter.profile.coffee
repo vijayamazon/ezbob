@@ -144,6 +144,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             crmModel: @crmModel
             personalModel: @personalInfoModel
             experianModel: @experianInfoModel
+            companyModel: @companyScoreModel
             propertiesModel: @PropertiesModel
             mpsModel: @marketPlaces
             loanModel: @loanInfoModel
