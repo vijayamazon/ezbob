@@ -323,7 +323,7 @@
                         <div class="tab-content no-border">
                             <%_.each(company, function(c, i){%>
                             <div class="tab-pane fade <%- (i==0 ? 'active' : '')%> in" id="companyExperian<%-i%>">
-                                <div class="row">
+                                <div class="">
                                     <div class="col-lg-3 col-md-6">
                                         <div class="right-seperator">
                                             <div class="text-center experian-canvas">
@@ -336,21 +336,22 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <%if(c.IsLimited){%>
                                     <div class="col-lg-3 col-md-6">
-                                    <div class="right-seperator">
-                                        <div class="text-center">
-                                            CAIS balance
-                                            <p class="text-small">
-                                                <%-EzBob.formatPoundsAsThousandsNoDecimals(c.CaisBalance)%> 
-                                                <br />
-                                                (<%-c.CaisAccounts%> accounts)
-                                            </p>
-                                        </div>
-                                        <div style="height:62px;">
-                                            <span>cais trend N/A</span>
+                                        <div class="right-seperator">
+                                            <div class="text-center">
+                                                CAIS balance
+                                                <p class="text-small">
+                                                    <%-EzBob.formatPoundsAsThousandsNoDecimals(c.CaisBalance)%> 
+                                                    <br />
+                                                    (<%-c.CaisAccounts%> accounts)
+                                                </p>
+                                            </div>
+                                            <div style="height:62px;">
+                                                <span>cais trend N/A</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                     <div class="col-lg-4 col-md-8">
                                         <div class="right-seperator">
                                             <div class="text-center">
@@ -370,6 +371,15 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <%}else{%>
+                                    <div class="col-lg-7">
+                                        <div class="right-seperator">
+                                            <div class="text-center">
+                                                <h3>Non Limited Company</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <%}%>
                                     <div class="col-lg-2 col-md-4">
                                         <% alert = 'alert-warning';%>
                                         <div class="alert <%-alert%>">
@@ -379,9 +389,9 @@
                                         <div class="alert <%-alert%>">
                                             Defaults: <%-c.DefaultAccounts%>
                                         </div>
-                                        <% alert = 'alert-warning'; /* experian.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info'; */%>
+                                        <% alert = c.Ccjs > 0 ? 'alert-danger' : 'alert-info'; %>
                                         <div class="alert <%-alert%>">
-                                            CCJ N/A, N/A months ago
+                                            CCJ <%-c.Ccjs%>, <%-c.CcjMonths%> months ago
                                         </div>
                                     </div>
                                </div>

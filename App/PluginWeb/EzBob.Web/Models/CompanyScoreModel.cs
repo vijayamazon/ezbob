@@ -45,6 +45,7 @@
 
 	public class ComapanyDashboardModel
 	{
+		public bool IsLimited { get; set; }
 		public string CompanyName { get; set; }
 		public string CompanyRefNum { get; set; }
 		public int Score { get; set; }
@@ -170,102 +171,120 @@
 
 		private ComapanyDashboardModel BuildDashboardModel(ExperianParserOutput oResult)
 		{
-			var model = new ComapanyDashboardModel{ FinDataHistories = new List<FinDataModel>(), LastFinData = new FinDataModel()};
-			
-			if (oResult.TypeOfBusinessReduced == TypeOfBusinessReduced.Limited)
+			switch (oResult.TypeOfBusinessReduced)
 			{
-				var scoreStr = GetValue(oResult, "Limited Company Commerical Delphi Score", "Commercial Delphi Score");
-				model.CompanyName = GetValue(oResult, "Limited Company Identification", "Company Name");
-				model.CompanyRefNum = GetValue(oResult, "Limited Company Identification", "Registered Number");
-				model.Score = string.IsNullOrEmpty(scoreStr) ? 0 : int.Parse(scoreStr);
-				model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
-
-				//Calc and add Cais Balance
-				if (oResult.Dataset.ContainsKey("Limited Company Installment CAIS Details"))
-				{
-					if (oResult.Dataset["Limited Company Installment CAIS Details"].Data.Any())
-					{
-						model.CaisBalance = 0;
-						foreach (var cais in oResult.Dataset["Limited Company Installment CAIS Details"].Data)
-						{
-							var state = GetValue(cais, "Account State");
-							var balance = GetDecimalValueFromDataItem(cais, "Current Balance");
-							
-							//Sum all accounts balance that are not settled
-							if (!string.IsNullOrEmpty(state) && state[0] != 'S')
-							{
-								model.CaisBalance += balance;
-								model.CaisAccounts++;
-							}
-
-							if (!string.IsNullOrEmpty(state) && state[0] == 'D')
-							{
-								model.DefaultAccounts++;
-								//todo default amount
-							}
-
-							//todo late accounts
-						}
-					}
-				}
-
-
-				//Calc and add tangible equity and adjusted profit
-				const string sKey = "Limited Company Financial Details IFRS & UK GAAP";
-				ParsedData oParsedData = oResult.Dataset.ContainsKey(sKey) ? oResult.Dataset[sKey] : null;
-				if ((oParsedData != null) && (oParsedData.Data != null) && (oParsedData.Data.Count > 0))
-				{
-					for (var i = 0; i < oParsedData.Data.Count - 1; i++)
-					{
-						ParsedDataItem parsedDataItem = oParsedData.Data[i];
-
-						decimal totalShareFund = GetDecimalValueFromDataItem(parsedDataItem, "TotalShareFund");
-						decimal inTngblAssets = GetDecimalValueFromDataItem(parsedDataItem, "InTngblAssets");
-						decimal debtorsDirLoans = GetDecimalValueFromDataItem(parsedDataItem, "DebtorsDirLoans");
-						decimal credDirLoans = GetDecimalValueFromDataItem(parsedDataItem, "CredDirLoans");
-						decimal onClDirLoans = GetDecimalValueFromDataItem(parsedDataItem, "OnClDirLoans");
-
-						decimal tangibleEquity = totalShareFund - inTngblAssets - debtorsDirLoans + credDirLoans + onClDirLoans;
-
-						if (oParsedData.Data.Count > 1)
-						{
-							ParsedDataItem parsedDataItemPrev = oParsedData.Data[i+1];
-
-							decimal retainedEarnings = GetDecimalValueFromDataItem(parsedDataItem, "RetainedEarnings");
-							decimal retainedEarningsPrev = GetDecimalValueFromDataItem(parsedDataItemPrev, "RetainedEarnings");
-							decimal fixedAssetsPrev = GetDecimalValueFromDataItem(parsedDataItemPrev, "TngblAssets");
-
-							decimal adjustedProfit = retainedEarnings - retainedEarningsPrev + fixedAssetsPrev/5;
-
-							var fin = new FinDataModel {TangibleEquity = tangibleEquity, AdjustedProfit = adjustedProfit};
-							model.FinDataHistories.Add(fin);
-							if (i == 0)
-							{
-								model.LastFinData = fin;
-							}
-						} // if
-					}
-				} // if
+				case TypeOfBusinessReduced.Limited:
+					return BuildLimitedDashboardModel(oResult);
+				case TypeOfBusinessReduced.NonLimited:
+				case TypeOfBusinessReduced.Personal:
+					return BuildNonLimitedDashboardModel(oResult);
 			}
 
-			return model;
-		}
-
-		private string GetValue(ExperianParserOutput oResult, string section, string key)
-		{
-			if (oResult.Dataset.ContainsKey(section))
-			{
-				if (oResult.Dataset[section].Data.Any())
-				{
-					if (oResult.Dataset[section].Data[0].Values.ContainsKey(key))
-					{
-						return oResult.Dataset[section].Data[0].Values[key];
-					}
-				}
-			}
 			return null;
 		}
 
+		private ComapanyDashboardModel BuildNonLimitedDashboardModel(ExperianParserOutput oResult)
+		{
+			var model = new ComapanyDashboardModel { FinDataHistories = new List<FinDataModel>(), LastFinData = new FinDataModel() };
+			model.IsLimited = false;
+			model.CompanyRefNum = oResult.CompanyRefNum;
+			model.CompanyName = oResult.GetValue("Non-Limited Report General Details", "Business name");
+			var scoreStr = oResult.GetValue("Non-Limited Commercial Delphi Block", "NL Commercial Delphi Score");
+			model.Score = string.IsNullOrEmpty(scoreStr) ? 0 : int.Parse(scoreStr);
+			model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
+			var ccjAge = oResult.GetValue("Non-Limited CCJ Summary", "Age of most recent judgment during ownership (Months)");
+			model.CcjMonths = string.IsNullOrEmpty(ccjAge) ? 0 : int.Parse(ccjAge);
+			var numOfCCjsYear = oResult.GetValue("Non-Limited CCJ Summary", "Total judgment count in last 12 months");
+			var numOfCCjs2Years = oResult.GetValue("Non-Limited CCJ Summary", "Total judgment count in last 13 to 24 months");
+			model.Ccjs = (string.IsNullOrEmpty(numOfCCjsYear) ? 0 : int.Parse(numOfCCjsYear)) +
+						 (string.IsNullOrEmpty(numOfCCjs2Years) ? 0 : int.Parse(numOfCCjs2Years));
+			return model;
+		}
+
+		private ComapanyDashboardModel BuildLimitedDashboardModel(ExperianParserOutput oResult)
+		{
+			var model = new ComapanyDashboardModel { FinDataHistories = new List<FinDataModel>(), LastFinData = new FinDataModel() };
+			model.IsLimited = true;
+			var scoreStr = oResult.GetValue("Limited Company Commerical Delphi Score", "Commercial Delphi Score");
+			model.CompanyName = oResult.GetValue("Limited Company Identification", "Company Name");
+			model.CompanyRefNum = oResult.GetValue("Limited Company Identification", "Registered Number");
+			model.Score = string.IsNullOrEmpty(scoreStr) ? 0 : int.Parse(scoreStr);
+			model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
+			var ccjAge = oResult.GetValue("Limited Company CCJ Summary", "Age of Most Recent CCJ/Decree (Months)");
+			model.CcjMonths = string.IsNullOrEmpty(ccjAge) ? 0 : int.Parse(ccjAge);
+			var numOfCCjsYear = oResult.GetValue("Limited Company CCJ Summary", "Number of CCJs During Last 12 Months");
+			var numOfCCjs2Years = oResult.GetValue("Limited Company CCJ Summary", "Number of CCJs Between 13 And 24 Months Ago");
+			model.Ccjs = (string.IsNullOrEmpty(numOfCCjsYear) ? 0 : int.Parse(numOfCCjsYear)) +
+						 (string.IsNullOrEmpty(numOfCCjs2Years) ? 0 : int.Parse(numOfCCjs2Years));
+			//Calc and add Cais Balance
+			if (oResult.Dataset.ContainsKey("Limited Company Installment CAIS Details"))
+			{
+				if (oResult.Dataset["Limited Company Installment CAIS Details"].Data.Any())
+				{
+					model.CaisBalance = 0;
+					foreach (var cais in oResult.Dataset["Limited Company Installment CAIS Details"].Data)
+					{
+						var state = GetValue(cais, "Account State");
+						var balance = GetDecimalValueFromDataItem(cais, "Current Balance");
+
+						//Sum all accounts balance that are not settled
+						if (!string.IsNullOrEmpty(state) && state[0] != 'S')
+						{
+							model.CaisBalance += balance;
+							model.CaisAccounts++;
+						}
+
+						if (!string.IsNullOrEmpty(state) && state[0] == 'D')
+						{
+							model.DefaultAccounts++;
+							//todo default amount
+						}
+
+						//todo late accounts
+					}
+				}
+			}
+
+
+			//Calc and add tangible equity and adjusted profit
+			const string sKey = "Limited Company Financial Details IFRS & UK GAAP";
+			ParsedData oParsedData = oResult.Dataset.ContainsKey(sKey) ? oResult.Dataset[sKey] : null;
+			if ((oParsedData != null) && (oParsedData.Data != null) && (oParsedData.Data.Count > 0))
+			{
+				for (var i = 0; i < oParsedData.Data.Count - 1; i++)
+				{
+					ParsedDataItem parsedDataItem = oParsedData.Data[i];
+
+					decimal totalShareFund = GetDecimalValueFromDataItem(parsedDataItem, "TotalShareFund");
+					decimal inTngblAssets = GetDecimalValueFromDataItem(parsedDataItem, "InTngblAssets");
+					decimal debtorsDirLoans = GetDecimalValueFromDataItem(parsedDataItem, "DebtorsDirLoans");
+					decimal credDirLoans = GetDecimalValueFromDataItem(parsedDataItem, "CredDirLoans");
+					decimal onClDirLoans = GetDecimalValueFromDataItem(parsedDataItem, "OnClDirLoans");
+
+					decimal tangibleEquity = totalShareFund - inTngblAssets - debtorsDirLoans + credDirLoans + onClDirLoans;
+
+					if (oParsedData.Data.Count > 1)
+					{
+						ParsedDataItem parsedDataItemPrev = oParsedData.Data[i + 1];
+
+						decimal retainedEarnings = GetDecimalValueFromDataItem(parsedDataItem, "RetainedEarnings");
+						decimal retainedEarningsPrev = GetDecimalValueFromDataItem(parsedDataItemPrev, "RetainedEarnings");
+						decimal fixedAssetsPrev = GetDecimalValueFromDataItem(parsedDataItemPrev, "TngblAssets");
+
+						decimal adjustedProfit = retainedEarnings - retainedEarningsPrev + fixedAssetsPrev / 5;
+
+						var fin = new FinDataModel { TangibleEquity = tangibleEquity, AdjustedProfit = adjustedProfit };
+						model.FinDataHistories.Add(fin);
+						if (i == 0)
+						{
+							model.LastFinData = fin;
+						}
+					} // if
+				}
+			} // if
+			return model;
+		}
+		
 		private string GetValue(ParsedDataItem dataItem, string key)
 		{
 			if (dataItem.Values.ContainsKey(key))

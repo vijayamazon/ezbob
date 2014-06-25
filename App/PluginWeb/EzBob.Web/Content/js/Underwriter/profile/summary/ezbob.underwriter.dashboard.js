@@ -175,15 +175,17 @@
       this.halfDonut(cc, cc.data('color'), cc.data('percent'));
       cii = this.$el.find("#consumerCIICanvas");
       this.halfDonut(cii, cii.data('color'), cii.data('percent'));
-      if (this.expCompany && this.expCompany.length > 0) {
+      if (this.expCompany && this.expCompany.length > 0 && !this.expCompany[0].Error) {
         _.each(this.expCompany, function(c, i) {
           var compC, equity, profit;
           compC = _this.$el.find("#companyScoreCanvas" + i);
           _this.halfDonut(compC, compC.data('color'), compC.data('percent'));
-          profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').reverse().join(',');
-          _this.$el.find("#companyProfit" + i).attr('values', profit);
-          equity = _.pluck(c.FinDataHistories, 'TangibleEquity').reverse().join(',');
-          return _this.$el.find("#companyEquity" + i).attr('values', equity);
+          if (c.IsLimited) {
+            profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').reverse().join(',');
+            _this.$el.find("#companyProfit" + i).attr('values', profit);
+            equity = _.pluck(c.FinDataHistories, 'TangibleEquity').reverse().join(',');
+            return _this.$el.find("#companyEquity" + i).attr('values', equity);
+          }
         });
       }
       this.$el.find('.bar-sparkline').sparkline("html", {

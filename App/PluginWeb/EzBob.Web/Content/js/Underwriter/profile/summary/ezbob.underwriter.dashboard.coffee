@@ -132,16 +132,16 @@ class EzBob.Underwriter.DashboardView extends Backbone.Marionette.ItemView
         cii = @$el.find("#consumerCIICanvas")
         @halfDonut(cii, cii.data('color'), cii.data('percent'))
         
-        if(@expCompany && @expCompany.length > 0)
+        if(@expCompany && @expCompany.length > 0 && !@expCompany[0].Error)
             _.each(@expCompany, (c, i) =>
                 compC = @$el.find("#companyScoreCanvas" + i)
                 @halfDonut(compC, compC.data('color'), compC.data('percent'))
+                if(c.IsLimited)
+                    profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').reverse().join(',')
+                    @$el.find("#companyProfit" + i).attr('values',profit)
                 
-                profit = _.pluck(c.FinDataHistories, 'AdjustedProfit').reverse().join(',')
-                @$el.find("#companyProfit" + i).attr('values',profit)
-                
-                equity = _.pluck(c.FinDataHistories, 'TangibleEquity').reverse().join(',')
-                @$el.find("#companyEquity" + i).attr('values',equity)
+                    equity = _.pluck(c.FinDataHistories, 'TangibleEquity').reverse().join(',')
+                    @$el.find("#companyEquity" + i).attr('values',equity)
             )
         
         @$el.find('.bar-sparkline').sparkline("html",
