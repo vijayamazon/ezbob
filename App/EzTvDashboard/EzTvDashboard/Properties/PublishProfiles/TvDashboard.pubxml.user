@@ -13,22 +13,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/12/2014 15:55:24</publishTime>
     </File>
     <File Include="bin/Barrymore.dll">
-      <publishTime>06/08/2014 09:13:03</publishTime>
+      <publishTime>06/25/2014 12:51:03</publishTime>
     </File>
     <File Include="bin/ConfigManager.dll">
-      <publishTime>06/08/2014 09:13:04</publishTime>
+      <publishTime>06/25/2014 12:51:04</publishTime>
     </File>
     <File Include="bin/DbConnection.dll">
-      <publishTime>06/08/2014 09:13:04</publishTime>
+      <publishTime>06/25/2014 12:51:04</publishTime>
     </File>
     <File Include="bin/DotNetOpenAuth.dll">
       <publishTime>03/24/2013 10:06:54</publishTime>
     </File>
     <File Include="bin/EzEnvironment.dll">
-      <publishTime>06/08/2014 09:13:03</publishTime>
+      <publishTime>06/25/2014 12:51:02</publishTime>
     </File>
     <File Include="bin/EzTvDashboard.dll">
-      <publishTime>06/08/2014 09:36:36</publishTime>
+      <publishTime>06/25/2014 13:06:46</publishTime>
     </File>
     <File Include="bin/Google.Apis.Analytics.v3.dll">
       <publishTime>03/21/2013 23:10:10</publishTime>
@@ -40,22 +40,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/24/2013 10:06:54</publishTime>
     </File>
     <File Include="bin/GoogleAnalyticsLib.dll">
-      <publishTime>06/08/2014 09:13:04</publishTime>
+      <publishTime>06/25/2014 12:51:03</publishTime>
     </File>
     <File Include="bin/log4net.dll">
       <publishTime>04/02/2013 18:59:36</publishTime>
     </File>
     <File Include="bin/Logger.dll">
-      <publishTime>06/08/2014 09:13:02</publishTime>
+      <publishTime>06/25/2014 12:51:02</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>07/19/2012 10:59:52</publishTime>
     </File>
     <File Include="bin/MiniResharper.dll">
-      <publishTime>06/05/2014 13:13:03</publishTime>
+      <publishTime>06/23/2014 11:47:43</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>06/05/2014 13:11:08</publishTime>
+      <publishTime>06/23/2014 11:34:44</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.Net35.dll">
       <publishTime>03/24/2013 10:06:54</publishTime>
@@ -133,7 +133,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/04/2014 09:41:38</publishTime>
     </File>
     <File Include="Content/Css/tvdashboard.css">
-      <publishTime>06/05/2014 18:59:32</publishTime>
+      <publishTime>06/25/2014 12:47:11</publishTime>
     </File>
     <File Include="Content/images/back_disabled.png">
       <publishTime>05/04/2014 15:48:48</publishTime>
@@ -199,7 +199,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/01/2014 18:19:30</publishTime>
     </File>
     <File Include="Content/js/eztvdashboard.js">
-      <publishTime>06/05/2014 13:11:07</publishTime>
+      <publishTime>06/23/2014 11:34:42</publishTime>
     </File>
     <File Include="Content/js/flaty.js">
       <publishTime>05/01/2014 18:19:30</publishTime>
@@ -406,13 +406,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/01/2014 18:19:30</publishTime>
     </File>
     <File Include="Content/js/moment.js">
-      <publishTime>06/05/2014 13:11:07</publishTime>
+      <publishTime>06/23/2014 11:34:42</publishTime>
     </File>
     <File Include="Content/js/underscore.js">
       <publishTime>05/04/2014 15:48:48</publishTime>
     </File>
     <File Include="Content/js/_references.js">
-      <publishTime>06/05/2014 13:11:07</publishTime>
+      <publishTime>06/23/2014 11:34:42</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>05/14/2014 10:44:43</publishTime>
@@ -424,16 +424,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/04/2014 15:48:48</publishTime>
     </File>
     <File Include="Views/Dashboard/Dashboard.cshtml">
-      <publishTime>06/05/2014 18:59:32</publishTime>
+      <publishTime>06/25/2014 12:59:16</publishTime>
     </File>
     <File Include="Views/Dashboard/DashboardTables.cshtml">
-      <publishTime>06/08/2014 09:11:45</publishTime>
+      <publishTime>06/23/2014 11:34:42</publishTime>
     </File>
     <File Include="Views/Dashboard/Footer.cshtml">
       <publishTime>05/12/2014 13:37:38</publishTime>
     </File>
     <File Include="Views/Dashboard/Index.cshtml">
-      <publishTime>06/05/2014 18:59:32</publishTime>
+      <publishTime>06/23/2014 11:34:42</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
       <publishTime>05/01/2014 18:19:30</publishTime>
@@ -442,10 +442,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/01/2014 18:19:30</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>06/08/2014 09:36:15</publishTime>
+      <publishTime>06/23/2014 11:34:42</publishTime>
     </File>
     <File Include="Views/Web.config">
-      <publishTime>06/08/2014 09:33:44</publishTime>
+      <publishTime>06/23/2014 11:34:42</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>05/01/2014 18:19:30</publishTime>

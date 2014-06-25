@@ -23,9 +23,12 @@
 }
 
 table.table {
-    font-size: 18px;
+    font-size: 13px;
 }
 
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 0;
+}
 .notifications {
     color: red;
 }
@@ -148,4 +151,12 @@ strong {
 
 .ezlight {
     color: #888;
+}
+
+.total {
+    background-color: #00bfff;
+}
+
+.total2 {
+    background-color: #00ced1;
 }

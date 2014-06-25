@@ -16,6 +16,7 @@
 		private static int CustomerId { get; set; }
 		private static int CashRequestsId { get; set; }
 		private static int LoanId { get; set; }
+		private static int BrokerId { get; set; }
 		public DashboardModelBuilder()
 		{
 			Db = new SqlConnection();
@@ -28,6 +29,7 @@
 			bool isCustomerChanged = false;
 			bool isCashRequestChanged = false;
 			bool isLoanChanged = false;
+			bool isBrokerChanged = false;
 			foreach (DataRow row in changed.Rows)
 			{
 				int val;
@@ -49,8 +51,14 @@
 					isLoanChanged = val > LoanId;
 					LoanId = val;
 				}
+				if (row["Table"].ToString() == "Broker")
+				{
+					val = int.Parse(row["Val"].ToString());
+					isBrokerChanged = val > BrokerId;
+					BrokerId = val;
+				}
 			}
-			return isCustomerChanged || isCashRequestChanged || isLoanChanged;
+			return isCustomerChanged || isCashRequestChanged || isLoanChanged || isBrokerChanged;
 		}
 
 		public DashboardModel BuildModel()
@@ -65,6 +73,7 @@
 					MonthlyCollection = new List<MonthlyCollectionModel>(),
 					MonthlyTraffic = new List<MonthlyTrafficModel>(),
 					Stats = new Dictionary<string, decimal>(),
+					Lottery = new List<LotteryModel>(),
 					LastChanged = LastChecked
 				};
 
@@ -82,6 +91,17 @@
 				new QueryParameter("@FirstOfMonth", firstOfMonth),
 				new QueryParameter("@MonthAgo", DateTime.Today.AddMonths(-1))
 			);
+
+			Db.ForEachRow(
+				(oReader, bRowsetStart) =>
+				{
+					model.Lottery.Add(new LotteryModel{ Name = oReader["Name"].ToString(), Value = (int)oReader["Value"], Css = oReader["Css"].ToString()});
+					return ActionResult.Continue;
+				}
+				,
+				"RptLottery",
+				CommandSpecies.StoredProcedure);
+
 			try
 			{
 				var ga = new GoogleAnalytics();
@@ -392,4 +412,6 @@
 		}
 
 	}
+
+	
 }
