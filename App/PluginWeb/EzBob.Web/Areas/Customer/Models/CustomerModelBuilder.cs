@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Models {
 	using System;
 	using System.Linq;
+	using CommonLib;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
