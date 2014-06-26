@@ -43,7 +43,7 @@ using System;
 		//Yodlee
 		public YodleeModel Yodlee { get; set; }
 
-		public IChannelGrabberData CGData { get; set; }
+		public HmrcData HmrcData { get; set; }
 
 		public bool IsPaymentAccount { get; set; }
 

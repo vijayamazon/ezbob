@@ -91,7 +91,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 					} // for each summary item
 				} // if has summary items
 
-				model.CGData = new ChannelGrabberHmrcData {
+				model.HmrcData = new HmrcData {
 					VatReturn = vrd.VatReturnRawData,
 					RtiTaxMonths = vrd.RtiTaxMonthRawData,
 					BankStatement = vrd.BankStatement,

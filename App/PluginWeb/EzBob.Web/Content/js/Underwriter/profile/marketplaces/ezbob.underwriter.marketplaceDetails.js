@@ -84,7 +84,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 	renderHmrcSummary: function(data) {
 		var oMp = data.marketplaces[0] || data.accounts[0];
 
-		if (!oMp || !oMp.CGData || !oMp.CGData.VatReturnSummary || !oMp.CGData.VatReturnSummary.length) {
+		if (!oMp || !oMp.HmrcData || !oMp.HmrcData.VatReturnSummary || !oMp.HmrcData.VatReturnSummary.length) {
 			this.$el.find('.vat-return-summary-display').hide();
 			this.$el.find('.vat-return-no-summary').show();
 			return;
@@ -93,14 +93,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 		this.$el.find('.vat-return-no-summary').hide();
 		var oDisplay = this.$el.find('.vat-return-summary-display').show();
 
-		var oBank = oMp.CGData.BankStatement || {};
-		var oAnalBank = oMp.CGData.BankStatementAnnualized || {};
+		var oBank = oMp.HmrcData.BankStatement || {};
+		var oAnalBank = oMp.HmrcData.BankStatementAnnualized || {};
 
-		for (var nIdx = 0; nIdx < oMp.CGData.VatReturnSummary.length; nIdx++) {
+		for (var nIdx = 0; nIdx < oMp.HmrcData.VatReturnSummary.length; nIdx++) {
 			var oTbl = this.$el.find('#vat-return-summary-template').find('.vat-return-summary').clone(true, true);
 			oDisplay.append(oTbl);
 
-			var oSummary = oMp.CGData.VatReturnSummary[nIdx];
+			var oSummary = oMp.HmrcData.VatReturnSummary[nIdx];
 			if (!isNaN(this.customSalariesMultiplier)) {
 			    oSummary.SalariesMultiplier = this.customSalariesMultiplier / 100;
 			} else {

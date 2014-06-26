@@ -79,11 +79,10 @@
     <Compile Include="DecisionHistoryModel.cs" />
     <Compile Include="DirectorModel.cs" />
     <Compile Include="EditLoanDetailsModel.cs" />
-    <Compile Include="Marketplaces\ChannelGrabberHmrcData.cs" />
+    <Compile Include="Marketplaces\HmrcData.cs" />
     <Compile Include="Marketplaces\CompanyFilesModel.cs" />
     <Compile Include="Marketplaces\EBayModel.cs" />
     <Compile Include="Marketplaces\FreeAgentModel.cs" />
-    <Compile Include="Marketplaces\IChannelGrabberData.cs" />
     <Compile Include="Marketplaces\MarketPlaceModel.cs" />
     <Compile Include="Marketplaces\MarketPlacesFacade.cs" />
     <Compile Include="Marketplaces\Builders\ChannelGrabberMarketplaceModelBuilder.cs" />

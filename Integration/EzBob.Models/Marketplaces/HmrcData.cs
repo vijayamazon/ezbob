@@ -3,10 +3,10 @@
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 
-	#region class ChannelGrabberHmrcData
+	#region class HmrcData
 
 	[Serializable]
-	public class ChannelGrabberHmrcData : IChannelGrabberData {
+	public class HmrcData {
 		public IEnumerable<VatReturnRawData> VatReturn { get; set; }
 		public IEnumerable<RtiTaxMonthRawData> RtiTaxMonths { get; set; }
 		public BankStatementDataModel BankStatement { get; set; }
@@ -14,9 +14,9 @@
 		public decimal SalariesMultiplier { get; set; }
 		public VatReturnSummary[] VatReturnSummary { get; set; }
 		public VatReturnSummaryDates[] VatReturnSummaryDates { get; set; }
-	} // class ChannelGrabberHmrcData
+	} // class HmrcData
 
-	#endregion class ChannelGrabberHmrcData
+	#endregion class HmrcData
 
 	#region class VatReturnSummaryDates
 

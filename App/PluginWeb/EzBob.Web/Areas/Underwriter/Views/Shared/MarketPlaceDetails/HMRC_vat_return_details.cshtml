@@ -1,8 +1,8 @@
 ﻿<table class="table centered"><thead class="box"><tr class="box-title">
 <th>Business &amp; Period</th> <th>Return Details</th></tr></thead><tbody><%
-if (m.CGData && m.CGData.VatReturn) {
-	for (var nIdx = 0; nIdx < m.CGData.VatReturn.length; nIdx++) {
-	var oEntry = m.CGData.VatReturn[nIdx];
+if (m.HmrcData && m.HmrcData.VatReturn) {
+	for (var nIdx = 0; nIdx < m.HmrcData.VatReturn.length; nIdx++) {
+	var oEntry = m.HmrcData.VatReturn[nIdx];
 		%><tr><td class="no-padding"><table class="internal-table">
 			<tr><td>Registration #:</td><td><%= oEntry.RegistrationNo %></td></tr>
 			<tr><td>Period:</td><td><%= oEntry.Period %></td></tr>

@@ -71,14 +71,14 @@
         <%
             var aff = {};
             var dates = {};
-            if(affordability && affordability.length == 1 && affordability[0].CGData){
+            if(affordability && affordability.length == 1 && affordability[0].HmrcData){
 			
-			if (affordability[0].CGData.VatReturnSummary && affordability[0].CGData.VatReturnSummary[0])
-				aff = affordability[0].CGData.VatReturnSummary[0];
+			if (affordability[0].HmrcData.VatReturnSummary && affordability[0].HmrcData.VatReturnSummary[0])
+				aff = affordability[0].HmrcData.VatReturnSummary[0];
 
 			var dates = {};
-			if (affordability[0].CGData.VatReturnSummaryDates && affordability[0].CGData.VatReturnSummaryDates[0])
-				dates = affordability[0].CGData.VatReturnSummaryDates[0];
+			if (affordability[0].HmrcData.VatReturnSummaryDates && affordability[0].HmrcData.VatReturnSummaryDates[0])
+				dates = affordability[0].HmrcData.VatReturnSummaryDates[0];
         }%>
         
         <div class="col-lg-9 col-md-12 col-sm-12">

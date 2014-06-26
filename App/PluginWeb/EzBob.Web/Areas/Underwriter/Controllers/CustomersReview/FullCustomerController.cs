@@ -12,6 +12,7 @@
 	using EzBob.Models.Marketplaces;
 	using Infrastructure;
 	using Models;
+	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
@@ -94,10 +95,12 @@
 			var m = new ApplicationInfoModel();
 			_infoModelBuilder.InitApplicationInfo(m, customer, cr);
 			model.ApplicationInfoModel = m;
+
 			DateTime historyDate;
-			model.Marketplaces = DateTime.TryParse(history, out historyDate)
-									 ? _marketPlaces.GetMarketPlaceModels(customer, historyDate).ToList()
-									 : _marketPlaces.GetMarketPlaceModels(customer, null).ToList();
+			bool bHasHistoryDate = DateTime.TryParse(history, out historyDate);
+
+			var ar = serviceClient.Instance.CalculateModelsAndAffordability(id, bHasHistoryDate ? historyDate : (DateTime?)null);
+			model.Marketplaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models).ToList();
 
 			model.LoansAndOffers = new LoansAndOffers(customer);
 

@@ -133,12 +133,12 @@
 		#region method HmrcBank
 
 		private void HmrcBank(MarketPlaceModel oModel) {
-			if (oModel.CGData == null) {
+			if (oModel.HmrcData == null) {
 				Log.Debug("There is no VAT return data for customer {0}.", m_oCustomer.Stringify());
 				return;
 			} // if
 
-			var oVat = (ChannelGrabberHmrcData)oModel.CGData;
+			var oVat = oModel.HmrcData;
 
 			if (oVat == null) {
 				Log.Debug("There is no VAT return data for customer {0}.", m_oCustomer.Stringify());
@@ -288,9 +288,10 @@
 			var oErrorMsgs = new List<string>();
 
 			decimal nRevenue = 0;
-			decimal nOpex = 0;
+			int nCount = 0;
 
 			foreach (var mm in oModels) {
+				nCount++;
 				var mp = mm.Marketplace;
 				var oModel = mm.Model;
 
@@ -319,16 +320,18 @@
 				);
 			} // for each account
 
-			var oRes = new AffordabilityData {
-				Type = nType,
-				Revenues = nRevenue,
-				IsAnnualized = bWasAnnualized,
-				ErrorMsgs = string.Join(" ", oErrorMsgs).Trim(),
-			};
+			if (nCount > 0) {
+				var oRes = new AffordabilityData {
+					Type = nType,
+					Revenues = nRevenue,
+					IsAnnualized = bWasAnnualized,
+					ErrorMsgs = string.Join(" ", oErrorMsgs).Trim(),
+				};
 
-			oRes.Fill();
+				oRes.Fill();
 
-			Affordability.Add(oRes);
+				Affordability.Add(oRes);
+			} // if
 		} // EcommAccounting
 
 		#endregion method EcommAccounting

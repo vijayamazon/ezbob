@@ -193,12 +193,12 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
             return;
         } // if
 
-        var oCGData = oHMRC.get('CGData');
+        var oHmrcData = oHMRC.get('HmrcData');
 
-        if (!oCGData || !oCGData.VatReturn || !oCGData.VatReturn.length)
+        if (!oHmrcData || !oHmrcData.VatReturn || !oHmrcData.VatReturn.length)
             return;
 
-        var oCompanyID = oCGData.VatReturn[oCGData.VatReturn.length - 1];
+        var oCompanyID = oHmrcData.VatReturn[oHmrcData.VatReturn.length - 1];
 
         this.$el.find('#cross-check-company-name .hmrc').text($.trim(oCompanyID['BusinessName']));
 
