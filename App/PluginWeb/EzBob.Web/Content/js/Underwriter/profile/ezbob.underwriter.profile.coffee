@@ -116,7 +116,10 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             model: @messagesModel
         )
         @Message.on "creditResultChanged", @changedSystemDecision, @
-        
+
+        @signatureMonitorView = new EzBob.Underwriter.SignatureMonitorView
+            el: @$el.find "#signature-monitor"
+
         @alertDocs = new EzBob.Underwriter.Docs()
         @alertDocsView = new EzBob.Underwriter.AlertDocsView(el: @$el.find("#alert-docs"), model: @alertDocs)
         
@@ -478,7 +481,9 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
             $('a[href=#marketplaces]').click() if isHistory
             $('a.common-bug').attr('data-bug-customer', id)
-            
+
+            @signatureMonitorView.reload id
+
             BlockUi "Off"
 
         EzBob.handleUserLayoutSetting()

@@ -14,13 +14,18 @@
 		[Test]
 		public void TestSendBoardResolution() {
 			var esf = new EchoSignFacade(m_oDB, m_oLog);
-			esf.Send(28, new int[] { 2, 3, }, 1, true);
+			esf.Send(new [] { new EchoSignEnvelope {
+				CustomerID = 28, Directors = new [] { 2, 3, }, TemplateID = 1, SendToCustomer = true,
+			}});
 		} // TestSendBoardResolution
 
 		[Test]
 		public void TestSendPersonalGuarantee() {
 			var esf = new EchoSignFacade(m_oDB, m_oLog);
-			esf.Send(28, new int[] { 2, 3, }, 2, false);
+
+			esf.Send(new [] { new EchoSignEnvelope {
+				CustomerID = 28, Directors = new [] { 2, 3, }, TemplateID = 2, SendToCustomer = false,
+			}});
 		} // TestSendPersonalGuarantee
 
 		[Test]

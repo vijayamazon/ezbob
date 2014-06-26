@@ -315,6 +315,7 @@
 				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.js")
 				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsFollowUp.js")
 				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.properties.js")
+				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.signature.monitor.js")
 
 				//----
 				.Add("~/Content/js/Underwriter/editLoan/loanModel.coffee")

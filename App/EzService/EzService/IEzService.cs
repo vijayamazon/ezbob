@@ -230,6 +230,13 @@
 		
 		#endregion email strategies
 
+		#region Esign
+
+		[OperationContract]
+		ActionMetaData EsignProcessPending(int? nCustomerID);
+
+		#endregion Esign
+
 		#region Experian
 
 		[OperationContract]
@@ -356,9 +363,6 @@
 
 		[OperationContract]
 		StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
-
-		[OperationContract]
-		ActionMetaData EsignProcessPending(int? nCustomerID);
 
 		[OperationContract]
 		MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory);

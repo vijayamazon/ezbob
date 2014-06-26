@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EchoSignEnvelope.cs" />
     <Compile Include="EchoSignFacade.cs" />
+    <Compile Include="EchoSignSendResult.cs" />
     <Compile Include="Internal\Address.cs" />
     <Compile Include="Internal\AAddressable.cs" />
     <Compile Include="Internal\Company.cs" />

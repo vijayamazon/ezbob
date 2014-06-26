@@ -57,12 +57,43 @@
 
 		#region method Send
 
-		public bool Send(int nCustomerID, IEnumerable<int> aryDirectors, int nTemplateID, bool bSendToCustomer) {
+		public EchoSignSendResult Send(IEnumerable<EchoSignEnvelope> oCorrespondence) {
+			int nTotalCount = 0;
+			int nSuccessCount = 0;
+
+			foreach (var oLetter in oCorrespondence) {
+				nTotalCount++;
+
+				if (EchoSignSendResult.Success == Send(oLetter))
+					nSuccessCount++;
+			} // for each
+
+			if (nSuccessCount == 0)
+				return EchoSignSendResult.Fail;
+
+			return nTotalCount == nSuccessCount ? EchoSignSendResult.Success : EchoSignSendResult.Partial;
+		} // Send
+
+		public EchoSignSendResult Send(EchoSignEnvelope oLetter) {
 			if (!m_bIsReady) {
 				m_oLog.Msg("EchoSign cannot send - not ready.");
-				return false;
+				return EchoSignSendResult.Fail;
 			} // if
 
+			if (oLetter == null) {
+				m_oLog.Warn("NULL EchoSign request discovered.");
+				return EchoSignSendResult.Fail;
+			} // if
+
+			if (!oLetter.IsValid) {
+				m_oLog.Warn("Some data are missing in EchoSign request: {0}.", oLetter);
+				return EchoSignSendResult.Fail;
+			} // if
+
+			return Send(oLetter.CustomerID, oLetter.Directors, oLetter.TemplateID, oLetter.SendToCustomer);
+		} // Send
+
+		private EchoSignSendResult Send(int nCustomerID, IEnumerable<int> aryDirectors, int nTemplateID, bool bSendToCustomer) {
 			SpLoadDataForEsign sp;
 
 			try {
@@ -76,12 +107,12 @@
 			}
 			catch (Exception e) {
 				m_oLog.Warn(e, "EchoSign cannot send: failed to load all the data from database.");
-				return false;
+				return EchoSignSendResult.Fail;
 			} // try
 
 			if (!sp.IsReady) {
 				m_oLog.Warn("EchoSign cannot send: failed to load all the data from database.");
-				return false;
+				return EchoSignSendResult.Fail;
 			} // if
 
 			List<Person> oRecipients = new List<Person>();
@@ -93,7 +124,7 @@
 
 			if (oRecipients.Count < 1) {
 				m_oLog.Warn("EchoSign cannot send: no recipients specified.");
-				return false;
+				return EchoSignSendResult.Fail;
 			} // if
 
 			switch (sp.Template.TemplateType) {
@@ -101,17 +132,24 @@
 				return SendOne(sp.Template, null, oRecipients, sp, bSendToCustomer);
 
 			case TemplateType.PersonalGuarantee:
-				bool bAllGood = true;
+				int nTotalCount = 0;
+				int nSuccessCount = 0;
 
-				foreach (Person oRecipient in oRecipients)
-					if (!SendOne(sp.Template, sp.Template.PersonalGuarantee(oRecipient), new List<Person> { oRecipient }, sp, bSendToCustomer))
-						bAllGood = false;
+				foreach (Person oRecipient in oRecipients) {
+					nTotalCount++;
 
-				return bAllGood;
+					if (EchoSignSendResult.Success == SendOne(sp.Template, sp.Template.PersonalGuarantee(oRecipient), new List<Person> {oRecipient}, sp, bSendToCustomer))
+						nSuccessCount++;
+				} // for each
+
+				if (nSuccessCount == 0)
+					return EchoSignSendResult.Fail;
+
+				return nTotalCount == nSuccessCount ? EchoSignSendResult.Success : EchoSignSendResult.Partial;
 
 			default:
 				m_oLog.Warn("EchoSign cannot send: don't know how to send template of type {0}.", sp.Template.TemplateType);
-				return false;
+				return EchoSignSendResult.Fail;
 			} // switch
 		} // Send
 
@@ -240,7 +278,7 @@
 
 		#region method SendOne
 
-		private bool SendOne(Template oTemplate, byte[] oFileContent, List<Person> oAddressee, SpLoadDataForEsign oData, bool bSentToCustomer) {
+		private EchoSignSendResult SendOne(Template oTemplate, byte[] oFileContent, List<Person> oAddressee, SpLoadDataForEsign oData, bool bSentToCustomer) {
 			var oRecipients = oAddressee.Select(oPerson => new RecipientInfo {
 				email = oPerson.Email,
 				role = RecipientRole.SIGNER,
@@ -273,7 +311,7 @@
 			}
 			catch (Exception e) {
 				m_oLog.Warn(e, "Something went exceptionally terrible while sending a document '{0}' to {1}.", oTemplate.DocumentName, sAllRecipients);
-				return false;
+				return EchoSignSendResult.Fail;
 			} // try
 
 			if (aryResult.Length != 1) {
@@ -293,7 +331,7 @@
 				sp.ExecuteNonQuery();
 			} // if
 
-			return true;
+			return EchoSignSendResult.Success;
 		} // SendOne
 
 		#endregion method SendOne

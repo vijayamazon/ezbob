@@ -81,7 +81,7 @@
     <Compile Include="Misc\BackfillFinancialAccounts.cs" />
     <Compile Include="Misc\CustomerAddressHelper.cs" />
     <Compile Include="Misc\DisplayMarketplaceSecurityData.cs" />
-    <Compile Include="Misc\EsignProcessPending.cs" />
+    <Compile Include="Esign\EsignProcessPending.cs" />
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
     <Compile Include="Misc\VerifyEnoughAvailableFunds.cs" />

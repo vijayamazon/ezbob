@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace EzBob.Backend.Strategies.Esign {
 	using EchoSignLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;

@@ -124,6 +124,9 @@
         model: this.messagesModel
       });
       this.Message.on("creditResultChanged", this.changedSystemDecision, this);
+      this.signatureMonitorView = new EzBob.Underwriter.SignatureMonitorView({
+        el: this.$el.find("#signature-monitor")
+      });
       this.alertDocs = new EzBob.Underwriter.Docs();
       this.alertDocsView = new EzBob.Underwriter.AlertDocsView({
         el: this.$el.find("#alert-docs"),
@@ -151,6 +154,7 @@
         crmModel: this.crmModel,
         personalModel: this.personalInfoModel,
         experianModel: this.experianInfoModel,
+        companyModel: this.companyScoreModel,
         propertiesModel: this.PropertiesModel,
         mpsModel: this.marketPlaces,
         loanModel: this.loanInfoModel
@@ -601,6 +605,7 @@
           $('a[href=#marketplaces]').click();
         }
         $('a.common-bug').attr('data-bug-customer', id);
+        _this.signatureMonitorView.reload(id);
         return BlockUi("Off");
       });
       return EzBob.handleUserLayoutSetting();

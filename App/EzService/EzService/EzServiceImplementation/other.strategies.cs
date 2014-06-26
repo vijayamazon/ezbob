@@ -5,7 +5,6 @@
 	using EzBob.Backend.Strategies.Postcode;
 	using EzBob.Backend.Strategies.VatReturn;
 	using Ezbob.Backend.Models;
-	using Newtonsoft.Json;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData FirstOfMonthStatusNotifier() {
@@ -146,14 +145,6 @@
 		} // ValidateAndUpdateLinkedHmrcPassword
 
 		#endregion method UpdateLinkedHmrcPassword
-
-		#region method EsignProcessPending
-
-		public ActionMetaData EsignProcessPending(int? nCustomerID) {
-			return Execute<EsignProcessPending>(null, null, nCustomerID);
-		} // EsignProcessPending
-
-		#endregion method EsignProcessPending
 
 		#region method CalculateModelsAndAffordability
 

@@ -638,6 +638,7 @@
     <Content Include="App_Code\UnderwriterSidebar.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ProfileHead.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ControlButtons.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\SignatureMonitor.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1172,6 +1173,7 @@
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.js">
       <DependentUpon>ezbob.underwriter.profile.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.signature.monitor.js" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js">
       <DependentUpon>ezbob.underwriter.fraudStatus.coffee</DependentUpon>
     </Content>
