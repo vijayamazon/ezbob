@@ -28,7 +28,6 @@
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using YodleeLib.connector;
-	using log4net;
 	using ISession = NHibernate.ISession;
 	using EzBob.Configuration;
 	using EzServiceConfigurationLoader;

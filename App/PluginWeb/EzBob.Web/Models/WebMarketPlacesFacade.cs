@@ -31,6 +31,7 @@
 						Id = mp.Id,
 						Type = mp.DisplayName,
 						Name = mp.Marketplace.Name,
+						IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
 						PaymentAccountBasic = new PaymentAccountsModel {
 							displayName = mp.DisplayName,
 						},

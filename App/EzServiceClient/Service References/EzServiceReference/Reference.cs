@@ -186,6 +186,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.MarketplacesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PricingModelModelActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.QuickOfferActionResult))]
@@ -290,6 +291,45 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MarketplacesActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class MarketplacesActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.AffordabilityData[] AffordabilityField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ModelsField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.AffordabilityData[] Affordability {
+            get {
+                return this.AffordabilityField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AffordabilityField, value) != true)) {
+                    this.AffordabilityField = value;
+                    this.RaisePropertyChanged("Affordability");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Models {
+            get {
+                return this.ModelsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ModelsField, value) != true)) {
+                    this.ModelsField = value;
+                    this.RaisePropertyChanged("Models");
                 }
             }
         }
@@ -1950,6 +1990,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EsignProcessPending", ReplyAction="http://tempuri.org/IEzService/EsignProcessPendingResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EsignProcessPending(System.Nullable<int> nCustomerID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateModelsAndAffordability", ReplyAction="http://tempuri.org/IEzService/CalculateModelsAndAffordabilityResponse")]
+        ServiceClientProxy.EzServiceReference.MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, System.Nullable<System.DateTime> oHistory);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPricingModelModel", ReplyAction="http://tempuri.org/IEzService/GetPricingModelModelResponse")]
         ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
         
@@ -2366,6 +2409,10 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData EsignProcessPending(System.Nullable<int> nCustomerID) {
             return base.Channel.EsignProcessPending(nCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, System.Nullable<System.DateTime> oHistory) {
+            return base.Channel.CalculateModelsAndAffordability(nCustomerID, oHistory);
         }
         
         public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName) {

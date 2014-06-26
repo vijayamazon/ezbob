@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoDecisions\AutoDecisionCondition.cs" />
-    <Compile Include="Misc\GetAffordabilityData.cs" />
+    <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
     <Compile Include="Misc\GetBankModel.cs" />
     <Compile Include="Misc\Agreement.cs" />
     <Compile Include="Misc\CalculateNewMedals.cs" />
@@ -272,6 +272,10 @@
     <ProjectReference Include="..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\integration\CompanyFiles\CompanyFiles.csproj">
+      <Project>{80458A21-990F-46BA-BCBB-FB211B5BAAAC}</Project>
+      <Name>CompanyFiles</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\CustomSchedulers\CustomSchedulers.csproj">
       <Project>{47D73896-1B70-4347-BEB5-A0AD94A45421}</Project>

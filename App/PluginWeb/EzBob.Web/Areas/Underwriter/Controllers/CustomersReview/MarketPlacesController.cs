@@ -17,6 +17,7 @@
 	using CommonLib;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
+	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using Web.Models;
 	using YodleeLib;
@@ -73,19 +74,16 @@
 		[HttpGet]
 		public JsonResult Index(int id, DateTime? history = null)
 		{
-			var customer = _customers.Get(id);
-			var models = _marketPlaces.GetMarketPlaceModels(customer, history).ToList();
+			var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(id, history);
+			var models = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
 			return Json(models, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpGet]
 		public JsonResult GetAffordabilityData(int id) {
-			var customer = _customers.Get(id);
-
-			// TODO
-
-			return Json(new { }, JsonRequestBehavior.AllowGet);
+			var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(id, null);
+			return Json(ar.Affordability, JsonRequestBehavior.AllowGet);
 		} // GetAffordabilityData
 
 		[Ajax]

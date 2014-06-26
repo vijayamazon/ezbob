@@ -360,6 +360,9 @@
 		[OperationContract]
 		ActionMetaData EsignProcessPending(int? nCustomerID);
 
+		[OperationContract]
+		MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory);
+
 		#endregion other strategies
 
 		#region pricing model

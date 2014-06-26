@@ -1,15 +1,12 @@
-﻿using System;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
-using System.ServiceModel.Discovery;
-using EzService;
-using EzServiceConfigurationLoader;
-
-namespace EzServiceHost {
+﻿namespace EzServiceHost {
+	using System;
+	using System.ServiceModel;
+	using System.ServiceModel.Channels;
+	using System.ServiceModel.Description;
+	using System.ServiceModel.Discovery;
+	using EzService;
+	using EzServiceConfigurationLoader;
 	using EzService.EzServiceImplementation;
-
-	#region class EzServiceHost
 
 	class EzServiceHost : ServiceHost {
 		public EzServiceHost(Configuration oCfg, EzServiceInstanceRuntimeData oData) : base(
@@ -93,6 +90,4 @@ namespace EzServiceHost {
 
 		#endregion private
 	} // class EzServiceHost
-
-	#endregion class EzServiceHost
 } // namespace EzServiceHost

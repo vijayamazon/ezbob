@@ -2,12 +2,26 @@ namespace EzBobTest
 {
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.Misc;
+	using EzServiceAccessor;
+	using EzServiceShortcut;
 	using Ezbob.Backend.Models;
 	using NUnit.Framework;
+	using StructureMap;
 
 	[TestFixture]
 	public class TestStrategies : BaseTestFixtue
 	{
+		[SetUp]
+		public void Init() {
+			base.Init();
+
+			ObjectFactory.Configure(x => {
+				x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>();
+			});
+
+			EzServiceAccessorShort.Set(m_oDB, m_oLog);
+		} // Init
+
 
 		[Test]
 		public void test_mainstrat()
@@ -183,8 +197,8 @@ namespace EzBobTest
 		} // TestGetBankModel
 
 		[Test]
-		public void TestGetAffordabilityData() {
-			new GetAffordabilityData(234, m_oDB, m_oLog).Execute();
-		} // TestAffordabilityData
+		public void TestCalculateModelsAndAffordability() {
+			new CalculateModelsAndAffordability(234, null, m_oDB, m_oLog).Execute();
+		} // TestCalculateModelsAndAffordability
 	}
 }

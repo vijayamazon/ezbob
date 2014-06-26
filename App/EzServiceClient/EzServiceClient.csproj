@@ -134,6 +134,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.IntActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.MarketplacesActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.PricingModelModelActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

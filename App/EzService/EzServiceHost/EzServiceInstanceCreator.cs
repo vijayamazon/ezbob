@@ -1,12 +1,9 @@
-﻿using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Dispatcher;
-using EzService;
-
-namespace EzServiceHost {
+﻿namespace EzServiceHost {
+	using System.ServiceModel;
+	using System.ServiceModel.Channels;
+	using System.ServiceModel.Dispatcher;
+	using EzService;
 	using EzService.EzServiceImplementation;
-
-	#region class EzServiceInstanceCreator
 
 	class EzServiceInstanceCreator : IInstanceProvider {
 		public EzServiceInstanceCreator(EzServiceInstanceRuntimeData oData) {
@@ -26,6 +23,4 @@ namespace EzServiceHost {
 
 		private readonly EzServiceInstanceRuntimeData m_oDataHolder;
 	} // class EzServiceInstanceCreator
-
-	#endregion class EzServiceInstanceCreator
 } // namespace EzServiceHost

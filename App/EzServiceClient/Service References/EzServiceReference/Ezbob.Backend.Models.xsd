@@ -11,6 +11,42 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="AccountsToUpdate" nillable="true" type="tns:AccountsToUpdate" />
+  <xs:complexType name="ArrayOfAffordabilityData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AffordabilityData" nillable="true" type="tns:AffordabilityData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAffordabilityData" nillable="true" type="tns:ArrayOfAffordabilityData" />
+  <xs:complexType name="AffordabilityData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DateFrom" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateTo" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Ebitda" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ErrorMsgs" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FreeCashFlow" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="IsAnnualized" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LoanRepayment" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Opex" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Revenues" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Salaries" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Tax" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Type" type="tns:AffordabilityType" />
+      <xs:element minOccurs="0" name="ValueAdded" nillable="true" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="AffordabilityData" nillable="true" type="tns:AffordabilityData" />
+  <xs:simpleType name="AffordabilityType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Hmrc" />
+      <xs:enumeration value="Bank" />
+      <xs:enumeration value="Psp" />
+      <xs:enumeration value="Ecomm" />
+      <xs:enumeration value="Accounting" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AffordabilityType" nillable="true" type="tns:AffordabilityType" />
   <xs:complexType name="QuickOfferModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Aml" type="xs:int" />

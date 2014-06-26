@@ -83,6 +83,14 @@
       <Project>{DFC5B190-AFA4-40A7-8237-8404687B4513}</Project>
       <Name>HmrcHarvester</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\EzServiceAccessorShort\EzServiceShortcut.csproj">
+      <Project>{3D162D7E-C8EA-4A97-AF1A-58E728093AD0}</Project>
+      <Name>EzServiceShortcut</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{D283AD52-FE57-4CD8-A928-A7A3AF9F04EC}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
       <Name>Ezbob.Backend.Models</Name>

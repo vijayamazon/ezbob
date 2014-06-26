@@ -1,9 +1,11 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System;
 	using System.Linq;
 	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.Postcode;
 	using EzBob.Backend.Strategies.VatReturn;
 	using Ezbob.Backend.Models;
+	using Newtonsoft.Json;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData FirstOfMonthStatusNotifier() {
@@ -152,5 +154,21 @@
 		} // EsignProcessPending
 
 		#endregion method EsignProcessPending
+
+		#region method CalculateModelsAndAffordability
+
+		public MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory) {
+			CalculateModelsAndAffordability oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, null, nCustomerID, oHistory);
+
+			return new MarketplacesActionResult {
+				Models = oInstance.Models,
+				Affordability = oInstance.Affordability.ToArray(),
+				MetaData = oMetaData,
+			};
+		} // CalculateModelsAndAffordability
+
+		#endregion method CalculateModelsAndAffordability
 	} // class EzServiceImplementation
 } // namespace EzService
