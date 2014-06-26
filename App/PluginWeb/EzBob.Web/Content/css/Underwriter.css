@@ -1103,6 +1103,12 @@ textarea.BusinessAddress {
     border-color: #39a7e6;
 }
 
+.alert-success {
+    color: #ffffff;
+    background-color: #00ab5d;
+    border-color: #00ab5d;
+}
+
 
 .pricing-model-double-input-width {
     width: 90px;
@@ -1784,4 +1790,17 @@ body {
 
 #journalTable {
     white-space: nowrap;
+}
+
+.green-row {
+    background-color: #e9f2ed;
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > tbody > tr > td, 
+.table > tfoot > tr > td {
+    padding: 7px;
 }

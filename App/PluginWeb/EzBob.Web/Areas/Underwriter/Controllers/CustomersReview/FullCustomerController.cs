@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces;
+	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Models;
 	using Newtonsoft.Json;
@@ -102,6 +103,20 @@
 			var ar = serviceClient.Instance.CalculateModelsAndAffordability(id, bHasHistoryDate ? historyDate : (DateTime?)null);
 			model.Marketplaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models).ToList();
 
+			try
+			{
+				var ar = serviceClient.Instance.CalculateModelsAndAffordability(id, isHistory ? historyDate : (DateTime?) null);
+				var mps = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
+
+				model.MarketPlaces = mps.ToList();
+				model.Affordability = ar.Affordability.ToList();
+			}
+			catch (Exception ex)
+			{
+				model.MarketPlaces = new List<MarketPlaceModel>();
+				model.Affordability = new List<AffordabilityData>();
+				Log.Error("Failed to retrieve mps and affordability", ex);
+			}
 			model.LoansAndOffers = new LoansAndOffers(customer);
 
 			model.CreditBureauModel = _creditBureauModelBuilder.Create(customer, false, null);
@@ -182,7 +197,8 @@
 		{
 			public PersonalInfoModel PersonalInfoModel { get; set; }
 			public ApplicationInfoModel ApplicationInfoModel { get; set; }
-			public List<MarketPlaceModel> Marketplaces { get; set; }
+			public List<MarketPlaceModel> MarketPlaces { get; set; }
+			public List<AffordabilityData> Affordability { get; set; }
 			public List<MarketPlaceHistoryModel> MarketplacesHistory { get; set; }
 			public LoansAndOffers LoansAndOffers { get; set; }
 			public CreditBureauModel CreditBureauModel { get; set; }

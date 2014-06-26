@@ -11,8 +11,8 @@
     <link rel="icon" type="image/png" href="@Url.Content("~/Content/img/big-bob.png")" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--[if IE]>
-		<link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
-	<![endif]-->
+        <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
+    <![endif]-->
     @BundleHelper.RenderUnderwriterCss()
     @BundleHelper.RenderPrintCss()
 </head>
@@ -20,12 +20,6 @@
 @{
     string sBodyClasses = "";
     string sBodyClassesException = "";
-    string availableFundsStr = "";
-    var sRoleImageUrl = "crm.png";
-    var sRoleImageTitle = "CRM";
-    var userName = "";
-    var userId = 0;
-    var userEmail = "";
 
     try
     {
@@ -36,36 +30,12 @@
             string sPermissions = context.User.Permissions == null ? "" : string.Join(" ", context.User.Permissions.Select(p => "permission-" + p.Name));
             string sRoles = context.User.Roles == null ? "" : string.Join(" ", context.User.Roles.Select(p => "role-" + p.Name));
             sBodyClasses = sRoles + " " + sPermissions;
-            var user = context.User;
-            if (user != null)
-            {
-                userName = user.FullName ?? user.Name;
-                userId = user.Id;
-                userEmail = user.EMail;
-
-
-                if (user.Roles.Any(r => r.Name == "manager"))
-                {
-                    sRoleImageUrl = "manager.png";
-                    sRoleImageTitle = "Manager";
-                }
-                else if (user.Roles.Any(r => r.Name == "Underwriter"))
-                {
-                    sRoleImageUrl = "underwriter.png";
-                    sRoleImageTitle = "Underwriter";
-                }
-
-                sRoleImageTitle = user.Roles.Last().Name;
-            }
         }
     }
     catch (Exception e)
     {
         sBodyClassesException = "Error fetching user permissions and roles: " + e.Message;
     }
-
-    sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
-    
 }
 
 <body class="@sBodyClasses">
@@ -76,149 +46,6 @@
 
     @AntiForgery.GetHtml()
     <div class="container" id="main-container">
-        
-        @*<div class="navbar navbar-blue" id="navbar">
-            <a class="navbar-brand" href="#" id="uw-name-and-icon" data-uw-id="@userId" style="float: left">
-                <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/>@userName
-            </a>
-            <ul class="nav flaty-nav">
-                <li id="liApplications">
-                    <a id="gotoCustomerId" href='@Url.Action("Index", "Customers")#'>Customers</a>
-                </li>
-                <li id="liClient">
-                    <a href='#'>Find</a>
-                </li>
-                <li id="liReports" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports</a>
-                    <ul class="dropdown-menu">
-                        <li id="liReport">
-                            <a href="Customers#report">Reports</a>
-                        </li>
-                        <li id="liCustomerReports">
-                            @{
-	                            string reportsIp = CurrentValues.Instance.ReportsSite;
-                                <a href="@reportsIp" target="_blank">Reports Site</a>
-                            }
-                        </li>
-                        <li id="liPerformenceReportPerUnderWriter">
-                            <a href='@Url.Action("PerformenceReportPerUnderWriter", "Reports", new { Area = "Underwriter" })'>Performence Report / Underwriter</a>
-                        </li>
-                        <li id="liPerformenceReportPerMedal">
-                            <a href='@Url.Action("PerformenceReportPerMedal", "Reports", new { Area = "Underwriter" })'>Performence Report / Medal</a>
-                        </li>
-                        <li id="liExposureReportPerUnderwriter">
-                            <a href='@Url.Action("ExposureReportPerUnderwriter", "Reports", new { Area = "Underwriter" })'>Exposure Report / Underwriter</a>
-                        </li>
-                        <li id="liExposureReportPerMedal">
-                            <a href='@Url.Action("ExposureReportPerMedal", "Reports", new { Area = "Underwriter" })'>Exposure Report / Medal</a>
-                        </li>
-                        <li id="liMedalStatisticReport">
-                            <a href='@Url.Action("MedalStatisticReport", "Reports", new { Area = "Underwriter" })'>Medal Statistic</a>
-                        </li>
-                        <li id="liDaily">
-                            <a href='@Url.Action("DailyReport", "Reports", new { Area = "Underwriter" })'>Daily Report</a>
-                        </li>
-                        <li id="liExtendedDaily">
-                            <a href='@Url.Action("ExpectationReport", "Reports", new { Area = "Underwriter" })'>Expectation Report</a>
-                        </li>
-                    </ul>
-                </li>
-                <li id="liSupport">
-                    <a href='Customers#support'>Support</a>
-                </li>
-                <li id="liFraud">
-                    <a href='Customers#fraud'>Fraud</a>
-                </li>
-                <li id="liCAIS">
-                    <a href="@Url.Action("Index", "CAIS")">CAIS</a>
-                </li>
-                <li id="liAutomation">
-                    <a href="Customers#automation">Automation</a>
-                </li>
-                <li id="liStrategySettings">
-                    <a href="Customers#settings">Settings</a>
-                </li>
-                <li id="liFunding">
-                    <a href="Customers#funding">
-                        <div id="fundingDiv" class="funding-main-menu-item">Funding @availableFundsStr</div>
-                    </a>
-                </li>
-            </ul>
-            <ul class="nav pull-right">
-                @if (!Request.Browser.IsMobileDevice)
-                {
-                    <li>
-                        <a href="#" class="ezbob-logo header-logo"></a>
-                    </li>
-                    <li>
-                        <div id="theme-setting">
-                            <a href="#"><i class="fa fa-gears fa fa-2x"></i></a>
-                            <ul>
-                                <li>
-                                    <span>Skin</span>
-                                    <ul class="colors" data-target="body" data-prefix="skin-">
-                                        <li class="active"><a class="blue" href="#"></a></li>
-                                        <li><a class="red" href="#"></a></li>
-                                        <li><a class="green" href="#"></a></li>
-                                        <li><a class="orange" href="#"></a></li>
-                                        <li><a class="yellow" href="#"></a></li>
-                                        <li><a class="pink" href="#"></a></li>
-                                        <li><a class="magenta" href="#"></a></li>
-                                        <li><a class="gray" href="#"></a></li>
-                                        <li><a class="black" href="#"></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <span>Navbar</span>
-                                    <ul class="colors" data-target="#navbar" data-prefix="navbar-">
-                                        <li class="active"><a class="blue" href="#"></a></li>
-                                        <li><a class="red" href="#"></a></li>
-                                        <li><a class="green" href="#"></a></li>
-                                        <li><a class="orange" href="#"></a></li>
-                                        <li><a class="yellow" href="#"></a></li>
-                                        <li><a class="pink" href="#"></a></li>
-                                        <li><a class="magenta" href="#"></a></li>
-                                        <li><a class="gray" href="#"></a></li>
-                                        <li><a class="black" href="#"></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <span>Sidebar</span>
-                                    <ul class="colors" data-target="#main-container" data-prefix="sidebar-">
-                                        <li class="active"><a class="blue" href="#"></a></li>
-                                        <li><a class="red" href="#"></a></li>
-                                        <li><a class="green" href="#"></a></li>
-                                        <li><a class="orange" href="#"></a></li>
-                                        <li><a class="yellow" href="#"></a></li>
-                                        <li><a class="pink" href="#"></a></li>
-                                        <li><a class="magenta" href="#"></a></li>
-                                        <li><a class="gray" href="#"></a></li>
-                                        <li><a class="black" href="#"></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a data-target="navbar" href="#"><i class="fa fa-square-o"></i>Fixed Navbar</a>
-                                </li>
-                                <li>
-                                    <a data-target="sidebar" href="#"><i class="fa fa-square-o"></i>Fixed Sidebar</a>
-                                </li>
-                                <li>
-                                    <a data-target="table" href="#"><i class="fa fa-square-o"></i>Striped Table</a>
-                                </li>
-                                <li>
-                                    <a data-target="whitebg" href="#"><i class="fa fa-square-o"></i>White Background</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                }
-                <li>
-                    @Html.ActionLink("Log out", "LogOffUnderwriter", "Account", new { Area = "" }, new { })
-                </li>
-            </ul>
-        </div>*@
-
-
         @RenderBody()
     </div>
 

@@ -49,8 +49,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 
         data[sTargetList].push(this.shop.toJSON());
 
-	    console.log('shop to json', this.shop.toJSON());
-
         data.hideAccounts = data.accounts.length == 0;
         data.hideMarketplaces = data.marketplaces == 0;
 

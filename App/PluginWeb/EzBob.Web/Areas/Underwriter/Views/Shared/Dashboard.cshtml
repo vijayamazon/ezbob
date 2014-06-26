@@ -69,16 +69,7 @@
         </div>
 
         <%
-            var aff = {};
-            var dates = {};
-            if(affordability && affordability.length == 1 && affordability[0].HmrcData){
-			
-			if (affordability[0].HmrcData.VatReturnSummary && affordability[0].HmrcData.VatReturnSummary[0])
-				aff = affordability[0].HmrcData.VatReturnSummary[0];
-
-			var dates = {};
-			if (affordability[0].HmrcData.VatReturnSummaryDates && affordability[0].HmrcData.VatReturnSummaryDates[0])
-				dates = affordability[0].HmrcData.VatReturnSummaryDates[0];
+            if(affordability && affordability.length > 0){
         }%>
         
         <div class="col-lg-9 col-md-12 col-sm-12">
@@ -89,7 +80,35 @@
                         @BoxTools("Affordability", "#marketplaces")
                     </div>
                     <div class="box-content">
-                        <table class="table table-striped">
+                       <table class="table" id="affordabilityTable" style="margin-top:-7px !important;">
+                           <tr>
+                               <td></td>
+                               <td>Annual</td>
+                               <td>Revenues</td>
+                               <td>Opex</td>
+                               <td><strong>Value added</strong></td>
+                               <td>Salaries</td>
+                               <td>tax</td>
+                               <td><strong>Ebidta</strong></td>
+                               <td>Loan repayment</td>
+                               <td><strong>FCF</strong></td>
+                           </tr>
+                               <%_.each(affordability, function(af,i) { if(af.Type) {console.log(af,i);%>
+                                    <tr>
+                                        <td><%-af.TypeStr%> <i class="fa fa-fa-exclamation-circle" data-error="<%-af.ErrorMsgs%>"></i></td>
+                                        <td class="<%-af.IsAnnualized ? 'red_cell' : '' %>"><%-af.DateFrom%> - <%-af.DateTo%></td>
+                                        <td><%-EzBob.formatPoundsNoDecimals(af.Revenues)%></td>
+                                        <td><%-EzBob.formatPoundsNoDecimals(af.Opex)%></td>
+                                        <td><strong><%-EzBob.formatPoundsNoDecimals(af.ValueAdded)%></strong></td>
+                                        <td><%-EzBob.formatPoundsNoDecimals(af.Salaries)%></td>
+                                        <td><%-EzBob.formatPoundsNoDecimals(af.Tax)%></td>
+                                        <td><strong><%-EzBob.formatPoundsNoDecimals(af.Ebitda)%></strong></td>
+                                        <td><%-EzBob.formatPoundsNoDecimals(af.LoanRepayment)%></td>
+                                        <td><strong><span class="alert <%- af.FreeCashFlow < 0 ? 'alert-danger' : 'alert-success' %>"><%-EzBob.formatPoundsNoDecimals(af.FreeCashFlow)%></span></strong></td>
+                                    </tr>
+                               <%}});%>
+                       </table>
+@*                         <table class="table table-striped">
                             <tbody>
                                 <tr>
                                     <td><i>annual</i></td>
@@ -128,7 +147,7 @@
                                     <td><span class="label label-large <%- aff.FreeCashFlow < 0 ? 'label-important' : 'label-success' %>"><%-EzBob.formatPoundsNoDecimals(aff.FreeCashFlow)%></span></td>
                                 </tr>
                             </tbody>
-                        </table>
+                        </table>*@
                     </div>
                 </div>
             </div>

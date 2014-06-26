@@ -10,6 +10,8 @@
 		[DataMember]
 		public AffordabilityType Type { get; set; }
 
+		public string TypeStr { get { return Type.ToString(); } }
+
 		[DataMember]
 		public DateTime? DateFrom { get; set; }
 

@@ -140,7 +140,8 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         )
 
         @PropertiesModel = new EzBob.Underwriter.Properties()
-
+        @affordability = new EzBob.Underwriter.Affordability()
+        
         @dashboardInfoView = new EzBob.Underwriter.DashboardView(
             el: dashboardInfo
             model: @summaryInfoModel
@@ -150,6 +151,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             companyModel: @companyScoreModel
             propertiesModel: @PropertiesModel
             mpsModel: @marketPlaces
+            affordability: @affordability
             loanModel: @loanInfoModel
         )
         
@@ -407,10 +409,14 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @loanInfoModel.set fullModel.get("ApplicationInfoModel"), silent: true
             @loanInfoModel.trigger "sync"
 
+            console.log('ff', fullModel.get("MarketPlaces"))
             @marketPlaces.customerId = id
             @marketPlaces.history = history
-            @marketPlaces.reset fullModel.get("Marketplaces"), silent: true
+            @marketPlaces.reset fullModel.get("MarketPlaces"), silent: true
             @marketPlaces.trigger "sync"
+            
+            @affordability.set fullModel.get("Affordability"), silent: true
+            @affordability.trigger "sync"
 
             @loanHistory.customerId = id
             @loanHistoryView.idCustomer = id

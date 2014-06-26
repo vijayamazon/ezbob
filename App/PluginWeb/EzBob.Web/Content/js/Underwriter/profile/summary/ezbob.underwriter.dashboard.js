@@ -11,6 +11,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.mpsModel = options.mpsModel;
         this.loanModel = options.loanModel;
         this.companyModel = options.companyModel;
+        this.affordability = options.affordability;
         this.bindTo(this.model, "change sync", this.render, this);
         this.bindTo(this.crmModel, "change sync", this.render, this);
         this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
@@ -19,6 +20,8 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.bindTo(this.propertiesModel, "change sync", this.render, this);
         this.bindTo(this.mpsModel, "change sync", this.render, this);
         this.bindTo(this.loanModel, "change sync", this.render, this);
+        this.bindTo(this.affordability, "change sync", this.render, this);
+        
         this.expCompany = [];
         this.journal = [];
         this.journalTable = null;
@@ -38,17 +41,41 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                 };
             })(this));
         }
+
+        console.log('aff', this.affordability);
         return {
             m: this.model.toJSON(),
             experian: this.experianModel.toJSON(),
             company: this.expCompany,
             properties: this.propertiesModel.toJSON(),
-            mps: this.mpsModel.toJSON(),
+            //mps: this.mpsModel.toJSON(),
             loan: this.loanModel.toJSON(),
-            affordability: _.first(_.filter(this.mpsModel.toJSON(), function (mp) {
-                return mp.Name === 'HMRC';
-            }), 1)
+            affordability: this.affordability.toJSON()
         };
+    },
+    rotateTable: function() {
+        this.$el.find("#affordabilityTable").each(function () {
+            var $this = $(this);
+            var newrows = [];
+            $this.find("tr").each(function () {
+                var i = 0;
+                $(this).find("td").each(function () {
+                    i++;
+                    if (newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
+                    newrows[i].append($(this));
+                });
+            });
+            $this.find("tr").remove();
+            $.each(newrows, function () {
+                $this.append(this);
+            });
+        });
+        
+        this.$el.find("#affordabilityTable tr:first-child td").each(function () {
+            $(this).replaceWith('<th>' + $(this).text() + '</th>');
+        });
+
+        $($("#affordabilityTable tr")[2]).addClass("green-row");
     },
     buildJournal: function () {
         if (!this.isCrm && this.crmModel && this.crmModel.get("CustomerRelations")) {
@@ -238,6 +265,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             }
         }
         this.buildJournal();
+        this.rotateTable();
         EzBob.handleUserLayoutSetting();
     },
     halfDonut: function (el, fillColor, fillPercent) {

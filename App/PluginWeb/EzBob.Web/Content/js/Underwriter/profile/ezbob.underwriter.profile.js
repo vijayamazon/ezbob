@@ -148,6 +148,7 @@
         model: this.FraudDetectionLogs
       });
       this.PropertiesModel = new EzBob.Underwriter.Properties();
+      this.affordability = new EzBob.Underwriter.Affordability();
       this.dashboardInfoView = new EzBob.Underwriter.DashboardView({
         el: dashboardInfo,
         model: this.summaryInfoModel,
@@ -157,6 +158,7 @@
         companyModel: this.companyScoreModel,
         propertiesModel: this.PropertiesModel,
         mpsModel: this.marketPlaces,
+        affordability: this.affordability,
         loanModel: this.loanInfoModel
       });
       this.profileHeadView = new EzBob.Underwriter.ProfileHeadView({
@@ -491,12 +493,17 @@
           silent: true
         });
         _this.loanInfoModel.trigger("sync");
+        console.log('ff', fullModel.get("MarketPlaces"));
         _this.marketPlaces.customerId = id;
         _this.marketPlaces.history = history;
-        _this.marketPlaces.reset(fullModel.get("Marketplaces"), {
+        _this.marketPlaces.reset(fullModel.get("MarketPlaces"), {
           silent: true
         });
         _this.marketPlaces.trigger("sync");
+        _this.affordability.set(fullModel.get("Affordability"), {
+          silent: true
+        });
+        _this.affordability.trigger("sync");
         _this.loanHistory.customerId = id;
         _this.loanHistoryView.idCustomer = id;
         _this.loanHistory.set(fullModel.get("LoansAndOffers"), {

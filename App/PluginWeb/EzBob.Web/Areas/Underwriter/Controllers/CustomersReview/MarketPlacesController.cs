@@ -76,9 +76,17 @@
 		[HttpGet]
 		public JsonResult Index(int id, DateTime? history = null)
 		{
-			var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(id, history);
-			var models = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
-			return Json(models, JsonRequestBehavior.AllowGet);
+			try
+			{
+				var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(id, history);
+				var mps = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
+				return Json(mps.ToList(), JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception ex)
+			{
+				Log.Error("failed to retrieve mp data from service", ex);
+				return Json(new List<MarketPlaceModel>(), JsonRequestBehavior.AllowGet); 
+			}
 		}
 		
 		[Ajax]

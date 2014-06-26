@@ -80,10 +80,6 @@
       return Affordability.__super__.constructor.apply(this, arguments);
     }
 
-    Affordability.prototype.url = function() {
-      return "" + window.gRootPath + "Underwriter/MarketPlaces/GetAffordabilityData/?id=" + this.customerId;
-    };
-
     return Affordability;
 
   })(Backbone.Model);
