@@ -1,18 +1,24 @@
 ﻿<script type="text/template" id="support-template">
-    <table class="table centered" style="white-space: nowrap;">
-        <thead class="box">
-            @EzForm.RawHeaderCell("Marketplaces with error", "", "", "", "", "", "", "")
-        </thead>
-        <tbody>
-            @RawCellBoldWithArray("#",
-                "Marketplace Type",
-                "Marketplace Name",
-                "Update start date",
-                "Error Message",
-                "CustomerId",
-                "Status",
-                "")
-            <%_.each(model, function(val, i){
+    @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Other)
+    <div id="main-content">
+        <div class="page-title">
+            <h1></h1>
+        </div>
+
+        <table class="table centered" style="white-space: nowrap;">
+            <thead class="box">
+                @EzForm.RawHeaderCell("Marketplaces with error", "", "", "", "", "", "", "")
+            </thead>
+            <tbody>
+                @RawCellBoldWithArray("#",
+                                  "Marketplace Type",
+                                  "Marketplace Name",
+                                  "Update start date",
+                                  "Error Message",
+                                  "CustomerId",
+                                  "Status",
+                                  "")
+                <%_.each(model, function(val, i){
              var disabled="";
              if(val.Status=="In progress") { disabled = "disabled"; }%>
                 @EzForm.RawCell(
@@ -24,9 +30,10 @@
                     "<%-val.CustomerId%>",
                     "<%-val.Status%>",
                     "<a href='#' class='btn btn-mini btn-primary reCheckMP <%- val.Name.toLowerCase() %> <%-disabled%>' umi='<%- val.Umi %>' marketplaceType='<%- val.Type %>'><i class='fa fa-refresh'></i>Recheck</a>")
-            <%});%>
-        </tbody>
-    </table>
+                <%});%>
+            </tbody>
+        </table>
+    </div>
 </script>
 
 @helper RawCellBoldWithArray(params string[] arguments)

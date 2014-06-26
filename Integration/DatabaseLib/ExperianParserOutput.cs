@@ -1,12 +1,15 @@
-﻿namespace EZBob.DatabaseLib {
+﻿namespace EZBob.DatabaseLib
+{
 	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.ExperianParser;
 	using Model.Database;
 
 	#region class ExperianParserOutput
 
-	public class ExperianParserOutput {
-		public Dictionary<string, ParsedData> Dataset { get; private set;} // Dataset
+	public class ExperianParserOutput
+	{
+		public Dictionary<string, ParsedData> Dataset { get; private set; } // Dataset
 		public ParsingResult ParsingResult { get; private set; } // ParsingResult
 		public string ErrorMsg { get; private set; } // ErrorMsg
 		public string CompanyRefNum { get; private set; } // CompanyRefNum
@@ -30,7 +33,22 @@
 			TypeOfBusinessReduced = nTypeOfBusiness;
 			MaxScore = maxScore;
 		} // constructor
-	} // class ExperianParserOutput
 
+
+		public string GetValue(string section, string key)
+		{
+			if (Dataset.ContainsKey(section))
+			{
+				if (Dataset[section].Data.Any())
+				{
+					if (Dataset[section].Data[0].Values.ContainsKey(key))
+					{
+						return Dataset[section].Data[0].Values[key];
+					}
+				}
+			}
+			return null;
+		}
+	} // class ExperianPar
 	#endregion class ExperianParserOutput
 } // namespace EZBob.DatabaseLib

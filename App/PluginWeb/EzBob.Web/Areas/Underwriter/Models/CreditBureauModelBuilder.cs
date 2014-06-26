@@ -1017,7 +1017,7 @@ using EZBob.DatabaseLib.Model.Experian;
 			}
 		}
 
-		protected DelphiModel GetScorePositionAndColor(double score, int scoreMax, int scoreMin)
+		public static DelphiModel GetScorePositionAndColor(double score, int scoreMax, int scoreMin)
 		{
 			const int w = 640;
 

@@ -20,7 +20,13 @@
 }
 
 <script id="automation-detail-settings" type="text/template">
-    @AutomationSettings()
+    @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Other)
+    <div id="main-content">
+        <div class="page-title">
+            <h1></h1>
+        </div>
+        @AutomationSettings()
+    </div>
 </script>
 
     @{Html.RenderPartial("AutomationSettings/_ApprovalSettings");}

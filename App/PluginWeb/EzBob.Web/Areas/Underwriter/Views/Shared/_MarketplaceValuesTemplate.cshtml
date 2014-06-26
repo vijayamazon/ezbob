@@ -134,7 +134,7 @@
 
 @helper MarketPlaces() {
 	<div style="overflow: auto">
-		<table class="table marketplace-table centered <%if (hideMarketplaces) print('hide');%>" style="white-space: nowrap;">
+		<table class="table box marketplace-table centered <%if (hideMarketplaces) print('hide');%>" style="white-space: nowrap;">
 			<thead class="box">
 				<tr class="box-title">
 					<th></th>
@@ -149,7 +149,7 @@
 					<th><%if(marketplaces[0] && marketplaces[0].IsHistory) print("History for");%></th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="box-content">
 				<% if (summary) { %>
 					<tr class="bold" style="font-size: 18px;">
 						<td>Total</td>
@@ -218,7 +218,7 @@
 		</table>
 	</div>
 	<div style="overflow: auto">
-		<table class="table marketplace-table paypalAccounts centered <%if (hideAccounts) print('hide');%>">
+		<table class="table box marketplace-table paypalAccounts centered <%if (hideAccounts) print('hide');%>">
 			<thead class="box">
 				<tr class="box-title">
 					<th></th>
@@ -232,7 +232,7 @@
 					<th><%if(accounts[0] && accounts[0].IsHistory) print("History for");%></th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="box-content">
 				<% _.each(accounts, function(m, i) {
 				var sShopName = m.Name.replace(' ', '');
 

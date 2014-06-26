@@ -1,17 +1,18 @@
 ﻿@model dynamic
 <script id="docs-template" type="text/template">
-    <table id="alertDocsTable" class="table centered">
-        <thead class="box">
-            <tr class="box-title">
-                <th>Uploaded document name</th>
-                <th>Date</th>
-                <th>Employee name</th>
-                <th style="width: 200px">Description</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <% _.each(docs, function(doc){%>
+    <div class="row">
+        <table id="alertDocsTable" class="table centered box">
+            <thead class="box">
+                <tr class="box-title">
+                    <th>Uploaded document name</th>
+                    <th>Date</th>
+                    <th>Employee name</th>
+                    <th style="width: 200px">Description</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="box-content">
+                <% _.each(docs, function(doc){%>
             <tr>
                 <td><a href="@Url.Action("File", "AlertDocs", new { Area = "Underwriter" })/<%-doc.Id%>"><%= doc.DocName%></a></td>
                 <td><%- EzBob.formatDate(doc.CreateDate)%></td>
@@ -22,12 +23,13 @@
                 <td>
                     <input type="checkbox" data-id="<%= doc.Id %>" /></td>
             </tr>
-            <%});%>
-        </tbody>
-    </table>
-    <div class="pull-right">
-        <button class="btn btn-primary" id="addNewDoc"><i class="fa fa-file"></i>Add</button>
-        <button class="btn btn-primary" id="deleteDocs"><i class="fa fa-trash-o"></i>Delete</button>
+                <%});%>
+            </tbody>
+        </table>
+        <div class="pull-right">
+            <button class="btn btn-primary" id="addNewDoc"><i class="fa fa-file"></i>Add</button>
+            <button class="btn btn-primary" id="deleteDocs"><i class="fa fa-trash-o"></i>Delete</button>
+        </div>
     </div>
 </script>
 
@@ -35,7 +37,7 @@
     <div class="modal-header">
         <h3 id="myModalLabel">Add/Edit Document</h3>
     </div>
-        
+
     <div class="modal-body">
         <form id="fileForm" action="@Url.Action("UploadDoc", "AlertDocs", new { Area = "Underwriter" })" class="form-horizontal" enctype="multipart/form-data">
 
@@ -61,7 +63,7 @@
             <input type="hidden" name="CustomerId" value="" />
         </form>
     </div>
-    
+
     <div class="pull-right">
         <button class="btn btn-primary button-upload">Save</button>
     </div>

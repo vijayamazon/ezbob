@@ -1,15 +1,30 @@
+var EzBob = EzBob || {};
+//Scrollable fixed sidebar
+EzBob.scrollableSidebar = function() {
+    if ($('#sidebar.sidebar-fixed').size() == 0) {
+        $('#sidebar .nav').css('height', 'auto');
+        return;
+    }
+    if ($('div[id="sidebar"].sidebar-fixed.sidebar-collapsed').size() > 0) {
+        $('div[id="sidebar"] .nav').css('height', 'auto');
+        return;
+    }
+    var winHeight = $(window).height() - 90;
+    $('div[id="sidebar"].sidebar-fixed .nav').slimScroll({ height: winHeight + 'px', position: 'left' });
+};
+
 EzBob.handleUserLayoutSetting = function () {
     if (typeof cookie_not_handle_user_settings != 'undefined' && cookie_not_handle_user_settings == true) {
         return;
     }
     //Collapsed sidebar
     if ($.cookie('sidebar-collapsed') == 'true') {
-        $('#sidebar').addClass('sidebar-collapsed');
+        $('div[id="sidebar"]').addClass('sidebar-collapsed');
     }
 
     //Fixed sidebar
     if ($.cookie('sidebar-fixed') == 'true') {
-        $('#sidebar').addClass('sidebar-fixed');
+        $('div[id="sidebar"]').addClass('sidebar-fixed');
     }
 
     //Fixed navbar
@@ -48,18 +63,101 @@ EzBob.handleUserLayoutSetting = function () {
     if (color_navbar !== undefined) {
         $('#navbar').addClass('navbar-' + color_navbar);
     }
-};
-
-$(function () {
-
-    //Handel user layout settings using cookie
     
-    //If you want to handle skin color by server-side code, don't forget to comment next line  
-    EzBob.handleUserLayoutSetting();
-    //Disable certain links
     $('a[href^=#]').click(function (e) {
         e.preventDefault();
     });
+    
+
+    $("div.box .box-tool > a").unbind('click');
+    $("thead.box .box-tool > a").unbind('click');
+    $("div[id='sidebar-collapse']").unbind('click');
+    //-------------------------- Boxes -----------------------------//
+    $('div.box .box-tool > a').click(function (e) {
+        if ($(this).data('action') == undefined) {
+            return;
+        }
+        var action = $(this).data('action');
+        var btn = $(this);
+        switch (action) {
+            case 'collapse':
+                $(btn).children('i').addClass('anim-turn180');
+                $(this).parents('.box').children('.box-content').slideToggle(500, function () {
+                    if ($(this).is(":hidden")) {
+                        $(btn).children('i').attr('class', 'fa fa-chevron-down');
+                    } else {
+                        $(btn).children('i').attr('class', 'fa fa-chevron-up');
+                    }
+                });
+                break;
+            case 'close':
+                $(this).parents('.box').fadeOut(500, function () {
+                    $(this).parent().remove();
+                })
+                break;
+            case 'config':
+                $('#' + $(this).data('modal')).modal('show');
+                break;
+        }
+        return false;
+    });
+    $('thead.box .box-tool > a').click(function (e) {
+        if ($(this).data('action') == undefined) {
+            return;
+        }
+        var action = $(this).data('action');
+        var btn = $(this);
+        switch (action) {
+            case 'collapse':
+                $(btn).children('i').addClass('anim-turn180');
+                $(this).parents('.box').parent().children('.box-content').slideToggle(500, function () {
+                    if ($(this).is(":hidden")) {
+                        $(btn).children('i').attr('class', 'fa fa-chevron-down');
+                    } else {
+                        $(btn).children('i').attr('class', 'fa fa-chevron-up');
+                    }
+                });
+                break;
+            case 'close':
+                $(this).parents('.box').fadeOut(500, function() {
+                    $(this).parent().remove();
+                });
+                break;
+            case 'config':
+                $('#' + $(this).data('modal')).modal('show');
+                break;
+        }
+        return false;
+    });
+    
+    $("div[id='sidebar-collapse']").click(function () {
+        $("div[id='sidebar']").toggleClass('sidebar-collapsed');
+        if ($("div[id='sidebar']").hasClass('sidebar-collapsed')) {
+            $("div[id='sidebar-collapse']:visible > i").attr('class', 'fa fa-angle-double-right');
+            $.cookie('sidebar-collapsed', 'true');
+            $("div[id='sidebar'] ul.nav-list").parent('.slimScrollDiv').replaceWith($("div[id='sidebar'] ul.nav-list"));
+        } else {
+            $('div[id="sidebar-collapse"] > i').attr('class', 'fa fa-angle-double-left');
+            $.cookie('sidebar-collapsed', 'false');
+            EzBob.scrollableSidebar();
+        }
+    });
+
+    $('div[id="sidebar"]').on('show.bs.collapse', function () {
+        if ($(this).hasClass('sidebar-collapsed')) {
+            $(this).removeClass('sidebar-collapsed');
+        }
+    });
+
+};
+
+$(function () {
+    //Handel user layout settings using cookie
+    
+    //If you want to handle skin color by server-side code, don't forget to comment next line  
+    //EzBob.handleUserLayoutSetting();
+    //Disable certain links
+    
 
     //slimScroll to fixed height tags
     $('.nice-scroll, .slimScroll').slimScroll({ touchScrollStep: 30 });
@@ -82,20 +180,8 @@ $(function () {
     window.prettyPrint && prettyPrint();
 
     //---------------- Sidebar -------------------------------//
-    //Scrollable fixed sidebar
-    var scrollableSidebar = function () {
-        if ($('#sidebar.sidebar-fixed').size() == 0) {
-            $('#sidebar .nav').css('height', 'auto');
-            return;
-        }
-        if ($('#sidebar.sidebar-fixed.sidebar-collapsed').size() > 0) {
-            $('#sidebar .nav').css('height', 'auto');
-            return;
-        }
-        var winHeight = $(window).height() - 90;
-        $('#sidebar.sidebar-fixed .nav').slimScroll({ height: winHeight + 'px', position: 'left' });
-    }
-    scrollableSidebar();
+    
+    EzBob.scrollableSidebar();
     //Submenu dropdown
     $('#sidebar a.dropdown-toggle').click(function () {
         var submenu = $(this).next('.submenu');
@@ -117,31 +203,14 @@ $(function () {
     });
 
     //Collapse button
-    $('#sidebar.sidebar-collapsed #sidebar-collapse > i').attr('class', 'fa fa-angle-double-right');
-    $('#sidebar-collapse').click(function () {
-        $('#sidebar').toggleClass('sidebar-collapsed');
-        if ($('#sidebar').hasClass('sidebar-collapsed')) {
-            $('#sidebar-collapse > i').attr('class', 'fa fa-angle-double-right');
-            $.cookie('sidebar-collapsed', 'true');
-            $("#sidebar ul.nav-list").parent('.slimScrollDiv').replaceWith($("#sidebar ul.nav-list"));
-        } else {
-            $('#sidebar-collapse > i').attr('class', 'fa fa-angle-double-left');
-            $.cookie('sidebar-collapsed', 'false');
-            scrollableSidebar();
-        }
-    });
-
-    $('#sidebar').on('show.bs.collapse', function () {
-        if ($(this).hasClass('sidebar-collapsed')) {
-            $(this).removeClass('sidebar-collapsed');
-        }
-    });
+    $('div[id="sidebar"].sidebar-collapsed div[id="sidebar-collapse"] > i').attr('class', 'fa fa-angle-double-right');
+    
 
     //Search Form
     $('#sidebar .search-form').click(function () {
         $('#sidebar .search-form input[type="text"]').focus();
     });
-    $('#sidebar .nav > li.active > a > .arrow').removeClass('fa-angle-right').addClass('fa-angle-down');
+    $('div[id="sidebar"] .nav > li.active > a > .arrow').removeClass('fa-angle-right').addClass('fa-angle-down');
 
     //---------------- Horizontal Menu -------------------------------//
     if ($('#nav-horizontal')) {
@@ -290,36 +359,7 @@ $(function () {
         }
     });
 
-    //-------------------------- Boxes -----------------------------//
-    $('.box .box-tool > a').click(function (e) {
-        if ($(this).data('action') == undefined) {
-            return;
-        }
-        var action = $(this).data('action');
-        var btn = $(this);
-        switch (action) {
-            case 'collapse':
-                $(btn).children('i').addClass('anim-turn180');
-                $(this).parents('.box').children('.box-content').slideToggle(500, function () {
-                    if ($(this).is(":hidden")) {
-                        $(btn).children('i').attr('class', 'fa fa-chevron-down');
-                    } else {
-                        $(btn).children('i').attr('class', 'fa fa-chevron-up');
-                    }
-                });
-                break;
-            case 'close':
-                $(this).parents('.box').fadeOut(500, function () {
-                    $(this).parent().remove();
-                })
-                break;
-            case 'config':
-                $('#' + $(this).data('modal')).modal('show');
-                break;
-        }
-        return false;
-    });
-
+    
     //-------------------------- Mail Page -----------------------------//
     //Collapse and Uncollapse
     $('.mail-messages .msg-collapse > a').click(function (e) {

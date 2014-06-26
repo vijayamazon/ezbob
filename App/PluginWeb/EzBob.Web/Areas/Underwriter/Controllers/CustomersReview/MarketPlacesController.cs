@@ -2,23 +2,25 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
+	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Serialization;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models;
 	using EzBob.Models.Marketplaces;
 	using NHibernate;
-	using CommonLib;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 	using Web.Models;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -78,7 +80,7 @@
 			var models = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
 			return Json(models, JsonRequestBehavior.AllowGet);
 		}
-
+		
 		[Ajax]
 		[HttpGet]
 		public JsonResult GetAffordabilityData(int id) {

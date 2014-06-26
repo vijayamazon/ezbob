@@ -1,24 +1,29 @@
 ﻿@using EzBob.Web.Areas.Underwriter.Models.Fraud
 
 <script type="text/template" id="fraud-template">
-    <div class="left simple-well">
-        <button class="add btn btn-success btn-small"><i class="fa fa-plus"></i>Add new fraud user</button>
-    </div>
+    @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Other)
+    <div id="main-content">
+        <div class="page-title">
+            <h1></h1>
+        </div>
+        <div class="left simple-well">
+            <button class="add btn btn-success btn-small"><i class="fa fa-plus"></i>Add new fraud user</button>
+        </div>
 
-    <table class="table">
-        <thead class="box">
-            @EzForm.RawHeaderCell("Fraud", "", "", "", "", "", "", "")
-        </thead>
-        <tbody>
-            @EzForm.RawCell("<b>Name</b>",
-                "<b>Addresses</b> (Postcode, line1, Line2, Line3, Town, County)",
-                "<b>Phones</b>",
-                "<b>Emails</b>",
-                "<b>Email Domains</b>",
-                "<b>Bank Accounts</b> (Bank account, Sort code)",
-                "<b>Companies</b> (Company name, Registration Number)",
-                "<b>Shops</b> (Shop name, Shop type)")
-            <%_.each(data, function(val){ %> 
+        <table class="table">
+            <thead class="box">
+                @EzForm.RawHeaderCell("Fraud", "", "", "", "", "", "", "")
+            </thead>
+            <tbody>
+                @EzForm.RawCell("<b>Name</b>",
+                            "<b>Addresses</b> (Postcode, line1, Line2, Line3, Town, County)",
+                            "<b>Phones</b>",
+                            "<b>Emails</b>",
+                            "<b>Email Domains</b>",
+                            "<b>Bank Accounts</b> (Bank account, Sort code)",
+                            "<b>Companies</b> (Company name, Registration Number)",
+                            "<b>Shops</b> (Shop name, Shop type)")
+                <%_.each(data, function(val){ %> 
             <%
             function PrepareOutput(data){
                 var retVal = "";
@@ -32,18 +37,19 @@
             }
             %>
             @EzForm.RawCell(
-            "<%-val.FirstName%> <%-val.LastName%>",
-            "<%=PrepareOutput(val.Addresses)%>",
-            "<%=PrepareOutput(val.Phones)%>",
-            "<%=PrepareOutput(val.Emails)%>",
-            "<%=PrepareOutput(val.EmailDomains)%>",
-            "<%=PrepareOutput(val.BankAccounts)%>",
-            "<%=PrepareOutput(val.Companies)%>",
-            "<%=PrepareOutput(val.Shops)%>"
-            )
-            <%})%>
-        </tbody>
-    </table>
+                "<%-val.FirstName%> <%-val.LastName%>",
+                "<%=PrepareOutput(val.Addresses)%>",
+                "<%=PrepareOutput(val.Phones)%>",
+                "<%=PrepareOutput(val.Emails)%>",
+                "<%=PrepareOutput(val.EmailDomains)%>",
+                "<%=PrepareOutput(val.BankAccounts)%>",
+                "<%=PrepareOutput(val.Companies)%>",
+                "<%=PrepareOutput(val.Shops)%>"
+                 )
+                <%})%>
+            </tbody>
+        </table>
+    </div>
 </script>
 
 <script type="text/template" id="fraud-add-edit-template">
@@ -55,42 +61,42 @@
             <b>Fraud name</b>
             @EzForm.InputTextUnderwriter("FirstName", "First Name", "")
             @EzForm.InputTextUnderwriter("LastName", "Last Name", "")
-            <hr/>
+            <hr />
 
             <b>Fraud Addresses </b><span>(Postcode, line1, Line2, Line3, Town, County)</span>
             <div class="Addresses"></div>
             <button class="btn-mini btn btn-success add" data-type="Addresses"><i class="fa fa-plus"></i></button>
-            <hr/>
+            <hr />
 
             <b>Fraud Phones</b>
             <div class="Phones"></div>
             <button class="btn-mini btn btn-success add" data-type="Phones"><i class="fa fa-plus"></i></button>
-            <hr/>
+            <hr />
 
             <b>Fraud Emails</b>
             <div class="Emails"></div>
             <button class="btn-mini btn btn-success add" data-type="Emails"><i class="fa fa-plus"></i></button>
-            <hr/>
+            <hr />
 
             <b>Fraud Email Domains </b><span>(like "gmail.com")</span>
             <div class="EmailDomains"></div>
             <button class="btn-mini btn btn-success add" data-type="EmailDomains"><i class="fa fa-plus"></i></button>
-            <hr/>
+            <hr />
 
             <b>Fraud Bank Accounts </b><span>(Bank account, Sort code)</span>
             <div class="BankAccounts"></div>
             <button class="btn-mini btn btn-success add" data-type="BankAccounts"><i class="fa fa-plus"></i></button>
-            <hr/>
-            
+            <hr />
+
             <b>Fraud Companies </b><span>(Company name, Registration Number)</span>
             <div class="Companies"></div>
             <button class="btn-mini btn btn-success add" data-type="Companies"><i class="fa fa-plus"></i></button>
-            <hr/>
+            <hr />
 
             <b>Fraud Shops </b><span>(Shop name, Shop type)</span>
             <div class="Shops"></div>
             <button class="btn-mini btn btn-success add" data-type="Shops"><i class="fa fa-plus"></i></button>
-            <hr/>
+            <hr />
         </form>
     </div>
     <div class="form-group">
@@ -113,7 +119,7 @@
                 }
                 else
                 {
-                    @EzForm.InputTextUnderwriter(val.Id, val.Caption, val.Value)
+                @EzForm.InputTextUnderwriter(val.Id, val.Caption, val.Value)
                 }
             }
         </form>
@@ -126,7 +132,7 @@
 @helper SimpleValues(string caption, string type)
 {
     <text>
-        <%_.each(models, function(val, i){%>
+    <%_.each(models, function(val, i){%>
         <div class="control-group">
             <label class="control-label" for="@caption<%-i%>">@caption <%-i+1%></label>
             <div class="controls">
@@ -134,13 +140,13 @@
                 <textarea  disabled="disabled" style="height:40px; resize: none"><%-_.values(val)%></textarea>
                 <button class="btn btn-mini btn-primary remove" data-index="<%-i%>" data-type="@type"><i class="fa fa-times"></i></button>
                 <%}else{%>
-                <input type="text"  disabled="disabled" value="<%-_.values(val)%>">
+                <input type="text" disabled="disabled" value="<%-_.values(val)%>">
                 <button class="btn btn-mini btn-primary remove" data-index="<%-i%>" data-type="@type" style="margin-top: -10px"><i class="fa fa-times"></i></button>
                 <%}%>
                 
             </div>
         </div>
-        <%});%>
+    <%});%>
     </text>
 }
 <script type="text/template" id="Addresses-template">

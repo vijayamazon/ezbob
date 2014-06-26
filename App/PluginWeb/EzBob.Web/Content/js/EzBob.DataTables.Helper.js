@@ -11,7 +11,25 @@ EzBob.DataTables.Helper = {
 		var aryResult = [];
 
 		var aryNames = sColumns.split(',');
+		function renderPercent(oData, sAction, oFullSource) {
+		    switch (sAction) {
+		        case 'display':
+		            return EzBob.formatPercents(oData);
 
+		        case 'filter':
+		            return oData;
+
+		        case 'type':
+		            return oData;
+
+		        case 'sort':
+		            return oData;
+
+		        default:
+		            return oData;
+		    } // switch
+		}
+	    
 		function renderMoney(oData, sAction, oFullSource) {
 			switch (sAction) {
 				case 'display':
@@ -98,6 +116,10 @@ EzBob.DataTables.Helper = {
 			} else if (sName[0] === '~') {
 			    sName = sName.substr(1);
 			    bVisible = false;
+			} else if (sName[0] === '%') {
+			    sClass = 'numeric';
+			    sName = sName.substr(1);
+			    oRenderFunc = renderPercent;
 			}
 
 			aryResult.push({
@@ -152,5 +174,86 @@ EzBob.DataTables.Helper = {
             return broker + '<span class="label label-info" data-toggle=tooltip title="First sale">1st</span>';
         }
         return broker;
+    },
+    
+    initCustomFiltering: function(){
+        if ($.fn.dataTableExt.afnFiltering.length == 0) {
+            $.fn.dataTableExt.afnFiltering.push(
+                function (oSettings, aData, iDataIndex) {
+                    if (oSettings.nTable !== document.getElementById("YodleeTransactionsTable")) {
+                        // if not table should be ignored
+                        return true;
+                    }
+                    var dateRange = $('#date-range').attr("value");
+                    if (dateRange == null) return true;
+
+                    var dateMin = dateRange.substring(0, 4) + dateRange.substring(5, 7) + dateRange.substring(8, 10);
+                    var dateMax = dateRange.substring(13, 17) + dateRange.substring(18, 20) + dateRange.substring(21, 23);
+                    var date = aData[2];
+                    if (date == null) {
+                        return true;
+                    }
+                    date = date.substring(0, 10);
+                    date = date.substring(6, 10) + date.substring(3, 5) + date.substring(0, 2);
+                    if (dateMin == "" && date <= dateMax) {
+                        return true;
+                    } else if (dateMin == "" && date <= dateMax) {
+                        return true;
+                    } else if (dateMin <= date && "" == dateMax) {
+                        return true;
+                    } else if (dateMin <= date && date <= dateMax) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+            
+            $.fn.dataTableExt.afnFiltering.push(
+                function (oSettings, aData, iDataIndex) {
+                    if (oSettings.nTable !== document.getElementById("journalTable")) {
+                        // if not table should be ignored
+                        return true;
+                    }
+                    
+                    if ($("#allJournal").is(":checked")) {
+                        return true;
+                    }
+                    
+                    var uwColumn = 12;
+                    var isCrmColumn = 14;
+                    
+                    if ($("#uwNotes").is(":checked") && aData[uwColumn] && !EzBob.DataTables.Helper.isCrm(aData[uwColumn].toLowerCase()) && aData[isCrmColumn]) {
+                        return true;
+                    }
+                    
+                    if ($("#crmNotes").is(":checked") && aData[uwColumn] && EzBob.DataTables.Helper.isCrm(aData[uwColumn].toLowerCase()) && aData[isCrmColumn]) {
+                        return true;
+                    }
+                    
+                    if ($("#loanAction").is(":checked") && aData[uwColumn] && aData[uwColumn] == "System" && aData[isCrmColumn]) {
+                        return true;
+                    }
+                    
+                    if ($("#manualDecision").is(":checked") && aData[uwColumn] && aData[uwColumn] != "se" && !aData[isCrmColumn]) {
+                        return true;
+                    }
+                    
+                    if ($("#systemDecision").is(":checked") && aData[uwColumn] && aData[uwColumn] == "se" && !aData[isCrmColumn]) {
+                        return true;
+                    }
+                    
+                    return false;
+                }
+            );
+        }
+        
+
+    },
+    
+    isCrm: function (uwName) {
+        if (uwName.indexOf("emma") === 0 || uwName.indexOf("ros") === 0 || uwName.indexOf("travis") === 0 || uwName.indexOf("emanuelle") === 0) {
+            return true;
+        }
+        return false;
     }
 }; // EzBob.DataTables.Helper

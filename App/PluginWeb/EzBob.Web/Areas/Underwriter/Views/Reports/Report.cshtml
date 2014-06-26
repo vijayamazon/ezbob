@@ -1,10 +1,16 @@
 ﻿@model dynamic
 
 <script type="text/template" id="report-template">
-    <div class="col-md-12">
-        <div class="box">
-            <div class="box-title">
-                <%if(reports){ %>
+    @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Other)
+    <div id="main-content">
+        <div class="page-title">
+            <h1></h1>
+        </div>
+
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-title">
+                    <%if(reports){ %>
                     <select id="reportsDdl" data-placeholder="Select report">
                         <option selected="selected" value="0"></option>
                         <%_.each(reports.reports, function(report){ if(report.Id){%>
@@ -19,7 +25,7 @@
                     </select>
                     <div id="form-date-range" class="btn report-button" style="display: none">
                         <i class="fa fa-calendar"></i>
-                        &nbsp;<span></span> 
+                        &nbsp;<span></span>
                         <b class="caret"></b>
                     </div>
                     <div id="reportCustomerDiv" class="report-button md-col-3" style="display: none;">
@@ -32,9 +38,10 @@
                     </div>
                     <button id="getReportBtn" class="btn btn-primary report-button"><i class="fa fa-play-circle-o"></i></button>
                     <button id="downloadReportBtn" class="btn btn-primary report-button"><i class="fa fa-file-excel-o"></i></button>
-                <%}%>
+                    <%}%>
+                </div>
+                <div id="reportDiv"></div>
             </div>
-            <div id="reportDiv"></div>
         </div>
     </div>
 </script>

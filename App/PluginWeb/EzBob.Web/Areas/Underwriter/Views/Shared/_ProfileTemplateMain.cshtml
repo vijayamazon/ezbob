@@ -1,37 +1,13 @@
 ﻿@model dynamic
 <script id="profile-template-main" type="text/template">
+        @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Customer)
         <div id="sidebar-dashboard" class="navbar-collapse collapse">
-            <div class="tabbable tabs-top">
-                <ul class="nav nav-tabs active-blue">
-                    <li class="active"><a href="#profile-person-info-id" data-toggle="tab"><span id="customer-label-span" class="label label-large label-success">Customer</a></li>
-                    <li><a href="#profile-loan-info-id" data-toggle="tab"><span class="label label-large label-success">Offer</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade in profile-person-info active" id="profile-person-info-id"/>
-                    <div class="tab-pane fade in profile-loan-info" id="profile-loan-info-id"/>
-                </div>
-            </div>
+            <div class="fundingAlert"></div>
+            <div class="profile-person-info" id="profile-person-info-id"/>
         </div>
         <div id="main-content" class="profile-tabs">
+            <div id="profileHead"></div>
             <div class="tabbable">
-                <ul class="nav nav-tabs">
-                    <li><a href="#dashboard" data-toggle="tab">Dashboard</a></li>
-                    <li><a href="#profile-summary" data-toggle="tab">Profile Summary</a></li>
-                    <li><a href="#marketplaces" data-toggle="tab">
-                        <div class="source_labels new-ribbon" id="new-ribbon-marketplaces"></div>
-                        Marketplaces</a></li>
-                    <li><a href="#payment-accounts" data-toggle="tab">Payment accounts</a></li>
-                    <li><a href="#credit-bureau" data-toggle="tab">Credit bureau</a></li>
-                    <li><a href="#calculator" data-toggle="tab">Calculator</a></li>
-                    <li><a href="#loanhistorys" data-toggle="tab">Loan history</a></li>
-                    <li><a href="#customer-info" class="cross-check-tab" data-toggle="tab">Cross check</a></li>
-                    <li><a href="#company-score" class="company-score-tab" data-toggle="tab">Company score</a></li>
-                    <li><a href="#messages-tab" data-toggle="tab" class="messages-tab">Messages / Files</a></li>
-                    <li><a href="#apiChecks" data-toggle="tab">API checks log</a></li>
-                    <li><a href="#customerRelations" data-toggle="tab" class="crm-tab"><i class="">&nbsp;</i>Customer relations</a></li>
-                    <li><a href="#fraudDetection" data-toggle="tab">Fraud detection</a></li>
-
-                </ul>
                 <div class="tab-content">
                     <div class="tab-pane" id="dashboard"></div>
                     <div class="tab-pane" id="profile-summary"></div>
@@ -40,7 +16,7 @@
                     <div class="tab-pane" id="credit-bureau"></div>
                     <div class="tab-pane" id="calculator">
                         <div id="pricing-calc"></div>
-                        <div id="medal-calc" style="margin-top: 30px;" ></div>
+                        <div id="medal-calc"></div>
                     </div>
                     <div class="tab-pane" id="loanhistorys"></div>
                     <div class="tab-pane" id="customer-info"></div>
@@ -56,28 +32,13 @@
                     <div class="tab-pane" id="fraudDetection"></div>
                 </div>
             </div>
-            <div id="controlButtons" style="margin-top: 10px;">
-            </div>
+            <div id="DecisionNotes"></div>
         </div>
-</script>
 
-<script id="controls-button-template" type="text/template">
-    <div id="DecisionNotes"></div>
-
-    <a class="btn btn-primary back" href="#"><i class="fa fa-arrow-circle-o-left" /> Go back</a>
-    <a href="#" class="btn btn-primary" id="ReportBug" data-bug-customer="<%-customerId%>" data-bug-type="Other"><i class="fa fa-bug" /> Report Bug</a>
-    <button name="newCreditLineLnk" id="newCreditLineLnkId" class="btn btn-primary"><i class="fa fa-bolt" /> New Credit Line</button>
-
-    <div class="pull-right" style="margin-right:50px;">
-        <button class="btn btn-primary" id="ReturnBtn"><i class="fa fa-repeat" /> Return</button>
-        <button class="btn btn-primary" id="SuspendBtn"><i class="fa fa-pause" /> Suspend</button>
-        <button class="btn btn-primary" id="RejectBtn"><i class="fa fa-times-circle-o" /> Reject</button>
-        <button class="btn btn-primary" id="ApproveBtn"><i class="fa fa-check-circle-o" /> Approve</button>
-        <button class="btn btn-primary" id="EscalateBtn"><i class="fa fa-question-circle" /> Escalate</button>
-    </div>
 </script>
 
 @{
+    Html.RenderPartial("ControlButtons");
     Html.RenderPartial("_MarketplaceValuesTemplate");
     Html.RenderPartial("MarketPlacesHistory");
     Html.RenderPartial("_LoanhistoryViewTemplate");
@@ -86,6 +47,7 @@
     Html.RenderPartial("ProfileLoanInfoTemplate");
     Html.RenderPartial("ProfileSummary");
     Html.RenderPartial("Dashboard");
+    Html.RenderPartial("ProfileHead");
     Html.RenderPartial("CreditBureau");
     Html.RenderPartial("_MedalCalculationTemplate");
     Html.RenderPartial("PricingModelCalculationTemplate");

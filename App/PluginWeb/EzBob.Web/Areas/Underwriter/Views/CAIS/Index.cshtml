@@ -5,8 +5,13 @@
     Layout = "../Shared/_Layout.cshtml";
 }
 
-<div class="content file-list"></div>
-
+@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Other)
+<div id="main-content">
+    <div class="page-title">
+        <h1></h1>
+    </div>
+    <div class="content file-list"></div>
+</div>
 <div id="loan_editor_schedule_template"></div>
 
 <script type="text/template" id="cais-template">

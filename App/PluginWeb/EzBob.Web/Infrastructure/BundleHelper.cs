@@ -213,6 +213,7 @@
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.barRenderer.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasOverlay.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.pointLabels.js")
+				.Add("~/Content/js/lib/jqplot/plugins/jqplot.donutRenderer.js")
 				
 				//Flaty
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")
@@ -235,7 +236,6 @@
 				//Underwriter
 				.Add("~/Content/js/underwriter/ezbob.underwriter.app.coffee")
 				.Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
-				.Add("~/Content/js/underwriter/NewCreditLine/ezbob.underwriter.newCreditLine.coffee")
 				.Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
 
 				//Support
@@ -270,6 +270,7 @@
 				//profile
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.customerFullModel.coffee")
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.profile.coffee")
+				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.profileHead.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.emaileditview.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.coffee")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.coffee")
@@ -286,7 +287,7 @@
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.manualPayment.coffee")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.LoanOptions.coffee")
 				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.summaryInfo.coffee")
-				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.dashboard.coffee")
+				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.dashboard.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaceDetails.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaces.coffee")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplacesHistory.coffee")

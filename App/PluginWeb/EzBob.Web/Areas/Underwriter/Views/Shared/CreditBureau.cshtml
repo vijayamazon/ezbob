@@ -70,14 +70,14 @@
 
 @helper BureauSummary(string checkStatus, string checkIcon, string buttonStyle, string score, string borrowerType, string checkDate, string checkValidity, string creditBureauDirectorId = null)
 {
-    <div class="row col-md-12">
-        <div class="span6 control-group form-horizontal">
+    <div class="row">
+        <div class="col-lg-6 col-md-12 control-group form-horizontal">
             @ButtonStatus(checkStatus, checkIcon, buttonStyle)
             <a href="#" class="btn btn-mini btn-primary" data-bug-type="ExpConsumer" data-credit-bureau-director-id="@Html.Raw(@creditBureauDirectorId)" data-bug-customer="<%=experianInfo.Id%>" style="float:right"><i class="fa fa-bug"></i></a>
             @InputTextSmallReadOnly("creditb-score", "Credit bureau score", score)
             @InputTextSmallReadOnly("creditb-borrower-type", "Borrower type", borrowerType)
         </div>
-        <div class="span6 control-group form-horizontal">
+        <div class="col-lg-6 col-md-12 control-group form-horizontal">
             @InputTextSmallReadOnly("creditb-check-date", "Check date", checkDate)
             @InputTextSmallReadOnly("creditb-valid-till", "Check is valid till", checkValidity)
         </div>
@@ -86,7 +86,7 @@
 
 @helper RunCheckButtons()
 {
-    <div class="row-fluid">
+    <div class="row">
         <div class="pull-left">
             <a class="btn btn-primary" href="#" id="RunConsumerCheckBtn">Run Consumer check</a>
             <select id="ConsumerCheckTarget" class="higherselectheight btn btn-primary">
@@ -983,15 +983,15 @@
 
 @helper BureauSummaryForCustomer()
 {
-    <div class="row-fluid">
-        <div class="span6">
-            <table class="table rright">
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <table class="table rright box">
                 <thead class="box">
                     <tr class="box-title">
                         @RawHeaderCell("Consumer", "")
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="box-content">
                     @RawCell("Score", "<%- experianInfo.Summary.Score  %>")
                     @RawCell("Consumer Indebtedness Index", "<%- experianInfo.Summary.ConsumerIndebtednessIndex  %>")
                     @RawCell("Check Date", "<%- experianInfo.Summary.CheckDate  %>")
@@ -1011,12 +1011,12 @@
                 </tbody>
             </table>
         </div>
-        <div class="span6">
-            <table class="table rright">
+        <div class="col-lg-6 col-md-12">
+            <table class="table rright box">
                 <thead class="box">
                     @RawHeaderCell("Business/AML", "", "")
                 </thead>
-                <tbody>
+                <tbody class="box-content">
                     @RawCell("AML", "<%- experianInfo.Summary.AML  %>", "<%- experianInfo.Summary.AMLnum  %>")
                     @RawCell("BWA", "<%- experianInfo.Summary.BWA  %>", "<%- experianInfo.Summary.BWAnum  %>")
                     @RawCell("Business type", "<%- experianInfo.Summary.Businesstype  %>", "")
@@ -1025,12 +1025,12 @@
                     @RawCell("Existing business loans", "<%- experianInfo.Summary.Existingbusinessloans  %>", "")
                 </tbody>
             </table>
-            <table class="table check-history">
+            <table class="table check-history box">
                 <thead class="box">
                     @RawHeaderCell("Check history", "", "")
                     @EzForm.RawCellBold("Id", "Date insert", "Score")
                 </thead>
-                <tbody>
+                <tbody class="box-content">
                     <% _.each(experianInfo.ConsumerHistory, function(val, i){%>
                         @RawCell("<%-val.Id%>", "<%-EzBob.formatDateTime(val.Date)%>", "<%-val.Score%>")
                     <%})%>
@@ -1038,13 +1038,13 @@
             </table>
         </div>
     </div>
-    <div class="row-fluid">
-        <div class="span12">
-            <table class="table">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <table class="table box">
                 <thead class="box">
                     @RawHeaderCell("Account Overview", "", "", "")
                 </thead>
-                <tbody>
+                <tbody class="box-content">
                     @RawCell("Type", "Open Accounts", "Worst Arrears", "Total Balance")
                     @RawCell("Credit Cards",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_CC %>",
@@ -1062,13 +1062,11 @@
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Other %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Other %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Other %>")
-                </tbody>
-                <tfoot>
                     @RawCell("Total",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Total %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Total %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Total %>")
-                </tfoot>
+                </tbody>
             </table>
         </div>
     </div>

@@ -72,60 +72,67 @@
 
 		private void BuildAlerts(ProfileSummaryModel summary, Customer customer)
 		{
-			summary.Alerts = new List<AlertModel>();
+			summary.Alerts = new AlertsModel()
+				{
+					Errors = new List<AlertModel>(),
+					Warnings = new List<AlertModel>(),
+					Infos = new List<AlertModel>(),
+				};
+
+
 			if (customer.IsTest)
 			{
-				summary.Alerts.Add(new AlertModel{ Alert = "Is test", AlertType = AlertType.Info.DescriptionAttr() });
+				summary.Alerts.Infos.Add(new AlertModel{ Abbreviation = "Test", Alert = "Is test", AlertType = AlertType.Info.DescriptionAttr() });
 			}
 
 			if (customer.CciMark)
 			{
-				summary.Alerts.Add(new AlertModel { Alert = "CCI Mark", AlertType = AlertType.Error.DescriptionAttr() });
+				summary.Alerts.Errors.Add(new AlertModel {Abbreviation = "CCI", Alert = "CCI Mark", AlertType = AlertType.Error.DescriptionAttr() });
 			}
-			
-			if (customer.CollectionStatus.CurrentStatus.IsDefault)
+
+			if (customer.CollectionStatus.CurrentStatus.IsDefault || customer.CollectionStatus.CurrentStatus.Name == "Bad")
 			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Error.DescriptionAttr() });
+				summary.Alerts.Errors.Add(new AlertModel {Abbreviation = "Bad", Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Error.DescriptionAttr() });
 			}
-			else if (customer.CollectionStatus.CurrentStatus.IsWarning)
+			else if (customer.CollectionStatus.CurrentStatus.Name == "Risky")
 			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Warning.DescriptionAttr() });
+				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "Risky", Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.CurrentStatus.Name), AlertType = AlertType.Warning.DescriptionAttr() });
 			}
 
 			if (customer.FraudStatus != FraudStatus.Ok)
 			{
-				summary.Alerts.Add(new AlertModel { Alert = string.Format("Fraud Status : {0}", customer.FraudStatus.DescriptionAttr()), AlertType = AlertType.Error.DescriptionAttr() });
+				summary.Alerts.Errors.Add(new AlertModel {Abbreviation = "F", Alert = string.Format("Fraud Status : {0}", customer.FraudStatus.DescriptionAttr()), AlertType = AlertType.Error.DescriptionAttr() });
 			}
 
 			switch (customer.AMLResult)
 			{
 				case "Rejected":
-					summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Error.DescriptionAttr() });
+					summary.Alerts.Errors.Add(new AlertModel {Abbreviation = "AML", Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Error.DescriptionAttr() });
 					break;
 				case "Not performed":
 				case "Warning":
-					summary.Alerts.Add(new AlertModel { Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Warning.DescriptionAttr() });
+					summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "AML", Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Warning.DescriptionAttr() });
 					break;
 			}
 			
 			switch (customer.BWAResult)
 			{
 				case "Rejected":
-					summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Error.DescriptionAttr() });
+					summary.Alerts.Errors.Add(new AlertModel {Abbreviation="BWA", Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Error.DescriptionAttr() });
 					break;
 				case "Not performed":
 				case "Warning":
-					summary.Alerts.Add(new AlertModel { Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Warning.DescriptionAttr() });
+					summary.Alerts.Warnings.Add(new AlertModel {Abbreviation="BWA", Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Warning.DescriptionAttr() });
 					break;
 			}
 
 			switch (summary.CreditBureau.ThinFile)
 			{
 				case "Yes":
-					summary.Alerts.Add(new AlertModel { Alert = "Thin file", AlertType = AlertType.Error.DescriptionAttr() });
+					summary.Alerts.Errors.Add(new AlertModel {Abbreviation="TF", Alert = "Thin file", AlertType = AlertType.Error.DescriptionAttr() });
 					break;
 				case "N/A":
-					summary.Alerts.Add(new AlertModel { Alert = "Couldn't get financial accounts", AlertType = AlertType.Warning.DescriptionAttr() });
+					summary.Alerts.Warnings.Add(new AlertModel {Abbreviation="N/A", Alert = "Couldn't get financial accounts", AlertType = AlertType.Warning.DescriptionAttr() });
 					break;
 			}
 
@@ -134,7 +141,7 @@
 				var state = customer.CustomerRelationStates.First();
 				if (state.IsFollowUp.HasValue && state.IsFollowUp.Value && state.FollowUp.FollowUpDate <= DateTime.UtcNow)
 				{
-					summary.Alerts.Add(new AlertModel { Alert = "Customer relations follow up date is due " + state.FollowUp.FollowUpDate.ToString("dd/MM/yyyy"), AlertType = AlertType.Error.DescriptionAttr() });
+					summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "Follow", Alert = "Customer relations follow up date is due " + state.FollowUp.FollowUpDate.ToString("dd/MM/yyyy"), AlertType = AlertType.Error.DescriptionAttr() });
 				}
 			}
 			BuildLandRegistryAlerts(customer, summary);
@@ -148,8 +155,9 @@
 				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success).ToList();
 			if (!lrs.Any() && customer.PersonalInfo != null && String.Equals(customer.PersonalInfo.ResidentialStatus,"home owner", StringComparison.OrdinalIgnoreCase))
 			{
-				summary.Alerts.Add(new AlertModel
+				summary.Alerts.Warnings.Add(new AlertModel
 					{
+						Abbreviation = "LR",
 						Alert = "No land registries retrieved",
 						AlertType = AlertType.Warning.DescriptionAttr()
 					});
@@ -163,8 +171,9 @@
 						owner.lastName.Contains(customer.PersonalInfo.Surname)))
 				{
 					var ownerNames = owners.Select(x => string.Format("{0} {1} {2}", x.firstName, x.lastName, x.company)).Aggregate((a, b) => a + ", " + b);
-					summary.Alerts.Add(new AlertModel
+					summary.Alerts.Errors.Add(new AlertModel
 					{
+						Abbreviation = "LR",
 						Alert = "Not a land registry owner",
 						AlertType = AlertType.Error.DescriptionAttr(),
 						Tooltip = string.Format("Owners list: {0}", ownerNames)

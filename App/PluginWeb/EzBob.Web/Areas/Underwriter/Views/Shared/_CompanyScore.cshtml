@@ -100,7 +100,7 @@
 	else
 		sCompanyCaption = (response.company_name == null) ? response.company_ref_num : response.company_name + ' (' + response.company_ref_num + ')';
 
-	print('<h3>' + caption + ': ' + sCompanyCaption + '</h3><div>');
+	print('<h3>' + caption + ': ' + sCompanyCaption + '</h3><div class="box-content">');
 
 	if (response.result != 'ok') {
 		print(response.result);
