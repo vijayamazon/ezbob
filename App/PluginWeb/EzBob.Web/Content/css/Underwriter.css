@@ -1737,6 +1737,15 @@ body {
     box-shadow: 0 1px 1px -1px gray;
 }
 
+.btn.btn-dashboard:active, 
+.btn.btn-dashboard.active, 
+.btn-group.open .btn.btn-dashboard.dropdown-toggle, 
+.btn.btn-dashboard:hover, 
+.btn.btn-dashboard.hover {
+    background: linear-gradient(to bottom, #adadad, #6d6d6d);
+    color: white;
+}
+
 .right-seperator {
     border-right: #d3d3d5 1px solid;
     height: 100%;

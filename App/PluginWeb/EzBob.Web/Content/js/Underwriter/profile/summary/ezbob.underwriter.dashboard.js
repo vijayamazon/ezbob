@@ -21,6 +21,9 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.bindTo(this.loanModel, "change sync", this.render, this);
         this.expCompany = [];
         this.journal = [];
+        this.journalTable = null;
+        this.isCrm = false;
+        this.isDecisionHistory = false;
         return this;
     },
     serializeData: function () {
@@ -48,14 +51,15 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         };
     },
     buildJournal: function () {
-        this.journal = [];
-        if (this.crmModel && this.crmModel.get("CustomerRelations")) {
+        if (!this.isCrm && this.crmModel && this.crmModel.get("CustomerRelations")) {
+            this.isCrm = true;
+            
             _.each(this.crmModel.get("CustomerRelations"), (function (_this) {
                 return function (crm) {
                     return _this.journal.push({
                         Action: crm.Action,
                         Adate: new Date(moment.utc(crm.DateTime)),
-                        InOut: crm.Type,
+                        Type: crm.Type,
                         Status: crm.Status,
                         ApprovedSum: null,
                         Interest: null,
@@ -66,18 +70,21 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                         LoanSource: null,
                         CustomerSelection: null,
                         UW: crm.User,
-                        Comment: crm.Comment
+                        Comment: crm.Comment,
+                        IsCrm: true
                     });
                 };
             })(this));
+
         }
-        if (this.model && this.model.get('DecisionHistory')) {
+        if (!this.isDecisionHistory && this.model && this.model.get('DecisionHistory')) {
+            this.isDecisionHistory = true;
             _.each(this.model.get('DecisionHistory'), (function (_this) {
                 return function (dh) {
                     return _this.journal.push({
                         Action: dh.Action,
                         Adate: new Date(moment.utc(dh.Date)),
-                        InOut: null,
+                        Type: null,
                         Status: null,
                         ApprovedSum: dh.ApprovedSum,
                         Interest: dh.InterestRate,
@@ -88,31 +95,46 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                         LoanSource: (dh.LoanSourceName === "EU" ? "EU" : ""),
                         CustomerSelection: (dh.IsLoanTypeSelectionAllowed === 1 ? "Yes" : "No"),
                         UW: dh.UnderwriterName,
-                        Comment: dh.Comment
+                        Comment: dh.Comment,
+                        IsCrm: false
                     });
                 };
             })(this));
         }
 
-        this.$el.find("#journalTable").dataTable({
-            aLengthMenu: [[-1, 10, 20, 50, 100], ['all', 10, 20, 50, 100]],
-            iDisplayLength: 20,
-            sPaginationType: 'bootstrap',
-            bJQueryUI: false,
-            aaSorting: [[1, 'desc']],
-            bAutoWidth: true,
-            aaData: this.journal,
-            aoColumns: EzBob.DataTables.Helper.extractColumns('Action,^Adate,InOut,Status,$ApprovedSum,%Interest,RepaymentPeriod,LoanType,SetupFee,DiscountPlan,LoanSource,CustomerSelection,UW,Comment'),
-            aoColumnDefs: [
-              {
-                  "aTargets": [1],
-                  "sType": 'date'
-              }
-            ]
-        });
+        
+        if (this.journal.length > 0 && this.isCrm && this.isDecisionHistory) {
+           // console.log('table');
+            this.journalTable = this.$el.find("#journalTable").dataTable({
+                aLengthMenu: [[-1, 10, 20, 50, 100], ['all', 10, 20, 50, 100]],
+                iDisplayLength: 20,
+                sPaginationType: 'bootstrap',
+                bJQueryUI: false,
+                aaSorting: [[1, 'desc']],
+                bAutoWidth: true,
+                aaData: this.journal,
+                aoColumns: EzBob.DataTables.Helper.extractColumns('Action,^Adate,Type,Status,$ApprovedSum,%Interest,RepaymentPeriod,LoanType,SetupFee,DiscountPlan,LoanSource,CustomerSelection,UW,Comment,~IsCrm'),
+                aoColumnDefs: [
+                    {
+                        "aTargets": [1],
+                        "sType": 'date'
+                    }
+                ]
+            });
+            EzBob.DataTables.Helper.initCustomFiltering();
+        }
     },
     events: {
-        'click a[href^="#companyExperian"]': "companyChanged"
+        'click a[href^="#companyExperian"]': "companyChanged",
+        'change label.journal-filter input': 'journalFilter'
+    },
+    journalFilter: function (e) {
+        var allJournal = this.$el.find("#allJournal");
+        if ($(e.currentTarget).attr("id") != "allJournal" && allJournal.is(":checked")) {
+            allJournal.parent().click();
+            return false;
+        }
+        this.journalTable.fnDraw();
     },
     companyChanged: function (e) {
         var obj;

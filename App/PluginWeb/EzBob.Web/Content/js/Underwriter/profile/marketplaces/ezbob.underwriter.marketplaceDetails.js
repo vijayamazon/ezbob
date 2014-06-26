@@ -350,40 +350,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
         };
         var that = this;
         var oTable = this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
-
-        if ($.fn.dataTableExt.afnFiltering.length == 0) {
-            $.fn.dataTableExt.afnFiltering.push(
-                function (oSettings, aData, iDataIndex) {
-                    if (oSettings.nTable !== document.getElementById("YodleeTransactionsTable")) {
-                        // if not table should be ignored
-                        return true;
-                    }
-                    var dateRange = that.$el.find('#date-range').attr("value");
-                    if (dateRange == null) return true;
-
-                    var dateMin = dateRange.substring(0, 4) + dateRange.substring(5, 7) + dateRange.substring(8, 10);
-                    var dateMax = dateRange.substring(13, 17) + dateRange.substring(18, 20) + dateRange.substring(21, 23);
-                    var date = aData[2];
-                    if (date == null) {
-                        return true;
-                    }
-                    date = date.substring(0, 10);
-                    date = date.substring(6, 10) + date.substring(3, 5) + date.substring(0, 2);
-                    if (dateMin == "" && date <= dateMax) {
-                        return true;
-                    } else if (dateMin == "" && date <= dateMax) {
-                        return true;
-                    } else if (dateMin <= date && "" == dateMax) {
-                        return true;
-                    } else if (dateMin <= date && date <= dateMax) {
-                        return true;
-                    }
-                    return false;
-                }
-            );
-        }
-
-
+        EzBob.DataTables.Helper.initCustomFiltering();
         this.$el.find("#DataTables_Table_1_length").after(this.$el.find('#range-filter'));
         this.$el.find("#date-range").keyup(function () { oTable.fnDraw(); });
 
