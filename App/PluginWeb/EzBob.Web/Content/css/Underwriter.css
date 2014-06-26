@@ -1772,3 +1772,7 @@ body {
 .experian-canvas {
     height: 90px;
 }
+
+#journalTable {
+    white-space: nowrap;
+}

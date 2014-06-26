@@ -11,7 +11,25 @@ EzBob.DataTables.Helper = {
 		var aryResult = [];
 
 		var aryNames = sColumns.split(',');
+		function renderPercent(oData, sAction, oFullSource) {
+		    switch (sAction) {
+		        case 'display':
+		            return EzBob.formatPercents(oData);
 
+		        case 'filter':
+		            return oData;
+
+		        case 'type':
+		            return oData;
+
+		        case 'sort':
+		            return oData;
+
+		        default:
+		            return oData;
+		    } // switch
+		}
+	    
 		function renderMoney(oData, sAction, oFullSource) {
 			switch (sAction) {
 				case 'display':
@@ -98,6 +116,10 @@ EzBob.DataTables.Helper = {
 			} else if (sName[0] === '~') {
 			    sName = sName.substr(1);
 			    bVisible = false;
+			} else if (sName[0] === '%') {
+			    sClass = 'numeric';
+			    sName = sName.substr(1);
+			    oRenderFunc = renderPercent;
 			}
 
 			aryResult.push({

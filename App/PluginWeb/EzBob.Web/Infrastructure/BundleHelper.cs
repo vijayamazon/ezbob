@@ -287,7 +287,7 @@
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.manualPayment.coffee")
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.LoanOptions.coffee")
 				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.summaryInfo.coffee")
-				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.dashboard.coffee")
+				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.dashboard.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaceDetails.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaces.coffee")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplacesHistory.coffee")

@@ -21,58 +21,44 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         };
     },
     events: {
-        'click a[data-action="collapse"]': "boxToolClick",
-        'click a[data-action="close"]': "boxToolClick",
+        'click a.collapseall': "collapseAll",
         'click #OfferEditBtn': 'editOfferClick'
     },
     ui: {
         editOfferDiv: '.editOfferDiv'
     },
-    
-    editOfferClick: function() {
+
+    editOfferClick: function () {
         this.ui.editOfferDiv.toggle();
     },
-    boxToolClick: function (e) {
-        var action, btn, obj;
-        obj = e.currentTarget;
-        if ($(obj).data("action") === undefined) {
-            false;
-        }
-        action = $(obj).data("action");
-        btn = $(obj);
+    
+    collapseAll: function () {
         var that = this;
-        switch (action) {
-            case "collapse":
-                btn = this.$el.find('a[data-action="collapse"]');
-                btn.children("i").addClass("anim-turn180");
-                btn.parents(".box").children(".box-content").slideToggle(500, function () {
-                    if ($(this).is(":hidden")) {
-                        btn.children("i").attr("class", "fa fa-chevron-down");
-                        console.log('a', btn.parents(".box").children(".box-title-collapse"));
-                        that.$el.find(".box-title-collapse").show();
-                    } else {
-                        btn.children("i").attr("class", "fa fa-chevron-up");
-                        that.$el.find(".box-title-collapse").hide();
-                    }
-                    return false;
-                });
-                break;
-            case "close":
-                $(obj).parents(".box").fadeOut(500, function () {
-                    $(this).parent().remove();
-                    return false;
-                });
-                break;
-            case "config":
-                $("#" + $(obj).data("modal")).modal("show");
-        }
+        var btn = this.$el.find('a.collapseall');
+        btn.children("i").addClass("anim-turn180");
+        btn.parents(".box").children(".box-content").slideToggle(500, function () {
+            if ($(this).is(":hidden")) {
+                btn.children("i").attr("class", "fa fa-chevron-down");
+                that.$el.find(".box-title-collapse").show();
+            } else {
+                btn.children("i").attr("class", "fa fa-chevron-up");
+                that.$el.find(".box-title-collapse").hide();
+            }
+            return false;
+        });
         return false;
     },
+    
     personalModelChanged: function (e, a) {
+        if (e && a && this.medalModel) {
+            this.medalModel.fetch();
+        }
+
         if (e && a && this.model) {
             this.model.fetch();
         }
     },
+    
     onRender: function () {
         var loanInfo = this.ui.editOfferDiv;
         this.loanInfoView = new EzBob.Underwriter.LoanInfoView({
@@ -89,8 +75,8 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 model: new Backbone.Model({ customerId: this.model.get("Id") })
             });
         this.controlButtonsView.render();
-        
-        this.$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
+
+        this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
         if (this.personalModel) {
             this.changeDecisionButtonsState(this.personalModel.get("Editable"));
         }
@@ -115,9 +101,9 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         var medalHistory = this.medalModel.get('History');
         if (medalHistory) {
             var histData = [];
-            for (var hist in medalHistory.MedalHistories) {
-                histData.push([parseInt(hist), medalHistory.MedalHistories[hist].Result * 100]);
-            }
+            _.each(medalHistory.MedalHistories, function(hist, i) {
+                histData.push([i, hist.Result * 100]);
+            });
             if (histData.length > 0) {
                 var mhPlot = $.jqplot('medalHistory', [histData],
                     {
@@ -234,8 +220,8 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         var period = this.loanModel.get('RepaymentPerion') || 0;
         this.drawDi('period-di', "#00ab5d", period / 12);
     },
-    
-    changeDecisionButtonsState: function(isHideAll) {
+
+    changeDecisionButtonsState: function (isHideAll) {
         var creditResult, disabled, userStatus;
         disabled = !this.personalModel.get("IsCustomerInEnabledStatus");
         creditResult = this.personalModel.get("CreditResult");
@@ -318,7 +304,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             context.stroke();
         }
     },
-    drawDi: function(canvasId, fillColor, fillPercent) {
+    drawDi: function (canvasId, fillColor, fillPercent) {
         var canvas = document.getElementById(canvasId);
         var context = canvas.getContext('2d');
         var x = canvas.width / 2;
@@ -329,9 +315,9 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         context.strokeStyle = '#ebebeb';
         context.lineWidth = 15;
         context.stroke();
-        
+
         context.beginPath();
-        context.moveTo(x, y-y*fillPercent);
+        context.moveTo(x, y - y * fillPercent);
         context.lineTo(x, y);
         context.strokeStyle = fillColor;
         context.lineWidth = 15;

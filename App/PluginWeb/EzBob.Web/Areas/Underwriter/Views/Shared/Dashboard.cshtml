@@ -49,7 +49,7 @@
                             </div>
                             <div class="networth-div">
                                 <span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.NetWorth) %></span><br />
-                                <span class="badge">(<%- properties.NetWorthPercentages %>%)</span>
+                                <span class="badge">(NW: <%- properties.NetWorthPercentages %>%)</span>
                             </div>
                         </div>
                         <div style="position: relative; width: 170px; margin: 0 auto;">
@@ -298,7 +298,7 @@
         </div>
         <%}%>
         
-        <%console.log('company', company); if(company && company.length>0){ var alert='';%>
+        <%if(company && company.length>0){ var alert='';%>
         <div class="col-lg-6 col-md-12 col-sm-12">
             <div class="box">
                 <div class="box-title">
@@ -519,8 +519,7 @@
         </div>
         <%}%>
     </div>
-    <%m.DecisionHistory = m.DecisionHistory || {};%>
-    <%if(m.DecisionHistory.length > 0){%>
+    
     <div class="table-ezbig">
         <div class="row">
             <div class="col-lg-12 col-md-12">
@@ -531,48 +530,32 @@
                     </div>
                     <div class="box-content">
 
-                        <table class="table centered">
+                        <table class="table centered" id="journalTable">
                             <thead class="box">
                                 <tr class="box-title">
                                     <th>Action </th>
-                                    <th style="width: 100px;">Date </th>
+                                    <th>Date </th>
+                                    <th>In/Out </th>
+                                    <th>Status </th>
                                     <th>Approved Sum </th>
                                     <th>Interest </th>
                                     <th>Repayment Period </th>
                                     <th>Loan Type </th>
-                                    <th>Use Setup Fee </th>
+                                    <th>Setup Fee </th>
                                     <th>Discount Plan </th>
-                                    <th>Customer Selection </th>
                                     <th>Loan Source </th>
-                                    <th>Originator </th>
+                                    <th>Customer Selection </th>
                                     <th>Underwriter </th>
                                     <th>Comment </th>
-                                    <th>ID </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <%_.each(m.DecisionHistory, function(d){%>
-                            <tr>
-                                <td><%- d.Action %></td>
-                                <td><%- EzBob.formatDate(d.Date) %></td>
-                                <% if (d.Action == "Reject") {%>
-                                    <td colspan="8"></td>
-                                <%} else {%>
-                                    <td><%- EzBob.formatPounds(d.ApprovedSum) %></td>
-                                <td><%- EzBob.formatPercents(d.InterestRate) %></td>
-                                <td><%- d.RepaymentPeriod %></td>
-                                <td><%- EzBob.formatLoanType(d.IsLoanTypeSelectionAllowed, d.LoanType) %></td>
-                                <td><%- (d.ManualSetupFeeAmount || d.ManualSetupFeePercent) ? 'Manual' : (d.UseBrokerSetupFee ? 'Broker' : (d.UseSetupFee ? 'Setup Fee' : 'No')) %></td>
-                                <td><%- d.DiscountPlan %></td>
-                                <td><%- EzBob.formatLoanTypeSelection(d.IsLoanTypeSelectionAllowed) %></td>
-                                <td><%- d.LoanSourceName %></td>
-                                <%}%>
-                                <td><%- d.Originator %></td>
-                                <td><%- d.UnderwriterName %></td>
-                                <td><%- d.Comment %></td>
-                                <td><%- d.Id %></td>
-                            </tr>
-                                <%});%>
+                                <tr>
+                                    @for (int i = 0; i < 14; ++i)
+                                    {
+                                        <td></td>
+                                    }
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -580,7 +563,6 @@
             </div>
         </div>
     </div>
-    <%}%>
 
 </script>
 

@@ -1254,9 +1254,6 @@
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.min.js">
       <DependentUpon>ezbob.underwriter.bankAccountDetails.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js">
-      <DependentUpon>ezbob.underwriter.dashboard.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
     </Content>
@@ -1985,11 +1982,11 @@
       <DependentUpon>ezbob.wizard.shops.js</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.coffee" />
-    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.Settings.PricingModel.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.ConfigTables.coffee" />
     <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.coffee" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.coffee" />
+    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />
