@@ -235,6 +235,12 @@
 		[OperationContract]
 		ActionMetaData EsignProcessPending(int? nCustomerID);
 
+		[OperationContract]
+		EsignatureListActionResult LoadEsignatures(int? nCustomerID);
+
+		[OperationContract]
+		EsignatureFileActionResult LoadEsignatureFile(long nEsignatureID);
+
 		#endregion Esign
 
 		#region Experian

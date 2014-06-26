@@ -168,6 +168,7 @@
     <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\EsignaturesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
     <Compile Include="Areas\Underwriter\Models\DecisionModel.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManagerException.cs" />

@@ -61,10 +61,10 @@
     <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.xsd">
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Models1.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.PricingModel.xsd">
@@ -129,6 +129,12 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.EsignatureFileActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.EsignatureListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.IntActionResult.datasource">

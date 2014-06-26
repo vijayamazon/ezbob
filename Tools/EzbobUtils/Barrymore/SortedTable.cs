@@ -2,9 +2,11 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Runtime.Serialization;
 	using System.Text;
 	using Extensions;
 
+	[DataContract]
 	public class SortedTable<TRowKey, TColumnKey, TData> {
 		#region public
 
@@ -105,6 +107,7 @@
 
 		#region property ColumnKeys
 
+		[DataMember]
 		public SortedSet<TColumnKey> ColumnKeys { get; private set; }
 
 		#endregion property ColumnKeys
@@ -225,6 +228,7 @@
 
 		#region private
 
+		[DataMember]
 		private readonly SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>> m_oData;
 
 		#endregion private

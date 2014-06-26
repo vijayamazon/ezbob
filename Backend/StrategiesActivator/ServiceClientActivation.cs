@@ -1067,6 +1067,30 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oServiceClient.EsignProcessPending(nCustomerID);
 		} // EsignProcessPending
 
+		[Activation]
+		private void LoadEsignatures() {
+			int zu;
+			int? nCustomerID = null;
+			bool bReady = false;
+
+			if (m_aryArgs.Length == 1)
+				bReady = true;
+			else if ((m_aryArgs.Length == 2) && int.TryParse(m_aryArgs[1], out zu)) {
+				nCustomerID = zu;
+				bReady = true;
+			}
+
+			if (!bReady) {
+				m_oLog.Msg("Usage: LoadEsignatures [<Customer ID>]");
+				return;
+			} // if
+
+			var elar = m_oServiceClient.LoadEsignatures(nCustomerID);
+
+			foreach (var e in elar.Data)
+				m_oLog.Msg("{0}", e);
+		} // LoadEsignatures
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

@@ -58,6 +58,8 @@
     <Compile Include="Coin.cs" />
     <Compile Include="ConfigTable.cs" />
     <Compile Include="CustomerAddressModel.cs" />
+    <Compile Include="EsignatureModel.cs" />
+    <Compile Include="EsignerModel.cs" />
     <Compile Include="FormattingUtils.cs" />
     <Compile Include="RejectionModel.cs" />
     <Compile Include="RtiTaxMonthRawData.cs" />
