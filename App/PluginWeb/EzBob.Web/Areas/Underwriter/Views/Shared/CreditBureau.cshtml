@@ -45,7 +45,7 @@
 @helper ScoreMark(string score, string scorePos, string valPos, string color, string align)
 {
     var backDivStyle = "height: 50px; width: 8px; display: inline-block; position:relative; left: " + scorePos + "background-color: " + color;
-    var scoreDivStyle = "height: 50px; width: 120px; display: inline-block; position: relative; font-size: 48px; " 
+    var scoreDivStyle = "height: 50px; width: 120px; display: inline-block; position: relative; font-size: 48px; "
         + " color: " + color
         + " left: " + valPos
         + " text-align: " + "center;"
@@ -769,34 +769,37 @@
 }
 
 <script id="experian-info-template" type="text/template">
-    <%
-    experianInfo.Summary = experianInfo.Summary || {};
-    experianInfo.Summary.ConsumerAccountsOverview = experianInfo.Summary.ConsumerAccountsOverview || {};
-    experianInfo.ConsumerSummaryCharacteristics = experianInfo.ConsumerSummaryCharacteristics || {};
-    experianInfo.ConsumerAccountsOverview = experianInfo.ConsumerAccountsOverview || {};
-    %>
-    @RunCheckButtons()
-    <% if (experianInfo.IsExperianError) { %>
-         @DisplayExperianError()
-    <% } else { %>
-        <% if (experianInfo.CheckFailed || experianInfo.CheckStatus=='Error') { %>
-            @DisplayFailedExperianCheck()
-        <% } else { %>
-            @BureauSummaryForCustomer()
-            @DisplayConsumerData()
-        <% } %>
-    <% } %>
+    <div class="row box">
+        <div class="box-content">
+            <%    experianInfo.Summary = experianInfo.Summary || {};
+            experianInfo.Summary.ConsumerAccountsOverview = experianInfo.Summary.ConsumerAccountsOverview || {};
+            experianInfo.ConsumerSummaryCharacteristics = experianInfo.ConsumerSummaryCharacteristics || {};
+            experianInfo.ConsumerAccountsOverview = experianInfo.ConsumerAccountsOverview || {};
+            %>
+            @RunCheckButtons()
+            <% if (experianInfo.IsExperianError) { %>
+                @DisplayExperianError()
+            <% } else { %>
+                <% if (experianInfo.CheckFailed || experianInfo.CheckStatus=='Error') { %>
+                    @DisplayFailedExperianCheck()
+                <% } else { %>
+                    @BureauSummaryForCustomer()
+                    @DisplayConsumerData()
+                <% } %>
+            <% } %>
     
-    <% if(experianInfo.ModelType == "Limited") { %>
-        @DisplayLimitedData()
-    <% } %>
-    <% if(experianInfo.ModelType == "NonLimited") { %>
-        @DisplayNonLimitedData()
-    <% } %>
-    <% if(experianInfo.directorsModels && experianInfo.directorsModels.length>0) {%>
-        @DisplayDirectors()
-    <% } %>
-    @ExperianConsent()
+            <% if(experianInfo.ModelType == "Limited") { %>
+                @DisplayLimitedData()
+            <% } %>
+            <% if(experianInfo.ModelType == "NonLimited") { %>
+                @DisplayNonLimitedData()
+            <% } %>
+            <% if(experianInfo.directorsModels && experianInfo.directorsModels.length>0) {%>
+                @DisplayDirectors()
+            <% } %>
+            @ExperianConsent()
+        </div>
+    </div>
 </script>
 
 <script id="idhub-customaddress-template" type="text/template">

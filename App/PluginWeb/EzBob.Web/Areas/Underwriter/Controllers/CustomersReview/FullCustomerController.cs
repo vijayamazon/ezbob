@@ -101,22 +101,9 @@
 			bool bHasHistoryDate = DateTime.TryParse(history, out historyDate);
 
 			var ar = serviceClient.Instance.CalculateModelsAndAffordability(id, bHasHistoryDate ? historyDate : (DateTime?)null);
-			model.Marketplaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models).ToList();
-
-			try
-			{
-				var ar = serviceClient.Instance.CalculateModelsAndAffordability(id, isHistory ? historyDate : (DateTime?) null);
-				var mps = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
-
-				model.MarketPlaces = mps.ToList();
-				model.Affordability = ar.Affordability.ToList();
-			}
-			catch (Exception ex)
-			{
-				model.MarketPlaces = new List<MarketPlaceModel>();
-				model.Affordability = new List<AffordabilityData>();
-				Log.Error("Failed to retrieve mps and affordability", ex);
-			}
+			model.MarketPlaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models).ToList();
+			model.Affordability = ar.Affordability.ToList();
+			
 			model.LoansAndOffers = new LoansAndOffers(customer);
 
 			model.CreditBureauModel = _creditBureauModelBuilder.Create(customer, false, null);

@@ -42,7 +42,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             })(this));
         }
 
-        console.log('aff', this.affordability);
         return {
             m: this.model.toJSON(),
             experian: this.experianModel.toJSON(),
@@ -72,7 +71,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         });
         
         this.$el.find("#affordabilityTable tr:first-child td").each(function () {
-            $(this).replaceWith('<th>' + $(this).text() + '</th>');
+            $(this).replaceWith('<th>' + $(this).html() + '</th>');
         });
 
         $($("#affordabilityTable tr")[2]).addClass("green-row");
@@ -131,7 +130,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
 
         
         if (this.journal.length > 0 && this.isCrm && this.isDecisionHistory) {
-           // console.log('table');
             this.journalTable = this.$el.find("#journalTable").dataTable({
                 aLengthMenu: [[-1, 10, 20, 50, 100], ['all', 10, 20, 50, 100]],
                 iDisplayLength: 20,
@@ -266,11 +264,16 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         }
         this.buildJournal();
         this.rotateTable();
+        
+        this.$el.find('[data-toggle="tooltip"]').tooltip({
+            'placement': 'bottom'
+        });
         EzBob.handleUserLayoutSetting();
     },
     halfDonut: function (el, fillColor, fillPercent) {
         var canvas, context, counterClockwise, endAngle, lineWidth, radius, startAngle, x, y;
         canvas = el[0];
+        if (!canvas) return false;
         context = canvas.getContext('2d');
         x = canvas.width / 2;
         y = canvas.height / 2;

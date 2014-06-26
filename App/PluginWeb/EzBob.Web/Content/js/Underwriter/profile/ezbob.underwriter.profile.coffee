@@ -409,7 +409,6 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @loanInfoModel.set fullModel.get("ApplicationInfoModel"), silent: true
             @loanInfoModel.trigger "sync"
 
-            console.log('ff', fullModel.get("MarketPlaces"))
             @marketPlaces.customerId = id
             @marketPlaces.history = history
             @marketPlaces.reset fullModel.get("MarketPlaces"), silent: true
