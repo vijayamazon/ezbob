@@ -2,8 +2,8 @@
 {
 	using System;
 	using System.Linq;
+	using Code;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -17,6 +17,7 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
+	using Web.Models;
 
 	public class ApplicationInfoModelBuilder
 	{
@@ -28,6 +29,8 @@
 		private readonly ServiceClient serviceClient;
 		private readonly VatReturnSummaryRepository _vatReturnSummaryRepository;
 		private readonly CustomerAnalyticsRepository _customerAnalyticsRepository;
+		private readonly LoanBuilder _loanBuilder;
+		private readonly APRCalculator _aprCalc;
 
 		public ApplicationInfoModelBuilder(
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
@@ -35,7 +38,9 @@
 			ILoanTypeRepository loanTypes,
 			ILoanSourceRepository loanSources,
 			VatReturnSummaryRepository vatReturnSummaryRepository,
-			CustomerAnalyticsRepository customerAnalyticsRepository)
+			CustomerAnalyticsRepository customerAnalyticsRepository,
+			LoanBuilder loanBuilder,
+			APRCalculator aprCalc)
 		{
 			_discounts = discounts;
 			_loanTypes = loanTypes;
@@ -44,6 +49,8 @@
 			_vatReturnSummaryRepository = vatReturnSummaryRepository;
 			_customerAnalyticsRepository = customerAnalyticsRepository;
 			serviceClient = new ServiceClient();
+			_loanBuilder = loanBuilder;
+			_aprCalc = aprCalc;
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
@@ -96,6 +103,14 @@
 				model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
 
 				model.AnnualTurnover = cr.AnnualTurnover;
+
+				var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.OfferStart.HasValue ? cr.OfferStart.Value : DateTime.UtcNow);
+				
+				var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
+
+				var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
+				model.Apr = apr;
+				model.RealCost = loanOffer.RealInterestCost;
 			}
 
 			model.LoanSource = new LoanSourceModel(cr != null && cr.LoanSource != null ? cr.LoanSource : _loanSources.GetDefault());

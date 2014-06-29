@@ -69,6 +69,10 @@
 		public decimal FreeCashFlow { get; set; }
 		public decimal ValueAdded { get; set; }
 
+		public double Apr { get; set; }
+		public decimal Air { get; set; }
+		public decimal RealCost { get; set; }
+
 		public SuggestedAmountModel[] SuggestedAmounts { get; set; }
     }
 }
