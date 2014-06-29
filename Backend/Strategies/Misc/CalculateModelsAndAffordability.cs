@@ -54,18 +54,24 @@
 
 			foreach (LocalMp mm in m_oMundMs) {
 				if (mm.Marketplace.Marketplace.InternalId == ms_oCompanyFilesID)
+				{
 					continue;
+				}
 
 				if (mm.Marketplace.Marketplace.InternalId == ms_oYodleeID) {
 					if (oYodlee == null)
+					{
 						oYodlee = mm.Model;
+					}
 
 					continue;
 				} // if
 
 				if (mm.Marketplace.Marketplace.InternalId == ms_oHmrcID) {
 					if (oHmrc == null)
+					{
 						oHmrc = mm.Model;
+					}
 
 					continue;
 				} // if
@@ -76,15 +82,24 @@
 				} // if
 
 				if (mm.Marketplace.Marketplace.IsPaymentAccount)
+				{
 					oAccounting.Add(mm);
+				}
 				else
+				{
 					oEcomm.Add(mm);
+				}
 			} // for each marketplace
 
 			if (oHmrc != null)
+			{
 				HmrcBank(oHmrc);
-			else if (oYodlee != null)
+			}
+			
+			if (oYodlee != null)
+			{
 				SaveBankStatement(oYodlee.Yodlee.BankStatementDataModel, null, null);
+			}
 
 			Psp(oPaypal);
 			EcommAccounting(oEcomm, AffordabilityType.Ecomm);
@@ -97,7 +112,9 @@
 			Log.Debug("**************************************************************************");
 
 			foreach (var a in Affordability)
+			{
 				Log.Debug(a);
+			}
 
 			Log.Debug("**************************************************************************");
 			Log.Debug("*");
@@ -176,8 +193,6 @@
 					Tax = oHmrc.Tax,
 					ValueAdded = oHmrc.TotalValueAdded,
 				});
-
-				SaveBankStatement(oVat.BankStatement, oFrom, oTo);
 			} // if
 		} // HmrcBank
 
@@ -185,7 +200,12 @@
 
 		#region method Psp
 
-		private void Psp(IEnumerable<LocalMp> oPayPals) {
+		private void Psp(List<LocalMp> oPayPals) {
+			if (!oPayPals.Any())
+			{
+				return;
+			}
+
 			bool bWasAnnualized = false;
 			var oErrorMsgs = new List<string>();
 
@@ -283,7 +303,11 @@
 
 		#region method EcommAccounting
 
-		private void EcommAccounting(IEnumerable<LocalMp> oModels, AffordabilityType nType) {
+		private void EcommAccounting(List<LocalMp> oModels, AffordabilityType nType) {
+			if (!oModels.Any())
+			{
+				return;
+			}
 			bool bWasAnnualized = false;
 			var oErrorMsgs = new List<string>();
 

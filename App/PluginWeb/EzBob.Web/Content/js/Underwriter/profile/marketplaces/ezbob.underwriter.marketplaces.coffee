@@ -32,7 +32,7 @@ class EzBob.Underwriter.MarketPlaces extends Backbone.Collection
     url: -> "#{window.gRootPath}Underwriter/MarketPlaces/Index/?id=#{@customerId}&history=#{@history}"
 
 class EzBob.Underwriter.Affordability extends Backbone.Model
-    #url: -> "#{window.gRootPath}Underwriter/MarketPlaces/GetAffordabilityData/?id=#{@customerId}"
+    url: -> "#{window.gRootPath}Underwriter/MarketPlaces/GetAffordabilityData/?id=#{@customerId}"
 
 class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     template: "#marketplace-template"
