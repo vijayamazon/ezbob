@@ -2902,19 +2902,19 @@ table.payment-schedule-table td{
 }
 
 .apply-for-loan-total-block .formula .plus {
-	left: 140px;
+	left: 20%;
 	background-image: url(../img/plus.png);
 	background-position: center center;
 }
 
 .apply-for-loan-total-block .formula .cost {
-	left: 240px;
+	left: 40%;
 	background-image: url(../img/image-money32.png); background-position: 16px 16px;
 	padding-left: 54px;
 }
 
 .apply-for-loan-total-block .formula .eq {
-	left: 365px;
+	left: 60%;
 	background-image: url(../img/arrow-right.png);
 	background-position: center center;
 }

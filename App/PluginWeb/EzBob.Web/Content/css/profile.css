@@ -756,6 +756,7 @@ h2.header-message a{
 select.selectheight { height: 30px; }
 
 #get-cash .underwriter-only { display: none; }
+#get-cash .print-customer_details { display: none; }
 
 textarea.invite_friend {
     width: 400px;

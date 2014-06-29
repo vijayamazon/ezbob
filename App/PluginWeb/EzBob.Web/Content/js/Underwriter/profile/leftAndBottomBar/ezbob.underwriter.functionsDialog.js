@@ -31,7 +31,6 @@
         this.$el.find("h3").css("display", "none");
       }
       this.ReasonField.val(this.model.get("Reason"));
-      console.log('@type', this.type);
       this.$el.dialog({
         autoOpen: true,
         position: ["top", 60],
@@ -75,7 +74,6 @@
     BtnOkClicked: function(e) {
       var data, rejectionReasons, req, that;
       that = this;
-      console.log('e', e);
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
@@ -95,7 +93,6 @@
         this.ReasonFieldEmptyError(this.$el.find(".rejectReasonDiv"), true);
         req = true;
       }
-      console.log('req', req);
       if (req) {
         return false;
       }
@@ -114,7 +111,6 @@
       if (this.NoYodlee) {
         data.reason += " | " + this.YodleeReasonField.val();
       }
-      console.log('data', data);
       BlockUi("on");
       req = $.ajax({
         type: "POST",
@@ -137,7 +133,6 @@
         return $(".ui-icon-refresh").click();
       });
       return req.always(function(res) {
-        console.log('always', res);
         BlockUi("off");
         return $(e.currentTarget).removeClass("disabled");
       });

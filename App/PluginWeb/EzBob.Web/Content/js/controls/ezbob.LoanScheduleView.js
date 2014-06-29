@@ -37,7 +37,6 @@ EzBob.LoanScheduleViewDlg = EzBob.LoanScheduleView.extend({
 	events: {
 		'click .pdf-link': 'exportToPdf',
 		'click .excel-link': 'exportToExcel',
-		'click .print-link': "print"
 	}, // events
 
 	exportToPdf: function(e) {
@@ -50,11 +49,12 @@ EzBob.LoanScheduleViewDlg = EzBob.LoanScheduleView.extend({
 		return $el.attr('href', window.gRootPath + 'Underwriter/Schedule/Export?id=' + this.options.offerId + '&isExcel=true&isShowDetails=false&customerId=' + this.options.customerId);
 	}, // exportToExcel
 
+
     
 	jqoptions: function() {
 		return {
 			modal: true,
-			width: 600
+			width: 880
 		};
 	}, // jqoptions
 }); // EzBob.LoanScheduleViewDlg
