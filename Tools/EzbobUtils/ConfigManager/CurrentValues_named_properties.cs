@@ -631,6 +631,22 @@ namespace ConfigManager {
 
 		#endregion property EchoSignDeadline
 
+		#region property EchoSignEnabledCustomer
+
+		public virtual VariableValue EchoSignEnabledCustomer {
+			get { return this[Variables.EchoSignEnabledCustomer]; } // get
+		} // EchoSignEnabledCustomer
+
+		#endregion property EchoSignEnabledCustomer
+
+		#region property EchoSignEnabledUnderwriter
+
+		public virtual VariableValue EchoSignEnabledUnderwriter {
+			get { return this[Variables.EchoSignEnabledUnderwriter]; } // get
+		} // EchoSignEnabledUnderwriter
+
+		#endregion property EchoSignEnabledUnderwriter
+
 		#region property EchoSignReminder
 
 		public virtual VariableValue EchoSignReminder {

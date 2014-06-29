@@ -84,6 +84,8 @@ namespace ConfigManager {
 		DisplayEarnedPoints,
 		EchoSignApiKey,
 		EchoSignDeadline,
+		EchoSignEnabledCustomer,
+		EchoSignEnabledUnderwriter,
 		EchoSignReminder,
 		EchoSignUrl,
 		EnableAutomaticApproval,

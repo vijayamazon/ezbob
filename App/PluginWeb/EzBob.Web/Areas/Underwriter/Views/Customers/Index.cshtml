@@ -358,6 +358,8 @@
         EzBob.Underwriter.StaticData = {};
         EzBob.Underwriter.StaticData.CollectionStatuses = new EzBob.Underwriter.CollectionStatuses(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.CollectionStatuses)));
 
+        EzBob.Config.EchoSignEnabledUnderwriter = @(CurrentValues.Instance.EchoSignEnabledUnderwriter ? "true" : "false");
+
         var escalatedFlag = @(Model.IsEscalated ? 1 : 0);
         EzBob.handleUserLayoutSetting();
     </script>

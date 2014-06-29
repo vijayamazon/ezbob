@@ -155,6 +155,11 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	}, // toggleSigners
 
 	reload: function(nCustomerID, bPollStatus) {
+		if (!EzBob.Config.EchoSignEnabledUnderwriter) {
+			this.$el.hide();
+			return;
+		} // if
+
 		bPollStatus = bPollStatus ? true : false;
 
 		if (this.SignaturesList) {
