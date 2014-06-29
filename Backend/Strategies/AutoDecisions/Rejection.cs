@@ -241,6 +241,7 @@
 			{
 				var accountSafeReader = new SafeReader(row);
 				DateTime lastUpdateDate = accountSafeReader["LastUpdateDate"];
+				int currentlyPointedStatus = 12;
 
 				if (lastUpdateDate.AddMonths(rejectLateLastMonth) > DateTime.UtcNow) // If not then there is no relevant data
 				{
@@ -249,9 +250,10 @@
 						DateTime tmpDate = DateTime.UtcNow.AddMonths(-1 * i);
 						if (tmpDate < lastUpdateDate || (tmpDate.Year == lastUpdateDate.Year && tmpDate.Month == lastUpdateDate.Month))
 						{
-							string fieldName = string.Format("StatusCode{0}", 11 - i);
+							string fieldName = string.Format("StatusCode{0}", currentlyPointedStatus);
+							currentlyPointedStatus--;
 							string monthStatus = accountSafeReader[fieldName];
-							relevantStatuses += monthStatus;
+							relevantStatuses += monthStatus ?? string.Empty;
 						}
 					}
 				}
