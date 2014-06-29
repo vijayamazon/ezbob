@@ -158,17 +158,20 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult CloseFollowUp(int customerId)
+		public JsonResult CloseFollowUp(int customerId, int? followUpId = null)
 		{
 			try
 			{
-				var lastFollowUp = _customerRelationFollowUpRepository.GetLastFollowUp(customerId);
+				var lastCrm = _customerRelationsRepository.GetLastCrm(customerId);
+				CustomerRelationFollowUp lastFollowUp = followUpId == null
+					                                        ? _customerRelationFollowUpRepository.GetLastFollowUp(customerId)
+					                                        : _customerRelationFollowUpRepository.Get(followUpId);
+
 				if (lastFollowUp == null)
 				{
 					return Json(new { success = false, error = "customer don't have any open follow ups please add one." });
 				}
 
-				var lastCrm = _customerRelationsRepository.GetLastCrm(customerId);
 				lastFollowUp.IsClosed = true;
 				lastFollowUp.CloseDate = DateTime.UtcNow;
 				_customerRelationStateRepository.SaveUpdateState(customerId, false, lastFollowUp, lastCrm);

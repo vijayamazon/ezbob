@@ -27,7 +27,7 @@
             <%if(lastFollowUp && !lastFollowUp.IsClosed) {%>
                 <div class="" style="width: 200px; display: inline-block">
                     <label class="red followUp" title="<%-lastFollowUp.Comment%> <%-EzBob.formatDate2(lastFollowUp.FollowUpDate)%>" data-toggle="tooltip">Followed up</label>
-                    <button id="closeFollowUp" class="btn btn-primary">Close</button>
+                    <button id="closeFollowUp" class="btn btn-primary">Close last</button>
                 </div>
             <%}%>
     
@@ -70,16 +70,18 @@
                         <th>Comment</th>
                         <th>Is closed</th>
                         <th>Close date</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <%_.each(followUps, function(fu) {%>
+                    <%_.each(followUps, function(fu) { console.log(fu);%>
                 <tr>
                     <td><%-EzBob.formatDate2(fu.Created)%></td>
                     <td><%-EzBob.formatDate2(fu.FollowUpDate)%></td>
                     <td><%-fu.Comment%></td>
                     <td><%-fu.IsClosed ? 'Yes' : 'No'%></td>
                     <td><%-EzBob.formatDate2(fu.CloseDate)%></td>
+                    <td><%if (!fu.IsClosed){ %><button class="btn btn-primary btnCloseFollowUp" data-id="<%-fu.Id%>">Close</button><%}%></td>
                 </tr>
                     <%});%>
                 </tbody>

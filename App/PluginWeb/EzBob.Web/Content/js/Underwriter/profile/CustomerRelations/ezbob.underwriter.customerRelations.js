@@ -26,7 +26,8 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         "click .addFollowUp": "addFollowUp",
         "click .toggleSystemCrm": "toggleSystmeCrm",
         "change #Rank": "changeRank",
-        "click #closeFollowUp": "closeFollowUp",
+        "click #closeFollowUp": "closeLastFollowUp",
+        "click .btnCloseFollowUp": "closeFollowUp"
     },
     ui: {
         "toggleBtnIcon": ".toggleSystemCrm i",
@@ -78,10 +79,14 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         this.postChange(window.gRootPath + "Underwriter/CustomerRelations/ChangeRank", { customerId: this.model.customerId, rankId: this.ui.rank.val() });
     },
     
-    closeFollowUp: function (event, state) {
+    closeLastFollowUp: function (event, state) {
         this.postChange(window.gRootPath + "Underwriter/CustomerRelations/CloseFollowUp", { customerId: this.model.customerId });
     },
     
+    closeFollowUp: function (event, state) {
+        this.postChange(window.gRootPath + "Underwriter/CustomerRelations/CloseFollowUp", { customerId: this.model.customerId, followUpId: $(event.currentTarget).data("id") });
+    },
+
     postChange: function(url, params) {
         BlockUi("on");
         var that = this;

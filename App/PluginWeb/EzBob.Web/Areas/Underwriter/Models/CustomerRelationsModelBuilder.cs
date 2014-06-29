@@ -70,6 +70,7 @@
 					FollowUpDate = x.FollowUpDate,
 					IsClosed = x.IsClosed,
 					CloseDate = x.CloseDate,
+					Id = x.Id
 				}).OrderByDescending(x => x.FollowUpDate);
 			return crmModel;
 		}

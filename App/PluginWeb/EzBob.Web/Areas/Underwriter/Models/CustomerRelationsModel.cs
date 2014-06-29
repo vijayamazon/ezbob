@@ -25,6 +25,7 @@
 
 	public class FollowUpModel
 	{
+		public int Id { get; set; }
 		public DateTime Created { get; set; }
 		public DateTime FollowUpDate { get; set; }
 		public bool IsClosed { get; set; }
