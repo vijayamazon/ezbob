@@ -22,7 +22,17 @@ BEGIN
 		@YodleeTotalAggrgationFuncId INT,
 		@YodleeTurnover DECIMAL(18,6),
 		@ZooplaEstimate NVARCHAR(30), 
-		@AverageSoldPrice1Year INT
+		@AverageSoldPrice1Year INT,
+		@FirstName NVARCHAR(250),
+		@Surname NVARCHAR(250),
+		@Gender CHAR(1),
+		@DateOfBirth DATETIME,
+		@Line1 VARCHAR(200),
+		@Line2 VARCHAR(200),
+		@Line3 VARCHAR(200),
+		@Town VARCHAR(200),
+		@County VARCHAR(200),
+		@Postcode VARCHAR(200)
 
 	SELECT 
 		@BusinessScore = Score, 
@@ -43,7 +53,11 @@ BEGIN
 		
 	SELECT 
 		@EzbobSeniority = GreetingMailSentDate, 
-		@MaritalStatus = MaritalStatus 
+		@MaritalStatus = MaritalStatus,
+		@FirstName = FirstName,
+		@Surname = Surname,
+		@Gender = Gender,
+		@DateOfBirth = DateOfBirth
 	FROM 
 		Customer 
 	WHERE 
@@ -135,7 +149,19 @@ BEGIN
 		AnalysisFunctionTimePeriodId DESC
 	
 	SELECT TOP 1 @ZooplaEstimate = Zoopla.ZooplaEstimate, @AverageSoldPrice1Year = Zoopla.AverageSoldPrice1Year FROM Zoopla, CustomerAddress WHERE CustomerId = @CustomerId AND CustomerAddress.addressId = Zoopla.CustomerAddressId AND CustomerAddress.addressType = 1 ORDER BY UpdateDate DESC 
-			
+	
+	SELECT
+		@Line1 = Line1,
+		@Line2 = Line2,
+		@Line3 = Line3,
+		@Town = Town,
+		@County = County,
+		@Postcode = Postcode
+	FROM
+		CustomerAddress
+	WHERE
+		CustomerId = @CustomerId AND
+		addressType = 1	
 			
 	SELECT
 		@FirstRepaymentDatePassed AS FirstRepaymentDatePassed, 
@@ -151,6 +177,16 @@ BEGIN
 		@HmrcId AS HmrcId,
 		@YodleeTurnover AS YodleeTurnover,
 		@ZooplaEstimate AS ZooplaEstimate,
-		@AverageSoldPrice1Year AS AverageSoldPrice1Year
+		@AverageSoldPrice1Year AS AverageSoldPrice1Year,
+		@FirstName AS FirstName,
+		@Surname AS Surname,
+		@Gender AS Gender,
+		@DateOfBirth AS DateOfBirth,
+		@Line1 AS Line1,
+		@Line2 AS Line2,
+		@Line3 AS Line3,
+		@Town AS Town,
+		@County AS County,
+		@Postcode AS Postcode
 END
 GO

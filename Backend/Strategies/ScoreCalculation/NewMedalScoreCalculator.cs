@@ -3,6 +3,7 @@
 	using System.Data;
 	using System.Text.RegularExpressions;
 	using ExperianLib;
+	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -17,6 +18,16 @@
 		private readonly AConnection db;
 		private bool freeCashFlowDataAvailable;
 		private bool firstRepaymentDatePassed;
+		private string firstName;
+		private string surname;
+		private string gender;
+		private DateTime? dateOfBirth;
+		private string line1;
+		private string line2;
+		private string line3;
+		private string town;
+		private string county;
+		private string postcode;
 
 		public ScoreResult Results { get; set; }
 
@@ -69,6 +80,16 @@
 			decimal yodleeTurnover = sr["YodleeTurnover"];
 			string zooplaEstimateStr = sr["ZooplaEstimate"];
 			int zoopla1YearAvg = sr["AverageSoldPrice1Year"];
+			firstName = sr["YodleeTurnover"];
+			surname = sr["YodleeTurnover"];
+			gender = sr["YodleeTurnover"];
+			dateOfBirth = sr["YodleeTurnover"];
+			line1 = sr["Line1"];
+			line2 = sr["Line2"];
+			line3 = sr["Line3"];
+			town = sr["Town"];
+			county = sr["County"];
+			postcode = sr["Postcode"];
 
 			// TODO: logic assumes 1 hmrc - what should we do if we have more
 
@@ -125,12 +146,30 @@
 			int zooplaValue = intVal;
 
 			decimal mortgageBalance = GetMortgages(customerId);
-			Results.NetWorth = zooplaValue - mortgageBalance;
+			if (zooplaValue != 0)
+			{
+				Results.NetWorth = (zooplaValue - mortgageBalance)/zooplaValue;
+			}
+			else
+			{
+				Results.NetWorth = 0;
+			}
 		}
 
 		private decimal GetMortgages(int customerId)
 		{
-			ConsumerServiceResult eInfo = ConsumerService.GetParsedCache(customerId);
+			var loc = new InputLocationDetailsMultiLineLocation();
+			loc.LocationLine1 = line1;
+			loc.LocationLine2 = line2;
+			loc.LocationLine3 = line3;
+			loc.LocationLine4 = town;
+			loc.LocationLine5 = county;
+			loc.LocationLine6 = postcode;
+
+			var consumerSrv = new ConsumerService();
+			ConsumerServiceResult eInfo = consumerSrv.GetConsumerInfo(firstName, surname,
+				gender, // should be Gender
+				dateOfBirth, null, loc, "PL", customerId, 0, true, false, false);
 			try
 			{
 				double balanceSum = 0;
