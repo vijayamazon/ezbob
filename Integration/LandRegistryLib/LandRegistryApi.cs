@@ -31,7 +31,7 @@
 		/// <param name="postCode">postcode</param>
 		/// <param name="customerId">customerId</param>
 		/// <returns></returns>
-		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null,string buildingName = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
+		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string buildingName = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Enquiry };
 			using (var client = new LREnquiryServiceNS.PropertyDescriptionEnquiryV2_0ServiceClient())
@@ -93,6 +93,23 @@
 					Log.ErrorFormat("{0}", ex);
 					model.Enquery = new LandRegistryEnquiryModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
+					model.Response = XmlHelper.SerializeObject(new LREnquiryServiceNS.ResponseSearchByPropertyDescriptionV2_0Type
+						{
+							GatewayResponse = new LREnquiryServiceNS.Q1GatewayResponseType
+								{
+									TypeCode = new LREnquiryServiceNS.ProductResponseCodeType
+										{
+											Value = LREnquiryServiceNS.ProductResponseCodeContentType.Item20
+										},
+									Rejection = new LREnquiryServiceNS.Q1RejectionType
+										{
+											RejectionResponse = new LREnquiryServiceNS.Q1RejectionResponseType
+												{
+													Reason = new LREnquiryServiceNS.TextType1 { Value = ex.Message }
+												}
+										}
+								}
+						});
 				}
 
 				return model;
@@ -202,17 +219,20 @@
 							response.GatewayResponse.Results.Attachment = null;
 						}
 					}
-					catch (Exception e) {
+					catch (Exception e)
+					{
 						Log.Warn("Something went terribly not good while saving Land Registry response as attachment.", e);
 					}
 
-					try {
+					try
+					{
 						Log.DebugFormat(
 							"Title number returned from PROD service is {0}",
 							response.GatewayResponse.Results.OCSummaryData.Title.TitleNumber.Value
 						);
 					}
-					catch (Exception) {
+					catch (Exception)
+					{
 						Log.Debug("Title number returned from PROD service is: FAILED TO SHOW.");
 					} // try
 
@@ -224,6 +244,24 @@
 					Log.ErrorFormat("{0}", ex);
 					model.Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
+
+					model.Response = XmlHelper.SerializeObject(new LRResServiceNS.ResponseOCWithSummaryV2_1Type
+					{
+						GatewayResponse = new LRResServiceNS.Q1GatewayResponseType
+						{
+							TypeCode = new LRResServiceNS.ProductResponseCodeType
+							{
+								Value = LRResServiceNS.ProductResponseCodeContentType.Item20
+							},
+							Rejection = new LRResServiceNS.Q1RejectionType
+							{
+								RejectionResponse = new LRResServiceNS.Q1RejectionResponseType
+								{
+									Reason = new LRResServiceNS.TextType { Value = ex.Message }
+								}
+							}
+						}
+					});
 				}
 			}
 			return model;

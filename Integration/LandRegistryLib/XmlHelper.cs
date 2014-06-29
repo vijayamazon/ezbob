@@ -50,8 +50,13 @@
 			return result;
 		}
 
-		public static T DeserializeObject<T>(string xml)
+		public static T DeserializeObject<T>(string xml) where T: class
 		{
+			if (string.IsNullOrEmpty(xml))
+			{
+				return null;
+			}
+
 			try
 			{
 				var xs = new XmlSerializer(typeof(T));

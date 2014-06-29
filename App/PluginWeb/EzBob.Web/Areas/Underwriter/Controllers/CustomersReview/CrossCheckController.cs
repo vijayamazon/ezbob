@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+	using System;
 	using System.Collections.Generic;
 	using System.Web.Mvc;
 	using CommonLib;
@@ -123,7 +124,16 @@
 			var lrEnqs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Enquiry).Select(x => x.Response);
 			foreach (var lr in lrEnqs)
 			{
-				landRegistryEnquiries.AddRange(b.BuildEnquiryModel(lr).Titles);
+				try
+				{
+					var lrModel = b.BuildEnquiryModel(lr);
+
+					landRegistryEnquiries.AddRange(lrModel.Titles);
+				}
+				catch (Exception ex)
+				{
+					
+				}
 			}
 
 			landRegistryEnquiries = landRegistryEnquiries.DistinctBy(x => x.TitleNumber).ToList();

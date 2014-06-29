@@ -983,7 +983,7 @@
 				{
 					Customer = customer,
 					InsertDate = DateTime.UtcNow,
-					Postcode = string.IsNullOrEmpty(postCode) ? string.Format("{0},{1},{2}", buildingNumber, streetName, cityName) : postCode,
+					Postcode = string.IsNullOrEmpty(postCode) ? string.Format("{3}{0},{1},{2}", buildingNumber, streetName, cityName, buildingName) : postCode,
 					Request = model.Request,
 					Response = model.Response,
 					RequestType = model.RequestType,

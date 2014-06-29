@@ -200,5 +200,13 @@ namespace EzBobTest
 		public void TestCalculateModelsAndAffordability() {
 			new CalculateModelsAndAffordability(234, null, m_oDB, m_oLog).Execute();
 		} // TestCalculateModelsAndAffordability
+
+		[Test]
+		public void TestLREnquiry()
+		{
+			var s = new LandRegistryEnquiry(21340, null, "test", null, null, "E12 6AY", m_oDB, m_oLog);
+			s.Execute();
+			Assert.IsNotNullOrEmpty(s.Result);
+		}
 	}
 }

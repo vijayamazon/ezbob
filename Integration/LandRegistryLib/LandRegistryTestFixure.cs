@@ -1,17 +1,20 @@
 ﻿namespace LandRegistryLib
 {
 	using System;
+	//using Ezbob.Utils.Security;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class LandRegistryTestFixure
 	{
+		//include to use prod service barrymore private static readonly LandRegistryApi Lr = new LandRegistryApi("SDulman3000", Encrypted.Decrypt("iOwNcavb8fxu080IEtpg1rmAzb5dsBsw7FhuLsJTxYk="), "c:\\temp\\landregistry\\");
 		private static readonly LandRegistryApi Lr = new LandRegistryApi("SDulman3000", "iOwNcavb8fxu080IEtpg1rmAzb5dsBsw7FhuLsJTxYk=", "c:\\temp\\landregistry\\");
 		private static readonly LandRegistryTestApi LrTest = new LandRegistryTestApi();
 		[Test]
 		public void test_prod_enquiry()
 		{
-			var model = Lr.EnquiryByPropertyDescription(buildingNumber: "27", streetName: "Church Road", cityName: "Exeter", customerId: 1);
+			//var model = Lr.EnquiryByPropertyDescription(buildingNumber: "27", streetName: "Church Road", cityName: "Exeter", customerId: 1);
+			var model = Lr.EnquiryByPropertyDescription(buildingName: "test", postCode:"E12 6AY", customerId: 1);
 			Assert.NotNull(model.Response);
 			Assert.AreEqual(LandRegistryResponseType.Success, model.ResponseType);
 		}
