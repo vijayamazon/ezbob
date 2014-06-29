@@ -23,13 +23,15 @@
 
 		#region constructor
 
-		public VatReturnSeeds() {
+		public VatReturnSeeds(ASafeLog oLog) {
+			m_oLog = oLog ?? new SafeLog();
+
 			m_oProperties = new SortedDictionary<Field, dynamic>();
 
 			Period = null;
-			DateFrom = LongTimeAgo;
-			DateTo = LongTimeAgo;
-			DateDue = LongTimeAgo;
+			DateFrom = ms_oLongTimeAgo;
+			DateTo = ms_oLongTimeAgo;
+			DateDue = ms_oLongTimeAgo;
 
 			RegistrationNo = 0;
 			BusinessName = null;
@@ -81,11 +83,29 @@
 		#region method IsPeriodValid
 
 		public bool IsPeriodValid() {
-			return
-				! string.IsNullOrWhiteSpace(Period) &&
-				! DateFrom.Equals(LongTimeAgo) &&
-				! DateTo.Equals(LongTimeAgo) &&
-				! DateDue.Equals(LongTimeAgo);
+			bool bIsValid = true;
+
+			if (string.IsNullOrWhiteSpace(Period)) {
+				bIsValid = false;
+				m_oLog.Debug("VAT return 'Period' not specified.");
+			} // if
+
+			if (DateFrom.Equals(ms_oLongTimeAgo)) {
+				bIsValid = false;
+				m_oLog.Debug("VAT return 'Date From' not specified.");
+			} // if
+
+			if (DateTo.Equals(ms_oLongTimeAgo)) {
+				bIsValid = false;
+				m_oLog.Debug("VAT return 'Date To' not specified.");
+			} // if
+
+			if (DateDue.Equals(ms_oLongTimeAgo)) {
+				bIsValid = false;
+				m_oLog.Debug("VAT return 'Date Due' not specified.");
+			} // if
+
+			return bIsValid;
 		} // IsPeriodValid
 
 		#endregion method IsPeriodValid
@@ -124,11 +144,28 @@
 		#region method AreBusinessDetailsValid
 
 		public bool AreBusinessDetailsValid() {
-			return
-				RegistrationNo > 0 &&
-				!string.IsNullOrWhiteSpace(BusinessName) &&
-				BusinessAddress != null &&
-				BusinessAddress.Length > 0;
+			bool bIsValid = true;
+
+			if (RegistrationNo <= 0) {
+				bIsValid = false;
+				m_oLog.Debug("VAT return 'Company Registration #' not specified.");
+			}
+
+			if (string.IsNullOrWhiteSpace(BusinessName)) {
+				bIsValid = false;
+				m_oLog.Debug("VAT return 'Company Name' not specified.");
+			}
+
+			if (BusinessAddress == null) {
+				bIsValid = false;
+				m_oLog.Debug("VAT return 'Company Address' not specified.");
+			}
+			else if (BusinessAddress.Length < 1) {
+				bIsValid = false;
+				m_oLog.Debug("VAT return 'Company Address' not specified.");
+			}
+
+			return bIsValid;
 		} // AreBusinessDetailsValid
 
 		#endregion method AreBusinessDetailsValid
@@ -169,7 +206,9 @@
 
 		private readonly SortedDictionary<Field, dynamic> m_oProperties;
 
-		private static readonly DateTime LongTimeAgo = new DateTime(1976, 7, 1, 9, 30, 0, DateTimeKind.Utc);
+		private readonly ASafeLog m_oLog;
+
+		private static readonly DateTime ms_oLongTimeAgo = new DateTime(1976, 7, 1, 9, 30, 0, DateTimeKind.Utc);
 
 		#endregion private
 	} // class VatReturnSeeds

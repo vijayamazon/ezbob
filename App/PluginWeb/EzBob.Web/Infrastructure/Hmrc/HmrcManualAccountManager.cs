@@ -207,7 +207,7 @@
 					Thrasher = null,
 				};
 
-				var oSeeds = new VatReturnSeeds();
+				var oSeeds = new VatReturnSeeds(ms_oLog);
 
 				oSeeds.Set(VatReturnSeeds.Field.Period, oPeriod.Period, ms_oLog);
 				oSeeds.Set(VatReturnSeeds.Field.DateFrom, oPeriod.FromDate, ms_oLog);

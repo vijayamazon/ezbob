@@ -24,7 +24,7 @@ namespace Ezbob.HmrcHarvester {
 
 			m_oReader = new PdfReader(oFile);
 
-			m_oSeeds = new VatReturnSeeds();
+			m_oSeeds = new VatReturnSeeds(this);
 
 			if (!VatPeriod())
 				return null;

@@ -37,7 +37,7 @@ namespace Ezbob.HmrcHarvester {
 				return null;
 			} // if
 
-			var seeds = new VatReturnSeeds();
+			var seeds = new VatReturnSeeds(this);
 
 			if (!VatPeriod(oDivs[0], seeds))
 				return null;
