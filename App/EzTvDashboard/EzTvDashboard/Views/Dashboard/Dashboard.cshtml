@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="col-md-1">
-            <h3 style="padding: 0;margin: -10px 0 0 0;">Lottery</h3>
+            <h3 style="padding: 0; margin: -10px 0 0 0;">Lottery</h3>
             <table class="table">
                 <thead>
                     <tr>
@@ -73,10 +73,10 @@
                 <tbody>
                     @foreach (var el in Model.Lottery)
                     {
-                        <tr class="@el.Css"> 
+                        <tr class="@el.Css">
                             <td>@if (el.Css == "total2")
                                 {
-                                    <i class="fa fa-trophy"></i>
+                                <i class="fa fa-trophy"></i>
                                 } @el.Name</td>
                             <td>@el.Value</td>
                         </tr>

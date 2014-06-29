@@ -20,8 +20,15 @@
 		[HttpGet]
 		public ActionResult Index()
 		{
-			_model = _modelBuilder.BuildModel();
+			_model = _modelBuilder.GetModel();
 			return View(_model);
+		}
+
+		[HttpGet]
+		public ActionResult Dashboard()
+		{
+			_model = _modelBuilder.GetModel();
+			return PartialView(_model);
 		}
 
 		[HttpGet]

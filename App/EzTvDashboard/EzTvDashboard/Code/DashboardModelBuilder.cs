@@ -17,6 +17,7 @@
 		private static int CashRequestsId { get; set; }
 		private static int LoanId { get; set; }
 		private static int BrokerId { get; set; }
+		private static DashboardModel DashboardModel{get;set;}
 		public DashboardModelBuilder()
 		{
 			Db = new SqlConnection();
@@ -58,11 +59,29 @@
 					BrokerId = val;
 				}
 			}
-			return isCustomerChanged || isCashRequestChanged || isLoanChanged || isBrokerChanged;
+
+			bool somethingChanged = isCustomerChanged || isCashRequestChanged || isLoanChanged || isBrokerChanged;
+			if (somethingChanged)
+			{
+				BuildModel();
+			}
+
+			return true;
+		}
+
+		public DashboardModel GetModel()
+		{
+			if (DashboardModel == null)
+			{
+				DashboardModel = BuildModel();
+			}
+
+			return DashboardModel;
 		}
 
 		public DashboardModel BuildModel()
 		{
+			
 			LastChecked = DateTime.UtcNow;
 			var model = new DashboardModel
 				{
