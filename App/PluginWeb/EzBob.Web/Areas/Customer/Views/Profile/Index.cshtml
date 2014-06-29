@@ -53,7 +53,7 @@
 						<li class="divider-vertical"></li>
 						<li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
 					}
-					@if (Model.Customer.CompanyInfo != null && Model.Customer.CompanyInfo.Directors.Any()) {
+					@if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CompanyInfo != null && Model.Customer.CompanyInfo.Directors.Any()) {
 						<li class="divider-vertical"></li>
 						<li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors">Company Directors</a></li>
 					}
@@ -329,6 +329,8 @@
 		EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
 		EzBob.Config.SessionTimeout = @currVals.SessionTimeout.Value;
 		EzBob.Config.CaptchaMode = '@currVals.CaptchaMode.Value';
+
+		EzBob.Config.EchoSignEnabledCustomer = @(currVals.EchoSignEnabledCustomer ? "true" : "false");
 
 		$(function() {
 			@{

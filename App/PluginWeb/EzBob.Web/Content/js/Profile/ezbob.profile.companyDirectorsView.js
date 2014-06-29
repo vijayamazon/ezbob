@@ -9,6 +9,9 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 	}, // initialize
 
 	onRender: function() {
+		if (!EzBob.Config.EchoSignEnabledCustomer)
+			return;
+
 		console.log('model is', this.model);
 	}, // onRender
 
