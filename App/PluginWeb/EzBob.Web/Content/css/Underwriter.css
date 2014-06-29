@@ -1466,6 +1466,11 @@ td a.edit-loan {
 }
 
 @media print {
+    body {
+        max-height: 600px;
+        background-color: white !important;
+    }
+
     body * {
         visibility: hidden;
     }
