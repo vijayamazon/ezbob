@@ -1811,6 +1811,11 @@ body {
     padding: 7px;
 }
 
+#signature-monitor .esign-send-another,
+#signature-monitor .esign-poll-status {
+	margin-left: 10px;
+}
+
 #signature-monitor .center { text-align: center; }
 
 #esigners-list-container .buttons input {

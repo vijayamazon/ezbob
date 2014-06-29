@@ -13,6 +13,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		'click .esign-poll-status': 'pollStatus',
 		'click .cancel-send': 'cancelSend',
 		'click .do-send': 'doSend',
+		'click .download-signed-document': 'downloadSignedDocument',
 	}, // events
 
 	pollStatus: function() {
@@ -149,7 +150,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	}, // cancelSend
 
 	toggleSigners: function() {
-		var nSignatureID = $(event.target).data('signature-id');
+		var nSignatureID = $(event.target).data('SignatureID');
 		this.$el.find('.signature' + nSignatureID).toggleClass('hide');
 	}, // toggleSigners
 
@@ -177,13 +178,13 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			var oSignatures = self.prepareSignatures(oResponse.signatures);
 
 			var oSignatureListOpts = self.getDataTableOpts(oSignatures, 'ID,Name,@Date,Status,HasDocument');
-			oSignatureListOpts.fnRowCallback = self.signatureListRowCallback;
+			oSignatureListOpts.fnRowCallback = _.bind(self.signatureListRowCallback, self);
 
 			self.SignaturesList = self.$el.find('#esignature-list').dataTable(oSignatureListOpts);
 			self.$el.find('#esignature-list_wrapper .dataTables_top_left')
 				.html('Sent documents ')
-				.append($('<button class=esign-send-another title="Send another document">+</button>'))
-				.append($('<button class=esign-poll-status title="Poll document status">Reload</button>').data('CustomerID', nCustomerID));
+				.append(self.fromTemplate('.esign-send-another'))
+				.append(self.fromTemplate('.esign-poll-status').data('CustomerID', nCustomerID));
 
 			var oSignersListOpts = self.getDataTableOpts(oResponse.signers, 'FirstName,LastName,Email');
 			oSignersListOpts.fnRowCallback = _.bind(self.signersListRowCallback, self);
@@ -203,6 +204,10 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 				UnBlockUi();
 		});
 	}, // reload
+
+	fromTemplate: function(sSelector) {
+		return this.$el.find('.templates').find(sSelector).clone(true);
+	}, // fromTemplate
 
 	signersListRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 		var oRow = $(oTR);
@@ -224,27 +229,26 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		oRow.find('.grid-item-IsSelected').empty().append(oSelected);
 	}, // signersListRowCallback
 
+	downloadSignedDocument: function() {
+		var nSignatureID = $(event.target).data('SignatureID');
+		window.open(window.gRootPath + 'Underwriter/Esignatures/Download?nEsignatureID=' + nSignatureID);
+	}, // downloadSignedDocument
+
 	signatureListRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 		var oRow = $(oTR);
 
 		if (oData.Type === 'signer')
 			oRow.addClass('hide signature' + oData.SignatureID);
 
-		if (oData.Type === 'signature') {
-			var oBtn = $('<button title="Toggle signers display" />')
-				.addClass('toggle-signers')
-				.data('signature-id', oData.SignatureID)
-				.text('*');
+		var oIDCell = oRow.find('.grid-item-ID').empty();
 
-			oRow.find('.grid-item-Name').empty().append(oBtn).append(oData.Name);
-		} // if
+		if (oData.Type === 'signature')
+			oIDCell.append(this.fromTemplate('.toggle-signers').data('SignatureID', oData.SignatureID));
 
-		if (oData.HasDocument) {
-			var sLink = window.gRootPath + 'Underwriter/Esignatures/Download?nEsignatureID=' + oData.SignatureID;
-			oRow.find('.grid-item-HasDocument').html('<a href="' + sLink + '" target=_blank title="Downloand the document.">Download</a>');
-		}
-		else
-			oRow.find('.grid-item-HasDocument').empty();
+		var oDownloadCell = oRow.find('.grid-item-HasDocument').empty();
+
+		if (oData.HasDocument)
+			oDownloadCell.append(this.fromTemplate('.download-signed-document').data('SignatureID', oData.SignatureID));
 	}, // signatureListRowCallback
 
 	prepareSignatures: function(oRawSignatures) {

@@ -4,7 +4,7 @@
 	<table id="esignature-list" class="table centered box">
 		<thead>
 			<tr>
-				<th>#</th>
+				<th></th>
 				<th>Document to sign</th>
 				<th>Sent on</th>
 				<th>Status</th>
@@ -49,7 +49,17 @@
 	<div class="center buttons">
 		<input type="checkbox" class="initially-checked document-type" data-template-id="1" id="esign-board-resolution"><label for="esign-board-resolution">Board resolution</label>
 		<input type="checkbox" class="initially-checked document-type" data-template-id="2" id="esign-personal-guarantee"><label for="esign-personal-guarantee">Personal guarantee</label>
-		<button class="do-send green">Send</button>
-		<button class="cancel-send gray">Cancel</button>
+		<button class="do-send btn btn-primary"><i class="fa fa-send-o"/> Send</button>
+		<button class="cancel-send btn btn-primary"><i class="fa fa-undo"/> Cancel</button>
 	</div>
+</div>
+
+<div class=templates style="display: none;">
+	<button class="esign-send-another btn btn-primary"><i class="fa fa-send-o" /> Send documents</button>
+
+	<button class="esign-poll-status btn btn-primary" title="Poll document status"><i class="fa fa-refresh"/> Reload</button>
+
+	<button class="download-signed-document btn btn-primary" title="Download signed document"><i class="fa fa-download" /> Download</button>
+
+	<button class="toggle-signers btn btn-primary" title="Show/hide signers"><i class="fa fa-navicon" /></button>
 </div>
