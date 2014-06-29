@@ -465,7 +465,7 @@
 			summary.Decisions = new DecisionsModel
 				{
 					TotalDecisionsCount = summary.DecisionHistory.Count,
-					TotalApprovedAmount = summary.DecisionHistory.Sum(dh => dh.ApprovedSum),
+					TotalApprovedAmount = summary.DecisionHistory.Where(dh => dh.Action == "Approve").Sum(dh => dh.ApprovedSum),
 					RejectsCount = summary.DecisionHistory.Count(dh => dh.Action == "Reject")
 				};
 			var lastApprove = summary.DecisionHistory.OrderByDescending(dh => dh.Date).FirstOrDefault(dh => dh.Action == "Approve");
