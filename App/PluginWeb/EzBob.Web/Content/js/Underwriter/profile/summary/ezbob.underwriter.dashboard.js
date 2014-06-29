@@ -21,12 +21,10 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.bindTo(this.mpsModel, "change sync", this.render, this);
         this.bindTo(this.loanModel, "change sync", this.render, this);
         this.bindTo(this.affordability, "change sync", this.render, this);
-        
+
         this.expCompany = [];
         this.journal = [];
         this.journalTable = null;
-        this.isCrm = false;
-        this.isDecisionHistory = false;
         return this;
     },
     serializeData: function () {
@@ -52,7 +50,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             affordability: this.affordability.toJSON()
         };
     },
-    rotateTable: function() {
+    rotateTable: function () {
         this.$el.find("#affordabilityTable").each(function () {
             var $this = $(this);
             var newrows = [];
@@ -69,7 +67,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                 $this.append(this);
             });
         });
-        
+
         this.$el.find("#affordabilityTable tr:first-child td").each(function () {
             $(this).replaceWith('<th>' + $(this).html() + '</th>');
         });
@@ -77,9 +75,9 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         $($("#affordabilityTable tr")[2]).addClass("green-row");
     },
     buildJournal: function () {
-        if (!this.isCrm && this.crmModel && this.crmModel.get("CustomerRelations")) {
-            this.isCrm = true;
-            
+        if (this.journalTable != null) this.journalTable.fnDestroy();
+        this.journal = [];
+        if (this.crmModel && this.crmModel.get("CustomerRelations")) {
             _.each(this.crmModel.get("CustomerRelations"), (function (_this) {
                 return function (crm) {
                     return _this.journal.push({
@@ -103,8 +101,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             })(this));
 
         }
-        if (!this.isDecisionHistory && this.model && this.model.get('DecisionHistory')) {
-            this.isDecisionHistory = true;
+        if (this.model && this.model.get('DecisionHistory')) {
             _.each(this.model.get('DecisionHistory'), (function (_this) {
                 return function (dh) {
                     return _this.journal.push({
@@ -128,8 +125,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             })(this));
         }
 
-        
-        if (this.journal.length > 0 && this.isCrm && this.isDecisionHistory) {
+        if (this.journal.length > 0 && this.model && this.crmModel) {
             this.journalTable = this.$el.find("#journalTable").dataTable({
                 aLengthMenu: [[-1, 10, 20, 50, 100], ['all', 10, 20, 50, 100]],
                 iDisplayLength: 20,
@@ -144,7 +140,9 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                         "aTargets": [1],
                         "sType": 'date'
                     }
-                ]
+                ],
+                bDestroy: true,
+                bDeferRender: true,
             });
             EzBob.DataTables.Helper.initCustomFiltering();
         }
@@ -173,7 +171,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
     },
     onRender: function () {
         var cc, cii, companyHistoryScores, consumerHistoryCIIs, consumerHistoryScores, directors, historyScoresSorted, i, properties;
-        
+
         this.$el.find('a[data-bug-type]').tooltip({
             title: 'Report bug'
         });
@@ -264,7 +262,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         }
         this.buildJournal();
         this.rotateTable();
-        
+
         this.$el.find('[data-toggle="tooltip"]').tooltip({
             'placement': 'bottom'
         });

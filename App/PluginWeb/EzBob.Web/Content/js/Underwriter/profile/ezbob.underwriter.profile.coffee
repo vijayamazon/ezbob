@@ -414,7 +414,8 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @marketPlaces.reset fullModel.get("MarketPlaces"), silent: true
             @marketPlaces.trigger "sync"
             
-            @affordability.set fullModel.get("Affordability"), silent: true
+            @affordability.customerId = id
+            @affordability.clear().set(fullModel.get("Affordability"), silent: true)
             @affordability.trigger "sync"
 
             @loanHistory.customerId = id

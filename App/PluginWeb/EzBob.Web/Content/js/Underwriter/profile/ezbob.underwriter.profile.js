@@ -459,6 +459,7 @@
       scrollTop();
       that = this;
       this.customerId = id;
+      console.log('customer id', id);
       fullModel = new EzBob.Underwriter.CustomerFullModel({
         customerId: id,
         history: (_ref = EzBob.parseDate(history)) != null ? _ref : {
@@ -493,16 +494,17 @@
           silent: true
         });
         _this.loanInfoModel.trigger("sync");
-        console.log('ff', fullModel.get("MarketPlaces"));
         _this.marketPlaces.customerId = id;
         _this.marketPlaces.history = history;
         _this.marketPlaces.reset(fullModel.get("MarketPlaces"), {
           silent: true
         });
         _this.marketPlaces.trigger("sync");
-        _this.affordability.set(fullModel.get("Affordability"), {
+        _this.affordability.customerId = id;
+        _this.affordability.clear().set(fullModel.get("Affordability"), {
           silent: true
         });
+        console.log('afff3', fullModel.get("Affordability"));
         _this.affordability.trigger("sync");
         _this.loanHistory.customerId = id;
         _this.loanHistoryView.idCustomer = id;
