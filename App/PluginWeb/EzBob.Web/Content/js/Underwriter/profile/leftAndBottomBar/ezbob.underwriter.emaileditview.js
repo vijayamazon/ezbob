@@ -60,6 +60,7 @@ EzBob.EmailEditView = Backbone.Marionette.ItemView.extend({
 		if (!this.validator.form())
 			return false;
 
+	    BlockUi();
 		var xhr = $.post(window.gRootPath + "Underwriter/EmailVerification/ChangeEmail", {
 			id: this.model.id,
 			email: this.ui.email.val()
@@ -76,6 +77,9 @@ EzBob.EmailEditView = Backbone.Marionette.ItemView.extend({
 			self.model.fetch();
 			self.close();
 		});
+	    xhr.complete(function() {
+	        UnBlockUi();
+	    });
 
 		return false;
 	}, // changeEmail
