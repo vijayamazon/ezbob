@@ -1708,6 +1708,10 @@
       <Project>{59FB16F3-4CCD-43E9-BBC4-5246E62AC70E}</Project>
       <Name>eBayServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EchoSign\EchoSignLib\EchoSignLib.csproj">
+      <Project>{BADDE16C-DC34-4A2A-8B08-DA0D0CAE6FEC}</Project>
+      <Name>EchoSignLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EKM\EKM.csproj">
       <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
       <Name>EKM</Name>

@@ -1072,6 +1072,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 			int zu;
 			int? nCustomerID = null;
 			bool bReady = false;
+			bool bPollStatus = false;
 
 			if (m_aryArgs.Length == 1)
 				bReady = true;
@@ -1079,13 +1080,17 @@ GeneratePassword broker-contact-email@example.com password-itself
 				nCustomerID = zu;
 				bReady = true;
 			}
+			else if ((m_aryArgs.Length == 3) && int.TryParse(m_aryArgs[1], out zu) && bool.TryParse(m_aryArgs[2], out bPollStatus)) {
+				nCustomerID = zu;
+				bReady = true;
+			}
 
 			if (!bReady) {
-				m_oLog.Msg("Usage: LoadEsignatures [<Customer ID>]");
+				m_oLog.Msg("Usage: LoadEsignatures [<Customer ID> [Poll Status (true/false)]]");
 				return;
 			} // if
 
-			var elar = m_oServiceClient.LoadEsignatures(nCustomerID);
+			var elar = m_oServiceClient.LoadEsignatures(nCustomerID, bPollStatus);
 
 			foreach (var e in elar.Data)
 				m_oLog.Msg("{0}", e);

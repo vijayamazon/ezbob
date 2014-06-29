@@ -2,11 +2,15 @@
 	using System;
 	using System.Globalization;
 	using System.Runtime.Serialization;
+	using Utils;
 
 	[DataContract]
-	public class Esigner {
+	public class Esigner : ITraversable {
 		[DataMember]
 		public long ID { get; set; }
+
+		[DataMember]
+		public int CustomerID { get; set; }
 
 		[DataMember]
 		public int DirectorID { get; set; }
@@ -28,6 +32,12 @@
 
 		[DataMember]
 		public DateTime? SignDate { get; set; }
+
+		[DataMember]
+		public bool IsDirector { get; set; }
+
+		[DataMember]
+		public bool IsShareholder { get; set; }
 
 		public override string ToString() {
 			return string.Format(

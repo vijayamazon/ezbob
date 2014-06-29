@@ -464,10 +464,13 @@
   <xs:element name="ArrayOfEsigner" nillable="true" type="tns:ArrayOfEsigner" />
   <xs:complexType name="Esigner">
     <xs:sequence>
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
       <xs:element minOccurs="0" name="DirectorID" type="xs:int" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ID" type="xs:long" />
+      <xs:element minOccurs="0" name="IsDirector" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsShareholder" type="xs:boolean" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SignDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />

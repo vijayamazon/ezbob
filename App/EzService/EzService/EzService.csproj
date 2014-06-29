@@ -139,6 +139,10 @@
       <Project>{7E526927-9849-4E6E-BBFF-D0D780F81A05}</Project>
       <Name>Strategies</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EchoSign\EchoSignLib\EchoSignLib.csproj">
+      <Project>{BADDE16C-DC34-4A2A-8B08-DA0D0CAE6FEC}</Project>
+      <Name>EchoSignLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\FraudChecker\FraudChecker.csproj">
       <Project>{EDC99346-E59D-44B7-BDD0-A08CD3D56941}</Project>
       <Name>FraudChecker</Name>

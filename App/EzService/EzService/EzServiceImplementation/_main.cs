@@ -146,6 +146,10 @@
 		} // ExecuteSync
 
 		private ActionMetaData ExecuteSync<T>(out T oInstance, int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
+			return ExecuteSync(out oInstance, nCustomerID, nUserID, null, args);
+		} // ExecuteSync
+
+		private ActionMetaData ExecuteSync<T>(out T oInstance, int? nCustomerID, int? nUserID, Action<T> oInitAction, params object[] args) where T : AStrategy {
 			ActionMetaData amd = null;
 
 			try {
@@ -182,11 +186,22 @@
 
 				oInstance = (T)oCreator.Invoke(oParams.ToArray());
 
-				Log.Debug(sStrategyType + " constructor complete, executing...");
+				if (oInstance == null)
+					throw new NullReferenceException("Failed to create an instance of " + sStrategyType);
+
+				if (oInitAction != null) {
+					Log.Debug(oInstance.Name + " instance created, invoking an initialisation action...");
+
+					oInitAction(oInstance);
+
+					Log.Debug(oInstance.Name + " initialisation action complete.");
+				} // if
+
+				Log.Debug(oInstance.Name + " instance is initialised, executing...");
 
 				oInstance.Execute();
 
-				Log.Debug("Executing " + sStrategyType + " complete in sync.");
+				Log.Debug("Executing " + oInstance.Name + " complete in sync.");
 
 				SaveActionStatus(amd, ActionStatus.Done);
 

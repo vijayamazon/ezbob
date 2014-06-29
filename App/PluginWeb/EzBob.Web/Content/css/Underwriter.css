@@ -1810,3 +1810,13 @@ body {
 .table > tfoot > tr > td {
     padding: 7px;
 }
+
+#signature-monitor .center { text-align: center; }
+
+#esigners-list-container .buttons input {
+	margin-top: -4px;
+}
+
+#esigners-list-container .buttons label { display: inline-block; margin: 0 20px 0 5px; }
+
+#esigners-list-container .buttons button { display: inline-block; margin-right: 20px; }

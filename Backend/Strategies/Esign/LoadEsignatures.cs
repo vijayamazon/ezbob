@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Esign {
+	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -9,9 +10,11 @@
 
 		#region constructor
 
-		public LoadEsignatures(int? nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadEsignatures(int? nCustomerID, bool bPollStatus, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_bPollStatus = bPollStatus;
 			Result = new SortedTable<int, long, Esignature>();
 			m_oSp = new LoadCustomerEsignatures(DB, Log) { CustomerID = nCustomerID, };
+			m_nCustomerID = nCustomerID;
 		} // constructor
 
 		#endregion constructor
@@ -27,7 +30,16 @@
 		#region method Execute
 
 		public override void Execute() {
+			if (m_bPollStatus)
+				new EsignProcessPending(m_nCustomerID, DB, Log).Execute();
+
 			Result = m_oSp.Load();
+
+			PotentialEsigners = DB.Fill<Esigner>(
+				"LoadPotentialEsigners",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", m_nCustomerID)
+			);
 		} // Execute
 
 		#endregion method Execute
@@ -38,11 +50,19 @@
 
 		#endregion property Result
 
+		#region property PotentialEsigners
+
+		public List<Esigner> PotentialEsigners { get; private set; }
+
+		#endregion property PotentialEsigners
+
 		#endregion public
 
 		#region private
 
 		private readonly LoadCustomerEsignatures m_oSp;
+		private readonly int? m_nCustomerID;
+		private readonly bool m_bPollStatus;
 
 		#endregion private
 	} // class LoadEsignatures

@@ -1103,6 +1103,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.Models.Esignature[] DataField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.Esigner[] PotentialSignersField;
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.Esignature[] Data {
             get {
@@ -1112,6 +1115,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.DataField, value) != true)) {
                     this.DataField = value;
                     this.RaisePropertyChanged("Data");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.Esigner[] PotentialSigners {
+            get {
+                return this.PotentialSignersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PotentialSignersField, value) != true)) {
+                    this.PotentialSignersField = value;
+                    this.RaisePropertyChanged("PotentialSigners");
                 }
             }
         }
@@ -2078,6 +2094,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateCurrencyRates();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
         ServiceClientProxy.EzServiceReference.CrmLookupsActionResult CrmLoadLookups();
         
@@ -2709,16 +2731,22 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EsignProcessPendingAsync(System.Nullable<int> nCustomerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadEsignatures", ReplyAction="http://tempuri.org/IEzService/LoadEsignaturesResponse")]
-        ServiceClientProxy.EzServiceReference.EsignatureListActionResult LoadEsignatures(System.Nullable<int> nCustomerID);
+        ServiceClientProxy.EzServiceReference.EsignatureListActionResult LoadEsignatures(System.Nullable<int> nCustomerID, bool bPollStatus);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadEsignatures", ReplyAction="http://tempuri.org/IEzService/LoadEsignaturesResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureListActionResult> LoadEsignaturesAsync(System.Nullable<int> nCustomerID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureListActionResult> LoadEsignaturesAsync(System.Nullable<int> nCustomerID, bool bPollStatus);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadEsignatureFile", ReplyAction="http://tempuri.org/IEzService/LoadEsignatureFileResponse")]
         ServiceClientProxy.EzServiceReference.EsignatureFileActionResult LoadEsignatureFile(long nEsignatureID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadEsignatureFile", ReplyAction="http://tempuri.org/IEzService/LoadEsignatureFileResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureFileActionResult> LoadEsignatureFileAsync(long nEsignatureID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EsignSend", ReplyAction="http://tempuri.org/IEzService/EsignSendResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult EsignSend(EchoSignLib.EchoSignEnvelope[] oPackage);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EsignSend", ReplyAction="http://tempuri.org/IEzService/EsignSendResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> EsignSendAsync(EchoSignLib.EchoSignEnvelope[] oPackage);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ExperianCompanyCheck", ReplyAction="http://tempuri.org/IEzService/ExperianCompanyCheckResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ExperianCompanyCheck(int customerId, bool forceCheck);
@@ -2851,12 +2879,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> XDaysDueAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateCurrencyRates();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -2884,6 +2906,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateCurrencyRates() {
+            return base.Channel.UpdateCurrencyRates();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync() {
+            return base.Channel.UpdateCurrencyRatesAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.CrmLookupsActionResult CrmLoadLookups() {
@@ -3726,12 +3756,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EsignProcessPendingAsync(nCustomerID);
         }
         
-        public ServiceClientProxy.EzServiceReference.EsignatureListActionResult LoadEsignatures(System.Nullable<int> nCustomerID) {
-            return base.Channel.LoadEsignatures(nCustomerID);
+        public ServiceClientProxy.EzServiceReference.EsignatureListActionResult LoadEsignatures(System.Nullable<int> nCustomerID, bool bPollStatus) {
+            return base.Channel.LoadEsignatures(nCustomerID, bPollStatus);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureListActionResult> LoadEsignaturesAsync(System.Nullable<int> nCustomerID) {
-            return base.Channel.LoadEsignaturesAsync(nCustomerID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureListActionResult> LoadEsignaturesAsync(System.Nullable<int> nCustomerID, bool bPollStatus) {
+            return base.Channel.LoadEsignaturesAsync(nCustomerID, bPollStatus);
         }
         
         public ServiceClientProxy.EzServiceReference.EsignatureFileActionResult LoadEsignatureFile(long nEsignatureID) {
@@ -3740,6 +3770,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureFileActionResult> LoadEsignatureFileAsync(long nEsignatureID) {
             return base.Channel.LoadEsignatureFileAsync(nEsignatureID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringActionResult EsignSend(EchoSignLib.EchoSignEnvelope[] oPackage) {
+            return base.Channel.EsignSend(oPackage);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> EsignSendAsync(EchoSignLib.EchoSignEnvelope[] oPackage) {
+            return base.Channel.EsignSendAsync(oPackage);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData ExperianCompanyCheck(int customerId, bool forceCheck) {
@@ -3916,14 +3954,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> XDaysDueAsync() {
             return base.Channel.XDaysDueAsync();
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateCurrencyRates() {
-            return base.Channel.UpdateCurrencyRates();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync() {
-            return base.Channel.UpdateCurrencyRatesAsync();
         }
     }
 }

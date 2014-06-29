@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using ActionResults;
+	using EchoSignLib;
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Models;
@@ -236,10 +237,13 @@
 		ActionMetaData EsignProcessPending(int? nCustomerID);
 
 		[OperationContract]
-		EsignatureListActionResult LoadEsignatures(int? nCustomerID);
+		EsignatureListActionResult LoadEsignatures(int? nCustomerID, bool bPollStatus);
 
 		[OperationContract]
 		EsignatureFileActionResult LoadEsignatureFile(long nEsignatureID);
+
+		[OperationContract]
+		StringActionResult EsignSend(EchoSignEnvelope[] oPackage);
 
 		#endregion Esign
 

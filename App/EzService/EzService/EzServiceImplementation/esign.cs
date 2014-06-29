@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System.Collections.Generic;
+	using EchoSignLib;
 	using EzBob.Backend.Strategies.Esign;
 	using Ezbob.Backend.Models;
 
@@ -14,10 +15,10 @@
 
 		#region method LoadEsignatures
 
-		public EsignatureListActionResult LoadEsignatures(int? nCustomerID) {
+		public EsignatureListActionResult LoadEsignatures(int? nCustomerID, bool bPollStatus) {
 			LoadEsignatures oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, null, nCustomerID);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, null, nCustomerID, bPollStatus);
 
 			List<Esignature> data = new List<Esignature>();
 
@@ -26,6 +27,7 @@
 			return new EsignatureListActionResult {
 				MetaData = oMetaData,
 				Data = data,
+				PotentialSigners = oInstance.PotentialEsigners,
 			};
 		} // LoadEsignatures
 
@@ -47,5 +49,20 @@
 		} // LoadEsignatureFile
 
 		#endregion method LoadEsignatureFile
+
+		#region method EsignSend
+
+		public StringActionResult EsignSend(EchoSignEnvelope[] oPackage) {
+			EsignSend oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, s => s.Package = oPackage);
+
+			return new StringActionResult {
+				MetaData = oMetaData,
+				Value = oInstance.Result,
+			};
+		} // EsignSend
+
+		#endregion method EsignSend
 	} // class EzServiceImplementation
 } // namespace
