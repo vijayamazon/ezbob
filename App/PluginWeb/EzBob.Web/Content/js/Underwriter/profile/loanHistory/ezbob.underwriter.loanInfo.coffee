@@ -120,6 +120,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
 
     editOfferedCreditLine: ->
         that = this
+        @model.set('amount', @model.get('OfferedCreditLine'))
         view = new EzBob.Underwriter.CreditLineEditDialog(
             model: @model
         )
