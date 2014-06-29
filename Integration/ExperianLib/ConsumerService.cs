@@ -245,7 +245,7 @@
 				var sl = ObjectFactory.GetInstance<ServiceLogRepository>();
 				MP_ServiceLog oFirst = m_oRetryer.Retry(() => sl.GetFirst());
 				SaveDefaultAccountIntoDb(outputRoot, customerId, oFirst);
-				financialAccountsParser.Parse(oFirst.ResponseData, oFirst.Id, customerId);
+				financialAccountsParser.Parse(content, oFirst.Id, customerId);
 			} // if
 
 			return consumerServiceResult;
