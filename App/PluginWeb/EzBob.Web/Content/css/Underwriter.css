@@ -1229,6 +1229,7 @@ td a.edit-loan {
     font-weight: bold;
     color: black;
     background-color: #B6D1F2!important;
+    vertical-align: top;
 }
 
 .total2 {
