@@ -168,8 +168,9 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         
         EzBob.handleUserLayoutSetting()
 
-        @$el.find('.profile-tabs a[data-toggle="tab"]').on('shown.bs.tab', ((e) =>
+        @$el.find('.nav-list a[data-toggle="tab"]').on('shown.bs.tab', ((e) =>
             @setLastShownProfileSection $(e.target).attr('href').substr(1)
+
             if($(e.currentTarget).attr("href") is "#dashboard")
                 $(".inline-sparkline").sparkline("html",
                     width: "100%"
@@ -191,17 +192,15 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
     setState: (nCustomerID, sSection) ->
         @lastShownCustomerID = nCustomerID
-        #todo
+
         unless sSection
             @getLastShownProfileSection @$el.find('a.customer-tab:first').attr('href').substr(1)
     # end of setState
 
     restoreState: ->
-        @$el.find(
-            'a.customer-tab').filter('[href="#' +
+        @$el.find('a.customer-tab').filter('[href="#' +
             @getLastShownProfileSection(@$el.find('a.customer-tab:first').attr('href').substr(1)) +
-            '"]'
-        ).tab('show')
+        '"]').tab('show')
     # end of restoreState
 
     setLastShownProfileSection: (sSection) ->

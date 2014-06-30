@@ -19,43 +19,35 @@
 				grids: {
 					view: new EzBob.Underwriter.GridsView({ el: $('#grids-view') }),
 					isRendered: false,
-					menuItem: 'liApplications',
 				},
 				profile: {
 					view: new EzBob.Underwriter.ProfileView({ el: $('#profile-view') }),
 					isRendered: false,
-					menuItem: 'liApplications',
 				},
 				strategySettings: {
 					view: new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') }),
 					isRendered: false,
-					menuItem: 'liStrategySettings',
 				},
 				strategyAutomation: {
 					view: new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view') }),
 					isRendered: false,
-					menuItem: 'liAutomation',
 				},
 				support: {
 					view: new EzBob.Underwriter.SupportView({ el: $('#support-area') }),
 					isRendered: false,
-					menuItem: 'liSupport',
 				},
 				fraud: {
 					view: new EzBob.Underwriter.FraudView({ el: $('#fraud-area') }),
 					isRendered: false,
-					menuItem: 'liFraud',
 				},
 				report: {
-				    view: new EzBob.Underwriter.ReportView({ el: $('#report-view') }),
-				    isRendered: false,
-				    menuItem: 'liReports',
+					view: new EzBob.Underwriter.ReportView({ el: $('#report-view') }),
+					isRendered: false,
 				},
 				funding: {
-				    view: new EzBob.Underwriter.FundingView({ el: $('#funding-view') }),
-				    isRendered: false,
-				    menuItem: 'liFunding',
-				}
+					view: new EzBob.Underwriter.FundingView({ el: $('#funding-view') }),
+					isRendered: false,
+				},
 			}; // views
 		}, // initialize
 
@@ -71,14 +63,12 @@
 			'support': 'support',
 			'fraud': 'fraud',
 			'report': 'report',
-			'funding' : 'funding',
+			'funding': 'funding',
 			'*z': 'customers',
 		}, // routes
 
 		handleRoute: function(sViewName, id, type) {
 			var oView = this.views[sViewName];
-
-			this.switchMenuTo(oView.menuItem);
 
 			if (!oView.isRendered) {
 				oView.isRendered = true;
@@ -126,19 +116,14 @@
 		fraud: function() {
 			this.handleRoute('fraud');
 		}, // fraud
-		
-		report: function () {
-		    this.handleRoute('report');
+
+		report: function() {
+			this.handleRoute('report');
 		}, // fraud
 
-		funding: function () {
-		    this.handleRoute('funding');
+		funding: function() {
+			this.handleRoute('funding');
 		}, // funding
-
-		switchMenuTo: function(name) {
-			$('.navbar ul.nav > li[id]').removeClass('active');
-			$('#' + name).addClass('active');
-		}, // switchMenuTo
 
 		hideAll: function() {
 			for (var i in this.views)

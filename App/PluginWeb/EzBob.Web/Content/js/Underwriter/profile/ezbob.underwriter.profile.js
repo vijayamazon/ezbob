@@ -171,7 +171,7 @@
       });
       this.showed = true;
       EzBob.handleUserLayoutSetting();
-      this.$el.find('.profile-tabs a[data-toggle="tab"]').on('shown.bs.tab', (function(e) {
+      this.$el.find('.nav-list a[data-toggle="tab"]').on('shown.bs.tab', (function(e) {
         _this.setLastShownProfileSection($(e.target).attr('href').substr(1));
         if ($(e.currentTarget).attr("href") === "#dashboard") {
           return $(".inline-sparkline").sparkline("html", {
@@ -357,6 +357,7 @@
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
+      $('.editOfferDiv').hide();
       if (this.loanInfoModel.get('InterestRate') <= 0) {
         EzBob.ShowMessage('Wrong Interest Rate value (' + this.loanInfoModel.get('InterestRate') + '), please enter the valid value (above zero)', 'Error');
         return false;
@@ -459,7 +460,6 @@
       scrollTop();
       that = this;
       this.customerId = id;
-      console.log('customer id', id);
       fullModel = new EzBob.Underwriter.CustomerFullModel({
         customerId: id,
         history: (_ref = EzBob.parseDate(history)) != null ? _ref : {
@@ -504,7 +504,6 @@
         _this.affordability.clear().set(fullModel.get("Affordability"), {
           silent: true
         });
-        console.log('afff3', fullModel.get("Affordability"));
         _this.affordability.trigger("sync");
         _this.loanHistory.customerId = id;
         _this.loanHistoryView.idCustomer = id;
