@@ -270,10 +270,8 @@
 			cr.UseSetupFee = enabled;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).UseSetupFee = {1}", id, enabled);
-
-			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
-			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
-			return Json(new { error = (string)null, id = id, status = enabled, setupFee = setupFee });
+			
+			return Json(new { error = (string)null });
 		}
 
 		[Transactional]
@@ -284,9 +282,7 @@
 			cr.UseBrokerSetupFee = enabled;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).UseBrokerSetupFee = {1}", id, enabled);
-			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
-			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
-			return Json(new { error = (string)null, id = id, status = enabled, setupFee = setupFee });
+			return Json(new { error = (string)null});
 		}
 
 		[Transactional]
@@ -304,9 +300,7 @@
 			}
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).ManualSetupFee percent: {1}", id, cr.ManualSetupFeePercent);
-			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
-			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
-			return Json(new { setupFee = setupFee });
+			return Json(new { });
 		}
 
 		[Transactional]
@@ -317,9 +311,7 @@
 			cr.ManualSetupFeeAmount = manualAmount.HasValue && manualAmount.Value > 0 ? manualAmount.Value : (int?)null;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
-			var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
-			var setupFee = calc.Calculate((decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum).Value);
-			return Json(new { setupFee = setupFee });
+			return Json(new { });
 		}
 
 		[HttpPost]

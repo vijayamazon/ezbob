@@ -83,6 +83,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
                 id: @model.get("CustomerId")
         )
         d.render()
+        d.on( "done", => @model.fetch() )
         return
 
     editStartingDate: ->
@@ -116,6 +117,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             required: true
         )
         d.render()
+        d.on( "done", => @model.fetch() )
         return
 
     editOfferedCreditLine: ->
@@ -145,6 +147,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             required: true
         )
         d.render()
+        d.on( "done", => @model.fetch() )
         return
 
     editDetails: ->
@@ -174,6 +177,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             required: false
         )
         d.render()
+        d.on( "done", => @model.fetch() )
         return
 
     editManualSetupFeePercent: ->
@@ -189,6 +193,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             required: false
         )
         d.render()
+        d.on( "done", => @model.fetch() )
         return
 
     runNewCreditLine: (e) ->
@@ -422,11 +427,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             if result.error
                 EzBob.App.trigger 'error', result.error
             else
-                @model.set(param, result.status)
-                
-            if (!isNaN(result.setupFee))
-                @model.set("SetupFee", result.setupFee)
-            
+                @model.fetch()
         ).always( ->
             UnBlockUi()
         )

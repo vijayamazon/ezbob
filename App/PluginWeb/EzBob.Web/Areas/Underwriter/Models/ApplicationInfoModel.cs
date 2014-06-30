@@ -25,6 +25,7 @@
 		public decimal? ManualSetupFeePercent { get; set; }
 
         public decimal SetupFee { get; set; }
+		public decimal SetupFeePercent { get; set; }
         public bool IsTest { get; set; }
 
 		public bool? IsOffline { get; set; }

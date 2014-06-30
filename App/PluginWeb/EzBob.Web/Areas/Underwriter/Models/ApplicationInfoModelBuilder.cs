@@ -83,7 +83,7 @@
 
 				var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
 				model.SetupFee = calc.Calculate(model.OfferedCreditLine);
-
+				model.SetupFeePercent = model.OfferedCreditLine == 0 ? 0 : model.SetupFee / model.OfferedCreditLine;
 				model.BorrowedAmount = customer.Loans.Where(x => x.CashRequest != null && x.CashRequest.Id == cr.Id).Sum(x => x.LoanAmount);
 
 				model.StartingFromDate = FormattingUtils.FormatDateToString(cr.OfferStart);
@@ -101,6 +101,8 @@
 
 				var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
 				model.Apr = apr;
+				model.Air = model.InterestRate*100*12 + model.RepaymentPerion == 0 ? 0
+					            : (12/(decimal) model.RepaymentPerion*model.SetupFeePercent*100);
 				model.RealCost = loanOffer.RealInterestCost;
 			}
 
