@@ -173,8 +173,10 @@
 
 		private void MakeSureDl97IsFilled(int customerId, MP_ExperianDataCache cachedEntry)
 		{
+			Log.DebugFormat("Making sure company accounts (DL97) is filled for customer {0}", customerId);
 			if (experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId) == null)
 			{
+				Log.DebugFormat("Company accounts (DL97) don't exist for customer {0}. Will fill it now", customerId);
 				// Customer doesn't have Dl97 entries - we should insert all the entries like the customer from the cache entry
 				foreach (ExperianDL97Accounts accountEntry in experianDL97AccountsRepository.GetAll().Where(x => x.CustomerId == cachedEntry.CustomerId))
 				{
