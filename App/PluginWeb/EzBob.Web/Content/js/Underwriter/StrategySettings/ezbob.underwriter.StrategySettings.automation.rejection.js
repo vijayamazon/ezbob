@@ -61,7 +61,11 @@
       RejectionCompanyScore: "input[name='RejectionCompanyScore']",
       RejectionExceptionMaxConsumerScoreForMpError: "input[name='RejectionExceptionMaxConsumerScoreForMpError']",
       RejectionExceptionMaxCompanyScoreForMpError: "input[name='RejectionExceptionMaxCompanyScoreForMpError']",
-      RejectionExceptionMaxCompanyScore: "input[name='RejectionExceptionMaxCompanyScore']"
+      RejectionExceptionMaxCompanyScore: "input[name='RejectionExceptionMaxCompanyScore']",
+      Reject_Defaults_CompanyScore: "input[name='Reject_Defaults_CompanyScore']",
+      Reject_Defaults_CompanyAccountsNum: "input[name='Reject_Defaults_CompanyAccountsNum']",
+      Reject_Defaults_CompanyMonthsNum: "input[name='Reject_Defaults_CompanyMonthsNum']",
+      Reject_Defaults_CompanyAmount: "input[name='Reject_Defaults_CompanyAmount']"
     };
 
     SettingsRejectionView.prototype.events = {
@@ -207,6 +211,22 @@
             min: 0
           },
           RejectionExceptionMaxCompanyScore: {
+            required: true,
+            min: 0
+          },
+          Reject_Defaults_CompanyScore: {
+            required: true,
+            min: 0
+          },
+          Reject_Defaults_CompanyAccountsNum: {
+            required: true,
+            min: 0
+          },
+          Reject_Defaults_CompanyMonthsNum: {
+            required: true,
+            min: 0
+          },
+          Reject_Defaults_CompanyAmount: {
             required: true,
             min: 0
           }

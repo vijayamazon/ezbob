@@ -291,6 +291,11 @@
 			var rejectionExceptionMaxCompanyScoreForMpError = CurrentValues.Instance.RejectionExceptionMaxCompanyScoreForMpError;
 			var rejectionExceptionMaxCompanyScore = CurrentValues.Instance.RejectionExceptionMaxCompanyScore;
 
+			var reject_Defaults_CompanyScore = CurrentValues.Instance.Reject_Defaults_CompanyScore;
+			var reject_Defaults_CompanyAccountsNum = CurrentValues.Instance.Reject_Defaults_CompanyAccountsNum;
+			var reject_Defaults_CompanyMonthsNum = CurrentValues.Instance.Reject_Defaults_CompanyMonthsNum;
+			var reject_Defaults_CompanyAmount = CurrentValues.Instance.Reject_Defaults_CompanyAmount;
+
 			var sr = new
 				{
 					EnableAutomaticRejection = enableAutomaticRejection.Value,
@@ -335,6 +340,14 @@
 					RejectionExceptionMaxCompanyScoreForMpErrorDesc = rejectionExceptionMaxCompanyScoreForMpError.Description,
 					RejectionExceptionMaxCompanyScore = rejectionExceptionMaxCompanyScore.Value,
 					RejectionExceptionMaxCompanyScoreDesc = rejectionExceptionMaxCompanyScore.Description,
+					Reject_Defaults_CompanyScore = reject_Defaults_CompanyScore.Value,
+					Reject_Defaults_CompanyScoreDesc = reject_Defaults_CompanyScore.Description,
+					Reject_Defaults_CompanyAccountsNum = reject_Defaults_CompanyAccountsNum.Value,
+					Reject_Defaults_CompanyAccountsNumDesc = reject_Defaults_CompanyAccountsNum.Description,
+					Reject_Defaults_CompanyMonthsNum = reject_Defaults_CompanyMonthsNum.Value,
+					Reject_Defaults_CompanyMonthsNumDesc = reject_Defaults_CompanyMonthsNum.Description,
+					Reject_Defaults_CompanyAmount = reject_Defaults_CompanyAmount.Value,
+					Reject_Defaults_CompanyAmountDesc = reject_Defaults_CompanyAmount.Description,
 				};
 			return Json(sr, JsonRequestBehavior.AllowGet);
 		}
@@ -363,7 +376,11 @@
 			string RejectionCompanyScore,
 			string RejectionExceptionMaxConsumerScoreForMpError,
 			string RejectionExceptionMaxCompanyScoreForMpError,
-			string RejectionExceptionMaxCompanyScore
+			string RejectionExceptionMaxCompanyScore,
+			string Reject_Defaults_CompanyScore,
+			string Reject_Defaults_CompanyAccountsNum,
+			string Reject_Defaults_CompanyMonthsNum,
+			string Reject_Defaults_CompanyAmount
 		) {
 			var upd = new SortedDictionary<Variables, string>();
 
@@ -388,6 +405,10 @@
 			upd[Variables.RejectionExceptionMaxConsumerScoreForMpError] = RejectionExceptionMaxConsumerScoreForMpError;
 			upd[Variables.RejectionExceptionMaxCompanyScoreForMpError] = RejectionExceptionMaxCompanyScoreForMpError;
 			upd[Variables.RejectionExceptionMaxCompanyScore] = RejectionExceptionMaxCompanyScore;
+			upd[Variables.Reject_Defaults_CompanyScore] = Reject_Defaults_CompanyScore;
+			upd[Variables.Reject_Defaults_CompanyAccountsNum] = Reject_Defaults_CompanyAccountsNum;
+			upd[Variables.Reject_Defaults_CompanyMonthsNum] = Reject_Defaults_CompanyMonthsNum;
+			upd[Variables.Reject_Defaults_CompanyAmount] = Reject_Defaults_CompanyAmount;
 
 			CurrentValues.Instance.Update(upd);
 
