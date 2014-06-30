@@ -26,12 +26,12 @@
             </div>
 
             @EzForm.DateInputUnderwriter("ExperiedDate", "Rollover Expiry Date", true, new[] { DateTime.Now, DateTime.Now.AddYears(1), DateTime.Now.AddDays(3) })
-            @EzForm.InputTextUnderwriter("MounthCount", "Amount of Months to Move", "1", "", false)
-            @EzForm.InputTextUnderwriter("Payment", "Rollover Amount", "", "", true)
+            @EzForm.InputTextUnderwriter(this, "MounthCount", "Amount of Months to Move", "1", "", false)
+            @EzForm.InputTextUnderwriter(this, "Payment", "Rollover Amount", "", "", true)
 
-            @EzForm.InputTextUnderwriter("rolloverFees", "Rollover fee", "<%-model.configValues.rolloverCharge%>", "", true)
-            @EzForm.InputTextUnderwriter("interest", "Interest", "", "", true)
-            @EzForm.InputTextUnderwriter("lateFees", "Late fees", "", "", true)
+            @EzForm.InputTextUnderwriter(this, "rolloverFees", "Rollover fee", "<%-model.configValues.rolloverCharge%>", "", true)
+            @EzForm.InputTextUnderwriter(this, "interest", "Interest", "", "", true)
+            @EzForm.InputTextUnderwriter(this, "lateFees", "Late fees", "", "", true)
         </form>
     </div>
 

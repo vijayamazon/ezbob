@@ -96,6 +96,7 @@
     <Compile Include="PricingModel\GetPricingModelScenarios.cs" />
     <Compile Include="ScoreCalculation\ScoreResult.cs" />
     <Compile Include="ScoreCalculation\NewMedalScoreCalculator.cs" />
+    <Compile Include="StoredProcs\GetCustomerAddresses.cs" />
     <Compile Include="VatReturn\AndRecalculateVatReturnSummaryForAll.cs" />
     <Compile Include="AStrategy.cs" />
     <Compile Include="Misc\AmlChecker.cs" />

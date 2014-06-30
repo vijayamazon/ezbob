@@ -1,187 +1,235 @@
-﻿namespace EzBob.Backend.Strategies.Misc
-{
+﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using ConfigManager;
 	using ExperianLib.IdIdentityHub;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using StoredProcs;
 
-	public class AmlChecker : AStrategy
-	{
-		private readonly IdHubService idHubService = new IdHubService();
-		private int timeAtAddress;
-		private string line1Current;
-		private string line2Current;
-		private string line3Current;
-		private string line4Current;
-		private string line6Current;
-		private string line1Prev;
-		private string line2Prev;
-		private string line3Prev;
-		private string line4Prev;
-		private string line6Prev;
-		private string firstName;
-		private string surname;
-		private string gender;
-		private DateTime dateOfBirth;
-		private readonly bool isCustom;
-		private readonly int customerId;
-		private readonly string idhubHouseNumber;
-		private readonly string idhubHouseName;
-		private readonly string idhubStreet;
-		private readonly string idhubDistrict;
-		private readonly string idhubTown;
-		private readonly string idhubCounty;
-		private readonly string idhubPostCode;
+	public class AmlChecker : AStrategy {
+		#region public
 
-		private readonly Dictionary<string, bool> warningRules = new Dictionary<string, bool>
-			{
-				{"U001", false},
-				{"U004", false},
-				{"U007", false},
-				{"U013", false},
-				{"U015", false},
-				{"U131", false},
-				{"U133", false},
-				{"U135", false},
-				{"U018", false},
-				{"U0132", false},
-				{"U0134", false}
-			};
+		#region constructor
 
-		public AmlChecker(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
-			this.customerId = customerId;
+		public AmlChecker(int customerId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+			m_nCustomerID = customerId;
 			GetPersonalInfo();
-			GetAddresses();
-		}
+			m_oCustomerAddress = new GetCustomerAddresses(m_nCustomerID, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
+		} // constructor
 
-		public AmlChecker(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, 
-			string idhubCounty, string idhubPostCode, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
-			isCustom = true;
-			this.customerId = customerId;
+		public AmlChecker(
+			int customerId,
+			string idhubHouseNumber,
+			string idhubHouseName,
+			string idhubStreet,
+			string idhubDistrict,
+			string idhubTown,
+			string idhubCounty,
+			string idhubPostCode,
+			AConnection oDb,
+			ASafeLog oLog
+		) : base(oDb, oLog) {
+			m_bIsCustom = true;
+			m_nCustomerID = customerId;
 			GetPersonalInfo();
 
-			this.idhubHouseNumber = idhubHouseNumber;
-			this.idhubHouseName = idhubHouseName;
-			this.idhubStreet = idhubStreet;
-			this.idhubDistrict = idhubDistrict;
-			this.idhubTown = idhubTown;
-			this.idhubCounty = idhubCounty;
-			this.idhubPostCode = idhubPostCode;
-		}
-		
-		public override string Name
-		{
+			m_sIdhubHouseNumber = idhubHouseNumber;
+			m_sIdhubHouseName = idhubHouseName;
+			m_sIdhubStreet = idhubStreet;
+			m_sIdhubDistrict = idhubDistrict;
+			m_sIdhubTown = idhubTown;
+			m_sIdhubCounty = idhubCounty;
+			m_sIdhubPostCode = idhubPostCode;
+		} // constructor
+
+		#endregion constructor
+
+		#region property Name
+
+		public override string Name {
 			get { return "AML check"; }
 		} // Name
 
-		public override void Execute()
-		{
+		#endregion property Name
+
+		#region method Execute
+
+		public override void Execute() {
 			string result;
 			decimal authentication;
-			bool hasError = isCustom ? GetAmlDataCustom(out result, out authentication) : GetAmlData(out result, out authentication);
 
+			bool hasError = m_bIsCustom
+				? GetAmlDataCustom(out result, out authentication)
+				: GetAmlData(out result, out authentication);
+			
 			if (hasError || authentication < CurrentValues.Instance.MinAuthenticationIndexToPassAml)
-			{
 				result = "Warning";
-			}
 
 			DB.ExecuteNonQuery("UpdateAmlResult", CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("AmlResult", result));
-		}
+				new QueryParameter("CustomerId", m_nCustomerID),
+				new QueryParameter("AmlResult", result)
+			);
+		} // Execute
 
-		private bool GetAmlData(out string result, out decimal authentication)
-		{
-			Log.Info("Starting aml check with params: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} Line1={4} Line2={5} Line3={6} Line4={7} Line6={8} PrevLine1={9} PrevLine2={10} PrevLine3={11} PrevLine4={12} PrevLine6={13}",
-				firstName, surname, gender, dateOfBirth, line1Current, line2Current, line3Current, line4Current, line6Current,
-				line1Prev, line2Prev, line3Prev, line4Prev, line6Prev);
-			bool hasError = GetAml(line1Current, line2Current, line3Current, line4Current, line6Current, out result, out authentication);
+		#endregion method Execute
 
-			if (hasError && timeAtAddress == 1 && line6Prev != null)
-			{
-				hasError = GetAml(line1Prev, line2Prev, line3Prev, line4Prev, line6Prev, out result, out authentication);
-			}
+		#endregion public
+
+		#region private
+
+		#region method GetAmlData
+
+		private bool GetAmlData(out string result, out decimal authentication) {
+			Log.Info("Starting standard AML check with parameters: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} {4}",
+				m_sFirstName, m_sLastName, m_sGender, m_oDateOfBirth, m_oCustomerAddress
+			);
+
+			bool hasError = GetAml(AddressCurrency.Current, out result, out authentication);
+
+			if (hasError && (m_nTimeAtAddress == 1) && !string.IsNullOrWhiteSpace(m_oCustomerAddress[6, AddressCurrency.Previous]))
+				hasError = GetAml(AddressCurrency.Previous, out result, out authentication);
 
 			return hasError;
-		}
+		} // GetAmlData
 
-		private bool GetAmlDataCustom(out string result, out decimal authentication)
-		{
-			Log.Info("Starting custom aml check with params: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} idhubHouseNumber={4} idhubHouseName={5} idhubStreet={6} idhubDistrict={7} idhubTown={8} idhubCounty={9} idhubPostCode={10}",
-				firstName, surname, gender, dateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
-				idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
-			AuthenticationResults authenticationResults = idHubService.AuthenticateForcedWithCustomAddress(
-				firstName, null, surname, gender, dateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
-				idhubDistrict, idhubTown, idhubCounty, idhubPostCode, customerId);
+		#endregion method GetAmlData
+
+		#region method GetAmlDataCustom
+
+		private bool GetAmlDataCustom(out string result, out decimal authentication) {
+			Log.Info(
+				"Starting custom AML check with parameters: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} idhubHouseNumber={4} idhubHouseName={5} idhubStreet={6} idhubDistrict={7} idhubTown={8} idhubCounty={9} idhubPostCode={10}",
+				m_sFirstName,
+				m_sLastName,
+				m_sGender,
+				m_oDateOfBirth,
+				m_sIdhubHouseNumber,
+				m_sIdhubHouseName,
+				m_sIdhubStreet,
+				m_sIdhubDistrict,
+				m_sIdhubTown,
+				m_sIdhubCounty,
+				m_sIdhubPostCode
+			);
+
+			AuthenticationResults authenticationResults = m_oIdHubService.AuthenticateForcedWithCustomAddress(
+				m_sFirstName,
+				null,
+				m_sLastName,
+				m_sGender,
+				m_oDateOfBirth,
+				m_sIdhubHouseNumber,
+				m_sIdhubHouseName,
+				m_sIdhubStreet,
+				m_sIdhubDistrict,
+				m_sIdhubTown,
+				m_sIdhubCounty,
+				m_sIdhubPostCode,
+				m_nCustomerID
+			);
+
 			return CreateAmlResultFromAuthenticationReuslts(authenticationResults, out result, out authentication);
-		}
+		} // GetAmlDataCustom
 
-		private bool GetAml(string line1, string line2, string line3, string line4, string line6, out string result, out decimal authentication)
-		{
-			AuthenticationResults authenticationResults = idHubService.Authenticate(
-				firstName, null, surname, gender, dateOfBirth,
-				line1, line2, line3, line4, null, line6, customerId);
+		#endregion method GetAmlDataCustom
+
+		#region method GetAml
+
+		private bool GetAml(AddressCurrency nCurrency, out string result, out decimal authentication) {
+			AuthenticationResults authenticationResults = m_oIdHubService.Authenticate(
+				m_sFirstName,
+				null,
+				m_sLastName,
+				m_sGender,
+				m_oDateOfBirth,
+				m_oCustomerAddress[1, nCurrency],
+				m_oCustomerAddress[2, nCurrency],
+				m_oCustomerAddress[3, nCurrency],
+				m_oCustomerAddress[4, nCurrency],
+				null,
+				m_oCustomerAddress[6, nCurrency],
+				m_nCustomerID
+			);
 
 			return CreateAmlResultFromAuthenticationReuslts(authenticationResults, out result, out authentication);
-		}
+		} // GetAml
 
-		private bool CreateAmlResultFromAuthenticationReuslts(AuthenticationResults results, out string result, out decimal authentication)
-		{
-			if (results.HasError)
-			{
-				Log.Info("Error getting aml data. error:{0}", results.Error);
+		#endregion method GetAml
+
+		#region method CreateAmlResultFromAuthenticationReuslts
+
+		private bool CreateAmlResultFromAuthenticationReuslts(AuthenticationResults results, out string result, out decimal authentication) {
+			if (results.HasError) {
+				Log.Info("Error getting AML data: {0}", results.Error);
 				result = string.Empty;
 				authentication = 0;
 				return true;
-			}
+			} // if
 
 			authentication = results.AuthenticationIndexType;
 			result = "Passed";
 
-			foreach (var returnedHrp in results.ReturnedHRP)
-			{
-				if (warningRules.ContainsKey(returnedHrp.HighRiskPolRuleID))
-				{
+			foreach (var returnedHrp in results.ReturnedHRP) {
+				if (m_oWarningRules.Contains(returnedHrp.HighRiskPolRuleID)) {
 					result = "Warning";
-				}
-			} // foreach
+					break;
+				} // if
+			} // for each
 
 			return false;
 		} // CreateAmlResultFromAuthenticationReuslts
 
-		private void GetAddresses()
-		{
-			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var addressesResults = new SafeReader(dt.Rows[0]);
-			line1Current = addressesResults["Line1"];
-			line2Current = addressesResults["Line2"];
-			line3Current = addressesResults["Line3"];
-			line4Current = addressesResults["Line4"];
-			line6Current = addressesResults["Line6"];
-			line1Prev = addressesResults["Line1Prev"];
-			line2Prev = addressesResults["Line2Prev"];
-			line3Prev = addressesResults["Line3Prev"];
-			line4Prev = addressesResults["Line4Prev"];
-			line6Prev = addressesResults["Line6Prev"];
-		}
+		#endregion method CreateAmlResultFromAuthenticationReuslts
 
-		private void GetPersonalInfo()
-		{
-			DataTable dt = DB.ExecuteReader("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var results = new SafeReader(dt.Rows[0]);
+		#region method GetPersonalInfo
 
-			firstName = results["FirstName"];
-			surname = results["Surname"];
-			gender = results["Gender"];
-			dateOfBirth = results["DateOfBirth"];
-			timeAtAddress = results["TimeAtAddress"];
-		}
-	}
-}
+		private void GetPersonalInfo() {
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					m_sFirstName = sr["FirstName"];
+					m_sLastName = sr["Surname"];
+					m_sGender = sr["Gender"];
+					m_oDateOfBirth = sr["DateOfBirth"];
+					m_nTimeAtAddress = sr["TimeAtAddress"];
+					return ActionResult.SkipAll;
+				},
+				"GetPersonalInfo",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", m_nCustomerID)
+			);
+		} // GetPersonalInfo
+
+		#endregion method GetPersonalInfo
+
+		#region fields
+
+		private readonly IdHubService m_oIdHubService = new IdHubService();
+		private int m_nTimeAtAddress;
+
+		private readonly GetCustomerAddresses.ResultRow m_oCustomerAddress;
+
+		private string m_sFirstName;
+		private string m_sLastName;
+		private string m_sGender;
+		private DateTime m_oDateOfBirth;
+		private readonly bool m_bIsCustom;
+		private readonly int m_nCustomerID;
+
+		private readonly string m_sIdhubHouseNumber;
+		private readonly string m_sIdhubHouseName;
+		private readonly string m_sIdhubStreet;
+		private readonly string m_sIdhubDistrict;
+		private readonly string m_sIdhubTown;
+		private readonly string m_sIdhubCounty;
+		private readonly string m_sIdhubPostCode;
+
+		private readonly SortedSet<string> m_oWarningRules = new SortedSet<string> {
+			"U001", "U004", "U007", "U013", "U015", "U131", "U133", "U135", "U018", "U0132", "U0134",
+		};
+
+		#endregion fields
+
+		#endregion private
+	} // class AmlChecker
+} // namespace

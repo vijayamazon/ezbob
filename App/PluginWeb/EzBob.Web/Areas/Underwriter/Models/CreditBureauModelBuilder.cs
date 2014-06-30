@@ -742,6 +742,9 @@ using EZBob.DatabaseLib.Model.Experian;
 										  customer.Id, true);
 			if (null == result)
 				return;
+
+			Log.DebugFormat("AML data for building model: {0} - {1}", result.AuthenticationIndexType, result.AuthIndexText);
+
 			data.AuthIndexText = result.AuthIndexText;
 			data.AuthenticationIndexType = result.AuthenticationIndexType;
 			data.NumPrimDataItems = result.NumPrimDataItems;

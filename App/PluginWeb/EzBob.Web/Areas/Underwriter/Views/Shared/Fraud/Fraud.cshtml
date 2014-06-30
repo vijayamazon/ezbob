@@ -59,8 +59,8 @@
     <div class="modal-body">
         <form class="form-horizontal fraud-form" action="/" method="post">
             <b>Fraud name</b>
-            @EzForm.InputTextUnderwriter("FirstName", "First Name", "")
-            @EzForm.InputTextUnderwriter("LastName", "Last Name", "")
+            @EzForm.InputTextUnderwriter(this, "FirstName", "First Name", "")
+            @EzForm.InputTextUnderwriter(this, "LastName", "Last Name", "")
             <hr />
 
             <b>Fraud Addresses </b><span>(Postcode, line1, Line2, Line3, Town, County)</span>
@@ -119,7 +119,7 @@
                 }
                 else
                 {
-                @EzForm.InputTextUnderwriter(val.Id, val.Caption, val.Value)
+                @EzForm.InputTextUnderwriter(this, val.Id, val.Caption, val.Value)
                 }
             }
         </form>

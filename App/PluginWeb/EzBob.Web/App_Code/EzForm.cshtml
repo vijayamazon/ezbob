@@ -85,27 +85,19 @@
     </div>
 }
 
-@helper InputTextUnderwriter(string id, string caption, string value, string cls = "", bool isDisabled = false)
+@helper InputTextUnderwriter(WebPageBase page, string id, string caption, string value, string cls = "", bool isDisabled = false)
 {
-    
-    var identificator = new HtmlString(id);
-    var val = new HtmlString(value);
-    <div class="form-group">
-        <label for="@identificator" class="control-label">@(new HtmlString(caption))</label>
-        <div class="controls">
-            <input 
-                id="@identificator" 
-                name="@identificator" 
-                type="text" 
-                value="@val" 
-                class="@cls form-control" 
-                @if (isDisabled)
-                {
-                    @:disabled="disabled"
-                }  
-            />
-        </div>
-    </div>
+	var identificator = new HtmlString(id);
+
+	var sInput = string.Format(
+		"<input id=\"{0}\" name=\"{0}\" type=text value=\"{1}\" class=\"{2} form-control\" {3}>",
+		id, value, cls, isDisabled ? "disabled=disabled" : ""
+	);
+
+	<div class="form-group">
+		<label for="@identificator" class="control-label">@(new HtmlString(caption))</label>
+		<div class="controls">@{ page.WriteLiteral(sInput); }</div>
+	</div>
 }
 
 @helper Password(string id, string caption, string value = "", string cls = "", bool isDisabled = false, bool isRequired = true, bool statusIcon = false, string uiEventControlID = "")

@@ -829,16 +829,16 @@
                     <fieldset>
                         <legend>Set New Address and/or Bank Account</legend>
                         <div class="span4 form-horizontal">
-                            @EzForm.InputTextUnderwriter("idhub-addr-housenumber", "House Number *", "<%- customAddress.IdHubAddressHouseNumber %>")
-                            @EzForm.InputTextUnderwriter("idhub-addr-housename", "House Name *", "<%- customAddress.IdHubAddressHouseName %>")
-                            @EzForm.InputTextUnderwriter("idhub-addr-street", "Street (Mandatory)", "<%- customAddress.IdHubAddressStreet %>")
-                            @EzForm.InputTextUnderwriter("idhub-addr-district", "District (Optional)", "<%- customAddress.IdHubAddressDistrict %>")
-                            @EzForm.InputTextUnderwriter("idhub-addr-town", "Town (Mandatory)", "<%- customAddress.IdHubAddressTown %>")
-                            @EzForm.InputTextUnderwriter("idhub-addr-county", "County (Optional)", "<%- customAddress.IdHubAddressCounty %>")
-                            @EzForm.InputTextUnderwriter("idhub-addr-postcode", "Postcode (Mandatory)", "<%- customAddress.IdHubAddressPostcode %>")
+                            @EzForm.InputTextUnderwriter(this, "idhub-addr-housenumber", "House Number *", "<%- customAddress.IdHubAddressHouseNumber %>")
+                            @EzForm.InputTextUnderwriter(this, "idhub-addr-housename", "House Name *", "<%- customAddress.IdHubAddressHouseName %>")
+                            @EzForm.InputTextUnderwriter(this, "idhub-addr-street", "Street (Mandatory)", "<%- customAddress.IdHubAddressStreet %>")
+                            @EzForm.InputTextUnderwriter(this, "idhub-addr-district", "District (Optional)", "<%- customAddress.IdHubAddressDistrict %>")
+                            @EzForm.InputTextUnderwriter(this, "idhub-addr-town", "Town (Mandatory)", "<%- customAddress.IdHubAddressTown %>")
+                            @EzForm.InputTextUnderwriter(this, "idhub-addr-county", "County (Optional)", "<%- customAddress.IdHubAddressCounty %>")
+                            @EzForm.InputTextUnderwriter(this, "idhub-addr-postcode", "Postcode (Mandatory)", "<%- customAddress.IdHubAddressPostcode %>")
                             @InputTextSmallReadOnly("idhub-addr-country", "Country(Mandatory)", "<%- customAddress.IdHubAddressCountry %>")
-                            @EzForm.InputTextUnderwriter("idhub-bankaccount", "Bank Account", "<%- customAddress.BankAccount %>")
-                            @EzForm.InputTextUnderwriter("idhub-sortcode", "Sort Code", "<%- customAddress.SortCode%>")
+                            @EzForm.InputTextUnderwriter(this, "idhub-bankaccount", "Bank Account", "<%- customAddress.BankAccount %>")
+                            @EzForm.InputTextUnderwriter(this, "idhub-sortcode", "Sort Code", "<%- customAddress.SortCode%>")
                         </div>
                     </fieldset>
                 </td>

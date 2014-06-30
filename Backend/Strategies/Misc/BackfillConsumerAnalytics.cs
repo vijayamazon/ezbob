@@ -9,6 +9,7 @@
 	using Ezbob.Logger;
 	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
+	using StoredProcs;
 
 	public class BackfillConsumerAnalytics : AStrategy
 	{
@@ -44,8 +45,8 @@
 
 					Log.Debug("Backfilling customer consumer analytics for customer {0} and director '{1}'...", customerId, directorId);
 
-					var addressLines = new ExperianConsumerCheck.GetCustomerAddresses(customerId, DB, Log).FillFirst<ExperianConsumerCheck.GetCustomerAddresses.ResultRow>();
-					InputLocationDetailsMultiLineLocation location = addressLines.GetLocation(ExperianConsumerCheck.AddressCurrency.Current);
+					var addressLines = new GetCustomerAddresses(customerId, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
+					InputLocationDetailsMultiLineLocation location = addressLines.GetLocation(AddressCurrency.Current);
 
 					var consumerService = new ConsumerService();
 					ConsumerServiceResult consumerServiceResult = consumerService.GetConsumerInfo(

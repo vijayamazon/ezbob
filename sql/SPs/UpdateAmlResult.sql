@@ -1,18 +1,23 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UpdateAmlResult]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[UpdateAmlResult]
+IF OBJECT_ID('UpdateAmlResult') IS NULL
+	EXECUTE('CREATE PROCEDURE UpdateAmlResult AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[UpdateAmlResult] 
-	(@CustomerId INT,
-	 @AmlResult NVARCHAR(100))
+
+ALTER PROCEDURE UpdateAmlResult
+@CustomerId INT,
+@AmlResult NVARCHAR(100)
 AS
 BEGIN
-	UPDATE 
+	SET NOCOUNT ON;
+
+	UPDATE
 		Customer
-	SET 
+	SET
 		AMLResult = @AmlResult
 	WHERE
 		Id = @CustomerId
