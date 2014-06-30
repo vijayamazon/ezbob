@@ -1,7 +1,9 @@
 ﻿namespace ExperianLib
 {
 	using System;
+	using System.IO;
 	using System.Text;
+	using System.Xml;
 	using System.Xml.Linq;
 	using System.Xml.XPath;
 	using ApplicationMng.Repository;
@@ -9,6 +11,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
+	using Parser;
 	using StructureMap;
 	using log4net;
 	using EZBob.DatabaseLib.Model.Experian;
@@ -91,10 +94,12 @@
 						case ExperianServiceType.Consumer:
 							history.Score = GetScoreFromXml(logEntry.ResponseData);
 							history.CII = GetCIIFromXml(logEntry.ResponseData);
+							history.CaisBalance = GetConsumerCaisBalance(logEntry.ResponseData);
 							historyRepo.SaveOrUpdate(history);
 							break;
 						case ExperianServiceType.LimitedData:
 							history.Score = GetLimitedScoreFromXml(logEntry.ResponseData);
+							history.CaisBalance = GetLimitedCaisBalance(logEntry.ResponseData);
 							historyRepo.SaveOrUpdate(history);
 							break;
 						case ExperianServiceType.NonLimitedData:
@@ -114,7 +119,8 @@
 			} // try
 
 			return logEntry;
-		} // WriteLog
+		}
+
 
 		#endregion method WriteLog
 
@@ -140,7 +146,44 @@
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Utils));
 
-		private static int GetScoreFromXml(String xml)
+		public static decimal? GetConsumerCaisBalance(string xml)
+		{
+			var xmlDoc = new XmlDocument();
+
+			var stream = new MemoryStream();
+			var writer = new StreamWriter(stream);
+			writer.Write(xml.Replace("<?xml version=\"1.0\" encoding=\"utf-16\"?>", "<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+			writer.Flush();
+			stream.Position = 0;
+			xmlDoc.Load(stream);
+
+			XmlNodeList caisDetailsList = xmlDoc.SelectNodes("//CAISDetails");
+			if (caisDetailsList != null)
+			{
+
+				decimal balance = 0;
+
+				foreach (XmlElement currentCaisDetails in caisDetailsList)
+				{
+					try
+					{
+						FinancialAccount financialAccount = FinancialAccountsParser.HandleOneCaisDetailsBlock(currentCaisDetails);
+						if (financialAccount.AccountStatus != "Settled")
+						{
+							balance += financialAccount.Balance.HasValue ? financialAccount.Balance.Value : 0;
+						}
+					}
+					catch (Exception ex)
+					{
+
+					}
+				}
+				return balance;
+			}
+			return null;
+		}
+
+		public static int GetScoreFromXml(String xml)
 		{
 			try
 			{
@@ -154,7 +197,7 @@
 			}
 		}
 
-		private static int GetCIIFromXml(string xml)
+		public static int GetCIIFromXml(string xml)
 		{
 			try
 			{
@@ -168,12 +211,12 @@
 			}
 		}
 
-		private static int GetNonLimitedScoreFromXml(string xml)
+		public static int GetNonLimitedScoreFromXml(string xml)
 		{
 			try
 			{
 				var doc = XDocument.Parse(xml);
-				var score = doc.XPathSelectElement("//REQUEST/DN73/NLCDSCORE").Value;
+				var score = doc.XPathSelectElement("//REQUEST/DN40/RISKSCORE").Value;
 				return Convert.ToInt32(score);
 			}
 			catch (Exception ex)
@@ -183,7 +226,7 @@
 			}
 		}
 
-		private static int GetLimitedScoreFromXml(string xml)
+		public static int GetLimitedScoreFromXml(string xml)
 		{
 			try
 			{
@@ -196,6 +239,33 @@
 				Log.WarnFormat("Failed to retrieve limited score from xml {0}", ex);
 				return -1;
 			}
+		}
+
+		public static decimal? GetLimitedCaisBalance(string xml)
+		{
+			var xmlDoc = new XmlDocument();
+			xmlDoc.LoadXml(xml);
+			XmlNodeList dl97List = xmlDoc.SelectNodes("//DL97");
+
+			if (dl97List != null)
+			{
+				decimal balance = 0;
+				foreach (XmlElement dl97 in dl97List)
+				{
+					XmlNode stateNode = dl97.SelectSingleNode("ACCTSTATE");
+					XmlNode currentBalanceNode = dl97.SelectSingleNode("CURRBALANCE");
+					if (stateNode != null && stateNode.InnerText != "S")
+					{
+						int currBalance;
+						if (currentBalanceNode != null && int.TryParse(currentBalanceNode.InnerText, out currBalance))
+						{
+							balance += currBalance;
+						}
+					}
+				}
+				return balance;
+			}
+			return null;
 		}
 
 		#endregion private

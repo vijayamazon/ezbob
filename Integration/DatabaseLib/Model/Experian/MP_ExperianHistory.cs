@@ -19,6 +19,7 @@
 		public virtual long ServiceLogId { get; set; }
 		public virtual int Score { get; set; }
 		public virtual int? CII { get; set; }
+		public virtual decimal? CaisBalance { get; set; }
 	}
 
 	public sealed class MP_ExperianHistoryMap : ClassMap<MP_ExperianHistory>
@@ -31,6 +32,7 @@
 			Map(x => x.Date).CustomType<UtcDateTimeType>();
 			Map(x => x.Score);
 			Map(x => x.CII);
+			Map(x => x.CaisBalance);
 			Map(x => x.ServiceLogId);
 			References(x => x.Customer, "CustomerId");
 		}

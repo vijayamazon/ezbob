@@ -169,7 +169,7 @@
 			} // switch
 		}
 
-		private ComapanyDashboardModel BuildDashboardModel(ExperianParserOutput oResult)
+		public ComapanyDashboardModel BuildDashboardModel(ExperianParserOutput oResult)
 		{
 			switch (oResult.TypeOfBusinessReduced)
 			{

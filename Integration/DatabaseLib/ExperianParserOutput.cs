@@ -16,6 +16,10 @@
 		public string CompanyName { get; private set; } // CompanyName
 		public TypeOfBusinessReduced? TypeOfBusinessReduced { get; private set; } // TypeOfBusinessReduced
 		public int? MaxScore { get; private set; }
+		public ExperianParserOutput(Dictionary<string, ParsedData> dataset)
+		{
+			Dataset = dataset;
+		}
 		public ExperianParserOutput(
 			Dictionary<string, ParsedData> dataset,
 			ParsingResult parsingResult,

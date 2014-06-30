@@ -95,7 +95,7 @@
 			}
 		}
 
-		private DateTime? ReadDateFromNode(XmlNode node)
+		public static DateTime? ReadDateFromNode(XmlNode node)
 		{
 			if (node == null)
 			{
@@ -124,7 +124,7 @@
 			return new DateTime(year, month, day);
 		}
 
-		private int? ReadAmountFromNode(XmlNode node)
+		public static int? ReadAmountFromNode(XmlNode node)
 		{
 			if (node == null)
 			{
@@ -146,7 +146,7 @@
 			return null;
 		}
 
-		private FinancialAccount HandleOneCaisDetailsBlock(XmlElement currentCaisDetails)
+		public static FinancialAccount HandleOneCaisDetailsBlock(XmlElement currentCaisDetails)
 		{
 			var result = new FinancialAccount();
 
@@ -221,7 +221,7 @@
 			return result;
 		}
 
-		private string GetAccountStatusString(string status, out string dateType)
+		public static string GetAccountStatusString(string status, out string dateType)
 		{
 			switch (status)
 			{

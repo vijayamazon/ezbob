@@ -7,10 +7,12 @@
 	using System.IO;
 	using System.Linq;
 	using System.Text.RegularExpressions;
+	using System.Xml;
 	using System.Xml.Linq;
 	using System.Xml.Serialization;
 	using System.Xml.XPath;
 	using ConfigManager;
+	using EZBob.DatabaseLib;
 	using ExperianLib;
 	using ExperianLib.Dictionaries;
 	using ExperianLib.Ebusiness;
@@ -20,10 +22,13 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
+	using Ezbob.ExperianParser;
+	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Text;
+	using Web.Models;
 	using log4net;
 using EZBob.DatabaseLib.Model.Experian;
 
@@ -91,7 +96,7 @@ using EZBob.DatabaseLib.Model.Experian;
 				var response =
 					_session.Query<MP_ServiceLog>().FirstOrDefault(x => x.Id == logId.Value);
 				
-				if (response == null)
+				if (response == null || string.IsNullOrEmpty(response.ResponseData))
 				{
 					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} id: {1}", customer.Id, logId.Value);
 					result = null;
@@ -134,22 +139,37 @@ using EZBob.DatabaseLib.Model.Experian;
 					Date = x.Date.ToUniversalTime(),
 					Id = x.Id,
 					Score = x.Score,
-					CII = x.CII.HasValue ? x.CII.Value : -1
+					CII = x.CII.HasValue ? x.CII.Value : -1,
+					Balance = x.CaisBalance.HasValue ? x.CaisBalance.Value : -1
 				}).OrderByDescending(h => h.Date);
 			}
 			else
 			{
-				var checkConsumerHistoryModels = (from s in _session.Query<MP_ServiceLog>()
-												  where s.Director == null
-												  where s.Customer.Id == customer.Id
-												  where s.ServiceType == ExperianServiceType.Consumer.DescriptionAttr()
-												  select new CheckHistoryModel
-												  {
-													  Date = s.InsertDate.ToUniversalTime(),
-													  Id = s.Id,
-													  Score = GetScoreFromXml(s.ResponseData),
-													  CII = GetCIIFromXml(s.ResponseData)
-												  }).ToList();
+				var consumerResponses = (from s in _session.Query<MP_ServiceLog>()
+				                                  where s.Director == null
+				                                  where s.Customer.Id == customer.Id
+				                                  where s.ServiceType == ExperianServiceType.Consumer.DescriptionAttr()
+				                                  select new {Id = s.Id, InsertDate = s.InsertDate});
+				var checkConsumerHistoryModels = new List<CheckHistoryModel>();
+				foreach (var res in consumerResponses)
+				{
+					ConsumerServiceResult result;
+					GetConsumerInfo(customer, true, res.Id, null, out result);
+					var consumerModel = GenerateConsumerModel(customer.Id, result);
+					int cii = 0;
+					int.TryParse(consumerModel.CII, out cii);
+					decimal balance;
+					decimal.TryParse(consumerModel.ConsumerAccountsOverview.Balance_Total, out balance);
+					checkConsumerHistoryModels.Add(new CheckHistoryModel
+						{
+							Id = res.Id,
+							Score = (int) consumerModel.Score,
+							CII = cii,
+							Balance = balance,
+							Date = res.InsertDate
+						});
+				}
+
 				model.ConsumerHistory = checkConsumerHistoryModels.OrderByDescending(h => h.Date);
 
 				foreach (var cModel in checkConsumerHistoryModels)
@@ -161,7 +181,8 @@ using EZBob.DatabaseLib.Model.Experian;
 						Type = ExperianServiceType.Consumer.DescriptionAttr(),
 						Date = cModel.Date,
 						Score = cModel.Score,
-						CII = cModel.CII
+						CII = cModel.CII,
+						CaisBalance = cModel.Balance
 					});
 				}
 			}
@@ -176,6 +197,7 @@ using EZBob.DatabaseLib.Model.Experian;
 					Date = x.Date.ToUniversalTime(),
 					Id = x.Id,
 					Score = x.Score,
+					Balance = x.CaisBalance
 				}).OrderByDescending(h => h.Date);
 			}
 			else
@@ -185,11 +207,14 @@ using EZBob.DatabaseLib.Model.Experian;
 												 where s.Director == null
 												 where s.Customer.Id == customer.Id
 												 where s.ServiceType == type
-												 select new CheckHistoryModel
+												 select isLimited ? 
+												 GetLimitedHistory(s.ResponseData, s.InsertDate, s.Id) :
+												 new CheckHistoryModel
 												 {
 													 Date = s.InsertDate.ToUniversalTime(),
 													 Id = s.Id,
-													 Score = (isLimited ? GetLimitedScoreFromXml(s.ResponseData) : GetNonLimitedScoreFromXml(s.ResponseData))
+													 Score = GetNonLimitedScoreFromXml(s.ResponseData),
+													 Balance = (decimal?)null
 												 }).ToList();
 
 
@@ -206,6 +231,31 @@ using EZBob.DatabaseLib.Model.Experian;
 					});
 				}
 			}
+		}
+
+		private CheckHistoryModel GetLimitedHistory(string responseData, DateTime date, long id)
+		{
+			var model = new CheckHistoryModel{Date = date, Id = id};
+			var doc = new XmlDocument();
+
+			try
+			{
+				var parser = new Parser(
+				CurrentValues.Instance[Variables.CompanyScoreParserConfiguration],
+				new SafeILog(this)
+			);
+				doc.LoadXml(responseData);
+				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
+				var b = new CompanyScoreModelBuilder();
+				var m = b.BuildDashboardModel(new ExperianParserOutput(oParsed));
+				model.Balance = m.CaisBalance;
+				model.Score = m.Score;
+			}
+			catch (Exception e)
+			{
+				return null;
+			} // try
+			return model;
 		}
 
 		private void CreatePersonalDataModel(CreditBureauModel model, Customer customer)
@@ -992,7 +1042,7 @@ using EZBob.DatabaseLib.Model.Experian;
 			try
 			{
 				var doc = XDocument.Parse(xml);
-				var score = doc.XPathSelectElement("//REQUEST/DN73/NLCDSCORE").Value;
+				var score = doc.XPathSelectElement("//REQUEST/DN40/RISKSCORE").Value;
 				return Convert.ToInt32(score);
 			}
 			catch (Exception ex)
