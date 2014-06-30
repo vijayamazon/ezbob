@@ -262,9 +262,6 @@
 		DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
 
 		[OperationContract]
-		DecimalActionResult GetLatestInterestRate(int customerId, int underwriterId);
-
-		[OperationContract]
 		DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
 
 		[OperationContract]

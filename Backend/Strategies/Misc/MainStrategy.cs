@@ -293,6 +293,19 @@
 				new QueryParameter("OverrideApprovedRejected", m_bOverrideApprovedRejected)
 			);
 
+			decimal interestAccordingToPast = -1;
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) =>
+				{
+					interestAccordingToPast = sr["InterestRate"];
+					return ActionResult.SkipAll;
+				},
+				"GetLatestInterestRate",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("Today", DateTime.UtcNow.Date)
+			);
+
 			DB.ExecuteNonQuery(
 				"UpdateCashRequestsNew",
 				CommandSpecies.StoredProcedure,
@@ -304,7 +317,7 @@
 				new QueryParameter("ScorePoints", scoringResult),
 				new QueryParameter("ExpirianRating", experianConsumerScore),
 				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
-				new QueryParameter("InterestRate", loanInterestBase),
+				new QueryParameter("InterestRate", interestAccordingToPast == -1 ? loanInterestBase : interestAccordingToPast),
 				new QueryParameter("ManualSetupFeeAmount", manualSetupFeeAmount),
 				new QueryParameter("ManualSetupFeePercent", manualSetupFeePercent),
 				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod),

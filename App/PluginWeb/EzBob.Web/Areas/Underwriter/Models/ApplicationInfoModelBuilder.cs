@@ -12,11 +12,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
-	using Infrastructure;
 	using PaymentServices.Calculators;
-	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
-	using StructureMap;
 	using Web.Models;
 
 	public class ApplicationInfoModelBuilder
@@ -26,7 +22,6 @@
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private readonly ILoanSourceRepository _loanSources;
-		private readonly ServiceClient serviceClient;
 		private readonly VatReturnSummaryRepository _vatReturnSummaryRepository;
 		private readonly CustomerAnalyticsRepository _customerAnalyticsRepository;
 		private readonly LoanBuilder _loanBuilder;
@@ -48,7 +43,6 @@
 			_loanSources = loanSources;
 			_vatReturnSummaryRepository = vatReturnSummaryRepository;
 			_customerAnalyticsRepository = customerAnalyticsRepository;
-			serviceClient = new ServiceClient();
 			_loanBuilder = loanBuilder;
 			_aprCalc = aprCalc;
 		}
@@ -62,11 +56,8 @@
 			model.CustomerRefNum = customer.RefNumber;
 			if (cr != null)
 			{
-				var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-				DecimalActionResult result = serviceClient.Instance.GetLatestInterestRate(customer.Id, context.UserId);
-				model.InterestRate = result.Value == -1 ? cr.InterestRate : result.Value;
+				model.InterestRate = cr.InterestRate;
 				model.CashRequestId = cr.Id;
-
 				model.UseSetupFee = cr.UseSetupFee;
 				model.UseBrokerSetupFee = cr.UseBrokerSetupFee;
 				model.ManualSetupFeeAmount = cr.ManualSetupFeeAmount;

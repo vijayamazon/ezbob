@@ -11,9 +11,43 @@ BEGIN
 		@InterestRate DECIMAL(18,7),
 		@LoanId INT,
 		@MinInterestRateToReuse DECIMAL(18,7),
-		@TempInterestRate DECIMAL(18,7)
+		@TempInterestRate DECIMAL(18,7),
+		@CashRequestSystemDecistionDate DATETIME,
+		@CashRequestUnderwriterDecistionDate DATETIME,
+		@LoanDate DATETIME
 		
 	SET @InterestRate = -1	
+	
+	SELECT TOP 1 @CashRequestSystemDecistionDate = SystemDecisionDate, @CashRequestUnderwriterDecistionDate = UnderwriterDecisionDate, @InterestRate = InterestRate FROM CashRequests WHERE IdCustomer = @CustomerId AND (SystemDecisionDate IS NOT NULL OR UnderwriterDecisionDate IS NOT NULL) ORDER BY CreationDate DESC
+	SELECT @LoanDate = Max(Date) FROM Loan WHERE CustomerId = @CustomerId
+
+	IF @LoanDate IS NOT NULL
+	BEGIN
+		DECLARE @MaxDecisionDate DATETIME
+		
+		IF @CashRequestSystemDecistionDate IS NULL
+		BEGIN
+			SELECT @MaxDecisionDate = @CashRequestUnderwriterDecistionDate
+		END
+		ELSE IF @CashRequestUnderwriterDecistionDate IS NULL
+		BEGIN
+			SELECT @MaxDecisionDate = @CashRequestSystemDecistionDate
+		END
+		ELSE IF @CashRequestUnderwriterDecistionDate > @CashRequestSystemDecistionDate
+		BEGIN
+			SELECT @MaxDecisionDate = @CashRequestUnderwriterDecistionDate
+		END
+		ELSE
+		BEGIN
+			SELECT @MaxDecisionDate = @CashRequestSystemDecistionDate
+		END
+		
+		IF @MaxDecisionDate > @LoanDate
+		BEGIN
+			SELECT @InterestRate AS InterestRate
+			RETURN
+		END
+	END
 		
 	-- Cursor for active loans
 	DECLARE cur CURSOR FOR 

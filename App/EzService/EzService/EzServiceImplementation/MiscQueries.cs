@@ -209,19 +209,6 @@
 			};
 		}
 
-		public DecimalActionResult GetLatestInterestRate(int customerId, int underwriterId)
-		{
-			GetLatestInterestRate instance;
-
-			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
-
-			return new DecimalActionResult
-			{
-				MetaData = result,
-				Value = instance.LatestInterestRate
-			};
-		}
-
 		public DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId)
 		{
 			GetCompanySeniority instance;
