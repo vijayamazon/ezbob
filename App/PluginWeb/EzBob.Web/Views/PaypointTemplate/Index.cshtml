@@ -306,12 +306,22 @@
             });
 
             $('input[type="submit"]').click(function (e) {
+                if ($('#paypoint-submit').hasClass('disabled')) {
+                    return false;
+                }
+                $('#paypoint-submit').attr('disabled', 'disabled').addClass('disabled');
+
                 if (EzBob.Validation.checkForm(validator)) {
                     submitPaypointForm();
                 }
                 else {
                     validator.form();
                 }
+                
+                setTimeout(function () {
+                    $('#paypoint-submit').prop('disabled', false).removeClass('disabled');
+                }, 10000);
+                
                 return false;
             });
 
