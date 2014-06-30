@@ -85,7 +85,7 @@ BEGIN
 	SELECT @NumOfDefaultAccounts = NumOfDefaultAccounts FROM [GetNumOfDefaultAccounts] (@CustomerId, @Reject_Defaults_Months, @Reject_Defaults_Amount)
 		
 	SELECT @CompanyDefaultStartDate = DATEADD(MM, -@Reject_Defaults_CompanyMonths, GETUTCDATE())
-	SELECT @NumOfDefaultCompanyAccounts = COUNT(1) FROM ExperianDL97Accounts WHERE CustomerId = @CustomerId AND LastUpdated > @CompanyDefaultStartDate AND CurrentBalance >= @Reject_Defaults_CompanyAmount
+	SELECT @NumOfDefaultCompanyAccounts = COUNT(1) FROM ExperianDL97Accounts WHERE CustomerId = @CustomerId AND LastUpdated > @CompanyDefaultStartDate AND CurrentBalance >= @Reject_Defaults_CompanyAmount AND State = 'D'
 	 	 	
 	SELECT 
 		@ErrorMPsNum AS ErrorMPsNum, 
