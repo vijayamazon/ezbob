@@ -1112,6 +1112,12 @@ textarea.BusinessAddress {
     border-color: #00ab5d;
 }
 
+.alert-label {
+    background-color: #ECECEC;
+    border-color: #ECECEC;
+    color: #000000;
+}
+
 
 .pricing-model-double-input-width {
     width: 90px;
@@ -1831,4 +1837,36 @@ body {
 
 .editOfferDiv {
     margin-top: 10px;
+}
+
+
+.current-loan-main {
+    border-bottom: #ebebeb 1px solid;
+    font-size: 16px;
+}
+
+.current-loan-main .approved-loan {
+    background-color: #00A2E8;
+    white-space: nowrap;
+}
+
+.current-loan-main .took-loan {
+    background-color: #EBEBEB;
+    white-space: nowrap;
+}
+
+.current-loan-main .balance-loan {
+    background-color: #00AB5D;
+    white-space: nowrap;
+}
+
+
+.current-loan {
+    background-color: #ebebeb;
+}
+.loan-eu {
+    background-image: url(../css/images/eu.png);
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: contain;
 }

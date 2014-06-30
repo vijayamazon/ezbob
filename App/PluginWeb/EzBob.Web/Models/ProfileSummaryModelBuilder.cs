@@ -4,6 +4,8 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using Backend.Models;
+	using EZBob.DatabaseLib.Model.Loans;
 	using ExperianLib;
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib.Model.Database;
@@ -12,7 +14,9 @@
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
 	using Ezbob.Utils.Extensions;
+	using MoreLinq;
 	using NHibernate;
+	using Newtonsoft.Json;
 	using StructureMap;
 	using log4net;
 
@@ -417,6 +421,62 @@
 			var activeCount = customer.Loans.Count(l => !l.DateClosed.HasValue);
 			var earnedInterest = customer.Loans.Sum(l => l.InterestPaid);
 
+			var activeLoans = new List<ActiveLoan>();
+			int i = 0;
+			var loans = customer.Loans.OrderBy(l => l.Date);
+			foreach (var loan in loans)
+			{
+				i++;
+				if (!loan.DateClosed.HasValue)
+				{
+					try
+					{
+						var agreement = JsonConvert.DeserializeObject<AgreementModel>(loan.AgreementModel);
+						activeLoans.Add(new ActiveLoan
+							{
+								Approved = loan.CashRequest.ManagerApprovedSum,
+								Balance = loan.Balance,
+								LoanAmount = loan.LoanAmount,
+								LoanAmountPercent =
+									loan.CashRequest.ManagerApprovedSum.HasValue
+										? loan.LoanAmount/(decimal) loan.CashRequest.ManagerApprovedSum.Value
+										: 0,
+								LoanDate = loan.Date,
+								InterestRate = loan.InterestRate,
+								IsLate = loan.Status == LoanStatus.Late,
+								IsEU = loan.LoanSource.Name == "EU",
+								BalanceWidthPercent = loan.CashRequest.ManagerApprovedSum.HasValue
+										? loan.Balance / (decimal)loan.CashRequest.ManagerApprovedSum.Value
+										: 0,
+								BalancePercent = loan.Balance / loan.LoanAmount,
+								Term = agreement.Term,
+								TermApproved = loan.CashRequest.RepaymentPeriod,
+								TotalFee = loan.SetupFee,
+								LoanNumber = i,
+							});
+					}
+					catch (Exception ex)
+					{
+						Log.Error("Failed to build current loans model", ex);
+					}
+				}
+			}
+
+			var maxLoan = activeLoans.MaxBy(x => x.Approved);
+			
+			maxLoan.WidthPercent = 1;
+
+			foreach (var activeLoan in activeLoans)
+			{
+				if (activeLoan.Approved.HasValue)
+				{
+					activeLoan.WidthPercent = maxLoan.Approved.HasValue ? activeLoan.Approved.Value/maxLoan.Approved.Value : 0;
+				}
+				activeLoan.BalanceWidthPercent *= (decimal)activeLoan.WidthPercent;
+				activeLoan.LoanAmountWidthPercent = activeLoan.LoanAmountPercent * (decimal)activeLoan.WidthPercent;
+			}
+			
+
 			return new LoanActivity
 				{
 					PreviousLoans = Money(previousLoans),
@@ -438,7 +498,8 @@
 					RepaidCount = repaidCount,
 					ActiveSum = active,
 					ActiveCount = activeCount,
-					EarnedInterest = earnedInterest
+					EarnedInterest = earnedInterest,
+					ActiveLoans = activeLoans
 				};
 		}
 

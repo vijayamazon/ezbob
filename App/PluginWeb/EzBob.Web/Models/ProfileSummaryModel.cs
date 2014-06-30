@@ -58,6 +58,28 @@
 		public decimal ActiveSum { get; set; }
 		public int ActiveCount { get; set; }
 		public decimal EarnedInterest { get; set; }
+
+		public List<ActiveLoan> ActiveLoans { get; set; }
+	}
+
+	public class ActiveLoan
+	{
+		public DateTime LoanDate { get; set; }
+		public int LoanNumber { get; set; }
+		public int Term { get; set; }
+		public int TermApproved { get; set; }
+		public double? Approved { get; set; }
+		public decimal Balance { get; set; }
+		public decimal BalancePercent { get; set; }
+		public decimal BalanceWidthPercent { get; set; }
+		public decimal LoanAmount { get; set; }
+		public decimal LoanAmountPercent { get; set; }
+		public decimal LoanAmountWidthPercent { get; set; }
+		public double WidthPercent { get; set; }
+		public bool IsEU { get; set; }
+		public decimal InterestRate { get; set; }
+		public decimal TotalFee { get; set; }
+		public bool IsLate { get; set; }
 	}
 
 	public class AffordabilityAnalysis
