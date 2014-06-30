@@ -1,251 +1,200 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
+	template: '#credit-line-dialog-template',
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+	initialize: function() {
+		this.cloneModel = this.model.clone();
+		this.modelBinder = new Backbone.ModelBinder();
+		this.bindTo(this.cloneModel, "change:StartingFromDate", this.onChangeStartingDate, this);
+		this.bind('close', this.closeDialog);
+	}, // initialize
 
-  EzBob.Underwriter.CreditLineDialog = (function(_super) {
+	events: {
+		'click .btnOk': 'save',
+		'change #loan-type ': 'onChangeLoanType',
+		'click #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed',
+		'change #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed',
+		'click #enableSetupFee': 'onChangeEnableSetupFee',
+	}, // events
 
-    __extends(CreditLineDialog, _super);
+	ui: {
+		form: "form"
+	}, // ui
 
-    function CreditLineDialog() {
-      return CreditLineDialog.__super__.constructor.apply(this, arguments);
-    }
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: false,
+			title: "Credit Line",
+			position: "center",
+			draggable: false,
+			dialogClass: "creditline-popup",
+			width: 840
+		};
+	}, // jqoptions
 
-    CreditLineDialog.prototype.template = '#credit-line-dialog-template';
+	closeDialog: function() {
+		return this.model.fetch();
+	}, // closeDialog
 
-    CreditLineDialog.prototype.initialize = function() {
-      this.cloneModel = this.model.clone();
-      this.modelBinder = new Backbone.ModelBinder();
-      this.bindTo(this.cloneModel, "change:StartingFromDate", this.onChangeStartingDate, this);
-      return this.bind('close', this.closeDialog);
-    };
+	onChangeEnableSetupFee: function() {
+		var bChecked = this.$el.find('#enableSetupFee').attr('checked') ? true : false;
+		this.setSomethingEnabled('#manualSetupFeeAmount, #manualSetupFeePercent', bChecked);
+	}, // onChangeEnableSetupFee
 
-    CreditLineDialog.prototype.events = {
-      'click .btnOk': 'save',
-      'change #loan-type ': 'onChangeLoanType',
-      'click #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed',
-      'change #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed'
-    };
+	onChangeLoanTypeSelectionAllowed: function() {
+		var controlledElements = '#loan-type, #repaymentPeriod';
 
-    CreditLineDialog.prototype.ui = {
-      form: "form"
-    };
+		var nIsLoanTypeSelectionAllowed = this.cloneModel.get('IsLoanTypeSelectionAllowed');
 
-    CreditLineDialog.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: false,
-        title: "Credit Line",
-        position: "center",
-        draggable: false,
-        dialogClass: "creditline-popup",
-        width: 840
-      };
-    };
+		if (nIsLoanTypeSelectionAllowed === 1 || nIsLoanTypeSelectionAllowed === '1') {
+			this.$el.find(controlledElements).attr('disabled', 'disabled');
 
-    CreditLineDialog.prototype.closeDialog = function() {
-      return this.model.fetch();
-    };
+			if (this.cloneModel.get('LoanTypeId') !== 1)
+				this.cloneModel.set('LoanTypeId', 1);
+		}
+		else
+			this.$el.find(controlledElements).removeAttr('disabled');
+	}, // onChangeLoanTypeSelectionAllowed
 
-    CreditLineDialog.prototype.onChangeLoanTypeSelectionAllowed = function() {
-      var controlledElements, _ref;
-      controlledElements = '#loan-type, #repaymentPeriod';
-      if ((_ref = this.cloneModel.get('IsLoanTypeSelectionAllowed')) === 1 || _ref === '1') {
-        this.$el.find(controlledElements).attr('disabled', 'disabled');
-        if (this.cloneModel.get('LoanTypeId') !== 1) {
-          return this.cloneModel.set('LoanTypeId', 1);
-        }
-      } else {
-        return this.$el.find(controlledElements).removeAttr('disabled');
-      }
-    };
+	onChangeStartingDate: function() {
+		var startingDate = moment.utc(this.cloneModel.get("StartingFromDate"), "DD/MM/YYYY");
 
-    CreditLineDialog.prototype.onChangeStartingDate = function() {
-      var endDate, startingDate;
-      startingDate = moment.utc(this.cloneModel.get("StartingFromDate"), "DD/MM/YYYY");
-      if (startingDate !== null) {
-        endDate = startingDate.add('hours', this.cloneModel.get('OfferValidForHours'));
-        return this.cloneModel.set("OfferValidateUntil", endDate.format('DD/MM/YYYY'));
-      }
-    };
+		if (startingDate !== null) {
+			var endDate = startingDate.add('hours', this.cloneModel.get('OfferValidForHours'));
+			this.cloneModel.set("OfferValidateUntil", endDate.format('DD/MM/YYYY'));
+		} // if
+	}, // onChangeStartingDate
 
-    CreditLineDialog.prototype.onChangeLoanType = function() {
-      var currentLoanType, loanTypeId;
-      loanTypeId = +this.$el.find("#loan-type option:selected").val();
-      currentLoanType = _.find(this.cloneModel.get("LoanTypes"), function(l) {
-        return l.Id === loanTypeId;
-      });
-      if (loanTypeId == null) {
-        return;
-      }
-      this.cloneModel.set("RepaymentPerion", currentLoanType.RepaymentPeriod);
-      return this;
-    };
+	onChangeLoanType: function() {
+		var loanTypeId = +this.$el.find("#loan-type option:selected").val();
 
-    CreditLineDialog.prototype.save = function() {
-      var action, post, postData,
-        _this = this;
-      if (!this.ui.form.valid()) {
-        return;
-      }
-      postData = this.getPostData();
-      action = "" + window.gRootPath + "Underwriter/ApplicationInfo/ChangeCreditLine";
-      post = $.post(action, postData);
-      return post.done(function() {
-        return _this.close();
-      });
-    };
+		var currentLoanType = _.find(this.cloneModel.get("LoanTypes"), function(l) { return l.Id === loanTypeId; });
 
-    CreditLineDialog.prototype.getPostData = function() {
-      var data, m;
-      m = this.cloneModel.toJSON();
-      data = {
-        id: m.CashRequestId,
-        loanType: m.LoanTypeId,
-        discountPlan: m.DiscountPlanId,
-        amount: m.amount,
-        interestRate: m.InterestRate,
-        repaymentPeriod: m.RepaymentPerion,
-        offerStart: m.StartingFromDate,
-        offerValidUntil: m.OfferValidateUntil,
-        useSetupFee: m.UseSetupFee,
-        useBrokerSetupFee: m.UseBrokerSetupFee,
-        manualSetupFeeAmount: m.ManualSetupFeeAmount,
-        manualSetupFeePercent: m.ManualSetupFeePercent,
-        allowSendingEmail: m.AllowSendingEmail,
-        isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed
-      };
-      return data;
-    };
+		if (loanTypeId == null)
+			return;
 
-    CreditLineDialog.prototype.bindings = {
-      InterestRate: {
-        selector: "input[name='interestRate']",
-        converter: EzBob.BindingConverters.percentsFormat
-      },
-      RepaymentPerion: {
-        selector: "input[name='repaymentPeriod']",
-        converter: EzBob.BindingConverters.notNull
-      },
-      StartingFromDate: {
-        selector: "input[name='startingFromDate']"
-      },
-      OfferValidateUntil: {
-        selector: "input[name='offerValidUntil']"
-      },
-      UseSetupFee: {
-        selector: "input[name='enableSetupFee']"
-      },
-      UseBrokerSetupFee: {
-        selector: "input[name='enableBrokerSetupFee']"
-      },
-      AllowSendingEmail: {
-        selector: "input[name='allowSendingEmail']"
-      },
-      IsLoanTypeSelectionAllowed: {
-        selector: "select[name='isLoanTypeSelectionAllowed']"
-      },
-      DiscountPlanId: "select[name='discount-plan']",
-      LoanTypeId: "select[name='loan-type']",
-      amount: {
-        selector: "#offeredCreditLine",
-        converter: EzBob.BindingConverters.moneyFormat
-      },
-      ManualSetupFeePercent: {
-        selector: "input[name='manualSetupFeePercent']",
-        converter: EzBob.BindingConverters.percentsFormat
-      },
-      ManualSetupFeeAmount: {
-        selector: "input[name='manualSetupFeeAmount']",
-        converter: EzBob.BindingConverters.moneyFormat
-      }
-    };
+		this.cloneModel.set("RepaymentPerion", currentLoanType.RepaymentPeriod);
+	}, // onChangeLoanType
 
-    CreditLineDialog.prototype.onRender = function() {
-      this.modelBinder.bind(this.cloneModel, this.el, this.bindings);
-      this.$el.find("#startingFromDate, #offerValidUntil").mask("99/99/9999").datepicker({
-        autoclose: true,
-        format: 'dd/mm/yyyy'
-      });
-      this.$el.find("#offeredCreditLine").autoNumeric(EzBob.moneyFormat);
-      if (this.$el.find("#offeredCreditLine").val() === "-") {
-        this.$el.find("#offeredCreditLine").val("");
-      }
-      this.$el.find("#interestRate").autoNumeric(EzBob.percentFormat);
-      this.$el.find("#manualSetupFeePercent").autoNumeric(EzBob.percentFormat);
-      this.$el.find("#manualSetupFeeAmount").autoNumeric(EzBob.moneyFormat);
-      this.$el.find("#repaymentPeriod").numericOnly();
-      return this.setValidator();
-    };
+	save: function() {
+		if (!this.ui.form.valid())
+			return;
 
-    CreditLineDialog.prototype.setValidator = function() {
-      return this.ui.form.validate({
-        rules: {
-          offeredCreditLine: {
-            required: true,
-            autonumericMin: EzBob.Config.XMinLoan,
-            autonumericMax: EzBob.Config.MaxLoan
-          },
-          repaymentPeriod: {
-            required: true,
-            autonumericMin: 1
-          },
-          interestRate: {
-            required: true,
-            autonumericMin: 1,
-            autonumericMax: 100
-          },
-          startingFromDate: {
-            required: true,
-            dateCheck: true
-          },
-          offerValidUntil: {
-            required: true,
-            dateCheck: true
-          },
-          manualSetupFeeAmount: {
-            autonumericMin: 0,
-            required: false
-          },
-          manualSetupFeePercent: {
-            autonumericMin: 0,
-            required: false
-          }
-        },
-        messages: {
-          interestRate: {
-            autonumericMin: "Interest Rate is below limit.",
-            autonumericMax: "Interest Rate is above limit."
-          },
-          repaymentPeriod: {
-            autonumericMin: "Repayment Period is below limit."
-          },
-          startingFromDate: {
-            dateCheck: "Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012"
-          },
-          offerValidUntil: {
-            dateCheck: "Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012"
-          },
-          manualSetupFeeAmount: {
-            autonumericMin: "Can't be negative."
-          },
-          manualSetupFeePercent: {
-            autonumericMin: "Can't be negative."
-          }
-        },
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
-      });
-    };
+		var postData = this.getPostData();
+		var action = "" + window.gRootPath + "Underwriter/ApplicationInfo/ChangeCreditLine";
+		var post = $.post(action, postData);
+		var self = this;
 
-    return CreditLineDialog;
+		post.done(function() { self.close(); });
+	}, // save
 
-  })(Backbone.Marionette.ItemView);
+	getPostData: function() {
+		var m = this.cloneModel.toJSON();
+		return {
+			id: m.CashRequestId,
+			loanType: m.LoanTypeId,
+			discountPlan: m.DiscountPlanId,
+			amount: m.amount,
+			interestRate: m.InterestRate,
+			repaymentPeriod: m.RepaymentPerion,
+			offerStart: m.StartingFromDate,
+			offerValidUntil: m.OfferValidateUntil,
+			useSetupFee: m.UseSetupFee,
+			useBrokerSetupFee: m.UseBrokerSetupFee,
+			manualSetupFeeAmount: m.ManualSetupFeeAmount,
+			manualSetupFeePercent: m.ManualSetupFeePercent,
+			allowSendingEmail: m.AllowSendingEmail,
+			isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed,
+		};
+	}, // getPostData
 
-}).call(this);
+	bindings: {
+		InterestRate: {
+			selector: "input[name='interestRate']",
+			converter: EzBob.BindingConverters.percentsFormat
+		},
+		RepaymentPerion: {
+			selector: "input[name='repaymentPeriod']",
+			converter: EzBob.BindingConverters.notNull
+		},
+		StartingFromDate: {
+			selector: "input[name='startingFromDate']"
+		},
+		OfferValidateUntil: {
+			selector: "input[name='offerValidUntil']"
+		},
+		UseSetupFee: {
+			selector: "input[name='enableSetupFee']"
+		},
+		UseBrokerSetupFee: {
+			selector: "input[name='enableBrokerSetupFee']"
+		},
+		AllowSendingEmail: {
+			selector: "input[name='allowSendingEmail']"
+		},
+		IsLoanTypeSelectionAllowed: {
+			selector: "select[name='isLoanTypeSelectionAllowed']"
+		},
+		DiscountPlanId: "select[name='discount-plan']",
+		LoanTypeId: "select[name='loan-type']",
+		amount: {
+			selector: "#offeredCreditLine",
+			converter: EzBob.BindingConverters.moneyFormat
+		},
+		ManualSetupFeePercent: {
+			selector: "input[name='manualSetupFeePercent']",
+			converter: EzBob.BindingConverters.percentsFormat
+		},
+		ManualSetupFeeAmount: {
+			selector: "input[name='manualSetupFeeAmount']",
+			converter: EzBob.BindingConverters.moneyFormat
+		},
+	}, // bindings
+
+	onRender: function() {
+		this.modelBinder.bind(this.cloneModel, this.el, this.bindings);
+
+		this.$el.find("#startingFromDate, #offerValidUntil").mask("99/99/9999").datepicker({
+			autoclose: true,
+			format: 'dd/mm/yyyy'
+		});
+
+		this.$el.find("#offeredCreditLine").autoNumeric(EzBob.moneyFormat);
+
+		if (this.$el.find("#offeredCreditLine").val() === "-")
+			this.$el.find("#offeredCreditLine").val("");
+
+		this.$el.find("#interestRate").autoNumeric(EzBob.percentFormat);
+		this.$el.find("#manualSetupFeePercent").autoNumeric(EzBob.percentFormat);
+		this.$el.find("#manualSetupFeeAmount").autoNumeric(EzBob.moneyFormat);
+		this.$el.find("#repaymentPeriod").numericOnly();
+
+		this.onChangeEnableSetupFee();
+
+		this.ui.form.validate({
+			rules: {
+				offeredCreditLine: { required: true, autonumericMin: EzBob.Config.XMinLoan, autonumericMax: EzBob.Config.MaxLoan },
+				repaymentPeriod: { required: true, autonumericMin: 1 },
+				interestRate: { required: true, autonumericMin: 1, autonumericMax: 100 },
+				startingFromDate: { required: true, dateCheck: true },
+				offerValidUntil: { required: true, dateCheck: true },
+				manualSetupFeeAmount: { autonumericMin: 0, required: false },
+				manualSetupFeePercent: { autonumericMin: 0, required: false },
+			},
+			messages: {
+				interestRate: { autonumericMin: "Interest Rate is below limit.", autonumericMax: "Interest Rate is above limit." },
+				repaymentPeriod: { autonumericMin: "Repayment Period is below limit." },
+				startingFromDate: { dateCheck: "Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012" },
+				offerValidUntil: { dateCheck: "Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012" },
+				manualSetupFeeAmount: { autonumericMin: "Can't be negative." },
+				manualSetupFeePercent: { autonumericMin: "Can't be negative." }
+			},
+			errorPlacement: EzBob.Validation.errorPlacement,
+			unhighlight: EzBob.Validation.unhighlight
+		});
+	}, // onRender
+}); // EzBob.Underwriter.CreditLineDialog

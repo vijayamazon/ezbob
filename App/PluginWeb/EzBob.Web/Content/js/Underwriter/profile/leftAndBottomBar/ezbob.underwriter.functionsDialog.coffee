@@ -98,6 +98,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
             data.reason += " | " + @YodleeReasonField.val()
         
         BlockUi "on"
+
         req = $.ajax({
             type: "POST"
             url: window.gRootPath + "Underwriter/Customers/ChangeStatus"
