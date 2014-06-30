@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,16 +10,17 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.FundingView = (function(_super) {
-
     __extends(FundingView, _super);
 
     function FundingView() {
-      return FundingView.__super__.constructor.apply(this, arguments);
+      _ref = FundingView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     FundingView.prototype.initialize = function() {
       var xhr, xhr1,
         _this = this;
+
       this.model = new EzBob.Underwriter.FundingModel();
       this.model.on("change reset", this.render, this);
       this.model.fetch();
@@ -46,6 +47,7 @@
 
     FundingView.prototype.addFunds = function(e) {
       var d, that;
+
       that = this;
       d = new EzBob.Dialogs.PacentManual({
         model: this.model,
@@ -68,6 +70,7 @@
 
     FundingView.prototype.cancelManuallyAddedFunds = function(e) {
       var d, that;
+
       that = this;
       d = new EzBob.Dialogs.CheckBoxEdit({
         model: this.model,
@@ -88,7 +91,8 @@
     };
 
     FundingView.prototype.onRender = function() {
-      var availableFundsNum, availableFundsStr, fundingAlert;
+      var availableFundsNum, availableFundsStr, fundingAlert, li, tdHeader, tdValue;
+
       if (!$("body").hasClass("role-manager")) {
         this.$el.find('#addFundsBtn').hide();
         this.$el.find('#cancelManuallyAddedFundsBtn').hide();
@@ -97,10 +101,31 @@
       availableFundsNum = this.model.get('AvailableFunds');
       availableFundsStr = 'Funding ' + EzBob.formatPoundsNoDecimals(availableFundsNum).replace(/\s+/g, '');
       fundingAlert.html(availableFundsStr);
+      li = $(document.getElementById("liFunding"));
+      tdHeader = $(document.getElementById("available-funds-td-header"));
+      tdValue = $(document.getElementById("available-funds-td-value"));
       if (this.requiredFunds > availableFundsNum) {
-        return fundingAlert.addClass('red_cell');
+        fundingAlert.addClass('red_cell');
+        if (!li.hasClass('available-funds-alert')) {
+          li.addClass('available-funds-alert');
+        }
+        if (!tdHeader.hasClass('available-funds-alert-text-color')) {
+          tdHeader.addClass('available-funds-alert-text-color');
+        }
+        if (!tdValue.hasClass('available-funds-alert-text-color')) {
+          return tdValue.addClass('available-funds-alert-text-color');
+        }
       } else {
-        return fundingAlert.removeClass('red_cell');
+        fundingAlert.removeClass('red_cell');
+        if (li.hasClass('available-funds-alert')) {
+          li.removeClass('available-funds-alert');
+        }
+        if (tdHeader.hasClass('available-funds-alert-text-color')) {
+          tdHeader.removeClass('available-funds-alert-text-color');
+        }
+        if (tdValue.hasClass('available-funds-alert-text-color')) {
+          return tdValue.removeClass('available-funds-alert-text-color');
+        }
       }
     };
 
@@ -123,11 +148,11 @@
   })(Backbone.Marionette.ItemView);
 
   EzBob.Underwriter.FundingModel = (function(_super) {
-
     __extends(FundingModel, _super);
 
     function FundingModel() {
-      return FundingModel.__super__.constructor.apply(this, arguments);
+      _ref1 = FundingModel.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     FundingModel.prototype.urlRoot = function() {
