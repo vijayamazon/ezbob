@@ -1,40 +1,40 @@
 ﻿@model dynamic
 <script id="profile-template-main" type="text/template">
-        @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Customer)
-        <div id="sidebar-dashboard" class="navbar-collapse collapse">
-            <div class="fundingAlert"></div>
-            <div class="profile-person-info" id="profile-person-info-id"/>
-        </div>
-        <div id="main-content" class="profile-tabs">
-            <div id="profileHead"></div>
-            <div class="tabbable">
-                <div class="tab-content">
-                    <div class="tab-pane" id="dashboard"></div>
-                    <div class="tab-pane" id="profile-summary"></div>
-                    <div class="tab-pane" id="marketplaces"></div>
-                    <div class="tab-pane" id="payment-accounts"></div>
-                    <div class="tab-pane" id="credit-bureau"></div>
-                    <div class="tab-pane" id="calculator">
-                        <div id="pricing-calc"></div>
-                        <div id="medal-calc"></div>
-                    </div>
-                    <div class="tab-pane" id="loanhistorys"></div>
-                    <div class="tab-pane" id="customer-info"></div>
-                    <div class="tab-pane" id="company-score">
-                        <div id="company-score-list"></div>
-                    </div>
-                    <div class="tab-pane" id="messages-tab">
-						<div id="signature-monitor">@{ Html.RenderPartial("SignatureMonitor"); }</div>
-                        <div id="alert-docs" class="messages"></div>
-                        <div id="messages" style="margin-top: 30px;" ></div>
-                    </div>
-                    <div class="tab-pane" id="apiChecks"></div>
-                    <div class="tab-pane" id="customerRelations"></div>
-                    <div class="tab-pane" id="fraudDetection"></div>
+    @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Customer)
+    <div id="sidebar-dashboard" class="navbar-collapse collapse">
+        <div class="fundingAlert"></div>
+        <div class="profile-person-info" id="profile-person-info-id" />
+    </div>
+    <div id="main-content" class="profile-tabs">
+        <div id="profileHead"></div>
+        <div class="tabbable">
+            <div class="tab-content">
+                <div class="tab-pane" id="dashboard"></div>
+                <div class="tab-pane" id="profile-summary"></div>
+                <div class="tab-pane" id="marketplaces"></div>
+                <div class="tab-pane" id="payment-accounts"></div>
+                <div class="tab-pane" id="credit-bureau"></div>
+                <div class="tab-pane" id="calculator">
+                    <div id="pricing-calc"></div>
+                    <div id="medal-calc"></div>
                 </div>
+                <div class="tab-pane" id="loanhistorys"></div>
+                <div class="tab-pane" id="customer-info"></div>
+                <div class="tab-pane" id="company-score">
+                    <div id="company-score-list"></div>
+                </div>
+                <div class="tab-pane" id="messages-tab">
+                    <div id="signature-monitor">@{ Html.RenderPartial("SignatureMonitor"); }</div>
+                    <div id="alert-docs" class="messages"></div>
+                    <div id="messages" style="margin-top: 30px;"></div>
+                </div>
+                <div class="tab-pane" id="apiChecks"></div>
+                <div class="tab-pane" id="customerRelations"></div>
+                <div class="tab-pane" id="fraudDetection"></div>
             </div>
-            <div id="DecisionNotes"></div>
         </div>
+        <div id="DecisionNotes"></div>
+    </div>
 
 </script>
 
@@ -71,25 +71,30 @@
         <div class="loan-schedule"></div>
         <div id="details"></div>
         <div>
-            <div class="rejectReasonDiv" style="display:none;">
+            <div class="rejectReasonDiv" style="display: none;">
                 <h3>Reject Reason:</h3>
-                <div style="width:100%">
-                    <select class="rejectReason chosen" data-placeholder=" " multiple="multiple" style="width:100%; min-height:40px;">
+                <div style="width: 100%">
+                    <select class="rejectReason chosen" data-placeholder=" " multiple="multiple" style="width: 100%; min-height: 40px;">
                         <%_.each(EzBob.RejectReasons, function(reason) {%>
                             <option value="<%-reason.Id%>"><%-reason.Reason%></option>
                         <%});%>
                     </select>
                 </div>
             </div>
-            <div class="uwReason">
-                <h3>Reason:</h3>
-                <textarea class="reason" maxlength="200"></textarea>
-            </div>
-            <div id="noYodleeReasonDiv" class="hide">
-                <h3 style="line-height: normal !important; margin-top: 15px !important;">Offline user without Yodlee
-                    <br />
-                    account - Reason:</h3>
-                <textarea class="yodleeReason" maxlength="200"></textarea>
+            <div>
+                <div class="col-md-6">
+                    <div class="uwReason">
+                        <h3>Reason:<br />&nbsp;</h3>
+                        <textarea class="reason" maxlength="200"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="noYodleeReasonDiv" class="hide">
+                        <h3>Offline user without Yodlee
+                        <br />account - Reason:</h3>
+                        <textarea class="yodleeReason" maxlength="200"></textarea>
+                    </div>
+                </div>
             </div>
         </div>
 

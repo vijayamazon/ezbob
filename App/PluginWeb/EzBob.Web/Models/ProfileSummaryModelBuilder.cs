@@ -462,20 +462,22 @@
 				}
 			}
 
-			var maxLoan = activeLoans.MaxBy(x => x.Approved);
-			
-			maxLoan.WidthPercent = 1;
-
-			foreach (var activeLoan in activeLoans)
+			if (activeLoans.Any())
 			{
-				if (activeLoan.Approved.HasValue)
+				var maxLoan = activeLoans.MaxBy(x => x.Approved);
+
+				maxLoan.WidthPercent = 1;
+
+				foreach (var activeLoan in activeLoans)
 				{
-					activeLoan.WidthPercent = maxLoan.Approved.HasValue ? activeLoan.Approved.Value/maxLoan.Approved.Value : 0;
+					if (activeLoan.Approved.HasValue)
+					{
+						activeLoan.WidthPercent = maxLoan.Approved.HasValue ? activeLoan.Approved.Value/maxLoan.Approved.Value : 0;
+					}
+					activeLoan.BalanceWidthPercent *= (decimal) activeLoan.WidthPercent;
+					activeLoan.LoanAmountWidthPercent = activeLoan.LoanAmountPercent*(decimal) activeLoan.WidthPercent;
 				}
-				activeLoan.BalanceWidthPercent *= (decimal)activeLoan.WidthPercent;
-				activeLoan.LoanAmountWidthPercent = activeLoan.LoanAmountPercent * (decimal)activeLoan.WidthPercent;
 			}
-			
 
 			return new LoanActivity
 				{
