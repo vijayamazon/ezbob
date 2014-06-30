@@ -41,7 +41,7 @@
 
 			public string this[int nIdx, AddressCurrency oCurrency] {
 				get {
-					if ((nIdx < 1) || (nIdx >= 6))
+					if ((nIdx < 1) || (nIdx > 6))
 						throw new ArgumentOutOfRangeException("nIdx", "Unsupported value: " + nIdx.ToString());
 
 					switch (oCurrency) {
