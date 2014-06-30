@@ -217,18 +217,20 @@ using EZBob.DatabaseLib.Model.Experian;
 													 Balance = (decimal?)null
 												 }).ToList();
 
-
-				model.CompanyHistory = checkCompanyHistoryModels.OrderByDescending(h => h.Date);
+				model.CompanyHistory = checkCompanyHistoryModels.Where(h => h != null).OrderByDescending(h => h.Date);
 				foreach (var cModel in checkCompanyHistoryModels)
 				{
-					_experianHistoryRepository.Save(new MP_ExperianHistory
+					if (cModel != null)
 					{
-						Customer = customer,
-						ServiceLogId = cModel.Id,
-						Type = type,
-						Date = cModel.Date,
-						Score = cModel.Score,
-					});
+						_experianHistoryRepository.Save(new MP_ExperianHistory
+							{
+								Customer = customer,
+								ServiceLogId = cModel.Id,
+								Type = type,
+								Date = cModel.Date,
+								Score = cModel.Score,
+							});
+					}
 				}
 			}
 		}

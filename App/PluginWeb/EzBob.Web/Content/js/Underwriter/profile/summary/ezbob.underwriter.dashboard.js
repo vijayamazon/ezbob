@@ -141,7 +141,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                         "sType": 'date'
                     }
                 ],
-                bDestroy: true,
+                //bDestroy: true,
                 bDeferRender: true,
             });
             EzBob.DataTables.Helper.initCustomFiltering();

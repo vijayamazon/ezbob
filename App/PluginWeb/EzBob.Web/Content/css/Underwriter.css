@@ -1067,7 +1067,10 @@ textarea.BusinessAddress {
 
     .summary-offer > li {
         border-bottom: 1px solid #f5f5f5;
-        padding-top: 12px;
+        
+    }
+    .summary-offer > li > p {
+        margin: 3px 0;
     }
 
 
