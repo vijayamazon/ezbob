@@ -8,7 +8,9 @@ GO
 CREATE PROCEDURE [dbo].[GetCustomerRejectionData] 
 	(@CustomerId INT,
 	 @Reject_Defaults_Months INT,
-	 @Reject_Defaults_Amount INT)
+	 @Reject_Defaults_Amount INT,
+	 @Reject_Defaults_CompanyMonths INT,
+	 @Reject_Defaults_CompanyAmount INT)
 AS
 BEGIN
 	DECLARE @ErrorMPsNum INT,
@@ -17,7 +19,9 @@ BEGIN
 			@NumOfDefaultAccounts INT,
 			@MarketPlaceGroup INT, 
 			@BankGroup INT, 
-			@RowNum INT
+			@RowNum INT,
+			@CompanyDefaultStartDate DATETIME,
+			@NumOfDefaultCompanyAccounts INT
 		
 	SELECT 
 		@ErrorMPsNum = COUNT(cmp.Id)
@@ -79,10 +83,14 @@ BEGIN
 	END
  
 	SELECT @NumOfDefaultAccounts = NumOfDefaultAccounts FROM [GetNumOfDefaultAccounts] (@CustomerId, @Reject_Defaults_Months, @Reject_Defaults_Amount)
- 	 	
+		
+	SELECT @CompanyDefaultStartDate = DATEADD(MM, -@Reject_Defaults_CompanyMonths, GETUTCDATE())
+	SELECT @NumOfDefaultCompanyAccounts = COUNT(1) FROM ExperianDL97Accounts WHERE CustomerId = @CustomerId AND LastUpdated > @CompanyDefaultStartDate AND CurrentBalance >= @Reject_Defaults_CompanyAmount
+	 	 	
 	SELECT 
 		@ErrorMPsNum AS ErrorMPsNum, 
 		@ApprovalNum AS ApprovalNum, 
-		@NumOfDefaultAccounts AS NumOfDefaultAccounts
+		@NumOfDefaultAccounts AS NumOfDefaultAccounts,
+		@NumOfDefaultCompanyAccounts AS NumOfDefaultCompanyAccounts
 END
 GO

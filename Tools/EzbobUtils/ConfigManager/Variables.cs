@@ -341,6 +341,10 @@ namespace ConfigManager {
 		LandRegistryUserName,
 		LandRegistryPassword,
 		LandRegistryFilePath,
-		RejectionLastValidLate
+		RejectionLastValidLate,
+		Reject_Defaults_CompanyScore,
+		Reject_Defaults_CompanyAccountsNum,
+		Reject_Defaults_CompanyMonthsNum,
+		Reject_Defaults_CompanyAmount
 	} // enum Variables
 } // namespace ConfigManager

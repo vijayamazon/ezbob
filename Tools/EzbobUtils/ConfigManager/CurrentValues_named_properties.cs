@@ -2352,6 +2352,24 @@ namespace ConfigManager {
 			get { return this[Variables.RejectionLastValidLate]; }
 		}
 
-		
+		public virtual VariableValue Reject_Defaults_CompanyScore
+		{
+			get { return this[Variables.Reject_Defaults_CompanyScore]; }
+		}
+
+		public virtual VariableValue Reject_Defaults_CompanyAccountsNum
+		{
+			get { return this[Variables.Reject_Defaults_CompanyAccountsNum]; }
+		}
+
+		public virtual VariableValue Reject_Defaults_CompanyMonthsNum
+		{
+			get { return this[Variables.Reject_Defaults_CompanyMonthsNum]; }
+		}
+
+		public virtual VariableValue Reject_Defaults_CompanyAmount
+		{
+			get { return this[Variables.Reject_Defaults_CompanyAmount]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

@@ -13,13 +13,16 @@
 	{
 		private int _autoRejectionExceptionAnualTurnover;
 		private int _rejectDefaultsCreditScore;
+		private int _rejectDefaultsCompanyScore;
 		private int _rejectMinimalSeniority;
 		private int _lowCreditScore;
 		private int _rejectDefaultsAccountsNum;
+		private int _rejectDefaultsCompanyAccountsNum;
 		private int _autoRejectionExceptionCreditScore;
 		private int _errorMPsNum;
 		private int _loanOfferApprovalNum;
 		private int _numOfDefaultAccounts;
+		private int _numOfCompanyDefaultAccounts;
 		private readonly AConnection _db;
 		private readonly ASafeLog _log;
 		private readonly double _totalSumOfOrders1YTotalForRejection;
@@ -172,9 +175,11 @@
 		{
 			_autoRejectionExceptionAnualTurnover = CurrentValues.Instance.AutoRejectionException_AnualTurnover;
 			_rejectDefaultsCreditScore = CurrentValues.Instance.Reject_Defaults_CreditScore;
+			_rejectDefaultsCompanyScore = CurrentValues.Instance.Reject_Defaults_CompanyScore;
 			_rejectMinimalSeniority = CurrentValues.Instance.Reject_Minimal_Seniority;
 			_lowCreditScore = CurrentValues.Instance.LowCreditScore;
 			_rejectDefaultsAccountsNum = CurrentValues.Instance.Reject_Defaults_AccountsNum;
+			_rejectDefaultsCompanyAccountsNum = CurrentValues.Instance.Reject_Defaults_CompanyAccountsNum;
 			_autoRejectionExceptionCreditScore = CurrentValues.Instance.AutoRejectionException_CreditScore;
 			int rejectDefaultsMonths = CurrentValues.Instance.Reject_Defaults_MonthsNum;
 			int rejectDefaultsAmount = CurrentValues.Instance.Reject_Defaults_Amount;
@@ -182,15 +187,18 @@
 			_lowTotalThreeMonthTurnover = CurrentValues.Instance.TotalThreeMonthTurnover;
 			_lowOfflineAnnualRevenue =  CurrentValues.Instance.Reject_LowOfflineAnnualRevenue;
 			_lowOfflineQuarterRevenue = CurrentValues.Instance.Reject_LowOfflineQuarterRevenue;
-
 			_rejectNumOfLateAccounts = CurrentValues.Instance.Reject_NumOfLateAccounts;
+			int rejectDefaultsCompanyMonths = CurrentValues.Instance.Reject_Defaults_CompanyMonthsNum;
+			int rejectDefaultsCompanyAmount = CurrentValues.Instance.Reject_Defaults_CompanyAmount;
 
 			DataTable dt = _db.ExecuteReader(
 				"GetCustomerRejectionData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", _customerId),
 				new QueryParameter("Reject_Defaults_Months", rejectDefaultsMonths),
-				new QueryParameter("Reject_Defaults_Amount", rejectDefaultsAmount)
+				new QueryParameter("Reject_Defaults_Amount", rejectDefaultsAmount),
+				new QueryParameter("Reject_Defaults_CompanyMonths", rejectDefaultsCompanyMonths),
+				new QueryParameter("Reject_Defaults_CompanyAmount", rejectDefaultsCompanyAmount)
 			);
 
 			var sr = new SafeReader(dt.Rows[0]);
@@ -198,7 +206,8 @@
 			_errorMPsNum = sr["ErrorMPsNum"];
 			_loanOfferApprovalNum = sr["ApprovalNum"];
 			_numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
-
+			_numOfCompanyDefaultAccounts = sr["NumOfDefaultCompanyAccounts"];
+			
 			_numOfLateAccounts = CountActiveAccounts();
 
 			if (_isOffline)
@@ -306,6 +315,17 @@
 												_maxExperianConsumerScore +
 												" < " + _rejectDefaultsCreditScore + " AND " + _numOfDefaultAccounts + " >= " +
 												_rejectDefaultsAccountsNum;
+				}
+				// Company score < 20 AND at least 1 default of at least 1000 in last 24 months
+				conditionValue = _maxCompanyScore < _rejectDefaultsCompanyScore && _numOfCompanyDefaultAccounts >= _rejectDefaultsCompanyAccountsNum;
+				conditionDescription = string.Format("Pretty low personal score and personal account defaults (_maxCompanyScore < _rejectDefaultsCompanyScore && _numOfCompanyDefaultAccounts >= _rejectDefaultsCompanyAccountsNum) [{0} < {1} && {2} >= {3}]", _maxExperianConsumerScore, _rejectDefaultsCreditScore, _numOfCompanyDefaultAccounts, _rejectDefaultsCompanyAccountsNum);
+				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
+				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
+				{
+					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met:" +
+												_rejectDefaultsCompanyScore +
+												" < " + _numOfCompanyDefaultAccounts + " AND " + _numOfCompanyDefaultAccounts + " >= " +
+												_rejectDefaultsCompanyAccountsNum;
 				}
 				// Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 months (in one or more accounts) in last 3 months
 				conditionValue = _numOfLateAccounts >= _rejectNumOfLateAccounts;
@@ -439,7 +459,9 @@
 					_lowOfflineAnnualRevenue : {30} \n
 					_numOfLateAccounts : {31} \n
 					_rejectNumOfLateAccounts : {32} \n
-					_payPalNumberOfStores : {33} _payPalTotalSumOfOrders3M : {34} _payPalTotalSumOfOrders1Y : {35} \n",
+					_payPalNumberOfStores : {33} _payPalTotalSumOfOrders3M : {34} _payPalTotalSumOfOrders1Y : {35} \n
+					_rejectDefaultsCompanyScore : {38} \n
+					_numOfCompanyDefaultAccounts : {39} _rejectDefaultsCompanyAccountsNum : {40} \n",
 				_autoRejectionExceptionAnualTurnover,
 				_rejectDefaultsCreditScore,
 				_rejectMinimalSeniority,
@@ -476,7 +498,11 @@
 				_payPalNumberOfStores,
 				_payPalTotalSumOfOrders3M,
 				_payPalTotalSumOfOrders1Y,
-				_hasYodlee, _hasHmrc);
+				_hasYodlee, 
+				_hasHmrc,
+				_rejectDefaultsCompanyScore,
+				_numOfCompanyDefaultAccounts,
+				_rejectDefaultsCompanyAccountsNum);
 		} 
 	}
 }
