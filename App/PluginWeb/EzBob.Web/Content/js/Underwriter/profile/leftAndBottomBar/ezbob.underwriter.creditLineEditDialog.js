@@ -1,160 +1,155 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter.CreditLineEditDialog = Backbone.Marionette.ItemView.extend({
+	template: '#credit-line-edit-dialog-template',
 
-  root.EzBob = root.EzBob || {};
+	initialize: function(options) {
+		this.model = options.model;
+		this.modelBinder = new Backbone.ModelBinder();
+		this.method = null;
+		this.medal = null;
+		this.value = null;
+	}, // initialize
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+	events: {
+		'click .btnOk': 'save',
+		'click .suggested-amount-link': 'suggestedAmountClicked',
+		"keydown": "onEnterKeydown",
+		'change .percent': 'percentChanged',
+	}, // events
 
-  EzBob.Underwriter.CreditLineEditDialog = (function(_super) {
+	ui: {
+		form: "form",
+		amount: "#edit-offer-amount",
+	}, // ui
 
-    __extends(CreditLineEditDialog, _super);
+	jqoptions: function() {
+		return {
+			modal: true,
+			resizable: true,
+			title: "Offer credit line edit",
+			position: "center",
+			draggable: true,
+			dialogClass: "credit-line-edit-popup",
+			width: 800,
+		};
+	}, // jqoptions
 
-    function CreditLineEditDialog() {
-      return CreditLineEditDialog.__super__.constructor.apply(this, arguments);
-    }
+	percentChanged: function(event) {
+		var $elem = $(event.target);
 
-    CreditLineEditDialog.prototype.template = '#credit-line-edit-dialog-template';
+		var percent = $elem.autoNumericGet() / 100;
 
-    CreditLineEditDialog.prototype.initialize = function(options) {
-      this.model = options.model;
-      this.modelBinder = new Backbone.ModelBinder();
-      this.method = null;
-      this.medal = null;
-      return this.value = null;
-    };
+		var method = $elem.data('method');
 
-    CreditLineEditDialog.prototype.events = {
-      'click .btnOk': 'save',
-      'click .suggested-amount-link': 'suggestedAmountClicked',
-      "keydown": "onEnterKeydown",
-      'change .percent': 'percentChanged'
-    };
+		var value = $elem.data('value');
 
-    CreditLineEditDialog.prototype.ui = {
-      form: "form",
-      amount: "#edit-offer-amount"
-    };
+		var link = this.$el.find('a.Manual' + method);
 
-    CreditLineEditDialog.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: true,
-        title: "Offer credit line edit",
-        position: "center",
-        draggable: true,
-        dialogClass: "credit-line-edit-popup",
-        width: 800
-      };
-    };
+		link.text("Manual offer " + EzBob.formatPoundsNoDecimals(value * percent) + " (" + EzBob.formatPercents(percent) + ")")
+			.data('value', value * percent).data('percent', percent);
+	}, // percentChanged
 
-    CreditLineEditDialog.prototype.percentChanged = function(event) {
-      var $elem, link, method, percent, value;
-      $elem = $(event.target);
-      percent = $elem.autoNumericGet() / 100;
-      method = $elem.data('method');
-      value = $elem.data('value');
-      link = this.$el.find('a.Manual' + method);
-      return link.text("Manual offer " + EzBob.formatPoundsNoDecimals(value * percent) + " (" + EzBob.formatPercents(percent) + ")").data('value', value * percent).data('percent', percent);
-    };
+	onEnterKeydown: function(event) {
+		if (event.keyCode === 13) {
+			this.ui.amount.change().blur();
+			this.save();
+			return false;
+		} // if
 
-    CreditLineEditDialog.prototype.onEnterKeydown = function(event) {
-      if (event.keyCode === 13) {
-        this.ui.amount.change().blur();
-        this.save();
-        return false;
-      }
-      return true;
-    };
+		return true;
+	}, // onEnterKeydown
 
-    CreditLineEditDialog.prototype.save = function() {
-      var post,
-        _this = this;
-      if (!this.validator.checkForm()) {
-        return;
-      }
-      post = $.post("" + window.gRootPath + "ApplicationInfo/ChangeCashRequestOpenCreditLine", this.getPostData());
-      post.done(function() {
-        _this.model.fetch();
-        return _this.trigger('done');
-      });
-      return this.close();
-    };
+	save: function() {
+		if (!this.validator.checkForm())
+			return;
 
-    CreditLineEditDialog.prototype.suggestedAmountClicked = function(el) {
-      var $elem;
-      $elem = $(el.currentTarget);
-      this.method = $elem.data('method');
-      this.medal = $elem.data('medal');
-      this.value = $elem.data('value');
-      this.percent = $elem.data('percent');
-      this.ui.amount.val(this.value).change().blur();
-      this.save();
-      return false;
-    };
+		var _this = this;
 
-    CreditLineEditDialog.prototype.getPostData = function() {
-      var data, m;
-      m = this.model.toJSON();
-      data = {
-        id: m.CashRequestId,
-        amount: m.amount,
-        method: this.method,
-        medal: this.medal,
-        value: this.value,
-        percent: this.percent
-      };
-      return data;
-    };
+		var post = $.post("" + window.gRootPath + "ApplicationInfo/ChangeCashRequestOpenCreditLine", this.getPostData());
 
-    CreditLineEditDialog.prototype.bindings = {
-      amount: {
-        selector: "#edit-offer-amount",
-        converter: EzBob.BindingConverters.moneyFormat
-      }
-    };
+		post.done(function() {
+			_this.model.fetch();
+			_this.trigger('done');
+		});
 
-    CreditLineEditDialog.prototype.onRender = function() {
-      this.modelBinder.bind(this.model, this.el, this.bindings);
-      this.$el.find("#edit-offer-amount").autoNumeric(EzBob.moneyFormat);
-      this.$el.find(".percent").autoNumeric(EzBob.percentFormat).blur();
-      if (this.$el.find("#edit-offer-amount").val() === "-") {
-        this.$el.find("#edit-offer-amount").val("");
-      }
-      return this.validator = this.setValidator();
-    };
+		this.close();
+	}, // save
 
-    CreditLineEditDialog.prototype.serializeData = function() {
-      return {
-        m: this.model.toJSON()
-      };
-    };
+	suggestedAmountClicked: function(el) {
+		var $elem = $(el.currentTarget);
 
-    CreditLineEditDialog.prototype.setValidator = function() {
-      return this.ui.form.validate({
-        rules: {
-          editOfferAmount: {
-            required: true,
-            autonumericMin: EzBob.Config.XMinLoan,
-            autonumericMax: EzBob.Config.MaxLoan
-          }
-        },
-        messages: {
-          editOfferAmount: {
-            autonumericMin: "Offer is below limit.",
-            autonumericMax: "Offer is above limit."
-          }
-        },
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
-      });
-    };
+		this.method = $elem.data('method');
+		this.medal = $elem.data('medal');
+		this.value = $elem.data('value');
+		this.percent = $elem.data('percent');
+		this.ui.amount.val(this.value).change().blur();
 
-    return CreditLineEditDialog;
+		this.save();
 
-  })(Backbone.Marionette.ItemView);
+		return false;
+	}, // suggestedAmountClicked
 
-}).call(this);
+	getPostData: function() {
+		var m = this.model.toJSON();
+
+		return {
+			id: m.CashRequestId,
+			amount: m.amount,
+			method: this.method,
+			medal: this.medal,
+			value: this.value,
+			percent: this.percent,
+		};
+	}, // getPostData
+
+	bindings: {
+		amount: {
+			selector: "#edit-offer-amount",
+			converter: EzBob.BindingConverters.moneyFormat,
+		},
+	}, // bindings
+
+	onRender: function() {
+		this.modelBinder.bind(this.model, this.el, this.bindings);
+		this.$el.find("#edit-offer-amount").autoNumeric(EzBob.moneyFormat);
+		this.$el.find(".percent").autoNumeric(EzBob.percentFormat).blur();
+
+		if (this.$el.find("#edit-offer-amount").val() === "-")
+			this.$el.find("#edit-offer-amount").val("");
+
+		this.validator = this.ui.form.validate({
+			rules: {
+				editOfferAmount: {
+					required: true,
+					autonumericMin: EzBob.Config.XMinLoan,
+					autonumericMax: EzBob.Config.MaxLoan,
+				},
+			},
+			messages: {
+				editOfferAmount: {
+					autonumericMin: "Offer is below limit.",
+					autonumericMax: "Offer is above limit.",
+				},
+			},
+			errorPlacement: EzBob.Validation.errorPlacement,
+			unhighlight: EzBob.Validation.unhighlight
+		});
+	}, // onRender
+
+	serializeData: function() {
+		var res = {
+			m: this.model.toJSON()
+		};
+
+		for (var i = 0; i < res.m.SuggestedAmounts.length; i++) {
+			var fa = res.m.SuggestedAmounts[i];
+
+			if (fa.Value <= 0)
+				fa.Value = 0;
+		} // for
+
+		return res;
+	}, // serializeData
+}); // EzBob.Underwriter.CreditLineEditDialog

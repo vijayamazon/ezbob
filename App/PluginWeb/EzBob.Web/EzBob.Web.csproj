@@ -1178,6 +1178,7 @@
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js">
       <DependentUpon>ezbob.underwriter.fraudStatus.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.profileHead.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js">
       <DependentUpon>ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee</DependentUpon>
@@ -1199,9 +1200,6 @@
     </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.min.js">
       <DependentUpon>ezbob.underwriter.creditLineDialog.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.js">
-      <DependentUpon>ezbob.underwriter.creditLineEditDialog.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.js">
@@ -1982,7 +1980,6 @@
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.min.js.map">
       <DependentUpon>ezbob.wizard.shops.js</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.Settings.PricingModel.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.ConfigTables.coffee" />
     <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.coffee" />
