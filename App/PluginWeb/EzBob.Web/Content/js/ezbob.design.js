@@ -1193,7 +1193,7 @@ EzBob.validatePersonalDetailsForm = function (el) {
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
         highlight: EzBob.Validation.highlightFS,
-        ignore: ":not(:visible)"
+        ignore: ':hidden:not(#DateOfBirth)',
     });
 };
 
