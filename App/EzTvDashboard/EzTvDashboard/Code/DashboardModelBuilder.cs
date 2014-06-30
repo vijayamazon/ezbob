@@ -92,7 +92,6 @@
 					MonthlyCollection = new List<MonthlyCollectionModel>(),
 					MonthlyTraffic = new List<MonthlyTrafficModel>(),
 					Stats = new Dictionary<string, decimal>(),
-					Lottery = new List<LotteryModel>(),
 					LastChanged = LastChecked
 				};
 
@@ -110,17 +109,7 @@
 				new QueryParameter("@FirstOfMonth", firstOfMonth),
 				new QueryParameter("@MonthAgo", DateTime.Today.AddMonths(-1))
 			);
-
-			Db.ForEachRow(
-				(oReader, bRowsetStart) =>
-				{
-					model.Lottery.Add(new LotteryModel{ Name = oReader["Name"].ToString(), Value = (int)oReader["Value"], Css = oReader["Css"].ToString()});
-					return ActionResult.Continue;
-				}
-				,
-				"RptLottery",
-				CommandSpecies.StoredProcedure);
-
+			
 			try
 			{
 				var ga = new GoogleAnalytics();

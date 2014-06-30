@@ -15,13 +15,6 @@ using System.Collections.Generic;
 		public List<FunnelNumbersModel> FunnelNumbers { get; set; }
 		public List<ExistingCustomersModel> ExistingCustomers { get; set; }
 
-		public List<LotteryModel> Lottery { get; set; }
-	}
-	public class LotteryModel
-	{
-		public string Name { get; set; }
-		public int Value { get; set; }
-		public string Css { get; set; }
 	}
 
 	public class MonthlyBoardModel
