@@ -119,7 +119,8 @@
 			//Status = "Active";
 			model.Details = customer.Details;
 			var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
-									   customer.CreditResult == CreditResultStatus.Escalated;
+									   customer.CreditResult == CreditResultStatus.Escalated || 
+									   customer.CreditResult == CreditResultStatus.ApprovedPending;
 
 			model.Editable = isWaitingOrEscalated && cr != null && customer.CollectionStatus.CurrentStatus.IsEnabled;
 

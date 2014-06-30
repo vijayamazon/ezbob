@@ -30,6 +30,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 
     editOfferClick: function () {
         this.ui.editOfferDiv.toggle();
+        $.cookie('editOfferVisible', this.ui.editOfferDiv.is(":visible"));
     },
     
     collapseAll: function () {
@@ -219,6 +220,10 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         this.drawDonut("offer-donut", "#00ab5d", offer / 50000, true);
         var period = this.loanModel.get('RepaymentPerion') || 0;
         this.drawDi('period-di', "#00ab5d", period / 12);
+
+        if ($.cookie('editOfferVisible') == "true") {
+            this.ui.editOfferDiv.show();
+        }
     },
 
     changeDecisionButtonsState: function (isHideAll) {
@@ -278,7 +283,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         var startAngle = 1 * Math.PI;
         var endAngle = (isClock ? 2 : 3) * Math.PI;
         var lineWidth = isClock ? 25 : 15;
-        var endEngleData = Math.PI * (1 + fillPercent * 2);
+        var endEngleData = Math.PI * (1 + fillPercent);
         context.beginPath();
         context.arc(x, y, radius, startAngle, endAngle, false);
         context.lineWidth = lineWidth;
@@ -292,7 +297,10 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 
         if (isClock) {
             context.beginPath();
-            context.moveTo(x - (radius + lineWidth / 2) * Math.cos(endEngleData - Math.PI), y - (radius + lineWidth / 2) * Math.sin(endEngleData - Math.PI));
+            context.moveTo(
+                x - (radius + lineWidth / 2) * Math.cos(endEngleData - Math.PI),
+                y - (radius + lineWidth / 2) * Math.sin(endEngleData - Math.PI)
+            );
             context.lineTo(x, y);
             context.strokeStyle = '#000000';
             context.lineWidth = 2;

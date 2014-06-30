@@ -170,39 +170,44 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         }
     },
     onRender: function () {
-        var cc, cii, companyHistoryScores, consumerHistoryCIIs, consumerHistoryScores, directors, historyScoresSorted, i, properties;
-
         this.$el.find('a[data-bug-type]').tooltip({
             title: 'Report bug'
         });
-        if (this.model.get('Alerts') !== void 0) {
-            if (this.model.get('Alerts').length === 0) {
-                $('#customer-label-span').removeClass('label-warning').removeClass('label-important').addClass('label-success');
-            } else {
-                if (_.some(this.model.get('Alerts'), function (alert) {
-                  return alert.AlertType === 'danger';
-                })) {
-                    $('#customer-label-span').removeClass('label-success').removeClass('label-warning').addClass('label-important');
-                } else {
-                    $('#customer-label-span').removeClass('label-success').removeClass('label-important').addClass('label-warning');
-                }
-            }
-        }
+        this.$el.find('[data-toggle="tooltip"]').tooltip({
+            'placement': 'bottom'
+        });
+
+        this.experianSpark();
+        this.drawGraphs();
+        this.buildJournal();
+        this.rotateTable();
+
+        EzBob.handleUserLayoutSetting();
+    },
+
+    experianSpark: function() {
         if (this.experianModel && this.experianModel.get('ConsumerHistory')) {
-            historyScoresSorted = _.sortBy(this.experianModel.get('ConsumerHistory'), function (history) {
+            var historyConsumerSorted = _.sortBy(this.experianModel.get('ConsumerHistory'), function (history) {
                 return history.Date;
             });
-            consumerHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
+            var consumerHistoryScores = _.pluck(historyConsumerSorted, 'Score').join(',');
+            var consumerHistoryCIIs = _.pluck(historyConsumerSorted, 'CII').join(',');
+            var consumerHistoryCais = _.pluck(historyConsumerSorted, 'Balance').join(',');
             this.$el.find(".consumerScoreGraph").attr('values', consumerHistoryScores);
-            consumerHistoryCIIs = _.pluck(historyScoresSorted, 'CII').join(',');
             this.$el.find(".consumerCIIGraph").attr('values', consumerHistoryCIIs);
+            this.$el.find(".consumerBalanceGraph").attr('values', consumerHistoryCais);
+            
         }
         if (this.experianModel && this.experianModel.get('CompanyHistory')) {
-            historyScoresSorted = _.sortBy(this.experianModel.get('CompanyHistory'), function (history) {
+            var historyCompanyScoresSorted = _.sortBy(this.experianModel.get('CompanyHistory'), function (history) {
                 return history.Date;
             });
-            companyHistoryScores = _.pluck(historyScoresSorted, 'Score').join(',');
+            var companyHistoryScores = _.pluck(historyCompanyScoresSorted, 'Score').join(',');
+            var companyHistoryCais = _.pluck(historyCompanyScoresSorted, 'Balance').join(',');
             this.$el.find(".companyScoreGraph0").attr('values', companyHistoryScores);
+            this.$el.find(".companyCaisBalanceGraph0").attr('values', companyHistoryCais);
+            
+
         }
         this.$el.find(".inline-sparkline").sparkline("html", {
             width: "100%",
@@ -218,16 +223,16 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                 ':': '#cfcfcf'
             }
         });
-        properties = this.propertiesModel.toJSON();
+    },
+    
+    drawGraphs: function() {
+        var properties = this.propertiesModel.toJSON();
         if (properties && properties.NetWorth) {
             this.drawDonut(this.$el.find("#assets-donut"), "#00ab5d", properties.NetWorth / (properties.NetWorth + properties.SumOfMortgages));
         }
-        this.$el.find('[data-toggle="tooltip"]').tooltip({
-            'placement': 'bottom'
-        });
-        cc = this.$el.find("#consumerScoreCanvas");
+        var cc = this.$el.find("#consumerScoreCanvas");
         this.halfDonut(cc, cc.data('color'), cc.data('percent'));
-        cii = this.$el.find("#consumerCIICanvas");
+        var cii = this.$el.find("#consumerCIICanvas");
         this.halfDonut(cii, cii.data('color'), cii.data('percent'));
         if (this.expCompany && this.expCompany.length > 0 && !this.expCompany[0].Error) {
             _.each(this.expCompany, (function (_this) {
@@ -260,16 +265,9 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                 i++;
             }
         }
-        this.buildJournal();
-        this.rotateTable();
-
-        this.$el.find('[data-toggle="tooltip"]').tooltip({
-            'placement': 'bottom'
-        });
-        EzBob.handleUserLayoutSetting();
     },
     halfDonut: function (el, fillColor, fillPercent) {
-        var canvas, context, counterClockwise, endAngle, lineWidth, radius, startAngle, x, y;
+        var canvas, context, endAngle, lineWidth, radius, startAngle, x, y;
         canvas = el[0];
         if (!canvas) return false;
         context = canvas.getContext('2d');
@@ -278,15 +276,14 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         radius = 40;
         startAngle = 1 * Math.PI;
         endAngle = 2 * Math.PI;
-        counterClockwise = false;
         lineWidth = 15;
         context.beginPath();
-        context.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+        context.arc(x, y, radius, startAngle, endAngle, false);
         context.lineWidth = lineWidth;
         context.strokeStyle = '#ebebeb';
         context.stroke();
         context.beginPath();
-        context.arc(x, y, radius, startAngle, Math.PI * (1 + fillPercent), counterClockwise);
+        context.arc(x, y, radius, startAngle, Math.PI * (1 + fillPercent), false);
         context.strokeStyle = fillColor;
         context.stroke();
     },
