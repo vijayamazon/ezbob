@@ -1472,7 +1472,6 @@ td a.edit-loan {
 
 @media print {
     body {
-        max-height: 600px;
         background-color: white !important;
     }
 
@@ -1480,7 +1479,11 @@ td a.edit-loan {
         visibility: hidden;
     }
 
-    #printSection, #printSection * {
+    #main-container {
+        display: none;
+    }
+
+    body #printSection, body #printSection * {
         visibility: visible;
         -webkit-print-color-adjust: exact;
     }
@@ -1496,7 +1499,9 @@ td a.edit-loan {
     }
 
     .loan-schedule {
-        width: 620px;
+        width: 880px;
+        page-break-after: avoid;
+        page-break-inside: avoid;
     }
 
     .print-ezboblogo {

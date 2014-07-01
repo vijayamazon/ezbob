@@ -126,25 +126,29 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         }
 
         if (this.journal.length > 0 && this.model && this.crmModel) {
-            this.journalTable = this.$el.find("#journalTable").dataTable({
-                aLengthMenu: [[-1, 10, 20, 50, 100], ['all', 10, 20, 50, 100]],
-                iDisplayLength: 20,
-                sPaginationType: 'bootstrap',
-                bJQueryUI: false,
-                aaSorting: [[1, 'desc']],
-                bAutoWidth: true,
-                aaData: this.journal,
-                aoColumns: EzBob.DataTables.Helper.extractColumns('Action,^Adate,Type,Status,$ApprovedSum,%Interest,RepaymentPeriod,LoanType,SetupFee,DiscountPlan,LoanSource,CustomerSelection,UW,Comment,~IsCrm'),
-                aoColumnDefs: [
-                    {
-                        "aTargets": [1],
-                        "sType": 'date'
-                    }
-                ],
-                //bDestroy: true,
-                bDeferRender: true,
-            });
-            EzBob.DataTables.Helper.initCustomFiltering();
+            try {
+                this.journalTable = this.$el.find("#journalTable").dataTable({
+                    aLengthMenu: [[-1, 10, 20, 50, 100], ['all', 10, 20, 50, 100]],
+                    iDisplayLength: 20,
+                    sPaginationType: 'bootstrap',
+                    bJQueryUI: false,
+                    aaSorting: [[1, 'desc']],
+                    bAutoWidth: true,
+                    aaData: this.journal,
+                    aoColumns: EzBob.DataTables.Helper.extractColumns('Action,^Adate,Type,Status,$ApprovedSum,%Interest,RepaymentPeriod,LoanType,SetupFee,DiscountPlan,LoanSource,CustomerSelection,UW,Comment,~IsCrm'),
+                    aoColumnDefs: [
+                        {
+                            "aTargets": [1],
+                            "sType": 'date'
+                        }
+                    ],
+                    //bDestroy: true,
+                    bDeferRender: true,
+                });
+                EzBob.DataTables.Helper.initCustomFiltering();
+            }catch(ex) {
+                console.log('journal table exception', ex);
+            }
         }
     },
     events: {

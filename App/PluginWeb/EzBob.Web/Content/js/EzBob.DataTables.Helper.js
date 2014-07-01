@@ -222,23 +222,39 @@ EzBob.DataTables.Helper = {
                     var uwColumn = 12;
                     var isCrmColumn = 14;
                     
-                    if ($("#uwNotes").is(":checked") && aData[uwColumn] && !EzBob.DataTables.Helper.isCrm(aData[uwColumn].toLowerCase()) && aData[isCrmColumn]) {
+                    if ($("#uwNotes").is(":checked") &&
+                        aData[uwColumn] &&
+                        !EzBob.DataTables.Helper.isCrm(aData[uwColumn].toLowerCase()) &&
+                        aData[uwColumn] != "System" &&
+                        aData[isCrmColumn]) {
                         return true;
                     }
                     
-                    if ($("#crmNotes").is(":checked") && aData[uwColumn] && EzBob.DataTables.Helper.isCrm(aData[uwColumn].toLowerCase()) && aData[isCrmColumn]) {
+                    if ($("#crmNotes").is(":checked") &&
+                        aData[uwColumn] &&
+                        EzBob.DataTables.Helper.isCrm(aData[uwColumn].toLowerCase()) &&
+                        aData[isCrmColumn]) {
                         return true;
                     }
                     
-                    if ($("#loanAction").is(":checked") && aData[uwColumn] && aData[uwColumn] == "System" && aData[isCrmColumn]) {
+                    if ($("#loanAction").is(":checked") &&
+                        aData[uwColumn] &&
+                        aData[uwColumn] == "System" &&
+                        aData[isCrmColumn]) {
                         return true;
                     }
                     
-                    if ($("#manualDecision").is(":checked") && aData[uwColumn] && aData[uwColumn] != "se" && !aData[isCrmColumn]) {
+                    if ($("#manualDecision").is(":checked") &&
+                        aData[uwColumn] &&
+                        aData[uwColumn] != "se" &&
+                        !aData[isCrmColumn]) {
                         return true;
                     }
                     
-                    if ($("#systemDecision").is(":checked") && aData[uwColumn] && aData[uwColumn] == "se" && !aData[isCrmColumn]) {
+                    if ($("#systemDecision").is(":checked") &&
+                        aData[uwColumn] &&
+                        aData[uwColumn] == "se" &&
+                        !aData[isCrmColumn]) {
                         return true;
                     }
                     

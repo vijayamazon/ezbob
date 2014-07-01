@@ -240,6 +240,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 this.$el.find("#RejectBtn").show();
                 this.$el.find("#ApproveBtn").show();
                 this.$el.find("#SuspendBtn").show();
+                this.$el.find("#newCreditLineButtonId").addClass("disabled");
                 //if (!escalatedFlag) {this.$el.find("#EscalateBtn").show();}
                 break;
             case "Rejected":
@@ -250,6 +251,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 this.$el.find("#ApproveBtn").hide();
                 this.$el.find("#SuspendBtn").hide();
                 this.$el.find("#EscalateBtn").hide();
+                this.$el.find("#newCreditLineButtonId").removeClass("disabled");
                 break;
             case "Escalated":
                 this.$el.find("#ReturnBtn").hide();
@@ -257,6 +259,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 this.$el.find("#ApproveBtn").show();
                 this.$el.find("#SuspendBtn").show();
                 this.$el.find("#EscalateBtn").hide();
+                this.$el.find("#newCreditLineButtonId").addClass("disabled");
                 break;
             case "ApprovedPending":
                 this.$el.find("#ReturnBtn").show();
@@ -264,6 +267,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 this.$el.find("#ApproveBtn").hide();
                 this.$el.find("#SuspendBtn").hide();
                 this.$el.find("#EscalateBtn").hide();
+                this.$el.find("#newCreditLineButtonId").addClass("disabled");
         }
         userStatus = this.personalModel.get("UserStatus");
         if (userStatus === 'Registered') {
@@ -271,7 +275,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             this.$el.find("#RejectBtn").hide();
             this.$el.find("#ApproveBtn").hide();
             this.$el.find("#SuspendBtn").hide();
-            return this.$el.find("#EscalateBtn").hide();
+            this.$el.find("#EscalateBtn").hide();
         }
     },
     drawDonut: function (canvasId, fillColor, fillPercent, isClock) {
