@@ -597,11 +597,13 @@ div.shop-connected {
     padding-left: 55px;
 }
 
-    .FormRadioCtrl input,
-    .BankContainer input {
-        margin: -5px 0 0 15px;
-    }
+.form-director-is-dir-sha input,
+.FormRadioCtrl input,
+.BankContainer input {
+	margin: -5px 0 0 15px;
+}
 
+.form-director-is-dir-sha label,
 .FormRadioCtrl label {
     display: inline-block;
     font-weight: normal;

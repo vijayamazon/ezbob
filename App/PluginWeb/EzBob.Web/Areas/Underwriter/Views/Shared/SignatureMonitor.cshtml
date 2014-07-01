@@ -47,11 +47,16 @@
 		</tbody>
 	</table>
 	<div class="center buttons">
+		<button class="just-reload">Just reload</button>
+		<button class="btn btn-mini btn-primary add-director"><i class="fa fa-users" /> Add director/shareholder</button>
 		<input type="checkbox" class="initially-checked document-type" data-template-id="1" id="esign-board-resolution"><label for="esign-board-resolution">Board resolution</label>
 		<input type="checkbox" class="initially-checked document-type" data-template-id="2" id="esign-personal-guarantee"><label for="esign-personal-guarantee">Personal guarantee</label>
 		<button class="do-send btn btn-primary"><i class="fa fa-send-o"/> Send</button>
 		<button class="cancel-send btn btn-primary"><i class="fa fa-undo"/> Cancel</button>
 	</div>
+
+	<div class="alert duplicate-director-detected" style="display: none;">You are going to add a duplicate director.</div>
+	<div class=add-director-container></div>
 </div>
 
 <div class=templates style="display: none;">

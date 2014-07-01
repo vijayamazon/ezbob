@@ -25,10 +25,12 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 
 		this.dupCheckKeys[sKey] = 1;
 
+		var self = this;
+
 		_.each(options.customerInfo.Directors, function (oDir) {
-		    if (oDir.IsExperianDirector || oDir.IsExperianShareholder) {
-		        return;
-		    }
+			if (oDir.IsExperianDirector || oDir.IsExperianShareholder)
+				return;
+
 			var sKey = this.detailsToKey(
 				oDir.Name,
 				oDir.Surname,
@@ -38,10 +40,8 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 				oDir.DirectorAddress[0].Rawpostcode
 			);
 
-			this.dupCheckKeys[sKey] = 1;
+			self.dupCheckKeys[sKey] = 1;
 		}, this);
-
-		var self = this;
 
 		this.DupCheckModel = function(ary) {
 			this.Name = '';
@@ -97,7 +97,20 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		'click    select': 'handleUiEvent',
 		'focusout select': 'handleUiEvent',
 		'keyup    select': 'handleUiEvent',
+
+		'click .is-dir-sha': 'toggleIsDirSha',
 	}, // events
+
+	toggleIsDirSha: function() {
+		var oChk = $(event.target);
+
+		var bChecked = oChk.attr('checked') ? true : false;
+		var sTarget = oChk.data('target');
+
+		this.$el.find('.' + sTarget).val(bChecked ? 'on' : 'off');
+
+		this.canSubmit();
+	}, // toggleIsDirSha
 
 	addressModelChange: function() {
 		return EzBob.App.trigger('dash-director-address-change', this.model);
@@ -190,9 +203,14 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		this.canSubmit();
 	}, // handleUiEvent
 
+	isDirSha: function(sSelector) {
+		return this.$el.find(sSelector).val() === 'on';
+	}, // isDirSha
+
 	canSubmit: function() {
 		var bEnabled = this.validator.checkForm() &&
 			(this.addressView.model.length > 0) &&
+			(this.isDirSha('.is-director') || this.isDirSha('.is-shareholder')) &&
 			this.validateDuplicates();
 
 		this.setSomethingEnabled(this.ui.addButton, bEnabled);

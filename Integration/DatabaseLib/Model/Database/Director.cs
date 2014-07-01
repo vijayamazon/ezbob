@@ -19,6 +19,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string Phone { get; set; }
 		public virtual Company Company { get; set; }
 		public virtual bool? IsShareholder { get; set; }
+		public virtual bool? IsDirector { get; set; }
 	} // class Director
 
 	#endregion class Director
@@ -115,6 +116,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 			Map(x => x.Email);
 			Map(x => x.Phone);
 			Map(x => x.IsShareholder);
+			Map(x => x.IsDirector);
 
 			Component(x => x.DirectorAddressInfo, m => {
 				m.HasMany(x => x.LimitedDirectorHomeAddressPrev)

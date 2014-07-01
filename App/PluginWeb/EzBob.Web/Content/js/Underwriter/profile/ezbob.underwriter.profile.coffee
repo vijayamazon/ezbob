@@ -119,6 +119,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
         @signatureMonitorView = new EzBob.Underwriter.SignatureMonitorView
             el: @$el.find "#signature-monitor"
+            personalInfoModel: @personalInfoModel
 
         @alertDocs = new EzBob.Underwriter.Docs()
         @alertDocsView = new EzBob.Underwriter.AlertDocsView(el: @$el.find("#alert-docs"), model: @alertDocs)

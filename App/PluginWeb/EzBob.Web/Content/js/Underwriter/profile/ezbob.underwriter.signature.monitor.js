@@ -5,6 +5,8 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	initialize: function() {
 		this.SignaturesList = null;
 		this.SignersList = null;
+
+		this.personalInfoModel = this.options.personalInfoModel;
 	}, // initialize
 
 	events: {
@@ -14,7 +16,80 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		'click .cancel-send': 'cancelSend',
 		'click .do-send': 'doSend',
 		'click .download-signed-document': 'downloadSignedDocument',
+		'click .add-director': 'addDirectorClicked',
+		'click .just-reload': 'justReload',
 	}, // events
+
+	justReload: function() {
+		this.reload(this.personalInfoModel.get('Id'));
+	}, // justReload
+
+	addDirectorClicked: function(event) {
+		event.stopPropagation();
+		event.preventDefault();
+
+		this.$el.find('.add-director').hide();
+
+		var customerInfo = {
+			FirstName: this.personalInfoModel.get('FirstName'),
+			Surname: this.personalInfoModel.get('Surname'),
+			DateOfBirth: this.personalInfoModel.get('DateOfBirth'),
+			Gender: this.personalInfoModel.get('Gender'),
+			PostCode: this.personalInfoModel.get('PostCode'),
+			Directors: this.personalInfoModel.get('Directors')
+		};
+
+		var directorEl = this.$el.find('.add-director-container');
+
+		var addDirectorView = new EzBob.AddDirectorInfoView({
+			model: new EzBob.DirectorModel(),
+			el: directorEl,
+			backButtonCaption: 'Cancel',
+			failOnDuplicate: false,
+			customerInfo: customerInfo,
+		});
+
+		var nCustomerID = this.personalInfoModel.get('Id');
+
+		var self = this;
+
+		addDirectorView.setBackHandler(function() {
+			return self.onDirectorAddCanceled();
+		});
+
+		addDirectorView.setSuccessHandler(function() {
+			return self.onDirectorAdded(nCustomerID);
+		});
+
+		addDirectorView.setDupCheckCompleteHandler(function(bDupFound) {
+			return self.onDuplicateCheckComplete(bDupFound);
+		});
+
+		addDirectorView.render();
+
+		addDirectorView.setCustomerID(nCustomerID);
+
+		directorEl.show();
+
+		return false;
+	}, // addDirectorClicked
+
+	onDirectorAddCanceled: function() {
+		this.$el.find('.add-director-container').hide().empty();
+		this.$el.find('.add-director').show();
+	}, // onDirectorAddCanceled
+
+	onDirectorAdded: function(nCustomerID) {
+		this.onDirectorAddCanceled();
+		this.reload(nCustomerID);
+	}, // onDirectorAdded
+
+	onDuplicateCheckComplete: function(bDupFound) {
+		if (bDupFound)
+			this.$el.find('.duplicate-director-detected').show();	
+		else
+			this.$el.find('.duplicate-director-detected').hide();
+	}, // onDuplicateCheckComplete
 
 	pollStatus: function() {
 		var nCustomerID = this.$el.find('.esign-poll-status').data('CustomerID');
@@ -78,7 +153,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			if (!this.SendToCustomer && (this.Directors.length < 1))
 				return false;
 
-			for (var i; i < this.Directors.length; i++)
+			for (var i = 0; i < this.Directors.length; i++)
 				if (this.Directors[i] < 1)
 					return false;
 
@@ -199,9 +274,13 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 				{ sClass: ['grid-item-IsSelected center'], mData: null, },
 			]);
 
-			self.SignersList = self.$el.find('#esigners-list').dataTable(oSignersListOpts);
+			var oTbl = self.$el.find('#esigners-list');
+			self.SignersList = oTbl.dataTable(oSignersListOpts);
 			self.$el.find('#esigners-list_wrapper .dataTables_top_left')
 				.html('Send documents to');
+			oTbl.css('width', '');
+
+			self.$el.find('.initially-checked').attr('checked', 'checked');
 		}); // on getJSON done
 
 		oRequest.always(function() {
@@ -214,6 +293,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		return this.$el.find('.templates').find(sSelector).clone(true);
 	}, // fromTemplate
 
+	// ReSharper disable UnusedParameter
 	signersListRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 		var oRow = $(oTR);
 
@@ -233,12 +313,14 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 		oRow.find('.grid-item-IsSelected').empty().append(oSelected);
 	}, // signersListRowCallback
+	// ReSharper restore UnusedParameter
 
 	downloadSignedDocument: function() {
 		var nSignatureID = $(event.target).data('SignatureID');
 		window.open(window.gRootPath + 'Underwriter/Esignatures/Download?nEsignatureID=' + nSignatureID);
 	}, // downloadSignedDocument
 
+	// ReSharper disable UnusedParameter
 	signatureListRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 		var oRow = $(oTR);
 
@@ -255,6 +337,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		if (oData.HasDocument)
 			oDownloadCell.append(this.fromTemplate('.download-signed-document').data('SignatureID', oData.SignatureID));
 	}, // signatureListRowCallback
+	// ReSharper restore UnusedParameter
 
 	prepareSignatures: function(oRawSignatures) {
 		oRawSignatures.sort(function(a, b) {

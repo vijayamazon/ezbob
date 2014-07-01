@@ -11,6 +11,10 @@
 	public class DirectorModel {
 		private static readonly ILog _log = LogManager.GetLogger(typeof(DirectorModel));
 
+		public const string Yes = "yes";
+		public const string No = "no";
+		public const string On = "on";
+
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Middle { get; set; }
@@ -24,8 +28,13 @@
 
 		public string Email { get; set; }
 		public string Phone { get; set; }
+
 		public bool IsExperianShareholder { get; set; }
 		public bool IsExperianDirector { get; set; }
+
+		public string IsShareholder { get; set; }
+		public string IsDirector { get; set; }
+
 		public Director FromModel() {
 			Director director = null;
 
@@ -41,7 +50,9 @@
 					},
 					Gender = (Gender)Enum.Parse(typeof(Gender), Gender.ToString()),
 					Email = Email,
-					Phone = Phone
+					Phone = Phone,
+					IsDirector = IsDirector.Equals(Yes, StringComparison.InvariantCultureIgnoreCase) || IsDirector.Equals(On, StringComparison.InvariantCultureIgnoreCase),
+					IsShareholder = IsShareholder.Equals(Yes, StringComparison.InvariantCultureIgnoreCase) || IsShareholder.Equals(On, StringComparison.InvariantCultureIgnoreCase),
 				};
 			}
 			catch (Exception e) {
@@ -67,7 +78,9 @@
 				PrevDirectorAddress = director.DirectorAddressInfo.AllAddresses.ToArray(),
 				Gender = director.Gender.ToString()[0],
 				Email = director.Email,
-				Phone = director.Phone
+				Phone = director.Phone,
+				IsDirector = !director.IsDirector.HasValue || director.IsDirector.Value ? Yes : No,
+				IsShareholder = director.IsShareholder.HasValue && director.IsShareholder.Value ? Yes : No,
 			};
 		} // FromDirector
 	} // class DirectorModel

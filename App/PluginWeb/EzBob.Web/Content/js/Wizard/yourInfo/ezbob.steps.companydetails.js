@@ -163,7 +163,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	webSiteTurnOverFocus: function() { $('#WebSiteTurnOver').change(); }, // webSiteTurnOverFocus
 
 	render: function () {
-	    UnBlockUi();
+		UnBlockUi();
 		this.$el.html(this.template(this.model.toJSON()));
 
 		var oFieldStatusIcons = this.$el.find('IMG.field_status');
@@ -200,9 +200,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	}, // ownValidationRules
 
 	ownValidationMessages: function() {
-		return {
-
-		};
+		return {};
 	}, // ownValidationMessages
 
 	next: function() {
@@ -212,9 +210,9 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		if ($('.btn-continue').hasClass('disabled'))
 			return false;
-	    
+
 		BlockUi();
-	    
+
 		var form = this.$el.find('form.CompanyDetailForm'),
 			data = form.serializeArray();
 
@@ -269,7 +267,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	}, // next
 
 	handleTargeting: function(form, action, data, postcode, companyName, sCompanyFilter, refNum) {
-	    var that = this;
+		var that = this;
 
 		var req = $.get(window.gRootPath + 'Account/CheckingCompany', { companyName: companyName, postcode: postcode, filter: sCompanyFilter, refNum: refNum });
 
@@ -330,11 +328,10 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	}, // saveTargeting
 
 	saveDataRequest: function(action, data) {
-
 		var that = this;
-		if (this.$el.find('#OverallTurnOver').is(":visible")) {
+
+		if (this.$el.find('#OverallTurnOver').is(":visible"))
 			_.find(data, function(d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumericGet();
-		}
 
 		var pbo = _.find(data, function(d) { return d.name === 'PartBusinessOnline'; });
 		if (pbo)

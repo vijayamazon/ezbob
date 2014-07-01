@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
-{
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	#region using
 
 	using System;
@@ -31,18 +30,19 @@
 
 	#endregion using
 
-	public class CustomerDetailsController : Controller
-	{
+	public class CustomerDetailsController : Controller {
 		#region public
 
 		#region static method AddDirectorToCustomer
 
-		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session, bool bFailOnDuplicate)
-		{
+		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session, bool bFailOnDuplicate) {
 			if (customer.Company == null)
-				return new { error = "Customer doesn't have a company" };
+				return new { error = "Customer doesn't have a company." };
 
 			Director dbDirector = director.FromModel();
+
+			if (dbDirector == null)
+				return new { error = "Failed to parse director data." };
 
 			string sDirKey = DetailsToKey(dbDirector);
 
@@ -57,16 +57,13 @@
 				? CustomerAddressType.LimitedDirectorHomeAddress
 				: CustomerAddressType.NonLimitedDirectorHomeAddress;
 
-			foreach (var address in dbDirector.DirectorAddressInfo.AllAddresses)
-			{
+			foreach (var address in dbDirector.DirectorAddressInfo.AllAddresses) {
 				address.Director = dbDirector;
 				address.AddressType = nAddressType;
 			} // for each
 
-			if (customer.Company.Directors.Any())
-			{
-				foreach (var dir in customer.Company.Directors)
-				{
+			if (customer.Company.Directors.Any()) {
+				foreach (var dir in customer.Company.Directors) {
 					if (sDirKey == DetailsToKey(dir))
 						if (bFailOnDuplicate)
 							return new { error = "This director already added" };
@@ -90,8 +87,7 @@
 			ISession oSession,
 			CashRequestBuilder oCashRequestBuilder,
 			DirectorRepository oDirectorRepository
-		)
-		{
+		) {
 			m_oContext = oContext;
 			m_oDatabaseHelper = oDatabaseHelper;
 			m_oPersonalInfoHistoryRepository = oPersonalInfoHistoryRepository;
@@ -106,25 +102,20 @@
 		#region method Dashboard
 
 		[HttpGet]
-		public System.Web.Mvc.ActionResult Dashboard()
-		{
+		public System.Web.Mvc.ActionResult Dashboard() {
 			var blm = new WizardBrokerLeadModel(Session);
 
-			if (blm.BrokerFillsForCustomer)
-			{
+			if (blm.BrokerFillsForCustomer) {
 				StringActionResult sar = null;
 
-				try
-				{
+				try {
 					sar = m_oServiceClient.Instance.BrokerBackFromCustomerWizard(blm.LeadID);
 				}
-				catch (Exception e)
-				{
+				catch (Exception e) {
 					ms_oLog.Warn(e, "Failed to retrieve broker details, falling back to customer's dashboard.");
 				} // try
 
-				if (sar != null)
-				{
+				if (sar != null) {
 					FormsAuthentication.SignOut();
 					HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
 					FormsAuthentication.SetAuthCookie(sar.Value, true);
@@ -150,8 +141,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult LinkAccountsComplete()
-		{
+		public JsonResult LinkAccountsComplete() {
 			WizardComplete();
 			return Json(new { });
 		} // LinkAccountsComplete
@@ -164,8 +154,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult TakeQuickOffer()
-		{
+		public JsonResult TakeQuickOffer() {
 			var customer = m_oContext.Customer;
 
 			Session["WizardComplete"] = false;
@@ -221,8 +210,7 @@
 			return Json(new { });
 		} // WizardComplete
 
-		private void WizardCompleteTrn(Customer customer)
-		{
+		private void WizardCompleteTrn(Customer customer) {
 			ms_oLog.Debug("Customer {1} ({0}): has completed wizard.", customer.Id, customer.PersonalInfo.Fullname);
 
 			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
@@ -256,8 +244,7 @@
 			List<DirectorModel> nonLimitedDirectors,
 			CompanyEmployeeCountInfo companyEmployeeCountInfo,
 			CompanyInfo experianInfo
-		)
-		{
+		) {
 			var customer = m_oContext.Customer;
 
 			TypeOfBusiness nBusinessType;
@@ -293,18 +280,14 @@
 			if (!string.IsNullOrWhiteSpace(sErrorMsg))
 				return Json(new { error = sErrorMsg });
 
-			if (nBusinessType != TypeOfBusiness.Entrepreneur)
-			{
+			if (nBusinessType != TypeOfBusiness.Entrepreneur) {
 				IQueryable<Director> directors = m_oDirectorRepository.GetAll().Where(x => x.Customer.Id == customer.Id);
 
-				foreach (Director director in directors)
-				{
-					try
-					{
+				foreach (Director director in directors) {
+					try {
 						m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, director.Id, false);
 					}
-					catch (Exception e)
-					{
+					catch (Exception e) {
 						ms_oLog.Error(e,
 							"Something went pretty not so excellent while starting " +
 							"an Experian consumer check for customer {0} and director {1}.",
@@ -316,17 +299,14 @@
 
 			QuickOfferActionResult qoar = null;
 
-			try
-			{
+			try {
 				qoar = m_oServiceClient.Instance.QuickOfferWithPrerequisites(customer.Id, true);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				ms_oLog.Error(e, "Failed to get a quick offer from the service.");
 			} // try
 
-			if ((qoar != null) && qoar.HasValue)
-			{
+			if ((qoar != null) && qoar.HasValue) {
 				ms_oLog.Debug("Quick offer is {0} for customer {1}.", qoar.Value.Amount, customer.Id);
 				m_oSession.Refresh(customer);
 			} // if
@@ -345,40 +325,32 @@
 			PersonalInfo personalInfo,
 			List<CustomerAddress> personalAddress,
 			List<CustomerAddress> prevPersonAddresses,
-			string dateOfBirth) 
-		{
+			string dateOfBirth) {
 			new Transactional(
 				() => SaveCustomerToDB(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth)
 			).Execute();
 
 			var customer = m_oContext.Customer;
 
-			try
-			{
+			try {
 				m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, 0, false);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				ms_oLog.Error(e, "Something went pretty not so excellent while starting an Experian consumer check for customer {0}.", customer.Id);
 			} // try
 
-			try
-			{
+			try {
 				m_oServiceClient.Instance.CheckAml(customer.Id);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				ms_oLog.Error(e, "Something went pretty not so excellent while starting an AML check for customer {0}.", +customer.Id);
 			} // try
 
-			if (!customer.IsTest)
-			{
-				try
-				{
+			if (!customer.IsTest) {
+				try {
 					m_oServiceClient.Instance.NotifySalesOnNewCustomer(customer.Id);
 				}
-				catch (Exception e)
-				{
+				catch (Exception e) {
 					ms_oLog.Error(e, "Something went pretty not so excellent while sending notification to sales for customer {0}.", customer.Id);
 				} // try
 			} // if
@@ -393,8 +365,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult AddDirector(DirectorModel director)
-		{
+		public JsonResult AddDirector(DirectorModel director) {
 			var customer = m_oContext.Customer;
 
 			if (customer == null)
@@ -422,8 +393,7 @@
 			List<CustomerAddress> nonLimitedCompanyAddress,
 			List<DirectorAddressModel>[] directorAddress,
 			List<CustomerAddress> otherPropertyAddress
-		)
-		{
+		) {
 			var customer = m_oContext.Customer;
 
 			var oldPersonalInfo = PersonalInfoEditHistoryParametersBuilder(customer);
@@ -442,8 +412,7 @@
 				CustomerAddressType.PersonalAddress
 			);
 
-			if (otherPropertyAddress != null)
-			{
+			if (otherPropertyAddress != null) {
 				MakeAddress(
 					otherPropertyAddress,
 					addressInfo.OtherPropertyAddress,
@@ -524,14 +493,11 @@
 		#region method SaveEditHistory
 
 		[NonAction]
-		public void SaveEditHistory(PersonalInfoHistoryParameter oldPersonalInfo, PersonalInfoHistoryParameter newPersonalInfo)
-		{
+		public void SaveEditHistory(PersonalInfoHistoryParameter oldPersonalInfo, PersonalInfoHistoryParameter newPersonalInfo) {
 			var customer = m_oContext.Customer;
 
-			if (oldPersonalInfo.DaytimePhone != newPersonalInfo.DaytimePhone)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.DaytimePhone != newPersonalInfo.DaytimePhone) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Day time Phone",
 					OldValue = oldPersonalInfo.DaytimePhone,
@@ -542,10 +508,8 @@
 				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
-			if (oldPersonalInfo.MobilePhone != newPersonalInfo.MobilePhone)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.MobilePhone != newPersonalInfo.MobilePhone) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Mobile Phone",
 					OldValue = oldPersonalInfo.MobilePhone,
@@ -555,10 +519,8 @@
 				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
-			if (oldPersonalInfo.BusinessPhone != newPersonalInfo.BusinessPhone)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.BusinessPhone != newPersonalInfo.BusinessPhone) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Business Phone",
 					OldValue = oldPersonalInfo.BusinessPhone,
@@ -569,10 +531,8 @@
 				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
-			if (oldPersonalInfo.OverallTurnOver != newPersonalInfo.OverallTurnOver)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.OverallTurnOver != newPersonalInfo.OverallTurnOver) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Total Estimated Sales",
 					OldValue = oldPersonalInfo.OverallTurnOver,
@@ -583,10 +543,8 @@
 				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // if
 
-			if (oldPersonalInfo.WebSiteTurnover != newPersonalInfo.WebSiteTurnover)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			if (oldPersonalInfo.WebSiteTurnover != newPersonalInfo.WebSiteTurnover) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = "Estimated Online Sales",
 					OldValue = oldPersonalInfo.WebSiteTurnover,
@@ -616,10 +574,8 @@
 			Iesi.Collections.Generic.ISet<CustomerAddress> oCurrentAddressList,
 			CustomerAddressType nType,
 			Action<Iesi.Collections.Generic.ISet<CustomerAddress>> fSetNewValue
-		)
-		{
-			if (oNewAddressList == null)
-			{
+		) {
+			if (oNewAddressList == null) {
 				if (oCurrentAddressList != null)
 					oCurrentAddressList.Clear();
 
@@ -628,19 +584,16 @@
 
 			var oNewEntries = new List<CustomerAddress>();
 
-			foreach (var val in oNewAddressList.Where(x => x.AddressId == 0))
-			{
+			foreach (var val in oNewAddressList.Where(x => x.AddressId == 0)) {
 				val.AddressType = nType;
 				val.Customer = customer;
 				oNewEntries.Add(val);
 			} // foreach
 
-			if (oNewEntries.Count > 0)
-			{
+			if (oNewEntries.Count > 0) {
 				if (oCurrentAddressList == null)
 					fSetNewValue(new HashedSet<CustomerAddress>(oNewEntries));
-				else
-				{
+				else {
 					oCurrentAddressList.Clear();
 					oCurrentAddressList.AddAll(oNewEntries);
 				} // if
@@ -665,8 +618,7 @@
 			CompanyInfo experianInfo, Customer customer,
 			TypeOfBusiness nBusinessType,
 			IndustryType eIndustryType
-		)
-		{
+		) {
 			if (customer.PersonalInfo == null)
 				customer.PersonalInfo = new PersonalInfo();
 
@@ -685,50 +637,46 @@
 			List<CustomerAddress> companyAddress = null;
 			List<DirectorModel> companyDirectors = null;
 
-			switch (businessType.Reduce())
-			{
-				case TypeOfBusinessReduced.Limited:
-					companyData = new CompanyInfoMap
-					{
-						BusinessPhone = limitedInfo.LimitedBusinessPhone,
-						CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
-						CompanyNumber = limitedInfo.LimitedCompanyNumber,
-						CompanyName = limitedInfo.LimitedCompanyName,
-						PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
-						RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
-						TypeOfBusiness = businessType,
-						TimeAtAddress = limitedInfo.LimitedTimeAtAddress,
-						YearsInCompany = companyAdditionalInfo.YearsInCompany,
-					};
+			switch (businessType.Reduce()) {
+			case TypeOfBusinessReduced.Limited:
+				companyData = new CompanyInfoMap {
+					BusinessPhone = limitedInfo.LimitedBusinessPhone,
+					CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
+					CompanyNumber = limitedInfo.LimitedCompanyNumber,
+					CompanyName = limitedInfo.LimitedCompanyName,
+					PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
+					RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
+					TypeOfBusiness = businessType,
+					TimeAtAddress = limitedInfo.LimitedTimeAtAddress,
+					YearsInCompany = companyAdditionalInfo.YearsInCompany,
+				};
 
-					companyAddress = limitedCompanyAddress;
-					companyDirectors = limitedDirectors;
-					break;
+				companyAddress = limitedCompanyAddress;
+				companyDirectors = limitedDirectors;
+				break;
 
-				case TypeOfBusinessReduced.NonLimited:
-					companyAddress = nonLimitedCompanyAddress;
-					companyDirectors = nonLimitedDirectors;
-					goto case TypeOfBusinessReduced.Personal;
+			case TypeOfBusinessReduced.NonLimited:
+				companyAddress = nonLimitedCompanyAddress;
+				companyDirectors = nonLimitedDirectors;
+				goto case TypeOfBusinessReduced.Personal;
 
-				case TypeOfBusinessReduced.Personal:
-					companyData = new CompanyInfoMap
-					{
-						BusinessPhone = nonLimitedInfo.NonLimitedBusinessPhone,
-						CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
-						CompanyName = nonLimitedInfo.NonLimitedCompanyName,
-						PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
-						RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
-						TypeOfBusiness = businessType,
-						TimeAtAddress = nonLimitedInfo.NonLimitedTimeAtAddress,
-						YearsInCompany = companyAdditionalInfo.YearsInCompany,
-						TimeInBusiness = nonLimitedInfo.NonLimitedTimeInBusiness,
-					};
+			case TypeOfBusinessReduced.Personal:
+				companyData = new CompanyInfoMap {
+					BusinessPhone = nonLimitedInfo.NonLimitedBusinessPhone,
+					CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
+					CompanyName = nonLimitedInfo.NonLimitedCompanyName,
+					PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
+					RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
+					TypeOfBusiness = businessType,
+					TimeAtAddress = nonLimitedInfo.NonLimitedTimeAtAddress,
+					YearsInCompany = companyAdditionalInfo.YearsInCompany,
+					TimeInBusiness = nonLimitedInfo.NonLimitedTimeInBusiness,
+				};
 
-					break;
+				break;
 			} // switch
 
-			if (!ReferenceEquals(companyData, null))
-			{
+			if (!ReferenceEquals(companyData, null)) {
 				var experianAddress = new List<CustomerAddress> {
 					new CustomerAddress {
 						AddressType = CustomerAddressType.ExperianCompanyAddress,
@@ -772,10 +720,8 @@
 			CompanyEmployeeCountInfo companyEmployeeCount,
 			CompanyInfo experianInfo,
 			Customer customer
-		)
-		{
-			var company = new Company
-			{
+		) {
+			var company = new Company {
 				ExperianCompanyName = experianInfo.BusName,
 				ExperianRefNum = experianInfo.BusRefNum == "skip" ? "NotFound" : experianInfo.BusRefNum,
 				TypeOfBusiness = companyData.TypeOfBusiness,
@@ -793,19 +739,14 @@
 
 			customer.Company = company;
 
-			if (directors != null)
-			{
+			if (directors != null) {
 				company.Directors.AddAll(
-					directors.Select(d =>
-					{
+					directors.Select(d => {
 						var dir = d.FromModel();
 
-						if (dir != null)
-						{
-							if (dir.DirectorAddressInfo != null && dir.DirectorAddressInfo.AllAddresses != null)
-							{
-								foreach (var address in dir.DirectorAddressInfo.AllAddresses)
-								{
+						if (dir != null) {
+							if (dir.DirectorAddressInfo != null && dir.DirectorAddressInfo.AllAddresses != null) {
+								foreach (var address in dir.DirectorAddressInfo.AllAddresses) {
 									address.AddressType = CustomerAddressType.LimitedDirectorHomeAddress;
 									address.Director = dir;
 								} // for each
@@ -824,8 +765,8 @@
 					DetailsToKey(customer)
 				};
 
-				foreach (Director oDir in company.Directors)
-				{
+				foreach (Director oDir in company.Directors) {
+
 					string sKey = DetailsToKey(oDir);
 
 					if (oKeys.Contains(sKey))
@@ -835,10 +776,8 @@
 				} // for each director
 			} // if
 
-			if (companyAddress != null)
-			{
-				foreach (var val in companyAddress)
-				{
+			if (companyAddress != null) {
+				foreach (var val in companyAddress) {
 					val.AddressType = CustomerAddressType.LimitedCompanyAddress; //TODO
 					val.Customer = customer;
 					val.Company = company;
@@ -847,8 +786,7 @@
 				company.CompanyAddress = new HashedSet<CustomerAddress>(companyAddress);
 			} // if
 
-			if (experianInfo != null)
-			{
+			if (experianInfo != null) {
 				experianCompanyAddress = new Collection<CustomerAddress> {
 					new CustomerAddress {
 						Line1 = experianInfo.AddrLine1,
@@ -859,8 +797,7 @@
 					}
 				};
 
-				foreach (var val in experianCompanyAddress)
-				{
+				foreach (var val in experianCompanyAddress) {
 					val.AddressType = CustomerAddressType.ExperianCompanyAddress;
 					val.Customer = customer;
 					val.Company = company;
@@ -869,8 +806,7 @@
 				company.ExperianCompanyAddress = new HashedSet<CustomerAddress>(experianCompanyAddress);
 			} // if
 
-			company.CompanyEmployeeCount.Add(new CompanyEmployeeCount
-			{
+			company.CompanyEmployeeCount.Add(new CompanyEmployeeCount {
 				BottomEarningEmployeeCount = companyEmployeeCount.BottomEarningEmployeeCount,
 				Created = DateTime.UtcNow,
 				Customer = customer,
@@ -905,8 +841,7 @@
 			IEnumerable<CustomerAddress> personalAddress,
 			IEnumerable<CustomerAddress> prevPersonAddresses,
 			string dateOfBirth // do not remove this argument, see remarks above
-		)
-		{
+		) {
 			ms_oLog.Debug("SaveCustomerToDB(personalInfo.birthdate = {0}, dateOfBirth = {1}.",
 				personalInfo.DateOfBirth.HasValue ? personalInfo.DateOfBirth.Value.ToString("d-MMMM-yyyy", CultureInfo.InvariantCulture) : "NULL",
 				dateOfBirth
@@ -918,8 +853,7 @@
 				throw new ArgumentNullException("personalInfo");
 
 			personalInfo.FirstName = personalInfo.FirstName.Trim();
-			if (personalInfo.MiddleInitial != null)
-			{
+			if (personalInfo.MiddleInitial != null) {
 				personalInfo.MiddleInitial = personalInfo.MiddleInitial.Trim();
 			}
 			personalInfo.Surname = personalInfo.Surname.Trim();
@@ -939,12 +873,10 @@
 
 			customer.PersonalInfo = personalInfo;
 
-			if (!string.IsNullOrEmpty(personalInfo.MiddleInitial))
-			{
+			if (!string.IsNullOrEmpty(personalInfo.MiddleInitial)) {
 				personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial).Trim();
 			}
-			else
-			{
+			else {
 				personalInfo.Fullname = string.Format("{0} {1}", personalInfo.FirstName, personalInfo.Surname).Trim();
 			}
 
@@ -976,8 +908,7 @@
 			CustomerAddressType prevAddressType,
 			Iesi.Collections.Generic.ISet<CustomerAddress> currentAddress,
 			CustomerAddressType currentAddressType
-		)
-		{
+		) {
 			var newAddresses = newAddress as IList<CustomerAddress> ?? newAddress.ToList();
 			var addAddress = newAddresses.Where(i => i.AddressId == 0).ToList();
 			var curAddress = addAddress.LastOrDefault() ?? currentAddress.LastOrDefault();
@@ -985,8 +916,7 @@
 			if (curAddress == null)
 				return;
 
-			foreach (var address in newAddresses)
-			{
+			foreach (var address in newAddresses) {
 				address.Director = currentAddress.First().Director;
 				address.Customer = currentAddress.First().Customer;
 				address.Company = currentAddress.First().Company;
@@ -995,8 +925,7 @@
 			foreach (var address in currentAddress)
 				address.AddressType = prevAddressType;
 
-			foreach (var item in addAddress.Where(a => a.Id != curAddress.Id))
-			{
+			foreach (var item in addAddress.Where(a => a.Id != curAddress.Id)) {
 				item.AddressType = prevAddressType;
 				prevAddress.Add(item);
 			} // for each old address
@@ -1015,18 +944,15 @@
 			IList<CustomerAddress> newAddress,
 			Customer customer,
 			string fieldName
-		)
-		{
+		) {
 			if (oldAddress == null || newAddress == null)
 				return;
 
 			var addedAddress = newAddress.Where(n => oldAddress.All(t => t.Id != n.Id)).ToList();
 			var removeAddress = oldAddress.Where(n => newAddress.All(t => t.Id != n.Id)).ToList();
 
-			foreach (var customerAddress in removeAddress)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			foreach (var customerAddress in removeAddress) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = fieldName,
 					OldValue = customerAddress.Id,
@@ -1037,10 +963,8 @@
 				m_oPersonalInfoHistoryRepository.SaveOrUpdate(personalInfoEditHistory);
 			} // for each removed address
 
-			foreach (var customerAddress in addedAddress)
-			{
-				var personalInfoEditHistory = new PersonalInfoHistory
-				{
+			foreach (var customerAddress in addedAddress) {
+				var personalInfoEditHistory = new PersonalInfoHistory {
 					Customer = customer,
 					FieldName = fieldName,
 					OldValue = string.Empty,
@@ -1058,19 +982,16 @@
 
 		#region method PersonalInfoEditHistoryParametersBuilder
 
-		private PersonalInfoHistoryParameter PersonalInfoEditHistoryParametersBuilder(Customer customer)
-		{
+		private PersonalInfoHistoryParameter PersonalInfoEditHistoryParametersBuilder(Customer customer) {
 			string businessPhone = "";
 			IList<CustomerAddress> companyAddress = null;
 			var company = customer.Company;
-			if (company != null)
-			{
+			if (company != null) {
 				businessPhone = company.BusinessPhone;
 				companyAddress = company.CompanyAddress.ToList();
 			}
 
-			var personalInfo = new PersonalInfoHistoryParameter
-			{
+			var personalInfo = new PersonalInfoHistoryParameter {
 				DaytimePhone = customer.PersonalInfo.DaytimePhone,
 				MobilePhone = customer.PersonalInfo.MobilePhone,
 				BusinessPhone = businessPhone,
@@ -1089,8 +1010,7 @@
 
 		#region method DetailsToKey
 
-		private static string DetailsToKey(Director oDir)
-		{
+		private static string DetailsToKey(Director oDir) {
 			return DetailsToKey(
 				oDir.Name,
 				oDir.Surname,
@@ -1100,8 +1020,7 @@
 			);
 		} // DetailsToKey
 
-		private static string DetailsToKey(Customer customer)
-		{
+		private static string DetailsToKey(Customer customer) {
 			return DetailsToKey(
 				customer.PersonalInfo.FirstName,
 				customer.PersonalInfo.Surname,
@@ -1111,8 +1030,7 @@
 			);
 		} // DetailsToKey
 
-		private static string DetailsToKey(string sFirstName, string sLastName, DateTime? oBirthDate, Gender nGender, string sPostCode)
-		{
+		private static string DetailsToKey(string sFirstName, string sLastName, DateTime? oBirthDate, Gender nGender, string sPostCode) {
 			string sBirthDate = oBirthDate.HasValue
 				? oBirthDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
 				: string.Empty;

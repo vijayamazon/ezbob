@@ -125,7 +125,8 @@
       });
       this.Message.on("creditResultChanged", this.changedSystemDecision, this);
       this.signatureMonitorView = new EzBob.Underwriter.SignatureMonitorView({
-        el: this.$el.find("#signature-monitor")
+        el: this.$el.find("#signature-monitor"),
+        personalInfoModel: this.personalInfoModel
       });
       this.alertDocs = new EzBob.Underwriter.Docs();
       this.alertDocsView = new EzBob.Underwriter.AlertDocsView({

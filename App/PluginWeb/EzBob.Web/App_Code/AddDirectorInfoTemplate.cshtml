@@ -5,7 +5,18 @@
 				<input type="hidden" name="nCustomerID" id="nCustomerID" />
 
 				<div class="add-director-container">
-					<h2 class="form_start">Add director</h2>
+					<h2 class="form_start">Add director/shareholder</h2>
+				</div>
+				
+				<div class="control-group form_field_container form-director-is-dir-sha">
+					<div>
+						<input type="checkbox" checked="checked" id="DirectorIsDirectorShareholder_Dir" class="is-dir-sha" data-target="is-director" ui-event-control-id="dashboard:director_is_director" />
+						<label for="DirectorIsDirectorShareholder_Dir">This person is a company director.</label>
+					</div>
+					<div>
+						<input type="checkbox" id="DirectorIsDirectorShareholder_Sha" class="is-dir-sha" data-target="is-shareholder" ui-event-control-id="dashboard:director_is_shareholder" />
+						<label for="DirectorIsDirectorShareholder_Sha">This person is a company shareholder.</label>
+					</div>
 				</div>
 
 				@EzForm.InputText("Name", "First name", cls: "form_field alphaOnly", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_first_name")
@@ -28,6 +39,9 @@
 
 				@EzForm.InputText("Email", "Email", type: "email", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_email")
 				@EzForm.InputText("Phone", "Best contact number", cls: "form_field phonenumber", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_phone")
+
+				<input type="hidden" class="is-director" name="IsDirector" value="on" />
+				<input type="hidden" class="is-shareholder" name="IsShareholder" value="off" />
 			</form>
 
 			<div class="form_buttons_container">
