@@ -435,7 +435,7 @@
 						activeLoans.Add(new ActiveLoan
 							{
 								Approved = loan.CashRequest.ManagerApprovedSum,
-								Balance = loan.Balance,
+								Balance = loan.Principal,
 								LoanAmount = loan.LoanAmount,
 								LoanAmountPercent =
 									loan.CashRequest.ManagerApprovedSum.HasValue
@@ -448,7 +448,7 @@
 								BalanceWidthPercent = loan.CashRequest.ManagerApprovedSum.HasValue
 										? loan.Balance / (decimal)loan.CashRequest.ManagerApprovedSum.Value
 										: 0,
-								BalancePercent = loan.Balance / loan.LoanAmount,
+								BalancePercent = loan.Principal / loan.LoanAmount,
 								Term = agreement.Term,
 								TermApproved = loan.CashRequest.RepaymentPeriod,
 								TotalFee = loan.SetupFee,
