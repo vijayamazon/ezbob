@@ -67,22 +67,28 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	public class ConsumerSummaryCharacteristics
 	{
-		public string NumberOfAccounts { get; set; } // done
-		public string NumberOfAccounts3M { get; set; } // done
+		public int NumberOfAccounts { get; set; } // done
+		public int NumberOfAccounts3M { get; set; } // done
 		public string WorstCurrentStatus { get; set; } // done
 		public string WorstCurrentStatus3M { get; set; } // done
-		public string NumberOfDefaults { get; set; } // done
+		public int NumberOfDefaults { get; set; } // done
 		public string NumberOfCCJs { get; set; } // done
 		public string AgeOfMostRecentCCJ { get; set; } // done
-		public string NumberOfCCOverLimit { get; set; } // done
-		public string EnquiriesLast3M { get; set; } // done
-		public string EnquiriesLast6M { get; set; } // done
+		public double NumberOfCCOverLimit { get; set; } // done
+		public double EnquiriesLast3M { get; set; } // done
+		public double EnquiriesLast6M { get; set; } // done
 		public string CreditCardUtilization { get; set; } // done
 		public string DSRandOwnershipType { get; set; } // !DSR
 		public string NOCsOnCCJ { get; set; } // done
 		public string NOCsOnCAIS { get; set; } // done
 		public string CAISSpecialInstructionFlag { get; set; } // done
-		public string SatisfiedJudgements { get; set; } // done 
+		public string SatisfiedJudgements { get; set; }
+
+		public int NumberOfLates { get; set; }
+		public string LateStatus { get; set; }
+		public int DefaultAmount { get; set; }
+
+// done 
 	}
 
 	public class ConsumerAccountsOverview
@@ -203,14 +209,14 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string Validtill { get; set; }
 		public string WorstCurrentstatus { get; set; }
 		public string WorstHistoricalstatus { get; set; }
-		public string Numberofdefaults { get; set; }
-		public string Accounts { get; set; }
+		public int Numberofdefaults { get; set; }
+		public int Accounts { get; set; }
 		public string CCJs { get; set; }
 		public string MostrecentCCJ { get; set; }
 		public string DSRandownershiptype { get; set; }
 		public string Creditcardutilization { get; set; }
-		public string Enquiriesinlast6months { get; set; }
-		public string Enquiriesinlast3months { get; set; }
+		public double Enquiriesinlast6months { get; set; }
+		public double Enquiriesinlast3months { get; set; }
 		public string Totalbalance { get; set; }
 		public string AML { get; set; }
 		public string AMLnum { get; set; }

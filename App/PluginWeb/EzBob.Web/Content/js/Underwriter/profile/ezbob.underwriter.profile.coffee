@@ -176,14 +176,13 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
                     width: "100%"
                     height: "100%"
                     lineWidth: 2
-                    spotRadius: 3
-                    lineColor: "#88bbc8"
-                    fillColor: "#f2f7f9"
-                    spotColor: "green"
-                    maxSpotColor: "#00AEEF"
-                    minSpotColor: "red"
-                    chartRangeMin: -1
-                    valueSpots: { ':' : 'green' }
+                    spotRadius: 3.5
+                    lineColor: "#cfcfcf"
+                    fillColor: "transparent"
+                    spotColor: "#cfcfcf"
+                    maxSpotColor: "#cfcfcf"
+                    minSpotColor: "#cfcfcf"
+                    valueSpots: { ':' : '#cfcfcf' }
                 )
         ))
 

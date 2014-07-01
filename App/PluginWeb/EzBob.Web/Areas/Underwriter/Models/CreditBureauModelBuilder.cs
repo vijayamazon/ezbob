@@ -30,7 +30,7 @@
 	using System.Text;
 	using Web.Models;
 	using log4net;
-using EZBob.DatabaseLib.Model.Experian;
+	using EZBob.DatabaseLib.Model.Experian;
 
 	public class CreditBureauModelBuilder
 	{
@@ -43,8 +43,8 @@ using EZBob.DatabaseLib.Model.Experian;
 		private const int CompanyScoreMax = 100;
 		private const int CompanyScoreMin = 0;
 
-		public CreditBureauModelBuilder(ISession session, 
-			ICustomerRepository customers, 
+		public CreditBureauModelBuilder(ISession session,
+			ICustomerRepository customers,
 			IExperianHistoryRepository experianHistoryRepository)
 		{
 			_session = session;
@@ -95,7 +95,7 @@ using EZBob.DatabaseLib.Model.Experian;
 				var dob = customer.PersonalInfo.DateOfBirth;
 				var response =
 					_session.Query<MP_ServiceLog>().FirstOrDefault(x => x.Id == logId.Value);
-				
+
 				if (response == null || string.IsNullOrEmpty(response.ResponseData))
 				{
 					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} id: {1}", customer.Id, logId.Value);
@@ -146,10 +146,10 @@ using EZBob.DatabaseLib.Model.Experian;
 			else
 			{
 				var consumerResponses = (from s in _session.Query<MP_ServiceLog>()
-				                                  where s.Director == null
-				                                  where s.Customer.Id == customer.Id
-				                                  where s.ServiceType == ExperianServiceType.Consumer.DescriptionAttr()
-				                                  select new {Id = s.Id, InsertDate = s.InsertDate});
+										 where s.Director == null
+										 where s.Customer.Id == customer.Id
+										 where s.ServiceType == ExperianServiceType.Consumer.DescriptionAttr()
+										 select new { Id = s.Id, InsertDate = s.InsertDate });
 				var checkConsumerHistoryModels = new List<CheckHistoryModel>();
 				foreach (var res in consumerResponses)
 				{
@@ -163,7 +163,7 @@ using EZBob.DatabaseLib.Model.Experian;
 					checkConsumerHistoryModels.Add(new CheckHistoryModel
 						{
 							Id = res.Id,
-							Score = (int) consumerModel.Score,
+							Score = (int)consumerModel.Score,
 							CII = cii,
 							Balance = balance,
 							Date = res.InsertDate
@@ -207,7 +207,7 @@ using EZBob.DatabaseLib.Model.Experian;
 												 where s.Director == null
 												 where s.Customer.Id == customer.Id
 												 where s.ServiceType == type
-												 select isLimited ? 
+												 select isLimited ?
 												 GetLimitedHistory(s.ResponseData, s.InsertDate, s.Id) :
 												 new CheckHistoryModel
 												 {
@@ -237,7 +237,7 @@ using EZBob.DatabaseLib.Model.Experian;
 
 		private CheckHistoryModel GetLimitedHistory(string responseData, DateTime date, long id)
 		{
-			var model = new CheckHistoryModel{Date = date, Id = id};
+			var model = new CheckHistoryModel { Date = date, Id = id };
 			var doc = new XmlDocument();
 
 			try
@@ -358,18 +358,18 @@ using EZBob.DatabaseLib.Model.Experian;
 
 			model.ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics
 			{
-				NumberOfAccounts = string.Empty,
-				NumberOfAccounts3M = string.Empty,
+				NumberOfAccounts = 0,
+				NumberOfAccounts3M = 0,
 				WorstCurrentStatus = string.Empty,
 				WorstCurrentStatus3M = string.Empty,
 
-				EnquiriesLast3M = eInfo.EnquiriesLast3Months.ToString(CultureInfo.InvariantCulture),
-				EnquiriesLast6M = eInfo.EnquiriesLast6Months.ToString(CultureInfo.InvariantCulture),
+				EnquiriesLast3M = eInfo.EnquiriesLast3Months,
+				EnquiriesLast6M = eInfo.EnquiriesLast6Months,
 
-				NumberOfDefaults = string.Empty,
 				NumberOfCCJs = string.Empty,
 				AgeOfMostRecentCCJ = string.Empty,
-				NumberOfCCOverLimit = eInfo.CreditCardOverLimit.ToString(CultureInfo.InvariantCulture),
+				NumberOfDefaults = 0,
+				NumberOfCCOverLimit = eInfo.CreditCardOverLimit,
 				CreditCardUtilization =
 					eInfo.CreditLimitUtilisation.ToString(CultureInfo.InvariantCulture),
 				DSRandOwnershipType = string.Empty,
@@ -490,7 +490,9 @@ using EZBob.DatabaseLib.Model.Experian;
 			var limits = new[] { 0.0, 0.0, 0.0, 0.0 };
 			var balances = new[] { 0.0, 0.0, 0.0, 0.0 };
 			int numberOfDefaults = 0;
-
+			int defaultAmount = 0;
+			int numberOfLates = 0;
+			string lateStatus = "0";
 			try
 			{
 				if (eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS != null)
@@ -533,14 +535,22 @@ using EZBob.DatabaseLib.Model.Experian;
 							string dateType;
 							accountInfo.AccountStatus = GetAccountStatusString(accStatus, out dateType);
 							accountInfo.DateType = dateType;
-							if (accStatus == "F")
+							if (accStatus == DefaultCaisStatusName)
+							{
 								numberOfDefaults++;
+								if (caisDetails.CurrentDefBalance != null && !string.IsNullOrEmpty(caisDetails.CurrentDefBalance.Amount))
+								{
+									int defAmount;
+									int.TryParse(caisDetails.CurrentDefBalance.Amount, out defAmount);
+									defaultAmount += defAmount;
+								}
+							}
 
 							var accType = GetAccountType(caisDetails.AccountType);
 							if (accType < 0)
 								continue;
 
-							if (((accStatus == "D") || (accStatus == "A")) && matchTo == Variables.FinancialAccounts_MainApplicant)
+							if (((accStatus == DelinquentCaisStatusName) || (accStatus == ActiveCaisStatusName)) && matchTo == Variables.FinancialAccounts_MainApplicant)
 							{
 								accounts[accType]++;
 								var ws = caisDetails.WorstStatus;
@@ -565,6 +575,12 @@ using EZBob.DatabaseLib.Model.Experian;
 								numberOfAccounts++;
 								if ((openDate != null) && (openDate.Value >= DateTime.Today.AddMonths(-3)))
 									numberOfAcc3M++;
+
+								if (accStatus == DelinquentStatusName)
+								{
+									numberOfLates++;
+									lateStatus = GetWorstStatus(lateStatus, ws);
+								}
 							}
 
 							string statuses = caisDetails.AccountStatusCodes ?? string.Empty;
@@ -643,9 +659,12 @@ using EZBob.DatabaseLib.Model.Experian;
 				Log.DebugFormat("Can`t read values for Financial Accounts {0}", e);
 			}
 
-			model.ConsumerSummaryCharacteristics.NumberOfAccounts = numberOfAccounts.ToString(CultureInfo.InvariantCulture);
-			model.ConsumerSummaryCharacteristics.NumberOfAccounts3M = numberOfAcc3M.ToString(CultureInfo.InvariantCulture);
-			model.ConsumerSummaryCharacteristics.NumberOfDefaults = numberOfDefaults.ToString(CultureInfo.InvariantCulture);
+			model.ConsumerSummaryCharacteristics.NumberOfAccounts = numberOfAccounts;
+			model.ConsumerSummaryCharacteristics.NumberOfAccounts3M = numberOfAcc3M;
+			model.ConsumerSummaryCharacteristics.NumberOfDefaults = numberOfDefaults;
+			model.ConsumerSummaryCharacteristics.NumberOfLates = numberOfLates;
+			model.ConsumerSummaryCharacteristics.LateStatus = AccountStatusDictionary.GetDetailedAccountStatusString(lateStatus);
+			model.ConsumerSummaryCharacteristics.DefaultAmount = defaultAmount;
 
 			Log.DebugFormat("Accounts List length: {0}", accList.Count);
 			accList.Sort(new AccountInfoComparer());

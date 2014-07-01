@@ -198,13 +198,13 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-md-6">
-                                    <% alert = 'alert-warning';%>
+                                    <% alert = experian.ConsumerSummaryCharacteristics.NumberOfLates > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
-                                        Delays: N/A
+                                        Delays: <%-experian.ConsumerSummaryCharacteristics.NumberOfLates%>, <%-experian.ConsumerSummaryCharacteristics.LateStatus%>
                                     </div>
                                     <% alert = experian.ConsumerSummaryCharacteristics.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info'; %>
                                     <div class="alert <%-alert%>">
-                                        Defaults: <%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%>
+                                        Defaults: <%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%>, <%-EzBob.formatPoundsAsInt(experian.ConsumerSummaryCharacteristics.DefaultAmount)%>
                                     </div>
                                     <% alert = experian.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
@@ -263,13 +263,13 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-6">
-                                        <% alert = 'alert-warning';%>
+                                        <% alert = item.ConsumerSummaryCharacteristics.NumberOfLates > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
-                                        Delays: N/A
+                                        Delays: <%-item.ConsumerSummaryCharacteristics.NumberOfLates%>, <%-item.ConsumerSummaryCharacteristics.LateStatus%>
                                     </div>
                                         <% alert = item.ConsumerSummaryCharacteristics.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info'; %>
                                     <div class="alert <%-alert%>">
-                                        Defaults: <%-item.ConsumerSummaryCharacteristics.NumberOfDefaults%>
+                                        Defaults: <%-item.ConsumerSummaryCharacteristics.NumberOfDefaults%>, <%-EzBob.formatPoundsAsInt(item.ConsumerSummaryCharacteristics.DefaultAmount)%>
                                     </div>
                                         <% alert = item.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
