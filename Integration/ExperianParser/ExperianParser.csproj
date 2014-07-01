@@ -68,6 +68,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="non_limited_director_details_parser.json" />
+    <None Include="director_details_parser.json" />
     <None Include="non_limited_director_info_parser.json" />
     <None Include="director_info_parser.json" />
     <None Include="limited_company_parser.json" />
