@@ -6,20 +6,18 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
     initialize: ->
         @model = new EzBob.Underwriter.FundingModel()
         @model.on "change reset", @render, @
+        @requiredFunds = -1
         @model.fetch()
         
-        @requiredFunds = -1
-
-        xhr1 = $.post "#{window.gRootPath}Underwriter/Funding/GetRequiredFunds"
-        xhr1.done (res) =>
-            @requiredFunds = res
-            @render()
-
         xhr = $.post "#{window.gRootPath}Underwriter/Funding/GetAvailableFundsInterval"
         xhr.done (res) =>
-            @modelUpdater = setInterval(=> 
-                @model.fetch()
-            , res )
+            xhr1 = $.post "#{window.gRootPath}Underwriter/Funding/GetRequiredFunds"
+            xhr1.done (res) =>
+                @requiredFunds = res
+                @render()
+                @modelUpdater = setInterval(=> 
+                    @model.fetch()
+                , res )
 
     template: "#funding-template"
 

@@ -18,23 +18,25 @@
     }
 
     FundingView.prototype.initialize = function() {
-      var xhr, xhr1,
+      var xhr,
         _this = this;
 
       this.model = new EzBob.Underwriter.FundingModel();
       this.model.on("change reset", this.render, this);
-      this.model.fetch();
       this.requiredFunds = -1;
-      xhr1 = $.post("" + window.gRootPath + "Underwriter/Funding/GetRequiredFunds");
-      xhr1.done(function(res) {
-        _this.requiredFunds = res;
-        return _this.render();
-      });
+      this.model.fetch();
       xhr = $.post("" + window.gRootPath + "Underwriter/Funding/GetAvailableFundsInterval");
       return xhr.done(function(res) {
-        return _this.modelUpdater = setInterval(function() {
-          return _this.model.fetch();
-        }, res);
+        var xhr1;
+
+        xhr1 = $.post("" + window.gRootPath + "Underwriter/Funding/GetRequiredFunds");
+        return xhr1.done(function(res) {
+          _this.requiredFunds = res;
+          _this.render();
+          return _this.modelUpdater = setInterval(function() {
+            return _this.model.fetch();
+          }, res);
+        });
       });
     };
 

@@ -1295,9 +1295,6 @@
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js">
       <DependentUpon>ezbob.underwriter.funding.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.min.js">
-      <DependentUpon>ezbob.underwriter.funding.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js">
       <DependentUpon>ezbob.underwriter.support.coffee</DependentUpon>
     </Content>
