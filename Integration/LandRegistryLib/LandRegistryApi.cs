@@ -67,7 +67,7 @@
 						ID =
 							new LREnquiryServiceNS.Q1IdentifierType
 								{
-									MessageID = new LREnquiryServiceNS.Q1TextType { Value = "ENQREQ" + customerId }
+									MessageID = new LREnquiryServiceNS.Q1TextType { Value = "ENQREQ" + customerId + "-" + Guid.NewGuid().ToString("N") }
 								},
 						Product = new LREnquiryServiceNS.Q1ProductType
 							{
