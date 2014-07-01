@@ -101,8 +101,7 @@
 
 				var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
 				model.Apr = apr;
-				model.Air = model.InterestRate*100*12 + model.RepaymentPerion == 0 ? 0
-					            : (12/(decimal) model.RepaymentPerion*model.SetupFeePercent*100);
+				model.Air = (model.InterestRate*100*12 + (model.RepaymentPerion == 0 ? 0 : (12/(decimal) model.RepaymentPerion*model.SetupFeePercent*100))) / 100;
 				model.RealCost = loanOffer.RealInterestCost;
 			}
 
