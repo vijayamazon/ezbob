@@ -591,6 +591,22 @@ namespace ConfigManager {
 
 		#endregion property DefaultFeedbackValue
 
+		#region property DirectorDetailsNonLimitedParserConfiguration
+
+		public virtual VariableValue DirectorDetailsNonLimitedParserConfiguration {
+			get { return this[Variables.DirectorDetailsNonLimitedParserConfiguration]; } // get
+		} // DirectorDetailsNonLimitedParserConfiguration
+
+		#endregion property DirectorDetailsNonLimitedParserConfiguration
+
+		#region property DirectorDetailsParserConfiguration
+
+		public virtual VariableValue DirectorDetailsParserConfiguration {
+			get { return this[Variables.DirectorDetailsParserConfiguration]; } // get
+		} // DirectorDetailsParserConfiguration
+
+		#endregion property DirectorInfoParserConfiguration
+
 		#region property DirectorInfoNonLimitedParserConfiguration
 
 		public virtual VariableValue DirectorInfoNonLimitedParserConfiguration {

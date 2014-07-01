@@ -79,6 +79,8 @@ namespace ConfigManager {
 		CustomerAnalyticsDefaultHistoryYears,
 		DEBUG_SaveVatReturnData,
 		DefaultFeedbackValue,
+		DirectorDetailsNonLimitedParserConfiguration,
+		DirectorDetailsParserConfiguration,
 		DirectorInfoNonLimitedParserConfiguration,
 		DirectorInfoParserConfiguration,
 		DisplayEarnedPoints,

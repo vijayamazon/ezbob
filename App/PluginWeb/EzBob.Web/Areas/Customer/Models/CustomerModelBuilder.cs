@@ -163,7 +163,7 @@
 						foreach (ParsedDataItem shareHolder in oParseResult.Dataset["Limited Company Shareholders"].Data) {
 							dirs.Add(new DirectorModel {
 								Name = shareHolder.Values["Description of Shareholder"],
-								IsExperianShareholder = true,
+								IsShareholder = DirectorModel.Yes,
 							});
 						} // for each
 					} // if
@@ -172,7 +172,7 @@
 						foreach (ParsedDataItem shareHolder in oParseResult.Dataset["Limited Company Current Directorship Details"].Data) {
 							dirs.Add(new DirectorModel {
 								Name = shareHolder.Values["Name"],
-								IsExperianDirector = true,
+								IsDirector = DirectorModel.Yes,
 							});
 						} // for each
 					} // if

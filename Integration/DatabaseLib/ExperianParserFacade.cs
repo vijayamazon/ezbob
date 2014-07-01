@@ -18,6 +18,7 @@
 		public enum Target {
 			Company,
 			Director,
+			DirectorDetails,
 		} // enum Target
 
 		static ExperianParserFacade() {
@@ -32,6 +33,10 @@
 			ms_oParsingCfg[Target.Director, TypeOfBusinessReduced.Limited] = Variables.DirectorInfoParserConfiguration;
 			ms_oParsingCfg[Target.Director, TypeOfBusinessReduced.NonLimited] = Variables.DirectorInfoNonLimitedParserConfiguration;
 			ms_oParsingCfg[Target.Director, TypeOfBusinessReduced.Personal] = Variables.DirectorInfoNonLimitedParserConfiguration;
+
+			ms_oParsingCfg[Target.DirectorDetails, TypeOfBusinessReduced.Limited] = Variables.DirectorDetailsParserConfiguration;
+			ms_oParsingCfg[Target.DirectorDetails, TypeOfBusinessReduced.NonLimited] = Variables.DirectorDetailsNonLimitedParserConfiguration;
+			ms_oParsingCfg[Target.DirectorDetails, TypeOfBusinessReduced.Personal] = Variables.DirectorDetailsNonLimitedParserConfiguration;
 		} // static constructor
 
 		private static readonly SortedTable<Target, TypeOfBusinessReduced, Variables> ms_oParsingCfg;

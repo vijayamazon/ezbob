@@ -3,10 +3,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	public static class CustomerExtensions {
-	
-
-		public static ExperianParserOutput ParseExperian(this Customer customer, ExperianParserFacade.Target nTarget)
-		{
+		public static ExperianParserOutput ParseExperian(this Customer customer, ExperianParserFacade.Target nTarget) {
 			if (ReferenceEquals(customer.Company, null))
 				return new ExperianParserOutput(null, Ezbob.ExperianParser.ParsingResult.NotFound, "Customer has no company", null, null, null);
 
@@ -17,5 +14,5 @@
 				customer.Company.TypeOfBusiness.Reduce()
 			);
 		} // ParseExperian
-	}
-}
+	} // class CustomerExtensions
+} // namespace
