@@ -28,16 +28,13 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		var self = this;
 
 		_.each(options.customerInfo.Directors, function (oDir) {
-			if (oDir.IsExperianDirector || oDir.IsExperianShareholder)
-				return;
-
 			var sKey = this.detailsToKey(
 				oDir.Name,
 				oDir.Surname,
 				oDir.DateOfBirth,
 				'DD/MM/YYYY',
 				oDir.Gender,
-				oDir.DirectorAddress[0].Rawpostcode
+				((oDir.DirectorAddress && oDir.DirectorAddress.length > 0) ? oDir.DirectorAddress[0].Rawpostcode : '')
 			);
 
 			self.dupCheckKeys[sKey] = 1;
@@ -208,10 +205,10 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 	}, // isDirSha
 
 	canSubmit: function() {
-		var bEnabled = this.validator.checkForm() &&
-			(this.addressView.model.length > 0) &&
-			(this.isDirSha('.is-director') || this.isDirSha('.is-shareholder')) &&
-			this.validateDuplicates();
+		var bForm = this.validator.checkForm();
+		var bHasAddress = bForm && (this.addressView.model.length > 0);
+		var bHasType = bHasAddress && (this.isDirSha('.is-director') || this.isDirSha('.is-shareholder'));
+		var bEnabled = bHasType && this.validateDuplicates();
 
 		this.setSomethingEnabled(this.ui.addButton, bEnabled);
 

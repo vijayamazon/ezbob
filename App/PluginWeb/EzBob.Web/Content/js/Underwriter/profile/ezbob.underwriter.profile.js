@@ -220,9 +220,9 @@
         _this = this;
       event.stopPropagation();
       event.preventDefault();
-      this.$el.find('.add-director').hide();
+      this.crossCheckView.$el.find('.add-director').hide();
       director = new EzBob.DirectorModel();
-      directorEl = this.$el.find('.add-director-container');
+      directorEl = this.crossCheckView.$el.find('.add-director-container');
       customerInfo = {
         FirstName: this.personalInfoModel.get('FirstName'),
         Surname: this.personalInfoModel.get('Surname'),
@@ -255,15 +255,15 @@
 
     ProfileView.prototype.onDuplicateCheckComplete = function(bDupFound) {
       if (bDupFound) {
-        return this.$el.find('.duplicate-director-detected').show();
+        return this.crossCheckView.$el.find('.duplicate-director-detected').show();
       } else {
-        return this.$el.find('.duplicate-director-detected').hide();
+        return this.crossCheckView.$el.find('.duplicate-director-detected').hide();
       }
     };
 
     ProfileView.prototype.onDirectorAddCanceled = function() {
-      this.$el.find('.add-director-container').hide().empty();
-      return this.$el.find('.add-director').show();
+      this.crossCheckView.$el.find('.add-director-container').hide().empty();
+      return this.crossCheckView.$el.find('.add-director').show();
     };
 
     ProfileView.prototype.onDirectorAdded = function() {

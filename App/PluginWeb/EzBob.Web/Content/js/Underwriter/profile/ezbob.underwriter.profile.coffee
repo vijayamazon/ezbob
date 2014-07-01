@@ -218,11 +218,11 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         event.stopPropagation()
         event.preventDefault()
 
-        @$el.find('.add-director').hide()
+        @crossCheckView.$el.find('.add-director').hide()
 
         director = new EzBob.DirectorModel()
 
-        directorEl = @$el.find '.add-director-container'
+        directorEl = @crossCheckView.$el.find '.add-director-container'
 
         customerInfo =
             FirstName: @personalInfoModel.get 'FirstName'
@@ -252,14 +252,14 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
     onDuplicateCheckComplete: (bDupFound) ->
         if bDupFound
-            @$el.find('.duplicate-director-detected').show()
+            @crossCheckView.$el.find('.duplicate-director-detected').show()
         else
-            @$el.find('.duplicate-director-detected').hide()
+            @crossCheckView.$el.find('.duplicate-director-detected').hide()
     # end of onDuplicateCheckComplete
 
     onDirectorAddCanceled: ->
-        @$el.find('.add-director-container').hide().empty()
-        @$el.find('.add-director').show()
+        @crossCheckView.$el.find('.add-director-container').hide().empty()
+        @crossCheckView.$el.find('.add-director').show()
     # end of onDirectorAddCanceled
 
     onDirectorAdded: ->
