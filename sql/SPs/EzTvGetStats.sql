@@ -94,7 +94,7 @@ SELECT 'T_LoansOut' AS 'Key', CAST(COALESCE(sum(l.LoanAmount),0) AS DECIMAL(18,6
 
 UNION
 
-SELECT 'T_Repayments' AS 'Key', CAST(COALESCE(sum(t.Amount),0) AS DECIMAL(18,6)) AS Value  
+SELECT 'T_Repayments' AS 'Key', CAST(COALESCE(sum(t.LoanRepayment),0) AS DECIMAL(18,6)) AS Value  
 FROM LoanTransaction t JOIN Loan l ON t.LoanId = l.Id 
 JOIN Customer c ON l.CustomerId=c.Id 
 WHERE datediff(day, t.PostDate, @Now) = 0 
@@ -126,7 +126,7 @@ SELECT 'M_LoansOut' AS 'Key', CAST(COALESCE(sum(l.LoanAmount),0) AS DECIMAL(18,6
 
 UNION
 
-SELECT 'M_Repayments' AS 'Key', CAST(COALESCE(sum(t.Amount),0) AS DECIMAL(18,6)) AS Value  
+SELECT 'M_Repayments' AS 'Key', CAST(COALESCE(sum(t.LoanRepayment),0) AS DECIMAL(18,6)) AS Value  
 FROM LoanTransaction t JOIN Loan l ON t.LoanId = l.Id 
 JOIN Customer c ON l.CustomerId=c.Id 
 WHERE t.PostDate >= @FirstOfMonth 
@@ -157,4 +157,3 @@ SELECT 'M_UkVisitors' AS 'Key', CAST(COALESCE(0,0) AS DECIMAL(18,6)) AS Value --
 END 
 
 GO
-
