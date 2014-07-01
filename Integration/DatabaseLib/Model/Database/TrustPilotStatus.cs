@@ -6,7 +6,7 @@
 	#region enum TrustPilotStauses
 
 	public enum TrustPilotStauses {
-		Nether,
+		Neither,
 		Claims,
 		Done,
 	} // enum TrustPilotStauses

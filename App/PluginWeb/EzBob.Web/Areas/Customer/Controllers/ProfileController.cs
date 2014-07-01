@@ -97,7 +97,7 @@
 			if (customer == null)
 				return Json(new { status = "error", error = "Customer not found." });
 
-			if (ReferenceEquals(customer.TrustPilotStatus, null) || customer.TrustPilotStatus.IsMe(TrustPilotStauses.Nether)) {
+			if (ReferenceEquals(customer.TrustPilotStatus, null) || customer.TrustPilotStatus.IsMe(TrustPilotStauses.Neither)) {
 				var oHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
 
 				customer.TrustPilotStatus = oHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Claims);

@@ -636,7 +636,7 @@ namespace EzBob.Web.Controllers {
 				PromoCode = promoCode,
 				CustomerInviteFriend = new List<CustomerInviteFriend>(),
 				PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone, },
-				TrustPilotStatus = m_oDatabaseHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
+				TrustPilotStatus = m_oDatabaseHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Neither),
 				GreetingMailSentDate = DateTime.UtcNow,
 				Vip = vip
 			};
