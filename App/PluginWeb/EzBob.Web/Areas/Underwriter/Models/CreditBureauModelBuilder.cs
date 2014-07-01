@@ -291,6 +291,15 @@
 
 		public CreditBureauModel GenerateConsumerModel(int id, ConsumerServiceResult eInfo)
 		{
+			string applicantNames = string.Empty;
+			try
+			{
+				foreach (var applicant in eInfo.Output.Output.Applicant)
+				{
+					string name = string.Format("{0} {1} {2}", applicant.Name.Forename, applicant.Name.Surname, applicant.Age.Years);
+					applicantNames = string.IsNullOrEmpty(applicantNames) ? name : string.Format("{0},{1}", applicantNames, name);
+				}
+			}catch{}
 			double score = (eInfo != null) ? eInfo.BureauScore : 0.0;
 
 			double odds = Math.Pow(2, (score - 600) / 80);
@@ -345,7 +354,7 @@
 				ScoreAlign = scorePosColor.Align,
 				ScoreValuePosition = scorePosColor.ValPosition,
 				ScoreColor = scorePosColor.Color,
-
+				ApplicantFullName = applicantNames,
 				ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics(),
 				ConsumerAccountsOverview = new ConsumerAccountsOverview(),
 			};

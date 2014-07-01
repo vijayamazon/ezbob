@@ -75,7 +75,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         $($("#affordabilityTable tr")[2]).addClass("green-row");
     },
     buildJournal: function () {
-        if (this.journalTable != null) this.journalTable.fnDestroy();
         this.journal = [];
         if (this.crmModel && this.crmModel.get("CustomerRelations")) {
             _.each(this.crmModel.get("CustomerRelations"), (function (_this) {
@@ -127,6 +126,11 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
 
         if (this.journal.length > 0 && this.model && this.crmModel) {
             try {
+                if (this.journalTable) {
+                    this.journalTable.fnClearTable();
+                    this.journalTable = null;
+                }
+
                 this.journalTable = this.$el.find("#journalTable").dataTable({
                     aLengthMenu: [[-1, 10, 20, 50, 100], ['all', 10, 20, 50, 100]],
                     iDisplayLength: 20,
@@ -153,6 +157,8 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
     },
     events: {
         'click a[href^="#companyExperian"]': "companyChanged",
+        'click a[href="#customerExperian"]': "consumerChanged",
+        'click a[href^="#director"]': "consumerChanged",
         'change label.journal-filter input': 'journalFilter'
     },
     journalFilter: function (e) {
@@ -167,6 +173,11 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         var obj;
         obj = e.currentTarget;
         this.$el.find('.company-name').text($(obj).data('companyname') + ' ' + $(obj).data('companyref'));
+    },
+    consumerChanged: function (e) {
+        var obj;
+        obj = e.currentTarget;
+        this.$el.find('.applicant-name').text($(obj).data('applicantname'));
     },
     personalModelChanged: function (e, a) {
         if (e && a && this.model) {

@@ -1293,6 +1293,10 @@ td a.edit-loan {
     position: fixed;
 }
 
+#grids-view {
+    margin-top: -20px;
+}
+
 #main-content {
     z-index: 10;
 }

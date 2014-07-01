@@ -14,6 +14,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string MiddleName { get; set; }
 		public string Surname { get; set; }
 		public string FullName { get; set; }
+		public string ApplicantFullName { get; set; }
 		public string CompanyName { get; set; }
 		public bool IsExperianError { get; set; }
 
