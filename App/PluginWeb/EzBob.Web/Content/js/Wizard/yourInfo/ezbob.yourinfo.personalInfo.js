@@ -115,6 +115,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		if (this.isPrevAddressValid()) {
 			this.clearAddressError('#PrevPersonAddresses');
 			$('#PrevPersonAddresses .field_status').hide();
+			$('#PrevPersonAddresses div.addAddressContainer').hide();
 		}
 		else
 			$('#PrevPersonAddresses .field_status').show();
