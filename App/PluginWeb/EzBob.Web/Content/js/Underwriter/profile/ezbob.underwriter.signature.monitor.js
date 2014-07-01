@@ -17,12 +17,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		'click .do-send': 'doSend',
 		'click .download-signed-document': 'downloadSignedDocument',
 		'click .add-director': 'addDirectorClicked',
-		'click .just-reload': 'justReload',
 	}, // events
-
-	justReload: function() {
-		this.reload(this.personalInfoModel.get('Id'));
-	}, // justReload
 
 	addDirectorClicked: function(event) {
 		event.stopPropagation();
