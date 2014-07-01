@@ -729,7 +729,8 @@
 			{ "SourcePath": "./CAISLASTUPDATED-DD",   "Targets": [{ "Name": "CAIS Last Updated Date", "Position": 1, "Prefix": " " }] },
 			{ "SourcePath": "./ACCTSTATUS12", "Targets": [{ "Name": "Account status (Last 12 Account Statuses" }] },
 			{ "SourcePath": "./AGREEMTNUM", "Targets": [{ "Name": "Agreement Number" }] },
-			{ "SourcePath": "./MONTHSDATA", "Targets": [{ "Name": "Months Data" }] }
+			{ "SourcePath": "./MONTHSDATA", "Targets": [{ "Name": "Months Data" }] },
+			{ "SourcePath": "./DEFAULTBALANCE", "Targets": [{ "Name": "Default Balance", "Transformation": { "Types": ["money"] } }] },
 		]
 	},
 	{

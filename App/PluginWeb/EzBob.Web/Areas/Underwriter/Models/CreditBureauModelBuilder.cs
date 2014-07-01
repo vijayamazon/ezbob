@@ -25,6 +25,7 @@
 	using Ezbob.ExperianParser;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
+	using MoreLinq;
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Text;
@@ -1193,20 +1194,15 @@
 
 		protected static List<string> StatusScale = new List<string> { "D", "U", "S", "?", "0", "1", "2", "3", "4", "5", "6", "8", "9" };
 
-		protected string GetWorstStatus(string s1, string s2)
+		public static string GetWorstStatus(params string[] s)
 		{
-			var idx1 = StatusScale.IndexOf(s1);
-			var idx2 = StatusScale.IndexOf(s2);
-			if (idx1 < 0)
-				return s2;
-			if (idx2 < 0)
-				return s1;
-			return (idx1 < idx2) ? s2 : s1;
+			var scales = s.Select(str => new { str, status = StatusScale.IndexOf(str) });
+			return scales.MaxBy(x => x.status).str;
 		}
 
 		protected const int StatusHistoryMonths = 24;
 
-		protected string GetAccountStatusString(string status, out string dateType)
+		public static string GetAccountStatusString(string status, out string dateType)
 		{
 			switch (status)
 			{

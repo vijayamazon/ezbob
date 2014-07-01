@@ -123,7 +123,6 @@
             experian.Summary.ConsumerAccountsOverview = experian.Summary.ConsumerAccountsOverview || {};
             experian.ConsumerSummaryCharacteristics = experian.ConsumerSummaryCharacteristics || {};
             experian.ConsumerAccountsOverview = experian.ConsumerAccountsOverview || {};
-            var experianCompany = experian.LimitedInfo || experian.NonLimitedInfo || {};
             var tileColor='';
             var alert = '';
             if(!EzBob.isDarkColor(experian.ScoreColor)){
@@ -368,14 +367,16 @@
                                     </div>
                                     <%}%>
                                     <div class="col-lg-2 col-md-4">
-                                        <% alert = 'alert-warning';%>
-                                        <div class="alert <%-alert%>">
-                                            Delays: N/A
-                                        </div>
-                                        <% alert = c.DefaultAccounts > 0 ? 'alert-danger' : 'alert-info'; %>
-                                        <div class="alert <%-alert%>">
-                                            Defaults: <%-c.DefaultAccounts%>
-                                        </div>
+                                        <%if(c.IsLimited){%>
+                                            <% alert = c.LateAccounts > 0 ? 'alert-danger' : 'alert-info';%>
+                                            <div class="alert <%-alert%>">
+                                                Delays: <%-c.LateAccounts%>, <%-c.LateStatus%>
+                                            </div>
+                                            <% alert = c.DefaultAccounts > 0 ? 'alert-danger' : 'alert-info'; %>
+                                            <div class="alert <%-alert%>">
+                                                Defaults: <%-c.DefaultAccounts%>, <%-EzBob.formatPoundsAsInt(c.DefaultAmount)%>
+                                            </div>
+                                        <%}%>
                                         <% alert = c.Ccjs > 0 ? 'alert-danger' : 'alert-info'; %>
                                         <div class="alert <%-alert%>">
                                             CCJ <%-c.Ccjs%>, <%-c.CcjMonths%> months ago

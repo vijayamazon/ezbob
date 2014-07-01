@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Text.RegularExpressions;
 	using Areas.Underwriter.Models;
 	using CommonLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -56,9 +57,9 @@
 		public int Ccjs { get; set; }
 		public int CcjMonths { get; set; }
 		public int DefaultAccounts { get; set; }
-		public int DefaultAmount { get; set; }
+		public decimal DefaultAmount { get; set; }
 		public int LateAccounts { get; set; }
-		public int LateAmount { get; set; }
+		public string LateStatus { get; set; }
 		public List<FinDataModel> FinDataHistories { get; set; }
 		public string Error { get; set; }
 
@@ -216,6 +217,7 @@
 			var numOfCCjs2Years = oResult.GetValue("Limited Company CCJ Summary", "Number of CCJs Between 13 And 24 Months Ago");
 			model.Ccjs = (string.IsNullOrEmpty(numOfCCjsYear) ? 0 : int.Parse(numOfCCjsYear)) +
 						 (string.IsNullOrEmpty(numOfCCjs2Years) ? 0 : int.Parse(numOfCCjs2Years));
+			var worstStatusAll = "0";
 			//Calc and add Cais Balance
 			if (oResult.Dataset.ContainsKey("Limited Company Installment CAIS Details"))
 			{
@@ -237,14 +239,25 @@
 						if (!string.IsNullOrEmpty(state) && state[0] == 'D')
 						{
 							model.DefaultAccounts++;
+							model.DefaultAmount += GetDecimalValueFromDataItem(cais, "Default Balance");
 							//todo default amount
 						}
+						else
+						{
+							var status = GetValue(cais, "Account status (Last 12 Account Statuses");
+							var worstStatus = CreditBureauModelBuilder.GetWorstStatus(Regex.Split(status, string.Empty));
+							if (worstStatus != "0")
+							{
+								model.LateAccounts++;
+								worstStatusAll = CreditBureauModelBuilder.GetWorstStatus(worstStatusAll, worstStatus);
+							}
 
-						//todo late accounts
+						}
 					}
 				}
 			}
-
+			string date;
+			model.LateStatus = CreditBureauModelBuilder.GetAccountStatusString(worstStatusAll, out date);
 
 			//Calc and add tangible equity and adjusted profit
 			const string sKey = "Limited Company Financial Details IFRS & UK GAAP";

@@ -172,18 +172,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @setLastShownProfileSection $(e.target).attr('href').substr(1)
 
             if($(e.currentTarget).attr("href") is "#dashboard")
-                $(".inline-sparkline").sparkline("html",
-                    width: "100%"
-                    height: "100%"
-                    lineWidth: 2
-                    spotRadius: 3.5
-                    lineColor: "#cfcfcf"
-                    fillColor: "transparent"
-                    spotColor: "#cfcfcf"
-                    maxSpotColor: "#cfcfcf"
-                    minSpotColor: "#cfcfcf"
-                    valueSpots: { ':' : '#cfcfcf' }
-                )
+                @dashboardInfoView.render()
         ))
 
         this

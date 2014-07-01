@@ -174,21 +174,7 @@
       this.$el.find('.nav-list a[data-toggle="tab"]').on('shown.bs.tab', (function(e) {
         _this.setLastShownProfileSection($(e.target).attr('href').substr(1));
         if ($(e.currentTarget).attr("href") === "#dashboard") {
-          return $(".inline-sparkline").sparkline("html", {
-            width: "100%",
-            height: "100%",
-            lineWidth: 2,
-            spotRadius: 3,
-            lineColor: "#88bbc8",
-            fillColor: "#f2f7f9",
-            spotColor: "green",
-            maxSpotColor: "#00AEEF",
-            minSpotColor: "red",
-            chartRangeMin: -1,
-            valueSpots: {
-              ':': 'green'
-            }
-          });
+          return _this.dashboardInfoView.render();
         }
       }));
       return this;
