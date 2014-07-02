@@ -507,19 +507,9 @@
 				};
 		}
 
-		private static string Money(decimal amount)
+		private static string Money<T>(T amount) where T : IFormattable
 		{
 			return String.Format("{0:0.#}", amount);
-		}
-
-		private static string Money(double amount)
-		{
-			return Money((decimal)amount);
-		}
-
-		private static string Money(int amount)
-		{
-			return Money((decimal)amount);
 		}
 
 		private void AddDecisionHistory(ProfileSummaryModel summary, Customer customer)
