@@ -2,6 +2,7 @@
 {
 	using System.Data;
 	using System.Text.RegularExpressions;
+	using ConfigManager;
 	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
@@ -183,7 +184,8 @@
 							if ((accStatus == "D" || accStatus == "A") && MortgageAccounts.IndexOf(caisDetails.AccountType, StringComparison.Ordinal) >= 0) // it is mortgage account
 							{
 								double balance = 0;
-								if ((caisDetails.Balance != null) && (caisDetails.Balance.Amount != null))
+								bool isMainApplicantAccount = caisDetails.MatchDetails != null && caisDetails.MatchDetails.MatchTo == "1";
+								if (isMainApplicantAccount && caisDetails.Balance != null && caisDetails.Balance.Amount != null)
 								{
 									string b = caisDetails.Balance.Amount.Replace("£", "");
 									double.TryParse(b, out balance);
@@ -421,15 +423,15 @@
 
 		private void CalculateNetWorthGrade()
 		{
-			if (Results.NetWorth < 15)
+			if (Results.NetWorth < 0.15m)
 			{
 				Results.NetWorthGrade = 0;
 			}
-			else if (Results.NetWorth < 50)
+			else if (Results.NetWorth < 0.5m)
 			{
 				Results.NetWorthGrade = 1;
 			}
-			else if (Results.NetWorth < 100)
+			else if (Results.NetWorth < 1)
 			{
 				Results.NetWorthGrade = 2;
 			}
@@ -565,7 +567,7 @@
 
 		private void CalculateFreeCashFlowGrade()
 		{
-			if (Results.FreeCashFlow < -10)
+			if (Results.FreeCashFlow < -0.1m)
 			{
 				Results.FreeCashFlowGrade = 0;
 			}
@@ -573,19 +575,19 @@
 			{
 				Results.FreeCashFlowGrade = 1;
 			}
-			else if (Results.FreeCashFlow < 10)
+			else if (Results.FreeCashFlow < 0.1m)
 			{
 				Results.FreeCashFlowGrade = 2;
 			}
-			else if (Results.FreeCashFlow < 20)
+			else if (Results.FreeCashFlow < 0.2m)
 			{
 				Results.FreeCashFlowGrade = 3;
 			}
-			else if (Results.FreeCashFlow < 30)
+			else if (Results.FreeCashFlow < 0.3m)
 			{
 				Results.FreeCashFlowGrade = 4;
 			}
-			else if (Results.FreeCashFlow < 40)
+			else if (Results.FreeCashFlow < 0.4m)
 			{
 				Results.FreeCashFlowGrade = 5;
 			}

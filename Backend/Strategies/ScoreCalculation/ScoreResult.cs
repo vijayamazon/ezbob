@@ -14,7 +14,8 @@
 			BusinessSeniorityWeight = 8;
 			ConsumerScoreWeight = 10;
 			NetWorthWeight = 10;
-			EzbobSeniorityWeight = 5;
+			MaritalStatusWeight = 5;
+			EzbobSeniorityWeight = 0;
 			NumOfLoansWeight = 0;
 			NumOfLateRepaymentsWeight = 0;
 			NumOfEarlyRepaymentsWeight = 0;
