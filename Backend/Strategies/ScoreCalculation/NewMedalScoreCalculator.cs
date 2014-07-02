@@ -511,7 +511,7 @@
 
 		private void CalculateTangibleEquityGrade()
 		{
-			if (Results.TangibleEquity < -5)
+			if (Results.TangibleEquity < -0.05m)
 			{
 				Results.TangibleEquityGrade = 0;
 			}
@@ -519,11 +519,11 @@
 			{
 				Results.TangibleEquityGrade = 1;
 			}
-			else if (Results.TangibleEquity < 10)
+			else if (Results.TangibleEquity < 0.1m)
 			{
 				Results.TangibleEquityGrade = 2;
 			}
-			else if (Results.TangibleEquity < 30)
+			else if (Results.TangibleEquity < 0.3m)
 			{
 				Results.TangibleEquityGrade = 3;
 			}
