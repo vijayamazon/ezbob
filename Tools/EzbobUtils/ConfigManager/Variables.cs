@@ -116,6 +116,7 @@ namespace ConfigManager {
 		FinancialAccounts_JointApplicant,
 		FinancialAccounts_MainApplicant,
 		FinancialAccounts_No_Match,
+		FinancialAccounts_Spare,
 		FinishWizardForApproved,
 		FirstOfMonthEnableCustomerMail,
 		FirstOfMonthStatusMailCopyTo,

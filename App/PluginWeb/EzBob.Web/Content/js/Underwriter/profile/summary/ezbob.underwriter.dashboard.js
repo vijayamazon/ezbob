@@ -185,18 +185,20 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         }
     },
     onRender: function () {
-        this.$el.find('a[data-bug-type]').tooltip({
-            title: 'Report bug'
-        });
-        this.$el.find('[data-toggle="tooltip"]').tooltip({
-            'placement': 'bottom'
-        });
+        
 
         this.experianSpark();
         this.drawGraphs();
         this.buildJournal();
         this.rotateTable();
 
+        this.$el.find('a[data-bug-type]').tooltip({
+            title: 'Report bug'
+        });
+        this.$el.find('[data-toggle="tooltip"]').tooltip({
+            'placement': 'bottom'
+        });
+        
         EzBob.handleUserLayoutSetting();
     },
 

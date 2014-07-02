@@ -887,6 +887,15 @@ namespace ConfigManager {
 
 		#endregion property FinancialAccounts_No_Match
 
+		#region property FinancialAccounts_Spare
+
+		public virtual VariableValue FinancialAccounts_Spare
+		{
+			get { return this[Variables.FinancialAccounts_Spare]; } // get
+		} // FinancialAccounts_Spare
+
+		#endregion property FinancialAccounts_No_Match
+
 		#region property FinishWizardForApproved
 
 		public virtual VariableValue FinishWizardForApproved {

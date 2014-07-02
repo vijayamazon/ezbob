@@ -299,7 +299,8 @@
 					string name = string.Format("{0} {1} {2}", applicant.Name.Forename, applicant.Name.Surname, applicant.Age.Years);
 					applicantNames = string.IsNullOrEmpty(applicantNames) ? name : string.Format("{0},{1}", applicantNames, name);
 				}
-			}catch{}
+			}
+			catch { }
 			double score = (eInfo != null) ? eInfo.BureauScore : 0.0;
 
 			double odds = Math.Pow(2, (score - 600) / 80);
@@ -513,14 +514,15 @@
 							var accountInfo = new AccountInfo();
 
 							//check which acccount type show
-							Variables matchTo;
-							Enum.TryParse(caisDetails.MatchDetails.MatchTo, out matchTo);
+							int matchTo;
+							int.TryParse(caisDetails.MatchDetails.MatchTo, out matchTo);
+							Variables var = map[matchTo];
 
-							var isShowThisFinancinalAccount = CurrentValues.Instance[matchTo];
-							if (isShowThisFinancinalAccount == null || isShowThisFinancinalAccount == "0")
+							var isShowThisFinancinalAccount = CurrentValues.Instance[var];
+							if (isShowThisFinancinalAccount == null || !isShowThisFinancinalAccount)
 								continue;
 
-							accountInfo.MatchTo = MathToToHumanView(matchTo);
+							accountInfo.MatchTo = MathToToHumanView(var);
 
 							DateTime? openDate;
 							try
@@ -560,7 +562,7 @@
 							if (accType < 0)
 								continue;
 
-							if (((accStatus == DelinquentCaisStatusName) || (accStatus == ActiveCaisStatusName)) && matchTo == Variables.FinancialAccounts_MainApplicant)
+							if (((accStatus == DelinquentCaisStatusName) || (accStatus == ActiveCaisStatusName)) && var == Variables.FinancialAccounts_MainApplicant)
 							{
 								accounts[accType]++;
 								var ws = caisDetails.WorstStatus;
@@ -1323,9 +1325,24 @@
 				case Variables.FinancialAccounts_JointApplicant: return "Joint Applicant";
 				case Variables.FinancialAccounts_MainApplicant: return "Main Applicant";
 				case Variables.FinancialAccounts_No_Match: return "No Match";
+				case Variables.FinancialAccounts_Spare: return "Spare";
 				default: return "-";
 			}
 		}
+
+		private static readonly Dictionary<int, Variables> map = new Dictionary<int, Variables>
+			{
+				{6, Variables.FinancialAccounts_AliasOfJointApplicant},
+				{2,Variables.FinancialAccounts_AliasOfMainApplicant},
+				{7,Variables.FinancialAccounts_AssociationOfJointApplicant},
+				{3,Variables.FinancialAccounts_AssociationOfMainApplicant},
+				{5,Variables.FinancialAccounts_JointApplicant},
+				{1,Variables.FinancialAccounts_MainApplicant},
+				{9,Variables.FinancialAccounts_No_Match},
+				{4,Variables.FinancialAccounts_Spare},//Spare
+				{8,Variables.FinancialAccounts_Spare},//Spare
+			};
 	}
+
 
 }
