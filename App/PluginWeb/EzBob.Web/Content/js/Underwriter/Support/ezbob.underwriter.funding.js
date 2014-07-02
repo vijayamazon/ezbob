@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,31 +10,25 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.FundingView = (function(_super) {
-
     __extends(FundingView, _super);
 
     function FundingView() {
-      return FundingView.__super__.constructor.apply(this, arguments);
+      _ref = FundingView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     FundingView.prototype.initialize = function() {
-      var xhr,
+      var that,
         _this = this;
+
       this.model = new EzBob.Underwriter.FundingModel();
       this.model.on("change reset", this.render, this);
       this.requiredFunds = -1;
-      this.model.fetch();
-      xhr = $.post("" + window.gRootPath + "Underwriter/Funding/GetAvailableFundsInterval");
-      return xhr.done(function(res) {
-        var xhr1;
-        xhr1 = $.post("" + window.gRootPath + "Underwriter/Funding/GetRequiredFunds");
-        return xhr1.done(function(res) {
-          _this.requiredFunds = res;
-          _this.render();
-          return _this.modelUpdater = setInterval(function() {
-            return _this.model.fetch();
-          }, res);
-        });
+      that = this;
+      return this.model.fetch().done(function() {
+        return setInterval((function() {
+          return that.model.fetch();
+        }), that.model.get('RefreshInterval'));
       });
     };
 
@@ -47,6 +41,7 @@
 
     FundingView.prototype.addFunds = function(e) {
       var d, that;
+
       that = this;
       d = new EzBob.Dialogs.PacentManual({
         model: this.model,
@@ -69,6 +64,7 @@
 
     FundingView.prototype.cancelManuallyAddedFunds = function(e) {
       var d, that;
+
       that = this;
       d = new EzBob.Dialogs.CheckBoxEdit({
         model: this.model,
@@ -90,6 +86,7 @@
 
     FundingView.prototype.onRender = function() {
       var availableFundsNum, li, tdHeader, tdValue;
+
       if (!$("body").hasClass("role-manager")) {
         this.$el.find('#addFundsBtn').hide();
         this.$el.find('#cancelManuallyAddedFundsBtn').hide();
@@ -98,7 +95,7 @@
       tdHeader = $("[id='available-funds-td-header']");
       tdValue = $("[id='available-funds-td-value']");
       availableFundsNum = this.model.get('AvailableFunds');
-      if (this.requiredFunds > availableFundsNum) {
+      if (this.model.get('RequiredFunds') > availableFundsNum) {
         li.addClass('available-funds-alert');
         tdHeader.addClass('available-funds-alert-text-color');
         return tdValue.addClass('available-funds-alert-text-color');
@@ -128,11 +125,11 @@
   })(Backbone.Marionette.ItemView);
 
   EzBob.Underwriter.FundingModel = (function(_super) {
-
     __extends(FundingModel, _super);
 
     function FundingModel() {
-      return FundingModel.__super__.constructor.apply(this, arguments);
+      _ref1 = FundingModel.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     FundingModel.prototype.urlRoot = function() {

@@ -7,17 +7,12 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
         @model = new EzBob.Underwriter.FundingModel()
         @model.on "change reset", @render, @
         @requiredFunds = -1
-        @model.fetch()
-        
-        xhr = $.post "#{window.gRootPath}Underwriter/Funding/GetAvailableFundsInterval"
-        xhr.done (res) =>
-            xhr1 = $.post "#{window.gRootPath}Underwriter/Funding/GetRequiredFunds"
-            xhr1.done (res) =>
-                @requiredFunds = res
-                @render()
-                @modelUpdater = setInterval(=> 
-                    @model.fetch()
-                , res )
+        that = this
+        @model.fetch().done(=>
+            setInterval (->
+                that.model.fetch()
+            ), that.model.get('RefreshInterval')
+        )
 
     template: "#funding-template"
 
@@ -71,7 +66,7 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
         tdHeader = $("[id='available-funds-td-header']")
         tdValue = $("[id='available-funds-td-value']")
         availableFundsNum = @model.get('AvailableFunds')
-        if (@requiredFunds > availableFundsNum)
+        if (@model.get('RequiredFunds') > availableFundsNum)
             li.addClass('available-funds-alert')
             tdHeader.addClass('available-funds-alert-text-color')
             tdValue.addClass('available-funds-alert-text-color')

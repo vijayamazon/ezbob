@@ -26,26 +26,9 @@
 			AvailableFundsActionResult availableFunds = serviceClient.Instance.GetAvailableFunds(context.UserId);
 			var today = DateTime.UtcNow;
 			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
-			return Json(new { AvailableFunds = availableFunds.AvailableFunds, ReservedAmount = availableFunds.ReservedAmount, RequiredFunds = relevantLimit }, JsonRequestBehavior.AllowGet);
+			int refreshInterval = CurrentValues.Instance.AvailableFundsRefreshInterval;
+			return Json(new { AvailableFunds = availableFunds.AvailableFunds, ReservedAmount = availableFunds.ReservedAmount, RequiredFunds = relevantLimit, RefreshInterval = refreshInterval }, JsonRequestBehavior.AllowGet);
         }
-
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		[HttpPost]
-		public JsonResult GetAvailableFundsInterval()
-		{
-			return Json(CurrentValues.Instance.AvailableFundsRefreshInterval.Value, JsonRequestBehavior.AllowGet);
-		}
-
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		[HttpPost]
-		public JsonResult GetRequiredFunds()
-		{
-			var today = DateTime.UtcNow;
-			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
-			return Json(relevantLimit, JsonRequestBehavior.AllowGet);
-		}
 
 		[HttpPost]
 		[Ajax]

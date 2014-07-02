@@ -480,19 +480,27 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @signatureMonitorView.reload id
 
             @fundingModel.fetch().done(() =>
-                fundingAlert = @$el.find(".fundingAlert")
-                availableFundsNum = @fundingModel.get('AvailableFunds')
-                reqFunds = @fundingModel.get('RequiredFunds')
-                availableFundsStr = 'Funding ' + EzBob.formatPoundsNoDecimals(availableFundsNum).replace(/\s+/g, '')
-                fundingAlert.html(availableFundsStr)
-                if (reqFunds > availableFundsNum)
-                    fundingAlert.addClass('red_cell')
-                else
-                    fundingAlert.removeClass('red_cell')
+                that.fillFunds()
+                setInterval (->
+                    that.fundingModel.fetch()
+                    that.fillFunds()
+                ), that.fundingModel.get('RefreshInterval')
             )
+
             BlockUi "Off"
 
         EzBob.handleUserLayoutSetting()
+
+    fillFunds: ->
+        fundingAlert = @$el.find(".fundingAlert")
+        availableFundsNum = @fundingModel.get('AvailableFunds')
+        reqFunds = @fundingModel.get('RequiredFunds')
+        availableFundsStr = 'Funding ' + EzBob.formatPoundsNoDecimals(availableFundsNum).replace(/\s+/g, '')
+        fundingAlert.html(availableFundsStr)
+        if (reqFunds > availableFundsNum)
+            fundingAlert.addClass('red_cell')
+        else
+            fundingAlert.removeClass('red_cell')
 
     hide: ->
         @$el.hide()
