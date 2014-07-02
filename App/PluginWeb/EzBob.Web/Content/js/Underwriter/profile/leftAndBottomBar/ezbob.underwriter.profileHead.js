@@ -41,9 +41,11 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             if ($(this).is(":hidden")) {
                 btn.children("i").attr("class", "fa fa-chevron-down");
                 that.$el.find(".box-title-collapse").show();
+                $.cookie('collapseAll', true);
             } else {
                 btn.children("i").attr("class", "fa fa-chevron-up");
                 that.$el.find(".box-title-collapse").hide();
+                $.cookie('collapseAll', false);
             }
             return false;
         });
@@ -223,6 +225,9 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 
         if ($.cookie('editOfferVisible') == "true") {
             this.ui.editOfferDiv.show();
+        }
+        if ($.cookie('collapseAll') == "true") {
+            this.collapseAll();
         }
     },
 
