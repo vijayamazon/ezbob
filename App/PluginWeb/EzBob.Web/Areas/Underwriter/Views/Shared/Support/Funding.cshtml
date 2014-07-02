@@ -1,34 +1,35 @@
 ﻿<script type="text/template" id="funding-template">
     @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Other)
     <div id="main-content">
-        <div class="page-title">
-            <h1></h1>
-        </div>
-        <div id="funding" class="funding-width">
-            <table class="table squeezed">
-                <thead class="box">
-                    <tr class="box-title">
-                        <th colspan="2">Funding</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td id="available-funds-td-header">Available Funds</td>
-                        <td id="available-funds-td-value"><%- GBPValues(model.get('AvailableFunds'), true) %></td>
-                    </tr>
-                    <tr>
-                        <td>Open Offers</td>
-                        <td><%- GBPValues(model.get('ReservedAmount'), true) %></td>
-                    </tr>
-                    <tr class="remaining-funds-color">
-                        <td>Remaining Funds</td>
-                        <td><%- GBPValues(model.get('AvailableFunds') - model.get('ReservedAmount'), true) %></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="pull-right">
-                <button class="btn btn-primary" id="addFundsBtn"><i class="fa fa-plus" />Add Funds</button>
-                <button class="btn btn-primary" id="cancelManuallyAddedFundsBtn"><i class="fa fa-ban" />Cancel Manually Added Funds</button>
+        <div class="box">
+            <div class="box-content">
+                <div id="funding" class="funding-width">
+                    <table class="table box squeezed">
+                        <thead class="box-title">
+                            <tr>
+                                <th colspan="2">Funding</th>
+                            </tr>
+                        </thead>
+                        <tbody class="box-content">
+                            <tr>
+                                <td id="available-funds-td-header">Available Funds</td>
+                                <td id="available-funds-td-value"><%- GBPValues(model.get('AvailableFunds'), true) %></td>
+                            </tr>
+                            <tr>
+                                <td>Open Offers</td>
+                                <td><%- GBPValues(model.get('ReservedAmount'), true) %></td>
+                            </tr>
+                            <tr class="remaining-funds-color">
+                                <td>Remaining Funds</td>
+                                <td><%- GBPValues(model.get('AvailableFunds') - model.get('ReservedAmount'), true) %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="">
+                        <button class="btn btn-primary" id="addFundsBtn"><i class="fa fa-plus" />Add Funds</button>
+                        <button class="btn btn-primary" id="cancelManuallyAddedFundsBtn"><i class="fa fa-ban" />Cancel Manually Added Funds</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

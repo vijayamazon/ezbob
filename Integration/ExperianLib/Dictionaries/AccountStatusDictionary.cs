@@ -36,6 +36,22 @@
 				{"D", "Dormant"},
 				{"?", "Unknown"},
 			};
+
+			ms_oAccountStatusColors = new SortedDictionary<string, string> {
+				{"0", "info"},
+				{"1", "warning"},
+				{"2", "warning"},
+				{"3", "warning"},
+				{"4", "warning"},
+				{"5", "warning"},
+				{"6", "warning"},
+				{"8", "danger"},
+				{"9", "danger"},
+				{"S", "warning"},
+				{"U", "warning"},
+				{"D", "warning"},
+				{"?", "warning"},
+			};
 		} // static constructor
 
 		#endregion static constructor
@@ -44,6 +60,11 @@
 
 		public static string GetAccountStatusString(string accStatusIndicator) {
 			return LookFor(accStatusIndicator, ms_oAccountStatuses);
+		} // GetAccountStatusString
+
+		public static string GetAccountStatusColor(string accStatusIndicator)
+		{
+			return LookFor(accStatusIndicator, ms_oAccountStatusColors);
 		} // GetAccountStatusString
 
 		#endregion method GetAccountStatusString
@@ -68,6 +89,7 @@
 
 		private static readonly SortedDictionary<string, string> ms_oAccountStatuses;
 		private static readonly SortedDictionary<string, string> ms_oAccountDetailedStatuses;
+		private static readonly SortedDictionary<string, string> ms_oAccountStatusColors;
 
 		#endregion private
 	} // class AccountStatusDictionary

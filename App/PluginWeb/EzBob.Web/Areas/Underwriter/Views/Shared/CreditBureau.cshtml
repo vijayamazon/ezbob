@@ -646,11 +646,12 @@
                                 _.each(model.AccountsInformation, function(ai,index){
                                 %>
                                 <div style="overflow: auto;">
-                                    <h2>Account #<%=index+1%></h2>
-                                    <table class="table" style="margin-bottom: 0;">
+                                    <div class="box">
+                                        <div class="box-content">
+                                            <table class="table" style="margin-bottom: 0;">
                                         <thead class="box">
                                             <tr class="box-title">
-                                                <th>Start Date</th>
+                                                <th>#<%=index+1%> Start Date</th>
                                                 <th>Account</th>
                                                 <th>Match To</th>
                                                 <th>Term &amp; Frequency</th>
@@ -665,49 +666,34 @@
                                                      "<%- ai.Limit %>", "<%- ai.AccBalance %>", "<%- ai.CashWithdrawals %>", "<%- ai.MinimumPayment %>")
                                         </tbody>
                                     </table>
-                                    <table class="table table-finaccount">
+                                            <%if(ai.LatestStatuses && _.some(ai.LatestStatuses, function(s){ return s.Status != "";})){ %>
+                                            <table class="table table-finaccount">
                                         <tr>
-                                            <% 
-                                            _.each(ai.Years, function(y) {
-                                            %>
-                                            @Html.Raw("<td colspan=\"" + "<%- y.Span %>" + "\">" + "<%- y.Year %>" + "</td>")
-                                            <%
-                                            });
-                                            %>
+                                            <% _.each(ai.Years, function(y) {%>
+                                            @Html.Raw("<td class=\"no-padding\" colspan=\"" + "<%- y.Span %>" + "\">" + "<%- y.Year %>" + "</td>")
+                                            <%});%>
                                         </tr>
                                         <tr>
-                                            <% 
-                                            _.each(ai.Quarters, function(q) {
-                                            %>
-                                            @Html.Raw("<td colspan=\"" + "<%- q.Span %>" + "\">" + "<%- q.Quarter %>" + "</td>")
-                                            <%
-                                            });
-                                            %>
+                                            <% _.each(ai.Quarters, function(q) {%>
+                                            @Html.Raw("<td class=\"no-padding\" colspan=\"" + "<%- q.Span %>" + "\">" + "<%- q.Quarter %>" + "</td>")
+                                            <%});%>
                                         </tr>
                                         <tr>
-                                            <% 
-                                            _.each(ai.LatestStatuses, function(s) {
-                                            %>
-                                            <td style="text-align: center;">@Html.Raw("<%- s.Status %>")</td>
-                                            <%
-                                            });
-                                            %>
+                                            <% _.each(ai.LatestStatuses, function(s) {%>
+                                            <td style="text-align: center;" class="alert alert-<%-s.StatusColor || 'white'%>">@Html.Raw("<%- s.Status %>")</td>
+                                            <%});%>
                                         </tr>
                                         <tr>
-                                            <% 
-                                            _.each(ai.MonthsDisplayed, function(m) {
-                                            %>
-                                            <td style="text-align: center;">@Html.Raw("<%- m %>")</td>
-                                            <%
-                                            });
-                                            %>
+                                            <% _.each(ai.MonthsDisplayed, function(m) {%>
+                                            <td class="no-padding" style="text-align: center;">@Html.Raw("<%- m %>")</td>
+                                            <%});%>
                                         </tr>
                                     </table>
+                                            <%}%>
+                                            </div>
+                                    </div>
                                 </div>
-                                <hr />
-                                <%
-                                });
-                                %>
+                                <%});%>
                             </div>
                         </div>
                     </div>
@@ -762,7 +748,7 @@
             </div>
         </div>
 
-            <% directorIdx = directorIdx + 1; %>        
+            <% directorIdx = directorIdx + 1; %>
         </fieldset>
         <% }); %>
     </div>
@@ -886,82 +872,69 @@
                     <%if(experianInfo.AccountsInformation) {
                         _.each(experianInfo.AccountsInformation, function(ai, index){
                         %>
-                        <div style="overflow: auto;">
-                            <h2>Account #<%=index+1%></h2>
-                            <table class="table" style="margin-bottom: 0; padding: 4px;">
-                                <thead class="box">
-                                    <tr class="box-title">
-                                        <th>Start Date</th>
-                                        <th>Account</th>
-                                        <th>Match To</th>
-                                        <th>Term &amp; Frequency</th>
-                                        <th>Limit</th>
-                                        <th>Balance</th>
-                                        <th>Status</th>
-                                        <th><%- ai.DateType %></th>
-                                        <th>Cash Withdrawals</th>
-                                        <th>Minimum Payment</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><%- ai.OpenDate %></td>
-                                        <td><%- ai.Account %></td>
-                                        <td><%- ai.MatchTo %></td>
-                                        <td><%- ai.TermAndfreq %></td>
-                                        <td><%- ai.Limit %></td>
-                                        <td><%- ai.AccBalance %></td>
-                                        <td class="experian-account-status <%- ai.AccountStatus %>"><%- ai.AccountStatus %></td>
-                                        <td><%- ai.SettlementDate %></td>
-                                        <td><%- ai.CashWithdrawals %></td>
-                                        <td><%- ai.MinimumPayment %></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <table class="table table-finaccount">
-                                <tr>
-                                    <% 
-                                    _.each(ai.Years, function(y) {
-                                    %>
-                                    @Html.Raw("<td colspan=\"" + "<%- y.Span %>" + "\">" + "<%- y.Year %>" + "</td>")
-                                    <%
-                                    });
-                                    %>
-                                </tr>
-                                <tr>
-                                    <% 
-                                    _.each(ai.Quarters, function(q) {
-                                    %>
-                                    @Html.Raw("<td colspan=\"" + "<%- q.Span %>" + "\">" + "<%- q.Quarter %>" + "</td>")
-                                    <%
-                                    });
-                                    %>
-                                </tr>
-                                <tr>
-                                    <% 
-                                    _.each(ai.LatestStatuses, function(s) {
-                                    %>
-                                    <td style="text-align: center;">@Html.Raw("<%- s.Status %>")</td>
-                                    <%
-                                    });
-                                    %>
-                                </tr>
-                                <tr>
-                                    <% 
-                                    _.each(ai.MonthsDisplayed, function(m) {
-                                    %>
-                                    <td style="text-align: center;">@Html.Raw("<%- m %>")</td>
-                                    <%
-                                    });
-                                    %>
-                                </tr>
-                            </table>
+                    <div style="overflow: auto;">
+                        <div class="box">
+                            <div class="box-content">
+                                <table class="table" style="margin-bottom: 0; padding: 4px;">
+                                    <thead class="box">
+                                        <tr class="box-title">
+                                            <th>#<%=index+1%> Start Date</th>
+                                            <th>Account</th>
+                                            <th>Match To</th>
+                                            <th>Term &amp; Frequency</th>
+                                            <th>Limit</th>
+                                            <th>Balance</th>
+                                            <th>Status</th>
+                                            <th><%- ai.DateType %></th>
+                                            <th>Cash Withdrawals</th>
+                                            <th>Minimum Payment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="box-content">
+                                        <tr>
+                                            <td><%- ai.OpenDate %></td>
+                                            <td><%- ai.Account %></td>
+                                            <td><%- ai.MatchTo %></td>
+                                            <td><%- ai.TermAndfreq %></td>
+                                            <td><%- ai.Limit %></td>
+                                            <td><%- ai.AccBalance %></td>
+                                            <td class="experian-account-status <%- ai.AccountStatus %>"><%- ai.AccountStatus %></td>
+                                            <td><%- ai.SettlementDate %></td>
+                                            <td><%- ai.CashWithdrawals %></td>
+                                            <td><%- ai.MinimumPayment %></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-finaccount">
+                                    <tbody>
+                                        <%if(ai.LatestStatuses && _.some(ai.LatestStatuses, function(s){ return s.Status != "";})){ %>
+                                        <tr>
+                                            <% _.each(ai.Years, function(y) {%>
+                                            @Html.Raw("<td class=\"no-padding\" colspan=\"" + "<%- y.Span %>" + "\">" + "<%- y.Year %>" + "</td>")
+                                            <%});%>
+                                        </tr>
+                                        <tr>
+                                            <% _.each(ai.Quarters, function(q) {%>
+                                            @Html.Raw("<td class=\"no-padding\" colspan=\"" + "<%- q.Span %>" + "\">" + "<%- q.Quarter %>" + "</td>")
+                                            <%});%>
+                                        </tr>
+                                        <tr>
+                                            <% _.each(ai.LatestStatuses, function(s) {%>
+                                            <td style="text-align: center;" class="alert alert-<%-s.StatusColor || 'white'%>">@Html.Raw("<%- s.Status %>")</td>
+                                            <%});%>
+                                        </tr>
+                                        <tr>
+                                            <% _.each(ai.MonthsDisplayed, function(m) {%>
+                                            <td class="no-padding" style="text-align: center;">@Html.Raw("<%- m %>")</td>
+                                            <%});%>
+                                        </tr>
+                                        <%}%>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    <hr />
-                    <%
-                        });
-                        }
-                        %>
+                    </div>
+                    <%});}%>
                 </div>
             </div>
         </div>

@@ -553,7 +553,7 @@
 								if (caisDetails.CurrentDefBalance != null && !string.IsNullOrEmpty(caisDetails.CurrentDefBalance.Amount))
 								{
 									int defAmount;
-									int.TryParse(caisDetails.CurrentDefBalance.Amount, out defAmount);
+									int.TryParse(caisDetails.CurrentDefBalance.Amount.Replace("£", ""), out defAmount);
 									defaultAmount += defAmount;
 								}
 							}
@@ -588,7 +588,7 @@
 								if ((openDate != null) && (openDate.Value >= DateTime.Today.AddMonths(-3)))
 									numberOfAcc3M++;
 
-								if (accStatus == DelinquentStatusName)
+								if (accStatus == DelinquentCaisStatusName)
 								{
 									numberOfLates++;
 									lateStatus = GetWorstStatus(lateStatus, ws);
@@ -629,7 +629,10 @@
 								string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
 								var idx = displayedMonths.IndexOf(histDate);
 								if (idx >= 0)
+								{
 									sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
+									sList[idx].StatusColor = AccountStatusDictionary.GetAccountStatusColor(indicator);
+								}
 							}
 
 							accountInfo.LatestStatuses = sList.ToArray();

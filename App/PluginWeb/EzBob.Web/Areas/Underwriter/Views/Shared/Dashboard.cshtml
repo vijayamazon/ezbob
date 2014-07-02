@@ -203,7 +203,8 @@
                                     </div>
                                     <% alert = experian.ConsumerSummaryCharacteristics.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info'; %>
                                     <div class="alert <%-alert%>">
-                                        Defaults: <%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%>, <%-EzBob.formatPoundsAsInt(experian.ConsumerSummaryCharacteristics.DefaultAmount)%>
+                                        Defaults: <%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%>, 
+                                        <%- experian.ConsumerSummaryCharacteristics.DefaultAmount < 1000 ? EzBob.formatPoundsAsInt(experian.ConsumerSummaryCharacteristics.DefaultAmount) : EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerSummaryCharacteristics.DefaultAmount)%>
                                     </div>
                                     <% alert = experian.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
@@ -268,7 +269,8 @@
                                     </div>
                                         <% alert = item.ConsumerSummaryCharacteristics.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info'; %>
                                     <div class="alert <%-alert%>">
-                                        Defaults: <%-item.ConsumerSummaryCharacteristics.NumberOfDefaults%>, <%-EzBob.formatPoundsAsInt(item.ConsumerSummaryCharacteristics.DefaultAmount)%>
+                                        Defaults: <%-item.ConsumerSummaryCharacteristics.NumberOfDefaults%>, 
+                                        <%- item.ConsumerSummaryCharacteristics.DefaultAmount < 1000 ? EzBob.formatPoundsAsInt(item.ConsumerSummaryCharacteristics.DefaultAmount) : EzBob.formatPoundsAsThousandsNoDecimals(item.ConsumerSummaryCharacteristics.DefaultAmount)%>
                                     </div>
                                         <% alert = item.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">

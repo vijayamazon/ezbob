@@ -1114,6 +1114,22 @@ textarea.BusinessAddress {
     color: #000000;
 }
 
+.alert-white {
+    background-color: transparent;
+    border-color: transparent;
+    color: #000000;
+}
+
+.table-finaccount .alert {
+    border-radius: 0!important;
+}
+table.table.table-finaccount {
+    overflow-x: hidden;
+}
+
+.table > tbody > tr > td.no-padding {
+    padding: 0;
+}
 
 .pricing-model-double-input-width {
     width: 90px;
@@ -1458,6 +1474,7 @@ td a.edit-loan {
 
 .funding-width {
     width: 41.55%;
+    font-size: 16px;
 }
 
 .available-funds-alert-text-color {
