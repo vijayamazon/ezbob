@@ -2,6 +2,10 @@
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.login-page:before, .error-page:before, #main-content {
+    background: initial;
+}
+
 .ezbob-logo {
     background-image: url(../img/new-ezbob-logo.png);
     background-position: center;
@@ -11,6 +15,7 @@
     height: 100%;
     margin-left: 10px;
 }
+
 .tvdashboard {
     display: inline-block;
     height: 100%;
@@ -29,12 +34,15 @@ table.table {
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
     padding: 0;
 }
+
 .notifications {
     color: red;
 }
+
 .navbar .nav > li > a {
     color: #000;
 }
+
 .skin-orange .navbar {
     background-color: #ddd;
 }
@@ -137,6 +145,7 @@ a.logout {
     margin-bottom: 15px;
     margin-left: 40%;
     margin-right: 40%;
+    text-shadow: none;
 }
 
 .col-md-4, .col-md-12 {
@@ -159,4 +168,67 @@ strong {
 
 .total2 {
     background-color: #00ced1;
+}
+
+@media (max-width: 762px) {
+    .login-page .login-wrapper form {
+        width: 100%;
+    }
+
+    .navbar {
+        height: initial;
+    }
+
+    .tvdashboard {
+        display: none;
+    }
+
+    .last-updated {
+        width: 120px;
+        height: 40px;
+    }
+
+    .navbar .navbar-brand.ezbob-logo {
+        background-image: url(../img/new-ezbob-logo.png);
+        background-position: left;
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 100px;
+        height: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    .box .box-title h3 {
+        font-size: 12px;
+        line-height: 12px;
+        font-weight: bold;
+    }
+
+    .tile {
+        height: initial;
+    }
+
+        .tile p.title {
+            font-size: 12px;
+            font-weight: bold;
+            position: absolute;
+            right: 2px;
+            top: 2px;
+        }
+
+        .tile .caption {
+            font-size: 13px;
+            position: absolute;
+            left: 0;
+            vertical-align: middle;
+            height: 100%;
+            top: 2px;
+            padding-left: 2px;
+        }
+
+    .skin-orange .box > .box-title {
+        padding: 0;
+        margin-bottom: 0;
+    }
 }
