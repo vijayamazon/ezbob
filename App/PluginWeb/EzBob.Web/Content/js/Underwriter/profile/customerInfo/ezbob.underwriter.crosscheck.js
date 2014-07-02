@@ -308,13 +308,16 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
         var address = $(el.currentTarget).attr('data-address');
         var postcode = $(el.currentTarget).attr('data-postcode');
         var that = this;
-        $.post(window.gRootPath + "Underwriter/CrossCheck/LandRegistryEnquiries/?customerId=" + this.model.customerId, function(data) {
+        BlockUi("On");
+        $.post(window.gRootPath + "Underwriter/CrossCheck/LandRegistryEnquiries/?customerId=" + this.model.customerId, function (data) {
+            BlockUi("Off");
             that.lrEnqView = new EzBob.LandRegistryEnquiryView({ model: { postcode: postcode, address: address, customerId: that.model.customerId, titles: data.titles } });
             EzBob.App.vent.on('landregistry:retrieved', that.landRegistryRetrieved, that);
             EzBob.App.jqmodal.show(that.lrEnqView);
         });
     },
-    landRegistryRetrieved: function() {
+    landRegistryRetrieved: function () {
+        BlockUi("Off");
         Backbone.history.loadUrl();
         return false;
     },

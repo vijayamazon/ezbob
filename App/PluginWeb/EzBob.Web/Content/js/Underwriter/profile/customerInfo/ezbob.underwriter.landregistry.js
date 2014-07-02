@@ -36,12 +36,13 @@ EzBob.LandRegistryEnquiryView = Backbone.Marionette.ItemView.extend({
                     that.landRegistryRetrieved();
                 });
             } else {
+                BlockUi("Off");
                 that.enqRes = new EzBob.LandRegistryEnquiryResultsView({ model:new Backbone.Model(response), customerId: that.model.customerId });
                 EzBob.App.jqmodal.show(that.enqRes);
             }
         });
 
-        xhr.always(function() {
+        xhr.fail(function() {
             BlockUi("Off");
         });
     },
