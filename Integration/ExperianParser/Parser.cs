@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Xml;
-using Ezbob.Logger;
-using Newtonsoft.Json;
-
-namespace Ezbob.ExperianParser {
-	#region class Parser
+﻿namespace Ezbob.ExperianParser {
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Xml;
+	using Ezbob.Logger;
+	using Newtonsoft.Json;
+	using ConfigManager;
 
 	public class Parser : SafeLog {
 		#region public
@@ -88,11 +87,13 @@ namespace Ezbob.ExperianParser {
 
 			m_oGroups.ForEach(g => g.Validate(this));
 
-			Debug("\n***\n*** Experian parser: configuration - begin\n***\n");
+			if (CurrentValues.Instance.VerboseConfigurationLogging) {
+				Debug("\n***\n*** Experian parser: configuration - begin\n***\n");
 
-			m_oGroups.ForEach(g => g.Log(this));
+				m_oGroups.ForEach(g => g.Log(this));
 
-			Debug("\n***\n*** Experian parser: configuration - end\n***\n");
+				Debug("\n***\n*** Experian parser: configuration - end\n***\n");
+			} // if
 
 			Debug("Experian parser: parsing configuration complete.");
 		} // InitConfiguration
@@ -123,6 +124,4 @@ namespace Ezbob.ExperianParser {
 
 		#endregion private
 	} // class Parser
-
-	#endregion class Parser
 } // namespace Ezbob.ExperianParser

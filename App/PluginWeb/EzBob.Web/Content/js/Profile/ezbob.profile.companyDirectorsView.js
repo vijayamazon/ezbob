@@ -29,7 +29,7 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 			});
 		});
 
-		if (this.directorsList != null) {
+		if (this.directorsList !== null) {
 			this.directorsList.fnClearTable();
 			this.directorsList = null;
 		} // if
