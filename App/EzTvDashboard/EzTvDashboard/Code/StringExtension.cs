@@ -1,5 +1,7 @@
 ﻿namespace EzTvDashboard.Code
 {
+	using System.Collections.Generic;
+
 	public static class StringExtension
 	{
 		public static string ToK0(this decimal num)
@@ -35,6 +37,20 @@
 		public static string ToInt(this decimal num)
 		{
 			return num.ToString("N0");
+		}
+
+		public static decimal GetSafe(this Dictionary<string, decimal> dict, string key)
+		{
+			if (dict == null)
+			{
+				return 0;
+			}
+
+			if (dict.ContainsKey(key))
+			{
+				return dict[key];
+			}
+			return 0;
 		}
 
 	}

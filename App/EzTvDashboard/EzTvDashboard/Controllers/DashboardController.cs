@@ -9,7 +9,6 @@
 	{
 		//
 		// GET: /Dashboard/
-		static DashboardModel _model;
 		private readonly DashboardModelBuilder _modelBuilder;
 
 		public DashboardController()
@@ -20,15 +19,15 @@
 		[HttpGet]
 		public ActionResult Index()
 		{
-			_model = _modelBuilder.GetModel();
-			return View(_model);
+			var model = _modelBuilder.GetModel();
+			return View(model);
 		}
 
 		[HttpGet]
 		public ActionResult Dashboard()
 		{
-			_model = _modelBuilder.GetModel();
-			return PartialView(_model);
+			var model = _modelBuilder.GetModel();
+			return PartialView(model);
 		}
 
 		[HttpGet]
@@ -40,7 +39,8 @@
 		[HttpGet]
 		public JsonResult IsSomethingChanged()
 		{
-			return Json(new { changed = _modelBuilder.SomethingChanged(), lastChanged = _model.LastChanged }, JsonRequestBehavior.AllowGet);
+			var changed = _modelBuilder.SomethingChanged();
+			return Json(new { changed = changed, lastChanged = DashboardModelBuilder.LastChanged }, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

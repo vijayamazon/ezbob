@@ -10,18 +10,21 @@
 	public class DashboardModelBuilder
 	{
 		private AConnection Db { get; set; }
-		private static DateTime LastChecked { get; set; }
 		private static string GaCertThumb { get; set; }
 		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(DashboardModelBuilder));
+		private static DashboardModel DashboardModel { get; set; }
+
 		private static int CustomerId { get; set; }
 		private static int CashRequestsId { get; set; }
 		private static int LoanId { get; set; }
 		private static int BrokerId { get; set; }
-		private static DashboardModel DashboardModel{get;set;}
+		public static DateTime LastChanged { get; set; }
+
 		public DashboardModelBuilder()
 		{
 			Db = new SqlConnection();
 			GaCertThumb = System.Configuration.ConfigurationManager.AppSettings["gaCertThumb"];
+			DashboardModel = DashboardModel ?? BuildModel();
 		}
 
 		public bool SomethingChanged()
@@ -63,7 +66,8 @@
 			bool somethingChanged = isCustomerChanged || isCashRequestChanged || isLoanChanged || isBrokerChanged;
 			if (somethingChanged)
 			{
-				BuildModel();
+				Log.Debug("Something changed, building model");
+				DashboardModel = BuildModel();
 			}
 
 			return true;
@@ -71,18 +75,12 @@
 
 		public DashboardModel GetModel()
 		{
-			if (DashboardModel == null)
-			{
-				DashboardModel = BuildModel();
-			}
-
 			return DashboardModel;
 		}
 
-		public DashboardModel BuildModel()
+		private DashboardModel BuildModel()
 		{
-			
-			LastChecked = DateTime.UtcNow;
+			LastChanged = DateTime.UtcNow;
 			var model = new DashboardModel
 				{
 					CollectionStatus = new List<CollectionStatusModel>(),
@@ -92,30 +90,30 @@
 					MonthlyCollection = new List<MonthlyCollectionModel>(),
 					MonthlyTraffic = new List<MonthlyTrafficModel>(),
 					Stats = new Dictionary<string, decimal>(),
-					LastChanged = LastChecked
+					
 				};
 
-			var firstOfMonth = new DateTime(LastChecked.Year, LastChecked.Month, 1);
+			var firstOfMonth = new DateTime(LastChanged.Year, LastChanged.Month, 1);
 			Db.ForEachRow(
 				(oReader, bRowsetStart) =>
-					{
-						model.Stats.Add(oReader["Key"].ToString(), (decimal) oReader["Value"]);
-						return ActionResult.Continue;
-					}
+				{
+					model.Stats.Add(oReader["Key"].ToString(), (decimal)oReader["Value"]);
+					return ActionResult.Continue;
+				}
 				,
 				"EzTvGetStats",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@Now", LastChecked),
+				new QueryParameter("@Now", LastChanged),
 				new QueryParameter("@FirstOfMonth", firstOfMonth),
 				new QueryParameter("@MonthAgo", DateTime.Today.AddMonths(-1))
 			);
-			
+
 			try
 			{
 				var ga = new GoogleAnalytics();
 				ga.Init(DateTime.UtcNow, GaCertThumb);
-				var todayAnalytics = ga.FetchByCountry(DateTime.Today, LastChecked);
-				var monthToDateAnalytics = ga.FetchByCountry(firstOfMonth, LastChecked);
+				var todayAnalytics = ga.FetchByCountry(DateTime.Today, LastChanged);
+				var monthToDateAnalytics = ga.FetchByCountry(firstOfMonth, LastChanged);
 				if (todayAnalytics.ContainsKey("United Kingdom"))
 				{
 					model.Stats["T_UkVisitors"] = todayAnalytics["United Kingdom"].Users;
@@ -128,7 +126,7 @@
 			}
 			catch (Exception ex)
 			{
-				Log.ErrorFormat("Failed to load google analytics values \n{0}",ex);
+				Log.ErrorFormat("Failed to load google analytics values \n{0}", ex);
 			}
 
 			return model;
@@ -136,9 +134,10 @@
 
 		public DashboardModel BuildFakeModel()
 		{
-			LastChecked = DateTime.UtcNow;
+			LastChanged = DateTime.UtcNow;
 			var model = new DashboardModel
 				{
+					
 					Stats = new Dictionary<string, decimal>
 						{
 							{"T_UkVisitors", 30},//-api
@@ -421,5 +420,5 @@
 
 	}
 
-	
+
 }

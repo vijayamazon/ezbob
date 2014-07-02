@@ -1,13 +1,12 @@
 ﻿namespace EzTvDashboard.Models
 {
-	using System;
-using System.Collections.Generic;
+	using System.Collections.Generic;
 
 	public class DashboardModel
 	{
-		public DateTime LastChanged { get; set; }
 		public Dictionary<string, decimal> Stats { get; set; }
 
+		//not in use
 		public List<MonthlyBoardModel> MonthlyBoard { get; set; }
 		public List<MonthlyTrafficModel> MonthlyTraffic { get; set; }
 		public List<MonthlyCollectionModel> MonthlyCollection { get; set; }
