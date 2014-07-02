@@ -87,6 +87,9 @@
 			if ((m_oExperianData == null) || m_oExperianData.IsError)
 				return;
 
+			if (!m_oExperianData.CacheHit)
+				new UpdateExperianDirectors(m_nCustomerID, m_oExperianData.OutputXml, m_oExperianData.IsLimited, DB, Log).Execute();
+
 			if (m_oExperianData.CacheHit) {
 				// This check is required to allow multiple customers have the same company
 				// While the cache works with RefNumber the analytics table works with customer

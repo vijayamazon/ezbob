@@ -6,7 +6,6 @@
 	using System.Xml.Linq;
 	using System.Xml.XPath;
 	using Ezbob.Logger;
-	using log4net;
 
 	public abstract class BusinessReturnData {
 		#region public
@@ -35,6 +34,8 @@
 
 		public DateTime? IncorporationDate { get; protected set; }
 		public bool CacheHit { get; set; }
+
+		public abstract bool IsLimited { get; }
 
 		#endregion public
 
@@ -125,6 +126,6 @@
 
 		#endregion protected
 
-		private static readonly ASafeLog ms_oLog = new SafeILog(LogManager.GetLogger(typeof (BusinessReturnData)));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (BusinessReturnData));
 	} // class BusinessReturnData
 } // namespace

@@ -23,6 +23,14 @@
 
 		#endregion constructors
 
+		#region property IsLimited
+
+		public override bool IsLimited {
+			get { return true; }
+		} // IsLimited
+
+		#endregion property IsLimited
+
 		#endregion public
 
 		#region protected

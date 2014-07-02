@@ -1096,6 +1096,23 @@ GeneratePassword broker-contact-email@example.com password-itself
 				m_oLog.Msg("{0}", e);
 		} // LoadEsignatures
 
+		[Activation]
+		private void BackfillExperianDirectors() {
+			if (m_aryArgs.Length == 1) {
+				m_oServiceClient.BackfillExperianDirectors(null);
+				return;
+			} // if
+
+			int nCustomerID;
+
+			if ((m_aryArgs.Length != 2) || !int.TryParse(m_aryArgs[1], out nCustomerID)) {
+				m_oLog.Msg("Usage: BackfillExperianDirectors [<Customer ID>]");
+				return;
+			} // if
+
+			m_oServiceClient.BackfillExperianDirectors(nCustomerID);
+		} // BackfillExperianDirectors
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

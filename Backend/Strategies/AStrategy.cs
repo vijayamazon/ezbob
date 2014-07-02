@@ -8,8 +8,6 @@
 	using Ezbob.Logger;
 	using StructureMap;
 
-	#region class AStrategy
-
 	public abstract class AStrategy {
 		#region public
 
@@ -55,6 +53,4 @@
 
 		#endregion protected
 	} // class AStrategy
-
-	#endregion class AStrategy
 } // namespace EzBob.Backend.Strategies

@@ -250,6 +250,9 @@
 		#region Experian
 
 		[OperationContract]
+		ActionMetaData BackfillExperianDirectors(int? nCustomerID);
+
+		[OperationContract]
 		ActionMetaData ExperianCompanyCheck(int customerId, bool forceCheck);
 
 		[OperationContract]

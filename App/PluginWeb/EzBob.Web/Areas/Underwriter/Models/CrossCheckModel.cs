@@ -4,7 +4,7 @@
 	using System.Collections.Generic;
 	using System.Text;
 	using AutoMapper;
-	using CommonLib;
+	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
 	using System.Linq;
 	using EZBob.DatabaseLib;

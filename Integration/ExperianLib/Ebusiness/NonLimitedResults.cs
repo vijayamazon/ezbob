@@ -13,9 +13,16 @@ namespace ExperianLib.Ebusiness {
 			CompanyNotFoundOnBureau = IsError;
 		} // constructor
 
-		public NonLimitedResults(Exception ex)
-			: base(ex) {
+		public NonLimitedResults(Exception ex) : base(ex) {
 		} // constructor
+
+		#region property IsLimited
+
+		public override bool IsLimited {
+			get { return false; }
+		} // IsLimited
+
+		#endregion property IsLimited
 
 		#endregion public
 

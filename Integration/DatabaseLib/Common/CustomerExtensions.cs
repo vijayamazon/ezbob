@@ -1,4 +1,4 @@
-﻿namespace EzBob.CommonLib {
+﻿namespace EZBob.DatabaseLib.Common {
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 
