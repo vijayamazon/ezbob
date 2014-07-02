@@ -318,7 +318,7 @@
 				}
 				// Company score < 20 AND at least 1 default of at least 1000 in last 24 months
 				conditionValue = _maxCompanyScore < _rejectDefaultsCompanyScore && _numOfCompanyDefaultAccounts >= _rejectDefaultsCompanyAccountsNum;
-				conditionDescription = string.Format("Pretty low personal score and personal account defaults (_maxCompanyScore < _rejectDefaultsCompanyScore && _numOfCompanyDefaultAccounts >= _rejectDefaultsCompanyAccountsNum) [{0} < {1} && {2} >= {3}]", _maxExperianConsumerScore, _rejectDefaultsCreditScore, _numOfCompanyDefaultAccounts, _rejectDefaultsCompanyAccountsNum);
+				conditionDescription = string.Format("Pretty low personal score and personal account defaults (_maxCompanyScore < _rejectDefaultsCompanyScore && _numOfCompanyDefaultAccounts >= _rejectDefaultsCompanyAccountsNum) [{0} < {1} && {2} >= {3}]", _maxCompanyScore, _rejectDefaultsCompanyScore, _numOfCompanyDefaultAccounts, _rejectDefaultsCompanyAccountsNum);
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
