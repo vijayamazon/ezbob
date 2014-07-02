@@ -184,8 +184,9 @@ strong {
     }
 
     .last-updated {
-        width: 120px;
-        height: 40px;
+        position: relative;
+        float: right;
+        top: 0;
     }
 
     .navbar .navbar-brand.ezbob-logo {
