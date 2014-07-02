@@ -647,13 +647,13 @@
 
 			if (Results.BusinessScore <= 30)
 			{
-				Results.BusinessScoreWeight = 41;
+				Results.BusinessScoreWeight = 41.25m;
 				sumIs100 = false;
 			}
 
 			if (Results.ConsumerScore <= 800)
 			{
-				Results.ConsumerScoreWeight = 14;
+				Results.ConsumerScoreWeight = 13.75m;
 				sumIs100 = false;
 			}
 
