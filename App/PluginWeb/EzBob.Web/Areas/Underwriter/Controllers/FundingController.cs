@@ -24,7 +24,9 @@
 		public JsonResult GetCurrentFundingStatus()
 		{
 			AvailableFundsActionResult availableFunds = serviceClient.Instance.GetAvailableFunds(context.UserId);
-			return Json(new { AvailableFunds = availableFunds.AvailableFunds, ReservedAmount = availableFunds.ReservedAmount }, JsonRequestBehavior.AllowGet);
+			var today = DateTime.UtcNow;
+			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? CurrentValues.Instance.PacnetBalanceWeekendLimit : CurrentValues.Instance.PacnetBalanceWeekdayLimit;
+			return Json(new { AvailableFunds = availableFunds.AvailableFunds, ReservedAmount = availableFunds.ReservedAmount, RequiredFunds = relevantLimit }, JsonRequestBehavior.AllowGet);
         }
 
 		[Ajax]

@@ -142,7 +142,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
         @PropertiesModel = new EzBob.Underwriter.Properties()
         @affordability = new EzBob.Underwriter.Affordability()
-        
+        @fundingModel = new EzBob.Underwriter.FundingModel()
         @dashboardInfoView = new EzBob.Underwriter.DashboardView(
             el: dashboardInfo
             model: @summaryInfoModel
@@ -479,6 +479,17 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
 
             @signatureMonitorView.reload id
 
+            @fundingModel.fetch().done(() =>
+                fundingAlert = @$el.find(".fundingAlert")
+                availableFundsNum = @fundingModel.get('AvailableFunds')
+                reqFunds = @fundingModel.get('RequiredFunds')
+                availableFundsStr = 'Funding ' + EzBob.formatPoundsNoDecimals(availableFundsNum).replace(/\s+/g, '')
+                fundingAlert.html(availableFundsStr)
+                if (reqFunds > availableFundsNum)
+                    fundingAlert.addClass('red_cell')
+                else
+                    fundingAlert.removeClass('red_cell')
+            )
             BlockUi "Off"
 
         EzBob.handleUserLayoutSetting()

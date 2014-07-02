@@ -150,6 +150,7 @@
       });
       this.PropertiesModel = new EzBob.Underwriter.Properties();
       this.affordability = new EzBob.Underwriter.Affordability();
+      this.fundingModel = new EzBob.Underwriter.FundingModel();
       this.dashboardInfoView = new EzBob.Underwriter.DashboardView({
         el: dashboardInfo,
         model: this.summaryInfoModel,
@@ -601,6 +602,19 @@
         }
         $('a.common-bug').attr('data-bug-customer', id);
         _this.signatureMonitorView.reload(id);
+        _this.fundingModel.fetch().done(function() {
+          var availableFundsNum, availableFundsStr, fundingAlert, reqFunds;
+          fundingAlert = _this.$el.find(".fundingAlert");
+          availableFundsNum = _this.fundingModel.get('AvailableFunds');
+          reqFunds = _this.fundingModel.get('RequiredFunds');
+          availableFundsStr = 'Funding ' + EzBob.formatPoundsNoDecimals(availableFundsNum).replace(/\s+/g, '');
+          fundingAlert.html(availableFundsStr);
+          if (reqFunds > availableFundsNum) {
+            return fundingAlert.addClass('red_cell');
+          } else {
+            return fundingAlert.removeClass('red_cell');
+          }
+        });
         return BlockUi("Off");
       });
       return EzBob.handleUserLayoutSetting();
