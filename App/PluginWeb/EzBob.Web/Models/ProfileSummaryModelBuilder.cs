@@ -446,11 +446,13 @@
 								IsLate = loan.Status == LoanStatus.Late,
 								IsEU = loan.LoanSource.Name == "EU",
 								BalanceWidthPercent = loan.CashRequest.ManagerApprovedSum.HasValue
-										? loan.Balance / (decimal)loan.CashRequest.ManagerApprovedSum.Value
+										? loan.Principal / (decimal)loan.CashRequest.ManagerApprovedSum.Value
 										: 0,
 								BalancePercent = loan.Principal / loan.LoanAmount,
 								Term = agreement.Term,
-								TermApproved = loan.CashRequest.RepaymentPeriod,
+								TermApproved = loan.CashRequest.ApprovedRepaymentPeriod.HasValue 
+									? loan.CashRequest.ApprovedRepaymentPeriod.Value 
+									: loan.CashRequest.RepaymentPeriod,
 								TotalFee = loan.SetupFee,
 								LoanNumber = i,
 							});

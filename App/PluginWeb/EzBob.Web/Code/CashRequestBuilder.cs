@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Code
 {
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
 	using System;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;

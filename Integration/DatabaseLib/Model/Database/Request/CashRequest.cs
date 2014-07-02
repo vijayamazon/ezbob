@@ -40,11 +40,18 @@
 		}
 
 		public virtual decimal? APR { get; set; }
+		/// <summary>
+		/// The value changes as customer changes the slider if allowed
+		/// </summary>
 		public virtual int RepaymentPeriod
 		{
 			get { return _repaymentPeriod; }
 			set { _repaymentPeriod = value; }
 		}
+		/// <summary>
+		/// underwriter approved repayment period
+		/// </summary>
+		public virtual int? ApprovedRepaymentPeriod { get; set; }
 
 		public virtual bool UseSetupFee
 		{

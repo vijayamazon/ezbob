@@ -27,6 +27,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			Map(x => x.InterestRate);
 			Map(x => x.APR);
 			Map(x => x.RepaymentPeriod);
+			Map(x => x.ApprovedRepaymentPeriod);
 			Map(x => x.UseSetupFee);
 			Map(x => x.UseBrokerSetupFee);
 			Map(x => x.ManualSetupFeeAmount);

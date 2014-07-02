@@ -176,6 +176,7 @@
 			var loanT = _loanTypes.Get(loanType);
 			cr.LoanType = loanT;
 			cr.RepaymentPeriod = loanT.RepaymentPeriod;
+			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).LoanType = {1}", id, cr.LoanType.Name);
 		}
@@ -208,7 +209,10 @@
 				cr.IsCustomerRepaymentPeriodSelectionAllowed = cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed;
 				cr.IsLoanTypeSelectionAllowed = cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed ? 1 : 0;
 				if (cr.LoanSource.DefaultRepaymentPeriod.HasValue)
+				{
 					cr.RepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod.Value;
+					cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
+				}
 			} // if
 
 			return Json(new { });
@@ -239,6 +243,7 @@
 		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.RepaymentPeriod = period;
+			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
 			cr.LoanTemplate = null;
 
 			Log.DebugFormat("CashRequest({0}).RepaymentPeriod = {1}", id, period);
@@ -534,6 +539,7 @@
 			cr.ManagerApprovedSum = cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step; 
 			cr.InterestRate = interestRate;
 			cr.RepaymentPeriod = repaymentPeriod;
+			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
 			cr.OfferStart = FormattingUtils.ParseDateWithCurrentTime(offerStart);
 			cr.OfferValidUntil = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil);
 
