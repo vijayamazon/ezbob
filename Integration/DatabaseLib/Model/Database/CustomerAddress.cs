@@ -3,6 +3,7 @@ using FluentNHibernate.Mapping;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using System.Linq;
 	using System.Web.Script.Serialization;
 	using Iesi.Collections.Generic;
 
@@ -52,8 +53,15 @@ namespace EZBob.DatabaseLib.Model.Database
 		{
 			get
 			{
-				return string.IsNullOrEmpty(Postcode) ? null : string.Format("{0} {1} {2}, {3}, {4}, {5}", 
-					new object[] { Line1, Line2, Line3, Town, Country, Postcode });
+				return string.IsNullOrEmpty(Postcode)
+					? null
+					: string.Join(
+						" ",
+						(new [] { Line1, Line2, Line3, Town, Country, Postcode })
+							.Select(x => (x ?? string.Empty).Trim())
+							.Where(x => !string.IsNullOrWhiteSpace(x)
+					)
+				);
 			}
 		}
 

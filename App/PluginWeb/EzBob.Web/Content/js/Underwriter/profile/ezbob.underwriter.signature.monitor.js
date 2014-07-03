@@ -10,14 +10,28 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	}, // initialize
 
 	events: {
-		'click .toggle-signers': 'toggleSigners',
+		'click .toggle-signers': 'toggleShowSigners',
 		'click .esign-send-another': 'sendAnother',
 		'click .esign-poll-status': 'pollStatus',
 		'click .cancel-send': 'cancelSend',
 		'click .do-send': 'doSend',
 		'click .download-signed-document': 'downloadSignedDocument',
 		'click .add-director': 'addDirectorClicked',
+		'click .toggle-all-signers': 'toggleAllSigners',
 	}, // events
+
+	toggleAllSigners: function() {
+		var oChk = this.$el.find('.toggle-all-signers');
+
+		var bChecked = !(oChk.data('checked') ? true : false);
+
+		oChk.data('checked', bChecked);
+
+		if (bChecked)
+			this.$el.find('.selected-signer').attr('checked', 'checked');
+		else
+			this.$el.find('.selected-signer').removeAttr('checked');
+	}, // toggleAllSigners
 
 	addDirectorClicked: function(event) {
 		event.stopPropagation();
@@ -219,10 +233,10 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		this.$el.find('#esignature-list-container').removeClass('hide');
 	}, // cancelSend
 
-	toggleSigners: function() {
+	toggleShowSigners: function() {
 		var nSignatureID = $(event.target).data('SignatureID');
 		this.$el.find('.signature' + nSignatureID).toggleClass('hide');
-	}, // toggleSigners
+	}, // toggleShowSigners
 
 	reload: function(nCustomerID, bPollStatus) {
 		if (!EzBob.Config.EchoSignEnabledUnderwriter) {
@@ -261,13 +275,45 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 				.append(self.fromTemplate('.esign-send-another'))
 				.append(self.fromTemplate('.esign-poll-status').data('CustomerID', nCustomerID));
 
-			var oSignersListOpts = self.getDataTableOpts(oResponse.signers, 'FirstName,LastName,Email');
+			var oSignersListOpts = self.getDataTableOpts(oResponse.signers, 'FirstName,LastName,Email,MobilePhone');
 			oSignersListOpts.fnRowCallback = _.bind(self.signersListRowCallback, self);
-			oSignersListOpts.aoColumns.push.apply(oSignersListOpts.aoColumns, [
-				{ sClass: ['grid-item-IsDirector center'], mData: null, },
-				{ sClass: ['grid-item-IsShareholder center'], mData: null, },
+			oSignersListOpts.aoColumns.unshift(
 				{ sClass: ['grid-item-IsSelected center'], mData: null, },
-			]);
+				{ sClass: ['grid-item-Source center'], mData: 'Type', mRender: function(sType) {
+					var sClass = 'fa-circle-o';
+					var bHide = false;
+					var sSource = '';
+
+					switch (sType) {
+					case 'customer':
+						sClass = 'fa-user';
+						sSource = 'This is the customer.';
+						break;
+					case 'director':
+						sClass = 'fa-users';
+						sSource = 'This director/shareholder has been entered by the customer/underwriter.';
+						break;
+					case 'experian':
+						sClass = 'fa-institution';
+						sSource = 'This director/shareholder has been extracted from Experian data.';
+						break;
+					default:
+						bHide = true;
+						break;
+					} // sType
+
+					var sHtml = '<i class="fa ' + sClass + '" title="' + sSource + '" ' + (bHide ? 'style="visibility: hidden;"' : '') + '></i>';
+					return sHtml +
+						'<i class="fa fa-legal IsDirector" title="Company director"></i>' +
+						'<i class="fa fa-money IsShareholder" title="Company shareholder"></i>';
+				}}
+			);
+
+			oSignersListOpts.aoColumns.push(
+				{ sClass: ['grid-item-Address'], mData: null, mRender: function(ignored, sType, oData) {
+					return _.filter([oData.Line1, oData.Line2, oData.Line3, oData.Town, oData.County, oData.Postcode], $.trim).join(', ');
+				}}
+			);
 
 			var oTbl = self.$el.find('#esigners-list');
 			self.SignersList = oTbl.dataTable(oSignersListOpts);
@@ -276,6 +322,8 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			oTbl.css('width', '');
 
 			self.$el.find('.initially-checked').attr('checked', 'checked');
+
+			self.$el.find('.grid-item-Source').find('i').tooltip();
 		}); // on getJSON done
 
 		oRequest.always(function() {
@@ -294,11 +342,11 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 		this.$el.find('.do-send').data('CustomerID', oData.CustomerID);
 
-		if (oData.IsDirector)
-			oRow.find('.grid-item-IsDirector').empty().append($('<i class="fa fa-check-square-o"/>'));
+		if (!oData.IsDirector)
+			oRow.find('.grid-item-Source .IsDirector').css('visibility', 'hidden');
 
-		if (oData.IsShareholder)
-			oRow.find('.grid-item-IsShareholder').empty().append($('<i class="fa fa-check-square-o"/>'));
+		if (!oData.IsShareholder)
+			oRow.find('.grid-item-Source .IsShareholder').css('visibility', 'hidden');
 
 		var oSelected = $('<input type=checkbox class="initially-checked selected-signer">').data({
 			DirectorID: oData.DirectorID,

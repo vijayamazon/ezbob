@@ -12,7 +12,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		'cutomer' AS Type,
+		'customer' AS Type,
 		c.Id AS CustomerID,
 		0 AS DirectorID,
 		c.FirstName,
@@ -21,12 +21,20 @@ BEGIN
 		s.StatusID,
 		s.StatusName AS Status,
 		CONVERT(BIT, 1) AS IsDirector,
-		CONVERT(BIT, 1) AS IsShareholder
+		CONVERT(BIT, 1) AS IsShareholder,
+		c.MobilePhone,
+		a.Line1,
+		a.Line2,
+		a.Line3,
+		a.Town,
+		a.County,
+		a.Postcode
 	FROM
 		Customer c
 		INNER JOIN EsignUserAgreementStatus s ON s.StatusID = 7
+		INNER JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType = 1
 	WHERE
-		@CustomerID IS NULL OR Id = @CustomerID
+		@CustomerID IS NULL OR c.Id = @CustomerID
 	UNION
 	SELECT
 		'director' AS Type,
@@ -38,13 +46,45 @@ BEGIN
 		s.StatusID,
 		s.StatusName AS Status,
 		CONVERT(BIT, 1) AS IsDirector,
-		ISNULL(d.IsShareholder, 0) AS IsShareholder
+		ISNULL(d.IsShareholder, 0) AS IsShareholder,
+		d.Phone AS MobilePhone,
+		a.Line1,
+		a.Line2,
+		a.Line3,
+		a.Town,
+		a.County,
+		a.Postcode
 	FROM
 		Director d
 		INNER JOIN Company co ON d.CompanyId = co.Id
 		INNER JOIN Customer c ON co.Id = c.CompanyId AND (@CustomerID IS NULL OR c.Id = @CustomerID)
 		INNER JOIN CustomerAddress a ON d.Id = a.DirectorId AND a.addressType IN (4, 6)
 		INNER JOIN EsignUserAgreementStatus s ON s.StatusID = 7
+	UNION
+	SELECT
+		'experian' AS Type,
+		c.Id AS CustomerID,
+		d.ExperianDirectorID AS DirectorID,
+		d.FirstName AS FirstName,
+		d.LastName AS LastName,
+		d.Email AS Email,
+		s.StatusID,
+		s.StatusName AS Status,
+		d.IsDirector AS IsDirector,
+		d.IsShareholder AS IsShareholder,
+		d.MobilePhone,
+		d.Line1,
+		d.Line2,
+		d.Line3,
+		d.Town,
+		d.County,
+		d.Postcode
+	FROM
+		ExperianDirectors d
+		INNER JOIN Customer c ON c.Id = d.CustomerID AND (@CustomerID IS NULL OR c.Id = @CustomerID)
+		INNER JOIN EsignUserAgreementStatus s ON s.StatusID = 7
+	WHERE
+		d.IsDeleted = 0
 	ORDER BY
 		c.Id,
 		1

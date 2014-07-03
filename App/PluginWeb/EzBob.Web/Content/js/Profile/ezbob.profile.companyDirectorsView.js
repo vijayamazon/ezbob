@@ -45,7 +45,7 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 
 		var oTbl = this.$el.find('.directors-list');
 		this.directorsList = oTbl.dataTable(
-			this.getDataTableOpts(aryData, 'name,email,phone,birthDate,address,isDirector,isShareholder')
+			this.getDataTableOpts(aryData, 'name,birthDate,email,phone,address,isDirector,isShareholder')
 		);
 		oTbl.css('width', '');
 	}, // reload
@@ -62,11 +62,11 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 
 		var oCell = oRow.find('.grid-item-isDirector').empty();
 		if (oData.isDirector === 'yes')
-			oCell.append($('<i class="fa fa-check-square-o" />'));
+			oCell.append($('<i class="fa fa-check-square-o"></i>'));
 
 		oCell = oRow.find('.grid-item-isShareholder').empty();
 		if (oData.isShareholder === 'yes')
-			oCell.append($('<i class="fa fa-check-square-o" />'));
+			oCell.append($('<i class="fa fa-check-square-o"></i>'));
 	}, // directorsListRowCallback
 
 	getDataTableOpts: function(aaData, sFieldNames) {
@@ -114,7 +114,9 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 		event.preventDefault();
 
 		var director = new EzBob.DirectorModel();
-		var directorEl = $('.add-company-director');
+		var directorEl = this.$el.find('.add-company-director');
+
+		this.$el.find('.add-director, .dataTables_wrapper').hide();
 
 		var customerInfo = _.extend({}, this.model.get('CustomerPersonalInfo'), {
 			PostCode: this.model.get('PersonalAddress').models[0].get('Rawpostcode')
@@ -132,10 +134,14 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 
 			var self = this;
 
-			this.addDirector.setBackHandler(function() { directorEl.hide(); });
+			this.addDirector.setBackHandler(function() {
+				directorEl.hide();
+				self.$el.find('.add-director, .dataTables_wrapper').show();
+			});
 
 			this.addDirector.setSuccessHandler(function() {
 				directorEl.hide();
+				self.$el.find('.add-director, .dataTables_wrapper').show();
 				self.model.fetch().done(function() { self.reload(); });
 			});
 

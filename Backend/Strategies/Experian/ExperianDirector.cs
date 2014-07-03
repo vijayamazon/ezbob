@@ -212,7 +212,13 @@
 
 		public static string Get(this ParsedDataItem oItem, ParsedFieldNames nName) {
 			string sKey = nName.ToString();
-			return ((oItem.Contains(sKey) ? oItem[sKey] : string.Empty) ?? string.Empty).Trim();
+
+			string sValue = ((oItem.Contains(sKey) ? oItem[sKey] : string.Empty) ?? string.Empty).Trim().ToLowerInvariant();
+
+			if (nName == ParsedFieldNames.Postcode)
+				return sValue.ToUpperInvariant();
+
+			return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(sValue);
 		} // Get
 	} // class ParsedDataItemExt
 

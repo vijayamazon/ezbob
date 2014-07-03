@@ -7,6 +7,9 @@
 	[DataContract]
 	public class Esigner : ITraversable {
 		[DataMember]
+		public string Type { get; set; }
+
+		[DataMember]
 		public long ID { get; set; }
 
 		[DataMember]
@@ -38,6 +41,27 @@
 
 		[DataMember]
 		public bool IsShareholder { get; set; }
+
+		[DataMember]
+		public string MobilePhone { get; set; }
+
+		[DataMember]
+		public string Line1 { get; set; }
+
+		[DataMember]
+		public string Line2 { get; set; }
+
+		[DataMember]
+		public string Line3 { get; set; }
+
+		[DataMember]
+		public string Town { get; set; }
+
+		[DataMember]
+		public string County { get; set; }
+
+		[DataMember]
+		public string Postcode { get; set; }
 
 		public override string ToString() {
 			return string.Format(

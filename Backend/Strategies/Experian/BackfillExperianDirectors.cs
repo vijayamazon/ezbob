@@ -25,7 +25,7 @@
 			if (m_nCustomerID.HasValue)
 				DB.ExecuteNonQuery("DELETE FROM ExperianDirectors WHERE CustomerID = " + m_nCustomerID.Value, CommandSpecies.Text);
 			else
-				DB.ExecuteNonQuery("TRUNCATE TABLE ExperianDirectors", CommandSpecies.Text);
+				DB.ExecuteNonQuery("DELETE FROM ExperianDirectors", CommandSpecies.Text);
 
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {

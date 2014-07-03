@@ -1844,6 +1844,10 @@ body {
 
 #signature-monitor .center { text-align: center; }
 
+#signature-monitor table tbody tr:hover {
+	background-color: #cfcfcf;
+}
+
 #esigners-list-container .buttons input {
 	margin-top: -4px;
 }
@@ -1851,6 +1855,15 @@ body {
 #esigners-list-container .buttons label { display: inline-block; margin: 0 20px 0 5px; }
 
 #esigners-list-container .buttons button { display: inline-block; margin-right: 20px; }
+
+#esigners-list-container .grid-item-Source i {
+	display: inline-block;
+	margin-right: 5px;
+}
+
+#esigners-list-container .toggle-all-signers {
+	cursor: pointer;
+}
 
 .editOfferDiv {
     margin-top: 10px;
