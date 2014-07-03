@@ -323,8 +323,8 @@
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
 					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met:" +
-												_rejectDefaultsCompanyScore +
-												" < " + _numOfCompanyDefaultAccounts + " AND " + _numOfCompanyDefaultAccounts + " >= " +
+												_maxCompanyScore +
+												" < " + _rejectDefaultsCompanyScore + " AND " + _numOfCompanyDefaultAccounts + " >= " +
 												_rejectDefaultsCompanyAccountsNum;
 				}
 				// Late over 30 days in personal CAIS (should be configurable according to ExperianAccountStatuses) At least in 2 months (in one or more accounts) in last 3 months
