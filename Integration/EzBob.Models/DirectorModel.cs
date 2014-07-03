@@ -15,6 +15,8 @@
 		public const string No = "no";
 		public const string On = "on";
 
+		public bool IsExperian { get; set; }
+
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Middle { get; set; }
@@ -61,6 +63,7 @@
 
 		public static DirectorModel FromDirector(Director director, List<Director> directors) {
 			return new DirectorModel {
+				IsExperian = false,
 				Id = director.Id,
 				Name = director.Name,
 				Middle = director.Middle,
@@ -80,5 +83,38 @@
 				IsShareholder = director.IsShareholder.HasValue && director.IsShareholder.Value ? Yes : No,
 			};
 		} // FromDirector
+
+		public static DirectorModel FromExperianDirector(ExperianDirector director, TypeOfBusinessReduced nBusinessType) {
+			return new DirectorModel {
+				IsExperian = true,
+				Id = director.ID,
+				Name = director.FirstName,
+				Middle = director.MiddleName,
+				Surname = director.LastName,
+				Position = 0,
+				DateOfBirth = FormattingUtils.FormatDateToString(director.BirthDate, "-/-/-"),
+
+				DirectorAddress = new [] {
+					new CustomerAddress {
+						Line1 = director.Line1,
+						Line2 = director.Line2,
+						Line3 = director.Line3,
+						Town = director.Town,
+						County = director.County,
+						Postcode = director.Postcode,
+						AddressType = nBusinessType == TypeOfBusinessReduced.Limited
+							? CustomerAddressType.LimitedDirectorHomeAddress
+							: CustomerAddressType.NonLimitedDirectorHomeAddress,
+					},
+				},
+
+				PrevDirectorAddress = new CustomerAddress[0],
+				Gender = director.Gender.HasValue ? director.Gender.Value : ' ',
+				Email = director.Email,
+				Phone = director.MobilePhone,
+				IsDirector = director.IsDirector ? Yes : No,
+				IsShareholder = director.IsShareholder ? Yes : No,
+			};
+		} // FromExperianDirector
 	} // class DirectorModel
 } // namespace

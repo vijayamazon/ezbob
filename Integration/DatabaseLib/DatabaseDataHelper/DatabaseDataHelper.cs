@@ -6,6 +6,7 @@ namespace EZBob.DatabaseLib {
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Net;
+	using Model.Database.Mapping;
 	using Newtonsoft.Json;
 	using Common;
 	using Model.Database.Broker;
@@ -89,6 +90,8 @@ namespace EZBob.DatabaseLib {
 		private readonly BrokerRepository _brokerRepository;
 		private readonly CustomerMarketPlaceUpdatingHistoryRepository customerMarketPlaceUpdatingHistoryRepository;
 
+		private readonly ExperianDirectorRepository m_oExperianDirectorRepository;
+
 		#endregion repositories
 
 		#region constructor
@@ -133,6 +136,8 @@ namespace EZBob.DatabaseLib {
 			_trustPilotStatusRepository = new TrustPilotStatusRepository(session);
 			_brokerRepository = new BrokerRepository(session);
 			customerMarketPlaceUpdatingHistoryRepository = new CustomerMarketPlaceUpdatingHistoryRepository(session);
+
+			m_oExperianDirectorRepository = new ExperianDirectorRepository(session);
 		} // constructor
 
 		#endregion constructor
@@ -167,6 +172,8 @@ namespace EZBob.DatabaseLib {
 		} // WizardSteps
 
 		#endregion property WizardSteps
+
+		public ExperianDirectorRepository ExperianDirectorRepository { get { return m_oExperianDirectorRepository; } }
 
 		public BrokerRepository BrokerRepository { get { return _brokerRepository; } }
 

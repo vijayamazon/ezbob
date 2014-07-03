@@ -937,6 +937,10 @@ div.director-container .accordion-inner { padding: 0 !important; margin-left: 15
     max-width: 700px;
 }
 
+.add-company-director {
+	margin-bottom: 1em;
+}
+
 table.directors-list td {
 	color: #333333;
 	font-size: 14px;

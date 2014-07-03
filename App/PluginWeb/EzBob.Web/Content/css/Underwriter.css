@@ -763,11 +763,6 @@ table.internal-table {
     margin-left: 3em;
 }
 
-.narrow-as-possible {
-    width: 1px !important;
-    white-space: nowrap !important;
-}
-
 .trend-container {
     float: right;
     display: inline-block;

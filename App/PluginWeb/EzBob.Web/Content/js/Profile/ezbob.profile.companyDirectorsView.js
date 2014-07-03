@@ -8,10 +8,18 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 		this.directorsList = null;
 	}, // initialize
 
+	events: {
+		'click .add-director': 'addDirectorClicked',
+	}, // events
+
 	onRender: function() {
 		if (!EzBob.Config.EchoSignEnabledCustomer)
 			return;
 
+		this.reload();
+	}, // onRender
+
+	reload: function() {
 		var company = this.model.get("CompanyInfo") || {};
 
 		var aryData = [];
@@ -26,6 +34,7 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 				address: (director.DirectorAddress && director.DirectorAddress[0] ? director.DirectorAddress[0].FormattedAddress : ''),
 				isShareholder: director.IsShareholder,
 				isDirector: director.IsDirector,
+				isExperian: director.IsExperian,
 			});
 		});
 
@@ -39,15 +48,17 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 			this.getDataTableOpts(aryData, 'name,email,phone,birthDate,address,isDirector,isShareholder')
 		);
 		oTbl.css('width', '');
-	}, // onRender
+	}, // reload
 
 	directorsListRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 		var oRow = $(oTR);
 
-		var oBtn = this.$el.find('.templates').find('.btn-edit-director').clone(true)
-			.data('DirectorID', oData.id);
+		if (oData.isExperian) {
+			var oBtn = this.$el.find('.templates').find('.btn-edit-director').clone(true)
+				.data('DirectorID', oData.id);
 
-		oRow.find('.grid-item-edit').empty().append(oBtn);
+			oRow.find('.grid-item-edit').empty().append(oBtn);
+		} // if
 
 		var oCell = oRow.find('.grid-item-isDirector').empty();
 		if (oData.isDirector === 'yes')
@@ -85,14 +96,68 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 
 		_.each(opts.aoColumns, function(col) {
 			if ((col.mData !== 'isDirector') && (col.mData !== 'isShareholder'))
-			col.sClass += ' l';
+				col.sClass += ' l';
+			else
+				col.sClass += ' narrow-as-possible';
 		});
 
 		opts.aoColumns.push({
-			sClass: 'grid-item-edit',
+			sClass: 'grid-item-edit narrow-as-possible',
 			mData: null,
 		});
 
 		return opts;
 	}, // getDataTableOpts
+
+	addDirectorClicked: function(event) {
+		event.stopPropagation();
+		event.preventDefault();
+
+		var director = new EzBob.DirectorModel();
+		var directorEl = $('.add-company-director');
+
+		var customerInfo = _.extend({}, this.model.get('CustomerPersonalInfo'), {
+			PostCode: this.model.get('PersonalAddress').models[0].get('Rawpostcode')
+		}, {
+			Directors: this.model.get('CompanyInfo').Directors
+		});
+
+		if (!this.addDirector) {
+			this.addDirector = new EzBob.AddDirectorInfoView({
+				model: director,
+				el: directorEl,
+				customerInfo: customerInfo,
+				failOnDuplicate: true
+			});
+
+			var self = this;
+
+			this.addDirector.setBackHandler(function() { directorEl.hide(); });
+
+			this.addDirector.setSuccessHandler(function() {
+				directorEl.hide();
+				self.model.fetch().done(function() { self.reload(); });
+			});
+
+			this.addDirector.setDupCheckCompleteHandler(function(bDupFound) {
+				if (bDupFound) {
+					if (!self.lastTimeDupDirFound) {
+						EzBob.App.trigger('clear');
+						EzBob.App.trigger('error', 'Duplicate director detected.');
+					} // if
+
+					self.lastTimeDupDirFound = true;
+				} else {
+					EzBob.App.trigger('clear');
+					self.lastTimeDupDirFound = false;
+				} // if
+			});
+
+			this.addDirector.render();
+		} // if
+
+		directorEl.show();
+
+		return false;
+	}, // addDirectorClicked
 }); // EzBob.Profile.CompanyDirectorsView

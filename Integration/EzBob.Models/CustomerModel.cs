@@ -61,6 +61,8 @@ namespace EzBob.Models {
 
 		public CompanyInfoMap CompanyInfo { get; set; }
 
+		public bool CanHaveDirectors { get; set; }
+
 		public CustomerAddress[] PersonalAddress { get; set; }
 
 		public CustomerAddress[] PrevPersonAddresses { get; set; }

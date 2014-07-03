@@ -53,7 +53,7 @@
 						<li class="divider-vertical"></li>
 						<li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
 					}
-					@if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CompanyInfo != null && Model.Customer.CompanyInfo.Directors.Any()) {
+					@if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CanHaveDirectors) {
 						<li class="divider-vertical"></li>
 						<li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors">Company Directors</a></li>
 					}
@@ -71,6 +71,8 @@
 	<div id="pay-early"></div>
 	<div id="loan-detail"></div>
 </div>
+
+@AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
 
 @section Js
 {

@@ -2958,3 +2958,8 @@ table.payment-schedule-table td{
 .bank-account .control-group { margin-bottom: 12px; }
 
 .bank-account .control-panel-and-bank-details { position: relative; display: inline-block; }
+
+.narrow-as-possible {
+    width: 1px !important;
+    white-space: nowrap !important;
+}
