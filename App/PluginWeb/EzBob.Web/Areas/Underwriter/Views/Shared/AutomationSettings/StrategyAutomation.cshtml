@@ -1,21 +1,25 @@
 ﻿@model dynamic
 
 @helper AutomationSettings()
-    {
-    <div id="automationplane">
-            <div class="tabbable">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#automation-settings" data-toggle="tab">General Settings</a></li>
-                    <li><a href="#approvals-settings" data-toggle="tab">Approvals</a></li>
-                    <li><a href="#rejections-settings" data-toggle="tab">Rejections</a></li>
-                    
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="automation-settings"></div>
-                    <div class="tab-pane" id="approvals-settings"></div>
-                    <div class="tab-pane" id="rejections-settings"></div>
+{
+    <div class="box">
+        <div class="box-content">
+            <div id="automationplane">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#automation-settings" data-toggle="tab">General Settings</a></li>
+                        <li><a href="#approvals-settings" data-toggle="tab">Approvals</a></li>
+                        <li><a href="#rejections-settings" data-toggle="tab">Rejections</a></li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="automation-settings"></div>
+                        <div class="tab-pane" id="approvals-settings"></div>
+                        <div class="tab-pane" id="rejections-settings"></div>
                     </div>
-            </div>  
+                </div>
+            </div>
+        </div>
     </div>
 }
 
@@ -29,6 +33,6 @@
     </div>
 </script>
 
-    @{Html.RenderPartial("AutomationSettings/_ApprovalSettings");}
-    @{Html.RenderPartial("AutomationSettings/_AutomationSettings");}
-    @{Html.RenderPartial("AutomationSettings/_RejectionSettings");}
+@{Html.RenderPartial("AutomationSettings/_ApprovalSettings");}
+@{Html.RenderPartial("AutomationSettings/_AutomationSettings");}
+@{Html.RenderPartial("AutomationSettings/_RejectionSettings");}

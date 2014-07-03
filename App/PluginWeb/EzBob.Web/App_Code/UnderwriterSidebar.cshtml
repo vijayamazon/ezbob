@@ -117,7 +117,7 @@
                     </a>
                     <ul class="submenu">
                         <li id="liClient">
-                            <a href='#'>Find</a>
+                            <a href='#'><i class="fa fa-search"></i><span>&nbsp;Find</span></a>
                         </li>
                         @SubMenu(page)
                     </ul>
@@ -141,7 +141,6 @@
                 <li><a href="#" class="common-bug" data-bug-customer="0" data-placement="bottom" data-bug-type="Common" style="width: 100%"><i class="fa fa-bug" /><span>Bug</span></a></li>
                     break;
                 case SideBarType.Other:
-        
                 <li>
                     <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
                 </li>
@@ -160,7 +159,7 @@
 {
     <li id="liReports" class="dropdown">
         <a href="#" class="dropdown-toggle">
-            <i class="fa fa-file-text-o"></i><span>Reports</span>
+            <i class="fa fa-file-text-o"></i><span>&nbsp;Reports</span>
             <b class="arrow fa fa-angle-right"></b>
         </a>
         <ul class="submenu">
@@ -170,7 +169,7 @@
             <li id="liCustomerReports">
                 @{
                     var reportsIp = ConfigManager.CurrentValues.Instance.ReportsSite.Value;
-                    <a href="@reportsIp" target="_blank"><i class="fa fa-file-text-o"></i><span>Reports Site</span></a>
+                    <a href="@reportsIp" target="_blank"><span>Reports Site</span></a>
                 }
             </li>
             <li id="liPerformenceReportPerUnderWriter">
@@ -197,21 +196,21 @@
         </ul>
     </li>
     <li id="liSupport">
-        <a href='Customers#support'><i class="fa fa-file-text-o"></i><span>Support</span></a>
+        <a href='Customers#support'><i class="fa fa-support"></i><span>&nbsp;Support</span></a>
     </li>
     <li id="liFraud">
-        <a href='Customers#fraud'><i class="fa fa-file-text-o"></i><span>Fraud</span></a>
+        <a href='Customers#fraud'><i class="fa fa-bomb"></i><span>&nbsp;Fraud</span></a>
     </li>
     <li id="liCAIS">
-        <a href="@page.Url.Action("Index", "CAIS")"><i class="fa fa-file-text-o"></i><span>CAIS</span></a>
+        <a href="@page.Url.Action("Index", "CAIS")"><i class="fa fa-building"></i><span>&nbsp;CAIS</span></a>
     </li>
     <li id="liAutomation">
-        <a href="Customers#automation"><i class="fa fa-file-text-o"></i><span>Automation</span></a>
+        <a href="Customers#automation"><i class="fa fa-flash"></i><span>&nbsp;Automation</span></a>
     </li>
     <li id="liStrategySettings">
-        <a href="Customers#settings"><i class="fa fa-file-text-o"></i><span>Settings</span></a>
+        <a href="Customers#settings"><i class="fa fa-gears"></i><span>&nbsp;Settings</span></a>
     </li>
     <li id="liFunding">
-        <a href="Customers#funding"><i class="fa fa-file-text-o"></i><span>Funding</span></a>
+        <a href="Customers#funding"><i class="fa fa-money"></i><span>&nbsp;Funding</span></a>
     </li>
 }

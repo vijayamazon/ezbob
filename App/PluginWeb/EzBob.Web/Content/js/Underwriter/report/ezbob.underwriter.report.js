@@ -66,7 +66,8 @@
 
     ReportView.prototype.onRender = function() {
       this.ui.reportsDdl.chosen();
-      return this.ui.datesDdl.chosen();
+      this.ui.datesDdl.chosen();
+      return EzBob.handleUserLayoutSetting();
     };
 
     ReportView.prototype.reportChanged = function() {
@@ -82,9 +83,11 @@
         this.ui.customerDiv.hide();
       }
       if ((rep != null) && rep.ShowNonCash) {
-        return this.ui.nonCashDiv.show();
+        this.ui.nonCashDiv.show();
+        return this.nonCashChanged();
       } else {
-        return this.ui.nonCashDiv.hide();
+        this.ui.nonCashDiv.hide();
+        return this.ui.nonCash.val("");
       }
     };
 
@@ -122,7 +125,6 @@
         alertify.error('Select report and/or date range');
         return false;
       }
-      console.log('@ui.nonCash.val()', this.ui.nonCash.val(), this.ui.nonCash.is(":visible"));
       if (this.ui.datesDdl.val() === 'Custom') {
         fromDate = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').startDate);
         toDate = EzBob.formatDateTimeCS(this.ui.dateRange.data('daterangepicker').endDate);
@@ -144,6 +146,7 @@
       return xhr.done(function(res) {
         if (res.report != null) {
           _this.ui.reportArea.html(res.report);
+          _this.ui.reportArea.children().addClass("row");
           return _this.formatTable(res.columns);
         }
       });
@@ -153,8 +156,8 @@
       var oDataTableArgs;
       $("#tableReportData").addClass("table table-bordered table-striped blue-header centered");
       oDataTableArgs = {
-        aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
-        iDisplayLength: 100,
+        aLengthMenu: [[10, 20, 50, 100, 200, -1], [10, 20, 50, 100, 200, "All"]],
+        iDisplayLength: 20,
         aaSorting: [],
         aoColumns: columns
       };

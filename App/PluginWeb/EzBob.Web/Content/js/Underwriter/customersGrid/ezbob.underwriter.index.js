@@ -73,6 +73,7 @@
 			if (!oView.isRendered) {
 				oView.isRendered = true;
 				oView.view.render();
+			    EzBob.handleUserLayoutSetting();
 			} // if
 
 			this.hideAll();
@@ -183,7 +184,7 @@
 			oRouter.views.profile.view.router.navigate('profile/' + id, { trigger: true, replace: true });
 		});
 
-		$('#liClient > a').on('click', function() {
+		$('[id="liClient"] > a').on('click', function() {
 			a.render();
 			return false;
 		});

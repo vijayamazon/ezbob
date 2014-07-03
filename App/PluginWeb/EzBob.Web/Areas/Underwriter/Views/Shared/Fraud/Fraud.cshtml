@@ -3,19 +3,17 @@
 <script type="text/template" id="fraud-template">
     @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Other)
     <div id="main-content">
-        <div class="page-title">
-            <h1></h1>
-        </div>
-        <div class="left simple-well">
-            <button class="add btn btn-success btn-small"><i class="fa fa-plus"></i>Add new fraud user</button>
-        </div>
-
-        <table class="table">
-            <thead class="box">
-                @EzForm.RawHeaderCell("Fraud", "", "", "", "", "", "", "")
-            </thead>
-            <tbody>
-                @EzForm.RawCell("<b>Name</b>",
+        <div class="box">
+            <div class="box-content">
+                <div class="left simple-well">
+                    <button class="add btn btn-success btn-small"><i class="fa fa-plus"></i>Add new fraud user</button>
+                </div>
+                <table class="table">
+                    <thead class="box">
+                        @EzForm.RawHeaderCell("Fraud", "", "", "", "", "", "", "")
+                    </thead>
+                    <tbody>
+                        @EzForm.RawCell("<b>Name</b>",
                             "<b>Addresses</b> (Postcode, line1, Line2, Line3, Town, County)",
                             "<b>Phones</b>",
                             "<b>Emails</b>",
@@ -23,7 +21,7 @@
                             "<b>Bank Accounts</b> (Bank account, Sort code)",
                             "<b>Companies</b> (Company name, Registration Number)",
                             "<b>Shops</b> (Shop name, Shop type)")
-                <%_.each(data, function(val){ %> 
+                        <%_.each(data, function(val){ %> 
             <%
             function PrepareOutput(data){
                 var retVal = "";
@@ -46,9 +44,11 @@
                 "<%=PrepareOutput(val.Companies)%>",
                 "<%=PrepareOutput(val.Shops)%>"
                  )
-                <%})%>
-            </tbody>
-        </table>
+                        <%})%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </script>
 

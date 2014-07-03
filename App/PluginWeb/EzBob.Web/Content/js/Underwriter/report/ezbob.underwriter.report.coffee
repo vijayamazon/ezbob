@@ -38,6 +38,7 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
     onRender: ->
          @ui.reportsDdl.chosen()
          @ui.datesDdl.chosen()
+         EzBob.handleUserLayoutSetting()
 
     reportChanged: ->
         reportId = parseInt(@ui.reportsDdl.val())
@@ -106,16 +107,17 @@ class EzBob.Underwriter.ReportView extends Backbone.Marionette.ItemView
         xhr.done (res) =>
             if res.report?
                 @ui.reportArea.html(res.report)
+                @ui.reportArea.children().addClass("row")
                 @formatTable(res.columns)
 
     formatTable: (columns)->
         $("#tableReportData").addClass "table table-bordered table-striped blue-header centered"
         oDataTableArgs =
           aLengthMenu: [
-            [10,25,50,100,200,-1]
-            [10,25,50,100,200,"All"]
+            [10,20,50,100,200,-1]
+            [10,20,50,100,200,"All"]
           ]
-          iDisplayLength: 100
+          iDisplayLength: 20
           aaSorting: []
           aoColumns: columns
 
