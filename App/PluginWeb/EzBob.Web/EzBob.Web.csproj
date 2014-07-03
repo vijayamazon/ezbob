@@ -974,6 +974,7 @@
     <Content Include="Content\js\controls\ezbob.LoanScheduleView.js" />
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
     <Content Include="Content\js\ezbob.cgvendors.js" />
+    <Content Include="Content\js\ezbob.edit.experian.director.data.js" />
     <Content Include="Content\js\ezbob.hmrc.upload.ui.js" />
     <Content Include="Content\js\ezbob.internal.debug.js" />
     <Content Include="Content\js\ezbob.serverLog.js" />
@@ -1582,6 +1583,7 @@
     <Content Include="Views\Shared\security_template.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <Content Include="App_Code\AddDirectorInfoTemplate.cshtml" />
+    <Content Include="Views\Shared\EditExperianDirectorData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

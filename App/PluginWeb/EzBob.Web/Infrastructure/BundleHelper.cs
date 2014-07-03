@@ -315,6 +315,7 @@
 				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.js")
 				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsFollowUp.js")
 				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.properties.js")
+				.Add("~/Content/js/ezbob.edit.experian.director.data.js")
 				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.signature.monitor.js")
 
 				//----
@@ -455,6 +456,7 @@
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsQuestion.js")
 				.Add("~/Content/js/Profile/ezbob.profile.Agreements.js")
+				.Add("~/Content/js/ezbob.edit.experian.director.data.js")
 				.Add("~/Content/js/Profile/ezbob.profile.companyDirectorsView.js")
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderProfileJs
