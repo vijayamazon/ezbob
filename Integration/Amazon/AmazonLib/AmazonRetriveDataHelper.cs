@@ -140,6 +140,7 @@
 					//var webServiceConfigurator = CreateServiceReportsConfigurator(connectionInfo);
 					var elapsedTimeInfo = new ElapsedTimeInfo();
 					DateTime? startDate = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.GetLastAmazonOrdersRequest( databaseCustomerMarketPlace ) );
 
@@ -168,6 +169,7 @@
 												  databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.Id);
 					
 					var orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => AmazonServiceHelper.GetListOrders( _ConnectionInfo, amazonOrdersRequestInfo, access ) );
 
@@ -179,7 +181,7 @@
 						{
 							foreach ( var orderItem2 in bestSaledOrderItemList )
 							{
-								var orderItems = GetOrderItems(securityInfo, access, orderItem2, elapsedTimeInfo, orders);
+								var orderItems = GetOrderItems(securityInfo, access, orderItem2, elapsedTimeInfo, orders, databaseCustomerMarketPlace.Id);
 
 							    orderItem2.OrderedItemsList = orderItems;
 
@@ -194,6 +196,7 @@
 						}
 
 						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => Helper.StoreAmazonOrdersData( databaseCustomerMarketPlace, /*ordersList,*/ orders, historyRecord ) );
 
@@ -205,14 +208,17 @@
 					}
 
 					var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.GetAllAmazonOrdersData( submittedDate, databaseCustomerMarketPlace ) );
 
 					var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.AggregateData,
 									() => CreateOrdersAggregationInfo( allOrders, Helper.CurrencyConverter ) );
 					// Save
 					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreAggregatedData,
 									() => Helper.StoreToDatabaseAggregatedData( databaseCustomerMarketPlace, aggregatedData, historyRecord ) );
 
@@ -231,7 +237,7 @@
 
         private AmazonOrderItemDetailsList GetOrderItems(AmazonSecurityInfo securityInfo, ActionAccessType access,
                                                          AmazonOrderItem2 orderItem2, ElapsedTimeInfo elapsedTimeInfo,
-                                                         AmazonOrdersList2 orders)
+                                                         AmazonOrdersList2 orders, int mpId)
         {
             var itemsRequestInfo = new AmazonOrdersItemsRequestInfo
                 {
@@ -242,7 +248,7 @@
                 };
 
             AmazonOrderItemDetailsList orderItems =
-                ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+                ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo, mpId,
                                                                                ElapsedDataMemberType
                                                                                    .RetrieveDataFromExternalService,
                                                                                () =>
@@ -296,6 +302,7 @@
 			try
 			{
 				productItem = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => AmazonServiceHelper.GetProductCategories( _ConnectionInfo, requestInfo, access, requestCounter ) );
 			}
@@ -307,7 +314,7 @@
 			if ( productItem != null )
 			{
 				var marketplace = databaseCustomerMarketPlace.Marketplace;
-				categories = Helper.AddAmazonCategories( marketplace, productItem, elapsedTimeInfo );
+				categories = Helper.AddAmazonCategories( marketplace, productItem, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
 			}
 			return categories;
 		}
@@ -320,7 +327,7 @@
 												ElapsedTimeInfo elapsedTimeInfo)
 		{
 
-			var categories = Helper.FindAmazonCategoryByProductSellerSKU( sellerSku, elapsedTimeInfo );
+			var categories = Helper.FindAmazonCategoryByProductSellerSKU( sellerSku, elapsedTimeInfo, databaseCustomerMarketPlace.Id );
 
 			if ( categories == null )
 			{
@@ -371,10 +378,12 @@
 			                            };
 
 					var amazonUserRatingInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => AmazonServiceHelper.GetUserStatisticsInfo( request ) );
 
 					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => ParceAndSaveUserFeedbackInfo( databaseCustomerMarketPlace, amazonUserRatingInfo, historyRecord ) );
 

@@ -43,6 +43,7 @@
 
 				//save orders data
 				ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+																				databaseCustomerMarketPlace.Id,
 																			   ElapsedDataMemberType.StoreDataToDatabase,
 																			   () => Helper.StoreYodleeOrdersData(
 																				   databaseCustomerMarketPlace,
@@ -52,24 +53,29 @@
 			}
 			// retrieve orders
 			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.GetAllYodleeOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace, isFirstTime: true));
 
 			//calculate transactions aggregated data
 			var transactionsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.AggregateData,
 									() => CreateTransactionsAggregationInfo(allOrders, Helper.CurrencyConverter));
 			// store transactions aggregated data
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+							databaseCustomerMarketPlace.Id,
 							ElapsedDataMemberType.StoreAggregatedData,
 							() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, transactionsAggregatedData, historyRecord));
 
 			//calculate accounts aggregated data
 			var accountsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.AggregateData,
 									() => CreateAccountsAggregationInfo(allOrders, Helper.CurrencyConverter));
 			// store accounts aggregated data
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+							databaseCustomerMarketPlace.Id,
 							ElapsedDataMemberType.StoreAggregatedData,
 							() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, accountsAggregatedData, historyRecord));
 

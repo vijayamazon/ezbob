@@ -189,13 +189,13 @@
 			return orders;
 		}
 
-		public MP_EbayAmazonCategory[] AddAmazonCategories(IMarketplaceType marketplace, AmazonProductItemBase productItem, ElapsedTimeInfo elapsedTimeInfo)
+		public MP_EbayAmazonCategory[] AddAmazonCategories(IMarketplaceType marketplace, AmazonProductItemBase productItem, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			var categories = new List<MP_EbayAmazonCategory>();
 
 			foreach (AmazonProductCategory amazonProductCategory in productItem.Categories)
 			{
-				var cat = FindEBayAmazonCategory(marketplace, amazonProductCategory.CategoryId, elapsedTimeInfo) ?? AddAmazonCategory(marketplace, amazonProductCategory, elapsedTimeInfo);
+				var cat = FindEBayAmazonCategory(marketplace, amazonProductCategory.CategoryId, elapsedTimeInfo, mpId) ?? AddAmazonCategory(marketplace, amazonProductCategory, elapsedTimeInfo, mpId);
 
 				categories.Add(cat);
 
@@ -205,32 +205,34 @@
 			return categories.ToArray();
 		}
 
-		private MP_EbayAmazonCategory AddAmazonCategory(IMarketplaceType marketplace, AmazonProductCategory amazonProductCategory, ElapsedTimeInfo elapsedTimeInfo)
+		private MP_EbayAmazonCategory AddAmazonCategory(IMarketplaceType marketplace, AmazonProductCategory amazonProductCategory, ElapsedTimeInfo elapsedTimeInfo,int mpId)
 		{
 			var cat = new MP_EbayAmazonCategory
 			{
 				CategoryId = amazonProductCategory.CategoryId,
 				Name = amazonProductCategory.CategoryName,
 				Marketplace = _MarketPlaceRepository.Get(marketplace.InternalId),
-				Parent = amazonProductCategory.Parent == null ? null : FindEBayAmazonCategory(marketplace, amazonProductCategory.Parent.CategoryId, elapsedTimeInfo) ?? AddAmazonCategory(marketplace, amazonProductCategory.Parent, elapsedTimeInfo)
+				Parent = amazonProductCategory.Parent == null ? null : FindEBayAmazonCategory(marketplace, amazonProductCategory.Parent.CategoryId, elapsedTimeInfo, mpId) ?? AddAmazonCategory(marketplace, amazonProductCategory.Parent, elapsedTimeInfo, mpId)
 			};
 
 			AddCategoryToCache(marketplace, cat);
 
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									mpId,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => _EbayAmazonCategoryRepository.Save(cat));
 
 			return cat;
 		}
 
-		public MP_EbayAmazonCategory[] FindAmazonCategoryByProductAsin(string asin, ElapsedTimeInfo elapsedTimeInfo)
+		public MP_EbayAmazonCategory[] FindAmazonCategoryByProductAsin(string asin, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			MP_EbayAmazonCategory[] cat;
 
 			if (!_CacheAmazonCategoryByProductKey.TryGetValue(asin, out cat))
 			{
 				cat = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									mpId,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => _AmazonOrderItemDetailRepository.FindCategoriesByAsin(asin));
 				if (cat != null)
@@ -242,13 +244,14 @@
 			return cat;
 		}
 
-		public MP_EbayAmazonCategory[] FindAmazonCategoryByProductSellerSKU(string sellerSKU, ElapsedTimeInfo elapsedTimeInfo)
+		public MP_EbayAmazonCategory[] FindAmazonCategoryByProductSellerSKU(string sellerSKU, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			MP_EbayAmazonCategory[] cat;
 
 			if (!_CacheAmazonCategoryByProductKey.TryGetValue(sellerSKU, out cat))
 			{
 				cat = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									mpId,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => _AmazonOrderItemDetailRepository.FindCategoriesBySellectSku(sellerSKU));
 				if (cat != null)

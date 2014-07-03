@@ -88,21 +88,25 @@
             var elapsedTimeInfo = new ElapsedTimeInfo();
 
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
                                     ElapsedDataMemberType.StoreDataToDatabase,
                                     () => Helper.StorePayPointOrdersData(databaseCustomerMarketPlace, new PayPointOrdersList(DateTime.UtcNow, payPointOrders), historyRecord));
 
 			// retrieve orders
 			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.GetAllPayPointOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
             // Calculate aggregated
             var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
                                     ElapsedDataMemberType.AggregateData,
                                     () => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter));
 
             // Store aggregated
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+							databaseCustomerMarketPlace.Id,
                             ElapsedDataMemberType.StoreAggregatedData,
                             () => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
 

@@ -16,25 +16,23 @@ namespace EzBob.CommonLib
 			_Stopwatch = new Stopwatch();
 		}
 
-		public static void CalculateAndStoreElapsedTimeForCallInSeconds( ElapsedTimeInfo elapsedTimeInfo, ElapsedDataMemberType elapsedDataMemberType, Action action )
+		public static void CalculateAndStoreElapsedTimeForCallInSeconds(ElapsedTimeInfo elapsedTimeInfo, int mpId, ElapsedDataMemberType elapsedDataMemberType, Action action)
 		{
-			Log.DebugFormat("{1} {0} begin", elapsedDataMemberType.ToString(), action.Method.Name);
-			CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo, elapsedDataMemberType, () =>
-				                                                                                      {
-					                                                                                      action();
-					                                                                                      return true;
-				                                                                                      } );
-			Log.DebugFormat("{1} {0} end", elapsedDataMemberType.ToString(), action.Method.Name);
+
+			CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo, mpId, elapsedDataMemberType,
+				() => { action(); return true; });
+
 		}
 
-		public static T CalculateAndStoreElapsedTimeForCallInSeconds<T>( ElapsedTimeInfo elapsedTimeInfo, ElapsedDataMemberType elapsedDataMemberType, Func<T> func )
+		public static T CalculateAndStoreElapsedTimeForCallInSeconds<T>(ElapsedTimeInfo elapsedTimeInfo, int mpId, ElapsedDataMemberType elapsedDataMemberType, Func<T> func)
 		{
-			return CalculateAndStoreElapsedTimeForCallInSeconds( _Stopwatch, elapsedTimeInfo, elapsedDataMemberType, func );
+			return CalculateAndStoreElapsedTimeForCallInSeconds(_Stopwatch, elapsedTimeInfo, mpId, elapsedDataMemberType, func);
 		}
 
-		private static T CalculateAndStoreElapsedTimeForCallInSeconds<T>( Stopwatch stopwatch, ElapsedTimeInfo elapsedTimeInfo, ElapsedDataMemberType elapsedDataMemberType, Func<T> func )
+		private static T CalculateAndStoreElapsedTimeForCallInSeconds<T>(Stopwatch stopwatch, ElapsedTimeInfo elapsedTimeInfo, int mpId, ElapsedDataMemberType elapsedDataMemberType, Func<T> func)
 		{
-			if ( stopwatch == null )
+			Log.DebugFormat("CalculateAndStoreElapsedTimeForCallInSeconds {0} for mp {1} begin", elapsedDataMemberType.ToString(), mpId);
+			if (stopwatch == null)
 			{
 				stopwatch = Stopwatch.StartNew();
 			}
@@ -47,9 +45,10 @@ namespace EzBob.CommonLib
 
 			stopwatch.Stop();
 
-			var totalSeconds = (int)Math.Round( stopwatch.Elapsed.TotalSeconds, MidpointRounding.AwayFromZero );
-			elapsedTimeInfo.IncreateData( elapsedDataMemberType, totalSeconds );
+			var totalSeconds = (int)Math.Round(stopwatch.Elapsed.TotalSeconds, MidpointRounding.AwayFromZero);
+			elapsedTimeInfo.IncreateData(elapsedDataMemberType, totalSeconds);
 
+			Log.DebugFormat("CalculateAndStoreElapsedTimeForCallInSeconds {0} for mp {1} end, took {2} sec", elapsedDataMemberType.ToString(), mpId, totalSeconds);
 			return rez;
 		}
 	}

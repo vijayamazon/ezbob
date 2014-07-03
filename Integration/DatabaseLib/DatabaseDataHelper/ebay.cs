@@ -128,7 +128,7 @@
 
 		}
 
-		public void UpdateOrderItemsInfo(IEnumerable<MP_EBayOrderItemDetail> mpEBayOrderItemDetails, ElapsedTimeInfo elapsedTimeInfo)
+		public void UpdateOrderItemsInfo(IEnumerable<MP_EBayOrderItemDetail> mpEBayOrderItemDetails, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			if (mpEBayOrderItemDetails == null || !mpEBayOrderItemDetails.Any())
 			{
@@ -144,6 +144,7 @@
 				var detail = mpEBayOrderItemDetail;
 
 				var items = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									mpId,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => _MP_EbayTransactionsRepository.GetAllItemsWithItemsID(detail.ItemID));
 
@@ -157,6 +158,7 @@
 					var transaction = mpEbayTransaction;
 
 					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									mpId,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => _MP_EbayTransactionsRepository.SaveOrUpdate(transaction));
 				}
@@ -486,13 +488,14 @@
 				PhoneLocalNumber = address.PhoneLocalNumber
 			};
 		}
-
-		public bool ExistsEBayOrderItemInfo(eBayFindOrderItemInfoData eBayFindOrderItemInfoData, ElapsedTimeInfo elapsedTimeInfo)
+		//not in use
+		public bool ExistsEBayOrderItemInfo(eBayFindOrderItemInfoData eBayFindOrderItemInfoData, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			MP_EBayOrderItemDetail value;
 			if (!_CacheEBayOrderItemInfo.TryGetValue(eBayFindOrderItemInfoData.ItemId, out value))
 			{
 				value = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									mpId,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => _EBayOrderItemInfoRepository.FindItem(eBayFindOrderItemInfoData));
 
@@ -505,7 +508,7 @@
 			return value != null;
 		}
 
-		public MP_EBayOrderItemDetail FindEBayOrderItemInfo(eBayFindOrderItemInfoData eBayFindOrderItemInfoData, ElapsedTimeInfo elapsedTimeInfo)
+		public MP_EBayOrderItemDetail FindEBayOrderItemInfo(eBayFindOrderItemInfoData eBayFindOrderItemInfoData, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			if (eBayFindOrderItemInfoData == null || eBayFindOrderItemInfoData.ItemId == null)
 			{
@@ -515,7 +518,7 @@
 			MP_EBayOrderItemDetail value;
 			if (!_CacheEBayOrderItemInfo.TryGetValue(eBayFindOrderItemInfoData.ItemId, out value))
 			{
-				value = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+				value = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,mpId,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => _EBayOrderItemInfoRepository.FindItem(eBayFindOrderItemInfoData));
 
@@ -529,12 +532,12 @@
 
 		}
 
-		public MP_EBayOrderItemDetail SaveEBayOrderItemInfo(EbayDatabaseOrderItemInfo data, ElapsedTimeInfo elapsedTimeInfo)
+		public MP_EBayOrderItemDetail SaveEBayOrderItemInfo(EbayDatabaseOrderItemInfo data, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			MP_EbayAmazonCategory mpEbayAmazonCategory = null;
 			if (data.PrimaryCategory != null)
 			{
-				mpEbayAmazonCategory = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+				mpEbayAmazonCategory = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,mpId,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => _EbayAmazonCategoryRepository.Get(data.PrimaryCategory.Id));
 			}
@@ -548,7 +551,7 @@
 				Title = data.Title,
 			};
 
-			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,mpId,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => _EBayOrderItemInfoRepository.Save(item));
 
@@ -557,14 +560,14 @@
 			return item;
 		}
 
-		public MP_EbayAmazonCategory FindEBayAmazonCategory(IMarketplaceType marketplace, string categoryId, ElapsedTimeInfo elapsedTimeInfo)
+		public MP_EbayAmazonCategory FindEBayAmazonCategory(IMarketplaceType marketplace, string categoryId, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			MP_EbayAmazonCategory value;
 			var cache = GetCache(marketplace);
 
 			if (!cache.TryGetValue(categoryId, out value))
 			{
-				value = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+				value = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,mpId,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => _EbayAmazonCategoryRepository.FindItem(categoryId));
 
@@ -577,7 +580,7 @@
 			return value;
 		}
 
-		public MP_EbayAmazonCategory AddEbayCategory(IMarketplaceType marketplace, eBayCategoryInfo data, ElapsedTimeInfo elapsedTimeInfo)
+		public MP_EbayAmazonCategory AddEbayCategory(IMarketplaceType marketplace, eBayCategoryInfo data, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			var item = new MP_EbayAmazonCategory
 			{
@@ -587,7 +590,7 @@
 				Marketplace = _MarketPlaceRepository.Get(marketplace.InternalId)
 			};
 
-			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,mpId,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => _EbayAmazonCategoryRepository.Save(item));
 

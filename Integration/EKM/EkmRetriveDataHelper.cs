@@ -55,21 +55,25 @@ namespace EKM
             var newOrders = new EkmOrdersList(DateTime.UtcNow, ekmOrderList);
             //store orders
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
                                     ElapsedDataMemberType.StoreDataToDatabase,
                                     () => Helper.StoreEkmOrdersData(databaseCustomerMarketPlace, newOrders, historyRecord));
 
             //retrieve orders
             var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
                                     ElapsedDataMemberType.RetrieveDataFromDatabase,
                                     () => Helper.GetAllEkmOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
             //calculate aggregated
             var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
                                     ElapsedDataMemberType.AggregateData,
                                     () => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter));
             
             // store aggregated
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+							databaseCustomerMarketPlace.Id,
                             ElapsedDataMemberType.StoreAggregatedData,
                             () => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
 

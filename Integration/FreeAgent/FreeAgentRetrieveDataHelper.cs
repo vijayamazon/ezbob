@@ -89,12 +89,13 @@
 			log.InfoFormat("Saving request, {0} invoices & {1} expenses in DB...", freeAgentInvoices.Count, freeAgentExpenses.Count);
 			var mpRequest = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.StoreDataToDatabase,
 				() => Helper.StoreFreeAgentRequestAndInvoicesAndExpensesData(databaseCustomerMarketPlace, freeAgentInvoices, freeAgentExpenses, historyRecord));
 
-			StoreCompanyData(mpRequest, freeAgentCompany, elapsedTimeInfo);
+			StoreCompanyData(mpRequest, freeAgentCompany, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
 
-			StoreUsersData(mpRequest, freeAgentUsers, elapsedTimeInfo);
+			StoreUsersData(mpRequest, freeAgentUsers, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
 
 			CalculateAndStoreAggregatedInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
 			CalculateAndStoreAggregatedExpenseData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo, accessToken);
@@ -131,6 +132,7 @@
 			log.Info("Fetching all distinct expenses");
 			var allExpenses = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
 				() => Helper.GetAllFreeAgentExpensesData(DateTime.UtcNow, databaseCustomerMarketPlace));
 			
@@ -140,12 +142,14 @@
 			log.InfoFormat("Creating aggregated data for {0} expenses", allExpenses);
 			var expensesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.AggregateData,
 				() => CreateExpensesAggregationInfo(allExpenses, Helper.CurrencyConverter));
 
 			log.Info("Saving aggragated expenses data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.StoreAggregatedData,
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, expensesAggregatedData, historyRecord));
 		}
@@ -157,23 +161,26 @@
 			log.Info("Fetching all distinct invoices");
 			var allInvoices = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
 				() => Helper.GetAllFreeAgentInvoicesData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
 			log.InfoFormat("Creating aggregated data for {0} invoices", allInvoices);
 			var invoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.AggregateData,
 				() => CreateInvoicesAggregationInfo(allInvoices, Helper.CurrencyConverter));
 
 			log.Info("Saving aggragated invoices data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.StoreAggregatedData,
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, invoicesAggregatedData, historyRecord));
 		}
 
-		private void StoreCompanyData(MP_FreeAgentRequest mpRequest, FreeAgentCompany freeAgentCompany, ElapsedTimeInfo elapsedTimeInfo)
+		private void StoreCompanyData(MP_FreeAgentRequest mpRequest, FreeAgentCompany freeAgentCompany, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			if (mpRequest == null) return;
 
@@ -198,11 +205,12 @@
 
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				mpId,
 				ElapsedDataMemberType.StoreDataToDatabase,
 				() => Helper.StoreFreeAgentCompanyData(mpFreeAgentCompany));
 		}
 
-		private void StoreUsersData(MP_FreeAgentRequest mpRequest, List<FreeAgentUsers> freeAgentUsers, ElapsedTimeInfo elapsedTimeInfo)
+		private void StoreUsersData(MP_FreeAgentRequest mpRequest, List<FreeAgentUsers> freeAgentUsers, ElapsedTimeInfo elapsedTimeInfo, int mpId)
 		{
 			if (mpRequest == null) return;
 
@@ -230,6 +238,7 @@
 
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				mpId,
 				ElapsedDataMemberType.StoreDataToDatabase,
 				() => Helper.StoreFreeAgentUsersData(mpFreeAgentUsersList));
 		}

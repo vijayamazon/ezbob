@@ -56,6 +56,7 @@
 			log.InfoFormat("Saving request, {0} sales invoices, {1} purchase invoices, {2} incomes, {3} expenditures in DB...", salesInvoices.Count, purchaseInvoices.Count, incomes.Count, expenditures.Count);
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.StoreDataToDatabase,
 				() => Helper.StoreSageData(databaseCustomerMarketPlace, salesInvoices, purchaseInvoices, incomes, expenditures, historyRecord));
 
@@ -63,6 +64,7 @@
 	        var paymentStatuses = SageConnector.GetPaymentStatuses(accessToken);
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.StoreDataToDatabase,
 				() => Helper.StoreSagePaymentStatuses(paymentStatuses));
 
@@ -136,18 +138,21 @@
 			log.InfoFormat("Fetching all distinct {0}", typeName);
 			var allItems = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
 				() => getAllFunc(DateTime.UtcNow, databaseCustomerMarketPlace));
 
 			log.InfoFormat("Creating aggregated data for {0} {1}", allItems, typeName);
 			var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.AggregateData,
 				() => CreateAggregationInfo(allItems, Helper.CurrencyConverter, factory, aggregateFunctions, createListFunc));
 
 			log.InfoFormat("Saving aggragated {0} data", typeName);
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.StoreAggregatedData,
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
 		}

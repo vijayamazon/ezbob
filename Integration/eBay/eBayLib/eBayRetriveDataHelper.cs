@@ -218,10 +218,12 @@
 				{
 					var elapsedTimeInfo = new ElapsedTimeInfo();
 					resultInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => GetCustomerUserInfo( info ) );
 
 					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => SaveUserInfo( databaseCustomerMarketPlace, resultInfo, historyRecord ) );
 
@@ -254,6 +256,7 @@
 					var checker = new DataProviderCheckAuthenticationToken( info );
 
 					var result = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => checker.Check() );
 
@@ -274,10 +277,12 @@
 					var account = new DataProviderGetAccount( info );
 					var elapsedTimeInfo = new ElapsedTimeInfo();
 					var resultInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => account.GetAccount() );
 					
-					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo, 
+					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreDataToDatabase, 
 									() => SaveAccountInfo( databaseCustomerMarketPlace, resultInfo, historyRecord ));
 
@@ -305,10 +310,12 @@
 				{
 					var elapsedTimeInfo = new ElapsedTimeInfo();
 					var resultInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => DataProviderGetFeedback.GetFeedBack( info ) );
 
 					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => SaveFeedbackInfo( databaseCustomerMarketPlace, resultInfo, historyRecord ) );
 
@@ -427,20 +434,24 @@
 						var toDate = now;
 
 						ResultInfoOrders orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => DataProviderGetOrders.GetOrders( info, new ParamsDataInfoGetOrdersFromDateToDateCreated( fromDate, toDate ) ) );
 
 						var databaseOrdersList = ParseOrdersInfo(orders);
 
 						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => Helper.AddEbayOrdersData( databaseCustomerMarketPlace, databaseOrdersList, historyRecord ) );
 
 						var allEBayOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.GetAllEBayOrders( orders.SubmittedDate, databaseCustomerMarketPlace ) );
 
 						var allTeraPeakData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.GetAllTeraPeakDataWithFullRange( orders.SubmittedDate, databaseCustomerMarketPlace ) );
 
@@ -452,7 +463,7 @@
 							{
 								var orderItemDetails = topSealedProductItems.Select( item => FindEBayOrderItemInfo( databaseCustomerMarketPlace, info, item, databaseOrdersList.RequestsCounter, elapsedTimeInfo ) ).Where( d => d != null).ToList();
 
-								Helper.UpdateOrderItemsInfo( orderItemDetails, elapsedTimeInfo );
+								Helper.UpdateOrderItemsInfo(orderItemDetails, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
 							}
 						}
 
@@ -462,10 +473,12 @@
 						{
 							//ParceAndSaveOrdersAggregationInfo( databaseCustomerMarketPlace, allEBayOrders, _Helper.CurrencyConverter, historyRecord );
 							var agInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.AggregateData,
 									() => CreateAggregationInfo( compositeList, Helper.CurrencyConverter ) );
 							// Save aggregated info
 							ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreAggregatedData,
 									() => Helper.StoreToDatabaseAggregatedData( databaseCustomerMarketPlace, agInfo, historyRecord ) );
 						}
@@ -525,6 +538,7 @@
 						var sellerInfo = new TeraPeakSellerInfo( ebayUserID );
 
 						var allTeraPeakData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 										() => Helper.GetAllTeraPeakDataWithFullRange(now, databaseCustomerMarketPlace));
 
@@ -563,15 +577,18 @@
 						var requestInfoByRange = new TeraPeakRequestInfo(sellerInfo, ranges, _Settings.ErrorRetryingInfo);
 
 						var teraPeakDatabaseSellerDataByRange = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => TeraPeakService.SearchBySeller(requestInfoByRange));
 
 						
 						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+								databaseCustomerMarketPlace.Id,
 								ElapsedDataMemberType.StoreDataToDatabase,
 								() => Helper.StoretoDatabaseTeraPeakOrdersData(databaseCustomerMarketPlace, teraPeakDatabaseSellerDataByRange, historyRecord));
                         
 						var agInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.AggregateData,
 									() =>
 									{
@@ -589,6 +606,7 @@
 
 						// Save aggregated info
 						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreAggregatedData,
 									() => Helper.StoreToDatabaseAggregatedData( databaseCustomerMarketPlace, agInfo, historyRecord ) );
 
@@ -615,6 +633,7 @@
 						var elapsedTimeInfo = new ElapsedTimeInfo();
 						// для начала нужно получить данные от Terapeak
 						var hasData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.ExistsTeraPeakOrdersData( databaseCustomerMarketPlace ) );
 	                    // для пользователя от Tera Peak получем данные только 1 раз 
@@ -639,6 +658,7 @@
                             var requestInfo = new TeraPeakRequestInfo(sellerInfo, ranges, _Settings.ErrorRetryingInfo);
 
 							var teraPeakDatabaseSellerData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => TeraPeakService.SearchBySeller( requestInfo ) );
 
@@ -649,6 +669,7 @@
 	                        }
 
 							ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.StoreDataToDatabase,
 									() => Helper.StoretoDatabaseTeraPeakOrdersData( databaseCustomerMarketPlace, teraPeakDatabaseSellerData, historyRecord ) );
 
@@ -668,6 +689,7 @@
 	                    else
 	                    {
 							startDate = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
 									() => Helper.GetLastEbayOrdersRequest( databaseCustomerMarketPlace ) );
 							
@@ -854,13 +876,14 @@
 
 			var eBayItemInfoData = new eBayFindOrderItemInfoData( itemID );
 
-			var eBayOrderItemInfo = Helper.FindEBayOrderItemInfo( eBayItemInfoData, elapsedTimeInfo );
+			var eBayOrderItemInfo = Helper.FindEBayOrderItemInfo( eBayItemInfoData, elapsedTimeInfo, databaseCustomerMarketPlace.Id );
 
 			if ( eBayOrderItemInfo == null )
 			{
 				var providerGetItemInfo = new DataProviderGetItemInfo( info );
 				var req = new eBayRequestItemInfoData( eBayItemInfoData );
 				ResultInfoEbayItemInfo ebayItemInfo = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
+									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => providerGetItemInfo.GetItem( req ) );
 				requestCounter.Add( ebayItemInfo.RequestsCounter );
@@ -868,27 +891,27 @@
 				var newEBayOrderItemInfo = new EbayDatabaseOrderItemInfo
 				{
 					ItemID = ebayItemInfo.ItemID,
-					PrimaryCategory = FindCategory( marketplace, ebayItemInfo.PrimaryCategory, elapsedTimeInfo ),
+					PrimaryCategory = FindCategory( marketplace, ebayItemInfo.PrimaryCategory, elapsedTimeInfo, databaseCustomerMarketPlace.Id),
 					//SecondaryCategory = FindCategory( marketplace, ebayItemInfo.SecondaryCategory ),
 					//FreeAddedCategory = FindCategory( marketplace, ebayItemInfo.FreeAddedCategory ),
 					Title = ebayItemInfo.Title,
 
 				};
 
-				eBayOrderItemInfo = Helper.SaveEBayOrderItemInfo( newEBayOrderItemInfo, elapsedTimeInfo );
+				eBayOrderItemInfo = Helper.SaveEBayOrderItemInfo( newEBayOrderItemInfo, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
 			}
 
 			return eBayOrderItemInfo;
 		}
 
-		private MP_EbayAmazonCategory FindCategory( IMarketplaceType marketplace, eBayCategoryInfo data, ElapsedTimeInfo elapsedTimeInfo )
+		private MP_EbayAmazonCategory FindCategory( IMarketplaceType marketplace, eBayCategoryInfo data, ElapsedTimeInfo elapsedTimeInfo, int mpId )
 		{
 			if ( data == null )
 			{
 				return null;
 			}
 
-			return Helper.FindEBayAmazonCategory( marketplace, data.CategoryId, elapsedTimeInfo ) ?? Helper.AddEbayCategory( marketplace, data, elapsedTimeInfo );
+			return Helper.FindEBayAmazonCategory( marketplace, data.CategoryId, elapsedTimeInfo, mpId ) ?? Helper.AddEbayCategory( marketplace, data, elapsedTimeInfo, mpId );
 		}
 
 		private EBayOrderStatusCodeType ConvertOrderStatus(OrderStatusCodeType orderStatus)

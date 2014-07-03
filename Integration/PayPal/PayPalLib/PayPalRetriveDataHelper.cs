@@ -83,6 +83,7 @@ namespace EzBob.PayPal
 
 					DateTime? startDate = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 						elapsedTimeInfo,
+						databaseCustomerMarketPlace.Id,
 						ElapsedDataMemberType.RetrieveDataFromDatabase,
 						() => Helper.GetLastPayPalTransactionRequest(databaseCustomerMarketPlace)
 					);
@@ -108,12 +109,14 @@ namespace EzBob.PayPal
 
 					var newTransactionsList = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 						elapsedTimeInfo,
+						databaseCustomerMarketPlace.Id,
 						ElapsedDataMemberType.RetrieveDataFromExternalService,
 						() => PayPalServiceHelper.GetTransactionData(reqInfo)
 					);
 
 					ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 						elapsedTimeInfo,
+						databaseCustomerMarketPlace.Id,
 						ElapsedDataMemberType.StoreDataToDatabase,
 						() => Helper.SavePayPalTransactionInfo(databaseCustomerMarketPlace, newTransactionsList, historyRecord)
 					);
@@ -121,12 +124,14 @@ namespace EzBob.PayPal
 					if (newTransactionsList != null) {
 						var allTransactions = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 							elapsedTimeInfo,
+							databaseCustomerMarketPlace.Id,
 							ElapsedDataMemberType.RetrieveDataFromDatabase,
 							() => Helper.GetAllPayPalTransactions(newTransactionsList.SubmittedDate, databaseCustomerMarketPlace)
 						);
 
 						var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 							elapsedTimeInfo,
+							databaseCustomerMarketPlace.Id,
 							ElapsedDataMemberType.AggregateData,
 							() => CreateTransactionAggregationInfo(allTransactions, Helper.CurrencyConverter)
 						);
@@ -134,6 +139,7 @@ namespace EzBob.PayPal
 						// Save
 						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 							elapsedTimeInfo,
+							databaseCustomerMarketPlace.Id,
 							ElapsedDataMemberType.StoreAggregatedData,
 							() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord)
 						);

@@ -187,6 +187,7 @@
 			// store retrieved orders to DB.
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.StoreDataToDatabase,
 				() => Helper.StoreChannelGrabberOrdersData(
 					databaseCustomerMarketPlace,
@@ -198,6 +199,7 @@
 			// retrieve ALL the orders from DB
 			InternalDataList allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
 				() => Helper.GetAllChannelGrabberOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace)
 			);
@@ -205,6 +207,7 @@
 			// calculate aggregated
 			IEnumerable<IWriteDataInfo<FunctionType>> aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.AggregateData,
 				() => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter)
 			);
@@ -212,6 +215,7 @@
 			// Store aggregated
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.StoreAggregatedData,
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord)
 			);

@@ -88,7 +88,7 @@ namespace AmazonStandaloneApp
             {
                 var configurator = AmazonServiceConfigurationFactory.CreateServiceReportsConfigurator(_ConnectionInfo);
 
-                orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+                orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,umi,
                                                                                                             ElapsedDataMemberType.RetrieveDataFromExternalService,
                                                                                                             () => AmazonServiceReports.GetUserOrders(configurator, amazonOrdersRequestInfo, ActionAccessType.Full))
                                                                                                             .Select(o => OrderItemTwo.FromOrderItem(o))
@@ -96,7 +96,7 @@ namespace AmazonStandaloneApp
             }
             else
             {
-                orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+                orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,umi,
                                                                                             ElapsedDataMemberType.RetrieveDataFromExternalService,
                                                                                             () => AmazonServiceHelper.GetListOrders(_ConnectionInfo, amazonOrdersRequestInfo, ActionAccessType.Full))
                                                                                             .Select(o => OrderItemTwo.FromOrderItem2(o))
