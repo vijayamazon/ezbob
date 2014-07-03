@@ -68,11 +68,6 @@ EzBob.handleUserLayoutSetting = function () {
         e.preventDefault();
     });
     
-    $('a.dropdown-toggle').unbind('click');
-    $('a.dropdown-toggle').click(function (e) {
-        e.preventDefault();
-    });
-    
 
     $("div.box .box-tool > a").unbind('click');
     $("thead.box .box-tool > a").unbind('click');
@@ -154,7 +149,8 @@ EzBob.handleUserLayoutSetting = function () {
         }
     });
     
-    $('div[id="sidebar"] a.dropdown-toggle').unbind("click").click(function () {
+    $('div[id="sidebar"] a.dropdown-toggle').unbind("click").click(function (e) {
+        e.preventDefault();
         var submenu = $(this).next('.submenu');
         var arrow = $(this).children('.arrow');
         if (arrow.hasClass('fa-angle-right')) {
