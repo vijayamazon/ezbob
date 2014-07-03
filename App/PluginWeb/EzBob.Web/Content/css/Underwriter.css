@@ -1887,3 +1887,8 @@ body {
     background-repeat: no-repeat;
     background-size: contain;
 }
+
+.offline-medal-text {
+    font-size: 9px;
+    color: gray;
+}

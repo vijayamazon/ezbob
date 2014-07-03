@@ -306,6 +306,15 @@ namespace EZBob.DatabaseLib.Model.Database {
 	} // class ScoringResult
 
 	#endregion class ScoringResult
+	
+	public class OfflineScoring
+	{
+		public virtual int Id { get; set; }
+		public virtual bool IsActive { get; set; }
+		public virtual int CustomerId { get; set; }
+		public virtual string Medal { get; set; }
+		public virtual decimal TotalScoreNormalized { get; set; }
+	}
 
 	#region class CollectionStatus
 
@@ -485,6 +494,13 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual Iesi.Collections.Generic.ISet<ScoringResult> ScoringResults {
 			get { return _scoringResults; }
 			set { _scoringResults = value; }
+		} // ScoringResults
+
+		private Iesi.Collections.Generic.ISet<OfflineScoring> _offlineScoring = new HashedSet<OfflineScoring>();
+		public virtual Iesi.Collections.Generic.ISet<OfflineScoring> OfflineScoring
+		{
+			get { return _offlineScoring; }
+			set { _offlineScoring = value; }
 		} // ScoringResults
 
 		public virtual CashRequest LastCashRequest { get { return CashRequests.LastOrDefault(); } }

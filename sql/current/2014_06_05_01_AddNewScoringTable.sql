@@ -1,9 +1,18 @@
-IF(object_id('NewScoreStorage') IS NULL) 
+IF(object_id('NewScoreStorage') IS NOT NULL) 
+BEGIN
+	DROP TABLE NewScoreStorage
+END
+GO
+
+
+IF(object_id('OfflineScoring') IS NULL) 
 BEGIN
 
-CREATE TABLE NewScoreStorage
+CREATE TABLE OfflineScoring
 (
-	CustomerId INT NOT NULL
+	Id INT IDENTITY
+	,CustomerId INT NOT NULL
+	,IsActive BIT
 	,BusinessScore INT
 	,BusinessScoreWeight DECIMAL(18,6)
 	,BusinessScoreGrade DECIMAL(18,6)
@@ -55,7 +64,7 @@ CREATE TABLE NewScoreStorage
 	,TotalScore DECIMAL(18,6)
 	,TotalScoreNormalized DECIMAL(18,6)
 	,Medal NVARCHAR(50)	
-	,CONSTRAINT PK_NewScoreStorage PRIMARY KEY (CustomerId)
+	,CONSTRAINT PK_OfflineScoring PRIMARY KEY (CustomerId)
 )
 
 END 

@@ -11,6 +11,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 	{
 		public DateTime Date { get; set; }
 		public string Medal { get; set; }
+		public string OfflineMedal { get; set; }
+		public double OfflineResult { get; set; }
 		public double Points { get; set; }
 		public double Result { get; set; }
 	}
@@ -54,6 +56,19 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			var maxdate = scorRes.Max(s => s.ScoreDate);
 			var scoringResult = scorRes.FirstOrDefault(s => s.ScoreDate == maxdate);
 			Score = BuildScore(scoringResult);
+
+			var offlineScoring = customer.OfflineScoring.FirstOrDefault(x => x.IsActive);
+			if (offlineScoring != null)
+			{
+				Score.OfflineMedal = offlineScoring.Medal;
+				Score.OfflineResult = (double) offlineScoring.TotalScoreNormalized;
+			}
+			else
+			{
+				Score.OfflineMedal = "N\\A";
+				Score.OfflineResult = -1;
+			}
+
 			BuildCharecteristic(scoringResult);
 			GetTotal();
 		}

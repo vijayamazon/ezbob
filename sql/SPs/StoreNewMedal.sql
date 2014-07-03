@@ -57,8 +57,11 @@ ALTER PROCEDURE StoreNewMedal
 	,@Medal NVARCHAR(50))
 AS
 BEGIN
-	INSERT INTO NewScoreStorage (
+	UPDATE OfflineScoring SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
+
+	INSERT INTO OfflineScoring (
 	 CustomerId
+	,IsActive
 	,BusinessScore
 	,BusinessScoreWeight
 	,BusinessScoreGrade
@@ -112,6 +115,7 @@ BEGIN
 	,Medal)
 	VALUES (
 	 @CustomerId
+	,1
 	,@BusinessScore
 	,@BusinessScoreWeight
 	,@BusinessScoreGrade

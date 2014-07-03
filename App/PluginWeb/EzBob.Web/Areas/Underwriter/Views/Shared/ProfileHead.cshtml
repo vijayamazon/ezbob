@@ -74,6 +74,7 @@
                                 <div><%-EzBob.formatPercents(medal.Result)%></div>
                             </div>
                             <canvas id="medalCanvas" width="100" height="100"></canvas>
+                            <div class="offline-medal-text">Offline: <%-medal.OfflineMedal%> <%- medal.OfflineResult != -1 ? EzBob.formatPercents(medal.OfflineResult) : '' %></div>
                         </div>
                     </div>
                 </div>

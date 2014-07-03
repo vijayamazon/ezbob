@@ -1308,9 +1308,6 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
       <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.min.js">
-      <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js">
       <DependentUpon>ezbob.shops.amazon.coffee</DependentUpon>
     </Content>
