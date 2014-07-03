@@ -33,6 +33,9 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         if ($el.hasClass("disabled"))
             return false;
 
+        if (!this.parentView.isEnabled())
+            return false;
+
         this.trigger('next');
         return false;
     }, // next

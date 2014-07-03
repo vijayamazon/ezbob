@@ -199,6 +199,14 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		if ($el.hasClass('disabled'))
 			return false;
 
+		var enabled = EzBob.Validation.checkForm(this.validator) &&
+			this.isPrevAddressValid() &&
+			this.isAddressValid();
+	    
+        if (!enabled) {
+            return false;
+        }
+	    
 		BlockUi();
 
 		var self = this;

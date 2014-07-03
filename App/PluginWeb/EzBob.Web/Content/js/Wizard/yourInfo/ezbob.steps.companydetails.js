@@ -106,15 +106,20 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
 			this.typeOfBusinessChanged();
 
-		var enabled = this.validator.checkForm();
-
-		if (enabled && this.CompanyView)
-			enabled = this.CompanyView.readyToContinue();
+	    var enabled = this.isEnabled();
 
 		$('.btn-continue').toggleClass('disabled', !enabled);
 		this.$el.find('.cashInput').moneyFormat();
 	}, // inputChanged
 
+    isEnabled: function() {
+        var enabled = this.validator.checkForm();
+
+        if (enabled && this.CompanyView)
+            enabled = this.CompanyView.readyToContinue();
+
+        return enabled;
+    },
 	typeOfBusinessChanged: function() {
 		var name = this.$el.find('#TypeOfBusiness').val().toLowerCase();
 
