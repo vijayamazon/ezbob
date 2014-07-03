@@ -97,7 +97,9 @@
 				string postcode = GetPostcode(ukLocation, mlLocation);
 
 				// debug mode
-				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile") {
+				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
+				{
+					var data = ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
 					MP_ExperianDataCache experianDataCacheEntry = _repo.GetAll()
 						.FirstOrDefault(x => x.CustomerId == customerId && x.DirectorId == directorId && x.CompanyRefNumber == null);
 
@@ -110,12 +112,18 @@
 							LastUpdateDate = DateTime.UtcNow,
 							CustomerId = customerId,
 							DirectorId = directorId,
+							JsonPacket = JsonConvert.SerializeObject(data.Output)
 						};
 
 						_repo.SaveOrUpdate(newExperianDataCacheEntry);
 					} // if
+					else if (string.IsNullOrEmpty(experianDataCacheEntry.JsonPacket))
+					{
+						experianDataCacheEntry.JsonPacket = JsonConvert.SerializeObject(data.Output);
+						_repo.SaveOrUpdate(experianDataCacheEntry);
+					}
 
-					return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
+					return data;
 				} // if test
 
 				mlLocation = ShiftLocation(mlLocation);
@@ -447,10 +455,13 @@
 				person.LastUpdateDate
 			);
 
-			var consumerServiceResult = new ConsumerServiceResult(
-				JsonConvert.DeserializeObject<OutputRoot>(person.JsonPacket),
-				person.BirthDate
-			) {
+			OutputRoot data = null;
+			if (!string.IsNullOrEmpty(person.JsonPacket))
+			{
+				data = JsonConvert.DeserializeObject<OutputRoot>(person.JsonPacket);
+			}
+
+			var consumerServiceResult = new ConsumerServiceResult(data,person.BirthDate) {
 				ExperianResult = person.ExperianResult,
 				LastUpdateDate = person.LastUpdateDate
 			};
@@ -459,20 +470,6 @@
 		} // ParseCache
 
 		#endregion method ParseCache
-
-		public static ConsumerServiceResult GetParsedCache(int customerId)
-		{
-			ExperianDataCacheRepository experianDataCacheRepository = ObjectFactory.GetInstance<ExperianDataCacheRepository>();
-			var cacheEntriesForCustomer = experianDataCacheRepository.GetAll().Where(x => x.CustomerId == customerId && x.DirectorId == 0);
-			foreach (var cacheEntry in cacheEntriesForCustomer)
-			{
-				if (!string.IsNullOrEmpty(cacheEntry.Name))
-				{
-					return ParseCache(cacheEntry);
-				}
-			}
-			return null;
-		}
 
 		#region method GetPostcode
 
