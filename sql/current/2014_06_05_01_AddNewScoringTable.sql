@@ -64,8 +64,25 @@ CREATE TABLE OfflineScoring
 	,TotalScore DECIMAL(18,6)
 	,TotalScoreNormalized DECIMAL(18,6)
 	,Medal NVARCHAR(50)	
-	,CONSTRAINT PK_OfflineScoring PRIMARY KEY (CustomerId)
+	,CONSTRAINT PK_OfflineScoring PRIMARY KEY (Id)
 )
 
 END 
 GO
+
+
+DECLARE @CurrentKeyName NVARCHAR(128)
+SELECT @CurrentKeyName = column_name
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE OBJECTPROPERTY(OBJECT_ID(constraint_name), 'IsPrimaryKey') = 1
+AND table_name = 'OfflineScoring'
+
+IF @CurrentKeyName = 'CustomerId'
+BEGIN
+	ALTER TABLE OfflineScoring DROP CONSTRAINT PK_OfflineScoring
+	ALTER TABLE OfflineScoring ADD CONSTRAINT PK_OfflineScoring PRIMARY KEY (Id)
+END
+GO
+
+
+
