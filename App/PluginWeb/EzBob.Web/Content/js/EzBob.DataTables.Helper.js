@@ -180,12 +180,12 @@ EzBob.DataTables.Helper = {
         if ($.fn.dataTableExt.afnFiltering.length == 0) {
             $.fn.dataTableExt.afnFiltering.push(
                 function (oSettings, aData, iDataIndex) {
-                    if (oSettings.nTable !== document.getElementById("YodleeTransactionsTable")) {
+                    if (oSettings.sTableId != "YodleeTransactionsTable") {
                         // if not table should be ignored
                         return true;
                     }
                     var dateRange = $('#date-range').attr("value");
-                    if (dateRange == null) return true;
+                    if (dateRange == null || dateRange == "") return true;
 
                     var dateMin = dateRange.substring(0, 4) + dateRange.substring(5, 7) + dateRange.substring(8, 10);
                     var dateMax = dateRange.substring(13, 17) + dateRange.substring(18, 20) + dateRange.substring(21, 23);
@@ -210,7 +210,7 @@ EzBob.DataTables.Helper = {
             
             $.fn.dataTableExt.afnFiltering.push(
                 function (oSettings, aData, iDataIndex) {
-                    if (oSettings.nTable !== document.getElementById("journalTable")) {
+                    if (oSettings.sTableId != "journalTable") {
                         // if not table should be ignored
                         return true;
                     }
