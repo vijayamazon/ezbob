@@ -178,7 +178,20 @@
           return _this.dashboardInfoView.render();
         }
       }));
+      this.gotoCustomer();
       return this;
+    };
+
+    ProfileView.prototype.gotoCustomer = function() {
+      var goToCustomerId;
+      goToCustomerId = new EzBob.Underwriter.goToCustomerId();
+      goToCustomerId.on("ok", function(id) {
+        return Redirect("" + gRootPath + "Underwriter/Customers#profile/" + id);
+      });
+      return $("[id=liClient] > a").unbind("click").on("click", function() {
+        goToCustomerId.render();
+        return false;
+      });
     };
 
     ProfileView.prototype.setState = function(nCustomerID, sSection) {

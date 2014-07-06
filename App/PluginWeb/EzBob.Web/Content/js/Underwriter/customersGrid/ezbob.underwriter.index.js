@@ -88,6 +88,18 @@
 			counterTimer = counterTimer || setInterval(updateCounters, 5000);
 
 			this.handleRoute('grids', null, type);
+		    
+			var a = new EzBob.Underwriter.goToCustomerId();
+
+			a.on('ok', function (id) {
+			    oRouter.views.profile.view.router.navigate('profile/' + id, { trigger: true, replace: true });
+			});
+
+			$('[id="liClient"] > a').unbind("click").on('click', function () {
+			    console.log('render click customers');
+			    a.render();
+			    return false;
+			});
 		}, // customers
 
 		profile: function(id, section) {
@@ -177,17 +189,6 @@
 
 	recentCustomersModel.fetch().done(function() {
 		localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.get('RecentCustomers')));
-
-		var a = new EzBob.Underwriter.goToCustomerId();
-
-		a.on('ok', function(id) {
-			oRouter.views.profile.view.router.navigate('profile/' + id, { trigger: true, replace: true });
-		});
-
-		$('[id="liClient"] > a').on('click', function() {
-			a.render();
-			return false;
-		});
 	}); // recent customers model fetch done
 
 	var aryInitialCustomerID = window.location.search.match(/[\?&]customerid=(\d+)/);

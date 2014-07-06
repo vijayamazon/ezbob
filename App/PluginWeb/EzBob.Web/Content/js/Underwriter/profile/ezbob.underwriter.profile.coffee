@@ -174,8 +174,18 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
                 @dashboardInfoView.render()
         ))
 
+        @gotoCustomer()
         this
     # end of render
+
+    gotoCustomer: ->
+        goToCustomerId = new EzBob.Underwriter.goToCustomerId()
+        goToCustomerId.on "ok", (id) ->
+            Redirect "#{gRootPath}Underwriter/Customers#profile/#{id}"
+        $("[id=liClient] > a").unbind("click").on("click", ->
+                goToCustomerId.render()
+                false
+        )
 
     setState: (nCustomerID, sSection) ->
         @lastShownCustomerID = nCustomerID

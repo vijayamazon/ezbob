@@ -85,8 +85,7 @@
     CaisManageView.prototype.template = _.template($("#cais-template").length > 0 ? $("#cais-template").html() : "");
 
     CaisManageView.prototype.initialize = function() {
-      var goToCustomerId,
-        _this = this;
+      var _this = this;
       this.model = new EzBob.Underwriter.CAIS.ListOfFilesModel();
       this.bindTo(this.model, "change reset", this.render, this);
       BlockUi("on");
@@ -94,15 +93,7 @@
         return BlockUi("off");
       });
       this.checkedModel = new EzBob.Underwriter.CAIS.SelectedFiles();
-      this.bindTo(this.checkedModel, "add remove reset", this.checkedFileModelChanged, this);
-      goToCustomerId = new EzBob.Underwriter.goToCustomerId();
-      goToCustomerId.on("ok", function(id) {
-        return Redirect("" + gRootPath + "Underwriter/Customers#profile/" + id);
-      });
-      return ($("#liClient > a")).on("click", function() {
-        goToCustomerId.render();
-        return false;
-      });
+      return this.bindTo(this.checkedModel, "add remove reset", this.checkedFileModelChanged, this);
     };
 
     CaisManageView.prototype.ui = {
