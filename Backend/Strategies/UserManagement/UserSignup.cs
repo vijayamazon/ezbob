@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Web.Security;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
@@ -14,7 +15,7 @@
 		// Create a user for Customer
 		public UserSignup(
 			string sEmail,
-			string sPassword,
+			Password oPassword,
 			int nPasswordQuestion,
 			string sPasswordAnswer,
 			string sRemoteIp,
@@ -25,7 +26,7 @@
 
 			m_oData = new UserSecurityData(this) {
 				Email = sEmail,
-				NewPassword = sPassword,
+				NewPassword = oPassword.Primary,
 				PasswordQuestion = nPasswordQuestion,
 				PasswordAnswer = sPasswordAnswer,
 			};

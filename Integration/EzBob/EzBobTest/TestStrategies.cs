@@ -117,7 +117,7 @@ namespace EzBobTest
 		[Test]
 		public void PasswordChanged()
 		{
-			var s = new PasswordChanged(3060, "dfsgfsdg", m_oDB, m_oLog);
+			var s = new PasswordChanged(3060, new Password("dfsgfsdg"), m_oDB, m_oLog);
 			s.Execute();
 		}
 

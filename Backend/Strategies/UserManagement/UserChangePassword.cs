@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.UserManagement {
 	using System;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
@@ -9,14 +10,14 @@
 
 		#region constructor
 
-		public UserChangePassword(string sEmail, string sOldPassword, string sNewPassword, bool bForceChangePassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_bForceChangePassword = bForceChangePassword;
 			ErrorMessage = null;
 
 			m_oData = new UserSecurityData(this) {
 				Email = sEmail,
-				OldPassword = sOldPassword,
-				NewPassword = sNewPassword,
+				OldPassword = oOldPassword.Primary,
+				NewPassword = oNewPassword.Primary,
 			};
 
 			m_oSpLoad = new UserDataForLogin(DB, Log) {
@@ -133,7 +134,9 @@
 			[UsedImplicitly]
 			public DateTime Now {
 				get { return DateTime.UtcNow; }
+				// ReSharper disable ValueParameterNotUsed
 				set { }
+				// ReSharper restore ValueParameterNotUsed
 			} // Now
 		} // class SpUserChangePassword
 

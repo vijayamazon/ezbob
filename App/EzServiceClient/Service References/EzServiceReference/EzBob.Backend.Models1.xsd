@@ -80,6 +80,13 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="QuickOfferModel" nillable="true" type="tns:QuickOfferModel" />
+  <xs:complexType name="Password">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="m_sConfirmation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="m_sPrimary" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Password" nillable="true" type="tns:Password" />
   <xs:complexType name="BankStatementDataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActualLoansRepayment" type="xs:double" />

@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.UserManagement {
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -9,7 +10,7 @@
 
 		public UserUpdateSecurityQuestion(
 			string sEmail,
-			string sPassword,
+			Password oPassword,
 			int nQuestionID,
 			string sAnswer,
 			AConnection oDB,
@@ -19,7 +20,7 @@
 
 			m_oData = new UserSecurityData(this) {
 				Email = sEmail,
-				OldPassword = sPassword,
+				OldPassword = oPassword.Primary,
 				PasswordQuestion = nQuestionID,
 				PasswordAnswer = sAnswer,
 			};
