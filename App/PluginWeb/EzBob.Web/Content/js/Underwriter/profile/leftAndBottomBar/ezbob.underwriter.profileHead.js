@@ -292,7 +292,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         var startAngle = 1 * Math.PI;
         var endAngle = (isClock ? 2 : 3) * Math.PI;
         var lineWidth = isClock ? 25 : 15;
-        var endEngleData = Math.PI * (1 + fillPercent);
+        var endEngleData = Math.PI * (1 + fillPercent*(isClock ? 1 : 2));
         context.beginPath();
         context.arc(x, y, radius, startAngle, endAngle, false);
         context.lineWidth = lineWidth;
