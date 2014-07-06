@@ -1,12 +1,17 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class BrokerPasswordRestored : PasswordRestored {
 		#region constructor
 
-		public BrokerPasswordRestored(int nBrokerID, string password, AConnection oDb, ASafeLog oLog) : base(nBrokerID, oDb, oLog) {
-			ForcedPassword = password;
+		public BrokerPasswordRestored(int nBrokerID, Password oPassword, AConnection oDb, ASafeLog oLog) : base(nBrokerID, oDb, oLog) {
+			ForcedPassword = oPassword.Primary;
+		} // constructor
+
+		internal BrokerPasswordRestored(int nBrokerID, string sPassword, AConnection oDb, ASafeLog oLog) : base(nBrokerID, oDb, oLog) {
+			ForcedPassword = sPassword;
 		} // constructor
 
 		#endregion constructor

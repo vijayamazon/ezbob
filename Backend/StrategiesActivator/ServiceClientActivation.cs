@@ -293,7 +293,7 @@
 				return;
 			}
 
-			m_oServiceClient.PasswordChanged(customerId, m_aryArgs[2]);
+			m_oServiceClient.PasswordChanged(customerId, new Password(m_aryArgs[2]));
 		}
 
 		[Activation]
@@ -708,7 +708,7 @@ crm:           CRM");
 				return;
 			}
 
-			m_oServiceClient.UnderwriterSignup(m_aryArgs[1], m_aryArgs[2], m_aryArgs[3]);
+			m_oServiceClient.UnderwriterSignup(m_aryArgs[1], new Password(m_aryArgs[2]), m_aryArgs[3]);
 		}
 
 		[Activation]

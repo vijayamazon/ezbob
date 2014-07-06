@@ -155,8 +155,7 @@
 					MobileCode,
 					ContactOtherPhone,
 					EstimatedMonthlyClientAmount,
-					Password,
-					Password2,
+					new Password(Password,Password2),
 					FirmWebSite,
 					EstimatedMonthlyAppCount,
 					IsCaptchaEnabled != 0,
@@ -834,7 +833,11 @@
 			ActionMetaData oResult;
 
 			try {
-				oResult = m_oServiceClient.Instance.BrokerUpdatePassword(ContactEmail, OldPassword, NewPassword, NewPassword2);
+				oResult = m_oServiceClient.Instance.BrokerUpdatePassword(
+					ContactEmail,
+					new Password(OldPassword),
+					new Password(NewPassword, NewPassword2)
+				);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to update password for contact email {0}", ContactEmail);

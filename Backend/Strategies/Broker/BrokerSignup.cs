@@ -23,8 +23,7 @@
 			string sMobileCode,
 			string sContactOtherPhone,
 			decimal nEstimatedMonthlyClientAmount,
-			string sPassword,
-			string sPassword2,
+			Password oPassword,
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchaEnabled,
@@ -44,8 +43,8 @@
 				ContactMobile = sContactMobile,
 				ContactOtherPhone = sContactOtherPhone,
 				EstimatedMonthlyClientAmount = nEstimatedMonthlyClientAmount,
-				Password = sPassword,
-				Password2 = sPassword2,
+				Password = oPassword.Primary,
+				Password2 = oPassword.Confirmation,
 				FirmWebSiteUrl = sFirmWebSiteUrl,
 				EstimatedMonthlyApplicationCount = nEstimatedMonthlyApplicationCount,
 				BrokerTermsID = nBrokerTermsID,
@@ -176,16 +175,18 @@
 			#endregion property Password
 
 			[UsedImplicitly]
-			public string TempSourceRef {
-				get { return Guid.NewGuid().ToString("N"); }
-				set { }
-			} // TempSourceRef
-
-			[UsedImplicitly]
 			public string FirmWebSiteUrl { get; set; }
 
 			[UsedImplicitly]
 			public int EstimatedMonthlyApplicationCount { get; set; }
+
+			// ReSharper disable ValueParameterNotUsed
+
+			[UsedImplicitly]
+			public string TempSourceRef {
+				get { return Guid.NewGuid().ToString("N"); }
+				set { }
+			} // TempSourceRef
 
 			[UsedImplicitly]
 			public DateTime AgreedToTermsDate {
@@ -198,6 +199,8 @@
 				get { return DateTime.UtcNow; }
 				set { }
 			} // AgreedToPrivacyPolicyDate
+
+			// ReSharper restore ValueParameterNotUsed
 
 			[NonTraversable]
 			[UsedImplicitly]

@@ -590,7 +590,7 @@ namespace EzBob.Web.Controllers {
 			try {
 				UserLoginActionResult ular = m_oServiceClient.Instance.CustomerSignup(
 					email,
-					password,
+					new Password(password),
 					Convert.ToInt32(passwordQuestion),
 					passwordAnswer,
 					RemoteIp()
@@ -716,7 +716,7 @@ namespace EzBob.Web.Controllers {
 			try {
 				UserLoginActionResult ular = m_oServiceClient.Instance.UserLogin(
 					username,
-					password,
+					new Password(password),
 					RemoteIp()
 				);
 

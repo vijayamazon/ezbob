@@ -61,8 +61,7 @@
 			string sMobileCode,
 			string sContactOtherPhone,
 			decimal nEstimatedMonthlyClientAmount,
-			string sPassword,
-			string sPassword2,
+			Password oPassword,
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchEnabled,
@@ -80,8 +79,7 @@
 				sMobileCode,
 				sContactOtherPhone,
 				nEstimatedMonthlyClientAmount,
-				sPassword,
-				sPassword2,
+				oPassword,
 				sFirmWebSiteUrl,
 				nEstimatedMonthlyApplicationCount,
 				bIsCaptchEnabled,
@@ -109,9 +107,9 @@
 
 		#region method BrokerLogin
 
-		public BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword) {
+		public BrokerPropertiesActionResult BrokerLogin(string sEmail, Password oPassword) {
 			BrokerLogin oInstance;
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, sPassword);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword);
 
 			return new BrokerPropertiesActionResult {
 				MetaData = oMetaData,
@@ -329,13 +327,13 @@
 
 		#region method BrokerUpdatePassword
 
-		public ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2) {
+		public ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword) {
 			BrokerUpdatePassword oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, oOldPassword, oNewPassword);
 
 			if ((oInstance != null) && (oInstance.BrokerID > 0))
-				Execute<BrokerPasswordRestored>(null, oInstance.BrokerID, oInstance.BrokerID, sNewPassword);
+				Execute<BrokerPasswordRestored>(null, oInstance.BrokerID, oInstance.BrokerID, oNewPassword);
 
 			return oMetaData;
 		} // BrokerUpdatePassword

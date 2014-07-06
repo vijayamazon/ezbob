@@ -61,8 +61,7 @@
 			string sMobileCode,
 			string sContactOtherPhone,
 			decimal nEstimatedMonthlyClientAmount,
-			string sPassword,
-			string sPassword2,
+			Password oPassword,
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchEnabled,
@@ -71,7 +70,7 @@
 		);
 
 		[OperationContract]
-		BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword);
+		BrokerPropertiesActionResult BrokerLogin(string sEmail, Password oPassword);
 
 		[OperationContract]
 		ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
@@ -122,7 +121,7 @@
 		BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail);
 
 		[OperationContract]
-		ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
+		ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword);
 
 		[OperationContract]
 		BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly);
@@ -182,7 +181,7 @@
 		ActionMetaData MoreBwaInformation(int userId, int customerId);
 
 		[OperationContract]
-		ActionMetaData PasswordChanged(int customerId, string password);
+		ActionMetaData PasswordChanged(int customerId, Password password);
 
 		[OperationContract]
 		ActionMetaData PasswordRestored(int customerId);
@@ -410,25 +409,25 @@
 		#region User Management
 
 		[OperationContract]
-		UserLoginActionResult CustomerSignup(string sEmail, string sPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
+		UserLoginActionResult CustomerSignup(string sEmail, Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
 
 		[OperationContract]
-		ActionMetaData UnderwriterSignup(string name, string password, string role);
+		ActionMetaData UnderwriterSignup(string name, Password password, string role);
 
 		[OperationContract]
-		UserLoginActionResult UserLogin(string sEmail, string sPassword, string sRemoteIp);
+		UserLoginActionResult UserLogin(string sEmail, Password sPassword, string sRemoteIp);
 
 		[OperationContract]
 		StringActionResult UserResetPassword(string sEmail);
 
 		[OperationContract]
-		StringActionResult UserChangePassword(string sEmail, string sOldPassword, string sNewPassword, bool bForceChangePassword);
+		StringActionResult UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword);
 
 		[OperationContract]
-		StringActionResult CustomerChangePassword(string sEmail, string sOldPassword, string sNewPassword);
+		StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword);
 
 		[OperationContract]
-		StringActionResult UserUpdateSecurityQuestion(string sEmail, string sPassword, int nQuestionID, string sAnswer);
+		StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer);
 
 		[OperationContract]
 		StringActionResult UserChangeEmail(int nUserID, string sNewEmail);

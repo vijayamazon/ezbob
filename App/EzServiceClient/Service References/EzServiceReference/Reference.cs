@@ -2215,22 +2215,22 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.QuickOfferActionResult> QuickOfferWithPrerequisitesAsync(int customerId, bool saveOfferToDB);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerSignup", ReplyAction="http://tempuri.org/IEzService/CustomerSignupResponse")]
-        ServiceClientProxy.EzServiceReference.UserLoginActionResult CustomerSignup(string sEmail, string sPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
+        ServiceClientProxy.EzServiceReference.UserLoginActionResult CustomerSignup(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerSignup", ReplyAction="http://tempuri.org/IEzService/CustomerSignupResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> CustomerSignupAsync(string sEmail, string sPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> CustomerSignupAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UnderwriterSignup", ReplyAction="http://tempuri.org/IEzService/UnderwriterSignupResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData UnderwriterSignup(string name, string password, string role);
+        ServiceClientProxy.EzServiceReference.ActionMetaData UnderwriterSignup(string name, Ezbob.Backend.Models.Password password, string role);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UnderwriterSignup", ReplyAction="http://tempuri.org/IEzService/UnderwriterSignupResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UnderwriterSignupAsync(string name, string password, string role);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UnderwriterSignupAsync(string name, Ezbob.Backend.Models.Password password, string role);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
-        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, string sPassword, string sRemoteIp);
+        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, string sPassword, string sRemoteIp);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserResetPassword", ReplyAction="http://tempuri.org/IEzService/UserResetPasswordResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail);
@@ -2239,22 +2239,22 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserResetPasswordAsync(string sEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangePassword", ReplyAction="http://tempuri.org/IEzService/UserChangePasswordResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, string sOldPassword, string sNewPassword, bool bForceChangePassword);
+        ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangePassword", ReplyAction="http://tempuri.org/IEzService/UserChangePasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, string sOldPassword, string sNewPassword, bool bForceChangePassword);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerChangePassword", ReplyAction="http://tempuri.org/IEzService/CustomerChangePasswordResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult CustomerChangePassword(string sEmail, string sOldPassword, string sNewPassword);
+        ServiceClientProxy.EzServiceReference.StringActionResult CustomerChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerChangePassword", ReplyAction="http://tempuri.org/IEzService/CustomerChangePasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> CustomerChangePasswordAsync(string sEmail, string sOldPassword, string sNewPassword);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> CustomerChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzService/UserUpdateSecurityQuestionResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, string sPassword, int nQuestionID, string sAnswer);
+        ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzService/UserUpdateSecurityQuestionResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, string sPassword, int nQuestionID, string sAnswer);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangeEmail", ReplyAction="http://tempuri.org/IEzService/UserChangeEmailResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserChangeEmail(int nUserID, string sNewEmail);
@@ -2425,16 +2425,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> IsBrokerAsync(string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
-        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerSignup(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled, int nBrokerTermsID, string sReferredBy);
+        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerSignup(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, Ezbob.Backend.Models.Password oPassword, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled, int nBrokerTermsID, string sReferredBy);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerSignupAsync(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled, int nBrokerTermsID, string sReferredBy);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerSignupAsync(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, Ezbob.Backend.Models.Password oPassword, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled, int nBrokerTermsID, string sReferredBy);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
-        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword);
+        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.Password oPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, string sPassword);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, Ezbob.Backend.Models.Password oPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzService/BrokerRestorePasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
@@ -2533,10 +2533,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadOwnPropertiesAsync(string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
+        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadStaticData", ReplyAction="http://tempuri.org/IEzService/BrokerLoadStaticDataResponse")]
         ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly);
@@ -2629,10 +2629,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MoreBwaInformationAsync(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordChanged", ReplyAction="http://tempuri.org/IEzService/PasswordChangedResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData PasswordChanged(int customerId, string password);
+        ServiceClientProxy.EzServiceReference.ActionMetaData PasswordChanged(int customerId, Ezbob.Backend.Models.Password password);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordChanged", ReplyAction="http://tempuri.org/IEzService/PasswordChangedResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PasswordChangedAsync(int customerId, string password);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PasswordChangedAsync(int customerId, Ezbob.Backend.Models.Password password);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordRestored", ReplyAction="http://tempuri.org/IEzService/PasswordRestoredResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData PasswordRestored(int customerId);
@@ -3068,27 +3068,27 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.QuickOfferWithPrerequisitesAsync(customerId, saveOfferToDB);
         }
         
-        public ServiceClientProxy.EzServiceReference.UserLoginActionResult CustomerSignup(string sEmail, string sPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp) {
-            return base.Channel.CustomerSignup(sEmail, sPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp);
+        public ServiceClientProxy.EzServiceReference.UserLoginActionResult CustomerSignup(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp) {
+            return base.Channel.CustomerSignup(sEmail, oPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> CustomerSignupAsync(string sEmail, string sPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp) {
-            return base.Channel.CustomerSignupAsync(sEmail, sPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> CustomerSignupAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp) {
+            return base.Channel.CustomerSignupAsync(sEmail, oPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData UnderwriterSignup(string name, string password, string role) {
+        public ServiceClientProxy.EzServiceReference.ActionMetaData UnderwriterSignup(string name, Ezbob.Backend.Models.Password password, string role) {
             return base.Channel.UnderwriterSignup(name, password, role);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UnderwriterSignupAsync(string name, string password, string role) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UnderwriterSignupAsync(string name, Ezbob.Backend.Models.Password password, string role) {
             return base.Channel.UnderwriterSignupAsync(name, password, role);
         }
         
-        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, string sPassword, string sRemoteIp) {
+        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp) {
             return base.Channel.UserLogin(sEmail, sPassword, sRemoteIp);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, string sPassword, string sRemoteIp) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp) {
             return base.Channel.UserLoginAsync(sEmail, sPassword, sRemoteIp);
         }
         
@@ -3100,28 +3100,28 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.UserResetPasswordAsync(sEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, string sOldPassword, string sNewPassword, bool bForceChangePassword) {
-            return base.Channel.UserChangePassword(sEmail, sOldPassword, sNewPassword, bForceChangePassword);
+        public ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
+            return base.Channel.UserChangePassword(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, string sOldPassword, string sNewPassword, bool bForceChangePassword) {
-            return base.Channel.UserChangePasswordAsync(sEmail, sOldPassword, sNewPassword, bForceChangePassword);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
+            return base.Channel.UserChangePasswordAsync(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringActionResult CustomerChangePassword(string sEmail, string sOldPassword, string sNewPassword) {
-            return base.Channel.CustomerChangePassword(sEmail, sOldPassword, sNewPassword);
+        public ServiceClientProxy.EzServiceReference.StringActionResult CustomerChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword) {
+            return base.Channel.CustomerChangePassword(sEmail, oOldPassword, oNewPassword);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> CustomerChangePasswordAsync(string sEmail, string sOldPassword, string sNewPassword) {
-            return base.Channel.CustomerChangePasswordAsync(sEmail, sOldPassword, sNewPassword);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> CustomerChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword) {
+            return base.Channel.CustomerChangePasswordAsync(sEmail, oOldPassword, oNewPassword);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, string sPassword, int nQuestionID, string sAnswer) {
-            return base.Channel.UserUpdateSecurityQuestion(sEmail, sPassword, nQuestionID, sAnswer);
+        public ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer) {
+            return base.Channel.UserUpdateSecurityQuestion(sEmail, oPassword, nQuestionID, sAnswer);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, string sPassword, int nQuestionID, string sAnswer) {
-            return base.Channel.UserUpdateSecurityQuestionAsync(sEmail, sPassword, nQuestionID, sAnswer);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer) {
+            return base.Channel.UserUpdateSecurityQuestionAsync(sEmail, oPassword, nQuestionID, sAnswer);
         }
         
         public ServiceClientProxy.EzServiceReference.StringActionResult UserChangeEmail(int nUserID, string sNewEmail) {
@@ -3348,20 +3348,20 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.IsBrokerAsync(sContactEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerSignup(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled, int nBrokerTermsID, string sReferredBy) {
-            return base.Channel.BrokerSignup(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, sPassword, sPassword2, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled, nBrokerTermsID, sReferredBy);
+        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerSignup(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, Ezbob.Backend.Models.Password oPassword, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled, int nBrokerTermsID, string sReferredBy) {
+            return base.Channel.BrokerSignup(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, oPassword, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled, nBrokerTermsID, sReferredBy);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerSignupAsync(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled, int nBrokerTermsID, string sReferredBy) {
-            return base.Channel.BrokerSignupAsync(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, sPassword, sPassword2, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled, nBrokerTermsID, sReferredBy);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerSignupAsync(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, Ezbob.Backend.Models.Password oPassword, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled, int nBrokerTermsID, string sReferredBy) {
+            return base.Channel.BrokerSignupAsync(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, oPassword, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled, nBrokerTermsID, sReferredBy);
         }
         
-        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword) {
-            return base.Channel.BrokerLogin(sEmail, sPassword);
+        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.Password oPassword) {
+            return base.Channel.BrokerLogin(sEmail, oPassword);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, string sPassword) {
-            return base.Channel.BrokerLoginAsync(sEmail, sPassword);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, Ezbob.Backend.Models.Password oPassword) {
+            return base.Channel.BrokerLoginAsync(sEmail, oPassword);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
@@ -3492,12 +3492,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerLoadOwnPropertiesAsync(sContactEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2) {
-            return base.Channel.BrokerUpdatePassword(sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword) {
+            return base.Channel.BrokerUpdatePassword(sContactEmail, oOldPassword, oNewPassword);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2) {
-            return base.Channel.BrokerUpdatePasswordAsync(sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword) {
+            return base.Channel.BrokerUpdatePasswordAsync(sContactEmail, oOldPassword, oNewPassword);
         }
         
         public ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly) {
@@ -3620,11 +3620,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.MoreBwaInformationAsync(userId, customerId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData PasswordChanged(int customerId, string password) {
+        public ServiceClientProxy.EzServiceReference.ActionMetaData PasswordChanged(int customerId, Ezbob.Backend.Models.Password password) {
             return base.Channel.PasswordChanged(customerId, password);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PasswordChangedAsync(int customerId, string password) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PasswordChangedAsync(int customerId, Ezbob.Backend.Models.Password password) {
             return base.Channel.PasswordChangedAsync(customerId, password);
         }
         

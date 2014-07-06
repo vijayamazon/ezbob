@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.UserManagement {
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MailStrategies;
@@ -8,8 +9,8 @@
 
 		#region constructor
 
-		public CustomerChangePassword(string sEmail, string sOldPassword, string sNewPassword, AConnection oDB, ASafeLog oLog)
-			: base(sEmail, sOldPassword, sNewPassword, false, oDB, oLog)
+		public CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, AConnection oDB, ASafeLog oLog)
+			: base(sEmail, oOldPassword, oNewPassword, false, oDB, oLog)
 		{
 		} // constructor
 

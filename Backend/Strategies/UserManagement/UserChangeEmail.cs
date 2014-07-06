@@ -121,6 +121,8 @@
 
 			#endregion property Email
 
+			// ReSharper disable ValueParameterNotUsed
+
 			#region property EzPassword
 
 			[UsedImplicitly]
@@ -164,6 +166,7 @@
 			} // Now
 
 			#endregion property Now
+			// ReSharper restore ValueParameterNotUsed
 		} // class SpUserChangePassword
 
 		#endregion class SpUserChangeEmail

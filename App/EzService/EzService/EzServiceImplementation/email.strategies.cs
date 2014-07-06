@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using EzBob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
 		#region async
@@ -44,7 +45,7 @@
 			return Execute(customerId, userId, typeof(MoreBwaInformation), customerId);
 		} // MoreBwaInformation
 
-		public ActionMetaData PasswordChanged(int customerId, string password) {
+		public ActionMetaData PasswordChanged(int customerId, Password password) {
 			return Execute(customerId, null, typeof(PasswordChanged), customerId, password);
 		} // PasswordChanged
 

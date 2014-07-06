@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
 	using System.Web.Mvc;
+	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -31,7 +32,7 @@
 			try {
 				StringActionResult sar = m_oServiceClient.Instance.UserUpdateSecurityQuestion(
 					m_oContext.User.Name,
-					password,
+					new Password(password),
 					model.Question,
 					model.Answer
 				);
@@ -61,7 +62,11 @@
 			bool bSuccess = false;
 
 			try {
-				StringActionResult sar = m_oServiceClient.Instance.CustomerChangePassword(m_oContext.User.Name, oldPassword, newPassword);
+				StringActionResult sar = m_oServiceClient.Instance.CustomerChangePassword(
+					m_oContext.User.Name,
+					new Password(oldPassword),
+					new Password(newPassword)
+				);
 
 				sErrorMsg = sar.Value;
 

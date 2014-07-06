@@ -5,6 +5,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
+	using JetBrains.Annotations;
 
 	#region class BrokerLogin
 
@@ -13,10 +14,10 @@
 
 		#region constructor
 
-		public BrokerLogin(string sEmail, string sPassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLogin(string sEmail, Password oPassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSp = new SpBrokerLogin(DB, Log) {
 				Email = sEmail,
-				Password = sPassword,
+				Password = oPassword.Primary,
 			};
 
 			Properties = new BrokerProperties();
@@ -75,6 +76,7 @@
 
 			#region property Email
 
+			[UsedImplicitly]
 			public string Email { get; set; }
 
 			#endregion property Email
@@ -82,6 +84,7 @@
 			#region property Password
 
 			public string Password {
+				[UsedImplicitly]
 				get { return SecurityUtils.HashPassword(Email, m_sPassword); }
 				set { m_sPassword = value; }
 			} // Password

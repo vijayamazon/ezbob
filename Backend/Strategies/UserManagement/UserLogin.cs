@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Web.Security;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
@@ -11,12 +12,12 @@
 
 		#region constructor
 
-		public UserLogin(string sEmail, string sPassword, string sRemoteIp, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UserLogin(string sEmail, Password oPassword, string sRemoteIp, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oResult = null;
 
 			m_oData = new UserSecurityData(this) {
 				Email = sEmail,
-				OldPassword = sPassword,
+				OldPassword = oPassword.Primary,
 			};
 
 			m_oSpLoad = new UserDataForLogin(DB, Log) {
@@ -198,9 +199,12 @@
 
 			private string m_sIp;
 
+			[UsedImplicitly]
 			public DateTime Now {
 				get { return DateTime.UtcNow; }
+				// ReSharper disable ValueParameterNotUsed
 				set { }
+				// ReSharper restore ValueParameterNotUsed
 			} // Now
 		} // class UserLoginCheckResult
 

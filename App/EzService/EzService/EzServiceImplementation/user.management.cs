@@ -1,12 +1,13 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using EzBob.Backend.Strategies.UserManagement;
+	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
 		#region method CustomerSignup
 
 		public UserLoginActionResult CustomerSignup(
 			string sEmail,
-			string sPassword,
+			Password oPassword,
 			int nPasswordQuestion,
 			string sPasswordAnswer,
 			string sRemoteIp
@@ -14,7 +15,7 @@
 			UserSignup oInstance;
 
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null,
-				sEmail, sPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp
+				sEmail, oPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp
 			);
 
 			return new UserLoginActionResult {
@@ -28,7 +29,7 @@
 
 		#region method UnderwriterSignup
 
-		public ActionMetaData UnderwriterSignup(string name, string password, string roleName) {
+		public ActionMetaData UnderwriterSignup(string name, Password password, string roleName) {
 			return ExecuteSync<UserSignup>(null, null, name, password, roleName);
 		} // UnderwriterSignup
 
@@ -36,10 +37,10 @@
 
 		#region method UserLogin
 
-		public UserLoginActionResult UserLogin(string sEmail, string sPassword, string sRemoteIp) {
+		public UserLoginActionResult UserLogin(string sEmail, Password oPassword, string sRemoteIp) {
 			UserLogin oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, sPassword, sRemoteIp);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, sRemoteIp);
 
 			return new UserLoginActionResult {
 				MetaData = oMetaData,
@@ -67,10 +68,10 @@
 
 		#region method UserChangePassword
 
-		public StringActionResult UserChangePassword(string sEmail, string sOldPassword, string sNewPassword, bool bForceChangePassword) {
+		public StringActionResult UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword) {
 			UserChangePassword oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, sOldPassword, sNewPassword, bForceChangePassword);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oOldPassword, oNewPassword, bForceChangePassword);
 
 			return new StringActionResult {
 				MetaData = oMetaData,
@@ -82,10 +83,10 @@
 
 		#region method CustomerChangePassword
 
-		public StringActionResult CustomerChangePassword(string sEmail, string sOldPassword, string sNewPassword) {
+		public StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword) {
 			CustomerChangePassword oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, sOldPassword, sNewPassword);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oOldPassword, oNewPassword);
 
 			return new StringActionResult {
 				MetaData = oMetaData,
@@ -97,10 +98,10 @@
 
 		#region method UserUpdateSecurityQuestion
 
-		public StringActionResult UserUpdateSecurityQuestion(string sEmail, string sPassword, int nQuestionID, string sAnswer) {
+		public StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer) {
 			UserUpdateSecurityQuestion oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, sPassword, nQuestionID, sAnswer);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, nQuestionID, sAnswer);
 
 			return new StringActionResult {
 				MetaData = oMetaData,

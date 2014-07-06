@@ -1,9 +1,11 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using Exceptions;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
+	using JetBrains.Annotations;
 
 	public class BrokerUpdatePassword : AStrategy {
 		#region public
@@ -12,17 +14,16 @@
 
 		public BrokerUpdatePassword(
 			string sContactEmail,
-			string sOldPassword,
-			string sNewPassword,
-			string sNewPassword2,
+			Password oOldPassword,
+			Password oNewPassword,
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
 			m_oSp = new SpBrokerUpdatePassword(DB, Log) {
 				ContactEmail = sContactEmail,
-				OldPassword = sOldPassword,
-				NewPassword = sNewPassword,
-				NewPassword2 = sNewPassword2,
+				OldPassword = oOldPassword.Primary,
+				NewPassword = oNewPassword.Primary,
+				NewPassword2 = oNewPassword.Confirmation,
 			};
 
 			BrokerID = 0;
@@ -74,14 +75,17 @@
 				return true;
 			} // HasValidParameters
 
+			[UsedImplicitly]
 			public string ContactEmail { get; set; }
 
+			[UsedImplicitly]
 			public string OldPassword {
 				get { return SecurityUtils.HashPassword(ContactEmail, m_sOldPassword); }
 				set { m_sOldPassword = value; }
 			}
 			private string m_sOldPassword;
 
+			[UsedImplicitly]
 			public string NewPassword {
 				get { return SecurityUtils.HashPassword(ContactEmail, m_sNewPassword); }
 				set { m_sNewPassword = value; }
@@ -89,7 +93,7 @@
 			private string m_sNewPassword;
 
 			[NonTraversable]
-			public string NewPassword2 { get; set; }
+			public string NewPassword2 { private get; set; }
 		} // class SpBrokerUpdatePassword
 
 		#endregion private
