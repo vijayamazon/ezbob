@@ -193,6 +193,7 @@
 			var companyHistory = _experianHistoryRepository.GetCompanyHistory(customer, isLimited).ToList();
 			if (companyHistory.Any())
 			{
+				Log.Debug("BuildHistoryModel company from history table");
 				model.CompanyHistory = companyHistory.Select(x => new CheckHistoryModel
 				{
 					Date = x.Date.ToUniversalTime(),
@@ -203,6 +204,7 @@
 			}
 			else
 			{
+				Log.Debug("BuildHistoryModel company from mp_servicelog table");
 				var type = (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr());
 				var checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
 												 where s.Director == null
@@ -244,18 +246,19 @@
 			try
 			{
 				var parser = new Parser(
-				CurrentValues.Instance[Variables.CompanyScoreParserConfiguration],
-				new SafeILog(this)
-			);
+				CurrentValues.Instance[Variables.CompanyScoreParserConfiguration],new SafeILog(this));
 				doc.LoadXml(responseData);
 				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
 				var b = new CompanyScoreModelBuilder();
-				var m = b.BuildDashboardModel(new ExperianParserOutput(oParsed));
+				var oResult = new ExperianParserOutput(oParsed, TypeOfBusinessReduced.Limited);
+				
+				var m = b.BuildDashboardModel(oResult);
 				model.Balance = m.CaisBalance;
 				model.Score = m.Score;
 			}
 			catch (Exception e)
 			{
+				Log.ErrorFormat("failed to retrieve history for company experian data for service log id {0} \n{1}", id, e);
 				return null;
 			} // try
 			return model;
