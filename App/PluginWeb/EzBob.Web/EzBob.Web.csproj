@@ -1583,6 +1583,7 @@
     <Content Include="Views\Shared\security_template.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <Content Include="App_Code\AddDirectorInfoTemplate.cshtml" />
+    <Content Include="Views\Shared\EditExperianDirectorData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
