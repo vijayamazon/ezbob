@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using Areas.Underwriter.Models;
@@ -9,6 +10,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.ExperianParser;
 	using EZBob.DatabaseLib;
+	using log4net;
 
 	public class CompanyScoreModel
 	{
@@ -61,9 +63,16 @@
 		public int LateAccounts { get; set; }
 		public string LateStatus { get; set; }
 		public List<FinDataModel> FinDataHistories { get; set; }
+		public List<NonLimScoreHistory> NonLimScoreHistories { get; set; }
 		public string Error { get; set; }
 
 		
+	}
+
+	public class NonLimScoreHistory
+	{
+		public int Score { get; set; }
+		public DateTime ScoreDate { get; set; }
 	}
 
 	public class FinDataModel
@@ -76,6 +85,7 @@
 
 	public class CompanyScoreModelBuilder
 	{
+		private static readonly ILog Log = LogManager.GetLogger(typeof(CompanyScoreModelBuilder));
 		public CompanyScoreModel Create(Customer customer)
 		{
 			ExperianParserOutput oOutput = customer.ParseExperian(ExperianParserFacade.Target.Company);
@@ -199,6 +209,29 @@
 			var numOfCCjs2Years = oResult.GetValue("Non-Limited CCJ Summary", "Total judgment count in last 13 to 24 months");
 			model.Ccjs = (string.IsNullOrEmpty(numOfCCjsYear) ? 0 : int.Parse(numOfCCjsYear)) +
 						 (string.IsNullOrEmpty(numOfCCjs2Years) ? 0 : int.Parse(numOfCCjs2Years));
+
+			if (oResult.Dataset.ContainsKey("Score History"))
+			{
+				if (oResult.Dataset["Score History"].Data.Any())
+				{
+					model.NonLimScoreHistories = new List<NonLimScoreHistory>();
+					foreach (var score in oResult.Dataset["Score History"].Data)
+					{
+						try
+						{
+							model.NonLimScoreHistories.Add(new NonLimScoreHistory
+								{
+									Score = (int) GetDecimalValueFromDataItem(score, "Score"),
+									ScoreDate = DateTime.ParseExact(GetValue(score, "Date"), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+								});
+						}
+						catch (Exception ex)
+						{
+							Log.Warn("failed to parse non limited score history", ex);
+						}
+					}
+				}
+			}
 			return model;
 		}
 

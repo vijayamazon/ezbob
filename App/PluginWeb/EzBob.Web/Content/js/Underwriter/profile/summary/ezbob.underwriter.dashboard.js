@@ -202,7 +202,8 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         EzBob.handleUserLayoutSetting();
     },
 
-    experianSpark: function() {
+    experianSpark: function () {
+        var that = this;
         if (this.experianModel && this.experianModel.get('ConsumerHistory')) {
             var historyConsumerSorted = _.sortBy(this.experianModel.get('ConsumerHistory'), function (history) {
                 return history.Date;
@@ -223,8 +224,15 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             var companyHistoryCais = _.pluck(historyCompanyScoresSorted, 'Balance').join(',');
             this.$el.find(".companyScoreGraph0").attr('values', companyHistoryScores);
             this.$el.find(".companyCaisBalanceGraph0").attr('values', companyHistoryCais);
-            
-
+        }
+        
+        if (this.expCompany) {
+            _.each(this.expCompany, function(c, i) {
+                if (c.NonLimScoreHistories && c.NonLimScoreHistories.length > 0) {
+                    var nonLimHistoryScore = _.pluck(c.NonLimScoreHistories, 'Score').join(',');
+                    that.$el.find(".companyScoreGraph" + i).attr('values', nonLimHistoryScore);
+                }
+            });
         }
         this.$el.find(".inline-sparkline").sparkline("html", {
             width: "100%",

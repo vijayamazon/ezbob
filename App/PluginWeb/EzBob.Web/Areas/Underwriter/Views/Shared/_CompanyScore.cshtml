@@ -115,7 +115,9 @@
 			var oMetaData = response.dataset[i].MetaData || {};
 
 			// console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
-
+            if (oMetaData.ID == 'DN40') { //skipping drawing of non limited score history
+                continue;
+            }
 			var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width table' : 'table';
 
 			if (oMetaData.ID == 'DL23SHAREHOLDING') {

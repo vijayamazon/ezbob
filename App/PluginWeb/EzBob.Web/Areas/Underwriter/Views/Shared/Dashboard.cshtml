@@ -296,7 +296,9 @@
                 <div class="box-content">
                     <%if(company[0].Error){%>
                         <h3><%-company[0].Error%></h3>
-                    <%}else{%>
+                    <%} else if(company[0].CompanyRefNum == 'NotFound'){%>
+                        <h3>Company not found</h3>
+                    <%} else{%>
                     <div class="tabbable tabs-left">
                         <ul class="nav nav-tabs active">
                             <%_.each(company, function(c, i){

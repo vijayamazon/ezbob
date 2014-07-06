@@ -1,4 +1,5 @@
-﻿[
+UPDATE dbo.ConfigurationVariables
+SET Value = '[
 	{
 		"Name": "Locality Resolution List Data Group",
 
@@ -818,3 +819,7 @@
 		]
 	}
 ]
+'
+WHERE Name = 'CompanyScoreNonLimitedParserConfiguration'
+GO
+
