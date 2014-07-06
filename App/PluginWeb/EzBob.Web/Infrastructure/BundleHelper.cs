@@ -42,6 +42,7 @@
 				//custom css
 				.Add("~/Content/css/profile.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
+				.Add("~/Content/css/edit-experian-director-data.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");
 		} // RenderProfileCss
 
@@ -84,6 +85,7 @@
 				.Add("~/Content/css/hmrc-upload-ui.css")
 				.Add("~/Content/css/hmrc-manual-ui.css")
 				.Add("~/Content/css/Permission.css")
+				.Add("~/Content/css/edit-experian-director-data.css")
 
 				.MvcRender("~/Content/css/min/combined_#.css");
 		} // RenderUnderwriterCss

@@ -18,7 +18,33 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		'click .download-signed-document': 'downloadSignedDocument',
 		'click .add-director': 'addDirectorClicked',
 		'click .toggle-all-signers': 'toggleAllSigners',
+		'click .btn-edit-director': 'startEditDirector',
 	}, // events
+
+	startEditDirector: function(event) {
+		var oRow = $(event.target).closest('TR.experian-director');
+
+		if (oRow.length !== 1)
+			return;
+
+		var oView = new EzBob.EditExperianDirectorView({
+			data: oRow.data('for-edit'),
+
+			saveUrl: window.gRootPath + 'Customer/CustomerDetails/SaveExperianDirector',
+
+			row: oRow,
+
+			editBtn: oRow.find('.btn-edit-director'),
+			saveBtn: oRow.find('.btn-save-director'),
+			cancelBtn: oRow.find('.btn-cancel-edit'),
+
+			emailCell: oRow.find('.grid-item-Email'),
+			mobilePhoneCell: oRow.find('.grid-item-MobilePhone'),
+			addressCell: oRow.find('.grid-item-Address'),
+		});
+
+		oView.render();
+	}, // startEditDirector
 
 	toggleAllSigners: function() {
 		var oChk = this.$el.find('.toggle-all-signers');
@@ -278,8 +304,8 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			var oSignersListOpts = self.getDataTableOpts(oResponse.signers, 'FirstName,LastName,Email,MobilePhone');
 			oSignersListOpts.fnRowCallback = _.bind(self.signersListRowCallback, self);
 			oSignersListOpts.aoColumns.unshift(
-				{ sClass: ['grid-item-IsSelected center'], mData: null, },
-				{ sClass: ['grid-item-Source center'], mData: 'Type', mRender: function(sType) {
+				{ sClass: 'grid-item-IsSelected center', mData: null, },
+				{ sClass: 'grid-item-Source center', mData: 'Type', mRender: function(sType) {
 					var sClass = 'fa-circle-o';
 					var bHide = false;
 					var sSource = '';
@@ -310,9 +336,10 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			);
 
 			oSignersListOpts.aoColumns.push(
-				{ sClass: ['grid-item-Address'], mData: null, mRender: function(ignored, sType, oData) {
+				{ sClass: 'grid-item-Address', mData: null, mRender: function(ignored, sType, oData) {
 					return _.filter([oData.Line1, oData.Line2, oData.Line3, oData.Town, oData.County, oData.Postcode], $.trim).join(', ');
-				}}
+				}},
+				{ sClass: 'grid-item-Controls narrow-as-possible', mData: null, }
 			);
 
 			var oTbl = self.$el.find('#esigners-list');
@@ -340,6 +367,18 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	signersListRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 		var oRow = $(oTR);
 
+		oRow.data('for-edit', new EzBob.EditExperianDirectorData({
+			directorID: oData.DirectorID,
+			email: oData.Email,
+			mobilePhone: oData.MobilePhone,
+			line1: oData.Line1,
+			line2: oData.Line2,
+			line3: oData.Line3,
+			town: oData.Town,
+			county: oData.County,
+			postcode: oData.Postcode,
+		}));
+
 		this.$el.find('.do-send').data('CustomerID', oData.CustomerID);
 
 		if (!oData.IsDirector)
@@ -355,6 +394,19 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		});
 
 		oRow.find('.grid-item-IsSelected').empty().append(oSelected);
+
+		var oControls = oRow.find('.grid-item-Controls').empty();
+
+		if (oData.Type === 'experian') {
+			oControls
+				.append($('<button class="btn btn-primary btn-edit-director"><i class="fa fa-edit"></i> Edit</button>'))
+				.append($(
+					'<button class="btn btn-primary btn-save-director hide"><i class="fa fa-save"></i> Save</button>' +
+					'<button class="btn btn-primary btn-cancel-edit hide"><i class="fa fa-undo"></i> Cancel</button>'
+				));
+
+			oRow.addClass('experian-director');
+		} // if
 	}, // signersListRowCallback
 	// ReSharper restore UnusedParameter
 

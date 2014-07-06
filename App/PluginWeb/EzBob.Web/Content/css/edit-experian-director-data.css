@@ -1,0 +1,25 @@
+﻿#signature-monitor table#esigners-list .btn {
+	width: 82px;
+	display: block;
+}
+
+#signature-monitor table#esigners-list .btn-cancel-edit {
+	margin-top: 0.3em;
+}
+
+#signature-monitor table#esigners-list .attardi-input {
+	width: 220px;
+}
+
+#signature-monitor table#esigners-list .more-rows,
+#signature-monitor table#esigners-list td.edit-mode {
+	padding-top: 20px;
+}
+
+#signature-monitor table#esigners-list .form_field {
+	width: 200px;
+}
+
+#signature-monitor table#esigners-list .field_status {
+	float: none;
+}

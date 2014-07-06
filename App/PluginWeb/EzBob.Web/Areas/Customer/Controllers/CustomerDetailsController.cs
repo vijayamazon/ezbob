@@ -562,6 +562,37 @@
 
 		#endregion method SaveEditHistory
 
+		#region method SaveExperianDirector
+
+		[HttpPost]
+		public JsonResult SaveExperianDirector(
+			int directorID,
+			string email,
+			string mobilePhone,
+			string line1,
+			string line2,
+			string line3,
+			string town,
+			string county,
+			string postcode
+		) {
+			ms_oLog.Debug("Saving Experian director: {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
+				directorID,
+				email,
+				mobilePhone,
+				line1,
+				line2,
+				line3,
+				town,
+				county,
+				postcode
+			);
+			// TODO
+			return Json(new { success = true, error = string.Empty, });
+		} // SaveExperianDirector
+
+		#endregion method SaveExperianDirector
+
 		#endregion public
 
 		#region private

@@ -25,16 +25,29 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 		var aryData = [];
 
 		_.each(company.Directors, function(director) {
+			var bHasAddress = director.DirectorAddress && director.DirectorAddress[0];
+
 			aryData.push({
 				id: director.Id,
 				name: director.Name + ' ' + director.Middle + ' ' + director.Surname,
 				email: director.Email,
 				phone: director.Phone,
 				birthDate: director.DateOfBirth,
-				address: (director.DirectorAddress && director.DirectorAddress[0] ? director.DirectorAddress[0].FormattedAddress : ''),
+				address: (bHasAddress ? director.DirectorAddress[0].FormattedAddress : ''),
 				isShareholder: director.IsShareholder,
 				isDirector: director.IsDirector,
 				isExperian: director.IsExperian,
+				forEdit:  new EzBob.EditExperianDirectorData({
+					directorID: director.Id,
+					email: director.Email,
+					mobilePhone: director.Phone,
+					line1: (bHasAddress ? director.DirectorAddress[0].Line1 : ''),
+					line2: (bHasAddress ? director.DirectorAddress[0].Line2 : ''),
+					line3: (bHasAddress ? director.DirectorAddress[0].Line3 : ''),
+					town: (bHasAddress ? director.DirectorAddress[0].Town : ''),
+					county: (bHasAddress ? director.DirectorAddress[0].County : ''),
+					postcode: (bHasAddress ? director.DirectorAddress[0].Postcode : ''),
+				}),
 			});
 		});
 
@@ -52,6 +65,8 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 
 	directorsListRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 		var oRow = $(oTR);
+
+		oRow.data('for-edit', oData.forEdit);
 
 		if (oData.isExperian) {
 			var oBtn = this.$el.find('.templates').find('.btn-edit-director').clone(true)

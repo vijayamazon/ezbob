@@ -429,6 +429,7 @@
     <Content Include="Content\css\broker.css" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
+    <Content Include="Content\css\edit-experian-director-data.css" />
     <Content Include="Content\css\hmrc-manual-ui.css" />
     <Content Include="Content\css\hmrc-upload-ui.css" />
     <Content Include="Content\css\images\300x250.jpg" />
