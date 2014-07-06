@@ -170,7 +170,7 @@
                                     <div class="right-seperator">
                                         <div class="text-center experian-canvas">
                                             <div>Indebtedness index</div>
-                                            <canvas id="consumerCIICanvas" width="100" height="100" data-color="#a7a7a7" data-percent="<%-experian.CII/100%>"></canvas>
+                                            <canvas id="consumerCIICanvas" width="100" height="100" data-color="#a7a7a7" data-percent="<%-Math.abs(experian.CII)/100%>"></canvas>
                                             <div class="half-donut-caption"><%-experian.CII%></div>
                                         </div>
                                         <div class="">
