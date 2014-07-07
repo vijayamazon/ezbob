@@ -270,6 +270,11 @@
 		#region method ExtractValue
 
 		private Tuple<decimal, bool> ExtractValue(Dictionary<string, string> oValues, string sKeyBase) {
+			if (oValues == null || !oValues.Keys.Any())
+			{
+				return new Tuple<decimal, bool>(0, false);
+			}
+
 			string sValue = string.Empty;
 			int nFactor = 0;
 
