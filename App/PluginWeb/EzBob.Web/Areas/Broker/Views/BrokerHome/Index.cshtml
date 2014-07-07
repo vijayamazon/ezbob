@@ -647,6 +647,14 @@
 							<form id="customerFilesUploader" class="aka-column"><div class="dz-message"><span>Drag or click to upload files.</span></div></form>
 						</div>
 					</div>
+					
+					<div class="value-group directors-group aka-table table-big box">
+						<div class="box-title aka-caption">Directors/shareholders</div>
+
+						<div class="aka-row">
+							<div class="aka-column customer-directors-in-broker"></div>
+						</div>
+					</div>
 
 					@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/CustomerRelations/AddCustomerRelationsEntry.cshtml");}
 				</div>
@@ -686,6 +694,8 @@
 <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 	@{
+		Html.RenderPartial("~/Areas/Customer/Views/Profile/CompanyDirectorsTemplate.cshtml");
+
 		Html.RenderPartial("_GoogleTagManager");
 		Html.RenderPartial("security_template");
 

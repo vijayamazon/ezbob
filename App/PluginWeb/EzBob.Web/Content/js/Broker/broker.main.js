@@ -53,10 +53,11 @@ $(document).ready(function() {
 		var oLinks = $('.marketing-files');
 		var sTemplate = oLinks.attr('data-url-template');
 
-		var crm = oResponse.crm;
-		EzBob.CrmActions = crm.CrmActions;
-		EzBob.CrmStatuses = crm.CrmStatuses;
-		EzBob.CrmRanks = crm.CrmRanks;
+		EzBob.CrmActions = data.Crm.CrmActions;
+		EzBob.CrmStatuses = data.Crm.CrmStatuses;
+		EzBob.CrmRanks = data.Crm.CrmRanks;
+
+		_.each(data.Crm.CrmStatuses, function(x) { x.Statuseses = x.Statuses; });
 
 		_.each(data.Files, function(fd) {
 			oLinks.append($('<li />').append(

@@ -1,16 +1,17 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
 	using System.Collections.Generic;
+	using System.Linq;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils;
 
 	public class CrmLoadLookups : AStrategy {
 		#region constructor
 
 		public CrmLoadLookups(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			Actions = new List<Entry>();
-			Statuses = new List<Entry>();
-			Ranks = new List<Entry>();
+			Actions = new List<IdNameModel>();
+			Statuses = new List<CrmStatusGroup>();
+			Ranks = new List<IdNameModel>();
 		} // constructor
 
 		#endregion constructor
@@ -25,37 +26,28 @@
 
 		#region property Actions
 
-		public virtual List<Entry> Actions { get; private set; } // Actions
+		public virtual List<IdNameModel> Actions { get; private set; } // Actions
 
 		#endregion property Actions
 
 		#region property Statuses
 
-		public virtual List<Entry> Statuses { get; private set; } // Statuses
+		public virtual List<CrmStatusGroup> Statuses { get; private set; } // Statuses
 
 		#endregion property Statuses
 
 		#region property Ranks
 
-		public virtual List<Entry> Ranks { get; private set; } // Statuses
+		public virtual List<IdNameModel> Ranks { get; private set; } // Statuses
 
 		#endregion property Ranks
-
-		#region class Entry (helper)
-
-		public class Entry : ITraversable {
-			public int ID { get; set; }
-			public string Name { get; set; }
-		} // class Entry
-
-		#endregion class Entry (helper)
 
 		#region method Execute
 
 		public override void Execute() {
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
-					Entry e = sr.Fill<Entry>();
+					IdNameModel e = sr.Fill<IdNameModel>();
 					Actions.Add(e);
 					return ActionResult.Continue;
 				},
@@ -65,24 +57,47 @@
 
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
-					Entry e = sr.Fill<Entry>();
-					Statuses.Add(e);
-					return ActionResult.Continue;
-				},
-				"CrmLoadStatuses",
-				CommandSpecies.StoredProcedure
-			);
-
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) =>
-				{
-					Entry e = sr.Fill<Entry>();
+					IdNameModel e = sr.Fill<IdNameModel>();
 					Ranks.Add(e);
 					return ActionResult.Continue;
 				},
 				"CrmLoadRanks",
 				CommandSpecies.StoredProcedure
 			);
+
+			var oStatuses = new SortedDictionary<int, CrmStatusGroup>();
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nGroupID = sr["GroupID"];
+
+					CrmStatusGroup grp = null;
+
+					if (oStatuses.ContainsKey(nGroupID))
+						grp = oStatuses[nGroupID];
+					else {
+						grp = new CrmStatusGroup {
+							Id = nGroupID,
+							Name = sr["GroupName"],
+							Priority = sr["Priority"],
+							Statuses = new List<IdNameModel>(),
+						};
+
+						oStatuses[grp.Id] = grp;
+					} // if
+
+					grp.Statuses.Add(new IdNameModel {
+						Id = sr["StatusID"],
+						Name = sr["StatusName"],
+					});
+
+					return ActionResult.Continue;
+				},
+				"CrmLoadStatuses",
+				CommandSpecies.StoredProcedure
+			);
+
+			Statuses = oStatuses.Values.ToList();
 		} // Execute
 
 		#endregion method Execute

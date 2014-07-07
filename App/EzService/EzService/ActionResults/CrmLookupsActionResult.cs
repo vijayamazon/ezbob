@@ -1,7 +1,6 @@
 ﻿namespace EzService {
 	using System.Runtime.Serialization;
-
-	#region class CrmLookupsActionResult
+	using Ezbob.Backend.Models;
 
 	[DataContract]
 	public class CrmLookupsActionResult : ActionResult {
@@ -9,11 +8,9 @@
 		public IdNameModel[] Actions { get; set; } // Actions
 
 		[DataMember]
-		public IdNameModel[] Statuses { get; set; } // Statuses
+		public CrmStatusGroup[] Statuses { get; set; } // Statuses
 
 		[DataMember]
 		public IdNameModel[] Ranks { get; set; } // Ranks
 	} // class CrmLookupsActionResult
-
-	#endregion class CrmLookupsActionResult
 } // namespace EzService

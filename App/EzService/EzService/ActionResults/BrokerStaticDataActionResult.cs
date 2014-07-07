@@ -18,14 +18,8 @@
 
 		[DataMember]
 		public string Terms { get; set; }
-	} // class BrokerStaticDataActionResult
 
-	[DataContract]
-	public class IdNameModel
-	{
 		[DataMember]
-		public int Id { get; set; }
-		[DataMember]
-		public string Name { get; set; }
-	}
+		public CrmStaticModel Crm { get; set; }
+	} // class BrokerStaticDataActionResult
 } // namespace EzService

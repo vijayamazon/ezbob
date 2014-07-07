@@ -91,27 +91,14 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Actions" nillable="true" type="tns:ArrayOfIdNameModel" />
-          <xs:element minOccurs="0" name="Ranks" nillable="true" type="tns:ArrayOfIdNameModel" />
-          <xs:element minOccurs="0" name="Statuses" nillable="true" type="tns:ArrayOfIdNameModel" />
+          <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Actions" nillable="true" type="q2:ArrayOfIdNameModel" />
+          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Ranks" nillable="true" type="q3:ArrayOfIdNameModel" />
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Statuses" nillable="true" type="q4:ArrayOfCrmStatusGroup" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="CrmLookupsActionResult" nillable="true" type="tns:CrmLookupsActionResult" />
-  <xs:complexType name="ArrayOfIdNameModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="IdNameModel" nillable="true" type="tns:IdNameModel" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfIdNameModel" nillable="true" type="tns:ArrayOfIdNameModel" />
-  <xs:complexType name="IdNameModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="IdNameModel" nillable="true" type="tns:IdNameModel" />
   <xs:complexType name="BoolActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -126,7 +113,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="AccountInfo" nillable="true" type="q2:AccountsToUpdate" />
+          <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="AccountInfo" nillable="true" type="q5:AccountsToUpdate" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -146,7 +133,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Affordability" nillable="true" type="q3:ArrayOfAffordabilityData" />
+          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Affordability" nillable="true" type="q6:ArrayOfAffordabilityData" />
           <xs:element minOccurs="0" name="Models" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
@@ -157,7 +144,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" minOccurs="0" name="Value" nillable="true" type="q4:PricingModelModel" />
+          <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" minOccurs="0" name="Value" nillable="true" type="q7:PricingModelModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -179,7 +166,7 @@
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
           <xs:element minOccurs="0" name="HasValue" type="xs:boolean" />
-          <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q5:QuickOfferModel" />
+          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q8:QuickOfferModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -200,11 +187,11 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="BankStatement" nillable="true" type="q6:BankStatementDataModel" />
-          <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="BankStatementAnnualized" nillable="true" type="q7:BankStatementDataModel" />
-          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="RtiTaxMonthRawData" nillable="true" type="q8:ArrayOfRtiTaxMonthRawData" />
-          <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Summary" nillable="true" type="q9:ArrayOfVatReturnSummary" />
-          <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="VatReturnRawData" nillable="true" type="q10:ArrayOfVatReturnRawData" />
+          <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="BankStatement" nillable="true" type="q9:BankStatementDataModel" />
+          <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="BankStatementAnnualized" nillable="true" type="q10:BankStatementDataModel" />
+          <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="RtiTaxMonthRawData" nillable="true" type="q11:ArrayOfRtiTaxMonthRawData" />
+          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Summary" nillable="true" type="q12:ArrayOfVatReturnSummary" />
+          <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="VatReturnRawData" nillable="true" type="q13:ArrayOfVatReturnRawData" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -214,7 +201,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Periods" nillable="true" type="q11:ArrayOfVatReturnPeriod" />
+          <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Periods" nillable="true" type="q14:ArrayOfVatReturnPeriod" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -224,7 +211,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Utils" minOccurs="0" name="Value" nillable="true" type="q12:ElapsedTimeInfo" />
+          <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/Ezbob.Utils" minOccurs="0" name="Value" nillable="true" type="q15:ElapsedTimeInfo" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -266,7 +253,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Properties" nillable="true" type="q13:BrokerProperties" />
+          <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Properties" nillable="true" type="q16:BrokerProperties" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -276,7 +263,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Customers" nillable="true" type="q14:ArrayOfBrokerCustomerEntry" />
+          <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Customers" nillable="true" type="q17:ArrayOfBrokerCustomerEntry" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -286,7 +273,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q15:BrokerCustomerDetails" />
+          <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q18:BrokerCustomerDetails" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -296,7 +283,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q16:ArrayOfBrokerCustomerFile" />
+          <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q19:ArrayOfBrokerCustomerFile" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -331,7 +318,8 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q17:ArrayOfFileDescription" />
+          <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Crm" nillable="true" type="q20:CrmStaticModel" />
+          <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q21:ArrayOfFileDescription" />
           <xs:element minOccurs="0" name="MaxPerNumber" type="xs:int" />
           <xs:element minOccurs="0" name="MaxPerPage" type="xs:int" />
           <xs:element minOccurs="0" name="Terms" nillable="true" type="xs:string" />
@@ -345,8 +333,8 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q18:ArrayOfEsignature" />
-          <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="PotentialSigners" nillable="true" type="q19:ArrayOfEsigner" />
+          <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q22:ArrayOfEsignature" />
+          <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="PotentialSigners" nillable="true" type="q23:ArrayOfEsigner" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

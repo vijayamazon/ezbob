@@ -6,9 +6,16 @@ ALTER PROCEDURE CrmLoadStatuses
 AS
 BEGIN
 	SELECT
-		Id AS ID,
-		Name
+		s.Id AS StatusID,
+		s.Name AS StatusName,
+		g.Id AS GroupID,
+		g.Name AS GroupName,
+		g.Priority AS Priority
 	FROM
-		CRMStatuses
+		CRMStatuses s
+		INNER JOIN CRMStatusGroup g ON s.GroupId = g.Id
+	ORDER BY
+		g.Priority,
+		s.Id
 END
 GO

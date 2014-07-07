@@ -17,11 +17,8 @@
 	using Infrastructure.Attributes;
 	using Infrastructure.Filters;
 	using Models;
-	using NHibernate;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
-	using Underwriter.Models;
-	using log4net;
 
 	#endregion using
 
@@ -29,7 +26,7 @@
 		#region static constructor
 
 		static BrokerHomeController() {
-			m_oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
+			ms_oLog = new SafeILog(typeof(BrokerHomeController));
 		} // static constructor
 
 		#endregion static constructor
@@ -38,10 +35,9 @@
 
 		#region constructor
 
-		public BrokerHomeController(ISession session) {
-			_session = session;
+		public BrokerHomeController() {
 			m_oServiceClient = new ServiceClient();
-			m_oHelper = new BrokerHelper(m_oServiceClient, m_oLog);
+			m_oHelper = new BrokerHelper(m_oServiceClient, ms_oLog);
 		} // constructor
 
 		#endregion constructor
@@ -69,7 +65,7 @@
 			if (User.Identity.IsAuthenticated) {
 				oModel.Auth = m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : Constant.Broker.Forbidden;
 
-				m_oLog.Info("Broker page sent to browser with authentication result '{0}' for identified name '{1}'.", oModel.Auth, User.Identity.Name);
+				ms_oLog.Info("Broker page sent to browser with authentication result '{0}' for identified name '{1}'.", oModel.Auth, User.Identity.Name);
 			} // if
 
 			return View("Index", oModel);
@@ -99,9 +95,16 @@
 			int IsCaptchaEnabled,
 			int TermsID
 		) {
-			string sReferredBy = Request.Cookies.AllKeys.Contains(Constant.SourceRef) ? Request.Cookies[Constant.SourceRef].Value : "";
+			string sReferredBy = "";
 
-			m_oLog.Debug(
+			if (Request.Cookies.AllKeys.Contains(Constant.SourceRef)) {
+				var oCookie = Request.Cookies[Constant.SourceRef];
+
+				if (oCookie != null)
+					sReferredBy = oCookie.Value;
+			} // if
+
+			ms_oLog.Debug(
 				"Broker signup request:" +
 				"\n\tFirm name: {0}" +
 				"\n\tFirm reg num: {1}" +
@@ -138,14 +141,13 @@
 			} // if
 
 			if (User.Identity.IsAuthenticated) {
-				m_oLog.Warn("Signup request with contact email {0}: already authorised as {1}.", ContactEmail, User.Identity.Name);
+				ms_oLog.Warn("Signup request with contact email {0}: already authorised as {1}.", ContactEmail, User.Identity.Name);
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
 			BrokerPropertiesActionResult bp;
 
-			try
-			{
+			try {
 				bp = m_oServiceClient.Instance.BrokerSignup(
 					FirmName,
 					FirmRegNum,
@@ -155,7 +157,7 @@
 					MobileCode,
 					ContactOtherPhone,
 					EstimatedMonthlyClientAmount,
-					new Password(Password,Password2),
+					new Password(Password, Password2),
 					FirmWebSite,
 					EstimatedMonthlyAppCount,
 					IsCaptchaEnabled != 0,
@@ -163,20 +165,19 @@
 					sReferredBy
 					);
 
-				if (!string.IsNullOrEmpty(bp.Properties.ErrorMsg))
-				{
-					m_oLog.Warn("Failed to signup as a broker. {0}", bp.Properties.ErrorMsg);
+				if (!string.IsNullOrEmpty(bp.Properties.ErrorMsg)) {
+					ms_oLog.Warn("Failed to signup as a broker. {0}", bp.Properties.ErrorMsg);
 					return new BrokerForJsonResult(bp.Properties.ErrorMsg);
 				}
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to signup as a broker.");
+				ms_oLog.Alert(e, "Failed to signup as a broker.");
 				return new BrokerForJsonResult("Registration failed. Please contact customer care.");
 			} // try
 
 			BrokerHelper.SetAuth(ContactEmail);
 
-			m_oLog.Debug("Broker signup succeeded for: {0}", ContactEmail);
+			ms_oLog.Debug("Broker signup succeeded for: {0}", ContactEmail);
 
 			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties) { antiforgery_token = AntiForgery.GetHtml().ToString() };
 		} // Signup
@@ -198,7 +199,7 @@
 				return new BrokerForJsonResult { antiforgery_token = AntiForgery.GetHtml().ToString() };
 			} // if
 
-			m_oLog.Warn(
+			ms_oLog.Warn(
 				"Logoff request with contact email {0} while {1} logged in.",
 				sContactEmail,
 				User.Identity.IsAuthenticated ? "broker " + User.Identity.Name + " is" : "not"
@@ -215,10 +216,10 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Login(string LoginEmail, string LoginPassword) {
-			m_oLog.Debug("Broker login request: {0}", LoginEmail);
+			ms_oLog.Debug("Broker login request: {0}", LoginEmail);
 
 			if (User.Identity.IsAuthenticated) {
-				m_oLog.Warn("Login request with contact email {0}: already authorised as {1}.", LoginEmail, User.Identity.Name);
+				ms_oLog.Warn("Login request with contact email {0}: already authorised as {1}.", LoginEmail, User.Identity.Name);
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
@@ -227,7 +228,7 @@
 			if (bp == null)
 				return new BrokerForJsonResult("Failed to log in.");
 
-			m_oLog.Debug("Broker login succeeded for: {0}", LoginEmail);
+			ms_oLog.Debug("Broker login succeeded for: {0}", LoginEmail);
 
 			return new PropertiesBrokerForJsonResult(oProperties: bp) { antiforgery_token = AntiForgery.GetHtml().ToString() };
 		} // Login
@@ -240,10 +241,10 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult RestorePassword(string ForgottenMobile, string ForgottenMobileCode) {
-			m_oLog.Debug("Broker restore password request: phone # {0} with code {1}", ForgottenMobile, ForgottenMobileCode);
+			ms_oLog.Debug("Broker restore password request: phone # {0} with code {1}", ForgottenMobile, ForgottenMobileCode);
 
 			if (User.Identity.IsAuthenticated) {
-				m_oLog.Warn("Request with mobile phone {0} and code {1}: already authorised as {2}.", ForgottenMobile, ForgottenMobileCode, User.Identity.Name);
+				ms_oLog.Warn("Request with mobile phone {0} and code {1}: already authorised as {2}.", ForgottenMobile, ForgottenMobileCode, User.Identity.Name);
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
@@ -251,11 +252,11 @@
 				m_oServiceClient.Instance.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to restore password for a broker with phone # {0}.", ForgottenMobile);
+				ms_oLog.Alert(e, "Failed to restore password for a broker with phone # {0}.", ForgottenMobile);
 				return new BrokerForJsonResult("Failed to restore password.");
 			} // try
 
-			m_oLog.Debug("Broker restore password succeded for phone # {0}", ForgottenMobile);
+			ms_oLog.Debug("Broker restore password succeded for phone # {0}", ForgottenMobile);
 
 			return new BrokerForJsonResult();
 		} // RestorePassword
@@ -268,7 +269,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult LoadProperties(string sContactEmail) {
-			m_oLog.Debug("Broker load properties request for contact email {0}", sContactEmail);
+			ms_oLog.Debug("Broker load properties request for contact email {0}", sContactEmail);
 
 			var oIsAuthResult = IsAuth<PropertiesBrokerForJsonResult>("Load properties", sContactEmail);
 			if (oIsAuthResult != null)
@@ -280,11 +281,11 @@
 				oResult = m_oServiceClient.Instance.BrokerLoadOwnProperties(sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to load properties request for contact email {0}", sContactEmail);
+				ms_oLog.Alert(e, "Failed to load properties request for contact email {0}", sContactEmail);
 				return new PropertiesBrokerForJsonResult("Failed to load broker properties.");
 			} // try
 
-			m_oLog.Debug("Broker load customers properties for contact email {0} complete.", sContactEmail);
+			ms_oLog.Debug("Broker load customers properties for contact email {0} complete.", sContactEmail);
 
 			return new PropertiesBrokerForJsonResult(oProperties: oResult.Properties);
 		} // LoadProperties
@@ -297,7 +298,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult LoadCustomers(string sContactEmail) {
-			m_oLog.Debug("Broker load customers request for contact email {0}", sContactEmail);
+			ms_oLog.Debug("Broker load customers request for contact email {0}", sContactEmail);
 
 			var oIsAuthResult = IsAuth<CustomerListBrokerForJsonResult>("Load customers", sContactEmail);
 			if (oIsAuthResult != null)
@@ -309,11 +310,11 @@
 				oResult = m_oServiceClient.Instance.BrokerLoadCustomerList(sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to load customers request for contact email {0}", sContactEmail);
+				ms_oLog.Alert(e, "Failed to load customers request for contact email {0}", sContactEmail);
 				return new CustomerListBrokerForJsonResult("Failed to load customer list.");
 			} // try
 
-			m_oLog.Debug("Broker load customers request for contact email {0} complete.", sContactEmail);
+			ms_oLog.Debug("Broker load customers request for contact email {0} complete.", sContactEmail);
 
 			return new CustomerListBrokerForJsonResult(oCustomers: oResult.Customers);
 		} // LoadCustomers
@@ -326,7 +327,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult LoadCustomerDetails(string sCustomerID, string sContactEmail) {
-			m_oLog.Debug("Broker load customer details request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
+			ms_oLog.Debug("Broker load customer details request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 
 			var oIsAuthResult = IsAuth<CustomerDetailsBrokerForJsonResult>("Load customer details for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
@@ -338,11 +339,11 @@
 				oDetails = m_oServiceClient.Instance.BrokerLoadCustomerDetails(sCustomerID, sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to load customer details request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
+				ms_oLog.Alert(e, "Failed to load customer details request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 				return new CustomerDetailsBrokerForJsonResult("Failed to load customer details.");
 			} // try
 
-			m_oLog.Debug("Broker load customer details request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
+			ms_oLog.Debug("Broker load customer details request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
 
 			return new CustomerDetailsBrokerForJsonResult(oDetails: oDetails.Data);
 		} // LoadCustomerDetails
@@ -355,7 +356,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult LoadStaticData() {
-			m_oLog.Debug("Broker loading CRM details started...");
+			ms_oLog.Debug("Broker loading CRM details started...");
 
 			BrokerStaticDataActionResult oResult;
 
@@ -363,7 +364,7 @@
 				oResult = m_oServiceClient.Instance.BrokerLoadStaticData(false);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Broker loading static data failed.");
+				ms_oLog.Alert(e, "Broker loading static data failed.");
 
 				oResult = new BrokerStaticDataActionResult {
 					MaxPerNumber = 3,
@@ -373,11 +374,10 @@
 					TermsID = 0,
 				};
 			} // try
-			var b = new CustomerRelationsModelBuilder(null, null, _session);
-			var crm = b.GetStaticCrmModel();
-			m_oLog.Debug("Broker loading CRM details complete.");
 
-			return Json(new {success = true, data = oResult, crm = crm}, JsonRequestBehavior.AllowGet);
+			ms_oLog.Debug("Broker loading CRM details complete.");
+
+			return Json(new { success = true, data = oResult, }, JsonRequestBehavior.AllowGet);
 		} // LoadStaticData
 
 		#endregion action LoadStaticData
@@ -388,7 +388,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult SaveCrmEntry(string type, int action, int status, string comment, string customerId, string sContactEmail) {
-			m_oLog.Debug(
+			ms_oLog.Debug(
 				"\nBroker saving CRM entry started:" +
 				"\n\ttype: {0}" +
 				"\n\taction: {1}" +
@@ -409,7 +409,7 @@
 				oResult = m_oServiceClient.Instance.BrokerSaveCrmEntry(type, action, status, comment, customerId, sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e,
+				ms_oLog.Alert(e,
 					"\nBroker saving CRM entry failed for:" +
 					"\n\ttype: {0}" +
 					"\n\taction: {1}" +
@@ -422,7 +422,7 @@
 				return new BrokerForJsonResult("Failed to save CRM entry.");
 			} // try
 
-			m_oLog.Debug(
+			ms_oLog.Debug(
 				"\nBroker saving CRM entry {5} for:" +
 				"\n\ttype: {0}" +
 				"\n\taction: {1}" +
@@ -446,7 +446,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult LoadCustomerFiles(string sCustomerID, string sContactEmail) {
-			m_oLog.Debug("Broker load customer files request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
+			ms_oLog.Debug("Broker load customer files request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 
 			var oIsAuthResult = IsAuth<FileListBrokerForJsonResult>("Load customer files for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
@@ -458,11 +458,11 @@
 				oFiles = m_oServiceClient.Instance.BrokerLoadCustomerFiles(sCustomerID, sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to load customer files request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
+				ms_oLog.Alert(e, "Failed to load customer files request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 				return new FileListBrokerForJsonResult("Failed to load customer files.");
 			} // try
 
-			m_oLog.Debug("Broker load customer files request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
+			ms_oLog.Debug("Broker load customer files request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
 
 			return new FileListBrokerForJsonResult(oFileList: oFiles.Files);
 		} // LoadCustomerFiles
@@ -477,7 +477,7 @@
 
 			string sCustomerID = Request.Headers["ezbob-broker-customer-id"];
 
-			m_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
+			ms_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 
 			BrokerForJsonResult oIsAuthResult = IsAuth("Upload customer file for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
@@ -491,7 +491,7 @@
 				HttpPostedFileBase oFile = Request.Files[i];
 
 				if (oFile == null) {
-					m_oLog.Alert("File object #{0} out of {1} is null.", (i + 1), nFileCount);
+					ms_oLog.Alert("File object #{0} out of {1} is null.", (i + 1), nFileCount);
 					oErrorList.Add("Failed to upload file #" + (i + 1));
 					continue;
 				} // if
@@ -502,14 +502,14 @@
 
 				if (nRead != oFile.ContentLength) {
 					oErrorList.Add("Failed to fully file #" + (i + 1) + ": " + oFile.FileName);
-					m_oLog.Alert(
+					ms_oLog.Alert(
 						"Failed to fully read file #{0}: {2} out of {1}; only {3} bytes out of {4} have been read.",
 						(i + 1), nFileCount, oFile.FileName, nRead, oFile.ContentLength
 					);
 					continue;
 				} // if
 
-				m_oLog.Debug(
+				ms_oLog.Debug(
 					"File #{0}: {2} out of {1}; file size is {3} bytes.",
 					(i + 1), nFileCount, oFile.FileName, nRead
 				);
@@ -518,12 +518,12 @@
 					m_oServiceClient.Instance.BrokerSaveUploadedCustomerFile(sCustomerID, sContactEmail, oFileContents, oFile.FileName);
 				}
 				catch (Exception e) {
-					m_oLog.Alert(e, "Failed to save file #{0}: {2} out of {1}.", (i + 1), nFileCount, oFile.FileName);
+					ms_oLog.Alert(e, "Failed to save file #{0}: {2} out of {1}.", (i + 1), nFileCount, oFile.FileName);
 					oErrorList.Add("Failed to save file #" + (i + 1) + ": " + oFile.FileName);
 				} // try
 			} // for each file
 
-			m_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
+			ms_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
 
 			return new BrokerForJsonResult(oErrorList.Count == 0 ? string.Empty : string.Join(" ", oErrorList));
 		} // HandleUploadFile
@@ -534,7 +534,7 @@
 
 		[HttpGet]
 		public FileResult DownloadCustomerFile(string sCustomerID, string sContactEmail, int nFileID) {
-			m_oLog.Debug("Broker download customer file request for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
+			ms_oLog.Debug("Broker download customer file request for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
 
 			BrokerForJsonResult oIsAuthResult = IsAuth("Download customer file for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
@@ -546,16 +546,16 @@
 				oFile = m_oServiceClient.Instance.BrokerDownloadCustomerFile(sCustomerID, sContactEmail, nFileID);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
+				ms_oLog.Alert(e, "Failed to download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
 				throw new Exception("Failed to download requested file.");
 			} // try
 
 			if (string.IsNullOrWhiteSpace(oFile.Name)) {
-				m_oLog.Alert("Could not download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
+				ms_oLog.Alert("Could not download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
 				throw new Exception("Failed to download requested file.");
 			} // if
 
-			m_oLog.Debug("Broker download customer file request for customer {1} and contact email {0} with file id {2} complete.", sContactEmail, sCustomerID, nFileID);
+			ms_oLog.Debug("Broker download customer file request for customer {1} and contact email {0} with file id {2} complete.", sContactEmail, sCustomerID, nFileID);
 
 			string sFileExt = string.Empty;
 
@@ -578,18 +578,21 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult DeleteCustomerFiles(string sCustomerID, string sContactEmail, int[] aryFileIDs) {
 			string sErrorMsg = null;
+			string sFileIDList = string.Empty;
 
 			if (aryFileIDs == null)
 				sErrorMsg = "list of file ids is null after parsing";
 			else if (aryFileIDs.Length < 1)
 				sErrorMsg = "list of file ids is empty after parsing";
+			else
+				sFileIDList = string.Join(", ", aryFileIDs);
 
 			if (!string.IsNullOrWhiteSpace(sErrorMsg)) {
-				m_oLog.Alert("Failed to delete customer files request for customer {1} and contact email {0}: {2}.", sContactEmail, sCustomerID, sErrorMsg);
+				ms_oLog.Alert("Failed to delete customer files request for customer {1} and contact email {0}: {2}.", sContactEmail, sCustomerID, sErrorMsg);
 				return new BrokerForJsonResult("Failed to delete customer files.");
 			} // if
 
-			m_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, sCustomerID, string.Join(", ", aryFileIDs));
+			ms_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, sCustomerID, sFileIDList);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Delete customer files for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
@@ -599,11 +602,11 @@
 				m_oServiceClient.Instance.BrokerDeleteCustomerFiles(sCustomerID, sContactEmail, aryFileIDs);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, sCustomerID, string.Join(", ", aryFileIDs));
+				ms_oLog.Alert(e, "Failed to delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, sCustomerID, sFileIDList);
 				return new BrokerForJsonResult("Failed to delete customer files.");
 			} // try
 
-			m_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2} complete.", sContactEmail, sCustomerID, string.Join(", ", aryFileIDs));
+			ms_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2} complete.", sContactEmail, sCustomerID, sFileIDList);
 
 			return new BrokerForJsonResult();
 		} // DeleteCustomerFiles
@@ -616,7 +619,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult AddLead(string LeadFirstName, string LeadLastName, string LeadEmail, string LeadAddMode, string ContactEmail) {
-			m_oLog.Debug("Broker add lead request for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
+			ms_oLog.Debug("Broker add lead request for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
 
 			var oIsAuthResult = IsAuth("Add lead", ContactEmail);
 			if (oIsAuthResult != null)
@@ -626,11 +629,11 @@
 				m_oServiceClient.Instance.BrokerAddCustomerLead(LeadFirstName, LeadLastName, LeadEmail, LeadAddMode, ContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to add lead for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
+				ms_oLog.Alert(e, "Failed to add lead for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
 				return new BrokerForJsonResult("Failed to add customer lead.");
 			} // try
 
-			m_oLog.Debug("Broker add lead request for contact email {0}: {1} {2}, {3} - {4} complete.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
+			ms_oLog.Debug("Broker add lead request for contact email {0}: {1} {2}, {3} - {4} complete.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
 
 			return new BrokerForJsonResult();
 		} // AddLead
@@ -643,7 +646,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult SendInvitation(int nLeadID, string sContactEmail) {
-			m_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1}.", sContactEmail, nLeadID);
+			ms_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1}.", sContactEmail, nLeadID);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Send invitation", sContactEmail);
 			if (oIsAuthResult != null)
@@ -653,11 +656,11 @@
 				m_oServiceClient.Instance.BrokerLeadSendInvitation(nLeadID, sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to send invitation request for contact email {0} and lead id {1}.", sContactEmail, nLeadID);
+				ms_oLog.Alert(e, "Failed to send invitation request for contact email {0} and lead id {1}.", sContactEmail, nLeadID);
 				return new BrokerForJsonResult("Failed to send an invitation.");
 			} // try
 
-			m_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1} complete.", sContactEmail, nLeadID);
+			ms_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1} complete.", sContactEmail, nLeadID);
 
 			return new BrokerForJsonResult();
 		} // SendInvitation
@@ -670,7 +673,7 @@
 		public System.Web.Mvc.ActionResult FillWizard(int? nLeadID, string sLeadEmail, string sContactEmail) {
 			nLeadID = nLeadID ?? 0;
 
-			m_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
+			ms_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Send invitation", sContactEmail);
 			if (oIsAuthResult != null) {
@@ -681,7 +684,7 @@
 			} // if
 
 			if ((nLeadID > 0) && !string.IsNullOrWhiteSpace(sLeadEmail)) {
-				m_oLog.Warn("Both lead id ({0}) and lead email ({1}) specified while there can be only one.", nLeadID, sLeadEmail);
+				ms_oLog.Warn("Both lead id ({0}) and lead email ({1}) specified while there can be only one.", nLeadID, sLeadEmail);
 
 				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
@@ -695,7 +698,7 @@
 				bld = m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID.Value, sLeadEmail, sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to process fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
+				ms_oLog.Alert(e, "Failed to process fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
 
 				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
@@ -704,7 +707,7 @@
 			} // try
 
 			if (bld.LeadID < 1) {
-				m_oLog.Warn("Validated lead id is {0}. Source lead id is {1} lead email {2}.", bld.LeadID, nLeadID, sLeadEmail);
+				ms_oLog.Warn("Validated lead id is {0}. Source lead id is {1} lead email {2}.", bld.LeadID, nLeadID, sLeadEmail);
 
 				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
@@ -716,17 +719,19 @@
 			if (bld.CustomerID > 0)
 				BrokerHelper.SetAuth(bld.LeadEmail, HttpContext, "Customer");
 
+			// ReSharper disable ObjectCreationAsStatement
 			// This constructor sets Session data.
 			new WizardBrokerLeadModel(
 				Session,
 				bld.LeadID,
-				bld.LeadEmail, 
+				bld.LeadEmail,
 				bld.FirstName,
 				bld.LastName,
 				true
 			);
+			// ReSharper restore ObjectCreationAsStatement
 
-			m_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2} complete.", sContactEmail, nLeadID, sLeadEmail);
+			ms_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2} complete.", sContactEmail, nLeadID, sLeadEmail);
 
 			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
 		} // FillWizard
@@ -739,7 +744,7 @@
 		public System.Web.Mvc.ActionResult FinishWizardLater() {
 			var blm = new WizardBrokerLeadModel(Session);
 
-			m_oLog.Debug("Broker fill wizard later request: {0}", blm);
+			ms_oLog.Debug("Broker fill wizard later request: {0}", blm);
 
 			if (blm.BrokerFillsForCustomer) {
 				StringActionResult sar = null;
@@ -748,23 +753,23 @@
 					sar = m_oServiceClient.Instance.BrokerBackFromCustomerWizard(blm.LeadID);
 				}
 				catch (Exception e) {
-					m_oLog.Warn("Failed to retrieve broker details, falling back to customer's dashboard.", e);
+					ms_oLog.Warn(e, "Failed to retrieve broker details, falling back to customer's dashboard.");
 				} // try
 
 				if (sar == null)
-					m_oLog.Debug("Failed to retrieve broker details.");
+					ms_oLog.Debug("Failed to retrieve broker details.");
 				else {
 					BrokerHelper.SetAuth(null, HttpContext);
 
-					m_oLog.Debug("Restoring broker identity after filling customer wizard: '{0}'.", sar.Value);
+					ms_oLog.Debug("Restoring broker identity after filling customer wizard: '{0}'.", sar.Value);
 					BrokerHelper.SetAuth(sar.Value);
 
 					blm.Unset();
-					return RedirectToAction("Index", "BrokerHome", new {Area = "Broker"});
+					return RedirectToAction("Index", "BrokerHome", new { Area = "Broker" });
 				} // if
 			} // if
 
-			m_oLog.Debug("Broker fill wizard later request failed, redirecting back to customer wizard.");
+			ms_oLog.Debug("Broker fill wizard later request failed, redirecting back to customer wizard.");
 
 			blm.Unset();
 			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
@@ -776,7 +781,7 @@
 
 		public System.Web.Mvc.ActionResult DownloadFile(string fid) {
 			if (string.IsNullOrWhiteSpace(fid)) {
-				m_oLog.Warn("Broker download file request: file with no id.");
+				ms_oLog.Warn("Broker download file request: file with no id.");
 				return HttpNotFound();
 			} // if
 
@@ -784,19 +789,19 @@
 
 			var oFiles = new MarketingFiles(m_oServiceClient);
 
-			m_oLog.Debug("Broker download file request: file with id {0}.", sFileName);
+			ms_oLog.Debug("Broker download file request: file with id {0}.", sFileName);
 
 			FileDescription fd = oFiles.Find(sFileName);
 
 			if (fd != null) {
 				string sPath = System.Web.HttpContext.Current.Server.MapPath("~" + BrokerHomeModel.MarketingFileLocation + fd.FileName);
 
-				m_oLog.Debug("Broker download file request: found file with id {0} of type {1} as {2}.", sFileName, fd.MimeType, sPath);
+				ms_oLog.Debug("Broker download file request: found file with id {0} of type {1} as {2}.", sFileName, fd.MimeType, sPath);
 
 				return File(sPath, fd.MimeType, fd.FileName);
 			} // if
 
-			m_oLog.Debug("Broker download file request: file with id {0} was not found.", sFileName);
+			ms_oLog.Debug("Broker download file request: file with id {0} was not found.", sFileName);
 
 			return HttpNotFound();
 		} // DownloadFile
@@ -809,24 +814,24 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult UpdatePassword(string ContactEmail, string OldPassword, string NewPassword, string NewPassword2) {
-			m_oLog.Debug("Broker update password request for contact email {0}", ContactEmail);
+			ms_oLog.Debug("Broker update password request for contact email {0}", ContactEmail);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Update password", ContactEmail);
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
 			if (ReferenceEquals(OldPassword, null) || ReferenceEquals(NewPassword, null) || ReferenceEquals(NewPassword2, null)) {
-				m_oLog.Warn("Cannot update password for contact email {0}: one of passwords not specified.", ContactEmail);
+				ms_oLog.Warn("Cannot update password for contact email {0}: one of passwords not specified.", ContactEmail);
 				return new BrokerForJsonResult("Cannot update password: some required fields are missing.");
 			} // if
 
 			if (NewPassword != NewPassword2) {
-				m_oLog.Warn("Cannot update password: passwords do not match.");
+				ms_oLog.Warn("Cannot update password: passwords do not match.");
 				return new BrokerForJsonResult("Cannot update password: passwords do not match.");
 			} // if
 
 			if (NewPassword == OldPassword) {
-				m_oLog.Warn("Cannot update password: new password is equal to the old one.");
+				ms_oLog.Warn("Cannot update password: new password is equal to the old one.");
 				return new BrokerForJsonResult("Cannot update password: new password is equal to the old one.");
 			} // if
 
@@ -840,16 +845,16 @@
 				);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to update password for contact email {0}", ContactEmail);
+				ms_oLog.Alert(e, "Failed to update password for contact email {0}", ContactEmail);
 				return new BrokerForJsonResult("Failed to update password.");
 			} // try
 
 			if (oResult == null) {
-				m_oLog.Warn("Failed to update password for contact email {0}", ContactEmail);
+				ms_oLog.Warn("Failed to update password for contact email {0}", ContactEmail);
 				return new BrokerForJsonResult("Failed to update password.");
 			} // if
 
-			m_oLog.Debug("Broker update password request for contact email {0} complete.", ContactEmail);
+			ms_oLog.Debug("Broker update password request for contact email {0} complete.", ContactEmail);
 
 			return new BrokerForJsonResult();
 		} // UpdatePassword
@@ -866,16 +871,21 @@
 			return IsAuth<BrokerForJsonResult>(sRequestDescription, sContactEmail);
 		} // IsAuth
 
-		private T IsAuth<T>(string sRequestDescription, string sContactEmail) where T: BrokerForJsonResult {
+		private T IsAuth<T>(string sRequestDescription, string sContactEmail) where T : BrokerForJsonResult {
 			if (!User.Identity.IsAuthenticated || (User.Identity.Name != sContactEmail)) {
-				m_oLog.Alert(
+				ms_oLog.Alert(
 					"{0} request with contact email {1}: {2}.",
 					sRequestDescription,
 					sContactEmail,
 					User.Identity.IsAuthenticated ? "authorised as " + User.Identity.Name : "not authenticated"
 				);
 
-				ConstructorInfo ci = typeof (T).GetConstructors().FirstOrDefault();
+				ConstructorInfo ci = typeof(T).GetConstructors().FirstOrDefault();
+
+				if (ci == null) {
+					ms_oLog.Alert("Failed to find a constructor for {0}.", typeof(T));
+					return (T)new BrokerForJsonResult("Not authorised.", false) { is_auth = false };
+				} // if
 
 				int nParamCount = ci.GetParameters().Length;
 
@@ -902,13 +912,12 @@
 		private readonly ServiceClient m_oServiceClient;
 		private readonly BrokerHelper m_oHelper;
 
-		private static readonly ASafeLog m_oLog;
-		private ISession _session;
+		private static readonly ASafeLog ms_oLog;
 
 		#endregion fields
 
 		#region result classes
-// ReSharper disable InconsistentNaming
+		// ReSharper disable InconsistentNaming
 
 		#region class BrokerForJsonResult
 
@@ -916,15 +925,15 @@
 			#region operator cast to JsonResult
 
 			public static implicit operator JsonResult(BrokerForJsonResult oResult) {
-				m_oLog.Debug(
+				ms_oLog.Debug(
 					"Controller output:\n\ttype: {0}\n\terror msg: {1}",
 					oResult.GetType(), oResult.error
 				);
 
 				return new JsonResult {
-					Data = oResult, 
+					Data = oResult,
 					ContentType = null,
-					ContentEncoding = null, 
+					ContentEncoding = null,
 					JsonRequestBehavior = JsonRequestBehavior.AllowGet,
 				};
 			} // operator JsonResult
@@ -934,8 +943,8 @@
 			#region constructor
 
 			public BrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null) {
-				is_auth = true;
-				error = sErrorMsg;
+				m_bIsAuth = true;
+				SetError(sErrorMsg);
 				m_bSuccess = bExplicitSuccess;
 			} // constructor
 
@@ -944,7 +953,7 @@
 			#region property success
 
 			public virtual bool success {
-				get { return m_bSuccess.HasValue ? m_bSuccess.Value : string.IsNullOrWhiteSpace(error); } 
+				get { return m_bSuccess.HasValue ? m_bSuccess.Value : string.IsNullOrWhiteSpace(error); }
 			} // success
 
 			private bool? m_bSuccess;
@@ -955,8 +964,12 @@
 
 			public virtual string error {
 				get { return m_sError; }
-				set { m_sError = (value ?? string.Empty).Trim(); }
+				set { SetError(value); }
 			} // error
+
+			private void SetError(string sError) {
+				m_sError = (sError ?? string.Empty).Trim();
+			} // SetError
 
 			private string m_sError;
 
@@ -964,7 +977,12 @@
 
 			#region property is_auth
 
-			public virtual bool is_auth { get; set; } // is_auth
+			public virtual bool is_auth {
+				get { return m_bIsAuth; }
+				set { m_bIsAuth = value; }
+			} // is_auth
+
+			private bool m_bIsAuth;
 
 			#endregion property is_auth
 
@@ -984,7 +1002,8 @@
 				string sErrorMsg = "",
 				bool? bExplicitSuccess = null,
 				BrokerProperties oProperties = null
-			) : base(sErrorMsg, bExplicitSuccess) {
+			)
+				: base(sErrorMsg, bExplicitSuccess) {
 				properties = oProperties ?? new BrokerProperties();
 			} // constructor
 
@@ -1000,7 +1019,8 @@
 				string sErrorMsg = "",
 				bool? bExplicitSuccess = null,
 				BrokerCustomerEntry[] oCustomers = null
-			) : base(sErrorMsg, bExplicitSuccess) {
+			)
+				: base(sErrorMsg, bExplicitSuccess) {
 				customers = oCustomers ?? new BrokerCustomerEntry[0];
 			} // constructor
 
@@ -1012,7 +1032,8 @@
 		#region class CustomerDetailsBrokerForJsonResult
 
 		public class CustomerDetailsBrokerForJsonResult : BrokerForJsonResult {
-			public CustomerDetailsBrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null, BrokerCustomerDetails oDetails = null) : base(sErrorMsg, bExplicitSuccess) {
+			public CustomerDetailsBrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null, BrokerCustomerDetails oDetails = null)
+				: base(sErrorMsg, bExplicitSuccess) {
 				crm_data = oDetails == null ? null : oDetails.CrmData;
 				personal_data = oDetails == null ? null : oDetails.PersonalData;
 			} // constructor
@@ -1027,7 +1048,8 @@
 		#region class FileListBrokerForJsonResult
 
 		public class FileListBrokerForJsonResult : BrokerForJsonResult {
-			public FileListBrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null, BrokerCustomerFile[] oFileList = null) : base(sErrorMsg, bExplicitSuccess) {
+			public FileListBrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null, BrokerCustomerFile[] oFileList = null)
+				: base(sErrorMsg, bExplicitSuccess) {
 				file_list = oFileList ?? new BrokerCustomerFile[0];
 			} // constructor
 
@@ -1036,7 +1058,7 @@
 
 		#endregion class FileListBrokerForJsonResult
 
-// ReSharper restore InconsistentNaming
+		// ReSharper restore InconsistentNaming
 		#endregion result classes
 
 		#region downloadable file descriptor
@@ -1061,7 +1083,7 @@
 			private readonly SortedDictionary<string, FileDescription> m_oAlphabetical;
 
 			private IEnumerable<FileDescription> Load(ServiceClient oServiceClient) {
-				m_oLog.Debug("Loading broker marketing files...");
+				ms_oLog.Debug("Loading broker marketing files...");
 
 				BrokerStaticDataActionResult flar = null;
 
@@ -1069,12 +1091,12 @@
 					flar = oServiceClient.Instance.BrokerLoadStaticData(true);
 				}
 				catch (Exception e) {
-					m_oLog.Alert(e, "Failed to load broker marketing files.");
+					ms_oLog.Alert(e, "Failed to load broker marketing files.");
 				} // try
 
 				FileDescription[] oResult = (flar == null ? null : flar.Files) ?? new FileDescription[0];
 
-				m_oLog.Debug("Loading broker marketing files complete, {0} file(s) loaded.", oResult.Length);
+				ms_oLog.Debug("Loading broker marketing files complete, {0} file(s) loaded.", oResult.Length);
 
 				return oResult;
 			} // Load

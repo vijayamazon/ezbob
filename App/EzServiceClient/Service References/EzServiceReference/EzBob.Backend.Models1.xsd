@@ -2,6 +2,34 @@
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfIdNameModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="IdNameModel" nillable="true" type="tns:IdNameModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfIdNameModel" nillable="true" type="tns:ArrayOfIdNameModel" />
+  <xs:complexType name="IdNameModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="IdNameModel" nillable="true" type="tns:IdNameModel" />
+  <xs:complexType name="ArrayOfCrmStatusGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CrmStatusGroup" nillable="true" type="tns:CrmStatusGroup" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCrmStatusGroup" nillable="true" type="tns:ArrayOfCrmStatusGroup" />
+  <xs:complexType name="CrmStatusGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Priority" type="xs:int" />
+      <xs:element minOccurs="0" name="Statuses" nillable="true" type="tns:ArrayOfIdNameModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CrmStatusGroup" nillable="true" type="tns:CrmStatusGroup" />
   <xs:simpleType name="ConfigTableType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="LoanOfferMultiplier" />
@@ -424,6 +452,14 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="BrokerCustomerFile" nillable="true" type="tns:BrokerCustomerFile" />
+  <xs:complexType name="CrmStaticModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CrmActions" nillable="true" type="tns:ArrayOfIdNameModel" />
+      <xs:element minOccurs="0" name="CrmRanks" nillable="true" type="tns:ArrayOfIdNameModel" />
+      <xs:element minOccurs="0" name="CrmStatuses" nillable="true" type="tns:ArrayOfCrmStatusGroup" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CrmStaticModel" nillable="true" type="tns:CrmStaticModel" />
   <xs:complexType name="ArrayOfFileDescription">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="FileDescription" nillable="true" type="tns:FileDescription" />

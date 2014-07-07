@@ -2,6 +2,7 @@
 	using System;
 	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.MailStrategies;
+	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
@@ -388,6 +389,23 @@
 				if (oMetaData.Status == ActionStatus.Done) {
 					oResult.MaxPerNumber = oInstance.MaxPerNumber;
 					oResult.MaxPerPage = oInstance.MaxPerPage;
+				} // if
+			}
+			catch (Exception e) {
+				Log.Alert(e, "Failed to retrieve SMS counts.");
+			} // try
+
+			try {
+				CrmLoadLookups oInstance;
+
+				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+
+				if (oMetaData.Status == ActionStatus.Done) {
+					oResult.Crm = new CrmStaticModel {
+						CrmActions = oInstance.Actions,
+						CrmRanks = oInstance.Ranks,
+						CrmStatuses = oInstance.Statuses,
+					};
 				} // if
 			}
 			catch (Exception e) {

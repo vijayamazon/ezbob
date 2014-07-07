@@ -72,9 +72,9 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />

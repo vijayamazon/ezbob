@@ -66,6 +66,10 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			return this;
 		} // if
 
+		var oDirsArea = this.$el.find('.customer-directors-in-broker');
+		oDirsArea.html($('#company-directors-template').html());
+		oDirsArea.find('h2').remove();
+
 		this.reloadData();
 
 		this.reloadFileList();

@@ -57,10 +57,12 @@
     <Compile Include="BrokerPropertiesModel.cs" />
     <Compile Include="Coin.cs" />
     <Compile Include="ConfigTable.cs" />
+    <Compile Include="CrmStatusGroup.cs" />
     <Compile Include="CustomerAddressModel.cs" />
     <Compile Include="EsignatureModel.cs" />
     <Compile Include="EsignerModel.cs" />
     <Compile Include="FormattingUtils.cs" />
+    <Compile Include="IdNameModel.cs" />
     <Compile Include="Password.cs" />
     <Compile Include="RejectionModel.cs" />
     <Compile Include="RtiTaxMonthRawData.cs" />

@@ -259,16 +259,16 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class CrmLookupsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ServiceClientProxy.EzServiceReference.IdNameModel[] ActionsField;
+        private Ezbob.Backend.Models.IdNameModel[] ActionsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ServiceClientProxy.EzServiceReference.IdNameModel[] RanksField;
+        private Ezbob.Backend.Models.IdNameModel[] RanksField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ServiceClientProxy.EzServiceReference.IdNameModel[] StatusesField;
+        private Ezbob.Backend.Models.CrmStatusGroup[] StatusesField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ServiceClientProxy.EzServiceReference.IdNameModel[] Actions {
+        public Ezbob.Backend.Models.IdNameModel[] Actions {
             get {
                 return this.ActionsField;
             }
@@ -281,7 +281,7 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ServiceClientProxy.EzServiceReference.IdNameModel[] Ranks {
+        public Ezbob.Backend.Models.IdNameModel[] Ranks {
             get {
                 return this.RanksField;
             }
@@ -294,7 +294,7 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ServiceClientProxy.EzServiceReference.IdNameModel[] Statuses {
+        public Ezbob.Backend.Models.CrmStatusGroup[] Statuses {
             get {
                 return this.StatusesField;
             }
@@ -1014,6 +1014,9 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class BrokerStaticDataActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.CrmStaticModel CrmField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.Models.FileDescription[] FilesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -1027,6 +1030,19 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int TermsIDField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.CrmStaticModel Crm {
+            get {
+                return this.CrmField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CrmField, value) != true)) {
+                    this.CrmField = value;
+                    this.RaisePropertyChanged("Crm");
+                }
+            }
+        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.FileDescription[] Files {
@@ -1253,67 +1269,6 @@ namespace ServiceClientProxy.EzServiceReference {
                     this.RecordsField = value;
                     this.RaisePropertyChanged("Records");
                 }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="IdNameModel", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class IdNameModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NameField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Id {
-            get {
-                return this.IdField;
-            }
-            set {
-                if ((this.IdField.Equals(value) != true)) {
-                    this.IdField = value;
-                    this.RaisePropertyChanged("Id");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Name {
-            get {
-                return this.NameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NameField, value) != true)) {
-                    this.NameField = value;
-                    this.RaisePropertyChanged("Name");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
