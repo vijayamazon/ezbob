@@ -1152,6 +1152,7 @@
     <Content Include="Content\js\Underwriter\editLoan\editLoanView.min.js">
       <DependentUpon>editLoanView.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.app.js" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js">
       <DependentUpon>ezbob.underwriter.goToCustomer.coffee</DependentUpon>
     </Content>
@@ -1930,7 +1931,6 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.coffee" />
-    <Content Include="Content\js\Underwriter\ezbob.underwriter.app.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.AddBankAccount.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.manualPayment.coffee" />

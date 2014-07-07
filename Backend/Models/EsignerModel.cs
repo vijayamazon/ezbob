@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Runtime.Serialization;
+	using System.Text.RegularExpressions;
 	using Utils;
 
 	[DataContract]
@@ -71,5 +73,32 @@
 				SignDate.HasValue ? "signed on " + SignDate.Value.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture) : "not signed"
 			);
 		} // ToString
+
+		public string ValidateExperianDirectorDetails() {
+			var err = new List<string>();
+
+			if (DirectorID < 0)
+				err.Add("Director ID not specified.");
+
+			if (string.IsNullOrWhiteSpace(Email) || !ms_reEmail.IsMatch(Email))
+				err.Add("Email not specified.");
+
+			if (string.IsNullOrWhiteSpace(MobilePhone) || !ms_rePhone.IsMatch(MobilePhone))
+				err.Add("Mobile phone not specified.");
+
+			if (string.IsNullOrWhiteSpace(Line1))
+				err.Add("Address line 1 not specified.");
+
+			if (string.IsNullOrWhiteSpace(Town))
+				err.Add("Town not specified.");
+
+			if (string.IsNullOrWhiteSpace(Postcode))
+				err.Add("Postcode not specified.");
+
+			return err.Count < 1 ? null : string.Join(" ", err);
+		} // ValidateExperianDirectorDetails
+
+		private static readonly Regex ms_reEmail = new Regex(@"^[A-Z0-9._%+-]+@[A-Z0-9.-_]+\.[A-Z]{2,4}$", RegexOptions.IgnoreCase);
+		private static readonly Regex ms_rePhone = new Regex(@"^0[0-9]{10}$");
 	} // class Esigner
 } // namespace

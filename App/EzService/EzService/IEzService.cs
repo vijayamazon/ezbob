@@ -269,6 +269,9 @@
 		[OperationContract]
 		IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId);
 
+		[OperationContract]
+		ActionMetaData UpdateExperianDirectorDetails(int? nCustomerID, int? nUnderwriterID, Esigner oDetails);
+
 		#endregion Experian
 
 		#region Land Registry

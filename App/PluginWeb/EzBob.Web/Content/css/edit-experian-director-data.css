@@ -1,4 +1,6 @@
-﻿#signature-monitor table#esigners-list .btn {
+﻿/* Underwriter section */
+
+#signature-monitor table#esigners-list .btn {
 	width: 82px;
 	display: block;
 }
@@ -21,5 +23,33 @@
 }
 
 #signature-monitor table#esigners-list .field_status {
+	float: none;
+}
+
+/* Customer section */
+
+#profile-main table.directors-list .button {
+	width: 118px;
+	display: block;
+}
+
+#profile-main table.directors-list .btn-cancel-edit {
+	margin-top: 0.3em;
+}
+
+#profile-main table.directors-list .attardi-input {
+	width: 220px;
+}
+
+#profile-main table.directors-list .more-rows,
+#profile-main table.directors-list td.edit-mode {
+	padding-top: 20px;
+}
+
+#profile-main table.directors-list .form_field {
+	width: 200px;
+}
+
+#profile-main table.directors-list .field_status {
 	float: none;
 }

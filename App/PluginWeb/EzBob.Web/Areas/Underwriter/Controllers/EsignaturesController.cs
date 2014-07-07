@@ -5,6 +5,7 @@
 	using EchoSignLib;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using Newtonsoft.Json;
@@ -14,7 +15,8 @@
 	public class EsignaturesController : Controller {
 		#region constructor
 
-		public EsignaturesController() {
+		public EsignaturesController(IEzbobWorkplaceContext oContext) {
+			m_oContext = oContext;
 			m_oServiceClient = new ServiceClient();
 		} // constructor
 
@@ -115,7 +117,68 @@
 
 		#endregion action Download
 
+		#region action SaveExperianDirector
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult SaveExperianDirector(
+			int directorID,
+			string email,
+			string mobilePhone,
+			string line1,
+			string line2,
+			string line3,
+			string town,
+			string county,
+			string postcode
+		) {
+			ms_oLog.Debug("User id: {0} {1}", m_oContext.UserId, m_oContext.User.Name);
+
+			ms_oLog.Debug("Saving Experian director (E-signatures controller): {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
+				directorID,
+				email,
+				mobilePhone,
+				line1,
+				line2,
+				line3,
+				town,
+				county,
+				postcode
+			);
+
+			var m = new Esigner {
+				DirectorID = directorID,
+				Email = (email ?? string.Empty).Trim(),
+				MobilePhone = (mobilePhone ?? string.Empty).Trim(),
+				Line1 = (line1 ?? string.Empty).Trim(),
+				Line2 = (line2 ?? string.Empty).Trim(),
+				Line3 = (line3 ?? string.Empty).Trim(),
+				Town = (town ?? string.Empty).Trim(),
+				County = (county ?? string.Empty).Trim(),
+				Postcode = (postcode ?? string.Empty).Trim(),
+			};
+
+			string sValidation = m.ValidateExperianDirectorDetails();
+
+			if (!string.IsNullOrWhiteSpace(sValidation))
+				return Json(new { success = false, error = sValidation, });
+
+			try {
+				m_oServiceClient.Instance.UpdateExperianDirectorDetails(null, m_oContext.UserId, m);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to save experian director details.");
+				return Json(new { success = false, error = string.Empty, });
+			} // try
+
+			return Json(new { success = true, error = string.Empty, });
+		} // SaveExperianDirector
+
+		#endregion action SaveExperianDirector
+
 		private readonly ServiceClient m_oServiceClient;
+		private readonly IEzbobWorkplaceContext m_oContext;
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (EsignaturesController));
 	} // class EsignaturesController

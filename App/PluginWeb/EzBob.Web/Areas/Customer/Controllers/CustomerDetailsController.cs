@@ -564,7 +564,9 @@
 
 		#region method SaveExperianDirector
 
+		[Ajax]
 		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult SaveExperianDirector(
 			int directorID,
 			string email,
@@ -576,7 +578,7 @@
 			string county,
 			string postcode
 		) {
-			ms_oLog.Debug("Saving Experian director: {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
+			ms_oLog.Debug("Saving Experian director (CustomerDetails controller): {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
 				directorID,
 				email,
 				mobilePhone,
@@ -587,7 +589,32 @@
 				county,
 				postcode
 			);
-			// TODO
+
+			var m = new Esigner {
+				DirectorID = directorID,
+				Email = (email ?? string.Empty).Trim(),
+				MobilePhone = (mobilePhone ?? string.Empty).Trim(),
+				Line1 = (line1 ?? string.Empty).Trim(),
+				Line2 = (line2 ?? string.Empty).Trim(),
+				Line3 = (line3 ?? string.Empty).Trim(),
+				Town = (town ?? string.Empty).Trim(),
+				County = (county ?? string.Empty).Trim(),
+				Postcode = (postcode ?? string.Empty).Trim(),
+			};
+
+			string sValidation = m.ValidateExperianDirectorDetails();
+
+			if (!string.IsNullOrWhiteSpace(sValidation))
+				return Json(new { success = false, error = sValidation, });
+
+			try {
+				m_oServiceClient.Instance.UpdateExperianDirectorDetails(null, m_oContext.UserId, m);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to save experian director details.");
+				return Json(new { success = false, error = string.Empty, });
+			} // try
+
 			return Json(new { success = true, error = string.Empty, });
 		} // SaveExperianDirector
 

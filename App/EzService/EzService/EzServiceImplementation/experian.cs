@@ -2,6 +2,7 @@
 	using System;
 	using System.Data;
 	using EzBob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
@@ -66,5 +67,13 @@
 				Value = cacheDate
 			};
 		}
+
+		#region method UpdateExperianDirectorDetails
+
+		public ActionMetaData UpdateExperianDirectorDetails(int? nCustomerID, int? nUnderwriterID, Esigner oDetails) {
+			return ExecuteSync<UpdateExperianDirectorDetails>(nCustomerID, nUnderwriterID, oDetails);
+		} // UpdateExperianDirectorDetails
+
+		#endregion method UpdateExperianDirectorDetails
 	} // class EzServiceImplementation
 } // namespace EzService

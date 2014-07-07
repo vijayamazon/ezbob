@@ -30,7 +30,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		var oView = new EzBob.EditExperianDirectorView({
 			data: oRow.data('for-edit'),
 
-			saveUrl: window.gRootPath + 'Customer/CustomerDetails/SaveExperianDirector',
+			saveUrl: window.gRootPath + 'Underwriter/Esignatures/SaveExperianDirector',
 
 			row: oRow,
 
@@ -304,8 +304,8 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			var oSignersListOpts = self.getDataTableOpts(oResponse.signers, 'FirstName,LastName,Email,MobilePhone');
 			oSignersListOpts.fnRowCallback = _.bind(self.signersListRowCallback, self);
 			oSignersListOpts.aoColumns.unshift(
-				{ sClass: 'grid-item-IsSelected center', mData: null, },
-				{ sClass: 'grid-item-Source center', mData: 'Type', mRender: function(sType) {
+				{ sClass: 'grid-item-IsSelected center narrow-as-possible', mData: null, },
+				{ sClass: 'grid-item-Source center narrow-as-possible', mData: 'Type', mRender: function(sType) {
 					var sClass = 'fa-circle-o';
 					var bHide = false;
 					var sSource = '';

@@ -10,7 +10,33 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 
 	events: {
 		'click .add-director': 'addDirectorClicked',
+		'click .btn-edit-director': 'startEditDirector',
 	}, // events
+
+	startEditDirector: function(event) {
+		var oRow = $(event.target).closest('TR');
+
+		if (oRow.length !== 1)
+			return;
+
+		var oView = new EzBob.EditExperianDirectorView({
+			data: oRow.data('for-edit'),
+
+			saveUrl: window.gRootPath + 'Customer/CustomerDetails/SaveExperianDirector',
+
+			row: oRow,
+
+			editBtn: oRow.find('.btn-edit-director'),
+			saveBtn: oRow.find('.btn-save-director'),
+			cancelBtn: oRow.find('.btn-cancel-edit'),
+
+			emailCell: oRow.find('.grid-item-email'),
+			mobilePhoneCell: oRow.find('.grid-item-phone'),
+			addressCell: oRow.find('.grid-item-address'),
+		});
+
+		oView.render();
+	}, // startEditDirector
 
 	onRender: function() {
 		if (!EzBob.Config.EchoSignEnabledCustomer)
@@ -51,6 +77,8 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 			});
 		});
 
+		console.log('aryData', aryData);
+
 		if (this.directorsList !== null) {
 			this.directorsList.fnClearTable();
 			this.directorsList = null;
@@ -69,10 +97,10 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 		oRow.data('for-edit', oData.forEdit);
 
 		if (oData.isExperian) {
-			var oBtn = this.$el.find('.templates').find('.btn-edit-director').clone(true)
-				.data('DirectorID', oData.id);
-
-			oRow.find('.grid-item-edit').empty().append(oBtn);
+			oRow.find('.grid-item-edit').empty()
+				.append(this.$el.find('.templates').find('.btn-edit-director').clone(true))
+				.append(this.$el.find('.templates').find('.btn-save-director').clone(true).hide())
+				.append(this.$el.find('.templates').find('.btn-cancel-edit').clone(true).hide());
 		} // if
 
 		var oCell = oRow.find('.grid-item-isDirector').empty();

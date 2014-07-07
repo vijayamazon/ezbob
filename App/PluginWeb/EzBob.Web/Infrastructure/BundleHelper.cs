@@ -236,7 +236,7 @@
 				.Add("~/Content/js/lib/highcharts/makeChart.js")
 
 				//Underwriter
-				.Add("~/Content/js/underwriter/ezbob.underwriter.app.coffee")
+				.Add("~/Content/js/underwriter/ezbob.underwriter.app.js")
 				.Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
 				.Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
 

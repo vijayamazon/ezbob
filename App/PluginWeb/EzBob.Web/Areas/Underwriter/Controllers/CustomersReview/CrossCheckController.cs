@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Web.Mvc;
-	using CommonLib;
 	using Customer.Controllers;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;

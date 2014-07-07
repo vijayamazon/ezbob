@@ -80,6 +80,7 @@
     <Compile Include="Esign\LoadEsignatures.cs" />
     <Compile Include="Experian\BackfillExperianDirectors.cs" />
     <Compile Include="Experian\ExperianDirector.cs" />
+    <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateExperianDirectors.cs" />
     <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
     <Compile Include="Misc\GetBankModel.cs" />
