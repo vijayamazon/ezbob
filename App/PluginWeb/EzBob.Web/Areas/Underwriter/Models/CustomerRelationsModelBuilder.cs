@@ -74,16 +74,5 @@
 				}).OrderByDescending(x => x.FollowUpDate);
 			return crmModel;
 		}
-
-		public CrmStaticModel GetStaticCrmModel()
-		{
-			var model = new CrmStaticModel
-			{
-				CrmActions = _crmActionsRepository.GetAll(),
-				CrmStatuses = _crmStatusGroupRepository.GetAll().OrderBy(x => x.Priority),
-				CrmRanks = _crmRanksRepository.GetAll()
-			};
-			return model;
-		}
 	}
 }

@@ -1,17 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
-	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using System;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-
-	public class CrmStaticModel
-	{
-		public IEnumerable<CRMActions> CrmActions { get; set; }
-		public IOrderedQueryable<CRMStatusGroup> CrmStatuses { get; set; }
-		public IEnumerable<CRMRanks> CrmRanks { get; set; }
-	}
 
 	public class CrmModel
 	{

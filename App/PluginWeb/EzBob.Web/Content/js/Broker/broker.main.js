@@ -57,8 +57,6 @@ $(document).ready(function() {
 		EzBob.CrmStatuses = data.Crm.CrmStatuses;
 		EzBob.CrmRanks = data.Crm.CrmRanks;
 
-		_.each(data.Crm.CrmStatuses, function(x) { x.Statuseses = x.Statuses; });
-
 		_.each(data.Files, function(fd) {
 			oLinks.append($('<li />').append(
 				$('<a />').attr('href', sTemplate.replace('__FILE_ID__', fd.FileID)).text(fd.DisplayName)

@@ -41,7 +41,7 @@
                             <option></option>
                             <% _.each(statuses, function(sGroup) { console.log(sGroup);%>
                             <optgroup label="<%- sGroup.Name%>">
-                                <%_.each(sGroup.Statuseses, function(status){%>
+                                <%_.each(sGroup.Statuses, function(status){%>
                                     <option value="<%- status.Id %>"><%- status.Name %></option>
                                 <%});%>
                             </optgroup>

@@ -1,10 +1,10 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
-	using System.Linq;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using Ezbob.Backend.Models;
 	using Models;
 	using Infrastructure.csrf;
 	using Infrastructure.Attributes;
@@ -55,10 +55,24 @@
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult CrmStatic()
-		{
-			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository, _session);
-			return Json(crm.GetStaticCrmModel(), JsonRequestBehavior.AllowGet);
+		public JsonResult CrmStatic() {
+			try {
+				var ar = new ServiceClientProxy.ServiceClient().Instance.CrmLoadLookups();
+
+				return Json(new {
+					CrmActions = ar.Actions,
+					CrmStatuses = ar.Statuses,
+					CrmRanks = ar.Ranks,
+				}, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception e) {
+				Log.Warn("Failed to load CRM static data.");
+				return Json(new {
+					CrmActions = new IdNameModel[0],
+					CrmStatuses = new CrmStatusGroup[0],
+					CrmRanks = new IdNameModel[0],
+				}, JsonRequestBehavior.AllowGet);
+			}
 		} // CrmStatic
 
 		#region action SaveEntry
