@@ -133,8 +133,6 @@
 			string county,
 			string postcode
 		) {
-			ms_oLog.Debug("User id: {0} {1}", m_oContext.UserId, m_oContext.User.Name);
-
 			ms_oLog.Debug("Saving Experian director (E-signatures controller): {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
 				directorID,
 				email,
@@ -176,6 +174,30 @@
 		} // SaveExperianDirector
 
 		#endregion action SaveExperianDirector
+
+		#region action DeleteExperianDirector
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult DeleteExperianDirector(int nDirectorID) {
+			ms_oLog.Debug("Deleting Experian director (E-signatures controller): {0}", nDirectorID);
+
+			if (nDirectorID <= 0)
+				return Json(new { success = false, error = "Invalid director ID.", });
+
+			try {
+				m_oServiceClient.Instance.DeleteExperianDirector(nDirectorID, m_oContext.UserId);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to delete experian director.");
+				return Json(new { success = false, error = string.Empty, });
+			} // try
+
+			return Json(new { success = true, error = string.Empty, });
+		} // DeleteExperianDirector
+
+		#endregion action DeleteExperianDirector
 
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext m_oContext;

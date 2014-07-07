@@ -19,7 +19,53 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		'click .add-director': 'addDirectorClicked',
 		'click .toggle-all-signers': 'toggleAllSigners',
 		'click .btn-edit-director': 'startEditDirector',
+		'click .btn-delete-director': 'deleteDirector',
 	}, // events
+
+	deleteDirector: function(event) {
+		var oRow = $(event.target).closest('TR.experian-director');
+
+		if (oRow.length !== 1)
+			return;
+
+		var self = this;
+
+		var doDeleteDirector = function() {
+			BlockUi();
+
+			var oData = oRow.data('for-edit');
+
+			var oRequest = $.post(window.gRootPath + 'Underwriter/Esignatures/DeleteExperianDirector', { nDirectorID: oData.directorID, });
+
+			oRequest.done(function(oResponse) {
+				if (oResponse.success) {
+					EzBob.App.trigger('clear');
+					self.reloadCurrent();
+					return;
+				} // if
+
+				if (oResponse.error)
+					EzBob.App.trigger('error', oResponse.error);
+				else
+					EzBob.App.trigger('error', 'Error deleting director.');
+			});
+
+			oRequest.fail(function() {
+				EzBob.App.trigger('error', 'Failed to delete director.');
+			});
+
+			oRequest.always(function() {
+				UnBlockUi();
+			});
+		}; // doDeleteDirector
+
+		var sTitle = $.trim(
+			$.trim(oRow.find('.grid-item-FirstName').text()) + ' ' +
+			$.trim(oRow.find('.grid-item-LastName').text())
+		);
+
+		EzBob.ShowMessage('Confirm deleting director', sTitle, doDeleteDirector, 'Delete', null, 'Keep');
+	}, // deleteDirector
 
 	startEditDirector: function(event) {
 		var oRow = $(event.target).closest('TR.experian-director');
@@ -34,7 +80,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 			row: oRow,
 
-			editBtn: oRow.find('.btn-edit-director'),
+			editBtn: oRow.find('.edit-and-delete'),
 			saveBtn: oRow.find('.btn-save-director'),
 			cancelBtn: oRow.find('.btn-cancel-edit'),
 
@@ -131,6 +177,10 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		this.reload(nCustomerID, true);
 	}, // pollStatus
 
+	reloadCurrent: function() {
+		this.reload(this.$el.find('.do-send').data('CustomerID'));
+	}, // reloadCurrent
+
 	doSend: function() {
 		var oPackage = this.prepareSendPackage();
 
@@ -148,7 +198,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 			if (oResponse.success) {
 				self.cancelSend();
-				self.reload(self.$el.find('.do-send').data('CustomerID'));
+				self.reloadCurrent();
 				EzBob.ShowMessageTimeout('Documents have been sent.', 'Success', 2);
 				return;
 			} // if
@@ -365,6 +415,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 	// ReSharper disable UnusedParameter
 	signersListRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+		// ReSharper restore UnusedParameter
 		var oRow = $(oTR);
 
 		oRow.data('for-edit', new EzBob.EditExperianDirectorData({
@@ -399,8 +450,12 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 		if (oData.Type === 'experian') {
 			oControls
-				.append($('<button class="btn btn-primary btn-edit-director"><i class="fa fa-edit"></i> Edit</button>'))
 				.append($(
+					'<div class=edit-and-delete>' +
+					'<button class="btn btn-primary btn-edit-director"><i class="fa fa-edit"></i> Edit</button>' +
+					'<button class="btn btn-primary btn-delete-director" title="Delete this director"><i class="fa fa-times"></i></button>' +
+					'</div>' +
+
 					'<button class="btn btn-primary btn-save-director hide"><i class="fa fa-save"></i> Save</button>' +
 					'<button class="btn btn-primary btn-cancel-edit hide"><i class="fa fa-undo"></i> Cancel</button>'
 				));
@@ -408,7 +463,6 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			oRow.addClass('experian-director');
 		} // if
 	}, // signersListRowCallback
-	// ReSharper restore UnusedParameter
 
 	downloadSignedDocument: function() {
 		var nSignatureID = $(event.target).data('SignatureID');

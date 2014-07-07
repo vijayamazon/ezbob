@@ -272,6 +272,9 @@
 		[OperationContract]
 		ActionMetaData UpdateExperianDirectorDetails(int? nCustomerID, int? nUnderwriterID, Esigner oDetails);
 
+		[OperationContract]
+		ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID);
+
 		#endregion Experian
 
 		#region Land Registry

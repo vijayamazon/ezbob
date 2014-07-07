@@ -75,5 +75,13 @@
 		} // UpdateExperianDirectorDetails
 
 		#endregion method UpdateExperianDirectorDetails
+
+		#region method DeleteExperianDirector
+
+		public ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID) {
+			return ExecuteSync<DeleteExperianDirector>(null, nUnderwriterID, nDirectorID);
+		} // DeleteExperianDirector
+
+		#endregion method DeleteExperianDirector
 	} // class EzServiceImplementation
 } // namespace EzService

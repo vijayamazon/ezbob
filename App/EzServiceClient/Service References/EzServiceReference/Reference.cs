@@ -2094,6 +2094,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateTransactionStatus();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData XDaysDue();
         
@@ -2802,6 +2808,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails", ReplyAction="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateExperianDirectorDetailsAsync(System.Nullable<int> nCustomerID, System.Nullable<int> nUnderwriterID, Ezbob.Backend.Models.Esigner oDetails);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/DeleteExperianDirector", ReplyAction="http://tempuri.org/IEzService/DeleteExperianDirectorResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/DeleteExperianDirector", ReplyAction="http://tempuri.org/IEzService/DeleteExperianDirectorResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> DeleteExperianDirectorAsync(int nDirectorID, int nUnderwriterID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
         
@@ -2879,12 +2891,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId, bool doUpdateWizardStep);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateTransactionStatus();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -2912,6 +2918,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateTransactionStatus() {
+            return base.Channel.UpdateTransactionStatus();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync() {
+            return base.Channel.UpdateTransactionStatusAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData XDaysDue() {
@@ -3858,6 +3872,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.UpdateExperianDirectorDetailsAsync(nCustomerID, nUnderwriterID, oDetails);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID) {
+            return base.Channel.DeleteExperianDirector(nDirectorID, nUnderwriterID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> DeleteExperianDirectorAsync(int nDirectorID, int nUnderwriterID) {
+            return base.Channel.DeleteExperianDirectorAsync(nDirectorID, nUnderwriterID);
+        }
+        
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
             return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
         }
@@ -3960,14 +3982,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId, bool doUpdateWizardStep) {
             return base.Channel.UpdateMarketplaceAsync(customerId, marketplaceId, doUpdateWizardStep);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateTransactionStatus() {
-            return base.Channel.UpdateTransactionStatus();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync() {
-            return base.Channel.UpdateTransactionStatusAsync();
         }
     }
 }

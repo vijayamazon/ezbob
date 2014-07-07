@@ -79,6 +79,7 @@
     <Compile Include="Esign\LoadEsignatureFile.cs" />
     <Compile Include="Esign\LoadEsignatures.cs" />
     <Compile Include="Experian\BackfillExperianDirectors.cs" />
+    <Compile Include="Experian\DeleteExperianDirector.cs" />
     <Compile Include="Experian\ExperianDirector.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateExperianDirectors.cs" />

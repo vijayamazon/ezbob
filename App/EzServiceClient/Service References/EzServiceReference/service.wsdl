@@ -110,6 +110,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_UpdateTransactionStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTransactionStatus" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateTransactionStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTransactionStatusResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_XDaysDue_InputMessage">
     <wsdl:part name="parameters" element="tns:XDaysDue" />
   </wsdl:message>
@@ -818,6 +824,12 @@
   <wsdl:message name="IEzService_UpdateExperianDirectorDetails_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateExperianDirectorDetailsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_DeleteExperianDirector_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteExperianDirector" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_DeleteExperianDirector_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteExperianDirectorResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
   </wsdl:message>
@@ -896,12 +908,6 @@
   <wsdl:message name="IEzService_UpdateMarketplace_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateMarketplaceResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UpdateTransactionStatus_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateTransactionStatus" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateTransactionStatus_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateTransactionStatusResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -925,6 +931,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="UpdateTransactionStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatus" message="tns:IEzService_UpdateTransactionStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatusResponse" message="tns:IEzService_UpdateTransactionStatus_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="XDaysDue">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/XDaysDue" message="tns:IEzService_XDaysDue_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/XDaysDueResponse" message="tns:IEzService_XDaysDue_OutputMessage" />
@@ -1397,6 +1407,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails" message="tns:IEzService_UpdateExperianDirectorDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse" message="tns:IEzService_UpdateExperianDirectorDetails_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="DeleteExperianDirector">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/DeleteExperianDirector" message="tns:IEzService_DeleteExperianDirector_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/DeleteExperianDirectorResponse" message="tns:IEzService_DeleteExperianDirector_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
@@ -1448,10 +1462,6 @@
     <wsdl:operation name="UpdateMarketplace">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplace" message="tns:IEzService_UpdateMarketplace_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplaceResponse" message="tns:IEzService_UpdateMarketplace_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UpdateTransactionStatus">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatus" message="tns:IEzService_UpdateTransactionStatus_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatusResponse" message="tns:IEzService_UpdateTransactionStatus_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1508,6 +1518,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="UpdateTransactionStatus">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateTransactionStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="XDaysDue">
       <soap12:operation soapAction="http://tempuri.org/IEzService/XDaysDue" style="document" />
       <wsdl:input>
@@ -2570,6 +2589,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="DeleteExperianDirector">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/DeleteExperianDirector" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
       <wsdl:input>
@@ -2680,15 +2708,6 @@
     </wsdl:operation>
     <wsdl:operation name="UpdateMarketplace">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateMarketplace" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UpdateTransactionStatus">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateTransactionStatus" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

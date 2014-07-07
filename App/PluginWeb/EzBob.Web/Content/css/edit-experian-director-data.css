@@ -1,6 +1,20 @@
 ﻿/* Underwriter section */
 
-#signature-monitor table#esigners-list .btn {
+#signature-monitor table#esigners-list .edit-and-delete button {
+	display: inline-block;
+	height: 34px;
+}
+
+#signature-monitor table#esigners-list .btn-edit-director {
+	margin-right: 0.3em;
+}
+
+#signature-monitor table#esigners-list .btn-delete-director {
+	color: #a52a2a;
+}
+
+#signature-monitor table#esigners-list .btn-save-director,
+#signature-monitor table#esigners-list .btn-cancel-edit {
 	width: 82px;
 	display: block;
 }
