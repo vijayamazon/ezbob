@@ -1594,6 +1594,10 @@ body {
 
 #profileHead {
     padding-top: 10px;
+    position: fixed;
+    z-index: 3;
+    width: calc(100% - 475px);
+    background-color: #ebebeb;
 }
 
     #profileHead .box-content {
@@ -1820,7 +1824,7 @@ body {
     height: 90px;
 }
 
-#journalTable {
+#journalTable th{
     white-space: nowrap;
 }
 
@@ -1904,4 +1908,12 @@ body {
 .offline-medal-text {
     font-size: 9px;
     color: gray;
+}
+
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn:last-child:not(:first-child), 
+.btn-group > .dropdown-toggle:not(:first-child) {
+    border-radius: 5px;
+    margin-right: 5px;
 }

@@ -33,13 +33,21 @@
                 </div>
             </div>
             <div class="row">
-                <%if(properties){%>
+                <%if(properties && personal){%>
             <div class="box">
                 <div class="box-title">
                     <h3>Assets & Worth</h3>
                     @BoxTools("AssetsAndWorth", "#customer-info")
                 </div>
                 <div class="box-content">
+                    <%if(personal.ResidentalStatus && personal.ResidentalStatus.toLowerCase() != 'home owner'){%>
+                    <div class="row">
+                        <div class="requested-loan-td">Residential Status: <span><%-personal.ResidentalStatus%></span></div>
+                        <%if(properties.SumOfMortgages>0){%>
+                        <div class="requested-loan-td">Have mortgage<%-properties.NumberOfMortgages>1 ? 's' : '' %>: <span><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %> (<%- properties.NumberOfMortgages %>)</span></div>
+                        <%}%>
+                    </div>
+                    <%} else {%>
                     <div class="row">
                         <div>Market value: <span class="ez-green"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></span></div>
                         <div style="position: relative;">
@@ -62,6 +70,7 @@
                             <div class="assets-legend"><i class="fa fa-square ez-light-grey"></i>Mortgage &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-square ez-green"></i>Net worth</div>
                         </div>
                     </div>
+                    <%}%>
                 </div>
             </div>
                 <%}%>
@@ -558,23 +567,23 @@
                     </div>
                     <div class="box-content">
 
-                        <table class="table centered" id="journalTable">
+                        <table class="table" id="journalTable">
                             <thead class="box">
                                 <tr class="box-title">
-                                    <th>Action </th>
-                                    <th>Date </th>
-                                    <th>Type </th>
-                                    <th>Status </th>
-                                    <th>Approved Sum </th>
-                                    <th>Interest </th>
-                                    <th>Repayment Period </th>
-                                    <th>Loan Type </th>
-                                    <th>Setup Fee </th>
-                                    <th>Discount Plan </th>
-                                    <th>Loan Source </th>
-                                    <th>Customer Selection </th>
-                                    <th>Underwriter </th>
-                                    <th>Comment </th>
+                                    <th>Action</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th><span data-toggle="tooltip" title="Approved Sum">App Sum</span></th>
+                                    <th>Interest</th>
+                                    <th><span data-toggle="tooltip" title="Repayment Period">RP</span></th>
+                                    <th><span data-toggle="tooltip" title="Loan Type">L Type</span></th>
+                                    <th><span data-toggle="tooltip" title="Setup Fee">SF</span></th>
+                                    <th><span data-toggle="tooltip" title="Discount Plan">Discount</span></th>
+                                    <th>Loan Source</th>
+                                    <th><span data-toggle="tooltip" title="Customer Selection">CS</span></th>
+                                    <th>Underwriter</th>
+                                    <th>Comment</th>
                                     <th>IsCrm </th>
                                 </tr>
                             </thead>
