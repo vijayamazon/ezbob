@@ -827,7 +827,7 @@
                             <td>Proprietorship</td>
                             @if (lr.Proprietorship.CurrentProprietorshipDate.HasValue)
                             {
-                                <td>Current Proprietorship Date: @lr.Proprietorship.CurrentProprietorshipDate.ToString("dd/MM/yyyy")</td>
+                                <td>Current Proprietorship Date: @lr.Proprietorship.CurrentProprietorshipDate.Value.ToString("dd/MM/yyyy")</td>
                                 <td colspan="3"></td>
                             }
                             else
