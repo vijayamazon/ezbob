@@ -1,7 +1,7 @@
-using FluentNHibernate.Mapping;
-
 namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
+	using FluentNHibernate.Mapping;
+
 	public class MP_AmazonOrderItemDetailCatgoryMap : ClassMap<MP_AmazonOrderItemDetailCatgory>
 	{
 		public MP_AmazonOrderItemDetailCatgoryMap()

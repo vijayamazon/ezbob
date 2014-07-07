@@ -72,7 +72,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
         public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
         {
-            var s = _session.Query<MP_AmazonOrderItem2>()
+            var s = _session.Query<MP_AmazonOrderItem>()
                                            .Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
                                            .Where(oi => oi.PurchaseDate != null)
                                            .Select(oi => oi.PurchaseDate);
@@ -81,7 +81,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
 		{
-			var s = _session.Query<MP_AmazonOrderItem2>().Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id).Where(oi => oi.PurchaseDate != null);
+			var s = _session.Query<MP_AmazonOrderItem>().Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id).Where(oi => oi.PurchaseDate != null);
 
 			if (s.Count() != 0)
 			{

@@ -48,7 +48,7 @@
 				ordersData2.ForEach(
 					dataItem =>
 					{
-						var mpOrderItem2 = new MP_AmazonOrderItem2
+						var mpOrderItem = new MP_AmazonOrderItem
 						{
 							Order = mpOrder,
 							OrderId = dataItem.AmazonOrderId,
@@ -63,13 +63,13 @@
 
 						if (dataItem.OrderedItemsList != null)
 						{
-							mpOrderItem2.OrderItemDetails.AddAll(dataItem.OrderedItemsList.Select(
+							mpOrderItem.OrderItemDetails.AddAll(dataItem.OrderedItemsList.Select(
 								i =>
 								{
 									var mpAmazonOrderItemDetail = new MP_AmazonOrderItemDetail
 									{
 
-										OrderItem = mpOrderItem2,
+										OrderItem = mpOrderItem,
 										SellerSKU = i.SellerSKU,
 										Title = i.Title,
 										ASIN = i.ASIN,
@@ -100,16 +100,16 @@
 						if (dataItem.PaymentsInfo != null)
 						{
 							dataItem.PaymentsInfo.ForEach(
-								i => mpOrderItem2.PaymentsInfo.Add(new MP_AmazonOrderItem2Payment
+								i => mpOrderItem.PaymentsInfo.Add(new MP_AmazonOrderItemPayment
 								{
-									OrderItem = mpOrderItem2,
+									OrderItem = mpOrderItem,
 									MoneyInfo = _CurrencyConvertor.ConvertToBaseCurrency(i.MoneyInfo, dataItem.PurchaseDate),
 									SubPaymentMethod = i.SubPaymentMethod
 								}));
 
 						}
 
-						mpOrder.OrderItems2.Add(mpOrderItem2);
+						mpOrder.OrderItems.Add(mpOrderItem);
 					});
 			}
 			customerMarketPlace.AmazonOrders.Add(mpOrder);
@@ -163,7 +163,7 @@
 
 			var orders = new AmazonOrdersList2(submittedDate);
 
-			orders.AddRange(customerMarketPlace.AmazonOrders.SelectMany(amazonOrder => amazonOrder.OrderItems2).Select(o =>
+			orders.AddRange(customerMarketPlace.AmazonOrders.SelectMany(amazonOrder => amazonOrder.OrderItems).Select(o =>
 			{
 				AmazonOrdersList2ItemStatusType orderStatus;
 				Enum.TryParse(o.OrderStatus, out orderStatus);

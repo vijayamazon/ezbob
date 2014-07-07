@@ -1,14 +1,14 @@
-using System;
-using EZBob.DatabaseLib.Common;
-using Iesi.Collections.Generic;
-
 namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
-	public class MP_AmazonOrderItem2
+	using System;
+	using Common;
+	using Iesi.Collections.Generic;
+
+	public class MP_AmazonOrderItem
 	{
-		public MP_AmazonOrderItem2()
+		public MP_AmazonOrderItem()
 		{
-			PaymentsInfo = new HashedSet<MP_AmazonOrderItem2Payment>();
+			PaymentsInfo = new HashedSet<MP_AmazonOrderItemPayment>();
 			OrderItemDetails = new HashedSet<MP_AmazonOrderItemDetail>();
 		}
 
@@ -24,7 +24,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 		public virtual AmountInfo OrderTotal { get; set; }
 		public virtual int? NumberOfItemsShipped { get; set; }
 		public virtual int? NumberOfItemsUnshipped { get; set; }
-		public virtual ISet<MP_AmazonOrderItem2Payment> PaymentsInfo { get; set; }
+		public virtual ISet<MP_AmazonOrderItemPayment> PaymentsInfo { get; set; }
 		public virtual ISet<MP_AmazonOrderItemDetail> OrderItemDetails { get; set; }
 	}
 }

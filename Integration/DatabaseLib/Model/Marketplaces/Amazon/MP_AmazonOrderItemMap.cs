@@ -1,13 +1,13 @@
-using FluentNHibernate.Mapping;
-using NHibernate.Type;
-
 namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
-	public class MP_AmazonOrderItem2Map : ClassMap<MP_AmazonOrderItem2>
+	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
+
+	public class MP_AmazonOrderItemMap : ClassMap<MP_AmazonOrderItem>
 	{
-		public MP_AmazonOrderItem2Map()
+		public MP_AmazonOrderItemMap()
 		{
-			Table("MP_AmazonOrderItem2");
+			Table("MP_AmazonOrderItem");
 			Id(x => x.Id);
 			References(x => x.Order, "AmazonOrderId");
 			Map(x => x.OrderId);
@@ -24,11 +24,11 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 			Map(x => x.NumberOfItemsUnshipped);
 
 			HasMany(x => x.PaymentsInfo).
-				KeyColumn("OrderItem2Id")
+				KeyColumn("OrderItemId")
 				.Cascade.All();
 
 			HasMany( x => x.OrderItemDetails ).
-				KeyColumn( "OrderItem2Id" )
+				KeyColumn( "OrderItemId" )
 				.Cascade.All();
 		}
 	}

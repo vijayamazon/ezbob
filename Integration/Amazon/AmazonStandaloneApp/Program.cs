@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.AmazonLib;
-using EzBob.AmazonServiceLib;
-using EzBob.AmazonServiceLib.Common;
-using EzBob.AmazonServiceLib.Config;
-using EzBob.AmazonServiceLib.Orders.Model;
-using EzBob.AmazonServiceLib.ServiceCalls;
-using EzBob.CommonLib;
-using NHibernate;
-using StandaloneInitializer;
-using StructureMap;
-using ConfigManager;
-
-namespace AmazonStandaloneApp
+﻿namespace AmazonStandaloneApp
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
+	using EzBob.AmazonLib;
+	using EzBob.AmazonServiceLib;
+	using EzBob.AmazonServiceLib.Common;
+	using EzBob.AmazonServiceLib.Config;
+	using EzBob.AmazonServiceLib.Orders.Model;
+	using EzBob.AmazonServiceLib.ServiceCalls;
+	using EzBob.CommonLib;
+	using NHibernate;
+	using StandaloneInitializer;
+	using StructureMap;
+	using ConfigManager;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Serialization;
 	using NHibernateWrapper.NHibernate;

@@ -1,8 +1,8 @@
-using EZBob.DatabaseLib.Common;
-using Iesi.Collections.Generic;
-
 namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
+	using Common;
+	using Iesi.Collections.Generic;
+
 	public class MP_AmazonOrderItemDetail
 	{
 		public MP_AmazonOrderItemDetail()
@@ -30,7 +30,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 		public virtual AmountInfo ShippingTax { get; set; }
 		public virtual string Title { get; set; }
 
-		public virtual MP_AmazonOrderItem2 OrderItem { get; set; }
+		public virtual MP_AmazonOrderItem OrderItem { get; set; }
 		public virtual ISet<MP_AmazonOrderItemDetailCatgory> OrderItemCategories { get; set; }
 	}
 }

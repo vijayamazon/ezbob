@@ -443,10 +443,10 @@
     <Compile Include="Model\Loans\LoanScheduleItem.cs" />
     <Compile Include="Model\Loans\LoanTransaction.cs" />
     <Compile Include="Model\Loans\PaypointTransaction.cs" />
-    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem2.cs" />
-    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem2Map.cs" />
-    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem2Payment.cs" />
-    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem2PaymentMap.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemPayment.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemPaymentMap.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayTransaction.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayTransactionMap.cs" />
     <Compile Include="Model\Loans\PacnetTransaction.cs" />

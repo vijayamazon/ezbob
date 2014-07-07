@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EzBob.AmazonDbLib;
-using EzBob.CommonLib.TimePeriodLogic;
-
 namespace EzBob.AmazonLib
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using AmazonDbLib;
+	using CommonLib.TimePeriodLogic;
+
 	internal class AmazonOrdersAgregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<AmazonOrderItem2>, AmazonOrderItem2, AmazonDatabaseFunctionType>
 	{
 		public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<AmazonOrderItem2>, AmazonOrderItem2, AmazonDatabaseFunctionType> CreateDataAggregator( ReceivedDataListTimeDependentInfo<AmazonOrderItem2> data, ICurrencyConvertor currencyConverter )
@@ -111,34 +111,9 @@ namespace EzBob.AmazonLib
 
 				case AmazonDatabaseFunctionType.TotalSumOfOrdersAnnualized:
 					return GetTotalSumOfOrdersAnnualized(orders);
-
-				/*case AmazonDatabaseFunctionType.ReturnsToSalesRate:
-					return GetReturnsToSalesRate( orders );
-
-				case AmazonDatabaseFunctionType.SoldItemsTrend:
-					return GetSoldItemsTrend( orders );
-
-				case AmazonDatabaseFunctionType.SoldValueTrend:
-					return GetSoldValueTrend( orders );
-
-				case AmazonDatabaseFunctionType.TotalReturns:
-					return GetTotalReturns( orders );
-
-				case AmazonDatabaseFunctionType.BuyerEmail:
-					return GetBuyerEmail();
-
-				case AmazonDatabaseFunctionType.BuyerName:
-					return GetBuyerName();
-
-				case AmazonDatabaseFunctionType.ShippingAddress:
-					return GetShippingAddress();
-				 */
 				default:
 					throw new NotImplementedException();
 			}
 		}
-
-		
 	}
-
 }

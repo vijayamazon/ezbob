@@ -1,14 +1,13 @@
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EzBob.AmazonServiceLib.Common;
-using EzBob.AmazonServiceLib.Orders.Configurator;
 namespace EzBob.AmazonServiceLib.ServiceCalls
 {
+	using System;
+	using System.Diagnostics;
+	using System.Linq;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using Common;
+	using Orders.Configurator;
 	using Orders.Model;
 	using CommonLib;
 	using CommonLib.TrapForThrottlingLogic;
@@ -143,14 +142,6 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 					string.Format("Amazon ParceOrdersInfo customerId {1}, sellerId {0} number of orders 0", sellerId, customerId));
 			}
 			orders.Order.AsParallel().ForAll( o => ordersList.Add( ParceOrder( o ) ) );
-
-			/*foreach (AmazonOrderItem2 orderInfo in ordersList)
-			{
-				if ( orderInfo.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped )
-				{
-					orderInfo.OrderedItemsList = GetListItemsOrdered( orderInfo.AmazonOrderId, sellerId, access );
-				}
-			}*/			
 		}
 
 		private AmazonOrderItem2 ParceOrder( Order order )

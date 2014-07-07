@@ -8,14 +8,14 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 	{
 		public MP_AmazonOrder()
 		{
-			OrderItems2 = new HashedSet<MP_AmazonOrderItem2>();
+			OrderItems = new HashedSet<MP_AmazonOrderItem>();
 		}
 
 		public virtual int Id { get; set; }
 		public virtual MP_CustomerMarketPlace CustomerMarketPlace { get; set; }
 		public virtual DateTime Created { get; set; }
 
-		public virtual ISet<MP_AmazonOrderItem2> OrderItems2 { get; set; }
+		public virtual ISet<MP_AmazonOrderItem> OrderItems { get; set; }
 
 		public virtual MP_CustomerMarketplaceUpdatingHistory HistoryRecord { get; set; }
 	}

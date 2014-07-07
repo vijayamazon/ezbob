@@ -1,14 +1,14 @@
-using FluentNHibernate.Mapping;
-
 namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
+	using FluentNHibernate.Mapping;
+
 	public class MP_AmazonOrderItemDetailMap : ClassMap<MP_AmazonOrderItemDetail>
 	{
 		public MP_AmazonOrderItemDetailMap()
 		{
 			Table( "MP_AmazonOrderItemDetail" );
 			Id( x => x.Id );
-			References( x => x.OrderItem, "OrderItem2Id" );
+			References( x => x.OrderItem, "OrderItemId" );
 			Map( x => x.OrderItemId, "AmazonOrderItemId" );
 			Map( x => x.SellerSKU );
 			Map( x => x.ASIN);

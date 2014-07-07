@@ -12,7 +12,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 			Map( x => x.Created ).CustomType<UtcDateTimeType>().Not.Nullable();
 			References( x => x.CustomerMarketPlace, "CustomerMarketPlaceId" );
 
-			HasMany( x => x.OrderItems2 )
+			HasMany( x => x.OrderItems )
 				.KeyColumn( "AmazonOrderId" )
 				.Cascade.All();
 
