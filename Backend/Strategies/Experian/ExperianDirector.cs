@@ -90,6 +90,11 @@
 				else
 					return;
 
+				if (BirthDate < ms_oLongAgo) {
+					BirthDate = null;
+					return;
+				} // if
+
 				MiddleName = oItem.Get(ParsedFieldNames.MidName1, ParsedFieldNames.MidName2);
 
 				var lines = new List<string>();
@@ -167,7 +172,7 @@
 						FirstName.ToUpperInvariant() + " " +
 						MiddleName.ToUpperInvariant() + " " +
 						LastName.ToUpperInvariant() + " " +
-						BirthDate.ToString("MMM d yyyy", CultureInfo.InvariantCulture)
+						(BirthDate.HasValue ? BirthDate.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty)
 					);
 				} // if
 
@@ -184,7 +189,7 @@
 		public string MiddleName { get; set; }
 		public string LastName { get; set; }
 
-		public DateTime BirthDate { get; set; }
+		public DateTime? BirthDate { get; set; }
 
 		public char? Gender { get; set; }
 
@@ -199,6 +204,8 @@
 		public string Postcode { get; set; }
 
 		#endregion DB fields
+
+		private static readonly DateTime ms_oLongAgo = new DateTime(1775, 5, 7);
 	} // class ExperianDirector
 
 	#endregion class ExperianDirector
