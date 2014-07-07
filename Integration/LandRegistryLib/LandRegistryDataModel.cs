@@ -157,7 +157,7 @@
 
 	public class LandRegistryProprietorshipModel
 	{
-		public DateTime CurrentProprietorshipDate { get; set; }
+		public DateTime? CurrentProprietorshipDate { get; set; }
 		public List<ProprietorshipPartyModel> ProprietorshipParties { get; set; }
 	}
 

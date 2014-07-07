@@ -825,8 +825,16 @@
                     <thead class="box">
                         <tr class="box-title">
                             <td>Proprietorship</td>
-                            <td>Current Proprietorship Date: @lr.Proprietorship.CurrentProprietorshipDate.ToString("dd/MM/yyyy")</td>
-                            <td colspan="3"></td>
+                            @if (lr.Proprietorship.CurrentProprietorshipDate.HasValue)
+                            {
+                                <td>Current Proprietorship Date: @lr.Proprietorship.CurrentProprietorshipDate.ToString("dd/MM/yyyy")</td>
+                                <td colspan="3"></td>
+                            }
+                            else
+                            {
+                                <td colspan="4"></td>
+                            }
+                            
                         </tr>
                         <tr class="box-title">
                             <td>Type</td>

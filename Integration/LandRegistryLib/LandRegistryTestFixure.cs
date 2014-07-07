@@ -85,6 +85,12 @@
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
+
+			var resHS94850 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResHS94850);
+			model = b.BuildResModel(resHS94850);
+			Assert.IsNotNull(model);
+			Console.WriteLine(XmlHelper.SerializeObject(model));
+
 			var resNGL854792 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(lrNGL854792);
 			model = b.BuildResModel(resNGL854792);
 			Assert.IsNotNull(model);
@@ -164,6 +170,274 @@
     </Results>
   </GatewayResponse>
 </ResponseSearchByPropertyDescriptionV2_0Type>";
+
+
+
+		public const string TestResHS94850 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<ResponseOCWithSummaryV2_1Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
+    <TypeCode>30</TypeCode>
+    <Results>
+      <ExternalReference>
+        <Reference>ezbob5987</Reference>
+      </ExternalReference>
+      <ActualPrice>
+        <GrossPriceAmount>6.00</GrossPriceAmount>
+      </ActualPrice>
+      <OCSummaryData>
+        <OfficialCopyDateTime>2014-05-27T18:25:15</OfficialCopyDateTime>
+        <EditionDate>2013-12-18</EditionDate>
+        <PropertyAddress>
+          <PostcodeZone>
+            <Postcode>DN31 2LE</Postcode>
+          </PostcodeZone>
+          <AddressLine>
+            <Line>16 Queens Parade</Line>
+            <Line>Grimsby and garage</Line>
+          </AddressLine>
+        </PropertyAddress>
+        <Title>
+          <TitleNumber>HS94850</TitleNumber>
+          <ClassOfTitleCode>10</ClassOfTitleCode>
+          <CommonholdIndicator>false</CommonholdIndicator>
+          <TitleRegistrationDetails>
+            <DistrictName>NORTH EAST LINCOLNSHIRE</DistrictName>
+            <AdministrativeArea>NORTH EAST LINCOLNSHIRE</AdministrativeArea>
+            <LandRegistryOfficeName>Kingston upon Hull Office</LandRegistryOfficeName>
+            <LatestEditionDate>2013-12-18</LatestEditionDate>
+            <PostcodeZone>
+              <Postcode>DN31 2LE</Postcode>
+            </PostcodeZone>
+          </TitleRegistrationDetails>
+        </Title>
+        <RegisterEntryIndicators>
+          <AgreedNoticeIndicator>false</AgreedNoticeIndicator>
+          <BankruptcyIndicator>false</BankruptcyIndicator>
+          <CautionIndicator>false</CautionIndicator>
+          <CCBIIndicator>false</CCBIIndicator>
+          <ChargeeIndicator>true</ChargeeIndicator>
+          <ChargeIndicator>true</ChargeIndicator>
+          <ChargeRelatedRestrictionIndicator>false</ChargeRelatedRestrictionIndicator>
+          <ChargeRestrictionIndicator>true</ChargeRestrictionIndicator>
+          <CreditorsNoticeIndicator>false</CreditorsNoticeIndicator>
+          <DeathOfProprietorIndicator>false</DeathOfProprietorIndicator>
+          <DeedOfPostponementIndicator>false</DeedOfPostponementIndicator>
+          <DiscountChargeIndicator>false</DiscountChargeIndicator>
+          <EquitableChargeIndicator>false</EquitableChargeIndicator>
+          <GreenOutEntryIndicator>false</GreenOutEntryIndicator>
+          <HomeRightsChangeOfAddressIndicator>false</HomeRightsChangeOfAddressIndicator>
+          <HomeRightsIndicator>false</HomeRightsIndicator>
+          <LeaseHoldTitleIndicator>false</LeaseHoldTitleIndicator>
+          <MultipleChargeIndicator>false</MultipleChargeIndicator>
+          <NonChargeRestrictionIndicator>false</NonChargeRestrictionIndicator>
+          <NotedChargeIndicator>false</NotedChargeIndicator>
+          <PricePaidIndicator>false</PricePaidIndicator>
+          <PropertyDescriptionNotesIndicator>false</PropertyDescriptionNotesIndicator>
+          <RentChargeIndicator>false</RentChargeIndicator>
+          <RightOfPreEmptionIndicator>false</RightOfPreEmptionIndicator>
+          <ScheduleOfLeasesIndicator>false</ScheduleOfLeasesIndicator>
+          <SubChargeIndicator>false</SubChargeIndicator>
+          <UnidentifiedEntryIndicator>false</UnidentifiedEntryIndicator>
+          <UnilateralNoticeBeneficiaryIndicator>false</UnilateralNoticeBeneficiaryIndicator>
+          <UnilateralNoticeIndicator>false</UnilateralNoticeIndicator>
+          <VendorsLienIndicator>false</VendorsLienIndicator>
+        </RegisterEntryIndicators>
+        <Proprietorship>
+          <RegisteredProprietorParty>
+            <PrivateIndividual>
+              <Name>
+                <ForenamesName>VINCE DAVID</ForenamesName>
+                <SurnameName>SNELL</SurnameName>
+              </Name>
+            </PrivateIndividual>
+            <Address>
+              <PostcodeZone>
+                <Postcode>DN31 2LE</Postcode>
+              </PostcodeZone>
+              <AddressLine>
+                <Line>16 Queens Parade</Line>
+                <Line>Grimsby</Line>
+              </AddressLine>
+            </Address>
+          </RegisteredProprietorParty>
+          <RegisteredProprietorParty>
+            <PrivateIndividual>
+              <Name>
+                <ForenamesName>AMY</ForenamesName>
+                <SurnameName>SNELL</SurnameName>
+              </Name>
+            </PrivateIndividual>
+            <Address>
+              <PostcodeZone>
+                <Postcode>DN31 2LE</Postcode>
+              </PostcodeZone>
+              <AddressLine>
+                <Line>16 Queens Parade</Line>
+                <Line>Grimsby</Line>
+              </AddressLine>
+            </Address>
+          </RegisteredProprietorParty>
+        </Proprietorship>
+        <RestrictionDetails>
+          <RestrictionEntry>
+            <ChargeRestriction>
+              <RestrictionTypeCode>30</RestrictionTypeCode>
+              <ChargeID>1</ChargeID>
+              <EntryDetails>
+                <EntryNumber>3</EntryNumber>
+                <EntryText>RESTRICTION: No disposition of the registered estate by the proprietor of the registered estate is to be registered without a written consent signed by the proprietor for the time being of the Charge dated 3 December 2013 in favour of Yorkshire Bank Home Loans Limited referred to in the Charges Register.</EntryText>
+                <SubRegisterCode>B</SubRegisterCode>
+                <Infills>
+                  <ChargeDate>2013-12-03</ChargeDate>
+                  <ChargeParty>Yorkshire Bank Home Loans Limited</ChargeParty>
+                </Infills>
+              </EntryDetails>
+            </ChargeRestriction>
+          </RestrictionEntry>
+        </RestrictionDetails>
+        <Charge>
+          <ChargeEntry>
+            <ChargeID>1</ChargeID>
+            <ChargeDate>2013-12-03</ChargeDate>
+            <RegisteredCharge>
+              <EntryDetails>
+                <EntryNumber>3</EntryNumber>
+                <EntryText>REGISTERED CHARGE dated 3 December 2013.</EntryText>
+                <RegistrationDate>2013-12-18</RegistrationDate>
+                <SubRegisterCode>C</SubRegisterCode>
+                <Infills>
+                  <ChargeDate>2013-12-03</ChargeDate>
+                </Infills>
+              </EntryDetails>
+            </RegisteredCharge>
+            <ChargeProprietor>
+              <ChargeeParty>
+                <Organization>
+                  <Name>Yorkshire Bank Home Loans Limited</Name>
+                </Organization>
+                <Address>
+                  <PostcodeZone>
+                    <Postcode>G60 9AU</Postcode>
+                  </PostcodeZone>
+                  <AddressLine>
+                    <Line>Mortgage Services</Line>
+                    <Line>P.O. Box 3105</Line>
+                    <Line>Clydebank</Line>
+                    <Line>Glasgow</Line>
+                  </AddressLine>
+                </Address>
+              </ChargeeParty>
+              <EntryDetails>
+                <EntryNumber>4</EntryNumber>
+                <EntryText>Proprietor: YORKSHIRE BANK HOME LOANS LIMITED (Co. Regn. No. 1855020)  of Mortgage Services, P.O. Box 3105, Clydebank, Glasgow G60 9AU.</EntryText>
+                <RegistrationDate>2013-12-18</RegistrationDate>
+                <SubRegisterCode>C</SubRegisterCode>
+              </EntryDetails>
+            </ChargeProprietor>
+          </ChargeEntry>
+        </Charge>
+        <DocumentDetails>
+          <Document>
+            <DocumentType>50</DocumentType>
+            <DocumentDate>2013-12-03</DocumentDate>
+            <EntryNumber>B3</EntryNumber>
+            <EntryNumber>C3</EntryNumber>
+            <EntryNumber>C4</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <RegisterDescription>Charge</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>60</DocumentType>
+            <DocumentDate>1931-08-25</DocumentDate>
+            <EntryNumber>C2</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <FiledUnder>HS312085</FiledUnder>
+            <RegisterDescription>Conveyance</RegisterDescription>
+          </Document>
+        </DocumentDetails>
+      </OCSummaryData>
+      <OCRegisterData>
+        <PropertyRegister>
+          <DistrictDetails>
+            <EntryText>NORTH EAST LINCOLNSHIRE</EntryText>
+          </DistrictDetails>
+          <RegisterEntry>
+            <EntryNumber>1</EntryNumber>
+            <EntryType>Property Description</EntryType>
+            <EntryText>The Freehold land shown edged with red on the plan of the above Title filed at the Registry and being 16 Queens Parade, Grimsby and garage (DN31 2LE).</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>2</EntryNumber>
+            <EntryType>Beneficial/Subjective Easements - A Register</EntryType>
+            <EntryText>The land tinted pink on the title plan has the benefit of the following rights granted by but is subject to the following rights reserved by the Conveyance dated 28 September 1984 referred to in the Charges Register:-</EntryText>
+            <EntryText>Together with full right and liberty for the Purchasers and their successors in title to use and enjoy over any adjoining or neighburing properties all ways passages sewers watercourses lights liberties privileges and advantages appertaining or reputed to appertain to the property or heretofore used or enjoyed by the owners and occupiers thereof AND FURTHER Together with a right of way in common with all others having similar rights for the Purchaesrs the owners and occupiers of the property hereby conveyed and their licensees over the remainder of the said grass road and footpath fronting the properties in Queens Parade for gaining access to and from the front of this property and Cartergate and Littlefield Lane Grimsby aforesaid and also with a right of way in common with all others entitled thereto for the owners and occupiers of the property hereby conveyed and their licensees on foot or with vehicles at all times over the strip of land coloured blue on the plan attached hereto such right of way to extend to the height of eight feet only and to be subject to the payment of a proportionate part of the expense of maintenance and repair thereof</EntryText>
+            <EntryText>Except and Reserving in fee simple to the Vendor and his successors in title the owners for the time being of any adjoining or neighbouring properties full right and liberty to use and enjoy all ways passages sewers drains watercourses lights liberties privileges and advantages whatsoever in or under or affecting the property hereby conveyed and heretofore appertaining or reputed to appertain such adjoining or neighbouring properties or any of them or heretofore used and enjoyed by the owners and occupiers thereof</EntryText>
+            <EntryText>Subject also to all rights of way light air drainage passage and support and all other easements quasi-easements rights privileges and liabilities affecting the same and existing for the benefit of any adjoining or neighbouring properties.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>3</EntryNumber>
+            <EntryDate>2011-07-25</EntryDate>
+            <EntryType>Plan Related</EntryType>
+            <EntryText>A new title plan based on the latest revision of the Ordnance Survey Map has been prepared.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>4</EntryNumber>
+            <EntryType>Beneficial/Subjective Easements - A Register</EntryType>
+            <EntryText>The land tinted blue on the title plan has the benefit of the following rights granted by but is subject to the following rights reserved by a Transfer thereof dated 2 June 2004 made between (1) G.C Tyler Limited and (2) Vince David Snell and Amy Potter :-</EntryText>
+            <EntryText>Rights Granted for the benefit of the property</EntryText>
+            <EntryText>together with a right of way in common with other persons having a like right for all purposes over along and upon the fifteen feet road leading from Cartergate to Littlefield Lane and together also with (so far as the Transferor can grant the same) all rights of shelter and support from the adjoining garages as may be required to ensure the stability of the garage hereby transferred</EntryText>
+            <EntryText>Rights reserved for the benefit of other land</EntryText>
+            <EntryText>All such rights of shelter and support as may be required from the garage hereby transferred to ensure the stability of the adjoining garages.</EntryText>
+          </RegisterEntry>
+        </PropertyRegister>
+        <ProprietorshipRegister>
+          <RegisterEntry>
+            <EntryNumber>1</EntryNumber>
+            <EntryType>Proprietor</EntryType>
+            <EntryText>PROPRIETOR: VINCE DAVID SNELL and AMY SNELL of 16 Queens Parade, Grimsby DN31 2LE.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>2</EntryNumber>
+            <EntryType>Personal Covenants</EntryType>
+            <EntryText>The Transfers to the proprietor contain covenants to observe and perform the covenants referred to in the Charges Register and of indemnity in respect thereof.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>3</EntryNumber>
+            <EntryDate>2013-12-18</EntryDate>
+            <EntryType>Charge Restriction - B Register</EntryType>
+            <EntryText>RESTRICTION: No disposition of the registered estate by the proprietor of the registered estate is to be registered without a written consent signed by the proprietor for the time being of the Charge dated 3 December 2013 in favour of Yorkshire Bank Home Loans Limited referred to in the Charges Register.</EntryText>
+          </RegisterEntry>
+        </ProprietorshipRegister>
+        <ChargesRegister>
+          <RegisterEntry>
+            <EntryNumber>1</EntryNumber>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>A Conveyance of the land tinted pink on the title plan dated 28 September 1984 made between (1) The Right Honourable John Edward Pelham (Vendor) and (2) Gerald Glen Whincop and Patricia Jean Whincop (Purchasers) contains the following covenants:-</EntryText>
+            <EntryText>THE Purchasers so as to bind so far as may be the property into whosesoever hands the same may come and so that this covenant shall be for the benefit and protection of such part or parts of the Vendor's Grimsby Estate as shall for the time being remain unsold by the Vendor or other the owner or owners for the time being thereof claiming under the Vendor otherwise than by a Conveyance or Conveyances on sale or as shall from time to time have been sold by the Vendor or by any other person or persons claiming under him as aforesaid with the express benefit of this covenant HEREBY COVENANT with the Vendor that the Purchasers and those deriving title under them (a) will not use or suffer the property to be used otherwise than as and for a single private dwellinghouse with the usual outbuildings and (b) will indemnify and keep indemnified the Vendor and his successors in title against all costs and expenses in relation to the repair and maintenance and (if required at any time) the making up of the piece of land secondly hereby conveyed (being part of its twenty foot wide grass road and footpath referred to in the Second Schedule hereto) and of lopping felling or replacing any trees growing or planted along or within the said piece of land.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>2</EntryNumber>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>A Conveyance of the land tinted blue on the title plan and other land dated 25 August 1931 made between (1) The Right Honourable Charles Alfred Worsley Earl Of Yarborough and (2) Frank Herbert Rotherham contains restrictive covenants.</EntryText>
+            <EntryText>NOTE: Copy filed under HS312085.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>3</EntryNumber>
+            <EntryDate>2013-12-18</EntryDate>
+            <EntryType>Registered Charges</EntryType>
+            <EntryText>REGISTERED CHARGE dated 3 December 2013.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>4</EntryNumber>
+            <EntryDate>2013-12-18</EntryDate>
+            <EntryType>Chargee</EntryType>
+            <EntryText>Proprietor: YORKSHIRE BANK HOME LOANS LIMITED (Co. Regn. No. 1855020)  of Mortgage Services, P.O. Box 3105, Clydebank, Glasgow G60 9AU.</EntryText>
+          </RegisterEntry>
+        </ChargesRegister>
+      </OCRegisterData>
+    </Results>
+  </GatewayResponse>
+</ResponseOCWithSummaryV2_1Type>";
 
 		public const string TestResBM253452 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">

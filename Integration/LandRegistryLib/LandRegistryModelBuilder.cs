@@ -139,7 +139,7 @@
 
 					model.Proprietorship = new LandRegistryProprietorshipModel
 						{
-							CurrentProprietorshipDate = data.Proprietorship.CurrentProprietorshipDate.Value,
+							CurrentProprietorshipDate = data.Proprietorship.CurrentProprietorshipDate != null ? data.Proprietorship.CurrentProprietorshipDate.Value : (DateTime?)null,
 							ProprietorshipParties = new List<ProprietorshipPartyModel>()
 						};
 
