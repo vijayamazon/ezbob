@@ -6,12 +6,9 @@
 	using StructureMap;
 
 	public class MarketPlacesFacade {
-		public DateTime MarketplacesSeniority(Customer customer, bool onlyForEluminationPassed = false, bool? isPaymentAccount = null) {
+		public DateTime MarketplacesSeniority(Customer customer, bool? isPaymentAccount = null) {
 			var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Disabled == false).ToList();
-
-			if (onlyForEluminationPassed)
-				marketplaces = marketplaces.Where(m => m.EliminationPassed).ToList();
-
+			
 			if (isPaymentAccount != null)
 				marketplaces = marketplaces.Where(m => m.Marketplace.IsPaymentAccount == isPaymentAccount.Value).ToList();
 

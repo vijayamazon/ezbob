@@ -59,8 +59,6 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual DateTime? UpdatingEnd { get; set; }
 		public virtual string UpdateError { get; set; }
 
-		public virtual bool EliminationPassed { get; set; }
-
 		public virtual ISet<MP_PayPalTransaction> PayPalTransactions { get; set; }
 		public virtual ISet<MP_EbayOrder> EbayOrders { get; set; }
 		public virtual ISet<MP_AmazonOrder> AmazonOrders { get; set; }

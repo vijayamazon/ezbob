@@ -5,6 +5,7 @@
 	using EzBob.Backend.Strategies.Postcode;
 	using EzBob.Backend.Strategies.VatReturn;
 	using Ezbob.Backend.Models;
+	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData FirstOfMonthStatusNotifier() {
@@ -28,7 +29,12 @@
 		} // SetLateLoanStatus
 
 		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
-			return Execute(customerId, null, typeof(UpdateMarketplace), customerId, marketplaceId, doUpdateWizardStep);
+			ActionMetaData amd = Execute(customerId, null, typeof(UpdateMarketplace), customerId, marketplaceId, doUpdateWizardStep);
+			if (amd.Status == ActionStatus.Failed || amd.Status == ActionStatus.Terminated)
+			{
+				DB.ExecuteNonQuery("RecordMpUpdateFailure", new QueryParameter("MpId", marketplaceId));
+			}
+			return amd;
 		} // UpdateMarketplace
 
 		public ActionMetaData UpdateTransactionStatus() {

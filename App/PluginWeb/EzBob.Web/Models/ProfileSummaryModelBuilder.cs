@@ -369,7 +369,7 @@
 
 		private double GetSeniority(Customer customer, bool isPaymentAccountOnly)
 		{
-			var marketplacesSeniority = _mpFacade.MarketplacesSeniority(customer, false, isPaymentAccountOnly);
+			var marketplacesSeniority = _mpFacade.MarketplacesSeniority(customer, isPaymentAccountOnly);
 			var minAccountAge = DateTime.UtcNow - marketplacesSeniority;
 			var minAccountAgeTotalMonth = minAccountAge.TotalDays / 30;
 			return minAccountAgeTotalMonth;

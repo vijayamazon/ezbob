@@ -38,15 +38,12 @@ namespace EzBob.Models.Marketplaces.Builders
 		{
 			var data = GetAnalysisFunctionValuesModel(GetAnalysisFunctionValues(mp, history));
 
-			var eluminatingStatus = mp.EliminationPassed ? "Pass" : "Fail";
-
 			var model = new MarketPlaceModel
 			{
 				Id = mp.Id,
 				Type = mp.DisplayName,
 				Name = mp.Marketplace.Name,
 				LastChecked = FormattingUtils.FormatDateToString(mp.UpdatingEnd.HasValue ? mp.UpdatingEnd.Value : mp.Updated, "-"),
-				EluminatingStatus = eluminatingStatus,
 				UpdatingStatus = mp.GetUpdatingStatus(history),
 				UpdateError = mp.GetUpdatingError(history),
 				AnalysisDataInfo = data,
@@ -151,7 +148,6 @@ namespace EzBob.Models.Marketplaces.Builders
 			}
 
 			return data;
-
 		}
 
 		protected virtual void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)

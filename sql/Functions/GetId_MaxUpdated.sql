@@ -20,7 +20,6 @@ inner join
 		select id 
 		from MP_CustomerMarketPlace
 		where CustomerId = @CustomerId
-		--and EliminationPassed = 1
 		)
 	and UpdatingStart is not null
 	and UpdatingEnd is not null

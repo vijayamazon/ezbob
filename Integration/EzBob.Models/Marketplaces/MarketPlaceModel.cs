@@ -19,7 +19,6 @@
 		public string Name { get; set; }
 		public bool IsNew { get; set; }
 		public string LastChecked { get; set; }
-		public string EluminatingStatus { get; set; }
 		public string UpdatingStatus { get; set; }
 		public string UpdateError { get; set; }
 		public string RaitingPercent { get; set; }

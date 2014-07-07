@@ -1,22 +1,20 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
 	using EZBob.DatabaseLib.Common;
-	using EzBob.AmazonLib;
-	using EzBob.Backend.Strategies.MailStrategies.API;
-	using EzBob.PayPal;
-	using EzBob.eBayLib;
+	using AmazonLib;
+	using MailStrategies.API;
+	using PayPal;
+	using eBayLib;
 	using DbConstants;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using EKM;
-	using EZBob.DatabaseLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
 	using PayPoint;
 	using Sage;
-	using StructureMap;
 	using YodleeLib.connector;
 
 	public class UpdateMarketplace : AStrategy {
