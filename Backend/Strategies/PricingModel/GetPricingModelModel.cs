@@ -44,7 +44,7 @@
 				interestOnlyPeriod = sr["InterestOnlyPeriod"];
 				euCollectionRate = sr["EuCollectionRate"];
 				defaultRateCompanyShare = sr["DefaultRateCompanyShare"];
-				debtPercentOfCapital = sr["DebtOutOfTotalCapital"];
+				debtPercentOfCapital = sr["DebtPercentOfCapital"];
 				costOfDebtPA = sr["CostOfDebtPA"];
 				collectionRate = sr["CollectionRate"];
 				cogs = sr["Cogs"];
