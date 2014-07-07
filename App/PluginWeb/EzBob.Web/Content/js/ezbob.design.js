@@ -609,10 +609,12 @@ EzBob.UpdateBugsIcon = function (element, state) {
             iconClass = "fa fa-times";
             break;
         default:
-            iconClass = "";
+            iconClass = "fa fa-bug";
     }
     element.removeClass().addClass(iconClass);
-    element.closest("a").attr("data-original-title", "{0} bug".f(state)).tooltip('fixTitle');
+    if (iconClass != "fa fa-bug") {
+        element.closest("a").attr("data-original-title", "{0} bug".f(state)).tooltip('fixTitle');
+    }
 };
 
 EzBob.GlobalUpdateBugsIcon = function (customerId) {
@@ -623,8 +625,11 @@ EzBob.GlobalUpdateBugsIcon = function (customerId) {
 };
 
 EzBob.UpdateBugsIcons = function (data) {
+    if (!data || data.length == 0) {
+        EzBob.UpdateBugsIcon($('a[data-bug-type]'), 'NoBug ');
+    }
     _.each(data, function (val) {
-        var element = val.MarketPlaceId ?
+        var element = val.MarketPlaceId ? 
             $('a[data-bug-mp={0}]'.f(val.MarketPlaceId)) :
             (
                 val.DirectorId ?

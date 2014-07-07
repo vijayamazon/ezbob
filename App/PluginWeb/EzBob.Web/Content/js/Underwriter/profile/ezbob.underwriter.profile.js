@@ -524,7 +524,6 @@
         _this.summaryInfoModel.trigger("sync");
         _this.checkCustomerAvailability(_this.summaryInfoModel);
         _this.recordRecentCustomers(id);
-        EzBob.UpdateBugsIcons(fullModel.get("Bugs"));
         _this.experianInfoModel.set({
           Id: id
         }, {
@@ -622,6 +621,8 @@
             return that.fillFunds();
           }), that.fundingModel.get('RefreshInterval'));
         });
+        EzBob.InitBugs();
+        EzBob.UpdateBugsIcons(fullModel.get("Bugs"));
         return BlockUi("Off");
       });
       return EzBob.handleUserLayoutSetting();

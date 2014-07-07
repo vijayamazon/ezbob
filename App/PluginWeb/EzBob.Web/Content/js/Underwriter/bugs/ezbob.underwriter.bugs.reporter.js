@@ -154,85 +154,89 @@
 
   })(EzBob.BoundItemView);
 
-  $('body').on('click', 'a[data-bug-type]', function(e) {
-    var $e, bugCustomer, bugMP, bugType, director, xhr,
-      _this = this;
-    $e = $(e.currentTarget);
-    bugType = $e.data('bug-type');
-    bugMP = $e.data('bug-mp');
-    bugCustomer = $e.data('bug-customer');
-    director = $e.data('credit-bureau-director-id');
-    if (!((bugType != null) && (bugCustomer != null))) {
-      return false;
-    }
-    xhr = $.getJSON("" + window.gRootPath + "Underwriter/Bugs/TryGet", {
-      MP: bugMP,
-      CustomerId: bugCustomer,
-      BugType: bugType,
-      Director: director
-    });
-    xhr.done(function(data) {
-      var model, view;
-      if ((data != null ? data.error : void 0)) {
-        return;
+  EzBob.InitBugs = function() {
+    return $('body').unbind('click').on('click', 'a[data-bug-type]', function(e) {
+      var $e, bugCustomer, bugMP, bugType, director, xhr,
+        _this = this;
+      $e = $(e.currentTarget);
+      bugType = $e.attr('data-bug-type');
+      bugMP = $e.attr('data-bug-mp');
+      bugCustomer = $e.attr('data-bug-customer');
+      director = $e.attr('data-credit-bureau-director-id');
+      console.log(e, $e.attr('data-bug-customer'));
+      if (!((bugType != null) && (bugCustomer != null))) {
+        return false;
       }
-      view = null;
-      model = null;
-      if (data != null ? data.Id : void 0) {
-        model = new EzBob.Underwriter.BugModel(data);
-        view = new EzBob.Underwriter.EditBugView({
-          model: model
-        });
-        view.on('closeBug', function() {
-          var req;
-          req = $.post("" + window.gRootPath + "Underwriter/Bugs/Close", model.toJSON());
-          return req.done(function(response) {
-            EzBob.UpdateBugsIcon($e, response.State);
-            return view.close();
-          });
-        });
-        view.on('reopenBug', function() {
-          var req;
-          req = $.post("" + window.gRootPath + "Underwriter/Bugs/Reopen", model.toJSON());
-          return req.done(function(response) {
-            model = new EzBob.Underwriter.BugModel(response);
-            view.model = model;
-            view.render();
-            return EzBob.UpdateBugsIcon($e, response.State);
-          });
-        });
-        view.on("closed", function() {
-          return EzBob.UpdateBugsIcon($e, model.get('State'));
-        });
-      } else {
-        model = new EzBob.Underwriter.BugModel({
-          Type: bugType,
-          CustomerId: bugCustomer,
-          MarketPlaceId: bugMP,
-          DirectorId: director
-        });
-        view = new EzBob.Underwriter.ReportBugView({
-          model: model
-        });
-        EzBob.UpdateBugsIcon($e, model.get('State'));
-        view.on("closed", function() {
-          return EzBob.UpdateBugsIcon($e, "New");
-        });
-      }
-      view.on('save', function() {
-        if (model.get("State") !== "Closed") {
-          model.save();
-        }
-        return view.close();
+      xhr = $.getJSON("" + window.gRootPath + "Underwriter/Bugs/TryGet", {
+        MP: bugMP,
+        CustomerId: bugCustomer,
+        BugType: bugType,
+        Director: director
       });
-      view.options = {
-        show: true,
-        keyboard: false,
-        focusOn: "textarea:first"
-      };
-      return EzBob.App.jqmodal.show(view);
+      xhr.done(function(data) {
+        var model, view;
+        console.log(bugCustomer, bugType, data);
+        if ((data != null ? data.error : void 0)) {
+          return;
+        }
+        view = null;
+        model = null;
+        if (data != null ? data.Id : void 0) {
+          model = new EzBob.Underwriter.BugModel(data);
+          view = new EzBob.Underwriter.EditBugView({
+            model: model
+          });
+          view.on('closeBug', function() {
+            var req;
+            req = $.post("" + window.gRootPath + "Underwriter/Bugs/Close", model.toJSON());
+            return req.done(function(response) {
+              EzBob.UpdateBugsIcon($e, response.State);
+              return view.close();
+            });
+          });
+          view.on('reopenBug', function() {
+            var req;
+            req = $.post("" + window.gRootPath + "Underwriter/Bugs/Reopen", model.toJSON());
+            return req.done(function(response) {
+              model = new EzBob.Underwriter.BugModel(response);
+              view.model = model;
+              view.render();
+              return EzBob.UpdateBugsIcon($e, response.State);
+            });
+          });
+          view.on("closed", function() {
+            return EzBob.UpdateBugsIcon($e, model.get('State'));
+          });
+        } else {
+          model = new EzBob.Underwriter.BugModel({
+            Type: bugType,
+            CustomerId: bugCustomer,
+            MarketPlaceId: bugMP,
+            DirectorId: director
+          });
+          view = new EzBob.Underwriter.ReportBugView({
+            model: model
+          });
+          EzBob.UpdateBugsIcon($e, model.get('State'));
+          view.on("closed", function() {
+            return EzBob.UpdateBugsIcon($e, "New");
+          });
+        }
+        view.on('save', function() {
+          if (model.get("State") !== "Closed") {
+            model.save();
+          }
+          return view.close();
+        });
+        view.options = {
+          show: true,
+          keyboard: false,
+          focusOn: "textarea:first"
+        };
+        return EzBob.App.jqmodal.show(view);
+      });
+      return false;
     });
-    return false;
-  });
+  };
 
 }).call(this);

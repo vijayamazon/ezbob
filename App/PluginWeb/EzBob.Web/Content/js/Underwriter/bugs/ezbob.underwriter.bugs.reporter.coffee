@@ -64,57 +64,58 @@ class EzBob.Underwriter.EditBugView extends EzBob.BoundItemView
     reopenBug: ->
         @trigger "reopenBug"
 
-$('body').on 'click', 'a[data-bug-type]', (e) ->
-    
-    $e = $(e.currentTarget)
-    bugType = $e.data 'bug-type'
-    bugMP = $e.data 'bug-mp'
-    bugCustomer = $e.data 'bug-customer'
-    director = $e.data 'credit-bureau-director-id'
+EzBob.InitBugs = () ->
+    $('body').unbind('click').on 'click', 'a[data-bug-type]', (e) ->
+        $e = $(e.currentTarget)
+        
+        bugType = $e.attr 'data-bug-type'
+        bugMP = $e.attr 'data-bug-mp'
+        bugCustomer = $e.attr 'data-bug-customer'
+        director = $e.attr 'data-credit-bureau-director-id'
+        return false unless bugType? && bugCustomer?
 
-    return false unless bugType? && bugCustomer?
+        xhr = $.getJSON "#{window.gRootPath}Underwriter/Bugs/TryGet", {MP: bugMP, CustomerId: bugCustomer, BugType: bugType, Director: director}
+         
+        xhr.done (data) =>
+            return if (data?.error)
 
-    xhr = $.getJSON "#{window.gRootPath}Underwriter/Bugs/TryGet", {MP: bugMP, CustomerId: bugCustomer, BugType: bugType, Director: director}
-    xhr.done (data) =>
-        return if (data?.error)
+            view = null
+            model = null
 
-        view = null
-        model = null
+            if data?.Id
+                model = new EzBob.Underwriter.BugModel data
+                view = new EzBob.Underwriter.EditBugView( model: model)
+                view.on 'closeBug', ->
+                    req = $.post "#{window.gRootPath}Underwriter/Bugs/Close", model.toJSON()
+                    req.done (response)-> 
+                        EzBob.UpdateBugsIcon $e, response.State
+                        view.close()
 
-        if data?.Id
-            model = new EzBob.Underwriter.BugModel data
-            view = new EzBob.Underwriter.EditBugView( model: model)
-            view.on 'closeBug', ->
-                req = $.post "#{window.gRootPath}Underwriter/Bugs/Close", model.toJSON()
-                req.done (response)-> 
-                    EzBob.UpdateBugsIcon $e, response.State
-                    view.close()
+                view.on 'reopenBug', ->
+                    req = $.post "#{window.gRootPath}Underwriter/Bugs/Reopen", model.toJSON()
+                    req.done (response)->
+                        model = new EzBob.Underwriter.BugModel response
+                        view.model = model
+                        view.render()
+                        EzBob.UpdateBugsIcon $e, response.State
 
-            view.on 'reopenBug', ->
-                req = $.post "#{window.gRootPath}Underwriter/Bugs/Reopen", model.toJSON()
-                req.done (response)->
-                    model = new EzBob.Underwriter.BugModel response
-                    view.model = model
-                    view.render()
-                    EzBob.UpdateBugsIcon $e, response.State
-
-            view.on "closed", ->
+                view.on "closed", ->
+                    EzBob.UpdateBugsIcon $e, model.get('State')
+            else
+                model = new EzBob.Underwriter.BugModel
+                    Type : bugType
+                    CustomerId: bugCustomer
+                    MarketPlaceId: bugMP
+                    DirectorId: director
+                view = new EzBob.Underwriter.ReportBugView( model: model)
                 EzBob.UpdateBugsIcon $e, model.get('State')
-        else
-            model = new EzBob.Underwriter.BugModel
-                Type : bugType
-                CustomerId: bugCustomer
-                MarketPlaceId: bugMP
-                DirectorId: director
-            view = new EzBob.Underwriter.ReportBugView( model: model)
-            EzBob.UpdateBugsIcon $e, model.get('State')
-            view.on "closed", ->
-                EzBob.UpdateBugsIcon $e, "New"
+                view.on "closed", ->
+                    EzBob.UpdateBugsIcon $e, "New"
 
-        view.on 'save', ->
-            model.save() unless model.get("State") is "Closed"
-            view.close()
+            view.on 'save', ->
+                model.save() unless model.get("State") is "Closed"
+                view.close()
 
-        view.options = {show: true, keyboard: false, focusOn: "textarea:first"}
-        EzBob.App.jqmodal.show view
-    false
+            view.options = {show: true, keyboard: false, focusOn: "textarea:first"}
+            EzBob.App.jqmodal.show view
+        false
