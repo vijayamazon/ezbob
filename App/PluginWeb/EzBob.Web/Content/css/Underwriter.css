@@ -1595,7 +1595,7 @@ body {
 #profileHead {
     padding-top: 10px;
     position: fixed;
-    z-index: 3;
+    z-index: 15;
     width: calc(100% - 475px);
     background-color: #ebebeb;
 }
