@@ -90,7 +90,7 @@
 				return EchoSignSendResult.Fail;
 			} // if
 
-			return Send(oLetter.CustomerID, oLetter.Directors, oLetter.TemplateID, oLetter.SendToCustomer);
+			return Send(oLetter.CustomerID, oLetter.Directors ?? new int[0], oLetter.TemplateID, oLetter.SendToCustomer);
 		} // Send
 
 		private EchoSignSendResult Send(int nCustomerID, IEnumerable<int> aryDirectors, int nTemplateID, bool bSendToCustomer) {
@@ -157,20 +157,51 @@
 
 		#region method ProcessPending
 
-		public void ProcessPending(int? nCustomerID = null) {
+		public List<EsignatureStatus> ProcessPending(int? nCustomerID = null) {
 			if (!m_bIsReady) {
 				m_oLog.Msg("EchoSign cannot process pending - not ready.");
-				return;
+				return new List<EsignatureStatus>();
 			} // if
 
 			var oSp = new SpLoadPendingEsignatures(nCustomerID, m_oDB, m_oLog);
 			oSp.Load();
 
-			foreach (KeyValuePair<int, Esignature> pair in oSp.Signatures) {
-				var oSignature = pair.Value;
+			m_oLog.Debug(
+				"{0} pending signature{1} discovered.",
+				oSp.Signatures.Count,
+				oSp.Signatures.Count == 1 ? "" : "s"
+			);
 
-				GetDocumentInfo(oSignature);
+			var oCompleted = new List<EsignatureStatus>();
+
+			foreach (KeyValuePair<int, Esignature> pair in oSp.Signatures) {
+				Esignature oSignature = pair.Value;
+
+				AgreementStatus? nStatus = GetDocumentInfo(oSignature);
+
+				if ((nStatus != null) && m_oTerminalStatuses.Contains(nStatus.Value)) {
+					m_oLog.Debug(
+						"Terminal status {0} for e-signature {1} (customer {2}).",
+						nStatus.Value, oSignature.ID, oSignature.CustomerID
+					);
+
+					oCompleted.Add(new EsignatureStatus {
+						CustomerID = oSignature.CustomerID,
+						EsignatureID = oSignature.ID,
+						Status = nStatus.Value,
+					});
+				} // if
 			} // for each signature
+
+			m_oLog.Debug(
+				"{0} pending signature{1} processed, out of them {2} ha{3} completed.",
+				oSp.Signatures.Count,
+				oSp.Signatures.Count == 1 ? "" : "s",
+				oCompleted.Count,
+				oCompleted.Count == 1 ? "ve" : "s"
+			);
+
+			return oCompleted;
 		} // ProcessPending
 
 		#endregion method ProcessPending
@@ -230,7 +261,7 @@
 
 		#region method GetDocumentInfo
 
-		private void GetDocumentInfo(Esignature oSignature) {
+		private AgreementStatus? GetDocumentInfo(Esignature oSignature) {
 			m_oLog.Msg("Loading document info for the key '{0}' started...", oSignature.DocumentKey);
 
 			DocumentInfo oResult;
@@ -240,7 +271,7 @@
 			}
 			catch (Exception e) {
 				m_oLog.Warn(e, "Failed to load document info for the '{0}'.", oSignature.DocumentKey);
-				return;
+				return null;
 			} // try
 
 			m_oLog.Debug("Loading document info result:");
@@ -272,6 +303,8 @@
 			} // if
 
 			m_oLog.Msg("Loading document info for the key '{0}' complete.", oSignature.DocumentKey);
+
+			return oResult.status;
 		} // GetDocumentInfo
 
 		#endregion method GetDocumentInfo

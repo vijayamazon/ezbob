@@ -50,8 +50,6 @@
 
 		#endregion method Send
 
-		#endregion public
-		
 		#region method SendMailViaMandrill
 
 		public void SendMailViaMandrill(MailMetaData oMeta) {
@@ -78,6 +76,8 @@
 		} // SendMailViaMandrill
 
 		#endregion method SendMailViaMandrill
+
+		#endregion public
 
 		#region private
 

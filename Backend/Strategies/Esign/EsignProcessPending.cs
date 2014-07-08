@@ -1,7 +1,9 @@
 ﻿namespace EzBob.Backend.Strategies.Esign {
+	using System.Collections.Generic;
 	using EchoSignLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using MailStrategies;
 
 	public class EsignProcessPending : AStrategy {
 		#region public
@@ -26,7 +28,10 @@
 		#region method Execute
 
 		public override void Execute() {
-			m_oFacade.ProcessPending(m_nCustomerID);
+			List<EsignatureStatus> oCompleted = m_oFacade.ProcessPending(m_nCustomerID);
+
+			foreach (var oStatus in oCompleted)
+				new NotifyDocumentSigned(oStatus, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute

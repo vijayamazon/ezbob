@@ -1,0 +1,2 @@
+ALTER TABLE ExperianDirectors ALTER COLUMN BirthDate DATETIME NULL
+GO

@@ -44,6 +44,7 @@
     <Compile Include="EchoSignEnvelope.cs" />
     <Compile Include="EchoSignFacade.cs" />
     <Compile Include="EchoSignSendResult.cs" />
+    <Compile Include="EsignatureStatus.cs" />
     <Compile Include="Internal\Address.cs" />
     <Compile Include="Internal\AAddressable.cs" />
     <Compile Include="Internal\Company.cs" />

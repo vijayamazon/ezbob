@@ -12,6 +12,14 @@
 		} // TestConfiguration
 
 		[Test]
+		public void TestSendBoardResolutionCustomerOnly() {
+			var esf = new EchoSignFacade(m_oDB, m_oLog);
+			esf.Send(new [] { new EchoSignEnvelope {
+				CustomerID = 28, Directors = null, TemplateID = 1, SendToCustomer = true,
+			}});
+		} // TestSendBoardResolutionCustomerOnly
+
+		[Test]
 		public void TestSendBoardResolution() {
 			var esf = new EchoSignFacade(m_oDB, m_oLog);
 			esf.Send(new [] { new EchoSignEnvelope {
