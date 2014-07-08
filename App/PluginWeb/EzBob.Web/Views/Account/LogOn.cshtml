@@ -48,7 +48,7 @@
 
 			<div class="form_field_container">
 				<label class="checkbox" for="RememberMe" style="font-weight: normal">
-					Remember me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" ui-event-control-id="login:remember_me" />
+					Remember me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe.ToString().ToLowerInvariant()" ui-event-control-id="login:remember_me" />
 				</label>
 			</div>
 			<div class="form_buttons_container">

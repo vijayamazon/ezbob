@@ -9,6 +9,7 @@ class EzBob.CustomerLoginView extends Backbone.View
     "click :submit": "submit"
     "keyup input": "inputChanged"
     "change input": "inputChanged"
+    "click.checks #RememberMe": "rememberMeChanged" 
 
   render: ->
     @$el.html @template()
@@ -27,6 +28,9 @@ class EzBob.CustomerLoginView extends Backbone.View
     EzBob.UiAction.registerView @
     @
 
+  rememberMeChanged: ->
+    rememberMe = @$el.find("#RememberMe")
+    rememberMe.val(rememberMe.is(':checked'));
   inputChanged: ->
         enabled =  EzBob.Validation.checkForm(@validator) 
         $("#loginSubmit").toggleClass('disabled', !enabled)
