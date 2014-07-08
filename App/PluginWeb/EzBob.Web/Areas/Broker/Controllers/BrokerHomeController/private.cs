@@ -190,15 +190,22 @@
 		#region class CustomerDetailsBrokerForJsonResult
 
 		public class CustomerDetailsBrokerForJsonResult : BrokerForJsonResult {
-			public CustomerDetailsBrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null, BrokerCustomerDetails oDetails = null)
-				: base(sErrorMsg, bExplicitSuccess) {
+			public CustomerDetailsBrokerForJsonResult(
+				string sErrorMsg = "",
+				bool? bExplicitSuccess = null,
+				BrokerCustomerDetails oDetails = null,
+				Esigner[] oPotentialSigners = null 
+			) : base(sErrorMsg, bExplicitSuccess) {
 				crm_data = oDetails == null ? null : oDetails.CrmData;
 				personal_data = oDetails == null ? null : oDetails.PersonalData;
+				potential_signers = oPotentialSigners ?? new Esigner[0];
 			} // constructor
 
 			public virtual List<BrokerCustomerCrmEntry> crm_data { get; private set; }
 
 			public virtual BrokerCustomerPersonalData personal_data { get; private set; }
+
+			public virtual Esigner[] potential_signers { get; private set; }
 		} // CustomerDetailsBrokerForJsonResult
 
 		#endregion class CustomerDetailsBrokerForJsonResult

@@ -435,6 +435,37 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="BrokerCustomerPersonalData" nillable="true" type="tns:BrokerCustomerPersonalData" />
+  <xs:complexType name="ArrayOfEsigner">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Esigner" nillable="true" type="tns:Esigner" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEsigner" nillable="true" type="tns:ArrayOfEsigner" />
+  <xs:complexType name="Esigner">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BirthDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="County" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="DirectorID" type="xs:int" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ID" type="xs:long" />
+      <xs:element minOccurs="0" name="IsDirector" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsShareholder" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Line1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Line2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Line3" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MobilePhone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SignDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StatusID" type="xs:int" />
+      <xs:element minOccurs="0" name="Town" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Esigner" nillable="true" type="tns:Esigner" />
   <xs:complexType name="ArrayOfBrokerCustomerFile">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="BrokerCustomerFile" nillable="true" type="tns:BrokerCustomerFile" />
@@ -499,34 +530,4 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Esignature" nillable="true" type="tns:Esignature" />
-  <xs:complexType name="ArrayOfEsigner">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Esigner" nillable="true" type="tns:Esigner" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfEsigner" nillable="true" type="tns:ArrayOfEsigner" />
-  <xs:complexType name="Esigner">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="County" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
-      <xs:element minOccurs="0" name="DirectorID" type="xs:int" />
-      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ID" type="xs:long" />
-      <xs:element minOccurs="0" name="IsDirector" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsShareholder" type="xs:boolean" />
-      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Line1" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Line2" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Line3" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="MobilePhone" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="SignDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="StatusID" type="xs:int" />
-      <xs:element minOccurs="0" name="Town" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Esigner" nillable="true" type="tns:Esigner" />
 </xs:schema>

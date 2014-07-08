@@ -844,6 +844,9 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.Models.BrokerCustomerDetails DataField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.Esigner[] PotentialSignersField;
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.BrokerCustomerDetails Data {
             get {
@@ -853,6 +856,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.DataField, value) != true)) {
                     this.DataField = value;
                     this.RaisePropertyChanged("Data");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.Esigner[] PotentialSigners {
+            get {
+                return this.PotentialSignersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PotentialSignersField, value) != true)) {
+                    this.PotentialSignersField = value;
+                    this.RaisePropertyChanged("PotentialSigners");
                 }
             }
         }

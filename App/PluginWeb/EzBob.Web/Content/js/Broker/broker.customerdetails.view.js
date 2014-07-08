@@ -9,6 +9,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		this.CrmTable = null;
 		this.FileTable = null;
 		this.Dropzone = null;
+		this.DirectorsList = null;
 
 		this.$el = $('.section-customer-details');
 		this.$el.off();
@@ -24,9 +25,37 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		evt['click .download-customer-file'] = 'downloadCustomerFile';
 		evt['click .remove-file-mark'] = 'fileMarkChanged';
 		evt['click .delete-selected-files'] = 'deleteSelectedFiles';
+		evt['click .btn-edit-director'] = 'startEditDirector';
 
 		return evt;
 	}, // events
+
+	startEditDirector: function(event) {
+		var oRow = $(event.target).closest('TR');
+
+		if (oRow.length !== 1)
+			return;
+
+		var oView = new EzBob.EditExperianDirectorView({
+			data: oRow.data('for-edit'),
+
+			saveUrl: window.gRootPath + 'Broker/BrokerHome/SaveExperianDirector',
+
+			row: oRow,
+
+			editBtn: oRow.find('.btn-edit-director'),
+			saveBtn: oRow.find('.btn-save-director'),
+			cancelBtn: oRow.find('.btn-cancel-edit'),
+
+			emailCell: oRow.find('.grid-item-email'),
+			mobilePhoneCell: oRow.find('.grid-item-phone'),
+			addressCell: oRow.find('.grid-item-address'),
+
+			additionalData: { sCustomerID: this.CustomerID, sContactEmail: this.router.getAuth(), },
+		});
+
+		oView.render();
+	}, // startEditDirector
 
 	clear: function() {
 		EzBob.Broker.CustomerDetailsView.__super__.clear.apply(this, arguments);
@@ -121,9 +150,113 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 				oCaption.find('.dataTables_filter').remove();
 				oCaption.append($('.dataTables_filter', oGroup));
+
+				self.reloadDirectors(oResponse.potential_signers);
 			} // on success loading customer details
 		);
 	}, // reloadData
+
+	reloadDirectors: function(oPotentialSigners) {
+		var self = this;
+
+		var aaData = [];
+
+		_.each(oPotentialSigners, function(director) {
+			if (director.DirectorID === 0)
+				return;
+
+			var sAddress = _.filter([director.Line1, director.Line2, director.Line3, director.Town, director.County, director.Postcode], $.trim).join(' ');
+
+			var sBirthDate = (director.BirthDate) ? moment.utc(director.BirthDate).format('MMMM Do YYYY') : '';
+
+			aaData.push({
+				id: director.DirectorID,
+				name: director.FirstName + ' ' + director.LastName,
+				email: director.Email,
+				phone: director.MobilePhone,
+				birthDate: sBirthDate,
+				address: sAddress,
+				isShareholder: director.IsShareholder,
+				isDirector: director.IsDirector,
+				isExperian: director.Type === 'experian',
+				forEdit: new EzBob.EditExperianDirectorData({
+					directorID: director.DirectorID,
+					email: director.Email,
+					mobilePhone: director.MobilePhone,
+					line1: director.Line1,
+					line2: director.Line2,
+					line3: director.Line3,
+					town: director.Town,
+					county: director.County,
+					postcode: director.Postcode,
+				}),
+			});
+		});
+
+		var opts = {
+			bDestroy: true,
+			bProcessing: true,
+			aoColumns: EzBob.DataTables.Helper.extractColumns('name,birthDate,email,phone,address,isDirector,isShareholder'),
+
+			aaData: aaData,
+
+			aaSorting: [],
+			bSort: false,
+
+			aLengthMenu: [[-1], ['all']],
+			iDisplayLength: -1,
+
+			sPaginationType: 'bootstrap',
+			bJQueryUI: false,
+
+			bAutoWidth: true,
+			sDom: 'tr',
+
+			fnRowCallback: _.bind(self.directorsListRowCallback, self),
+		};
+
+		_.each(opts.aoColumns, function(col) {
+			if ((col.mData !== 'isDirector') && (col.mData !== 'isShareholder'))
+				col.sClass += ' l';
+			else
+				col.sClass += ' narrow-as-possible';
+		});
+
+		opts.aoColumns.push({
+			sClass: 'grid-item-edit narrow-as-possible',
+			mData: null,
+		});
+
+		if (this.DirectorsList !== null) {
+			this.DirectorsList.fnClearTable();
+			this.DirectorsList = null;
+		} // if
+
+		var oTbl = this.$el.find('.directors-list');
+		this.DirectorsList = oTbl.dataTable(opts);
+		oTbl.css('width', '');
+	}, // reloadDirectors
+
+	directorsListRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+		var oRow = $(oTR);
+
+		oRow.data('for-edit', oData.forEdit);
+
+		if (oData.isExperian) {
+			oRow.find('.grid-item-edit').empty()
+				.append(this.$el.find('.templates').find('.btn-edit-director').clone(true).removeClass('orange'))
+				.append(this.$el.find('.templates').find('.btn-save-director').clone(true).removeClass('orange').hide())
+				.append(this.$el.find('.templates').find('.btn-cancel-edit').clone(true).removeClass('orange').hide());
+		} // if
+
+		var oCell = oRow.find('.grid-item-isDirector').empty();
+		if (oData.isDirector === 'yes')
+			oCell.append($('<i class="fa fa-check-square-o"></i>'));
+
+		oCell = oRow.find('.grid-item-isShareholder').empty();
+		if (oData.isShareholder === 'yes')
+			oCell.append($('<i class="fa fa-check-square-o"></i>'));
+	}, // directorsListRowCallback
 
 	reloadFileList: function() {
 		this.clearFiles();

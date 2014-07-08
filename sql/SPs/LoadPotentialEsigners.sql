@@ -28,7 +28,8 @@ BEGIN
 		a.Line3,
 		a.Town,
 		a.County,
-		a.Postcode
+		a.Postcode,
+		c.DateOfBirth AS BirthDate
 	FROM
 		Customer c
 		INNER JOIN EsignUserAgreementStatus s ON s.StatusID = 7
@@ -53,7 +54,8 @@ BEGIN
 		a.Line3,
 		a.Town,
 		a.County,
-		a.Postcode
+		a.Postcode,
+		d.DateOfBirth AS BirthDate
 	FROM
 		Director d
 		INNER JOIN Company co ON d.CompanyId = co.Id
@@ -78,7 +80,8 @@ BEGIN
 		d.Line3,
 		d.Town,
 		d.County,
-		d.Postcode
+		d.Postcode,
+		d.BirthDate
 	FROM
 		ExperianDirectors d
 		INNER JOIN Customer c ON c.Id = d.CustomerID AND (@CustomerID IS NULL OR c.Id = @CustomerID)

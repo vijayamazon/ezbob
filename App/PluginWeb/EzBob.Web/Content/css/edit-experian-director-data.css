@@ -67,3 +67,31 @@
 #profile-main table.directors-list .field_status {
 	float: none;
 }
+
+/* Broker section */
+
+.customer-directors-in-broker .button {
+	width: 80px;
+	display: block;
+}
+
+.customer-directors-in-broker .btn-cancel-edit {
+	margin-top: 0.3em;
+}
+
+.customer-directors-in-broker .attardi-input {
+	width: 150px;
+}
+
+.customer-directors-in-broker .more-rows,
+.customer-directors-in-broker td.edit-mode {
+	padding-top: 20px;
+}
+
+.customer-directors-in-broker .form_field {
+	width: 130px;
+}
+
+.customer-directors-in-broker .field_status {
+	float: none;
+}

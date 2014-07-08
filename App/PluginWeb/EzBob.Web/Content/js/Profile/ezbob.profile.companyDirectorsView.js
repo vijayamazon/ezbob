@@ -77,8 +77,6 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 			});
 		});
 
-		console.log('aryData', aryData);
-
 		if (this.directorsList !== null) {
 			this.directorsList.fnClearTable();
 			this.directorsList = null;

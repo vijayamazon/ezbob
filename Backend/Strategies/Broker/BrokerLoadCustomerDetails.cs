@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using System;
+	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -16,6 +17,7 @@
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			Result = new BrokerCustomerDetails();
+			PotentialEsigners = new List<Esigner>();
 		} // constructor
 
 		#endregion constructor
@@ -97,6 +99,12 @@
 				new QueryParameter("@RefNum", m_sCustomerRefNum),
 				new QueryParameter("@ContactEmail", m_sContactEmail)
 			);
+
+			PotentialEsigners = DB.Fill<Esigner>(
+				"LoadPotentialEsigners",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", raw.CustomerID)
+			);
 		} // Execute
 
 		#endregion method Execute
@@ -106,6 +114,12 @@
 		public BrokerCustomerDetails Result { get; private set; } // Result
 
 		#endregion property Result
+
+		#region property PotentialEsigners
+
+		public List<Esigner> PotentialEsigners { get; private set; }
+
+		#endregion property PotentialEsigners
 
 		#endregion public
 

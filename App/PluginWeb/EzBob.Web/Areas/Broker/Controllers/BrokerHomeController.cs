@@ -333,7 +333,7 @@
 
 			ms_oLog.Debug("Broker load customer details request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
 
-			return new CustomerDetailsBrokerForJsonResult(oDetails: oDetails.Data);
+			return new CustomerDetailsBrokerForJsonResult(oDetails: oDetails.Data, oPotentialSigners: oDetails.PotentialSigners);
 		} // LoadCustomerDetails
 
 		#endregion action LoadCustomerDetails
@@ -848,5 +848,70 @@
 		} // UpdatePassword
 
 		#endregion action UpdatePassword
+
+		#region action SaveExperianDirector
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult SaveExperianDirector(
+			string sCustomerID,
+			string sContactEmail,
+			int directorID,
+			string email,
+			string mobilePhone,
+			string line1,
+			string line2,
+			string line3,
+			string town,
+			string county,
+			string postcode
+		) {
+			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Save Experian director details for customer " + sCustomerID, sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			ms_oLog.Debug("Saving Experian director (BrokerHome controller, broker {9}): {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
+				directorID,
+				email,
+				mobilePhone,
+				line1,
+				line2,
+				line3,
+				town,
+				county,
+				postcode,
+				sContactEmail
+			);
+
+			var m = new Esigner {
+				DirectorID = directorID,
+				Email = (email ?? string.Empty).Trim(),
+				MobilePhone = (mobilePhone ?? string.Empty).Trim(),
+				Line1 = (line1 ?? string.Empty).Trim(),
+				Line2 = (line2 ?? string.Empty).Trim(),
+				Line3 = (line3 ?? string.Empty).Trim(),
+				Town = (town ?? string.Empty).Trim(),
+				County = (county ?? string.Empty).Trim(),
+				Postcode = (postcode ?? string.Empty).Trim(),
+			};
+
+			string sValidation = m.ValidateExperianDirectorDetails();
+
+			if (!string.IsNullOrWhiteSpace(sValidation))
+				return new BrokerForJsonResult(sValidation);
+
+			try {
+				m_oServiceClient.Instance.UpdateExperianDirectorDetails(null, null, m);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to save Experian director details.");
+				return new BrokerForJsonResult("Failed to save director details.");
+			} // try
+
+			return new BrokerForJsonResult();
+		} // SaveExperianDirector
+
+		#endregion action SaveExperianDirector
 	} // class BrokerHomeController
 } // namespace

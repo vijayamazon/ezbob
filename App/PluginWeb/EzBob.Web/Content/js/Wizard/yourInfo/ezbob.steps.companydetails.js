@@ -106,20 +106,21 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
 			this.typeOfBusinessChanged();
 
-	    var enabled = this.isEnabled();
+		var enabled = this.isEnabled();
 
 		$('.btn-continue').toggleClass('disabled', !enabled);
 		this.$el.find('.cashInput').moneyFormat();
 	}, // inputChanged
 
-    isEnabled: function() {
-        var enabled = this.validator.checkForm();
+	isEnabled: function() {
+		var enabled = this.validator.checkForm();
 
-        if (enabled && this.CompanyView)
-            enabled = this.CompanyView.readyToContinue();
+		if (enabled && this.CompanyView)
+			enabled = this.CompanyView.readyToContinue();
 
-        return enabled;
-    },
+		return enabled;
+	}, // isEnabled
+
 	typeOfBusinessChanged: function() {
 		var name = this.$el.find('#TypeOfBusiness').val().toLowerCase();
 
@@ -167,7 +168,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 	webSiteTurnOverFocus: function() { $('#WebSiteTurnOver').change(); }, // webSiteTurnOverFocus
 
-	render: function () {
+	render: function() {
 		UnBlockUi();
 		this.$el.html(this.template(this.model.toJSON()));
 
@@ -301,8 +302,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 						var companyTargets = new EzBob.companyTargets({ model: reqData });
 						companyTargets.render();
 						UnBlockUi();
-						companyTargets.on('BusRefNumGetted', function (targetingData) {
-						    BlockUi();
+						companyTargets.on('BusRefNumGetted', function(targetingData) {
+							BlockUi();
 							that.saveTargeting(targetingData, action, form);
 						});
 						break;
@@ -315,7 +316,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		});
 	}, // handleTargeting
 
-	saveTargeting: function (targetingData, action, form) {
+	saveTargeting: function(targetingData, action, form) {
 		var data = form.serializeArray();
 
 		if (targetingData && targetingData.BusRefNum != 'skip') {

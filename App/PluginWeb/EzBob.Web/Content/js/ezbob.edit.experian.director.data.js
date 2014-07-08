@@ -43,6 +43,8 @@
 			emailCell: null,
 			mobilePhoneCell: null,
 			addressCell: null,
+
+			additionalData: null,
 		};
 
 		_.extend(this, defaults, options);
@@ -57,6 +59,8 @@
 		this.mobilePhoneCell.find('.mobilePhone').numericOnly(this.phoneNumberLength);
 
 		this.addressCell.addClass('narrow-as-possible edit-mode').empty().append(oTemplate.find('.address-container').clone(true));
+
+		this.row.find('img.field_status').each(function() { $(this).css({ display: '', visibility: '', }); });
 
 		var oIcons = this.row.find('img.field_status');
 		oIcons.filter('.required').field_status({ required: true, });
@@ -92,7 +96,7 @@
 			if (sField !== 'directorID')
 				this.data[sField] = $.trim(this.row.find('.' + sField).val());
 
-		var oRequest = $.post(this.saveUrl, this.data);
+		var oRequest = $.post(this.saveUrl, _.extend({}, this.additionalData, this.data));
 
 		var self = this;
 

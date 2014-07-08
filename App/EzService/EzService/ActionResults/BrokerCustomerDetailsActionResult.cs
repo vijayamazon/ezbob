@@ -1,14 +1,14 @@
 ﻿namespace EzService {
+	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using System.Runtime.Serialization;
-
-	#region class BrokerCustomerDetailsActionResult
 
 	[DataContract]
 	public class BrokerCustomerDetailsActionResult : ActionResult {
 		[DataMember]
 		public BrokerCustomerDetails Data { get; set; }
-	} // class BrokerCustomerDetailsActionResult
 
-	#endregion class BrokerCustomerDetailsActionResult
+		[DataMember]
+		public IEnumerable<Esigner> PotentialSigners { get; set; }
+	} // class BrokerCustomerDetailsActionResult
 } // namespace EzService

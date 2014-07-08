@@ -52,6 +52,7 @@
 			//custom css
 			.Add("~/Content/css/common.css")
 			.Add("~/Content/css/broker.css")
+			.Add("~/Content/css/edit-experian-director-data.css")
 			.MvcRender("~/Content/css/min/broker_#.css")
 		);
 	}
@@ -695,6 +696,7 @@
 <![endif]-->
 	@{
 		Html.RenderPartial("~/Areas/Customer/Views/Profile/CompanyDirectorsTemplate.cshtml");
+		Html.RenderPartial("EditExperianDirectorData");
 
 		Html.RenderPartial("_GoogleTagManager");
 		Html.RenderPartial("security_template");
@@ -760,6 +762,7 @@
 			.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.js")
 			.AddString(BundleHelper.GetDbStrings())
 			.Add("~/Content/js/ezbob.view.js")
+			.Add("~/Content/js/ezbob.edit.experian.director.data.js")
 			.Add("~/Content/js/Broker/broker.base.view.js")
 			.Add("~/Content/js/Broker/broker.submit.view.js")
 			.Add("~/Content/js/Broker/broker.mobilephone.view.js")

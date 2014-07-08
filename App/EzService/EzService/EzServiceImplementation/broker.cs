@@ -153,6 +153,7 @@
 			return new BrokerCustomerDetailsActionResult {
 				MetaData = oResult,
 				Data = oIntstance.Result,
+				PotentialSigners = oIntstance.PotentialEsigners,
 			};
 		} // BrokerLoadCustomerDetails
 
