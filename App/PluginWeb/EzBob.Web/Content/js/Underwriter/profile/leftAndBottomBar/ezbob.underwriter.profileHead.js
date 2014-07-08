@@ -41,10 +41,12 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             if ($(this).is(":hidden")) {
                 btn.children("i").attr("class", "fa fa-chevron-down");
                 that.$el.find(".box-title-collapse").show();
+                $(".profile-content").css({ "margin-top": "50px" });
                 $.cookie('collapseAll', true);
             } else {
                 btn.children("i").attr("class", "fa fa-chevron-up");
                 that.$el.find(".box-title-collapse").hide();
+                $(".profile-content").css({ "margin-top": "190px" });
                 $.cookie('collapseAll', false);
             }
             return false;

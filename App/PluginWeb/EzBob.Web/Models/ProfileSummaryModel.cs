@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Areas.Underwriter.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using System.ComponentModel;
@@ -59,7 +60,7 @@
 		public int ActiveCount { get; set; }
 		public decimal EarnedInterest { get; set; }
 
-		public List<ActiveLoan> ActiveLoans { get; set; }
+		public IOrderedEnumerable<ActiveLoan> ActiveLoans { get; set; }
 	}
 
 	public class ActiveLoan
@@ -80,6 +81,7 @@
 		public decimal InterestRate { get; set; }
 		public decimal TotalFee { get; set; }
 		public bool IsLate { get; set; }
+		public string Comment { get; set; }
 	}
 
 	public class AffordabilityAnalysis

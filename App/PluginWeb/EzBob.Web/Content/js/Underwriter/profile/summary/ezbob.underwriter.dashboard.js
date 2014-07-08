@@ -47,7 +47,8 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             properties: this.propertiesModel.toJSON(),
             //mps: this.mpsModel.toJSON(),
             loan: this.loanModel.toJSON(),
-            affordability: this.affordability.toJSON()
+            affordability: this.affordability.toJSON(),
+            personal: this.personalModel.toJSON()
         };
     },
     rotateTable: function () {
