@@ -853,7 +853,7 @@
                                 <td>@p.PrivateIndividualForename @p.PrivateIndividualSurname</td>
                                 <td>@p.CompanyName @p.CompanyRegistrationNumber</td>
                                 <td>
-                                    <table class="table centered squeezed">
+                                    <table class="">
                                         <tbody>
                                             @foreach (var a in p.ProprietorshipAddresses)
                                             {
@@ -892,7 +892,7 @@
                                     <td>@c.ChargeDate.ToString("dd/MM/yyyy")</td>
                                     <td>@c.Description</td>
                                     <td>
-                                        <table class="table centered squeezed">
+                                        <table class="">
                                             <thead class="box">
                                                 <tr class="box-title">
                                                     <td>Type</td>
@@ -909,7 +909,7 @@
                                                         <td>@p.ProprietorshipPartyType</td>
                                                         <td>@p.CompanyName@p.PrivateIndividualForename @p.PrivateIndividualSurname</td>
                                                         <td>
-                                                            <table class="table centered squeezed">
+                                                            <table class="">
                                                                 <tbody>
                                                                     @foreach (var a in p.ProprietorshipAddresses)
                                                                     {
@@ -964,7 +964,7 @@
                                     <td>@r.SubRegisterCode</td>
                                     <td>@r.ScheduleCode</td>
                                     <td>
-                                        <table class="table centered squeezed">
+                                        <table class="">
                                             <tbody>
                                                 @foreach (var i in r.Infills)
                                                 {
