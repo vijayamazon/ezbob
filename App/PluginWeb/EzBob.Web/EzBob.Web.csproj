@@ -168,6 +168,7 @@
     </Compile>
     <Compile Include="Areas\Broker\BrokerAreaRegistration.cs" />
     <Compile Include="Areas\Broker\Controllers\BrokerHomeController.cs" />
+    <Compile Include="Areas\Broker\Controllers\BrokerHomeController\private.cs" />
     <Compile Include="Areas\Broker\Models\BrokerHomeModel.cs" />
     <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />

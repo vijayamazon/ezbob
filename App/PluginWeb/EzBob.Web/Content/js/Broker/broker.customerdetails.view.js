@@ -11,6 +11,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		this.Dropzone = null;
 
 		this.$el = $('.section-customer-details');
+		this.$el.off();
 
 		this.initDropzone();
 	}, // initialize
@@ -351,7 +352,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 				}); // on success
 
 				oDropzone.on('error', function(oFile, sErrorMsg, oXhr) {
-					console.log('Upload error:', oFile, sErrorMsg, oXhr);
+					console.error('Upload error:', oFile, sErrorMsg, oXhr);
 					EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
 				}); // always
 
@@ -368,9 +369,9 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 		window.open(
 			window.gRootPath + 'Broker/BrokerHome/DownloadCustomerFile' +
-			'?sCustomerID=' + this.CustomerID +
+			'?sCustomerID=' + encodeURIComponent(this.CustomerID) +
 			'&sContactEmail=' + encodeURIComponent(this.router.getAuth()) +
-			'&nFileID=' + encodeURIComponent($(event.currentTarget).attr('data-file-id'))
+			'&nFileID=' + encodeURIComponent($(event.currentTarget).data('file-id'))
 		);
 	}, // downloadCustomerFile
 }); // EzBob.Broker.SubmitView
