@@ -418,8 +418,6 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @checkCustomerAvailability @summaryInfoModel
             @recordRecentCustomers(id)
             
-            EzBob.UpdateBugsIcons fullModel.get("Bugs")
-
             @experianInfoModel.set {Id: id} , {silent: true}
             @experianInfoModel.set fullModel.get("CreditBureauModel"), silent: true
             @experianInfoModel.trigger "sync"
@@ -486,6 +484,9 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
                 ), that.fundingModel.get('RefreshInterval')
             )
 
+            EzBob.InitBugs()
+            EzBob.UpdateBugsIcons fullModel.get("Bugs")
+            
             BlockUi "Off"
 
         EzBob.handleUserLayoutSetting()
