@@ -12,10 +12,12 @@
 
 		#region constructor
 
-		public LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_oRaw = new LoadVatReturnRawData(nCustomerMarketplaceID, DB, Log);
-			m_oSummary = new LoadVatReturnSummary(nCustomerID, nCustomerMarketplaceID, DB, Log);
-			m_oGetBankModel = new GetBankModel(nCustomerID, DB, Log);
+		public LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog)
+		{
+			m_nCustomerID = nCustomerID;
+			m_nCustomerMarketplaceID = nCustomerMarketplaceID;
+			BankStatement = new BankStatementDataModel();
+			BankStatementAnnualized = new BankStatementDataModel();
 		} // constructor
 
 		#endregion constructor
@@ -31,19 +33,11 @@
 		#region method Execute
 
 		public override void Execute() {
+			m_oRaw = new LoadVatReturnRawData(m_nCustomerMarketplaceID, DB, Log);
+			m_oSummary = new LoadVatReturnSummary(m_nCustomerID, m_nCustomerMarketplaceID, DB, Log);
 			m_oRaw.Execute();
 			m_oSummary.Execute();
 
-			m_oGetBankModel.Execute();
-
-			BankStatementAnnualized = new BankStatementDataModel();
-
-			if (m_oGetBankModel.Result == null)
-				BankStatement = new BankStatementDataModel();
-			else {
-				BankStatement = m_oGetBankModel.Result.Yodlee.BankStatementDataModel;
-				CalculateBankStatements();
-			}
 		} // Execute
 
 		#endregion method Execute
@@ -62,13 +56,12 @@
 
 		#region private
 
-		private readonly LoadVatReturnRawData m_oRaw;
-		private readonly LoadVatReturnSummary m_oSummary;
-		private readonly GetBankModel m_oGetBankModel;
+		private LoadVatReturnRawData m_oRaw;
+		private LoadVatReturnSummary m_oSummary;
+		private readonly int m_nCustomerID;
+		private readonly int m_nCustomerMarketplaceID;
 
-		private void CalculateBankStatements() {
-			var lastVatReturn = VatReturnRawData.LastOrDefault();
-
+		public void CalculateBankStatements(VatReturnRawData lastVatReturn, BankStatementDataModel bankStatement) {
 			decimal box3 = 0;
 			decimal box4 = 0;
 			decimal box6 = 0;
@@ -90,12 +83,12 @@
 			var vatRevenues = 1 + (box6 == 0 ? 0 : (box3 / box6));
 			var vatOpex = 1 + (box7 == 0 ? 0 : (box4 / box7));
 
-			BankStatement.Revenues = vatRevenues == 0 ? BankStatement.Revenues : BankStatement.Revenues / (double)vatRevenues;
-			BankStatement.Opex = Math.Abs(vatOpex == 0 ? BankStatement.Opex : BankStatement.Opex / (double)vatOpex);
-			BankStatement.TotalValueAdded = BankStatement.Revenues - BankStatement.Opex;
-			BankStatement.PercentOfRevenues = Math.Abs(BankStatement.Revenues - 0) < 0.01 ? 0 : BankStatement.TotalValueAdded / BankStatement.Revenues;
-			BankStatement.Ebida = BankStatement.TotalValueAdded + (BankStatement.Salaries + BankStatement.Tax);
-			BankStatement.FreeCashFlow = BankStatement.Ebida - BankStatement.ActualLoansRepayment;
+			BankStatement.Revenues = vatRevenues == 0 ? bankStatement.Revenues : bankStatement.Revenues / (double)vatRevenues;
+			BankStatement.Opex = Math.Abs(vatOpex == 0 ? bankStatement.Opex : bankStatement.Opex / (double)vatOpex);
+			BankStatement.TotalValueAdded = bankStatement.Revenues - bankStatement.Opex;
+			BankStatement.PercentOfRevenues = Math.Abs(bankStatement.Revenues - 0) < 0.01 ? 0 : bankStatement.TotalValueAdded / bankStatement.Revenues;
+			BankStatement.Ebida = bankStatement.TotalValueAdded + (bankStatement.Salaries + bankStatement.Tax);
+			BankStatement.FreeCashFlow = bankStatement.Ebida - bankStatement.ActualLoansRepayment;
 
 			if (BankStatement.PeriodMonthsNum == 0)
 				return;

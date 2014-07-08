@@ -1,4 +1,5 @@
-﻿namespace EZBob.DatabaseLib {
+﻿namespace EZBob.DatabaseLib
+{
 	#region using
 
 	using System;
@@ -6,6 +7,7 @@
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using EzBob.CommonLib;
+	using Model.Experian;
 	using Newtonsoft.Json;
 	using Common;
 	using Ezbob.ExperianParser;
@@ -17,25 +19,32 @@
 
 	#endregion using
 
-	public partial class DatabaseDataHelper {
+	public partial class DatabaseDataHelper
+	{
 		#region public
 
 		#region property YodleeBanks
 
 		private string m_sYodleeBanks;
 
-		public string YodleeBanks {
-			get {
-				if (m_sYodleeBanks == null) {
+		public string YodleeBanks
+		{
+			get
+			{
+				if (m_sYodleeBanks == null)
+				{
 					var banks = _yodleeBanksRepository.GetAll();
 
 					var dict = new Dictionary<string, YodleeParentBankModel>();
-					var yodleeBanksModel = new YodleeBanksModel {
+					var yodleeBanksModel = new YodleeBanksModel
+					{
 						DropDownBanks = new List<YodleeSubBankModel>(),
 					};
 
-					foreach (var bank in banks) {
-						if (bank.Active && bank.Image) {
+					foreach (var bank in banks)
+					{
+						if (bank.Active && bank.Image)
+						{
 							var sub = new YodleeSubBankModel { csId = bank.ContentServiceId, displayName = bank.Name };
 
 							if (!dict.ContainsKey(bank.ParentBank))
@@ -61,7 +70,8 @@
 
 		#region method StoreYodleeOrdersData
 
-		public void StoreYodleeOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeOrderDictionary ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+		public void StoreYodleeOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeOrderDictionary ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			// var yodleeGroupRepository = new YodleeGroupRepository(_session).GetAll().ToList();
@@ -69,20 +79,24 @@
 
 			// LogData("Yodlee Orders Data", customerMarketPlace, ordersData);
 
-			if (ordersData == null) {
+			if (ordersData == null)
+			{
 				return;
 			}
 
 			DateTime submittedDate = DateTime.UtcNow;
-			var mpOrder = new MP_YodleeOrder {
+			var mpOrder = new MP_YodleeOrder
+			{
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
 
 
-			foreach (var item in ordersData.Data.Keys) {
-				var mpOrderItem = new MP_YodleeOrderItem {
+			foreach (var item in ordersData.Data.Keys)
+			{
+				var mpOrderItem = new MP_YodleeOrderItem
+				{
 					Order = mpOrder,
 					isSeidFromDataSource = item.isSeidFromDataSource,
 					isSeidFromDataSourceSpecified = item.isSeidFromDataSourceSpecified,
@@ -224,8 +238,10 @@
 				};
 
 
-				foreach (var bankTransaction in ordersData.Data[item]) {
-					var orderBankTransaction = new MP_YodleeOrderItemBankTransaction {
+				foreach (var bankTransaction in ordersData.Data[item])
+				{
+					var orderBankTransaction = new MP_YodleeOrderItemBankTransaction
+					{
 						YodleeOrderItem = mpOrderItem,
 						isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
 						isSeidFromDataSourceSpecified = bankTransaction.isSeidFromDataSourceSpecified,
@@ -371,19 +387,24 @@
 			MP_YodleeOrderItemBankTransaction oLastTransaction = null;
 			int nCurTransactionPosition = 0;
 
-			foreach (MP_YodleeOrderItemBankTransaction oCurrentTransaction in transactions) {
+			foreach (MP_YodleeOrderItemBankTransaction oCurrentTransaction in transactions)
+			{
 				CategorizeTransaction(oCurrentTransaction, yodleeGroupRepository, yodleeGroupRuleMapRepository, mp, directors);
 
-				if (!oCurrentTransaction.runningBalance.HasValue) {
-					if (nCurTransactionPosition == 0) {
+				if (!oCurrentTransaction.runningBalance.HasValue)
+				{
+					if (nCurTransactionPosition == 0)
+					{
 						oCurrentTransaction.runningBalance = currentBalance.Value;
 						oCurrentTransaction.runningBalanceCurrency = currentBalance.CurrencyCode;
 						currDate = (oCurrentTransaction.postDate ?? oCurrentTransaction.transactionDate).Value;
 					}
-					else {
+					else
+					{
 						double amount = 0;
 
-						if (oCurrentTransaction.transactionAmount.HasValue) {
+						if (oCurrentTransaction.transactionAmount.HasValue)
+						{
 							amount = _CurrencyConvertor.ConvertToBaseCurrency(
 								oCurrentTransaction.transactionAmountCurrency,
 								oCurrentTransaction.transactionAmount.Value,
@@ -400,7 +421,8 @@
 
 						var newDate = (oCurrentTransaction.postDate ?? oCurrentTransaction.transactionDate).Value;
 
-						if (newDate.Date != currDate.Date) {
+						if (newDate.Date != currDate.Date)
+						{
 							for (int j = currIndex; j < nCurTransactionPosition; j++)
 								transactions[j].runningBalance = oLastTransaction.runningBalance;
 
@@ -418,7 +440,7 @@
 		}
 
 		private List<MP_YodleeOrderItemBankTransaction> GetTransactions(IDatabaseCustomerMarketPlace dmp, string sourceId, out MP_CustomerMarketPlace mp,
-		                             out List<string> directors)
+									 out List<string> directors)
 		{
 			mp = GetCustomerMarketPlace(dmp.Id);
 
@@ -431,24 +453,25 @@
 			directors = GetExperianDirectors(mp.Customer);
 
 			var transactions = mp.YodleeOrders
-			                     .SelectMany(yo => yo.OrderItems)
-			                     .Where(oi => oi.srcElementId == sourceId)
-			                     .SelectMany(oi => oi.OrderItemBankTransactions)
-			                     .Where(t => t.isSeidMod.HasValue && t.isSeidMod.Value == 0)
-			                     .Distinct(new YodleeTransactionComparer())
-			                     .OrderByDescending(x => (x.postDate ?? x.transactionDate).Value)
-			                     .ToList();
+								 .SelectMany(yo => yo.OrderItems)
+								 .Where(oi => oi.srcElementId == sourceId)
+								 .SelectMany(oi => oi.OrderItemBankTransactions)
+								 .Where(t => t.isSeidMod.HasValue && t.isSeidMod.Value == 0)
+								 .Distinct(new YodleeTransactionComparer())
+								 .OrderByDescending(x => (x.postDate ?? x.transactionDate).Value)
+								 .ToList();
 
 			return transactions;
 		}
 
-// CalculateYodleeRunningBalance
+		// CalculateYodleeRunningBalance
 
 		#endregion method CalculateYodleeRunningBalance(
 
 		#region method GetAllYodleeOrdersData
 
-		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime = false) {
+		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime = false)
+		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var orders = new YodleeOrderDictionary { Data = new Dictionary<BankData, List<BankTransactionData>>() };
@@ -457,12 +480,15 @@
 
 			#region yodlee data retrieve
 
-			if (mpYodleeOrder != null) {
+			if (mpYodleeOrder != null)
+			{
 				var orderItems = mpYodleeOrder.OrderItems.Where(x => x.isSeidMod.HasValue && x.isSeidMod.Value == 0);
 
 				//Not Retrieving Seid transactions as they seem to be duplicated data
-				foreach (var item in orderItems) {
-					var bankData = new BankData {
+				foreach (var item in orderItems)
+				{
+					var bankData = new BankData
+					{
 						acctType = item.acctType,
 						srcElementId = item.srcElementId,
 						bankAccountId = item.bankAccountId,
@@ -487,8 +513,8 @@
 					{
 						double currentBalance = item.currentBalance == null ? 0 : item.currentBalance.Value;
 						string currentBalanceCurrency = string.IsNullOrEmpty(item.currentBalanceCurrency)
-							                                ? "GBP"
-							                                : item.currentBalanceCurrency;
+															? "GBP"
+															: item.currentBalanceCurrency;
 
 						CalculateYodleeRunningBalance(mp,
 							item.srcElementId,
@@ -504,7 +530,8 @@
 								(t.postDate.HasValue && t.postDate.Value.Date <= history)
 							)
 						)
-						.Select(bankTransaction => new BankTransactionData {
+						.Select(bankTransaction => new BankTransactionData
+						{
 							isSeidMod = bankTransaction.isSeidMod,
 							srcElementId = bankTransaction.srcElementId,
 							transactionStatusId = bankTransaction.transactionStatusId,
@@ -514,7 +541,8 @@
 							bankTransactionId = bankTransaction.bankTransactionId,
 							isDeleted = bankTransaction.isDeleted,
 							transactionDate = new YDate { date = bankTransaction.transactionDate },
-							runningBalance = new YMoney {
+							runningBalance = new YMoney
+							{
 								amount = bankTransaction.runningBalance,
 								currencyCode = bankTransaction.runningBalanceCurrency
 							},
@@ -523,7 +551,8 @@
 							siteCategory = bankTransaction.ezbobCategory != null ? bankTransaction.ezbobCategory.Group : null,
 							customCategoryId = bankTransaction.ezbobCategory != null ? bankTransaction.ezbobCategory.Priority : (long?)null,
 							postDate = new YDate { date = bankTransaction.postDate },
-							transactionAmount = new YMoney {
+							transactionAmount = new YMoney
+							{
 								amount = bankTransaction.transactionAmount,
 								currencyCode = bankTransaction.transactionAmountCurrency
 							},
@@ -548,7 +577,8 @@
 
 		#region method HasYodleeOrders
 
-		public bool HasYodleeOrders(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+		public bool HasYodleeOrders(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
 			return !GetCustomerMarketPlace(databaseCustomerMarketPlace.Id).YodleeOrders.IsEmpty;
 		} // HasYodleeOrders
 
@@ -560,26 +590,23 @@
 
 		private readonly IMP_YodleeTransactionCategoriesRepository _MP_YodleeTransactionCategoriesRepository;
 		private readonly YodleeBanksRepository _yodleeBanksRepository;
-
 		#region method GetExperianDirectors
 
-		private List<string> GetExperianDirectors(Customer customer) {
+		private List<string> GetExperianDirectors(Customer customer)
+		{
+
+			var lastNames = m_oExperianDirectorRepository.GetCustomerDirectorsLastNames(customer.Id);
 			var experianDirectors = new List<string>();
 
-			ExperianParserOutput oParseResult = customer.ParseExperian(ExperianParserFacade.Target.Director);
-
-			if (oParseResult.ParsingResult == ParsingResult.Ok) {
-				foreach (var pair in oParseResult.Dataset) {
-					foreach (ParsedDataItem di in pair.Value.Data) {
-						string sFullName = (di["LastName"] ?? "").ToLowerInvariant().Trim();
-						if (!string.IsNullOrEmpty(sFullName))
-							experianDirectors.Add(sFullName);
-					} // foreach
-				} // foreach
-			} // if
+			foreach (var lastName in lastNames)
+			{
+				if (!string.IsNullOrEmpty(lastName))
+					experianDirectors.Add(lastName);
+			} // foreach
 
 			var company = customer.Company;
-			if (company != null) {
+			if (company != null)
+			{
 				var directorsNames = company.Directors.Select(d => d.Surname.ToLowerInvariant().Trim()).ToList();
 
 				experianDirectors.AddRange(directorsNames);
@@ -592,7 +619,8 @@
 
 		#region method CategorizeTransaction
 
-		private MP_YodleeGroup CategorizeTransaction(List<MP_YodleeGroup> yodleeGroupRepository, List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository, string description, string baseType, int amount, int customerId, string customerSurname, List<string> directors) {
+		private MP_YodleeGroup CategorizeTransaction(List<MP_YodleeGroup> yodleeGroupRepository, List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository, string description, string baseType, int amount, int customerId, string customerSurname, List<string> directors)
+		{
 			if (!string.IsNullOrEmpty(customerSurname))
 				directors.Add(customerSurname);
 
@@ -601,7 +629,8 @@
 			if (baseType == "debit")
 				category = yodleeGroupRepository.FirstOrDefault(x => x.Id == (int)YodleeGroup.Opex);
 
-			foreach (var mpYodleeGroup in yodleeGroupRepository) {
+			foreach (var mpYodleeGroup in yodleeGroupRepository)
+			{
 				MP_YodleeGroup group = mpYodleeGroup;
 
 				if (group.Id == (int)YodleeGroup.Opex || group.Id == (int)YodleeGroup.RevenuesException)
@@ -615,7 +644,8 @@
 
 				bool containsLiteral = false;
 
-				foreach (var literal in includeLiteral) {
+				foreach (var literal in includeLiteral)
+				{
 					if (literal.IsRegex)
 						containsLiteral = Regex.IsMatch(description.ToLowerInvariant(), literal.Literal);
 					else if (description.ToLowerInvariant().Contains(literal.Literal))
@@ -630,8 +660,10 @@
 
 				bool containsDirector = false;
 
-				if (includeDirector || dontIncludeDirector) {
-					foreach (var directorsName in directors) {
+				if (includeDirector || dontIncludeDirector)
+				{
+					foreach (var directorsName in directors)
+					{
 						if (description.ToLowerInvariant().Contains(directorsName))
 							containsDirector = true;
 					} // foreach
@@ -656,7 +688,8 @@
 					continue;
 
 				if (!string.IsNullOrEmpty(group.BaseType) &&
-					group.BaseType.ToLowerInvariant().Trim() != baseType.ToLowerInvariant().Trim()) {
+					group.BaseType.ToLowerInvariant().Trim() != baseType.ToLowerInvariant().Trim())
+				{
 					continue;
 				} // if
 
@@ -674,11 +707,13 @@
 			List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository,
 			MP_CustomerMarketPlace mp,
 			List<string> directors
-		) {
+		)
+		{
 			if (oTransaction.ezbobCategory != null)
 				return;
 
-			try {
+			try
+			{
 				oTransaction.ezbobCategory = CategorizeTransaction(
 					yodleeGroupRepository,
 					yodleeGroupRuleMapRepository,
@@ -690,7 +725,8 @@
 					directors
 				);
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				_Log.Debug("Yodlee Categorize transaction failed.", e);
 			} // try
 		} // CategorizeTransaction
