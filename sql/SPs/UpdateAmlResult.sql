@@ -9,8 +9,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE UpdateAmlResult
-@CustomerId INT,
-@AmlResult NVARCHAR(100)
+	@CustomerId INT,
+	@AmlResult NVARCHAR(100),
+	@AmlScore INT,
+	@AmlDescription NVARCHAR(200)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -18,7 +20,9 @@ BEGIN
 	UPDATE
 		Customer
 	SET
-		AMLResult = @AmlResult
+		AMLResult = @AmlResult,
+		AmlDescription = @AmlDescription,
+		AmlScore = @AmlScore
 	WHERE
 		Id = @CustomerId
 END

@@ -460,6 +460,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string ApprovedReason { get; set; }
 		public virtual string BWAResult { get; set; }
 		public virtual string AMLResult { get; set; }
+		public virtual int AmlScore { get; set; }
+		public virtual string AmlDescription { get; set; }
 		public virtual string Comment { get; set; }
 		public virtual string Details { get; set; }
 		public virtual PendingStatus PendingStatus { get; set; }

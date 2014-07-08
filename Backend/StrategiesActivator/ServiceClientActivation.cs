@@ -839,6 +839,18 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
+		private void BackfillAml()
+		{
+			if ((m_aryArgs.Length != 1))
+			{
+				m_oLog.Msg("Usage: BackfillAml");
+				return;
+			} // if
+
+			m_oServiceClient.BackfillAml();
+		}
+
+		[Activation]
 		private void BackfillFinancialAccounts()
 		{
 			if ((m_aryArgs.Length != 1))

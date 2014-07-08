@@ -25,6 +25,9 @@
 		[OperationContract]
 		ActionMetaData BackfillConsumerAnalytics();
 
+		[OperationContract]
+		ActionMetaData BackfillAml(); // No analytics yet will be filled into customer table
+
 		#endregion analytics
 
 		[OperationContract]

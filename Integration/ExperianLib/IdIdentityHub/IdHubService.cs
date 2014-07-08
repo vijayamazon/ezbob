@@ -210,6 +210,15 @@
 			return result;
 		}
 
+		public AuthenticationResults GetResults_ForBackfill(string xml)
+		{
+			var result = new AuthenticationResults();
+			ProcessConfigResponseType r;
+			r = GetRequestFromXml(xml);
+			result.Parse(r);
+			return result;
+		}
+
 		//-----------------------------------------------------------------------------------
 		public AddressType FillAddress(string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode)
 		{

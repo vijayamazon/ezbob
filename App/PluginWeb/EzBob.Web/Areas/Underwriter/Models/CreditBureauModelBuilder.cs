@@ -782,8 +782,8 @@
 
 			Log.DebugFormat("AML data for building model: {0} - {1}", result.AuthenticationIndexType, result.AuthIndexText);
 
-			data.AuthIndexText = result.AuthIndexText;
-			data.AuthenticationIndexType = result.AuthenticationIndexType;
+			data.AuthIndexText = customer.AmlDescription;
+			data.AuthenticationIndexType = customer.AmlScore;
 			data.NumPrimDataItems = result.NumPrimDataItems;
 			data.NumPrimDataSources = result.NumPrimDataSources;
 			data.NumSecDataItems = result.NumSecDataItems;

@@ -84,6 +84,7 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateExperianDirectors.cs" />
     <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
+    <Compile Include="Misc\BackfillAml.cs" />
     <Compile Include="Misc\GetBankModel.cs" />
     <Compile Include="Misc\Agreement.cs" />
     <Compile Include="Misc\CalculateNewMedals.cs" />

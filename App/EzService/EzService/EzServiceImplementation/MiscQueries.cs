@@ -253,6 +253,12 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
+		public ActionMetaData BackfillAml() // No analytics yet will be filled into customer table
+		{
+			BackfillAml instance;
+			return ExecuteSync(out instance, 0, 0);
+		}
+
 		public ActionMetaData CalculateNewMedals()
 		{
 			CalculateNewMedals instance;

@@ -55,6 +55,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.PayPointErrorsCount).Nullable();
 			Map(x => x.BWAResult).Length(100);
 			Map(x => x.AMLResult).Length(100);
+			Map(x => x.AmlScore);
+			Map(x => x.AmlDescription).Length(200);
 			
 			Component(x => x.PersonalInfo, m => {
 				m.Map(x => x.FirstName).Length(255);

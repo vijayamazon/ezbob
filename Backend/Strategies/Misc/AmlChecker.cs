@@ -54,21 +54,23 @@
 		#endregion property Name
 
 		#region method Execute
-
+		
 		public override void Execute() {
-			string result;
+			string result, description;
 			decimal authentication;
 
 			bool hasError = m_bIsCustom
-				? GetAmlDataCustom(out result, out authentication)
-				: GetAmlData(out result, out authentication);
+				? GetAmlDataCustom(out result, out authentication, out description)
+				: GetAmlData(out result, out authentication, out description);
 			
 			if (hasError || authentication < CurrentValues.Instance.MinAuthenticationIndexToPassAml)
 				result = "Warning";
 
 			DB.ExecuteNonQuery("UpdateAmlResult", CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", m_nCustomerID),
-				new QueryParameter("AmlResult", result)
+				new QueryParameter("AmlResult", result),
+				new QueryParameter("AmlScore", (int)authentication),
+				new QueryParameter("AmlDescription", description)
 			);
 		} // Execute
 
@@ -80,15 +82,15 @@
 
 		#region method GetAmlData
 
-		private bool GetAmlData(out string result, out decimal authentication) {
+		private bool GetAmlData(out string result, out decimal authentication, out string description) {
 			Log.Info("Starting standard AML check with parameters: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} {4}",
 				m_sFirstName, m_sLastName, m_sGender, m_oDateOfBirth, m_oCustomerAddress
 			);
 
-			bool hasError = GetAml(AddressCurrency.Current, out result, out authentication);
+			bool hasError = GetAml(AddressCurrency.Current, out result, out authentication, out description);
 
 			if (hasError && (m_nTimeAtAddress == 1) && !string.IsNullOrWhiteSpace(m_oCustomerAddress[6, AddressCurrency.Previous]))
-				hasError = GetAml(AddressCurrency.Previous, out result, out authentication);
+				hasError = GetAml(AddressCurrency.Previous, out result, out authentication, out description);
 
 			return hasError;
 		} // GetAmlData
@@ -97,7 +99,7 @@
 
 		#region method GetAmlDataCustom
 
-		private bool GetAmlDataCustom(out string result, out decimal authentication) {
+		private bool GetAmlDataCustom(out string result, out decimal authentication, out string description) {
 			Log.Info(
 				"Starting custom AML check with parameters: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} idhubHouseNumber={4} idhubHouseName={5} idhubStreet={6} idhubDistrict={7} idhubTown={8} idhubCounty={9} idhubPostCode={10}",
 				m_sFirstName,
@@ -129,14 +131,15 @@
 				m_nCustomerID
 			);
 
-			return CreateAmlResultFromAuthenticationReuslts(authenticationResults, out result, out authentication);
+			return CreateAmlResultFromAuthenticationReuslts(authenticationResults, out result, out authentication, out description);
 		} // GetAmlDataCustom
 
 		#endregion method GetAmlDataCustom
 
 		#region method GetAml
 
-		private bool GetAml(AddressCurrency nCurrency, out string result, out decimal authentication) {
+		private bool GetAml(AddressCurrency nCurrency, out string result, out decimal authentication, out string description)
+		{
 			AuthenticationResults authenticationResults = m_oIdHubService.Authenticate(
 				m_sFirstName,
 				null,
@@ -152,23 +155,25 @@
 				m_nCustomerID
 			);
 
-			return CreateAmlResultFromAuthenticationReuslts(authenticationResults, out result, out authentication);
+			return CreateAmlResultFromAuthenticationReuslts(authenticationResults, out result, out authentication, out description);
 		} // GetAml
 
 		#endregion method GetAml
 
 		#region method CreateAmlResultFromAuthenticationReuslts
 
-		private bool CreateAmlResultFromAuthenticationReuslts(AuthenticationResults results, out string result, out decimal authentication) {
+		private bool CreateAmlResultFromAuthenticationReuslts(AuthenticationResults results, out string result, out decimal authentication, out string description) {
 			if (results.HasError) {
 				Log.Info("Error getting AML data: {0}", results.Error);
 				result = string.Empty;
+				description = string.Empty;
 				authentication = 0;
 				return true;
 			} // if
 
 			authentication = results.AuthenticationIndexType;
 			result = "Passed";
+			description = results.AuthIndexText;
 
 			foreach (var returnedHrp in results.ReturnedHRP) {
 				if (m_oWarningRules.Contains(returnedHrp.HighRiskPolRuleID)) {
