@@ -100,7 +100,7 @@
     <Compile Include="Model\Database\CompanyEmployeeCount.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
     <Compile Include="Model\Database\Company.cs" />
-    <Compile Include="Model\Database\ExperianDirector.cs" />
+    <Compile Include="Model\Experian\ExperianDirector.cs" />
     <Compile Include="Model\Database\OfflineScoringMap.cs" />
     <Compile Include="Model\Database\LandRegistryOwner.cs" />
     <Compile Include="Model\Database\CustomerAnalytics.cs" />
@@ -312,8 +312,8 @@
     <Compile Include="Model\Database\CaisReportsHistoryMap.cs" />
     <Compile Include="Model\Database\CardInfo.cs" />
     <Compile Include="Model\Database\CustomerAddress.cs" />
-    <Compile Include="Model\Database\ExperianConsentAgreement.cs" />
-    <Compile Include="Model\Database\ExperianConsentAgreementMap.cs" />
+    <Compile Include="Model\Experian\ExperianConsentAgreement.cs" />
+    <Compile Include="Model\Experian\ExperianConsentAgreementMap.cs" />
     <Compile Include="Model\Database\LoanOptions.cs" />
     <Compile Include="Model\Database\LoanOptionsMap.cs" />
     <Compile Include="Model\Database\Request\DecisionHistory.cs" />

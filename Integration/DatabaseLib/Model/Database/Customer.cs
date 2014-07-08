@@ -7,7 +7,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using CustomerRelations;
 	using Loans;
 	using Email;
-	using Ezbob.ExperianParser;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
 	using NHibernateWrapper.NHibernate.Types;

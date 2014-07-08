@@ -31,6 +31,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 #region namespace EZBob.DatabaseLib.Model.Database.Mapping
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping {
+	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using FluentNHibernate.Mapping;
@@ -78,6 +79,11 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 		public IQueryable<ExperianDirector> Find(int nCustomerID) {
 			return GetAll().Where(ed => (ed.CustomerID == nCustomerID) && !ed.IsDeleted);
 		} // Find
+
+		public IEnumerable<string> GetCustomerDirectorsLastNames(int nCustomerID)
+		{
+			return GetAll().Where(ed => (ed.CustomerID == nCustomerID) && !ed.IsDeleted).Select(x => x.LastName);
+		}
 	} // class ExperianDirectorRepository
 
 	#endregion class ExperianDirectorRepository

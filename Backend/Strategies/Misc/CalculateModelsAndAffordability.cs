@@ -1,7 +1,9 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Linq;
+	using System.Text;
 	using CompanyFiles;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models.Marketplaces;
@@ -10,6 +12,7 @@
 	using Ezbob.Logger;
 	using Newtonsoft.Json;
 	using PayPalServiceLib;
+	using VatReturn;
 	using YodleeLib.connector;
 
 	public class CalculateModelsAndAffordability : AStrategy {
@@ -18,11 +21,15 @@
 		#region constructor
 
 		public CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			_timeElapsed = new List<Tuple<string, double>>();
+			Stopwatch sw = Stopwatch.StartNew();
 			m_nCustomerID = nCustomerID;
 			m_oHistory = oHistory;
 			m_oMundMs = new List<LocalMp>();
 			Affordability = new SortedSet<AffordabilityData>();
 			m_oCustomer = DbHelper.GetCustomerInfo(nCustomerID);
+			sw.Stop();
+			_timeElapsed.Add(new Tuple<string, double>("Constructor time", sw.Elapsed.TotalMilliseconds));
 		} // constructor
 
 		#endregion constructor
@@ -42,9 +49,12 @@
 				Log.Warn("Could not find customer by id {0}.", m_nCustomerID);
 				return;
 			} // if
-
+			Stopwatch sw = Stopwatch.StartNew();
+			Stopwatch totalSw = Stopwatch.StartNew();
 			GetAllModels();
-
+			sw.Stop();
+			_timeElapsed.Add(new Tuple<string, double>("All marketplaces build time", sw.Elapsed.TotalMilliseconds));
+			
 			var oPaypal = new List<LocalMp>();
 			var oEcomm = new List<LocalMp>();
 			var oAccounting = new List<LocalMp>();
@@ -90,21 +100,37 @@
 					oEcomm.Add(mm);
 				}
 			} // for each marketplace
-
+			
 			if (oHmrc != null)
 			{
+				sw.Restart();
 				HmrcBank(oHmrc);
+				sw.Stop();
+				_timeElapsed.Add(new Tuple<string, double>("HMRC affordability build time", sw.Elapsed.TotalMilliseconds));
 			}
 			
 			if (oYodlee != null)
 			{
+				sw.Restart();
 				SaveBankStatement(oYodlee.Yodlee.BankStatementDataModel, null, null);
+				sw.Stop();
+				_timeElapsed.Add(new Tuple<string, double>("Yodlee affordability build time", sw.Elapsed.TotalMilliseconds));
 			}
 
+			sw.Restart();
 			Psp(oPaypal);
+			sw.Stop();
+			_timeElapsed.Add(new Tuple<string, double>("PayPal affordability build time", sw.Elapsed.TotalMilliseconds));
+			sw.Restart();
 			EcommAccounting(oEcomm, AffordabilityType.Ecomm);
+			sw.Stop();
+			_timeElapsed.Add(new Tuple<string, double>("Ecomm affordability build time", sw.Elapsed.TotalMilliseconds));
+			sw.Restart();
 			EcommAccounting(oAccounting, AffordabilityType.Accounting);
+			sw.Stop();
+			_timeElapsed.Add(new Tuple<string, double>("Accounting affordability build time", sw.Elapsed.TotalMilliseconds));
 
+			sw.Restart();
 			Log.Debug("**************************************************************************");
 			Log.Debug("*");
 			Log.Debug("* Affordability data for customer {0} - begin:", m_oCustomer.Stringify());
@@ -121,6 +147,22 @@
 			Log.Debug("* Affordability data for customer {0} - end.", m_oCustomer.Stringify());
 			Log.Debug("*");
 			Log.Debug("**************************************************************************");
+			sw.Stop();
+			_timeElapsed.Add(new Tuple<string, double>("Logging affordability time", sw.Elapsed.TotalMilliseconds));
+			totalSw.Stop();
+			_timeElapsed.Add(new Tuple<string, double>("Total mp and affordability strategy execute time", totalSw.Elapsed.TotalMilliseconds));
+			LogElapsedTimes();
+		}
+
+		private void LogElapsedTimes()
+		{
+			var sb = new StringBuilder();
+			sb.AppendFormat("CalculateModelsAndAffordability elapsed times \n");
+			foreach (var time in _timeElapsed)
+			{
+				sb.AppendFormat("{0}: {1}ms \n", time.Item1, time.Item2);
+			}
+			Log.Debug(sb);
 		} // Execute
 
 		#endregion method Execute
@@ -391,10 +433,14 @@
 				MarketPlaceModel model;
 				try {
 					var builder = GetMpModelBuilder(mp);
-
+					Stopwatch sw = Stopwatch.StartNew();
 					model = builder.Create(mp, m_oHistory);
-
+					sw.Stop();
+					_timeElapsed.Add(new Tuple<string, double>(string.Format("{0} MP model build  time",model.Name), sw.Elapsed.TotalMilliseconds));
+					sw.Restart();
 					model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, m_oHistory);
+					sw.Stop();
+					_timeElapsed.Add(new Tuple<string, double>(string.Format("{0} MP payment model build  time", model.Name), sw.Elapsed.TotalMilliseconds));
 				}
 				catch (Exception e) {
 					new SafeILog(this).Warn(e, "Something went wrong while building marketplace model for marketplace id {0} of type {1}.", mp.Id, mp.Marketplace.Name);
@@ -412,6 +458,18 @@
 
 				m_oMundMs.Add(new LocalMp(model, mp));
 			} // for each mp
+
+			if (m_oMundMs.Any(x => x.Model.Name == "HMRC") && m_oMundMs.Any(x => x.Model.Name == "Yodlee"))
+			{
+				
+				foreach (var mp in m_oMundMs.Where(x => x.Model.Name == "HMRC"))
+				{
+					var returnData = new LoadVatReturnFullData(m_oCustomer.Id, mp.Model.Id, DB, Log);
+					returnData.CalculateBankStatements(mp.Model.HmrcData.VatReturn.LastOrDefault(), m_oMundMs.First(x => x.Model.Name == "Yodlee").Model.Yodlee.BankStatementDataModel);
+					mp.Model.HmrcData.BankStatement = returnData.BankStatement;
+					mp.Model.HmrcData.BankStatementAnnualized = returnData.BankStatementAnnualized;
+				}
+			}
 		} // GetAllModels
 
 		#endregion method GetAllModels
@@ -459,6 +517,8 @@
 		private static readonly Guid ms_oPaypalID = new PayPalServiceInfo().InternalId;
 		private static readonly Guid ms_oYodleeID = new YodleeServiceInfo().InternalId;
 		private static readonly Guid ms_oCompanyFilesID = new CompanyFilesServiceInfo().InternalId;
+
+		private List<Tuple<string, double>> _timeElapsed;
 
 		#endregion constants
 
