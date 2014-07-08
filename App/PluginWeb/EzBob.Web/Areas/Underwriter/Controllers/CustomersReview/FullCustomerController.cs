@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System.Diagnostics;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -52,7 +53,7 @@
 											MessagesModelBuilder messagesModelBuilder,
 											CustomerRelationsRepository customerRelationsRepository,
 											NHibernateRepositoryBase<MP_AlertDocument> docRepo,
-											IBugRepository bugs, 
+											IBugRepository bugs,
 											LoanRepository loanRepository,
 											CustomerAddressRepository customerAddressRepository)
 		{
@@ -77,6 +78,7 @@
 		[HttpGet]
 		public JsonResult Index(int id, string history = null)
 		{
+			Log.Debug("Build full customer model begin");
 			var model = new FullCustomerModel();
 
 			var customer = _customers.TryGet(id);
@@ -88,31 +90,50 @@
 			}
 
 			var cr = customer.LastCashRequest;
-
+			Stopwatch sw = Stopwatch.StartNew();
+			Stopwatch totalSw = Stopwatch.StartNew();
 			var pi = new PersonalInfoModel();
 			pi.InitFromCustomer(customer, _session);
 			model.PersonalInfoModel = pi;
-
+			sw.Stop();
+			var personalTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			var m = new ApplicationInfoModel();
 			_infoModelBuilder.InitApplicationInfo(m, customer, cr);
 			model.ApplicationInfoModel = m;
-
+			sw.Stop();
+			var appTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			DateTime historyDate;
 			bool bHasHistoryDate = DateTime.TryParse(history, out historyDate);
 
 			var ar = serviceClient.Instance.CalculateModelsAndAffordability(id, bHasHistoryDate ? historyDate : (DateTime?)null);
 			model.MarketPlaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models).ToList();
 			model.Affordability = ar.Affordability.ToList();
-			
+			sw.Stop();
+			var mpTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.LoansAndOffers = new LoansAndOffers(customer);
-
+			sw.Stop();
+			var loanTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.CreditBureauModel = _creditBureauModelBuilder.Create(customer, false, null);
+			sw.Stop();
+			var expTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 
 			model.SummaryModel = _summaryModelBuilder.CreateProfile(customer);
-
+			sw.Stop();
+			var summaryTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.PaymentAccountModel = new PaymentsAccountModel(customer);
-
+			sw.Stop();
+			var paymentTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.MedalCalculations = new MedalCalculators(customer);
+			sw.Stop();
+			var medalTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			try
 			{
@@ -124,6 +145,9 @@
 			{
 				Log.ErrorFormat("Failed to load pricing model \n{0}", ex);
 			}
+			sw.Stop();
+			var pricingTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			int numberOfProperties = customer.PersonalInfo == null ? 0 : customer.PersonalInfo.ResidentialStatus == "Home owner" ? 1 : 0;
 			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
 										 a.Customer.Id == customer.Id &&
@@ -134,16 +158,20 @@
 			var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
 			Zoopla zoopla = null;
 			if (currentAddress != null) zoopla = currentAddress.Zoopla.LastOrDefault();
-			int zooplaValue = 0; 
+			int zooplaValue = 0;
 			int experianMortgage = 0;
 			int experianMortgageCount = 0;
 			if (zoopla != null)
 			{
 				CrossCheckModel.GetZooplaAndMortgagesData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue, out experianMortgage, out experianMortgageCount);
 			}
-
+			sw.Stop();
+			var zooplaTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.Properties = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage);
-
+			sw.Stop();
+			var propTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			DateTime? lastDateCheck;
 			model.FraudDetectionLog = new FraudDetectionLogModel
 				{
@@ -153,30 +181,75 @@
 					                                          .ToList(),
 					LastCheckDate = lastDateCheck
 				};
-
+			sw.Stop();
+			var fraudTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.ApiCheckLogs = _apiCheckLogBuilder.Create(customer);
-
+			sw.Stop();
+			var apiTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.Messages = _messagesModelBuilder.Create(customer);
-
+			sw.Stop();
+			var messagesTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository, _session);
 
 			model.CustomerRelations = crm.Create(customer.Id);
-
+			sw.Stop();
+			var crmTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.AlertDocs =
 				(from d in _docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();
-
+			sw.Stop();
+			var docsTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.Bugs = _bugs.GetAll()
 				.Where(x => x.Customer.Id == customer.Id)
 				.Select(x => BugModel.ToModel(x)).ToList();
-
+			sw.Stop();
+			var bugsTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			var builder = new CompanyScoreModelBuilder();
 			model.CompanyScore = builder.Create(customer);
-
+			sw.Stop();
+			var expCompTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.ExperianDirectors = CrossCheckModel.GetExperianDirectors(customer);
-
+			sw.Stop();
+			var expDirTime = sw.Elapsed.TotalMilliseconds;
+			sw.Restart();
 			model.State = "Ok";
 
 			model.MarketplacesHistory = _marketPlaces.GetMarketPlaceHistoryModel(customer).ToList();
+			sw.Stop();
+			var mpHistTime = sw.Elapsed.TotalMilliseconds;
+			totalSw.Stop();
+
+			Log.DebugFormat(@"
+							Total FullCustomerModel Time taken: {20}ms
+							PersonalInfoModel Time taken: {0}ms
+							ApplicationInfoModel Time taken: {1}ms
+							MarketPlaces and Affordability Time taken: {2}ms
+							LoansAndOffers Time taken: {3}ms
+							CreditBureauModel Time taken: {4}ms
+							SummaryModel Time taken: {5}ms
+							PaymentAccountModel Time taken: {6}ms
+							MedalCalculations Time taken: {7}ms
+							PricingModelCalculations Time taken: {8}ms
+							ZooplaAndMortgagesData Time taken: {9}ms
+							PropertiesModel Time taken: {10}ms
+							FraudDetectionLog Time taken: {11}ms
+							ApiCheckLogs Time taken: {12}ms
+							Messages Time taken: {13}ms
+							CustomerRelations Time taken: {14}ms
+							AlertDocs Time taken: {15}ms
+							Bugs Time taken: {16}ms
+							CompanyScore Time taken: {17}ms
+							ExperianDirectors Time taken: {18}ms
+							MarketplacesHistory Time taken: {19}ms", 
+							personalTime, appTime, mpTime, loanTime, expTime, summaryTime, paymentTime, medalTime, pricingTime, zooplaTime, propTime,
+							fraudTime, apiTime, messagesTime, crmTime, docsTime, bugsTime, expCompTime, expDirTime, mpHistTime, totalSw.Elapsed.TotalMilliseconds);
+			Log.Debug("full customer model build end");
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 

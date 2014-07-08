@@ -443,6 +443,7 @@
 									: loan.CashRequest.RepaymentPeriod,
 								TotalFee = loan.SetupFee,
 								LoanNumber = i,
+								Comment = loan.CashRequest.UnderwriterComment
 							});
 					}
 					catch (Exception ex)
@@ -491,7 +492,7 @@
 					ActiveSum = active,
 					ActiveCount = activeCount,
 					EarnedInterest = earnedInterest,
-					ActiveLoans = activeLoans
+					ActiveLoans = activeLoans.OrderByDescending(x => x.LoanNumber)
 				};
 		}
 

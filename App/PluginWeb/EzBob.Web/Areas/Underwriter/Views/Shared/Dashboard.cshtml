@@ -98,7 +98,7 @@
                                 <td><strong>Value added</strong></td>
                                 <td>Salaries</td>
                                 <td>tax</td>
-                                <td><strong>Ebidta</strong></td>
+                                <td><strong>EBIDA</strong></td>
                                 <td>Loan repayment</td>
                                 <td><strong>FCF</strong></td>
                             </tr>
@@ -442,10 +442,13 @@
                                             <div>TotalFee <%-EzBob.formatPoundsAsInt(l.TotalFee)%></div>
                                             <div>Term <%-l.Term%>m / <%-l.TermApproved%>m approved</div>
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <div class="approved-loan" style="width: <%-l.WidthPercent*100%>%;">Approved <%-l.Approved < 1000 ? EzBob.formatPoundsAsInt(l.Approved) : EzBob.formatPoundsAsThousands(l.Approved)%></div>
                                             <div class="took-loan" style="width: <%-l.LoanAmountWidthPercent*100%>%;">Took <%-l.LoanAmount < 1000 ? EzBob.formatPoundsAsInt(l.LoanAmount) : EzBob.formatPoundsAsThousands(l.LoanAmount)%> (<%-EzBob.formatPercents(l.LoanAmountPercent)%>)</div>
                                             <div class="balance-loan" style="width: <%-l.BalanceWidthPercent*100%>%;">Balance <%-l.Balance < 1000 ? EzBob.formatPoundsAsInt(l.Balance) : EzBob.formatPoundsAsThousands(l.Balance)%> (<%-EzBob.formatPercents(l.BalancePercent)%>)</div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div style="font-size:12px;"><%-l.Comment%></div>
                                         </div>
                                     </div>
                                 </div>
