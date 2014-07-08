@@ -214,7 +214,7 @@
 			sw.Stop();
 			var expCompTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();
-			model.ExperianDirectors = CrossCheckModel.GetExperianDirectors(customer);
+			model.ExperianDirectors = model.PersonalInfoModel.ExperianDirectors;
 			sw.Stop();
 			var expDirTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();
@@ -225,7 +225,7 @@
 			var mpHistTime = sw.Elapsed.TotalMilliseconds;
 			totalSw.Stop();
 
-			Log.DebugFormat(@"
+			Log.DebugFormat(@"Customer Id {21}
 							Total FullCustomerModel Time taken: {20}ms
 							PersonalInfoModel Time taken: {0}ms
 							ApplicationInfoModel Time taken: {1}ms
@@ -247,8 +247,9 @@
 							CompanyScore Time taken: {17}ms
 							ExperianDirectors Time taken: {18}ms
 							MarketplacesHistory Time taken: {19}ms", 
-							personalTime, appTime, mpTime, loanTime, expTime, summaryTime, paymentTime, medalTime, pricingTime, zooplaTime, propTime,
-							fraudTime, apiTime, messagesTime, crmTime, docsTime, bugsTime, expCompTime, expDirTime, mpHistTime, totalSw.Elapsed.TotalMilliseconds);
+							personalTime, appTime, mpTime, loanTime, expTime, summaryTime, paymentTime, medalTime, pricingTime, 
+							zooplaTime, propTime,fraudTime, apiTime, messagesTime, crmTime, docsTime, bugsTime, expCompTime,
+							expDirTime, mpHistTime, totalSw.Elapsed.TotalMilliseconds, customer.Id);
 			Log.Debug("full customer model build end");
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -275,7 +276,7 @@
 			public List<BugModel> Bugs { get; set; }
 			public string State { get; set; }
 			public CompanyScoreModel CompanyScore { get; set; }
-			public SortedSet<string> ExperianDirectors { get; set; }
+			public List<string> ExperianDirectors { get; set; }
 		}
 	}
 }
