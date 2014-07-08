@@ -310,7 +310,8 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	}, // cancelSend
 
 	toggleShowSigners: function() {
-		var nSignatureID = $(event.target).data('SignatureID');
+
+		var nSignatureID = $(event.target).closest('button').data('SignatureID');
 		this.$el.find('.signature' + nSignatureID).toggleClass('hide');
 	}, // toggleShowSigners
 
@@ -345,11 +346,13 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			var oSignatureListOpts = self.getDataTableOpts(oSignatures, 'ID,Name,@Date,Status,HasDocument');
 			oSignatureListOpts.fnRowCallback = _.bind(self.signatureListRowCallback, self);
 
-			self.SignaturesList = self.$el.find('#esignature-list').dataTable(oSignatureListOpts);
+			var oTbl = self.$el.find('#esignature-list');
+			self.SignaturesList = oTbl.dataTable(oSignatureListOpts);
 			self.$el.find('#esignature-list_wrapper .dataTables_top_left')
 				.html('Sent documents ')
 				.append(self.fromTemplate('.esign-send-another'))
 				.append(self.fromTemplate('.esign-poll-status').data('CustomerID', nCustomerID));
+			oTbl.css('width', '');
 
 			var oSignersListOpts = self.getDataTableOpts(oResponse.signers, 'FirstName,LastName,Email,MobilePhone');
 			oSignersListOpts.fnRowCallback = _.bind(self.signersListRowCallback, self);
@@ -392,7 +395,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 				{ sClass: 'grid-item-Controls narrow-as-possible', mData: null, }
 			);
 
-			var oTbl = self.$el.find('#esigners-list');
+			oTbl = self.$el.find('#esigners-list');
 			self.SignersList = oTbl.dataTable(oSignersListOpts);
 			self.$el.find('#esigners-list_wrapper .dataTables_top_left')
 				.html('Send documents to');
@@ -465,7 +468,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	}, // signersListRowCallback
 
 	downloadSignedDocument: function() {
-		var nSignatureID = $(event.target).data('SignatureID');
+		var nSignatureID = $(event.target).closest('button').data('SignatureID');
 		window.open(window.gRootPath + 'Underwriter/Esignatures/Download?nEsignatureID=' + nSignatureID);
 	}, // downloadSignedDocument
 
