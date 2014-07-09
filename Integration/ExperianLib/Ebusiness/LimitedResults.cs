@@ -10,15 +10,22 @@
 		#region properties
 		
 		public decimal ExistingBusinessLoans { get; set; }
+		public SortedSet<string> Owners { get; protected set; }
 
 		#endregion properties
 
 		#region constructors
 
-		public LimitedResults(string inputXml, DateTime lastCheckDate) : base(inputXml, lastCheckDate) {
+		public LimitedResults(string inputXml, DateTime lastCheckDate)
+			: base(inputXml, lastCheckDate)
+		{
+			Owners = new SortedSet<string>();
 		} // constructor
 
-		public LimitedResults(Exception exception) : base(exception) {
+		public LimitedResults(Exception exception)
+			: base(exception)
+		{
+			Owners = new SortedSet<string>();
 		} // constructor
 
 		#endregion constructors

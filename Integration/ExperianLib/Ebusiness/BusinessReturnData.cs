@@ -22,7 +22,6 @@
 		public decimal BureauScore { get; set; }
 		public decimal MaxBureauScore { get; set; }
 		public decimal CreditLimit { get; set; }
-		public SortedSet<string> Owners { get; protected set; }
 
 		public string CompanyName { get; set; }
 		public string AddressLine1 { get; set; }
@@ -44,7 +43,6 @@
 		#region constructors
 
 		protected BusinessReturnData() {
-			Owners = new SortedSet<string>();
 		} // constructor
 
 		protected BusinessReturnData(Exception ex) : this() {

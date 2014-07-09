@@ -61,7 +61,7 @@
 		public override void Execute()
 		{
 			decimal defaultRateCustomerShare;
-			decimal defaultRate = GetDefaultRate( out defaultRateCustomerShare);
+			decimal defaultRate = GetDefaultRate(out defaultRateCustomerShare);
 			int loanAmount, loanTerm;
 			GetDataFromCashRequest(out loanAmount, out loanTerm);
 			decimal tenureMonths = tenurePercents * loanTerm;

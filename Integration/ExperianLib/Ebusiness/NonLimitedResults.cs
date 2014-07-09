@@ -39,10 +39,7 @@ namespace ExperianLib.Ebusiness {
 			var node = root.XPathSelectElement("./REQUEST/DN73/CREDITLIMIT");
 			if (node != null)
 				CreditLimit = Convert.ToDecimal(node.Value);
-
-			if (Owners == null)
-				Owners = new SortedSet<string>();
-
+			
 			node = root.XPathSelectElement("./REQUEST/DN10/BUSINESSNAME");
 			if (node != null)
 				CompanyName = node.Value;

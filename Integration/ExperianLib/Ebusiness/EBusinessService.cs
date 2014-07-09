@@ -84,14 +84,6 @@
 		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
 			oRes.MaxBureauScore = oRes.BureauScore;
-			foreach (string sOwnerRegNum in oRes.Owners)
-			{
-				var parentCompanyResult = GetOneNotLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
-				if (parentCompanyResult.BureauScore > oRes.MaxBureauScore)
-				{
-					oRes.MaxBureauScore = parentCompanyResult.BureauScore;
-				}
-			}
 
 			return oRes;
 		} // GetNotLimitedBusinessData
@@ -278,16 +270,24 @@
 			}, "EBusinessService.AddToCache(" + refNum + ")");
 			try
 			{
-				if (!res.Owners.Any()) return;
-				var repo = ObjectFactory.GetInstance<ExperianParentCompanyMapRepository>();
-				foreach (var owner in res.Owners)
+				
+				if (res.GetType() == typeof (LimitedResults))
 				{
-					var map = new MP_ExperianParentCompanyMap
+					var t = res as LimitedResults;
+					if (t != null && !t.Owners.Any()) return;
+					var repo = ObjectFactory.GetInstance<ExperianParentCompanyMapRepository>();
+					if (t != null)
+					{
+						foreach (var owner in t.Owners)
 						{
-							ExperianRefNum = refNum,
-							ExperianParentRefNum = owner
-						};
-					repo.SaveOrUpdate(map);
+							var map = new MP_ExperianParentCompanyMap
+								{
+									ExperianRefNum = refNum,
+									ExperianParentRefNum = owner
+								};
+							repo.SaveOrUpdate(map);
+						}
+					}
 				}
 			}
 			catch (Exception ex)
