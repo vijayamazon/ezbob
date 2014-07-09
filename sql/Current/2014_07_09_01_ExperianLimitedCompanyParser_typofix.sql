@@ -1,4 +1,4 @@
-﻿
+UPDATE ConfigurationVariables SET Value = '
 [
 	{
 		"Name": "Limited Company Identification",
@@ -286,7 +286,7 @@
 					"Types": [ "monthsandyears" ]
 				}
 			}] },
-			{ "SourcePath": "./DIRAGE", "Targets": [{ "Name": "DirectorÔÇÖs age (Years)" }] },
+			{ "SourcePath": "./DIRAGE", "Targets": [{ "Name": "Director???s age (Years)" }] },
 			{ "SourcePath": "./NUMCONVICTIONS", "Targets": [{ "Name": "Number of convictions" }] },
 			{ "SourcePath": "./DIRNAMEPREFIX", "Targets": [{ "Name": "Name" }] },
 			{ "SourcePath": "./DIRFORENAME", "Targets": [{ "Name": "Name", "Position": 1, "Prefix": " " }] },
@@ -404,17 +404,17 @@
 			{ "SourcePath": "./COMPAVGDBT-3MTH", "Targets": [{ "Name": "Company - Average DBT - 3 Months" }] },
 			{ "SourcePath": "./COMPAVGDBT-6MTH", "Targets": [{ "Name": "Company - Average DBT - 6 Months" }] },
 			{ "SourcePath": "./COMPAVGDBT-12MTH", "Targets": [{ "Name": "Company - Average DBT - 12 Months" }] },
-			{ "SourcePath": "./COMPNUMDBT-1000", "Targets": [{ "Name": "Company - Number of DBT (-ú0--ú1,000)" }] },
-			{ "SourcePath": "./COMPNUMDBT-10000", "Targets": [{ "Name": "Company - Number of DBT (-ú1,000--ú10,000)" }] },
-			{ "SourcePath": "./COMPNUMDBT-100000", "Targets": [{ "Name": "Company - Number of DBT (-ú10,000--ú100,000)" }] },
-			{ "SourcePath": "./COMPNUMDBT-100000PLUS", "Targets": [{ "Name": "Company - Number of DBT (-ú100,000+)" }] },
+			{ "SourcePath": "./COMPNUMDBT-1000", "Targets": [{ "Name": "Company - Number of DBT (-?0--?1,000)" }] },
+			{ "SourcePath": "./COMPNUMDBT-10000", "Targets": [{ "Name": "Company - Number of DBT (-?1,000--?10,000)" }] },
+			{ "SourcePath": "./COMPNUMDBT-100000", "Targets": [{ "Name": "Company - Number of DBT (-?10,000--?100,000)" }] },
+			{ "SourcePath": "./COMPNUMDBT-100000PLUS", "Targets": [{ "Name": "Company - Number of DBT (-?100,000+)" }] },
 			{ "SourcePath": "./INDAVGDBT-3MTH", "Targets": [{ "Name": "Industry - Average DBT - 3 Months" }] },
 			{ "SourcePath": "./INDAVGDBT-6MTH", "Targets": [{ "Name": "Industry - Average DBT - 6 Months" }] },
 			{ "SourcePath": "./INDAVGDBT-12MTH", "Targets": [{ "Name": "Industry - Average DBT - 12 Months" }] },
-			{ "SourcePath": "./INDNUMDBT-1000", "Targets": [{ "Name": "Industry - Number of DBT (-ú0--ú1,000)" }] },
-			{ "SourcePath": "./INDNUMDBT-10000", "Targets": [{ "Name": "Industry - Number of DBT (-ú1,000--ú10,000)" }] },
-			{ "SourcePath": "./INDNUMDBT-100000", "Targets": [{ "Name": "Industry - Number of DBT (-ú10,000--ú100,000)" }] },
-			{ "SourcePath": "./INDNUMDBT-100000PLUS", "Targets": [{ "Name": "Industry - Number of DBT (-ú100,000+)" }] },
+			{ "SourcePath": "./INDNUMDBT-1000", "Targets": [{ "Name": "Industry - Number of DBT (-?0--?1,000)" }] },
+			{ "SourcePath": "./INDNUMDBT-10000", "Targets": [{ "Name": "Industry - Number of DBT (-?1,000--?10,000)" }] },
+			{ "SourcePath": "./INDNUMDBT-100000", "Targets": [{ "Name": "Industry - Number of DBT (-?10,000--?100,000)" }] },
+			{ "SourcePath": "./INDNUMDBT-100000PLUS", "Targets": [{ "Name": "Industry - Number of DBT (-?100,000+)" }] },
 			{ "SourcePath": "./COMPPAYPATTN", "Targets": [
 				{ "Name": "Company Payment Pattern" },
 				{
@@ -801,28 +801,28 @@
 				{ "Name": "Form Number", "Position": 1, "Prefix": " - ", "Transformation": {
 					"Types": [ "map" ],
 					"Map": {
-						"04": "ÔÇÿAÔÇÖ ÔÇô Mortgage extracted from credit master file: All charges until autumn 1994",
-						"08": "ÔÇÿBÔÇÖ ÔÇô Satisfaction of a mortgage originally extracted from the credit master file as record type ÔÇÿAÔÇÖ",
-						"12": "ÔÇÿ9999ÔÇÖ ÔÇô Correction to charge details",
-						"16": "ÔÇÿ395ÔÇÖ ÔÇô Mortgage or charge registration",
-						"20": "ÔÇÿ400ÔÇÖ ÔÇô Mortgage or charge subject to which property has been acquired",
-						"24": "ÔÇÿ397ÔÇÖ ÔÇô Charge securing a series of debentures",
-						"28": "ÔÇÿ397AÔÇÖ ÔÇô Issue of secured debentures in a series",
-						"32": "ÔÇÿ403AÔÇÖ ÔÇô Satisfaction in full or part of a charge",
-						"36": "ÔÇÿ403BÔÇÖ ÔÇô Part of property or undertaking charged has been released from the charge or no longer part of the companyÔÇÖs property/undertaking",
-						"40": "ÔÇÿ4051ÔÇÖ ÔÇô Appointment of receiver or manager",
-						"44": "ÔÇÿ4052ÔÇÖ ÔÇô Cessation of receiver or manager",
-						"48": "ÔÇÿ410ÔÇÖ ÔÇô Scottish mortgage/charge registration",
-						"52": "ÔÇÿ413ÔÇÖ ÔÇô Charge securing a series of debentures",
-						"56": "ÔÇÿ413AÔÇÖ ÔÇô Issue of secured debentures in a series",
-						"60": "ÔÇÿ416ÔÇÖ ÔÇô Mortgage or charge subject to which property has been acquired",
-						"64": "ÔÇÿ419AÔÇÖ ÔÇô Satisfaction in full or part of a mortgage or charge",
-						"68": "ÔÇÿ419BÔÇÖ ÔÇô Declaration that part of the property or undertaking has been released from the charge or no longer forms part of the companyÔÇÖs property or undertaking",
-						"72": "ÔÇÿ1SCÔÇÖ ÔÇô Appointment of a receiver by the holder of a floating charge",
-						"76": "ÔÇÿ2SCÔÇÖ ÔÇô Appointment of a receiver by the court",
-						"80": "ÔÇÿ3SCÔÇÖ ÔÇô Cessation of a receiver",
-						"84": "ÔÇÿ33SCÔÇÖ ÔÇô Death of a receiver",
-						"88": "ÔÇÿ466ÔÇÖ ÔÇô Instrument of alteration to a floating charge"
+						"04": "???A??? ??? Mortgage extracted from credit master file: All charges until autumn 1994",
+						"08": "???B??? ??? Satisfaction of a mortgage originally extracted from the credit master file as record type ???A???",
+						"12": "???9999??? ??? Correction to charge details",
+						"16": "???395??? ??? Mortgage or charge registration",
+						"20": "???400??? ??? Mortgage or charge subject to which property has been acquired",
+						"24": "???397??? ??? Charge securing a series of debentures",
+						"28": "???397A??? ??? Issue of secured debentures in a series",
+						"32": "???403A??? ??? Satisfaction in full or part of a charge",
+						"36": "???403B??? ??? Part of property or undertaking charged has been released from the charge or no longer part of the company???s property/undertaking",
+						"40": "???4051??? ??? Appointment of receiver or manager",
+						"44": "???4052??? ??? Cessation of receiver or manager",
+						"48": "???410??? ??? Scottish mortgage/charge registration",
+						"52": "???413??? ??? Charge securing a series of debentures",
+						"56": "???413A??? ??? Issue of secured debentures in a series",
+						"60": "???416??? ??? Mortgage or charge subject to which property has been acquired",
+						"64": "???419A??? ??? Satisfaction in full or part of a mortgage or charge",
+						"68": "???419B??? ??? Declaration that part of the property or undertaking has been released from the charge or no longer forms part of the company???s property or undertaking",
+						"72": "???1SC??? ??? Appointment of a receiver by the holder of a floating charge",
+						"76": "???2SC??? ??? Appointment of a receiver by the court",
+						"80": "???3SC??? ??? Cessation of a receiver",
+						"84": "???33SC??? ??? Death of a receiver",
+						"88": "???466??? ??? Instrument of alteration to a floating charge"
 					}
 				}}
 			]},
@@ -874,3 +874,6 @@
 		]
 	}
 ]
+'
+WHERE Name = 'CompanyScoreParserConfiguration'
+GO
