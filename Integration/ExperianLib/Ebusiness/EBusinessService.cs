@@ -86,8 +86,7 @@
 			oRes.MaxBureauScore = oRes.BureauScore;
 			foreach (string sOwnerRegNum in oRes.Owners)
 			{
-				var parentCompanyResult = GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
-				GetOneNotLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
+				var parentCompanyResult = GetOneNotLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
 				if (parentCompanyResult.BureauScore > oRes.MaxBureauScore)
 				{
 					oRes.MaxBureauScore = parentCompanyResult.BureauScore;
