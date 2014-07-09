@@ -151,7 +151,6 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             experianModel: @experianInfoModel
             companyModel: @companyScoreModel
             propertiesModel: @PropertiesModel
-            mpsModel: @marketPlaces
             affordability: @affordability
             loanModel: @loanInfoModel
         )

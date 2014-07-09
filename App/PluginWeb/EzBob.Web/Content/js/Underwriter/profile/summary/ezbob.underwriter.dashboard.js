@@ -8,7 +8,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.personalModel = options.personalModel;
         this.experianModel = options.experianModel;
         this.propertiesModel = options.propertiesModel;
-        this.mpsModel = options.mpsModel;
         this.loanModel = options.loanModel;
         this.companyModel = options.companyModel;
         this.affordability = options.affordability;
@@ -18,7 +17,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.bindTo(this.experianModel, "change sync", this.render, this);
         this.bindTo(this.companyModel, "change sync", this.render, this);
         this.bindTo(this.propertiesModel, "change sync", this.render, this);
-        this.bindTo(this.mpsModel, "change sync", this.render, this);
         this.bindTo(this.loanModel, "change sync", this.render, this);
         this.bindTo(this.affordability, "change sync", this.render, this);
 

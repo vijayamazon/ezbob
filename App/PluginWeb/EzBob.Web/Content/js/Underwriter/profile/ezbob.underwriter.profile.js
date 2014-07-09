@@ -159,7 +159,6 @@
         experianModel: this.experianInfoModel,
         companyModel: this.companyScoreModel,
         propertiesModel: this.PropertiesModel,
-        mpsModel: this.marketPlaces,
         affordability: this.affordability,
         loanModel: this.loanInfoModel
       });
