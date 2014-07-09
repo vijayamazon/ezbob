@@ -423,11 +423,8 @@
 					"CII");
 			TryRead(() => model.ConsumerSummaryCharacteristics.NumberOfCCJs = eInfo.Output.Output.ConsumerSummary.Summary.PublicInfo.E1A01,
 					"# of CCJ's");
-			TryRead(() => model.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ = eInfo.Output.Output.ConsumerSummary.Summary.PublicInfo.E1A03,
-					"Age of most recent CCJ");
-
-			TryRead(() => model.ConsumerSummaryCharacteristics.SatisfiedJudgements = eInfo.Output.Output.ConsumerSummary.Summary.PublicInfo.EA4Q06,
-					"Satisfied Judgements");
+			model.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ = eInfo.CCJLast2Years.ToString();
+			model.ConsumerSummaryCharacteristics.SatisfiedJudgements = eInfo.SatisfiedJudgement;
 
 			TryRead(() => model.ConsumerSummaryCharacteristics.NOCsOnCCJ = eInfo.Output.Output.ConsumerSummary.Summary.NOC.EA4Q02,
 					"NOCs on CCJ");
