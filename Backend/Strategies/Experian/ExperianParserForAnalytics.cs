@@ -14,7 +14,7 @@
 			m_oDB = oDB;
 		} // constructor
 
-		public void UpdateAnalytics(int customerId) {
+		public void UpdateAnalytics(int customerId, int maxScore = -1) {
 			m_oLog.Debug("Updating customer analytics for customer {0}", customerId);
 
 			string companyData = string.Empty;
@@ -85,17 +85,23 @@
 			GetCcjs(xmlDoc, isLimited, out ageOfMostRecentCcj, out numOfCcjsInLast24Months, out sumOfCcjsInLast24Months);
 
 			int score = GetScore(xmlDoc, isLimited);
+			if (maxScore == -1)
+			{
+				maxScore = score;
+			}
+
 			int creditLimit = GetCreditLimit(xmlDoc, isLimited);
 			DateTime? incorporationDate = GetIncorporationDate(xmlDoc, isLimited);
 
 			ParseExperianDl97Accounts(customerId, xmlDoc);
 
+			m_oLog.Info("Inserting to analytics exoerian Score:{0} MaxScore:{1}", score, maxScore);
 			m_oDB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateCompany",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerId),
 				new QueryParameter("Score", score),
-				new QueryParameter("MaxScore", output.MaxScore),
+				new QueryParameter("MaxScore", maxScore),
 				new QueryParameter("SuggestedAmount", creditLimit),
 				new QueryParameter("IncorporationDate", incorporationDate),
 				new QueryParameter("TangibleEquity", tangibleEquity),
