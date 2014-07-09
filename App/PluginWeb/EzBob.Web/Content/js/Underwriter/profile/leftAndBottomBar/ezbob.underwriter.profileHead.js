@@ -31,6 +31,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
     editOfferClick: function () {
         this.ui.editOfferDiv.toggle();
         $.cookie('editOfferVisible', this.ui.editOfferDiv.is(":visible"));
+        $(".profile-content").css({ "margin-top": this.$el.height() + "px" });
     },
     
     collapseAll: function () {
@@ -41,14 +42,14 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             if ($(this).is(":hidden")) {
                 btn.children("i").attr("class", "fa fa-chevron-down");
                 that.$el.find(".box-title-collapse").show();
-                $(".profile-content").css({ "margin-top": "50px" });
+                
                 $.cookie('collapseAll', true);
             } else {
                 btn.children("i").attr("class", "fa fa-chevron-up");
                 that.$el.find(".box-title-collapse").hide();
-                $(".profile-content").css({ "margin-top": "190px" });
                 $.cookie('collapseAll', false);
             }
+            $(".profile-content").css({ "margin-top": that.$el.height() + "px" });
             return false;
         });
         return false;
@@ -227,6 +228,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 
         if ($.cookie('editOfferVisible') == "true") {
             this.ui.editOfferDiv.show();
+            $(".profile-content").css({ "margin-top": this.$el.height() + "px" });
         }
         if ($.cookie('collapseAll') == "true") {
             this.collapseAll();

@@ -1596,7 +1596,10 @@ body {
     padding-top: 10px;
     position: fixed;
     z-index: 15;
-    width: calc(100% - 475px);
+    width: -moz-calc(100% - 475px);/* Firefox */
+    width: -webkit-calc(100% - 475px);/* WebKit */
+    width: -o-calc(100% - 475px);/* Opera */
+    width: calc(100% - 475px);/* Standard */
     background-color: #ebebeb;
 }
 
