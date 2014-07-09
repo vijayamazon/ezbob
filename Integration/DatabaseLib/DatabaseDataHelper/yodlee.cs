@@ -470,8 +470,9 @@
 
 		#region method GetAllYodleeOrdersData
 
-		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime = false)
+		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime, out List<string> directors)
 		{
+			directors = new List<string>();
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var orders = new YodleeOrderDictionary { Data = new Dictionary<BankData, List<BankTransactionData>>() };
@@ -507,8 +508,9 @@
 					};
 
 					MP_CustomerMarketPlace mp;
-					List<string> directors;
-					List<MP_YodleeOrderItemBankTransaction> transactions = GetTransactions(databaseCustomerMarketPlace, item.srcElementId, out mp, out directors);
+					var directorsList = new List<string>();
+					List<MP_YodleeOrderItemBankTransaction> transactions = GetTransactions(databaseCustomerMarketPlace, item.srcElementId, out mp, out directorsList);
+					directors = directorsList;
 					if (!isFirstTime)
 					{
 						double currentBalance = item.currentBalance == null ? 0 : item.currentBalance.Value;
@@ -518,7 +520,7 @@
 
 						CalculateYodleeRunningBalance(mp,
 							item.srcElementId,
-							_CurrencyConvertor.ConvertToBaseCurrency(currentBalanceCurrency, currentBalance, item.asOfDate), transactions, directors);
+							_CurrencyConvertor.ConvertToBaseCurrency(currentBalanceCurrency, currentBalance, item.asOfDate), transactions, directorsList);
 					}
 
 

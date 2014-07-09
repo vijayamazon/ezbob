@@ -23,7 +23,7 @@
 		private const string SearchWord = "2";
 		private YodleeSearchWordsModel yodlee;
 
-		public YodleeSearchWordsModelBuilder(ISession session, Customer customer)
+		public YodleeSearchWordsModelBuilder(ISession session, Customer customer, IEnumerable<string> directors)
 		{
 			yodlee = new YodleeSearchWordsModel
 				{
@@ -42,15 +42,9 @@
 			//Add customer surname
 			_yodleeSearchWords.Add(string.Format("{0}{1}", CustomerSurname, customer.PersonalInfo.Surname));
 
-			//Add directors surnames
-			if (customer.Company != null && customer.Company.Directors.Any())
+			foreach (var director in directors)
 			{
-				var directors = customer.Company.Directors.Select(d => d.Surname).ToList();
-
-				foreach (var director in directors)
-				{
-					_yodleeSearchWords.Add(string.Format("{0}{1}", DirectorSurname, director));
-				}
+				_yodleeSearchWords.Add(string.Format("{0}{1}", DirectorSurname, director));
 			}
 		}
 

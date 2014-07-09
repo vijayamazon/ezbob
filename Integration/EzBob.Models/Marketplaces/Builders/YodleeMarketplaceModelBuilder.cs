@@ -83,10 +83,10 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 		public YodleeModel BuildYodlee(MP_CustomerMarketPlace mp, DateTime? history) {
 			YodleeOrderDictionary yodleeData = null;
-
+			var directors = new List<string>();
 			if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId) {
 				var ddh = new DatabaseDataHelper(_session);
-				yodleeData = ddh.GetAllYodleeOrdersData(history.HasValue ? history.Value : DateTime.UtcNow, mp);
+				yodleeData = ddh.GetAllYodleeOrdersData(history.HasValue ? history.Value : DateTime.UtcNow, mp, false, out directors);
 			} // if
 
 			if (yodleeData == null) {
@@ -169,7 +169,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 			YodleeRunningBalanceModel yodleeRunningBalanceModel;
 
-			model.CashFlowReportModel = CreateYodleeCashFlowModel(model, mp.Customer, out yodleeSearchWordsModel, out yodleeRunningBalanceModel);
+			model.CashFlowReportModel = CreateYodleeCashFlowModel(model, mp.Customer, directors, out yodleeSearchWordsModel, out yodleeRunningBalanceModel);
 			model.SearchWordsModel = yodleeSearchWordsModel;
 			model.RunningBalanceModel = yodleeRunningBalanceModel;
 
@@ -184,9 +184,9 @@ namespace EzBob.Models.Marketplaces.Builders {
 				: (double?)null;
 		} // CurrencyXchg
 
-		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, Customer customer, out YodleeSearchWordsModel yodleeSearchWordsModel, out YodleeRunningBalanceModel yodleeRunningBalanceModel) {
+		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, Customer customer, IEnumerable<string> directors, out YodleeSearchWordsModel yodleeSearchWordsModel, out YodleeRunningBalanceModel yodleeRunningBalanceModel) {
 			var yodleeCashFlowReportModelBuilder = new YodleeCashFlowReportModelBuilder(_session);
-			var yodleeSearchWordsModelBuilder = new YodleeSearchWordsModelBuilder(_session, customer);
+			var yodleeSearchWordsModelBuilder = new YodleeSearchWordsModelBuilder(_session, customer, directors);
 			var yodleeRunningBalanceModelBuilder = new YodleeRunningBalanceModelBuilder();
 			foreach (var bank in model.banks) {
 				if (bank.overdraftProtection.HasValue && bank.transactions.Any()) {
