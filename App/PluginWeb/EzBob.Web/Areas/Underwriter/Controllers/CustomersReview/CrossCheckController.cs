@@ -44,7 +44,7 @@
 		[Ajax]
 		[HttpGet]
 		public ActionResult Index(int id) {
-			var model = new CrossCheckModel(_customerRepository.Get(id), _creditBureauModelBuilder);
+			var model = new CrossCheckModel(_customerRepository.Get(id));
 			return View(model);
 		} // Index
 

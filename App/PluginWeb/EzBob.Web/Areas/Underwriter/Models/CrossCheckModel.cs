@@ -4,12 +4,10 @@
 	using System.Collections.Generic;
 	using System.Text;
 	using AutoMapper;
-	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
 	using System.Linq;
-	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EzBob.Models;
-	using Ezbob.ExperianParser;
 	using System.Text.RegularExpressions;
 	using ExperianLib;
 	using LandRegistryLib;
@@ -30,7 +28,7 @@
 
 		public List<Director> Directors { get; set; }
 		public Customer Customer { get; set; }
-		public SortedSet<string> ExperianDirectors { get; set; }
+		public List<string> ExperianDirectors { get; set; }
 
 		public int ExperianMortgage { get; set; }
 		public int ExperianMortgageCount { get; set; }
@@ -93,7 +91,7 @@
 			catch { }
 		}
 
-		public CrossCheckModel(Customer customer, CreditBureauModelBuilder creditBureauModelBuilder)
+		public CrossCheckModel(Customer customer)
 		{
 			Customer = customer;
 			
@@ -108,7 +106,7 @@
 			Directors = new List<Director>();
 			CrossCheckStatus = new CrossCheckStatus();
 
-			ExperianDirectors = GetExperianDirectors(customer);
+			ExperianDirectors = GetExperianDirectors(customer).DirectorNames;
 			
 			OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.OtherPropertyAddress);
 
@@ -187,31 +185,23 @@
 			}
 		}
 
-		public static SortedSet<string> GetExperianDirectors(Customer customer)
+		public static ExperianDirectorsModel GetExperianDirectors(Customer customer)
 		{
-			SortedSet<string> experianDirectors = null;
-			ExperianParserOutput oParseResult = customer.ParseExperian(ExperianParserFacade.Target.Director);
+			var expDirRepo = ObjectFactory.GetInstance<ExperianDirectorRepository>();
+			var dirs = expDirRepo.Find(customer.Id);
+			var directorsModel = new ExperianDirectorsModel();
 
-			if (oParseResult.ParsingResult == ParsingResult.Ok)
+			if (dirs.Any())
 			{
-				foreach (var pair in oParseResult.Dataset)
+				directorsModel.NumOfDirectors = dirs.Count(x => x.IsDirector);
+				directorsModel.NumOfShareHolders = dirs.Count(x => x.IsShareholder);
+				directorsModel.DirectorNames = new List<string>();
+				foreach (var expDir in dirs)
 				{
-					foreach (ParsedDataItem di in pair.Value.Data)
-					{
-						string sFullName = DetailsToName(di["FirstName"], di["MidName1"], di["MidName2"], di["LastName"]);
-
-						if (sFullName != string.Empty)
-						{
-							if (experianDirectors == null)
-								experianDirectors = new SortedSet<string>();
-
-							experianDirectors.Add(sFullName);
-						} // if
-					} // for each director
-				} // for each group
-			} // if
-
-			return experianDirectors;
+					directorsModel.DirectorNames.Add(DetailsToName(expDir.FirstName, expDir.MiddleName, expDir.LastName));
+				}
+			}
+			return directorsModel;
 		}
 
 		public enum TriState { NoData, No, Yes }
@@ -274,5 +264,12 @@
 			SellerInfo = new EbaySellerInfo();
 		}
 
+	}
+
+	public class ExperianDirectorsModel
+	{
+		public List<string> DirectorNames { get; set; }
+		public int NumOfDirectors { get; set; }
+		public int NumOfShareHolders { get; set; }
 	}
 }

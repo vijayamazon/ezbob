@@ -70,6 +70,7 @@
 		public string PostCode { get; set; }
 		public DirectorModel[] Directors { get; set; }
 		public bool IsWizardComplete { get; set; }
+		public List<string> ExperianDirectors { get; set; }
 
 		public PersonalInfoModel() {
 			IndustryFields = new List<string>();
@@ -123,21 +124,12 @@
 			if (Directors == null)
 				Directors = new DirectorModel[0];
 
-			ExperianParserOutput parsedExperian = customer.ParseExperian(ExperianParserFacade.Target.Company);
-			int numOfShareholders = 0;
-			if (parsedExperian.Dataset != null && parsedExperian.Dataset.ContainsKey("Limited Company Shareholders") &&
-				parsedExperian.Dataset["Limited Company Shareholders"].Data != null)
-			{
-				numOfShareholders = parsedExperian.Dataset["Limited Company Shareholders"].Data.Count;
-			}
-			SortedSet<string> experianDirectors = CrossCheckModel.GetExperianDirectors(customer);
-			int numOfDirectors = 0;
-			if (experianDirectors != null)
-			{
-				numOfDirectors = experianDirectors.Count;
-			}
-			NumOfDirectors = numOfDirectors;
-			NumOfShareholders = numOfShareholders;
+			
+			var expDirModel = CrossCheckModel.GetExperianDirectors(customer);
+			ExperianDirectors = expDirModel.DirectorNames;
+			NumOfDirectors = expDirModel.NumOfDirectors;
+			NumOfShareholders = expDirModel.NumOfShareHolders;
+			
 			
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			DateTime companySeniority;
