@@ -37,10 +37,10 @@
 
 		public override void Execute()
 		{
-			Model.FeesRevenue = Model.SetupFeePounds + Model.BrokerSetupFeePounds;
+			Model.FeesRevenue = Model.SetupFeePounds;
 			Model.MonthlyInterestRate = GetMonthlyInterestRate();
 
-			Loan loan = CreateLoan(Model.MonthlyInterestRate, Model.FeesRevenue);
+			Loan loan = CreateLoan(Model.MonthlyInterestRate, Model.FeesRevenue + Model.BrokerSetupFeePounds);
 			Model.Apr = GetApr(loan);
 
 			Model.CostOfDebtOutput = GetCostOfDebt(loan.Schedule);
@@ -61,7 +61,7 @@
 			Model.Ebitda = Model.GrossProfit - Model.OpexAndCapex;
 			Model.NetLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
 			Model.ProfitMarkupOutput = Model.ProfitMarkup * Model.Revenue;
-			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + ((Model.SetupFeePercents + Model.BrokerSetupFeePercents) * 12 / Model.TenureMonths) : 0;
+			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0;
 			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
 
 			decimal annualizedInterestRateEu2, aprEu2;
@@ -110,7 +110,7 @@
 			decimal netLossFromDefaults = (1 - Model.EuCollectionRate) * Model.LoanAmount * Model.DefaultRate;
 			decimal setupFeePounds = Model.ProfitMarkupOutput - interestRevenue + Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
 			decimal setupFee = setupFeePounds / Model.LoanAmount;
-			loan = CreateLoan(monthlyInterestRate, setupFeePounds);
+			loan = CreateLoan(monthlyInterestRate, setupFeePounds + Model.BrokerSetupFeePounds);
 			apr = GetApr(loan);
 			annualizedInterestRate = Model.TenureMonths != 0 ? (monthlyInterestRate * 12) + (setupFee * 12 / Model.TenureMonths) : 0;
 			return setupFee;
