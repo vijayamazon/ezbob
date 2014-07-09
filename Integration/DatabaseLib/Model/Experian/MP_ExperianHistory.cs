@@ -6,6 +6,7 @@
 	using Database;
 	using Ezbob.Utils.Extensions;
 	using FluentNHibernate.Mapping;
+	using NHibernate.Mapping;
 	using NHibernate.Type;
 	using ApplicationMng.Repository;
 	using NHibernate;
@@ -42,6 +43,7 @@
 	{
 		IEnumerable<MP_ExperianHistory> GetConsumerHistory(Customer customer);
 		IEnumerable<MP_ExperianHistory> GetCompanyHistory(Customer customer, bool isLimited);
+		bool HasHistory(Customer customer, ExperianServiceType type);
 	}
 
 	public class ExperianHistoryRepository : NHibernateRepositoryBase<MP_ExperianHistory>, IExperianHistoryRepository
@@ -60,6 +62,11 @@
 		public IEnumerable<MP_ExperianHistory> GetCompanyHistory(Customer customer, bool isLimited)
 		{
 			return GetAll().Where(x => x.Customer == customer && x.Type == (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr()));
+		}
+
+		public bool HasHistory(Customer customer, ExperianServiceType type)
+		{
+			return GetAll().Any(x => x.Customer == customer && x.Type == type.DescriptionAttr());
 		}
 	}
 }

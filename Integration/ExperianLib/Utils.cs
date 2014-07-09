@@ -81,31 +81,35 @@
 
 				try
 				{
-					var history = new MP_ExperianHistory
-						{
-							Customer = logEntry.Customer,
-							ServiceLogId = logEntry.Id,
-							Date = logEntry.InsertDate,
-							Type = logEntry.ServiceType,
-						};
-					var historyRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianHistory>>();
-					switch (type)
+					var historyRepo = ObjectFactory.GetInstance<ExperianHistoryRepository>();
+					if (historyRepo.HasHistory(logEntry.Customer, type))
 					{
-						case ExperianServiceType.Consumer:
-							history.Score = GetScoreFromXml(logEntry.ResponseData);
-							history.CII = GetCIIFromXml(logEntry.ResponseData);
-							history.CaisBalance = GetConsumerCaisBalance(logEntry.ResponseData);
-							historyRepo.SaveOrUpdate(history);
-							break;
-						case ExperianServiceType.LimitedData:
-							history.Score = GetLimitedScoreFromXml(logEntry.ResponseData);
-							history.CaisBalance = GetLimitedCaisBalance(logEntry.ResponseData);
-							historyRepo.SaveOrUpdate(history);
-							break;
-						case ExperianServiceType.NonLimitedData:
-							history.Score = GetNonLimitedScoreFromXml(logEntry.ResponseData);
-							historyRepo.SaveOrUpdate(history);
-							break;
+						var history = new MP_ExperianHistory
+							{
+								Customer = logEntry.Customer,
+								ServiceLogId = logEntry.Id,
+								Date = logEntry.InsertDate,
+								Type = logEntry.ServiceType,
+							};
+
+						switch (type)
+						{
+							case ExperianServiceType.Consumer:
+								history.Score = GetScoreFromXml(logEntry.ResponseData);
+								history.CII = GetCIIFromXml(logEntry.ResponseData);
+								history.CaisBalance = GetConsumerCaisBalance(logEntry.ResponseData);
+								historyRepo.SaveOrUpdate(history);
+								break;
+							case ExperianServiceType.LimitedData:
+								history.Score = GetLimitedScoreFromXml(logEntry.ResponseData);
+								history.CaisBalance = GetLimitedCaisBalance(logEntry.ResponseData);
+								historyRepo.SaveOrUpdate(history);
+								break;
+							case ExperianServiceType.NonLimitedData:
+								history.Score = GetNonLimitedScoreFromXml(logEntry.ResponseData);
+								historyRepo.SaveOrUpdate(history);
+								break;
+						}
 					}
 				}
 				catch (Exception ex)
