@@ -47,6 +47,7 @@
 		#endregion property Name
 
 		public decimal MaxScore { get; private set; }
+		public decimal Score { get; private set; }
 
 		#region method Execute
 
@@ -69,6 +70,7 @@
 				if (!m_oExperianData.IsError) {
 					experianBureauScore = m_oExperianData.BureauScore;
 					MaxScore = m_oExperianData.MaxBureauScore;
+					Score = m_oExperianData.BureauScore;
 				}
 				else
 					experianError = m_oExperianData.Error;
