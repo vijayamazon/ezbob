@@ -1,14 +1,16 @@
 ﻿namespace ExperianLib.IdIdentityHub
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security.Authentication;
 	using System.Text.RegularExpressions;
 	using System.Xml;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Repository;
+	using Iesi.Collections.Generic;
 	using Web_References.IDHubService;
 	using StructureMap;
 	using log4net;
@@ -19,6 +21,7 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(IdHubService));
 		private readonly ExperianBankCacheRepository _bankCacheRepository;
+		private readonly AmlResultsRepository amlResultsRepository;
 		private string uIdCertificateThumb;
 		private string authTokenServiceIdHub;
 		private string idHubService;
@@ -26,12 +29,14 @@
 		public IdHubService()
 		{
 			_bankCacheRepository = ObjectFactory.GetInstance<ExperianBankCacheRepository>();
+			amlResultsRepository = ObjectFactory.GetInstance<AmlResultsRepository>();
 			GetConfigs();
 		}
 
 		public IdHubService(ExperianBankCacheRepository bankCacheRepository)
 		{
 			_bankCacheRepository = bankCacheRepository;
+			amlResultsRepository = ObjectFactory.GetInstance<AmlResultsRepository>();
 			GetConfigs();
 		}
 
@@ -48,13 +53,38 @@
 			var result = new AuthenticationResults();
 
 			var key = String.Format("{0}_{1}_{2}_{3}", foreName, middleName, surname, postCode);
-			Log.DebugFormat("Checking key '{0}' in cache...", key);
-			var cachedValue = _bankCacheRepository.Get<ProcessConfigResponseType>(key, null);
-			if (cachedValue != null && string.IsNullOrEmpty(xmlForDebug))
+
+			if (string.IsNullOrEmpty(xmlForDebug))
 			{
-				Log.DebugFormat("Will use cache value for key '{0}'", key);
-				result.Parse(cachedValue);
-				return result;
+				Log.DebugFormat("Checking key '{0}' in cache...", key);
+
+				var cachedResult = amlResultsRepository.GetAll().FirstOrDefault(aml => aml.Key == key && aml.IsActive);
+
+				bool foundInCache = cachedResult != null;
+				if (foundInCache)
+				{
+					Log.DebugFormat("Will use cache value for key '{0}'", key);
+					
+					result.AuthenticationIndexType = cachedResult.AuthenticationIndexType;
+					result.AuthIndexText = cachedResult.AuthIndexText;
+					result.NumPrimDataItems = cachedResult.NumPrimDataItems;
+					result.NumPrimDataSources = cachedResult.NumPrimDataSources;
+					result.NumSecDataItems = cachedResult.NumSecDataItems;
+					result.StartDateOldestPrim = cachedResult.StartDateOldestPrim;
+					result.StartDateOldestSec = cachedResult.StartDateOldestSec;
+					result.ReturnedHRPCount = cachedResult.HighRiskRules.Count;
+					if (result.ReturnedHRPCount == 0)
+					{
+						result.ReturnedHRP = new ReturnedHRPType[0];
+					}
+					else
+					{
+						result.ReturnedHRP = cachedResult.HighRiskRules.Select(rule => new ReturnedHRPType {HighRiskPolRuleID = rule.RuleId, HighRiskPolRuleText = rule.RuleText}).ToArray();
+					}
+					result.Error = cachedResult.Error;
+
+					return result;
+				}
 			}
 			if (checkInCacheOnly)
 				return null;
@@ -107,10 +137,30 @@
 				{
 					r = GetRequestFromXml(xmlForDebug);
 				}
-				var logItem = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
-				_bankCacheRepository.Set(key, r, logItem);
+				MP_ServiceLog logItem = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
 
 				result.Parse(r);
+
+				var amlResult = new AmlResults
+					{
+						Key = key,
+						CustomerId = customerId,
+						ServiceLogId = logItem.Id,
+						Created = logItem.InsertDate,
+						AuthenticationDecision = result.AuthenticationDecision,
+						AuthenticationIndexType = result.AuthenticationIndexType,
+						AuthIndexText = result.AuthIndexText,
+						NumPrimDataItems = result.NumPrimDataItems,
+						NumPrimDataSources = result.NumPrimDataSources,
+						NumSecDataItems = result.NumSecDataItems,
+						StartDateOldestPrim = result.StartDateOldestPrim,
+						StartDateOldestSec = result.StartDateOldestSec,
+						Error = result.Error,
+						IsActive = true
+					};
+				List<AmlResultsHighRiskRules> highRiskRules = result.ReturnedHRP.Select(rule => new AmlResultsHighRiskRules {RuleId = rule.HighRiskPolRuleID, RuleText = rule.HighRiskPolRuleText, AmlResult = amlResult}).ToList();
+				amlResult.HighRiskRules = new HashedSet<AmlResultsHighRiskRules>(highRiskRules);
+				amlResultsRepository.SaveOrUpdate(amlResult);
 			}
 			catch (Exception exception)
 			{

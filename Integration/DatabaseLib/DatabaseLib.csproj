@@ -143,6 +143,8 @@
     <Compile Include="Model\Database\TestCustomer.cs" />
     <Compile Include="Model\Database\UnderwriterRecentCustomers.cs" />
     <Compile Include="Model\Database\UnderwriterRecentCustomersMap.cs" />
+    <Compile Include="Model\Experian\AmlResults.cs" />
+    <Compile Include="Model\Experian\AmlResultsHighRiskRules.cs" />
     <Compile Include="Model\Experian\MP_ExperianParentCompanyMap.cs" />
     <Compile Include="Model\Experian\MP_ExperianHistory.cs" />
     <Compile Include="Model\Experian\ExperianDL97Accounts.cs" />
