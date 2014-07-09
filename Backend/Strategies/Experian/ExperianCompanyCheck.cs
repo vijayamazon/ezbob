@@ -60,28 +60,32 @@
 			} // if
 
 			string experianError = null;
-			decimal experianBureauScore = 0;
 
 			if (string.IsNullOrEmpty(m_sExperianRefNum))
 				experianError = "RefNumber is empty";
 			else {
+				Log.Info("ExperianCompanyCheck strategy will make sure we have experian data");
 				m_oExperianData = GetBusinessDataFromExperian();
+				Log.Info("Fetched BureauScore:{0} & MaxBureauScore:{1} for customer:{2}", m_oExperianData.BureauScore, m_oExperianData.MaxBureauScore, m_nCustomerID);
+			
 
 				if (!m_oExperianData.IsError) {
-					experianBureauScore = m_oExperianData.BureauScore;
 					MaxScore = m_oExperianData.MaxBureauScore;
 					Score = m_oExperianData.BureauScore;
+					Log.Info("Filled Score & MaxScore of the strategy");
 				}
 				else
 					experianError = m_oExperianData.Error;
 			} // if
 
+
+			Log.Info("Filling Analytics with Score:{0} & max score:{1}", Score, MaxScore);
 			DB.ExecuteNonQuery(
 				"UpdateExperianBusiness",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CompanyRefNumber", m_sExperianRefNum),
 				new QueryParameter("ExperianError", experianError),
-				new QueryParameter("ExperianScore", experianBureauScore),
+				new QueryParameter("ExperianScore", Score),
 				new QueryParameter("ExperianMaxScore", MaxScore),
 				new QueryParameter("CustomerId", m_nCustomerID)
 			);
@@ -99,7 +103,7 @@
 					return;
 			} // if
 
-			m_oParser.UpdateAnalytics(m_nCustomerID);
+			m_oParser.UpdateAnalytics(m_nCustomerID, (int)MaxScore);
 		} // Execute
 
 		#endregion method Execute

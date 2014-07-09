@@ -66,6 +66,7 @@
 			Log.DebugFormat("Begin GetLimitedBusinessData {0} {1} {2} {3}", regNumber, customerId, checkInCacheOnly, forceCheck);
 			var oRes = GetOneLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
 			oRes.MaxBureauScore = oRes.BureauScore;
+			Log.InfoFormat("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", oRes.BureauScore, oRes.MaxBureauScore, customerId, regNumber);
 			foreach (string sOwnerRegNum in oRes.Owners)
 			{
 				var parentCompanyResult = GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
@@ -73,6 +74,7 @@
 				{
 					oRes.MaxBureauScore = parentCompanyResult.BureauScore;
 				}
+				Log.InfoFormat("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", parentCompanyResult.BureauScore, oRes.MaxBureauScore, customerId, sOwnerRegNum);
 			}
 			return oRes;
 		} // GetLimitedBusinessData
@@ -84,7 +86,8 @@
 		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
 			oRes.MaxBureauScore = oRes.BureauScore;
-
+			Log.InfoFormat("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", oRes.BureauScore, oRes.MaxBureauScore, customerId, regNumber);
+			
 			return oRes;
 		} // GetNotLimitedBusinessData
 
