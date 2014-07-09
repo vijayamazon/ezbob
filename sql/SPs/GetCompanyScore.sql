@@ -17,7 +17,7 @@ BEGIN
 	DECLARE @MaxScore INT = 0
 
 	SELECT
-		@MaxScore = (CASE WHEN MaxScore IS NULL THEN Score ELSE MaxScore END)
+		@MaxScore = (CASE WHEN MaxScore IS NULL OR MaxScore < Score THEN Score ELSE MaxScore END)
 	FROM
 		CustomerAnalyticsCompany
 	WHERE
