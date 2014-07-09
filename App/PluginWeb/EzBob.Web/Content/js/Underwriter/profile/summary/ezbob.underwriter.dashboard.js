@@ -316,6 +316,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
     drawDonut: function (el, fillColor, fillPercent) {
         var canvas, context, endAngle, lineWidth, radius, startAngle, x, y;
         canvas = el[0];
+        if (!canvas) return false;
         context = canvas.getContext("2d");
         x = canvas.width / 2;
         y = canvas.height / 2;

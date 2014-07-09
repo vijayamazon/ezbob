@@ -289,6 +289,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
     },
     drawDonut: function (canvasId, fillColor, fillPercent, isClock) {
         var canvas = document.getElementById(canvasId);
+        if (!canvas) return false;
         var context = canvas.getContext('2d');
         var x = canvas.width / 2;
         var y = canvas.height / 2;
@@ -327,6 +328,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
     },
     drawDi: function (canvasId, fillColor, fillPercent) {
         var canvas = document.getElementById(canvasId);
+        if (!canvas) return false;
         var context = canvas.getContext('2d');
         var x = canvas.width / 2;
         var y = canvas.height;
