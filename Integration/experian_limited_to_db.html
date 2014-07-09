@@ -195,7 +195,7 @@ function doParse()
 				else {
 					tables[sTableName][sFieldName] = oField.getFieldType();
 
-					xml2sql.push(sLastTagName + ', ' + oField.tag + ' &rarr; ' + sTableName + ', ' + sFieldName);
+					xml2sql.push('ms_oXml2Db["' + i + '", "' + oField.tag + '"] = new TblFld("' + sTableName + '", "' + sFieldName + '");');
 				}
 			} // if
 		} // for
