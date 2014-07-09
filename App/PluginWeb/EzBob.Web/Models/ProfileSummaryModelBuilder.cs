@@ -118,17 +118,6 @@
 					summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "AML", Alert = string.Format("AML Status : {0}", customer.AMLResult), AlertType = AlertType.Warning.DescriptionAttr() });
 					break;
 			}
-			
-			switch (customer.BWAResult)
-			{
-				case "Rejected":
-					summary.Alerts.Errors.Add(new AlertModel {Abbreviation="BWA", Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Error.DescriptionAttr() });
-					break;
-				case "Not performed":
-				case "Warning":
-					summary.Alerts.Warnings.Add(new AlertModel {Abbreviation="BWA", Alert = string.Format("BWA Status : {0}", customer.BWAResult), AlertType = AlertType.Warning.DescriptionAttr() });
-					break;
-			}
 
 			switch (summary.CreditBureau.ThinFile)
 			{
@@ -149,7 +138,6 @@
 				}
 			}
 			BuildLandRegistryAlerts(customer, summary);
-			//TODO: add approve button alerts
 		}
 
 		private void BuildLandRegistryAlerts(Customer customer, ProfileSummaryModel summary)
