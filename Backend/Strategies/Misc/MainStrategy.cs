@@ -75,6 +75,7 @@
 			GetPersonalInfo();
 
 			SetAutoDecisionAvailability();
+			GetCompanySeniorityDays();
 
 			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
 			{
@@ -94,7 +95,6 @@
 			{
 				experianConsumerScore = GetCurrentExperianScore();
 				GetMaxCompanyExperianScore();
-				GetCompanySeniorityDays();
 				minExperianScore = experianConsumerScore;
 				maxExperianScore = experianConsumerScore;
 				initialExperianConsumerScore = experianConsumerScore;
