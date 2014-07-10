@@ -120,7 +120,8 @@ a[data-bug-type],
 .permission-CreditLineFields [name="interestRateChangeButton"],
 .permission-CreditLineFields [name="setupFeeEditButton"],
 .permission-CreditLineFields [name="brokerSetupFeeEditButton"],
-.permission-CreditLineFields [name="isLoanTypeSelectionAllowed"] {
+.permission-CreditLineFields [name="isLoanTypeSelectionAllowed"],
+.permission-CreditLineFields .couple_buttons {
     display: inline-block;
     visibility: visible;
 }
@@ -227,13 +228,6 @@ a[data-bug-type],
 /*Add debit card*/
 
 .permission-AddDebitCard .payment-cards-buttons > * {
-    display: inline-block;
-    visibility: visible;
-}
-
-/*Pacnet manual*/
-
-.permission-PacnetManualButton .couple_buttons {
     display: inline-block;
     visibility: visible;
 }
