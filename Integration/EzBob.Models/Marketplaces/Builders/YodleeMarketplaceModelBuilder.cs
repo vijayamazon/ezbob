@@ -20,7 +20,6 @@ namespace EzBob.Models.Marketplaces.Builders
 
 	public class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
 	{
-		private readonly MP_YodleeTransactionCategoriesRepository _mpYodleeTransactionCategoriesRepository;
 		private readonly CustomerMarketPlaceRepository customerMarketPlaceRepository;
 		private readonly CurrencyConvertor _currencyConvertor;
 		private YodleeModel _yodleeModel;
@@ -28,7 +27,6 @@ namespace EzBob.Models.Marketplaces.Builders
 		public YodleeMarketplaceModelBuilder(ISession session = null)
 			: base(session)
 		{
-			_mpYodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(_session);
 			customerMarketPlaceRepository = new CustomerMarketPlaceRepository(_session);
 			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(_session));
 		} // constructor
@@ -163,8 +161,8 @@ namespace EzBob.Models.Marketplaces.Builders
 					{
 						transactionBaseType = transaction.transactionBaseType,
 						transactionDate = (transaction.postDate.date ?? transaction.transactionDate.date).Value,
-						categoryName = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.transactionCategoryId).Name,
-						categoryType = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.transactionCategoryId).Type,
+						categoryName = transaction.memo,
+						categoryType = transaction.userDescription,
 						transactionAmount = transactionAmount,
 						description = transaction.description,
 						runningBalance = runningBalance,
