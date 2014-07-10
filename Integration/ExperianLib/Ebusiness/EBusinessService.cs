@@ -8,6 +8,7 @@
 	using System.Web;
 	using ApplicationMng.Repository;
 	using ConfigManager;
+	using EBusiness;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Experian;
 	using Ezbob.Database;
@@ -24,6 +25,7 @@
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
 			eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
 			experianDL97AccountsRepository = ObjectFactory.GetInstance<ExperianDL97AccountsRepository>();
+			nonLimitedParser = new NonLimitedParser();
 		} // constructor
 
 		#endregion constructor
@@ -207,9 +209,14 @@
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
 
-					Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
+					MP_ServiceLog serviceLogEntry = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
 
+					// TODO: uncomment
+					//nonLimitedParser.ParseAndStore(customerId, newResponse, regNumber, serviceLogEntry.Id);
+					
+					// Fill the result in ParseAndStore instead of NonLimitedResults's constructor
 					var res = new NonLimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false };
+					// Don't add to cache - all usages should be retired
 					AddToCache(regNumber, requestXml, res);
 
 					return res;
@@ -352,6 +359,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EBusinessService));
 		private readonly SqlRetryer m_oRetryer;
 		private readonly ExperianDL97AccountsRepository experianDL97AccountsRepository;
+		private readonly NonLimitedParser nonLimitedParser;
 		private readonly string eSeriesUrl;
 
 		#endregion properties

@@ -89,6 +89,7 @@
     <Compile Include="Dictionaries\AccountTypeDictionary.cs" />
     <Compile Include="Dictionaries\PaymentFrequencyDictionary.cs" />
     <Compile Include="Ebusiness\CompanyInfo.cs" />
+    <Compile Include="Ebusiness\NonLimitedParser.cs" />
     <Compile Include="Ebusiness\LimitedResults.cs" />
     <Compile Include="Ebusiness\NonLimitedResults.cs" />
     <Compile Include="Ebusiness\EBusinessService.cs" />

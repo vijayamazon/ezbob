@@ -338,7 +338,7 @@
 				}
 				// max(Marketplace(Ecomm) or company )seniority < 300 days.
 				conditionValue = Math.Max(_marketplaceSeniorityDays, _companySeniorityDays) < _rejectMinimalSeniority;
-				conditionDescription = string.Format("Low company or MP seniority (Max(_marketplaceSeniorityDays, _companySeniorityDays) < _rejectMinimalSeniority) [Max({0}, {1}) < {2}]", _marketplaceSeniorityDays, _companySeniorityDays, _rejectMinimalSeniority);
+				conditionDescription = string.Format("Low company and MP seniority (Max(_marketplaceSeniorityDays, _companySeniorityDays) < _rejectMinimalSeniority) [Max({0}, {1}) < {2}]", _marketplaceSeniorityDays, _companySeniorityDays, _rejectMinimalSeniority);
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
