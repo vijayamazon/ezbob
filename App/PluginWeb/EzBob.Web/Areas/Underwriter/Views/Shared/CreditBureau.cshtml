@@ -1,4 +1,37 @@
 ﻿@model dynamic
+
+<script id="experian-info-template" type="text/template">
+    <div class="row box">
+        <div class="box-content">
+            <%    experianInfo.Summary = experianInfo.Summary || {};
+            experianInfo.Summary.ConsumerAccountsOverview = experianInfo.Summary.ConsumerAccountsOverview || {};
+            experianInfo.ConsumerSummaryCharacteristics = experianInfo.ConsumerSummaryCharacteristics || {};
+            experianInfo.ConsumerAccountsOverview = experianInfo.ConsumerAccountsOverview || {};
+            %>
+            @RunCheckButtons()
+            <% if (experianInfo.HasExperianError) { %>
+                @DisplayExperianError()
+            <% } else { %>
+                @DisplayExperianError()
+                @BureauSummaryForCustomer()
+                @DisplayConsumerData()
+            <% } %>
+    
+            <% if(experianInfo.ModelType == "Limited") { %>
+                @DisplayLimitedData()
+            <% } %>
+            <% if(experianInfo.ModelType == "NonLimited") { %>
+                @DisplayNonLimitedData()
+            <% } %>
+            <% if(experianInfo.directorsModels && experianInfo.directorsModels.length>0) {%>
+                @DisplayDirectors()
+            <% } %>
+            @ExperianConsent()
+        </div>
+    </div>
+</script>
+
+
 @helper ButtonStatus(string checkStatus, string checkIcon, string btnStyle)
 {
     var icon = "<i class=\"" + checkIcon + "\"></i>";
@@ -385,24 +418,28 @@
 
 @helper DisplayExperianError()
 {
-    <div class="span9 accordion page-content-frame" id="accordion-request-error">
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianRequestFailed">
-                <b class="play"></b>Experian Request failed</a>
-        </div>
-        <div id="collapseExperianRequestFailed" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <div class="col-md-12">
-                    <div class="span8">
-                        <ul>
-                            <% _.each(experianInfo.ErrorList, function(errMessage){ %>
-                        <li>@Html.Raw("<%- errMessage %>")</li>
-                            <% }); %>
-                        </ul>
+    <div>
+    <%if(experianInfo.ErrorList && experianInfo.ErrorList.length > 0){%>
+        <div class="span9 accordion page-content-frame" id="accordion-request-error">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianRequestFailed">
+                    <b class="play"></b>Experian Errors</a>
+            </div>
+            <div id="collapseExperianRequestFailed" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div class="col-md-12">
+                        <div class="span8">
+                            <ul>
+                                <% _.each(experianInfo.ErrorList, function(errMessage){ %>
+                                <li>@Html.Raw("<%- errMessage %>")</li>
+                                <% }); %>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    <%}%>
     </div>
 }
 
@@ -754,39 +791,6 @@
     </div>
 }
 
-<script id="experian-info-template" type="text/template">
-    <div class="row box">
-        <div class="box-content">
-            <%    experianInfo.Summary = experianInfo.Summary || {};
-            experianInfo.Summary.ConsumerAccountsOverview = experianInfo.Summary.ConsumerAccountsOverview || {};
-            experianInfo.ConsumerSummaryCharacteristics = experianInfo.ConsumerSummaryCharacteristics || {};
-            experianInfo.ConsumerAccountsOverview = experianInfo.ConsumerAccountsOverview || {};
-            %>
-            @RunCheckButtons()
-            <% if (experianInfo.IsExperianError) { %>
-                @DisplayExperianError()
-            <% } else { %>
-                <% if (experianInfo.CheckFailed || experianInfo.CheckStatus=='Error') { %>
-                    @DisplayFailedExperianCheck()
-                <% } else { %>
-                    @BureauSummaryForCustomer()
-                    @DisplayConsumerData()
-                <% } %>
-            <% } %>
-    
-            <% if(experianInfo.ModelType == "Limited") { %>
-                @DisplayLimitedData()
-            <% } %>
-            <% if(experianInfo.ModelType == "NonLimited") { %>
-                @DisplayNonLimitedData()
-            <% } %>
-            <% if(experianInfo.directorsModels && experianInfo.directorsModels.length>0) {%>
-                @DisplayDirectors()
-            <% } %>
-            @ExperianConsent()
-        </div>
-    </div>
-</script>
 
 <script id="idhub-customaddress-template" type="text/template">
     @IdHubCustomAddress()

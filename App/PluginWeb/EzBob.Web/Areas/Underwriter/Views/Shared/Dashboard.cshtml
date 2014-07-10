@@ -160,7 +160,7 @@
                         </ul>
                         <div class="tab-content no-border">
                             <div class="tab-pane fade active in" id="customerExperian">
-                                <% if (experian.IsExperianError || experian.CheckFailed || experian.CheckStatus=='Error') { %>
+                                <% if (experian.HasExperianError) { %>
                                     <h3>Error retrieving consumer data</h3>
                                 <% } else { %>
                                     <div class="col-lg-3 col-md-6">

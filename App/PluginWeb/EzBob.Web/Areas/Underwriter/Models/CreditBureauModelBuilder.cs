@@ -284,7 +284,7 @@
 		{
 			if (eInfo == null || eInfo.Data == null)
 			{
-				return new CreditBureauModel { IsExperianError = true, ErrorList = new List<string>{ "No data"}};
+				return new CreditBureauModel { HasExperianError = true, ErrorList = new List<string>{ "No data"}};
 			}
 			int score = eInfo.Data.BureauScore;
 			double odds = Math.Pow(2, ((double)score - 600) / 80);
@@ -317,7 +317,7 @@
 			var model = new CreditBureauModel
 			{
 				Id = id,
-				IsExperianError = (eInfo != null) && eInfo.Data.HasExperianError,
+				HasExperianError = (eInfo != null) && eInfo.Data.HasExperianError,
 				ModelType = "Consumer",
 				CheckStatus = checkStatus,
 				CheckIcon = checkIcon,

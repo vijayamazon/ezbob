@@ -8,7 +8,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 	{
 		public IOrderedEnumerable<CheckHistoryModel> ConsumerHistory { get; set; }
 		public IOrderedEnumerable<CheckHistoryModel> CompanyHistory { get; set; }
-		
+
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string MiddleName { get; set; }
@@ -16,15 +16,16 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string FullName { get; set; }
 		public string ApplicantFullName { get; set; }
 		public string CompanyName { get; set; }
-		public bool IsExperianError { get; set; }
+		public bool HasExperianError { get; set; }
+		public bool HasParsingError { get; set; }
 
 		public bool IsError
 		{
-			get { return ErrorList.Count> 0; }
+			get { return ErrorList.Count > 0; }
 		}
 
 		public List<string> ErrorList { get; set; }
-		
+
 		public string ModelType { get; set; }
 
 		public bool CheckFailed
@@ -38,8 +39,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string BorrowerType { get; set; } // done
 		public string CheckDate { get; set; } // done
 		public string CheckValidity { get; set; } // done
-		public int Score { get; set; } // done     
-		public double Odds { get; set; } // done     
+		public int Score { get; set; } // done
+		public double Odds { get; set; } // done
 		public string ScoreColor { get; set; } // done 
 		public string ScorePosition { get; set; } // done
 		public string ScoreAlign { get; set; } // done
@@ -81,13 +82,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public bool NOCsOnCAIS { get; set; } // done
 		public bool SatisfiedJudgements { get; set; }
 		public string CAISSpecialInstructionFlag { get; set; } // done
-		
+
 
 		public int NumberOfLates { get; set; }
 		public string LateStatus { get; set; }
 		public int DefaultAmount { get; set; }
 
-// done 
+		// done 
 	}
 
 	public class ConsumerAccountsOverview
