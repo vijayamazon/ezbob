@@ -9,7 +9,7 @@ EzBob.Underwriter.GridTools = {
 	}, // showMedalIcon
 
 	profileLink: function(nCustomerID, sLinkText) {
-		return EzBob.DataTables.Helper.withScrollbar('<a class=profileLink title="Open customer profile" href="#profile/' + nCustomerID + '">' + (sLinkText || nCustomerID) + '</a>');
+	    return EzBob.DataTables.Helper.withScrollbar('<button class="profileLink btn btn-link" title="Open customer profile" data-href="#profile/' + nCustomerID + '">' + (sLinkText || nCustomerID) + '</button>');
 	}, // profileLink
 }; // EzBob.Underwriter.GridTools
 
@@ -52,9 +52,10 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				} // if has name
 
 				$(oTR).dblclick(function() {
-					location.assign($(oTR).find('.profileLink').first().attr('href'));
+					location.assign($(oTR).find('.profileLink').first().data('href'));
 				});
-			} // if has id
+		    } // if has id
+
 
 			if (oData.IsWasLate) {
 				//$(oTR).addClass(oData.IsWasLate);
@@ -163,8 +164,12 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		'click #logbook-show-new-entry-form': 'showNewLogbookEntryForm',
 		'click #logbook-new-entry-cancel': 'hideNewLogbookEntryForm',
 		'click #logbook-new-entry-save': 'submitNewLogbookEntryForm',
+	    'click .profileLink': 'profileLinkClicked'
 	}, // events
-
+    profileLinkClicked: function(el) {
+        location.assign($(el.currentTarget).data('href'));
+    },
+	
 	submitNewLogbookEntryForm: function() {
 		var nEntryType = $('#logbook-new-entry-type').val();
 
