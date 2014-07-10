@@ -15,7 +15,30 @@
 	public abstract class AConnection : SafeLog {
 		#region public
 
-		#region IConnection implementation
+		#region method OpenPersistent
+
+		public virtual void OpenPersistent() {
+			if (PersistentConnection != null)
+				return;
+
+			PersistentConnection = new ConnectionWrapper(CreateConnection(), true);
+		} // OpenPersistent
+
+		#endregion method OpenPersistent
+
+		#region method ClosePersistent
+
+		public virtual void ClosePersistent() {
+			if (PersistentConnection == null)
+				return;
+
+			if (PersistentConnection.IsOpen)
+				PersistentConnection.Connection.Dispose();
+
+			PersistentConnection = null;
+		} // ClosePersistent
+
+		#endregion method ClosePersistent
 
 		#region method ExecuteScalar
 
@@ -263,11 +286,14 @@
 
 		#region property CommandTimeout
 
-		public virtual int CommandTimeout { get; set; }
+		public virtual int CommandTimeout {
+			get { return m_nCommandTimeout; }
+			set { m_nCommandTimeout = value; }
+		} // CommandTimeout
+
+		private int m_nCommandTimeout;
 
 		#endregion property CommandTimeout
-
-		#endregion IConnection implementation
 
 		#region property LogVerbosityLevel
 
@@ -290,13 +316,15 @@
 			Env = new Ezbob.Context.Environment(log);
 			m_sConnectionString = sConnectionString;
 			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
-			CommandTimeout = 30;
+			m_nCommandTimeout = 30;
+			m_oPersistentConnection = null;
 		} // constructor
 
 		protected AConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null) : base(log) {
 			Env = oEnv;
 			m_sConnectionString = null;
 			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
+			m_oPersistentConnection = null;
 		} // Env
 
 		#endregion constructor
@@ -304,12 +332,20 @@
 		#region abstract methods
 
 		protected abstract DbConnection CreateConnection();
-		protected abstract DbCommand CreateCommand(string sCommand, DbConnection oConnection);
+		protected abstract DbCommand CreateCommand(string sCommand);
 		protected abstract void AppendParameter(DbCommand cmd, QueryParameter prm);
 
 		protected abstract ARetryer CreateRetryer();
 
 		#endregion abstract methods
+
+		#region method GetConnection
+
+		protected virtual ConnectionWrapper GetConnection() {
+			return PersistentConnection ?? new ConnectionWrapper(CreateConnection(), false);
+		} // GetConnection
+
+		#endregion method GetConnection
 
 		#region property Env
 
@@ -467,7 +503,7 @@
 		#region method BuildCommand
 
 		protected virtual DbCommand BuildCommand(string spName, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			DbCommand command = CreateCommand(spName, null);
+			DbCommand command = CreateCommand(spName);
 
 			switch (nSpecies) {
 			case CommandSpecies.Auto:
@@ -511,10 +547,10 @@
 			string sArgsForLog,
 			Guid guid
 		) {
-			using (var connection = CreateConnection()) {
-				command.Connection = connection;
+			using (var cw = GetConnection()) {
+				command.Connection = cw.Connection;
 
-				connection.Open();
+				cw.Open();
 
 				var sw = new Stopwatch();
 				sw.Start();
@@ -596,6 +632,64 @@
 		} // RunNonQuery
 
 		#endregion method RunNonQuery
+
+		#region class ConnectionWrapper
+
+		protected class ConnectionWrapper : IDisposable {
+			#region constructor
+
+			public ConnectionWrapper(DbConnection oConnection, bool bIsPersistent) {
+				Connection = oConnection;
+				IsPersistent = bIsPersistent;
+				IsOpen = false;
+			} // constructor
+
+			#endregion constructor
+
+			#region method Open
+
+			public void Open() {
+				if (IsOpen)
+					return;
+
+				if (Connection == null)
+					return;
+
+				Connection.Open();
+
+				IsOpen = true;
+			} // Open
+
+			#endregion method Open
+
+			#region method Dispose
+
+			public void Dispose() {
+				if (!IsPersistent && (Connection != null))
+					Connection.Dispose();
+			} // Dispose
+
+			#endregion method Dispose
+
+			public DbConnection Connection { get; private set; }
+
+			public bool IsPersistent { get; private set; }
+
+			public bool IsOpen { get; private set; }
+		} // class ConnectionWrapper
+
+		#endregion class ConnectionWrapper
+
+		#region property PersistentConnection
+
+		protected virtual ConnectionWrapper PersistentConnection {
+			get { return m_oPersistentConnection; }
+			set { m_oPersistentConnection = value; }
+		} // PersistentConnection
+
+		private ConnectionWrapper m_oPersistentConnection;
+
+		#endregion property PersistentConnection
 
 		#endregion protected
 	} // AConnection

@@ -40,13 +40,17 @@
 
 		#endregion method CreateTableParameter
 
+		#region property NewCommand
+
 		public override DbCommand NewCommand {
 			get {
-				var oCmd = new SqlCommand();
-				oCmd.Connection = new System.Data.SqlClient.SqlConnection(ConnectionString);
-				return oCmd;
+				return new SqlCommand {
+					Connection = (System.Data.SqlClient.SqlConnection)(GetConnection().Connection),
+				};
 			} // get
 		} // NewCommand
+
+		#endregion property NewCommand
 
 		#endregion public
 
@@ -55,21 +59,25 @@
 		#region method CreateConnection
 
 		protected override DbConnection CreateConnection() {
-			return new System.Data.SqlClient.SqlConnection(ConnectionString);
+			var oConnection = new System.Data.SqlClient.SqlConnection(ConnectionString);
+
+			oConnection.InfoMessage += (sender, args) => Debug("Database information from '{0}'; message: '{1}'.\nErrors:\n\t{2}", args.Source, args.Message, string.Join("\n\t", args.Errors));
+
+			oConnection.StateChange += (sender, args) => Debug("Database connection state change: {0} -> {1}.", args.OriginalState, args.CurrentState);
+
+			oConnection.Disposed += (obj, args) => Debug("Database connection is disposed.");
+
+			return oConnection;
 		} // CreateConnection
 
 		#endregion method CreateConnection
 
 		#region method CreateCommand
 
-		protected override DbCommand CreateCommand(string sCommand, DbConnection oConnection) {
-			var oCmd = new SqlCommand();
-			oCmd.CommandText = sCommand;
-
-			if (oConnection != null)
-				oCmd.Connection = (System.Data.SqlClient.SqlConnection)oConnection;
-
-			return oCmd;
+		protected override DbCommand CreateCommand(string sCommand) {
+			return new SqlCommand {
+				CommandText = sCommand,
+			};
 		} // CreateCommand
 
 		#endregion method CreateCommand
@@ -87,7 +95,7 @@
 				return;
 			} // if
 
-			SqlParameter oParam = null;
+			SqlParameter oParam;
 
 			if (prm.Type == DbType.Binary) {
 				oParam = oCmd.Parameters.Add(prm.Name, SqlDbType.VarBinary);
@@ -109,8 +117,11 @@
 			else {
 				object oValue;
 
-				if (prm.Value is int && (int)prm.Value == 0)
+				if (prm.Value is int && (int)prm.Value == 0) {
+					// ReSharper disable RedundantCast
 					oValue = (int)0;
+					// ReSharper restore RedundantCast
+				}
 				else
 					oValue = prm.Value;
 

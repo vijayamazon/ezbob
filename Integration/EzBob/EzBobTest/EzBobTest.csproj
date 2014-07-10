@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
+    <Compile Include="TestDbConnection.cs" />
     <Compile Include="MedalScoreCalculatorTestFixture.cs" />
     <Compile Include="TestEchoSign.cs" />
     <Compile Include="TestStrategies.cs" />
