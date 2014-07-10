@@ -1,5 +1,9 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
+	using System.Reflection;
 	using System.Xml;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -9,7 +13,12 @@
 		#region static constructor
 
 		static ParseExperianLtd() {
+			var oLog = new SafeILog(typeof (ParseExperianLtd));
+
 			ms_oXml2Db = new SortedTable<string, string, TblFld>();
+			ms_oConstructors = new SortedDictionary<string, ConstructorInfo>();
+
+			#region fill ms_oXml2Db
 
 			ms_oXml2Db["./REQUEST/DL12", "REGNUMBER"] = new TblFld("ExperianLtd", "RegisteredNumber");
 			ms_oXml2Db["./REQUEST/DL12", "LEGALSTATUS"] = new TblFld("ExperianLtd", "LegalStatus");
@@ -187,7 +196,32 @@
 			ms_oXml2Db["./REQUEST/DL65", "FULLYSATDINDICATOR"] = new TblFld("ExperianLtdDL65", "FullySatisfiedIndicator");
 			ms_oXml2Db["./REQUEST/DL65", "NUMPARTIALSATNDATES"] = new TblFld("ExperianLtdDL65", "NumberOfPartialSatisfactionDates");
 			ms_oXml2Db["./REQUEST/DL65", "NUMPARTIALSATNDATAITEMS"] = new TblFld("ExperianLtdDL65", "NumberOfPartialSatisfactionDataItems");
-			ms_oXml2Db["./REQUEST/DL65/LENDERDETAILS", "LENDERNAME"] = new TblFld("ExperianLtdLenderDetails", "LenderName");
+
+			#endregion fill ms_oXml2Db
+
+			ms_oXml2Db.ForEach((ignoredOnce, ignoredTwice, oTblFld) => {
+				if (ms_oConstructors.ContainsKey(oTblFld.TableName))
+					return;
+
+				string sFullTypeName = typeof (ParseExperianLtd).Namespace + "." + oTblFld.TableName;
+
+				Type oTableType = Type.GetType(sFullTypeName);
+
+				if (oTableType == null) {
+					oLog.Alert("There is no type {0} ({1}).", oTblFld.TableName, sFullTypeName);
+					ms_oConstructors[oTblFld.TableName] = null;
+					return;
+				} // if
+
+				ConstructorInfo ci = oTableType.GetConstructors().FirstOrDefault();
+
+				if (ci == null)
+					oLog.Alert("There is no constructor for type {0}.", oTblFld.TableName);
+
+				ms_oConstructors[oTblFld.TableName] = ci;
+
+				oLog.Debug("Constructor for type {0} ({1}) has been registered successfully.", oTblFld.TableName, sFullTypeName);
+			}); // for each table field
 		} // static constructor
 
 		#endregion static constructor
@@ -245,6 +279,13 @@
 				return;
 			} // try
 
+			if (oXml.DocumentElement == null) {
+				Log.Warn("Parsing Experian Ltd for service log entry {0} failed (no root element found).", m_nServiceLogID);
+				return;
+			} // try
+
+			ParseAndSave(oXml);
+
 			Log.Debug("Parsing Experian Ltd for service log entry {0} complete.", m_nServiceLogID);
 		} // Execute
 
@@ -256,7 +297,200 @@
 
 		private readonly long m_nServiceLogID;
 
+		#region method ParseAndSave
+
+		private void ParseAndSave(XmlDocument oXml) {
+			AHasChildren oMainTable = null;
+			string sMainTableName = null;
+			var oData = new SortedDictionary<string, List<AHasChildren>>();
+
+			ms_oXml2Db.ForEachRow((sGroupNodeName, oGroupFields) => {
+				// ReSharper disable PossibleNullReferenceException
+				XmlNodeList oGroupNodes = oXml.DocumentElement.SelectNodes(sGroupNodeName);
+				// ReSharper restore PossibleNullReferenceException
+
+				if ((oGroupNodes == null) || (oGroupNodes.Count < 1)) {
+					Log.Debug("No nodes found for {0}.", sGroupNodeName);
+					return;
+				} // if
+
+				foreach (XmlNode oGroup in oGroupNodes) {
+					var oUpdatedTables = new SortedDictionary<string, bool>();
+
+					foreach (KeyValuePair<string, TblFld> pair in oGroupFields) {
+						string sNodeName = pair.Key;
+						TblFld oTblFld = pair.Value;
+
+						var oNode = oGroup.SelectSingleNode(sNodeName);
+
+						if (oNode == null)
+							continue;
+
+						AHasChildren oCurTable = null;
+
+						if (oTblFld.TableName == sMainTableName)
+							oCurTable = oMainTable;
+						else if (oUpdatedTables.ContainsKey(oTblFld.TableName))
+							oCurTable = oUpdatedTables[oTblFld.TableName] ? oMainTable : oData[oTblFld.TableName].Last();
+						else {
+							ConstructorInfo ci = ms_oConstructors.ContainsKey(oTblFld.TableName) ? ms_oConstructors[oTblFld.TableName] : null;
+
+							if (ci == null) { // should never happen, all such cases should be eliminated during developers testing.
+								Log.Alert("Cannot find constructor for type {0}.", oTblFld.TableName);
+								return;
+							} // if
+
+							oCurTable = ci.Invoke(new object[0]) as AHasChildren;
+
+							if (oCurTable == null) { // should never happen, all such cases should be eliminated during developers testing.
+								Log.Alert("Failed to create an instance of type {0}.", oTblFld.TableName);
+								return;
+							} // if
+
+							if (oCurTable.IsMainTable()) {
+								oMainTable = oCurTable;
+								sMainTableName = oTblFld.TableName;
+								oUpdatedTables[oTblFld.TableName] = true;
+							}
+							else {
+								if (!oData.ContainsKey(oTblFld.TableName))
+									oData[oTblFld.TableName] = new List<AHasChildren>();
+
+								oData[oTblFld.TableName].Add(oCurTable);
+
+								oUpdatedTables[oTblFld.TableName] = false;
+							} // if
+						} // if
+
+						if (oCurTable == null) {
+							Log.Warn(
+								"No table found for {0}.{1} from {2}/{3}.",
+								oTblFld.TableName,
+								oTblFld.FieldName,
+								sGroupNodeName,
+								sNodeName
+							);
+							continue;
+						} // if
+
+						var pi = oCurTable.GetType().GetProperty(oTblFld.FieldName);
+
+						if (pi.PropertyType == typeof (string))
+							pi.SetValue(oCurTable, oNode.InnerText);
+						else if (pi.PropertyType == typeof (int?))
+							SetInt(pi, oCurTable, oNode.InnerText);
+						else if (pi.PropertyType == typeof (double?))
+							SetDouble(pi, oCurTable, oNode.InnerText);
+						else if (pi.PropertyType == typeof (decimal?))
+							SetDecimal(pi, oCurTable, oNode.InnerText);
+						else if (pi.PropertyType == typeof (DateTime?)) {
+							if (sNodeName.EndsWith("-YYYY")) {
+								string sPrefix = sNodeName.Substring(0, sNodeName.Length - 5);
+
+								XmlNode oMonthNode = oGroup.SelectSingleNode(sPrefix + "-MM");
+
+								XmlNode oDayNode = oMonthNode == null ? null : oGroup.SelectSingleNode(sPrefix + "-DD");
+
+								if (oDayNode != null)
+									SetDate(pi, oCurTable, oNode.InnerText + MD(oMonthNode) + MD(oDayNode));
+							}
+							else
+								SetDate(pi, oCurTable, oNode.InnerText);
+						}
+					} // for each node name of the group
+				} // for each selected node in the group
+			}); // for each
+
+			if (oMainTable == null) {
+				Log.Debug("No main table entry extracted.");
+				return;
+			} // if
+
+			Log.Debug("{0}", oMainTable.Stringify());
+
+			foreach (var pair in oData) {
+				Log.Debug("Start of {0} with {1} items.", pair.Key, pair.Value.Count);
+
+				foreach (var oRow in pair.Value)
+					Log.Debug("{0}", oRow.Stringify());
+
+				Log.Debug("End of {0} with {1} items.", pair.Key, pair.Value.Count);
+			} // for each
+		} // ParseAndSave
+
+		#endregion method ParseAndSave
+
+		#region method SetInt
+
+		private static void SetInt(PropertyInfo pi, AHasChildren oCurTable, string sValue) {
+			int n;
+
+			if (int.TryParse(sValue, out n))
+				pi.SetValue(oCurTable, n);
+			else
+				pi.SetValue(oCurTable, null);
+		} // SetInt
+
+		#endregion method SetInt
+
+		#region method SetDouble
+
+		private static void SetDouble(PropertyInfo pi, AHasChildren oCurTable, string sValue) {
+			double n;
+
+			if (double.TryParse(sValue, out n))
+				pi.SetValue(oCurTable, n);
+			else
+				pi.SetValue(oCurTable, null);
+		} // SetDouble
+
+		#endregion method SetDouble
+
+		#region method SetDecimal
+
+		private static void SetDecimal(PropertyInfo pi, AHasChildren oCurTable, string sValue) {
+			decimal n;
+
+			if (decimal.TryParse(sValue, out n))
+				pi.SetValue(oCurTable, n);
+			else
+				pi.SetValue(oCurTable, null);
+		} // SetDecimal
+
+		#endregion method SetDecimal
+
+		#region method SetDate
+
+		private static void SetDate(PropertyInfo pi, AHasChildren oCurTable, string sValue) {
+			DateTime n;
+
+			if (DateTime.TryParseExact(sValue, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out n))
+				pi.SetValue(oCurTable, n);
+			else
+				pi.SetValue(oCurTable, null);
+		} // SetDate
+
+		#endregion method SetDate
+
+		#region method MD
+
+		private static string MD(XmlNode oNode) {
+			string s = oNode.InnerText;
+
+			if (s.Length < 2)
+				return "0" + s;
+
+			return s;
+		} // MD
+
+		#endregion method MD
+
+		#region static
+
 		private static readonly SortedTable<string, string, TblFld> ms_oXml2Db;
+		private static readonly SortedDictionary<string, ConstructorInfo> ms_oConstructors;
+
+		#endregion static
 
 		#region class TblFld
 

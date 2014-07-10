@@ -40,6 +40,9 @@ function doParse()
 
 	var sNumeric = 'NUMERIC(18, 6) NULL';
 	var sKeyType = 'BIGINT IDENTITY(1, 1) NOT NULL';
+	var sForeignKeyType = 'BIGINT NOT NULL';
+	var sRowVersion = 'ROWVERSION';
+	var sDateType = 'DATETIME NULL';
 
 	var ary = JSON.parse($('#src').html());
 
@@ -82,7 +85,7 @@ function doParse()
 				sName += this.tag.substr(this.tag.length - 1);
 		} // if address
 		else if (/DATE/.test(this.tag)) {
-			this.type = 'DATETIME NULL';
+			this.type = sDateType;
 
 			if (/-MM$|-DD$/.test(this.tag))
 				sName = '';
@@ -139,7 +142,7 @@ function doParse()
 
 	tables[sTableNamePrefix] = {
 		ExperianLtdID: sKeyType,
-		ServiceLogID: 'BIGINT NOT NULL',
+		ServiceLogID: sForeignKeyType,
 	};
 
 	var xml2sql = [];
@@ -161,13 +164,13 @@ function doParse()
 			if (sOrigTableName === 'LenderDetails') {
 				obj = {
 					LenderDetailsEntryID: sKeyType,
-					DL65EntryID: 'BIGINT',
+					DL65EntryID: sForeignKeyType,
 				};
 			}
 			else {
 				obj = {};
 				obj[sOrigTableName + 'EntryID'] = sKeyType;
-				obj['ExperianLtdID'] = 'BIGINT';
+				obj['ExperianLtdID'] = sForeignKeyType;
 			} // if
 
 			tables[sTableName] = obj;
@@ -207,7 +210,7 @@ function doParse()
 		var sKeyField = null;
 
 		var tbl = tables[i];
-		tbl['TimestampCounter'] = 'ROWVERSION';
+		tbl['TimestampCounter'] = sRowVersion;
 
 		var oNameEl = $("<div>IF OBJECT_ID('" + i + "') IS NOT NULL<br />DROP TABLE " + i + "<br />GO<br /><br />CREATE TABLE " + i + " (</div>");
 		el.append(oNameEl);
@@ -231,6 +234,62 @@ function doParse()
 		el.append($('<div>)<br>GO<br><br></div>'));
 
 		oNameEl.append($('<span> -- ' + nCount + ' fields</span>'));
+	} // for
+
+	for (var i in tables) {
+		var tbl = tables[i];
+
+		el.append($("<div>#region class " + i + "</div><br>"));
+
+		el.append($("<div>internal class " + i + " : AHasChildren, ITraversable {</div>"));
+
+		for (var j in tbl) {
+			if ((tbl[j] === sKeyType) || (tbl[j] === sRowVersion))
+				continue;
+
+			var sType = 'string';
+
+			if (tbl[j] === sNumeric)
+				sType = 'decimal?';
+			else if (tbl[j] === sForeignKeyType)
+				sType = 'long';
+			else if (tbl[j] === sDateType)
+				sType = 'DateTime?';
+
+			el.append($('<div>public ' + sType + ' ' + j + ' { get; set; }</div>'));
+		} // for j
+
+		el.append($("<div>} // class " + i + "</div>"));
+
+		el.append($("<br><div>#endregion class " + i + "</div><br>"));
+	} // for
+
+	for (var i in tables) {
+		var tbl = tables[i];
+
+		el.append($("<div>IF TYPE_ID('" + i + "List') IS NOT NULL</div>"));
+		el.append($("<div>DROP TYPE " + i + "List</div>"));
+		el.append($("<div>GO</div>"));
+
+		el.append($("<div>CREATE TYPE " + i + "List AS TABLE (</div>"));
+
+		var bFirst = true;
+
+		for (var j in tbl) {
+			if ((tbl[j] === sKeyType) || (tbl[j] === sRowVersion))
+				continue;
+
+			var sComma = ', ';
+
+			if (bFirst) {
+				sComma = '';
+				bFirst = false;
+			} // if
+
+			el.append($('<div>' + sComma + j + ' ' + tbl[j] + '</div>'));
+		} // for j
+
+		el.append($("<div>)</div><div>GO</div>"));
 	} // for
 
 	for (var i = 0; i < xml2sql.length; i++)

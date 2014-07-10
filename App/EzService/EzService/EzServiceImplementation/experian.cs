@@ -83,5 +83,13 @@
 		} // DeleteExperianDirector
 
 		#endregion method DeleteExperianDirector
+
+		#region method ParseExperianLtd
+
+		public ActionMetaData ParseExperianLtd(long nServiceLogID) {
+			return Execute<ParseExperianLtd>(null, null, nServiceLogID);
+		} // ParseExperianLtd
+
+		#endregion method ParseExperianLtd
 	} // class EzServiceImplementation
 } // namespace EzService

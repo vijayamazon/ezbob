@@ -82,6 +82,7 @@
     <Compile Include="Experian\DeleteExperianDirector.cs" />
     <Compile Include="Experian\ExperianDirector.cs" />
     <Compile Include="Experian\ParseExperianLtd.cs" />
+    <Compile Include="Experian\ParseExperianLtdDataClasses.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateExperianDirectors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />

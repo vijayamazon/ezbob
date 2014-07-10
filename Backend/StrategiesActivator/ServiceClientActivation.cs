@@ -1125,6 +1125,17 @@ GeneratePassword broker-contact-email@example.com password-itself
 			m_oServiceClient.BackfillExperianDirectors(nCustomerID);
 		} // BackfillExperianDirectors
 
+		[Activation]
+		private void ParseExperianLtd() {
+			int nCustomerID;
+
+			if ((m_aryArgs.Length != 2) || !int.TryParse(m_aryArgs[1], out nCustomerID)) {
+				m_oLog.Msg("Usage: ParseExperianLtd <Customer ID>");
+				return;
+			} // if
+			m_oServiceClient.ParseExperianLtd(nCustomerID);
+		} // ParseExperianLtd
+
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 

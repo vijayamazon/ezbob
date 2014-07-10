@@ -278,6 +278,9 @@
 		[OperationContract]
 		ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID);
 
+		[OperationContract]
+		ActionMetaData ParseExperianLtd(long nServiceLogID);
+
 		#endregion Experian
 
 		#region Land Registry
