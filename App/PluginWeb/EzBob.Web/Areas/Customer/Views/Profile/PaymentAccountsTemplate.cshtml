@@ -24,7 +24,7 @@
                     <td>
                         <div class="payment-account-<%-account.type%>"></div>
                     </td>
-                    <td><%-account.displayName%> (<%-account.expire%>)</td>
+                    <td>X - <%-account.displayName%> <%-account.expire ? '(' + account.expire + ')' : ''%></td>
                     <%if(account.isDefault){%>
                     <td class="last Live">Default</td>
                     <%}else{%>

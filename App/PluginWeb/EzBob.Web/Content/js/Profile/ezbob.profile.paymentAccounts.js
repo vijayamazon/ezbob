@@ -30,7 +30,8 @@ EzBob.Profile.PaymentAccountsView = Backbone.View.extend({
         
         if (this.model.get('PayPointCards')) {
             _.each(this.model.get('PayPointCards'), function (card) {
-                accounts.add({ displayName: card.CardNo, type: "Card", isDefault: card.IsDefault, expire: moment(card.ExpireDate).format("MM/YY"), cardId: card.Id });
+                var expDate = card.ExpireDate ? moment(card.ExpireDate).format("MM/YY") : null;
+                accounts.add({ displayName: card.CardNo, type: "Card", isDefault: card.IsDefault, expire: expDate, cardId: card.Id });
             });
         }
 
