@@ -1,5 +1,8 @@
-﻿namespace ExperianLib.EBusiness {
+﻿namespace ExperianLib.EBusiness 
+{
 	using System;
+	using System.Collections.Generic;
+	using System.Data;
 	using System.Globalization;
 	using System.Xml;
 	using Ezbob.Database;
@@ -40,6 +43,7 @@
 			int numOfAssociatedCcjsInLast24Months = 0;
 			int sumOfCcjsInLast24Months = 0;
 			int sumOfAssociatedCcjsInLast24Months = 0;
+			var scoreHistory = new List<Tuple<DateTime?, int>>();
 			
 			var xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(xml);
@@ -92,6 +96,21 @@
 			{
 				XmlNode dn40Node = dn40Nodes[0];
 				riskScore = GetIntValueOrDefault(dn40Node, "RISKSCORE");
+
+				XmlNodeList scoreHistoryNodes = dn40Node.SelectNodes("SCOREHISTORY");
+
+				if (scoreHistoryNodes != null)
+				{
+					foreach (XmlNode scoreHistoryNode in scoreHistoryNodes)
+					{
+						DateTime? scoreHistoryDate = GetDateFromNode(scoreHistoryNode, "SCOREHISTORY_DATE");
+						int riskScoreHistory = GetIntValueOrDefault(scoreHistoryNode, "SCOREHISTORY_RISKSCORE");
+						if (scoreHistoryDate.HasValue)
+						{
+							scoreHistory.Add(new Tuple<DateTime?, int>(scoreHistoryDate, riskScoreHistory));
+						}
+					}
+				}
 			}
 
 			XmlNodeList dn73Nodes = xmlDoc.SelectNodes("//DN73");
@@ -117,7 +136,7 @@
 				sumOfAssociatedCcjsInLast24Months = GetIntValueOrDefault(dn14Node, "ATOTJUDGVALUELST24MNTHS");
 			}
 
-			db.ExecuteNonQuery(
+			DataTable dt = db.ExecuteReader(
 				"InsertNonLimitedResult",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
@@ -145,9 +164,25 @@
 				new QueryParameter("SumOfCcjsInLast24Months", sumOfCcjsInLast24Months),
 				new QueryParameter("SumOfAssociatedCcjsInLast24Months", sumOfAssociatedCcjsInLast24Months)
 			);
+
+			if (dt.Rows.Count == 1)
+			{
+				var sr = new SafeReader(dt.Rows[0]);
+				int newId = sr["NewId"];
+				
+				foreach (Tuple<DateTime?, int> historyData in scoreHistory)
+				{
+					db.ExecuteNonQuery(
+						"InsertNonLimitedResultScoreHistory",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("NonLimitedResultId", newId),
+						new QueryParameter("RiskScore", historyData.Item2),
+						new QueryParameter("Date", historyData.Item1));
+				}
+			}
 		}
 
-		private DateTime? GetDateFromNode(XmlNode node, string tag) 
+		private DateTime? GetDateFromNode(XmlNode node, string tag)
 		{
 			XmlNode yearNode = node.SelectSingleNode(tag + "-YYYY");
 			XmlNode monthNode = node.SelectSingleNode(tag + "-MM");

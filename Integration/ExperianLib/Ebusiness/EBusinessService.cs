@@ -211,8 +211,7 @@
 
 					MP_ServiceLog serviceLogEntry = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
 
-					// TODO: uncomment
-					//nonLimitedParser.ParseAndStore(customerId, newResponse, regNumber, serviceLogEntry.Id);
+					nonLimitedParser.ParseAndStore(customerId, newResponse, regNumber, serviceLogEntry.Id);
 					
 					// Fill the result in ParseAndStore instead of NonLimitedResults's constructor
 					var res = new NonLimitedResults(newResponse, DateTime.UtcNow) { CacheHit = false };

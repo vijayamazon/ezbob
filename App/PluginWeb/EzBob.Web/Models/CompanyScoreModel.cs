@@ -8,8 +8,10 @@
 	using Areas.Underwriter.Models;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Experian;
 	using Ezbob.ExperianParser;
 	using EZBob.DatabaseLib;
+	using StructureMap;
 	using log4net;
 
 	public class CompanyScoreModel
@@ -65,8 +67,6 @@
 		public List<FinDataModel> FinDataHistories { get; set; }
 		public List<NonLimScoreHistory> NonLimScoreHistories { get; set; }
 		public string Error { get; set; }
-
-		
 	}
 
 	public class NonLimScoreHistory
@@ -81,30 +81,35 @@
 		public decimal AdjustedProfit { get; set; }
 	}
 
-	// CompanyScoreModel
-
 	public class CompanyScoreModelBuilder
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CompanyScoreModelBuilder));
+		private readonly ExperianNonLimitedResultsRepository experianNonLimitedResultsRepository;
+
+		public CompanyScoreModelBuilder()
+		{
+			experianNonLimitedResultsRepository = ObjectFactory.GetInstance<ExperianNonLimitedResultsRepository>();
+		}
+
 		public CompanyScoreModel Create(Customer customer)
 		{
 			ExperianParserOutput oOutput = customer.ParseExperian(ExperianParserFacade.Target.Company);
 
-			CompanyScoreModel oResult = BuildFromParseResult(oOutput);
+			CompanyScoreModel oResult = BuildFromParseResult(oOutput, customer.Id, customer.Company.ExperianRefNum);
 
 			if (oResult.result != CompanyScoreModel.Ok)
 				return oResult;
 
 			if (oOutput.TypeOfBusinessReduced == TypeOfBusinessReduced.Limited)
 			{
-				AddOwners(
+				AddOwners(customer,
 					oResult,
 					"Limited Company Shareholders",
 					"Registered number of a limited company which is a shareholder",
 					"Description of Shareholder"
 					);
 
-				AddOwners(
+				AddOwners(customer,
 					oResult,
 					"Limited Company Ownership Details",
 					"Registered Number of the Current Ultimate Parent Company",
@@ -115,7 +120,7 @@
 			return oResult;
 		} // Create
 
-		private void AddOwners(CompanyScoreModel oPossession, string sGroupName, string sCompanyNumberField, string sCompanyNameField)
+		private void AddOwners(Customer customer, CompanyScoreModel oPossession, string sGroupName, string sCompanyNumberField, string sCompanyNameField)
 		{
 			if (oPossession.dataset.ContainsKey(sGroupName))
 			{
@@ -135,7 +140,9 @@
 									oShareholder[sCompanyNameField] ?? "",
 									ExperianParserFacade.Target.Company,
 									TypeOfBusinessReduced.Limited
-								)
+								),
+								customer.Id,
+								customer.Company.ExperianRefNum
 							);
 
 							if (oOwner.result == CompanyScoreModel.Ok)
@@ -148,7 +155,7 @@
 			} // if contains list of owners
 		} // AddOwners
 
-		private CompanyScoreModel BuildFromParseResult(ExperianParserOutput oResult)
+		private CompanyScoreModel BuildFromParseResult(ExperianParserOutput oResult, int customerId, string refNumber)
 		{
 			switch (oResult.ParsingResult)
 			{
@@ -161,7 +168,7 @@
 						company_ref_num = oResult.CompanyRefNum
 					};
 
-					model.DashboardModel = BuildDashboardModel(oResult);
+					model.DashboardModel = BuildDashboardModel(oResult, customerId, refNumber);
 					return model;
 				case ParsingResult.Fail:
 					return new CompanyScoreModel { result = "Failed to parse Experian response.", DashboardModel = new ComapanyDashboardModel
@@ -180,7 +187,7 @@
 			} // switch
 		}
 
-		public ComapanyDashboardModel BuildDashboardModel(ExperianParserOutput oResult)
+		public ComapanyDashboardModel BuildDashboardModel(ExperianParserOutput oResult, int customerId, string refNumber)
 		{
 			switch (oResult.TypeOfBusinessReduced)
 			{
@@ -188,50 +195,44 @@
 					return BuildLimitedDashboardModel(oResult);
 				case TypeOfBusinessReduced.NonLimited:
 				case TypeOfBusinessReduced.Personal:
-					return BuildNonLimitedDashboardModel(oResult);
+					return BuildNonLimitedDashboardModel(oResult, customerId, refNumber);
 			}
 
 			return null;
 		}
 
-		private ComapanyDashboardModel BuildNonLimitedDashboardModel(ExperianParserOutput oResult)
+		private ComapanyDashboardModel BuildNonLimitedDashboardModel(ExperianParserOutput oResult, int customerId, string refNumber)
 		{
 			var model = new ComapanyDashboardModel { FinDataHistories = new List<FinDataModel>(), LastFinData = new FinDataModel() };
 			model.IsLimited = false;
-			model.CompanyRefNum = oResult.CompanyRefNum;
-			model.CompanyName = oResult.GetValue("Non-Limited Report General Details", "Business name");
-			var scoreStr = oResult.GetValue("Non-Limited Commercial Delphi Block", "NL Commercial Delphi Score");
-			model.Score = string.IsNullOrEmpty(scoreStr) ? 0 : int.Parse(scoreStr);
-			model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
-			var ccjAge = oResult.GetValue("Non-Limited CCJ Summary", "Age of most recent judgment during ownership (Months)");
-			model.CcjMonths = string.IsNullOrEmpty(ccjAge) ? 0 : int.Parse(ccjAge);
-			var numOfCCjsYear = oResult.GetValue("Non-Limited CCJ Summary", "Total judgment count in last 12 months");
-			var numOfCCjs2Years = oResult.GetValue("Non-Limited CCJ Summary", "Total judgment count in last 13 to 24 months");
-			model.Ccjs = (string.IsNullOrEmpty(numOfCCjsYear) ? 0 : int.Parse(numOfCCjsYear)) +
-						 (string.IsNullOrEmpty(numOfCCjs2Years) ? 0 : int.Parse(numOfCCjs2Years));
-
-			if (oResult.Dataset.ContainsKey("Score History"))
+			model.CompanyRefNum = refNumber;
+			
+			ExperianNonLimitedResults experianNonLimitedResult = experianNonLimitedResultsRepository.GetAll().FirstOrDefault(res => res.CustomerId == customerId && res.RefNumber == refNumber);
+			if (experianNonLimitedResult != null)
 			{
-				if (oResult.Dataset["Score History"].Data.Any())
+				model.CompanyName = experianNonLimitedResult.BusinessName;
+				model.Score = experianNonLimitedResult.Score;
+				model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
+				model.CcjMonths = experianNonLimitedResult.AgeOfMostRecentCcj;
+				model.Ccjs = experianNonLimitedResult.NumOfCcjsInLast12Months + experianNonLimitedResult.NumOfCcjsIn13To24Months;
+
+				foreach (ExperianNonLimitedResultsScoreHistory scoreHistory in experianNonLimitedResult.HistoryScores)
 				{
-					model.NonLimScoreHistories = new List<NonLimScoreHistory>();
-					foreach (var score in oResult.Dataset["Score History"].Data)
+					try
 					{
-						try
+						model.NonLimScoreHistories.Add(new NonLimScoreHistory
 						{
-							model.NonLimScoreHistories.Add(new NonLimScoreHistory
-								{
-									Score = (int) GetDecimalValueFromDataItem(score, "Score"),
-									ScoreDate = DateTime.ParseExact(GetValue(score, "Date"), "dd/MM/yyyy", CultureInfo.InvariantCulture)
-								});
-						}
-						catch (Exception ex)
-						{
-							Log.Warn("failed to parse non limited score history", ex);
-						}
+							Score = scoreHistory.RiskScore,
+							ScoreDate = scoreHistory.Date
+						});
+					}
+					catch (Exception ex)
+					{
+						Log.Warn("failed to parse non limited score history", ex);
 					}
 				}
 			}
+
 			return model;
 		}
 

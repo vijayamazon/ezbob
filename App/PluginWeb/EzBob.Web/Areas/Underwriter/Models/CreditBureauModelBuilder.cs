@@ -199,7 +199,7 @@
 												 where s.Customer.Id == customer.Id
 												 where s.ServiceType == type
 												 select isLimited ?
-												 GetLimitedHistory(s.ResponseData, s.InsertDate, s.Id) :
+												 GetLimitedHistory(s.ResponseData, s.InsertDate, s.Id, s.Customer.Id, s.Customer.Company.ExperianRefNum) :
 												 new CheckHistoryModel
 												 {
 													 Date = s.InsertDate.ToUniversalTime(),
@@ -226,7 +226,7 @@
 			}
 		}
 
-		private CheckHistoryModel GetLimitedHistory(string responseData, DateTime date, long id)
+		private CheckHistoryModel GetLimitedHistory(string responseData, DateTime date, long id, int customerId, string refNumber)
 		{
 			var model = new CheckHistoryModel { Date = date, Id = id };
 			var doc = new XmlDocument();
@@ -240,7 +240,7 @@
 				var b = new CompanyScoreModelBuilder();
 				var oResult = new ExperianParserOutput(oParsed, TypeOfBusinessReduced.Limited);
 				
-				var m = b.BuildDashboardModel(oResult);
+				var m = b.BuildDashboardModel(oResult, customerId, refNumber);
 				model.Balance = m.CaisBalance;
 				model.Score = m.Score;
 			}

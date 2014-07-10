@@ -1,6 +1,6 @@
-IF OBJECT_ID('NonLimitedResults') IS NULL
+IF OBJECT_ID('ExperianNonLimitedResults') IS NULL
 BEGIN
-	CREATE TABLE NonLimitedResults (
+	CREATE TABLE ExperianNonLimitedResults (
 		Id INT IDENTITY NOT NULL,
 		CustomerId INT,
 		RefNumber NVARCHAR(50),

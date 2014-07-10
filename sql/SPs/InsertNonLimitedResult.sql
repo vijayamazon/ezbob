@@ -31,11 +31,13 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	UPDATE NonLimitedResults SET IsActive = 0 WHERE CustomerId = @CustomerId AND RefNumber = @RefNumber
+	UPDATE ExperianNonLimitedResults SET IsActive = 0 WHERE CustomerId = @CustomerId AND RefNumber = @RefNumber
 	
-	INSERT INTO NonLimitedResults
-		(CustomerId, RefNumber, ServiceLogId, Created, BusinessName, Address1, Address2, Address3, Address4, Address5, Postcode,	IncorporationDate, RiskScore, Score, CreditLimit, AgeOfMostRecentCcj, NumOfCcjsInLast12Months, NumOfCcjsIn13To24Months, SumOfCcjsInLast12Months, SumOfCcjsIn13To24Months, NumOfCcjsInLast24Months, NumOfAssociatedCcjsInLast24Months, SumOfCcjsInLast24Months, SumOfAssociatedCcjsInLast24Months, IsActive)
+	INSERT INTO ExperianNonLimitedResults
+		(CustomerId, RefNumber, ServiceLogId, Created, BusinessName, Address1, Address2, Address3, Address4, Address5, Postcode, IncorporationDate, RiskScore, Score, CreditLimit, AgeOfMostRecentCcj, NumOfCcjsInLast12Months, NumOfCcjsIn13To24Months, SumOfCcjsInLast12Months, SumOfCcjsIn13To24Months, NumOfCcjsInLast24Months, NumOfAssociatedCcjsInLast24Months, SumOfCcjsInLast24Months, SumOfAssociatedCcjsInLast24Months, IsActive)
 	VALUES
 		(@CustomerId, @RefNumber, @ServiceLogId, @Created, @BusinessName, @Address1, @Address2, @Address3, @Address4, @Address5, @Postcode,	@IncorporationDate, @RiskScore, @Score, @CreditLimit, @AgeOfMostRecentCcj, @NumOfCcjsInLast12Months, @NumOfCcjsIn13To24Months, @SumOfCcjsInLast12Months, @SumOfCcjsIn13To24Months, @NumOfCcjsInLast24Months, @NumOfAssociatedCcjsInLast24Months, @SumOfCcjsInLast24Months, @SumOfAssociatedCcjsInLast24Months, 1)
+		
+	SELECT @@IDENTITY AS NewId
 END
 GO

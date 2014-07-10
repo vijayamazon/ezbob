@@ -100,6 +100,8 @@
     <Compile Include="Model\Database\CompanyEmployeeCount.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
     <Compile Include="Model\Database\Company.cs" />
+    <Compile Include="Model\Experian\ExperianNonLimitedResultsScoreHistory.cs" />
+    <Compile Include="Model\Experian\ExperianNonLimitedResults.cs" />
     <Compile Include="Model\Experian\ExperianConsumerData.cs" />
     <Compile Include="Model\Experian\ExperianDirector.cs" />
     <Compile Include="Model\Database\OfflineScoringMap.cs" />
