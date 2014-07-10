@@ -217,10 +217,10 @@
 				}
 				if (result != null)
 				{
-					creditBureau.CreditBureauScore = result.BureauScore;
-					creditBureau.TotalDebt = result.TotalAccountBalances;
+					creditBureau.CreditBureauScore = result.Data.BureauScore;
+					creditBureau.TotalDebt = result.Data.TotalAccountBalances;
 					creditBureau.TotalMonthlyRepayments = result.SumOfRepayements;
-					creditBureau.CreditCardBalances = result.CreditCardBalances;
+					creditBureau.CreditCardBalances = result.Data.CreditCardBalances;
 					creditBureau.BorrowerType =
 						TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
 

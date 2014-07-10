@@ -3,167 +3,105 @@ using EzBobIntegration.Web_References.Consumer;
 
 namespace ExperianLib
 {
-	public class ConsumerServiceResult
+	using EZBob.DatabaseLib.Model.Experian;
+	using Newtonsoft.Json;
+
+	public class ConsumerExperianModelBuilder
 	{
-		public bool IsError
+		private string Errors { get; set; }
+		private bool HasParsingError { get; set; }
+
+		public ExperianConsumerData Build(OutputRoot outputRoot, int? customerId = null, int? directorId = null, DateTime? insertDate = null, long serviceLogId = 0)
 		{
-			get { return !string.IsNullOrEmpty(Error); }
-		}
-
-		public bool IsExpirianError { get; set; }
-		public string Error { get; set; }
-		public OutputRoot Output { get; private set; }
-
-		public double BureauScore { get; set; }
-		public double CreditCardBalances { get; set; }
-		public double NumCreditCards { get; set; }
-		public double CreditLimitUtilisation { get; set; }
-		public double CreditCardOverLimit { get; set; }
-        public double CreditCardStatus { get; set; }
-        public double CreditCardBalanceTrend { get; set; }
-        public double UnsecuredLoans { get; set; }
-        public double UnsecuredBorrowing { get; set; }
-        public double PersonalLoanStatus { get; set; }
-        public double PersonalLoans { get; set; }
-		public double TotalAccountBalances { get; set; }
-        public string NoAccountsReturned { get; set; }
-		public double CCJLast2Years { get; set; }
-		public double EnquiriesLast6Months { get; set; }
-		public double EnquiriesLast3Months { get; set; }
-		public double MortgageBalance { get; set; }
-        public double StatusOnMortgageAccounts { get; set; }
-		public double SumOfRepayements { get; set; }
-        public double NumberCashWithdrawalsLastMonth { get; set; }
-        public double NumberCCWithRepaymentFlag { get; set; }
-        public double TimeLastAccountOpened { get; set; }
-		public DateTime BirthDate { get; set; }
-
-		public string SatisfiedJudgement { get; set; }
-		public string Bankruptcy { get; set; }
-		public double PublicData { get; set; }
-		public double CAISDefaults { get; set; }
-		public string BadDebt { get; set; }
-		public string NOCAndNOD { get; set; }
-		public double ConsumerIndebtedness { get; set; }
-		public string CAISSpecialInstruction { get; set; }
-		public string OtherBankruptcy { get; set; }
-		public bool OtherPublicInfo { get; set; }
-
-		public string ExperianResult { get; set; }
-		public DateTime LastUpdateDate { get; set; }
-
-		public ConsumerServiceResult()
-		{
-		}
-
-		//-----------------------------------------------------------------------------------
-		public ConsumerServiceResult(OutputRoot outputRoot, DateTime? defaultBirthDate)
-		{
-			Output = outputRoot;
-			if (outputRoot == null)
-			{
-				Error = string.Format("Experian response is null");
-				return;
-			}
+			var data = new ExperianConsumerData();
+			data.ServiceLogId = serviceLogId;
+			data.CustomerId = customerId;
+			data.DirectorId = directorId;
+			data.InsertDate = insertDate.HasValue ? insertDate.Value : new DateTime();
 
 			if (outputRoot.Output.Error != null)
 			{
-				Error = string.Format("Error from service with code: {0}, severity: {1}, message: {2}", outputRoot.Output.Error.ErrorCode, outputRoot.Output.Error.Severity, outputRoot.Output.Error.Message);
-				IsExpirianError = true;
+				Errors = string.Format("Error from service with code: {0}, severity: {1}, message: {2} \n", outputRoot.Output.Error.ErrorCode, outputRoot.Output.Error.Severity, outputRoot.Output.Error.Message);
+				data.HasExperianError = true;
+				data.Error = Errors;
+				return data;
 			}
-			else
-			{
-                TryRead(() => BureauScore = Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.Scoring.E5S051),"BureauScore");
-                TryRead(() =>CreditCardBalances =Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA04),"CreditCardBalances");
-                TryRead(() =>NumCreditCards =Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.APACSCCBehavrlData.NOMPMNPRL3M),"NumCreditCards");
-                TryRead(() =>CreditLimitUtilisation =Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.APACSCCBehavrlData.CLUNPRL1M),"CreditLimitUtilisation");
-                TryRead(() =>CreditCardOverLimit =Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPF131),"CreditCardOverLimit");
-                TryRead(() => CreditCardStatus = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.CAIS.NDHAC04),"CreditCardStatus");
-                TryRead(() =>
-                            {
-                                var ccbt =
-                                    Convert.ToInt32(
-                                        Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.
-                                            Utilisationblock.SPB218);
-                                switch (ccbt)
-                                {
-                                    case 9996:
-                                    case 9999:
-                                        CreditCardBalanceTrend = 0;
-                                        break;
-                                    case 9997:
-                                    case 9998:
-                                        CreditCardBalanceTrend = 100;
-                                        break;
-                                    default:
-                                        CreditCardBalanceTrend = ccbt;
-                                        break;
-                                }
-                            }, "CreditCardBalanceTrend");
-                TryRead(
-                    () =>
-                    UnsecuredLoans =
-                    Convert.ToDouble(
-                        Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA02) -
-                    Convert.ToDouble(
-                        Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA04),
-                    "UnsecuredLoans");
-                TryRead(() => PersonalLoanStatus = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.CAIS.NDHAC05),"PersonalLoanStatus");
-                TryRead(() => TotalAccountBalances = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.CAIS.E1B10),"TotalAccountBalances");
-                TryRead(() => NoAccountsReturned = Output.Output.ConsumerSummary.Summary.CAIS.E1B01,"NoAccountsReturned");
-				TryRead(() => CCJLast2Years = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.PublicInfo.E1A03),"CCJLast2Years");
-                TryRead(() => EnquiriesLast6Months = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.CAPS.E1E02),"EnquiriesLast6Months");
-                TryRead(() => EnquiriesLast3Months = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.CAPS.E1E01),"EnquiriesLast3Months");
-                TryRead(() => MortgageBalance = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.CAIS.E1B11),"MortgageBalance");
-				
-				TryRead(() =>
-				{
-					if (null != Output.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04)
-					{
-						BirthDate = new DateTime(1900 + Output.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.YY,
-												 Output.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.MM,
-												 Output.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.DD);
-					}
-					else if (null != Output.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB)
-					{
-						BirthDate = new DateTime(1900 + Output.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.YY,
-												 Output.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.MM,
-												 Output.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.DD);
-					}
-					else
-					{
-						BirthDate = defaultBirthDate.HasValue ? defaultBirthDate.Value : new DateTime(1900, 1, 1);
-					}
-				}, "BirthDate");
-				
-				TryRead(() => SumOfRepayements = 
-					Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPH39) +
-					Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPH40) + 
-					Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPH41), "SumOfRepayements");
-                TryRead(() => NumberCashWithdrawalsLastMonth = Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.APACSCCBehavrlData.NOCAL1M), "NumberCashWithdrawalsLastMonth");
-                TryRead(() => NumberCCWithRepaymentFlag = Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.APACSCCBehavrlData.NOMPMNPRL3M), "NumberCCWithRepaymentFlag");
-                TryRead(() => TimeLastAccountOpened = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.CAIS.E1B01), "TimeLastAccountOpened");
-                TryRead(() => UnsecuredBorrowing = Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA02), "UnsecuredBorrowing");
-                TryRead(() => PersonalLoans = Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA02) - Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA04), "PersonalLoans");
-				TryRead(() => Bankruptcy = Output.Output.ConsumerSummary.Summary.PublicInfo.EA1C01, "Bankruptcy");
-				TryRead(() => OtherBankruptcy = Output.Output.ConsumerSummary.Summary.PublicInfo.EA2I01, "OtherBankruptcy");
 
-				TryRead(() => SatisfiedJudgement = Output.Output.ConsumerSummary.Summary.PublicInfo.EA4Q06, "SatisfiedJudgement");
-                TryRead(() => PublicData = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.PublicInfo.E1A02), "PublicData");
-				
-				TryRead(() => CAISDefaults = Convert.ToDouble(Output.Output.ConsumerSummary.Summary.CAIS.E1A05), "CAISDefaults");
-				TryRead(() => BadDebt = Output.Output.ConsumerSummary.Summary.CAIS.E1B08, "BadDebt");
-				TryRead(() => NOCAndNOD = Output.Output.ConsumerSummary.Summary.NOC.EA4Q05, "NOCAndNOD");
-				TryRead(() => ConsumerIndebtedness = Convert.ToDouble(Output.Output.ConsumerSummary.PremiumValueData.CII.NDSPCII), "ConsumerIndebtedness");
-				TryRead(() => CAISSpecialInstruction = Output.Output.ConsumerSummary.Summary.PublicInfo.EA4Q06, "CAISSpecialInstruction");
-                TryRead(() => OtherBankruptcy = Output.Output.ConsumerSummary.Summary.PublicInfo.EA2I01, "OtherBankruptcy");
-				TryRead(() =>
-				{
-					OtherPublicInfo = 
-						Convert.ToInt32(Output.Output.ConsumerSummary.Summary.PublicInfo.E1A02) == 1 ||
-						Convert.ToDouble(Output.Output.ConsumerSummary.Summary.PublicInfo.E2G02) > 0;
-				}, "OtherPublicInfo");
+			var applicant = outputRoot.Output.Applicant != null && outputRoot.Output.Applicant.Length > 0
+				? outputRoot.Output.Applicant[0] : null;
+
+			if (applicant != null)
+			{
+				TryRead(() => data.ApplicantIdentifier = applicant.ApplicantIdentifier, "ApplicantIdentifier");
+				TryRead(() => data.Title = applicant.Name.Title, "Title");
+				TryRead(() => data.Forename = applicant.Name.Forename, "Forename");
+				TryRead(() => data.MiddleName = applicant.Name.MiddleName, "MiddleName");
+				TryRead(() => data.Surname = applicant.Name.Surname, "Surname");
+				TryRead(() => data.Suffix = applicant.Name.Suffix, "Suffix");
+				TryRead(() => data.DateOfBirth = new DateTime(int.Parse(applicant.DateOfBirth.CCYY.ToString()),int.Parse(applicant.DateOfBirth.MM.ToString()),int.Parse(applicant.DateOfBirth.DD.ToString())), "DateOfBirth");
+				TryRead(() => data.Gender = applicant.Gender, "Gender");
 			}
+
+			if (outputRoot.Output.Applicant != null && outputRoot.Output.Applicant.Length > 1)
+			{
+				Errors += "More than one applicant specified" + Environment.NewLine;
+			}
+
+			TryRead(() => data.BureauScore = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.Scoring.E5S051),"BureauScore");
+			TryRead(() => data.CreditCardBalances = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA04), "CreditCardBalances");
+			TryRead(() => data.ActiveCaisBalanceExcMortgages = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA02), "ActiveCaisBalanceExcMortgages");
+			TryRead(() => data.NumCreditCards = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.APACSCCBehavrlData.NOMPMNPRL3M), "NumCreditCards");
+			TryRead(() => data.CreditLimitUtilisation = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.APACSCCBehavrlData.CLUNPRL1M), "CreditLimitUtilisation");
+			TryRead(() => data.CreditCardOverLimit = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPF131), "CreditCardOverLimit");
+			TryRead(() => data.PersonalLoanStatus = outputRoot.Output.ConsumerSummary.Summary.CAIS.NDHAC05, "PersonalLoanStatus");
+			TryRead(() => data.WorstStatus = outputRoot.Output.ConsumerSummary.Summary.CAIS.NDHAC09, "WorstStatus");
+			TryRead(() => data.WorstCurrentStatus = outputRoot.Output.FullConsumerData.ConsumerDataSummary.SummaryDetails.CAISSummary.WorstCurrent, "WorstCurrentStatus");
+			TryRead(() => data.WorstHistoricalStatus = outputRoot.Output.FullConsumerData.ConsumerDataSummary.SummaryDetails.CAISSummary.WorstHistorical, "WorstHistoricalStatus");
+
+			TryRead(() => data.TotalAccountBalances = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.CAIS.E1B10), "TotalAccountBalances");
+			TryRead(() => data.NumAccounts = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.CAIS.E1B01), "NumAccounts");
+			TryRead(() => data.NumCCJs = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.PublicInfo.E1A01), "NumCCJs");
+
+			TryRead(() => data.CCJLast2Years = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.PublicInfo.E1A03), "CCJLast2Years");
+			TryRead(() => data.TotalCCJValue1 = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.PublicInfo.E1A02), "TotalCCJValue1");
+			TryRead(() => data.TotalCCJValue2 = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.PublicInfo.E2G02), "TotalCCJValue2");
+			TryRead(() => data.EnquiriesLast6Months = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.CAPS.E1E02), "EnquiriesLast6Months");
+			TryRead(() => data.EnquiriesLast3Months = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.CAPS.E1E01), "EnquiriesLast3Months");
+			TryRead(() => data.MortgageBalance = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.CAIS.E1B11), "MortgageBalance");
+			TryRead(() =>
+				{
+					if (null != outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04)
+					{
+						data.CaisDOB = new DateTime(1900 + outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.YY,
+						                            outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.MM,
+						                            outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.DD);
+					}
+					else if (null != outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB)
+					{
+						data.CaisDOB = new DateTime(1900 + outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.YY,
+						                            outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.MM,
+						                            outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.DD);
+					}
+				} , "CaisDOB");
+			TryRead(() => data.CreditCommitmentsRevolving = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPH39), "CreditCommitmentsRevolving");
+			TryRead(() => data.CreditCommitmentsNonRevolving = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPH40), "CreditCommitmentsNonRevolving");
+			TryRead(() => data.MortgagePayments = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPH41), "MortgagePayments");
+			TryRead(() => data.Bankruptcy = (outputRoot.Output.ConsumerSummary.Summary.PublicInfo.EA1C01 == "Y"), "Bankruptcy");
+			TryRead(() => data.OtherBankruptcy = (outputRoot.Output.ConsumerSummary.Summary.PublicInfo.EA2I01 == "Y"), "OtherBankruptcy");
+			TryRead(() => data.CAISDefaults = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.CAIS.E1A05), "CAISDefaults");
+			TryRead(() => data.BadDebt = outputRoot.Output.ConsumerSummary.Summary.CAIS.E1B08, "BadDebt");
+			TryRead(() => data.NOCsOnCCJ = (outputRoot.Output.ConsumerSummary.Summary.NOC.EA4Q02 == "Y"), "NOCsOnCCJ");
+			TryRead(() => data.NOCsOnCAIS = (outputRoot.Output.ConsumerSummary.Summary.NOC.EA4Q04 == "Y"), "NOCsOnCAIS");
+			TryRead(() => data.NOCAndNOD = (outputRoot.Output.ConsumerSummary.Summary.NOC.EA4Q05 == "Y"), "NOCAndNOD");
+			TryRead(() => data.SatisfiedJudgement = (outputRoot.Output.ConsumerSummary.Summary.PublicInfo.EA4Q06 == "Y"), "SatisfiedJudgement");
+			TryRead(() => data.CII = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.CII.NDSPCII), "CII");
+			TryRead(() => data.CAISSpecialInstructionFlag = outputRoot.Output.ConsumerSummary.Summary.CAIS.EA1F04, "CAISSpecialInstructionFlag");
+
+			data.Error = Errors;
+			data.HasParsingError = HasParsingError;
+			Console.WriteLine(JsonConvert.SerializeObject(data, new JsonSerializerSettings{Formatting = Formatting.Indented}));
+			return data;
+
 		}
 
 		private void TryRead(Action a, string key)
@@ -174,9 +112,34 @@ namespace ExperianLib
 			}
 			catch
 			{
-				Error += "Can`t read value for: " + key + Environment.NewLine;
+				HasParsingError = true;
+				Errors += "Can`t read value for: " + key + Environment.NewLine;
 			}
 		}
 
+	}
+
+	public class ConsumerServiceResult
+	{
+		public string ExperianResult { get; set; }//todo remove
+		public DateTime LastUpdateDate { get; set; }//todo remove
+
+		public ExperianConsumerData Data{get;set; }
+		public OutputRoot Output { get; private set; }
+
+		public double SumOfRepayements { get; set; }
+
+		public ConsumerServiceResult()
+		{
+		}
+
+		//-----------------------------------------------------------------------------------
+		public ConsumerServiceResult(OutputRoot outputRoot)
+		{
+			Output = outputRoot;
+			var builder = new ConsumerExperianModelBuilder();
+			Data = builder.Build(outputRoot);
+			SumOfRepayements = Data.CreditCommitmentsNonRevolving + Data.CreditCommitmentsRevolving + Data.MortgagePayments;
+		}
 	}
 }

@@ -8,7 +8,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 	{
 		public IOrderedEnumerable<CheckHistoryModel> ConsumerHistory { get; set; }
 		public IOrderedEnumerable<CheckHistoryModel> CompanyHistory { get; set; }
-		private readonly List<string> _errorList = new List<string>();
+		
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string MiddleName { get; set; }
@@ -20,14 +20,11 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 		public bool IsError
 		{
-			get { return _errorList.Count > 0; }
+			get { return ErrorList.Count> 0; }
 		}
 
-		public List<string> ErrorList
-		{
-			get { return _errorList; }
-		}
-
+		public List<string> ErrorList { get; set; }
+		
 		public string ModelType { get; set; }
 
 		public bool CheckFailed
@@ -41,13 +38,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string BorrowerType { get; set; } // done
 		public string CheckDate { get; set; } // done
 		public string CheckValidity { get; set; } // done
-		public double Score { get; set; } // done     
+		public int Score { get; set; } // done     
 		public double Odds { get; set; } // done     
 		public string ScoreColor { get; set; } // done 
 		public string ScorePosition { get; set; } // done
 		public string ScoreAlign { get; set; } // done
 		public string ScoreValuePosition { get; set; } // done
-		public string CII { get; set; } // done
+		public int CII { get; set; } // done
 		public ConsumerSummaryCharacteristics ConsumerSummaryCharacteristics { get; set; }
 		public ConsumerAccountsOverview ConsumerAccountsOverview { get; set; }
 		public AccountInfo[] AccountsInformation { get; set; }
@@ -73,17 +70,18 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string WorstCurrentStatus { get; set; } // done
 		public string WorstCurrentStatus3M { get; set; } // done
 		public int NumberOfDefaults { get; set; } // done
-		public string NumberOfCCJs { get; set; } // done
-		public string AgeOfMostRecentCCJ { get; set; } // done
-		public double NumberOfCCOverLimit { get; set; } // done
-		public double EnquiriesLast3M { get; set; } // done
-		public double EnquiriesLast6M { get; set; } // done
-		public string CreditCardUtilization { get; set; } // done
+		public int NumberOfCCJs { get; set; } // done
+		public int AgeOfMostRecentCCJ { get; set; } // done
+		public int NumberOfCCOverLimit { get; set; } // done
+		public int EnquiriesLast3M { get; set; } // done
+		public int EnquiriesLast6M { get; set; } // done
+		public int CreditCardUtilization { get; set; } // done
 		public string DSRandOwnershipType { get; set; } // !DSR
-		public string NOCsOnCCJ { get; set; } // done
-		public string NOCsOnCAIS { get; set; } // done
+		public bool NOCsOnCCJ { get; set; } // done
+		public bool NOCsOnCAIS { get; set; } // done
+		public bool SatisfiedJudgements { get; set; }
 		public string CAISSpecialInstructionFlag { get; set; } // done
-		public string SatisfiedJudgements { get; set; }
+		
 
 		public int NumberOfLates { get; set; }
 		public string LateStatus { get; set; }
@@ -204,18 +202,18 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	public class Summary
 	{
-		public string Score { get; set; }
-		public string ConsumerIndebtednessIndex { get; set; }
+		public int Score { get; set; }
+		public int ConsumerIndebtednessIndex { get; set; }
 		public string CheckDate { get; set; }
 		public string Validtill { get; set; }
 		public string WorstCurrentstatus { get; set; }
 		public string WorstHistoricalstatus { get; set; }
 		public int Numberofdefaults { get; set; }
 		public int Accounts { get; set; }
-		public string CCJs { get; set; }
-		public string MostrecentCCJ { get; set; }
+		public int CCJs { get; set; }
+		public int MostrecentCCJ { get; set; }
 		public string DSRandownershiptype { get; set; }
-		public string Creditcardutilization { get; set; }
+		public int Creditcardutilization { get; set; }
 		public double Enquiriesinlast6months { get; set; }
 		public double Enquiriesinlast3months { get; set; }
 		public string Totalbalance { get; set; }

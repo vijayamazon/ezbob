@@ -64,13 +64,13 @@
 						false
 					);
 
-					if (consumerServiceResult == null || consumerServiceResult.IsError)
+					if (consumerServiceResult == null || consumerServiceResult.Data.HasExperianError)
 					{
 						Log.Debug("Backfilling customer analytics for customer {0} and director {1} Failed!", customerId, directorId);
 						continue;
 					}
 
-					int score = (int)consumerServiceResult.BureauScore;
+					int score = (int)consumerServiceResult.Data.BureauScore;
 
 					if (directorId == 0)
 					{

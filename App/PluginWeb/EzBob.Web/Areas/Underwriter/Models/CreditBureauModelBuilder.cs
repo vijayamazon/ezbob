@@ -93,7 +93,6 @@
 
 			if (getFromLog && logId.HasValue)
 			{
-				var dob = customer.PersonalInfo.DateOfBirth;
 				var response =
 					_session.Query<MP_ServiceLog>().FirstOrDefault(x => x.Id == logId.Value);
 
@@ -107,7 +106,7 @@
 				using (TextReader sr = new StringReader(response.ResponseData))
 				{
 					var output = (OutputRoot)serializer.Deserialize(sr);
-					result = new ConsumerServiceResult(output, dob);
+					result = new ConsumerServiceResult(output);
 				}
 			}
 			else
@@ -118,16 +117,6 @@
 					customer.PersonalInfo.Gender.ToString(), // should be Gender
 					customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true, false, false);
 			}
-		}
-
-		private static string PrintDates(IEnumerable<MP_ServiceLog> logs)
-		{
-			var sb = new StringBuilder();
-			foreach (var mpServiceLog in logs)
-			{
-				sb.AppendLine(mpServiceLog.InsertDate.ToUniversalTime().ToString(CultureInfo.InvariantCulture));
-			}
-			return sb.ToString();
 		}
 
 		private void BuildHistoryModel(CreditBureauModel model, Customer customer)
@@ -157,8 +146,7 @@
 					ConsumerServiceResult result;
 					GetConsumerInfo(customer, true, res.Id, null, out result);
 					var consumerModel = GenerateConsumerModel(customer.Id, result);
-					int cii = 0;
-					int.TryParse(consumerModel.CII, out cii);
+					int cii = consumerModel.CII;
 					decimal balance;
 					decimal.TryParse(consumerModel.ConsumerAccountsOverview.Balance_Total, out balance);
 					checkConsumerHistoryModels.Add(new CheckHistoryModel
@@ -294,25 +282,14 @@
 
 		public CreditBureauModel GenerateConsumerModel(int id, ConsumerServiceResult eInfo)
 		{
-			string applicantNames = string.Empty;
-			try
+			if (eInfo == null || eInfo.Data == null)
 			{
-				foreach (var applicant in eInfo.Output.Output.Applicant)
-				{
-					string name = string.Format("{0} {1} {2}", applicant.Name.Forename, applicant.Name.Surname, applicant.Age.Years);
-					applicantNames = string.IsNullOrEmpty(applicantNames) ? name : string.Format("{0},{1}", applicantNames, name);
-				}
+				return new CreditBureauModel { IsExperianError = true, ErrorList = new List<string>{ "No data"}};
 			}
-			catch { }
-			double score = (eInfo != null) ? eInfo.BureauScore : 0.0;
-
-			double odds = Math.Pow(2, (score - 600) / 80);
-
+			int score = eInfo.Data.BureauScore;
+			double odds = Math.Pow(2, ((double)score - 600) / 80);
 			var scorePosColor = GetScorePositionAndColor(score, ConsumerScoreMax, ConsumerScoreMin);
-
-			var checkStatus = ((eInfo == null) || !string.IsNullOrEmpty(eInfo.Error))
-								  ? "Error"
-								  : eInfo.ExperianResult;
+			var checkStatus = (eInfo.Data.HasExperianError) ? "Error" : eInfo.ExperianResult;
 
 			var checkIcon = "icon-white icon-remove-sign";
 			var buttonStyle = "btn-danger";
@@ -332,63 +309,58 @@
 					break;
 			}
 
-			var checkDate = (eInfo != null) ? (DateTime?)eInfo.LastUpdateDate : null;
-			var checkValidity = (checkDate != null) ? (DateTime?)checkDate.Value.AddMonths(3) : null;
+			var checkDate = eInfo.LastUpdateDate;
+			var checkValidity =checkDate.AddMonths(3);
 
 			Errors = new List<string>();
 
 			var model = new CreditBureauModel
 			{
 				Id = id,
-
-				IsExperianError = (eInfo != null) && eInfo.IsExpirianError,
+				IsExperianError = (eInfo != null) && eInfo.Data.HasExperianError,
 				ModelType = "Consumer",
-
 				CheckStatus = checkStatus,
 				CheckIcon = checkIcon,
 				ButtonStyle = buttonStyle,
-				CheckDate = (checkDate != null) ? checkDate.Value.ToShortDateString() : string.Empty,
-				CheckValidity =
-					(checkValidity != null) ? checkValidity.Value.ToShortDateString() : string.Empty,
+				CheckDate = checkDate.ToShortDateString(),
+				CheckValidity = checkValidity.ToShortDateString(),
 				BorrowerType = "Consumer",
-
 				Score = score,
 				Odds = odds,
 				ScorePosition = scorePosColor.Position,
 				ScoreAlign = scorePosColor.Align,
 				ScoreValuePosition = scorePosColor.ValPosition,
 				ScoreColor = scorePosColor.Color,
-				ApplicantFullName = applicantNames,
+				ApplicantFullName = string.Format("{0} {1} {2} {3}" ,eInfo.Data.Forename,eInfo.Data.MiddleName, eInfo.Data.Surname, eInfo.Data.DateOfBirth.HasValue ? (DateTime.UtcNow.Year - eInfo.Data.DateOfBirth.Value.Year).ToString() : ""),
 				ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics(),
 				ConsumerAccountsOverview = new ConsumerAccountsOverview(),
+				CII = eInfo.Data.CII
 			};
-			if ((eInfo != null) && !string.IsNullOrEmpty(eInfo.Error))
+			if (!string.IsNullOrEmpty(eInfo.Data.Error))
 			{
-				model.ErrorList.AddRange(eInfo.Error.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+				model.ErrorList.AddRange(eInfo.Data.Error.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
 			}
-
-			if (eInfo == null)
-				return model;
 
 			model.ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics
 			{
 				NumberOfAccounts = 0,
 				NumberOfAccounts3M = 0,
-				WorstCurrentStatus = string.Empty,
-				WorstCurrentStatus3M = string.Empty,
-
-				EnquiriesLast3M = eInfo.EnquiriesLast3Months,
-				EnquiriesLast6M = eInfo.EnquiriesLast6Months,
-
-				NumberOfCCJs = string.Empty,
-				AgeOfMostRecentCCJ = string.Empty,
+				WorstCurrentStatus = AccountStatusDictionary.GetDetailedAccountStatusString(eInfo.Data.WorstCurrentStatus),
+				WorstCurrentStatus3M = AccountStatusDictionary.GetDetailedAccountStatusString(eInfo.Data.WorstHistoricalStatus),
+				EnquiriesLast3M = eInfo.Data.EnquiriesLast3Months,
+				EnquiriesLast6M = eInfo.Data.EnquiriesLast6Months,
 				NumberOfDefaults = 0,
-				NumberOfCCOverLimit = eInfo.CreditCardOverLimit,
-				CreditCardUtilization =
-					eInfo.CreditLimitUtilisation.ToString(CultureInfo.InvariantCulture),
+				NumberOfCCOverLimit = eInfo.Data.CreditCardOverLimit,
+				CreditCardUtilization = eInfo.Data.CreditLimitUtilisation,
 				DSRandOwnershipType = string.Empty,
-				NOCsOnCCJ = string.Empty,
-				NOCsOnCAIS = string.Empty
+				NOCsOnCCJ = eInfo.Data.NOCsOnCCJ,
+				NOCsOnCAIS = eInfo.Data.NOCsOnCAIS,
+				NumberOfCCJs = eInfo.Data.NumCCJs,
+				SatisfiedJudgements = eInfo.Data.SatisfiedJudgement,
+				AgeOfMostRecentCCJ = eInfo.Data.CCJLast2Years,
+				CAISSpecialInstructionFlag = eInfo.Data.CAISSpecialInstructionFlag,
+				
+				
 			};
 			model.ConsumerAccountsOverview =
 				new ConsumerAccountsOverview
@@ -418,51 +390,7 @@
 					TotalCurLimits_Total = string.Empty,
 					Balance_Total = string.Empty
 				};
-
-			TryRead(() => model.CII = eInfo.Output.Output.ConsumerSummary.PremiumValueData.CII.NDSPCII,
-					"CII");
-			TryRead(() => model.ConsumerSummaryCharacteristics.NumberOfCCJs = eInfo.Output.Output.ConsumerSummary.Summary.PublicInfo.E1A01,
-					"# of CCJ's");
-			model.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ = eInfo.CCJLast2Years.ToString();
-			model.ConsumerSummaryCharacteristics.SatisfiedJudgements = eInfo.SatisfiedJudgement;
-
-			TryRead(() => model.ConsumerSummaryCharacteristics.NOCsOnCCJ = eInfo.Output.Output.ConsumerSummary.Summary.NOC.EA4Q02,
-					"NOCs on CCJ");
-
-			TryRead(() => model.ConsumerSummaryCharacteristics.NOCsOnCAIS = eInfo.Output.Output.ConsumerSummary.Summary.NOC.EA4Q04,
-					"NOCs on CAIS");
-
-			model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag = string.Empty;
-			TryRead(() => model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag = eInfo.Output.Output.ConsumerSummary.Summary.CAIS.EA1F04,
-					"CAIS Special Instruction Flag");
-			if (string.IsNullOrEmpty(model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag))
-				model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag = "-";
-
-			TryRead(() =>
-				model.ConsumerSummaryCharacteristics.WorstCurrentStatus =
-					eInfo.Output.Output.FullConsumerData.ConsumerDataSummary.SummaryDetails.CAISSummary.WorstCurrent,
-				"Worst Current Status"
-			);
-
-			string sWorstCurrent = model.ConsumerSummaryCharacteristics.WorstCurrentStatus;
-
-			model.ConsumerSummaryCharacteristics.WorstCurrentStatus =
-				AccountStatusDictionary.GetDetailedAccountStatusString(model.ConsumerSummaryCharacteristics.WorstCurrentStatus);
-
-			TryRead(() =>
-				model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M =
-					eInfo.Output.Output.FullConsumerData.ConsumerDataSummary.SummaryDetails.CAISSummary.WorstHistorical,
-				"Worst Historical Status"
-			);
-
-			string sWorstHistorical = model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M;
-
-			model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M =
-				AccountStatusDictionary.GetDetailedAccountStatusString(model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M);
-
-			Log.DebugFormat("Worst current status is: {0} - {1}", sWorstCurrent, model.ConsumerSummaryCharacteristics.WorstCurrentStatus);
-			Log.DebugFormat("Worst historical status is: {0} - {1}", sWorstHistorical, model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M);
-
+			
 			var accList = new List<AccountInfo>();
 
 			var years = new List<AccountDisplayedYear>();
@@ -730,7 +658,7 @@
 			}
 			model.NOCs = nocList.ToArray();
 
-			if (eInfo.IsExpirianError)
+			if (eInfo.Data.HasExperianError)
 			{
 				model.ErrorList.AddRange(Errors);
 			}
@@ -905,7 +833,7 @@
 		{
 			model.Summary = new Summary
 			{
-				Score = model.Score.ToString(CultureInfo.InvariantCulture),
+				Score = model.Score,
 				ConsumerIndebtednessIndex = model.CII,
 				CheckDate = model.CheckDate,
 				Validtill = model.CheckValidity,
@@ -993,7 +921,7 @@
 						using (TextReader sr = new StringReader(response.ResponseData))
 						{
 							var output = (OutputRoot)serializer.Deserialize(sr);
-							result = new ConsumerServiceResult(output, director.DateOfBirth);
+							result = new ConsumerServiceResult(output);
 						}
 					}
 

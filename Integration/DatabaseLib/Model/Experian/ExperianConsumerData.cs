@@ -5,17 +5,19 @@
 
 	public class ExperianConsumerData
 	{
-		public virtual int Id { get; set; }
-		public virtual int ServiceLogId { get; set; }
+		public virtual long Id { get; set; }
+		public virtual long ServiceLogId { get; set; }
 		public virtual DateTime InsertDate { get; set; }
 
 		public virtual int? CustomerId { get; set; }
-		public virtual int? Director { get; set; }
+		public virtual int? DirectorId { get; set; }
 
 		public virtual string Error { get; set; }
-		public virtual bool HasError { get; set; }
+		public virtual bool HasParsingError { get; set; }
+		public virtual bool HasExperianError { get; set; }
 
 		//Applicant
+		public virtual string ApplicantIdentifier { get; set; }
 		public virtual string Title { get; set; }
 		public virtual string Forename { get; set; }
 		public virtual string MiddleName { get; set; }
@@ -32,6 +34,8 @@
 		public virtual int CreditCardOverLimit { get; set; } //SPF131 SP Number of active revolving CAIS with CLU > 100%
 		public virtual string PersonalLoanStatus { get; set; } //NDHAC05 Current Worst status (fine) on active non revolving CAIS (SP) "Current Worst status (fine) on active non revolving CAIS"
 		public virtual string WorstStatus { get; set; } //NDHAC09 Worst status (fine) in last 6m on mortgage accounts (SP)
+		public virtual string WorstCurrentStatus { get; set; } //CAISSummary.WorstCurrent
+		public virtual string WorstHistoricalStatus { get; set; }//CAISSummary.WorstHistorical
 		public virtual int TotalAccountBalances { get; set; } //E1B10 Balance (class 1) (excl. mortgages)
 		public virtual int NumAccounts { get; set; } //E1B01 # accounts
 		public virtual int NumCCJs { get; set; } //E1A01 # CCJ's
@@ -41,7 +45,7 @@
 		public virtual int EnquiriesLast6Months { get; set; } //E1E02 # in last 6 months (previous search information)
 		public virtual int EnquiriesLast3Months { get; set; } //E1E01 # in last 3 months (previous search information)
 		public virtual int MortgageBalance { get; set; } //E1B11 Balance  (mortgages)
-		public virtual int CaisDOB { get; set; } //EA4S04 CAIS DOB
+		public virtual DateTime? CaisDOB { get; set; } //EA4S04 CAIS DOB
 
 		//SumOfRepayements = CreditCommitmentsRevolving+CreditCommitmentsNonRevolving+MortgagePayments
 		public virtual int CreditCommitmentsRevolving { get; set; } //SPH39 SP Monthly Credit Commitments (revolving)
@@ -54,20 +58,14 @@
 		public virtual int CAISDefaults { get; set; } //E1A05 Tot value (class 1) of CAIS 8/9's
 		public virtual string BadDebt { get; set; } //E1B08 Worst current status (coarse)
 		
-		public virtual int NOCsOnCCJ { get; set; } //EA4Q02 CCJ NOC (ALL)
-		public virtual int NOCsOnCAIS { get; set; } //EA4Q04 CAIS NOC  (ALL)
-		public virtual int NOCAndNOD { get; set; }//EA4Q05 NOC on any item (ALL)
-		public virtual int SatisfiedJudgement { get; set; } //EA4Q06 Satisfied CCJ detected (ALL)
+		public virtual bool NOCsOnCCJ { get; set; } //EA4Q02 CCJ NOC (ALL)
+		public virtual bool NOCsOnCAIS { get; set; } //EA4Q04 CAIS NOC  (ALL)
+		public virtual bool NOCAndNOD { get; set; }//EA4Q05 NOC on any item (ALL)
+		public virtual bool SatisfiedJudgement { get; set; } //EA4Q06 Satisfied CCJ detected (ALL)
 
 		public virtual int CII { get; set; } //NDSPCII (SP) Consumer Indebtedness Index
-		public virtual int CAISSpecialInstructionFlag { get; set; } //EA1F04 CAIS special instruction ind (SP)
-		/*public virtual int MortgageBalance { get; set; }
-		public virtual int MortgageBalance { get; set; }
-		public virtual int MortgageBalance { get; set; }
-		public virtual int MortgageBalance { get; set; }
-		public virtual int MortgageBalance { get; set; }
-		public virtual int MortgageBalance { get; set; }*/
-
+		public virtual string CAISSpecialInstructionFlag { get; set; } //EA1F04 CAIS special instruction ind (SP)
+		
 		public virtual ISet<ExperianConsumerDataAlias> ConsumerDataAlias { get; set; }
 		public virtual ISet<ExperianConsumerDataLocation> ConsumerDataLocations { get; set; }
 		

@@ -154,7 +154,14 @@
 			}
 			catch (Exception ex) {
 				Log.Error(ex);
-				return new ConsumerServiceResult { Error = "Exception: " + ex.Message };
+				return new ConsumerServiceResult
+					{
+						Data = new ExperianConsumerData
+							{
+								HasExperianError = true, 
+								Error = "Exception: " + ex.Message
+							}
+					};
 			} // try
 		} // GetConsumerInfo
 
@@ -234,7 +241,6 @@
 
 		private ConsumerServiceResult CreateConsumerServiceResult(
 			string surname,
-			DateTime? birthDate,
 			int customerId,
 			bool checkInCacheOnly,
 			string content
@@ -242,7 +248,7 @@
 			var outputRootSerializer = new XmlSerializer(typeof(OutputRoot));
 			var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(content));
 
-			var consumerServiceResult = new ConsumerServiceResult(outputRoot, birthDate) {
+			var consumerServiceResult = new ConsumerServiceResult(outputRoot) {
 				ExperianResult = "Passed",
 				LastUpdateDate = DateTime.Now
 			};
@@ -369,7 +375,7 @@
 				financialAccountsParser.Parse(serviceLog.ResponseData, serviceLog.Id, customerId);
 			} // if
 
-			return new ConsumerServiceResult(output, cachedResponse.BirthDate);
+			return new ConsumerServiceResult(output);
 		} // GetServiceOutput
 
 		#endregion method GetServiceOutput
@@ -428,7 +434,7 @@
 				} // try
 			} // if
 
-			return CreateConsumerServiceResult(surname, birthDate, customerId, checkInCacheOnly, content);
+			return CreateConsumerServiceResult(surname, customerId, checkInCacheOnly, content);
 		} // ConsumerDebugResult
 
 		#endregion method ConsumerDebugResult
@@ -461,7 +467,7 @@
 				data = JsonConvert.DeserializeObject<OutputRoot>(person.JsonPacket);
 			}
 
-			var consumerServiceResult = new ConsumerServiceResult(data,person.BirthDate) {
+			var consumerServiceResult = new ConsumerServiceResult(data) {
 				ExperianResult = person.ExperianResult,
 				LastUpdateDate = person.LastUpdateDate
 			};

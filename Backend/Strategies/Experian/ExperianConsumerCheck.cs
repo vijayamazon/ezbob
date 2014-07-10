@@ -77,7 +77,7 @@
 		#region method UpdateAnalytics
 
 		private void UpdateAnalytics() {
-			if ((m_oConsumerServiceResult == null) || m_oConsumerServiceResult.IsError)
+			if ((m_oConsumerServiceResult == null) || m_oConsumerServiceResult.Data.HasExperianError)
 				return;
 
 			if (m_nDirectorID == 0)
@@ -216,14 +216,14 @@
 				m_bForceCheck
 			);
 
-			if (!m_oConsumerServiceResult.IsError)
-				Score = (int)m_oConsumerServiceResult.BureauScore;
+			if (!m_oConsumerServiceResult.Data.HasExperianError)
+				Score = (int)m_oConsumerServiceResult.Data.BureauScore;
 
 			var sp = new UpdateExperianConsumer(DB, Log) {
 				Name = m_oPersonalData.FirstName,
 				Surname = m_oPersonalData.Surname,
 				PostCode = m_oAddressLines[6, oAddressCurrency],
-				ExperianError = m_oConsumerServiceResult.Error,
+				ExperianError = m_oConsumerServiceResult.Data.Error,
 				ExperianScore = Score,
 				CustomerID = m_nCustomerID,
 				DirectorID = m_nDirectorID,
@@ -232,7 +232,7 @@
 
 			sp.ExecuteNonQuery();
 
-			return !m_oConsumerServiceResult.IsError;
+			return !m_oConsumerServiceResult.Data.HasExperianError;
 		} // GetConsumerInfoAndSave
 
 		#endregion method GetConsumerInfoAndSave
