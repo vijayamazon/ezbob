@@ -159,8 +159,8 @@
 			{
 				var owners = lrs.SelectMany(x => x.Owners).Select(x => new {firstName = x.FirstName ?? string.Empty, lastName = x.LastName ?? string.Empty, company = x.CompanyName ?? string.Empty}).ToList();
 				if (owners.Any() && !owners.Any(owner =>
-						owner.firstName.Contains(customer.PersonalInfo.FirstName) &&
-						owner.lastName.Contains(customer.PersonalInfo.Surname)))
+						owner.firstName.ToLowerInvariant().Contains(customer.PersonalInfo.FirstName.Trim().ToLowerInvariant()) &&
+						owner.lastName.ToLowerInvariant().Contains(customer.PersonalInfo.Surname.Trim().ToLowerInvariant())))
 				{
 					var ownerNames = owners.Select(x => string.Format("{0} {1} {2}", x.firstName, x.lastName, x.company)).Aggregate((a, b) => a + ", " + b);
 					summary.Alerts.Errors.Add(new AlertModel
