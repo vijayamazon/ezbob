@@ -125,8 +125,8 @@
 					availableBalanceCurrency = avaliableBalance != null ? avaliableBalance.CurrencyCode : null,
 					currentBalance = currentBalance != null ? currentBalance.Value : (double?)null,
 					currentBalanceCurrency = currentBalance != null ? currentBalance.CurrencyCode : null,
-					overdraftProtection = overdraftProtection!=null ? overdraftProtection.Value : (double?)null,
-					overdraftProtectionCurrency = overdraftProtection!= null ? overdraftProtection.CurrencyCode : null,
+					overdraftProtection = overdraftProtection != null ? overdraftProtection.Value : (double?)null,
+					overdraftProtectionCurrency = overdraftProtection != null ? overdraftProtection.CurrencyCode : null,
 					accountName = item.accountName,
 					routingNumber = item.routingNumber,
 					maturityDate =
@@ -162,54 +162,56 @@
 					var transactionAmount = CurrencyXchg(bankTransaction.transactionAmount, date);
 
 					var orderBankTransaction = new MP_YodleeOrderItemBankTransaction
-					{
-						YodleeOrderItem = mpOrderItem,
-						isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
-						isSeidMod = bankTransaction.isSeidMod,
-						srcElementId = bankTransaction.srcElementId,
-						transactionTypeId = bankTransaction.transactionTypeId,
-						transactionType = bankTransaction.transactionType,
-						transactionStatusId = bankTransaction.transactionStatusId,
-						transactionStatus = bankTransaction.transactionStatus,
-						transactionBaseTypeId = bankTransaction.transactionBaseTypeId,
-						transactionBaseType = bankTransaction.transactionBaseType,
-						categoryId = bankTransaction.categoryId,
-						bankTransactionId = bankTransaction.bankTransactionId,
-						bankAccountId = bankTransaction.bankAccountId,
-						bankStatementId = bankTransaction.bankStatementId,
-						isDeleted = bankTransaction.isDeleted,
-						lastUpdated = bankTransaction.lastUpdated,
-						hasDetails = bankTransaction.hasDetails,
-						transactionId = bankTransaction.transactionId,
-						transactionCategory = _MP_YodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(bankTransaction.transactionCategoryId),
-						classUpdationSource = bankTransaction.classUpdationSource,
-						lastCategorised = bankTransaction.lastCategorised,
-						transactionDate =
-							(bankTransaction.transactionDate != null && bankTransaction.transactionDate.dateSpecified)
-								? bankTransaction.transactionDate.date
-								: null,
-						prevLastCategorised = bankTransaction.prevLastCategorised,
-						runningBalance = runningBalance != null ? runningBalance.Value : (double?) null,
-						runningBalanceCurrency = runningBalance != null? runningBalance.CurrencyCode : null,
-						categorisationSourceId = bankTransaction.categorisationSourceId,
-						plainTextDescription = bankTransaction.plainTextDescription,
-						calcRunningBalance = calcRunningBalance != null ? calcRunningBalance.Value : (double?)null,
-						calcRunningBalanceCurrency = calcRunningBalance != null ? calcRunningBalance.CurrencyCode : null,
-						category = bankTransaction.category,
-						link = bankTransaction.link,
-						postDate =
-							(bankTransaction.postDate != null && bankTransaction.postDate.dateSpecified)
-								? bankTransaction.postDate.date
-								: null,
-						prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,
-						descriptionViewPref = bankTransaction.descriptionViewPref,
-						prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId,
-						transactionAmount = transactionAmount != null ? transactionAmount.Value : (double?)null,
-						transactionAmountCurrency = transactionAmount != null ? transactionAmount.CurrencyCode : null,
-						checkNumber = bankTransaction.checkNumber,
-						description = bankTransaction.description,
-						categorizationKeyword = bankTransaction.categorizationKeyword,
-					};
+						{
+							YodleeOrderItem = mpOrderItem,
+							isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
+							isSeidMod = bankTransaction.isSeidMod,
+							srcElementId = bankTransaction.srcElementId,
+							transactionTypeId = bankTransaction.transactionTypeId,
+							transactionType = bankTransaction.transactionType,
+							transactionStatusId = bankTransaction.transactionStatusId,
+							transactionStatus = bankTransaction.transactionStatus,
+							transactionBaseTypeId = bankTransaction.transactionBaseTypeId,
+							transactionBaseType = bankTransaction.transactionBaseType,
+							categoryId = bankTransaction.categoryId,
+							bankTransactionId = bankTransaction.bankTransactionId,
+							bankAccountId = bankTransaction.bankAccountId,
+							bankStatementId = bankTransaction.bankStatementId,
+							isDeleted = bankTransaction.isDeleted,
+							lastUpdated = bankTransaction.lastUpdated,
+							hasDetails = bankTransaction.hasDetails,
+							transactionId = bankTransaction.transactionId,
+							transactionCategory =
+								_MP_YodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(
+									bankTransaction.transactionCategoryId),
+							classUpdationSource = bankTransaction.classUpdationSource,
+							lastCategorised = bankTransaction.lastCategorised,
+							transactionDate =
+								(bankTransaction.transactionDate != null && bankTransaction.transactionDate.dateSpecified)
+									? bankTransaction.transactionDate.date
+									: null,
+							prevLastCategorised = bankTransaction.prevLastCategorised,
+							runningBalance = runningBalance != null ? runningBalance.Value : (double?)null,
+							runningBalanceCurrency = runningBalance != null ? runningBalance.CurrencyCode : null,
+							categorisationSourceId = bankTransaction.categorisationSourceId,
+							plainTextDescription = bankTransaction.plainTextDescription,
+							calcRunningBalance = calcRunningBalance != null ? calcRunningBalance.Value : (double?)null,
+							calcRunningBalanceCurrency = calcRunningBalance != null ? calcRunningBalance.CurrencyCode : null,
+							category = bankTransaction.category,
+							link = bankTransaction.link,
+							postDate =
+								(bankTransaction.postDate != null && bankTransaction.postDate.dateSpecified)
+									? bankTransaction.postDate.date
+									: null,
+							prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,
+							descriptionViewPref = bankTransaction.descriptionViewPref,
+							prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId,
+							transactionAmount = transactionAmount != null ? transactionAmount.Value : (double?)null,
+							transactionAmountCurrency = transactionAmount != null ? transactionAmount.CurrencyCode : null,
+							checkNumber = bankTransaction.checkNumber,
+							description = bankTransaction.description,
+							categorizationKeyword = bankTransaction.categorizationKeyword,
+						};
 					mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
 				}
 
@@ -226,9 +228,17 @@
 
 		private AmountInfo CurrencyXchg(YMoney coin, YDate date)
 		{
-			var oDate = date != null && date.date.HasValue ? date.date.Value : (DateTime?) null;
-			return coin.amount.HasValue ? _CurrencyConvertor.ConvertToBaseCurrency(coin.currencyCode, coin.amount.Value, oDate) 
-				: null;
+			try
+			{
+				var oDate = (date != null && date.date.HasValue) ? date.date.Value : (DateTime?)null;
+				return (coin != null && coin.amount.HasValue)
+						   ? _CurrencyConvertor.ConvertToBaseCurrency(coin.currencyCode, coin.amount.Value, oDate)
+						   : null;
+			}
+			catch
+			{
+				return null;
+			}
 		} // CurrencyXchg
 
 		#region method CalculateYodleeRunningBalance(
