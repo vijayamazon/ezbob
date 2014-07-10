@@ -52,10 +52,11 @@
 					);
 			}
 			// retrieve orders
+			List<string> directors;
 			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									databaseCustomerMarketPlace.Id,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,
-									() => Helper.GetAllYodleeOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace, isFirstTime: true));
+									() => Helper.GetAllYodleeOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace, true, out directors));
 
 			//calculate transactions aggregated data
 			var transactionsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,

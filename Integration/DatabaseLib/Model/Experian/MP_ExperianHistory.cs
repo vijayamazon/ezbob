@@ -6,7 +6,6 @@
 	using Database;
 	using Ezbob.Utils.Extensions;
 	using FluentNHibernate.Mapping;
-	using NHibernate.Mapping;
 	using NHibernate.Type;
 	using ApplicationMng.Repository;
 	using NHibernate;

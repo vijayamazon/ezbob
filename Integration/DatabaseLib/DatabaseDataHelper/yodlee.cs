@@ -95,32 +95,23 @@
 
 			foreach (var item in ordersData.Data.Keys)
 			{
+				var avaliableBalance = CurrencyXchg(item.availableBalance, item.asOfDate);
+				var currentBalance = CurrencyXchg(item.currentBalance, item.asOfDate);
+				var overdraftProtection = CurrencyXchg(item.overdraftProtection, item.asOfDate);
 				var mpOrderItem = new MP_YodleeOrderItem
 				{
 					Order = mpOrder,
 					isSeidFromDataSource = item.isSeidFromDataSource,
-					isSeidFromDataSourceSpecified = item.isSeidFromDataSourceSpecified,
 					isSeidMod = item.isSeidMod,
-					isSeidModSpecified = item.isSeidModSpecified,
 					acctTypeId = item.acctTypeId,
-					acctTypeIdSpecified = item.acctTypeIdSpecified,
 					acctType = item.acctType,
 					localizedAcctType = item.localizedAcctType,
 					srcElementId = item.srcElementId,
-					individualInformationId = item.individualInformationId,
-					individualInformationIdSpecified = item.individualInformationIdSpecified,
 					bankAccountId = item.bankAccountId,
-					bankAccountIdSpecified = item.bankAccountIdSpecified,
-					customName = item.customName,
-					customDescription = item.customDescription,
 					isDeleted = item.isDeleted,
-					isDeletedSpecified = item.isDeletedSpecified,
 					lastUpdated = item.lastUpdated,
-					lastUpdatedSpecified = item.lastUpdatedSpecified,
 					hasDetails = item.hasDetails,
-					hasDetailsSpecified = item.hasDetailsSpecified,
 					interestRate = item.interestRate,
-					interestRateSpecified = item.interestRateSpecified,
 					accountNumber = item.accountNumber,
 					link = item.link,
 					accountHolder = item.accountHolder,
@@ -130,64 +121,22 @@
 						(item.tranListFromDate != null && item.tranListFromDate.dateSpecified)
 							? item.tranListFromDate.date
 							: null,
-					availableBalance =
-						(item.availableBalance != null && item.availableBalance.amountSpecified)
-							? item.availableBalance.amount
-							: null,
-					availableBalanceCurrency =
-						(item.availableBalance != null && item.availableBalance.amountSpecified)
-							? item.availableBalance.currencyCode
-							: null,
-					currentBalance =
-						(item.currentBalance != null && item.currentBalance.amountSpecified)
-							? item.currentBalance.amount
-							: null,
-					currentBalanceCurrency =
-						(item.currentBalance != null && item.currentBalance.amountSpecified)
-							? item.currentBalance.currencyCode
-							: null,
-					interestEarnedYtd =
-						(item.interestEarnedYtd != null && item.interestEarnedYtd.amountSpecified)
-							? item.interestEarnedYtd.amount
-							: null,
-					interestEarnedYtdCurrency =
-						(item.interestEarnedYtd != null && item.interestEarnedYtd.amountSpecified)
-							? item.interestEarnedYtd.currencyCode
-							: null,
-					prevYrInterest =
-						(item.prevYrInterest != null && item.prevYrInterest.amountSpecified)
-							? item.prevYrInterest.amount
-							: null,
-					prevYrInterestCurrency =
-						(item.prevYrInterest != null && item.prevYrInterest.amountSpecified)
-							? item.prevYrInterest.currencyCode
-							: null,
-					overdraftProtection =
-						(item.overdraftProtection != null && item.overdraftProtection.amountSpecified)
-							? item.overdraftProtection.amount
-							: null,
-					overdraftProtectionCurrency =
-						(item.overdraftProtection != null && item.overdraftProtection.amountSpecified)
-							? item.overdraftProtection.currencyCode
-							: null,
-					term = item.term,
+					availableBalance = avaliableBalance != null ? avaliableBalance.Value : (double?)null,
+					availableBalanceCurrency = avaliableBalance != null ? avaliableBalance.CurrencyCode : null,
+					currentBalance = currentBalance != null ? currentBalance.Value : (double?)null,
+					currentBalanceCurrency = currentBalance != null ? currentBalance.CurrencyCode : null,
+					overdraftProtection = overdraftProtection!=null ? overdraftProtection.Value : (double?)null,
+					overdraftProtectionCurrency = overdraftProtection!= null ? overdraftProtection.CurrencyCode : null,
 					accountName = item.accountName,
-					annualPercentYield = item.annualPercentYield,
-					annualPercentYieldSpecified = item.annualPercentYieldSpecified,
 					routingNumber = item.routingNumber,
 					maturityDate =
 						(item.maturityDate != null && item.maturityDate.dateSpecified) ? item.maturityDate.date : null,
 					asOfDate =
 						(item.asOfDate != null && item.asOfDate.dateSpecified) ? item.asOfDate.date : mpOrder.Created,
-					accountNicknameAtSrcSite = item.accountNicknameAtSrcSite,
 					isPaperlessStmtOn = item.isPaperlessStmtOn,
-					isPaperlessStmtOnSpecified = item.isPaperlessStmtOnSpecified,
-					siteAccountStatusSpecified = item.siteAccountStatusSpecified,
 					siteAccountStatus = item.siteAccountStatus.ToString(),
 					accountClassification = item.accountClassification.ToString(),
 					created = item.created,
-					createdSpecified = item.createdSpecified,
-					nomineeName = item.nomineeName,
 					secondaryAccountHolderName = item.secondaryAccountHolderName,
 					accountOpenDate =
 						(item.accountOpenDate != null && item.accountOpenDate.dateSpecified)
@@ -197,128 +146,55 @@
 						(item.accountCloseDate != null && item.accountCloseDate.dateSpecified)
 							? item.accountCloseDate.date
 							: null,
-					maturityAmount =
-						(item.maturityAmount != null && item.maturityAmount.amountSpecified)
-							? item.maturityAmount.amount
-							: null,
-					maturityAmountCurrency =
-						(item.maturityAmount != null && item.maturityAmount.amountSpecified)
-							? item.maturityAmount.currencyCode
-							: null,
-					taxesWithheldYtd =
-						(item.taxesWithheldYtd != null && item.taxesWithheldYtd.amountSpecified)
-							? item.taxesWithheldYtd.amount
-							: null,
-					taxesWithheldYtdCurrency =
-						(item.taxesWithheldYtd != null && item.taxesWithheldYtd.amountSpecified)
-							? item.taxesWithheldYtd.currencyCode
-							: null,
-					taxesPaidYtd =
-						(item.taxesPaidYtd != null && item.taxesPaidYtd.amountSpecified) ? item.taxesPaidYtd.amount : null,
-					taxesPaidYtdCurrency =
-						(item.taxesPaidYtd != null && item.taxesPaidYtd.amountSpecified)
-							? item.taxesPaidYtd.currencyCode
-							: null,
-					budgetBalance =
-						(item.budgetBalance != null && item.budgetBalance.amountSpecified) ? item.budgetBalance.amount : null,
-					budgetBalanceCurrency =
-						(item.budgetBalance != null && item.budgetBalance.amountSpecified)
-							? item.budgetBalance.currencyCode
-							: null,
-					straightBalance =
-						(item.straightBalance != null && item.straightBalance.amountSpecified)
-							? item.straightBalance.amount
-							: null,
-					straightBalanceCurrency =
-						(item.straightBalance != null && item.straightBalance.amountSpecified)
-							? item.straightBalance.currencyCode
-							: null,
-					accountClassificationSpecified = item.accountClassificationSpecified,
 					itemAccountId = item.itemAccountId
 				};
 
 
 				foreach (var bankTransaction in ordersData.Data[item])
 				{
+					var date = bankTransaction.transactionDate;
+					if (bankTransaction.transactionDate == null || !bankTransaction.transactionDate.date.HasValue)
+					{
+						date = bankTransaction.postDate;
+					}
+					var runningBalance = CurrencyXchg(bankTransaction.runningBalance, date);
+					var calcRunningBalance = CurrencyXchg(bankTransaction.calcRunningBalance, date);
+					var transactionAmount = CurrencyXchg(bankTransaction.transactionAmount, date);
+
 					var orderBankTransaction = new MP_YodleeOrderItemBankTransaction
 					{
 						YodleeOrderItem = mpOrderItem,
 						isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
-						isSeidFromDataSourceSpecified = bankTransaction.isSeidFromDataSourceSpecified,
 						isSeidMod = bankTransaction.isSeidMod,
-						isSeidModSpecified = bankTransaction.isSeidModSpecified,
 						srcElementId = bankTransaction.srcElementId,
 						transactionTypeId = bankTransaction.transactionTypeId,
-						transactionTypeIdSpecified = bankTransaction.transactionTypeIdSpecified,
 						transactionType = bankTransaction.transactionType,
-						localizedTransactionType = bankTransaction.localizedTransactionType,
 						transactionStatusId = bankTransaction.transactionStatusId,
-						transactionStatusIdSpecified = bankTransaction.transactionStatusIdSpecified,
 						transactionStatus = bankTransaction.transactionStatus,
-						localizedTransactionStatus = bankTransaction.localizedTransactionStatus,
 						transactionBaseTypeId = bankTransaction.transactionBaseTypeId,
-						transactionBaseTypeIdSpecified = bankTransaction.transactionBaseTypeIdSpecified,
 						transactionBaseType = bankTransaction.transactionBaseType,
-						localizedTransactionBaseType = bankTransaction.localizedTransactionBaseType,
 						categoryId = bankTransaction.categoryId,
-						categoryIdSpecified = bankTransaction.categoryIdSpecified,
 						bankTransactionId = bankTransaction.bankTransactionId,
-						bankTransactionIdSpecified = bankTransaction.bankTransactionIdSpecified,
 						bankAccountId = bankTransaction.bankAccountId,
-						bankAccountIdSpecified = bankTransaction.bankAccountIdSpecified,
 						bankStatementId = bankTransaction.bankStatementId,
-						bankStatementIdSpecified = bankTransaction.bankStatementIdSpecified,
 						isDeleted = bankTransaction.isDeleted,
-						isDeletedSpecified = bankTransaction.isDeletedSpecified,
 						lastUpdated = bankTransaction.lastUpdated,
-						lastUpdatedSpecified = bankTransaction.lastUpdatedSpecified,
 						hasDetails = bankTransaction.hasDetails,
-						hasDetailsSpecified = bankTransaction.hasDetailsSpecified,
 						transactionId = bankTransaction.transactionId,
 						transactionCategory = _MP_YodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(bankTransaction.transactionCategoryId),
-						siteCategoryType = bankTransaction.siteCategoryType,
-						siteCategory = bankTransaction.siteCategory,
 						classUpdationSource = bankTransaction.classUpdationSource,
 						lastCategorised = bankTransaction.lastCategorised,
 						transactionDate =
 							(bankTransaction.transactionDate != null && bankTransaction.transactionDate.dateSpecified)
 								? bankTransaction.transactionDate.date
 								: null,
-						isReimbursable = bankTransaction.isReimbursable,
-						isReimbursableSpecified = bankTransaction.isReimbursableSpecified,
-						mcCode = bankTransaction.mcCode,
 						prevLastCategorised = bankTransaction.prevLastCategorised,
-						prevLastCategorisedSpecified = bankTransaction.prevLastCategorisedSpecified,
-						naicsCode = bankTransaction.naicsCode,
-						runningBalance =
-							(bankTransaction.runningBalance != null && bankTransaction.runningBalance.amountSpecified)
-								? bankTransaction.runningBalance.amount
-								: null,
-						runningBalanceCurrency =
-							(bankTransaction.runningBalance != null && bankTransaction.runningBalance.amountSpecified)
-								? bankTransaction.runningBalance.currencyCode
-								: null,
-						userDescription = bankTransaction.userDescription,
-						customCategoryId = bankTransaction.customCategoryId,
-						customCategoryIdSpecified = bankTransaction.customCategoryIdSpecified,
-						memo = bankTransaction.memo,
-						parentId = bankTransaction.parentId,
-						parentIdSpecified = bankTransaction.parentIdSpecified,
-						isOlbUserDesc = bankTransaction.isOlbUserDesc,
-						isOlbUserDescSpecified = bankTransaction.isOlbUserDescSpecified,
+						runningBalance = runningBalance != null ? runningBalance.Value : (double?) null,
+						runningBalanceCurrency = runningBalance != null? runningBalance.CurrencyCode : null,
 						categorisationSourceId = bankTransaction.categorisationSourceId,
 						plainTextDescription = bankTransaction.plainTextDescription,
-						splitType = bankTransaction.splitType,
-						categoryLevelId = bankTransaction.categoryLevelId,
-						categoryLevelIdSpecified = bankTransaction.categoryLevelIdSpecified,
-						calcRunningBalance =
-							(bankTransaction.calcRunningBalance != null && bankTransaction.calcRunningBalance.amountSpecified)
-								? bankTransaction.calcRunningBalance.amount
-								: null,
-						calcRunningBalanceCurrency =
-							(bankTransaction.calcRunningBalance != null && bankTransaction.calcRunningBalance.amountSpecified)
-								? bankTransaction.calcRunningBalance.currencyCode
-								: null,
+						calcRunningBalance = calcRunningBalance != null ? calcRunningBalance.Value : (double?)null,
+						calcRunningBalanceCurrency = calcRunningBalance != null ? calcRunningBalance.CurrencyCode : null,
 						category = bankTransaction.category,
 						link = bankTransaction.link,
 						postDate =
@@ -326,31 +202,13 @@
 								? bankTransaction.postDate.date
 								: null,
 						prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,
-						prevTransactionCategoryIdSpecified = bankTransaction.prevTransactionCategoryIdSpecified,
-						isBusinessExpense = bankTransaction.isBusinessExpense,
-						isBusinessExpenseSpecified = bankTransaction.isBusinessExpenseSpecified,
 						descriptionViewPref = bankTransaction.descriptionViewPref,
-						descriptionViewPrefSpecified = bankTransaction.descriptionViewPrefSpecified,
 						prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId,
-						prevCategorisationSourceIdSpecified = bankTransaction.prevCategorisationSourceIdSpecified,
-						transactionAmount =
-							(bankTransaction.transactionAmount != null && bankTransaction.transactionAmount.amountSpecified)
-								? bankTransaction.transactionAmount.amount
-								: null,
-						transactionAmountCurrency =
-							(bankTransaction.transactionAmount != null && bankTransaction.transactionAmount.amountSpecified)
-								? bankTransaction.transactionAmount.currencyCode
-								: null,
-						transactionPostingOrder = bankTransaction.transactionPostingOrder,
-						transactionPostingOrderSpecified = bankTransaction.transactionPostingOrderSpecified,
+						transactionAmount = transactionAmount != null ? transactionAmount.Value : (double?)null,
+						transactionAmountCurrency = transactionAmount != null ? transactionAmount.CurrencyCode : null,
 						checkNumber = bankTransaction.checkNumber,
 						description = bankTransaction.description,
-						isTaxDeductible = bankTransaction.isTaxDeductible,
-						isTaxDeductibleSpecified = bankTransaction.isTaxDeductibleSpecified,
-						isMedicalExpense = bankTransaction.isMedicalExpense,
-						isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified,
 						categorizationKeyword = bankTransaction.categorizationKeyword,
-						sourceTransactionType = bankTransaction.sourceTransactionType,
 					};
 					mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
 				}
@@ -365,6 +223,13 @@
 		}
 
 		#endregion method StoreYodleeOrdersData
+
+		private AmountInfo CurrencyXchg(YMoney coin, YDate date)
+		{
+			var oDate = date != null && date.date.HasValue ? date.date.Value : (DateTime?) null;
+			return coin.amount.HasValue ? _CurrencyConvertor.ConvertToBaseCurrency(coin.currencyCode, coin.amount.Value, oDate) 
+				: null;
+		} // CurrencyXchg
 
 		#region method CalculateYodleeRunningBalance(
 
@@ -470,8 +335,9 @@
 
 		#region method GetAllYodleeOrdersData
 
-		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime = false)
+		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, bool isFirstTime, out List<string> directors)
 		{
+			directors = new List<string>();
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
 			var orders = new YodleeOrderDictionary { Data = new Dictionary<BankData, List<BankTransactionData>>() };
@@ -492,7 +358,6 @@
 						acctType = item.acctType,
 						srcElementId = item.srcElementId,
 						bankAccountId = item.bankAccountId,
-						customDescription = item.customDescription,
 						isDeleted = item.isDeleted,
 						lastUpdated = item.lastUpdated,
 						accountNumber = item.accountNumber,
@@ -507,8 +372,9 @@
 					};
 
 					MP_CustomerMarketPlace mp;
-					List<string> directors;
-					List<MP_YodleeOrderItemBankTransaction> transactions = GetTransactions(databaseCustomerMarketPlace, item.srcElementId, out mp, out directors);
+					var directorsList = new List<string>();
+					List<MP_YodleeOrderItemBankTransaction> transactions = GetTransactions(databaseCustomerMarketPlace, item.srcElementId, out mp, out directorsList);
+					directors = directorsList;
 					if (!isFirstTime)
 					{
 						double currentBalance = item.currentBalance == null ? 0 : item.currentBalance.Value;
@@ -518,7 +384,7 @@
 
 						CalculateYodleeRunningBalance(mp,
 							item.srcElementId,
-							_CurrencyConvertor.ConvertToBaseCurrency(currentBalanceCurrency, currentBalance, item.asOfDate), transactions, directors);
+							_CurrencyConvertor.ConvertToBaseCurrency(currentBalanceCurrency, currentBalance, item.asOfDate), transactions, directorsList);
 					}
 
 
@@ -535,6 +401,8 @@
 							isSeidMod = bankTransaction.isSeidMod,
 							srcElementId = bankTransaction.srcElementId,
 							transactionStatusId = bankTransaction.transactionStatusId,
+							userDescription = bankTransaction.transactionCategory.Type, //userdesc used for category type
+							memo = bankTransaction.transactionCategory.Name, //memo used for category name
 							transactionStatus = bankTransaction.transactionStatus,
 							transactionBaseTypeId = bankTransaction.transactionBaseTypeId,
 							transactionBaseType = bankTransaction.transactionBaseType,
@@ -546,7 +414,6 @@
 								amount = bankTransaction.runningBalance,
 								currencyCode = bankTransaction.runningBalanceCurrency
 							},
-							memo = bankTransaction.memo,
 							siteCategoryType = bankTransaction.ezbobCategory != null ? bankTransaction.ezbobCategory.SubGroup : null,
 							siteCategory = bankTransaction.ezbobCategory != null ? bankTransaction.ezbobCategory.Group : null,
 							customCategoryId = bankTransaction.ezbobCategory != null ? bankTransaction.ezbobCategory.Priority : (long?)null,
@@ -556,8 +423,6 @@
 								amount = bankTransaction.transactionAmount,
 								currencyCode = bankTransaction.transactionAmountCurrency
 							},
-							transactionPostingOrder = bankTransaction.transactionPostingOrder,
-							transactionPostingOrderSpecified = bankTransaction.transactionPostingOrderSpecified,
 							checkNumber = bankTransaction.checkNumber,
 							description = bankTransaction.description,
 						})
