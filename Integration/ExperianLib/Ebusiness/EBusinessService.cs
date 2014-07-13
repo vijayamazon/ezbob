@@ -124,10 +124,10 @@
 
 		#region private
 
-		private bool CacheExpired(MP_ExperianDataCache cacheEntry)
+		private bool CacheExpired(DateTime updateDate)
 		{
 			int cacheIsValidForDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
-			return (DateTime.UtcNow - cacheEntry.LastUpdateDate).TotalDays > cacheIsValidForDays;
+			return (DateTime.UtcNow - updateDate).TotalDays > cacheIsValidForDays;
 		} // CacheNotExpired
 
 		#region method GetOneLimitedBusinessData
@@ -138,7 +138,7 @@
 			{
 				var response = CheckCache(regNumber);
 
-				if (forceCheck || (!checkInCacheOnly && (response == null || CacheExpired(response))))
+				if (forceCheck || (!checkInCacheOnly && (response == null || CacheExpired(response.LastUpdateDate))))
 				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.LimitedBusinessRequest.xml", regNumber);
 
@@ -199,37 +199,33 @@
 
 		#region method GetOneNotLimitedBusinessData
 
-		private NonLimitedResults GetOneNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
+		private NonLimitedResults GetOneNotLimitedBusinessData(string refNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
 		{
 			try 
 			{
-				var response = CheckCache(regNumber);
+				ExperianNonLimitedResults existingData = experianNonLimitedResultsRepository.GetAll().FirstOrDefault(r => r.CustomerId == customerId && r.RefNumber == refNumber);
 
-				if (forceCheck || (!checkInCacheOnly && (response == null || CacheExpired(response))))
+				if (forceCheck || (!checkInCacheOnly && (existingData == null || CacheExpired(existingData.Created))))
 				{
-					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", regNumber);
+					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", refNumber);
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
 
 					MP_ServiceLog serviceLogEntry = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
 
-					nonLimitedParser.ParseAndStore(customerId, newResponse, regNumber, serviceLogEntry.Id);
+					nonLimitedParser.ParseAndStore(customerId, newResponse, refNumber, serviceLogEntry.Id);
 
-					NonLimitedResults res = BuildResponseFromDb(customerId, regNumber);
-
-					AddToCache(regNumber, requestXml, res);
-
-					return res;
+					return BuildResponseFromDb(customerId, refNumber);
 				} // if
 
-				if (response == null)
+				if (existingData == null)
 				{
 					return null;
 				}
 
-				NonLimitedResults res1 = BuildResponseFromDb(customerId, regNumber);
-				res1.CacheHit = true;
-				return res1;
+				NonLimitedResults res = BuildResponseFromDb(customerId, refNumber);
+				res.CacheHit = true;
+				return res;
 			}
 			catch (Exception e) {
 				Log.Error(e);
