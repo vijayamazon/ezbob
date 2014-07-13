@@ -17,7 +17,6 @@
 	using ExperianLib.Dictionaries;
 	using ExperianLib.Ebusiness;
 	using ExperianLib.IdIdentityHub;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBobIntegration.Web_References.Consumer;
@@ -51,12 +50,13 @@
 			_session = session;
 			_customers = customers;
 			_experianHistoryRepository = experianHistoryRepository;
+			Errors = new List<string>();
 		}
 
 		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
 		{
 			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
-			var model = new CreditBureauModel();
+			var model = new CreditBureauModel { ErrorList = new List<string>()};
 			var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
 
 			//registered customer
@@ -71,7 +71,7 @@
 			{
 				ConsumerServiceResult result;
 				GetConsumerInfo(customer, getFromLog, logId, customerMainAddress, out result);
-				model = GenerateConsumerModel(customer.Id, result);
+				GenerateConsumerModel(model, customer.Id, result);
 				CreatePersonalDataModel(model, customer);
 				AppendAmlInfo(model.AmlInfo, customer, customerMainAddress);
 				AppendBavInfo(model.BavInfo, customer, customerMainAddress);
@@ -84,6 +84,8 @@
 				Log.DebugFormat("CreditBureauModel Create Exception {0} ", e);
 				model.ErrorList.Add(e.Message);
 			}
+
+			model.ErrorList.AddRange(Errors);
 			return model;
 		}
 
@@ -145,16 +147,14 @@
 				{
 					ConsumerServiceResult result;
 					GetConsumerInfo(customer, true, res.Id, null, out result);
-					var consumerModel = GenerateConsumerModel(customer.Id, result);
+					var consumerModel = model;
 					int cii = consumerModel.CII;
-					decimal balance;
-					decimal.TryParse(consumerModel.ConsumerAccountsOverview.Balance_Total, out balance);
 					checkConsumerHistoryModels.Add(new CheckHistoryModel
 						{
 							Id = res.Id,
 							Score = (int)consumerModel.Score,
 							CII = cii,
-							Balance = balance,
+							Balance = consumerModel.ConsumerAccountsOverview.Balance_Total,
 							Date = res.InsertDate
 						});
 				}
@@ -258,7 +258,6 @@
 			model.MiddleName = customer.PersonalInfo.MiddleInitial;
 			model.Surname = customer.PersonalInfo.Surname;
 			model.FullName = customer.PersonalInfo.Fullname;
-			model.CompanyName = string.Empty;
 
 			model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
 			model.ConsumerSummaryCharacteristics.DSRandOwnershipType = customer.PersonalInfo.ResidentialStatus;
@@ -280,11 +279,14 @@
 			_customers.Update(customer);
 		}
 
-		public CreditBureauModel GenerateConsumerModel(int id, ConsumerServiceResult eInfo)
+		public void GenerateConsumerModel(CreditBureauModel model, int id, ConsumerServiceResult eInfo)
 		{
+			model.ErrorList = model.ErrorList ?? new List<string>();
 			if (eInfo == null || eInfo.Data == null)
 			{
-				return new CreditBureauModel { HasExperianError = true, ErrorList = new List<string>{ "No data"}};
+				model.HasExperianError = true;
+				model.ErrorList.Add("No data");
+				return;
 			}
 			int score = eInfo.Data.BureauScore;
 			double odds = Math.Pow(2, ((double)score - 600) / 80);
@@ -314,28 +316,30 @@
 
 			Errors = new List<string>();
 
-			var model = new CreditBureauModel
-			{
-				Id = id,
-				HasExperianError = (eInfo != null) && eInfo.Data.HasExperianError,
-				ModelType = "Consumer",
-				CheckStatus = checkStatus,
-				CheckIcon = checkIcon,
-				ButtonStyle = buttonStyle,
-				CheckDate = checkDate.ToShortDateString(),
-				CheckValidity = checkValidity.ToShortDateString(),
-				BorrowerType = "Consumer",
-				Score = score,
-				Odds = odds,
-				ScorePosition = scorePosColor.Position,
-				ScoreAlign = scorePosColor.Align,
-				ScoreValuePosition = scorePosColor.ValPosition,
-				ScoreColor = scorePosColor.Color,
-				ApplicantFullName = string.Format("{0} {1} {2} {3}" ,eInfo.Data.Forename,eInfo.Data.MiddleName, eInfo.Data.Surname, eInfo.Data.DateOfBirth.HasValue ? (DateTime.UtcNow.Year - eInfo.Data.DateOfBirth.Value.Year).ToString() : ""),
-				ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics(),
-				ConsumerAccountsOverview = new ConsumerAccountsOverview(),
-				CII = eInfo.Data.CII
-			};
+
+			model.Id = id;
+			model.HasExperianError = eInfo.Data.HasExperianError;
+			model.ModelType = "Consumer";
+			model.CheckStatus = checkStatus;
+			model.CheckIcon = checkIcon;
+			model.ButtonStyle = buttonStyle;
+			model.CheckDate = checkDate.ToShortDateString();
+			model.CheckValidity = checkValidity.ToShortDateString();
+			model.BorrowerType = "Consumer";
+			model.Score = score;
+			model.Odds = odds;
+			model.ScorePosition = scorePosColor.Position;
+			model.ScoreAlign = scorePosColor.Align;
+			model.ScoreValuePosition = scorePosColor.ValPosition;
+			model.ScoreColor = scorePosColor.Color;
+			model.ApplicantFullName = string.Format("{0} {1} {2} {3}", eInfo.Data.Forename, eInfo.Data.MiddleName,
+			                                        eInfo.Data.Surname,
+			                                        eInfo.Data.DateOfBirth.HasValue
+				                                        ? (DateTime.UtcNow.Year - eInfo.Data.DateOfBirth.Value.Year).ToString()
+				                                        : "");
+			model.ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics();
+			model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
+			model.CII = eInfo.Data.CII;
 			if (!string.IsNullOrEmpty(eInfo.Data.Error))
 			{
 				model.ErrorList.AddRange(eInfo.Data.Error.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
@@ -362,34 +366,8 @@
 				
 				
 			};
-			model.ConsumerAccountsOverview =
-				new ConsumerAccountsOverview
-				{
-					OpenAccounts_CC = string.Empty,
-					WorstArrears_CC = string.Empty,
-					TotalCurLimits_CC = string.Empty,
-					Balance_CC = string.Empty,
-
-					OpenAccounts_PL = string.Empty,
-					WorstArrears_PL = string.Empty,
-					TotalCurLimits_PL = string.Empty,
-					Balance_PL = string.Empty,
-
-					OpenAccounts_Mtg = string.Empty,
-					WorstArrears_Mtg = string.Empty,
-					TotalCurLimits_Mtg = string.Empty,
-					Balance_Mtg = string.Empty,
-
-					OpenAccounts_Other = string.Empty,
-					WorstArrears_Other = string.Empty,
-					TotalCurLimits_Other = string.Empty,
-					Balance_Other = string.Empty,
-
-					OpenAccounts_Total = string.Empty,
-					WorstArrears_Total = string.Empty,
-					TotalCurLimits_Total = string.Empty,
-					Balance_Total = string.Empty
-				};
+			model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
+				
 			
 			var accList = new List<AccountInfo>();
 
@@ -426,8 +404,8 @@
 			// 0 - CC, 1 - Mortgage, 2 - PL, 3 - other
 			var accounts = new[] { 0, 0, 0, 0 };
 			var worstStatus = new[] { "0", "0", "0", "0" };
-			var limits = new[] { 0.0, 0.0, 0.0, 0.0 };
-			var balances = new[] { 0.0, 0.0, 0.0, 0.0 };
+			var limits = new[] { 0, 0, 0, 0 };
+			var balances = new[] { 0, 0, 0, 0 };
 			int numberOfDefaults = 0;
 			int defaultAmount = 0;
 			int numberOfLates = 0;
@@ -496,19 +474,19 @@
 								var ws = caisDetails.WorstStatus;
 								worstStatus[accType] = GetWorstStatus(worstStatus[accType], ws);
 
-								double limit = 0;
+								int limit = 0;
 								if ((caisDetails.CreditLimit != null) && (caisDetails.CreditLimit.Amount != null))
 								{
 									string l = caisDetails.CreditLimit.Amount.Replace("£", "");
-									double.TryParse(l, out limit);
+									int.TryParse(l, out limit);
 								}
 								limits[accType] += limit;
 
-								double balance = 0;
+								int balance = 0;
 								if ((caisDetails.Balance != null) && (caisDetails.Balance.Amount != null))
 								{
 									string b = caisDetails.Balance.Amount.Replace("£", "");
-									double.TryParse(b, out balance);
+									int.TryParse(b, out balance);
 								}
 								balances[accType] += balance;
 
@@ -599,7 +577,7 @@
 			catch (Exception e)
 			{
 				Errors.Add("Can`t read values for Financial Accounts");
-				Log.DebugFormat("Can`t read values for Financial Accounts {0}", e);
+				Log.Debug("Can`t read values for Financial Accounts", e);
 			}
 
 			model.ConsumerSummaryCharacteristics.NumberOfAccounts = numberOfAccounts;
@@ -614,34 +592,29 @@
 
 			model.AccountsInformation = accList.ToArray();
 
-			model.ConsumerAccountsOverview.OpenAccounts_CC = accounts[0].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.OpenAccounts_Mtg = accounts[1].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.OpenAccounts_PL = accounts[2].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.OpenAccounts_Other = accounts[3].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.OpenAccounts_Total = (accounts[0] + accounts[1] + accounts[2] + accounts[3]).ToString(CultureInfo.InvariantCulture);
+			model.ConsumerAccountsOverview.OpenAccounts_CC = accounts[0];
+			model.ConsumerAccountsOverview.OpenAccounts_Mtg = accounts[1];
+			model.ConsumerAccountsOverview.OpenAccounts_PL = accounts[2];
+			model.ConsumerAccountsOverview.OpenAccounts_Other = accounts[3];
+			model.ConsumerAccountsOverview.OpenAccounts_Total = accounts.Sum();
 
 			model.ConsumerAccountsOverview.WorstArrears_CC = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[0]);
 			model.ConsumerAccountsOverview.WorstArrears_Mtg = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[1]);
 			model.ConsumerAccountsOverview.WorstArrears_PL = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[2]);
 			model.ConsumerAccountsOverview.WorstArrears_Other = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[3]);
-			var totalWorst = "0";
-			totalWorst = GetWorstStatus(totalWorst, worstStatus[0]);
-			totalWorst = GetWorstStatus(totalWorst, worstStatus[1]);
-			totalWorst = GetWorstStatus(totalWorst, worstStatus[2]);
-			totalWorst = GetWorstStatus(totalWorst, worstStatus[3]);
-			model.ConsumerAccountsOverview.WorstArrears_Total = AccountStatusDictionary.GetDetailedAccountStatusString(totalWorst);
+			model.ConsumerAccountsOverview.WorstArrears_Total = AccountStatusDictionary.GetDetailedAccountStatusString(GetWorstStatus(worstStatus));
 
-			model.ConsumerAccountsOverview.TotalCurLimits_CC = limits[0].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.TotalCurLimits_Mtg = limits[1].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.TotalCurLimits_PL = limits[2].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.TotalCurLimits_Other = limits[3].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.TotalCurLimits_Total = (limits[0] + limits[1] + limits[2] + limits[3]).ToString(CultureInfo.InvariantCulture);
+			model.ConsumerAccountsOverview.TotalCurLimits_CC = limits[0];
+			model.ConsumerAccountsOverview.TotalCurLimits_Mtg = limits[1];
+			model.ConsumerAccountsOverview.TotalCurLimits_PL = limits[2];
+			model.ConsumerAccountsOverview.TotalCurLimits_Other = limits[3];
+			model.ConsumerAccountsOverview.TotalCurLimits_Total = limits.Sum();
 
-			model.ConsumerAccountsOverview.Balance_CC = balances[0].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.Balance_Mtg = balances[1].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.Balance_PL = balances[2].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.Balance_Other = balances[3].ToString(CultureInfo.InvariantCulture);
-			model.ConsumerAccountsOverview.Balance_Total = (balances[0] + balances[1] + balances[2] + balances[3]).ToString(CultureInfo.InvariantCulture);
+			model.ConsumerAccountsOverview.Balance_CC = balances[0];
+			model.ConsumerAccountsOverview.Balance_Mtg = balances[1];
+			model.ConsumerAccountsOverview.Balance_PL = balances[2];
+			model.ConsumerAccountsOverview.Balance_Other = balances[3];
+			model.ConsumerAccountsOverview.Balance_Total = balances.Sum();
 
 			var nocList = new List<NOCInfo>();
 			try
@@ -658,12 +631,7 @@
 			}
 			model.NOCs = nocList.ToArray();
 
-			if (eInfo.Data.HasExperianError)
-			{
-				model.ErrorList.AddRange(Errors);
-			}
 			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
-			return model;
 		}
 
 		private string ConvertAmount(string amountStr)
@@ -695,50 +663,69 @@
 
 		protected void AppendAmlInfo(AMLInfo data, Customer customer, CustomerAddress customerAddress)
 		{
-			var srv = new IdHubService();
-			var result = srv.Authenticate(customer.PersonalInfo.FirstName, string.Empty, customer.PersonalInfo.Surname,
-										  customer.PersonalInfo.Gender.ToString(),
-										  customer.PersonalInfo.DateOfBirth.HasValue ? customer.PersonalInfo.DateOfBirth.Value : DateTime.Now,
-										  customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
-										  customerAddress.Town, customerAddress.County, customerAddress.Postcode,
-										  customer.Id, true);
-			if (null == result)
-				return;
+			try
+			{
+				var srv = new IdHubService();
+				var result = srv.Authenticate(customer.PersonalInfo.FirstName, string.Empty, customer.PersonalInfo.Surname,
+				                              customer.PersonalInfo.Gender.ToString(),
+				                              customer.PersonalInfo.DateOfBirth.HasValue
+					                              ? customer.PersonalInfo.DateOfBirth.Value
+					                              : DateTime.Now,
+				                              customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
+				                              customerAddress.Town, customerAddress.County, customerAddress.Postcode,
+				                              customer.Id, true);
+				if (null == result)
+					return;
 
-			Log.DebugFormat("AML data for building model: {0} - {1}", result.AuthenticationIndexType, result.AuthIndexText);
-
-			data.AuthIndexText = customer.AmlDescription;
-			data.AuthenticationIndexType = customer.AmlScore;
-			data.NumPrimDataItems = result.NumPrimDataItems;
-			data.NumPrimDataSources = result.NumPrimDataSources;
-			data.NumSecDataItems = result.NumSecDataItems;
-			data.ReturnedHRPCount = result.ReturnedHRPCount;
-			data.StartDateOldestPrim = result.StartDateOldestPrim;
-			data.StartDateOldestSec = result.StartDateOldestSec;
+				Log.DebugFormat("AML data for building model: {0} - {1}", result.AuthenticationIndexType, result.AuthIndexText);
+				data.HasAML = true;
+				data.AuthIndexText = customer.AmlDescription;
+				data.AuthenticationIndexType = customer.AmlScore;
+				data.NumPrimDataItems = result.NumPrimDataItems;
+				data.NumPrimDataSources = result.NumPrimDataSources;
+				data.NumSecDataItems = result.NumSecDataItems;
+				data.ReturnedHRPCount = result.ReturnedHRPCount;
+				data.StartDateOldestPrim = result.StartDateOldestPrim;
+				data.StartDateOldestSec = result.StartDateOldestSec;
+			}
+			catch (Exception ex)
+			{
+				Log.Warn("AppendAmlInfo failed", ex);
+				Errors.Add("Failed to retrieve AML info");
+			}
 		}
 
 		protected void AppendBavInfo(BankAccountVerificationInfo data, Customer customer, CustomerAddress customerAddress)
 		{
-			var srv = new IdHubService();
+			try
+			{
+				var srv = new IdHubService();
 
-			var bankAccount = customer.BankAccount;
-			var result = srv.AccountVerification(customer.PersonalInfo.FirstName, string.Empty,
-												 customer.PersonalInfo.Surname,
-												 customer.PersonalInfo.Gender.ToString(),
-												 customer.PersonalInfo.DateOfBirth.HasValue
-													 ? customer.PersonalInfo.DateOfBirth.Value
-													 : DateTime.Now,
-												 customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
-												 customerAddress.Town, customerAddress.County, customerAddress.Postcode,
-												 bankAccount != null ? bankAccount.SortCode : "",
-												 bankAccount != null ? bankAccount.AccountNumber : "",
-												 customer.Id, true);
-			if (null == result)
-				return;
-			data.AddressScore = result.AddressScore;
-			data.NameScore = result.NameScore;
-			data.AuthenticationText = result.AuthenticationText;
-			data.AccountStatus = result.AccountStatus;
+				var bankAccount = customer.BankAccount;
+				var result = srv.AccountVerification(customer.PersonalInfo.FirstName, string.Empty,
+				                                     customer.PersonalInfo.Surname,
+				                                     customer.PersonalInfo.Gender.ToString(),
+				                                     customer.PersonalInfo.DateOfBirth.HasValue
+					                                     ? customer.PersonalInfo.DateOfBirth.Value
+					                                     : DateTime.Now,
+				                                     customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
+				                                     customerAddress.Town, customerAddress.County, customerAddress.Postcode,
+				                                     bankAccount != null ? bankAccount.SortCode : "",
+				                                     bankAccount != null ? bankAccount.AccountNumber : "",
+				                                     customer.Id, true);
+				if (null == result)
+					return;
+				data.HasBWA = true;
+				data.AddressScore = result.AddressScore;
+				data.NameScore = result.NameScore;
+				data.AuthenticationText = result.AuthenticationText;
+				data.AccountStatus = result.AccountStatus;
+			}
+			catch (Exception ex)
+			{
+				Log.Warn("AppendBavInfo failed", ex);
+				Errors.Add("Failed to retrieve BWA info");
+			}
 		}
 
 
@@ -949,7 +936,8 @@
 												director.DateOfBirth, null, dirLoc, "PL", customer.Id, director.Id, true, true, false);
 				}
 
-				var dirModel = GenerateConsumerModel(-1, result);
+				var dirModel = new CreditBureauModel();
+				GenerateConsumerModel(dirModel, -1, result);
 				dirModel.Name = director.Name;
 				dirModel.MiddleName = director.Middle;
 				dirModel.Surname = director.Surname;
@@ -976,34 +964,6 @@
 			return loc;
 		}
 
-		private static int GetScoreFromXml(String xml)
-		{
-			try
-			{
-				var doc = XDocument.Parse(xml);
-				var score = doc.XPathSelectElement("//PremiumValueData/Scoring/E5S051").Value;
-				return Convert.ToInt32(score);
-			}
-			catch (Exception)
-			{
-				return -1;
-			}
-		}
-
-		private static int GetCIIFromXml(string xml)
-		{
-			try
-			{
-				var doc = XDocument.Parse(xml);
-				var cii = doc.XPathSelectElement("//PremiumValueData/CII/NDSPCII").Value;
-				return Convert.ToInt32(cii);
-			}
-			catch (Exception)
-			{
-				return -1;
-			}
-		}
-
 		private static int GetNonLimitedScoreFromXml(string xml)
 		{
 			try
@@ -1018,22 +978,7 @@
 				return -1;
 			}
 		}
-
-		private static int GetLimitedScoreFromXml(string xml)
-		{
-			try
-			{
-				var doc = XDocument.Parse(xml);
-				var score = doc.XPathSelectElement("//REQUEST/DL76/RISKSCORE").Value;
-				return Convert.ToInt32(score);
-			}
-			catch (Exception ex)
-			{
-				Log.WarnFormat("Failed to retrieve limited score from xml {0}", ex);
-				return -1;
-			}
-		}
-
+		
 		public static DelphiModel GetScorePositionAndColor(double score, int scoreMax, int scoreMin)
 		{
 			const int w = 640;
@@ -1120,22 +1065,8 @@
 			};
 		}
 
-		private void TryRead(Action a, string key)
-		{
-			try
-			{
-				a();
-			}
-			catch
-			{
-				Errors.Add("Can't read value for: " + key);
-			}
-		}
-
-		protected List<string> Errors = new List<string>();
-
 		protected static List<string> StatusScale = new List<string> { "D", "U", "S", "?", "0", "1", "2", "3", "4", "5", "6", "8", "9" };
-
+		protected List<string> Errors { get; set; }
 		public static string GetWorstStatus(params string[] s)
 		{
 			var scales = s.Select(str => new { str, status = StatusScale.IndexOf(str) });

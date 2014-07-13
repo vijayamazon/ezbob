@@ -3,6 +3,7 @@ using EzBobIntegration.Web_References.Consumer;
 
 namespace ExperianLib
 {
+	using System.Globalization;
 	using EZBob.DatabaseLib.Model.Experian;
 	using Newtonsoft.Json;
 
@@ -38,7 +39,10 @@ namespace ExperianLib
 				TryRead(() => data.MiddleName = applicant.Name.MiddleName, "MiddleName");
 				TryRead(() => data.Surname = applicant.Name.Surname, "Surname");
 				TryRead(() => data.Suffix = applicant.Name.Suffix, "Suffix");
-				TryRead(() => data.DateOfBirth = new DateTime(int.Parse(applicant.DateOfBirth.CCYY.ToString()),int.Parse(applicant.DateOfBirth.MM.ToString()),int.Parse(applicant.DateOfBirth.DD.ToString())), "DateOfBirth");
+				TryRead(() => data.DateOfBirth = new DateTime(
+					int.Parse(applicant.DateOfBirth.CCYY.ToString(CultureInfo.InvariantCulture)),
+					int.Parse(applicant.DateOfBirth.MM.ToString(CultureInfo.InvariantCulture)),
+					int.Parse(applicant.DateOfBirth.DD.ToString(CultureInfo.InvariantCulture))), "DateOfBirth");
 				TryRead(() => data.Gender = applicant.Gender, "Gender");
 			}
 

@@ -21,7 +21,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 		public bool IsError
 		{
-			get { return ErrorList.Count > 0; }
+			get { return ErrorList != null && ErrorList.Count > 0; }
 		}
 
 		public List<string> ErrorList { get; set; }
@@ -93,26 +93,26 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	public class ConsumerAccountsOverview
 	{
-		public string OpenAccounts_CC { get; set; } // done
+		public int OpenAccounts_CC { get; set; } // done
 		public string WorstArrears_CC { get; set; } // done
-		public string TotalCurLimits_CC { get; set; } // done
-		public string Balance_CC { get; set; } // done
-		public string OpenAccounts_Mtg { get; set; } // done
+		public int TotalCurLimits_CC { get; set; } // done
+		public int Balance_CC { get; set; } // done
+		public int OpenAccounts_Mtg { get; set; } // done
 		public string WorstArrears_Mtg { get; set; } // done
-		public string TotalCurLimits_Mtg { get; set; } // done
-		public string Balance_Mtg { get; set; } // done
-		public string OpenAccounts_PL { get; set; } // done
+		public int TotalCurLimits_Mtg { get; set; } // done
+		public int Balance_Mtg { get; set; } // done
+		public int OpenAccounts_PL { get; set; } // done
 		public string WorstArrears_PL { get; set; } // done
-		public string TotalCurLimits_PL { get; set; } // done
-		public string Balance_PL { get; set; } // done
-		public string OpenAccounts_Other { get; set; } // done
+		public int TotalCurLimits_PL { get; set; } // done
+		public int Balance_PL { get; set; } // done
+		public int OpenAccounts_Other { get; set; } // done
 		public string WorstArrears_Other { get; set; } // done
-		public string TotalCurLimits_Other { get; set; } // done
-		public string Balance_Other { get; set; } // done
-		public string OpenAccounts_Total { get; set; } // done
+		public int TotalCurLimits_Other { get; set; } // done
+		public int Balance_Other { get; set; } // done
+		public int OpenAccounts_Total { get; set; } // done
 		public string WorstArrears_Total { get; set; } // done
-		public string TotalCurLimits_Total { get; set; } // done
-		public string Balance_Total { get; set; } // done
+		public int TotalCurLimits_Total { get; set; } // done
+		public int Balance_Total { get; set; } // done
 	}
 
 	public class AccountInfo
@@ -160,6 +160,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	public class AMLInfo
 	{
+		public bool HasAML { get; set; }
 		public string AMLResult { get; set; }
 		public decimal AuthenticationIndexType { get; set; }
 		public string AuthIndexText { get; set; }
@@ -173,6 +174,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	public class BankAccountVerificationInfo
 	{
+		public bool HasBWA { get; set; }
 		public string BankAccountVerificationResult { get; set; }
 		public string AuthenticationText { get; set; }
 		public string AccountStatus { get; set; }
@@ -215,9 +217,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public int MostrecentCCJ { get; set; }
 		public string DSRandownershiptype { get; set; }
 		public int Creditcardutilization { get; set; }
-		public double Enquiriesinlast6months { get; set; }
-		public double Enquiriesinlast3months { get; set; }
-		public string Totalbalance { get; set; }
+		public int Enquiriesinlast6months { get; set; }
+		public int Enquiriesinlast3months { get; set; }
+		public int Totalbalance { get; set; }
 		public string AML { get; set; }
 		public string AMLnum { get; set; }
 		public string BWA { get; set; }

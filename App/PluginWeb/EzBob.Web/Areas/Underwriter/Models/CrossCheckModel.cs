@@ -76,16 +76,12 @@
 				ConsumerServiceResult result;
 				CreditBureauModelBuilder creditBureauModelBuilder = ObjectFactory.GetInstance<CreditBureauModelBuilder>();
 				creditBureauModelBuilder.GetConsumerInfo(customer, false, null, currentAddress, out result);
-				var experian = creditBureauModelBuilder.GenerateConsumerModel(customer.Id, result);
-				if (experian != null && experian.ConsumerAccountsOverview != null)
+				var expModel = new CreditBureauModel();
+				creditBureauModelBuilder.GenerateConsumerModel(expModel, customer.Id, result);
+				if (expModel != null && expModel.ConsumerAccountsOverview != null)
 				{
-					int mtg;
-					int.TryParse(experian.ConsumerAccountsOverview.Balance_Mtg, out mtg);
-					mortgageBalance = mtg;
-
-					int mtgCount;
-					int.TryParse(experian.ConsumerAccountsOverview.OpenAccounts_Mtg, out mtgCount);
-					mortgageCount = mtgCount;
+					mortgageBalance = expModel.ConsumerAccountsOverview.Balance_Mtg;
+					mortgageCount = expModel.ConsumerAccountsOverview.OpenAccounts_Mtg;
 				}
 			}
 			catch { }

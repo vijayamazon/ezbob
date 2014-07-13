@@ -219,18 +219,20 @@
                         </table>
                     </div>
                 </div>
-                <div class="row-fluid">
-                    <div class="span6 control-group form-horizontal">
-                        @InputTextSmallReadOnly("aml-prim-items", "Data items", "<%- experianInfo.AmlInfo.NumPrimDataItems %>")
-                        @InputTextSmallReadOnly("aml-prim-srcs", "Data sources", "<%- experianInfo.AmlInfo.NumPrimDataSources %>")
-                        @InputTextSmallReadOnly("aml-prim-date", "From date", "<%- experianInfo.AmlInfo.StartDateOldestPrim %>")
+                    <% if (experianInfo.AmlInfo.HasAML) {%>
+                    <div class="row-fluid">
+                        <div class="span6 control-group form-horizontal">
+                            @InputTextSmallReadOnly("aml-prim-items", "Data items", "<%- experianInfo.AmlInfo.NumPrimDataItems %>")
+                            @InputTextSmallReadOnly("aml-prim-srcs", "Data sources", "<%- experianInfo.AmlInfo.NumPrimDataSources %>")
+                            @InputTextSmallReadOnly("aml-prim-date", "From date", "<%- experianInfo.AmlInfo.StartDateOldestPrim %>")
+                        </div>
+                        <div class="span6 control-group form-horizontal">
+                            @InputTextSmallReadOnly("aml-sec-items", "Sec items", "<%- experianInfo.AmlInfo.NumSecDataItems %>")
+                            @InputTextSmallReadOnly("aml-sec-date", "Sec date", "<%- experianInfo.AmlInfo.StartDateOldestSec %>")
+                            @InputTextSmallReadOnly("aml-hrp-count", "HRP", "<%- experianInfo.AmlInfo.ReturnedHRPCount %>")
+                        </div>
                     </div>
-                    <div class="span6 control-group form-horizontal">
-                        @InputTextSmallReadOnly("aml-sec-items", "Sec items", "<%- experianInfo.AmlInfo.NumSecDataItems %>")
-                        @InputTextSmallReadOnly("aml-sec-date", "Sec date", "<%- experianInfo.AmlInfo.StartDateOldestSec %>")
-                        @InputTextSmallReadOnly("aml-hrp-count", "HRP", "<%- experianInfo.AmlInfo.ReturnedHRPCount %>")
-                    </div>
-                </div>
+                    <%}%>
                 <% } else { %>
                 <div class="row-fluid">
                     <div class="span6">
@@ -253,13 +255,15 @@
                         </table>
                     </div>
                 </div>
-                <div class="row-fluid">
-                    <div class="span6 control-group form-horizontal">
-                        @InputTextSmallReadOnly("bav-name-score", "Name score", "<%- experianInfo.BavInfo.NameScore %>")
-                        @InputTextSmallReadOnly("bav-addr-srcs", "Address score", "<%- experianInfo.BavInfo.AddressScore %>")
-                        @InputTextSmallReadOnly("bav-status", "Status", "<%- experianInfo.BavInfo.AccountStatus %>")
+                    <% if (experianInfo.BavInfo.HasBWA) {%>
+                    <div class="row-fluid">
+                        <div class="span6 control-group form-horizontal">
+                            @InputTextSmallReadOnly("bav-name-score", "Name score", "<%- experianInfo.BavInfo.NameScore %>")
+                            @InputTextSmallReadOnly("bav-addr-srcs", "Address score", "<%- experianInfo.BavInfo.AddressScore %>")
+                            @InputTextSmallReadOnly("bav-status", "Status", "<%- experianInfo.BavInfo.AccountStatus %>")
+                        </div>
                     </div>
-                </div>
+                    <%}%>
                 <% } else { %>
                 <div class="row-fluid">
                     <div class="span6">
@@ -302,10 +306,10 @@
                                 @RawCell("Enquiries in last 6 months", "<%- experianInfo.ConsumerSummaryCharacteristics.EnquiriesLast6M %>")
                                 @RawCell("Credit card utilization", "<%- experianInfo.ConsumerSummaryCharacteristics.CreditCardUtilization %>")
                                 @RawCell("DSR and ownership type", "<%- experianInfo.ConsumerSummaryCharacteristics.DSRandOwnershipType %>")
-                                @RawCell("Has NOCs on CCJ", "<%- experianInfo.ConsumerSummaryCharacteristics.NOCsOnCCJ %>")
-                                @RawCell("Has NOCs on CAIS", "<%- experianInfo.ConsumerSummaryCharacteristics.NOCsOnCAIS %>")
+                                @RawCell("Has NOCs on CCJ", "<%- experianInfo.ConsumerSummaryCharacteristics.NOCsOnCCJ ? 'Yes' : 'No' %>")
+                                @RawCell("Has NOCs on CAIS", "<%- experianInfo.ConsumerSummaryCharacteristics.NOCsOnCAIS  ? 'Yes' : 'No' %>")
                                 @RawCell("CAIS Special Instruction Flag", "<%- experianInfo.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag %>")
-                                @RawCell("Satisfied judgements", "<%- experianInfo.ConsumerSummaryCharacteristics.SatisfiedJudgements %>")
+                                @RawCell("Satisfied judgements", "<%- experianInfo.ConsumerSummaryCharacteristics.SatisfiedJudgements  ? 'Yes' : 'No' %>")
                             </tbody>
                         </table>
                     </div>
@@ -336,29 +340,29 @@
                                          "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_CC %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_CC %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_CC %>",
-                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_CC %>")
+                                         "<%- EzBob.formatPoundsAsInt(experianInfo.ConsumerAccountsOverview.Balance_CC) %>")
                                 @RawCell("Mortgages",
                                          "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Mtg %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Mtg %>",
-                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_Mtg %>")
+                                         "<%- EzBob.formatPoundsAsInt(experianInfo.ConsumerAccountsOverview.Balance_Mtg) %>")
                                 @RawCell("Personal Loans",
                                          "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_PL %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_PL %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_PL %>",
-                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_PL %>")
+                                         "<%- EzBob.formatPoundsAsInt(experianInfo.ConsumerAccountsOverview.Balance_PL) %>")
                                 @RawCell("Other",
                                          "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Other %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Other %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Other %>",
-                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_Other %>")
+                                         "<%- EzBob.formatPoundsAsInt(experianInfo.ConsumerAccountsOverview.Balance_Other) %>")
                             </tbody>
                             <tfoot>
                                 @RawCell("Total",
                                          "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Total %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Total %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Total %>",
-                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_Total %>")
+                                         "<%- EzBob.formatPoundsAsInt(experianInfo.ConsumerAccountsOverview.Balance_Total) %>")
                             </tfoot>
                         </table>
                     </div>
@@ -605,10 +609,10 @@
                                         @RawCell("Enquiries in last 6 months", "<%- model.ConsumerSummaryCharacteristics.EnquiriesLast6M %>")
                                         @RawCell("Credit card utilization", "<%- model.ConsumerSummaryCharacteristics.CreditCardUtilization %>")
                                         @RawCell("DSR and ownership type", "<%- model.ConsumerSummaryCharacteristics.DSRandOwnershipType %>")
-                                        @RawCell("Has NOCs on CCJ", "<%- model.ConsumerSummaryCharacteristics.NOCsOnCCJ %>")
-                                        @RawCell("Has NOCs on CAIS", "<%- model.ConsumerSummaryCharacteristics.NOCsOnCAIS %>")
+                                        @RawCell("Has NOCs on CCJ", "<%- model.ConsumerSummaryCharacteristics.NOCsOnCCJ  ? 'Yes' : 'No' %>")
+                                        @RawCell("Has NOCs on CAIS", "<%- model.ConsumerSummaryCharacteristics.NOCsOnCAIS  ? 'Yes' : 'No' %>")
                                         @RawCell("CAIS Special Instruction Flag", "<%- model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag %>")
-                                        @RawCell("Satisfied judgements", "<%- model.ConsumerSummaryCharacteristics.SatisfiedJudgements %>")
+                                        @RawCell("Satisfied judgements", "<%- model.ConsumerSummaryCharacteristics.SatisfiedJudgements ? 'Yes' : 'No' %>")
                                     </tbody>
                                 </table>
                             </div>
@@ -640,29 +644,29 @@
                                                 "<%- model.ConsumerAccountsOverview.OpenAccounts_CC %>",
                                                 "<%- model.ConsumerAccountsOverview.WorstArrears_CC %>",
                                                 "<%- model.ConsumerAccountsOverview.TotalCurLimits_CC %>",
-                                                "<%- model.ConsumerAccountsOverview.Balance_CC %>")
+                                                "<%- EzBob.formatPoundsAsInt(model.ConsumerAccountsOverview.Balance_CC) %>")
                                         @RawCell("Mortgages",
                                                 "<%- model.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
                                                 "<%- model.ConsumerAccountsOverview.WorstArrears_Mtg %>",
                                                 "<%- model.ConsumerAccountsOverview.TotalCurLimits_Mtg %>",
-                                                "<%- model.ConsumerAccountsOverview.Balance_Mtg %>")
+                                                "<%- EzBob.formatPoundsAsInt(model.ConsumerAccountsOverview.Balance_Mtg) %>")
                                         @RawCell("Personal Loans",
                                                 "<%- model.ConsumerAccountsOverview.OpenAccounts_PL %>",
                                                 "<%- model.ConsumerAccountsOverview.WorstArrears_PL %>",
                                                 "<%- model.ConsumerAccountsOverview.TotalCurLimits_PL %>",
-                                                "<%- model.ConsumerAccountsOverview.Balance_PL %>")
+                                                "<%- EzBob.formatPoundsAsInt(model.ConsumerAccountsOverview.Balance_PL) %>")
                                         @RawCell("Other",
                                                 "<%- model.ConsumerAccountsOverview.OpenAccounts_Other %>",
                                                 "<%- model.ConsumerAccountsOverview.WorstArrears_Other %>",
                                                 "<%- model.ConsumerAccountsOverview.TotalCurLimits_Other %>",
-                                                "<%- model.ConsumerAccountsOverview.Balance_Other %>")
+                                                "<%- EzBob.formatPoundsAsInt(model.ConsumerAccountsOverview.Balance_Other) %>")
                                     </tbody>
                                     <tfoot>
                                         @RawCell("Total",
                                                 "<%- model.ConsumerAccountsOverview.OpenAccounts_Total %>",
                                                 "<%- model.ConsumerAccountsOverview.WorstArrears_Total %>",
                                                 "<%- model.ConsumerAccountsOverview.TotalCurLimits_Total %>",
-                                                "<%- model.ConsumerAccountsOverview.Balance_Total %>")
+                                                "<%- EzBob.formatPoundsAsInt(model.ConsumerAccountsOverview.Balance_Total) %>")
                                     </tfoot>
                                 </table>
                             </div>
@@ -987,7 +991,7 @@
                     @RawCell("Credit card utilization", "<%- experianInfo.Summary.Creditcardutilization  %>")
                     @RawCell("Enquiries in last 6 months", "<%- experianInfo.Summary.Enquiriesinlast6months  %>")
                     @RawCell("Enquiries in last 3 months", "<%- experianInfo.Summary.Enquiriesinlast3months  %>")
-                    @RawCell("Total balance", "<%- experianInfo.Summary.Totalbalance  %>")
+                    @RawCell("Total balance", "<%- EzBob.formatPoundsAsInt(experianInfo.Summary.Totalbalance)  %>")
                 </tbody>
             </table>
         </div>
@@ -1029,23 +1033,23 @@
                     @RawCell("Credit Cards",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_CC %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_CC %>",
-                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_CC %>")
+                             "<%- EzBob.formatPoundsAsInt(experianInfo.Summary.ConsumerAccountsOverview.Balance_CC) %>")
                     @RawCell("Mortgages",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Mtg %>",
-                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Mtg %>")
+                             "<%- EzBob.formatPoundsAsInt(experianInfo.Summary.ConsumerAccountsOverview.Balance_Mtg) %>")
                     @RawCell("Personal Loans",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_PL %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_PL %>",
-                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_PL %>")
+                             "<%- EzBob.formatPoundsAsInt(experianInfo.Summary.ConsumerAccountsOverview.Balance_PL) %>")
                     @RawCell("Other",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Other %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Other %>",
-                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Other %>")
+                             "<%- EzBob.formatPoundsAsInt(experianInfo.Summary.ConsumerAccountsOverview.Balance_Other) %>")
                     @RawCell("Total",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Total %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Total %>",
-                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Total %>")
+                             "<%- EzBob.formatPoundsAsInt(experianInfo.Summary.ConsumerAccountsOverview.Balance_Total) %>")
                 </tbody>
             </table>
         </div>
