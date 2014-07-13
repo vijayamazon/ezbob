@@ -15,7 +15,7 @@
 		} // IsError
 
 		public string Error { get; set; }
-		public DateTime? LastCheckDate { get; protected set; }
+		public DateTime? LastCheckDate { get; set; }
 		public bool IsDataExpired { get; set; }
 		public string OutputXml { get; private set; }
 
@@ -31,7 +31,7 @@
 		public string AddressLine5 { get; set; }
 		public string PostCode { get; set; }
 
-		public DateTime? IncorporationDate { get; protected set; }
+		public DateTime? IncorporationDate { get; set; }
 		public bool CacheHit { get; set; }
 
 		public abstract bool IsLimited { get; }

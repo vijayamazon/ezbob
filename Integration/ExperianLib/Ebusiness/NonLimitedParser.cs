@@ -44,6 +44,7 @@
 			int sumOfCcjsInLast24Months = 0;
 			int sumOfAssociatedCcjsInLast24Months = 0;
 			var scoreHistory = new List<Tuple<DateTime?, int>>();
+			string errors = string.Empty;
 			
 			var xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(xml);
@@ -136,6 +137,15 @@
 				sumOfAssociatedCcjsInLast24Months = GetIntValueOrDefault(dn14Node, "ATOTJUDGVALUELST24MNTHS");
 			}
 
+			XmlNodeList errorMessagesNodes = xmlDoc.SelectNodes("//REQUEST/ERR1/MESSAGE");
+			if (errorMessagesNodes != null)
+			{
+				foreach (XmlNode errorMessagesNode in errorMessagesNodes)
+				{
+					errors += errorMessagesNode.InnerText + Environment.NewLine;
+				}
+			}
+
 			DataTable dt = db.ExecuteReader(
 				"InsertNonLimitedResult",
 				CommandSpecies.StoredProcedure,
@@ -162,7 +172,8 @@
 				new QueryParameter("NumOfCcjsInLast24Months", numOfCcjsInLast24Months),
 				new QueryParameter("NumOfAssociatedCcjsInLast24Months", numOfAssociatedCcjsInLast24Months),
 				new QueryParameter("SumOfCcjsInLast24Months", sumOfCcjsInLast24Months),
-				new QueryParameter("SumOfAssociatedCcjsInLast24Months", sumOfAssociatedCcjsInLast24Months)
+				new QueryParameter("SumOfAssociatedCcjsInLast24Months", sumOfAssociatedCcjsInLast24Months),
+				new QueryParameter("Errors", errors)
 			);
 
 			if (dt.Rows.Count == 1)

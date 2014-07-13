@@ -26,7 +26,8 @@ ALTER PROCEDURE InsertNonLimitedResult
 	 @NumOfCcjsInLast24Months INT,
 	 @NumOfAssociatedCcjsInLast24Months INT,
 	 @SumOfCcjsInLast24Months INT,
-	 @SumOfAssociatedCcjsInLast24Months INT)
+	 @SumOfAssociatedCcjsInLast24Months INT,
+	 @Errors NVARCHAR(MAX))
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -34,9 +35,9 @@ BEGIN
 	UPDATE ExperianNonLimitedResults SET IsActive = 0 WHERE CustomerId = @CustomerId AND RefNumber = @RefNumber
 	
 	INSERT INTO ExperianNonLimitedResults
-		(CustomerId, RefNumber, ServiceLogId, Created, BusinessName, Address1, Address2, Address3, Address4, Address5, Postcode, IncorporationDate, RiskScore, Score, CreditLimit, AgeOfMostRecentCcj, NumOfCcjsInLast12Months, NumOfCcjsIn13To24Months, SumOfCcjsInLast12Months, SumOfCcjsIn13To24Months, NumOfCcjsInLast24Months, NumOfAssociatedCcjsInLast24Months, SumOfCcjsInLast24Months, SumOfAssociatedCcjsInLast24Months, IsActive)
+		(CustomerId, RefNumber, ServiceLogId, Created, BusinessName, Address1, Address2, Address3, Address4, Address5, Postcode, IncorporationDate, RiskScore, Score, CreditLimit, AgeOfMostRecentCcj, NumOfCcjsInLast12Months, NumOfCcjsIn13To24Months, SumOfCcjsInLast12Months, SumOfCcjsIn13To24Months, NumOfCcjsInLast24Months, NumOfAssociatedCcjsInLast24Months, SumOfCcjsInLast24Months, SumOfAssociatedCcjsInLast24Months, IsActive, Errors)
 	VALUES
-		(@CustomerId, @RefNumber, @ServiceLogId, @Created, @BusinessName, @Address1, @Address2, @Address3, @Address4, @Address5, @Postcode,	@IncorporationDate, @RiskScore, @Score, @CreditLimit, @AgeOfMostRecentCcj, @NumOfCcjsInLast12Months, @NumOfCcjsIn13To24Months, @SumOfCcjsInLast12Months, @SumOfCcjsIn13To24Months, @NumOfCcjsInLast24Months, @NumOfAssociatedCcjsInLast24Months, @SumOfCcjsInLast24Months, @SumOfAssociatedCcjsInLast24Months, 1)
+		(@CustomerId, @RefNumber, @ServiceLogId, @Created, @BusinessName, @Address1, @Address2, @Address3, @Address4, @Address5, @Postcode,	@IncorporationDate, @RiskScore, @Score, @CreditLimit, @AgeOfMostRecentCcj, @NumOfCcjsInLast12Months, @NumOfCcjsIn13To24Months, @SumOfCcjsInLast12Months, @SumOfCcjsIn13To24Months, @NumOfCcjsInLast24Months, @NumOfAssociatedCcjsInLast24Months, @SumOfCcjsInLast24Months, @SumOfAssociatedCcjsInLast24Months, 1, @Errors)
 		
 	SELECT @@IDENTITY AS NewId
 END

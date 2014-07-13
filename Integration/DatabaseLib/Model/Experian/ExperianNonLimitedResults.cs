@@ -34,6 +34,7 @@
 		public virtual int NumOfAssociatedCcjsInLast24Months { get; set; }
 		public virtual int SumOfCcjsInLast24Months { get; set; }
 		public virtual int SumOfAssociatedCcjsInLast24Months { get; set; }
+		public virtual string Errors { get; set; }
 		public virtual bool IsActive { get; set; }
 
 		public virtual ISet<ExperianNonLimitedResultsScoreHistory> HistoryScores { get; set; }
@@ -74,6 +75,7 @@
 			Map(x => x.NumOfAssociatedCcjsInLast24Months);
 			Map(x => x.SumOfCcjsInLast24Months);
 			Map(x => x.SumOfAssociatedCcjsInLast24Months);
+			Map(x => x.Errors).Length(4000);
 			Map(x => x.IsActive);
 			HasMany(x => x.HistoryScores).
 				KeyColumn("NonLimitedResultId")

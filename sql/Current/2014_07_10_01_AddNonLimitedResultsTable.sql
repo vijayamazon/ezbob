@@ -31,3 +31,9 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE Name = N'Errors' and Object_ID = Object_ID(N'ExperianNonLimitedResults'))
+BEGIN 
+	ALTER TABLE ExperianNonLimitedResults 
+	ADD Errors NVARCHAR(MAX)
+END 
+GO
