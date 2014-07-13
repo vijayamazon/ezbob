@@ -14,7 +14,7 @@
 		public void test_prod_enquiry()
 		{
 			//var model = Lr.EnquiryByPropertyDescription(buildingNumber: "27", streetName: "Church Road", cityName: "Exeter", customerId: 1);
-			var model = Lr.EnquiryByPropertyDescription(buildingName: "test", postCode:"E12 6AY", customerId: 1);
+			var model = Lr.EnquiryByPropertyDescription(buildingName: "test", postCode:"E12 6AY");
 			Assert.NotNull(model.Response);
 			Assert.AreEqual(LandRegistryResponseType.Success, model.ResponseType);
 		}
@@ -39,7 +39,7 @@
 		[Test]
 		public void test_enquiry()
 		{
-			var model = LrTest.EnquiryByPropertyDescription(buildingNumber: "27", streetName: "Church Road", cityName: "Exeter", customerId: 1);
+			var model = LrTest.EnquiryByPropertyDescription(buildingNumber: "27", streetName: "Church Road", cityName: "Exeter");
 			Assert.NotNull(model.Response);
 			Assert.AreEqual(LandRegistryResponseType.Success, model.ResponseType);
 		}
@@ -72,64 +72,107 @@
 		public void test_res_builder()
 		{
 
-
-
-			var responseBM253452 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResBM253452);
+			var responseBm253452 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResBm253452);
 			var b = new LandRegistryModelBuilder();
 
 			var enqModel = b.BuildEnquiryModel(TestEnquiry);
 			Assert.IsNotNull(enqModel);
 			Console.WriteLine(XmlHelper.SerializeObject(enqModel));
 
-			var model = b.BuildResModel(responseBM253452);
+			enqModel = b.BuildEnquiryModel(TestEnq2);
+			Assert.IsNotNull(enqModel);
+			Console.WriteLine(XmlHelper.SerializeObject(enqModel));
+
+			var model = b.BuildResModel(responseBm253452);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
 
-			var resHS94850 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResHS94850);
-			model = b.BuildResModel(resHS94850);
+			var resHs94850 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResHs94850);
+			model = b.BuildResModel(resHs94850);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
-			var resNGL854792 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(lrNGL854792);
-			model = b.BuildResModel(resNGL854792);
+			var resNgl854792 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(LrNgl854792);
+			model = b.BuildResModel(resNgl854792);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
-			var responseNT147249 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResNT147249);
-			model = b.BuildResModel(responseNT147249);
+			var responseNt147249 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResNt147249);
+			model = b.BuildResModel(responseNt147249);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
 
-			var responseHW153409 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResHW153409);
-			model = b.BuildResModel(responseHW153409);
+			var responseHw153409 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResHw153409);
+			model = b.BuildResModel(responseHw153409);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
-			var responseSGL348466 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResSGL348466);
-			model = b.BuildResModel(responseSGL348466);
+			var responseSgl348466 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResSgl348466);
+			model = b.BuildResModel(responseSgl348466);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
-			var responseSGL410307 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResSGL410307);
-			model = b.BuildResModel(responseSGL410307);
+			var responseSgl410307 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResSgl410307);
+			model = b.BuildResModel(responseSgl410307);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
-			var responseSGL433128 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResSGL433128);
-			model = b.BuildResModel(responseSGL433128);
+			var responseSgl433128 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResSgl433128);
+			model = b.BuildResModel(responseSgl433128);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
-			var responseTGL70137 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResTGL70137);
-			model = b.BuildResModel(responseTGL70137);
+			var responseTgl70137 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResTgl70137);
+			model = b.BuildResModel(responseTgl70137);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
-			var responseWYK874430 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResWYK874430);
-			model = b.BuildResModel(responseWYK874430);
+			var responseWyk874430 = XmlHelper.XmlDeserializeFromString<LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResWyk874430);
+			model = b.BuildResModel(responseWyk874430);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
 			
 			
 		}
+
+		public const string TestEnq2 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<ResponseSearchByPropertyDescriptionV2_0Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0"">
+    <TypeCode>30</TypeCode>
+    <Results>
+      <ExternalReference>
+        <Reference>ezbob14695</Reference>
+      </ExternalReference>
+      <Title>
+        <TitleNumber>CL258237</TitleNumber>
+        <TenureInformation>
+          <TenureTypeCode>10</TenureTypeCode>
+        </TenureInformation>
+        <Address>
+          <BuildingName>MIDDLE HILL FARM</BuildingName>
+          <StreetName>SHUTE LANE</StreetName>
+          <CityName>LISKEARD</CityName>
+          <PostcodeZone>
+            <Postcode>PL14 5QD</Postcode>
+          </PostcodeZone>
+        </Address>
+      </Title>
+      <Title>
+        <TitleNumber>CL253243</TitleNumber>
+        <TenureInformation>
+          <TenureTypeCode>10</TenureTypeCode>
+        </TenureInformation>
+        <Address>
+          <BuildingName>MIDDLE HILL FARM</BuildingName>
+          <SubBuildingName>LAND ON THE SOUTH SIDE OF</SubBuildingName>
+          <StreetName>SHUTE LANE</StreetName>
+          <CityName>LISKEARD</CityName>
+          <PostcodeZone>
+            <Postcode>PL14 5QD</Postcode>
+          </PostcodeZone>
+        </Address>
+      </Title>
+    </Results>
+  </GatewayResponse>
+</ResponseSearchByPropertyDescriptionV2_0Type>";
 
 		public const string TestEnquiry = @"<?xml version=""1.0""?>
 <ResponseSearchByPropertyDescriptionV2_0Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
@@ -173,7 +216,7 @@
 
 
 
-		public const string TestResHS94850 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string TestResHs94850 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
@@ -439,7 +482,7 @@
   </GatewayResponse>
 </ResponseOCWithSummaryV2_1Type>";
 
-		public const string TestResBM253452 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string TestResBm253452 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
@@ -687,7 +730,7 @@
 </ResponseOCWithSummaryV2_1Type>
 		";
 
-		public const string TestResHW153409 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string TestResHw153409 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
@@ -981,7 +1024,7 @@
     </Results>
   </GatewayResponse>
 </ResponseOCWithSummaryV2_1Type>";
-		public const string TestResSGL348466 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string TestResSgl348466 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
@@ -1227,7 +1270,7 @@
     </Results>
   </GatewayResponse>
 </ResponseOCWithSummaryV2_1Type>";
-		public const string TestResSGL410307 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string TestResSgl410307 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
@@ -1473,7 +1516,7 @@
     </Results>
   </GatewayResponse>
 </ResponseOCWithSummaryV2_1Type>";
-		public const string TestResSGL433128 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string TestResSgl433128 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
@@ -1705,7 +1748,7 @@
   </GatewayResponse>
 </ResponseOCWithSummaryV2_1Type>";
 
-		public const string TestResNT147249 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string TestResNt147249 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
@@ -1968,7 +2011,7 @@
   </GatewayResponse>
 </ResponseOCWithSummaryV2_1Type>";
 
-		public const string TestResTGL70137 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string TestResTgl70137 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
@@ -2214,7 +2257,7 @@
     </Results>
   </GatewayResponse>
 </ResponseOCWithSummaryV2_1Type>";
-		public const string TestResWYK874430 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string TestResWyk874430 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
@@ -2637,7 +2680,7 @@
   </GatewayResponse>
 </ResponseOCWithSummaryV2_1Type>";
 
-		public const string lrNGL854792 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+		public const string LrNgl854792 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
     <TypeCode>30</TypeCode>
