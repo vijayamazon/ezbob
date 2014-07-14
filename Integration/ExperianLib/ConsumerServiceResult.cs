@@ -41,7 +41,7 @@ namespace ExperianLib
 				TryRead(() =>
 					{
 						var app = new ExperianConsumerDataApplicant();
-						TryRead(() => app.ApplicantIdentifier = applicant.ApplicantIdentifier, "ApplicantIdentifier");
+						TryRead(() => app.ApplicantIdentifier = Convert.ToInt32(applicant.ApplicantIdentifier), "ApplicantIdentifier");
 						TryRead(() => app.Title = applicant.Name.Title, "Title");
 						TryRead(() => app.Forename = applicant.Name.Forename, "Forename");
 						TryRead(() => app.MiddleName = applicant.Name.MiddleName, "MiddleName");
@@ -108,13 +108,94 @@ namespace ExperianLib
 			TryRead(() => data.CAISSpecialInstructionFlag = outputRoot.Output.ConsumerSummary.Summary.CAIS.EA1F04, "CAISSpecialInstructionFlag");
 
 			data.Cais = GetCais(outputRoot);
-
+			data.Locations = GetLocations(outputRoot);
+			data.Residencies = GetResidencies(outputRoot);
+			data.Nocs = GetNocs(outputRoot);
 			data.Error = Errors;
 			data.HasParsingError = HasParsingError;
 			Console.WriteLine(JsonConvert.SerializeObject(data, new JsonSerializerSettings { Formatting = Formatting.Indented }));
 			return data;
 
 		}
+
+		private List<ExperianConsumerDataNoc> GetNocs(OutputRoot outputRoot)
+		{
+			var nocs = new List<ExperianConsumerDataNoc>();
+			TryRead(() =>
+				{
+					if (outputRoot.Output.FullConsumerData.ConsumerData.NOC != null)
+						foreach (var nocInfo in outputRoot.Output.FullConsumerData.ConsumerData.NOC)
+						{
+							nocs.AddRange(
+								nocInfo.NoCDetails.Select(
+									nocDetails => new ExperianConsumerDataNoc {Reference = nocDetails.Reference, TextLine = nocDetails.TextLine }));
+						}
+				},"Noc");
+			return nocs;
+
+		}
+
+		private List<ExperianConsumerDataLocation> GetLocations(OutputRoot outputRoot)
+		{
+			var locations = new List<ExperianConsumerDataLocation>();
+			TryRead(() =>
+				{
+					for (int i = 0; i < outputRoot.Output.LocationDetails.Length; ++i)
+					{
+						var location = new ExperianConsumerDataLocation();
+						TryRead(() => location.LocationIdentifier = outputRoot.Output.LocationDetails[i].LocationIdentifier, "LocationIdentifier");
+						TryRead(() => location.Flat = outputRoot.Output.LocationDetails[i].UKLocation.Flat, "Flat");
+						TryRead(() => location.HouseName = outputRoot.Output.LocationDetails[i].UKLocation.HouseName, "HouseName");
+						TryRead(() => location.HouseNumber = outputRoot.Output.LocationDetails[i].UKLocation.HouseNumber, "HouseNumber");
+						TryRead(() => location.Street = outputRoot.Output.LocationDetails[i].UKLocation.Street, "Street");
+						TryRead(() => location.Street2 = outputRoot.Output.LocationDetails[i].UKLocation.Street2, "Street2");
+						TryRead(() => location.District = outputRoot.Output.LocationDetails[i].UKLocation.District, "District");
+						TryRead(() => location.District2 = outputRoot.Output.LocationDetails[i].UKLocation.District2, "District2");
+						TryRead(() => location.PostTown = outputRoot.Output.LocationDetails[i].UKLocation.PostTown, "PostTown");
+						TryRead(() => location.County = outputRoot.Output.LocationDetails[i].UKLocation.County, "County");
+						TryRead(() => location.Country = outputRoot.Output.LocationDetails[i].UKLocation.Country, "Country");
+						TryRead(() => location.Postcode = outputRoot.Output.LocationDetails[i].UKLocation.Postcode, "Postcode");
+						TryRead(() => location.POBox = outputRoot.Output.LocationDetails[i].UKLocation.POBox, "POBox");
+						TryRead(() => location.SharedLetterbox = outputRoot.Output.LocationDetails[i].UKLocation.SharedLetterbox, "SharedLetterbox");
+						TryRead(() => location.FormattedLocation = outputRoot.Output.LocationDetails[i].FormattedLocation, "FormattedLocation");
+						locations.Add(location);
+					}
+				},
+				"Location");
+			return locations;
+		}
+
+		private List<ExperianConsumerDataResidency> GetResidencies(OutputRoot outputRoot)
+		{
+			var residencies = new List<ExperianConsumerDataResidency>();
+			TryRead(() =>
+			{
+				for (int i = 0; i < outputRoot.Output.Residency.Length; ++i)
+				{
+					var residency = new ExperianConsumerDataResidency();
+					TryRead(() => residency.LocationIdentifier = Convert.ToInt32(outputRoot.Output.Residency[i].LocationIdentifier), "LocationIdentifier");
+					TryRead(() => residency.ApplicantIdentifier = Convert.ToInt32(outputRoot.Output.Residency[i].ApplicantIdentifier), "LocationIdentifier");
+					TryRead(() => residency.LocationCode = outputRoot.Output.Residency[i].LocationCode, "LocationCode");
+					TryRead(() => residency.TimeAtYears = outputRoot.Output.Residency[i].TimeAt.Years, "TimeAtYears");
+					TryRead(() => residency.TimeAtMonths = outputRoot.Output.Residency[i].TimeAt.Months, "TimeAtMonths");
+					TryRead(() => residency.ResidencyDateFrom = new DateTime(
+															int.Parse(outputRoot.Output.Residency[i].ResidencyDateFrom.CCYY.ToString(CultureInfo.InvariantCulture)),
+															int.Parse(outputRoot.Output.Residency[i].ResidencyDateFrom.MM.ToString(CultureInfo.InvariantCulture)),
+															int.Parse(outputRoot.Output.Residency[i].ResidencyDateFrom.DD.ToString(CultureInfo.InvariantCulture))),
+								"ResidencyDateFrom", false);
+
+					TryRead(() => residency.ResidencyDateTo = new DateTime(
+															int.Parse(outputRoot.Output.Residency[i].ResidencyDateTo.CCYY.ToString(CultureInfo.InvariantCulture)),
+															int.Parse(outputRoot.Output.Residency[i].ResidencyDateTo.MM.ToString(CultureInfo.InvariantCulture)),
+															int.Parse(outputRoot.Output.Residency[i].ResidencyDateTo.DD.ToString(CultureInfo.InvariantCulture))),
+								"ResidencyDateTo", false);
+					residencies.Add(residency);
+				}
+			},
+				"Residency");
+			return residencies;
+		}
+
 
 		private List<ExperianConsumerDataCais> GetCais(OutputRoot outputRoot)
 		{

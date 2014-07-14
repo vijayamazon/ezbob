@@ -47,7 +47,7 @@
 
 		public virtual int CAISDefaults { get; set; } //E1A05 Tot value (class 1) of CAIS 8/9's
 		public virtual string BadDebt { get; set; } //E1B08 Worst current status (coarse)
-		
+
 		public virtual bool NOCsOnCCJ { get; set; } //EA4Q02 CCJ NOC (ALL)
 		public virtual bool NOCsOnCAIS { get; set; } //EA4Q04 CAIS NOC  (ALL)
 		public virtual bool NOCAndNOD { get; set; }//EA4Q05 NOC on any item (ALL)
@@ -57,9 +57,11 @@
 		public virtual string CAISSpecialInstructionFlag { get; set; } //EA1F04 CAIS special instruction ind (SP)
 
 		public virtual List<ExperianConsumerDataApplicant> Applicants { get; set; }
-		public virtual List<ExperianConsumerDataLocation> ConsumerDataLocations { get; set; }
+		public virtual List<ExperianConsumerDataLocation> Locations { get; set; }
+		public virtual List<ExperianConsumerDataResidency> Residencies { get; set; }
+		public virtual List<ExperianConsumerDataNoc> Nocs { get; set; }
 		public virtual List<ExperianConsumerDataCais> Cais { get; set; }
-		
+
 	}
 
 	public class ExperianConsumerDataApplicant
@@ -68,7 +70,7 @@
 		public virtual ExperianConsumerData ExperianConsumerData { get; set; }
 
 		//Applicant
-		public virtual string ApplicantIdentifier { get; set; }
+		public virtual int ApplicantIdentifier { get; set; }
 		public virtual string Title { get; set; }
 		public virtual string Forename { get; set; }
 		public virtual string MiddleName { get; set; }
@@ -78,6 +80,11 @@
 		public virtual string Gender { get; set; }
 	}
 
+	public class ExperianConsumerDataNoc
+	{
+		public virtual string Reference { get; set; }
+		public virtual string TextLine { get; set; }
+	}
 	public class ExperianConsumerDataLocation
 	{
 		public virtual int Id { get; set; }
@@ -102,56 +109,69 @@
 		public virtual string TimeAtYears { get; set; }
 		public virtual string TimeAtMonths { get; set; }
 	}
-	
+
+	public class ExperianConsumerDataResidency
+	{
+		public virtual int Id { get; set; }
+		public virtual ExperianConsumerData ExperianConsumerData { get; set; }
+
+		public virtual int ApplicantIdentifier { get; set; }
+		public virtual int LocationIdentifier { get; set; }
+		public virtual string LocationCode { get; set; }
+		public virtual DateTime? ResidencyDateFrom { get; set; }
+		public virtual DateTime? ResidencyDateTo { get; set; }
+		public virtual string TimeAtYears { get; set; }
+		public virtual string TimeAtMonths { get; set; }
+	}
+
 	public class ExperianConsumerDataCais
 	{
 		public virtual int Id { get; set; }
 		public virtual ExperianConsumerData ExperianConsumerData { get; set; }
 
-		public DateTime? CAISAccStartDate { get; set; }
-		public DateTime? SettlementDate { get; set; }  //Default Date is displayed if CAIS status 8/9 is returned
-		public DateTime? LastUpdatedDate { get; set; }
+		public virtual DateTime? CAISAccStartDate { get; set; }
+		public virtual DateTime? SettlementDate { get; set; }  //Default Date is displayed if CAIS status 8/9 is returned
+		public virtual DateTime? LastUpdatedDate { get; set; }
 
-		public int MatchTo { get; set; }
+		public virtual int MatchTo { get; set; }
 
-		public int? CreditLimit { get; set; }
-		public int? Balance { get; set; }
-		public int? CurrentDefBalance { get; set; }
-		public int? DelinquentBalance { get; set; }
-		public string AccountStatusCodes { get; set; }
+		public virtual int? CreditLimit { get; set; }
+		public virtual int? Balance { get; set; }
+		public virtual int? CurrentDefBalance { get; set; }
+		public virtual int? DelinquentBalance { get; set; }
+		public virtual string AccountStatusCodes { get; set; }
 
-		public string Status1To2 { get; set; }
-		public string StatusTo3 { get; set; }
+		public virtual string Status1To2 { get; set; }
+		public virtual string StatusTo3 { get; set; }
 
-		public int NumOfMonthsHistory { get; set; }
-		public string WorstStatus { get; set; }
-		public string AccountStatus { get; set; }
-		public string AccountType { get; set; }
-		public string CompanyType { get; set; }
-		public int RepaymentPeriod { get; set; }
-		public int? Payment { get; set; }
+		public virtual int NumOfMonthsHistory { get; set; }
+		public virtual string WorstStatus { get; set; }
+		public virtual string AccountStatus { get; set; }
+		public virtual string AccountType { get; set; }
+		public virtual string CompanyType { get; set; }
+		public virtual int RepaymentPeriod { get; set; }
+		public virtual int? Payment { get; set; }
 
-		public int NumAccountBalances { get; set; }
-		public List<ExperianConsumerDataCaisBalance> AccountBalances { get; set; }
-
-		public int NumCardHistories { get; set; }
-		public List<ExperianConsumerDataCaisCardHistory> CardHistories { get; set; }
+		public virtual int NumAccountBalances { get; set; }
+		public virtual List<ExperianConsumerDataCaisBalance> AccountBalances { get; set; }
+		public virtual int NumCardHistories { get; set; }
+		public virtual List<ExperianConsumerDataCaisCardHistory> CardHistories { get; set; }
 
 	}
 
 	public class ExperianConsumerDataCaisBalance
 	{
-		public int AccountBalance { get; set; }
-		public string Status { get; set; }
+		public virtual int AccountBalance { get; set; }
+		public virtual string Status { get; set; }
 	}
 
 	public class ExperianConsumerDataCaisCardHistory
 	{
-		public int PrevStatementBal { get; set; }
-		public string PromotionalRate { get; set; }
-		public int PaymentAmount { get; set; }
-		public int NumCashAdvances { get; set; }
-		public int CashAdvanceAmount { get; set; }
-		public string PaymentCode { get; set; }
+		public virtual int PrevStatementBal { get; set; }
+		public virtual string PromotionalRate { get; set; }
+		public virtual int PaymentAmount { get; set; }
+		public virtual int NumCashAdvances { get; set; }
+		public virtual int CashAdvanceAmount { get; set; }
+		public virtual string PaymentCode { get; set; }
 	}
 }
