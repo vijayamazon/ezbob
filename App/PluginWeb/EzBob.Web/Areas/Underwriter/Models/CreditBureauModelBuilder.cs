@@ -542,21 +542,7 @@
 			model.ConsumerAccountsOverview.Balance_PL = balances[2];
 			model.ConsumerAccountsOverview.Balance_Other = balances[3];
 			model.ConsumerAccountsOverview.Balance_Total = balances.Sum();
-
-			var nocList = new List<NOCInfo>();
-			try
-			{
-				if (eInfo.Output.Output.FullConsumerData.ConsumerData.NOC != null)
-					foreach (var nocInfo in eInfo.Output.Output.FullConsumerData.ConsumerData.NOC)
-					{
-						nocList.AddRange(nocInfo.NoCDetails.Select(nocDetails => new NOCInfo { NOCReference = nocDetails.Reference, NOCLines = nocDetails.TextLine }));
-					}
-			}
-			catch (Exception)
-			{
-				Errors.Add("Can`t read values for NOCs");
-			}
-			model.NOCs = nocList.ToArray();
+			model.NOCs = eInfo.Data.Nocs.Select(nocDetails => new NOCInfo { NOCReference = nocDetails.Reference, NOCLines = nocDetails.TextLine }).ToArray();
 
 			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
 		}
