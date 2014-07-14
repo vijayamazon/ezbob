@@ -2,9 +2,8 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using EchoSignService;
-	using Ezbob.Utils;
 
-	internal class Esignature : ITraversable {
+	internal class Esignature {
 		public Esignature(int nSignatureID) {
 			ID = nSignatureID;
 			Signers = new SortedDictionary<int, Esigner>();

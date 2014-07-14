@@ -1,10 +1,9 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System;
 	using System.Runtime.Serialization;
-	using Utils;
 
 	[DataContract(IsReference = true)]
-	public class BrokerCustomerCrmEntry : ITraversable {
+	public class BrokerCustomerCrmEntry {
 		[DataMember]
 		public DateTime CrDate { get; set; }
 

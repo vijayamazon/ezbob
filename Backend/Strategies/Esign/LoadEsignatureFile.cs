@@ -1,9 +1,8 @@
 ﻿namespace EzBob.Backend.Strategies.Esign {
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils;
 
-	public class LoadEsignatureFile : AStrategy, ITraversable {
+	public class LoadEsignatureFile : AStrategy {
 		#region public
 
 		#region constructor

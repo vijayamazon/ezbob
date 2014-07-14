@@ -219,13 +219,13 @@
 
 		#region method Fill
 
-		public T Fill<T>() where T: ITraversable, new() {
+		public T Fill<T>() where T: new() {
 			var oInstance = new T();
 			Fill(oInstance);
 			return oInstance;
 		} // Fill
 
-		public void Fill(ITraversable oInstance) {
+		public void Fill(object oInstance) {
 			oInstance.Traverse(FillProperty);
 		} // Fill
 
@@ -263,7 +263,7 @@
 
 		#region method FillProperty
 
-		private void FillProperty(ITraversable oInstance, PropertyInfo oPropertyInfo) {
+		private void FillProperty(object oInstance, PropertyInfo oPropertyInfo) {
 			string sFieldName = oPropertyInfo.Name;
 
 			object[] aryAttrList = oPropertyInfo.GetCustomAttributes(typeof (FieldNameAttribute), false);

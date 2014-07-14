@@ -17,7 +17,7 @@
 
 	#region class Template
 
-	internal class Template : ITraversable {
+	internal class Template {
 		#region public
 
 		#region constructor

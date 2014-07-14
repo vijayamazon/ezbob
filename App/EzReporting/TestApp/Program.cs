@@ -17,7 +17,7 @@ namespace TestApp {
 	using SqlConnection = Ezbob.Database.SqlConnection;
 
 	class Program {
-		private class A : ITraversable {
+		private class A {
 			public int F1 { get; set; }
 			public int F2 { get; private set; }
 			public virtual int V1 { get; set; }

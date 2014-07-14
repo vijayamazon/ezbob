@@ -12,7 +12,6 @@
 	using OfficeOpenXml;
 
 	using Cci;
-	using Ezbob.Utils;
 
 	public partial class BaseReportHandler : SafeLog {
 		#region public
@@ -880,7 +879,7 @@
 
 		#region class AccountingLoanBalanceRawData
 
-		public class AccountingLoanBalanceRawData : ITraversable {
+		public class AccountingLoanBalanceRawData {
 			public DateTime IssueDate { get; set; }
 			public int ClientID { get; set; }
 			public int LoanID { get; set; }

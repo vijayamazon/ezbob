@@ -91,14 +91,6 @@
 
 		#endregion method IsParametrisable
 
-		#region method IsTraversable
-
-		public static bool IsTraversable(Type oType) {
-			return IsInterfaceImplemented(oType, typeof(ITraversable));
-		} // IsTraversable
-
-		#endregion method IsTraversable
-
 		#region method IsInterfaceImplemented
 
 		public static bool IsInterfaceImplemented(Type oType, Type oInterfaceType) {
@@ -120,22 +112,22 @@
 		#endregion method IsSimpleType
 
 		#region method GetConvertorToObjectArray
+		// ReSharper disable PossibleNullReferenceException
 
 		public static Func<object, object[]> GetConvertorToObjectArray(Type oType) {
 			Func<object, object[]> func;
 
 			if (TypeUtils.IsSimpleType(oType))
-				func = o => new object[1] { o };
+				func = o => new object[] { o };
 			else if (TypeUtils.IsParametrisable(oType))
 				func = o => (o as IParametrisable).ToParameter();
-			else if (TypeUtils.IsTraversable(oType))
-				func = o => (o as ITraversable).ToObjectArray();
 			else
-				throw new NotImplementedException("Type " + oType + " cannot be converted to object[].");
+				func = o => o.ToObjectArray();
 
 			return func;
 		} // GetConvertorToObjectArray
 
+		// ReSharper restore PossibleNullReferenceException
 		#endregion method GetConvertorToObjectArray
 	} // class TypeUtils
 } // namespace

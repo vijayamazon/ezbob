@@ -163,11 +163,11 @@
 
 		#region method Fill
 
-		public List<T> Fill<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new() {
+		public List<T> Fill<T>(string sQuery, params QueryParameter[] aryParams) where T : new() {
 			return Fill<T>(sQuery, CommandSpecies.Auto, aryParams);
 		} // Fill
 
-		public List<T> Fill<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable, new() {
+		public List<T> Fill<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : new() {
 			var oResult = new List<T>();
 
 			ForEachRowSafe(
@@ -187,11 +187,11 @@
 
 		#region method FillFirst
 
-		public virtual T FillFirst<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new() {
+		public virtual T FillFirst<T>(string sQuery, params QueryParameter[] aryParams) where T : new() {
 			return FillFirst<T>(sQuery, CommandSpecies.Auto, aryParams);
 		} // FillFirst
 
-		public virtual T FillFirst<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable, new() {
+		public virtual T FillFirst<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : new() {
 			var oResult = new T();
 
 			ForEachRowSafe(
@@ -207,11 +207,11 @@
 			return oResult;
 		} // FillFirst
 
-		public virtual void FillFirst<T>(T oInstatnce, string sQuery, params QueryParameter[] aryParams) where T: ITraversable {
+		public virtual void FillFirst<T>(T oInstatnce, string sQuery, params QueryParameter[] aryParams) {
 			FillFirst<T>(oInstatnce, sQuery, CommandSpecies.Auto, aryParams);
 		} // FillFirst
 
-		public virtual void FillFirst<T>(T oInstance, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable {
+		public virtual void FillFirst<T>(T oInstance, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					sr.Fill(oInstance);
@@ -231,7 +231,7 @@
 			return CreateVectorParameter<T>(sFieldName, (IEnumerable<T>)oValues);
 		} // CreateVectorParameter
 
-		public class VectorToTableParameter<T> : ITraversable {
+		public class VectorToTableParameter<T> {
 			public T Value { get; set; } // Value
 		} // class VectorToTableParameter
 
@@ -244,8 +244,7 @@
 		#region method CreateTableParameter
 
 		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, IEnumerable<TSource> oValues, ParameterDirection nDirection = ParameterDirection.Input)
-			where TColumnInfo : ITraversable, new()
-			where TSource : ITraversable
+			where TColumnInfo : new()
 		{
 			return CreateTableParameter<TColumnInfo>(sFieldName, oValues, TypeUtils.GetConvertorToObjectArray(typeof(TSource)), nDirection);
 		} // CreateTableParameter
@@ -255,7 +254,7 @@
 			IEnumerable oValues,
 			Func<object, object[]> oValueToRow,
 			ParameterDirection nDirection = ParameterDirection.Input
-		) where TColumnInfo : ITraversable, new() {
+		) where TColumnInfo : new() {
 			return CreateTableParameter(typeof (TColumnInfo), sFieldName, oValues, oValueToRow, nDirection);
 		} // CreateTableParameter
 

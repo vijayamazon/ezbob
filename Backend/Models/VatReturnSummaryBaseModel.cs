@@ -1,10 +1,9 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System.Runtime.Serialization;
 	using System.Text;
-	using Utils;
 
 	[DataContract(IsReference = true)]
-	public class VatReturnSummaryBase : ITraversable {
+	public class VatReturnSummaryBase { 
 		[DataMember]
 		public int SummaryID { get; set; }
 

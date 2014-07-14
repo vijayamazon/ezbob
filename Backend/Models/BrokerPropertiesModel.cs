@@ -1,9 +1,8 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System.Runtime.Serialization;
-	using Utils;
 
 	[DataContract(IsReference = true)]
-	public class BrokerProperties : ITraversable {
+	public class BrokerProperties {
 		[DataMember]
 		public string ErrorMsg { get; set; }
 

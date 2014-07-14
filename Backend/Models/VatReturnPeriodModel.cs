@@ -2,10 +2,9 @@
 	using System;
 	using System.Globalization;
 	using System.Runtime.Serialization;
-	using Utils;
 
 	[DataContract(IsReference = true)]
-	public class VatReturnPeriod : ITraversable {
+	public class VatReturnPeriod {
 		[DataMember]
 		public DateTime DateFrom { get; set; }
 

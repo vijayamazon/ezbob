@@ -8,7 +8,7 @@ namespace Ezbob.Backend.Models {
 	using ValueIntervals;
 
 	[DataContract]
-	public class VatReturnRawData : ITraversable, IComparable<VatReturnRawData> {
+	public class VatReturnRawData : IComparable<VatReturnRawData> {
 		#region constructor
 
 		public VatReturnRawData() {

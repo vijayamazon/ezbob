@@ -1,8 +1,7 @@
 ﻿namespace EchoSignLib {
 	using Ezbob.Database;
-	using Ezbob.Utils;
 
-	internal class Esigner : ITraversable {
+	internal class Esigner {
 		[FieldName("EsignerID")]
 		public int ID { get; set; }
 

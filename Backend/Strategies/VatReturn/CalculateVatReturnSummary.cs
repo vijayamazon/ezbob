@@ -364,7 +364,7 @@
 
 		#region class BusinessDataOutput
 
-		private class BusinessDataOutput : ITraversable {
+		private class BusinessDataOutput {
 			#region properties saved in DB
 
 			public virtual decimal? PctOfAnnualRevenues { get; set; }

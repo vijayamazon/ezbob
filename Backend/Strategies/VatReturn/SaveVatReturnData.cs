@@ -377,7 +377,7 @@
 
 			#region class Entry
 
-			public class Entry : ITraversable {
+			public class Entry {
 				[UsedImplicitly]
 				public Guid RecordInternalID { get; set; }
 
@@ -399,7 +399,7 @@
 
 			#region class HistoryItem
 
-			public class HistoryItem : ITraversable {
+			public class HistoryItem {
 				[UsedImplicitly]
 				public Guid DeleteRecordInternalID { get; set; }
 

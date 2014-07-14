@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Database {
 	using Ezbob.Utils;
 
-	public interface IResultRow : ITraversable {
+	public interface IResultRow {
 		/// <summary>
 		/// Gets indicator whether current row is the first in a row set
 		/// (for queries returning multiple row sets).

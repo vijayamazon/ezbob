@@ -124,6 +124,7 @@
 				new ExperianLtdLenderDetails().GetCreateTable()
 			);
 
+			/*
 			Log.Debug(
 				"\n\n{0}\n\n",
 				new ExperianLtd().GetCreateSp() +
@@ -141,6 +142,7 @@
 				new ExperianLtdDL65().GetCreateSp() +
 				new ExperianLtdLenderDetails().GetCreateSp()
 			);
+			*/
 		} // LogCreateSql
 
 		#endregion method LogCreateSql

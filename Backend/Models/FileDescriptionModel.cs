@@ -1,9 +1,8 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System.Runtime.Serialization;
-	using Utils;
 
 	[DataContract(IsReference = true)]
-	public class FileDescription : ITraversable {
+	public class FileDescription {
 		[DataMember]
 		public string ID { get; set; }
 

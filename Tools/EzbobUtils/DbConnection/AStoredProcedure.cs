@@ -35,7 +35,7 @@
 
 	#region class AStoredProcedure
 
-	public abstract class AStoredProcedure : ITraversable {
+	public abstract class AStoredProcedure {
 		#region public
 
 		public abstract bool HasValidParameters();
@@ -50,17 +50,6 @@
 		} // ExecuteScalar
 
 		#endregion method ExecuteScalar
-
-		#region method ExecuteReader
-
-		public virtual DataTable ExecuteReader() {
-			if (!IsReadyToGo())
-				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
-
-			return DB.ExecuteReader(GetName(), Species, PrepareParameters());
-		} // ExecuteReader
-
-		#endregion method ExecuteReader
 
 		#region method ExecuteNonQuery
 
@@ -143,7 +132,7 @@
 
 		#region method Fill
 
-		public virtual List<T> Fill<T>() where T : ITraversable, new() {
+		public virtual List<T> Fill<T>() where T : new() {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
@@ -154,14 +143,14 @@
 
 		#region method FillFirst
 
-		public virtual T FillFirst<T>() where T: ITraversable, new() {
+		public virtual T FillFirst<T>() where T : new() {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			return DB.FillFirst<T>(GetName(), Species, PrepareParameters());
 		} // FillFirst
 
-		public virtual void FillFirst<T>(T oInstance) where T : ITraversable {
+		public virtual void FillFirst<T>(T oInstance) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 

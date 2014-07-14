@@ -18,40 +18,29 @@
 
 	#endregion class NonTraversableAttribute
 
-	#region interface ITraversable
-
-	public interface ITraversable {
-		// nothing here
-	} // interface ITraversable
-
-	#endregion interface ITraversable
-
 	#region class PropertyTraverser
 
 	public static class PropertyTraverser {
 		#region public
 
-		public static void Traverse(Type oType, Action<ITraversable, PropertyInfo> oCallback) {
+		public static void Traverse(Type oType, Action<object, PropertyInfo> oCallback) {
 			if (oType == null)
 				throw new ArgumentNullException("oType", "Type to traverse not specified.");
 
 			if (oCallback == null)
 				throw new ArgumentNullException("oCallback", "Property callback not specified.");
 
-			if (null == oType.GetInterface(typeof (ITraversable).ToString()))
-				throw new NotImplementedException("Type " + oType + " does not implement " + typeof (ITraversable));
-
 			Traverse(null, oType, oCallback);
 		} // Traverse
 
-		public static void Traverse<T>(Action<ITraversable, PropertyInfo> oCallback) where T: ITraversable {
+		public static void Traverse<T>(Action<object, PropertyInfo> oCallback) {
 			if (oCallback == null)
 				throw new ArgumentNullException("oCallback", "Property callback not specified.");
 
 			Traverse(null, typeof(T), oCallback);
 		} // Traverse
 
-		public static void Traverse(this ITraversable oInstance, Action<ITraversable, PropertyInfo> oCallback) {
+		public static void Traverse(this object oInstance, Action<object, PropertyInfo> oCallback) {
 			if (oInstance == null)
 				throw new ArgumentNullException("oInstance", "Object to traverse not specified.");
 
@@ -65,7 +54,7 @@
 
 		#region private
 
-		private static void Traverse(ITraversable oInstance, Type oRealType, Action<ITraversable, PropertyInfo> oCallback) {
+		private static void Traverse(object oInstance, Type oRealType, Action<object, PropertyInfo> oCallback) {
 			PropertyInfo[] oPropertyList = oRealType
 				.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 				.Where(p => p.GetSetMethod() != null)
@@ -99,7 +88,7 @@
 	#region class TraversableExt
 
 	public static class TraversableExt {
-		public static object[] ToObjectArray(this ITraversable oSrc) {
+		public static object[] ToObjectArray(this object oSrc) {
 			if (oSrc == null)
 				return new object[0];
 

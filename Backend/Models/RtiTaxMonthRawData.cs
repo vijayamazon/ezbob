@@ -6,7 +6,7 @@ namespace Ezbob.Backend.Models {
 	using Utils;
 
 	[DataContract]
-	public class RtiTaxMonthRawData : ITraversable, IComparable<RtiTaxMonthRawData> {
+	public class RtiTaxMonthRawData : IComparable<RtiTaxMonthRawData> {
 		#region constructor
 
 		public RtiTaxMonthRawData() {

@@ -38,7 +38,7 @@
 
 	#region class ExperianDirector
 
-	internal class ExperianDirector : ITraversable {
+	internal class ExperianDirector {
 		#region constructor
 
 		public ExperianDirector(ParsedDataItem oItem, int nCustomerID, bool bIsDirector) {

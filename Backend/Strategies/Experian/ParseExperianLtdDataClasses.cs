@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Reflection;
 	using System.Text;
 	using Ezbob.Utils;
@@ -94,7 +93,7 @@
 
 	#region class AExperianDataRow
 
-	internal abstract class AExperianDataRow : ITraversable {
+	internal abstract class AExperianDataRow {
 		[FK("ExperianLtd", "ExperianLtdID")]
 		public virtual long ExperianLtdID { get; set; }
 
@@ -122,39 +121,41 @@
 
 			string sTableName = this.GetType().Name;
 
+			bool bHasPk = false;
+
 			this.Traverse((oInstance, oPropInfo) => {
 				string sType = T2T(oPropInfo);
 
 				if (string.IsNullOrWhiteSpace(sType))
 					return;
 
-				List<CustomAttributeData> oKeyAttr = oPropInfo.CustomAttributes
-					.Where(a => a.GetType() == typeof (FKAttribute) || a.GetType() == typeof (PKAttribute))
-					.ToList();
+				var pk = oPropInfo.GetCustomAttribute<PKAttribute>();
 
-				if (oKeyAttr.Count == 0) {
-					oFields.Add("\t\t" + oPropInfo.Name + " " + sType);
-					return;
-				} // if
-
-				if (oKeyAttr.Count > 1)
-					throw new Exception("A field cannot be both PRIMARY KEY and FOREIGN KEY simultaneously.");
-
-				if (oKeyAttr[0].AttributeType == typeof (PKAttribute))
-					oConstraints.Add("\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY (" + oPropInfo.Name + ")");
+				if (pk != null) {
+					oConstraints.Insert(0, "\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY (" + oPropInfo.Name + ")");
+					oFields.Insert(0, "\t\t" + oPropInfo.Name + " " + sType);
+					bHasPk = true;
+				}
 				else {
-					var fk = oPropInfo.GetCustomAttribute<FKAttribute>();
+					FKAttribute fk = oPropInfo.GetCustomAttribute<FKAttribute>();
 
-					if (!string.IsNullOrWhiteSpace(fk.TableName)) {
+					if ((fk != null) && !string.IsNullOrWhiteSpace(fk.TableName)) {
+						oFields.Insert(0, "\t\t" + oPropInfo.Name + " " + sType);
+
 						oConstraints.Add(
 							"\t\tCONSTRAINT FK_" + sTableName + "_" + oPropInfo.Name +
-								" FOREIGN KEY (" + oPropInfo.Name + ") REFERENCES " + fk.TableName + "(" + fk.FieldName + ")"
+							" FOREIGN KEY (" + oPropInfo.Name + ") REFERENCES " + fk.TableName + "(" + fk.FieldName + ")"
 						);
-					} // if
-				}
-
-				oFields.Insert(0, "\t\t" + oPropInfo.Name + " " + sType);
+					}
+					else
+						oFields.Add("\t\t" + oPropInfo.Name + " " + sType);
+				} // if
 			});
+
+			if (!bHasPk) {
+				oConstraints.Insert(0, "\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY (" + sTableName + "ID)");
+				oFields.Insert(0, "\t\t" + sTableName + "ID BIGINT IDENTITY(1, 1) NOT NULL");
+			} // if
 
 			oFields.Add("\t\tTimestampCounter ROWVERSION");
 
@@ -163,7 +164,7 @@
 				"IF OBJECT_ID('" + sTableName + "') IS NULL\nBEGIN\n" +
 				"\tCREATE TABLE " + sTableName + " (\n" +
 				string.Join(",\n", oFields) +
-				(oConstraints.Count < 1 ? "" : ",\n" + string.Join("\n", oConstraints)) +
+				(oConstraints.Count < 1 ? "" : ",\n" + string.Join(",\n", oConstraints)) +
 				"\n\t)\nEND\nGO\n\n";
 		} // GetCreateTable
 
@@ -746,6 +747,9 @@
 
 		[LenderDetails("LENDERNAME")]
 		public string LenderName { get; set; }
+
+		[NonTraversable]
+		public override long ExperianLtdID { get; set; }
 	} // class ExperianLtdLenderDetails
 
 	#endregion class ExperianLtdLenderDetails

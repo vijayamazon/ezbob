@@ -1,9 +1,8 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System.Runtime.Serialization;
-	using Utils;
 
 	[DataContract]
-	public class IdNameModel : ITraversable {
+	public class IdNameModel {
 		[DataMember]
 		public int Id { get; set; }
 

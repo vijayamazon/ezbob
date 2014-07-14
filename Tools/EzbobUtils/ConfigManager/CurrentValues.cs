@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
 	using JetBrains.Annotations;
 
@@ -282,7 +281,7 @@
 
 		#region class CfgValueUpdate
 
-		private class CfgValueUpdate : ITraversable {
+		private class CfgValueUpdate {
 			[UsedImplicitly]
 			public int ID { get; set; }
 

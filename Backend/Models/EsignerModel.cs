@@ -4,10 +4,9 @@
 	using System.Globalization;
 	using System.Runtime.Serialization;
 	using System.Text.RegularExpressions;
-	using Utils;
 
 	[DataContract]
-	public class Esigner : ITraversable {
+	public class Esigner {
 		[DataMember]
 		public string Type { get; set; }
 

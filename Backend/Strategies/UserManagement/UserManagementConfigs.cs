@@ -8,7 +8,7 @@
 	using Ezbob.Utils;
 	using JetBrains.Annotations;
 
-	internal class UserManagementConfigs : ITraversable {
+	internal class UserManagementConfigs {
 		#region constructor
 
 		public UserManagementConfigs(AConnection oDB, ASafeLog oLog) {

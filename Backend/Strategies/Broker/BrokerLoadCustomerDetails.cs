@@ -4,7 +4,6 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils;
 
 	#region class BrokerLoadCustomerDetails
 
@@ -32,7 +31,7 @@
 
 		#region class BrokerLoadCustomerDetailsRawData
 
-		public class BrokerLoadCustomerDetailsRawData : ITraversable {
+		public class BrokerLoadCustomerDetailsRawData {
 			#region properties
 
 			public int CustomerID { get; set; }

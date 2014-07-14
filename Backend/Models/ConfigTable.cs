@@ -3,7 +3,7 @@
 	using Ezbob.Utils;
 
 	[DataContract(IsReference = true)]
-	public class ConfigTable : ITraversable {
+	public class ConfigTable {
 		[DataMember]
 		[NonTraversable]
 		public int Id { get; set; }

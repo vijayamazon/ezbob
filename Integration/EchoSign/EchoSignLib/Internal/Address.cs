@@ -17,9 +17,8 @@
 namespace EchoSignLib {
 	using System.Collections.Generic;
 	using Ext;
-	using Ezbob.Utils;
 
-	internal class Address : ITraversable {
+	internal class Address {
 		public string Line1    { get; set; }
 		public string Line2    { get; set; }
 		public string Line3    { get; set; }

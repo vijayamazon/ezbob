@@ -4,7 +4,6 @@
 	using EchoSignService;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils;
 
 	internal class SpSaveSignedDocument : AStoredProc {
 		#region constructor
@@ -38,7 +37,7 @@
 
 		#region class EsignerStatus
 
-		public class EsignerStatus : ITraversable {
+		public class EsignerStatus {
 			public int EsignerID { get; set; }
 			public int StatusID { get; set; }
 			public DateTime? SignatureTime { get; set; }
@@ -48,7 +47,7 @@
 
 		#region class HistoryEvent
 
-		public class HistoryEvent : ITraversable {
+		public class HistoryEvent {
 			public HistoryEvent(DocumentHistoryEvent oEvent) {
 				EventTime = oEvent.date;
 				Description = oEvent.description;

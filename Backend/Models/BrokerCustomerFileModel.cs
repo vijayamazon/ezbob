@@ -1,10 +1,9 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System;
 	using System.Runtime.Serialization;
-	using Utils;
 
 	[DataContract(IsReference = true)]
-	public class BrokerCustomerFile : ITraversable {
+	public class BrokerCustomerFile {
 		[DataMember]
 		public int FileID { get; set; }
 
