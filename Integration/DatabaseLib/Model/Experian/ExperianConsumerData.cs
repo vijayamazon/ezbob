@@ -1,7 +1,7 @@
 ﻿namespace EZBob.DatabaseLib.Model.Experian
 {
 	using System;
-	using Iesi.Collections.Generic;
+	using System.Collections.Generic;
 
 	public class ExperianConsumerData
 	{
@@ -16,16 +16,6 @@
 		public virtual bool HasParsingError { get; set; }
 		public virtual bool HasExperianError { get; set; }
 
-		//Applicant
-		public virtual string ApplicantIdentifier { get; set; }
-		public virtual string Title { get; set; }
-		public virtual string Forename { get; set; }
-		public virtual string MiddleName { get; set; }
-		public virtual string Surname { get; set; }
-		public virtual string Suffix { get; set; }
-		public virtual DateTime? DateOfBirth { get; set; }
-		public virtual string Gender { get; set; }
-		
 		public virtual int BureauScore { get; set; } //E5S051
 		public virtual int CreditCardBalances { get; set; } //SPA04 SP Balance of active revolving CAIS
 		public virtual int ActiveCaisBalanceExcMortgages { get; set; } //SPA02 SP Balance of all active CAIS (excluding mortgages) Used to calculate UnsecuredLoans
@@ -65,23 +55,26 @@
 
 		public virtual int CII { get; set; } //NDSPCII (SP) Consumer Indebtedness Index
 		public virtual string CAISSpecialInstructionFlag { get; set; } //EA1F04 CAIS special instruction ind (SP)
-		
-		public virtual ISet<ExperianConsumerDataAlias> ConsumerDataAlias { get; set; }
-		public virtual ISet<ExperianConsumerDataLocation> ConsumerDataLocations { get; set; }
+
+		public virtual List<ExperianConsumerDataApplicant> Applicants { get; set; }
+		public virtual List<ExperianConsumerDataLocation> ConsumerDataLocations { get; set; }
+		public virtual List<ExperianConsumerDataCais> Cais { get; set; }
 		
 	}
 
-	public class ExperianConsumerDataAlias
+	public class ExperianConsumerDataApplicant
 	{
 		public virtual int Id { get; set; }
 		public virtual ExperianConsumerData ExperianConsumerData { get; set; }
 
+		//Applicant
+		public virtual string ApplicantIdentifier { get; set; }
 		public virtual string Title { get; set; }
 		public virtual string Forename { get; set; }
 		public virtual string MiddleName { get; set; }
 		public virtual string Surname { get; set; }
 		public virtual string Suffix { get; set; }
-		public virtual string Source { get; set; }
+		public virtual DateTime? DateOfBirth { get; set; }
 		public virtual string Gender { get; set; }
 	}
 
@@ -109,54 +102,56 @@
 		public virtual string TimeAtYears { get; set; }
 		public virtual string TimeAtMonths { get; set; }
 	}
-
-	//TODO if necessary 
-	public class ExperianConsumerDataAssociation
+	
+	public class ExperianConsumerDataCais
 	{
 		public virtual int Id { get; set; }
 		public virtual ExperianConsumerData ExperianConsumerData { get; set; }
 
-		/*
-		LocationIndicator
-		ApplicantIndicator
-		<Title>
-		<Forename>
-		<MiddleName>
-		<Surname>
-		Suffix
-		DoBAssociateOrAlias
-		CCYY
-		MM
-		DD
-		Gender
-		Location
-		Flat
-		HouseName
-		HouseNumber
-		Street
-		Street2
-		District
-		District2
-		PostTown
-		County
-		Postcode
-		Country
-		Source
-		StreetMatchLevel
-		HouseMatchLevel
-		BureauRefCategory
-		MatchTo
-		InformationType
-		CompanyType
-		InformationSource
-		 */
-	}
-
-	public class ExperianConsumerDataFinancialAccounts
-	{
+		public DateTime? CAISAccStartDate { get; set; }
 		public DateTime? SettlementDate { get; set; }  //Default Date is displayed if CAIS status 8/9 is returned
 		public DateTime? LastUpdatedDate { get; set; }
+
+		public int MatchTo { get; set; }
+
+		public int? CreditLimit { get; set; }
+		public int? Balance { get; set; }
+		public int? CurrentDefBalance { get; set; }
+		public int? DelinquentBalance { get; set; }
+		public string AccountStatusCodes { get; set; }
+
+		public string Status1To2 { get; set; }
+		public string StatusTo3 { get; set; }
+
+		public int NumOfMonthsHistory { get; set; }
+		public string WorstStatus { get; set; }
+		public string AccountStatus { get; set; }
+		public string AccountType { get; set; }
+		public string CompanyType { get; set; }
+		public int RepaymentPeriod { get; set; }
+		public int? Payment { get; set; }
+
+		public int NumAccountBalances { get; set; }
+		public List<ExperianConsumerDataCaisBalance> AccountBalances { get; set; }
+
+		public int NumCardHistories { get; set; }
+		public List<ExperianConsumerDataCaisCardHistory> CardHistories { get; set; }
+
 	}
 
+	public class ExperianConsumerDataCaisBalance
+	{
+		public int AccountBalance { get; set; }
+		public string Status { get; set; }
+	}
 
+	public class ExperianConsumerDataCaisCardHistory
+	{
+		public int PrevStatementBal { get; set; }
+		public string PromotionalRate { get; set; }
+		public int PaymentAmount { get; set; }
+		public int NumCashAdvances { get; set; }
+		public int CashAdvanceAmount { get; set; }
+		public string PaymentCode { get; set; }
+	}
 }

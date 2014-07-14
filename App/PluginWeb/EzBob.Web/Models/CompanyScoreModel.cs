@@ -274,7 +274,6 @@
 						{
 							model.DefaultAccounts++;
 							model.DefaultAmount += GetDecimalValueFromDataItem(cais, "Default Balance");
-							//todo default amount
 						}
 						else
 						{

@@ -396,33 +396,13 @@
             </div>
         </div>
         <% } %>
-    
-        <% if (experianInfo.IsError) { %>
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianResponseErrors">
-                <b class="play"></b>Experian response parsing errors</a>
-        </div>
-        <div id="collapseExperianResponseErrors" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <div class="row-fluid">
-                    <div class="span12">
-                        <ul>
-                            <% _.each(experianInfo.ErrorList, function(errMessage){ %>
-                            <li>@Html.Raw("<%- errMessage.replace(/,/g, ', ') %>")</li>
-                            <% }); %>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <% }%>
     </div>
     <div id="idhub-custom-address"></div>
 }
 
 @helper DisplayExperianError()
 {
-    <div>
+    <div class="row">
     <%if(experianInfo.ErrorList && experianInfo.ErrorList.length > 0){%>
         <div class="span9 accordion page-content-frame" id="accordion-request-error">
             <div class="accordion-heading">
@@ -532,7 +512,12 @@
 {
     <div>
         <% var directorIdx = 0 %>
-        <% _.each(experianInfo.directorsModels, function(model,i){ %>   
+        <% _.each(experianInfo.directorsModels, function(model,i){ 
+            model.Summary = model.Summary || {};
+            model.Summary.ConsumerAccountsOverview = model.Summary.ConsumerAccountsOverview || {};
+            model.ConsumerSummaryCharacteristics = model.ConsumerSummaryCharacteristics || {};
+            model.ConsumerAccountsOverview = model.ConsumerAccountsOverview || {};
+        %>
         <fieldset>
             <legend>Director #<%-i+1%></legend>
             <% var accordionId = 'accordion-credit-bureau' + directorIdx %>
@@ -703,8 +688,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @RawCell("<%- ai.OpenDate %>", "<%- ai.Account %>", "<%- ai.MatchTo %>", "<%- ai.TermAndfreq %>",
-                                                     "<%- ai.Limit %>", "<%- ai.AccBalance %>", "<%- ai.CashWithdrawals %>", "<%- ai.MinimumPayment %>")
+                                            @RawCell("<%- EzBob.formatDate2(ai.OpenDate) %>", "<%- ai.Account %>", "<%- ai.MatchTo %>", "<%- ai.TermAndfreq %>",
+                                                     "<%- ai.Limit %>", "<%- EzBob.formatPoundsAsInt(ai.AccBalance) %>", "<%- ai.CashWithdrawals %>", "<%- ai.MinimumPayment %>")
                                         </tbody>
                                     </table>
                                             <%if(ai.LatestStatuses && _.some(ai.LatestStatuses, function(s){ return s.Status != "";})){ %>
@@ -900,14 +885,14 @@
                                     </thead>
                                     <tbody class="box-content">
                                         <tr>
-                                            <td><%- ai.OpenDate %></td>
+                                            <td><%- EzBob.formatDate2(ai.OpenDate) %></td>
                                             <td><%- ai.Account %></td>
                                             <td><%- ai.MatchTo %></td>
                                             <td><%- ai.TermAndfreq %></td>
                                             <td><%- ai.Limit %></td>
-                                            <td><%- ai.AccBalance %></td>
+                                            <td><%- EzBob.formatPoundsAsInt(ai.AccBalance) %></td>
                                             <td class="experian-account-status <%- ai.AccountStatus %>"><%- ai.AccountStatus %></td>
-                                            <td><%- ai.SettlementDate %></td>
+                                            <td><%- EzBob.formatDate2(ai.SettlementDate) %></td>
                                             <td><%- ai.CashWithdrawals %></td>
                                             <td><%- ai.MinimumPayment %></td>
                                         </tr>
@@ -984,7 +969,7 @@
                     @RawCell("Worst Historical status", "<%- experianInfo.Summary.WorstHistoricalstatus  %>")
                     @RawCell("Number of defaults", "<%- experianInfo.Summary.Numberofdefaults  %>")
                     @RawCell("Active Accounts", "<%- experianInfo.Summary.Accounts  %>")
-                    @RawCell("ThinFile", "<%- (experianInfo.AccountsInformation && experianInfo.AccountsInformation.length == 0) ? 'Yes' : 'No'  %>")
+                    @RawCell("ThinFile", "<%- experianInfo.Summary.ThinFile ? 'Yes' : 'No'  %>")
                     @RawCell("CCJ's", "<%- experianInfo.Summary.CCJs  %>")
                     @RawCell("Most recent CCJ", "<%- experianInfo.Summary.MostrecentCCJ  %>")
                     @RawCell("DSR and ownership type", "<%- experianInfo.Summary.DSRandownershiptype  %>")

@@ -117,14 +117,14 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	public class AccountInfo
 	{
-		public string OpenDate { get; set; } // done
+		public DateTime? OpenDate { get; set; } // done
 		public string Account { get; set; } // done
 		public string TermAndfreq { get; set; } // done
-		public string Limit { get; set; } // done
-		public string AccBalance { get; set; } // done
+		public int? Limit { get; set; } // done
+		public int? AccBalance { get; set; } // done
 		public string AccountStatus { get; set; } // done
 		public string DateType { get; set; } // done
-		public string SettlementDate { get; set; } // done
+		public DateTime SettlementDate { get; set; } // done
 		public string CashWithdrawals { get; set; } // done
 		public string MinimumPayment { get; set; } // done
 		public AccountDisplayedYear[] Years { get; set; } // done
@@ -228,6 +228,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string BusinessScore { get; set; }
 		public string RiskLevel { get; set; }
 		public string Existingbusinessloans { get; set; }
+		public bool ThinFile { get; set; }
 		public ConsumerAccountsOverview ConsumerAccountsOverview { get; set; }
 	}
 

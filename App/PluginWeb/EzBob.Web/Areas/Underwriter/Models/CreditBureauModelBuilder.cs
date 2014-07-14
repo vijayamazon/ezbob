@@ -6,7 +6,6 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
-	using System.Text.RegularExpressions;
 	using System.Xml;
 	using System.Xml.Linq;
 	using System.Xml.Serialization;
@@ -20,7 +19,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBobIntegration.Web_References.Consumer;
-	using Ezbob.Backend.Models;
 	using Ezbob.ExperianParser;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
@@ -56,7 +54,7 @@
 		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
 		{
 			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
-			var model = new CreditBureauModel { ErrorList = new List<string>()};
+			var model = new CreditBureauModel { ErrorList = new List<string>() };
 			var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
 
 			//registered customer
@@ -234,12 +232,12 @@
 			try
 			{
 				var parser = new Parser(
-				CurrentValues.Instance[Variables.CompanyScoreParserConfiguration],new SafeILog(this));
+				CurrentValues.Instance[Variables.CompanyScoreParserConfiguration], new SafeILog(this));
 				doc.LoadXml(responseData);
 				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
 				var b = new CompanyScoreModelBuilder();
 				var oResult = new ExperianParserOutput(oParsed, TypeOfBusinessReduced.Limited);
-				
+
 				var m = b.BuildDashboardModel(oResult, customerId, refNumber);
 				model.Balance = m.CaisBalance;
 				model.Score = m.Score;
@@ -288,9 +286,8 @@
 				model.ErrorList.Add("No data");
 				return;
 			}
-			int score = eInfo.Data.BureauScore;
-			double odds = Math.Pow(2, ((double)score - 600) / 80);
-			var scorePosColor = GetScorePositionAndColor(score, ConsumerScoreMax, ConsumerScoreMin);
+
+			var scorePosColor = GetScorePositionAndColor(eInfo.Data.BureauScore, ConsumerScoreMax, ConsumerScoreMin);
 			var checkStatus = (eInfo.Data.HasExperianError) ? "Error" : eInfo.ExperianResult;
 
 			var checkIcon = "icon-white icon-remove-sign";
@@ -312,10 +309,9 @@
 			}
 
 			var checkDate = eInfo.LastUpdateDate;
-			var checkValidity =checkDate.AddMonths(3);
+			var checkValidity = checkDate.AddMonths(3);
 
 			Errors = new List<string>();
-
 
 			model.Id = id;
 			model.HasExperianError = eInfo.Data.HasExperianError;
@@ -326,17 +322,15 @@
 			model.CheckDate = checkDate.ToShortDateString();
 			model.CheckValidity = checkValidity.ToShortDateString();
 			model.BorrowerType = "Consumer";
-			model.Score = score;
-			model.Odds = odds;
+			model.Score = eInfo.Data.BureauScore;
+			model.Odds = Math.Pow(2, ((double)eInfo.Data.BureauScore - 600) / 80);
 			model.ScorePosition = scorePosColor.Position;
 			model.ScoreAlign = scorePosColor.Align;
 			model.ScoreValuePosition = scorePosColor.ValPosition;
 			model.ScoreColor = scorePosColor.Color;
-			model.ApplicantFullName = string.Format("{0} {1} {2} {3}", eInfo.Data.Forename, eInfo.Data.MiddleName,
-			                                        eInfo.Data.Surname,
-			                                        eInfo.Data.DateOfBirth.HasValue
-				                                        ? (DateTime.UtcNow.Year - eInfo.Data.DateOfBirth.Value.Year).ToString()
-				                                        : "");
+			model.ApplicantFullName = eInfo.Data.Applicants.Select(applicant =>
+				string.Format("{0} {1} {2} {3}", applicant.Forename, applicant.MiddleName, applicant.Surname, applicant.DateOfBirth.HasValue ?
+				(DateTime.UtcNow.Year - applicant.DateOfBirth.Value.Year).ToString(CultureInfo.InvariantCulture) : "")).Aggregate((x, y) => x + "," + y);
 			model.ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics();
 			model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
 			model.CII = eInfo.Data.CII;
@@ -363,12 +357,12 @@
 				SatisfiedJudgements = eInfo.Data.SatisfiedJudgement,
 				AgeOfMostRecentCCJ = eInfo.Data.CCJLast2Years,
 				CAISSpecialInstructionFlag = eInfo.Data.CAISSpecialInstructionFlag,
-				
-				
+
+
 			};
 			model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
-				
-			
+
+
 			var accList = new List<AccountInfo>();
 
 			var years = new List<AccountDisplayedYear>();
@@ -410,174 +404,107 @@
 			int defaultAmount = 0;
 			int numberOfLates = 0;
 			string lateStatus = "0";
-			try
+
+			foreach (var caisDetails in eInfo.Data.Cais)
 			{
-				if (eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS != null)
-					foreach (var caisData in eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS)
+				var accountInfo = new AccountInfo();
+				//check which acccount type show
+				Variables var = map[caisDetails.MatchTo];
+
+				var isShowThisFinancinalAccount = CurrentValues.Instance[var];
+				if (isShowThisFinancinalAccount == null || !isShowThisFinancinalAccount)
+				{
+					continue;
+				}
+
+				accountInfo.MatchTo = var.DescriptionAttr();
+				accountInfo.OpenDate = caisDetails.CAISAccStartDate;
+				accountInfo.Account = AccountTypeDictionary.GetAccountType(caisDetails.AccountType);
+				var accStatus = caisDetails.AccountStatus;
+				string dateType;
+				accountInfo.AccountStatus = GetAccountStatusString(accStatus, out dateType);
+				accountInfo.DateType = dateType;
+				if (accStatus == DefaultCaisStatusName)
+				{
+					numberOfDefaults++;
+					defaultAmount += caisDetails.CurrentDefBalance.HasValue ? caisDetails.CurrentDefBalance.Value : 0;
+				}
+
+				var accType = GetAccountType(caisDetails.AccountType);
+				if (accType < 0)
+					continue;
+
+				if (((accStatus == DelinquentCaisStatusName) || (accStatus == ActiveCaisStatusName)) && var == Variables.FinancialAccounts_MainApplicant)
+				{
+					accounts[accType]++;
+					var ws = caisDetails.WorstStatus;
+					worstStatus[accType] = GetWorstStatus(worstStatus[accType], ws);
+					limits[accType] += caisDetails.CreditLimit.HasValue ? caisDetails.CreditLimit.Value : 0;
+					balances[accType] += caisDetails.Balance.HasValue ? caisDetails.Balance.Value : 0;
+
+					numberOfAccounts++;
+					if ((accountInfo.OpenDate.HasValue) && (accountInfo.OpenDate.Value >= DateTime.Today.AddMonths(-3)))
+						numberOfAcc3M++;
+
+					if (accStatus == DelinquentCaisStatusName)
 					{
-						foreach (var caisDetails in caisData.CAISDetails)
-						{
-							var accountInfo = new AccountInfo();
-
-							//check which acccount type show
-							int matchTo;
-							int.TryParse(caisDetails.MatchDetails.MatchTo, out matchTo);
-							Variables var = map[matchTo];
-
-							var isShowThisFinancinalAccount = CurrentValues.Instance[var];
-							if (isShowThisFinancinalAccount == null || !isShowThisFinancinalAccount)
-								continue;
-
-							accountInfo.MatchTo = MathToToHumanView(var);
-
-							DateTime? openDate;
-							try
-							{
-								openDate = new DateTime(caisDetails.CAISAccStartDate.CCYY,
-														caisDetails.CAISAccStartDate.MM,
-														caisDetails.CAISAccStartDate.DD);
-							}
-							catch
-							{
-								openDate = null;
-							}
-							accountInfo.OpenDate = (openDate == null)
-													   ? string.Empty
-													   : openDate.Value.ToShortDateString();
-							accountInfo.Account =
-								AccountTypeDictionary.GetAccountType(caisDetails.AccountType ?? string.Empty);
-							//accountInfo.TermAndfreq =
-							//    PaymentFrequencyDictionary.GetPaymentFrequency(caisDetails.PaymentFrequency ?? string.Empty);
-							var accStatus = caisDetails.AccountStatus;
-
-							string dateType;
-							accountInfo.AccountStatus = GetAccountStatusString(accStatus, out dateType);
-							accountInfo.DateType = dateType;
-							if (accStatus == DefaultCaisStatusName)
-							{
-								numberOfDefaults++;
-								if (caisDetails.CurrentDefBalance != null && !string.IsNullOrEmpty(caisDetails.CurrentDefBalance.Amount))
-								{
-									int defAmount;
-									int.TryParse(caisDetails.CurrentDefBalance.Amount.Replace("£", ""), out defAmount);
-									defaultAmount += defAmount;
-								}
-							}
-
-							var accType = GetAccountType(caisDetails.AccountType);
-							if (accType < 0)
-								continue;
-
-							if (((accStatus == DelinquentCaisStatusName) || (accStatus == ActiveCaisStatusName)) && var == Variables.FinancialAccounts_MainApplicant)
-							{
-								accounts[accType]++;
-								var ws = caisDetails.WorstStatus;
-								worstStatus[accType] = GetWorstStatus(worstStatus[accType], ws);
-
-								int limit = 0;
-								if ((caisDetails.CreditLimit != null) && (caisDetails.CreditLimit.Amount != null))
-								{
-									string l = caisDetails.CreditLimit.Amount.Replace("£", "");
-									int.TryParse(l, out limit);
-								}
-								limits[accType] += limit;
-
-								int balance = 0;
-								if ((caisDetails.Balance != null) && (caisDetails.Balance.Amount != null))
-								{
-									string b = caisDetails.Balance.Amount.Replace("£", "");
-									int.TryParse(b, out balance);
-								}
-								balances[accType] += balance;
-
-								numberOfAccounts++;
-								if ((openDate != null) && (openDate.Value >= DateTime.Today.AddMonths(-3)))
-									numberOfAcc3M++;
-
-								if (accStatus == DelinquentCaisStatusName)
-								{
-									numberOfLates++;
-									lateStatus = GetWorstStatus(lateStatus, ws);
-								}
-							}
-
-							string statuses = caisDetails.AccountStatusCodes ?? string.Empty;
-							int mthsCount;
-							int.TryParse(caisDetails.NumOfMonthsHistory ?? "0", out mthsCount);
-
-							var sList = new List<AccountStatus>();
-							for (int i = 0; i < StatusHistoryMonths; i++)
-							{
-								sList.Add(new AccountStatus { Status = "", StatusColor = "white" });
-							}
-
-							int relevantYear, relevantMonth, relevantDay;
-							if (caisDetails.SettlementDate != null)
-							{
-								relevantYear = caisDetails.SettlementDate.CCYY;
-								relevantMonth = caisDetails.SettlementDate.MM;
-								relevantDay = caisDetails.SettlementDate.DD;
-							}
-							else
-							{
-								relevantYear = caisDetails.LastUpdatedDate.CCYY;
-								relevantMonth = caisDetails.LastUpdatedDate.MM;
-								relevantDay = caisDetails.LastUpdatedDate.DD;
-							}
-
-							var histStart = new DateTime(relevantYear, relevantMonth, 1);
-							accountInfo.SettlementDate =
-								FormattingUtils.FormatDateToString(new DateTime(relevantYear, relevantMonth, relevantDay));
-
-							for (int i = 0; i < mthsCount; i++)
-							{
-								var histDate = histStart.AddMonths(-i);
-								string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
-								var idx = displayedMonths.IndexOf(histDate);
-								if (idx >= 0)
-								{
-									sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
-									sList[idx].StatusColor = AccountStatusDictionary.GetAccountStatusColor(indicator);
-								}
-							}
-
-							accountInfo.LatestStatuses = sList.ToArray();
-
-							int repaymentPeriod;
-							int.TryParse(caisDetails.RepaymentPeriod ?? string.Empty, out repaymentPeriod);
-
-							accountInfo.TermAndfreq = GetRepaymentPeriodString(repaymentPeriod);
-
-							accountInfo.Limit = caisDetails.CreditLimit.Amount;
-							accountInfo.AccBalance = caisDetails.Balance.Amount == null ? null : ConvertAmount(caisDetails.Balance.Amount);
-
-							accountInfo.CashWithdrawals = string.Empty;
-							accountInfo.MinimumPayment = string.Empty;
-
-							if (caisDetails.CardHistories != null)
-							{
-								foreach (var cardHistory in caisDetails.CardHistories)
-								{
-									accountInfo.CashWithdrawals = string.Format(
-										"{0} ({1})", cardHistory.NumCashAdvances ?? "0",
-										cardHistory.CashAdvanceAmount ?? "0");
-									accountInfo.MinimumPayment = cardHistory.PaymentCode ?? string.Empty;
-									break;
-								}
-							}
-
-							accountInfo.Years = years.ToArray();
-							accountInfo.Quarters = quarters.ToArray();
-							accountInfo.MonthsDisplayed = monthsList.ToArray();
-
-							accList.Add(accountInfo);
-						}
+						numberOfLates++;
+						lateStatus = GetWorstStatus(lateStatus, ws);
 					}
-			}
-			catch (Exception e)
-			{
-				Errors.Add("Can`t read values for Financial Accounts");
-				Log.Debug("Can`t read values for Financial Accounts", e);
+				}
+
+				string statuses = caisDetails.AccountStatusCodes ?? string.Empty;
+				var sList = new List<AccountStatus>();
+				for (int i = 0; i < StatusHistoryMonths; i++)
+				{
+					sList.Add(new AccountStatus { Status = "", StatusColor = "white" });
+				}
+
+				int relevantYear, relevantMonth, relevantDay;
+				if (caisDetails.SettlementDate != null)
+				{
+					relevantYear = caisDetails.SettlementDate.Value.Year;
+					relevantMonth = caisDetails.SettlementDate.Value.Month;
+					relevantDay = caisDetails.SettlementDate.Value.Day;
+				}
+				else
+				{
+					relevantYear = caisDetails.LastUpdatedDate.Value.Year;
+					relevantMonth = caisDetails.LastUpdatedDate.Value.Month;
+					relevantDay = caisDetails.LastUpdatedDate.Value.Day;
+				}
+
+				var histStart = new DateTime(relevantYear, relevantMonth, 1);
+				accountInfo.SettlementDate = new DateTime(relevantYear, relevantMonth, relevantDay);
+
+				for (int i = 0; i < caisDetails.NumOfMonthsHistory; i++)
+				{
+					var histDate = histStart.AddMonths(-i);
+					string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
+					var idx = displayedMonths.IndexOf(histDate);
+					if (idx >= 0)
+					{
+						sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
+						sList[idx].StatusColor = AccountStatusDictionary.GetAccountStatusColor(indicator);
+					}
+				}
+
+				accountInfo.LatestStatuses = sList.ToArray();
+				accountInfo.TermAndfreq = GetRepaymentPeriodString(caisDetails.RepaymentPeriod);
+				accountInfo.Limit = caisDetails.CreditLimit;
+				accountInfo.AccBalance = caisDetails.Balance;
+
+				foreach (var cardHistory in caisDetails.CardHistories)
+				{
+					accountInfo.CashWithdrawals = string.Format("{0} ({1})", cardHistory.NumCashAdvances, cardHistory.CashAdvanceAmount);
+					accountInfo.MinimumPayment = cardHistory.PaymentCode ?? string.Empty;
+					break;
+				}
+
+				accountInfo.Years = years.ToArray();
+				accountInfo.Quarters = quarters.ToArray();
+				accountInfo.MonthsDisplayed = monthsList.ToArray();
+				accList.Add(accountInfo);
 			}
 
 			model.ConsumerSummaryCharacteristics.NumberOfAccounts = numberOfAccounts;
@@ -634,14 +561,6 @@
 			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
 		}
 
-		private string ConvertAmount(string amountStr)
-		{
-			var numbersStr = Regex.Replace(amountStr, "[^\\d]", "");
-			decimal number;
-			decimal.TryParse(numbersStr, out number);
-			return string.Format("£ {0}", number.ToString("N0"));
-		}
-
 		private static string PrintErrorList(List<string> errorList)
 		{
 			var sb = new StringBuilder();
@@ -667,13 +586,13 @@
 			{
 				var srv = new IdHubService();
 				var result = srv.Authenticate(customer.PersonalInfo.FirstName, string.Empty, customer.PersonalInfo.Surname,
-				                              customer.PersonalInfo.Gender.ToString(),
-				                              customer.PersonalInfo.DateOfBirth.HasValue
-					                              ? customer.PersonalInfo.DateOfBirth.Value
-					                              : DateTime.Now,
-				                              customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
-				                              customerAddress.Town, customerAddress.County, customerAddress.Postcode,
-				                              customer.Id, true);
+											  customer.PersonalInfo.Gender.ToString(),
+											  customer.PersonalInfo.DateOfBirth.HasValue
+												  ? customer.PersonalInfo.DateOfBirth.Value
+												  : DateTime.Now,
+											  customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
+											  customerAddress.Town, customerAddress.County, customerAddress.Postcode,
+											  customer.Id, true);
 				if (null == result)
 					return;
 
@@ -703,16 +622,16 @@
 
 				var bankAccount = customer.BankAccount;
 				var result = srv.AccountVerification(customer.PersonalInfo.FirstName, string.Empty,
-				                                     customer.PersonalInfo.Surname,
-				                                     customer.PersonalInfo.Gender.ToString(),
-				                                     customer.PersonalInfo.DateOfBirth.HasValue
-					                                     ? customer.PersonalInfo.DateOfBirth.Value
-					                                     : DateTime.Now,
-				                                     customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
-				                                     customerAddress.Town, customerAddress.County, customerAddress.Postcode,
-				                                     bankAccount != null ? bankAccount.SortCode : "",
-				                                     bankAccount != null ? bankAccount.AccountNumber : "",
-				                                     customer.Id, true);
+													 customer.PersonalInfo.Surname,
+													 customer.PersonalInfo.Gender.ToString(),
+													 customer.PersonalInfo.DateOfBirth.HasValue
+														 ? customer.PersonalInfo.DateOfBirth.Value
+														 : DateTime.Now,
+													 customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
+													 customerAddress.Town, customerAddress.County, customerAddress.Postcode,
+													 bankAccount != null ? bankAccount.SortCode : "",
+													 bankAccount != null ? bankAccount.AccountNumber : "",
+													 customer.Id, true);
 				if (null == result)
 					return;
 				data.HasBWA = true;
@@ -765,9 +684,6 @@
 					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
 					break;
 			}
-
-
-
 		}
 
 		protected void AppendLimitedInfo(CreditBureauModel model, LimitedResults eInfo)
@@ -843,6 +759,7 @@
 				BusinessScore = GetBusinessScore(model),
 				RiskLevel = model.LimitedInfo != null ? model.LimitedInfo.RiskLevel : "-",
 				Existingbusinessloans = GetExistingBusinessLoans(model),
+				ThinFile = model.AccountsInformation == null || model.AccountsInformation.Length == 0,
 				ConsumerAccountsOverview = model.ConsumerAccountsOverview
 			};
 		}
@@ -911,7 +828,6 @@
 							result = new ConsumerServiceResult(output);
 						}
 					}
-
 				}
 				else
 				{
@@ -978,7 +894,7 @@
 				return -1;
 			}
 		}
-		
+
 		public static DelphiModel GetScorePositionAndColor(double score, int scoreMax, int scoreMin)
 		{
 			const int w = 640;
@@ -1023,7 +939,6 @@
 					ValPosition = string.Format("{0}px;", valPos),
 					Color = string.Format("#{0:X2}{1:X2}{2:X2};", c.R, c.G, c.B),
 				};
-
 		}
 
 		private static double Cup(double x)
@@ -1175,31 +1090,15 @@
 				return 0;
 			}
 		}
-
-		private static string MathToToHumanView(Variables input)
-		{
-			switch (input)
-			{
-				case Variables.FinancialAccounts_AliasOfJointApplicant: return "Alias Of Joint Applicant";
-				case Variables.FinancialAccounts_AliasOfMainApplicant: return "Alias Of Main Applicant";
-				case Variables.FinancialAccounts_AssociationOfJointApplicant: return "Association Of Joint Applicant";
-				case Variables.FinancialAccounts_AssociationOfMainApplicant: return "Association Of Main Applicant";
-				case Variables.FinancialAccounts_JointApplicant: return "Joint Applicant";
-				case Variables.FinancialAccounts_MainApplicant: return "Main Applicant";
-				case Variables.FinancialAccounts_No_Match: return "No Match";
-				case Variables.FinancialAccounts_Spare: return "Spare";
-				default: return "-";
-			}
-		}
-
+		
 		private static readonly Dictionary<int, Variables> map = new Dictionary<int, Variables>
 			{
-				{6, Variables.FinancialAccounts_AliasOfJointApplicant},
+				{1,Variables.FinancialAccounts_MainApplicant},
 				{2,Variables.FinancialAccounts_AliasOfMainApplicant},
-				{7,Variables.FinancialAccounts_AssociationOfJointApplicant},
 				{3,Variables.FinancialAccounts_AssociationOfMainApplicant},
 				{5,Variables.FinancialAccounts_JointApplicant},
-				{1,Variables.FinancialAccounts_MainApplicant},
+				{6, Variables.FinancialAccounts_AliasOfJointApplicant},
+				{7,Variables.FinancialAccounts_AssociationOfJointApplicant},
 				{9,Variables.FinancialAccounts_No_Match},
 				{4,Variables.FinancialAccounts_Spare},//Spare
 				{8,Variables.FinancialAccounts_Spare},//Spare
