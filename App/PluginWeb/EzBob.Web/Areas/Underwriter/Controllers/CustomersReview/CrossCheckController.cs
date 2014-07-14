@@ -25,13 +25,11 @@
 
 		public CrossCheckController(
 			CustomerRepository customerRepository,
-			CreditBureauModelBuilder creditBureauModelBuilder,
 			CustomerAddressRepository customerAddressRepository,
 			ISession oSession
 		) {
 			m_oServiceClient = new ServiceClient();
 			_customerRepository = customerRepository;
-			_creditBureauModelBuilder = creditBureauModelBuilder;
 			_customerAddressRepository = customerAddressRepository;
 			m_oSession = oSession;
 		} // constructor
@@ -219,7 +217,6 @@
 		private readonly ServiceClient m_oServiceClient;
 		private readonly CustomerRepository _customerRepository;
 		private readonly CustomerAddressRepository _customerAddressRepository;
-		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
 		private readonly ISession m_oSession;
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (CrossCheckController));
