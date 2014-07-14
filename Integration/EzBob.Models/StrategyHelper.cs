@@ -792,7 +792,7 @@
 
 		public LandRegistryLib.LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber)
 		{
-
+			log.DebugFormat("GetLandRegistryData begin cId {0} titleNumber {1}", customerId, titleNumber);
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
 
 			//check cash
@@ -863,19 +863,22 @@
 					};
 
 				var owners = new List<LandRegistryOwner>();
-				foreach (var owner in model.Res.Proprietorship.ProprietorshipParties)
-				{
-					owners.Add(new LandRegistryOwner
-						{
-							LandRegistry = dbLr,
-							FirstName = owner.PrivateIndividualForename,
-							LastName = owner.PrivateIndividualSurname,
-							CompanyName = owner.CompanyName,
-							CompanyRegistrationNumber = owner.CompanyRegistrationNumber,
-						});
-				}
-				dbLr.Owners = owners;
 
+				if (model.ResponseType == LandRegistryLib.LandRegistryResponseType.Success && model.Res != null && model.Res.Proprietorship != null && model.Res.Proprietorship.ProprietorshipParties!= null)
+				{
+					foreach (var owner in model.Res.Proprietorship.ProprietorshipParties)
+					{
+						owners.Add(new LandRegistryOwner
+							{
+								LandRegistry = dbLr,
+								FirstName = owner.PrivateIndividualForename,
+								LastName = owner.PrivateIndividualSurname,
+								CompanyName = owner.CompanyName,
+								CompanyRegistrationNumber = owner.CompanyRegistrationNumber,
+							});
+					}
+					dbLr.Owners = owners;
+				}
 				lrRepo.Save(dbLr);
 
 				if (model.Attachment != null)

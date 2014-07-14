@@ -208,5 +208,13 @@ namespace EzBobTest
 			s.Execute();
 			Assert.IsNotNullOrEmpty(s.Result);
 		}
+
+		[Test]
+		public void TestLRRes()
+		{
+			var s = new LandRegistryRes(21340, "CL258237" , m_oDB, m_oLog);
+			s.Execute();
+			Assert.IsNotNullOrEmpty(s.Result);
+		}
 	}
 }
