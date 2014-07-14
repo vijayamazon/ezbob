@@ -7,13 +7,13 @@
 	class TestDbConnection : BaseTestFixtue {
 		[Test]
 		public void TestConfiguration() {
-			m_oDB.OpenPersistent();
+			var cw = m_oDB.GetPersistent();
 
-			m_oLog.Debug("First customer ID: {0}", m_oDB.ExecuteScalar<int>("SELECT TOP 1 Id FROM Customer"));
+			m_oLog.Debug("First customer ID: {0}", m_oDB.ExecuteScalar<int>(cw, "SELECT TOP 1 Id FROM Customer"));
 
-			m_oLog.Debug("First broker ID: {0}", m_oDB.ExecuteScalar<int>("SELECT TOP 1 BrokerID FROM Broker"));
+			m_oLog.Debug("First broker ID: {0}", m_oDB.ExecuteScalar<int>(cw, "SELECT TOP 1 BrokerID FROM Broker"));
 
-			m_oDB.ClosePersistent();
+			cw.Close();
 		} // TestConfiguration
 
 		[Test]
@@ -48,9 +48,9 @@
 
 		[Test]
 		public void TestEnumerableWithPersistent() {
-			m_oDB.OpenPersistent();
+			var cw = m_oDB.GetPersistent();
 
-			IEnumerable<SafeReader> lst = m_oDB.ExecuteEnumerable("SELECT TOP 2 Id, Name FROM Customer", CommandSpecies.Text);
+			IEnumerable<SafeReader> lst = m_oDB.ExecuteEnumerable(cw, "SELECT TOP 2 Id, Name FROM Customer", CommandSpecies.Text);
 
 			m_oLog.Debug("Iteration starts...");
 
@@ -60,6 +60,7 @@
 			m_oLog.Debug("Iteration complete.");
 
 			m_oDB.ForEachRowSafe(
+				cw,
 				(sr, bRowsetStart) => {
 					m_oLog.Debug("Broker {0}: {1}", (int)sr[0], (string)sr[1]);
 					return ActionResult.Continue;
@@ -69,6 +70,7 @@
 			);
 
 			m_oDB.ForEachRowSafe(
+				cw,
 				(sr, bRowsetStart) => {
 					m_oLog.Debug("User {0}: {1}", (int)sr[0], (string)sr[1]);
 					return ActionResult.Continue;
@@ -77,7 +79,7 @@
 				CommandSpecies.Text
 			);
 
-			m_oDB.ClosePersistent();
+			cw.Close();
 		} // TestEnumerableWithPersistent
 	} // class TestDbConnection
 } // namespace

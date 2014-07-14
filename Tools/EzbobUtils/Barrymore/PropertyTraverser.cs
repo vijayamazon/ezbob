@@ -23,6 +23,8 @@
 	public static class PropertyTraverser {
 		#region public
 
+		#region method Traverse
+
 		public static void Traverse(Type oType, Action<object, PropertyInfo> oCallback) {
 			if (oType == null)
 				throw new ArgumentNullException("oType", "Type to traverse not specified.");
@@ -50,11 +52,37 @@
 			Traverse(oInstance, oInstance.GetType(), oCallback);
 		} // Traverse
 
+		#endregion method Traverse
+
+		#region method EnumerateProperties
+
+		public static IEnumerable<PropertyInfo> EnumerateProperties(Type oType) {
+			if (oType == null)
+				throw new ArgumentNullException("oType", "Type to traverse not specified.");
+
+			return Traverse(null, oType, null);
+		} // EnumerateProperties
+
+		public static IEnumerable<PropertyInfo> EnumerateProperties<T>() {
+			return Traverse(null, typeof(T), null);
+		} // EnumerateProperties
+
+		public static IEnumerable<PropertyInfo> EnumerateProperties(this object oInstance) {
+			if (oInstance == null)
+				throw new ArgumentNullException("oInstance", "Object to traverse not specified.");
+
+			return Traverse(oInstance, oInstance.GetType(), null);
+		} // EnumerateProperties
+
+		#endregion method EnumerateProperties
+
 		#endregion public
 
 		#region private
 
-		private static void Traverse(object oInstance, Type oRealType, Action<object, PropertyInfo> oCallback) {
+		private static IEnumerable<PropertyInfo> Traverse(object oInstance, Type oRealType, Action<object, PropertyInfo> oCallback) {
+			List<PropertyInfo> oResult = (oCallback == null) ? new List<PropertyInfo>() : null;
+
 			PropertyInfo[] oPropertyList = oRealType
 				.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 				.Where(p => p.GetSetMethod() != null)
@@ -75,9 +103,15 @@
 			foreach (PropertyInfo pi in oSelected) {
 				object[] oAttrList = pi.GetCustomAttributes(typeof(NonTraversableAttribute), false);
 
-				if (oAttrList.Length == 0)
-					oCallback(oInstance, pi);
+				if (oAttrList.Length == 0) {
+					if (oCallback == null)
+						oResult.Add(pi);
+					else
+						oCallback(oInstance, pi);
+				} // if
 			} // foreach
+
+			return oResult;
 		} // Traverse
 
 		#endregion private

@@ -54,7 +54,7 @@
 
 		#region method ExecuteEnumerable
 
-		public static IEnumerable<SafeReader> ExecuteEnumerable(this DbCommand command, ConnectionWrapper cw, bool bForceCloseOnExit, Action oLogExecution = null) {
+		public static IEnumerable<SafeReader> ExecuteEnumerable(this DbCommand command, ConnectionWrapper cw, Action oLogExecution = null) {
 			cw.Open();
 
 			DbDataReader oReader = command.ExecuteReader();
@@ -71,9 +71,6 @@
 			} while (oReader.NextResult());
 
 			oReader.Close();
-
-			if (bForceCloseOnExit)
-				cw.Close();
 		} // ExecuteEnumerable
 
 		#endregion method ExecuteEnumerable

@@ -42,22 +42,22 @@
 
 		#region method ExecuteScalar
 
-		public virtual T ExecuteScalar<T>() {
+		public virtual T ExecuteScalar<T>(ConnectionWrapper oConnectionToUse = null) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.ExecuteScalar<T>(GetName(), Species, PrepareParameters());
+			return DB.ExecuteScalar<T>(oConnectionToUse, GetName(), Species, PrepareParameters());
 		} // ExecuteScalar
 
 		#endregion method ExecuteScalar
 
 		#region method ExecuteNonQuery
 
-		public virtual int ExecuteNonQuery() {
+		public virtual int ExecuteNonQuery(ConnectionWrapper oConnectionToUse = null) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.ExecuteNonQuery(GetName(), Species, PrepareParameters());
+			return DB.ExecuteNonQuery(oConnectionToUse, GetName(), Species, PrepareParameters());
 		} // ExecuteNonQuery
 
 		#endregion method ExecuteNonQuery
@@ -65,10 +65,14 @@
 		#region method ForEachRow
 
 		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction) {
+			ForEachRow(null, oAction);
+		} // ForEachRow
+
+		public virtual void ForEachRow(ConnectionWrapper oConnectionToUse, Func<DbDataReader, bool, ActionResult> oAction) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.ForEachRow(oAction, GetName(), Species, PrepareParameters());
+			DB.ForEachRow(oConnectionToUse, oAction, GetName(), Species, PrepareParameters());
 		} // ForEachRow
 
 		#endregion method ForEachRow
@@ -76,10 +80,14 @@
 		#region method ForEachRowSafe
 
 		public virtual void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction) {
+			ForEachRowSafe(null, oAction);
+		} // ForEachRowSafe
+
+		public virtual void ForEachRowSafe(ConnectionWrapper oConnectionToUse, Func<SafeReader, bool, ActionResult> oAction) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.ForEachRowSafe(oAction, GetName(), Species, PrepareParameters());
+			DB.ForEachRowSafe(oConnectionToUse, oAction, GetName(), Species, PrepareParameters());
 		} // ForEachRowSafe
 
 		#endregion method ForEachRowSafe
@@ -87,6 +95,10 @@
 		#region method ForEachResult
 
 		public virtual void ForEachResult(Func<IResultRow, ActionResult> oAction) {
+			ForEachResult(null, oAction);
+		} // ForEachResult
+
+		public virtual void ForEachResult(ConnectionWrapper oConnectionToUse, Func<IResultRow, ActionResult> oAction) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
@@ -107,6 +119,7 @@
 				throw new NotImplementedException("Nested ResultRow class has no parameterless constructor.");
 
 			DB.ForEachRowSafe(
+				oConnectionToUse,
 				(sr, bRowsetStart) => {
 					var oRow = (IResultRow)oConstructorInfo.Invoke(null);
 					oRow.SetIsFirst(bRowsetStart);
@@ -121,43 +134,62 @@
 			);
 		} // ForEachResult
 
-		public virtual void ForEachResult<T>(Func<T, ActionResult> oAction) where T: IResultRow, new() {
+		public virtual void ForEachResult<T>(Func<T, ActionResult> oAction) where T : IResultRow, new() {
+			ForEachResult<T>(null, oAction);
+		} // ForEachResult
+
+		public virtual void ForEachResult<T>(ConnectionWrapper oConnectionToUse, Func<T, ActionResult> oAction) where T: IResultRow, new() {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.ForEachResult(oAction, GetName(), Species, PrepareParameters());
+			DB.ForEachResult(oConnectionToUse, oAction, GetName(), Species, PrepareParameters());
 		} // ForEachResult
 
 		#endregion method ForEachResult
 
 		#region method Fill
 
-		public virtual List<T> Fill<T>() where T : new() {
+		public virtual List<T> Fill<T>(ConnectionWrapper oConnectionToUse = null) where T : new() {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.Fill<T>(GetName(), Species, PrepareParameters());
+			return DB.Fill<T>(oConnectionToUse, GetName(), Species, PrepareParameters());
 		} // Fill
 
 		#endregion method Fill
 
 		#region method FillFirst
 
-		public virtual T FillFirst<T>() where T : new() {
+		public virtual T FillFirst<T>(ConnectionWrapper oConnectionToUse = null) where T : new() {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.FillFirst<T>(GetName(), Species, PrepareParameters());
+			return DB.FillFirst<T>(oConnectionToUse, GetName(), Species, PrepareParameters());
 		} // FillFirst
 
 		public virtual void FillFirst<T>(T oInstance) {
+			FillFirst<T>(null, oInstance);
+		} // FillFirst
+
+		public virtual void FillFirst<T>(ConnectionWrapper oConnectionToUse, T oInstance) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.FillFirst(oInstance, GetName(), Species, PrepareParameters());
+			DB.FillFirst(oConnectionToUse, oInstance, GetName(), Species, PrepareParameters());
 		} // FillFirst
 
 		#endregion method FillFirst
+
+		#region method ExecuteEnumerable
+
+		public virtual IEnumerable<SafeReader> ExecuteEnumerable(ConnectionWrapper oConnectionToUse = null) {
+			if (!IsReadyToGo())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
+			return DB.ExecuteEnumerable(oConnectionToUse, GetName(), Species, PrepareParameters());
+		} // ExecuteEnumerable
+
+		#endregion method ExecuteEnumerable
 
 		#region method ToString
 
@@ -172,9 +204,6 @@
 		#region protected
 
 		#region constructor
-
-		protected AStoredProcedure(ASafeLog oLog, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) : this(null, oLog, nSpecies) {
-		} // constructor
 
 		protected AStoredProcedure(AConnection oDB, ASafeLog oLog = null, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) {
 			m_aryArgs = null;
@@ -342,9 +371,6 @@
 
 	public abstract class AStoredProc : AStoredProcedure {
 		#region constructor
-
-		protected AStoredProc(ASafeLog oLog, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) : this(null, oLog, nSpecies) {
-		} // constructor
 
 		protected AStoredProc(AConnection oDB, ASafeLog oLog = null, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) : base(oDB, oLog, nSpecies) {
 		} // constructor

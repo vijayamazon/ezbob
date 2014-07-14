@@ -1,8 +1,12 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Reflection;
 	using System.Text;
+	using System.Xml;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 	using Ezbob.Utils;
 
 	#region attributes
@@ -35,16 +39,34 @@
 
 	#endregion class FKAttribute
 
+	#region XML source attributes
+
 	#region class ASrcAttribute
 
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 	internal abstract class ASrcAttribute : Attribute {
 		protected ASrcAttribute(string sNodeName) {
+			GroupName = null;
 			NodeName = sNodeName;
+			IsTopLevel = true;
 		} // constructor
 
 		public string GroupName { get; protected set; }
 		public string NodeName { get; private set; }
+
+		public bool IsTopLevel { get; protected set; }
+
+		public string GroupPath {
+			get { return "./REQUEST/" + GroupName; }
+		} // GroupPath
+
+		public string NodePath {
+			get { return GroupPath + "/" + NodeName; }
+		} // GroupPath
+
+		public override string ToString() {
+			return string.Format("{0}/{1}", GroupName, NodeName);
+		} // ToString
 	} // class ASrcAttribute
 
 	#endregion class ASrcAttribute
@@ -70,30 +92,17 @@
 	internal class DL99Attribute : ASrcAttribute { public DL99Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL99"; } }
 	internal class DLA2Attribute : ASrcAttribute { public DLA2Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DLA2"; } }
 	internal class DLB5Attribute : ASrcAttribute { public DLB5Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DLB5"; } }
+	internal class LenderDetailsAttribute : ASrcAttribute { public LenderDetailsAttribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL65/LENDERDETAILS"; IsTopLevel = false; } }
 
-	internal class LenderDetailsAttribute : ASrcAttribute { public LenderDetailsAttribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL65/LENDERDETAILS"; } }
+	#endregion XML source attributes
 
 	#endregion attributes
 
-	#region class TblFld
-
-	internal class TblFld {
-		public TblFld(Type oTableType, string sFieldName) {
-			TableType = oTableType;
-			TableName = TableType.Name;
-			FieldName = sFieldName;
-		} // constructor
-
-		public Type TableType { get; private set; }
-		public string TableName { get; private set; }
-		public string FieldName { get; private set; }
-	} // class TblFld
-
-	#endregion class TblFld
-
 	#region class AExperianDataRow
 
-	internal abstract class AExperianDataRow {
+	internal abstract class AExperianDataRow : IParametrisable {
+		#region public
+
 		[FK("ExperianLtd", "ExperianLtdID")]
 		public virtual long ExperianLtdID { get; set; }
 
@@ -102,7 +111,7 @@
 		public virtual string Stringify() {
 			var oResult = new StringBuilder();
 
-			oResult.Append("Start of " + this.GetType().Name + "\n\t");
+			oResult.Append("Start of " + this.GetType().Name + " (" + LoadedCount + " fields loaded)\n\t");
 
 			this.Traverse((oItem, oPropertyInfo) => oResult.Append(oPropertyInfo.Name + ": " + oPropertyInfo.GetValue(oItem) + " "));
 
@@ -119,11 +128,9 @@
 			List<string> oFields = new List<string>();
 			List<string> oConstraints = new List<string>();
 
-			string sTableName = this.GetType().Name;
-
 			bool bHasPk = false;
 
-			this.Traverse((oInstance, oPropInfo) => {
+			this.Traverse((oIgnoredInstance, oPropInfo) => {
 				string sType = T2T(oPropInfo);
 
 				if (string.IsNullOrWhiteSpace(sType))
@@ -132,7 +139,7 @@
 				var pk = oPropInfo.GetCustomAttribute<PKAttribute>();
 
 				if (pk != null) {
-					oConstraints.Insert(0, "\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY (" + oPropInfo.Name + ")");
+					oConstraints.Insert(0, "\t\tCONSTRAINT PK_" + DBTableName + " PRIMARY KEY (" + oPropInfo.Name + ")");
 					oFields.Insert(0, "\t\t" + oPropInfo.Name + " " + sType);
 					bHasPk = true;
 				}
@@ -143,7 +150,7 @@
 						oFields.Insert(0, "\t\t" + oPropInfo.Name + " " + sType);
 
 						oConstraints.Add(
-							"\t\tCONSTRAINT FK_" + sTableName + "_" + oPropInfo.Name +
+							"\t\tCONSTRAINT FK_" + DBTableName + "_" + oPropInfo.Name +
 							" FOREIGN KEY (" + oPropInfo.Name + ") REFERENCES " + fk.TableName + "(" + fk.FieldName + ")"
 						);
 					}
@@ -153,22 +160,34 @@
 			});
 
 			if (!bHasPk) {
-				oConstraints.Insert(0, "\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY (" + sTableName + "ID)");
-				oFields.Insert(0, "\t\t" + sTableName + "ID BIGINT IDENTITY(1, 1) NOT NULL");
+				oConstraints.Insert(0, "\t\tCONSTRAINT PK_" + DBTableName + " PRIMARY KEY (" + DBTableName + "ID)");
+				oFields.Insert(0, "\t\t" + DBTableName + "ID BIGINT IDENTITY(1, 1) NOT NULL");
 			} // if
 
 			oFields.Add("\t\tTimestampCounter ROWVERSION");
 
 			return
 				"SET QUOTED_IDENTIFIER ON\nGO\n\n" +
-				"IF OBJECT_ID('" + sTableName + "') IS NULL\nBEGIN\n" +
-				"\tCREATE TABLE " + sTableName + " (\n" +
+				"IF OBJECT_ID('" + DBTableName + "') IS NULL\nBEGIN\n" +
+				"\tCREATE TABLE " + DBTableName + " (\n" +
 				string.Join(",\n", oFields) +
 				(oConstraints.Count < 1 ? "" : ",\n" + string.Join(",\n", oConstraints)) +
 				"\n\t)\nEND\nGO\n\n";
 		} // GetCreateTable
 
 		#endregion method GetCreateTable
+
+		#region property DBTableName
+
+		public virtual string DBTableName { get { return this.GetType().Name; } } // DBTableName
+
+		#endregion property DBTableName
+
+		#region property DBSaveProcName
+
+		public virtual string DBSaveProcName { get { return "Save" + DBTableName; } } // DBSaveProcName
+
+		#endregion property DBSaveProcName
 
 		#region method GetCreateSp
 
@@ -179,45 +198,43 @@
 
 			List<string> oProcSql = new List<string>();
 
-			string sTableName = this.GetType().Name;
+			string sTypeName = DBTableName + "List";
 
-			string sProcName = "Save" + sTableName;
-
-			string sTypeName = sTableName + "List";
-
-			oSql.Add("IF OBJECT_ID('" + sProcName + "') IS NOT NULL\n\tDROP PROCEDURE " + sProcName + "\nGO\n");
+			oSql.Add("IF OBJECT_ID('" + DBSaveProcName + "') IS NOT NULL\n\tDROP PROCEDURE " + DBSaveProcName + "\nGO\n");
 
 			oSql.Add("IF TYPE_ID('" + sTypeName + "') IS NOT NULL\n\tDROP TYPE " + sTypeName + "\nGO\n");
 
-			oSql.Add("CREATE TYPE " + sTableName + " AS TABLE (");
+			oSql.Add("CREATE TYPE " + sTypeName + " AS TABLE (");
 
-			this.Traverse((oInstance, oPropInfo) => {
-				string sType = T2T(oPropInfo);
-
-				if (!string.IsNullOrWhiteSpace(sType)) {
-					if (oPropInfo.DeclaringType == this.GetType()) {
-						oFields.Add(oPropInfo.Name + " " + sType);
-						oFieldNames.Add(oPropInfo.Name);
-					}
-					else {
-						oSql.Add("\t" + oPropInfo.Name + " " + sType + ",");
-						oFieldNames.Insert(0, oPropInfo.Name);
-					} // if
+			this.TraverseForDB((oPropInfo, sType) => {
+				if (oPropInfo.DeclaringType == this.GetType()) {
+					oFields.Add(oPropInfo.Name + " " + sType);
+					oFieldNames.Add(oPropInfo.Name);
+				}
+				else {
+					oFields.Insert(0, oPropInfo.Name + " " + sType);
+					oFieldNames.Insert(0, oPropInfo.Name);
 				} // if
 			});
 
 			var sFieldNames = string.Join(",\n\t\t", oFieldNames);
 
-			oProcSql.Add("CREATE PROCEDURE " + sProcName);
+			oProcSql.Add("CREATE PROCEDURE " + DBSaveProcName);
 			oProcSql.Add("@Tbl " + sTypeName + " READONLY");
 			oProcSql.Add("AS");
 			oProcSql.Add("BEGIN");
 			oProcSql.Add("\tSET NOCOUNT ON;\n");
-			oProcSql.Add("\tINSERT INTO " + sTableName + " (");
+
+			DoBeforeTheMainInsert(oProcSql);
+			
+			oProcSql.Add("\tINSERT INTO " + DBTableName + " (");
 			oProcSql.Add("\t\t" + sFieldNames);
 			oProcSql.Add("\t) SELECT");
 			oProcSql.Add("\t\t" + sFieldNames);
 			oProcSql.Add("\tFROM @Tbl");
+
+			DoAfterTheMainInsert(oProcSql);
+
 			oProcSql.Add("END");
 			oProcSql.Add("GO");
 
@@ -229,6 +246,141 @@
 		} // GetCreateSp
 
 		#endregion method GetCreateSp
+
+		#region method LoadFromXml
+
+		public virtual AExperianDataRow LoadFromXml() {
+			if (Root == null)
+				throw new NullReferenceException("No XML root element specified for " + this.GetType().Name);
+
+			LoadedCount = 0;
+
+			var oGroupSrcAttr = this.GetType().GetCustomAttribute<ASrcAttribute>();
+
+			var oPropInfos = this.EnumerateProperties();
+
+			foreach (var pi in oPropInfos) {
+				var oNodeSrcAttr = pi.GetCustomAttribute<ASrcAttribute>();
+
+				if (oNodeSrcAttr == null)
+					continue;
+
+				XmlNode oNode = Root.SelectSingleNode(
+					oGroupSrcAttr == null ? oNodeSrcAttr.NodePath : oNodeSrcAttr.NodeName
+				);
+
+				if (oNode == null)
+					continue;
+
+				LoadedCount++;
+
+				SetValue(this, pi, oNode, Root);
+			} // for each properties
+
+			return this;
+		} // LoadFromXml
+
+		#endregion method LoadFromXml
+
+		#region property LoadedCount
+
+		public virtual int LoadedCount { get; private set; } // LoadedCount
+
+		#endregion property LoadedCount
+
+		#region method Save
+
+		public virtual bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
+			oDB.ExecuteNonQuery(
+				oPersistent,
+				DBSaveProcName,
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@Tbl", new List<AExperianDataRow> { this })
+			);
+
+			return true;
+		} // Save
+
+		#endregion method Save
+
+		#region method ToParameter
+
+		public object[] ToParameter() {
+			var oResult = new List<object>();
+
+			this.TraverseForDB((oPropInfo, sType) => {
+				if (oPropInfo.DeclaringType == this.GetType())
+					oResult.Add(oPropInfo.GetValue(this));
+				else
+					oResult.Insert(0, oPropInfo.GetValue(this));
+			});
+
+			return oResult.ToArray();
+		} // ToParameter
+
+		#endregion method ToParameter
+
+		#endregion public
+
+		#region protected
+
+		#region constructor
+
+		protected AExperianDataRow(XmlNode oRoot, ASafeLog oLog) {
+			Root = oRoot;
+			Log = oLog ?? new SafeLog();
+			LoadedCount = 0;
+		} // constructor
+
+		#endregion constructor
+
+		#region property Root
+
+		protected virtual XmlNode Root { get; private set; } // Root
+
+		#endregion property Root
+
+		#region property Log
+
+		protected virtual ASafeLog Log { get; private set; } // Log
+
+		#endregion property Log
+
+		#region method DoBeforeTheMainInsert
+
+		protected virtual void DoBeforeTheMainInsert(List<string> oProcSql) {} // DoBeforeTheMainInsert
+
+		#endregion method DoBeforeTheMainInsert
+
+		#region method DoAfterTheMainInsert
+
+		protected virtual void DoAfterTheMainInsert(List<string> oProcSql) {} // DoAfterTheMainInsert
+
+		#endregion method DoAfterTheMainInsert
+
+		#endregion protected
+
+		#region private
+
+		#region method TraverseForDB
+
+		private void TraverseForDB(Action<PropertyInfo, string> oAction) {
+			this.Traverse((oIgnoredInstance, oPropInfo) => {
+				string sType = T2T(oPropInfo);
+
+				if (string.IsNullOrWhiteSpace(sType))
+					return;
+
+				var pk = oPropInfo.GetCustomAttribute<PKAttribute>();
+
+				if (pk != null)
+					return;
+
+				oAction(oPropInfo, sType);
+			});
+		} // TraverseForDB
+
+		#endregion method TraverseForDB
 
 		#region method T2T
 
@@ -255,6 +407,102 @@
 		} // T2T
 
 		#endregion method T2T
+
+		#region method SetValue
+
+		private static void SetValue(AExperianDataRow oCurTable, PropertyInfo pi, XmlNode oNode, XmlNode oGroup) {
+			if (pi.PropertyType == typeof (string))
+				pi.SetValue(oCurTable, oNode.InnerText);
+			else if (pi.PropertyType == typeof (int?))
+				SetInt(pi, oCurTable, oNode.InnerText);
+			else if (pi.PropertyType == typeof (double?))
+				SetDouble(pi, oCurTable, oNode.InnerText);
+			else if (pi.PropertyType == typeof (decimal?))
+				SetDecimal(pi, oCurTable, oNode.InnerText);
+			else if (pi.PropertyType == typeof (DateTime?)) {
+				if (oNode.Name.EndsWith("-YYYY")) {
+					string sPrefix = oNode.Name.Substring(0, oNode.Name.Length - 5);
+
+					XmlNode oMonthNode = oGroup.SelectSingleNode(sPrefix + "-MM");
+
+					XmlNode oDayNode = oMonthNode == null ? null : oGroup.SelectSingleNode(sPrefix + "-DD");
+
+					if (oDayNode != null)
+						SetDate(pi, oCurTable, oNode.InnerText + MD(oMonthNode) + MD(oDayNode));
+				}
+				else
+					SetDate(pi, oCurTable, oNode.InnerText);
+			} // if
+		} // SetValue
+
+		#endregion method SetValue
+
+		#region method SetInt
+
+		private static void SetInt(PropertyInfo pi, AExperianDataRow oCurTable, string sValue) {
+			int n;
+
+			if (int.TryParse(sValue, out n))
+				pi.SetValue(oCurTable, n);
+			else
+				pi.SetValue(oCurTable, null);
+		} // SetInt
+
+		#endregion method SetInt
+
+		#region method SetDouble
+
+		private static void SetDouble(PropertyInfo pi, AExperianDataRow oCurTable, string sValue) {
+			double n;
+
+			if (double.TryParse(sValue, out n))
+				pi.SetValue(oCurTable, n);
+			else
+				pi.SetValue(oCurTable, null);
+		} // SetDouble
+
+		#endregion method SetDouble
+
+		#region method SetDecimal
+
+		private static void SetDecimal(PropertyInfo pi, AExperianDataRow oCurTable, string sValue) {
+			decimal n;
+
+			if (decimal.TryParse(sValue, out n))
+				pi.SetValue(oCurTable, n);
+			else
+				pi.SetValue(oCurTable, null);
+		} // SetDecimal
+
+		#endregion method SetDecimal
+
+		#region method SetDate
+
+		private static void SetDate(PropertyInfo pi, AExperianDataRow oCurTable, string sValue) {
+			DateTime n;
+
+			if (DateTime.TryParseExact(sValue, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out n))
+				pi.SetValue(oCurTable, n);
+			else
+				pi.SetValue(oCurTable, null);
+		} // SetDate
+
+		#endregion method SetDate
+
+		#region method MD
+
+		private static string MD(XmlNode oNode) {
+			string s = oNode.InnerText;
+
+			if (s.Length < 2)
+				return "0" + s;
+
+			return s;
+		} // MD
+
+		#endregion method MD
+
+		#endregion private
 	} // class AExperianDataRow
 
 	#endregion class AExperianDataRow
@@ -262,6 +510,29 @@
 	#region class ExperianLtd
 
 	internal class ExperianLtd : AExperianDataRow {
+		#region constructor
+
+		public ExperianLtd(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {
+			ExperianLtdID = 0;
+		} // constructor
+
+		#endregion constructor
+
+		#region method Save
+
+		public override bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
+			ExperianLtdID = oDB.ExecuteScalar<int>(
+				oPersistent,
+				DBSaveProcName,
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@Tbl", new List<AExperianDataRow> { this })
+			);
+
+			return ExperianLtdID > 0;
+		} // Save
+
+		#endregion method Save
+
 		[PK]
 		public override long ExperianLtdID {
 			get { return base.ExperianLtdID; }
@@ -387,6 +658,28 @@
 		public string IndustryPaymentPattern { get; set; }
 		[DL41("SUPPPAYPATTN")]
 		public string SupplierPaymentPattern { get; set; }
+
+		#region method DoBeforeTheMainInsert
+
+		protected override void DoBeforeTheMainInsert(List<string> oProcSql) {
+			oProcSql.Add("\tDECLARE @ExperianLtdID INT");
+
+			oProcSql.Add("\tDECLARE @c INT\n");
+			oProcSql.Add("\tSELECT @c = COUNT(*) FROM @Tbl\n");
+			oProcSql.Add("\tIF @c != 1");
+			oProcSql.Add("\t\tRAISERROR('Invalid argument: no/too much data to insert into ExperianLtd table.', 11, 1)\n");
+		} // DoBeforeTheMainInsert
+
+		#endregion method DoBeforeTheMainInsert
+
+		#region method DoAfterTheMainInsert
+
+		protected override void DoAfterTheMainInsert(List<string> oProcSql) {
+			oProcSql.Add("\n\tSET @ExperianLtdID = SCOPE_IDENTITY()\n");
+			oProcSql.Add("\tSELECT @ExperianLtdID AS ExperianLtdID");
+		} // DoAfterTheMainInsert
+
+		#endregion method DoAfterTheMainInsert
 	} // class ExperianLtd
 
 	#endregion class ExperianLtd
@@ -395,6 +688,8 @@
 
 	[PrevCompNames]
 	internal class ExperianLtdPrevCompanyNames : AExperianDataRow {
+		public ExperianLtdPrevCompanyNames(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[PrevCompNames("DATECHANGED")]
 		public DateTime? DateChanged { get; set; }
 		[PrevCompNames("PREVREGADDR1")]
@@ -415,6 +710,8 @@
 
 	[Sharehlds]
 	internal class ExperianLtdShareholders : AExperianDataRow {
+		public ExperianLtdShareholders(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[Sharehlds("SHLDNAME")]
 		public string DescriptionOfShareholder { get; set; }
 		[Sharehlds("SHLDHOLDING")]
@@ -429,6 +726,8 @@
 
 	[DLB5]
 	internal class ExperianLtdDLB5 : AExperianDataRow {
+		public ExperianLtdDLB5(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[DLB5("RECORDTYPE")]
 		public string RecordType { get; set; }
 		[DLB5("ISSUINGCOMPANY")]
@@ -497,6 +796,8 @@
 
 	[DL72]
 	internal class ExperianLtdDL72 : AExperianDataRow {
+		public ExperianLtdDL72(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[DL72("FOREIGNFLAG")]
 		public string ForeignAddressFlag { get; set; }
 		[DL72("DIRCOMPFLAG")]
@@ -553,6 +854,8 @@
 
 	[SummaryLine]
 	internal class ExperianLtdCreditSummary : AExperianDataRow {
+		public ExperianLtdCreditSummary(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[SummaryLine("CREDTYPE")]
 		public string CreditEventType { get; set; }
 		[SummaryLine("TYPEDATE-YYYY")]
@@ -565,6 +868,8 @@
 
 	[DL48]
 	internal class ExperianLtdDL48 : AExperianDataRow {
+		public ExperianLtdDL48(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[DL48("FRAUDCATEGORY")]
 		public string FraudCategory { get; set; }
 		[DL48("SUPPLIERNAME")]
@@ -577,6 +882,8 @@
 
 	[DL52]
 	internal class ExperianLtdDL52 : AExperianDataRow {
+		public ExperianLtdDL52(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[DL52("RECORDTYPE")]
 		public string NoticeType { get; set; }
 		[DL52("DATEOFNOTICE-YYYY")]
@@ -589,6 +896,8 @@
 
 	[DL68]
 	internal class ExperianLtdDL68 : AExperianDataRow {
+		public ExperianLtdDL68(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[DL68("SUBSIDREGNUM")]
 		public string SubsidiaryRegisteredNumber { get; set; }
 		[DL68("SUBSIDSTATUS")]
@@ -605,6 +914,8 @@
 
 	[DL97]
 	internal class ExperianLtdDL97 : AExperianDataRow {
+		public ExperianLtdDL97(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[DL97("ACCTSTATE")]
 		public string AccountState { get; set; }
 		[DL97("COMPANYTYPE")]
@@ -639,6 +950,8 @@
 
 	[DL99]
 	internal class ExperianLtdDL99 : AExperianDataRow {
+		public ExperianLtdDL99(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[DL99("DATEOFACCOUNTS-YYYY")]
 		public DateTime? Date { get; set; }
 		[DL99("CREDDIRLOANS")]
@@ -679,6 +992,8 @@
 
 	[DLA2]
 	internal class ExperianLtdDLA2 : AExperianDataRow {
+		public ExperianLtdDLA2(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
 		[DLA2("DATEACCS-YYYY")]
 		public DateTime? Date { get; set; }
 
@@ -692,11 +1007,30 @@
 
 	[DL65]
 	internal class ExperianLtdDL65 : AExperianDataRow {
-		public ExperianLtdDL65() {
+		public ExperianLtdDL65(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {
+			ExperianLtdDL65ID = 0;
 			Details = new List<ExperianLtdLenderDetails>();
 		} // constructor
 
 		public List<ExperianLtdLenderDetails> Details { get; private set; }
+
+		#region method Save
+
+		public override bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
+			ExperianLtdDL65ID = oDB.ExecuteScalar<int>(
+				oPersistent,
+				DBSaveProcName,
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@Tbl", new List<AExperianDataRow> { this })
+			);
+
+			return ExperianLtdDL65ID > 0;
+		} // Save
+
+		#endregion method Save
+
+		[PK]
+		public long ExperianLtdDL65ID { get; set; }
 
 		[DL65("CHARGENUMBER")]
 		public string ChargeNumber { get; set; }
@@ -742,14 +1076,23 @@
 
 	[LenderDetails]
 	internal class ExperianLtdLenderDetails : AExperianDataRow {
-		[FK("ExperianLtdDL65", "ExperianLtdDL65EntryID")]
-		public long DL65EntryID { get; set; }
+		public ExperianLtdLenderDetails(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+
+		[FK("ExperianLtdDL65", "ExperianLtdDL65ID")]
+		public long DL65ID { get; set; }
 
 		[LenderDetails("LENDERNAME")]
 		public string LenderName { get; set; }
 
+		/// <summary>
+		/// Do not remove.
+		/// The only usage of this field is to hide from traversing corresponding field in the base class.
+		/// </summary>
 		[NonTraversable]
-		public override long ExperianLtdID { get; set; }
+		public override long ExperianLtdID {
+			get { return base.ExperianLtdID; }
+			set { base.ExperianLtdID = value; }
+		} // ExperianLtdID
 	} // class ExperianLtdLenderDetails
 
 	#endregion class ExperianLtdLenderDetails

@@ -40,18 +40,6 @@
 
 		#endregion method CreateTableParameter
 
-		#region property NewCommand
-
-		public override DbCommand NewCommand {
-			get {
-				return new SqlCommand {
-					Connection = (System.Data.SqlClient.SqlConnection)(GetConnection().Connection),
-				};
-			} // get
-		} // NewCommand
-
-		#endregion property NewCommand
-
 		#endregion public
 
 		#region protected

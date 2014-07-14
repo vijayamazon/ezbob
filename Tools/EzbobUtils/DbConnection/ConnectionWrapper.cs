@@ -15,16 +15,18 @@
 
 		#region method Open
 
-		public void Open() {
+		public ConnectionWrapper Open() {
 			if (IsOpen)
-				return;
+				return this;
 
 			if (Connection == null)
-				return;
+				return this;
 
 			Connection.Open();
 
 			IsOpen = true;
+
+			return this;
 		} // Open
 
 		#endregion method Open
