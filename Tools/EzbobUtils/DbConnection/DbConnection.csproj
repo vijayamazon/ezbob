@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="AResultRow.cs" />
     <Compile Include="AStoredProcedure.cs" />
+    <Compile Include="ConnectionWrapper.cs" />
     <Compile Include="DbCommandExt.cs" />
     <Compile Include="DbConnectionGenerator.cs" />
     <Compile Include="IResultRow.cs" />

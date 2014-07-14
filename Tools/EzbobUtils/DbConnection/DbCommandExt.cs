@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Database {
 	using System;
+	using System.Collections.Generic;
 	using System.Data.Common;
 
 	public static class DbCommandExt {
@@ -51,6 +52,32 @@
 
 		#endregion method ForEachResult
 
+		#region method ExecuteEnumerable
+
+		public static IEnumerable<SafeReader> ExecuteEnumerable(this DbCommand command, ConnectionWrapper cw, bool bForceCloseOnExit, Action oLogExecution = null) {
+			cw.Open();
+
+			DbDataReader oReader = command.ExecuteReader();
+
+			if (oLogExecution != null)
+				oLogExecution();
+
+			do {
+				if (!oReader.HasRows)
+					continue;
+
+				while (oReader.Read())
+					yield return new SafeReader(oReader);
+			} while (oReader.NextResult());
+
+			oReader.Close();
+
+			if (bForceCloseOnExit)
+				cw.Close();
+		} // ExecuteEnumerable
+
+		#endregion method ExecuteEnumerable
+
 		#endregion public
 
 		#region private
@@ -83,6 +110,8 @@
 					bRowSetStart = false;
 				} // while has rows in current set
 			} while (!bStop && oReader.NextResult());
+
+			oReader.Close();
 		} // Run
 
 		#endregion private

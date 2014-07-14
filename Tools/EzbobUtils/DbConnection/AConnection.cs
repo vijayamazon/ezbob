@@ -42,11 +42,11 @@
 
 		#region method ExecuteScalar
 
-		public T ExecuteScalar<T>(string sQuery, params QueryParameter[] aryParams) {
+		public virtual T ExecuteScalar<T>(string sQuery, params QueryParameter[] aryParams) {
 			return ExecuteScalar<T>(sQuery, CommandSpecies.Auto, aryParams);
 		} // ExecuteScalar
 
-		public T ExecuteScalar<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+		public virtual T ExecuteScalar<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			object oRes = Run(ExecMode.Scalar, nSpecies, sQuery, aryParams);
 
 			if (oRes is DBNull)
@@ -60,12 +60,12 @@
 		#region method ExecuteReader
 
 		[Obsolete]
-		public DataTable ExecuteReader(string sQuery, params QueryParameter[] aryParams) {
+		public virtual DataTable ExecuteReader(string sQuery, params QueryParameter[] aryParams) {
 			return ExecuteReader(sQuery, CommandSpecies.Auto, aryParams);
 		} // ExecuteReader
 
 		[Obsolete]
-		public DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+		public virtual DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			return (DataTable)Run(ExecMode.Reader, nSpecies, sQuery, aryParams);
 		} // ExecuteReader
 
@@ -73,11 +73,11 @@
 
 		#region method ExecuteNonQuery
 
-		public int ExecuteNonQuery(string sQuery, params QueryParameter[] aryParams) {
+		public virtual int ExecuteNonQuery(string sQuery, params QueryParameter[] aryParams) {
 			return ExecuteNonQuery(sQuery, CommandSpecies.Auto, aryParams);
 		} // ExecuteNonQuery
 
-		public int ExecuteNonQuery(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+		public virtual int ExecuteNonQuery(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			return (int)Run(ExecMode.NonQuery, nSpecies, sQuery, aryParams);
 		} // ExecuteNonQuery
 
@@ -85,14 +85,14 @@
 
 		#region method ForEachRow
 
-		public void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
+		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
 
 			ForEachRow(oAction, sQuery, CommandSpecies.Auto, aryParams);
 		} // ForEachRow
 
-		public void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
 
@@ -103,14 +103,14 @@
 
 		#region method ForEachRowSafe
 
-		public void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
+		public virtual void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
 
 			ForEachRowSafe(oAction, sQuery, CommandSpecies.Auto, aryParams);
 		} // ForEachRowSafe
 
-		public void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+		public virtual void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
 
@@ -149,6 +149,18 @@
 
 		#endregion method ForEachResult
 
+		#region method ExecuteEnumerable
+
+		public virtual IEnumerable<SafeReader> ExecuteEnumerable(string sQuery, params QueryParameter[] aryParams) {
+			return ExecuteEnumerable(sQuery, CommandSpecies.Auto, aryParams);
+		} // ExecuteEnumerable
+
+		public virtual IEnumerable<SafeReader> ExecuteEnumerable(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			return (IEnumerable<SafeReader>)Run(null, ExecMode.Enumerable, nSpecies, sQuery, aryParams);
+		} // ExecuteEnumerable
+
+		#endregion method ExecuteEnumerable
+
 		#region method Fill
 
 		public List<T> Fill<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new() {
@@ -175,11 +187,11 @@
 
 		#region method FillFirst
 
-		public T FillFirst<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new() {
+		public virtual T FillFirst<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new() {
 			return FillFirst<T>(sQuery, CommandSpecies.Auto, aryParams);
 		} // FillFirst
 
-		public T FillFirst<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable, new() {
+		public virtual T FillFirst<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable, new() {
 			var oResult = new T();
 
 			ForEachRowSafe(
@@ -341,8 +353,8 @@
 
 		#region method GetConnection
 
-		protected virtual ConnectionWrapper GetConnection() {
-			return PersistentConnection ?? new ConnectionWrapper(CreateConnection(), false);
+		protected virtual ConnectionWrapper GetConnection(bool bPersistent = false) {
+			return PersistentConnection ?? new ConnectionWrapper(CreateConnection(), bPersistent);
 		} // GetConnection
 
 		#endregion method GetConnection
@@ -393,7 +405,8 @@
 			Scalar,
 			Reader,
 			NonQuery,
-			ForEachRow
+			ForEachRow,
+			Enumerable,
 		} // Enum ExecMode
 
 		#endregion enum ExecMode
@@ -547,7 +560,7 @@
 			string sArgsForLog,
 			Guid guid
 		) {
-			using (var cw = GetConnection()) {
+			using (var cw = GetConnection(nMode == ExecMode.Enumerable)) {
 				command.Connection = cw.Connection;
 
 				cw.Open();
@@ -565,10 +578,12 @@
 				case ExecMode.NonQuery:
 					return RunNonQuery(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
 
-				case ExecMode.ForEachRow: {
+				case ExecMode.ForEachRow:
 					command.ForEachRow(oAction, () => PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw));
 					return null;
-				} // ExecMode.ForEachRow
+
+				case ExecMode.Enumerable:
+					return command.ExecuteEnumerable(cw, cw != PersistentConnection, () => PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw));
 
 				default:
 					throw new ArgumentOutOfRangeException("nMode");
@@ -601,7 +616,7 @@
 			var dataTable = new DataTable();
 			dataTable.Load(oReader);
 
-			string sMsg = string.Empty;
+			string sMsg;
 
 			switch (nLogVerbosityLevel) {
 			case LogVerbosityLevel.Compact:
@@ -632,53 +647,6 @@
 		} // RunNonQuery
 
 		#endregion method RunNonQuery
-
-		#region class ConnectionWrapper
-
-		protected class ConnectionWrapper : IDisposable {
-			#region constructor
-
-			public ConnectionWrapper(DbConnection oConnection, bool bIsPersistent) {
-				Connection = oConnection;
-				IsPersistent = bIsPersistent;
-				IsOpen = false;
-			} // constructor
-
-			#endregion constructor
-
-			#region method Open
-
-			public void Open() {
-				if (IsOpen)
-					return;
-
-				if (Connection == null)
-					return;
-
-				Connection.Open();
-
-				IsOpen = true;
-			} // Open
-
-			#endregion method Open
-
-			#region method Dispose
-
-			public void Dispose() {
-				if (!IsPersistent && (Connection != null))
-					Connection.Dispose();
-			} // Dispose
-
-			#endregion method Dispose
-
-			public DbConnection Connection { get; private set; }
-
-			public bool IsPersistent { get; private set; }
-
-			public bool IsOpen { get; private set; }
-		} // class ConnectionWrapper
-
-		#endregion class ConnectionWrapper
 
 		#region property PersistentConnection
 
