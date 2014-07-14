@@ -4,7 +4,7 @@
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
 
-	public class ExperianNonLimitedResultsScoreHistory
+	public class ExperianNonLimitedResultScoreHistory
 	{
 		public virtual int Id { get; set; }
 		public virtual ExperianNonLimitedResults ExperianNonLimitedResult { get; set; }
@@ -12,13 +12,13 @@
 		public virtual DateTime Date { get; set; }
 	}
 
-	public sealed class ExperianNonLimitedResultsScoreHistoryMap : ClassMap<ExperianNonLimitedResultsScoreHistory>
+	public sealed class ExperianNonLimitedResultScoreHistoryMap : ClassMap<ExperianNonLimitedResultScoreHistory>
 	{
-		public ExperianNonLimitedResultsScoreHistoryMap()
+		public ExperianNonLimitedResultScoreHistoryMap()
 		{
-			Table("ExperianNonLimitedResultsScoreHistory");
+			Table("ExperianNonLimitedResultScoreHistory");
 			Id(x => x.Id);
-			References(x => x.ExperianNonLimitedResult, "NonLimitedResultId");
+			References(x => x.ExperianNonLimitedResult, "ExperianNonLimitedResultId");
 			Map(x => x.RiskScore);
 			Map(x => x.Date).Access.BackingField().CustomType<UtcDateTimeType>();
 		}

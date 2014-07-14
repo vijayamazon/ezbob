@@ -3,16 +3,16 @@ IF OBJECT_ID('InsertNonLimitedResultScoreHistory') IS NULL
 GO
 
 ALTER PROCEDURE InsertNonLimitedResultScoreHistory
-	(@NonLimitedResultId INT,
+	(@ExperianNonLimitedResultId INT,
 	 @RiskScore INT,
 	 @Date DATETIME)
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	INSERT INTO ExperianNonLimitedResultsScoreHistory
-		(NonLimitedResultId, RiskScore,	Date)
+	INSERT INTO ExperianNonLimitedResultScoreHistory
+		(ExperianNonLimitedResultId, RiskScore,	Date)
 	VALUES
-		(@NonLimitedResultId, @RiskScore, @Date)
+		(@ExperianNonLimitedResultId, @RiskScore, @Date)
 END
 GO

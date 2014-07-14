@@ -37,11 +37,11 @@
 		public virtual string Errors { get; set; }
 		public virtual bool IsActive { get; set; }
 
-		public virtual ISet<ExperianNonLimitedResultsScoreHistory> HistoryScores { get; set; }
+		public virtual ISet<ExperianNonLimitedResultScoreHistory> HistoryScores { get; set; }
 
 		public ExperianNonLimitedResults()
 		{
-			HistoryScores = new HashedSet<ExperianNonLimitedResultsScoreHistory>();
+			HistoryScores = new HashedSet<ExperianNonLimitedResultScoreHistory>();
 		}
 	}
 
@@ -78,7 +78,7 @@
 			Map(x => x.Errors).Length(4000);
 			Map(x => x.IsActive);
 			HasMany(x => x.HistoryScores).
-				KeyColumn("NonLimitedResultId")
+				KeyColumn("ExperianNonLimitedResultId")
 				.Cascade.All();
 		}
 	}

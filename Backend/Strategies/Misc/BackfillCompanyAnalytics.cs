@@ -1,6 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
-	using EzBob.Backend.Strategies.Experian;
+	using Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

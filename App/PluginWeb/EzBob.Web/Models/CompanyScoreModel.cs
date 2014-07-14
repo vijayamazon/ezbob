@@ -216,7 +216,7 @@
 				model.CcjMonths = experianNonLimitedResult.AgeOfMostRecentCcj;
 				model.Ccjs = experianNonLimitedResult.NumOfCcjsInLast12Months + experianNonLimitedResult.NumOfCcjsIn13To24Months;
 
-				foreach (ExperianNonLimitedResultsScoreHistory scoreHistory in experianNonLimitedResult.HistoryScores)
+				foreach (ExperianNonLimitedResultScoreHistory scoreHistory in experianNonLimitedResult.HistoryScores)
 				{
 					try
 					{
