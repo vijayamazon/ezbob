@@ -107,9 +107,6 @@
 		//Errors
 		string errors = string.Empty;
 
-		// TODO: discuss processing of these tags: DG02, DT11 ,DD11 , DD12, DD14, DD15, DD23
-		// Non exist in production but DD11 that exists twice
-
 		public NonLimitedParser()
 		{
 			log = new SafeILog(LogManager.GetLogger(typeof(NonLimitedParser)));

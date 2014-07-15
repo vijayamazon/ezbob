@@ -2,16 +2,16 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
+	using System.Data;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using Areas.Underwriter.Models;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Experian;
+	using Ezbob.Database;
 	using Ezbob.ExperianParser;
 	using EZBob.DatabaseLib;
-	using StructureMap;
+	using Ezbob.Logger;
 	using log4net;
 
 	public class CompanyScoreModel
@@ -84,11 +84,14 @@
 	public class CompanyScoreModelBuilder
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CompanyScoreModelBuilder));
-		private readonly ExperianNonLimitedResultsRepository experianNonLimitedResultsRepository;
+		private readonly AConnection db;
+		private readonly SafeILog log;
 
 		public CompanyScoreModelBuilder()
 		{
-			experianNonLimitedResultsRepository = ObjectFactory.GetInstance<ExperianNonLimitedResultsRepository>();
+			log = new SafeILog(LogManager.GetLogger(typeof(CompanyScoreModelBuilder)));
+			var env = new Ezbob.Context.Environment(log);
+			db = new SqlConnection(env, log);
 		}
 
 		public CompanyScoreModel Create(Customer customer)
@@ -207,23 +210,39 @@
 			model.IsLimited = false;
 			model.CompanyRefNum = refNumber;
 			
-			ExperianNonLimitedResults experianNonLimitedResult = experianNonLimitedResultsRepository.GetAll().FirstOrDefault(res => res.CustomerId == customerId && res.RefNumber == refNumber);
-			if (experianNonLimitedResult != null)
-			{
-				model.CompanyName = experianNonLimitedResult.BusinessName;
-				model.Score = experianNonLimitedResult.Score;
-				model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
-				model.CcjMonths = experianNonLimitedResult.AgeOfMostRecentCcj;
-				model.Ccjs = experianNonLimitedResult.NumOfCcjsInLast12Months + experianNonLimitedResult.NumOfCcjsIn13To24Months;
+			
+			DataTable dt = db.ExecuteReader(
+				"GetNonLimitedCompanyDashboardDetails",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("RefNumber", refNumber));
 
-				foreach (ExperianNonLimitedResultScoreHistory scoreHistory in experianNonLimitedResult.HistoryScores)
+			if (dt.Rows.Count == 1)
+			{
+				var sr = new SafeReader(dt.Rows[0]);
+
+				model.CompanyName = sr["BusinessName"];
+				model.Score = sr["RiskScore"];
+				model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
+				model.CcjMonths = sr["AgeOfMostRecentJudgmentDuringOwnershipMonths"];
+				model.Ccjs = sr["TotalJudgmentCountLast24Months"];
+				model.Ccjs += sr["TotalAssociatedJudgmentCountLast24Months"];
+
+				DataTable scoreHistoryDataTable = db.ExecuteReader(
+					"GetNonLimitedCompanyScoreHistory",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", customerId),
+					new QueryParameter("RefNumber", refNumber));
+
+				foreach (DataRow row in scoreHistoryDataTable.Rows)
 				{
+					var scoreHistorySafeReader = new SafeReader(row);
 					try
 					{
 						model.NonLimScoreHistories.Add(new NonLimScoreHistory
 						{
-							Score = scoreHistory.RiskScore,
-							ScoreDate = scoreHistory.Date
+							Score = scoreHistorySafeReader["RiskScore"],
+							ScoreDate = scoreHistorySafeReader["Date"]
 						});
 					}
 					catch (Exception ex)

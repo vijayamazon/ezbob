@@ -1,5 +1,6 @@
 ﻿namespace ExperianLib.Ebusiness {
 	using System;
+	using System.Data;
 	using System.IO;
 	using System.Linq;
 	using System.Net;
@@ -27,7 +28,10 @@
 			eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
 			experianDL97AccountsRepository = ObjectFactory.GetInstance<ExperianDL97AccountsRepository>();
 			nonLimitedParser = new NonLimitedParser();
-			experianNonLimitedResultsRepository = ObjectFactory.GetInstance<ExperianNonLimitedResultsRepository>();
+
+			log = new SafeILog(LogManager.GetLogger(typeof(NonLimitedParser)));
+			var env = new Ezbob.Context.Environment(log);
+			db = new SqlConnection(env, log);
 		} // constructor
 
 		#endregion constructor
@@ -201,11 +205,10 @@
 
 		private NonLimitedResults GetOneNotLimitedBusinessData(string refNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
 		{
-			try 
+			try
 			{
-				ExperianNonLimitedResults existingData = experianNonLimitedResultsRepository.GetAll().FirstOrDefault(r => r.CustomerId == customerId && r.RefNumber == refNumber);
-
-				if (forceCheck || (!checkInCacheOnly && (existingData == null || CacheExpired(existingData.Created))))
+				DateTime? created = GetNonLimitedCreationTime(refNumber, customerId);
+				if (forceCheck || (!checkInCacheOnly && (created == null || CacheExpired(created.Value))))
 				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", refNumber);
 
@@ -218,7 +221,7 @@
 					return BuildResponseFromDb(customerId, refNumber);
 				} // if
 
-				if (existingData == null)
+				if (created == null)
 				{
 					return null;
 				}
@@ -233,35 +236,77 @@
 			} // try
 		}
 
-		private NonLimitedResults BuildResponseFromDb(int customerId, string regNumber)
+		private DateTime? GetNonLimitedCreationTime(string refNumber, int customerId)
 		{
-			ExperianNonLimitedResults experianNonLimitedResults = experianNonLimitedResultsRepository.GetAll().FirstOrDefault(r => r.CustomerId == customerId && r.RefNumber == regNumber);
-
-			var nonLimitedResults = new NonLimitedResults();
-			if (experianNonLimitedResults != null)
+			DateTime? created = null;
+			DataTable dt = db.ExecuteReader(
+				"GetNonLimitedCompanyCreationTime",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("RefNumber", refNumber));
+			if (dt.Rows.Count == 1)
 			{
+				var sr = new SafeReader(dt.Rows[0]);
+				created = sr["Created"];
+			}
+			return created;
+		}
+
+		private NonLimitedResults BuildResponseFromDb(int customerId, string refNumber)
+		{
+			DateTime? incorporationDate;
+			string errors, businessName, address1, address2, address3, address4, address5, postcode;
+			int riskScore;
+			decimal creditLimit;
+			var nonLimitedResults = new NonLimitedResults();
+
+			DataTable dt = db.ExecuteReader(
+				"GetNonLimitedCompanyBasicDetails",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("RefNumber", refNumber));
+
+			if (dt.Rows.Count == 1)
+			{
+				var sr = new SafeReader(dt.Rows[0]);
+				incorporationDate = sr["IncorporationDate"];
+				errors = sr["Errors"];
+				string creditLimitStr = sr["CreditLimit"];
+				if (!decimal.TryParse(creditLimitStr, out creditLimit))
+				{
+					creditLimit = 0;
+				}
+				businessName = sr["BusinessName"];
+				address1 = sr["Address1"];
+				address2 = sr["Address2"];
+				address3 = sr["Address3"];
+				address4 = sr["Address4"];
+				address5 = sr["Address5"];
+				postcode = sr["Postcode"];
+				riskScore = sr["RiskScore"];
+
 				nonLimitedResults.LastCheckDate = DateTime.UtcNow;
-				nonLimitedResults.Error = experianNonLimitedResults.Errors;
+				nonLimitedResults.Error = errors;
 				nonLimitedResults.CompanyNotFoundOnBureau = nonLimitedResults.IsError;
-				if (experianNonLimitedResults.RiskScore == 0)
+				if (riskScore == 0)
 				{
 					nonLimitedResults.Error += "Can't read RISKSCORE section from response!";
 				}
 				else
 				{
-					nonLimitedResults.BureauScore = experianNonLimitedResults.RiskScore;
+					nonLimitedResults.BureauScore = riskScore;
 				}
 
 				nonLimitedResults.CompanyNotFoundOnBureau = !string.IsNullOrEmpty(nonLimitedResults.Error);
-				nonLimitedResults.CreditLimit = experianNonLimitedResults.CreditLimit;
-				nonLimitedResults.CompanyName = experianNonLimitedResults.BusinessName;
-				nonLimitedResults.AddressLine1 = experianNonLimitedResults.Address1;
-				nonLimitedResults.AddressLine2 = experianNonLimitedResults.Address2;
-				nonLimitedResults.AddressLine3 = experianNonLimitedResults.Address3;
-				nonLimitedResults.AddressLine4 = experianNonLimitedResults.Address4;
-				nonLimitedResults.AddressLine5 = experianNonLimitedResults.Address5;
-				nonLimitedResults.PostCode = experianNonLimitedResults.Postcode;
-				nonLimitedResults.IncorporationDate = experianNonLimitedResults.IncorporationDate;
+				nonLimitedResults.CreditLimit = creditLimit;
+				nonLimitedResults.CompanyName = businessName;
+				nonLimitedResults.AddressLine1 = address1;
+				nonLimitedResults.AddressLine2 = address2;
+				nonLimitedResults.AddressLine3 = address3;
+				nonLimitedResults.AddressLine4 = address4;
+				nonLimitedResults.AddressLine5 = address5;
+				nonLimitedResults.PostCode = postcode;
+				nonLimitedResults.IncorporationDate = incorporationDate;
 			}
 
 			return nonLimitedResults;
@@ -393,9 +438,11 @@
 		private readonly ExperianDL97AccountsRepository experianDL97AccountsRepository;
 		private readonly NonLimitedParser nonLimitedParser;
 		private readonly string eSeriesUrl;
-		private readonly ExperianNonLimitedResultsRepository experianNonLimitedResultsRepository;
 
 		#endregion properties
+
+		private readonly AConnection db;
+		private readonly SafeILog log;
 
 		#endregion private
 	} // class EBusinessService
