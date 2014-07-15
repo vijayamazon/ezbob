@@ -33,6 +33,7 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     @initStatusIcons()
     $('#email').focus()
     EzBob.UiAction.registerView @
+    $('.header-info-text').text('PASSWORD RECOVERY')
     @
 
   events:

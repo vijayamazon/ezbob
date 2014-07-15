@@ -8,8 +8,6 @@
 	var customer = Model.Customer;
 	customer.IsProfile = true;
 	var currVals = CurrentValues.Instance;
-
-	string sMedalCart = ((Model.Customer.Medal != null) ? Model.Customer.Medal.ToLower() : "") + "-cart";
 }
 
 @section css {
@@ -19,18 +17,19 @@
 <script id="profile-main-template" type="text/template">
 	<div id="profile-main">
 		<div class="clearfix">
-			<div class="cart-logo @sMedalCart"></div>
+			
 			<div class="profile-headlines">
 				<div id="message-sign" class=""></div>
-				<h1 style="margin-top: -10px;">My Account</h1>
 				<div class="proccessing-message"></div>
 			</div>
-			<div class="whats-new-main notification_lightblue" style="display: none">
+			
+            <div class="whats-new-main notification_lightblue" style="display: none">
 				<div class="whats-new-buttons">
 					<input type="button" value="Got it" class="btn-link" id="btnGotIt" ui-event-control-id="dashboard:whats-new-dismiss" />
 				</div>
 			</div>
-			<div class="notifications"></div>
+			
+            <div class="notifications"></div>
 		</div>
 
 		<div class="d-widgets clearfix"></div>
@@ -64,12 +63,15 @@
 		<div class="profile-widgets"></div>
 	</div>
 </script>
-
-<div id="profile-content">
-	<div id="profile-main-to-be-replaced"></div>
-	<div id="get-cash"></div>
-	<div id="pay-early"></div>
-	<div id="loan-detail"></div>
+<div class="row-fluid">
+    <div class="inner">
+        <div id="profile-content">
+	        <div id="profile-main-to-be-replaced"></div>
+	        <div id="get-cash"></div>
+	        <div id="pay-early"></div>
+	        <div id="loan-detail"></div>
+        </div>
+    </div>
 </div>
 
 @AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
@@ -287,15 +289,13 @@
 	</script>
 
 	<script id="sign-welcome-template" type="text/template">
-		<div class="welcome-sign pull-right"><%= text %></div>
+		<div class="welcome-sign"><%= text %></div>
 	</script>
 
 	@{
 		Html.RenderPartial("EditExperianDirectorData");
-		Html.RenderPartial("EbayStoreInfo");
 		Html.RenderPartial("AmazonStoreInfo");
 		Html.RenderPartial("StoreButton");
-		Html.RenderPartial("PayPalInstructions");
 		Html.RenderPartial("_CompanyDetails");
 		Html.RenderPartial("BankAccountInstructions");
 		Html.RenderPartial("ApplyForLoanTopTemplate");
@@ -308,7 +308,6 @@
 		Html.RenderPartial("_ProfileSummary");
 		Html.RenderPartial("_YourInfo");
 		Html.RenderPartial("StoreInfoMain");
-		Html.RenderPartial("PayPalInstructions");
 		Html.RenderPartial("InviteFriendTemplate");
 		Html.RenderPartial("CompanyDirectorsTemplate");
 		Html.RenderPartial("PerksTemplate");

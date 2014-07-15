@@ -60,6 +60,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
         if (this.customer.get('hasLoans'))
             window.location.href = "#AccountActivity";
 
+        $('.header-info-text').text('MY ACCOUNT');
         return this;
     },
 

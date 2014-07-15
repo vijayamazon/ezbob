@@ -51,15 +51,21 @@
 
     <div id="wrapper">
         <div id="header">
+            <div class="header-bg-strip"></div>
             <div class="header-inner">
-                <a href="http://www.ezbob.com">
-                    <img src="@Url.Content("~/Content/img/ezbob-logo-2014.png")" class="newlogo"></a>
-
-                <div class="header-phone">0800-011-4787</div>
-
-                <div class="eu-menu"><img src="@Url.Content("~/Content/img/eu-menu.png")"><br>Authorised by the<br />European Union</div>
+                <div class="header-logo">
+                    <a href="http://www.ezbob.com">
+                        <img src="@Url.Content("~/Content/css/images/header/ezbob_logo-white.png")" class="newlogo">
+                    </a>
+                </div>
+                <div class="header-info">
+                    <div class="header-info-left"></div>
+                    <div class="header-info-text"></div>
+                    <div class="header-info-right"></div>
+                </div>
 
                 <ul id="user-menu">
+                    <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
                     <li id="logoff-li" class="login" style="display: none;">
                         <a href="@Url.Action("LogOff", "Account", new { Area = "" })">LOG OFF</a>
                     </li>
@@ -69,7 +75,7 @@
             </div>
         </div>
 
-        <div class="inner main-page">
+        <div class="main-page">
             <section id="full_width">
                 @RenderBody()
             </section>

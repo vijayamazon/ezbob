@@ -21,7 +21,7 @@
     -o-border-radius: 6px;
     -webkit-border-radius: 6px;
     display: block;
-    font: normal 14px Arial;
+    font-size:14px;
     color: #565656;
     height: 30px;
     padding: 12px 18px 12px 18px;
@@ -106,7 +106,8 @@
     width: 188px;
     height: 44px;
     padding: 6px 8px 8px 11px;
-    font: bold 17px Arial;
+    font-size:17px;
+    font-weight: bold;
     color: #404040;
 }
 
@@ -117,7 +118,8 @@
 .profile-menu.navbar .nav a {
     color: #dca613;
     text-shadow: none;
-    font: bold 12px Arial;
+    font-size: 12px ;
+    font-weight: bold;
     padding-left: 18px;
     padding-right: 18px;
 }
@@ -176,14 +178,15 @@ body .agreement-text {
 .profile-table th {
     background-color: #a9c854;
     color: white;
-    font: bold 14px Arial;
+    font-size: 14px;
+    font-weight: bold;
     height: 29px;
     line-height: 29px;
     text-align: center;
 }
 
 .profile-table td {
-    font: normal 12px Arial;
+    font-size: 12px;
     color: #565656;
     text-align: center;
 }
@@ -198,16 +201,17 @@ body .agreement-text {
 }
 
 .profile-headlines {
-    padding-left: 106px;
     padding-top: 60px;
 }
 .profile-headlines h1 {
-    font: italic 36px Georgia;
+    font-size: 36px;
+    font-style: italic;
     color: #0b73b4;
 }
 
 .profile-headlines h2 {
-    font: italic 20px Georgia;
+    font-size: 20px;
+    font-style: italic;
     color: #0b73b4;
 }
 
@@ -232,19 +236,12 @@ body .agreement-text {
 }
 
 .welcome-sign{
-    background-image: url(../img/empty-big-sign.png);
-    width: 226px; /*266*/
-    height: 73px; /*146*/
-    padding: 15px 13px 0px 13px;
-    color: white;
-    font: bold 18px Arial;
-    -webkit-text-shadow: none;
-    text-shadow: none;
-    display: table;
+    font-size: 18px;
 }
 
 .green-sign, .green-sign a, .green-sign:hover, .green-sign:visited, .green-sign:active {
-    font: bold 22px Arial;
+    font-size: 22px;
+    font-weight: bold;
     color: #fefefe;
     text-decoration: none;
 }
@@ -414,12 +411,8 @@ body .statusLate {
     font-size: 12px;
     font-variant: normal;
     font-style: normal;
-    font-family: Arial;
 }
 
-.profile-headlines {
-    padding-bottom: 25px;
-}
 
 .settings-form {
     padding-top: 10px;
@@ -543,11 +536,6 @@ body .other-amount-label {
     font-size: 14px;
 }
 
-
-#message-sign {
-    float: right;
-}
-
 .profile-screen .SecurityStatement {
     margin-top: 20px;
 }
@@ -566,6 +554,9 @@ body .other-amount-label {
     font-size: 10px;
 }
 
+.client-name {
+    color: #60CB01;
+}
 .proccessing-message {
     margin-left: -100px;
 }
@@ -594,14 +585,7 @@ body .other-amount-label {
 }
 
 .welcome-sign a.pay-early, .welcome-sign a.pay-early:hover, .welcome-sign a.pay-early:active, .welcome-sign a.pay-early:visited {
-    color: white;
     text-decoration: none;
-}
-
-.welcome-sign span {
-     display: table-cell; 
-     vertical-align: middle; 
-     text-align: center; 
 }
 
 .dashboard-frame {
@@ -952,4 +936,8 @@ table.directors-list td.l {
 
 .directors-list button {
 	white-space: nowrap;
+}
+
+a.pay-early {
+    color: #565656;
 }
