@@ -17,7 +17,7 @@ CREATE TYPE ExperianLtdDL65List AS TABLE (
 	TotalAmountOfDebentureSecured NVARCHAR(255) NULL,
 	ChargeType NVARCHAR(255) NULL,
 	AmountSecured NVARCHAR(255) NULL,
-	PropertyDetails NVARCHAR(255) NULL,
+	PropertyDetails NVARCHAR(4000) NULL,
 	ChargeeText NVARCHAR(255) NULL,
 	RestrictingProvisions NVARCHAR(255) NULL,
 	RegulatingProvisions NVARCHAR(255) NULL,

@@ -141,52 +141,6 @@
 
 		#endregion method ParseAndSave
 
-		/*
-
-		#region method LogCreateSql
-
-		private void LogCreateSql() {
-			Log.Debug(
-				"\n\n{0}\n\n",
-				new ExperianLtd().GetCreateTable() +
-				new ExperianLtdPrevCompanyNames().GetCreateTable() +
-				new ExperianLtdShareholders().GetCreateTable() +
-				new ExperianLtdDLB5().GetCreateTable() +
-				new ExperianLtdDL72().GetCreateTable() +
-				new ExperianLtdCreditSummary().GetCreateTable() +
-				new ExperianLtdDL48().GetCreateTable() +
-				new ExperianLtdDL52().GetCreateTable() +
-				new ExperianLtdDL68().GetCreateTable() +
-				new ExperianLtdDL97().GetCreateTable() +
-				new ExperianLtdDL99().GetCreateTable() +
-				new ExperianLtdDLA2().GetCreateTable() +
-				new ExperianLtdDL65().GetCreateTable() +
-				new ExperianLtdLenderDetails().GetCreateTable()
-			);
-
-			Log.Debug(
-				"\n\n{0}\n\n",
-				new ExperianLtd().GetCreateSp() +
-				new ExperianLtdPrevCompanyNames().GetCreateSp() +
-				new ExperianLtdShareholders().GetCreateSp() +
-				new ExperianLtdDLB5().GetCreateSp() +
-				new ExperianLtdDL72().GetCreateSp() +
-				new ExperianLtdCreditSummary().GetCreateSp() +
-				new ExperianLtdDL48().GetCreateSp() +
-				new ExperianLtdDL52().GetCreateSp() +
-				new ExperianLtdDL68().GetCreateSp() +
-				new ExperianLtdDL97().GetCreateSp() +
-				new ExperianLtdDL99().GetCreateSp() +
-				new ExperianLtdDLA2().GetCreateSp() +
-				new ExperianLtdDL65().GetCreateSp() +
-				new ExperianLtdLenderDetails().GetCreateSp()
-			);
-		} // LogCreateSql
-
-		#endregion method LogCreateSql
-
-		*/
-
 		#endregion private
 	} // class ParseExperianLtd
 } // namespace

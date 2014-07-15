@@ -2065,6 +2065,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData PayPointCharger();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PayPointChargerAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SetLateLoanStatus();
         
@@ -2809,6 +2815,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseExperianLtd", ReplyAction="http://tempuri.org/IEzService/ParseExperianLtdResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ParseExperianLtdAsync(long nServiceLogID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianLtd", ReplyAction="http://tempuri.org/IEzService/BackfillExperianLtdResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianLtd();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianLtd", ReplyAction="http://tempuri.org/IEzService/BackfillExperianLtdResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianLtdAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
         
@@ -2868,12 +2880,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LateBy14DaysAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData PayPointCharger();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PayPointChargerAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -2901,6 +2907,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData PayPointCharger() {
+            return base.Channel.PayPointCharger();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PayPointChargerAsync() {
+            return base.Channel.PayPointChargerAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SetLateLoanStatus() {
@@ -3895,6 +3909,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.ParseExperianLtdAsync(nServiceLogID);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianLtd() {
+            return base.Channel.BackfillExperianLtd();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianLtdAsync() {
+            return base.Channel.BackfillExperianLtdAsync();
+        }
+        
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
             return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
         }
@@ -3973,14 +3995,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LateBy14DaysAsync() {
             return base.Channel.LateBy14DaysAsync();
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData PayPointCharger() {
-            return base.Channel.PayPointCharger();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PayPointChargerAsync() {
-            return base.Channel.PayPointChargerAsync();
         }
     }
 }
