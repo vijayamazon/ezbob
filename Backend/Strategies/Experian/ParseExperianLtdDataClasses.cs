@@ -1,43 +1,16 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
+	using System.Collections.Specialized;
 	using System.Globalization;
+	using System.Linq;
 	using System.Reflection;
-	using System.Text;
 	using System.Xml;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 
 	#region attributes
-
-	#region class PKAttribute
-
-	[AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-	internal class PKAttribute : Attribute {} // class PKAttribute
-
-	#endregion class PKAttribute
-
-	#region class FKAttribute
-
-	[AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-	internal class FKAttribute : Attribute {
-		public FKAttribute(string sTableName = null, string sFieldName = null) {
-			if (string.IsNullOrWhiteSpace(sTableName) || string.IsNullOrWhiteSpace(sFieldName)) {
-				TableName = null;
-				FieldName = null;
-			}
-			else {
-				TableName = sTableName;
-				FieldName = sFieldName;
-			} // if
-		} // constructor
-
-		public string TableName { get; private set; }
-		public string FieldName { get; private set; }
-	} // class FKAttribute
-
-	#endregion class FKAttribute
 
 	#region XML source attributes
 
@@ -57,7 +30,7 @@
 		public bool IsTopLevel { get; protected set; }
 
 		public string GroupPath {
-			get { return "./REQUEST/" + GroupName; }
+			get { return "." + (IsTopLevel ? "/REQUEST" : "") + "/" + GroupName; }
 		} // GroupPath
 
 		public string NodePath {
@@ -65,117 +38,145 @@
 		} // GroupPath
 
 		public override string ToString() {
-			return string.Format("{0}/{1}", GroupName, NodeName);
+			return string.IsNullOrWhiteSpace(NodeName) ? GroupPath : NodePath;
 		} // ToString
 	} // class ASrcAttribute
 
 	#endregion class ASrcAttribute
 
-	internal class DL12Attribute : ASrcAttribute { public DL12Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL12"; } }
-	internal class DL13Attribute : ASrcAttribute { public DL13Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL13"; } }
+	internal class DL12Attribute          : ASrcAttribute { public DL12Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL12"; } }
+	internal class DL13Attribute          : ASrcAttribute { public DL13Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL13"; } }
 	internal class PrevCompNamesAttribute : ASrcAttribute { public PrevCompNamesAttribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL15/PREVCOMPNAMES"; } }
-	internal class DL17Attribute : ASrcAttribute { public DL17Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL17"; } }
-	internal class DL23Attribute : ASrcAttribute { public DL23Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL23"; } }
-	internal class SharehldsAttribute : ASrcAttribute { public SharehldsAttribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL23/SHAREHLDS"; } }
-	internal class DL26Attribute : ASrcAttribute { public DL26Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL26"; } }
-	internal class SummaryLineAttribute : ASrcAttribute { public SummaryLineAttribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL27/SUMMARYLINE"; } }
-	internal class DL41Attribute : ASrcAttribute { public DL41Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL41"; } }
-	internal class DL42Attribute : ASrcAttribute { public DL42Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL42"; } }
-	internal class DL48Attribute : ASrcAttribute { public DL48Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL48"; } }
-	internal class DL52Attribute : ASrcAttribute { public DL52Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL52"; } }
-	internal class DL65Attribute : ASrcAttribute { public DL65Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL65"; } }
-	internal class DL68Attribute : ASrcAttribute { public DL68Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL68"; } }
-	internal class DL72Attribute : ASrcAttribute { public DL72Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL72"; } }
-	internal class DL76Attribute : ASrcAttribute { public DL76Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL76"; } }
-	internal class DL78Attribute : ASrcAttribute { public DL78Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL78"; } }
-	internal class DL97Attribute : ASrcAttribute { public DL97Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL97"; } }
-	internal class DL99Attribute : ASrcAttribute { public DL99Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL99"; } }
-	internal class DLA2Attribute : ASrcAttribute { public DLA2Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DLA2"; } }
-	internal class DLB5Attribute : ASrcAttribute { public DLB5Attribute(string sNodeName = null) : base(sNodeName) { GroupName = "DLB5"; } }
-	internal class LenderDetailsAttribute : ASrcAttribute { public LenderDetailsAttribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL65/LENDERDETAILS"; IsTopLevel = false; } }
+	internal class DL17Attribute          : ASrcAttribute { public DL17Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL17"; } }
+	internal class DL23Attribute          : ASrcAttribute { public DL23Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL23"; } }
+	internal class SharehldsAttribute     : ASrcAttribute { public SharehldsAttribute(string sNodeName = null)     : base(sNodeName) { GroupName = "DL23/SHAREHLDS"; } }
+	internal class DL26Attribute          : ASrcAttribute { public DL26Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL26"; } }
+	internal class SummaryLineAttribute   : ASrcAttribute { public SummaryLineAttribute(string sNodeName = null)   : base(sNodeName) { GroupName = "DL27/SUMMARYLINE"; } }
+	internal class DL41Attribute          : ASrcAttribute { public DL41Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL41"; } }
+	internal class DL42Attribute          : ASrcAttribute { public DL42Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL42"; } }
+	internal class DL48Attribute          : ASrcAttribute { public DL48Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL48"; } }
+	internal class DL52Attribute          : ASrcAttribute { public DL52Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL52"; } }
+	internal class DL65Attribute          : ASrcAttribute { public DL65Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL65"; } }
+	internal class DL68Attribute          : ASrcAttribute { public DL68Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL68"; } }
+	internal class DL72Attribute          : ASrcAttribute { public DL72Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL72"; } }
+	internal class DL76Attribute          : ASrcAttribute { public DL76Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL76"; } }
+	internal class DL78Attribute          : ASrcAttribute { public DL78Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL78"; } }
+	internal class DL97Attribute          : ASrcAttribute { public DL97Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL97"; } }
+	internal class DL99Attribute          : ASrcAttribute { public DL99Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL99"; } }
+	internal class DLA2Attribute          : ASrcAttribute { public DLA2Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DLA2"; } }
+	internal class DLB5Attribute          : ASrcAttribute { public DLB5Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DLB5"; } }
+	internal class LenderDetailsAttribute : ASrcAttribute { public LenderDetailsAttribute(string sNodeName = null) : base(sNodeName) { GroupName = "LENDERDETAILS"; IsTopLevel = false; } }
 
 	#endregion XML source attributes
 
 	#endregion attributes
 
-	#region class AExperianDataRow
+	#region class AExperianLtdDataRow
 
-	internal abstract class AExperianDataRow : IParametrisable {
+	internal abstract class AExperianLtdDataRow : IParametrisable {
+		#region static constructor
+
+		static AExperianLtdDataRow() {
+			DryRunMode = false;
+		} // static constructor
+
+		#endregion static constructor
+
 		#region public
 
-		[FK("ExperianLtd", "ExperianLtdID")]
-		public virtual long ExperianLtdID { get; set; }
+		#region property DryRunMode
+
+		public static bool DryRunMode { get; set; } // DryRunMode
+
+		#endregion property DryRunMode
+
+		#region method ProcessOneRow
+
+		public static bool ProcessOneRow(
+			Type oTableType,
+			XmlNode oRoot,
+			long nParentID,
+			ASrcAttribute oGroupSrcAttr,
+			AConnection oDB,
+			ConnectionWrapper oPersistent,
+			ASafeLog oLog
+		) {
+			oGroupSrcAttr = oGroupSrcAttr ?? oTableType.GetCustomAttribute<ASrcAttribute>();
+
+			oLog.Debug("Parsing Experian company data into {0}...", oTableType.Name);
+
+			ConstructorInfo ci = oTableType.GetConstructors().FirstOrDefault();
+
+			if (ci == null) {
+				oLog.Alert("Parsing Experian company data into {0} failed: no constructor found.", oTableType.Name);
+				return true;
+			} // if
+
+			XmlNodeList oGroupNodes = oRoot.SelectNodes(oGroupSrcAttr.GroupPath);
+
+			if (oGroupNodes == null)
+				return true;
+
+			oLog.Debug(
+				"Parsing Experian company data into {0}: {1} XML node{2} found.",
+				oTableType.Name,
+				oGroupNodes.Count,
+				oGroupNodes.Count == 1 ? "" : "s"
+			);
+
+			foreach (XmlNode oGroup in oGroupNodes) {
+				AExperianLtdDataRow oRow = (AExperianLtdDataRow)ci.Invoke(new object[] { oGroup, oLog });
+
+				oRow.LoadFromXml().SetParentID(nParentID);
+
+				if (!oRow.Save(oDB, oPersistent)) {
+					oLog.Warn("Parsing Experian company data into {0} failed on saving to DB.", oTableType.Name);
+					return false;
+				} // if
+
+				if (!oRow.ProcessChildren(oDB, oPersistent)) {
+					oLog.Warn("Parsing Experian company data into {0} failed on processing children.", oTableType.Name);
+					return false;
+				} // if
+			} // for each matching XML node
+
+			return true;
+		} // ProcessOneRow
+
+		#endregion method ProcessOneRow
+
+		#region property ExperianLtdID
+
+		public virtual long ExperianLtdID {
+			get { return m_nExperianLtdID; }
+			set { m_nExperianLtdID = value; }
+		} // ExperianLtdID
+
+		private long m_nExperianLtdID;
+
+		#endregion property ExperianLtdID
 
 		#region method Stringify
 
 		public virtual string Stringify() {
-			var oResult = new StringBuilder();
+			var oFields = new List<string>();
 
-			oResult.Append("Start of " + this.GetType().Name + " (" + LoadedCount + " fields loaded)\n\t");
+			this.Traverse((oItem, oPropertyInfo) => {
+				string sFld = "\t" + oPropertyInfo.Name + ": " + oPropertyInfo.GetValue(oItem);
 
-			this.Traverse((oItem, oPropertyInfo) => oResult.Append(oPropertyInfo.Name + ": " + oPropertyInfo.GetValue(oItem) + " "));
+				if (oPropertyInfo.DeclaringType == this.GetType())
+					oFields.Add(sFld);
+				else
+					oFields.Insert(0, sFld);
+			});
 
-			oResult.Append("\nEnd of " + this.GetType().Name);
-
-			return oResult.ToString();
+			return
+				"\tStart of " + this.GetType().Name + " (" + LoadedCount + " fields loaded)\n" +
+				string.Join("\n", oFields) +
+				"\n\tEnd of " + this.GetType().Name;
 		} // Stringify
 
 		#endregion method Stringify
-
-		#region method GetCreateTable
-
-		public virtual string GetCreateTable() {
-			List<string> oFields = new List<string>();
-			List<string> oConstraints = new List<string>();
-
-			bool bHasPk = false;
-
-			this.Traverse((oIgnoredInstance, oPropInfo) => {
-				string sType = T2T(oPropInfo);
-
-				if (string.IsNullOrWhiteSpace(sType))
-					return;
-
-				var pk = oPropInfo.GetCustomAttribute<PKAttribute>();
-
-				if (pk != null) {
-					oConstraints.Insert(0, "\t\tCONSTRAINT PK_" + DBTableName + " PRIMARY KEY (" + oPropInfo.Name + ")");
-					oFields.Insert(0, "\t\t" + oPropInfo.Name + " " + sType);
-					bHasPk = true;
-				}
-				else {
-					FKAttribute fk = oPropInfo.GetCustomAttribute<FKAttribute>();
-
-					if ((fk != null) && !string.IsNullOrWhiteSpace(fk.TableName)) {
-						oFields.Insert(0, "\t\t" + oPropInfo.Name + " " + sType);
-
-						oConstraints.Add(
-							"\t\tCONSTRAINT FK_" + DBTableName + "_" + oPropInfo.Name +
-							" FOREIGN KEY (" + oPropInfo.Name + ") REFERENCES " + fk.TableName + "(" + fk.FieldName + ")"
-						);
-					}
-					else
-						oFields.Add("\t\t" + oPropInfo.Name + " " + sType);
-				} // if
-			});
-
-			if (!bHasPk) {
-				oConstraints.Insert(0, "\t\tCONSTRAINT PK_" + DBTableName + " PRIMARY KEY (" + DBTableName + "ID)");
-				oFields.Insert(0, "\t\t" + DBTableName + "ID BIGINT IDENTITY(1, 1) NOT NULL");
-			} // if
-
-			oFields.Add("\t\tTimestampCounter ROWVERSION");
-
-			return
-				"SET QUOTED_IDENTIFIER ON\nGO\n\n" +
-				"IF OBJECT_ID('" + DBTableName + "') IS NULL\nBEGIN\n" +
-				"\tCREATE TABLE " + DBTableName + " (\n" +
-				string.Join(",\n", oFields) +
-				(oConstraints.Count < 1 ? "" : ",\n" + string.Join(",\n", oConstraints)) +
-				"\n\t)\nEND\nGO\n\n";
-		} // GetCreateTable
-
-		#endregion method GetCreateTable
 
 		#region property DBTableName
 
@@ -189,67 +190,9 @@
 
 		#endregion property DBSaveProcName
 
-		#region method GetCreateSp
-
-		public virtual string GetCreateSp() {
-			List<string> oSql = new List<string>();
-			List<string> oFields = new List<string>();
-			List<string> oFieldNames = new List<string>();
-
-			List<string> oProcSql = new List<string>();
-
-			string sTypeName = DBTableName + "List";
-
-			oSql.Add("IF OBJECT_ID('" + DBSaveProcName + "') IS NOT NULL\n\tDROP PROCEDURE " + DBSaveProcName + "\nGO\n");
-
-			oSql.Add("IF TYPE_ID('" + sTypeName + "') IS NOT NULL\n\tDROP TYPE " + sTypeName + "\nGO\n");
-
-			oSql.Add("CREATE TYPE " + sTypeName + " AS TABLE (");
-
-			this.TraverseForDB((oPropInfo, sType) => {
-				if (oPropInfo.DeclaringType == this.GetType()) {
-					oFields.Add(oPropInfo.Name + " " + sType);
-					oFieldNames.Add(oPropInfo.Name);
-				}
-				else {
-					oFields.Insert(0, oPropInfo.Name + " " + sType);
-					oFieldNames.Insert(0, oPropInfo.Name);
-				} // if
-			});
-
-			var sFieldNames = string.Join(",\n\t\t", oFieldNames);
-
-			oProcSql.Add("CREATE PROCEDURE " + DBSaveProcName);
-			oProcSql.Add("@Tbl " + sTypeName + " READONLY");
-			oProcSql.Add("AS");
-			oProcSql.Add("BEGIN");
-			oProcSql.Add("\tSET NOCOUNT ON;\n");
-
-			DoBeforeTheMainInsert(oProcSql);
-			
-			oProcSql.Add("\tINSERT INTO " + DBTableName + " (");
-			oProcSql.Add("\t\t" + sFieldNames);
-			oProcSql.Add("\t) SELECT");
-			oProcSql.Add("\t\t" + sFieldNames);
-			oProcSql.Add("\tFROM @Tbl");
-
-			DoAfterTheMainInsert(oProcSql);
-
-			oProcSql.Add("END");
-			oProcSql.Add("GO");
-
-			return
-				"SET QUOTED_IDENTIFIER ON\nGO\n\n" +
-				string.Join("\n", oSql) + "\n\t" +
-				string.Join(",\n\t", oFields) + "\n)\nGO\n\n" +
-				string.Join("\n", oProcSql) + "\n\n";
-		} // GetCreateSp
-
-		#endregion method GetCreateSp
-
 		#region method LoadFromXml
 
-		public virtual AExperianDataRow LoadFromXml() {
+		public virtual AExperianLtdDataRow LoadFromXml() {
 			if (Root == null)
 				throw new NullReferenceException("No XML root element specified for " + this.GetType().Name);
 
@@ -291,14 +234,33 @@
 		#region method Save
 
 		public virtual bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
-			oDB.ExecuteNonQuery(
-				oPersistent,
-				DBSaveProcName,
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@Tbl", new List<AExperianDataRow> { this })
-			);
+			Log.Debug("Saving {0} to DB with data:\n{1}.", this.GetType().Name, Stringify());
 
-			return true;
+			if (DryRunMode) {
+				Log.Debug("{0}.Save in dry run mode.", this.GetType().Name);
+				return true;
+			} // if
+
+			try {
+				oDB.ExecuteNonQuery(
+					oPersistent,
+					DBSaveProcName,
+					CommandSpecies.StoredProcedure,
+					oDB.CreateTableParameter(
+						this.GetType(),
+						"@Tbl",
+						new List<AExperianLtdDataRow> { this },
+						TypeUtils.GetConvertorToObjectArray(this.GetType()),
+						GetDBColumnTypes()
+					)
+				);
+
+				return true;
+			}
+			catch (Exception e) {
+				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);
+				return false;
+			} // try
 		} // Save
 
 		#endregion method Save
@@ -308,7 +270,7 @@
 		public object[] ToParameter() {
 			var oResult = new List<object>();
 
-			this.TraverseForDB((oPropInfo, sType) => {
+			this.Traverse((oIgnoredInstance, oPropInfo) => {
 				if (oPropInfo.DeclaringType == this.GetType())
 					oResult.Add(oPropInfo.GetValue(this));
 				else
@@ -320,16 +282,26 @@
 
 		#endregion method ToParameter
 
+		#region method ProcessChildren
+
+		public virtual bool ProcessChildren(AConnection oDB, ConnectionWrapper oPersistent) {
+			return true;
+		} // ProcessChildren
+
+		#endregion method ProcessChildren
+
 		#endregion public
 
 		#region protected
 
 		#region constructor
 
-		protected AExperianDataRow(XmlNode oRoot, ASafeLog oLog) {
+		protected AExperianLtdDataRow(XmlNode oRoot, ASafeLog oLog) {
+			LoadedCount = 0;
+			m_nExperianLtdID = 0;
+
 			Root = oRoot;
 			Log = oLog ?? new SafeLog();
-			LoadedCount = 0;
 		} // constructor
 
 		#endregion constructor
@@ -358,59 +330,38 @@
 
 		#endregion method DoAfterTheMainInsert
 
+		#region method SetParentID
+
+		protected virtual void SetParentID(long nParentID) {
+			ExperianLtdID = nParentID;
+		} // SetParentID
+
+		#endregion method SetParentID
+
+		#region method GetDBColumnTypes
+
+		protected virtual List<Type> GetDBColumnTypes() {
+			var oDBColumns = new List<Type>();
+
+			this.Traverse((oIgnoredInstance, oPropInfo) => {
+				if (oPropInfo.DeclaringType == this.GetType())
+					oDBColumns.Add(oPropInfo.PropertyType);
+				else
+					oDBColumns.Insert(0, oPropInfo.PropertyType);
+			});
+
+			return oDBColumns;
+		} // GetDBColumnTypes
+
+		#endregion method GetDBColumnTypes
+
 		#endregion protected
 
 		#region private
 
-		#region method TraverseForDB
-
-		private void TraverseForDB(Action<PropertyInfo, string> oAction) {
-			this.Traverse((oIgnoredInstance, oPropInfo) => {
-				string sType = T2T(oPropInfo);
-
-				if (string.IsNullOrWhiteSpace(sType))
-					return;
-
-				var pk = oPropInfo.GetCustomAttribute<PKAttribute>();
-
-				if (pk != null)
-					return;
-
-				oAction(oPropInfo, sType);
-			});
-		} // TraverseForDB
-
-		#endregion method TraverseForDB
-
-		#region method T2T
-
-		private static string T2T(PropertyInfo oPropInfo) {
-			if (oPropInfo.PropertyType == typeof(string))
-				return "NVARCHAR(255) NULL";
-
-			if (oPropInfo.PropertyType == typeof(int?))
-				return "INT NULL";
-
-			if (oPropInfo.PropertyType == typeof(long?))
-				return "BIGINT NULL";
-
-			if (oPropInfo.PropertyType == typeof(long))
-				return "BIGINT NOT NULL";
-
-			if (oPropInfo.PropertyType == typeof(decimal?))
-				return "DECIMAL(18, 6) NULL";
-
-			if (oPropInfo.PropertyType == typeof(DateTime?))
-				return "DATETIME NULL";
-
-			return null;
-		} // T2T
-
-		#endregion method T2T
-
 		#region method SetValue
 
-		private static void SetValue(AExperianDataRow oCurTable, PropertyInfo pi, XmlNode oNode, XmlNode oGroup) {
+		private static void SetValue(AExperianLtdDataRow oCurTable, PropertyInfo pi, XmlNode oNode, XmlNode oGroup) {
 			if (pi.PropertyType == typeof (string))
 				pi.SetValue(oCurTable, oNode.InnerText);
 			else if (pi.PropertyType == typeof (int?))
@@ -439,7 +390,7 @@
 
 		#region method SetInt
 
-		private static void SetInt(PropertyInfo pi, AExperianDataRow oCurTable, string sValue) {
+		private static void SetInt(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
 			int n;
 
 			if (int.TryParse(sValue, out n))
@@ -452,7 +403,7 @@
 
 		#region method SetDouble
 
-		private static void SetDouble(PropertyInfo pi, AExperianDataRow oCurTable, string sValue) {
+		private static void SetDouble(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
 			double n;
 
 			if (double.TryParse(sValue, out n))
@@ -465,7 +416,7 @@
 
 		#region method SetDecimal
 
-		private static void SetDecimal(PropertyInfo pi, AExperianDataRow oCurTable, string sValue) {
+		private static void SetDecimal(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
 			decimal n;
 
 			if (decimal.TryParse(sValue, out n))
@@ -478,7 +429,7 @@
 
 		#region method SetDate
 
-		private static void SetDate(PropertyInfo pi, AExperianDataRow oCurTable, string sValue) {
+		private static void SetDate(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
 			DateTime n;
 
 			if (DateTime.TryParseExact(sValue, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out n))
@@ -503,17 +454,16 @@
 		#endregion method MD
 
 		#endregion private
-	} // class AExperianDataRow
+	} // class AExperianLtdDataRow
 
-	#endregion class AExperianDataRow
+	#endregion class AExperianLtdDataRow
 
 	#region class ExperianLtd
 
-	internal class ExperianLtd : AExperianDataRow {
+	internal class ExperianLtd : AExperianLtdDataRow {
 		#region constructor
 
 		public ExperianLtd(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {
-			ExperianLtdID = 0;
 		} // constructor
 
 		#endregion constructor
@@ -521,26 +471,41 @@
 		#region method Save
 
 		public override bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
-			ExperianLtdID = oDB.ExecuteScalar<int>(
-				oPersistent,
-				DBSaveProcName,
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@Tbl", new List<AExperianDataRow> { this })
-			);
+			Log.Debug("Saving {0} to DB with data:\n{1}.", this.GetType().Name, Stringify());
+
+			if (DryRunMode) {
+				Log.Debug("{0}.Save in dry run mode.", this.GetType().Name);
+				ExperianLtdID = 1;
+				return ExperianLtdID > 0;
+			} // if
+
+			try {
+				ExperianLtdID = oDB.ExecuteScalar<long>(
+					oPersistent,
+					DBSaveProcName,
+					CommandSpecies.StoredProcedure,
+					oDB.CreateTableParameter("@Tbl", this)
+				);
+			}
+			catch (Exception e) {
+				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);
+				ExperianLtdID = 0;
+			} // try
 
 			return ExperianLtdID > 0;
 		} // Save
 
 		#endregion method Save
 
-		[PK]
+		[NonTraversable]
 		public override long ExperianLtdID {
 			get { return base.ExperianLtdID; }
 			set { base.ExperianLtdID = value; }
 		} // ExperianLtdID
 
-		[FK("MP_ServiceLog", "Id")]
 		public long ServiceLogID { get; set; }
+
+		#region properties loaded from XML
 
 		[DL12("REGNUMBER")]
 		public string RegisteredNumber { get; set; }
@@ -659,6 +624,8 @@
 		[DL41("SUPPPAYPATTN")]
 		public string SupplierPaymentPattern { get; set; }
 
+		#endregion properties loaded from XML
+
 		#region method DoBeforeTheMainInsert
 
 		protected override void DoBeforeTheMainInsert(List<string> oProcSql) {
@@ -680,6 +647,14 @@
 		} // DoAfterTheMainInsert
 
 		#endregion method DoAfterTheMainInsert
+
+		#region method SetParentID
+
+		protected override void SetParentID(long nParentID) {
+			// Nothing here.
+		} // SetParentID
+
+		#endregion method SetParentID
 	} // class ExperianLtd
 
 	#endregion class ExperianLtd
@@ -687,7 +662,7 @@
 	#region class ExperianLtdPrevCompanyNames
 
 	[PrevCompNames]
-	internal class ExperianLtdPrevCompanyNames : AExperianDataRow {
+	internal class ExperianLtdPrevCompanyNames : AExperianLtdDataRow {
 		public ExperianLtdPrevCompanyNames(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[PrevCompNames("DATECHANGED")]
@@ -709,7 +684,7 @@
 	#region class ExperianLtdShareholders
 
 	[Sharehlds]
-	internal class ExperianLtdShareholders : AExperianDataRow {
+	internal class ExperianLtdShareholders : AExperianLtdDataRow {
 		public ExperianLtdShareholders(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[Sharehlds("SHLDNAME")]
@@ -725,7 +700,7 @@
 	#region class ExperianLtdDLB5
 
 	[DLB5]
-	internal class ExperianLtdDLB5 : AExperianDataRow {
+	internal class ExperianLtdDLB5 : AExperianLtdDataRow {
 		public ExperianLtdDLB5(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[DLB5("RECORDTYPE")]
@@ -795,7 +770,7 @@
 	#region class ExperianLtdDL72
 
 	[DL72]
-	internal class ExperianLtdDL72 : AExperianDataRow {
+	internal class ExperianLtdDL72 : AExperianLtdDataRow {
 		public ExperianLtdDL72(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[DL72("FOREIGNFLAG")]
@@ -853,7 +828,7 @@
 	#region class ExperianLtdCreditSummary
 
 	[SummaryLine]
-	internal class ExperianLtdCreditSummary : AExperianDataRow {
+	internal class ExperianLtdCreditSummary : AExperianLtdDataRow {
 		public ExperianLtdCreditSummary(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[SummaryLine("CREDTYPE")]
@@ -867,7 +842,7 @@
 	#region class ExperianLtdDL48
 
 	[DL48]
-	internal class ExperianLtdDL48 : AExperianDataRow {
+	internal class ExperianLtdDL48 : AExperianLtdDataRow {
 		public ExperianLtdDL48(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[DL48("FRAUDCATEGORY")]
@@ -881,7 +856,7 @@
 	#region class ExperianLtdDL52
 
 	[DL52]
-	internal class ExperianLtdDL52 : AExperianDataRow {
+	internal class ExperianLtdDL52 : AExperianLtdDataRow {
 		public ExperianLtdDL52(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[DL52("RECORDTYPE")]
@@ -895,7 +870,7 @@
 	#region class ExperianLtdDL68
 
 	[DL68]
-	internal class ExperianLtdDL68 : AExperianDataRow {
+	internal class ExperianLtdDL68 : AExperianLtdDataRow {
 		public ExperianLtdDL68(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[DL68("SUBSIDREGNUM")]
@@ -913,7 +888,7 @@
 	#region class ExperianLtdDL97
 
 	[DL97]
-	internal class ExperianLtdDL97 : AExperianDataRow {
+	internal class ExperianLtdDL97 : AExperianLtdDataRow {
 		public ExperianLtdDL97(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[DL97("ACCTSTATE")]
@@ -949,7 +924,7 @@
 	#region class ExperianLtdDL99
 
 	[DL99]
-	internal class ExperianLtdDL99 : AExperianDataRow {
+	internal class ExperianLtdDL99 : AExperianLtdDataRow {
 		public ExperianLtdDL99(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[DL99("DATEOFACCOUNTS-YYYY")]
@@ -991,7 +966,7 @@
 	#region class ExperianLtdDLA2
 
 	[DLA2]
-	internal class ExperianLtdDLA2 : AExperianDataRow {
+	internal class ExperianLtdDLA2 : AExperianLtdDataRow {
 		public ExperianLtdDLA2(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
 		[DLA2("DATEACCS-YYYY")]
@@ -1006,7 +981,7 @@
 	#region class ExperianLtdDL65
 
 	[DL65]
-	internal class ExperianLtdDL65 : AExperianDataRow {
+	internal class ExperianLtdDL65 : AExperianLtdDataRow {
 		public ExperianLtdDL65(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {
 			ExperianLtdDL65ID = 0;
 			Details = new List<ExperianLtdLenderDetails>();
@@ -1017,20 +992,58 @@
 		#region method Save
 
 		public override bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
-			ExperianLtdDL65ID = oDB.ExecuteScalar<int>(
-				oPersistent,
-				DBSaveProcName,
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@Tbl", new List<AExperianDataRow> { this })
-			);
+			Log.Debug("Saving {0} to DB with data:\n{1}.", this.GetType().Name, Stringify());
+
+			if (DryRunMode) {
+				Log.Debug("{0}.Save in dry run mode.", this.GetType().Name);
+				ExperianLtdDL65ID = 1;
+				return ExperianLtdDL65ID > 0;
+			} // if
+
+			try {
+				ExperianLtdDL65ID = oDB.ExecuteScalar<long>(
+					oPersistent,
+					DBSaveProcName,
+					CommandSpecies.StoredProcedure,
+					oDB.CreateTableParameter(
+						this.GetType(),
+						"@Tbl",
+						new List<ExperianLtdDL65> { this },
+						TypeUtils.GetConvertorToObjectArray(this.GetType()),
+						GetDBColumnTypes()
+					)
+				);
+			}
+			catch (Exception e) {
+				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);
+				ExperianLtdDL65ID = 0;
+			} // try
 
 			return ExperianLtdDL65ID > 0;
 		} // Save
 
 		#endregion method Save
 
-		[PK]
+		#region method ProcessChildren
+
+		public override bool ProcessChildren(AConnection oDB, ConnectionWrapper oPersistent) {
+			return AExperianLtdDataRow.ProcessOneRow(
+				typeof(ExperianLtdLenderDetails),
+				Root,
+				ExperianLtdDL65ID,
+				null,
+				oDB,
+				oPersistent,
+				Log
+			);
+		} // ProcessChildren
+
+		#endregion method ProcessChildren
+
+		[NonTraversable]
 		public long ExperianLtdDL65ID { get; set; }
+
+		#region properties loaded from XML
 
 		[DL65("CHARGENUMBER")]
 		public string ChargeNumber { get; set; }
@@ -1068,6 +1081,30 @@
 		public int? NumberOfPartialSatisfactionDates { get; set; }
 		[DL65("NUMPARTIALSATNDATAITEMS")]
 		public int? NumberOfPartialSatisfactionDataItems { get; set; }
+
+		#endregion properties loaded from XML
+
+		#region method DoBeforeTheMainInsert
+
+		protected override void DoBeforeTheMainInsert(List<string> oProcSql) {
+			oProcSql.Add("\tDECLARE @ExperianLtdDL65ID INT");
+
+			oProcSql.Add("\tDECLARE @c INT\n");
+			oProcSql.Add("\tSELECT @c = COUNT(*) FROM @Tbl\n");
+			oProcSql.Add("\tIF @c != 1");
+			oProcSql.Add("\t\tRAISERROR('Invalid argument: no/too much data to insert into ExperianLtdDL65 table.', 11, 1)\n");
+		} // DoBeforeTheMainInsert
+
+		#endregion method DoBeforeTheMainInsert
+
+		#region method DoAfterTheMainInsert
+
+		protected override void DoAfterTheMainInsert(List<string> oProcSql) {
+			oProcSql.Add("\n\tSET @ExperianLtdDL65ID = SCOPE_IDENTITY()\n");
+			oProcSql.Add("\tSELECT @ExperianLtdDL65ID AS ExperianLtdID");
+		} // DoAfterTheMainInsert
+
+		#endregion method DoAfterTheMainInsert
 	} // class ExperianLtdDL65
 
 	#endregion class ExperianLtdDL65
@@ -1075,10 +1112,9 @@
 	#region class ExperianLtdLenderDetails
 
 	[LenderDetails]
-	internal class ExperianLtdLenderDetails : AExperianDataRow {
+	internal class ExperianLtdLenderDetails : AExperianLtdDataRow {
 		public ExperianLtdLenderDetails(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
 
-		[FK("ExperianLtdDL65", "ExperianLtdDL65ID")]
 		public long DL65ID { get; set; }
 
 		[LenderDetails("LENDERNAME")]
@@ -1093,6 +1129,14 @@
 			get { return base.ExperianLtdID; }
 			set { base.ExperianLtdID = value; }
 		} // ExperianLtdID
+
+		#region method SetParentID
+
+		protected override void SetParentID(long nParentID) {
+			DL65ID = nParentID;
+		} // SetParentID
+
+		#endregion method SetParentID
 	} // class ExperianLtdLenderDetails
 
 	#endregion class ExperianLtdLenderDetails

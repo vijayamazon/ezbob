@@ -307,60 +307,67 @@
 		} // class VectorToTableParameter
 
 		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues) {
-			return CreateTableParameter<VectorToTableParameter<T>>(sFieldName, oValues, oOneValue => new object[] { oOneValue });
+			return CreateTableParameter<VectorToTableParameter<T>>(sFieldName, oValues, oOneValue => new object[] {oOneValue});
 		} // CreateVectorParameter
 
 		#endregion method CreateVectorParameter
 
 		#region method CreateTableParameter
 
-		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, IEnumerable<TSource> oValues, ParameterDirection nDirection = ParameterDirection.Input)
-			where TColumnInfo : new()
-		{
-			return CreateTableParameter<TColumnInfo>(sFieldName, oValues, TypeUtils.GetConvertorToObjectArray(typeof(TSource)), nDirection);
+		public virtual QueryParameter CreateTableParameter<T>(string sFieldName, params T[] aryValues) {
+			return CreateTableParameter<T>(sFieldName, (IEnumerable<T>)aryValues);
+		} // CreateTableParameter
+
+		public virtual QueryParameter CreateTableParameter<T>(string sFieldName, IEnumerable<T> oValues) {
+			return CreateTableParameter<T>(sFieldName, oValues, TypeUtils.GetConvertorToObjectArray(typeof(T)));
+		} // CreateTableParameter
+
+		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, params TSource[] aryValues) {
+			return CreateTableParameter<TColumnInfo>(sFieldName, aryValues, TypeUtils.GetConvertorToObjectArray(typeof(TSource)));
+		} // CreateTableParameter
+
+		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, IEnumerable<TSource> oValues) {
+			return CreateTableParameter<TColumnInfo>(sFieldName, oValues, TypeUtils.GetConvertorToObjectArray(typeof(TSource)));
 		} // CreateTableParameter
 
 		public virtual QueryParameter CreateTableParameter<TColumnInfo>(
 			string sFieldName,
 			IEnumerable oValues,
-			Func<object, object[]> oValueToRow,
-			ParameterDirection nDirection = ParameterDirection.Input
-		) where TColumnInfo : new() {
-			return CreateTableParameter(typeof (TColumnInfo), sFieldName, oValues, oValueToRow, nDirection);
+			Func<object, object[]> oValueToRow
+		) {
+			return CreateTableParameter(typeof (TColumnInfo), sFieldName, oValues, oValueToRow);
 		} // CreateTableParameter
 
-		public virtual QueryParameter CreateTableParameter(Type oColumnInfo, string sFieldName, IEnumerable oValues, Func<object, object[]> oValueToRow, ParameterDirection nDirection = ParameterDirection.Input) {
+		public virtual QueryParameter CreateTableParameter(
+			Type oColumnInfo,
+			string sFieldName,
+			IEnumerable oValues,
+			Func<object, object[]> oValueToRow,
+			IEnumerable<Type> oCustomTypeOrder = null
+		) {
 			var tbl = new DataTable();
 
-			if (TypeUtils.IsSimpleType(oColumnInfo)) {
-				bool bIsNullable = TypeUtils.IsNullable(oColumnInfo);
-
-				tbl.Columns.Add(
-					string.Empty,
-					bIsNullable ? Nullable.GetUnderlyingType(oColumnInfo) : oColumnInfo
-				);
-			}
+			if (TypeUtils.IsSimpleType(oColumnInfo))
+				AddColumn(tbl, oColumnInfo);
 			else {
-				PropertyTraverser.Traverse(oColumnInfo, (oIgnoredInstance, oPropertyInfo) => {
-					bool bIsNullable = TypeUtils.IsNullable(oPropertyInfo.PropertyType);
-
-					tbl.Columns.Add(
-						string.Empty,
-						bIsNullable ? Nullable.GetUnderlyingType(oPropertyInfo.PropertyType) : oPropertyInfo.PropertyType
-					);
-				});
+				if (oCustomTypeOrder == null)
+					PropertyTraverser.Traverse(oColumnInfo, (i, oPropertyInfo) => AddColumn(tbl, oPropertyInfo.PropertyType));
+				else {
+					foreach (Type t in oCustomTypeOrder)
+						AddColumn(tbl, t);
+				} // if
 			} // if
 
 			if (oValues != null)
 				foreach (object v in oValues)
 					tbl.Rows.Add(oValueToRow(v));
 
-			return BuildTableParameter(sFieldName, tbl, nDirection);
+			return BuildTableParameter(sFieldName, tbl);
 		} // CreateTableParameter
 
 		#endregion method CreateTableParameter
 
-		public abstract QueryParameter BuildTableParameter(string sFieldName, DataTable oValues, ParameterDirection nDirection = ParameterDirection.Input);
+		public abstract QueryParameter BuildTableParameter(string sFieldName, DataTable oValues);
 
 		public abstract string DateToString(DateTime oDate);
 
@@ -635,6 +642,9 @@
 			using (var oConnection = oConnectionToUse ?? new ConnectionWrapper(CreateConnection(), nMode == ExecMode.Enumerable)) {
 				command.Connection = oConnection.Connection;
 
+				if (oConnection.Transaction != null)
+					command.Transaction = oConnection.Transaction;
+
 				var sw = new Stopwatch();
 				sw.Start();
 
@@ -723,5 +733,18 @@
 		#endregion method RunNonQuery
 
 		#endregion protected
+
+		#region private
+
+		private static void AddColumn(DataTable tbl, Type oType) {
+			bool bIsNullable = TypeUtils.IsNullable(oType);
+
+			tbl.Columns.Add(
+				string.Empty,
+				bIsNullable ? Nullable.GetUnderlyingType(oType) : oType
+			);
+		} // AddColumn
+
+		#endregion private
 	} // AConnection
 } // namespace Ezbob.Database

@@ -322,8 +322,7 @@
 								oUnderlyingType,
 								sFieldName,
 								(IEnumerable)oPropertyInfo.GetValue(oInstance, null),
-								TypeUtils.GetConvertorToObjectArray(oUnderlyingType),
-								nDirection
+								TypeUtils.GetConvertorToObjectArray(oUnderlyingType)
 							);
 						}
 						else

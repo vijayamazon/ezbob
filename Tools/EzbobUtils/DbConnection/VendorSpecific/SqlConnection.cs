@@ -31,10 +31,10 @@
 
 		#region method CreateTableParameter
 
-		public override QueryParameter BuildTableParameter(string sFieldName, DataTable oValues, ParameterDirection nDirection = ParameterDirection.Input) {
+		public override QueryParameter BuildTableParameter(string sFieldName, DataTable oValues) {
 			return new QueryParameter(new SqlParameter(sFieldName, SqlDbType.Structured) {
 				Value = oValues,
-				Direction = nDirection,
+				Direction = ParameterDirection.Input,
 			});
 		} // CreateTableParameter
 

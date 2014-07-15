@@ -9,6 +9,7 @@
 			Connection = oConnection;
 			IsPersistent = bIsPersistent;
 			IsOpen = false;
+			Transaction = null;
 		} // constructor
 
 		#endregion constructor
@@ -43,6 +44,9 @@
 		#region method Close
 
 		public void Close() {
+			if (Transaction != null)
+				throw new DbException("Cannot close connection wrapper: transaction is still active.");
+
 			if (Connection != null)
 				Connection.Dispose();
 
@@ -51,10 +55,56 @@
 
 		#endregion method Close
 
+		#region method BeginTransaction
+
+		public void BeginTransaction() {
+			if (Transaction != null)
+				return;
+
+			if (!IsOpen)
+				return;
+
+			Transaction = Connection.BeginTransaction();
+		} // BeginTransaction
+
+		#endregion method BeginTransaction
+
+		#region method Commit
+
+		public void Commit() {
+			if (Transaction == null)
+				return;
+
+			Transaction.Commit();
+			Transaction.Dispose();
+			Transaction = null;
+
+			Close();
+		} // Commit
+
+		#endregion method Commit
+
+		#region method Rollback
+
+		public void Rollback() {
+			if (Transaction == null)
+				return;
+
+			Transaction.Rollback();
+			Transaction.Dispose();
+			Transaction = null;
+
+			Close();
+		} // Rollback
+
+		#endregion method Rollback
+
 		public DbConnection Connection { get; private set; }
 
 		public bool IsPersistent { get; private set; }
 
 		public bool IsOpen { get; private set; }
+
+		public DbTransaction Transaction { get; private set; }
 	} // class ConnectionWrapper
 } // namespace

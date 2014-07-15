@@ -1,7 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
-	using System.Collections.Generic;
-	using System.Data.Common;
 	using System.Linq;
 	using System.Reflection;
 	using System.Xml;
@@ -30,12 +28,10 @@
 		#region method Execute
 
 		public override void Execute() {
-			LogCreateSql();
-
 			string sXml = null;
 			long nID = 0;
 
-			Log.Debug("Parsing Experian Ltd for service log entry {0}...", m_nServiceLogID);
+			Log.Info("Parsing Experian Ltd for service log entry {0}...", m_nServiceLogID);
 
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
@@ -50,7 +46,7 @@
 			);
 
 			if (nID != m_nServiceLogID) {
-				Log.Debug("Parsing Experian Ltd for service log entry {0} failed: entry not found.", m_nServiceLogID);
+				Log.Info("Parsing Experian Ltd for service log entry {0} failed: entry not found.", m_nServiceLogID);
 				return;
 			} // if
 
@@ -71,7 +67,7 @@
 
 			ParseAndSave(oXml);
 
-			Log.Debug("Parsing Experian Ltd for service log entry {0} complete.", m_nServiceLogID);
+			Log.Info("Parsing Experian Ltd for service log entry {0} complete.", m_nServiceLogID);
 		} // Execute
 
 		#endregion method Execute
@@ -81,6 +77,71 @@
 		#region private
 
 		private readonly long m_nServiceLogID;
+
+		#region method ParseAndSave
+
+		private void ParseAndSave(XmlDocument oXml) {
+			if ((oXml == null) || (oXml.DocumentElement == null))
+				return; // this should never happen, but to shut resharper up...
+
+			Log.Debug("Parsing Experian company data into {0}...", typeof (ExperianLtd).Name);
+
+			ExperianLtd oMainTable = new ExperianLtd(oXml.DocumentElement, Log);
+			oMainTable.LoadFromXml();
+
+			if (string.IsNullOrWhiteSpace(oMainTable.RegisteredNumber)) {
+				Log.Warn(
+					"Parsing Experian company data into {0} failed: no main company data loaded for service log entry {1}.",
+					typeof (ExperianLtd).Name, m_nServiceLogID
+				);
+				return;
+			} // if
+
+			oMainTable.ServiceLogID = m_nServiceLogID;
+
+			ConnectionWrapper oPersistent = DB.GetPersistent();
+
+			oPersistent.BeginTransaction();
+
+			if (!oMainTable.Save(DB, oPersistent)) {
+				oPersistent.Rollback();
+				Log.Warn("Parsing Experian company data into {0} failed on saving to DB.", typeof (ExperianLtd).Name);
+				return;
+			} // if
+
+			Log.Debug("Parsing Experian company data into {0} complete.", typeof (ExperianLtd).Name);
+
+			foreach (Type oTableType in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof (AExperianLtdDataRow)))) {
+				var oGroupSrcAttr = oTableType.GetCustomAttribute<ASrcAttribute>();
+
+				if (oGroupSrcAttr == null)
+					continue;
+
+				if (!oGroupSrcAttr.IsTopLevel)
+					continue;
+
+				bool bSuccess = AExperianLtdDataRow.ProcessOneRow(
+					oTableType,
+					oXml.DocumentElement,
+					oMainTable.ExperianLtdID,
+					oGroupSrcAttr,
+					DB,
+					oPersistent,
+					Log
+				);
+
+				if (!bSuccess) {
+					oPersistent.Rollback();
+					return;
+				} // if
+			} // for each row type (DL 65, DL 72, etc)
+
+			oPersistent.Commit();
+		} // ParseAndSave
+
+		#endregion method ParseAndSave
+
+		/*
 
 		#region method LogCreateSql
 
@@ -124,68 +185,7 @@
 
 		#endregion method LogCreateSql
 
-		#region method ParseAndSave
-
-		private void ParseAndSave(XmlDocument oXml) {
-			ExperianLtd oMainTable = new ExperianLtd(oXml.DocumentElement, Log);
-			oMainTable.LoadFromXml();
-
-			if (string.IsNullOrWhiteSpace(oMainTable.RegisteredNumber)) {
-				Log.Debug("No main company data loaded for service log entry {0}.", m_nServiceLogID);
-				return;
-			} // if
-
-			oMainTable.ServiceLogID = m_nServiceLogID;
-
-			Log.Debug("{0}", oMainTable.Stringify());
-
-			ConnectionWrapper oPersistent = DB.GetPersistent();
-
-			DbTransaction oTransaction = oPersistent.Connection.BeginTransaction();
-
-			if (!oMainTable.Save(DB, oPersistent)) {
-				oTransaction.Rollback();
-				oPersistent.Close();
-				return;
-			} // if
-
-			foreach (Type oTableType in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof (AExperianDataRow)))) {
-				var oGroupSrcAttr = oTableType.GetCustomAttribute<ASrcAttribute>();
-
-				if (oGroupSrcAttr == null)
-					continue;
-
-				if (!oGroupSrcAttr.IsTopLevel)
-					continue;
-
-				ConstructorInfo ci = oTableType.GetConstructors().FirstOrDefault();
-
-				if (ci == null) {
-					Log.Alert("There is no constructor for type {0}.", oTableType.Name);
-					continue;
-				} // if
-
-				XmlNodeList oGroupNodes = oXml.DocumentElement.SelectNodes(oGroupSrcAttr.GroupPath);
-
-				foreach (XmlNode oGroup in oGroupNodes) {
-					AExperianDataRow oRow = (AExperianDataRow)ci.Invoke(new object[] { oGroup, Log });
-
-					oRow.LoadFromXml();
-
-					if (!oRow.Save(DB, oPersistent)) {
-						oTransaction.Rollback();
-						oPersistent.Close();
-						return;
-					} // if
-				} // for each matching XML node
-			} // for each row type (DL 65, DL 72, etc)
-
-			oTransaction.Commit();
-
-			oPersistent.Close();
-		} // ParseAndSave
-
-		#endregion method ParseAndSave
+		*/
 
 		#endregion private
 	} // class ParseExperianLtd
