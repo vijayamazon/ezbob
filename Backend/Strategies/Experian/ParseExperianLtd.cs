@@ -56,12 +56,12 @@
 				oXml.LoadXml(sXml);
 			}
 			catch (Exception e) {
-				Log.Warn(e, "Parsing Experian Ltd for service log entry {0} failed.", m_nServiceLogID);
+				Log.Alert(e, "Parsing Experian Ltd for service log entry {0} failed.", m_nServiceLogID);
 				return;
 			} // try
 
 			if (oXml.DocumentElement == null) {
-				Log.Warn("Parsing Experian Ltd for service log entry {0} failed (no root element found).", m_nServiceLogID);
+				Log.Alert("Parsing Experian Ltd for service log entry {0} failed (no root element found).", m_nServiceLogID);
 				return;
 			} // try
 
