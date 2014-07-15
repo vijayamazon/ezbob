@@ -198,13 +198,13 @@
 					return BuildLimitedDashboardModel(oResult);
 				case TypeOfBusinessReduced.NonLimited:
 				case TypeOfBusinessReduced.Personal:
-					return BuildNonLimitedDashboardModel(oResult, customerId, refNumber);
+					return BuildNonLimitedDashboardModel(customerId, refNumber);
 			}
 
 			return null;
 		}
 
-		private ComapanyDashboardModel BuildNonLimitedDashboardModel(ExperianParserOutput oResult, int customerId, string refNumber)
+		private ComapanyDashboardModel BuildNonLimitedDashboardModel(int customerId, string refNumber)
 		{
 			var model = new ComapanyDashboardModel { FinDataHistories = new List<FinDataModel>(), LastFinData = new FinDataModel() };
 			model.IsLimited = false;

@@ -37,29 +37,29 @@
 		private List<DN11> bankruptcyDetails;
 
 		//DN12
-		private int bankruptcyCountDuringOwnership;
-		private int ageOfMostRecentBankruptcyDuringOwnershipMonths;
-		private int associatedBankruptcyCountDuringOwnership;
-		private int ageOfMostRecentAssociatedBankruptcyDuringOwnershipMonths;
+		private int? bankruptcyCountDuringOwnership;
+		private int? ageOfMostRecentBankruptcyDuringOwnershipMonths;
+		private int? associatedBankruptcyCountDuringOwnership;
+		private int? ageOfMostRecentAssociatedBankruptcyDuringOwnershipMonths;
 
 		//DN13
 		private List<DN13> ccjDetails;
 
 		//DN14
-		private int ageOfMostRecentJudgmentDuringOwnershipMonths;
-		private int totalJudgmentCountLast12Months;
-		private int totalJudgmentValueLast12Months;
-		private int totalJudgmentCountLast13To24Months;
-		private int totalJudgmentValueLast13To24Months;
-		private int valueOfMostRecentAssociatedJudgmentDuringOwnership;
-		private int totalAssociatedJudgmentCountLast12Months;
-		private int totalAssociatedJudgmentValueLast12Months;
-		private int totalAssociatedJudgmentCountLast13To24Months;
-		private int totalAssociatedJudgmentValueLast13To24Months;
-		private int totalJudgmentCountLast24Months;
-		private int totalAssociatedJudgmentCountLast24Months;
-		private int totalJudgmentCountValue24Months;
-		private int totalAssociatedJudgmentValueLast24Months;
+		private int? ageOfMostRecentJudgmentDuringOwnershipMonths;
+		private int? totalJudgmentCountLast12Months;
+		private int? totalJudgmentValueLast12Months;
+		private int? totalJudgmentCountLast13To24Months;
+		private int? totalJudgmentValueLast13To24Months;
+		private int? valueOfMostRecentAssociatedJudgmentDuringOwnership;
+		private int? totalAssociatedJudgmentCountLast12Months;
+		private int? totalAssociatedJudgmentValueLast12Months;
+		private int? totalAssociatedJudgmentCountLast13To24Months;
+		private int? totalAssociatedJudgmentValueLast13To24Months;
+		private int? totalJudgmentCountLast24Months;
+		private int? totalAssociatedJudgmentCountLast24Months;
+		private int? totalJudgmentCountValue24Months;
+		private int? totalAssociatedJudgmentValueLast24Months;
 
 		//DN17
 		private List<DN17> previousSearches;
@@ -70,39 +70,39 @@
 		private string fraudCategoryDesc;
 
 		//DN26
-		private int numberOfAccountsPlacedForCollection;
-		private int valueOfAccountsPlacedForCollection;
-		private int numberOfAccountsPlacedForCollectionLast2Years;
-		private int averageDaysBeyondTermsFor0To100;
-		private int averageDaysBeyondTermsFor101To1000;
-		private int averageDaysBeyondTermsFor1001To10000;
-		private int averageDaysBeyondTermsForOver10000;
-		private int averageDaysBeyondTermsForLast3MonthsOfDataReturned;
-		private int averageDaysBeyondTermsForLast6MonthsOfDataReturned;
-		private int averageDaysBeyondTermsForLast12MonthsOfDataReturned;
-		private int currentAverageDebt;
-		private int averageDebtLast3Months;
-		private int averageDebtLast12Months;
+		private int? numberOfAccountsPlacedForCollection;
+		private int? valueOfAccountsPlacedForCollection;
+		private int? numberOfAccountsPlacedForCollectionLast2Years;
+		private int? averageDaysBeyondTermsFor0To100;
+		private int? averageDaysBeyondTermsFor101To1000;
+		private int? averageDaysBeyondTermsFor1001To10000;
+		private int? averageDaysBeyondTermsForOver10000;
+		private int? averageDaysBeyondTermsForLast3MonthsOfDataReturned;
+		private int? averageDaysBeyondTermsForLast6MonthsOfDataReturned;
+		private int? averageDaysBeyondTermsForLast12MonthsOfDataReturned;
+		private int? currentAverageDebt;
+		private int? averageDebtLast3Months;
+		private int? averageDebtLast12Months;
 		private List<CommonTerm> commonTerms; 
 
 		//DN36
 		private string telephoneNumberDN36;
 
 		//DN40
-		private List<Tuple<DateTime?, int>> scoreHistory;
-		private int riskScore;
+		private List<Tuple<DateTime?, int?>> scoreHistory;
+		private int? riskScore;
 
 		//DN73
 		private string searchType;
 		private string searchTypeDesc;
-		private int commercialDelphiScore;
+		private int? commercialDelphiScore;
 		private string creditRating;
 		private string creditLimit;
-		private decimal probabilityOfDefaultScore;
+		private decimal? probabilityOfDefaultScore;
 		private string stabilityOdds;
 		private string riskBand;
-		private int numberOfProprietorsSearched;
-		private int numberOfProprietorsFound;
+		private int? numberOfProprietorsSearched;
+		private int? numberOfProprietorsFound;
 
 		//Errors
 		string errors = string.Empty;
@@ -123,7 +123,7 @@
 			ccjDetails = new List<DN13>();
 			previousSearches = new List<DN17>();
 			commonTerms = new List<CommonTerm>();
-			scoreHistory = new List<Tuple<DateTime?, int>>();
+			scoreHistory = new List<Tuple<DateTime?, int?>>();
 		}
 
 		public void ParseAndStore(int customerId, string xml, string refNumber, long serviceLogId)
@@ -224,7 +224,7 @@
 				var sr = new SafeReader(dt.Rows[0]);
 				int newId = sr["NewId"];
 
-				foreach (Tuple<DateTime?, int> historyData in scoreHistory)
+				foreach (Tuple<DateTime?, int?> historyData in scoreHistory)
 				{
 					db.ExecuteNonQuery(
 						"InsertNonLimitedResultScoreHistory",
@@ -366,58 +366,231 @@
 			}
 		}
 
-		private void ParseDN73()
+		private void ParseDN10()
 		{
-			XmlNodeList dn73Nodes = xmlDoc.SelectNodes("//DN73");
-			if (dn73Nodes != null && dn73Nodes.Count == 1)
+			XmlNodeList dn10Nodes = xmlDoc.SelectNodes("//DN10");
+			if (dn10Nodes != null && dn10Nodes.Count == 1)
 			{
-				XmlNode dn73Node = dn73Nodes[0];
-				searchType = GetStringValueOrEmpty(dn73Node, "SEARCHTYPE");
-				switch (searchType)
+				XmlNode dn10Node = dn10Nodes[0];
+				businessName = GetString(dn10Node, "BUSINESSNAME");
+				address1 = GetString(dn10Node, "BUSADDR1");
+				address2 = GetString(dn10Node, "BUSADDR2");
+				address3 = GetString(dn10Node, "BUSADDR3");
+				address4 = GetString(dn10Node, "BUSADDR4");
+				address5 = GetString(dn10Node, "BUSADDR5");
+				postcode = GetString(dn10Node, "BUSPOSTCODE");
+				telephoneNumber = GetString(dn10Node, "TELEPHONENUM");
+				principalActivities = GetString(dn10Node, "PRINCIPALACTIVITIES");
+
+				dateOwnershipCeased = GetDate(dn10Node, "DATEOWNSHPTERMD");
+				lastUpdateDate = GetDate(dn10Node, "LATESTUPDATE");
+
+				dateOwnershipCommenced = GetDate(dn10Node, "DATEOWNSHPCOMMD");
+				earliestKnownDate = GetDate(dn10Node, "EARLIESTKNOWNDATE");
+				incorporationDate = dateOwnershipCommenced ?? earliestKnownDate;
+
+				XmlNodeList sicCodeNodes = dn10Node.SelectNodes("SICCODES");
+				if (sicCodeNodes != null)
 				{
-					case "P":
-						searchTypeDesc = "Proprietor only";
-						break;
-					case "B":
-						searchTypeDesc = "Business only";
-						break;
-					case "J":
-						searchTypeDesc = "Business & proprietor";
-						break;
-				}
-				commercialDelphiScore = GetIntValueOrDefault(dn73Node, "NLCDSCORE");
-				creditRating = GetStringValueOrEmpty(dn73Node, "CREDITRATING");
-				creditLimit = GetStringValueOrEmpty(dn73Node, "CREDITLIMIT");
-				probabilityOfDefaultScore = GetDecimalValueOrDefault(dn73Node, "PDSCORE");
-				stabilityOdds = GetStringValueOrEmpty(dn73Node, "STABILITYODDS");
-				riskBand = GetStringValueOrEmpty(dn73Node, "RISKBAND");
-				numberOfProprietorsSearched = GetIntValueOrDefault(dn73Node, "NUMPROPSSEARCHED");
-				numberOfProprietorsFound = GetIntValueOrDefault(dn73Node, "NUMPROPSFOUND");
-			}
-		}
-
-		private void ParseDN40()
-		{
-			XmlNodeList dn40Nodes = xmlDoc.SelectNodes("//DN40");
-			if (dn40Nodes != null && dn40Nodes.Count == 1)
-			{
-				XmlNode dn40Node = dn40Nodes[0];
-				riskScore = GetIntValueOrDefault(dn40Node, "RISKSCORE");
-
-				XmlNodeList scoreHistoryNodes = dn40Node.SelectNodes("SCOREHISTORY");
-
-				if (scoreHistoryNodes != null)
-				{
-					foreach (XmlNode scoreHistoryNode in scoreHistoryNodes)
+					foreach (XmlNode sicCodeNode in sicCodeNodes)
 					{
-						DateTime? scoreHistoryDate = GetDateFromNode(scoreHistoryNode, "SCOREHISTORY_DATE");
-						int riskScoreHistory = GetIntValueOrDefault(scoreHistoryNode, "SCOREHISTORY_RISKSCORE");
-						if (scoreHistoryDate.HasValue)
+						XmlNode sicCode1992Node = sicCodeNode.SelectSingleNode("SICCODE1992");
+						if (sicCode1992Node != null)
 						{
-							scoreHistory.Add(new Tuple<DateTime?, int>(scoreHistoryDate, riskScoreHistory));
+							sicCodes1992.Add(sicCode1992Node.InnerText);
 						}
 					}
 				}
+				XmlNodeList sicDescNodes = dn10Node.SelectNodes("SICDESCS");
+				if (sicDescNodes != null)
+				{
+					foreach (XmlNode sicDescNode in sicDescNodes)
+					{
+						XmlNode sicDesc1992Node = sicDescNode.SelectSingleNode("SICDESC1992");
+						if (sicDesc1992Node != null)
+						{
+							sicDescs1992.Add(sicDesc1992Node.InnerText);
+						}
+					}
+				}
+			}
+		}
+
+		private void ParseDN11()
+		{
+			XmlNodeList dn11Nodes = xmlDoc.SelectNodes("//DN11");
+			if (dn11Nodes != null)
+			{
+				foreach (XmlNode dn11Node in dn11Nodes)
+				{
+					var dn11 = new DN11();
+					dn11.BankruptcyName = GetString(dn11Node, "BANKRUPTCYNAME");
+					dn11.BankruptcyAddr1 = GetString(dn11Node, "BANKRUPTCYADDR1");
+					dn11.BankruptcyAddr2 = GetString(dn11Node, "BANKRUPTCYADDR2");
+					dn11.BankruptcyAddr3 = GetString(dn11Node, "BANKRUPTCYADDR3");
+					dn11.BankruptcyAddr4 = GetString(dn11Node, "BANKRUPTCYADDR4");
+					dn11.BankruptcyAddr5 = GetString(dn11Node, "BANKRUPTCYADDR5");
+					dn11.PostCode = GetString(dn11Node, "BUSPOSTCODE");
+					dn11.GazetteDate = GetDate(dn11Node, "GAZETTE");
+					dn11.BankruptcyType = GetString(dn11Node, "BANKRUPTCYTYPE");
+					switch (dn11.BankruptcyType)
+					{
+						case "BO":
+							dn11.BankruptcyTypeDesc = "Bankruptcy Order";
+							break;
+						case "SEQ":
+							dn11.BankruptcyTypeDesc = "Sequestration";
+							break;
+						case "OD":
+							dn11.BankruptcyTypeDesc = "Order Of Discharge";
+							break;
+					}
+					bankruptcyDetails.Add(dn11);
+				}
+			}
+		}
+
+		private void ParseDN12()
+		{
+			XmlNodeList dn12Nodes = xmlDoc.SelectNodes("//DN12");
+			if (dn12Nodes != null && dn12Nodes.Count == 1)
+			{
+				XmlNode dn12Node = dn12Nodes[0];
+				bankruptcyCountDuringOwnership = GetInt(dn12Node, "MBANKRUPTCYCOUNTOWNSHP");
+				ageOfMostRecentBankruptcyDuringOwnershipMonths = GetInt(dn12Node, "MMOSTRECBANKRUPCY");
+				associatedBankruptcyCountDuringOwnership = GetInt(dn12Node, "ABANKRUPTCYCOUNTOWNSHP");
+				ageOfMostRecentAssociatedBankruptcyDuringOwnershipMonths = GetInt(dn12Node, "AMOSTRECBANKRUPCY"); // TODO: never exists in prod - remove it
+			}
+		}
+
+		private void ParseDN13()
+		{
+			XmlNodeList dn13Nodes = xmlDoc.SelectNodes("//DN13");
+			if (dn13Nodes != null)
+			{
+				foreach (XmlNode dn13Node in dn13Nodes)
+				{
+					var dn13 = new DN13();
+					dn13.RecordType = GetString(dn13Node, "RECORDTYPE");
+					switch (dn13.RecordType)
+					{
+						case "M":
+							dn13.RecordTypeFullName = "Main";
+							break;
+						case "A":
+							dn13.RecordTypeFullName = "Associated";
+							break;
+						case "P":
+							dn13.RecordTypeFullName = "Pool";
+							break;
+					}
+					dn13.JudgementDate = GetDate(dn13Node, "JUDGDATE");
+					dn13.SatisfactionFlag = GetString(dn13Node, "SATFLAG");
+					switch (dn13.SatisfactionFlag)
+					{
+						case "Y":
+							dn13.SatisfactionFlagDesc = "Satisfied";
+							break;
+						case "N":
+							dn13.SatisfactionFlagDesc = "Not satisfied";
+							break;
+					}
+					dn13.SatisfactionDate = GetDate(dn13Node, "SATDATE");
+
+					dn13.JudgmentType = GetString(dn13Node, "JUDGTYPE");
+					switch (dn13.JudgmentType)
+					{
+						case "JG":
+							dn13.JudgmentTypeDesc = "Judgment";
+							break;
+						case "SS":
+							dn13.JudgmentTypeDesc = "Satisfied Judgment";
+							break;
+						case "DO":
+							dn13.JudgmentTypeDesc = "Discovery Order";
+							break;
+						case "CU":
+							dn13.JudgmentTypeDesc = "Certificate Of Unenforceability";
+							break;
+					}
+
+					dn13.JudgmentAmount = GetInt(dn13Node, "JUDGAMOUNT");
+					dn13.Court = GetString(dn13Node, "COURT");
+					dn13.CaseNumber = GetString(dn13Node, "CASENUM");
+					dn13.NumberOfJudgmentNames = GetString(dn13Node, "NUMJUDGNAMES");
+					dn13.NumberOfTradingNames = GetString(dn13Node, "NUMTRADNAMES");
+					dn13.LengthOfJudgmentName = GetString(dn13Node, "LENJUDGNAME");
+					dn13.LengthOfTradingName = GetString(dn13Node, "LENTRADNAME");
+					dn13.LengthOfJudgmentAddress = GetString(dn13Node, "LENJUDGADDR");
+					dn13.LengthOfJudgmentAddress = GetString(dn13Node, "LENJUDGADDR");
+					dn13.LengthOfJudgmentAddress = GetString(dn13Node, "LENJUDGADDR");
+					dn13.LengthOfJudgmentAddress = GetString(dn13Node, "LENJUDGADDR");
+					dn13.LengthOfJudgmentAddress = GetString(dn13Node, "LENJUDGADDR");
+					dn13.LengthOfJudgmentAddress = GetString(dn13Node, "LENJUDGADDR");
+					dn13.JudgementAddr1 = GetString(dn13Node, "JUDGADDR1");
+					dn13.JudgementAddr2 = GetString(dn13Node, "JUDGADDR2");
+					dn13.JudgementAddr3 = GetString(dn13Node, "JUDGADDR3");
+					dn13.JudgementAddr4 = GetString(dn13Node, "JUDGADDR4");
+					dn13.JudgementAddr5 = GetString(dn13Node, "JUDGADDR5");
+					dn13.PostCode = GetString(dn13Node, "JUDGPOSTCODE");
+
+					XmlNodeList judgmentRegisteredAgainstNodes = dn13Node.SelectNodes("JUDGDETS");
+					if (judgmentRegisteredAgainstNodes != null)
+					{
+						foreach (XmlNode judgmentRegisteredAgainstNode in judgmentRegisteredAgainstNodes)
+						{
+							dn13.JudgmentRegisteredAgainst.Add(judgmentRegisteredAgainstNode.InnerText);
+						}
+					}
+					XmlNodeList tradingNamesNodes = dn13Node.SelectNodes("TRADDETS");
+					if (tradingNamesNodes != null)
+					{
+						foreach (XmlNode tradingNamesNode in tradingNamesNodes)
+						{
+							var tradingName = new TradingName();
+							tradingName.Name = GetString(tradingNamesNode, "TRADNAME");
+							tradingName.TradingIndicator = GetString(tradingNamesNode, "TRADINDICATOR");
+							switch (tradingName.TradingIndicator)
+							{
+								case "F":
+									tradingName.TradingIndicatorDesc = "Formerly trading as";
+									break;
+								case "P":
+									tradingName.TradingIndicatorDesc = "Previously trading as";
+									break;
+								case "T":
+									tradingName.TradingIndicatorDesc = "Trading as";
+									break;
+							}
+							dn13.TradingNames.Add(tradingName);
+						}
+					}
+
+					ccjDetails.Add(dn13);
+				}
+			}
+		}
+
+		private void ParseDN14()
+		{
+			XmlNodeList dn14Nodes = xmlDoc.SelectNodes("//DN14");
+			if (dn14Nodes != null && dn14Nodes.Count == 1)
+			{
+				XmlNode dn14Node = dn14Nodes[0];
+				ageOfMostRecentJudgmentDuringOwnershipMonths = GetInt(dn14Node, "MAGEMOSTRECJUDGSINCEOWNSHP");
+				totalJudgmentCountLast12Months = GetInt(dn14Node, "MTOTJUDGCOUNTLST12MNTHS");
+				totalJudgmentValueLast12Months = GetInt(dn14Node, "MTOTJUDGVALUELST12MNTHS");
+				totalJudgmentCountLast13To24Months = GetInt(dn14Node, "MTOTJUDGCOUNTLST13TO24MNTHS");
+				totalJudgmentValueLast13To24Months = GetInt(dn14Node, "MTOTJUDGVALUELST13TO24MNTHS");
+				valueOfMostRecentAssociatedJudgmentDuringOwnership = GetInt(dn14Node, "AVALMOSTRECJUDGSINCEOWNSHP");
+				totalAssociatedJudgmentCountLast12Months = GetInt(dn14Node, "ATOTJUDGCOUNTLST12MNTHS");
+				totalAssociatedJudgmentValueLast12Months = GetInt(dn14Node, "ATOTJUDGVALUELST12MNTHS");
+				totalAssociatedJudgmentCountLast13To24Months = GetInt(dn14Node, "ATOTJUDGCOUNTLST13TO24MNTHS");
+				totalAssociatedJudgmentValueLast13To24Months = GetInt(dn14Node, "ATOTJUDGVALUELST13TO24MNTHS");
+				totalJudgmentCountLast24Months = GetInt(dn14Node, "MTOTJUDGCOUNTLST24MNTHS");
+				totalAssociatedJudgmentCountLast24Months = GetInt(dn14Node, "ATOTJUDGCOUNTLST24MNTHS");
+				totalJudgmentCountValue24Months = GetInt(dn14Node, "MTOTJUDGVALUELST24MNTHS");
+				totalAssociatedJudgmentValueLast24Months = GetInt(dn14Node, "ATOTJUDGVALUELST24MNTHS");
 			}
 		}
 
@@ -429,8 +602,8 @@
 				foreach (XmlNode dn17Node in dn17Nodes)
 				{
 					var dn17 = new DN17();
-					dn17.PreviousSearchDate = GetDateFromNode(dn17Node, "PREVSEARCHDATE");
-					dn17.EnquiryType = GetStringValueOrEmpty(dn17Node, "ENQUIRYTYPE");
+					dn17.PreviousSearchDate = GetDate(dn17Node, "PREVSEARCHDATE");
+					dn17.EnquiryType = GetString(dn17Node, "ENQUIRYTYPE");
 					switch (dn17.EnquiryType)
 					{
 						case "Z":
@@ -470,208 +643,8 @@
 							dn17.EnquiryTypeDesc = "Credit Card Report";
 							break;
 					}
-					dn17.CreditRequired = GetStringValueOrEmpty(dn17Node, "CREDITREQD");
+					dn17.CreditRequired = GetString(dn17Node, "CREDITREQD");
 					previousSearches.Add(dn17);
-				}
-			}
-		}
-
-		private void ParseDN13()
-		{
-			XmlNodeList dn13Nodes = xmlDoc.SelectNodes("//DN13");
-			if (dn13Nodes != null)
-			{
-				foreach (XmlNode dn13Node in dn13Nodes)
-				{
-					var dn13 = new DN13();
-					dn13.RecordType = GetStringValueOrEmpty(dn13Node, "RECORDTYPE");
-					switch (dn13.RecordType)
-					{
-						case "M":
-							dn13.RecordTypeFullName = "Main";
-							break;
-						case "A":
-							dn13.RecordTypeFullName = "Associated";
-							break;
-						case "P":
-							dn13.RecordTypeFullName = "Pool";
-							break;
-					}
-					dn13.JudgementDate = GetDateFromNode(dn13Node, "JUDGDATE");
-					dn13.SatisfactionFlag = GetStringValueOrEmpty(dn13Node, "SATFLAG");
-					switch (dn13.SatisfactionFlag)
-					{
-						case "Y":
-							dn13.SatisfactionFlagDesc = "Satisfied";
-							break;
-						case "N":
-							dn13.SatisfactionFlagDesc = "Not satisfied";
-							break;
-					}
-					dn13.SatisfactionDate = GetDateFromNode(dn13Node, "SATDATE");
-			
-					dn13.JudgmentType = GetStringValueOrEmpty(dn13Node, "JUDGTYPE");
-					switch (dn13.JudgmentType)
-					{
-						case "JG":
-							dn13.JudgmentTypeDesc = "Judgment";
-							break;
-						case "SS":
-							dn13.JudgmentTypeDesc = "Satisfied Judgment";
-							break;
-						case "DO":
-							dn13.JudgmentTypeDesc = "Discovery Order";
-							break;
-						case "CU":
-							dn13.JudgmentTypeDesc = "Certificate Of Unenforceability";
-							break;
-					}
-
-					dn13.JudgmentAmount = GetIntValueOrDefault(dn13Node, "JUDGAMOUNT");
-					dn13.Court = GetStringValueOrEmpty(dn13Node, "COURT");
-					dn13.CaseNumber = GetStringValueOrEmpty(dn13Node, "CASENUM");
-					dn13.NumberOfJudgmentNames = GetStringValueOrEmpty(dn13Node, "NUMJUDGNAMES");
-					dn13.NumberOfTradingNames = GetStringValueOrEmpty(dn13Node, "NUMTRADNAMES");
-					dn13.LengthOfJudgmentName = GetStringValueOrEmpty(dn13Node, "LENJUDGNAME");
-					dn13.LengthOfTradingName = GetStringValueOrEmpty(dn13Node, "LENTRADNAME");
-					dn13.LengthOfJudgmentAddress = GetStringValueOrEmpty(dn13Node, "LENJUDGADDR");
-					dn13.LengthOfJudgmentAddress = GetStringValueOrEmpty(dn13Node, "LENJUDGADDR");
-					dn13.LengthOfJudgmentAddress = GetStringValueOrEmpty(dn13Node, "LENJUDGADDR");
-					dn13.LengthOfJudgmentAddress = GetStringValueOrEmpty(dn13Node, "LENJUDGADDR");
-					dn13.LengthOfJudgmentAddress = GetStringValueOrEmpty(dn13Node, "LENJUDGADDR");
-					dn13.LengthOfJudgmentAddress = GetStringValueOrEmpty(dn13Node, "LENJUDGADDR");
-					dn13.JudgementAddr1 = GetStringValueOrEmpty(dn13Node, "JUDGADDR1");
-					dn13.JudgementAddr2 = GetStringValueOrEmpty(dn13Node, "JUDGADDR2");
-					dn13.JudgementAddr3 = GetStringValueOrEmpty(dn13Node, "JUDGADDR3");
-					dn13.JudgementAddr4 = GetStringValueOrEmpty(dn13Node, "JUDGADDR4");
-					dn13.JudgementAddr5 = GetStringValueOrEmpty(dn13Node, "JUDGADDR5");
-					dn13.PostCode = GetStringValueOrEmpty(dn13Node, "JUDGPOSTCODE");
-
-					XmlNodeList judgmentRegisteredAgainstNodes = dn13Node.SelectNodes("JUDGDETS");
-					if (judgmentRegisteredAgainstNodes != null)
-					{
-						foreach (XmlNode judgmentRegisteredAgainstNode in judgmentRegisteredAgainstNodes)
-						{
-							dn13.JudgmentRegisteredAgainst.Add(judgmentRegisteredAgainstNode.InnerText);
-						}
-					}
-					XmlNodeList tradingNamesNodes = dn13Node.SelectNodes("TRADDETS");
-					if (tradingNamesNodes != null)
-					{
-						foreach (XmlNode tradingNamesNode in tradingNamesNodes)
-						{
-							var tradingName = new TradingName();
-							tradingName.Name = GetStringValueOrEmpty(tradingNamesNode, "TRADNAME");
-							tradingName.TradingIndicator = GetStringValueOrEmpty(tradingNamesNode, "TRADINDICATOR");
-							switch (tradingName.TradingIndicator)
-							{
-								case "F":
-									tradingName.TradingIndicatorDesc = "Formerly trading as";
-									break;
-								case "P":
-									tradingName.TradingIndicatorDesc = "Previously trading as";
-									break;
-								case "T":
-									tradingName.TradingIndicatorDesc = "Trading as";
-									break;
-							}
-							dn13.TradingNames.Add(tradingName);
-						}
-					}
-
-					ccjDetails.Add(dn13);
-				}
-			}
-		}
-
-		private void ParseDN11()
-		{
-			XmlNodeList dn11Nodes = xmlDoc.SelectNodes("//DN11");
-			if (dn11Nodes != null)
-			{
-				foreach (XmlNode dn11Node in dn11Nodes)
-				{
-					var dn11 = new DN11();
-					dn11.BankruptcyName = GetStringValueOrEmpty(dn11Node, "BANKRUPTCYNAME");
-					dn11.BankruptcyAddr1 = GetStringValueOrEmpty(dn11Node, "BANKRUPTCYADDR1");
-					dn11.BankruptcyAddr2 = GetStringValueOrEmpty(dn11Node, "BANKRUPTCYADDR2");
-					dn11.BankruptcyAddr3 = GetStringValueOrEmpty(dn11Node, "BANKRUPTCYADDR3");
-					dn11.BankruptcyAddr4 = GetStringValueOrEmpty(dn11Node, "BANKRUPTCYADDR4");
-					dn11.BankruptcyAddr5 = GetStringValueOrEmpty(dn11Node, "BANKRUPTCYADDR5");
-					dn11.PostCode = GetStringValueOrEmpty(dn11Node, "BUSPOSTCODE");
-					dn11.GazetteDate = GetDateFromNode(dn11Node, "GAZETTE");
-					dn11.BankruptcyType = GetStringValueOrEmpty(dn11Node, "BANKRUPTCYTYPE");
-					switch (dn11.BankruptcyType)
-					{
-						case "BO":
-							dn11.BankruptcyTypeDesc = "Bankruptcy Order";
-							break;
-						case "SEQ":
-							dn11.BankruptcyTypeDesc = "Sequestration";
-							break;
-						case "OD":
-							dn11.BankruptcyTypeDesc = "Order Of Discharge";
-							break;
-					}
-					bankruptcyDetails.Add(dn11);
-				}
-			}
-		}
-
-		private void ParseDN12()
-		{
-			XmlNodeList dn12Nodes = xmlDoc.SelectNodes("//DN12");
-			if (dn12Nodes != null && dn12Nodes.Count == 1)
-			{
-				XmlNode dn12Node = dn12Nodes[0];
-				bankruptcyCountDuringOwnership = GetIntValueOrDefault(dn12Node, "MBANKRUPTCYCOUNTOWNSHP");
-				ageOfMostRecentBankruptcyDuringOwnershipMonths = GetIntValueOrDefault(dn12Node, "MMOSTRECBANKRUPCY");
-				associatedBankruptcyCountDuringOwnership = GetIntValueOrDefault(dn12Node, "ABANKRUPTCYCOUNTOWNSHP");
-				ageOfMostRecentAssociatedBankruptcyDuringOwnershipMonths = GetIntValueOrDefault(dn12Node, "AMOSTRECBANKRUPCY"); // TODO: never exists in prod - remove it
-			}
-		}
-
-		private void ParseDN36()
-		{
-			XmlNodeList dn36Nodes = xmlDoc.SelectNodes("//DN36");
-			if (dn36Nodes != null && dn36Nodes.Count == 1)
-			{
-				XmlNode dn36Node = dn36Nodes[0];
-				telephoneNumberDN36 = GetStringValueOrEmpty(dn36Node, "TELEPHONENUM");
-			}
-		}
-
-		private void ParseDN26()
-		{
-			XmlNodeList dn26Nodes = xmlDoc.SelectNodes("//DN26");
-			if (dn26Nodes != null && dn26Nodes.Count == 1)
-			{
-				XmlNode dn26Node = dn26Nodes[0];
-
-				numberOfAccountsPlacedForCollection = GetIntValueOrDefault(dn26Node, "NUMACCSPLACEDFORCOLLTN");
-				valueOfAccountsPlacedForCollection = GetIntValueOrDefault(dn26Node, "VALACCSPLACEDFORCOLLTN");
-				numberOfAccountsPlacedForCollectionLast2Years = GetIntValueOrDefault(dn26Node, "NUMACCSPLACEDFORCOLLTNLST2YRS");
-				averageDaysBeyondTermsFor0To100 = GetIntValueOrDefault(dn26Node, "AVDBT0-100");
-				averageDaysBeyondTermsFor101To1000 = GetIntValueOrDefault(dn26Node, "AVDBT101-1000");
-				averageDaysBeyondTermsFor1001To10000 = GetIntValueOrDefault(dn26Node, "AVDBT1001-10000");
-				averageDaysBeyondTermsForOver10000 = GetIntValueOrDefault(dn26Node, "AVDBTGREATERTHAN10000");
-				averageDaysBeyondTermsForLast3MonthsOfDataReturned = GetIntValueOrDefault(dn26Node, "AVDBTLST3MNTHSDATARTND");
-				averageDaysBeyondTermsForLast6MonthsOfDataReturned = GetIntValueOrDefault(dn26Node, "AVDBTLST6MNTHSDATARTND");
-				averageDaysBeyondTermsForLast12MonthsOfDataReturned = GetIntValueOrDefault(dn26Node, "AVDBTLST12MNTHSDATARTND");
-				currentAverageDebt = GetIntValueOrDefault(dn26Node, "CURRAVDEBT");
-				averageDebtLast3Months = GetIntValueOrDefault(dn26Node, "AVDEBTLST3MNTHS");
-				averageDebtLast12Months = GetIntValueOrDefault(dn26Node, "AVDEBTLST12MNTHS");
-
-				XmlNodeList commonTermsNodes = dn26Node.SelectNodes("COMMONTERMS");
-				if (commonTermsNodes != null)
-				{
-					foreach (XmlNode commonTermsNode in commonTermsNodes)
-					{
-						var commonTerm = new CommonTerm();
-						commonTerm.Code = GetStringValueOrEmpty(commonTermsNode, "COMMONTERMSCODE");
-						commonTerm.DaysBeyondTerms = GetIntValueOrDefault(commonTermsNode, "COMMONTERMSDBT");
-						commonTerms.Add(commonTerm);
-					}
 				}
 			}
 		}
@@ -683,7 +656,7 @@
 			{
 				XmlNode dn23Node = dn23Nodes[0];
 				{
-					fraudCategory = GetStringValueOrEmpty(dn23Node, "FRAUDCATEGORY");
+					fraudCategory = GetString(dn23Node, "FRAUDCATEGORY");
 					switch (fraudCategory)
 					{
 						case "01":
@@ -708,85 +681,112 @@
 							fraudCategoryDesc = "Opening an account for the purpose of fraud.";
 							break;
 					}
-					supplierName = GetStringValueOrEmpty(dn23Node, "SUPPLIERNAME");
+					supplierName = GetString(dn23Node, "SUPPLIERNAME");
 				}
 			}
 		}
 
-		private void ParseDN14()
+		private void ParseDN26()
 		{
-			XmlNodeList dn14Nodes = xmlDoc.SelectNodes("//DN14");
-			if (dn14Nodes != null && dn14Nodes.Count == 1)
+			XmlNodeList dn26Nodes = xmlDoc.SelectNodes("//DN26");
+			if (dn26Nodes != null && dn26Nodes.Count == 1)
 			{
-				XmlNode dn14Node = dn14Nodes[0];
-				ageOfMostRecentJudgmentDuringOwnershipMonths = GetIntValueOrDefault(dn14Node, "MAGEMOSTRECJUDGSINCEOWNSHP");
-				totalJudgmentCountLast12Months = GetIntValueOrDefault(dn14Node, "MTOTJUDGCOUNTLST12MNTHS");
-				totalJudgmentValueLast12Months = GetIntValueOrDefault(dn14Node, "MTOTJUDGVALUELST12MNTHS");
-				totalJudgmentCountLast13To24Months = GetIntValueOrDefault(dn14Node, "MTOTJUDGCOUNTLST13TO24MNTHS");
-				totalJudgmentValueLast13To24Months = GetIntValueOrDefault(dn14Node, "MTOTJUDGVALUELST13TO24MNTHS");
-				valueOfMostRecentAssociatedJudgmentDuringOwnership = GetIntValueOrDefault(dn14Node, "AVALMOSTRECJUDGSINCEOWNSHP");
-				totalAssociatedJudgmentCountLast12Months = GetIntValueOrDefault(dn14Node, "ATOTJUDGCOUNTLST12MNTHS");
-				totalAssociatedJudgmentValueLast12Months = GetIntValueOrDefault(dn14Node, "ATOTJUDGVALUELST12MNTHS");
-				totalAssociatedJudgmentCountLast13To24Months = GetIntValueOrDefault(dn14Node, "ATOTJUDGCOUNTLST13TO24MNTHS");
-				totalAssociatedJudgmentValueLast13To24Months = GetIntValueOrDefault(dn14Node, "ATOTJUDGVALUELST13TO24MNTHS");
-				totalJudgmentCountLast24Months = GetIntValueOrDefault(dn14Node, "MTOTJUDGCOUNTLST24MNTHS");
-				totalAssociatedJudgmentCountLast24Months = GetIntValueOrDefault(dn14Node, "ATOTJUDGCOUNTLST24MNTHS");
-				totalJudgmentCountValue24Months = GetIntValueOrDefault(dn14Node, "MTOTJUDGVALUELST24MNTHS");
-				totalAssociatedJudgmentValueLast24Months = GetIntValueOrDefault(dn14Node, "ATOTJUDGVALUELST24MNTHS");
-			}
-		}
+				XmlNode dn26Node = dn26Nodes[0];
 
-		private void ParseDN10()
-		{
-			XmlNodeList dn10Nodes = xmlDoc.SelectNodes("//DN10");
-			if (dn10Nodes != null && dn10Nodes.Count == 1)
-			{
-				XmlNode dn10Node = dn10Nodes[0];
-				businessName = GetStringValueOrEmpty(dn10Node, "BUSINESSNAME");
-				address1 = GetStringValueOrEmpty(dn10Node, "BUSADDR1");
-				address2 = GetStringValueOrEmpty(dn10Node, "BUSADDR2");
-				address3 = GetStringValueOrEmpty(dn10Node, "BUSADDR3");
-				address4 = GetStringValueOrEmpty(dn10Node, "BUSADDR4");
-				address5 = GetStringValueOrEmpty(dn10Node, "BUSADDR5");
-				postcode = GetStringValueOrEmpty(dn10Node, "BUSPOSTCODE");
-				telephoneNumber = GetStringValueOrEmpty(dn10Node, "TELEPHONENUM");
-				principalActivities = GetStringValueOrEmpty(dn10Node, "PRINCIPALACTIVITIES");
+				numberOfAccountsPlacedForCollection = GetInt(dn26Node, "NUMACCSPLACEDFORCOLLTN");
+				valueOfAccountsPlacedForCollection = GetInt(dn26Node, "VALACCSPLACEDFORCOLLTN");
+				numberOfAccountsPlacedForCollectionLast2Years = GetInt(dn26Node, "NUMACCSPLACEDFORCOLLTNLST2YRS");
+				averageDaysBeyondTermsFor0To100 = GetInt(dn26Node, "AVDBT0-100");
+				averageDaysBeyondTermsFor101To1000 = GetInt(dn26Node, "AVDBT101-1000");
+				averageDaysBeyondTermsFor1001To10000 = GetInt(dn26Node, "AVDBT1001-10000");
+				averageDaysBeyondTermsForOver10000 = GetInt(dn26Node, "AVDBTGREATERTHAN10000");
+				averageDaysBeyondTermsForLast3MonthsOfDataReturned = GetInt(dn26Node, "AVDBTLST3MNTHSDATARTND");
+				averageDaysBeyondTermsForLast6MonthsOfDataReturned = GetInt(dn26Node, "AVDBTLST6MNTHSDATARTND");
+				averageDaysBeyondTermsForLast12MonthsOfDataReturned = GetInt(dn26Node, "AVDBTLST12MNTHSDATARTND");
+				currentAverageDebt = GetInt(dn26Node, "CURRAVDEBT");
+				averageDebtLast3Months = GetInt(dn26Node, "AVDEBTLST3MNTHS");
+				averageDebtLast12Months = GetInt(dn26Node, "AVDEBTLST12MNTHS");
 
-				dateOwnershipCeased = GetDateFromNode(dn10Node, "DATEOWNSHPTERMD");
-				lastUpdateDate = GetDateFromNode(dn10Node, "LATESTUPDATE");
-
-				dateOwnershipCommenced = GetDateFromNode(dn10Node, "DATEOWNSHPCOMMD");
-				earliestKnownDate = GetDateFromNode(dn10Node, "EARLIESTKNOWNDATE");
-				incorporationDate = dateOwnershipCommenced ?? earliestKnownDate;
-
-				XmlNodeList sicCodeNodes = dn10Node.SelectNodes("SICCODES");
-				if (sicCodeNodes != null)
+				XmlNodeList commonTermsNodes = dn26Node.SelectNodes("COMMONTERMS");
+				if (commonTermsNodes != null)
 				{
-					foreach (XmlNode sicCodeNode in sicCodeNodes)
+					foreach (XmlNode commonTermsNode in commonTermsNodes)
 					{
-						XmlNode sicCode1992Node = sicCodeNode.SelectSingleNode("SICCODE1992");
-						if (sicCode1992Node != null)
-						{
-							sicCodes1992.Add(sicCode1992Node.InnerText);
-						}
-					}
-				}
-				XmlNodeList sicDescNodes = dn10Node.SelectNodes("SICDESCS");
-				if (sicDescNodes != null)
-				{
-					foreach (XmlNode sicDescNode in sicDescNodes)
-					{
-						XmlNode sicDesc1992Node = sicDescNode.SelectSingleNode("SICDESC1992");
-						if (sicDesc1992Node != null)
-						{
-							sicDescs1992.Add(sicDesc1992Node.InnerText);
-						}
+						var commonTerm = new CommonTerm();
+						commonTerm.Code = GetString(commonTermsNode, "COMMONTERMSCODE");
+						commonTerm.DaysBeyondTerms = GetInt(commonTermsNode, "COMMONTERMSDBT");
+						commonTerms.Add(commonTerm);
 					}
 				}
 			}
 		}
 
-		private DateTime? GetDateFromNode(XmlNode node, string tag)
+		private void ParseDN36()
+		{
+			XmlNodeList dn36Nodes = xmlDoc.SelectNodes("//DN36");
+			if (dn36Nodes != null && dn36Nodes.Count == 1)
+			{
+				XmlNode dn36Node = dn36Nodes[0];
+				telephoneNumberDN36 = GetString(dn36Node, "TELEPHONENUM");
+			}
+		}
+
+		private void ParseDN40()
+		{
+			XmlNodeList dn40Nodes = xmlDoc.SelectNodes("//DN40");
+			if (dn40Nodes != null && dn40Nodes.Count == 1)
+			{
+				XmlNode dn40Node = dn40Nodes[0];
+				riskScore = GetInt(dn40Node, "RISKSCORE");
+
+				XmlNodeList scoreHistoryNodes = dn40Node.SelectNodes("SCOREHISTORY");
+
+				if (scoreHistoryNodes != null)
+				{
+					foreach (XmlNode scoreHistoryNode in scoreHistoryNodes)
+					{
+						DateTime? scoreHistoryDate = GetDate(scoreHistoryNode, "SCOREHISTORY_DATE");
+						int? riskScoreHistory = GetInt(scoreHistoryNode, "SCOREHISTORY_RISKSCORE");
+						if (scoreHistoryDate.HasValue)
+						{
+							scoreHistory.Add(new Tuple<DateTime?, int?>(scoreHistoryDate, riskScoreHistory));
+						}
+					}
+				}
+			}
+		}
+
+		private void ParseDN73()
+		{
+			XmlNodeList dn73Nodes = xmlDoc.SelectNodes("//DN73");
+			if (dn73Nodes != null && dn73Nodes.Count == 1)
+			{
+				XmlNode dn73Node = dn73Nodes[0];
+				searchType = GetString(dn73Node, "SEARCHTYPE");
+				switch (searchType)
+				{
+					case "P":
+						searchTypeDesc = "Proprietor only";
+						break;
+					case "B":
+						searchTypeDesc = "Business only";
+						break;
+					case "J":
+						searchTypeDesc = "Business & proprietor";
+						break;
+				}
+				commercialDelphiScore = GetInt(dn73Node, "NLCDSCORE");
+				creditRating = GetString(dn73Node, "CREDITRATING");
+				creditLimit = GetString(dn73Node, "CREDITLIMIT");
+				probabilityOfDefaultScore = GetDecimal(dn73Node, "PDSCORE");
+				stabilityOdds = GetString(dn73Node, "STABILITYODDS");
+				riskBand = GetString(dn73Node, "RISKBAND");
+				numberOfProprietorsSearched = GetInt(dn73Node, "NUMPROPSSEARCHED");
+				numberOfProprietorsFound = GetInt(dn73Node, "NUMPROPSFOUND");
+			}
+		}
+
+		private DateTime? GetDate(XmlNode node, string tag)
 		{
 			XmlNode yearNode = node.SelectSingleNode(tag + "-YYYY");
 			XmlNode monthNode = node.SelectSingleNode(tag + "-MM");
@@ -812,7 +812,7 @@
 			return null;
 		}
 
-		private int GetIntValueOrDefault(XmlNode element, string nodeName)
+		private int? GetInt(XmlNode element, string nodeName)
 		{
 			XmlNode node = element.SelectSingleNode(nodeName);
 
@@ -823,12 +823,14 @@
 				{
 					return result;
 				}
+
+				return null;
 			}
 
-			return 0;
+			return null;
 		}
 
-		private decimal GetDecimalValueOrDefault(XmlNode element, string nodeName)
+		private decimal? GetDecimal(XmlNode element, string nodeName)
 		{
 			XmlNode node = element.SelectSingleNode(nodeName);
 
@@ -839,21 +841,23 @@
 				{
 					return result;
 				}
+				
+				return null;
 			}
 
-			return 0;
+			return null;
 		}
 
-		private string GetStringValueOrEmpty(XmlNode element, string nodeName)
+		private string GetString(XmlNode element, string nodeName)
 		{
 			XmlNode node = element.SelectSingleNode(nodeName);
 
-			if (node != null)
+			if (node == null)
 			{
-				return node.InnerText;
+				return null;
 			}
 
-			return string.Empty;
+			return node.InnerText;
 		}
 
 		private class DN11
@@ -894,7 +898,7 @@
 			public DateTime? SatisfactionDate { get; set; }
 			public string JudgmentType { get; set; }
 			public string JudgmentTypeDesc { get; set; }
-			public int JudgmentAmount { get; set; }
+			public int? JudgmentAmount { get; set; }
 			public string Court { get; set; }
 			public string CaseNumber { get; set; }
 			public string NumberOfJudgmentNames { get; set; }
@@ -922,7 +926,7 @@
 		private class CommonTerm
 		{
 			public string Code { get; set; }
-			public int DaysBeyondTerms { get; set; }
+			public int? DaysBeyondTerms { get; set; }
 		}
 	}
 }
