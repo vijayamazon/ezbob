@@ -4,7 +4,7 @@ EzBob.Profile = EzBob.Profile || {};
 EzBob.Profile.SignModel = Backbone.Model.extend({
     defaults: {
         color: 'green',
-        text: 'Pay early &amp; Save',
+        text: 'Welcome back',
         signTemplate: "standard"
     }
 });
@@ -57,7 +57,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (!hasRollOver && state == "late") {
             this.model.set({
                 color: 'green',
-                text: '<span>'+ name + ', <br/>Payment is Required</span>',
+                text: '<span><span class="client-name">' + name + '</span>, <a href="#" class="pay-early" ui-event-control-id="dashboard:payment-is-required-late">Payment is Required</a></span>',
                 signTemplate: "welcome"
             });
             return;
@@ -66,7 +66,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (hasRollOver) {
             this.model.set({
                 color: 'green',
-                text: "<span>Roll over, and reduce late charges</span>",
+                text: '<span><span class="client-name">' + name + '</span>, You have a Rollover payment pending</span>',
                 signTemplate: "welcome"
             });
             return;
@@ -75,9 +75,9 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (balance > 0) {
             var valueOfText;
             if (isEarly) {
-                valueOfText = '<span><a href="#" class="pay-early" ui-event-control-id="dashboard:pay-early-and-save">Pay Early &amp; Save</a></span>';
+                valueOfText = '<span><span class="client-name">' + name + '</span>, <a href="#" class="pay-early" ui-event-control-id="dashboard:pay-early-and-save">Pay Early &amp; Save</a></span>';
             } else {
-                valueOfText = '<span><a href="#" class="pay-early" ui-event-control-id="dashboard:payment-is-required">' + name + ',<br/>Payment is Required</a></span>';
+                valueOfText = '<span><span class="client-name">' + name + '</span>, <a href="#" class="pay-early" ui-event-control-id="dashboard:payment-is-required">Payment is Required</a></span>';
             }
             this.model.set({
                 color: 'green',
@@ -90,7 +90,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (state == "get" && !isNew) {
             this.model.set({
                 color: 'green',
-                text: '<span>Congrats.  Use the money wisely</span>',
+                text: '<span><span class="client-name">' + name + '</span>, Congratulations, your credit is ready to be taken</span>',
                 signTemplate: "welcome"
             });
             return;
@@ -99,7 +99,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (state == "get" && isNew) {
             this.model.set({
                 color: 'green',
-                text: '<span>Congratulations</span>',
+                text: '<span><span class="client-name">' + name + '</span>, Congratulations, credit is approved and can be taken</span>',
                 signTemplate: "welcome"
             });
             return;
@@ -108,7 +108,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (state == "bad" && hasLoans) {
             this.model.set({
                 color: 'green',
-                text: '<span>Please revisit us soon</span>',
+                text: '<span><span class="client-name">' + name + '</span>, Welcome back</span>',
                 signTemplate: "welcome"
             });
             return;
@@ -117,7 +117,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (state == "bad" && !hasLoans) {
             this.model.set({
                 color: 'green',
-                text: '<span>Add Stores to Get Cash</span>',
+                text: '<span><span class="client-name">' + name + '</span>, Add more accounts below to Get Cash</span>',
                 signTemplate: "welcome"
             });
             return;
@@ -126,7 +126,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (state == "apply") {
             this.model.set({
                 color: 'green',
-                text: '<span>Request Cash<br/>&<br/>Grow</span>',
+                text: '<span><span class="client-name">' + name + '</span>, Request Cash to get funding today!</span>',
                 signTemplate: "welcome"
             });
             return;
@@ -135,7 +135,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (!isNew && state == "wait") {
             this.model.set({
                 color: 'green',
-                text: '<span>EZBOB Will Revert Back to You Shortly</span>',
+                text: '<span><span class="client-name">' + name + '</span>, Your application is under review, we will revert as soon as possible</span>',
                 signTemplate: "welcome"
             });
             return;
@@ -144,7 +144,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (isNew && state == "wait") {
             this.model.set({
                 color: 'green',
-                text: "<span>" + name + ", Welcome to the EZBOB Family</span>",
+                text: '<span><span class="client-name">' + name + '</span>, Welcome to the ezbob Family</span>',
                 signTemplate: "welcome"
             });
             return;
@@ -152,7 +152,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
 
         this.model.set({
             color: 'green',
-            text: '<span>Apply &amp; get funds</span>',
+            text: '<span><span class="client-name">' + name + '</span>, Welcome back</span>',
             signTemplate: "welcome"
         });
     }, // balanceChanged

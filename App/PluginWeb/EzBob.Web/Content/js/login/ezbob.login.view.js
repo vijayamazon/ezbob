@@ -22,7 +22,8 @@
     CustomerLoginView.prototype.events = {
       "click :submit": "submit",
       "keyup input": "inputChanged",
-      "change input": "inputChanged"
+      "change input": "inputChanged",
+      "click.checks #RememberMe": "rememberMeChanged"
     };
 
     CustomerLoginView.prototype.render = function() {
@@ -39,9 +40,17 @@
       oFieldStatusIcons.not('.required').field_status({
         required: false
       });
+      $('#Password').focus();
       $('#UserName').focus();
+      $('.header-info-text').text('LOGIN');
       EzBob.UiAction.registerView(this);
       return this;
+    };
+
+    CustomerLoginView.prototype.rememberMeChanged = function() {
+      var rememberMe;
+      rememberMe = this.$el.find("#RememberMe");
+      return rememberMe.val(rememberMe.is(':checked'));
     };
 
     CustomerLoginView.prototype.inputChanged = function() {
