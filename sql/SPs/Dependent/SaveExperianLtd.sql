@@ -74,6 +74,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @ServiceLogID BIGINT
 	DECLARE @ExperianLtdID BIGINT
 	DECLARE @c INT
 
@@ -81,6 +82,10 @@ BEGIN
 
 	IF @c != 1
 		RAISERROR('Invalid argument: no/too much data to insert into ExperianLtd table.', 11, 1)
+
+	SELECT @ServiceLogID = MAX(ServiceLogID) FROM @Tbl
+
+	EXECUTE DeleteParsedExperianLtd @ServiceLogID
 
 	INSERT INTO ExperianLtd (
 		ServiceLogID,
