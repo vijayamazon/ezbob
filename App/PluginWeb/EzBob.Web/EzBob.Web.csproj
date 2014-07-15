@@ -435,6 +435,17 @@
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-bolditalic-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-extralight-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-extralightitalic-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-italic-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-light-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-lightitalic-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-regular-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibold-webfont.svg" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.svg" />
     <Content Include="Content\css\hmrc-manual-ui.css" />
     <Content Include="Content\css\hmrc-upload-ui.css" />
     <Content Include="Content\css\images\300x250.jpg" />
@@ -497,6 +508,22 @@
     <Content Include="Content\css\images\freeagent_on.png" />
     <Content Include="Content\css\images\gauge.png" />
     <Content Include="Content\css\images\green_dot.png" />
+    <Content Include="Content\css\images\header\ezbob_logo-white.png" />
+    <Content Include="Content\css\images\header\ezbob_logo_dark.png" />
+    <Content Include="Content\css\images\header\head-left-info.png" />
+    <Content Include="Content\css\images\header\head-right-info.png" />
+    <Content Include="Content\css\images\header\header_bg_left.png" />
+    <Content Include="Content\css\images\header\header_bg_strip.png" />
+    <Content Include="Content\css\images\header\pas.png" />
+    <Content Include="Content\css\images\header\process_L_green.png" />
+    <Content Include="Content\css\images\header\process_L_grey.png" />
+    <Content Include="Content\css\images\header\process_M_green.png" />
+    <Content Include="Content\css\images\header\process_M_grey.png" />
+    <Content Include="Content\css\images\header\process_pas.png" />
+    <Content Include="Content\css\images\header\process_R_green.png" />
+    <Content Include="Content\css\images\header\process_R_grey.png" />
+    <Content Include="Content\css\images\header\progress-circle-done.png" />
+    <Content Include="Content\css\images\header\progress-circle.png" />
     <Content Include="Content\css\images\help\help_ebay.jpg" />
     <Content Include="Content\css\images\help\help_ekm.jpg" />
     <Content Include="Content\css\images\help\help_freeagent.jpg" />
@@ -646,6 +673,39 @@
     <Content Include="Areas\Underwriter\Views\Shared\ProfileHead.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ControlButtons.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\SignatureMonitor.cshtml" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-bolditalic-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-bolditalic-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-bolditalic-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-extralight-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-extralight-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-extralight-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-extralightitalic-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-extralightitalic-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-extralightitalic-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-italic-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-italic-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-italic-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-light-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-light-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-light-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-lightitalic-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-lightitalic-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-lightitalic-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-regular-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-regular-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-regular-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibold-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibold-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibold-webfont.woff" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.eot" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.ttf" />
+    <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.woff" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1112,6 +1172,9 @@
     <Content Include="Areas\Underwriter\Views\Shared\_FraudDetectionLog.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
     <Content Include="Content\js\login\ezbob.login.view.js">
+      <DependentUpon>ezbob.login.view.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\login\ezbob.login.view.min.js">
       <DependentUpon>ezbob.login.view.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\login\ezbob.restorePassword.js">
@@ -1848,12 +1911,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Customer\Views\Shared\StoreInfoMain.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\EbayStoreInfo.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\EbayConnected.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\AmazonStoreInfo.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_Wizard.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\StoreButton.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\PayPalInstructions.cshtml" />
     <Content Include="Areas\Customer\Views\PaymentAccounts\Success.cshtml" />
     <Content Include="Areas\Customer\Views\Wizard\Index.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_SignUpTemplate.cshtml" />
