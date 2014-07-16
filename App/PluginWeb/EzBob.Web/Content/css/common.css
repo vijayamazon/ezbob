@@ -150,6 +150,20 @@ footer, .push {
     padding-top: 5px;
 }
 
+/*-- General Content Classes --*/
+h1,h2,h3,h4,h5,h6{font-size:28px; margin:20px 0 20px 0; line-height:28px; font-family: 'Titillium Web Bold';}
+h1{font-size:24px; margin:10px 0 20px 0; color:#999; padding:0 0 10px 0; border-bottom:1px #eee solid;}
+h1.home_page{font-size:34px; line-height:50px; color:#666; border:none!important; padding:0; margin:0 0 10px 0;}
+h1.centered{text-align:center;}
+h1 span{color:#7bb224;}
+h2{font-size:32px; line-height: 40px; color:#7bb224;}
+h2 a{font-size:28px; color:#7bb224; text-decoration:none;}
+h3{font-size:24px;}
+h3.qa-faq-title{font-size:20px;}
+h4{font-size:20px;}
+h5{font-size:18px;}
+h6{font-size:16px;}
+
 
 .right_border {
     border-right: 1px #999 dotted;
@@ -1508,6 +1522,7 @@ button,
     width:120px;
     text-decoration:none;
     text-align:center;
+    font-family: 'Titillium Web Bold';
 }
 
 .btn-green {
@@ -2801,9 +2816,9 @@ ul.application_steps {
                 background: url(images/header/process_pas.png);
                 background-repeat: repeat-x;
                 width: 20%;
-                height: 10px;
+                height: 7px;
                 position: absolute;
-                top: 4px;
+                top: 3px;
             }
 
             ul.application_steps li.current .progress-circle {
@@ -2815,6 +2830,10 @@ ul.application_steps {
                 background-repeat: no-repeat;
             }
             ul.application_steps li.current .progress-circle.first-circle {
+                background: url(images/header/process_L_green.png);
+                background-repeat: no-repeat;
+            }
+            ul.application_steps li.complete .progress-circle.first-circle {
                 background: url(images/header/process_L_green.png);
                 background-repeat: no-repeat;
             }
@@ -2874,8 +2893,8 @@ ul.application_steps {
     ul.application_steps li.complete .progress-line-complete {
         background: url(images/header/process_pas.png);
         background-repeat: repeat-x;
-        height: 10px;
-        margin-top: 4px;
+        height: 7px;
+        margin-top: 3px;
     }
 
     ul.application_steps li.complete .progress-circle {
