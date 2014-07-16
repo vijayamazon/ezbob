@@ -34,10 +34,9 @@
 
 .d-widget h3 {
     font-weight: bold;
-    color: #8BAC2B;
     float: left;
     border-right: solid 1px #ccc;
-    font-size: 13px;
+    font-size: 16px;
     width: 70px;
     margin-right: 5px;
     line-height: 23px;
@@ -116,36 +115,28 @@
 }
 
 .profile-menu.navbar .nav a {
-    color: #dca613;
     text-shadow: none;
-    font-size: 12px ;
-    font-weight: bold;
-    padding-left: 18px;
-    padding-right: 18px;
+    font-size: 14px ;
+    padding: 0 18px;
+    color: #a7a6a6;
+    font-family: "Titillium Web Semi Bold";
+    line-height: 40px;
+    vertical-align: middle;
 }
 .profile-menu .navbar-inner{
     padding-left: 0px;
 }
 
-.profile-menu.navbar .nav .active a, .profile-menu.navbar  .nav .active a:hover{
-    color: #525151;
-    background-color: #fcfcfc;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    -o-border-radius: 6px;
-    margin-top: 4px;
-    height: 11px;
-    padding-top: 7px;
-
-    behavior: url(CSS3PIE);
-    position:relative\0/;
+.profile-menu.navbar .nav > li > a:focus, 
+.profile-menu.navbar .nav > li > a:hover,
+.profile-menu.navbar .nav .active a, 
+.profile-menu.navbar  .nav .active a:hover{
+    color: #ffffff;
 }
 
 .profile-menu .divider-vertical {
-    background-color: #DCA613;
     height: 20px;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 .slider-ticks {
@@ -253,44 +244,31 @@ body .agreement-text {
     border-radius: 8px;
     /*padding: 15px;*/
     background-color: white;
-    
-    behavior: url(CSS3PIE);
-    position:relative\0/;
 }
 
 .navbar .profile-menu {
     margin-bottom: 10px;
 }
 
-.navbar .profile-menu li {
-
-}
-
 .profile-menu .nav {
-    height: 36px;
-    width: 950px;
-    margin: 0 10px;
+    height: 40px;
 }
 
 .profile-menu .navbar-inner {
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
-    
     background: rgb(89,89,89); /* Old browsers */
     /* IE9 SVG, needs conditional override of 'filter' to 'none' */
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzU5NTk1OSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMzFmMjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  rgba(89,89,89,1) 0%, rgba(35,31,32,1) 100%); /* FF3.6+ */
+    background: -moz-linear-gradient(top, rgba(89,89,89,1) 0%, rgba(35,31,32,1) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(89,89,89,1)), color-stop(100%,rgba(35,31,32,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* IE10+ */
-    background: linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* W3C */
+    background: -webkit-linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* IE10+ */
+    background: linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* W3C */
     filter: none\0/ !important;
-    -pie-background: linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* W3C */    
-
-    behavior: url(CSS3PIE);
-    position:relative\0/;
+    -pie-background: linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* W3C */
 }
 
 .button-profile.single {
@@ -688,14 +666,6 @@ html body .right {
     color: #0B73B4;
     margin-top: 25px;
     margin-bottom: 25px
-}
-.profile-menu.navbar .nav a:hover {
-    color: #DCA613;
-    text-decoration: underline;
-}
-.profile-menu.navbar .nav a, .profile-menu.navbar .nav a:hover {
-    behavior: url(CSS3PIE);
-    position:relative\0/;
 }
 
 body .modal.fade {

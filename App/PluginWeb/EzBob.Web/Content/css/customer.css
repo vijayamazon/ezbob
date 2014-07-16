@@ -294,26 +294,20 @@ table.table th{
     background: linear-gradient(to bottom,  #ffffff 0%,#e2e5ea 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e2e5ea',GradientType=0 );    
     font-weight:bold;
-    color:#025598;
+    font-family: "Titillium Web Semi Bold";
+    font-size: 16px;
 }
-table.table th, table.table td{padding:15px 5px; text-align:center; border-right:1px #ccc solid; border-bottom:1px #ccc solid; }
-table.table td{background:#fff; font-size:18px; color:#7bb224;}
+table.table th, table.table td {
+    padding:15px 5px; text-align:center; border-right:1px #ccc solid; border-bottom:1px #ccc solid;
+}
+table.table td {
+    background:#fff;
+    font-size:16px; 
+    font-family: "Titillium Web Light";
+}
 table.table td span.label{color:#666;}
 table.table tbody tr:hover{background:#f1f1f1;}
 
-/*-- General Content Classes --*/
-h1,h2,h3,h4,h5,h6{font-size:28px; margin:20px 0 20px 0; line-height:28px; font-family: 'Titillium Web Semi Bold';}
-h1{font-size:24px; margin:10px 0 20px 0; color:#999; padding:0 0 10px 0; border-bottom:1px #eee solid;}
-h1.home_page{font-size:34px; line-height:50px; color:#666; border:none!important; padding:0; margin:0 0 10px 0;}
-h1.centered{text-align:center;}
-h1 span{color:#7bb224;}
-h2{font-size:32px; line-height: 40px; color:#7bb224;}
-h2 a{font-size:28px; color:#7bb224; text-decoration:none;}
-h3{font-size:24px;}
-h3.qa-faq-title{font-size:20px;}
-h4{font-size:20px;}
-h5{font-size:18px;}
-h6{font-size:16px;}
 p{margin:10px 0 20px 0;}
 ul, ol{margin:0 0 15px 30px;}
 ul li, ol li{margin:0 0 10px 0;}
