@@ -445,7 +445,7 @@
 		} // ToString
 
 		public string ToNullString(IFormatProvider provider = null) {
-			return ReferenceEquals(m_oValue, null) ? null : m_oValue.ToString();
+			return ReferenceEquals(m_oValue, null) || m_oValue == DBNull.Value ? null : m_oValue.ToString();
 		} // ToNullString
 
 		#endregion to string
