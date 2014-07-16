@@ -444,6 +444,10 @@
 			return string.Empty;
 		} // ToString
 
+		public string ToNullString(IFormatProvider provider = null) {
+			return ReferenceEquals(m_oValue, null) ? null : m_oValue.ToString();
+		} // ToNullString
+
 		#endregion to string
 
 		#region method ToType
