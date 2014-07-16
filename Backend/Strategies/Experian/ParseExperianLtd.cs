@@ -3,6 +3,7 @@
 	using System.Xml;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class ParseExperianLtd : AStrategy {
 		#region public
