@@ -16,6 +16,72 @@
 
 	public class CompanyScoreModel
 	{
+		public bool IsLimited { get; set; }
+		public string BusinessName { get; set; }
+		public string Address1 { get; set; }
+		public string Address2 { get; set; }
+		public string Address3 { get; set; }
+		public string Address4 { get; set; }
+		public string Address5 { get; set; }
+		public string Postcode { get; set; }
+		public string TelephoneNumber { get; set; }
+		public string PrincipalActivities { get; set; }
+		public DateTime? EarliestKnownDate { get; set; }
+		public DateTime? DateOwnershipCommenced { get; set; }
+		public DateTime? IncorporationDate { get; set; }
+		public DateTime? DateOwnershipCeased { get; set; }
+		public DateTime? LastUpdateDate { get; set; }
+	
+		public int? BankruptcyCountDuringOwnership { get; set; }
+		public int? AgeOfMostRecentBankruptcyDuringOwnershipMonths { get; set; }
+		public int? AssociatedBankruptcyCountDuringOwnership { get; set; }
+		public int? AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths { get; set; }
+
+		public int? AgeOfMostRecentJudgmentDuringOwnershipMonths { get; set; }
+		public int? TotalJudgmentCountLast12Months { get; set; }
+		public int? TotalJudgmentValueLast12Months { get; set; }
+		public int? TotalJudgmentCountLast13To24Months { get; set; }
+		public int? TotalJudgmentValueLast13To24Months { get; set; }
+		public int? ValueOfMostRecentAssociatedJudgmentDuringOwnership { get; set; }
+		public int? TotalAssociatedJudgmentCountLast12Months { get; set; }
+		public int? TotalAssociatedJudgmentValueLast12Months { get; set; }
+		public int? TotalAssociatedJudgmentCountLast13To24Months { get; set; }
+		public int? TotalAssociatedJudgmentValueLast13To24Months { get; set; }
+		public int? TotalJudgmentCountLast24Months { get; set; }
+		public int? TotalAssociatedJudgmentCountLast24Months { get; set; }
+		public int? TotalJudgmentCountValue24Months { get; set; }
+		public int? TotalAssociatedJudgmentValueLast24Months { get; set; }
+
+		public string SupplierName { get; set; }
+		public string FraudCategory { get; set; }
+		public string FraudCategoryDesc { get; set; }
+		public int? NumberOfAccountsPlacedForCollection { get; set; }
+		public int? ValueOfAccountsPlacedForCollection { get; set; }
+		public int? NumberOfAccountsPlacedForCollectionLast2Years { get; set; }
+		public int? AverageDaysBeyondTermsFor0To100 { get; set; }
+		public int? AverageDaysBeyondTermsFor101To1000 { get; set; }
+		public int? AverageDaysBeyondTermsFor1001To10000 { get; set; }
+		public int? AverageDaysBeyondTermsForOver10000 { get; set; }
+		public int? AverageDaysBeyondTermsForLast3MonthsOfDataReturned { get; set; }
+		public int? AverageDaysBeyondTermsForLast6MonthsOfDataReturned { get; set; }
+		public int? AverageDaysBeyondTermsForLast12MonthsOfDataReturned { get; set; }
+		public int? CurrentAverageDebt { get; set; }
+		public int? AverageDebtLast3Months { get; set; }
+		public int? AverageDebtLast12Months { get; set; }
+		public string TelephoneNumberDN36 { get; set; }
+		public int? RiskScore { get; set; }
+		public string SearchType { get; set; }
+		public string SearchTypeDesc { get; set; }
+		public int? CommercialDelphiScore { get; set; }
+		public string CreditRating { get; set; }
+		public string CreditLimit { get; set; }
+		public decimal? ProbabilityOfDefaultScore { get; set; }
+		public string StabilityOdds { get; set; }
+		public string RiskBand { get; set; }
+		public int? NumberOfProprietorsSearched { get; set; }
+		public int? NumberOfProprietorsFound { get; set; }
+		public string Errors { get; set; }
+
 		public const string Ok = "ok";
 
 		public string result { get; set; }
@@ -160,34 +226,142 @@
 
 		private CompanyScoreModel BuildFromParseResult(ExperianParserOutput oResult, int customerId, string refNumber)
 		{
-			switch (oResult.ParsingResult)
+			bool isLimited = true;
+			DataTable dt = db.ExecuteReader(
+				"GetCompanyIsLimited",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("RefNumber", refNumber));
+			
+			if (dt.Rows.Count == 1)
 			{
-				case ParsingResult.Ok:
-					var model = new CompanyScoreModel
-					{
-						result = CompanyScoreModel.Ok,
-						dataset = oResult.Dataset,
-						company_name = oResult.CompanyName,
-						company_ref_num = oResult.CompanyRefNum
-					};
+				var sr = new SafeReader(dt.Rows[0]);
+				isLimited = sr["IsLimited"];
+			}
 
-					model.DashboardModel = BuildDashboardModel(oResult, customerId, refNumber);
-					return model;
-				case ParsingResult.Fail:
-					return new CompanyScoreModel { result = "Failed to parse Experian response.", DashboardModel = new ComapanyDashboardModel
-						{
-							Error = string.Format("{0} {1}", "Failed to parse Experian response.", oResult.ErrorMsg)
-						}};
+			if (isLimited)
+			{
+				switch (oResult.ParsingResult)
+				{
+					case ParsingResult.Ok:
+						var model = new CompanyScoreModel
+							{
+								result = CompanyScoreModel.Ok,
+								dataset = oResult.Dataset,
+								company_name = oResult.CompanyName,
+								company_ref_num = oResult.CompanyRefNum,
+								IsLimited = true
+							};
 
-				case ParsingResult.NotFound:
-					return new CompanyScoreModel { result = "No data found.", DashboardModel = new ComapanyDashboardModel
-						{
-							Error = string.Format("{0} {1}", "No data found.", oResult.ErrorMsg)
-						}};
+						model.DashboardModel = BuildDashboardModel(oResult, customerId, refNumber);
+						return model;
+					case ParsingResult.Fail:
+						return new CompanyScoreModel
+							{
+								result = "Failed to parse Experian response.",
+								DashboardModel = new ComapanyDashboardModel
+									{
+										Error = string.Format("{0} {1}", "Failed to parse Experian response.", oResult.ErrorMsg)
+									}
+							};
 
-				default:
-					throw new ArgumentOutOfRangeException();
-			} // switch
+					case ParsingResult.NotFound:
+						return new CompanyScoreModel
+							{
+								result = "No data found.",
+								DashboardModel = new ComapanyDashboardModel
+									{
+										Error = string.Format("{0} {1}", "No data found.", oResult.ErrorMsg)
+									}
+							};
+
+					default:
+						throw new ArgumentOutOfRangeException();
+				} // switch
+			}
+
+			// Fill non limited data
+			var nonLimitedModel = new CompanyScoreModel
+			{
+				result = CompanyScoreModel.Ok
+			};
+
+			DataTable nonLimitedDataTable = db.ExecuteReader(
+				"GetNonLimitedDataForCompanyScore",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("RefNumber", refNumber));
+
+			if (nonLimitedDataTable.Rows.Count == 1)
+			{
+				var nonLimitedSafeReader = new SafeReader(nonLimitedDataTable.Rows[0]);
+
+				nonLimitedModel.company_name = nonLimitedSafeReader["BusinessName"].ToNullString();
+				nonLimitedModel.company_ref_num = refNumber;
+				nonLimitedModel.Address1 = nonLimitedSafeReader["Address1"].ToNullString();
+				nonLimitedModel.Address1 = nonLimitedSafeReader["Address1"].ToNullString();
+				nonLimitedModel.Address2 = nonLimitedSafeReader["Address2"].ToNullString();
+				nonLimitedModel.Address3 = nonLimitedSafeReader["Address3"].ToNullString();
+				nonLimitedModel.Address4 = nonLimitedSafeReader["Address4"].ToNullString();
+				nonLimitedModel.Address5 = nonLimitedSafeReader["Address5"].ToNullString();
+				nonLimitedModel.Postcode = nonLimitedSafeReader["Postcode"].ToNullString();
+				nonLimitedModel.TelephoneNumber = nonLimitedSafeReader["TelephoneNumber"].ToNullString();
+				nonLimitedModel.PrincipalActivities = nonLimitedSafeReader["PrincipalActivities"].ToNullString();
+				nonLimitedModel.EarliestKnownDate = nonLimitedSafeReader["EarliestKnownDate"];
+				nonLimitedModel.DateOwnershipCommenced = nonLimitedSafeReader["DateOwnershipCommenced"];
+				nonLimitedModel.IncorporationDate = nonLimitedSafeReader["IncorporationDate"];
+				nonLimitedModel.DateOwnershipCeased = nonLimitedSafeReader["DateOwnershipCeased"];
+				nonLimitedModel.LastUpdateDate = nonLimitedSafeReader["LastUpdateDate"];
+				nonLimitedModel.BankruptcyCountDuringOwnership = nonLimitedSafeReader["BankruptcyCountDuringOwnership"];
+				nonLimitedModel.AgeOfMostRecentBankruptcyDuringOwnershipMonths = nonLimitedSafeReader["AgeOfMostRecentBankruptcyDuringOwnershipMonths"];
+				nonLimitedModel.AssociatedBankruptcyCountDuringOwnership = nonLimitedSafeReader["AssociatedBankruptcyCountDuringOwnership"];
+				nonLimitedModel.AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths = nonLimitedSafeReader["AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths"];
+				nonLimitedModel.AgeOfMostRecentJudgmentDuringOwnershipMonths = nonLimitedSafeReader["AgeOfMostRecentJudgmentDuringOwnershipMonths"];
+				nonLimitedModel.TotalJudgmentCountLast12Months = nonLimitedSafeReader["TotalJudgmentCountLast12Months"];
+				nonLimitedModel.TotalJudgmentValueLast12Months = nonLimitedSafeReader["TotalJudgmentValueLast12Months"];
+				nonLimitedModel.TotalJudgmentCountLast13To24Months = nonLimitedSafeReader["TotalJudgmentCountLast13To24Months"];
+				nonLimitedModel.TotalJudgmentValueLast13To24Months = nonLimitedSafeReader["TotalJudgmentValueLast13To24Months"];
+				nonLimitedModel.ValueOfMostRecentAssociatedJudgmentDuringOwnership = nonLimitedSafeReader["ValueOfMostRecentAssociatedJudgmentDuringOwnership"];
+				nonLimitedModel.TotalAssociatedJudgmentCountLast12Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast12Months"];
+				nonLimitedModel.TotalAssociatedJudgmentValueLast12Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast12Months"];
+				nonLimitedModel.TotalAssociatedJudgmentCountLast13To24Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast13To24Months"];
+				nonLimitedModel.TotalAssociatedJudgmentValueLast13To24Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast13To24Months"];
+				nonLimitedModel.TotalJudgmentCountLast24Months = nonLimitedSafeReader["TotalJudgmentCountLast24Months"];
+				nonLimitedModel.TotalAssociatedJudgmentCountLast24Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast24Months"];
+				nonLimitedModel.TotalJudgmentCountValue24Months = nonLimitedSafeReader["TotalJudgmentCountValue24Months"];
+				nonLimitedModel.TotalAssociatedJudgmentValueLast24Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast24Months"];
+				nonLimitedModel.SupplierName = nonLimitedSafeReader["SupplierName"].ToNullString();
+				nonLimitedModel.FraudCategory = nonLimitedSafeReader["FraudCategory"].ToNullString();
+				nonLimitedModel.FraudCategoryDesc = nonLimitedSafeReader["FraudCategoryDesc"].ToNullString();
+				nonLimitedModel.NumberOfAccountsPlacedForCollection = nonLimitedSafeReader["NumberOfAccountsPlacedForCollection"];
+				nonLimitedModel.ValueOfAccountsPlacedForCollection = nonLimitedSafeReader["ValueOfAccountsPlacedForCollection"];
+				nonLimitedModel.NumberOfAccountsPlacedForCollectionLast2Years = nonLimitedSafeReader["NumberOfAccountsPlacedForCollectionLast2Years"];
+				nonLimitedModel.AverageDaysBeyondTermsFor0To100 = nonLimitedSafeReader["AverageDaysBeyondTermsFor0To100"];
+				nonLimitedModel.AverageDaysBeyondTermsFor101To1000 = nonLimitedSafeReader["AverageDaysBeyondTermsFor101To1000"];
+				nonLimitedModel.AverageDaysBeyondTermsFor1001To10000 = nonLimitedSafeReader["AverageDaysBeyondTermsFor1001To10000"];
+				nonLimitedModel.AverageDaysBeyondTermsForOver10000 = nonLimitedSafeReader["AverageDaysBeyondTermsForOver10000"];
+				nonLimitedModel.AverageDaysBeyondTermsForLast3MonthsOfDataReturned = nonLimitedSafeReader["AverageDaysBeyondTermsForLast3MonthsOfDataReturned"];
+				nonLimitedModel.AverageDaysBeyondTermsForLast6MonthsOfDataReturned = nonLimitedSafeReader["AverageDaysBeyondTermsForLast6MonthsOfDataReturned"];
+				nonLimitedModel.AverageDaysBeyondTermsForLast12MonthsOfDataReturned = nonLimitedSafeReader["AverageDaysBeyondTermsForLast12MonthsOfDataReturned"];
+				nonLimitedModel.CurrentAverageDebt = nonLimitedSafeReader["CurrentAverageDebt"];
+				nonLimitedModel.AverageDebtLast3Months = nonLimitedSafeReader["AverageDebtLast3Months"];
+				nonLimitedModel.AverageDebtLast12Months = nonLimitedSafeReader["AverageDebtLast12Months"];
+				nonLimitedModel.TelephoneNumberDN36 = nonLimitedSafeReader["TelephoneNumberDN36"].ToNullString();
+				nonLimitedModel.RiskScore = nonLimitedSafeReader["RiskScore"];
+				nonLimitedModel.SearchType = nonLimitedSafeReader["SearchType"].ToNullString();
+				nonLimitedModel.SearchTypeDesc = nonLimitedSafeReader["SearchTypeDesc"].ToNullString();
+				nonLimitedModel.CommercialDelphiScore = nonLimitedSafeReader["CommercialDelphiScore"];
+				nonLimitedModel.CreditRating = nonLimitedSafeReader["CreditRating"].ToNullString();
+				nonLimitedModel.CreditLimit = nonLimitedSafeReader["CreditLimit"].ToNullString();
+				nonLimitedModel.ProbabilityOfDefaultScore = nonLimitedSafeReader["ProbabilityOfDefaultScore"];
+				nonLimitedModel.StabilityOdds = nonLimitedSafeReader["StabilityOdds"].ToNullString();
+				nonLimitedModel.RiskBand = nonLimitedSafeReader["RiskBand"].ToNullString();
+				nonLimitedModel.NumberOfProprietorsSearched = nonLimitedSafeReader["NumberOfProprietorsSearched"];
+				nonLimitedModel.NumberOfProprietorsFound = nonLimitedSafeReader["NumberOfProprietorsFound"];
+				nonLimitedModel.Address1 = nonLimitedSafeReader["Errors"].ToNullString();
+			}
+
+			return nonLimitedModel;
 		}
 
 		public ComapanyDashboardModel BuildDashboardModel(ExperianParserOutput oResult, int customerId, string refNumber)

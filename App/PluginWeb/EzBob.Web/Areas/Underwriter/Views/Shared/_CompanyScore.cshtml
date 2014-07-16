@@ -107,479 +107,504 @@
 		print('</div>');
 		return;
 	} // if
-
-	for (var i in response.dataset) {
-		var aryData = response.dataset[i].Data;
-		
-		if (aryData.length > 0) {
-			var oMetaData = response.dataset[i].MetaData || {};
-
-			// console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
-            if (oMetaData.ID == 'DN40') { //skipping drawing of non limited score history
-                continue;
-            }
-			var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width table' : 'table';
-
-			if (oMetaData.ID == 'DL23SHAREHOLDING') {
-				var nTotal = 0;
-
-				for (var j = 0; j < aryData.length; j++)
-					nTotal +=  parseInt(aryData[j].Values['Description of Shareholding']);
-
-				// console.log('total =', nTotal);
-
-				if (nTotal != 0) {
-					for (var j = 0; j < aryData.length; j++)
-						aryData[j].Values['% of Shareholding'] = EzBob.formatPercents(aryData[j].Values['Description of Shareholding'] / nTotal);
-				} // if total
-			} // if
-            var totalBalance = 0;
-            if(oMetaData.ID == 'DL97'){
-                aryData = _.sortBy(aryData, function(obj) { return obj.Values["Account State"]; } );
-                totalBalance = _.reduce(aryData, function(memo, data){ 
-                    var balance = 0;
-                    if(data.Values['Account State'][0] != 'S'){
-                        balance = EzBob.poundToNum(data.Values['Current Balance']);
-                    }
-                    return memo + balance;}, 0
-                );
-            }
-			if (oMetaData.ID == 'DL41') {
-				%><div class=tab-content><table class="<%- sTableWidthClass %>">
-					<thead class="box">
-						<tr class="box-title">
-							<th colspan=4><%- i %></th>
-						</tr>
-						<tr class="box-title">
-							<th></th>
-							<th>Company</th>
-							<th>Industry</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody><%
-						var aryCompany = {};
-						var aryIndustry = {};
-
-						var sSupplierPaymentPattern = '';
-
-						var obj = aryData[0].Values;
-
-						for (var fld in obj) {
-							if (fld == 'Supplier Payment Pattern') {
-								sSupplierPaymentPattern = obj[fld];
-								continue;
-							} // if
-
-							var nFirstSpace = fld.indexOf(' ');
-
-							var aryTarget = (fld.substr(0, nFirstSpace) == 'Company') ? aryCompany : aryIndustry;
-
-							var sSuffix = fld.substr(nFirstSpace + 1);
-
-							if (sSuffix == 'Payment Pattern') {
-								aryTarget[sSuffix] = obj[fld];
-								continue;
-							} // if
-
-							var bIsAverage = (sSuffix.substr(0, 3) == '- A');
-
-							var sKey, sNeedle, sNeedleLen;
-
-							if (bIsAverage) {
-								sKey = 'Average DBT';
-								sNeedle = ' - ';
-								sNeedleLen = 3;
-							}
-							else {
-								sKey = 'Number of DBT';
-								sNeedle = '(';
-								sNeedleLen = 0;
-							} // if
-
-							if (!aryTarget[sKey])
-								aryTarget[sKey] = {};
-
-							aryTarget[sKey][sSuffix.substr(sSuffix.indexOf(sNeedle) + sNeedleLen)] = obj[fld];
-						} // for each field
-
-						var sGroup = 'Average DBT';
-
-						%><tr><th class=narrow-as-possible>Payment Pattern</th>
-							<td class=narrow-as-possible><%- aryCompany['Payment Pattern'] || '' %></td>
-							<td class=narrow-as-possible><%- aryIndustry['Payment Pattern'] || '' %></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th colspan=3 class=narrow-as-possible><%- sGroup %></th>
-							<td></td>
-						</tr><%
-
-
-						var aryMonths = [ 12, 6, 3 ];
-						aryMonths.sort(function(a, b) { return b - a; });
-						
-						var aryOutput = [];
-						var aryLast = null;
-
-						function GetTrend(a, b) {
-							a = parseInt(a);
-							b = parseInt(b);
-
-							var sTrend = 'stable-trend';
-
-							if (a < b)
-								sTrend = 'positive-trend';
-							else if (a > b)
-								sTrend = 'negative-trend';
-
-							return sTrend;
-						} // GetTrend
-
-						for (var j = 0; j < aryMonths.length; j++) {
-							var sKey = aryMonths[j] + ' Months';
-						
-							var bHasCompany  = aryCompany[sGroup]  && (typeof aryCompany[sGroup][sKey] !== 'undefined');
-							var bHasIndustry = aryIndustry[sGroup] && (typeof aryIndustry[sGroup][sKey] !== 'undefined');
-
-							var aryThis = {
-								caption: sKey,
-
-								has_company: bHasCompany,
-								company: (bHasCompany  ? aryCompany[sGroup][sKey]  : ''),
-
-								has_industry: bHasIndustry,
-								industry: (bHasIndustry ? aryIndustry[sGroup][sKey] : ''),
-
-								company_trend: '',
-								company_to_industry_trend: '',
-								industry_trend: ''
-							};
-						
-							if (bHasCompany && bHasIndustry)
-								aryThis.company_to_industry_trend = GetTrend(aryThis.company, aryThis.industry);
-
-							aryOutput.push(aryThis);
-
-							if (aryLast == null) {
-								aryLast = aryThis;
-								continue;
-							} // if
-
-							if (bHasCompany && aryLast.has_company)
-								aryThis.company_trend = GetTrend(aryThis.company, aryLast.company);
-
-							if (bHasIndustry && aryLast.has_industry)
-								aryThis.industry_trend = GetTrend(aryThis.industry, aryLast.industry);
-						} // for
-
-						for (var j = aryOutput.length - 1; j >= 0; j--) {
-							var oCurrent = aryOutput[j];
-
-							%><tr><td class=narrow-as-possible><%- oCurrent.caption %></td>
-							<td class=narrow-as-possible><%- oCurrent.company %><div class="trend-container">
-								<span class="<%- oCurrent.company_trend %>" title="<%- oCurrent.company_trend ? 'Self' : '' %>"></span>
-								<span class="<%- oCurrent.company_to_industry_trend %>" title="<%- oCurrent.company_to_industry_trend ? 'Industry' : '' %>"></span>
-							</div></td>
-							<td class=narrow-as-possible><%- oCurrent.industry %><div class=trend-container><span class="<%- oCurrent.industry_trend %>"></span></div></td>
-							<td></td>
-						</tr><%
-						} // for
-
-						sGroup = 'Number of DBT';
-
-						%><tr>
-							<th colspan=3 class=narrow-as-possible><%- sGroup %></th>
-							<td></td>
-						</tr><%
-
-						var aryIntervals = {};
-
-						if (aryCompany[sGroup])
-							for (var j in aryCompany[sGroup])
-								aryIntervals[j] = 0;
-
-						if (aryIndustry[sGroup])
-							for (var j in aryIndustry[sGroup])
-								aryIntervals[j] = 0;
-
-						var arySortedIntervals = [];
-
-						for (var j in aryIntervals)
-							arySortedIntervals.push(j);
-
-						arySortedIntervals.sort();
-
-						for (var j = 0; j < arySortedIntervals.length; j++) {
-							var sKey = arySortedIntervals[j];
-							%><tr><td class=narrow-as-possible><%- sKey.substr(1, sKey.length - 2) %></th>
-							<td class=narrow-as-possible><%- aryCompany[sGroup]  ? (aryCompany[sGroup][sKey] || '') : '' %></td>
-							<td class=narrow-as-possible><%- aryIndustry[sGroup] ? (aryIndustry[sGroup][sKey] || '') : '' %></td>
-							<td></td>
-						</tr><%
-						} // for
-					%></tbody>
-					<tfoot><tr><th class=narrow-as-possible>Supplier Payment Pattern</th>
-						<td colspan=2 class=narrow-as-possible><%- sSupplierPaymentPattern || '' %></td>
-						<td></td>
-					</tr></tfoot><%
-				%></table></div><%
-			}
-			else if (oMetaData.ID == 'DL99') {
-				aryData.sort(function(a, b) {
-					var oA = Date.parse(a.Values['Date']);
-					var oB = Date.parse(b.Values['Date']);
-					return oA - oB;
-				});
-
-				var oChartData = [];
-
-				var oSeriesKeys = {
-					Cash: 1,
-					'A/R': 2,
-					Inventory: 3,
-					'Fixed assets': 4,
-					'Total short term liabilities': 5,
-					'Total long term liabilities': 6,
-					'Tangible equity': 7,
-					'Adjusted profit': 8,
-				};
-
-				var sDivChartID = 'chart' + oMetaData.ID + ('' + Math.random()).replace(/\./, '') + '' + (new Date()).getTime();
-				var sParentDivChartID = 'parent_' + sDivChartID;
-
-				%><table class="<%- sTableWidthClass %>">
-					<thead  class="box">
-						<tr class="box-title"><th><%- i %></th></tr>
-					</thead>
-					<tbody><tr><td id="<%- sParentDivChartID %>" style="padding-top:40px"></td></tr></tbody>
-				</table><%
-
-				for (var j = 0; j < aryData.length; j++) {
-					var obj = aryData[j].Values;
-
-					var raw = {};
-					for (var k in obj)
-						if (k !== 'Date')
-							raw[k] =  EzBob.poundToNum(obj[k]);
-
-					// console.log('aryData[' + j + '] =', obj, '->', raw);
-
-					oChartData.push({ tick: obj.Date, data: {
-						Cash: raw.TotalCash,
-						'A/R': raw.Debtors - (raw.PrepayAccRuals + raw.DebtorsGroupLoans + raw.DebtorsDirLoans + raw.OtherDebtors),
-						Inventory: raw.Inventories,
-						'Fixed assets': raw.TngblAssets,
-						'Total short term liabilities': raw.TotalCurrLblts,
-						'Total long term liabilities': raw.TotalNonCurr,
-						'Tangible equity': raw.TotalShareFund - raw.InTngblAssets - raw.DebtorsDirLoans + raw.CredDirLoans + raw.OnClDirLoans,
-						'Adjusted profit': 8,
-						'Retained earnings': raw.RetainedEarnings,
-					}});
-				} // for each group output
-
-				for (var j = 1; j < oChartData.length; j++) {
-					oChartData[j].data['Adjusted profit'] =
-						oChartData[j].data['Retained earnings'] -
-						oChartData[j - 1].data['Retained earnings'] +
-						oChartData[j - 1].data['Fixed assets'] / 5;
-				} // for
-	
-				$('body').append(
-					$('<div></div>').attr('id', sDivChartID).css({ width: '1200px', height: '600px', display: 'block' })
-				);
-
-				// console.log(oChartData);
-
-				onAfterRender.push(function() {
-					var aryLabels = [];
-
-					for (var sSeriesName in oSeriesKeys) {
-						aryLabels[oSeriesKeys[sSeriesName] - 1] = { 
-							label: sSeriesName,
-							renderer:$.jqplot.BarRenderer,
-							rendererOptions: { fillToZero: true }
-						};
-					} // for
-
-					var aryTicks = [];
-					var arySeries = [];
-
-					for (var i = 0; i < oChartData.length; i++) {
-						var oItem = oChartData[i];
-
-						aryTicks[i] = oItem.tick;
-
-						for (var sSeriesName in oSeriesKeys) {
-							var nSeriesIdx = oSeriesKeys[sSeriesName] - 1;
-
-							if (!arySeries[nSeriesIdx])
-								arySeries[nSeriesIdx] = [];
-
-							if (!isNaN(oItem.data[sSeriesName]))
-								arySeries[nSeriesIdx][i] = oItem.data[sSeriesName];
-						} // for
-					} // for each chart data item
-
-					$.jqplot(sDivChartID, arySeries, {
-						series: aryLabels,
-						grid: {
-							gridLineColor: 'black',
-							gridLineWidth: 2.0,
-							borderColor: 'black',
-							borderWidth: 2.0
-						},
-						legend: {
-							show: true,
-							location: 'n',
-							renderer: $.jqplot.EnhancedLegendRenderer,
-							rendererOptions: {
-								numberRows: 1,
-								numberColumns: null
-							},
-							placement: 'outside',
-						},
-						axes: {
-							xaxis: {
-								show: true,
-								Label: 'Date',
-								labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-								renderer: $.jqplot.CategoryAxisRenderer,
-								tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-								ticks: aryTicks
-							},
-							yaxis: {
-								show: true,
-								pad: 1.05,
-								tickOptions: { formatString: "£ %'d" }
-							}
-						},
-						highlighter: {
-							show: true,
-							showTooltip: true,
-							tooltipLocation: 'n',
-							tooltipOffset: -10,
-							tooltipAxes: 'y',
-							showMarker: false,
-							bringSeriesToFront: true,
-							useAxesFormatters: true,
-							tooltipFormatString: "£ %'d",
-							tooltipContentEditor: function(str, seriesIndex, pointIndex, plot) {
-								return aryLabels[seriesIndex].label + ': ' + str;
-							},
-						},
-						seriesDefaults: {
-							trendline: {
-								show: false
-							},
-							pointLabels: {
-								show: false,
-							}
-						},
-					}); // jqplot
-	
-					$('#' + sDivChartID).appendTo('#' + sParentDivChartID);
-				}); // onAfterRender.push
-			}
-			else if (oMetaData.DisplayDirection == 'horizontal') {
-				var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
-	
-				var nColspan = arySortOrder.length;
-				if (oMetaData.ID === 'DL65' || oMetaData.ID === 'DL97')
-					nColspan++;
-
-				%><div class=tab-content><table class="<%- sTableWidthClass %>">
-				<thead  class="box">
-					<tr class="box-title">
-						<th colspan="<%- nColspan %>"><%= i %></th>
-					</tr>
-					<tr class="box-title"><%
-                        if (oMetaData.ID === 'DL97') {
-							%><th>Account #</th><%
-						}
-						for (var j = 0; j < arySortOrder.length; j++) {
-							%><th><%- arySortOrder[j] %></th><%
-						}
-
-						if (oMetaData.ID === 'DL65') {
-							%><th>Lender names</th><%
-						}
-					%></tr>
-				</thead>
-                    <%if(oMetaData.ID == 'DL97'){%>
-                    <tbody>
-                        <tr class="total">
-                            <td colspan="<%-arySortOrder.length+1%>">
-                                <span>Num of accounts: <%-aryData.length%> Total balance (active): <%-EzBob.formatPounds(totalBalance)%></span>
-                            </td>
+    
+    if (!response.IsLimited) {
+        %><div class=tab-content>
+            <table>
+                <thead class="box">
+                    <tr class="box-title">
+                        <th colspan=2>Basic Non limited company fields</th>
+                    </tr>
+                </thead>
+		        <tbody>
+                    <% if (response.company_name != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Business name</td><td><%-response.company_name%></td>
                         </tr>
-                    </tbody>
                     <%}%>
-                <tbody><%
-				for (var j = 0; j < aryData.length; j++) {
-					var obj = aryData[j].Values;
+                    <% if (response.Address1 != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Address line1</td><td><%-response.Address1%></td>
+                        </tr>
+                    <%}%>
+                </tbody>
+            </table>
+        </div><%
+    }
+    else
+    {
+        for (var i in response.dataset) {
+		    var aryData = response.dataset[i].Data;
+		
+		    if (aryData.length > 0) {
+			    var oMetaData = response.dataset[i].MetaData || {};
 
-					print('<tr>');
-                    if(oMetaData.ID == 'DL97'){%>
-                           <td><%=j%></td>
-                    <%}
-					for (var t = 0; t < arySortOrder.length; t++) {
-						var fld = arySortOrder[t];
-						%><td class="<%-AddStyling(obj[fld], fld, oMetaData.ID)%>"><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td><%
-					} // for each field
+			    // console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
+                if (oMetaData.ID == 'DN40') { //skipping drawing of non limited score history
+                    continue;
+                }
+			    var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width table' : 'table';
 
-					if (oMetaData.ID === 'DL65') {
-						var aryLenderNames = [];
-						var oChildren = aryData[j].Children;
+			    if (oMetaData.ID == 'DL23SHAREHOLDING') {
+				    var nTotal = 0;
 
-						if (oChildren && oChildren['Limited Company Mortgages Details']) {
-							var oDetails = oChildren['Limited Company Mortgages Details'].Data;
+				    for (var j = 0; j < aryData.length; j++)
+					    nTotal +=  parseInt(aryData[j].Values['Description of Shareholding']);
 
-							for (var k = 0; k < oDetails.length; k++)
-								aryLenderNames.push(oDetails[k].Values['Lender name']);
-						} // if
+				    // console.log('total =', nTotal);
 
-						var sLenderNames = '';
+				    if (nTotal != 0) {
+					    for (var j = 0; j < aryData.length; j++)
+						    aryData[j].Values['% of Shareholding'] = EzBob.formatPercents(aryData[j].Values['Description of Shareholding'] / nTotal);
+				    } // if total
+			    } // if
+                var totalBalance = 0;
+                if(oMetaData.ID == 'DL97'){
+                    aryData = _.sortBy(aryData, function(obj) { return obj.Values["Account State"]; } );
+                    totalBalance = _.reduce(aryData, function(memo, data){ 
+                        var balance = 0;
+                        if(data.Values['Account State'][0] != 'S'){
+                            balance = EzBob.poundToNum(data.Values['Current Balance']);
+                        }
+                        return memo + balance;}, 0
+                    );
+                }
+			    if (oMetaData.ID == 'DL41') {
+				    %><div class=tab-content><table class="<%- sTableWidthClass %>">
+					    <thead class="box">
+						    <tr class="box-title">
+							    <th colspan=4><%- i %></th>
+						    </tr>
+						    <tr class="box-title">
+							    <th></th>
+							    <th>Company</th>
+							    <th>Industry</th>
+							    <th></th>
+						    </tr>
+					    </thead>
+					    <tbody><%
+						    var aryCompany = {};
+						    var aryIndustry = {};
+
+						    var sSupplierPaymentPattern = '';
+
+						    var obj = aryData[0].Values;
+
+						    for (var fld in obj) {
+							    if (fld == 'Supplier Payment Pattern') {
+								    sSupplierPaymentPattern = obj[fld];
+								    continue;
+							    } // if
+
+							    var nFirstSpace = fld.indexOf(' ');
+
+							    var aryTarget = (fld.substr(0, nFirstSpace) == 'Company') ? aryCompany : aryIndustry;
+
+							    var sSuffix = fld.substr(nFirstSpace + 1);
+
+							    if (sSuffix == 'Payment Pattern') {
+								    aryTarget[sSuffix] = obj[fld];
+								    continue;
+							    } // if
+
+							    var bIsAverage = (sSuffix.substr(0, 3) == '- A');
+
+							    var sKey, sNeedle, sNeedleLen;
+
+							    if (bIsAverage) {
+								    sKey = 'Average DBT';
+								    sNeedle = ' - ';
+								    sNeedleLen = 3;
+							    }
+							    else {
+								    sKey = 'Number of DBT';
+								    sNeedle = '(';
+								    sNeedleLen = 0;
+							    } // if
+
+							    if (!aryTarget[sKey])
+								    aryTarget[sKey] = {};
+
+							    aryTarget[sKey][sSuffix.substr(sSuffix.indexOf(sNeedle) + sNeedleLen)] = obj[fld];
+						    } // for each field
+
+						    var sGroup = 'Average DBT';
+
+						    %><tr><th class=narrow-as-possible>Payment Pattern</th>
+							    <td class=narrow-as-possible><%- aryCompany['Payment Pattern'] || '' %></td>
+							    <td class=narrow-as-possible><%- aryIndustry['Payment Pattern'] || '' %></td>
+							    <td></td>
+						    </tr>
+						    <tr>
+							    <th colspan=3 class=narrow-as-possible><%- sGroup %></th>
+							    <td></td>
+						    </tr><%
+
+
+						    var aryMonths = [ 12, 6, 3 ];
+						    aryMonths.sort(function(a, b) { return b - a; });
 						
-						switch (aryLenderNames.length) {
-						case 0:
-							break;
+						    var aryOutput = [];
+						    var aryLast = null;
 
-						case 1:
-							sLenderNames = aryLenderNames[0];
-							break;
+						    function GetTrend(a, b) {
+							    a = parseInt(a);
+							    b = parseInt(b);
 
-						default:
-							sLenderNames = '<ul><li>' + aryLenderNames.join('<li>') + '</ul>';
-							break;
-						} // switch
+							    var sTrend = 'stable-trend';
 
-						%><td><% print(sLenderNames); %></td><%
-					} // if DL65
+							    if (a < b)
+								    sTrend = 'positive-trend';
+							    else if (a > b)
+								    sTrend = 'negative-trend';
 
-					print('</tr>');
-				} // for each group output
-				%></tbody></table></div><%
-			}
-			else {
-				var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
+							    return sTrend;
+						    } // GetTrend
 
-				%><div class=tab-content><table class="<%- sTableWidthClass %>">
-				<thead  class="box"><tr class="box-title"><th colspan=2><%= i %></th></tr></thead>
-				<tbody><%
-				for (var j = 0; j < aryData.length; j++) {
-					var obj = aryData[j].Values;
+						    for (var j = 0; j < aryMonths.length; j++) {
+							    var sKey = aryMonths[j] + ' Months';
+						
+							    var bHasCompany  = aryCompany[sGroup]  && (typeof aryCompany[sGroup][sKey] !== 'undefined');
+							    var bHasIndustry = aryIndustry[sGroup] && (typeof aryIndustry[sGroup][sKey] !== 'undefined');
 
-					for (var t = 0; t < arySortOrder.length; t++) {
-						var fld = arySortOrder[t];
-						%><tr><td class=narrow-as-possible><%- fld %></td><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td></tr><%
-					} // for each field
-				} // for each group output
-				%></tbody></table></div><%
-			}
-		} // if
-	} // for
+							    var aryThis = {
+								    caption: sKey,
 
+								    has_company: bHasCompany,
+								    company: (bHasCompany  ? aryCompany[sGroup][sKey]  : ''),
+
+								    has_industry: bHasIndustry,
+								    industry: (bHasIndustry ? aryIndustry[sGroup][sKey] : ''),
+
+								    company_trend: '',
+								    company_to_industry_trend: '',
+								    industry_trend: ''
+							    };
+						
+							    if (bHasCompany && bHasIndustry)
+								    aryThis.company_to_industry_trend = GetTrend(aryThis.company, aryThis.industry);
+
+							    aryOutput.push(aryThis);
+
+							    if (aryLast == null) {
+								    aryLast = aryThis;
+								    continue;
+							    } // if
+
+							    if (bHasCompany && aryLast.has_company)
+								    aryThis.company_trend = GetTrend(aryThis.company, aryLast.company);
+
+							    if (bHasIndustry && aryLast.has_industry)
+								    aryThis.industry_trend = GetTrend(aryThis.industry, aryLast.industry);
+						    } // for
+
+						    for (var j = aryOutput.length - 1; j >= 0; j--) {
+							    var oCurrent = aryOutput[j];
+
+							    %><tr><td class=narrow-as-possible><%- oCurrent.caption %></td>
+							    <td class=narrow-as-possible><%- oCurrent.company %><div class="trend-container">
+								    <span class="<%- oCurrent.company_trend %>" title="<%- oCurrent.company_trend ? 'Self' : '' %>"></span>
+								    <span class="<%- oCurrent.company_to_industry_trend %>" title="<%- oCurrent.company_to_industry_trend ? 'Industry' : '' %>"></span>
+							    </div></td>
+							    <td class=narrow-as-possible><%- oCurrent.industry %><div class=trend-container><span class="<%- oCurrent.industry_trend %>"></span></div></td>
+							    <td></td>
+						    </tr><%
+						    } // for
+
+						    sGroup = 'Number of DBT';
+
+						    %><tr>
+							    <th colspan=3 class=narrow-as-possible><%- sGroup %></th>
+							    <td></td>
+						    </tr><%
+
+						    var aryIntervals = {};
+
+						    if (aryCompany[sGroup])
+							    for (var j in aryCompany[sGroup])
+								    aryIntervals[j] = 0;
+
+						    if (aryIndustry[sGroup])
+							    for (var j in aryIndustry[sGroup])
+								    aryIntervals[j] = 0;
+
+						    var arySortedIntervals = [];
+
+						    for (var j in aryIntervals)
+							    arySortedIntervals.push(j);
+
+						    arySortedIntervals.sort();
+
+						    for (var j = 0; j < arySortedIntervals.length; j++) {
+							    var sKey = arySortedIntervals[j];
+							    %><tr><td class=narrow-as-possible><%- sKey.substr(1, sKey.length - 2) %></th>
+							    <td class=narrow-as-possible><%- aryCompany[sGroup]  ? (aryCompany[sGroup][sKey] || '') : '' %></td>
+							    <td class=narrow-as-possible><%- aryIndustry[sGroup] ? (aryIndustry[sGroup][sKey] || '') : '' %></td>
+							    <td></td>
+						    </tr><%
+						    } // for
+					    %></tbody>
+					    <tfoot><tr><th class=narrow-as-possible>Supplier Payment Pattern</th>
+						    <td colspan=2 class=narrow-as-possible><%- sSupplierPaymentPattern || '' %></td>
+						    <td></td>
+					    </tr></tfoot><%
+				    %></table></div><%
+			    }
+			    else if (oMetaData.ID == 'DL99') {
+				    aryData.sort(function(a, b) {
+					    var oA = Date.parse(a.Values['Date']);
+					    var oB = Date.parse(b.Values['Date']);
+					    return oA - oB;
+				    });
+
+				    var oChartData = [];
+
+				    var oSeriesKeys = {
+					    Cash: 1,
+					    'A/R': 2,
+					    Inventory: 3,
+					    'Fixed assets': 4,
+					    'Total short term liabilities': 5,
+					    'Total long term liabilities': 6,
+					    'Tangible equity': 7,
+					    'Adjusted profit': 8,
+				    };
+
+				    var sDivChartID = 'chart' + oMetaData.ID + ('' + Math.random()).replace(/\./, '') + '' + (new Date()).getTime();
+				    var sParentDivChartID = 'parent_' + sDivChartID;
+
+				    %><table class="<%- sTableWidthClass %>">
+					    <thead  class="box">
+						    <tr class="box-title"><th><%- i %></th></tr>
+					    </thead>
+					    <tbody><tr><td id="<%- sParentDivChartID %>" style="padding-top:40px"></td></tr></tbody>
+				    </table><%
+
+				    for (var j = 0; j < aryData.length; j++) {
+					    var obj = aryData[j].Values;
+
+					    var raw = {};
+					    for (var k in obj)
+						    if (k !== 'Date')
+							    raw[k] =  EzBob.poundToNum(obj[k]);
+
+					    // console.log('aryData[' + j + '] =', obj, '->', raw);
+
+					    oChartData.push({ tick: obj.Date, data: {
+						    Cash: raw.TotalCash,
+						    'A/R': raw.Debtors - (raw.PrepayAccRuals + raw.DebtorsGroupLoans + raw.DebtorsDirLoans + raw.OtherDebtors),
+						    Inventory: raw.Inventories,
+						    'Fixed assets': raw.TngblAssets,
+						    'Total short term liabilities': raw.TotalCurrLblts,
+						    'Total long term liabilities': raw.TotalNonCurr,
+						    'Tangible equity': raw.TotalShareFund - raw.InTngblAssets - raw.DebtorsDirLoans + raw.CredDirLoans + raw.OnClDirLoans,
+						    'Adjusted profit': 8,
+						    'Retained earnings': raw.RetainedEarnings,
+					    }});
+				    } // for each group output
+
+				    for (var j = 1; j < oChartData.length; j++) {
+					    oChartData[j].data['Adjusted profit'] =
+						    oChartData[j].data['Retained earnings'] -
+						    oChartData[j - 1].data['Retained earnings'] +
+						    oChartData[j - 1].data['Fixed assets'] / 5;
+				    } // for
+	
+				    $('body').append(
+					    $('<div></div>').attr('id', sDivChartID).css({ width: '1200px', height: '600px', display: 'block' })
+				    );
+
+				    // console.log(oChartData);
+
+				    onAfterRender.push(function() {
+					    var aryLabels = [];
+
+					    for (var sSeriesName in oSeriesKeys) {
+						    aryLabels[oSeriesKeys[sSeriesName] - 1] = { 
+							    label: sSeriesName,
+							    renderer:$.jqplot.BarRenderer,
+							    rendererOptions: { fillToZero: true }
+						    };
+					    } // for
+
+					    var aryTicks = [];
+					    var arySeries = [];
+
+					    for (var i = 0; i < oChartData.length; i++) {
+						    var oItem = oChartData[i];
+
+						    aryTicks[i] = oItem.tick;
+
+						    for (var sSeriesName in oSeriesKeys) {
+							    var nSeriesIdx = oSeriesKeys[sSeriesName] - 1;
+
+							    if (!arySeries[nSeriesIdx])
+								    arySeries[nSeriesIdx] = [];
+
+							    if (!isNaN(oItem.data[sSeriesName]))
+								    arySeries[nSeriesIdx][i] = oItem.data[sSeriesName];
+						    } // for
+					    } // for each chart data item
+
+					    $.jqplot(sDivChartID, arySeries, {
+						    series: aryLabels,
+						    grid: {
+							    gridLineColor: 'black',
+							    gridLineWidth: 2.0,
+							    borderColor: 'black',
+							    borderWidth: 2.0
+						    },
+						    legend: {
+							    show: true,
+							    location: 'n',
+							    renderer: $.jqplot.EnhancedLegendRenderer,
+							    rendererOptions: {
+								    numberRows: 1,
+								    numberColumns: null
+							    },
+							    placement: 'outside',
+						    },
+						    axes: {
+							    xaxis: {
+								    show: true,
+								    Label: 'Date',
+								    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+								    renderer: $.jqplot.CategoryAxisRenderer,
+								    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+								    ticks: aryTicks
+							    },
+							    yaxis: {
+								    show: true,
+								    pad: 1.05,
+								    tickOptions: { formatString: "£ %'d" }
+							    }
+						    },
+						    highlighter: {
+							    show: true,
+							    showTooltip: true,
+							    tooltipLocation: 'n',
+							    tooltipOffset: -10,
+							    tooltipAxes: 'y',
+							    showMarker: false,
+							    bringSeriesToFront: true,
+							    useAxesFormatters: true,
+							    tooltipFormatString: "£ %'d",
+							    tooltipContentEditor: function(str, seriesIndex, pointIndex, plot) {
+								    return aryLabels[seriesIndex].label + ': ' + str;
+							    },
+						    },
+						    seriesDefaults: {
+							    trendline: {
+								    show: false
+							    },
+							    pointLabels: {
+								    show: false,
+							    }
+						    },
+					    }); // jqplot
+	
+					    $('#' + sDivChartID).appendTo('#' + sParentDivChartID);
+				    }); // onAfterRender.push
+			    }
+			    else if (oMetaData.DisplayDirection == 'horizontal') {
+				    var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
+	
+				    var nColspan = arySortOrder.length;
+				    if (oMetaData.ID === 'DL65' || oMetaData.ID === 'DL97')
+					    nColspan++;
+
+				    %><div class=tab-content><table class="<%- sTableWidthClass %>">
+				    <thead  class="box">
+					    <tr class="box-title">
+						    <th colspan="<%- nColspan %>"><%= i %></th>
+					    </tr>
+					    <tr class="box-title"><%
+                            if (oMetaData.ID === 'DL97') {
+							    %><th>Account #</th><%
+						    }
+						    for (var j = 0; j < arySortOrder.length; j++) {
+							    %><th><%- arySortOrder[j] %></th><%
+						    }
+
+						    if (oMetaData.ID === 'DL65') {
+							    %><th>Lender names</th><%
+						    }
+					    %></tr>
+				    </thead>
+                        <%if(oMetaData.ID == 'DL97'){%>
+                        <tbody>
+                            <tr class="total">
+                                <td colspan="<%-arySortOrder.length+1%>">
+                                    <span>Num of accounts: <%-aryData.length%> Total balance (active): <%-EzBob.formatPounds(totalBalance)%></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <%}%>
+                    <tbody><%
+				    for (var j = 0; j < aryData.length; j++) {
+					    var obj = aryData[j].Values;
+
+					    print('<tr>');
+                        if(oMetaData.ID == 'DL97'){%>
+                               <td><%=j%></td>
+                        <%}
+					    for (var t = 0; t < arySortOrder.length; t++) {
+						    var fld = arySortOrder[t];
+						    %><td class="<%-AddStyling(obj[fld], fld, oMetaData.ID)%>"><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td><%
+					    } // for each field
+
+					    if (oMetaData.ID === 'DL65') {
+						    var aryLenderNames = [];
+						    var oChildren = aryData[j].Children;
+
+						    if (oChildren && oChildren['Limited Company Mortgages Details']) {
+							    var oDetails = oChildren['Limited Company Mortgages Details'].Data;
+
+							    for (var k = 0; k < oDetails.length; k++)
+								    aryLenderNames.push(oDetails[k].Values['Lender name']);
+						    } // if
+
+						    var sLenderNames = '';
+						
+						    switch (aryLenderNames.length) {
+						    case 0:
+							    break;
+
+						    case 1:
+							    sLenderNames = aryLenderNames[0];
+							    break;
+
+						    default:
+							    sLenderNames = '<ul><li>' + aryLenderNames.join('<li>') + '</ul>';
+							    break;
+						    } // switch
+
+						    %><td><% print(sLenderNames); %></td><%
+					    } // if DL65
+
+					    print('</tr>');
+				    } // for each group output
+				    %></tbody></table></div><%
+			    }
+			    else {
+				    var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
+
+				    %><div class=tab-content><table class="<%- sTableWidthClass %>">
+				    <thead  class="box"><tr class="box-title"><th colspan=2><%= i %></th></tr></thead>
+				    <tbody><%
+				    for (var j = 0; j < aryData.length; j++) {
+					    var obj = aryData[j].Values;
+
+					    for (var t = 0; t < arySortOrder.length; t++) {
+						    var fld = arySortOrder[t];
+						    %><tr><td class=narrow-as-possible><%- fld %></td><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td></tr><%
+					    } // for each field
+				    } // for each group output
+				    %></tbody></table></div><%
+			    }
+		    } // if
+	    } // for
+    }
 	print('</div>');
 })(companyScoreData, onAfterRender, caption);
 %>
