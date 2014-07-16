@@ -147,9 +147,9 @@
                                     name="accept" 
                                     value="Confirm" 
                                     id="paypoint-submit"
-                                    class="submit pull-right button orange disabled confirm" tabindex="6" />
+                                    class="submit pull-right button btn-green disabled confirm" tabindex="6" />
                                 
-                                <a href="#"class="button grey pull-right back">Back</a>
+                                <a href="#"class="button btn-grey pull-right back">Back</a>
                             </div>
 
                             @Hiddens()
@@ -278,7 +278,7 @@
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
             //set user email in top bar
-            var html = '<span id="logged-in-user-name">' + decodeURIComponent(getCallbackValue('username') || "") + '</span><a href="/Account/LogOff" class="button grey medium_btn">Log off</a>';
+            var html = '<span id="logged-in-user-name">' + decodeURIComponent(getCallbackValue('username') || "") + '</span><a href="/Account/LogOff" class="button btn-grey">Log off</a>';
             $("#header_description").html(html);
 
             //set url for back button

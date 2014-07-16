@@ -191,9 +191,14 @@ ul.list_none
 }
 
 .btn-showmore {
-    width: 100%;
+    width: 95% !important;
     line-height: normal !important;
     cursor: pointer !important;
+    float: left;
+    margin-left: 0;
+    margin-right: 0;
+    color: #4d4d4d;
+
 }
 
 h1.form_start,
@@ -390,28 +395,29 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 	margin-top: 1em;
 }
 
+.vip-container {
+    margin-bottom: 10px;
+}
+
 .vip-main {
-    height: 140px;
     color: #5c6373;
     position: relative;
-    width: 100%;
 }
 
 .vip-button {
     position: absolute;
-    right: 5px;
-    bottom: 30px;
-    height: 40px;
+    bottom: 10px;
+    width: 100%;
 }
 
 .vip-req-button {
-    display: inline-block;
-    vertical-align: middle;
+    width: 90%;
+    margin: 0 auto;
+    display: inherit;
 }
 
 .vip-image {
     background-image: url(images/vip.PNG);
-    background-size: contain;
     background-repeat: no-repeat;
-    height: 140px;
+    height: 220px;
 }

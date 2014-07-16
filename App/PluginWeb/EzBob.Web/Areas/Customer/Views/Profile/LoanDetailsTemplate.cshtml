@@ -108,7 +108,7 @@
 					payButtonName = "Pay Now";
 			
 				if ((loan.Status == 'Live') || (loan.Status == 'Late')) {
-					%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button orange pay-early" style="margin-top: 5px;" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
+					%><a href="#PayEarly/<%- loan.Id %>" class="btn-continue button btn-green pay-early" style="margin-top: 5px;" ui-event-control-id="dashboard:pay-early"><%= payButtonName %></a><%
 				}
 			%></div>
 		</div>
@@ -235,7 +235,7 @@
 
 	<div class="clearfix"><%
 		if (area != 'Underwriter') {
-			%><a class="btn-back button grey pull-right" href="#AccountActivity" ui-event-control-id="dashboard:loan-details-back">Back</a><%
+			%><a class="btn-back button btn-grey pull-right" href="#AccountActivity" ui-event-control-id="dashboard:loan-details-back">Back</a><%
 		}
 	%></div>
 </script>

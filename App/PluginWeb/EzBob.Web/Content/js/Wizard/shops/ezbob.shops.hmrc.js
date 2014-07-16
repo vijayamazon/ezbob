@@ -17,8 +17,8 @@ EzBob.HmrcAccountInfoView = Backbone.Marionette.ItemView.extend({
 				doneBtn: 'hmrc:do_upload',
 			},
 			classes: {
-				backBtn: 'rc-button grey back',
-				doneBtn: 'rc-button green',
+			    backBtn: 'button btn-grey back',
+				doneBtn: 'button btn-green',
 			},
 			clickBack: _.bind(this.uploadFilesBack, this),
 			clickDone: _.bind(this.doUploadFiles, this),

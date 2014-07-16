@@ -30,7 +30,7 @@
                     <%}else{%>
                     <td class="last">
                         <%if(selectionAllowed){%>
-                        <button class="button orange setDefaultCard" data-card-id="<%-account.cardId%>" ui-event-control-id="profile:set-default-debit-card">Set as default</button></td>
+                        <button class="button btn-green setDefaultCard" data-card-id="<%-account.cardId%>" ui-event-control-id="profile:set-default-debit-card">Set as default</button></td>
                         <%}%>
                     <%}%>
                 </tr>
@@ -38,7 +38,7 @@
             <%});%>
         </tbody>
     </table>
-    <button class="button orange addDebitCardHelp">Add debit card</button>
+    <button class="button btn-green addDebitCardHelp">Add debit card</button>
     <div class="hide">
         <div id="add_debit_card_help" class="help_window">
             <h2>Add debit card</h2>
@@ -46,9 +46,9 @@
                 Adding a new card will be tested and a £5 will be charged.
             </p>
             <br>
-            <div class="alignright" style="padding: 0 10px 0 0;">
-                <a href="@Url.Action("AddPayPoint", "Profile", new { Area = "Customer"})" target="_blank" class="button orange pull-right" id="addDebitCardBtn" onclick="$.colorbox.close();" ui-event-control-id="profile:add-debit-card">Continue</a>
-                <a href="#" class="button grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="profile:cancel-add-debit-card">Cancel</a>
+            <div class="form_buttons_container" style="padding: 0 10px 0 0;">
+                <a href="@Url.Action("AddPayPoint", "Profile", new { Area = "Customer"})" target="_blank" class="button btn-green pull-right" id="addDebitCardBtn" onclick="$.colorbox.close();" ui-event-control-id="profile:add-debit-card">Continue</a>
+                <a href="#" class="button btn-grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="profile:cancel-add-debit-card">Cancel</a>
             </div>
             <div class="clear"></div>
             <hr>

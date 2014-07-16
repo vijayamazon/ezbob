@@ -81,9 +81,9 @@
                     <li>
                         <div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div>
                     </li>
-                    <li class="menu-btn login log-off"><a href="#">LOG OFF</a></li>
-                    <li class="menu-btn login log-in"><a href="#">LOGIN</a></li>
-                    <li class="menu-btn sign-up"><a href="#">SIGN UP</a></li>
+                    <li class="menu-btn login log-off"><a href="#" class="button btn-grey">LOG OFF</a></li>
+                    <li class="menu-btn login log-in"><a href="#" class="button btn-grey">LOGIN</a></li>
+                    <li class="menu-btn sign-up"><a href="#" class="button btn-green">SIGN UP</a></li>
                 </ul>
             </div>
         </div>
@@ -146,7 +146,7 @@
                                         <span>Contact person mobile phone</span>
                                         <input type="text" name="ContactMobile" id="ContactMobile" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:signup-contact-mobile" maxlength="11" />
                                         <img id="ContactMobileImage" class="field_status required" />
-                                        <input id="generateMobileCode" name="generateMobileCode" class="btn green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:signup-generate-mobile-code" />
+                                        <input id="generateMobileCode" name="generateMobileCode" class="button btn-green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:signup-generate-mobile-code" />
                                     </label>
                                 </div>
 
@@ -155,7 +155,7 @@
                                         <span>Mobile phone authentication code</span>
                                         <input type="text" class="phonenumbercode form_field_left_side form_field" name="MobileCode" id="MobileCode" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-mobile-code" maxlength="6" data-sent-to="" />
                                         <img id="mobileCodeImage" class="field_status required" />
-                                        <input id="switchToCaptcha" class="btn green form_field_right_side_signup_phone" type="button" value="Did not receive code" ui-event-control-id="broker:switch-to-captcha" />
+                                        <input id="switchToCaptcha" class="button btn-green form_field_right_side_signup_phone" type="button" value="Did not receive code" ui-event-control-id="broker:switch-to-captcha" />
                                     </label>
                                 </div>
 
@@ -219,7 +219,7 @@
 
                                 <div class="form_buttons_container">
                                     <div class="attardi-button">
-                                        <button type="submit" id="SignupBrokerButton" class="rc-button disabled pull-right" disabled="disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-submit">Sign up</button>
+                                        <button type="submit" id="SignupBrokerButton" class="button btn-green disabled pull-right" disabled="disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-submit">Sign up</button>
                                     </div>
                                 </div>
                             </form>
@@ -253,7 +253,7 @@
 
                                 <div class="form_buttons_container">
                                     <div class="attardi-button">
-                                        <button type="submit" id="LoginBrokerButton" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" ui-event-control-id="broker:login-submit">Login</button>
+                                        <button type="submit" id="LoginBrokerButton" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" ui-event-control-id="broker:login-submit">Login</button>
                                     </div>
                                 </div>
                             </form>
@@ -274,7 +274,7 @@
                                         <span>Contact person mobile phone</span>
                                         <input type="text" name="ForgottenMobile" id="ForgottenMobile" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:forgotten-contact-mobile" maxlength="11" />
                                         <img id="ForgottenMobileImage" class="field_status required" />
-                                        <input id="forgottenGenerateMobileCode" name="forgottenGenerateMobileCode" class="btn green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:forgotten-generate-mobile-code" />
+                                        <input id="forgottenGenerateMobileCode" name="forgottenGenerateMobileCode" class="button btn-green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:forgotten-generate-mobile-code" />
                                     </label>
                                 </div>
 
@@ -288,7 +288,7 @@
 
                                 <div class="form_buttons_container">
                                     <div class="attardi-button">
-                                        <button type="submit" id="RestorePassBrokerButton" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" ui-event-control-id="broker:login-submit">Restore password</button>
+                                        <button type="submit" id="RestorePassBrokerButton" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" ui-event-control-id="broker:login-submit">Restore password</button>
                                     </div>
                                 </div>
                             </form>
@@ -305,7 +305,7 @@
                             </ul>
 
                             <div id="section-dashboard-customers">
-                                <button type="button" id="AddNewCustomer" class="rc-button green pull-right">Add a new client</button>
+                                <button type="button" id="AddNewCustomer" class="button btn-green pull-right">Add a new client</button>
                                 <h2 class="form-start">Client list</h2>
 
                                 <div class="table-responsive table-big">
@@ -502,7 +502,7 @@
 
                                                 <div class="form_buttons_container">
                                                     <div class="attardi-button">
-                                                        <button type="submit" id="UpdatePassword" class="rc-button disabled pull-right" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
+                                                        <button type="submit" id="UpdatePassword" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -514,7 +514,7 @@
                         <!-- section-customer-list -->
 
                         <div class="page-section hide section-add-customer">
-                            <button type="button" class="back-to-list rc-button green pull-right">Back to client list</button>
+                            <button type="button" class="back-to-list button btn-green pull-right">Back to client list</button>
                             <h2 class="form-start">Add a new client</h2>
 
                             <form class="new-lead-form broker-form" novalidate="novalidate">
@@ -566,7 +566,7 @@
                             <input type="hidden" id="customer-id" class="value" data-field-name="id" />
 
                             <div class="back-to-list-container">
-                                <button type="button" class="back-to-list green rc-button">Back to client list</button></div>
+                                <button type="button" class="back-to-list button btn-green">Back to client list</button></div>
 
                             <div class="value-group aka-table table-big box">
                                 <div class="box-title aka-caption">Client details</div>

@@ -78,7 +78,7 @@
 <script type="text/template" id="vip-template">
     <div class="vip-main vip-image">
         <div class="vip-button">
-            <button type="button" class="rc-button green vip-req-button vip_help" id="vipRequestBtn" ui-event-control-id="vip:request-callback">Request VIP</button>
+            <button type="button" class="button btn-green vip-req-button vip_help" id="vipRequestBtn" ui-event-control-id="vip:request-callback">Request VIP</button>
         </div>
 
         <div class="hide">
@@ -92,8 +92,8 @@
                 </form>
                 <div class="form_buttons_container">
                     <div class="attardi-button">
-                        <a href="#" class="button orange pull-right" id="requestVipBtn" ui-event-control-id="vip:continue" onclick="EzBob.App.trigger('wizard:vipRequest', $('#vip-form').serializeArray());$.colorbox.close();">Continue</a>
-                        <a href="#" class="button grey pull-right" id="cancelVipBtn" onclick="$.colorbox.close();" ui-event-control-id="vip:cancel">Cancel</a>
+                        <a href="#" class="button btn-green pull-right" id="requestVipBtn" ui-event-control-id="vip:continue" onclick="EzBob.App.trigger('wizard:vipRequest', $('#vip-form').serializeArray());$.colorbox.close();">Continue</a>
+                        <a href="#" class="button btn-grey pull-right" id="cancelVipBtn" onclick="$.colorbox.close();" ui-event-control-id="vip:cancel">Cancel</a>
                     </div>
                 </div>
             </div>

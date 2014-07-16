@@ -27,7 +27,7 @@
 						@if (refreshYodleeEnabled) {
 							<div>
 								<%if (store.type == 'Yodlee'){%>
-								<button class="button orange updateYodlee refresh_yodlee_help1" data-bank="<%= store.displayName %>">Update</button>
+								<button class="button btn-green updateYodlee refresh_yodlee_help1" data-bank="<%= store.displayName %>">Update</button>
 								<%}%>
 							</div>
 						}
@@ -37,7 +37,7 @@
 		%></tbody>
 	</table>
 	<div style="padding-left: 260px;">
-		<a href="#" style="margin-left: 80px;" class="btn-continue button orange add-store">Add Account</a><br />
+		<a href="#" style="margin-left: 80px;" class="btn-continue button btn-green add-store">Add Account</a><br />
 		<span style="padding-left: 90px;" class="add-stores-tip">Get more cash!</span>
 	</div>
 
@@ -50,8 +50,8 @@
 			</p>
 			<br>
 			<div class="alignright" style="padding: 0 10px 0 0;">
-				<a href="#" target="_blank" class="button orange pull-right" id="refreshYodleeBtn1" onclick="$.colorbox.close();">Continue</a>
-				<a href="#" class="button grey pull-right" id="cancelYodleeBtn1" onclick="$.colorbox.close();">Cancel</a>
+				<a href="#" target="_blank" class="button btn-green pull-right" id="refreshYodleeBtn1" onclick="$.colorbox.close();">Continue</a>
+				<a href="#" class="button btn-grey pull-right" id="cancelYodleeBtn1" onclick="$.colorbox.close();">Cancel</a>
 			</div>
 			<div class="clear"></div>
 			<hr>

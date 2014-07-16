@@ -92,7 +92,7 @@
 
 .d-widget button {
     display: block;
-    margin: -5px -9px 0;
+    margin: -7px -10px 0;
     float: right;
     width: 167px;
 }
@@ -628,8 +628,8 @@ dl.loan-schedule-info  {
     font-size: 12px;
 }
 
-.btn-fix {
-    margin-right: -8px;
+.button.btn-fix {
+    width: 160px
 }
 
 html body .centered {
