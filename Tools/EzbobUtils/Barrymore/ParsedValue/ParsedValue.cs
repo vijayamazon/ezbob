@@ -52,8 +52,18 @@
 		#region constructor
 
 		public ParsedValue(object oVal, object oDefault = null) {
-			m_oValue = oVal;
-			m_oDefault = oDefault;
+			if (!ReferenceEquals(oVal, null) && (oVal.GetType() == typeof (ParsedValue))) {
+				// ReSharper disable PossibleNullReferenceException
+				var pv = oVal as ParsedValue;
+
+				m_oValue = pv.m_oValue;
+				m_oDefault = pv.m_oDefault;
+				// ReSharper restore PossibleNullReferenceException
+			}
+			else {
+				m_oValue = oVal;
+				m_oDefault = oDefault;
+			}
 		} // constructor
 
 		#endregion constructor

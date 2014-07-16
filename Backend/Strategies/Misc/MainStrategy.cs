@@ -583,7 +583,7 @@
 				maritalStatus = MaritalStatus.Other;
 			} // if
 
-			int modelMaxFeedback = scoreCardResults.IntWithDefault("MaxFeedback", defaultFeedbackValue);
+			int modelMaxFeedback = scoreCardResults["MaxFeedback", defaultFeedbackValue];
 
 			int modelMPsNumber = scoreCardResults["MPsNumber"];
 			int modelEzbobSeniority = scoreCardResults["EZBOBSeniority"];

@@ -191,6 +191,17 @@
 
 		#endregion method ExecuteEnumerable
 
+		#region method GetFirst
+
+		public virtual SafeReader GetFirst(ConnectionWrapper oConnectionToUse = null) {
+			if (!IsReadyToGo())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
+			return DB.GetFirst(oConnectionToUse, GetName(), Species, PrepareParameters());
+		} // GetFirst
+
+		#endregion method GetFirst
+
 		#region method ToString
 
 		public override string ToString() {

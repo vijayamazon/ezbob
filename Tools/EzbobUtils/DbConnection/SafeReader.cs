@@ -85,12 +85,20 @@
 
 		#endregion class SafeReaderFluentInterface
 
+		#region method CreateEmpty
+
+		public static SafeReader CreateEmpty() {
+			return new SafeReader(null, null, true, false);
+		} // CreateEmpty
+
+		#endregion method CreateEmpty
+
 		#region constructor
 
-		public SafeReader(DataRow oRow) : this(oRow, null) {
+		public SafeReader(DataRow oRow) : this(oRow, null, false, false) {
 		} // constructor
 
-		public SafeReader(DbDataReader oReader) : this(null, oReader) {
+		public SafeReader(DbDataReader oReader) : this(null, oReader, false, false) {
 		} // constructor
 
 		#endregion constructor
@@ -102,58 +110,6 @@
 		} // Read
 
 		#endregion property Read
-
-		#region indexer wrappers
-
-		#region method Bool
-
-		public bool Bool(string index) {
-			return this[index, default(bool)];
-		} // Bool
-
-		#endregion method Bool
-
-		#region method Int
-
-		public int Int(string index) {
-			return this[index, default(int)];
-		} // Int
-
-		#endregion method Int
-
-		#region method IntWithDefault
-
-		public int IntWithDefault(string index, int defaultValue) {
-			return this[index, defaultValue];
-		} // IntWithDefault
-
-		#endregion method IntWithDefault
-
-		#region method Decimal
-
-		public decimal Decimal(string index) {
-			return this[index, default(Decimal)];
-		} // Decimal
-
-		#endregion method Decimal
-
-		#region method DateTime
-
-		public DateTime DateTime(string index) {
-			return this[index, default(DateTime)];
-		} // DateTime
-
-		#endregion method DateTime
-
-		#region method String
-
-		public string String(string index, string sDefault = null) {
-			return this[index, sDefault];
-		} // String
-
-		#endregion method String
-
-		#endregion indexer wrappers
 
 		#region indexer
 
@@ -183,6 +139,9 @@
 						return true;
 			} // if
 
+			if (!ReferenceEquals(m_oCache, null))
+				return m_oCache.Contains(sIdx);
+
 			return false;
 		} // ContainsField
 
@@ -202,6 +161,9 @@
 				} // for
 			} // if
 
+			if (!ReferenceEquals(m_oCache, null))
+				return m_oCache.Contains(sIdx);
+
 			return false;
 		} // ContainsField
 
@@ -211,6 +173,9 @@
 
 			if (!ReferenceEquals(m_oReader, null))
 				return ((0 <= nIdx) && (nIdx < m_oReader.FieldCount));
+
+			if (!ReferenceEquals(m_oCache, null))
+				return m_oCache.Contains(nIdx);
 
 			return false;
 		} // ContainsField
@@ -241,11 +206,38 @@
 				if (!ReferenceEquals(m_oReader, null))
 					return m_oReader.FieldCount;
 
+				if (!ReferenceEquals(m_oCache, null))
+					return m_oCache.Count;
+
+				if (m_bAllowNoSource)
+					return 0;
+
 				throw new NullReferenceException("Neither row nor DB reader specified.");
 			} // get
 		} // Count
 
 		#endregion property Count
+
+		#region method ToCache
+
+		public SafeReader ToCache() {
+			var sr = new SafeReader(null, null, false, true);
+
+			if (ReferenceEquals(m_oRow, null) && ReferenceEquals(m_oReader, null))
+				return sr;
+
+			for (int i = 0; i < Count; i++) {
+				string sName = !ReferenceEquals(m_oRow, null)
+					? m_oRow.Table.Columns[i].ColumnName
+					: m_oReader.GetName(i);
+
+				sr.m_oCache.Add(sName, this[i]);
+			} // for
+
+			return sr;
+		} // ToCache
+
+		#endregion method ToCache
 
 		#endregion public
 
@@ -253,10 +245,12 @@
 
 		#region constructor
 
-		private SafeReader(DataRow oRow, DbDataReader oReader) {
+		private SafeReader(DataRow oRow, DbDataReader oReader, bool bAllowNoSource, bool bAllowCache) {
 			m_oReader = oReader;
 			m_oRow = oRow;
 			m_oFluent = new SafeReaderFluentInterface(this);
+			m_bAllowNoSource = bAllowNoSource;
+			m_oCache = bAllowCache ? new ParsedValueCache() : null;
 		} // constructor
 
 		#endregion constructor
@@ -295,6 +289,12 @@
 				} // try
 			} // try
 
+			if (!ReferenceEquals(m_oCache, null))
+				return m_oCache[sIdx, oDefault];
+
+			if (m_bAllowNoSource)
+				return oDefault;
+
 			throw new NullReferenceException("Neither row nor DB reader specified.");
 		} // ColumnOrDefault
 
@@ -311,6 +311,12 @@
 				} // try
 			} // try
 
+			if (!ReferenceEquals(m_oCache, null))
+				return m_oCache[nIdx, oDefault];
+
+			if (m_bAllowNoSource)
+				return oDefault;
+
 			throw new NullReferenceException("Neither row nor DB reader specified.");
 		} // ColumnOrDefault
 
@@ -321,6 +327,8 @@
 		private readonly DataRow m_oRow;
 		private readonly DbDataReader m_oReader;
 		private readonly SafeReaderFluentInterface m_oFluent;
+		private readonly bool m_bAllowNoSource;
+		private readonly ParsedValueCache m_oCache;
 
 		#endregion properties
 

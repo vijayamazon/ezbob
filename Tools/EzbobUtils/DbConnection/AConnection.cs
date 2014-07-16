@@ -296,6 +296,39 @@
 
 		#endregion method FillFirst
 
+		#region method GetFirst
+
+		public virtual SafeReader GetFirst(ConnectionWrapper oConnectionToUse, string sQuery, params QueryParameter[] aryParams) {
+			return GetFirst(oConnectionToUse, sQuery, CommandSpecies.Auto, aryParams);
+		} // FillFirst
+
+		public virtual SafeReader GetFirst(string sQuery, params QueryParameter[] aryParams) {
+			return GetFirst(null, sQuery, CommandSpecies.Auto, aryParams);
+		} // FillFirst
+
+		public virtual SafeReader GetFirst(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			return GetFirst(null, sQuery, nSpecies, aryParams);
+		} // FillFirst
+
+		public virtual SafeReader GetFirst(ConnectionWrapper oConnectionToUse, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			SafeReader oResult = null;
+
+			ForEachRowSafe(
+				oConnectionToUse,
+				(sr, bRowsetStart) => {
+					oResult = sr.ToCache();
+					return ActionResult.SkipAll;
+				},
+				sQuery,
+				nSpecies,
+				aryParams
+			);
+
+			return oResult ?? SafeReader.CreateEmpty();
+		} // GetFirst
+
+		#endregion method GetFirst
+
 		#region method CreateVectorParameter
 
 		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, params T[] oValues) {

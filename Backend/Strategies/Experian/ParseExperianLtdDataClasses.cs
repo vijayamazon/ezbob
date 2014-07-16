@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Collections.Generic;
-	using System.Collections.Specialized;
 	using System.Globalization;
 	using System.Linq;
 	using System.Reflection;
@@ -74,76 +73,7 @@
 	#region class AExperianLtdDataRow
 
 	internal abstract class AExperianLtdDataRow : IParametrisable {
-		#region static constructor
-
-		static AExperianLtdDataRow() {
-			DryRunMode = false;
-		} // static constructor
-
-		#endregion static constructor
-
 		#region public
-
-		#region property DryRunMode
-
-		public static bool DryRunMode { get; set; } // DryRunMode
-
-		#endregion property DryRunMode
-
-		#region method ProcessOneRow
-
-		public static bool ProcessOneRow(
-			Type oTableType,
-			XmlNode oRoot,
-			long nParentID,
-			ASrcAttribute oGroupSrcAttr,
-			AConnection oDB,
-			ConnectionWrapper oPersistent,
-			ASafeLog oLog
-		) {
-			oGroupSrcAttr = oGroupSrcAttr ?? oTableType.GetCustomAttribute<ASrcAttribute>();
-
-			oLog.Debug("Parsing Experian company data into {0}...", oTableType.Name);
-
-			ConstructorInfo ci = oTableType.GetConstructors().FirstOrDefault();
-
-			if (ci == null) {
-				oLog.Alert("Parsing Experian company data into {0} failed: no constructor found.", oTableType.Name);
-				return true;
-			} // if
-
-			XmlNodeList oGroupNodes = oRoot.SelectNodes(oGroupSrcAttr.GroupPath);
-
-			if (oGroupNodes == null)
-				return true;
-
-			oLog.Debug(
-				"Parsing Experian company data into {0}: {1} XML node{2} found.",
-				oTableType.Name,
-				oGroupNodes.Count,
-				oGroupNodes.Count == 1 ? "" : "s"
-			);
-
-			foreach (XmlNode oGroup in oGroupNodes) {
-				AExperianLtdDataRow oRow = (AExperianLtdDataRow)ci.Invoke(new object[] { oGroup, oLog });
-
-				oRow.LoadFromXml().SetParentID(nParentID);
-
-				if (!oRow.Save(oDB, oPersistent)) {
-					oLog.Warn("Parsing Experian company data into {0} failed on saving to DB.", oTableType.Name);
-					return false;
-				} // if
-
-				if (!oRow.ProcessChildren(oDB, oPersistent)) {
-					oLog.Warn("Parsing Experian company data into {0} failed on processing children.", oTableType.Name);
-					return false;
-				} // if
-			} // for each matching XML node
-
-			return true;
-		} // ProcessOneRow
-
-		#endregion method ProcessOneRow
 
 		#region property ExperianLtdID
 
@@ -192,7 +122,7 @@
 
 		#region method LoadFromXml
 
-		public virtual AExperianLtdDataRow LoadFromXml() {
+		public virtual void LoadFromXml() {
 			if (Root == null)
 				throw new NullReferenceException("No XML root element specified for " + this.GetType().Name);
 
@@ -220,7 +150,7 @@
 				SetValue(this, pi, oNode, Root);
 			} // for each properties
 
-			return this;
+			LoadChildrenFromXml();
 		} // LoadFromXml
 
 		#endregion method LoadFromXml
@@ -236,31 +166,17 @@
 		public virtual bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
 			Log.Debug("Saving {0} to DB with data:\n{1}.", this.GetType().Name, Stringify());
 
-			if (DryRunMode) {
-				Log.Debug("{0}.Save in dry run mode.", this.GetType().Name);
-				return true;
-			} // if
-
-			try {
-				oDB.ExecuteNonQuery(
-					oPersistent,
-					DBSaveProcName,
-					CommandSpecies.StoredProcedure,
-					oDB.CreateTableParameter(
-						this.GetType(),
-						"@Tbl",
-						new List<AExperianLtdDataRow> { this },
-						TypeUtils.GetConvertorToObjectArray(this.GetType()),
-						GetDBColumnTypes()
-					)
-				);
-
-				return true;
-			}
-			catch (Exception e) {
-				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);
+			if (!SelfSave(oDB, oPersistent))
 				return false;
-			} // try
+
+			foreach (var kid in Children) {
+				kid.SetParentID(GetID());
+
+				if (!kid.Save(oDB, oPersistent))
+					return false;
+			} // for each
+
+			return true;
 		} // Save
 
 		#endregion method Save
@@ -282,13 +198,21 @@
 
 		#endregion method ToParameter
 
-		#region method ProcessChildren
+		#region method SetParentID
 
-		public virtual bool ProcessChildren(AConnection oDB, ConnectionWrapper oPersistent) {
-			return true;
-		} // ProcessChildren
+		public virtual void SetParentID(long nParentID) {
+			ExperianLtdID = nParentID;
+		} // SetParentID
 
-		#endregion method ProcessChildren
+		#endregion method SetParentID
+
+		#region method ShouldBeSaved
+
+		public virtual bool ShouldBeSaved() {
+			return (LoadedCount > 0) || (Children.Count > 0);
+		} // ShouldBeSaved
+
+		#endregion method ShouldBeSaved
 
 		#endregion public
 
@@ -299,6 +223,7 @@
 		protected AExperianLtdDataRow(XmlNode oRoot, ASafeLog oLog) {
 			LoadedCount = 0;
 			m_nExperianLtdID = 0;
+			Children = new List<AExperianLtdDataRow>();
 
 			Root = oRoot;
 			Log = oLog ?? new SafeLog();
@@ -330,13 +255,13 @@
 
 		#endregion method DoAfterTheMainInsert
 
-		#region method SetParentID
+		#region method GetID
 
-		protected virtual void SetParentID(long nParentID) {
-			ExperianLtdID = nParentID;
-		} // SetParentID
+		protected virtual long GetID() {
+			return 0;
+		} // GetParentID
 
-		#endregion method SetParentID
+		#endregion method GetID
 
 		#region method GetDBColumnTypes
 
@@ -354,6 +279,85 @@
 		} // GetDBColumnTypes
 
 		#endregion method GetDBColumnTypes
+
+		#region method LoadChildrenFromXml
+
+		protected virtual void LoadChildrenFromXml() {
+			// Nothing here.
+		} // LoadChildrenFromXml
+
+		#endregion method LoadChildrenFromXml
+
+		protected List<AExperianLtdDataRow> Children { get; private set; }
+
+		#region method SelfSave
+
+		protected virtual bool SelfSave(AConnection oDB, ConnectionWrapper oPersistent) {
+			try {
+				oDB.ExecuteNonQuery(
+					oPersistent,
+					DBSaveProcName,
+					CommandSpecies.StoredProcedure,
+					oDB.CreateTableParameter(
+						this.GetType(),
+						"@Tbl",
+						new List<AExperianLtdDataRow> {this},
+						TypeUtils.GetConvertorToObjectArray(this.GetType()),
+						GetDBColumnTypes()
+					)
+				);
+
+				return true;
+			}
+			catch (Exception e) {
+				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);
+				return false;
+			} // try
+		} // SelfSave
+
+		#endregion method SelfSave
+
+		#region method LoadOneChildFromXml
+
+		protected virtual void LoadOneChildFromXml(Type oTableType, ASrcAttribute oGroupSrcAttr) {
+			oGroupSrcAttr = oGroupSrcAttr ?? oTableType.GetCustomAttribute<ASrcAttribute>();
+
+			Log.Debug("Parsing Experian company data into {0}...", oTableType.Name);
+
+			ConstructorInfo ci = oTableType.GetConstructors().FirstOrDefault();
+
+			if (ci == null) {
+				Log.Alert("Parsing Experian company data into {0} failed: no constructor found.", oTableType.Name);
+				return;
+			} // if
+
+			XmlNodeList oGroupNodes = Root.SelectNodes(oGroupSrcAttr.GroupPath);
+
+			if (oGroupNodes == null) {
+				Log.Debug("Parsing Experian company data into {0}: no XML nodes found.", oTableType.Name);
+				return;
+			} // if
+
+			Log.Debug(
+				"Parsing Experian company data into {0}: {1} XML node{2} found.",
+				oTableType.Name,
+				oGroupNodes.Count,
+				oGroupNodes.Count == 1 ? "" : "s"
+			);
+
+			foreach (XmlNode oGroup in oGroupNodes) {
+				AExperianLtdDataRow oRow = (AExperianLtdDataRow)ci.Invoke(new object[] { oGroup, Log });
+
+				oRow.LoadFromXml();
+
+				if (oRow.ShouldBeSaved())
+					Children.Add(oRow);
+			} // for each matching XML node
+
+			Log.Debug("Parsing Experian company data into {0} complete.", oTableType.Name);
+		} // LoadOneChildFromXml
+
+		#endregion method LoadOneChildFromXml
 
 		#endregion protected
 
@@ -468,35 +472,6 @@
 
 		#endregion constructor
 
-		#region method Save
-
-		public override bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
-			Log.Debug("Saving {0} to DB with data:\n{1}.", this.GetType().Name, Stringify());
-
-			if (DryRunMode) {
-				Log.Debug("{0}.Save in dry run mode.", this.GetType().Name);
-				ExperianLtdID = 1;
-				return ExperianLtdID > 0;
-			} // if
-
-			try {
-				ExperianLtdID = oDB.ExecuteScalar<long>(
-					oPersistent,
-					DBSaveProcName,
-					CommandSpecies.StoredProcedure,
-					oDB.CreateTableParameter("@Tbl", this)
-				);
-			}
-			catch (Exception e) {
-				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);
-				ExperianLtdID = 0;
-			} // try
-
-			return ExperianLtdID > 0;
-		} // Save
-
-		#endregion method Save
-
 		[NonTraversable]
 		public override long ExperianLtdID {
 			get { return base.ExperianLtdID; }
@@ -504,6 +479,14 @@
 		} // ExperianLtdID
 
 		public long ServiceLogID { get; set; }
+
+		#region method ShouldBeSaved
+
+		public override bool ShouldBeSaved() {
+			return !string.IsNullOrWhiteSpace(RegisteredNumber);
+		} // ShouldBeSaved
+
+		#endregion method ShouldBeSaved
 
 		#region properties loaded from XML
 
@@ -648,13 +631,54 @@
 
 		#endregion method DoAfterTheMainInsert
 
-		#region method SetParentID
+		#region method SelfSave
 
-		protected override void SetParentID(long nParentID) {
-			// Nothing here.
-		} // SetParentID
+		protected override bool SelfSave(AConnection oDB, ConnectionWrapper oPersistent) {
+			try {
+				ExperianLtdID = oDB.ExecuteScalar<long>(
+					oPersistent,
+					DBSaveProcName,
+					CommandSpecies.StoredProcedure,
+					oDB.CreateTableParameter("@Tbl", this)
+				);
+			}
+			catch (Exception e) {
+				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);
+				ExperianLtdID = 0;
+			} // try
 
-		#endregion method SetParentID
+			Log.Debug("ExperianLtd new ID is {0}.", GetID());
+
+			return ExperianLtdID > 0;
+		} // SelfSave
+
+		#endregion method SelfSave
+
+		#region method GetID
+
+		protected override long GetID() {
+			return ExperianLtdID;
+		} // GetParentID
+
+		#endregion method GetID
+
+		#region method LoadChildrenFromXml
+
+		protected override void LoadChildrenFromXml() {
+			foreach (Type oTableType in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(AExperianLtdDataRow)))) {
+				ASrcAttribute oGroupSrcAttr = oTableType.GetCustomAttribute<ASrcAttribute>();
+
+				if (oGroupSrcAttr == null)
+					continue;
+
+				if (!oGroupSrcAttr.IsTopLevel)
+					continue;
+
+				LoadOneChildFromXml(oTableType, oGroupSrcAttr);
+			} // for each row type (DL 65, DL 72, etc)
+		} // LoadChildrenFromXml
+
+		#endregion method LoadChildrenFromXml
 	} // class ExperianLtd
 
 	#endregion class ExperianLtd
@@ -984,61 +1008,7 @@
 	internal class ExperianLtdDL65 : AExperianLtdDataRow {
 		public ExperianLtdDL65(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {
 			ExperianLtdDL65ID = 0;
-			Details = new List<ExperianLtdLenderDetails>();
 		} // constructor
-
-		public List<ExperianLtdLenderDetails> Details { get; private set; }
-
-		#region method Save
-
-		public override bool Save(AConnection oDB, ConnectionWrapper oPersistent) {
-			Log.Debug("Saving {0} to DB with data:\n{1}.", this.GetType().Name, Stringify());
-
-			if (DryRunMode) {
-				Log.Debug("{0}.Save in dry run mode.", this.GetType().Name);
-				ExperianLtdDL65ID = 1;
-				return ExperianLtdDL65ID > 0;
-			} // if
-
-			try {
-				ExperianLtdDL65ID = oDB.ExecuteScalar<long>(
-					oPersistent,
-					DBSaveProcName,
-					CommandSpecies.StoredProcedure,
-					oDB.CreateTableParameter(
-						this.GetType(),
-						"@Tbl",
-						new List<ExperianLtdDL65> { this },
-						TypeUtils.GetConvertorToObjectArray(this.GetType()),
-						GetDBColumnTypes()
-					)
-				);
-			}
-			catch (Exception e) {
-				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);
-				ExperianLtdDL65ID = 0;
-			} // try
-
-			return ExperianLtdDL65ID > 0;
-		} // Save
-
-		#endregion method Save
-
-		#region method ProcessChildren
-
-		public override bool ProcessChildren(AConnection oDB, ConnectionWrapper oPersistent) {
-			return AExperianLtdDataRow.ProcessOneRow(
-				typeof(ExperianLtdLenderDetails),
-				Root,
-				ExperianLtdDL65ID,
-				null,
-				oDB,
-				oPersistent,
-				Log
-			);
-		} // ProcessChildren
-
-		#endregion method ProcessChildren
 
 		[NonTraversable]
 		public long ExperianLtdDL65ID { get; set; }
@@ -1105,6 +1075,49 @@
 		} // DoAfterTheMainInsert
 
 		#endregion method DoAfterTheMainInsert
+
+		#region method SelfSave
+
+		protected override bool SelfSave(AConnection oDB, ConnectionWrapper oPersistent) {
+			try {
+				ExperianLtdDL65ID = oDB.ExecuteScalar<long>(
+					oPersistent,
+					DBSaveProcName,
+					CommandSpecies.StoredProcedure,
+					oDB.CreateTableParameter(
+						this.GetType(),
+						"@Tbl",
+						new List<ExperianLtdDL65> { this },
+						TypeUtils.GetConvertorToObjectArray(this.GetType()),
+						GetDBColumnTypes()
+					)
+				);
+			}
+			catch (Exception e) {
+				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);
+				ExperianLtdDL65ID = 0;
+			} // try
+
+			return ExperianLtdDL65ID > 0;
+		} // SelfSave
+
+		#endregion method SelfSave
+
+		#region method GetID
+
+		protected override long GetID() {
+			return ExperianLtdDL65ID;
+		} // GetParentID
+
+		#endregion method GetID
+
+		#region method LoadChildrenFromXml
+
+		protected override void LoadChildrenFromXml() {
+			LoadOneChildFromXml(typeof(ExperianLtdLenderDetails), null);
+		} // LoadChildrenFromXml
+
+		#endregion method LoadChildrenFromXml
 	} // class ExperianLtdDL65
 
 	#endregion class ExperianLtdDL65
@@ -1132,7 +1145,7 @@
 
 		#region method SetParentID
 
-		protected override void SetParentID(long nParentID) {
+		public override void SetParentID(long nParentID) {
 			DL65ID = nParentID;
 		} // SetParentID
 

@@ -66,6 +66,7 @@
     <Compile Include="ObjList.cs" />
     <Compile Include="ParsedValue\ParsedValue.cs" />
     <Compile Include="OrdinalNumber.cs" />
+    <Compile Include="ParsedValue\ParsedValueCache.cs" />
     <Compile Include="PostcodeToRegion.cs" />
     <Compile Include="ProgressCounter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

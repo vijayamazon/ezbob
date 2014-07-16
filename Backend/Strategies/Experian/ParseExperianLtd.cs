@@ -1,7 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
-	using System.Linq;
-	using System.Reflection;
 	using System.Xml;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -28,44 +26,9 @@
 		#region method Execute
 
 		public override void Execute() {
-			string sXml = null;
-			long nID = 0;
-
 			Log.Info("Parsing Experian Ltd for service log entry {0}...", m_nServiceLogID);
 
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					sXml = sr["ResponseData"];
-					nID = sr["Id"];
-
-					return ActionResult.SkipAll;
-				},
-				"LoadServiceLogEntry",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@EntryID", m_nServiceLogID)
-			);
-
-			if (nID != m_nServiceLogID) {
-				Log.Info("Parsing Experian Ltd for service log entry {0} failed: entry not found.", m_nServiceLogID);
-				return;
-			} // if
-
-			XmlDocument oXml = new XmlDocument();
-
-			try {
-				oXml.LoadXml(sXml);
-			}
-			catch (Exception e) {
-				Log.Alert(e, "Parsing Experian Ltd for service log entry {0} failed.", m_nServiceLogID);
-				return;
-			} // try
-
-			if (oXml.DocumentElement == null) {
-				Log.Alert("Parsing Experian Ltd for service log entry {0} failed (no root element found).", m_nServiceLogID);
-				return;
-			} // try
-
-			ParseAndSave(oXml);
+			Save(Parse(Load()));
 
 			Log.Info("Parsing Experian Ltd for service log entry {0} complete.", m_nServiceLogID);
 		} // Execute
@@ -78,26 +41,76 @@
 
 		private readonly long m_nServiceLogID;
 
-		#region method ParseAndSave
+		#region method Load
 
-		private void ParseAndSave(XmlDocument oXml) {
+		private XmlDocument Load() {
+			SafeReader sr = DB.GetFirst(
+				"LoadServiceLogEntry",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@EntryID", m_nServiceLogID)
+			);
+
+			if (sr["Id"] != m_nServiceLogID) {
+				Log.Info("Parsing Experian Ltd for service log entry {0} failed: entry not found.", m_nServiceLogID);
+				return null;
+			} // if
+
+			XmlDocument oXml = new XmlDocument();
+
+			try {
+				oXml.LoadXml(sr["ResponseData"]);
+			}
+			catch (Exception e) {
+				Log.Alert(e, "Parsing Experian Ltd for service log entry {0} failed.", m_nServiceLogID);
+				return null;
+			} // try
+
+			if (oXml.DocumentElement == null) {
+				Log.Alert("Parsing Experian Ltd for service log entry {0} failed (no root element found).", m_nServiceLogID);
+				return null;
+			} // try
+
+			return oXml;
+		} // Load
+
+		#endregion method Load
+
+		#region method Parse
+
+		private ExperianLtd Parse(XmlDocument oXml) {
 			if ((oXml == null) || (oXml.DocumentElement == null))
-				return; // this should never happen, but to shut resharper up...
+				return null; // this should never happen, but to shut resharper up...
 
-			Log.Debug("Parsing Experian company data into {0}...", typeof (ExperianLtd).Name);
+			Log.Info("Parsing Experian company data...");
 
 			ExperianLtd oMainTable = new ExperianLtd(oXml.DocumentElement, Log);
 			oMainTable.LoadFromXml();
 
-			if (string.IsNullOrWhiteSpace(oMainTable.RegisteredNumber)) {
+			if (!oMainTable.ShouldBeSaved()) {
 				Log.Warn(
-					"Parsing Experian company data into {0} failed: no main company data loaded for service log entry {1}.",
-					typeof (ExperianLtd).Name, m_nServiceLogID
+					"Parsing Experian company data failed: no main company data loaded for service log entry {0}.",
+					m_nServiceLogID
 				);
-				return;
+
+				return null;
 			} // if
 
 			oMainTable.ServiceLogID = m_nServiceLogID;
+
+			Log.Info("Parsing Experian company data complete.");
+
+			return oMainTable;
+		} // Parse
+
+		#endregion method ParseAndSave
+
+		#region method Save
+
+		private void Save(ExperianLtd oMainTable) {
+			if (oMainTable == null)
+				return;
+
+			Log.Info("Saving Experian company data into DB...");
 
 			ConnectionWrapper oPersistent = DB.GetPersistent();
 
@@ -105,41 +118,15 @@
 
 			if (!oMainTable.Save(DB, oPersistent)) {
 				oPersistent.Rollback();
-				Log.Warn("Parsing Experian company data into {0} failed on saving to DB.", typeof (ExperianLtd).Name);
+				Log.Warn("Saving Experian company data into DB failed.");
 				return;
 			} // if
 
-			Log.Debug("Parsing Experian company data into {0} complete.", typeof (ExperianLtd).Name);
-
-			foreach (Type oTableType in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof (AExperianLtdDataRow)))) {
-				var oGroupSrcAttr = oTableType.GetCustomAttribute<ASrcAttribute>();
-
-				if (oGroupSrcAttr == null)
-					continue;
-
-				if (!oGroupSrcAttr.IsTopLevel)
-					continue;
-
-				bool bSuccess = AExperianLtdDataRow.ProcessOneRow(
-					oTableType,
-					oXml.DocumentElement,
-					oMainTable.ExperianLtdID,
-					oGroupSrcAttr,
-					DB,
-					oPersistent,
-					Log
-				);
-
-				if (!bSuccess) {
-					oPersistent.Rollback();
-					return;
-				} // if
-			} // for each row type (DL 65, DL 72, etc)
-
 			oPersistent.Commit();
-		} // ParseAndSave
+			Log.Info("Saving Experian company data into DB complete.");
+		} // Save
 
-		#endregion method ParseAndSave
+		#endregion method Save
 
 		#endregion private
 	} // class ParseExperianLtd
