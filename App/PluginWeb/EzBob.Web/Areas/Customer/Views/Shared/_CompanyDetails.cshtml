@@ -141,14 +141,15 @@
                         <label for="ConsentToSearch" class="editor-label-with-checkbox">I have read and accept the <a>terms and conditions</a> of the credit bureau search</label>
                     </div>
                 </div>
-		}
+        }
 
         <div class="form_buttons_container">
             <div class="attardi-button">
-                <a href="#" class="rc-button green btn-continue disabled" ui-event-control-id="personal-info:continue">Continue</a>
+                <a href="#" class="button btn-green btn-continue disabled" ui-event-control-id="personal-info:continue">Continue</a>
             </div>
         </div>
     </div>
+    <div class="push"></div>
 </script>
 
 <script id="company-data-template" type="text/template">
@@ -219,14 +220,15 @@
                 </div>
                 <div class="row-fluid company-full-details"></div>
             </div>
-		}
+        }
     </div>
 
     <div class="form_buttons_container">
         <div class="attardi-button">
-            <a href='#' class="btn-continue next rc-button green disabled" ui-event-control-id="personal-info:company_continue">Continue</a>
+            <a href='#' class="btn-continue next button btn-green disabled" ui-event-control-id="personal-info:company_continue">Continue</a>
         </div>
     </div>
+    <div class="push"></div>
 </script>
 
 <script id="director-edit-template" type="text/template">
@@ -237,7 +239,7 @@
 
         <div class="add-director-container">
             <div class="wizard-director-text">Adding the details of additional directors may improve the offer you receive.</div>
-            <input id="addDirector" class="button green" type="button" value="Add" ui-event-control-id="personal-info:add_director" />
+            <input id="addDirector" class="button btn-green" type="button" value="Add" ui-event-control-id="personal-info:add_director" />
         </div>
     </div>
 </script>
@@ -374,7 +376,7 @@
     <%_.each(directors, function(director, i){%>
         <div class="Directors">
             <div class="add-director-container">
-                <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button green" ui-event-control-id="personal-info:remove_director">Remove</a></h1>
+                <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button btn-green" ui-event-control-id="personal-info:remove_director">Remove</a></h1>
             </div>
             
             <div class="control-group form_field_container">

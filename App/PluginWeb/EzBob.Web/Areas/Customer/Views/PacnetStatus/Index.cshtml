@@ -11,7 +11,7 @@
 	@BundleHelper.RenderProfileCss()
 }
 
-<div class="row-fluid loan-taken">
+<div class="row-fluid inner loan-taken">
 	<div id="profile-content">
 		<div id="header-container"></div>
 		<h1>Congratulations</h1>
@@ -53,20 +53,21 @@
 				<div id="schedule"></div>
 			</div>
 		</div>
-		<div class="row-fluid">
-			<div class="span12" style="padding-top: 30px;">
-				<a
-					href="#" class="schedule-print-link pull-left print-link"
-					style="margin-top: 8px;"
-					onclick="window.print();return false;"
-					ui-event-control-id="loan-taken:print">Print for your records</a>
-				<a
-					href='@Url.Action("Index", "Profile", new { Area = "Customer" })' 
-					class="btn-continue button orange pull-right btn-fix"
-					id="pacnet-status-back-to-profile"
-					ui-event-control-id="loan-taken:back-to-profile">Go to My Account</a>
-			</div>
-		</div>
+	    <div class="row-fluid">
+	        <div class="span12" style="padding-top: 30px;">
+	            <a
+	                href="#" class="schedule-print-link pull-left print-link"
+	                style="margin-top: 8px;"
+	                onclick="window.print();return false;"
+	                ui-event-control-id="loan-taken:print">Print for your records</a>
+	            <a
+	                href='@Url.Action("Index", "Profile", new { Area = "Customer" })' 
+	                class="btn-continue button btn-green pull-right btn-fix"
+	                id="pacnet-status-back-to-profile"
+	                ui-event-control-id="loan-taken:back-to-profile">Go to my account</a>
+	        </div>
+	    </div>
+        <div class="push"></div>
 	</div>
 	@if (Request.Cookies["tt"] != null && ttPixelEnabled) {
 		string srcStr = string.Format(

@@ -178,42 +178,6 @@ table.customer-list {
 
 .section-add-customer .form_buttons_container { position: relative; }
 
-.section-add-customer .form_buttons_container button {
-	display: inline-block;
-	min-width: 25%;
-	text-align: center;
-	color: #444;
-	font-size: 16px;
-	font-weight: normal;
-	padding: 12px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	-o-transition: all 0.218s;
-	-moz-transition: all 0.218s;
-	-webkit-transition: all 0.218s;
-	transition: all 0.218s;
-	border: 1px solid #dcdcdc;
-	-o-transition: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-	cursor: default;
-	outline: none;
-	box-shadow: none;
-	text-shadow: none !important;
-	position: absolute;
-	top: 0;
-}
-
-.section-add-customer .form_buttons_container button:hover {
-	outline: 1px dotted yellow;
-}
-
-.section-add-customer .form_buttons_container button:focus {
-	outline: 1px solid yellow;
-}
-
 .section-add-customer .form_buttons_container button i {
 	display: block;
 }

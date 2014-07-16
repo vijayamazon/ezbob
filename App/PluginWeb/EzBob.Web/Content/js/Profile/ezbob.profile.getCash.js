@@ -340,8 +340,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				doneBtn: 'hmrc-cash-request:do_upload',
 			},
 			classes: {
-				backBtn: 'rc-button grey back',
-				doneBtn: 'rc-button green',
+			    backBtn: 'button btn-grey back',
+				doneBtn: 'button btn-green',
 			},
 			clickBack: _.bind(this.backFromUploadFiles, this, false),
 			clickDone: _.bind(this.backFromUploadFiles, this, true),

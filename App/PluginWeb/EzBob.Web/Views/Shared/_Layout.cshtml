@@ -67,10 +67,10 @@
                 <ul id="user-menu">
                     <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
                     <li id="logoff-li" class="login" style="display: none;">
-                        <a href="@Url.Action("LogOff", "Account", new { Area = "" })">LOG OFF</a>
+                        <a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="button btn-grey">LOG OFF</a>
                     </li>
-                    <li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })">LOGIN</a></li>
-                    <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp">SIGN UP</a></li>
+                    <li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })" class="button btn-grey">LOGIN</a></li>
+                    <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="button btn-green">SIGN UP</a></li>
                 </ul>
             </div>
         </div>
@@ -81,12 +81,14 @@
             </section>
         </div>
 
-        <div id="modalRegion" class="modal hide fade">
-        </div>
+        <div id="modalRegion" class="modal hide fade"></div>
+        <div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
+        <div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
+        <div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
+        <div style="display: none;" class="hide" id="customer-name"></div>
         <div class="push"></div>
     </div>
-
-    <!--wraper-->
+    
     <footer>
         @{ Html.RenderPartial("_Copyright"); }
     </footer>
@@ -140,10 +142,5 @@
 			EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
 		} // EzBob_CgVendors_init
     </script>
-
-    <div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
-    <div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
-    <div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
-    <div style="display: none;" class="hide" id="customer-name"></div>
 </body>
 </html>

@@ -301,7 +301,7 @@ class EzBob.StoreInfoView extends Backbone.View
         sShow = ''
         sRemove = ''
 
-        @storeList.find('.btn-showmore').show()
+        @storeList.find('.marketplace-button.show-more').show()
 
         if isOffline
             sShow = '.offline_entry_message'
@@ -310,7 +310,7 @@ class EzBob.StoreInfoView extends Backbone.View
             @storeList.find('.importantnumber').text '£150,000'
 
             if isProfile
-                @storeList.find('.btn-showmore').hide()
+                @storeList.find('.marketplace-button.show-more').hide()
                 @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
             else
                 @storeList.find('.btn-showmore').show()
@@ -318,7 +318,7 @@ class EzBob.StoreInfoView extends Backbone.View
             sShow = '.online_entry_message'
             sRemove = '.offline_entry_message'
 
-            @storeList.find('.btn-showmore').hide()
+            @storeList.find('.marketplace-button.show-more').hide()
             @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
 
         @storeList.find(sShow).show()
