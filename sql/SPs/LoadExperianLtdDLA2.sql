@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdDLA2' AS DatumType,
-		ExperianLtdDLA2ID,
-		ExperianLtdID,
+		ExperianLtdDLA2ID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		Date,
 		NumberOfEmployees
 	FROM

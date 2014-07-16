@@ -1,6 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
-	using System.Data;
 	using EzBob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -21,20 +20,16 @@
 		public DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId) {
 			DateTime cacheDate = DateTime.UtcNow;
 			try {
-				DataTable dt = DB.ExecuteReader(
+				SafeReader sr = DB.GetFirst(
 					"GetExperianConsumerCacheDate",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId),
 					new QueryParameter("DirectorId", directorId)
 				);
 
-				if (dt.Rows.Count > 0) {
-					var sr = new SafeReader(dt.Rows[0]);
-					DateTime tmpCacheDate = sr["LastUpdateDate"];
-					if (cacheDate > tmpCacheDate) {
-						cacheDate = tmpCacheDate;
-					}
-				}
+				DateTime tmpCacheDate = sr["LastUpdateDate"];
+				if (cacheDate > tmpCacheDate)
+					cacheDate = tmpCacheDate;
 			}
 			catch (Exception e) {
 				Log.Error("Exception occurred during execution of GetExperianConsumerCacheDate. The exception:{0}", e);
@@ -48,16 +43,13 @@
 		public DateTimeActionResult GetExperianCompanyCacheDate(int customerId) {
 			DateTime cacheDate = DateTime.UtcNow;
 			try {
-				DataTable dt = DB.ExecuteReader(
+				SafeReader sr = DB.GetFirst(
 					"GetExperianCompanyCacheDate",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId)
 				);
 
-				if (dt.Rows.Count > 0) {
-					var sr = new SafeReader(dt.Rows[0]);
-					cacheDate = sr["LastUpdateDate"];
-				}
+				cacheDate = sr["LastUpdateDate"];
 			}
 			catch (Exception e) {
 				Log.Error("Exception occurred during execution of GetExperianCompanyCacheDate. The exception:{0}", e);
@@ -99,5 +91,20 @@
 		} // BackfillExperianLtd
 
 		#endregion method BackfillExperianLtd
+
+		#region method LoadExperianLtd
+
+		public ExperianLtdActionResult LoadExperianLtd(long nServiceLogID) {
+			LoadExperianLtd oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nServiceLogID);
+
+			return new ExperianLtdActionResult {
+				MetaData = oMetaData,
+				Value = oInstance.Result,
+			};
+		} // LoadExperianLtd
+
+		#endregion method LoadExperianLtd
 	} // class EzServiceImplementation
 } // namespace EzService

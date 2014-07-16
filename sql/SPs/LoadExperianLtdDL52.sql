@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdDL52' AS DatumType,
-		ExperianLtdDL52ID,
-		ExperianLtdID,
+		ExperianLtdDL52ID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		NoticeType,
 		DateOfNotice
 	FROM

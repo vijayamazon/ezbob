@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdPrevCompanyNames' AS DatumType,
-		ExperianLtdPrevCompanyNamesID,
-		ExperianLtdID,
+		ExperianLtdPrevCompanyNamesID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		DateChanged,
 		OfficeAddress1,
 		OfficeAddress2,

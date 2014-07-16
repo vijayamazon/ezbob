@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdDL68' AS DatumType,
-		ExperianLtdDL68ID,
-		ExperianLtdID,
+		ExperianLtdDL68ID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		SubsidiaryRegisteredNumber,
 		SubsidiaryStatus,
 		SubsidiaryLegalStatus,

@@ -284,6 +284,9 @@
 		[OperationContract]
 		ActionMetaData BackfillExperianLtd();
 
+		[OperationContract]
+		ExperianLtdActionResult LoadExperianLtd(long nServiceLogID);
+
 		#endregion Experian
 
 		#region Land Registry

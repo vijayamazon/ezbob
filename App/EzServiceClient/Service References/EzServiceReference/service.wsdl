@@ -78,6 +78,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IEzServiceAdmin_Shutdown_InputMessage">
@@ -109,6 +110,12 @@
   </wsdl:message>
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LateBy14Days_InputMessage">
+    <wsdl:part name="parameters" element="tns:LateBy14Days" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LateBy14Days_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LateBy14DaysResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_PayPointCharger_InputMessage">
     <wsdl:part name="parameters" element="tns:PayPointCharger" />
@@ -866,6 +873,12 @@
   <wsdl:message name="IEzService_BackfillExperianLtd_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillExperianLtdResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianLtd_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianLtd" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianLtd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianLtdResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
   </wsdl:message>
@@ -920,12 +933,6 @@
   <wsdl:message name="IEzService_FraudChecker_OutputMessage">
     <wsdl:part name="parameters" element="tns:FraudCheckerResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LateBy14Days_InputMessage">
-    <wsdl:part name="parameters" element="tns:LateBy14Days" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LateBy14Days_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LateBy14DaysResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -949,6 +956,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="LateBy14Days">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LateBy14Days" message="tns:IEzService_LateBy14Days_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LateBy14DaysResponse" message="tns:IEzService_LateBy14Days_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="PayPointCharger">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointCharger" message="tns:IEzService_PayPointCharger_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointChargerResponse" message="tns:IEzService_PayPointCharger_OutputMessage" />
@@ -1453,6 +1464,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtd" message="tns:IEzService_BackfillExperianLtd_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtdResponse" message="tns:IEzService_BackfillExperianLtd_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="LoadExperianLtd">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianLtd" message="tns:IEzService_LoadExperianLtd_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianLtdResponse" message="tns:IEzService_LoadExperianLtd_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
@@ -1488,10 +1503,6 @@
     <wsdl:operation name="FraudChecker">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LateBy14Days">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LateBy14Days" message="tns:IEzService_LateBy14Days_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LateBy14DaysResponse" message="tns:IEzService_LateBy14Days_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1548,6 +1559,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="LateBy14Days">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LateBy14Days" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="PayPointCharger">
       <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointCharger" style="document" />
       <wsdl:input>
@@ -2682,6 +2702,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="LoadExperianLtd">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianLtd" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
       <wsdl:input>
@@ -2756,15 +2785,6 @@
     </wsdl:operation>
     <wsdl:operation name="FraudChecker">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LateBy14Days">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LateBy14Days" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -1127,19 +1127,33 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 		[Activation]
 		private void ParseExperianLtd() {
-			int nCustomerID;
+			int nServiceLogID;
 
-			if ((m_aryArgs.Length != 2) || !int.TryParse(m_aryArgs[1], out nCustomerID)) {
-				m_oLog.Msg("Usage: ParseExperianLtd <Customer ID>");
+			if ((m_aryArgs.Length != 2) || !int.TryParse(m_aryArgs[1], out nServiceLogID)) {
+				m_oLog.Msg("Usage: ParseExperianLtd <MP_ServiceLog entry ID>");
 				return;
 			} // if
-			m_oServiceClient.ParseExperianLtd(nCustomerID);
+			m_oServiceClient.ParseExperianLtd(nServiceLogID);
 		} // ParseExperianLtd
 
 		[Activation]
 		private void BackfillExperianLtd() {
 			m_oServiceClient.BackfillExperianLtd();
 		} // BackfillExperianLtd
+
+		[Activation]
+		private void LoadExperianLtd() {
+			int nServiceLogID;
+
+			if ((m_aryArgs.Length != 2) || !int.TryParse(m_aryArgs[1], out nServiceLogID)) {
+				m_oLog.Msg("Usage: LoadExperianLtd <MP_ServiceLog entry ID>");
+				return;
+			} // if
+
+			var lear = m_oServiceClient.LoadExperianLtd(nServiceLogID);
+
+			m_oLog.Msg("Result: {0}", lear.Value.StringifyAll());
+		} // LoadExperianLtd
 
 		// ReSharper restore UnusedMember.Local
 		#endregion strategy activators

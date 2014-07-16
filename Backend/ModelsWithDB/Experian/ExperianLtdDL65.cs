@@ -77,6 +77,17 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#endregion properties loaded from XML
 
+		#region property ID
+
+		[DataMember]
+		[NonTraversable]
+		public override long ID {
+			get { return ExperianLtdDL65ID; }
+			set { ExperianLtdDL65ID = value; }
+		} // ID
+
+		#endregion property GetID
+
 		#region protected
 
 		#region method DoBeforeTheMainInsert
@@ -127,14 +138,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		} // SelfSave
 
 		#endregion method SelfSave
-
-		#region method GetID
-
-		protected override long GetID() {
-			return ExperianLtdDL65ID;
-		} // GetParentID
-
-		#endregion method GetID
 
 		#region method LoadChildrenFromXml
 

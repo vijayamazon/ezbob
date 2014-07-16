@@ -19,7 +19,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		#endregion constructor
 
 		[DataMember]
-		[NonTraversable]
+		[NonTraversable] // <- this attribute is the reason of the overriding...
 		public override long ExperianLtdID {
 			get { return base.ExperianLtdID; }
 			set { base.ExperianLtdID = value; }
@@ -210,6 +210,28 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#endregion properties loaded from XML
 
+		#region property ID
+
+		[DataMember]
+		[NonTraversable]
+		public override long ID {
+			get { return ExperianLtdID; }
+			set { ExperianLtdID = value; }
+		} // ID
+
+		#endregion property ID
+
+		#region property ParentID
+
+		[DataMember]
+		[NonTraversable]
+		public override long ParentID {
+			get { return ServiceLogID; }
+			set { ServiceLogID = value; }
+		} // ParentID
+
+		#endregion property ParentID
+
 		#region method DoBeforeTheMainInsert
 
 		protected override void DoBeforeTheMainInsert(List<string> oProcSql) {
@@ -248,20 +270,12 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 				ExperianLtdID = 0;
 			} // try
 
-			Log.Debug("ExperianLtd new ID is {0}.", GetID());
+			Log.Debug("ExperianLtd new ID is {0}.", ID);
 
 			return ExperianLtdID > 0;
 		} // SelfSave
 
 		#endregion method SelfSave
-
-		#region method GetID
-
-		protected override long GetID() {
-			return ExperianLtdID;
-		} // GetParentID
-
-		#endregion method GetID
 
 		#region method LoadChildrenFromXml
 

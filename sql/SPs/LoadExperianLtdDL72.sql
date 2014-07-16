@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdDL72' AS DatumType,
-		ExperianLtdDL72ID,
-		ExperianLtdID,
+		ExperianLtdDL72ID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		ForeignAddressFlag,
 		IsCompany,
 		Number,

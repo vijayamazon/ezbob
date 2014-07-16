@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdDL99' AS DatumType,
-		ExperianLtdDL99ID,
-		ExperianLtdID,
+		ExperianLtdDL99ID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		Date,
 		CredDirLoans,
 		Debtors,

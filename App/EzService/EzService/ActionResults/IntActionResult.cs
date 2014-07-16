@@ -6,4 +6,4 @@
 		[DataMember]
 		public int Value { get; set; }
 	} // class IntActionResult
-} // namespace EzService
+} // namespace

@@ -14,8 +14,8 @@ BEGIN
 	SELECT
 		'ExperianLtdLenderDetails' AS DatumType,
 		'ExperianLtdDL65' AS ParentType,
-		ExperianLtdLenderDetailsID,
-		DL65ID,
+		ExperianLtdLenderDetailsID AS ID,
+		DL65ID AS ParentID,
 		LenderName
 	FROM
 		ExperianLtdLenderDetails ld

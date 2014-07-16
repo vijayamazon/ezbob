@@ -76,6 +76,7 @@
     <Compile Include="ActionResults\BrokerPropertiesActionResult.cs" />
     <Compile Include="ActionResults\AvailableFundsActionResult.cs" />
     <Compile Include="ActionResults\AccountsToUpdateActionResult.cs" />
+    <Compile Include="ActionResults\ExperianLtdActionResult.cs" />
     <Compile Include="ActionResults\EsignatureFileActionResult.cs" />
     <Compile Include="ActionResults\EsignatureListActionResult.cs" />
     <Compile Include="ActionResults\MarketplacesActionResult.cs" />
@@ -131,6 +132,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
       <Name>Ezbob.Backend.Models</Name>

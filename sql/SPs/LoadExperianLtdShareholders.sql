@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdShareholders' AS DatumType,
-		ExperianLtdShareholdersID,
-		ExperianLtdID,
+		ExperianLtdShareholdersID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		DescriptionOfShareholder,
 		DescriptionOfShareholding,
 		RegisteredNumberOfALimitedCompanyWhichIsAShareholder

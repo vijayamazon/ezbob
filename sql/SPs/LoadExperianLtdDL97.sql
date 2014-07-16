@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdDL97' AS DatumType,
-		ExperianLtdDL97ID,
-		ExperianLtdID,
+		ExperianLtdDL97ID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		AccountState,
 		CompanyType,
 		AccountType,

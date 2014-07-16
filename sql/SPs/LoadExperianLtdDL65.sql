@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdDL65' AS DatumType,
-		ExperianLtdDL65ID,
-		ExperianLtdID,
+		ExperianLtdDL65ID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		ChargeNumber,
 		FormNumber,
 		CurrencyIndicator,

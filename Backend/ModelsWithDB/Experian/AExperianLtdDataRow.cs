@@ -5,6 +5,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+	using System.Text;
 	using System.Xml;
 	using Database;
 	using Logger;
@@ -48,6 +49,24 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#endregion method Stringify
 
+		#region method StringifyAll
+
+		public virtual string StringifyAll(StringBuilder os = null) {
+			bool bReturnData = os == null;
+
+			os = os ?? new StringBuilder();
+
+			os.Append(Stringify());
+			os.Append("\n");
+
+			// foreach (var kid in Children)
+				// kid.StringifyAll(os);
+
+			return bReturnData ? os.ToString() : string.Empty;
+		} // StringifyAll
+
+		#endregion method StringifyAll
+
 		#region property DBTableName
 
 		public virtual string DBTableName { get { return this.GetType().Name; } } // DBTableName
@@ -80,7 +99,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 				XmlNode oNode = Root.SelectSingleNode(
 					oGroupSrcAttr == null ? oNodeSrcAttr.NodePath : oNodeSrcAttr.NodeName
-					);
+				);
 
 				if (oNode == null)
 					continue;
@@ -110,7 +129,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 				return false;
 
 			foreach (var kid in Children) {
-				kid.SetParentID(GetID());
+				kid.ParentID = this.ID;
 
 				if (!kid.Save(oDB, oPersistent))
 					return false;
@@ -138,13 +157,16 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#endregion method ToParameter
 
-		#region method SetParentID
+		#region property ParentID
 
-		public virtual void SetParentID(long nParentID) {
-			ExperianLtdID = nParentID;
-		} // SetParentID
+		[DataMember]
+		[NonTraversable]
+		public virtual long ParentID {
+			get { return ExperianLtdID; }
+			set { ExperianLtdID = value; }
+		} // ParentID
 
-		#endregion method SetParentID
+		#endregion property ParentID
 
 		#region method ShouldBeSaved
 
@@ -154,8 +176,29 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#endregion method ShouldBeSaved
 
+		#region property Children
+
 		[DataMember]
 		public List<AExperianLtdDataRow> Children { get; private set; }
+
+		#endregion property Children
+
+		#region property ID
+
+		[DataMember]
+		[NonTraversable]
+		public virtual long ID { get; set; } // ID
+
+		#endregion property ID
+
+		#region method AddChild
+
+		public virtual void AddChild(AExperianLtdDataRow oKid) {
+			if (oKid != null)
+				Children.Add(oKid);
+		} // AddChild
+
+		#endregion method AddChild
 
 		#endregion public
 
@@ -197,14 +240,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		protected virtual void DoAfterTheMainInsert(List<string> oProcSql) {} // DoAfterTheMainInsert
 
 		#endregion method DoAfterTheMainInsert
-
-		#region method GetID
-
-		protected virtual long GetID() {
-			return 0;
-		} // GetParentID
-
-		#endregion method GetID
 
 		#region method GetDBColumnTypes
 

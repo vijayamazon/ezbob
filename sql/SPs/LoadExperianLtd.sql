@@ -16,8 +16,8 @@ BEGIN
 
 	SELECT
 		'ExperianLtd' AS DatumType,
-		ExperianLtdID,
-		ServiceLogID,
+		ExperianLtdID AS ID,
+		ServiceLogID AS ParentID,
 		RegisteredNumber,
 		LegalStatus,
 		IncorporationDate,

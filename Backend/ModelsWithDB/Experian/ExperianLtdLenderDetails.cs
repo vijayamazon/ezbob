@@ -26,12 +26,15 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			set { base.ExperianLtdID = value; }
 		} // ExperianLtdID
 
-		#region method SetParentID
+		#region property ParentID
 
-		public override void SetParentID(long nParentID) {
-			DL65ID = nParentID;
-		} // SetParentID
+		[DataMember]
+		[NonTraversable]
+		public override long ParentID {
+			get { return DL65ID; }
+			set { DL65ID = value; }
+		} // ParentID
 
-		#endregion method SetParentID
+		#endregion property ParentID
 	} // class ExperianLtdLenderDetails
 } // namespace

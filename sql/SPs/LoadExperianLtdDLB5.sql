@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdDLB5' AS DatumType,
-		ExperianLtdDLB5ID,
-		ExperianLtdID,
+		ExperianLtdDLB5ID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		RecordType,
 		IssueCompany,
 		CurrentpreviousIndicator,

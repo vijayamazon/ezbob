@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdDL48' AS DatumType,
-		ExperianLtdDL48ID,
-		ExperianLtdID,
+		ExperianLtdDL48ID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		FraudCategory,
 		SupplierName
 	FROM

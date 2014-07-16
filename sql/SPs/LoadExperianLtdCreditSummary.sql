@@ -13,8 +13,9 @@ BEGIN
 
 	SELECT
 		'ExperianLtdCreditSummary' AS DatumType,
-		ExperianLtdCreditSummaryID,
-		ExperianLtdID,
+		ExperianLtdCreditSummaryID AS ID,
+		ExperianLtdID AS ParentID,
+		'ExperianLtd' AS ParentType,
 		CreditEventType,
 		DateOfMostRecentRecordForType
 	FROM
