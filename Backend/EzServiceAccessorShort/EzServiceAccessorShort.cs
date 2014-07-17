@@ -1,4 +1,5 @@
 ﻿namespace EzServiceShortcut {
+	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.VatReturn;
 	using EzServiceAccessor;
 	using Ezbob.Backend.Models;
@@ -71,6 +72,14 @@
 		} // LoadVatReturnFullData
 
 		#endregion method LoadVatReturnFullData
+
+		#region method ParseExperianLtd
+
+		public void ParseExperianLtd(long nServiceLogID) {
+			new ParseExperianLtd(nServiceLogID, ms_oDB, ms_oLog).Execute();
+		} // ParseExperianLtd
+
+		#endregion method ParseExperianLtd
 
 		#endregion public
 

@@ -55,6 +55,14 @@
 
 		#endregion method LoadVatReturnFullData
 
+		#region method ParseExperianLtd
+
+		public void ParseExperianLtd(long nServiceLogID) {
+			m_oServiceClient.Instance.ParseExperianLtd(nServiceLogID);
+		} // ParseExperianLtd
+
+		#endregion method ParseExperianLtd
+
 		#endregion public
 
 		#region private

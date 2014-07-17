@@ -8,6 +8,7 @@
 	using System.Xml.XPath;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
+	using EzServiceAccessor;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
@@ -78,6 +79,8 @@
 					repoLog.SaveOrUpdate(logEntry);
 				});
 
+				if (type == ExperianServiceType.LimitedData)
+					ObjectFactory.GetInstance<IEzServiceAccessor>().ParseExperianLtd(logEntry.Id);
 
 				try
 				{

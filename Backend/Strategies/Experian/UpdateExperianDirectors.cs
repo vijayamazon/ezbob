@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Xml;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.ExperianParser;
 	using Ezbob.Logger;

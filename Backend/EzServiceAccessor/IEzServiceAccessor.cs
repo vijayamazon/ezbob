@@ -14,5 +14,7 @@
 		);
 
 		VatReturnFullData LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID);
+
+		void ParseExperianLtd(long nServiceLogID);
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor
