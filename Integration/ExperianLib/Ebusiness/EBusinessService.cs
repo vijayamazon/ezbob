@@ -134,13 +134,35 @@
 			return (DateTime.UtcNow - updateDate).TotalDays > cacheIsValidForDays;
 		} // CacheNotExpired
 
+		#region method CheckCache
+
+		private MP_ExperianDataCache CheckCache(string refNumber) {
+			return m_oRetryer.Retry(() => {
+				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
+
+				Log.InfoFormat("Checking cache for refNumber={0}...", refNumber);
+
+				var cacheVal = repo.GetAll().FirstOrDefault(c => c.CompanyRefNumber == refNumber);
+
+				if (cacheVal != null) {
+					Log.InfoFormat("Returning data from cache for refNumber={0}", refNumber);
+					return cacheVal;
+				} // if
+
+				Log.WarnFormat("Company data from cache for refNumber={0} was not found", refNumber);
+				return null;
+			}, "EBusinessService.CheckCache(" + refNumber + ")");
+		} // CheckCache
+
+		#endregion method CheckCache
+
 		#region method GetOneLimitedBusinessData
 
 		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
 		{
 			try 
 			{
-				var response = CheckCache(regNumber);
+				MP_ExperianDataCache response = CheckCache(regNumber);
 
 				if (forceCheck || (!checkInCacheOnly && (response == null || CacheExpired(response.LastUpdateDate))))
 				{
@@ -313,28 +335,6 @@
 		}
 
 		#endregion method GetOneNotLimitedBusinessData
-
-		#region method CheckCache
-
-		private MP_ExperianDataCache CheckCache(string refNumber) {
-			return m_oRetryer.Retry(() => {
-				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
-
-				Log.InfoFormat("Checking cache for refNumber={0}...", refNumber);
-
-				var cacheVal = repo.GetAll().FirstOrDefault(c => c.CompanyRefNumber == refNumber);
-
-				if (cacheVal != null) {
-					Log.InfoFormat("Returning data from cache for refNumber={0}", refNumber);
-					return cacheVal;
-				} // if
-
-				Log.WarnFormat("Company data from cache for refNumber={0} was not found", refNumber);
-				return null;
-			}, "EBusinessService.CheckCache(" + refNumber + ")");
-		} // CheckCache
-
-		#endregion method CheckCache
 
 		#region method AddToCache
 

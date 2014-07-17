@@ -25,6 +25,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	DELETE ExperianLtdPrevCompanyNames FROM ExperianLtdPrevCompanyNames d INNER JOIN ExperianLtd e ON d.ExperianLtdID = e.ExperianLtdID WHERE e.ServiceLogID = @ServiceLogID
+	DELETE ExperianLtdCaisMonthly      FROM ExperianLtdCaisMonthly      d INNER JOIN ExperianLtd e ON d.ExperianLtdID = e.ExperianLtdID WHERE e.ServiceLogID = @ServiceLogID
 	DELETE ExperianLtdShareholders     FROM ExperianLtdShareholders     d INNER JOIN ExperianLtd e ON d.ExperianLtdID = e.ExperianLtdID WHERE e.ServiceLogID = @ServiceLogID
 	DELETE ExperianLtdDLB5             FROM ExperianLtdDLB5             d INNER JOIN ExperianLtd e ON d.ExperianLtdID = e.ExperianLtdID WHERE e.ServiceLogID = @ServiceLogID
 	DELETE ExperianLtdDL72             FROM ExperianLtdDL72             d INNER JOIN ExperianLtd e ON d.ExperianLtdID = e.ExperianLtdID WHERE e.ServiceLogID = @ServiceLogID

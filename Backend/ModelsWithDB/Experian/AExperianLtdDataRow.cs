@@ -14,6 +14,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 	[Serializable]
 	[DataContract]
 	[KnownType(typeof(ExperianLtd))]
+	[KnownType(typeof(ExperianLtdCaisMonthly))]
 	[KnownType(typeof(ExperianLtdCreditSummary))]
 	[KnownType(typeof(ExperianLtdDL48))]
 	[KnownType(typeof(ExperianLtdDL52))]

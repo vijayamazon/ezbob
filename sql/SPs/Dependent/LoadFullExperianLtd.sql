@@ -19,6 +19,7 @@ BEGIN
 
 	-- Dependent tables (level 1)
 
+	EXECUTE LoadExperianLtdCaisMonthly @ExperianLtdID
 	EXECUTE LoadExperianLtdCreditSummary @ExperianLtdID
 	EXECUTE LoadExperianLtdDL48 @ExperianLtdID
 	EXECUTE LoadExperianLtdDL52 @ExperianLtdID

@@ -16,6 +16,7 @@
 	public class DL72Attribute          : ASrcAttribute { public DL72Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL72"; } }
 	public class DL76Attribute          : ASrcAttribute { public DL76Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL76"; } }
 	public class DL78Attribute          : ASrcAttribute { public DL78Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL78"; } }
+	public class CaisMonthlyAttribute   : ASrcAttribute { public CaisMonthlyAttribute(string sNodeName = null)   : base(sNodeName) { GroupName = "DL95/MONTHLYDATA"; } }
 	public class DL97Attribute          : ASrcAttribute { public DL97Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL97"; } }
 	public class DL99Attribute          : ASrcAttribute { public DL99Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL99"; } }
 	public class DLA2Attribute          : ASrcAttribute { public DLA2Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DLA2"; } }
