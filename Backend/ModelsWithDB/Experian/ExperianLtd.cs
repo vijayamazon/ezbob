@@ -13,7 +13,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 	public class ExperianLtd : AExperianLtdDataRow {
 		#region constructor
 
-		public ExperianLtd(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {
+		public ExperianLtd(ASafeLog oLog = null) : base(oLog) {
 		} // constructor
 
 		#endregion constructor
@@ -279,7 +279,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#region method LoadChildrenFromXml
 
-		protected override void LoadChildrenFromXml() {
+		protected override void LoadChildrenFromXml(XmlNode oRoot) {
 			foreach (Type oTableType in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(AExperianLtdDataRow)))) {
 				ASrcAttribute oGroupSrcAttr = oTableType.GetCustomAttribute<ASrcAttribute>();
 
@@ -289,7 +289,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 				if (!oGroupSrcAttr.IsTopLevel)
 					continue;
 
-				LoadOneChildFromXml(oTableType, oGroupSrcAttr);
+				LoadOneChildFromXml(oRoot, oTableType, oGroupSrcAttr);
 			} // for each row type (DL 65, DL 72, etc)
 		} // LoadChildrenFromXml
 

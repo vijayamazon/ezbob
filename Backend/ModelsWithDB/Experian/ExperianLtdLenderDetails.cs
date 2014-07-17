@@ -1,13 +1,12 @@
 namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System.Runtime.Serialization;
-	using System.Xml;
 	using Logger;
 	using Utils;
 
 	[DataContract]
 	[LenderDetails]
 	public class ExperianLtdLenderDetails : AExperianLtdDataRow {
-		public ExperianLtdLenderDetails(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+		public ExperianLtdLenderDetails(ASafeLog oLog = null) : base(oLog) {} // constructor
 
 		[DataMember]
 		public long DL65ID { get; set; }

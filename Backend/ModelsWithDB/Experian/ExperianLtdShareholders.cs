@@ -1,12 +1,11 @@
 namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System.Runtime.Serialization;
-	using System.Xml;
 	using Logger;
 
 	[DataContract]
 	[Sharehlds]
 	public class ExperianLtdShareholders : AExperianLtdDataRow {
-		public ExperianLtdShareholders(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+		public ExperianLtdShareholders(ASafeLog oLog = null) : base(oLog) {} // constructor
 
 		[DataMember]
 		[Sharehlds("SHLDNAME")]

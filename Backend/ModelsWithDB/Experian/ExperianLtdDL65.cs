@@ -10,7 +10,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 	[DataContract]
 	[DL65]
 	public class ExperianLtdDL65 : AExperianLtdDataRow {
-		public ExperianLtdDL65(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {
+		public ExperianLtdDL65(ASafeLog oLog = null) : base(oLog) {
 			ExperianLtdDL65ID = 0;
 		} // constructor
 
@@ -141,8 +141,8 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#region method LoadChildrenFromXml
 
-		protected override void LoadChildrenFromXml() {
-			LoadOneChildFromXml(typeof(ExperianLtdLenderDetails), null);
+		protected override void LoadChildrenFromXml(XmlNode oRoot) {
+			LoadOneChildFromXml(oRoot, typeof(ExperianLtdLenderDetails), null);
 		} // LoadChildrenFromXml
 
 		#endregion method LoadChildrenFromXml

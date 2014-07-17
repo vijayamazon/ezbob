@@ -1152,7 +1152,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 			var lear = m_oServiceClient.LoadExperianLtd(nServiceLogID);
 
-			m_oLog.Msg("Result: {0}", lear.Value.StringifyAll());
+			m_oLog.Msg("Result:\n{0}", lear.Value.StringifyAll());
 		} // LoadExperianLtd
 
 		// ReSharper restore UnusedMember.Local

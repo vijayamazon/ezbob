@@ -1,13 +1,12 @@
 namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Xml;
 	using Logger;
 
 	[DataContract]
 	[PrevCompNames]
 	public class ExperianLtdPrevCompanyNames : AExperianLtdDataRow {
-		public ExperianLtdPrevCompanyNames(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+		public ExperianLtdPrevCompanyNames(ASafeLog oLog = null) : base(oLog) {} // constructor
 
 		[DataMember]
 		[PrevCompNames("DATECHANGED")]

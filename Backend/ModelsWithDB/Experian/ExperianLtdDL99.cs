@@ -1,13 +1,12 @@
 namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Xml;
 	using Logger;
 
 	[DataContract]
 	[DL99]
 	public class ExperianLtdDL99 : AExperianLtdDataRow {
-		public ExperianLtdDL99(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) { } // constructor
+		public ExperianLtdDL99(ASafeLog oLog = null) : base(oLog) { } // constructor
 
 		[DataMember]
 		[DL99("DATEOFACCOUNTS-YYYY")]

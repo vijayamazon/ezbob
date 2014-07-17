@@ -84,8 +84,8 @@
 
 			Log.Info("Parsing Experian company data...");
 
-			ExperianLtd oMainTable = new ExperianLtd(oXml.DocumentElement, Log);
-			oMainTable.LoadFromXml();
+			ExperianLtd oMainTable = new ExperianLtd(Log);
+			oMainTable.LoadFromXml(oXml.DocumentElement);
 
 			if (!oMainTable.ShouldBeSaved()) {
 				Log.Warn(

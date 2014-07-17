@@ -1,13 +1,12 @@
 namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Xml;
 	using Logger;
 
 	[DataContract]
 	[DL72]
 	public class ExperianLtdDL72 : AExperianLtdDataRow {
-		public ExperianLtdDL72(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) { } // constructor
+		public ExperianLtdDL72(ASafeLog oLog = null) : base(oLog) { } // constructor
 
 		[DataMember]
 		[DL72("FOREIGNFLAG")]

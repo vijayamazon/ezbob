@@ -62,7 +62,7 @@
 						continue;
 					} // if
 
-					oRow = (AExperianLtdDataRow)ci.Invoke(new object[] {null, Log});
+					oRow = (AExperianLtdDataRow)ci.Invoke(new object[] { Log });
 				} // if
 
 				sr.Fill(oRow);
@@ -75,7 +75,7 @@
 				string sParentType = sr["ParentType"];
 
 				if (string.IsNullOrWhiteSpace(sParentType)) {
-					Log.Debug("No parent row. This row: id {0} of type {1}.", oRow.ID, sType);
+					// Log.Debug("No parent row. This row: id {0} of type {1}.", oRow.ID, sType);
 					continue;
 				} // if
 
@@ -89,11 +89,7 @@
 				}
 				else {
 					oParent.AddChild(oRow);
-
-					Log.Debug(
-						"\n\tThis row: id {0} of type {1}.\n\tParent row: id {2} of type {3}.",
-						oRow.ID, sType, oRow.ParentID, sParentType
-					);
+					// Log.Debug("\n\tThis row: id {0} of type {1}.\n\tParent row: id {2} of type {3}.", oRow.ID, sType, oRow.ParentID, sParentType);
 				} // if
 			} // for each row
 		} // Execute

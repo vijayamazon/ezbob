@@ -1,12 +1,11 @@
 namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System.Runtime.Serialization;
-	using System.Xml;
 	using Logger;
 
 	[DataContract]
 	[DL68]
 	public class ExperianLtdDL68 : AExperianLtdDataRow {
-		public ExperianLtdDL68(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+		public ExperianLtdDL68(ASafeLog oLog = null) : base(oLog) {} // constructor
 
 		[DataMember]
 		[DL68("SUBSIDREGNUM")]

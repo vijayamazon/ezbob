@@ -1,13 +1,12 @@
 namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Xml;
 	using Logger;
 
 	[DataContract]
 	[DL52]
 	public class ExperianLtdDL52 : AExperianLtdDataRow {
-		public ExperianLtdDL52(XmlNode oRoot = null, ASafeLog oLog = null) : base(oRoot, oLog) {} // constructor
+		public ExperianLtdDL52(ASafeLog oLog = null) : base(oLog) {} // constructor
 
 		[DataMember]
 		[DL52("RECORDTYPE")]

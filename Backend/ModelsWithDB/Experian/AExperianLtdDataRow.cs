@@ -11,7 +11,22 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using Logger;
 	using Utils;
 
+	[Serializable]
 	[DataContract]
+	[KnownType(typeof(ExperianLtd))]
+	[KnownType(typeof(ExperianLtdCreditSummary))]
+	[KnownType(typeof(ExperianLtdDL48))]
+	[KnownType(typeof(ExperianLtdDL52))]
+	[KnownType(typeof(ExperianLtdDL65))]
+	[KnownType(typeof(ExperianLtdDL68))]
+	[KnownType(typeof(ExperianLtdDL72))]
+	[KnownType(typeof(ExperianLtdDL97))]
+	[KnownType(typeof(ExperianLtdDL99))]
+	[KnownType(typeof(ExperianLtdDLA2))]
+	[KnownType(typeof(ExperianLtdDLB5))]
+	[KnownType(typeof(ExperianLtdLenderDetails))]
+	[KnownType(typeof(ExperianLtdPrevCompanyNames))]
+	[KnownType(typeof(ExperianLtdShareholders))]
 	public abstract class AExperianLtdDataRow : IParametrisable {
 		#region public
 
@@ -33,13 +48,16 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			var oFields = new List<string>();
 
 			this.Traverse((oItem, oPropertyInfo) => {
-				string sFld = "\t" + oPropertyInfo.Name + ": " + oPropertyInfo.GetValue(oItem);
+				string sFld = "\t\t" + oPropertyInfo.Name + ": " + oPropertyInfo.GetValue(oItem);
 
 				if (oPropertyInfo.DeclaringType == this.GetType())
 					oFields.Add(sFld);
 				else
 					oFields.Insert(0, sFld);
 			});
+
+			oFields.Insert(0, "\t\tParent ID: " + ParentID);
+			oFields.Insert(0, "\t\tID: " + ID);
 
 			return
 				"\tStart of " + this.GetType().Name + " (" + LoadedCount + " fields loaded)\n" +
@@ -59,8 +77,11 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			os.Append(Stringify());
 			os.Append("\n");
 
-			// foreach (var kid in Children)
-				// kid.StringifyAll(os);
+			if (Children == null)
+				os.Append("\t!!! No kids (the list is null).");
+			else
+				foreach (var kid in Children)
+					kid.StringifyAll(os);
 
 			return bReturnData ? os.ToString() : string.Empty;
 		} // StringifyAll
@@ -81,8 +102,8 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#region method LoadFromXml
 
-		public virtual void LoadFromXml() {
-			if (Root == null)
+		public virtual void LoadFromXml(XmlNode oRoot) {
+			if (oRoot == null)
 				throw new NullReferenceException("No XML root element specified for " + this.GetType().Name);
 
 			LoadedCount = 0;
@@ -97,7 +118,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 				if (oNodeSrcAttr == null)
 					continue;
 
-				XmlNode oNode = Root.SelectSingleNode(
+				XmlNode oNode = oRoot.SelectSingleNode(
 					oGroupSrcAttr == null ? oNodeSrcAttr.NodePath : oNodeSrcAttr.NodeName
 				);
 
@@ -106,10 +127,10 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 				LoadedCount++;
 
-				SetValue(this, pi, oNode, Root);
+				SetValue(this, pi, oNode, oRoot);
 			} // for each properties
 
-			LoadChildrenFromXml();
+			LoadChildrenFromXml(oRoot);
 		} // LoadFromXml
 
 		#endregion method LoadFromXml
@@ -206,22 +227,15 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#region constructor
 
-		protected AExperianLtdDataRow(XmlNode oRoot, ASafeLog oLog) {
+		protected AExperianLtdDataRow(ASafeLog oLog = null) {
 			LoadedCount = 0;
 			m_nExperianLtdID = 0;
 			Children = new List<AExperianLtdDataRow>();
 
-			Root = oRoot;
 			Log = oLog ?? new SafeLog();
 		} // constructor
 
 		#endregion constructor
-
-		#region property Root
-
-		protected virtual XmlNode Root { get; private set; } // Root
-
-		#endregion property Root
 
 		#region property Log
 
@@ -260,7 +274,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#region method LoadChildrenFromXml
 
-		protected virtual void LoadChildrenFromXml() {
+		protected virtual void LoadChildrenFromXml(XmlNode oRoot) {
 			// Nothing here.
 		} // LoadChildrenFromXml
 
@@ -295,7 +309,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#region method LoadOneChildFromXml
 
-		protected virtual void LoadOneChildFromXml(Type oTableType, ASrcAttribute oGroupSrcAttr) {
+		protected virtual void LoadOneChildFromXml(XmlNode oRoot, Type oTableType, ASrcAttribute oGroupSrcAttr) {
 			oGroupSrcAttr = oGroupSrcAttr ?? oTableType.GetCustomAttribute<ASrcAttribute>();
 
 			Log.Debug("Parsing Experian company data into {0}...", oTableType.Name);
@@ -307,7 +321,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 				return;
 			} // if
 
-			XmlNodeList oGroupNodes = Root.SelectNodes(oGroupSrcAttr.GroupPath);
+			XmlNodeList oGroupNodes = oRoot.SelectNodes(oGroupSrcAttr.GroupPath);
 
 			if (oGroupNodes == null) {
 				Log.Debug("Parsing Experian company data into {0}: no XML nodes found.", oTableType.Name);
@@ -322,9 +336,9 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 				);
 
 			foreach (XmlNode oGroup in oGroupNodes) {
-				AExperianLtdDataRow oRow = (AExperianLtdDataRow)ci.Invoke(new object[] { oGroup, Log });
+				AExperianLtdDataRow oRow = (AExperianLtdDataRow)ci.Invoke(new object[] { Log });
 
-				oRow.LoadFromXml();
+				oRow.LoadFromXml(oGroup);
 
 				if (oRow.ShouldBeSaved())
 					Children.Add(oRow);
