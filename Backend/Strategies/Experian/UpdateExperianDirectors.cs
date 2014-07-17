@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Xml;
 	using ConfigManager;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.ExperianParser;
 	using Ezbob.Logger;
@@ -13,8 +14,9 @@
 
 		#region constructor
 
-		public UpdateExperianDirectors(int nCustomerID, string sExperianXml, bool bIsLimited, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UpdateExperianDirectors(int nCustomerID, long nServiceLogID, string sExperianXml, bool bIsLimited, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
+			m_nServiceLogID = nServiceLogID;
 			m_sExperianXml = sExperianXml;
 			m_bIsLimited = bIsLimited;
 		} // constructor
@@ -32,16 +34,57 @@
 		#region method Execute
 
 		public override void Execute() {
-			if ((m_nCustomerID <= 0) || string.IsNullOrWhiteSpace(m_sExperianXml)) {
+			if ((m_nCustomerID <= 0) || (!m_bIsLimited && string.IsNullOrWhiteSpace(m_sExperianXml)) || (m_bIsLimited && (m_nServiceLogID < 1))) {
 				Log.Warn(
 					"Cannot update Experian directors from input parameters: " +
-					"customer id = {0}, is limited = {1}, XML = {2}",
-					m_nCustomerID, m_bIsLimited, m_sExperianXml
+					"customer id = {0}, is limited = {1}, service log id = {3}, XML = {2}",
+					m_nCustomerID, m_bIsLimited, m_sExperianXml, m_nServiceLogID
 				);
 				return;
 			} // if
 
-			Log.Debug("Updating Experian directors for customer {0}, is limited {1}...", m_nCustomerID, m_bIsLimited ? "yes" : "no");
+			List<ExperianDirector> oDirectors = m_bIsLimited ? UpdateLimited() : UpdateNonLimited();
+
+			if (oDirectors != null) {
+				var sp = new SaveExperianDirectors(DB, Log) { DirList = oDirectors, };
+				sp.ExecuteNonQuery();
+			} // if
+
+			Log.Debug("Updating Experian directors for customer {0}, is limited {1} complete.", m_nCustomerID, m_bIsLimited ? "yes" : "no");
+		} // Execute
+
+		#endregion method Execute
+
+		#endregion public
+
+		#region private
+
+		private readonly int m_nCustomerID;
+		private readonly long m_nServiceLogID;
+		private readonly string m_sExperianXml;
+		private readonly bool m_bIsLimited;
+
+		private const string Directors = "Directors";
+
+		#region class SaveExperianDirectors
+
+		private class SaveExperianDirectors : AStoredProcedure {
+			public SaveExperianDirectors(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+
+			public override bool HasValidParameters() {
+				return (DirList != null) && (DirList.Count > 0);
+			} // HasValidParameters
+
+			[UsedImplicitly]
+			public List<ExperianDirector> DirList { get; set; }
+		} // class SaveExperianDirectors
+
+		#endregion class SaveExperianDirectors
+
+		#region method UpdateNonLimited
+
+		private List<ExperianDirector> UpdateNonLimited() {
+			Log.Debug("Updating Experian directors for customer {0}, is limited no...", m_nCustomerID);
 
 			var doc = new XmlDocument();
 
@@ -49,15 +92,11 @@
 				doc.LoadXml(m_sExperianXml);
 			}
 			catch (Exception e) {
-				Log.Warn(e, "Updating Experian directors for customer {0}, is limited {1} failed.", m_nCustomerID, m_bIsLimited ? "yes" : "no");
-				return;
+				Log.Warn(e, "Updating Experian directors for customer {0}, is limited no failed.", m_nCustomerID);
+				return null;
 			} // try
 
-			var nVar = m_bIsLimited
-				? Variables.DirectorDetailsParserConfiguration
-				: Variables.DirectorDetailsNonLimitedParserConfiguration;
-
-			var parser = new Parser(CurrentValues.Instance[nVar], Log);
+			var parser = new Parser(CurrentValues.Instance[Variables.DirectorDetailsNonLimitedParserConfiguration], Log);
 
 			Dictionary<string, ParsedData> oParsed;
 
@@ -65,11 +104,11 @@
 				oParsed = parser.NamedParse(doc);
 			}
 			catch (Exception e) {
-				Log.Warn(e, "Updating Experian directors for customer {0}, is limited {1} failed.", m_nCustomerID, m_bIsLimited ? "yes" : "no");
-				return;
+				Log.Warn(e, "Updating Experian directors for customer {0}, is limited no failed.", m_nCustomerID);
+				return null;
 			} // try
 
-			Log.Debug("{0} parsed data - begin:", m_bIsLimited ? "Limited" : "Non-limited");
+			Log.Debug("Non-limited parsed data - begin:");
 
 			var oDirectors = new List<ExperianDirector>();
 			var oDirMap = new SortedDictionary<string, ExperianDirector>();
@@ -112,42 +151,97 @@
 					oDirectors.Add(sha);
 			} // for each shareholder
 
-			Log.Debug("{0} parsed data - end.", m_bIsLimited ? "Limited" : "Non-limited");
+			Log.Debug("Non-limited parsed data - end.");
 
-			if (oDirectors.Count > 0) {
-				var sp = new SaveExperianDirectors(DB, Log) { DirList = oDirectors, };
-				sp.ExecuteNonQuery();
-			} // if
+			return oDirectors.Count > 0 ? oDirectors : null;
+		} // UpdateNonLimited
 
-			Log.Debug("Updating Experian directors for customer {0}, is limited {1} complete.", m_nCustomerID, m_bIsLimited ? "yes" : "no");
-		} // Execute
+		#endregion method UpdateNonLimited
 
-		#endregion method Execute
+		#region method UpdateLimited
 
-		#endregion public
+		private List<ExperianDirector> UpdateLimited() {
+			Log.Debug("Updating limited Experian directors for customer {0}...", m_nCustomerID);
 
-		#region private
+			var stra = new LoadExperianLtd(m_nServiceLogID, DB, Log);
+			stra.Execute();
 
-		private readonly int m_nCustomerID;
-		private readonly string m_sExperianXml;
-		private readonly bool m_bIsLimited;
+			var oDirectors = new List<ExperianDirector>();
+			var oDirMap = new SortedDictionary<string, ExperianDirector>();
+			var oShareholders = new List<ExperianDirector>();
+			var oShaMap = new SortedDictionary<string, ExperianDirector>();
 
-		private const string Directors = "Directors";
+			var oDirDetails = new List<ExperianLtdDL72>();
+			var oShaDetails = new List<ExperianLtdDLB5>();
+			var oShaSummary = new List<ExperianLtdShareholders>();
 
-		#region class SaveExperianDirectors
+			foreach (var row in stra.Result.Children) {
+				if (row.GetType() == typeof (ExperianLtdDL72))
+					oDirDetails.Add((ExperianLtdDL72)row);
+				else if (row.GetType() == typeof (ExperianLtdDLB5))
+					oShaDetails.Add((ExperianLtdDLB5)row);
+				else if (row.GetType() == typeof (ExperianLtdShareholders))
+					oShaSummary.Add((ExperianLtdShareholders)row);
+			} // for each
 
-		private class SaveExperianDirectors : AStoredProcedure {
-			public SaveExperianDirectors(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+			foreach (var oDetails in oDirDetails) {
+				var dir = new ExperianDirector(oDetails, m_nCustomerID);
 
-			public override bool HasValidParameters() {
-				return (DirList != null) && (DirList.Count > 0);
-			} // HasValidParameters
+				if (!dir.IsValid)
+					continue;
 
-			[UsedImplicitly]
-			public List<ExperianDirector> DirList { get; set; }
-		} // class SaveExperianDirectors
+				oDirectors.Add(dir);
+				oDirMap[dir.FullName] = dir;
+			} // for each
 
-		#endregion class SaveExperianDirectors
+			foreach (var oDetails in oShaDetails) {
+				var dir = new ExperianDirector(oDetails, m_nCustomerID);
+
+				if (!dir.IsValid)
+					continue;
+
+				oShareholders.Add(dir);
+				oShaMap[dir.FullName] = dir;
+			} // for each
+
+			foreach (var oDetails in oShaSummary) {
+				if (!string.IsNullOrWhiteSpace(oDetails.RegisteredNumberOfALimitedCompanyWhichIsAShareholder))
+					continue;
+
+				if (
+					oDetails.DescriptionOfShareholder.Equals("UNDISCLOSED", StringComparison.InvariantCultureIgnoreCase) ||
+					(oDetails.DescriptionOfShareholder.IndexOf("LTD", StringComparison.InvariantCultureIgnoreCase) >= 0) ||
+					(oDetails.DescriptionOfShareholder.IndexOf("LIMITED", StringComparison.InvariantCultureIgnoreCase) >= 0)
+				)
+					continue;
+
+				string[] lst = oDetails.DescriptionOfShareholder.Split('&');
+
+				foreach (var s in lst) {
+					var dir = new ExperianDirector(s, m_nCustomerID);
+
+					if (!dir.IsValid)
+						continue;
+
+					if (oShaMap.ContainsKey(dir.FullName))
+						continue;
+
+					oShareholders.Add(dir);
+					oShaMap[dir.FullName] = dir;
+				} // for each
+			} // for each
+
+			foreach (var sha in oShareholders) {
+				if (oDirMap.ContainsKey(sha.FullName))
+					oDirMap[sha.FullName].IsShareholder = true;
+				else
+					oDirectors.Add(sha);
+			} // for each shareholder
+
+			return oDirectors.Count > 0 ? oDirectors : null;
+		} // UpdateLimited
+
+		#endregion method UpdateLimited
 
 		#endregion private
 	} // class UpdateExperianDirectors

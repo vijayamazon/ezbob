@@ -16,15 +16,11 @@
 
 		#region constructors
 
-		public LimitedResults(string inputXml, DateTime lastCheckDate)
-			: base(inputXml, lastCheckDate)
-		{
+		public LimitedResults(long nServiceLogID, string inputXml, DateTime lastCheckDate) : base(nServiceLogID, inputXml, lastCheckDate) {
 			Owners = new SortedSet<string>();
 		} // constructor
 
-		public LimitedResults(Exception exception)
-			: base(exception)
-		{
+		public LimitedResults(Exception exception) : base(exception) {
 			Owners = new SortedSet<string>();
 		} // constructor
 

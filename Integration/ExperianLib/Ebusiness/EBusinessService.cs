@@ -148,9 +148,9 @@
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
 
-					Utils.WriteLog(requestXml, newResponse, ExperianServiceType.LimitedData, customerId);
+					MP_ServiceLog oLogEntry = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.LimitedData, customerId);
 
-					var res = new LimitedResults(newResponse, DateTime.UtcNow) {CacheHit = false};
+					var res = new LimitedResults(oLogEntry.Id, newResponse, DateTime.UtcNow) {CacheHit = false};
 					AddToCache(regNumber, requestXml, res);
 
 					return res;
@@ -163,7 +163,7 @@
 
 				MakeSureDl97IsFilled(customerId, response);
 
-				return new LimitedResults(response.JsonPacket, response.LastUpdateDate) { CacheHit = true };
+				return new LimitedResults(0, response.JsonPacket, response.LastUpdateDate) { CacheHit = true };
 			}
 			catch (Exception e) {
 				Log.Error(e);

@@ -31,9 +31,17 @@
 				(sr, bRowsetStart) => {
 					int nCustomerID = sr["CustomerID"];
 					string sServiceType = sr["ServiceType"];
-					string sXml = sr["ResponseData"];
 
-					new UpdateExperianDirectors(nCustomerID, sXml, sServiceType == "E-SeriesLimitedData", DB, Log).Execute();
+					bool bIsLimited = sServiceType == "E-SeriesLimitedData";
+
+					new UpdateExperianDirectors(
+						nCustomerID,
+						sr["Id"],
+						bIsLimited ? string.Empty : sr["ResponseData"],
+						bIsLimited,
+						DB,
+						Log
+					).Execute();
 
 					return ActionResult.Continue;
 				},

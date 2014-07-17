@@ -65,9 +65,10 @@
 				experianError = "RefNumber is empty";
 			else {
 				Log.Info("ExperianCompanyCheck strategy will make sure we have experian data");
+
 				m_oExperianData = GetBusinessDataFromExperian();
-				Log.Info("Fetched BureauScore:{0} & MaxBureauScore:{1} for customer:{2}", m_oExperianData.BureauScore, m_oExperianData.MaxBureauScore, m_nCustomerID);
-			
+
+				Log.Info("Fetched BureauScore {0} & MaxBureauScore {1} for customer {2}.", m_oExperianData.BureauScore, m_oExperianData.MaxBureauScore, m_nCustomerID);
 
 				if (!m_oExperianData.IsError) {
 					MaxScore = m_oExperianData.MaxBureauScore;
@@ -78,8 +79,8 @@
 					experianError = m_oExperianData.Error;
 			} // if
 
+			Log.Info("Filling Analytics with Score: {0} & max score: {1}", Score, MaxScore);
 
-			Log.Info("Filling Analytics with Score:{0} & max score:{1}", Score, MaxScore);
 			DB.ExecuteNonQuery(
 				"UpdateExperianBusiness",
 				CommandSpecies.StoredProcedure,
@@ -94,7 +95,7 @@
 				return;
 
 			if (!m_oExperianData.CacheHit)
-				new UpdateExperianDirectors(m_nCustomerID, m_oExperianData.OutputXml, m_oExperianData.IsLimited, DB, Log).Execute();
+				new UpdateExperianDirectors(m_nCustomerID, m_oExperianData.ServiceLogID, m_oExperianData.IsLimited ? string.Empty : m_oExperianData.OutputXml, m_oExperianData.IsLimited, DB, Log).Execute();
 
 			if (m_oExperianData.CacheHit) {
 				// This check is required to allow multiple customers have the same company

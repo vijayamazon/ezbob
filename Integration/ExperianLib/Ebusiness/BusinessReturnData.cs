@@ -18,6 +18,7 @@
 		public DateTime? LastCheckDate { get; set; }
 		public bool IsDataExpired { get; set; }
 		public string OutputXml { get; private set; }
+		public long ServiceLogID { get; private set; }
 
 		public decimal BureauScore { get; set; }
 		public decimal MaxBureauScore { get; set; }
@@ -49,9 +50,10 @@
 			Error = ex.Message;
 		} // constructor
 
-		protected BusinessReturnData(string outputXml, DateTime lastCheckDate) : this() {
+		protected BusinessReturnData(long nServiceLogID, string outputXml, DateTime lastCheckDate) : this() {
 			LastCheckDate = lastCheckDate;
 			OutputXml = outputXml;
+			ServiceLogID = nServiceLogID;
 
 			try {
 				XElement root = XDocument.Load(new StringReader(outputXml)).Root;
