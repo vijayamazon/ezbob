@@ -21,7 +21,6 @@
 	line-height: 18px;
 	margin: 10px 0 10px 0;
 	text-shadow: 0 1px 0 rgba(255,255,255,.24);
-	width: 550px;
 }
 .notification_green .close, .notification_yellow .close, .notification_orange .close, .notification_red .close, .notification_pink .close, .notification_darkblue .close, .notification_lightblue .close, .notification_white .close {
 	position: absolute;

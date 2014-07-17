@@ -1,5 +1,4 @@
-﻿@using EzBob.Web.Code
-@using EzBob.Web.Infrastructure
+﻿@using EzBob.Web.Infrastructure
 @using ConfigManager
 @using Ezbob.Backend.Models
 @{
@@ -120,7 +119,7 @@
 		$(function() {
 			var scheduleView = new EzBob.Profile.PaypointLoanScheduleView({
 				el: $('#schedule'),
-				schedule: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"])),
+				schedule: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"]))
 			});
 			scheduleView.render();
 
@@ -129,17 +128,13 @@
 
 			var oView = new EzBob.Profile.LoanTakenView();
 			oView.render();
+			$('.header-info').show();
+			$('.header-info-text').text('MY ACCOUNT');
 		})
 	</script>
 	<script id="wizard-bar-template" type="text/template">
-		<div class="narrow-wizard-header"><%
-			var steps = [
-				{ title: "Choose Loan Term", css: "completed complete" },
-				{ title: "Enter Bank & Debit", css: "completed complete" },
-				{ title: "Get Cash", css: "active completed complete" }
-			];
-			%>@{Html.RenderPartial("_StepsDashboard");}
-		</div>
+			<%var current = 2;%>
+			@{Html.RenderPartial("_StepsDashboard");}
 	</script>
 
 	@BundleHelper.RenderProfileJs()

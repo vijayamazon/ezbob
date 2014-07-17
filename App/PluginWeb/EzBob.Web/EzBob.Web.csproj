@@ -1177,6 +1177,9 @@
     <Content Include="Content\js\login\ezbob.restorePassword.js">
       <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\login\ezbob.restorePassword.min.js">
+      <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanModel.js" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanTopView.js">
       <DependentUpon>ApplyForLoanTopView.coffee</DependentUpon>

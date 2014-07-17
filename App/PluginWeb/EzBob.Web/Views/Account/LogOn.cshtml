@@ -17,28 +17,24 @@
 </div>
 
 <script id="customerlogin-template" type="text/template">
-    <div class="notifications"></div>
-    <div class="row-fluid">
-        <div class="span12">
-            <!-- @Html.ValidationSummary(true, "Login was unsuccessful. Please correct the errors and try again.") -->
-        </div>
-    </div>
     @using (Html.BeginForm("CustomerLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login" }))
     {
         <section id="content">
+            <div class="notifications"></div>
             <section class="pages">
+                <h1>Login</h1>
                 <h2>Welcome back!</h2>
                 @Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
 
                 @{
-        var oForgottenAttr = new Dictionary<string, Object>();
-        oForgottenAttr["ui-event-control-id"] = "login:forgotten_password";
+                    var oForgottenAttr = new Dictionary<string, Object>();
+                    oForgottenAttr["ui-event-control-id"] = "login:forgotten_password";
 
-        var oSignupRouteValues = new RouteValueDictionary();
-        oSignupRouteValues["Area"] = "Customer";
+                    var oSignupRouteValues = new RouteValueDictionary();
+                    oSignupRouteValues["Area"] = "Customer";
 
-        var oSignupAttr = new Dictionary<string, Object>();
-        oSignupAttr["ui-event-control-id"] = "login:signup";
+                    var oSignupAttr = new Dictionary<string, Object>();
+                    oSignupAttr["ui-event-control-id"] = "login:signup";
                 }
                 <p style="font-weight: bold;">@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
 

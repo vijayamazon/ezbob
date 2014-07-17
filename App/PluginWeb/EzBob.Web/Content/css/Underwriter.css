@@ -1780,6 +1780,8 @@ body {
     border-radius: 5px;
     background: linear-gradient(to bottom, #eeeeee, #dddddd);
     box-shadow: 0 1px 1px -1px gray;
+    height: 21px;
+    width: auto;
 }
 
 .btn.btn-dashboard:active, 

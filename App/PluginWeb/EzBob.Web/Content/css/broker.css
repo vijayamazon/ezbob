@@ -2,6 +2,30 @@
     font-family: 'Titillium Web Regular', Arial, sans-serif;
 }
 
+.broker {
+    margin-top: 90px;
+}
+
+input[type="button"],
+input[type="submit"], 
+input[type="reset"], 
+button, 
+.button {
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal;
+    height: 36px;
+    line-height: 36px;
+    width: 120px;
+}
+
+.add-crm-note {
+    width: 30px;
+}
+
+.forgotten-form .button {
+    width: 200px;
+}
 .box > .box-title {
     background-color: #E2E3E5;
     text-shadow: 0 1px 0 #E2E3E5;
@@ -66,18 +90,9 @@ table.customer-list {
 
 .section-dashboard .reload-customer-list,
 .section-customer-details .delete-selected-files {
-	display: inline-block;
-	margin: 0.1em 0 0 1em;
-	padding: 0.2em 3em;
-	background-color: transparent;
-	border: 1px solid #eeeeee;
-	color: black;
+    margin-top: -8px;
+    margin-left: 10px;
 	float: right;
-}
-
-.section-dashboard .reload-customer-list:hover,
-.section-customer-details .delete-selected-files:hover {
-	border: 1px solid white;
 }
 
 .broker a,
