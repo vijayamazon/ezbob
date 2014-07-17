@@ -127,6 +127,301 @@
                             <td class=narrow-as-possible>Address line1</td><td><%-response.Address1%></td>
                         </tr>
                     <%}%>
+                    <% if (response.Address2 != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Address line2</td><td><%-response.Address2%></td>
+                        </tr>
+                    <%}%>
+                    <% if (response.Address3 != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Address line3</td><td><%-response.Address3%></td>
+                        </tr>
+                    <%}%>
+                    <% if (response.Address4 != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Address line4</td><td><%-response.Address4%></td>
+                        </tr>
+                    <%}%>
+                    <% if (response.Address5 != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Address line5</td><td><%-response.Address5%></td>
+                        </tr>
+                    <%}%>    
+                    <% if (response.Postcode != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Postcode</td><td><%-response.Postcode%></td>
+                        </tr>
+                    <%}%>
+                    <% if (response.TelephoneNumber != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Telephone #</td><td><%-response.TelephoneNumber%></td>
+                        </tr>
+                    <%}%>
+                    <% if (response.PrincipalActivities != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Principal activities</td><td><%-response.PrincipalActivities%></td>
+                        </tr>
+                    <%}%>
+                    <% if (response.EarliestKnownDate != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Earliest known date</td><td><%-EzBob.formatDate(response.EarliestKnownDate)%></td>
+                        </tr>
+                    <%}%>
+                    <% if (response.DateOwnershipCommenced != undefined) {%>
+                        <tr>
+                            <td class=narrow-as-possible>Date ownership commenced</td><td><%-EzBob.formatDate(response.DateOwnershipCommenced)%></td>
+                        </tr>
+                    <%}%>
+                    <% if (response.IncorporationDate != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Incorporation date</td><td><%-EzBob.formatDate(response.IncorporationDate)%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.DateOwnershipCeased != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Date ownership ceased</td><td><%-EzBob.formatDate(response.DateOwnershipCeased)%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.LastUpdateDate != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Last update date</td><td><%-EzBob.formatDate(response.LastUpdateDate)%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.BankruptcyCountDuringOwnership != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Bankruptcy count during ownership</td><td><%-response.BankruptcyCountDuringOwnership%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AgeOfMostRecentBankruptcyDuringOwnershipMonths != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Age of most recent bankruptcy during ownership (months)</td><td><%-response.AgeOfMostRecentBankruptcyDuringOwnershipMonths%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AssociatedBankruptcyCountDuringOwnership != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Associated bankruptcy count during ownership</td><td><%-response.AssociatedBankruptcyCountDuringOwnership%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Age of most recent associated bankruptcy during ownership (months)</td><td><%-response.AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AgeOfMostRecentJudgmentDuringOwnershipMonths != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Age of most recent judgment during ownership (months)</td><td><%-response.AgeOfMostRecentJudgmentDuringOwnershipMonths%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalJudgmentCountLast12Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total judgment count last 12 (months)</td><td><%-response.TotalJudgmentCountLast12Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalJudgmentValueLast12Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total judgment value last 12 (months)</td><td><%-response.TotalJudgmentValueLast12Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalJudgmentCountLast13To24Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total judgment count last 13 to 24 (months)</td><td><%-response.TotalJudgmentCountLast13To24Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalJudgmentValueLast13To24Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total judgment value last 13 to 24 (months)</td><td><%-response.TotalJudgmentValueLast13To24Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.ValueOfMostRecentAssociatedJudgmentDuringOwnership != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Value of most recent associated judgment during ownership</td><td><%-response.ValueOfMostRecentAssociatedJudgmentDuringOwnership%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalAssociatedJudgmentCountLast12Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total associated judgment count last 12 (months)</td><td><%-response.TotalAssociatedJudgmentCountLast12Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalAssociatedJudgmentValueLast12Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total associated judgment value last 12 (months)</td><td><%-response.TotalAssociatedJudgmentValueLast12Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalAssociatedJudgmentCountLast13To24Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total associated judgment count last 13 to 24 (months)</td><td><%-response.TotalAssociatedJudgmentCountLast13To24Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalAssociatedJudgmentValueLast13To24Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total associated judgment value last 13 to 24 (months)</td><td><%-response.TotalAssociatedJudgmentValueLast13To24Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalJudgmentCountLast24Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total judgment count last 24 (months)</td><td><%-response.TotalJudgmentCountLast24Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalAssociatedJudgmentCountLast24Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total associated judgment count last 24 (months)</td><td><%-response.TotalAssociatedJudgmentCountLast24Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalJudgmentValueLast24Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total judgment value last 24 (months)</td><td><%-response.TotalJudgmentValueLast24Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TotalAssociatedJudgmentValueLast24Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Total associated judgment value last 24 (months)</td><td><%-response.TotalAssociatedJudgmentValueLast24Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.SupplierName != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Supplier name</td><td><%-response.SupplierName%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.FraudCategory != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Fraud category</td><td><%-response.FraudCategory%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.FraudCategoryDesc != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Fraud category description</td><td><%-response.FraudCategoryDesc%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.NumberOfAccountsPlacedForCollection != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Number of accounts placed for collection</td><td><%-response.NumberOfAccountsPlacedForCollection%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.ValueOfAccountsPlacedForCollection != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Value of accounts placed for collection</td><td><%-response.ValueOfAccountsPlacedForCollection%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.NumberOfAccountsPlacedForCollectionLast2Years != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Number of accounts placed for collection last 2 years</td><td><%-response.NumberOfAccountsPlacedForCollectionLast2Years%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AverageDaysBeyondTermsFor0To100 != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Average days beyond terms for 0 to 100</td><td><%-response.AverageDaysBeyondTermsFor0To100%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AverageDaysBeyondTermsFor101To1000 != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Average days beyond terms for 101 to 1000</td><td><%-response.AverageDaysBeyondTermsFor101To1000%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AverageDaysBeyondTermsFor1001To10000 != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Average days beyond terms for 1001 to 10000</td><td><%-response.AverageDaysBeyondTermsFor1001To10000%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AverageDaysBeyondTermsForOver10000 != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Average days beyond terms for over 10000</td><td><%-response.AverageDaysBeyondTermsForOver10000%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AverageDaysBeyondTermsForLast3MonthsOfDataReturned != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Average days beyond terms for last 3 months of data returned</td><td><%-response.AverageDaysBeyondTermsForLast3MonthsOfDataReturned%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AverageDaysBeyondTermsForLast6MonthsOfDataReturned != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Average days beyond terms for last 6 months of data returned</td><td><%-response.AverageDaysBeyondTermsForLast6MonthsOfDataReturned%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AverageDaysBeyondTermsForLast12MonthsOfDataReturned != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Average days beyond terms for last 12 months of data returned</td><td><%-response.AverageDaysBeyondTermsForLast12MonthsOfDataReturned%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.CurrentAverageDebt != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Current average debt</td><td><%-response.CurrentAverageDebt%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AverageDebtLast3Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Average debt last 3 months</td><td><%-response.AverageDebtLast3Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.AverageDebtLast12Months != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Average debt last 12 months</td><td><%-response.AverageDebtLast12Months%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.TelephoneNumberDN36 != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Telephone # (DN36)</td><td><%-response.TelephoneNumberDN36%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.RiskScore != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Risk score</td><td><%-response.RiskScore%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.SearchType != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Search type</td><td><%-response.SearchType%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.SearchTypeDesc != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Search type description</td><td><%-response.SearchTypeDesc%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.CommercialDelphiScore != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Commercial delphi score</td><td><%-response.CommercialDelphiScore%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.CreditRating != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Credit rating</td><td><%-response.CreditRating%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.CreditLimit != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Credit limit</td><td><%-response.CreditLimit%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.ProbabilityOfDefaultScore != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Probability of default score</td><td><%-response.ProbabilityOfDefaultScore%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.StabilityOdds != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Stability odds</td><td><%-response.StabilityOdds%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.RiskBand != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Risk band</td><td><%-response.RiskBand%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.NumberOfProprietorsSearched != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Number of proprietors searched</td><td><%-response.NumberOfProprietorsSearched%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.NumberOfProprietorsFound != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Number of proprietors found</td><td><%-response.NumberOfProprietorsFound%></td>
+	                    </tr>
+                    <%}%>
+                    <% if (response.Errors != undefined) {%>
+	                    <tr>
+		                    <td class=narrow-as-possible>Errors</td><td><%-response.Errors%></td>
+	                    </tr>
+                    <%}%>
                 </tbody>
             </table>
         </div><%

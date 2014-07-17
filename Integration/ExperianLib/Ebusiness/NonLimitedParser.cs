@@ -58,7 +58,7 @@
 		private int? totalAssociatedJudgmentValueLast13To24Months;
 		private int? totalJudgmentCountLast24Months;
 		private int? totalAssociatedJudgmentCountLast24Months;
-		private int? totalJudgmentCountValue24Months;
+		private int? totalJudgmentValueLast24Months;
 		private int? totalAssociatedJudgmentValueLast24Months;
 
 		//DN17
@@ -186,7 +186,7 @@
 				new QueryParameter("TotalAssociatedJudgmentValueLast13To24Months", totalAssociatedJudgmentValueLast13To24Months),
 				new QueryParameter("TotalJudgmentCountLast24Months", totalJudgmentCountLast24Months),
 				new QueryParameter("TotalAssociatedJudgmentCountLast24Months", totalAssociatedJudgmentCountLast24Months),
-				new QueryParameter("TotalJudgmentCountValue24Months", totalJudgmentCountValue24Months),
+				new QueryParameter("TotalJudgmentValueLast24Months", totalJudgmentValueLast24Months),
 				new QueryParameter("TotalAssociatedJudgmentValueLast24Months", totalAssociatedJudgmentValueLast24Months),
 				new QueryParameter("SupplierName", supplierName),
 				new QueryParameter("FraudCategory", fraudCategory),
@@ -589,7 +589,7 @@
 				totalAssociatedJudgmentValueLast13To24Months = GetInt(dn14Node, "ATOTJUDGVALUELST13TO24MNTHS");
 				totalJudgmentCountLast24Months = GetInt(dn14Node, "MTOTJUDGCOUNTLST24MNTHS");
 				totalAssociatedJudgmentCountLast24Months = GetInt(dn14Node, "ATOTJUDGCOUNTLST24MNTHS");
-				totalJudgmentCountValue24Months = GetInt(dn14Node, "MTOTJUDGVALUELST24MNTHS");
+				totalJudgmentValueLast24Months = GetInt(dn14Node, "MTOTJUDGVALUELST24MNTHS");
 				totalAssociatedJudgmentValueLast24Months = GetInt(dn14Node, "ATOTJUDGVALUELST24MNTHS");
 			}
 		}

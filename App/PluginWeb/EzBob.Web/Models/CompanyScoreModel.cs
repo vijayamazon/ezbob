@@ -358,7 +358,7 @@
 				nonLimitedModel.RiskBand = nonLimitedSafeReader["RiskBand"].ToNullString();
 				nonLimitedModel.NumberOfProprietorsSearched = nonLimitedSafeReader["NumberOfProprietorsSearched"];
 				nonLimitedModel.NumberOfProprietorsFound = nonLimitedSafeReader["NumberOfProprietorsFound"];
-				nonLimitedModel.Address1 = nonLimitedSafeReader["Errors"].ToNullString();
+				nonLimitedModel.Errors = nonLimitedSafeReader["Errors"].ToNullString();
 			}
 
 			return nonLimitedModel;
