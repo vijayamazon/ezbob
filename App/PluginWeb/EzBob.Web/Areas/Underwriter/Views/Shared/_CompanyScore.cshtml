@@ -444,6 +444,42 @@
                     </tbody>
                 </table>
             <%}%>
+            <% if (response.Data.BankruptcyDetails != undefined) {%>
+                <table>
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th>Name</th>
+                            <th>Addr line 1</th>
+                            <th>Addr line 2</th>
+                            <th>Addr line 3</th>
+                            <th>Addr line 4</th>
+                            <th>Addr line 5</th>
+                            <th>Post code</th>
+                            <th>Gazette date</th>
+                            <th>Bankruptcy type</th>
+                            <th>Bankruptcy type description</th>		
+                        </tr>
+                    </thead>
+		            <tbody>
+                        @*<% _.each(response.Data.BankruptcyDetails, function(i) {*@
+                        <% if (response.Data.BankruptcyDetails[0] != undefined) {%>
+                            <tr>
+		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyName%></td>
+		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr1%></td>
+		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr2%></td>
+		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr3%></td>
+		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr4%></td>
+		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr5%></td>
+		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].PostCode%></td>
+		                        <td class=narrow-as-possible><%-EzBob.formatDate(response.Data.BankruptcyDetails[0].GazetteDate)%></td>
+		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyType%></td>
+		                        <td><%-response.Data.BankruptcyDetails[0].BankruptcyTypeDesc%></td>
+	                        </tr>
+                        <%}%>
+                        @*<%}%>*@
+                    </tbody>
+                </table>
+            <%}%>
         </div><%
     }
     else

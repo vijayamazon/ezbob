@@ -333,6 +333,7 @@
       <xs:element minOccurs="0" name="AverageDebtLast12Months" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="AverageDebtLast3Months" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="BankruptcyCountDuringOwnership" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="BankruptcyDetails" nillable="true" type="tns:ArrayOfBankruptcyDetail" />
       <xs:element minOccurs="0" name="BusinessName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CommercialDelphiScore" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="CreditLimit" nillable="true" type="xs:string" />
@@ -381,6 +382,27 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CompanyData" nillable="true" type="tns:CompanyData" />
+  <xs:complexType name="ArrayOfBankruptcyDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BankruptcyDetail" nillable="true" type="tns:BankruptcyDetail" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBankruptcyDetail" nillable="true" type="tns:ArrayOfBankruptcyDetail" />
+  <xs:complexType name="BankruptcyDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BankruptcyAddr1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankruptcyAddr2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankruptcyAddr3" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankruptcyAddr4" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankruptcyAddr5" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankruptcyName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankruptcyType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankruptcyTypeDesc" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GazetteDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PostCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BankruptcyDetail" nillable="true" type="tns:BankruptcyDetail" />
   <xs:complexType name="ArrayOfLoanScheduleItemModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />

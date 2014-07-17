@@ -136,10 +136,38 @@
 						{
 							var sicCodesSafeReader = new SafeReader(row);
 
-							string sicCode = sicCodesSafeReader["Code"];
-							string sicDesc = sicCodesSafeReader["Description"];
+							string sicCode = sicCodesSafeReader["Code"].ToNullString();
+							string sicDesc = sicCodesSafeReader["Description"].ToNullString();
 							Data.SicCodes.Add(sicCode);
 							Data.SicDescs.Add(sicDesc);
+						}
+					}
+
+					DataTable bakruptcyDetailsDataTable = DB.ExecuteReader(
+						"GetNonLimitedBankruptcyDetails",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
+
+					if (bakruptcyDetailsDataTable.Rows.Count > 0)
+					{
+						Data.BankruptcyDetails = new List<BankruptcyDetail>();
+						foreach (DataRow row in bakruptcyDetailsDataTable.Rows)
+						{
+							var bakruptcyDetailsSafeReader = new SafeReader(row);
+
+							var bankruptcyDetail = new BankruptcyDetail();
+							bankruptcyDetail.BankruptcyName = bakruptcyDetailsSafeReader["BankruptcyName"].ToNullString();
+							bankruptcyDetail.BankruptcyAddr1 = bakruptcyDetailsSafeReader["BankruptcyAddr1"].ToNullString();
+							bankruptcyDetail.BankruptcyAddr2 = bakruptcyDetailsSafeReader["BankruptcyAddr2"].ToNullString();
+							bankruptcyDetail.BankruptcyAddr3 = bakruptcyDetailsSafeReader["BankruptcyAddr3"].ToNullString();
+							bankruptcyDetail.BankruptcyAddr4 = bakruptcyDetailsSafeReader["BankruptcyAddr4"].ToNullString();
+							bankruptcyDetail.BankruptcyAddr5 = bakruptcyDetailsSafeReader["BankruptcyAddr5"].ToNullString();
+							bankruptcyDetail.PostCode = bakruptcyDetailsSafeReader["PostCode"].ToNullString();
+							bankruptcyDetail.GazetteDate = bakruptcyDetailsSafeReader["GazetteDate"];
+							bankruptcyDetail.BankruptcyType = bakruptcyDetailsSafeReader["BankruptcyType"].ToNullString();
+							bankruptcyDetail.BankruptcyTypeDesc = bakruptcyDetailsSafeReader["BankruptcyTypeDesc"].ToNullString();
+							
+							Data.BankruptcyDetails.Add(bankruptcyDetail);
 						}
 					}
 				}

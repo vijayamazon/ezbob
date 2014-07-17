@@ -2,6 +2,40 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	
+	[DataContract]
+	public class BankruptcyDetail
+	{
+		[DataMember]
+		public string BankruptcyName { get; set; }
+
+		[DataMember]
+		public string BankruptcyAddr1 { get; set; }
+
+		[DataMember]
+		public string BankruptcyAddr2 { get; set; }
+
+		[DataMember]
+		public string BankruptcyAddr3 { get; set; }
+
+		[DataMember]
+		public string BankruptcyAddr4 { get; set; }
+
+		[DataMember]
+		public string BankruptcyAddr5 { get; set; }
+
+		[DataMember]
+		public string PostCode { get; set; }
+
+		[DataMember]
+		public DateTime GazetteDate { get; set; }
+
+		[DataMember]
+		public string BankruptcyType { get; set; }
+
+		[DataMember]
+		public string BankruptcyTypeDesc { get; set; }
+	}
 
 	[DataContract]
 	public class CompanyData
@@ -197,5 +231,8 @@
 
 		[DataMember]
 		public List<string> SicDescs { get; set; }
+
+		[DataMember]
+		public List<BankruptcyDetail> BankruptcyDetails { get; set; }
 	}
 }
