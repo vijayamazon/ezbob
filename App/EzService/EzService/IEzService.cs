@@ -519,6 +519,9 @@
 
 		[OperationContract]
 		ActionMetaData CalculateNewMedals();
+
+		[OperationContract]
+		CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, int customerId, string refNumber);
 	} // interface IEzService
 } // namespace EzService
 

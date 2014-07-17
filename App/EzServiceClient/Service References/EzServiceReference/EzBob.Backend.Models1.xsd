@@ -312,6 +312,75 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
+  <xs:complexType name="CompanyData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Address1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Address2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Address3" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Address4" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Address5" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AgeOfMostRecentBankruptcyDuringOwnershipMonths" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AgeOfMostRecentJudgmentDuringOwnershipMonths" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AssociatedBankruptcyCountDuringOwnership" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AverageDaysBeyondTermsFor0To100" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AverageDaysBeyondTermsFor1001To10000" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AverageDaysBeyondTermsFor101To1000" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AverageDaysBeyondTermsForLast12MonthsOfDataReturned" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AverageDaysBeyondTermsForLast3MonthsOfDataReturned" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AverageDaysBeyondTermsForLast6MonthsOfDataReturned" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AverageDaysBeyondTermsForOver10000" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AverageDebtLast12Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AverageDebtLast3Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="BankruptcyCountDuringOwnership" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="BusinessName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CommercialDelphiScore" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CreditLimit" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CreditRating" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CurrentAverageDebt" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DateOwnershipCeased" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateOwnershipCommenced" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="EarliestKnownDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Errors" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FraudCategory" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FraudCategoryDesc" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IncorporationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="IsLimited" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LastUpdateDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="NumberOfAccountsPlacedForCollection" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="NumberOfAccountsPlacedForCollectionLast2Years" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="NumberOfProprietorsFound" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="NumberOfProprietorsSearched" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PrincipalActivities" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProbabilityOfDefaultScore" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="RiskBand" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RiskScore" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="SearchType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SearchTypeDesc" nillable="true" type="xs:string" />
+      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SicCodes" nillable="true" type="q5:ArrayOfstring" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SicDescs" nillable="true" type="q6:ArrayOfstring" />
+      <xs:element minOccurs="0" name="StabilityOdds" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SupplierName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TelephoneNumberDN36" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TotalAssociatedJudgmentCountLast12Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalAssociatedJudgmentCountLast13To24Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalAssociatedJudgmentCountLast24Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalAssociatedJudgmentValueLast12Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalAssociatedJudgmentValueLast13To24Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalAssociatedJudgmentValueLast24Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalJudgmentCountLast12Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalJudgmentCountLast13To24Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalJudgmentCountLast24Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalJudgmentValueLast12Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalJudgmentValueLast13To24Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalJudgmentValueLast24Months" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ValueOfAccountsPlacedForCollection" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ValueOfMostRecentAssociatedJudgmentDuringOwnership" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompanyData" nillable="true" type="tns:CompanyData" />
   <xs:complexType name="ArrayOfLoanScheduleItemModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />

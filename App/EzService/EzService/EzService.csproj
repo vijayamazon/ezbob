@@ -76,6 +76,7 @@
     <Compile Include="ActionResults\BrokerPropertiesActionResult.cs" />
     <Compile Include="ActionResults\AvailableFundsActionResult.cs" />
     <Compile Include="ActionResults\AccountsToUpdateActionResult.cs" />
+    <Compile Include="ActionResults\CompanyDataForCompanyScoreActionResult.cs" />
     <Compile Include="ActionResults\ExperianLtdActionResult.cs" />
     <Compile Include="ActionResults\EsignatureFileActionResult.cs" />
     <Compile Include="ActionResults\EsignatureListActionResult.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
+    <Compile Include="EzServiceImplementation\CompanyData.cs" />
     <Compile Include="EzServiceImplementation\esign.cs" />
     <Compile Include="EzServiceImplementation\Funding.cs" />
     <Compile Include="EzServiceImplementation\vat.return.cs" />
