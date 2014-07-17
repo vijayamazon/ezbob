@@ -4,6 +4,95 @@
 	using System.Runtime.Serialization;
 	
 	[DataContract]
+	public class TradingName
+	{
+		[DataMember]
+		public string Name { get; set; }
+
+		[DataMember]
+		public string TradingIndicator { get; set; }
+
+		[DataMember]
+		public string TradingIndicatorDesc { get; set; }
+	}
+
+	[DataContract]
+	public class CcjDetail
+	{
+		[DataMember]
+		public string RecordType { get; set; }
+
+		[DataMember]
+		public string RecordTypeFullName { get; set; }
+
+		[DataMember]
+		public DateTime JudgementDate { get; set; }
+
+		[DataMember]
+		public string SatisfactionFlag { get; set; }
+
+		[DataMember]
+		public string SatisfactionFlagDesc { get; set; }
+
+		[DataMember]
+		public DateTime SatisfactionDate { get; set; }
+
+		[DataMember]
+		public string JudgmentType { get; set; }
+
+		[DataMember]
+		public string JudgmentTypeDesc { get; set; }
+		
+		[DataMember]
+		public int JudgmentAmount { get; set; }
+
+		[DataMember]
+		public string Court { get; set; }
+
+		[DataMember]
+		public string CaseNumber { get; set; }
+
+		[DataMember]
+		public string NumberOfJudgmentNames { get; set; }
+
+		[DataMember]
+		public string NumberOfTradingNames { get; set; }
+
+		[DataMember]
+		public string LengthOfJudgmentName { get; set; }
+
+		[DataMember]
+		public string LengthOfTradingName { get; set; }
+
+		[DataMember]
+		public string LengthOfJudgmentAddress { get; set; }
+		
+		[DataMember]
+		public string JudgementAddr1 { get; set; }
+
+		[DataMember]
+		public string JudgementAddr2 { get; set; }
+
+		[DataMember]
+		public string JudgementAddr3 { get; set; }
+
+		[DataMember]
+		public string JudgementAddr4 { get; set; }
+
+		[DataMember]
+		public string JudgementAddr5 { get; set; }
+
+		[DataMember]
+		public string PostCode { get; set; }
+
+		[DataMember]
+		public List<string> RegisteredAgainst { get; set; }
+
+		[DataMember]
+		public List<TradingName> TradingNames { get; set; }
+	}
+
+	[DataContract]
 	public class BankruptcyDetail
 	{
 		[DataMember]
@@ -234,5 +323,8 @@
 
 		[DataMember]
 		public List<BankruptcyDetail> BankruptcyDetails { get; set; }
+
+		[DataMember]
+		public List<CcjDetail> CcjDetails { get; set; }
 	}
 }

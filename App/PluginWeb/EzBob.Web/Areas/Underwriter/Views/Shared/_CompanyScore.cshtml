@@ -480,6 +480,107 @@
                     </tbody>
                 </table>
             <%}%>
+    
+            <% if (response.Data.CcjDetails != undefined) {%>
+                <table>
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th>Record type</th>
+                            <th>Record type fullName</th>
+                            <th>Judgement date</th>
+                            <th>Satisfaction flag</th>
+                            <th>Satisfaction flag description</th>
+                            <th>Satisfaction date</th>
+                            <th>Judgment type description</th>
+                            <th>Judgment amount</th>
+                            <th>Court</th>
+                            <th>Case #</th>
+                            <th># of judgment names</th>
+                            <th># of trading names</th>
+                            <th>Length of judgment name</th>
+                            <th>Length of trading name</th>
+                            <th>Length of judgment address</th>
+                            <th>Addr line 1</th>
+                            <th>Addr line 2</th>
+                            <th>Addr line 3</th>
+                            <th>Addr line 4</th>
+                            <th>Addr line 5</th>
+                            <th>PostCode</th>
+                            <th>Registered against</th>
+                            <th>Trading names</th>
+                        </tr>
+                    </thead>
+		            <tbody>
+                        @*<% _.each(response.Data.CcjDetails, function(i) {*@
+                        <% if (response.Data.CcjDetails[0] != undefined) {%>
+                            <tr>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].RecordType%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].RecordTypeFullName%></td>
+		                        <td class=narrow-as-possible><%-EzBob.formatDate(response.Data.CcjDetails[0].JudgementDate)%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].SatisfactionFlag%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].SatisfactionFlagDesc%></td>
+		                        <td class=narrow-as-possible><%-EzBob.formatDate(response.Data.CcjDetails[0].SatisfactionDate)%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgmentType%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgmentTypeDesc%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgmentAmount%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].Court%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].CaseNumber%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].NumberOfJudgmentNames%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].NumberOfTradingNames%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].LengthOfJudgmentName%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].LengthOfTradingName%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].LengthOfJudgmentAddress%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr1%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr2%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr3%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr4%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr5%></td>
+		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].PostCode%></td>
+		                        <td class=narrow-as-possible>
+                                    <% if (response.Data.CcjDetails[0].RegisteredAgainst != undefined) {%>
+                                        <table>
+		                                    <tbody>
+                                                @*<% _.each(response.Data.CcjDetails[0].RegisteredAgainst, function(i) {*@
+                                                <% if (response.Data.CcjDetails[0].RegisteredAgainst[0] != undefined) {%>
+                                                    <tr>
+		                                                <td class=narrow-as-possible><%response.Data.CcjDetails[0].RegisteredAgainst[0]%></td>
+	                                                </tr>
+                                                <%}%>
+                                                @*<%}%>*@
+                                            </tbody>
+                                        </table>
+                                    <%}%>
+                                </td>
+		                        <td>
+                                    <% if (response.Data.CcjDetails[0].TradingNames != undefined) {%>
+                                        <table>
+                                            <thead class="box">
+                                                <tr class="box-title">
+                                                    <th>Name</th>
+                                                    <th>Indicator</th>
+                                                    <th>Indicator description</th>
+                                                </tr>
+                                            </thead>
+		                                    <tbody>
+                                                @*<% _.each(response.Data.CcjDetails[0].TradingNames, function(i) {*@
+                                                <% if (response.Data.CcjDetails[0].TradingNames[0] != undefined) {%>
+                                                    <tr>
+		                                                <td class=narrow-as-possible><%response.Data.CcjDetails[0].TradingNames[0].Name%></td>
+		                                                <td class=narrow-as-possible><%response.Data.CcjDetails[0].TradingNames[0].Indicator%></td>
+		                                                <td class=narrow-as-possible><%response.Data.CcjDetails[0].TradingNames[0].IndicatorDesc%></td>
+	                                                </tr>
+                                                <%}%>
+                                                @*<%}%>*@
+                                            </tbody>
+                                        </table>
+                                    <%}%>
+                                </td>
+	                        </tr>
+                        <%}%>
+                        @*<%}%>*@
+                    </tbody>
+                </table>
+            <%}%>
         </div><%
     }
     else

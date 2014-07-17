@@ -335,6 +335,7 @@
       <xs:element minOccurs="0" name="BankruptcyCountDuringOwnership" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="BankruptcyDetails" nillable="true" type="tns:ArrayOfBankruptcyDetail" />
       <xs:element minOccurs="0" name="BusinessName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CcjDetails" nillable="true" type="tns:ArrayOfCcjDetail" />
       <xs:element minOccurs="0" name="CommercialDelphiScore" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="CreditLimit" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CreditRating" nillable="true" type="xs:string" />
@@ -403,6 +404,55 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="BankruptcyDetail" nillable="true" type="tns:BankruptcyDetail" />
+  <xs:complexType name="ArrayOfCcjDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CcjDetail" nillable="true" type="tns:CcjDetail" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCcjDetail" nillable="true" type="tns:ArrayOfCcjDetail" />
+  <xs:complexType name="CcjDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CaseNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Court" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JudgementAddr1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JudgementAddr2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JudgementAddr3" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JudgementAddr4" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JudgementAddr5" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JudgementDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="JudgmentAmount" type="xs:int" />
+      <xs:element minOccurs="0" name="JudgmentType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JudgmentTypeDesc" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LengthOfJudgmentAddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LengthOfJudgmentName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LengthOfTradingName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NumberOfJudgmentNames" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NumberOfTradingNames" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PostCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RecordType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RecordTypeFullName" nillable="true" type="xs:string" />
+      <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RegisteredAgainst" nillable="true" type="q7:ArrayOfstring" />
+      <xs:element minOccurs="0" name="SatisfactionDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="SatisfactionFlag" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SatisfactionFlagDesc" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TradingNames" nillable="true" type="tns:ArrayOfTradingName" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CcjDetail" nillable="true" type="tns:CcjDetail" />
+  <xs:complexType name="ArrayOfTradingName">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TradingName" nillable="true" type="tns:TradingName" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTradingName" nillable="true" type="tns:ArrayOfTradingName" />
+  <xs:complexType name="TradingName">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TradingIndicator" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TradingIndicatorDesc" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TradingName" nillable="true" type="tns:TradingName" />
   <xs:complexType name="ArrayOfLoanScheduleItemModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />

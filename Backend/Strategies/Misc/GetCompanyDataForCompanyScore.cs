@@ -170,6 +170,82 @@
 							Data.BankruptcyDetails.Add(bankruptcyDetail);
 						}
 					}
+
+					DataTable ccjDetailsDataTable = DB.ExecuteReader(
+						"GetNonLimitedCcjDetails",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
+
+					if (ccjDetailsDataTable.Rows.Count > 0)
+					{
+						Data.CcjDetails = new List<CcjDetail>();
+						foreach (DataRow row in ccjDetailsDataTable.Rows)
+						{
+							var ccjDetailsSafeReader = new SafeReader(row);
+
+							var ccjDetail = new CcjDetail();
+							ccjDetail.RecordType = ccjDetailsSafeReader["RecordType"].ToNullString();
+							ccjDetail.RecordTypeFullName = ccjDetailsSafeReader["RecordTypeFullName"].ToNullString();
+							ccjDetail.JudgementDate = ccjDetailsSafeReader["JudgementDate"];
+							ccjDetail.SatisfactionFlag = ccjDetailsSafeReader["SatisfactionFlag"].ToNullString();
+							ccjDetail.SatisfactionFlagDesc = ccjDetailsSafeReader["SatisfactionFlagDesc"].ToNullString();
+							ccjDetail.SatisfactionDate = ccjDetailsSafeReader["SatisfactionDate"];
+							ccjDetail.JudgmentType = ccjDetailsSafeReader["JudgmentType"].ToNullString();
+							ccjDetail.JudgmentTypeDesc = ccjDetailsSafeReader["JudgmentTypeDesc"].ToNullString();
+							ccjDetail.JudgmentAmount = ccjDetailsSafeReader["JudgmentAmount"];
+							ccjDetail.Court = ccjDetailsSafeReader["Court"].ToNullString();
+							ccjDetail.CaseNumber = ccjDetailsSafeReader["CaseNumber"].ToNullString();
+							ccjDetail.NumberOfJudgmentNames = ccjDetailsSafeReader["NumberOfJudgmentNames"].ToNullString();
+							ccjDetail.NumberOfTradingNames = ccjDetailsSafeReader["NumberOfTradingNames"].ToNullString();
+							ccjDetail.LengthOfJudgmentName = ccjDetailsSafeReader["LengthOfJudgmentName"].ToNullString();
+							ccjDetail.LengthOfTradingName = ccjDetailsSafeReader["LengthOfTradingName"].ToNullString();
+							ccjDetail.LengthOfJudgmentAddress = ccjDetailsSafeReader["LengthOfJudgmentAddress"].ToNullString();
+							ccjDetail.JudgementAddr1 = ccjDetailsSafeReader["JudgementAddr1"].ToNullString();
+							ccjDetail.JudgementAddr2 = ccjDetailsSafeReader["JudgementAddr2"].ToNullString();
+							ccjDetail.JudgementAddr3 = ccjDetailsSafeReader["JudgementAddr3"].ToNullString();
+							ccjDetail.JudgementAddr4 = ccjDetailsSafeReader["JudgementAddr4"].ToNullString();
+							ccjDetail.JudgementAddr5 = ccjDetailsSafeReader["JudgementAddr5"].ToNullString();
+							ccjDetail.PostCode = ccjDetailsSafeReader["PostCode"].ToNullString();
+							int ccjDetailId = ccjDetailsSafeReader["Id"];
+
+							DataTable ccjDetailRegisteredAgainstDataTable = DB.ExecuteReader(
+								"GetNonLimitedCcjDetailRegisteredAgainst",
+								CommandSpecies.StoredProcedure,
+								new QueryParameter("ExperianNonLimitedResultCcjDetailsId", ccjDetailId));
+
+							if (ccjDetailRegisteredAgainstDataTable.Rows.Count > 0)
+							{
+								ccjDetail.RegisteredAgainst = new List<string>();
+								foreach (DataRow registeredAgainstRow in ccjDetailRegisteredAgainstDataTable.Rows)
+								{
+									var registeredAgainstSafeReader = new SafeReader(registeredAgainstRow);
+									string registeredAgainst = registeredAgainstSafeReader["Name"].ToNullString();
+									ccjDetail.RegisteredAgainst.Add(registeredAgainst);
+								}
+							}
+
+							DataTable ccjDetailTradingNamesDataTable = DB.ExecuteReader(
+								"GetNonLimitedCcjDetailTradingNames",
+								CommandSpecies.StoredProcedure,
+								new QueryParameter("ExperianNonLimitedResultCcjDetailsId", ccjDetailId));
+
+							if (ccjDetailTradingNamesDataTable.Rows.Count > 0)
+							{
+								ccjDetail.TradingNames = new List<TradingName>();
+								foreach (DataRow tradingNamesRow in ccjDetailTradingNamesDataTable.Rows)
+								{
+									var tradingNamesSafeReader = new SafeReader(tradingNamesRow);
+									var tradingName = new TradingName();
+									tradingName.Name = tradingNamesSafeReader["Name"].ToNullString();
+									tradingName.TradingIndicator = tradingNamesSafeReader["TradingIndicator"].ToNullString();
+									tradingName.TradingIndicatorDesc = tradingNamesSafeReader["TradingIndicatorDesc"].ToNullString();
+									ccjDetail.TradingNames.Add(tradingName);
+								}
+							}
+
+							Data.CcjDetails.Add(ccjDetail);
+						}
+					}
 				}
 			}
 		} // Execute
