@@ -46,6 +46,7 @@
     };
 
     ResetPasswordView.prototype.onRender = function() {
+      var notifications;
       this.captcha = new EzBob.Captcha({
         elementId: "captcha",
         tabindex: 11
@@ -56,6 +57,10 @@
       this.initStatusIcons();
       $('#email').focus();
       EzBob.UiAction.registerView(this);
+      notifications = new EzBob.NotificationsView({
+        el: this.$el.find(".errorArea")
+      });
+      notifications.render();
       return this;
     };
 

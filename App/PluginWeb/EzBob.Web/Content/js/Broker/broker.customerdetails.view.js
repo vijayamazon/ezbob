@@ -311,7 +311,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 				oCaption.append($('.dataTables_filter', oGroup));
 
 				oCaption.prepend(self.setSomethingEnabled(
-					$('<button type=button class="delete-selected-files" title="Delete selected files">Delete</button>'),
+					$('<button type=button class="button btn-green delete-selected-files" title="Delete selected files">Delete</button>'),
 					false
 				));
 			} // on success loading customer details

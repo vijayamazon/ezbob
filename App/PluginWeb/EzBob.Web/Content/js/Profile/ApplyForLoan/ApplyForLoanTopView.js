@@ -59,7 +59,6 @@
       var region, view;
       this.$el.html(this.template());
       view = this.states[this.model.get("state")]();
-      $('.narrow-wizard-header').after($('.notifications'));
       region = new Backbone.Marionette.Region({
         el: this.$el.find('.apply-for-loan-div')
       });

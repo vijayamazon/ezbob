@@ -25,7 +25,6 @@ class EzBob.CustomerLoginView extends Backbone.View
 
     $('#Password').focus()
     $('#UserName').focus()
-    $('.header-info-text').text('LOGIN')
     EzBob.UiAction.registerView @
     @
 

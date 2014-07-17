@@ -1,8 +1,45 @@
-﻿input[name="answer"] {
-    color: #555;
+﻿.dashboard-header {
+    position: relative;
+}
+.dashboard-header:before,.dashboard-header:after {
+  content: "";
+  position: absolute;
+  background-color: #E2E3E5;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+.dashboard-header:before {
+    right: 100%;
+}
+.dashboard-header:after {
+    left: 100%;
 }
 
-/*#profile-content { padding: 0px 62px 0 62px; }*/
+
+@media screen and (min-width: 1200px){
+    html,body {
+        overflow-x: hidden;
+    }
+}
+
+@media screen and (max-width: 1200px){
+  .dashboard-header:before,.dashboard-header:after {
+  content: "";
+  position: absolute;
+  background-color: #E2E3E5;
+  top: 0;
+  bottom: 0;
+  width: inherit;
+}
+.dashboard-header:before {
+    right: 0;
+}
+.dashboard-header:after {
+    left: 0;
+}
+
+}
 
 .d-widgets 
 {
@@ -906,8 +943,4 @@ table.directors-list td.l {
 
 .directors-list button {
 	white-space: nowrap;
-}
-
-a.pay-early {
-    color: #565656;
 }

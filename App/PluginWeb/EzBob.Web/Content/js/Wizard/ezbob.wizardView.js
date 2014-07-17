@@ -151,6 +151,7 @@ EzBob.WizardView = EzBob.View.extend({
     render: function () {
         var template = this.template();
         this.$el.html(template);
+        $('.header-info').show();
         $('.header-info-text').text('SIGNUP');
         this.stepChanged();
 

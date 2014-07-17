@@ -248,13 +248,18 @@ select:focus {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
 }
 
-div.form_buttons_container { position: relative; height: 38px;width: 96%;}
-div.form_buttons_container input, 
-div.form_buttons_container .button {
-    float: right;
-    margin-left: 5px;
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+button,
+.button {
+    font-size:15px;
+    font-weight:bold;
+    font-style:normal;
+    height:36px;
+    line-height:36px;
+    width:120px;
 }
-
 
 label{display:block; font-weight:bold; margin:0 0 5px 0;}
 
