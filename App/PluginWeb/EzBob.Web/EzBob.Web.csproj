@@ -719,6 +719,8 @@
     <Content Include="Content\img\excel.png" />
     <Content Include="Content\img\ezbob-logo-2014.png" />
     <Content Include="Content\img\ezbob-logo-big-2014.png" />
+    <Content Include="Content\img\favicon\favicon_57x57.png" />
+    <Content Include="Content\img\favicon\favicon_72x72.png" />
     <Content Include="Content\img\free-gift-icon.png" />
     <Content Include="Content\img\hmrc_button_link.png" />
     <Content Include="Content\img\hmrc_button_upload.png" />
@@ -808,11 +810,6 @@
     <Content Include="Content\img\ebay-link.png" />
     <Content Include="Content\img\ebay-logo.png" />
     <Content Include="Content\img\empty-big-sign.png" />
-    <Content Include="Content\img\favicon.png" />
-    <Content Include="Content\img\favicon114x114.png" />
-    <Content Include="Content\img\favicon32x32.png" />
-    <Content Include="Content\img\favicon57x57.png" />
-    <Content Include="Content\img\favicon72x72.png" />
     <Content Include="Content\img\five-icons.png" />
     <Content Include="Content\img\footer-copyright-bg.png" />
     <Content Include="Content\img\gold-1.png" />
