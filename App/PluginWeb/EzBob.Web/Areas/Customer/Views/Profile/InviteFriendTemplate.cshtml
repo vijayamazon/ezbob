@@ -49,7 +49,7 @@ The ezbob team
 	</ol>
 
 	<div class="row-fluid">
-		<button class="button orange pull-right inviteFriendHelp" ui-event-control-id="invite-friend:refer">Refer A Friend</button>
+		<button class="button btn-green pull-right inviteFriendHelp" ui-event-control-id="invite-friend:refer">Refer A Friend</button>
 	</div>
 
 	@if (customer.InvitedFriends != null && customer.InvitedFriends.Any()) {
@@ -99,14 +99,14 @@ The ezbob team
 					<a
 						href="mailto:?subject=@subject&body=@encodedSummary"
 						target="_blank"
-						class="button orange pull-right"
+						class="button btn-green pull-right"
 						id="inviteFriendBtn"
 						onclick="$.colorbox.close();"
 						title="Send email"
 						ui-event-control-id="invite-friend:email"
 					>Send</a>
 
-					<button class="button grey pull-right" id="cancelInviteFriendBtn" onclick="$.colorbox.close();" ui-event-control-id="invite-friend:cancel">Cancel</button>
+					<button class="button btn-grey pull-right" id="cancelInviteFriendBtn" onclick="$.colorbox.close();" ui-event-control-id="invite-friend:cancel">Cancel</button>
 				</div>
 			</div>
 			<hr>

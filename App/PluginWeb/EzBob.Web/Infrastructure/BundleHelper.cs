@@ -472,7 +472,6 @@
 		public static MvcHtmlString RenderPaypointTemplateJs()
 		{
 			return Bundle.JavaScript()
-				.AddString(GetDbStrings())
 				.Add("~/Content/js/lib/jquery-1.8.3.js")
 				.Add("~/Content/js/lib/jquery.browser.min.js")
 				.Add("~/Content/js/lib/jquery.scrollTo.js")

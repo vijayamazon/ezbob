@@ -1,5 +1,7 @@
 ﻿@model dynamic
-           
+@{
+    Layout = null;
+}
 You can downoad prod template here: @Html.ActionLink("Download", "DownloadTemplate", "PaypointTemplate", new{Area="", type = "Prod"}, new {})<br/>
 You can downoad qa template here: @Html.ActionLink("Download", "DownloadTemplate", "PaypointTemplate", new{Area="", type = "Qa"}, new {})<br/>
 You can downoad dev template here: @Html.ActionLink("Download", "DownloadTemplate", "PaypointTemplate", new{Area="", type = "Dev"}, new {})<br/>

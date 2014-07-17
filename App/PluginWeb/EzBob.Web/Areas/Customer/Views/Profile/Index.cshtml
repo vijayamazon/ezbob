@@ -4,355 +4,363 @@
 @model EzBob.Web.Models.WizardModel
 
 @{
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	var customer = Model.Customer;
-	customer.IsProfile = true;
-	var currVals = CurrentValues.Instance;
-
-	string sMedalCart = ((Model.Customer.Medal != null) ? Model.Customer.Medal.ToLower() : "") + "-cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var customer = Model.Customer;
+    customer.IsProfile = true;
+    var currVals = CurrentValues.Instance;
 }
 
 @section css {
-	@BundleHelper.RenderProfileCss()
+    @BundleHelper.RenderProfileCss()
 }
 
 <script id="profile-main-template" type="text/template">
-	<div id="profile-main">
-		<div class="clearfix">
-			<div class="cart-logo @sMedalCart"></div>
-			<div class="profile-headlines">
-				<div id="message-sign" class=""></div>
-				<h1 style="margin-top: -10px;">My Account</h1>
-				<div class="proccessing-message"></div>
-			</div>
-			<div class="whats-new-main notification_lightblue" style="display: none">
-				<div class="whats-new-buttons">
-					<input type="button" value="Got it" class="btn-link" id="btnGotIt" ui-event-control-id="dashboard:whats-new-dismiss" />
-				</div>
-			</div>
-			<div class="notifications"></div>
-		</div>
+    <div id="profile-main">
+        <div class="clearfix">
 
-		<div class="d-widgets clearfix"></div>
+            <div class="profile-headlines">
+                <div id="message-sign" class=""></div>
+                <div class="proccessing-message"></div>
+            </div>
 
-		<div class="navbar profile-menu">
-			<div class="navbar-inner">
-				<ul class="nav">
-					<li><a href="#AccountActivity" ui-event-control-id="dashboard:tab-account-acitvity">Account Activity</a></li>
-					<li class="divider-vertical"></li>
-					<li class="active"><a href="#YourStores" ui-event-control-id="dashboard:tab-accounts">Accounts</a></li>
-					<li class="divider-vertical"></li>
-					<li><a href="#PaymentAccounts" ui-event-control-id="dashboard:tab-payment-accounts">Payment Accounts</a></li>
-					<li class="divider-vertical"></li>
-					<li><a href="#YourDetails" ui-event-control-id="dashboard:tab-my-information">My Information</a></li>
-					<li class="divider-vertical"></li>
-					<li><a href="#Settings" ui-event-control-id="dashboard:tab-settings">Settings</a></li>
-					<li class="divider-vertical"></li>
-					<li><a href="#InviteFriend" ui-event-control-id="dashboard:tab-refer-a-friend">Refer A Friend</a></li>
-					@if (Model.Customer.Perks != null) {
-						<li class="divider-vertical"></li>
-						<li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
-					}
-					@if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CanHaveDirectors) {
-						<li class="divider-vertical"></li>
-						<li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors">Company Directors</a></li>
-					}
-				</ul>
-			</div>
-		</div>
+            <div class="whats-new-main notification_lightblue" style="display: none">
+                <div class="whats-new-buttons">
+                    <input type="button" value="Got it" class="btn-link" id="btnGotIt" ui-event-control-id="dashboard:whats-new-dismiss" />
+                </div>
+            </div>
 
-		<div class="profile-widgets"></div>
-	</div>
+            <div class="notifications"></div>
+        </div>
+
+        <div class="d-widgets clearfix"></div>
+
+        <div class="navbar profile-menu">
+            <div class="navbar-inner">
+                <ul class="nav">
+                    <li><a href="#AccountActivity" ui-event-control-id="dashboard:tab-account-acitvity">Account Activity</a></li>
+                    <li class="divider-vertical"></li>
+                    <li class="active"><a href="#YourStores" ui-event-control-id="dashboard:tab-accounts">Accounts</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#PaymentAccounts" ui-event-control-id="dashboard:tab-payment-accounts">Payment Accounts</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#YourDetails" ui-event-control-id="dashboard:tab-my-information">My Information</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#Settings" ui-event-control-id="dashboard:tab-settings">Settings</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#InviteFriend" ui-event-control-id="dashboard:tab-refer-a-friend">Refer A Friend</a></li>
+                    @if (Model.Customer.Perks != null)
+                    {
+                        <li class="divider-vertical"></li>
+                        <li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
+                    }
+                    @if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CanHaveDirectors)
+                    {
+                        <li class="divider-vertical"></li>
+                        <li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors">Company Directors</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="profile-widgets"></div>
+    </div>
 </script>
 
-<div id="profile-content">
-	<div id="profile-main-to-be-replaced"></div>
-	<div id="get-cash"></div>
-	<div id="pay-early"></div>
-	<div id="loan-detail"></div>
+<div class="row-fluid profile-main">
+    <div class="inner">
+        <div id="profile-content">
+            <div id="profile-main-to-be-replaced"></div>
+            <div id="get-cash"></div>
+            <div id="pay-early"></div>
+            <div id="loan-detail"></div>
+        </div>
+    </div>
 </div>
 
 @AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CustomerDetails", new { Area = "Customer" }))
 
 @section Js
 {
-	<script id="d-payEarly-template" type="text/template">
-		<h3>Loans</h3>
-		<dl>
-			<dt>Total Balance:</dt>
-			<dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
-			<dt>Next Payment:</dt>
-			<dd class="next-due-amount"><%- EzBob.formatPounds(NextPayment) %> <i><%- EzBob.formatDate(NextPaymentDate) %></i></dd>
-		</dl>
-		<button class="button orange" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
-	</script>
+    <script id="d-payEarly-template" type="text/template">
+        <h3>Loans</h3>
+        <dl>
+            <dt>Total Balance:</dt>
+            <dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
+            <dt>Next Payment:</dt>
+            <dd class="next-due-amount"><%- EzBob.formatPounds(NextPayment) %> <i><%- EzBob.formatDate(NextPaymentDate) %></i></dd>
+        </dl>
+        <button class="button btn-green" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
+    </script>
 
-	<script id="d-lateLoan-template" type="text/template">
-		<dl>
-			<dt>Total Balance:</dt>
-			<dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
-			<dt style="line-height: 14px;">Amount Past Due:</dt>
-			<dd style="color: red;"><%- EzBob.formatPounds(TotalDue) %></dd>
-		</dl>
-		<button class="button orange pay-late" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
-	</script>
+    <script id="d-lateLoan-template" type="text/template">
+        <h3>Loans</h3>
+        <dl>
+            <dt>Total Balance:</dt>
+            <dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
+            <dt style="line-height: 14px;">Amount Past Due:</dt>
+            <dd style="color: red;"><%- EzBob.formatPounds(TotalDue) %></dd>
+        </dl>
+        <button class="button btn-green pay-late" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
 
-	<script id="d-getCash-template" type="text/template">
-		<h3>Cash</h3>
-		<dl>
-			<dt>Available Credit:</dt>
-			<dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimals(availableCredit) %></dd>
-			<dt>Offer Valid for:</dt>
-			<dd class="offerValidFor"><%- countDown %> hrs</dd>
-		</dl>
+    </script>
 
-		<button class="button orange get-cash" ui-event-control-id="dashboard:top-choose-amount">Choose Amount</button>
-	</script>
+    <script id="d-getCash-template" type="text/template">
+        <h3>Cash</h3>
+        <dl>
+            <dt>Available Credit:</dt>
+            <dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimals(availableCredit) %></dd>
+            <dt>Offer Valid for:</dt>
+            <dd class="offerValidFor"><%- countDown %> hrs</dd>
+        </dl>
 
-	<script id="d-getCash-template-late" type="text/template">
-		<dl>
-			<dt>Available Credit:</dt>
-			<dd class="dashes">---</dd>
-			<dt>Offer Valid:</dt>
-			<dd class="dashes">---</dd>
-		</dl>
-		<button
-			rel="popover"
-			data-content="To get more cash, please pay your minimum amount due."
-			data-original-title="Get More Cash"
-			class="button orange disabled get-cash"
-			ui-event-control-id="dashboard:get-more-cash">
-			Get More Cash
-		</button>
-	</script>
+        <button class="button btn-green get-cash" ui-event-control-id="dashboard:top-choose-amount">Choose Amount</button>
+    </script>
 
-	<script id="d-getCash-template-apply" type="text/template">
-		<h3>Cash</h3>
-		<dl>
-			<dt>Available Credit:</dt>
-			<dd class="dashes">---</dd>
-			<dt>Offer Valid:</dt>
-			<dd class="dashes">---</dd>
-		</dl>
-		<button href="#" class="button orange apply-for-loan refresh-account-help" ui-event-control-id="dashboard:request-cash">Request Cash</button>
+    <script id="d-getCash-template-late" type="text/template">
+        <h3>Cash</h3>
+        <dl>
+            <dt>Available Credit:</dt>
+            <dd class="dashes">---</dd>
+            <dt>Offer Valid:</dt>
+            <dd class="dashes">---</dd>
+        </dl>
+        <button
+            rel="popover"
+            data-content="To get more cash, please pay your minimum amount due."
+            data-original-title="Get More Cash"
+            class="button btn-green disabled get-cash"
+            ui-event-control-id="dashboard:get-more-cash">
+            Get More Cash
+        </button>
 
-		<div class="hide">
-			<div id="refresh-vat-return" class="hmrc-upload-ui help_window"></div>
+    </script>
 
-			<div id="refresh-accounts-dlg" class="help_window">
-				<h2>Please update the following accounts</h2>
+    <script id="d-getCash-template-apply" type="text/template">
+        <h3>Cash</h3>
+        <dl>
+            <dt>Available Credit:</dt>
+            <dd class="dashes">---</dd>
+            <dt>Offer Valid:</dt>
+            <dd class="dashes">---</dd>
+        </dl>
+        <button href="#" class="button btn-green apply-for-loan refresh-account-help" ui-event-control-id="dashboard:request-cash">Request Cash</button>
 
-				<p></p>
+        <div class="hide">
+            <div id="refresh-vat-return" class="hmrc-upload-ui help_window"></div>
 
-				<ul class="account-list"></ul>
+            <div id="refresh-accounts-dlg" class="help_window">
+                <h2>Please update the following accounts</h2>
 
-				<p></p>
+                <p></p>
 
-				<div><a href="#" class="button orange skip-refresh-accounts" ui-event-control-id="refresh-account:skip">Skip</a></div>
+                <ul class="account-list"></ul>
 
-				<p></p>
-			</div>
+                <p></p>
 
-			<div id="refresh_yodlee_help" class="help_window">
-				<h2>Refresh bank account</h2>
-				<p>
-					Please click continue button below to refresh your bank account.<br />
-					You will be redirected, this will take around 30 seconds.
-				</p>
-				<br>
-				<div class="alignright" style="padding: 0 10px 0 0;">
-					<a href="#" target="_blank" class="button orange pull-right" id="refreshYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee">Continue</a>
-					<a href="#" class="button grey pull-right" id="cancelYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee-cancel">Cancel</a>
-				</div>
-				<div class="clear"></div>
-				<hr>
-				<div class="help_security"></div>
-			</div>
+                <div><a href="#" class="button btn-green skip-refresh-accounts" ui-event-control-id="refresh-account:skip">Skip</a></div>
 
-			<div id="refresh_ekm_help" class="help_window">
-				<h2>Update ekmpowershop account credentials</h2>
-				<p>Your credentials changed, please provide new credentials below.</p>
-				<p class="error" style="color: red; min-height: 32px;" id="update-ekm-error"></p>
-				<br />
-				@EzForm.InputText("refresh_ekm_login", "ekm login", cls: "form_field", isDisabled: true, isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_login")
-				@EzForm.Password("refresh_ekm_password", "ekm password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_password")
+                <p></p>
+            </div>
 
-				<div class="form_buttons_container">
-					<div class="attardi-button">
-						<a href="#" class="button orange pull-right" id="refreshEkmBtn"  ui-event-control-id="refresh-account:ekm">Continue</a>
-						<a href="#" class="button grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:ekm-cancel">Cancel</a>
-					</div>
-				</div>
-				<div class="clear"></div>
-				<hr>
-				<div class="help_security"></div>
-			</div>
+            <div id="refresh_yodlee_help" class="help_window">
+                <h2>Refresh bank account</h2>
+                <p>
+                    Please click continue button below to refresh your bank account.<br />
+                    You will be redirected, this will take around 30 seconds.
+                </p>
+                <br>
+                <div class="alignright" style="padding: 0 10px 0 0;">
+                    <a href="#" target="_blank" class="button btn-green pull-right" id="refreshYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee">Continue</a>
+                    <a href="#" class="button btn-grey pull-right" id="cancelYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee-cancel">Cancel</a>
+                </div>
+                <div class="clear"></div>
+                <hr>
+                <div class="help_security"></div>
+            </div>
 
-			<div id="refresh_hmrc_help" class="help_window">
-				<h2>Update HMRC account credentials</h2>
-				<p>Your credentials changed, please provide new credentials below.</p>
-				<p class="error" style="color: red; min-height: 32px;" id="update-hmrc-error"></p>
-				<br />
-				@EzForm.InputText("refresh_hmrc_login", "User ID", cls: "form_field", isDisabled: true, isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:hmrc_login")
-				@EzForm.Password("refresh_hmrc_password", "Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:hmrc_password")
+            <div id="refresh_ekm_help" class="help_window">
+                <h2>Update ekmpowershop account credentials</h2>
+                <p>Your credentials changed, please provide new credentials below.</p>
+                <p class="error" style="color: red; min-height: 32px;" id="update-ekm-error"></p>
+                <br />
+                @EzForm.InputText("refresh_ekm_login", "ekm login", cls: "form_field", isDisabled: true, isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_login")
+                @EzForm.Password("refresh_ekm_password", "ekm password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_password")
 
-				<div class="form_buttons_container">
-					<div class="attardi-button">
-						<a href="#" class="button orange pull-right" id="refreshHmrcBtn" ui-event-control-id="refresh-account:hmrc">Continue</a>
-						<a href="#" class="button grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:hmrc-cancel">Cancel</a>
-					</div>
-				</div>
-				<div class="clear"></div>
-				<hr>
-				<div class="help_security"></div>
-			</div>
-		</div>
+                <div class="form_buttons_container">
+                    <div class="attardi-button">
+                        <a href="#" class="button btn-green pull-right" id="refreshEkmBtn" ui-event-control-id="refresh-account:ekm">Continue</a>
+                        <a href="#" class="button btn-grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:ekm-cancel">Cancel</a>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <hr>
+                <div class="help_security"></div>
+            </div>
 
-		<div class="trustpilot-ezbob">
-			<div class="skip">
-				<h3>Rate us on Trustpilot</h3>
-				<a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">
-					<span class="ui-icon ui-icon-closethick">skip</span>
-				</a>
-			</div>
-			<div class="trust-caption">
-				Thank you for requesting cash,<br />
-				your request is been processed.
-			</div>
-			<div class="rate">
-				<div class="text">
-					<div>Help us grow,</div>
-					<div>ezbob will help</div>
-					<div class="strong">your business</div>
-					<div class="strong">grow too!</div>
-				</div>
+            <div id="refresh_hmrc_help" class="help_window">
+                <h2>Update HMRC account credentials</h2>
+                <p>Your credentials changed, please provide new credentials below.</p>
+                <p class="error" style="color: red; min-height: 32px;" id="update-hmrc-error"></p>
+                <br />
+                @EzForm.InputText("refresh_hmrc_login", "User ID", cls: "form_field", isDisabled: true, isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:hmrc_login")
+                @EzForm.Password("refresh_hmrc_password", "Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:hmrc_password")
 
-				<a class="image-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-image">
-					<img src="../../../../Content/img/trustpilot.png" alt="Rate us!" />
-				</a>
-			</div>
-			<div class="rate">
-				<a class="text-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-text">Write a review</a>
-			</div>
-		</div>
-	</script>
+                <div class="form_buttons_container">
+                    <div class="attardi-button">
+                        <a href="#" class="button btn-green pull-right" id="refreshHmrcBtn" ui-event-control-id="refresh-account:hmrc">Continue</a>
+                        <a href="#" class="button btn-grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:hmrc-cancel">Cancel</a>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <hr>
+                <div class="help_security"></div>
+            </div>
+        </div>
 
-	<script id="processing-message-template" type="text/template">
-		<h2 class="header-message <%- cls %>"><%= Message %></h2>
-	</script>
+        <div class="trustpilot-ezbob">
+            <div class="skip">
+                <h3>Rate us on Trustpilot</h3>
+                <a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">
+                    <span class="ui-icon ui-icon-closethick">skip</span>
+                </a>
+            </div>
+            <div class="trust-caption">
+                Thank you for requesting cash,<br />
+                your request is been processed.
+            </div>
+            <div class="rate">
+                <div class="text">
+                    <div>Help us grow,</div>
+                    <div>ezbob will help</div>
+                    <div class="strong">your business</div>
+                    <div class="strong">grow too!</div>
+                </div>
 
-	<script id="d-getCash-template-wait" type="text/template">
-		<h3>Cash</h3>
-		<dl>
-			<dt>Available Credit:</dt>
-			<dd style="font-weight: bold; font-size: 13px; text-align: center;">Under Review</dd>
-			<dt>Offer Valid:</dt>
-			<dd class="dashes">---</dd>
-		</dl>
-		<button class="button orange disabled" ui-event-control-id="dashboard:choose-amount-wait">
-			Choose Amount
-		</button>
-	</script>
+                <a class="image-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-image">
+                    <img src="../../../../Content/img/trustpilot.png" alt="Rate us!" />
+                </a>
+            </div>
+            <div class="rate">
+                <a class="text-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-text">Write a review</a>
+            </div>
+        </div>
+    </script>
 
-	<script id="d-getCash-template-bad" type="text/template">
-		<h3>Cash</h3>
-		<dl>
-			<dt>Available Credit:</dt>
-			<dd style="font-weight: bold; font-size: 13px; text-align: center;">None</dd>
-			<dt>Offer Valid:</dt>
-			<dd class="dashes">---</dd>
-		</dl>
-		<button class="button orange apply-for-loan disabled" ui-event-control-id="dashboard:choose-amount-bad">
-			Choose Amount
-		</button>
-	</script>
+    <script id="processing-message-template" type="text/template">
+        <h2 class="header-message <%- cls %>"><%= Message %></h2>
+    </script>
 
-	<div class="modal" id="payEarly-modal" style="display: none;">
-		<div class="modal-header">
-			<button class="close" data-dismiss="modal" ui-event-control-id="pay-early-modal:x">×</button>
-			<h3>Information</h3>
-		</div>
-		<div class="modal-body">
-			<p>Your don't have any loan to repay</p>
-		</div>
-		<div class="modal-footer">
-			<a href="#" class="btn-back" data-dismiss="modal" ui-event-control-id="pay-early-modal:dismiss">Close</a>
-		</div>
-	</div>
+    <script id="d-getCash-template-wait" type="text/template">
+        <h3>Cash</h3>
+        <dl>
+            <dt>Available Credit:</dt>
+            <dd style="font-weight: bold; font-size: 13px; text-align: center;">Under Review</dd>
+            <dt>Offer Valid:</dt>
+            <dd class="dashes">---</dd>
+        </dl>
+        <button class="button btn-green disabled" ui-event-control-id="dashboard:choose-amount-wait">
+            Choose Amount
+        </button>
+    </script>
 
-	<script id="sign-template" type="text/template">
-		<div class="<%-color%>-sign pull-right">
-			<a href="#" ui-event-control-id="sign-template:link"><%=text%></a>
-		</div>
-	</script>
+    <script id="d-getCash-template-bad" type="text/template">
+        <h3>Cash</h3>
+        <dl>
+            <dt>Available Credit:</dt>
+            <dd style="font-weight: bold; font-size: 13px; text-align: center;">None</dd>
+            <dt>Offer Valid:</dt>
+            <dd class="dashes">---</dd>
+        </dl>
+        <button class="button btn-green apply-for-loan disabled" ui-event-control-id="dashboard:choose-amount-bad">
+            Choose Amount
+        </button>
+    </script>
 
-	<script id="sign-welcome-template" type="text/template">
-		<div class="welcome-sign pull-right"><%= text %></div>
-	</script>
+    <div class="modal" id="payEarly-modal" style="display: none;">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal" ui-event-control-id="pay-early-modal:x">×</button>
+            <h3>Information</h3>
+        </div>
+        <div class="modal-body">
+            <p>Your don't have any loan to repay</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn-back" data-dismiss="modal" ui-event-control-id="pay-early-modal:dismiss">Close</a>
+        </div>
+    </div>
 
-	@{
-		Html.RenderPartial("EbayStoreInfo");
-		Html.RenderPartial("AmazonStoreInfo");
-		Html.RenderPartial("StoreButton");
-		Html.RenderPartial("PayPalInstructions");
-		Html.RenderPartial("_CompanyDetails");
-		Html.RenderPartial("BankAccountInstructions");
-		Html.RenderPartial("ApplyForLoanTopTemplate");
-		Html.RenderPartial("PayEarlyTemplate");
-		Html.RenderPartial("AccountActivityTemplate");
-		Html.RenderPartial("LoanDetailsTemplate");
-		Html.RenderPartial("PaymentAccountsTemplate");
-		Html.RenderPartial("StoresTemplate");
-		Html.RenderPartial("SettingsTemplate");
-		Html.RenderPartial("_ProfileSummary");
-		Html.RenderPartial("_YourInfo");
-		Html.RenderPartial("StoreInfoMain");
-		Html.RenderPartial("PayPalInstructions");
-		Html.RenderPartial("InviteFriendTemplate");
-		Html.RenderPartial("CompanyDirectorsTemplate");
-		Html.RenderPartial("PerksTemplate");
-		Html.RenderPartial("../Shared/Profile/_PayPointCardSelectViewTemplate");
-		Html.RenderPartial("Shops/EKMAccoutInfoTemplate");
-		Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");
-		Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");
-		Html.RenderPartial("Shops/CGAccountInfoTemplate");
-		Html.RenderPartial("Shops/HMRCAccountInfoTemplate");
-		Html.RenderPartial("Shops/CompanyFilesAccountInfoTemplate");
-	}
+    <script id="sign-template" type="text/template">
+        <div class="<%-color%>-sign pull-right">
+            <a href="#" ui-event-control-id="sign-template:link"><%=text%></a>
+        </div>
+    </script>
 
-	<script type="text/javascript">
-		EzBob.Config.GetCashSliderStep = @currVals.GetCashSliderStep.Value;
-		EzBob.Config.MinLoan = @currVals.MinLoan.Value;
-		EzBob.Config.XMinLoan = @currVals.XMinLoan.Value;
-		EzBob.Config.PayPalEnabled = @currVals.PayPalEnabled.Value.ToLower();
-		EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
-		EzBob.Config.TargetsEnabledEntrepreneur = @currVals.TargetsEnabledEntrepreneur.Value.ToLower(CultureInfo.InvariantCulture);
-		EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
-		EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
-		EzBob.Config.SessionTimeout = @currVals.SessionTimeout.Value;
-		EzBob.Config.CaptchaMode = '@currVals.CaptchaMode.Value';
+    <script id="sign-welcome-template" type="text/template">
+        <div class="welcome-sign"><%= text %></div>
+    </script>
 
-		EzBob.Config.EchoSignEnabledCustomer = @(currVals.EchoSignEnabledCustomer ? "true" : "false");
+    @{
+        Html.RenderPartial("EditExperianDirectorData");
+        Html.RenderPartial("AmazonStoreInfo");
+        Html.RenderPartial("StoreButton");
+        Html.RenderPartial("_CompanyDetails");
+        Html.RenderPartial("BankAccountInstructions");
+        Html.RenderPartial("ApplyForLoanTopTemplate");
+        Html.RenderPartial("PayEarlyTemplate");
+        Html.RenderPartial("AccountActivityTemplate");
+        Html.RenderPartial("LoanDetailsTemplate");
+        Html.RenderPartial("PaymentAccountsTemplate");
+        Html.RenderPartial("StoresTemplate");
+        Html.RenderPartial("SettingsTemplate");
+        Html.RenderPartial("_ProfileSummary");
+        Html.RenderPartial("_YourInfo");
+        Html.RenderPartial("StoreInfoMain");
+        Html.RenderPartial("InviteFriendTemplate");
+        Html.RenderPartial("CompanyDirectorsTemplate");
+        Html.RenderPartial("PerksTemplate");
+        Html.RenderPartial("../Shared/Profile/_PayPointCardSelectViewTemplate");
+        Html.RenderPartial("Shops/EKMAccoutInfoTemplate");
+        Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");
+        Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");
+        Html.RenderPartial("Shops/CGAccountInfoTemplate");
+        Html.RenderPartial("Shops/HMRCAccountInfoTemplate");
+        Html.RenderPartial("Shops/CompanyFilesAccountInfoTemplate");
+    }
 
-		$(function() {
+    <script type="text/javascript">
+        EzBob.Config.GetCashSliderStep = @currVals.GetCashSliderStep.Value;
+        EzBob.Config.MinLoan = @currVals.MinLoan.Value;
+        EzBob.Config.XMinLoan = @currVals.XMinLoan.Value;
+        EzBob.Config.PayPalEnabled = @currVals.PayPalEnabled.Value.ToLower();
+        EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
+        EzBob.Config.TargetsEnabledEntrepreneur = @currVals.TargetsEnabledEntrepreneur.Value.ToLower(CultureInfo.InvariantCulture);
+        EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
+        EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
+        EzBob.Config.SessionTimeout = @currVals.SessionTimeout.Value;
+        EzBob.Config.CaptchaMode = '@currVals.CaptchaMode.Value';
+
+        EzBob.Config.EchoSignEnabledCustomer = @(currVals.EchoSignEnabledCustomer ? "true" : "false");
+
+        $(function() {
 			@{
-				string wizardComplete = "false";
+                string wizardComplete = "false";
 
-				if (ViewData["WizardComplete"] != null) {
-					wizardComplete = ViewData["WizardComplete"].ToString().ToLower();
-					ViewData["WizardComplete"] = false;
-				} 
+                if (ViewData["WizardComplete"] != null)
+                {
+                    wizardComplete = ViewData["WizardComplete"].ToString().ToLower();
+                    ViewData["WizardComplete"] = false;
+                } 
 			}
 
-			var finishedWizard = @wizardComplete;
+		    var finishedWizard = @wizardComplete;
 
-			if (finishedWizard === true) {
-				var oDialog = $('#thankyou_help');
-				if (oDialog.length > 0)
-					$.colorbox({ inline: true, transition: 'elastic',href: oDialog, open: true, show: true, width: 600, scrolling: false });
-			}
+		    if (finishedWizard === true) {
+		        var oDialog = $('#thankyou_help');
+		        if (oDialog.length > 0)
+		            $.colorbox({ inline: true, transition: 'elastic',href: oDialog, open: true, show: true, width: 600, scrolling: false });
+		    }
 
-			var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
+		    var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
 			options.createdInProfile = true;
 
 			var profileView = new EzBob.Profile.ProfileView(options);
@@ -368,42 +376,44 @@
 
 			Backbone.history.start();
 		});
-	</script>
+    </script>
 
-	@BundleHelper.RenderProfileJs()
+    @BundleHelper.RenderProfileJs()
 }
 
 <div class="hide">
-	<div id="thankyou_help" class="help_window">
-		<h2 class="form_section">Your application is complete!</h2>
-		@if (customer.IsOffline.HasValue && customer.IsOffline.Value) {
-			<div class="offline">
-				<p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
-				<p>
-					In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
+    <div id="thankyou_help" class="help_window">
+        <h2 class="form_section">Your application is complete!</h2>
+        @if (customer.IsOffline.HasValue && customer.IsOffline.Value)
+        {
+            <div class="offline">
+                <p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
+                <p>
+                    In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
 					If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
-				</p>
-				<p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
-			</div>
-		}
-		else {
-			<div class="notoffline">
-				<p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
-				<p>
-					In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
+                </p>
+                <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
+            </div>
+        }
+        else
+        {
+            <div class="notoffline">
+                <p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
+                <p>
+                    In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
 					If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
-				</p>
-				<p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
-			</div>
-		}
-		<p>
-			Thank You,<br>
-			The <span class="bold">ezbob</span> Team
-		</p>
+                </p>
+                <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
+            </div>
+        }
+        <p>
+            Thank You,<br>
+            The <span class="bold">ezbob</span> Team
+        </p>
 
-		<div class="alignright" style="padding: 0 10px 0 0;">
-			<button onclick="javascript:$.colorbox.close(); return false;" class="button orange pull-right" ui-event-control-id="profile:thank-you-popup">Continue</button>
-		</div>
-		<div class="clear"></div>
-	</div>
+        <div class="alignright" style="padding: 0 10px 0 0;">
+            <button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:thank-you-popup">Continue</button>
+        </div>
+        <div class="clear"></div>
+    </div>
 </div>

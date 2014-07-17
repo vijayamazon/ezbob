@@ -23,8 +23,8 @@ class EzBob.CustomerLoginView extends Backbone.View
     oFieldStatusIcons.filter('.required').field_status({ required: true })
     oFieldStatusIcons.not('.required').field_status({ required: false })
 
+    $('#Password').focus()
     $('#UserName').focus()
-
     EzBob.UiAction.registerView @
     @
 

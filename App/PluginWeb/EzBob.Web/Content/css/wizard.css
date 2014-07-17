@@ -49,11 +49,13 @@ body .SecurityStatement {
     color: #585858;
     background-color: #FFF;
 
-    font: normal 12px Arial;
+    font-size: 12px;
+    font-weight: normal;
 }
 
 .SecurityStatement h4 {
-    font: normal 16px Arial;
+    font-weight: normal;
+    font-size:  16px;
     margin-bottom: 22px;
     color: #585858;
 }
@@ -80,7 +82,6 @@ body .SecurityStatement {
 .AmazonForm, .AmazonForm label {
     font-size: 14px;
     font-weight: bold;
-    font-family: Arial;
     color: black;
 }
 
@@ -138,12 +139,12 @@ ul.list_none
 }
 
 .consent-dialog {
-    font: 11pt Calibri;
+    font-size: 11pt;
     color: black;
 }
 .consent-dialog h1
 {
-    font: 18pt Calibri;
+    font-size: 18pt;
     font-weight: bold;
     text-align: center;
     margin-top: 15px;
@@ -158,7 +159,7 @@ ul.list_none
 }
 .consent-dialog h2
 {
-    font: 14pt Calibri;
+    font-size: 14pt;
     font-weight: bold;
     text-align: left;
     color: black;
@@ -190,9 +191,14 @@ ul.list_none
 }
 
 .btn-showmore {
-    width: 100%;
+    width: 95% !important;
     line-height: normal !important;
     cursor: pointer !important;
+    float: left;
+    margin-left: 0;
+    margin-right: 0;
+    color: #4d4d4d;
+
 }
 
 h1.form_start,
@@ -261,8 +267,8 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .CompanyDetailForm .oobts-selected {
-	color: #8fc13d;
-	border: 1px solid #8fc13d !important;
+	color: #67c10b;
+	border: 1px solid #67c10b !important;
 	font-weight: bold;
 }
 
@@ -279,7 +285,7 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .CompanyDetailForm .oobts i.fa-check-square-o {
-	color: #8FC13D;
+	color: #67c10b;
 }
 
 .CompanyDetailForm .oobts-common {
@@ -342,7 +348,7 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 	width: 100%;
 	border-radius: 5px 5px 0 0;
 	padding: 1em;
-	background-color: #7bb224;
+	background-color: #67c10b;
 	color: white;
 	margin: 0;
 	-moz-box-sizing: border-box;
@@ -389,28 +395,29 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 	margin-top: 1em;
 }
 
+.vip-container {
+    margin-bottom: 10px;
+}
+
 .vip-main {
-    height: 140px;
     color: #5c6373;
     position: relative;
-    width: 100%;
 }
 
 .vip-button {
     position: absolute;
-    right: 5px;
-    bottom: 30px;
-    height: 40px;
+    bottom: 15px;
+    width: 100%;
 }
 
 .vip-req-button {
-    display: inline-block;
-    vertical-align: middle;
+    width: 90%;
+    margin: 0 auto;
+    display: inherit;
 }
 
 .vip-image {
     background-image: url(images/vip.PNG);
-    background-size: contain;
     background-repeat: no-repeat;
-    height: 140px;
+    height: 220px;
 }

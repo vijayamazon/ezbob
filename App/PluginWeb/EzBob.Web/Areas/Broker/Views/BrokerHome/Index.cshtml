@@ -3,58 +3,58 @@
 @using SquishIt.Mvc
 @model EzBob.Web.Areas.Broker.Models.BrokerHomeModel
 @{
-	Layout = null;
+    Layout = null;
 
-	Model.RootUrl = Url.Content("~/");
+    Model.RootUrl = Url.Content("~/");
 
-	Model.MarketingFileUrlTemplate = Url.Action("DownloadFile", "BrokerHome", new {Area = "Broker", fid = "__FILE_ID__",});
+    Model.MarketingFileUrlTemplate = Url.Action("DownloadFile", "BrokerHome", new { Area = "Broker", fid = "__FILE_ID__", });
 
-	Model.LogoUrl = Url.Content("~/Content/img/ezbob-logo-2014.png");
-	Model.EuIconUrl = Url.Content("~/Content/img/eu-menu.png");
+    Model.LogoUrl = Url.Content("~/Content/css/images/header/ezbob_logo-white.png");
+    Model.EuIconUrl = Url.Content("~/Content/img/eu-menu.png");
 }
 <!DOCTYPE html>
 <html>
 <head>
-	@{ Html.RenderPartial("_FrameKiller"); }
-	<script type="text/javascript">
-		window.gRootPath = '@Model.RootUrl';
-	</script>
+    @{ Html.RenderPartial("_FrameKiller"); }
+    <script type="text/javascript">
+        window.gRootPath = '@Model.RootUrl';
+    </script>
 
-	<title>Broker's home | EZBOB</title>
+    <title>Broker's home | EZBOB</title>
 
-	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
-	<meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
-	<meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
+    <meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
+    <meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
 
-	<meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
+    <meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
 
-	<link href="https://fonts.googleapis.com/css?family=Sanchez" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Sanchez" rel="stylesheet" type="text/css">
 
-	@{
-		Html.RenderPartial("_FavIcon");
+    @{
+        Html.RenderPartial("_FavIcon");
 
-		WriteLiteral(Bundle.Css()
-			//libs
-			.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
-			.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
-			.Add("~/Content/css/lib/bootstrap2.css")
-			.Add("~/Content/css/lib/bootstrap3.css")
-			.Add("~/Content/css/lib/bootstrap3-modal-patch.css")
-			.Add("~/Content/css/lib/dataTables.bootstrap.css")
-			.Add("~/Content/css/lib/DT_bootstrap.css")
-			.Add("~/Content/css/lib/font-awesome.min.css")
-			.Add("~/Content/css/lib/dropzone.css")
-			.Add("~/Content/css/lib/flaty.css")
-			.Add("~/Content/css/lib/flaty-responsive.css")
-			.Add("~/Content/css/lib/chosen.css")
-			.Add("~/Content/css/lib/notifications.css")
-			//custom css
-			.Add("~/Content/css/common.css")
-			.Add("~/Content/css/broker.css")
-			.MvcRender("~/Content/css/min/broker_#.css")
-		);
-	}
+        WriteLiteral(Bundle.Css()
+            //libs
+            .Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+            .Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+            .Add("~/Content/css/lib/bootstrap2.css")
+            .Add("~/Content/css/lib/bootstrap3.css")
+            .Add("~/Content/css/lib/bootstrap3-modal-patch.css")
+            .Add("~/Content/css/lib/dataTables.bootstrap.css")
+            .Add("~/Content/css/lib/DT_bootstrap.css")
+            .Add("~/Content/css/lib/font-awesome.min.css")
+            .Add("~/Content/css/lib/dropzone.css")
+            .Add("~/Content/css/lib/flaty.css")
+            .Add("~/Content/css/lib/flaty-responsive.css")
+            .Add("~/Content/css/lib/chosen.css")
+            .Add("~/Content/css/lib/notifications.css")
+            //custom css
+            .Add("~/Content/css/common.css")
+            .Add("~/Content/css/broker.css")
+            .MvcRender("~/Content/css/min/broker_#.css")
+        );
+    }
 </head>
 
 <body
@@ -62,724 +62,751 @@
 	data-msg-on-start="@Model.MessageOnStart"
 	data-msg-on-start-severity="@Model.MessageOnStartSeverity"
 >
-	@AntiForgery.GetHtml() 
-
-	<div id="wrapper">
-		<div id="header">
-			<div class="header-inner">
-				<div class="broker-logo">
-					<a href="http://www.ezbob.com"><img src="@Model.LogoUrl" class="logo-broker"></a> 
-					for <span class=word-brokers>Brokers</span>
-				</div>
-
-				<div class="header-phone">0800-011-4787</div>
-
-				<div class="eu-menu"><img src="@Model.EuIconUrl"><br>Authorised by the<br />European Union</div>
-
-				<ul id="user-menu" class="hide">
-					<li class="menu-btn login log-off"><a href="#">LOG OFF</a></li>
-					<li class="menu-btn login log-in"><a href="#">LOGIN</a></li>
-					<li class="menu-btn sign-up"><a href="#">SIGN UP</a></li>
-				</ul>
-			</div>
-		</div>
-
-		<div class="inner main-page">
-			<section id="full_width" class="broker">
-				<div class="notifications"></div>
-
-				<div class="page-section hide section-signup">
-					<form class="signup-form broker-form" novalidate="novalidate">
-						@{ int nSignupTabIdx = 1; }
-						<h2 class="form-start">Create broker account</h2>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Company name</span>
-								<input type="text" name="FirmName" id="FirmName" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-name" />
-								<img id="FirmNameImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Company registration number</span>
-								<input type="text" name="FirmRegNum" id="FirmRegNum" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-regnum" />
-								<img id="FirmRegNumImage" class="field_status" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Company web site</span>
-								<input type="text" name="FirmWebSite" id="FirmWebSite" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-web-site" />
-								<img id="FirmWebSiteImage" class="field_status" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Contact person full name</span>
-								<input type="text" name="ContactName" id="ContactName" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-contact-name" />
-								<img id="ContactNameImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Contact person email</span>
-								<input type="email" name="ContactEmail" id="ContactEmail" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-contact-email" />
-								<img id="ContactEmailImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<div class="code-sent-style-container"><label id="codeSentLabel" class="code-sent-style hide">Code sent</label></div>
-								<span>Contact person mobile phone</span>
-								<input type="text" name="ContactMobile" id="ContactMobile" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:signup-contact-mobile" maxlength="11" />
-								<img id="ContactMobileImage" class="field_status required" />
-								<input id="generateMobileCode" name="generateMobileCode" class="btn green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:signup-generate-mobile-code" />
-							</label>
-						</div>
-
-						<div id="mobileCodeDiv" class="form_field_container hide">
-							<label class="attardi-input">
-								<span>Mobile phone authentication code</span>
-								<input type="text" class="phonenumbercode form_field_left_side form_field" name="MobileCode" id="MobileCode" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-mobile-code" maxlength="6" data-sent-to="" />
-								<img id="mobileCodeImage" class="field_status required" />
-								<input id="switchToCaptcha" class="btn green form_field_right_side_signup_phone" type="button" value="Did not receive code" ui-event-control-id="broker:switch-to-captcha" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Contact person other phone number</span>
-								<input type="text" name="ContactOtherPhone" id="ContactOtherPhone" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="phonenumber form_field" ui-event-control-id="broker:signup-contact-other-phone" />
-								<img id="ContactOtherPhoneImage" class="field_status" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Estimated number of applications per month</span>
-								<input type="text" name="EstimatedMonthlyAppCount" id="EstimatedMonthlyAppCount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" max-length="6" ui-event-control-id="broker:signup-esitmated-monthly-application-count" />
-								<img id="EstimatedMonthlyAppCountImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Estimated value of credit per month (&pound;)</span>
-								<input type="text" name="EstimatedMonthlyClientAmount" id="EstimatedMonthlyClientAmount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-estimated-monthly-client-amount" />
-								<img id="EstimatedMonthlyClientAmountImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div id="strength-password-view" class="form_field_container">
-							<label class="attardi-input">
-								<span>Create password</span>
-								<input type="password" name="Password" id="Password" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-password" />
-								<img id="PasswordImage" class="field_status required" />
-							</label>
-							<p id="message" class="help-block"></p>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Confirm password</span>
-								<input type="password" name="Password2" id="Password2" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-confirm-password" />
-								<img id="Password2Image" class="field_status required" />
-							</label>
-						</div>
-
-						<div id="CaptchaSection" class="form_field_container hide" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
-							<input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0"/>
-							@EzForm.Captcha(Model.CaptchaMode, sId: "broker-captcha")
-						</div>
-
-						<div class="form_field_container form-read-and-accept">
-							<div>
-								<input id="AgreeToTerms" name="AgreeToTerms" type="checkbox" value="accepted-terms" ui-event-control-id="broker:signup-agree-to-terms" />
-								<label for="AgreeToTerms">I have read and accept the ezbob <a href="#" class="show-terms-and-conditions">terms and conditions</a></label>
-							</div>
-
-							<div>
-								<input id="AgreeToPrivacyPolicy" name="AgreeToPrivacyPolicy" type="checkbox" value="accepted-privacy-policy" ui-event-control-id="broker:signup-agree-to-privacy-policy" />
-								<label for="AgreeToPrivacyPolicy">I have read and accept the ezbob <a target="_blank" href="http://www.ezbob.com/privacy-and-cookies">privacy policy</a></label>
-							</div>
-						</div>
-
-						<div class="form_buttons_container">
-							<div class="attardi-button">
-								<button type="submit" id="SignupBrokerButton" class="rc-button disabled pull-right" disabled="disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-submit">Sign up</button>
-							</div>
-						</div>
-					</form>
-
-					<aside class="customer-sidebar broker"></aside>
-				</div>
-				<!-- section-signup -->
-
-				<div class="page-section hide section-login">
-					<form class="login-form broker-form" novalidate="novalidate">
-						@{ int nLoginTabIdx = 1; }
-						<h2 class="form-start">Broker login</h2>
-						
-						<a href="#" class="ForgottenPassword">Forgotten password</a> | <a href="#" class="Signup">Sign up</a>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Contact person email</span>
-								<input type="email" name="LoginEmail" id="LoginEmail" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" ui-event-control-id="broker:login-email" />
-								<img id="LoginEmailImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Password</span>
-								<input type="password" name="LoginPassword" id="LoginPassword" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" ui-event-control-id="broker:login-password" />
-								<img id="LoginPasswordImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_buttons_container">
-							<div class="attardi-button">
-								<button type="submit" id="LoginBrokerButton" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" ui-event-control-id="broker:login-submit">Login</button>
-							</div>
-						</div>
-					</form>
-
-					<aside class="customer-sidebar broker"></aside>
-				</div>
-				<!-- section-login -->
-
-				<div class="page-section hide section-forgotten">
-					<form class="forgotten-form broker-form" novalidate="novalidate">
-						@{ int nForgottenTabIdx = 1; }
-						<h2 class="form-start">Password recovery</h2>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<div class="code-sent-style-container"><label id="forgottenSentLabel" class="code-sent-style hide">Code sent</label></div>
-								<span>Contact person mobile phone</span>
-								<input type="text" name="ForgottenMobile" id="ForgottenMobile" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:forgotten-contact-mobile" maxlength="11" />
-								<img id="ForgottenMobileImage" class="field_status required" />
-								<input id="forgottenGenerateMobileCode" name="forgottenGenerateMobileCode" class="btn green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:forgotten-generate-mobile-code" />
-							</label>
-						</div>
-
-						<div id="forgottenMobileCodeDiv" class="form_field_container hide">
-							<label class="attardi-input">
-								<span>Mobile phone authentication code</span>
-								<input type="text" class="phonenumbercode form_field_left_side form_field" name="ForgottenMobileCode" id="ForgottenMobileCode" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" ui-event-control-id="broker:forgotten-mobile-code" maxlength="6" data-sent-to="" />
-								<img id="ForgottenMobileCodeImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_buttons_container">
-							<div class="attardi-button">
-								<button type="submit" id="RestorePassBrokerButton" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" ui-event-control-id="broker:login-submit">Restore password</button>
-							</div>
-						</div>
-					</form>
-
-					<aside class="customer-sidebar broker"></aside>
-				</div>
-				<!-- section-forgotten -->
-
-				<div class="page-section hide section-dashboard">
-					<ul>
-						<li><a href="#section-dashboard-customers">Clients</a></li>
-						<li><a href="#section-dashboard-marketing">Marketing materials</a></li>
-						<li><a href="#section-dashboard-account-info">Account information</a></li>
-					</ul>
-					
-					<div id="section-dashboard-customers">
-						<button type="button" id="AddNewCustomer" class="rc-button green pull-right">Add a new client</button>
-						<h2 class="form-start">Client list</h2>
-
-						<div class="table-responsive table-big">
-							<table class="customer-list table">
-								<thead><tr>
-									<th>First name</th>
-									<th>Last name</th>
-									<th>Status</th>
-									<th>Accounts</th>
-									<th>Applied date</th>
-									<th>Loan amount</th>
-									<th>Commission</th>
-									<th>Loan date</th>
-									<th>Last invitation sent</th>
-									<th></th>
-									<th></th>
-								</tr></thead>
-								<tbody><tr>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr></tbody>
-								<tfoot><tr>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr></tfoot>
-							</table>
-						</div>
-					</div>
-
-					<div id="section-dashboard-marketing">
-						<h2 class=form_start>Marketing materials</h2>
-
-						<div class="value-group aka-table table-big box">
-							<div class="box-title aka-caption">Add ezbob logo to your web site and email</div>
-
-							<div class="aka-row logo-example">
-								<div class="aka-column">
-									<div class="source-ref-container">
-										<div class="image-size">100 x 26</div>
-										<div class="value source-ref-sample" data-field-name="SourceRefToLink_100x26"></div>
-									</div>
-								</div>
-
-								<div class="aka-column-top">
-									<div class="value source-ref-sample-text" data-field-name="SourceRefToText_100x26"></div>
-								</div>
-							</div>
-
-							<div class="aka-row logo-example">
-								<div class="aka-column">
-									<div class="source-ref-container">
-										<div class="image-size">200 x 52</div>
-										<div class="value source-ref-sample" data-field-name="SourceRefToLink_200x52"></div>
-									</div>
-								</div>
-
-								<div class="aka-column-top">
-									<div class="value source-ref-sample-text" data-field-name="SourceRefToText_200x52"></div>
-								</div>
-							</div>
-
-							<div class="aka-row logo-example">
-								<div class="aka-column">
-									<div class="source-ref-container">
-										<div class="direct-link">Direct link</div>
-										<div class="send-via-email"><i class="fa fa-envelope"></i> Send via email</div>
-									</div>
-								</div>
-
-								<div class="aka-column">
-									<div class="source-ref-link value" data-field-name="SourceRef"></div>
-								</div>
-							</div>
-						</div>
-
-						<div class="value-group aka-table table-big box">
-							<div class="box-title aka-caption">Useful links</div>
-							<div class="aka-row">
-								<div class="aka-column">
-									<ul class="marketing-files" data-url-template="@Model.MarketingFileUrlTemplate"></ul>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div id="section-dashboard-account-info">
-						<h2 class=form_start>Account information</h2>
-
-						<div class="value-group aka-table table-big box">
-							<div class="box-title aka-caption">Account details</div>
-
-							<div class="aka-row">
-								<div class="aka-column">
-									<div class="aka-table">
-										<div class="aka-row">
-											<span class="value-title">Company name:</span>
-											<span class="value" data-field-name="BrokerName"></span>
-										</div>
-										<div class="aka-row">
-											<span class="value-title">Contact person:</span>
-											<span class="value" data-field-name="ContactName"></span>
-										</div>
-									</div>
-								</div>
-
-								<div class="aka-column">
-									<div class="aka-table">
-										<div class="aka-row">
-											<span class="value-title">Company registration number:</span>
-											<span class="value" data-field-name="BrokerRegNum"></span>
-										</div>
-										<div class="aka-row">
-											<span class="value-title">Mobile phone #:</span>
-											<span class="value" data-field-name="ContactMobile"></span>
-										</div>
-										<div class="aka-row">
-											<span class="value-title">Other phone #:</span>
-											<span class="value" data-field-name="ContactOtherPhone"></span>
-										</div>
-									</div>
-								</div>
-
-								<div class="aka-column">
-									<div class="aka-table">
-										<div class="aka-row">
-											<span class="value-title">Company web site:</span>
-											<span class="value" data-field-name="BrokerWebSiteUrl"></span>
-										</div>
-										<div class="aka-row">
-											<span class="value-title">Contact email:</span>
-											<span class="value" data-field-name="ContactEmail"></span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="value-group aka-table table-big box">
-							<div class="box-title aka-caption">Update password</div>
-
-							<div class="aka-row">
-								<div class="aka-column">
-									<form class="update-password-form broker-form" novalidate="novalidate">
-										@{ int nUpdatePassIdx = 1; }
-
-										<div class="form_field_container">
-											<label class="attardi-input">
-												<span>Current password</span>
-												<input type="password" name="OldPassword" id="OldPassword" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" class="form_field" ui-event-control-id="broker:update-old-password" />
-												<img id="OldPasswordImage" class="field_status required" />
-											</label>
-										</div>
-
-										<div id="strength-update-password-view" class="form_field_container">
-											<label class="attardi-input">
-												<span>New password</span>
-												<input type="password" name="NewPassword" id="NewPassword" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" class="form_field" ui-event-control-id="broker:update-password" />
-												<img id="NewPasswordImage" class="field_status required" />
-											</label>
-											<p id="message" class="help-block"></p>
-										</div>
-
-										<div class="form_field_container">
-											<label class="attardi-input">
-												<span>Confirm password</span>
-												<input type="password" name="NewPassword2" id="NewPassword2" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" class="form_field" ui-event-control-id="broker:update-confirm-password" />
-												<img id="NewPassword2Image" class="field_status required" />
-											</label>
-										</div>
-
-										<div class="form_buttons_container">
-											<div class="attardi-button">
-												<button type="submit" id="UpdatePassword" class="rc-button disabled pull-right" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
-											</div>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- section-customer-list -->
-
-				<div class="page-section hide section-add-customer">
-					<button type="button" class="back-to-list rc-button green pull-right">Back to client list</button>
-					<h2 class="form-start">Add a new client</h2>
-
-					<form class="new-lead-form broker-form" novalidate="novalidate">
-						@{ int nLeadTabIdx = 1; }
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Client first name</span>
-								<input type="text" name="LeadFirstName" id="LeadFirstName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-first-name" />
-								<img id="LeadFirstNameImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Client surname</span>
-								<input type="text" name="LeadLastName" id="LeadLastName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-last-name" />
-								<img id="LeadLastNameImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Client email</span>
-								<input type="email" name="LeadEmail" id="LeadEmail" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-email" />
-								<img id="LeadEmailImage" class="field_status required" />
-							</label>
-						</div>
-
-						<div class="form_buttons_container">
-							<div class="attardi-button">
-								<button type="submit" id="LeadFillWizard" data-add-mode="fill" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">
-									<i class="fa fa-desktop"></i>
-									<div>Complete the application</div>
-									<div>on behalf of your client</div>
-								</button>
-								<button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">
-									<i class="fa fa-envelope"></i>
-									<div>Send an invitation to</div>
-									<div>the client to fill himself</div>
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
-				<!-- section-add-customer -->
-
-				<div class="page-section hide section-customer-details">
-					<input type="hidden" id="customer-id" class="value" data-field-name="id" />
-
-					<div class="back-to-list-container"><button type="button" class="back-to-list green rc-button">Back to client list</button></div>
-
-					<div class="value-group aka-table table-big box">
-						<div class="box-title aka-caption">Client details</div>
-
-						<div class="aka-row">
-							<div class="aka-column">
-								<div class="aka-table">
-									<div class="aka-row">
-										<span class="value-title">Name:</span>
-										<span class="value" data-field-name="name"></span>
-									</div>
-									<div class="aka-row">
-										<span class="value-title">Date of birth:</span>
-										<span class="value" data-field-name="birthdate"></span>
-									</div>
-									<div class="aka-row">
-										<span class="value-title">Gender:</span>
-										<span class="value" data-field-name="gender"></span>
-									</div>
-									<div class="aka-row">
-										<span class="value-title">Email:</span>
-										<span class="value" data-field-name="email"></span>
-									</div>
-								</div>
-							</div>
-
-							<div class="aka-column">
-								<div class="aka-table">
-									<div class="aka-row">
-										<span class="value-title">Marital status:</span>
-										<span class="value" data-field-name="maritalstatus"></span>
-									</div>
-									<div class="aka-row">
-										<span class="value-title">Mobile phone #:</span>
-										<span class="value" data-field-name="mobilephone"></span>
-									</div>
-									<div class="aka-row">
-										<span class="value-title">Daytime phone #:</span>
-										<span class="value" data-field-name="daytimephone"></span>
-									</div>
-								</div>
-							</div>
-
-							<div class="aka-column">
-								<div class="aka-table">
-									<div class="aka-row">
-										<span class="value-title">Address:</span>
-										<span class="value" data-field-name="address"></span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="value-group crm-group aka-table table-big box">
-						<div class="box-title aka-caption">CRM events
-							<button type="button" class="add-crm-note" title="Add CRM note">+</button>
-						</div>
-
-						<table class="customer-crm-list table">
-							<thead><tr>
-								<th>Date</th>
-								<th>Action</th>
-								<th>Status</th>
-								<th>Comment</th>
-							</tr></thead>
-							<tbody><tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr></tbody>
-						</table>
-					</div>
-					
-					<div class="value-group files-group aka-table table-big box">
-						<div class="box-title aka-caption">Client files</div>
-
-						<div class="aka-row">
-							<div class="aka-column table-responsive">
-								<table class="customer-file-list table">
-									<thead><tr>
-										<th>File name</th>
-										<th></th>
-									</tr></thead>
-									<tbody><tr>
-										<td></td>
-										<td></td>
-									</tr></tbody>
-								</table>
-							</div>
-
-							<form id="customerFilesUploader" class="aka-column"><div class="dz-message"><span>Drag or click to upload files.</span></div></form>
-						</div>
-					</div>
-
-					@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/CustomerRelations/AddCustomerRelationsEntry.cshtml");}
-				</div>
-				<!-- section-customer-details -->
-
-				<div class="page-section hide section-forbidden">
-					<h2>You are not authorised to see this page.</h2>
-				</div>
-				<!-- section-forbidden -->
-			</section>
-		</div>
-
-		<div id="modalRegion" class="modal hide fade"></div>
-		<div class="push"></div>
-	</div>
-
-	<footer>
-		@{ Html.RenderPartial("_Copyright"); }
-	</footer>
-
-	<div id="hidden-container" class="hide" style="display: none !important;">
-		<div class="common-customer-sidebar">
-			@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
-		</div>
-
-		<div style="display: none;" class="hide" id="broker-sms-count"
+    @AntiForgery.GetHtml()
+
+    <div id="wrapper">
+        <div id="header">
+            <div class="header-bg-strip"></div>
+            <div class="header-inner">
+                <div class="header-logo">
+                    <img src="@Model.LogoUrl" class="newlogo">
+                </div>
+                <div class="header-info">
+                    <div class="header-info-left"></div>
+                    <div class="header-info-text">FOR BROKERS</div>
+                    <div class="header-info-right"></div>
+                </div>
+                <ul id="user-menu" class="hide">
+                    <li>
+                        <div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div>
+                    </li>
+                    <li class="menu-btn login log-off"><a href="#" class="button btn-grey">LOG OFF</a></li>
+                    <li class="menu-btn login log-in"><a href="#" class="button btn-grey">LOGIN</a></li>
+                    <li class="menu-btn sign-up"><a href="#" class="button btn-green">SIGN UP</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="inner">
+
+                <div class="inner main-page">
+                    <section id="full_width" class="broker">
+                        <div class="notifications"></div>
+
+                        <div class="page-section hide section-signup">
+                            <form class="signup-form broker-form" novalidate="novalidate">
+                                @{ int nSignupTabIdx = 1; }
+                                <h2 class="form-start">Create broker account</h2>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Company name</span>
+                                        <input type="text" name="FirmName" id="FirmName" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-name" />
+                                        <img id="FirmNameImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Company registration number</span>
+                                        <input type="text" name="FirmRegNum" id="FirmRegNum" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-regnum" />
+                                        <img id="FirmRegNumImage" class="field_status" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Company web site</span>
+                                        <input type="text" name="FirmWebSite" id="FirmWebSite" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-web-site" />
+                                        <img id="FirmWebSiteImage" class="field_status" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Contact person full name</span>
+                                        <input type="text" name="ContactName" id="ContactName" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-contact-name" />
+                                        <img id="ContactNameImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Contact person email</span>
+                                        <input type="email" name="ContactEmail" id="ContactEmail" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-contact-email" />
+                                        <img id="ContactEmailImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <div class="code-sent-style-container">
+                                            <label id="codeSentLabel" class="code-sent-style hide">Code sent</label></div>
+                                        <span>Contact person mobile phone</span>
+                                        <input type="text" name="ContactMobile" id="ContactMobile" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:signup-contact-mobile" maxlength="11" />
+                                        <img id="ContactMobileImage" class="field_status required" />
+                                        <input id="generateMobileCode" name="generateMobileCode" class="button btn-green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:signup-generate-mobile-code" />
+                                    </label>
+                                </div>
+
+                                <div id="mobileCodeDiv" class="form_field_container hide">
+                                    <label class="attardi-input">
+                                        <span>Mobile phone authentication code</span>
+                                        <input type="text" class="phonenumbercode form_field_left_side form_field" name="MobileCode" id="MobileCode" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-mobile-code" maxlength="6" data-sent-to="" />
+                                        <img id="mobileCodeImage" class="field_status required" />
+                                        <input id="switchToCaptcha" class="button btn-green form_field_right_side_signup_phone" type="button" value="Did not receive code" ui-event-control-id="broker:switch-to-captcha" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Contact person other phone number</span>
+                                        <input type="text" name="ContactOtherPhone" id="ContactOtherPhone" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="phonenumber form_field" ui-event-control-id="broker:signup-contact-other-phone" />
+                                        <img id="ContactOtherPhoneImage" class="field_status" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Estimated number of applications per month</span>
+                                        <input type="text" name="EstimatedMonthlyAppCount" id="EstimatedMonthlyAppCount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" max-length="6" ui-event-control-id="broker:signup-esitmated-monthly-application-count" />
+                                        <img id="EstimatedMonthlyAppCountImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Estimated value of credit per month (&pound;)</span>
+                                        <input type="text" name="EstimatedMonthlyClientAmount" id="EstimatedMonthlyClientAmount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-estimated-monthly-client-amount" />
+                                        <img id="EstimatedMonthlyClientAmountImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div id="strength-password-view" class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Create password</span>
+                                        <input type="password" name="Password" id="Password" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-password" />
+                                        <img id="PasswordImage" class="field_status required" />
+                                    </label>
+                                    <p id="message" class="help-block"></p>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Confirm password</span>
+                                        <input type="password" name="Password2" id="Password2" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-confirm-password" />
+                                        <img id="Password2Image" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div id="CaptchaSection" class="form_field_container hide" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
+                                    <input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0" />
+                                    @EzForm.Captcha(Model.CaptchaMode, sId: "broker-captcha")
+                                </div>
+
+                                <div class="form_field_container form-read-and-accept">
+                                    <div>
+                                        <input id="AgreeToTerms" name="AgreeToTerms" type="checkbox" value="accepted-terms" ui-event-control-id="broker:signup-agree-to-terms" />
+                                        <label for="AgreeToTerms">I have read and accept the ezbob <a href="#" class="show-terms-and-conditions">terms and conditions</a></label>
+                                    </div>
+
+                                    <div>
+                                        <input id="AgreeToPrivacyPolicy" name="AgreeToPrivacyPolicy" type="checkbox" value="accepted-privacy-policy" ui-event-control-id="broker:signup-agree-to-privacy-policy" />
+                                        <label for="AgreeToPrivacyPolicy">I have read and accept the ezbob <a target="_blank" href="http://www.ezbob.com/privacy-and-cookies">privacy policy</a></label>
+                                    </div>
+                                </div>
+
+                                <div class="form_buttons_container">
+                                    <div class="attardi-button">
+                                        <button type="submit" id="SignupBrokerButton" class="button btn-green disabled pull-right" disabled="disabled" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-submit">Sign up</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <aside class="customer-sidebar broker"></aside>
+                        </div>
+                        <!-- section-signup -->
+
+                        <div class="page-section hide section-login">
+                            <form class="login-form broker-form" novalidate="novalidate">
+                                @{ int nLoginTabIdx = 1; }
+                                <h2 class="form-start">Broker login</h2>
+
+                                <a href="#" class="ForgottenPassword">Forgotten password</a> | <a href="#" class="Signup">Sign up</a>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Contact person email</span>
+                                        <input type="email" name="LoginEmail" id="LoginEmail" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" ui-event-control-id="broker:login-email" />
+                                        <img id="LoginEmailImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Password</span>
+                                        <input type="password" name="LoginPassword" id="LoginPassword" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" ui-event-control-id="broker:login-password" />
+                                        <img id="LoginPasswordImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_buttons_container">
+                                    <div class="attardi-button">
+                                        <button type="submit" id="LoginBrokerButton" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" ui-event-control-id="broker:login-submit">Login</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <aside class="customer-sidebar broker"></aside>
+                        </div>
+                        <!-- section-login -->
+
+                        <div class="page-section hide section-forgotten">
+                            <form class="forgotten-form broker-form" novalidate="novalidate">
+                                @{ int nForgottenTabIdx = 1; }
+                                <h2 class="form-start">Password recovery</h2>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <div class="code-sent-style-container">
+                                            <label id="forgottenSentLabel" class="code-sent-style hide">Code sent</label></div>
+                                        <span>Contact person mobile phone</span>
+                                        <input type="text" name="ForgottenMobile" id="ForgottenMobile" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:forgotten-contact-mobile" maxlength="11" />
+                                        <img id="ForgottenMobileImage" class="field_status required" />
+                                        <input id="forgottenGenerateMobileCode" name="forgottenGenerateMobileCode" class="button btn-green form_field_right_side_signup_phone disabled" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" type="button" value="Send activation code" ui-event-control-id="broker:forgotten-generate-mobile-code" />
+                                    </label>
+                                </div>
+
+                                <div id="forgottenMobileCodeDiv" class="form_field_container hide">
+                                    <label class="attardi-input">
+                                        <span>Mobile phone authentication code</span>
+                                        <input type="text" class="phonenumbercode form_field_left_side form_field" name="ForgottenMobileCode" id="ForgottenMobileCode" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" ui-event-control-id="broker:forgotten-mobile-code" maxlength="6" data-sent-to="" />
+                                        <img id="ForgottenMobileCodeImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_buttons_container">
+                                    <div class="attardi-button">
+                                        <button type="submit" id="RestorePassBrokerButton" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" ui-event-control-id="broker:login-submit">Restore password</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <aside class="customer-sidebar broker"></aside>
+                        </div>
+                        <!-- section-forgotten -->
+
+                        <div class="page-section hide section-dashboard">
+                            <ul>
+                                <li><a href="#section-dashboard-customers">Clients</a></li>
+                                <li><a href="#section-dashboard-marketing">Marketing materials</a></li>
+                                <li><a href="#section-dashboard-account-info">Account information</a></li>
+                            </ul>
+
+                            <div id="section-dashboard-customers">
+                                <button type="button" id="AddNewCustomer" class="button btn-green pull-right">Add a new client</button>
+                                <h2 class="form-start">Client list</h2>
+
+                                <div class="table-responsive table-big">
+                                    <table class="customer-list table">
+                                        <thead>
+                                            <tr>
+                                                <th>First name</th>
+                                                <th>Last name</th>
+                                                <th>Status</th>
+                                                <th>Accounts</th>
+                                                <th>Applied date</th>
+                                                <th>Loan amount</th>
+                                                <th>Commission</th>
+                                                <th>Loan date</th>
+                                                <th>Last invitation sent</th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="section-dashboard-marketing">
+                                <h2 class="form_start">Marketing materials</h2>
+
+                                <div class="value-group aka-table table-big box">
+                                    <div class="box-title aka-caption">Add ezbob logo to your web site and email</div>
+
+                                    <div class="aka-row logo-example">
+                                        <div class="aka-column">
+                                            <div class="source-ref-container">
+                                                <div class="image-size">100 x 26</div>
+                                                <div class="value source-ref-sample" data-field-name="SourceRefToLink_100x26"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="aka-column-top">
+                                            <div class="value source-ref-sample-text" data-field-name="SourceRefToText_100x26"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="aka-row logo-example">
+                                        <div class="aka-column">
+                                            <div class="source-ref-container">
+                                                <div class="image-size">200 x 52</div>
+                                                <div class="value source-ref-sample" data-field-name="SourceRefToLink_200x52"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="aka-column-top">
+                                            <div class="value source-ref-sample-text" data-field-name="SourceRefToText_200x52"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="aka-row logo-example">
+                                        <div class="aka-column">
+                                            <div class="source-ref-container">
+                                                <div class="direct-link">Direct link</div>
+                                                <div class="send-via-email"><i class="fa fa-envelope"></i>Send via email</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="aka-column">
+                                            <div class="source-ref-link value" data-field-name="SourceRef"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="value-group aka-table table-big box">
+                                    <div class="box-title aka-caption">Useful links</div>
+                                    <div class="aka-row">
+                                        <div class="aka-column">
+                                            <ul class="marketing-files" data-url-template="@Model.MarketingFileUrlTemplate"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="section-dashboard-account-info">
+                                <h2 class="form_start">Account information</h2>
+
+                                <div class="value-group aka-table table-big box">
+                                    <div class="box-title aka-caption">Account details</div>
+
+                                    <div class="aka-row">
+                                        <div class="aka-column">
+                                            <div class="aka-table">
+                                                <div class="aka-row">
+                                                    <span class="value-title">Company name:</span>
+                                                    <span class="value" data-field-name="BrokerName"></span>
+                                                </div>
+                                                <div class="aka-row">
+                                                    <span class="value-title">Contact person:</span>
+                                                    <span class="value" data-field-name="ContactName"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="aka-column">
+                                            <div class="aka-table">
+                                                <div class="aka-row">
+                                                    <span class="value-title">Company registration number:</span>
+                                                    <span class="value" data-field-name="BrokerRegNum"></span>
+                                                </div>
+                                                <div class="aka-row">
+                                                    <span class="value-title">Mobile phone #:</span>
+                                                    <span class="value" data-field-name="ContactMobile"></span>
+                                                </div>
+                                                <div class="aka-row">
+                                                    <span class="value-title">Other phone #:</span>
+                                                    <span class="value" data-field-name="ContactOtherPhone"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="aka-column">
+                                            <div class="aka-table">
+                                                <div class="aka-row">
+                                                    <span class="value-title">Company web site:</span>
+                                                    <span class="value" data-field-name="BrokerWebSiteUrl"></span>
+                                                </div>
+                                                <div class="aka-row">
+                                                    <span class="value-title">Contact email:</span>
+                                                    <span class="value" data-field-name="ContactEmail"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="value-group aka-table table-big box">
+                                    <div class="box-title aka-caption">Update password</div>
+
+                                    <div class="aka-row">
+                                        <div class="aka-column">
+                                            <form class="update-password-form broker-form" novalidate="novalidate">
+                                                @{ int nUpdatePassIdx = 1; }
+
+                                                <div class="form_field_container">
+                                                    <label class="attardi-input">
+                                                        <span>Current password</span>
+                                                        <input type="password" name="OldPassword" id="OldPassword" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" class="form_field" ui-event-control-id="broker:update-old-password" />
+                                                        <img id="OldPasswordImage" class="field_status required" />
+                                                    </label>
+                                                </div>
+
+                                                <div id="strength-update-password-view" class="form_field_container">
+                                                    <label class="attardi-input">
+                                                        <span>New password</span>
+                                                        <input type="password" name="NewPassword" id="NewPassword" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" class="form_field" ui-event-control-id="broker:update-password" />
+                                                        <img id="NewPasswordImage" class="field_status required" />
+                                                    </label>
+                                                    <p id="message" class="help-block"></p>
+                                                </div>
+
+                                                <div class="form_field_container">
+                                                    <label class="attardi-input">
+                                                        <span>Confirm password</span>
+                                                        <input type="password" name="NewPassword2" id="NewPassword2" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" class="form_field" ui-event-control-id="broker:update-confirm-password" />
+                                                        <img id="NewPassword2Image" class="field_status required" />
+                                                    </label>
+                                                </div>
+
+                                                <div class="form_buttons_container">
+                                                    <div class="attardi-button">
+                                                        <button type="submit" id="UpdatePassword" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- section-customer-list -->
+
+                        <div class="page-section hide section-add-customer">
+                            <button type="button" class="back-to-list button btn-green pull-right">Back to client list</button>
+                            <h2 class="form-start">Add a new client</h2>
+
+                            <form class="new-lead-form broker-form" novalidate="novalidate">
+                                @{ int nLeadTabIdx = 1; }
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Client first name</span>
+                                        <input type="text" name="LeadFirstName" id="LeadFirstName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-first-name" />
+                                        <img id="LeadFirstNameImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Client surname</span>
+                                        <input type="text" name="LeadLastName" id="LeadLastName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-last-name" />
+                                        <img id="LeadLastNameImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_field_container">
+                                    <label class="attardi-input">
+                                        <span>Client email</span>
+                                        <input type="email" name="LeadEmail" id="LeadEmail" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-email" />
+                                        <img id="LeadEmailImage" class="field_status required" />
+                                    </label>
+                                </div>
+
+                                <div class="form_buttons_container">
+                                    <div class="attardi-button">
+                                        <button type="submit" id="LeadFillWizard" data-add-mode="fill" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">
+                                            <i class="fa fa-desktop"></i>
+                                            <div>Complete the application</div>
+                                            <div>on behalf of your client</div>
+                                        </button>
+                                        <button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">
+                                            <i class="fa fa-envelope"></i>
+                                            <div>Send an invitation to</div>
+                                            <div>the client to fill himself</div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- section-add-customer -->
+
+                        <div class="page-section hide section-customer-details">
+                            <input type="hidden" id="customer-id" class="value" data-field-name="id" />
+
+                            <div class="back-to-list-container">
+                                <button type="button" class="back-to-list button btn-green">Back to client list</button></div>
+
+                            <div class="value-group aka-table table-big box">
+                                <div class="box-title aka-caption">Client details</div>
+
+                                <div class="aka-row">
+                                    <div class="aka-column">
+                                        <div class="aka-table">
+                                            <div class="aka-row">
+                                                <span class="value-title">Name:</span>
+                                                <span class="value" data-field-name="name"></span>
+                                            </div>
+                                            <div class="aka-row">
+                                                <span class="value-title">Date of birth:</span>
+                                                <span class="value" data-field-name="birthdate"></span>
+                                            </div>
+                                            <div class="aka-row">
+                                                <span class="value-title">Gender:</span>
+                                                <span class="value" data-field-name="gender"></span>
+                                            </div>
+                                            <div class="aka-row">
+                                                <span class="value-title">Email:</span>
+                                                <span class="value" data-field-name="email"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="aka-column">
+                                        <div class="aka-table">
+                                            <div class="aka-row">
+                                                <span class="value-title">Marital status:</span>
+                                                <span class="value" data-field-name="maritalstatus"></span>
+                                            </div>
+                                            <div class="aka-row">
+                                                <span class="value-title">Mobile phone #:</span>
+                                                <span class="value" data-field-name="mobilephone"></span>
+                                            </div>
+                                            <div class="aka-row">
+                                                <span class="value-title">Daytime phone #:</span>
+                                                <span class="value" data-field-name="daytimephone"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="aka-column">
+                                        <div class="aka-table">
+                                            <div class="aka-row">
+                                                <span class="value-title">Address:</span>
+                                                <span class="value" data-field-name="address"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="value-group crm-group aka-table table-big box">
+                                <div class="box-title aka-caption">
+                                    CRM events
+                                    <button type="button" class="button btn-green add-crm-note" title="Add CRM note">+</button>
+                                </div>
+
+                                <table class="customer-crm-list table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Action</th>
+                                            <th>Status</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="value-group files-group aka-table table-big box">
+                                <div class="box-title aka-caption">Client files</div>
+
+                                <div class="aka-row">
+                                    <div class="aka-column table-responsive">
+                                        <table class="customer-file-list table">
+                                            <thead>
+                                                <tr>
+                                                    <th>File name</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <form id="customerFilesUploader" class="aka-column">
+                                        <div class="dz-message"><span>Drag or click to upload files.</span></div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            @{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/CustomerRelations/AddCustomerRelationsEntry.cshtml");}
+                        </div>
+                        <!-- section-customer-details -->
+
+                        <div class="page-section hide section-forbidden">
+                            <h2>You are not authorised to see this page.</h2>
+                        </div>
+                        <!-- section-forbidden -->
+                    </section>
+                </div>
+            </div>
+            </div>
+        <div id="modalRegion" class="modal hide fade"></div>
+        <div class="push"></div>
+    </div>
+
+    <footer>
+        @{ Html.RenderPartial("_Copyright"); }
+    </footer>
+
+    <div id="hidden-container" class="hide" style="display: none !important;">
+        <div class="common-customer-sidebar">
+            @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
+        </div>
+
+        <div style="display: none;" class="hide" id="broker-sms-count"
 			data-force-captcha="@Model.ForceCaptcha"
 			data-max-per-number="@Model.MaxPerNumber"
 			data-max-per-page="@Model.MaxPerPage"
-		></div>
+		>
+        </div>
 
-		<div id="broker-terms-and-conditions" title="Terms and Conditions" data-terms-version="0"></div>
-	</div>
+        <div id="broker-terms-and-conditions" title="Terms and Conditions" data-terms-version="0"></div>
+    </div>
 
-	<!-- scripts - begin -->
-<!--[if lt IE 9]>
+    <!-- scripts - begin -->
+    <!--[if lt IE 9]>
 <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-	@{
-		Html.RenderPartial("_GoogleTagManager");
-		Html.RenderPartial("security_template");
+    @{
+        Html.RenderPartial("_GoogleTagManager");
+        Html.RenderPartial("security_template");
 
-		WriteLiteral(Bundle.JavaScript()
-			.Add("~/Content/js/lib/jquery-1.8.3.js")
-			.Add("~/Content/js/ezbob.csrf.js")
-			.Add("~/Content/js/lib/jquery.browser.min.js")
-			.Add("~/Content/js/lib/dropzone.js")
-			.Add("~/Content/js/lib/jquery.hoverIntent.min.js")
-			.Add("~/Content/js/lib/jquery.scrollTo.js")
-			.Add("~/Content/js/lib/jquery.blockUI.js")
-			.Add("~/Content/js/lib/jquery.mousewheel.js")
-			.Add("~/Content/js/lib/jquery.jscrollpane.js")
-			.Add("~/Content/js/lib/jquery.validate.js")
-			.Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
-			.Add("~/Content/js/lib/jsuri-1.1.1.js")
-			.Add("~/Content/js/lib/jquery.cookie.js")
-			.Add("~/Content/js/lib/jquery.slimscroll.min.js")
-			.Add("~/Content/js/lib/cookies.js")
-			.Add("~/Content/js/lib/underscore.js")
-			.Add("~/Content/js/lib/backbone.js")
-			.Add("~/Content/js/lib/backbone.marionette.js")
-			.Add("~/Content/js/lib/Backbone.ModelBinder.js")
-			.Add("~/Content/js/lib/moment.js")
-			.Add("~/Content/js/lib/jquery.numeric.js")
-			.Add("~/Content/js/lib/recaptcha_ajax.js")
-			.Add("~/Content/js/lib/autoNumeric-1.7.4.js")
-			.Add("~/Content/js/lib/chosen.jquery.js")
-			.Add("~/Content/js/lib/jquery.maskedinput-1.2.2.js")
-			.Add("~/Content/js/lib/notifications.js")
-			.Add("~/Content/js/lib/coin-slider.js")
-			.Add("~/Content/js/lib/jquery.placeholder.js")
-			.Add("~/Content/js/lib/attardi.labels.js")
-			.Add("~/Content/js/lib/amount-period-sliders.js")
-			.Add("~/Content/js/lib/jquery.field_status.js")
-			.Add("~/Content/js/lib/jquery.set_display_value.js")
-			.Add("~/Content/js/lib/jquery.load_display_value.js")
-			.Add("~/Content/js/lib/mousetrap_1.4.0.js")
-			.Add("~/Content/js/lib/jquery.colorbox-min.js")
-			.Add("~/Content/js/controls/ezbob.modal.js")
-			.Add("~/Content/js/controls/ezbob.jqmodal.coffee")
-			.Add("~/Content/js/App/ezbob.app.js")
-			.Add("~/Content/js/App/ezbob.validation.js")
-			.Add("~/Content/js/controls/captcha.js")
-			.Add("~/Content/js/controls/ezbob.notifications.js")
-			.Add("~/Content/js/ezbob.design.js")
-			.Add("~/Content/js/ezbob.internal.debug.js")
-			.Add("~/Content/js/ezbob.uiaction.js")
-			.Add("~/Content/js/ezbob.cgvendors.js")
-			.Add("~/Content/js/ezbob.serverlog.js")
-			.Add("~/Content/js/ezbob.strengthPassword.js")
-			.Add("~/Content/js/lib/jquery.dataTables.js")
-			.Add("~/Content/js/lib/flaty/bootstrap3.js")
-			.Add("~/Content/js/lib/bootstrap-datepicker.js")
-			.Add("~/Content/js/lib/bootstrap-modal.js")
-			.Add("~/Content/js/lib/bootstrap-modalmanager.js")
-			.Add("~/Content/js/lib/flaty/dataTables.bootstrap.js")
-			.Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
-			.Add("~/Content/js/lib/flaty/flaty.js")
-			.Add("~/Content/js/EzBob.DataTables.Helper.js")
-			.Add("~/Content/js/controls/ezbob.BoundItemView.coffee")
-			.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.js")
-			.AddString(BundleHelper.GetDbStrings())
-			.Add("~/Content/js/ezbob.view.js")
-			.Add("~/Content/js/Broker/broker.base.view.js")
-			.Add("~/Content/js/Broker/broker.submit.view.js")
-			.Add("~/Content/js/Broker/broker.mobilephone.view.js")
-			.Add("~/Content/js/Broker/broker.forgotten.view.js")
-			.Add("~/Content/js/Broker/broker.dashboard.view.js")
-			.Add("~/Content/js/Broker/broker.login.view.js")
-			.Add("~/Content/js/Broker/broker.signup.view.js")
-			.Add("~/Content/js/Broker/broker.addcustomer.view.js")
-			.Add("~/Content/js/Broker/broker.customerdetails.view.js")
-			.Add("~/Content/js/Broker/broker.router.js")
-			.Add("~/Content/js/Broker/broker.main.js")
-			.MvcRender("~/Content/js/min/jslib_#.js")
-		);
-	}
+        WriteLiteral(Bundle.JavaScript()
+            .Add("~/Content/js/lib/jquery-1.8.3.js")
+            .Add("~/Content/js/ezbob.csrf.js")
+            .Add("~/Content/js/lib/jquery.browser.min.js")
+            .Add("~/Content/js/lib/dropzone.js")
+            .Add("~/Content/js/lib/jquery.hoverIntent.min.js")
+            .Add("~/Content/js/lib/jquery.scrollTo.js")
+            .Add("~/Content/js/lib/jquery.blockUI.js")
+            .Add("~/Content/js/lib/jquery.mousewheel.js")
+            .Add("~/Content/js/lib/jquery.jscrollpane.js")
+            .Add("~/Content/js/lib/jquery.validate.js")
+            .Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
+            .Add("~/Content/js/lib/jsuri-1.1.1.js")
+            .Add("~/Content/js/lib/jquery.cookie.js")
+            .Add("~/Content/js/lib/jquery.slimscroll.min.js")
+            .Add("~/Content/js/lib/cookies.js")
+            .Add("~/Content/js/lib/underscore.js")
+            .Add("~/Content/js/lib/backbone.js")
+            .Add("~/Content/js/lib/backbone.marionette.js")
+            .Add("~/Content/js/lib/Backbone.ModelBinder.js")
+            .Add("~/Content/js/lib/moment.js")
+            .Add("~/Content/js/lib/jquery.numeric.js")
+            .Add("~/Content/js/lib/recaptcha_ajax.js")
+            .Add("~/Content/js/lib/autoNumeric-1.7.4.js")
+            .Add("~/Content/js/lib/chosen.jquery.js")
+            .Add("~/Content/js/lib/jquery.maskedinput-1.2.2.js")
+            .Add("~/Content/js/lib/notifications.js")
+            .Add("~/Content/js/lib/coin-slider.js")
+            .Add("~/Content/js/lib/jquery.placeholder.js")
+            .Add("~/Content/js/lib/attardi.labels.js")
+            .Add("~/Content/js/lib/amount-period-sliders.js")
+            .Add("~/Content/js/lib/jquery.field_status.js")
+            .Add("~/Content/js/lib/jquery.set_display_value.js")
+            .Add("~/Content/js/lib/jquery.load_display_value.js")
+            .Add("~/Content/js/lib/mousetrap_1.4.0.js")
+            .Add("~/Content/js/lib/jquery.colorbox-min.js")
+            .Add("~/Content/js/controls/ezbob.modal.js")
+            .Add("~/Content/js/controls/ezbob.jqmodal.coffee")
+            .Add("~/Content/js/App/ezbob.app.js")
+            .Add("~/Content/js/App/ezbob.validation.js")
+            .Add("~/Content/js/controls/captcha.js")
+            .Add("~/Content/js/controls/ezbob.notifications.js")
+            .Add("~/Content/js/ezbob.design.js")
+            .Add("~/Content/js/ezbob.internal.debug.js")
+            .Add("~/Content/js/ezbob.uiaction.js")
+            .Add("~/Content/js/ezbob.cgvendors.js")
+            .Add("~/Content/js/ezbob.serverlog.js")
+            .Add("~/Content/js/ezbob.strengthPassword.js")
+            .Add("~/Content/js/lib/jquery.dataTables.js")
+            .Add("~/Content/js/lib/flaty/bootstrap3.js")
+            .Add("~/Content/js/lib/bootstrap-datepicker.js")
+            .Add("~/Content/js/lib/bootstrap-modal.js")
+            .Add("~/Content/js/lib/bootstrap-modalmanager.js")
+            .Add("~/Content/js/lib/flaty/dataTables.bootstrap.js")
+            .Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
+            .Add("~/Content/js/lib/flaty/flaty.js")
+            .Add("~/Content/js/EzBob.DataTables.Helper.js")
+            .Add("~/Content/js/controls/ezbob.BoundItemView.coffee")
+            .Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.js")
+            .AddString(BundleHelper.GetDbStrings())
+            .Add("~/Content/js/ezbob.view.js")
+            .Add("~/Content/js/Broker/broker.base.view.js")
+            .Add("~/Content/js/Broker/broker.submit.view.js")
+            .Add("~/Content/js/Broker/broker.mobilephone.view.js")
+            .Add("~/Content/js/Broker/broker.forgotten.view.js")
+            .Add("~/Content/js/Broker/broker.dashboard.view.js")
+            .Add("~/Content/js/Broker/broker.login.view.js")
+            .Add("~/Content/js/Broker/broker.signup.view.js")
+            .Add("~/Content/js/Broker/broker.addcustomer.view.js")
+            .Add("~/Content/js/Broker/broker.customerdetails.view.js")
+            .Add("~/Content/js/Broker/broker.router.js")
+            .Add("~/Content/js/Broker/broker.main.js")
+            .MvcRender("~/Content/js/min/jslib_#.js")
+        );
+    }
 
-	<script>
-		var EzBob = EzBob || {};
-		EzBob.LoadedConfig = EzBob.LoadedConfig || {};
-		EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';
+    <script>
+        var EzBob = EzBob || {};
+        EzBob.LoadedConfig = EzBob.LoadedConfig || {};
+        EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';
 		EzBob.LoadedConfig.CaptchaMode = '@Model.CaptchaMode';
-		EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;
+        EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;
 
-		function EzBob_CgVendors_init() {
-			EzBob.CgVendors.init(@{ WriteLiteral(Model.ChannelGrabberAccounts); });
+        function EzBob_CgVendors_init() {
+            EzBob.CgVendors.init(@{ WriteLiteral(Model.ChannelGrabberAccounts); });
 		} // EzBob_CgVendors_init
 
 		$(document).ready(function() {
-			EzBob_CgVendors_init();
+		    EzBob_CgVendors_init();
 		});
-	</script>
-	<!-- scripts - end -->
+    </script>
+    <!-- scripts - end -->
 </body>
 </html>

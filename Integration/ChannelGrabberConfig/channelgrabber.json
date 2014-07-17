@@ -285,7 +285,8 @@
 					"<li>Press <strong>Save</strong></li>",
 					"<li>You will get the OAuth Credentials: copy <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> to the above fields</li>",
 					"</ol>",
-					"<img src=\"/Content/xero/instructions.jpg\">"
+					"<img src=\"/Content/xero/instructions.jpg\" style=\"margin-bottom: 10px;\">"
+                    
 				],
 				"OnBeforeLink": [
 					"accountModel.auxLogin = accountModel.publicCert;",
@@ -412,7 +413,7 @@
 				"UploadFilesHandler": "HandleUploadedHmrcVatReturn",
 				"Notes": [
 					"<h2 class=\"hmrc-or\">or</h2><h2 style=\"padding-left: 0\">Upload VAT files</h2><p style=\"margin-top: -15px;\">Upload a copy of your last 5 VAT returns; only upload files titled <strong>Printed Copy of Submitted VAT return for your records</strong> which you should have received automatically from the HMRC. Files can be uploaded in any order of dates.</p><p>Don\'t have the file? ask your accountant for them, it will take him 5 minutes to send them to you.</p>",
-					"<div><input type=\"button\" class=\"upload-files rc-button green\" value=\"Upload\" ui-event-control-id=\"link-account:upload-files\"></div>"
+					"<div><input type=\"button\" class=\"upload-files button btn-green\" value=\"Upload\" ui-event-control-id=\"link-account:upload-files\"></div>"
 				],
 				"OnBeforeLink": [
 					"if (bUploadMode) {",

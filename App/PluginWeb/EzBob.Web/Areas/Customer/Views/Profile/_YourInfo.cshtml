@@ -11,13 +11,14 @@
 			*@
 			<div class="column company-info" />
 		</div>
-		<div class="form_buttons_container">
+	    <div class="form_buttons_container">
 			<div class="attardi-button">
-				<a class="btn-continue button orange submit-personal pull-right" display="none" ui-event-control-id="my-information:submit">Submit</a>
-				<a class="btn-continue cancel button orange pull-right" display="none" ui-event-control-id="my-information:cancel">Cancel</a>
-				<a class="btn-continue edit-personal button orange pull-right" ui-event-control-id="my-information:edit">Edit Information</a>
+                <a class="btn-continue button btn-green submit-personal pull-right" display="none" ui-event-control-id="my-information:submit">Submit</a>
+				<a class="btn-continue edit-personal button btn-green pull-right" ui-event-control-id="my-information:edit">Edit Information</a>
+                <a class="btn-continue cancel button btn-grey pull-right" display="none" ui-event-control-id="my-information:cancel">Cancel</a>
 			</div>
 		</div>
+        <div class="push"></div>
 	}
 	<div class="add-director-container" style="display: none;"></div>
 </script>
@@ -162,7 +163,7 @@
 			</div><%
 		} %>
 		<div class="control-group director-container"></div>
-		<button type="button" class="btn orange add-director" ui-event-control-id="my-information:limited-add-director">Add Director</button>
+		<button type="button" class="button btn-green add-director" ui-event-control-id="my-information:limited-add-director">Add Director</button>
 		<div class="offline">
 			@CompanyCountFields("limited")
 		</div>
@@ -210,7 +211,7 @@
 		} %>
 
 		<div class="control-group director-container"></div>
-		<button type="button" class="btn orange add-director" ui-event-control-id="my-information:nonlimited-add-director">Add Director</button>
+		<button type="button" class="button btn-green add-director" ui-event-control-id="my-information:nonlimited-add-director">Add Director</button>
 
 		<div class="offline">
 			@CompanyCountFields("nonlimited")

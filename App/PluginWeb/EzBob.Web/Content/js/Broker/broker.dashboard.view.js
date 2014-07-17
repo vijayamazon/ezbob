@@ -301,7 +301,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 			self.theTable = self.$el.find('.customer-list').dataTable(theTableOpts);
 
 			self.$el.find('.dataTables_top_right').prepend(
-				$('<button type=button class="reload-customer-list" title="Reload customer and lead lists">Reload</button>')
+				$('<button type=button class="button btn-green reload-customer-list" title="Reload customer and lead lists">Reload</button>')
 			);
 		}); // on success
 	}, // reloadCustomerList

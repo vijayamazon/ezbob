@@ -1,29 +1,18 @@
 ﻿@model dynamic
-@helper ApplyForLoanTopTemplate() {
-	<div class="row-fluid profile-screen" style="padding-top: 16px;">
-		<div class="narrow-wizard-header">
-			<%
-				var steps = [
-					{ num: 0, title: "Choose Loan Term", css: "active current" },
-					{ num: 1, title: "Enter Bank & Debit" },
-					{ num: 2, title: "Get Cash" }
-				];
-			%>
-			@{Html.RenderPartial("_StepsDashboard");}
-		</div>
+@helper ApplyForLoanTopTemplate()
+{
+    <div class="row-fluid profile-screen">
+        <%var current = 0;%>
+        @{Html.RenderPartial("_StepsDashboard");}
 
-		<div class="row-fluid">
-			<div class="apply-for-loan-div">
-			</div>
-		</div>
-		@* <div class="span4">
-			@{Html.RenderPartial("SideBars/GetCashNotification");}
-		</div>*@
-	</div>
+        <div class="row-fluid">
+            <div class="apply-for-loan-div"></div>
+        </div>
+    </div>
 }
 
 <script id="apply-forloan-top-template" type="text/template">
-	@ApplyForLoanTopTemplate()
+    @ApplyForLoanTopTemplate()
 </script>
 
 
@@ -31,17 +20,18 @@
 @{Html.RenderPartial("~/Areas/Customer/Views/Shared/BankAccountInstructions.cshtml");}
 @{Html.RenderPartial("ApplyForLoanTemplate"); }
 
-@helper ThankYouLoan() {
-	<h1>Apply for a loan</h1>
-	<h2>It’s so easy. Unbelievable!</h2>
-	<div class="thankyou-loan">
-		EZBOB will get back to you by mail in 24 hours.<br />
-		You can edit your personal and business<br />
-		information in your dashboard.<br />
-	</div>
-	<a href="#" class="btn-continue button orange offer">Go to My Account</a>
+@helper ThankYouLoan()
+{
+    <h1>Apply for a loan</h1>
+    <h2>It’s so easy. Unbelievable!</h2>
+    <div class="thankyou-loan">
+        EZBOB will get back to you by mail in 24 hours.<br />
+        You can edit your personal and business<br />
+        information in your dashboard.<br />
+    </div>
+    <a href="#" class="btn-continue button btn-green offer">Go to My Account</a>
 }
 
 <script id="thankyouloan-template" type="text/template">
-	@ThankYouLoan()
+    @ThankYouLoan()
 </script>

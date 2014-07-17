@@ -1,10 +1,42 @@
 ﻿@model dynamic
-<div class="dashboard-steps">
-	<ul class="application_steps">
-		<% _.each(steps, function(step, i) { %>
-		<li data-step-num="<%= i %>" class="<%= step.css %>">
-			<span class="step_label">Step <%= i + 1 %>: <br/> <%= step.title %></span>
-		</li>
-		<% }) %>
-	</ul>
+<div class="dashboard-header">
+    <div class="dashboard-steps wizard-steps">
+        <div class="progress-time"></div>
+        <ul class="application_steps">
+            <%(function() {
+        var steps = [
+        { title: "Choose Loan Term" },
+        { title: "Enter Bank & Debit" },
+        { title: "Get Cash" }
+        ];
+        var last = steps.length - 1;
+
+        _.each(steps, function(step, i) {
+        var css = '';
+        var lastcss = '';
+        var circleType = 'center-circle';
+        if (i == current) css += 'current';
+
+        if (i < current) css += 'complete';
+
+        if (i == last) {
+        lastcss = 'last';
+        circleType = 'last-circle';
+        }
+        if ( i == 0 ) circleType = 'first-circle'
+        %>
+        <li class="<%- css %> <%-lastcss%>" data-step-num="<%= i %>">
+            <div class="progress-circle <%-circleType%>">
+                <div class="percent"><%=(i+1)%></div>
+            </div>
+            <div class="progress-line">
+                <div class="progress-line-fill"></div>
+            </div>
+            <span class="step_label"><% print(step.title) %></span>
+        </li>
+            <%}); // for each step
+        })(); // inline function - local scope
+        %>
+        </ul>
+    </div>
 </div>

@@ -1,39 +1,41 @@
-﻿div.broker-logo {
-	position: absolute;
-	top: 20px;
-	left: 130px;
-	font-size: 16px;
-	line-height: 12px;
-	font-weight: bold;
-	color: #7bb224;
+﻿.ui-widget {
+    font-family: 'Titillium Web Regular', Arial, sans-serif;
 }
 
-div.broker-logo span.word-brokers {
-	position: relative;
-	top: 1px;
-	left: 4px;
+.broker {
+    margin-top: 90px;
 }
 
-img.logo-broker {
-	width: 160px;
-	height: auto;
-	vertical-align: baseline;
-	margin-bottom: -11px;
+input[type="button"],
+input[type="submit"], 
+input[type="reset"], 
+button, 
+.button {
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal;
+    height: 36px;
+    line-height: 36px;
+    width: 120px;
 }
 
-.inner {
-	width: 1212px;
-	padding: 0 10px 14px 10px;
-	margin: 0 auto;
-	min-height: 500px;
+.add-crm-note {
+    width: 30px;
+}
+
+.forgotten-form .button {
+    width: 200px;
+}
+.box > .box-title {
+    background-color: #E2E3E5;
+    text-shadow: 0 1px 0 #E2E3E5;
 }
 
 h2 {
 	font-size: 32px;
 	line-height: 40px;
-	color: #7bb224;
+	color: #67c10b;
 	margin: 20px 0;
-	font-family: Arial, Helvetica, sans-serif;
 	padding: 0;
 	border: 0;
 	vertical-align: baseline;
@@ -88,18 +90,9 @@ table.customer-list {
 
 .section-dashboard .reload-customer-list,
 .section-customer-details .delete-selected-files {
-	display: inline-block;
-	margin: 0.1em 0 0 1em;
-	padding: 0.2em 3em;
-	background-color: transparent;
-	border: 1px solid #eeeeee;
-	color: black;
+    margin-top: -8px;
+    margin-left: 10px;
 	float: right;
-}
-
-.section-dashboard .reload-customer-list:hover,
-.section-customer-details .delete-selected-files:hover {
-	border: 1px solid white;
 }
 
 .broker a,
@@ -120,7 +113,7 @@ table.customer-list {
 
 .section-dashboard tfoot td {
 	font-weight: bold;
-	background-color: #b6d1f2;
+	background-color: #E2E3E5;
 }
 
 .section-dashboard .lead-send-invitation,
@@ -200,42 +193,6 @@ table.customer-list {
 
 .section-add-customer .form_buttons_container { position: relative; }
 
-.section-add-customer .form_buttons_container button {
-	display: inline-block;
-	min-width: 25%;
-	text-align: center;
-	color: #444;
-	font-size: 16px;
-	font-weight: normal;
-	padding: 12px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	-o-transition: all 0.218s;
-	-moz-transition: all 0.218s;
-	-webkit-transition: all 0.218s;
-	transition: all 0.218s;
-	border: 1px solid #dcdcdc;
-	-o-transition: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-	cursor: default;
-	outline: none;
-	box-shadow: none;
-	text-shadow: none !important;
-	position: absolute;
-	top: 0;
-}
-
-.section-add-customer .form_buttons_container button:hover {
-	outline: 1px dotted yellow;
-}
-
-.section-add-customer .form_buttons_container button:focus {
-	outline: 1px solid yellow;
-}
-
 .section-add-customer .form_buttons_container button i {
 	display: block;
 }
@@ -278,7 +235,7 @@ table.customer-list {
 .source-ref-sample-text {
 	white-space: pre;
 	padding: 10px;
-	border: 1px solid #b6d1f2;
+	border: 1px solid #E2E3E5;
 }
 
 .source-ref-container .direct-link {
@@ -289,7 +246,7 @@ table.customer-list {
 }
 
 .source-ref-link {
-	border: 1px solid #b6d1f2;
+	border: 1px solid #E2E3E5;
 	padding: 1.5em;
 	text-align: left;
 }
