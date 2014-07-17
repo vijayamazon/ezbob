@@ -424,6 +424,26 @@
                     <%}%>
                 </tbody>
             </table>
+            <% if (response.SicCodes != undefined) {%>
+                <table>
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th>Code</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+		            <tbody>
+                        @*<% _.each(response.SicCodes, function(i) {*@
+                        <% if (response.SicCodes[0] != undefined && response.SicDescs[0] != undefined) {%>
+                            <tr>
+		                        <td class=narrow-as-possible><%-response.SicCodes[0]%></td>
+		                        <td><%-response.SicDescs[0]%></td>
+	                        </tr>
+                        <%}%>
+                        @*<%}%>*@
+                    </tbody>
+                </table>
+            <%}%>
         </div><%
     }
     else

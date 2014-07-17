@@ -49,7 +49,7 @@
 		public int? TotalAssociatedJudgmentValueLast13To24Months { get; set; }
 		public int? TotalJudgmentCountLast24Months { get; set; }
 		public int? TotalAssociatedJudgmentCountLast24Months { get; set; }
-		public int? TotalJudgmentCountValue24Months { get; set; }
+		public int? TotalJudgmentValueLast24Months { get; set; }
 		public int? TotalAssociatedJudgmentValueLast24Months { get; set; }
 
 		public string SupplierName { get; set; }
@@ -81,6 +81,10 @@
 		public int? NumberOfProprietorsSearched { get; set; }
 		public int? NumberOfProprietorsFound { get; set; }
 		public string Errors { get; set; }
+
+
+		public List<string> SicCodes { get; set; }
+		public List<string> SicDescs { get; set; } 
 
 		public const string Ok = "ok";
 
@@ -328,7 +332,7 @@
 				nonLimitedModel.TotalAssociatedJudgmentValueLast13To24Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast13To24Months"];
 				nonLimitedModel.TotalJudgmentCountLast24Months = nonLimitedSafeReader["TotalJudgmentCountLast24Months"];
 				nonLimitedModel.TotalAssociatedJudgmentCountLast24Months = nonLimitedSafeReader["TotalAssociatedJudgmentCountLast24Months"];
-				nonLimitedModel.TotalJudgmentCountValue24Months = nonLimitedSafeReader["TotalJudgmentCountValue24Months"];
+				nonLimitedModel.TotalJudgmentValueLast24Months = nonLimitedSafeReader["TotalJudgmentValueLast24Months"];
 				nonLimitedModel.TotalAssociatedJudgmentValueLast24Months = nonLimitedSafeReader["TotalAssociatedJudgmentValueLast24Months"];
 				nonLimitedModel.SupplierName = nonLimitedSafeReader["SupplierName"].ToNullString();
 				nonLimitedModel.FraudCategory = nonLimitedSafeReader["FraudCategory"].ToNullString();
@@ -359,6 +363,27 @@
 				nonLimitedModel.NumberOfProprietorsSearched = nonLimitedSafeReader["NumberOfProprietorsSearched"];
 				nonLimitedModel.NumberOfProprietorsFound = nonLimitedSafeReader["NumberOfProprietorsFound"];
 				nonLimitedModel.Errors = nonLimitedSafeReader["Errors"].ToNullString();
+				int experianNonLimitedResultId = nonLimitedSafeReader["Id"];
+
+				DataTable sicCodesDataTable = db.ExecuteReader(
+					"GetNonLimitedSicCodes",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
+				
+				if (sicCodesDataTable.Rows.Count > 0)
+				{
+					nonLimitedModel.SicCodes = new List<string>();
+					nonLimitedModel.SicDescs = new List<string>();
+					foreach (DataRow row in sicCodesDataTable.Rows)
+					{
+						var sicCodesSafeReader = new SafeReader(row);
+
+						string sicCode = sicCodesSafeReader["Code"];
+						string sicDesc = sicCodesSafeReader["Description"];
+						nonLimitedModel.SicCodes.Add(sicCode);
+						nonLimitedModel.SicDescs.Add(sicDesc);
+					}
+				}
 			}
 
 			return nonLimitedModel;

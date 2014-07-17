@@ -9,7 +9,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	SELECT 
+	SELECT
+		Id,
 		BusinessName,
 		Address1,
 		Address2,
@@ -40,7 +41,7 @@ BEGIN
 		TotalAssociatedJudgmentValueLast13To24Months,
 		TotalJudgmentCountLast24Months,
 		TotalAssociatedJudgmentCountLast24Months,
-		TotalJudgmentCountValue24Months,
+		TotalJudgmentValueLast24Months,
 		TotalAssociatedJudgmentValueLast24Months,
 		SupplierName,
 		FraudCategory,
