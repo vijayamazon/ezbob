@@ -1,5 +1,6 @@
 ﻿namespace EzServiceAccessor {
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils;
 
 	public interface IEzServiceAccessor {
@@ -16,5 +17,8 @@
 		VatReturnFullData LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID);
 
 		void ParseExperianLtd(long nServiceLogID);
+
+		ExperianLtd LoadExperianLtd(long nServiceLogID);
+		ExperianLtd CheckLtdCompanyCache(string sCompanyRefNum);
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor

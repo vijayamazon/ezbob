@@ -2113,6 +2113,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, Ezbob.Backend.Models.FraudMode mode);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData LateBy14Days();
         
@@ -2887,6 +2893,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianLtd", ReplyAction="http://tempuri.org/IEzService/LoadExperianLtdResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> LoadExperianLtdAsync(long nServiceLogID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckLtdCompanyCache", ReplyAction="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse")]
+        ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(string sCompanyRefNum);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckLtdCompanyCache", ReplyAction="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> CheckLtdCompanyCacheAsync(string sCompanyRefNum);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
         
@@ -2934,12 +2946,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, Ezbob.Backend.Models.FraudMode mode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -2967,6 +2973,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode) {
+            return base.Channel.FraudChecker(customerId, mode);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, Ezbob.Backend.Models.FraudMode mode) {
+            return base.Channel.FraudCheckerAsync(customerId, mode);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData LateBy14Days() {
@@ -4001,6 +4015,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoadExperianLtdAsync(nServiceLogID);
         }
         
+        public ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(string sCompanyRefNum) {
+            return base.Channel.CheckLtdCompanyCache(sCompanyRefNum);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> CheckLtdCompanyCacheAsync(string sCompanyRefNum) {
+            return base.Channel.CheckLtdCompanyCacheAsync(sCompanyRefNum);
+        }
+        
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
             return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
         }
@@ -4063,14 +4085,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync() {
             return base.Channel.FirstOfMonthStatusNotifierAsync();
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode) {
-            return base.Channel.FraudChecker(customerId, mode);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, Ezbob.Backend.Models.FraudMode mode) {
-            return base.Channel.FraudCheckerAsync(customerId, mode);
         }
     }
 }

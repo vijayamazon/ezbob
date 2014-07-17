@@ -111,6 +111,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_FraudChecker_InputMessage">
+    <wsdl:part name="parameters" element="tns:FraudChecker" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FraudChecker_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FraudCheckerResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LateBy14Days_InputMessage">
     <wsdl:part name="parameters" element="tns:LateBy14Days" />
   </wsdl:message>
@@ -885,6 +891,12 @@
   <wsdl:message name="IEzService_LoadExperianLtd_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadExperianLtdResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_CheckLtdCompanyCache_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckLtdCompanyCache" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckLtdCompanyCache_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckLtdCompanyCacheResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
   </wsdl:message>
@@ -933,12 +945,6 @@
   <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_OutputMessage">
     <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifierResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_FraudChecker_InputMessage">
-    <wsdl:part name="parameters" element="tns:FraudChecker" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_FraudChecker_OutputMessage">
-    <wsdl:part name="parameters" element="tns:FraudCheckerResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -962,6 +968,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="FraudChecker">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LateBy14Days">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LateBy14Days" message="tns:IEzService_LateBy14Days_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LateBy14DaysResponse" message="tns:IEzService_LateBy14Days_OutputMessage" />
@@ -1478,6 +1488,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianLtd" message="tns:IEzService_LoadExperianLtd_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianLtdResponse" message="tns:IEzService_LoadExperianLtd_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="CheckLtdCompanyCache">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckLtdCompanyCache" message="tns:IEzService_CheckLtdCompanyCache_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse" message="tns:IEzService_CheckLtdCompanyCache_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
@@ -1509,10 +1523,6 @@
     <wsdl:operation name="FirstOfMonthStatusNotifier">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse" message="tns:IEzService_FirstOfMonthStatusNotifier_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="FraudChecker">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1569,6 +1579,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="FraudChecker">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LateBy14Days">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LateBy14Days" style="document" />
       <wsdl:input>
@@ -2730,6 +2749,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="CheckLtdCompanyCache">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckLtdCompanyCache" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
       <wsdl:input>
@@ -2795,15 +2823,6 @@
     </wsdl:operation>
     <wsdl:operation name="FirstOfMonthStatusNotifier">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="FraudChecker">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -13,9 +13,12 @@
 
 		#region constructor
 
-		public LoadExperianLtd(long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public LoadExperianLtd(string sCompanyRefNum, long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			Result = new ExperianLtd();
 
+			m_nWorkMode = string.IsNullOrWhiteSpace(sCompanyRefNum) ? WorkMode.LoadFull : WorkMode.CheckCache;
+
+			m_sCompanyRefNum = sCompanyRefNum;
 			m_nServiceLogID = nServiceLogID;
 		} // constructor
 
@@ -32,11 +35,30 @@
 		#region method Execute
 
 		public override void Execute() {
-			IEnumerable<SafeReader> lst = DB.ExecuteEnumerable(
-				"LoadFullExperianLtd",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("ServiceLogID", m_nServiceLogID)
-			);
+			IEnumerable<SafeReader> lst;
+
+			switch (m_nWorkMode) {
+			case WorkMode.LoadFull:
+				lst = DB.ExecuteEnumerable(
+					"LoadFullExperianLtd",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("ServiceLogID", m_nServiceLogID)
+				);
+				break;
+
+			case WorkMode.CheckCache:
+				lst = DB.ExecuteEnumerable(
+					"CheckLtdCompanyCache",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CompanyRefNum", m_sCompanyRefNum),
+					new QueryParameter("Now", DateTime.UtcNow)
+				);
+				break;
+
+			default:
+				Log.Alert("Unsupported work mode: {0}", m_nWorkMode.ToString());
+				return;
+			} // switch
 
 			var oKidMap = new SortedTable<string, long, AExperianLtdDataRow>();
 
@@ -106,7 +128,15 @@
 
 		#region private
 
+		private enum WorkMode {
+			LoadFull,
+			CheckCache,
+		} // enum WorkMode
+
+		private readonly WorkMode m_nWorkMode;
+
 		private readonly long m_nServiceLogID;
+		private readonly string m_sCompanyRefNum;
 
 		#endregion private
 	} // class LoadExperianLtd

@@ -287,6 +287,9 @@
 		[OperationContract]
 		ExperianLtdActionResult LoadExperianLtd(long nServiceLogID);
 
+		[OperationContract]
+		ExperianLtdActionResult CheckLtdCompanyCache(string sCompanyRefNum);
+
 		#endregion Experian
 
 		#region Land Registry

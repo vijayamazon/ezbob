@@ -163,7 +163,7 @@
 		private List<ExperianDirector> UpdateLimited() {
 			Log.Debug("Updating limited Experian directors for customer {0}...", m_nCustomerID);
 
-			var stra = new LoadExperianLtd(m_nServiceLogID, DB, Log);
+			var stra = new LoadExperianLtd(null, m_nServiceLogID, DB, Log);
 			stra.Execute();
 
 			var oDirectors = new List<ExperianDirector>();

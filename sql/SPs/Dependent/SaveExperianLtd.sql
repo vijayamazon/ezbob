@@ -76,6 +76,7 @@ BEGIN
 
 	DECLARE @ServiceLogID BIGINT
 	DECLARE @ExperianLtdID BIGINT
+	DECLARE @RegNum NVARCHAR(50)
 	DECLARE @c INT
 
 	SELECT @c = COUNT(*) FROM @Tbl
@@ -83,7 +84,11 @@ BEGIN
 	IF @c != 1
 		RAISERROR('Invalid argument: no/too much data to insert into ExperianLtd table.', 11, 1)
 
-	SELECT @ServiceLogID = MAX(ServiceLogID) FROM @Tbl
+	SELECT TOP 1
+		@ServiceLogID = ServiceLogID,
+		@RegNum = SUBSTRING(RegisteredNumber, 1, 50)
+	FROM
+		@Tbl
 
 	EXECUTE DeleteParsedExperianLtd @ServiceLogID
 
@@ -202,6 +207,11 @@ BEGIN
 	FROM @Tbl
 
 	SET @ExperianLtdID = SCOPE_IDENTITY()
+
+	UPDATE MP_ServiceLog SET
+		CompanyRefNum = @RegNum
+	WHERE
+		Id = @ServiceLogID
 
 	SELECT @ExperianLtdID AS ExperianLtdID
 END

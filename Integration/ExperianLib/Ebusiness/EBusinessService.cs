@@ -12,6 +12,8 @@
 	using EBusiness;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Experian;
+	using EzServiceAccessor;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using StructureMap;
@@ -134,38 +136,14 @@
 			return (DateTime.UtcNow - updateDate).TotalDays > cacheIsValidForDays;
 		} // CacheNotExpired
 
-		#region method CheckCache
-
-		private MP_ExperianDataCache CheckCache(string refNumber) {
-			return m_oRetryer.Retry(() => {
-				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
-
-				Log.InfoFormat("Checking cache for refNumber={0}...", refNumber);
-
-				var cacheVal = repo.GetAll().FirstOrDefault(c => c.CompanyRefNumber == refNumber);
-
-				if (cacheVal != null) {
-					Log.InfoFormat("Returning data from cache for refNumber={0}", refNumber);
-					return cacheVal;
-				} // if
-
-				Log.WarnFormat("Company data from cache for refNumber={0} was not found", refNumber);
-				return null;
-			}, "EBusinessService.CheckCache(" + refNumber + ")");
-		} // CheckCache
-
-		#endregion method CheckCache
-
 		#region method GetOneLimitedBusinessData
 
-		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
-		{
-			try 
-			{
-				MP_ExperianDataCache response = CheckCache(regNumber);
+		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
+			try {
+				/*
+				ExperianLtd oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().CheckLtdCompanyCache(regNumber);
 
-				if (forceCheck || (!checkInCacheOnly && (response == null || CacheExpired(response.LastUpdateDate))))
-				{
+				if (forceCheck || (!checkInCacheOnly && (oExperianLtd == null))) {
 					string requestXml = GetResource("ExperianLib.Ebusiness.LimitedBusinessRequest.xml", regNumber);
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
@@ -174,18 +152,17 @@
 
 					var res = new LimitedResults(oLogEntry.Id, newResponse, DateTime.UtcNow) {CacheHit = false};
 					AddToCache(regNumber, requestXml, res);
-
-					return res;
 				} // if
 
 				if (response == null)
-				{
 					return null;
-				}
 
 				MakeSureDl97IsFilled(customerId, response);
 
 				return new LimitedResults(0, response.JsonPacket, response.LastUpdateDate) { CacheHit = true };
+				*/
+
+				return new LimitedResults(new Exception()); // TODO: remove this ugly stub
 			}
 			catch (Exception e) {
 				Log.Error(e);

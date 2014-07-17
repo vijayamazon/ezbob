@@ -97,7 +97,7 @@
 		public ExperianLtdActionResult LoadExperianLtd(long nServiceLogID) {
 			LoadExperianLtd oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nServiceLogID);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, null, nServiceLogID);
 
 			return new ExperianLtdActionResult {
 				MetaData = oMetaData,
@@ -106,5 +106,20 @@
 		} // LoadExperianLtd
 
 		#endregion method LoadExperianLtd
+
+		#region method CheckLtdCompanyCache
+
+		public ExperianLtdActionResult CheckLtdCompanyCache(string sCompanyRefNum) {
+			LoadExperianLtd oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sCompanyRefNum, 0);
+
+			return new ExperianLtdActionResult {
+				MetaData = oMetaData,
+				Value = oInstance.Result,
+			};
+		} // CheckLtdCompanyCache
+
+		#endregion method CheckLtdCompanyCache
 	} // class EzServiceImplementation
 } // namespace EzService

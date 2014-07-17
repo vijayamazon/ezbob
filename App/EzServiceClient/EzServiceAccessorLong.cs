@@ -2,6 +2,7 @@
 	using EzServiceAccessor;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils;
 
 	public class EzServiceAccessorLong : IEzServiceAccessor {
@@ -62,6 +63,20 @@
 		} // ParseExperianLtd
 
 		#endregion method ParseExperianLtd
+
+		#region method LoadExperianLtd
+
+		public ExperianLtd LoadExperianLtd(long nServiceLogID) {
+			var ar = m_oServiceClient.Instance.LoadExperianLtd(nServiceLogID);
+			return ar.Value;
+		} // LoadExperianLtd
+
+		public ExperianLtd CheckLtdCompanyCache(string sCompanyRefNum) {
+			var ar = m_oServiceClient.Instance.CheckLtdCompanyCache(sCompanyRefNum);
+			return ar.Value;
+		} // CheckLtdCompanyCache
+
+		#endregion method CheckLtdCompanyCache
 
 		#endregion public
 

@@ -1,12 +1,9 @@
-using System;
-using FluentNHibernate.Mapping;
-
-namespace EZBob.DatabaseLib.Model.Database
-{
+namespace EZBob.DatabaseLib.Model.Database {
+	using System;
 	using System.ComponentModel;
+	using FluentNHibernate.Mapping;
 
-	public enum ExperianServiceType
-	{
+	public enum ExperianServiceType {
 		[Description("AML A check")]
 		Aml,
 		[Description("Askville")]
@@ -21,9 +18,9 @@ namespace EZBob.DatabaseLib.Model.Database
 		NonLimitedData,
 		[Description("ESeriesTargeting")]
 		Targeting
-	}
-	public class MP_ServiceLog
-	{
+	} // enum ExperianServiceType
+
+	public class MP_ServiceLog {
 		public virtual long Id { get; set; }
 		public virtual Customer Customer { get; set; }
 		public virtual Director Director { get; set; }
@@ -31,13 +28,11 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string ServiceType { get; set; }
 		public virtual string RequestData { get; set; }
 		public virtual string ResponseData { get; set; }
-	}
+		public virtual string CompanyRefNum { get; set; }
+	} // class MP_ServiceLog
 
-	//-----------------------------------------------------------------------------------
-	public sealed class MP_ServiceLogMap : ClassMap<MP_ServiceLog>
-	{
-		public MP_ServiceLogMap()
-		{
+	public sealed class MP_ServiceLogMap : ClassMap<MP_ServiceLog> {
+		public MP_ServiceLogMap() {
 			Table("MP_ServiceLog");
 			Id(x => x.Id);
 			References(x => x.Customer, "CustomerId");
@@ -46,6 +41,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			Map(x => x.ServiceType);
 			Map(x => x.RequestData).CustomType("StringClob");
 			Map(x => x.ResponseData).CustomType("StringClob");
-		}
-	}
-}
+			Map(x => x.CompanyRefNum).Length(50);
+		} // constructor
+	} // class MP_ServiceLogMap
+} // namespace

@@ -198,6 +198,10 @@
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
       <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
       <Name>RegistryScanner</Name>

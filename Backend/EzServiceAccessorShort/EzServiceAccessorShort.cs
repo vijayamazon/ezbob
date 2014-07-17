@@ -3,6 +3,7 @@
 	using EzBob.Backend.Strategies.VatReturn;
 	using EzServiceAccessor;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -80,6 +81,22 @@
 		} // ParseExperianLtd
 
 		#endregion method ParseExperianLtd
+
+		#region method LoadExperianLtd
+
+		public ExperianLtd LoadExperianLtd(long nServiceLogID) {
+			var stra = new LoadExperianLtd(null, nServiceLogID, ms_oDB, ms_oLog);
+			stra.Execute();
+			return stra.Result;
+		} // LoadExperianLtd
+
+		public ExperianLtd CheckLtdCompanyCache(string sCompanyRefNum) {
+			var stra = new LoadExperianLtd(sCompanyRefNum, 0, ms_oDB, ms_oLog);
+			stra.Execute();
+			return stra.Result;
+		} // CheckLtdCompanyCache
+
+		#endregion method LoadExperianLtd
 
 		#endregion public
 
