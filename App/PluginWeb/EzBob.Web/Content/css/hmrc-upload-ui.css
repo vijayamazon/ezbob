@@ -7,7 +7,7 @@
 	margin-top: 35px;
 	font-size: 32px;
 	text-align: center;
-	color: #7bb224;
+	color: #67c10b;
 	font-weight: normal;
 }
 
@@ -85,7 +85,7 @@
 }
 
 .hmrc-upload-ui .periods-chart td {
-	border: 1px solid #7bb224;
+	border: 1px solid #67c10b;
 	padding: 3px 0;
 	font-size: 12px;
 	line-height: 14px;
@@ -101,6 +101,6 @@
 }
 
 .hmrc-upload-ui .periods-chart td.found {
-	background-color: #7bb224;
+	background-color: #67c10b;
 	color: white;
 }

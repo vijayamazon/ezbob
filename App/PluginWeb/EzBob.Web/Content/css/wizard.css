@@ -267,8 +267,8 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .CompanyDetailForm .oobts-selected {
-	color: #8fc13d;
-	border: 1px solid #8fc13d !important;
+	color: #67c10b;
+	border: 1px solid #67c10b !important;
 	font-weight: bold;
 }
 
@@ -285,7 +285,7 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .CompanyDetailForm .oobts i.fa-check-square-o {
-	color: #8FC13D;
+	color: #67c10b;
 }
 
 .CompanyDetailForm .oobts-common {
@@ -348,7 +348,7 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 	width: 100%;
 	border-radius: 5px 5px 0 0;
 	padding: 1em;
-	background-color: #7bb224;
+	background-color: #67c10b;
 	color: white;
 	margin: 0;
 	-moz-box-sizing: border-box;

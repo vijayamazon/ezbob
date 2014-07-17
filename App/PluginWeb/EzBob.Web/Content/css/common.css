@@ -155,9 +155,9 @@ h1,h2,h3,h4,h5,h6{font-size:28px; margin:20px 0 20px 0; line-height:28px; font-f
 h1{font-size:24px; margin:10px 0 20px 0; color:#999; padding:0 0 10px 0; border-bottom:1px #eee solid;}
 h1.home_page{font-size:34px; line-height:50px; color:#666; border:none!important; padding:0; margin:0 0 10px 0;}
 h1.centered{text-align:center;}
-h1 span{color:#7bb224;}
-h2{font-size:32px; line-height: 40px; color:#7bb224;}
-h2 a{font-size:28px; color:#7bb224; text-decoration:none;}
+h1 span{color:#67c10b;}
+h2{font-size:32px; line-height: 40px; color:#67c10b;}
+h2 a{font-size:28px; color:#67c10b; text-decoration:none;}
 h3{font-size:24px;}
 h3.qa-faq-title{font-size:20px;}
 h4{font-size:20px;}
@@ -1619,7 +1619,7 @@ td.account-logo {
     display: block;
 }
 
-.marketplace-group .group-title { color: #7bb224; }
+.marketplace-group .group-title { color: #67c10b; }
 
 .marketplace-group.following .group-title { padding-top: 1.5em; }
 
@@ -2098,7 +2098,7 @@ ul.storelist li span {
 .address-dialog-title {
     font-size: 32px !important;
     line-height: 40px !important;
-    color: #7bb224 !important;
+    color: #67c10b !important;
     font-weight: normal !important;
 }
 
@@ -2701,7 +2701,7 @@ ul#menu {
 
 ul#user-menu {
     position: absolute;
-    top: 20px;
+    top: 15px;
     right: 5px;
 }
 
@@ -3081,7 +3081,7 @@ table.payment-schedule-table {
 
 table.payment-schedule-table td{
     font-size: 16px;
-    color: #7BB224;
+    color: #67c10b;
 }
 
 .red, .hm_red {
@@ -3147,7 +3147,7 @@ table.payment-schedule-table td{
 
 /* .apply-for-loan-total-block .formula .due { left: 510px; } */
 
-.apply-for-loan-total-block .gelt { color: #8BAC2B; }
+.apply-for-loan-total-block .gelt { color: #67c10b; }
 
 .apply-for-loan-total-block .free-gift {
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;

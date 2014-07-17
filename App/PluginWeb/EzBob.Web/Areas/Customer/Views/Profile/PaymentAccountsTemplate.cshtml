@@ -14,7 +14,7 @@
                 <%if(account.type == 'Bank'){%>
                 <tr>
                     <td>
-                        <div class="payment-account-<%-account.type%>"></div>
+                        <strong>Bank account</strong>
                     </td>
                     <td>X - <%-account.displayName.substring(4)%></td>
                     <td class="last Live">Live</td>
@@ -22,7 +22,7 @@
                 <%} else {%>
                 <tr>
                     <td>
-                        <div class="payment-account-<%-account.type%>"></div>
+                        <strong>Debit card</strong>
                     </td>
                     <td>X - <%-account.displayName%> <%-account.expire ? '(' + account.expire + ')' : ''%></td>
                     <%if(account.isDefault){%>

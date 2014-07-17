@@ -349,7 +349,7 @@ body .apply-header-approved {
 
 body .apply-header-approved b{
     font-size: 18px;
-    color: #8bac2b;
+    color: #67c10b;
 }
 
 body .get-cash-amount {
@@ -405,7 +405,7 @@ body .statusLate {
 
 
 .grey-table .Live {
-    color: #8BAC2B;
+    color: #67c10b;
     font-weight: bold;
 }
 
@@ -524,7 +524,7 @@ input.white {
 }
 
 .green, .hm_green {
-    color: #8BAC2B;
+    color: #67c10b;
 }
 
 .blue, .hm_blue {
@@ -570,7 +570,7 @@ body .other-amount-label {
 }
 
 .client-name {
-    color: #60CB01;
+    color: #67c10b;
 }
 .proccessing-message {
     margin-left: -100px;
@@ -720,7 +720,7 @@ body .modal-backdrop.fade.in {
 }
 
 .header-message.hm_green {
-    color: #8BAC2B;
+    color: #67c10b;
     font-weight: bold;
 }
 
@@ -862,7 +862,7 @@ div.director-container .accordion-inner { padding: 0 !important; margin-left: 15
 	vertical-align: middle;
 	margin: 0;
 	padding: 0;
-	color: #7bb224;
+	color: #67c10b;
 	font-weight: bold;
 }
 
@@ -914,7 +914,7 @@ div.director-container .accordion-inner { padding: 0 !important; margin-left: 15
     font-weight: bold;
     font-size: 18px;
     text-decoration: underline;
-    color: #7bb224;
+    color: #67c10b;
 
 }
 
@@ -926,6 +926,10 @@ div.director-container .accordion-inner { padding: 0 !important; margin-left: 15
 
 .director {
     max-width: 700px;
+}
+
+.add-director {
+    margin-bottom: 15px;
 }
 
 .add-company-director {

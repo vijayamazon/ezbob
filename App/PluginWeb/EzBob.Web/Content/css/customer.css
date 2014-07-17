@@ -124,7 +124,7 @@ box-shadow: 0 0 10px #ccc;
     -moz-box-shadow: 0 0 10px #ccc;
     -webkit-box-shadow: 0 0 10px #ccc;
     box-shadow: 0 0 10px #ccc;
-    color:#7bb224;
+    color:#67c10b;
     font-size:24px;
     overflow:hidden;
     margin:20px auto;
@@ -324,8 +324,14 @@ ul li, ol li{margin:0 0 10px 0;}
 .cf:after{ clear: both;}
 .cf{*zoom: 1;}
 .hide{display:none;}
-strong{font-weight:bold;}
-em{font-style:italic;}    
+
+strong,b {
+    font-weight:bold;
+    font-family: "Titillium Web Semi Bold";
+}
+em {
+    font-style:italic;
+}
 a{color:#39f;}
 a:hover{text-decoration:none;}
 .indent_text{text-indent:-9999px;}
@@ -661,3 +667,7 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 }
 
 #refresh-accounts-dlg > div { text-align: right; }
+
+.item-fully-secured {
+    margin-top: 20px;
+}
