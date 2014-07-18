@@ -457,7 +457,7 @@
                             <th>Post code</th>
                             <th>Gazette date</th>
                             <th>Bankruptcy type</th>
-                            <th>Bankruptcy type description</th>		
+                            <th>Bankruptcy type description</th>
                         </tr>
                     </thead>
 		            <tbody>
@@ -576,6 +576,52 @@
                                     <%}%>
                                 </td>
 	                        </tr>
+                        <%}%>
+                        @*<%}%>*@
+                    </tbody>
+                </table>
+            <%}%>
+    
+            <% if (response.Data.PreviousSearches != undefined) {%>
+                <table>
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th>Previous search date</th>
+                            <th>Enquiry type</th>
+                            <th>Enquiry type descripton</th>
+                            <th>Credit required</th>
+                        </tr>
+                    </thead>
+		            <tbody>
+                        @*<% _.each(response.Data.PreviousSearches, function(i) {*@
+                        <% if (response.Data.PreviousSearches[0] != undefined) {%>
+                            <tr>
+		                        <td class=narrow-as-possible><%-EzBob.formatDate(response.Data.PreviousSearches[0].PreviousSearchDate)%></td>
+		                        <td class=narrow-as-possible><%-response.Data.PreviousSearches[0].EnquiryType%></td>
+		                        <td class=narrow-as-possible><%-response.Data.PreviousSearches[0].EnquiryTypeDesc%></td>
+		                        <td><%-response.Data.PreviousSearches[0].CreditRequired%></td>
+	                        </tr>
+                        <%}%>
+                        @*<%}%>*@
+                    </tbody>
+                </table>
+            <%}%>
+    
+            <% if (response.Data.PaymentPerformanceDetails != undefined) {%>
+                <table>
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th>Code</th>
+                            <th>Days beyond terms</th>
+                        </tr>
+                    </thead>
+		            <tbody>
+                        @*<% _.each(response.Data.PaymentPerformanceDetails, function(i) {*@
+                        <% if (response.Data.PaymentPerformanceDetails[0] != undefined) {%>
+                            <tr>
+		                        <td class=narrow-as-possible><%-response.Data.PaymentPerformanceDetails[0].Code%></td>
+		                        <td class=narrow-as-possible><%-response.Data.PaymentPerformanceDetails[0].DaysBeyondTerms%></td>
+		                    </tr>
                         <%}%>
                         @*<%}%>*@
                     </tbody>

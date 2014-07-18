@@ -353,7 +353,9 @@
       <xs:element minOccurs="0" name="NumberOfAccountsPlacedForCollectionLast2Years" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="NumberOfProprietorsFound" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="NumberOfProprietorsSearched" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PaymentPerformanceDetails" nillable="true" type="tns:ArrayOfPaymentPerformanceDetail" />
       <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PreviousSearches" nillable="true" type="tns:ArrayOfPreviousSearch" />
       <xs:element minOccurs="0" name="PrincipalActivities" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProbabilityOfDefaultScore" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="RiskBand" nillable="true" type="xs:string" />
@@ -453,6 +455,34 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TradingName" nillable="true" type="tns:TradingName" />
+  <xs:complexType name="ArrayOfPaymentPerformanceDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PaymentPerformanceDetail" nillable="true" type="tns:PaymentPerformanceDetail" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPaymentPerformanceDetail" nillable="true" type="tns:ArrayOfPaymentPerformanceDetail" />
+  <xs:complexType name="PaymentPerformanceDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DaysBeyondTerms" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PaymentPerformanceDetail" nillable="true" type="tns:PaymentPerformanceDetail" />
+  <xs:complexType name="ArrayOfPreviousSearch">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PreviousSearch" nillable="true" type="tns:PreviousSearch" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPreviousSearch" nillable="true" type="tns:ArrayOfPreviousSearch" />
+  <xs:complexType name="PreviousSearch">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CreditRequired" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EnquiryType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EnquiryTypeDesc" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PreviousSearchDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PreviousSearch" nillable="true" type="tns:PreviousSearch" />
   <xs:complexType name="ArrayOfLoanScheduleItemModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />

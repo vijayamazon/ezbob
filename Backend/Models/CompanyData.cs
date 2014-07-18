@@ -2,7 +2,33 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
-	
+
+	[DataContract]
+	public class PaymentPerformanceDetail
+	{
+		[DataMember]
+		public string Code { get; set; }
+
+		[DataMember]
+		public int DaysBeyondTerms { get; set; }
+	}
+
+	[DataContract]
+	public class PreviousSearch
+	{
+		[DataMember]
+		public DateTime PreviousSearchDate { get; set; }
+
+		[DataMember]
+		public string EnquiryType { get; set; }
+
+		[DataMember]
+		public string EnquiryTypeDesc { get; set; }
+
+		[DataMember]
+		public string CreditRequired { get; set; }
+	}
+
 	[DataContract]
 	public class TradingName
 	{
@@ -326,5 +352,11 @@
 
 		[DataMember]
 		public List<CcjDetail> CcjDetails { get; set; }
+
+		[DataMember]
+		public List<PreviousSearch> PreviousSearches { get; set; }
+
+		[DataMember]
+		public List<PaymentPerformanceDetail> PaymentPerformanceDetails { get; set; }
 	}
 }

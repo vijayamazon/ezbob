@@ -245,6 +245,48 @@
 
 							Data.CcjDetails.Add(ccjDetail);
 						}
+
+						DataTable previousSearchesDataTable = DB.ExecuteReader(
+							"GetNonLimitedPreviousSearches",
+							CommandSpecies.StoredProcedure,
+							new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
+
+						if (previousSearchesDataTable.Rows.Count > 0)
+						{
+							Data.PreviousSearches = new List<PreviousSearch>();
+							foreach (DataRow row in previousSearchesDataTable.Rows)
+							{
+								var previousSearchesSafeReader = new SafeReader(row);
+
+								var previousSearch = new PreviousSearch();
+								previousSearch.PreviousSearchDate = previousSearchesSafeReader["PreviousSearchDate"];
+								previousSearch.EnquiryType = previousSearchesSafeReader["EnquiryType"].ToNullString();
+								previousSearch.EnquiryTypeDesc = previousSearchesSafeReader["EnquiryTypeDesc"].ToNullString();
+								previousSearch.CreditRequired = previousSearchesSafeReader["CreditRequired"].ToNullString();
+
+								Data.PreviousSearches.Add(previousSearch);
+							}
+						}
+
+						DataTable paymentPerformanceDetailsDataTable = DB.ExecuteReader(
+							"GetNonLimitedPaymentPerformanceDetails",
+							CommandSpecies.StoredProcedure,
+							new QueryParameter("ExperianNonLimitedResultId", experianNonLimitedResultId));
+
+						if (paymentPerformanceDetailsDataTable.Rows.Count > 0)
+						{
+							Data.PaymentPerformanceDetails = new List<PaymentPerformanceDetail>();
+							foreach (DataRow row in paymentPerformanceDetailsDataTable.Rows)
+							{
+								var paymentPerformanceDetailsSafeReader = new SafeReader(row);
+
+								var paymentPerformanceDetail = new PaymentPerformanceDetail();
+								paymentPerformanceDetail.Code = paymentPerformanceDetailsSafeReader["Code"];
+								paymentPerformanceDetail.DaysBeyondTerms = paymentPerformanceDetailsSafeReader["DaysBeyondTerms"];
+
+								Data.PaymentPerformanceDetails.Add(paymentPerformanceDetail);
+							}
+						}
 					}
 				}
 			}
