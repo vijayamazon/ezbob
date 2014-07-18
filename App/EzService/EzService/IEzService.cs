@@ -33,6 +33,9 @@
 		[OperationContract]
 		ActionMetaData BackfillFinancialAccounts();
 
+		[OperationContract]
+		ActionMetaData BackfillNonLimitedCompanies();
+
 		#region AML and BWA
 
 		[OperationContract]

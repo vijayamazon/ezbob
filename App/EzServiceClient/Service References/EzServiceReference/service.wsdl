@@ -111,6 +111,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_InputMessage">
+    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifier" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifierResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_FraudChecker_InputMessage">
     <wsdl:part name="parameters" element="tns:FraudChecker" />
   </wsdl:message>
@@ -464,6 +470,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillFinancialAccounts_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillFinancialAccountsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillNonLimitedCompanies_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillNonLimitedCompanies" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillNonLimitedCompanies_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillNonLimitedCompaniesResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_CheckAml_InputMessage">
     <wsdl:part name="parameters" element="tns:CheckAml" />
@@ -939,12 +951,6 @@
   <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
     <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_InputMessage">
-    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifier" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_OutputMessage">
-    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifierResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -968,6 +974,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="FirstOfMonthStatusNotifier">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse" message="tns:IEzService_FirstOfMonthStatusNotifier_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="FraudChecker">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
@@ -1203,6 +1213,10 @@
     <wsdl:operation name="BackfillFinancialAccounts">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillFinancialAccounts" message="tns:IEzService_BackfillFinancialAccounts_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillFinancialAccountsResponse" message="tns:IEzService_BackfillFinancialAccounts_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BackfillNonLimitedCompanies">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillNonLimitedCompanies" message="tns:IEzService_BackfillNonLimitedCompanies_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillNonLimitedCompaniesResponse" message="tns:IEzService_BackfillNonLimitedCompanies_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CheckAml">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAml" message="tns:IEzService_CheckAml_InputMessage" />
@@ -1520,10 +1534,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="FirstOfMonthStatusNotifier">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse" message="tns:IEzService_FirstOfMonthStatusNotifier_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1579,6 +1589,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="FirstOfMonthStatusNotifier">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="FraudChecker">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
       <wsdl:input>
@@ -2103,6 +2122,15 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillFinancialAccounts">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillFinancialAccounts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackfillNonLimitedCompanies">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillNonLimitedCompanies" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2814,15 +2842,6 @@
     </wsdl:operation>
     <wsdl:operation name="ValidateMobileCode">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="FirstOfMonthStatusNotifier">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

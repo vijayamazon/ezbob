@@ -13,7 +13,7 @@
 	{
 		private readonly AConnection db;
 		private readonly SafeILog log;
-		private readonly XmlDocument xmlDoc;
+		private XmlDocument xmlDoc;
 
 		// DN10 fields
 		private string businessName;
@@ -129,6 +129,7 @@
 		public void ParseAndStore(int customerId, string xml, string refNumber, long serviceLogId)
 		{
 			Init();
+			xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(xml);
 
 			ParseDN10();

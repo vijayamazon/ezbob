@@ -10,7 +10,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	INSERT INTO ExperianNonLimitedResultPerformanceDetails
+	INSERT INTO ExperianNonLimitedResultPaymentPerformanceDetails
 		(ExperianNonLimitedResultId,
 		 Code,	
 		 DaysBeyondTerms)

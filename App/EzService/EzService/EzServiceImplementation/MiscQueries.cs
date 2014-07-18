@@ -247,6 +247,12 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
+		public ActionMetaData BackfillNonLimitedCompanies()
+		{
+			BackfillNonLimitedCompanies instance;
+			return ExecuteSync(out instance, 0, 0);
+		}
+		
 		public ActionMetaData BackfillConsumerAnalytics()
 		{
 			BackfillConsumerAnalytics instance;

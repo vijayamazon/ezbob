@@ -863,6 +863,18 @@ GeneratePassword broker-contact-email@example.com password-itself
 		}
 
 		[Activation]
+		private void BackfillNonLimitedCompanies()
+		{
+			if ((m_aryArgs.Length != 1))
+			{
+				m_oLog.Msg("Usage: BackfillNonLimitedCompanies");
+				return;
+			} // if
+
+			m_oServiceClient.BackfillNonLimitedCompanies();
+		}
+
+		[Activation]
 		private void CalculateNewMedals() {
 			if ((m_aryArgs.Length != 1)) {
 				m_oLog.Msg("Usage: CalculateNewMedals");
