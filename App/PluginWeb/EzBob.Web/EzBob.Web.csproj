@@ -68,6 +68,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.dll</HintPath>
     </Reference>
+    <Reference Include="Fizzler.Sandbox, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Sandbox.dll</HintPath>
+    </Reference>
     <Reference Include="Fizzler.Systems.HtmlAgilityPack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
@@ -706,6 +710,7 @@
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.eot" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.ttf" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.woff" />
+    <Content Include="Content\css\fonts\opensans.woff" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

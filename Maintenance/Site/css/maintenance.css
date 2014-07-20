@@ -146,6 +146,7 @@ text-decoration: underline;
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#1f2022',GradientType=0 );
     color:#fff; text-shadow:0 1px 1px #000; font-size:11px;
     height: 90px;
+	font-family: Arial;
 }
 
 .copyrights-inner {
