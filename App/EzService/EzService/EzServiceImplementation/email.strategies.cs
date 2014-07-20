@@ -5,10 +5,6 @@
 	partial class EzServiceImplementation {
 		#region async
 
-		public ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
-			return Execute(nCustomerID, null, typeof(Greeting), nCustomerID, sConfirmationEmail);
-		} // GreetingMailStrategy
-
 		public ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
 			return Execute(customerId, userId, typeof(ApprovedUser), customerId, loanAmount);
 		} // ApprovedUser

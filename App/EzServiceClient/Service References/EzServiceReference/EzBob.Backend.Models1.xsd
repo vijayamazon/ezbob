@@ -2,15 +2,6 @@
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:simpleType name="FraudMode">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="FullCheck" />
-      <xs:enumeration value="PersonalDetaisCheck" />
-      <xs:enumeration value="CompanyDetailsCheck" />
-      <xs:enumeration value="MarketplacesCheck" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
   <xs:complexType name="ArrayOfIdNameModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="IdNameModel" nillable="true" type="tns:IdNameModel" />
@@ -279,6 +270,15 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="FinishWizardArgs" nillable="true" type="tns:FinishWizardArgs" />
+  <xs:simpleType name="FraudMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FullCheck" />
+      <xs:enumeration value="PersonalDetaisCheck" />
+      <xs:enumeration value="CompanyDetailsCheck" />
+      <xs:enumeration value="MarketplacesCheck" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
   <xs:simpleType name="NewCreditLineOption">
     <xs:restriction base="xs:string">
       <xs:enumeration value="SkipEverything">

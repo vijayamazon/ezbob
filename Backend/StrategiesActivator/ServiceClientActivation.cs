@@ -127,17 +127,6 @@
 		// ReSharper disable UnusedMember.Local
 
 		[Activation]
-		private void Greeting() {
-			int customerId;
-			if (m_aryArgs.Length != 3 || !int.TryParse(m_aryArgs[1], out customerId)) {
-				m_oLog.Msg("Usage: Greeting <CustomerId> <ConfirmEmailAddress>");
-				return;
-			}
-
-			m_oServiceClient.GreetingMailStrategy(customerId, m_aryArgs[2]);
-		}
-
-		[Activation]
 		private void GetWizardConfigs() {
 			m_oServiceClient.GetWizardConfigs();
 		}

@@ -154,9 +154,6 @@
 		#region email strategies
 
 		[OperationContract]
-		ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
-
-		[OperationContract]
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount);
 
 		[OperationContract]
