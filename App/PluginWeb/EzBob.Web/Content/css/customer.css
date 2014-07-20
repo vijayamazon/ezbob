@@ -247,17 +247,18 @@ select:focus {
 input[type="button"],
 input[type="submit"],
 input[type="reset"],
-button,
+button, 
 .button {
     font-family: "Titillium Web Semi Bold";
     font-size:15px;
     font-style:normal;
     height:36px;
     line-height:36px;
-    width:120px;
-
 }
 
+.button {
+    min-width: 120px;
+}
 label{display:block; font-weight:bold; margin:0 0 5px 0;}
 
 span.required {

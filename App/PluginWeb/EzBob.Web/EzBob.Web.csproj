@@ -509,6 +509,7 @@
     <Content Include="Content\css\images\header\header_bg_left.png" />
     <Content Include="Content\css\images\header\header_bg_strip.png" />
     <Content Include="Content\css\images\header\pas.png" />
+    <Content Include="Content\css\images\header\phone.PNG" />
     <Content Include="Content\css\images\header\process_L_green.png" />
     <Content Include="Content\css\images\header\process_L_grey.png" />
     <Content Include="Content\css\images\header\process_M_green.png" />
@@ -2033,6 +2034,9 @@
     <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.coffee" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js" />
+    <Content Include="Content\js\login\ezbob.login.view.min.js.map">
+      <DependentUpon>ezbob.login.view.js</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />

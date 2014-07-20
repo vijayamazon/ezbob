@@ -2660,7 +2660,12 @@ img.newlogo {
     font-size: 16px;
 }
 
-
+.ez-phone {
+    background-image: url(images/header/phone.PNG);
+    background-repeat: no-repeat;
+    width: 13px;
+    height: 18px;
+}
 #logged-in-user-name {
     right: 50% !important;
 }

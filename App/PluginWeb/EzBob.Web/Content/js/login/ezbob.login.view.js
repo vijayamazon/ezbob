@@ -42,7 +42,6 @@
       });
       $('#Password').focus();
       $('#UserName').focus();
-      $('.header-info-text').text('LOGIN');
       EzBob.UiAction.registerView(this);
       return this;
     };
