@@ -148,11 +148,12 @@ footer, .push {
     margin: 0 auto;
     padding-bottom: 5px;
     padding-top: 5px;
+    font-family: Arial;
 }
 
 /*-- General Content Classes --*/
 h1,h2,h3,h4,h5,h6{font-size:28px; margin:20px 0 20px 0; line-height:28px; font-family: 'Titillium Web Semi Bold';}
-h1{font-size:24px; margin:10px 0 20px 0; color:#999; padding:0 0 10px 0; border-bottom:1px #eee solid;}
+h1{font-size:24px; margin:20px 0 20px 0; color:#999; padding:0 0 10px 0; border-bottom:1px #eee solid;}
 h1.home_page{font-size:34px; line-height:50px; color:#666; border:none!important; padding:0; margin:0 0 10px 0;}
 h1.centered{text-align:center;}
 h1 span{color:#67c10b;}
@@ -2233,7 +2234,7 @@ li[stripped="stripped"] {
     outline: 0;
     top: -18px;
     color: #acacac !important;
-    font-size: 11px;
+    font-size: 12px;
     min-height: 18px;
 }
 
@@ -2360,7 +2361,7 @@ img.help-btn {
 }
 
 .amount-period-sliders .sliders-container .ui-slider-range {
-    background: #A7C952;
+    background: #67c10b;
     box-shadow: inset 0 1px 5px 0px rgba(0, 0, 0, .5),
                       0 1px 0   0px rgba(250, 250, 250, .5);
     position: absolute;
@@ -2725,10 +2726,13 @@ ul#user-menu {
 .loginTemplate,
 #wizard,
 #profile-main,
-#get-cash,
 .wizard-steps
 {
     margin-top: 77px;
+}
+
+#get-cash {
+    margin-top: 90px;
 }
 
 #get-cash .wizard-steps {
@@ -2789,7 +2793,9 @@ ul#user-menu {
     z-index: 3;
 }
     .first-circle .inner-circle,
-    .progress-circle .inner-circle.complete {
+    .progress-circle .inner-circle.complete,
+    .dashboard-steps .inner-circle.current
+     {
         background: url(images/header/circle_green.png);
         background-repeat: no-repeat;
         color: #ffffff;
@@ -2968,6 +2974,7 @@ ul.application_steps {
         color: #515254;
         width: 90px;
         text-align: center;
+        padding-top: 5px;
     }
 
 /*side bar*/
@@ -3023,7 +3030,7 @@ div.customer-sidebar-content hr {
 
             div.customer-sidebar-content div.item div.text h3 {
                 font-weight: bold;
-                font-size: 1.2em;
+                font-size: 1.3em;
                 margin: 0 0 0.1em 0;
             }
 
@@ -3061,11 +3068,12 @@ div.customer-sidebar-content hr {
     font-weight: bold;
     padding-left: 2px;
     text-align: right;
-    font-size: 13px;
+    font-size: 14px;
     margin-bottom: 3px;
     margin-right: 8px;
     display: block;
     margin-left: 145px;
+    text-align: center;
 }
 .loan-details-table td,
 .loan-details-table th {
@@ -3101,17 +3109,12 @@ table.payment-schedule-table {
     border: #c5c5c5 1px solid;
 }
 
-table.payment-schedule-table td{
-    font-size: 16px;
-    color: #67c10b;
-}
-
 .red, .hm_red {
     color: red!important;
 }
 
 .hm_black {
-    color: #000!important;
+    color: #4D4D4D!important;
 }
 
 #block-loan-schedule .apply-for-loan-total-block {
@@ -3187,7 +3190,7 @@ table.payment-schedule-table td{
 }
 
 .apply-for-loan-total-block .rlc {
-    font-size: 10px;
+    font-size: 14px;
     position: relative;
 }
 

@@ -484,7 +484,6 @@
 				.Add("~/Content/js/lib/cookies.js")
 				.Add("~/Content/js/lib/underscore.js")
 				.Add("~/Content/js/lib/backbone.js")
-				.Add("~/Content/js/contactUs/ezbo.contactUs.js")
 				.Add("~/Content/js/App/ezbob.validation.js")
 				.Add("~/Content/js/lib/jquery.field_status.js")
 				.Add("~/Content/js/lib/attardi.labels.js")

@@ -800,8 +800,10 @@
         EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;
 
         function EzBob_CgVendors_init() {
-            EzBob.CgVendors.init(@{ WriteLiteral(Model.ChannelGrabberAccounts); });
-		} // EzBob_CgVendors_init
+            if (EzBob.CgVendors) {
+                EzBob.CgVendors.init(@{ WriteLiteral(Model.ChannelGrabberAccounts); });
+            }
+        } // EzBob_CgVendors_init
 
 		$(document).ready(function() {
 		    EzBob_CgVendors_init();
