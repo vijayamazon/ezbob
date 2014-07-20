@@ -738,6 +738,7 @@ h2.header-message a{
 .early-payment-form .radio .money { 
     margin: 0;
     margin-left: 15px;
+    width: 50%;
 }
 
 #profile-content .stores-view .next { display: none!important;}

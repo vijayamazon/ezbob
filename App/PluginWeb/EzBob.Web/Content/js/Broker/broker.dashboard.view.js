@@ -222,7 +222,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 						return '';
 
 					if (sAction === 'display')
-						return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Complete the application on behalf of the client.">' +
+						return '<button class="lead-fill-wizard button btn-green" data-lead-id=' + oFullSource.LeadID + ' title="Complete the application on behalf of the client.">' +
 							'<i class="fa fa-desktop"></i> Fill' +
 							'</button>';
 
@@ -248,7 +248,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 					else
 						sTitle = 'Send another invitation to the client to fill himself.';
 
-					return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' +
+					return '<button class="lead-send-invitation button btn-green" data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' +
 						'<i class="fa fa-envelope"></i> Send' +
 						'</button>';
 				}, // mRender

@@ -1,5 +1,10 @@
 ﻿.ui-widget {
     font-family: 'Titillium Web Regular', Arial, sans-serif;
+    font-size: 14px;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    font-size: 14px;
 }
 
 .broker {
@@ -7,13 +12,13 @@
 }
 
 input[type="button"],
-input[type="submit"], 
-input[type="reset"], 
-button, 
-.button {
-    font-size: 15px;
-    font-weight: bold;
-    font-style: normal;
+input[type="submit"],
+input[type="reset"],
+button,
+.button,
+.ui-widget button {
+    font-size: 16px;
+    font-family: "Titillium Web Semi Bold";
     height: 36px;
     line-height: 36px;
     width: 120px;
@@ -26,81 +31,85 @@ button,
 .forgotten-form .button {
     width: 200px;
 }
+
 .box > .box-title {
     background-color: #E2E3E5;
     text-shadow: 0 1px 0 #E2E3E5;
 }
 
 h2 {
-	font-size: 32px;
-	line-height: 40px;
-	color: #67c10b;
-	margin: 20px 0;
-	padding: 0;
-	border: 0;
-	vertical-align: baseline;
+    font-size: 32px;
+    line-height: 40px;
+    color: #67c10b;
+    margin: 20px 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
 }
 
 .form-read-and-accept input[type="checkbox"] {
-	margin: 0 5px 5px 0;
+    margin: 0 5px 5px 0;
 }
 
 .broker-form {
-	float: left;
-	width: 62%;
-	line-height: 1.8em;
-	margin-bottom: 1.5em;
+    float: left;
+    width: 62%;
+    line-height: 1.8em;
+    margin-bottom: 1.5em;
 }
 
 .login-form a {
-	font-weight: bold;
-	margin-bottom: 1em;
-	display: inline-block;
+    font-weight: bold;
+    margin-bottom: 1em;
+    display: inline-block;
 }
 
 footer {
-	clear: both;
+    clear: both;
 }
 
-.simpleCaptcha > div { padding-top: 1em; }
-
-#AddNewCustomer {
-	font-size: 16px;
+.simpleCaptcha > div {
+    padding-top: 1em;
 }
 
 .section-dashboard {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
-.section-dashboard .ui-tabs-panel {
-	padding: 0;
-}
+    .section-dashboard .ui-tabs-panel {
+        padding: 0;
+    }
 
 table.customer-list {
-	width: 1190px !important;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	clear: both;
+    width: 1190px !important;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    clear: both;
+    font-size: 14px;
 }
 
-.section-dashboard .dataTables_top_right { float: right; }
+.section-dashboard .dataTables_top_right {
+    float: right;
+}
 
-.section-dashboard .dataTables_filter { display: inline; }
+.section-dashboard .dataTables_filter {
+    display: inline;
+}
 
 .section-dashboard .reload-customer-list,
 .section-customer-details .delete-selected-files {
     margin-top: -8px;
     margin-left: 10px;
-	float: right;
+    float: right;
 }
 
 .broker a,
 #broker-terms-and-conditions a,
 .section-dashboard tbody .grid-item-FirstName a,
 .section-dashboard tbody .grid-item-LastName a {
-	text-decoration: underline;
-	color: #428bca !important;
+    text-decoration: underline;
+    color: #428bca !important;
 }
 
 .section-dashboard tbody .grid-item-LoanAmount,
@@ -108,162 +117,170 @@ table.customer-list {
 .section-dashboard tfoot .grid-item-LoanAmount,
 .section-dashboard tfoot .grid-item-SetupFee,
 .section-dashboard tfoot .grid-item-LoanDate {
-	text-align: right;
+    text-align: right;
 }
 
 .section-dashboard tfoot td {
-	font-weight: bold;
-	background-color: #E2E3E5;
+    font-weight: bold;
+    background-color: #E2E3E5;
 }
 
 .section-dashboard .lead-send-invitation,
 .section-dashboard .lead-fill-wizard {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 
 .section-customer-details .back-to-list-container {
-	margin: 2em 0 1em 0;
-	text-align: right;
+    margin: 2em 0 1em 0;
+    text-align: right;
 }
 
 .value-group {
-	font-size: 15px;
-	margin-bottom: 1em;
-	padding: 5px;
+    font-size: 15px;
+    margin-bottom: 1em;
+    padding: 5px;
 }
 
 .aka-table {
-	display: table;
-	width: 100%;
+    display: table;
+    width: 100%;
 }
 
 .aka-caption {
-	display: table-caption;
-	font-weight: bold;
+    display: table-caption;
+    font-weight: bold;
 }
 
-.aka-caption .dataTables_filter {
-	float: right;
-}
+    .aka-caption .dataTables_filter {
+        float: right;
+    }
 
-.aka-caption .dataTables_filter input {
-	margin: 0 !important;
-}
+        .aka-caption .dataTables_filter input {
+            margin: 0 !important;
+        }
 
 .aka-row {
-	display: table-row;
+    display: table-row;
 }
 
 .aka-column {
-	display: table-cell;
+    display: table-cell;
 }
 
 .value-title {
-	font-weight: bold;
-	padding-right: 1em;
-	padding-bottom: 0.5em;
-	width: 1px !important;
-	white-space: nowrap !important;
+    font-weight: bold;
+    padding-right: 1em;
+    padding-bottom: 0.5em;
+    width: 1px !important;
+    white-space: nowrap !important;
+    font-family: 'Titillium Web Semi Bold';
+}
+
+table.table th {
+    font-family: 'Titillium Web Semi Bold';
 }
 
 .aka-row > .value-title,
 .aka-row > .value {
-	display: table-cell;
+    display: table-cell;
 }
 
-.section-customer-details .center { text-align: center!important; }
+.section-customer-details .center {
+    text-align: center!important;
+}
 
 .section-customer-details .dropzone {
-	min-height: 0 !important;
-	width: 20%;
+    min-height: 0 !important;
+    width: 20%;
 }
 
 .section-customer-details .table-responsive {
-	width: 80%;
+    width: 80%;
 }
 
 .section-customer-details .dataTables_info,
 .section-customer-details .dataTables_length {
-	display: inline-block;
-	float: left;
-	margin-right: 1em;
-	padding: 0 !important;
+    display: inline-block;
+    float: left;
+    margin-right: 1em;
+    padding: 0 !important;
 }
 
-.section-add-customer .form_buttons_container { position: relative; }
-
-.section-add-customer .form_buttons_container button i {
-	display: block;
+.section-add-customer .form_buttons_container {
+    position: relative;
 }
 
-.section-add-customer .form_buttons_container button div {
-	margin-top: 8px;
-}
 
-.section-add-customer .form_buttons_container button#LeadFillWizard {
-	left: 0;
-}
+    .section-add-customer .form_buttons_container button#LeadFillWizard {
+        left: 0;
+        width: 250px;
+        height: 140px;
+    }
 
-.section-add-customer .form_buttons_container button#LeadSendInvitation {
-	right: 0;
-}
+    .section-add-customer .form_buttons_container button#LeadSendInvitation {
+        width: 250px;
+        height: 140px;
+        right: 0;
+    }
 
 .aka-column-top {
-	display: table-cell;
-	vertical-align: top;
+    display: table-cell;
+    vertical-align: top;
 }
 
-.logo-example > div > div { margin-top: 20px; }
+.logo-example > div > div {
+    margin-top: 20px;
+}
 
 .source-ref-container {
-	position: relative;
-	width: 220px;
+    position: relative;
+    width: 220px;
 }
 
-.source-ref-container .image-size {
-	position: absolute;
-	top: -15px;
-	left: 0;
-	color: #aaaaaa;
-}
+    .source-ref-container .image-size {
+        position: absolute;
+        top: -15px;
+        left: 0;
+        color: #aaaaaa;
+    }
 
 .source-ref-sample {
-	padding: 10px;
+    padding: 10px;
 }
 
 .source-ref-sample-text {
-	white-space: pre;
-	padding: 10px;
-	border: 1px solid #E2E3E5;
+    white-space: pre;
+    padding: 10px;
+    border: 1px solid #E2E3E5;
 }
 
 .source-ref-container .direct-link {
-	position: absolute;
-	top: -35px;
-	left: 0;
-	color: #aaaaaa;
+    position: absolute;
+    top: -35px;
+    left: 0;
+    color: #aaaaaa;
 }
 
 .source-ref-link {
-	border: 1px solid #E2E3E5;
-	padding: 1.5em;
-	text-align: left;
+    border: 1px solid #E2E3E5;
+    padding: 1.5em;
+    text-align: left;
 }
 
 .send-via-email {
-	padding-left: 20px;
+    padding-left: 20px;
 }
 
 .update-password-form {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-	.broker-form {
-		float: left;
-		width: 100%;
-		line-height: 1.8em;
-		margin-bottom: 1.5em;
-	}
+    .broker-form {
+        float: left;
+        width: 100%;
+        line-height: 1.8em;
+        margin-bottom: 1.5em;
+    }
 }

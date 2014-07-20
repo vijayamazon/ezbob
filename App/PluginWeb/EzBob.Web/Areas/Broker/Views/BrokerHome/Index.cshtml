@@ -302,7 +302,7 @@
                             </ul>
 
                             <div id="section-dashboard-customers">
-                                <button type="button" id="AddNewCustomer" class="button btn-green pull-right">Add a new client</button>
+                                <button type="button" id="AddNewCustomer" class="button btn-green pull-right btn-wide">Add a new client</button>
                                 <h2 class="form-start">Client list</h2>
 
                                 <div class="table-responsive table-big">
@@ -499,7 +499,7 @@
 
                                                 <div class="form_buttons_container">
                                                     <div class="attardi-button">
-                                                        <button type="submit" id="UpdatePassword" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
+                                                        <button type="submit" id="UpdatePassword" class="button btn-green disabled pull-right btn-wide" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -511,7 +511,7 @@
                         <!-- section-customer-list -->
 
                         <div class="page-section hide section-add-customer">
-                            <button type="button" class="back-to-list button btn-green pull-right">Back to client list</button>
+                            <button type="button" class="back-to-list button btn-green pull-right btn-wide">Back to client list</button>
                             <h2 class="form-start">Add a new client</h2>
 
                             <form class="new-lead-form broker-form" novalidate="novalidate">
@@ -543,12 +543,12 @@
 
                                 <div class="form_buttons_container">
                                     <div class="attardi-button">
-                                        <button type="submit" id="LeadFillWizard" data-add-mode="fill" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">
+                                        <button type="submit" id="LeadFillWizard" data-add-mode="fill" class="button btn-green disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">
                                             <i class="fa fa-desktop"></i>
                                             <div>Complete the application</div>
                                             <div>on behalf of your client</div>
                                         </button>
-                                        <button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">
+                                        <button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="button btn-green disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">
                                             <i class="fa fa-envelope"></i>
                                             <div>Send an invitation to</div>
                                             <div>the client to fill himself</div>
@@ -563,7 +563,7 @@
                             <input type="hidden" id="customer-id" class="value" data-field-name="id" />
 
                             <div class="back-to-list-container">
-                                <button type="button" class="back-to-list button btn-green">Back to client list</button></div>
+                                <button type="button" class="back-to-list button btn-green btn-wide">Back to client list</button></div>
 
                             <div class="value-group aka-table table-big box">
                                 <div class="box-title aka-caption">Client details</div>

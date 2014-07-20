@@ -100,7 +100,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
   src: local('Open Sans'), local('OpenSans'), url(fonts/opensans.woff) format('woff');
 }
 
-body {
+body, .ui-dialog {
     font-family: "Titillium Web Regular";
     color: #4d4d4d;
     font-weight: normal;
@@ -1546,6 +1546,11 @@ button,
     color: #ffffff;
 }
 
+.btn-wide {
+    width: 140px !important;
+}
+
+
 .btn-green {
     -moz-box-shadow: 0px 1px 1px 0px #000000;
     -webkit-box-shadow: 0px 1px 1px 0px #000000;
@@ -1743,7 +1748,7 @@ border-radius: 5px;
     top: 6px;
     right: 4px;
     position: absolute;
-    background-color: #1AB852;
+    background-color: #67C10B;
     color: white;
     font-weight: normal;
     font-size: 10px;
@@ -1836,8 +1841,9 @@ input.form_field_right_side_signup_phone { float: right; margin-right: 10px; wid
     background-position: 20px center;
     background-repeat: no-repeat;
     padding: 30px 30px 30px 112px;
-    border: 5px solid #5C6373;
-    margin: 10px 0 5px 0;
+    border: 1px solid #E2E3E5;
+    width: 1070px;
+    margin: 10px auto;
 }
 
 .broker-finish-wizard-later .button-container {
