@@ -280,13 +280,7 @@
             var isValid = EzBob.Validation.checkForm(validator);
             return $('.submit').toggleClass('disabled', !isValid);
         }
-
-        (function () {
-            var sSegmentType = decodeURIComponent(new Uri(document.location).getQueryParamValue('segmenttype'));
-            var sLogoClassExt = (sSegmentType === 'offline') ? 'ezbob_logo_offline' : 'ezbob_logo_online';
-            $('.ezbob_logo').removeClass('ezbob_logo_online ezbob_logo_offline').addClass(sLogoClassExt);
-        })();
-
+        
         $(function () {
             $('.header-info').show();
             $('.header-info-text').text("MY ACCOUNT");
@@ -305,9 +299,9 @@
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
             //set user email in top bar
-            var html = '<span id="logged-in-user-name">' + decodeURIComponent(getCallbackValue('username') || "") + '</span><a href="/Account/LogOff" class="button btn-grey">Log off</a>';
-            $("#header_description").html(html);
-
+            $('#logoff-li').show().tooltip({ placement: 'bottom', title: decodeURIComponent(getCallbackValue('username') || "") }).tooltip("enable").tooltip('fixTitle');
+            $('#user-menu .login_btn, .signup_btn').hide();
+            
             //set url for back button
             var ulrBack = !isPayEarly ? 'https://app.ezbob.com/Customer/Profile#GetCash' : "https://app.ezbob.com/Customer/Profile#PayEarly";
             var testUrlBack = !isPayEarly ? "@baseUrl/EzBob/EzBob.Web/Customer/Profile#GetCash" : "@baseUrl/EzBob/EzBob.Web/Customer/Profile#PayEarly";
