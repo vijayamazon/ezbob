@@ -8,14 +8,25 @@ GO
 CREATE PROCEDURE [dbo].[GetExperianCompanyCacheDate]
 	(@CustomerId INT)
 AS
-BEGIN	
-	SELECT
-		MIN(LastUpdateDate) AS LastUpdateDate
-	FROM
-		MP_ExperianDataCache
-	WHERE
-		CustomerId = @CustomerId AND 
-		Name IS NULL AND
-		CompanyRefNumber IS NOT NULL
+BEGIN
+	DECLARE @NonLimitedUpdateDate DATETIME
+	
+	SELECT @NonLimitedUpdateDate = Created FROM ExperianNonLimitedResults WHERE CustomerId = @CustomerId AND IsActive = 1
+
+	IF @NonLimitedUpdateDate IS NOT NULL
+	BEGIN
+		SELECT @NonLimitedUpdateDate AS LastUpdateDate
+	END
+	ELSE
+	BEGIN
+		SELECT
+			MIN(LastUpdateDate) AS LastUpdateDate
+		FROM
+			MP_ExperianDataCache
+		WHERE
+			CustomerId = @CustomerId AND 
+			Name IS NULL AND
+			CompanyRefNumber IS NOT NULL
+	END
 END
 GO

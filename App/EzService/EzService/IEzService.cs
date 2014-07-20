@@ -20,9 +20,6 @@
 		#region analytics
 
 		[OperationContract]
-		ActionMetaData BackfillCompanyAnalytics();
-
-		[OperationContract]
 		ActionMetaData BackfillConsumerAnalytics();
 
 		[OperationContract]

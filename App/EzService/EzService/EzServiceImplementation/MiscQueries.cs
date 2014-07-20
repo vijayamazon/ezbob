@@ -235,12 +235,6 @@
 			};
 		}
 
-		public ActionMetaData BackfillCompanyAnalytics()
-		{
-			BackfillCompanyAnalytics instance;
-			return ExecuteSync(out instance, 0, 0);
-		}
-
 		public ActionMetaData BackfillFinancialAccounts()
 		{
 			BackfillFinancialAccounts instance;
