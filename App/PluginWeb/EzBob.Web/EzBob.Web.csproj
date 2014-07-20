@@ -1640,7 +1640,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\ConfirmEmail\Index.cshtml" />
     <Content Include="Views\ConfirmEmail\ConfirmationError.cshtml" />
-    <Content Include="Views\Shared\_FeaturedIn.cshtml" />
     <Content Include="Views\Shared\_OnlineSellers.cshtml" />
     <Content Include="Views\Shared\security_template.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
