@@ -120,7 +120,9 @@
 
             <tr>
                 <td class="customer-column-width-50">Website</td>
-                <td><a href="http://<%- data.Website %>" target="_blank"><%- data.Website %></a></td>
+                <td>
+                    <a data-title="<%- data.Website %>" class="tltp <%=getIcon()%>" href="http://<%- data.Website %>" target="_blank"><%- data.Website.length <= 30 ? data.Website : data.Website.substring(0,27)+'...' %></a>
+                </td>
             </tr>
         </tbody>
     </table>
