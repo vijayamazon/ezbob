@@ -70,7 +70,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		[DataMember]
 		[DL76("RISKSCORE")]
-		public string CommercialDelphiScore { get; set; }
+		public int? CommercialDelphiScore { get; set; }
 		[DataMember]
 		[DL76("STABILITYODDS")]
 		public string StabilityOdds { get; set; }
@@ -80,7 +80,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		[DataMember]
 		[DL78("CREDITLIMIT")]
-		public string CommercialDelphiCreditLimit { get; set; }
+		public decimal? CommercialDelphiCreditLimit { get; set; }
 
 		[DataMember]
 		[DL13("ASREGOFFICEFLAG")]
@@ -231,6 +231,14 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		} // ParentID
 
 		#endregion property ParentID
+
+		#region property ReceivedTime
+
+		[DataMember]
+		[NonTraversable]
+		public virtual DateTime ReceivedTime { get; set; }
+
+		#endregion property ReceivedTime
 
 		#region method DoBeforeTheMainInsert
 

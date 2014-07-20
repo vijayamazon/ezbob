@@ -1141,7 +1141,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 				return;
 			} // if
 
-			var lear = m_oServiceClient.LoadExperianLtd(nServiceLogID);
+			ExperianLtdActionResult lear = m_oServiceClient.LoadExperianLtd(nServiceLogID);
 
 			m_oLog.Msg("Result:\n{0}", lear.Value.StringifyAll());
 		} // LoadExperianLtd

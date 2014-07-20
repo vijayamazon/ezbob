@@ -93,8 +93,6 @@
 			int creditLimit = GetCreditLimit(xmlDoc);
 			DateTime? incorporationDate = GetIncorporationDate(xmlDoc);
 
-			ParseExperianDl97Accounts(customerId, xmlDoc);
-
 			m_oLog.Info("Inserting to analytics exoerian Score:{0} MaxScore:{1}", score, maxScore);
 			m_oDB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateCompany",
@@ -118,84 +116,6 @@
 
 			m_oLog.Debug("Updating customer analytics for customer {0} and company '{1}' complete.", customerId, experianRefNum);
 		} // UpdateAnalytics
-
-		private void ParseExperianDl97Accounts(int customerId, XmlDocument xmlDoc) {
-			m_oDB.ExecuteNonQuery(
-				"DeleteExperianDL97Accounts",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-
-			XmlNodeList dl97List = xmlDoc.SelectNodes("//DL97");
-
-			if (dl97List != null) {
-				foreach (XmlElement dl97 in dl97List) {
-					XmlNode stateNode = dl97.SelectSingleNode("ACCTSTATE");
-					XmlNode typeNode = dl97.SelectSingleNode("ACCTTYPE");
-					XmlNode status12MonthsNode = dl97.SelectSingleNode("ACCTSTATUS12");
-					XmlNode lastUpdatedYearNode = dl97.SelectSingleNode("CAISLASTUPDATED-YYYY");
-					XmlNode lastUpdatedMonthNode = dl97.SelectSingleNode("CAISLASTUPDATED-MM");
-					XmlNode lastUpdatedDayNode = dl97.SelectSingleNode("CAISLASTUPDATED-DD");
-					XmlNode companyTypeNode = dl97.SelectSingleNode("COMPANYTYPE");
-					XmlNode currentBalanceNode = dl97.SelectSingleNode("CURRBALANCE");
-					XmlNode monthsDataNode = dl97.SelectSingleNode("MONTHSDATA");
-					XmlNode status1To2Node = dl97.SelectSingleNode("STATUS1TO2");
-					XmlNode status3To9Node = dl97.SelectSingleNode("STATUS3TO9");
-
-					string state = stateNode != null ? stateNode.InnerText : string.Empty;
-					string type = typeNode != null ? typeNode.InnerText : string.Empty;
-					string status12Months = status12MonthsNode != null ? status12MonthsNode.InnerText : string.Empty;
-
-					DateTime? lastUpdated = null;
-
-					if (lastUpdatedYearNode != null && lastUpdatedMonthNode != null && lastUpdatedDayNode != null) {
-						int year, month, day;
-
-						if (int.TryParse(lastUpdatedYearNode.InnerText, out year) &&
-							int.TryParse(lastUpdatedMonthNode.InnerText, out month) &&
-							int.TryParse(lastUpdatedDayNode.InnerText, out day)
-						) {
-							lastUpdated = new DateTime(year, month, day);
-						}
-					} // if
-
-					string companyType = companyTypeNode != null ? companyTypeNode.InnerText : string.Empty;
-
-					int currentBalance = 0;
-					if (currentBalanceNode != null)
-						int.TryParse(currentBalanceNode.InnerText, out currentBalance);
-
-
-					int monthsData = 0;
-					if (monthsDataNode != null)
-						int.TryParse(monthsDataNode.InnerText, out monthsData);
-
-
-					int status1To2 = 0;
-					if (status1To2Node != null)
-						int.TryParse(status1To2Node.InnerText, out status1To2);
-
-					int status3To9 = 0;
-					if (status3To9Node != null)
-						int.TryParse(status3To9Node.InnerText, out status3To9);
-
-					m_oDB.ExecuteNonQuery(
-						"AddExperianDL97Accounts",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerId", customerId),
-						new QueryParameter("State", state),
-						new QueryParameter("Type", type),
-						new QueryParameter("Status12Months", status12Months),
-						new QueryParameter("LastUpdated", lastUpdated),
-						new QueryParameter("CompanyType", companyType),
-						new QueryParameter("CurrentBalance", currentBalance),
-						new QueryParameter("MonthsData", monthsData),
-						new QueryParameter("Status1To2", status1To2),
-						new QueryParameter("Status3To9", status3To9)
-					);
-				} // foreach
-			} // if
-		} // ParseExperianDl97Accounts
 
 		private int GetScore(XmlDocument xmlDoc) {
 			XmlNodeList dl76Nodes = xmlDoc.SelectNodes("//DL76");

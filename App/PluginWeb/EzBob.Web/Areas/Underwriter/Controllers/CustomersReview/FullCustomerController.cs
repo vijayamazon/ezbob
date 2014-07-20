@@ -78,7 +78,7 @@
 		[HttpGet]
 		public JsonResult Index(int id, string history = null)
 		{
-			Log.Debug("Build full customer model begin");
+			Log.DebugFormat("Build full customer model begin for customer {0} and history = {1}", id, history);
 			var model = new FullCustomerModel();
 
 			var customer = _customers.TryGet(id);

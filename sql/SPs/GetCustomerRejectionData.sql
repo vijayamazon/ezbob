@@ -22,7 +22,9 @@ BEGIN
 			@RowNum INT,
 			@CompanyDefaultStartDate DATETIME,
 			@NumOfDefaultCompanyAccounts INT
-		
+
+	DECLARE @ServiceLogID BIGINT
+
 	SELECT 
 		@ErrorMPsNum = COUNT(cmp.Id)
 	FROM 
@@ -85,8 +87,22 @@ BEGIN
 	SELECT @NumOfDefaultAccounts = NumOfDefaultAccounts FROM [GetNumOfDefaultAccounts] (@CustomerId, @Reject_Defaults_Months, @Reject_Defaults_Amount)
 		
 	SELECT @CompanyDefaultStartDate = DATEADD(MM, -@Reject_Defaults_CompanyMonths, GETUTCDATE())
-	SELECT @NumOfDefaultCompanyAccounts = COUNT(1) FROM ExperianDL97Accounts WHERE CustomerId = @CustomerId AND LastUpdated > @CompanyDefaultStartDate AND CurrentBalance >= @Reject_Defaults_CompanyAmount AND State = 'D'
-	 	 	
+	
+	SET @ServiceLogID = dbo.udfGetCustomerCompanyLogID(@CustomerID)
+
+	SELECT
+		@NumOfDefaultCompanyAccounts = COUNT(1)
+	FROM
+		ExperianLtdDL97 dl97
+		INNER JOIN ExperianLtd ltd ON dl97.ExperianLtdID = ltd.ExperianLtdID
+		INNER JOIN MP_ServiceLog log ON log.Id = @ServiceLogID
+	WHERE
+		log.InsertDate > @CompanyDefaultStartDate
+		AND
+		dl97.CurrentBalance >= @Reject_Defaults_CompanyAmount
+		AND
+		dl97.AccountState = 'D'
+
 	SELECT 
 		@ErrorMPsNum AS ErrorMPsNum, 
 		@ApprovalNum AS ApprovalNum, 

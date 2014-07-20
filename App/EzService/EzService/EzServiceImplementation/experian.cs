@@ -78,8 +78,15 @@
 
 		#region method ParseExperianLtd
 
-		public ActionMetaData ParseExperianLtd(long nServiceLogID) {
-			return Execute<ParseExperianLtd>(null, null, nServiceLogID);
+		public ExperianLtdActionResult ParseExperianLtd(long nServiceLogID) {
+			ParseExperianLtd oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nServiceLogID);
+
+			return new ExperianLtdActionResult {
+				MetaData = oMetaData,
+				Value = oInstance.Result,
+			};
 		} // ParseExperianLtd
 
 		#endregion method ParseExperianLtd
@@ -97,7 +104,7 @@
 		public ExperianLtdActionResult LoadExperianLtd(long nServiceLogID) {
 			LoadExperianLtd oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, null, nServiceLogID);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, (string)null, nServiceLogID);
 
 			return new ExperianLtdActionResult {
 				MetaData = oMetaData,

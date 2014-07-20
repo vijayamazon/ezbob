@@ -65,6 +65,11 @@
 			foreach (SafeReader sr in lst) {
 				string sType = sr["DatumType"];
 
+				if (sType == "Metadata") {
+					Result.ReceivedTime = sr["InsertDate"];
+					continue;
+				} // if
+
 				Type oType = typeof(ExperianLtd).Assembly.GetType(typeof (ExperianLtd).Namespace + "." + sType);
 
 				if (oType == null) {

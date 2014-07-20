@@ -6,6 +6,7 @@
 	using System.Web.Mvc;
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Ezbob.Logger;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
@@ -48,8 +49,9 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonResult Index(int id, bool getFromLog = false, long? logId = null)
-		{
+		public JsonResult Index(int id, bool getFromLog = false, long? logId = null) {
+			var log = new SafeILog(this);
+			log.Debug("Loading a credit bureau model for customer {0}, getFromLog = {1}, logId = {2}.", id, getFromLog, logId);
 			var customer = _customers.Get(id);
 			var model = _creditBureauModelBuilder.Create(customer, getFromLog, logId);
 			return Json(model, JsonRequestBehavior.AllowGet);

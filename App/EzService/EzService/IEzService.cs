@@ -276,7 +276,7 @@
 		ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID);
 
 		[OperationContract]
-		ActionMetaData ParseExperianLtd(long nServiceLogID);
+		ExperianLtdActionResult ParseExperianLtd(long nServiceLogID);
 
 		[OperationContract]
 		ActionMetaData BackfillExperianLtd();

@@ -49,7 +49,14 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			var oFields = new List<string>();
 
 			this.Traverse((oItem, oPropertyInfo) => {
-				string sFld = "\t\t" + oPropertyInfo.Name + ": " + oPropertyInfo.GetValue(oItem);
+				object oValue = oPropertyInfo.GetValue(oItem);
+
+				string sValue = oValue == null ? string.Empty : oValue.ToString();
+
+				if (string.IsNullOrWhiteSpace(sValue))
+					return;
+
+				string sFld = "\t\t" + oPropertyInfo.Name + ": " + sValue;
 
 				if (oPropertyInfo.DeclaringType == this.GetType())
 					oFields.Add(sFld);

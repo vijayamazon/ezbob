@@ -132,8 +132,10 @@
 			return oResult;
 		} // Create
 
-		private void AddOwners(Customer customer, CompanyScoreModel oPossession, string sGroupName, string sCompanyNumberField, string sCompanyNameField)
-		{
+		private void AddOwners(Customer customer, CompanyScoreModel oPossession, string sGroupName, string sCompanyNumberField, string sCompanyNameField) {
+			if (oPossession.dataset == null) // TODO: looks like this is affected by ExperianLtd
+				return;
+
 			if (oPossession.dataset.ContainsKey(sGroupName))
 			{
 				List<ParsedDataItem> aryShareholders = oPossession.dataset[sGroupName].Data;

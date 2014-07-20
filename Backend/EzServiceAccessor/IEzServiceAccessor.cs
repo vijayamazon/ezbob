@@ -16,7 +16,7 @@
 
 		VatReturnFullData LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID);
 
-		void ParseExperianLtd(long nServiceLogID);
+		ExperianLtd ParseExperianLtd(long nServiceLogID);
 
 		ExperianLtd LoadExperianLtd(long nServiceLogID);
 		ExperianLtd CheckLtdCompanyCache(string sCompanyRefNum);

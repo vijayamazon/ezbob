@@ -1,6 +1,5 @@
 ﻿namespace ExperianLib.Ebusiness {
 	using System;
-	using System.Data;
 	using System.IO;
 	using System.Linq;
 	using System.Net;
@@ -17,23 +16,19 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using StructureMap;
-	using log4net;
 
-	public class EBusinessService
-	{
+	public class EBusinessService {
 		#region public
 
 		#region constructor
 
 		public EBusinessService() {
-			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
+			m_oRetryer = new SqlRetryer(oLog: ms_oLog);
 			eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
-			experianDL97AccountsRepository = ObjectFactory.GetInstance<ExperianDL97AccountsRepository>();
 			nonLimitedParser = new NonLimitedParser();
 
-			log = new SafeILog(LogManager.GetLogger(typeof(NonLimitedParser)));
-			var env = new Ezbob.Context.Environment(log);
-			db = new SqlConnection(env, log);
+			var env = new Ezbob.Context.Environment(ms_oLog);
+			m_oDB = new SqlConnection(env, ms_oLog);
 		} // constructor
 
 		#endregion constructor
@@ -62,7 +57,7 @@
 				return new TargetResults(response);
 			}
 			catch (Exception e) {
-				Log.Error(e);
+				ms_oLog.Error(e, "Target business failed.");
 				throw;
 			} // try
 		} // TargetBusiness
@@ -71,21 +66,30 @@
 
 		#region method GetLimitedBusinessData
 
-		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
-		{
-			Log.DebugFormat("Begin GetLimitedBusinessData {0} {1} {2} {3}", regNumber, customerId, checkInCacheOnly, forceCheck);
+		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
+			ms_oLog.Debug("Begin GetLimitedBusinessData {0} {1} {2} {3}", regNumber, customerId, checkInCacheOnly, forceCheck);
+
 			var oRes = GetOneLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
+
+			if (oRes == null)
+				return null;
+
 			oRes.MaxBureauScore = oRes.BureauScore;
-			Log.InfoFormat("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", oRes.BureauScore, oRes.MaxBureauScore, customerId, regNumber);
-			foreach (string sOwnerRegNum in oRes.Owners)
-			{
+
+			ms_oLog.Info("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", oRes.BureauScore, oRes.MaxBureauScore, customerId, regNumber);
+
+			foreach (string sOwnerRegNum in oRes.Owners) {
 				var parentCompanyResult = GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
+
+				if (parentCompanyResult == null)
+					continue;
+
 				if (parentCompanyResult.BureauScore > oRes.MaxBureauScore)
-				{
 					oRes.MaxBureauScore = parentCompanyResult.BureauScore;
-				}
-				Log.InfoFormat("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", parentCompanyResult.BureauScore, oRes.MaxBureauScore, customerId, sOwnerRegNum);
-			}
+
+				ms_oLog.Info("Fetched BureauScore: {0} Calculated MaxBureauScore: {1} for customer: {2} regNum: {3}.", parentCompanyResult.BureauScore, oRes.MaxBureauScore, customerId, sOwnerRegNum);
+			} // for each
+
 			return oRes;
 		} // GetLimitedBusinessData
 
@@ -96,8 +100,7 @@
 		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
 			oRes.MaxBureauScore = oRes.BureauScore;
-			Log.InfoFormat("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", oRes.BureauScore, oRes.MaxBureauScore, customerId, regNumber);
-			
+			ms_oLog.Info("Fetched BureauScore:{0} Calculated MaxBureauScore:{1} for customer:{2} regNum:{3}", oRes.BureauScore, oRes.MaxBureauScore, customerId, regNumber);
 			return oRes;
 		} // GetNotLimitedBusinessData
 
@@ -130,85 +133,102 @@
 
 		#region private
 
-		private bool CacheExpired(DateTime updateDate)
-		{
-			int cacheIsValidForDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
-			return (DateTime.UtcNow - updateDate).TotalDays > cacheIsValidForDays;
-		} // CacheNotExpired
-
 		#region method GetOneLimitedBusinessData
 
 		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			try {
-				/*
-				ExperianLtd oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().CheckLtdCompanyCache(regNumber);
+				ExperianLtd oExperianLtd = null;
+				bool bCacheHit = false;
 
-				if (forceCheck || (!checkInCacheOnly && (oExperianLtd == null))) {
-					string requestXml = GetResource("ExperianLib.Ebusiness.LimitedBusinessRequest.xml", regNumber);
+				if (forceCheck)
+					oExperianLtd = DownloadOneLimitedFromExperian(regNumber, customerId);
 
-					var newResponse = MakeRequest("POST", "application/xml", requestXml);
+				if (oExperianLtd == null) {
+					oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().CheckLtdCompanyCache(regNumber);
 
-					MP_ServiceLog oLogEntry = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.LimitedData, customerId);
-
-					var res = new LimitedResults(oLogEntry.Id, newResponse, DateTime.UtcNow) {CacheHit = false};
-					AddToCache(regNumber, requestXml, res);
+					if (oExperianLtd == null) {
+						if (!checkInCacheOnly)
+							oExperianLtd = DownloadOneLimitedFromExperian(regNumber, customerId);
+					}
+					else
+						bCacheHit = true;
 				} // if
 
-				if (response == null)
-					return null;
+				ms_oLog.Debug(
+					"GetOneLimitedBusinessData({0}, {1}, {2}, {3}) = (cache hit: {4}):\n{5}",
+					regNumber, customerId, checkInCacheOnly, forceCheck, bCacheHit,
+					oExperianLtd == null ? "-- null --" : oExperianLtd.StringifyAll()
+				);
 
-				MakeSureDl97IsFilled(customerId, response);
-
-				return new LimitedResults(0, response.JsonPacket, response.LastUpdateDate) { CacheHit = true };
-				*/
-
-				return new LimitedResults(new Exception()); // TODO: remove this ugly stub
+				return oExperianLtd == null ? null : new LimitedResults(oExperianLtd, bCacheHit);
 			}
 			catch (Exception e) {
-				Log.Error(e);
+				ms_oLog.Error(e,
+					"Failed to get limited results for a company {0} and customer {1} (cache only: {2}, force: {3}).",
+					regNumber, customerId,
+					checkInCacheOnly ? "yes" : "no",
+					forceCheck ? "yes" : "no"
+				);
 				return new LimitedResults(e);
 			} // try
 		} // GetOneLimitedBusinessData
 
 		#endregion method GetOneLimitedBusinessData
 
-		private void MakeSureDl97IsFilled(int customerId, MP_ExperianDataCache cachedEntry)
-		{
-			Log.DebugFormat("Making sure company accounts (DL97) is filled for customer {0}", customerId);
-			if (experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId) == null)
-			{
-				Log.DebugFormat("Company accounts (DL97) don't exist for customer {0}. Will fill it now", customerId);
-				// Customer doesn't have Dl97 entries - we should insert all the entries like the customer from the cache entry
-				foreach (ExperianDL97Accounts accountEntry in experianDL97AccountsRepository.GetAll().Where(x => x.CustomerId == cachedEntry.CustomerId))
-				{
-					var newAccountEntry = new ExperianDL97Accounts
-					{
-						CustomerId = customerId,
-						State = accountEntry.State,
-						Type = accountEntry.Type,
-						Status12Months = accountEntry.Status12Months,
-						LastUpdated = accountEntry.LastUpdated,
-						CompanyType = accountEntry.CompanyType,
-						CurrentBalance = accountEntry.CurrentBalance,
-						MonthsData = accountEntry.MonthsData,
-						Status1To2 = accountEntry.Status1To2,
-						Status3To9 = accountEntry.Status3To9
-					};
+		#region method DownloadOneLimitedFromExperian
 
-					experianDL97AccountsRepository.SaveOrUpdate(newAccountEntry);
-				}
+		private ExperianLtd DownloadOneLimitedFromExperian(string regNumber, int customerId) {
+			string requestXml = GetResource("ExperianLib.Ebusiness.LimitedBusinessRequest.xml", regNumber);
+
+			string newResponse = MakeRequest("POST", "application/xml", requestXml);
+
+			MP_ServiceLog oLogEntry = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.LimitedData, customerId);
+
+			ExperianLtd oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().LoadExperianLtd(oLogEntry.Id);
+
+			var res = new LimitedResults(oExperianLtd, false);
+
+			try {
+				if (res.Owners.Count > 0) {
+					var repo = ObjectFactory.GetInstance<ExperianParentCompanyMapRepository>();
+
+					foreach (var owner in res.Owners) {
+						var map = new MP_ExperianParentCompanyMap {
+							ExperianRefNum = regNumber,
+							ExperianParentRefNum = owner
+						};
+						repo.SaveOrUpdate(map);
+					} // for each owner
+				} // if
 			}
-		}
+			catch (Exception ex) {
+				ms_oLog.Error(ex, "Failed to save owners map for company {0}.", regNumber);
+			} // try
+
+			return oExperianLtd;
+		} // DownloadOneLimitedFromExperian
+
+		#endregion method DownloadOneLimitedFromExperian
+
+		#region method CacheExpired
+
+		private bool CacheExpired(DateTime? updateDate) {
+			if (!updateDate.HasValue)
+				return true;
+
+			int cacheIsValidForDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
+			return (DateTime.UtcNow - updateDate.Value).TotalDays > cacheIsValidForDays;
+		} // CacheNotExpired
+
+		#endregion method CacheExpired
 
 		#region method GetOneNotLimitedBusinessData
 
-		private NonLimitedResults GetOneNotLimitedBusinessData(string refNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
-		{
-			try
-			{
+		private NonLimitedResults GetOneNotLimitedBusinessData(string refNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
+			try {
 				DateTime? created = GetNonLimitedCreationTime(refNumber, customerId);
-				if (forceCheck || (!checkInCacheOnly && (created == null || CacheExpired(created.Value))))
-				{
+
+				if (forceCheck || (!checkInCacheOnly && CacheExpired(created))) {
 					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", refNumber);
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
@@ -221,79 +241,75 @@
 				} // if
 
 				if (created == null)
-				{
 					return null;
-				}
 
 				NonLimitedResults res = BuildResponseFromDb(customerId, refNumber);
 				res.CacheHit = true;
 				return res;
 			}
 			catch (Exception e) {
-				Log.Error(e);
-				return new NonLimitedResults {Error = e.Message};
+				ms_oLog.Error(e,
+					"Failed to get one non limited result for a company {0} and customer {1} (cache only: {2}, force: {3}).",
+					refNumber, customerId,
+					checkInCacheOnly ? "yes" : "no",
+					forceCheck ? "yes" : "no"
+				);
+				return new NonLimitedResults { Error = e.Message };
 			} // try
 		}
 
-		private DateTime? GetNonLimitedCreationTime(string refNumber, int customerId)
-		{
+		private DateTime? GetNonLimitedCreationTime(string refNumber, int customerId) {
 			DateTime? created = null;
-			DataTable dt = db.ExecuteReader(
+
+			SafeReader sr = m_oDB.GetFirst(
 				"GetNonLimitedCompanyCreationTime",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("RefNumber", refNumber));
-			if (dt.Rows.Count == 1)
-			{
-				var sr = new SafeReader(dt.Rows[0]);
+				new QueryParameter("RefNumber", refNumber)
+			);
+
+			if (!sr.IsEmpty)
 				created = sr["Created"];
-			}
+
 			return created;
 		}
 
-		private NonLimitedResults BuildResponseFromDb(int customerId, string refNumber)
-		{
-			DateTime? incorporationDate;
-			string errors, businessName, address1, address2, address3, address4, address5, postcode;
-			int riskScore;
-			decimal creditLimit;
+		private NonLimitedResults BuildResponseFromDb(int customerId, string refNumber) {
 			var nonLimitedResults = new NonLimitedResults();
 
-			DataTable dt = db.ExecuteReader(
+			SafeReader sr = m_oDB.GetFirst(
 				"GetNonLimitedCompanyBasicDetails",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("RefNumber", refNumber));
+				new QueryParameter("RefNumber", refNumber)
+			);
 
-			if (dt.Rows.Count == 1)
-			{
-				var sr = new SafeReader(dt.Rows[0]);
-				incorporationDate = sr["IncorporationDate"];
-				errors = sr["Errors"];
+			if (!sr.IsEmpty) {
+				decimal creditLimit;
+
+				DateTime? incorporationDate = sr["IncorporationDate"];
+				string errors = sr["Errors"];
 				string creditLimitStr = sr["CreditLimit"];
+
 				if (!decimal.TryParse(creditLimitStr, out creditLimit))
-				{
 					creditLimit = 0;
-				}
-				businessName = sr["BusinessName"];
-				address1 = sr["Address1"];
-				address2 = sr["Address2"];
-				address3 = sr["Address3"];
-				address4 = sr["Address4"];
-				address5 = sr["Address5"];
-				postcode = sr["Postcode"];
-				riskScore = sr["RiskScore"];
+
+				string businessName = sr["BusinessName"];
+				string address1 = sr["Address1"];
+				string address2 = sr["Address2"];
+				string address3 = sr["Address3"];
+				string address4 = sr["Address4"];
+				string address5 = sr["Address5"];
+				string postcode = sr["Postcode"];
+				int riskScore = sr["RiskScore"];
 
 				nonLimitedResults.LastCheckDate = DateTime.UtcNow;
 				nonLimitedResults.Error = errors;
+
 				if (riskScore == 0)
-				{
 					nonLimitedResults.Error += "Can't read RISKSCORE section from response!";
-				}
 				else
-				{
 					nonLimitedResults.BureauScore = riskScore;
-				}
 
 				nonLimitedResults.CompanyNotFoundOnBureau = !string.IsNullOrEmpty(nonLimitedResults.Error);
 				nonLimitedResults.CreditLimit = creditLimit;
@@ -305,68 +321,19 @@
 				nonLimitedResults.AddressLine5 = address5;
 				nonLimitedResults.PostCode = postcode;
 				nonLimitedResults.IncorporationDate = incorporationDate;
-			}
+			} // if
 
 			return nonLimitedResults;
-		}
+		} // BuildResponseFromDb
 
 		#endregion method GetOneNotLimitedBusinessData
 
-		#region method AddToCache
-
-		private void AddToCache(string refNum, string input, BusinessReturnData res)
-		{
-			m_oRetryer.Retry(() => {
-				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
-
-				MP_ExperianDataCache cacheVal =
-					repo.GetAll().FirstOrDefault(c => c.CompanyRefNumber == refNum)
-					?? new MP_ExperianDataCache { CompanyRefNumber = refNum };
-
-				cacheVal.LastUpdateDate = DateTime.UtcNow;
-				cacheVal.JsonPacketInput = input;
-				cacheVal.JsonPacket = res.OutputXml;
-				cacheVal.ExperianScore = (int)res.BureauScore;
-				cacheVal.ExperianMaxScore = (int)res.MaxBureauScore;
-				
-				repo.SaveOrUpdate(cacheVal);
-			}, "EBusinessService.AddToCache(" + refNum + ")");
-			try
-			{
-				
-				if (res.GetType() == typeof (LimitedResults))
-				{
-					var t = res as LimitedResults;
-					if (t != null && !t.Owners.Any()) return;
-					var repo = ObjectFactory.GetInstance<ExperianParentCompanyMapRepository>();
-					if (t != null)
-					{
-						foreach (var owner in t.Owners)
-						{
-							var map = new MP_ExperianParentCompanyMap
-								{
-									ExperianRefNum = refNum,
-									ExperianParentRefNum = owner
-								};
-							repo.SaveOrUpdate(map);
-						}
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.ErrorFormat("Failed to save owners map for company {0} \n{1}", refNum, ex);
-			}
-		} // AddToCache
-
-		#endregion method AddToCache
-		
 		#region method MakeRequest
 
 		private string MakeRequest(string method, string contentType, string post) {
-			Log.DebugFormat("Request URL: {0} with data: {1}", eSeriesUrl, post);
+			ms_oLog.Debug("Request URL: {0} with data: {1}", eSeriesUrl, post);
 
-			var request = (HttpWebRequest)WebRequest.Create(eSeriesUrl);
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(eSeriesUrl);
 			request.Method = method;
 			request.AllowAutoRedirect = false;
 
@@ -409,16 +376,14 @@
 
 		#region properties
 
-		private static readonly ILog Log = LogManager.GetLogger(typeof(EBusinessService));
 		private readonly SqlRetryer m_oRetryer;
-		private readonly ExperianDL97AccountsRepository experianDL97AccountsRepository;
 		private readonly NonLimitedParser nonLimitedParser;
 		private readonly string eSeriesUrl;
 
-		#endregion properties
+		private readonly AConnection m_oDB;
+		private static readonly SafeILog ms_oLog = new SafeILog(typeof(EBusinessService));
 
-		private readonly AConnection db;
-		private readonly SafeILog log;
+		#endregion properties
 
 		#endregion private
 	} // class EBusinessService

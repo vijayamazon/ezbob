@@ -58,8 +58,9 @@
 
 		#region method ParseExperianLtd
 
-		public void ParseExperianLtd(long nServiceLogID) {
-			m_oServiceClient.Instance.ParseExperianLtd(nServiceLogID);
+		public ExperianLtd ParseExperianLtd(long nServiceLogID) {
+			ExperianLtdActionResult ar = m_oServiceClient.Instance.ParseExperianLtd(nServiceLogID);
+			return ar.Value;
 		} // ParseExperianLtd
 
 		#endregion method ParseExperianLtd
@@ -67,12 +68,12 @@
 		#region method LoadExperianLtd
 
 		public ExperianLtd LoadExperianLtd(long nServiceLogID) {
-			var ar = m_oServiceClient.Instance.LoadExperianLtd(nServiceLogID);
+			ExperianLtdActionResult ar = m_oServiceClient.Instance.LoadExperianLtd(nServiceLogID);
 			return ar.Value;
 		} // LoadExperianLtd
 
 		public ExperianLtd CheckLtdCompanyCache(string sCompanyRefNum) {
-			var ar = m_oServiceClient.Instance.CheckLtdCompanyCache(sCompanyRefNum);
+			ExperianLtdActionResult ar = m_oServiceClient.Instance.CheckLtdCompanyCache(sCompanyRefNum);
 			return ar.Value;
 		} // CheckLtdCompanyCache
 

@@ -11,7 +11,7 @@ GO
 
 CREATE TYPE ExperianLtdDL97List AS TABLE (
 	ExperianLtdID BIGINT NOT NULL,
-	AccountState NVARCHAR(255) NULL,
+	AccountState NVARCHAR(1) NULL,
 	CompanyType INT NULL,
 	AccountType INT NULL,
 	DefaultDate DATETIME NULL,
@@ -22,7 +22,7 @@ CREATE TYPE ExperianLtdDL97List AS TABLE (
 	CAISLastUpdatedDate DATETIME NULL,
 	AccountStatusLast12AccountStatuses NVARCHAR(255) NULL,
 	AgreementNumber NVARCHAR(255) NULL,
-	MonthsData NVARCHAR(255) NULL,
+	MonthsData INT NULL,
 	DefaultBalance DECIMAL(18, 6) NULL
 )
 GO
@@ -66,5 +66,3 @@ BEGIN
 	FROM @Tbl
 END
 GO
-
-

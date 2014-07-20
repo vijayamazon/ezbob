@@ -13,8 +13,8 @@
           <xs:element minOccurs="0" name="BankName" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="BankSortcode" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="CommercialDelphiBandText" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CommercialDelphiCreditLimit" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CommercialDelphiScore" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CommercialDelphiCreditLimit" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CommercialDelphiScore" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" name="CompanyAverageDBT12Months" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="CompanyAverageDBT3Months" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="CompanyAverageDBT6Months" nillable="true" type="xs:decimal" />
@@ -48,6 +48,7 @@
           <xs:element minOccurs="0" name="OfficeAddress4" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="OfficeAddressPostcode" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="PrincipalActivities" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReceivedTime" type="xs:dateTime" />
           <xs:element minOccurs="0" name="RegisteredNameOfTheCurrentUltimateParentCompany" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="RegisteredNumber" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="RegisteredNumberOfTheCurrentUltimateParentCompany" nillable="true" type="xs:string" />
@@ -321,7 +322,7 @@
           <xs:element minOccurs="0" name="CurrentBalance" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="DefaultBalance" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="DefaultDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="MonthsData" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MonthsData" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" name="SettlementDate" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Status12" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="Status39" nillable="true" type="xs:decimal" />

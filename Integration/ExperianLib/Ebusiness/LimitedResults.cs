@@ -2,7 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Xml.Linq;
-	using System.Xml.XPath;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class LimitedResults : BusinessReturnData {
 		#region public
@@ -16,8 +16,11 @@
 
 		#region constructors
 
-		public LimitedResults(long nServiceLogID, string inputXml, DateTime lastCheckDate) : base(nServiceLogID, inputXml, lastCheckDate) {
+		public LimitedResults(ExperianLtd oExperianLtd, bool bCacheHit) : base(oExperianLtd.ServiceLogID, "<xml />", oExperianLtd.ReceivedTime) {
 			Owners = new SortedSet<string>();
+
+			CacheHit = bCacheHit;
+			m_oRawData = oExperianLtd;
 		} // constructor
 
 		public LimitedResults(Exception exception) : base(exception) {
@@ -38,68 +41,54 @@
 
 		#region protected
 
-		#region method Parse
-
 		protected override void Parse(XElement root) {
-			var node = root.XPathSelectElement("./REQUEST/DL76/RISKSCORE");
-
-			if (node == null)
+			if (!m_oRawData.CommercialDelphiScore.HasValue)
 				Error += "There is no RISKSCORE in the experian response! ";
 			else
-				BureauScore = Convert.ToDecimal(node.Value);
+				BureauScore = m_oRawData.CommercialDelphiScore.Value;
 
-			node = root.XPathSelectElement("./REQUEST/DL78/CREDITLIMIT");
-			if (node != null)
-				CreditLimit = Convert.ToDecimal(node.Value);
+			if (m_oRawData.CommercialDelphiCreditLimit.HasValue)
+				CreditLimit = m_oRawData.CommercialDelphiCreditLimit.Value;
 
-			node = root.XPathSelectElement("./REQUEST/DL95/NUMACTIVEACCS");
+			CompanyName = m_oRawData.CompanyName;
 
-			if (node != null)
-				ExistingBusinessLoans = Convert.ToDecimal(node.Value);
-
-			node = root.XPathSelectElement("./REQUEST/DL12/COMPANYNAME");
-			if (node != null)
-				CompanyName = node.Value;
-
-			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR1");
-			if (node != null)
-				AddressLine1 = node.Value;
-
-			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR2");
-			if (node != null)
-				AddressLine2 = node.Value;
-
-			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR3");
-			if (node != null)
-				AddressLine3 = node.Value;
-
-			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR4");
-			if (node != null)
-				AddressLine4 = node.Value;
-
-			node = root.XPathSelectElement("./REQUEST/DL12/REGPOSTCODE");
-			if (node != null)
-				PostCode = node.Value;
+			AddressLine1 = m_oRawData.OfficeAddress1;
+			AddressLine2 = m_oRawData.OfficeAddress2;
+			AddressLine3 = m_oRawData.OfficeAddress3;
+			AddressLine4 = m_oRawData.OfficeAddress4;
+			PostCode = m_oRawData.OfficeAddressPostcode;
 
 			if (Owners == null)
 				Owners = new SortedSet<string>();
 
-			node = root.XPathSelectElement("./REQUEST/DL23/ULTPARREGNUM");
-			if (node != null)
-				Owners.Add(node.Value.Trim());
+			Owners.Add((m_oRawData.RegisteredNumberOfTheCurrentUltimateParentCompany ?? string.Empty).Trim());
 
-			IEnumerable<XElement> oNodes = root.XPathSelectElements("./REQUEST/DL23/SHAREHLDS/SHLDREGNUM");
+			ExistingBusinessLoans = 0;
 
-			foreach (XElement oNode in oNodes)
-				Owners.Add(oNode.Value.Trim());
+			foreach (var oKid in m_oRawData.Children) {
+				if (oKid.GetType() == typeof (ExperianLtdShareholders)) {
+					ExperianLtdShareholders obj = (ExperianLtdShareholders)oKid;
 
-			node = root.XPathSelectElement("./REQUEST/DL12");
-			if (node != null)
-				IncorporationDate = ExtractDate(node, "DATEINCORP", "incorporation date");
+					if (!string.IsNullOrWhiteSpace(obj.RegisteredNumberOfALimitedCompanyWhichIsAShareholder))
+						Owners.Add(obj.RegisteredNumberOfALimitedCompanyWhichIsAShareholder.Trim());
+				}
+				else if (oKid.GetType() == typeof (ExperianLtdCaisMonthly)) {
+					ExperianLtdCaisMonthly obj = (ExperianLtdCaisMonthly)oKid;
+
+					if (obj.NumberOfActiveAccounts.HasValue)
+						ExistingBusinessLoans += obj.NumberOfActiveAccounts.Value;
+				}
+			} // for
+
+			IncorporationDate = m_oRawData.IncorporationDate;
 		} // Parse
 
-		#endregion method Parse
-
 		#endregion protected
+
+		#region private
+
+		private readonly ExperianLtd m_oRawData;
+
+		#endregion private
 	} // class LimitedResults
 } // namespace

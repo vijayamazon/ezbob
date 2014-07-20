@@ -68,11 +68,6 @@ namespace ExperianLib.Tests.Integration
 			Assert.AreEqual(-2,cii);
 			Assert.IsNotNull(balance);
 
-			var limScore = Utils.GetLimitedScoreFromXml(limitedData);
-			var limBalance = Utils.GetLimitedCaisBalance(limitedData);
-			Assert.AreEqual(84, limScore);
-			Assert.AreEqual(5138, limBalance);
-
 			var nonLimScore = Utils.GetNonLimitedScoreFromXml(nonLimitedData);
 			Assert.AreEqual(28, nonLimScore);
 		}

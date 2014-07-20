@@ -338,7 +338,7 @@
 			model.ApplicantFullName = eInfo.Data.Applicants.Select(applicant =>
 				string.Format("{0} {1} {2} {3}", applicant.Forename, applicant.MiddleName, applicant.Surname, applicant.DateOfBirth.HasValue ?
 				(DateTime.UtcNow.Year - applicant.DateOfBirth.Value.Year).ToString(CultureInfo.InvariantCulture) : "")).Aggregate((x, y) => x + "," + y);
-			model.ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics();
+
 			model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
 			model.CII = eInfo.Data.CII;
 			if (!string.IsNullOrEmpty(eInfo.Data.Error))

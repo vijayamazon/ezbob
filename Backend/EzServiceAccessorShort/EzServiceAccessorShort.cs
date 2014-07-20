@@ -76,8 +76,10 @@
 
 		#region method ParseExperianLtd
 
-		public void ParseExperianLtd(long nServiceLogID) {
-			new ParseExperianLtd(nServiceLogID, ms_oDB, ms_oLog).Execute();
+		public ExperianLtd ParseExperianLtd(long nServiceLogID) {
+			var stra = new ParseExperianLtd(nServiceLogID, ms_oDB, ms_oLog);
+			stra.Execute();
+			return stra.Result;
 		} // ParseExperianLtd
 
 		#endregion method ParseExperianLtd

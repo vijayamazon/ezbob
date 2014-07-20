@@ -239,6 +239,19 @@
 
 		#endregion method ToCache
 
+		#region property IsEmpty
+
+		public bool IsEmpty {
+			get { return
+				ReferenceEquals(m_oReader, null) &&
+				ReferenceEquals(m_oRow, null) &&
+				ReferenceEquals(m_oCache, null) &&
+				m_bAllowNoSource;
+			}
+		} // IsEmpty
+
+		#endregion property IsEmpty
+
 		#endregion public
 
 		#region private

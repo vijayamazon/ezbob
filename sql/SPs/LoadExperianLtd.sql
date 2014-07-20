@@ -12,7 +12,12 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT @ExperianLtdID = ExperianLtdID FROM ExperianLtd WHERE ServiceLogID = @ServiceLogID
+	SELECT
+		@ExperianLtdID = ExperianLtdID
+	FROM
+		ExperianLtd
+	WHERE
+		ServiceLogID = @ServiceLogID
 
 	SELECT
 		'ExperianLtd' AS DatumType,

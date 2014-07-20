@@ -25,9 +25,41 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	------------------------------------------------------------------------------
+
+	DECLARE @CurrentBalanceSum INT = 0
+	DECLARE @ServiceLogID BIGINT
+
+	------------------------------------------------------------------------------
+
+	SET @ServiceLogID = dbo.udfGetCustomerCompanyLogID(@CustomerID)
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@CurrentBalanceSum = SUM(dl97.CurrentBalance)
+	FROM
+		ExperianLtdDL97 dl97
+		INNER JOIN ExperianLtd ltd
+			ON dl97.ExperianLtdID = ltd.ExperianLtdID
+			AND ltd.ServiceLogID = @ServiceLogID
+	WHERE
+		dl97.AccountState = 'A'
+
+	------------------------------------------------------------------------------
+
+	IF @CurrentBalanceSum IS NULL
+		SET @CurrentBalanceSum = 0
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
 	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
 
 	BEGIN TRANSACTION
+
+	------------------------------------------------------------------------------
 
 	UPDATE CustomerAnalyticsCompany SET
 		IsActive = 0
@@ -35,23 +67,23 @@ BEGIN
 		CustomerID = @CustomerID
 		AND
 		ISActive = 1
-		
-	DECLARE @CurrentBalanceSum INT
-	
-	SELECT 
-		@CurrentBalanceSum = SUM(CurrentBalance) 
-	FROM 
-		ExperianDL97Accounts 
-	WHERE 
-		CustomerId = @CustomerId AND 
-		State = 'A'
-		
-	IF @CurrentBalanceSum IS NULL
-		SET @CurrentBalanceSum = 0
 
-	INSERT INTO CustomerAnalyticsCompany (CustomerID, AnalyticsDate, IsActive, Score,MaxScore, SuggestedAmount, IncorporationDate, CurrentBalanceSum, TangibleEquity, AdjustedProfit, Sic1980Code1, Sic1980Desc1, Sic1992Code1, Sic1992Desc1, AgeOfMostRecentCcj, NumOfCcjsInLast24Months, SumOfCcjsInLast24Months)
-		VALUES (@CustomerID, @AnalyticsDate, 1, @Score,@MaxScore, @SuggestedAmount, @IncorporationDate, @CurrentBalanceSum, @TangibleEquity, @AdjustedProfit, @Sic1980Code1, @Sic1980Desc1, @Sic1992Code1, @Sic1992Desc1, @AgeOfMostRecentCcj, @NumOfCcjsInLast24Months, @SumOfCcjsInLast24Months)
-	
+	------------------------------------------------------------------------------
+
+	INSERT INTO CustomerAnalyticsCompany (
+		CustomerID, AnalyticsDate, IsActive, Score,MaxScore, SuggestedAmount,
+		IncorporationDate, CurrentBalanceSum, TangibleEquity, AdjustedProfit,
+		Sic1980Code1, Sic1980Desc1, Sic1992Code1, Sic1992Desc1,
+		AgeOfMostRecentCcj, NumOfCcjsInLast24Months, SumOfCcjsInLast24Months
+	) VALUES (
+		@CustomerID, @AnalyticsDate, 1, @Score,@MaxScore, @SuggestedAmount,
+		@IncorporationDate, @CurrentBalanceSum, @TangibleEquity, @AdjustedProfit,
+		@Sic1980Code1, @Sic1980Desc1, @Sic1992Code1, @Sic1992Desc1,
+		@AgeOfMostRecentCcj, @NumOfCcjsInLast24Months, @SumOfCcjsInLast24Months
+	)
+
+	------------------------------------------------------------------------------
+
 	COMMIT TRANSACTION
 END
 GO

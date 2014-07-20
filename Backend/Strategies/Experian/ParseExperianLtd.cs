@@ -11,6 +11,8 @@
 		#region constructor
 
 		public ParseExperianLtd(long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			Result = new ExperianLtd();
+
 			m_nServiceLogID = nServiceLogID;
 		} // constructor
 
@@ -29,12 +31,21 @@
 		public override void Execute() {
 			Log.Info("Parsing Experian Ltd for service log entry {0}...", m_nServiceLogID);
 
-			Save(Parse(Load()));
+			var oTbl = Save(Parse(Load()));
+
+			if (oTbl != null)
+				Result = oTbl;
 
 			Log.Info("Parsing Experian Ltd for service log entry {0} complete.", m_nServiceLogID);
 		} // Execute
 
 		#endregion method Execute
+
+		#region property Result
+
+		public ExperianLtd Result { get; private set; }
+
+		#endregion property Result
 
 		#endregion public
 
@@ -44,7 +55,7 @@
 
 		#region method Load
 
-		private XmlDocument Load() {
+		private Tuple<XmlDocument, DateTime> Load() {
 			SafeReader sr = DB.GetFirst(
 				"LoadServiceLogEntry",
 				CommandSpecies.StoredProcedure,
@@ -71,21 +82,24 @@
 				return null;
 			} // try
 
-			return oXml;
+			return new Tuple<XmlDocument, DateTime>(oXml, sr["InsertDate"]);
 		} // Load
 
 		#endregion method Load
 
 		#region method Parse
 
-		private ExperianLtd Parse(XmlDocument oXml) {
-			if ((oXml == null) || (oXml.DocumentElement == null))
-				return null; // this should never happen, but to shut resharper up...
+		private ExperianLtd Parse(Tuple<XmlDocument, DateTime> oDoc) {
+			if (oDoc == null)
+				return null;
+
+			if ((oDoc.Item1 == null) || (oDoc.Item1.DocumentElement == null))
+				return null;
 
 			Log.Info("Parsing Experian company data...");
 
 			ExperianLtd oMainTable = new ExperianLtd(Log);
-			oMainTable.LoadFromXml(oXml.DocumentElement);
+			oMainTable.LoadFromXml(oDoc.Item1.DocumentElement);
 
 			if (!oMainTable.ShouldBeSaved()) {
 				Log.Warn(
@@ -100,6 +114,8 @@
 
 			Log.Info("Parsing Experian company data complete.");
 
+			oMainTable.ReceivedTime = oDoc.Item2;
+
 			return oMainTable;
 		} // Parse
 
@@ -107,9 +123,9 @@
 
 		#region method Save
 
-		private void Save(ExperianLtd oMainTable) {
+		private ExperianLtd Save(ExperianLtd oMainTable) {
 			if (oMainTable == null)
-				return;
+				return null;
 
 			Log.Info("Saving Experian company data into DB...");
 
@@ -120,11 +136,12 @@
 			if (!oMainTable.Save(DB, oPersistent)) {
 				oPersistent.Rollback();
 				Log.Warn("Saving Experian company data into DB failed.");
-				return;
+				return null;
 			} // if
 
 			oPersistent.Commit();
 			Log.Info("Saving Experian company data into DB complete.");
+			return oMainTable;
 		} // Save
 
 		#endregion method Save

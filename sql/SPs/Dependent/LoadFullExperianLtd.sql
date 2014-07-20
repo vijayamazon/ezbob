@@ -36,6 +36,15 @@ BEGIN
 	-- Dependent tables (level 2)
 
 	EXECUTE LoadExperianLtdLenderDetails @ExperianLtdID
+
+	-- Metadata
+
+	SELECT
+		'Metadata' AS DatumType,
+		InsertDate
+	FROM
+		MP_ServiceLog
+	WHERE
+		Id = @ServiceLogID
 END
 GO
-
