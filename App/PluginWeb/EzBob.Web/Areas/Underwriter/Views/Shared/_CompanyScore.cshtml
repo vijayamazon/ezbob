@@ -424,7 +424,7 @@
                     <%}%>
                 </tbody>
             </table>
-            <% if (response.Data.SicCodes != undefined) {%>
+            <% debugger; if (response.Data.SicCodes != undefined) {%>
                 <table>
                     <thead class="box">
                         <tr class="box-title">
@@ -433,14 +433,14 @@
                         </tr>
                     </thead>
 		            <tbody>
-                        @*<% _.each(response.Data.SicCodes, function(i) {*@
-                        <% if (response.Data.SicCodes[0] != undefined && response.Data.SicDescs[0] != undefined) {%>
-                            <tr>
-		                        <td class=narrow-as-possible><%-response.Data.SicCodes[0]%></td>
-		                        <td><%-response.Data.SicDescs[0]%></td>
-	                        </tr>
-                        <%}%>
-                        @*<%}%>*@
+                        <% _.each(response.Data.SicCodes, function(elem, i) {
+                            if (elem != undefined && response.Data.SicDescs[i] != undefined) {%>
+                                <tr>
+		                            <td class=narrow-as-possible><%-elem%></td>
+		                            <td><%-response.Data.SicDescs[i]%></td>
+	                            </tr>
+                            <%}
+                        });%>
                     </tbody>
                 </table>
             <%}%>
@@ -461,22 +461,22 @@
                         </tr>
                     </thead>
 		            <tbody>
-                        @*<% _.each(response.Data.BankruptcyDetails, function(i) {*@
-                        <% if (response.Data.BankruptcyDetails[0] != undefined) {%>
-                            <tr>
-		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyName%></td>
-		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr1%></td>
-		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr2%></td>
-		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr3%></td>
-		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr4%></td>
-		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyAddr5%></td>
-		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].PostCode%></td>
-		                        <td class=narrow-as-possible><%-EzBob.formatDate(response.Data.BankruptcyDetails[0].GazetteDate)%></td>
-		                        <td class=narrow-as-possible><%-response.Data.BankruptcyDetails[0].BankruptcyType%></td>
-		                        <td><%-response.Data.BankruptcyDetails[0].BankruptcyTypeDesc%></td>
-	                        </tr>
-                        <%}%>
-                        @*<%}%>*@
+                        <% _.each(response.Data.BankruptcyDetails, function(elem, i) {
+                            if (elem != undefined) {%>
+                                <tr>
+		                            <td class=narrow-as-possible><%-elem.BankruptcyName%></td>
+		                            <td class=narrow-as-possible><%-elem.BankruptcyAddr1%></td>
+		                            <td class=narrow-as-possible><%-elem.BankruptcyAddr2%></td>
+		                            <td class=narrow-as-possible><%-elem.BankruptcyAddr3%></td>
+		                            <td class=narrow-as-possible><%-elem.BankruptcyAddr4%></td>
+		                            <td class=narrow-as-possible><%-elem.BankruptcyAddr5%></td>
+		                            <td class=narrow-as-possible><%-elem.PostCode%></td>
+		                            <td class=narrow-as-possible><%-EzBob.formatDate(elem.GazetteDate)%></td>
+		                            <td class=narrow-as-possible><%-elem.BankruptcyType%></td>
+		                            <td><%-elem.BankruptcyTypeDesc%></td>
+	                            </tr>
+                            <%}
+                        });%>
                     </tbody>
                 </table>
             <%}%>
@@ -511,73 +511,73 @@
                         </tr>
                     </thead>
 		            <tbody>
-                        @*<% _.each(response.Data.CcjDetails, function(i) {*@
-                        <% if (response.Data.CcjDetails[0] != undefined) {%>
-                            <tr>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].RecordType%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].RecordTypeFullName%></td>
-		                        <td class=narrow-as-possible><%-EzBob.formatDate(response.Data.CcjDetails[0].JudgementDate)%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].SatisfactionFlag%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].SatisfactionFlagDesc%></td>
-		                        <td class=narrow-as-possible><%-EzBob.formatDate(response.Data.CcjDetails[0].SatisfactionDate)%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgmentType%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgmentTypeDesc%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgmentAmount%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].Court%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].CaseNumber%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].NumberOfJudgmentNames%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].NumberOfTradingNames%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].LengthOfJudgmentName%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].LengthOfTradingName%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].LengthOfJudgmentAddress%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr1%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr2%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr3%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr4%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].JudgementAddr5%></td>
-		                        <td class=narrow-as-possible><%-response.Data.CcjDetails[0].PostCode%></td>
-		                        <td class=narrow-as-possible>
-                                    <% if (response.Data.CcjDetails[0].RegisteredAgainst != undefined) {%>
-                                        <table>
-		                                    <tbody>
-                                                @*<% _.each(response.Data.CcjDetails[0].RegisteredAgainst, function(i) {*@
-                                                <% if (response.Data.CcjDetails[0].RegisteredAgainst[0] != undefined) {%>
-                                                    <tr>
-		                                                <td class=narrow-as-possible><%response.Data.CcjDetails[0].RegisteredAgainst[0]%></td>
-	                                                </tr>
-                                                <%}%>
-                                                @*<%}%>*@
-                                            </tbody>
-                                        </table>
-                                    <%}%>
-                                </td>
-		                        <td>
-                                    <% if (response.Data.CcjDetails[0].TradingNames != undefined) {%>
-                                        <table>
-                                            <thead class="box">
-                                                <tr class="box-title">
-                                                    <th>Name</th>
-                                                    <th>Indicator</th>
-                                                    <th>Indicator description</th>
-                                                </tr>
-                                            </thead>
-		                                    <tbody>
-                                                @*<% _.each(response.Data.CcjDetails[0].TradingNames, function(i) {*@
-                                                <% if (response.Data.CcjDetails[0].TradingNames[0] != undefined) {%>
-                                                    <tr>
-		                                                <td class=narrow-as-possible><%response.Data.CcjDetails[0].TradingNames[0].Name%></td>
-		                                                <td class=narrow-as-possible><%response.Data.CcjDetails[0].TradingNames[0].Indicator%></td>
-		                                                <td class=narrow-as-possible><%response.Data.CcjDetails[0].TradingNames[0].IndicatorDesc%></td>
-	                                                </tr>
-                                                <%}%>
-                                                @*<%}%>*@
-                                            </tbody>
-                                        </table>
-                                    <%}%>
-                                </td>
-	                        </tr>
-                        <%}%>
-                        @*<%}%>*@
+                        <% _.each(response.Data.CcjDetails, function(elem, i) {
+                            if (elem != undefined) {%>
+                                <tr>
+		                            <td class=narrow-as-possible><%-elem.RecordType%></td>
+		                            <td class=narrow-as-possible><%-elem.RecordTypeFullName%></td>
+		                            <td class=narrow-as-possible><%-EzBob.formatDate(elem.JudgementDate)%></td>
+		                            <td class=narrow-as-possible><%-elem.SatisfactionFlag%></td>
+		                            <td class=narrow-as-possible><%-elem.SatisfactionFlagDesc%></td>
+		                            <td class=narrow-as-possible><%-EzBob.formatDate(elem.SatisfactionDate)%></td>
+		                            <td class=narrow-as-possible><%-elem.JudgmentType%></td>
+		                            <td class=narrow-as-possible><%-elem.JudgmentTypeDesc%></td>
+		                            <td class=narrow-as-possible><%-elem.JudgmentAmount%></td>
+		                            <td class=narrow-as-possible><%-elem.Court%></td>
+		                            <td class=narrow-as-possible><%-elem.CaseNumber%></td>
+		                            <td class=narrow-as-possible><%-elem.NumberOfJudgmentNames%></td>
+		                            <td class=narrow-as-possible><%-elem.NumberOfTradingNames%></td>
+		                            <td class=narrow-as-possible><%-elem.LengthOfJudgmentName%></td>
+		                            <td class=narrow-as-possible><%-elem.LengthOfTradingName%></td>
+		                            <td class=narrow-as-possible><%-elem.LengthOfJudgmentAddress%></td>
+		                            <td class=narrow-as-possible><%-elem.JudgementAddr1%></td>
+		                            <td class=narrow-as-possible><%-elem.JudgementAddr2%></td>
+		                            <td class=narrow-as-possible><%-elem.JudgementAddr3%></td>
+		                            <td class=narrow-as-possible><%-elem.JudgementAddr4%></td>
+		                            <td class=narrow-as-possible><%-elem.JudgementAddr5%></td>
+		                            <td class=narrow-as-possible><%-elem.PostCode%></td>
+		                            <td class=narrow-as-possible>
+                                        <% if (elem.RegisteredAgainst != undefined) {%>
+                                            <table>
+		                                        <tbody>
+                                                    <% _.each(elem.RegisteredAgainst, function(registeredAgainst, i) {
+                                                        if (registeredAgainst != undefined) {%>
+                                                            <tr>
+		                                                        <td class=narrow-as-possible><%registeredAgainst%></td>
+	                                                        </tr>
+                                                        <%}
+                                                    });%>
+                                                </tbody>
+                                            </table>
+                                        <%}%>
+                                    </td>
+		                            <td>
+                                        <% if (elem.TradingNames != undefined) {%>
+                                            <table>
+                                                <thead class="box">
+                                                    <tr class="box-title">
+                                                        <th>Name</th>
+                                                        <th>Indicator</th>
+                                                        <th>Indicator description</th>
+                                                    </tr>
+                                                </thead>
+		                                        <tbody>
+                                                    <% _.each(elem.TradingNames, function(tradingName, i) {
+                                                        if (tradingName != undefined) {%>
+                                                            <tr>
+		                                                        <td class=narrow-as-possible><%tradingName.Name%></td>
+		                                                        <td class=narrow-as-possible><%tradingName.Indicator%></td>
+		                                                        <td class=narrow-as-possible><%tradingName.IndicatorDesc%></td>
+	                                                        </tr>
+                                                        <%}
+                                                    });%>
+                                                </tbody>
+                                            </table>
+                                        <%}%>
+                                    </td>
+	                            </tr>
+                            <%}
+                        });%>
                     </tbody>
                 </table>
             <%}%>
@@ -593,16 +593,16 @@
                         </tr>
                     </thead>
 		            <tbody>
-                        @*<% _.each(response.Data.PreviousSearches, function(i) {*@
-                        <% if (response.Data.PreviousSearches[0] != undefined) {%>
-                            <tr>
-		                        <td class=narrow-as-possible><%-EzBob.formatDate(response.Data.PreviousSearches[0].PreviousSearchDate)%></td>
-		                        <td class=narrow-as-possible><%-response.Data.PreviousSearches[0].EnquiryType%></td>
-		                        <td class=narrow-as-possible><%-response.Data.PreviousSearches[0].EnquiryTypeDesc%></td>
-		                        <td><%-response.Data.PreviousSearches[0].CreditRequired%></td>
-	                        </tr>
-                        <%}%>
-                        @*<%}%>*@
+                        <% _.each(response.Data.PreviousSearches, function(elem, i) {
+                            if (elem != undefined) {%>
+                                <tr>
+		                            <td class=narrow-as-possible><%-EzBob.formatDate(elem.PreviousSearchDate)%></td>
+		                            <td class=narrow-as-possible><%-elem.EnquiryType%></td>
+		                            <td class=narrow-as-possible><%-elem.EnquiryTypeDesc%></td>
+		                            <td><%-response.Data.PreviousSearches[0].CreditRequired%></td>
+	                            </tr>
+                            <%}
+                        });%>
                     </tbody>
                 </table>
             <%}%>
@@ -616,14 +616,14 @@
                         </tr>
                     </thead>
 		            <tbody>
-                        @*<% _.each(response.Data.PaymentPerformanceDetails, function(i) {*@
-                        <% if (response.Data.PaymentPerformanceDetails[0] != undefined) {%>
-                            <tr>
-		                        <td class=narrow-as-possible><%-response.Data.PaymentPerformanceDetails[0].Code%></td>
-		                        <td class=narrow-as-possible><%-response.Data.PaymentPerformanceDetails[0].DaysBeyondTerms%></td>
-		                    </tr>
-                        <%}%>
-                        @*<%}%>*@
+                        <% _.each(response.Data.PaymentPerformanceDetails, function(elem, i) {
+                            if (elem != undefined) {%>
+                                <tr>
+		                            <td class=narrow-as-possible><%-elem.Code%></td>
+		                            <td class=narrow-as-possible><%-elem.DaysBeyondTerms%></td>
+		                        </tr>
+                            <%}
+                        });%>
                     </tbody>
                 </table>
             <%}%>
