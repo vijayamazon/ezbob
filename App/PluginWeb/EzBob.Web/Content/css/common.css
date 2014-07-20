@@ -1516,7 +1516,8 @@ input[type="button"],
 input[type="submit"],
 input[type="reset"],
 button,
-.button {
+.button,
+.ui-widget button {
     border: none;
     outline: none;
     padding: 0;
@@ -1540,6 +1541,7 @@ button,
     text-align:center;
     font-family: 'Titillium Web Semi Bold';
     cursor: pointer;
+    font-size: 16px;
 }
 
 .button:active, .button:hover {
@@ -1700,7 +1702,7 @@ td.account-logo {
     outline-style: none;
     overflow: hidden;
     border: 1px solid #dddddd;
-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .hmrc-main-button a {
