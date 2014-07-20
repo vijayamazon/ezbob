@@ -172,6 +172,34 @@
 
 		#endregion method GetOneLimitedBusinessData
 
+		private void MakeSureDl97IsFilled(int customerId, MP_ExperianDataCache cachedEntry)
+		{
+			Log.DebugFormat("Making sure company accounts (DL97) is filled for customer {0}", customerId);
+			if (experianDL97AccountsRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId) == null)
+			{
+				Log.DebugFormat("Company accounts (DL97) don't exist for customer {0}. Will fill it now", customerId);
+				// Customer doesn't have Dl97 entries - we should insert all the entries like the customer from the cache entry
+				foreach (ExperianDL97Accounts accountEntry in experianDL97AccountsRepository.GetAll().Where(x => x.CustomerId == cachedEntry.CustomerId))
+				{
+					var newAccountEntry = new ExperianDL97Accounts
+					{
+						CustomerId = customerId,
+						State = accountEntry.State,
+						Type = accountEntry.Type,
+						Status12Months = accountEntry.Status12Months,
+						LastUpdated = accountEntry.LastUpdated,
+						CompanyType = accountEntry.CompanyType,
+						CurrentBalance = accountEntry.CurrentBalance,
+						MonthsData = accountEntry.MonthsData,
+						Status1To2 = accountEntry.Status1To2,
+						Status3To9 = accountEntry.Status3To9
+					};
+
+					experianDL97AccountsRepository.SaveOrUpdate(newAccountEntry);
+				}
+			}
+		}
+
 		#region method GetOneNotLimitedBusinessData
 
 		private NonLimitedResults GetOneNotLimitedBusinessData(string refNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
@@ -283,6 +311,55 @@
 		}
 
 		#endregion method GetOneNotLimitedBusinessData
+
+		#region method AddToCache
+
+		private void AddToCache(string refNum, string input, BusinessReturnData res)
+		{
+			m_oRetryer.Retry(() => {
+				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
+
+				MP_ExperianDataCache cacheVal =
+					repo.GetAll().FirstOrDefault(c => c.CompanyRefNumber == refNum)
+					?? new MP_ExperianDataCache { CompanyRefNumber = refNum };
+
+				cacheVal.LastUpdateDate = DateTime.UtcNow;
+				cacheVal.JsonPacketInput = input;
+				cacheVal.JsonPacket = res.OutputXml;
+				cacheVal.ExperianScore = (int)res.BureauScore;
+				cacheVal.ExperianMaxScore = (int)res.MaxBureauScore;
+				
+				repo.SaveOrUpdate(cacheVal);
+			}, "EBusinessService.AddToCache(" + refNum + ")");
+			try
+			{
+				
+				if (res.GetType() == typeof (LimitedResults))
+				{
+					var t = res as LimitedResults;
+					if (t != null && !t.Owners.Any()) return;
+					var repo = ObjectFactory.GetInstance<ExperianParentCompanyMapRepository>();
+					if (t != null)
+					{
+						foreach (var owner in t.Owners)
+						{
+							var map = new MP_ExperianParentCompanyMap
+								{
+									ExperianRefNum = refNum,
+									ExperianParentRefNum = owner
+								};
+							repo.SaveOrUpdate(map);
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.ErrorFormat("Failed to save owners map for company {0} \n{1}", refNum, ex);
+			}
+		} // AddToCache
+
+		#endregion method AddToCache
 		
 		#region method MakeRequest
 
