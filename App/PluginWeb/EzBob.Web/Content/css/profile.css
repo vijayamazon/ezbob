@@ -735,7 +735,10 @@ h2.header-message a{
 }
 
 .early-payment-form .radio b { margin-left: 15px;}
-.early-payment-form .radio .money { margin-left: 25px;}
+.early-payment-form .radio .money { 
+    margin: 0;
+    margin-left: 15px;
+}
 
 #profile-content .stores-view .next { display: none!important;}
 
