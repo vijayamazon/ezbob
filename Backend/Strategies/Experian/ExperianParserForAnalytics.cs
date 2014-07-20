@@ -82,16 +82,16 @@
 
 			bool isLimited = typeOfBusiness == TypeOfBusinessReduced.Limited;
 			int ageOfMostRecentCcj, numOfCcjsInLast24Months, sumOfCcjsInLast24Months;
-			GetCcjs(xmlDoc, isLimited, out ageOfMostRecentCcj, out numOfCcjsInLast24Months, out sumOfCcjsInLast24Months);
+			GetCcjs(xmlDoc, out ageOfMostRecentCcj, out numOfCcjsInLast24Months, out sumOfCcjsInLast24Months);
 
-			int score = GetScore(xmlDoc, isLimited);
+			int score = GetScore(xmlDoc);
 			if (maxScore == -1)
 			{
 				maxScore = score;
 			}
 
-			int creditLimit = GetCreditLimit(xmlDoc, isLimited);
-			DateTime? incorporationDate = GetIncorporationDate(xmlDoc, isLimited);
+			int creditLimit = GetCreditLimit(xmlDoc);
+			DateTime? incorporationDate = GetIncorporationDate(xmlDoc);
 
 			ParseExperianDl97Accounts(customerId, xmlDoc);
 
@@ -197,24 +197,12 @@
 			} // if
 		} // ParseExperianDl97Accounts
 
-		private int GetScore(XmlDocument xmlDoc, bool isLimited) {
-			if (isLimited) {
-				XmlNodeList dl76Nodes = xmlDoc.SelectNodes("//DL76");
+		private int GetScore(XmlDocument xmlDoc) {
+			XmlNodeList dl76Nodes = xmlDoc.SelectNodes("//DL76");
 
-				if (dl76Nodes != null && dl76Nodes.Count == 1) {
-					XmlNode dl76Node = dl76Nodes[0];
-					return GetIntValueOrDefault(dl76Node, "RISKSCORE");
-				} // if
-
-				return 0;
-			} // if
-
-			// non-limited
-			XmlNodeList dn40Nodes = xmlDoc.SelectNodes("//DN40");
-
-			if (dn40Nodes != null && dn40Nodes.Count == 1) {
-				XmlNode dn40Node = dn40Nodes[0];
-				return GetIntValueOrDefault(dn40Node, "RISKSCORE");
+			if (dl76Nodes != null && dl76Nodes.Count == 1) {
+				XmlNode dl76Node = dl76Nodes[0];
+				return GetIntValueOrDefault(dl76Node, "RISKSCORE");
 			} // if
 
 			return 0;
@@ -242,53 +230,23 @@
 			return null;
 		} // GetDateFromNode
 
-		private DateTime? GetIncorporationDate(XmlDocument xmlDoc, bool isLimited) {
-			if (isLimited) {
-				XmlNodeList dl12Nodes = xmlDoc.SelectNodes("//DL12");
+		private DateTime? GetIncorporationDate(XmlDocument xmlDoc) {
+			XmlNodeList dl12Nodes = xmlDoc.SelectNodes("//DL12");
 
-				if (dl12Nodes != null && dl12Nodes.Count == 1) {
-					XmlNode dl12Node = dl12Nodes[0];
-					return GetDateFromNode(dl12Node, "DATEINCORP");
-				} // if
-
-				return null;
-			} // if
-
-			// non-limited
-			XmlNodeList dn10Nodes = xmlDoc.SelectNodes("//DN10");
-
-			if (dn10Nodes != null && dn10Nodes.Count == 1) {
-				XmlNode dn10Node = dn10Nodes[0];
-
-				DateTime? res = GetDateFromNode(dn10Node, "DATEOWNSHPCOMMD");
-
-				if (res != null)
-					return res;
-
-				return GetDateFromNode(dn10Node, "EARLIESTKNOWNDATE");
+			if (dl12Nodes != null && dl12Nodes.Count == 1) {
+				XmlNode dl12Node = dl12Nodes[0];
+				return GetDateFromNode(dl12Node, "DATEINCORP");
 			} // if
 
 			return null;
 		} // GetIncorporationDate
 
-		private int GetCreditLimit(XmlDocument xmlDoc, bool isLimited) {
-			if (isLimited) {
-				XmlNodeList dl78Nodes = xmlDoc.SelectNodes("//DL78");
+		private int GetCreditLimit(XmlDocument xmlDoc) {
+			XmlNodeList dl78Nodes = xmlDoc.SelectNodes("//DL78");
 
-				if (dl78Nodes != null && dl78Nodes.Count == 1) {
-					XmlNode dl78Node = dl78Nodes[0];
-					return GetIntValueOrDefault(dl78Node, "CREDITLIMIT");
-				} // if
-
-				return 0;
-			} // if
-
-			// non-limited
-			XmlNodeList dn73Nodes = xmlDoc.SelectNodes("//DN73");
-
-			if (dn73Nodes != null && dn73Nodes.Count == 1) {
-				XmlNode dn73Node = dn73Nodes[0];
-				return GetIntValueOrDefault(dn73Node, "CREDITLIMIT");
+			if (dl78Nodes != null && dl78Nodes.Count == 1) {
+				XmlNode dl78Node = dl78Nodes[0];
+				return GetIntValueOrDefault(dl78Node, "CREDITLIMIT");
 			} // if
 
 			return 0;
@@ -296,48 +254,26 @@
 
 		private void GetCcjs(
 			XmlDocument xmlDoc,
-			bool isLimited,
 			out int ageOfMostRecentCcj,
 			out int numOfCcjsInLast24Months,
 			out int sumOfCcjsInLast24Months
 		) {
-			if (isLimited) {
-				XmlNodeList dl26Nodes = xmlDoc.SelectNodes("//DL26");
+			XmlNodeList dl26Nodes = xmlDoc.SelectNodes("//DL26");
 
-				if (dl26Nodes != null && dl26Nodes.Count == 1) {
-					XmlNode dl26Node = dl26Nodes[0];
+			if (dl26Nodes != null && dl26Nodes.Count == 1) {
+				XmlNode dl26Node = dl26Nodes[0];
 
-					ageOfMostRecentCcj = GetIntValueOrDefault(dl26Node, "AGEMOSTRECENTCCJ");
+				ageOfMostRecentCcj = GetIntValueOrDefault(dl26Node, "AGEMOSTRECENTCCJ");
 
-					numOfCcjsInLast24Months =
-						GetIntValueOrDefault(dl26Node, "NUMCCJLAST12") +
-						GetIntValueOrDefault(dl26Node, "NUMCCJ13TO24");
+				numOfCcjsInLast24Months =
+					GetIntValueOrDefault(dl26Node, "NUMCCJLAST12") +
+					GetIntValueOrDefault(dl26Node, "NUMCCJ13TO24");
 
-					sumOfCcjsInLast24Months =
-						GetIntValueOrDefault(dl26Node, "VALCCJLAST12") +
-						GetIntValueOrDefault(dl26Node, "VALCCJ13TO24");
+				sumOfCcjsInLast24Months =
+					GetIntValueOrDefault(dl26Node, "VALCCJLAST12") +
+					GetIntValueOrDefault(dl26Node, "VALCCJ13TO24");
 
-					return;
-				} // if
-			}
-			else {
-				XmlNodeList dn14Nodes = xmlDoc.SelectNodes("//DN14");
-
-				if (dn14Nodes != null && dn14Nodes.Count == 1) {
-					XmlNode dn14Node = dn14Nodes[0];
-
-					ageOfMostRecentCcj = GetIntValueOrDefault(dn14Node, "MAGEMOSTRECJUDGSINCEOWNSHP");
-
-					numOfCcjsInLast24Months =
-						GetIntValueOrDefault(dn14Node, "MTOTJUDGCOUNTLST24MNTHS") +
-						GetIntValueOrDefault(dn14Node, "ATOTJUDGCOUNTLST24MNTHS");
-
-					sumOfCcjsInLast24Months =
-						GetIntValueOrDefault(dn14Node, "MTOTJUDGVALUELST24MNTHS") +
-						GetIntValueOrDefault(dn14Node, "ATOTJUDGVALUELST24MNTHS");
-
-					return;
-				} // if
+				return;
 			} // if
 
 			ageOfMostRecentCcj = 0;

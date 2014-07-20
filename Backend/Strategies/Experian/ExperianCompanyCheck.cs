@@ -104,7 +104,20 @@
 					return;
 			} // if
 
-			m_oParser.UpdateAnalytics(m_nCustomerID, (int)MaxScore);
+			if (m_oExperianData.IsLimited)
+			{
+				m_oParser.UpdateAnalytics(m_nCustomerID, (int) MaxScore);
+			}
+			else
+			{
+				DB.ExecuteNonQuery(
+					"CustomerAnalyticsUpdateNonLimitedCompany",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", m_nCustomerID),
+					new QueryParameter("RefNumber", m_sExperianRefNum),
+					new QueryParameter("MaxScore", MaxScore)
+				);
+			}
 		} // Execute
 
 		#endregion method Execute
