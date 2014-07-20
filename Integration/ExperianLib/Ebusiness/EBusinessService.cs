@@ -286,7 +286,6 @@
 
 				nonLimitedResults.LastCheckDate = DateTime.UtcNow;
 				nonLimitedResults.Error = errors;
-				nonLimitedResults.CompanyNotFoundOnBureau = nonLimitedResults.IsError;
 				if (riskScore == 0)
 				{
 					nonLimitedResults.Error += "Can't read RISKSCORE section from response!";

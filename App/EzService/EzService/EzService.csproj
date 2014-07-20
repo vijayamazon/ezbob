@@ -77,6 +77,7 @@
     <Compile Include="ActionResults\AvailableFundsActionResult.cs" />
     <Compile Include="ActionResults\AccountsToUpdateActionResult.cs" />
     <Compile Include="ActionResults\CompanyDataForCompanyScoreActionResult.cs" />
+    <Compile Include="ActionResults\CompanyDataForCreditBureauActionResult.cs" />
     <Compile Include="ActionResults\ExperianLtdActionResult.cs" />
     <Compile Include="ActionResults\EsignatureFileActionResult.cs" />
     <Compile Include="ActionResults\EsignatureListActionResult.cs" />

@@ -528,6 +528,9 @@
 
 		[OperationContract]
 		CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, int customerId, string refNumber);
+
+		[OperationContract]
+		CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, int customerId, string refNumber);
 	} // interface IEzService
 } // namespace EzService
 

@@ -200,6 +200,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableFundsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomerDetailsActionResult))]
@@ -809,6 +810,61 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.DataField, value) != true)) {
                     this.DataField = value;
                     this.RaisePropertyChanged("Data");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CompanyDataForCreditBureauActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CompanyDataForCreditBureauActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> LastUpdateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ScoreField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Errors {
+            get {
+                return this.ErrorsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorsField, value) != true)) {
+                    this.ErrorsField = value;
+                    this.RaisePropertyChanged("Errors");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> LastUpdate {
+            get {
+                return this.LastUpdateField;
+            }
+            set {
+                if ((this.LastUpdateField.Equals(value) != true)) {
+                    this.LastUpdateField = value;
+                    this.RaisePropertyChanged("LastUpdate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Score {
+            get {
+                return this.ScoreField;
+            }
+            set {
+                if ((this.ScoreField.Equals(value) != true)) {
+                    this.ScoreField = value;
+                    this.RaisePropertyChanged("Score");
                 }
             }
         }
@@ -2443,6 +2499,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, int customerId, string refNumber);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
+        ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, int customerId, string refNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, int customerId, string refNumber);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2);
         
@@ -3419,6 +3481,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, int customerId, string refNumber) {
             return base.Channel.GetCompanyDataForCompanyScoreAsync(underwriterId, customerId, refNumber);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, int customerId, string refNumber) {
+            return base.Channel.GetCompanyDataForCreditBureau(underwriterId, customerId, refNumber);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, int customerId, string refNumber) {
+            return base.Channel.GetCompanyDataForCreditBureauAsync(underwriterId, customerId, refNumber);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2) {

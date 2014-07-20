@@ -22,10 +22,14 @@
 	using Ezbob.ExperianParser;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
+	using Infrastructure;
 	using MoreLinq;
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Text;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 	using Web.Models;
 	using log4net;
 	using EZBob.DatabaseLib.Model.Experian;
@@ -40,6 +44,8 @@
 		private const int ConsumerScoreMin = 120;
 		private const int CompanyScoreMax = 100;
 		private const int CompanyScoreMin = 0;
+		private readonly ServiceClient serviceClient;
+		private readonly IWorkplaceContext context = ObjectFactory.GetInstance<IWorkplaceContext>();
 
 		public CreditBureauModelBuilder(ISession session,
 			ICustomerRepository customers,
@@ -49,6 +55,7 @@
 			_customers = customers;
 			_experianHistoryRepository = experianHistoryRepository;
 			Errors = new List<string>();
+			serviceClient = new ServiceClient();
 		}
 
 		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
@@ -646,6 +653,7 @@
 				case TypeOfBusinessReduced.Limited:
 					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
 					updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
+
 					if (limitedBusinessData != null && limitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.UtcNow - limitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays)
 					{
@@ -657,14 +665,19 @@
 					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
 					break;
 				case TypeOfBusinessReduced.NonLimited:
-					var notLimitedBusinessData = srv.GetNotLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
+					CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(context.UserId, customer.Id, company.ExperianRefNum);
+
+					bool isDataExpired = false;
 					updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
-					if (notLimitedBusinessData != null && notLimitedBusinessData.LastCheckDate.HasValue &&
-						(DateTime.UtcNow - notLimitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays)
+					if (notLimitedBusinessData != null && notLimitedBusinessData.LastUpdate.HasValue &&
+						(DateTime.UtcNow - notLimitedBusinessData.LastUpdate.Value).TotalDays >= updateCompanyDataPeriodDays)
 					{
-						notLimitedBusinessData.IsDataExpired = true;
+						isDataExpired = true;
 					}
-					AppendNonLimitedInfo(model, notLimitedBusinessData);
+					if (notLimitedBusinessData != null)
+					{
+						AppendNonLimitedInfo(model, notLimitedBusinessData.LastUpdate, notLimitedBusinessData.Score, notLimitedBusinessData.Errors, isDataExpired);
+					}
 					model.BorrowerType = company.TypeOfBusiness.ToString();
 					model.CompanyName = company.CompanyName;
 					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
@@ -696,25 +709,25 @@
 			}
 		}
 
-		protected void AppendNonLimitedInfo(CreditBureauModel model, NonLimitedResults eInfo)
+		protected void AppendNonLimitedInfo(CreditBureauModel model, DateTime? lastUpdate, int score, string errors, bool isDataExpired)
 		{
-			if (eInfo == null)
+			if (!lastUpdate.HasValue)
 				return;
 			model.ModelType = "NonLimited";
-			var spc = GetScorePositionAndColor((double)eInfo.BureauScore, CompanyScoreMax, CompanyScoreMin);
+			var spc = GetScorePositionAndColor(score, CompanyScoreMax, CompanyScoreMin);
 			model.NonLimitedInfo = new ExperianNonLimitedInfo
 			{
-				BureauScore = eInfo.BureauScore,
+				BureauScore = score,
 				ScoreColor = spc.Color,
-				CompanyNotFoundOnBureau = eInfo.CompanyNotFoundOnBureau,
-				Error = eInfo.Error,
-				IsDataExpired = eInfo.IsDataExpired,
-				IsError = eInfo.IsError,
-				LastCheckDate = eInfo.LastCheckDate
+				CompanyNotFoundOnBureau = !string.IsNullOrEmpty(errors),
+				Error = errors,
+				IsDataExpired = isDataExpired,
+				IsError = !string.IsNullOrEmpty(errors),
+				LastCheckDate = lastUpdate
 			};
-			if (!string.IsNullOrEmpty(eInfo.Error))
+			if (!string.IsNullOrEmpty(errors))
 			{
-				model.ErrorList.AddRange(eInfo.Error.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+				model.ErrorList.AddRange(errors.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
 			}
 		}
 
