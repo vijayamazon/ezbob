@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Reports {
+﻿namespace Reports {
+	using System;
+	using System.Data;
 	using System.Globalization;
 	using System.IO;
 	using System.Xml;
@@ -37,7 +33,8 @@ namespace Reports {
 
 		#region method Add
 
-		public void Add(SafeReader oRow) {
+		public void Add(SafeReader oRow, AConnection oDB)
+		{
 			XmlDocument doc = ExtractXml(oRow["ResponseData"]);
 
 			if (doc == null)
@@ -60,7 +57,7 @@ namespace Reports {
 
 			case "E-SeriesNonLimitedData":
 				if (DateFits(ref m_oCompanyDataDate, oInsertDate))
-					AddCompanyData(doc);
+					AddCompanyData(oDB);
 				break;
 			} // switch
 		} // Add
@@ -76,14 +73,16 @@ namespace Reports {
 			if (string.IsNullOrWhiteSpace(m_sCompanyRefNum))
 				return;
 
+			// TODO: Remove this query once limited company is done
 			var sXml = oDB.ExecuteScalar<string>("SELECT TOP 1 JsonPacket FROM MP_ExperianDataCache WHERE CompanyRefNumber = '" + m_sCompanyRefNum + "' ORDER BY LastUpdateDate DESC", CommandSpecies.Text);
 
 			var doc = ExtractXml(sXml);
 
 			if (doc != null) {
 				AddLtdData(doc);
-				AddCompanyData(doc);
 			} // if
+
+			AddCompanyData(oDB);
 		} // LoadLastScore
 
 		#endregion method LoadLastScore
@@ -220,21 +219,21 @@ namespace Reports {
 
 		#region method AddCompanyData
 
-		private void AddCompanyData(XmlDocument doc) {
-			XmlNode oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DN73/NLCDSCORE");
+		private void AddCompanyData(AConnection oDB)
+		{
+			DataTable nonLimitedDataTable = oDB.ExecuteReader("GetNonLimitedDataForLoanDateScoreReport",
+			                 CommandSpecies.StoredProcedure,
+							 new QueryParameter("CustomerId", CustomerID),
+			                 new QueryParameter("RefNumber", m_sCompanyRefNum));
 
-			if (!ReferenceEquals(oNode, null))
-				m_sNonLimDelphiScore = oNode.InnerText;
 
-			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DN73/PDSCORE");
-
-			if (!ReferenceEquals(oNode, null))
-				m_sNonLimDefaultChance = oNode.InnerText;
-
-			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DN73/STABILITYODDS");
-
-			if (!ReferenceEquals(oNode, null))
-				m_sNonLimStabilityOdds = oNode.InnerText;
+			if (nonLimitedDataTable.Rows.Count == 1)
+			{
+				var sr = new SafeReader(nonLimitedDataTable.Rows[0]);
+				m_sNonLimDelphiScore = sr["CommercialDelphiScore"];
+				m_sNonLimDefaultChance = sr["ProbabilityOfDefaultScore"];
+				m_sNonLimDelphiScore = sr["StabilityOdds"];
+			}
 		} // AddCompanyData
 
 		#endregion method AddCompanyData

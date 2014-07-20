@@ -89,7 +89,7 @@
     <Compile Include="EarnedInterest\InterestFreezePeriods.cs" />
     <Compile Include="ExperianLimitedCompanyData\ExperianLimitedCompanyData.cs" />
     <Compile Include="ExperianLimitedCompanyData\ExperianLimitedCompanyReportItem.cs" />
-    <Compile Include="LoanDateScore\LoandDateScore.cs" />
+    <Compile Include="LoanDateScore\LoanDateScore.cs" />
     <Compile Include="LoanDateScore\LoanDateScoreItem.cs" />
     <Compile Include="LoanIntegrity.cs" />
     <Compile Include="EarnedInterest\EarnedInterest.cs" />

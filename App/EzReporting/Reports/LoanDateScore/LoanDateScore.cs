@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.IO;
-using System.Text;
-using System.Xml;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace Reports {
-	using System.Globalization;
+﻿namespace Reports {
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Text;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	#region class LoanDateScore
 
@@ -98,7 +93,7 @@ namespace Reports {
 			int nCustomerID = oRow["CustomerID"];
 
 			if (m_oResult.ContainsKey(nCustomerID))
-				m_oResult[nCustomerID].Add(oRow);
+				m_oResult[nCustomerID].Add(oRow, m_oDB);
 
 			return ActionResult.Continue;
 		} // HandleCompanyRow
