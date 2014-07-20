@@ -2765,22 +2765,40 @@ ul#user-menu {
     
 }
 
-.progress-circle.center-circle {
-    background: url(images/header/process_M_grey.png);
+.center-circle .progress-circle {
+    background: url(images/header/circle_bg_M.png);
     background-repeat: no-repeat;
 }
-.progress-circle.first-circle {
-    background: url(images/header/process_L_grey.png);
+.first-circle .progress-circle {
+    background: url(images/header/circle_bg_L.png);
     background-repeat: no-repeat;
 }
-.progress-circle.last-circle {
-    background: url(images/header/process_R_grey.png);
+.last-circle .progress-circle {
+    background: url(images/header/circle_bg_R.png);
     background-repeat: no-repeat;
 }
 
+.progress-circle .inner-circle {
+    background: url(images/header/circle_white.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    width: 80px;
+    height: 80px;
+    z-index: 3;
+}
+    .first-circle .inner-circle,
+    .progress-circle .inner-circle.complete {
+        background: url(images/header/circle_green.png);
+        background-repeat: no-repeat;
+        color: #ffffff;
+    }
+
+
     .progress-circle .percent {
         vertical-align: middle;
-        line-height: 94px;
+        line-height: 80px;
         font-size: 45px;
     }
 
@@ -2789,11 +2807,30 @@ ul#user-menu {
     background: url(images/header/pas.png);
     background-repeat: repeat-x;
     z-index: -1;
-    margin-top: -54px;
+    top: 40px;
     height: 15px;
     width: 110%;
     position: absolute;
     margin-left: 80px;
+}
+.progress-line-current,
+.progress-line-fill,
+.progress-line-complete {
+        background: url(images/header/process_pas.png);
+        background-repeat: repeat-x;
+        height: 7px;
+        top: 43px;
+        position: absolute;
+}
+
+.first .progress-line-current,
+.first .progress-line-fill,
+.first .progress-line-complete {
+    margin-left: 80px;
+}
+
+.progress-line-complete {
+    width: 110%;
 }
 
 ul.application_steps {
@@ -2831,7 +2868,7 @@ ul.application_steps {
         width: 45%;
     }
 
-    .dashboard-steps ul.application_steps li .progress-line .progress-line-fill {
+    .dashboard-steps ul.application_steps li .progress-line-fill {
         background: url(images/header/process_pas.png);
         background-repeat: repeat-x;
         height: 7px;
@@ -2839,11 +2876,24 @@ ul.application_steps {
         top: 3px;
     }
 
-    .dashboard-steps ul.application_steps li.current .progress-line .progress-line-fill {
+    .dashboard-steps ul.application_steps li.current .progress-line-fill {
         width: 20%;
     }
-    .dashboard-steps ul.application_steps li.complete .progress-line .progress-line-fill {
+    .dashboard-steps ul.application_steps li.complete .progress-line-fill {
         width: 100%;
+    }
+
+    .dashboard-steps .progress-line-complete,
+    .dashboard-steps .progress-line {
+        width: 100%;
+    }
+    .dashboard-steps .first-circle .progress-line-complete,
+    .dashboard-steps .first-circle .progress-line-current {
+        margin-left: 80px;
+    }
+
+    .dashboard-steps .last-circle .progress-line-current {
+        width: 50% !important;
     }
 
         ul.application_steps li.last {
@@ -2854,35 +2904,14 @@ ul.application_steps {
             color: #559302;
         }
 
-            ul.application_steps li.current .progress-line .progress-line-current {
+            ul.application_steps li.current .progress-line-current {
                 background: url(images/header/process_pas.png);
                 background-repeat: repeat-x;
                 width: 20%;
                 height: 7px;
                 position: absolute;
-                top: 3px;
             }
 
-            ul.application_steps li.current .progress-circle {
-                color: #fff;
-                background-repeat: no-repeat;
-            }
-            ul.application_steps li.current .progress-circle.center-circle {
-                background: url(images/header/process_M_green.png);
-                background-repeat: no-repeat;
-            }
-            ul.application_steps li.current .progress-circle.first-circle {
-                background: url(images/header/process_L_green.png);
-                background-repeat: no-repeat;
-            }
-            ul.application_steps li.complete .progress-circle.first-circle {
-                background: url(images/header/process_L_green.png);
-                background-repeat: no-repeat;
-            }
-            ul.application_steps li.current .progress-circle.last-circle {
-                background: url(images/header/process_R_green.png);
-                background-repeat: no-repeat;
-            }
 
     ul.application_steps .timer > #slice {
         position: absolute;
@@ -2932,18 +2961,6 @@ ul.application_steps {
             height: 1em;
         }
     
-    ul.application_steps li.complete .progress-line-complete {
-        background: url(images/header/process_pas.png);
-        background-repeat: repeat-x;
-        height: 7px;
-        margin-top: 3px;
-    }
-
-    ul.application_steps li.complete .progress-circle {
-        background: url(images/header/process_M_green.png);
-        color: #fff;
-    }
-
     ul.application_steps li .step_label {
         display: block;
         line-height: 17px;

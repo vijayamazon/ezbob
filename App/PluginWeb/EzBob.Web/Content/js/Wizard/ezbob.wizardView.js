@@ -282,16 +282,17 @@ EzBob.WizardView = EzBob.View.extend({
         if (this.steps[current])
             this.$el.find('.wizard-header').text(this.steps[current].header);
 
-        var $proggressLine = this.$el.find("ul.application_steps li.complete .progress-line-complete").last().css("width", "20%");
+        var $proggressLine = this.$el.find("ul.application_steps li.complete .progress-line-complete").last().css("width", "35%");
         var $proggresLineCurrent = this.$el.find("ul.application_steps li.current .progress-line-current");
-
+        var $circleCurrent = this.$el.find("ul.application_steps li.current .inner-circle");
         $proggresLineCurrent.hide().css("width", "0");
 
         if (this.$el.find("ul.application_steps li:first").hasClass("current"))
-            $proggresLineCurrent.show().css("width", "20%");
+            $proggresLineCurrent.show().css("width", "35%");
 
-        $proggressLine.show().animate({ width: "100%" }, 1000, function () {
-            $proggresLineCurrent.show().animate({ width: "20%" }, 1000, function () { });
+        $proggressLine.show().animate({ width: "110%" }, 1000, function () {
+            $circleCurrent.addClass('complete');
+            $proggresLineCurrent.show().animate({ width: "35%" }, 800, function () { });
         });
     }, // stepChanged
 

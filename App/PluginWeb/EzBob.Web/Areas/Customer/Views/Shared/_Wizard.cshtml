@@ -38,16 +38,19 @@
                             lastcss = 'last';
                             circleType = 'last-circle';
                         }
-                        if ( i == 0 ) circleType = 'first-circle'
+                        if ( i == 0 ) {
+                            lastcss='first';
+                            circleType = 'first-circle';
+                        }
                         if (step.showTitleInWizardSteps) nVisibleStepNum++; else css += 'hide';
             %>
-            <li class="<%- css %> <%-lastcss%>" data-step-num="<%= step.num %>">
-                <div class="progress-circle <%-circleType%>">
-                    <div class="percent"><%=(i+1)%></div>
+            <li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= step.num %>">
+                <div class="progress-circle">
+                    <div class="inner-circle <%-css%>"><div class="percent"><%=(i+1)%></div></div>
+                    
                 </div>
-                <div class="progress-line">
-                    <div class="progress-line-<%-css%>"></div>
-                </div>
+                <div class="progress-line"></div>
+                <div class="progress-line-<%-css%>"></div>
                 <span class="step_label"><% print(step.title) %></span>
             </li>
             <%}); // for each step

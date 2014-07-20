@@ -502,6 +502,11 @@
     <Content Include="Content\css\images\freeagent_on.png" />
     <Content Include="Content\css\images\gauge.png" />
     <Content Include="Content\css\images\green_dot.png" />
+    <Content Include="Content\css\images\header\circle_bg_L.png" />
+    <Content Include="Content\css\images\header\circle_bg_M.png" />
+    <Content Include="Content\css\images\header\circle_bg_R.png" />
+    <Content Include="Content\css\images\header\circle_green.png" />
+    <Content Include="Content\css\images\header\circle_white.png" />
     <Content Include="Content\css\images\header\ezbob_logo-white.png" />
     <Content Include="Content\css\images\header\ezbob_logo_dark.png" />
     <Content Include="Content\css\images\header\head-left-info.png" />
@@ -729,6 +734,7 @@
     <Content Include="Content\img\info.png" />
     <Content Include="Content\img\info_active.png" />
     <Content Include="Content\img\info_hover.png" />
+    <Content Include="Content\img\live_chat_btn_up.png" />
     <Content Include="Content\img\logo-amazon-small.png" />
     <Content Include="Content\img\logo_ir.jpg" />
     <Content Include="Content\img\london-the-news.jpg" />
