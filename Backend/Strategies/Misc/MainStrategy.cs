@@ -1186,7 +1186,7 @@
 			return DB.ExecuteScalar<bool>(
 				"GetIsCompanyDataUpdated",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CompanyRefNumber", experianRefNum),
+				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("Today", DateTime.Today)
 			);
 		} // GetIsExperianCompanyUpdated

@@ -6,12 +6,12 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetIsCompanyDataUpdated] 
-	(@CompanyRefNumber NVARCHAR(50), @Today DATE)
+	(@CustomerId INT, @Today DATE)
 AS
 BEGIN
 	DECLARE @LastUpdateTime DATE
 	
-	SELECT @LastUpdateTime = LastUpdateDate FROM MP_ExperianDataCache WHERE CompanyRefNumber = @CompanyRefNumber 
+	SELECT @LastUpdateTime = AnalyticsDate FROM CustomerAnalyticsCompany WHERE CustomerId = @CustomerId AND IsActive = 1
 	IF @Today = @LastUpdateTime
 		SELECT CAST (1 AS BIT) AS IsUpdated
 	ELSE
