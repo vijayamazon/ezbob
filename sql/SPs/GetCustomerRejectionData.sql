@@ -22,6 +22,7 @@ BEGIN
 			@RowNum INT,
 			@CompanyDefaultStartDate DATETIME,
 			@NumOfDefaultCompanyAccounts INT
+			@HasCompanyFiles BIT
 
 	DECLARE @ServiceLogID BIGINT
 
@@ -65,9 +66,7 @@ BEGIN
 				WHERE 
 					p.row=@RowNum
 				)
-		) 
-	
-	
+		)	
 	
 	IF @Counter = 0
 	BEGIN
@@ -103,10 +102,16 @@ BEGIN
 		AND
 		dl97.AccountState = 'D'
 
+	IF EXISTS (SELECT 1 FROM MP_CustomerMarketPlace, MP_MarketplaceType WHERE MarketPlaceId = MP_MarketplaceType.Id AND MP_MarketplaceType.Name = 'CompanyFiles' AND MP_CustomerMarketPlace.CustomerId = @CustomerId)
+		SET @HasCompanyFiles = 1
+	ELSE
+		SET @HasCompanyFiles = 0
+		
 	SELECT 
 		@ErrorMPsNum AS ErrorMPsNum, 
 		@ApprovalNum AS ApprovalNum, 
 		@NumOfDefaultAccounts AS NumOfDefaultAccounts,
-		@NumOfDefaultCompanyAccounts AS NumOfDefaultCompanyAccounts
+		@NumOfDefaultCompanyAccounts AS NumOfDefaultCompanyAccounts,
+		@HasCompanyFiles AS HasCompanyFiles
 END
 GO
