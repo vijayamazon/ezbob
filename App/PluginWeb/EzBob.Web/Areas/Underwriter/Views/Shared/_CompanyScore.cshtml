@@ -424,7 +424,7 @@
                     <%}%>
                 </tbody>
             </table>
-            <% debugger; if (response.Data.SicCodes != undefined) {%>
+            <% if (response.Data.SicCodes != undefined) {%>
                 <table>
                     <thead class="box">
                         <tr class="box-title">
@@ -491,6 +491,7 @@
                             <th>Satisfaction flag</th>
                             <th>Satisfaction flag description</th>
                             <th>Satisfaction date</th>
+                            <th>Judgment type</th>
                             <th>Judgment type description</th>
                             <th>Judgment amount</th>
                             <th>Court</th>
@@ -537,13 +538,13 @@
 		                            <td class=narrow-as-possible><%-elem.JudgementAddr5%></td>
 		                            <td class=narrow-as-possible><%-elem.PostCode%></td>
 		                            <td class=narrow-as-possible>
-                                        <% if (elem.RegisteredAgainst != undefined) {%>
+                                        <% if (elem.RegisteredAgainst != undefined) { %>
                                             <table>
 		                                        <tbody>
                                                     <% _.each(elem.RegisteredAgainst, function(registeredAgainst, i) {
                                                         if (registeredAgainst != undefined) {%>
                                                             <tr>
-		                                                        <td class=narrow-as-possible><%registeredAgainst%></td>
+		                                                        <td class=narrow-as-possible><%-registeredAgainst%></td>
 	                                                        </tr>
                                                         <%}
                                                     });%>
@@ -565,9 +566,9 @@
                                                     <% _.each(elem.TradingNames, function(tradingName, i) {
                                                         if (tradingName != undefined) {%>
                                                             <tr>
-		                                                        <td class=narrow-as-possible><%tradingName.Name%></td>
-		                                                        <td class=narrow-as-possible><%tradingName.Indicator%></td>
-		                                                        <td class=narrow-as-possible><%tradingName.IndicatorDesc%></td>
+		                                                        <td class=narrow-as-possible><%-tradingName.Name%></td>
+		                                                        <td class=narrow-as-possible><%-tradingName.TradingIndicator%></td>
+		                                                        <td class=narrow-as-possible><%-tradingName.TradingIndicatorDesc%></td>
 	                                                        </tr>
                                                         <%}
                                                     });%>
