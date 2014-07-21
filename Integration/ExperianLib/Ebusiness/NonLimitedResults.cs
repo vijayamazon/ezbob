@@ -1,16 +1,13 @@
 ﻿namespace ExperianLib.Ebusiness {
-	using System.Xml.Linq;
+	using System;
 
 	public class NonLimitedResults : BusinessReturnData {
+		public NonLimitedResults(string sError, decimal nBureauScore) : base(sError, nBureauScore) {}
 
-		public bool CompanyNotFoundOnBureau { get; set; }
-		
-		public override bool IsLimited {
-			get { return false; }
-		}
+		public NonLimitedResults(Exception e) : base(e) {}
 
-		protected override void Parse(XElement root) {
-		} // Parse
+		public bool CompanyNotFoundOnBureau { get { return !string.IsNullOrEmpty(Error); } }
 
+		public override bool IsLimited { get { return false; } }
 	} // class NonLimitedResults
 } // namespace

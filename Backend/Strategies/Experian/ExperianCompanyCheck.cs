@@ -91,8 +91,15 @@
 				new QueryParameter("CustomerId", m_nCustomerID)
 			);
 
-			if ((m_oExperianData == null) || m_oExperianData.IsError)
+			if (m_oExperianData == null) {
+				Log.Debug("Premature completion: no data received from Experian.");
 				return;
+			} // if
+
+			if (m_oExperianData.IsError) {
+				Log.Debug("Premature completion because of error: {0}.", m_oExperianData.Error);
+				return;
+			} // if
 
 			if (!m_oExperianData.CacheHit)
 				new UpdateExperianDirectors(m_nCustomerID, m_oExperianData.ServiceLogID, m_oExperianData.IsLimited ? string.Empty : m_oExperianData.OutputXml, m_oExperianData.IsLimited, DB, Log).Execute();

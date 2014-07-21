@@ -21,6 +21,7 @@ BEGIN
 
 	EXECUTE LoadExperianLtdCaisMonthly @ExperianLtdID
 	EXECUTE LoadExperianLtdCreditSummary @ExperianLtdID
+	EXECUTE LoadExperianLtdErrors @ExperianLtdID
 	EXECUTE LoadExperianLtdDL48 @ExperianLtdID
 	EXECUTE LoadExperianLtdDL52 @ExperianLtdID
 	EXECUTE LoadExperianLtdDL68 @ExperianLtdID

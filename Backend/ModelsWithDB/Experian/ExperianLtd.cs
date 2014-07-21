@@ -271,7 +271,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 					DBSaveProcName,
 					CommandSpecies.StoredProcedure,
 					oDB.CreateTableParameter("@Tbl", this)
-					);
+				);
 			}
 			catch (Exception e) {
 				Log.Warn(e, "Failed to save {0} to DB.", this.GetType().Name);

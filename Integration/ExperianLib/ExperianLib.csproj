@@ -145,6 +145,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="WriteToLogPackage.cs" />
     <Compile Include="XSerializer.cs" />
   </ItemGroup>
   <ItemGroup>

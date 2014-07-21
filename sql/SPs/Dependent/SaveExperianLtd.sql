@@ -77,20 +77,28 @@ BEGIN
 	DECLARE @ServiceLogID BIGINT
 	DECLARE @ExperianLtdID BIGINT
 	DECLARE @RegNum NVARCHAR(50)
+	DECLARE @ParentRegNum NVARCHAR(15)
 	DECLARE @c INT
 
 	SELECT @c = COUNT(*) FROM @Tbl
 
+	------------------------------------------------------------------------------
+
 	IF @c != 1
 		RAISERROR('Invalid argument: no/too much data to insert into ExperianLtd table.', 11, 1)
 
+	------------------------------------------------------------------------------
+
 	SELECT TOP 1
 		@ServiceLogID = ServiceLogID,
-		@RegNum = SUBSTRING(RegisteredNumber, 1, 50)
+		@RegNum = SUBSTRING(RegisteredNumber, 1, 50),
+		@ParentRegNum = SUBSTRING(ISNULL(LTRIM(RTRIM(ISNULL(RegisteredNumberOfTheCurrentUltimateParentCompany, ''))), ''), 1, 15)
 	FROM
 		@Tbl
 
 	EXECUTE DeleteParsedExperianLtd @ServiceLogID
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO ExperianLtd (
 		ServiceLogID,
@@ -206,12 +214,26 @@ BEGIN
 		SupplierPaymentPattern
 	FROM @Tbl
 
+	------------------------------------------------------------------------------
+
 	SET @ExperianLtdID = SCOPE_IDENTITY()
+
+	------------------------------------------------------------------------------
 
 	UPDATE MP_ServiceLog SET
 		CompanyRefNum = @RegNum
 	WHERE
 		Id = @ServiceLogID
+
+	------------------------------------------------------------------------------
+
+	IF @ParentRegNum IS NOT NULL AND @ParentRegNum != ''
+	BEGIN
+		INSERT INTO MP_ExperianParentCompanyMap(ExperianRefNum, ExperianParentRefNum)
+			VALUES(SUBSTRING(@RegNum, 1, 15), @ParentRegNum)
+	END
+
+	------------------------------------------------------------------------------
 
 	SELECT @ExperianLtdID AS ExperianLtdID
 END

@@ -14,7 +14,6 @@
 	using Ezbob.Utils.Extensions;
 	using Parser;
 	using StructureMap;
-	using log4net;
 	using EZBob.DatabaseLib.Model.Experian;
 
 	public class Utils {
@@ -40,80 +39,88 @@
 		#region method WriteLog
 
 		public static MP_ServiceLog WriteLog(string input, string output, ExperianServiceType type, int customerId, int? directorId = null) {
-			var oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
+			var pkg = new WriteToLogPackage(input, output, type, customerId, directorId);
+			WriteLog(pkg);
+			return pkg.Out.ServiceLog;
+		} // WriteToLog
 
-			var logEntry = new MP_ServiceLog {
+		public static void WriteLog(WriteToLogPackage oPackage) {
+			if (oPackage == null)
+				throw new ArgumentNullException("oPackage", "Cannot save to MP_ServiceLog: no package specified.");
+
+			var oRetryer = new SqlRetryer(oLog: ms_oLog);
+
+			oPackage.Out.ServiceLog = new MP_ServiceLog {
 				InsertDate = DateTime.Now,
-				RequestData = input,
-				ResponseData = output,
-				ServiceType = type.DescriptionAttr(),
+				RequestData = oPackage.In.Request,
+				ResponseData = oPackage.In.Response,
+				ServiceType = oPackage.In.ServiceType.DescriptionAttr(),
 			};
 
 			try {
 				oRetryer.Retry(() => {
 					var customerRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
-					logEntry.Customer = customerRepo.Get(customerId);
+					oPackage.Out.ServiceLog.Customer = customerRepo.Get(oPackage.In.CustomerID);
 				});
 
-				if (directorId != null) {
+				if (oPackage.In.DirectorID != null) {
 					oRetryer.Retry(() => {
 						var directorRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Director>>();
-						logEntry.Director = directorRepo.Get(directorId);
+						oPackage.Out.ServiceLog.Director = directorRepo.Get(oPackage.In.DirectorID);
 					});
 				} // if
 
-				Log.DebugFormat("Input data was: {0}", logEntry.RequestData);
-				Log.DebugFormat("Output data was: {0}", logEntry.ResponseData);
+				ms_oLog.Debug("Input data was: {0}", oPackage.Out.ServiceLog.RequestData);
+				ms_oLog.Debug("Output data was: {0}", oPackage.Out.ServiceLog.ResponseData);
 
 				oRetryer.Retry(() => {
 					var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
-					repoLog.SaveOrUpdate(logEntry);
+					repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
 				});
 
-				ExperianLtd oExperianLtd = null;
-
-				if (type == ExperianServiceType.LimitedData)
-					oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().ParseExperianLtd(logEntry.Id);
+				if (oPackage.In.ServiceType == ExperianServiceType.LimitedData)
+					oPackage.Out.ExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().ParseExperianLtd(oPackage.Out.ServiceLog.Id);
 
 				try {
 					var historyRepo = ObjectFactory.GetInstance<ExperianHistoryRepository>();
 
-					if (historyRepo.HasHistory(logEntry.Customer, type)) {
+					if (historyRepo.HasHistory(oPackage.Out.ServiceLog.Customer, oPackage.In.ServiceType)) {
 						var history = new MP_ExperianHistory {
-							Customer = logEntry.Customer,
-							ServiceLogId = logEntry.Id,
-							Date = logEntry.InsertDate,
-							Type = logEntry.ServiceType,
+							Customer = oPackage.Out.ServiceLog.Customer,
+							ServiceLogId = oPackage.Out.ServiceLog.Id,
+							Date = oPackage.Out.ServiceLog.InsertDate,
+							Type = oPackage.Out.ServiceLog.ServiceType,
 						};
 
-						switch (type) {
+						switch (oPackage.In.ServiceType) {
 						case ExperianServiceType.Consumer:
-							history.Score = GetScoreFromXml(logEntry.ResponseData);
-							history.CII = GetCIIFromXml(logEntry.ResponseData);
-							history.CaisBalance = GetConsumerCaisBalance(logEntry.ResponseData);
+							history.Score = GetScoreFromXml(oPackage.Out.ServiceLog.ResponseData);
+							history.CII = GetCIIFromXml(oPackage.Out.ServiceLog.ResponseData);
+							history.CaisBalance = GetConsumerCaisBalance(oPackage.Out.ServiceLog.ResponseData);
 							historyRepo.SaveOrUpdate(history);
 							break;
 						case ExperianServiceType.LimitedData:
-							history.Score = (oExperianLtd == null) ? -1 : (oExperianLtd.CommercialDelphiScore ?? -1);
-							history.CaisBalance = GetLimitedCaisBalance(oExperianLtd);
+							history.Score = (oPackage.Out.ExperianLtd == null) ? -1 : (oPackage.Out.ExperianLtd.CommercialDelphiScore ?? -1);
+							history.CaisBalance = GetLimitedCaisBalance(oPackage.Out.ExperianLtd);
 							historyRepo.SaveOrUpdate(history);
 							break;
 						case ExperianServiceType.NonLimitedData:
-							history.Score = GetNonLimitedScoreFromXml(logEntry.ResponseData);
+							history.Score = GetNonLimitedScoreFromXml(oPackage.Out.ServiceLog.ResponseData);
 							historyRepo.SaveOrUpdate(history);
 							break;
-						}
-					}
+						} // switch
+					} // if
 				}
 				catch (Exception ex) {
-					Log.WarnFormat("Failed to save experian history \n{0}", ex);
-				}
+					ms_oLog.Warn(ex, "Failed to save Experian history.");
+				} // try
 			}
 			catch (Exception e) {
-				Log.Error("Failed to save a '" + type + "' entry for customer id " + customerId + " into MP_ServiceLog.", e);
+				ms_oLog.Error(e,
+					"Failed to save a '{0}' entry for customer id {1} into MP_ServiceLog.",
+					oPackage.In.ServiceType, oPackage.In.CustomerID 
+				);
 			} // try
-
-			return logEntry;
 		} // WriteToLog
 
 		#endregion method WriteLog
@@ -130,12 +137,6 @@
 		} // TryRead
 
 		#endregion method TryRead
-
-		#endregion public
-
-		#region private
-
-		private static readonly ILog Log = LogManager.GetLogger(typeof(Utils));
 
 		public static decimal? GetConsumerCaisBalance(string xml) {
 			var xmlDoc = new XmlDocument();
@@ -197,7 +198,7 @@
 				return Convert.ToInt32(score);
 			}
 			catch (Exception ex) {
-				Log.WarnFormat("Failed to retrieve nonlimited score from xml {0}", ex);
+				ms_oLog.Warn(ex, "Failed to retrieve non-limited score from xml.");
 				return -1;
 			}
 		}
@@ -227,6 +228,12 @@
 		} // GetLimitedCaisBalance
 
 		#endregion method GetLimitedCaisBalance
+
+		#endregion public
+
+		#region private
+
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(Utils));
 
 		#endregion private
 	} // class Utils

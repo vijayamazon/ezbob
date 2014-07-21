@@ -23,6 +23,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO ExperianLtdShareholders (
 		ExperianLtdID,
 		DescriptionOfShareholder,
@@ -33,8 +35,23 @@ BEGIN
 		DescriptionOfShareholder,
 		DescriptionOfShareholding,
 		RegisteredNumberOfALimitedCompanyWhichIsAShareholder
-	FROM @Tbl
+	FROM
+		@Tbl
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO MP_ExperianParentCompanyMap(ExperianRefNum, ExperianParentRefNum)
+	SELECT
+		ltd.RegisteredNumber,
+		SUBSTRING(LTRIM(RTRIM(t.RegisteredNumberOfALimitedCompanyWhichIsAShareholder)), 1, 15)
+	FROM
+		@Tbl t
+		INNER JOIN ExperianLtd ltd ON t.ExperianLtdID = ltd.ExperianLtdID
+	WHERE
+		t.RegisteredNumberOfALimitedCompanyWhichIsAShareholder IS NOT NULL
+		AND
+		LTRIM(RTRIM(RegisteredNumberOfALimitedCompanyWhichIsAShareholder)) != ''
+
+	------------------------------------------------------------------------------
 END
 GO
-
-

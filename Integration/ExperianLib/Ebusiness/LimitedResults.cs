@@ -17,10 +17,14 @@
 		#region constructors
 
 		public LimitedResults(ExperianLtd oExperianLtd, bool bCacheHit) : base(oExperianLtd.ServiceLogID, "<xml />", oExperianLtd.ReceivedTime) {
+			Error = string.Empty;
+
 			Owners = new SortedSet<string>();
 
 			CacheHit = bCacheHit;
 			m_oRawData = oExperianLtd;
+
+			Parse();
 		} // constructor
 
 		public LimitedResults(Exception exception) : base(exception) {
@@ -41,9 +45,9 @@
 
 		#region protected
 
-		protected override void Parse(XElement root) {
+		private void Parse() {
 			if (!m_oRawData.CommercialDelphiScore.HasValue)
-				Error += "There is no RISKSCORE in the experian response! ";
+				Error = "There is no RISKSCORE in the experian response! ";
 			else
 				BureauScore = m_oRawData.CommercialDelphiScore.Value;
 
@@ -61,9 +65,12 @@
 			if (Owners == null)
 				Owners = new SortedSet<string>();
 
-			Owners.Add((m_oRawData.RegisteredNumberOfTheCurrentUltimateParentCompany ?? string.Empty).Trim());
+			if (!string.IsNullOrWhiteSpace(m_oRawData.RegisteredNumberOfTheCurrentUltimateParentCompany))
+				Owners.Add(m_oRawData.RegisteredNumberOfTheCurrentUltimateParentCompany.Trim());
 
 			ExistingBusinessLoans = 0;
+
+			var oErrors = new List<string>();
 
 			foreach (var oKid in m_oRawData.Children) {
 				if (oKid.GetType() == typeof (ExperianLtdShareholders)) {
@@ -78,7 +85,16 @@
 					if (obj.NumberOfActiveAccounts.HasValue)
 						ExistingBusinessLoans += obj.NumberOfActiveAccounts.Value;
 				}
+				else if (oKid.GetType() == typeof (ExperianLtdErrors)) {
+					ExperianLtdErrors obj = (ExperianLtdErrors)oKid;
+
+					if (!string.IsNullOrWhiteSpace(obj.ErrorMessage))
+						oErrors.Add(obj.ErrorMessage);
+				}
 			} // for
+
+			if (oErrors.Count > 0)
+				Error += string.Join("", oErrors);
 
 			IncorporationDate = m_oRawData.IncorporationDate;
 		} // Parse

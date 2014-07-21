@@ -186,6 +186,10 @@
 			if (string.IsNullOrWhiteSpace(LastName))
 				return;
 
+			FirstName = Ti(FirstName);
+			MiddleName = Ti(MiddleName);
+			LastName = Ti(LastName);
+
 			CustomerID = nCustomerID;
 
 			IsDirector = false;
@@ -372,6 +376,8 @@
 
 		#endregion DB fields
 
+		#region private
+
 		private static readonly DateTime ms_oLongAgo = new DateTime(1775, 5, 7);
 
 		private static string TwoString(string a, string b) {
@@ -379,8 +385,10 @@
 		} // TwoString
 
 		private static string Ti(string a) {
-			return CultureInfo.InvariantCulture.TextInfo.ToTitleCase((a ?? string.Empty).ToLowerInvariant());
+			return CultureInfo.InvariantCulture.TextInfo.ToTitleCase((a ?? string.Empty).Trim().ToLowerInvariant());
 		} // Ti
+
+		#endregion private
 	} // class ExperianDirector
 
 	#endregion class ExperianDirector

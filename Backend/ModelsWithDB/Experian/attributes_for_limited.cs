@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.Experian {
+	public class ERR1Attribute          : ASrcAttribute { public ERR1Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "ERR1"; } }
 	public class DL12Attribute          : ASrcAttribute { public DL12Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL12"; } }
 	public class DL13Attribute          : ASrcAttribute { public DL13Attribute(string sNodeName = null)          : base(sNodeName) { GroupName = "DL13"; } }
 	public class PrevCompNamesAttribute : ASrcAttribute { public PrevCompNamesAttribute(string sNodeName = null) : base(sNodeName) { GroupName = "DL15/PREVCOMPNAMES"; } }

@@ -1977,7 +1977,7 @@
   <xs:element name="ParseExperianLtdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q159="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="ParseExperianLtdResult" nillable="true" type="q159:ActionMetaData" />
+        <xs:element xmlns:q159="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="ParseExperianLtdResult" nillable="true" type="q159:ExperianLtdActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

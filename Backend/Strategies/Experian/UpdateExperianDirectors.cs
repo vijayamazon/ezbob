@@ -190,8 +190,13 @@
 				if (!dir.IsValid)
 					continue;
 
+				if (oDirMap.ContainsKey(dir.FullName))
+					continue;
+
 				oDirectors.Add(dir);
 				oDirMap[dir.FullName] = dir;
+
+				Log.Debug("Director full name: '{0}'.", dir.FullName);
 			} // for each
 
 			foreach (var oDetails in oShaDetails) {
@@ -200,8 +205,13 @@
 				if (!dir.IsValid)
 					continue;
 
+				if (oShaMap.ContainsKey(dir.FullName))
+					continue;
+
 				oShareholders.Add(dir);
 				oShaMap[dir.FullName] = dir;
+
+				Log.Debug("Shareholder (details) full name: '{0}'.", dir.FullName);
 			} // for each
 
 			foreach (var oDetails in oShaSummary) {
@@ -228,6 +238,8 @@
 
 					oShareholders.Add(dir);
 					oShaMap[dir.FullName] = dir;
+
+					Log.Debug("Shareholder (summary) full name: '{0}'.", dir.FullName);
 				} // for each
 			} // for each
 
