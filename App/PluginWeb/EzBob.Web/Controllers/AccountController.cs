@@ -24,6 +24,7 @@ namespace EzBob.Web.Controllers {
 	using Code;
 	using Code.Email;
 	using Ezbob.Backend.Models;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -59,6 +60,7 @@ namespace EzBob.Web.Controllers {
 			m_oBrokerHelper = new BrokerHelper();
 			m_oLogOffMode = (LogOffMode)(int)ConfigManager.CurrentValues.Instance.LogOffMode;
 			m_oVipRequestRepository = ObjectFactory.GetInstance<IVipRequestRepository>();
+			m_oDB = DbConnectionGenerator.Get(ms_oLog);
 		} // constructor
 
 		#endregion constructor
@@ -220,9 +222,8 @@ namespace EzBob.Web.Controllers {
 				return Json(new { success = false, errorMessage = "Please use dedicated underwriter log on page." }, JsonRequestBehavior.AllowGet);
 			} // if
 
-			string errorMessage = null;
 
-			Customer customer = null;
+			Customer customer;
 
 			try {
 				customer = m_oCustomers.Get(user.Id);
@@ -233,14 +234,14 @@ namespace EzBob.Web.Controllers {
 			} // try
 
 			if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
-				errorMessage = @"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> customercare@ezbob.com";
+				const string sDisabledError = @"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> customercare@ezbob.com";
 
 				m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
 					CustomerId = user.Id,
 					StartSession = DateTime.Now,
 					Ip = customerIp,
 					IsPasswdOk = false,
-					ErrorMessage = errorMessage
+					ErrorMessage = sDisabledError,
 				});
 
 				ms_oLog.Warn(
@@ -249,7 +250,7 @@ namespace EzBob.Web.Controllers {
 					model.UserName
 				);
 
-				return Json(new { success = false, errorMessage }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = false, errorMessage = sDisabledError, }, JsonRequestBehavior.AllowGet);
 			} // if user is disabled
 
 			var nStatus = ValidateUser(model.UserName, model.Password);
@@ -266,7 +267,7 @@ namespace EzBob.Web.Controllers {
 				return Json(new { success = true, model, }, JsonRequestBehavior.AllowGet);
 			} // if logged in successfully
 
-			errorMessage = MembershipCreateStatus.InvalidProviderUserKey == nStatus
+			string errorMessage = MembershipCreateStatus.InvalidProviderUserKey == nStatus
 				? @"Three unsuccessful login attempts have been made. <span class='bold'>ezbob</span> has issued you with a temporary password. Please check your e-mail."
 				: @"User not found or incorrect password.";
 
@@ -504,7 +505,7 @@ namespace EzBob.Web.Controllers {
 
 			var result = new TargetResults(null);
 			try {
-				var service = new EBusinessService();
+				var service = new EBusinessService(m_oDB);
 
 				result = service.TargetBusiness(companyName, postcode, m_oContext.UserId, nFilter, refNum);
 
@@ -844,6 +845,7 @@ namespace EzBob.Web.Controllers {
 		private readonly BrokerHelper m_oBrokerHelper;
 		private readonly LogOffMode m_oLogOffMode;
 		private readonly IVipRequestRepository m_oVipRequestRepository;
+		private readonly AConnection m_oDB;
 
 		#endregion fields
 

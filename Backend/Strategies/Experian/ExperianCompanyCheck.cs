@@ -142,7 +142,7 @@
 		// ReSharper disable RedundantCast
 
 		private BusinessReturnData GetBusinessDataFromExperian() {
-			var service = new EBusinessService();
+			var service = new EBusinessService(DB);
 
 			return m_bIsLimited
 				? (BusinessReturnData)service.GetLimitedBusinessData(m_sExperianRefNum, m_nCustomerID, false, m_bForceCheck)

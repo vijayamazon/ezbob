@@ -10,7 +10,7 @@ namespace ExperianLib.Tests.Integration {
 		[Test]
 		[Ignore]
 		public void GetLimitedCompanyTest() {
-			var service = new EBusinessService();
+			var service = new EBusinessService(m_oDB);
 
 			var aryRefNumbs = new[] { "",
 				/*"05691397", "07943908", "07841965", "07915265", "01776469",
@@ -30,7 +30,7 @@ namespace ExperianLib.Tests.Integration {
 		[Test]
 		[Ignore]
 		public void GetNonLimitedCompanyTest() {
-			var service = new EBusinessService();
+			var service = new EBusinessService(m_oDB);
 			const string refNum = "02406500";
 			var result = service.GetNotLimitedBusinessData(refNum, 1, false, false);
 			Debug.WriteLine("NonLimited business with ref number = {0} results: {1}", refNum,
@@ -40,7 +40,7 @@ namespace ExperianLib.Tests.Integration {
 		[Test]
 		[Ignore]
 		public void TargetingTest() {
-			var service = new EBusinessService();
+			var service = new EBusinessService(m_oDB);
 			var result = service.TargetBusiness("ORANGE", "EC1V 4PW", 14219, TargetResults.LegalStatus.Limited, "7852687");
 			//var result = service.TargetBusiness("ORANGE", "EC1V 4PW", 14219, TargetResults.LegalStatus.NonLimited, "7852687");
 			Debug.WriteLine("Targeting results: " + JsonConvert.SerializeObject(result));
@@ -50,7 +50,7 @@ namespace ExperianLib.Tests.Integration {
 		[Ignore]
 		public void TargetingCacheTest()
 		{
-			var service = new EBusinessService();
+			var service = new EBusinessService(m_oDB);
 			var result = service.TargetCache(20291, "03795714");
 			Debug.WriteLine("Targeting result: " + JsonConvert.SerializeObject(result));
 		}

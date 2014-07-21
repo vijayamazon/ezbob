@@ -19,6 +19,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBobIntegration.Web_References.Consumer;
+	using Ezbob.Database;
 	using Ezbob.ExperianParser;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
@@ -46,6 +47,7 @@
 		private const int CompanyScoreMin = 0;
 		private readonly ServiceClient serviceClient;
 		private readonly IWorkplaceContext context = ObjectFactory.GetInstance<IWorkplaceContext>();
+		private readonly AConnection m_oDB;
 
 		public CreditBureauModelBuilder(ISession session,
 			ICustomerRepository customers,
@@ -56,6 +58,7 @@
 			_experianHistoryRepository = experianHistoryRepository;
 			Errors = new List<string>();
 			serviceClient = new ServiceClient();
+			m_oDB = DbConnectionGenerator.Get(new SafeILog(Log));
 		}
 
 		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
@@ -157,7 +160,7 @@
 					checkConsumerHistoryModels.Add(new CheckHistoryModel
 						{
 							Id = res.Id,
-							Score = (int)consumerModel.Score,
+							Score = consumerModel.Score,
 							CII = cii,
 							Balance = consumerModel.ConsumerAccountsOverview.Balance_Total,
 							Date = res.InsertDate
@@ -644,13 +647,15 @@
 		private void BuildEBusinessModel(Customer customer, CreditBureauModel model,
 										 bool getFromLog = false, long? logId = null)
 		{
-			var srv = new EBusinessService();
 			var company = customer.Company;
-			if (company == null) return;
+			if (company == null)
+				return;
+
 			int updateCompanyDataPeriodDays;
-			switch (company.TypeOfBusiness.Reduce())
-			{
+
+			switch (company.TypeOfBusiness.Reduce()) {
 				case TypeOfBusinessReduced.Limited:
+					var srv = new EBusinessService(m_oDB);
 					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
 					updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 
@@ -664,6 +669,7 @@
 					model.CompanyName = company.CompanyName;
 					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
 					break;
+
 				case TypeOfBusinessReduced.NonLimited:
 					CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(context.UserId, customer.Id, company.ExperianRefNum);
 

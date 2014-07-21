@@ -16,7 +16,8 @@
 			var env = new Context.Environment(oLog);
 
 			lock (ms_oLock) {
-				ms_oDB = new SqlConnection(env, oLog);
+				if (ReferenceEquals(null, ms_oDB))
+					ms_oDB = new SqlConnection(env, oLog);
 			} // lock
 
 			return ms_oDB;

@@ -22,13 +22,12 @@
 
 		#region constructor
 
-		public EBusinessService() {
+		public EBusinessService(AConnection oDB) {
 			m_oRetryer = new SqlRetryer(oLog: ms_oLog);
 			eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
 			nonLimitedParser = new NonLimitedParser();
 
-			var env = new Ezbob.Context.Environment(ms_oLog);
-			m_oDB = new SqlConnection(env, ms_oLog);
+			m_oDB = oDB;
 		} // constructor
 
 		#endregion constructor
@@ -146,7 +145,9 @@
 				if (oExperianLtd == null) {
 					oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().CheckLtdCompanyCache(regNumber);
 
-					if (oExperianLtd == null) {
+					if ((oExperianLtd == null) || (oExperianLtd.ID == 0)) {
+						oExperianLtd = null;
+
 						if (!checkInCacheOnly)
 							oExperianLtd = DownloadOneLimitedFromExperian(regNumber, customerId);
 					}

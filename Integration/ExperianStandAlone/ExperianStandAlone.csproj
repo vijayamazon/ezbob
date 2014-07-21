@@ -93,6 +93,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Utils\StandaloneInitializer\StandaloneInitializer.csproj">
       <Project>{3b719d9d-7d14-4499-8ee9-5fdfd604453a}</Project>
       <Name>StandaloneInitializer</Name>

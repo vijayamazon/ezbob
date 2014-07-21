@@ -49,7 +49,7 @@
 			string dirPath2 = caisPath2 + "\\" + timeString;
 			Directory.CreateDirectory(dirPath);
 			Directory.CreateDirectory(dirPath2);
-			var service = new ExperianLib.Ebusiness.EBusinessService();
+			var service = new ExperianLib.Ebusiness.EBusinessService(DB);
 			DataTable dt = DB.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);

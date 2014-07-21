@@ -7,6 +7,8 @@ using StandaloneInitializer;
 [assembly: XmlConfigurator(ConfigFileExtension = "log4net", Watch = true)]
 namespace ExperianStandAlone
 {
+	using Ezbob.Database;
+
 	class Program
 	{
 		static void Main(string[] args)
@@ -25,6 +27,12 @@ namespace ExperianStandAlone
 
 				try
 				{
+			var oLog4NetCfg = new Log4Net().Init();
+
+			m_oLog = new ConsoleLog(new SafeILog(this));
+
+			m_oDB = new SqlConnection(oLog4NetCfg.Environment, m_oLog);
+
 					var service = new EBusinessService();
 					var refNum = args[1];
 					if (args[0] == "limited")
