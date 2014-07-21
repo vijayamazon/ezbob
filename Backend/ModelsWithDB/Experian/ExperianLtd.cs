@@ -97,6 +97,15 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		[DataMember]
 		[DL13("SIC1992DESC1")]
 		public string First1992SICCodeDescription { get; set; }
+		[DataMember]
+		[DL13("SIC1992CODE1")]
+		public string First1992SICCode { get; set; }
+		[DataMember]
+		[DL13("SIC1980DESC1")]
+		public string First1980SICCodeDescription { get; set; }
+		[DataMember]
+		[DL13("SIC1980CODE1")]
+		public string First1980SICCode { get; set; }
 
 		[DataMember]
 		[DL17("BANKSORTCODE")]

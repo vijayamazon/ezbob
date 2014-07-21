@@ -9,13 +9,20 @@
 	using Ezbob.Logger;
 
 	internal class ExperianParserForAnalytics {
-		public ExperianParserForAnalytics(AConnection oDB, ASafeLog oLog) {
+		#region constructor
+
+		public ExperianParserForAnalytics(int nCustomerID, AConnection oDB, ASafeLog oLog) {
+			m_nCustomerID = nCustomerID;
 			m_oLog = oLog;
 			m_oDB = oDB;
 		} // constructor
 
-		public void UpdateAnalytics(int customerId, int maxScore = -1) {
-			m_oLog.Debug("Updating customer analytics for customer {0}", customerId);
+		#endregion constructor
+
+		#region method UpdateAnalytics
+
+		public void UpdateAnalytics(decimal nMaxScore) {
+			m_oLog.Debug("Updating customer analytics for customer {0}...", m_nCustomerID);
 
 			string companyData = string.Empty;
 			string experianRefNum = string.Empty;
@@ -32,7 +39,7 @@
 				},
 				"GetPersonalInfoForExperianCompanyCheck",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
+				new QueryParameter("CustomerId", m_nCustomerID)
 			);
 
 			TypeOfBusinessReduced typeOfBusiness =
@@ -80,26 +87,22 @@
 			string sic1980Code1, sic1980Desc1, sic1992Code1, sic1992Desc1;
 			GetSicCodes(xmlDoc, out sic1980Code1, out sic1980Desc1, out sic1992Code1, out sic1992Desc1);
 
-			bool isLimited = typeOfBusiness == TypeOfBusinessReduced.Limited;
 			int ageOfMostRecentCcj, numOfCcjsInLast24Months, sumOfCcjsInLast24Months;
 			GetCcjs(xmlDoc, out ageOfMostRecentCcj, out numOfCcjsInLast24Months, out sumOfCcjsInLast24Months);
 
 			int score = GetScore(xmlDoc);
-			if (maxScore == -1)
-			{
-				maxScore = score;
-			}
 
 			int creditLimit = GetCreditLimit(xmlDoc);
 			DateTime? incorporationDate = GetIncorporationDate(xmlDoc);
 
-			m_oLog.Info("Inserting to analytics exoerian Score:{0} MaxScore:{1}", score, maxScore);
+			m_oLog.Info("Inserting to analytics Experian Score: {0} MaxScore: {1}.", score, nMaxScore);
+
 			m_oDB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateCompany",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", customerId),
+				new QueryParameter("CustomerID", m_nCustomerID),
 				new QueryParameter("Score", score),
-				new QueryParameter("MaxScore", maxScore),
+				new QueryParameter("MaxScore", (int)nMaxScore),
 				new QueryParameter("SuggestedAmount", creditLimit),
 				new QueryParameter("IncorporationDate", incorporationDate),
 				new QueryParameter("TangibleEquity", tangibleEquity),
@@ -114,8 +117,10 @@
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
 			);
 
-			m_oLog.Debug("Updating customer analytics for customer {0} and company '{1}' complete.", customerId, experianRefNum);
+			m_oLog.Debug("Updating customer analytics for customer {0} and company '{1}' complete.", m_nCustomerID, experianRefNum);
 		} // UpdateAnalytics
+
+		#endregion method UpdateAnalytics
 
 		private int GetScore(XmlDocument xmlDoc) {
 			XmlNodeList dl76Nodes = xmlDoc.SelectNodes("//DL76");
@@ -264,5 +269,6 @@
 
 		private readonly ASafeLog m_oLog;
 		private readonly AConnection m_oDB;
+		private readonly int m_nCustomerID;
 	} // class ExperianParserForAnalytics
 } // namespace

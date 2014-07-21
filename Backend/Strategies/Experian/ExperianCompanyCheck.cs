@@ -14,7 +14,6 @@
 			m_bForceCheck = bForceCheck;
 			m_bFoundCompany = false;
 
-			m_oParser = new ExperianParserForAnalytics(DB, Log);
 
 			oDB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
@@ -112,11 +111,8 @@
 			} // if
 
 			if (m_oExperianData.IsLimited)
-			{
-				m_oParser.UpdateAnalytics(m_nCustomerID, (int) MaxScore);
-			}
-			else
-			{
+				new ExperianParserForAnalytics(m_nCustomerID, DB, Log).UpdateAnalytics(MaxScore);
+			else {
 				DB.ExecuteNonQuery(
 					"CustomerAnalyticsUpdateNonLimitedCompany",
 					CommandSpecies.StoredProcedure,
@@ -167,7 +163,6 @@
 		private bool m_bIsLimited;
 		private string m_sExperianRefNum;
 		private BusinessReturnData m_oExperianData;
-		private readonly ExperianParserForAnalytics m_oParser;
 
 		#endregion fields
 
