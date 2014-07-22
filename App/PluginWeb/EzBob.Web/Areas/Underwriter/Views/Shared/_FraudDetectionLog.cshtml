@@ -1,30 +1,33 @@
 ﻿<script id="fraudDetectionLog" type="text/template">
-    <div class="box row">
-        <div class="box-content">
-            <button class="btn-primary btn" id="recheckFraud"><i class="fa fa-refresh"></i>Recheck</button><span>  Last check date: <%-checkDate == undefined ? 'Never checked' : EzBob.formatDate(checkDate)%></span>
-
-            <table class="table centered">
-                <thead class="box">
-                    <tr class="box-title">
-                        <th>Check Type</th>
-                        <th>Current Field</th>
-                        <th>Compare Field</th>
-                        <th style="width: 130px;">Value</th>
-                        <th>Concurrence</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%_.each(vals, function(val){%>
-                    <tr>
-                        <td class="break-word"><%-val.Type%></td>
-                        <td class="break-word"><%-val.CurrentField%></td>
-                        <td class="break-word"><%-val.CompareField || ''%></td>
-                        <td class="break-word"><%-val.Value || ''%></td>
-                        <td class="break-word"><%=val.Concurrence || ''%></td>
-                    </tr>
-                    <%})%>
-                </tbody>
-            </table>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-content">
+                    <button class="btn-primary btn" id="recheckFraud"><i class="fa fa-refresh"></i>Recheck</button><span>  Last check date: <%-checkDate == undefined ? 'Never checked' : EzBob.formatDate(checkDate)%></span>
+                    <table class="table centered">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <th>Check Type</th>
+                                <th>Current Field</th>
+                                <th>Compare Field</th>
+                                <th style="width: 130px;">Value</th>
+                                <th>Concurrence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%_.each(vals, function(val){%>
+                                <tr>
+                                    <td class="break-word"><%-val.Type%></td>
+                                    <td class="break-word"><%-val.CurrentField%></td>
+                                    <td class="break-word"><%-val.CompareField || ''%></td>
+                                    <td class="break-word"><%-val.Value || ''%></td>
+                                    <td class="break-word"><%=val.Concurrence || ''%></td>
+                                </tr>
+                            <%})%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </script>

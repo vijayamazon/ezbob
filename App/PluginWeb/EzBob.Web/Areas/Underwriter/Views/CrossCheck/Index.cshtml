@@ -38,648 +38,653 @@
 
     string sManualAddressTitle = "Customer has entered this address manually.";
 }
-<div class="box row">
-    <div class="box-content">
-
-        <h3>Summary</h3>
-        <table class="cross-check-summary-table table centered squeezed">
-            <tbody>
-                <tr>
-                    <th class="narrow-as-possible"><a href="javascript:document.getElementById('cross-check-business-info-section').scrollIntoView()">Company name</a></th>
-                    <td><b class="marking cross-check-summary-company-name"></b></td>
-                </tr>
-                <tr>
-                    <th class="narrow-as-possible"><a href="javascript:document.getElementById('cross-check-business-info-section').scrollIntoView()">Company address</a></th>
-                    <td><b class="marking cross-check-summary-company-address"></b></td>
-                </tr>
-                <tr>
-                    <th class="narrow-as-possible"><a href="javascript:document.getElementById('cross-check-directors-section').scrollIntoView()">Directors</a></th>
-                    <td><b class="marking cross-check-summary-directors"></b></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h3>Personal info</h3>
-        <table class="table centered squeezed cross-check-director-details" director-name="@string.Join("\n", new[] { Model.Application.FirstName, Model.Application.MiddleInitial, Model.Application.Surname })">
-            <thead class="box">
-                <tr class="box-title">
-                    <th style="width: 20%;">Personal Info</th>
-                    <th style="width: 20%;">Application</th>
-                    <th style="width: 30%;">eBay</th>
-                    <th style="width: 30%;">PayPal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>E-Mail</b><b class="marking pull-right @Model.CrossCheckStatus.Email"></b></td>
-                    <td class="cross-check-customer-email" isoffline="@{ WriteLiteral(Model.Customer.SegmentType() == "Offline" ? "y" : "n"); }">@Model.Application.Email</td>
-                    <td>@Model.EBay.Email</td>
-                    <td>@Model.PayPal.Email</td>
-                </tr>
-                <tr>
-                    <td><b>Billing Email</b></td>
-                    <td></td>
-                    <td>@Model.EBay.BillingEmail</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><b>FirstName</b><b class="marking pull-right  @Model.CrossCheckStatus.FirstName"></b></td>
-                    <td class="@sNameClass" title="@sNameTitle">@Model.Application.FirstName</td>
-                    <td>@Model.EBay.FirstName</td>
-                    <td>@Model.PayPal.FirstName</td>
-                </tr>
-                <tr>
-                    <td><b>MiddleInitial</b><b class="marking pull-right  @Model.CrossCheckStatus.MiddleInitial"></b> </td>
-                    <td class="@sNameClass" title="@sNameTitle">@Model.Application.MiddleInitial</td>
-                    <td>@Model.EBay.MiddleInitial</td>
-                    <td>@Model.PayPal.MiddleInitial</td>
-                </tr>
-                <tr>
-                    <td><b>Surname</b><b class="marking pull-right  @Model.CrossCheckStatus.Surname"></b></td>
-                    <td class="@sNameClass" title="@sNameTitle">@Model.Application.Surname</td>
-                    <td>@Model.EBay.Surname</td>
-                    <td>@Model.PayPal.Surname</td>
-                </tr>
-                <tr>
-                    <td><b>Fullname</b><b class="marking pull-right  @Model.CrossCheckStatus.FullName"></b></td>
-                    <td>@Model.Application.Fullname</td>
-                    <td>@Model.EBay.Fullname</td>
-                    <td>@Model.PayPal.Fullname</td>
-                </tr>
-                <tr>
-                    <td><b>Date Of Birth</b><b class="marking pull-right  @Model.CrossCheckStatus.DateOfBirth"></b></td>
-                    <td>@GetDate(Model.Application.DateOfBirth) @( Model.Application.DateOfBirth != null ? "(" + (DateTime.Now.Year - (Model.Application.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
-                    <td>@GetDate(Model.EBay.DateOfBirth) @( Model.EBay.DateOfBirth != null ? "(" + (DateTime.Now.Year - (Model.EBay.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
-                    <td>@GetDate(Model.PayPal.DateOfBirth) @( Model.PayPal.DateOfBirth != null ? "(" + (DateTime.Now.Year - (Model.PayPal.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
-                </tr>
-                <tr>
-                    <td><b>Mobile Phone</b></td>
-                    <td>@Model.Application.MobilePhone</td>
-                    <td>@Model.EBay.MobilePhone</td>
-                    <td>@Model.PayPal.MobilePhone</td>
-                </tr>
-                <tr>
-                    <td><b>Residential Status</b></td>
-                    <td>@Model.Application.ResidentialStatus</td>
-                    <td>@Model.EBay.ResidentialStatus</td>
-                    <td>@Model.PayPal.ResidentialStatus</td>
-                </tr>
-                <tr>
-                    <td><b>Gender</b></td>
-                    <td>@Model.Application.Gender</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><b>Marital Status</b></td>
-                    <td>@Model.Application.MaritalStatus</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><b>Type Of Business</b><b class="marking pull-right  @Model.CrossCheckStatus.TypeOfBussnes"></b></td>
-                    <td>@Model.Customer.PersonalInfo.TypeOfBusiness</td>
-                    <td>@Model.EBay.SellerInfo.SellerInfoSellerBusinessType</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><b>Industry Type</b><b class="marking pull-right  @Model.CrossCheckStatus.TypeOfBussnes"></b></td>
-                    <td>@Model.Customer.PersonalInfo.IndustryType.DescriptionAttr()</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><b>Daytime Phone</b><b class="marking pull-right  @Model.CrossCheckStatus.DaytimePhone"></b></td>
-                    <td>@Model.Application.DaytimePhone</td>
-                    <td>@Model.EBay.DaytimePhone</td>
-                    <td>@Model.PayPal.DaytimePhone</td>
-                </tr>
-                <tr>
-                    <td><b>Business Name</b><b class="marking pull-right  @Model.CrossCheckStatus.BusinessName"></b></td>
-                    <td></td>
-                    <td></td>
-                    <td>@Model.PayPal.BusinessName</td>
-                </tr>
-                <tr>
-                    <td><b>SkypeID</b></td>
-                    <td></td>
-                    <td>@Model.EBay.SkypeID</td>
-                    <td></td>
-                </tr>
-
-                @if (@Model.Customer.PersonalInfo.TypeOfBusiness == TypeOfBusiness.Entrepreneur)
-                {
-                    <tr>
-                        <td><b>Overall turnover</b></td>
-                        <td>@Model.Customer.PersonalInfo.OverallTurnOver</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>WebSite turnover</b></td>
-                        <td>@Model.Customer.PersonalInfo.WebSiteTurnOver</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <h3>Residential address</h3>
-        <table class="table centered squeezed">
-            <thead class="box">
-                <tr class="box-title">
-                    <th style="width: 20%;">Address</th>
-                    <th style="width: 20%;">Current</th>
-                    <th style="width: 20%;">Previous</th>
-                    <th style="width: 20%;">eBay seller</th>
-                    <th style="width: 20%;">PayPal</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.CurrentAddress != null)
-                {
-                    <tr>
-                        <td><b>Line1</b><b class="marking pull-right  @Model.CrossCheckStatus.Line1"></b></td>
-                        <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Line1</td>
-                        <td>@Model.PrevAddress.Line1</td>
-                        <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street</td>
-                        <td>@Model.PayPalAddress.Line1</td>
-                    </tr>
-                    <tr>
-                        <td><b>Line2</b><b class="marking pull-right  @Model.CrossCheckStatus.Line2"></b></td>
-                        <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
-                            {
-                                WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
-                            }>@Model.CurrentAddress.Line2</td>
-                        <td>@Model.PrevAddress.Line2</td>
-                        <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street1</td>
-                        <td>@Model.PayPalAddress.Line2</td>
-                    </tr>
-                    <tr>
-                        <td><b>Line3</b></td>
-                        <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
-                            {
-                                WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
-                            }>@Model.CurrentAddress.Line3</td>
-                        <td>@Model.PrevAddress.Line3</td>
-                        <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street2</td>
-                        <td>@Model.PayPalAddress.Line3</td>
-                    </tr>
-                    <tr>
-                        <td><b>Town</b><b class="marking pull-right  @Model.CrossCheckStatus.Town"></b></td>
-                        <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
-                            {
-                                WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
-                            }>@Model.CurrentAddress.Town</td>
-                        <td>@Model.PrevAddress.Town</td>
-                        <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CityName</td>
-                        <td>@Model.PayPalAddress.Town</td>
-                    </tr>
-                    <tr>
-                        <td><b>County</b><b class="marking pull-right @Model.CrossCheckStatus.County"></b></td>
-                        <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
-                            {
-                                WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
-                            }>@Model.CurrentAddress.County</td>
-                        <td>@Model.PrevAddress.County</td>
-                        <td>@Model.EBay.SellerInfo.SellerPaymentAddress.County</td>
-                        <td>@Model.PayPalAddress.County</td>
-                    </tr>
-                    <tr>
-                        <td><b>Postcode</b><b class="marking pull-right  @Model.CrossCheckStatus.Postcode"></b></td>
-                        <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
-                            {
-                                WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
-                            }>@Model.CurrentAddress.Postcode</td>
-                        <td>@Model.PrevAddress.Postcode</td>
-                        <td>@Model.EBay.SellerInfo.SellerPaymentAddress.PostalCode</td>
-                        <td>@Model.PayPalAddress.Postcode</td>
-                    </tr>
-                    <tr>
-                        <td><b>Country</b><b class="marking pull-right @Model.CrossCheckStatus.Country"></b></td>
-                        <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
-                            {
-                                WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
-                            }>@Model.CurrentAddress.Country</td>
-                        <td>@Model.PrevAddress.Country</td>
-                        <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CountryName</td>
-                        <td>@Model.PayPalAddress.Country</td>
-                    </tr>
-                }
-                <tr>
-                    <td><b>Zoopla LR Copy Image</b></td>
-                    <td>@copyAddress("Current", @Model.CurrentAddress)</td>
-                    <td>@copyAddress("Previous", @Model.PrevAddress)</td>
-                    <td>@copyAddress("Ebay", @Model.EBayAddress)</td>
-                    <td>@copyAddress("PayPal", @Model.PayPalAddress)</td>
-                </tr>
-                <tr>
-                    <td><b>Zoopla Estimate</b></td>
-                    <td colspan="4">@if (Model.CurrentAddress != null)
-                                    {
-                        @GetZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaAverage, Model.CurrentAddress.ZooplaUpdateDate);
-                                    }
-                        <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Mortgage</b></td>
-                    <td colspan="4">@GetMortgage()</td>
-                </tr>
-                <tr>
-                    <td><b>Property net worth</b></td>
-                    <td colspan="4">
-                        @if (@Model.Application.ResidentialStatus != null && Model.Application.ResidentialStatus.Contains("Home owner"))
-                        {
-                            @Html.Raw("£")
-                            @Model.AssetWorth.ToString("N0")
-                        }
-                        else
-                        {
-                            @Html.Raw("Not home owner")
-                        }
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        @if (Model.LandRegistries.Any())
-        {
-            <div class="box">
-                <div class="box-title">
-                    <h3>Land Registry</h3>
-                </div>
-                <div class="box-content">
-                    @foreach (var lr in Model.LandRegistries)
-                    {
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" href="#@lr.TitleNumber">Title Number: @lr.TitleNumber</a>
-                        </div>
-                        <div id="@lr.TitleNumber" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                @LandRegistryRes(lr)
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
-
-        @if (Model.Customer.SegmentType() == "Offline")
-        {
-            <table class="table centered squeezed">
-                <thead class="box">
-                    <tr class="box-title">
-                        <th colspan="2">
-                            <h3>Other property ownership</h3>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.OtherPropertyAddress == null)
-                    {
-                        <tr>
-                            <td colspan="2">Does not own another property</td>
-                        </tr>
-                    }
-                    else
-                    {
-                        <tr>
-                            <td><b>Line1</b></td>
-                            <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line1</td>
-                        </tr>
-                        <tr>
-                            <td><b>Line2</b></td>
-                            <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line2</td>
-                        </tr>
-                        <tr>
-                            <td><b>Line3</b></td>
-                            <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line3</td>
-                        </tr>
-                        <tr>
-                            <td><b>Town</b></td>
-                            <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Town</td>
-                        </tr>
-                        <tr>
-                            <td><b>County</b></td>
-                            <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.County</td>
-                        </tr>
-                        <tr>
-                            <td><b>Postcode</b></td>
-                            <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Postcode</td>
-                        </tr>
-                        <tr>
-                            <td><b>Country</b></td>
-                            <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Country</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-
-        @{
-            string companyRefNum = null, companyNum = null, companyName = null, industryType = null, vatReporting = null;
-            Iesi.Collections.Generic.ISet<CustomerAddress> postcode = null;
-            bool propertyOwnedByCompany = false;
-            var company = Model.Customer.Company;
-
-            var companyType = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? "L" : "N");
-            industryType = Model.Customer.PersonalInfo.IndustryType.DescriptionAttr<IndustryType?>();
-            if (company != null)
-            {
-                companyRefNum = company.ExperianRefNum;
-                companyNum = company.CompanyNumber;
-                postcode = company.CompanyAddress; //todo experian
-                companyName = company.CompanyName; //todo experian
-                propertyOwnedByCompany = company.PropertyOwnedByCompany.HasValue ? company.PropertyOwnedByCompany.Value : false;
-                vatReporting = company.VatReporting.DescriptionAttr<VatReporting?>();
-            }
+<div class="row">
+    <div class="col-md-12">
     
-        }
 
-        <h3 id="cross-check-business-info-section">Business info</h3>
-        <table class="table centered squeezed">
-            <thead class="box">
-                <tr class="box-title">
-                    <th></th>
-                    <th>Application</th>
-                    <th>Experian</th>
-                    <th class="hmrc">HMRC</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>Business Type</b></td>
-                    <td>@Model.Customer.PersonalInfo.TypeOfBusinessName</td>
-                    <td></td>
-                    <td class="hmrc"></td>
-                </tr>
-                <tr>
-                    <td><b>Industry Type</b></td>
-                    <td>@industryType</td>
-                    <td></td>
-                    <td class="hmrc"></td>
-                </tr>
-                @if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() != TypeOfBusinessReduced.Personal)
-                {
-                    <tr>
-                        <td><b>Targeting Status</b></td>
-                        <td>
-                            <a class="btn btn-mini pull-right @(String.IsNullOrEmpty(companyRefNum) ? "btn-primary" : "btn-success") disabled" style="margin-left: 10px;">
-                                <i class="@(String.IsNullOrEmpty(companyRefNum) ? "fa fa-times" : "fa fa-check")"></i>
-                                @(String.IsNullOrEmpty(companyRefNum) ? "Not performed" : "Performed")
-                            </a>
-                            <a id="recheck-targeting"
-                    class="btn btn-mini btn-primary pull-right"
-                    href="#"
-                    data-postcode="@postcode.Select(x => x.Postcode).FirstOrDefault()"
-                    data-company-name="@companyName"
-                    data-company-legal-status="@companyType"
-                    data-company-number="@companyNum">Recheck</a>
-                        </td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr>
+        <div class="box row">
+            <div class="box-content">
 
-                    <tr>
-                        <td><b>Ref Number</b></td>
-                        <td>@companyRefNum</td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr> 
-         
-                    if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.NonLimited)
-                    {
-                    <tr>
-                        <td><b>Time In Business</b></td>
-                        <td>@(company != null ? company.TimeInBusiness : "")</td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr>
-                    }
-
-                    if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
-                    {
-                    <tr>
-                        <td><b>Company Number</b></td>
-                        <td>@(companyNum ?? "")</td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr>
-                    }
-
-                    <tr id="cross-check-company-name">
-                        <td><b>Company Name</b><b class="marking pull-right checkoutcome"></b></td>
-                        <td class="application">@((companyName ?? "").ToUpper())</td>
-                        <td class="experian"></td>
-                        <td class="hmrc"></td>
-                    </tr>
-                    <tr id="cross-check-company-address">
-                        <td><b>Company Address</b><b class="marking pull-right checkoutcome"></b></td>
-                        @{
-                    string sCrossCheckCompanyAddress = "";
-                    CustomerAddress oCompanyAddress = null;
-
-                    switch (Model.Customer.PersonalInfo.TypeOfBusiness)
-                    {
-                        case TypeOfBusiness.LLP:
-                        case TypeOfBusiness.Limited:
-                            oCompanyAddress = company.CompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
-                            break;
-
-                        case TypeOfBusiness.PShip:
-                        case TypeOfBusiness.PShip3P:
-                        case TypeOfBusiness.SoleTrader:
-                            oCompanyAddress = company.CompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
-                            break;
-                    } // switch
-
-                    if (oCompanyAddress != null)
-                    {
-                        sCrossCheckCompanyAddress = string.Join("\n",
-                            oCompanyAddress.AddressArray()
-                            .Where(s => !string.IsNullOrWhiteSpace(s))
-                            .Select(s => s.Replace(".", "").Trim())
-                            .Where(s => !string.IsNullOrWhiteSpace(s))
-                        ).ToUpper();
-                    } // if
-                        }
-                        <td class="application" @if ((oCompanyAddress != null) && oCompanyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@sCrossCheckCompanyAddress</td>
-                        <td class="experian"></td>
-                        <td class="hmrc"></td>
-                    </tr>
-                    <tr>
-                        <td><b>Time At Address</b></td>
-                        <td>@(company != null ? company.TimeAtAddress : null)</td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr>
-                    <tr>
-                        <td><b>Business Phone</b></td>
-                        <td>@(company != null ? company.BusinessPhone : "")</td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr>
-
-                                                if (Model.Customer.SegmentType() == "Offline")
-                                                {
-                    <tr>
-                        <td><b>Property owned by company</b></td>
-                        <td>@(propertyOwnedByCompany ? "Yes" : "No")</td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr>
-
-                                                    if (!propertyOwnedByCompany)
-                                                    {
-                    <tr>
-                        <td><b>How many years in the property</b></td>
-                        <td>@(company.YearsInCompany)</td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr>
-                    <tr>
-                        <td><b>How many month are left for the rent contract</b></td>
-                        <td>@(company.RentMonthLeft)</td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr>
-                                                    }
-                                                }
-                    <tr>
-                        <td><b>VAT Reporting</b></td>
-                        <td>@vatReporting</td>
-                        <td></td>
-                        <td class="hmrc"></td>
-                    </tr> 
-                }
-            </tbody>
-        </table>
-
-        <h3 id="cross-check-directors-section">Directors
-    @if (Model.Customer.PersonalInfo.TypeOfBusiness != TypeOfBusiness.Entrepreneur)
-    {
-        <button class="btn btn-mini btn-primary add-director">Add director</button>
-    }
-        </h3>
-
-        <div class="alert duplicate-director-detected" style="display: none;">You are going to add a duplicate director.</div>
-
-        <div class="add-director-container"></div>
-
-        <fieldset id="cross-check-experian-only-directors">
-            <legend>Directors received from Experian and not specified by the customer</legend>
-            <ul></ul>
-        </fieldset>
-
-        @if (Model.Directors.Count == 0)
-        {
-            <text>Customer did not specify any additional directors.</text>
-        }
-
-        @for (int i = 0; i < Model.Directors.Count; i++)
-        {
-            var d = Model.Directors[i];
-            var addressInfo = d.DirectorAddressInfo;
-            var address = addressInfo != null && addressInfo.AllAddresses.Any() ? addressInfo.AllAddresses.First() : new CustomerAddress() { Id = String.Empty };
-
-            CrossCheckModel.TriState nIsKnownDirector = Model.IsExperianDirector(d);
-
-            string sDirNameClass = "";
-            string sDirNameTitle = "";
-
-            switch (nIsKnownDirector)
-            {
-                case CrossCheckModel.TriState.No:
-                    sDirNameClass = "unknown-as-experian-director";
-                    sDirNameTitle = "Not found in Experian directors list.";
-                    break;
-
-                case CrossCheckModel.TriState.Yes:
-                    sDirNameClass = "known-as-experian-director";
-                    sDirNameTitle = "Found in Experian directors list.";
-                    break;
-
-                default:
-                    sDirNameTitle = "No data in Experian directors list.";
-                    break;
-            } // switch
-
-
-            <fieldset>
-                <legend>Director #@(i + 1) Info</legend>
-
-                <table class="table table-bordered cross-check-director-details" director-name="@string.Join("\n", new[] { d.Name, d.Middle, d.Surname })">
+                <h3>Summary</h3>
+                <table class="cross-check-summary-table table centered squeezed">
                     <tbody>
                         <tr>
-                            <td><b>Name</b></td>
-                            <td class="@sDirNameClass" title="@sDirNameTitle">@d.Name</td>
+                            <th class="narrow-as-possible"><a href="javascript:document.getElementById('cross-check-business-info-section').scrollIntoView()">Company name</a></th>
+                            <td><b class="marking cross-check-summary-company-name"></b></td>
                         </tr>
                         <tr>
-                            <td><b>Middle</b></td>
-                            <td class="@sDirNameClass" title="@sDirNameTitle">@d.Middle</td>
+                            <th class="narrow-as-possible"><a href="javascript:document.getElementById('cross-check-business-info-section').scrollIntoView()">Company address</a></th>
+                            <td><b class="marking cross-check-summary-company-address"></b></td>
                         </tr>
                         <tr>
-                            <td><b>Surname</b></td>
-                            <td class="@sDirNameClass" title="@sDirNameTitle">@d.Surname</td>
-                        </tr>
-                        <tr>
-                            <td><b>Gender</b></td>
-                            <td>@d.Gender</td>
-                        </tr>
-                        <tr>
-                            <td><b>Date Of Birth</b></td>
-                            <td>@GetDate(d.DateOfBirth) @( d.DateOfBirth != null ? "(" + (DateTime.Now.Year - (d.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
-                        </tr>
-                        <tr>
-                            <td><b>Email</b></td>
-                            <td>@d.Email</td>
-                        </tr>
-                        <tr>
-                            <td><b>Phone</b></td>
-                            <td>@d.Phone</td>
-                        </tr>
-                        <tr>
-                            <td><b>Organisation</b></td>
-                            <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Organisation</td>
-                        </tr>
-                        <tr>
-                            <td><b>Line1</b></td>
-                            <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Line1</td>
-                        </tr>
-                        <tr>
-                            <td><b>Line2</b></td>
-                            <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Line2</td>
-                        </tr>
-                        <tr>
-                            <td><b>Line3</b></td>
-                            <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Line3</td>
-                        </tr>
-                        <tr>
-                            <td><b>Town</b></td>
-                            <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Town</td>
-                        </tr>
-                        <tr>
-                            <td><b>County</b></td>
-                            <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.County</td>
-                        </tr>
-                        <tr>
-                            <td><b>Postcode</b></td>
-                            <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Postcode</td>
-                        </tr>
-                        <tr>
-                            <td><b>Country</b></td>
-                            <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Country</td>
+                            <th class="narrow-as-possible"><a href="javascript:document.getElementById('cross-check-directors-section').scrollIntoView()">Directors</a></th>
+                            <td><b class="marking cross-check-summary-directors"></b></td>
                         </tr>
                     </tbody>
                 </table>
-            </fieldset>
-        }
 
+                <h3>Personal info</h3>
+                <table class="table centered squeezed cross-check-director-details" director-name="@string.Join("\n", new[] { Model.Application.FirstName, Model.Application.MiddleInitial, Model.Application.Surname })">
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th style="width: 20%;">Personal Info</th>
+                            <th style="width: 20%;">Application</th>
+                            <th style="width: 30%;">eBay</th>
+                            <th style="width: 30%;">PayPal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>E-Mail</b><b class="marking pull-right @Model.CrossCheckStatus.Email"></b></td>
+                            <td class="cross-check-customer-email" isoffline="@{ WriteLiteral(Model.Customer.SegmentType() == "Offline" ? "y" : "n"); }">@Model.Application.Email</td>
+                            <td>@Model.EBay.Email</td>
+                            <td>@Model.PayPal.Email</td>
+                        </tr>
+                        <tr>
+                            <td><b>Billing Email</b></td>
+                            <td></td>
+                            <td>@Model.EBay.BillingEmail</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><b>FirstName</b><b class="marking pull-right  @Model.CrossCheckStatus.FirstName"></b></td>
+                            <td class="@sNameClass" title="@sNameTitle">@Model.Application.FirstName</td>
+                            <td>@Model.EBay.FirstName</td>
+                            <td>@Model.PayPal.FirstName</td>
+                        </tr>
+                        <tr>
+                            <td><b>MiddleInitial</b><b class="marking pull-right  @Model.CrossCheckStatus.MiddleInitial"></b> </td>
+                            <td class="@sNameClass" title="@sNameTitle">@Model.Application.MiddleInitial</td>
+                            <td>@Model.EBay.MiddleInitial</td>
+                            <td>@Model.PayPal.MiddleInitial</td>
+                        </tr>
+                        <tr>
+                            <td><b>Surname</b><b class="marking pull-right  @Model.CrossCheckStatus.Surname"></b></td>
+                            <td class="@sNameClass" title="@sNameTitle">@Model.Application.Surname</td>
+                            <td>@Model.EBay.Surname</td>
+                            <td>@Model.PayPal.Surname</td>
+                        </tr>
+                        <tr>
+                            <td><b>Fullname</b><b class="marking pull-right  @Model.CrossCheckStatus.FullName"></b></td>
+                            <td>@Model.Application.Fullname</td>
+                            <td>@Model.EBay.Fullname</td>
+                            <td>@Model.PayPal.Fullname</td>
+                        </tr>
+                        <tr>
+                            <td><b>Date Of Birth</b><b class="marking pull-right  @Model.CrossCheckStatus.DateOfBirth"></b></td>
+                            <td>@GetDate(Model.Application.DateOfBirth) @( Model.Application.DateOfBirth != null ? "(" + (DateTime.Now.Year - (Model.Application.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
+                            <td>@GetDate(Model.EBay.DateOfBirth) @( Model.EBay.DateOfBirth != null ? "(" + (DateTime.Now.Year - (Model.EBay.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
+                            <td>@GetDate(Model.PayPal.DateOfBirth) @( Model.PayPal.DateOfBirth != null ? "(" + (DateTime.Now.Year - (Model.PayPal.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
+                        </tr>
+                        <tr>
+                            <td><b>Mobile Phone</b></td>
+                            <td>@Model.Application.MobilePhone</td>
+                            <td>@Model.EBay.MobilePhone</td>
+                            <td>@Model.PayPal.MobilePhone</td>
+                        </tr>
+                        <tr>
+                            <td><b>Residential Status</b></td>
+                            <td>@Model.Application.ResidentialStatus</td>
+                            <td>@Model.EBay.ResidentialStatus</td>
+                            <td>@Model.PayPal.ResidentialStatus</td>
+                        </tr>
+                        <tr>
+                            <td><b>Gender</b></td>
+                            <td>@Model.Application.Gender</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><b>Marital Status</b></td>
+                            <td>@Model.Application.MaritalStatus</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><b>Type Of Business</b><b class="marking pull-right  @Model.CrossCheckStatus.TypeOfBussnes"></b></td>
+                            <td>@Model.Customer.PersonalInfo.TypeOfBusiness</td>
+                            <td>@Model.EBay.SellerInfo.SellerInfoSellerBusinessType</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><b>Industry Type</b><b class="marking pull-right  @Model.CrossCheckStatus.TypeOfBussnes"></b></td>
+                            <td>@Model.Customer.PersonalInfo.IndustryType.DescriptionAttr()</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><b>Daytime Phone</b><b class="marking pull-right  @Model.CrossCheckStatus.DaytimePhone"></b></td>
+                            <td>@Model.Application.DaytimePhone</td>
+                            <td>@Model.EBay.DaytimePhone</td>
+                            <td>@Model.PayPal.DaytimePhone</td>
+                        </tr>
+                        <tr>
+                            <td><b>Business Name</b><b class="marking pull-right  @Model.CrossCheckStatus.BusinessName"></b></td>
+                            <td></td>
+                            <td></td>
+                            <td>@Model.PayPal.BusinessName</td>
+                        </tr>
+                        <tr>
+                            <td><b>SkypeID</b></td>
+                            <td></td>
+                            <td>@Model.EBay.SkypeID</td>
+                            <td></td>
+                        </tr>
+
+                        @if (@Model.Customer.PersonalInfo.TypeOfBusiness == TypeOfBusiness.Entrepreneur)
+                        {
+                            <tr>
+                                <td><b>Overall turnover</b></td>
+                                <td>@Model.Customer.PersonalInfo.OverallTurnOver</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><b>WebSite turnover</b></td>
+                                <td>@Model.Customer.PersonalInfo.WebSiteTurnOver</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <h3>Residential address</h3>
+                <table class="table centered squeezed">
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th style="width: 20%;">Address</th>
+                            <th style="width: 20%;">Current</th>
+                            <th style="width: 20%;">Previous</th>
+                            <th style="width: 20%;">eBay seller</th>
+                            <th style="width: 20%;">PayPal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.CurrentAddress != null)
+                        {
+                            <tr>
+                                <td><b>Line1</b><b class="marking pull-right  @Model.CrossCheckStatus.Line1"></b></td>
+                                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Line1</td>
+                                <td>@Model.PrevAddress.Line1</td>
+                                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street</td>
+                                <td>@Model.PayPalAddress.Line1</td>
+                            </tr>
+                            <tr>
+                                <td><b>Line2</b><b class="marking pull-right  @Model.CrossCheckStatus.Line2"></b></td>
+                                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                                    {
+                                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                                    }>@Model.CurrentAddress.Line2</td>
+                                <td>@Model.PrevAddress.Line2</td>
+                                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street1</td>
+                                <td>@Model.PayPalAddress.Line2</td>
+                            </tr>
+                            <tr>
+                                <td><b>Line3</b></td>
+                                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                                    {
+                                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                                    }>@Model.CurrentAddress.Line3</td>
+                                <td>@Model.PrevAddress.Line3</td>
+                                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street2</td>
+                                <td>@Model.PayPalAddress.Line3</td>
+                            </tr>
+                            <tr>
+                                <td><b>Town</b><b class="marking pull-right  @Model.CrossCheckStatus.Town"></b></td>
+                                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                                    {
+                                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                                    }>@Model.CurrentAddress.Town</td>
+                                <td>@Model.PrevAddress.Town</td>
+                                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CityName</td>
+                                <td>@Model.PayPalAddress.Town</td>
+                            </tr>
+                            <tr>
+                                <td><b>County</b><b class="marking pull-right @Model.CrossCheckStatus.County"></b></td>
+                                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                                    {
+                                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                                    }>@Model.CurrentAddress.County</td>
+                                <td>@Model.PrevAddress.County</td>
+                                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.County</td>
+                                <td>@Model.PayPalAddress.County</td>
+                            </tr>
+                            <tr>
+                                <td><b>Postcode</b><b class="marking pull-right  @Model.CrossCheckStatus.Postcode"></b></td>
+                                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                                    {
+                                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                                    }>@Model.CurrentAddress.Postcode</td>
+                                <td>@Model.PrevAddress.Postcode</td>
+                                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.PostalCode</td>
+                                <td>@Model.PayPalAddress.Postcode</td>
+                            </tr>
+                            <tr>
+                                <td><b>Country</b><b class="marking pull-right @Model.CrossCheckStatus.Country"></b></td>
+                                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                                    {
+                                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                                    }>@Model.CurrentAddress.Country</td>
+                                <td>@Model.PrevAddress.Country</td>
+                                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CountryName</td>
+                                <td>@Model.PayPalAddress.Country</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td><b>Zoopla LR Copy Image</b></td>
+                            <td>@copyAddress("Current", @Model.CurrentAddress)</td>
+                            <td>@copyAddress("Previous", @Model.PrevAddress)</td>
+                            <td>@copyAddress("Ebay", @Model.EBayAddress)</td>
+                            <td>@copyAddress("PayPal", @Model.PayPalAddress)</td>
+                        </tr>
+                        <tr>
+                            <td><b>Zoopla Estimate</b></td>
+                            <td colspan="4">@if (Model.CurrentAddress != null)
+                                            {
+                                                @GetZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaAverage, Model.CurrentAddress.ZooplaUpdateDate);
+                                            }
+                                <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Mortgage</b></td>
+                            <td colspan="4">@GetMortgage()</td>
+                        </tr>
+                        <tr>
+                            <td><b>Property net worth</b></td>
+                            <td colspan="4">
+                                @if (@Model.Application.ResidentialStatus != null && Model.Application.ResidentialStatus.Contains("Home owner"))
+                                {
+                                    @Html.Raw("£")
+                                    @Model.AssetWorth.ToString("N0")
+                                }
+                                else
+                                {
+                                    @Html.Raw("Not home owner")
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                @if (Model.LandRegistries.Any())
+                {
+                    <div class="box">
+                        <div class="box-title">
+                            <h3>Land Registry</h3>
+                        </div>
+                        <div class="box-content">
+                            @foreach (var lr in Model.LandRegistries)
+                            {
+                                <div class="accordion-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" href="#@lr.TitleNumber">Title Number: @lr.TitleNumber</a>
+                                </div>
+                                <div id="@lr.TitleNumber" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        @LandRegistryRes(lr)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.Customer.SegmentType() == "Offline")
+                {
+                    <table class="table centered squeezed">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <th colspan="2">
+                                    <h3>Other property ownership</h3>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.OtherPropertyAddress == null)
+                            {
+                                <tr>
+                                    <td colspan="2">Does not own another property</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td><b>Line1</b></td>
+                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line1</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Line2</b></td>
+                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line2</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Line3</b></td>
+                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line3</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Town</b></td>
+                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Town</td>
+                                </tr>
+                                <tr>
+                                    <td><b>County</b></td>
+                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.County</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Postcode</b></td>
+                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Postcode</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Country</b></td>
+                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Country</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+
+                @{
+                    string companyRefNum = null, companyNum = null, companyName = null, industryType = null, vatReporting = null;
+                    Iesi.Collections.Generic.ISet<CustomerAddress> postcode = null;
+                    bool propertyOwnedByCompany = false;
+                    var company = Model.Customer.Company;
+
+                    var companyType = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? "L" : "N");
+                    industryType = Model.Customer.PersonalInfo.IndustryType.DescriptionAttr<IndustryType?>();
+                    if (company != null)
+                    {
+                        companyRefNum = company.ExperianRefNum;
+                        companyNum = company.CompanyNumber;
+                        postcode = company.CompanyAddress; //todo experian
+                        companyName = company.CompanyName; //todo experian
+                        propertyOwnedByCompany = company.PropertyOwnedByCompany.HasValue ? company.PropertyOwnedByCompany.Value : false;
+                        vatReporting = company.VatReporting.DescriptionAttr<VatReporting?>();
+                    }
+    
+                }
+
+                <h3 id="cross-check-business-info-section">Business info</h3>
+                <table class="table centered squeezed">
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th></th>
+                            <th>Application</th>
+                            <th>Experian</th>
+                            <th class="hmrc">HMRC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Business Type</b></td>
+                            <td>@Model.Customer.PersonalInfo.TypeOfBusinessName</td>
+                            <td></td>
+                            <td class="hmrc"></td>
+                        </tr>
+                        <tr>
+                            <td><b>Industry Type</b></td>
+                            <td>@industryType</td>
+                            <td></td>
+                            <td class="hmrc"></td>
+                        </tr>
+                        @if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() != TypeOfBusinessReduced.Personal)
+                        {
+                            <tr>
+                                <td><b>Targeting Status</b></td>
+                                <td>
+                                    <a class="btn btn-mini pull-right @(String.IsNullOrEmpty(companyRefNum) ? "btn-primary" : "btn-success") disabled" style="margin-left: 10px;">
+                                        <i class="@(String.IsNullOrEmpty(companyRefNum) ? "fa fa-times" : "fa fa-check")"></i>
+                                        @(String.IsNullOrEmpty(companyRefNum) ? "Not performed" : "Performed")
+                                    </a>
+                                    <a id="recheck-targeting"
+                                       class="btn btn-mini btn-primary pull-right"
+                                       href="#"
+                                       data-postcode="@postcode.Select(x => x.Postcode).FirstOrDefault()"
+                                       data-company-name="@companyName"
+                                       data-company-legal-status="@companyType"
+                                       data-company-number="@companyNum">Recheck</a>
+                                </td>
+                                <td></td>
+                                <td class="hmrc"></td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Ref Number</b></td>
+                                <td>@companyRefNum</td>
+                                <td></td>
+                                <td class="hmrc"></td>
+                            </tr> 
+         
+                            if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.NonLimited)
+                            {
+                                <tr>
+                                    <td><b>Time In Business</b></td>
+                                    <td>@(company != null ? company.TimeInBusiness : "")</td>
+                                    <td></td>
+                                    <td class="hmrc"></td>
+                                </tr>
+                            }
+
+                            if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
+                            {
+                                <tr>
+                                    <td><b>Company Number</b></td>
+                                    <td>@(companyNum ?? "")</td>
+                                    <td></td>
+                                    <td class="hmrc"></td>
+                                </tr>
+                            }
+
+                            <tr id="cross-check-company-name">
+                                <td><b>Company Name</b><b class="marking pull-right checkoutcome"></b></td>
+                                <td class="application">@((companyName ?? "").ToUpper())</td>
+                                <td class="experian"></td>
+                                <td class="hmrc"></td>
+                            </tr>
+                            <tr id="cross-check-company-address">
+                                <td><b>Company Address</b><b class="marking pull-right checkoutcome"></b></td>
+                                @{
+                                    string sCrossCheckCompanyAddress = "";
+                                    CustomerAddress oCompanyAddress = null;
+
+                                    switch (Model.Customer.PersonalInfo.TypeOfBusiness)
+                                    {
+                                        case TypeOfBusiness.LLP:
+                                        case TypeOfBusiness.Limited:
+                                            oCompanyAddress = company.CompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
+                                            break;
+
+                                        case TypeOfBusiness.PShip:
+                                        case TypeOfBusiness.PShip3P:
+                                        case TypeOfBusiness.SoleTrader:
+                                            oCompanyAddress = company.CompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
+                                            break;
+                                    } // switch
+
+                                    if (oCompanyAddress != null)
+                                    {
+                                        sCrossCheckCompanyAddress = string.Join("\n",
+                                                                                oCompanyAddress.AddressArray()
+                                                                                               .Where(s => !string.IsNullOrWhiteSpace(s))
+                                                                                               .Select(s => s.Replace(".", "").Trim())
+                                                                                               .Where(s => !string.IsNullOrWhiteSpace(s))
+                                            ).ToUpper();
+                                    } // if
+                                }
+                                <td class="application" @if ((oCompanyAddress != null) && oCompanyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@sCrossCheckCompanyAddress</td>
+                                <td class="experian"></td>
+                                <td class="hmrc"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Time At Address</b></td>
+                                <td>@(company != null ? company.TimeAtAddress : null)</td>
+                                <td></td>
+                                <td class="hmrc"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Business Phone</b></td>
+                                <td>@(company != null ? company.BusinessPhone : "")</td>
+                                <td></td>
+                                <td class="hmrc"></td>
+                            </tr>
+
+                            if (Model.Customer.SegmentType() == "Offline")
+                            {
+                                <tr>
+                                    <td><b>Property owned by company</b></td>
+                                    <td>@(propertyOwnedByCompany ? "Yes" : "No")</td>
+                                    <td></td>
+                                    <td class="hmrc"></td>
+                                </tr>
+
+                                if (!propertyOwnedByCompany)
+                                {
+                                    <tr>
+                                        <td><b>How many years in the property</b></td>
+                                        <td>@(company.YearsInCompany)</td>
+                                        <td></td>
+                                        <td class="hmrc"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>How many month are left for the rent contract</b></td>
+                                        <td>@(company.RentMonthLeft)</td>
+                                        <td></td>
+                                        <td class="hmrc"></td>
+                                    </tr>
+                                }
+                            }
+                            <tr>
+                                <td><b>VAT Reporting</b></td>
+                                <td>@vatReporting</td>
+                                <td></td>
+                                <td class="hmrc"></td>
+                            </tr> 
+                        }
+                    </tbody>
+                </table>
+
+                <h3 id="cross-check-directors-section">Directors
+                    @if (Model.Customer.PersonalInfo.TypeOfBusiness != TypeOfBusiness.Entrepreneur)
+                    {
+                        <button class="btn btn-mini btn-primary add-director">Add director</button>
+                    }
+                </h3>
+
+                <div class="alert duplicate-director-detected" style="display: none;">You are going to add a duplicate director.</div>
+
+                <div class="add-director-container"></div>
+
+                <fieldset id="cross-check-experian-only-directors">
+                    <legend>Directors received from Experian and not specified by the customer</legend>
+                    <ul></ul>
+                </fieldset>
+
+                @if (Model.Directors.Count == 0)
+                {
+                    <text>Customer did not specify any additional directors.</text>
+                }
+
+                @for (int i = 0; i < Model.Directors.Count; i++)
+                {
+                    var d = Model.Directors[i];
+                    var addressInfo = d.DirectorAddressInfo;
+                    var address = addressInfo != null && addressInfo.AllAddresses.Any() ? addressInfo.AllAddresses.First() : new CustomerAddress() { Id = String.Empty };
+
+                    CrossCheckModel.TriState nIsKnownDirector = Model.IsExperianDirector(d);
+
+                    string sDirNameClass = "";
+                    string sDirNameTitle = "";
+
+                    switch (nIsKnownDirector)
+                    {
+                        case CrossCheckModel.TriState.No:
+                            sDirNameClass = "unknown-as-experian-director";
+                            sDirNameTitle = "Not found in Experian directors list.";
+                            break;
+
+                        case CrossCheckModel.TriState.Yes:
+                            sDirNameClass = "known-as-experian-director";
+                            sDirNameTitle = "Found in Experian directors list.";
+                            break;
+
+                        default:
+                            sDirNameTitle = "No data in Experian directors list.";
+                            break;
+                    } // switch
+
+
+                    <fieldset>
+                        <legend>Director #@(i + 1) Info</legend>
+
+                        <table class="table table-bordered cross-check-director-details" director-name="@string.Join("\n", new[] { d.Name, d.Middle, d.Surname })">
+                            <tbody>
+                                <tr>
+                                    <td><b>Name</b></td>
+                                    <td class="@sDirNameClass" title="@sDirNameTitle">@d.Name</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Middle</b></td>
+                                    <td class="@sDirNameClass" title="@sDirNameTitle">@d.Middle</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Surname</b></td>
+                                    <td class="@sDirNameClass" title="@sDirNameTitle">@d.Surname</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Gender</b></td>
+                                    <td>@d.Gender</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Date Of Birth</b></td>
+                                    <td>@GetDate(d.DateOfBirth) @( d.DateOfBirth != null ? "(" + (DateTime.Now.Year - (d.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Email</b></td>
+                                    <td>@d.Email</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Phone</b></td>
+                                    <td>@d.Phone</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Organisation</b></td>
+                                    <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Organisation</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Line1</b></td>
+                                    <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Line1</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Line2</b></td>
+                                    <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Line2</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Line3</b></td>
+                                    <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Line3</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Town</b></td>
+                                    <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Town</td>
+                                </tr>
+                                <tr>
+                                    <td><b>County</b></td>
+                                    <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.County</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Postcode</b></td>
+                                    <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Postcode</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Country</b></td>
+                                    <td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Country</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                }
+
+            </div>
+        </div>
     </div>
 </div>
-
 
 @helper GetDate(DateTime? d)
 {

@@ -1,34 +1,42 @@
 ﻿@model dynamic
 <script id="docs-template" type="text/template">
     <div class="row">
-        <table id="alertDocsTable" class="table centered box">
-            <thead class="box">
-                <tr class="box-title">
-                    <th>Uploaded document name</th>
-                    <th>Date</th>
-                    <th>Employee name</th>
-                    <th style="width: 200px">Description</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody class="box-content">
-                <% _.each(docs, function(doc){%>
-            <tr>
-                <td><a href="@Url.Action("File", "AlertDocs", new { Area = "Underwriter" })/<%-doc.Id%>"><%= doc.DocName%></a></td>
-                <td><%- EzBob.formatDate(doc.CreateDate)%></td>
-                <td><%- doc.EmployeeName%></td>
-                <td>
-                    <p style="text-overflow: ellipsis; width: 200px; overflow: hidden" title="<%- doc.Description %>"><%- doc.Description %></p>
-                </td>
-                <td>
-                    <input type="checkbox" data-id="<%= doc.Id %>" /></td>
-            </tr>
-                <%});%>
-            </tbody>
-        </table>
-        <div class="pull-right">
-            <button class="btn btn-primary" id="addNewDoc"><i class="fa fa-file"></i>Add</button>
-            <button class="btn btn-primary" id="deleteDocs"><i class="fa fa-trash-o"></i>Delete</button>
+        <div class="col-md-12">
+            <table id="alertDocsTable" class="table centered box">
+                <thead class="box-title">
+                    <tr class="">
+                        <th>Uploaded document name</th>
+                        <th>Date</th>
+                        <th>Employee name</th>
+                        <th style="width: 200px">Description</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="box-content">
+                    <% _.each(docs, function(doc){%>
+                        <tr>
+                            <td><a href="@Url.Action("File", "AlertDocs", new { Area = "Underwriter" })/<%-doc.Id%>"><%= doc.DocName%></a></td>
+                            <td><%- EzBob.formatDate(doc.CreateDate)%></td>
+                            <td><%- doc.EmployeeName%></td>
+                            <td>
+                                <p style="text-overflow: ellipsis; width: 200px; overflow: hidden" title="<%- doc.Description %>"><%- doc.Description %></p>
+                            </td>
+                            <td>
+                                <input type="checkbox" data-id="<%= doc.Id %>" /></td>
+                        </tr>
+                        
+                    <%});%>
+                    <tr>
+                            <td colspan="5">
+                                <div class="pull-right">
+                                    <button class="btn btn-primary" id="addNewDoc"><i class="fa fa-file"></i>Add</button>
+                                    <button class="btn btn-primary" id="deleteDocs"><i class="fa fa-trash-o"></i>Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+            
         </div>
     </div>
 </script>

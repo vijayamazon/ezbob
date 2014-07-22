@@ -1,18 +1,20 @@
 ﻿<div class="messages row">
-    <table class="table centered box">
-        <thead class="box">
-            <tr class="box-title">
-                <th>Sent document name</th>
-                <th>Date created</th>
-            </tr>
-        </thead>
-        <tbody class="box-content">
-            <%_.each(model, function(val, i){%>
-            <tr>
-                <td><a href="<%-gRootPath+'Underwriter/Messages/DownloadMessagesDocument/' + val.Id%>"><%-val.FileName%></a></td>
-                <td><%-val.CreationDate%></td>
-            </tr>
-            <%});%>
-        </tbody>
-    </table>
+    <div class="col-md-12">
+        <table class="table centered box">
+            <thead class="box-title">
+                <tr>
+                    <th>Sent document name</th>
+                    <th>Date created</th>
+                </tr>
+            </thead>
+            <tbody class="box-content">
+                <%_.each(model, function(val, i){%>
+                <tr>
+                    <td><a href="<%-gRootPath+'Underwriter/Messages/DownloadMessagesDocument/' + val.Id%>"><%-val.FileName%></a></td>
+                    <td><%-val.CreationDate%></td>
+                </tr>
+                <%});%>
+            </tbody>
+        </table>
+    </div>
 </div>

@@ -1,31 +1,28 @@
 ﻿<script id="apiChecksLog" type="text/template">
-    @ApiChecksLog()
-</script>
-
-@helper ApiChecksLog()
-{
     <div class="row">
-        <table class="table centered table-fixed box">
-            <thead class="box">
-                <tr class="box-title">
-                    <th class="api-check-first-column">Date/time</th>
-                    <th class="api-check-seccond-column">API Type</th>
-                    <th>Marketplace</th>
-                    <th style="width: 130px;">Status</th>
-                    <th>Error message</th>
-                </tr>
-            </thead>
-            <tbody class="box-content">
-                <%_.each(vals, function(val){%>
-            <tr>
-                <td><%-EzBob.formatDateTime(val.DateTime)%></td>
-                <td class="break-word"><%-val.ApiType%></td>
-                <td class="break-word"><%-val.Marketplace || ''%></td>
-                <td><%-val.Status%></td>
-                <td class="break-word"><%-val.ErrorMessage || ''%></td>
-            </tr>
-                <%})%>
-            </tbody>
-        </table>
+        <div class="col-md-12">
+            <table class="table centered table-fixed box">
+                <thead class="box-title">
+                    <tr>
+                        <th class="api-check-first-column">Date/time</th>
+                        <th class="api-check-seccond-column">API Type</th>
+                        <th>Marketplace</th>
+                        <th style="width: 130px;">Status</th>
+                        <th>Error message</th>
+                    </tr>
+                </thead>
+                <tbody class="box-content">
+                    <%_.each(vals, function(val){%>
+                    <tr>
+                        <td style="white-space: nowrap;"><%-EzBob.formatDateTime(val.DateTime)%></td>
+                        <td class="break-word"><%-val.ApiType%></td>
+                        <td class="break-word"><%-val.Marketplace || ''%></td>
+                        <td><%-val.Status%></td>
+                        <td class="break-word"><%-val.ErrorMessage || ''%></td>
+                    </tr>
+                    <%})%>
+                </tbody>
+            </table>
+        </div>
     </div>
-}
+</script>

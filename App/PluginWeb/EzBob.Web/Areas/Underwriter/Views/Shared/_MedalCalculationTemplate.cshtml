@@ -1,9 +1,13 @@
 ﻿@model dynamic
 
 <script id="medal-calculation-template" type="text/template">
-    <table class="table centered box">
-        <thead class="box">
-            <%
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <table class="table centered box">
+                <thead class="box">
+                    <%
             medals.Score = medals.Score || {};
             %>
             <tr class="box-title">
@@ -11,42 +15,43 @@
                 <th>Points</th>
                 <th>Result</th>
             </tr>
-        </thead>
-        <tbody class="box-content">
-            <tr>
-                <td><%-medals.Score.Medal%></td>
-                <td><%-medals.Score.Points%></td>
-                <td><%- EzBob.formatPercents(medals.Score.Result, 1) %></td>
-            </tr>
-        </tbody>
-    </table>
+                </thead>
+                <tbody class="box-content">
+                    <tr>
+                        <td><%-medals.Score.Medal%></td>
+                        <td><%-medals.Score.Points%></td>
+                        <td><%- EzBob.formatPercents(medals.Score.Result, 1) %></td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <table class="table centered box">
-        <thead class="box">
-            <tr class="box-title">
-                <th>Customer Characteristic</th>
-                <th>Weight Used</th>
-                <th>Points Obtained</th>
-            </tr>
-        </thead>
-        <tbody class="box-content">
-            <tr>
-                <%
+            <table class="table centered box">
+                <thead class="box">
+                    <tr class="box-title">
+                        <th>Customer Characteristic</th>
+                        <th>Weight Used</th>
+                        <th>Points Obtained</th>
+                    </tr>
+                </thead>
+                <tbody class="box-content">
+                    <tr>
+                        <%
                 _.each( medals.MedalCharacteristics, function(medal, i){%> 
                 <td><%-medal.CustomerCharacteristic%></td>
-                <td><%-Math.round(medal.WeightUsed)%>%</td>
-                <td><%-Math.round(medal.ACParameters)+' from ' + Math.round(medal.MaxPoss)%> (<%-EzBob.roundNumber(medal.PointsObtainedPercent, 1) %>%)</td>
-            </tr>
-            <%}) %>
-            <tr> 
+                        <td><%-Math.round(medal.WeightUsed)%>%</td>
+                        <td><%-Math.round(medal.ACParameters)+' from ' + Math.round(medal.MaxPoss)%> (<%-EzBob.roundNumber(medal.PointsObtainedPercent, 1) %>%)</td>
+                    </tr>
+                    <%}) %>
+            <tr>
                 <td>Total (not normalized)</td>
                 <td><%-medals.TotalWeightUsed != undefined ? medals.TotalWeightUsed : "-"%>%</td>
-                <td>
-                    <%-(medals.TotalACParameters != undefined ? EzBob.roundNumber(medals.TotalACParameters, 1) : "-") + ' from ' + (medals.TotalMaxPoss != undefined ? EzBob.roundNumber(medals.TotalMaxPoss, 1) : "-")%> 
+                <td><%-(medals.TotalACParameters != undefined ? EzBob.roundNumber(medals.TotalACParameters, 1) : "-") + ' from ' + (medals.TotalMaxPoss != undefined ? EzBob.roundNumber(medals.TotalMaxPoss, 1) : "-")%> 
                     (<%-(medals.TotalPointsObtainedPercent != undefined ? EzBob.roundNumber(medals.TotalPointsObtainedPercent, 1) : "-")%>%)
                 </td>
             </tr>
-        </tbody>
-    </table>
-    @{Html.RenderPartial("_ExportToExcel");}
+                </tbody>
+            </table>
+            @{Html.RenderPartial("_ExportToExcel");}
+        </div>
+    </div>
 </script>

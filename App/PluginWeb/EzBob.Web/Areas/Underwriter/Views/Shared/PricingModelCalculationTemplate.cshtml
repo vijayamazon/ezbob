@@ -1,210 +1,211 @@
 ﻿@model dynamic
 
 <script id="pricing-model-calculation-template" type="text/template">
-    <div class="box">
-        <div class="box-title">
-            <h3>Calculator</h3>
-        </div>
-        <div class="box-content">
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <select id="PricingModelScenario" class="selectheight">
-                        <% _.each(scenarios, function(scenario) { %>
-                    <option value="<%- scenario%>"><%- scenario%></option>
-                        <%});%>
-                    </select>
-                    <button class="btn btn-primary pull-right" id="pricingModelCalculateButton">Calculate</button>
-                    <button class="btn btn-primary pull-right reset-button-margin" id="pricingModelResetButton">Reset</button>
-                    <table class="table">
-                        <thead class="box">
-                            <tr class="box-title">
-                                <th>Model inputs</th>
-                                <th>Values</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="pricing-model-left-td">Loan Amount</td>
-                                <td>
-                                    <input type="text" id="loanAmount" /></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">Default Rate</td>
-                                <td><%-EzBob.formatPercents(model.DefaultRate)%>&nbsp;Company:<input type="text" id="defaultRateCompanyShare" class="pricing-model-double-input-width" />
-                                    Applicant:<input type="text" id="defaultRateCustomerShare" class="pricing-model-double-input-width" /></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">Total Fee</td>
-                                <td><span id="totalSetupFeePercents" />= <span id="totalSetupFeePounds" /></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">Setup Fee</td>
-                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="setupFeePercents" class="pricing-model-double-input-width" />
-                                    =
-                                    <input type="text" id="setupFeePounds" class="pricing-model-double-input-width" /></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">Broker Setup Fee</td>
-                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="brokerSetupFeePercents" class="pricing-model-double-input-width" />
-                                    =
-                                    <input type="text" id="brokerSetupFeePounds" class="pricing-model-double-input-width" /></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">Loan Term</td>
-                                <td>
-                                    <input type="text" id="loanTerm" /></td>
-                            </tr>
-
-                            <tr class="minor-input-row hide">
-                                <td class="pricing-model-left-td">Interest Only Period</td>
-                                <td>
-                                    <input type="text" id="interestOnlyPeriod" /></td>
-                            </tr>
-                            <tr class="minor-input-row hide">
-                                <td class="pricing-model-left-td">Tenure</td>
-                                <td>
-                                    <input type="text" id="tenurePercents" class="pricing-model-double-input-width" />
-                                    =
-                                    <input type="text" id="tenureMonths" class="pricing-model-double-input-width-wider" /></td>
-                            </tr>
-                            <tr class="minor-input-row hide">
-                                <td class="pricing-model-left-td">Collection Rate</td>
-                                <td>
-                                    <input type="text" id="collectionRate" /></td>
-                            </tr>
-                            <tr class="minor-input-row hide">
-                                <td class="pricing-model-left-td">COGS (incl. acq. costs)</td>
-                                <td>
-                                    <input type="text" id="cogs" /></td>
-                            </tr>
-                            <tr class="minor-input-row hide">
-                                <td class="pricing-model-left-td">Debt Percent Of Capital</td>
-                                <td>
-                                    <input type="text" id="debtPercentOfCapital" /></td>
-                            </tr>
-                            <tr class="minor-input-row hide">
-                                <td class="pricing-model-left-td">Cost Of Debt (incl. fees)</td>
-                                <td>
-                                    <input type="text" id="costOfDebt" /></td>
-                            </tr>
-                            <tr class="minor-input-row hide">
-                                <td class="pricing-model-left-td">Opex And Capex</td>
-                                <td>
-                                    <input type="text" id="opexAndCapex" /></td>
-                            </tr>
-                            <tr class="minor-input-row hide">
-                                <td class="pricing-model-left-td">Profit Markup As % Of Revenue</td>
-                                <td>
-                                    <input type="text" id="profitMarkup" /></td>
-                            </tr>
-
-                            <tr>
-                                <td class="pricing-model-left-td">
-                                    <button class="btn btn-primary" id="expandCollapseInputsButton"><span id="expandInputsSign">+</span><span class="hide" id="collapseInputsSign">-</span></button></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box">
+                <div class="box-title">
+                    <h3>Calculator</h3>
                 </div>
+                <div class="box-content">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <select id="PricingModelScenario" class="selectheight">
+                                <% _.each(scenarios, function(scenario) { %>
+                    <option value="<%- scenario%>"><%- scenario%></option>
+                                <%});%>
+                            </select>
+                            <button class="btn btn-primary pull-right" id="pricingModelCalculateButton">Calculate</button>
+                            <button class="btn btn-primary pull-right reset-button-margin" id="pricingModelResetButton">Reset</button>
+                            <table class="table">
+                                <thead class="box">
+                                    <tr class="box-title">
+                                        <th>Model inputs</th>
+                                        <th>Values</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Loan Amount</td>
+                                        <td>
+                                            <input type="text" id="loanAmount" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Default Rate</td>
+                                        <td><%-EzBob.formatPercents(model.DefaultRate)%>&nbsp;Company:<input type="text" id="defaultRateCompanyShare" class="pricing-model-double-input-width" />
+                                            Applicant:<input type="text" id="defaultRateCustomerShare" class="pricing-model-double-input-width" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Total Fee</td>
+                                        <td><span id="totalSetupFeePercents" />= <span id="totalSetupFeePounds" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Setup Fee</td>
+                                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="setupFeePercents" class="pricing-model-double-input-width" />
+                                            =
+                                    <input type="text" id="setupFeePounds" class="pricing-model-double-input-width" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Broker Setup Fee</td>
+                                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="brokerSetupFeePercents" class="pricing-model-double-input-width" />
+                                            =
+                                    <input type="text" id="brokerSetupFeePounds" class="pricing-model-double-input-width" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Loan Term</td>
+                                        <td>
+                                            <input type="text" id="loanTerm" /></td>
+                                    </tr>
 
-                <div class="col-lg-6 col-md-12">
-                    <table class="table">
-                        <thead class="box">
-                            <tr class="box-title">
-                                <th>Loan Type</th>
-                                <th>Setup Fee</th>
-                                <th>Monthly Interest Rate</th>
-                                <th>AIR (Ex. broker fee)</th>
-                                <th>APR</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Ezbob Loan</td>
-                                <td class="pricing-model-highlight-ezbob-loan"><%-EzBob.formatPercents(model.SetupFeePercents)%></td>
-                                <td class="pricing-model-highlight-ezbob-loan"><%-EzBob.formatPercents(model.MonthlyInterestRate)%></td>
-                                <td><%-EzBob.formatPercents(model.AnnualizedInterestRate)%></td>
-                                <td><%-EzBob.formatPercents(model.Apr)%></td>
-                            </tr>
-                            <tr>
-                                <td>EU Loan (2%)</td>
-                                <td class="<%-model.EuLoan2MainFieldsClass%>"><%-EzBob.formatPercents(model.SetupFeeForEuLoanHigh)%></td>
-                                <td class="<%-model.EuLoan2MainFieldsClass%>">2.00%</td>
-                                <td><%-EzBob.formatPercents(model.AnnualizedInterestRateEu2)%></td>
-                                <td><%-EzBob.formatPercents(model.AprEu2)%></td>
-                            </tr>
-                            <tr>
-                                <td>EU Loan (1.75%)</td>
-                                <td class="<%-model.EuLoan175MainFieldsClass%>"><%-EzBob.formatPercents(model.SetupFeeForEuLoanLow)%></td>
-                                <td class="<%-model.EuLoan175MainFieldsClass%>">1.75%</td>
-                                <td><%-EzBob.formatPercents(model.AnnualizedInterestRateEu175)%></td>
-                                <td><%-EzBob.formatPercents(model.AprEu175)%></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table">
-                        <thead class="box">
-                            <tr class="box-title">
-                                <th>Model outputs</th>
-                                <th>Values</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="pricing-model-left-td pricing-model-bold">Revenue</td>
-                                <td class="pricing-model-bold"><%-GBPValues(model.Revenue, true)%></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td pricing-model-italic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;including:</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interest Revenue</td>
-                                <td><%-GBPValues(model.InterestRevenue, true)%></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fees Revenue</td>
-                                <td><%-GBPValues(model.FeesRevenue, true)%></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">COGS (incl. acq. costs)</td>
-                                <td class="pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.CogsOutput, true)%>&nbsp;&nbsp;&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td pricing-model-bold">Gross Profit</td>
-                                <td class="pricing-model-bold"><%-GBPValues(model.GrossProfit, true)%></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">Opex And Capex</td>
-                                <td class="pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.OpexAndCapexOutput, true)%>&nbsp;&nbsp;&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td pricing-model-bold">EBITDA</td>
-                                <td class="pricing-model-bold"><%-GBPValues(model.Ebitda, true)%></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">Net Loss From Defaults</td>
-                                <td><%-GBPValues(model.NetLossFromDefaults, true)%></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td">Cost Of Debt (incl. fees)</td>
-                                <td><%-GBPValues(model.CostOfDebtOutput, true)%></td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td pricing-model-italic">Note: Total Cost</td>
-                                <td class="pricing-model-italic pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.TotalCost, true)%>&nbsp;&nbsp;&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td class="pricing-model-left-td pricing-model-bold">Profit Before Tax</td>
-                                <td class="pricing-model-bold"><%-GBPValues(model.ProfitMarkupOutput, true)%></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    <tr class="minor-input-row hide">
+                                        <td class="pricing-model-left-td">Interest Only Period</td>
+                                        <td>
+                                            <input type="text" id="interestOnlyPeriod" /></td>
+                                    </tr>
+                                    <tr class="minor-input-row hide">
+                                        <td class="pricing-model-left-td">Tenure</td>
+                                        <td>
+                                            <input type="text" id="tenurePercents" class="pricing-model-double-input-width" />
+                                            =
+                                    <input type="text" id="tenureMonths" class="pricing-model-double-input-width-wider" /></td>
+                                    </tr>
+                                    <tr class="minor-input-row hide">
+                                        <td class="pricing-model-left-td">Collection Rate</td>
+                                        <td>
+                                            <input type="text" id="collectionRate" /></td>
+                                    </tr>
+                                    <tr class="minor-input-row hide">
+                                        <td class="pricing-model-left-td">COGS (incl. acq. costs)</td>
+                                        <td>
+                                            <input type="text" id="cogs" /></td>
+                                    </tr>
+                                    <tr class="minor-input-row hide">
+                                        <td class="pricing-model-left-td">Debt Percent Of Capital</td>
+                                        <td>
+                                            <input type="text" id="debtPercentOfCapital" /></td>
+                                    </tr>
+                                    <tr class="minor-input-row hide">
+                                        <td class="pricing-model-left-td">Cost Of Debt (incl. fees)</td>
+                                        <td>
+                                            <input type="text" id="costOfDebt" /></td>
+                                    </tr>
+                                    <tr class="minor-input-row hide">
+                                        <td class="pricing-model-left-td">Opex And Capex</td>
+                                        <td>
+                                            <input type="text" id="opexAndCapex" /></td>
+                                    </tr>
+                                    <tr class="minor-input-row hide">
+                                        <td class="pricing-model-left-td">Profit Markup As % Of Revenue</td>
+                                        <td>
+                                            <input type="text" id="profitMarkup" /></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="pricing-model-left-td">
+                                            <button class="btn btn-primary" id="expandCollapseInputsButton"><span id="expandInputsSign">+</span><span class="hide" id="collapseInputsSign">-</span></button></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-lg-6 col-md-12">
+                            <table class="table">
+                                <thead class="box">
+                                    <tr class="box-title">
+                                        <th>Loan Type</th>
+                                        <th>Setup Fee</th>
+                                        <th>Monthly Interest Rate</th>
+                                        <th>AIR (Ex. broker fee)</th>
+                                        <th>APR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Ezbob Loan</td>
+                                        <td class="pricing-model-highlight-ezbob-loan"><%-EzBob.formatPercents(model.SetupFeePercents)%></td>
+                                        <td class="pricing-model-highlight-ezbob-loan"><%-EzBob.formatPercents(model.MonthlyInterestRate)%></td>
+                                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRate)%></td>
+                                        <td><%-EzBob.formatPercents(model.Apr)%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>EU Loan (2%)</td>
+                                        <td class="<%-model.EuLoan2MainFieldsClass%>"><%-EzBob.formatPercents(model.SetupFeeForEuLoanHigh)%></td>
+                                        <td class="<%-model.EuLoan2MainFieldsClass%>">2.00%</td>
+                                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRateEu2)%></td>
+                                        <td><%-EzBob.formatPercents(model.AprEu2)%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>EU Loan (1.75%)</td>
+                                        <td class="<%-model.EuLoan175MainFieldsClass%>"><%-EzBob.formatPercents(model.SetupFeeForEuLoanLow)%></td>
+                                        <td class="<%-model.EuLoan175MainFieldsClass%>">1.75%</td>
+                                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRateEu175)%></td>
+                                        <td><%-EzBob.formatPercents(model.AprEu175)%></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table">
+                                <thead class="box">
+                                    <tr class="box-title">
+                                        <th>Model outputs</th>
+                                        <th>Values</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="pricing-model-left-td pricing-model-bold">Revenue</td>
+                                        <td class="pricing-model-bold"><%-GBPValues(model.Revenue, true)%></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td pricing-model-italic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;including:</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interest Revenue</td>
+                                        <td><%-GBPValues(model.InterestRevenue, true)%></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fees Revenue</td>
+                                        <td><%-GBPValues(model.FeesRevenue, true)%></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">COGS (incl. acq. costs)</td>
+                                        <td class="pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.CogsOutput, true)%>&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td pricing-model-bold">Gross Profit</td>
+                                        <td class="pricing-model-bold"><%-GBPValues(model.GrossProfit, true)%></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Opex And Capex</td>
+                                        <td class="pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.OpexAndCapexOutput, true)%>&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td pricing-model-bold">EBITDA</td>
+                                        <td class="pricing-model-bold"><%-GBPValues(model.Ebitda, true)%></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Net Loss From Defaults</td>
+                                        <td><%-GBPValues(model.NetLossFromDefaults, true)%></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td">Cost Of Debt (incl. fees)</td>
+                                        <td><%-GBPValues(model.CostOfDebtOutput, true)%></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td pricing-model-italic">Note: Total Cost</td>
+                                        <td class="pricing-model-italic pricing-model-underline">&nbsp;&nbsp;&nbsp;<%-GBPValues(model.TotalCost, true)%>&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pricing-model-left-td pricing-model-bold">Profit Before Tax</td>
+                                        <td class="pricing-model-bold"><%-GBPValues(model.ProfitMarkupOutput, true)%></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
 </script>

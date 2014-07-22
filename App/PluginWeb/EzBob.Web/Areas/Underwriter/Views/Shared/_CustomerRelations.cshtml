@@ -10,82 +10,85 @@
 @helper CustomerRelations()
 {
     <div class="box row">
-        <div class="box-content">
-            <button class="btn btn-primary addNewCustomerRelationsEntry">Add New Entry</button>
-            <button class="btn btn-primary addFollowUp">Add Follow up</button>
-            <span>Potential rank:</span>
-            <div style="width: 150px; display: inline-block;">
-                <select class="form_field selectheight" id="Rank" name="Rank">
-                    <option></option>
-                    <% _.each(ranks, function(rank) { %>
-                <option value="<%- rank.Id %>"><%- rank.Name %></option>
-                    <%});%>
-                </select>
-            </div>
-            <span>Last status: <%-lastStatus%></span>
+        <div class="col-md-12">
+            <div class="box-content">
+                <button class="btn btn-primary addNewCustomerRelationsEntry">Add New Entry</button>
+                <button class="btn btn-primary addFollowUp">Add Follow up</button>
+                <span>Potential rank:</span>
+                <div style="width: 150px; display: inline-block;">
+                    <select class="form_field selectheight" id="Rank" name="Rank">
+                        <option></option>
+                        <% _.each(ranks, function(rank) { %>
+                        <option value="<%- rank.Id %>"><%- rank.Name %></option>
+                        <%});%>
+                    </select>
+                </div>
+                <span>Last status: <%-lastStatus%></span>
 
-            <%if(lastFollowUp && !lastFollowUp.IsClosed) {%>
+                <%if(lastFollowUp && !lastFollowUp.IsClosed) {%>
                 <div class="" style="width: 200px; display: inline-block">
                     <label class="red followUp" title="<%-lastFollowUp.Comment%> <%-EzBob.formatDate2(lastFollowUp.FollowUpDate)%>" data-toggle="tooltip">Followed up</label>
                     <button id="closeFollowUp" class="btn btn-primary">Close last</button>
                 </div>
-            <%}%>
+                <%}%>
     
-        <table class="table centered">
-            <thead class="box">
-                <tr class="box-title">
-                    <th>Date</th>
-                    <th>User</th>
-                    <th>Action</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Rank</th>
-                    <th class="customer-relations-comment-column">Comment</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%_.each(vals, function(val){ %>
-                <tr class="<%if(val.User == 'System') {print('crm-system');}%>" style="display: <%- (val.User == 'System' ? 'none' : 'table-row')%>">
-                    <td><%-EzBob.formatDateTime(val.DateTime)%></td>
-                    <td><%-val.User%></td>
-                    <td><%-val.Action%></td>
-                    <td><%-val.Type%></td>
-                    <td><%-val.Status%></td>
-                    <td><%-val.Rank%></td>
-                    <td style="word-wrap: break-word;"><%-val.Comment%></td>
-                    @*The <br/> is being converted in the browser?
+                <table class="table centered">
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th>Date</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Rank</th>
+                            <th class="customer-relations-comment-column">Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%_.each(vals, function(val){ %>
+                        <tr class="<%if(val.User == 'System') {print('crm-system');}%>" style="display: <%- (val.User == 'System' ? 'none' : 'table-row')%>">
+                            <td><%-EzBob.formatDateTime(val.DateTime)%></td>
+                            <td><%-val.User%></td>
+                            <td><%-val.Action%></td>
+                            <td><%-val.Type%></td>
+                            <td><%-val.Status%></td>
+                            <td><%-val.Rank%></td>
+                            <td style="word-wrap: break-word;"><%-val.Comment%></td>
+                            @*The <br/> is being converted in the browser?
                     <td style="word-wrap: break-word"><%-val.Comment.replace(/\r\n/g,'<br/>')%></td>*@
-                </tr>
-                <%})%>
-            </tbody>
-        </table>
+                        </tr>
+                        <%})%>
+                    </tbody>
+                </table>
 
-            <button class="btn btn-primary toggleSystemCrm" data-toggle="tooltip" title="show/hide system events"><i class="fa fa-search-plus"></i></button>
+                <button class="btn btn-primary toggleSystemCrm" data-toggle="tooltip" title="show/hide system events"><i class="fa fa-search-plus"></i></button>
 
-            <table class="table centered">
-                <thead class="box">
-                    <tr class="box-title">
-                        <th>Created</th>
-                        <th>Follow up Date</th>
-                        <th>Comment</th>
-                        <th>Is closed</th>
-                        <th>Close date</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%_.each(followUps, function(fu) { %>
-                <tr>
-                    <td><%-EzBob.formatDate2(fu.Created)%></td>
-                    <td><%-EzBob.formatDate2(fu.FollowUpDate)%></td>
-                    <td><%-fu.Comment%></td>
-                    <td><%-fu.IsClosed ? 'Yes' : 'No'%></td>
-                    <td><%-EzBob.formatDate2(fu.CloseDate)%></td>
-                    <td><%if (!fu.IsClosed){ %><button class="btn btn-primary btnCloseFollowUp" data-id="<%-fu.Id%>">Close</button><%}%></td>
-                </tr>
-                    <%});%>
-                </tbody>
-            </table>
+                <table class="table centered">
+                    <thead class="box">
+                        <tr class="box-title">
+                            <th>Created</th>
+                            <th>Follow up Date</th>
+                            <th>Comment</th>
+                            <th>Is closed</th>
+                            <th>Close date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%_.each(followUps, function(fu) { %>
+                        <tr>
+                            <td><%-EzBob.formatDate2(fu.Created)%></td>
+                            <td><%-EzBob.formatDate2(fu.FollowUpDate)%></td>
+                            <td><%-fu.Comment%></td>
+                            <td><%-fu.IsClosed ? 'Yes' : 'No'%></td>
+                            <td><%-EzBob.formatDate2(fu.CloseDate)%></td>
+                            <td><%if (!fu.IsClosed){ %>
+                                <button class="btn btn-primary btnCloseFollowUp" data-id="<%-fu.Id%>">Close</button><%}%></td>
+                        </tr>
+                        <%});%>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 }

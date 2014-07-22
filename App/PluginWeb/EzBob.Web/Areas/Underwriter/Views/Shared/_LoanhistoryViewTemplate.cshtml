@@ -14,17 +14,21 @@
 
 
 <script id="loanhistory-template" type="text/template">
-    @Loans()
-    <div>
-        <label class="checkbox">
-            <input type="checkbox" class="show-rejections" checked="checked">
-            Show rejections
-        </label>
-    </div>
-    <div id="offers-conteiner">
-    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Loans()
+            <div>
+                <label class="checkbox">
+                    <input type="checkbox" class="show-rejections" checked="checked">
+                    Show rejections
+                </label>
+            </div>
+            <div id="offers-conteiner">
+            </div>
 
-    @{Html.RenderPartial("_ExportToExcel");}
+            @{Html.RenderPartial("_ExportToExcel");}
+        </div>
+    </div>
 </script>
 
 @helper Loans()

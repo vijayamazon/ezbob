@@ -8,7 +8,8 @@
     -moz-transform: none;
     -ms-transform: none;
     -o-transform: none;
-     transform: none; 
+     transform: none;
+    font-size: 14px;
 }
 
 .ui-dialog {
@@ -19,10 +20,15 @@ input[type="submit"],
 input[type="reset"],
 button,
 .button,
-.ui-widget button {
+.ui-widget button
+{
     font-family: 'Open Sans';
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans';
+    font-weight: 600;
+}
 
 textarea.reason, textarea.yodleeReason {
     width: 100%;
@@ -1053,7 +1059,7 @@ textarea.BusinessAddress {
 
 .alert {
     padding: 5px !important;
-    margin: 5px 1px;
+    margin: 3px 1px;
     border-radius: 5px;
 }
 
@@ -1538,6 +1544,8 @@ td a.edit-loan {
 .box .box-title {
     background: linear-gradient(to bottom, white, #ebebeb);
     border-bottom: #d3d3d5 1px solid;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
     border-radius: 5px;
     color: #282828;
     font-weight: 500;
@@ -1554,7 +1562,7 @@ td a.edit-loan {
 .box .box-title a,
 .box .box-title h3 {
     color: #282828;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
 }
 
@@ -1912,4 +1920,15 @@ td a.edit-loan {
 .customer-details-switch-td {
     padding-top: 1px !important;
     padding-bottom: 1px !important;
+}
+
+.messages {
+    padding: 0;
+}
+
+.ui-state-active, 
+.ui-widget-content .ui-state-active, 
+.ui-widget-header .ui-state-active,
+.ui-widget-content {
+    border: none;
 }
