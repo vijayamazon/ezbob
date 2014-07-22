@@ -1928,3 +1928,12 @@ body {
 .customer-details-left-margin {
     margin-left: 5px;
 }
+
+.customer-details-switch-height {
+    height: 19px;
+}
+
+.customer-details-switch-td {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}

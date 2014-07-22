@@ -58,7 +58,7 @@
 @helper RowCellWithSlider(string title, string className, string labelOff, string labelOn, string css = "", string dataOn = "danger")
 {
     <tr>
-        <td>
+        <td class="customer-details-switch-td">
             <span class="@Html.Raw(css) customer-details-left-margin">@Html.Raw(title)</span>
             <span class="@Html.Raw(css) pull-right">
                 <div class="@Html.Raw(className) make-switch switch-mini" data-on="@Html.Raw(dataOn)" data-off="default" data-animated="true" data-off-label="@Html.Raw(labelOff)" data-on-label="@Html.Raw(labelOn)">
@@ -269,11 +269,11 @@
                 </td>
             </tr>
 
-            @RowCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td")
+            @RowCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td customer-details-switch-height")
 
-            @RowCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td")
+            @RowCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td customer-details-switch-height")
             
-            @RowCellWithSlider("Manual Decision", "manualDecisionSwitch", "No", "Yes")
+            @RowCellWithSlider("Manual Decision", "manualDecisionSwitch", "No", "Yes", "customer-details-switch-height")
 
             @RowCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusName %>", "TrustPilotStatusUpdate")
 
