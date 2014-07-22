@@ -324,10 +324,6 @@
       <Project>{d91f3fd0-9e1b-41ff-ae2e-67f051198f51}</Project>
       <Name>ExperianLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Integration\ExperianParser\ExperianParser.csproj">
-      <Project>{002CD56A-BA12-48E2-BB40-663E3BCBFF3A}</Project>
-      <Name>ExperianParser</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Integration\EzBob.Models\EzBob.Models.csproj">
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>

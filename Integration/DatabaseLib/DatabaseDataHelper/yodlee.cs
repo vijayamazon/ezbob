@@ -10,7 +10,6 @@
 	using Model.Experian;
 	using Newtonsoft.Json;
 	using Common;
-	using Ezbob.ExperianParser;
 	using DatabaseWrapper;
 	using DatabaseWrapper.Order;
 	using Model.Database;

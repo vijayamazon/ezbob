@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using Ezbob.Backend.ModelsWithDB.Experian;
-	using Ezbob.ExperianParser;
 	using Ezbob.Utils.Security;
 
 	#region enum ParsedFieldNames
@@ -208,97 +207,6 @@
 
 		#endregion constructor for limited shareholder
 
-		#region constructor for non-limited director/shareholder
-
-		public ExperianDirector(ParsedDataItem oItem, int nCustomerID, bool bIsDirector) {
-			IsValid = false;
-
-			bool bIsCompany = oItem.Get(ParsedFieldNames.IsCompany).Equals("Y", StringComparison.InvariantCultureIgnoreCase);
-
-			if (bIsCompany)
-				return;
-
-			CustomerID = nCustomerID;
-
-			IsDirector = bIsDirector;
-			IsShareholder = !bIsDirector;
-
-			FirstName = oItem.Get(ParsedFieldNames.FirstName);
-
-			if (FirstName == string.Empty)
-				return;
-
-			LastName = oItem.Get(ParsedFieldNames.LastName);
-
-			if (LastName == string.Empty)
-				return;
-
-			switch (oItem.Get(ParsedFieldNames.Prefix).ToUpper(CultureInfo.InvariantCulture)) {
-			case "MR":
-				Gender = 'M';
-				break;
-
-			case "MRS":
-			case "MS":
-				Gender = 'F';
-				break;
-			} // switch
-
-			Town = oItem.Get(ParsedFieldNames.Town);
-			County = oItem.Get(ParsedFieldNames.County);
-			Postcode = oItem.Get(ParsedFieldNames.Postcode);
-
-			if (IsDirector) {
-				if (Town == string.Empty)
-					return;
-
-				DateTime d;
-
-				if (DateTime.TryParseExact(oItem.Get(ParsedFieldNames.BirthDate), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out d))
-					BirthDate = d;
-				else
-					return;
-
-				if (BirthDate < ms_oLongAgo) {
-					BirthDate = null;
-					return;
-				} // if
-
-				MiddleName = oItem.Get(ParsedFieldNames.MidName1, ParsedFieldNames.MidName2);
-
-				var lines = new List<string>();
-
-				var sHouseName = oItem.Get(ParsedFieldNames.HouseName);
-				if (sHouseName != string.Empty)
-					lines.Add(sHouseName);
-
-				var sAddr = oItem.Get(ParsedFieldNames.HouseNumber, ParsedFieldNames.Street);
-				if (sAddr != string.Empty)
-					lines.Add(sAddr);
-
-				Line1 = lines.Count > 0 ? lines[0] : string.Empty;
-
-				if (Line1 == string.Empty)
-					return;
-
-				Line2 = lines.Count > 1 ? lines[1] : string.Empty;
-				Line3 = string.Empty;
-
-				RefNum = oItem.Get(ParsedFieldNames.Number);
-			}
-			else {
-				MiddleName = oItem.Get(ParsedFieldNames.MidName1);
-
-				Line1 = oItem.Get(ParsedFieldNames.AddressLine1);
-				Line2 = oItem.Get(ParsedFieldNames.AddressLine2);
-				Line3 = oItem.Get(ParsedFieldNames.AddressLine3);
-			} // if
-
-			IsValid = true;
-		} // constructor
-
-		#endregion constructor for non-limited director/shareholder
-
 		#endregion constructor
 
 		#region property IsValid
@@ -392,25 +300,4 @@
 	} // class ExperianDirector
 
 	#endregion class ExperianDirector
-
-	#region class ParsedDataItemExt
-
-	internal static class ParsedDataItemExt {
-		public static string Get(this ParsedDataItem oItem, ParsedFieldNames nNameA, ParsedFieldNames nNameB) {
-			return (oItem.Get(nNameA) + " " + oItem.Get(nNameB)).Trim();
-		} // Get
-
-		public static string Get(this ParsedDataItem oItem, ParsedFieldNames nName) {
-			string sKey = nName.ToString();
-
-			string sValue = ((oItem.Contains(sKey) ? oItem[sKey] : string.Empty) ?? string.Empty).Trim().ToLowerInvariant();
-
-			if (nName == ParsedFieldNames.Postcode)
-				return sValue.ToUpperInvariant();
-
-			return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(sValue);
-		} // Get
-	} // class ParsedDataItemExt
-
-	#endregion class ParsedDataItemExt
 } // namespace

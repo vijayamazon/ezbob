@@ -2,7 +2,6 @@
 	using System;
 	using System.Linq;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
@@ -10,7 +9,6 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
-	using Ezbob.ExperianParser;
 	using Underwriter.Models;
 	using PaymentServices.Calculators;
 	using System.Collections.Generic;

@@ -6,12 +6,10 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
-	using System.Xml;
 	using System.Xml.Linq;
 	using System.Xml.Serialization;
 	using System.Xml.XPath;
 	using ConfigManager;
-	using EZBob.DatabaseLib;
 	using ExperianLib;
 	using ExperianLib.Dictionaries;
 	using ExperianLib.Ebusiness;
@@ -20,7 +18,6 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Database;
-	using Ezbob.ExperianParser;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
 	using Infrastructure;
@@ -202,19 +199,18 @@
 			{
 				Log.Debug("BuildHistoryModel company from mp_servicelog table");
 				var type = (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr());
-				var checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
-												 where s.Director == null
-												 where s.Customer.Id == customer.Id
-												 where s.ServiceType == type
-												 select isLimited ?
-												 GetLimitedHistory(s.ResponseData, s.InsertDate, s.Id, s.Customer.Id, s.Customer.Company.ExperianRefNum) :
-												 new CheckHistoryModel
-												 {
-													 Date = s.InsertDate.ToUniversalTime(),
-													 Id = s.Id,
-													 Score = GetNonLimitedScoreFromXml(s.ResponseData),
-													 Balance = (decimal?)null
-												 }).ToList();
+				var checkCompanyHistoryModels = (
+					from s in _session.Query<MP_ServiceLog>()
+					where s.Director == null
+					where s.Customer.Id == customer.Id
+					where s.ServiceType == type
+					select isLimited ? GetLimitedHistory(s.InsertDate, s.Id) : new CheckHistoryModel {
+						Date = s.InsertDate.ToUniversalTime(),
+						Id = s.Id,
+						Score = GetNonLimitedScoreFromXml(s.ResponseData),
+						Balance = (decimal?)null
+					}
+				).ToList();
 
 				model.CompanyHistory = checkCompanyHistoryModels.Where(h => h != null).OrderByDescending(h => h.Date);
 				foreach (var cModel in checkCompanyHistoryModels)
@@ -234,31 +230,16 @@
 			}
 		}
 
-		private CheckHistoryModel GetLimitedHistory(string responseData, DateTime date, long id, int customerId, string refNumber)
-		{
-			var model = new CheckHistoryModel { Date = date, Id = id };
-			var doc = new XmlDocument();
+		private CheckHistoryModel GetLimitedHistory(DateTime date, long id) {
+			ComapanyDashboardModel m = new CompanyScoreModelBuilder().BuildLimitedDashboardModel(id);
 
-			try
-			{
-				var parser = new Parser(
-				CurrentValues.Instance[Variables.CompanyScoreParserConfiguration], new SafeILog(this));
-				doc.LoadXml(responseData);
-				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
-				var oResult = new ExperianParserOutput(oParsed, TypeOfBusinessReduced.Limited);
-
-				ComapanyDashboardModel m = new CompanyScoreModelBuilder().BuildLimitedDashboardModel(oResult);
-
-				model.Balance = m.CaisBalance;
-				model.Score = m.Score;
-			}
-			catch (Exception e)
-			{
-				Log.ErrorFormat("failed to retrieve history for company experian data for service log id {0} \n{1}", id, e);
-				return null;
-			} // try
-			return model;
-		}
+			return new CheckHistoryModel {
+				Date = date,
+				Id = id,
+				Balance = m.CaisBalance,
+				Score = m.Score,
+			};
+		} // GetLimitedHistory
 
 		private void CreatePersonalDataModel(CreditBureauModel model, Customer customer)
 		{

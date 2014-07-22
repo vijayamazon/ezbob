@@ -72,7 +72,6 @@
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
     <Compile Include="Common\Coin.cs" />
-    <Compile Include="Common\CustomerExtensions.cs" />
     <Compile Include="DatabaseDataHelper\amazon.cs" />
     <Compile Include="DatabaseDataHelper\channelgrabber.cs" />
     <Compile Include="DatabaseDataHelper\ebay.cs" />
@@ -81,8 +80,6 @@
     <Compile Include="DatabaseWrapper\Order\AInternalOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\RtiTaxMonthEntry.cs" />
     <Compile Include="DatabaseWrapper\Order\VatReturnEntry.cs" />
-    <Compile Include="ExperianParserFacade.cs" />
-    <Compile Include="ExperianParserOutput.cs" />
     <Compile Include="Model\CustomerRelations\CRMStatusGroup.cs" />
     <Compile Include="Model\CustomerRelations\CustomerRelationState.cs" />
     <Compile Include="Model\CustomerRelations\CustomerRelationFollowUp.cs" />
@@ -578,10 +575,6 @@
     <ProjectReference Include="..\DbConstants\DbConstants.csproj">
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExperianParser\ExperianParser.csproj">
-      <Project>{002cd56a-ba12-48e2-bb40-663e3bcbff3a}</Project>
-      <Name>ExperianParser</Name>
     </ProjectReference>
     <ProjectReference Include="..\LandRegistryLib\LandRegistryLib.csproj">
       <Project>{637833c1-b500-4310-be16-f157f15b17c1}</Project>

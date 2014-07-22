@@ -198,6 +198,7 @@
     <Compile Include="Areas\Underwriter\Models\BugModel.cs" />
     <Compile Include="Code\ReportGenerator\ReportHandler.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManager.cs" />
+    <Compile Include="Models\CompanyScoreModelBuilder.cs" />
     <Compile Include="Models\LoanOffer.cs" />
     <Compile Include="Code\ServerLog\ServerLogCachePkgModel.cs" />
     <Compile Include="Code\ServerLog\ServerLogEntryModel.cs" />
@@ -1711,6 +1712,10 @@
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
       <Name>Ezbob.Backend.Models</Name>
@@ -1782,10 +1787,6 @@
     <ProjectReference Include="..\..\..\Integration\ExperianLib\ExperianLib.csproj">
       <Project>{D91F3FD0-9E1B-41FF-AE2E-67F051198F51}</Project>
       <Name>ExperianLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Integration\ExperianParser\ExperianParser.csproj">
-      <Project>{002cd56a-ba12-48e2-bb40-663e3bcbff3a}</Project>
-      <Name>ExperianParser</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EzBob.Models\EzBob.Models.csproj">
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
