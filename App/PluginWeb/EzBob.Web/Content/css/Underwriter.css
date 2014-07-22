@@ -11,6 +11,9 @@
      transform: none; 
 }
 
+.ui-dialog {
+    background-color: #ffffff;
+}
 input[type="button"],
 input[type="submit"],
 input[type="reset"],

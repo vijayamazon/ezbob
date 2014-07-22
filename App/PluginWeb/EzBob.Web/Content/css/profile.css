@@ -208,7 +208,10 @@ body .agreement-text {
 .personal-company-info-container:after { display: table; line-height: 0; content: ""; }
 .personal-company-info-container:after { clear: both; }
 
-.personal-company-info-container .column { width: 590px; margin-right: 10px; float: left; }
+.personal-company-info-container .column {
+     width: 49%;
+     float: left;
+}
 
 body .apply-header-approved {
     font-size: 18px;
@@ -780,4 +783,5 @@ table.directors-list td.l {
 
 .jspPane {
     font-family: Arial;
+    font-size: 16px;
 }

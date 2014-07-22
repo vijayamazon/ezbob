@@ -57,8 +57,12 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
         
         this.$el.find('input[nextSerial]').serialFill();
 
-        $(".dashboard-steps > ul li[data-step-num=0]").addClass("completed complete").removeClass("active current");
-        $(".dashboard-steps > ul li[data-step-num=1]").addClass("active current");
+        $(".dashboard-steps li[data-step-num=0]").addClass("complete").removeClass("current");
+        $(".dashboard-steps li[data-step-num=0] .inner-circle").addClass("complete");
+        $(".dashboard-steps li[data-step-num=0] .progress-line-current").addClass("progress-line-complete");
+        $(".dashboard-steps li[data-step-num=1]").addClass("current");
+        $(".dashboard-steps li[data-step-num=1] .inner-circle").addClass("current");
+        $(".dashboard-steps li[data-step-num=1] .progress-line-").addClass("progress-line-current");
 
         if (this.model.get('bankAccountAdded'))
             this.ready();

@@ -23,7 +23,6 @@
         }
 
     #copyrights {
-        height: 100px;
         min-width: 600px;
         width: 100%;
     }
@@ -31,7 +30,7 @@
     footer .copyrights-inner {
         min-width: 600px;
         width: 100%;
-        height: 100px;
+        padding: 0;
     }
 
     div.full_width {
@@ -39,7 +38,7 @@
         overflow-x: hidden;
     }
 
-    .inner {
+    .inner, .broker-finish-wizard-later {
         min-width: 600px;
         width: 100%;
         margin: 0 auto;

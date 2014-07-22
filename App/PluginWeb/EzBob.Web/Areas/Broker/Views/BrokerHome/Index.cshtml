@@ -222,8 +222,10 @@
                                     </div>
                                 </div>
                             </form>
-
-                            <aside class="customer-sidebar broker"></aside>
+                            @if (Request.Browser.ScreenPixelsWidth >= 1000)
+                            {
+                                <aside class="customer-sidebar broker"></aside>
+                            }
                         </div>
                         <!-- section-signup -->
 
