@@ -297,6 +297,16 @@ table.table th {
 .update-password-form {
     margin-top: 20px;
 }
+
+.table > thead > tr > th, 
+.table > tbody > tr > th, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > tbody > tr > td, 
+.table > tfoot > tr > td{
+	vertical-align: middle;
+}
+
 /*
 @media only screen and (min-device-width : 320px) and (max-device-width : 1000px) {
     .broker-form {

@@ -304,64 +304,63 @@
     var hidden = string.Format("<input id='{0}' class='{0} {1} hidden-field {2} ' style='display: none !important' name='{0}'/>", identificator, validationClass, hiddenFieldAuxClass);
     
     <div class="control-group form_field_container">
+        <span class="fs16">@title</span>
         <div class="controls ezDateTime">
-            <span class="fs16">@title</span>
-
             <label class="attardi-input @labelCss">
                 <span>Day</span>
-                    @{ page.WriteLiteral(daySelect); }
+                @{ page.WriteLiteral(daySelect); }
                    
-                    <option value="-"></option>
-                    @for (var i = 1; i <= 31; i++)
-                    {
-                        <option
-                            @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
-                            {
-                                @:selected="selected"
-                            }
-                            value="@i"
-                            >@i</option>
-                    }
+                <option value="-"></option>
+                @for (var i = 1; i <= 31; i++)
+                {
+                    <option
+                        @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
+                        {
+                            @:selected="selected"
+                        }
+                        value="@i"
+                        >@i</option>
+                }
                  
-                   @{ page.WriteLiteral(endSelect); }
+                @{ page.WriteLiteral(endSelect); }
                  
             </label>
 
             <label class="attardi-input @labelCss">
                 <span>Month</span>
                 @{ page.WriteLiteral(monthSelect); }
-                    <option value="-"></option>
-                    @for (var i = 1; i <= 12; i++)
-                    {
-                        <option
-                            @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
-                            {
-                                @:selected="selected"
-                            }
-                            value="@i"
-                            >@month[i - 1]</option>
-                    }
+                <option value="-"></option>
+                @for (var i = 1; i <= 12; i++)
+                {
+                    <option
+                        @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
+                        {
+                            @:selected="selected"
+                        }
+                        value="@i"
+                        >@month[i - 1]</option>
+                }
                 @{ page.WriteLiteral(endSelect); }
             </label>
 
             <label class="attardi-input @labelCss">
                 <span>Year</span>
                 @{ page.WriteLiteral(yearSelect); }
-                    <option value="-"></option>
-                    @{
-                        var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
-                        var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
-                        for (var i = maxYear; i >= minYear; i--)
-                        {
-                            <option
-                                @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
-                                {
-                                    @:selected="selected"
-                                }
-                                value="@i"
-                                >@i</option>
-                        }
+                <option value="-"></option>
+                @{
+                    var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
+                    var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
+                    for (var i = maxYear; i >= minYear; i--)
+                    {
+                        <option
+                            @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
+                            {
+                                @:selected="selected"
+                            }
+                            value="@i"
+                            >@i</option>
                     }
+                }
                 @{ page.WriteLiteral(endSelect); }
             </label>
             
@@ -385,7 +384,6 @@
     var identificator = new HtmlString(name);
 
     <div class="form-group">
-
         <label for="day" class="control-label">@title</label>
         <div class="controls ezDateTime">
             <select name="day" style="width: 33%;" class="form-control selectheight">

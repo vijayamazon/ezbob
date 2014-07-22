@@ -38,7 +38,7 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
             save = this.model.get('TotalPayEarlySavings');
       
         if (state == 'get' && hasLoans) {
-            message = "<em>Congratulations!</em> Click <a class='hm_blue get-cash' href='#GetCash'>Choose Amount</a> and choose the exact amount you need.";
+            message = "<em>Congratulations!</em> Click Choose Amount and choose the exact amount you need.";
             cls = "green";
         }
 
@@ -56,17 +56,17 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
         }
 
         if (state == 'apply' && hasLoans && !wasSetAccordingToApplyState) {
-            message = "<em>Note:</em> Our previous offer to you has expired. Click <a class='hm_blue request-cash' href='#'>REQUEST CASH</a>.  ";
+            message = "<em>Note:</em> Our previous offer to you has expired. Click Request Cash.  ";
             cls = "green";
         }
 
         if (state == 'apply' && !hasLoans) {
-            message = "<em>Note:</em> Our previous offer to you expired.  Click REQUEST CASH.  ";
+            message = "<em>Note:</em> Our previous offer to you expired.  Click Request Cash.  ";
             cls = "green";
         }
 
         if (state == 'get' && !hasLoans) {
-            message = "<b>Congratulations!</b> Click <a class='hm_blue get-cash' href='#GetCash'>Choose Amount</a> and choose the exact amount you need.";
+            message = "<em>Congratulations!</em> Click Choose Amount and choose the exact amount you need.";
             cls = "green";
         }
 

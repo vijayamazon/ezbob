@@ -1,4 +1,7 @@
-﻿textarea.reason, textarea.yodleeReason {
+﻿.ui-dialog {
+    background-color: #ffffff;
+}
+textarea.reason, textarea.yodleeReason {
     width: 100%;
     resize: none;
     height: 80px;

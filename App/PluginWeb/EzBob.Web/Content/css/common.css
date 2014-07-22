@@ -1166,7 +1166,7 @@ table.dashboard_sources {
 select,option {
     display: inline-block;
     margin-bottom: 10px;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 20px;
     color: black;
     vertical-align: middle;
@@ -1427,76 +1427,6 @@ DIV#upload-files-form {
 
 .upload-files-dialog .ui-dialog-titlebar-close {
     display: none;
-}
-
-.addr-button {
-    display: inline-block;
-    text-align: center;
-    color: #444;
-    font-size: 16px;
-    font-weight: normal;
-    height: 100% !important;
-    padding: 0 8px;
-    line-height: 36px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    -o-transition: all 0.218s;
-    -moz-transition: all 0.218s;
-    -webkit-transition: all 0.218s;
-    transition: all 0.218s;
-    border: 1px solid #dcdcdc;
-    -o-transition: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
-    outline: none;
-    margin-left: 5px;
-    box-shadow: none;
-    text-shadow: none !important;
-    min-width: 10em !important;
-}
-
-.rc-button {
-    display: inline-block;
-    min-width: 25%;
-    text-align: center;
-    color: #444;
-    font-size: 16px;
-    font-weight: normal;
-    height: 100% !important;
-    padding: 0 8px;
-    line-height: 36px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    -o-transition: all 0.218s;
-    -moz-transition: all 0.218s;
-    -webkit-transition: all 0.218s;
-    transition: all 0.218s;
-    border: 1px solid #dcdcdc;
-    -o-transition: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
-    outline: none;
-    margin-left: 5px;
-    box-shadow: none;
-    text-shadow: none !important;
-}
-
-.addr-button:hover,
-.rc-button:hover {
-    border: 1px solid #c6c6c6;
-    color: #333;
-    text-decoration: none;
-    -o-transition: all 0.0s;
-    -moz-transition: all 0.0s;
-    -webkit-transition: all 0.0s;
-    transition: all 0.0s;
-    text-shadow: none !important;
 }
 
 div.form_buttons_container {
@@ -1843,10 +1773,15 @@ input.form_field_right_side_signup_phone { float: right; margin-right: 10px; wid
     background-size: 64px 52px;
     background-position: 20px center;
     background-repeat: no-repeat;
-    padding: 30px 30px 30px 112px;
+    padding: 30px 0;
     border: 1px solid #E2E3E5;
-    width: 1070px;
+    width: 1000px;
     margin: 10px auto;
+}
+
+.broker-finish-inner {
+    padding-left: 100px;
+    padding-right: 30px;
 }
 
 .broker-finish-wizard-later .button-container {
@@ -1935,7 +1870,6 @@ input[type='radio'], input[type='checkbox'] { box-shadow: none; }
         background-size: 30px;
         color: #333;
         cursor: pointer;
-        font-weight: bold;
         padding: 0 0 0 4em;
         margin-bottom: 0;
         vertical-align: middle;
@@ -2130,13 +2064,13 @@ ul.storelist li span {
     background-repeat: no-repeat;
     background-position: 10px 50%;
     cursor: pointer;
-    font-weight: bold;
     color: #333;
     padding: 0 0 0 4em;
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 40px;
     font-size: 18px;
+    min-height: 40px;
 }
 
 .matchingAddressList li.not-found-item {
@@ -2223,7 +2157,7 @@ li[stripped="stripped"] {
     margin: 0 !important;
     width: 100%;
     height: 100%;
-    font-size: 14px;
+    font-size: 18px;
 }
 
 .attardi-input span {
@@ -2239,6 +2173,7 @@ li[stripped="stripped"] {
     pointer-events: none;
     font-size: 18px;
     line-height: 20px;
+    width: 96%;
 }
 
 .attardi-input span.active {
@@ -2252,7 +2187,7 @@ li[stripped="stripped"] {
     outline: 0;
     top: -18px;
     color: #acacac !important;
-    font-size: 12px;
+    font-size: 14px;
     min-height: 18px;
 }
 
@@ -2284,7 +2219,7 @@ li[stripped="stripped"] {
 }
 
 .ezDateTime .attardi-input {
-    width: 27%;
+    width: 31%;
 }
 
 .ezDateTime .attardi-input select {
@@ -3286,4 +3221,9 @@ table.payment-schedule-table {
 
 ul.marketing-files {
     list-style: none;
+}
+
+iframe[src^='https://finimpact'] {
+    position: absolute;
+    top: -1000px;
 }

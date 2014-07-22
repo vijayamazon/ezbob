@@ -16,7 +16,8 @@ body
     -webkit-font-smoothing: antialiased !important;
     margin: 0;
     padding: 0;
-    background: #fff;/*#eef3fa;*/
+    background: #fff;
+    font-size: 18px;
 }
 
 /*-- login bar --*/
@@ -614,13 +615,6 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 
 .store-connect-manual li {
     margin: 20px 0;
-}
-
-.store-connect-manual, .store-connect-manual p, .store-connect-manual a, .store-connect-manual a:hover, .store-connect-manual a:visited, .amazon-instructions p {
-    
-    font-size: 16px;
-    font-weight: normal;
-    color: #565656;
 }
 
 .store-connect-manual a, .store-connect-manual a:hover, .store-connect-manual a:visited {
