@@ -8,7 +8,7 @@ EzBob.Underwriter.CompanyScoreModel = Backbone.Model.extend({
 });
 
 EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
-	initialize: function (options) {
+	initialize: function () {
 		this.template = _.template($('#company-score-template').html());
 		this.model.on('change sync', this.render, this);
 		this.list = null;
@@ -30,8 +30,10 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 
 		var oOwners = this.model.get('Owners');
 
+		var i;
+
 		if (oOwners) {
-			for (var i = 0; i < oOwners.length; i++) {
+			for (i = 0; i < oOwners.length; i++) {
 				sHtml = this.template({
 					companyScoreData: oOwners[i],
 					onAfterRender: onAfterRender,
@@ -44,7 +46,7 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 
 		this.$el.html(sHtml);
 
-		for (var i = 0; i < onAfterRender.length; i++)
+		for (i = 0; i < onAfterRender.length; i++)
 			onAfterRender[i].call(undefined);
 
 		this.redisplayAccordion();

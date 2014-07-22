@@ -28,13 +28,13 @@
 
 		public CompanyScoreModelItemValues() {
 			Values = new SortedDictionary<string, string>();
-			Children = new SortedDictionary<string, CompanyScoreModelItemValues>();
+			Children = new Dictionary<string, CompanyScoreModelItem>();
 		} // constructor
 
 		#endregion constructor
 
 		public SortedDictionary<string, string> Values { get; private set; }
-		public SortedDictionary<string, CompanyScoreModelItemValues> Children { get; private set; }
+		public Dictionary<string, CompanyScoreModelItem> Children { get; private set; }
 	} // class CompanyScoreModelItemValues
 
 	#endregion class ParsedDataItem
@@ -42,9 +42,9 @@
 	#region class CompanyScoreModelItem
 
 	public class CompanyScoreModelItem {
-		public CompanyScoreModelItem(string sGroupName) {
+		public CompanyScoreModelItem(string sGroupName, SortedDictionary<string, string> oMetaData) {
 			GroupName = sGroupName;
-			MetaData = new SortedDictionary<string, string>();
+			MetaData = oMetaData ?? new SortedDictionary<string, string>();
 			Data = new List<CompanyScoreModelItemValues>();
 		} // constructor
 
@@ -67,6 +67,8 @@
 		public string result { get; set; }
 
 		public Dictionary<string, CompanyScoreModelItem> dataset { get; set; }
+
+		public Dictionary<string, CompanyScoreModelItem> newDataset { get; set; }
 
 		public string company_name { get; set; }
 

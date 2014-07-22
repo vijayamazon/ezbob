@@ -3,16 +3,17 @@
 
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 	public abstract class ASrcAttribute : Attribute {
-		protected ASrcAttribute(string sNodeName) {
-			GroupName = null;
+		protected ASrcAttribute(string sGroupName, string sNodeName) {
+			GroupName = sGroupName;
 			NodeName = sNodeName;
-			IsTopLevel = true;
 		} // constructor
 
-		public string GroupName { get; protected set; }
+		public string GroupName { get; private set; }
 		public string NodeName { get; private set; }
 
-		public bool IsTopLevel { get; protected set; }
+		public virtual bool IsTopLevel { get { return true; } }
+
+		public virtual bool IsDisplayed { get { return true; } }
 
 		public string GroupPath {
 			get { return "." + (IsTopLevel ? "/REQUEST" : "") + "/" + GroupName; }
@@ -25,5 +26,7 @@
 		public override string ToString() {
 			return string.IsNullOrWhiteSpace(NodeName) ? GroupPath : NodePath;
 		} // ToString
+
+		public virtual DisplayMetaData MetaData { get { return null; } }
 	} // class ASrcAttribute
 } // namespace

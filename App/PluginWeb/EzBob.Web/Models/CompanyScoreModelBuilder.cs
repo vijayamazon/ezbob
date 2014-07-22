@@ -307,7 +307,8 @@
 
 			return new CompanyScoreModel {
 				result = CompanyScoreModel.Ok,
-				dataset = oDataset,
+				dataset = new Dictionary<string, CompanyScoreModelItem>(), // TODO: oDataset,
+				newDataset = oDataset,
 				company_name = oExperianLtd.CompanyName,
 				company_ref_num = oExperianLtd.RegisteredNumber,
 				Data = null,

@@ -43,6 +43,7 @@
     <Compile Include="Experian\AExperianLtdDataRow.cs" />
     <Compile Include="Experian\ASrcAttribute.cs" />
     <Compile Include="Experian\attributes_for_limited.cs" />
+    <Compile Include="Experian\DisplayMetaData.cs" />
     <Compile Include="Experian\ExperianLtdErrors.cs" />
     <Compile Include="Experian\ExperianLtdCaisMonthly.cs" />
     <Compile Include="Experian\ExperianLtd.cs" />
