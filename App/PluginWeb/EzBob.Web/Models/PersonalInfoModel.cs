@@ -147,7 +147,7 @@
 			}
 
 			CompanySeniority = string.Format("{0}y {1}m", companySeniorityYears, companySeniorityMonths);
-			IsYoungCompany = companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow;
+			IsYoungCompany = companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow && (companySeniority.Value.Year != DateTime.UtcNow.Year || companySeniority.Value.Month != DateTime.UtcNow.Month || companySeniority.Value.Day != DateTime.UtcNow.Day);
 
 			if (customer.FraudStatus != FraudStatus.Ok)
 			{

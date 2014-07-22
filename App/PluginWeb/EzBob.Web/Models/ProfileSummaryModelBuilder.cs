@@ -145,7 +145,7 @@
 			try
 			{
 				DateTime? companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
-				if (companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow)
+				if (companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow && (companySeniority.Value.Year != DateTime.UtcNow.Year || companySeniority.Value.Month != DateTime.UtcNow.Month || companySeniority.Value.Day != DateTime.UtcNow.Day))
 				{
 					summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "YC", Alert = "Young company. Incorporation date: " + companySeniority.Value.ToString("dd/MM/yyyy"), AlertType = AlertType.Error.DescriptionAttr() });
 				}
