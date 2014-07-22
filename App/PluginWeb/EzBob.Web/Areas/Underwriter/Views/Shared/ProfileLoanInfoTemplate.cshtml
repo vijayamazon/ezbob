@@ -11,7 +11,7 @@
 {
     <tr>
         <td>
-            <span>@Html.Raw(title)</span>
+            <span class="customer-details-left-margin">@Html.Raw(title)</span>
             <span class="pull-right">@Html.Raw(value)</span>
         </td>
     </tr>
@@ -33,7 +33,7 @@
 {
     <tr>
         <td>
-            <span class="@Html.Raw(css)">@Html.Raw(title)</span>
+            <span class="@Html.Raw(css) customer-details-left-margin">@Html.Raw(title)</span>
             <span class="@Html.Raw(css) pull-right">
                 <span>@Html.Raw(val1) </span>
                 <button class="btn btn-mini left-pane-button" name="@Html.Raw(val2)"><i class="fa fa-pencil" /></button>
@@ -59,7 +59,7 @@
 {
     <tr>
         <td>
-            <span class="@Html.Raw(css)">@Html.Raw(title)</span>
+            <span class="@Html.Raw(css) customer-details-left-margin">@Html.Raw(title)</span>
             <span class="@Html.Raw(css) pull-right">
                 <div class="@Html.Raw(className) make-switch switch-mini" data-on="@Html.Raw(dataOn)" data-off="default" data-animated="true" data-off-label="@Html.Raw(labelOff)" data-on-label="@Html.Raw(labelOn)">
                     <input type="checkbox" checked/>
@@ -104,7 +104,7 @@
             </tr>
             <tr>
                 <td>
-                    <span class="customer-column-width-50">Reg date</span>
+                    <span class="customer-details-left-margin">Reg date</span>
                     <span class="pull-right"><%- data.RegistrationDate %></span>
                 </td>
             </tr>
@@ -147,7 +147,7 @@
 
             <tr>
                 <td>
-                    <span>E-mail<i data-title="<%- data.EmailState %>" class="tltp <%=getIcon()%>"/></span>
+                    <span class="customer-details-left-margin">E-mail<i data-title="<%- data.EmailState %>" class="tltp <%=getIcon()%>"/></span>
                     <span class="pull-right">
                         <%- data.Email.length <= 14 ? data.Email : data.Email.substring(0,11)+'...' %>
                         <i data-title="<%- data.Email %>" class="tltp-left <%=getIcon()%>"/>
@@ -160,7 +160,7 @@
 
             <tr>
                 <td>
-                    <span>Website</span>
+                    <span class="customer-details-left-margin">Website</span>
                     <span class="pull-right">
                         <a data-title="<%- data.Website %>" class="tltp <%=getIcon()%>" href="http://<%- data.Website %>" target="_blank">
                             <%- data.Website.length <= 30 ? data.Website : data.Website.substring(0,27)+'...' %>
@@ -184,11 +184,11 @@
         <tbody class="box-content">
             <tr class="with-broker">
                 <td>
-                    <span>
+                    <span class="customer-details-left-margin">
                         <button class="btn btn-mini left-pane-button hide" id="brokerDetailsBtn" name="brokerDetails">
                             <i class="fa fa-plus"/>
                         </button>
-                        &nbsp;Broker name
+                        Broker name
                     </span>
                     <span class="pull-right">
                         <%- data.BrokerName %>
@@ -202,7 +202,7 @@
             </tr>
             <tr>
                 <td>
-                    <span>Email</span>
+                    <span class="customer-details-left-margin">Email</span>
                     <span class="pull-right">
                         <%- data.BrokerContactEmail.length <= 15 ? data.BrokerContactEmail : data.BrokerContactEmail.substring(0,12)+'...' %>
                         <i data-title="<%- data.BrokerContactEmail %>" class="tltp-left <%=getIcon()%>"/>
@@ -216,7 +216,7 @@
         <tbody class="box-content">
             <tr>
                 <td>
-                    <span class="<%= data.PromoCodeCss %>">Promo</span>
+                    <span class="<%= data.PromoCodeCss %> customer-details-left-margin">Promo</span>
                     <span class="pull-right <%= data.PromoCodeCss %>">
                         <%= data.PromoCode %>
                     </span>
@@ -226,7 +226,7 @@
 
             <tr>
                 <td>
-                    <span>Ref Source</span>
+                    <span class="customer-details-left-margin">Ref Source</span>
                     <span class="pull-right">
                         <%- data.ReferenceSource ? (data.ReferenceSource.length <= 20 ? data.ReferenceSource : data.ReferenceSource.substring(0,17)+'...') : '-' %>
                     <i data-title="<%- data.ReferenceSource || 'no source ref' %>" class="tltp fa fa-question-circle"></i>
@@ -253,14 +253,14 @@
 
             <tr>
                 <td>
-                    <span class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %>">AML</span>
+                    <span class="customer-details-left-margin <%= data.IsAmlInAlertMode ? 'red_cell' : '' %>">AML</span>
                     <span class="pull-right <%= data.IsAmlInAlertMode ? 'red_cell' : '' %>"><%- data.AmlResult %></span>
                 </td>
             </tr>
 
             <tr>
                 <td>
-                    <span class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">Fraud Status</span>
+                    <span class="customer-details-left-margin <%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">Fraud Status</span>
                     <span class="pull-right <%= data.IsFraudInAlertMode ? 'red_cell' : '' %>"><%- data.FraudCheckStatus %>
                         <button class="btn btn-mini left-pane-button" name="changeFraudStatusManualy">
                             <i class="fa fa-pencil" />

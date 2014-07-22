@@ -1924,3 +1924,7 @@ body {
 .profileLink {
     padding: 0;
 }
+
+.customer-details-left-margin {
+    margin-left: 5px;
+}
