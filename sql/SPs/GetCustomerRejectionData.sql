@@ -21,7 +21,8 @@ BEGIN
 			@BankGroup INT, 
 			@RowNum INT,
 			@CompanyDefaultStartDate DATETIME,
-			@NumOfDefaultCompanyAccounts INT
+			@NumOfDefaultCompanyAccounts INT,
+			@HasCompanyFiles BIT
 		
 	SELECT 
 		@ErrorMPsNum = COUNT(cmp.Id)
@@ -86,11 +87,17 @@ BEGIN
 		
 	SELECT @CompanyDefaultStartDate = DATEADD(MM, -@Reject_Defaults_CompanyMonths, GETUTCDATE())
 	SELECT @NumOfDefaultCompanyAccounts = COUNT(1) FROM ExperianDL97Accounts WHERE CustomerId = @CustomerId AND LastUpdated > @CompanyDefaultStartDate AND CurrentBalance >= @Reject_Defaults_CompanyAmount AND State = 'D'
+	
+	IF EXISTS (SELECT 1 FROM MP_CustomerMarketPlace, MP_MarketplaceType WHERE MarketPlaceId = MP_MarketplaceType.Id AND MP_MarketplaceType.Name = 'CompanyFiles' AND MP_CustomerMarketPlace.CustomerId = @CustomerId)
+		SET @HasCompanyFiles = 1
+	ELSE
+		SET @HasCompanyFiles = 0
 	 	 	
 	SELECT 
 		@ErrorMPsNum AS ErrorMPsNum, 
 		@ApprovalNum AS ApprovalNum, 
 		@NumOfDefaultAccounts AS NumOfDefaultAccounts,
-		@NumOfDefaultCompanyAccounts AS NumOfDefaultCompanyAccounts
+		@NumOfDefaultCompanyAccounts AS NumOfDefaultCompanyAccounts,
+		@HasCompanyFiles AS HasCompanyFiles
 END
 GO
