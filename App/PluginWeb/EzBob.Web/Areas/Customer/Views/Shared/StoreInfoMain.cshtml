@@ -42,8 +42,14 @@
         </div>
 
         <div class="link-accounts-form hide">
-            <h2 class="form_start">Link accounts</h2>
-
+            @if (bIsWizard)
+            {
+                <h2 class="form_start">Link accounts</h2>
+            }
+            else
+            {
+                <h2 class="form_start">Link more accounts</h2>
+            }
             <div style="display: none;" class="online_entry_message wizard_message">Please connect at least one account.</div>
 
             <div style="display: none;" class="offline_entry_message wizard_message">

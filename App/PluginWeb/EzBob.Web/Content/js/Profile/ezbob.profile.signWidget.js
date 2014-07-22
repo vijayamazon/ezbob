@@ -57,7 +57,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (!hasRollOver && state == "late") {
             this.model.set({
                 color: 'green',
-                text: '<span><span class="client-name">' + name + '</span>, <a href="#" class="pay-early" ui-event-control-id="dashboard:payment-is-required-late">Payment is Required</a></span>',
+                text: '<span><span class="client-name">' + name + '</span>, Payment is Required',
                 signTemplate: "welcome"
             });
             return;
@@ -75,9 +75,9 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (balance > 0) {
             var valueOfText;
             if (isEarly) {
-                valueOfText = '<span><span class="client-name">' + name + '</span>, <a href="#" class="pay-early" ui-event-control-id="dashboard:pay-early-and-save">Pay Early &amp; Save</a></span>';
+                valueOfText = '<span><span class="client-name">' + name + '</span>, Pay Early &amp; Save';
             } else {
-                valueOfText = '<span><span class="client-name">' + name + '</span>, <a href="#" class="pay-early" ui-event-control-id="dashboard:payment-is-required">Payment is Required</a></span>';
+                valueOfText = '<span><span class="client-name">' + name + '</span>, Payment is Required';
             }
             this.model.set({
                 color: 'green',

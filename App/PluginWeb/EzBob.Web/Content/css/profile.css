@@ -102,7 +102,6 @@
 }
 
 .d-widget dd {
-    color: #525151;
     border: solid 1px #c5c5c5;
     width: 110px;
     display: block;
@@ -113,17 +112,13 @@
     -o-border-radius: 4px;
     text-align: right;
     padding-right: 3px;
-    color: #0B73B4;
     font-weight: bold;
-    text-align: left;
     margin-right: 8px;
     padding-left: 2px;
-    text-align: right;
-    font-size: 13px;
+    font-size: 16px;
     position: relative;
-
-    behavior: url(CSS3PIE);
-    position:relative\0/;
+    font-family: 'Titillium Web Semi Bold';
+    color: #67c10b;
 }
 
 .d-widget button {
@@ -131,24 +126,6 @@
     margin: -7px -10px 0;
     float: right;
     width: 167px;
-}
-
-.button-profile {
-    background-image: url(../img/btn-profile-bg.png);
-    background-position: 0 0;
-    background-color: transparent;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-    border: none 0px;
-    width: 188px;
-    height: 44px;
-    padding: 6px 8px 8px 11px;
-    font-size:17px;
-    font-weight: bold;
-    color: #404040;
-}
-
-.button-profile:hover {
-    background-position: 0 -44px;
 }
 
 .profile-menu.navbar .nav a {
@@ -203,31 +180,6 @@ body .agreement-text {
     left: 40%;
 }
 
-.profile-table th {
-    background-color: #a9c854;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    height: 29px;
-    line-height: 29px;
-    text-align: center;
-}
-
-.profile-table td {
-    font-size: 12px;
-    color: #565656;
-    text-align: center;
-}
-
-
-.cart-logo {
-    float: left;
-    width: 94px;
-    height: 115px;
-    margin-left: -9px;
-    background-position: right center;
-}
-
 .profile-headlines {
     padding-top: 60px;
 }
@@ -256,30 +208,12 @@ body .agreement-text {
     background-image: url(../img/cart_silver.png)
 }
 
-.green-sign {
-    background-image: url(../img/green-sign.png);
-    padding: 18px 20px 66px 20px;
-    width: 97px;
-    height: 50px;
-}
-
 .welcome-sign{
-    font-size: 18px;
+    font-size: 24px;
 }
 
-.green-sign, .green-sign a, .green-sign:hover, .green-sign:visited, .green-sign:active {
-    font-size: 22px;
-    font-weight: bold;
-    color: #fefefe;
-    text-decoration: none;
-}
 .profile-widgets {
     margin-top: 0px;
-    /*border: solid 1px #c5c5c5;*/
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-    /*padding: 15px;*/
     background-color: white;
 }
 
@@ -311,19 +245,6 @@ body .agreement-text {
 .button-profile.single {
     margin-top: 60px;
 }
-
-.payment-account-Bank {
-    background-image: url(../img/bank_account.png);
-    background-repeat: no-repeat;
-    height: 18px;
-}
-
-.payment-account-Card {
-    background-image: url(../img/debit-card.png);
-    background-repeat: no-repeat;
-    height: 28px;
-}
-
 
 .summary-table tr td:first-child {
     text-align: left;
@@ -420,10 +341,8 @@ body .statusLate {
 }
 
 .processing-header h2{
-    padding: 10px 0 0 0;
-    margin: 0 0 0 100px;
     color: red;
-    font-size: 14px;
+    font-size: 18px;
     font-variant: normal;
     font-style: normal;
 }
@@ -437,10 +356,6 @@ body .statusLate {
     position: relative;
 }
 
-.settings-form input {
-    color: #0B73B4;
-}
-
 .settings-form .control-group .controls a
 {
     position: absolute;
@@ -450,24 +365,6 @@ body .statusLate {
 .loan-schedule {
     margin-top: 10px;
     font-weight: normal;
-}
-
-.button-profile.disabled {
-    color: rgba(64, 64, 64, 0.63);
-    /* IE 8 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-
-    /* IE 5-7 */
-    filter: alpha(opacity=63);
-
-    /* Netscape */
-    -moz-opacity: 0.63;
-
-    /* Safari 1.x */
-    -khtml-opacity: 0.63;
-
-    /* Good browsers */
-    opacity: 0.63;
 }
 
 body .dashes {
@@ -568,13 +465,6 @@ body .other-amount-label {
     top: -10px;
     left: 20px;
     font-size: 10px;
-}
-
-.client-name {
-    color: #67c10b;
-}
-.proccessing-message {
-    margin-left: -100px;
 }
 
 #message-sign {
@@ -687,16 +577,17 @@ html body .right {
 }*/
 
 .dashboard-frame td.caption {
-    width: 150px;
     height: 35px;
-    color: black;
-    font-size: 15px;
+    font-size: 16px;
     vertical-align: top;
+    width: 150px;
 }
 
-.dashboard-frame td {
+.dashboard-frame td.value {
     height: 35px;
     vertical-align: top;
+    font-size: 16px;
+    font-family: 'Titillium Web Semi Bold';
 }
 
 .by-paying-early {
@@ -704,20 +595,6 @@ html body .right {
     color: #0B73B4;
     margin-top: 25px;
     margin-bottom: 25px
-}
-
-body .modal.fade {
-    -webkit-transition: none;
-    -moz-transition: none;
-    -ms-transition: none;
-    -o-transition: none;
-    transition: none;
-}​
-
-body .modal-backdrop,
-body .modal-backdrop.fade.in {
-  opacity: 0.3;
-  filter: alpha(opacity=30);
 }
 
 .header-message.hm_green {

@@ -9,46 +9,43 @@
                 type = customer.BusinessTypeReduced,
                 companyName = '',
                 isLate = loan.Status == 'Late';
-
             switch(type){
             case 'Personal':
                 address = customer.PersonalAddress.toJSON()[0];
                 break;
 
             case 'Limited':
-                address = customer.CompanyAddress[0];
+                address = customer.CompanyAddress.toJSON()[0];
                 companyName = 'LIMITED company name<br />'; // customer.LimitedInfo.LimitedCompanyName || '' + "<br />";
                 break;
 
             case 'NonLimited':
-                address =  customer.CompanyAddress[0];
+                address =  customer.CompanyAddress.toJSON()[0];
                 companyName = 'NON LIMITED company name<br />'; // customer.NonLimitedInfo.NonLimitedCompanyName  || '' + "<br />";
                 break;
             }
-
             %><table style="width: 100%;">
                 <tr>
                     <td class="caption">Date:</td>
-                    <td><%- EzBob.formatDateHumanFull(loan.Date) %> </td>
+                    <td class="value"><%- EzBob.formatDateHumanFull(loan.Date) %> </td>
                 </tr>
                 <tr>
                     <td class="caption">Name:</td>
-                    <td><%- customer.CustomerPersonalInfo.FirstName %> <%- customer.CustomerPersonalInfo.Surname %></td>
+                    <td class="value"><%- customer.CustomerPersonalInfo.FirstName %> <%- customer.CustomerPersonalInfo.Surname %></td>
                 </tr>
+                <%if(address) {%>
                 <tr>
                     <td class="caption">Address:</td>
-                    <td><%
-                        if(address) {
-                            %><%- address.Line1 || '' %>
+                    <td class="value"><%- address.Line1 || '' %>
                             <%- address.Line2 || '' %>
                             <%- address.Town || '' %>
-                            <%- address.Postcode || '' %><%
-                        }
-                    %></td>
+                            <%- address.Postcode || '' %>
+                    </td>
                 </tr>
+                <%}%>
                 <tr>
                     <td class="caption">Loan Reference#:</td>
-                    <td><%- loan.RefNumber || '' %></td>
+                    <td class="value"><%- loan.RefNumber || '' %></td>
                 </tr>
             </table>
         </div>

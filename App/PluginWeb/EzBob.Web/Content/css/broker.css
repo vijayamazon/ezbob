@@ -275,12 +275,28 @@ table.table th {
 .update-password-form {
     margin-top: 20px;
 }
-
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+/*
+@media only screen and (min-device-width : 320px) and (max-device-width : 1000px) {
     .broker-form {
         float: left;
         width: 100%;
         line-height: 1.8em;
         margin-bottom: 1.5em;
     }
+
+    .customer-sidebar {
+        display: none;
+        visibility: hidden;
+    }
+    body,
+    #wrapper,
+    #header,
+    .header-inner,
+    .inner,
+    .copyrights-inner {
+        min-width: 600px;
+        width: 100%;
+    }
+
 }
+*/

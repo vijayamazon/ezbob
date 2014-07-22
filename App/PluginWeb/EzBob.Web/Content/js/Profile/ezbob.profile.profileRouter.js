@@ -20,7 +20,6 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.perksView = new EzBob.Profile.PerksView();
         
         this.companyDirectorsView = new EzBob.Profile.CompanyDirectorsView({ model: options });
-        //this.accountSummary = new EzBob.Profile.AccountSummaryView({ model: options });
 
         var accountSettings = new EzBob.Profile.AccountSettingsModel(options.get('AccountSettings'));
         accountSettings.set('userName', options.get('userName'));
@@ -28,7 +27,6 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
 
         this.YourDetails = new EzBob.Profile.YourInfoMainView({ model: options });
 
-        //this.widgets.AccountSummary = this.accountSummary;
         this.widgets.PaymentAccounts = this.accounts;
         this.widgets.YourStores = this.stores;
         this.widgets.AccountActivity = this.accountActivityView;
@@ -159,7 +157,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.marketing("LoanDetails");
     },
     companyDirectors: function() {
-        this.activate("CompanyDirectors")
+        this.activate("CompanyDirectors");
     },
 
     marketing: function (page) {

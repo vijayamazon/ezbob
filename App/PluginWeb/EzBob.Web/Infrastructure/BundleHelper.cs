@@ -29,7 +29,6 @@
 				//custom css
 				.Add("~/Content/css/common.css")
 				.Add("~/Content/css/customer.css")
-				.Add("~/Content/css/mobile.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // RenderCustomerCss
 
@@ -51,7 +50,16 @@
 				//custom css
 				.Add("~/Content/css/wizard.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
+				.Add("~/Content/css/mobile.css")
 				.MvcRender("~/Content/css/min/wizard_combined_#.css");
+		} // RenderProfileCss
+
+		public static MvcHtmlString RenderLoginCss()
+		{
+			return Bundle.Css()
+				//custom css
+				.Add("~/Content/css/mobile.css")
+				.MvcRender("~/Content/css/min/login_combined_#.css");
 		} // RenderProfileCss
 
 		public static MvcHtmlString RenderUnderwriterCss()
@@ -444,7 +452,6 @@
 				.Add("~/Content/js/Profile/ezbob.profile.loanDetails.js")
 				.Add("~/Content/js/Profile/ezbob.profile.paymentAccounts.js")
 				.Add("~/Content/js/Profile/ezbob.profile.Stores.js")
-				.Add("~/Content/js/Profile/ezbob.profile.AccountSummary.js")
 				.Add("~/Content/js/Profile/ezbob.profile.yourInfo.coffee")
 				.Add("~/Content/js/Profile/ezbob.profile.paypointSchedule.js")
 				.Add("~/Content/js/Profile/ezbob.profile.loanTaken.js")

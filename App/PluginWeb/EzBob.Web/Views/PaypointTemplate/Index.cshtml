@@ -71,7 +71,7 @@
 }
 <div class="row-fluid">
     <div class="dashboard-header">
-            <div class="dashboard-steps wizard-steps">
+            <div class="dashboard-steps wizard-steps" style="display: none;">
                 <div class="progress-time"></div>
                 <ul class="application_steps">
                     <li class="complete first-circle" data-step-num="0">
@@ -86,7 +86,7 @@
                     </li>
                     <li class="current center-circle" data-step-num="1">
                         <div class="progress-circle">
-                            <div class="inner-circle complete">
+                            <div class="inner-circle current">
                                 <div class="percent">2</div>
                             </div>
                         </div>
@@ -313,11 +313,12 @@
             }
             $("#expiry").mask("99/99");
             $("#card_no").mask("9999999999999999");
-
+            console.log('isPayEarly', isPayEarly);
             if (isPayEarly) {
                 $('#amount-group').show();
                 $('.PayPointHeader h3').hide();
-                $(".dashboard-steps").hide();
+            } else {
+                $(".dashboard-steps").show();
             }
 
             $('li[rel]').popover({ placement: 'left' });

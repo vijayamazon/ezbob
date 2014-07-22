@@ -21,7 +21,6 @@
         </div>
         <ul class="application_steps">
             <%(function() {
-                    var nVisibleStepNum = 0;
                     var last = steps.length - 1;
 
                     _.each(steps, function(step, i) {
@@ -32,8 +31,6 @@
 
                         if (i < current) css += 'complete';
 
-                        if (progress == 100) css = 'complete';
-
                         if (i == last) {
                             lastcss = 'last';
                             circleType = 'last-circle';
@@ -42,7 +39,6 @@
                             lastcss='first';
                             circleType = 'first-circle';
                         }
-                        if (step.showTitleInWizardSteps) nVisibleStepNum++; else css += 'hide';
             %>
             <li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= step.num %>">
                 <div class="progress-circle">

@@ -151,8 +151,6 @@ EzBob.WizardView = EzBob.View.extend({
     render: function () {
         var template = this.template();
         this.$el.html(template);
-        $('.header-info').show();
-        $('.header-info-text').text('SIGNUP');
         this.stepChanged();
 
         var notifications = new EzBob.NotificationsView({ el: this.$el.find('.notifications') });
@@ -285,13 +283,14 @@ EzBob.WizardView = EzBob.View.extend({
         var $proggressLine = this.$el.find("ul.application_steps li.complete .progress-line-complete").last().css("width", "35%");
         var $proggresLineCurrent = this.$el.find("ul.application_steps li.current .progress-line-current");
         var $circleCurrent = this.$el.find("ul.application_steps li.current .inner-circle");
+        $circleCurrent.removeClass('current');
         $proggresLineCurrent.hide().css("width", "0");
 
         if (this.$el.find("ul.application_steps li:first").hasClass("current"))
             $proggresLineCurrent.show().css("width", "35%");
 
         $proggressLine.show().animate({ width: "110%" }, 1000, function () {
-            $circleCurrent.addClass('complete');
+            $circleCurrent.addClass('current');
             $proggresLineCurrent.show().animate({ width: "35%" }, 800, function () { });
         });
     }, // stepChanged

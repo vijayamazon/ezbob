@@ -19,7 +19,6 @@ body
     background: #fff;/*#eef3fa;*/
 }
 
-.inner_nopadding{width:980px; padding:0; margin:0 auto; }
 /*-- login bar --*/
 #pre_header{
     height:40px; color:#fff; text-shadow:0 1px 1px #000;
@@ -224,13 +223,8 @@ body .form_field_look,
 body .form_field {
     margin: 0 0 20px 0;
     padding: 5px;
-    font-size: 14px;
+    font-size: 18px;
     border: 1px #ccc solid;
-    /*
-    -moz-box-shadow: 0 0 10px #ccc;
-    -webkit-box-shadow: 0 0 10px #ccc;
-    box-shadow: 0 0 10px #ccc;
-        */
 }
 
 body .form_field_look:hover,
