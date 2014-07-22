@@ -151,7 +151,7 @@ footer, .push {
 }
 
 /*-- General Content Classes --*/
-h1,h2,h3,h4,h5,h6{font-size:28px; margin:20px 0 20px 0; line-height:28px; font-family: 'Titillium Web Bold';}
+h1,h2,h3,h4,h5,h6{font-size:28px; margin:20px 0 20px 0; line-height:28px; font-family: 'Titillium Web Semi Bold';}
 h1{font-size:24px; margin:10px 0 20px 0; color:#999; padding:0 0 10px 0; border-bottom:1px #eee solid;}
 h1.home_page{font-size:34px; line-height:50px; color:#666; border:none!important; padding:0; margin:0 0 10px 0;}
 h1.centered{text-align:center;}
@@ -1529,7 +1529,7 @@ button,
     color:#ffffff;
     text-decoration:none;
     text-align:center;
-    font-family: 'Titillium Web Bold';
+    font-family: 'Titillium Web Semi Bold';
     cursor: pointer;
 }
 
