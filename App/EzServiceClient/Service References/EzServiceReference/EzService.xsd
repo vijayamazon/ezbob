@@ -386,6 +386,16 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="DateTimeActionResult" nillable="true" type="tns:DateTimeActionResult" />
+  <xs:complexType name="NullableDateTimeActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NullableDateTimeActionResult" nillable="true" type="tns:NullableDateTimeActionResult" />
   <xs:complexType name="ExperianLtdActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

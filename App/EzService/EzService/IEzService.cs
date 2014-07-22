@@ -264,7 +264,7 @@
 		DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
 
 		[OperationContract]
-		DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
+		NullableDateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
 
 		[OperationContract]
 		IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId);

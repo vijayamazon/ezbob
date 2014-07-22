@@ -209,16 +209,16 @@
 			};
 		}
 
-		public DateTimeActionResult GetCompanySeniority(int customerId, int underwriterId)
+		public NullableDateTimeActionResult GetCompanySeniority(int customerId, int underwriterId)
 		{
 			GetCompanySeniority instance;
 
 			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
 
-			return new DateTimeActionResult
+			return new NullableDateTimeActionResult
 			{
 				MetaData = result,
-				Value = instance.CompanyIncorporationDate.HasValue ? instance.CompanyIncorporationDate.Value : DateTime.UtcNow
+				Value = instance.CompanyIncorporationDate
 			};
 		}
 

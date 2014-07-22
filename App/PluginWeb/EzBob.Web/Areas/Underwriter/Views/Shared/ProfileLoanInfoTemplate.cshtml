@@ -125,7 +125,14 @@
         <tbody class="box-content">
             @RowCell("Company Name", "<%- data.CompanyName %>")
             @RowCell("Business Type", "<%- data.CompanyType %>")
-            @RowCell("Company Seniority", "<%- data.CompanySeniority %>")
+
+            <tr>
+                <td>
+                    <span class="customer-details-left-margin <%= data.IsYoungCompany ? 'red_cell' : '' %>">Company Seniority</span>
+                    <span class="pull-right <%= data.IsYoungCompany ? 'red_cell' : '' %>"><%- data.CompanySeniority %></span>
+                </td>
+            </tr>
+
             @RowCell("# Directors", "<%- data.NumOfDirectors %>")
             @RowCell("# Shareholders", "<%- data.NumOfShareholders %>")
         </tbody>

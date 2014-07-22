@@ -5,7 +5,6 @@
 	using System.Globalization;
 	using System.Linq;
 	using Backend.Models;
-	using EZBob.DatabaseLib.Model.Loans;
 	using ExperianLib;
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib.Model.Database;
@@ -14,9 +13,11 @@
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
 	using Ezbob.Utils.Extensions;
+	using Infrastructure;
 	using MoreLinq;
 	using NHibernate;
 	using Newtonsoft.Json;
+	using ServiceClientProxy;
 	using StructureMap;
 	using log4net;
 
@@ -24,11 +25,13 @@
 	{
 		private readonly IDecisionHistoryRepository _decisions;
 		private readonly MarketPlacesFacade _mpFacade;
+		private readonly ServiceClient serviceClient;
 
 		public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, MarketPlacesFacade mpFacade)
 		{
 			_decisions = decisions;
 			_mpFacade = mpFacade;
+			serviceClient = new ServiceClient();
 		}
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ProfileSummaryModelBuilder));
@@ -137,6 +140,21 @@
 					summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "Follow", Alert = "Customer relations follow up date is due " + state.FollowUp.FollowUpDate.ToString("dd/MM/yyyy"), AlertType = AlertType.Error.DescriptionAttr() });
 				}
 			}
+
+			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+			try
+			{
+				DateTime? companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
+				if (companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow)
+				{
+					summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "YC", Alert = "Young company. Incorporation date: " + companySeniority.Value.ToString("dd/MM/yyyy"), AlertType = AlertType.Error.DescriptionAttr() });
+				}
+			}
+			catch (Exception e)
+			{
+				Log.Debug("Error fetching company seniority: {0}", e);
+			}
+
 			BuildLandRegistryAlerts(customer, summary);
 		}
 

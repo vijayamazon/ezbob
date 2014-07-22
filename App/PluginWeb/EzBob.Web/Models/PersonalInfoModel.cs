@@ -58,6 +58,7 @@
 		public string CompanyName { get; set; }
 		public string CompanyType { get; set; }
 		public string CompanySeniority { get; set; }
+		public bool IsYoungCompany { get; set; }
 		public string CompanyExperianRefNum { get; set; }
 		public int NumOfDirectors { get; set; }
 		public int NumOfShareholders { get; set; }
@@ -123,16 +124,14 @@
 
 			if (Directors == null)
 				Directors = new DirectorModel[0];
-
 			
 			var expDirModel = CrossCheckModel.GetExperianDirectors(customer);
 			ExperianDirectors = expDirModel.DirectorNames;
 			NumOfDirectors = expDirModel.NumOfDirectors;
 			NumOfShareholders = expDirModel.NumOfShareHolders;
 			
-			
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-			DateTime companySeniority;
+			DateTime? companySeniority;
 			try
 			{
 				companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
@@ -141,10 +140,14 @@
 			{
 				companySeniority = DateTime.UtcNow;
 			}
-			int companySeniorityYears, companySeniorityMonths;
-			MiscUtils.GetFullYearsAndMonths(companySeniority, out companySeniorityYears, out companySeniorityMonths);
-			
+			int companySeniorityYears = 0, companySeniorityMonths = 0;
+			if (companySeniority.HasValue)
+			{
+				MiscUtils.GetFullYearsAndMonths(companySeniority.Value, out companySeniorityYears, out companySeniorityMonths);
+			}
+
 			CompanySeniority = string.Format("{0}y {1}m", companySeniorityYears, companySeniorityMonths);
+			IsYoungCompany = companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow;
 
 			if (customer.FraudStatus != FraudStatus.Ok)
 			{

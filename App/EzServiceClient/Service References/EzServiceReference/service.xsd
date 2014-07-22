@@ -1917,7 +1917,7 @@
   <xs:element name="GetCompanySeniorityResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q154="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCompanySeniorityResult" nillable="true" type="q154:DateTimeActionResult" />
+        <xs:element xmlns:q154="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCompanySeniorityResult" nillable="true" type="q154:NullableDateTimeActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
