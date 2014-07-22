@@ -29,8 +29,6 @@
 
     <meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
 
-    <link href="https://fonts.googleapis.com/css?family=Sanchez" rel="stylesheet" type="text/css">
-
     @{
         Html.RenderPartial("_FavIcon");
 
@@ -78,12 +76,12 @@
                     <div class="header-info-right"></div>
                 </div>
                 <ul id="user-menu" class="hide">
+                    <li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
+                    <li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
+                    <li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
                     <li>
                         <div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div>
                     </li>
-                    <li class="menu-btn login log-off"><a href="#" class="button btn-grey">LOG OFF</a></li>
-                    <li class="menu-btn login log-in"><a href="#" class="button btn-grey">LOGIN</a></li>
-                    <li class="menu-btn sign-up"><a href="#" class="button btn-green">SIGN UP</a></li>
                 </ul>
             </div>
         </div>
@@ -142,7 +140,8 @@
                                 <div class="form_field_container">
                                     <label class="attardi-input">
                                         <div class="code-sent-style-container">
-                                            <label id="codeSentLabel" class="code-sent-style hide">Code sent</label></div>
+                                            <label id="codeSentLabel" class="code-sent-style hide">Code sent</label>
+                                        </div>
                                         <span>Contact person mobile phone</span>
                                         <input type="text" name="ContactMobile" id="ContactMobile" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:signup-contact-mobile" maxlength="11" />
                                         <img id="ContactMobileImage" class="field_status required" />
@@ -270,7 +269,8 @@
                                 <div class="form_field_container">
                                     <label class="attardi-input">
                                         <div class="code-sent-style-container">
-                                            <label id="forgottenSentLabel" class="code-sent-style hide">Code sent</label></div>
+                                            <label id="forgottenSentLabel" class="code-sent-style hide">Code sent</label>
+                                        </div>
                                         <span>Contact person mobile phone</span>
                                         <input type="text" name="ForgottenMobile" id="ForgottenMobile" tabindex="@{ WriteLiteral(nForgottenTabIdx++); }" class="phonenumber form_field form_field_left_side" ui-event-control-id="broker:forgotten-contact-mobile" maxlength="11" />
                                         <img id="ForgottenMobileImage" class="field_status required" />
@@ -298,14 +298,21 @@
                         <!-- section-forgotten -->
 
                         <div class="page-section hide section-dashboard">
-                            <ul>
-                                <li><a href="#section-dashboard-customers">Clients</a></li>
-                                <li><a href="#section-dashboard-marketing">Marketing materials</a></li>
-                                <li><a href="#section-dashboard-account-info">Account information</a></li>
-                            </ul>
+                            <div class="profile-menu">
+                                <div class="navbar-inner">
+                                    <ul class="nav">
+                                        <li class="active"><a href="#section-dashboard-customers">Clients</a></li>
+                                        <li class="divider-vertical"></li>
+                                        <li><a href="#section-dashboard-marketing">Marketing materials</a></li>
+                                        <li class="divider-vertical"></li>
+                                        <li><a href="#section-dashboard-account-info">Account information</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
 
                             <div id="section-dashboard-customers">
-                                <button type="button" id="AddNewCustomer" class="button btn-green pull-right">Add a new client</button>
+                                <button type="button" id="AddNewCustomer" class="button btn-green pull-right btn-wide">Add a new client</button>
                                 <h2 class="form-start">Client list</h2>
 
                                 <div class="table-responsive table-big">
@@ -502,7 +509,7 @@
 
                                                 <div class="form_buttons_container">
                                                     <div class="attardi-button">
-                                                        <button type="submit" id="UpdatePassword" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
+                                                        <button type="submit" id="UpdatePassword" class="button btn-green disabled pull-right btn-wide" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -514,7 +521,7 @@
                         <!-- section-customer-list -->
 
                         <div class="page-section hide section-add-customer">
-                            <button type="button" class="back-to-list button btn-green pull-right">Back to client list</button>
+                            <button type="button" class="back-to-list button btn-green pull-right btn-wide">Back to client list</button>
                             <h2 class="form-start">Add a new client</h2>
 
                             <form class="new-lead-form broker-form" novalidate="novalidate">
@@ -544,102 +551,128 @@
                                     </label>
                                 </div>
 
-                                <div class="form_buttons_container">
-                                    <div class="attardi-button">
-                                        <button type="submit" id="LeadFillWizard" data-add-mode="fill" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">
-                                            <i class="fa fa-desktop"></i>
-                                            <div>Complete the application</div>
-                                            <div>on behalf of your client</div>
-                                        </button>
-                                        <button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">
-                                            <i class="fa fa-envelope"></i>
-                                            <div>Send an invitation to</div>
-                                            <div>the client to fill himself</div>
-                                        </button>
+                                <div>
+                                    <div class="form_field_container">
+                                        <div class="form_buttons_container">
+                                            Complete the application on behalf of your client
+                                            <button type="submit" id="LeadFillWizard" data-add-mode="fill" class="button btn-green disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">
+                                                <i class="fa fa-desktop"></i>&nbsp;Fill
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form_field_container">
+                                        <div class="form_buttons_container">
+                                            Send an invitation to the client to fill himself
+                                            <button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="button btn-green disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">
+                                                <i class="fa fa-envelope"></i>&nbsp;Send
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <!-- section-add-customer -->
+                <!-- section-add-customer -->
 
-                        <div class="page-section hide section-customer-details">
-                            <input type="hidden" id="customer-id" class="value" data-field-name="id" />
+                <div class="page-section hide section-customer-details">
+                    <input type="hidden" id="customer-id" class="value" data-field-name="id" />
 
-                            <div class="back-to-list-container">
-                                <button type="button" class="back-to-list button btn-green">Back to client list</button></div>
+                    <div class="back-to-list-container">
+                        <button type="button" class="back-to-list button btn-green btn-wide">Back to client list</button>
+                    </div>
 
-                            <div class="value-group aka-table table-big box">
-                                <div class="box-title aka-caption">Client details</div>
+                    <div class="value-group aka-table table-big box">
+                        <div class="box-title aka-caption">Client details</div>
 
-                                <div class="aka-row">
-                                    <div class="aka-column">
-                                        <div class="aka-table">
-                                            <div class="aka-row">
-                                                <span class="value-title">Name:</span>
-                                                <span class="value" data-field-name="name"></span>
-                                            </div>
-                                            <div class="aka-row">
-                                                <span class="value-title">Date of birth:</span>
-                                                <span class="value" data-field-name="birthdate"></span>
-                                            </div>
-                                            <div class="aka-row">
-                                                <span class="value-title">Gender:</span>
-                                                <span class="value" data-field-name="gender"></span>
-                                            </div>
-                                            <div class="aka-row">
-                                                <span class="value-title">Email:</span>
-                                                <span class="value" data-field-name="email"></span>
-                                            </div>
-                                        </div>
+                        <div class="aka-row">
+                            <div class="aka-column">
+                                <div class="aka-table">
+                                    <div class="aka-row">
+                                        <span class="value-title">Name:</span>
+                                        <span class="value" data-field-name="name"></span>
                                     </div>
-
-                                    <div class="aka-column">
-                                        <div class="aka-table">
-                                            <div class="aka-row">
-                                                <span class="value-title">Marital status:</span>
-                                                <span class="value" data-field-name="maritalstatus"></span>
-                                            </div>
-                                            <div class="aka-row">
-                                                <span class="value-title">Mobile phone #:</span>
-                                                <span class="value" data-field-name="mobilephone"></span>
-                                            </div>
-                                            <div class="aka-row">
-                                                <span class="value-title">Daytime phone #:</span>
-                                                <span class="value" data-field-name="daytimephone"></span>
-                                            </div>
-                                        </div>
+                                    <div class="aka-row">
+                                        <span class="value-title">Date of birth:</span>
+                                        <span class="value" data-field-name="birthdate"></span>
                                     </div>
-
-                                    <div class="aka-column">
-                                        <div class="aka-table">
-                                            <div class="aka-row">
-                                                <span class="value-title">Address:</span>
-                                                <span class="value" data-field-name="address"></span>
-                                            </div>
-                                        </div>
+                                    <div class="aka-row">
+                                        <span class="value-title">Gender:</span>
+                                        <span class="value" data-field-name="gender"></span>
+                                    </div>
+                                    <div class="aka-row">
+                                        <span class="value-title">Email:</span>
+                                        <span class="value" data-field-name="email"></span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="value-group crm-group aka-table table-big box">
-                                <div class="box-title aka-caption">
-                                    CRM events
-                                    <button type="button" class="button btn-green add-crm-note" title="Add CRM note">+</button>
+                            <div class="aka-column">
+                                <div class="aka-table">
+                                    <div class="aka-row">
+                                        <span class="value-title">Marital status:</span>
+                                        <span class="value" data-field-name="maritalstatus"></span>
+                                    </div>
+                                    <div class="aka-row">
+                                        <span class="value-title">Mobile phone #:</span>
+                                        <span class="value" data-field-name="mobilephone"></span>
+                                    </div>
+                                    <div class="aka-row">
+                                        <span class="value-title">Daytime phone #:</span>
+                                        <span class="value" data-field-name="daytimephone"></span>
+                                    </div>
                                 </div>
+                            </div>
 
-                                <table class="customer-crm-list table">
+                            <div class="aka-column">
+                                <div class="aka-table">
+                                    <div class="aka-row">
+                                        <span class="value-title">Address:</span>
+                                        <span class="value" data-field-name="address"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="value-group crm-group aka-table table-big box">
+                        <div class="box-title aka-caption">
+                            CRM events
+                                    <button type="button" class="button btn-green add-crm-note" title="Add CRM note">+</button>
+                        </div>
+
+                        <table class="customer-crm-list table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                    <th>Status</th>
+                                    <th>Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="value-group files-group aka-table table-big box">
+                        <div class="box-title aka-caption">Client files</div>
+
+                        <div class="aka-row">
+                            <div class="aka-column table-responsive">
+                                <table class="customer-file-list table">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Action</th>
-                                            <th>Status</th>
-                                            <th>Comment</th>
+                                            <th>File name</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -647,32 +680,11 @@
                                 </table>
                             </div>
 
-                            <div class="value-group files-group aka-table table-big box">
-                                <div class="box-title aka-caption">Client files</div>
-
-                                <div class="aka-row">
-                                    <div class="aka-column table-responsive">
-                                        <table class="customer-file-list table">
-                                            <thead>
-                                                <tr>
-                                                    <th>File name</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <form id="customerFilesUploader" class="aka-column">
-                                        <div class="dz-message"><span>Drag or click to upload files.</span></div>
-                                    </form>
-                                </div>
-                            </div>
+                            <form id="customerFilesUploader" class="aka-column">
+                                <div class="dz-message"><span>Drag or click to upload files.</span></div>
+                            </form>
+                        </div>
+                    </div>
 
                             <div class="value-group directors-group aka-table table-big box">
                                 <div class="box-title aka-caption">Directors/shareholders</div>
@@ -682,20 +694,20 @@
                                 </div>
                             </div>
 
-                            @{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/CustomerRelations/AddCustomerRelationsEntry.cshtml");}
-                        </div>
-                        <!-- section-customer-details -->
-
-                        <div class="page-section hide section-forbidden">
-                            <h2>You are not authorised to see this page.</h2>
-                        </div>
-                        <!-- section-forbidden -->
-                    </section>
+                    @{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/CustomerRelations/AddCustomerRelationsEntry.cshtml");}
                 </div>
+                <!-- section-customer-details -->
+
+                <div class="page-section hide section-forbidden">
+                    <h2>You are not authorised to see this page.</h2>
+                </div>
+                <!-- section-forbidden -->
+                </section>
             </div>
-            </div>
-        <div id="modalRegion" class="modal hide fade"></div>
-        <div class="push"></div>
+        </div>
+    </div>
+    <div id="modalRegion" class="modal hide fade"></div>
+    <div class="push"></div>
     </div>
 
     <footer>
@@ -809,16 +821,18 @@
         var EzBob = EzBob || {};
         EzBob.LoadedConfig = EzBob.LoadedConfig || {};
         EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';
-		EzBob.LoadedConfig.CaptchaMode = '@Model.CaptchaMode';
+        EzBob.LoadedConfig.CaptchaMode = '@Model.CaptchaMode';
         EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;
 
         function EzBob_CgVendors_init() {
-            EzBob.CgVendors.init(@{ WriteLiteral(Model.ChannelGrabberAccounts); });
-		} // EzBob_CgVendors_init
+            if (EzBob.CgVendors) {
+                EzBob.CgVendors.init(@{ WriteLiteral(Model.ChannelGrabberAccounts); });
+            }
+        } // EzBob_CgVendors_init
 
-		$(document).ready(function() {
-		    EzBob_CgVendors_init();
-		});
+        $(document).ready(function() {
+            EzBob_CgVendors_init();
+        });
     </script>
     <!-- scripts - end -->
 </body>

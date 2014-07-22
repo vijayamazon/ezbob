@@ -1,7 +1,35 @@
-﻿textarea.reason, textarea.yodleeReason {
+﻿body, .ui-dialog {
+    background-color: #ebebeb;
+    font-family: 'Open Sans';
+    color: #4d4d4d;
+    font-weight: normal;
+    font-style: normal;
+    -webkit-transform: none; 
+    -moz-transform: none;
+    -ms-transform: none;
+    -o-transform: none;
+     transform: none; 
+}
+
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+button,
+.button,
+.ui-widget button {
+    font-family: 'Open Sans';
+}
+
+
+textarea.reason, textarea.yodleeReason {
     width: 100%;
     resize: none;
     height: 80px;
+}
+
+div.user-name {
+    display: inline-block;
+    position: absolute;
 }
 
 .underwriter-body {
@@ -280,10 +308,6 @@ table.squeezed tbody tr td {
     color: #797979;
 }
 
-table.table {
-    font-family: Tahoma;
-}
-
 .view-collection-status .control-label {
     float: left;
     width: 130px;
@@ -440,55 +464,6 @@ a.ezbob-logo-login {
     display: inline-block;
     margin-right: 0.32em;
 }
-
-/*
-#grids-view {
-	font-family: Tahoma, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	font-size: 12px;
-	font-weight: normal;
-	line-height: 20px;
-}
-
-#grids-view h2 { font-size: 1.3em; margin-left: 1em; }
-
-#grids-view .tab-pane .dataTables_processing {
-	z-index: 1;
-	background-color: yellow;
-	color: red;
-	font-weight: bold;
-}
-
-#grids-view .tab-pane label,
-#grids-view .tab-pane select,
-#grids-view .tab-pane input
-{
-	font-size: 12px;
-}
-
-#grids-view .tab-pane select,
-#grids-view .tab-pane input {
-	margin-top: 7px;
-}
- 
-#grids-view .grid-data {
-	width: 100%;
-}
-
-#grids-view .grid-data thead th,
-#grids-view .grid-data .grid-item-Name {
-	white-space: nowrap;
-}
-
-#grids-view .grid-data tbody tr.iswaslate { background-color: #ffdfdf!important; }
-
-#grids-view .grid-data tbody td { border: 1px solid #aaaaaa; }
-
-#grids-view .grid-data td.numeric {
-	text-align: right;
-}
-
-#grids-view tbody td.grid-item-Cart { text-align: center; }
-*/
 
 .with-border {
     border: 1px solid #aaa;
@@ -1182,8 +1157,7 @@ table.table.table-finaccount {
 }
 
 .row {
-    margin-left: -5px;
-    margin-right: -5px;
+    margin: 0;
 }
 
 ul.ScheduleList {
@@ -1428,7 +1402,7 @@ td a.edit-loan {
 
 .profile-tabs > .tabbable > .tab-content {
     position: relative;
-    padding: 5px 10px;
+    padding: 0;
     border: none;
 }
 
@@ -1588,9 +1562,6 @@ td a.edit-loan {
     margin-bottom: 10px;
 }
 
-body {
-    background-color: #ebebeb;
-}
 
 #profileHead {
     padding-top: 10px;

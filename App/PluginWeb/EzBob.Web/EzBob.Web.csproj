@@ -508,6 +508,12 @@
     <Content Include="Content\css\images\freeagent_on.png" />
     <Content Include="Content\css\images\gauge.png" />
     <Content Include="Content\css\images\green_dot.png" />
+    <Content Include="Content\css\images\header\circle_bg_L.png" />
+    <Content Include="Content\css\images\header\circle_bg_M.png" />
+    <Content Include="Content\css\images\header\circle_bg_R.png" />
+    <Content Include="Content\css\images\header\circle_green.png" />
+    <Content Include="Content\css\images\header\circle_green_process.png" />
+    <Content Include="Content\css\images\header\circle_white.png" />
     <Content Include="Content\css\images\header\ezbob_logo-white.png" />
     <Content Include="Content\css\images\header\ezbob_logo_dark.png" />
     <Content Include="Content\css\images\header\head-left-info.png" />
@@ -515,6 +521,7 @@
     <Content Include="Content\css\images\header\header_bg_left.png" />
     <Content Include="Content\css\images\header\header_bg_strip.png" />
     <Content Include="Content\css\images\header\pas.png" />
+    <Content Include="Content\css\images\header\phone.PNG" />
     <Content Include="Content\css\images\header\process_L_green.png" />
     <Content Include="Content\css\images\header\process_L_grey.png" />
     <Content Include="Content\css\images\header\process_M_green.png" />
@@ -706,6 +713,7 @@
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.eot" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.ttf" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.woff" />
+    <Content Include="Content\css\fonts\opensans.woff" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -734,6 +742,7 @@
     <Content Include="Content\img\info.png" />
     <Content Include="Content\img\info_active.png" />
     <Content Include="Content\img\info_hover.png" />
+    <Content Include="Content\img\live_chat_btn_up.png" />
     <Content Include="Content\img\logo-amazon-small.png" />
     <Content Include="Content\img\logo_ir.jpg" />
     <Content Include="Content\img\london-the-news.jpg" />
@@ -1586,7 +1595,6 @@
     <Content Include="Areas\Underwriter\Views\LoanAmountPerDay\Index.cshtml" />
     <Content Include="Content\js\Profile\ezbob.profile.getCash.js" />
     <Content Include="Content\js\lib\recaptcha_ajax.js" />
-    <Content Include="Content\js\Profile\ezbob.profile.AccountSummary.js" />
     <Content Include="Content\js\Profile\Settings\ezbob.profile.settingsQuestion.js" />
     <Content Include="Content\js\Profile\Settings\ezbob.profile.settingsPassword.js" />
     <Content Include="Content\js\Profile\Settings\ezbob.profile.settingsMain.js" />
@@ -1930,7 +1938,6 @@
     <Content Include="Areas\Customer\Views\Profile\PaymentAccountsTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\StoresTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\SettingsTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\_ProfileSummary.cshtml" />
     <Content Include="Areas\Customer\Views\Paypoint\Callback.cshtml" />
     <Content Include="Areas\Customer\Views\Paypoint\Error.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\PacnetStatus.cshtml" />
@@ -2041,6 +2048,9 @@
     <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.coffee" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js" />
+    <Content Include="Content\js\login\ezbob.login.view.min.js.map">
+      <DependentUpon>ezbob.login.view.js</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />

@@ -21,7 +21,6 @@
         </div>
         <ul class="application_steps">
             <%(function() {
-                    var nVisibleStepNum = 0;
                     var last = steps.length - 1;
 
                     _.each(steps, function(step, i) {
@@ -32,22 +31,22 @@
 
                         if (i < current) css += 'complete';
 
-                        if (progress == 100) css = 'complete';
-
                         if (i == last) {
                             lastcss = 'last';
                             circleType = 'last-circle';
                         }
-                        if ( i == 0 ) circleType = 'first-circle'
-                        if (step.showTitleInWizardSteps) nVisibleStepNum++; else css += 'hide';
+                        if ( i == 0 ) {
+                            lastcss='first';
+                            circleType = 'first-circle';
+                        }
             %>
-            <li class="<%- css %> <%-lastcss%>" data-step-num="<%= step.num %>">
-                <div class="progress-circle <%-circleType%>">
-                    <div class="percent"><%=(i+1)%></div>
+            <li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= step.num %>">
+                <div class="progress-circle">
+                    <div class="inner-circle <%-css%>"><div class="percent"><%=(i+1)%></div></div>
+                    
                 </div>
-                <div class="progress-line">
-                    <div class="progress-line-<%-css%>"></div>
-                </div>
+                <div class="progress-line"></div>
+                <div class="progress-line-<%-css%>"></div>
                 <span class="step_label"><% print(step.title) %></span>
             </li>
             <%}); // for each step
@@ -68,7 +67,7 @@
             </div>
             <div class="button-container">
                 For any assistance, please contact us.
-                <button class="green" title="Click to finish sign up process later and return to dashboard.">Finish later</button>
+                <button class="button btn-green" title="Click to finish sign up process later and return to dashboard.">Finish later</button>
             </div>
         </div>
         }

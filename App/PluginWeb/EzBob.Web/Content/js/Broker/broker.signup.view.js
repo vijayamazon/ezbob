@@ -126,19 +126,24 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 	}, // onFocus
 
 	showConsent: function(event) {
-		event.preventDefault();
-		event.stopPropagation();
+	    event.preventDefault();
+	    event.stopPropagation();
 
-		$('#broker-terms-and-conditions').dialog({
-			modal: true,
+	    $('#broker-terms-and-conditions').dialog({
+	        modal: true,
 
-			width: 800,
-			height: 600,
+	        width: 800,
+	        height: 600,
 
-			buttons: {
-				Close: function() {
-					$(this).dialog("close");
-				}, // close button
+	        buttons: {
+	            Close:
+	            {
+	                text: 'Close',
+	                'class': 'button btn-green',
+	                click: function () {
+	                    $(this).dialog("close");
+	                }
+	            }, // close button
 			}, // buttons
 		});
 

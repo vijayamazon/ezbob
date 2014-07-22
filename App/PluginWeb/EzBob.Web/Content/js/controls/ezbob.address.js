@@ -112,7 +112,7 @@ EzBob.Popup = Backbone.View.extend({
 		case 'manual-input':
 			oButtons.push({
 				text: 'Cancel',
-				'class': 'button grey',
+				'class': 'button btn-grey',
 				click: function() { self.PostCodeBtnCancel(); },
 				'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-manual-input-cancelled',
 			});

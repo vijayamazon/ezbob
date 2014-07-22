@@ -87,13 +87,20 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 @font-face {
     font-family: 'Titillium Select';
-    src: url('fonts/titillium-web/titilliumweb-regular-webfont.eot');    
+    src: url('fonts/titillium-web/titilliumweb-regular-webfont.eot');
     src: 
          url('fonts/titillium-web/titilliumweb-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('fonts/titillium-web/titilliumweb-regular-webfont.ttf') format('truetype');
 }
 
-body {
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(fonts/opensans.woff) format('woff');
+}
+
+body, .ui-dialog {
     font-family: "Titillium Web Regular";
     color: #4d4d4d;
     font-weight: normal;
@@ -105,8 +112,8 @@ body {
     transform: translateZ(0);
 }
 
-select {
-    font-family: "Titillium Select";
+select, .tooltip {
+    font-family: 'Open Sans';
 }
 html, body {
     height: 100%;
@@ -121,7 +128,7 @@ html, body {
 
 /*-- Padding for inner sections --*/
 .inner {
-    width:1200px; 
+    width:1000px; 
     margin:0 auto;
 }
 
@@ -141,18 +148,20 @@ footer, .push {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#1f2022',GradientType=0 );
     color:#fff; text-shadow:0 1px 1px #000; font-size:11px;
     height: 90px;
+    
 }
 
 .copyrights-inner {
-    width: 960px;
+    width: 1000px;
     margin: 0 auto;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    padding-bottom: 17px;
+    padding-top: 17px;
+    font-family: Arial;
 }
 
 /*-- General Content Classes --*/
 h1,h2,h3,h4,h5,h6{font-size:28px; margin:20px 0 20px 0; line-height:28px; font-family: 'Titillium Web Semi Bold';}
-h1{font-size:24px; margin:10px 0 20px 0; color:#999; padding:0 0 10px 0; border-bottom:1px #eee solid;}
+h1{font-size:24px; margin:20px 0 20px 0; color:#999; padding:0 0 10px 0; border-bottom:1px #eee solid;}
 h1.home_page{font-size:34px; line-height:50px; color:#666; border:none!important; padding:0; margin:0 0 10px 0;}
 h1.centered{text-align:center;}
 h1 span{color:#67c10b;}
@@ -971,10 +980,11 @@ table.dashboard_sources {
     overflow: hidden;
 }
 
+.modal-backdrop,
 #cboxOverlay {
     position: fixed;
     width: 100%;
-    height: 100%;
+    height: 200%;
 }
 
 #cboxMiddleLeft, #cboxBottomLeft {
@@ -1198,7 +1208,7 @@ input[type="color"],
     border-radius: 0px;
     padding: 4px 6px;
     height: 20px;
-    font-family: 'Titillium Web Light';
+    font-family: 'Open Sans';
 }
 
 .ez_progress_bar {
@@ -1507,7 +1517,8 @@ input[type="button"],
 input[type="submit"],
 input[type="reset"],
 button,
-.button {
+.button,
+.ui-widget button {
     border: none;
     outline: none;
     padding: 0;
@@ -1531,11 +1542,17 @@ button,
     text-align:center;
     font-family: 'Titillium Web Semi Bold';
     cursor: pointer;
+    font-size: 16px;
 }
 
 .button:active, .button:hover {
     color: #ffffff;
 }
+
+.btn-wide {
+    width: 140px !important;
+}
+
 
 .btn-green {
     -moz-box-shadow: 0px 1px 1px 0px #000000;
@@ -1686,7 +1703,7 @@ td.account-logo {
     outline-style: none;
     overflow: hidden;
     border: 1px solid #dddddd;
-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .hmrc-main-button a {
@@ -1734,7 +1751,7 @@ border-radius: 5px;
     top: 6px;
     right: 4px;
     position: absolute;
-    background-color: #1AB852;
+    background-color: #67C10B;
     color: white;
     font-weight: normal;
     font-size: 10px;
@@ -1827,8 +1844,9 @@ input.form_field_right_side_signup_phone { float: right; margin-right: 10px; wid
     background-position: 20px center;
     background-repeat: no-repeat;
     padding: 30px 30px 30px 112px;
-    border: 5px solid #5C6373;
-    margin: 10px 0 5px 0;
+    border: 1px solid #E2E3E5;
+    width: 1070px;
+    margin: 10px auto;
 }
 
 .broker-finish-wizard-later .button-container {
@@ -2118,6 +2136,7 @@ ul.storelist li span {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 40px;
+    font-size: 18px;
 }
 
 .matchingAddressList li.not-found-item {
@@ -2218,7 +2237,7 @@ li[stripped="stripped"] {
     z-index: 1;
     cursor: text;
     pointer-events: none;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 20px;
 }
 
@@ -2233,7 +2252,7 @@ li[stripped="stripped"] {
     outline: 0;
     top: -18px;
     color: #acacac !important;
-    font-size: 11px;
+    font-size: 12px;
     min-height: 18px;
 }
 
@@ -2360,7 +2379,7 @@ img.help-btn {
 }
 
 .amount-period-sliders .sliders-container .ui-slider-range {
-    background: #A7C952;
+    background: #67c10b;
     box-shadow: inset 0 1px 5px 0px rgba(0, 0, 0, .5),
                       0 1px 0   0px rgba(250, 250, 250, .5);
     position: absolute;
@@ -2584,15 +2603,18 @@ img.help-btn {
 /*wizard-header*/
 #header {
     position: fixed;
-    min-width: 1200px;
+    min-width: 1000px;
     width: 100%;
     height: 77px;
     z-index: 10;
     background: #4d4d4d;
+    -webkit-box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.35);
+    -moz-box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.35);
+    box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.35);
 }
 
 .header-inner {
-    width: 1200px;
+    width: 1000px;
     height: 100%;
     margin: auto;
     position: relative;
@@ -2652,6 +2674,7 @@ img.help-btn {
 img.newlogo {
     vertical-align: middle;
     margin-top: -10px;
+    margin-left: 7px;
 }
 
 .header-phone {
@@ -2660,7 +2683,12 @@ img.newlogo {
     font-size: 16px;
 }
 
-
+.ez-phone {
+    background-image: url(images/header/phone.PNG);
+    background-repeat: no-repeat;
+    width: 13px;
+    height: 18px;
+}
 #logged-in-user-name {
     right: 50% !important;
 }
@@ -2720,14 +2748,17 @@ ul#user-menu {
 .loginTemplate,
 #wizard,
 #profile-main,
-#get-cash,
 .wizard-steps
 {
     margin-top: 77px;
 }
 
+#get-cash {
+    margin-top: 90px;
+}
+
 #get-cash .wizard-steps {
-    margin-top: 0;
+    margin-top: -13px;
 }
 
 .wizard-steps {
@@ -2760,22 +2791,48 @@ ul#user-menu {
     
 }
 
-.progress-circle.center-circle {
-    background: url(images/header/process_M_grey.png);
+.center-circle .progress-circle {
+    background: url(images/header/circle_bg_M.png);
     background-repeat: no-repeat;
 }
-.progress-circle.first-circle {
-    background: url(images/header/process_L_grey.png);
+.first-circle .progress-circle {
+    background: url(images/header/circle_bg_L.png);
     background-repeat: no-repeat;
 }
-.progress-circle.last-circle {
-    background: url(images/header/process_R_grey.png);
+.last-circle .progress-circle {
+    background: url(images/header/circle_bg_R.png);
     background-repeat: no-repeat;
 }
 
+
+
+.progress-circle .inner-circle {
+    background: url(images/header/circle_white.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    width: 80px;
+    height: 80px;
+    z-index: 3;
+}
+.first-circle .inner-circle,
+.inner-circle.current {
+    background: url(images/header/circle_green_process.png);
+    background-repeat: no-repeat;
+}
+
+    .progress-circle .inner-circle.complete
+     {
+        background: url(images/header/circle_green.png);
+        background-repeat: no-repeat;
+        color: #ffffff;
+    }
+
+
     .progress-circle .percent {
         vertical-align: middle;
-        line-height: 94px;
+        line-height: 80px;
         font-size: 45px;
     }
 
@@ -2784,18 +2841,35 @@ ul#user-menu {
     background: url(images/header/pas.png);
     background-repeat: repeat-x;
     z-index: -1;
-    margin-top: -54px;
+    top: 40px;
     height: 15px;
-    width: 110%;
+    width: 100%;
     position: absolute;
+    margin-left: 70px;
+}
+.progress-line-current,
+.progress-line-complete {
+        background: url(images/header/process_pas.png);
+        background-repeat: repeat-x;
+        height: 7px;
+        top: 43px;
+        position: absolute;
+}
+
+.first .progress-line-current,
+.first .progress-line-complete {
     margin-left: 80px;
+}
+
+.progress-line-complete {
+    width: 110%;
 }
 
 ul.application_steps {
     overflow: hidden;
     list-style: none;
     margin: 0 auto;
-    max-width: 1200px;
+    max-width: 1000px;
     padding-bottom: 10px;
 }
 
@@ -2826,19 +2900,21 @@ ul.application_steps {
         width: 45%;
     }
 
-    .dashboard-steps ul.application_steps li .progress-line .progress-line-fill {
-        background: url(images/header/process_pas.png);
-        background-repeat: repeat-x;
-        height: 7px;
-        position: absolute;
-        top: 3px;
+    .dashboard-steps .progress-line-complete,
+    .dashboard-steps .progress-line {
+        width: 100%;
+    }
+    .dashboard-steps .first-circle .progress-line-complete,
+    .dashboard-steps .first-circle .progress-line-current {
+        margin-left: 80px;
     }
 
-    .dashboard-steps ul.application_steps li.current .progress-line .progress-line-fill {
-        width: 20%;
+    .dashboard-steps .last-circle .progress-line-current {
+        width: 50% !important;
     }
-    .dashboard-steps ul.application_steps li.complete .progress-line .progress-line-fill {
-        width: 100%;
+
+    .dashboard-steps ul.application_steps li.current .progress-line-current {
+        width: 35%;
     }
 
         ul.application_steps li.last {
@@ -2849,35 +2925,14 @@ ul.application_steps {
             color: #559302;
         }
 
-            ul.application_steps li.current .progress-line .progress-line-current {
+            ul.application_steps li.current .progress-line-current {
                 background: url(images/header/process_pas.png);
                 background-repeat: repeat-x;
                 width: 20%;
                 height: 7px;
                 position: absolute;
-                top: 3px;
             }
 
-            ul.application_steps li.current .progress-circle {
-                color: #fff;
-                background-repeat: no-repeat;
-            }
-            ul.application_steps li.current .progress-circle.center-circle {
-                background: url(images/header/process_M_green.png);
-                background-repeat: no-repeat;
-            }
-            ul.application_steps li.current .progress-circle.first-circle {
-                background: url(images/header/process_L_green.png);
-                background-repeat: no-repeat;
-            }
-            ul.application_steps li.complete .progress-circle.first-circle {
-                background: url(images/header/process_L_green.png);
-                background-repeat: no-repeat;
-            }
-            ul.application_steps li.current .progress-circle.last-circle {
-                background: url(images/header/process_R_green.png);
-                background-repeat: no-repeat;
-            }
 
     ul.application_steps .timer > #slice {
         position: absolute;
@@ -2927,18 +2982,6 @@ ul.application_steps {
             height: 1em;
         }
     
-    ul.application_steps li.complete .progress-line-complete {
-        background: url(images/header/process_pas.png);
-        background-repeat: repeat-x;
-        height: 7px;
-        margin-top: 3px;
-    }
-
-    ul.application_steps li.complete .progress-circle {
-        background: url(images/header/process_M_green.png);
-        color: #fff;
-    }
-
     ul.application_steps li .step_label {
         display: block;
         line-height: 17px;
@@ -2946,6 +2989,8 @@ ul.application_steps {
         color: #515254;
         width: 90px;
         text-align: center;
+        padding-top: 5px;
+        font-family: 'Titillium Web Semi Bold';
     }
 
 /*side bar*/
@@ -2958,13 +3003,13 @@ ul.application_steps {
 
 div.customer-sidebar-content {
     margin-top: 10px;
-    width: 70%;
+    width: 95%;
     float: right;
     overflow: visible;
 }
 div.customer-sidebar-content hr {
     margin-bottom: 5px;
-    margin-top: 0;
+    margin-top: -10px;
 }
     div.customer-sidebar-content div.item {
         min-height: 70px;
@@ -2996,12 +3041,13 @@ div.customer-sidebar-content hr {
             right: 0;
             top: 0;
             width: 74%;
-            padding-left: 30px;
+            padding-left: 20px;
+            font-size: 14px;
         }
 
             div.customer-sidebar-content div.item div.text h3 {
                 font-weight: bold;
-                font-size: 1.2em;
+                font-size: 1.3em;
                 margin: 0 0 0.1em 0;
             }
 
@@ -3024,13 +3070,11 @@ div.customer-sidebar-content hr {
 }
 .loan-details dt {
   float: left;
-  width: 130px;
+  width: 45%;
 }
 
 .loan-details dd {
-    color: #0B73B4;
     border: solid 1px #C5C5C5;
-    width: 110px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     -o-border-radius: 4px;
@@ -3039,11 +3083,14 @@ div.customer-sidebar-content hr {
     font-weight: bold;
     padding-left: 2px;
     text-align: right;
-    font-size: 13px;
+    font-size: 16px;
     margin-bottom: 3px;
     margin-right: 8px;
     display: block;
-    margin-left: 145px;
+    margin-left: 50%;
+    text-align: center;
+    font-family: 'Titillium Web Semi Bold';
+    color: #67c10b;
 }
 .loan-details-table td,
 .loan-details-table th {
@@ -3079,17 +3126,12 @@ table.payment-schedule-table {
     border: #c5c5c5 1px solid;
 }
 
-table.payment-schedule-table td{
-    font-size: 16px;
-    color: #67c10b;
-}
-
 .red, .hm_red {
     color: red!important;
 }
 
 .hm_black {
-    color: #000!important;
+    color: #4D4D4D!important;
 }
 
 #block-loan-schedule .apply-for-loan-total-block {
@@ -3165,7 +3207,7 @@ table.payment-schedule-table td{
 }
 
 .apply-for-loan-total-block .rlc {
-    font-size: 10px;
+    font-size: 14px;
     position: relative;
 }
 
@@ -3184,4 +3226,64 @@ table.payment-schedule-table td{
 .narrow-as-possible {
     width: 1px !important;
     white-space: nowrap !important;
+}
+
+.profile-menu .navbar-inner {
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    background: rgb(89,89,89); /* Old browsers */
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzU5NTk1OSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMzFmMjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top, rgba(89,89,89,1) 0%, rgba(35,31,32,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(89,89,89,1)), color-stop(100%,rgba(35,31,32,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* IE10+ */
+    background: linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* W3C */
+    filter: none\0/ !important;
+    -pie-background: linear-gradient(top, rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* W3C */
+}
+
+.navbar .profile-menu {
+    margin-bottom: 10px;
+}
+
+.profile-menu .nav {
+    height: 40px;
+    border: none;
+    color: #ffffff;
+}
+
+.navbar .nav > li > a,
+.profile-menu .nav > li > a {
+    text-shadow: none;
+    font-size: 14px ;
+    padding: 0 18px !important;
+    color: #a7a6a6;
+    font-family: "Titillium Web Semi Bold";
+    line-height: 40px !important;
+    vertical-align: middle;
+}
+.profile-menu .navbar-inner{
+    padding-left: 0px;
+}
+
+.profile-menu .ui-tabs .ui-tabs-nav li.ui-tabs-selected a,
+.profile-menu.navbar .nav > li > a:focus, 
+.profile-menu.navbar .nav > li > a:hover,
+.profile-menu.navbar .nav .active a, 
+.profile-menu.navbar  .nav .active a:hover{
+    color: #ffffff !important;
+}
+
+.profile-menu .divider-vertical {
+    height: 20px;
+    margin-top: 10px;
+    border-right: 1px solid #ffffff !important;
+    border-left: 1px solid #f2f2f2 !important;
+}
+
+ul.marketing-files {
+    list-style: none;
 }

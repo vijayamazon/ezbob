@@ -63,7 +63,7 @@ $(document).ready(function() {
 			));
 		});
 
-		oLinks.removeAttr('data-url-template').removeClass('marketing-files');
+		oLinks.removeAttr('data-url-template');
 	});
 
 	var sMsgOnStart = $('body').attr('data-msg-on-start');

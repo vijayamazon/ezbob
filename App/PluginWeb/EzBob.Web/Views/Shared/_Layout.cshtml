@@ -31,8 +31,6 @@
 
     @{ Html.RenderPartial("_FavIcon"); }
 
-    <link href='https://fonts.googleapis.com/css?family=Sanchez' rel='stylesheet' type='text/css'>
-
     @BundleHelper.RenderPrintCss()
     @BundleHelper.RenderCustomerCss()
     @RenderSection("css", false)
@@ -65,12 +63,12 @@
                 </div>
 
                 <ul id="user-menu">
-                    <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
                     <li id="logoff-li" class="login" style="display: none;">
-                        <a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="button btn-grey">LOG OFF</a>
+                        <a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="button btn-grey">Log Off</a>
                     </li>
-                    <li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })" class="button btn-grey">LOGIN</a></li>
-                    <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="button btn-green">SIGN UP</a></li>
+                    <li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })" class="button btn-grey">Login</a></li>
+                    <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="button btn-green">Sign Up</a></li>
+                    <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
                 </ul>
             </div>
         </div>
@@ -141,9 +139,11 @@
 			EzBob_CgVendors_init();
         });
 
-		function EzBob_CgVendors_init() {
-			EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
-		} // EzBob_CgVendors_init
+        function EzBob_CgVendors_init() {
+            if (EzBob.CgVendors) {
+                EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
+            }
+        } // EzBob_CgVendors_init
     </script>
 </body>
 </html>

@@ -9,46 +9,43 @@
                 type = customer.BusinessTypeReduced,
                 companyName = '',
                 isLate = loan.Status == 'Late';
-
             switch(type){
             case 'Personal':
                 address = customer.PersonalAddress.toJSON()[0];
                 break;
 
             case 'Limited':
-                address = customer.CompanyAddress[0];
+                address = customer.CompanyAddress.toJSON()[0];
                 companyName = 'LIMITED company name<br />'; // customer.LimitedInfo.LimitedCompanyName || '' + "<br />";
                 break;
 
             case 'NonLimited':
-                address =  customer.CompanyAddress[0];
+                address =  customer.CompanyAddress.toJSON()[0];
                 companyName = 'NON LIMITED company name<br />'; // customer.NonLimitedInfo.NonLimitedCompanyName  || '' + "<br />";
                 break;
             }
-
             %><table style="width: 100%;">
                 <tr>
                     <td class="caption">Date:</td>
-                    <td><%- EzBob.formatDateHumanFull(loan.Date) %> </td>
+                    <td class="value"><%- EzBob.formatDateHumanFull(loan.Date) %> </td>
                 </tr>
                 <tr>
                     <td class="caption">Name:</td>
-                    <td><%- customer.CustomerPersonalInfo.FirstName %> <%- customer.CustomerPersonalInfo.Surname %></td>
+                    <td class="value"><%- customer.CustomerPersonalInfo.FirstName %> <%- customer.CustomerPersonalInfo.Surname %></td>
                 </tr>
+                <%if(address) {%>
                 <tr>
                     <td class="caption">Address:</td>
-                    <td><%
-                        if(address) {
-                            %><%- address.Line1 || '' %>
+                    <td class="value"><%- address.Line1 || '' %>
                             <%- address.Line2 || '' %>
                             <%- address.Town || '' %>
-                            <%- address.Postcode || '' %><%
-                        }
-                    %></td>
+                            <%- address.Postcode || '' %>
+                    </td>
                 </tr>
+                <%}%>
                 <tr>
                     <td class="caption">Loan Reference#:</td>
-                    <td><%- loan.RefNumber || '' %></td>
+                    <td class="value"><%- loan.RefNumber || '' %></td>
                 </tr>
             </table>
         </div>
@@ -126,70 +123,63 @@
             <th style="width: 75px;">Fees</th>
             <th style="width: 75px;">Rebate</th>
             <th style="width: 75px;">Total</th>
-            @*<th style="width: 75px;">Balance</th>*@
             <th style="width: 110px;">Status</th>
         </tr>
     </thead>
     <tbody><%
         _.each(pacnetTransactions, function(transaction, i) {
-            %><tr style="height: 56px;">
+            %><tr>
                 <td>
                     <img  style="width: 24px; height: 24px" src='@Url.Content("~/Content/img/payment-to-customer.png")'  alt=""/></td>
-                <td class="hm_black"><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
-                <td class="bold right"><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
-                <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
-                <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Fees) %></td>
-                <td class='right'><%- EzBob.formatPoundsWidhDash(0) %></td>
-                <td class='bold right'><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
-                @*<td></td>*@
-                <td class="hm_black"><%- transaction.StatusDescription %></td>
+                <td><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
+                <td><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
+                <td><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
+                <td><%- EzBob.formatPoundsWidhDash(transaction.Fees) %></td>
+                <td><%- EzBob.formatPoundsWidhDash(0) %></td>
+                <td><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
+                <td><%- transaction.StatusDescription %></td>
             </tr><%
         });
 
         _.each(transactions, function(transaction, i) {
             if (transaction.StatusDescription != 'Error') {
-                %><tr style="height: 56px;">
-                    <td>
-                        <img  height="31"  src='@Url.Content("~/Content/img/wizard-mark-completed.png")'  alt=""/></td>
-                    <td class="hm_black"><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
-                    <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.LoanRepayment) %></td>
-                    <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
-                    <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Fees + transaction.Rollover) %></td>
-                    <td class='right'><%- EzBob.formatPoundsWidhDash(0) %></td>
-                    <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
-                    @*<td><%- EzBob.formatPoundsWidhDash(transaction.Balance) %></td>*@
-                    <td class="hm_black"><%- transaction.StatusDescription %></td>
+                %><tr>
+                    <td><img  height="31"  src='@Url.Content("~/Content/img/wizard-mark-completed.png")' alt=""/></td>
+                    <td><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
+                    <td><%- EzBob.formatPoundsWidhDash(transaction.LoanRepayment) %></td>
+                    <td><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
+                    <td><%- EzBob.formatPoundsWidhDash(transaction.Fees + transaction.Rollover) %></td>
+                    <td><%- EzBob.formatPoundsWidhDash(0) %></td>
+                    <td><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
+                    <td><%- transaction.StatusDescription %></td>
                 </tr><%
             }
         });
 
         _.each(rollovers, function(rollover, i) {
-            %><tr style="height: 56px;">
-                <td>
-                    <img  height="31"  src='@Url.Content("~/Content/img/two_arrows.png")'  alt=""/></td>
-                <td class="hm_black"><%- moment.utc(rollover.ExperyDate).local().format("MMM DD YYYY")  %></td>
+            %><tr>
+                <td><img  height="31"  src='@Url.Content("~/Content/img/two_arrows.png")'  alt=""/></td>
+                <td><%- moment.utc(rollover.ExperyDate).local().format("MMM DD YYYY")  %></td>
                 <td></td>
                 <td></td>
-                <td class='right hm_black'><%- EzBob.formatPoundsWidhDash(rollover.Payment) %></td>
+                <td><%- EzBob.formatPoundsWidhDash(rollover.Payment) %></td>
                 <td></td>
                 <td></td>
-                <td class="hm_black">Roll Over</td>
+                <td>Roll Over</td>
             </tr><%
         });
 
         _.each(charges, function(charge, i) {
             if ( charge.State !== 'Paid' && charge.State !== 'Expired') {
-                %><tr style="height: 56px;">
-                    <td>
-                        <img  height="31"  src='@Url.Content("~/Content/img/calendarx32.png")'  alt=""/></td>
-                    <td class="hm_black"><%- moment.utc(charge.Date).local().format("MMM DD YYYY")  %></td>
+                %><tr>
+                    <td><img  height="31"  src='@Url.Content("~/Content/img/calendarx32.png")'  alt=""/></td>
+                    <td><%- moment.utc(charge.Date).local().format("MMM DD YYYY")  %></td>
                     <td></td>
                     <td></td>
-                    <td class='right hm_black'><%- EzBob.formatPoundsWidhDash(charge.Amount) %></td>
+                    <td><%- EzBob.formatPoundsWidhDash(charge.Amount) %></td>
                     <td></td>
                     <td></td>
-                    @*<td><%- EzBob.formatPoundsWidhDash(transaction.Balance) %></td>*@
-                    <td class="hm_black"><%- charge.State %></td>
+                    <td><%- charge.State %></td>
                 </tr><%
             }
         });
@@ -197,18 +187,17 @@
         _.each(schedule, function(item, i) {
             if ((item.Status !== 'PaidEarly') && (item.Status !== 'PaidOnTime') && (item.Status !== 'Paid')) {
                 var late = item.Status === 'Late';
-                var styleForLate = late ? "hm_red" : "hm_black";
+                var styleForLate = late ? "hm_red" : "";
                 var urlImage = item.Status === 'Late' ? "@Url.Content("~/Content/img/calendar-late.png")" : "@Url.Content("~/Content/img/calendarx32.png")";
 
-                %><tr style="height: 56px;" data-scheduleid="<%- item.Id %>">
+                %><tr data-scheduleid="<%- item.Id %>">
                     <td><img src="<%-urlImage%>"></td>
-                    <td class="hm_black"><%- moment.utc(item.Date).local().format("MMM DD YYYY")  %></td>
-                    <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LoanRepayment)%></td>
-                    <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Interest)%></td>
-                    <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Fees + item.LateCharges)%></td>
-                    <td class='right <%-styleForLate%>'><%- EzBob.formatPoundsWidhDash(0) %></td>
-                    <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.AmountDue)%></td>
-                    @*<td><%-EzBob.formatPounds(item.Balance)%></td>*@
+                    <td><%- moment.utc(item.Date).local().format("MMM DD YYYY")  %></td>
+                    <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LoanRepayment)%></td>
+                    <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Interest)%></td>
+                    <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Fees + item.LateCharges)%></td>
+                    <td class='<%-styleForLate%>'><%- EzBob.formatPoundsWidhDash(0) %></td>
+                    <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.AmountDue)%></td>
                     <td class='<%-styleForLate%>'><%-item.StatusDescription == 'AlmostPaid' ? 'Open' : item.StatusDescription%>
                         <% if(late) {
                             %><br /><span class="late-installment-tip">See Late Balance above</span><%

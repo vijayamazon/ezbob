@@ -400,13 +400,13 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .vip-main {
-    color: #5c6373;
     position: relative;
+    cursor: pointer;
 }
 
 .vip-button {
     position: absolute;
-    bottom: 15px;
+    bottom: 25px;
     width: 100%;
 }
 
@@ -419,5 +419,6 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 .vip-image {
     background-image: url(images/vip.PNG);
     background-repeat: no-repeat;
-    height: 220px;
+    background-size: contain;
+    height: 250px;
 }

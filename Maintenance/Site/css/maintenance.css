@@ -33,6 +33,15 @@ body {
     transform: translateZ(0);
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  font-size: 62.5%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
 html, body {
     height: 100%;
 }
@@ -109,7 +118,7 @@ footer, .push {
     height: 90px; /* .push must be the same height as .footer */
 }
 .inner-footer {
-    width:700px; 
+    width:900px; 
     margin:0 auto;
 	padding-top: 10px;
 }
@@ -146,6 +155,7 @@ text-decoration: underline;
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#1f2022',GradientType=0 );
     color:#fff; text-shadow:0 1px 1px #000; font-size:11px;
     height: 90px;
+	font-family: Arial;
 }
 
 .copyrights-inner {

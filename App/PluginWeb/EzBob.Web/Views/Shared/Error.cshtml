@@ -3,16 +3,16 @@
 
 
 @{
-    var exceptions = new[]{typeof(LoanDelayViolationException)};
+    var exceptions = new[] { typeof(LoanDelayViolationException) };
     var message = "Please reload the page.";
 }
 
 @if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
 {
     Layout = null;
-    if (Model!=null)
+    if (Model != null)
     {
-        @Model.Exception.Message
+    @Model.Exception.Message
     }
     return;
 }
@@ -21,17 +21,23 @@
     Layout = "_Layout.cshtml";
     ViewBag.Title = "Sorry, an error has occurred.";
 }
+
 <div class="row-fluid">
-    <div class="span1">&nbsp;</div>
-    <div class="span10">
-        <div class="well" style="color: #565656">
-            @if (Model != null && Model.Exception != null && exceptions.Contains(Model.Exception.GetType()))
-            {
-                message = Model.Exception.Message;
-            }
-            <h2>Sorry, an error has occurred.</h2>
-            <i>@message</i>
+    <div class="inner">
+        <div id="profile-main">
+            <div class="span1">&nbsp;</div>
+            <div class="span10">
+                <div class="well" style="color: #565656">
+                    @if (Model != null && exceptions.Contains(Model.Exception.GetType()))
+                    {
+                        message = Model.Exception.Message;
+                    }
+                    <h2>Sorry, an error has occurred.</h2>
+                    <i>@message</i>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 

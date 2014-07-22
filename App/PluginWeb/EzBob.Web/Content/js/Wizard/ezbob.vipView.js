@@ -8,7 +8,8 @@ EzBob.VipView = Backbone.Marionette.ItemView.extend({
     }, // initialize
 
     events: {
-        "click #vipRequestBtn": "vipClicked"
+        "click #vipRequestBtn": "vipClicked",
+        "click .vip-main": "vipClicked"
     }, // events
 
     vipClicked: function () {

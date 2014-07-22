@@ -1,8 +1,4 @@
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-
-	.marketplace-button { width: 95%; float: left; }
-
-	.marketplace-button a { width: 95%; }
+@media only screen and (min-device-width : 320px) and (max-device-width : 1000px) {
 
     html, body {
         padding: 0;
@@ -11,34 +7,31 @@
 
     #header {
         margin: 0;
-        padding: 0 2px;
         width: 100%;
         background-color: #fff;
     }
 
-    .header-inner {
-        background-color: #eceff1;
-        height: 100%
+    ul#user-menu {
+        position: relative;
+        display: inline-block;
+        top: 0;
+        margin: 0;
     }
 
-    .header-phone {
-        display: none;
-    }
-    img.newlogo {
-        position: absolute;
-        top: 20px;
-        width: 100px;
-        height: auto;
-        left: 0;
+        ul#user-menu li {
+            padding: 0;
+        }
+
+    #copyrights {
+        height: 100px;
+        min-width: 600px;
+        width: 100%;
     }
 
     footer .copyrights-inner {
+        min-width: 600px;
         width: 100%;
-        padding: 0 2px;
-    }
-
-    .eu-menu {
-        display: none;
+        height: 100px;
     }
 
     div.full_width {
@@ -47,18 +40,11 @@
     }
 
     .inner {
+        min-width: 600px;
         width: 100%;
-        padding: 0 2px;
         margin: 0 auto;
     }
 
-    .inner_nopadding {
-        width: 100%;
-        padding: 0;
-        margin: 0 auto;
-    }
-
-    /*ul.eu_icon{position:absolute  ; top:0  ; left:0  ;}*/
     div.wizard-director-text {
         width: 100%;
         font-size: 11pt;
@@ -76,43 +62,8 @@
         height: 30px;
         padding: 0;
         background: #f7f7f7;
-        background: -moz-linear-gradient(top,#f7f7f7 0%,#e5e5e5 90%);
+        background: -moz-linear-gradient(top,#f7f7f7 0,#e5e5e5 90%);
     }
-
-    .notification_green, .notification_yellow, .notification_orange, .notification_red, .notification_pink, .notification_darkblue, .notification_lightblue, .notification_white {
-        min-height: 10px;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        -moz-box-shadow: inset 0 0 1px #fff,0 0 10px rgba(0,0,0,.2);
-        -webkit-box-shadow: inset 0 0 1px #fff,0 0 10px rgba(0,0,0,.2);
-        box-shadow: inset 0 0 1px #fff,0 0 10px rgba(0,0,0,.2);
-        position: relative;
-        padding-left: 15px;
-        padding-right: 14px;
-        padding-top: 5px;
-        padding-bottom: 10px;
-        font-size: 11px;
-        text-align: justify;
-        font-family: Arial;
-        line-height: 18px;
-        margin: 10px 0 10px 0;
-        text-shadow: 0 1px 0 rgba(255,255,255,.24);
-        width: 100%;
-    }
-
-        .notification_green .specular, .notification_yellow .specular, .notification_orange .specular, .notification_red .specular, .notification_pink .specular, .notification_darkblue .specular, .notification_lightblue .specular, .notification_white .specular {
-            position: absolute;
-            width: 200%;
-            height: 90%;
-            background: #fff;
-            opacity: .15;
-            filter: alpha(opacity=15);
-            top: -30%;
-            left: -10%;
-            -moz-transform: rotate(20deg);
-            -webkit-transform: rotate(20deg);
-            -o-transform: rotate(50deg);
-        }
 
     input.form_field, textarea.form_field {
         width: 92%;
@@ -127,16 +78,20 @@
         height: 30px;
         padding: 0;
     }
+
     .btn.addAddress {
         width: 40% !important;
     }
+
     .addAddressInput {
         width: 50% !important;
     }
+
     .ezDateTime .fs16 {
         display: block !important;
         width: 100% !important;
     }
+
     .ezDateTime .attardi-input {
         width: 30% !important;
     }
@@ -148,9 +103,11 @@
     .hmrc-why {
         width: 100%;
     }
+
     .hmrc_main_buttons_container {
         height: 100px !important;
     }
+
     .FormRadioCtrl > span {
         width: 100%;
         display: inline-block;
@@ -188,44 +145,29 @@
             left: 0;
         }
 
+    .wizard-steps {
+        min-width: 600px;
+        width: 100%;
+    }
+
     ul.application_steps {
         margin: 0 0 0 0;
         overflow: hidden;
         list-style: none;
+        min-width: 600px;
+        width: 100%;
     }
 
-        ul.application_steps li {
-            /*background: url(images/arrow-m.png) no-repeat;
-            background-position: left center;*/
-            padding: 10px 0 10px 8px;
-            font-weight: bold;
-            font-size: 12px;
-            width: 21%;
-            margin: 0 0;
-            position: relative;
-        }
+    .progress-line {
+        margin-left: 50px;
+    }
 
-            ul.application_steps li.current {
-                /*background: url(images/current_arrow-m.png) no-repeat;*/
-                background-position: left center;
-            }
-
-            ul.application_steps li.current .step_label {
-                font-weight: bold;
-            }
-
-            ul.application_steps li.complete {
-                /*background: url(images/tick-m.png) no-repeat;*/
-                background-position: left center;
-            }
-
-            ul.application_steps li .step_label {
-                display: block;
-                font-weight: normal;
-                margin-left: 10px;
-            }
-
-    input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+    input[disabled], 
+    select[disabled], 
+    textarea[disabled], 
+    input[readonly], 
+    select[readonly], 
+    textarea[readonly] {
         background-color: #eee;
         border: 1px #ccc solid;
         cursor: default;
@@ -270,19 +212,22 @@
         display: none !important;
         visibility: hidden;
     }
+
     aside.customer-sidebar {
         display: none !important;
         visibility: hidden;
     }
 
-	.type-of-business-form_field {
-		box-sizing: border-box;
-		overflow: hidden;
-		height: auto !important; 
-		width: 93%; 
-		padding: 4px;
-		font-size: 16px;
-	}
+    .type-of-business-form_field {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+        height: auto !important;
+        width: 93%;
+        padding: 4px;
+        font-size: 16px;
+    }
 
     .vip-container {
         display: none;

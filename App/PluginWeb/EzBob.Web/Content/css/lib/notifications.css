@@ -88,19 +88,10 @@
 }
 
 .notification_green {
-   background: rgb(188,210,127); /* Old browsers */
-background: -moz-linear-gradient(top,  rgba(188,210,127,1) 1%, rgba(170,200,85,1) 18%, rgba(166,196,80,1) 29%, rgba(155,187,66,1) 50%, rgba(144,177,50,1) 81%, rgba(138,172,42,1) 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(188,210,127,1)), color-stop(18%,rgba(170,200,85,1)), color-stop(29%,rgba(166,196,80,1)), color-stop(50%,rgba(155,187,66,1)), color-stop(81%,rgba(144,177,50,1)), color-stop(100%,rgba(138,172,42,1))); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  rgba(188,210,127,1) 1%,rgba(170,200,85,1) 18%,rgba(166,196,80,1) 29%,rgba(155,187,66,1) 50%,rgba(144,177,50,1) 81%,rgba(138,172,42,1) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  rgba(188,210,127,1) 1%,rgba(170,200,85,1) 18%,rgba(166,196,80,1) 29%,rgba(155,187,66,1) 50%,rgba(144,177,50,1) 81%,rgba(138,172,42,1) 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  rgba(188,210,127,1) 1%,rgba(170,200,85,1) 18%,rgba(166,196,80,1) 29%,rgba(155,187,66,1) 50%,rgba(144,177,50,1) 81%,rgba(138,172,42,1) 100%); /* IE10+ */
-background: linear-gradient(to bottom,  rgba(188,210,127,1) 1%,rgba(170,200,85,1) 18%,rgba(166,196,80,1) 29%,rgba(155,187,66,1) 50%,rgba(144,177,50,1) 81%,rgba(138,172,42,1) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bcd27f', endColorstr='#8aac2a',GradientType=0 ); /* IE6-9 */
-
-
-
+   background: #67c10b; /* Old browsers */
+    background: linear-gradient(to bottom, #67c10b, #4d9108); /* W3C */
 	border: 1px solid #82c35b;
-	color: #47642f;
+	color: #ffffff;
 }
 .notification_yellow {
 	background: #d3e37c;
@@ -129,7 +120,7 @@ background: linear-gradient(to bottom,  rgba(255,140,140,1) 0%,rgba(193,62,62,1)
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff8c8c', endColorstr='#c13e3e',GradientType=0 ); /* IE6-9 */
 
 	border: 1px solid #c35b5b;
-	color: #642f2f;
+	color: #ffffff;
 }
 .notification_pink {
 	background: #e27bcb;
