@@ -11,12 +11,16 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 	[DataContract]
 	public class ExperianLtd : AExperianLtdDataRow {
+		#region public
+
 		#region constructor
 
 		public ExperianLtd(ASafeLog oLog = null) : base(oLog) {
 		} // constructor
 
 		#endregion constructor
+
+		#region property ExperianLtdID
 
 		[DataMember]
 		[NonTraversable] // <- this attribute is the reason of the overriding...
@@ -25,7 +29,13 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			set { base.ExperianLtdID = value; }
 		} // ExperianLtdID
 
+		#endregion property ExperianLtdID
+
+		#region property ServiceLogID
+
 		public long ServiceLogID { get; set; }
+
+		#endregion property ServiceLogID
 
 		#region method ShouldBeSaved
 
@@ -249,6 +259,51 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#endregion property ReceivedTime
 
+		#region method GetAgeOfMostRecentCCJDecreeMonths
+
+		public int GetAgeOfMostRecentCCJDecreeMonths() { return AgeOfMostRecentCCJDecreeMonths ?? 0; } // GetAgeOfMostRecentCCJDecreeMonths
+
+		#endregion method GetAgeOfMostRecentCCJDecreeMonths
+
+		#region method GetNumberOfCcjsInLast24Months
+
+		public int GetNumberOfCcjsInLast24Months() {
+			return
+				(NumberOfCCJsDuringLast12Months ?? 0) +
+				(NumberOfCCJsBetween13And24MonthsAgo ?? 0);
+		} // GetNumberOfCcjsInLast24Months
+
+		#endregion method GetNumberOfCcjsInLast24Months
+
+		#region method GetSumOfCcjsInLast24Months
+
+		public int GetSumOfCcjsInLast24Months() {
+			return Convert.ToInt32(
+				(ValueOfCCJsDuringLast12Months ?? 0) +
+				(ValueOfCCJsBetween13And24MonthsAgo ?? 0)
+			);
+		} // GetSumOfCcjsInLast24Months
+
+		#endregion method GetSumOfCcjsInLast24Months
+
+		#region method GetCommercialDelphiScore
+
+		public int GetCommercialDelphiScore() { return CommercialDelphiScore ?? 0; } // GetCommercialDelphiScore
+
+		#endregion method GetCommercialDelphiScore
+
+		#region method GetCommercialDelphiCreditLimit
+
+		public int GetCommercialDelphiCreditLimit() {
+			return Convert.ToInt32(CommercialDelphiCreditLimit ?? 0);
+		} // GetCommercialDelphiCreditLimit
+
+		#endregion method GetCommercialDelphiCreditLimit
+
+		#endregion public
+
+		#region protected
+
 		#region method DoBeforeTheMainInsert
 
 		protected override void DoBeforeTheMainInsert(List<string> oProcSql) {
@@ -311,5 +366,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		} // LoadChildrenFromXml
 
 		#endregion method LoadChildrenFromXml
+
+		#endregion protected
 	} // class ExperianLtd
 } // namespace

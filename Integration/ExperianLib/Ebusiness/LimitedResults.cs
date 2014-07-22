@@ -1,7 +1,6 @@
 ﻿namespace ExperianLib.Ebusiness {
 	using System;
 	using System.Collections.Generic;
-	using System.Xml.Linq;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class LimitedResults : BusinessReturnData {
@@ -22,7 +21,7 @@
 			Owners = new SortedSet<string>();
 
 			CacheHit = bCacheHit;
-			m_oRawData = oExperianLtd;
+			RawExperianLtd = oExperianLtd;
 
 			Parse();
 		} // constructor
@@ -41,38 +40,46 @@
 
 		#endregion property IsLimited
 
+		#region property RawExperianLtd
+
+		public virtual ExperianLtd RawExperianLtd { get; private set; }
+
+		#endregion property RawExperianLtd
+
 		#endregion public
 
-		#region protected
+		#region private
+
+		#region method Parse
 
 		private void Parse() {
-			if (!m_oRawData.CommercialDelphiScore.HasValue)
+			if (!RawExperianLtd.CommercialDelphiScore.HasValue)
 				Error = "There is no RISKSCORE in the experian response! ";
 			else
-				BureauScore = m_oRawData.CommercialDelphiScore.Value;
+				BureauScore = RawExperianLtd.CommercialDelphiScore.Value;
 
-			if (m_oRawData.CommercialDelphiCreditLimit.HasValue)
-				CreditLimit = m_oRawData.CommercialDelphiCreditLimit.Value;
+			if (RawExperianLtd.CommercialDelphiCreditLimit.HasValue)
+				CreditLimit = RawExperianLtd.CommercialDelphiCreditLimit.Value;
 
-			CompanyName = m_oRawData.CompanyName;
+			CompanyName = RawExperianLtd.CompanyName;
 
-			AddressLine1 = m_oRawData.OfficeAddress1;
-			AddressLine2 = m_oRawData.OfficeAddress2;
-			AddressLine3 = m_oRawData.OfficeAddress3;
-			AddressLine4 = m_oRawData.OfficeAddress4;
-			PostCode = m_oRawData.OfficeAddressPostcode;
+			AddressLine1 = RawExperianLtd.OfficeAddress1;
+			AddressLine2 = RawExperianLtd.OfficeAddress2;
+			AddressLine3 = RawExperianLtd.OfficeAddress3;
+			AddressLine4 = RawExperianLtd.OfficeAddress4;
+			PostCode = RawExperianLtd.OfficeAddressPostcode;
 
 			if (Owners == null)
 				Owners = new SortedSet<string>();
 
-			if (!string.IsNullOrWhiteSpace(m_oRawData.RegisteredNumberOfTheCurrentUltimateParentCompany))
-				Owners.Add(m_oRawData.RegisteredNumberOfTheCurrentUltimateParentCompany.Trim());
+			if (!string.IsNullOrWhiteSpace(RawExperianLtd.RegisteredNumberOfTheCurrentUltimateParentCompany))
+				Owners.Add(RawExperianLtd.RegisteredNumberOfTheCurrentUltimateParentCompany.Trim());
 
 			ExistingBusinessLoans = 0;
 
 			var oErrors = new List<string>();
 
-			foreach (var oKid in m_oRawData.Children) {
+			foreach (var oKid in RawExperianLtd.Children) {
 				if (oKid.GetType() == typeof (ExperianLtdShareholders)) {
 					ExperianLtdShareholders obj = (ExperianLtdShareholders)oKid;
 
@@ -96,14 +103,10 @@
 			if (oErrors.Count > 0)
 				Error += string.Join("", oErrors);
 
-			IncorporationDate = m_oRawData.IncorporationDate;
+			IncorporationDate = RawExperianLtd.IncorporationDate;
 		} // Parse
 
-		#endregion protected
-
-		#region private
-
-		private readonly ExperianLtd m_oRawData;
+		#endregion method Parse
 
 		#endregion private
 	} // class LimitedResults

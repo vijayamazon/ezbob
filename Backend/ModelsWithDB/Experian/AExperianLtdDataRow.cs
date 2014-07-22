@@ -230,6 +230,14 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#endregion method AddChild
 
+		#region method GetChildren
+
+		public virtual IEnumerable<T> GetChildren<T>() where T : AExperianLtdDataRow {
+			return Children.Where(oKid => oKid.GetType() == typeof (T)).Cast<T>();
+		} // GetChildren
+
+		#endregion method GetChildren
+
 		#endregion public
 
 		#region protected
