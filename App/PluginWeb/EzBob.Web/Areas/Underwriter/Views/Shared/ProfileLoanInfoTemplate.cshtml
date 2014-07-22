@@ -7,6 +7,16 @@
     </tr>
 }
 
+@helper RowCell(string title, string value)
+{
+    <tr>
+        <td>
+            <span>@Html.Raw(title)</span>
+            <span class="pull-right">@Html.Raw(value)</span>
+        </td>
+    </tr>
+}
+
 @helper RawCellWithButtonNear(string title, string val1, string val2, string css = "", string sRawHtmlUnder = "")
 {
     <tr>
@@ -19,6 +29,20 @@
     </tr>
 }
 
+@helper RowCellWithButtonNear(string title, string val1, string val2, string css = "", string sRawHtmlUnder = "")
+{
+    <tr>
+        <td>
+            <span class="@Html.Raw(css)">@Html.Raw(title)</span>
+            <span class="@Html.Raw(css) pull-right">
+                <span>@Html.Raw(val1) </span>
+                <button class="btn btn-mini left-pane-button" name="@Html.Raw(val2)"><i class="fa fa-pencil" /></button>
+                @{ WriteLiteral(sRawHtmlUnder); }
+            </span>
+        </td>
+    </tr>
+}
+
 @helper RawCellWithSlider(string title, string className, string labelOff, string labelOn, string css = "", string dataOn = "danger")
 {
     <tr>
@@ -27,6 +51,20 @@
             <div class="@Html.Raw(className) make-switch switch-mini" data-on="@Html.Raw(dataOn)" data-off="default" data-animated="true" data-off-label="@Html.Raw(labelOff)" data-on-label="@Html.Raw(labelOn)">
                 <input type="checkbox" checked/>
             </div>
+        </td>
+    </tr>
+}
+
+@helper RowCellWithSlider(string title, string className, string labelOff, string labelOn, string css = "", string dataOn = "danger")
+{
+    <tr>
+        <td>
+            <span class="@Html.Raw(css)">@Html.Raw(title)</span>
+            <span class="@Html.Raw(css) pull-right">
+                <div class="@Html.Raw(className) make-switch switch-mini" data-on="@Html.Raw(dataOn)" data-off="default" data-animated="true" data-off-label="@Html.Raw(labelOff)" data-on-label="@Html.Raw(labelOn)">
+                    <input type="checkbox" checked/>
+                </div>
+            </span>
         </td>
     </tr>
 }
@@ -49,35 +87,34 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Customer Details
+                <th class="left-pane-header">Customer Details
                     <button id="MainStrategyHidden" class="hide btn btn-mini btn-primary">Run main strategy</button>
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
                     </div>
                 </th>
-
             </tr>
         </thead>
         <tbody class="box-content">
-            @RawCell("Id", "<%- data.Id %>")
-            @RawCell("Name", "<%- data.Name %>")
+            @RowCell("Id", "<%- data.Id %>")
+            @RowCell("Name", "<%- data.Name %>")
             <tr>
-                <td colspan="2" class="customer-personal-status-alignment"><%- data.FullGender %>, <%- data.FamilyStatus %>, <%- data.Age %></td>
+                <td class="customer-personal-status-alignment"><%- data.FullGender %>, <%- data.FamilyStatus %>, <%- data.Age %></td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td>
                     <span class="customer-column-width-50">Reg date</span>
                     <span class="pull-right"><%- data.RegistrationDate %></span>
                 </td>
             </tr>
-            @RawCell("Residental Status", "<%- data.ResidentalStatus %>")
+            @RowCell("Residental Status", "<%- data.ResidentalStatus %>")
         </tbody>
     </table>
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Company Details
+                <th class="left-pane-header">Company Details
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
@@ -86,17 +123,17 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            @RawCell("Company Name", "<%- data.CompanyName %>")
-            @RawCell("Business Type", "<%- data.CompanyType %>")
-            @RawCell("Company Seniority", "<%- data.CompanySeniority %>")
-            @RawCell("# Directors", "<%- data.NumOfDirectors %>")
-            @RawCell("# Shareholders", "<%- data.NumOfShareholders %>")
+            @RowCell("Company Name", "<%- data.CompanyName %>")
+            @RowCell("Business Type", "<%- data.CompanyType %>")
+            @RowCell("Company Seniority", "<%- data.CompanySeniority %>")
+            @RowCell("# Directors", "<%- data.NumOfDirectors %>")
+            @RowCell("# Shareholders", "<%- data.NumOfShareholders %>")
         </tbody>
     </table>
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Contact Details
+                <th class="left-pane-header">Contact Details
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
@@ -105,23 +142,30 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            @RawCell("Mobile", "<%- data.MobilePhone %>")
-            @RawCell("Daytime", "<%- data.DaytimePhone %>")
+            @RowCell("Mobile", "<%- data.MobilePhone %>")
+            @RowCell("Daytime", "<%- data.DaytimePhone %>")
 
             <tr>
-                <td class="customer-column-width-50">E-mail 
-                    <i data-title="<%- data.EmailState %>" class="tltp <%=getIcon()%>"></i>
-                </td>
-                <td><%- data.Email.length <= 14 ? data.Email : data.Email.substring(0,11)+'...' %>
-                    <i data-title="<%- data.Email %>" class="tltp-left <%=getIcon()%>"></i>
-                    <button class="btn btn-mini left-pane-button" name="editEmail"><i class="fa fa-pencil"></i></button>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="customer-column-width-50">Website</td>
                 <td>
-                    <a data-title="<%- data.Website %>" class="tltp <%=getIcon()%>" href="http://<%- data.Website %>" target="_blank"><%- data.Website.length <= 30 ? data.Website : data.Website.substring(0,27)+'...' %></a>
+                    <span>E-mail<i data-title="<%- data.EmailState %>" class="tltp <%=getIcon()%>"/></span>
+                    <span class="pull-right">
+                        <%- data.Email.length <= 14 ? data.Email : data.Email.substring(0,11)+'...' %>
+                        <i data-title="<%- data.Email %>" class="tltp-left <%=getIcon()%>"/>
+                        <button class="btn btn-mini left-pane-button" name="editEmail">
+                            <i class="fa fa-pencil"/>
+                        </button>
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span>Website</span>
+                    <span class="pull-right">
+                        <a data-title="<%- data.Website %>" class="tltp <%=getIcon()%>" href="http://<%- data.Website %>" target="_blank">
+                            <%- data.Website.length <= 30 ? data.Website : data.Website.substring(0,27)+'...' %>
+                        </a>
+                    </span>
                 </td>
             </tr>
         </tbody>
@@ -129,7 +173,7 @@
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Source
+                <th class="left-pane-header">Source
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
@@ -139,49 +183,64 @@
         </thead>
         <tbody class="box-content">
             <tr class="with-broker">
-                <td class="customer-column-width-50"><button class="btn btn-mini left-pane-button hide" id="brokerDetailsBtn" name="brokerDetails"><i class="fa fa-plus"></i></button>&nbsp;Broker name</td>
-                <td><%- data.BrokerName %></td>
+                <td>
+                    <span>
+                        <button class="btn btn-mini left-pane-button hide" id="brokerDetailsBtn" name="brokerDetails">
+                            <i class="fa fa-plus"/>
+                        </button>
+                        &nbsp;Broker name
+                    </span>
+                    <span class="pull-right">
+                        <%- data.BrokerName %>
+                    </span>
+                </td>
             </tr>
         </tbody>
         <tbody class="broker-details-rows with-broker" style="display: none;">
             <tr>
-                <td>Firm name</td>
-                <td><%- data.BrokerFirmName %></td>
+                @RowCell("Firm name", "<%- data.BrokerFirmName %>")
             </tr>
             <tr>
-                <td>Email</td>
-                <td><%- data.BrokerContactEmail.length <= 15 ? data.BrokerContactEmail : data.BrokerContactEmail.substring(0,12)+'...' %>
-                    <i data-title="<%- data.BrokerContactEmail %>" class="tltp-left <%=getIcon()%>"></i>
+                <td>
+                    <span>Email</span>
+                    <span class="pull-right">
+                        <%- data.BrokerContactEmail.length <= 15 ? data.BrokerContactEmail : data.BrokerContactEmail.substring(0,12)+'...' %>
+                        <i data-title="<%- data.BrokerContactEmail %>" class="tltp-left <%=getIcon()%>"/>
+                    </span>
                 </td>
             </tr>
             <tr>
-                <td>Mobile</td>
-                <td><%- data.BrokerContactMobile %></td>
+                @RowCell("Mobile", "<%- data.BrokerContactMobile %>")
             </tr>
         </tbody>
         <tbody class="box-content">
             <tr>
-                <td class="customer-column-width-50 <%= data.PromoCodeCss %>">Promo</td>
-                <td class="<%= data.PromoCodeCss %>">
-                    <span><%= data.PromoCode %></span>
+                <td>
+                    <span class="<%= data.PromoCodeCss %>">Promo</span>
+                    <span class="pull-right <%= data.PromoCodeCss %>">
+                        <%= data.PromoCode %>
+                    </span>
                 </td>
             </tr>
-            @RawCell("Campaigns", "<%- data.ActiveCampaign %>")
+            @RowCell("Campaigns", "<%- data.ActiveCampaign %>")
 
             <tr>
-                <td class="customer-column-width-50">Ref Source</td>
-                <td><%- data.ReferenceSource ? (data.ReferenceSource.length <= 20 ? data.ReferenceSource : data.ReferenceSource.substring(0,17)+'...') : '-' %>
+                <td>
+                    <span>Ref Source</span>
+                    <span class="pull-right">
+                        <%- data.ReferenceSource ? (data.ReferenceSource.length <= 20 ? data.ReferenceSource : data.ReferenceSource.substring(0,17)+'...') : '-' %>
                     <i data-title="<%- data.ReferenceSource || 'no source ref' %>" class="tltp fa fa-question-circle"></i>
+                    </span>
                 </td>
             </tr>
 
-            @RawCell("Segment", "<%- data.SegmentType %>")
+            @RowCell("Segment", "<%- data.SegmentType %>")
         </tbody>
     </table>
     <table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
-                <th class="left-pane-header" colspan="2">Statuses
+                <th class="left-pane-header">Statuses
                     <div class="box-tool">
                         <a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
                         <a data-action="close" href="#"><i class="fa fa-times"></i></a>
@@ -190,34 +249,39 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            @RawCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
+            @RowCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeDisabledState", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
 
             <tr>
-                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %> customer-column-width-50">AML</td>
-                <td class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %>"><%- data.AmlResult %></td>
-            </tr>
-
-            <tr>
-                <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %> customer-column-width-50 fraud-status-td">Fraud Status</td>
-                <td class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">
-                    <span class="fraud-status"><%= data.FraudCheckStatus %> </span>
-                    <button class="btn btn-mini left-pane-button" name="changeFraudStatusManualy"><i class="fa fa-pencil" /></button>
+                <td>
+                    <span class="<%= data.IsAmlInAlertMode ? 'red_cell' : '' %>">AML</span>
+                    <span class="pull-right <%= data.IsAmlInAlertMode ? 'red_cell' : '' %>"><%- data.AmlResult %></span>
                 </td>
             </tr>
 
-            @RawCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td")
+            <tr>
+                <td>
+                    <span class="<%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">Fraud Status</span>
+                    <span class="pull-right <%= data.IsFraudInAlertMode ? 'red_cell' : '' %>"><%- data.FraudCheckStatus %>
+                        <button class="btn btn-mini left-pane-button" name="changeFraudStatusManualy">
+                            <i class="fa fa-pencil" />
+                        </button>
+                    </span>
+                </td>
+            </tr>
 
-            @RawCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td")
+            @RowCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td")
+
+            @RowCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td")
             
-            @RawCellWithSlider("Manual Decision", "manualDecisionSwitch", "No", "Yes")
+            @RowCellWithSlider("Manual Decision", "manualDecisionSwitch", "No", "Yes")
 
-            @RawCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusName %>", "TrustPilotStatusUpdate")
+            @RowCellWithButtonNear("Trust Pilot status", "<%- data.TrustPilotStatusName %>", "TrustPilotStatusUpdate")
 
-            @RawCell("User status", "<%- data.UserStatus %>")
+            @RowCell("User status", "<%- data.UserStatus %>")
         </tbody>
         <tfoot>
             <tr>
-                <th class="left-pane-header" colspan="2"><button id="ForceFinishWizard" class="btn btn-mini btn-primary">Finish wizard</button></th>
+                <th class="left-pane-header"><button id="ForceFinishWizard" class="btn btn-mini btn-primary">Finish wizard</button></th>
             </tr>
         </tfoot>
     </table>
