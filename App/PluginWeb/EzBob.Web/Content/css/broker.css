@@ -5,6 +5,9 @@
 
 .ui-tabs .ui-tabs-nav li a {
     font-size: 14px;
+    font-family: "Titillium Web Semi Bold";
+    background-color: inherit !important;
+    border: none !important;
 }
 
 .broker {
@@ -35,6 +38,10 @@ button,
 .box > .box-title {
     background-color: #E2E3E5;
     text-shadow: 0 1px 0 #E2E3E5;
+    padding: 0 10px;
+    height: 48px;
+    vertical-align: middle;
+    line-height: 48px;
 }
 
 h2 {
@@ -87,6 +94,11 @@ table.customer-list {
     box-sizing: border-box;
     clear: both;
     font-size: 14px;
+    white-space: nowrap;
+}
+
+div.dataTables_info {
+padding-top: 0;
 }
 
 .section-dashboard .dataTables_top_right {
@@ -99,7 +111,7 @@ table.customer-list {
 
 .section-dashboard .reload-customer-list,
 .section-customer-details .delete-selected-files {
-    margin-top: -8px;
+    margin-top: 7px;
     margin-left: 10px;
     float: right;
 }
@@ -109,8 +121,32 @@ table.customer-list {
 .section-dashboard tbody .grid-item-FirstName a,
 .section-dashboard tbody .grid-item-LastName a {
     text-decoration: underline;
-    color: #428bca !important;
+    color: #428bca;
 }
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a,
+.ui-tabs .ui-tabs-nav li.ui-state-disabled a,
+.ui-tabs .ui-tabs-nav li.ui-state-processing a,
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+    color: #ffffff;
+}
+
+.ui-tabs .ui-tabs-nav li a,
+.ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a {
+    color: #a7a6a6;
+}
+
+    .ui-tabs .ui-tabs-nav li:hover, .ui-tabs .ui-tabs-nav li a:hover {
+        background: inherit;
+        border-bottom: none;
+        color: #ffffff;
+    }
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected:hover, .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover {
+    background: inherit;
+}
+
+
 
 .section-dashboard tbody .grid-item-LoanAmount,
 .section-dashboard tbody .grid-item-SetupFee,
@@ -210,19 +246,6 @@ table.table th {
 .section-add-customer .form_buttons_container {
     position: relative;
 }
-
-
-    .section-add-customer .form_buttons_container button#LeadFillWizard {
-        left: 0;
-        width: 250px;
-        height: 140px;
-    }
-
-    .section-add-customer .form_buttons_container button#LeadSendInvitation {
-        width: 250px;
-        height: 140px;
-        right: 0;
-    }
 
 .aka-column-top {
     display: table-cell;
