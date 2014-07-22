@@ -95,8 +95,6 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
     RunCompanyCheckBtnClick: function (e) {
         if ($(e.currentTarget).hasClass("disabled")) return false;
 
-	    console.log('model is', this.model);
-
         var that = this;
         BlockUi("on");
         $.post(window.gRootPath + "Underwriter/CreditBureau/IsCompanyCacheRelevant", { customerId: this.model.get("Id") })

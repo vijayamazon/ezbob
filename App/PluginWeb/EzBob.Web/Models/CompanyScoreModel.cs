@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Models
-{
+﻿namespace EzBob.Web.Models {
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
@@ -19,8 +18,7 @@
 	using StructureMap;
 	using log4net;
 
-	public class CompanyScoreModel
-	{
+	public class CompanyScoreModel {
 		public CompanyData Data { get; set; }
 
 		public const string Ok = "ok";
@@ -34,12 +32,11 @@
 		public string company_ref_num { get; set; }
 
 		public ComapanyDashboardModel DashboardModel { get; set; }
+
 		public CompanyScoreModel[] Owners { get { return ReferenceEquals(m_oOwners, null) ? null : m_oOwners.ToArray(); } }
 
-		public void AddOwner(CompanyScoreModel oOwner)
-		{
-			if (ReferenceEquals(m_oSavedOwners, null))
-			{
+		public void AddOwner(CompanyScoreModel oOwner) {
+			if (ReferenceEquals(m_oSavedOwners, null)) {
 				m_oSavedOwners = new SortedSet<string>();
 				m_oOwners = new List<CompanyScoreModel>();
 			} // if
@@ -53,10 +50,9 @@
 
 		private SortedSet<string> m_oSavedOwners;
 		private List<CompanyScoreModel> m_oOwners;
-	}
+	} // class CompanyScoreModel
 
-	public class ComapanyDashboardModel
-	{
+	public class ComapanyDashboardModel {
 		public bool IsLimited { get; set; }
 		public string CompanyName { get; set; }
 		public string CompanyRefNum { get; set; }
@@ -74,189 +70,163 @@
 		public List<FinDataModel> FinDataHistories { get; set; }
 		public List<NonLimScoreHistory> NonLimScoreHistories { get; set; }
 		public string Error { get; set; }
-	}
+	} // class ComapanyDashboardModel
 
-	public class NonLimScoreHistory
-	{
+	public class NonLimScoreHistory {
 		public int Score { get; set; }
 		public DateTime ScoreDate { get; set; }
-	}
+	} // class NonLimScoreHistory
 
-	public class FinDataModel
-	{
+	public class FinDataModel {
 		public decimal TangibleEquity { get; set; }
 		public decimal AdjustedProfit { get; set; }
-	}
+	} // class FinDataModel
 
-	public class CompanyScoreModelBuilder
-	{
+	public class CompanyScoreModelBuilder {
 		private readonly ServiceClient serviceClient = new ServiceClient();
 		private readonly IWorkplaceContext context = ObjectFactory.GetInstance<IWorkplaceContext>();
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CompanyScoreModelBuilder));
 		private readonly AConnection db;
 		private readonly SafeILog log;
 
-		public CompanyScoreModelBuilder()
-		{
+		public CompanyScoreModelBuilder() {
 			log = new SafeILog(LogManager.GetLogger(typeof(CompanyScoreModelBuilder)));
 			var env = new Ezbob.Context.Environment(log);
 			db = new SqlConnection(env, log);
-		}
+		} // constructor
 
-		public CompanyScoreModel Create(Customer customer)
-		{
-			ExperianParserOutput oOutput = customer.ParseExperian(ExperianParserFacade.Target.Company);
+		public CompanyScoreModel Create(Customer customer) {
+			bool bHasCompany = false;
+			TypeOfBusinessReduced nBusinessType = TypeOfBusinessReduced.Personal;
 
-			CompanyScoreModel oResult = BuildFromParseResult(oOutput, customer.Id, customer.Company.ExperianRefNum);
+			if (customer != null) {
+				if (customer.Company != null) {
+					nBusinessType = customer.Company.TypeOfBusiness.Reduce();
+					bHasCompany = true;
+				} // if
+			} // if
+
+			if (!bHasCompany) {
+				return new CompanyScoreModel {
+					result = "No data found.",
+					DashboardModel = new ComapanyDashboardModel { Error = "No data found.", },
+				};
+			} // if
+
+			if (nBusinessType != TypeOfBusinessReduced.Limited) {
+				CompanyDataForCompanyScoreActionResult ar = serviceClient.Instance.GetCompanyDataForCompanyScore(
+					context.UserId,
+					customer.Id,
+					customer.Company.ExperianRefNum
+				);
+
+				return new CompanyScoreModel {
+					result = CompanyScoreModel.Ok,
+					company_name = ar.Data.BusinessName,
+					company_ref_num = customer.Company.ExperianRefNum,
+					Data = ar.Data,
+				};
+			} // if
+
+			CompanyScoreModel oResult = BuildFromParseResult(
+				customer.ParseExperian(ExperianParserFacade.Target.Company)
+			);
 
 			if (oResult.result != CompanyScoreModel.Ok)
 				return oResult;
 
-			if (oOutput.TypeOfBusinessReduced == TypeOfBusinessReduced.Limited)
-			{
-				AddOwners(customer,
-					oResult,
-					"Limited Company Shareholders",
-					"Registered number of a limited company which is a shareholder",
-					"Description of Shareholder"
-					);
+			AddOwners(
+				oResult,
+				"Limited Company Shareholders",
+				"Registered number of a limited company which is a shareholder",
+				"Description of Shareholder"
+			);
 
-				AddOwners(customer,
-					oResult,
-					"Limited Company Ownership Details",
-					"Registered Number of the Current Ultimate Parent Company",
-					"Registered Name of the Current Ultimate Parent Company"
-					);
-			} // if
+			AddOwners(
+				oResult,
+				"Limited Company Ownership Details",
+				"Registered Number of the Current Ultimate Parent Company",
+				"Registered Name of the Current Ultimate Parent Company"
+			);
 
 			return oResult;
 		} // Create
 
-		private void AddOwners(Customer customer, CompanyScoreModel oPossession, string sGroupName, string sCompanyNumberField, string sCompanyNameField) {
+		private void AddOwners(CompanyScoreModel oPossession, string sGroupName, string sCompanyNumberField, string sCompanyNameField) {
 			if (oPossession.dataset == null) // TODO: looks like this is affected by ExperianLtd
 				return;
 
-			if (oPossession.dataset.ContainsKey(sGroupName))
-			{
+			if (oPossession.dataset.ContainsKey(sGroupName)) {
 				List<ParsedDataItem> aryShareholders = oPossession.dataset[sGroupName].Data;
 
-				foreach (var oShareholder in aryShareholders)
-				{
-					if (oShareholder.ContainsKey(sCompanyNumberField))
-					{
+				foreach (var oShareholder in aryShareholders) {
+					if (oShareholder.ContainsKey(sCompanyNumberField)) {
 						var sNumber = oShareholder[sCompanyNumberField];
 
-						if (!string.IsNullOrWhiteSpace(sNumber))
-						{
+						if (!string.IsNullOrWhiteSpace(sNumber)) {
 							var oOwner = BuildFromParseResult(
 								ExperianParserFacade.Invoke(
 									sNumber,
 									oShareholder[sCompanyNameField] ?? "",
 									ExperianParserFacade.Target.Company,
 									TypeOfBusinessReduced.Limited
-								),
-								customer.Id,
-								customer.Company.ExperianRefNum
+								)
 							);
 
 							if (oOwner.result == CompanyScoreModel.Ok)
-							{
 								oPossession.AddOwner(oOwner);
-							} // if owner was found
 						} // if company number is not empty
 					} // if owner has a company number
 				} // for each owner
 			} // if contains list of owners
 		} // AddOwners
 
-		private CompanyScoreModel BuildFromParseResult(ExperianParserOutput oResult, int customerId, string refNumber)
-		{
-			CompanyDataForCompanyScoreActionResult companyDataForCompanyScoreActionResult = serviceClient.Instance.GetCompanyDataForCompanyScore(context.UserId, customerId, refNumber);
-			CompanyData data = companyDataForCompanyScoreActionResult.Data;
+		private CompanyScoreModel BuildFromParseResult(ExperianParserOutput oResult) {
+			switch (oResult.ParsingResult) {
+			case ParsingResult.Ok:
+				return new CompanyScoreModel {
+					result = CompanyScoreModel.Ok,
+					dataset = oResult.Dataset,
+					company_name = oResult.CompanyName,
+					company_ref_num = oResult.CompanyRefNum,
+					Data = null,
+					DashboardModel = BuildLimitedDashboardModel(oResult),
+				};
 
-			if (data.IsLimited)
-			{
-				switch (oResult.ParsingResult)
-				{
-					case ParsingResult.Ok:
-						var model = new CompanyScoreModel
-							{
-								result = CompanyScoreModel.Ok,
-								dataset = oResult.Dataset,
-								company_name = oResult.CompanyName,
-								company_ref_num = oResult.CompanyRefNum,
-								Data = new CompanyData { IsLimited = true }
-							};
+			case ParsingResult.Fail:
+				return new CompanyScoreModel {
+					result = "Failed to parse Experian response.",
+					DashboardModel = new ComapanyDashboardModel {
+						Error = string.Format("{0} {1}", "Failed to parse Experian response.", oResult.ErrorMsg)
+					}
+				};
 
-						model.DashboardModel = BuildDashboardModel(oResult, customerId, refNumber);
-						return model;
-					case ParsingResult.Fail:
-						return new CompanyScoreModel
-							{
-								result = "Failed to parse Experian response.",
-								DashboardModel = new ComapanyDashboardModel
-									{
-										Error = string.Format("{0} {1}", "Failed to parse Experian response.", oResult.ErrorMsg)
-									}
-							};
+			case ParsingResult.NotFound:
+				return new CompanyScoreModel {
+					result = "No data found.",
+					DashboardModel = new ComapanyDashboardModel {
+						Error = string.Format("{0} {1}", "No data found.", oResult.ErrorMsg)
+					}
+				};
 
-					case ParsingResult.NotFound:
-						return new CompanyScoreModel
-							{
-								result = "No data found.",
-								DashboardModel = new ComapanyDashboardModel
-									{
-										Error = string.Format("{0} {1}", "No data found.", oResult.ErrorMsg)
-									}
-							};
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // BuildFromParseResult
 
-					default:
-						throw new ArgumentOutOfRangeException();
-				} // switch
-			}
-
-			// Fill non limited data
-			var nonLimitedModel = new CompanyScoreModel
-			{
-				result = CompanyScoreModel.Ok
-			};
-
-			nonLimitedModel.company_name = data.BusinessName;
-			nonLimitedModel.company_ref_num = refNumber;
-			nonLimitedModel.Data = data;
-
-			return nonLimitedModel;
-		}
-
-		public ComapanyDashboardModel BuildDashboardModel(ExperianParserOutput oResult, int customerId, string refNumber)
-		{
-			switch (oResult.TypeOfBusinessReduced)
-			{
-				case TypeOfBusinessReduced.Limited:
-					return BuildLimitedDashboardModel(oResult);
-				case TypeOfBusinessReduced.NonLimited:
-				case TypeOfBusinessReduced.Personal:
-					return BuildNonLimitedDashboardModel(customerId, refNumber);
-			}
-
-			return null;
-		}
-
-		private ComapanyDashboardModel BuildNonLimitedDashboardModel(int customerId, string refNumber)
-		{
+		private ComapanyDashboardModel BuildNonLimitedDashboardModel(int customerId, string refNumber) {
 			var model = new ComapanyDashboardModel { FinDataHistories = new List<FinDataModel>(), LastFinData = new FinDataModel() };
 			model.IsLimited = false;
 			model.CompanyRefNum = refNumber;
-			
-			
+
+
 			DataTable dt = db.ExecuteReader(
 				"GetNonLimitedCompanyDashboardDetails",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("RefNumber", refNumber));
 
-			if (dt.Rows.Count == 1)
-			{
+			if (dt.Rows.Count == 1) {
 				var sr = new SafeReader(dt.Rows[0]);
 
 				model.CompanyName = sr["BusinessName"];
@@ -272,29 +242,24 @@
 					new QueryParameter("CustomerId", customerId),
 					new QueryParameter("RefNumber", refNumber));
 
-				foreach (DataRow row in scoreHistoryDataTable.Rows)
-				{
+				foreach (DataRow row in scoreHistoryDataTable.Rows) {
 					var scoreHistorySafeReader = new SafeReader(row);
-					try
-					{
-						model.NonLimScoreHistories.Add(new NonLimScoreHistory
-						{
+					try {
+						model.NonLimScoreHistories.Add(new NonLimScoreHistory {
 							Score = scoreHistorySafeReader["RiskScore"],
 							ScoreDate = scoreHistorySafeReader["Date"]
 						});
 					}
-					catch (Exception ex)
-					{
+					catch (Exception ex) {
 						Log.Warn("failed to parse non limited score history", ex);
 					}
 				}
 			}
 
 			return model;
-		}
+		} // BuildNonLimitedDashboardModel
 
-		private ComapanyDashboardModel BuildLimitedDashboardModel(ExperianParserOutput oResult)
-		{
+		public ComapanyDashboardModel BuildLimitedDashboardModel(ExperianParserOutput oResult) {
 			var model = new ComapanyDashboardModel { FinDataHistories = new List<FinDataModel>(), LastFinData = new FinDataModel() };
 			model.IsLimited = true;
 			var scoreStr = oResult.GetValue("Limited Company Commerical Delphi Score", "Commercial Delphi Score");
@@ -310,52 +275,43 @@
 						 (string.IsNullOrEmpty(numOfCCjs2Years) ? 0 : int.Parse(numOfCCjs2Years));
 			var worstStatusAll = "0";
 			//Calc and add Cais Balance
-			if (oResult.Dataset.ContainsKey("Limited Company Installment CAIS Details"))
-			{
-				if (oResult.Dataset["Limited Company Installment CAIS Details"].Data.Any())
-				{
+			if (oResult.Dataset.ContainsKey("Limited Company Installment CAIS Details")) {
+				if (oResult.Dataset["Limited Company Installment CAIS Details"].Data.Any()) {
 					model.CaisBalance = 0;
-					foreach (var cais in oResult.Dataset["Limited Company Installment CAIS Details"].Data)
-					{
+					foreach (var cais in oResult.Dataset["Limited Company Installment CAIS Details"].Data) {
 						var state = GetValue(cais, "Account State");
 						var balance = GetDecimalValueFromDataItem(cais, "Current Balance");
 
 						//Sum all accounts balance that are not settled
-						if (!string.IsNullOrEmpty(state) && state[0] != 'S')
-						{
+						if (!string.IsNullOrEmpty(state) && state[0] != 'S') {
 							model.CaisBalance += balance;
 							model.CaisAccounts++;
-						}
+						} // if
 
-						if (!string.IsNullOrEmpty(state) && state[0] == 'D')
-						{
+						if (!string.IsNullOrEmpty(state) && state[0] == 'D') {
 							model.DefaultAccounts++;
 							model.DefaultAmount += GetDecimalValueFromDataItem(cais, "Default Balance");
 						}
-						else
-						{
+						else {
 							var status = GetValue(cais, "Account status (Last 12 Account Statuses");
 							var worstStatus = CreditBureauModelBuilder.GetWorstStatus(Regex.Split(status, string.Empty));
-							if (worstStatus != "0")
-							{
+							if (worstStatus != "0") {
 								model.LateAccounts++;
 								worstStatusAll = CreditBureauModelBuilder.GetWorstStatus(worstStatusAll, worstStatus);
 							}
 
-						}
-					}
-				}
-			}
+						} // if
+					} // for each
+				} // if
+			} // if
 			string date;
 			model.LateStatus = CreditBureauModelBuilder.GetAccountStatusString(worstStatusAll, out date);
 
 			//Calc and add tangible equity and adjusted profit
 			const string sKey = "Limited Company Financial Details IFRS & UK GAAP";
 			ParsedData oParsedData = oResult.Dataset.ContainsKey(sKey) ? oResult.Dataset[sKey] : null;
-			if ((oParsedData != null) && (oParsedData.Data != null) && (oParsedData.Data.Count > 0))
-			{
-				for (var i = 0; i < oParsedData.Data.Count - 1; i++)
-				{
+			if ((oParsedData != null) && (oParsedData.Data != null) && (oParsedData.Data.Count > 0)) {
+				for (var i = 0; i < oParsedData.Data.Count - 1; i++) {
 					ParsedDataItem parsedDataItem = oParsedData.Data[i];
 
 					decimal totalShareFund = GetDecimalValueFromDataItem(parsedDataItem, "TotalShareFund");
@@ -366,8 +322,7 @@
 
 					decimal tangibleEquity = totalShareFund - inTngblAssets - debtorsDirLoans + credDirLoans + onClDirLoans;
 
-					if (oParsedData.Data.Count > 1)
-					{
+					if (oParsedData.Data.Count > 1) {
 						ParsedDataItem parsedDataItemPrev = oParsedData.Data[i + 1];
 
 						decimal retainedEarnings = GetDecimalValueFromDataItem(parsedDataItem, "RetainedEarnings");
@@ -378,27 +333,21 @@
 
 						var fin = new FinDataModel { TangibleEquity = tangibleEquity, AdjustedProfit = adjustedProfit };
 						model.FinDataHistories.Add(fin);
-						if (i == 0)
-						{
+						if (i == 0) {
 							model.LastFinData = fin;
 						}
 					} // if
 				}
 			} // if
-			return model;
-		}
-		
-		private string GetValue(ParsedDataItem dataItem, string key)
-		{
-			if (dataItem.Values.ContainsKey(key))
-			{
-				return dataItem.Values[key];
-			}
-			return null;
-		}
 
-		private decimal GetDecimalValueFromDataItem(ParsedDataItem parsedDataItem, string requiredValueName)
-		{
+			return model;
+		} // BuildLimitedDashboardModel
+
+		private string GetValue(ParsedDataItem dataItem, string key) {
+			return dataItem.Values.ContainsKey(key) ? dataItem.Values[key] : null;
+		} // GetValue
+
+		private decimal GetDecimalValueFromDataItem(ParsedDataItem parsedDataItem, string requiredValueName) {
 			if (!parsedDataItem.Values.ContainsKey(requiredValueName))
 				return 0;
 
@@ -414,7 +363,5 @@
 
 			return 0;
 		} // GetDecimalValueFromDataItem
-
-		// BuildFromParseResult
 	} // class CompanyScoreModelBuilder
 } // namespace

@@ -245,10 +245,10 @@
 				CurrentValues.Instance[Variables.CompanyScoreParserConfiguration], new SafeILog(this));
 				doc.LoadXml(responseData);
 				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
-				var b = new CompanyScoreModelBuilder();
 				var oResult = new ExperianParserOutput(oParsed, TypeOfBusinessReduced.Limited);
 
-				var m = b.BuildDashboardModel(oResult, customerId, refNumber);
+				ComapanyDashboardModel m = new CompanyScoreModelBuilder().BuildLimitedDashboardModel(oResult);
+
 				model.Balance = m.CaisBalance;
 				model.Score = m.Score;
 			}
