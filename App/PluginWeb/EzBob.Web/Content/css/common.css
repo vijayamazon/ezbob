@@ -3279,3 +3279,7 @@ table.payment-schedule-table {
     border-right: 1px solid #ffffff !important;
     border-left: 1px solid #f2f2f2 !important;
 }
+
+ul.marketing-files {
+    list-style: none;
+}
