@@ -8,19 +8,14 @@
     #header {
         margin: 0;
         width: 100%;
+        min-width: 100%;
         background-color: #fff;
     }
-
-    ul#user-menu {
-        position: relative;
-        display: inline-block;
-        top: 0;
-        margin: 0;
+    
+    .header-inner {
+        width: 100%;
+        min-width: 600px;
     }
-
-        ul#user-menu li {
-            padding: 0;
-        }
 
     #copyrights {
         min-width: 600px;
