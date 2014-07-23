@@ -47,8 +47,6 @@ EzBob.Popup = Backbone.View.extend({
 
 		this.setDialogueButtons('init');
 
-		$('body, .ui-widget-overlay').addClass('address-dialog-no-overflow');
-
 		var oWidget = this.$el.dialog('widget');
 
 		oWidget.find('.ui-dialog-title').addClass('address-dialog-title');
@@ -309,7 +307,6 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.dialog('close');
 		this.remove();
 		this.unbind();
-		$('body').removeClass('address-dialog-no-overflow');
 
 		EzBob.ServerLog.debug('address popup OK clicked: the following address accepted:', addressModel);
 	}, // PostCodeBtnOk
@@ -346,7 +343,6 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.dialog('close');
 		this.remove();
 		this.unbind();
-		$('body').removeClass('address-dialog-no-overflow');
 
 		EzBob.ServerLog.debug('address popup manual OK clicked: the following address accepted:', addressModel);
 	}, // PostCodeBtnManualInputOk
@@ -355,7 +351,6 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.dialog('close');
 		this.remove();
 		this.unbind();
-		$('body').removeClass('address-dialog-no-overflow');
 
 		EzBob.ServerLog.debug('address popup cancel clicked');
 	}, // PostCodeBtnCancel

@@ -124,8 +124,8 @@
                             <div class="error">
                                 ${error_table}
                             </div>
-
-                            <form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
+                            <div class="bank-account">
+                                <form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
                                 @EzForm.InputText("customer", "${customer_Text:=Name of Cardholder}", "${customer}", "text", "form_field", false, true, true, 1)
 
                                 ${start_card_type}
@@ -181,7 +181,7 @@
                                 @Hiddens()
 
                             </form>
-
+                            </div>
                             <div id="buttons" align="center" class="span7">
                                 ${other_pay}<br>
                             </div>

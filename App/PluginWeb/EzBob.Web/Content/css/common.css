@@ -2046,10 +2046,6 @@ ul.storelist li span {
     border: 0 !important;
 }
 
-.address-dialog-no-overflow {
-    overflow: hidden !important;
-}
-
 .address-dialog-title {
     font-size: 32px !important;
     line-height: 40px !important;
@@ -3139,8 +3135,6 @@ table.payment-schedule-table {
 .bank-account { width: 70%; }
 .bank-account #baPersonal { margin: 0 4px -3px 4px; }
 .bank-account #baBusiness { margin: 0 4px -3px 28px; }
-
-.bank-account .control-group { margin-bottom: 12px; }
 
 .bank-account .control-panel-and-bank-details { position: relative; display: inline-block; }
 
