@@ -46,9 +46,6 @@ EzBob.companyTargets = Backbone.View.extend({
             ]
         });
 
-
-        $('body, .ui-widget-overlay').addClass('address-dialog-no-overflow');
-
         var oWidget = this.$el.dialog('widget');
 
         oWidget.find('.ui-dialog-title').addClass('address-dialog-title');
@@ -100,6 +97,5 @@ EzBob.companyTargets = Backbone.View.extend({
     },
     btnCancelClick: function () {
         this.$el.dialog("close");
-        $('body').removeClass('address-dialog-no-overflow');
     }
 });
