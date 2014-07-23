@@ -989,6 +989,8 @@
     <Content Include="Content\img\store-logos.png" />
     <Content Include="Content\img\store-sprites.png" />
     <Content Include="Content\img\superfast-app.jpg" />
+    <Content Include="Content\img\tab_L.png" />
+    <Content Include="Content\img\tab_R.png" />
     <Content Include="Content\img\Tamebay.png" />
     <Content Include="Content\img\TechCrunch.png" />
     <Content Include="Content\img\three-steps.jpg" />

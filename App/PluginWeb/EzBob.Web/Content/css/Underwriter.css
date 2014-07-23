@@ -1740,8 +1740,22 @@ td a.edit-loan {
     z-index: 2;
 }
 
-.badge {
-    color: #000000;
+.assets-bubble-left-image {
+    position: absolute;
+    left: -5px;
+    top: 130px;
+    width: 100px;
+    height: 25px;
+    z-index: 1;
+}
+
+.assets-bubble-right-image {
+    position: absolute;
+    right: -10px;
+    top: 10px;
+    width: 100px;
+    height: 25px;
+    z-index: 1;
 }
 
 .box .box-title .box-tool a.btn {

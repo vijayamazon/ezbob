@@ -56,11 +56,13 @@
                                 <br />
                                 <span>(<%- properties.NumberOfMortgages %>)</span>
                                 <br />
-                                <span class="badge">(LTV: <%- properties.Ltv %>%)</span>
+                                <span>(LTV: <%- properties.Ltv %>%)</span>
                             </div>
+                            <img class="assets-bubble-left-image" src='@Url.Content("~/Content/img/tab_L.png")'></img>
+                            <img class="assets-bubble-right-image" src='@Url.Content("~/Content/img/tab_R.png")'></img>
                             <div class="networth-div">
                                 <span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimalsNoSign(properties.NetWorth) %></span><br />
-                                <span class="badge">(NW: <%- properties.NetWorthPercentages %>%)</span>
+                                <span>(NW: <%- properties.NetWorthPercentages %>%)</span>
                             </div>
                         </div>
                         <div style="position: relative; width: 170px; margin: 0 auto;">
