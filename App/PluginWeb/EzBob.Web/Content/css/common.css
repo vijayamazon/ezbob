@@ -2681,6 +2681,9 @@ ul#user-menu {
 .wizard-steps {
     background-color: #E2E3E5;
     color: #fff;
+    -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.35);
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.35);
 }
 
     .wizard-steps .progress-time {
@@ -2692,7 +2695,7 @@ ul#user-menu {
     }
 
         .wizard-steps .progress-time .progress-time-remainig {
-            color: #ec8b0b;
+            color: #67c10b;
             font-style: italic;
             font-weight: bold;
         }
@@ -2839,7 +2842,7 @@ ul.application_steps {
         }
 
         ul.application_steps li.current .step_label {
-            color: #559302;
+            color: #67c10b;
         }
 
             ul.application_steps li.current .progress-line-current {
@@ -2904,10 +2907,11 @@ ul.application_steps {
         line-height: 17px;
         padding-bottom: 5px;
         color: #515254;
-        width: 90px;
+        width: 100px;
         text-align: center;
         padding-top: 5px;
         font-family: 'Titillium Web Semi Bold';
+        font-size: 1.3em;
     }
 
 /*side bar*/
