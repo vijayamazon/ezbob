@@ -39,7 +39,7 @@
                         <span>Status</span>
                         <select class="form_field selectheight" id="Status" name="Status">
                             <option></option>
-                            <% _.each(statuses, function(sGroup) { console.log(sGroup);%>
+                            <% _.each(statuses, function(sGroup) { %>
                             <optgroup label="<%- sGroup.Name%>">
                                 <%_.each(sGroup.Statuseses, function(status){%>
                                     <option value="<%- status.Id %>"><%- status.Name %></option>
@@ -68,6 +68,6 @@
         </form>
     </div>
     <div class="pull-right">
-        <button class="button btn-green">OK</button>
+        <button class="button btn-green btn-primary">OK</button>
     </div>
 </script>
