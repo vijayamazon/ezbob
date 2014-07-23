@@ -1708,6 +1708,10 @@ td a.edit-loan {
     margin-top: 2px;
 }
 
+.assets-legend-text {
+    color: black;
+}
+
 .ez-light-grey {
     color: #a7a7a7;
 }
@@ -1725,14 +1729,14 @@ td a.edit-loan {
 .mortgage-div {
     position: absolute;
     left: 2px;
-    top: 120px;
+    top: 80px;
     z-index: 2;
 }
 
 .networth-div {
     position: absolute;
-    right: 10px;
-    top: 0;
+    right: 0px;
+    top: -20px;
     z-index: 2;
 }
 

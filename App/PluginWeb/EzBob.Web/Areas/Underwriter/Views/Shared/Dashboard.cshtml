@@ -52,7 +52,10 @@
                         <div>Market value: <span class="ez-green"><%- EzBob.formatPoundsAsThousandsNoDecimalsNoSign(properties.MarketValue) %></span></div>
                         <div style="position: relative;">
                             <div class="mortgage-div">
-                                <span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimalsNoSign(properties.SumOfMortgages) %> (<%- properties.NumberOfMortgages %>)</span><br />
+                                <span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimalsNoSign(properties.SumOfMortgages) %></span>
+                                <br />
+                                <span>(<%- properties.NumberOfMortgages %>)</span>
+                                <br />
                                 <span class="badge">(LTV: <%- properties.Ltv %>%)</span>
                             </div>
                             <div class="networth-div">
@@ -70,10 +73,10 @@
                         </div>
                         <div class="assets-legend">
                             <i class="fa fa-square ez-light-grey pull-left">
-                                Mortgage
+                                <span class="assets-legend-text">Mortgage</span>
                             </i>
                             <i class="fa fa-square ez-green pull-right">
-                                Net worth
+                                <span class="assets-legend-text">Net worth</span>
                             </i>
                         </div>
                     </div>
