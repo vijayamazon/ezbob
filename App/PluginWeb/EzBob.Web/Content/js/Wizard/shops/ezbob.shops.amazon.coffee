@@ -47,7 +47,9 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
 
     runTutorial: ->
         div = $('<div/>')
-        content = $('#amazon-gallery-container')
+        tutorial = new EzBob.AmazonTutorialView()
+        tutorial.render()
+        content = tutorial.$el
         div.html content.html()
         div.find('.amazon-tutorial-slider').attr('id', 'amazon-tutorial-slider' + (new Date().getTime())).show()
         div.dialog
@@ -120,6 +122,11 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
     getDocumentTitle: ->
         EzBob.App.trigger 'clear'
         'Link Amazon Account'
+
+
+class EzBob.AmazonTutorialView extends Backbone.Marionette.ItemView
+    template: "#amazon-tutorial"
+
 
 class EzBob.AmazonStoreModel extends Backbone.Model
     defaults:

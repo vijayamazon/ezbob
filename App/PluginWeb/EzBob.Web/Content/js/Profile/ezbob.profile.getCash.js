@@ -258,7 +258,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		var self = this;
 
 		var oBtn = $('<button>Update</button>')
-			.addClass('green')
+			.addClass('button btn-green')
 			.attr(
 				'ui-event-control-id', 'refresh-account:' + sUiEventControlID
 			).click(function() {

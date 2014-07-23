@@ -222,7 +222,6 @@ ul.star li{background:url(images/star.png) no-repeat 0 0; padding:0 0 0 30px;}
 
 body .form_field_look,
 body .form_field {
-    margin: 0 0 20px 0;
     padding: 5px;
     font-size: 18px;
     border: 1px #ccc solid;
@@ -328,7 +327,16 @@ em {
 a{color:#39f;}
 a:hover{text-decoration:none;}
 .indent_text{text-indent:-9999px;}
-blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:italic; background:#eee;}
+
+blockquote {
+    margin: 0 0 20px 0;
+    padding: 10px;
+    border: 1px #ccc solid;
+    font-style: italic;
+    background: #eee;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+}
 /* --- Buttons --- */
 
 /*

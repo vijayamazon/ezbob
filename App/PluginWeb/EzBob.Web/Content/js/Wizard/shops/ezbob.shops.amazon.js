@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -27,6 +27,7 @@
       this.merchantId = this.$el.find('#amazonMerchantId');
       this.marketplaceId.withoutSpaces();
       this.merchantId.withoutSpaces();
+      EzBob.UiAction.registerView(this);
       return this;
     };
 
@@ -59,9 +60,11 @@
     };
 
     AmazonStoreInfoView.prototype.runTutorial = function() {
-      var content, div;
+      var content, div, tutorial;
       div = $('<div/>');
-      content = $('#amazon-gallery-container');
+      tutorial = new EzBob.AmazonTutorialView();
+      tutorial.render();
+      content = tutorial.$el;
       div.html(content.html());
       div.find('.amazon-tutorial-slider').attr('id', 'amazon-tutorial-slider' + (new Date().getTime())).show();
       div.dialog({
@@ -145,6 +148,20 @@
     return AmazonStoreInfoView;
 
   })(Backbone.View);
+
+  EzBob.AmazonTutorialView = (function(_super) {
+
+    __extends(AmazonTutorialView, _super);
+
+    function AmazonTutorialView() {
+      return AmazonTutorialView.__super__.constructor.apply(this, arguments);
+    }
+
+    AmazonTutorialView.prototype.template = "#amazon-tutorial";
+
+    return AmazonTutorialView;
+
+  })(Backbone.Marionette.ItemView);
 
   EzBob.AmazonStoreModel = (function(_super) {
 
