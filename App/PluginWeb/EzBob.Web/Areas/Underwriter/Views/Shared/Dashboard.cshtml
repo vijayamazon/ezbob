@@ -49,14 +49,14 @@
                     </div>
                     <%} else {%>
                     <div class="row">
-                        <div>Market value: <span class="ez-green"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.MarketValue) %></span></div>
+                        <div>Market value: <span class="ez-green"><%- EzBob.formatPoundsAsThousandsNoDecimalsNoSign(properties.MarketValue) %></span></div>
                         <div style="position: relative;">
                             <div class="mortgage-div">
-                                <span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %> (<%- properties.NumberOfMortgages %>)</span><br />
+                                <span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimalsNoSign(properties.SumOfMortgages) %> (<%- properties.NumberOfMortgages %>)</span><br />
                                 <span class="badge">(LTV: <%- properties.Ltv %>%)</span>
                             </div>
                             <div class="networth-div">
-                                <span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.NetWorth) %></span><br />
+                                <span class="ez-bigtext"><%- EzBob.formatPoundsAsThousandsNoDecimalsNoSign(properties.NetWorth) %></span><br />
                                 <span class="badge">(NW: <%- properties.NetWorthPercentages %>%)</span>
                             </div>
                         </div>
