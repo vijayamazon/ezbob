@@ -155,10 +155,39 @@
 				Log.Debug("Error fetching company seniority: {0}", e);
 			}
 
-			BuildLandRegistryAlerts(customer, summary);
+			bool errorFetchingLandRegistryData = BuildLandRegistryAlerts(customer, summary);
+
+			try
+			{
+				string errors = serviceClient.Instance.GetUnfetchedDataErrors(context.UserId, customer.Id).Value;
+
+				if (errorFetchingLandRegistryData)
+				{
+					if (errors == null)
+					{
+						errors = string.Empty;
+					}
+
+					if (errors != string.Empty)
+					{
+						errors += Environment.NewLine;
+					}
+
+					errors += "Error getting land registry data";
+				}
+
+				if (!string.IsNullOrEmpty(errors))
+				{
+					summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "DATA", Alert = errors, AlertType = AlertType.Error.DescriptionAttr() });
+				}
+			}
+			catch (Exception e)
+			{
+				Log.Debug("Error fetching customer's errors: {0}", e);
+			}
 		}
 
-		private void BuildLandRegistryAlerts(Customer customer, ProfileSummaryModel summary)
+		private bool BuildLandRegistryAlerts(Customer customer, ProfileSummaryModel summary)
 		{
 			var lrs = customer.LandRegistries.Where(x =>
 				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
@@ -171,6 +200,7 @@
 						Alert = "No land registries retrieved",
 						AlertType = AlertType.Warning.DescriptionAttr()
 					});
+				return true;
 			}
 			
 			if (lrs.Any())
@@ -190,6 +220,8 @@
 					});
 				}
 			}
+
+			return false;
 		}
 
 		private static void BuildRequestedLoan(ProfileSummaryModel summary, Customer customer)

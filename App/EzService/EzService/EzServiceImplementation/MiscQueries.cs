@@ -264,5 +264,18 @@
 			CalculateNewMedals instance;
 			return ExecuteSync(out instance, 0, 0);
 		}
+
+		public StringActionResult GetUnfetchedDataErrors(int underwriterId, int customerId)
+		{
+			GetUnfetchedDataErrors instance;
+
+			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
+
+			return new StringActionResult
+			{
+				MetaData = result,
+				Value = instance.Errors
+			};
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

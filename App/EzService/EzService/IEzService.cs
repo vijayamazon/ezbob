@@ -525,6 +525,9 @@
 
 		[OperationContract]
 		CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, int customerId, string refNumber);
+
+		[OperationContract]
+		StringActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
 	} // interface IEzService
 } // namespace EzService
 

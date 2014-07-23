@@ -90,6 +90,7 @@
     <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
     <Compile Include="Misc\BackfillAml.cs" />
     <Compile Include="Misc\BackfillNonLimitedCompanies.cs" />
+    <Compile Include="Misc\GetUnfetchedDataErrors.cs" />
     <Compile Include="Misc\GetCompanyDataForCreditBureau.cs" />
     <Compile Include="Misc\GetCompanyDataForCompanyScore.cs" />
     <Compile Include="Misc\GetBankModel.cs" />
