@@ -93,22 +93,22 @@ namespace EZBob.DatabaseLib.Repository {
 				return x.TitleNumber == titleNumber;
 			}; // oIsMatch
 
-			return GetAll().OrderByDescending(x => x.InsertDate).FirstOrDefault(oIsMatch);
+			return GetAll().Where(oIsMatch).OrderByDescending(x => x.InsertDate).FirstOrDefault();
 		} // GetRes
 
 		public LandRegistry GetEnquiry(int customerId, string postCode) {
-			return GetAll()
-				.OrderByDescending(x => x.InsertDate)
-				.FirstOrDefault(x =>
+			return GetAll().Where(x =>
 					(x.Customer.Id == customerId) &&
 					(x.RequestType == LandRegistryRequestType.Enquiry || x.RequestType == LandRegistryRequestType.EnquiryPoll) &&
 					(x.ResponseType == LandRegistryResponseType.Success) &&
 					(x.Postcode == postCode)
-				);
+				)
+				.OrderByDescending(x => x.InsertDate)
+				.FirstOrDefault();
 		} // GetEnquiry
 
 		public LandRegistry GetByTitleNumber(string titleNumber) {
-			return GetAll().LastOrDefault(x => x.TitleNumber == titleNumber && IsResRequest(x));
+			return GetAll().Where(x => x.TitleNumber == titleNumber && IsResRequest(x)).OrderByDescending(x => x.InsertDate).FirstOrDefault();
 		} // GetByTitleNumber
 
 		private bool IsResRequest(LandRegistry x) {
