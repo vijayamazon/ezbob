@@ -2,7 +2,6 @@
 {
 	using System.Data;
 	using System.Text.RegularExpressions;
-	using ConfigManager;
 	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;

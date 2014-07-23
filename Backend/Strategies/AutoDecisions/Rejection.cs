@@ -4,7 +4,6 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using ConfigManager;
-	using ExperianLib;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using System.Data;
@@ -351,7 +350,7 @@
 				{
 					response.AutoRejectReason = "AutoReject: Customer status. Condition not met:" + _customerStatusName;
 				}
-				// !hasCompanyFiles && Sufficient annual or quarterly turnover (Pay pal is also being considered by itself)
+				// !hasCompanyFiles && !_isOffline && Sufficient annual or quarterly turnover (Pay pal is also being considered by itself)
 				conditionValue = !hasCompanyFiles && !_isOffline && 
 					(_payPalNumberOfStores == 0 || _payPalTotalSumOfOrders3M < _lowTotalThreeMonthTurnover || _payPalTotalSumOfOrders1Y < _lowTotalAnnualTurnover)
 					&& (_totalSumOfOrders3MTotalForRejection < _lowTotalThreeMonthTurnover || _totalSumOfOrders1YTotalForRejection < _lowTotalAnnualTurnover);
