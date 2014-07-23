@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.CompanyScore;
 
 	#region class NonLimScoreHistory
 
@@ -21,42 +22,6 @@
 
 	#endregion class FinDataModel
 
-	#region class CompanyScoreModelItemValues
-
-	public class CompanyScoreModelItemValues {
-		#region constructor
-
-		public CompanyScoreModelItemValues() {
-			Values = new SortedDictionary<string, string>();
-			Children = new Dictionary<string, CompanyScoreModelItem>();
-		} // constructor
-
-		#endregion constructor
-
-		public SortedDictionary<string, string> Values { get; private set; }
-		public Dictionary<string, CompanyScoreModelItem> Children { get; private set; }
-	} // class CompanyScoreModelItemValues
-
-	#endregion class ParsedDataItem
-
-	#region class CompanyScoreModelItem
-
-	public class CompanyScoreModelItem {
-		public CompanyScoreModelItem(string sGroupName, SortedDictionary<string, string> oMetaData) {
-			GroupName = sGroupName;
-			MetaData = oMetaData ?? new SortedDictionary<string, string>();
-			Data = new List<CompanyScoreModelItemValues>();
-		} // constructor
-
-		public string GroupName { get; private set; }
-
-		public SortedDictionary<string, string> MetaData { get; private set; }
-
-		public List<CompanyScoreModelItemValues> Data { get; private set; }
-	} // CompanyScoreModelItem
-
-	#endregion class CompanyScoreModelItem
-
 	#region class CompanyScoreModel
 
 	public class CompanyScoreModel {
@@ -66,9 +31,9 @@
 
 		public string result { get; set; }
 
-		public Dictionary<string, CompanyScoreModelItem> dataset { get; set; }
+		public SortedDictionary<string, CompanyScoreModelItem> dataset { get; set; }
 
-		public Dictionary<string, CompanyScoreModelItem> newDataset { get; set; }
+		public List<string> dataset_display_order { get; set; }
 
 		public string company_name { get; set; }
 

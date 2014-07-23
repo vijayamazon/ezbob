@@ -1,5 +1,6 @@
 namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System.Runtime.Serialization;
+	using Attributes;
 	using Logger;
 	using Utils;
 
@@ -12,8 +13,10 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		public long DL65ID { get; set; }
 
 		[DataMember]
-		[LenderDetails("LENDERNAME")]
+		[LenderDetails("LENDERNAME", "Lender name")]
 		public string LenderName { get; set; }
+
+		#region property ExperianLtdID
 
 		/// <summary>
 		/// Do not remove.
@@ -24,6 +27,8 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 			get { return base.ExperianLtdID; }
 			set { base.ExperianLtdID = value; }
 		} // ExperianLtdID
+
+		#endregion property ExperianLtdID
 
 		#region property ParentID
 

@@ -7,9 +7,13 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System.Runtime.Serialization;
 	using System.Text;
 	using System.Xml;
+	using Attributes;
+	using CompanyScore;
 	using Database;
 	using Logger;
 	using Utils;
+
+	using CompanyScoreModelDataset = System.Collections.Generic.SortedDictionary<string, CompanyScore.CompanyScoreModelItem>;
 
 	[Serializable]
 	[DataContract]
@@ -136,7 +140,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 				LoadedCount++;
 
-				SetValue(this, pi, oNode, oRoot);
+				SetValue(this, pi, oNode);
 			} // for each properties
 
 			LoadChildrenFromXml(oRoot);
@@ -237,6 +241,170 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		} // GetChildren
 
 		#endregion method GetChildren
+
+		#region method ToCompanyScoreModel
+
+		public virtual CompanyScoreModelDataset ToCompanyScoreModel(CompanyScoreModelDataset oModel = null) {
+			if (oModel == null)
+				oModel = new CompanyScoreModelDataset();
+
+			ASrcAttribute oGroupSrcAttr = this.GetType().GetCustomAttribute<ASrcAttribute>();
+
+			var oMyValues = new SortedDictionary<string, CompanyScoreModelItemValues>();
+			var oMyMetaData = new SortedDictionary<string, DisplayMetaData>();
+
+			this.Traverse((oInstance, oPropertyInfo) => {
+				ASrcAttribute oValueSrcAttr = oPropertyInfo.GetCustomAttribute<ASrcAttribute>();
+
+				if (oValueSrcAttr == null)
+					return;
+
+				if (!oValueSrcAttr.IsCompanyScoreModel)
+					return;
+
+				string sTargetGroupName = (oGroupSrcAttr ?? oValueSrcAttr).TargetDisplayGroup;
+
+				CompanyScoreModelItemValues oValues;
+
+				if (oMyValues.ContainsKey(sTargetGroupName))
+					oValues = oMyValues[sTargetGroupName];
+				else {
+					oValues = new CompanyScoreModelItemValues();
+					oMyValues[sTargetGroupName] = oValues;
+					oMyMetaData[sTargetGroupName] = (oGroupSrcAttr ?? oValueSrcAttr).MetaData;
+				} // if
+
+				object oValue = oPropertyInfo.GetValue(oInstance);
+
+				string sDisplayName = oValueSrcAttr.TargetDisplayName;
+				if (string.IsNullOrWhiteSpace(sDisplayName))
+					sDisplayName = oPropertyInfo.Name;
+
+				string sValue = string.Empty;
+				
+				if (oValue != null) {
+					if (oPropertyInfo.PropertyType == typeof (DateTime?))
+						sValue = ((DateTime?)oValue).Value.ToString("MMMM d yyyy", ms_oCulture);
+					else if (oPropertyInfo.PropertyType == typeof (int?)) {
+						if (oValueSrcAttr.Transformation == TransformationType.MonthsAndYears) {
+							decimal nValue = (decimal)((int?)oValue).Value;
+
+							decimal nYears = Math.Floor(nValue / 12);
+							decimal nMonths = nValue - nYears * 12;
+
+							var os = new StringBuilder();
+							if (nYears > 0)
+								os.AppendFormat("{0} year{1}", nYears, nYears == 1 ? "" : "s");
+
+							if (nMonths > 0)
+								os.AppendFormat(" {0} month{1}", nMonths, nMonths == 1 ? "" : "s");
+
+							sValue = os.ToString().Trim();
+						}
+						else
+							sValue = oValue.ToString();
+					}
+					else if (oPropertyInfo.PropertyType == typeof (decimal?)) {
+						decimal x = ((decimal?)oValue).Value;
+
+						string sPrecision = Math.Abs(Math.Truncate(x) - x) < 0.00000001m ? "0" : "2";
+						string sFormat = oValueSrcAttr.Transformation == TransformationType.Money ? "C" : "G";
+
+						sValue = x.ToString(sFormat + sPrecision, ms_oCulture);
+					}
+					else { // string
+						sValue = oValue.ToString();
+
+						if (oValueSrcAttr.Transformation == TransformationType.Shares) {
+							decimal nValue = 0;
+							bool bFound = false;
+
+							foreach (char c in sValue) {
+								bool bGood = false;
+
+								switch (c) {
+								case '0':
+								case '1':
+								case '2':
+								case '3':
+								case '4':
+								case '5':
+								case '6':
+								case '7':
+								case '8':
+								case '9':
+									bFound = true;
+									nValue = nValue * 10m + (c - '0');
+									goto case ' '; // !!! fall through !!!
+
+								case ' ':
+								case ',':
+								case '\t':
+									bGood = true;
+									break;
+								} // switch
+
+								if (!bGood)
+									break;
+							} // for each char
+
+							if (bFound)
+								sValue = nValue.ToString("G0", ms_oCulture);
+						} // if
+					} // if
+
+					sValue = oValueSrcAttr.Map(sValue);
+				} // if
+
+				if (oValues.Values.ContainsKey(sDisplayName))
+					oValues.Values[sDisplayName] = Str(oValues.Values[sDisplayName] + oValueSrcAttr.DisplayPrefix + sValue);
+				else
+					oValues.Values[sDisplayName] = Str(sValue);
+			});
+
+			CompanyScoreModelItemValues oGroupValues = null;
+
+			foreach (KeyValuePair<string, CompanyScoreModelItemValues> pair in oMyValues) {
+				string sTargetGroupName = pair.Key;
+
+				CompanyScoreModelItem oItem;
+
+				if (oModel.ContainsKey(sTargetGroupName))
+					oItem = oModel[sTargetGroupName];
+				else {
+					oItem = new CompanyScoreModelItem(sTargetGroupName, oMyMetaData[sTargetGroupName].ToDictionary());
+					oModel[sTargetGroupName] = oItem;
+				} // if
+
+				oItem.Data.Add(pair.Value);
+
+				if (oGroupSrcAttr != null)
+					oGroupValues = pair.Value;
+			} // for each
+
+			foreach (AExperianLtdDataRow oKid in Children) {
+				ASrcAttribute oKidSrcAttr = oKid.GetType().GetCustomAttribute<ASrcAttribute>();
+
+				if (oKidSrcAttr == null)
+					continue;
+
+				if (!oKidSrcAttr.IsCompanyScoreModel)
+					continue;
+
+				if (oKidSrcAttr.IsTopLevel)
+					oKid.ToCompanyScoreModel(oModel);
+				else {
+					if (oGroupValues == null)
+						Log.Alert("No group values were defined for children of {0}.", this.GetType());
+					else
+						oKid.ToCompanyScoreModel(oGroupValues.Children);
+				}
+			} // for each kid
+
+			return oModel;
+		} // ToCompanyScoreModel
+
+		#endregion method ToCompanyScoreModel
 
 		#endregion public
 
@@ -372,22 +540,22 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#region method SetValue
 
-		private static void SetValue(AExperianLtdDataRow oCurTable, PropertyInfo pi, XmlNode oNode, XmlNode oGroup) {
+		private static void SetValue(AExperianLtdDataRow oCurTable, PropertyInfo pi, XmlNode oNode) {
 			if (pi.PropertyType == typeof (string))
 				pi.SetValue(oCurTable, oNode.InnerText);
 			else if (pi.PropertyType == typeof (int?))
 				SetInt(pi, oCurTable, oNode.InnerText);
-			else if (pi.PropertyType == typeof (double?))
-				SetDouble(pi, oCurTable, oNode.InnerText);
 			else if (pi.PropertyType == typeof (decimal?))
 				SetDecimal(pi, oCurTable, oNode.InnerText);
 			else if (pi.PropertyType == typeof (DateTime?)) {
 				if (oNode.Name.EndsWith("-YYYY")) {
 					string sPrefix = oNode.Name.Substring(0, oNode.Name.Length - 5);
 
-					XmlNode oMonthNode = oGroup.SelectSingleNode(sPrefix + "-MM");
+					// ReSharper disable PossibleNullReferenceException
+					XmlNode oMonthNode = oNode.ParentNode.SelectSingleNode(sPrefix + "-MM");
 
-					XmlNode oDayNode = oMonthNode == null ? null : oGroup.SelectSingleNode(sPrefix + "-DD");
+					XmlNode oDayNode = oMonthNode == null ? null : oNode.ParentNode.SelectSingleNode(sPrefix + "-DD");
+					// ReSharper restore PossibleNullReferenceException
 
 					if (oDayNode != null)
 						SetDate(pi, oCurTable, oNode.InnerText + MD(oMonthNode) + MD(oDayNode));
@@ -412,19 +580,6 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 
 		#endregion method SetInt
 
-		#region method SetDouble
-
-		private static void SetDouble(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
-			double n;
-
-			if (double.TryParse(sValue, out n))
-				pi.SetValue(oCurTable, n);
-			else
-				pi.SetValue(oCurTable, null);
-		} // SetDouble
-
-		#endregion method SetDouble
-
 		#region method SetDecimal
 
 		private static void SetDecimal(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
@@ -443,7 +598,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		private static void SetDate(PropertyInfo pi, AExperianLtdDataRow oCurTable, string sValue) {
 			DateTime n;
 
-			if (DateTime.TryParseExact(sValue, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out n))
+			if (DateTime.TryParseExact(sValue, "yyyyMMdd", ms_oCulture, DateTimeStyles.AssumeUniversal, out n))
 				pi.SetValue(oCurTable, n);
 			else
 				pi.SetValue(oCurTable, null);
@@ -463,6 +618,16 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		} // MD
 
 		#endregion method MD
+
+		#region method Str
+
+		private static string Str(string a) {
+			return (a ?? string.Empty).Trim();
+		} // Str
+
+		#endregion method Str
+
+		private static readonly CultureInfo ms_oCulture = new CultureInfo("en-GB", false);
 
 		#endregion private
 	} // class AExperianLtdDataRow

@@ -1,6 +1,7 @@
 namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System;
 	using System.Runtime.Serialization;
+	using Attributes;
 	using Logger;
 
 	[DataContract]
@@ -11,50 +12,65 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		[DataMember]
 		[DL99("DATEOFACCOUNTS-YYYY")]
 		public DateTime? Date { get; set; }
+
 		[DataMember]
-		[DL99("CREDDIRLOANS")]
+		[DL99("CREDDIRLOANS", Transformation = TransformationType.Money)]
 		public decimal? CredDirLoans { get; set; }
+
 		[DataMember]
-		[DL99("DEBTORS")]
+		[DL99("DEBTORS", Transformation = TransformationType.Money)]
 		public decimal? Debtors { get; set; }
+
 		[DataMember]
-		[DL99("DEBTORSDIRLOANS")]
+		[DL99("DEBTORSDIRLOANS", Transformation = TransformationType.Money)]
 		public decimal? DebtorsDirLoans { get; set; }
+
 		[DataMember]
-		[DL99("DEBTORSGROUPLOANS")]
+		[DL99("DEBTORSGROUPLOANS", Transformation = TransformationType.Money)]
 		public decimal? DebtorsGroupLoans { get; set; }
+
 		[DataMember]
-		[DL99("INTNGBLASSETS")]
+		[DL99("INTNGBLASSETS", Transformation = TransformationType.Money)]
 		public decimal? InTngblAssets { get; set; }
+
 		[DataMember]
-		[DL99("INVENTORIES")]
+		[DL99("INVENTORIES", Transformation = TransformationType.Money)]
 		public decimal? Inventories { get; set; }
+
 		[DataMember]
-		[DL99("ONCLDIRLOANS")]
+		[DL99("ONCLDIRLOANS", Transformation = TransformationType.Money)]
 		public decimal? OnClDirLoans { get; set; }
+
 		[DataMember]
-		[DL99("OTHDEBTORS")]
+		[DL99("OTHDEBTORS", Transformation = TransformationType.Money)]
 		public decimal? OtherDebtors { get; set; }
+
 		[DataMember]
-		[DL99("PREPAYACCRUALS")]
+		[DL99("PREPAYACCRUALS", Transformation = TransformationType.Money)]
 		public decimal? PrepayAccRuals { get; set; }
+
 		[DataMember]
-		[DL99("RETAINEDEARNINGS")]
+		[DL99("RETAINEDEARNINGS", Transformation = TransformationType.Money)]
 		public decimal? RetainedEarnings { get; set; }
+
 		[DataMember]
-		[DL99("TNGBLASSETS")]
+		[DL99("TNGBLASSETS", Transformation = TransformationType.Money)]
 		public decimal? TngblAssets { get; set; }
+
 		[DataMember]
-		[DL99("TOTALCASH")]
+		[DL99("TOTALCASH", Transformation = TransformationType.Money)]
 		public decimal? TotalCash { get; set; }
+
 		[DataMember]
-		[DL99("TOTALCURRLBLTS")]
+		[DL99("TOTALCURRLBLTS", Transformation = TransformationType.Money)]
 		public decimal? TotalCurrLblts { get; set; }
+
 		[DataMember]
-		[DL99("TOTALNONCURR")]
+		[DL99("TOTALNONCURR", Transformation = TransformationType.Money)]
 		public decimal? TotalNonCurr { get; set; }
+
 		[DataMember]
-		[DL99("TOTALSHAREFUND")]
+		[DL99("TOTALSHAREFUND", Transformation = TransformationType.Money)]
 		public decimal? TotalShareFund { get; set; }
 	} // class ExperianLtdDL99
 } // namespace

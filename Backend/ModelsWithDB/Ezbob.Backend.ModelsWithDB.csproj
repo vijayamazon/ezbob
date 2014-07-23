@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\App\PluginWeb\EzBob.Web\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -40,9 +44,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompanyScore\CompanyScoreModelItem.cs" />
+    <Compile Include="CompanyScore\CompanyScoreModelItemValues.cs" />
     <Compile Include="Experian\AExperianLtdDataRow.cs" />
-    <Compile Include="Experian\ASrcAttribute.cs" />
-    <Compile Include="Experian\attributes_for_limited.cs" />
+    <Compile Include="Experian\Attributes\ASrcAttribute.cs" />
+    <Compile Include="Experian\Attributes\CaisMonthlyAttribute.cs" />
+    <Compile Include="Experian\Attributes\DL12Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL13Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL17Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL23Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL26Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL41Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL42Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL48Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL52Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL65Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL68Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL72Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL76Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL78Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL97Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL99Attribute.cs" />
+    <Compile Include="Experian\Attributes\DLA2Attribute.cs" />
+    <Compile Include="Experian\Attributes\DLB5Attribute.cs" />
+    <Compile Include="Experian\Attributes\ERR1Attribute.cs" />
+    <Compile Include="Experian\Attributes\LenderDetailsAttribute.cs" />
+    <Compile Include="Experian\Attributes\PrevCompNamesAttribute.cs" />
+    <Compile Include="Experian\Attributes\SharehldsAttribute.cs" />
+    <Compile Include="Experian\Attributes\SummaryLineAttribute.cs" />
     <Compile Include="Experian\DisplayMetaData.cs" />
     <Compile Include="Experian\ExperianLtdErrors.cs" />
     <Compile Include="Experian\ExperianLtdCaisMonthly.cs" />

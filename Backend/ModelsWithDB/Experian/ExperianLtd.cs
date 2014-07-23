@@ -1,10 +1,11 @@
-namespace Ezbob.Backend.ModelsWithDB.Experian {
+﻿namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Xml;
+	using Attributes;
 	using Database;
 	using Logger;
 	using Utils;
@@ -48,183 +49,220 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		#region properties loaded from XML
 
 		[DataMember]
-		[DL12("REGNUMBER")]
+		[DL12("REGNUMBER", "Registered Number")]
 		public string RegisteredNumber { get; set; }
+
 		[DataMember]
-		[DL12("LEGALSTATUS")]
+		[DL12("LEGALSTATUS", "Legal status", @"{
+			""1"": ""Private Unlimited"",
+			""2"": ""Private Limited"",
+			""3"": ""PLC"",
+			""4"": ""Old Public Company"",
+			""5"": ""Private Company Limited by Guarantee (Exempt from using word Limited)"",
+			""6"": ""Limited Partnership"",
+			""7"": ""Private Limited Company Without Share Capital"",
+			""8"": ""Company Converted / Closed"",
+			""9"": ""Private Unlimited Company Without Share Capital"",
+			""0"": ""Other"",
+			""A"": ""Private Company Limited by Shares (Exempt from using word Limited)""
+		}")]
 		public string LegalStatus { get; set; }
+
 		[DataMember]
-		[DL12("DATEINCORP-YYYY")]
+		[DL12("DATEINCORP-YYYY", "Incorporation Date")]
 		public DateTime? IncorporationDate { get; set; }
 		[DataMember]
-		[DL12("DATEDISSVD-YYYY")]
+		[DL12("DATEDISSVD-YYYY", "Dissolution Date")]
 		public DateTime? DissolutionDate { get; set; }
 		[DataMember]
-		[DL12("COMPANYNAME")]
+		[DL12("COMPANYNAME", "Company Name")]
 		public string CompanyName { get; set; }
 		[DataMember]
-		[DL12("REGADDR1")]
+		[DL12("REGADDR1", "Office Address")]
 		public string OfficeAddress1 { get; set; }
 		[DataMember]
-		[DL12("REGADDR2")]
+		[DL12("REGADDR2", "Office Address")]
 		public string OfficeAddress2 { get; set; }
 		[DataMember]
-		[DL12("REGADDR3")]
+		[DL12("REGADDR3", "Office Address")]
 		public string OfficeAddress3 { get; set; }
 		[DataMember]
-		[DL12("REGADDR4")]
+		[DL12("REGADDR4", "Office Address")]
 		public string OfficeAddress4 { get; set; }
 		[DataMember]
-		[DL12("REGPOSTCODE")]
+		[DL12("REGPOSTCODE", "Office Address")]
 		public string OfficeAddressPostcode { get; set; }
 
 		[DataMember]
-		[DL76("RISKSCORE")]
+		[DL76("RISKSCORE", "Commercial Delphi Score")]
 		public int? CommercialDelphiScore { get; set; }
 		[DataMember]
-		[DL76("STABILITYODDS")]
+		[DL76("STABILITYODDS", "Stability Odds")]
 		public string StabilityOdds { get; set; }
 		[DataMember]
-		[DL76("RISKBANDTEXT")]
+		[DL76("RISKBANDTEXT", "Commercial Delphi Band Text")]
 		public string CommercialDelphiBandText { get; set; }
 
 		[DataMember]
-		[DL78("CREDITLIMIT")]
+		[DL78("CREDITLIMIT", "Commercial Delphi Credit Limit", Transformation = TransformationType.Money)]
 		public decimal? CommercialDelphiCreditLimit { get; set; }
 
 		[DataMember]
-		[DL13("ASREGOFFICEFLAG")]
+		[DL13("ASREGOFFICEFLAG", "Same Trading Address", @"{
+			""Y"": ""Yes"",
+			""N"": ""No""
+		}")]
 		public string SameTradingAddressG { get; set; }
+
 		[DataMember]
-		[DL13("LEN1992SIC")]
+		[DL13("LEN1992SIC", "Length of 1992 SIC area")]
 		public int? LengthOf1992SICArea { get; set; }
 		[DataMember]
-		[DL13("TRADPHONENUM")]
+		[DL13("TRADPHONENUM", "Trading Phone Number")]
 		public string TradingPhoneNumber { get; set; }
 		[DataMember]
-		[DL13("PRINACTIVITIES")]
+		[DL13("PRINACTIVITIES", "Principal Activities")]
 		public string PrincipalActivities { get; set; }
 		[DataMember]
-		[DL13("SIC1992DESC1")]
+		[DL13("SIC1992DESC1", "First 1992 SIC Code Description")]
 		public string First1992SICCodeDescription { get; set; }
 		[DataMember]
-		[DL13("SIC1992CODE1")]
+		[DL13("SIC1992CODE1", IsCompanyScoreModel = false)]
 		public string First1992SICCode { get; set; }
 		[DataMember]
-		[DL13("SIC1980DESC1")]
+		[DL13("SIC1980DESC1", IsCompanyScoreModel = false)]
 		public string First1980SICCodeDescription { get; set; }
 		[DataMember]
-		[DL13("SIC1980CODE1")]
+		[DL13("SIC1980CODE1", IsCompanyScoreModel = false)]
 		public string First1980SICCode { get; set; }
 
 		[DataMember]
-		[DL17("BANKSORTCODE")]
+		[DL17("BANKSORTCODE", "Bank Sortcode")]
 		public string BankSortcode { get; set; }
 		[DataMember]
-		[DL17("BANKNAME")]
+		[DL17("BANKNAME", "Bank Name")]
 		public string BankName { get; set; }
 		[DataMember]
-		[DL17("BANKADDR1")]
+		[DL17("BANKADDR1", "Bank Address")]
 		public string BankAddress1 { get; set; }
 		[DataMember]
-		[DL17("BANKADDR2")]
+		[DL17("BANKADDR2", "Bank Address")]
 		public string BankAddress2 { get; set; }
 		[DataMember]
-		[DL17("BANKADDR3")]
+		[DL17("BANKADDR3", "Bank Address")]
 		public string BankAddress3 { get; set; }
 		[DataMember]
-		[DL17("BANKADDR4")]
+		[DL17("BANKADDR4", "Bank Address")]
 		public string BankAddress4 { get; set; }
 		[DataMember]
-		[DL17("BANKPOSTCODE")]
+		[DL17("BANKPOSTCODE", "Bank Address")]
 		public string BankAddressPostcode { get; set; }
 
 		[DataMember]
-		[DL23("ULTPARREGNUM")]
+		[DL23("ULTPARREGNUM", "Registered Number of the Current Ultimate Parent Company")]
 		public string RegisteredNumberOfTheCurrentUltimateParentCompany { get; set; }
 		[DataMember]
-		[DL23("ULTPARNAME")]
+		[DL23("ULTPARNAME", "Registered Name of the Current Ultimate Parent Company")]
 		public string RegisteredNameOfTheCurrentUltimateParentCompany { get; set; }
 
 		[DataMember]
-		[DL42("TOTCURRDIRS")]
+		[DL42("TOTCURRDIRS", "Total Number of Current Directors")]
 		public int? TotalNumberOfCurrentDirectors { get; set; }
 		[DataMember]
-		[DL42("CURRDIRSHIPSLAST12")]
+		[DL42("CURRDIRSHIPSLAST12", "Number of Current Directorships Less Than 12 Months")]
 		public int? NumberOfCurrentDirectorshipsLessThan12Months { get; set; }
 		[DataMember]
-		[DL42("APPTSLAST12")]
+		[DL42("APPTSLAST12", "Number of Appointments in the Last 12 Months")]
 		public int? NumberOfAppointmentsInTheLast12Months { get; set; }
 		[DataMember]
-		[DL42("RESNSLAST12")]
+		[DL42("RESNSLAST12", "Number of Resignations in the Last 12 Months")]
 		public int? NumberOfResignationsInTheLast12Months { get; set; }
 
 		[DataMember]
-		[DL26("AGEMOSTRECENTCCJ")]
+		[DL26("AGEMOSTRECENTCCJ", "Age of Most Recent CCJ/Decree (Months)")]
 		public int? AgeOfMostRecentCCJDecreeMonths { get; set; }
 		[DataMember]
-		[DL26("NUMCCJLAST12")]
+		[DL26("NUMCCJLAST12", "Number of CCJs During Last 12 Months")]
 		public int? NumberOfCCJsDuringLast12Months { get; set; }
 		[DataMember]
-		[DL26("VALCCJLAST12")]
+		[DL26("VALCCJLAST12", "Value of CCJs During Last 12 Months")]
 		public decimal? ValueOfCCJsDuringLast12Months { get; set; }
 		[DataMember]
-		[DL26("NUMCCJ13TO24")]
+		[DL26("NUMCCJ13TO24", "Number of CCJs Between 13 And 24 Months Ago")]
 		public int? NumberOfCCJsBetween13And24MonthsAgo { get; set; }
 		[DataMember]
-		[DL26("VALCCJ13TO24")]
+		[DL26("VALCCJ13TO24", "Value of CCJs Between 13 And 24 Months Ago")]
 		public decimal? ValueOfCCJsBetween13And24MonthsAgo { get; set; }
 
 		[DataMember]
-		[DL41("COMPAVGDBT-3MTH")]
+		[DL41("COMPAVGDBT-3MTH", "Company - Average DBT - 3 Months")]
 		public decimal? CompanyAverageDBT3Months { get; set; }
 		[DataMember]
-		[DL41("COMPAVGDBT-6MTH")]
+		[DL41("COMPAVGDBT-6MTH", "Company - Average DBT - 6 Months")]
 		public decimal? CompanyAverageDBT6Months { get; set; }
 		[DataMember]
-		[DL41("COMPAVGDBT-12MTH")]
+		[DL41("COMPAVGDBT-12MTH", "Company - Average DBT - 12 Months")]
 		public decimal? CompanyAverageDBT12Months { get; set; }
 		[DataMember]
-		[DL41("COMPNUMDBT-1000")]
+		[DL41("COMPNUMDBT-1000", "Company - Number of DBT (£0-£1,000)")]
 		public decimal? CompanyNumberOfDbt1000 { get; set; }
 		[DataMember]
-		[DL41("COMPNUMDBT-10000")]
+		[DL41("COMPNUMDBT-10000", "Company - Number of DBT (£1,000-£10,000)")]
 		public decimal? CompanyNumberOfDbt10000 { get; set; }
 		[DataMember]
-		[DL41("COMPNUMDBT-100000")]
+		[DL41("COMPNUMDBT-100000", "Company - Number of DBT (£10,000-£100,000)")]
 		public decimal? CompanyNumberOfDbt100000 { get; set; }
 		[DataMember]
-		[DL41("COMPNUMDBT-100000PLUS")]
+		[DL41("COMPNUMDBT-100000PLUS", "Company - Number of DBT (£100,000+)")]
 		public decimal? CompanyNumberOfDbt100000Plus { get; set; }
 		[DataMember]
-		[DL41("INDAVGDBT-3MTH")]
+		[DL41("INDAVGDBT-3MTH", "Industry - Average DBT - 3 Months")]
 		public decimal? IndustryAverageDBT3Months { get; set; }
 		[DataMember]
-		[DL41("INDAVGDBT-6MTH")]
+		[DL41("INDAVGDBT-6MTH", "Industry - Average DBT - 6 Months")]
 		public decimal? IndustryAverageDBT6Months { get; set; }
 		[DataMember]
-		[DL41("INDAVGDBT-12MTH")]
+		[DL41("INDAVGDBT-12MTH", "Industry - Average DBT - 12 Months")]
 		public decimal? IndustryAverageDBT12Months { get; set; }
 		[DataMember]
-		[DL41("INDNUMDBT-1000")]
+		[DL41("INDNUMDBT-1000", "Industry - Number of DBT (£0-£1,000)")]
 		public decimal? IndustryNumberOfDbt1000 { get; set; }
 		[DataMember]
-		[DL41("INDNUMDBT-10000")]
+		[DL41("INDNUMDBT-10000", "Industry - Number of DBT (£1,000-£10,000)")]
 		public decimal? IndustryNumberOfDbt10000 { get; set; }
 		[DataMember]
-		[DL41("INDNUMDBT-100000")]
+		[DL41("INDNUMDBT-100000", "Industry - Number of DBT (£10,000-£100,000)")]
 		public decimal? IndustryNumberOfDbt100000 { get; set; }
 		[DataMember]
-		[DL41("INDNUMDBT-100000PLUS")]
+		[DL41("INDNUMDBT-100000PLUS", "Industry - Number of DBT (£100,000+)")]
 		public decimal? IndustryNumberOfDbt100000Plus { get; set; }
+
 		[DataMember]
-		[DL41("COMPPAYPATTN")]
+		[DL41("COMPPAYPATTN", "Company Payment Pattern", @"{
+			""C"": ""Consistent"",
+			""W"": ""Worsening"",
+			""N"": ""Noticeable Worsening"",
+			""S"": ""Significant Worsening"",
+			""I"": ""Improvement"",
+			""O"": ""Noticeable Improvement"",
+			""T"": ""Significant Improvement""
+		}")]
 		public string CompanyPaymentPattern { get; set; }
+
 		[DataMember]
-		[DL41("INDPAYPATTN")]
+		[DL41("INDPAYPATTN", "Industry Payment Pattern", @"{
+			""C"": ""Consistent"",
+			""S"": ""Slower"",
+			""F"": ""Faster""
+		}")]
 		public string IndustryPaymentPattern { get; set; }
+
 		[DataMember]
-		[DL41("SUPPPAYPATTN")]
+		[DL41("SUPPPAYPATTN", "Supplier Payment Pattern", @"{
+			""N"": ""No or Little Difference"",
+			""S"": ""Slower"",
+			""F"": ""Faster""
+		}")]
 		public string SupplierPaymentPattern { get; set; }
 
 		#endregion properties loaded from XML

@@ -632,7 +632,12 @@
     }
     else
     {
-        for (var i in response.dataset) {
+        for (var nPosition = 0; nPosition < response.dataset_display_order.length; nPosition++) {
+			var i = response.dataset_display_order[nPosition];
+	
+			if (!response.dataset[i])
+				continue;
+
 		    var aryData = response.dataset[i].Data;
 		
 		    if (aryData.length > 0) {

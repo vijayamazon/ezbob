@@ -2,10 +2,14 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Linq;
+	using System.Reflection;
 	using System.Text.RegularExpressions;
 	using Areas.Underwriter.Models;
 	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.Backend.ModelsWithDB.CompanyScore;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.ModelsWithDB.Experian.Attributes;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Infrastructure;
@@ -14,6 +18,38 @@
 	using StructureMap;
 
 	public class CompanyScoreModelBuilder {
+		#region static constructor
+
+		static CompanyScoreModelBuilder() {
+			var oAttrTypes = typeof (ASrcAttribute).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(ASrcAttribute)) && t != typeof (ASrcAttribute));
+
+			SortedDictionary<int, string> oOrder = new SortedDictionary<int, string>();
+
+			foreach (Type oType in oAttrTypes) {
+				ConstructorInfo ci = oType.GetConstructors().FirstOrDefault();
+
+				if (ci == null)
+					continue;
+
+				ASrcAttribute oAttr = (ASrcAttribute)ci.Invoke(new object[ci.GetParameters().Length]);
+
+				if (!oAttr.IsCompanyScoreModel)
+					continue;
+
+				if (!oAttr.IsTopLevel)
+					continue;
+
+				if (oOrder.ContainsKey(oAttr.TargetDisplayPosition))
+					throw new Exception("Company score display order of " + oAttr.TargetDisplayPosition + " is specified more than once.");
+
+				oOrder[oAttr.TargetDisplayPosition] = oAttr.TargetDisplayGroup;
+			} // for each
+
+			ms_DisplayOrder = oOrder.Values.ToList();
+		} // static constructor
+
+		#endregion static constructor
+
 		#region public
 
 		#region constructor
@@ -301,14 +337,12 @@
 		#region method BuildLimitedScoreModel
 
 		private CompanyScoreModel BuildLimitedScoreModel(ExperianLtd oExperianLtd) {
-			var oDataset = new Dictionary<string, CompanyScoreModelItem>();
-
-			// TODO build dataset
+			SortedDictionary<string, CompanyScoreModelItem> oDataset = oExperianLtd.ToCompanyScoreModel();
 
 			return new CompanyScoreModel {
 				result = CompanyScoreModel.Ok,
-				dataset = new Dictionary<string, CompanyScoreModelItem>(), // TODO: oDataset,
-				newDataset = oDataset,
+				dataset = oDataset,
+				dataset_display_order = ms_DisplayOrder,
 				company_name = oExperianLtd.CompanyName,
 				company_ref_num = oExperianLtd.RegisteredNumber,
 				Data = null,
@@ -327,6 +361,8 @@
 		private static readonly SafeILog m_oLog = new SafeILog(typeof(CompanyScoreModelBuilder));
 
 		#endregion fields
+
+		private static readonly List<string> ms_DisplayOrder;
 
 		#endregion private
 	} // class CompanyScoreModelBuilder
