@@ -1,4 +1,8 @@
-﻿.ui-widget {
+﻿html {
+    overflow-y: scroll;
+}
+
+.ui-widget {
     font-family: 'Titillium Web Regular', Arial, sans-serif;
     font-size: 14px;
 }

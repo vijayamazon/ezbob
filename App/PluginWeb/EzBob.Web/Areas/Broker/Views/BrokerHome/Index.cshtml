@@ -67,7 +67,9 @@
             <div class="header-bg-strip"></div>
             <div class="header-inner">
                 <div class="header-logo">
-                    <img src="@Model.LogoUrl" class="newlogo">
+                    <a href="http://ezbob.com">
+                        <img src="@Model.LogoUrl" class="newlogo" width="128" height="34">
+                    </a>
                 </div>
                 <div class="header-info">
                     <div class="header-info-left"></div>
@@ -221,10 +223,7 @@
                                     </div>
                                 </div>
                             </form>
-                            @if (Request.Browser.ScreenPixelsWidth >= 1000)
-                            {
-                                <aside class="customer-sidebar broker"></aside>
-                            }
+                            <aside class="customer-sidebar broker"></aside>
                         </div>
                         <!-- section-signup -->
 

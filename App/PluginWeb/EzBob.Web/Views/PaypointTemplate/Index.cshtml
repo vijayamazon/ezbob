@@ -23,7 +23,7 @@
             baseUrl = "https://app.ezbob.com";
             break;
     }
-    
+
     <base href="@baseUrl"/>
 
     <script type="text/javascript">
@@ -67,180 +67,181 @@
         #paypal_link {
             text-align: center;
         }
+
+        #secure {
+            height: 200px;
+        }
     </style>
 }
 <div class="row-fluid">
     <div class="dashboard-header">
-            <div class="dashboard-steps wizard-steps" style="display: none;">
-                <div class="progress-time"></div>
-                <ul class="application_steps">
-                    <li class="complete first-circle" data-step-num="0">
-                        <div class="progress-circle">
-                            <div class="inner-circle complete">
-                                <div class="percent">1</div>
-                            </div>
-                        </div>
-                        <div class="progress-line"></div>
-                        <div class="progress-line-complete"></div>
-                        <span class="step_label">Choose Loan Term</span>
-                    </li>
-                    <li class="current center-circle" data-step-num="1">
-                        <div class="progress-circle">
-                            <div class="inner-circle current">
-                                <div class="percent">2</div>
-                            </div>
-                        </div>
-                        <div class="progress-line"></div>
-                        <div class="progress-line-current"></div>
-                        <span class="step_label">Enter Bank & Debit</span>
-                    </li>
-                    <li class="last last-circle" data-step-num="2">
-                        <div class="progress-circle ">
-                            <div class="inner-circle">
-                                <div class="percent">3</div>
-                            </div>
-                        </div>
-                        <div class="progress-line"></div>
-                        <span class="step_label">Get Cash</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    <div class="inner">
-        <div style="padding: 0 30px;">
-    <div class="row-fluid">
-        <div class="pages">
-            <div>
-                <div class="row-fluid">
-                    <div class="pages">
-                        
-                        <div class="PayPointHeader">
-                            <h2>Enter your debit card details</h2>
-                            <h3>For automatic loan repayment</h3>
-                        </div>
-
-                        <div class="error">
-                            ${error_table}
-                        </div>
-                        <form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
-                            @EzForm.InputText("customer", "${customer_Text:=Name of Cardholder}", "${customer}", "text", "form_field", false, true, true, 1)
-
-                            ${start_card_type}
-                            <div class="form_field_container control-group controls">
-                                <label class="attardi-input">
-                                    <span>${card_type_Text:=Card Type}</span>
-                                    <select name="card_type" class="selectheight form_field" tabindex="2">
-                                        <option value></option>
-                                        <option value="Visa" ${card_type="Visa"}>${Visa_Text:=Visa}</option>
-                                        <option value="Debit Master Card" ${card_type="Debit" master="" card=""}>${Debit_Master_Card_Text:=Debit Master Card}</option>
-                                        <option value="Delta" ${card_type="Delta"}>${Delta_Text:=Visa Debit Delta or Connect}</option>
-                                        ${StartIssue}
-                                        <option value="Maestro" ${card_type="Maestro"}>${Maestro_Text:=Maestro}</option>
-                                        <option value="Solo" ${card_type="Solo"}>${Solo_Text:=Solo}</option>
-                                        ${EndIssue}
-                                        ${card_types} 
-                                    </select>
-                                    <img id="card_typeImage" class="field_status required" />
-                                </label>
-                            </div>
-                            ${end_card_type}
-                            
-                            @EzForm.InputText("card_no", "${card_no_Text:=Card Number}", "${card_no}", "text", "form_field", false, true, true, 3, 16)
-                            
-                            @EzForm.InputText("expiry", "${expiry_Text:=Expiry Date (MM/YY)}", "${expiry}", "text", "form_field", false, true, true, 4, 5)
-                            
-                            @EzForm.InputText("cv2", "${cv2_Text:=CV2 (security code)}", "${cv2}", "password", "form_field", false, true, true, 5, 4)
-
-                            <div id="amount-group" class="control-group" style="display: none">
-                                <label class="control-label" for="amount">Amount</label>
-                                <div class="controls">
-                                    <label class="control-label" id="amount">${amount} ${currency:=GBP}</label>
-                                </div>
-                            </div>
-
-                            @*<div>
-                                <div>
-                                    <p id="mandatory_text">${mandatory_Text:=Mandatory fields} <span class="mand">*</span></p>
-                                </div>
-                            </div>*@
-
-                            <div class="form_buttons_container">
-                                <input 
-                                    type="submit"
-                                    name="accept" 
-                                    value="Confirm" 
-                                    id="paypoint-submit"
-                                    class="submit pull-right button btn-green disabled confirm" tabindex="6" />
-                                
-                                <a href="#"class="button btn-grey pull-right back">Back</a>
-                            </div>
-
-                            @Hiddens()
-
-                        </form>
-
-                        <div id="buttons" align="center" class="span7">
-                            ${other_pay}<br>
-                        </div>
-                        <div class="row">
-                            <div class="span7" align="center">
-                                ${3ds}
-                                <br>
-                            </div>
+        <div class="dashboard-steps wizard-steps" style="display: none;">
+            <div class="progress-time"></div>
+            <ul class="application_steps">
+                <li class="complete first-circle" data-step-num="0">
+                    <div class="progress-circle">
+                        <div class="inner-circle complete">
+                            <div class="percent">1</div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12">
-                    <hr>
-                    ${paypal:=<table id="paypal_table">
-                                  <tr>
-                                      <td id="paypal_text">
-                                          <p>Pay with PayPal</p>
-                                      </td>
-                                      <td id="paypal_link">
-                                          <a href="javascript:PPHelp()">What is PayPal?</a>
-                                      </td>
-                                      <td id="paypal_button">
-                                          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" value="PayByPayPal" name="paypal_transaction">
-                                      </td>
-                                  </tr>
-                              </table><hr id="paypal_line">
-                    }
-
-                    <div id="secure">
-                        <table border="0" width="100%" class="secure_table">
-                            <tbody>
-                                <tr>
-                                    <td style="text-align: center; width: 150px;">
-                                        <a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
-                                            <img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
-                                        </a>
-                                    </td>
-                                    <td valign="top" rowspan="2">
-                                        ${wait_Text:=You have now entered a secure transaction environment. Your personal
-                                        information will be encrypted before transmission. Please check that the address
-                                        bar of your browser is visible and that the address begins with <b>https://</b>.
-                                        For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
-                                        incorporates the SECPay service.}
-                                    </td>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: center;">
-                                        Secure Payment<br>
-                                                      <img src="https://www.secpay.com/users/lock.png" alt="The secure padlock" width="16" height="16">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="progress-line"></div>
+                    <div class="progress-line-complete"></div>
+                    <span class="step_label">Choose Loan Term</span>
+                </li>
+                <li class="current center-circle" data-step-num="1">
+                    <div class="progress-circle">
+                        <div class="inner-circle current">
+                            <div class="percent">2</div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-line-current"></div>
+                    <span class="step_label">Enter Bank & Debit</span>
+                </li>
+                <li class="last last-circle" data-step-num="2">
+                    <div class="progress-circle ">
+                        <div class="inner-circle">
+                            <div class="percent">3</div>
+                        </div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <span class="step_label">Get Cash</span>
+                </li>
+            </ul>
         </div>
     </div>
-</div>
+    <div class="inner">
+        <div class="row-fluid">
+            <div class="pages">
+                <div class="row-fluid">
+                        <div class="pages">
+
+                            <div class="PayPointHeader">
+                                <h2>Enter your debit card details</h2>
+                                <h3>For automatic loan repayment</h3>
+                            </div>
+
+                            <div class="error">
+                                ${error_table}
+                            </div>
+
+                            <form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
+                                @EzForm.InputText("customer", "${customer_Text:=Name of Cardholder}", "${customer}", "text", "form_field", false, true, true, 1)
+
+                                ${start_card_type}
+                                <div class="form_field_container control-group controls">
+                                    <label class="attardi-input">
+                                        <span>${card_type_Text:=Card Type}</span>
+                                        <select name="card_type" class="selectheight form_field" tabindex="2">
+                                            <option value></option>
+                                            <option value="Visa" ${card_type="Visa"}>${Visa_Text:=Visa}</option>
+                                            <option value="Debit Master Card" ${card_type="Debit" master="" card=""}>${Debit_Master_Card_Text:=Debit Master Card}</option>
+                                            <option value="Delta" ${card_type="Delta"}>${Delta_Text:=Visa Debit Delta or Connect}</option>
+                                            ${StartIssue}
+                                            <option value="Maestro" ${card_type="Maestro"}>${Maestro_Text:=Maestro}</option>
+                                            <option value="Solo" ${card_type="Solo"}>${Solo_Text:=Solo}</option>
+                                            ${EndIssue}
+                                            ${card_types} 
+                                        </select>
+                                        <img id="card_typeImage" class="field_status required" />
+                                    </label>
+                                </div>
+                                ${end_card_type}
+                            
+                                @EzForm.InputText("card_no", "${card_no_Text:=Card Number}", "${card_no}", "text", "form_field", false, true, true, 3, 16)
+
+                                @EzForm.InputText("expiry", "${expiry_Text:=Expiry Date (MM/YY)}", "${expiry}", "text", "form_field", false, true, true, 4, 5)
+
+                                @EzForm.InputText("cv2", "${cv2_Text:=CV2 (security code)}", "${cv2}", "password", "form_field", false, true, true, 5, 4)
+
+                                <div id="amount-group" class="control-group" style="display: none">
+                                    <label class="control-label" for="amount">Amount</label>
+                                    <div class="controls">
+                                        <label class="control-label" id="amount">${amount} ${currency:=GBP}</label>
+                                    </div>
+                                </div>
+
+                                @*<div>
+                            <div>
+                                <p id="mandatory_text">${mandatory_Text:=Mandatory fields} <span class="mand">*</span></p>
+                            </div>
+                        </div>*@
+
+                                <div class="form_buttons_container">
+                                    <input
+                                        type="submit"
+                                        name="accept"
+                                        value="Confirm"
+                                        id="paypoint-submit"
+                                        class="submit pull-right button btn-green disabled confirm" tabindex="6" />
+
+                                    <a href="#" class="button btn-grey pull-right back">Back</a>
+                                </div>
+
+                                @Hiddens()
+
+                            </form>
+
+                            <div id="buttons" align="center" class="span7">
+                                ${other_pay}<br>
+                            </div>
+                            <div class="row">
+                                <div class="span7" align="center">
+                                    ${3ds}
+                            <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                <div class="row-fluid">
+                    <div class="span12">
+                        <hr>
+                        ${paypal:=<table id="paypal_table">
+                            <tr>
+                                <td id="paypal_text">
+                                    <p>Pay with PayPal</p>
+                                </td>
+                                <td id="paypal_link">
+                                    <a href="javascript:PPHelp()">What is PayPal?</a>
+                                </td>
+                                <td id="paypal_button">
+                                    <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" value="PayByPayPal" name="paypal_transaction">
+                                </td>
+                            </tr>
+                        </table>
+                        <hr id="paypal_line">
+                        }
+
+                <div id="secure">
+                    <table border="0" width="100%" class="secure_table">
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center; width: 150px;">
+                                    <a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
+                                        <img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
+                                    </a>
+                                </td>
+                                <td valign="top" rowspan="2">${wait_Text:=You have now entered a secure transaction environment. Your personal
+                                    information will be encrypted before transmission. Please check that the address
+                                    bar of your browser is visible and that the address begins with <b>https://</b>.
+                                    For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
+                                    incorporates the SECPay service.}
+                                </td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">Secure Payment<br>
+                                    <img src="https://www.secpay.com/users/lock.png" alt="The secure padlock" width="16" height="16">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -280,7 +281,7 @@
             var isValid = EzBob.Validation.checkForm(validator);
             return $('.submit').toggleClass('disabled', !isValid);
         }
-        
+
         $(function () {
             $('.header-info').show();
             $('.header-info-text').text("MY ACCOUNT");
@@ -301,7 +302,7 @@
             //set user email in top bar
             $('#logoff-li').show().tooltip({ placement: 'bottom', title: decodeURIComponent(getCallbackValue('username') || "") }).tooltip("enable").tooltip('fixTitle');
             $('#user-menu .login_btn, .signup_btn').hide();
-            
+
             //set url for back button
             var ulrBack = !isPayEarly ? 'https://app.ezbob.com/Customer/Profile#GetCash' : "https://app.ezbob.com/Customer/Profile#PayEarly";
             var testUrlBack = !isPayEarly ? "@baseUrl/EzBob/EzBob.Web/Customer/Profile#GetCash" : "@baseUrl/EzBob/EzBob.Web/Customer/Profile#PayEarly";

@@ -232,6 +232,9 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 
 .fs16 {
     font-size: 18px;
+    height: 38px;
+    margin-bottom: 10px;
+    margin-top: -20px;
 }
 
 .male-director-gender-margin {

@@ -61,7 +61,7 @@
         <ul class="nav nav-list">
             <li>
                 <a title="click to log out" href="@page.Url.Action("LogOffUnderwriter", "Account", new { Area = "" })" id="uw-name-and-icon" data-uw-id="@userId">
-                    <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/><span>@userName</span>
+                    <img data-title="@sRoleImageTitle" class="roleImg" width="40" height="40" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/><div class="user-name">@userName</div>
                 </a>
             </li>
             @switch (type)

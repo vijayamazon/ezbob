@@ -69,6 +69,9 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
 
         this.$el.find('.field_status').field_status({ required: true });
 
+        var notifications = new EzBob.NotificationsView({ el: this.$el.find('.notifications') });
+        notifications.render();
+        
 	    EzBob.UiAction.registerView(this);
 
         return this;
@@ -86,13 +89,14 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
 
     connect: function (e) {
         var $el = $(e.currentTarget);
-        if ($el.hasClass("disabled")) return false;
-        /*
-        if (this.$el.find('a.connect-bank').hasClass('disabled')) {
-            EzBob.App.trigger("error", "You must fill in all of the fields.");
+        if ($el.hasClass("disabled")) {
             return false;
-        }*/
-
+        }
+        
+        if (!EzBob.Validation.checkForm(this.validator)) {
+            return false;
+        }
+        
         var accNum = this.$el.find('#AccountNumber').val(),
 			sortCode = this.$el.find('#SortCodeSplit').val(),
 			bankAccountType = this.$el.find('input[name="bankAccountType"]:checked').val(),
