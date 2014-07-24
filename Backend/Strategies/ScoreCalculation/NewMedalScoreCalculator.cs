@@ -2,14 +2,13 @@
 {
 	using System.Data;
 	using System.Text.RegularExpressions;
-	using ExperianLib;
-	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Utils;
+	using Misc;
 	using VatReturn;
 
 	public class NewMedalScoreCalculator
@@ -18,16 +17,6 @@
 		private readonly AConnection db;
 		private bool freeCashFlowDataAvailable;
 		private bool firstRepaymentDatePassed;
-		private string firstName;
-		private string surname;
-		private string gender;
-		private DateTime? dateOfBirth;
-		private string line1;
-		private string line2;
-		private string line3;
-		private string town;
-		private string county;
-		private string postcode;
 
 		public ScoreResult Results { get; set; }
 
@@ -80,16 +69,6 @@
 			decimal yodleeTurnover = sr["YodleeTurnover"];
 			string zooplaEstimateStr = sr["ZooplaEstimate"];
 			int zoopla1YearAvg = sr["AverageSoldPrice1Year"];
-			firstName = sr["YodleeTurnover"];
-			surname = sr["YodleeTurnover"];
-			gender = sr["YodleeTurnover"];
-			dateOfBirth = sr["YodleeTurnover"];
-			line1 = sr["Line1"];
-			line2 = sr["Line2"];
-			line3 = sr["Line3"];
-			town = sr["Town"];
-			county = sr["County"];
-			postcode = sr["Postcode"];
 
 			// TODO: logic assumes 1 hmrc - what should we do if we have more
 
@@ -158,48 +137,10 @@
 
 		private decimal GetMortgages(int customerId)
 		{
-			var loc = new InputLocationDetailsMultiLineLocation();
-			loc.LocationLine1 = line1;
-			loc.LocationLine2 = line2;
-			loc.LocationLine3 = line3;
-			loc.LocationLine4 = town;
-			loc.LocationLine5 = county;
-			loc.LocationLine6 = postcode;
+			var instance = new GetCustomerMortgages(db, log, customerId);
+			instance.Execute();
 
-			var consumerSrv = new ConsumerService();
-			ConsumerServiceResult eInfo = consumerSrv.GetConsumerInfo(firstName, surname,
-				gender, // should be Gender
-				dateOfBirth, null, loc, "PL", customerId, 0, true, false, false);
-			try
-			{
-				double balanceSum = 0;
-				if (eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS != null)
-					foreach (var caisData in eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS)
-					{
-						foreach (var caisDetails in caisData.CAISDetails)
-						{
-							var accStatus = caisDetails.AccountStatus;
-							string MortgageAccounts = "03,16,25,30,31,32,33,34,35,69";
-							if ((accStatus == "D" || accStatus == "A") && MortgageAccounts.IndexOf(caisDetails.AccountType, StringComparison.Ordinal) >= 0) // it is mortgage account
-							{
-								double balance = 0;
-								bool isMainApplicantAccount = caisDetails.MatchDetails != null && caisDetails.MatchDetails.MatchTo == "1";
-								if (isMainApplicantAccount && caisDetails.Balance != null && caisDetails.Balance.Amount != null)
-								{
-									string b = caisDetails.Balance.Amount.Replace("£", "");
-									double.TryParse(b, out balance);
-								}
-								balanceSum += balance;
-							}
-						}
-					}
-
-				return (decimal)balanceSum;
-			}
-			catch (Exception e)
-			{
-			}
-			return 0;
+			return instance.MortgagesSum;
 		}
 
 		private void CalculateMedal()
