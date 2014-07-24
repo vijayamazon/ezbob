@@ -37,10 +37,28 @@
         overflow-x: hidden;
     }
 
-    .inner, .broker-finish-wizard-later {
+    .inner {
         min-width: 320px;
         width: 100%;
         margin: 0 auto;
+    }
+
+    .broker-finish-wizard-later {
+        background: none;
+        min-width: 320px;
+        width: 100%;
+        margin: 0;
+        border: none;
+    }
+
+    .broker-finish-inner {
+        border: 1px solid #E2E3E5;
+        padding: 0;
+    }
+
+    .broker-finish-wizard-later .button-container button {
+        position: relative;
+        margin-top: 5px;
     }
 
     div.wizard-director-text {

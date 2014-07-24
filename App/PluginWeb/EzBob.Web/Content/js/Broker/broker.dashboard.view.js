@@ -131,7 +131,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 			} // if
 
 			var theTableOpts = self.initDataTablesOptions(
-				'FirstName,LastName,Status,Marketplaces,^ApplyDate,$LoanAmount,$SetupFee,^LoanDate,@LastInvitationSent',
+				'FirstName,LastName,Status,^ApplyDate,$LoanAmount',
 				'brk-grid-state-' + self.router.getAuth() + '-customer-list'
 			);
 
@@ -255,8 +255,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 			});
 
 			theTableOpts.fnRowCallback = function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
-				if (oData.hasOwnProperty('Marketplaces'))
-					$('.grid-item-Marketplaces', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.Marketplaces));
+				//if (oData.hasOwnProperty('Marketplaces'))
+				//	$('.grid-item-Marketplaces', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.Marketplaces));
 
 				if (oData.RefNumber) {
 					var sLinkBase = '<a class=profileLink title="Show customer details" href="#customer/' + oData.RefNumber + '">';
