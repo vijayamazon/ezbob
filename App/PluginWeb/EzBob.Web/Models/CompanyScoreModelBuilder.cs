@@ -259,57 +259,6 @@
 
 		#endregion public
 
-		#region method BuildNonLimitedDashboardModel
-
-		private ComapanyDashboardModel BuildNonLimitedDashboardModel(int customerId, string refNumber) {
-			var model = new ComapanyDashboardModel {
-				FinDataHistories = new List<FinDataModel>(),
-				LastFinData = new FinDataModel(),
-				IsLimited = false,
-				CompanyRefNum = refNumber,
-			};
-
-			DataTable dt = m_oDB.ExecuteReader(
-				"GetNonLimitedCompanyDashboardDetails",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("RefNumber", refNumber));
-
-			if (dt.Rows.Count == 1) {
-				var sr = new SafeReader(dt.Rows[0]);
-
-				model.CompanyName = sr["BusinessName"];
-				model.Score = sr["RiskScore"];
-				model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
-				model.CcjMonths = sr["AgeOfMostRecentJudgmentDuringOwnershipMonths"];
-				model.Ccjs = sr["TotalJudgmentCountLast24Months"];
-				model.Ccjs += sr["TotalAssociatedJudgmentCountLast24Months"];
-
-				DataTable scoreHistoryDataTable = m_oDB.ExecuteReader(
-					"GetNonLimitedCompanyScoreHistory",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId),
-					new QueryParameter("RefNumber", refNumber));
-
-				foreach (DataRow row in scoreHistoryDataTable.Rows) {
-					var scoreHistorySafeReader = new SafeReader(row);
-					try {
-						model.NonLimScoreHistories.Add(new NonLimScoreHistory {
-							Score = scoreHistorySafeReader["RiskScore"],
-							ScoreDate = scoreHistorySafeReader["Date"]
-						});
-					}
-					catch (Exception ex) {
-						m_oLog.Warn(ex, "Failed to parse non limited score history.");
-					}
-				}
-			}
-
-			return model;
-		} // BuildNonLimitedDashboardModel
-
-		#endregion method BuildNonLimitedDashboardModel
-
 		#region private
 
 		#region method AddOwners
