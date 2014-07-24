@@ -851,6 +851,7 @@
 
 		private void PerformCompanyExperianCheck()
 		{
+			Log.Debug("PerformCompanyExperianCheck starts");
 			if (wasMainStrategyExecutedBefore)
 			{
 				Log.Info("Performing experian company check");
@@ -865,7 +866,9 @@
 			}
 			else
 			{
+				Log.Debug("PerformCompanyExperianCheck waiting ended - going to fetch company score from db");
 				GetMaxCompanyExperianScore();
+				Log.Debug("PerformCompanyExperianCheck fetched company score from db: {0}", maxCompanyScore);
 			}
 		} // PerformCompanyExperianCheck
 
