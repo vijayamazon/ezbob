@@ -4,7 +4,7 @@ GO
 
 ALTER PROCEDURE InsertNonLimitedResultCcjTradingNames
 	(@ExperianNonLimitedResultCcjDetailsId INT,
-	 @Name INT,
+	 @Name NVARCHAR(75),
 	 @TradingIndicator NVARCHAR(1),		
 	 @TradingIndicatorDesc NVARCHAR(25))
 AS

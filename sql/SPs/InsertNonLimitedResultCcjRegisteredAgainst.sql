@@ -4,7 +4,7 @@ GO
 
 ALTER PROCEDURE InsertNonLimitedResultCcjRegisteredAgainst
 	(@ExperianNonLimitedResultCcjDetailsId INT,
-	 @Name INT)
+	 @Name NVARCHAR(75))
 AS
 BEGIN
 	SET NOCOUNT ON;
