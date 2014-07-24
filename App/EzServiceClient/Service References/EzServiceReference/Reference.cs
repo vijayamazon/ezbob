@@ -201,6 +201,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableFundsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerMortgagesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomerDetailsActionResult))]
@@ -866,6 +867,45 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.ScoreField.Equals(value) != true)) {
                     this.ScoreField = value;
                     this.RaisePropertyChanged("Score");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CustomerMortgagesActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CustomerMortgagesActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasMortgagesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MortgagesSumField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasMortgages {
+            get {
+                return this.HasMortgagesField;
+            }
+            set {
+                if ((this.HasMortgagesField.Equals(value) != true)) {
+                    this.HasMortgagesField = value;
+                    this.RaisePropertyChanged("HasMortgages");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MortgagesSum {
+            get {
+                return this.MortgagesSumField;
+            }
+            set {
+                if ((this.MortgagesSumField.Equals(value) != true)) {
+                    this.MortgagesSumField = value;
+                    this.RaisePropertyChanged("MortgagesSum");
                 }
             }
         }
@@ -2523,6 +2563,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors", ReplyAction="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> GetUnfetchedDataErrorsAsync(int underwriterId, int customerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerMortgages", ReplyAction="http://tempuri.org/IEzService/GetCustomerMortgagesResponse")]
+        ServiceClientProxy.EzServiceReference.CustomerMortgagesActionResult GetCustomerMortgages(int underwriterId, int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerMortgages", ReplyAction="http://tempuri.org/IEzService/GetCustomerMortgagesResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerMortgagesActionResult> GetCustomerMortgagesAsync(int underwriterId, int customerId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2);
         
@@ -3499,6 +3545,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> GetUnfetchedDataErrorsAsync(int underwriterId, int customerId) {
             return base.Channel.GetUnfetchedDataErrorsAsync(underwriterId, customerId);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.CustomerMortgagesActionResult GetCustomerMortgages(int underwriterId, int customerId) {
+            return base.Channel.GetCustomerMortgages(underwriterId, customerId);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerMortgagesActionResult> GetCustomerMortgagesAsync(int underwriterId, int customerId) {
+            return base.Channel.GetCustomerMortgagesAsync(underwriterId, customerId);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2) {

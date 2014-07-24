@@ -277,5 +277,19 @@
 				Value = instance.Errors
 			};
 		}
+
+		public CustomerMortgagesActionResult GetCustomerMortgages(int underwriterId, int customerId)
+		{
+			GetCustomerMortgages instance;
+
+			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
+
+			return new CustomerMortgagesActionResult
+			{
+				MetaData = result,
+				HasMortgages = instance.HasMortgages,
+				MortgagesSum = instance.MortgagesSum
+			};
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

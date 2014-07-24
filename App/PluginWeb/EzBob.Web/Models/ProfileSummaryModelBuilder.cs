@@ -86,7 +86,6 @@
 					Infos = new List<AlertModel>(),
 				};
 
-
 			if (customer.IsTest)
 			{
 				summary.Alerts.Infos.Add(new AlertModel{ Abbreviation = "Test", Alert = "Is test", AlertType = AlertType.Info.DescriptionAttr() });
@@ -184,6 +183,27 @@
 			catch (Exception e)
 			{
 				Log.Debug("Error fetching customer's errors: {0}", e);
+			}
+
+			bool hasMortgage = false;
+			bool isHomeOwner = customer.PersonalInfo != null && customer.PersonalInfo.ResidentialStatus == "Home Owner";
+			try
+			{
+				hasMortgage = serviceClient.Instance.GetCustomerMortgages(context.UserId, customer.Id).HasMortgages;
+			}
+			catch (Exception e)
+			{
+				Log.Debug("Error fetching customer's mortgages: {0}", e);
+			}
+
+			if (isHomeOwner && !hasMortgage)
+			{
+				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "MTG", Alert = "Home owner and no mortgages", AlertType = AlertType.Warning.DescriptionAttr() });
+			}
+
+			if (!isHomeOwner && hasMortgage)
+			{
+				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "MTG", Alert = "Has mortgages but not a home owner", AlertType = AlertType.Warning.DescriptionAttr() });
 			}
 		}
 

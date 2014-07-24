@@ -528,6 +528,9 @@
 
 		[OperationContract]
 		StringActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
+
+		[OperationContract]
+		CustomerMortgagesActionResult GetCustomerMortgages(int underwriterId, int customerId);
 	} // interface IEzService
 } // namespace EzService
 

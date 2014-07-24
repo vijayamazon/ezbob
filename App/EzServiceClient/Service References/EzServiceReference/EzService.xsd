@@ -272,6 +272,17 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="CompanyDataForCreditBureauActionResult" nillable="true" type="tns:CompanyDataForCreditBureauActionResult" />
+  <xs:complexType name="CustomerMortgagesActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="HasMortgages" type="xs:boolean" />
+          <xs:element minOccurs="0" name="MortgagesSum" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CustomerMortgagesActionResult" nillable="true" type="tns:CustomerMortgagesActionResult" />
   <xs:complexType name="BrokerPropertiesActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
