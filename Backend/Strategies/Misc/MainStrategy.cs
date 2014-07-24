@@ -856,10 +856,11 @@
 			else if (!WaitForExperianCompanyCheckToFinishUpdates())
 			{
 				Log.Info("No data exist from experian company check for customer:{0}.", customerId);
-				return;
 			}
-
-			GetMaxCompanyExperianScore();
+			else
+			{
+				GetMaxCompanyExperianScore();
+			}
 		} // PerformCompanyExperianCheck
 
 		#endregion method PerformCompanyExperianCheck
