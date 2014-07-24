@@ -209,9 +209,15 @@
 				SendWaitingForDecisionMail();
 			}
 
-			if (autoDecisionResponse.CreditResult != "Rejected" && autoDecisionResponse.SystemDecision != "Reject")
+			if (autoDecisionResponse.CreditResult != "Rejected" && autoDecisionResponse.SystemDecision != "Reject" &&
+			    appHomeOwner != null && appHomeOwner.ToLowerInvariant().Equals("home owner"))
 			{
+				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.SystemDecision, appHomeOwner);
 				GetLandRegistry();
+			}
+			else
+			{
+				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.SystemDecision, appHomeOwner);
 			}
 
 			GetZooplaData();
