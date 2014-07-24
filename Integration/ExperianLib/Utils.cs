@@ -13,6 +13,8 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
 	using Parser;
+	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 	using EZBob.DatabaseLib.Model.Experian;
 
@@ -105,7 +107,9 @@
 							historyRepo.SaveOrUpdate(history);
 							break;
 						case ExperianServiceType.NonLimitedData:
-							history.Score = GetNonLimitedScoreFromXml(oPackage.Out.ServiceLog.ResponseData);
+							var serviceClient = new ServiceClient();
+							CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(0/*should be refactored*/, oPackage.Out.ServiceLog.Customer.Id, oPackage.Out.ServiceLog.Customer.Company.ExperianRefNum);
+							history.Score = notLimitedBusinessData != null ? notLimitedBusinessData.Score : 0;
 							historyRepo.SaveOrUpdate(history);
 							break;
 						} // switch
@@ -187,18 +191,6 @@
 				return Convert.ToInt32(cii);
 			}
 			catch (Exception) {
-				return -1;
-			}
-		}
-
-		public static int GetNonLimitedScoreFromXml(string xml) {
-			try {
-				var doc = XDocument.Parse(xml);
-				var score = doc.XPathSelectElement("//REQUEST/DN40/RISKSCORE").Value;
-				return Convert.ToInt32(score);
-			}
-			catch (Exception ex) {
-				ms_oLog.Warn(ex, "Failed to retrieve non-limited score from xml.");
 				return -1;
 			}
 		}

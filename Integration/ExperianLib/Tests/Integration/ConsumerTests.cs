@@ -59,21 +59,6 @@ namespace ExperianLib.Tests.Integration
 
 		[Test]
 		[Ignore]
-		public void TestParsers()
-		{
-			var score = Utils.GetScoreFromXml(consumerData);
-			var balance = Utils.GetConsumerCaisBalance(consumerData);
-			var cii = Utils.GetCIIFromXml(consumerData);
-			Assert.AreEqual(648, score);
-			Assert.AreEqual(-2,cii);
-			Assert.IsNotNull(balance);
-
-			var nonLimScore = Utils.GetNonLimitedScoreFromXml(nonLimitedData);
-			Assert.AreEqual(28, nonLimScore);
-		}
-
-		[Test]
-		[Ignore]
 		public void TestBuilder()
 		{
 			var b = new ConsumerExperianModelBuilder();

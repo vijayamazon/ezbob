@@ -6,9 +6,7 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
-	using System.Xml.Linq;
 	using System.Xml.Serialization;
-	using System.Xml.XPath;
 	using ConfigManager;
 	using ExperianLib;
 	using ExperianLib.Dictionaries;
@@ -207,7 +205,7 @@
 					select isLimited ? GetLimitedHistory(s.InsertDate, s.Id) : new CheckHistoryModel {
 						Date = s.InsertDate.ToUniversalTime(),
 						Id = s.Id,
-						Score = GetNonLimitedScoreFromXml(s.ResponseData),
+						Score = GetNonLimitedScore(customer.Id, customer.Company.ExperianRefNum),
 						Balance = (decimal?)null
 					}
 				).ToList();
@@ -866,18 +864,17 @@
 			return loc;
 		}
 
-		private static int GetNonLimitedScoreFromXml(string xml)
+		private int GetNonLimitedScore(int customerId, string experianRefNumber)
 		{
 			try
 			{
-				var doc = XDocument.Parse(xml);
-				var score = doc.XPathSelectElement("//REQUEST/DN40/RISKSCORE").Value;
-				return Convert.ToInt32(score);
+				CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(context.UserId, customerId, experianRefNumber);
+				return notLimitedBusinessData.Score;
 			}
 			catch (Exception ex)
 			{
-				Log.WarnFormat("Failed to retrieve nonlimited score from xml {0}", ex);
-				return -1;
+				Log.WarnFormat("Failed to retrieve nonlimited score from db {0}", ex);
+				return 0;
 			}
 		}
 

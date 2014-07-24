@@ -64,6 +64,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
@@ -195,6 +197,10 @@
     <Content Include="Web References\ExpAuth\expauth.disco" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
+      <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
+      <Name>EzServiceClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>
