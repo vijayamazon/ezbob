@@ -854,7 +854,12 @@
 				maxCompanyScore = Math.Max((int)experianCompanyChecker.MaxScore, (int)experianCompanyChecker.Score);
 			}
 			else if (!WaitForExperianCompanyCheckToFinishUpdates())
+			{
 				Log.Info("No data exist from experian company check for customer:{0}.", customerId);
+				return;
+			}
+
+			GetMaxCompanyExperianScore();
 		} // PerformCompanyExperianCheck
 
 		#endregion method PerformCompanyExperianCheck
