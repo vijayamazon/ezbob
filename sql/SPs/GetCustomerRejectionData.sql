@@ -21,7 +21,7 @@ BEGIN
 			@BankGroup INT, 
 			@RowNum INT,
 			@CompanyDefaultStartDate DATETIME,
-			@NumOfDefaultCompanyAccounts INT
+			@NumOfDefaultCompanyAccounts INT,
 			@HasCompanyFiles BIT
 
 	DECLARE @ServiceLogID BIGINT
