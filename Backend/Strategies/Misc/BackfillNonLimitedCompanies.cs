@@ -26,11 +26,18 @@
 				var sr = new SafeReader(row);
 				int serviceLogId = sr["Id"];
 				int customerId = sr["CustomerId"];
-				string response = sr["ResponseData"];
 				string refNumber = sr["ExperianRefNum"];
 
 				try
 				{
+					string response = null;
+					DataTable xmlDataTable = DB.ExecuteReader("GetServiceLogNonLimitedEntry", CommandSpecies.StoredProcedure, new QueryParameter("ServiceLogId", serviceLogId));
+					if (xmlDataTable.Rows.Count == 1)
+					{
+						var xmlSafeReader = new SafeReader(xmlDataTable.Rows[0]);
+						response = xmlSafeReader["ResponseData"];
+					}
+
 					parser.ParseAndStore(customerId, response, refNumber, serviceLogId);
 				}
 				catch (Exception e)

@@ -7,8 +7,7 @@ AS
 BEGIN	
 	SELECT 
 		MP_ServiceLog.Id, 
-		MP_ServiceLog.CustomerId, 
-		MP_ServiceLog.ResponseData, 
+		MP_ServiceLog.CustomerId,
 		Company.ExperianRefNum
 	FROM 
 		MP_ServiceLog,
