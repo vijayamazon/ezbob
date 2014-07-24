@@ -287,7 +287,7 @@
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue)
 				{
-					response.AutoRejectReason = "AutoReject: Low score. Condition not met: 0 < " + _maxExperianConsumerScore + " AND " + _maxExperianConsumerScore + " < " +
+					response.AutoRejectReason = "AutoReject: Low score. Condition met: 0 < " + _maxExperianConsumerScore + " AND " + _maxExperianConsumerScore + " < " +
 												_lowCreditScore;
 				}
 				// 0 < Business score < 10 (If business score exists)
@@ -296,7 +296,7 @@
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
-					response.AutoRejectReason = "AutoReject: Low company score. Condition not met:" + _maxCompanyScore + " < " +
+					response.AutoRejectReason = "AutoReject: Low company score. Condition met: 0 < " + _maxCompanyScore + " < " +
 												rejectionCompanyScore;
 				}
 				// 0 < Credit score < 800 AND at least 1 default of at least 300 in last 24 months
@@ -305,7 +305,7 @@
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
-					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met: 0 < " +
+					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition met: 0 < " +
 												_maxExperianConsumerScore + " AND " +
 												_maxExperianConsumerScore + " < " + _rejectDefaultsCreditScore + " AND " + _numOfDefaultAccounts + " >= " +
 												_rejectDefaultsAccountsNum;
@@ -316,7 +316,7 @@
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
-					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met: 0 < " + _maxCompanyScore + " AND " +
+					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition met: 0 < " + _maxCompanyScore + " AND " +
 												_maxCompanyScore +
 												" < " + _rejectDefaultsCompanyScore + " AND " + _numOfCompanyDefaultAccounts + " >= " +
 												_rejectDefaultsCompanyAccountsNum;
@@ -327,7 +327,7 @@
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
-					response.AutoRejectReason = string.Format("AutoReject: Late CAIS accounts. Condition not met: {0} >= {1}",
+					response.AutoRejectReason = string.Format("AutoReject: Late CAIS accounts. Condition met: {0} >= {1}",
 					                                          _numOfLateAccounts, _rejectNumOfLateAccounts);
 				}
 				// (0 < max(Marketplace(Ecomm) or company )seniority < 300 days) && !hasCompanyFiles
@@ -337,7 +337,7 @@
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
-					response.AutoRejectReason = "AutoReject: Seniority. Condition not met: (0 < (max(mp " + _marketplaceSeniorityDays +
+					response.AutoRejectReason = "AutoReject: Seniority. Condition met: (0 < (max(mp " + _marketplaceSeniorityDays +
 												", company " + _companySeniorityDays + ") AND (max(mp " + _marketplaceSeniorityDays +
 												", company " + _companySeniorityDays + ") < " +
 												_rejectMinimalSeniority + ")) AND NOT " + hasCompanyFiles;
@@ -348,7 +348,7 @@
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
-					response.AutoRejectReason = "AutoReject: Customer status. Condition not met:" + _customerStatusName;
+					response.AutoRejectReason = "AutoReject: Customer status. Condition met:" + _customerStatusName;
 				}
 				// !hasCompanyFiles && !_isOffline && Sufficient annual or quarterly turnover (Pay pal is also being considered by itself)
 				conditionValue = !hasCompanyFiles && !_isOffline && 
@@ -360,7 +360,7 @@
 				_conditions.Add(new AutoDecisionCondition { DecisionName = "Rejection", Description = conditionDescription, Satisfied = conditionValue });
 				if (conditionValue && string.IsNullOrEmpty(response.AutoRejectReason))
 				{
-					response.AutoRejectReason = "AutoReject: Online Totals. Condition not met: NOT " + hasCompanyFiles + " AND NOT " + _isOffline + " AND (" + _payPalNumberOfStores + " < 0 OR " +
+					response.AutoRejectReason = "AutoReject: Online Totals. Condition met: NOT " + hasCompanyFiles + " AND NOT " + _isOffline + " AND (" + _payPalNumberOfStores + " < 0 OR " +
 												_payPalTotalSumOfOrders3M + " < " +
 												_lowTotalThreeMonthTurnover + " OR " + _payPalTotalSumOfOrders1Y + " < " +
 												_lowTotalAnnualTurnover + ") AND (" + _totalSumOfOrders3MTotalForRejection + " < " +
@@ -375,7 +375,7 @@
 				{
 					response.AutoRejectReason =
 						string.Format(
-							"AutoReject: Offline Revenues. Condition not met: (!hasCompanyFiles && _isOffline && (_hasHmrc || _hasYodlee) && (max yodlee hmrc annual revenue (_yodlee1YForRejection, _hmrcAnnualRevenues) < _lowOfflineAnnualRevenue OR max yodlee hmrc quarter revenue (_yodlee3MForRejection, _hmrcQuarterRevenues) < _lowOfflineQuarterRevenue)) [!{0} && {1} && ({2} || {3}) && (max yodlee hmrc annual revenue ({4}, {5}) < {6} OR max yodlee hmrc quarter revenue ({7}, {8}) < {9})]",
+							"AutoReject: Offline Revenues. Condition met: [NOT {0} AND {1} AND ({2} OR {3}) AND (max yodlee hmrc annual revenue ({4}, {5}) < {6} OR max yodlee hmrc quarter revenue ({7}, {8}) < {9})]",
 							hasCompanyFiles, _isOffline, _hasHmrc, _hasYodlee, _yodlee1YForRejection, _hmrcAnnualRevenues, _lowOfflineAnnualRevenue, _yodlee3MForRejection, _hmrcQuarterRevenues, _lowOfflineQuarterRevenue);
 				}
 
