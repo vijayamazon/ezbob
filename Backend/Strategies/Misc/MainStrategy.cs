@@ -209,7 +209,7 @@
 				SendWaitingForDecisionMail();
 			}
 
-			if (autoDecisionResponse.CreditResult != "Rejected" && autoDecisionResponse.SystemDecision != "Reject")
+			if (autoDecisionResponse.CreditResult != "Rejected" && autoDecisionResponse.SystemDecision != "Reject" && appHomeOwner != null && appHomeOwner.ToLowerInvariant().Equals("home owner"))
 			{
 				GetLandRegistry();
 			}
