@@ -84,7 +84,7 @@
 
 		private void CompanyCheck(Customer customer, IList<Customer> customers, List<FraudDetection> fraudDetections)
 		{
-			InternalCompanyNameCheck(customer, fraudDetections, customers);
+			InternalCompanyCheck(customer, fraudDetections, customers);
 			InternalDirectorFirstMiddleLastNameCheck(fraudDetections, customers, customer);
 			InternalDirectorFirstMiddleLastNameCheck(fraudDetections, customers, customer, true);
 		}
@@ -265,7 +265,7 @@
 									null, string.Format("{0}: {1}", ca.Postcode, customer.PersonalInfo.Surname)));
 		}
 
-		private void InternalShopCheck(Customer customer, List<FraudDetection> fraudDetections, IList<Customer> customers)
+		private void InternalShopCheck(Customer customer, List<FraudDetection> fraudDetections, IEnumerable<Customer> customers)
 		{
 			//Shop ID
 			var customerMps = customer.CustomerMarketPlaces.Select(m => m.DisplayName).ToList();
@@ -321,7 +321,7 @@
 			var customerAddresses = customer.AddressInfo.AllAddresses.Where(
 					a => a.County != null || a.Director != null ||
 						 a.Line1 != null || a.Line2 != null || a.Line3 != null ||
-						 a.Postcode != null || a.Town != null);
+						 a.Postcode != null || a.Town != null).ToList();
 			var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
 			var addresses = customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Postcode));
 
@@ -392,25 +392,39 @@
 									string.Format("{0}, {1}", c.BankAccount.SortCode, c.BankAccount.AccountNumber)));
 		}
 
-		private static void InternalCompanyNameCheck(Customer customer, List<FraudDetection> fraudDetections,
-													 IEnumerable<Customer> customerPortion)
+		private static void InternalCompanyCheck(Customer customer, List<FraudDetection> fraudDetections,
+													 IList<Customer> customerPortion)
 		{
-			//Name of company
+			
 			var company = customer.Company;
 			if (company != null)
 			{
+				//Company Name
 				var companyName = company.CompanyName;
-				if (string.IsNullOrEmpty(companyName)) return;
-				fraudDetections.AddRange(
-					from c in customerPortion
-					where c.WizardStep.TheLastOne && c.Company != null
-					where
-						(c.Company.CompanyName ?? "").ToLower() == companyName.ToLower()
-					select
-						Helper.CreateDetection("Customer CompanyName", customer, c,
-											   "Customer CompanyName",
-											   null,
-											   string.Format("{0}", companyName)));
+				if (!string.IsNullOrEmpty(companyName))
+				{
+					fraudDetections.AddRange(
+						from c in customerPortion
+						where c.WizardStep.TheLastOne && c.Company != null
+						where
+							(c.Company.CompanyName ?? "").ToLower() == companyName.ToLower()
+						select
+							Helper.CreateDetection("Customer CompanyName", customer, c,
+							                       "Customer CompanyName",
+							                       null,
+							                       string.Format("{0}", companyName)));
+				}
+				//Company Experian Ref Number
+				var companyRefNum = company.ExperianRefNum;
+				if (companyRefNum != "NotFound" && string.IsNullOrEmpty(companyRefNum))
+				{
+					fraudDetections.AddRange(
+						customerPortion.Where(c => c.Company != null && c.Company.ExperianRefNum == companyRefNum)
+						               .Select(c => Helper.CreateDetection("Customer CompanyRefNumber", customer, c,
+						                                                   "Customer CompanyRefNumber",
+						                                                   null,
+						                                                   string.Format("{0}", companyName))));
+				}
 			}
 		}
 
