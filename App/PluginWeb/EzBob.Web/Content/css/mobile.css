@@ -14,18 +14,22 @@
     
     .header-inner {
         width: 100%;
-        min-width: 600px;
+        min-width: 320px;
     }
 
-    #copyrights {
-        min-width: 600px;
-        width: 100%;
+    ul#user-menu {
+        margin: 0;
+        width: 170px;
+        top: 0;
+        right: 0;
     }
 
-    footer .copyrights-inner {
-        min-width: 600px;
-        width: 100%;
-        padding: 0;
+    ul#user-menu li {
+        margin: 0 0 0 17px; 
+    }
+    
+    footer {
+        display: none;
     }
 
     div.full_width {
@@ -34,7 +38,7 @@
     }
 
     .inner, .broker-finish-wizard-later {
-        min-width: 600px;
+        min-width: 320px;
         width: 100%;
         margin: 0 auto;
     }
@@ -59,8 +63,17 @@
         background: -moz-linear-gradient(top,#f7f7f7 0,#e5e5e5 90%);
     }
 
+    .code-sent-style-container,
+    input.form_field_left_side,
     input.form_field, textarea.form_field {
         width: 92%;
+        max-width: 92%;
+    }
+
+    input.form_field_right_side_signup_phone {
+        float: none;
+        margin-top: 10px;
+        width: 170px;
     }
 
     div.form_read_and_accept {
@@ -90,16 +103,14 @@
         width: 30% !important;
     }
 
-    .BankContainer a.radio-fx {
-        display: block !important;
+    .BankContainer .marketplace-button {
+        width: 92%;
     }
 
     .hmrc-why {
         width: 100%;
-    }
-
-    .hmrc_main_buttons_container {
-        height: 100px !important;
+        margin-left: 30px;
+        padding-left: 50px;
     }
 
     .FormRadioCtrl > span {
@@ -111,9 +122,47 @@
             width: 100%;
             display: inline-block;
         }
+    
+    .marketplace-button {
+        width: 47%;
+    }
+
+    .hmrc-main-button {
+        margin: 5px;
+    }
+    .help_window {
+        width: 316px;
+        padding: 0;
+    }
+    .help_image {
+        width: 320px;
+        height: 229px;
+     }
+
+    .help_security {
+        width: 320px;
+        height: 25px;
+    }
 
     .SubBank {
+        width: 92%;
+    }
+
+    a.amazonscreenshot,
+    .amazon_view_tutorial_label {
+        margin-top: 10px;
+    }
+
+    .dropzone {
+        min-height: 220px;
+    }
+
+    .dropzone .dz-with-text {
         width: 100%;
+        height: inherit;
+        margin: 0;
+        top: 0;
+        left: 0;
     }
 
     div.form_buttons_container {
@@ -140,7 +189,7 @@
         }
 
     .wizard-steps {
-        min-width: 600px;
+        min-width: 320px;
         width: 100%;
     }
 
@@ -148,14 +197,45 @@
         margin: 0 0 0 0;
         overflow: hidden;
         list-style: none;
-        min-width: 600px;
+        min-width: 320px;
         width: 100%;
     }
 
     .progress-line {
-        margin-left: 50px;
+        margin-left: 20px;
+        top: 18px;
     }
 
+    .progress-circle {
+        width: 47px;
+        height: 47px;
+    }
+
+    .progress-circle .inner-circle {
+        left: 3px;
+        top: 3px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .progress-circle .percent {
+        vertical-align: middle;
+        line-height: 40px;
+        font-size: 25px;
+    }
+
+    .progress-line-current, .progress-line-complete {
+        top: 21px;
+    }
+
+    .first .progress-line-current, .first .progress-line-complete {
+        margin-left: 20px;
+    }
+
+    ul.application_steps li.current .progress-line-current {
+        left: -20px;
+    }
+    
     input[disabled], 
     select[disabled], 
     textarea[disabled], 
@@ -165,10 +245,6 @@
         background-color: #eee;
         border: 1px #ccc solid;
         cursor: default;
-    }
-
-    .attardi-input input, .attardi-input textarea, .attardi-input select {
-        padding: 4px;
     }
 
     .modal {

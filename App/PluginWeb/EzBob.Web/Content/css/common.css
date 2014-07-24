@@ -645,14 +645,6 @@ div.shop-connected {
     display: inline-block;
 }
 
-.hmrc-info-button-right-margin {
-    margin-right: 60%;
-}
-
-.hmrc-info-button-right-margin-link {
-    margin-right: 70%;
-}
-
 .hmrc-info-button {
     background: url(../img/info.png) no-repeat 0 0;
     -moz-background-size: contain;
@@ -746,7 +738,6 @@ div.shop-connected {
 }
 
 .hmrc-why {
-    /*color: #29ABE2;*/
     margin-left: 55px;
     padding-left: 55px;
 }
@@ -772,7 +763,7 @@ div.shop-connected {
 }
 
 .SubBank {
-    width: 400px;
+    width: 96%;
 }
 
 select.SubBank {
@@ -1312,43 +1303,50 @@ input[type="color"],
 }
 
 .help_EKM {
-    background: url(images/help/help_ekm.jpg) no-repeat center center;
+    background: url(images/help/help_ekm.jpg) no-repeat center 0;
+    background-size: contain;
 }
 
 .help_FreeAgent {
-    background: url(images/help/help_freeagent.jpg) no-repeat center center;
+    background: url(images/help/help_freeagent.jpg) no-repeat center 0;
+    background-size: contain;
 }
 
 .help_Sage {
-    background: url(images/help/help_sage.jpg) no-repeat center center;
+    background: url(images/help/help_sage.jpg) no-repeat center 0;
+    background-size: contain;
 }
 
 .help_eBay {
-    background: url(images/help/help_ebay.jpg) no-repeat center center;
+    background: url(images/help/help_ebay.jpg) no-repeat center 0;
+    background-size: contain;
 }
 
 .help_paypal {
-    background: url(images/help/help_paypal.jpg) no-repeat center center;
+    background: url(images/help/help_paypal.jpg) no-repeat center 0;
+    background-size: contain;
 }
 
 .help_Amazon {
-    background: url(images/cb/loading.gif) no-repeat center center;
-    background-color: black;
+    background: url(images/cb/loading.gif) no-repeat center 0;
+    background-size: contain;
     /*TODO provide real image*/
 }
 
 .help_PayPoint {
-    background: url(images/cb/loading.gif) no-repeat center center;
-    background-color: black;
+    background: url(images/cb/loading.gif) no-repeat center 0;
+    background-size: contain;
     /*TODO provide real image*/
 }
 
 .help_offline {
-    background: url(images/help/help_offline_wizard.png) no-repeat center center;
+    background: url(images/help/help_offline_wizard.png) no-repeat center 0;
+    background-size: contain;
 }
 
 .help_security {
-    background: url(images/help/help_security.png) no-repeat center center;
+    background: url(images/help/help_security.png) no-repeat center 0;
+    background-size: contain;
     width: 759px;
     height: 77px;
 }
@@ -1381,25 +1379,12 @@ div.full_width {
 
 a.amazonscreenshot {
     height: 40px;
-    top: 0;
-    left: 350px;
-    position: absolute;
+    float: right;
 }
 
-    a.amazonscreenshot:hover {
-        -moz-box-shadow: none;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        position: absolute;
-        top: 5px;
-        left: 355px;
-    }
-
 .amazon_view_tutorial_label {
-    position: absolute;
-    top: 40px;
-    left: 358px;
-    line-height: 25px;
+    float: right;
+    font-size: 16px;
 }
 
 .blue-link, a.blue-link, a.blue-link:visited, a.blue-link:active, a.blue-link:hover {
@@ -2159,7 +2144,6 @@ li[stripped="stripped"] {
     pointer-events: none;
     font-size: 18px;
     line-height: 20px;
-    width: 96%;
 }
 
 .attardi-input span.active {
@@ -2655,7 +2639,6 @@ ul#user-menu {
         margin: 0 7px;
         font-weight: bold;
         font-size: 14px;
-        border-radius: 15px;
         line-height: 30px;
         padding: 5px 12px;
     }
@@ -2702,8 +2685,6 @@ ul#user-menu {
 .progress-circle {
     width: 94px;
     height: 94px;
-    font-size: 25px;
-    font-weight: bold;
     text-align: center;
     vertical-align: middle;
     color: #5C5C5C;
@@ -2713,14 +2694,17 @@ ul#user-menu {
 .center-circle .progress-circle {
     background: url(images/header/circle_bg_M.png);
     background-repeat: no-repeat;
+    background-size: contain;
 }
 .first-circle .progress-circle {
     background: url(images/header/circle_bg_L.png);
     background-repeat: no-repeat;
+    background-size: contain;
 }
 .last-circle .progress-circle {
     background: url(images/header/circle_bg_R.png);
     background-repeat: no-repeat;
+    background-size: contain;
 }
 
 
@@ -2728,6 +2712,7 @@ ul#user-menu {
 .progress-circle .inner-circle {
     background: url(images/header/circle_white.png);
     background-repeat: no-repeat;
+    background-size: contain;
     position: absolute;
     left: 7px;
     top: 7px;
@@ -2739,12 +2724,14 @@ ul#user-menu {
 .inner-circle.current {
     background: url(images/header/circle_green_process.png);
     background-repeat: no-repeat;
+    background-size: contain;
 }
 
     .progress-circle .inner-circle.complete
      {
         background: url(images/header/circle_green.png);
         background-repeat: no-repeat;
+        background-size: contain;
         color: #ffffff;
     }
 
