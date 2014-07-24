@@ -2,7 +2,6 @@
 {
 	using System.Data;
 	using System.Text.RegularExpressions;
-	using ConfigManager;
 	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
@@ -81,10 +80,10 @@
 			decimal yodleeTurnover = sr["YodleeTurnover"];
 			string zooplaEstimateStr = sr["ZooplaEstimate"];
 			int zoopla1YearAvg = sr["AverageSoldPrice1Year"];
-			firstName = sr["YodleeTurnover"];
-			surname = sr["YodleeTurnover"];
-			gender = sr["YodleeTurnover"];
-			dateOfBirth = sr["YodleeTurnover"];
+			firstName = sr["FirstName"];
+			surname = sr["Surname"];
+			gender = sr["Gender"];
+			dateOfBirth = sr["DateOfBirth"];
 			line1 = sr["Line1"];
 			line2 = sr["Line2"];
 			line3 = sr["Line3"];
