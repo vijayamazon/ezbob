@@ -107,7 +107,6 @@
 							historyRepo.SaveOrUpdate(history);
 							break;
 						case ExperianServiceType.NonLimitedData:
-							var serviceClient = new ServiceClient();
 							CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(0/*should be refactored*/, oPackage.Out.ServiceLog.Customer.Id, oPackage.Out.ServiceLog.Customer.Company.ExperianRefNum);
 							history.Score = notLimitedBusinessData != null ? notLimitedBusinessData.Score : 0;
 							historyRepo.SaveOrUpdate(history);
@@ -226,6 +225,8 @@
 		#region private
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(Utils));
+
+		private static readonly ServiceClient serviceClient = new ServiceClient();
 
 		#endregion private
 	} // class Utils
