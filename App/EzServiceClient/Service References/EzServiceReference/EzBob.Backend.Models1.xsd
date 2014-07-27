@@ -360,6 +360,7 @@
       <xs:element minOccurs="0" name="ProbabilityOfDefaultScore" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="RiskBand" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RiskScore" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ScoreHistory" nillable="true" type="tns:ArrayOfScoreAtDate" />
       <xs:element minOccurs="0" name="SearchType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SearchTypeDesc" nillable="true" type="xs:string" />
       <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SicCodes" nillable="true" type="q5:ArrayOfstring" />
@@ -483,6 +484,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PreviousSearch" nillable="true" type="tns:PreviousSearch" />
+  <xs:complexType name="ArrayOfScoreAtDate">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ScoreAtDate" nillable="true" type="tns:ScoreAtDate" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfScoreAtDate" nillable="true" type="tns:ArrayOfScoreAtDate" />
+  <xs:complexType name="ScoreAtDate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Score" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ScoreAtDate" nillable="true" type="tns:ScoreAtDate" />
   <xs:complexType name="ArrayOfLoanScheduleItemModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />

@@ -153,6 +153,16 @@
 	}
 
 	[DataContract]
+	public class ScoreAtDate
+	{
+		[DataMember]
+		public DateTime Date { get; set; }
+
+		[DataMember]
+		public int Score { get; set; }
+	}
+
+	[DataContract]
 	public class CompanyData
 	{
 		[DataMember]
@@ -358,5 +368,8 @@
 
 		[DataMember]
 		public List<PaymentPerformanceDetail> PaymentPerformanceDetails { get; set; }
+
+		[DataMember]
+		public List<ScoreAtDate> ScoreHistory { get; set; }
 	}
 }

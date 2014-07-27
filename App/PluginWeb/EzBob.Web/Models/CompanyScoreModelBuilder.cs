@@ -7,6 +7,7 @@
 	using System.Text.RegularExpressions;
 	using Areas.Underwriter.Models;
 	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.CompanyScore;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.ModelsWithDB.Experian.Attributes;
@@ -94,6 +95,7 @@
 					company_name = oUnlimAr.Data.BusinessName,
 					company_ref_num = customer.Company.ExperianRefNum,
 					Data = oUnlimAr.Data,
+					DashboardModel = BuildNonLimitedDashboardModel(oUnlimAr.Data, customer.Company.ExperianRefNum)
 				};
 			} // if
 
@@ -129,6 +131,31 @@
 		} // Create
 
 		#endregion method Create
+
+
+		public ComapanyDashboardModel BuildNonLimitedDashboardModel(CompanyData data, string refNumber)
+		{
+			var model = new ComapanyDashboardModel();
+			model.IsLimited = false;
+
+			model.CompanyName = data.BusinessName;
+			model.CompanyRefNum = refNumber;
+
+			model.Score = data.RiskScore ?? 0;
+			model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
+
+			model.CcjMonths = data.AgeOfMostRecentJudgmentDuringOwnershipMonths ?? -1;
+
+			model.Ccjs = data.TotalJudgmentCountLast24Months ?? 0 + data.TotalAssociatedJudgmentCountLast24Months ?? 0;
+			model.NonLimScoreHistories = new List<NonLimScoreHistory>();
+
+			foreach (ScoreAtDate scoreAtDate in data.ScoreHistory)
+			{
+				model.NonLimScoreHistories.Add(new NonLimScoreHistory { Score = scoreAtDate.Score, ScoreDate = scoreAtDate.Date });
+			}
+
+			return model;
+		}
 
 		#region method BuildLimitedDashboardModel
 

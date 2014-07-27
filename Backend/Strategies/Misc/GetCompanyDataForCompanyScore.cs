@@ -287,6 +287,27 @@
 								Data.PaymentPerformanceDetails.Add(paymentPerformanceDetail);
 							}
 						}
+
+						DataTable scoreHistoryDataTable = DB.ExecuteReader(
+							"GetNonLimitedCompanyScoreHistory",
+							CommandSpecies.StoredProcedure,
+							new QueryParameter("CustomerId", customerId),
+							new QueryParameter("RefNumber", refNumber));
+
+						if (scoreHistoryDataTable.Rows.Count > 0)
+						{
+							Data.ScoreHistory = new List<ScoreAtDate>();
+							foreach (DataRow row in scoreHistoryDataTable.Rows)
+							{
+								var scoreHistorySafeReader = new SafeReader(row);
+
+								var scoreAtDate = new ScoreAtDate();
+								scoreAtDate.Score = scoreHistorySafeReader["RiskScore"];
+								scoreAtDate.Date = scoreHistorySafeReader["Date"];
+
+								Data.ScoreHistory.Add(scoreAtDate);
+							}
+						}
 					}
 				}
 			}
