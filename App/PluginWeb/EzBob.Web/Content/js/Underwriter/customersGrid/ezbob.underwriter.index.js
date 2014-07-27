@@ -48,6 +48,10 @@
 					view: new EzBob.Underwriter.FundingView({ el: $('#funding-view') }),
 					isRendered: false,
 				},
+				broker: {
+					view: new EzBob.Underwriter.BrokerProfileView({ el: $('#broker-profile-view') }),
+					isRendered: false,
+				},
 			}; // views
 		}, // initialize
 
@@ -64,6 +68,10 @@
 			'fraud': 'fraud',
 			'report': 'report',
 			'funding': 'funding',
+			'broker/:id': 'broker',
+			'broker/:id/': 'broker',
+			'broker/:id/:section': 'broker',
+			'broker/:id/:section/': 'broker',
 			'*z': 'customers',
 		}, // routes
 
@@ -73,7 +81,7 @@
 			if (!oView.isRendered) {
 				oView.isRendered = true;
 				oView.view.render();
-			    EzBob.handleUserLayoutSetting();
+				EzBob.handleUserLayoutSetting();
 			} // if
 
 			this.hideAll();
@@ -138,6 +146,10 @@
 			this.handleRoute('funding');
 		}, // funding
 
+		broker: function(id, section) {
+			this.handleRoute('broker', id, section);
+		}, // broker
+
 		hideAll: function() {
 			for (var i in this.views)
 				this.views[i].view.hide();
@@ -151,6 +163,8 @@
 	oRouter.views.grids.view.router = oRouter;
 
 	oRouter.views.profile.view.router = oRouter;
+
+	oRouter.views.broker.view.router = oRouter;
 
 	Backbone.history.start();
 

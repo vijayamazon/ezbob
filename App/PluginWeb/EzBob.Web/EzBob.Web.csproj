@@ -715,6 +715,7 @@
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.ttf" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-semibolditalic-webfont.woff" />
     <Content Include="Content\css\fonts\opensans.woff" />
+    <Content Include="Areas\Underwriter\Views\Shared\_BrokerProfile.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1250,6 +1251,7 @@
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.AddCustomerRelationsFollowUp.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.AddCustomerRelationsEntry.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.customerRelations.js" />
+    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.broker.profile.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js">
       <DependentUpon>ezbob.underwriter.customerFullModel.coffee</DependentUpon>
     </Content>

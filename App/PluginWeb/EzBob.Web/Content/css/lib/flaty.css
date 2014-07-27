@@ -532,6 +532,13 @@ hr.margin-0  {margin: 0;}
     margin-right: 275px;
 }
 
+#sidebar+#broker-main-content {
+    margin-left: 200px;
+}
+
+#sidebar.sidebar-collapsed+#broker-main-content {
+    margin-left: 43px;
+}
 
 .navbar-collapse {
     padding-right: 0;

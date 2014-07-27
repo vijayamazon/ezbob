@@ -275,6 +275,17 @@
 
 		#endregion method GridLogbook
 
+		#region method GridBrokers
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		public JsonResult GridBrokers(bool includeTestCustomers) {
+			return LoadGrid("UwGridBrokers", includeTestCustomers, () => new GridBroker());
+		} // GridBrokers
+
+		#endregion method GridBrokers
+
 		#region method LoadGrid
 
 		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory) {
@@ -296,9 +307,7 @@
 				args.Add(new QueryParameter("@WithAll", bIncludeAllCustomers));
 
 			if (now.HasValue)
-			{
 				args.Add(new QueryParameter("@Now", now.Value));
-			}
 
 			m_oDB.ForEachRowSafe(
 				(sr, bRowSetStarts) => {

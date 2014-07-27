@@ -604,5 +604,45 @@
 
 	#endregion class GridLogbookRow
 
+	#region class GridBroker
+
+	internal class GridBroker : AGridRow {
+		#region RowIDFieldName
+
+		public override string RowIDFieldName() {
+			return "BrokerID";
+		} // RowIDFieldName
+
+		#endregion RowIDFieldName
+
+		public virtual long BrokerID { get; set; }
+		public virtual string FirmName { get; set; }
+		public virtual string ContactName { get; set; }
+		public virtual string ContactEmail { get; set; }
+		public virtual string ContactMobile { get; set; }
+		public virtual string ContactOtherPhone { get; set; }
+		public virtual string FirmWebSiteUrl { get; set; }
+		public virtual string IsTest { get; set; }
+
+		#region method Init
+
+		public override void Init(long nRowID, SafeReader oRow) {
+			oRow.Fill(this);
+			BrokerID = nRowID;
+		} // Init
+
+		#endregion method Init
+
+		#region method Add
+
+		public override void Add(SafeReader oRow) {
+			// nothing to do here
+		} // Add
+
+		#endregion method Add
+	} // GridBroker
+
+	#endregion class GridBroker
+
 	#endregion concrete classes
 } // namespace

@@ -9,8 +9,12 @@ EzBob.Underwriter.GridTools = {
 	}, // showMedalIcon
 
 	profileLink: function(nCustomerID, sLinkText) {
-	    return EzBob.DataTables.Helper.withScrollbar('<button class="profileLink btn btn-link" title="Open customer profile" data-href="#profile/' + nCustomerID + '">' + (sLinkText || nCustomerID) + '</button>');
+		return EzBob.DataTables.Helper.withScrollbar('<button class="profileLink btn btn-link" title="Open customer profile" data-href="#profile/' + nCustomerID + '">' + (sLinkText || nCustomerID) + '</button>');
 	}, // profileLink
+
+	brokerProfileLink: function(nBrokerID, sLinkText) {
+		return EzBob.DataTables.Helper.withScrollbar('<button class="profileLink btn btn-link" title="Open broker profile" data-href="#broker/' + nBrokerID + '">' + (sLinkText || nBrokerID) + '</button>');
+	}, // brokerProfileLink
 }; // EzBob.Underwriter.GridTools
 
 EzBob.Underwriter.GridsView = Backbone.View.extend({
@@ -31,19 +35,16 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			if (oData.hasOwnProperty('Cart'))
 				$('.grid-item-Cart', oTR).empty().html(EzBob.Underwriter.GridTools.showMedalIcon(oData.Cart));
 
-		    if (oData.hasOwnProperty('MP_List')) {
-		        $('.grid-item-MP_List', oTR).empty().html(EzBob.DataTables.Helper.showNewMPsIcon(oData.MP_List, oData.SegmentType));
-		    }
+			if (oData.hasOwnProperty('MP_List'))
+				$('.grid-item-MP_List', oTR).empty().html(EzBob.DataTables.Helper.showNewMPsIcon(oData.MP_List, oData.SegmentType));
 
-		    if (oData.hasOwnProperty('Email')) {
-		        $('.grid-item-Email', oTR).empty().html(EzBob.DataTables.Helper.showEmail(oData.Email));
-		    }
-		    
-		    if (oData.hasOwnProperty('Broker')) {
-		        $('.grid-item-Broker', oTR).empty().html(EzBob.DataTables.Helper.showBroker(oData.Broker, oData.FirstSale));
-		    }
+			if (oData.hasOwnProperty('Email'))
+				$('.grid-item-Email', oTR).empty().html(EzBob.DataTables.Helper.showEmail(oData.Email));
 
-		    if (oData.hasOwnProperty('Id')) {
+			if (oData.hasOwnProperty('Broker'))
+				$('.grid-item-Broker', oTR).empty().html(EzBob.DataTables.Helper.showBroker(oData.Broker, oData.FirstSale));
+
+			if (oData.hasOwnProperty('Id')) {
 				$('.grid-item-Id', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.Id));
 
 				if (oData.hasOwnProperty('Name')) {
@@ -54,14 +55,11 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				$(oTR).dblclick(function() {
 					location.assign($(oTR).find('.profileLink').first().data('href'));
 				});
-		    } // if has id
+			} // if has id
 
-
-			if (oData.IsWasLate) {
-				//$(oTR).addClass(oData.IsWasLate);
+			if (oData.IsWasLate)
 				$(oTR).addClass("table-flag-red");
-			} // if
-		    
+
 			$(oTR).find('[data-toggle="tooltip"]').tooltip({ html: true, placement: "bottom" });
 		}; // fnRowCallback
 
@@ -121,11 +119,11 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				icon: 'bars',
 				action: 'GridRegistered',
 				columns: '#UserId,Email,UserStatus,^RegDate,MP_Statuses,WizardStep,SegmentType',
-				fnRowCallback: function (oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+				fnRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 					$('.grid-item-UserId', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.UserId));
 
 					$(oTR).dblclick(function() {
-						location.assign($(oTR).find('.profileLink').first().attr('href'));
+						location.assign($(oTR).find('.profileLink').first().data('href'));
 					});
 
 					if (oData.IsWasLate)
@@ -150,10 +148,24 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 							!oView.$el.find(sTableContainer + ' #logbook-new-entry-form').hasClass('hide')
 						);
 				}, // OnAfterRender
-				fnRowCallback: function (oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+				fnRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 					$('.grid-item-EntryContent', oTR).empty().html(oData.EntryContent.replace(/\n/g, '<br>'));
 				}, // fnRowCallback
 			}), // logbook
+			brokers: new GridProperties({
+				icon: 'male',
+				action: 'GridBrokers',
+				columns: '#BrokerID,FirmName,ContactName,ContactEmail,ContactMobile,ContactOtherPhone,FirmWebSiteUrl',
+				fnRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+					$('.grid-item-BrokerID', oTR).empty().html(EzBob.Underwriter.GridTools.brokerProfileLink(oData.BrokerID));
+
+					$(oTR).dblclick(function() {
+						console.log($(oTR).find('.profileLink'));
+
+						location.assign($(oTR).find('.profileLink').first().data('href'));
+					});
+				}, // fnRowCallback
+			}), // brokers
 		}; // gridProperties
 	}, // initialize
 
@@ -164,12 +176,25 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		'click #logbook-show-new-entry-form': 'showNewLogbookEntryForm',
 		'click #logbook-new-entry-cancel': 'hideNewLogbookEntryForm',
 		'click #logbook-new-entry-save': 'submitNewLogbookEntryForm',
-	    'click .profileLink': 'profileLinkClicked'
+		'mouseup .profileLink': 'profileLinkClicked'
 	}, // events
-    profileLinkClicked: function(el) {
-        location.assign($(el.currentTarget).data('href'));
-    },
-	
+
+	profileLinkClicked: function(evt) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		if (evt.button === 1)
+			window.open($(evt.currentTarget).data('href'));
+		else if (evt.button === 0) {
+			if (evt.shiftKey)
+				window.open($(evt.currentTarget).data('href'));
+			else
+				location.assign($(evt.currentTarget).data('href'));
+		} // if
+
+		return false;
+	}, // profileLinkClicked
+
 	submitNewLogbookEntryForm: function() {
 		var nEntryType = $('#logbook-new-entry-type').val();
 
@@ -243,12 +268,12 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 	render: function() {
 		var self = this;
 
-		this.tabLinks().on('shown.bs.tab', function (e) { self.handleTabSwitch(e); });
+		this.tabLinks().on('shown.bs.tab', function(e) { self.handleTabSwitch(e); });
 
 		return this;
 	}, // render
 
-	handleTabSwitch: function (evt) {
+	handleTabSwitch: function(evt) {
 		this.loadGrid(this.typeFromHref($(evt.target).attr('href')));
 	}, // handleTabSwitch
 
@@ -309,28 +334,28 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 
 			fnRowCallback: oGridProperties.fnRowCallback,
 
-			aaSorting: [[ 0, 'desc' ]],
+			aaSorting: [[0, 'desc']],
 
 			bAutoWidth: true,
 			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"if><"dataTables_top_left">><"box-content"tr<"row"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>>>>>',
 
 			bStateSave: true,
 
-			fnStateSave: function (oSettings, oData) {
+			fnStateSave: function(oSettings, oData) {
 				var sKey = 'uw-grid-state-' + $('#uw-name-and-icon').attr('data-uw-id') + '-' + sGridName;
 				localStorage.setItem(sKey, JSON.stringify(oData));
 			}, // fnStateSave
 
-			fnStateLoad: function (oSettings) {
+			fnStateLoad: function(oSettings) {
 				var sKey = 'uw-grid-state-' + $('#uw-name-and-icon').attr('data-uw-id') + '-' + sGridName;
 				var sData = localStorage.getItem(sKey);
 				var oData = sData ? JSON.parse(sData) : null;
 				return oData;
 			}, // fnStateLoad
-			
-			fnInitComplete: function (oSettings, json) {
-		        $('[data-toggle="tooltip"]').tooltip({ html: true, placement: "bottom" });
-		    },
+
+			fnInitComplete: function(oSettings, json) {
+				$('[data-toggle="tooltip"]').tooltip({ html: true, placement: "bottom" });
+			},
 		}); // create data table
 
 		var oTableTitle = this.$el.find(sTableContainer + ' .dataTables_top_left');
@@ -371,22 +396,22 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			'&includeAllCustomers=' + (bIncludeAll ? 'true' : 'false');
 	}, // gridSrcUrl
 
-	tabLinks: function () {
+	tabLinks: function() {
 		return this.$el.find('a[data-toggle="tab"]');
 	}, // tabLinks
 
-	tabLinkTo: function (sTarget) {
+	tabLinkTo: function(sTarget) {
 		return this.tabLinks().filter('[href="#' + (sTarget || '') + '-grid"]');
 	}, // tabLinkTo
 
 	/// id argument is not used here. It was added to be consistent with
 	/// previously created views.
-	show: function (id, type) {
+	show: function(id, type) {
 		this.$el.show();
 		this.loadGrid(this.getValidType(type));
 	}, // show
 
-	typeFromHref: function (sHref) {
+	typeFromHref: function(sHref) {
 		if (!sHref)
 			sHref = this.tabLinks().first().attr('href');
 
@@ -398,7 +423,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		return this.typeFromHref(this.tabLinks().first().attr('href'));
 	}, // typeFromHref
 
-	getValidType: function (sType) {
+	getValidType: function(sType) {
 		if (this.isValidType(sType))
 			return sType;
 

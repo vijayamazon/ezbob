@@ -326,6 +326,24 @@
                     </table>
                 </div>
             </div>
+            <div class="tab-pane" id="brokers-grid">
+                <div class="table-responsive table-ezbig">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Firm name</th>
+                                <th>Contact name</th>
+                                <th>E-mail</th>
+                                <th>Mobile</th>
+                                <th>Other phone #</th>
+                                <th>Web site</th>
+                            </tr>
+                        </thead>
+                        @Tds(2)
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -337,6 +355,7 @@
 <div id="fraud-area" style="display: none;"></div>
 <div id="report-view" style="display: none;"></div>
 <div id="funding-view" style="display: none;"></div>
+<div id="broker-profile-view" style="display: none;">@{ Html.RenderPartial("_BrokerProfile"); }</div>
 
 @{
     Html.RenderPartial("_ProfileTemplateMain");

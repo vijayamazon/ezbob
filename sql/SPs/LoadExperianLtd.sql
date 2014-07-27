@@ -83,6 +83,6 @@ BEGIN
 	FROM
 		ExperianLtd
 	WHERE
-		ServiceLogID = @ServiceLogID
+		ExperianLtdID = @ExperianLtdID
 END
 GO

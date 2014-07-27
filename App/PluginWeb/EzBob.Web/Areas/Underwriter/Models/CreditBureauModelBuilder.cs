@@ -222,6 +222,7 @@
 								Score = cModel.Score,
 							});
 						}
+				}
 					}
 				}
 			}
