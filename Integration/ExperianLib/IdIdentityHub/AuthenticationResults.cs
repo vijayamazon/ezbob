@@ -1,12 +1,12 @@
-using System;
-using System.Text;
-using ExperianLib.Web_References.IDHubService;
-
 namespace ExperianLib.IdIdentityHub
 {
+	using System;
+	using System.Text;
+	using Web_References.IDHubService;
+
     public class AuthenticationResults:BaseIdHubResult
     {
-        public decimal AuthenticationIndexType { get; set; }
+        public int AuthenticationIndex { get; set; }
         public string AuthIndexText { get; set; }
         public decimal NumPrimDataItems { get; set; }
         public decimal NumPrimDataSources { get; set; }
@@ -23,7 +23,7 @@ namespace ExperianLib.IdIdentityHub
 
             var errors = new StringBuilder();
 
-            Utils.TryRead(() => AuthenticationIndexType = Convert.ToDecimal(response.ProcessConfigResultsBlock.EIAResultBlock.AuthenticationIndex), "AuthenticationIndexType", errors);
+            Utils.TryRead(() => AuthenticationIndex = Convert.ToInt32(response.ProcessConfigResultsBlock.EIAResultBlock.AuthenticationIndex), "AuthenticationIndex", errors);
             Utils.TryRead(() => AuthIndexText = response.ProcessConfigResultsBlock.EIAResultBlock.AuthIndexText, "AuthIndexText", errors);
             Utils.TryRead(() => NumPrimDataItems = Convert.ToDecimal(response.ProcessConfigResultsBlock.EIAResultBlock.EIAResults.IDandLocDataAtCL.NumPrimDataItems), "NumPrimDataItems", errors);
             Utils.TryRead(() => NumPrimDataSources = Convert.ToDecimal(response.ProcessConfigResultsBlock.EIAResultBlock.EIAResults.IDandLocDataAtCL.NumPrimDataSources), "NumPrimDataSources", errors);

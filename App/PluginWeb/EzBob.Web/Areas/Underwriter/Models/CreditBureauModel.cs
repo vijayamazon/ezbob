@@ -162,7 +162,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 	{
 		public bool HasAML { get; set; }
 		public string AMLResult { get; set; }
-		public decimal AuthenticationIndexType { get; set; }
+		public int AuthenticationIndex { get; set; }
 		public string AuthIndexText { get; set; }
 		public decimal NumPrimDataItems { get; set; }
 		public decimal NumPrimDataSources { get; set; }

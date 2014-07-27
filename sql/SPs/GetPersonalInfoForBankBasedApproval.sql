@@ -13,7 +13,6 @@ CREATE PROCEDURE [dbo].[GetPersonalInfoForBankBasedApproval]
 AS
 BEGIN
 	DECLARE 
-		@AmlId BIGINT,
 		@FirstName NVARCHAR(250),
 		@LastName NVARCHAR(250),
 		@DefaultCount INT,
@@ -33,17 +32,7 @@ BEGIN
 		@TotalAnnualizedValue FLOAT,
 		@NumberOfVatReturns INT,
 		@VatCategoryId INT
-		
-	SELECT TOP 1
-		@AmlId = Id
-	FROM
-		MP_ServiceLog
-	WHERE
-		CustomerId = @CustomerId AND
-		ServiceType = 'AML A check'
-	ORDER BY
-		InsertDate DESC
-				
+						
 	SELECT
 		@FirstName = FirstName,
 		@LastName = Surname,
@@ -172,7 +161,7 @@ BEGIN
 	GROUP BY MP_YodleeOrderItemBankTransaction.srcElementId	
 
 	SELECT
-		(SELECT ResponseData FROM MP_ServiceLog WHERE Id = @AmlId) AS AmlData,
+		(SELECT AuthenticationIndex FROM AmlResults WHERE CustomerId = @CustomerId) AS AmlScore,
 		@FirstName AS FirstName,
 		@LastName AS Surname,
 		(SELECT MP_ExperianDataCache.JsonPacket FROM MP_ExperianDataCache, Company WHERE MP_ExperianDataCache.CompanyRefNumber = Company.CompanyNumber AND Company.Id = @CompanyId) AS CompanyData,

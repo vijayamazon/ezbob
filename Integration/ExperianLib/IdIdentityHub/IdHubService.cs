@@ -65,7 +65,7 @@
 				{
 					Log.DebugFormat("Will use cache value for key '{0}'", key);
 					
-					result.AuthenticationIndexType = cachedResult.AuthenticationIndexType;
+					result.AuthenticationIndex = cachedResult.AuthenticationIndex;
 					result.AuthIndexText = cachedResult.AuthIndexText;
 					result.NumPrimDataItems = cachedResult.NumPrimDataItems;
 					result.NumPrimDataSources = cachedResult.NumPrimDataSources;
@@ -148,7 +148,7 @@
 						ServiceLogId = logItem.Id,
 						Created = logItem.InsertDate,
 						AuthenticationDecision = result.AuthenticationDecision,
-						AuthenticationIndexType = result.AuthenticationIndexType,
+						AuthenticationIndex = result.AuthenticationIndex,
 						AuthIndexText = result.AuthIndexText,
 						NumPrimDataItems = result.NumPrimDataItems,
 						NumPrimDataSources = result.NumPrimDataSources,

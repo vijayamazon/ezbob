@@ -171,7 +171,7 @@
 				return true;
 			} // if
 
-			authentication = results.AuthenticationIndexType;
+			authentication = results.AuthenticationIndex;
 			result = "Passed";
 			description = results.AuthIndexText;
 

@@ -15,7 +15,7 @@
 		public virtual long ServiceLogId { get; set; }
 		public virtual DateTime Created { get; set; }
 		public virtual string AuthenticationDecision { get; set; }
-		public virtual decimal AuthenticationIndexType { get; set; }
+		public virtual int AuthenticationIndex { get; set; }
 		public virtual string AuthIndexText { get; set; }
 		public virtual decimal NumPrimDataItems { get; set; }
 		public virtual decimal NumPrimDataSources { get; set; }
@@ -44,7 +44,7 @@
 			Map(x => x.ServiceLogId);
 			Map(x => x.Created).CustomType<UtcDateTimeType>().Not.Nullable();
 			Map(x => x.AuthenticationDecision).Length(20);
-			Map(x => x.AuthenticationIndexType);
+			Map(x => x.AuthenticationIndex);
 			Map(x => x.AuthIndexText).Length(500);
 			Map(x => x.NumPrimDataItems);
 			Map(x => x.NumPrimDataSources);

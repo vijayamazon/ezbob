@@ -41,7 +41,7 @@
 
 					var result = idHubService.GetResults_ForBackfill(xml);
 
-					int authentication = (int)result.AuthenticationIndexType;
+					int authentication = (int)result.AuthenticationIndex;
 					string description = result.AuthIndexText;
 
 					DB.ExecuteNonQuery("UpdateAmlResult", CommandSpecies.StoredProcedure,

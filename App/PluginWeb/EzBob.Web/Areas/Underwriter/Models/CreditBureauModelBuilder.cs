@@ -571,10 +571,10 @@
 				if (null == result)
 					return;
 
-				Log.DebugFormat("AML data for building model: {0} - {1}", result.AuthenticationIndexType, result.AuthIndexText);
+				Log.DebugFormat("AML data for building model: {0} - {1}", result.AuthenticationIndex, result.AuthIndexText);
 				data.HasAML = true;
 				data.AuthIndexText = customer.AmlDescription;
-				data.AuthenticationIndexType = customer.AmlScore;
+				data.AuthenticationIndex = customer.AmlScore;
 				data.NumPrimDataItems = result.NumPrimDataItems;
 				data.NumPrimDataSources = result.NumPrimDataSources;
 				data.NumSecDataItems = result.NumSecDataItems;
@@ -736,7 +736,7 @@
 				Enquiriesinlast3months = model.ConsumerSummaryCharacteristics.EnquiriesLast3M,
 				Totalbalance = model.ConsumerAccountsOverview.Balance_Total,
 				AML = model.AmlInfo.AMLResult,
-				AMLnum = model.AmlInfo.AuthenticationIndexType.ToString(CultureInfo.InvariantCulture),
+				AMLnum = model.AmlInfo.AuthenticationIndex.ToString(CultureInfo.InvariantCulture),
 				BWA = model.BavInfo.BankAccountVerificationResult,
 				BWAnum = GetBwaScoreInfo(model.BavInfo),
 				Businesstype = model.BorrowerType,

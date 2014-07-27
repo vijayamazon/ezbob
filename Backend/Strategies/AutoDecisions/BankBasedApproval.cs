@@ -113,20 +113,10 @@
 			annualizedTurnover = sr["TotalAnnualizedValue"];
 			numberOfVatReturns = sr["NumberOfVatReturns"];
 
-			// Parse experian data
-			string amlData = sr["AmlData"];
+			amlScore = sr["AmlScore"];
 			string firstName = sr["FirstName"];
 			string surame = sr["Surame"];
 			string companyData = sr["CompanyData"];
-
-			try
-			{
-				amlScore = experianUtils.DetectAml(amlData);
-			}
-			catch (Exception e)
-			{
-				log.Error("Exception while parsing amldata:{0}. The exception:{1}", amlData, e);
-			}
 
 			if (!string.IsNullOrEmpty(companyData))
 			{
