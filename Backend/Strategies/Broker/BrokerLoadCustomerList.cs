@@ -13,13 +13,15 @@
 
 		#region constructor
 
-		public BrokerLoadCustomerList(string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadCustomerList(string sContactEmail, int nBrokerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSpCustomers = new SpBrokerLoadCustomerList(DB, Log) {
 				ContactEmail = sContactEmail,
+				BrokerID = nBrokerID,
 			};
 
 			m_oSpLeads = new SpBrokerLoadLeadList(DB, Log) {
 				ContactEmail = sContactEmail,
+				BrokerID = nBrokerID,
 			};
 
 			m_oCustomers = new SortedDictionary<int, BrokerCustomerEntry>();
@@ -115,7 +117,7 @@
 			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
-				return !string.IsNullOrWhiteSpace(ContactEmail);
+				return !string.IsNullOrWhiteSpace(ContactEmail) || (BrokerID > 0);
 			} // HasValidParameters
 
 			#endregion method HasValidParameters
@@ -125,6 +127,12 @@
 			public string ContactEmail { get; set; }
 
 			#endregion property ContactEmail
+
+			#region property BrokerID
+
+			public int BrokerID { get; set; }
+
+			#endregion property BrokerID
 
 			#region class ResultRow
 
@@ -160,7 +168,7 @@
 			#region method HasValidParameters
 
 			public override bool HasValidParameters() {
-				return !string.IsNullOrWhiteSpace(ContactEmail);
+				return !string.IsNullOrWhiteSpace(ContactEmail) || (BrokerID > 0);
 			} // HasValidParameters
 
 			#endregion method HasValidParameters
@@ -170,6 +178,12 @@
 			public string ContactEmail { get; set; }
 
 			#endregion property ContactEmail
+
+			#region property BrokerID
+
+			public int BrokerID { get; set; }
+
+			#endregion property BrokerID
 
 			#region class ResultRow
 

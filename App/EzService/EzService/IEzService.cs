@@ -82,6 +82,9 @@
 		BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
 
 		[OperationContract]
+		BrokerCustomersActionResult BrokerLoadCustomersByID(int nBrokerID);
+
+		[OperationContract]
 		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail);
 
 		[OperationContract]

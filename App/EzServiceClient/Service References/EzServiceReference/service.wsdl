@@ -111,6 +111,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_FraudChecker_InputMessage">
+    <wsdl:part name="parameters" element="tns:FraudChecker" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FraudChecker_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FraudCheckerResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LateBy14Days_InputMessage">
     <wsdl:part name="parameters" element="tns:LateBy14Days" />
   </wsdl:message>
@@ -530,6 +536,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerLoadCustomerList_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadCustomerListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomersByID_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomersByID" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomersByID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomersByIDResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerLoadCustomerDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadCustomerDetails" />
@@ -951,12 +963,6 @@
   <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_OutputMessage">
     <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifierResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_FraudChecker_InputMessage">
-    <wsdl:part name="parameters" element="tns:FraudChecker" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_FraudChecker_OutputMessage">
-    <wsdl:part name="parameters" element="tns:FraudCheckerResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -980,6 +986,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="FraudChecker">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LateBy14Days">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LateBy14Days" message="tns:IEzService_LateBy14Days_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LateBy14DaysResponse" message="tns:IEzService_LateBy14Days_OutputMessage" />
@@ -1259,6 +1269,10 @@
     <wsdl:operation name="BrokerLoadCustomerList">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerList" message="tns:IEzService_BrokerLoadCustomerList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse" message="tns:IEzService_BrokerLoadCustomerList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomersByID">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomersByID" message="tns:IEzService_BrokerLoadCustomersByID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomersByIDResponse" message="tns:IEzService_BrokerLoadCustomersByID_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BrokerLoadCustomerDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails" message="tns:IEzService_BrokerLoadCustomerDetails_InputMessage" />
@@ -1540,10 +1554,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse" message="tns:IEzService_FirstOfMonthStatusNotifier_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="FraudChecker">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1599,6 +1609,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="FraudChecker">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LateBy14Days">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LateBy14Days" style="document" />
       <wsdl:input>
@@ -2222,6 +2241,15 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerLoadCustomerList">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomersByID">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomersByID" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2859,32 +2887,23 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="FraudChecker">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

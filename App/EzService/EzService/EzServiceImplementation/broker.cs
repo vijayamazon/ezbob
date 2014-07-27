@@ -128,18 +128,33 @@
 
 		#endregion method BrokerRestorePassword
 
-		#region method BrokerLoadCustomerList
+		#region method BrokerLoadCustomersByID
 
-		public BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
+		public BrokerCustomersActionResult BrokerLoadCustomersByID(int nBrokerID) {
 			BrokerLoadCustomerList oIntstance;
 
-			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, string.Empty, nBrokerID);
 
 			return new BrokerCustomersActionResult {
 				MetaData = oResult,
 				Customers = oIntstance.Customers,
 			};
-		} // BrokerRestorePassword
+		} // BrokerLoadCustomersByID
+
+		#endregion method BrokerLoadCustomersByID
+
+		#region method BrokerLoadCustomerList
+
+		public BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
+			BrokerLoadCustomerList oIntstance;
+
+			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, sContactEmail, 0);
+
+			return new BrokerCustomersActionResult {
+				MetaData = oResult,
+				Customers = oIntstance.Customers,
+			};
+		} // BrokerLoadCustomerList
 
 		#endregion method BrokerLoadCustomerList
 

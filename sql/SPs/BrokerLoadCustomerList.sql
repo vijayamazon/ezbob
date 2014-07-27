@@ -3,14 +3,14 @@ IF OBJECT_ID('BrokerLoadCustomerList') IS NULL
 GO
 
 ALTER PROCEDURE BrokerLoadCustomerList
-@ContactEmail NVARCHAR(255)
+@ContactEmail NVARCHAR(255),
+@BrokerID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @BrokerID INT
-
-	SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail
+	IF @BrokerID IS NULL OR @BrokerID <= 0
+		SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail
 
 	SELECT
 		c.Id AS CustomerID,
