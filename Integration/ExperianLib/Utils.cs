@@ -107,7 +107,7 @@
 							historyRepo.SaveOrUpdate(history);
 							break;
 						case ExperianServiceType.NonLimitedData:
-							CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(0/*should be refactored*/, oPackage.Out.ServiceLog.Customer.Id, oPackage.Out.ServiceLog.Customer.Company.ExperianRefNum);
+							CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(0/*should be refactored*/, oPackage.Out.ServiceLog.Customer.Company.ExperianRefNum);
 							history.Score = notLimitedBusinessData != null ? notLimitedBusinessData.Score : 0;
 							historyRepo.SaveOrUpdate(history);
 							break;

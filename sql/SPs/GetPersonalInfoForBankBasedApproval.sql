@@ -21,7 +21,7 @@ BEGIN
 		@ReferenceSource NVARCHAR(200),
 		@HasNonYodleeMarketplace BIT,
 		@IsOffline BIT,
-		@DateOfBirth DateTime,
+		@DateOfBirth DATETIME,
 		@ResidentialStatus NVARCHAR(250),
 		@ExperianScore INT,
 		@EarliestTransactionDate DATETIME,
@@ -31,7 +31,14 @@ BEGIN
 		@TempAnnualizedValue FLOAT,
 		@TotalAnnualizedValue FLOAT,
 		@NumberOfVatReturns INT,
-		@VatCategoryId INT
+		@VatCategoryId INT,
+		@ExperianLimitedCompanyId BIGINT,
+		@LastLimitedServiceLogId BIGINT,
+		@RefNumber NVARCHAR(50),
+		@IncorporationDate DATETIME, 
+		@CommercialDelphiScore INT,
+		@InTngblAssets DECIMAL(18,6), 
+		@TngblAssets DECIMAL(18,6)
 						
 	SELECT
 		@FirstName = FirstName,
@@ -44,7 +51,9 @@ BEGIN
 	FROM
 		Customer
 	WHERE
-		Id = @CustomerId		
+		Id = @CustomerId
+
+	SELECT @RefNumber = ExperianRefNum FROM Company WHERE Id = @CompanyId
 		
 	SELECT
 		@DefaultCount = COUNT(1)
@@ -160,11 +169,37 @@ BEGIN
 		(postDate >= @StartTimeForVatCheck OR transactionDate >= @StartTimeForVatCheck)
 	GROUP BY MP_YodleeOrderItemBankTransaction.srcElementId	
 
+	SELECT TOP 1
+		@LastLimitedServiceLogId = Id
+	FROM
+		MP_ServiceLog
+	WHERE
+		CompanyRefNum = @RefNumber AND
+		ServiceType = 'E-SeriesLimitedData'
+	ORDER BY
+		Id DESC	
+		
+	SELECT 
+		@ExperianLimitedCompanyId = ExperianLtdID, 
+		@IncorporationDate = IncorporationDate, 
+		@CommercialDelphiScore = CommercialDelphiScore 
+	FROM 
+		ExperianLtd
+	WHERE
+		ServiceLogId = @LastLimitedServiceLogId
+		
+	SELECT 
+		@InTngblAssets = InTngblAssets, 
+		@TngblAssets = TngblAssets 
+	FROM 
+		ExperianLtdDL99 
+	WHERE 
+		ExperianLtdID = @ExperianLimitedCompanyId
+	
 	SELECT
 		(SELECT AuthenticationIndex FROM AmlResults WHERE CustomerId = @CustomerId) AS AmlScore,
 		@FirstName AS FirstName,
 		@LastName AS Surname,
-		(SELECT MP_ExperianDataCache.JsonPacket FROM MP_ExperianDataCache, Company WHERE MP_ExperianDataCache.CompanyRefNumber = Company.CompanyNumber AND Company.Id = @CompanyId) AS CompanyData,
 		CAST((CASE @DefaultCount WHEN 0 THEN 0 ELSE 1 END) AS BIT) AS HasDefaultAccounts,
 		@UnsettledDefaultCount AS UnsettledDefaultCount,
 		CAST((CASE @ReferenceSource WHEN 'liqcen' THEN 1 ELSE 0 END) AS BIT) AS IsCustomerViaBroker,
@@ -175,6 +210,10 @@ BEGIN
 		@ExperianScore AS ExperianScore,
 		ISNULL(@EarliestTransactionDate, @Now) AS EarliestTransactionDate,
 		@TotalAnnualizedValue AS TotalAnnualizedValue,
-		@NumberOfVatReturns AS NumberOfVatReturns
+		@NumberOfVatReturns AS NumberOfVatReturns,
+		@InTngblAssets AS InTngblAssets, 
+		@TngblAssets AS TngblAssets,
+		@IncorporationDate AS IncorporationDate, 
+		@CommercialDelphiScore AS CommercialDelphiScore 
 END
 GO

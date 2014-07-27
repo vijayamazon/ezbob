@@ -631,7 +631,7 @@
 
 			switch (company.TypeOfBusiness.Reduce()) {
 				case TypeOfBusinessReduced.NonLimited:
-					CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(context.UserId, customer.Id, company.ExperianRefNum);
+					CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(context.UserId, company.ExperianRefNum);
 
 					bool isDataExpired = false;
 					int updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
@@ -843,21 +843,6 @@
 				loc.LocationLine6 = customerMainAddress.Postcode;
 			}
 			return loc;
-		}
-
-		private int GetNonLimitedScore(int customerId, string experianRefNumber)
-		{
-			try
-			{
-				CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(context.UserId, customerId, experianRefNumber);
-				
-				return notLimitedBusinessData.Score;
-			}
-			catch (Exception ex)
-			{
-				Log.WarnFormat("Failed to retrieve nonlimited score from db {0}", ex);
-				return 0;
-			}
 		}
 
 		public static DelphiModel GetScorePositionAndColor(double score, int scoreMax, int scoreMin)

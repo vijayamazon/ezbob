@@ -86,7 +86,6 @@
 			if (nBusinessType != TypeOfBusinessReduced.Limited) {
 				CompanyDataForCompanyScoreActionResult oUnlimAr = m_oServiceClient.Instance.GetCompanyDataForCompanyScore(
 					m_oContext.UserId,
-					customer.Id,
 					customer.Company.ExperianRefNum
 				);
 

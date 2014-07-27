@@ -4,13 +4,10 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
-	using System.Xml;
-	using Experian;
 	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.Models.Marketplaces.Yodlee;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils.XmlUtils;
 	using MailStrategies.API;
 	using Misc;
 
@@ -69,7 +66,6 @@
 		private bool isSilent;
 		private string silentTemplateName;
 		private string silentToAddress;
-		private readonly ExperianUtils experianUtils;
 		private DateTime dateOfBirth;
 		private bool isEnabled;
 		private int numOfMonthsToLookForDefaults;
@@ -82,7 +78,6 @@
 			this.db = db;
 			this.log = log;
 			this.customerId = customerId;
-			experianUtils = new ExperianUtils(log);
 			mailer = new StrategiesMailer(db, log);
 		}
 
@@ -116,19 +111,14 @@
 			amlScore = sr["AmlScore"];
 			string firstName = sr["FirstName"];
 			string surame = sr["Surame"];
-			string companyData = sr["CompanyData"];
+
+			tangibleEquity = sr["InTngblAssets"];
+			decimal totalCurrentAssets = sr["TngblAssets"];
+			DateTime? companyIncorporationDate = sr["IncorporationDate"];
+			companySeniorityDays = companyIncorporationDate.HasValue ? (decimal)(DateTime.UtcNow - companyIncorporationDate.Value).TotalDays : 0;
+			businessScore = sr["CommercialDelphiScore"];
 
 			CheckIfIsDirector(firstName, surame);
-
-			if (!string.IsNullOrEmpty(companyData))
-			{
-				decimal totalCurrentAssets;
-				XmlNode companyInfo = Xml.ParseRoot(companyData);
-				experianUtils.DetectTangibleEquity(companyInfo, out tangibleEquity, out totalCurrentAssets);
-				DateTime? companyIncorporationDate = experianUtils.DetectIncorporationDate(companyInfo);
-				companySeniorityDays = companyIncorporationDate.HasValue ? (decimal) (DateTime.UtcNow - companyIncorporationDate.Value).TotalDays : 0;
-				businessScore = experianUtils.DetectBusinessScore(companyInfo);
-			}
 		}
 
 		private void CheckIfIsDirector(string firstName, string surame)
