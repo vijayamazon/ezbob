@@ -197,18 +197,18 @@
 			{
 				Log.Debug("BuildHistoryModel company from mp_servicelog table");
 				var type = (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr());
-				var checkCompanyHistoryModels = (
-					from s in _session.Query<MP_ServiceLog>()
-					where s.Director == null
-					where s.Customer.Id == customer.Id
-					where s.ServiceType == type
-					select isLimited ? GetLimitedHistory(s.InsertDate, s.Id) : new CheckHistoryModel {
-						Date = s.InsertDate.ToUniversalTime(),
-						Id = s.Id,
-						Score = GetNonLimitedScore(customer.Id, customer.Company.ExperianRefNum),
-						Balance = (decimal?)null
-					}
-				).ToList();
+
+				List<CheckHistoryModel> checkCompanyHistoryModels;
+				if (isLimited)
+				{
+					checkCompanyHistoryModels = (
+						                            from s in _session.Query<MP_ServiceLog>()
+						                            where s.Director == null
+						                            where s.Customer.Id == customer.Id
+						                            where s.ServiceType == type
+						                            select GetLimitedHistory(s.InsertDate, s.Id)
+					                            ).ToList();
+				}
 
 				model.CompanyHistory = checkCompanyHistoryModels.Where(h => h != null).OrderByDescending(h => h.Date);
 				foreach (var cModel in checkCompanyHistoryModels)
@@ -869,6 +869,7 @@
 			try
 			{
 				CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(context.UserId, customerId, experianRefNumber);
+				
 				return notLimitedBusinessData.Score;
 			}
 			catch (Exception ex)
