@@ -48,10 +48,11 @@ WHERE
 	(
 		@WithTest = 1 OR c.IsTest = 0
 	)
-	AND
-	c.CreditResult = 'Rejected'
+	AND c.CreditResult = 'Rejected'
+	AND c.DateRejected > DateAdd(MM, -1, GetDate())
 ORDER BY
 	c.Id DESC,
 	t.Id
 END
+
 GO
