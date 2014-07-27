@@ -50,8 +50,7 @@
 				lst = DB.ExecuteEnumerable(
 					"CheckLtdCompanyCache",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CompanyRefNum", m_sCompanyRefNum),
-					new QueryParameter("Now", DateTime.UtcNow)
+					new QueryParameter("CompanyRefNum", m_sCompanyRefNum)
 				);
 				break;
 

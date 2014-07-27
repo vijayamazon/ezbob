@@ -6,7 +6,8 @@ IF OBJECT_ID('LoadFullExperianLtd') IS NULL
 GO
 
 ALTER PROCEDURE LoadFullExperianLtd
-@ServiceLogID BIGINT
+@ServiceLogID BIGINT,
+@InsertDate DATETIME = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -40,12 +41,20 @@ BEGIN
 
 	-- Metadata
 
-	SELECT
-		'Metadata' AS DatumType,
-		InsertDate
-	FROM
-		MP_ServiceLog
-	WHERE
-		Id = @ServiceLogID
+	IF @InsertDate IS NULL
+	BEGIN
+		SELECT
+			'Metadata' AS DatumType,
+			InsertDate
+		FROM
+			MP_ServiceLog
+		WHERE
+			Id = @ServiceLogID
+	END
+	ELSE BEGIN
+		SELECT
+			'Metadata' AS DatumType,
+			@InsertDate AS InsertDate
+	END
 END
 GO

@@ -6,44 +6,33 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE CheckLtdCompanyCache
-@CompanyRefNum NVARCHAR(50),
-@Now DATETIME
+@CompanyRefNum NVARCHAR(50)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	------------------------------------------------------------------------------
 
-	DECLARE @UpdateCompanyDataPeriodDays INT
 	DECLARE @ServiceLogID BIGINT
-	
-	------------------------------------------------------------------------------
-
-	SELECT
-		@UpdateCompanyDataPeriodDays = CONVERT(INT, Value)
-	FROM
-		ConfigurationVariables
-	WHERE
-		Name = 'UpdateCompanyDataPeriodDays'
+	DECLARE @InsertDate DATETIME = NULL
 	
 	------------------------------------------------------------------------------
 
 	SELECT TOP 1
-		@ServiceLogID = Id
+		@ServiceLogID = Id,
+		@InsertDate = InsertDate
 	FROM
 		MP_ServiceLog l
 	WHERE
 		l.CompanyRefNum = @CompanyRefNum
 		AND
 		l.ServiceType = 'E-SeriesLimitedData'
-		AND
-		DATEDIFF(day, l.InsertDate, @Now) BETWEEN 0 AND @UpdateCompanyDataPeriodDays
 	ORDER BY
 		l.InsertDate DESC,
 		l.Id DESC
 	
 	------------------------------------------------------------------------------
 
-	EXECUTE LoadFullExperianLtd @ServiceLogID
+	EXECUTE LoadFullExperianLtd @ServiceLogID, @InsertDate
 END
 GO

@@ -1,6 +1,7 @@
 ﻿namespace ExperianLib.Ebusiness {
 	using System;
 	using System.Collections.Generic;
+	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class LimitedResults : BusinessReturnData {
@@ -15,7 +16,7 @@
 
 		#region constructors
 
-		public LimitedResults(ExperianLtd oExperianLtd, bool bCacheHit) : base(oExperianLtd.ServiceLogID, "<xml />", oExperianLtd.ReceivedTime) {
+		public LimitedResults(ExperianLtd oExperianLtd, bool bCacheHit) : base(oExperianLtd.ServiceLogID, oExperianLtd.ReceivedTime) {
 			Error = string.Empty;
 
 			Owners = new SortedSet<string>();
@@ -104,6 +105,9 @@
 				Error += string.Join("", oErrors);
 
 			IncorporationDate = RawExperianLtd.IncorporationDate;
+
+			IsDataExpired = LastCheckDate.HasValue &&
+				(DateTime.UtcNow - LastCheckDate.Value).TotalDays >= CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 		} // Parse
 
 		#endregion method Parse

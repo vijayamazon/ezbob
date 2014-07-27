@@ -78,7 +78,7 @@
 				CreatePersonalDataModel(model, customer);
 				AppendAmlInfo(model.AmlInfo, customer, customerMainAddress);
 				AppendBavInfo(model.BavInfo, customer, customerMainAddress);
-				BuildEBusinessModel(customer, model, getFromLog, logId);
+				BuildEBusinessModel(customer, model, getFromLog, logId); // TODO: remove
 				BuildSummaryModel(model);
 				BuildHistoryModel(model, customer);
 			}
@@ -622,7 +622,7 @@
 			}
 		}
 
-
+		// TODO: remove
 		private void BuildEBusinessModel(Customer customer, CreditBureauModel model,
 										 bool getFromLog = false, long? logId = null)
 		{
@@ -630,30 +630,12 @@
 			if (company == null)
 				return;
 
-			int updateCompanyDataPeriodDays;
-
 			switch (company.TypeOfBusiness.Reduce()) {
-				case TypeOfBusinessReduced.Limited:
-					var srv = new EBusinessService(m_oDB);
-					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
-					updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
-
-					if (limitedBusinessData != null && limitedBusinessData.LastCheckDate.HasValue &&
-						(DateTime.UtcNow - limitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays)
-					{
-						limitedBusinessData.IsDataExpired = true;
-					}
-					AppendLimitedInfo(model, limitedBusinessData);
-					model.BorrowerType = company.TypeOfBusiness.ToString();
-					model.CompanyName = company.CompanyName;
-					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
-					break;
-
 				case TypeOfBusinessReduced.NonLimited:
 					CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(context.UserId, customer.Id, company.ExperianRefNum);
 
 					bool isDataExpired = false;
-					updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
+					int updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 					if (notLimitedBusinessData != null && notLimitedBusinessData.LastUpdate.HasValue &&
 						(DateTime.UtcNow - notLimitedBusinessData.LastUpdate.Value).TotalDays >= updateCompanyDataPeriodDays)
 					{

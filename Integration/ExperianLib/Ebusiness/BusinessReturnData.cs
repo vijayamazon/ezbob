@@ -46,9 +46,8 @@
 			Error = ex.Message;
 		} // constructor
 
-		protected BusinessReturnData(long nServiceLogID, string outputXml, DateTime lastCheckDate) { 
+		protected BusinessReturnData(long nServiceLogID, DateTime lastCheckDate) { 
 			LastCheckDate = lastCheckDate;
-			OutputXml = outputXml;
 			ServiceLogID = nServiceLogID;
 		} // constructor
 
