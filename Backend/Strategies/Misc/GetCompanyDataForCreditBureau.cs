@@ -7,15 +7,13 @@
 
 	public class GetCompanyDataForCreditBureau : AStrategy
 	{
-		private readonly int customerId;
 		private readonly string refNumber;
 
 		#region constructor
 
-		public GetCompanyDataForCreditBureau(AConnection oDb, ASafeLog oLog, int customerId, string refNumber)
+		public GetCompanyDataForCreditBureau(AConnection oDb, ASafeLog oLog, string refNumber)
 			: base(oDb, oLog)
 		{
-			this.customerId = customerId;
 			this.refNumber = refNumber;
 		}
 
@@ -41,7 +39,6 @@
 			DataTable nonLimitedDataTable = DB.ExecuteReader(
 				"GetNonLimitedDataForCreditBureau",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("RefNumber", refNumber));
 
 			if (nonLimitedDataTable.Rows.Count == 1)

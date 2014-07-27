@@ -3,8 +3,7 @@ IF OBJECT_ID('GetCompanyIsLimited') IS NULL
 GO
 
 ALTER PROCEDURE GetCompanyIsLimited
-	(@CustomerId INT,		
-	 @RefNumber NVARCHAR(50))
+	(@RefNumber NVARCHAR(50))
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -12,8 +11,7 @@ BEGIN
 	(
 		SELECT 1
 		FROM ExperianNonLimitedResults 
-		WHERE CustomerId = @CustomerId AND 
-			RefNumber = @RefNumber AND 
+		WHERE RefNumber = @RefNumber AND 
 			IsActive = 1
 	)
 	BEGIN

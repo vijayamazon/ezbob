@@ -232,7 +232,7 @@
 
 		private NonLimitedResults GetOneNotLimitedBusinessData(string refNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			try {
-				DateTime? created = GetNonLimitedCreationTime(refNumber, customerId);
+				DateTime? created = GetNonLimitedCreationTime(refNumber);
 
 				if (forceCheck || (!checkInCacheOnly && CacheExpired(created))) {
 					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", refNumber);
@@ -241,15 +241,15 @@
 
 					MP_ServiceLog serviceLogEntry = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
 
-					nonLimitedParser.ParseAndStore(customerId, newResponse, refNumber, serviceLogEntry.Id);
+					nonLimitedParser.ParseAndStore(newResponse, refNumber, serviceLogEntry.Id);
 
-					return BuildResponseFromDb(customerId, refNumber);
+					return BuildResponseFromDb(refNumber);
 				} // if
 
 				if (created == null)
 					return null;
 
-				NonLimitedResults res = BuildResponseFromDb(customerId, refNumber);
+				NonLimitedResults res = BuildResponseFromDb(refNumber);
 				res.CacheHit = true;
 				return res;
 			}
@@ -264,13 +264,12 @@
 			} // try
 		}
 
-		private DateTime? GetNonLimitedCreationTime(string refNumber, int customerId) {
+		private DateTime? GetNonLimitedCreationTime(string refNumber) {
 			DateTime? created = null;
 
 			SafeReader sr = m_oDB.GetFirst(
 				"GetNonLimitedCompanyCreationTime",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("RefNumber", refNumber)
 			);
 
@@ -280,11 +279,10 @@
 			return created;
 		}
 
-		private NonLimitedResults BuildResponseFromDb(int customerId, string refNumber) {
+		private NonLimitedResults BuildResponseFromDb(string refNumber) {
 			SafeReader sr = m_oDB.GetFirst(
 				"GetNonLimitedCompanyBasicDetails",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("RefNumber", refNumber)
 			);
 

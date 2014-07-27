@@ -3,8 +3,7 @@ IF OBJECT_ID('GetNonLimitedCompanyScoreHistory') IS NULL
 GO
 
 ALTER PROCEDURE GetNonLimitedCompanyScoreHistory
-	(@CustomerId INT,		
-	 @RefNumber NVARCHAR(50))
+	(@RefNumber NVARCHAR(50))
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -16,7 +15,6 @@ BEGIN
 		ExperianNonLimitedResults,
 		ExperianNonLimitedResultScoreHistory
 	WHERE 
-		CustomerId = @CustomerId AND 
 		RefNumber = @RefNumber AND 
 		IsActive = 1 AND
 		ExperianNonLimitedResults.Id = ExperianNonLimitedResultScoreHistory.ExperianNonLimitedResultId

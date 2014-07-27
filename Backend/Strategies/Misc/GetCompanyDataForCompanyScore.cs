@@ -8,15 +8,13 @@
 
 	public class GetCompanyDataForCompanyScore : AStrategy
 	{
-		private readonly int customerId;
 		private readonly string refNumber;
 
 		#region constructor
 
-		public GetCompanyDataForCompanyScore(AConnection oDb, ASafeLog oLog, int customerId, string refNumber)
+		public GetCompanyDataForCompanyScore(AConnection oDb, ASafeLog oLog, string refNumber)
 			: base(oDb, oLog)
 		{
-			this.customerId = customerId;
 			this.refNumber = refNumber;
 		} // constructor
 
@@ -40,7 +38,6 @@
 			DataTable dt = DB.ExecuteReader(
 				"GetCompanyIsLimited",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("RefNumber", refNumber));
 
 			if (dt.Rows.Count == 1)
@@ -54,7 +51,6 @@
 				DataTable nonLimitedDataTable = DB.ExecuteReader(
 					"GetNonLimitedDataForCompanyScore",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId),
 					new QueryParameter("RefNumber", refNumber));
 
 				if (nonLimitedDataTable.Rows.Count == 1)
@@ -291,7 +287,6 @@
 						DataTable scoreHistoryDataTable = DB.ExecuteReader(
 							"GetNonLimitedCompanyScoreHistory",
 							CommandSpecies.StoredProcedure,
-							new QueryParameter("CustomerId", customerId),
 							new QueryParameter("RefNumber", refNumber));
 
 						if (scoreHistoryDataTable.Rows.Count > 0)
@@ -304,6 +299,7 @@
 								var scoreAtDate = new ScoreAtDate();
 								scoreAtDate.Score = scoreHistorySafeReader["RiskScore"];
 								scoreAtDate.Date = scoreHistorySafeReader["Date"];
+
 
 								Data.ScoreHistory.Add(scoreAtDate);
 							}

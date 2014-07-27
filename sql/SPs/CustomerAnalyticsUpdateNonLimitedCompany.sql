@@ -35,7 +35,6 @@ BEGIN
 	FROM
 		ExperianNonLimitedResults
 	WHERE
-		CustomerId = @CustomerId AND
 		RefNumber = @RefNumber AND
 		IsActive = 1
 	

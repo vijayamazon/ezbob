@@ -38,7 +38,7 @@
 						response = xmlSafeReader["ResponseData"];
 					}
 
-					parser.ParseAndStore(customerId, response, refNumber, serviceLogId);
+					parser.ParseAndStore(response, refNumber, serviceLogId);
 				}
 				catch (Exception e)
 				{

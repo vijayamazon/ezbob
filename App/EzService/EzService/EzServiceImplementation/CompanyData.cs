@@ -2,10 +2,10 @@
 	using EzBob.Backend.Strategies.Misc;
 
 	partial class EzServiceImplementation {
-		public CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, int customerId, string refNumber)
+		public CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber)
 		{
 			GetCompanyDataForCompanyScore strategyInstance;
-			var result = ExecuteSync(out strategyInstance, null, underwriterId, customerId, refNumber);
+			var result = ExecuteSync(out strategyInstance, null, underwriterId, refNumber);
 
 			return new CompanyDataForCompanyScoreActionResult
 			{
@@ -14,10 +14,10 @@
 			};
 		}
 
-		public CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, int customerId, string refNumber)
+		public CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber)
 		{
 			GetCompanyDataForCreditBureau strategyInstance;
-			var result = ExecuteSync(out strategyInstance, null, underwriterId, customerId, refNumber);
+			var result = ExecuteSync(out strategyInstance, null, underwriterId, refNumber);
 
 			return new CompanyDataForCreditBureauActionResult
 			{

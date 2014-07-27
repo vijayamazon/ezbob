@@ -223,8 +223,7 @@
 		{
 			DataTable nonLimitedDataTable = oDB.ExecuteReader("GetNonLimitedDataForLoanDateScoreReport",
 			                 CommandSpecies.StoredProcedure,
-							 new QueryParameter("CustomerId", CustomerID),
-			                 new QueryParameter("RefNumber", m_sCompanyRefNum));
+							 new QueryParameter("RefNumber", m_sCompanyRefNum));
 
 
 			if (nonLimitedDataTable.Rows.Count == 1)

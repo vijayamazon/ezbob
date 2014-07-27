@@ -198,24 +198,22 @@
 				Log.Debug("BuildHistoryModel company from mp_servicelog table");
 				var type = (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr());
 
-				List<CheckHistoryModel> checkCompanyHistoryModels;
 				if (isLimited)
 				{
-					checkCompanyHistoryModels = (
-						                            from s in _session.Query<MP_ServiceLog>()
-						                            where s.Director == null
-						                            where s.Customer.Id == customer.Id
-						                            where s.ServiceType == type
-						                            select GetLimitedHistory(s.InsertDate, s.Id)
-					                            ).ToList();
-				}
+					List<CheckHistoryModel> checkCompanyHistoryModels = (
+						                                                    from s in _session.Query<MP_ServiceLog>()
+						                                                    where s.Director == null
+						                                                    where s.Customer.Id == customer.Id
+						                                                    where s.ServiceType == type
+						                                                    select GetLimitedHistory(s.InsertDate, s.Id)
+					                                                    ).ToList();
 
-				model.CompanyHistory = checkCompanyHistoryModels.Where(h => h != null).OrderByDescending(h => h.Date);
-				foreach (var cModel in checkCompanyHistoryModels)
-				{
-					if (cModel != null)
+					model.CompanyHistory = checkCompanyHistoryModels.Where(h => h != null).OrderByDescending(h => h.Date);
+					foreach (var cModel in checkCompanyHistoryModels)
 					{
-						_experianHistoryRepository.Save(new MP_ExperianHistory
+						if (cModel != null)
+						{
+							_experianHistoryRepository.Save(new MP_ExperianHistory
 							{
 								Customer = customer,
 								ServiceLogId = cModel.Id,
@@ -223,6 +221,7 @@
 								Date = cModel.Date,
 								Score = cModel.Score,
 							});
+						}
 					}
 				}
 			}

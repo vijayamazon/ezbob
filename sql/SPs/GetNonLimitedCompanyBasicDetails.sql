@@ -3,8 +3,7 @@ IF OBJECT_ID('GetNonLimitedCompanyBasicDetails') IS NULL
 GO
 
 ALTER PROCEDURE GetNonLimitedCompanyBasicDetails
-	(@CustomerId INT,		
-	 @RefNumber NVARCHAR(50))
+	(@RefNumber NVARCHAR(50))
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -24,7 +23,6 @@ BEGIN
 	FROM 
 		ExperianNonLimitedResults 
 	WHERE 
-		CustomerId = @CustomerId AND 
 		RefNumber = @RefNumber AND 
 		IsActive = 1
 END

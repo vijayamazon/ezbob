@@ -3,8 +3,7 @@ IF OBJECT_ID('InsertNonLimitedResult') IS NULL
 GO
 
 ALTER PROCEDURE InsertNonLimitedResult
-	(@CustomerId INT,
-	 @RefNumber NVARCHAR(50),
+	(@RefNumber NVARCHAR(50),
 	 @ServiceLogId INT,
 	 @Created DATETIME,		
 	 @BusinessName NVARCHAR(75),
@@ -72,11 +71,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	UPDATE ExperianNonLimitedResults SET IsActive = 0 WHERE CustomerId = @CustomerId AND RefNumber = @RefNumber
+	UPDATE ExperianNonLimitedResults SET IsActive = 0 WHERE RefNumber = @RefNumber
 	
 	INSERT INTO ExperianNonLimitedResults
-		(CustomerId, 
-		 RefNumber,
+		(RefNumber,
 		 ServiceLogId,
 		 Created,		
 		 BusinessName,
@@ -142,8 +140,7 @@ BEGIN
 		 Errors,
 		 IsActive)
 	VALUES
-		(@CustomerId,
-		 @RefNumber,
+		(@RefNumber,
 		 @ServiceLogId,
 		 @Created,		
 		 @BusinessName,

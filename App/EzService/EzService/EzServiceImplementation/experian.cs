@@ -40,13 +40,14 @@
 			};
 		}
 
-		public DateTimeActionResult GetExperianCompanyCacheDate(int customerId) {
+		public DateTimeActionResult GetExperianCompanyCacheDate(string refNumber)
+		{
 			DateTime cacheDate = DateTime.UtcNow;
 			try {
 				SafeReader sr = DB.GetFirst(
 					"GetExperianCompanyCacheDate",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId)
+					new QueryParameter("RefNumber", refNumber)
 				);
 
 				cacheDate = sr["LastUpdateDate"];

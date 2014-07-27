@@ -165,7 +165,9 @@
 		[HttpPost]
 		public JsonResult IsCompanyCacheRelevant(int customerId)
 		{
-			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianCompanyCacheDate(customerId);
+			var customer = _customers.Get(customerId);
+			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianCompanyCacheDate(customer.Company.ExperianRefNum);
+
 			DateTime cacheDate = result.Value;
 			int cacheValidForDays = ConfigManager.CurrentValues.Instance.UpdateCompanyDataPeriodDays;
 			string isRelevant = (DateTime.UtcNow - cacheDate).TotalDays > cacheValidForDays ? "False" : "True";

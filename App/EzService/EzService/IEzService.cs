@@ -261,7 +261,7 @@
 		DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId);
 
 		[OperationContract]
-		DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
+		DateTimeActionResult GetExperianCompanyCacheDate(string refNumber);
 
 		[OperationContract]
 		NullableDateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
@@ -521,10 +521,10 @@
 		ActionMetaData CalculateNewMedals();
 
 		[OperationContract]
-		CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, int customerId, string refNumber);
+		CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber);
 
 		[OperationContract]
-		CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, int customerId, string refNumber);
+		CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
 
 		[OperationContract]
 		StringActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);

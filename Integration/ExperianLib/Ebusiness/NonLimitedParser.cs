@@ -126,7 +126,7 @@
 			scoreHistory = new List<Tuple<DateTime?, int?>>();
 		}
 
-		public void ParseAndStore(int customerId, string xml, string refNumber, long serviceLogId)
+		public void ParseAndStore(string xml, string refNumber, long serviceLogId)
 		{
 			Init();
 			xmlDoc = new XmlDocument();
@@ -145,15 +145,14 @@
 			ParseDN73();
 			ParseErrors();
 
-			SaveToDb(customerId, refNumber, serviceLogId);
+			SaveToDb(refNumber, serviceLogId);
 		}
 
-		private void SaveToDb(int customerId, string refNumber, long serviceLogId)
+		private void SaveToDb(string refNumber, long serviceLogId)
 		{
 			DataTable dt = db.ExecuteReader(
 				"InsertNonLimitedResult",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("RefNumber", refNumber),
 				new QueryParameter("ServiceLogId", serviceLogId),
 				new QueryParameter("Created", DateTime.UtcNow),
