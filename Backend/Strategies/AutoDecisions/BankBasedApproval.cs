@@ -118,15 +118,40 @@
 			string surame = sr["Surame"];
 			string companyData = sr["CompanyData"];
 
+			CheckIfIsDirector(firstName, surame);
+
 			if (!string.IsNullOrEmpty(companyData))
 			{
 				decimal totalCurrentAssets;
 				XmlNode companyInfo = Xml.ParseRoot(companyData);
-				isDirectorInExperian = experianUtils.IsDirector(companyInfo, firstName, surame);
 				experianUtils.DetectTangibleEquity(companyInfo, out tangibleEquity, out totalCurrentAssets);
 				DateTime? companyIncorporationDate = experianUtils.DetectIncorporationDate(companyInfo);
 				companySeniorityDays = companyIncorporationDate.HasValue ? (decimal) (DateTime.UtcNow - companyIncorporationDate.Value).TotalDays : 0;
 				businessScore = experianUtils.DetectBusinessScore(companyInfo);
+			}
+		}
+
+		private void CheckIfIsDirector(string firstName, string surame)
+		{
+			DataTable directorsDataTable = db.ExecuteReader("GetExperianDirectorsNamesForCustomer",
+			                                                CommandSpecies.StoredProcedure,
+			                                                new QueryParameter("CustomerId", customerId));
+
+			string comparableFirstName = firstName.Trim().ToLower();
+			string comparableLastName = surame.Trim().ToLower();
+			isDirectorInExperian = false;
+
+			foreach (DataRow row in directorsDataTable.Rows)
+			{
+				var directorsSafeReader = new SafeReader(row);
+				string directorFirstName = directorsSafeReader["FirstName"];
+				string directorLastName = directorsSafeReader["LastName"];
+				if (directorFirstName.Trim().ToLower() == comparableFirstName &&
+				    directorLastName.Trim().ToLower() == comparableLastName)
+				{
+					isDirectorInExperian = true;
+					break;
+				}
 			}
 		}
 
