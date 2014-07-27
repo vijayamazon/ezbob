@@ -1,4 +1,5 @@
-﻿namespace EzBob.Backend.Strategies.Experian {
+﻿namespace EzBob.Backend.Strategies.Experian 
+{
 	using System;
 	using System.Linq;
 	using ExperianLib.Ebusiness;
@@ -6,175 +7,163 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class ExperianCompanyCheck : AStrategy {
-		#region public
+	public class ExperianCompanyCheck : AStrategy 
+	{
+		private readonly int customerId;
+		private bool foundCompany;
+		private readonly bool forceCheck;
+		private bool isLimited;
+		private string experianRefNum;
 
-		#region constructor
+		public ExperianCompanyCheck(int customerId, bool forceCheck, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) 
+		{
+			this.customerId = customerId;
+			this.forceCheck = forceCheck;
+			foundCompany = false;
 
-		public ExperianCompanyCheck(int nCustomerID, bool bForceCheck, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_nCustomerID = nCustomerID;
-			m_bForceCheck = bForceCheck;
-			m_bFoundCompany = false;
-
-			oDB.ForEachRowSafe(
+			oDb.ForEachRowSafe(
 				(sr, bRowsetStart) => {
-					m_bFoundCompany = true;
+					foundCompany = true;
 
 					string companyType = sr["CompanyType"];
-					m_sExperianRefNum = sr["ExperianRefNum"];
+					experianRefNum = sr["ExperianRefNum"];
 
-					m_bIsLimited = companyType == "Limited" || companyType == "LLP";
+					isLimited = companyType == "Limited" || companyType == "LLP";
 
 					return ActionResult.SkipAll;
 				},
 				"GetCompanyData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", m_nCustomerID)
+				new QueryParameter("CustomerId", this.customerId)
 			);
 
-			if (!m_bFoundCompany)
-				oLog.Info("Can't find company data for customer {0} (is the customer an entrepreneur?).", m_nCustomerID);
-		} // constructor
+			if (!foundCompany)
+				oLog.Info("Can't find company data for customer {0} (is the customer an entrepreneur?).", this.customerId);
+		}
 
-		#endregion constructor
-
-		#region property Name
-
-		public override string Name {
+		public override string Name
+		{
 			get { return "Experian company check"; }
-		} // Name
-
-		#endregion property Name
+		}
 
 		public decimal MaxScore { get; private set; }
 		public decimal Score { get; private set; }
 
-		#region method Execute
+		public override void Execute() 
+		{
+			Log.Info("Starting company check with parameters: IsLimited={0} ExperianRefNum={1}", isLimited ? "yes" : "no", experianRefNum);
 
-		public override void Execute() {
-			Log.Info("Starting company check with parameters: IsLimited={0} ExperianRefNum={1}", m_bIsLimited ? "yes" : "no", m_sExperianRefNum);
-
-			if (!m_bFoundCompany || (m_sExperianRefNum == "NotFound")) {
+			if (!foundCompany || (experianRefNum == "NotFound")) 
+			{
 				Log.Info("Can't execute Experian company check for customer with no company");
 				return;
-			} // if
+			}
 
 			string experianError = null;
 			BusinessReturnData oExperianData = null;
 
-			if (string.IsNullOrEmpty(m_sExperianRefNum))
+			if (string.IsNullOrEmpty(experianRefNum))
+			{
 				experianError = "RefNumber is empty";
-			else {
+			}
+			else
+			{
 				Log.Info("ExperianCompanyCheck strategy will make sure we have experian data");
 
 				oExperianData = GetBusinessDataFromExperian();
 
-				Log.Info("Fetched BureauScore {0} & MaxBureauScore {1} for customer {2}.", oExperianData.BureauScore, oExperianData.MaxBureauScore, m_nCustomerID);
+				Log.Info("Fetched BureauScore {0} & MaxBureauScore {1} for customer {2}.", oExperianData.BureauScore,
+				         oExperianData.MaxBureauScore, customerId);
 
-				if (!oExperianData.IsError) {
+				if (!oExperianData.IsError)
+				{
 					MaxScore = oExperianData.MaxBureauScore;
 					Score = oExperianData.BureauScore;
 					Log.Info("Filled Score & MaxScore of the strategy");
 				}
 				else
+				{
 					experianError = oExperianData.Error;
-			} // if
+				}
+			}
+
+			if (!string.IsNullOrEmpty(experianError))
+			{
+				Log.Error("Error in experian company check. Customer:{0} RefNumber:{1} Errors: {2}", customerId, experianRefNum, experianError);
+			}
 
 			Log.Info("Filling Analytics with Score: {0} & max score: {1}", Score, MaxScore);
 
-			DB.ExecuteNonQuery(
-				"UpdateExperianBusiness",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CompanyRefNumber", m_sExperianRefNum),
-				new QueryParameter("ExperianError", experianError),
-				new QueryParameter("ExperianScore", Score),
-				new QueryParameter("ExperianMaxScore", MaxScore),
-				new QueryParameter("CustomerId", m_nCustomerID)
-			);
-
-			if (oExperianData == null) {
+			if (oExperianData == null) 
+			{
 				Log.Debug("Premature completion: no data received from Experian.");
 				return;
-			} // if
+			}
 
-			if (oExperianData.IsError) {
+			if (oExperianData.IsError)
+			{
 				Log.Debug("Premature completion because of error: {0}.", oExperianData.Error);
 				return;
-			} // if
+			}
 
 			if (!oExperianData.CacheHit)
-				new UpdateExperianDirectors(m_nCustomerID, oExperianData.ServiceLogID, oExperianData.IsLimited ? string.Empty : oExperianData.OutputXml, oExperianData.IsLimited, DB, Log).Execute();
+			{
+				new UpdateExperianDirectors(customerId, oExperianData.ServiceLogID,
+				                            oExperianData.IsLimited ? string.Empty : oExperianData.OutputXml,
+				                            oExperianData.IsLimited, DB, Log).Execute();
+			}
 
-			if (oExperianData.CacheHit) {
+			if (oExperianData.CacheHit) 
+			{
 				// This check is required to allow multiple customers have the same company
 				// While the cache works with RefNumber the analytics table works with customer
 				if (IsCustomerAlreadyInAnalytics())
+				{
 					return;
-			} // if
+				}
+			}
 
 			if (oExperianData.IsLimited)
-				UpdateAnalyticsForLimited(MaxScore, (LimitedResults)oExperianData);
-			else {
+			{
+				UpdateAnalyticsForLimited(MaxScore, (LimitedResults) oExperianData);
+			}
+			else
+			{
 				DB.ExecuteNonQuery(
 					"CustomerAnalyticsUpdateNonLimitedCompany",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", m_nCustomerID),
-					new QueryParameter("RefNumber", m_sExperianRefNum),
+					new QueryParameter("CustomerId", customerId),
+					new QueryParameter("RefNumber", experianRefNum),
 					new QueryParameter("MaxScore", MaxScore)
-				);
+					);
 			}
-		} // Execute
-
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
-		#region method IsCustomerAlreadyInAnalytics
-
-		private bool IsCustomerAlreadyInAnalytics() {
+		}
+		
+		private bool IsCustomerAlreadyInAnalytics() 
+		{
 			return DB.ExecuteScalar<bool>(
 				"CustomerHasCompanyAnalytics",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", m_nCustomerID)
+				new QueryParameter("CustomerId", customerId)
 			);
-		} // IsCustomerAlreadyInAnalytics
+		}
 
-		#endregion method IsCustomerAlreadyInAnalytics
-
-		#region method GetBusinessDataFromExperian
-		// ReSharper disable RedundantCast
-
-		private BusinessReturnData GetBusinessDataFromExperian() {
+		private BusinessReturnData GetBusinessDataFromExperian() 
+		{
 			var service = new EBusinessService(DB);
-
-			return m_bIsLimited
-				? (BusinessReturnData)service.GetLimitedBusinessData(m_sExperianRefNum, m_nCustomerID, false, m_bForceCheck)
-				: (BusinessReturnData)service.GetNotLimitedBusinessData(m_sExperianRefNum, m_nCustomerID, false, m_bForceCheck);
-		} // GetBusinessDataFromExperian
-
+			
+		// ReSharper disable RedundantCast
+			return isLimited
+				? (BusinessReturnData)service.GetLimitedBusinessData(experianRefNum, customerId, false, forceCheck)
+				: (BusinessReturnData)service.GetNotLimitedBusinessData(experianRefNum, customerId, false, forceCheck);
 		// ReSharper restore RedundantCast
-		#endregion method GetBusinessDataFromExperian
+		}
 
-		#region fields
-
-		private readonly int m_nCustomerID;
-		private bool m_bFoundCompany;
-		private readonly bool m_bForceCheck;
-		private bool m_bIsLimited;
-		private string m_sExperianRefNum;
-
-		#endregion fields
-
-		#region update analytics
-
-		#region method UpdateAnalyticsForLimited
-
-		private void UpdateAnalyticsForLimited(decimal nMaxScore, LimitedResults oExperianData) {
+		private void UpdateAnalyticsForLimited(decimal nMaxScore, LimitedResults oExperianData) 
+		{
 			ExperianLtd oExperianLtd = oExperianData.RawExperianLtd;
 
-			Log.Debug("Updating limited customer analytics for customer {0} and company '{1}'...", m_nCustomerID, oExperianLtd.RegisteredNumber);
+			Log.Debug("Updating limited customer analytics for customer {0} and company '{1}'...", customerId, oExperianLtd.RegisteredNumber);
 
 			decimal tangibleEquity = 0;
 			decimal adjustedProfit = 0;
@@ -185,7 +174,8 @@
 			Array.Sort(ary, (a, b) => b.Date.Value.CompareTo(a.Date.Value));
 			// ReSharper restore PossibleInvalidOperationException
 
-			if (ary.Length > 0) {
+			if (ary.Length > 0) 
+			{
 				decimal totalShareFund = ary[0].TotalShareFund ?? 0;
 				decimal inTngblAssets = ary[0].InTngblAssets ?? 0;
 				decimal debtorsDirLoans = ary[0].DebtorsDirLoans ?? 0;
@@ -194,21 +184,22 @@
 
 				tangibleEquity = totalShareFund - inTngblAssets - debtorsDirLoans + credDirLoans + onClDirLoans;
 
-				if (ary.Length > 1) {
+				if (ary.Length > 1) 
+				{
 					decimal retainedEarnings = ary[0].RetainedEarnings ?? 0;
 					decimal retainedEarningsPrev = ary[1].RetainedEarnings ?? 0;
 					decimal fixedAssetsPrev = ary[1].TngblAssets ?? 0;
 
 					adjustedProfit = retainedEarnings - retainedEarningsPrev + fixedAssetsPrev / 5;
-				} // if
-			} // if
+				}
+			}
 
 			Log.Info("Inserting to analytics Experian Score: {0} MaxScore: {1}.", oExperianLtd.GetCommercialDelphiScore(), nMaxScore);
 
 			DB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateCompany",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", m_nCustomerID),
+				new QueryParameter("CustomerID", customerId),
 				new QueryParameter("Score", oExperianLtd.GetCommercialDelphiScore()),
 				new QueryParameter("MaxScore", (int)nMaxScore),
 				new QueryParameter("SuggestedAmount", oExperianLtd.GetCommercialDelphiCreditLimit()),
@@ -225,13 +216,7 @@
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
 			);
 
-			Log.Debug("Updating limited customer analytics for customer {0} and company '{1}' complete.", m_nCustomerID, oExperianLtd.RegisteredNumber);
-		} // UpdateAnalyticsForLimited
-
-		#endregion method UpdateAnalyticsForLimited
-
-		#endregion update analytics
-
-		#endregion private
-	} // class ExperianCompanyCheck
-} // namespace
+			Log.Debug("Updating limited customer analytics for customer {0} and company '{1}' complete.", customerId, oExperianLtd.RegisteredNumber);
+		}
+	}
+}
