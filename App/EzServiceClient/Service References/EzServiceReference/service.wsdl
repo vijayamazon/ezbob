@@ -111,6 +111,18 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySync1" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync1_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySync1Response" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GenerateMobileCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:GenerateMobileCode" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GenerateMobileCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GenerateMobileCodeResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_ValidateMobileCode_InputMessage">
     <wsdl:part name="parameters" element="tns:ValidateMobileCode" />
   </wsdl:message>
@@ -549,6 +561,12 @@
   <wsdl:message name="IEzService_BrokerLoadCustomerList_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadCustomerListResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomersByID_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomersByID" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomersByID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomersByIDResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_BrokerLoadCustomerDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadCustomerDetails" />
   </wsdl:message>
@@ -632,6 +650,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerLoadOwnProperties_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadOwnPropertiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadPropertiesByID_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadPropertiesByID" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadPropertiesByID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadPropertiesByIDResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerUpdatePassword_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerUpdatePassword" />
@@ -963,18 +987,6 @@
   <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategySync1" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategySync1_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategySync1Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GenerateMobileCode_InputMessage">
-    <wsdl:part name="parameters" element="tns:GenerateMobileCode" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GenerateMobileCode_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GenerateMobileCodeResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -998,6 +1010,14 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="MainStrategySync1">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerateMobileCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCode" message="tns:IEzService_GenerateMobileCode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCodeResponse" message="tns:IEzService_GenerateMobileCode_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ValidateMobileCode">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
@@ -1290,6 +1310,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerList" message="tns:IEzService_BrokerLoadCustomerList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse" message="tns:IEzService_BrokerLoadCustomerList_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomersByID">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomersByID" message="tns:IEzService_BrokerLoadCustomersByID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomersByIDResponse" message="tns:IEzService_BrokerLoadCustomersByID_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="BrokerLoadCustomerDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails" message="tns:IEzService_BrokerLoadCustomerDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse" message="tns:IEzService_BrokerLoadCustomerDetails_OutputMessage" />
@@ -1345,6 +1369,10 @@
     <wsdl:operation name="BrokerLoadOwnProperties">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadOwnProperties" message="tns:IEzService_BrokerLoadOwnProperties_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadOwnPropertiesResponse" message="tns:IEzService_BrokerLoadOwnProperties_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadPropertiesByID">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadPropertiesByID" message="tns:IEzService_BrokerLoadPropertiesByID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadPropertiesByIDResponse" message="tns:IEzService_BrokerLoadPropertiesByID_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BrokerUpdatePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerUpdatePassword" message="tns:IEzService_BrokerUpdatePassword_InputMessage" />
@@ -1566,14 +1594,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="MainStrategySync1">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GenerateMobileCode">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCode" message="tns:IEzService_GenerateMobileCode_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCodeResponse" message="tns:IEzService_GenerateMobileCode_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1629,6 +1649,24 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="MainStrategySync1">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerateMobileCode">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GenerateMobileCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ValidateMobileCode">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
       <wsdl:input>
@@ -2286,6 +2324,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomersByID">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomersByID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="BrokerLoadCustomerDetails">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetails" style="document" />
       <wsdl:input>
@@ -2405,6 +2452,15 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerLoadOwnProperties">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadOwnProperties" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadPropertiesByID">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadPropertiesByID" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2900,24 +2956,6 @@
     </wsdl:operation>
     <wsdl:operation name="MainStrategy2">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategySync1">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GenerateMobileCode">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GenerateMobileCode" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

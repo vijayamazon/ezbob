@@ -2257,6 +2257,18 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult GenerateMobileCode(string phone);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> GenerateMobileCodeAsync(string phone);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code);
         
@@ -2588,16 +2600,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateNewMedalsAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse")]
-        ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, int customerId, string refNumber);
+        ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, int customerId, string refNumber);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, string refNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
-        ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, int customerId, string refNumber);
+        ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, int customerId, string refNumber);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors", ReplyAction="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
@@ -2695,6 +2707,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerList", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult> BrokerLoadCustomerListAsync(string sContactEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomersByID", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomersByIDResponse")]
+        ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomersByID(int nBrokerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomersByID", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomersByIDResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult> BrokerLoadCustomersByIDAsync(int nBrokerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse")]
         ServiceClientProxy.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail);
         
@@ -2778,6 +2796,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadOwnProperties", ReplyAction="http://tempuri.org/IEzService/BrokerLoadOwnPropertiesResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadOwnPropertiesAsync(string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadPropertiesByID", ReplyAction="http://tempuri.org/IEzService/BrokerLoadPropertiesByIDResponse")]
+        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLoadPropertiesByID(int nBrokerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadPropertiesByID", ReplyAction="http://tempuri.org/IEzService/BrokerLoadPropertiesByIDResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadPropertiesByIDAsync(int nBrokerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
@@ -3014,10 +3038,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> GetExperianConsumerCacheDateAsync(int customerId, int directorId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
-        ServiceClientProxy.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
+        ServiceClientProxy.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(string refNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(int customerId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(string refNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanySeniority", ReplyAction="http://tempuri.org/IEzService/GetCompanySeniorityResponse")]
         ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
@@ -3108,18 +3132,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
-        ServiceClientProxy.EzServiceReference.BoolActionResult GenerateMobileCode(string phone);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> GenerateMobileCodeAsync(string phone);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3147,6 +3159,22 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategySync1Async(underwriterId, customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BoolActionResult GenerateMobileCode(string phone) {
+            return base.Channel.GenerateMobileCode(phone);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> GenerateMobileCodeAsync(string phone) {
+            return base.Channel.GenerateMobileCodeAsync(phone);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code) {
@@ -3589,20 +3617,20 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CalculateNewMedalsAsync();
         }
         
-        public ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, int customerId, string refNumber) {
-            return base.Channel.GetCompanyDataForCompanyScore(underwriterId, customerId, refNumber);
+        public ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber) {
+            return base.Channel.GetCompanyDataForCompanyScore(underwriterId, refNumber);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, int customerId, string refNumber) {
-            return base.Channel.GetCompanyDataForCompanyScoreAsync(underwriterId, customerId, refNumber);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, string refNumber) {
+            return base.Channel.GetCompanyDataForCompanyScoreAsync(underwriterId, refNumber);
         }
         
-        public ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, int customerId, string refNumber) {
-            return base.Channel.GetCompanyDataForCreditBureau(underwriterId, customerId, refNumber);
+        public ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
+            return base.Channel.GetCompanyDataForCreditBureau(underwriterId, refNumber);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, int customerId, string refNumber) {
-            return base.Channel.GetCompanyDataForCreditBureauAsync(underwriterId, customerId, refNumber);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber) {
+            return base.Channel.GetCompanyDataForCreditBureauAsync(underwriterId, refNumber);
         }
         
         public ServiceClientProxy.EzServiceReference.StringActionResult GetUnfetchedDataErrors(int underwriterId, int customerId) {
@@ -3733,6 +3761,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerLoadCustomerListAsync(sContactEmail);
         }
         
+        public ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomersByID(int nBrokerID) {
+            return base.Channel.BrokerLoadCustomersByID(nBrokerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult> BrokerLoadCustomersByIDAsync(int nBrokerID) {
+            return base.Channel.BrokerLoadCustomersByIDAsync(nBrokerID);
+        }
+        
         public ServiceClientProxy.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail) {
             return base.Channel.BrokerLoadCustomerDetails(sCustomerRefNum, sContactEmail);
         }
@@ -3843,6 +3879,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadOwnPropertiesAsync(string sContactEmail) {
             return base.Channel.BrokerLoadOwnPropertiesAsync(sContactEmail);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLoadPropertiesByID(int nBrokerID) {
+            return base.Channel.BrokerLoadPropertiesByID(nBrokerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadPropertiesByIDAsync(int nBrokerID) {
+            return base.Channel.BrokerLoadPropertiesByIDAsync(nBrokerID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword) {
@@ -4157,12 +4201,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetExperianConsumerCacheDateAsync(customerId, directorId);
         }
         
-        public ServiceClientProxy.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId) {
-            return base.Channel.GetExperianCompanyCacheDate(customerId);
+        public ServiceClientProxy.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(string refNumber) {
+            return base.Channel.GetExperianCompanyCacheDate(refNumber);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(int customerId) {
-            return base.Channel.GetExperianCompanyCacheDateAsync(customerId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(string refNumber) {
+            return base.Channel.GetExperianCompanyCacheDateAsync(refNumber);
         }
         
         public ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, int underwriterId) {
@@ -4283,22 +4327,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
             return base.Channel.MainStrategy2Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategySync1Async(underwriterId, customerId, newCreditLine, avoidAutoDescison);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.BoolActionResult GenerateMobileCode(string phone) {
-            return base.Channel.GenerateMobileCode(phone);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> GenerateMobileCodeAsync(string phone) {
-            return base.Channel.GenerateMobileCodeAsync(phone);
         }
     }
 }
