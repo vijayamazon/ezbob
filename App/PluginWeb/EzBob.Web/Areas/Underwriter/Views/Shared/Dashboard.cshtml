@@ -67,11 +67,23 @@
                         </div>
                         <div style="position: relative; width: 170px; margin: 0 auto;">
                             <canvas id="assets-donut" width="170" height="170"></canvas>
-                            <div class="assets-image">
-                                <i class="fa fa-home"></i>
-                                <br />
-                                X<%- properties.NumberOfProperties %>
-                            </div>
+                            <% if (properties.NumberOfProperties > 1) {%>
+                                <div class="assets-image">
+                                    <i class="fa fa-home multiple-assets-font"/>
+                                    <i class="fa fa-home multiple-assets-font"/>
+                                    <br />
+                                    <i class="fa fa-home multiple-assets-font"/>
+                                    <i class="fa fa-home multiple-assets-font"/>
+                                    <br />
+                                    X<%- properties.NumberOfProperties %>
+                                </div>
+                            <% } else {%>
+                                <div class="assets-image">
+                                    <i class="fa fa-home single-asset-font"/>
+                                    <br />
+                                    X<%- properties.NumberOfProperties %>
+                                </div>
+                            <% } %>
                         </div>
                         <div class="assets-legend">
                             <span class="pull-left">

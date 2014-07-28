@@ -1699,9 +1699,13 @@ td a.edit-loan {
     top: 50px;
 }
 
-    .assets-image i {
-        font-size: 50px;
-    }
+.single-asset-font {
+    font-size: 50px;
+}
+
+.multiple-assets-font {
+    font-size: 25px;
+}
 
 .assets-legend {
     text-align: center;
