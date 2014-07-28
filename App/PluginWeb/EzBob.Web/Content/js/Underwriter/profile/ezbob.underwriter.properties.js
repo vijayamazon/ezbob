@@ -13,7 +13,7 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
         this.model.on("reset sync", this.render, this);
     },
     serializeData: function () {
-        return { vals: this.model.toJSON() };
+        return { model: this.model.toJSON() };
     }
 });
 

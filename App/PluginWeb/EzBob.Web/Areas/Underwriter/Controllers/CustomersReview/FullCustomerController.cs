@@ -161,14 +161,19 @@
 			int zooplaValue = 0;
 			int experianMortgage = 0;
 			int experianMortgageCount = 0;
+			int zooplaAverage1YearPrice = 0;
+			DateTime? zooplaUpdateDate = null;
 			if (zoopla != null)
 			{
+				zooplaAverage1YearPrice = zoopla.AverageSoldPrice1Year;
+				zooplaUpdateDate = zoopla.UpdateDate;
 				CrossCheckModel.GetZooplaAndMortgagesData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue, out experianMortgage, out experianMortgageCount);
 			}
 			sw.Stop();
 			var zooplaTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();
-			model.Properties = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage);
+			// TODO: fetch data for all owned properties
+			model.Properties = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage, zooplaAverage1YearPrice, zooplaUpdateDate);
 			sw.Stop();
 			var propTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();

@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using System;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -37,12 +38,18 @@
 			int zooplaValue = 0;
 			int experianMortgage = 0;
 			int experianMortgageCount = 0;
+			int zooplaAverage1YearPrice = 0;
+			DateTime? zooplaUpdateDate = null;
 			if (zoopla != null)
 			{
+				zooplaAverage1YearPrice = zoopla.AverageSoldPrice1Year;
+				zooplaUpdateDate = zoopla.UpdateDate;
 				CrossCheckModel.GetZooplaAndMortgagesData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue, out experianMortgage, out experianMortgageCount);
 			}
 
-			var data = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage);
+			// TODO: fetch all required data for all owned properties
+			var data = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage, zooplaAverage1YearPrice, zooplaUpdateDate);
+
 			return Json(data, JsonRequestBehavior.AllowGet);
 		}
 	}

@@ -1,8 +1,10 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System;
+
 	public class PropertiesModel
 	{
-		public PropertiesModel(int numberOfProperties, int numberOfMortgages, int assetsValue, int totalMortgages)
+		public PropertiesModel(int numberOfProperties, int numberOfMortgages, int assetsValue, int totalMortgages, int zoopla1YearAverage, DateTime? zooplaUpdateDate)
 		{
 			NumberOfProperties = numberOfProperties;
 			NumberOfMortgages = numberOfMortgages;
@@ -11,6 +13,8 @@
 			NetWorth = MarketValue - SumOfMortgages;
 			Ltv = MarketValue == 0 ? 0 : SumOfMortgages*100/MarketValue;
 			NetWorthPercentages = 100 - Ltv;
+			Zoopla1YearAverage = zoopla1YearAverage;
+			ZooplaUpdateDate = zooplaUpdateDate;
 		}
 
 		public int NumberOfProperties { get; set; }
@@ -20,5 +24,7 @@
 		public int Ltv { get; set; }
 		public int NetWorth { get; set; }
 		public int NetWorthPercentages { get; set; }
+		public int Zoopla1YearAverage { get; set; }
+		public DateTime? ZooplaUpdateDate { get; set; }
 	}
 }
