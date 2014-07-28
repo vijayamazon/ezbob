@@ -1118,9 +1118,9 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 		[Activation]
 		private void ParseExperianLtd() {
-			int nServiceLogID;
+			long nServiceLogID;
 
-			if ((m_aryArgs.Length != 2) || !int.TryParse(m_aryArgs[1], out nServiceLogID)) {
+			if ((m_aryArgs.Length != 2) || !long.TryParse(m_aryArgs[1], out nServiceLogID)) {
 				m_oLog.Msg("Usage: ParseExperianLtd <MP_ServiceLog entry ID>");
 				return;
 			} // if
@@ -1133,10 +1133,16 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // BackfillExperianLtd
 
 		[Activation]
-		private void LoadExperianLtd() {
-			int nServiceLogID;
+		private void BackfillExperianConsumer()
+		{
+			m_oServiceClient.BackfillExperianConsumer();
+		} // BackfillExperianConsumer
 
-			if ((m_aryArgs.Length != 2) || !int.TryParse(m_aryArgs[1], out nServiceLogID)) {
+		[Activation]
+		private void LoadExperianLtd() {
+			long nServiceLogID;
+
+			if ((m_aryArgs.Length != 2) || !long.TryParse(m_aryArgs[1], out nServiceLogID)) {
 				m_oLog.Msg("Usage: LoadExperianLtd <MP_ServiceLog entry ID>");
 				return;
 			} // if
@@ -1144,6 +1150,38 @@ GeneratePassword broker-contact-email@example.com password-itself
 			ExperianLtdActionResult lear = m_oServiceClient.LoadExperianLtd(nServiceLogID);
 
 			m_oLog.Msg("Result:\n{0}", lear.Value.StringifyAll());
+		} // LoadExperianLtd
+
+		[Activation]
+		private void LoadExperianConsumer()
+		{
+			long nServiceLogID;
+
+			if ((m_aryArgs.Length != 2) || !long.TryParse(m_aryArgs[1], out nServiceLogID))
+			{
+				m_oLog.Msg("Usage: LoadExperianLtd <MP_ServiceLog entry ID>");
+				return;
+			} // if
+
+			var res = m_oServiceClient.LoadExperianConsumer(1, (int?)null, nServiceLogID);
+
+			m_oLog.Msg("Result:\n{0}", res.Value.ToString());
+		} // LoadExperianLtd
+
+		[Activation]
+		private void ParseExperianConsumer()
+		{
+			long nServiceLogID;
+
+			if ((m_aryArgs.Length != 2) || !long.TryParse(m_aryArgs[1], out nServiceLogID))
+			{
+				m_oLog.Msg("Usage: LoadExperianConsumer <MP_ServiceLog entry ID>");
+				return;
+			} // if
+
+			var res = m_oServiceClient.ParseExperianConsumer(nServiceLogID);
+
+			m_oLog.Msg("Result:\n{0}", res.Value.ToString());
 		} // LoadExperianLtd
 
 		// ReSharper restore UnusedMember.Local

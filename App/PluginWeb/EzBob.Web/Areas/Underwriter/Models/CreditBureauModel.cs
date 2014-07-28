@@ -39,13 +39,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string BorrowerType { get; set; } // done
 		public string CheckDate { get; set; } // done
 		public string CheckValidity { get; set; } // done
-		public int Score { get; set; } // done
+		public int? Score { get; set; } // done
 		public double Odds { get; set; } // done
 		public string ScoreColor { get; set; } // done 
 		public string ScorePosition { get; set; } // done
 		public string ScoreAlign { get; set; } // done
 		public string ScoreValuePosition { get; set; } // done
-		public int CII { get; set; } // done
+		public int? CII { get; set; } // done
 		public ConsumerSummaryCharacteristics ConsumerSummaryCharacteristics { get; set; }
 		public ConsumerAccountsOverview ConsumerAccountsOverview { get; set; }
 		public AccountInfo[] AccountsInformation { get; set; }
@@ -66,17 +66,17 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	public class ConsumerSummaryCharacteristics
 	{
-		public int NumberOfAccounts { get; set; } // done
-		public int NumberOfAccounts3M { get; set; } // done
+		public int? NumberOfAccounts { get; set; } // done
+		public int? NumberOfAccounts3M { get; set; } // done
 		public string WorstCurrentStatus { get; set; } // done
 		public string WorstCurrentStatus3M { get; set; } // done
-		public int NumberOfDefaults { get; set; } // done
-		public int NumberOfCCJs { get; set; } // done
-		public int AgeOfMostRecentCCJ { get; set; } // done
-		public int NumberOfCCOverLimit { get; set; } // done
-		public int EnquiriesLast3M { get; set; } // done
-		public int EnquiriesLast6M { get; set; } // done
-		public int CreditCardUtilization { get; set; } // done
+		public int? NumberOfDefaults { get; set; } // done
+		public int? NumberOfCCJs { get; set; } // done
+		public int? AgeOfMostRecentCCJ { get; set; } // done
+		public int? NumberOfCCOverLimit { get; set; } // done
+		public int? EnquiriesLast3M { get; set; } // done
+		public int? EnquiriesLast6M { get; set; } // done
+		public int? CreditCardUtilization { get; set; } // done
 		public string DSRandOwnershipType { get; set; } // !DSR
 		public bool NOCsOnCCJ { get; set; } // done
 		public bool NOCsOnCAIS { get; set; } // done
@@ -84,9 +84,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string CAISSpecialInstructionFlag { get; set; } // done
 
 
-		public int NumberOfLates { get; set; }
+		public int? NumberOfLates { get; set; }
 		public string LateStatus { get; set; }
-		public int DefaultAmount { get; set; }
+		public int? DefaultAmount { get; set; }
 
 		// done 
 	}
@@ -205,21 +205,21 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	public class Summary
 	{
-		public int Score { get; set; }
-		public int ConsumerIndebtednessIndex { get; set; }
+		public int? Score { get; set; }
+		public int? ConsumerIndebtednessIndex { get; set; }
 		public string CheckDate { get; set; }
 		public string Validtill { get; set; }
 		public string WorstCurrentstatus { get; set; }
 		public string WorstHistoricalstatus { get; set; }
-		public int Numberofdefaults { get; set; }
-		public int Accounts { get; set; }
-		public int CCJs { get; set; }
-		public int MostrecentCCJ { get; set; }
+		public int? Numberofdefaults { get; set; }
+		public int? Accounts { get; set; }
+		public int? CCJs { get; set; }
+		public int? MostrecentCCJ { get; set; }
 		public string DSRandownershiptype { get; set; }
-		public int Creditcardutilization { get; set; }
-		public int Enquiriesinlast6months { get; set; }
-		public int Enquiriesinlast3months { get; set; }
-		public int Totalbalance { get; set; }
+		public int? Creditcardutilization { get; set; }
+		public int? Enquiriesinlast6months { get; set; }
+		public int? Enquiriesinlast3months { get; set; }
+		public int? Totalbalance { get; set; }
 		public string AML { get; set; }
 		public string AMLnum { get; set; }
 		public string BWA { get; set; }
@@ -235,8 +235,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 	public class CheckHistoryModel
 	{
 		public DateTime Date { get; set; }
-		public int Score { get; set; }
-		public int CII { get; set; }
+		public int? Score { get; set; }
+		public int? CII { get; set; }
 		public decimal? Balance { get; set; }
 		public long Id { get; set; }
 	}

@@ -43,6 +43,7 @@
 		public class OutputData {
 			public MP_ServiceLog ServiceLog { get; set; }
 			public ExperianLtd ExperianLtd { get; set; }
+			public ExperianConsumerData ExperianConsumer { get; set; }
 		} // class Out
 	} // class WriteToLogPackage
 } // namespace

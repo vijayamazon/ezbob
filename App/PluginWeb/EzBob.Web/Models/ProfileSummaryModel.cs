@@ -92,12 +92,12 @@
 
 	public class CreditBureau : BaseProfileSummaryModel
 	{
-		public double CreditBureauScore { get; set; }
-		public double TotalMonthlyRepayments { get; set; }
-		public double TotalDebt { get; set; }
-		public double CreditCardBalances { get; set; }
+		public int? CreditBureauScore { get; set; }
+		public int? TotalMonthlyRepayments { get; set; }
+		public int? TotalDebt { get; set; }
+		public int? CreditCardBalances { get; set; }
 		public string BorrowerType { get; set; }
-		public int FinancialAccounts { get; set; }
+		public int? FinancialAccounts { get; set; }
 		public string ThinFile { get; set; }
 	}
 

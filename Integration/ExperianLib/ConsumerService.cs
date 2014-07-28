@@ -13,6 +13,7 @@
 	using EZBob.DatabaseLib.Model.Experian;
 	using Dictionaries;
 	using EzBobIntegration.Web_References.Consumer;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Newtonsoft.Json;

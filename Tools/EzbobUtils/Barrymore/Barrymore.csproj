@@ -49,6 +49,9 @@
     <Compile Include="ARetryer.cs" />
     <Compile Include="BaseConverter.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="dbutils\CodeToSql.cs" />
+    <Compile Include="dbutils\FKAttribute.cs" />
+    <Compile Include="dbutils\PKAttribute.cs" />
     <Compile Include="ElapsedTimeInfo.cs" />
     <Compile Include="Exceptions\AException.cs" />
     <Compile Include="Exceptions\ALoggedException.cs" />

@@ -7,6 +7,7 @@
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
@@ -292,6 +293,15 @@
 
 		[OperationContract]
 		ExperianLtdActionResult CheckLtdCompanyCache(string sCompanyRefNum);
+
+		[OperationContract]
+		ActionMetaData BackfillExperianConsumer();
+
+		[OperationContract]
+		ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId);
+
+		[OperationContract]
+		ExperianConsumerActionResult LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId);
 
 		#endregion Experian
 

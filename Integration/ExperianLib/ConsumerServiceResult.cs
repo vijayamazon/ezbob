@@ -6,7 +6,7 @@ namespace ExperianLib
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using EZBob.DatabaseLib.Model.Experian;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Newtonsoft.Json;
 
 	public class ConsumerExperianModelBuilder
@@ -204,14 +204,14 @@ namespace ExperianLib
 			{
 				foreach (var caisData in outputRoot.Output.FullConsumerData.ConsumerData.CAIS)
 				{
-					var account = new ExperianConsumerDataCais
+					for (int j = 0; j < caisData.CAISDetails.Length; ++j)
+					{
+						var account = new ExperianConsumerDataCais
 						{
 							AccountBalances = new List<ExperianConsumerDataCaisBalance>(),
 							CardHistories = new List<ExperianConsumerDataCaisCardHistory>()
 						};
 
-					for (int j = 0; j < caisData.CAISDetails.Length; ++j)
-					{
 						var caisDetails = caisData.CAISDetails[j];
 						TryRead(() => account.CAISAccStartDate = new DateTime(caisDetails.CAISAccStartDate.CCYY,
 																			  caisDetails.CAISAccStartDate.MM,
@@ -316,7 +316,7 @@ namespace ExperianLib
 		public ExperianConsumerData Data { get; set; }
 		public OutputRoot Output { get; private set; }
 
-		public double SumOfRepayements { get; set; }
+		public int SumOfRepayements { get; set; }
 
 		public ConsumerServiceResult()
 		{
@@ -328,7 +328,10 @@ namespace ExperianLib
 			Output = outputRoot;
 			var builder = new ConsumerExperianModelBuilder();
 			Data = builder.Build(outputRoot);
-			SumOfRepayements = Data.CreditCommitmentsNonRevolving + Data.CreditCommitmentsRevolving + Data.MortgagePayments;
+			SumOfRepayements = 
+				(Data.CreditCommitmentsNonRevolving.HasValue ? Data.CreditCommitmentsNonRevolving.Value : 0) +
+				(Data.CreditCommitmentsRevolving.HasValue ? Data.CreditCommitmentsRevolving.Value : 0) + 
+				(Data.MortgagePayments.HasValue ? Data.MortgagePayments.Value : 0);
 		}
 	}
 }

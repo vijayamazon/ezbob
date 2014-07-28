@@ -126,7 +126,7 @@
 
 		private void BuildHistoryModel(CreditBureauModel model, Customer customer)
 		{
-			var consumerHistory = _experianHistoryRepository.GetConsumerHistory(customer).ToList();
+			var consumerHistory = _experianHistoryRepository.GetCustomerConsumerHistory(customer.Id).ToList();
 			if (consumerHistory.Any())
 			{
 				model.ConsumerHistory = consumerHistory.Select(x => new CheckHistoryModel
@@ -138,50 +138,11 @@
 					Balance = x.CaisBalance.HasValue ? x.CaisBalance.Value : -1
 				}).OrderByDescending(h => h.Date);
 			}
-			else
-			{
-				var consumerResponses = (from s in _session.Query<MP_ServiceLog>()
-										 where s.Director == null
-										 where s.Customer.Id == customer.Id
-										 where s.ServiceType == ExperianServiceType.Consumer.DescriptionAttr()
-										 select new { Id = s.Id, InsertDate = s.InsertDate });
-				var checkConsumerHistoryModels = new List<CheckHistoryModel>();
-				foreach (var res in consumerResponses)
-				{
-					ConsumerServiceResult result;
-					GetConsumerInfo(customer, true, res.Id, null, out result);
-					var consumerModel = model;
-					int cii = consumerModel.CII;
-					checkConsumerHistoryModels.Add(new CheckHistoryModel
-						{
-							Id = res.Id,
-							Score = consumerModel.Score,
-							CII = cii,
-							Balance = consumerModel.ConsumerAccountsOverview.Balance_Total,
-							Date = res.InsertDate
-						});
-				}
-
-				model.ConsumerHistory = checkConsumerHistoryModels.OrderByDescending(h => h.Date);
-
-				foreach (var cModel in checkConsumerHistoryModels)
-				{
-					_experianHistoryRepository.Save(new MP_ExperianHistory
-					{
-						Customer = customer,
-						ServiceLogId = cModel.Id,
-						Type = ExperianServiceType.Consumer.DescriptionAttr(),
-						Date = cModel.Date,
-						Score = cModel.Score,
-						CII = cModel.CII,
-						CaisBalance = cModel.Balance
-					});
-				}
-			}
+			
 
 			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
 			Log.DebugFormat("BuildHistoryModel company type: {0}", isLimited ? "Limited" : "NonLimited");
-			var companyHistory = _experianHistoryRepository.GetCompanyHistory(customer, isLimited).ToList();
+			var companyHistory = _experianHistoryRepository.GetCompanyHistory(customer.Company.ExperianRefNum, isLimited).ToList();
 			if (companyHistory.Any())
 			{
 				Log.Debug("BuildHistoryModel company from history table");
@@ -215,8 +176,9 @@
 						{
 							_experianHistoryRepository.Save(new MP_ExperianHistory
 							{
-								Customer = customer,
+								CustomerId = customer.Id,
 								ServiceLogId = cModel.Id,
+								CompanyRefNum = customer.Company.ExperianRefNum,
 								Type = type,
 								Date = cModel.Date,
 								Score = cModel.Score,
@@ -275,7 +237,7 @@
 				return;
 			}
 
-			var scorePosColor = GetScorePositionAndColor(eInfo.Data.BureauScore, ConsumerScoreMax, ConsumerScoreMin);
+			var scorePosColor = GetScorePositionAndColor(eInfo.Data.BureauScore.HasValue? eInfo.Data.BureauScore.Value : 0, ConsumerScoreMax, ConsumerScoreMin);
 			var checkStatus = (eInfo.Data.HasExperianError) ? "Error" : eInfo.ExperianResult;
 
 			var checkIcon = "icon-white icon-remove-sign";
@@ -397,15 +359,19 @@
 			{
 				var accountInfo = new AccountInfo();
 				//check which acccount type show
-				Variables var = map[caisDetails.MatchTo];
-
-				var isShowThisFinancinalAccount = CurrentValues.Instance[var];
-				if (isShowThisFinancinalAccount == null || !isShowThisFinancinalAccount)
+				Variables? var = null;
+				if (caisDetails.MatchTo.HasValue)
 				{
-					continue;
-				}
+					var = map[caisDetails.MatchTo.Value];
 
-				accountInfo.MatchTo = var.DescriptionAttr();
+					var isShowThisFinancinalAccount = CurrentValues.Instance[var.Value];
+					if (isShowThisFinancinalAccount == null || !isShowThisFinancinalAccount)
+					{
+						continue;
+					}
+
+					accountInfo.MatchTo = var.DescriptionAttr();
+				}
 				accountInfo.OpenDate = caisDetails.CAISAccStartDate;
 				accountInfo.Account = AccountTypeDictionary.GetAccountType(caisDetails.AccountType);
 				var accStatus = caisDetails.AccountStatus;
@@ -856,7 +822,6 @@
 			const int yellowX = 240;
 			const int greenWidth = 240;
 
-
 			var s = (int)((score - scoreMin) / (scoreMax - scoreMin) * barCount);
 			s = (s < 0) ? 0 : s;
 			s = (s >= barCount) ? barCount - 1 : s;
@@ -999,14 +964,14 @@
 		protected static string LoanAccounts = "00,01,02,17,19,22,26,27,28,29";
 		protected static string OtherAccounts = "07,08,12,13,14,15,18,20,21,23,24,36,39,40,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,58,59,60,61,62,63,64,70";
 
-		protected string GetRepaymentPeriodString(int months)
+		protected string GetRepaymentPeriodString(int? months)
 		{
-			if (months == 999)
+			if (months == 999 || !months.HasValue)
 			{
 				return "-";
 			}
-			int repaymentYears = months / 12;
-			int repaymentMonths = months % 12;
+			int repaymentYears = months.Value / 12;
+			int repaymentMonths = months.Value % 12;
 			if (repaymentYears > 0)
 			{
 				if (repaymentMonths > 0)

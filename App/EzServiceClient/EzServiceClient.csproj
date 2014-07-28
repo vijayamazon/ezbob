@@ -152,6 +152,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.EsignatureListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ExperianLtdActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

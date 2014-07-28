@@ -2,6 +2,7 @@
 	using System;
 	using EzBob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
@@ -129,5 +130,51 @@
 		} // CheckLtdCompanyCache
 
 		#endregion method CheckLtdCompanyCache
+
+		#region method ParseExperianConsumer
+
+		public ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId)
+		{
+			ParseExperianConsumerData oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nServiceLogId);
+
+			return new ExperianConsumerActionResult
+			{
+				MetaData = oMetaData,
+				Value = oInstance.Result,
+			};
+
+		}
+
+		#endregion method ParseExperianConsumer
+
+		#region method LoadExperianConsumer
+
+		public ExperianConsumerActionResult LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId)
+		{
+			LoadExperianConsumerData oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, null, customerId, directorId, nServiceLogId);
+
+			return new ExperianConsumerActionResult
+			{
+				MetaData = oMetaData,
+				Value = oInstance.Result,
+			};
+		}
+
+		#endregion method LoadExperianConsumer
+
+		#region method BackfillExperianConsumer
+
+		public ActionMetaData BackfillExperianConsumer()
+		{
+			return Execute<BackfillExperianConsumer>(null, null);
+		}
+
+		#endregion method BackfillExperianConsumer
+
+
 	} // class EzServiceImplementation
 } // namespace EzService

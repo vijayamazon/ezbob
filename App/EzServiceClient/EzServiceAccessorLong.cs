@@ -52,7 +52,22 @@
 				BankStatement = vrdar.BankStatement,
 				BankStatementAnnualized = vrdar.BankStatementAnnualized,
 			};
-		} // LoadVatReturnFullData
+		}
+
+		public ExperianConsumerData ParseExperianConsumer(long nServiceLogId)
+		{
+			var res = m_oServiceClient.Instance.ParseExperianConsumer(nServiceLogId);
+			return res.Value;
+		}
+
+		public ExperianConsumerData LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId)
+		{
+			var res = m_oServiceClient.Instance.LoadExperianConsumer(customerId, directorId, nServiceLogId);
+			return res.Value;
+		}
+
+
+// LoadVatReturnFullData
 
 		#endregion method LoadVatReturnFullData
 

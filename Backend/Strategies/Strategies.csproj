@@ -80,6 +80,9 @@
     <Compile Include="Esign\LoadEsignatures.cs" />
     <Compile Include="Experian\BackfillExperianDirectors.cs" />
     <Compile Include="Experian\BackfillExperianLtd.cs" />
+    <Compile Include="Experian\BackfillExperianConsumer.cs" />
+    <Compile Include="Experian\LoadExperianConsumerData.cs" />
+    <Compile Include="Experian\ParseExperianConsumerData.cs" />
     <Compile Include="Experian\DeleteExperianDirector.cs" />
     <Compile Include="Experian\ExperianDirector.cs" />
     <Compile Include="Experian\LoadExperianLtd.cs" />

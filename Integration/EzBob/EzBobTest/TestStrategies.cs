@@ -1,11 +1,14 @@
 namespace EzBobTest
 {
+	using System;
+	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.Misc;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using Ezbob.Backend.Models;
 	using NUnit.Framework;
+	using Newtonsoft.Json;
 	using StructureMap;
 
 	[TestFixture]
@@ -212,9 +215,44 @@ namespace EzBobTest
 		[Test]
 		public void TestLRRes()
 		{
-			var s = new LandRegistryRes(21340, "CL258237" , m_oDB, m_oLog);
+			var s = new LandRegistryRes(21378, "SK310937", m_oDB, m_oLog);
 			s.Execute();
 			Assert.IsNotNullOrEmpty(s.Result);
+		}
+
+		[Test]
+		public void TestParseExperianConsumer()
+		{
+			var s = new ParseExperianConsumerData(110285, m_oDB, m_oLog);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+		}
+
+		[Test]
+		public void TestLoadExperianConsumer()
+		{
+			var s = new LoadExperianConsumerData(20323, null, 110285, m_oDB, m_oLog);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+
+			s = new LoadExperianConsumerData(17254, null, null, m_oDB, m_oLog);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+
+			s = new LoadExperianConsumerData(110285, 1014, null, m_oDB, m_oLog);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+		}
+
+		[Test]
+		public void TestBackfillExperianConsumer()
+		{
+			var s = new BackfillExperianConsumer(m_oDB, m_oLog);
+			s.Execute();
 		}
 	}
 }

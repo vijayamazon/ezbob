@@ -13,13 +13,15 @@
 	public class MP_ExperianHistory
 	{
 		public virtual int Id { get; set; }
-		public virtual Customer Customer { get; set; }
+		public virtual int? CustomerId { get; set; }
 		public virtual string Type { get; set; }
 		public virtual DateTime Date { get; set; }
 		public virtual long ServiceLogId { get; set; }
-		public virtual int Score { get; set; }
+		public virtual int? Score { get; set; }
 		public virtual int? CII { get; set; }
 		public virtual decimal? CaisBalance { get; set; }
+		public virtual int? DirectorId { get; set; }
+		public virtual string CompanyRefNum { get; set; }
 	}
 
 	public sealed class MP_ExperianHistoryMap : ClassMap<MP_ExperianHistory>
@@ -34,15 +36,19 @@
 			Map(x => x.CII);
 			Map(x => x.CaisBalance);
 			Map(x => x.ServiceLogId);
-			References(x => x.Customer, "CustomerId");
+
+			Map(x => x.CustomerId);
+			Map(x => x.DirectorId);
+			Map(x => x.CompanyRefNum);
 		}
 	}
 
 	public interface IExperianHistoryRepository : IRepository<MP_ExperianHistory>
 	{
-		IEnumerable<MP_ExperianHistory> GetConsumerHistory(Customer customer);
-		IEnumerable<MP_ExperianHistory> GetCompanyHistory(Customer customer, bool isLimited);
-		bool HasHistory(Customer customer, ExperianServiceType type);
+		IEnumerable<MP_ExperianHistory> GetCustomerConsumerHistory(int customerId);
+		IEnumerable<MP_ExperianHistory> GetDirectorConsumerHistory(int directorId);
+		IEnumerable<MP_ExperianHistory> GetCompanyHistory(string companyRefNum, bool isLimited);
+		void SaveOrUpdateConsumerHistory(int serviceLogId, DateTime date, int? customerId, int? DirectorId, int? score, int? caisBalance, int? cii);
 	}
 
 	public class ExperianHistoryRepository : NHibernateRepositoryBase<MP_ExperianHistory>, IExperianHistoryRepository
@@ -53,19 +59,37 @@
 		{
 		}
 
-		public IEnumerable<MP_ExperianHistory> GetConsumerHistory(Customer customer)
+		public IEnumerable<MP_ExperianHistory> GetCustomerConsumerHistory(int customerId)
 		{
-			return GetAll().Where(x => x.Customer == customer && x.Type == ExperianServiceType.Consumer.DescriptionAttr());
+			return GetAll().Where(x => x.CustomerId == customerId && !x.DirectorId.HasValue && x.Type == ExperianServiceType.Consumer.DescriptionAttr());
 		}
 
-		public IEnumerable<MP_ExperianHistory> GetCompanyHistory(Customer customer, bool isLimited)
+		public IEnumerable<MP_ExperianHistory> GetDirectorConsumerHistory(int directorId)
 		{
-			return GetAll().Where(x => x.Customer == customer && x.Type == (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr()));
+			return GetAll().Where(x => x.DirectorId == directorId && x.Type == ExperianServiceType.Consumer.DescriptionAttr());
+		}
+		
+		public IEnumerable<MP_ExperianHistory> GetCompanyHistory(string companyRefNum, bool isLimited)
+		{
+			return GetAll().Where(x => x.CompanyRefNum == companyRefNum && x.Type == (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr()));
 		}
 
-		public bool HasHistory(Customer customer, ExperianServiceType type)
+		public void SaveOrUpdateConsumerHistory(int serviceLogId, DateTime date, int? customerId, int? directorId, int? score, int? caisBalance,
+		                                int? cii)
 		{
-			return GetAll().Any(x => x.Customer == customer && x.Type == type.DescriptionAttr());
+			if (!GetAll().Any(x => x.ServiceLogId == serviceLogId))
+			{
+				SaveOrUpdate(new MP_ExperianHistory()
+					{
+						ServiceLogId = serviceLogId,
+						Date = date,
+						CustomerId = customerId,
+						DirectorId = directorId,
+						Score = score,
+						CII = cii,
+						CaisBalance = caisBalance
+					});
+			}
 		}
 	}
 }

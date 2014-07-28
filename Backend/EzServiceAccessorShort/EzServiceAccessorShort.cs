@@ -70,7 +70,23 @@
 				BankStatement = stra.BankStatement,
 				BankStatementAnnualized = stra.BankStatementAnnualized,
 			};
-		} // LoadVatReturnFullData
+		}
+
+		public ExperianConsumerData ParseExperianConsumer(long nServiceLogID)
+		{
+			var stra = new ParseExperianConsumerData(nServiceLogID, ms_oDB, ms_oLog);
+			stra.Execute();
+			return stra.Result;
+		}
+
+		public ExperianConsumerData LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId)
+		{
+			var stra = new LoadExperianConsumerData(customerId, directorId, nServiceLogId, ms_oDB, ms_oLog);
+			stra.Execute();
+			return stra.Result;
+		}
+
+// LoadVatReturnFullData
 
 		#endregion method LoadVatReturnFullData
 
