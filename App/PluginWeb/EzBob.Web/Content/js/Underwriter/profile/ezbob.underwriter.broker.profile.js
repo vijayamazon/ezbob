@@ -13,18 +13,22 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		this.myTabHeaders().on('shown.bs.tab', function(e) {
 			var sSection = $(e.target).attr('href').substr(1);
 			self.handleTabSwitch(sSection);
-			console.log('TODO:', sSection);
 
 			switch (sSection) {
 			case 'broker-customers-grid':
 				self.reloadCustomerGrid();
 				break;
+
+			case 'broker-profile-summary':
+				self.displayBrokerProperties();
+				break;
+
+			case 'broker-relations':
+				console.log('TODO:', sSection);
+				break;
 			} // switch
 		});
 	}, // render
-
-	events: {
-	}, // events
 
 	reloadCustomerGrid: function() {
 		if (this.theTable) {
@@ -58,7 +62,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 				oCol.asSorting = [];
 			});
 
-			self.adjustAoColumn(theTableOpts, [ 'LoanAmount', 'SetupFee' ], function(oCol) {
+			self.adjustAoColumn(theTableOpts, ['LoanAmount', 'SetupFee'], function(oCol) {
 				var oStdMoneyRender = oCol.mRender;
 
 				oCol.mRender = function(oData, sAction, oFullSource) {
@@ -66,43 +70,43 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 						return oStdMoneyRender(oData, sAction, oFullSource);
 
 					switch (sAction) {
-						case 'display':
-							return '';
+					case 'display':
+						return '';
 
-						case 'filter':
-							return '';
+					case 'filter':
+						return '';
 
-						case 'type':
-							return 0;
+					case 'type':
+						return 0;
 
-						case 'sort':
-							return 0;
+					case 'sort':
+						return 0;
 
-						default:
-							return 0;
+					default:
+						return 0;
 					} // switch
 				}; // mRender for LoanAmount
 			});
 
 			var oSomeTimeAgo = moment([2012, 7]).utc();
 
-			self.adjustAoColumn(theTableOpts, [ 'ApplyDate', 'LoanDate' ], function(oCol) {
+			self.adjustAoColumn(theTableOpts, ['ApplyDate', 'LoanDate'], function(oCol) {
 				oCol.mRender = function(oData, sAction, oFullSource) {
 					switch (sAction) {
-						case 'display':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDate(oData);
+					case 'display':
+						return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDate(oData);
 
-						case 'filter':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
+					case 'filter':
+						return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
 
-						case 'type':
-							return oData;
+					case 'type':
+						return oData;
 
-						case 'sort':
-							return oData;
+					case 'sort':
+						return oData;
 
-						default:
-							return oData;
+					default:
+						return oData;
 					} // switch
 				}; // mRender
 			});
@@ -110,20 +114,20 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 			self.adjustAoColumn(theTableOpts, 'LastInvitationSent', function(oCol) {
 				oCol.mRender = function(oData, sAction, oFullSource) {
 					switch (sAction) {
-						case 'display':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDateTime(oData);
+					case 'display':
+						return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDateTime(oData);
 
-						case 'filter':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
+					case 'filter':
+						return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
 
-						case 'type':
-							return oData;
+					case 'type':
+						return oData;
 
-						case 'sort':
-							return oData;
+					case 'sort':
+						return oData;
 
-						default:
-							return oData;
+					default:
+						return oData;
 					} // switch
 				}; // mRender
 			});
@@ -176,6 +180,35 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		});
 	}, // reloadCustomerGrid
 
+	displayBrokerProperties: function() {
+		var self = this;
+
+		var oXhr = $.getJSON(
+			'' + window.gRootPath + 'Underwriter/Brokers/LoadProperties',
+			{ nBrokerID: this.brokerID, }
+		);
+
+		oXhr.done(function(oResponse) {
+			if (this.brokerID !== oResponse.brokerID)
+				return;
+
+			self.$el.find('#broker-profile-summary .value').load_display_value({
+				data_source: oResponse,
+
+				callback: function(sFieldName, oFieldValue) {
+					switch (sFieldName) {
+					case 'BrokerWebSiteUrl':
+						return '<a target=_blank href="' + oFieldValue + '">' + oFieldValue + '</a>';
+					case 'ContactEmail':
+						return '<a href="mailto:' + oFieldValue + '">' + oFieldValue + '</a>';
+					} // switch
+
+					return oFieldValue;
+				}, // callback
+			});
+		});
+	}, // displayBrokerProperties
+
 	show: function(id, type) {
 		this.brokerID = id;
 		this.$el.show();
@@ -206,7 +239,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 			oFiltered = oAll.filter('[href="#' + sTabID + '"]');
 			bFound = oFiltered.length;
 		}
-		catch(e) {
+		catch (e) {
 			console.error('Error parsing tab header:', e);
 		} // try
 

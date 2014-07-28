@@ -1951,3 +1951,30 @@ td a.edit-loan {
 .ui-widget-content {
     border: none;
 }
+
+#broker-main-content .aka-table {
+    display: table;
+    width: 100%;
+}
+
+#broker-main-content .aka-row {
+    display: table-row;
+}
+
+#broker-main-content .aka-column {
+    display: table-cell;
+}
+
+#broker-main-content .value-title {
+    font-weight: bold;
+    padding-right: 1em;
+    padding-bottom: 0.5em;
+    width: 1px !important;
+    white-space: nowrap !important;
+    font-family: 'Titillium Web Semi Bold';
+}
+
+#broker-main-content .aka-row > .value-title,
+#broker-main-content .aka-row > .value {
+    display: table-cell;
+}

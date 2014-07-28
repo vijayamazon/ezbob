@@ -332,7 +332,7 @@
 		public BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail) {
 			BrokerLoadOwnProperties oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, 0);
 
 			return new BrokerPropertiesActionResult {
 				MetaData = oMetaData,
@@ -341,6 +341,21 @@
 		} // BrokerLoadOwnProperties
 
 		#endregion method BrokerLoadOwnProperties
+
+		#region method BrokerLoadPropertiesByID
+
+		public BrokerPropertiesActionResult BrokerLoadPropertiesByID(int nBrokerID) {
+			BrokerLoadOwnProperties oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, string.Empty, nBrokerID);
+
+			return new BrokerPropertiesActionResult {
+				MetaData = oMetaData,
+				Properties = oInstance.Properties,
+			};
+		} // BrokerLoadPropertiesByID
+
+		#endregion method BrokerLoadPropertiesByID
 
 		#region method BrokerUpdatePassword
 

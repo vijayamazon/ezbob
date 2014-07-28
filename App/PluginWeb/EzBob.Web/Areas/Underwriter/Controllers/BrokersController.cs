@@ -23,7 +23,7 @@
 		[Ajax]
 		[HttpGet]
 		public JsonResult LoadCustomers(int nBrokerID) {
-			ms_oLog.Debug("Loading broker customers request for broker {0}...", nBrokerID);
+			ms_oLog.Debug("Load broker customers request for broker {0}...", nBrokerID);
 
 			BrokerCustomersActionResult oResult;
 
@@ -35,11 +35,36 @@
 				return Json(new { aaData = new BrokerCustomerEntry[0], }, JsonRequestBehavior.AllowGet);
 			} // try
 
-			ms_oLog.Debug("Loading broker customers request for broker {0} complete.", nBrokerID);
+			ms_oLog.Debug("Load broker customers request for broker {0} complete.", nBrokerID);
 			return Json(new { aaData = oResult.Customers, }, JsonRequestBehavior.AllowGet);
 		} // LoadCustomers
 
 		#endregion action LoadCustomers
+
+		#region action LoadProperties
+
+		[HttpGet]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult LoadProperties(int nBrokerID) {
+			ms_oLog.Debug("Load broker properties request for broker {0}...", nBrokerID);
+
+			BrokerPropertiesActionResult oResult;
+
+			try {
+				oResult = m_oServiceClient.Instance.BrokerLoadPropertiesByID(nBrokerID);
+			}
+			catch (Exception e) {
+				ms_oLog.Alert(e, "Load broker properties request for broker {0} failed.", nBrokerID);
+				return Json(new BrokerProperties(), JsonRequestBehavior.AllowGet);
+			} // try
+
+			ms_oLog.Debug("Load broker properties request for broker {0} complete.", nBrokerID);
+
+			return Json(oResult.Properties, JsonRequestBehavior.AllowGet);
+		} // LoadProperties
+
+		#endregion action LoadProperties
 
 		#region private
 

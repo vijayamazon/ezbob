@@ -93,7 +93,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 					return '<a href="mailto:' + oFieldValue + '">' + oFieldValue + '</a>';
 
 				case 'SourceRef':
-				    return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '" rel="nofollow">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
+					return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '" rel="nofollow">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
 				} // switch
 
 				if (sFieldName.indexOf('SourceRef') !== 0)
@@ -102,10 +102,10 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 				var aryMatch = /^SourceRefTo(.{4})_(\d+)x(\d+)$/.exec(sFieldName);
 
 				return oSampleLink(oFieldValue,
-				    (aryMatch[1] === 'Text' ? "http://www.ezbob.com/wp-content/themes/ezbob-new/images/new-ezbob-logo.png" : "/Content/img/ezbob-logo-2014.png"),
-				    (aryMatch[1] === 'Text' ? '\n' : ''),
-				    parseInt(aryMatch[2], 10),
-				    parseInt(aryMatch[3], 10));
+					(aryMatch[1] === 'Text' ? "http://www.ezbob.com/wp-content/themes/ezbob-new/images/new-ezbob-logo.png" : "/Content/img/ezbob-logo-2014.png"),
+					(aryMatch[1] === 'Text' ? '\n' : ''),
+					parseInt(aryMatch[2], 10),
+					parseInt(aryMatch[3], 10));
 			}, // callback
 
 			fieldNameSetText: function(sFieldName) {
@@ -137,13 +137,13 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 
 			theTableOpts.aaData = oResponse.customers;
 
-			theTableOpts.aaSorting = [ [5, 'desc'] ];
+			theTableOpts.aaSorting = [[5, 'desc']];
 
 			self.adjustAoColumn(theTableOpts, 'Marketplaces', function(oCol) {
 				oCol.asSorting = [];
 			});
 
-			self.adjustAoColumn(theTableOpts, [ 'LoanAmount', 'SetupFee' ], function(oCol) {
+			self.adjustAoColumn(theTableOpts, ['LoanAmount', 'SetupFee'], function(oCol) {
 				var oStdMoneyRender = oCol.mRender;
 
 				oCol.mRender = function(oData, sAction, oFullSource) {
@@ -151,43 +151,43 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 						return oStdMoneyRender(oData, sAction, oFullSource);
 
 					switch (sAction) {
-						case 'display':
-							return '';
+					case 'display':
+						return '';
 
-						case 'filter':
-							return '';
+					case 'filter':
+						return '';
 
-						case 'type':
-							return 0;
+					case 'type':
+						return 0;
 
-						case 'sort':
-							return 0;
+					case 'sort':
+						return 0;
 
-						default:
-							return 0;
+					default:
+						return 0;
 					} // switch
 				}; // mRender for LoanAmount
 			});
 
 			var oSomeTimeAgo = moment([2012, 7]).utc();
 
-			self.adjustAoColumn(theTableOpts, [ 'ApplyDate', 'LoanDate' ], function(oCol) {
+			self.adjustAoColumn(theTableOpts, ['ApplyDate', 'LoanDate'], function(oCol) {
 				oCol.mRender = function(oData, sAction, oFullSource) {
 					switch (sAction) {
-						case 'display':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDate(oData);
+					case 'display':
+						return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDate(oData);
 
-						case 'filter':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
+					case 'filter':
+						return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
 
-						case 'type':
-							return oData;
+					case 'type':
+						return oData;
 
-						case 'sort':
-							return oData;
+					case 'sort':
+						return oData;
 
-						default:
-							return oData;
+					default:
+						return oData;
 					} // switch
 				}; // mRender
 			});
@@ -195,20 +195,20 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 			self.adjustAoColumn(theTableOpts, 'LastInvitationSent', function(oCol) {
 				oCol.mRender = function(oData, sAction, oFullSource) {
 					switch (sAction) {
-						case 'display':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDateTime(oData);
+					case 'display':
+						return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDateTime(oData);
 
-						case 'filter':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
+					case 'filter':
+						return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
 
-						case 'type':
-							return oData;
+					case 'type':
+						return oData;
 
-						case 'sort':
-							return oData;
+					case 'sort':
+						return oData;
 
-						default:
-							return oData;
+					default:
+						return oData;
 					} // switch
 				}; // mRender
 			});

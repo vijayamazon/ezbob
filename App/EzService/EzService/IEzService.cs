@@ -127,6 +127,9 @@
 		BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail);
 
 		[OperationContract]
+		BrokerPropertiesActionResult BrokerLoadPropertiesByID(int nBrokerID);
+
+		[OperationContract]
 		ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword);
 
 		[OperationContract]

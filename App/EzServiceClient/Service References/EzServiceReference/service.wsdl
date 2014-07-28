@@ -111,6 +111,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_InputMessage">
+    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifier" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifierResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_FraudChecker_InputMessage">
     <wsdl:part name="parameters" element="tns:FraudChecker" />
   </wsdl:message>
@@ -627,6 +633,12 @@
   <wsdl:message name="IEzService_BrokerLoadOwnProperties_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadOwnPropertiesResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadPropertiesByID_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadPropertiesByID" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadPropertiesByID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadPropertiesByIDResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_BrokerUpdatePassword_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerUpdatePassword" />
   </wsdl:message>
@@ -957,12 +969,6 @@
   <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
     <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_InputMessage">
-    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifier" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_OutputMessage">
-    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifierResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -986,6 +992,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="FirstOfMonthStatusNotifier">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse" message="tns:IEzService_FirstOfMonthStatusNotifier_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="FraudChecker">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
@@ -1330,6 +1340,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadOwnProperties" message="tns:IEzService_BrokerLoadOwnProperties_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadOwnPropertiesResponse" message="tns:IEzService_BrokerLoadOwnProperties_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BrokerLoadPropertiesByID">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadPropertiesByID" message="tns:IEzService_BrokerLoadPropertiesByID_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadPropertiesByIDResponse" message="tns:IEzService_BrokerLoadPropertiesByID_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="BrokerUpdatePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerUpdatePassword" message="tns:IEzService_BrokerUpdatePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse" message="tns:IEzService_BrokerUpdatePassword_OutputMessage" />
@@ -1550,10 +1564,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="FirstOfMonthStatusNotifier">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse" message="tns:IEzService_FirstOfMonthStatusNotifier_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1609,6 +1619,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="FirstOfMonthStatusNotifier">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="FraudChecker">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
       <wsdl:input>
@@ -2383,6 +2402,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BrokerLoadPropertiesByID">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadPropertiesByID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="BrokerUpdatePassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerUpdatePassword" style="document" />
       <wsdl:input>
@@ -2871,15 +2899,6 @@
     </wsdl:operation>
     <wsdl:operation name="ValidateMobileCode">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="FirstOfMonthStatusNotifier">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

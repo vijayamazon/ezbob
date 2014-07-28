@@ -8,9 +8,10 @@
 
 		#region constructor
 
-		public BrokerLoadOwnProperties(string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLoadOwnProperties(string sContactEmail, int nBrokerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSp = new SpBrokerLoadOwnProperties(DB, Log) {
 				ContactEmail = sContactEmail,
+				BrokerID = nBrokerID,
 			};
 
 			Properties = new BrokerProperties();

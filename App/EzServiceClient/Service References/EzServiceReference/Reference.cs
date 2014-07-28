@@ -2233,6 +2233,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode);
         
@@ -2749,6 +2755,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadOwnProperties", ReplyAction="http://tempuri.org/IEzService/BrokerLoadOwnPropertiesResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadOwnPropertiesAsync(string sContactEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadPropertiesByID", ReplyAction="http://tempuri.org/IEzService/BrokerLoadPropertiesByIDResponse")]
+        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLoadPropertiesByID(int nBrokerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadPropertiesByID", ReplyAction="http://tempuri.org/IEzService/BrokerLoadPropertiesByIDResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadPropertiesByIDAsync(int nBrokerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword);
         
@@ -3078,12 +3090,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3111,6 +3117,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier() {
+            return base.Channel.FirstOfMonthStatusNotifier();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync() {
+            return base.Channel.FirstOfMonthStatusNotifierAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData FraudChecker(int customerId, Ezbob.Backend.Models.FraudMode mode) {
@@ -3801,6 +3815,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerLoadOwnPropertiesAsync(sContactEmail);
         }
         
+        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLoadPropertiesByID(int nBrokerID) {
+            return base.Channel.BrokerLoadPropertiesByID(nBrokerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadPropertiesByIDAsync(int nBrokerID) {
+            return base.Channel.BrokerLoadPropertiesByIDAsync(nBrokerID);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword) {
             return base.Channel.BrokerUpdatePassword(sContactEmail, oOldPassword, oNewPassword);
         }
@@ -4239,14 +4261,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code) {
             return base.Channel.ValidateMobileCodeAsync(phone, code);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier() {
-            return base.Channel.FirstOfMonthStatusNotifier();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync() {
-            return base.Channel.FirstOfMonthStatusNotifierAsync();
         }
     }
 }

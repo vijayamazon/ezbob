@@ -147,6 +147,8 @@
 				.Add("~/Content/js/lib/attardi.labels.js")
 				.Add("~/Content/js/lib/amount-period-sliders.js")
 				.Add("~/Content/js/lib/jquery.field_status.js")
+				.Add("~/Content/js/lib/jquery.set_display_value.js")
+				.Add("~/Content/js/lib/jquery.load_display_value.js")
 				.Add("~/Content/js/lib/mousetrap_1.4.0.js")
 				.Add("~/Content/js/lib/jquery.colorbox-min.js")
 				.Add("~/Content/js/lib/jquery.dataTables.min.js")
