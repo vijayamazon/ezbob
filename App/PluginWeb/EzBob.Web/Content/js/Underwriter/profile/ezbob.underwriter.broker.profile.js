@@ -133,7 +133,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 				//	$('.grid-item-Marketplaces', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.Marketplaces));
 
 				if (oData.RefNumber) {
-					var sLinkBase = '<a class=profileLink title="Show customer details" href="#customer/' + oData.RefNumber + '">';
+					var sLinkBase = '<a class=profileLink title="Show customer details" href="#profile/' + oData.CustomerID + '">';
 
 					if (oData.hasOwnProperty('FirstName') && oData.FirstName) {
 						$('.grid-item-FirstName', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
@@ -173,10 +173,6 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 			}; // fnFooterCallback
 
 			self.theTable = oTbl.dataTable(theTableOpts);
-
-			oDiv.find('.dataTables_top_right').prepend(
-				$('<button type=button class="button btn-green reload-customer-list" title="Reload customer and lead lists">Reload</button>')
-			);
 		});
 	}, // reloadCustomerGrid
 
