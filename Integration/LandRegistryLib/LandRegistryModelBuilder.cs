@@ -90,13 +90,13 @@
 			return model;
 		}
 
-		public LandRegistryResModel BuildResModel(string responseXml)
+		public LandRegistryResModel BuildResModel(string responseXml, string titleNumber = "titleNumber")
 		{
 			var response = XmlHelper.XmlDeserializeFromString<ResponseOCWithSummaryV2_1Type>(responseXml);
-			return BuildResModel(response);
+			return BuildResModel(response, titleNumber);
 		}
 
-		public LandRegistryResModel BuildResModel(ResponseOCWithSummaryV2_1Type response)
+		public LandRegistryResModel BuildResModel(ResponseOCWithSummaryV2_1Type response, string titleNumber = "titleNumber")
 		{
 			var model = new LandRegistryResModel();
 			if (response.GatewayResponse.Acknowledgement != null)
@@ -108,6 +108,7 @@
 					Description = ack.MessageDescription != null ? ack.MessageDescription.Value : null,
 					UniqueId = ack.UniqueID != null ? ack.UniqueID.Value : null
 				};
+				model.TitleNumber = titleNumber;
 			}
 			else if (response.GatewayResponse.Rejection != null)
 			{
@@ -117,6 +118,7 @@
 					Reason = rej.Reason != null ? rej.Reason.Value : "Some error occurred",
 					OtherDescription = rej.OtherDescription != null ? rej.OtherDescription.Value : null
 				};
+				model.TitleNumber = titleNumber;
 			}
 			else
 			{

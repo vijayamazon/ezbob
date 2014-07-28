@@ -172,12 +172,12 @@
 			CrossCheckStatus.BuildMarkerStatusForPersonalInfo(Application, PayPal, EBay);
 			CrossCheckStatus.BuildMarkerStatusForCustomerAddress(CurrentAddress, EBayAddress, PayPalAddress);
 
-			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res).Select(x => x.Response);
+			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res).Select(x => new { Response = x.Response, Title = x.TitleNumber });
 			var b = new LandRegistryModelBuilder();
 			LandRegistries = new List<LandRegistryResModel>();
 			foreach (var lr in lrs)
 			{
-				LandRegistries.Add(b.BuildResModel(lr));
+				LandRegistries.Add(b.BuildResModel(lr.Response, lr.Title));
 			}
 		}
 

@@ -237,7 +237,7 @@
 					} // try
 
 					model.Response = XmlHelper.SerializeObject(response);
-					model.Res = _builder.BuildResModel(response);
+					model.Res = _builder.BuildResModel(response, titleNumber);
 				}
 				catch (Exception ex)
 				{
