@@ -31,6 +31,7 @@
                 <div class="tab-pane" id="apiChecks"></div>
                 <div class="tab-pane" id="customerRelations"></div>
                 <div class="tab-pane" id="fraudDetection"></div>
+                <div class="tab-pane" id="properties"></div>
             </div>
         </div>
         <div id="DecisionNotes"></div>
@@ -57,6 +58,7 @@
     Html.RenderPartial("_CompanyScore");
     Html.RenderPartial("_FraudDetectionLog");
     Html.RenderPartial("~/Areas/Underwriter/Views/Shared/_CustomerRelations.cshtml");
+    Html.RenderPartial("~/Areas/Underwriter/Views/Shared/_Properties.cshtml");
     Html.RenderPartial("_DocsTemplate");
     Html.RenderPartial("~/Areas/Underwriter/Views/Shared/LoanEditor/_loan_editor.cshtml");
     Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml");

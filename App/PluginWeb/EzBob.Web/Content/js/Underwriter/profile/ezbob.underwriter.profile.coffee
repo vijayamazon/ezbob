@@ -34,6 +34,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         alertPassed = @$el.find("#alerts-passed")
         profileHead = @$el.find("#profileHead")
         fraudDetection = @$el.find("#fraudDetection")
+        properties = @$el.find("#properties")
         @personalInfoModel = new EzBob.Underwriter.PersonalInfoModel()
         @profileInfoView = new EzBob.Underwriter.PersonInfoView(
             el: profileInfo
@@ -141,6 +142,11 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         )
 
         @PropertiesModel = new EzBob.Underwriter.Properties()
+        @PropertiesView = new EzBob.Underwriter.PropertiesView(
+            el: properties
+            model: @PropertiesModel
+        )
+
         @affordability = new EzBob.Underwriter.Affordability()
         @fundingModel = new EzBob.Underwriter.FundingModel()
         @dashboardInfoView = new EzBob.Underwriter.DashboardView(
