@@ -148,9 +148,12 @@
 			model.Ccjs = data.TotalJudgmentCountLast24Months ?? 0 + data.TotalAssociatedJudgmentCountLast24Months ?? 0;
 			model.NonLimScoreHistories = new List<NonLimScoreHistory>();
 
-			foreach (ScoreAtDate scoreAtDate in data.ScoreHistory)
+			if (data.ScoreHistory != null)
 			{
-				model.NonLimScoreHistories.Add(new NonLimScoreHistory { Score = scoreAtDate.Score, ScoreDate = scoreAtDate.Date });
+				foreach (ScoreAtDate scoreAtDate in data.ScoreHistory)
+				{
+					model.NonLimScoreHistories.Add(new NonLimScoreHistory {Score = scoreAtDate.Score, ScoreDate = scoreAtDate.Date});
+				}
 			}
 
 			return model;
