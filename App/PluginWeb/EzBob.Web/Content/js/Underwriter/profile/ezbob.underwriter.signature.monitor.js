@@ -223,6 +223,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		function echoSignEnvelope(nCustomerID, nTemplateID) {
 			this.CustomerID = nCustomerID;
 			this.Directors = [];
+			this.ExperianDirectors = [];
 			this.TemplateID = nTemplateID;
 			this.SendToCustomer = false;
 		}
@@ -235,11 +236,17 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			if (this.TemplateID < 1)
 				return false;
 
-			if (!this.SendToCustomer && (this.Directors.length < 1))
+			if (!this.SendToCustomer && ((this.Directors.length < 1) && (this.ExperianDirectors.length < 1)))
 				return false;
 
-			for (var i = 0; i < this.Directors.length; i++)
+			var i;
+
+			for (i = 0; i < this.Directors.length; i++)
 				if (this.Directors[i] < 1)
+					return false;
+
+			for (i = 0; i < this.ExperianDirectors.length; i++)
+				if (this.ExperianDirectors[i] < 1)
 					return false;
 
 			return true;
@@ -274,15 +281,23 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			var oSigner = oChk.data();
 
 			if (oSigner.IsDirector && oPackage[1]) {
-				if (oSigner.DirectorID)
-					oPackage[1].Directors.push(oSigner.DirectorID);
+				if (oSigner.DirectorID) {
+					if (oSigner.Type === 'experian')
+						oPackage[1].ExperianDirectors.push(oSigner.DirectorID);
+					else
+						oPackage[1].Directors.push(oSigner.DirectorID);
+				}
 				else
 					oPackage[1].SendToCustomer = true;
 			} // if
 
 			if (oSigner.IsShareholder && oPackage[2]) {
-				if (oSigner.DirectorID)
-					oPackage[2].Directors.push(oSigner.DirectorID);
+				if (oSigner.DirectorID) {
+					if (oSigner.Type === 'experian')
+						oPackage[2].ExperianDirectors.push(oSigner.DirectorID);
+					else
+						oPackage[2].Directors.push(oSigner.DirectorID);
+				}
 				else
 					oPackage[2].SendToCustomer = true;
 			} // if
@@ -445,6 +460,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			DirectorID: oData.DirectorID,
 			IsDirector: oData.IsDirector,
 			IsShareholder: oData.IsShareholder,
+			Type: oData.Type,
 		});
 
 		oRow.find('.grid-item-IsSelected').empty().append(oSelected);

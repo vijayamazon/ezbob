@@ -5,6 +5,7 @@
 		Other,
 		Customer,
 		Director,
+		ExperianDirector,
 	} // enum PersonType
 
 	internal abstract class AAddressable : Address {

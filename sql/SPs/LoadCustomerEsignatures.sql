@@ -21,9 +21,10 @@ BEGIN
 		CONVERT(BIT, CASE WHEN e.SignedDocument IS NULL THEN 0 ELSE 1 END) AS HasDocument,
 		ed.EsignerID,
 		ed.DirectorID,
-		ISNULL(d.Email, c.Name) AS SignerEmail,
-		ISNULL(d.Name, c.FirstName) AS SignerFirstName,
-		ISNULL(d.Surname, c.Surname) AS SignerLastName,
+		ed.ExperianDirectorID,
+		CASE WHEN ed.DirectorID IS NULL AND ed.ExperianDirectorID IS NULL THEN c.Name      ELSE ISNULL(d.Email, exp.Email)      END AS SignerEmail,
+		CASE WHEN ed.DirectorID IS NULL AND ed.ExperianDirectorID IS NULL THEN c.FirstName ELSE ISNULL(d.Name, exp.FirstName)   END AS SignerFirstName,
+		CASE WHEN ed.DirectorID IS NULL AND ed.ExperianDirectorID IS NULL THEN c.Surname   ELSE ISNULL(d.Surname, exp.LastName) END AS SignerLastName,
 		ed.StatusID AS SignerStatusID,
 		es.StatusName AS SignerStatus,
 		ed.SignDate
@@ -36,8 +37,11 @@ BEGIN
 		INNER JOIN EsignTemplates t ON e.EsignTemplateID = t.EsignTemplateID
 		INNER JOIN EsignTemplateTypes tt ON t.EsignTemplateTypeID = tt.EsignTemplateTypeID
 		LEFT JOIN Director d ON ed.DirectorID = d.id
+		LEFT JOIN ExperianDirectors exp ON ed.ExperianDirectorID = exp.ExperianDirectorID
 	WHERE
-		@CustomerID IS NULL OR e.CustomerID = @CustomerID
+		@CustomerID IS NULL
+		OR
+		e.CustomerID = @CustomerID
 	ORDER BY
 		e.CustomerID,
 		e.EsignatureID,

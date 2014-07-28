@@ -8,7 +8,8 @@ GO
 ALTER PROCEDURE LoadDataForEsign
 @CustomerID INT,
 @TemplateID INT,
-@Directors IntList READONLY
+@Directors IntList READONLY,
+@ExperianDirectors IntList READONLY
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -57,6 +58,25 @@ BEGIN
 		INNER JOIN @Directors dl ON d.Id = dl.Value
 	ORDER BY
 		a.addressId
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		'ExperianDirector' AS RowType,
+		d.ExperianDirectorID AS ID,
+		d.FirstName AS FirstName,
+		d.LastName AS LastName,
+		d.Email AS Email,
+		d.Line1,
+		d.Line2,
+		d.Line3,
+		d.Town,
+		d.County,
+		d.Postcode,
+		'' AS Country
+	FROM
+		ExperianDirectors d
+		INNER JOIN @ExperianDirectors dl ON d.ExperianDirectorID = dl.Value
 
 	------------------------------------------------------------------------------
 

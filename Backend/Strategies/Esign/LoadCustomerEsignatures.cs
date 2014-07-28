@@ -47,6 +47,7 @@
 			public bool HasDocument { get; set; }
 			public long EsignerID { get; set; }
 			public int DirectorID { get; set; }
+			public int ExperianDirectorID { get; set; }
 			public string SignerEmail { get; set; }
 			public string SignerFirstName { get; set; }
 			public string SignerLastName { get; set; }

@@ -37,5 +37,7 @@
 		} // Now
 
 		public List<int> Directors { get; set; }
+
+		public List<int> ExperianDirectors { get; set; }
 	} // class SpSaveEsignSent
 } // namespace

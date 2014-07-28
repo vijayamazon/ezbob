@@ -6,6 +6,7 @@
 		public int ID { get; set; }
 
 		public int? DirectorID { get; set; }
+		public int? ExperianDirectorID { get; set; }
 		public string DirectorEmail { get; set; }
 	} // class Esigner
 } // namespace

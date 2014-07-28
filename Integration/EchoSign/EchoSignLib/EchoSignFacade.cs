@@ -90,10 +90,22 @@
 				return EchoSignSendResult.Fail;
 			} // if
 
-			return Send(oLetter.CustomerID, oLetter.Directors ?? new int[0], oLetter.TemplateID, oLetter.SendToCustomer);
+			return Send(
+				oLetter.CustomerID,
+				oLetter.Directors ?? new int[0],
+				oLetter.ExperianDirectors ?? new int[0],
+				oLetter.TemplateID,
+				oLetter.SendToCustomer
+			);
 		} // Send
 
-		private EchoSignSendResult Send(int nCustomerID, IEnumerable<int> aryDirectors, int nTemplateID, bool bSendToCustomer) {
+		private EchoSignSendResult Send(
+			int nCustomerID,
+			IEnumerable<int> aryDirectors,
+			IEnumerable<int> aryExperianDirectors,
+			int nTemplateID,
+			bool bSendToCustomer
+		) {
 			SpLoadDataForEsign sp;
 
 			try {
@@ -101,6 +113,7 @@
 					CustomerID = nCustomerID,
 					TemplateID = nTemplateID,
 					DirectorIDs = aryDirectors.ToList(),
+					ExperianDirectorIDs = aryExperianDirectors.ToList(),
 				};
 
 				sp.Load();
@@ -118,6 +131,7 @@
 			List<Person> oRecipients = new List<Person>();
 
 			oRecipients.AddRange(sp.Directors);
+			oRecipients.AddRange(sp.ExperianDirectors);
 
 			if (bSendToCustomer)
 				oRecipients.Add(sp.Customer);
@@ -129,7 +143,7 @@
 
 			switch (sp.Template.TemplateType) {
 			case TemplateType.BoardResolution:
-				return SendOne(sp.Template, null, oRecipients, sp, bSendToCustomer);
+				return SendOne(sp.Template, null, oRecipients, sp.Customer.ID, sp.Template.ID, bSendToCustomer);
 
 			case TemplateType.PersonalGuarantee:
 				int nTotalCount = 0;
@@ -138,7 +152,7 @@
 				foreach (Person oRecipient in oRecipients) {
 					nTotalCount++;
 
-					if (EchoSignSendResult.Success == SendOne(sp.Template, sp.Template.PersonalGuarantee(oRecipient), new List<Person> {oRecipient}, sp, bSendToCustomer))
+					if (EchoSignSendResult.Success == SendOne(sp.Template, sp.Template.PersonalGuarantee(oRecipient), new List<Person> {oRecipient}, sp.Customer.ID, sp.Template.ID, bSendToCustomer))
 						nSuccessCount++;
 				} // for each
 
@@ -311,7 +325,14 @@
 
 		#region method SendOne
 
-		private EchoSignSendResult SendOne(Template oTemplate, byte[] oFileContent, List<Person> oAddressee, SpLoadDataForEsign oData, bool bSentToCustomer) {
+		private EchoSignSendResult SendOne(
+			Template oTemplate,
+			byte[] oFileContent,
+			List<Person> oAddressee,
+			int nCustomerID,
+			int nTemplateID,
+			bool bSentToCustomer
+		) {
 			var oRecipients = oAddressee.Select(oPerson => new RecipientInfo {
 				email = oPerson.Email,
 				role = RecipientRole.SIGNER,
@@ -354,11 +375,12 @@
 				m_oLog.Debug("Sending result: document key is '{0}'.", aryResult[0].documentKey);
 
 				var sp = new SpSaveEsignSent(m_oDB, m_oLog) {
-					CustomerID = oData.Customer.ID,
+					CustomerID = nCustomerID,
 					Directors = oAddressee.Where(x => x.PersonType == PersonType.Director).Select(x => x.ID).ToList(),
+					ExperianDirectors = oAddressee.Where(x => x.PersonType == PersonType.ExperianDirector).Select(x => x.ID).ToList(),
 					DocumentKey = aryResult[0].documentKey,
 					SentToCustomer = bSentToCustomer,
-					TemplateID = oData.Template.ID,
+					TemplateID = nTemplateID,
 				};
 
 				sp.ExecuteNonQuery();

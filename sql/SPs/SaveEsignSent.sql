@@ -11,7 +11,8 @@ ALTER PROCEDURE SaveEsignSent
 @DocumentKey NVARCHAR(255),
 @SentToCustomer BIT,
 @Now DATETIME,
-@Directors IntList READONLY
+@Directors IntList READONLY,
+@ExperianDirectors IntList READONLY
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -36,6 +37,14 @@ BEGIN
 		0
 	FROM
 		@Directors
+
+	INSERT INTO Esigners(EsignatureID, ExperianDirectorID, StatusID)
+	SELECT
+		@SignatureID,
+		Value,
+		0
+	FROM
+		@ExperianDirectors
 
 	COMMIT TRANSACTION
 END

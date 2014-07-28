@@ -36,6 +36,10 @@
 		[FieldName("Directors")]
 		public List<int> DirectorIDs { get; set; }
 
+		[UsedImplicitly]
+		[FieldName("ExperianDirectors")]
+		public List<int> ExperianDirectorIDs { get; set; }
+
 		#endregion DB arguments
 
 		#region Loaded data
@@ -47,6 +51,8 @@
 		public Company Company { get; private set; }
 
 		public List<Person> Directors { get; private set; }
+
+		public List<Person> ExperianDirectors { get; private set; }
 
 		public Template Template { get; private set; }
 
@@ -60,7 +66,10 @@
 			Template = null;
 			Customer = null;
 			Company = null;
+
 			var oDirs = new SortedDictionary<int, Person>();
+
+			var oExpDirs = new SortedDictionary<int, Person>();
 
 			ForEachRowSafe((sr, bRowsetStart) => {
 				RowType nRowType;
@@ -81,9 +90,16 @@
 					Company = sr.Fill<Company>();
 					break;
 
-				case RowType.Director:
+				case RowType.Director: {
 					Person p = sr.Fill<Person>();
 					oDirs[p.ID] = p;
+				}
+					break;
+
+				case RowType.ExperianDirector: {
+					Person p = sr.Fill<Person>();
+					oExpDirs[p.ID] = p;
+				}
 					break;
 
 				case RowType.Template:
@@ -100,6 +116,8 @@
 
 			Directors = oDirs.Count > 0 ? oDirs.Values.ToList() : new List<Person>();
 
+			ExperianDirectors = oExpDirs.Count > 0 ? oExpDirs.Values.ToList() : new List<Person>();
+
 			FillTemplate();
 		} // Load
 
@@ -113,6 +131,7 @@
 			Customer,
 			Company,
 			Director,
+			ExperianDirector,
 			Template,
 		} // RowType
 
