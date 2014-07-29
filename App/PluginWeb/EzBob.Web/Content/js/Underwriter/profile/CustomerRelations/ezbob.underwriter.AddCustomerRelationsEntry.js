@@ -25,6 +25,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         this.onbeforesave = options.onbeforesave;
         this.customerId = this.model.customerId;
         this.url = options.url;
+	    this.isBroker = options.isBroker;
 
         EzBob.Underwriter.AddCustomerRelationsEntry.__super__.initialize.call(this);
     }, // initialize
@@ -43,9 +44,11 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
     }, // onRender
 
     serializeData: function () {
+	    var bIsBroker = this.isBroker;
+
         return {
             actions: EzBob.CrmActions,
-            statuses: EzBob.CrmStatuses,
+            statuses: _.filter(EzBob.CrmStatuses, function(s) { return s.IsBroker === bIsBroker; }),
             ranks: EzBob.CrmRanks,
         };
     }, // serializeData
@@ -78,7 +81,8 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
             status: this.ui.Status[0].value,
             rank: this.ui.Rank[0].value,
             comment: this.ui.Comment.val(),
-            customerId: this.customerId
+            customerId: this.customerId,
+			isBroker: this.isBroker,
         };
 
         if (this.onbeforesave)

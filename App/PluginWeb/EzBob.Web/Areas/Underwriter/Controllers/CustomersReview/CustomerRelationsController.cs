@@ -1,6 +1,6 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
+	using System.Linq;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -11,8 +11,7 @@
 	using NHibernate;
 	using log4net;
 
-	public class CustomerRelationsController : Controller
-	{
+	public class CustomerRelationsController : Controller {
 		#region public
 
 		#region constructor
@@ -25,8 +24,8 @@
 			CRMStatusesRepository crmStatusesRepository,
 			CRMActionsRepository crmActionsRepository,
 			CustomerRelationFollowUpRepository customerRelationFollowUpRepository,
-			CustomerRelationStateRepository customerRelationStateRepository)
-		{
+			CustomerRelationStateRepository customerRelationStateRepository
+		) {
 			_customerRelationsRepository = customerRelationsRepository;
 			_loanRepository = loanRepository;
 			_session = session;
@@ -44,13 +43,14 @@
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult Index(int id)
-		{
+		public JsonResult Index(int id) {
 			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository, _session);
 			return Json(crm.Create(id), JsonRequestBehavior.AllowGet);
 		} // Index
 
 		#endregion action Index
+
+		#region action CrmStatic
 
 		[Ajax]
 		[HttpGet]
@@ -66,7 +66,8 @@
 				}, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception e) {
-				Log.Warn("Failed to load CRM static data.");
+				Log.Warn("Failed to load CRM static data.", e);
+
 				return Json(new {
 					CrmActions = new IdNameModel[0],
 					CrmStatuses = new CrmStatusGroup[0],
@@ -75,17 +76,16 @@
 			}
 		} // CrmStatic
 
+		#endregion action CrmStatic
+
 		#region action SaveEntry
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult SaveEntry(string type, int action, int status, int? rank, string comment, int customerId)
-		{
-			try
-			{
-				var newEntry = new CustomerRelations
-				{
+		public JsonResult SaveEntry(string type, int action, int status, int? rank, string comment, int customerId, bool isBroker) {
+			try {
+				var newEntry = new CustomerRelations {
 					CustomerId = customerId,
 					UserName = User.Identity.Name,
 					Type = type,
@@ -93,7 +93,8 @@
 					Status = _crmStatusesRepository.Get(status),
 					Rank = rank.HasValue ? _crmRanksRepository.Get(rank.Value) : null,
 					Comment = comment,
-					Timestamp = DateTime.UtcNow
+					Timestamp = DateTime.UtcNow,
+					IsBroker = isBroker,
 				};
 
 				_customerRelationsRepository.SaveOrUpdate(newEntry);
@@ -101,8 +102,7 @@
 				_customerRelationStateRepository.SaveUpdateState(customerId, false, null, newEntry);
 				return Json(new { success = true, error = "" });
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				Log.ErrorFormat("Exception while trying to save customer relations new entry:{0}", e);
 				return Json(new { success = false, error = "Error saving new customer relations entry." });
 			} // try
@@ -110,23 +110,22 @@
 
 		#endregion action SaveEntry
 
+		#region action SaveFollowUp
+
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult SaveFollowUp(DateTime followUpDate, string comment, int customerId)
-		{
-
-			try
-			{
+		public JsonResult SaveFollowUp(DateTime followUpDate, string comment, int customerId, bool isBroker) {
+			try {
 				var lastCrm = _customerRelationsRepository.GetLastCrm(customerId);
 
-				var followUp = new CustomerRelationFollowUp
-					{
-						Comment = comment,
-						CustomerId = customerId,
-						DateAdded = DateTime.UtcNow,
-						FollowUpDate = followUpDate,
-					};
+				var followUp = new CustomerRelationFollowUp {
+					Comment = comment,
+					CustomerId = customerId,
+					DateAdded = DateTime.UtcNow,
+					FollowUpDate = followUpDate,
+					IsBroker = isBroker,
+				};
 
 				_customerRelationFollowUpRepository.SaveOrUpdate(followUp);
 				_session.Flush();
@@ -134,27 +133,27 @@
 
 				return Json(new { success = true, error = "" });
 			}
-			catch (Exception e)
-			{
-				Log.ErrorFormat("Exception while trying to save customer relations new entry:{0}", e);
-				return Json(new { success = false, error = "Error saving new customer relations followup." });
+			catch (Exception e) {
+				Log.Error("Exception while trying to save customer relations new entry.", e);
+				return Json(new { success = false, error = "Error saving new customer relations follow up." });
 			} // try
-		}
+		} // SaveFollowUp
+
+		#endregion action SaveFollowUp
+
+		#region action ChangeRank
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult ChangeRank(int customerId, int rankId)
-		{
-			try
-			{
-				var crm = new CustomerRelations
-					{
-						Rank = _crmRanksRepository.Get(rankId),
-						Timestamp = DateTime.UtcNow,
-						Comment = "Rank change",
-						UserName = User.Identity.Name,
-					};
+		public JsonResult ChangeRank(int customerId, int rankId) {
+			try {
+				var crm = new CustomerRelations {
+					Rank = _crmRanksRepository.Get(rankId),
+					Timestamp = DateTime.UtcNow,
+					Comment = "Rank change",
+					UserName = User.Identity.Name,
+				};
 
 				_customerRelationsRepository.Save(crm);
 				_session.Flush();
@@ -162,29 +161,28 @@
 
 				return Json(new { success = true, error = "" });
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				Log.ErrorFormat("Exception while trying to change customer relations rank:{0}", e);
 				return Json(new { success = false, error = "Error saving new customer relations rank." });
 			} // try
-		}
+		} // ChangeRank
+
+		#endregion action ChangeRank
+
+		#region action CloseFollowUp
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult CloseFollowUp(int customerId, int? followUpId = null)
-		{
-			try
-			{
+		public JsonResult CloseFollowUp(int customerId, int? followUpId = null) {
+			try {
 				var lastCrm = _customerRelationsRepository.GetLastCrm(customerId);
 				CustomerRelationFollowUp lastFollowUp = followUpId == null
-					                                        ? _customerRelationFollowUpRepository.GetLastFollowUp(customerId)
-					                                        : _customerRelationFollowUpRepository.Get(followUpId);
+					? _customerRelationFollowUpRepository.GetLastFollowUp(customerId)
+					: _customerRelationFollowUpRepository.Get(followUpId);
 
 				if (lastFollowUp == null)
-				{
 					return Json(new { success = false, error = "customer don't have any open follow ups please add one." });
-				}
 
 				lastFollowUp.IsClosed = true;
 				lastFollowUp.CloseDate = DateTime.UtcNow;
@@ -192,12 +190,13 @@
 
 				return Json(new { success = true, error = "" });
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				Log.ErrorFormat("Exception while trying to close customer relations follow up:{0}", e);
 				return Json(new { success = false, error = "Error saving new customer relations follow up." });
 			} // try
-		}
+		} // CloseFollowUp
+
+		#endregion action CloseFollowUp
 
 		#endregion public
 

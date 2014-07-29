@@ -66,6 +66,7 @@
   <xs:complexType name="CrmStatusGroup">
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsBroker" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Priority" type="xs:int" />
       <xs:element minOccurs="0" name="Statuses" nillable="true" type="tns:ArrayOfIdNameModel" />

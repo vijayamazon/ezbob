@@ -134,6 +134,7 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
         @CustomerRelationsView = new EzBob.Underwriter.CustomerRelationsView(
             el: customerRelations
             model: @crmModel
+            isBroker: false
         )
         @FraudDetectionLogs = new EzBob.Underwriter.fraudDetectionLogModel()
         @FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView(

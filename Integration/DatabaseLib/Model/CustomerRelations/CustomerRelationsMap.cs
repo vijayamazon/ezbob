@@ -1,11 +1,8 @@
-namespace EZBob.DatabaseLib.Model.CustomerRelations
-{
+namespace EZBob.DatabaseLib.Model.CustomerRelations {
 	using FluentNHibernate.Mapping;
 
-	public class CustomerRelationsMap : ClassMap<CustomerRelations>
-	{
-		public CustomerRelationsMap()
-		{
+	public class CustomerRelationsMap : ClassMap<CustomerRelations> {
+		public CustomerRelationsMap() {
 			Table("CustomerRelations");
 			Id(x => x.Id);
 
@@ -17,6 +14,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 			References(x => x.Rank, "RankId");
 			Map(x => x.Comment).Length(1000);
 			Map(x => x.Timestamp);
-		}
-	}
-}
+			Map(x => x.IsBroker);
+		} // constructor
+	} // class CustomerRelationsMap
+} // namespace

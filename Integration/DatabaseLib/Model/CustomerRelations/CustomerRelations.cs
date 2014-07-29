@@ -1,12 +1,12 @@
-namespace EZBob.DatabaseLib.Model.CustomerRelations
-{
+namespace EZBob.DatabaseLib.Model.CustomerRelations {
 	using System;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using NHibernate;
 
-	public class CustomerRelations
-	{
+	#region class CustomerRelations
+
+	public class CustomerRelations {
 		public virtual int Id { get; set; }
 
 		public virtual int CustomerId { get; set; }
@@ -17,30 +17,27 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 		public virtual CRMRanks Rank { get; set; }
 		public virtual string Comment { get; set; }
 		public virtual DateTime Timestamp { get; set; }
-	}
+		public virtual bool? IsBroker { get; set; }
+	} // class CustomerRelations
 
-	public interface ICustomerRelationsRepository : IRepository<CustomerRelations>
-	{
-	}
+	#endregion class CustomerRelations
 
-	public class CustomerRelationsRepository : NHibernateRepositoryBase<CustomerRelations>, ICustomerRelationsRepository
-	{
-		public CustomerRelationsRepository(ISession session)
-			: base(session)
-		{
-		}
+	#region class CustomerRelationsRepository
 
-		public virtual IQueryable<CustomerRelations> ByCustomer(int customerId)
-		{
+	public class CustomerRelationsRepository : NHibernateRepositoryBase<CustomerRelations> {
+		public CustomerRelationsRepository(ISession session) : base(session) {} // constructor
+
+		public virtual IQueryable<CustomerRelations> ByCustomer(int customerId) {
 			return GetAll().Where(r => r.CustomerId == customerId);
-		}
+		} // ByCustomer
 
-		public CustomerRelations GetLastCrm(int customerId)
-		{
+		public CustomerRelations GetLastCrm(int customerId) {
 			return GetAll()
 				.Where(x => x.CustomerId == customerId)
 				.OrderByDescending(x => x.Timestamp)
 				.FirstOrDefault();
-		}
-	}
-}
+		} // GetLastCrm
+	} // class CustomerRelationsRepository
+
+	#endregion class CustomerRelationsRepository
+} // namespace

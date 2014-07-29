@@ -41,8 +41,8 @@ BEGIN
 	IF @ErrorMsg = ''
 	BEGIN
 		BEGIN TRY
-			INSERT INTO CustomerRelations(CustomerId, UserName, Type, ActionId, StatusId, Comment, Timestamp)
-				VALUES (@CustomerID, @BrokerName, @Type, @ActionID, @StatusID, @Comment, @EntryTime)
+			INSERT INTO CustomerRelations(CustomerId, UserName, Type, ActionId, StatusId, Comment, Timestamp, IsBroker)
+				VALUES (@CustomerID, @BrokerName, @Type, @ActionID, @StatusID, @Comment, @EntryTime, 0)
 		END TRY
 		BEGIN CATCH
 			SET @ErrorMsg = 'Failed to insert new CRM entry into database.'

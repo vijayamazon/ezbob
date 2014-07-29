@@ -440,7 +440,8 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			url: window.gRootPath + 'Broker/BrokerHome/SaveCrmEntry',
 			onsave: function() { self.reloadData(); },
 			onbeforesave: function(opts) { opts.sContactEmail = self.router.getAuth(); },
-			model : model
+			model: model,
+			isBroker: false,
 		};
 
 		var view = new EzBob.Underwriter.AddCustomerRelationsEntry(options);

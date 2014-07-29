@@ -9,9 +9,12 @@ EzBob.Underwriter.CustomerRelationsModel = Backbone.Model.extend({
 
 EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
     template: '#customerRelationsTemplate',
+
     initialize: function() {
         this.model.on("change reset sync", this.render, this);
+	    this.isBroker = this.options.isBroker;
     },
+
     serializeData: function () {
         return {
             vals: this.model.get("CustomerRelations"), 
@@ -21,6 +24,7 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
             lastStatus: this.model.get("LastStatus")
         };
     },
+
     events: {
         "click .addNewCustomerRelationsEntry": "addNewCustomerRelationsEntry",
         "click .addFollowUp": "addFollowUp",
@@ -29,6 +33,7 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         "click #closeFollowUp": "closeLastFollowUp",
         "click .btnCloseFollowUp": "closeFollowUp"
     },
+
     ui: {
         "toggleBtnIcon": ".toggleSystemCrm i",
         "toggleSystemBtn": ".toggleSystemCrm",
@@ -37,14 +42,22 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         "rank": "#Rank",
         "followUp": 'label.followUp'
     },
+
     addNewCustomerRelationsEntry: function() {
-        var view = new EzBob.Underwriter.AddCustomerRelationsEntry({ model: this.model, url: window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/' });
+        var view = new EzBob.Underwriter.AddCustomerRelationsEntry({
+        	model: this.model,
+        	url: window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/',
+        	isBroker: this.isBroker,
+        });
         EzBob.App.jqmodal.show(view);
         return false;
     },
 
     addFollowUp: function() {
-        var view = new EzBob.Underwriter.AddCustomerRelationsFollowUp({ model: this.model });
+        var view = new EzBob.Underwriter.AddCustomerRelationsFollowUp({
+	        model: this.model,
+        	isBroker: this.isBroker,
+        });
         EzBob.App.jqmodal.show(view);
         return false;
     },
@@ -56,20 +69,15 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
 
     onRender: function() {
         var curRank = this.model.get('CurrentRank');
-        if (curRank) {
+        if (curRank)
             this.ui.rank.val(curRank.Id).blur();
-        }
 
         var isFollowed = _.some(this.model.get("FollowUps"), function(f) {
             return !f.IsClosed;
         });
-        
-        if (isFollowed) {
-            $('.crm-tab').addClass('followed-up');
-        } else {
-            $('.crm-tab').removeClass('followed-up');
-        }
-        
+
+        $('.crm-tab').toggleClass('followed-up', isFollowed);
+
         this.ui.toggleSystemBtn.tooltip({ placement: "right" });
         this.ui.followUp.tooltip({ placement: "bottom" });
     },
@@ -81,11 +89,11 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         }
         this.postChange(window.gRootPath + "Underwriter/CustomerRelations/ChangeRank", { customerId: this.model.customerId, rankId: this.ui.rank.val() });
     },
-    
+
     closeLastFollowUp: function (event, state) {
         this.postChange(window.gRootPath + "Underwriter/CustomerRelations/CloseFollowUp", { customerId: this.model.customerId });
     },
-    
+
     closeFollowUp: function (event, state) {
         this.postChange(window.gRootPath + "Underwriter/CustomerRelations/CloseFollowUp", { customerId: this.model.customerId, followUpId: $(event.currentTarget).data("id") });
     },

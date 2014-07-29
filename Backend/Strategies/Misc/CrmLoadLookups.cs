@@ -80,6 +80,7 @@
 							Id = nGroupID,
 							Name = sr["GroupName"],
 							Priority = sr["Priority"],
+							IsBroker = ((bool?)sr["IsBroker"]) ?? false,
 							Statuses = new List<IdNameModel>(),
 						};
 

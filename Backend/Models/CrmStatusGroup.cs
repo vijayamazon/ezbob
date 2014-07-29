@@ -14,6 +14,9 @@
 		public int Priority { get; set; }
 
 		[DataMember]
+		public bool? IsBroker { get; set; }
+
+		[DataMember]
 		public List<IdNameModel> Statuses { get; set; }
 	} // CrmStatusGroup
 

@@ -4,7 +4,8 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 	initialize: function() {
 		this.brokerID = null;
 		this.theTable = null;
-		this.leadTable = null;
+
+		this.brokerID2UserID = {}; // TODO: remove this mapping when implementing EZ-2459
 	}, // initialize
 
 	render: function() {
@@ -24,11 +25,68 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 				break;
 
 			case 'broker-relations':
-				console.log('TODO:', sSection);
+				self.startDisplayBrokerRelations();
 				break;
 			} // switch
 		});
 	}, // render
+
+	startDisplayBrokerRelations: function() {
+		this.loadBrokerID2UserIDEntry(_.bind(this.displayBrokerRelations, this));
+	}, // startDisplayBrokerRelations
+
+	displayBrokerRelations: function() {
+		var nBrokerID = this.brokerID2UserID[this.brokerID];
+
+		if (!nBrokerID) {
+			EzBob.ShowMessage('Cannot display broker relations: no user id found.');
+			return;
+		} // if
+
+		var crmModel = new EzBob.Underwriter.CustomerRelationsModel();
+
+		var oView = new EzBob.Underwriter.CustomerRelationsView({
+			el: this.$el.find('.broker-relations-root-el'),
+			model: crmModel,
+			isBroker: true,
+		});
+
+		crmModel.customerId = nBrokerID;
+		crmModel.fetch();
+	}, // displayBrokerRelations
+
+	loadBrokerID2UserIDEntry: function(oCallback) {
+		if (this.brokerID2UserID[this.brokerID]) {
+			if (oCallback)
+				oCallback();
+
+			return;
+		} // if
+
+		if (oCallback)
+			BlockUi();
+
+		var nBrokerID = this.brokerID;
+
+		var oXhr = $.getJSON(
+			'' + window.gRootPath + 'Underwriter/Brokers/LoadBrokerID2UserIDEntry',
+			{ nBrokerID: nBrokerID, }
+		);
+
+		var self = this;
+
+		oXhr.done(function(oResponse) {
+			if (oResponse.userID)
+				self.brokerID2UserID[nBrokerID] = oResponse.userID;
+		});
+
+		oXhr.always(function() {
+			if (oCallback) {
+				UnBlockUi();
+				oCallback();
+			} // if
+		});
+	}, // loadBrokerID2UserIDEntry
 
 	reloadCustomerGrid: function() {
 		if (this.theTable) {
@@ -214,6 +272,8 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		this.$el.show();
 		this.handleTabSwitch(type);
 		EzBob.handleUserLayoutSetting();
+
+		this.loadBrokerID2UserIDEntry();
 	}, // show
 
 	handleTabSwitch: function(sTabID) {

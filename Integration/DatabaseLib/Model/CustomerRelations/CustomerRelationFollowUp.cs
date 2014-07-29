@@ -1,5 +1,4 @@
-namespace EZBob.DatabaseLib.Model.CustomerRelations
-{
+namespace EZBob.DatabaseLib.Model.CustomerRelations {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -8,8 +7,9 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 	using NHibernate;
 	using NHibernate.Type;
 
-	public class CustomerRelationFollowUp
-	{
+	#region class CustomerRelationFollowUp
+
+	public class CustomerRelationFollowUp {
 		public virtual int Id { get; set; }
 		public virtual int CustomerId { get; set; }
 		public virtual DateTime DateAdded { get; set; }
@@ -17,12 +17,15 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 		public virtual string Comment { get; set; }
 		public virtual bool IsClosed { get; set; }
 		public virtual DateTime? CloseDate { get; set; }
-	}
+		public virtual bool? IsBroker { get; set; }
+	} // class CustomerRelationFollowUp
 
-	public class CustomerRelationFollowUpMap : ClassMap<CustomerRelationFollowUp>
-	{
-		public CustomerRelationFollowUpMap()
-		{
+	#endregion class CustomerRelationFollowUp
+
+	#region class CustomerRelationFollowUpMap
+
+	public class CustomerRelationFollowUpMap : ClassMap<CustomerRelationFollowUp> {
+		public CustomerRelationFollowUpMap() {
 			Table("CustomerRelationFollowUp");
 			Id(x => x.Id);
 			Map(x => x.DateAdded).CustomType<UtcDateTimeType>();
@@ -31,29 +34,33 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations
 			Map(x => x.CustomerId);
 			Map(x => x.IsClosed);
 			Map(x => x.CloseDate).CustomType<UtcDateTimeType>();
-		}
-	}
+			Map(x => x.IsBroker);
+		} // constructor
+	} // class CustomerRelationFollowUpMap
 
-	public interface ICustomerRelationFollowUpRepository : IRepository<CustomerRelationFollowUp>
-	{
+	#endregion class CustomerRelationFollowUpMap
+
+	#region interface ICustomerRelationFollowUpRepository
+
+	public interface ICustomerRelationFollowUpRepository : IRepository<CustomerRelationFollowUp> {
 		IEnumerable<CustomerRelationFollowUp> GetByCustomer(int customerId);
-	}
-	
-	public class CustomerRelationFollowUpRepository : NHibernateRepositoryBase<CustomerRelationFollowUp>, ICustomerRelationFollowUpRepository
-	{
-		public CustomerRelationFollowUpRepository(ISession session)
-			: base(session)
-		{
-		}
+	} // interface ICustomerRelationFollowUpRepository
 
-		public CustomerRelationFollowUp GetLastFollowUp(int customerId)
-		{
+	#endregion interface ICustomerRelationFollowUpRepository
+
+	#region class CustomerRelationFollowUpRepository
+
+	public class CustomerRelationFollowUpRepository : NHibernateRepositoryBase<CustomerRelationFollowUp>, ICustomerRelationFollowUpRepository {
+		public CustomerRelationFollowUpRepository(ISession session) : base(session) {} // constructor
+
+		public CustomerRelationFollowUp GetLastFollowUp(int customerId) {
 			return GetAll().Where(x => x.CustomerId == customerId).OrderByDescending(x => x.DateAdded).FirstOrDefault(x => x.IsClosed == false);
-		}
+		} // GetLastFollowUp
 
-		public IEnumerable<CustomerRelationFollowUp> GetByCustomer(int customerId)
-		{
+		public IEnumerable<CustomerRelationFollowUp> GetByCustomer(int customerId) {
 			return GetAll().Where(x => x.CustomerId == customerId);
-		}
-	}
-}
+		} // GetByCustomer
+	} // class CustomerRelationFollowUpRepository
+
+	#endregion class CustomerRelationFollowUpRepository
+} // namespace

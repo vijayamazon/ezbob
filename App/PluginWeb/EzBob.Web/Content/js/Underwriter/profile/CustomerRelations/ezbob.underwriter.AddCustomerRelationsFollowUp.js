@@ -26,8 +26,9 @@ EzBob.Underwriter.AddCustomerRelationsFollowUp = EzBob.BoundItemView.extend({
         this.onbeforesave = options.onbeforesave;
         this.customerId = this.model.customerId;
         this.url = window.gRootPath + 'Underwriter/CustomerRelations/SaveFollowUp/';
+	    this.isBroker = options.isBroker;
 
-        EzBob.Underwriter.AddCustomerRelationsEntry.__super__.initialize.call(this);
+        EzBob.Underwriter.AddCustomerRelationsFollowUp.__super__.initialize.call(this);
     }, // initialize
 
     onRender: function () {
@@ -37,14 +38,6 @@ EzBob.Underwriter.AddCustomerRelationsFollowUp = EzBob.BoundItemView.extend({
             that.ui.Comment.focus();
         });
     }, // onRender
-
-    serializeData: function () {
-        return {
-            actions: EzBob.CrmActions,
-            statuses: EzBob.CrmStatuses,
-            ranks: EzBob.CrmRanks,
-        };
-    }, // serializeData
 
     commentKeyup: function (el) {
         return this.ui.Comment.val(this.ui.Comment.val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
@@ -67,7 +60,8 @@ EzBob.Underwriter.AddCustomerRelationsFollowUp = EzBob.BoundItemView.extend({
         var opts = {
             followUpDate: EzBob.formatDateTimeCS(moment(this.ui.FollowUpDate.val(), 'DD/MM/YYYY')),
             comment: this.ui.Comment.val(),
-            customerId: this.customerId
+            customerId: this.customerId,
+            isBroker: this.isBroker,
         };
 
         if (this.onbeforesave)
@@ -94,4 +88,4 @@ EzBob.Underwriter.AddCustomerRelationsFollowUp = EzBob.BoundItemView.extend({
 
         return false;
     }, // onSave
-}); // EzBob.Underwriter.AddCustomerRelationsEntry
+}); // EzBob.Underwriter.AddCustomerRelationsFollowUp

@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
+	using System.Linq;
 	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.Misc;
@@ -435,7 +436,7 @@
 					oResult.Crm = new CrmStaticModel {
 						CrmActions = oInstance.Actions,
 						CrmRanks = oInstance.Ranks,
-						CrmStatuses = oInstance.Statuses,
+						CrmStatuses = oInstance.Statuses.Where(s => !s.IsBroker.HasValue || !s.IsBroker.Value).ToList(),
 					};
 				} // if
 			}
