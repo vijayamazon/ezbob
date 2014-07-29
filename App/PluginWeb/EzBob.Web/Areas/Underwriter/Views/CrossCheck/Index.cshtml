@@ -278,8 +278,57 @@
                             <td>@copyAddress("Ebay", @Model.EBayAddress)</td>
                             <td>@copyAddress("PayPal", @Model.PayPalAddress)</td>
                         </tr>
+                        <tr>
+                            <td><b>Zoopla Estimate</b></td>
+                            <td colspan="4">@if (Model.CurrentAddress != null)
+                                            {
+                                                @GetZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaAverage, Model.CurrentAddress.ZooplaUpdateDate);
+                                            }
+                                <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Mortgage</b></td>
+                            <td colspan="4">@GetMortgage()</td>
+                        </tr>
+                        <tr>
+                            <td><b>Property net worth</b></td>
+                            <td colspan="4">
+                                @if (@Model.Application.ResidentialStatus != null && Model.Application.ResidentialStatus.Contains("Home owner"))
+                                {
+                                    @Html.Raw("£")
+                                    @Model.AssetWorth.ToString("N0")
+                                }
+                                else
+                                {
+                                    @Html.Raw("Not home owner")
+                                }
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
+
+                @if (Model.LandRegistries.Any())
+                {
+                    <div class="box">
+                        <div class="box-title">
+                            <h3>Land Registry</h3>
+                        </div>
+                        <div class="box-content">
+                            @foreach (var lr in Model.LandRegistries)
+                            {
+                                <div class="accordion-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" href="#@lr.TitleNumber">Title Number: @lr.TitleNumber</a>
+                                </div>
+                                <div id="@lr.TitleNumber" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        @LandRegistryRes(lr)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
 
                 @if (Model.Customer.SegmentType() == "Offline")
                 {
@@ -695,3 +744,271 @@
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressTemplate.cshtml");}
 </script>
 
+@helper LandRegistryRes(LandRegistryLib.LandRegistryResModel lr)
+{
+    <div class="tabbable">
+        @if (lr == null)
+        {
+            <h3>Error parsing the data</h3>
+        }
+        else if (lr.Rejection != null)
+        {
+            <h3>Rejection: @lr.Rejection.Reason
+                <br />
+                @lr.Rejection.OtherDescription</h3>
+        }
+        else if (lr.Acknowledgement != null)
+        {
+            <h3>Acknowledgment: <b>tell developer about it!!!</b><br />
+                @lr.Acknowledgement.Description%> @lr.Acknowledgement.PollDate</h3>
+        }
+        else
+        {
+
+            <div class="tab-content">
+                <span>Title Number: @lr.TitleNumber</span>
+            </div>
+
+            <div class="tab-content">
+                @if (lr.PropertyAddresses.Count == 1)
+                {
+                    <div>Property Address: @lr.PropertyAddresses[0].Lines @lr.PropertyAddresses[0].PostCode</div>
+                }
+                else
+                {
+                    <table class="table centered squeezed">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <td colspan="2">Property Address</td>
+                            </tr>
+                            <tr class="box-title">
+                                <td>Address</td>
+                                <td>Postcode</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var a in lr.PropertyAddresses)
+                            {
+                                <tr>
+                                    <td class="narrow-as-possible">@a.Lines</td>
+                                    <td>@a.PostCode</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+
+            <div class="tab-content">
+                @if (lr.PricePaidInfills != null && lr.PricePaidInfills.Count > 0)
+                {
+                    <table class="table centered squeezed">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <td colspan="2">Price Paid</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in lr.PricePaidInfills)
+                            {
+                                <tr>
+                                    <td class="narrow-as-possible">@p.Key</td>
+                                    <td>@p.Value</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div><span>No price paid specified.</span></div>
+                }
+            </div>
+
+            <div class="tab-content">
+                <table class="table centered squeezed">
+                    <thead class="box">
+                        <tr class="box-title">
+                            <td>Proprietorship</td>
+                            @if (lr.Proprietorship.CurrentProprietorshipDate.HasValue)
+                            {
+                                <td>Current Proprietorship Date: @lr.Proprietorship.CurrentProprietorshipDate.Value.ToString("dd/MM/yyyy")</td>
+                                <td colspan="3"></td>
+                            }
+                            else
+                            {
+                                <td colspan="4"></td>
+                            }
+                            
+                        </tr>
+                        <tr class="box-title">
+                            <td>Type</td>
+                            <td>Party Type</td>
+                            <td>Private Individual Name</td>
+                            <td>Company Name / Registration Number</td>
+                            <td>Proprietorship Addresses</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in lr.Proprietorship.ProprietorshipParties)
+                        {
+                            <tr>
+                                <td>@p.ProprietorshipType</td>
+                                <td>@p.ProprietorshipPartyType</td>
+                                <td>@p.PrivateIndividualForename @p.PrivateIndividualSurname</td>
+                                <td>@p.CompanyName @p.CompanyRegistrationNumber</td>
+                                <td>
+                                    <table class="">
+                                        <tbody>
+                                            @foreach (var a in p.ProprietorshipAddresses)
+                                            {
+                                                <tr>
+                                                    <td>@a.Lines</td>
+                                                    <td>@a.PostCode</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                @if (lr.Charges != null && lr.Charges.Count > 0)
+                {
+                    <table class="table centered squeezed">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <td colspan="6">Charges</td>
+                            </tr>
+                            <tr class="box-title">
+                                <td>Date</td>
+                                <td>Entry Text</td>
+                                <td>Proprietorship</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in lr.Charges)
+                            {
+                                <tr>
+                                    <td>@c.ChargeDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@c.Description</td>
+                                    <td>
+                                        <table class="">
+                                            <thead class="box">
+                                                <tr class="box-title">
+                                                    <td>Type</td>
+                                                    <td>Party Type</td>
+                                                    <td>Name</td>
+                                                    <td>Proprietorship Addresses</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var p in c.Proprietorship.ProprietorshipParties)
+                                                {
+                                                    <tr>
+                                                        <td>@p.ProprietorshipType</td>
+                                                        <td>@p.ProprietorshipPartyType</td>
+                                                        <td>@p.CompanyName@p.PrivateIndividualForename @p.PrivateIndividualSurname</td>
+                                                        <td>
+                                                            <table class="">
+                                                                <tbody>
+                                                                    @foreach (var a in p.ProprietorshipAddresses)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@a.Lines</td>
+                                                                            <td>@a.PostCode</td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <span>No charges specified</span>
+                }
+            </div>
+
+            <div class="tab-content">
+                @if (lr.Restrictions != null && lr.Restrictions.Count > 0)
+                {
+                    <table class="table centered squeezed">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <td colspan="6">Restrictions</td>
+                            </tr>
+                            <tr class="box-title">
+                                <td>Entry Num</td>
+                                <td>Entry Text</td>
+                                <td>Type</td>
+                                <td>SubRegister Code</td>
+                                <td>Schedule Code</td>
+                                <td>In fills</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in lr.Restrictions)
+                            {
+                                <tr>
+                                    <td>@r.EntryNumber</td>
+                                    <td>@r.EntryText</td>
+                                    <td>@r.Type</td>
+                                    <td>@r.SubRegisterCode</td>
+                                    <td>@r.ScheduleCode</td>
+                                    <td>
+                                        <table class="">
+                                            <tbody>
+                                                @foreach (var i in r.Infills)
+                                                {
+                                                    <tr>
+                                                        <td>@i.Key</td>
+                                                        <td>@i.Value</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <span>No restrictions specified</span>
+                }
+            </div>
+
+            <div class="tab-content">
+                <table class="table centered squeezed">
+                    <thead class="box">
+                        <tr class="box-title">
+                            <td>Indicators</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in lr.Indicators)
+                        {
+                            <tr>
+                                <td>@i</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+}
