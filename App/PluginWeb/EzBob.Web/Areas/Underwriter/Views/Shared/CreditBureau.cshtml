@@ -1,29 +1,40 @@
 ﻿@model dynamic
 
 <script id="experian-info-template" type="text/template">
-    <div class="row box">
-        <div class="box-content">
-            @RunCheckButtons()
-            <% if (experianInfo.HasExperianError) { %>
-                @DisplayExperianError()
-            <% } else { %>
-                @DisplayExperianError()
-            <%var summary = experianInfo.Summary || {}; %>
-                @BureauSummaryForCustomer()
-            <%var consumerData = experianInfo.Consumer || {}; %>
-                @DisplayConsumerData()
-            @DisplayConsumerAmlBwaData()
-            <% } %>
-            <% if(experianInfo.Directors && experianInfo.Directors.length>0) {
-                _.each(experianInfo.Directors, function(director){
-                    consumerData = director; %>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-content">
+                    @RunCheckButtons()
+
+                    <%
+                        var summary = experianInfo.Summary || {};
+                        var consumerData = experianInfo.Consumer || {};
+                        var consumerHistory = consumerData.ConsumerHistory;
+                        var errorList = consumerData.ErrorList;
+                        var curId=consumerData.Id;
+                    %>
+
+                    @BureauSummaryForCustomer()
                     @DisplayConsumerData()
-            <%});%>
-            <% } %>
-            @ExperianConsent()
+                    @DisplayConsumerAmlBwaData()
+                    
+                    <% if(experianInfo.Directors && experianInfo.Directors.length>0) {
+                        _.each(experianInfo.Directors, function(director){
+                            consumerData = director;
+                            errorList = director.ErrorList; 
+                            curId=consumerData.Id;%>
+                            
+                            @DisplayConsumerData()
+
+                        <%});%>
+                    <% } %>
+                @ExperianConsent()
+                </div>
+            </div>
+            <div id="idhub-custom-address"></div>
         </div>
     </div>
-    <div id="idhub-custom-address"></div>
 </script>
 
 
@@ -118,7 +129,7 @@
         <div class="pull-left">
             <a class="btn btn-primary" href="#" id="RunConsumerCheckBtn">Run Consumer check</a>
             <select id="ConsumerCheckTarget" class="higherselectheight btn btn-primary">
-                <option selected="selected" value="<%- experianInfo.Id %>"><%- experianInfo.ApplicantFullNameAge %></option>
+                <option selected="selected" value="<%- experianInfo.Consumer.Id %>"><%- experianInfo.Consumer.ApplicantFullNameAge %></option>
                 <% _.each(experianInfo.Directors, function(directorsModel) { %>
                     <option value="<%- directorsModel.Id %>"><%- directorsModel.ApplicantFullNameAge %></option>
                 <% }); %>
@@ -141,7 +152,7 @@
         <div id="collapseSummary<%-consumerData.Id%>" class="accordion-body collapse">
             <div class="accordion-inner">
                 <div class="row col-md-12">
-
+                    <%if(!consumerData.HasExperianError) {%>
                     <div class="accordion-heading">
                         <a class="accordion-toggle" data-toggle="collapse" href="#collapseDetails<%-consumerData.Id%>">
                             <b class="play"></b>Delphi Score Details</a>
@@ -262,10 +273,10 @@
                     </div>
 
                     <%var accountsInformation = consumerData.AccountsInformation || [];%>
-                @FinancialAccounts()
+                    @FinancialAccounts()
 
                     <% if (experianInfo.HasNOCs) { %>
-                <div class="accordion-heading">
+                    <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" href="#collapseNOCs<%-consumerData.Id%>">
                         <b class="play"></b>Notices of Correction (NOCs)</a>
                 </div>
@@ -288,6 +299,9 @@
                         </div>
                     </div>
                     <% } %>
+                    
+                    <%}%>
+                    @DisplayExperianError()
                 </div>
             </div>
         </div>
@@ -378,18 +392,18 @@
 @helper DisplayExperianError()
 {
     <div class="row">
-        <%if(experianInfo.ErrorList && experianInfo.ErrorList.length > 0){%>
+        <%if(errorList && errorList.length > 0){%>
         <div class="span9 accordion page-content-frame" id="accordion-request-error">
             <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianRequestFailed">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianRequestFailed<%-curId%>">
                     <b class="play"></b>Experian Errors</a>
             </div>
-            <div id="collapseExperianRequestFailed" class="accordion-body collapse">
+            <div id="collapseExperianRequestFailed<%-curId%>" class="accordion-body collapse">
                 <div class="accordion-inner">
                     <div class="col-md-12">
                         <div class="span8">
                             <ul>
-                                <% _.each(experianInfo.ErrorList, function(errMessage){ %>
+                                <% _.each(errorList, function(errMessage){ %>
                                     <li><%- errMessage %></li>
                                 <% }); %>
                             </ul>
@@ -569,7 +583,7 @@
 {
     <div class="row">
         <div class="col-lg-6 col-md-12">
-            
+
             <table class="table rright box">
                 <thead class="box">
                     <tr class="box-title">
@@ -611,8 +625,8 @@
                     @EzForm.RawCellBold("Id", "Date insert", "Score")
                 </thead>
                 <tbody class="box-content">
-                    <% _.each(experianInfo.Consumer.ConsumerHistory, function(val, i){%>
-                    @RawCell("<%-val.Id%>", "<%-EzBob.formatDateTime(val.Date)%>", "<%-val.Score%>")
+                    <% _.each(consumerHistory, function(val, i){%>
+                    @RawCell("<%-val.ServiceLogId%>", "<%-EzBob.formatDateTime(val.Date)%>", "<%-val.Score%>")
                     <%})%>
                 </tbody>
             </table>

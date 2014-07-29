@@ -82,6 +82,10 @@
 		#region method LookFor
 
 		private static string LookFor(string sNeedle, SortedDictionary<string, string> oHaystack) {
+			if (string.IsNullOrEmpty(sNeedle))
+			{
+				return string.Empty;
+			}
 			return oHaystack.ContainsKey(sNeedle) ? oHaystack[sNeedle] : (sNeedle ?? string.Empty);
 		} // LookFor
 

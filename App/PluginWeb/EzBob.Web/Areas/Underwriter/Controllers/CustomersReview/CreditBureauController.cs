@@ -166,6 +166,12 @@
 		public JsonResult IsCompanyCacheRelevant(int customerId)
 		{
 			var customer = _customers.Get(customerId);
+			if (customer == null || customer.Company == null || string.IsNullOrEmpty(customer.Company.ExperianRefNum) ||
+			    customer.Company.ExperianRefNum.Equals("NotFound"))
+			{
+				return Json(new { NoCompany = true });
+			}
+
 			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianCompanyCacheDate(customer.Company.ExperianRefNum);
 
 			DateTime cacheDate = result.Value;

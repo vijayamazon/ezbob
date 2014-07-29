@@ -42,16 +42,17 @@
 		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
 		{
 			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
-			var model = new CreditBureauModel();
+			var model = new CreditBureauModel { Id = customer.Id };
 			try
 			{
-				model.Consumer = GetConsumerInfo(customer.Id, null, logId);
+				model.Consumer = GetConsumerInfo(customer.Id, null, logId, customer.PersonalInfo != null ? customer.PersonalInfo.Fullname : "");
 				if (customer.Company != null && customer.Company.Directors.Any())
 				{
 					model.Directors = new List<ExperianConsumerModel>();
 					foreach (var director in customer.Company.Directors)
 					{
-						model.Directors.Add(GetConsumerInfo(customer.Id, director.Id, null));
+						model.Directors.Add(GetConsumerInfo(customer.Id, director.Id, null, 
+							string.Format("{0} {1} {2}", director.Name, director.Middle, director.Surname)));
 					}
 				}
 
@@ -60,7 +61,7 @@
 				model.Summary = GetSummaryModel(model);
 
 				//todo move to CompanyScore
-				GetCompanyHistoryModel(customer, model);
+				model.CompanyHistory = GetCompanyHistoryModel(customer);
 			}
 			catch (Exception e)
 			{
@@ -72,23 +73,17 @@
 			return model;
 		}
 
-		public ExperianConsumerModel GetConsumerInfo(int customerId, int? directorId, long? logId)
+		public ExperianConsumerModel GetConsumerInfo(int customerId, int? directorId, long? logId, string name)
 		{
 			var data = _serviceClient.Instance.LoadExperianConsumer(customerId, directorId, logId);
-			return GenerateConsumerModel(data.Value);
+			return GenerateConsumerModel(data.Value, customerId, directorId, logId, name);
 		}
 
 		private IOrderedEnumerable<CheckHistoryModel> GetConsumerHistoryModel(int customerId, int? directorId)
 		{
-			List<MP_ExperianHistory> consumerHistory;
-			if (directorId.HasValue)
-			{
-				consumerHistory = _experianHistoryRepository.GetDirectorConsumerHistory(directorId.Value).ToList();
-			}
-			else
-			{
-				consumerHistory = _experianHistoryRepository.GetCustomerConsumerHistory(customerId).ToList();
-			}
+			List<MP_ExperianHistory> consumerHistory = directorId.HasValue ? 
+				_experianHistoryRepository.GetDirectorConsumerHistory(directorId.Value).ToList() : 
+				_experianHistoryRepository.GetCustomerConsumerHistory(customerId).ToList();
 
 			if (consumerHistory.Any())
 			{
@@ -98,7 +93,8 @@
 						Id = x.Id,
 						Score = x.Score,
 						CII = x.CII.HasValue ? x.CII.Value : -1,
-						Balance = x.CaisBalance.HasValue ? x.CaisBalance.Value : -1
+						Balance = x.CaisBalance.HasValue ? x.CaisBalance.Value : -1,
+						ServiceLogId = x.ServiceLogId
 					}).OrderByDescending(h => h.Date);
 			}
 
@@ -106,7 +102,7 @@
 		}
 
 		//todo remove
-		private void GetCompanyHistoryModel(Customer customer, CreditBureauModel model)
+		private IOrderedEnumerable<CheckHistoryModel> GetCompanyHistoryModel(Customer customer)
 		{
 			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
 			Log.DebugFormat("BuildHistoryModel company type: {0}", isLimited ? "Limited" : "NonLimited");
@@ -114,7 +110,7 @@
 			if (companyHistory.Any())
 			{
 				Log.Debug("BuildHistoryModel company from history table");
-				model.CompanyHistory = companyHistory.Select(x => new CheckHistoryModel
+				return companyHistory.Select(x => new CheckHistoryModel
 				{
 					Date = x.Date.ToUniversalTime(),
 					Id = x.Id,
@@ -122,39 +118,39 @@
 					Balance = x.CaisBalance
 				}).OrderByDescending(h => h.Date);
 			}
-			else
+			
+			//Not in cache
+			Log.Debug("BuildHistoryModel company from mp_servicelog table");
+			var type = (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr());
+
+			if (isLimited)
 			{
-				Log.Debug("BuildHistoryModel company from mp_servicelog table");
-				var type = (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr());
+				List<CheckHistoryModel> checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
+																	 where s.Director == null
+																	 where s.Customer.Id == customer.Id
+																	 where s.ServiceType == type
+																	 select GetLimitedHistory(s.InsertDate, s.Id)
+																	).ToList();
 
-				if (isLimited)
+				var history =  checkCompanyHistoryModels.Where(h => h != null).OrderByDescending(h => h.Date);
+				foreach (var cModel in checkCompanyHistoryModels)
 				{
-					List<CheckHistoryModel> checkCompanyHistoryModels = (
-																			from s in _session.Query<MP_ServiceLog>()
-																			where s.Director == null
-																			where s.Customer.Id == customer.Id
-																			where s.ServiceType == type
-																			select GetLimitedHistory(s.InsertDate, s.Id)
-																		).ToList();
-
-					model.CompanyHistory = checkCompanyHistoryModels.Where(h => h != null).OrderByDescending(h => h.Date);
-					foreach (var cModel in checkCompanyHistoryModels)
+					if (cModel != null)
 					{
-						if (cModel != null)
+						_experianHistoryRepository.Save(new MP_ExperianHistory
 						{
-							_experianHistoryRepository.Save(new MP_ExperianHistory
-							{
-								CustomerId = customer.Id,
-								ServiceLogId = cModel.Id,
-								CompanyRefNum = customer.Company.ExperianRefNum,
-								Type = type,
-								Date = cModel.Date,
-								Score = cModel.Score,
-							});
-						}
+							CustomerId = customer.Id,
+							ServiceLogId = cModel.Id,
+							CompanyRefNum = customer.Company.ExperianRefNum,
+							Type = type,
+							Date = cModel.Date,
+							Score = cModel.Score,
+						});
 					}
 				}
+				return history;
 			}
+			return null;
 		}
 		//todo remove
 		private CheckHistoryModel GetLimitedHistory(DateTime date, long id)
@@ -167,16 +163,19 @@
 				Id = id,
 				Balance = m.CaisBalance,
 				Score = m.Score,
+				ServiceLogId = id
 			};
 		} // GetLimitedHistory
 
-		public ExperianConsumerModel GenerateConsumerModel(ExperianConsumerData eInfo)
+		public ExperianConsumerModel GenerateConsumerModel(ExperianConsumerData eInfo, int customerId, int? directorId, long? logId, string name)
 		{
-			var model = new ExperianConsumerModel { ErrorList = new List<string>() };
-			if (eInfo == null)
+			var model = new ExperianConsumerModel { ErrorList = new List<string>(),
+				Id = directorId.HasValue? directorId.Value : customerId };
+			if (eInfo == null || eInfo.ServiceLogId == null)
 			{
 				model.HasExperianError = true;
 				model.ErrorList.Add("No data");
+				model.ApplicantFullNameAge = name;
 				return model;
 			}
 
@@ -184,8 +183,7 @@
 
 			var checkDate = eInfo.InsertDate;
 			var checkValidity = checkDate.AddMonths(3);
-
-			model.Id = eInfo.DirectorId.HasValue ? eInfo.DirectorId.Value : (eInfo.CustomerId ?? 0);
+			
 			model.ServiceLogId = eInfo.ServiceLogId;
 			model.HasExperianError = eInfo.HasExperianError;
 			model.ModelType = "Consumer";
@@ -427,8 +425,8 @@
 			model.NOCs = eInfo.Nocs.Select(nocDetails => new NOCInfo { NOCReference = nocDetails.Reference, NOCLines = nocDetails.TextLine }).ToArray();
 
 			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
-
-			model.ConsumerHistory = GetConsumerHistoryModel(eInfo.CustomerId.Value, eInfo.DirectorId);
+			
+			model.ConsumerHistory = GetConsumerHistoryModel(customerId, directorId);
 			return model;
 		}
 

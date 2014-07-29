@@ -99,15 +99,19 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         BlockUi("on");
         $.post(window.gRootPath + "Underwriter/CreditBureau/IsCompanyCacheRelevant", { customerId: this.model.get("Id") })
             .done(function (response) {
-                if (response.IsRelevant == "True") {
-                    EzBob.ShowMessage("Last check was done at " + response.LastCheckDate + " and cache is valid for " + response.CacheValidForDays + " days. Run check anyway?", "No need for check warning",
-                        function () {
-                            that.RunCompanyCheck(true);
-                            return true;
-                        },
-                        "Yes", null, "No");
+                if (response.NoCompany) {
+                    EzBob.ShowMessage("Customer don't have a company", "Nothing to recheck");
                 } else {
-                    that.RunCompanyCheck(false);
+                    if (response.IsRelevant == "True") {
+                        EzBob.ShowMessage("Last check was done at " + response.LastCheckDate + " and cache is valid for " + response.CacheValidForDays + " days. Run check anyway?", "No need for check warning",
+                            function() {
+                                that.RunCompanyCheck(true);
+                                return true;
+                            },
+                            "Yes", null, "No");
+                    } else {
+                        that.RunCompanyCheck(false);
+                    }
                 }
             })
             .complete(function () {

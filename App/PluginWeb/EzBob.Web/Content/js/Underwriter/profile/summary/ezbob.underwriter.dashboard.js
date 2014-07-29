@@ -172,11 +172,13 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         var obj;
         obj = e.currentTarget;
         this.$el.find('.company-name').text($(obj).data('companyname') + ' ' + $(obj).data('companyref'));
+        this.drawSparklineGraphs();
     },
     consumerChanged: function (e) {
         var obj;
         obj = e.currentTarget;
         this.$el.find('.applicant-name').text($(obj).data('applicantname'));
+        this.drawSparklineGraphs();
     },
     personalModelChanged: function (e, a) {
         if (e && a && this.model) {
@@ -203,8 +205,8 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
 
     experianSpark: function () {
         var that = this;
-        if (this.experianModel && this.experianModel.get('ConsumerHistory')) {
-            var historyConsumerSorted = _.sortBy(this.experianModel.get('ConsumerHistory'), function (history) {
+        if (this.experianModel && this.experianModel.get('Consumer')) {
+            var historyConsumerSorted = _.sortBy(this.experianModel.get('Consumer').ConsumerHistory, function (history) {
                 return history.Date;
             });
             var consumerHistoryScores = _.pluck(historyConsumerSorted, 'Score').join(',');
@@ -213,8 +215,24 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             this.$el.find(".consumerScoreGraph").attr('values', consumerHistoryScores);
             this.$el.find(".consumerCIIGraph").attr('values', consumerHistoryCIIs);
             this.$el.find(".consumerBalanceGraph").attr('values', consumerHistoryCais);
-            
         }
+
+        if (this.experianModel && this.experianModel.get('Directors')) {
+            console.log('dirs', this.experianModel);
+            _.each(this.experianModel.get('Directors'), function (director, i) {
+                var historyDirectorSorted = _.sortBy(director.ConsumerHistory, function (history) {
+                    return history.Date;
+                });
+                var directorHistoryScores = _.pluck(historyDirectorSorted, 'Score').join(',');
+                var directorHistoryCIIs = _.pluck(historyDirectorSorted, 'CII').join(',');
+                var directorHistoryCais = _.pluck(historyDirectorSorted, 'Balance').join(',');
+                console.log('dir', i, directorHistoryScores, directorHistoryCIIs, directorHistoryCais);
+                that.$el.find(".directorScoreGraph" + i).attr('values', directorHistoryScores);
+                that.$el.find(".directorCIIGraph" + i).attr('values', directorHistoryCIIs);
+                that.$el.find(".directorBalanceGraph" + i).attr('values', directorHistoryCais);
+            });
+        }
+        
         if (this.experianModel && this.experianModel.get('CompanyHistory')) {
             var historyCompanyScoresSorted = _.sortBy(this.experianModel.get('CompanyHistory'), function (history) {
                 return history.Date;
@@ -233,6 +251,9 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                 }
             });
         }
+        this.drawSparklineGraphs();
+    },
+    drawSparklineGraphs: function() {
         this.$el.find(".inline-sparkline").sparkline("html", {
             width: "100%",
             height: "100%",
@@ -248,7 +269,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             }
         });
     },
-    
     drawGraphs: function() {
         var properties = this.propertiesModel.toJSON();
         if (properties && properties.NetWorth) {
@@ -278,9 +298,9 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             barColor: '#cfcfcf',
             height: "50px"
         });
-        if (this.experianModel && this.experianModel.get('directorsModels')) {
-            directors = this.experianModel.get('directorsModels').length;
-            i = 0;
+        if (this.experianModel && this.experianModel.get('Directors')) {
+            var directors = this.experianModel.get('Directors').length;
+            var i = 0;
             while (i < directors) {
                 cc = this.$el.find("#directorScoreCanvas" + i);
                 this.halfDonut(cc, cc.data('color'), cc.data('percent'));

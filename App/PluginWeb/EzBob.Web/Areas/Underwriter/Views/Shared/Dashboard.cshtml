@@ -154,10 +154,8 @@
     </div>
     <div class="row">
         <%if(experian) {
-            experian.Summary = experian.Summary || {};
-            experian.Summary.ConsumerAccountsOverview = experian.Summary.ConsumerAccountsOverview || {};
-            experian.ConsumerSummaryCharacteristics = experian.ConsumerSummaryCharacteristics || {};
-            experian.ConsumerAccountsOverview = experian.ConsumerAccountsOverview || {};
+            experian.Consumer = experian.Consumer || {};
+            experian.Consumer.ConsumerAccountsOverview = experian.Consumer.ConsumerAccountsOverview || {};
             var tileColor='';
             var alert = '';
             if(!EzBob.isDarkColor(experian.ScoreColor)){
@@ -167,15 +165,15 @@
         <div class="col-lg-6 col-md-12 col-sm-12">
             <div class="box">
                 <div class="box-title">
-                    <h3>Customer & Directors <span class="applicant-name"><%-experian.ApplicantFullName%></span></h3>
+                    <h3>Customer & Directors <span class="applicant-name"><%-experian.Consumer.ApplicantFullName%></span></h3>
                     @BoxTools("CustomerAndDirectors", "#credit-bureau")
                 </div>
                 <div class="box-content">
                     <div class="tabbable tabs-left">
                         <ul class="nav nav-tabs active">
-                            <li class="active"><a href="#customerExperian" data-toggle="tab" data-applicantname="<%-experian.ApplicantFullName%>"><span class="<%-tileColor%>" style="background-color: <%-experian.ScoreColor%>;"><%-experian.Score%></span>&nbsp;Applicant</a></li>
-                            <%if(experian.directorsModels && experian.directorsModels.length > 0){
-                                _.each(experian.directorsModels, function(item, i){
+                            <li class="active"><a href="#customerExperian" data-toggle="tab" data-applicantname="<%-experian.Consumer.ApplicantFullName%>"><span class="<%-tileColor%>" style="background-color: <%-experian.Consumer.ScoreColor%>;"><%-experian.Consumer.Score%></span>&nbsp;Applicant</a></li>
+                            <%if(experian.Directors && experian.Directors.length > 0){
+                                _.each(experian.Directors, function(item, i){
                                     var directorTileColor='';
                                     if(!EzBob.isDarkColor(item.ScoreColor)){
                                         directorTileColor = 'tile-light';
@@ -186,15 +184,15 @@
                         </ul>
                         <div class="tab-content no-border">
                             <div class="tab-pane fade active in" id="customerExperian">
-                                <% if (experian.HasExperianError) { %>
+                                <% if (experian.Consumer.HasExperianError) { %>
                                     <h3>Error retrieving consumer data</h3>
                                 <% } else { %>
                                     <div class="col-lg-3 col-md-6">
                                         <div class="right-seperator">
                                             <div class="text-center experian-canvas">
                                                 <div>Score</div>
-                                                <canvas id="consumerScoreCanvas" width="100" height="100" data-color="<%-experian.ScoreColor%>" data-percent="<%-experian.Score/1200%>"></canvas>
-                                                <div class="half-donut-caption"><%-experian.Score%></div>
+                                                <canvas id="consumerScoreCanvas" width="100" height="100" data-color="<%-experian.Consumer.ScoreColor%>" data-percent="<%-experian.Consumer.Score/1200%>"></canvas>
+                                                <div class="half-donut-caption"><%-experian.Consumer.Score%></div>
                                             </div>
                                             <div class="">
                                                 <span class="inline-sparkline consumerScoreGraph"></span>
@@ -205,8 +203,8 @@
                                     <div class="right-seperator">
                                         <div class="text-center experian-canvas">
                                             <div>Indebtedness index</div>
-                                            <canvas id="consumerCIICanvas" width="100" height="100" data-color="#a7a7a7" data-percent="<%-Math.abs(experian.CII)/100%>"></canvas>
-                                            <div class="half-donut-caption"><%-experian.CII%></div>
+                                            <canvas id="consumerCIICanvas" width="100" height="100" data-color="#a7a7a7" data-percent="<%-Math.abs(experian.Consumer.CII)/100%>"></canvas>
+                                            <div class="half-donut-caption"><%-experian.Consumer.CII%></div>
                                         </div>
                                         <div class="">
                                             <span class="inline-sparkline consumerCIIGraph"></span>
@@ -217,13 +215,13 @@
                                     <div class="right-seperator">
                                         <div class="text-center">
                                             Total CAIS balance
-                                                <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total);
+                                                <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(experian.Consumer.ConsumerAccountsOverview.Balance_Total);
                                                    var textSize = 'text-big';
                                                    if(balance.length > 5){ textSize = 'text-small';} %>
                                                 <p class="<%-textSize%>">
-                                                    <%-EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerAccountsOverview.Balance_Total)%> 
+                                                    <%-EzBob.formatPoundsAsThousandsNoDecimals(experian.Consumer.ConsumerAccountsOverview.Balance_Total)%> 
                                                     <br />
-                                                    (<%-experian.ConsumerAccountsOverview.OpenAccounts_Total%> accounts)
+                                                    (<%-experian.Consumer.ConsumerAccountsOverview.OpenAccounts_Total%> accounts)
                                                 </p>
                                         </div>
                                         <div class="">
@@ -232,29 +230,29 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-md-6">
-                                    <% alert = experian.ConsumerSummaryCharacteristics.NumberOfLates > 0 ? 'alert-danger' : 'alert-info';%>
+                                    <% alert = experian.Consumer.NumberOfLates > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
-                                        Delays: <%-experian.ConsumerSummaryCharacteristics.NumberOfLates%>, <%-experian.ConsumerSummaryCharacteristics.LateStatus%>
+                                        Delays: <%-experian.Consumer.NumberOfLates%>, <%-experian.Consumer.LateStatus%>
                                     </div>
-                                    <% alert = experian.ConsumerSummaryCharacteristics.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info'; %>
+                                    <% alert = experian.Consumer.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info'; %>
                                     <div class="alert <%-alert%>">
-                                        Defaults: <%-experian.ConsumerSummaryCharacteristics.NumberOfDefaults%>, 
-                                        <%- experian.ConsumerSummaryCharacteristics.DefaultAmount < 1000 ? EzBob.formatPoundsAsInt(experian.ConsumerSummaryCharacteristics.DefaultAmount) : EzBob.formatPoundsAsThousandsNoDecimals(experian.ConsumerSummaryCharacteristics.DefaultAmount)%>
+                                        Defaults: <%-experian.Consumer.NumberOfDefaults%>, 
+                                        <%- experian.Consumer.DefaultAmount < 1000 ? EzBob.formatPoundsAsInt(experian.Consumer.DefaultAmount) : EzBob.formatPoundsAsThousandsNoDecimals(experian.Consumer.DefaultAmount)%>
                                     </div>
-                                    <% alert = experian.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info';%>
+                                    <% alert = experian.Consumer.NumberOfCCJs > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
-                                        CCJ <%-experian.Summary.CCJs || 0%>, <%-experian.Summary.MostrecentCCJ || 0%> months ago
+                                        CCJ <%-experian.Consumer.NumberOfCCJs || 0%>, <%-experian.Consumer.AgeOfMostRecentCCJ || 0%> months ago
                                     </div>
                                 </div>
                                 <% } %>
                             </div>
-                            <%if(experian.directorsModels && experian.directorsModels.length > 0){
-                            _.each(experian.directorsModels, function(item, i){
-                                item.Summary = item.Summary || {};
-                                item.Summary.ConsumerAccountsOverview = item.Summary.ConsumerAccountsOverview || {};
-                                item.ConsumerSummaryCharacteristics = item.ConsumerSummaryCharacteristics || {};
+                            <%if(experian.Directors && experian.Directors.length > 0){
+                            _.each(experian.Directors, function(item, i){
                                 item.ConsumerAccountsOverview = item.ConsumerAccountsOverview || {};%>
-                                <div class="tab-pane fade in" id="director<%-i%>">
+                                    <div class="tab-pane fade in" id="director<%-i%>">
+                                    <%if(item.HasExperianError) { %>
+                                            <h3>Error retrieving consumer data</h3>
+                                    <%} else {%>
                                     <div class="col-lg-3 col-md-6">
                                         <div class="right-seperator">
                                             <div class="text-center experian-canvas">
@@ -298,20 +296,21 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-6">
-                                        <% alert = item.ConsumerSummaryCharacteristics.NumberOfLates > 0 ? 'alert-danger' : 'alert-info';%>
+                                        <% alert = item.NumberOfLates > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
-                                        Delays: <%-item.ConsumerSummaryCharacteristics.NumberOfLates%>, <%-item.ConsumerSummaryCharacteristics.LateStatus%>
+                                        Delays: <%-item.NumberOfLates%>, <%-item.LateStatus%>
                                     </div>
-                                        <% alert = item.ConsumerSummaryCharacteristics.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info'; %>
+                                        <% alert = item.NumberOfDefaults > 0 ? 'alert-danger' : 'alert-info'; %>
                                     <div class="alert <%-alert%>">
-                                        Defaults: <%-item.ConsumerSummaryCharacteristics.NumberOfDefaults%>, 
-                                        <%- item.ConsumerSummaryCharacteristics.DefaultAmount < 1000 ? EzBob.formatPoundsAsInt(item.ConsumerSummaryCharacteristics.DefaultAmount) : EzBob.formatPoundsAsThousandsNoDecimals(item.ConsumerSummaryCharacteristics.DefaultAmount)%>
+                                        Defaults: <%-item.NumberOfDefaults%>, 
+                                        <%- item.DefaultAmount < 1000 ? EzBob.formatPoundsAsInt(item.DefaultAmount) : EzBob.formatPoundsAsThousandsNoDecimals(item.DefaultAmount)%>
                                     </div>
-                                        <% alert = item.Summary.CCJs > 0 ? 'alert-danger' : 'alert-info';%>
+                                        <% alert = item.NumberOfCCJs > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
-                                        CCJ <%-item.Summary.CCJs || 0%>, <%-item.Summary.MostrecentCCJ || 0%> months ago
+                                        CCJ <%-item.NumberOfCCJs || 0%>, <%-item.AgeOfMostRecentCCJ || 0%> months ago
                                     </div>
                                     </div>
+                                    <%}%>
                                 </div>
                             <%});}%>
                         </div>

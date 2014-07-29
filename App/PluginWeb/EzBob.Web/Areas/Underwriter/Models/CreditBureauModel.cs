@@ -8,6 +8,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 	public class CreditBureauModel
 	{
+
+		public int Id { get; set; } //Customer Id
 		public Summary Summary { get; set; }
 		public ExperianConsumerModel Consumer { get; set; }
 		public List<ExperianConsumerModel> Directors { get; set; }
@@ -201,6 +203,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public int? CII { get; set; }
 		public decimal? Balance { get; set; }
 		public long Id { get; set; }
+		public long ServiceLogId { get; set; }
 	}
 
 	public class DelphiModel

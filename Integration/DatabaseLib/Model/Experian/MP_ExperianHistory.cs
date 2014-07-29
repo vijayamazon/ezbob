@@ -61,7 +61,7 @@
 
 		public IEnumerable<MP_ExperianHistory> GetCustomerConsumerHistory(int customerId)
 		{
-			return GetAll().Where(x => x.CustomerId == customerId && !x.DirectorId.HasValue && x.Type == ExperianServiceType.Consumer.DescriptionAttr());
+			return GetAll().Where(x => x.CustomerId == customerId && x.DirectorId == null && x.Type == ExperianServiceType.Consumer.DescriptionAttr());
 		}
 
 		public IEnumerable<MP_ExperianHistory> GetDirectorConsumerHistory(int directorId)
@@ -87,7 +87,8 @@
 						DirectorId = directorId,
 						Score = score,
 						CII = cii,
-						CaisBalance = caisBalance
+						CaisBalance = caisBalance,
+						Type = ExperianServiceType.Consumer.DescriptionAttr()
 					});
 			}
 		}
