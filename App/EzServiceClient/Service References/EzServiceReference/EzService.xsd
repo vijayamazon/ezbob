@@ -427,4 +427,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ExperianConsumerActionResult" nillable="true" type="tns:ExperianConsumerActionResult" />
+  <xs:complexType name="ExperianConsumerMortgageActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" minOccurs="0" name="Value" nillable="true" type="q28:ExperianConsumerMortgagesData" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerMortgageActionResult" nillable="true" type="tns:ExperianConsumerMortgageActionResult" />
 </xs:schema>

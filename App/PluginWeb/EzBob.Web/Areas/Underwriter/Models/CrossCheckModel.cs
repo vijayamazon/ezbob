@@ -9,8 +9,8 @@
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EzBob.Models;
 	using System.Text.RegularExpressions;
-	using ExperianLib;
 	using LandRegistryLib;
+	using ServiceClientProxy;
 	using StructureMap;
 
 	public class CrossCheckModel
@@ -35,6 +35,7 @@
 		public int AssetWorth { get; set; }
 		public List<LandRegistryResModel> LandRegistries { get; set; }
 
+		private static readonly ServiceClient serviceClient;
 		static CrossCheckModel()
 		{
 			Mapper.CreateMap<EZBob.DatabaseLib.Model.Database.PersonalInfo, PersonalInfo>();
@@ -56,13 +57,12 @@
 				.ForMember(x => x.Line1, y => y.MapFrom(z => z.Street1))
 				.ForMember(x => x.Line2, y => y.MapFrom(z => z.Street2))
 				.ForMember(x => x.Town, y => y.MapFrom(z => z.City));
+
+			serviceClient = new ServiceClient();
 		}
 
 		public static void GetZooplaAndMortgagesData(Customer customer, string zooplaEstimateStr, int zoopla1YearAvg, out int zooplaValue, out int mortgageBalance, out int mortgageCount)
 		{
-			var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
-			mortgageBalance = 0;
-			mortgageCount = 0;
 			var regexObj = new Regex(@"[^\d]");
 			var stringVal = string.IsNullOrEmpty(zooplaEstimateStr) ? "" : regexObj.Replace(zooplaEstimateStr.Trim(), "");
 			int intVal;
@@ -71,26 +71,15 @@
 				intVal = zoopla1YearAvg;
 			}
 			zooplaValue = intVal;
-			try
-			{
-				ConsumerServiceResult result;
-				CreditBureauModelBuilder creditBureauModelBuilder = ObjectFactory.GetInstance<CreditBureauModelBuilder>();
-				creditBureauModelBuilder.GetConsumerInfo(customer, false, null, currentAddress, out result);
-				var expModel = new CreditBureauModel();
-				creditBureauModelBuilder.GenerateConsumerModel(expModel, customer.Id, result);
-				if (expModel != null && expModel.ConsumerAccountsOverview != null)
-				{
-					mortgageBalance = expModel.ConsumerAccountsOverview.Balance_Mtg;
-					mortgageCount = expModel.ConsumerAccountsOverview.OpenAccounts_Mtg;
-				}
-			}
-			catch { }
+			var data = serviceClient.Instance.LoadExperianConsumerMortageData(customer.Id);
+			mortgageBalance = data.Value.MortageBalance;
+			mortgageCount = data.Value.NumMortgages;
 		}
 
 		public CrossCheckModel(Customer customer)
 		{
 			Customer = customer;
-			
+
 			Application = new PersonalInfo();
 			EBay = new PersonalInfo();
 			PayPal = new PersonalInfo();
@@ -103,12 +92,12 @@
 			CrossCheckStatus = new CrossCheckStatus();
 
 			ExperianDirectors = GetExperianDirectors(customer).DirectorNames;
-			
+
 			OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.OtherPropertyAddress);
 
 			var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
 			Zoopla zoopla = null;
-			if(current != null) zoopla = current.Zoopla.LastOrDefault();
+			if (current != null) zoopla = current.Zoopla.LastOrDefault();
 
 			if (zoopla != null)
 			{

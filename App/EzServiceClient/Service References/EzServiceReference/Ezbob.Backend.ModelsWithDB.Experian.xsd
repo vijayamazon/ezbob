@@ -551,4 +551,11 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ExperianConsumerDataResidency" nillable="true" type="tns:ExperianConsumerDataResidency" />
+  <xs:complexType name="ExperianConsumerMortgagesData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MortageBalance" type="xs:int" />
+      <xs:element minOccurs="0" name="NumMortgages" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerMortgagesData" nillable="true" type="tns:ExperianConsumerMortgagesData" />
 </xs:schema>

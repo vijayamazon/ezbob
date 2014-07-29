@@ -344,4 +344,13 @@
 		[DataMember]
 		public string PaymentCode { get; set; }
 	}
+
+	[DataContract]
+	public class ExperianConsumerMortgagesData
+	{
+		[DataMember]
+		public int NumMortgages { get; set; }
+		[DataMember]
+		public int MortageBalance { get; set; }
+	}
 }

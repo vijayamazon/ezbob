@@ -302,6 +302,9 @@
 
 		[OperationContract]
 		ExperianConsumerActionResult LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId);
+		
+		[OperationContract]
+		ExperianConsumerMortgageActionResult LoadExperianConsumerMortageData(int customerId);
 
 		#endregion Experian
 

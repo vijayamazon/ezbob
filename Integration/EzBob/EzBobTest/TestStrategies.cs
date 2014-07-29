@@ -254,5 +254,15 @@ namespace EzBobTest
 			var s = new BackfillExperianConsumer(m_oDB, m_oLog);
 			s.Execute();
 		}
+
+		[Test]
+		public void TestLoadExperianConsumerMortagageData()
+		{
+			var s = new LoadExperianConsumerMortgageData(20323, m_oDB, m_oLog);
+			s.Execute();
+			Assert.AreEqual(200089, s.Result.MortageBalance);
+			Assert.AreEqual(1, s.Result.NumMortgages);
+			Console.WriteLine("{0} {1}", s.Result.NumMortgages, s.Result.MortageBalance);
+		}
 	}
 }

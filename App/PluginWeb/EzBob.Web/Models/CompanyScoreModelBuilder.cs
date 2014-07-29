@@ -141,7 +141,7 @@
 			model.CompanyRefNum = refNumber;
 
 			model.Score = data.RiskScore ?? 0;
-			model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, 100, 0).Color;
+			model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, CompanyScoreMax, CompanyScoreMin).Color;
 
 			model.CcjMonths = data.AgeOfMostRecentJudgmentDuringOwnershipMonths ?? -1;
 
@@ -337,6 +337,9 @@
 		private readonly AConnection m_oDB;
 
 		private static readonly SafeILog m_oLog = new SafeILog(typeof(CompanyScoreModelBuilder));
+
+		private const int CompanyScoreMax = 100;
+		private const int CompanyScoreMin = 0;
 
 		#endregion fields
 

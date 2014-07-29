@@ -2,21 +2,35 @@
 	using System;
 	using EzBob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 
-	partial class EzServiceImplementation {
+	partial class EzServiceImplementation
+	{
+		#region method BackfillExperianDirectors
+
 		public ActionMetaData BackfillExperianDirectors(int? nCustomerID) {
 			return Execute<BackfillExperianDirectors>(nCustomerID, null, nCustomerID);
 		} // BackfillExperianDirectors
 
+		#endregion method BackfillExperianDirectors
+
+		#region method ExperianCompanyCheck
+
 		public ActionMetaData ExperianCompanyCheck(int nCustomerID, bool bForceCheck) {
 			return Execute(nCustomerID, null, typeof(ExperianCompanyCheck), nCustomerID, bForceCheck);
 		} // ExperianCompanyCheck
+		
+		#endregion method ExperianCompanyCheck
+
+		#region method ExperianConsumerCheck
 
 		public ActionMetaData ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck) {
 			return Execute(nCustomerID, null, typeof(ExperianConsumerCheck), nCustomerID, nDirectorID, bForceCheck);
 		} // ExperianConsumerCheck
+
+		#endregion method ExperianConsumerCheck
+
+		#region method GetExperianConsumerCacheDate
 
 		public DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId) {
 			DateTime cacheDate = DateTime.UtcNow;
@@ -40,6 +54,9 @@
 				Value = cacheDate
 			};
 		}
+		#endregion method GetExperianConsumerCacheDate
+
+		#region method GetExperianCompanyCacheDate
 
 		public DateTimeActionResult GetExperianCompanyCacheDate(string refNumber)
 		{
@@ -61,6 +78,7 @@
 				Value = cacheDate
 			};
 		}
+		#endregion method GetExperianCompanyCacheDate
 
 		#region method UpdateExperianDirectorDetails
 
@@ -175,6 +193,21 @@
 
 		#endregion method BackfillExperianConsumer
 
+		#region method LoadExperianConsumerMortage
 
+		public ExperianConsumerMortgageActionResult LoadExperianConsumerMortageData(int customerId)
+		{
+			LoadExperianConsumerMortgageData oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, null, customerId);
+
+			return new ExperianConsumerMortgageActionResult
+			{
+				MetaData = oMetaData,
+				Value = oInstance.Result,
+			};
+		}
+
+		#endregion method LoadExperianConsumerMortage
 	} // class EzServiceImplementation
 } // namespace EzService

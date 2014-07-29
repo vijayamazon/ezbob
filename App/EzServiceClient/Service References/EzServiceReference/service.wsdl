@@ -111,6 +111,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategySync1" />
   </wsdl:message>
@@ -963,6 +969,12 @@
   <wsdl:message name="IEzService_LoadExperianConsumer_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadExperianConsumerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianConsumerMortageData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortageData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadExperianConsumerMortageData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortageDataResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
   </wsdl:message>
@@ -980,12 +992,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -1010,6 +1016,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="MainStrategy2">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="MainStrategySync1">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
@@ -1578,6 +1588,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumer" message="tns:IEzService_LoadExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerResponse" message="tns:IEzService_LoadExperianConsumer_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="LoadExperianConsumerMortageData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortageData" message="tns:IEzService_LoadExperianConsumerMortageData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortageDataResponse" message="tns:IEzService_LoadExperianConsumerMortageData_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
@@ -1589,10 +1603,6 @@
     <wsdl:operation name="MainStrategy1">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy2">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1649,6 +1659,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="MainStrategy2">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="MainStrategySync1">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
       <wsdl:input>
@@ -2927,6 +2946,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="LoadExperianConsumerMortageData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianConsumerMortageData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
       <wsdl:input>
@@ -2947,15 +2975,6 @@
     </wsdl:operation>
     <wsdl:operation name="MainStrategy1">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy1" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy2">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

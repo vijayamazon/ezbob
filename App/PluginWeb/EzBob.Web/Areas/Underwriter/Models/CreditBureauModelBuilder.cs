@@ -4,142 +4,110 @@
 	using System.Collections.Generic;
 	using System.Drawing;
 	using System.Globalization;
-	using System.IO;
 	using System.Linq;
-	using System.Xml.Serialization;
 	using ConfigManager;
-	using ExperianLib;
 	using ExperianLib.Dictionaries;
-	using ExperianLib.Ebusiness;
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzBobIntegration.Web_References.Consumer;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
-	using Infrastructure;
 	using MoreLinq;
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Text;
 	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
-	using StructureMap;
 	using Web.Models;
 	using log4net;
 	using EZBob.DatabaseLib.Model.Experian;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class CreditBureauModelBuilder
 	{
 		private readonly ISession _session;
-		private readonly ICustomerRepository _customers;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CreditBureauModelBuilder));
 		private readonly IExperianHistoryRepository _experianHistoryRepository;
 		private const int ConsumerScoreMax = 1400;
 		private const int ConsumerScoreMin = 120;
-		private const int CompanyScoreMax = 100;
-		private const int CompanyScoreMin = 0;
-		private readonly ServiceClient serviceClient;
-		private readonly IWorkplaceContext context = ObjectFactory.GetInstance<IWorkplaceContext>();
-		private readonly AConnection m_oDB;
+
+		private readonly ServiceClient _serviceClient;
 
 		public CreditBureauModelBuilder(ISession session,
-			ICustomerRepository customers,
 			IExperianHistoryRepository experianHistoryRepository)
 		{
 			_session = session;
-			_customers = customers;
 			_experianHistoryRepository = experianHistoryRepository;
 			Errors = new List<string>();
-			serviceClient = new ServiceClient();
-			m_oDB = DbConnectionGenerator.Get(new SafeILog(Log));
+			_serviceClient = new ServiceClient();
 		}
 
 		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
 		{
 			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
-			var model = new CreditBureauModel { ErrorList = new List<string>() };
-			var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
-
-			//registered customer
-			if (customerMainAddress == null)
-			{
-				model.CheckStatus = "Error";
-				model.CheckValidity = "Registered customer no address";
-				return model;
-			}
-
+			var model = new CreditBureauModel();
 			try
 			{
-				ConsumerServiceResult result;
-				GetConsumerInfo(customer, getFromLog, logId, customerMainAddress, out result);
-				GenerateConsumerModel(model, customer.Id, result);
-				CreatePersonalDataModel(model, customer);
-				AppendAmlInfo(model.AmlInfo, customer, customerMainAddress);
-				AppendBavInfo(model.BavInfo, customer, customerMainAddress);
-				BuildEBusinessModel(customer, model, getFromLog, logId); // TODO: remove
-				BuildSummaryModel(model);
-				BuildHistoryModel(model, customer);
+				model.Consumer = GetConsumerInfo(customer.Id, null, logId);
+				if (customer.Company != null && customer.Company.Directors.Any())
+				{
+					model.Directors = new List<ExperianConsumerModel>();
+					foreach (var director in customer.Company.Directors)
+					{
+						model.Directors.Add(GetConsumerInfo(customer.Id, director.Id, null));
+					}
+				}
+
+				model.AmlInfo = GetAmlInfo(customer);
+				model.BavInfo = GetBavInfo(customer);
+				model.Summary = GetSummaryModel(model);
+
+				//todo move to CompanyScore
+				GetCompanyHistoryModel(customer, model);
 			}
 			catch (Exception e)
 			{
 				Log.DebugFormat("CreditBureauModel Create Exception {0} ", e);
-				model.ErrorList.Add(e.Message);
+				model.Consumer.ErrorList.Add(e.Message);
 			}
 
-			model.ErrorList.AddRange(Errors);
+			model.Consumer.ErrorList.AddRange(Errors);
 			return model;
 		}
 
-		public void GetConsumerInfo(Customer customer,
-			bool getFromLog, long? logId, CustomerAddress customerMainAddress, out ConsumerServiceResult result)
+		public ExperianConsumerModel GetConsumerInfo(int customerId, int? directorId, long? logId)
 		{
+			var data = _serviceClient.Instance.LoadExperianConsumer(customerId, directorId, logId);
+			return GenerateConsumerModel(data.Value);
+		}
 
-			if (getFromLog && logId.HasValue)
+		private IOrderedEnumerable<CheckHistoryModel> GetConsumerHistoryModel(int customerId, int? directorId)
+		{
+			List<MP_ExperianHistory> consumerHistory;
+			if (directorId.HasValue)
 			{
-				var response =
-					_session.Query<MP_ServiceLog>().FirstOrDefault(x => x.Id == logId.Value);
-
-				if (response == null || string.IsNullOrEmpty(response.ResponseData))
-				{
-					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} id: {1}", customer.Id, logId.Value);
-					result = null;
-					return;
-				}
-				var serializer = new XmlSerializer(typeof(OutputRoot));
-				using (TextReader sr = new StringReader(response.ResponseData))
-				{
-					var output = (OutputRoot)serializer.Deserialize(sr);
-					result = new ConsumerServiceResult(output);
-				}
+				consumerHistory = _experianHistoryRepository.GetDirectorConsumerHistory(directorId.Value).ToList();
 			}
 			else
 			{
-				var loc = MultiLineLocationFromCustomerAddress(customerMainAddress);
-				var consumerSrv = new ConsumerService();
-				result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
-					customer.PersonalInfo.Gender.ToString(), // should be Gender
-					customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true, false, false);
+				consumerHistory = _experianHistoryRepository.GetCustomerConsumerHistory(customerId).ToList();
 			}
-		}
 
-		private void BuildHistoryModel(CreditBureauModel model, Customer customer)
-		{
-			var consumerHistory = _experianHistoryRepository.GetCustomerConsumerHistory(customer.Id).ToList();
 			if (consumerHistory.Any())
 			{
-				model.ConsumerHistory = consumerHistory.Select(x => new CheckHistoryModel
-				{
-					Date = x.Date.ToUniversalTime(),
-					Id = x.Id,
-					Score = x.Score,
-					CII = x.CII.HasValue ? x.CII.Value : -1,
-					Balance = x.CaisBalance.HasValue ? x.CaisBalance.Value : -1
-				}).OrderByDescending(h => h.Date);
+				return consumerHistory.Select(x => new CheckHistoryModel
+					{
+						Date = x.Date.ToUniversalTime(),
+						Id = x.Id,
+						Score = x.Score,
+						CII = x.CII.HasValue ? x.CII.Value : -1,
+						Balance = x.CaisBalance.HasValue ? x.CaisBalance.Value : -1
+					}).OrderByDescending(h => h.Date);
 			}
-			
 
+			return null;
+		}
+
+		//todo remove
+		private void GetCompanyHistoryModel(Customer customer, CreditBureauModel model)
+		{
 			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
 			Log.DebugFormat("BuildHistoryModel company type: {0}", isLimited ? "Limited" : "NonLimited");
 			var companyHistory = _experianHistoryRepository.GetCompanyHistory(customer.Company.ExperianRefNum, isLimited).ToList();
@@ -162,12 +130,12 @@
 				if (isLimited)
 				{
 					List<CheckHistoryModel> checkCompanyHistoryModels = (
-						                                                    from s in _session.Query<MP_ServiceLog>()
-						                                                    where s.Director == null
-						                                                    where s.Customer.Id == customer.Id
-						                                                    where s.ServiceType == type
-						                                                    select GetLimitedHistory(s.InsertDate, s.Id)
-					                                                    ).ToList();
+																			from s in _session.Query<MP_ServiceLog>()
+																			where s.Director == null
+																			where s.Customer.Id == customer.Id
+																			where s.ServiceType == type
+																			select GetLimitedHistory(s.InsertDate, s.Id)
+																		).ToList();
 
 					model.CompanyHistory = checkCompanyHistoryModels.Where(h => h != null).OrderByDescending(h => h.Date);
 					foreach (var cModel in checkCompanyHistoryModels)
@@ -188,11 +156,13 @@
 				}
 			}
 		}
-
-		private CheckHistoryModel GetLimitedHistory(DateTime date, long id) {
+		//todo remove
+		private CheckHistoryModel GetLimitedHistory(DateTime date, long id)
+		{
 			ComapanyDashboardModel m = new CompanyScoreModelBuilder().BuildLimitedDashboardModel(id);
 
-			return new CheckHistoryModel {
+			return new CheckHistoryModel
+			{
 				Date = date,
 				Id = id,
 				Balance = m.CaisBalance,
@@ -200,119 +170,77 @@
 			};
 		} // GetLimitedHistory
 
-		private void CreatePersonalDataModel(CreditBureauModel model, Customer customer)
+		public ExperianConsumerModel GenerateConsumerModel(ExperianConsumerData eInfo)
 		{
-			model.Name = customer.PersonalInfo.FirstName;
-			model.MiddleName = customer.PersonalInfo.MiddleInitial;
-			model.Surname = customer.PersonalInfo.Surname;
-			model.FullName = customer.PersonalInfo.Fullname;
-
-			model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
-			model.ConsumerSummaryCharacteristics.DSRandOwnershipType = customer.PersonalInfo.ResidentialStatus;
-
-			model.AmlInfo = new AMLInfo
-			{
-				AMLResult = string.IsNullOrEmpty(customer.AMLResult)
-					? "Verification was not performed"
-					: customer.AMLResult
-			};
-
-			model.BavInfo = new BankAccountVerificationInfo
-			{
-				BankAccountVerificationResult = string.IsNullOrEmpty(customer.BWAResult)
-					? "Verification was not performed"
-					: customer.BWAResult
-			};
-			customer.FinancialAccounts = model.AccountsInformation == null ? 0 : model.AccountsInformation.Length;
-			_customers.Update(customer);
-		}
-
-		public void GenerateConsumerModel(CreditBureauModel model, int id, ConsumerServiceResult eInfo)
-		{
-			model.ErrorList = model.ErrorList ?? new List<string>();
-			if (eInfo == null || eInfo.Data == null)
+			var model = new ExperianConsumerModel { ErrorList = new List<string>() };
+			if (eInfo == null)
 			{
 				model.HasExperianError = true;
 				model.ErrorList.Add("No data");
-				return;
+				return model;
 			}
 
-			var scorePosColor = GetScorePositionAndColor(eInfo.Data.BureauScore.HasValue? eInfo.Data.BureauScore.Value : 0, ConsumerScoreMax, ConsumerScoreMin);
-			var checkStatus = (eInfo.Data.HasExperianError) ? "Error" : eInfo.ExperianResult;
+			var scorePosColor = GetScorePositionAndColor(eInfo.BureauScore.HasValue ? eInfo.BureauScore.Value : 0, ConsumerScoreMax, ConsumerScoreMin);
 
-			var checkIcon = "icon-white icon-remove-sign";
-			var buttonStyle = "btn-danger";
-			switch (checkStatus)
-			{
-				case "Passed":
-					checkIcon = "icon-white icon-ok-sign";
-					buttonStyle = "btn-success";
-					break;
-				case "Referred":
-					checkIcon = "icon-white icon-question-sign";
-					buttonStyle = "btn-warning";
-					break;
-				case "Rejected":
-					checkIcon = "icon-white icon-remove-sign";
-					buttonStyle = "btn-danger";
-					break;
-			}
-
-			var checkDate = eInfo.LastUpdateDate;
+			var checkDate = eInfo.InsertDate;
 			var checkValidity = checkDate.AddMonths(3);
 
-			Errors = new List<string>();
-
-			model.Id = id;
-			model.HasExperianError = eInfo.Data.HasExperianError;
+			model.Id = eInfo.DirectorId.HasValue ? eInfo.DirectorId.Value : (eInfo.CustomerId ?? 0);
+			model.ServiceLogId = eInfo.ServiceLogId;
+			model.HasExperianError = eInfo.HasExperianError;
 			model.ModelType = "Consumer";
-			model.CheckStatus = checkStatus;
-			model.CheckIcon = checkIcon;
-			model.ButtonStyle = buttonStyle;
 			model.CheckDate = checkDate.ToShortDateString();
 			model.CheckValidity = checkValidity.ToShortDateString();
 			model.BorrowerType = "Consumer";
-			model.Score = eInfo.Data.BureauScore;
-			model.Odds = Math.Pow(2, ((double)eInfo.Data.BureauScore - 600) / 80);
+			model.Score = eInfo.BureauScore;
+			model.Odds = Math.Pow(2, (((double)(eInfo.BureauScore ?? 0)) - 600) / 80);
 			model.ScorePosition = scorePosColor.Position;
 			model.ScoreAlign = scorePosColor.Align;
 			model.ScoreValuePosition = scorePosColor.ValPosition;
 			model.ScoreColor = scorePosColor.Color;
-			model.ApplicantFullName = eInfo.Data.Applicants.Select(applicant =>
-				string.Format("{0} {1} {2} {3}", applicant.Forename, applicant.MiddleName, applicant.Surname, applicant.DateOfBirth.HasValue ?
-				(DateTime.UtcNow.Year - applicant.DateOfBirth.Value.Year).ToString(CultureInfo.InvariantCulture) : "")).Aggregate((x, y) => x + "," + y);
-
-			model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
-			model.CII = eInfo.Data.CII;
-			if (!string.IsNullOrEmpty(eInfo.Data.Error))
+			model.Applicant = eInfo.Applicants.FirstOrDefault();
+			if (model.Applicant != null)
 			{
-				model.ErrorList.AddRange(eInfo.Data.Error.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+				var days = model.Applicant.DateOfBirth.HasValue ? (DateTime.Now - model.Applicant.DateOfBirth.Value).TotalDays : 0;
+				var age = (int)Math.Round(days/365);
+				model.ApplicantFullNameAge = string.Format("{0} {1} {2} {3} {4} {5}",
+				                                           model.Applicant.Title,
+				                                           model.Applicant.Forename,
+				                                           model.Applicant.MiddleName,
+				                                           model.Applicant.Surname,
+				                                           model.Applicant.Suffix,
+				                                           age);
+			}
+			if (eInfo.Applicants.Count > 1)
+			{
+				Errors.Add("More than one applicant specified");
 			}
 
-			model.ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics
+
+			model.CII = eInfo.CII;
+			if (!string.IsNullOrEmpty(eInfo.Error))
 			{
-				NumberOfAccounts = 0,
-				NumberOfAccounts3M = 0,
-				WorstCurrentStatus = AccountStatusDictionary.GetDetailedAccountStatusString(eInfo.Data.WorstCurrentStatus),
-				WorstCurrentStatus3M = AccountStatusDictionary.GetDetailedAccountStatusString(eInfo.Data.WorstHistoricalStatus),
-				EnquiriesLast3M = eInfo.Data.EnquiriesLast3Months,
-				EnquiriesLast6M = eInfo.Data.EnquiriesLast6Months,
-				NumberOfDefaults = 0,
-				NumberOfCCOverLimit = eInfo.Data.CreditCardOverLimit,
-				CreditCardUtilization = eInfo.Data.CreditLimitUtilisation,
-				DSRandOwnershipType = string.Empty,
-				NOCsOnCCJ = eInfo.Data.NOCsOnCCJ,
-				NOCsOnCAIS = eInfo.Data.NOCsOnCAIS,
-				NumberOfCCJs = eInfo.Data.NumCCJs,
-				SatisfiedJudgements = eInfo.Data.SatisfiedJudgement,
-				AgeOfMostRecentCCJ = eInfo.Data.CCJLast2Years,
-				CAISSpecialInstructionFlag = eInfo.Data.CAISSpecialInstructionFlag,
+				model.ErrorList.AddRange(eInfo.Error.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+			}
+
+			model.NumberOfAccounts = 0;
+			model.NumberOfAccounts3M = 0;
+			model.WorstCurrentStatus = AccountStatusDictionary.GetDetailedAccountStatusString(eInfo.WorstCurrentStatus);
+			model.WorstCurrentStatus3M = AccountStatusDictionary.GetDetailedAccountStatusString(eInfo.WorstHistoricalStatus);
+			model.EnquiriesLast3M = eInfo.EnquiriesLast3Months;
+			model.EnquiriesLast6M = eInfo.EnquiriesLast6Months;
+			model.NumberOfDefaults = 0;
+			model.NumberOfCCOverLimit = eInfo.CreditCardOverLimit;
+			model.CreditCardUtilization = eInfo.CreditLimitUtilisation;
+			model.NOCsOnCCJ = eInfo.NOCsOnCCJ;
+			model.NOCsOnCAIS = eInfo.NOCsOnCAIS;
+			model.NumberOfCCJs = eInfo.NumCCJs;
+			model.SatisfiedJudgements = eInfo.SatisfiedJudgement;
+			model.AgeOfMostRecentCCJ = eInfo.CCJLast2Years;
+			model.CAISSpecialInstructionFlag = eInfo.CAISSpecialInstructionFlag;
 
 
-			};
 			model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
-
-
 			var accList = new List<AccountInfo>();
 
 			var years = new List<AccountDisplayedYear>();
@@ -355,7 +283,7 @@
 			int numberOfLates = 0;
 			string lateStatus = "0";
 
-			foreach (var caisDetails in eInfo.Data.Cais)
+			foreach (var caisDetails in eInfo.Cais)
 			{
 				var accountInfo = new AccountInfo();
 				//check which acccount type show
@@ -461,12 +389,12 @@
 				accList.Add(accountInfo);
 			}
 
-			model.ConsumerSummaryCharacteristics.NumberOfAccounts = numberOfAccounts;
-			model.ConsumerSummaryCharacteristics.NumberOfAccounts3M = numberOfAcc3M;
-			model.ConsumerSummaryCharacteristics.NumberOfDefaults = numberOfDefaults;
-			model.ConsumerSummaryCharacteristics.NumberOfLates = numberOfLates;
-			model.ConsumerSummaryCharacteristics.LateStatus = AccountStatusDictionary.GetDetailedAccountStatusString(lateStatus);
-			model.ConsumerSummaryCharacteristics.DefaultAmount = defaultAmount;
+			model.NumberOfAccounts = numberOfAccounts;
+			model.NumberOfAccounts3M = numberOfAcc3M;
+			model.NumberOfDefaults = numberOfDefaults;
+			model.NumberOfLates = numberOfLates;
+			model.LateStatus = AccountStatusDictionary.GetDetailedAccountStatusString(lateStatus);
+			model.DefaultAmount = defaultAmount;
 
 			Log.DebugFormat("Accounts List length: {0}", accList.Count);
 			accList.Sort(new AccountInfoComparer());
@@ -496,9 +424,12 @@
 			model.ConsumerAccountsOverview.Balance_PL = balances[2];
 			model.ConsumerAccountsOverview.Balance_Other = balances[3];
 			model.ConsumerAccountsOverview.Balance_Total = balances.Sum();
-			model.NOCs = eInfo.Data.Nocs.Select(nocDetails => new NOCInfo { NOCReference = nocDetails.Reference, NOCLines = nocDetails.TextLine }).ToArray();
+			model.NOCs = eInfo.Nocs.Select(nocDetails => new NOCInfo { NOCReference = nocDetails.Reference, NOCLines = nocDetails.TextLine }).ToArray();
 
 			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
+
+			model.ConsumerHistory = GetConsumerHistoryModel(eInfo.CustomerId.Value, eInfo.DirectorId);
+			return model;
 		}
 
 		private static string PrintErrorList(List<string> errorList)
@@ -520,10 +451,18 @@
 			return sb.ToString();
 		}
 
-		protected void AppendAmlInfo(AMLInfo data, Customer customer, CustomerAddress customerAddress)
+		protected AMLInfo GetAmlInfo(Customer customer)
 		{
+			var data = new AMLInfo
+			{
+				AMLResult = string.IsNullOrEmpty(customer.AMLResult)
+					? "Verification was not performed"
+					: customer.AMLResult
+			};
+
 			try
 			{
+				var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 				var srv = new IdHubService();
 				var result = srv.Authenticate(customer.PersonalInfo.FirstName, string.Empty, customer.PersonalInfo.Surname,
 											  customer.PersonalInfo.Gender.ToString(),
@@ -534,7 +473,7 @@
 											  customerAddress.Town, customerAddress.County, customerAddress.Postcode,
 											  customer.Id, true);
 				if (null == result)
-					return;
+					return data;
 
 				Log.DebugFormat("AML data for building model: {0} - {1}", result.AuthenticationIndex, result.AuthIndexText);
 				data.HasAML = true;
@@ -552,14 +491,23 @@
 				Log.Warn("AppendAmlInfo failed", ex);
 				Errors.Add("Failed to retrieve AML info");
 			}
+			return data;
 		}
 
-		protected void AppendBavInfo(BankAccountVerificationInfo data, Customer customer, CustomerAddress customerAddress)
+		protected BankAccountVerificationInfo GetBavInfo(Customer customer)
 		{
+
+			var data = new BankAccountVerificationInfo
+			{
+				BankAccountVerificationResult = string.IsNullOrEmpty(customer.BWAResult)
+					? "Verification was not performed"
+					: customer.BWAResult
+			};
+
 			try
 			{
+				var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 				var srv = new IdHubService();
-
 				var bankAccount = customer.BankAccount;
 				var result = srv.AccountVerification(customer.PersonalInfo.FirstName, string.Empty,
 													 customer.PersonalInfo.Surname,
@@ -573,7 +521,7 @@
 													 bankAccount != null ? bankAccount.AccountNumber : "",
 													 customer.Id, true);
 				if (null == result)
-					return;
+					return data;
 				data.HasBWA = true;
 				data.AddressScore = result.AddressScore;
 				data.NameScore = result.NameScore;
@@ -585,113 +533,33 @@
 				Log.Warn("AppendBavInfo failed", ex);
 				Errors.Add("Failed to retrieve BWA info");
 			}
+
+			return data;
 		}
 
-		// TODO: remove
-		private void BuildEBusinessModel(Customer customer, CreditBureauModel model,
-										 bool getFromLog = false, long? logId = null)
+		private static Summary GetSummaryModel(CreditBureauModel model)
 		{
-			var company = customer.Company;
-			if (company == null)
-				return;
-
-			switch (company.TypeOfBusiness.Reduce()) {
-				case TypeOfBusinessReduced.NonLimited:
-					CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(context.UserId, company.ExperianRefNum);
-
-					bool isDataExpired = false;
-					int updateCompanyDataPeriodDays = CurrentValues.Instance.UpdateCompanyDataPeriodDays;
-					if (notLimitedBusinessData != null && notLimitedBusinessData.LastUpdate.HasValue &&
-						(DateTime.UtcNow - notLimitedBusinessData.LastUpdate.Value).TotalDays >= updateCompanyDataPeriodDays)
-					{
-						isDataExpired = true;
-					}
-					if (notLimitedBusinessData != null)
-					{
-						AppendNonLimitedInfo(model, notLimitedBusinessData.LastUpdate, notLimitedBusinessData.Score, notLimitedBusinessData.Errors, isDataExpired);
-					}
-					model.BorrowerType = company.TypeOfBusiness.ToString();
-					model.CompanyName = company.CompanyName;
-					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
-					break;
-			}
-		}
-
-		protected void AppendLimitedInfo(CreditBureauModel model, LimitedResults eInfo)
-		{
-			if (eInfo == null)
-				return;
-			var spc = GetScorePositionAndColor((double)eInfo.BureauScore, CompanyScoreMax, CompanyScoreMin);
-			model.ModelType = "Limited";
-			model.LimitedInfo = new ExperianLimitedInfo
+			return new Summary
 			{
-				BureauScore = eInfo.BureauScore,
-				ScoreColor = spc.Color,
-				RiskLevel = (eInfo.BureauScore > 90) ? "Low Risk" : ((eInfo.BureauScore < 40) ? "High Risk" : "Medium Risk"),
-				ExistingBusinessLoans = eInfo.ExistingBusinessLoans,
-				Error = eInfo.Error,
-				IsDataExpired = eInfo.IsDataExpired,
-				IsError = eInfo.IsError,
-				LastCheckDate = eInfo.LastCheckDate
-			};
-
-			if (!string.IsNullOrEmpty(eInfo.Error))
-			{
-				model.ErrorList.AddRange(eInfo.Error.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
-			}
-		}
-
-		protected void AppendNonLimitedInfo(CreditBureauModel model, DateTime? lastUpdate, int score, string errors, bool isDataExpired)
-		{
-			if (!lastUpdate.HasValue)
-				return;
-			model.ModelType = "NonLimited";
-			var spc = GetScorePositionAndColor(score, CompanyScoreMax, CompanyScoreMin);
-			model.NonLimitedInfo = new ExperianNonLimitedInfo
-			{
-				BureauScore = score,
-				ScoreColor = spc.Color,
-				CompanyNotFoundOnBureau = !string.IsNullOrEmpty(errors),
-				Error = errors,
-				IsDataExpired = isDataExpired,
-				IsError = !string.IsNullOrEmpty(errors),
-				LastCheckDate = lastUpdate
-			};
-			if (!string.IsNullOrEmpty(errors))
-			{
-				model.ErrorList.AddRange(errors.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
-			}
-		}
-
-		private static void BuildSummaryModel(CreditBureauModel model)
-		{
-			model.Summary = new Summary
-			{
-				Score = model.Score,
-				ConsumerIndebtednessIndex = model.CII,
-				CheckDate = model.CheckDate,
-				Validtill = model.CheckValidity,
-				WorstCurrentstatus = model.ConsumerSummaryCharacteristics.WorstCurrentStatus,
-				WorstHistoricalstatus = model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M,
-				Numberofdefaults = model.ConsumerSummaryCharacteristics.NumberOfDefaults,
-				Accounts = model.ConsumerSummaryCharacteristics.NumberOfAccounts,
-				CCJs = model.ConsumerSummaryCharacteristics.NumberOfCCJs,
-				MostrecentCCJ = model.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ,
-				DSRandownershiptype = model.ConsumerSummaryCharacteristics.DSRandOwnershipType,
-				Creditcardutilization = model.ConsumerSummaryCharacteristics.CreditCardUtilization,
-				Enquiriesinlast6months = model.ConsumerSummaryCharacteristics.EnquiriesLast6M,
-				Enquiriesinlast3months = model.ConsumerSummaryCharacteristics.EnquiriesLast3M,
-				Totalbalance = model.ConsumerAccountsOverview.Balance_Total,
+				Score = model.Consumer.Score,
+				ConsumerIndebtednessIndex = model.Consumer.CII,
+				CheckDate = model.Consumer.CheckDate,
+				Validtill = model.Consumer.CheckValidity,
+				WorstCurrentstatus = model.Consumer.WorstCurrentStatus,
+				WorstHistoricalstatus = model.Consumer.WorstCurrentStatus3M,
+				Numberofdefaults = model.Consumer.NumberOfDefaults,
+				Accounts = model.Consumer.NumberOfAccounts,
+				CCJs = model.Consumer.NumberOfCCJs,
+				MostrecentCCJ = model.Consumer.AgeOfMostRecentCCJ,
+				Creditcardutilization = model.Consumer.CreditCardUtilization,
+				Enquiriesinlast6months = model.Consumer.EnquiriesLast6M,
+				Enquiriesinlast3months = model.Consumer.EnquiriesLast3M,
+				Totalbalance = model.Consumer.ConsumerAccountsOverview.Balance_Total,
 				AML = model.AmlInfo.AMLResult,
 				AMLnum = model.AmlInfo.AuthenticationIndex.ToString(CultureInfo.InvariantCulture),
 				BWA = model.BavInfo.BankAccountVerificationResult,
 				BWAnum = GetBwaScoreInfo(model.BavInfo),
-				Businesstype = model.BorrowerType,
-				BusinessScore = GetBusinessScore(model),
-				RiskLevel = model.LimitedInfo != null ? model.LimitedInfo.RiskLevel : "-",
-				Existingbusinessloans = GetExistingBusinessLoans(model),
-				ThinFile = model.AccountsInformation == null || model.AccountsInformation.Length == 0,
-				ConsumerAccountsOverview = model.ConsumerAccountsOverview
+				ThinFile = model.Consumer.AccountsInformation == null || model.Consumer.AccountsInformation.Length == 0,
 			};
 		}
 
@@ -702,113 +570,6 @@
 				info.NameScore,
 				info.AddressScore,
 				string.IsNullOrEmpty(info.AccountStatus) ? "-" : info.AccountStatus);
-		}
-
-		private static string GetBusinessScore(CreditBureauModel creditBureauModel)
-		{
-			if (creditBureauModel.LimitedInfo != null)
-			{
-				return creditBureauModel.LimitedInfo.BureauScore.ToString(CultureInfo.InvariantCulture);
-			}
-			if (creditBureauModel.NonLimitedInfo != null)
-			{
-				return creditBureauModel.NonLimitedInfo.BureauScore.ToString(CultureInfo.InvariantCulture);
-			}
-			return "-";
-		}
-
-		private static string GetExistingBusinessLoans(CreditBureauModel model)
-		{
-			if (model.LimitedInfo != null)
-			{
-				return model.LimitedInfo.ExistingBusinessLoans.ToString(CultureInfo.InvariantCulture);
-			}
-			if (model.NonLimitedInfo != null)
-			{
-				return model.NonLimitedInfo.CompanyNotFoundOnBureau.ToString(CultureInfo.InvariantCulture);
-			}
-			return "-";
-		}
-
-		public CreditBureauModel[] GenerateDirectorsModels(Customer customer, IEnumerable<Director> directors, bool getFromLog = false, long? logId = null)
-		{
-			var consumerSrv = new ConsumerService();
-			var dirModelList = new List<CreditBureauModel>();
-			foreach (var director in directors)
-			{
-				ConsumerServiceResult result = null;
-				if (getFromLog && logId.HasValue)
-				{
-					var directorCopy = director;
-					var logs =
-						_session.Query<MP_ServiceLog>()
-							.Where(x => x.Director.Id == directorCopy.Id && x.ServiceType == ExperianServiceType.Consumer.DescriptionAttr())
-							.ToList();
-					var date = _session.Query<MP_ServiceLog>().First(x => x.Id == logId).InsertDate.ToUniversalTime().Date;
-					var response = logs.FirstOrDefault(x => x.InsertDate >= date && x.InsertDate < date.AddDays(1));
-
-					var serializer = new XmlSerializer(typeof(OutputRoot));
-
-					if (response != null)
-					{
-						Log.DebugFormat("No directors consumer requests where found in DB for director {1} {2} for date {0}", date, director.Name, director.Surname);
-
-						using (TextReader sr = new StringReader(response.ResponseData))
-						{
-							var output = (OutputRoot)serializer.Deserialize(sr);
-							result = new ConsumerServiceResult(output);
-						}
-					}
-				}
-				else
-				{
-					var directorAddresses = director.DirectorAddressInfo != null
-											? director.DirectorAddressInfo.AllAddresses
-											: null;
-					var directorMainAddress = directorAddresses != null && directorAddresses.Any()
-												  ? directorAddresses.First()
-												  : null;
-					var dirLoc = new InputLocationDetailsMultiLineLocation();
-					if (directorMainAddress != null)
-					{
-						dirLoc.LocationLine1 = directorMainAddress.Line1;
-						dirLoc.LocationLine2 = directorMainAddress.Line2;
-						dirLoc.LocationLine3 = directorMainAddress.Line3;
-						dirLoc.LocationLine4 = directorMainAddress.Town;
-						dirLoc.LocationLine5 = directorMainAddress.County;
-						dirLoc.LocationLine6 = directorMainAddress.Postcode;
-					}
-					result = consumerSrv.GetConsumerInfo(director.Name, director.Surname,
-												director.Gender.ToString(),
-												director.DateOfBirth, null, dirLoc, "PL", customer.Id, director.Id, true, true, false);
-				}
-
-				var dirModel = new CreditBureauModel();
-				GenerateConsumerModel(dirModel, -1, result);
-				dirModel.Name = director.Name;
-				dirModel.MiddleName = director.Middle;
-				dirModel.Surname = director.Surname;
-				dirModel.FullName = string.Format("{0} {1} {2}", director.Name, director.Middle, director.Surname);
-				dirModel.Id = director.Id;
-				dirModelList.Add(dirModel);
-			}
-			return dirModelList.ToArray();
-		}
-
-		private static InputLocationDetailsMultiLineLocation MultiLineLocationFromCustomerAddress(
-			CustomerAddress customerMainAddress)
-		{
-			var loc = new InputLocationDetailsMultiLineLocation();
-			if (customerMainAddress != null)
-			{
-				loc.LocationLine1 = customerMainAddress.Line1;
-				loc.LocationLine2 = customerMainAddress.Line2;
-				loc.LocationLine3 = customerMainAddress.Line3;
-				loc.LocationLine4 = customerMainAddress.Town;
-				loc.LocationLine5 = customerMainAddress.County;
-				loc.LocationLine6 = customerMainAddress.Postcode;
-			}
-			return loc;
 		}
 
 		public static DelphiModel GetScorePositionAndColor(double score, int scoreMax, int scoreMin)
@@ -859,40 +620,6 @@
 		private static double Cup(double x)
 		{
 			return ((x <= -1) || (x >= 1)) ? 0.0 : Math.Exp(1.0 / (x * x - 1)) * Math.E;
-		}
-
-		protected CreditBureauModel GenerateRandomModel(int id)
-		{
-			var r = new Random();
-			var score = r.Next(-200, 1600);
-			var spc = GetScorePositionAndColor(score, ConsumerScoreMax, ConsumerScoreMin);
-
-			return new CreditBureauModel
-			{
-				Id = id,
-				Score = score,
-				ScorePosition = spc.Position,
-				ScoreAlign = spc.Align,
-				ScoreValuePosition = spc.ValPosition,
-				ScoreColor = spc.Color,
-				CheckStatus = "Passed",
-				CheckIcon = "icon-white icon-ok",
-				ButtonStyle = "btn-success"
-			};
-		}
-
-		protected CreditBureauModel GenerateNotQualifiedModel(int id)
-		{
-			return new CreditBureauModel
-			{
-				Id = id,
-				Score = 0,
-				CheckStatus = "Not Qualified",
-				CheckIcon = "icon-white icon-remove-sign",
-				ButtonStyle = "btn-danger",
-				CheckDate = string.Empty,
-				CheckValidity = string.Empty
-			};
 		}
 
 		protected static List<string> StatusScale = new List<string> { "D", "U", "S", "?", "0", "1", "2", "3", "4", "5", "6", "8", "9" };
@@ -1005,20 +732,18 @@
 				return 0;
 			}
 		}
-		
+
 		private static readonly Dictionary<int, Variables> map = new Dictionary<int, Variables>
 			{
-				{1,Variables.FinancialAccounts_MainApplicant},
-				{2,Variables.FinancialAccounts_AliasOfMainApplicant},
-				{3,Variables.FinancialAccounts_AssociationOfMainApplicant},
-				{5,Variables.FinancialAccounts_JointApplicant},
+				{1, Variables.FinancialAccounts_MainApplicant},
+				{2, Variables.FinancialAccounts_AliasOfMainApplicant},
+				{3, Variables.FinancialAccounts_AssociationOfMainApplicant},
+				{5, Variables.FinancialAccounts_JointApplicant},
 				{6, Variables.FinancialAccounts_AliasOfJointApplicant},
-				{7,Variables.FinancialAccounts_AssociationOfJointApplicant},
-				{9,Variables.FinancialAccounts_No_Match},
-				{4,Variables.FinancialAccounts_Spare},//Spare
-				{8,Variables.FinancialAccounts_Spare},//Spare
+				{7, Variables.FinancialAccounts_AssociationOfJointApplicant},
+				{9, Variables.FinancialAccounts_No_Match},
+				{4, Variables.FinancialAccounts_Spare},//Spare
+				{8, Variables.FinancialAccounts_Spare},//Spare
 			};
 	}
-
-
 }

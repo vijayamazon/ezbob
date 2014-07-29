@@ -155,6 +155,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ExperianLtdActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
