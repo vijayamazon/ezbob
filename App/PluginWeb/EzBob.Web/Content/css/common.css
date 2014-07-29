@@ -3189,6 +3189,8 @@ table.payment-schedule-table {
     border-left: 1px solid #f2f2f2 !important;
 }
 
+.profile-menu .customer-dashboard-main { margin: 0; }
+
 ul.marketing-files {
     list-style: none;
 }

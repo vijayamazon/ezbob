@@ -1982,3 +1982,8 @@ td a.edit-loan {
 #broker-main-content .aka-row > .value {
     display: table-cell;
 }
+
+.fs16 {
+    font-size: 18px;
+    height: 38px;
+}

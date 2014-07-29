@@ -181,9 +181,10 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 			});
 
 			this.addDirector.setSuccessHandler(function() {
-				directorEl.hide();
+				directorEl.hide().empty();
 				self.$el.find('.add-director, .dataTables_wrapper').show();
 				self.model.fetch().done(function() { self.reload(); });
+				self.addDirector = null;
 			});
 
 			this.addDirector.setDupCheckCompleteHandler(function(bDupFound) {

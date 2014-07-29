@@ -14,7 +14,12 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         this.model.on('change sync', this.render, this);
     },
     render: function() {
-        this.$el.html(this.template({ experianInfo: this.model.toJSON() }));
+	    var uiData = this.model.toJSON();
+
+	    uiData.Consumer = uiData.Consumer || {};
+	    uiData.Consumer.ConsumerAccountsOverview = uiData.Consumer.ConsumerAccountsOverview || {};
+
+	    this.$el.html(this.template({ experianInfo: uiData }));
         this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
         this.$el.find('.check-history tr:not(:eq(0),:eq(1))').css("cursor", "pointer");
     },
