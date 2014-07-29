@@ -5,10 +5,12 @@
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzBob.Models;
 	using Infrastructure.Attributes;
 	using LandRegistryLib;
 	using Models;
 	using System.Web.Mvc;
+	using MoreLinq;
 	using StructureMap;
 
 	public class PropertiesController : Controller
@@ -60,8 +62,63 @@
 			{
 				data.LandRegistries.Add(b.BuildResModel(lr.Response, lr.Title));
 			}
+			
+			var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
+			data.Postcode = current.Postcode;
+			data.FormattedAddress = current.FormattedAddress;
 
 			return Json(data, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpGet]
+		public JsonResult Zoopla(int customerId, bool recheck)
+		{
+			// TODO: this method should be changed to handle all owned properties of the customer
+			var address = customerAddressRepository.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
+
+			if (address == null)
+				return Json(new { error = "address not found" }, JsonRequestBehavior.AllowGet);
+
+			var zoopla = address.Zoopla.LastOrDefault();
+
+			if (zoopla == null || recheck)
+			{
+				var sh = new StrategyHelper();
+				sh.GetZooplaData(customerId, recheck);
+				zoopla = address.Zoopla.LastOrDefault();
+
+				if (zoopla == null)
+					return Json(new { error = "zoopla info not found" }, JsonRequestBehavior.AllowGet);
+			} // if
+
+			return Json(zoopla, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpPost]
+		public JsonResult LandRegistryEnquiries(int customerId)
+		{
+			var customer = customerRepository.Get(customerId);
+			var b = new LandRegistryModelBuilder();
+			var landRegistryEnquiries = new List<LandRegistryEnquiryTitle>();
+			var lrEnqs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Enquiry).Select(x => x.Response);
+			foreach (var lr in lrEnqs)
+			{
+				try
+				{
+					var lrModel = b.BuildEnquiryModel(lr);
+
+					landRegistryEnquiries.AddRange(lrModel.Titles);
+				}
+				catch (Exception ex)
+				{
+
+				}
+			}
+
+			landRegistryEnquiries = landRegistryEnquiries.DistinctBy(x => x.TitleNumber).ToList();
+			return Json(new { titles = landRegistryEnquiries });
 		}
 	}
 }

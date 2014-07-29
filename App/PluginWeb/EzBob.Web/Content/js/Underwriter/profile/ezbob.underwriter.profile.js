@@ -631,6 +631,7 @@
         _this.crossCheckView.render({
           customerId: id
         });
+        _this.PropertiesView.customerId = id;
         if (isHistory) {
           $('a[href=#marketplaces]').click();
         }

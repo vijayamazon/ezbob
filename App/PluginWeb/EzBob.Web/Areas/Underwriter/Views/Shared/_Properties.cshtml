@@ -39,17 +39,25 @@
             </thead>
             <tbody class="box-content">
                 <tr>
+                    <td><b>Zoopla LR</b></td>
+                    <td>
+                        <div class="copy-buttons">
+                            <button class="btn btn-primary" id="zoopla">Zoopla</button>
+                            <button class="btn btn-primary" id="landregistry" data-postcode="<%- model.Postcode %>" data-address="<%- model.FormattedAddress %>">Land Registry</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <td><b>Zoopla Estimate</b></td>
                     <td>
                         <% if (model.NumberOfProperties > 0) {%>
-                            <span>£ <%- model.MarketValue %></span>
-                            <% if (model.ZooplaUpdateDate != null) { %>
-                                <span>, updated: <%- EzBob.formatDate2(model.ZooplaUpdateDate) %></span>
-                            <% } %>
-                            <span>(average: £ <%- model.Zoopla1YearAverage %>)</span>
+                        <span>£ <%- model.MarketValue %></span>
+                        <% if (model.ZooplaUpdateDate != null) { %>
+                        <span>, updated: <%- EzBob.formatDate2(model.ZooplaUpdateDate) %></span>
                         <% } %>
-                        @* should consider another way to allow refreshing zoopla (per property)
-                        <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button>*@
+                        <span>(average: £ <%- model.Zoopla1YearAverage %>)</span>
+                        <% } %>
+                        <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck all owned properties"><i class="fa fa-refresh"></i></button>
                     </td>
                 </tr>
                 <tr>
@@ -57,7 +65,7 @@
                     <td>
                         <span>£ <%- model.SumOfMortgages %></span>
                         <% if (model.NumberOfMortgages > 0) { %>
-                            <span> (<%- model.NumberOfMortgages %>)</span>
+                        <span> (<%- model.NumberOfMortgages %>)</span>
                         <%}%>
                     </td>
                 </tr>
@@ -65,14 +73,15 @@
                     <td><b>Property net worth</b></td>
                     <td>
                         <% if (model.NumberOfProperties > 0) {%>
-                            £ <%- model.NetWorth %>
+                        £ <%- model.NetWorth %>
                         <% } else { %>
-                            Not home owner
+                        Not home owner
                         <% } %>
                     </td>
                 </tr>
             </tbody>
         </table>
+
         <% if (model.LandRegistries != undefined && model.LandRegistries.length > 0) { %>
             <div class="box">
                 <div class="box-title">

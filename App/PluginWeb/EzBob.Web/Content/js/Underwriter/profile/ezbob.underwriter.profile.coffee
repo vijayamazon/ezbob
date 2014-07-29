@@ -486,6 +486,8 @@ class EzBob.Underwriter.ProfileView extends EzBob.View
             @crossCheckView.fullModel = fullModel
             @crossCheckView.render customerId: id
 
+            @PropertiesView.customerId = id
+
             $('a[href=#marketplaces]').click() if isHistory
             $('a.common-bug').attr('data-bug-customer', id)
 

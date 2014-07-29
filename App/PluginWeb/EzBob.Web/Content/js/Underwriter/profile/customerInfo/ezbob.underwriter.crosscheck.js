@@ -278,11 +278,13 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 
     events: {
         "click #recheck-targeting": "recheckTargeting",
+        // TODO: The next 3 events should be removed after testing
+        "click #landregistry": "showLandRegistry",
         "click #zoopla": "showZoopla",
         "click .zooplaRecheck": "recheckZoopla",
-        "click #landregistry": "showLandRegistry",
     }, // events
 
+    // TODO: Remove the next 3 methods
     recheckZoopla: function () {
         BlockUi("On");
         var that = this;

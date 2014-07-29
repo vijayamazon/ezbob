@@ -49,6 +49,7 @@
 
 		#region action Zoopla
 
+		// TODO: this method should be removed after testing is done
 		[Ajax]
 		[Transactional]
 		[HttpGet]
@@ -111,6 +112,8 @@
 		} // LandRegistryEnquiry
 
 		#endregion action LandRegistryEnquiry
+
+		// TODO: method should be removed after testing
 		[Ajax]
 		[HttpPost]
 		public JsonResult LandRegistryEnquiries(int customerId)

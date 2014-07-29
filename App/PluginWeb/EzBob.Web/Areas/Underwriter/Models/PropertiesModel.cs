@@ -29,5 +29,7 @@
 		public int Zoopla1YearAverage { get; set; }
 		public DateTime? ZooplaUpdateDate { get; set; }
 		public List<LandRegistryResModel> LandRegistries { get; set; }
+		public string Postcode { get; set; }
+		public string FormattedAddress { get; set; }
 	}
 }

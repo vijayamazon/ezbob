@@ -184,6 +184,10 @@
 				model.Properties.LandRegistries.Add(b.BuildResModel(lr.Response, lr.Title));
 			}
 
+			var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
+			model.Properties.Postcode = current.Postcode;
+			model.Properties.FormattedAddress = current.FormattedAddress;
+
 			sw.Stop();
 			var propTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();
