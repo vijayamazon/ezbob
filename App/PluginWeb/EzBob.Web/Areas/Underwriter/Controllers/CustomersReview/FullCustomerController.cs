@@ -13,6 +13,7 @@
 	using EzBob.Models.Marketplaces;
 	using Ezbob.Backend.Models;
 	using Infrastructure;
+	using LandRegistryLib;
 	using Models;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
@@ -174,6 +175,15 @@
 			sw.Restart();
 			// TODO: fetch data for all owned properties
 			model.Properties = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage, zooplaAverage1YearPrice, zooplaUpdateDate);
+			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res).Select(x => new { Response = x.Response, Title = x.TitleNumber });
+			var b = new LandRegistryModelBuilder();
+			model.Properties.LandRegistries = new List<LandRegistryResModel>();
+			
+			foreach (var lr in lrs)
+			{
+				model.Properties.LandRegistries.Add(b.BuildResModel(lr.Response, lr.Title));
+			}
+
 			sw.Stop();
 			var propTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();

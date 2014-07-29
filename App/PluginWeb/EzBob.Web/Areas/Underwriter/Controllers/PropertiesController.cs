@@ -1,10 +1,12 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure.Attributes;
+	using LandRegistryLib;
 	using Models;
 	using System.Web.Mvc;
 	using StructureMap;
@@ -49,6 +51,15 @@
 
 			// TODO: fetch all required data for all owned properties
 			var data = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage, zooplaAverage1YearPrice, zooplaUpdateDate);
+
+			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res).Select(x => new { Response = x.Response, Title = x.TitleNumber });
+			var b = new LandRegistryModelBuilder();
+			data.LandRegistries = new List<LandRegistryResModel>();
+			
+			foreach (var lr in lrs)
+			{
+				data.LandRegistries.Add(b.BuildResModel(lr.Response, lr.Title));
+			}
 
 			return Json(data, JsonRequestBehavior.AllowGet);
 		}

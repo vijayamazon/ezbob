@@ -1,6 +1,8 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
 	using System;
+	using System.Collections.Generic;
+	using LandRegistryLib;
 
 	public class PropertiesModel
 	{
@@ -26,5 +28,6 @@
 		public int NetWorthPercentages { get; set; }
 		public int Zoopla1YearAverage { get; set; }
 		public DateTime? ZooplaUpdateDate { get; set; }
+		public List<LandRegistryResModel> LandRegistries { get; set; }
 	}
 }
