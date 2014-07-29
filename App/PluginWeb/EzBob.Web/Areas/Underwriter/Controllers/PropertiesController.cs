@@ -90,7 +90,7 @@
 
 				if (zoopla == null)
 					return Json(new { error = "zoopla info not found" }, JsonRequestBehavior.AllowGet);
-			} // if
+			}
 
 			return Json(zoopla, JsonRequestBehavior.AllowGet);
 		}

@@ -58,7 +58,7 @@
 			{
 				Log.DebugFormat("Checking key '{0}' in cache...", key);
 
-				var cachedResult = amlResultsRepository.GetAll().FirstOrDefault(aml => aml.Key == key && aml.IsActive);
+				var cachedResult = amlResultsRepository.GetAll().FirstOrDefault(aml => aml.LookupKey == key && aml.IsActive);
 
 				bool foundInCache = cachedResult != null;
 				if (foundInCache)
@@ -143,7 +143,7 @@
 
 				var amlResult = new AmlResults
 					{
-						Key = key,
+						LookupKey = key,
 						CustomerId = customerId,
 						ServiceLogId = logItem.Id,
 						Created = logItem.InsertDate,

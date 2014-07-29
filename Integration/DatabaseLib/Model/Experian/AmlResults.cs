@@ -10,7 +10,7 @@
 	public class AmlResults
 	{
 		public virtual int Id { get; set; }
-		public virtual string Key { get; set; }
+		public virtual string LookupKey { get; set; }
 		public virtual int CustomerId { get; set; }
 		public virtual long ServiceLogId { get; set; }
 		public virtual DateTime Created { get; set; }
@@ -39,7 +39,7 @@
 		{
 			Table("AmlResults");
 			Id(x => x.Id);
-			Map(x => x.Key).Length(500);
+			Map(x => x.LookupKey).Length(500);
 			Map(x => x.CustomerId);
 			Map(x => x.ServiceLogId);
 			Map(x => x.Created).CustomType<UtcDateTimeType>().Not.Nullable();
