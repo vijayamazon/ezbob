@@ -129,11 +129,14 @@
 
 		#region method PersonalGuarantee
 
-		public byte[] PersonalGuarantee(Person oSigner) {
+		public byte[] PersonalGuarantee(Person oSigner, int nApprovedSum) {
+			if ((nApprovedSum <= 0) || (nApprovedSum > 50000))
+				nApprovedSum = 50000;
+
 			string sTemplate = System.Text.Encoding.UTF8.GetString(FileContent);
 
 			sTemplate = sTemplate.Replace("__GUARANTOR_DETAILS__", oSigner.FullDetails);
-			sTemplate = sTemplate.Replace("__LOAN_AMOUNT__", "£50,000.00");
+			sTemplate = sTemplate.Replace("__LOAN_AMOUNT__", nApprovedSum.ToString("C2", ms_oCulture));
 
 			return Encoding.UTF8.GetBytes(sTemplate);
 		} // PersonalGuarantee
@@ -145,6 +148,7 @@
 		#region private
 
 		private readonly MimeTypeResolver m_oMime;
+		private static readonly CultureInfo ms_oCulture = new CultureInfo("en-GB", false);
 
 		#endregion private
 	} // class Template

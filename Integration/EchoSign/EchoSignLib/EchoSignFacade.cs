@@ -146,13 +146,19 @@
 				return SendOne(sp.Template, null, oRecipients, sp.Customer.ID, sp.Template.ID, bSendToCustomer);
 
 			case TemplateType.PersonalGuarantee:
+				int nApprovedSum = m_oDB.ExecuteScalar<int>(
+					"LoadCustomerLatestApprovedSum",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", sp.Customer.ID)
+				);
+
 				int nTotalCount = 0;
 				int nSuccessCount = 0;
 
 				foreach (Person oRecipient in oRecipients) {
 					nTotalCount++;
 
-					if (EchoSignSendResult.Success == SendOne(sp.Template, sp.Template.PersonalGuarantee(oRecipient), new List<Person> {oRecipient}, sp.Customer.ID, sp.Template.ID, bSendToCustomer))
+					if (EchoSignSendResult.Success == SendOne(sp.Template, sp.Template.PersonalGuarantee(oRecipient, nApprovedSum), new List<Person> {oRecipient}, sp.Customer.ID, sp.Template.ID, bSendToCustomer))
 						nSuccessCount++;
 				} // for each
 
