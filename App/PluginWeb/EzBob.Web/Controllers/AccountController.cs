@@ -310,14 +310,18 @@ namespace EzBob.Web.Controllers {
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		} // LogOffUnderwriter
 
+		#endregion action LogOffUnderwriter
+
+		#region action GetPropertyStatuses
+
 		[Ajax]
 		[HttpGet]
-		public JsonResult GetPropertyStatuses()
-		{
+		public JsonResult GetPropertyStatuses() {
 			PropertyStatusesActionResult propertyStatusesActionResult = m_oServiceClient.Instance.GetPropertyStatuses();
 			return Json(propertyStatusesActionResult.Groups, JsonRequestBehavior.AllowGet);
-		}
+		} // GetPropertyStatuses
 
+		#endregion action GetPropertyStatuses
 
 		#region action SignUp
 
@@ -624,7 +628,7 @@ namespace EzBob.Web.Controllers {
 				Ezbob.Utils.Security.SecurityUtils.HashPassword(model.UserName, model.Password)
 			);
 
-			int nUserID = 0;
+			int nUserID;
 
 			try {
 				if (string.IsNullOrEmpty(model.UserName))
