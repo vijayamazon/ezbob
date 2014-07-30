@@ -447,7 +447,6 @@
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayTransaction.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayTransactionMap.cs" />
     <Compile Include="Model\Loans\PacnetTransaction.cs" />
-    <Compile Include="Model\Experian\MP_ExperianDataCache.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedback.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackItem.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackItemMap.cs" />

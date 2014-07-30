@@ -33,14 +33,19 @@ BEGIN
 	WHERE 
 		CustomerID = @CustomerId
 
-	SELECT 
-		@ConsumerScore = MIN(ExperianScore) 
-	FROM 
-		MP_ExperianDataCache 
-	WHERE 
-		CustomerId = @CustomerId AND 
-		Name IS NOT NULL
-		
+	
+	SELECT @ConsumerScore = MIN(ExperianConsumerScore)
+	FROM
+	(
+		SELECT ExperianConsumerScore
+		FROM Customer
+		WHERE Id=@CustomerId
+		UNION
+		SELECT ExperianConsumerScore
+		FROM Director
+		WHERE CustomerId=@CustomerId AND ExperianConsumerScore IS NOT NULL
+	) AS X
+			
 	SELECT 
 		@EzbobSeniority = GreetingMailSentDate, 
 		@MaritalStatus = MaritalStatus

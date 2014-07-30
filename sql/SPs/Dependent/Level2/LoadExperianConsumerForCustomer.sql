@@ -29,6 +29,27 @@ BEGIN
 		l.InsertDate DESC,
 		l.Id DESC
 	
+	IF @ServiceLogId IS NULL
+	BEGIN
+		PRINT 'select by name'
+		SELECT TOP 1
+		   l.Id, l.InsertDate
+		FROM
+		 Customer c 
+		 INNER JOIN CustomerAddress a ON a.CustomerId = c.Id AND a.addressType=1
+		 INNER JOIN MP_ServiceLog l on
+		  l.Firstname = c.FirstName AND
+		  l.Surname = c.Surname AND 
+		  l.DateOfBirth = c.DateOfBirth AND
+		  l.Postcode = a.Postcode AND
+		  l.ServiceType = 'Consumer Request'
+		  
+		  WHERE
+		   c.Id=@CustomerId
+		  ORDER BY
+		   l.InsertDate DESC,
+		   l.Id DESC
+	END
 	------------------------------------------------------------------------------
 
 	EXECUTE LoadFullExperianConsumer @ServiceLogID, @InsertDate

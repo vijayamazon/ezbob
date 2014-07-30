@@ -86,7 +86,7 @@
     <Compile Include="CaisFile\Trailer.cs" />
     <Compile Include="CaisFile\Utils.cs" />
     <Compile Include="ConsumerService.cs" />
-    <Compile Include="ConsumerServiceResult.cs" />
+    <Compile Include="ConsumerExperianModelBuilder.cs" />
     <Compile Include="Dictionaries\AccountStatusDictionary.cs" />
     <Compile Include="Dictionaries\AccountTypeDictionary.cs" />
     <Compile Include="Dictionaries\PaymentFrequencyDictionary.cs" />
@@ -102,8 +102,6 @@
     <Compile Include="IdIdentityHub\BaseIdHubResult.cs" />
     <Compile Include="IdIdentityHub\IdHubService.cs" />
     <Compile Include="InteractiveService.cs" />
-    <Compile Include="Parser\FinancialAccount.cs" />
-    <Compile Include="Parser\FinancialAccountsParser.cs" />
     <Compile Include="Tests\IdHubServiceParseTests.cs" />
     <Compile Include="Tests\Integration\BaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

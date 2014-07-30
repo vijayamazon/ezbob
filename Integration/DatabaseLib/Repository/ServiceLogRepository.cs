@@ -7,7 +7,9 @@ using NHibernate.Linq;
 
 namespace EZBob.DatabaseLib.Repository
 {
-    public class ServiceLogRepository : NHibernateRepositoryBase<MP_ServiceLog>
+	using Ezbob.Utils.Extensions;
+
+	public class ServiceLogRepository : NHibernateRepositoryBase<MP_ServiceLog>
     {
         public ServiceLogRepository(ISession session) : base(session)
         {
@@ -19,7 +21,7 @@ namespace EZBob.DatabaseLib.Repository
 
 		public MP_ServiceLog GetFirst()
 		{
-			return GetAll().FirstOrDefault();
+			return GetAll().FirstOrDefault(x => x.ServiceType == ExperianServiceType.Consumer.DescriptionAttr() && x.ResponseData != null);
 		}
 
         public MP_ServiceLog GetById(int id)

@@ -80,13 +80,12 @@ BEGIN
 		SELECT @HasNonYodleeMarketplace = 0
 	END
 	
-	SELECT
-		@ExperianScore = ExperianScore
+	SELECT 
+		@ExperianScore = ExperianConsumerScore
 	FROM
-		MP_ExperianDataCache
+		Customer
 	WHERE
-		CustomerId = @CustomerId AND
-		DirectorId = 0
+		Id = @CustomerId 
 		
 	SELECT
 		@EarliestTransactionDate = MIN(PostDate)

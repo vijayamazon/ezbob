@@ -372,7 +372,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual bool Fraud { get; set; }
 		public virtual FraudStatus FraudStatus { get; set; }
-		public virtual int FinancialAccounts { get; set; }
 
 		//public virtual LimitedInfo LimitedInfo { get; set; }
 		//public virtual NonLimitedInfo NonLimitedInfo { get; set; }
@@ -713,6 +712,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual IList<LandRegistry> LandRegistries { get; set; }
 
 		public virtual string FirstVisitTime { get; set; }
+
+		public virtual int? ExperianConsumerScore { get; set; }
 	} // class Customer
 
 	#endregion class Customer

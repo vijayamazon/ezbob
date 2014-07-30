@@ -10,13 +10,8 @@ ALTER PROCEDURE LoadExperianConsumerMortgagesData
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE @ServiceLogId INT = (SELECT TOP 1 Id 
-								FROM MP_ServiceLog 
-								WHERE ServiceType='Consumer Request' 
-								AND CustomerId = @CustomerId 
-								AND DirectorId IS NULL 
-								ORDER BY InsertDate DESC
-							   )
+	DECLARE @ServiceLogId BIGINT
+	EXEC GetExperianConsumerServiceLog @CustomerId, @ServiceLogId OUTPUT
 							   
 	SELECT count(*) AS NumMortgages, isnull(sum(Balance),0) AS MortageBalance 
 	FROM ExperianConsumerDataCais c INNER JOIN ExperianConsumerData d ON d.Id = c.ExperianConsumerDataId 

@@ -30,9 +30,9 @@ namespace ExperianLib.Tests.Integration
             };
             var dob = new DateTime(1990, 08, 17);
 			var result = service.GetConsumerInfo("ABUL", "TestSurnameDebugMode", "1170", dob, null, loc, "PL", 39, 1, false, false, false);
-            if(result.Data.HasExperianError)
+            if(result.HasExperianError)
             {
-                Log.Error("Error from consumer service: " + result.Data.Error);
+                Log.Error("Error from consumer service: " + result.Error);
                 Assert.Fail();
             }
         }
@@ -54,9 +54,9 @@ namespace ExperianLib.Tests.Integration
             };
             var dob = new DateTime(1968, 10, 15);
             var result = service.GetConsumerInfo("Matt", "Lunt", "M", dob, null, loc, "PL", 1, 0, false, false, false);
-            if (result.Data.HasExperianError)
+            if (result.HasExperianError)
             {
-                Log.Error("Error from consumer service: " + result.Data.Error);
+                Log.Error("Error from consumer service: " + result.Error);
                 Assert.Fail();
             }
         }

@@ -14,19 +14,7 @@ BEGIN
 		@Score INT,
 		@InterestRate NUMERIC(18,4)
 
-	SELECT @Score = ExperianScore
-	FROM
-		(
-			SELECT
-				CustomerId,
-				ExperianScore,
-				ROW_NUMBER() OVER(PARTITION BY CustomerId ORDER BY Id DESC) AS rn
-			FROM
-				MP_ExperianDataCache
-		) as T
-	WHERE
-		rn = 1 AND
-		CustomerId = @CustomerId
+	SELECT @Score = ISNULL(ExperianConsumerScore,0) FROM Customer WHERE Id=@CustomerId
 
 	SELECT @InterestRate = Value FROM BasicInterestRate WHERE Start <= @Score AND [End] >= @Score
 	IF @InterestRate IS NULL SET @InterestRate=0

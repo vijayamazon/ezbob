@@ -2,6 +2,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using System;
 	using System.ComponentModel;
 	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
 
 	public enum ExperianServiceType {
 		[Description("AML A check")]
@@ -29,6 +30,10 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string RequestData { get; set; }
 		public virtual string ResponseData { get; set; }
 		public virtual string CompanyRefNum { get; set; }
+		public virtual string Firstname { get; set; }
+		public virtual string Surname { get; set; }
+		public virtual DateTime? DateOfBirth { get; set; }
+		public virtual string Postcode { get; set; }
 	} // class MP_ServiceLog
 
 	public sealed class MP_ServiceLogMap : ClassMap<MP_ServiceLog> {
@@ -42,6 +47,10 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.RequestData).CustomType("StringClob");
 			Map(x => x.ResponseData).CustomType("StringClob");
 			Map(x => x.CompanyRefNum).Length(50);
+			Map(x => x.Firstname).Length(50).Nullable();
+			Map(x => x.Surname).Length(50).Nullable();
+			Map(x => x.DateOfBirth).CustomType<UtcDateTimeType>().Nullable();
+			Map(x => x.Postcode).Length(50).Nullable();
 		} // constructor
 	} // class MP_ServiceLogMap
 } // namespace

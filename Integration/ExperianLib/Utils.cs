@@ -4,8 +4,6 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
-	using System.Xml.Linq;
-	using System.Xml.XPath;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzServiceAccessor;
@@ -24,28 +22,39 @@
 
 		#region generic method WriteLog
 
-		public static MP_ServiceLog WriteLog<TX, TY>(
+		public static WriteToLogPackage.OutputData WriteLog<TX, TY>(
 			TX input,
 			TY output,
 			ExperianServiceType type,
 			int customerId,
-			int? directorId = null
+			int? directorId = null,
+			string firstname = null,
+			string surname = null,
+			DateTime? dob = null,
+			string postCode = null
 		)
 			where TX : class
 			where TY : class
 		{
-			return WriteLog(XSerializer.Serialize(input), XSerializer.Serialize(output), type, customerId, directorId);
+			return WriteLog(XSerializer.Serialize(input), XSerializer.Serialize(output), type, customerId, directorId, firstname, surname,dob,postCode);
 		} // WriteLog
 
 		#endregion generic method WriteLog
 
 		#region method WriteLog
 
-		public static MP_ServiceLog WriteLog(string input, string output, ExperianServiceType type, int customerId, int? directorId = null)
+		public static WriteToLogPackage.OutputData WriteLog(string input,
+			string output, ExperianServiceType type,
+			int customerId,
+			int? directorId = null, 
+			string firstname = null,
+			string surname = null,
+			DateTime? dob = null,
+			string postCode = null)
 		{
-			var pkg = new WriteToLogPackage(input, output, type, customerId, directorId);
+			var pkg = new WriteToLogPackage(input, output, type, customerId, directorId, firstname, surname, dob, postCode);
 			WriteLog(pkg);
-			return pkg.Out.ServiceLog;
+			return pkg.Out;
 		} // WriteToLog
 
 		public static void WriteLog(WriteToLogPackage oPackage)
@@ -61,6 +70,10 @@
 				RequestData = oPackage.In.Request,
 				ResponseData = oPackage.In.Response,
 				ServiceType = oPackage.In.ServiceType.DescriptionAttr(),
+				Firstname = oPackage.In.Firstname,
+				Surname = oPackage.In.Surname,
+				DateOfBirth = oPackage.In.DateOfBirth,
+				Postcode = oPackage.In.PostCode
 			};
 
 			try
@@ -83,11 +96,7 @@
 				ms_oLog.Debug("Input data was: {0}", oPackage.Out.ServiceLog.RequestData);
 				ms_oLog.Debug("Output data was: {0}", oPackage.Out.ServiceLog.ResponseData);
 
-				oRetryer.Retry(() =>
-				{
-					var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
-					repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
-				});
+				
 
 				switch (oPackage.In.ServiceType)
 				{
@@ -96,8 +105,22 @@
 						break;
 					case ExperianServiceType.Consumer:
 						oPackage.Out.ExperianConsumer = ObjectFactory.GetInstance<IEzServiceAccessor>().ParseExperianConsumer(oPackage.Out.ServiceLog.Id);
+						if (oPackage.Out.ServiceLog.Director != null)
+						{
+							oPackage.Out.ServiceLog.Director.ExperianConsumerScore = oPackage.Out.ExperianConsumer.BureauScore;
+						}
+						else
+						{
+							oPackage.Out.ServiceLog.Customer.ExperianConsumerScore = oPackage.Out.ExperianConsumer.BureauScore;
+						}
 						break;
 				}
+
+				oRetryer.Retry(() =>
+				{
+					var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
+					repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
+				});
 
 				try
 				{

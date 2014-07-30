@@ -2,6 +2,7 @@
 	using System;
 	using System.Data;
 	using System.Globalization;
+	using System.Linq;
 	using System.Xml;
 	using Experian;
 	using EzServiceConfiguration;
@@ -9,13 +10,9 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils;
-	using Ezbob.Utils.Exceptions;
 	using Ezbob.Utils.Extensions;
-	using Ezbob.Utils.JsonUtils;
 	using Ezbob.Utils.XmlUtils;
-	using Newtonsoft.Json.Linq;
-
+	
 	#region class QuickOfferData
 
 	internal class QuickOfferData {
@@ -23,11 +20,12 @@
 
 		#region constructor
 
-		public QuickOfferData(QuickOfferConfigurationData qoc, ASafeLog oLog) {
+		public QuickOfferData(QuickOfferConfigurationData qoc, AConnection oDB, ASafeLog oLog) {
 			Log = new SafeLog(oLog);
 			IsValid = false;
 			Cfg = qoc;
 			m_oExperianUtils = new ExperianUtils(oLog);
+			DB = oDB;
 		} // constructor
 
 		#endregion constructor
@@ -50,8 +48,7 @@
 				CompanyData = oReader["CompanyData"];
 				FirstName = oReader["FirstName"];
 				LastName = oReader["LastName"];
-				ConsumerData = oReader["ConsumerData"];
-
+				//ConsumerData = oReader["ConsumerData"];
 				Enabled = QuickOfferConfiguration.GetEnabledStatus(oReader["Enabled"]);
 				FundsAvailable = oReader["FundsAvailable"];
 				LoanCount = oReader["LoanCount"];
@@ -179,8 +176,7 @@
 		private string CompanyData;
 		private string FirstName;
 		private string LastName;
-		private string ConsumerData;
-
+		
 		private QuickOfferEnabledStatus Enabled;
 		private decimal FundsAvailable;
 		private int LoanCount;
@@ -396,11 +392,6 @@
 				return false;
 			} // if
 
-			if (string.IsNullOrWhiteSpace(ConsumerData)) {
-				Log.Debug("Consumer data not set.");
-				return false;
-			} // if
-
 			return true;
 		} // AreLoadedValid
 
@@ -408,40 +399,21 @@
 
 		#region method IsThinFile
 
-		private bool IsThinFile() {
-			JObject jo;
-
-			try {
-				jo = JObject.Parse(ConsumerData);
+		private bool IsThinFile()
+		{
+			var experianConsumer = new LoadExperianConsumerData(CustomerID, null, null, DB, Log);
+			if (experianConsumer.Result.ServiceLogId != null || !experianConsumer.Result.Cais.Any())
+			{
+				Log.Debug("No Consumer Data or CAIS details data not found: this is a thin file.");
+				return true;
 			}
-			catch (SeldenException e) {
-				Log.Alert(e, "Could not parse consumer data.");
-				return true;
-			} // try
-
-			var oPath = new NameList("Output", "FullConsumerData", "ConsumerData", "CAIS");
-
-			var oToken = jo.Offspring(oPath);
-
-			if (ReferenceEquals(oToken, null)) {
-				Log.Debug("CAIS details data not found (CAIS node is missing): this is a thin file.");
-				return true;
-			} // if
-
-			foreach (var t in oToken.Children()) {
-				if (!ReferenceEquals(t["CAISDetails"], null)) {
-					Log.Debug("CAIS details data found: this is NOT a thin file.");
-					return false;
-				} // if
-			} // for each
-
-			Log.Debug("CAIS details data not found: this is a thin file.");
-			return true;
+			return false;
 		} // IsThinFile
 
 		#endregion method IsThinFile
 
 		private readonly ExperianUtils m_oExperianUtils;
+		private readonly AConnection DB;
 
 		#endregion private
 	} // class QuickOfferData

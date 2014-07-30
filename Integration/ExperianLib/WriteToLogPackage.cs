@@ -1,4 +1,5 @@
 ﻿namespace ExperianLib {
+	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 
@@ -8,9 +9,13 @@
 			string sResponseText,
 			ExperianServiceType nServiceType,
 			int nCustomerID,
-			int? nDirectorID = null
+			int? nDirectorID = null,
+			string firstname = null,
+			string surname = null,
+			DateTime? dob = null,
+			string postCode = null
 		) {
-			In = new InputData(sRequestText, sResponseText, nServiceType, nCustomerID, nDirectorID);
+			In = new InputData(sRequestText, sResponseText, nServiceType, nCustomerID, nDirectorID, firstname, surname, dob, postCode);
 			Out = new OutputData();
 		} // constructor
 
@@ -24,13 +29,21 @@
 				string sResponse,
 				ExperianServiceType nServiceType,
 				int nCustomerID,
-				int? nDirectorID
+				int? nDirectorID,
+				string firstname = null,
+				string surname = null,
+				DateTime? dob = null,
+				string postCode = null
 			) {
 				Request = sRequest;
 				Response = sResponse;
 				ServiceType = nServiceType;
 				CustomerID = nCustomerID;
 				DirectorID = nDirectorID;
+				Firstname = firstname;
+				Surname = surname;
+				DateOfBirth = dob;
+				PostCode = postCode;
 			} // constructor
 
 			public string Request { get; private set; }
@@ -38,6 +51,10 @@
 			public ExperianServiceType ServiceType { get; private set; }
 			public int CustomerID { get; private set; }
 			public int? DirectorID { get; private set; }
+			public string Firstname { get; private set; }
+			public string Surname { get; private set; }
+			public DateTime? DateOfBirth { get; private set; }
+			public string PostCode { get; private set; }
 		} // class In
 
 		public class OutputData {

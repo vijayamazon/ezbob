@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.PricingModel
 {
 	using System.Data;
+	using Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -25,12 +26,10 @@
 		public override void Execute()
 		{
 			decimal customerShare = 1 - companyShare;
+			var scoreStrat = new GetExperianConsumerScore(customerId, DB, Log);
+			scoreStrat.Execute();
 
-			int consumerScore = DB.ExecuteScalar<int>(
-				"GetExperianScore",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
+			int consumerScore = scoreStrat.Score;
 
 			int companyScore = DB.ExecuteScalar<int>(
 				"GetCompanyScore",

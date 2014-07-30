@@ -137,7 +137,7 @@
 				{
 					r = GetRequestFromXml(xmlForDebug);
 				}
-				MP_ServiceLog logItem = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
+				var res = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
 
 				result.Parse(r);
 
@@ -145,8 +145,8 @@
 					{
 						LookupKey = key,
 						CustomerId = customerId,
-						ServiceLogId = logItem.Id,
-						Created = logItem.InsertDate,
+						ServiceLogId = res.ServiceLog.Id,
+						Created = res.ServiceLog.InsertDate,
 						AuthenticationDecision = result.AuthenticationDecision,
 						AuthenticationIndex = result.AuthenticationIndex,
 						AuthIndexText = result.AuthIndexText,
@@ -245,8 +245,8 @@
 				{
 					r = GetRequestFromXml(xmlForDebug);
 				}
-				var logItem = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
-				_bankCacheRepository.Set(key, r, logItem);
+				var writelog = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
+				_bankCacheRepository.Set(key, r, writelog.ServiceLog);
 
 				result.Parse(r);
 			}
@@ -484,8 +484,8 @@
 				{
 					r = GetRequestFromXml(xmlForDebug);
 				}
-				var logItem = Utils.WriteLog(execRequestBwa, r, ExperianServiceType.Bwa, customerId);
-				_bankCacheRepository.Set(key, r, logItem);
+				var writeLog = Utils.WriteLog(execRequestBwa, r, ExperianServiceType.Bwa, customerId);
+				_bankCacheRepository.Set(key, r, writeLog.ServiceLog);
 
 				result.Parse(r);
 			}
@@ -584,8 +584,8 @@
 					r = GetRequestFromXml(xmlForDebug);
 				}
 
-				var logItem = Utils.WriteLog(execRequestBwa, r, ExperianServiceType.Bwa, customerId);
-				_bankCacheRepository.Set(key, r, logItem);
+				var writeLog = Utils.WriteLog(execRequestBwa, r, ExperianServiceType.Bwa, customerId);
+				_bankCacheRepository.Set(key, r, writeLog.ServiceLog);
 
 				result.Parse(r);
 			}

@@ -19,8 +19,7 @@
 			IDiscountPlanRepository discounts,
 			IUsersRepository users,
 			ILoanSourceRepository loanSources,
-			IDecisionHistoryRepository historyRepository,
-			ExperianDataCacheRepository experianData
+			IDecisionHistoryRepository historyRepository
 		)
 		{
 			m_oServiceClient = new ServiceClient();
@@ -29,7 +28,6 @@
 			_users = users;
 			_loanSources = loanSources;
 			_historyRepository = historyRepository;
-			_experianData = experianData;
 		} // constructor
 
 		#endregion constructor
@@ -41,12 +39,9 @@
 			var loanType = _loanTypes.GetDefault();
 			var loanSource = _loanSources.GetDefault();
 			var score = customer.ScoringResults.OrderByDescending(x => x.ScoreDate).FirstOrDefault();
-			var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
-			var postcode = address != null ? address.Postcode : null;
-			var personInfo = customer.PersonalInfo ?? new PersonalInfo();
-			var experian = _experianData.GetCustomerFromCache(customer.Id, personInfo.FirstName, personInfo.Surname,
-															  personInfo.DateOfBirth, postcode);
-			int? experianScore = experian != null ? experian.ExperianScore : 0;
+
+
+			int? experianScore = customer.ExperianConsumerScore;
 
 			var cashRequest = new CashRequest
 				{
@@ -115,7 +110,8 @@
 					UnderwriterDecisionDate = DateTime.UtcNow,
 					UnderwriterComment = sReason,
 					IdUnderwriter = user.Id,
-					Originator = CashRequestOriginator.QuickOffer
+					Originator = CashRequestOriginator.QuickOffer,
+					ExpirianRating = customer.ExperianConsumerScore
 				};
 
 			customer.CashRequests.Add(cashRequest);
@@ -182,7 +178,6 @@
 		private readonly IUsersRepository _users;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IDecisionHistoryRepository _historyRepository;
-		private readonly IExperianDataCacheRepository _experianData;
 		private readonly ServiceClient m_oServiceClient;
 
 		#endregion private

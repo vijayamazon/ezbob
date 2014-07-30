@@ -3,7 +3,9 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using ConfigManager;
+	using Experian;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using System.Data;
@@ -201,8 +203,7 @@
 			_numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
 			_numOfCompanyDefaultAccounts = sr["NumOfDefaultCompanyAccounts"];
 			hasCompanyFiles = sr["HasCompanyFiles"];
-			
-			_numOfLateAccounts = CountActiveAccounts();
+			_numOfLateAccounts = CountLateAccounts();
 
 			if (_isOffline)
 			{
@@ -229,46 +230,39 @@
 			_payPalTotalSumOfOrders1Y = sr["PayPal_TotalSumOfOrders1Y"];
 		}
 
-		private int CountActiveAccounts()
+		private int CountLateAccounts()
 		{
-			// Fetch active accounts
-			DataTable activeAccountsDataTable = _db.ExecuteReader(
-				"GetCustomerActiveAccounts",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", _customerId)
-			);
-
-			int rejectLateLastMonth = CurrentValues.Instance.Reject_LateLastMonthsNum;
-			string relevantStatuses = string.Empty;
-			foreach (DataRow row in activeAccountsDataTable.Rows)
+			int numOfLateAccounts = 0;
+			var data = new LoadExperianConsumerData(_customerId, null, null, _db, _log);
+			data.Execute();
+			if (data.Result.ServiceLogId != null && data.Result.Cais.Any())
 			{
-				var accountSafeReader = new SafeReader(row);
-				DateTime lastUpdateDate = accountSafeReader["LastUpdateDate"];
-				int currentlyPointedStatus = 12;
+				int rejectLateLastMonth = CurrentValues.Instance.Reject_LateLastMonthsNum;
+				int rejectValidLate = CurrentValues.Instance.RejectionLastValidLate;
 
-				if (lastUpdateDate.AddMonths(rejectLateLastMonth) > DateTime.UtcNow) // If not then there is no relevant data
+				foreach (var cais in data.Result.Cais)
 				{
-					for (int i = 0; i < rejectLateLastMonth - 1; i++)
+					DateTime lastUpdateDate = cais.LastUpdatedDate.HasValue ? cais.LastUpdatedDate.Value : new DateTime(1900,0,0);
+					var days = (lastUpdateDate - DateTime.UtcNow.AddMonths(-rejectLateLastMonth)).TotalDays;
+					int numOfRelevantStatuses = (int)Math.Ceiling(days / 30.0);
+					if (numOfRelevantStatuses > 0) // If not then there is no relevant data
 					{
-						DateTime tmpDate = DateTime.UtcNow.AddMonths(-1 * i);
-						if (tmpDate < lastUpdateDate || (tmpDate.Year == lastUpdateDate.Year && tmpDate.Month == lastUpdateDate.Month))
+						var relevantStatuses = cais.AccountStatusCodes.Substring(cais.AccountStatusCodes.Length - numOfRelevantStatuses,
+						                                                         numOfRelevantStatuses).ToArray();
+						foreach (var status in relevantStatuses)
 						{
-							string fieldName = string.Format("StatusCode{0}", currentlyPointedStatus);
-							currentlyPointedStatus--;
-							string monthStatus = accountSafeReader[fieldName];
-							relevantStatuses += monthStatus ?? string.Empty;
-						}
+							int nStatus = 0;
+							int.TryParse(status.ToString(CultureInfo.InvariantCulture), out nStatus);
+							if (nStatus > rejectValidLate && nStatus<8)
+							{
+								numOfLateAccounts++;
+								break;
+							}
+						} 
 					}
 				}
 			}
-
-			int numOfRelevantAccounts = relevantStatuses.Length;
-			for (int i = CurrentValues.Instance.RejectionLastValidLate + 1; i < 10; i++)
-			{
-				relevantStatuses = relevantStatuses.Replace(i.ToString(CultureInfo.InvariantCulture), "");
-			}
-
-			return numOfRelevantAccounts - relevantStatuses.Length;
+			return numOfLateAccounts;
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)

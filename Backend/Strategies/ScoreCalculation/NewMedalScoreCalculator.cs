@@ -2,6 +2,7 @@
 {
 	using System.Data;
 	using System.Text.RegularExpressions;
+	using Experian;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -137,10 +138,10 @@
 
 		private decimal GetMortgages(int customerId)
 		{
-			var instance = new GetCustomerMortgages(db, log, customerId);
+			var instance = new LoadExperianConsumerMortgageData(customerId, db, log);
 			instance.Execute();
 
-			return instance.MortgagesSum;
+			return instance.Result.MortageBalance;
 		}
 
 		private void CalculateMedal()

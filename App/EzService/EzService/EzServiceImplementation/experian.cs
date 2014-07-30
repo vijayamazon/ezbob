@@ -209,5 +209,21 @@
 		}
 
 		#endregion method LoadExperianConsumerMortage
+
+		#region method LoadExperianConsumerMortage
+
+		public IntActionResult GetExperianConsumerScore(int customerId)
+		{
+			GetExperianConsumerScore oInstance;
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, null, customerId);
+
+			return new IntActionResult
+			{
+				MetaData = oMetaData,
+				Value = oInstance.Score,
+			};
+		}
+
+		#endregion method LoadExperianConsumerMortage
 	} // class EzServiceImplementation
 } // namespace EzService

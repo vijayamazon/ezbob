@@ -90,7 +90,7 @@ BEGIN
 	BEGIN
 		SELECT @ApprovedSum = sum(ManagerApprovedSum) FROM CashRequests WHERE IdCustomer=@CustomerId AND ManagerApprovedSum IS NOT NULL
 		SELECT @LoanedAmount = sum(Loan.LoanAmount) FROM Loan WHERE CustomerId=@CustomerId
-		SELECT @ExperianScore = ExperianScore FROM (SELECT CustomerId, ExperianScore, row_number() OVER(PARTITION BY CustomerId ORDER BY Id DESC) AS rn FROM MP_ExperianDataCache) as T WHERE CustomerId=@CustomerId
+		SELECT @ExperianScore = (SELECT ExperianConsumerScore FROM Customer WHERE Id=@CustomerId)
 
 		UPDATE #ApprovedCustomers SET ApprovedLoan = @ApprovedSum, LoanedAmount = @LoanedAmount, ExperianScore = @ExperianScore WHERE CustomerId=@CustomerId
 

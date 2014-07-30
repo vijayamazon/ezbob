@@ -48,7 +48,7 @@
 		IEnumerable<MP_ExperianHistory> GetCustomerConsumerHistory(int customerId);
 		IEnumerable<MP_ExperianHistory> GetDirectorConsumerHistory(int directorId);
 		IEnumerable<MP_ExperianHistory> GetCompanyHistory(string companyRefNum, bool isLimited);
-		void SaveOrUpdateConsumerHistory(int serviceLogId, DateTime date, int? customerId, int? DirectorId, int? score, int? caisBalance, int? cii);
+		void SaveOrUpdateConsumerHistory(long serviceLogId, DateTime date, int? customerId, int? DirectorId, int? score, int? caisBalance, int? cii);
 	}
 
 	public class ExperianHistoryRepository : NHibernateRepositoryBase<MP_ExperianHistory>, IExperianHistoryRepository
@@ -74,12 +74,12 @@
 			return GetAll().Where(x => x.CompanyRefNum == companyRefNum && x.Type == (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr()));
 		}
 
-		public void SaveOrUpdateConsumerHistory(int serviceLogId, DateTime date, int? customerId, int? directorId, int? score, int? caisBalance,
+		public void SaveOrUpdateConsumerHistory(long serviceLogId, DateTime date, int? customerId, int? directorId, int? score, int? caisBalance,
 		                                int? cii)
 		{
 			if (!GetAll().Any(x => x.ServiceLogId == serviceLogId))
 			{
-				SaveOrUpdate(new MP_ExperianHistory()
+				SaveOrUpdate(new MP_ExperianHistory
 					{
 						ServiceLogId = serviceLogId,
 						Date = date,

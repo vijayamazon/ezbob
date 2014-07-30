@@ -1,10 +1,12 @@
 ﻿namespace EzBob.Backend.Strategies.Misc 
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
 	using ConfigManager;
 	using EzBob.Backend.Strategies.Experian;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using ExperianLib;
@@ -49,7 +51,7 @@
 					InputLocationDetailsMultiLineLocation location = addressLines.GetLocation(AddressCurrency.Current);
 
 					var consumerService = new ConsumerService();
-					ConsumerServiceResult consumerServiceResult = consumerService.GetConsumerInfo(
+					var result = consumerService.GetConsumerInfo(
 						firstName,
 						surname,
 						gender,
@@ -64,17 +66,17 @@
 						false
 					);
 
-					if (consumerServiceResult == null || consumerServiceResult.Data.HasExperianError)
+					if (result == null || result.HasExperianError)
 					{
 						Log.Debug("Backfilling customer analytics for customer {0} and director {1} Failed!", customerId, directorId);
 						continue;
 					}
 
-					int score = (int)consumerServiceResult.Data.BureauScore;
+					int? score = result.BureauScore;
 
 					if (directorId == 0)
 					{
-						UpdateCustomerAnalytics(consumerServiceResult, customerId, score);
+						UpdateCustomerAnalytics(result, customerId, score);
 					}
 					else
 					{
@@ -90,7 +92,7 @@
 			}
 		}
 
-		private void UpdateDirectorAnalytics(int customerId, int directorId, int score)
+		private void UpdateDirectorAnalytics(int customerId, int directorId, int? score)
 		{
 			Log.Debug("Updating customer analytics director score (customer = {0}, director = {1}, score = {2})", customerId, directorId, score);
 
@@ -103,40 +105,21 @@
 			);
 		}
 
-		private void UpdateCustomerAnalytics(ConsumerServiceResult consumerServiceResult, int customerId, int score)
+		private void UpdateCustomerAnalytics(ExperianConsumerData data, int customerId, int? score)
 		{
-			string sCii = consumerServiceResult.Output.Output.ConsumerSummary.PremiumValueData.CII.NDSPCII;
-
-			int nCii;
-			if (!int.TryParse(sCii, out nCii))
-				Log.Alert("Failed to parse customer indebtedness index '{0}' (integer expected).", sCii);
-
-			OutputFullConsumerDataConsumerDataCAIS[] cais = null;
+			int? nCii = data.CII;
+			
 			int nNumOfAccounts = 0;
 			int nDefaultCount = 0;
 			int nLastDefaultCount = 0;
 
-			try
-			{
-				cais = consumerServiceResult.Output.Output.FullConsumerData.ConsumerData.CAIS;
-			}
-			catch (Exception e)
-			{
-				Log.Debug(e, "Could not extract CAIS data from Experian output - this is a thin file.");
-			} // try
-
-			if (cais == null)
-				cais = new OutputFullConsumerDataConsumerDataCAIS[0];
+			List<ExperianConsumerDataCais> cais = data.Cais ?? new List<ExperianConsumerDataCais>();
+			
 
 			var dThen = DateTime.UtcNow.AddYears(-CurrentValues.Instance.CustomerAnalyticsDefaultHistoryYears);
 
-			foreach (var caisData in cais)
+			foreach (var detail in cais)
 			{
-				if (caisData.CAISDetails == null)
-					continue;
-
-				foreach (OutputFullConsumerDataConsumerDataCAISCAISDetails detail in caisData.CAISDetails)
-				{
 					nNumOfAccounts++;
 
 					if (detail.AccountStatus != "F")
@@ -144,26 +127,10 @@
 
 					nDefaultCount++;
 
-					int relevantYear, relevantMonth, relevantDay;
-
-					if (detail.SettlementDate != null)
-					{
-						relevantYear = detail.SettlementDate.CCYY;
-						relevantMonth = detail.SettlementDate.MM;
-						relevantDay = detail.SettlementDate.DD;
-					}
-					else
-					{
-						relevantYear = detail.LastUpdatedDate.CCYY;
-						relevantMonth = detail.LastUpdatedDate.MM;
-						relevantDay = detail.LastUpdatedDate.DD;
-					} // if
-
-					var settlementDate = new DateTime(relevantYear, relevantMonth, relevantDay);
+					var settlementDate = detail.LastUpdatedDate ?? detail.SettlementDate;
 
 					if (settlementDate >= dThen)
 						nLastDefaultCount++;
-				} // for each detail in CAIS datum
 			} // for each CAIS datum in CAIS data
 
 			Log.Debug(

@@ -239,9 +239,9 @@
 
 					var newResponse = MakeRequest(requestXml);
 
-					MP_ServiceLog serviceLogEntry = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
+					var writelog = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
 
-					nonLimitedParser.ParseAndStore(newResponse, refNumber, serviceLogEntry.Id);
+					nonLimitedParser.ParseAndStore(newResponse, refNumber, writelog.ServiceLog.Id);
 
 					return BuildResponseFromDb(refNumber);
 				} // if

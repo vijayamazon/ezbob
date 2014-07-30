@@ -1,4 +1,5 @@
-﻿namespace ExperianLib {
+﻿namespace ExperianLib
+{
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
@@ -7,27 +8,27 @@
 	using System.Xml.Serialization;
 	using ApplicationMng.Repository;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
+	using Dictionaries;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Experian;
-	using Dictionaries;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Newtonsoft.Json;
-	using Parser;
+	using ServiceClientProxy;
 	using StructureMap;
 	using log4net;
 	using EZBob.DatabaseLib.Repository;
 
-	public class ConsumerService {
+	public class ConsumerService
+	{
 		#region public
 
 		#region method ShiftLocation
 
-		public static InputLocationDetailsMultiLineLocation ShiftLocation(InputLocationDetailsMultiLineLocation mlLocation) {
+		public static InputLocationDetailsMultiLineLocation ShiftLocation(InputLocationDetailsMultiLineLocation mlLocation)
+		{
 			if (mlLocation == null)
 				return null;
 
@@ -53,7 +54,8 @@
 
 			string[] lines = oDstLines.ToArray();
 
-			mlLocation = new InputLocationDetailsMultiLineLocation {
+			mlLocation = new InputLocationDetailsMultiLineLocation
+			{
 				LocationLine1 = lines[0],
 				LocationLine2 = lines[1],
 				LocationLine3 = lines[2],
@@ -69,10 +71,10 @@
 
 		#region constructor
 
-		public ConsumerService() {
-			_repo = ObjectFactory.GetInstance<ExperianDataCacheRepository>();
+		public ConsumerService()
+		{
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
-
+			_serviceClient = new ServiceClient();
 			interactiveMode = CurrentValues.Instance.ExperianInteractiveMode;
 		} // constructor
 
@@ -80,7 +82,7 @@
 
 		#region GetConsumerInfo
 
-		public ConsumerServiceResult GetConsumerInfo(
+		public ExperianConsumerData GetConsumerInfo(
 			string firstName,
 			string surname,
 			string gender,
@@ -93,75 +95,45 @@
 			bool checkInCacheOnly,
 			bool isDirector,
 			bool forceCheck
-		) {
-			try {
+		)
+		{
+			try
+			{
 				string postcode = GetPostcode(ukLocation, mlLocation);
 
+				Log.InfoFormat("GetConsumerInfo: checking cache for {2} id {3} firstName: {0}, surname: {1} birthday: {4}, postcode: {5}", firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode);
+
+				var cachedResponse = _serviceClient.Instance.LoadExperianConsumer(customerId, directorId, null);
+
 				// debug mode
-				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
+				if (cachedResponse.Value.ServiceLogId == null && surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
 				{
-					var data = ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
-					MP_ExperianDataCache experianDataCacheEntry = _repo.GetAll()
-						.FirstOrDefault(x => x.CustomerId == customerId && x.DirectorId == directorId && x.CompanyRefNumber == null);
-
-					if (experianDataCacheEntry == null) {
-						var newExperianDataCacheEntry = new MP_ExperianDataCache {
-							Name = firstName,
-							Surname = surname,
-							BirthDate = birthDate,
-							PostCode = postcode,
-							LastUpdateDate = DateTime.UtcNow,
-							CustomerId = customerId,
-							DirectorId = directorId,
-							JsonPacket = JsonConvert.SerializeObject(data.Output)
-						};
-
-						_repo.SaveOrUpdate(newExperianDataCacheEntry);
-					} // if
-					else if (string.IsNullOrEmpty(experianDataCacheEntry.JsonPacket))
-					{
-						experianDataCacheEntry.JsonPacket = JsonConvert.SerializeObject(data.Output);
-						_repo.SaveOrUpdate(experianDataCacheEntry);
-					}
-
+					var data = ConsumerDebugResult(surname, customerId);
 					return data;
 				} // if test
 
 				mlLocation = ShiftLocation(mlLocation);
 
-				Log.InfoFormat("GetConsumerInfo: checking cache for {2} id {3} firstName: {0}, surname: {1} birthday: {4}, postcode: {5}", firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode);
-				
-				MP_ExperianDataCache cachedResponse = isDirector
-					? _repo.GetDirectorFromCache(directorId, firstName, surname, birthDate, postcode)
-					: _repo.GetCustomerFromCache(customerId, firstName, surname, birthDate, postcode);
-
-				if (!forceCheck) {
-					if (cachedResponse != null) {
-						if (CacheNotExpired(cachedResponse) || checkInCacheOnly)
-							return ParseCache(cachedResponse);
+				if (!forceCheck)
+				{
+					if (cachedResponse.Value != null)
+					{
+						if (CacheNotExpired(cachedResponse.Value.InsertDate) || checkInCacheOnly)
+							return cachedResponse.Value;
 					}
 					else if (checkInCacheOnly)
 						return null;
 				} // if
 
-				cachedResponse = cachedResponse ?? new MP_ExperianDataCache {
-					Name = firstName,
-					Surname = surname,
-					BirthDate = birthDate,
-					PostCode = postcode
-				};
-
-				return GetServiceOutput(gender, ukLocation, mlLocation, applicationType, customerId, directorId, cachedResponse);
+				return GetServiceOutput(gender, ukLocation, mlLocation, applicationType, customerId, directorId, firstName, surname, birthDate, postcode);
 			}
-			catch (Exception ex) {
+			catch (Exception ex)
+			{
 				Log.Error(ex);
-				return new ConsumerServiceResult
+				return new ExperianConsumerData
 					{
-						Data = new ExperianConsumerData
-							{
-								HasExperianError = true, 
-								Error = "Exception: " + ex.Message
-							}
+						HasExperianError = true,
+						Error = "Exception: " + ex.Message
 					};
 			} // try
 		} // GetConsumerInfo
@@ -237,54 +209,29 @@
 		} // SaveDefaultAccountIntoDb
 
 		#endregion method SaveDefaultAccountIntoDb
-
-		#region method CreateConsumerServiceResult
-
-		private ConsumerServiceResult CreateConsumerServiceResult(
-			string surname,
-			int customerId,
-			bool checkInCacheOnly,
-			string content
-		) {
-			var outputRootSerializer = new XmlSerializer(typeof(OutputRoot));
-			var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(content));
-
-			var consumerServiceResult = new ConsumerServiceResult(outputRoot) {
-				ExperianResult = "Passed",
-				LastUpdateDate = DateTime.Now
-			};
-
-			Log.InfoFormat("Get consumer info for test user: {0}", surname);
-
-			if (!checkInCacheOnly) {
-				var sl = ObjectFactory.GetInstance<ServiceLogRepository>();
-				MP_ServiceLog oFirst = m_oRetryer.Retry(() => sl.GetFirst());
-				SaveDefaultAccountIntoDb(outputRoot, customerId, oFirst);
-				financialAccountsParser.Parse(content, oFirst.Id, customerId);
-			} // if
-
-			return consumerServiceResult;
-		} // CreateConsumerServiceResult
-
-		#endregion method CreateConsumerServiceResult
-
 		#region method GetServiceOutput
 
-		private ConsumerServiceResult GetServiceOutput(
+		private ExperianConsumerData GetServiceOutput(
 			string gender,
 			InputLocationDetailsUKLocation ukLocation,
 			InputLocationDetailsMultiLineLocation mlLocation,
 			string applicationType,
 			int customerId,
 			int directorId,
-			MP_ExperianDataCache cachedResponse
-		) {
+			string firstName,
+			string surname,
+			DateTime? birthDate,
+			string postcode
+		)
+		{
 			var service = new InteractiveService();
 
-			var inputControl = new InputControl {
+			var inputControl = new InputControl
+			{
 				ExperianReference = "",
 				ReprocessFlag = "N",
-				Parameters = new InputControlParameters {
+				Parameters = new InputControlParameters
+				{
 					AuthPlusRequired = "Y",
 					FullFBLRequired = "Y",
 					DetectRequired = "N",
@@ -293,17 +240,20 @@
 			};
 
 			// 1 applicant
-			var applicant = new InputApplicant {
+			var applicant = new InputApplicant
+			{
 				ApplicantIdentifier = "1",
-				Name = new InputApplicantName { Forename = cachedResponse.Name, Surname = cachedResponse.Surname },
+				Name = new InputApplicantName { Forename = firstName, Surname = surname },
 				Gender = gender
 			};
 
-			if (cachedResponse.BirthDate != null) {
-				applicant.DateOfBirth = new InputApplicantDateOfBirth {
-					CCYY = cachedResponse.BirthDate.Value.Year,
-					DD = cachedResponse.BirthDate.Value.Day,
-					MM = cachedResponse.BirthDate.Value.Month,
+			if (birthDate != null)
+			{
+				applicant.DateOfBirth = new InputApplicantDateOfBirth
+				{
+					CCYY = birthDate.Value.Year,
+					DD = birthDate.Value.Day,
+					MM = birthDate.Value.Month,
 					CCYYSpecified = true,
 					DDSpecified = true,
 					MMSpecified = true
@@ -311,17 +261,20 @@
 			}
 
 			// 1 address
-			var address = new InputLocationDetails {
+			var address = new InputLocationDetails
+			{
 				LocationIdentifier = 1,
 				UKLocation = ukLocation,
 				MultiLineLocation = mlLocation
 			};
 
 			// 1 Residency Information 
-			var residencyInfo = new InputResidency {
+			var residencyInfo = new InputResidency
+			{
 				LocationIdentifier = "1",
 				ResidencyDateTo =
-					new InputResidencyResidencyDateTo {
+					new InputResidencyResidencyDateTo
+					{
 						CCYY = DateTime.Now.Year,
 						MM = DateTime.Now.Month,
 						DD = DateTime.Now.Day
@@ -332,7 +285,8 @@
 			};
 
 			// 1 Third Party Data (TPD) block
-			var tpd = new InputThirdPartyData {
+			var tpd = new InputThirdPartyData
+			{
 				OutcomeCode = "",
 				OptOut = "N",
 				TransientAssocs = "N",
@@ -340,13 +294,15 @@
 				OptoutValidCutOff = ""
 			};
 
-			var application = new InputApplication {
+			var application = new InputApplication
+			{
 				ApplicationChannel = "",
 				SearchConsent = "Y",
 				ApplicationType = applicationType
 			};
 
-			var input = new Input {
+			var input = new Input
+			{
 				Control = inputControl,
 				Applicant = new[] { applicant },
 				LocationDetails = new[] { address },
@@ -359,131 +315,120 @@
 
 			var output = service.GetOutput(input);
 
-			var serviceLog = Utils.WriteLog(input, output, ExperianServiceType.Consumer, customerId, directorId);
+			var serviceLog = Utils.WriteLog(input, output, ExperianServiceType.Consumer, customerId, directorId, firstName, surname, birthDate, postcode);
 
-			if (output != null && output.Output.Error == null) {
-				cachedResponse.LastUpdateDate = DateTime.Now;
-				cachedResponse.JsonPacket = JsonConvert.SerializeObject(output);
-				cachedResponse.JsonPacketInput = JsonConvert.SerializeObject(input);
-				cachedResponse.CustomerId = customerId;
-
-				if (directorId != 0)
-					cachedResponse.DirectorId = directorId;
-
-				m_oRetryer.Retry(() => _repo.SaveOrUpdate(cachedResponse));
-
-				SaveDefaultAccountIntoDb(output, customerId, serviceLog);
-				financialAccountsParser.Parse(serviceLog.ResponseData, serviceLog.Id, customerId);
-			} // if
-
-			return new ConsumerServiceResult(output);
+			SaveDefaultAccountIntoDb(output, customerId, serviceLog.ServiceLog);
+			return serviceLog.ExperianConsumer;
 		} // GetServiceOutput
 
 		#endregion method GetServiceOutput
 
 		#region method CacheNotExpired
 
-		private bool CacheNotExpired(MP_ExperianDataCache cacheEntry) {
+		private bool CacheNotExpired(DateTime cacheDate)
+		{
 			int cacheIsValidForDays = CurrentValues.Instance.UpdateConsumerDataPeriodDays;
-			return (DateTime.UtcNow - cacheEntry.LastUpdateDate).TotalDays <= cacheIsValidForDays;
+			return (DateTime.UtcNow - cacheDate).TotalDays <= cacheIsValidForDays;
 		} // CacheNotExpired
 
 		#endregion method CacheNotExpired
 
 		#region method ConsumerDebugResult
 
-		private ConsumerServiceResult ConsumerDebugResult(string surname, DateTime? birthDate, int customerId, bool checkInCacheOnly) {
+		private ExperianConsumerData ConsumerDebugResult(string surname, int customerId)
+		{
 			var content = string.Empty;
 			string testPart = string.Empty;
 
 			string filename = string.Empty;
 
-			if (surname != null && surname.Contains("_")) {
+			if (surname != null && surname.Contains("_"))
+			{
 				string[] splitValues = surname.Split('_');
 
-				if (splitValues.Length > 1 && !string.IsNullOrEmpty(splitValues[1])) {
+				if (splitValues.Length > 1 && !string.IsNullOrEmpty(splitValues[1]))
+				{
 					testPart = splitValues[1];
 
-					if (!testPart.Contains(":")) {
+					if (!testPart.Contains(":"))
+					{
 						int mpSeviceLogId;
 						int.TryParse(testPart, out mpSeviceLogId);
 
-						if (mpSeviceLogId > 0) {
+						if (mpSeviceLogId > 0)
+						{
 							var log = ObjectFactory.GetInstance<ServiceLogRepository>();
 							TryRead(() => m_oRetryer.Retry(() => content = log.GetById(mpSeviceLogId).ResponseData));
 						} // if
 					}
-					else {
-						try {
+					else
+					{
+						try
+						{
 							filename = testPart;
 							content = File.ReadAllText(filename);
 						}
-						catch (Exception e) {
+						catch (Exception e)
+						{
 							Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", filename, e);
 						} // try
 					} // if
 				} // if
 			} // if
 
-			if (content == string.Empty) {
-				try {
+			if (string.IsNullOrEmpty(content))
+			{
+				try
+				{
 					filename = string.IsNullOrEmpty(testPart) ? @"C:\Temp\Experian.xml" : testPart;
 					content = File.ReadAllText(filename);
 				}
-				catch (Exception e) {
+				catch (Exception e)
+				{
 					Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", filename, e);
 				} // try
 			} // if
 
-			return CreateConsumerServiceResult(surname, customerId, checkInCacheOnly, content);
+			if (string.IsNullOrEmpty(content))
+			{
+				var sl = ObjectFactory.GetInstance<ServiceLogRepository>();
+				MP_ServiceLog oFirst = m_oRetryer.Retry(() => sl.GetFirst());
+				content = oFirst.ResponseData;
+			}
+			
+			
+			
+			var outputRootSerializer = new XmlSerializer(typeof(OutputRoot));
+			var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(content));
+
+			Log.InfoFormat("Get consumer info for test user: {0}", surname);
+			var serviceLog = Utils.WriteLog(null, content, ExperianServiceType.Consumer, customerId, null, null, surname, null, null);
+			SaveDefaultAccountIntoDb(outputRoot, customerId, serviceLog.ServiceLog);
+			var builder = new ConsumerExperianModelBuilder();
+			
+			return builder.Build(outputRoot, customerId);
 		} // ConsumerDebugResult
 
 		#endregion method ConsumerDebugResult
 
 		#region properties
 
-		private readonly ExperianDataCacheRepository _repo;
 		private readonly SqlRetryer m_oRetryer;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
-		private FinancialAccountsParser financialAccountsParser = new FinancialAccountsParser();
 		private readonly string interactiveMode;
+		private readonly ServiceClient _serviceClient;
 
 		#endregion properties
 
 		#region static
-
-		#region method ParseCache
-
-		private static ConsumerServiceResult ParseCache(MP_ExperianDataCache person) {
-			Log.InfoFormat(
-				"GetConsumerInfo: return data from cache for firstName={0}, surname={1}, last update date={2}",
-				person.Name,
-				person.Surname,
-				person.LastUpdateDate
-			);
-
-			OutputRoot data = null;
-			if (!string.IsNullOrEmpty(person.JsonPacket))
-			{
-				data = JsonConvert.DeserializeObject<OutputRoot>(person.JsonPacket);
-			}
-
-			var consumerServiceResult = new ConsumerServiceResult(data) {
-				ExperianResult = person.ExperianResult,
-				LastUpdateDate = person.LastUpdateDate
-			};
-
-			return consumerServiceResult;
-		} // ParseCache
-
-		#endregion method ParseCache
 
 		#region method GetPostcode
 
 		private static string GetPostcode(
 			InputLocationDetailsUKLocation ukLocation,
 			InputLocationDetailsMultiLineLocation mlLocation
-		) {
+		)
+		{
 			return (ukLocation != null)
 				? ukLocation.Postcode
 				: (mlLocation != null) ? mlLocation.LocationLine6 : string.Empty;
@@ -493,17 +438,20 @@
 
 		#region method TryRead
 
-		private static void TryRead(Action a) {
-			try {
+		private static void TryRead(Action a)
+		{
+			try
+			{
 				a();
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Log.Warn(e);
 			} // try
 		} // TryRead
 
 		#endregion method TryRead
-		
+
 		#endregion static
 
 		#endregion private

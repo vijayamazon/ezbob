@@ -140,9 +140,6 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.CustomerMortgagesActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.DateTimeActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

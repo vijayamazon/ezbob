@@ -816,11 +816,9 @@
 
 		private int GetCurrentExperianScore()
 		{
-			return DB.ExecuteScalar<int>(
-				"GetExperianScore",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
+			var scoreStrat = new GetExperianConsumerScore(customerId, DB, Log);
+			scoreStrat.Execute();
+			return scoreStrat.Score;
 		} // GetCurrentExperianScore
 
 		#endregion method GetCurrentExperianScore
@@ -997,7 +995,6 @@
 			appSortCode = results["SortCode"];
 			appRegistrationDate = results["RegistrationDate"];
 			appBankAccountType = results["BankAccountType"];
-			initialExperianConsumerScore = results["PrevExperianConsumerScore"];
 			int numOfLoans = results["NumOfLoans"];
 			isFirstLoan = numOfLoans == 0;
 			typeOfBusiness = results["TypeOfBusiness"];

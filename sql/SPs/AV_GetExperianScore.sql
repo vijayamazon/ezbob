@@ -10,10 +10,11 @@ CREATE PROCEDURE [dbo].[AV_GetExperianScore]
 AS
 BEGIN
 	SET NOCOUNT ON
-	SELECT TOP 1 JsonPacket, ExperianScore 
-	FROM MP_ExperianDataCache 
-	WHERE CustomerId=@CustomerId AND ExperianScore IS NOT NULL AND DirectorId=0
-	ORDER BY LastUpdateDate DESC
+	
+	SELECT ExperianConsumerScore
+	FROM Customer
+	WHERE Id=@CustomerId
+	
 SET NOCOUNT OFF
 END
 GO

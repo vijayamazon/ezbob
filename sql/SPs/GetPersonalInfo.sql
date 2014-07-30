@@ -14,17 +14,8 @@ BEGIN
 		@CustomerStatusIsWarning BIT,
 		@NumOfMps INT,
 		@NumOfLoans INT,
-		@prevExperianConsumerScore INT,
 		@CustomerStatusName NVARCHAR(100)
 		
-	SELECT 
-		@prevExperianConsumerScore = MIN(ExperianScore) 
-	FROM 
-		MP_ExperianDataCache 
-	WHERE 
-		CustomerId = @CustomerId AND 
-		Name IS NOT NULL
-	
 	SELECT 
 		@CustomerStatusIsEnabled = IsEnabled, 
 		@CustomerStatusIsWarning = IsWarning,
@@ -54,7 +45,6 @@ BEGIN
 		@CustomerStatusIsEnabled AS CustomerStatusIsEnabled,
 		@CustomerStatusIsWarning AS CustomerStatusIsWarning,
 		@CustomerStatusName AS CustomerStatusName,		
-		@prevExperianConsumerScore AS PrevExperianConsumerScore,
 		IsOffline,
 		CAST(CASE WHEN BrokerID IS NULL THEN 0 ELSE 1 END AS BIT) AS IsBrokerCustomer,
 		Name AS CustomerEmail,

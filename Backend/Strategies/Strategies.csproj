@@ -81,6 +81,8 @@
     <Compile Include="Experian\BackfillExperianDirectors.cs" />
     <Compile Include="Experian\BackfillExperianLtd.cs" />
     <Compile Include="Experian\BackfillExperianConsumer.cs" />
+    <Compile Include="Experian\GetExperianConsumerScore.cs" />
+    <Compile Include="Experian\LoadExperianConsumerDefaultsData.cs" />
     <Compile Include="Experian\LoadExperianConsumerMortageData.cs" />
     <Compile Include="Experian\LoadExperianConsumerData.cs" />
     <Compile Include="Experian\ParseExperianConsumerData.cs" />
@@ -95,14 +97,12 @@
     <Compile Include="Misc\BackfillAml.cs" />
     <Compile Include="Misc\BackfillNonLimitedCompanies.cs" />
     <Compile Include="Misc\GetPropertyStatuses.cs" />
-    <Compile Include="Misc\GetCustomerMortgages.cs" />
     <Compile Include="Misc\GetUnfetchedDataErrors.cs" />
     <Compile Include="Misc\GetCompanyDataForCreditBureau.cs" />
     <Compile Include="Misc\GetCompanyDataForCompanyScore.cs" />
     <Compile Include="Misc\GetBankModel.cs" />
     <Compile Include="Misc\Agreement.cs" />
     <Compile Include="Misc\CalculateNewMedals.cs" />
-    <Compile Include="Misc\BackfillFinancialAccounts.cs" />
     <Compile Include="Misc\CustomerAddressHelper.cs" />
     <Compile Include="Misc\DisplayMarketplaceSecurityData.cs" />
     <Compile Include="Esign\EsignProcessPending.cs" />

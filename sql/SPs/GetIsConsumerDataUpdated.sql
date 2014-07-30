@@ -15,11 +15,11 @@ BEGIN
 			
 	IF @DirectorId = 0
 	BEGIN
-		SELECT @LastUpdateTime = max(LastUpdateDate) FROM MP_ExperianDataCache WHERE CustomerId = @CustomerId AND (DirectorId IS NULL OR DirectorId = 0)
+		SELECT @LastUpdateTime = max(InsertDate) FROM MP_ServiceLog WHERE CustomerId = @CustomerId AND (DirectorId IS NULL OR DirectorId = 0)
 	END
 	ELSE
 	BEGIN
-		SELECT @LastUpdateTime = max(LastUpdateDate) FROM MP_ExperianDataCache WHERE CustomerId = @CustomerId AND DirectorId = @DirectorId
+		SELECT @LastUpdateTime = max(InsertDate) FROM MP_ServiceLog WHERE CustomerId = @CustomerId AND DirectorId = @DirectorId
 	END
 	
 	IF @Today = @LastUpdateTime

@@ -155,7 +155,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			Map(x => x.Fraud);
 			Map(x => x.FraudStatus).CustomType<FraudStatus>();
-			Map(x => x.FinancialAccounts);
+
 			Map(x => x.Comment, "Comments").CustomType("StringClob").LazyLoad();
 			Map(x => x.SetupFee);
 			Map(x => x.ReferenceSource).Length(200);
@@ -236,6 +236,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Inverse();
 
 			Map(x => x.FirstVisitTime).Length(64);
+			Map(x => x.ExperianConsumerScore);
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

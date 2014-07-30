@@ -8,6 +8,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Exceptions;
+	using Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using PaymentServices.Calculators;
@@ -48,12 +49,11 @@
 
 			Model.Revenue = Model.FeesRevenue + Model.InterestRevenue;
 
-			int consumerScore = DB.ExecuteScalar<int>(
-				"GetExperianScore",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
+			var scoreStrat = new GetExperianConsumerScore(customerId, DB, Log);
+			scoreStrat.Execute();
 
+			int consumerScore = scoreStrat.Score;
+			
 			Model.EuLoanPercentages = GetEuLoanMonthlyInterest(consumerScore);
 			Model.CogsOutput = Model.Cogs;
 			Model.OpexAndCapexOutput = Model.OpexAndCapex;

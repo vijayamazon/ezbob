@@ -30,9 +30,6 @@
 		#endregion analytics
 
 		[OperationContract]
-		ActionMetaData BackfillFinancialAccounts();
-
-		[OperationContract]
 		ActionMetaData BackfillNonLimitedCompanies();
 
 		#region AML and BWA
@@ -307,6 +304,9 @@
 		[OperationContract]
 		ExperianConsumerMortgageActionResult LoadExperianConsumerMortageData(int customerId);
 
+		[OperationContract]
+		IntActionResult GetExperianConsumerScore(int customerId);
+
 		#endregion Experian
 
 		#region Land Registry
@@ -557,9 +557,6 @@
 
 		[OperationContract]
 		StringActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
-
-		[OperationContract]
-		CustomerMortgagesActionResult GetCustomerMortgages(int underwriterId, int customerId);
 
 		[OperationContract]
 		PropertyStatusesActionResult GetPropertyStatuses();

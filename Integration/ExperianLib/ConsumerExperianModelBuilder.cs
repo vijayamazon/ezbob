@@ -307,31 +307,4 @@ namespace ExperianLib
 			}
 		}
 	}
-
-	public class ConsumerServiceResult
-	{
-		public string ExperianResult { get; set; }//todo remove
-		public DateTime LastUpdateDate { get; set; }//todo remove
-
-		public ExperianConsumerData Data { get; set; }
-		public OutputRoot Output { get; private set; }
-
-		public int SumOfRepayements { get; set; }
-
-		public ConsumerServiceResult()
-		{
-		}
-
-		//-----------------------------------------------------------------------------------
-		public ConsumerServiceResult(OutputRoot outputRoot)
-		{
-			Output = outputRoot;
-			var builder = new ConsumerExperianModelBuilder();
-			Data = builder.Build(outputRoot);
-			SumOfRepayements = 
-				(Data.CreditCommitmentsNonRevolving.HasValue ? Data.CreditCommitmentsNonRevolving.Value : 0) +
-				(Data.CreditCommitmentsRevolving.HasValue ? Data.CreditCommitmentsRevolving.Value : 0) + 
-				(Data.MortgagePayments.HasValue ? Data.MortgagePayments.Value : 0);
-		}
-	}
 }

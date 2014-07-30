@@ -234,13 +234,7 @@
 				Value = instance.CurrentBalance
 			};
 		}
-
-		public ActionMetaData BackfillFinancialAccounts()
-		{
-			BackfillFinancialAccounts instance;
-			return ExecuteSync(out instance, 0, 0);
-		}
-
+		
 		public ActionMetaData BackfillNonLimitedCompanies()
 		{
 			BackfillNonLimitedCompanies instance;
@@ -278,19 +272,6 @@
 			};
 		}
 
-		public CustomerMortgagesActionResult GetCustomerMortgages(int underwriterId, int customerId)
-		{
-			GetCustomerMortgages instance;
-
-			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
-
-			return new CustomerMortgagesActionResult
-			{
-				MetaData = result,
-				HasMortgages = instance.HasMortgages,
-				MortgagesSum = instance.MortgagesSum
-			};
-		}
 
 		public PropertyStatusesActionResult GetPropertyStatuses()
 		{

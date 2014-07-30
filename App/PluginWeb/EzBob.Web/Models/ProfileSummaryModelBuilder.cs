@@ -4,8 +4,8 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using System.Text;
 	using Backend.Models;
-	using ExperianLib;
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -154,42 +154,14 @@
 				Log.Debug("Error fetching company seniority: {0}", e);
 			}
 
-			bool errorFetchingLandRegistryData = BuildLandRegistryAlerts(customer, summary);
-
-			try
-			{
-				string errors = serviceClient.Instance.GetUnfetchedDataErrors(context.UserId, customer.Id).Value;
-
-				if (errorFetchingLandRegistryData)
-				{
-					if (errors == null)
-					{
-						errors = string.Empty;
-					}
-
-					if (errors != string.Empty)
-					{
-						errors += Environment.NewLine;
-					}
-
-					errors += "Error getting land registry data";
-				}
-
-				if (!string.IsNullOrEmpty(errors))
-				{
-					summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "DATA", Alert = errors, AlertType = AlertType.Error.DescriptionAttr() });
-				}
-			}
-			catch (Exception e)
-			{
-				Log.Debug("Error fetching customer's errors: {0}", e);
-			}
+			BuildLandRegistryAlerts(customer, summary);
+			BuilDataAlerts(customer, summary, context.UserId);
 
 			bool hasMortgage = false;
 			bool isHomeOwner = customer.PersonalInfo != null && customer.PersonalInfo.ResidentialStatus == "Home Owner";
 			try
 			{
-				hasMortgage = serviceClient.Instance.GetCustomerMortgages(context.UserId, customer.Id).HasMortgages;
+				hasMortgage = serviceClient.Instance.LoadExperianConsumerMortageData(customer.Id).Value.NumMortgages > 0;
 			}
 			catch (Exception e)
 			{
@@ -200,10 +172,55 @@
 			{
 				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "MTG", Alert = "Home owner and no mortgages", AlertType = AlertType.Warning.DescriptionAttr() });
 			}
+		}
 
-			if (!isHomeOwner && hasMortgage)
+		private void BuilDataAlerts(Customer customer, ProfileSummaryModel summary, int userId)
+		{
+			string errorsList = serviceClient.Instance.GetUnfetchedDataErrors(userId, customer.Id).Value;
+
+			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			var errors = new StringBuilder();
+			if (currAddr != null && !currAddr.Zoopla.Any())
 			{
-				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "MTG", Alert = "Has mortgages but not a home owner", AlertType = AlertType.Warning.DescriptionAttr() });
+				errors.AppendLine("No zoopla for current address");
+			}
+
+			if (customer.CustomerMarketPlaces.Any(x => !string.IsNullOrEmpty(x.UpdateError)))
+			{
+				var mpErrors =
+					customer.CustomerMarketPlaces.Where(x => !string.IsNullOrEmpty(x.UpdateError))
+					        .Select(x => string.Format("MP {0} : {1}", x.DisplayName, x.UpdateError));
+				foreach (var mpError in mpErrors)
+				{
+					errors.AppendLine(mpError);
+				}
+			}
+
+			if (!customer.ExperianConsumerScore.HasValue || customer.ExperianConsumerScore.Value == 0)
+			{
+				errors.AppendLine("No consumer score");
+			}
+
+			if (customer.Company != null &&
+			    !customer.Company.Directors.Any(x => !x.ExperianConsumerScore.HasValue || x.ExperianConsumerScore.Value == 0))
+			{
+				var dirErrors = customer.Company.Directors.Where(
+					x => !x.ExperianConsumerScore.HasValue || x.ExperianConsumerScore.Value == 0)
+				                        .Select(x => string.Format("Director {0} {1} don't have consumer score", x.Name, x.Surname));
+				foreach (var dirError in dirErrors)
+				{
+					errors.AppendLine(dirError);
+				}
+			}
+
+			if (!string.IsNullOrEmpty(errorsList))
+			{
+				errors.AppendLine(errorsList);
+			}
+
+			if (!string.IsNullOrEmpty(errors.ToString()))
+			{
+				summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "DATA", Alert = errors.ToString(), AlertType = AlertType.Error.DescriptionAttr() });
 			}
 		}
 
@@ -259,47 +276,28 @@
 			}
 			summary.RequestedLoan = rl;
 		}
-		private static void BuildCreditBureau(Customer customer, ProfileSummaryModel summary)
+		private void BuildCreditBureau(Customer customer, ProfileSummaryModel summary)
 		{
 			var creditBureau = new CreditBureau();
-			var consumerSrv = new ConsumerService();
 
 			try
 			{
-				var loc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation();
-				if (customer.AddressInfo.PersonalAddress.Any())
-				{
-					var customerMainAddress = customer.AddressInfo.PersonalAddress.First();
-
-					loc.LocationLine1 = customerMainAddress.Line1;
-					loc.LocationLine2 = customerMainAddress.Line2;
-					loc.LocationLine3 = customerMainAddress.Line3;
-					loc.LocationLine4 = customerMainAddress.Town;
-					loc.LocationLine5 = customerMainAddress.County;
-					loc.LocationLine6 = customerMainAddress.Postcode;
-				}
-				ConsumerServiceResult result = null;
-				if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.FirstName))
-				{
-					result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
-					   customer.PersonalInfo.Gender.ToString(), // should be Gender
-					   customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true, false, false);
-				}
+				var result = serviceClient.Instance.LoadExperianConsumer(customer.Id, null, null);
 				if (result != null)
 				{
-					creditBureau.CreditBureauScore = result.Data.BureauScore;
-					creditBureau.TotalDebt = result.Data.TotalAccountBalances;
-					creditBureau.TotalMonthlyRepayments = result.SumOfRepayements;
-					creditBureau.CreditCardBalances = result.Data.CreditCardBalances;
+					creditBureau.CreditBureauScore = result.Value.BureauScore;
+					creditBureau.TotalDebt = result.Value.TotalAccountBalances;
+					creditBureau.TotalMonthlyRepayments = result.Value.CreditCommitmentsRevolving + result.Value.CreditCommitmentsNonRevolving + result.Value.MortgagePayments;
+					creditBureau.CreditCardBalances = result.Value.CreditCardBalances;
 					creditBureau.BorrowerType =
 						TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
 
 					//creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
-					creditBureau.FinancialAccounts = customer.FinancialAccounts;
+					creditBureau.FinancialAccounts = result.Value.Cais.Count();
 					var isHasFinancialAccout = false;
 
 					try {
-						isHasFinancialAccout = result.Output.Output.FullConsumerData.ConsumerData.CAIS.Any(x => x.CAISDetails.Any());
+						isHasFinancialAccout = result.Value.Cais.Any();
 					}
 					catch (Exception ex) {
 						Log.InfoFormat("Can't read value for isHasFinancialAccount because of exception: {0}", ex.Message);
