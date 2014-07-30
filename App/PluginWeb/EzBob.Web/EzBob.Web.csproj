@@ -200,6 +200,7 @@
     <Compile Include="Code\ReportGenerator\ReportHandler.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManager.cs" />
     <Compile Include="Models\CompanyScoreModelBuilder.cs" />
+    <Compile Include="Models\CreatePasswordModel.cs" />
     <Compile Include="Models\LoanOffer.cs" />
     <Compile Include="Code\ServerLog\ServerLogCachePkgModel.cs" />
     <Compile Include="Code\ServerLog\ServerLogEntryModel.cs" />
@@ -1183,6 +1184,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\Fraud\Fraud.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_FraudDetectionLog.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
+    <Content Include="Content\js\login\ezbob.create.password.view.js" />
     <Content Include="Content\js\login\ezbob.login.view.js">
       <DependentUpon>ezbob.login.view.coffee</DependentUpon>
     </Content>
@@ -1666,6 +1668,7 @@
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <Content Include="App_Code\AddDirectorInfoTemplate.cshtml" />
     <Content Include="Views\Shared\EditExperianDirectorData.cshtml" />
+    <Content Include="Views\Account\CreatePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

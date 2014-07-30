@@ -158,6 +158,17 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Password" nillable="true" type="tns:Password" />
+  <xs:complexType name="CustomerDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="CustomerDetails" nillable="true" type="tns:CustomerDetails" />
   <xs:complexType name="BankStatementDataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActualLoansRepayment" type="xs:double" />

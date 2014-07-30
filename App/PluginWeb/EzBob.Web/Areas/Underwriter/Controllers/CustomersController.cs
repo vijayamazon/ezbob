@@ -366,8 +366,7 @@
 
 			string sWarning = string.Empty;
 
-			switch (model.status)
-			{
+			switch (model.status) {
 			case CreditResultStatus.Approved:
 				if (!customer.WizardStep.TheLastOne) {
 					try {
@@ -603,6 +602,7 @@
 			return Json(new {reasons = _rejectReasonRepository.GetAll().ToList()}, JsonRequestBehavior.AllowGet);
 		}
 		#endregion
+
 		#endregion public
 
 		#region private

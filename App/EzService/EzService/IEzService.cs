@@ -476,6 +476,12 @@
 		[OperationContract]
 		ActionMetaData MarkSessionEnded(int nSessionID);
 
+		[OperationContract]
+		CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken);
+
+		[OperationContract]
+		IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken);
+
 		#endregion User Management
 
 		#region VAT

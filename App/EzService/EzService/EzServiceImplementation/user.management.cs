@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System;
 	using EzBob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Models;
 
@@ -133,5 +134,35 @@
 		} // MarkSessionEnded
 
 		#endregion method MarkSessionEnded
+
+		#region method LoadCustomerByCreatePasswordToken
+
+		public CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken) {
+			LoadCustomerByCreatePasswordToken oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, oToken);
+
+			return new CustomerDetailsActionResult {
+				MetaData = oMetaData,
+				Value = oInstance.Result,
+			};
+		} // LoadCustomerByCreatePasswordToken
+
+		#endregion method LoadCustomerByCreatePasswordToken
+
+		#region method SetCustomerPasswordByToken
+
+		public IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken) {
+			SetCustomerPasswordByToken oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, oToken);
+
+			return new IntActionResult {
+				MetaData = oMetaData,
+				Value = oInstance.CustomerID,
+			};
+		} // SetCustomerPasswordByToken
+
+		#endregion method SetCustomerPasswordByToken
 	} // class EzServiceImplementation
 } // namespace EzService

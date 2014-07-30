@@ -473,12 +473,17 @@
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderProfileJs
 
-		public static MvcHtmlString RenderLoginJs()
-		{
+		public static MvcHtmlString RenderLoginJs() {
 			return Bundle.JavaScript()
 				.Add("~/Content/js/login/ezbob.login.view.coffee")
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderLoginJs
+
+		public static MvcHtmlString RenderCreatePasswordJs() {
+			return Bundle.JavaScript()
+				.Add("~/Content/js/login/ezbob.create.password.view.js")
+				.MvcRender("~/Content/js/min/profile_#.js");
+		} // RenderCreatePasswordJs
 
 		#endregion customer js
 

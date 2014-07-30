@@ -68,8 +68,7 @@ namespace EzBob.Web.Controllers {
 		#region action AdminLogOn
 
 		public ActionResult AdminLogOn(string returnUrl) {
-			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"]))
-			{
+			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"])) {
 				return RedirectToAction("LogOn", "Account");
 			}
 
@@ -79,8 +78,7 @@ namespace EzBob.Web.Controllers {
 
 		[HttpPost]
 		public ActionResult AdminLogOn(LogOnModel model) {
-			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"]))
-			{
+			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"])) {
 				return RedirectToAction("LogOn", "Account");
 			}
 
@@ -136,6 +134,10 @@ namespace EzBob.Web.Controllers {
 		public ActionResult LogOn(string returnUrl) {
 			return View(new LogOnModel { ReturnUrl = returnUrl });
 		} // LogOn
+
+		#endregion action LogOn
+
+		#region action CustomerLogOn
 
 		[HttpPost]
 		[NoCache]
@@ -222,7 +224,6 @@ namespace EzBob.Web.Controllers {
 				return Json(new { success = false, errorMessage = "Please use dedicated underwriter log on page." }, JsonRequestBehavior.AllowGet);
 			} // if
 
-
 			Customer customer;
 
 			try {
@@ -282,31 +283,32 @@ namespace EzBob.Web.Controllers {
 			return Json(new { success = false, errorMessage }, JsonRequestBehavior.AllowGet);
 		} // CustomerLogOn
 
-		#endregion action LogOn
+		#endregion action CustomerLogOn
 
 		#region action LogOff
 
 		public ActionResult LogOff() {
 			EndSession();
-			
+
 			switch (m_oLogOffMode) {
-				case LogOffMode.SignUpOfEnv:
-					return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
-				case LogOffMode.LogOnOfEnv:
-					return RedirectToAction("LogOn", "Account", new { Area = "" });
-				default:
-					return Redirect(@"http://www.ezbob.com");
+			case LogOffMode.SignUpOfEnv:
+				return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
+			case LogOffMode.LogOnOfEnv:
+				return RedirectToAction("LogOn", "Account", new { Area = "" });
+			default:
+				return Redirect(@"http://www.ezbob.com");
 			} // switch
 		} // LogOff
 
 		#endregion action LogOff
 
-		public ActionResult LogOffUnderwriter()
-		{
+		#region action LogOffUnderwriter
+
+		public ActionResult LogOffUnderwriter() {
 			EndSession();
 
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
-		}
+		} // LogOffUnderwriter
 
 		[Ajax]
 		[HttpGet]
@@ -316,30 +318,6 @@ namespace EzBob.Web.Controllers {
 			return Json(propertyStatusesActionResult.Groups, JsonRequestBehavior.AllowGet);
 		}
 
-		private void EndSession()
-		{
-			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId))
-			{
-				int nSessionID;
-
-				if (int.TryParse(m_oContext.SessionId, out nSessionID))
-				{
-					try
-					{
-						m_oServiceClient.Instance.MarkSessionEnded(nSessionID);
-					}
-					catch (Exception e)
-					{
-						ms_oLog.Debug(e, "Failed to mark customer session as ended.");
-					} // try
-				} // if
-			} // if
-
-			m_oContext.SessionId = null;
-
-			FormsAuthentication.SignOut();
-			HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
-		}
 
 		#region action SignUp
 
@@ -585,6 +563,132 @@ namespace EzBob.Web.Controllers {
 
 		#endregion action GetTwilioConfig
 
+		#region action CreatePassword
+
+		[IsSuccessfullyRegisteredFilter]
+		[NoCache]
+		public ActionResult CreatePassword(string token) {
+			var oModel = new CreatePasswordModel {
+				RawToken = token,
+			};
+
+			if (oModel.IsTokenValid) {
+				try {
+					CustomerDetailsActionResult ar = m_oServiceClient.Instance.LoadCustomerByCreatePasswordToken(oModel.Token);
+
+					if (ar.Value.CustomerID > 0) {
+						oModel.FirstName = ar.Value.FirstName;
+						oModel.LastName = ar.Value.LastName;
+						oModel.UserName = ar.Value.Email;
+
+						return View(oModel);
+					} // if
+				}
+				catch (Exception e) {
+					ms_oLog.Alert(e, "Failed to check create password token '{0}'.", token);
+				} // try
+			} // if
+
+			return RedirectToAction("LogOn", "Account", new { Area = "" });
+		} // CreatePassword
+
+		#endregion action CreatePassword
+
+		#region action CustomerCreatePassword
+
+		[HttpPost]
+		[NoCache]
+		public JsonResult CustomerCreatePassword(CreatePasswordModel model) {
+			var customerIp = RemoteIp();
+
+			if (!ModelState.IsValid) {
+				ms_oLog.Debug("Customer create password attempt from remote IP {0}: model state is invalid, list of errors:", customerIp);
+
+				foreach (var val in ModelState.Values) {
+					if (val.Errors.Count < 1)
+						continue;
+
+					foreach (var err in val.Errors)
+						ms_oLog.Debug("Model value '{0}' with error '{1}'.", val.Value, err.ErrorMessage);
+				} // for each value
+
+				ms_oLog.Debug("End of list of errors.");
+
+				return Json(new { success = false, errorMessage = @"Failed to set a password." }, JsonRequestBehavior.AllowGet);
+			} // if
+
+			ms_oLog.Debug(
+				"Customer create password attempt from remote IP {0} received with user name '{1}' and hash '{2}'...",
+				customerIp,
+				model.UserName,
+				Ezbob.Utils.Security.SecurityUtils.HashPassword(model.UserName, model.Password)
+			);
+
+			int nUserID = 0;
+
+			try {
+				if (string.IsNullOrEmpty(model.UserName))
+					throw new Exception(DbStrings.NotValidEmailAddress);
+
+				if (!string.Equals(model.Password, model.signupPass2))
+					throw new Exception(DbStrings.PasswordDoesNotMatch);
+
+				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
+				if (model.Password.Length < maxPassLength)
+					throw new Exception(DbStrings.NotValidEmailAddress);
+
+				nUserID = m_oServiceClient.Instance.SetCustomerPasswordByToken(
+					model.UserName,
+					new Password(model.Password),
+					model.Token
+				).Value;
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
+				return Json(new { success = false, errorMessage = @"Failed to set a password." }, JsonRequestBehavior.AllowGet);
+			} // try
+
+			if (nUserID <= 0) {
+				ms_oLog.Warn("Failed to set a password (returned user id is 0) for user name {0}.", model.UserName);
+				return Json(new { success = false, errorMessage = "Failed to set a password." }, JsonRequestBehavior.AllowGet);
+			} // if
+
+			Customer customer;
+
+			try {
+				customer = m_oCustomers.Get(nUserID);
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to retrieve a customer by id {0}.", nUserID);
+				return Json(new { success = false, errorMessage = "Failed to set a password." }, JsonRequestBehavior.AllowGet);
+			} // try
+
+			if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
+				const string sDisabledError = @"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> customercare@ezbob.com";
+
+				m_oSessionIpLog.AddSessionIpLog(new CustomerSession {
+					CustomerId = nUserID,
+					StartSession = DateTime.Now,
+					Ip = customerIp,
+					IsPasswdOk = false,
+					ErrorMessage = sDisabledError,
+				});
+
+				ms_oLog.Warn(
+					"Customer log on attempt from remote IP {0} with user name '{1}': the customer is disabled.",
+					customerIp,
+					model.UserName
+				);
+
+				return Json(new { success = false, errorMessage = sDisabledError, }, JsonRequestBehavior.AllowGet);
+			} // if user is disabled
+
+			model.SetCookie("Customer");
+			return Json(new { success = true, errorMessage = string.Empty }, JsonRequestBehavior.AllowGet);
+		} // CustomerCreatePassword
+
+		#endregion action CustomerCreatePassword
+
 		#endregion public
 
 		#region private
@@ -607,7 +711,7 @@ namespace EzBob.Web.Controllers {
 
 				ObjectFactory.GetInstance<IEzbobWorkplaceContext>().SessionId = ular.SessionID.ToString(CultureInfo.InvariantCulture);
 
-				status = (MembershipCreateStatus)Enum.Parse(typeof (MembershipCreateStatus), ular.Status);
+				status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), ular.Status);
 			}
 			catch (Exception e) {
 				ms_oLog.Error(e, "Failed to create user '{0}'.", email);
@@ -730,7 +834,7 @@ namespace EzBob.Web.Controllers {
 				);
 
 				nSessionID = ular.SessionID;
-				nStatus = (MembershipCreateStatus)Enum.Parse(typeof (MembershipCreateStatus), ular.Status);
+				nStatus = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), ular.Status);
 			}
 			catch (Exception e) {
 				ms_oLog.Error(e, "Failed to validate user '{0}' credentials.", username);
@@ -836,6 +940,30 @@ namespace EzBob.Web.Controllers {
 		} // RemoteIp
 
 		#endregion method RemoteIp
+
+		#region method EndSession
+
+		private void EndSession() {
+			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId)) {
+				int nSessionID;
+
+				if (int.TryParse(m_oContext.SessionId, out nSessionID)) {
+					try {
+						m_oServiceClient.Instance.MarkSessionEnded(nSessionID);
+					}
+					catch (Exception e) {
+						ms_oLog.Debug(e, "Failed to mark customer session as ended.");
+					} // try
+				} // if
+			} // if
+
+			m_oContext.SessionId = null;
+
+			FormsAuthentication.SignOut();
+			HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+		} // EndSession
+
+		#endregion method EndSession
 
 		#region fields
 

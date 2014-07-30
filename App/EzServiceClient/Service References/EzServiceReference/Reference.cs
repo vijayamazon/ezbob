@@ -193,11 +193,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableFundsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult))]
@@ -565,6 +566,52 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CustomerDetailsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CustomerDetailsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.CustomerDetails ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.CustomerDetails Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="IntActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class IntActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="VatReturnDataActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class VatReturnDataActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -730,29 +777,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
                     this.NumberOfMobileCodeAttemptsField = value;
                     this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="IntActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class IntActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((this.ValueField.Equals(value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
                 }
             }
         }
@@ -2568,6 +2592,18 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzService/MarkSessionEndedResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadCustomerByCreatePasswordToken", ReplyAction="http://tempuri.org/IEzService/LoadCustomerByCreatePasswordTokenResponse")]
+        ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(System.Guid oToken);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadCustomerByCreatePasswordToken", ReplyAction="http://tempuri.org/IEzService/LoadCustomerByCreatePasswordTokenResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult> LoadCustomerByCreatePasswordTokenAsync(System.Guid oToken);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzService/SetCustomerPasswordByTokenResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult SetCustomerPasswordByToken(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzService/SetCustomerPasswordByTokenResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateVatReturnSummary", ReplyAction="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
         
@@ -3572,6 +3608,22 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarkSessionEndedAsync(int nSessionID) {
             return base.Channel.MarkSessionEndedAsync(nSessionID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(System.Guid oToken) {
+            return base.Channel.LoadCustomerByCreatePasswordToken(oToken);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult> LoadCustomerByCreatePasswordTokenAsync(System.Guid oToken) {
+            return base.Channel.LoadCustomerByCreatePasswordTokenAsync(oToken);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.IntActionResult SetCustomerPasswordByToken(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken) {
+            return base.Channel.SetCustomerPasswordByToken(sEmail, oPassword, oToken);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken) {
+            return base.Channel.SetCustomerPasswordByTokenAsync(sEmail, oPassword, oToken);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID) {
