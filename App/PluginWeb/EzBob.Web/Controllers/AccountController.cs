@@ -308,6 +308,14 @@ namespace EzBob.Web.Controllers {
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		}
 
+		[Ajax]
+		[HttpGet]
+		public JsonResult GetPropertyStatuses()
+		{
+			PropertyStatusesActionResult propertyStatusesActionResult = m_oServiceClient.Instance.GetPropertyStatuses();
+			return Json(propertyStatusesActionResult.Groups, JsonRequestBehavior.AllowGet);
+		}
+
 		private void EndSession()
 		{
 			if (!string.IsNullOrWhiteSpace(m_oContext.SessionId))

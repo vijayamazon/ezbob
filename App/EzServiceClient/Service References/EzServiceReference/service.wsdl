@@ -490,6 +490,12 @@
   <wsdl:message name="IEzService_GetCustomerMortgages_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCustomerMortgagesResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetPropertyStatuses_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPropertyStatuses" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPropertyStatuses_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPropertyStatusesResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
@@ -1274,6 +1280,10 @@
     <wsdl:operation name="GetCustomerMortgages">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerMortgages" message="tns:IEzService_GetCustomerMortgages_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerMortgagesResponse" message="tns:IEzService_GetCustomerMortgages_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyStatuses">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatuses" message="tns:IEzService_GetPropertyStatuses_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatusesResponse" message="tns:IEzService_GetPropertyStatuses_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
@@ -2237,6 +2247,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetPropertyStatuses">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetPropertyStatuses" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SaveAgreement" style="document" />
       <wsdl:input>
@@ -3005,20 +3024,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

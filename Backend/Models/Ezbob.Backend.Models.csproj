@@ -58,6 +58,7 @@
     <Compile Include="Coin.cs" />
     <Compile Include="ConfigTable.cs" />
     <Compile Include="CompanyData.cs" />
+    <Compile Include="PropertyStatus.cs" />
     <Compile Include="CrmStatusGroup.cs" />
     <Compile Include="CustomerAddressModel.cs" />
     <Compile Include="EsignatureModel.cs" />

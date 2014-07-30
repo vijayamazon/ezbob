@@ -624,6 +624,15 @@ EzBob.GlobalUpdateBugsIcon = function (customerId) {
     });
 };
 
+EzBob.PropertyStatuses = function () {
+    if (!EzBob.PropertyStatusesData) {
+        var req = $.get(window.gRootPath + "Account/GetPropertyStatuses");
+        req.done(function (data) {
+            EzBob.PropertyStatusesData = data;
+        });
+    }
+};
+
 EzBob.UpdateBugsIcons = function (data) {
     if (!data || data.length == 0) {
         EzBob.UpdateBugsIcon($('a[data-bug-type]'), 'NoBug ');

@@ -498,6 +498,33 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ScoreAtDate" nillable="true" type="tns:ScoreAtDate" />
+  <xs:complexType name="ArrayOfPropertyStatusGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PropertyStatusGroup" nillable="true" type="tns:PropertyStatusGroup" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPropertyStatusGroup" nillable="true" type="tns:ArrayOfPropertyStatusGroup" />
+  <xs:complexType name="PropertyStatusGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Statuses" nillable="true" type="tns:ArrayOfPropertyStatus" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PropertyStatusGroup" nillable="true" type="tns:PropertyStatusGroup" />
+  <xs:complexType name="ArrayOfPropertyStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PropertyStatus" nillable="true" type="tns:PropertyStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPropertyStatus" nillable="true" type="tns:ArrayOfPropertyStatus" />
+  <xs:complexType name="PropertyStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsOwner" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PropertyStatus" nillable="true" type="tns:PropertyStatus" />
   <xs:complexType name="ArrayOfLoanScheduleItemModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />

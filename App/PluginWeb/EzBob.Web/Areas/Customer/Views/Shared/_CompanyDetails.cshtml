@@ -104,9 +104,13 @@
                             <span>Residential status</span>
                             <select id="ResidentialStatus" name="ResidentialStatus" class="select form_field" ui-event-control-id="personal-info:residential_status">
                                 <option></option>
-                                <option value="Home owner">Home owner</option>
-                                <option value="Renting">Renting</option>
-                                <option value="Living with parents">Living with parents</option>
+                                <% _.each(EzBob.PropertyStatusesData, function(group) { %>
+                                    <optgroup label="<%- group.Title%>">
+                                        <%_.each(group.Statuses, function(status){%>
+                                            <option value="<%- status.Id %>"><%- status.Description %></option>
+                                        <%});%>
+                                    </optgroup>
+                                <%});%>
                             </select>
                             <img id="ResidentialStatusImage" class="field_status required" />
                         </label>

@@ -291,5 +291,18 @@
 				MortgagesSum = instance.MortgagesSum
 			};
 		}
+
+		public PropertyStatusesActionResult GetPropertyStatuses()
+		{
+			GetPropertyStatuses instance;
+
+			ActionMetaData result = ExecuteSync(out instance, 0, 0);
+
+			return new PropertyStatusesActionResult
+			{
+				MetaData = result,
+				Groups = instance.Groups
+			};
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -554,6 +554,9 @@
 
 		[OperationContract]
 		CustomerMortgagesActionResult GetCustomerMortgages(int underwriterId, int customerId);
+
+		[OperationContract]
+		PropertyStatusesActionResult GetPropertyStatuses();
 	} // interface IEzService
 } // namespace EzService
 

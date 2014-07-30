@@ -929,6 +929,21 @@
 			if (customer.PersonalInfo != null)
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
 
+			// TODO: Remove this temporary hack - it allows new GUI in wizard while keeping old logic
+			if (personalInfo.ResidentialStatus == "1" || personalInfo.ResidentialStatus == "2" ||
+			    personalInfo.ResidentialStatus == "3" || personalInfo.ResidentialStatus == "4")
+			{
+				personalInfo.ResidentialStatus = "Home owner";
+			}
+			else if (personalInfo.ResidentialStatus == "5" || personalInfo.ResidentialStatus == "6")
+			{
+				personalInfo.ResidentialStatus = "Renting";
+			}
+			else
+			{
+				personalInfo.ResidentialStatus = "Living with Parents";
+			}
+
 			customer.PersonalInfo = personalInfo;
 
 			if (!string.IsNullOrEmpty(personalInfo.MiddleInitial)) {
