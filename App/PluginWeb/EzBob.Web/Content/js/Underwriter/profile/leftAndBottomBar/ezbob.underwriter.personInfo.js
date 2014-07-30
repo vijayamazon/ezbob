@@ -1,341 +1,300 @@
-(function() {
-  var root, _ref, _ref1,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.Underwriter = EzBob.Underwriter || {};
 
-  root.EzBob = root.EzBob || {};
+EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
+	template: '#profile-person-info-template',
 
-  EzBob.Underwriter = EzBob.Underwriter || {};
+	initialize: function() {
+		this.bindTo(this.model, 'change sync', this.render, this);
+	}, // initialize
 
-  EzBob.Underwriter.PersonInfoView = (function(_super) {
-    __extends(PersonInfoView, _super);
+	onRender: function() {
+		this.$el.find(".tltp").tooltip();
+		this.$el.find(".tltp-left").tooltip({ placement: "left" });
 
-    function PersonInfoView() {
-      _ref = PersonInfoView.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
+		if (this.model.get('IsWizardComplete'))
+			this.$el.find('#ForceFinishWizard').addClass('hide');
 
-    PersonInfoView.prototype.template = "#profile-person-info-template";
+		this.initSwitch(".cciMarkSwitch", this.model.get('IsCciMarkInAlertMode'), this.toggleCciMark);
 
-    PersonInfoView.prototype.initialize = function() {
-      return this.bindTo(this.model, "change sync", this.render, this);
-    };
+		this.initSwitch(".testUserSwitch", this.model.get('IsTestInAlertMode'), this.toggleIsTest);
 
-    PersonInfoView.prototype.onRender = function() {
-      var that;
+		this.initSwitch(".manualDecisionSwitch", this.model.get('IsAvoid'), this.toggleManualDecision);
 
-      this.$el.find(".tltp").tooltip();
-      this.$el.find(".tltp-left").tooltip({
-        placement: "left"
-      });
-      if (this.model.get('IsWizardComplete')) {
-        this.$el.find('#ForceFinishWizard').addClass('hide');
-      }
-      that = this;
-      this.initSwitch(".cciMarkSwitch", this.model.get('IsCciMarkInAlertMode'), this.toggleCciMark);
-      this.initSwitch(".testUserSwitch", this.model.get('IsTestInAlertMode'), this.toggleIsTest);
-      this.initSwitch(".manualDecisionSwitch", this.model.get('IsAvoid'), this.toggleManualDecision);
-      if (this.model.get('BrokerName') !== '') {
-        return this.$el.find('#brokerDetailsBtn').removeClass('hide');
-      }
-    };
+		if (this.model.get('BrokerName') !== '')
+			this.$el.find('#brokerDetailsBtn').removeClass('hide');
+	}, // onRender
 
-    PersonInfoView.prototype.initSwitch = function(elemClass, state, func) {
-      var that;
+	initSwitch: function(elemClass, state, func) {
+		this.$el.find(elemClass).bootstrapSwitch();
 
-      that = this;
-      this.$el.find(elemClass).bootstrapSwitch();
-      this.$el.find(elemClass).bootstrapSwitch('setState', state);
-      return this.$el.find(elemClass).on('switch-change', function(event, state) {
-        return func.call(that, event, state);
-      });
-    };
+		this.$el.find(elemClass).bootstrapSwitch('setState', state);
 
-    PersonInfoView.prototype.toggleCciMark = function(event, state) {
-      var id,
-        _this = this;
+		var self = this;
 
-      id = this.model.get('Id');
-      BlockUi();
-      return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleCciMark', {
-        id: id
-      }).done(function(result) {
-        if (result.error) {
-          return EzBob.App.trigger('error', result.error);
-        } else {
-          _this.setAlertStatus(result.mark, '.cci-mark-td');
-          return _this.model.set('IsCciMarkInAlertMode', result.mark);
-        }
-      }).always(function() {
-        return UnBlockUi();
-      });
-    };
+		this.$el.find(elemClass).on('switch-change', function(event, innerState) {
+			func.call(self, event, innerState);
+		});
+	}, // initSwitch
 
-    PersonInfoView.prototype.toggleIsTest = function(event, state) {
-      var id,
-        _this = this;
+	toggleCciMark: function(event, state) {
+		var self = this;
 
-      id = this.model.get('Id');
-      BlockUi();
-      return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleIsTest', {
-        id: id
-      }).done(function(result) {
-        if (result.error) {
-          return EzBob.App.trigger('error', result.error);
-        } else {
-          _this.setAlertStatus(result.isTest, '.is-test-td');
-          return _this.model.set('IsTestInAlertMode', result.isTest);
-        }
-      }).always(function() {
-        return UnBlockUi();
-      });
-    };
+		var id = this.model.get('Id');
 
-    PersonInfoView.prototype.toggleManualDecision = function(event, state) {
-      var id,
-        _this = this;
+		BlockUi();
 
-      id = this.model.get('Id');
-      BlockUi();
-      return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/AvoidAutomaticDecision', {
-        id: id,
-        enabled: state.value
-      }).done(function(result) {
-        if (result.error) {
-          return EzBob.App.trigger('error', result.error);
-        } else {
-          return _this.model.set('IsAvoid', result.status);
-        }
-      }).always(function() {
-        return UnBlockUi();
-      });
-    };
+		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleCciMark', {
+			id: id
+		}).done(function(result) {
+			if (result.error)
+				EzBob.App.trigger('error', result.error);
+			else {
+				self.setAlertStatus(result.mark, '.cci-mark-td');
+				self.model.set('IsCciMarkInAlertMode', result.mark);
+			} // if
+		}).always(function() {
+			UnBlockUi();
+		});
+	}, // toggleCciMark
 
-    PersonInfoView.prototype.setAlertStatus = function(isAlert, td) {
-      var oTd;
+	toggleIsTest: function(event, state) {
+		var self = this;
 
-      oTd = this.$el.find(td);
-      if (isAlert) {
-        return oTd.addClass('red_cell');
-      } else {
-        return oTd.removeClass('red_cell');
-      }
-    };
+		var id = this.model.get('Id');
 
-    PersonInfoView.prototype.events = {
-      "click button[name=\"changeDisabledState\"]": "changeDisabledState",
-      "click button[name=\"editEmail\"]": "editEmail",
-      "click button[name=\"brokerDetails\"]": "brokerDetails",
-      "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
-      'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus',
-      'click #MainStrategyHidden': 'activateMainStratgey',
-      'click #ForceFinishWizard': 'activateFinishWizard'
-    };
+		BlockUi();
 
-    PersonInfoView.prototype.activateMainStratgey = function() {
-      var xhr;
+		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleIsTest', {
+			id: id
+		}).done(function(result) {
+			if (result.error)
+				EzBob.App.trigger('error', result.error);
+			else {
+				self.setAlertStatus(result.isTest, '.is-test-td');
+				self.model.set('IsTestInAlertMode', result.isTest);
+			}
+		}).always(function() {
+			UnBlockUi();
+		});
+	}, // toggleIsTest
 
-      return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateMainStrategy", {
-        customerId: this.model.get('Id')
-      });
-    };
+	toggleManualDecision: function(event, state) {
+		var self = this;
+		var id = this.model.get('Id');
 
-    PersonInfoView.prototype.activateFinishWizard = function() {
-      var xhr;
+		BlockUi();
 
-      return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateFinishWizard", {
-        customerId: this.model.get('Id')
-      });
-    };
+		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/AvoidAutomaticDecision', {
+			id: id,
+			enabled: state.value
+		}).done(function(result) {
+			if (result.error)
+				EzBob.App.trigger('error', result.error);
+			else
+				self.model.set('IsAvoid', result.status);
+		}).always(function() {
+			UnBlockUi();
+		});
+	}, // toggleManualDecision
 
-    PersonInfoView.prototype.updateTrustPilotStatus = function() {
-      var d,
-        _this = this;
+	setAlertStatus: function(isAlert, td) {
+		this.$el.find(td).toggleClass('red_cell', isAlert);
+	}, // setAlertStatus
 
-      d = new EzBob.Dialogs.ComboEdit({
-        model: this.model,
-        propertyName: 'TrustPilotStatusName',
-        title: 'Trust Pilot Status',
-        width: 500,
-        postValueName: 'status',
-        comboValues: this.model.get('TrustPilotStatusList'),
-        url: "Underwriter/ApplicationInfo/UpdateTrustPilotStatus",
-        data: {
-          id: this.model.get('Id')
-        }
-      });
-      d.render();
-      d.on('done', function() {
-        return _this.model.fetch();
-      });
-    };
+	events: {
+		"click button[name=\"changeDisabledState\"]": "changeDisabledState",
+		"click button[name=\"editEmail\"]": "editEmail",
+		"click button[name=\"brokerDetails\"]": "brokerDetails",
+		"click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
+		'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus',
+		'click #MainStrategyHidden': 'activateMainStratgey',
+		'click #ForceFinishWizard': 'activateFinishWizard',
+		'click .reset-password-123456': 'resetPassword123456',
+	}, // events
 
-    PersonInfoView.prototype.changeFraudStatusManualyClicked = function() {
-      var fraudStatusModel, that, xhr,
-        _this = this;
+	resetPassword123456: function() {
+		event.preventDefault();
+		event.stopPropagation();
+		
+		$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ResetPassword123456", {
+			nCustomerID: this.model.get('Id')
+		});
 
-      fraudStatusModel = new EzBob.Underwriter.FraudStatusModel({
-        customerId: this.model.get('Id'),
-        currentStatus: this.model.get('FraudCheckStatusId')
-      });
-      BlockUi("on");
-      that = this;
-      xhr = fraudStatusModel.fetch();
-      return xhr.done(function() {
-        var fraudStatusLayout;
+		EzBob.ShowMessageTimeout('Customer password has been reset to 123456.', 'Success', 3);
 
-        fraudStatusLayout = new EzBob.Underwriter.FraudStatusLayout({
-          model: fraudStatusModel
-        });
-        fraudStatusLayout.render();
-        EzBob.App.jqmodal.show(fraudStatusLayout);
-        BlockUi("off");
-        return fraudStatusLayout.on('saved', function() {
-          var currentStatus;
+		return false;
+	}, // resetPassword123456
 
-          currentStatus = fraudStatusModel.get('currentStatus');
-          _this.model.set('FraudCheckStatusId', currentStatus);
-          _this.model.set('FraudCheckStatus', fraudStatusModel.get('currentStatusText'));
-          return that.setAlertStatus(currentStatus !== 0, '.fraud-status', '.fraud-status-td');
-        });
-      });
-    };
+	activateMainStratgey: function() {
+		$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateMainStrategy", {
+			customerId: this.model.get('Id')
+		});
+	}, //activateMainStratgey
 
-    PersonInfoView.prototype.templateHelpers = {
-      getIcon: function() {
-        if (this.EmailState === "Confirmed" || this.EmailState === "ManuallyConfirmed") {
-          return "icon-ok";
-        }
-        return "icon-question-sign";
-      }
-    };
+	activateFinishWizard: function() {
+		var self = this;
+		EzBob.ShowMessage("Finish wizard is in progress, refresh in a couple of seconds", "Ok", function() {
+			$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateFinishWizard", {
+				customerId: self.model.get('Id')
+			});
+		});
+	}, // activateFinishWizard
 
-    PersonInfoView.prototype.serializeData = function() {
-      var data;
+	updateTrustPilotStatus: function() {
+		var self = this;
 
-      data = this.model.toJSON();
-      return {
-        data: data,
-        getIcon: this.templateHelpers.getIcon
-      };
-    };
+		var d = new EzBob.Dialogs.ComboEdit({
+			model: this.model,
+			propertyName: 'TrustPilotStatusName',
+			title: 'Trust Pilot Status',
+			width: 500,
+			postValueName: 'status',
+			comboValues: this.model.get('TrustPilotStatusList'),
+			url: "Underwriter/ApplicationInfo/UpdateTrustPilotStatus",
+			data: {
+				id: this.model.get('Id')
+			},
+		});
 
-    PersonInfoView.prototype.changeDisabledState = function() {
-      var collectionStatusModel, customerId, prevStatus, xhr,
-        _this = this;
+		d.render();
 
-      collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel({
-        customerId: this.model.get('Id'),
-        currentStatus: this.model.get('CustomerStatusId')
-      });
-      prevStatus = this.model.get('CustomerStatusId');
-      customerId = this.model.get('Id');
-      BlockUi("on");
-      xhr = collectionStatusModel.fetch();
-      return xhr.done(function() {
-        var collectionStatusLayout;
+		d.on('done', function() { self.model.fetch(); });
+	}, // updateTrustPilotStatus
 
-        collectionStatusLayout = new EzBob.Underwriter.CollectionStatusLayout({
-          model: collectionStatusModel
-        });
-        collectionStatusLayout.render();
-        EzBob.App.jqmodal.show(collectionStatusLayout);
-        BlockUi("off");
-        return collectionStatusLayout.on('saved', function() {
-          var newStatus, that;
+	changeFraudStatusManualyClicked: function() {
+		var self = this;
 
-          newStatus = collectionStatusModel.get('currentStatus');
-          that = _this;
-          xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/GetIsStatusWarning", {
-            status: newStatus
-          });
-          return xhr.done(function(result) {
-            var isWarning, xhr2;
+		var fraudStatusModel = new EzBob.Underwriter.FraudStatusModel({
+			customerId: this.model.get('Id'),
+			currentStatus: this.model.get('FraudCheckStatusId')
+		});
 
-            BlockUi("on");
-            isWarning = result;
-            that.model.fetch();
-            xhr2 = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/LogStatusChange", {
-              newStatus: newStatus,
-              prevStatus: prevStatus,
-              customerId: customerId
-            });
-            return xhr2.done(function() {
-              return BlockUi("off");
-            });
-          });
-        });
-      });
-    };
+		BlockUi("on");
 
-    PersonInfoView.prototype.brokerDetails = function() {
-      this.$el.find('.broker-details-rows').toggle("fast");
-      return this.$el.find('#brokerDetailsBtn i').toggleClass("fa-plus fa-minus");
-    };
+		fraudStatusModel.fetch().done(function() {
+			var fraudStatusLayout = new EzBob.Underwriter.FraudStatusLayout({
+				model: fraudStatusModel
+			});
 
-    PersonInfoView.prototype.editEmail = function() {
-      var view;
+			fraudStatusLayout.render();
 
-      view = new EzBob.EmailEditView({
-        model: this.model
-      });
-      EzBob.App.jqmodal.show(view);
-      view.on("showed", function() {
-        return view.$el.find("input").focus();
-      });
-      return false;
-    };
+			EzBob.App.jqmodal.show(fraudStatusLayout);
 
-    return PersonInfoView;
+			BlockUi("off");
 
-  })(Backbone.Marionette.ItemView);
+			fraudStatusLayout.on('saved', function() {
+				var currentStatus = fraudStatusModel.get('currentStatus');
+				self.model.set('FraudCheckStatusId', currentStatus);
+				self.model.set('FraudCheckStatus', fraudStatusModel.get('currentStatusText'));
+				self.setAlertStatus(currentStatus !== 0, '.fraud-status', '.fraud-status-td');
+			});
+		});
+	}, // changeFraudStatusManualyClicked
 
-  EzBob.Underwriter.PersonalInfoModel = (function(_super) {
-    __extends(PersonalInfoModel, _super);
+	templateHelpers: {
+		getIcon: function() {
+			return (
+				this.EmailState === "Confirmed" || this.EmailState === "ManuallyConfirmed"
+			) ? "fa fa-check-circle" : "fa fa-question-circle";
+		},
+	}, // templateHelpers
 
-    function PersonalInfoModel() {
-      _ref1 = PersonalInfoModel.__super__.constructor.apply(this, arguments);
-      return _ref1;
-    }
+	serializeData: function() {
+		return {
+			data: this.model.toJSON(),
+			getIcon: this.templateHelpers.getIcon,
+		};
+	}, // serializeData
 
-    PersonalInfoModel.prototype.idAttribute = "Id";
+	changeDisabledState: function() {
+		var self = this;
 
-    PersonalInfoModel.prototype.urlRoot = window.gRootPath + "Underwriter/CustomerInfo/Index";
+		var collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel({
+			customerId: this.model.get('Id'),
+			currentStatus: this.model.get('CustomerStatusId')
+		});
 
-    PersonalInfoModel.prototype.initialize = function() {
-      var status, _i, _len, _ref2, _results;
+		var prevStatus = this.model.get('CustomerStatusId');
 
-      this.on("change:FraudCheckStatusId", this.changeFraudCheckStatus, this);
-      this.changeFraudCheckStatus();
-      if (this.StatusesArr === void 0) {
-        this.statuses = EzBob.Underwriter.StaticData.CollectionStatuses;
-      }
-      this.StatusesArr = {};
-      _ref2 = this.statuses.models;
-      _results = [];
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        status = _ref2[_i];
-        _results.push(this.StatusesArr[status.get('Id')] = status.get('Name'));
-      }
-      return _results;
-    };
+		var customerId = this.model.get('Id');
 
-    PersonalInfoModel.prototype.changeFraudCheckStatus = function() {
-      var fraud, fraudCss;
+		BlockUi("on");
 
-      fraud = this.get("FraudCheckStatusId");
-      fraudCss = "";
-      switch (fraud) {
-        case 2:
-          fraudCss = "red_cell";
-      }
-      return this.set("FraudHighlightCss", fraudCss);
-    };
+		collectionStatusModel.fetch().done(function() {
+			var collectionStatusLayout = new EzBob.Underwriter.CollectionStatusLayout({
+				model: collectionStatusModel
+			});
 
-    return PersonalInfoModel;
+			collectionStatusLayout.render();
 
-  })(Backbone.Model);
+			EzBob.App.jqmodal.show(collectionStatusLayout);
 
-}).call(this);
+			BlockUi("off");
+
+			collectionStatusLayout.on('saved', function() {
+				var newStatus = collectionStatusModel.get('currentStatus');
+
+				$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/GetIsStatusWarning", {
+					status: newStatus
+				}).done(function() {
+					BlockUi("on");
+
+					self.model.fetch();
+
+					$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/LogStatusChange", {
+						newStatus: newStatus,
+						prevStatus: prevStatus,
+						customerId: customerId,
+					}).done(function() {
+						return BlockUi("off");
+					});
+				});
+			});
+		});
+	}, // changeDisabledState
+
+	brokerDetails: function() {
+		this.$el.find('.broker-details-rows').toggle("fast");
+		return this.$el.find('#brokerDetailsBtn i').toggleClass("fa-plus fa-minus");
+	}, // brokerDetails
+
+	editEmail: function() {
+		var view = new EzBob.EmailEditView({ model: this.model });
+
+		EzBob.App.jqmodal.show(view);
+
+		view.on("showed", function() { return view.$el.find("input").focus(); });
+
+		return false;
+	}, // editEmail
+}); // EzBob.Underwriter.PersonInfoView
+
+EzBob.Underwriter.PersonalInfoModel = Backbone.Model.extend({
+	idAttribute: "Id",
+
+	urlRoot: window.gRootPath + 'Underwriter/CustomerInfo/Index',
+
+	initialize: function() {
+		this.on("change:FraudCheckStatusId", this.changeFraudCheckStatus, this);
+
+		this.changeFraudCheckStatus();
+
+		if (this.StatusesArr === void 0)
+			this.statuses = EzBob.Underwriter.StaticData.CollectionStatuses;
+
+		this.StatusesArr = {};
+		var _ref = this.statuses.models;
+		var _results = [];
+		for (var _i = 0, _len = _ref.length; _i < _len; _i++) {
+			var status = _ref[_i];
+			_results.push(this.StatusesArr[status.get('Id')] = status.get('Name'));
+		} // for
+		return _results;
+	}, // initialize
+
+	changeFraudCheckStatus: function() {
+		this.set("FraudHighlightCss", this.get("FraudCheckStatusId") === 2 ? 'red_cell' : '');
+	}, // changeFraudCheckStatus
+}); // EzBob.Underwriter.PersonalInfoModel

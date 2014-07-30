@@ -7,7 +7,6 @@
 	using System;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
@@ -19,9 +18,9 @@
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using NHibernate;
-	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 	using log4net;
 
@@ -610,5 +609,11 @@
 				return Json(new { success = false, error = e.Message, });
 			} // try
 		}
-	}
-}
+
+		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		public JsonResult ResetPassword123456(int nCustomerID) {
+			new ServiceClient().Instance.ResetPassword123456(_context.User.Id, nCustomerID, PasswordResetTarget.Customer);
+			return Json(true);
+		} // ResetPassword123456
+	} // class ApplicationInfoController
+} // namespace

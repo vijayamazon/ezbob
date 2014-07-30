@@ -1267,6 +1267,7 @@
     </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineEditDialog.js" />
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.profileHead.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js">
       <DependentUpon>ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee</DependentUpon>
@@ -1284,9 +1285,6 @@
       <DependentUpon>ezbob.underwriter.controlButtons.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.emaileditview.js" />
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.js">
-      <DependentUpon>ezbob.underwriter.personInfo.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.js">
       <DependentUpon>ezbob.underwriter.collectionStatus.coffee</DependentUpon>
     </Content>
@@ -2004,7 +2002,6 @@
     <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.coffee" />
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.personInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.AddBankAccount.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.coffee" />

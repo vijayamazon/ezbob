@@ -285,7 +285,7 @@
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.broker.profile.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.profileHead.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.emaileditview.js")
-				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.coffee")
+				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.coffee")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineDialog.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.ApproveLoanWithoutAML.coffee")

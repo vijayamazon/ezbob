@@ -9,7 +9,7 @@
 
 	partial class EzServiceImplementation {
 		public ActionMetaData FirstOfMonthStatusNotifier() {
-			return Execute(null, null, typeof(FirstOfMonthStatusNotifier));
+			return Execute(null, null, typeof (FirstOfMonthStatusNotifier));
 		} // FirstOfMonthStatusNotifier
 
 		public ActionMetaData FraudChecker(int customerId, FraudMode mode) {
@@ -17,32 +17,32 @@
 		} // FraudChecker
 
 		public ActionMetaData LateBy14Days() {
-			return Execute(null, null, typeof(LateBy14Days));
+			return Execute(null, null, typeof (LateBy14Days));
 		} // LateBy14Days
 
 		public ActionMetaData PayPointCharger() {
-			return Execute(null, null, typeof(PayPointCharger));
+			return Execute(null, null, typeof (PayPointCharger));
 		} // PayPointCharger
 
 		public ActionMetaData SetLateLoanStatus() {
-			return Execute(null, null, typeof(SetLateLoanStatus));
+			return Execute(null, null, typeof (SetLateLoanStatus));
 		} // SetLateLoanStatus
 
 		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
-			ActionMetaData amd = Execute(customerId, null, typeof(UpdateMarketplace), customerId, marketplaceId, doUpdateWizardStep);
+			ActionMetaData amd = Execute(customerId, null, typeof (UpdateMarketplace), customerId, marketplaceId, doUpdateWizardStep);
+
 			if (amd.Status == ActionStatus.Failed || amd.Status == ActionStatus.Terminated)
-			{
 				DB.ExecuteNonQuery("RecordMpUpdateFailure", new QueryParameter("MpId", marketplaceId));
-			}
+		
 			return amd;
 		} // UpdateMarketplace
 
 		public ActionMetaData UpdateTransactionStatus() {
-			return Execute(null, null, typeof(UpdateTransactionStatus));
+			return Execute(null, null, typeof (UpdateTransactionStatus));
 		} // UpdateTransactionStatus
 
 		public ActionMetaData XDaysDue() {
-			return Execute(null, null, typeof(XDaysDue));
+			return Execute(null, null, typeof (XDaysDue));
 		} // XDaysDue
 
 		public CrmLookupsActionResult CrmLoadLookups() {
@@ -59,14 +59,12 @@
 		} // CrmLoadLookups
 
 		public ActionMetaData UpdateCurrencyRates() {
-			return Execute(null, null, typeof(UpdateCurrencyRates));
+			return Execute(null, null, typeof (UpdateCurrencyRates));
 		} // UpdateCurrencyRates
 
-
-		public ActionMetaData UpdateConfigurationVariables()
-		{
+		public ActionMetaData UpdateConfigurationVariables() {
 			return Execute(null, null, typeof (UpdateConfigurationVariables));
-		}//UpdateConfigurationVariables
+		} //UpdateConfigurationVariables
 
 		#region method PostcodeSaveLog
 
@@ -78,7 +76,9 @@
 			string sErrorMessage,
 			int nUserID
 		) {
-			return Execute<PostcodeSaveLog>(null, nUserID,
+			return Execute<PostcodeSaveLog>(
+				null,
+				nUserID,
 				sRequestType,
 				sUrl,
 				sStatus,
@@ -86,7 +86,8 @@
 				sErrorMessage,
 				nUserID
 			);
-		} // PostcodeSaveLog
+		} 
+		// PostcodeSaveLog
 
 		#endregion method PostcodeSaveLog
 
@@ -167,5 +168,13 @@
 		} // CalculateModelsAndAffordability
 
 		#endregion method CalculateModelsAndAffordability
+
+		#region method ResetPassword123456
+
+		public ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget) {
+			return Execute<ResetPassword123456>(null, nUnderwriterID, nTargetID, nTarget);
+		} // ResetPassword123456
+
+		#endregion method ResetPassword123456
 	} // class EzServiceImplementation
 } // namespace EzService

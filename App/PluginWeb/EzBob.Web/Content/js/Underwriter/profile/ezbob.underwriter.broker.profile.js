@@ -8,6 +8,23 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		this.brokerID2UserID = {}; // TODO: remove this mapping when implementing EZ-2459
 	}, // initialize
 
+	events: {
+		'click .reset-password-123456': 'resetPassword123456',
+	}, // events
+
+	resetPassword123456: function() {
+		event.preventDefault();
+		event.stopPropagation();
+		
+		$.post("" + window.gRootPath + "Underwriter/Brokers/ResetPassword123456", {
+			nBrokerID: this.brokerID,
+		});
+
+		EzBob.ShowMessageTimeout('Broker password has been reset to 123456.', 'Success', 3);
+
+		return false;
+	}, // resetPassword123456
+
 	render: function() {
 		var self = this;
 

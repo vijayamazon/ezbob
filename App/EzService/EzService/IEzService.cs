@@ -5,6 +5,7 @@
 	using ActionResults;
 	using EchoSignLib;
 	using EzBob.Backend.Models;
+	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -412,6 +413,9 @@
 
 		[OperationContract]
 		MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory);
+
+		[OperationContract]
+		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
 
 		#endregion other strategies
 

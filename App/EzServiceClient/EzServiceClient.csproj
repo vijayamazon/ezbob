@@ -73,6 +73,9 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.Misc.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.PricingModel.xsd">
       <SubType>Designer</SubType>
     </None>

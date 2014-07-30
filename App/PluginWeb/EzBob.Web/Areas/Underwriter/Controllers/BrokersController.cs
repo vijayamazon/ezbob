@@ -5,6 +5,7 @@
 	using EZBob.DatabaseLib.Model.Database.Broker;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using ServiceClientProxy;
@@ -14,8 +15,9 @@
 	public class BrokersController : Controller {
 		#region constructor
 
-		public BrokersController() {
+		public BrokersController(IEzbobWorkplaceContext context) {
 			m_oServiceClient = new ServiceClient();
+			m_oContext = context;
 		} // constructor
 
 		#endregion constructor
@@ -93,8 +95,19 @@
 
 		#endregion action LoadBrokerID2UserIDEntry
 
+		#region action ResetPassword123456
+
+		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		public JsonResult ResetPassword123456(int nBrokerID) {
+			new ServiceClient().Instance.ResetPassword123456(m_oContext.User.Id, nBrokerID, PasswordResetTarget.Broker);
+			return Json(true);
+		} // ResetPassword123456
+
+		#endregion action ResetPassword123456
+
 		#region private
 
+		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly ServiceClient m_oServiceClient;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(BrokersController));
 
