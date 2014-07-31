@@ -22,7 +22,6 @@ namespace EzBob.Models {
 		public Ezbob.Backend.Models.PropertyStatus PropertyStatus { get; set; }
 
 		public PersonalInfo CustomerPersonalInfo { get; set; }
-		public string BirthDateYMD { get; set; }
 
 		public string BusinessTypeReduced { get; set; }
 

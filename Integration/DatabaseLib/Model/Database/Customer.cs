@@ -223,11 +223,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual decimal? OverallTurnOver { get; set; }
 		public virtual decimal? WebSiteTurnOver { get; set; }
 		public virtual bool ConsentToSearch { get; set; }
-
-		// TODO: retire method
-		public string BirthDateYMD() {
-			return DateOfBirth.HasValue ? DateOfBirth.Value.ToString("yyyy-M-d", CultureInfo.InvariantCulture) : "";
-		} // BirthDateYMD
 	} // class PersonalInfo
 
 	#endregion class PersonalInfo

@@ -77,11 +77,7 @@
 			}
 			customerModel.BusinessTypeReduced = customerModel.CustomerPersonalInfo == null ?
 				TypeOfBusinessReduced.Personal.ToString() : customer.PersonalInfo.TypeOfBusiness.Reduce().ToString();
-
-			customerModel.BirthDateYMD = customerModel.CustomerPersonalInfo == null
-				? ""
-				: customerModel.CustomerPersonalInfo.BirthDateYMD();
-
+			
 			customerModel.bankAccountAdded = customer.HasBankAccount;
 
 			if (customer.HasBankAccount) {
