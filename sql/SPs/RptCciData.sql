@@ -172,7 +172,7 @@ BEGIN
 		) AS OfficeAddress,
 		cps.Description AS PropertyStatusDescription
 	FROM
-		Customer c,
+		Customer c
 		INNER JOIN CustomerPropertyStatuses cps ON c.PropertyStatusId = cps.Id
 		INNER JOIN #ebp ebp ON c.Id = ebp.CustomerID
 		LEFT JOIN Loan l ON c.Id = l.CustomerId
