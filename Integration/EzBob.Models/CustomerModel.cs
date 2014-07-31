@@ -19,6 +19,8 @@ namespace EzBob.Models {
 		public string userName { get; set; }
 		public string accountType { get; set; }
 
+		public Ezbob.Backend.Models.PropertyStatus PropertyStatus { get; set; }
+
 		public PersonalInfo CustomerPersonalInfo { get; set; }
 		public string BirthDateYMD { get; set; }
 

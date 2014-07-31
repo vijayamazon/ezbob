@@ -65,6 +65,12 @@
 			customerModel.EmailState = customer.EmailState.ToString();
 
 			customerModel.CustomerPersonalInfo = customer.PersonalInfo;
+			customerModel.PropertyStatus = new Ezbob.Backend.Models.PropertyStatus
+				{
+					Id = customer.PropertyStatus.Id,
+					Description = customer.PropertyStatus.Description,
+					IsOwner = customer.PropertyStatus.IsOwner
+				};
 			customerModel.BusinessTypeReduced = customerModel.CustomerPersonalInfo == null ?
 				TypeOfBusinessReduced.Personal.ToString() : customer.PersonalInfo.TypeOfBusiness.Reduce().ToString();
 
