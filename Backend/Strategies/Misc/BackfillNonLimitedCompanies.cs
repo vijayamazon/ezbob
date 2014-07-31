@@ -1,17 +1,21 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
 	using System.Data;
+	using EZBob.DatabaseLib.Model.Experian;
 	using ExperianLib.EBusiness;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using StructureMap;
 
 	public class BackfillNonLimitedCompanies : AStrategy
 	{
 		readonly NonLimitedParser parser = new NonLimitedParser();
+		private readonly ExperianHistoryRepository _experianHistoryRepository;
 
 		public BackfillNonLimitedCompanies(AConnection oDB, ASafeLog oLog)
 			: base(oDB, oLog)
 		{
+			_experianHistoryRepository = ObjectFactory.GetInstance<ExperianHistoryRepository>();
 		} // constructor
 
 		public override string Name {
@@ -27,6 +31,7 @@
 				int serviceLogId = sr["Id"];
 				int customerId = sr["CustomerId"];
 				string refNumber = sr["ExperianRefNum"];
+				DateTime insertDate = sr["InsertDate"];
 
 				try
 				{
@@ -38,7 +43,10 @@
 						response = xmlSafeReader["ResponseData"];
 					}
 
-					parser.ParseAndStore(response, refNumber, serviceLogId);
+					parser.ParseAndStore(response, refNumber, serviceLogId, insertDate);
+					
+					int? score = parser.GetScore();
+					_experianHistoryRepository.SaveOrUpdateNonLimitedHistory(serviceLogId, customerId, insertDate, refNumber, score);
 				}
 				catch (Exception e)
 				{

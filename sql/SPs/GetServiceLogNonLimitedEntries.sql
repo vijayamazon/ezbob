@@ -8,7 +8,8 @@ BEGIN
 	SELECT 
 		MP_ServiceLog.Id, 
 		MP_ServiceLog.CustomerId,
-		Company.ExperianRefNum
+		Company.ExperianRefNum,
+		MP_ServiceLog.InsertDate
 	FROM 
 		MP_ServiceLog,
 		Company,
@@ -16,7 +17,8 @@ BEGIN
 	WHERE 
 		ServiceType = 'E-SeriesNonLimitedData' AND
 		MP_ServiceLog.CustomerId = Customer.Id AND
-		Customer.CompanyId = Company.Id
+		Customer.CompanyId = Company.Id AND
+		Company.ExperianRefNum <> 'NotFound'
 	ORDER BY Id ASC
 END
 GO

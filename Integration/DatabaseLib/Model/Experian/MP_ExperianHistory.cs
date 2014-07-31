@@ -49,6 +49,8 @@
 		IEnumerable<MP_ExperianHistory> GetDirectorConsumerHistory(int directorId);
 		IEnumerable<MP_ExperianHistory> GetCompanyHistory(string companyRefNum, bool isLimited);
 		void SaveOrUpdateConsumerHistory(long serviceLogId, DateTime date, int? customerId, int? DirectorId, int? score, int? caisBalance, int? cii);
+		void SaveOrUpdateLimitedHistory(long serviceLogId, DateTime date, string companyRefNum, int? score, decimal? balance);
+		void SaveOrUpdateNonLimitedHistory(long serviceLogId, int customerId, DateTime date, string companyRefNum, int? score);
 	}
 
 	public class ExperianHistoryRepository : NHibernateRepositoryBase<MP_ExperianHistory>, IExperianHistoryRepository
@@ -68,14 +70,14 @@
 		{
 			return GetAll().Where(x => x.DirectorId == directorId && x.Type == ExperianServiceType.Consumer.DescriptionAttr());
 		}
-		
+
 		public IEnumerable<MP_ExperianHistory> GetCompanyHistory(string companyRefNum, bool isLimited)
 		{
 			return GetAll().Where(x => x.CompanyRefNum == companyRefNum && x.Type == (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr()));
 		}
 
 		public void SaveOrUpdateConsumerHistory(long serviceLogId, DateTime date, int? customerId, int? directorId, int? score, int? caisBalance,
-		                                int? cii)
+										int? cii)
 		{
 			if (!GetAll().Any(x => x.ServiceLogId == serviceLogId))
 			{
@@ -90,6 +92,36 @@
 						CaisBalance = caisBalance,
 						Type = ExperianServiceType.Consumer.DescriptionAttr()
 					});
+			}
+		}
+
+		public void SaveOrUpdateLimitedHistory(long serviceLogId, DateTime date, string companyRefNum, int? score, decimal? balance)
+		{
+			if (!GetAll().Any(x => x.ServiceLogId == serviceLogId))
+			{
+				SaveOrUpdate(new MP_ExperianHistory
+				{
+					ServiceLogId = serviceLogId,
+					Date = date,
+					Score = score,
+					CaisBalance = balance,
+					Type = ExperianServiceType.LimitedData.DescriptionAttr()
+				});
+			}
+		}
+
+		public void SaveOrUpdateNonLimitedHistory(long serviceLogId, int customerId, DateTime date, string companyRefNum, int? score)
+		{
+			if (!GetAll().Any(x => x.ServiceLogId == serviceLogId))
+			{
+				SaveOrUpdate(new MP_ExperianHistory
+				{
+					ServiceLogId = serviceLogId,
+					CustomerId = customerId,
+					Date = date,
+					Score = score,
+					Type = ExperianServiceType.NonLimitedData.DescriptionAttr()
+				});
 			}
 		}
 	}

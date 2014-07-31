@@ -1,0 +1,2 @@
+ALTER TABLE MP_ExperianHistory ALTER COLUMN CustomerId INT NULL 
+GO

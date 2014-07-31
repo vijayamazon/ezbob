@@ -9,7 +9,7 @@ namespace EzBobTest
 	using System.Globalization;
 
 	/// <summary>
-	/// Tests calcultation of late accounts for auto rejection In Rejection.cs strategy CountLateAccounts method
+	/// Tests calculation of late accounts for auto rejection In Rejection.cs strategy CountLateAccounts method
 	/// </summary>
 	[TestFixture]
 	internal class TestExperianLateCount

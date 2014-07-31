@@ -126,7 +126,7 @@
 			scoreHistory = new List<Tuple<DateTime?, int?>>();
 		}
 
-		public void ParseAndStore(string xml, string refNumber, long serviceLogId)
+		public void ParseAndStore(string xml, string refNumber, long serviceLogId, DateTime? insertDate = null)
 		{
 			Init();
 			xmlDoc = new XmlDocument();
@@ -145,17 +145,17 @@
 			ParseDN73();
 			ParseErrors();
 
-			SaveToDb(refNumber, serviceLogId);
+			SaveToDb(refNumber, serviceLogId, insertDate);
 		}
 
-		private void SaveToDb(string refNumber, long serviceLogId)
+		private void SaveToDb(string refNumber, long serviceLogId, DateTime? insertDate = null)
 		{
 			DataTable dt = db.ExecuteReader(
 				"InsertNonLimitedResult",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("RefNumber", refNumber),
 				new QueryParameter("ServiceLogId", serviceLogId),
-				new QueryParameter("Created", DateTime.UtcNow),
+				new QueryParameter("Created", insertDate.HasValue ? insertDate.Value : DateTime.UtcNow),
 				new QueryParameter("BusinessName", businessName), 
 				new QueryParameter("Address1", address1),
 				new QueryParameter("Address2", address2),
@@ -352,6 +352,11 @@
 					);
 				}
 			}
+		}
+
+		public int? GetScore()
+		{
+			return riskScore;
 		}
 
 		private void ParseErrors()
