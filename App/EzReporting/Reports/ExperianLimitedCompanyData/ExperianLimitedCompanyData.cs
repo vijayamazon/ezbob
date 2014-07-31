@@ -1,14 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.IO;
-using System.Text;
-using System.Xml;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿//*****************************************************************************
+//
+// July 31, 2014
+// This class was not changed to use ExperianLtd* tables, and it still parses
+// XML. The only change done while moving from using MP_ExperianDataCache to
+// using ExperianLtd* is to replace MP_ExperianDataCache with MP_ServiceLog.
+// Parsing XML here is all right because this class is only used to create
+// some report. The report is not part of the report system. It is
+// manually created by Adi once in a while.
+//
+//*****************************************************************************
 
 namespace Reports {
-	#region class ExperianLimitedCompanyData
+	using System;
+	using System.Collections.Generic;
+	using System.Data.Common;
+	using System.IO;
+	using System.Text;
+	using System.Xml;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	public class ExperianLimitedCompanyData : SafeLog {
 		#region public
@@ -19,7 +29,14 @@ namespace Reports {
 			List<ExperianLimitedCompanyReportItem> oReportItems = oData.Item1;
 			SortedSet<string> oFieldNames = oData.Item2;
 
-			var oFieldCaptions = new List<string> {"Company reg #", "Company name", "Incorporation date", "Company score", "Customer ID", "Date"};
+			var oFieldCaptions = new List<string> {
+				"Company reg #",
+				"Company name",
+				"Incorporation date",
+				"Company score",
+				"Customer ID",
+				"Date"
+			};
 
 			oFieldCaptions.AddRange(ExperianLimitedCompanyReportItem.RelevantFieldNames);
 
@@ -56,7 +73,6 @@ namespace Reports {
 
 		public ExperianLimitedCompanyData(AConnection oDB, ASafeLog log = null) : base(log) {
 			m_oDB = oDB;
-
 			VerboseLogging = false;
 		} // constructor
 
@@ -64,7 +80,7 @@ namespace Reports {
 
 		#region method Run
 
-		public Tuple<List<ExperianLimitedCompanyReportItem>, SortedSet<string>>  Run() {
+		public Tuple<List<ExperianLimitedCompanyReportItem>, SortedSet<string>> Run() {
 			m_oResult = new List<ExperianLimitedCompanyReportItem>();
 			m_oFieldNames = new SortedSet<string>();
 
@@ -170,6 +186,4 @@ namespace Reports {
 
 		#endregion private
 	} // class ExperianLimitedCompanyData
-
-	#endregion class ExperianLimitedCompanyData
 } // namespace Reports

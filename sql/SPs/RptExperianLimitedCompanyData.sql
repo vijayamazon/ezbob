@@ -1,24 +1,52 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptExperianLimitedCompanyData]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptExperianLimitedCompanyData]
+IF OBJECT_ID('RptExperianLimitedCompanyData') IS NULL
+	EXECUTE('CREATE PROCEDURE RptExperianLimitedCompanyData AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[RptExperianLimitedCompanyData]
+
+ALTER PROCEDURE RptExperianLimitedCompanyData
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	SELECT
-	c.Id,
-	e.JsonPacket
-FROM
-	Customer c
-	INNER JOIN Company co ON co.Id = c.CompanyId 
-	INNER JOIN MP_ExperianDataCache e ON co.ExperianRefNum = e.CompanyRefNumber AND e.JsonPacket LIKE '<%'
-WHERE
-	c.IsTest = 0
-	AND c.TypeOfBusiness IN ('Limited', 'LLP', 'PShip')
-ORDER BY
-	c.Id
+		c.Id AS CustomerID,
+		l.Id AS LogID,
+		ROW_NUMBER() OVER(PARTITION BY c.Id, co.ExperianRefNum ORDER BY l.InsertDate DESC, l.Id DESC) AS RowNum
+	INTO
+		#cl
+	FROM
+		Customer c
+		INNER JOIN Company co ON co.Id = c.CompanyId 
+		INNER JOIN MP_ServiceLog l ON co.ExperianRefNum = l.CompanyRefNum
+	WHERE
+		c.IsTest = 0
+		AND
+		co.ExperianRefNum IS NOT NULL
+		AND
+		co.ExperianRefNum != 'NotFound'
+		AND
+		c.TypeOfBusiness IN ('Limited', 'LLP')
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		#cl.CustomerID AS Id,
+		l.ResponseData AS JsonPacket
+	FROM
+		#cl
+		INNER JOIN MP_ServiceLog l ON #cl.LogID = l.Id
+	WHERE
+		#cl.RowNum = 1
+	ORDER BY
+		#cl.CustomerID
+
+	------------------------------------------------------------------------------
+
+	DROP TABLE #cl
 END
 GO

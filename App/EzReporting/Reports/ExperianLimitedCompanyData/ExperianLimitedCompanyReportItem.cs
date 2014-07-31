@@ -1,11 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Xml;
-using Ezbob.Logger;
+﻿//*****************************************************************************
+//
+// July 31, 2014
+// This class was not changed to use ExperianLtd* tables, and it still parses
+// XML. The only change done while moving from using MP_ExperianDataCache to
+// using ExperianLtd* is to replace MP_ExperianDataCache with MP_ServiceLog.
+// Parsing XML here is all right because this class is only used to create
+// some report. The report is not part of the report system. It is
+// manually created by Adi once in a while.
+//
+//*****************************************************************************
 
 namespace Reports {
-	#region class ExperianLimitedCompanyReportItem
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Xml;
+	using Ezbob.Logger;
 
 	public class ExperianLimitedCompanyReportItem : SafeLog {
 		#region public
@@ -241,6 +251,4 @@ namespace Reports {
 
 		#endregion private
 	} // class ExperianLimitedCompanyReportItem
-
-	#endregion class ExperianLimitedCompanyReportItem
 } // namespace Reports
