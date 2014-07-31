@@ -124,7 +124,7 @@
                         </tr>
                         <tr>
                             <td><b>Residential Status</b></td>
-                            <td>@Model.Application.ResidentialStatus</td>
+                            <td>@Model.Application.PropertyStatus.Description</td>
                             <td>@Model.EBay.ResidentialStatus</td>
                             <td>@Model.PayPal.ResidentialStatus</td>
                         </tr>
@@ -294,7 +294,7 @@
                         <tr>
                             <td><b>Property net worth</b></td>
                             <td colspan="4">
-                                @if (@Model.Application.ResidentialStatus != null && Model.Application.ResidentialStatus.Contains("Home owner"))
+                                @if (@Model.Application.PropertyStatus != null && Model.Application.PropertyStatus.IsOwner)
                                 {
                                     @Html.Raw("£")
                                     @Model.AssetWorth.ToString("N0")

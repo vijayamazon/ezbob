@@ -40,9 +40,9 @@
                     @BoxTools("AssetsAndWorth", "#properties")
                 </div>
                 <div class="box-content">
-                    <%if(personal.ResidentalStatus && personal.ResidentalStatus.toLowerCase() != 'home owner'){%>
+                    <%if(personal.PropertyStatus != null && !personal.PropertyStatus.IsOwner){%>
                     <div class="row">
-                        <div class="requested-loan-td">Residential Status: <span><%-personal.ResidentalStatus%></span></div>
+                        <div class="requested-loan-td">Residential Status: <span><%-personal.ResidentialStatus%></span></div>
                         <%if(properties.SumOfMortgages>0){%>
                         <div class="requested-loan-td">Have mortgage<%-properties.NumberOfMortgages>1 ? 's' : '' %>: <span><%- EzBob.formatPoundsAsThousandsNoDecimals(properties.SumOfMortgages) %> (<%- properties.NumberOfMortgages %>)</span></div>
                         <%}%>

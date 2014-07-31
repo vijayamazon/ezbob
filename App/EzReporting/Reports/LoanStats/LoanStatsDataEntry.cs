@@ -26,7 +26,8 @@
 		public Gender Gender { get; private set; }
 		public DateTime BirthDate { get; private set; }
 		public MaritalStatus MaritalStatus { get; private set; }
-		public string ResidentialStatus { get; private set; }
+		public bool IsHomeOwner { get; private set; }
+		public string PropertyStatusDescription { get; private set; }
 		public TypeOfBusiness TypeOfBusiness { get; private set; }
 		public string ReferenceSource { get; private set; }
 		public int LoanID { get; private set; }
@@ -106,7 +107,8 @@
 			Gender = (Gender)Enum.Parse(typeof(Gender), sr["Gender"]);
 			BirthDate = sr["DateOfBirth"];
 			MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), sr["MaritalStatus"]);
-			ResidentialStatus = sr["ResidentialStatus"];
+			IsHomeOwner = sr["IsOwner"];
+			PropertyStatusDescription = sr["Description"];
 			TypeOfBusiness = (TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), sr["TypeOfBusiness"]);
 			ReferenceSource = sr["ReferenceSource"];
 			LoanID = sr["LoanID"];

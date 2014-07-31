@@ -54,7 +54,8 @@
 		public string Gender { get; set; }
 		public string FullGender { get; set; }
 		public string FamilyStatus { get; set; }
-		public string ResidentalStatus { get; set; }
+		public string ResidentialStatus { get; set; }
+		public Ezbob.Backend.Models.PropertyStatus PropertyStatus { get; set; }
 		public string CompanyName { get; set; }
 		public string CompanyType { get; set; }
 		public string CompanySeniority { get; set; }
@@ -104,7 +105,8 @@
 					Gender = customer.PersonalInfo.Gender.ToString();
 					FullGender = Gender == "M" ? "Male" : "Female";
 					FamilyStatus = customer.PersonalInfo.MaritalStatus.ToString();
-					ResidentalStatus = customer.PersonalInfo.ResidentialStatus;
+					ResidentialStatus = customer.PersonalInfo.ResidentialStatus;
+					PropertyStatus = customer.PropertyStatus;
 				}
 			}
 

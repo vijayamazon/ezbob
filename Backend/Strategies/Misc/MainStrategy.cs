@@ -209,15 +209,14 @@
 				SendWaitingForDecisionMail();
 			}
 
-			if (autoDecisionResponse.CreditResult != "Rejected" && autoDecisionResponse.SystemDecision != "Reject" &&
-			    appHomeOwner != null && appHomeOwner.ToLowerInvariant().Equals("home owner"))
+			if (autoDecisionResponse.CreditResult != "Rejected" && autoDecisionResponse.SystemDecision != "Reject" && isHomeOwner)
 			{
-				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.SystemDecision, appHomeOwner);
+				Log.Debug("Retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.SystemDecision, propertyStatusDescription);
 				GetLandRegistry();
 			}
 			else
 			{
-				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.SystemDecision, appHomeOwner);
+				Log.Info("Not retrieving LandRegistry system decision: {0} residential status: {1}", autoDecisionResponse.SystemDecision, propertyStatusDescription);
 			}
 
 			GetZooplaData();
@@ -268,16 +267,16 @@
 
 			offeredCreditLine = modelLoanOffer;
 
-			if (appHomeOwner == "Home owner" && maxCapHomeOwner < loanOfferReApprovalSum)
+			if (isHomeOwner && maxCapHomeOwner < loanOfferReApprovalSum)
 				loanOfferReApprovalSum = maxCapHomeOwner;
 
-			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < loanOfferReApprovalSum)
+			if (!isHomeOwner && maxCapNotHomeOwner < loanOfferReApprovalSum)
 				loanOfferReApprovalSum = maxCapNotHomeOwner;
 
-			if (appHomeOwner == "Home owner" && maxCapHomeOwner < offeredCreditLine)
+			if (isHomeOwner && maxCapHomeOwner < offeredCreditLine)
 				offeredCreditLine = maxCapHomeOwner;
 
-			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < offeredCreditLine)
+			if (!isHomeOwner && maxCapNotHomeOwner < offeredCreditLine)
 				offeredCreditLine = maxCapNotHomeOwner;
 		} // CalcAndCapOffer
 
@@ -989,7 +988,8 @@
 			appFirstName = results["FirstName"];
 			appSurname = results["Surname"];
 			appGender = results["Gender"];
-			appHomeOwner = results["HomeOwner"];
+			isHomeOwner = results["IsHomeOwner"];
+			propertyStatusDescription = results["PropertyStatusDescription"];
 			allMPsNum = results["NumOfMps"];
 			appAccountNumber = results["AccountNumber"];
 			appSortCode = results["SortCode"];
@@ -1300,7 +1300,8 @@
 		private string appFirstName;
 		private string appSurname;
 		private string appGender;
-		private string appHomeOwner;
+		private bool isHomeOwner;
+		private string propertyStatusDescription;
 		private string appAccountNumber;
 		private string appSortCode;
 		private DateTime appRegistrationDate;

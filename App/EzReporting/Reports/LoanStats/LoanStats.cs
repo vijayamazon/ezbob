@@ -111,23 +111,31 @@ namespace Reports {
 						throw new ArgumentOutOfRangeException("MaritalStatus", (object)lse.MaritalStatus, "Unsupported marital status.");
 					} // switch
 
-					switch (lse.ResidentialStatus.ToLower()) {
-					case "home owner":
+					if (lse.IsHomeOwner)
+					{
 						lre.HomeOwnership = 1;
-						break;
+					}
+					else
+					{
+						switch (lse.PropertyStatusDescription.ToLower())
+						{
+							case "social house":
+								lre.HomeOwnership = 3;
+								break;
 
-					case "renting":
-						lre.HomeOwnership = 0;
-						break;
+							case "renting":
+								lre.HomeOwnership = 0;
+								break;
 
-					case "living with parents":
-						lre.HomeOwnership = 2;
-						break;
+							case "living with parents":
+								lre.HomeOwnership = 2;
+								break;
 
-					default:
-						lre.HomeOwnership = null;
-						break;
-					} // switch
+							default:
+								lre.HomeOwnership = null;
+								break;
+						} // switch
+					}
 
 					switch (lse.TypeOfBusiness) {
 					case TypeOfBusiness.Entrepreneur:
@@ -296,7 +304,7 @@ namespace Reports {
 			sheet.Cells["AL" + nRowNumber].Value = "Gender";
 			sheet.Cells["AO" + nRowNumber].Value = "Year of birth";
 			sheet.Cells["AQ" + nRowNumber].Value = "Family status: 0-single/other, 1-married, 2-divorced, 3-widow";
-			sheet.Cells["FN" + nRowNumber].Value = "Home ownership (0-renting, 1-home owner, 2-living with parents)";
+			sheet.Cells["FN" + nRowNumber].Value = "Home ownership (0-renting, 1-home owner, 2-living with parents, 3-social house)";
 			sheet.Cells["FO" + nRowNumber].Value = "Type of business (0-entrepreneur, 1-partnership, 2-Ltd)";
 			sheet.Cells["GC" + nRowNumber].Value = "SourceRef";
 			sheet.Cells["GD" + nRowNumber].Value = "Category 1";

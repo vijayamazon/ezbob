@@ -23,7 +23,7 @@ BEGIN
 END
 GO
 
-IF NOT EXISTS (SELECT 1 FROM CustomerPropertyStatusGroups WHERE Name = 'Property-owners')
+IF NOT EXISTS (SELECT 1 FROM CustomerPropertyStatusGroups WHERE Title = 'Property-owners')
 BEGIN
 	INSERT INTO CustomerPropertyStatusGroups (Name, Title, Priority) VALUES ('Owners', 'Property-owners', 1)
 	INSERT INTO CustomerPropertyStatusGroups (Name, Title, Priority) VALUES ('Not owners', 'I do not own any property', 2)

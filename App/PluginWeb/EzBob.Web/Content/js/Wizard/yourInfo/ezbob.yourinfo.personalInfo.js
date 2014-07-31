@@ -61,21 +61,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	}, // isAddressValid
 
 	residentialStatusChanged: function() {
-		var oCombo = this.$el.find('#OwnOtherProperty');
-
-		if (oCombo.length < 1)
-			return;
-
-		if (this.$el.find('#ResidentialStatus').val() === 'Home owner') {
-			this.$el.find('#OwnOtherPropertyQuestion').text('Do you own another property?');
-			oCombo.find('option[value="Yes"]').text('Yes, I own another property.');
-			oCombo.find('option[value="No"]').text('No, I don\'t own another property.');
-		}
-		else {
-			this.$el.find('#OwnOtherPropertyQuestion').text('Do you own a property?');
-			oCombo.find('option[value="Yes"]').text('Yes, I own a property.');
-			oCombo.find('option[value="No"]').text('No, I don\'t own a property.');
-		} // if
+		// TODO: fill with new logic
 	}, // residentialStatusChanged
 
 	personalTimeAtAddressChanged: function() {

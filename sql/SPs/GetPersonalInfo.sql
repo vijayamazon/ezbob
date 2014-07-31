@@ -55,7 +55,8 @@ BEGIN
 		Surname,
 		Gender,
 		DateOfBirth,
-		ResidentialStatus AS HomeOwner,
+		CustomerPropertyStatuses.IsOwner AS IsHomeOwner,
+		CustomerPropertyStatuses.Description AS PropertyStatusDescription,
 		@NumOfMps AS NumOfMps,
 		Customer.TimeAtAddress,
 		AccountNumber,
@@ -65,9 +66,11 @@ BEGIN
 		@NumOfLoans AS NumOfLoans,
 		Customer.TypeOfBusiness
 	FROM
+		CustomerPropertyStatuses,
 		Customer
 		LEFT OUTER JOIN Company ON Company.Id = Customer.CompanyId
 	WHERE
-		Customer.Id = @CustomerId
+		Customer.Id = @CustomerId AND
+		Customer.PropertyStatusId = CustomerPropertyStatuses.Id
 END
 GO

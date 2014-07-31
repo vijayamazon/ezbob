@@ -149,7 +149,7 @@
 			sw.Stop();
 			var pricingTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();
-			int numberOfProperties = customer.PersonalInfo == null ? 0 : customer.PersonalInfo.ResidentialStatus == "Home owner" ? 1 : 0;
+			int numberOfProperties = customer.PropertyStatus.IsOwner ? 1 : 0;
 			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
 										 a.Customer.Id == customer.Id &&
 				                         (a.AddressType == CustomerAddressType.OtherPropertyAddress ||

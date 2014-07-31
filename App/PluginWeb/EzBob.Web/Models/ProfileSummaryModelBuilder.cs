@@ -197,6 +197,10 @@
 			}
 
 			if (!customer.ExperianConsumerScore.HasValue || customer.ExperianConsumerScore.Value == 0)
+
+			bool hasMortgage = false;
+			bool isHomeOwner = customer.PropertyStatus.IsOwner;
+			try
 			{
 				errors.AppendLine("No consumer score");
 			}
@@ -229,7 +233,7 @@
 			var lrs = customer.LandRegistries.Where(x =>
 				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
 				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success).ToList();
-			if (!lrs.Any() && customer.PersonalInfo != null && String.Equals(customer.PersonalInfo.ResidentialStatus,"home owner", StringComparison.OrdinalIgnoreCase))
+			if (!lrs.Any() && customer.PropertyStatus.IsOwner)
 			{
 				summary.Alerts.Warnings.Add(new AlertModel
 					{

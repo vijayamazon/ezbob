@@ -86,7 +86,8 @@
 			IPersonalInfoHistoryRepository oPersonalInfoHistoryRepository,
 			ISession oSession,
 			CashRequestBuilder oCashRequestBuilder,
-			DirectorRepository oDirectorRepository
+			DirectorRepository oDirectorRepository,
+			PropertyStatusRepository propertyStatusRepository
 		) {
 			m_oContext = oContext;
 			m_oDatabaseHelper = oDatabaseHelper;
@@ -95,6 +96,7 @@
 			m_oSession = oSession;
 			m_oCashRequestBuilder = oCashRequestBuilder;
 			m_oDirectorRepository = oDirectorRepository;
+			this.propertyStatusRepository = propertyStatusRepository;
 		} // constructor
 
 		#endregion constructor
@@ -929,19 +931,16 @@
 			if (customer.PersonalInfo != null)
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
 
-			// TODO: Remove this temporary hack - it allows new GUI in wizard while keeping old logic
-			if (personalInfo.ResidentialStatus == "1" || personalInfo.ResidentialStatus == "2" ||
-			    personalInfo.ResidentialStatus == "3" || personalInfo.ResidentialStatus == "4")
+			int propertyStatusId;
+			if (!int.TryParse(personalInfo.ResidentialStatus, out propertyStatusId))
 			{
-				personalInfo.ResidentialStatus = "Home owner";
+				throw new Exception("Wrong property status id");
 			}
-			else if (personalInfo.ResidentialStatus == "5" || personalInfo.ResidentialStatus == "6")
+
+			customer.PropertyStatus = propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == propertyStatusId);
+			if (customer.PropertyStatus != null)
 			{
-				personalInfo.ResidentialStatus = "Renting";
-			}
-			else
-			{
-				personalInfo.ResidentialStatus = "Living with Parents";
+				personalInfo.ResidentialStatus = customer.PropertyStatus.Description;
 			}
 
 			customer.PersonalInfo = personalInfo;
@@ -1123,6 +1122,7 @@
 		private readonly IConcentAgreementHelper m_oConcentAgreementHelper = new ConcentAgreementHelper();
 		private readonly DatabaseDataHelper m_oDatabaseHelper;
 		private readonly DirectorRepository m_oDirectorRepository;
+		private readonly PropertyStatusRepository propertyStatusRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(CustomerDetailsController));
 
 		#endregion private properties

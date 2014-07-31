@@ -22,7 +22,6 @@ BEGIN
 		@HasNonYodleeMarketplace BIT,
 		@IsOffline BIT,
 		@DateOfBirth DATETIME,
-		@ResidentialStatus NVARCHAR(250),
 		@ExperianScore INT,
 		@EarliestTransactionDate DATETIME,
 		@YodleeTotalIncomeAnnualizedId INT,
@@ -38,7 +37,8 @@ BEGIN
 		@IncorporationDate DATETIME, 
 		@CommercialDelphiScore INT,
 		@InTngblAssets DECIMAL(18,6), 
-		@TngblAssets DECIMAL(18,6)
+		@TngblAssets DECIMAL(18,6),
+		@IsHomeOwner BIT
 						
 	SELECT
 		@FirstName = FirstName,
@@ -47,11 +47,13 @@ BEGIN
 		@ReferenceSource = ReferenceSource,
 		@IsOffline = IsOffline,
 		@DateOfBirth = DateOfBirth,
-		@ResidentialStatus = ResidentialStatus
+		@IsHomeOwner = IsOwner
 	FROM
-		Customer
+		Customer,
+		CustomerPropertyStatuses
 	WHERE
-		Id = @CustomerId
+		Customer.Id = @CustomerId AND
+		Customer.PropertyStatusId = CustomerPropertyStatuses.Id
 
 	SELECT @RefNumber = ExperianRefNum FROM Company WHERE Id = @CompanyId
 		
@@ -205,7 +207,7 @@ BEGIN
 		@HasNonYodleeMarketplace AS HasNonYodleeMarketplace,
 		@IsOffline AS IsOffline,
 		@DateOfBirth AS DateOfBirth,
-		CAST((CASE @ResidentialStatus WHEN 'Home owner' THEN 1 ELSE 0 END) AS BIT) AS IsHomeOwner,
+		@IsHomeOwner AS IsHomeOwner,
 		@ExperianScore AS ExperianScore,
 		ISNULL(@EarliestTransactionDate, @Now) AS EarliestTransactionDate,
 		@TotalAnnualizedValue AS TotalAnnualizedValue,

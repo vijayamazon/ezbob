@@ -43,7 +43,8 @@ BEGIN
 		c.Gender,
 		c.DateOfBirth,
 		c.MaritalStatus,
-		c.ResidentialStatus,
+		cps.IsOwner,
+		cps.Description,
 		c.TypeOfBusiness,
 		c.ReferenceSource,
 		ISNULL(lmt.LoanId, 0) AS LoanID,
@@ -53,6 +54,7 @@ BEGIN
 	FROM
 		CashRequests r
 		INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
+		INNER JOIN CustomerPropertyStatuses cps ON c.PropertyStatusId = cps.Id
 		INNER JOIN LoanType lt ON r.LoanTypeId = lt.Id
 		INNER JOIN DiscountPlan dp ON r.DiscountPlanId = dp.Id
 		LEFT JOIN (

@@ -206,23 +206,25 @@ namespace EZBob.DatabaseLib.Model.Database {
 	#region class PersonalInfo
 
 	public class PersonalInfo {
-		public string FirstName { get; set; }
-		public string MiddleInitial { get; set; }
-		public string Surname { get; set; }
+		public virtual string FirstName { get; set; }
+		public virtual string MiddleInitial { get; set; }
+		public virtual string Surname { get; set; }
 		public virtual string Fullname { get; set; }
-		public DateTime? DateOfBirth { get; set; }
-		public int? TimeAtAddress { get; set; }
-		public string ResidentialStatus { get; set; }
-		public Gender Gender { get; set; }
-		public MaritalStatus MaritalStatus { get; set; }
-		public TypeOfBusiness TypeOfBusiness { get; set; }
-		public string TypeOfBusinessName { get { return TypeOfBusiness.ToString(); } }
-		public IndustryType? IndustryType { get; set; }
-		public string DaytimePhone { get; set; }
-		public string MobilePhone { get; set; }
-		public decimal? OverallTurnOver { get; set; }
-		public decimal? WebSiteTurnOver { get; set; }
-		public bool ConsentToSearch { get; set; }
+		public virtual DateTime? DateOfBirth { get; set; }
+		public virtual int? TimeAtAddress { get; set; }
+		public virtual string ResidentialStatus { get; set; }
+		public virtual Gender Gender { get; set; }
+		public virtual MaritalStatus MaritalStatus { get; set; }
+		public virtual TypeOfBusiness TypeOfBusiness { get; set; }
+		public virtual string TypeOfBusinessName { get { return TypeOfBusiness.ToString(); } }
+		public virtual IndustryType? IndustryType { get; set; }
+		public virtual string DaytimePhone { get; set; }
+		public virtual string MobilePhone { get; set; }
+		public virtual decimal? OverallTurnOver { get; set; }
+		public virtual decimal? WebSiteTurnOver { get; set; }
+		public virtual bool ConsentToSearch { get; set; }
+
+		// TODO: retire method
 		public string BirthDateYMD() {
 			return DateOfBirth.HasValue ? DateOfBirth.Value.ToString("yyyy-M-d", CultureInfo.InvariantCulture) : "";
 		} // BirthDateYMD
@@ -348,6 +350,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // CashRequests
 
 		public virtual bool IsWasLate { get; set; }
+		public virtual PropertyStatus PropertyStatus { get; set; }
 
 		public virtual PaymentdemeanorType PaymentDemenaor {
 			get {
