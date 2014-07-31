@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EzBob.Models;
 	using System.Text.RegularExpressions;
+	using Ezbob.Backend.Models;
 	using LandRegistryLib;
 	using ServiceClientProxy;
 	using StructureMap;
@@ -25,6 +26,7 @@
 		public CustomerAddress PayPalAddress { get; set; }
 		public CustomerAddress SellerAddress { get; set; }
 		public CrossCheckStatus CrossCheckStatus { get; set; }
+		public Ezbob.Backend.Models.PropertyStatus PropertyStatus { get; set; }
 
 		public List<Director> Directors { get; set; }
 		public Customer Customer { get; set; }
@@ -122,6 +124,8 @@
 				Application = Mapper.Map<EZBob.DatabaseLib.Model.Database.PersonalInfo, PersonalInfo>(customer.PersonalInfo);
 				Application.Email = customer.Name;
 			}
+
+			PropertyStatus = new Ezbob.Backend.Models.PropertyStatus { Id = customer.PropertyStatus.Id, Description = customer.PropertyStatus.Description, IsOwner = customer.PropertyStatus.IsOwner };
 
 			var ebay = customer.GetEbayCustomerMarketPlaces().FirstOrDefault();
 			if (ebay != null)

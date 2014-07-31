@@ -1,6 +1,5 @@
 ﻿@using EZBob.DatabaseLib.Model.Database
 @using EzBob.Web.Areas.Underwriter.Models
-@using EzBob.Web.Code
 @using Ezbob.Backend.Models
 @using Ezbob.Utils.Extensions
 @using PersonalInfo = EZBob.DatabaseLib.Model.Database.PersonalInfo
@@ -124,7 +123,7 @@
                         </tr>
                         <tr>
                             <td><b>Residential Status</b></td>
-                            <td>@Model.Application.ResidentialStatus</td>
+                            <td>@Model.PropertyStatus.Description</td>
                             <td>@Model.EBay.ResidentialStatus</td>
                             <td>@Model.PayPal.ResidentialStatus</td>
                         </tr>
@@ -294,7 +293,7 @@
                         <tr>
                             <td><b>Property net worth</b></td>
                             <td colspan="4">
-                                @if (@Model.Application.ResidentialStatus != null && (Model.Application.ResidentialStatus == "I own only this property" || Model.Application.ResidentialStatus == "I own this property and other properties" || Model.Application.ResidentialStatus == "I live in the above and own other properties" || Model.Application.ResidentialStatus == "Home owner"))
+                                @if (@Model.PropertyStatus != null && Model.PropertyStatus.IsOwner)
                                 {
                                     @Html.Raw("£")
                                     @Model.AssetWorth.ToString("N0")
