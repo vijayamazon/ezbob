@@ -106,7 +106,12 @@
 					FullGender = Gender == "M" ? "Male" : "Female";
 					FamilyStatus = customer.PersonalInfo.MaritalStatus.ToString();
 					ResidentialStatus = customer.PersonalInfo.ResidentialStatus;
-					PropertyStatus = customer.PropertyStatus;
+					PropertyStatus = new Ezbob.Backend.Models.PropertyStatus
+						{
+							Description = customer.PropertyStatus.Description,
+							Id = customer.PropertyStatus.Id,
+							IsOwner = customer.PropertyStatus.IsOwner
+						};
 				}
 			}
 
