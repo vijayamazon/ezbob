@@ -4,17 +4,17 @@
 	using System.Runtime.Serialization;
 
 	[DataContract]
-	public class PropertyStatusGroup
+	public class PropertyStatusGroupModel
 	{
 		[DataMember]
 		public string Title { get; set; }
 
 		[DataMember]
-		public List<PropertyStatus> Statuses { get; set; }
+		public List<PropertyStatusModel> Statuses { get; set; }
 	}
 
 	[DataContract]
-	public class PropertyStatus
+	public class PropertyStatusModel
 	{
 		[DataMember]
 		public int Id { get; set; }

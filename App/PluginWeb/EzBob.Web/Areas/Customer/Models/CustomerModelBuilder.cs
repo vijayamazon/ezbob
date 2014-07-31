@@ -68,7 +68,7 @@
 
 			if (customer.PropertyStatus != null)
 			{
-				customerModel.PropertyStatus = new Ezbob.Backend.Models.PropertyStatus
+				customerModel.PropertyStatus = new PropertyStatusModel
 					{
 						Id = customer.PropertyStatus.Id,
 						Description = customer.PropertyStatus.Description,

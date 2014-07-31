@@ -1,11 +1,12 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Models {
+﻿namespace EzBob.Web.Areas.Underwriter.Models 
+{
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models;
+	using Ezbob.Backend.Models;
 	using Ezbob.Utils;
 	using Infrastructure;
 	using NHibernate;
@@ -54,7 +55,7 @@
 		public string Gender { get; set; }
 		public string FullGender { get; set; }
 		public string FamilyStatus { get; set; }
-		public Ezbob.Backend.Models.PropertyStatus PropertyStatus { get; set; }
+		public PropertyStatusModel PropertyStatus { get; set; }
 		public string CompanyName { get; set; }
 		public string CompanyType { get; set; }
 		public string CompanySeniority { get; set; }
@@ -106,7 +107,7 @@
 					FamilyStatus = customer.PersonalInfo.MaritalStatus.ToString();
 					if (customer.PropertyStatus != null)
 					{
-						PropertyStatus = new Ezbob.Backend.Models.PropertyStatus
+						PropertyStatus = new PropertyStatusModel
 							{
 								Description = customer.PropertyStatus.Description,
 								Id = customer.PropertyStatus.Id,

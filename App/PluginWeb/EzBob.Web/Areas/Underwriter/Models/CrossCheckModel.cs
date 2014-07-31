@@ -26,7 +26,7 @@
 		public CustomerAddress PayPalAddress { get; set; }
 		public CustomerAddress SellerAddress { get; set; }
 		public CrossCheckStatus CrossCheckStatus { get; set; }
-		public Ezbob.Backend.Models.PropertyStatus PropertyStatus { get; set; }
+		public PropertyStatusModel PropertyStatus { get; set; }
 
 		public List<Director> Directors { get; set; }
 		public Customer Customer { get; set; }
@@ -127,7 +127,7 @@
 
 			if (customer.PropertyStatus != null)
 			{
-				PropertyStatus = new Ezbob.Backend.Models.PropertyStatus
+				PropertyStatus = new PropertyStatusModel
 					{
 						Id = customer.PropertyStatus.Id,
 						Description = customer.PropertyStatus.Description,

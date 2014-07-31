@@ -8,6 +8,6 @@
 	public class PropertyStatusesActionResult : ActionResult
 	{
 		[DataMember]
-		public List<PropertyStatusGroup> Groups { get; set; }
+		public List<PropertyStatusGroupModel> Groups { get; set; }
 	}
 }
