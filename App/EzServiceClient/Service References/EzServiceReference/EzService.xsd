@@ -286,7 +286,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Groups" nillable="true" type="q18:ArrayOfPropertyStatusGroupModel" />
+          <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Groups" nillable="true" type="q18:ArrayOfPropertyStatusGroup" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
