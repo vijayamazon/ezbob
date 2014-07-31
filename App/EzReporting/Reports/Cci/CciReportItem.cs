@@ -45,7 +45,7 @@ namespace Reports
 			oOutput.Columns.Add("HasOtherEbay", typeof(string));
 			oOutput.Columns.Add("CurrentAddress", typeof(string));
 			oOutput.Columns.Add("OfficeAdress", typeof(string));
-			oOutput.Columns.Add("ResidentialStatus", typeof(string));
+			oOutput.Columns.Add("PropertyStatusDescription", typeof(string));
 			oOutput.Columns.Add("Notes", typeof(string));
 			oOutput.Columns.Add("CssClass", typeof(string));
 
@@ -86,7 +86,7 @@ namespace Reports
 				HasOtherEbay = oRow["HasOtherEbay"].ToString();
 				CurrentAddress = oRow["CurrentAddress"].ToString();
 				OfficeAdress = oRow["OfficeAddress"].ToString();
-				ResidentialStatus = oRow["ResidentialStatus"].ToString();
+				PropertyStatusDescription = oRow["PropertyStatusDescription"].ToString();
 			}
 			catch {
 				// Silently ignore.
@@ -114,7 +114,7 @@ namespace Reports
 				Currency, LoanRef, DateOfAgreement, DateOfDefault, CompanyName, LegalProcess, LegalAmount,
 				Gender, FirstName, LastName, DateOfBirth, NationalInsurance, MobilePhone, DaytimePhone,
 				EmailApplicant, EbayPhone, PaypalPhone, EmailEbay, HasOtherEbay, CurrentAddress, OfficeAdress,
-				ResidentialStatus, Notes, sClass
+				PropertyStatusDescription, Notes, sClass
 			);
 		} // ToRow
 
@@ -150,7 +150,7 @@ namespace Reports
 		public string HasOtherEbay { get; private set; }
 		public string CurrentAddress { get; private set; }
 		public string OfficeAdress { get; private set; }
-		public string ResidentialStatus { get; private set; }
+		public string PropertyStatusDescription { get; private set; }
 		public string Notes { get { return ""; } }
 
 		#endregion properties

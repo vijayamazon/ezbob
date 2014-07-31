@@ -158,7 +158,7 @@
 			BuilDataAlerts(customer, summary, context.UserId);
 
 			bool hasMortgage = false;
-			bool isHomeOwner = customer.PersonalInfo != null && customer.PersonalInfo.ResidentialStatus == "Home Owner";
+			bool isHomeOwner = customer.PropertyStatus != null && customer.PropertyStatus.IsOwner;
 			try
 			{
 				hasMortgage = serviceClient.Instance.LoadExperianConsumerMortageData(customer.Id).Value.NumMortgages > 0;

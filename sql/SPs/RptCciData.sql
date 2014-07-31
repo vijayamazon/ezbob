@@ -170,9 +170,10 @@ BEGIN
 			ISNULL(' ' + eba.PostalCode, '') +
 			ISNULL(' ' + eba.CountryName, '')
 		) AS OfficeAddress,
-		c.ResidentialStatus
+		cps.Description AS PropertyStatusDescription
 	FROM
-		Customer c
+		Customer c,
+		INNER JOIN CustomerPropertyStatuses cps ON c.PropertyStatusId = cps.Id
 		INNER JOIN #ebp ebp ON c.Id = ebp.CustomerID
 		LEFT JOIN Loan l ON c.Id = l.CustomerId
 		LEFT JOIN LoanTransaction t

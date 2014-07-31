@@ -144,7 +144,7 @@ BEGIN
 		c.MobilePhone,
 		c.DaytimePhone,
 		c.TimeAtAddress,
-		c.ResidentialStatus,
+		cps.Description,
 		c.TypeOfBusiness,
 		co.CompanyName,
 		c.IsOffline,
@@ -153,6 +153,7 @@ BEGIN
 		w.WizardStepTypeName
 	FROM
 		Customer c
+		INNER JOIN CustomerPropertyStatuses cps ON cps.Id = c.PropertyStatusId
 		LEFT JOIN Company co ON co.Id = c.CompanyId
 		INNER JOIN #RelevantCustomers rc ON c.Id = rc.CustomerID
 		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
