@@ -1,4 +1,14 @@
-﻿namespace Reports {
+﻿//*****************************************************************************
+//
+// July 31, 2014
+// This class was not changed to use ExperianLtd* tables, and it still parses
+// XML. Parsing XML here is all right because this class is only used to create
+// some report. The report is not part of the report system. It is
+// manually created by Adi once in a while.
+//
+//*****************************************************************************
+
+namespace Reports {
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
