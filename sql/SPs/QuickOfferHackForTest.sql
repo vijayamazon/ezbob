@@ -14,6 +14,8 @@ ALTER PROCEDURE QuickOfferHackForTest
 AS
 BEGIN
 	SET NOCOUNT ON;
+/*
+	------------------------------------------------------------------------------
 
 	IF NOT EXISTS (SELECT * FROM Customer WHERE Id = @CustomerID AND IsTest = 1)
 	BEGIN
@@ -21,15 +23,34 @@ BEGIN
 		RETURN
 	END
 
+	------------------------------------------------------------------------------
+
 	DECLARE @CompanyRefNum NVARCHAR(50) = 'EB' + RIGHT('00000000' + CONVERT(NVARCHAR, @CustomerID), 8)
 	DECLARE @IncorpDate NVARCHAR(8)
+	DECLARE @AmlMin INT
+	DECLARE @ConsumerScoreMin INT
+
+	------------------------------------------------------------------------------
 
 	SELECT
-		@IncorpDate = CONVERT(NVARCHAR, DATEADD(month, - qoc.CompanySeniorityMonths - 6, GETUTCDATE()), 112)
+		@IncorpDate = CONVERT(NVARCHAR, DATEADD(month, - qoc.CompanySeniorityMonths - 6, GETUTCDATE()), 112),
+		@AmlMin = AmlMin,
+		@ConsumerScoreMin = PersonalScoreMin
 	FROM
 		QuickOfferConfiguration qoc
 	WHERE
 		ID = 1
+
+	------------------------------------------------------------------------------
+
+	insert into MP_ServiceLog (ServiceType, InsertDate, CustomerId) values ('Consumer Request', 'Jul 31 2014', 31)
+
+	insert into ExperianConsumerData (ServiceLogId, CustomerId, HasParsingError, HasExperianError, Bankruptcy, OtherBankruptcy, NOCsOnCCJ, NOCsOnCAIS, NOCAndNOD, SatisfiedJudgement)
+	values (4600, 31, 0, 0, 0, 0, 0, 0, 0, 1)
+
+	insert into ExperianConsumerDataCais (ExperianConsumerDataId) values (18)
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO MP_ExperianDataCache (
 		Name, Surname, PostCode,
@@ -58,24 +79,32 @@ BEGIN
 	WHERE
 		qoc.ID = 1
 
-	UPDATE Customer SET FraudStatus = 0 WHERE Id = @CustomerID
+	------------------------------------------------------------------------------
+
+	UPDATE Customer SET
+		FraudStatus = 0,
+		AmlScore = @AmlMin + 6,
+		ExperianConsumerScore = @ConsumerScoreMin + 36
+	WHERE
+		Id = @CustomerID
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO MP_ServiceLog (ServiceType, InsertDate, RequestData, ResponseData, CustomerId, DirectorId)
-	SELECT
+	VALUES (
 		'AML A check',
 		DATEADD(hour, 8, GETUTCDATE()),
 		'<request>Quick Offer Hack for Test</request>',
-		
+
 		'<?xml version="1.0" encoding="utf-16"?><ProcessConfigResponseType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><ProcessConfigResultsBlock xmlns="http://schema.uk.experian.com/eih/2011/03"><EIAResultBlock><AuthenticationIndex>'
-		+ CONVERT(NVARCHAR, qoc.AmlMin + 6) +
+		+ CONVERT(NVARCHAR, @AmlMin + 6) +
 		'</AuthenticationIndex></EIAResultBlock></ProcessConfigResultsBlock></ProcessConfigResponseType>',
 		
 		@CustomerID,
 		NULL
-	FROM
-		QuickOfferConfiguration qoc
-	WHERE
-		qoc.ID = 1
+	)
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO MP_ExperianDataCache (
 		Name, Surname, PostCode, BirthDate, LastUpdateDate,
@@ -107,6 +136,8 @@ BEGIN
 	WHERE
 		c.Id = @CustomerID
 
+	------------------------------------------------------------------------------
+
 	UPDATE Company SET
 		ExperianRefNum = @CompanyRefNum
 	FROM
@@ -116,5 +147,7 @@ BEGIN
 		c.Id = @CustomerID
 		AND
 		c.CompanyId = b.Id
+*/
+	------------------------------------------------------------------------------
 END
 GO

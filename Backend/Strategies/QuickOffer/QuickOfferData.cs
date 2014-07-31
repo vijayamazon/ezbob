@@ -40,15 +40,9 @@
 				RequestedAmount = oReader["RequestedAmount"];
 				CompanyRefNum = oReader["CompanyRefNum"];
 				// DefaultCount = oReader["DefaultCount"];
-				// AmlID = oReader["AmlID"];
-				AmlData = oReader["AmlData"];
-				// PersonalID = oReader["PersonalID"];
-				// PersonalScore = oReader["PersonalScore"];
-				// CompanyID = oReader["CompanyID"];
-				CompanyData = oReader["CompanyData"];
+				Aml = oReader["AmlScore"];
 				FirstName = oReader["FirstName"];
 				LastName = oReader["LastName"];
-				//ConsumerData = oReader["ConsumerData"];
 				Enabled = QuickOfferConfiguration.GetEnabledStatus(oReader["Enabled"]);
 				FundsAvailable = oReader["FundsAvailable"];
 				LoanCount = oReader["LoanCount"];
@@ -149,7 +143,7 @@
 						oLog.Warn("Failed to parse quick offer id from {0}", oID.Value.ToString());
 				}
 				catch (Exception e) {
-					oLog.Alert("Failed to save a quick offer to DB.", e);
+					oLog.Alert(e, "Failed to save a quick offer to DB.");
 				} // try
 			} // if
 
@@ -168,12 +162,7 @@
 		private decimal RequestedAmount;
 		private string CompanyRefNum;
 		// private int DefaultCount;
-		// private long AmlID;
-		private string AmlData;
-		// private long PersonalID;
-		// private int PersonalScore;
-		// private long CompanyID;
-		private string CompanyData;
+		private int Aml;
 		private string FirstName;
 		private string LastName;
 		
@@ -187,7 +176,6 @@
 
 		private string FatalMsg;
 
-		private int Aml;
 		private int BusinessScore;
 		private DateTime? IncorporationDate;
 		private decimal TangibleEquity;
@@ -275,27 +263,24 @@
 			if (IsThinFile())
 				return;
 
-			Aml = m_oExperianUtils.DetectAml(AmlData);
-			if (Aml < Cfg.AmlMin) {
-				Log.Debug("QuickOffer.Validate: AML is too low.");
+			var oLoader = new LoadExperianLtd(CompanyRefNum, 0, DB, Log);
+			oLoader.Execute();
+
+			if (oLoader.Result.RegisteredNumber != CompanyRefNum)
 				return;
-			} // if
 
-			XmlNode oCompanyInfo = Xml.ParseRoot(CompanyData);
-
-			if (!m_oExperianUtils.IsDirector(oCompanyInfo, FirstName, LastName)) {
+			if (!m_oExperianUtils.IsDirector(oLoader.Result, FirstName, LastName)) {
 				Log.Debug("QuickOffer.Validate: the customer is not director of this company.");
 				return;
 			} // if
 
-			BusinessScore = m_oExperianUtils.DetectBusinessScore(oCompanyInfo);
+			BusinessScore = oLoader.Result.GetCommercialDelphiScore();
 			if (BusinessScore < Cfg.BusinessScoreMin) {
 				Log.Debug("QuickOffer.Validate: business score is too low.");
 				return;
 			} // if
 
-			IncorporationDate = m_oExperianUtils.DetectIncorporationDate(oCompanyInfo);
-
+			IncorporationDate = oLoader.Result.IncorporationDate;
 			if (!IncorporationDate.HasValue) {
 				Log.Debug("QuickOffer.Validate: business age cannot be detected.");
 				return;
@@ -306,10 +291,10 @@
 				return;
 			} // if
 
-			decimal nTangibleEquity = 0;
-			decimal nTotalCurrentAssets = 0;
+			decimal nTangibleEquity;
+			decimal nTotalCurrentAssets;
 
-			m_oExperianUtils.DetectTangibleEquity(oCompanyInfo, out nTangibleEquity, out nTotalCurrentAssets);
+			m_oExperianUtils.DetectTangibleEquity(oLoader.Result, out nTangibleEquity, out nTotalCurrentAssets);
 
 			TangibleEquity = nTangibleEquity;
 			TotalCurrentAssets = nTotalCurrentAssets;
@@ -372,16 +357,6 @@
 				return false;
 			} // if
 
-			if (string.IsNullOrWhiteSpace(AmlData)) {
-				Log.Debug("AML data not set.");
-				return false;
-			} // if
-
-			if (string.IsNullOrWhiteSpace(CompanyData)) {
-				Log.Debug("Company Experian data not set.");
-				return false;
-			} // if
-
 			if (string.IsNullOrWhiteSpace(FirstName)) {
 				Log.Debug("Customer first name not set.");
 				return false;
@@ -399,14 +374,15 @@
 
 		#region method IsThinFile
 
-		private bool IsThinFile()
-		{
+		private bool IsThinFile() {
 			var experianConsumer = new LoadExperianConsumerData(CustomerID, null, null, DB, Log);
-			if (experianConsumer.Result.ServiceLogId != null || !experianConsumer.Result.Cais.Any())
-			{
+			experianConsumer.Execute();
+
+			if ((experianConsumer.Result.ServiceLogId == null) || (experianConsumer.Result.Cais.Count < 1)) {
 				Log.Debug("No Consumer Data or CAIS details data not found: this is a thin file.");
 				return true;
-			}
+			} // if
+
 			return false;
 		} // IsThinFile
 

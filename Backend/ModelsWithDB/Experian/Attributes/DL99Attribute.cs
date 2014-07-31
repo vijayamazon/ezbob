@@ -4,7 +4,7 @@ namespace Ezbob.Backend.ModelsWithDB.Experian.Attributes {
 			string sNodeName = null,
 			string sTargetDisplayName = null,
 			string oMap = null
-			) : base("DL99", sNodeName, sTargetDisplayName, oMap) {}
+		) : base("DL99", sNodeName, sTargetDisplayName, oMap) {}
 
 		public override DisplayMetaData MetaData {
 			get {

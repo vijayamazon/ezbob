@@ -9,7 +9,10 @@ RETURNS @out TABLE (
 	LoanCount INT NULL,
 	IssuedAmount DECIMAL(18, 4) NULL,
 	OpenCashRequests DECIMAL(18, 4) NULL,
-	ErrorMsg NVARCHAR(255) NOT NULL
+	ErrorMsg NVARCHAR(255) NOT NULL,
+	AmlMin INT,
+	ConsumerScoreMin INT,
+	ApplicantMinAgeYears INT
 )
 AS
 BEGIN
@@ -20,12 +23,23 @@ BEGIN
 	DECLARE @IssuedAmount DECIMAL(18, 4)
 	DECLARE @OpenCashRequests DECIMAL(18, 4)
 	DECLARE @Enabled INT
+	DECLARE @AmlMin INT
+	DECLARE @ConsumerScoreMin INT
+	DECLARE @ApplicantMinAgeYears INT
 
 	DECLARE @bContinue BIT = 1
 
 	IF @bContinue = 1
 	BEGIN
-		SELECT @Enabled = Enabled FROM QuickOfferConfiguration WHERE ID = 1
+		SELECT
+			@Enabled = Enabled,
+			@AmlMin = AmlMin,
+			@ConsumerScoreMin = PersonalScoreMin,
+			@ApplicantMinAgeYears = ApplicantMinAgeYears
+		FROM
+			QuickOfferConfiguration
+		WHERE
+			ID = 1
 	
 		IF @Enabled IS NULL OR @Enabled = 0
 		BEGIN
@@ -33,7 +47,7 @@ BEGIN
 			SET @bContinue = 0
 		END
 		ELSE BEGIN
-			INSERT INTO @out (Enabled, ErrorMsg) VALUES (@Enabled, '')
+			INSERT INTO @out (Enabled, ErrorMsg, AmlMin, ConsumerScoreMin, ApplicantMinAgeYears) VALUES (@Enabled, '', @AmlMin, @ConsumerScoreMin, @ApplicantMinAgeYears)
 			SET @bContinue = 1
 		END
 	END
@@ -137,6 +151,4 @@ BEGIN
 
 	RETURN
 END
-
 GO
-

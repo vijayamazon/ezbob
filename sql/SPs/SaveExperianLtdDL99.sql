@@ -26,7 +26,11 @@ CREATE TYPE ExperianLtdDL99List AS TABLE (
 	TotalCash DECIMAL(18, 6) NULL,
 	TotalCurrLblts DECIMAL(18, 6) NULL,
 	TotalNonCurr DECIMAL(18, 6) NULL,
-	TotalShareFund DECIMAL(18, 6) NULL
+	TotalShareFund DECIMAL(18, 6) NULL,
+	FinDirLoans DECIMAL(18, 6) NULL,
+	FinLbltsDirLoans DECIMAL(18, 6) NULL,
+	CurrDirLoans DECIMAL(18, 6) NULL,
+	TotalCurrAssets DECIMAL(18, 6) NULL
 )
 GO
 
@@ -53,7 +57,11 @@ BEGIN
 		TotalCash,
 		TotalCurrLblts,
 		TotalNonCurr,
-		TotalShareFund
+		TotalShareFund,
+		FinDirLoans,
+		FinLbltsDirLoans,
+		CurrDirLoans,
+		TotalCurrAssets
 	) SELECT
 		ExperianLtdID,
 		Date,
@@ -71,9 +79,11 @@ BEGIN
 		TotalCash,
 		TotalCurrLblts,
 		TotalNonCurr,
-		TotalShareFund
+		TotalShareFund,
+		FinDirLoans,
+		FinLbltsDirLoans,
+		CurrDirLoans,
+		TotalCurrAssets
 	FROM @Tbl
 END
 GO
-
-

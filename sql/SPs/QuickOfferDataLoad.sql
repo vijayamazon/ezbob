@@ -16,13 +16,11 @@ BEGIN
 
 	DECLARE @CompanyRefNum NVARCHAR(50)
 	DECLARE @DefaultCount INT
-	DECLARE @AmlID BIGINT
-	DECLARE @PersonalID BIGINT
-	DECLARE @PersonalScore INT
-	DECLARE @CompanyID BIGINT
+	DECLARE @AmlScore INT
 	DECLARE @FirstName NVARCHAR(250)
 	DECLARE @LastName NVARCHAR(250)
 	DECLARE @RequestedAmount DECIMAL(18, 0)
+	DECLARE @ConsumerScore INT
 
 	DECLARE @Enabled INT
 	DECLARE @FundsAvailable DECIMAL(18, 4)
@@ -30,6 +28,9 @@ BEGIN
 	DECLARE @IssuedAmount DECIMAL(18, 4)
 	DECLARE @OpenCashRequests DECIMAL(18, 4)
 	DECLARE @ErrorMsg NVARCHAR(255)
+	DECLARE @AmlMin INT
+	DECLARE @ConsumerScoreMin INT
+	DECLARE @ApplicantMinAgeYears INT
 
 	DECLARE @FatalMsg NVARCHAR(255)
 	
@@ -48,7 +49,10 @@ BEGIN
 		@LoanCount = LoanCount,
 		@IssuedAmount = IssuedAmount,
 		@OpenCashRequests = OpenCashRequests,
-		@ErrorMsg = ErrorMsg
+		@ErrorMsg = ErrorMsg,
+		@AmlMin = AmlMin,
+		@ConsumerScoreMin = ConsumerScoreMin,
+		@ApplicantMinAgeYears = ApplicantMinAgeYears
 	FROM
 		dbo.udfCanQuickOffer()
 
@@ -95,7 +99,9 @@ BEGIN
 	SELECT
 		@CompanyRefNum = co.ExperianRefNum,
 		@FirstName = cu.FirstName,
-		@LastName = cu.Surname
+		@LastName = cu.Surname,
+		@AmlScore = cu.AmlScore,
+		@ConsumerScore = cu.ExperianConsumerScore
 	FROM
 		Customer cu
 		INNER JOIN Company co
@@ -113,12 +119,32 @@ BEGIN
 		cu.BrokerID IS NULL
 		AND
 		(cu.ReferenceSource IS NULL OR cu.ReferenceSource != 'liqcen')
+		AND
+		DATEDIFF(day, cu.DateOfBirth, GETDATE()) >= 365 * @ApplicantMinAgeYears
 
 	---------------------------------------------------------------------------
 
 	IF @CompanyRefNum IS NULL OR ISNULL(LTRIM(RTRIM(@CompanyRefNum)), '') = ''
 	BEGIN
-		EXECUTE xp_sprintf @FatalMsg OUTPUT, 'Customer %s - one of following: online customer/broker customer/fraud suspect/has no limited company/no company ref num in Company table.', @sCustomerID
+		EXECUTE xp_sprintf @FatalMsg OUTPUT, 'Customer %s - one of following: online customer/too young/broker customer/fraud suspect/has no limited company/no company ref num in Company table.', @sCustomerID
+		SELECT @FatalMsg AS FatalMsg
+		RETURN
+	END
+
+	---------------------------------------------------------------------------
+
+	IF @AmlScore IS NULL OR @AmlScore < @AmlMin
+	BEGIN
+		EXECUTE xp_sprintf @FatalMsg OUTPUT, 'AML score is too low for customer %s.', @sCustomerID
+		SELECT @FatalMsg AS FatalMsg
+		RETURN
+	END
+
+	---------------------------------------------------------------------------
+
+	IF @ConsumerScore IS NULL OR @ConsumerScore < @ConsumerScoreMin
+	BEGIN
+		EXECUTE xp_sprintf @FatalMsg OUTPUT, 'Customer %s: personal score is too low.', @sCustomerID
 		SELECT @FatalMsg AS FatalMsg
 		RETURN
 	END
@@ -136,8 +162,7 @@ BEGIN
 		INNER JOIN QuickOfferConfiguration qoc ON qoc.ID = 1
 	WHERE
 		eda.CustomerId = @CustomerID
-		AND
-		(
+		AND (
 			DATEDIFF(month, eda.Date, GETDATE()) < qoc.NoDefaultsInLastMonths -- default in last X months
 			OR
 			eda.Balance > 0 -- unsettled default
@@ -154,89 +179,6 @@ BEGIN
 
 	---------------------------------------------------------------------------
 	--
-	-- Check existence of AML score.
-	--
-	---------------------------------------------------------------------------
-
-	SELECT TOP 1
-		@AmlID = l.Id
-	FROM
-		MP_ServiceLog l
-	WHERE
-		l.CustomerId = @CustomerID
-		AND
-		l.ServiceType = 'AML A check'
-	ORDER BY
-		l.InsertDate DESC
-
-	---------------------------------------------------------------------------
-
-	IF @AmlID IS NULL
-	BEGIN
-		EXECUTE xp_sprintf @FatalMsg OUTPUT, 'No "AML A check" entry found in MP_ServiceLog for customer %s.', @sCustomerID
-		SELECT @FatalMsg AS FatalMsg
-		RETURN
-	END
-
-	---------------------------------------------------------------------------
-	--
-	-- Check existence of consumer data, age, and personal score.
-	--
-	---------------------------------------------------------------------------
-
-	SELECT TOP 1
-		@PersonalID = edc.Id,
-		@PersonalScore = edc.ExperianScore
-	FROM
-		MP_ExperianDataCache edc
-		INNER JOIN Customer c
-			ON c.Id = @CustomerID
-			AND edc.CustomerId = c.Id
-			AND LOWER(LTRIM(RTRIM(edc.Name))) = LOWER(LTRIM(RTRIM(c.FirstName)))
-			AND LOWER(LTRIM(RTRIM(edc.Surname))) = LOWER(LTRIM(RTRIM(c.Surname)))
-		INNER JOIN QuickOfferConfiguration qoc ON qoc.ID = 1
-	WHERE
-		DATEDIFF(day, edc.BirthDate, GETDATE()) >= 365 * qoc.ApplicantMinAgeYears
-		AND
-		edc.ExperianScore >= qoc.PersonalScoreMin
-	ORDER BY
-		edc.LastUpdateDate DESC
-
-	---------------------------------------------------------------------------
-
-	IF @PersonalScore IS NULL
-	BEGIN
-		EXECUTE xp_sprintf @FatalMsg OUTPUT, 'Customer %s - one of following: no consumer data in MP_ExperianDataCache/too young/personal score is too low.', @sCustomerID
-		SELECT @FatalMsg AS FatalMsg
-		RETURN
-	END
-
-	---------------------------------------------------------------------------
-	--
-	-- Check existence of company data.
-	--
-	---------------------------------------------------------------------------
-
-	SELECT TOP 1
-		@CompanyID = edc.Id
-	FROM
-		MP_ExperianDataCache edc
-	WHERE
-		edc.CompanyRefNumber = @CompanyRefNum
-	ORDER BY
-		edc.LastUpdateDate DESC
-
-	---------------------------------------------------------------------------
-
-	IF @CompanyID IS NULL
-	BEGIN
-		EXECUTE xp_sprintf @FatalMsg OUTPUT, 'No company data found in MP_ExperianDataCache for company %s (customer %s).', @CompanyRefNum, @sCustomerID
-		SELECT @FatalMsg AS FatalMsg
-		RETURN
-	END
-
-	---------------------------------------------------------------------------
-	--
 	-- Final output.
 	--
 	---------------------------------------------------------------------------
@@ -246,15 +188,10 @@ BEGIN
 		@RequestedAmount AS RequestedAmount,
 		@CompanyRefNum AS CompanyRefNum,
 		@DefaultCount AS DefaultCount,
-		@AmlID AS AmlID,
-		(SELECT ResponseData FROM MP_ServiceLog WHERE Id = @AmlID) AS AmlData,
-		@PersonalID AS PersonalID,
-		@PersonalScore AS PersonalScore,
-		@CompanyID AS CompanyID,
-		(SELECT JsonPacket FROM MP_ExperianDataCache WHERE Id = @CompanyID) AS CompanyData,
+		@AmlScore AS AmlScore,
 		LTRIM(RTRIM(@FirstName)) AS FirstName,
 		LTRIM(RTRIM(@LastName)) AS LastName,
-		(SELECT JsonPacket FROM MP_ExperianDataCache WHERE Id = @PersonalID) AS ConsumerData,
+		@ConsumerScore AS ConsumerScore,
 		@Enabled AS Enabled,
 		@FundsAvailable AS FundsAvailable,
 		@LoanCount AS LoanCount,

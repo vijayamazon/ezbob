@@ -31,7 +31,11 @@ BEGIN
 		TotalCash,
 		TotalCurrLblts,
 		TotalNonCurr,
-		TotalShareFund
+		TotalShareFund,
+		FinDirLoans,
+		FinLbltsDirLoans,
+		CurrDirLoans,
+		TotalCurrAssets
 	FROM
 		ExperianLtdDL99
 	WHERE

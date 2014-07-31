@@ -72,5 +72,21 @@ namespace Ezbob.Backend.ModelsWithDB.Experian {
 		[DataMember]
 		[DL99("TOTALSHAREFUND", Transformation = TransformationType.Money)]
 		public decimal? TotalShareFund { get; set; }
+
+		[DataMember]
+		[DL99("FINDIRLOANS", IsCompanyScoreModel = false)]
+		public decimal? FinDirLoans { get; set; }
+
+		[DataMember]
+		[DL99("FINLBLTSDIRLOANS", IsCompanyScoreModel = false)]
+		public decimal? FinLbltsDirLoans { get; set; }
+
+		[DataMember]
+		[DL99("CURRDIRLOANS", IsCompanyScoreModel = false)]
+		public decimal? CurrDirLoans { get; set; }
+
+		[DataMember]
+		[DL99("TOTALCURRASSETS", IsCompanyScoreModel = false)]
+		public decimal? TotalCurrAssets { get; set; }
 	} // class ExperianLtdDL99
 } // namespace

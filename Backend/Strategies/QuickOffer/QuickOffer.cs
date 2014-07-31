@@ -7,8 +7,6 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region class QuickOffer
-
 	public class QuickOffer : AStrategy {
 		#region public
 
@@ -53,10 +51,10 @@
 			// * Limited Company only.
 			// * Offline clients only.
 			// * Min age: 18 years (BirthDate in the latest by LastUpdateDate MP_ExperianDataCache join by CustomerId and Name and Surname).
-			// * Personal score >= 560 (ExperianScore in the latest by LastUpdateDate MP_ExperianDataCache join by CustomerId and Name and Surname).
+			// * Personal score >= 560 (ExperianConsumerScore in Customer).
 			// * No defaults in last two years (ExperianDefaultAccount join CustomerId filter "Date").
 			// + "Thick" file only.
-			// + AML > 70 (join by CustomerId, the latest by InsertDate, with ServiceType = 'AML A check' in MP_ServiceLog: innerText of from document element ./ProcessConfigResultsBlock/EIAResultBlock/AuthenticationIndex).
+			// * AML > 70 (AmlScore field in Customer table).
 			// + The applicant should be director of the company (Experian contains ./REQUEST/DL72/DIRFORENAME and ./REQUEST/DL72/DIRSURNAME).
 			// + Business score >= 31 (./REQUEST/DL76/RISKSCORE in MP_ExperianDataCache join by CompanyRefNum).
 			// + Company seniority: 3 years at least (./REQUEST/DL12/DATEINCORP in MP_ExperianDataCache join by CompanyRefNum).
@@ -64,7 +62,7 @@
 			//   DL99 values should be from the latest financial year:
 			//   DATEOFACCOUNTS-YYYY, DATEOFACCOUNTS-MM, DATEOFACCOUNTS-DD
 
-			// Starred items are currently (Jan 22 2014) checked in the stored procedure: if all the conditions are met
+			// Starred items are currently (July 31, 2014) checked in the stored procedure: if all the conditions are met
 			// it returns one row of data; otherwise it returns nothing.
 
 			// Plussed items are checked in QuickOfferData.Load method.
@@ -192,6 +190,4 @@
 
 		#endregion private
 	} // class QuickOffer
-
-	#endregion class QuickOffer
 } // namespace EzBob.Backend.Strategies.QuickOffer

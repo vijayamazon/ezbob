@@ -14,17 +14,11 @@
 			Result = new ExperianConsumerData();
 
 			if (nServiceLogId.HasValue)
-			{
 				m_nWorkMode = WorkMode.ServiceLog;
-			}
 			else if (directorId.HasValue)
-			{
 				m_nWorkMode = WorkMode.CacheDirector;
-			}
 			else
-			{
 				m_nWorkMode = WorkMode.CacheCustomer;
-			}
 
 			m_nCustomerId = customerId;
 			m_nDirectorId = directorId;
@@ -82,87 +76,91 @@
 			foreach (SafeReader sr in data) {
 				string sType = sr["DatumType"];
 				
-				switch (sType)
-				{
-					case "ExperianConsumerData":
-						sr.Fill(Result);
-						Result.Id = sr["Id"];
-						break;
-					case "Metadata":
-						Result.InsertDate = sr["InsertDate"];
-						break;
-					case "ExperianConsumerDataApplicant":
-						var a = sr.Fill<ExperianConsumerDataApplicant>();
-						a.Id = sr["Id"];
-						Result.Applicants.Add(a);
-						break;
-					case "ExperianConsumerDataLocation":
-						var l = sr.Fill<ExperianConsumerDataLocation>();
-						l.Id = sr["Id"];
-						Result.Locations.Add(l);
-						break;
-					case "ExperianConsumerDataResidency":
-						var r = sr.Fill<ExperianConsumerDataResidency>();
-						r.Id = sr["Id"];
-						Result.Residencies.Add(r);
-						break;
-					case "ExperianConsumerDataCais":
-						var c = sr.Fill<ExperianConsumerDataCais>();
-						c.Id = sr["Id"];
-						Result.Cais.Add(c);
-						break;
-					case "ExperianConsumerDataCaisBalance":
-						var b = sr.Fill<ExperianConsumerDataCaisBalance>();
-						b.Id = sr["Id"];
-						caisBalance.Add(b);
-						break;
-					case "ExperianConsumerDataCaisCardHistory":
-						var h = sr.Fill<ExperianConsumerDataCaisCardHistory>();
-						h.Id = sr["Id"];
-						caisCards.Add(h);
-						break;
-					case "ExperianConsumerNoc":
-						var n = sr.Fill<ExperianConsumerDataNoc>();
-						n.Id = sr["Id"];
-						Result.Nocs.Add(n);
-						break;
-				}
+				switch (sType) {
+				case "ExperianConsumerData":
+					sr.Fill(Result);
+					Result.Id = sr["Id"];
+					break;
+
+				case "Metadata":
+					Result.InsertDate = sr["InsertDate"];
+					break;
+
+				case "ExperianConsumerDataApplicant":
+					var a = sr.Fill<ExperianConsumerDataApplicant>();
+					a.Id = sr["Id"];
+					Result.Applicants.Add(a);
+					break;
+
+				case "ExperianConsumerDataLocation":
+					var l = sr.Fill<ExperianConsumerDataLocation>();
+					l.Id = sr["Id"];
+					Result.Locations.Add(l);
+					break;
+
+				case "ExperianConsumerDataResidency":
+					var r = sr.Fill<ExperianConsumerDataResidency>();
+					r.Id = sr["Id"];
+					Result.Residencies.Add(r);
+					break;
+
+				case "ExperianConsumerDataCais":
+					var c = sr.Fill<ExperianConsumerDataCais>();
+					c.Id = sr["Id"];
+					Result.Cais.Add(c);
+					break;
+
+				case "ExperianConsumerDataCaisBalance":
+					var b = sr.Fill<ExperianConsumerDataCaisBalance>();
+					b.Id = sr["Id"];
+					caisBalance.Add(b);
+					break;
+
+				case "ExperianConsumerDataCaisCardHistory":
+					var h = sr.Fill<ExperianConsumerDataCaisCardHistory>();
+					h.Id = sr["Id"];
+					caisCards.Add(h);
+					break;
+
+				case "ExperianConsumerNoc":
+					var n = sr.Fill<ExperianConsumerDataNoc>();
+					n.Id = sr["Id"];
+					Result.Nocs.Add(n);
+					break;
+				} // switch
 			} // for each row
-			Log.Debug("cais {2} caisBalance {0} caisCards {1}", caisBalance.Count, caisCards.Count, Result.Cais.Count);
-			if (!Result.Cais.Any()) return;
+
+			Log.Debug(
+				"ServiceLogID: {3}, cais {2} caisBalance {0} caisCards {1}",
+				caisBalance.Count,
+				caisCards.Count,
+				Result.Cais.Count,
+				Result.ServiceLogId
+			);
+
+			if (!Result.Cais.Any())
+				return;
 			
 			foreach (var c in Result.Cais)
-			{
 				Log.Debug("caisid {0}", c.Id);
-			}
 
-			if (caisBalance.Any())
-			{
-				foreach (var b in caisBalance)
-				{
-					if (b.ExperianConsumerDataCaisId.HasValue)
-					{
-						var cais = Result.Cais.FirstOrDefault(x => x.Id == b.ExperianConsumerDataCaisId.Value);
-						Log.Debug("cais found {0} cais id {1}", cais != null, b.ExperianConsumerDataCaisId);
-						if (cais != null)
-						{
-							Log.Debug("cais id {0} cais balance {1}", cais.Id, b.Id);
-							cais.AccountBalances.Add(b);
-						}
+			foreach (var b in caisBalance) {
+				if (b.ExperianConsumerDataCaisId.HasValue) {
+					var cais = Result.Cais.FirstOrDefault(x => x.Id == b.ExperianConsumerDataCaisId.Value);
+
+					Log.Debug("cais found {0} cais id {1}", cais != null, b.ExperianConsumerDataCaisId);
+
+					if (cais != null) {
+						Log.Debug("cais id {0} cais balance {1}", cais.Id, b.Id);
+						cais.AccountBalances.Add(b);
 					}
 				}
 			}
 
-			if (caisCards.Any())
-			{
-				foreach (var c in caisCards)
-				{
-					var cais = Result.Cais.FirstOrDefault(x => x.Id == c.ExperianConsumerDataCaisId);
-					if (cais != null)
-					{
-						cais.CardHistories.Add(c);
-					}
-				}
+			foreach (var c in caisCards) {
+				var cais = Result.Cais.FirstOrDefault(x => x.Id == c.ExperianConsumerDataCaisId);
+				if (cais != null)
+					cais.CardHistories.Add(c);
 			}
 		} // Execute
 
