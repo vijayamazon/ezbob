@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
+	using ConfigManager;
 	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -50,7 +51,7 @@
 		#region property ProfilePage
 
 		protected virtual string ProfilePage {
-			get { return "https://app.ezbob.com/Account/LogOn"; }
+			get { return CurrentValues.Instance.CustomerSite + "/Account/LogOn"; }
 		} // ProfilePage
 
 		#endregion property ProfilePage
