@@ -46,17 +46,17 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			TypeOfBussnes = GetTypeStatusForColums(application.TypeOfBusiness.ToString(), eBay.SellerInfo.SellerInfoSellerBusinessType);
 		}
 
-		public void BuildMarkerStatusForCustomerAddress(CustomerAddress current, CustomerAddress ebaySeller, CustomerAddress payPall)
+		public void BuildMarkerStatusForCustomerAddress(CustomerAddress current, CustomerAddress ebaySeller, CustomerAddress payPal)
 		{
-			payPall = payPall ?? new CustomerAddress();
+			payPal = payPal ?? new CustomerAddress();
 			ebaySeller = ebaySeller ?? new CustomerAddress();
 			current = current ?? new CustomerAddress();
-			Line1 = GetTypeStatusForColums( ebaySeller.Line1, current.Line1, payPall.Line1);
-			Line2 = GetTypeStatusForColums(ebaySeller.Line2, current.Line2, payPall.Line2);
-			Town = GetTypeStatusForColums(ebaySeller.Town, current.Town, payPall.Town);
-			County = GetTypeStatusForColums(ebaySeller.County, current.County, payPall.County);
-			Country = GetTypeStatusForCountry(ebaySeller.Country, current.Country, payPall.Country);
-			Postcode = GetTypeStatusForColums(ebaySeller.Postcode, current.Postcode, payPall.Postcode);
+			Line1 = GetTypeStatusForColums(ebaySeller.Line1, current.Line1, payPal.Line1);
+			Line2 = GetTypeStatusForColums(ebaySeller.Line2, current.Line2, payPal.Line2);
+			Town = GetTypeStatusForColums(ebaySeller.Town, current.Town, payPal.Town);
+			County = GetTypeStatusForColums(ebaySeller.County, current.County, payPal.County);
+			Country = GetTypeStatusForCountry(ebaySeller.Country, current.Country, payPal.Country);
+			Postcode = GetTypeStatusForColums(ebaySeller.Postcode, current.Postcode, payPal.Postcode);
 		}
 
 		public CrossCheckTypeStatus GetStatusDayTimePhone(string eBayDaytimePhone, string applicationDaytimePhone, string payPalDaytimePhone, CrossCheckTypeStatus defaultStatus)
