@@ -14,6 +14,92 @@
 	public class ExperianLtd : AExperianLtdDataRow {
 		#region public
 
+		#region method Load
+
+		public static ExperianLtd Load(string sCompanyRefNum, AConnection oDB, ASafeLog oLog) {
+			return Load(oDB.ExecuteEnumerable(
+				"CheckLtdCompanyCache",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CompanyRefNum", sCompanyRefNum)
+			), oLog);
+		} // Load
+
+		public static ExperianLtd Load(long nServiceLogID, AConnection oDB, ASafeLog oLog) {
+			return Load(oDB.ExecuteEnumerable(
+				"LoadFullExperianLtd",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("ServiceLogID", nServiceLogID)
+			), oLog);
+		} // Load
+
+		private static ExperianLtd Load(IEnumerable<SafeReader> lst, ASafeLog oLog) {
+			var oResult = new ExperianLtd();
+
+			var oKidMap = new SortedTable<string, long, AExperianLtdDataRow>();
+
+			foreach (SafeReader sr in lst) {
+				string sType = sr["DatumType"];
+
+				if (sType == "Metadata") {
+					oResult.ReceivedTime = sr["InsertDate"];
+					continue;
+				} // if
+
+				Type oType = typeof(ExperianLtd).Assembly.GetType(typeof (ExperianLtd).Namespace + "." + sType);
+
+				if (oType == null) {
+					oLog.Alert("Could not find type '{0}'.", sType);
+					continue;
+				} // if
+
+				AExperianLtdDataRow oRow;
+
+				if (oType == typeof (ExperianLtd))
+					oRow = oResult;
+				else {
+					ConstructorInfo ci = oType.GetConstructors().FirstOrDefault();
+
+					if (ci == null) {
+						oLog.Alert("Parsing Experian company data into {0} failed: no constructor found.", oType.Name);
+						continue;
+					} // if
+
+					oRow = (AExperianLtdDataRow)ci.Invoke(new object[] { oLog });
+				} // if
+
+				sr.Fill(oRow);
+
+				oRow.ID = sr["ID"];
+				oRow.ParentID = sr["ParentID"];
+
+				oKidMap[sType, oRow.ID] = oRow;
+
+				string sParentType = sr["ParentType"];
+
+				if (string.IsNullOrWhiteSpace(sParentType)) {
+					// oLog.Debug("No parent row. This row: id {0} of type {1}.", oRow.ID, sType);
+					continue;
+				} // if
+
+				AExperianLtdDataRow oParent = oKidMap[sParentType, oRow.ParentID];
+
+				if (oParent == null) {
+					oLog.Alert(
+						"No parent row found.\n\tThis row: id {0} of type {1}.\n\tParent row: id {2} of type {3}.",
+						oRow.ID, sType, oRow.ParentID, sParentType
+					);
+				}
+				else {
+					oParent.AddChild(oRow);
+					// Log.Debug("\n\tThis row: id {0} of type {1}.\n\tParent row: id {2} of type {3}.", oRow.ID, sType, oRow.ParentID, sParentType);
+				} // if
+			} // for each row
+
+			return oResult;
+		} // Load
+
+		#endregion method Load
+
 		#region constructor
 
 		public ExperianLtd(ASafeLog oLog = null) : base(oLog) {

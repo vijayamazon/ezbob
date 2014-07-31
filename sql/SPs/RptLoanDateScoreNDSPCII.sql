@@ -1,18 +1,22 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoanDateScoreNDSPCII]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptLoanDateScoreNDSPCII]
+IF OBJECT_ID('RptLoanDateScoreNDSPCII') IS NULL
+	EXECUTE('CREATE PROCEDURE RptLoanDateScoreNDSPCII AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[RptLoanDateScoreNDSPCII]
+
+ALTER PROCEDURE RptLoanDateScoreNDSPCII
 AS
 BEGIN
 	SELECT
 		c.Id AS CustomerID,
 		e.InsertDate,
 		e.ServiceType,
-		e.ResponseData
+		e.ResponseData,
+		e.Id AS ServiceLogID
 	FROM
 		Customer c
 		LEFT JOIN MP_ServiceLog e
