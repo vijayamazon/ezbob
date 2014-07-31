@@ -86,7 +86,7 @@
 
 			Offer = null;
 
-			var qod = new QuickOfferData(m_oCfg, Log);
+			QuickOfferData qod = new QuickOfferData(m_oCfg, DB, Log);
 
 			try {
 				DB.ForEachRowSafe(

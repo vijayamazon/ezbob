@@ -75,6 +75,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.Misc" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
@@ -260,6 +261,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_CalculateModelsAndAffordability_OutputMessage">
     <wsdl:part name="parameters" element="tns:CalculateModelsAndAffordabilityResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ResetPassword123456_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResetPassword123456" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ResetPassword123456_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ResetPassword123456Response" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetPricingModelModel_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPricingModelModel" />
@@ -488,6 +495,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_GetUnfetchedDataErrors_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetUnfetchedDataErrorsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPropertyStatuses_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPropertyStatuses" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetPropertyStatuses_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPropertyStatusesResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
@@ -1122,6 +1135,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateModelsAndAffordability" message="tns:IEzService_CalculateModelsAndAffordability_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateModelsAndAffordabilityResponse" message="tns:IEzService_CalculateModelsAndAffordability_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ResetPassword123456">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ResetPassword123456" message="tns:IEzService_ResetPassword123456_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ResetPassword123456Response" message="tns:IEzService_ResetPassword123456_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPricingModelModel">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPricingModelModel" message="tns:IEzService_GetPricingModelModel_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPricingModelModelResponse" message="tns:IEzService_GetPricingModelModel_OutputMessage" />
@@ -1273,6 +1290,10 @@
     <wsdl:operation name="GetUnfetchedDataErrors">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors" message="tns:IEzService_GetUnfetchedDataErrors_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse" message="tns:IEzService_GetUnfetchedDataErrors_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyStatuses">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatuses" message="tns:IEzService_GetPropertyStatuses_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetPropertyStatusesResponse" message="tns:IEzService_GetPropertyStatuses_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
@@ -1894,6 +1915,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ResetPassword123456">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ResetPassword123456" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPricingModelModel">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetPricingModelModel" style="document" />
       <wsdl:input>
@@ -2229,6 +2259,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetUnfetchedDataErrors">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetUnfetchedDataErrors" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyStatuses">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetPropertyStatuses" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
