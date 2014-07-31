@@ -197,10 +197,6 @@
 			}
 
 			if (!customer.ExperianConsumerScore.HasValue || customer.ExperianConsumerScore.Value == 0)
-
-			bool hasMortgage = false;
-			bool isHomeOwner = customer.PropertyStatus.IsOwner;
-			try
 			{
 				errors.AppendLine("No consumer score");
 			}
