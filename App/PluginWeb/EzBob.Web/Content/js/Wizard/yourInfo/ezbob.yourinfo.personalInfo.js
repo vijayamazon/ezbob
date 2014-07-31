@@ -9,7 +9,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		this.events = _.extend({}, this.events, {
 			'change #TimeAtAddress': 'personalTimeAtAddressChanged',
-			'change #ResidentialStatus': 'residentialStatusChanged',
+			'change #PropertyStatusId': 'propertyStatusChanged',
 			'click label[for="ConsentToSearch"] a': 'showConsent',
 
 			'change input': 'inputChanged',
@@ -60,9 +60,9 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		return oAddress && (oAddress.length > 0);
 	}, // isAddressValid
 
-	residentialStatusChanged: function() {
+	propertyStatusChanged: function () {
 		// TODO: fill with new logic
-	}, // residentialStatusChanged
+	},
 
 	personalTimeAtAddressChanged: function() {
 		var buttonContainer = '#PrevPersonAddresses';

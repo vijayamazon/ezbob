@@ -1194,7 +1194,7 @@ EzBob.validatePersonalDetailsForm = function (el) {
             DateOfBirth: { requiredDate: true, yearLimit: 18 },
             DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
             MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
-            ResidentialStatus: { required: true },
+            PropertyStatus: { required: true },
             Gender: { required: true },
             MaritalStatus: { required: true },
             TimeAtAddress: { required: true },
@@ -1202,7 +1202,7 @@ EzBob.validatePersonalDetailsForm = function (el) {
         },
         messages: {
             DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
-            ResidentialStatus: { required: "This field is required" },
+            PropertyStatus: { required: "This field is required" },
             TimeAtAddress: { regex: "This field is required" },
             MaritalStatus: { required: "This field is required" },
             MobilePhone: { regex: "Please enter a valid UK number" },

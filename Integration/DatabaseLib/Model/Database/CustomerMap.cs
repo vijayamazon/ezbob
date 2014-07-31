@@ -65,7 +65,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 				m.Map(x => x.Fullname).Length(250);
 				m.Map(x => x.DateOfBirth);
 				m.Map(x => x.TimeAtAddress);
-				m.Map(x => x.ResidentialStatus).Length(255);
 				m.Map(x => x.MobilePhone);
 				m.Map(x => x.DaytimePhone);
 				m.Map(x => x.Gender).CustomType<GenderType>();

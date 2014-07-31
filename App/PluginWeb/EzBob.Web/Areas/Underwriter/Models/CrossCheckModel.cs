@@ -125,7 +125,15 @@
 				Application.Email = customer.Name;
 			}
 
-			PropertyStatus = new Ezbob.Backend.Models.PropertyStatus { Id = customer.PropertyStatus.Id, Description = customer.PropertyStatus.Description, IsOwner = customer.PropertyStatus.IsOwner };
+			if (customer.PropertyStatus != null)
+			{
+				PropertyStatus = new Ezbob.Backend.Models.PropertyStatus
+					{
+						Id = customer.PropertyStatus.Id,
+						Description = customer.PropertyStatus.Description,
+						IsOwner = customer.PropertyStatus.IsOwner
+					};
+			}
 
 			var ebay = customer.GetEbayCustomerMarketPlaces().FirstOrDefault();
 			if (ebay != null)
@@ -243,6 +251,7 @@
 		public string BusinessName { get; set; }
 		public string PlayerId { get; set; }
 		public string BillingEmail { get; set; }
+		public string ResidentialStatus { get; set; }
 		public DateTime? RegistrationDate { get; set; }
 		public EbaySellerInfo SellerInfo { get; set; }
 		public string Site { get; set; }

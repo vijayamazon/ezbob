@@ -930,18 +930,8 @@
 
 			if (customer.PersonalInfo != null)
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
-
-			int propertyStatusId;
-			if (!int.TryParse(personalInfo.ResidentialStatus, out propertyStatusId))
-			{
-				throw new Exception("Wrong property status id");
-			}
-
-			customer.PropertyStatus = propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == propertyStatusId);
-			if (customer.PropertyStatus != null)
-			{
-				personalInfo.ResidentialStatus = customer.PropertyStatus.Description;
-			}
+			
+			customer.PropertyStatus = propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == personalInfo.PropertyStatusId);
 
 			customer.PersonalInfo = personalInfo;
 

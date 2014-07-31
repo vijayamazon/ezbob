@@ -212,7 +212,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string Fullname { get; set; }
 		public virtual DateTime? DateOfBirth { get; set; }
 		public virtual int? TimeAtAddress { get; set; }
-		public virtual string ResidentialStatus { get; set; }
+		public virtual int PropertyStatusId { get; set; }
 		public virtual Gender Gender { get; set; }
 		public virtual MaritalStatus MaritalStatus { get; set; }
 		public virtual TypeOfBusiness TypeOfBusiness { get; set; }

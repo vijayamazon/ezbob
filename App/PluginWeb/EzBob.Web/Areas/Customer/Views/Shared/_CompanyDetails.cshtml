@@ -102,7 +102,7 @@
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Residential status</span>
-                            <select id="ResidentialStatus" name="ResidentialStatus" class="select form_field" ui-event-control-id="personal-info:residential_status">
+                            <select id="PropertyStatusId" name="PropertyStatusId" class="select form_field" ui-event-control-id="personal-info:residential_status">
                                 <option></option>
                                 <% _.each(EzBob.PropertyStatusesData, function(group) { %>
                                     <optgroup label="<%- group.Title%>">
@@ -112,7 +112,7 @@
                                     </optgroup>
                                 <%});%>
                             </select>
-                            <img id="ResidentialStatusImage" class="field_status required" />
+                            <img id="PropertyStatusImage" class="field_status required" />
                         </label>
                     </div>
                 </div>
