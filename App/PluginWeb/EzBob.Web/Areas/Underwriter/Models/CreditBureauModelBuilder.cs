@@ -66,10 +66,13 @@
 			catch (Exception e)
 			{
 				Log.DebugFormat("CreditBureauModel Create Exception {0} ", e);
-				model.Consumer.ErrorList.Add(e.Message);
+				if (model.Consumer != null)
+					model.Consumer.ErrorList.Add(e.Message);
 			}
 
-			model.Consumer.ErrorList.AddRange(Errors);
+			if (model.Consumer != null)
+				model.Consumer.ErrorList.AddRange(Errors);
+
 			return model;
 		}
 
