@@ -106,15 +106,18 @@
                                 <option></option>
                                 <% _.each(EzBob.PropertyStatusesData, function(group) { %>
                                     <optgroup label="<%- group.Title%>">
-                                        <%_.each(group.Statuses, function(status){%>
-                                            <option value="<%- status.Id %>"><%- status.Description %></option>
-                                        <%});%>
+                                        <% _.each(group.Statuses, function(status){  %>
+                                            <option value="<%- status.Id %>" class="<%- status.IsOwner ? 'PropertyOwner' : '' %>"><%- status.Description %></option>
+                                        <% }); %>
                                     </optgroup>
-                                <%});%>
+                                <% }); %>
                             </select>
                             <img id="PropertyStatusImage" class="field_status required" />
                         </label>
                     </div>
+                </div>
+            
+                <div id="propertiesList" class="hide">
                 </div>
 
                 <h2 class="form_section">Contact details</h2>

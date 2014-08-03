@@ -61,7 +61,10 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	}, // isAddressValid
 
 	propertyStatusChanged: function () {
-		// TODO: fill with new logic
+	    var selectedItem = document.getElementById("PropertyStatusId");
+	    var selectedIndex = selectedItem.selectedIndex;
+	    var isPropertyOwner = $(selectedItem[selectedIndex]).hasClass('PropertyOwner');
+	    $('#propertiesList').toggleClass('hide', !isPropertyOwner);
 	},
 
 	personalTimeAtAddressChanged: function() {
