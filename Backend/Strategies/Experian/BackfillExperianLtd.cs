@@ -14,7 +14,7 @@
 
 		public BackfillExperianLtd(AConnection oDB, ASafeLog oLog)
 			: base(oDB, oLog) {
-				_experianHistoryRepository = ObjectFactory.GetInstance<ExperianHistoryRepository>();
+			_experianHistoryRepository = ObjectFactory.GetInstance<ExperianHistoryRepository>();
 		} // constructor
 
 		#endregion constructor
@@ -32,24 +32,26 @@
 		public override void Execute() {
 			IEnumerable<SafeReader> lst = DB.ExecuteEnumerable("LoadServiceLogForLtdBackfill", CommandSpecies.StoredProcedure);
 
-			foreach (SafeReader sr in lst)
-			{
+			foreach (SafeReader sr in lst) {
 				var parser = new ParseExperianLtd(sr["Id"], DB, Log);
 				parser.Execute();
-				try
-				{
+
+				try {
 					string companyRefNum = parser.Result.RegisteredNumber;
 					int? score = parser.Result != null ? parser.Result.CommercialDelphiScore : null;
 					decimal? balance = Utils.GetLimitedCaisBalance(parser.Result);
-					_experianHistoryRepository.SaveOrUpdateLimitedHistory(parser.Result.ServiceLogID, sr["InsertDate"],
-					                                                      companyRefNum, score, balance);
+					_experianHistoryRepository.SaveOrUpdateLimitedHistory(
+						parser.Result.ServiceLogID,
+						sr["InsertDate"],
+						companyRefNum,
+						score,
+						balance
+					);
 				}
-				catch (Exception ex)
-				{
-					Log.Warn(ex, "Failed to save experian limited history servicelog {0}", sr["Id"] );
-				}
-				break;
-			}
+				catch (Exception ex) {
+					Log.Warn(ex, "Failed to save experian limited history servicelog {0}", sr["Id"]);
+				} // try
+			} // for each
 		} // Execute
 
 		#endregion method Execute
