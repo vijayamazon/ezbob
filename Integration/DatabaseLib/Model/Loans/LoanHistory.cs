@@ -1,198 +1,208 @@
-﻿using System;
-using System.Linq;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using FluentNHibernate.Mapping;
-using NHibernate;
-using NHibernate.Linq;
-
-namespace EZBob.DatabaseLib.Model.Loans
+﻿namespace EZBob.DatabaseLib.Model.Loans
 {
-    public class LoanHistory
-    {
-        public LoanHistory()
-        {
-        }
+	using System;
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using Database.Loans;
+	using FluentNHibernate.Mapping;
+	using NHibernate;
+	using NHibernate.Linq;
 
-        public LoanHistory(EZBob.DatabaseLib.Model.Database.Loans.Loan loan, DateTime date)
-        {
-            Loan = loan;
-            Interest = loan.Interest;
-            Balance = loan.Balance;
-            Principal = loan.Principal;
-            Fees = loan.Fees;
-            Date = date;
-        }
+	public class LoanHistory
+	{
+		public LoanHistory()
+		{
+		}
 
-        public LoanHistory(Database.Loans.Loan loan, LoanScheduleItem installment, DateTime date)
-            : this(loan, date)
-        {
-            ExpectedAmountDue = installment.AmountDue;
-            ExpectedFees = installment.Fees;
-            ExpectedInterest = installment.Interest;
-            ExpectedPrincipal = installment.LoanRepayment;
-        }
+		public LoanHistory(Loan loan, DateTime date)
+		{
+			Loan = loan;
+			Interest = loan.Interest;
+			Balance = loan.Balance;
+			Principal = loan.Principal;
+			Fees = loan.Fees;
+			Date = date;
+		}
 
-        public virtual int Id { get; set; }
-        public virtual Database.Loans.Loan Loan { get; set; }
-        public virtual DateTime Date { get; set; }
+		public LoanHistory(Loan loan, LoanScheduleItem installment, DateTime date)
+			: this(loan, date)
+		{
+			ExpectedAmountDue = installment.AmountDue;
+			ExpectedFees = installment.Fees;
+			ExpectedInterest = installment.Interest;
+			ExpectedPrincipal = installment.LoanRepayment;
+		}
 
-        /// <summary>
-        /// Доход банка, который осталось получить.
-        /// </summary>
-        public virtual decimal Interest { get; set; }
+		public virtual int Id { get; set; }
+		public virtual Loan Loan { get; set; }
+		public virtual DateTime Date { get; set; }
 
-        /// <summary>
-        /// Сумма, которую клиенту необходимо выплатить, включая все дополнительные отчисления и проценты
-        /// </summary>
-        public virtual decimal Balance { get; set; }
+		/// <summary>
+		/// Доход банка, который осталось получить.
+		/// Interest
+		/// </summary>
+		public virtual decimal Interest { get; set; }
 
-        /// <summary>
-        /// Остаток по телу кредита, без учета дохода и процентов
-        /// </summary>
-        public virtual decimal Principal { get; set; }
+		/// <summary>
+		/// Сумма, которую клиенту необходимо выплатить, включая все дополнительные отчисления и проценты
+		/// Amount, that client have to pay, including all aditional fees and interst
+		/// </summary>
+		public virtual decimal Balance { get; set; }
 
-        public virtual decimal Fees { get; set; }
+		/// <summary>
+		/// Остаток по телу кредита, без учета дохода и процентов
+		/// Principal
+		/// </summary>
+		public virtual decimal Principal { get; set; }
 
-        public virtual LoanStatus Status { get; set; }
+		public virtual decimal Fees { get; set; }
 
-        /// <summary>
-        /// Если платеж совершается вовремя, в это поле попадает ожидаемая выплата по телу кредита
-        /// </summary>
-        public virtual decimal ExpectedPrincipal { get; set; }
+		public virtual LoanStatus Status { get; set; }
 
-        /// <summary>
-        /// Если платеж совершается вовремя, в это поле попадает ожидаемая выплата по процентам
-        /// </summary>
-        public virtual decimal ExpectedInterest { get; set; }
+		/// <summary>
+		/// Если платеж совершается вовремя, в это поле попадает ожидаемая выплата по телу кредита
+		/// If on time repayment, this field populated with expected principal
+		/// </summary>
+		public virtual decimal ExpectedPrincipal { get; set; }
 
-        /// <summary>
-        /// Если платеж совершается вовремя, в это поле попадает ожидаемая выплата по штрафам
-        /// </summary>
-        public virtual decimal ExpectedFees { get; set; }
+		/// <summary>
+		/// Если платеж совершается вовремя, в это поле попадает ожидаемая выплата по процента
+		/// If on time repayment, this field populated with expected interst
+		/// </summary>
+		public virtual decimal ExpectedInterest { get; set; }
 
-        /// <summary>
-        /// Если платеж совершается вовремя, в это поле попадает ожидаемая общая выплата
-        /// </summary>
-        public virtual decimal ExpectedAmountDue { get; set; }
-    }
+		/// <summary>
+		/// Если платеж совершается вовремя, в это поле попадает ожидаемая выплата по штрафам
+		/// If on time repayment, this field populated with expected fees
+		/// </summary>
+		public virtual decimal ExpectedFees { get; set; }
 
-    public class LoanHistoryMap : ClassMap<LoanHistory>
-    {
-        public LoanHistoryMap()
-        {
-            Id(x => x.Id).GeneratedBy.HiLo("100");
-            Map(x => x.Interest);
-            Map(x => x.Principal);
-            Map(x => x.Balance);
-            Map(x => x.Fees);
-            Map(x => x.Date);
-            Map(x => x.Status).CustomType<LoanStatusType>();
-            References(x => x.Loan, "LoanId");
-            Map(x => x.ExpectedPrincipal);
-            Map(x => x.ExpectedInterest);
-            Map(x => x.ExpectedFees);
-            Map(x => x.ExpectedAmountDue);
-        }
-    }
+		/// <summary>
+		/// Если платеж совершается вовремя, в это поле попадает ожидаемая общая выплата
+		/// If on time repayment, this field populated with expected repayment sum
+		/// </summary>
+		public virtual decimal ExpectedAmountDue { get; set; }
+	}
 
-    public interface ILoanHistoryRepository : IRepository<LoanHistory>
-    {
-        IQueryable<LoanHistory> GetByLoan(Database.Loans.Loan loan);
-        LoanHistory FindMostRescent(Database.Loans.Loan loan, DateTime dateTime);
-        LoanHistoryByDay FetchHistoryByDay(Database.Loans.Loan loan, DateTime dateTime);
-    }
+	public class LoanHistoryMap : ClassMap<LoanHistory>
+	{
+		public LoanHistoryMap()
+		{
+			Id(x => x.Id);
+			Map(x => x.Interest);
+			Map(x => x.Principal);
+			Map(x => x.Balance);
+			Map(x => x.Fees);
+			Map(x => x.Date);
+			Map(x => x.Status).CustomType<LoanStatusType>();
+			References(x => x.Loan, "LoanId");
+			Map(x => x.ExpectedPrincipal);
+			Map(x => x.ExpectedInterest);
+			Map(x => x.ExpectedFees);
+			Map(x => x.ExpectedAmountDue);
+		}
+	}
 
-    public class LoanHistoryRepository : NHibernateRepositoryBase<LoanHistory>, ILoanHistoryRepository
-    {
-        public LoanHistoryRepository(ISession session) : base(session)
-        {
-        }
+	public interface ILoanHistoryRepository : IRepository<LoanHistory>
+	{
+		IQueryable<LoanHistory> GetByLoan(Loan loan);
+		LoanHistory FindMostRescent(Loan loan, DateTime dateTime);
+		LoanHistoryByDay FetchHistoryByDay(Loan loan, DateTime dateTime);
+	}
 
-        public IQueryable<LoanHistory> GetByLoan(Database.Loans.Loan loan)
-        {
-            return GetAll().Where(l => l.Loan.Id == loan.Id);
-        }
+	public class LoanHistoryRepository : NHibernateRepositoryBase<LoanHistory>, ILoanHistoryRepository
+	{
+		public LoanHistoryRepository(ISession session)
+			: base(session)
+		{
+		}
 
-        public LoanHistory FindMostRescent(Database.Loans.Loan loan, DateTime dateTime)
-        {
-            var items = GetByLoan(loan);
-            var item =  items.Where(i => i.Date < dateTime)
-                        .OrderByDescending(i => i.Date)
-                        .FirstOrDefault();
-            if (item != null) return item;
-            item = new LoanHistory(loan, loan.Date);
-            Save(item);
-            return item;
-        }
+		public IQueryable<LoanHistory> GetByLoan(Loan loan)
+		{
+			return GetAll().Where(l => l.Loan.Id == loan.Id);
+		}
 
-        public LoanHistoryByDay FetchHistoryByDay(Database.Loans.Loan loan, DateTime dateTime)
-        {
-            var items = GetByLoan(loan);
-            var before = items.Where(i => i.Date < dateTime)
-                        .OrderByDescending(i => i.Date)
-                        .ToFutureValue();
+		public LoanHistory FindMostRescent(Loan loan, DateTime dateTime)
+		{
+			var item = GetByLoan(loan).Where(i => i.Date < dateTime).OrderByDescending(i => i.Date).FirstOrDefault();
+			
+			if (item != null)
+			{
+				return item;
+			}
 
-            var after = items.Where(i => i.Date < dateTime.AddDays(1))
-                        .OrderByDescending(i => i.Date)
-                        .ToFutureValue();
+			item = new LoanHistory(loan, loan.Date);
+			SaveOrUpdate(item);
+			return item;
+		}
 
-            var expected = items.Where(i => i.Date < dateTime.AddDays(1) && i.Date > dateTime)
-                        .OrderBy(i => i.Date)
-                        .ToFutureValue();
+		public LoanHistoryByDay FetchHistoryByDay(Loan loan, DateTime dateTime)
+		{
+			var items = GetByLoan(loan);
+			var before = items.Where(i => i.Date < dateTime)
+						.OrderByDescending(i => i.Date)
+						.ToFutureValue();
 
-            var l = _session.QueryOver<Database.Loans.Loan>()
-                    .Where(x => x.Id == loan.Id)
-                    .Fetch(x => x.Customer).Eager
-                    .FutureValue<Database.Loans.Loan>();
+			var after = items.Where(i => i.Date < dateTime.AddDays(1))
+						.OrderByDescending(i => i.Date)
+						.ToFutureValue();
 
-            return new LoanHistoryByDay(l, before, expected, after);
-        }
-    }
+			var expected = items.Where(i => i.Date < dateTime.AddDays(1) && i.Date > dateTime)
+						.OrderBy(i => i.Date)
+						.ToFutureValue();
 
-    public class LoanHistoryByDay
-    {
-        private readonly IFutureValue<Database.Loans.Loan> _loan;
-        private readonly IFutureValue<LoanHistory> _before;
-        private readonly IFutureValue<LoanHistory> _expected;
-        private readonly IFutureValue<LoanHistory> _after;
+			var l = _session.QueryOver<Loan>()
+					.Where(x => x.Id == loan.Id)
+					.Fetch(x => x.Customer).Eager
+					.FutureValue<Loan>();
 
-        public LoanHistoryByDay(IFutureValue<Database.Loans.Loan> loan, IFutureValue<LoanHistory> before, IFutureValue<LoanHistory> expected, IFutureValue<LoanHistory> after)
-        {
-            _loan = loan;
-            _before = before;
-            _expected = expected;
-            _after = after;
-        }
+			return new LoanHistoryByDay(l, before, expected, after);
+		}
+	}
 
-        public Database.Loans.Loan Loan
-        {
-            get { return _loan.Value; }
-        }
+	public class LoanHistoryByDay
+	{
+		private readonly IFutureValue<Loan> _loan;
+		private readonly IFutureValue<LoanHistory> _before;
+		private readonly IFutureValue<LoanHistory> _expected;
+		private readonly IFutureValue<LoanHistory> _after;
 
-        public LoanHistory Before
-        {
-	        get
-	        {
-		        try
-		        {
-			        return _before.Value ?? new LoanHistory(Loan, Loan.Date);
-		        }
-		        catch
-		        {
-			        return new LoanHistory(Loan, Loan.Date);
-		        }
-	        }
-        }
+		public LoanHistoryByDay(IFutureValue<Loan> loan, IFutureValue<LoanHistory> before, IFutureValue<LoanHistory> expected, IFutureValue<LoanHistory> after)
+		{
+			_loan = loan;
+			_before = before;
+			_expected = expected;
+			_after = after;
+		}
 
-        public LoanHistory Expected
-        {
-            get { return _expected.Value ?? new LoanHistory(Loan, Loan.Date); }
-        }
+		public Loan Loan
+		{
+			get { return _loan.Value; }
+		}
 
-        public LoanHistory After
-        {
-            get { return _after.Value ?? new LoanHistory(Loan, Loan.Date); }
-        }
-    }
+		public LoanHistory Before
+		{
+			get
+			{
+				try
+				{
+					return _before.Value ?? new LoanHistory(Loan, Loan.Date);
+				}
+				catch
+				{
+					return new LoanHistory(Loan, Loan.Date);
+				}
+			}
+		}
+
+		public LoanHistory Expected
+		{
+			get { return _expected.Value ?? new LoanHistory(Loan, Loan.Date); }
+		}
+
+		public LoanHistory After
+		{
+			get { return _after.Value ?? new LoanHistory(Loan, Loan.Date); }
+		}
+	}
 }

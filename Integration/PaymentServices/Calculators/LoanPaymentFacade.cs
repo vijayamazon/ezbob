@@ -60,7 +60,7 @@ namespace PaymentServices.Calculators
             if (_historyRepository != null)
             {
                 var historyRecord = new LoanHistory(loan, paymentTime);
-                _historyRepository.Save(historyRecord);
+                _historyRepository.SaveOrUpdate(historyRecord);
             }
 
             loan.UpdateStatus(paymentTime);

@@ -113,7 +113,7 @@
 
 			_agreementsGenerator.RenderAgreements(loan, true);
 
-			_loanHistoryRepository.Save(new LoanHistory(loan, now));
+			_loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
 
 			_session.Flush();
 
