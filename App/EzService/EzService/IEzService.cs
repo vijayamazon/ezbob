@@ -8,7 +8,6 @@
 	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
@@ -20,10 +19,7 @@
 		#endregion Agreements
 
 		#region analytics
-
-		[OperationContract]
-		ActionMetaData BackfillConsumerAnalytics();
-
+		
 		[OperationContract]
 		ActionMetaData BackfillAml(); // No analytics yet will be filled into customer table
 

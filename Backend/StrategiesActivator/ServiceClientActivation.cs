@@ -808,16 +808,6 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // GeneratePassword
 
 		[Activation]
-		private void BackfillConsumerAnalytics() {
-			if ((m_aryArgs.Length != 1)) {
-				m_oLog.Msg("Usage: BackfillConsumerAnalytics");
-				return;
-			} // if
-
-			m_oServiceClient.BackfillConsumerAnalytics();
-		}
-
-		[Activation]
 		private void BackfillAml()
 		{
 			if ((m_aryArgs.Length != 1))

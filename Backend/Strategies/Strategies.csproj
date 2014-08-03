@@ -141,7 +141,6 @@
     <Compile Include="Broker\SpBrokerLoadOwnProperties.cs" />
     <Compile Include="VatReturn\AVatReturnStrategy.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary.cs" />
-    <Compile Include="Misc\BackfillConsumerAnalytics.cs" />
     <Compile Include="Misc\EncryptChannelGrabberMarketplaces.cs" />
     <Compile Include="Exceptions\StrategyWarning.cs" />
     <Compile Include="Exceptions\StrategyAlert.cs" />
