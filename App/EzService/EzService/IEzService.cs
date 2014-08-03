@@ -130,6 +130,9 @@
 		[OperationContract]
 		BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly);
 
+		[OperationContract]
+		ActionMetaData BrokerAttachCustomer(int nCustomerID, int? nBrokerID, int nUnderwriterID);
+
 		#endregion Broker
 
 		#region CAIS

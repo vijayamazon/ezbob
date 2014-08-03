@@ -99,11 +99,33 @@
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ResetPassword123456(int nBrokerID) {
-			new ServiceClient().Instance.ResetPassword123456(m_oContext.User.Id, nBrokerID, PasswordResetTarget.Broker);
+			try {
+				new ServiceClient().Instance.ResetPassword123456(m_oContext.User.Id, nBrokerID, PasswordResetTarget.Broker);
+			}
+			catch (Exception e) {
+				ms_oLog.Alert(e, "Failed to reset broker {0}'s password to 123456.", nBrokerID);
+			} // try
+
 			return Json(true);
 		} // ResetPassword123456
 
 		#endregion action ResetPassword123456
+
+		#region action AttachCustomer
+
+		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		public JsonResult AttachCustomer(int nCustomerID, int nBrokerID) {
+			try {
+				m_oServiceClient.Instance.BrokerAttachCustomer(nCustomerID, nBrokerID <= 0 ? (int?)null : nBrokerID, m_oContext.User.Id);
+				return Json(new { success = true, error = string.Empty, });
+			}
+			catch (Exception e) {
+				ms_oLog.Alert(e, "Failed to update customer's broker for customer {0}, broker {1}.", nCustomerID, nBrokerID);
+				return Json(new { success = false, error = e.Message, });
+			} // try
+		} // AttachCustomer
+
+		#endregion action AttachCustomer
 
 		#region private
 

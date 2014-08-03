@@ -112,12 +112,13 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		'click #MainStrategyHidden': 'activateMainStratgey',
 		'click #ForceFinishWizard': 'activateFinishWizard',
 		'click .reset-password-123456': 'resetPassword123456',
+		'click .change-broker': 'startChangeBroker',
 	}, // events
 
 	resetPassword123456: function() {
 		event.preventDefault();
 		event.stopPropagation();
-		
+
 		$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ResetPassword123456", {
 			nCustomerID: this.model.get('Id')
 		});
@@ -126,6 +127,123 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 		return false;
 	}, // resetPassword123456
+
+	selectBrokerEntry: function(oDiv, nBrokerID) {
+		var oLst = oDiv.find('.broker-entry');
+		oLst.filter('.active').removeClass('active');
+		oLst.filter('.brkr' + nBrokerID).addClass('active');
+	}, // selectBrokerEntry
+
+	changeBroker: function(oDlg, oDiv) {
+		var oEntry = oDiv.find('.broker-entry').filter('.active');
+
+		if (oEntry.length !== 1) {
+			console.log('No broker entry selected.');
+			oDlg.dialog('close');
+			return;
+		} // if
+
+		BlockUi();
+
+		var self = this;
+
+		var oRequest = $.post(window.gRootPath + 'Brokers/AttachCustomer', {
+			nCustomerID: this.model.get('Id'),
+			nBrokerID: oEntry.data('broker-id'),
+		});
+
+		oRequest.done(function(oResponse) {
+			UnBlockUi();
+
+			if (oResponse.success) {
+				oDlg.dialog('close');
+				self.model.fetch();
+			} // if
+
+			if (oResponse.error)
+				EzBob.ShowMessge(oResponse.error, 'Error');
+			else
+				EzBob.ShowMessge("Could not change customer's broker", 'Error');
+		});
+
+		oRequest.fail(function() {
+			EzBob.ShowMessge("Failed to change customer's broker", 'Error');
+			UnBlockUi();
+		});
+
+	}, // changeBroker
+
+	startChangeBroker: function() {
+		BlockUi();
+
+		var oSelectBrokerEntry = _.bind(this.selectBrokerEntry, this);
+		var oChangeBroker = _.bind(this.changeBroker, this);
+
+		var self = this;
+
+		var oRequest = $.getJSON(window.gRootPath + 'Customers/GridBrokers', { includeTestCustomers: false });
+
+		oRequest.done(function(oResponse) {
+			oResponse.aaData.sort(function(a, b) {
+				var sA = a.ContactName + a.FirmaName;
+				var sB = b.ContactName + b.FirmaName;
+				return sA.localeCompare(sB);
+			});
+
+			var oDiv = $('<div title="Select broker" class=broker-select-dlg></div>');
+
+			oDiv.append(
+				$('<div>No broker</div>')
+					.data('broker-id', 0)
+					.addClass('broker-entry brkr0')
+					.click(function() { oSelectBrokerEntry(oDiv, 0); })
+			);
+
+			for (var i = 0; i < oResponse.aaData.length; i++) {
+				var oBroker = oResponse.aaData[i];
+
+				oDiv.append(
+					$('<div></div>')
+						.text(oBroker.ContactName + ' of ' + oBroker.FirmName)
+						.data('broker-id', oBroker.BrokerID)
+						.addClass('broker-entry brkr' + oBroker.BrokerID)
+						.click((function(nBrkrID) {
+							return function() { oSelectBrokerEntry(oDiv, nBrkrID); };
+						})(oBroker.BrokerID))
+				);
+			} // for i
+
+			UnBlockUi();
+
+			var oDlg = oDiv.dialog({
+				autoOpen: true,
+				modal: true,
+				width: 400,
+				height: 400,
+				buttons: [
+					{
+						text: 'Cancel',
+						click: function() { oDlg.dialog('close'); },
+						'class': 'btn btn-primary',
+					},
+					{
+						text: 'Attach to broker',
+						click: function() {
+							oChangeBroker(oDlg, oDiv);
+						},
+						'class': 'btn btn-primary',
+					},
+				], // buttons
+			});
+
+			oSelectBrokerEntry(oDiv, self.model.get('BrokerID'));
+		});
+
+		oRequest.fail(function() {
+			UnBlockUi();
+			EzBob.ShowMessage('Failed to load list of brokers.', 'Error');
+		});
+	}, // startChangeBroker
 
 	activateMainStratgey: function() {
 		$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateMainStrategy", {
@@ -256,8 +374,8 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 	}, // changeDisabledState
 
 	brokerDetails: function() {
-		this.$el.find('.broker-details-rows').toggle("fast");
-		return this.$el.find('#brokerDetailsBtn i').toggleClass("fa-plus fa-minus");
+		this.$el.find('.broker-details-rows').toggle();
+		this.$el.find('#brokerDetailsBtn i').toggleClass("fa-plus fa-minus");
 	}, // brokerDetails
 
 	editEmail: function() {

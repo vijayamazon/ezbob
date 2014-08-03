@@ -1987,3 +1987,17 @@ td a.edit-loan {
     font-size: 18px;
     height: 38px;
 }
+
+.broker-select-dlg .broker-entry {
+	padding: 2px;
+	cursor: pointer;
+}
+
+.broker-select-dlg .broker-entry:hover {
+	background-color: #e5e5e5;
+}
+
+.broker-select-dlg .broker-entry.active {
+	font-weight: bold;
+	background-color: #e5e5e5;
+}

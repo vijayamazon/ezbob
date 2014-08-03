@@ -449,6 +449,14 @@
 
 		#endregion method BrokerLoadStaticData
 
+		#region method BrokerAttachCustomer
+
+		public ActionMetaData BrokerAttachCustomer(int nCustomerID, int? nBrokerID, int nUnderwriterID) {
+			return ExecuteSync<BrokerAttachCustomer>(nCustomerID, nUnderwriterID, nCustomerID, nBrokerID, nUnderwriterID);
+		} // BrokerAttachCustomer
+
+		#endregion method BrokerAttachCustomer
+
 		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

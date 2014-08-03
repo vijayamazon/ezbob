@@ -112,6 +112,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategySync1" />
   </wsdl:message>
@@ -676,6 +682,12 @@
   <wsdl:message name="IEzService_BrokerLoadStaticData_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadStaticDataResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerAttachCustomer_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerAttachCustomer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerAttachCustomer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerAttachCustomerResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_CaisGenerate_InputMessage">
     <wsdl:part name="parameters" element="tns:CaisGenerate" />
   </wsdl:message>
@@ -1000,12 +1012,6 @@
   <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1029,6 +1035,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="MainStrategy2">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="MainStrategySync1">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
@@ -1405,6 +1415,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadStaticData" message="tns:IEzService_BrokerLoadStaticData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadStaticDataResponse" message="tns:IEzService_BrokerLoadStaticData_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BrokerAttachCustomer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerAttachCustomer" message="tns:IEzService_BrokerAttachCustomer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerAttachCustomerResponse" message="tns:IEzService_BrokerAttachCustomer_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="CaisGenerate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CaisGenerateResponse" message="tns:IEzService_CaisGenerate_OutputMessage" />
@@ -1621,10 +1635,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="MainStrategy2">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1680,6 +1690,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="MainStrategy2">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="MainStrategySync1">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
       <wsdl:input>
@@ -2526,6 +2545,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BrokerAttachCustomer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerAttachCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="CaisGenerate">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CaisGenerate" style="document" />
       <wsdl:input>
@@ -3012,32 +3040,23 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="MainStrategy2">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

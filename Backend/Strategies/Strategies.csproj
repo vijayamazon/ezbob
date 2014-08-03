@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoDecisions\AutoDecisionCondition.cs" />
+    <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Esign\EsignSend.cs" />
     <Compile Include="Esign\LoadCustomerEsignatures.cs" />
     <Compile Include="Esign\LoadEsignatureFile.cs" />

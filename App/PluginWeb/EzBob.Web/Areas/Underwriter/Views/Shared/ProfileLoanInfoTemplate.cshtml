@@ -207,9 +207,7 @@
             </tr>
         </tbody>
         <tbody class="broker-details-rows with-broker" style="display: none;">
-            <tr>
-                @RowCell("Firm name", "<%- data.BrokerFirmName %>")
-            </tr>
+			@RowCell("Firm name", "<%- data.BrokerFirmName %>")
             <tr>
                 <td>
                     <span class="customer-details-left-margin">Email</span>
@@ -219,8 +217,11 @@
                     </span>
                 </td>
             </tr>
+			@RowCell("Mobile", "<%- data.BrokerContactMobile %>")
+        </tbody>
+        <tbody class="box-content">
             <tr>
-                @RowCell("Mobile", "<%- data.BrokerContactMobile %>")
+                <td class="customer-personal-status-alignment"><a href="#" class="change-broker">Update broker</a></td>
             </tr>
         </tbody>
         <tbody class="box-content">
