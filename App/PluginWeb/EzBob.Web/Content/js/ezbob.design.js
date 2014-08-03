@@ -600,13 +600,13 @@ EzBob.UpdateBugsIcon = function (element, state) {
             state = "Report"; // for use in tooltip title
             break;
         case "Closed":
-            iconClass = "fa fa-check";
+            iconClass = "fa fa-check ";
             break;
         case "Reopened":
-            iconClass = "fa fa-repeat";
+            iconClass = "fa fa-repeat red";
             break;
         case "Opened":
-            iconClass = "fa fa-times";
+            iconClass = "fa fa-bug red";
             break;
         default:
             iconClass = "fa fa-bug";

@@ -670,6 +670,10 @@ span.active {
     padding-top: 35px;
 }
 
+.red {
+    color: #f55f60;
+}
+
 .red_cell {
     color: #f55f60;
     font-weight: bold;
