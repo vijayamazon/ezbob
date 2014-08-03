@@ -18,7 +18,7 @@
                         var selected = (model.hasActive && model.rollover.LoanScheduleId == item.Id) ? "selected='selected'" : "";
                         %>
                         <% if( item.Status == 'Late' || item.Status == 'StillToPay'){ %>
-                        <option  <%= selected  %> value="<%-item.Id%>" >#<%-item.Id%> (<%- moment.utc(item.Date).local().format("MMM DD YYYY") %>)</option>
+                        <option  <%= selected  %> value="<%-item.Id%>" >#<%-item.Id%> (<%- EzBob.formatDateHumanFull(item.Date) %>)</option>
                         <%}%>
                         <%});%>
                     </select>

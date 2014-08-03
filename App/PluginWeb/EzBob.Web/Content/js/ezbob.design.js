@@ -1,10 +1,4 @@
-﻿/// <reference path="~/Content/js/lib/moment.js" />
-/// <reference path="~/Content/js/App/ezbob.app.js" />
-/// <reference path="~/Content/js/lib/underscore.js" />
-/// <reference path="~/Content/js/lib/jquery.validate.js"/>
-/// <reference path="~/Content/js/lib/jquery-1.8.3.js" />
-
-var EzBob = EzBob || {};
+﻿var EzBob = EzBob || {};
 
 EzBob.Validation = EzBob.Validation || {};
 
@@ -650,7 +644,7 @@ EzBob.UpdateBugsIcons = function (data) {
 };
 
 EzBob.currentDateFormatted = function () {
-    return moment().format('DD/MM/YYYY');
+    return moment.utc().format('DD/MM/YYYY');
 };
 
 EzBob.roundNumber = function (num, dec) {
@@ -857,54 +851,6 @@ EzBob.formatPoundsWithBrackets = function (val) {
     return "(" + EzBob.formatPounds(val) + ")";
 };
 
-//formats date for user from utc asp.net date
-EzBob.formatDate = function (date) {
-	if (!date)
-		return '';
-
-	var oMoment = moment.utc(date);
-
-	if (oMoment.year() === 1 && oMoment.months() === 0 && oMoment.date() === 1)
-		return '';
-
-    return oMoment.format("MMM DD, YYYY");
-};
-
-//formats date for user from utc asp.net date
-EzBob.formatDate2 = function (date) {
-    if (!date) return "";
-    return moment.utc(date).format("DD/MM/YYYY");
-};
-
-
-//formats date for user from utc asp.net date + time
-EzBob.formatDateTime = function (date) {
-    if (!date) return "";
-    return moment.utc(date).format("DD/MM/YYYY HH:mm:ss");
-};
-
-//formats date for user from asp.net date + time as is
-EzBob.formatDateTimeAsIs = function (date) {
-    if (!date) return "";
-    return moment.utc(date).format("DD/MM/YYYY HH:mm:ss");
-};
-
-EzBob.formatDateTimeCS = function (date) {
-    if (!date) return "";
-    return moment.utc(date).format("YYYY-MM-DDTHH:mm:ss");
-};
-
-
-EzBob.datetimeToDate = function (date) {
-    if (!date) return "";
-    return new Date(date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
-};
-
-//formats date for user from utc asp.net date without time
-EzBob.formatDateWithoutTime = function (date) {
-    if (!date) return "";
-    return moment.utc(date).format("DD/MM/YYYY");
-};
 //parses dateString "DD/MM/YYYY" to date "yyyy-MM-dd"
 EzBob.parseDate = function (dateString) {
     if (!dateString) return "";
@@ -977,6 +923,55 @@ EzBob.formatLoanTypeSelection = function (num) {
             break;
     } // switch
 }; // formatLoanTypeSelection
+
+//formats date for user from utc asp.net date
+EzBob.formatDate = function (date) {
+    if (!date)
+        return '';
+
+    var oMoment = moment.utc(date);
+
+    if (oMoment.year() === 1 && oMoment.months() === 0 && oMoment.date() === 1)
+        return '';
+
+    return oMoment.format("MMM DD, YYYY");
+};
+
+//formats date for user from utc asp.net date
+EzBob.formatDate2 = function (date) {
+    if (!date) return "";
+    return moment.utc(date).format("DD/MM/YYYY");
+};
+
+
+//formats date for user from utc asp.net date + time
+EzBob.formatDateTime = function (date) {
+    if (!date) return "";
+    return moment.utc(date).format("DD/MM/YYYY HH:mm:ss");
+};
+
+//formats date for user from asp.net date + time as is
+EzBob.formatDateTimeAsIs = function (date) {
+    if (!date) return "";
+    return moment.utc(date).format("DD/MM/YYYY HH:mm:ss");
+};
+
+EzBob.formatDateTimeCS = function (date) {
+    if (!date) return "";
+    return moment.utc(date).format("YYYY-MM-DDTHH:mm:ss");
+};
+
+
+EzBob.datetimeToDate = function (date) {
+    if (!date) return "";
+    return new Date(date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
+};
+
+//formats date for user from utc asp.net date without time
+EzBob.formatDateWithoutTime = function (date) {
+    if (!date) return "";
+    return moment.utc(date).format("DD/MM/YYYY");
+};
 
 EzBob.formatDateHuman = function (date) {
     if (!date) return "";

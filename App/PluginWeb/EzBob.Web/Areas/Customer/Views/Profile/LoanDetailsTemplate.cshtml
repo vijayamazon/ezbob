@@ -60,7 +60,7 @@
                     <dd><%-EzBob.formatPoundsWidhDash(loan.LoanAmount)%></dd>
 
                     <dt>Origination Date:</dt>
-                    <dd><%- moment.utc(loan.Date).local().format('MMM DD, YYYY') %> </dd>
+                    <dd><%- EzBob.formatDate(loan.Date) %> </dd>
 
                     <dt>Interest Rate:</dt>
                     <dd><%- EzBob.formatPercents(loan.InterestRate) %></dd>
@@ -131,7 +131,7 @@
             %><tr>
                 <td>
                     <img  style="width: 24px; height: 24px" src='@Url.Content("~/Content/img/payment-to-customer.png")'  alt=""/></td>
-                <td><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
+                <td><%- EzBob.formatDateHumanFull(transaction.PostDate  %></td>
                 <td><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
                 <td><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
                 <td><%- EzBob.formatPoundsWidhDash(transaction.Fees) %></td>
@@ -145,7 +145,7 @@
             if (transaction.StatusDescription != 'Error') {
                 %><tr>
                     <td><img  height="31"  src='@Url.Content("~/Content/img/wizard-mark-completed.png")' alt=""/></td>
-                    <td><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
+                    <td><%- EzBob.formatDateHumanFull(transaction.PostDate) %></td>
                     <td><%- EzBob.formatPoundsWidhDash(transaction.LoanRepayment) %></td>
                     <td><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
                     <td><%- EzBob.formatPoundsWidhDash(transaction.Fees + transaction.Rollover) %></td>
@@ -159,7 +159,7 @@
         _.each(rollovers, function(rollover, i) {
             %><tr>
                 <td><img  height="31"  src='@Url.Content("~/Content/img/two_arrows.png")'  alt=""/></td>
-                <td><%- moment.utc(rollover.ExperyDate).local().format("MMM DD YYYY")  %></td>
+                <td><%- EzBob.formatDateHumanFull(rollover.ExperyDate)  %></td>
                 <td></td>
                 <td></td>
                 <td><%- EzBob.formatPoundsWidhDash(rollover.Payment) %></td>
@@ -173,7 +173,7 @@
             if ( charge.State !== 'Paid' && charge.State !== 'Expired') {
                 %><tr>
                     <td><img  height="31"  src='@Url.Content("~/Content/img/calendarx32.png")'  alt=""/></td>
-                    <td><%- moment.utc(charge.Date).local().format("MMM DD YYYY")  %></td>
+                    <td><%- EzBob.formatDateHumanFull(charge.Date) %></td>
                     <td></td>
                     <td></td>
                     <td><%- EzBob.formatPoundsWidhDash(charge.Amount) %></td>
@@ -192,7 +192,7 @@
 
                 %><tr data-scheduleid="<%- item.Id %>">
                     <td><img src="<%-urlImage%>"></td>
-                    <td><%- moment.utc(item.Date).local().format("MMM DD YYYY")  %></td>
+                    <td><%- EzBob.formatDateHumanFull(item.Date) %></td>
                     <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LoanRepayment)%></td>
                     <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Interest)%></td>
                     <td class='<%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Fees + item.LateCharges)%></td>

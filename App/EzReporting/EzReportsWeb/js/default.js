@@ -3,7 +3,7 @@
 		if (!date)
 			return '';
 
-		var oMoment = moment.utc(date, 'DD/MM/YYYY HH:mm:ss').local();
+		var oMoment = moment.utc(date, 'DD/MM/YYYY HH:mm:ss');
 
 		if (oMoment.year() === 1 && oMoment.months() === 0 && oMoment.date() === 1)
 			return '';
@@ -15,7 +15,7 @@
 		if (!date)
 			return '';
 
-		var oMoment = moment.utc(date, 'DD/MM/YYYY HH:mm:ss').local();
+		var oMoment = moment.utc(date, 'DD/MM/YYYY HH:mm:ss');
 
 		if (oMoment.year() === 1 && oMoment.months() === 0 && oMoment.date() === 1)
 			return '';
