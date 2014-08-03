@@ -18,24 +18,15 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT TOP 1
-		@ApprovedSum = CASE
-			WHEN cr.UnderwriterDecision = 'Approved' THEN cr.ManagerApprovedSum
-			ELSE cr.SystemCalculatedSum
-		END
+		cr.ManagerApprovedSum
 	FROM
 		CashRequests cr
 	WHERE
-		(
-			cr.UnderwriterDecision = 'Approved'
-			OR
-			(
-				cr.UnderwriterDecision IS NULL
-				AND
-				cr.SystemDecision = 'Approve'
-			)
-		)
-		AND
 		cr.IdCustomer = @CustomerID
+		AND
+		cr.ManagerApprovedSum IS NOT NULL
+		AND
+		cr.ManagerApprovedSum > 0
 	ORDER BY
 		cr.CreationDate DESC,
 		cr.Id DESC

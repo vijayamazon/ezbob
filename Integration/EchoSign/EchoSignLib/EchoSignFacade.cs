@@ -156,9 +156,23 @@
 				int nSuccessCount = 0;
 
 				foreach (Person oRecipient in oRecipients) {
+					bool bIsCustomer = ReferenceEquals(oRecipient, sp.Customer);
+
+					if (bIsCustomer && !bSendToCustomer)
+						continue;
+
 					nTotalCount++;
 
-					if (EchoSignSendResult.Success == SendOne(sp.Template, sp.Template.PersonalGuarantee(oRecipient, nApprovedSum), new List<Person> {oRecipient}, sp.Customer.ID, sp.Template.ID, bSendToCustomer))
+					EchoSignSendResult bSendOneResult = SendOne(
+						sp.Template,
+						sp.Template.PersonalGuarantee(oRecipient, nApprovedSum),
+						new List<Person> { oRecipient },
+						sp.Customer.ID,
+						sp.Template.ID,
+						bIsCustomer
+					);
+
+					if (EchoSignSendResult.Success == bSendOneResult)
 						nSuccessCount++;
 				} // for each
 
