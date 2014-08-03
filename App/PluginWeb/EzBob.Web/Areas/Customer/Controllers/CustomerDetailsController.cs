@@ -746,6 +746,7 @@
 						Line3 = companyAdditionalInfo.ExperianCompanyAddrLine3,
 						Town = companyAdditionalInfo.ExperianCompanyAddrLine4,
 						Postcode = companyAdditionalInfo.ExperianCompanyPostcode,
+						OwnedByCustomer = false
 					}
 				};
 
@@ -853,7 +854,8 @@
 						Line2 = experianInfo.AddrLine2,
 						Line3 = experianInfo.AddrLine3,
 						Town = experianInfo.AddrLine4,
-						Postcode = experianInfo.PostCode
+						Postcode = experianInfo.PostCode,
+						OwnedByCustomer = false
 					}
 				};
 

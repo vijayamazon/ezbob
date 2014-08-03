@@ -13,5 +13,6 @@
 		OtherPropertyAddress = 11,
 		OtherPropertyAddressPrev = 12,
 		ExperianCompanyAddress = 13,
+		OtherOwnedProperty = 14
 	} // enum CustomerAddressType
 } // namespace EZBob.DatabaseLib.Model.Database

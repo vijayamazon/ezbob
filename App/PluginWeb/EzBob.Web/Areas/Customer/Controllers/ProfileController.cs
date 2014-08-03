@@ -179,7 +179,8 @@
 				Postcode = company.PostCode,
 				AddressType = CustomerAddressType.ExperianCompanyAddress,
 				Customer = customer,
-				Company = customer.Company
+				Company = customer.Company,
+				OwnedByCustomer = false
 			}};
 
 			return Json(new { });

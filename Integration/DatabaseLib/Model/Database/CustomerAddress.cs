@@ -40,6 +40,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string Pobox { get; set; }
 		public virtual string Mailsortcode { get; set; }
 		public virtual string Udprn { get; set; }
+		public virtual bool OwnedByCustomer { get; set; }
 
 		[Newtonsoft.Json.JsonIgnore]
 		[ScriptIgnore]
