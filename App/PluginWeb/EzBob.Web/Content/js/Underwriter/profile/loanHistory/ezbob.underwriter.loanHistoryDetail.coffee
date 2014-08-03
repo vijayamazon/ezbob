@@ -70,10 +70,10 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
             notExperiedRollover: @model.get("notExperiedRollover")
             loanId: @model.loanid
 
-        rolloverView = new EzBob.Underwriter.RolloverView(model: model)
-        EzBob.App.jqmodal.show rolloverView
-        rolloverView.on "addRollover", @addRollover, this
-        rolloverView.on "removeRollover", @removeRollover, this
+        @rolloverView = new EzBob.Underwriter.RolloverView(model: model)
+        EzBob.App.jqmodal.show @rolloverView
+        @rolloverView.on "addRollover", @addRollover, this
+        @rolloverView.on "removeRollover", @removeRollover, this
 
     removeRollover: (roloverId) ->
         that = this
@@ -85,6 +85,7 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
             EzBob.ShowMessage "Rollover succesfully removed"
             that.model.fetch()
         ).done ->
+            EzBob.App.jqmodal.hideModal(that.rolloverView)
             BlockUi "off"
 
 
@@ -99,6 +100,7 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
             that.model.fetch()
             that.trigger "RolloverAdded"
         ).done ->
+            EzBob.App.jqmodal.hideModal(that.rolloverView)
             BlockUi "off"
 
 

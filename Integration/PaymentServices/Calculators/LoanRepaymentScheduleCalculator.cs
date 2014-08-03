@@ -4,14 +4,12 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using StructureMap;
 
-    public class LoanRepaymentScheduleCalculator : ILoanRepaymentScheduleCalculator
+	public class LoanRepaymentScheduleCalculator : ILoanRepaymentScheduleCalculator
     {
-		// private static readonly ILog _log = LogManager.GetLogger(typeof(LoanRepaymentScheduleCalculator));
+		//private static readonly ILog _log = LogManager.GetLogger(typeof(LoanRepaymentScheduleCalculator));
         private readonly Loan _loan;
         private DateTime _term;
         private readonly IList<LoanScheduleItem> _schedule;
@@ -301,14 +299,14 @@
 
         private void UpdateState(DateTime date)
         {
-            //доход банка, за расчетный период
+            //interest for period
             var interest = _principal * GetInterestRate(_lastActionDate, date);
             _totalInterestToPay += interest;
 
-            //время с момента последнего расчета
+            //time from last calculation
             _lastActionDate = date;
 
-            //помечяем устаревшие rollovers и удаляем их из списка
+            //marking expired rollovers and removing them from the list
             var expired = new List<PaymentRollover>();
             foreach (var rollover in _currentRollover.Where(r => r != null))
             {
@@ -324,6 +322,7 @@
 
         /// <summary>
         /// Возвращает процентную ставку, для конкретного периода.
+        /// Returns interest for specific period
         ///  </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
@@ -431,29 +430,29 @@
             _lastPaymentDate = payment.PostDate;
 
 
-            //Платим Fees
+            //Paying Fees
             var amount = Math.Min(money, Math.Round(feestToPay, 2));
             _paidFees += amount;
             money = money - amount;
             payment.Fees = amount;
             RecordFeesPayment(amount);
 
-            //Платим Interest
+            //Paying Interest
             amount = payment.InterestOnly ? money : Math.Min(money, Math.Round(interestToPay, 2));
             _paidInterest += amount;
             money = money - amount;
             payment.Interest = amount;
             RecordInterestPayment(amount);
 
-            //Платим тело rollover
+            //Paying rollover
             foreach (var rollover in _rollovers)
             {
                 money = PayRollover(rollover, payment, money);
             }
-            //удаляем оплаченные rollover
+            //Removing payed rollovers
             _currentRollover = _currentRollover.Where(r => r.Status != RolloverStatus.Paid).ToList();
 
-            //Платим тело кредита
+            //Paying principal
             amount = Math.Min(money, _principal);
             _principal = _principal - amount;
             money = money - amount;
@@ -482,10 +481,10 @@
                 _paidRollOvers += amount;
                 money = money - amount;
 
-                //если rollover оплачен
+                //if rollover is payed
                 if (_paidRollOvers >= _totalRollOversToPay)
                 {
-                    //тогда сдвигаем расписание в случае "первой" оплаты
+                    //than shifting schedule in case of "first" repayment
                     if (rollover.Status == RolloverStatus.New)
                     {
                         _loan.ShiftPayments(rollover.LoanSchedule.Date, rollover.MounthCount);
@@ -508,7 +507,7 @@
             }
         }
 
-        // при просроченном платеже, необходимо обновить все незакрытые installment
+        // in case of late payment, need update all not closed installments
         private void RecordFeesPayment(decimal amount)
         {
             var oldAmount = amount;
@@ -534,7 +533,7 @@
             _chargesToPay = _chargesToPay.Where(c => c.State != "Paid").ToList();
         }
 
-        // при просроченном платеже, необходимо обновить все незакрытые installment
+        // in case of late payment, need to update all not closed installments
         private void RecordInterestPayment(decimal amount)
         {
             foreach (var installment in _processed.Where(i => i.Interest > 0))
@@ -545,7 +544,7 @@
             }
         }
 
-        // при просроченном платеже, необходимо обновить все незакрытые installment
+		// in case of late payment, need to update all not closed installments
         private void RecordPrincipalPayment(decimal amount)
         {
             foreach (var installment in _processed.Where(i => i.LoanRepayment > 0))
@@ -590,7 +589,7 @@
 
             _daysInMonth = DaysInMonth(installment.Date);
 
-            //сколько должны заплатить по телу кредита в рамках этого installment
+            //how much have to pay principal in current installment
             var principalToPay = _principal - _expectedPrincipal - _rescentLate.Where(x => x.Status == LoanScheduleStatus.Late).Sum(x => x.LoanRepayment);
             var interestToPay = _totalInterestToPay - _paidInterest - _processed.Sum(x => x.Interest);
 			var feesToPay = _totalFeesToPay - _paidFees - _processed.Sum(x => x.Fees);
@@ -599,7 +598,7 @@
 
             installment.Status = LoanScheduleStatus.StillToPay;
 
-            //если на момент installment у клиента на руках было меньше денег, чем должно было остаться, то платеж считается оплаченным.
+            //if the moment of installment client have less money than had to be, than the payment considered as payed.
 
             var diff = _principal - _expectedPrincipal;
 
@@ -629,7 +628,7 @@
             installment.LoanRepayment = Math.Round(Math.Max(0, principalToPay), 2);
             installment.AmountDue = installment.LoanRepayment + installment.Interest + installment.Fees;
 
-            //для installmentов в будущем, которые следует оплатить будем считать, что клиент платит четко по расписанию
+            //for future installments, that have to be payed, will consider that client pays exactly on schedule 
             if (_term <= installment.Date && _principal > installment.Balance && installment.Status == LoanScheduleStatus.StillToPay)
             {
                 _principal = installment.Balance;

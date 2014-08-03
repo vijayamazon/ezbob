@@ -40,9 +40,8 @@
         title: "Rollover",
         position: "center",
         draggable: false,
-        width: "73%",
-        height: Math.max(window.innerHeight * 0.9, 600),
-        dialogClass: "rollover-popup"
+        dialogClass: "rollover-popup",
+        width: 600
       };
     };
 
@@ -76,15 +75,13 @@
       disabled = this.form.find(':input:disabled').removeAttr('disabled');
       this.trigger("addRollover", this.form.serializeArray());
       disabled.attr('disabled', 'disabled');
-      this.$el.find('.close').click();
       return true;
     };
 
     RolloverView.prototype.removeRollover = function() {
       var rolloverId;
       rolloverId = this.$el.find('input[name=\"rolloverId\"]');
-      this.trigger("removeRollover", rolloverId);
-      return this.$el.find('.close').click();
+      return this.trigger("removeRollover", rolloverId);
     };
 
     RolloverView.prototype.updatePaymentData = function() {

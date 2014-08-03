@@ -122,7 +122,7 @@
 		{
 			var expDate = FormattingUtils.ParseDateWithoutTime(experiedDate);
 			var currentLoanSchedule = _loanScheduleRepository.GetById(scheduleId);
-			var rolloverModel = isEditCurrent ? _rolloverRepository.GetById((int)rolloverId) : new PaymentRollover();
+			var rolloverModel = isEditCurrent && rolloverId.HasValue ? _rolloverRepository.GetById((int)rolloverId) : new PaymentRollover();
 			var customer = currentLoanSchedule.Loan.Customer;
 
 			if (expDate <= DateTime.UtcNow)
@@ -131,7 +131,7 @@
 			}
 			if (mounthCount < 1)
 			{
-				throw new Exception("Mounth count must be more 1");
+				throw new Exception("Month count must be more 1");
 			}
 
 			if (isEditCurrent)
@@ -141,13 +141,12 @@
 			else
 			{
 				var rollovers = _rolloverRepository.GetByLoanId(currentLoanSchedule.Loan.Id);
-				if (
-					rollovers.Any(
-						rollover => rollover.Status == RolloverStatus.New && rollover.ExpiryDate > DateTime.UtcNow))
+				if (rollovers.Any(rollover => rollover.Status == RolloverStatus.New && rollover.ExpiryDate > DateTime.UtcNow))
 				{
 					throw new Exception("The loan has an unpaid rollover. Please close unpaid rollover and try again");
 				}
 			}
+
 			rolloverModel.MounthCount = mounthCount;
 			rolloverModel.ExpiryDate = expDate;
 			rolloverModel.LoanSchedule = currentLoanSchedule;

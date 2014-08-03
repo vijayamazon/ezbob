@@ -21,7 +21,7 @@ class EzBob.JqModalRegion extends  Backbone.Marionette.Region
             option['resizable'] = true
             option['draggable'] = true
         @dialog.dialog(option)
-        @dialog.one 'dialogclose', =>
+        @dialog.on 'dialogclose', =>
             @close()
 
         @dialog.find('.ui-dialog').addClass('box')

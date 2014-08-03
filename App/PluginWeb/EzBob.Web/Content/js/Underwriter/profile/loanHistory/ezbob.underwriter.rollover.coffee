@@ -50,14 +50,11 @@ class EzBob.Underwriter.RolloverView extends Backbone.View
 
         #re-disabled the set of inputs that you previously enabled
         disabled.attr('disabled','disabled');
-
-        @$el.find('.close').click()
         true
 
     removeRollover: ->
         rolloverId = @$el.find('input[name=\"rolloverId\"]');
         @trigger "removeRollover", rolloverId
-        @$el.find('.close').click()
 
     updatePaymentData: ->
         data = {

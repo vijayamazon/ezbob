@@ -95,7 +95,7 @@
     };
 
     LoanDetailsView.prototype.rollover = function(e) {
-      var model, rolloverView;
+      var model;
       if (!this.checkForActiveLoan()) {
         return false;
       }
@@ -110,12 +110,12 @@
         notExperiedRollover: this.model.get("notExperiedRollover"),
         loanId: this.model.loanid
       };
-      rolloverView = new EzBob.Underwriter.RolloverView({
+      this.rolloverView = new EzBob.Underwriter.RolloverView({
         model: model
       });
-      EzBob.App.jqmodal.show(rolloverView);
-      rolloverView.on("addRollover", this.addRollover, this);
-      return rolloverView.on("removeRollover", this.removeRollover, this);
+      EzBob.App.jqmodal.show(this.rolloverView);
+      this.rolloverView.on("addRollover", this.addRollover, this);
+      return this.rolloverView.on("removeRollover", this.removeRollover, this);
     };
 
     LoanDetailsView.prototype.removeRollover = function(roloverId) {
@@ -130,6 +130,7 @@
         EzBob.ShowMessage("Rollover succesfully removed");
         return that.model.fetch();
       }).done(function() {
+        EzBob.App.jqmodal.hideModal(that.rolloverView);
         return BlockUi("off");
       });
     };
@@ -147,6 +148,7 @@
         that.model.fetch();
         return that.trigger("RolloverAdded");
       }).done(function() {
+        EzBob.App.jqmodal.hideModal(that.rolloverView);
         return BlockUi("off");
       });
     };
