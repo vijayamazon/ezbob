@@ -171,8 +171,22 @@
 						if (!checkInCacheOnly)
 							oExperianLtd = DownloadOneLimitedFromExperian(regNumber, customerId);
 					}
-					else
-						bCacheHit = true;
+					else {
+						if ((DateTime.UtcNow - oExperianLtd.ReceivedTime).TotalDays > CurrentValues.Instance.UpdateCompanyDataPeriodDays) {
+							oExperianLtd = DownloadOneLimitedFromExperian(regNumber, customerId);
+
+							if ((oExperianLtd == null) || (oExperianLtd.ID == 0)) {
+								oExperianLtd = null;
+
+								ms_oLog.Debug(
+									"GetOneLimitedBusinessData({0}, {1}, {2}, {3}): no data downloaded nor data found in cache.",
+									regNumber, customerId, checkInCacheOnly, forceCheck
+								);
+							}
+						}
+						else
+							bCacheHit = true;
+					}
 				} // if
 
 				ms_oLog.Debug(
