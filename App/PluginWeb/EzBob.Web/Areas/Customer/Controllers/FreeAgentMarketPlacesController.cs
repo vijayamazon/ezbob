@@ -50,7 +50,6 @@
 			return Json(freeagents, JsonRequestBehavior.AllowGet);
 		}
 
-		[ValidateJsonAntiForgeryToken]
 		public ActionResult AttachFreeAgent()
 		{
 			log.Info("Attaching FreeAgent");
