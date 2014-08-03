@@ -862,7 +862,7 @@ EzBob.formatDate = function (date) {
 	if (!date)
 		return '';
 
-	var oMoment = moment.utc(date).local();
+	var oMoment = moment.utc(date);
 
 	if (oMoment.year() === 1 && oMoment.months() === 0 && oMoment.date() === 1)
 		return '';
@@ -873,14 +873,14 @@ EzBob.formatDate = function (date) {
 //formats date for user from utc asp.net date
 EzBob.formatDate2 = function (date) {
     if (!date) return "";
-    return moment.utc(date).local().format("DD/MM/YYYY");
+    return moment.utc(date).format("DD/MM/YYYY");
 };
 
 
 //formats date for user from utc asp.net date + time
 EzBob.formatDateTime = function (date) {
     if (!date) return "";
-    return moment.utc(date).local().format("DD/MM/YYYY HH:mm:ss");
+    return moment.utc(date).format("DD/MM/YYYY HH:mm:ss");
 };
 
 //formats date for user from asp.net date + time as is
@@ -903,7 +903,7 @@ EzBob.datetimeToDate = function (date) {
 //formats date for user from utc asp.net date without time
 EzBob.formatDateWithoutTime = function (date) {
     if (!date) return "";
-    return moment.utc(date).local().format("DD/MM/YYYY");
+    return moment.utc(date).format("DD/MM/YYYY");
 };
 //parses dateString "DD/MM/YYYY" to date "yyyy-MM-dd"
 EzBob.parseDate = function (dateString) {
@@ -980,22 +980,22 @@ EzBob.formatLoanTypeSelection = function (num) {
 
 EzBob.formatDateHuman = function (date) {
     if (!date) return "";
-    return moment.utc(date).local().format("MMM D");
+    return moment.utc(date).format("MMM D");
 };
 
 EzBob.formatDateHumanFull = function (date) {
     if (!date) return "";
-    return moment.utc(date).local().format("MMM D YYYY");
+    return moment.utc(date).format("MMM D YYYY");
 };
 
 EzBob.formatDateShortCard = function (date) {
     if (!date) return "";
-    return moment.utc(date).local().format("MM/YYYY");
+    return moment.utc(date).format("MM/YYYY");
 };
 
 EzBob.formatDateMY = function (date) {
     if (!date) return "";
-    return moment.utc(date).local().format("MMM 'YY");
+    return moment.utc(date).format("MMM 'YY");
 };
 
 EzBob.formatTimeSpan = function (val) {
