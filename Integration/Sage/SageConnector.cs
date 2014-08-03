@@ -96,7 +96,7 @@
 			return results;
 		}
 
-		private static PaginatedResults<TDeserialized> CreateDeserializedItems<TDeserialized>(string cleanResponse)
+		public static PaginatedResults<TDeserialized> CreateDeserializedItems<TDeserialized>(string cleanResponse)
 		{
 			var deserializedItems = DeserializeItems<TDeserialized>(cleanResponse);
 			if (deserializedItems == null)
@@ -158,7 +158,7 @@
 			}
 		}
 
-		private static string CleanResponse(string originalResponse)
+		public static string CleanResponse(string originalResponse)
 		{
 			return originalResponse.Replace("\"$", "\"");
 		}

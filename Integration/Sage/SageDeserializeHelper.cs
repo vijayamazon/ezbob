@@ -106,7 +106,7 @@ namespace Sage
 		public SageReferenceKey contact { get; set; }
 		public SageReferenceKey source { get; set; }
 		public SageReferenceKey destination { get; set; }
-		public SageReferenceKey payment_method { get; set; }
+		//public SageReferenceKey payment_method { get; set; }
 		public bool voided { get; set; }
 		public int lock_version { get; set; }
 	}
@@ -127,7 +127,7 @@ namespace Sage
 		public SageReferenceKey contact { get; set; }
 		public SageReferenceKey source { get; set; }
 		public SageReferenceKey destination { get; set; }
-		public SageReferenceKey payment_method { get; set; }
+		//public SageReferenceKey payment_method { get; set; }
 		public bool voided { get; set; }
 		public int lock_version { get; set; }
 	}

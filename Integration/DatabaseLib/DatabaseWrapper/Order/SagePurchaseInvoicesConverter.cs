@@ -78,7 +78,7 @@
 				contact = o.ContactId,
 				source = o.SourceId,
 				destination = o.DestinationId,
-				payment_method = o.PaymentMethodId,
+				//payment_method = o.PaymentMethodId,
 				voided = o.voided,
 				lock_version = o.lock_version
 			}));

@@ -75,6 +75,7 @@
     <Compile Include="MedalScoreCalculatorTestFixture.cs" />
     <Compile Include="TestEchoSign.cs" />
     <Compile Include="TestExperianLateCount.cs" />
+    <Compile Include="TestSageParser.cs" />
     <Compile Include="TestStrategies.cs" />
     <Compile Include="TestCurrencyUpdateController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

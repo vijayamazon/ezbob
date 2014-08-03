@@ -283,7 +283,7 @@ namespace Sage
 				contact = si.contact == null ? null : si.contact.key,
 				source = si.source == null ? null : si.source.key,
 				destination = si.destination == null ? null : si.destination.key,
-				payment_method = si.payment_method == null ? null : si.payment_method.key,
+				//payment_method = si.payment_method == null ? null : si.payment_method.key,
 				voided = si.voided,
 				lock_version = si.lock_version
 			};
@@ -357,7 +357,7 @@ namespace Sage
 				contact = si.contact == null ? null : si.contact.key,
 				source = si.source == null ? null : si.source.key,
 				destination = si.destination == null ? null : si.destination.key,
-				payment_method = si.payment_method == null ? null : si.payment_method.key,
+				//payment_method = si.payment_method == null ? null : si.payment_method.key,
 				voided = si.voided,
 				lock_version = si.lock_version
 			};

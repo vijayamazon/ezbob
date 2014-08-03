@@ -24,7 +24,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 			Map(x => x.ContactId);
 			Map(x => x.SourceId);
 			Map(x => x.DestinationId);
-			Map(x => x.PaymentMethodId);
+			//Map(x => x.PaymentMethodId);
 			Map(x => x.voided);
 			Map(x => x.lock_version);
 		}

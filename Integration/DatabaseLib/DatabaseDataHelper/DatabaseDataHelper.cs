@@ -616,7 +616,7 @@ namespace EZBob.DatabaseLib {
 						ContactId = dataItem.contact,
 						SourceId = dataItem.source,
 						DestinationId = dataItem.destination,
-						PaymentMethodId = dataItem.payment_method,
+						//PaymentMethodId = dataItem.payment_method,
 						voided = dataItem.voided,
 						lock_version = dataItem.lock_version
 					};
@@ -641,7 +641,7 @@ namespace EZBob.DatabaseLib {
 						ContactId = dataItem.contact,
 						SourceId = dataItem.source,
 						DestinationId = dataItem.destination,
-						PaymentMethodId = dataItem.payment_method,
+						//PaymentMethodId = dataItem.payment_method,
 						voided = dataItem.voided,
 						lock_version = dataItem.lock_version
 					};
