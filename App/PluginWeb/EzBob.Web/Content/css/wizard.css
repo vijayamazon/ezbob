@@ -223,7 +223,9 @@ div.form_read_and_accept label{
 div.add-director-container #addDirector { position: relative; margin-bottom: 1em; }
 
 div.canDisabledAddress { display: none; }
-
+div.address-selected {
+    margin-top: 10px;
+}
 div.wizard-director-text { font-size: 11pt; color: #585858; }
 
 .wizard-wrapper .stores-view .back-step {

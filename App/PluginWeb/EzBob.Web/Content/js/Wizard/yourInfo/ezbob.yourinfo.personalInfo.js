@@ -67,20 +67,20 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	    $('#propertiesList').toggleClass('hide', !isPropertyOwner);
 	},
 
-	personalTimeAtAddressChanged: function() {
+	personalTimeAtAddressChanged: function () {
 		var buttonContainer = '#PrevPersonAddresses';
 
 		this.clearAddressError(buttonContainer);
-		this.$el.find('#PrevPersonAddresses .addAddressContainer label.attardi-input span').text('Enter previous postcode');
+
 		var jqElem = this.$el.find('#TimeAtAddress');
 
 		var nCurrentValue = parseInt(jqElem.val(), 10);
 
 		if ((nCurrentValue === 1) || (nCurrentValue === 2))
-			this.$el.find(buttonContainer + ' .btn').parents('div.control-group').show();
+		    this.$el.find('.prevPersonAddress').removeClass('canDisabledAddress');
 		else {
-			this.model.get('PrevPersonAddresses').reset();
-			this.$el.find(buttonContainer + ' .btn').parents('div.control-group').hide();
+		    this.model.get('PrevPersonAddresses').reset();
+		    this.$el.find('.prevPersonAddress').addClass('canDisabledAddress');
 		} // if
 	}, // personalTimeAtAddressChanged
 
@@ -101,14 +101,11 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	}, // isPrevAddressValid
 
 	prevModelChange: function() {
-		if (this.isPrevAddressValid()) {
-			this.clearAddressError('#PrevPersonAddresses');
-			$('#PrevPersonAddresses .field_status').hide();
-		}
-		else
-			$('#PrevPersonAddresses .field_status').show();
+	    if (this.isPrevAddressValid()) {
+	        this.clearAddressError('#PrevPersonAddresses');
+	    }
 
-		this.inputChanged();
+	    this.inputChanged();
 		EzBob.UiAction.registerView(this.prevPersonAddressesView);
 	}, // prevModelChange
 
@@ -131,6 +128,8 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			model: this.model.get('PrevPersonAddresses'),
 			name: 'PrevPersonAddresses',
 			max: 3,
+			title: 'Enter previous postcode',
+		    required: "empty",
 			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 		});
 		this.prevPersonAddressesView.render().$el.appendTo(oAddressContainer);

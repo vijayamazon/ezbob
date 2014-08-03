@@ -498,6 +498,7 @@ EzBob.AddressView = Backbone.View.extend({
 		this.isShowClear = options.isShowClear;
 		this.directorId = options.directorId || 0;
 		this.customerId = options.customerId || 0;
+	    this.required = options.required || "required";
 		this.uiEventControlIdPrefix = options.uiEventControlIdPrefix;
 
 		EzBob.ServerLog.debug('address view initialised');
@@ -506,7 +507,7 @@ EzBob.AddressView = Backbone.View.extend({
 	render: function () {
 		var self = this;
 
-		this.$el.html(this.template({ addresses: this.model.toJSON(), name: this.name, title: this.title }));
+		this.$el.html(this.template({ addresses: this.model.toJSON(), name: this.name, title: this.title, required: this.required }));
 
 		if (this.uiEventControlIdPrefix) {
 			this.$el.find('[ui-event-control-id]').each(function() {
@@ -523,11 +524,14 @@ EzBob.AddressView = Backbone.View.extend({
 		this.postcodeInput = this.$el.find('.addAddressInput');
 		this.showClear();
 
-		var sInitialStatus = (this.model && this.model.length) ? 'ok' : '';
-
+		var sInitialStatus = (this.model && this.model.length > 0 && this.required == 'required') ? 'ok' : '';
 		this.$el.find('img.field_status').each(function () {
-			var bRequired = $(this).hasClass('required');
-			$(this).field_status({ required: bRequired, initial_status: sInitialStatus, });
+		    var bRequired = $(this).hasClass('required');
+		    if (bRequired) {
+		        $(this).field_status({ required: bRequired, initial_status: sInitialStatus, });
+		    } else {
+		        $(this).field_status('set', 'empty', 2);
+		    }
 		});
 
 		_.each(this.model.models, function (val) {
