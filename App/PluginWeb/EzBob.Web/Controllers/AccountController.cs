@@ -318,6 +318,7 @@ namespace EzBob.Web.Controllers {
 		[HttpGet]
 		public JsonResult GetPropertyStatuses() {
 			PropertyStatusesActionResult propertyStatusesActionResult = m_oServiceClient.Instance.GetPropertyStatuses();
+			ms_oLog.Info("QQQ - Received {0} statuses", propertyStatusesActionResult.Groups.Length);
 			return Json(propertyStatusesActionResult.Groups, JsonRequestBehavior.AllowGet);
 		} // GetPropertyStatuses
 
