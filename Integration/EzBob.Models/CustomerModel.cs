@@ -68,7 +68,7 @@ namespace EzBob.Models {
 
 		public CustomerAddress[] PrevPersonAddresses { get; set; }
 
-		public CustomerAddress[] OtherPropertyAddress { get; set; }
+		public CustomerAddress[] OtherPropertiesAddresses { get; set; }
 
 		public CustomerAddress[] CompanyAddress { get; set; }
 

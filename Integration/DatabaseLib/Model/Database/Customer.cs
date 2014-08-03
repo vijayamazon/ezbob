@@ -273,15 +273,11 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		#endregion property AllAddresses
 
-		#region property OtherPropertyAddress
-
-		private Iesi.Collections.Generic.ISet<CustomerAddress> _otherPropertyAddress = new HashedSet<CustomerAddress>();
-		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> OtherPropertyAddress {
-			get { return _otherPropertyAddress; }
-			set { _otherPropertyAddress = value; }
-		} // OtherPropertyAddress
-
-		#endregion property OtherPropertyAddress
+		private Iesi.Collections.Generic.ISet<CustomerAddress> _otherPropertiesAddresses = new HashedSet<CustomerAddress>();
+		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> OtherPropertiesAddresses {
+			get { return _otherPropertiesAddresses; }
+			set { _otherPropertiesAddresses = value; }
+		}
 	} // class AddressInfo
 
 	#endregion class AddressInfo

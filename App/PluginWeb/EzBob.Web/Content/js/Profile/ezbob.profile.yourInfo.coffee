@@ -179,7 +179,7 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
 
     regions: 
         personAddress: '#PersonalAddress'
-        otherPropertyAddress: '#OtherPropertyAddress'
+        otherPropertiesAddresses: '#OtherPropertiesAddresses'
 
     onRender: ->
         address = new EzBob.AddressView({
@@ -193,13 +193,13 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
 
         if @model.get('IsOffline')
             otherAddress = new EzBob.AddressView({
-                model: @model.get('OtherPropertyAddress'),
-                name: 'OtherPropertyAddress',
+                model: @model.get('OtherPropertiesAddresses'),
+                name: 'OtherPropertiesAddresses',
                 max: 1,
                 isShowClear: true,
-                uiEventControlIdPrefix: @otherPropertyAddress.getEl(@otherPropertyAddress.el).attr('data-ui-event-control-id-prefix'),
+                uiEventControlIdPrefix: @otherPropertiesAddresses.getEl(@otherPropertiesAddresses.el).attr('data-ui-event-control-id-prefix'),
             })
-            @otherPropertyAddress.show(otherAddress)
+            @otherPropertiesAddresses.show(otherAddress)
         else
             @$el.find('.offline').remove()
 

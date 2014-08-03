@@ -21,7 +21,6 @@
 		public PersonalInfo PayPal { get; set; }
 		public CustomerAddress CurrentAddress { get; set; }
 		public CustomerAddress PrevAddress { get; set; }
-		public CustomerAddress OtherPropertyAddress { get; set; }
 		public CustomerAddress EBayAddress { get; set; }
 		public CustomerAddress PayPalAddress { get; set; }
 		public CustomerAddress SellerAddress { get; set; }
@@ -94,8 +93,6 @@
 			CrossCheckStatus = new CrossCheckStatus();
 
 			ExperianDirectors = GetExperianDirectors(customer).DirectorNames;
-
-			OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.OtherPropertyAddress);
 
 			var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
 			Zoopla zoopla = null;

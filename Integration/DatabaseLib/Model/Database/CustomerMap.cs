@@ -99,7 +99,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 				 .Inverse()
 				 .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-				m.HasMany(x => x.OtherPropertyAddress)
+				m.HasMany(x => x.OtherPropertiesAddresses)
 				 .AsSet()
 				 .KeyColumn("customerId")
 				 .Where("addressType=" + Convert.ToInt32(CustomerAddressType.OtherPropertyAddress))

@@ -105,9 +105,9 @@
                             <select id="PropertyStatusId" name="PropertyStatusId" class="select form_field" ui-event-control-id="personal-info:residential_status">
                                 <option></option>
                                 <% _.each(EzBob.PropertyStatusesData, function(group) { %>
-                                    <optgroup label="<%- group.Title%>">
-                                        <% _.each(group.Statuses, function(status){  %>
-                                            <option value="<%- status.Id %>" class="<%- status.IsOwner ? 'PropertyOwner' : '' %>"><%- status.Description %></option>
+                                    <optgroup label="<%- group.Title %>">
+                                        <% _.each(group.Statuses, function(status) {  %>
+                                            <option value="<%- status.Id %>" class="<%- status.IsOwner ? (status.Description == 'I own only this property' ? 'SinglePropertyOwner' : 'MultiPropertyOwner') : '' %>"><%- status.Description %></option>
                                         <% }); %>
                                     </optgroup>
                                 <% }); %>
@@ -118,6 +118,7 @@
                 </div>
             
                 <div id="propertiesList" class="hide">
+                    @EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "previous-personal", "otherPropertiesAddress canDisabledAddress")
                 </div>
 
                 <h2 class="form_section">Contact details</h2>

@@ -63,8 +63,15 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	propertyStatusChanged: function () {
 	    var selectedItem = document.getElementById("PropertyStatusId");
 	    var selectedIndex = selectedItem.selectedIndex;
-	    var isPropertyOwner = $(selectedItem[selectedIndex]).hasClass('PropertyOwner');
-	    $('#propertiesList').toggleClass('hide', !isPropertyOwner);
+	    var isMultiPropertyOwner = $(selectedItem[selectedIndex]).hasClass('MultiPropertyOwner');
+	    $('#propertiesList').toggleClass('hide', !isMultiPropertyOwner);
+
+	    if (isMultiPropertyOwner) {
+	        this.$el.find('.otherPropertiesAddress').removeClass('canDisabledAddress');
+	    } else {
+	        this.model.get('OtherPropertiesAddresses').reset();
+	        this.$el.find('.otherPropertiesAddress').addClass('canDisabledAddress');
+	    }
 	},
 
 	personalTimeAtAddressChanged: function () {
@@ -135,8 +142,19 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		this.prevPersonAddressesView.render().$el.appendTo(oAddressContainer);
 		EzBob.Validation.addressErrorPlacement(this.prevPersonAddressesView.$el, this.prevPersonAddressesView.model);
 
+		oAddressContainer = this.$el.find('#OtherPropertiesAddresses');
+		this.otherPropertiesAddressesView = new EzBob.AddressView({
+		    model: this.model.get('OtherPropertiesAddresses'),
+		    name: 'OtherPropertiesAddresses',
+		    max: 3,
+		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		});
+		this.otherPropertiesAddressesView.render().$el.appendTo(oAddressContainer);
+		EzBob.Validation.addressErrorPlacement(this.otherPropertiesAddressesView.$el, this.otherPropertiesAddressesView.model);
+
 		this.model.get('PrevPersonAddresses').on('all', this.prevModelChange, this);
 		this.model.get('PersonalAddress').on('all', this.personalAddressModelChange, this);
+		this.model.get('OtherPropertiesAddresses').on('all', this.otherPropertiesAddressesModelChange, this);
 		this.$el.find('.cashInput').moneyFormat();
 
 		this.$el.find('.addressCaption').hide();
@@ -173,11 +191,17 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		return this;
 	}, // render
 
-	personalAddressModelChange: function(e, el) {
-		this.inputChanged();
-		this.clearAddressError('#PersonalAddress');
-		EzBob.UiAction.registerView(this.personalAddressView);
+	personalAddressModelChange: function (e, el) {
+	    this.inputChanged();
+	    this.clearAddressError('#PersonalAddress');
+	    EzBob.UiAction.registerView(this.personalAddressView);
 	}, // personalAddressModelChange
+
+	otherPropertiesAddressesModelChange: function (e, el) {
+	    this.inputChanged();
+	    this.clearAddressError('#OtherPropertiesAddresses');
+	    EzBob.UiAction.registerView(this.otherPropertiesAddressesView);
+	},
 
 	getValidator: function() { return EzBob.validatePersonalDetailsForm; }, // getValidator
 

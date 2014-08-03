@@ -329,9 +329,10 @@
 			PersonalInfo personalInfo,
 			List<CustomerAddress> personalAddress,
 			List<CustomerAddress> prevPersonAddresses,
+			List<CustomerAddress> otherPropertiesAddresses,
 			string dateOfBirth) {
 			new Transactional(
-				() => SaveCustomerToDB(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth)
+				() => SaveCustomerToDB(personalInfo, personalAddress, prevPersonAddresses, otherPropertiesAddresses, dateOfBirth)
 			).Execute();
 
 			var customer = m_oContext.Customer;
@@ -396,7 +397,7 @@
 			List<CustomerAddress> limitedCompanyAddress,
 			List<CustomerAddress> nonLimitedCompanyAddress,
 			List<DirectorAddressModel>[] directorAddress,
-			List<CustomerAddress> otherPropertyAddress
+			List<CustomerAddress> otherPropertiesAddresses
 		) {
 			var customer = m_oContext.Customer;
 
@@ -415,16 +416,6 @@
 				addressInfo.PersonalAddress,
 				CustomerAddressType.PersonalAddress
 			);
-
-			if (otherPropertyAddress != null) {
-				MakeAddress(
-					otherPropertyAddress,
-					addressInfo.OtherPropertyAddress,
-					CustomerAddressType.OtherPropertyAddressPrev,
-					addressInfo.OtherPropertyAddress,
-					CustomerAddressType.OtherPropertyAddress
-				);
-			} // if
 
 			var company = customer.Company;
 			if (company != null)
@@ -635,6 +626,7 @@
 			IEnumerable<CustomerAddress> oNewAddressList,
 			Iesi.Collections.Generic.ISet<CustomerAddress> oCurrentAddressList,
 			CustomerAddressType nType,
+			bool ownedByCustomer,
 			Action<Iesi.Collections.Generic.ISet<CustomerAddress>> fSetNewValue
 		) {
 			if (oNewAddressList == null) {
@@ -649,6 +641,7 @@
 			foreach (var val in oNewAddressList.Where(x => x.AddressId == 0)) {
 				val.AddressType = nType;
 				val.Customer = customer;
+				val.OwnedByCustomer = ownedByCustomer;
 				oNewEntries.Add(val);
 			} // foreach
 
@@ -904,6 +897,7 @@
 			PersonalInfo personalInfo,
 			IEnumerable<CustomerAddress> personalAddress,
 			IEnumerable<CustomerAddress> prevPersonAddresses,
+			List<CustomerAddress> otherPropertiesAddresses,
 			string dateOfBirth // do not remove this argument, see remarks above
 		) {
 			ms_oLog.Debug("SaveCustomerToDB(personalInfo.birthdate = {0}, dateOfBirth = {1}.",
@@ -946,16 +940,31 @@
 				personalInfo.Fullname = string.Format("{0} {1}", personalInfo.FirstName, personalInfo.Surname).Trim();
 			}
 
+			bool customerOwnsMainResidentialAddress = customer.PropertyStatus.IsOwner &&
+													  customer.PropertyStatus.Description != "I live in the above and own other properties";
+
 			UpdateAddresses(
-				customer, personalAddress, customer.AddressInfo.PersonalAddress,
-				CustomerAddressType.PersonalAddress,
+				customer, personalAddress, 
+				customer.AddressInfo.PersonalAddress,
+				CustomerAddressType.PersonalAddress, 
+				customerOwnsMainResidentialAddress,
 				lst => customer.AddressInfo.PersonalAddress = lst
 			);
 
 			UpdateAddresses(
-				customer, prevPersonAddresses, customer.AddressInfo.PrevPersonAddresses,
-				CustomerAddressType.PrevPersonAddresses,
+				customer, prevPersonAddresses, 
+				customer.AddressInfo.PrevPersonAddresses,
+				CustomerAddressType.PrevPersonAddresses, 
+				false,
 				lst => customer.AddressInfo.PrevPersonAddresses = lst
+			);
+
+			UpdateAddresses(
+				customer, otherPropertiesAddresses, 
+				customer.AddressInfo.OtherPropertiesAddresses,
+				CustomerAddressType.OtherPropertyAddress, 
+				true,
+				lst => customer.AddressInfo.OtherPropertiesAddresses = lst
 			);
 
 			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);

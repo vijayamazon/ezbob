@@ -174,7 +174,7 @@
 			if (customer.AddressInfo != null) {
 				customerModel.PersonalAddress = customer.AddressInfo.PersonalAddress.ToArray();
 				customerModel.PrevPersonAddresses = customer.AddressInfo.PrevPersonAddresses.ToArray();
-				customerModel.OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.ToArray();
+				customerModel.OtherPropertiesAddresses = customer.AddressInfo.OtherPropertiesAddresses.ToArray();
 			} // if
 
 			customerModel.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);

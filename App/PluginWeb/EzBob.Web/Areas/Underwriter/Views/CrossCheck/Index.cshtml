@@ -329,58 +329,6 @@
                     </div>
                 }
 
-                @if (Model.Customer.SegmentType() == "Offline")
-                {
-                    <table class="table centered squeezed">
-                        <thead class="box">
-                            <tr class="box-title">
-                                <th colspan="2">
-                                    <h3>Other property ownership</h3>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.OtherPropertyAddress == null)
-                            {
-                                <tr>
-                                    <td colspan="2">Does not own another property</td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td><b>Line1</b></td>
-                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line1</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Line2</b></td>
-                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line2</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Line3</b></td>
-                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line3</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Town</b></td>
-                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Town</td>
-                                </tr>
-                                <tr>
-                                    <td><b>County</b></td>
-                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.County</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Postcode</b></td>
-                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Postcode</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Country</b></td>
-                                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Country</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-
                 @{
                     string companyRefNum = null, companyNum = null, companyName = null, industryType = null, vatReporting = null;
                     Iesi.Collections.Generic.ISet<CustomerAddress> postcode = null;

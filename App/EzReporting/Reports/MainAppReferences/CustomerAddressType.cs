@@ -12,8 +12,7 @@
 		LimitedDirectorHomeAddressPrev = 8,
 		NonLimitedCompanyAddressPrev = 9,
 		NonLimitedDirectorHomeAddressPrev = 10,
-		OtherPropertyAddress = 11,
-		OtherPropertyAddressPrev = 12,
+		OtherPropertiesAddresses = 11,
 		ExperianCompanyAddress = 13,
 	} // enum CustomerAddressType
 }
