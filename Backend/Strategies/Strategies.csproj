@@ -92,7 +92,7 @@
     <Compile Include="Experian\LoadExperianLtd.cs" />
     <Compile Include="Experian\ParseExperianLtd.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
-    <Compile Include="Experian\UpdateExperianDirectors.cs" />
+    <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
     <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
     <Compile Include="Misc\BackfillAml.cs" />

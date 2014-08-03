@@ -18,7 +18,7 @@ BEGIN
 	WHERE
 		l.CustomerId IS NOT NULL
 		AND
-		l.ServiceType IN ('E-SeriesLimitedData', 'E-SeriesNonLimitedData')
+		l.ServiceType IN ('E-SeriesLimitedData')
 		AND
 		(@CustomerID IS NULL OR l.CustomerId = @CustomerID)
 	ORDER BY

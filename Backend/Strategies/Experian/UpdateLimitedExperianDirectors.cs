@@ -6,16 +6,14 @@
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
 
-	public class UpdateExperianDirectors : AStrategy {
+	public class UpdateLimitedExperianDirectors : AStrategy {
 		#region public
 
 		#region constructor
 
-		public UpdateExperianDirectors(int nCustomerID, long nServiceLogID, string sExperianXml, bool bIsLimited, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UpdateLimitedExperianDirectors(int nCustomerID, long nServiceLogID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
 			m_nServiceLogID = nServiceLogID;
-			m_sExperianXml = sExperianXml;
-			m_bIsLimited = bIsLimited;
 		} // constructor
 
 		#endregion constructor
@@ -23,7 +21,7 @@
 		#region property Name
 
 		public override string Name {
-			get { return "UpdateExperianDirectors"; }
+			get { return "Update limited Experian directors"; }
 		} // Name
 
 		#endregion property Name
@@ -31,23 +29,24 @@
 		#region method Execute
 
 		public override void Execute() {
-			if ((m_nCustomerID <= 0) || (!m_bIsLimited && string.IsNullOrWhiteSpace(m_sExperianXml)) || (m_bIsLimited && (m_nServiceLogID < 1))) {
+			Log.Debug("Updating limited Experian directors for customer {0} from service log id {1}...", m_nCustomerID, m_nServiceLogID);
+
+			if ((m_nCustomerID <= 0) || (m_nServiceLogID < 1)) {
 				Log.Warn(
-					"Cannot update Experian directors from input parameters: " +
-					"customer id = {0}, is limited = {1}, service log id = {3}, XML = {2}",
-					m_nCustomerID, m_bIsLimited, m_sExperianXml, m_nServiceLogID
+					"Cannot update limited Experian directors from input parameters: customer id = {0}, service log id = {1}",
+					m_nCustomerID, m_nServiceLogID
 				);
 				return;
 			} // if
 
-			List<ExperianDirector> oDirectors = m_bIsLimited ? UpdateLimited() : null;
+			List<ExperianDirector> oDirectors = UpdateLimited();
 
 			if (oDirectors != null) {
 				var sp = new SaveExperianDirectors(DB, Log) { DirList = oDirectors, };
 				sp.ExecuteNonQuery();
 			} // if
 
-			Log.Debug("Updating Experian directors for customer {0}, is limited {1} complete.", m_nCustomerID, m_bIsLimited ? "yes" : "no");
+			Log.Debug("Updating limited Experian directors for customer {0} from service log id {1} complete.", m_nCustomerID, m_nServiceLogID);
 		} // Execute
 
 		#endregion method Execute
@@ -58,8 +57,6 @@
 
 		private readonly int m_nCustomerID;
 		private readonly long m_nServiceLogID;
-		private readonly string m_sExperianXml;
-		private readonly bool m_bIsLimited;
 
 		#region class SaveExperianDirectors
 
@@ -174,5 +171,5 @@
 		#endregion method UpdateLimited
 
 		#endregion private
-	} // class UpdateExperianDirectors
+	} // class UpdateLimitedExperianDirectors
 } // namespace

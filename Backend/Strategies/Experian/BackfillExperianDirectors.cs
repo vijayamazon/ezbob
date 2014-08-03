@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
+	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -27,28 +28,14 @@
 			else
 				DB.ExecuteNonQuery("DELETE FROM ExperianDirectors", CommandSpecies.Text);
 
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					int nCustomerID = sr["CustomerID"];
-					string sServiceType = sr["ServiceType"];
-
-					bool bIsLimited = sServiceType == "E-SeriesLimitedData";
-
-					new UpdateExperianDirectors(
-						nCustomerID,
-						sr["Id"],
-						bIsLimited ? string.Empty : sr["ResponseData"],
-						bIsLimited,
-						DB,
-						Log
-					).Execute();
-
-					return ActionResult.Continue;
-				},
+			IEnumerable<SafeReader> lst = DB.ExecuteEnumerable(
 				"LoadExperianDataForDirectorsBackfill",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", m_nCustomerID)
 			);
+
+			foreach (SafeReader sr in lst)
+				new UpdateLimitedExperianDirectors(sr["CustomerID"], sr["Id"], DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute
