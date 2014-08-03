@@ -34,6 +34,10 @@
 		public string IsShareholder { get; set; }
 		public string IsDirector { get; set; }
 
+		public override string ToString() {
+			return string.Format("{0}: {1} {2}", Id, Name, Surname);
+		} // ToString
+
 		public Director FromModel() {
 			Director director = null;
 

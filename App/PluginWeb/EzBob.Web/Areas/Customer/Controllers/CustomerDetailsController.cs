@@ -39,6 +39,8 @@
 			if (customer.Company == null)
 				return new { error = "Customer doesn't have a company." };
 
+			ms_oLog.Debug("Adding a director {0} to customer {1}.", director, customer.Stringify());
+
 			Director dbDirector = director.FromModel();
 
 			if (dbDirector == null)
@@ -48,7 +50,7 @@
 
 			if (sDirKey == DetailsToKey(customer))
 				if (bFailOnDuplicate)
-					return new { error = "This director already added" };
+					return new { error = "This Director already added." };
 
 			dbDirector.Customer = customer;
 			dbDirector.Company = customer.Company;
@@ -66,7 +68,7 @@
 				foreach (var dir in customer.Company.Directors) {
 					if (sDirKey == DetailsToKey(dir))
 						if (bFailOnDuplicate)
-							return new { error = "This director already added" };
+							return new { error = "This director already added." };
 				} // for each existing director
 			} // if customer has director(s)
 

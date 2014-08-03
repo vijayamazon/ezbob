@@ -4,6 +4,8 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 	template: '#add-director-info-template',
 
 	initialize: function(options) {
+		this.alreadySaved = false;
+
 		this.backButtonCaption = options.backButtonCaption || 'Back';
 
 		this.failOnDuplicate = options.failOnDuplicate;
@@ -72,14 +74,9 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		};
 	}, // initDupCheck
 
-	region: {
-		directorAddress: '.director_address'
-	}, // region
-
-	ui: {
-		form: '.addDirectorInfoForm',
-		addButton: '.addDirector'
-	}, // ui
+	form: function() {
+		return this.$el.find('.addDirectorInfoForm');
+	}, // form
 
 	events: {
 		'click .directorBack': 'directorBack',
@@ -124,7 +121,7 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		this.$el.find('.phonenumber').numericOnly(11);
 		this.$el.find('.addressCaption').hide();
 
-		this.validator = EzBob.validateAddDirectorForm(this.ui.form);
+		this.validator = this.buildValidator();
 
 		var oAddressContainer = this.$el.find('#DirectorAddress');
 
@@ -164,17 +161,19 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		if (!this.canSubmit())
 			return false;
 
-		var data = this.ui.form.serializeArray();
+		var data = this.form().serializeArray();
 
 		BlockUi('on');
 
-		var request = $.post(this.ui.form.attr('action'), data);
+		var request = $.post(this.form().attr('action'), data);
 
 		var self = this;
 
 		request.done(function(res) {
-			if (res.success)
+			if (res.success) {
+				self.alreadySaved = true;
 				self.trigger(self.successEvtName());
+			}
 			else {
 				if (res.error)
 					EzBob.App.trigger('error', res.error);
@@ -205,12 +204,15 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 	}, // isDirSha
 
 	canSubmit: function() {
+		if (this.alreadySaved)
+			return false;
+
 		var bForm = this.validator.checkForm();
 		var bHasAddress = bForm && (this.addressView.model.length > 0);
 		var bHasType = bHasAddress && (this.isDirSha('.is-director') || this.isDirSha('.is-shareholder'));
 		var bEnabled = bHasType && this.validateDuplicates();
 
-		this.setSomethingEnabled(this.ui.addButton, bEnabled);
+		this.setSomethingEnabled(this.$el.find('.addDirector'), bEnabled);
 
 		return bEnabled;
 	}, // canSubmit
@@ -241,7 +243,7 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 	}, // setDupCheckCompleteHandler
 
 	validateDuplicates: function() {
-		var oModel = new this.DupCheckModel(this.ui.form.serializeArray());
+		var oModel = new this.DupCheckModel(this.form().serializeArray());
 
 		if (!oModel.readyForCheck())
 			return false;
@@ -278,4 +280,25 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 
 		return JSON.stringify({ f: sFirstName, l: sLastName, b: sBirthDate, g: sGender, p: sPostCode, });
 	}, // detailsToKey
+
+	buildValidator: function() {
+		return this.form().validate({
+			rules: {
+				Name: EzBob.Validation.NameValidationObject,
+				Surname: { required: true },
+				Gender: { required: true },
+				DateOfBirth: { requiredDate: true, yearLimit: 18 },
+				Email: { required: true, email: true },
+				Phone: { required: true, regex: "^0[0-9]{10}$" },
+			},
+			messages: {
+				DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
+				Phone: { regex: "Please enter a valid UK number" },
+			},
+			errorPlacement: EzBob.Validation.errorPlacement,
+			unhighlight: EzBob.Validation.unhighlightFS,
+			highlight: EzBob.Validation.highlightFS,
+			ignore: ':not(:visible)',
+		});
+	}, // buildValidator
 }); // EzBob.AddDirectorInfoView
