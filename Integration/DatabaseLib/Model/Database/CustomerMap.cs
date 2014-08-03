@@ -42,7 +42,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.ManagerName);
 
 			Map(x => x.EscalationReason).Length(200);
-			Map(x => x.RejectedReason).Length(200);
+			Map(x => x.RejectedReason).Length(1000);
 			Map(x => x.ApprovedReason).Length(200);
 
 			Map(x => x.Details);

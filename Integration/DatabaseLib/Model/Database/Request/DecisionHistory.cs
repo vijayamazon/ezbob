@@ -90,17 +90,20 @@
 							   LoanType = cr.LoanType,
 							   RejectReasons = new HashedSet<DecisionHistoryRejectReason>()
 						   };
-			if (rejectionReasons != null)
-			{
+			if (rejectionReasons != null) {
+				
 				var repo = new RejectReasonRepository(_session);
-				foreach (var rejectionReason in rejectionReasons)
-				{
+				foreach (var rejectionReason in rejectionReasons) {
+					var reason = repo.Get(rejectionReason);
 					item.RejectReasons.Add(new DecisionHistoryRejectReason
 						{
 							DecisionHistory = item,
-							RejectReason = repo.Get(rejectionReason)
+							RejectReason = reason
 						});
 				}
+
+				string reasons = item.RejectReasons.Select(x => x.RejectReason.Reason).Aggregate((a, b) => a + ", " + b);
+				customer.RejectedReason += reasons;
 			}
 			Save(item);
 		}

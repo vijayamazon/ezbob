@@ -1,0 +1,5 @@
+ALTER TABLE Customer ALTER COLUMN RejectedReason NVARCHAR(1000)
+GO
+
+
+
