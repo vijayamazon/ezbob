@@ -279,7 +279,7 @@
 
 				res = ExtractValue(oModel.AnalysisDataInfo, PaypalOpex);
 				if (res.Item1 != 0) {
-					nOpex += res.Item1;
+					nOpex += Math.Abs(res.Item1);
 
 					if (res.Item2)
 						bWasAnnualized = true;
@@ -417,9 +417,9 @@
 				Ebitda = (decimal)oBank.Ebida,
 				FreeCashFlow = (decimal)oBank.FreeCashFlow,
 				LoanRepayment = (decimal)oBank.ActualLoansRepayment,
-				Opex = (decimal)oBank.Opex,
+				Opex = Math.Abs((decimal)oBank.Opex),
 				Revenues = (decimal)oBank.Revenues,
-				Salaries = (decimal)oBank.Salaries,
+				Salaries = Math.Abs((decimal)oBank.Salaries),
 				Tax = (decimal)oBank.Tax,
 				ValueAdded = (decimal)oBank.TotalValueAdded,
 			});
