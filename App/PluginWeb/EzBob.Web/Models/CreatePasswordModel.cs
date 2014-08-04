@@ -6,9 +6,24 @@
 
 		public CreatePasswordModel() {
 			Token = Guid.Empty;
+			BrokerLeadStr = "no";
 		} // constructor
 
 		#endregion constructor
+
+		#region property IsBrokerLead
+
+		public bool IsBrokerLead {
+			get { return BrokerLeadStr == "yes"; }
+		} // IsBrokerLead
+
+		#endregion property IsBrokerLead
+
+		#region property BrokerLeadStr
+
+		public string BrokerLeadStr { get; set; } // BrokerLeadStr
+
+		#endregion property BrokerLeadStr
 
 		#region property FirstName
 

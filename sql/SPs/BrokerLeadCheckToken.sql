@@ -11,6 +11,8 @@ BEGIN
 
 	DECLARE @LeadID INT
 
+	------------------------------------------------------------------------------
+
 	SELECT
 		@LeadID = BrokerLeadID
 	FROM
@@ -18,16 +20,24 @@ BEGIN
 	WHERE
 		BrokerLeadToken = @Token
 		AND
+		DateAccessed IS NULL
+		AND
 		DateDeleted IS NULL
+
+	------------------------------------------------------------------------------
 
 	IF @LeadID IS NOT NULL
 	BEGIN
 		UPDATE BrokerLeadTokens SET
-			DateDeleted = @DateDeleted
+			DateAccessed = @DateDeleted
 		WHERE
 			BrokerLeadID = @LeadID
 			AND
+			DateAccessed IS NULL
+			AND
 			DateDeleted IS NULL
+
+		-------------------------------------------------------------------------
 
 		SELECT
 			BrokerLeadID AS LeadID,
@@ -44,5 +54,7 @@ BEGIN
 			AND
 			BrokerLeadDeletedReasonID IS NULL
 	END
+
+	------------------------------------------------------------------------------
 END
 GO

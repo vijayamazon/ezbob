@@ -152,10 +152,10 @@
 
 		#region method SetCustomerPasswordByToken
 
-		public IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken) {
+		public IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken, bool bIsBrokerLead) {
 			SetCustomerPasswordByToken oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, oToken);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, oToken, bIsBrokerLead);
 
 			return new IntActionResult {
 				MetaData = oMetaData,

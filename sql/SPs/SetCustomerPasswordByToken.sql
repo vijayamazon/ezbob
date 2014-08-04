@@ -9,26 +9,44 @@ ALTER PROCEDURE SetCustomerPasswordByToken
 @Email NVARCHAR(128),
 @EzPassword VARCHAR(255),
 @TokenID UNIQUEIDENTIFIER,
+@IsBrokerLead BIT,
 @Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @CustomerID INT = 0
+	DECLARE @BrokerLeadTokenID INT = 0
 
 	------------------------------------------------------------------------------
 
-	SELECT
-		@CustomerID = c.Id
-	FROM
-		Customer c
-		INNER JOIN CreatePasswordTokens t
-			ON c.Id = t.CustomerID
-			AND t.TokenID = @TokenID
-			AND t.DateAccessed IS NOT NULL
-			AND t.DateDeleted IS NULL
-	WHERE
-		c.Name = @Email
+	IF @IsBrokerLead = 0
+	BEGIN
+		SELECT
+			@CustomerID = c.Id
+		FROM
+			Customer c
+			INNER JOIN CreatePasswordTokens t
+				ON c.Id = t.CustomerID
+				AND t.TokenID = @TokenID
+				AND t.DateAccessed IS NOT NULL
+				AND t.DateDeleted IS NULL
+		WHERE
+			c.Name = @Email
+	END
+	ELSE BEGIN
+		SELECT
+			@CustomerID = l.CustomerID,
+			@BrokerLeadTokenID = t.BrokerLeadTokenID
+		FROM
+			BrokerLeads l
+			INNER JOIN BrokerLeadTokens t
+				ON l.BrokerLeadID = t.BrokerLeadID
+				AND t.BrokerLeadToken = @TokenID
+				AND l.Email = @Email
+				AND t.DateAccessed IS NOT NULL
+				AND t.DateDeleted IS NULL
+	END
 
 	------------------------------------------------------------------------------
 
@@ -38,10 +56,19 @@ BEGIN
 
 		-------------------------------------------------------------------------
 
-		UPDATE CreatePasswordTokens SET
-			DateDeleted = @Now
-		WHERE
-			TokenID = @TokenID
+		IF @IsBrokerLead = 0
+		BEGIN
+			UPDATE CreatePasswordTokens SET
+				DateDeleted = @Now
+			WHERE
+				TokenID = @TokenID
+		END
+		ELSE BEGIN
+			UPDATE BrokerLeadTokens SET
+				DateDeleted = @Now
+			WHERE
+				BrokerLeadTokenID = @BrokerLeadTokenID
+		END
 
 		-------------------------------------------------------------------------
 

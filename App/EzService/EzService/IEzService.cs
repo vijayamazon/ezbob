@@ -479,7 +479,7 @@
 		CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken);
 
 		[OperationContract]
-		IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken);
+		IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken, bool bIsBrokerLead);
 
 		#endregion User Management
 

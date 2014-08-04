@@ -5,6 +5,20 @@
 	using System.Web.Security;
 
 	public class LogOnModel {
+		public enum Roles {
+			Customer,
+			Underwriter,
+		} // enum Roles
+
+		#region method SetCookie
+
+		public static void SetCookie(Roles nRole, string sUserName, bool bRememberMe) {
+			FormsAuthentication.SetAuthCookie(sUserName, bRememberMe);
+			HttpContext.Current.User = new GenericPrincipal(new GenericIdentity(sUserName), new[] { nRole.ToString() });
+		} // SetCookie
+
+		#endregion method SetCookie
+
 		#region property UserName
 
 		[Required]
@@ -37,9 +51,8 @@
 
 		#region method SetCookie
 
-		public void SetCookie(string sRole) {
-			FormsAuthentication.SetAuthCookie(UserName, RememberMe);
-			HttpContext.Current.User = new GenericPrincipal(new GenericIdentity(UserName), new[] { sRole });
+		public void SetCookie(Roles nRole) {
+			SetCookie(nRole, UserName, RememberMe);
 		} // SetCookie
 
 		#endregion method SetCookie

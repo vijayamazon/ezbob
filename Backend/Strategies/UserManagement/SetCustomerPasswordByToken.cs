@@ -14,6 +14,7 @@
 			string sEmail,
 			Password oPassword,
 			Guid oToken,
+			bool bIsBrokerLead,
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
@@ -28,6 +29,7 @@
 				Email = sEmail,
 				EzPassword = m_oData.NewPasswordHash,
 				TokenID = oToken,
+				IsBrokerLead = bIsBrokerLead,
 			};
 		} // constructor
 
@@ -89,6 +91,9 @@
 
 			[UsedImplicitly]
 			public Guid TokenID { get; set; }
+
+			[UsedImplicitly]
+			public bool IsBrokerLead { get; set; }
 
 			[UsedImplicitly]
 			public DateTime Now {

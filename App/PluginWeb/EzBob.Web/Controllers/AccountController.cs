@@ -102,7 +102,7 @@ namespace EzBob.Web.Controllers {
 
 				try {
 					if (MembershipCreateStatus.Success == ValidateUser(model.UserName, model.Password)) {
-						model.SetCookie("Underwriter");
+						model.SetCookie(LogOnModel.Roles.Underwriter);
 
 						bool bRedirectToUrl =
 							Url.IsLocalUrl(model.ReturnUrl) &&
@@ -257,7 +257,7 @@ namespace EzBob.Web.Controllers {
 			var nStatus = ValidateUser(model.UserName, model.Password);
 
 			if (MembershipCreateStatus.Success == nStatus) {
-				model.SetCookie("Customer");
+				model.SetCookie(LogOnModel.Roles.Customer);
 
 				ms_oLog.Debug(
 					"Customer log on attempt from remote IP {0} with user name '{1}': success.",
@@ -567,6 +567,24 @@ namespace EzBob.Web.Controllers {
 
 		#endregion action GetTwilioConfig
 
+		#region action LeadCreatePassword
+
+		[IsSuccessfullyRegisteredFilter]
+		[NoCache]
+		public ActionResult LeadCreatePassword(string sToken, string sFirstName, string sLastName, string sEmail) {
+			var oModel = new CreatePasswordModel {
+				RawToken = sToken,
+				FirstName = sFirstName,
+				LastName = sLastName,
+				UserName = sEmail,
+				BrokerLeadStr = "yes",
+			};
+
+			return View("CreatePassword", oModel);
+		} // LeadCreatePassword
+
+		#endregion action LeadCreatePassword
+
 		#region action CreatePassword
 
 		[IsSuccessfullyRegisteredFilter]
@@ -644,7 +662,8 @@ namespace EzBob.Web.Controllers {
 				nUserID = m_oServiceClient.Instance.SetCustomerPasswordByToken(
 					model.UserName,
 					new Password(model.Password),
-					model.Token
+					model.Token,
+					model.IsBrokerLead
 				).Value;
 			}
 			catch (Exception e) {
@@ -687,7 +706,7 @@ namespace EzBob.Web.Controllers {
 				return Json(new { success = false, errorMessage = sDisabledError, }, JsonRequestBehavior.AllowGet);
 			} // if user is disabled
 
-			model.SetCookie("Customer");
+			model.SetCookie(LogOnModel.Roles.Customer);
 			return Json(new { success = true, errorMessage = string.Empty }, JsonRequestBehavior.AllowGet);
 		} // CustomerCreatePassword
 

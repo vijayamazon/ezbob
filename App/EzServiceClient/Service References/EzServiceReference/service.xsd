@@ -718,6 +718,7 @@
         <xs:element minOccurs="0" name="sEmail" nillable="true" type="xs:string" />
         <xs:element xmlns:q68="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="oPassword" nillable="true" type="q68:Password" />
         <xs:element xmlns:q69="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="oToken" type="q69:guid" />
+        <xs:element minOccurs="0" name="bIsBrokerLead" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
