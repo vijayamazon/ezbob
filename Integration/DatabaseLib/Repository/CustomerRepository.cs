@@ -1,9 +1,7 @@
 using System;
-using System.Linq;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Exceptions;
 using NHibernate;
-using NHibernate.Linq;
 
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {

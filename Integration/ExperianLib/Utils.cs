@@ -6,6 +6,7 @@
 	using System.Text;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EzServiceAccessor;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
@@ -15,6 +16,7 @@
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 	using EZBob.DatabaseLib.Model.Experian;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 
 	public class Utils
 	{
@@ -36,7 +38,7 @@
 			where TX : class
 			where TY : class
 		{
-			return WriteLog(XSerializer.Serialize(input), XSerializer.Serialize(output), type, customerId, directorId, firstname, surname,dob,postCode);
+			return WriteLog(XSerializer.Serialize(input), XSerializer.Serialize(output), type, customerId, directorId, firstname, surname, dob, postCode);
 		} // WriteLog
 
 		#endregion generic method WriteLog
@@ -46,7 +48,7 @@
 		public static WriteToLogPackage.OutputData WriteLog(string input,
 			string output, ExperianServiceType type,
 			int customerId,
-			int? directorId = null, 
+			int? directorId = null,
 			string firstname = null,
 			string surname = null,
 			DateTime? dob = null,
@@ -80,7 +82,7 @@
 			{
 				oRetryer.Retry(() =>
 				{
-					var customerRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
+					var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 					oPackage.Out.ServiceLog.Customer = customerRepo.Get(oPackage.In.CustomerID);
 				});
 
@@ -88,47 +90,39 @@
 				{
 					oRetryer.Retry(() =>
 					{
-						var directorRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Director>>();
+						var directorRepo = ObjectFactory.GetInstance<DirectorRepository>();
 						oPackage.Out.ServiceLog.Director = directorRepo.Get(oPackage.In.DirectorID);
 					});
 				} // if
 
 				ms_oLog.Debug("Input data was: {0}", oPackage.Out.ServiceLog.RequestData);
 				ms_oLog.Debug("Output data was: {0}", oPackage.Out.ServiceLog.ResponseData);
+				var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
+				oRetryer.Retry(() => repoLog.SaveOrUpdate(oPackage.Out.ServiceLog));
 
-				oRetryer.Retry(() =>
+				switch (oPackage.In.ServiceType)
 				{
-					var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
-					repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
-				});
+					case ExperianServiceType.LimitedData:
+						oPackage.Out.ExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().ParseExperianLtd(oPackage.Out.ServiceLog.Id);
+						break;
 
-				case ExperianServiceType.LimitedData:
-					oRetryer.Retry(() => {
-						var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
-						repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
-					});
-
-					oPackage.Out.ExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().ParseExperianLtd(oPackage.Out.ServiceLog.Id);
-					break;
-
-				case ExperianServiceType.Consumer:
-					oPackage.Out.ExperianConsumer = ObjectFactory.GetInstance<IEzServiceAccessor>().ParseExperianConsumer(oPackage.Out.ServiceLog.Id);
-						if (oPackage.Out.ExperianConsumer != null) {
-							if (oPackage.Out.ServiceLog.Director != null) {
+					case ExperianServiceType.Consumer:
+						oPackage.Out.ExperianConsumer = ObjectFactory.GetInstance<IEzServiceAccessor>().ParseExperianConsumer(oPackage.Out.ServiceLog.Id);
+						if (oPackage.Out.ExperianConsumer != null)
+						{
+							if (oPackage.Out.ServiceLog.Director != null)
+							{
 								oPackage.Out.ServiceLog.Director.ExperianConsumerScore = oPackage.Out.ExperianConsumer.BureauScore;
 							}
-							else {
+							else
+							{
 								oPackage.Out.ServiceLog.Customer.ExperianConsumerScore = oPackage.Out.ExperianConsumer.BureauScore;
 							}
 						}
-						var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
 						repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
-					});
-
-					break;
-
-					break;
+						break;
 				} // switch
+
 				try
 				{
 					var historyRepo = ObjectFactory.GetInstance<ExperianHistoryRepository>();
@@ -146,7 +140,8 @@
 					switch (oPackage.In.ServiceType)
 					{
 						case ExperianServiceType.Consumer:
-							if (oPackage.Out.ExperianConsumer != null) {
+							if (oPackage.Out.ExperianConsumer != null)
+							{
 								history.Score = oPackage.Out.ExperianConsumer.BureauScore;
 								history.CII = oPackage.Out.ExperianConsumer.CII;
 								history.CaisBalance = GetConsumerCaisBalance(oPackage.Out.ExperianConsumer.Cais);
@@ -173,8 +168,8 @@
 			catch (Exception e)
 			{
 				ms_oLog.Error(e,
-					"Failed to save a '{0}' entry for customer id {1} into MP_ServiceLog.",
-					oPackage.In.ServiceType, oPackage.In.CustomerID
+					"Failed to save a '{0}' entry for customer id {1} of type {2} into MP_ServiceLog.",
+					oPackage.In.ServiceType, oPackage.In.CustomerID, oPackage.In.ServiceType.DescriptionAttr()
 				);
 			} // try
 		} // WriteToLog
