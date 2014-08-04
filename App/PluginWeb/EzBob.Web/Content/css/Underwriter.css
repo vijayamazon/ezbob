@@ -2009,3 +2009,7 @@ td a.edit-loan {
 .customer-website-font {
     font-family: 'Open Sans';
 }
+
+.tooltip-inner {
+    text-align:left !important;
+}

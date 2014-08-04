@@ -1,6 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc 
 {
-	using System;
+	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -18,11 +18,11 @@
 			get { return "GetUnfetchedDataErrors"; }
 		}
 
-		public string Errors { get; set; }
+		public List<string> Errors { get; set; }
 
 		public override void Execute()
 		{
-			Errors = string.Empty;
+			Errors = new List<string>();
 			
 			int maxCompanyScore = DB.ExecuteScalar<int>(
 				"GetCompanyScore",
@@ -31,17 +31,8 @@
 
 			if (maxCompanyScore == 0)
 			{
-				AddError("No company score");
+				Errors.Add("No company score");
 			}
-		}
-
-		private void AddError(string error)
-		{
-			if (Errors != string.Empty)
-			{
-				Errors += Environment.NewLine;
-			}
-			Errors += error;
 		}
 	}
 }

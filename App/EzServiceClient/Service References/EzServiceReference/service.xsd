@@ -1009,7 +1009,7 @@
   <xs:element name="GetUnfetchedDataErrorsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q94="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetUnfetchedDataErrorsResult" nillable="true" type="q94:StringActionResult" />
+        <xs:element xmlns:q94="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetUnfetchedDataErrorsResult" nillable="true" type="q94:StringListActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

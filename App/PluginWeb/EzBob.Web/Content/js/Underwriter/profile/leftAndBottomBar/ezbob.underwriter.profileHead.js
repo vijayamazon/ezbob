@@ -100,7 +100,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 }
             }
         }
-        this.$el.find('[data-toggle="tooltip"]').tooltip({
+        this.$el.find('[data-toggle="tooltip"]').tooltip({ html:true,
             'placement': 'bottom'
         });
 

@@ -555,7 +555,7 @@
 		CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
 
 		[OperationContract]
-		StringActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
+		StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
 
 		[OperationContract]
 		PropertyStatusesActionResult GetPropertyStatuses();

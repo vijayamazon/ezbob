@@ -253,16 +253,16 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public StringActionResult GetUnfetchedDataErrors(int underwriterId, int customerId)
+		public StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId)
 		{
 			GetUnfetchedDataErrors instance;
 
 			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
 
-			return new StringActionResult
+			return new StringListActionResult
 			{
 				MetaData = result,
-				Value = instance.Errors
+				Records = instance.Errors
 			};
 		}
 
