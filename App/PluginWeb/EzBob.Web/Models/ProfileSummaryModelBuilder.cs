@@ -172,6 +172,10 @@
 			{
 				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "MTG", Alert = "Home owner and no mortgages", AlertType = AlertType.Warning.DescriptionAttr() });
 			}
+			else if (!isHomeOwner && hasMortgage)
+			{
+				summary.Alerts.Warnings.Add(new AlertModel { Abbreviation = "MTG", Alert = "Has mortgages but not a home owner", AlertType = AlertType.Warning.DescriptionAttr() });
+			}
 		}
 
 		private void BuilDataAlerts(Customer customer, ProfileSummaryModel summary, int userId)
