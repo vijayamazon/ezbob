@@ -96,7 +96,12 @@
 				ms_oLog.Debug("Input data was: {0}", oPackage.Out.ServiceLog.RequestData);
 				ms_oLog.Debug("Output data was: {0}", oPackage.Out.ServiceLog.ResponseData);
 
-				switch (oPackage.In.ServiceType) {
+				oRetryer.Retry(() =>
+				{
+					var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
+					repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
+				});
+
 				case ExperianServiceType.LimitedData:
 					oRetryer.Retry(() => {
 						var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
@@ -108,27 +113,22 @@
 
 				case ExperianServiceType.Consumer:
 					oPackage.Out.ExperianConsumer = ObjectFactory.GetInstance<IEzServiceAccessor>().ParseExperianConsumer(oPackage.Out.ServiceLog.Id);
-
-					if (oPackage.Out.ServiceLog.Director != null)
-						oPackage.Out.ServiceLog.Director.ExperianConsumerScore = oPackage.Out.ExperianConsumer.BureauScore;
-					else
-						oPackage.Out.ServiceLog.Customer.ExperianConsumerScore = oPackage.Out.ExperianConsumer.BureauScore;
-
-					oRetryer.Retry(() => {
+						if (oPackage.Out.ExperianConsumer != null) {
+							if (oPackage.Out.ServiceLog.Director != null) {
+								oPackage.Out.ServiceLog.Director.ExperianConsumerScore = oPackage.Out.ExperianConsumer.BureauScore;
+							}
+							else {
+								oPackage.Out.ServiceLog.Customer.ExperianConsumerScore = oPackage.Out.ExperianConsumer.BureauScore;
+							}
+						}
 						var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
 						repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
 					});
 
 					break;
 
-				default:
-					oRetryer.Retry(() => {
-						var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
-						repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
-					});
 					break;
 				} // switch
-
 				try
 				{
 					var historyRepo = ObjectFactory.GetInstance<ExperianHistoryRepository>();
@@ -146,9 +146,11 @@
 					switch (oPackage.In.ServiceType)
 					{
 						case ExperianServiceType.Consumer:
-							history.Score = oPackage.Out.ExperianConsumer.BureauScore;
-							history.CII = oPackage.Out.ExperianConsumer.CII;
-							history.CaisBalance = GetConsumerCaisBalance(oPackage.Out.ExperianConsumer.Cais);
+							if (oPackage.Out.ExperianConsumer != null) {
+								history.Score = oPackage.Out.ExperianConsumer.BureauScore;
+								history.CII = oPackage.Out.ExperianConsumer.CII;
+								history.CaisBalance = GetConsumerCaisBalance(oPackage.Out.ExperianConsumer.Cais);
+							}
 							historyRepo.SaveOrUpdate(history);
 							break;
 						case ExperianServiceType.LimitedData:

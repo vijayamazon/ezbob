@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 	using System.Text.RegularExpressions;
@@ -402,7 +403,8 @@
 			var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(content));
 
 			Log.InfoFormat("Get consumer info for test user: {0}", surname);
-			var serviceLog = Utils.WriteLog(null, content, ExperianServiceType.Consumer, customerId, null, null, surname, null, null);
+			var input = new Input { Applicant = new [] {new InputApplicant {FormattedName = surname, ClientPersonID = customerId.ToString(CultureInfo.InvariantCulture)}}};
+			var serviceLog = Utils.WriteLog(input, outputRoot, ExperianServiceType.Consumer, customerId, null, null, surname, null, null);
 			SaveDefaultAccountIntoDb(outputRoot, customerId, serviceLog.ServiceLog);
 			var builder = new ConsumerExperianModelBuilder();
 			
