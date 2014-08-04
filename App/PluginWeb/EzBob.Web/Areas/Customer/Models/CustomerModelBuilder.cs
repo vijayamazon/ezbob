@@ -72,7 +72,8 @@
 					{
 						Id = customer.PropertyStatus.Id,
 						Description = customer.PropertyStatus.Description,
-						IsOwner = customer.PropertyStatus.IsOwner
+						IsOwnerOfOtherProperties = customer.PropertyStatus.IsOwnerOfOtherProperties,
+						IsOwnerOfMainAddress = customer.PropertyStatus.IsOwnerOfMainAddress
 					};
 			}
 			customerModel.BusinessTypeReduced = customerModel.CustomerPersonalInfo == null ?

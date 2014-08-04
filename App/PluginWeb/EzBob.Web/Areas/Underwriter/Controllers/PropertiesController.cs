@@ -29,7 +29,7 @@
 		public JsonResult Index(int id)
 		{
 			var customer = customerRepository.TryGet(id);
-			int numberOfProperties = customer.PropertyStatus.IsOwner ? 1 : 0;
+			int numberOfProperties = customer.PropertyStatus.IsOwnerOfMainAddress ? 1 : 0;
 			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
 										 a.Customer.Id == customer.Id &&
 										 a.AddressType == CustomerAddressType.OtherPropertyAddress);

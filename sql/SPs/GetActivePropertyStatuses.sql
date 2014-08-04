@@ -11,7 +11,8 @@ BEGIN
 	SELECT 
 		CustomerPropertyStatusGroups.Title,
 		CustomerPropertyStatuses.Description,
-		CustomerPropertyStatuses.IsOwner ,
+		CustomerPropertyStatuses.IsOwnerOfMainAddress,
+		CustomerPropertyStatuses.IsOwnerOfOtherProperties,
 		CustomerPropertyStatuses.Id 
 	FROM 
 		CustomerPropertyStatuses, 

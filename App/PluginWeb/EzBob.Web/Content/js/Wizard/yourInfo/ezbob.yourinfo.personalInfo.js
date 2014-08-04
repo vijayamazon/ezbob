@@ -63,10 +63,10 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	propertyStatusChanged: function () {
 	    var selectedItem = document.getElementById("PropertyStatusId");
 	    var selectedIndex = selectedItem.selectedIndex;
-	    var isMultiPropertyOwner = $(selectedItem[selectedIndex]).hasClass('MultiPropertyOwner');
-	    $('#propertiesList').toggleClass('hide', !isMultiPropertyOwner);
+	    var isOwnerOfOtherProperties = $(selectedItem[selectedIndex]).hasClass('OtherPropertyOwner');
+	    $('#propertiesList').toggleClass('hide', !isOwnerOfOtherProperties);
 
-	    if (isMultiPropertyOwner) {
+	    if (isOwnerOfOtherProperties) {
 	        this.$el.find('.otherPropertiesAddress').removeClass('canDisabledAddress');
 	    } else {
 	        this.model.get('OtherPropertiesAddresses').reset();

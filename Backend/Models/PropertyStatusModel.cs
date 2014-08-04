@@ -23,6 +23,9 @@
 		public string Description { get; set; }
 
 		[DataMember]
-		public bool IsOwner { get; set; }
+		public bool IsOwnerOfMainAddress { get; set; }
+
+		[DataMember]
+		public bool IsOwnerOfOtherProperties { get; set; }
 	}
 }

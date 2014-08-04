@@ -35,9 +35,10 @@
 				}
 
 				string description = sr["Description"];
-				bool isOwner = sr["IsOwner"];
+				bool isOwnerOfMainAddress = sr["IsOwnerOfMainAddress"];
+				bool isOwnerOfOtherProperties = sr["IsOwnerOfOtherProperties"];
 				int id = sr["Id"];
-				groups[title].Statuses.Add(new PropertyStatusModel { Description = description, IsOwner = isOwner, Id = id });
+				groups[title].Statuses.Add(new PropertyStatusModel { Description = description, IsOwnerOfMainAddress = isOwnerOfMainAddress, IsOwnerOfOtherProperties = isOwnerOfOtherProperties, Id = id });
 			}
 
 			Groups = new List<PropertyStatusGroupModel>();

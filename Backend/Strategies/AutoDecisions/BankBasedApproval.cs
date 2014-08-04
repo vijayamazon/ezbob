@@ -102,7 +102,9 @@
 			isOffline = sr["IsOffline"];
 			dateOfBirth = sr["DateOfBirth"];
 			isUnderAge = dateOfBirth.AddYears(minAge) > DateTime.UtcNow;
-			isHomeOwner = sr["IsHomeOwner"];
+			bool isOwnerOfMainAddress = sr["IsOwnerOfMainAddress"];
+			bool isOwnerOfOtherProperties = sr["IsOwnerOfOtherProperties"];
+			isHomeOwner = isOwnerOfMainAddress || isOwnerOfOtherProperties;
 			personalScore = sr["ExperianScore"];
 			earliestTransactionDate = sr["EarliestTransactionDate"];
 			annualizedTurnover = sr["TotalAnnualizedValue"];

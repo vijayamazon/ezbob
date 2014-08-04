@@ -988,7 +988,9 @@
 			appFirstName = results["FirstName"];
 			appSurname = results["Surname"];
 			appGender = results["Gender"];
-			isHomeOwner = results["IsHomeOwner"];
+			bool isOwnerOfMainAddress = results["IsOwnerOfMainAddress"];
+			bool isOwnerOfOtherProperties = results["IsOwnerOfOtherProperties"];
+			isHomeOwner = isOwnerOfMainAddress || isOwnerOfOtherProperties;
 			propertyStatusDescription = results["PropertyStatusDescription"];
 			allMPsNum = results["NumOfMps"];
 			appAccountNumber = results["AccountNumber"];

@@ -293,7 +293,7 @@
                         <tr>
                             <td><b>Property net worth</b></td>
                             <td colspan="4">
-                                @if (@Model.PropertyStatus != null && Model.PropertyStatus.IsOwner)
+                                @if (@Model.PropertyStatus != null && Model.PropertyStatus.IsOwnerOfMainAddress)
                                 {
                                     @Html.Raw("£")
                                     @Model.AssetWorth.ToString("N0")

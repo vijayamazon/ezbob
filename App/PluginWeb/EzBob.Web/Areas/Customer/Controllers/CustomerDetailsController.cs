@@ -626,7 +626,6 @@
 			IEnumerable<CustomerAddress> oNewAddressList,
 			Iesi.Collections.Generic.ISet<CustomerAddress> oCurrentAddressList,
 			CustomerAddressType nType,
-			bool ownedByCustomer,
 			Action<Iesi.Collections.Generic.ISet<CustomerAddress>> fSetNewValue
 		) {
 			if (oNewAddressList == null) {
@@ -641,7 +640,6 @@
 			foreach (var val in oNewAddressList.Where(x => x.AddressId == 0)) {
 				val.AddressType = nType;
 				val.Customer = customer;
-				val.OwnedByCustomer = ownedByCustomer;
 				oNewEntries.Add(val);
 			} // foreach
 
@@ -940,14 +938,10 @@
 				personalInfo.Fullname = string.Format("{0} {1}", personalInfo.FirstName, personalInfo.Surname).Trim();
 			}
 
-			bool customerOwnsMainResidentialAddress = customer.PropertyStatus.IsOwner &&
-													  customer.PropertyStatus.Description != "I live in the above and own other properties";
-
 			UpdateAddresses(
 				customer, personalAddress, 
 				customer.AddressInfo.PersonalAddress,
 				CustomerAddressType.PersonalAddress, 
-				customerOwnsMainResidentialAddress,
 				lst => customer.AddressInfo.PersonalAddress = lst
 			);
 
@@ -955,15 +949,13 @@
 				customer, prevPersonAddresses, 
 				customer.AddressInfo.PrevPersonAddresses,
 				CustomerAddressType.PrevPersonAddresses, 
-				false,
 				lst => customer.AddressInfo.PrevPersonAddresses = lst
 			);
 
 			UpdateAddresses(
 				customer, otherPropertiesAddresses, 
 				customer.AddressInfo.OtherPropertiesAddresses,
-				CustomerAddressType.OtherPropertyAddress, 
-				true,
+				CustomerAddressType.OtherPropertyAddress,
 				lst => customer.AddressInfo.OtherPropertiesAddresses = lst
 			);
 

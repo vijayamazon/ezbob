@@ -40,7 +40,7 @@
                     @BoxTools("AssetsAndWorth", "#properties")
                 </div>
                 <div class="box-content">
-                    <%if(personal.PropertyStatus != null && !personal.PropertyStatus.IsOwner){%>
+                    <%if(personal.PropertyStatus != null && !personal.PropertyStatus.IsOwnerOfMainAddress){%>
                     <div class="row">
                         <div class="requested-loan-td">Property Status: <span><%-personal.PropertyStatus.Description%></span></div>
                         <%if(properties.SumOfMortgages>0){%>

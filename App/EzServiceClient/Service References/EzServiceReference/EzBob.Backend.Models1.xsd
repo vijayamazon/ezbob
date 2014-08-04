@@ -532,7 +532,8 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="IsOwner" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsOwnerOfMainAddress" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsOwnerOfOtherProperties" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PropertyStatusModel" nillable="true" type="tns:PropertyStatusModel" />

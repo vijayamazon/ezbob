@@ -107,7 +107,9 @@
 			Gender = (Gender)Enum.Parse(typeof(Gender), sr["Gender"]);
 			BirthDate = sr["DateOfBirth"];
 			MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), sr["MaritalStatus"]);
-			IsHomeOwner = sr["IsOwner"];
+			bool isOwnerOfMainAddress = sr["IsOwnerOfMainAddress"];
+			bool isOwnerOfOtherProperties = sr["IsOwnerOfOtherProperties"];
+			IsHomeOwner = isOwnerOfMainAddress || isOwnerOfOtherProperties;
 			PropertyStatusDescription = sr["Description"];
 			TypeOfBusiness = (TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), sr["TypeOfBusiness"]);
 			ReferenceSource = sr["ReferenceSource"];

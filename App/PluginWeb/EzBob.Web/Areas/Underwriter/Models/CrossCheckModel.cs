@@ -128,7 +128,8 @@
 					{
 						Id = customer.PropertyStatus.Id,
 						Description = customer.PropertyStatus.Description,
-						IsOwner = customer.PropertyStatus.IsOwner
+						IsOwnerOfMainAddress = customer.PropertyStatus.IsOwnerOfMainAddress,
+						IsOwnerOfOtherProperties = customer.PropertyStatus.IsOwnerOfOtherProperties
 					};
 			}
 

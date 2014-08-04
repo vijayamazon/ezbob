@@ -158,7 +158,7 @@
 			BuilDataAlerts(customer, summary, context.UserId);
 
 			bool hasMortgage = false;
-			bool isHomeOwner = customer.PropertyStatus != null && customer.PropertyStatus.IsOwner;
+			bool isHomeOwner = customer.PropertyStatus != null && (customer.PropertyStatus.IsOwnerOfMainAddress || customer.PropertyStatus.IsOwnerOfOtherProperties);
 			try
 			{
 				hasMortgage = serviceClient.Instance.LoadExperianConsumerMortageData(customer.Id).Value.NumMortgages > 0;
@@ -243,7 +243,7 @@
 			var lrs = customer.LandRegistries.Where(x =>
 				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
 				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success).ToList();
-			if (!lrs.Any() && customer.PropertyStatus.IsOwner)
+			if (!lrs.Any() && customer.PropertyStatus.IsOwnerOfMainAddress)
 			{
 				summary.Alerts.Warnings.Add(new AlertModel
 					{

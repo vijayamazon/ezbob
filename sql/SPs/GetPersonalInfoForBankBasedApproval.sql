@@ -38,7 +38,8 @@ BEGIN
 		@CommercialDelphiScore INT,
 		@InTngblAssets DECIMAL(18,6), 
 		@TngblAssets DECIMAL(18,6),
-		@IsHomeOwner BIT
+		@IsOwnerOfMainAddress BIT,
+		@IsOwnerOfOtherProperties BIT
 						
 	SELECT
 		@FirstName = FirstName,
@@ -47,7 +48,8 @@ BEGIN
 		@ReferenceSource = ReferenceSource,
 		@IsOffline = IsOffline,
 		@DateOfBirth = DateOfBirth,
-		@IsHomeOwner = IsOwner
+		@IsOwnerOfMainAddress = IsOwnerOfMainAddress,
+		@IsOwnerOfOtherProperties = IsOwnerOfOtherProperties
 	FROM
 		Customer,
 		CustomerPropertyStatuses
@@ -207,7 +209,8 @@ BEGIN
 		@HasNonYodleeMarketplace AS HasNonYodleeMarketplace,
 		@IsOffline AS IsOffline,
 		@DateOfBirth AS DateOfBirth,
-		@IsHomeOwner AS IsHomeOwner,
+		@IsOwnerOfMainAddress AS IsOwnerOfMainAddress,
+		@IsOwnerOfOtherProperties AS IsOwnerOfOtherProperties,
 		@ExperianScore AS ExperianScore,
 		ISNULL(@EarliestTransactionDate, @Now) AS EarliestTransactionDate,
 		@TotalAnnualizedValue AS TotalAnnualizedValue,

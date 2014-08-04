@@ -107,7 +107,7 @@
                                 <% _.each(EzBob.PropertyStatusesData, function(group) { %>
                                     <optgroup label="<%- group.Title %>">
                                         <% _.each(group.Statuses, function(status) {  %>
-                                            <option value="<%- status.Id %>" class="<%- status.IsOwner ? (status.Description == 'I own only this property' ? 'SinglePropertyOwner' : 'MultiPropertyOwner') : '' %>"><%- status.Description %></option>
+                                            <option value="<%- status.Id %>" class="<%- status.IsOwnerOfOtherProperties ? 'OtherPropertyOwner' : '' %>"><%- status.Description %></option>
                                         <% }); %>
                                     </optgroup>
                                 <% }); %>

@@ -10,7 +10,8 @@ namespace EZBob.DatabaseLib.Model.Database
 	{
 		public virtual int Id { get; set; }
 		public virtual string Description { get; set; }
-		public virtual bool IsOwner { get; set; }
+		public virtual bool IsOwnerOfMainAddress { get; set; }
+		public virtual bool IsOwnerOfOtherProperties { get; set; }
 		public virtual int GroupId { get; set; }
 		public virtual bool IsActive { get; set; }
 	}
@@ -23,7 +24,8 @@ namespace EZBob.DatabaseLib.Model.Database
 			LazyLoad();
 			Id(x => x.Id);
 			Map(x => x.Description).Length(50);
-			Map(x => x.IsOwner);
+			Map(x => x.IsOwnerOfMainAddress);
+			Map(x => x.IsOwnerOfOtherProperties);
 			Map(x => x.GroupId);
 			Map(x => x.IsActive);
 		}
