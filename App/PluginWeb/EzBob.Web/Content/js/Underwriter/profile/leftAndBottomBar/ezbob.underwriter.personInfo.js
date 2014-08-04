@@ -113,7 +113,17 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		'click #ForceFinishWizard': 'activateFinishWizard',
 		'click .reset-password-123456': 'resetPassword123456',
 		'click .change-broker': 'startChangeBroker',
+		'click .go-to-broker': 'goToBroker',
 	}, // events
+
+	goToBroker: function() {
+		event.preventDefault();
+		event.stopPropagation();
+
+		window.location = '#broker/' + $(event.target).data('broker-id');
+
+		return false;
+	}, // goToBroker
 
 	resetPassword123456: function() {
 		event.preventDefault();
