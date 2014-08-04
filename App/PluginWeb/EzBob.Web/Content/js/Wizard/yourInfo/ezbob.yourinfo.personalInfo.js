@@ -9,7 +9,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		this.events = _.extend({}, this.events, {
 			'change #TimeAtAddress': 'personalTimeAtAddressChanged',
-			'change #PropertyStatusId': 'propertyStatusChanged',
+			'change #PropertyStatus': 'propertyStatusChanged',
 			'click label[for="ConsentToSearch"] a': 'showConsent',
 
 			'change input': 'inputChanged',
@@ -61,10 +61,10 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	}, // isAddressValid
 
 	propertyStatusChanged: function () {
-	    var selectedItem = document.getElementById("PropertyStatusId");
+	    var selectedItem = document.getElementById("PropertyStatus");
 	    var selectedIndex = selectedItem.selectedIndex;
 	    var isOwnerOfOtherProperties = $(selectedItem[selectedIndex]).hasClass('OtherPropertyOwner');
-	    $('#propertiesList').toggleClass('hide', !isOwnerOfOtherProperties);
+	    $('#otherPropertiesSection').toggleClass('hide', !isOwnerOfOtherProperties);
 
 	    if (isOwnerOfOtherProperties) {
 	        this.$el.find('.otherPropertiesAddress').removeClass('canDisabledAddress');
@@ -90,7 +90,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		    this.$el.find('.prevPersonAddress').addClass('canDisabledAddress');
 		} // if
 	}, // personalTimeAtAddressChanged
-
+	
 	isPrevAddressValid: function() {
 		var oPersonalInfo = this.model.get('CustomerPersonalInfo');
 
@@ -147,6 +147,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		    model: this.model.get('OtherPropertiesAddresses'),
 		    name: 'OtherPropertiesAddresses',
 		    max: 3,
+		    required: "empty",
 		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 		});
 		this.otherPropertiesAddressesView.render().$el.appendTo(oAddressContainer);

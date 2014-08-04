@@ -102,7 +102,7 @@
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Residential status</span>
-                            <select id="PropertyStatusId" name="PropertyStatusId" class="select form_field" ui-event-control-id="personal-info:residential_status">
+                            <select id="PropertyStatus" name="PropertyStatus" class="select form_field" ui-event-control-id="personal-info:residential_status">
                                 <option></option>
                                 <% _.each(EzBob.PropertyStatusesData, function(group) { %>
                                     <optgroup label="<%- group.Title %>">
@@ -117,8 +117,9 @@
                     </div>
                 </div>
             
-                <div id="propertiesList" class="hide">
-                    @EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "previous-personal", "otherPropertiesAddress canDisabledAddress")
+                <div id="otherPropertiesSection" class="hide">
+                    <h2 class="form_section">Other owned properties</h2>
+                    @EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "other-properties-personal", "otherPropertiesAddress canDisabledAddress")
                 </div>
 
                 <h2 class="form_section">Contact details</h2>
