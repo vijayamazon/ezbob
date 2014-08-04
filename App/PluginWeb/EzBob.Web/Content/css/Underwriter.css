@@ -1936,8 +1936,9 @@ td a.edit-loan {
     padding: 0;
 }
 
-.customer-details-left-margin {
+.customer-details-title {
     margin-left: 5px;
+    color: #cdcdcd;
 }
 
 .customer-details-switch-height {

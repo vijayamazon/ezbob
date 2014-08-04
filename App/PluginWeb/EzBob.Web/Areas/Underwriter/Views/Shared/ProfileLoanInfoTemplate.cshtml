@@ -11,7 +11,7 @@
 {
     <tr>
         <td>
-            <span class="customer-details-left-margin">@Html.Raw(title)</span>
+            <span class="customer-details-title">@Html.Raw(title)</span>
             <span class="pull-right">@Html.Raw(value)</span>
         </td>
     </tr>
@@ -33,7 +33,7 @@
 {
     <tr>
         <td>
-            <span class="@Html.Raw(css) customer-details-left-margin">@Html.Raw(title)</span>
+            <span class="@Html.Raw(css) customer-details-title">@Html.Raw(title)</span>
             <span class="@Html.Raw(css) pull-right">
                 <span>@Html.Raw(val1) </span>
                 <button class="btn btn-mini left-pane-button" name="@Html.Raw(val2)"><i class="fa fa-pencil" /></button>
@@ -59,7 +59,7 @@
 {
     <tr>
         <td class="customer-details-switch-td">
-            <span class="@Html.Raw(css) customer-details-left-margin">@Html.Raw(title)</span>
+            <span class="@Html.Raw(css) customer-details-title">@Html.Raw(title)</span>
             <span class="@Html.Raw(css) pull-right">
                 <div class="@Html.Raw(className) make-switch switch-mini" data-on="@Html.Raw(dataOn)" data-off="default" data-animated="true" data-off-label="@Html.Raw(labelOff)" data-on-label="@Html.Raw(labelOn)">
                     <input type="checkbox" checked/>
@@ -104,7 +104,7 @@
             </tr>
             <tr>
                 <td>
-                    <span class="customer-details-left-margin">Reg date</span>
+                    <span class="customer-details-title">Reg date</span>
                     <span class="pull-right"><%- data.RegistrationDate %></span>
                 </td>
             </tr>
@@ -131,7 +131,7 @@
 
             <tr>
                 <td>
-                    <span class="customer-details-left-margin <%= data.IsYoungCompany ? 'red_cell' : '' %>">Company Seniority</span>
+                    <span class="customer-details-title <%= data.IsYoungCompany ? 'red_cell' : '' %>">Company Seniority</span>
                     <span class="pull-right <%= data.IsYoungCompany ? 'red_cell' : '' %>"><%- data.CompanySeniority %></span>
                 </td>
             </tr>
@@ -157,7 +157,7 @@
 
             <tr>
                 <td>
-                    <span class="customer-details-left-margin">E-mail<i data-title="<%- data.EmailState %>" class="tltp <%=getIcon()%>"/></span>
+                    <span class="customer-details-title">E-mail<i data-title="<%- data.EmailState %>" class="tltp <%=getIcon()%>"/></span>
                     <span class="pull-right">
                         <%- data.Email.length <= 14 ? data.Email : data.Email.substring(0,11)+'...' %>
                         <i data-title="<%- data.Email %>" class="tltp-left <%=getIcon()%>"/>
@@ -170,7 +170,7 @@
 
             <tr>
                 <td>
-                    <span class="customer-details-left-margin">Website</span>
+                    <span class="customer-details-title">Website</span>
                     <span class="pull-right">
                         <a data-title="<%- data.Website %>" class="tltp <%=getIcon()%>" href="http://<%- data.Website %>" target="_blank">
                             <span class="customer-website-font">
@@ -196,7 +196,7 @@
         <tbody class="box-content">
             <tr class="with-broker">
                 <td>
-                    <span class="customer-details-left-margin">
+                    <span class="customer-details-title">
                         <button class="btn btn-mini left-pane-button hide" id="brokerDetailsBtn" name="brokerDetails">
                             <i class="fa fa-plus"/>
                         </button>
@@ -212,7 +212,7 @@
 			@RowCell("Firm name", "<%- data.BrokerFirmName %>")
             <tr>
                 <td>
-                    <span class="customer-details-left-margin">Email</span>
+                    <span class="customer-details-title">Email</span>
                     <span class="pull-right">
                         <%- data.BrokerContactEmail.length <= 15 ? data.BrokerContactEmail : data.BrokerContactEmail.substring(0,12)+'...' %>
                         <i data-title="<%- data.BrokerContactEmail %>" class="tltp-left <%=getIcon()%>"/>
@@ -229,7 +229,7 @@
         <tbody class="box-content">
             <tr>
                 <td>
-                    <span class="<%= data.PromoCodeCss %> customer-details-left-margin">Promo</span>
+                    <span class="<%= data.PromoCodeCss %> customer-details-title">Promo</span>
                     <span class="pull-right <%= data.PromoCodeCss %>">
                         <%= data.PromoCode %>
                     </span>
@@ -239,7 +239,7 @@
 
             <tr>
                 <td>
-                    <span class="customer-details-left-margin">Ref Source</span>
+                    <span class="customer-details-title">Ref Source</span>
                     <span class="pull-right">
                         <%- data.ReferenceSource ? (data.ReferenceSource.length <= 20 ? data.ReferenceSource : data.ReferenceSource.substring(0,17)+'...') : '-' %>
                     <i data-title="<%- data.ReferenceSource || 'no source ref' %>" class="tltp fa fa-question-circle"></i>
@@ -266,14 +266,14 @@
 
             <tr>
                 <td>
-                    <span class="customer-details-left-margin <%= data.IsAmlInAlertMode ? 'red_cell' : '' %>">AML</span>
+                    <span class="customer-details-title <%= data.IsAmlInAlertMode ? 'red_cell' : '' %>">AML</span>
                     <span class="pull-right <%= data.IsAmlInAlertMode ? 'red_cell' : '' %>"><%- data.AmlResult %></span>
                 </td>
             </tr>
 
             <tr>
                 <td>
-                    <span class="customer-details-left-margin <%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">Fraud Status</span>
+                    <span class="customer-details-title <%= data.IsFraudInAlertMode ? 'red_cell' : '' %>">Fraud Status</span>
                     <span class="pull-right <%= data.IsFraudInAlertMode ? 'red_cell' : '' %>"><%- data.FraudCheckStatus %>
                         <button class="btn btn-mini left-pane-button" name="changeFraudStatusManualy">
                             <i class="fa fa-pencil" />
