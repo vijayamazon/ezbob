@@ -173,7 +173,9 @@
                     <span class="customer-details-left-margin">Website</span>
                     <span class="pull-right">
                         <a data-title="<%- data.Website %>" class="tltp <%=getIcon()%>" href="http://<%- data.Website %>" target="_blank">
-                            <%- data.Website.length <= 30 ? data.Website : data.Website.substring(0,27)+'...' %>
+                            <span class="customer-website-font">
+                                <%- data.Website.length <= 23 ? data.Website : data.Website.substring(0,20)+'...' %>
+                            </span>
                         </a>
                     </span>
                 </td>

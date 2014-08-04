@@ -2005,3 +2005,7 @@ td a.edit-loan {
 	font-weight: bold;
 	background-color: #e5e5e5;
 }
+
+.customer-website-font {
+    font-family: 'Open Sans';
+}
