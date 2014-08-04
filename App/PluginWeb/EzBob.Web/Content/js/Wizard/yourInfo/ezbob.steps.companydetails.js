@@ -227,23 +227,24 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			typeOfBussiness = dataForCompany.TypeOfBusiness,
 			companyName = null,
 			postcode = null,
-			sCompanyFilter = '',
+			sCompanyFilter = 'N',
 			refNum = '',
-			bDoTargeting = false;
+			bDoTargeting = true,
+		    isEntrepreneur = false;
 
 		if (typeOfBussiness === 'Entrepreneur') {
+		    isEntrepreneur = true;
 			if (EzBob.Config.TargetsEnabledEntrepreneur) {
-				postcode = this.model.get('PersonalAddress').models[0].get('Postcode');
+			    postcode = this.model.get('PersonalAddress').models[0].get('Postcode');
+			    companyName = (function(model) {
+			        var cpi = model.get('CustomerPersonalInfo');
+			        return cpi.FirstName + ' ' + cpi.Surname;
+			    })(this.model);
 
-				companyName = (function(model) {
-					var cpi = model.get('CustomerPersonalInfo');
-					return cpi.FirstName + ' ' + cpi.Surname;
-				})(this.model);
 
-				sCompanyFilter = 'N';
-
-				bDoTargeting = true;
-			} // if
+			} else {
+			    bDoTargeting = false;
+			}
 		}
 		else {
 			switch (this.companyTypes[typeOfBussiness.toLowerCase()].Type) {
@@ -252,27 +253,24 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 					companyName = dataForCompany.LimitedCompanyName;
 					refNum = dataForCompany.LimitedCompanyNumber;
 					sCompanyFilter = 'L';
-					bDoTargeting = true;
 					break;
 
 				case 'NonLimited':
 					postcode = dataForCompany['NonLimitedCompanyAddress[0].Postcode'];
 					companyName = dataForCompany.NonLimitedCompanyName;
-					sCompanyFilter = 'N';
-					bDoTargeting = true;
 					break;
 			} // switch type of business
 		} // if
 
 		if (EzBob.Config.TargetsEnabled && bDoTargeting)
-			this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum);
+		    this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum, isEntrepreneur);
 		else
 			this.saveDataRequest(action, data);
 
 		return false;
 	}, // next
 
-	handleTargeting: function(form, action, data, postcode, companyName, sCompanyFilter, refNum) {
+	handleTargeting: function (form, action, data, postcode, companyName, sCompanyFilter, refNum, isEntrepreneur) {
 		var that = this;
 
 		var req = $.get(window.gRootPath + 'Account/CheckingCompany', { companyName: companyName, postcode: postcode, filter: sCompanyFilter, refNum: refNum });
@@ -284,7 +282,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			else {
 				switch (reqData.length) {
 					case 0:
-						if (that.targetingTries === 0) {
+					    if (that.targetingTries === 0 && !isEntrepreneur) {
 							EzBob.App.trigger('warning', 'Company ' + companyName + ' ' + postcode + ' was not found. Please check your input and try again.');
 							that.targetingTries++;
 							UnBlockUi();
