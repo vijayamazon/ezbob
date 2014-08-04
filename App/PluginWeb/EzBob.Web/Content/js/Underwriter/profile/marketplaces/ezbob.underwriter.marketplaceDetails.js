@@ -406,12 +406,16 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
 
         }
 
-        for (var date in runningBalance) {
-            runningBalanceLine.push([new Date(moment(date)), parseInt(runningBalance[date], 10)]);
-            bankFrameLine.push([new Date(moment(date)), parseInt(bankFrame, 10)]);
+        for (var r in runningBalance) {
+            runningBalanceLine.push([new Date(moment(runningBalance[r].Date)), parseInt(runningBalance[r].Balance, 10)]);
+            bankFrameLine.push([new Date(moment(runningBalance[r].Date)), parseInt(bankFrame, 10)]);
         }
 
+        
         if (lowBalanceLine.length && highBalanceLine.length && !this.runningBalancePlot) {
+            var firstDate = new Date(moment(runningBalance[0].Date));
+            var lastDate = new Date(moment(runningBalance[runningBalance.length - 1].Date));
+
             this.runningBalancePlot = $.jqplot('yodleeRunningBalanceChart', [highBalanceLine, lowBalanceLine, runningBalanceLine, bankFrameLine], {
                 animateReplot: true,
                 drawIfHidden: true,
@@ -457,6 +461,8 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
                             angle: 15,
                             formatString: '%d-%m-%y'
                         },
+                        min: firstDate,
+                        max: lastDate
                     },
                     yaxis: {
                         label: 'Balance',

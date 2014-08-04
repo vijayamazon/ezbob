@@ -189,8 +189,7 @@
 
 		private void BuilDataAlerts(Customer customer, ProfileSummaryModel summary, int userId)
 		{
-			List<string> errorsList = serviceClient.Instance.GetUnfetchedDataErrors(userId, customer.Id).Records.ToList();
-
+			var errorsList = serviceClient.Instance.GetUnfetchedDataErrors(userId, customer.Id).Records;
 			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			var errors = new StringBuilder();
 			if (currAddr != null && !currAddr.Zoopla.Any())

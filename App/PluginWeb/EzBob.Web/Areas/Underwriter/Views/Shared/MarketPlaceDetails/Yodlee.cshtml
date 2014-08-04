@@ -131,20 +131,20 @@
 {
     <div class="tab-pane" id="yodleetab2">
         <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
-        <h3 style="width: 850px; text-align: center;">Monthly Activity Summary<br />
+        <h3 style="margin: 0; text-align: center;">Monthly Activity Summary<br />
             <small>monthly as of date <%=EzBob.formatDate(new Date(moment(y.CashFlowReportModel.AsOfDate)))%></small>
         </h3>
-        <div class="well" style="width: 850px; height: 350px; position: relative;">
-            <div id="yodleeBarGraph" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
+        <div class="well" style="width: 80%; height: 350px; position: relative;">
+            <div id="yodleeBarGraph" class="jqplot-target" style="width: 90%; height: 300px; position: relative;"></div>
         </div>
         <hr />
-        <h3 style="width: 850px; text-align: center;">Cash Flow High/Low Trends<br />
+        <h3 style="margin: 0; text-align: center;">Cash Flow High/Low Trends<br />
             <small>monthly as of date <%=EzBob.formatDate(new Date(moment(y.CashFlowReportModel.AsOfDate)))%></small>
         </h3>
-        <div class="well" style="width: 850px; height: 350px; position: relative;">
+        <div class="well" style="width: 80%; height: 350px; position: relative;">
             <button class="yodleeReplotGraph btn btn-mini" style="right: 0px; top: 0px; position: absolute;" title="Replot"><i class="fa fa-refresh"></i></button>
             <button class="yodleeShowTransactionsInRange btn btn-mini" style="right: 0px; top: 35px; position: absolute; z-index: 5;" title="Show transactions in range"><i class="fa fa-magnet"></i></button>
-            <div id="yodleeRunningBalanceChart" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
+            <div id="yodleeRunningBalanceChart" class="jqplot-target" style="width: 90%; height: 300px; position: relative;"></div>
         </div>
 
         <br />

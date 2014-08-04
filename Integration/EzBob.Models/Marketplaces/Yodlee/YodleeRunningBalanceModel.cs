@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	[Serializable]
 	public class RunningBalance
@@ -16,7 +17,7 @@
 		public SortedDictionary<string /*yearmonth*/, RunningBalance> LowRunningBalanceDict { get; set; }
 		public SortedDictionary<string /*yearmonth*/, RunningBalance> HighRunningBalanceDict { get; set; }
 		public SortedDictionary<string /*accountNum*/, double /*currentBalance*/> AccountCurrentBalanceDict { get; set; }
-		public SortedDictionary<string /*date*/, double> MergedDailyRunningBalanceDict { get; set; }
+		public List<RunningBalance> MergedDailyRunningBalanceDict { get; set; }
 		public double BankFrame = 0;
 		public DateTime AsOfDate;
 	}
@@ -41,7 +42,7 @@
 			RunningBalanceDict = new SortedDictionary<DateTime, Dictionary<string, double>>();
 			_firstTrans = DateTime.Today;
 			_lastTrans = DateTime.Today;
-			
+
 		}
 
 		public void Add(YodleeTransactionModel transaction, string accountNum)
@@ -125,51 +126,55 @@
 
 		private void CalculateMergedData()
 		{
-			yodlee.MergedDailyRunningBalanceDict = new SortedDictionary<string, double>();
+			var runningBalanceList = new List<RunningBalance>();
+
 			foreach (var rb in RunningBalanceDict)
 			{
 				foreach (var balance in rb.Value)
 				{
-					if (!yodlee.MergedDailyRunningBalanceDict.ContainsKey(rb.Key.Ticks.ToString()))
+					var day = runningBalanceList.FirstOrDefault(x => x.Date == rb.Key);
+					if (day == null)
 					{
-						yodlee.MergedDailyRunningBalanceDict[rb.Key.Ticks.ToString()] = balance.Value;
+						runningBalanceList.Add(new RunningBalance { Date = rb.Key, Balance = balance.Value });
 					}
 					else
 					{
-						yodlee.MergedDailyRunningBalanceDict[rb.Key.Ticks.ToString()] += balance.Value;
+						day.Balance += balance.Value;
 					}
 				}
 			}
+
+			yodlee.MergedDailyRunningBalanceDict = runningBalanceList.OrderBy(x => x.Date).ToList();
 		}
 
 		private void CalculateMinMaxMonthlyRunningBalance()
 		{
 			foreach (var mdrbd in yodlee.MergedDailyRunningBalanceDict)
 			{
-				DateTime date =new DateTime(long.Parse(mdrbd.Key));
+				DateTime date = mdrbd.Date;
 				string yearmonth = (date.Year * 100 + date.Month).ToString();
 				if (!yodlee.LowRunningBalanceDict.ContainsKey(yearmonth))
 				{
-					yodlee.LowRunningBalanceDict[yearmonth] = new RunningBalance { Date = date, Balance = mdrbd.Value };
+					yodlee.LowRunningBalanceDict[yearmonth] = new RunningBalance { Date = date, Balance = mdrbd.Balance };
 				}
 				else
 				{
-					if (yodlee.LowRunningBalanceDict[yearmonth].Balance > mdrbd.Value)
+					if (yodlee.LowRunningBalanceDict[yearmonth].Balance > mdrbd.Balance)
 					{
-						yodlee.LowRunningBalanceDict[yearmonth].Balance = mdrbd.Value;
+						yodlee.LowRunningBalanceDict[yearmonth].Balance = mdrbd.Balance;
 						yodlee.LowRunningBalanceDict[yearmonth].Date = date;
 					}
 				}
 
 				if (!yodlee.HighRunningBalanceDict.ContainsKey(yearmonth))
 				{
-					yodlee.HighRunningBalanceDict[yearmonth] = new RunningBalance { Date = date, Balance = mdrbd.Value };
+					yodlee.HighRunningBalanceDict[yearmonth] = new RunningBalance { Date = date, Balance = mdrbd.Balance };
 				}
 				else
 				{
-					if (yodlee.HighRunningBalanceDict[yearmonth].Balance < mdrbd.Value)
+					if (yodlee.HighRunningBalanceDict[yearmonth].Balance < mdrbd.Balance)
 					{
-						yodlee.HighRunningBalanceDict[yearmonth].Balance = mdrbd.Value;
+						yodlee.HighRunningBalanceDict[yearmonth].Balance = mdrbd.Balance;
 						yodlee.HighRunningBalanceDict[yearmonth].Date = date;
 					}
 				}
