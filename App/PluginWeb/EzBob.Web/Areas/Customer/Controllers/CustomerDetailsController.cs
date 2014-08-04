@@ -927,7 +927,7 @@
 			if (customer.PersonalInfo != null)
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
 			
-			customer.PropertyStatus = propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == personalInfo.PropertyStatusId);
+			customer.PropertyStatus = propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == personalInfo.PropertyStatus);
 
 			customer.PersonalInfo = personalInfo;
 
