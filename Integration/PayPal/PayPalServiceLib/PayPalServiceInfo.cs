@@ -17,7 +17,7 @@ namespace EzBob.PayPalServiceLib
 
 		public string Description
 		{
-			get { return "Pay Pal"; }
+			get { return "PayPal"; }
 		}
 
 		public bool IsPaymentAccount

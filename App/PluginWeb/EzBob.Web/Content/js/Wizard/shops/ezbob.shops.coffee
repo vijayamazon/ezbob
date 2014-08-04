@@ -124,14 +124,14 @@ class EzBob.StoreInfoView extends Backbone.View
         for grp in EzBob.Config.MarketPlaceGroups
             @mpGroups[grp.Id] = grp
             grp.ui = null
-
+        console.log('mps', EzBob.Config.MarketPlaces)
         for j in EzBob.Config.MarketPlaces
             storeTypeName = if j.Name == "Pay Pal" then "paypal" else j.Name
             if @stores[storeTypeName]
                 @stores[storeTypeName].active = if @isProfile() then (if @isOffline() then j.ActiveDashboardOffline else j.ActiveDashboardOnline) else (if @isOffline() then j.ActiveWizardOffline else j.ActiveWizardOnline)
                 @stores[storeTypeName].priority = if @isOffline() then j.PriorityOffline else j.PriorityOnline
                 @stores[storeTypeName].ribbon = if j.Ribbon then j.Ribbon else ""
-                @stores[storeTypeName].button = new EzBob.StoreButtonView({ name: storeTypeName, mpAccounts: @model })
+                @stores[storeTypeName].button = new EzBob.StoreButtonView({ name: storeTypeName, mpAccounts: @model, description: j.Description })
                 @stores[storeTypeName].button.ribbon = if j.Ribbon then j.Ribbon else ""
                 @stores[storeTypeName].mandatory = if @isOffline() then j.MandatoryOffline else j.MandatoryOnline
                 @stores[storeTypeName].groupid = if j.Group? then j.Group.Id else 0

@@ -199,7 +199,8 @@
           this.stores[storeTypeName].ribbon = j.Ribbon ? j.Ribbon : "";
           this.stores[storeTypeName].button = new EzBob.StoreButtonView({
             name: storeTypeName,
-            mpAccounts: this.model
+            mpAccounts: this.model,
+            description: j.Description
           });
           this.stores[storeTypeName].button.ribbon = j.Ribbon ? j.Ribbon : "";
           this.stores[storeTypeName].mandatory = this.isOffline() ? j.MandatoryOffline : j.MandatoryOnline;
@@ -376,13 +377,13 @@
       $(this.storeList).find('.back-store').remove();
       sShow = '';
       sRemove = '';
-      this.storeList.find('.btn-showmore').show();
+      this.storeList.find('.marketplace-button.show-more').show();
       if (isOffline) {
         sShow = '.offline_entry_message';
         sRemove = '.online_entry_message';
         this.storeList.find('.importantnumber').text('£150,000');
         if (isProfile) {
-          this.storeList.find('.btn-showmore').hide();
+          this.storeList.find('.marketplace-button.show-more').hide();
           this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
         } else {
           this.storeList.find('.btn-showmore').show();
@@ -390,7 +391,7 @@
       } else {
         sShow = '.online_entry_message';
         sRemove = '.offline_entry_message';
-        this.storeList.find('.btn-showmore').hide();
+        this.storeList.find('.marketplace-button.show-more').hide();
         this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
       }
       this.storeList.find(sShow).show();

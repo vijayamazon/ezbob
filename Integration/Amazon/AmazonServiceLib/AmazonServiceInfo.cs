@@ -20,7 +20,7 @@ namespace EzBob.AmazonServiceLib
 
 		public string Description
 		{
-			get { return "Amazon Market Place"; }
+			get { return "amazon"; }
 		}
 
 		public bool IsPaymentAccount

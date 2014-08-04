@@ -17,7 +17,7 @@
 
         public string Description
         {
-            get { return "Yodlee Bank Account"; }
+            get { return "Bank"; }
         }
 
 		public bool IsPaymentAccount

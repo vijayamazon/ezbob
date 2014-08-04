@@ -87,8 +87,8 @@
 
 	{
 		"Name":        "Play",
-		"DisplayName": "Play.com",
-		"Description": "Play.com",
+		"DisplayName": "Play",
+		"Description": "play.com",
 		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
 		"Behaviour":   "Default",
 
@@ -158,8 +158,8 @@
 
 	{
 		"Name":        "Shopify",
-		"DisplayName": "Shopify.com",
-		"Description": "Shopify.com",
+		"DisplayName": "Shopify",
+		"Description": "Shopify",
 		"InternalID":  "{A386F349-8E41-4BA9-B709-90332466D42D}",
 		"Behaviour":   "Default",
 
@@ -219,8 +219,8 @@
 	
 	{
 		"Name":        "Xero",
-		"DisplayName": "Xero.com",
-		"Description": "Xero.com",
+		"DisplayName": "Xero",
+		"Description": "Xero",
 		"InternalID":  "{AAFEBF1F-C4BD-4AFA-80ED-037AACFA392C}",
 		"Behaviour":   "Default",
 
@@ -301,8 +301,8 @@
 	},
 	{
 		"Name":        "KashFlow",
-		"DisplayName": "KashFlow.com",
-		"Description": "KashFlow.com",
+		"DisplayName": "KashFlow",
+		"Description": "KashFlow",
 		"InternalID":  "{A755B4F6-D4EC-4D80-96A2-B2849BD800AC}",
 		"Behaviour":   "Default",
 
@@ -365,7 +365,7 @@
 	{
 		"Name":        "HMRC",
 		"DisplayName": "HMRC",
-		"Description": "HM Revenue and Customs",
+		"Description": "VAT Reports",
 		"InternalID":  "{AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA}",
 		"Behaviour":   "HMRC",
 
@@ -431,8 +431,8 @@
 	},
 	{
 		"Name":        "Magento",
-		"DisplayName": "Magento.com",
-		"Description": "Magento.com",
+		"DisplayName": "Magento",
+		"Description": "Magento",
 		"InternalID":  "{A660B9CC-8BB1-4A37-9597-507622AEBF9E}",
 		"Behaviour":   "Default",
 
@@ -505,8 +505,8 @@
 	},
 	{
 		"Name":        "Prestashop",
-		"DisplayName": "Prestashop.com",
-		"Description": "Prestashop.com",
+		"DisplayName": "Prestashop",
+		"Description": "PrestaShop",
 		"InternalID":  "{AE0BC89A-9884-4025-9D96-2755A6CD10EE}",
 		"Behaviour":   "Default",
 
@@ -572,8 +572,8 @@
 	},
 	{
 		"Name":        "Bigcommerce",
-		"DisplayName": "Bigcommerce.com",
-		"Description": "Bigcommerce.com",
+		"DisplayName": "Bigcommerce",
+		"Description": "Bigcommerce",
 		"InternalID":  "{A5FC4B43-EBB7-4C6B-BC23-3C162CB61996}",
 		"Behaviour":   "Default",
 

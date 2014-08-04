@@ -17,7 +17,7 @@ namespace EKM
 
         public string Description
         {
-            get { return "EKM Powershop"; }
+            get { return "ekmPowershop"; }
         }
 
 	    public bool IsPaymentAccount

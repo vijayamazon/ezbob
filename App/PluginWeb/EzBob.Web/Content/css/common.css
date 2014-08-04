@@ -789,8 +789,7 @@ select.SubBank {
     display: inline-block;
     background: url(images/yodlee/banks_sprite.png) no-repeat 0 0;
     height: 40px;
-    margin-top: 3px;
-    margin-bottom: 3px;
+    vertical-align: middle;
 }
 
     .BankContainer span.HSBC.off {
@@ -855,12 +854,12 @@ select.SubBank {
 
     .BankContainer span.DAG.off {
         background: url(images/yodlee/dag_off.png) no-repeat 0 0;
-        width: 80px;
+        width: 40px;
     }
 
     .BankContainer span.DAG.on {
         background: url(images/yodlee/dag_on.png) no-repeat 0 0;
-        width: 80px;
+        width: 40px;
     }
 
     .BankContainer span.Halifax.off {
@@ -1636,13 +1635,13 @@ td.account-logo {
     font-size: 20px;
     text-align: center;
     position: absolute;
+    display: table;
     top: 60px;
     left: 0;
     border-radius: 5px;
     background-color: #e8fcc6;
     background-color: rgba(123, 188, 36, 0.8);
     color: white;
-    padding-top: 17px;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -1652,6 +1651,10 @@ td.account-logo {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
 }
+    .marketplace-button a div.onhover div.onhover-cell {
+        display: table-cell;
+        vertical-align: middle;
+    } 
 
 .hmrc-main-button a div.onhover {
     height: 103px;
