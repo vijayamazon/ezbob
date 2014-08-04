@@ -76,7 +76,7 @@
 		<div class="control-group">
 			<label class="control-label">Property status</label>
 			<div class="controls">
-				<input type="text" value="<%-PropertyStatus.Description%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:residential-status" />
+				<input type="text" value="<%-PropertyStatus != undefined ? PropertyStatus.Description : 'TBD'%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:residential-status" />
 			</div>
 		</div>
 
