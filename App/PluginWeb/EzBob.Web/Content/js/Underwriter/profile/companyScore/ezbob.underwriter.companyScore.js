@@ -16,8 +16,6 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 	}, // initialize
 
 	render: function () {
-		console.log('company score model:', this.model);
-
 		var onAfterRender = [];
 
 		var sHtml = this.template({
