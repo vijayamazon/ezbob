@@ -52,7 +52,7 @@
 						bool isLastEntryForCustomer = dataSafeReader["IsLastEntryForCustomer"];
 
 						string key = string.Format("{0}_{1}_{2}_{3}", firstName, middleName, surname, postcode);
-						AuthenticationResults result = idHubService.ParseAndSave_ForBackfill(customerId, xml, serviceLogId, insertDate, key);
+						AuthenticationResults result = idHubService.ParseAndSave_ForBackfill(xml, serviceLogId, insertDate, key);
 						
 						int authentication = result.AuthenticationIndex;
 						string description = result.AuthIndexText;

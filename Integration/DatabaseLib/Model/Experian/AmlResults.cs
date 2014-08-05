@@ -11,7 +11,6 @@
 	{
 		public virtual int Id { get; set; }
 		public virtual string LookupKey { get; set; }
-		public virtual int CustomerId { get; set; }
 		public virtual long ServiceLogId { get; set; }
 		public virtual DateTime Created { get; set; }
 		public virtual string AuthenticationDecision { get; set; }
@@ -40,7 +39,6 @@
 			Table("AmlResults");
 			Id(x => x.Id);
 			Map(x => x.LookupKey).Length(500);
-			Map(x => x.CustomerId);
 			Map(x => x.ServiceLogId);
 			Map(x => x.Created).CustomType<UtcDateTimeType>().Not.Nullable();
 			Map(x => x.AuthenticationDecision).Length(20);

@@ -228,7 +228,7 @@
 				}
 				var writelog = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
 
-				SaveAmlData(customerId, key, writelog.ServiceLog.Id, writelog.ServiceLog.InsertDate, result);
+				SaveAmlData(key, writelog.ServiceLog.Id, writelog.ServiceLog.InsertDate, result);
 
 				result.Parse(r);
 			}
@@ -242,12 +242,11 @@
 			return result;
 		}
 
-		private void SaveAmlData(int customerId, string key, long serviceLogId, DateTime serviceLogInsertDate, AuthenticationResults result)
+		private void SaveAmlData(string key, long serviceLogId, DateTime serviceLogInsertDate, AuthenticationResults result)
 		{
 			var amlResult = new AmlResults
 				{
 					LookupKey = key,
-					CustomerId = customerId,
 					ServiceLogId = serviceLogId,
 					Created = serviceLogInsertDate,
 					AuthenticationDecision = result.AuthenticationDecision,
@@ -275,13 +274,13 @@
 			amlResultsRepository.SaveOrUpdate(amlResult);
 		}
 
-		public AuthenticationResults ParseAndSave_ForBackfill(int customerId, string xml, long serviceLogId, DateTime serviceLogInsertDate, string key)
+		public AuthenticationResults ParseAndSave_ForBackfill(string xml, long serviceLogId, DateTime serviceLogInsertDate, string key)
 		{
 			var result = new AuthenticationResults();
 			ProcessConfigResponseType r = GetRequestFromXml(xml);
 			result.Parse(r);
 
-			SaveAmlData(customerId, key, serviceLogId, serviceLogInsertDate, result);
+			SaveAmlData(key, serviceLogId, serviceLogInsertDate, result);
 
 			return result;
 		}

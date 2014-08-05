@@ -14,6 +14,7 @@ AS
 BEGIN
 	DECLARE 
 		@FirstName NVARCHAR(250),
+		@MiddleInitial NVARCHAR(250),
 		@LastName NVARCHAR(250),
 		@DefaultCount INT,
 		@UnsettledDefaultCount INT,
@@ -39,10 +40,12 @@ BEGIN
 		@InTngblAssets DECIMAL(18,6), 
 		@TngblAssets DECIMAL(18,6),
 		@IsOwnerOfMainAddress BIT,
-		@IsOwnerOfOtherProperties BIT
+		@IsOwnerOfOtherProperties BIT,
+		@Postcode VARCHAR(200)
 						
 	SELECT
 		@FirstName = FirstName,
+		@MiddleInitial = MiddleInitial,
 		@LastName = Surname,
 		@CompanyId = CompanyId,
 		@ReferenceSource = ReferenceSource,
@@ -57,6 +60,8 @@ BEGIN
 		Customer.Id = @CustomerId AND
 		Customer.PropertyStatusId = CustomerPropertyStatuses.Id
 
+	SELECT @Postcode = Postcode FROM CustomerAddress WHERE addressType = 1 AND CustomerId = @CustomerId
+	
 	SELECT @RefNumber = ExperianRefNum FROM Company WHERE Id = @CompanyId
 		
 	SELECT
@@ -200,7 +205,7 @@ BEGIN
 		ExperianLtdID = @ExperianLimitedCompanyId
 	
 	SELECT
-		(SELECT AuthenticationIndex FROM AmlResults WHERE CustomerId = @CustomerId) AS AmlScore,
+		(SELECT AuthenticationIndex FROM AmlResults WHERE LookupKey = @FirstName + '_' + @MiddleInitial + '_' + @LastName + '_' + @Postcode) AS AmlScore,
 		@FirstName AS FirstName,
 		@LastName AS Surname,
 		CAST((CASE @DefaultCount WHEN 0 THEN 0 ELSE 1 END) AS BIT) AS HasDefaultAccounts,
