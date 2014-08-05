@@ -769,10 +769,18 @@ div.shop-connected {
 select.SubBank {
     overflow: hidden;
 }
+    select.SubBank option {
+        display: block;
+        margin: 0;
+    }
 
     select.SubBank::-webkit-scrollbar {
         display: none;
     }
+
+#subTypeHeader {
+    float: left;
+}
 
 .BankContainer label,
 .SubBank label {
@@ -1150,7 +1158,7 @@ table.dashboard_sources {
     }
 
 
-select,option {
+select {
     display: inline-block;
     margin-bottom: 10px;
     font-size: 18px;
@@ -1162,10 +1170,6 @@ select,option {
     border-radius: 0px;
     padding: 4px 6px;
     height: 20px;
-}
-
-select:hover {
-    
 }
 
 textarea,

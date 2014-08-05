@@ -508,7 +508,6 @@
       this.oldTitle = $(document).attr("title");
       this.setDocumentTitle(storeView);
       this.setFocus(storeName);
-      event.preventDefault();
       return false;
     };
 

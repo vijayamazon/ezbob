@@ -124,7 +124,7 @@ class EzBob.StoreInfoView extends Backbone.View
         for grp in EzBob.Config.MarketPlaceGroups
             @mpGroups[grp.Id] = grp
             grp.ui = null
-        console.log('mps', EzBob.Config.MarketPlaces)
+        
         for j in EzBob.Config.MarketPlaces
             storeTypeName = if j.Name == "Pay Pal" then "paypal" else j.Name
             if @stores[storeTypeName]
@@ -430,8 +430,6 @@ class EzBob.StoreInfoView extends Backbone.View
         @oldTitle = $(document).attr("title")
         @setDocumentTitle storeView
         @setFocus storeName
-
-        event.preventDefault()
         false
 
     setFocus: (storeName) ->
