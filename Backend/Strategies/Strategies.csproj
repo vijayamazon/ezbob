@@ -84,7 +84,7 @@
     <Compile Include="Experian\BackfillExperianConsumer.cs" />
     <Compile Include="Experian\GetExperianConsumerScore.cs" />
     <Compile Include="Experian\LoadExperianConsumerDefaultsData.cs" />
-    <Compile Include="Experian\LoadExperianConsumerMortageData.cs" />
+    <Compile Include="Experian\LoadExperianConsumerMortgageData.cs" />
     <Compile Include="Experian\LoadExperianConsumerData.cs" />
     <Compile Include="Experian\ParseExperianConsumerData.cs" />
     <Compile Include="Experian\DeleteExperianDirector.cs" />

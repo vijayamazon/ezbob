@@ -301,7 +301,7 @@
 		ExperianConsumerActionResult LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId);
 		
 		[OperationContract]
-		ExperianConsumerMortgageActionResult LoadExperianConsumerMortageData(int customerId);
+		ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int customerId);
 
 		[OperationContract]
 		IntActionResult GetExperianConsumerScore(int customerId);

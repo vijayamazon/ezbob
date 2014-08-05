@@ -982,11 +982,11 @@
   <wsdl:message name="IEzService_LoadExperianConsumer_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadExperianConsumerResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoadExperianConsumerMortageData_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortageData" />
+  <wsdl:message name="IEzService_LoadExperianConsumerMortgageData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortgageData" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoadExperianConsumerMortageData_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortageDataResponse" />
+  <wsdl:message name="IEzService_LoadExperianConsumerMortgageData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadExperianConsumerMortgageDataResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetExperianConsumerScore_InputMessage">
     <wsdl:part name="parameters" element="tns:GetExperianConsumerScore" />
@@ -1615,9 +1615,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumer" message="tns:IEzService_LoadExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerResponse" message="tns:IEzService_LoadExperianConsumer_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="LoadExperianConsumerMortageData">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortageData" message="tns:IEzService_LoadExperianConsumerMortageData_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortageDataResponse" message="tns:IEzService_LoadExperianConsumerMortageData_OutputMessage" />
+    <wsdl:operation name="LoadExperianConsumerMortgageData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData" message="tns:IEzService_LoadExperianConsumerMortgageData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageDataResponse" message="tns:IEzService_LoadExperianConsumerMortgageData_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetExperianConsumerScore">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScore" message="tns:IEzService_GetExperianConsumerScore_InputMessage" />
@@ -2995,8 +2995,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="LoadExperianConsumerMortageData">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianConsumerMortageData" style="document" />
+    <wsdl:operation name="LoadExperianConsumerMortgageData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3043,20 +3043,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

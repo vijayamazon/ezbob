@@ -193,9 +193,7 @@
 
 		#endregion method BackfillExperianConsumer
 
-		#region method LoadExperianConsumerMortage
-
-		public ExperianConsumerMortgageActionResult LoadExperianConsumerMortageData(int customerId)
+		public ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int customerId)
 		{
 			LoadExperianConsumerMortgageData oInstance;
 
@@ -208,10 +206,6 @@
 			};
 		}
 
-		#endregion method LoadExperianConsumerMortage
-
-		#region method LoadExperianConsumerMortage
-
 		public IntActionResult GetExperianConsumerScore(int customerId)
 		{
 			GetExperianConsumerScore oInstance;
@@ -223,7 +217,5 @@
 				Value = oInstance.Score,
 			};
 		}
-
-		#endregion method LoadExperianConsumerMortage
 	} // class EzServiceImplementation
 } // namespace EzService

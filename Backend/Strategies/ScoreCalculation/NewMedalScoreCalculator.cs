@@ -141,7 +141,7 @@
 			var instance = new LoadExperianConsumerMortgageData(customerId, db, log);
 			instance.Execute();
 
-			return instance.Result.MortageBalance;
+			return instance.Result.MortgageBalance;
 		}
 
 		private void CalculateMedal()

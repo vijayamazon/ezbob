@@ -161,7 +161,7 @@
 			bool isHomeOwner = customer.PropertyStatus != null && (customer.PropertyStatus.IsOwnerOfMainAddress || customer.PropertyStatus.IsOwnerOfOtherProperties);
 			try
 			{
-				hasMortgage = serviceClient.Instance.LoadExperianConsumerMortageData(customer.Id).Value.NumMortgages > 0;
+				hasMortgage = serviceClient.Instance.LoadExperianConsumerMortgageData(customer.Id).Value.NumMortgages > 0;
 			}
 			catch (Exception e)
 			{

@@ -351,6 +351,6 @@
 		[DataMember]
 		public int NumMortgages { get; set; }
 		[DataMember]
-		public int MortageBalance { get; set; }
+		public int MortgageBalance { get; set; }
 	}
 }

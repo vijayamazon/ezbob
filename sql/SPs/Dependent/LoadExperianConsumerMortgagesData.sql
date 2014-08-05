@@ -13,7 +13,7 @@ BEGIN
 	DECLARE @ServiceLogId BIGINT
 	EXEC GetExperianConsumerServiceLog @CustomerId, @ServiceLogId OUTPUT
 							   
-	SELECT count(*) AS NumMortgages, isnull(sum(Balance),0) AS MortageBalance 
+	SELECT count(*) AS NumMortgages, isnull(sum(Balance),0) AS MortgageBalance 
 	FROM ExperianConsumerDataCais c INNER JOIN ExperianConsumerData d ON d.Id = c.ExperianConsumerDataId 
 	WHERE d.ServiceLogId=@ServiceLogId 
 	AND AccountType IN ('03','16','25','30','31','32','33','34','35','69') 

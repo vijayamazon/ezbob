@@ -72,8 +72,8 @@
 				intVal = zoopla1YearAvg;
 			}
 			zooplaValue = intVal;
-			var data = serviceClient.Instance.LoadExperianConsumerMortageData(customer.Id);
-			mortgageBalance = data.Value.MortageBalance;
+			var data = serviceClient.Instance.LoadExperianConsumerMortgageData(customer.Id);
+			mortgageBalance = data.Value.MortgageBalance;
 			mortgageCount = data.Value.NumMortgages;
 		}
 
