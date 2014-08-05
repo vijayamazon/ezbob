@@ -108,7 +108,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         if (medalHistory) {
             var histData = [];
             _.each(medalHistory.MedalHistories, function(hist, i) {
-                histData.push([i, hist.Result * 100]);
+                histData.push([i+1, hist.Result * 100]);
             });
             if (histData.length > 0) {
                 var mhPlot = $.jqplot('medalHistory', [histData],
@@ -117,7 +117,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                         axes: {
                             yaxis: {
                                 labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                                min: 0,
+                                min: 0, //score between 0% and 100%
                                 max: 100,
                                 tickOptions: {
                                     show: false,
@@ -127,6 +127,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                             },
                             xaxis: {
                                 min: 0,
+                                max: medalHistory.MedalHistories.length+1,
                                 tickOptions: { show: false },
                                 rendererOptions: { drawBaseline: false }
                             }
@@ -143,7 +144,9 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                             color: "#a7a7a7",
                             markerOptions: {
                                 color: "#a7a7a7",
-                                style: "circle"
+                                style: "filledCircle",
+                                size: 7,
+                                shadow: false
                             }
                         },
                         highlighter: {
