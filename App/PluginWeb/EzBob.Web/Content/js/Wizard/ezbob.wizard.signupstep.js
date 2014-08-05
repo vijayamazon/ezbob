@@ -160,7 +160,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 	generateMobileCode: function() {
 		if ($('#generateMobileCode').hasClass('disabled'))
-			return false;
+			return;
 
 		EzBob.App.trigger('clear');
 
@@ -171,7 +171,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 			EzBob.App.trigger('warning', "Switching to authentication via captcha");
 			this.$el.find('#twilioDiv').addClass('hide');
 			this.$el.find('#captchaDiv').removeClass('hide');
-			return false;
+			return;
 		}
 		var that = this;
 		var xhr = $.post(window.gRootPath + "Account/GenerateMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
@@ -185,17 +185,15 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				codeSentObject.animate({ opacity: 1 });
 			}
 
-			return false;
+			
 		});
-		xhr.always(function() {
+		xhr.always(function () {
 			that.$el.find('#mobileCodeDiv').show();
-			that.$el.find('#generateMobileCode').val('Resend activation code');
+			that.$el.find('#generateMobileCode').text('Resend activation code');
 			if (document.getElementById('generateMobileCode') === document.activeElement) {
 				document.getElementById('mobileCode').focus();
 			}
 		});
-
-		return false;
 	},
 
 	mobilePhoneChanged: function() {

@@ -146,7 +146,6 @@
 
     StoreInfoView.prototype.events = {
       'click a.connect-store': 'close',
-      'click a.continue': 'next',
       'click .btn-showmore': 'toggleShowMoreAccounts',
       'click .btn-go-to-link-accounts': 'showLinkAccountsForm',
       'click .btn-take-quick-offer': 'takeQuickOffer',
@@ -546,25 +545,6 @@
       this.$el.find(">div").hide();
       this.storeList.show();
       $(document).attr("title", this.oldTitle);
-      return false;
-    };
-
-    StoreInfoView.prototype.next = function() {
-      var btn, xhr;
-      btn = this.$el.find(".continue");
-      if (btn.hasClass("disabled")) {
-        return;
-      }
-      BlockUi('on');
-      btn.addClass('disabled');
-      xhr = $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
-      xhr.done(function() {
-        EzBob.App.trigger("clear");
-        return window.location = window.gRootPath + 'CustomerDetails/Dashboard';
-      });
-      xhr.error(function() {
-        return UnBlockUi();
-      });
       return false;
     };
 
