@@ -64,6 +64,8 @@
 
 			Log.Debug("Summary data - begin:");
 
+			int nSavedCount = 0;
+
 			foreach (KeyValuePair<long, BusinessData> pair in m_oBusinessData) {
 				BusinessData oBusinessData = pair.Value;
 
@@ -90,8 +92,19 @@
 					};
 
 					oSp.ExecuteNonQuery();
+
+					nSavedCount++;
 				});
 			} // for each
+
+			if (nSavedCount == 0) {
+				DB.ExecuteNonQuery(
+					"DeleteOtherVatReturnSummary",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", m_nCustomerID),
+					new QueryParameter("CustomerMarketplaceID", m_nCustomerMarketplaceID)
+				);
+			} // if
 
 			Log.Debug("Summary data - end.");
 		} // Execute

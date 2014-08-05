@@ -27,6 +27,7 @@
 			this.options = _.defaults(options, this.defaults);
 
 			this.FirstLoad = true;
+			this.HasRowBeenRemoved = false;
 
 			this.Dropzone = null;
 			this.BackButton = null;
@@ -262,7 +263,7 @@
 				else {
 					var bHasRows = oResponse.aaData && oResponse.aaData.length;
 
-					if (bHasRows)
+					if (self.HasRowBeenRemoved || bHasRows)
 						self.DoneButton.show();
 					else
 						self.BackButton.show();
@@ -345,6 +346,7 @@
 
 			oRequest.always(function() {
 				UnBlockUi();
+				self.HasRowBeenRemoved = true;
 				self.reloadPeriods();
 			});
 		}, // doRemovePeriodFor
