@@ -540,28 +540,30 @@
 
 		private static Summary GetSummaryModel(CreditBureauModel model)
 		{
-			return new Summary
+			var summary = new Summary();
+			summary.Score = model.Consumer.Score;
+			summary.ConsumerIndebtednessIndex = model.Consumer.CII;
+			summary.CheckDate = model.Consumer.CheckDate;
+			summary.Validtill = model.Consumer.CheckValidity;
+			summary.WorstCurrentstatus = model.Consumer.WorstCurrentStatus;
+			summary.WorstHistoricalstatus = model.Consumer.WorstCurrentStatus3M;
+			summary.Numberofdefaults = model.Consumer.NumberOfDefaults;
+			summary.Accounts = model.Consumer.NumberOfAccounts;
+			summary.CCJs = model.Consumer.NumberOfCCJs;
+			summary.MostrecentCCJ = model.Consumer.AgeOfMostRecentCCJ;
+			summary.Creditcardutilization = model.Consumer.CreditCardUtilization;
+			summary.Enquiriesinlast6months = model.Consumer.EnquiriesLast6M;
+			summary.Enquiriesinlast3months = model.Consumer.EnquiriesLast3M;
+			if (model.Consumer.ConsumerAccountsOverview != null)
 			{
-				Score = model.Consumer.Score,
-				ConsumerIndebtednessIndex = model.Consumer.CII,
-				CheckDate = model.Consumer.CheckDate,
-				Validtill = model.Consumer.CheckValidity,
-				WorstCurrentstatus = model.Consumer.WorstCurrentStatus,
-				WorstHistoricalstatus = model.Consumer.WorstCurrentStatus3M,
-				Numberofdefaults = model.Consumer.NumberOfDefaults,
-				Accounts = model.Consumer.NumberOfAccounts,
-				CCJs = model.Consumer.NumberOfCCJs,
-				MostrecentCCJ = model.Consumer.AgeOfMostRecentCCJ,
-				Creditcardutilization = model.Consumer.CreditCardUtilization,
-				Enquiriesinlast6months = model.Consumer.EnquiriesLast6M,
-				Enquiriesinlast3months = model.Consumer.EnquiriesLast3M,
-				Totalbalance = model.Consumer.ConsumerAccountsOverview.Balance_Total,
-				AML = model.AmlInfo.AMLResult,
-				AMLnum = model.AmlInfo.AuthenticationIndex.ToString(CultureInfo.InvariantCulture),
-				BWA = model.BavInfo.BankAccountVerificationResult,
-				BWAnum = GetBwaScoreInfo(model.BavInfo),
-				ThinFile = model.Consumer.AccountsInformation == null || model.Consumer.AccountsInformation.Length == 0,
-			};
+				summary.Totalbalance = model.Consumer.ConsumerAccountsOverview.Balance_Total;
+			}
+			summary.AML = model.AmlInfo.AMLResult;
+			summary.AMLnum = model.AmlInfo.AuthenticationIndex.ToString(CultureInfo.InvariantCulture);
+			summary.BWA = model.BavInfo.BankAccountVerificationResult;
+			summary.BWAnum = GetBwaScoreInfo(model.BavInfo);
+			summary.ThinFile = model.Consumer.AccountsInformation == null || model.Consumer.AccountsInformation.Length == 0;
+			return summary;
 		}
 
 		private static string GetBwaScoreInfo(BankAccountVerificationInfo info)
