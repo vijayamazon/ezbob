@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System.Collections.Generic;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Models;
 
@@ -100,6 +101,10 @@
 		public ActionMetaData NotifySalesOnNewCustomer(int nCustomerID) {
 			return Execute<NotifySalesOnNewCustomer>(nCustomerID, null, nCustomerID);
 		} // NotifySalesOnNewCustomer
+
+		public ActionMetaData EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail) {
+			return Execute<EmailHmrcParsingErrors>(nCustomerID, null, nCustomerID, nCustomerMarketplaceID, oErrorsToEmail);
+		} // EmailHmrcParsingErrors
 
 		#endregion async
 

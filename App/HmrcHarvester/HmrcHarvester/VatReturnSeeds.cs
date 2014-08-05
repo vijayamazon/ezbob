@@ -38,9 +38,30 @@
 			BusinessAddress = null;
 
 			ReturnDetails = new SortedDictionary<string, Coin>();
+
+			FatalErrors = new List<string>();
 		} // constructor
 
 		#endregion constructor
+
+		#region property FatalErrors
+
+		public List<string> FatalErrors { get; private set; }
+
+		#endregion property FatalErrors
+
+		#region property FatalError
+
+		public string FatalError {
+			get {
+				if (FatalErrors.Count < 1)
+					return string.Empty;
+
+				return string.Join(" ", FatalErrors);
+			} // get
+		} // FatalError
+
+		#endregion property FatalError
 
 		#region VAT period related
 
@@ -87,22 +108,22 @@
 
 			if (string.IsNullOrWhiteSpace(Period)) {
 				bIsValid = false;
-				m_oLog.Debug("VAT return 'Period' not specified.");
+				AddFatalError("VAT return 'Period' not specified.");
 			} // if
 
 			if (DateFrom.Equals(ms_oLongTimeAgo)) {
 				bIsValid = false;
-				m_oLog.Debug("VAT return 'Date From' not specified.");
+				AddFatalError("VAT return 'Date From' not specified.");
 			} // if
 
 			if (DateTo.Equals(ms_oLongTimeAgo)) {
 				bIsValid = false;
-				m_oLog.Debug("VAT return 'Date To' not specified.");
+				AddFatalError("VAT return 'Date To' not specified.");
 			} // if
 
 			if (DateDue.Equals(ms_oLongTimeAgo)) {
 				bIsValid = false;
-				m_oLog.Debug("VAT return 'Date Due' not specified.");
+				AddFatalError("VAT return 'Date Due' not specified.");
 			} // if
 
 			return bIsValid;
@@ -148,21 +169,21 @@
 
 			if (RegistrationNo <= 0) {
 				bIsValid = false;
-				m_oLog.Debug("VAT return 'Company Registration #' not specified.");
+				AddFatalError("VAT return 'Company Registration #' not specified.");
 			}
 
 			if (string.IsNullOrWhiteSpace(BusinessName)) {
 				bIsValid = false;
-				m_oLog.Debug("VAT return 'Company Name' not specified.");
+				AddFatalError("VAT return 'Company Name' not specified.");
 			}
 
 			if (BusinessAddress == null) {
 				bIsValid = false;
-				m_oLog.Debug("VAT return 'Company Address' not specified.");
+				AddFatalError("VAT return 'Company Address' not specified.");
 			}
 			else if (BusinessAddress.Length < 1) {
 				bIsValid = false;
-				m_oLog.Debug("VAT return 'Company Address' not specified.");
+				AddFatalError("VAT return 'Company Address' not specified.");
 			}
 
 			return bIsValid;
@@ -203,6 +224,15 @@
 		#endregion public
 
 		#region private
+
+		#region method AddFatalError
+
+		private void AddFatalError(string sError) {
+			FatalErrors.Add(sError);
+			m_oLog.Debug(sError);
+		} // AddFatalError
+
+		#endregion method AddFatalError
 
 		private readonly SortedDictionary<Field, dynamic> m_oProperties;
 

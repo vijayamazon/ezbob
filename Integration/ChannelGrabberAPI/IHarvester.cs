@@ -1,5 +1,5 @@
 ﻿namespace Integration.ChannelGrabberAPI {
-	#region interface IHarvester
+	using System.Collections.Generic;
 
 	public interface IHarvester {
 		bool Init();
@@ -8,7 +8,7 @@
 		void Done();
 
 		int SourceID { get; }
-	} // interface IHarvester
 
-	#endregion interface IHarvester
+		SortedDictionary<string, string> ErrorsToEmail { get; }
+	} // interface IHarvester
 } // namespace Integration.ChannelGrabberAPI

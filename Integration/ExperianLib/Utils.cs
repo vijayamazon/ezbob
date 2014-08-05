@@ -8,12 +8,11 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EzServiceAccessor;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
-	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -140,21 +139,22 @@
 					switch (oPackage.In.ServiceType)
 					{
 						case ExperianServiceType.Consumer:
-							if (oPackage.Out.ExperianConsumer != null)
-							{
+							if (oPackage.Out.ExperianConsumer != null) {
 								history.Score = oPackage.Out.ExperianConsumer.BureauScore;
 								history.CII = oPackage.Out.ExperianConsumer.CII;
 								history.CaisBalance = GetConsumerCaisBalance(oPackage.Out.ExperianConsumer.Cais);
 							}
 							historyRepo.SaveOrUpdate(history);
 							break;
+
 						case ExperianServiceType.LimitedData:
 							history.Score = (oPackage.Out.ExperianLtd == null) ? -1 : (oPackage.Out.ExperianLtd.CommercialDelphiScore ?? -1);
 							history.CaisBalance = GetLimitedCaisBalance(oPackage.Out.ExperianLtd);
 							historyRepo.SaveOrUpdate(history);
 							break;
+
 						case ExperianServiceType.NonLimitedData:
-							CompanyDataForCreditBureauActionResult notLimitedBusinessData = serviceClient.Instance.GetCompanyDataForCreditBureau(0/*should be refactored*/, oPackage.Out.ServiceLog.Customer.Company.ExperianRefNum);
+							CompanyDataForCreditBureau notLimitedBusinessData = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCompanyDataForCreditBureau(0/*should be refactored*/, oPackage.Out.ServiceLog.Customer.Company.ExperianRefNum);
 							history.Score = notLimitedBusinessData != null ? notLimitedBusinessData.Score : 0;
 							historyRepo.SaveOrUpdate(history);
 							break;
@@ -234,8 +234,6 @@
 		#region private
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(Utils));
-
-		private static readonly ServiceClient serviceClient = new ServiceClient();
 
 		#endregion private
 	} // class Utils

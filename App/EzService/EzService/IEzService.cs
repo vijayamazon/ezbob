@@ -231,7 +231,10 @@
 
 		[OperationContract]
 		ActionMetaData VipRequest(int customerId, string fullname, string email, string phone);
-		
+
+		[OperationContract]
+		ActionMetaData EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail);
+
 		#endregion email strategies
 
 		#region Esign

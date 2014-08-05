@@ -59,6 +59,8 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion property Culture
 
+		public abstract ISeeds Seeds { get; protected set; }
+
 		#endregion protected
 
 		#region private

@@ -1,5 +1,8 @@
 ﻿namespace EzServiceShortcut {
+	using System.Collections.Generic;
 	using EzBob.Backend.Strategies.Experian;
+	using EzBob.Backend.Strategies.MailStrategies;
+	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.VatReturn;
 	using EzServiceAccessor;
 	using Ezbob.Backend.Models;
@@ -115,6 +118,26 @@
 		} // CheckLtdCompanyCache
 
 		#endregion method LoadExperianLtd
+
+		#region method EmailHmrcParsingErrors
+
+		public void EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail) {
+			new EmailHmrcParsingErrors(nCustomerID, nCustomerMarketplaceID, oErrorsToEmail, ms_oDB, ms_oLog).Execute();
+		} // EmailHmrcParsingErrors
+
+		#endregion method EmailHmrcParsingErrors
+
+		public CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
+			GetCompanyDataForCreditBureau strategyInstance = new GetCompanyDataForCreditBureau(ms_oDB, ms_oLog, refNumber);
+
+			strategyInstance.Execute();
+
+			return new CompanyDataForCreditBureau {
+				LastUpdate = strategyInstance.LastUpdate,
+				Score = strategyInstance.Score,
+				Errors = strategyInstance.Errors
+			};
+		}
 
 		#endregion public
 

@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using EzBob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
 		public CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber)
@@ -17,14 +18,16 @@
 		public CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber)
 		{
 			GetCompanyDataForCreditBureau strategyInstance;
+
 			var result = ExecuteSync(out strategyInstance, null, underwriterId, refNumber);
 
-			return new CompanyDataForCreditBureauActionResult
-			{
+			return new CompanyDataForCreditBureauActionResult {
 				MetaData = result,
-				LastUpdate = strategyInstance.LastUpdate,
-				Score = strategyInstance.Score,
-				Errors = strategyInstance.Errors
+				Result = new CompanyDataForCreditBureau {
+					LastUpdate = strategyInstance.LastUpdate,
+					Score = strategyInstance.Score,
+					Errors = strategyInstance.Errors
+				}
 			};
 		}
 	} // class EzServiceImplementation

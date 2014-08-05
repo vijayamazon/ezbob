@@ -14,10 +14,10 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Experian;
 	using EzBobIntegration.Web_References.Consumer;
+	using EzServiceAccessor;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using ServiceClientProxy;
 	using StructureMap;
 	using log4net;
 	using EZBob.DatabaseLib.Repository;
@@ -75,7 +75,6 @@
 		public ConsumerService()
 		{
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
-			_serviceClient = new ServiceClient();
 			interactiveMode = CurrentValues.Instance.ExperianInteractiveMode;
 		} // constructor
 
@@ -104,10 +103,10 @@
 
 				Log.InfoFormat("GetConsumerInfo: checking cache for {2} id {3} firstName: {0}, surname: {1} birthday: {4}, postcode: {5}", firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode);
 
-				var cachedResponse = _serviceClient.Instance.LoadExperianConsumer(customerId, directorId, null);
+				ExperianConsumerData cachedResponse = ObjectFactory.GetInstance<IEzServiceAccessor>().LoadExperianConsumer(customerId, directorId, null);
 
 				// debug mode
-				if (cachedResponse.Value.ServiceLogId == null && surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
+				if (cachedResponse.ServiceLogId == null && surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
 				{
 					var data = ConsumerDebugResult(surname, customerId);
 					return data;
@@ -117,10 +116,10 @@
 
 				if (!forceCheck)
 				{
-					if (cachedResponse.Value != null)
+					if (cachedResponse.ServiceLogId != null)
 					{
-						if (CacheNotExpired(cachedResponse.Value.InsertDate) || checkInCacheOnly)
-							return cachedResponse.Value;
+						if (CacheNotExpired(cachedResponse.InsertDate) || checkInCacheOnly)
+							return cachedResponse;
 					}
 					else if (checkInCacheOnly)
 						return null;
@@ -396,9 +395,7 @@
 				MP_ServiceLog oFirst = m_oRetryer.Retry(() => sl.GetFirst());
 				content = oFirst.ResponseData;
 			}
-			
-			
-			
+
 			var outputRootSerializer = new XmlSerializer(typeof(OutputRoot));
 			var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(content));
 
@@ -418,7 +415,6 @@
 		private readonly SqlRetryer m_oRetryer;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
 		private readonly string interactiveMode;
-		private readonly ServiceClient _serviceClient;
 
 		#endregion properties
 

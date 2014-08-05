@@ -5,7 +5,6 @@
 	using System.Text;
 	using System.Web;
 	using ConfigManager;
-	using EZBob.DatabaseLib;
 	using Ezbob.Backend.Models;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
@@ -20,6 +19,7 @@
 			CustomerID = nCustomerID;
 			FileList = oFiles;
 			FileCache = new HmrcFileCache();
+			ErrorMsg = null;
 		} // constructor
 
 		#endregion constructor
@@ -80,8 +80,10 @@
 					continue;
 				} // try
 
-				if (oResult == null)
+				if (oResult == null) {
+					ErrorMsg = m_sErrorMsg + " " + ((VatReturnSeeds)vrpt.Seeds).FatalError;
 					continue;
+				} // if
 
 				var oSeeds = (VatReturnSeeds)oResult;
 
@@ -104,7 +106,10 @@
 
 		public string ErrorMsg {
 			get { return FileCache.ErrorMsg; }
+			private set { m_sErrorMsg = string.IsNullOrWhiteSpace(value) ? string.Empty : value; }
 		} // ErroMsg
+
+		private string m_sErrorMsg;
 
 		#endregion property ErrorMsg
 

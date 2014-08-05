@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Ezbob.Utils.Security;
-using Ezbob.Logger;
-using HtmlAgilityPack;
-using Integration.ChannelGrabberAPI;
-using Integration.ChannelGrabberConfig;
-using log4net;
-using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
-
-namespace Ezbob.HmrcHarvester {
+﻿namespace Ezbob.HmrcHarvester {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Linq;
+	using System.Net.Http;
+	using System.Text.RegularExpressions;
+	using System.Threading.Tasks;
+	using Ezbob.Utils.Security;
+	using Ezbob.Logger;
+	using HtmlAgilityPack;
+	using Integration.ChannelGrabberAPI;
+	using Integration.ChannelGrabberConfig;
+	using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 	using Backend.Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using StructureMap;
@@ -102,6 +100,8 @@ namespace Ezbob.HmrcHarvester {
 		/// Constructs the Harvester object. The object is not ready to harvest. Call to Init() first.
 		/// </summary>
 		public Harvester(AccountData oAccountData, ASafeLog log) : base(log) {
+			ErrorsToEmail = new SortedDictionary<string, string>();
+
 			AccountData = oAccountData;
 			VerboseLogging = false;
 			Hopper = new Hopper(VatReturnSourceType.Linked);
@@ -228,6 +228,12 @@ namespace Ezbob.HmrcHarvester {
 		} // Done
 
 		#endregion method Done
+
+		#region property ErrorsToEmail
+
+		public SortedDictionary<string, string> ErrorsToEmail { get; private set; }
+
+		#endregion property ErrorsToEmail
 
 		#endregion public
 
@@ -699,15 +705,24 @@ namespace Ezbob.HmrcHarvester {
 
 			HttpResponseMessage response = task.Result;
 
+			var sUrl = response.RequestMessage.RequestUri.PathAndQuery;
+
 			lock (m_oVatReturnsMetaData) {
-				fi = m_oVatReturnsMetaData[response.RequestMessage.RequestUri.PathAndQuery];
+				fi = m_oVatReturnsMetaData[sUrl];
 			} // lock
 
 			Info("GetFile: retrieving {0}", response.RequestMessage);
 
 			if (!response.IsSuccessStatusCode) {
-				Error("Not saving because of error. Status code {0}: {1}", response.StatusCode.ToString(), response.ReasonPhrase);
+				string sErrMsg = response.StatusCode.ToString() + ": " + response.ReasonPhrase;
+
+				Error("Not saving because of error. Status code {0}", sErrMsg);
 				Hopper.Add(fi, response);
+
+				lock (ErrorsToEmail) {
+					ErrorsToEmail[sUrl] = sErrMsg;
+				} // lock
+
 				return;
 			} // if
 
@@ -734,8 +749,19 @@ namespace Ezbob.HmrcHarvester {
 
 			Hopper.Add(fi, oFile);
 
-			if (fi.Thrasher != null)
-				Hopper.Add(fi, fi.Thrasher.Run(fi, oFile));
+			if (fi.Thrasher != null) {
+				ISeeds x = fi.Thrasher.Run(fi, oFile);
+
+				if (x == null) {
+					var vrs = (VatReturnSeeds)fi.Thrasher.Seeds;
+
+					lock (ErrorsToEmail) {
+						ErrorsToEmail[sUrl] = vrs.FatalError;
+					} // lock
+				} // if
+
+				Hopper.Add(fi, x);
+			} // if
 		} // GetFile
 
 		#endregion method GetFile

@@ -1,18 +1,10 @@
-﻿namespace EzService
-{
-	using System;
+﻿namespace EzService {
 	using System.Runtime.Serialization;
+	using Ezbob.Backend.Models;
 
 	[DataContract]
-	public class CompanyDataForCreditBureauActionResult : ActionResult
-	{
+	public class CompanyDataForCreditBureauActionResult : ActionResult {
 		[DataMember]
-		public DateTime? LastUpdate { get; set; }
-
-		[DataMember]
-		public int Score { get; set; }
-
-		[DataMember]
-		public string Errors { get; set; }
+		public CompanyDataForCreditBureau Result { get; set; }
 	}
 }

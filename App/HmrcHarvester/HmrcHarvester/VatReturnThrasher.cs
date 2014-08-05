@@ -14,9 +14,16 @@ namespace Ezbob.HmrcHarvester {
 		#region constructor
 
 		public VatReturnThrasher(bool bVerboseLogging = false, ASafeLog oLog = null) : base(bVerboseLogging, oLog) {
+			Seeds = new VatReturnSeeds(this);
 		} // constructor
 
 		#endregion constructor
+
+		#region property Seeds
+
+		public override ISeeds Seeds { get; protected set; }
+
+		#endregion property Seeds
 
 		#region method Run
 
@@ -37,7 +44,7 @@ namespace Ezbob.HmrcHarvester {
 				return null;
 			} // if
 
-			var seeds = new VatReturnSeeds(this);
+			var seeds = (VatReturnSeeds)Seeds;
 
 			if (!VatPeriod(oDivs[0], seeds))
 				return null;
@@ -119,7 +126,7 @@ namespace Ezbob.HmrcHarvester {
 			if (dlp.Data.ContainsKey("VAT Registration Number:")) {
 				string sNum = dlp.Data["VAT Registration Number:"].Replace(" ", "");
 
-				long nNum = 0;
+				long nNum;
 
 				if (long.TryParse(sNum, out nNum))
 					seeds.Set(VatReturnSeeds.Field.RegistrationNo, nNum, this);

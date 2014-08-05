@@ -215,7 +215,7 @@
 				oSeeds.Set(VatReturnSeeds.Field.DateDue, oPeriod.DueDate, ms_oLog);
 
 				if (!oSeeds.IsPeriodValid()) {
-					sStateError = "Invalid period detected.";
+					sStateError = "Invalid period detected: " + oSeeds.FatalError;
 					return null;
 				} // if
 
@@ -226,7 +226,7 @@
 				oSeeds.Set(VatReturnSeeds.Field.BusinessAddress, oData.BusinessAddress.Split('\n'), ms_oLog);
 
 				if (!oSeeds.AreBusinessDetailsValid()) {
-					sStateError = "Invalid business details detected.";
+					sStateError = "Invalid business details detected: " + oSeeds.FatalError;
 					return null;
 				} // if
 

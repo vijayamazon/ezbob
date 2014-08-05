@@ -24,7 +24,7 @@ namespace Ezbob.HmrcHarvester {
 
 			m_oReader = new PdfReader(oFile);
 
-			m_oSeeds = new VatReturnSeeds(this);
+			Seeds = new VatReturnSeeds(this);
 
 			if (!VatPeriod())
 				return null;
@@ -37,10 +37,16 @@ namespace Ezbob.HmrcHarvester {
 
 			Info("Parsing {0} complete.", oFileID);
 
-			return m_oSeeds;
+			return Seeds;
 		} // Run
 
 		#endregion method Run
+
+		#region property Seeds
+
+		public override ISeeds Seeds { get; protected set; }
+
+		#endregion property Seeds
 
 		#endregion public
 
@@ -49,7 +55,9 @@ namespace Ezbob.HmrcHarvester {
 		#region method VatPeriod
 
 		private bool VatPeriod() {
-			m_oSeeds.Set(VatReturnSeeds.Field.Period, Read("returnDetailsDto.vatPeriod.formattedAvailablePeriod"), this);
+			var oSeeds = (VatReturnSeeds)Seeds;
+
+			oSeeds.Set(VatReturnSeeds.Field.Period, Read("returnDetailsDto.vatPeriod.formattedAvailablePeriod"), this);
 
 			var kv = new Dictionary<string, VatReturnSeeds.Field>();
 			kv["returnDetailsDto.vatPeriod.formattedDateFrom"] = VatReturnSeeds.Field.DateFrom;
@@ -62,10 +70,10 @@ namespace Ezbob.HmrcHarvester {
 				string sDate = Read(pair.Key);
 
 				if (DateTime.TryParseExact(sDate, "dd MMM yyyy", Culture, DateTimeStyles.None, out d))
-					m_oSeeds.Set(pair.Value, d, this);
+					oSeeds.Set(pair.Value, d, this);
 			} // for each
 
-			return m_oSeeds.IsPeriodValid();
+			return oSeeds.IsPeriodValid();
 		} // VatPeriod
 
 		#endregion method VatPeriod
@@ -73,23 +81,25 @@ namespace Ezbob.HmrcHarvester {
 		#region method BusinessDetails
 
 		private bool BusinessDetails() {
+			var oSeeds = (VatReturnSeeds)Seeds;
+
 			string sNum = Read("returnDetailsDto.traderDetails.vrn").Replace(" ", "");
 
-			long nNum = 0;
+			long nNum;
 
 			if (long.TryParse(sNum, out nNum))
-				m_oSeeds.Set(VatReturnSeeds.Field.RegistrationNo, nNum, this);
+				oSeeds.Set(VatReturnSeeds.Field.RegistrationNo, nNum, this);
 
-			m_oSeeds.Set(VatReturnSeeds.Field.BusinessName, Read("returnDetailsDto.traderDetails.tradersName"), this);
+			oSeeds.Set(VatReturnSeeds.Field.BusinessName, Read("returnDetailsDto.traderDetails.tradersName"), this);
 
 			var aryAddress = new List<string>();
 
 			for (int i = 1; i <= 6; i++)
 				aryAddress.Add(Read("returnDetailsDto.traderDetails." + (i == 6 ? "postcode" : "address" + i)));
 
-			m_oSeeds.Set(VatReturnSeeds.Field.BusinessAddress, aryAddress.ToArray(), this);
+			oSeeds.Set(VatReturnSeeds.Field.BusinessAddress, aryAddress.ToArray(), this);
 
-			return m_oSeeds.AreBusinessDetailsValid();
+			return oSeeds.AreBusinessDetailsValid();
 		} // BusinessDetails
 
 		#endregion method BusinessDetails
@@ -97,6 +107,8 @@ namespace Ezbob.HmrcHarvester {
 		#region method ReturnDetails
 
 		private bool ReturnDetails() {
+			var oSeeds = (VatReturnSeeds)Seeds;
+
 			for (int i = 1; i <= 9; i++) {
 				string sValueFieldName = string.Format("returnDetailsDto.vatReturnForm.box{0}.display{1}", i, i <= 5 ? "Amount" : "Pounds");
 
@@ -104,7 +116,7 @@ namespace Ezbob.HmrcHarvester {
 
 				string sFieldName = string.Format("{0} (Box {1})", Read("vatBox" + i + "Pdf"), i);
 
-				m_oSeeds.ReturnDetails[sFieldName] = new Coin(nAmount, "GBP");
+				oSeeds.ReturnDetails[sFieldName] = new Coin(nAmount, "GBP");
 
 				Debug("VatReturnSeeds.ReturnDetails[{0}] = {1}", sFieldName, nAmount);
 			} // foreach
@@ -125,7 +137,6 @@ namespace Ezbob.HmrcHarvester {
 		#region fields
 
 		private PdfReader m_oReader;
-		private VatReturnSeeds m_oSeeds;
 
 		#endregion fields
 

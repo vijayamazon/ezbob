@@ -19,6 +19,8 @@
 		#region constructor
 
 		public Harvester(AccountData oAccountData, ASafeLog log, int nCustomerID, string sCustomerEmail) : base(log) {
+			ErrorsToEmail = new SortedDictionary<string, string>();
+
 			m_oAccountData = oAccountData;
 
 			if ((nCustomerID < 1) || string.IsNullOrWhiteSpace(sCustomerEmail))
@@ -95,6 +97,12 @@
 		} // SourceID
 
 		#endregion property SourceID
+
+		#region property ErrorsToEmail
+
+		public SortedDictionary<string, string> ErrorsToEmail { get; private set; }
+
+		#endregion property ErrorsToEmail
 
 		#endregion public
 

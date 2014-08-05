@@ -1,5 +1,6 @@
 ﻿namespace Integration.ChannelGrabberFrontend {
 	using System;
+	using System.Collections.Generic;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
 	using Integration.ChannelGrabberAPI;
@@ -125,5 +126,14 @@
 		} // SourceID
 
 		#endregion property SourceID
+
+		#region property ErrorsToEmail
+
+		public SortedDictionary<string, string> ErrorsToEmail {
+			get { return DataHarvester.ErrorsToEmail; }
+			private set { }
+		} // ErrorsToEmail
+
+		#endregion property ErrorsToEmail
 	} // class Connector
 } // namespace Integration.ChannelGrabberFrontend

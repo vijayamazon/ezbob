@@ -1,4 +1,5 @@
 ﻿namespace EzServiceAccessor {
+	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils;
@@ -33,11 +34,14 @@
 		/// <param name="nServiceLogID">MP_ServiceLogId</param>
 		/// <returns></returns>
 		ExperianConsumerData LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogID);
-		
 
 		ExperianLtd ParseExperianLtd(long nServiceLogID);
 
 		ExperianLtd LoadExperianLtd(long nServiceLogID);
 		ExperianLtd CheckLtdCompanyCache(string sCompanyRefNum);
+
+		void EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail);
+
+		CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor

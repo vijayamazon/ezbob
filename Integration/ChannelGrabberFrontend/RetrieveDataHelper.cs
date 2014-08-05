@@ -121,6 +121,14 @@
 						);
 
 					case Behaviour.HMRC:
+						if (ctr.DataHarvester.ErrorsToEmail.Count > 0) {
+							ObjectFactory.GetInstance<IEzServiceAccessor>().EmailHmrcParsingErrors(
+								databaseCustomerMarketPlace.Customer.Id,
+								databaseCustomerMarketPlace.Id,
+								ctr.DataHarvester.ErrorsToEmail
+							);
+						} // if
+
 						return ObjectFactory.GetInstance<IEzServiceAccessor>().SaveVatReturnData(
 							databaseCustomerMarketPlace.Id,
 							historyRecord.Id,

@@ -1,4 +1,5 @@
 ﻿namespace ServiceClientProxy {
+	using System.Collections.Generic;
 	using EzServiceAccessor;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
@@ -52,7 +53,9 @@
 				BankStatement = vrdar.BankStatement,
 				BankStatementAnnualized = vrdar.BankStatementAnnualized,
 			};
-		}
+		} // LoadVatReturnFullData
+
+		#endregion method LoadVatReturnFullData
 
 		public ExperianConsumerData ParseExperianConsumer(long nServiceLogId)
 		{
@@ -65,11 +68,6 @@
 			var res = m_oServiceClient.Instance.LoadExperianConsumer(customerId, directorId, nServiceLogId);
 			return res.Value;
 		}
-
-
-// LoadVatReturnFullData
-
-		#endregion method LoadVatReturnFullData
 
 		#region method ParseExperianLtd
 
@@ -87,12 +85,33 @@
 			return ar.Value;
 		} // LoadExperianLtd
 
+		#endregion method LoadExperianLtd
+
+		#region method CheckLtdCompanyCache
+
 		public ExperianLtd CheckLtdCompanyCache(string sCompanyRefNum) {
 			ExperianLtdActionResult ar = m_oServiceClient.Instance.CheckLtdCompanyCache(sCompanyRefNum);
 			return ar.Value;
 		} // CheckLtdCompanyCache
 
 		#endregion method CheckLtdCompanyCache
+
+		#region method EmailHmrcParsingErrors
+
+		public void EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail) {
+			Dictionary<string, string> arg = new Dictionary<string, string>();
+
+			foreach (var pair in oErrorsToEmail)
+				arg[pair.Key] = pair.Value;
+
+			m_oServiceClient.Instance.EmailHmrcParsingErrors(nCustomerID, nCustomerMarketplaceID, arg);
+		} // EmailHmrcParsingErrors
+
+		#endregion method EmailHmrcParsingErrors
+
+		public CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
+			return m_oServiceClient.Instance.GetCompanyDataForCreditBureau(underwriterId, refNumber).Result;
+		}
 
 		#endregion public
 
