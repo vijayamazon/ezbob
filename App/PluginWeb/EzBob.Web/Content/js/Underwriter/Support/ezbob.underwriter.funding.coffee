@@ -62,18 +62,13 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
             @$el.find('#addFundsBtn').hide()
             @$el.find('#cancelManuallyAddedFundsBtn').hide()
 
-        li = $("[id='liFunding']")
-        tdHeader = $("[id='available-funds-td-header']")
-        tdValue = $("[id='available-funds-td-value']")
+        fundsMenuText = $("[id='liFunding'] span,[id='liFunding'] i")
+        
         availableFundsNum = @model.get('AvailableFunds')
         if (@model.get('RequiredFunds') > availableFundsNum)
-            li.addClass('available-funds-alert')
-            tdHeader.addClass('available-funds-alert-text-color')
-            tdValue.addClass('available-funds-alert-text-color')
+            fundsMenuText.addClass('red_cell')
         else
-            li.removeClass('available-funds-alert')
-            tdHeader.removeClass('available-funds-alert-text-color')
-            tdValue.removeClass('available-funds-alert-text-color')
+            fundsMenuText.removeClass('red_cell')
 
     hide: ->
         @$el.hide()

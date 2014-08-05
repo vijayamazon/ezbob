@@ -1431,10 +1431,6 @@ td a.edit-loan {
     color: white;
 }
 
-.available-funds-alert {
-    background-color: red !important;
-}
-
 .salaries-multiplier {
     width: 70px;
 }
@@ -1457,10 +1453,6 @@ td a.edit-loan {
 .funding-width {
     width: 41.55%;
     font-size: 16px;
-}
-
-.available-funds-alert-text-color {
-    color: red;
 }
 
 @media screen {
