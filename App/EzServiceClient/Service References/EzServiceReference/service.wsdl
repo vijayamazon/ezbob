@@ -112,6 +112,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy1_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy1" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategy2_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy2" />
   </wsdl:message>
@@ -862,6 +868,12 @@
   <wsdl:message name="IEzService_VipRequest_OutputMessage">
     <wsdl:part name="parameters" element="tns:VipRequestResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_EmailHmrcParsingErrors_InputMessage">
+    <wsdl:part name="parameters" element="tns:EmailHmrcParsingErrors" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailHmrcParsingErrors_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EmailHmrcParsingErrorsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_EsignProcessPending_InputMessage">
     <wsdl:part name="parameters" element="tns:EsignProcessPending" />
   </wsdl:message>
@@ -1006,12 +1018,6 @@
   <wsdl:message name="IEzService_LandRegistryRes_OutputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryResResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy1_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy1" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1035,6 +1041,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="MainStrategy1">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="MainStrategy2">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
@@ -1535,6 +1545,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VipRequest" message="tns:IEzService_VipRequest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VipRequestResponse" message="tns:IEzService_VipRequest_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="EmailHmrcParsingErrors">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailHmrcParsingErrors" message="tns:IEzService_EmailHmrcParsingErrors_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailHmrcParsingErrorsResponse" message="tns:IEzService_EmailHmrcParsingErrors_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="EsignProcessPending">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EsignProcessPending" message="tns:IEzService_EsignProcessPending_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EsignProcessPendingResponse" message="tns:IEzService_EsignProcessPending_OutputMessage" />
@@ -1631,10 +1645,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryRes" message="tns:IEzService_LandRegistryRes_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryResResponse" message="tns:IEzService_LandRegistryRes_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="MainStrategy1">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1690,6 +1700,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="MainStrategy1">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="MainStrategy2">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
       <wsdl:input>
@@ -2815,6 +2834,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="EmailHmrcParsingErrors">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EmailHmrcParsingErrors" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="EsignProcessPending">
       <soap12:operation soapAction="http://tempuri.org/IEzService/EsignProcessPending" style="document" />
       <wsdl:input>
@@ -3024,15 +3052,6 @@
     </wsdl:operation>
     <wsdl:operation name="LandRegistryRes">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryRes" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy1">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy1" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

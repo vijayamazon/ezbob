@@ -850,49 +850,17 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class CompanyDataForCreditBureauActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ErrorsField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<System.DateTime> LastUpdateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ScoreField;
+        private Ezbob.Backend.Models.CompanyDataForCreditBureau ResultField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Errors {
+        public Ezbob.Backend.Models.CompanyDataForCreditBureau Result {
             get {
-                return this.ErrorsField;
+                return this.ResultField;
             }
             set {
-                if ((object.ReferenceEquals(this.ErrorsField, value) != true)) {
-                    this.ErrorsField = value;
-                    this.RaisePropertyChanged("Errors");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<System.DateTime> LastUpdate {
-            get {
-                return this.LastUpdateField;
-            }
-            set {
-                if ((this.LastUpdateField.Equals(value) != true)) {
-                    this.LastUpdateField = value;
-                    this.RaisePropertyChanged("LastUpdate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Score {
-            get {
-                return this.ScoreField;
-            }
-            set {
-                if ((this.ScoreField.Equals(value) != true)) {
-                    this.ScoreField = value;
-                    this.RaisePropertyChanged("Score");
+                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
+                    this.ResultField = value;
+                    this.RaisePropertyChanged("Result");
                 }
             }
         }
@@ -2300,6 +2268,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
         
@@ -3050,6 +3024,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VipRequest", ReplyAction="http://tempuri.org/IEzService/VipRequestResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VipRequestAsync(int customerId, string fullname, string email, string phone);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailHmrcParsingErrors", ReplyAction="http://tempuri.org/IEzService/EmailHmrcParsingErrorsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, System.Collections.Generic.Dictionary<string, string> oErrorsToEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailHmrcParsingErrors", ReplyAction="http://tempuri.org/IEzService/EmailHmrcParsingErrorsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailHmrcParsingErrorsAsync(int nCustomerID, int nCustomerMarketplaceID, System.Collections.Generic.Dictionary<string, string> oErrorsToEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EsignProcessPending", ReplyAction="http://tempuri.org/IEzService/EsignProcessPendingResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EsignProcessPending(System.Nullable<int> nCustomerID);
         
@@ -3193,12 +3173,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
         System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3226,6 +3200,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
@@ -4228,6 +4210,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.VipRequestAsync(customerId, fullname, email, phone);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, System.Collections.Generic.Dictionary<string, string> oErrorsToEmail) {
+            return base.Channel.EmailHmrcParsingErrors(nCustomerID, nCustomerMarketplaceID, oErrorsToEmail);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailHmrcParsingErrorsAsync(int nCustomerID, int nCustomerMarketplaceID, System.Collections.Generic.Dictionary<string, string> oErrorsToEmail) {
+            return base.Channel.EmailHmrcParsingErrorsAsync(nCustomerID, nCustomerMarketplaceID, oErrorsToEmail);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData EsignProcessPending(System.Nullable<int> nCustomerID) {
             return base.Channel.EsignProcessPending(nCustomerID);
         }
@@ -4418,14 +4408,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber) {
             return base.Channel.LandRegistryResAsync(customerId, titleNumber);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
     }
 }
