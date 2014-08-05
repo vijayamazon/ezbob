@@ -33,7 +33,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         $.cookie('editOfferVisible', this.ui.editOfferDiv.is(":visible"));
         $(".profile-content").css({ "margin-top": this.$el.height() + "px" });
     },
-    
+
     collapseAll: function () {
         var that = this;
         var btn = this.$el.find('a.collapseall');
@@ -42,7 +42,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             if ($(this).is(":hidden")) {
                 btn.children("i").attr("class", "fa fa-chevron-down");
                 that.$el.find(".box-title-collapse").show();
-                
+
                 $.cookie('collapseAll', true);
             } else {
                 btn.children("i").attr("class", "fa fa-chevron-up");
@@ -54,7 +54,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         });
         return false;
     },
-    
+
     personalModelChanged: function (e, a) {
         if (e && a && this.medalModel) {
             this.medalModel.fetch();
@@ -64,7 +64,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             this.model.fetch();
         }
     },
-    
+
     onRender: function () {
         var loanInfo = this.ui.editOfferDiv;
         this.loanInfoView = new EzBob.Underwriter.LoanInfoView({
@@ -100,19 +100,19 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 }
             }
         }
-        this.$el.find('[data-toggle="tooltip"]').tooltip({ html:true,
+        this.$el.find('[data-toggle="tooltip"]').tooltip({
+            html: true,
             'placement': 'bottom'
         });
 
         var medalHistory = this.medalModel.get('History');
         if (medalHistory) {
             var histData = [];
-            _.each(medalHistory.MedalHistories, function(hist, i) {
-                histData.push([i+1, hist.Result * 100]);
+            _.each(medalHistory.MedalHistories, function (hist, i) {
+                histData.push([i + 1, hist.Result * 100]);
             });
             if (histData.length > 0) {
-                var mhPlot = $.jqplot('medalHistory', [histData],
-                    {
+                $.jqplot('medalHistory', [histData], {
                         title: '',
                         axes: {
                             yaxis: {
@@ -127,7 +127,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                             },
                             xaxis: {
                                 min: 0,
-                                max: medalHistory.MedalHistories.length+1,
+                                max: medalHistory.MedalHistories.length + 1,
                                 tickOptions: { show: false },
                                 rendererOptions: { drawBaseline: false }
                             }
@@ -169,43 +169,41 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                     });
             }
 
-            var medalBar = $.jqplot('medalBar', [[40], [22], [22], [16]],
-                {
-                    // Tell the plot to stack the bars.
-                    stackSeries: true,
-                    captureRightClick: true,
-                    seriesDefaults: {
-                        renderer: $.jqplot.BarRenderer,
-                        rendererOptions: {
-                            // Put a 30 pixel margin between bars.
-                            barMargin: 30,
-                        },
-                        shadow: false,
+            $.jqplot('medalBar', [[40], [22], [22], [16]], {
+                stackSeries: true,
+                captureRightClick: true,
+                seriesDefaults: {
+                    renderer: $.jqplot.BarRenderer,
+                    rendererOptions: {
+                        // Put a 30 pixel margin between bars.
+                        barMargin: 30,
                     },
-                    seriesColors: ['silver', '#D4AF37', '#E5E4E2', '#39A3E1'],
-                    axes: {
-                        xaxis: {
-                            renderer: $.jqplot.CategoryAxisRenderer,
-                            ticks: [''],
-                            tickOptions: { show: false },
-                            rendererOptions: { drawBaseline: false }
-                        },
-                        yaxis: {
-                            min: 0,
-                            max: 100,
-                            padMin: 0,
-                            tickOptions: { show: false },
-                            rendererOptions: { drawBaseline: false }
-                        }
+                    shadow: false,
+                },
+                seriesColors: ['silver', '#D4AF37', '#E5E4E2', '#39A3E1'],
+                axes: {
+                    xaxis: {
+                        renderer: $.jqplot.CategoryAxisRenderer,
+                        ticks: [''],
+                        tickOptions: { show: false },
+                        rendererOptions: { drawBaseline: false }
                     },
-                    grid: {
-                        drawGridLines: false,
-                        background: 'transparent',
-                        borderWidth: 0,
-                        borderColor: 'transparent',
-                        shadow: false
-                    },
-                });
+                    yaxis: {
+                        min: 0,
+                        max: 100,
+                        padMin: 0,
+                        tickOptions: { show: false },
+                        rendererOptions: { drawBaseline: false }
+                    }
+                },
+                grid: {
+                    drawGridLines: false,
+                    background: 'transparent',
+                    borderWidth: 0,
+                    borderColor: 'transparent',
+                    shadow: false
+                },
+            });
         }
 
         var medal = this.medalModel.get('Score');
@@ -300,7 +298,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         var startAngle = 1 * Math.PI;
         var endAngle = (isClock ? 2 : 3) * Math.PI;
         var lineWidth = isClock ? 25 : 15;
-        var endEngleData = Math.PI * (1 + fillPercent*(isClock ? 1 : 2));
+        var endEngleData = Math.PI * (1 + fillPercent * (isClock ? 1 : 2));
         context.beginPath();
         context.arc(x, y, radius, startAngle, endAngle, false);
         context.lineWidth = lineWidth;
@@ -328,6 +326,8 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
             context.strokeStyle = '#ebebeb';
             context.stroke();
         }
+
+        return true;
     },
     drawDi: function (canvasId, fillColor, fillPercent) {
         var canvas = document.getElementById(canvasId);
@@ -348,6 +348,6 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
         context.strokeStyle = fillColor;
         context.lineWidth = 15;
         context.stroke();
-
+        return true;
     }
 });
