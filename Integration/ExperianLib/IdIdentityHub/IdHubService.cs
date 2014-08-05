@@ -141,7 +141,7 @@
 
 				result.Parse(r);
 
-				SaveAmlData(customerId, key, res.ServiceLog.Id, res.ServiceLog.InsertDate, result);
+				SaveAmlData(key, res.ServiceLog.Id, res.ServiceLog.InsertDate, result);
 			}
 			catch (Exception exception)
 			{
