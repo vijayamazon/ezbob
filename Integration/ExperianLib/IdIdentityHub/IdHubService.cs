@@ -52,7 +52,7 @@
 		{
 			var result = new AuthenticationResults();
 
-			var key = String.Format("{0}_{1}_{2}_{3}", foreName, middleName, surname, postCode);
+			var key = string.Format("{0}_{1}_{2}_{3}", foreName, middleName, surname, postCode);
 
 			if (string.IsNullOrEmpty(xmlForDebug))
 			{
@@ -141,26 +141,7 @@
 
 				result.Parse(r);
 
-				var amlResult = new AmlResults
-					{
-						LookupKey = key,
-						CustomerId = customerId,
-						ServiceLogId = res.ServiceLog.Id,
-						Created = res.ServiceLog.InsertDate,
-						AuthenticationDecision = result.AuthenticationDecision,
-						AuthenticationIndex = result.AuthenticationIndex,
-						AuthIndexText = result.AuthIndexText,
-						NumPrimDataItems = result.NumPrimDataItems,
-						NumPrimDataSources = result.NumPrimDataSources,
-						NumSecDataItems = result.NumSecDataItems,
-						StartDateOldestPrim = result.StartDateOldestPrim,
-						StartDateOldestSec = result.StartDateOldestSec,
-						Error = result.Error,
-						IsActive = true
-					};
-				List<AmlResultsHighRiskRules> highRiskRules = result.ReturnedHRP.Select(rule => new AmlResultsHighRiskRules {RuleId = rule.HighRiskPolRuleID, RuleText = rule.HighRiskPolRuleText, AmlResult = amlResult}).ToList();
-				amlResult.HighRiskRules = new HashedSet<AmlResultsHighRiskRules>(highRiskRules);
-				amlResultsRepository.SaveOrUpdate(amlResult);
+				SaveAmlData(customerId, key, res, result);
 			}
 			catch (Exception exception)
 			{
@@ -246,7 +227,8 @@
 					r = GetRequestFromXml(xmlForDebug);
 				}
 				var writelog = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
-				_bankCacheRepository.Set(key, r, writelog.ServiceLog);
+
+				SaveAmlData(customerId, key, writelog, result);
 
 				result.Parse(r);
 			}
@@ -258,6 +240,39 @@
 			}
 
 			return result;
+		}
+
+		private void SaveAmlData(int customerId, string key, WriteToLogPackage.OutputData writelog, AuthenticationResults result)
+		{
+			var amlResult = new AmlResults
+				{
+					LookupKey = key,
+					CustomerId = customerId,
+					ServiceLogId = writelog.ServiceLog.Id,
+					Created = writelog.ServiceLog.InsertDate,
+					AuthenticationDecision = result.AuthenticationDecision,
+					AuthenticationIndex = result.AuthenticationIndex,
+					AuthIndexText = result.AuthIndexText,
+					NumPrimDataItems = result.NumPrimDataItems,
+					NumPrimDataSources = result.NumPrimDataSources,
+					NumSecDataItems = result.NumSecDataItems,
+					StartDateOldestPrim = result.StartDateOldestPrim,
+					StartDateOldestSec = result.StartDateOldestSec,
+					Error = result.Error,
+					IsActive = true
+				};
+
+			List<AmlResultsHighRiskRules> highRiskRules =
+				result.ReturnedHRP.Select(
+					rule =>
+					new AmlResultsHighRiskRules
+						{
+							RuleId = rule.HighRiskPolRuleID,
+							RuleText = rule.HighRiskPolRuleText,
+							AmlResult = amlResult
+						}).ToList();
+			amlResult.HighRiskRules = new HashedSet<AmlResultsHighRiskRules>(highRiskRules);
+			amlResultsRepository.SaveOrUpdate(amlResult);
 		}
 
 		public AuthenticationResults GetResults_ForBackfill(string xml)
