@@ -1,8 +1,3 @@
-
-IF OBJECT_ID('EzTvGetStats') IS NULL
-	EXECUTE('CREATE PROCEDURE EzTvGetStats AS SELECT 1')
-GO
-
 ALTER PROCEDURE EzTvGetStats
 @Now DATETIME,
 @FirstOfMonth DATETIME,
@@ -55,7 +50,7 @@ WHERE
 
 --UNION
 
-SELECT 'G_TotalLoans' AS 'Key', CAST(sum(Amount) AS DECIMAL(18,6)) AS Value  FROM vw_LoansAmountByDay
+SELECT 'G_TotalLoans' AS 'Key', CAST(sum(l.LoanAmount) AS DECIMAL(18,6)) AS Value FROM Loan l INNER JOIN Customer c ON l.CustomerId=c.Id WHERE c.IsTest=0
 
 UNION
 
@@ -140,7 +135,7 @@ SELECT 'M_AvgLoanSize' AS 'Key', COALESCE(sum(l.LoanAmount) / CAST(count(*) AS D
 
 UNION
 
-SELECT 'M_AvgDailyLoans' AS 'Key', COALESCE(sum(Amount) / CAST(datepart(d,@Now) AS DECIMAL(18,6)),0) AS Value  FROM vw_LoansAmountByDay WHERE [Date] >= @FirstOfMonth
+SELECT 'M_AvgDailyLoans' AS 'Key', COALESCE(sum(l.LoanAmount) / CAST(datepart(d,@Now) AS DECIMAL(18,6)),0) AS Value  FROM Loan l INNER JOIN Customer c ON l.CustomerId=c.Id WHERE c.IsTest=0 AND l.[Date] >= @FirstOfMonth
 
 UNION
 
@@ -157,3 +152,4 @@ SELECT 'M_UkVisitors' AS 'Key', CAST(COALESCE(0,0) AS DECIMAL(18,6)) AS Value --
 END 
 
 GO
+
