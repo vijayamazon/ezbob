@@ -112,7 +112,7 @@
 			if (oYodlee != null)
 			{
 				sw.Restart();
-				SaveBankStatement(oYodlee.Yodlee.BankStatementDataModel, null, null);
+				SaveBankStatement(oYodlee.Yodlee.BankStatementAnnualizedModel);
 				sw.Stop();
 				_timeElapsed.Add(new Tuple<string, double>("Yodlee affordability build time", sw.Elapsed.TotalMilliseconds));
 			}
@@ -409,11 +409,13 @@
 
 		#region method SaveBankStatement
 
-		private void SaveBankStatement(BankStatementDataModel oBank, DateTime? oFrom, DateTime? oTo) {
+		private void SaveBankStatement(BankStatementDataModel oBank) {
+
+
 			Affordability.Add(new AffordabilityData {
 				Type = AffordabilityType.Bank,
-				DateFrom = oFrom,
-				DateTo = oTo,
+				DateFrom = oBank.DateFrom,
+				DateTo = oBank.DateTo,
 				Ebitda = (decimal)oBank.Ebida,
 				FreeCashFlow = (decimal)oBank.FreeCashFlow,
 				LoanRepayment = (decimal)oBank.ActualLoansRepayment,

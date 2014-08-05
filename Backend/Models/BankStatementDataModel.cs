@@ -12,6 +12,10 @@
 		[DataMember]
 		public double PercentOfAnnual { get; set; }
 		[DataMember]
+		public DateTime? DateFrom { get; set; }
+		[DataMember]
+		public DateTime? DateTo { get; set; }
+		[DataMember]
 		public double Revenues { get; set; }
 		[DataMember]
 		public double Opex { get; set; }

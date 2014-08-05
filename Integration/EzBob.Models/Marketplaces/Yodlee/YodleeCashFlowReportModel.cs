@@ -298,17 +298,38 @@
 				var to = new DateTime(maxDate / 100, maxDate % 100, yodlee.MaxDateDict.Last().Value);
 				bankStatementDataModel.PeriodMonthsNum = ((to.Year - from.Year) * 12) + to.Month - from.Month;
 				bankStatementDataModel.Period = string.Format("{0} - {1}", from.ToString("MMM yy", CultureInfo.InvariantCulture), to.ToString("MMM yy", CultureInfo.InvariantCulture));
-
 				bankStatementDataModel.Revenues = yodlee.YodleeCashFlowReportModelDict.ContainsKey("1aRevenues") ? yodlee.YodleeCashFlowReportModelDict["1aRevenues"][TotalColumn] : 0;
 				bankStatementDataModel.Opex = yodlee.YodleeCashFlowReportModelDict.ContainsKey("2aOpex") ? yodlee.YodleeCashFlowReportModelDict["2aOpex"][TotalColumn] : 0;
-
 				bankStatementDataModel.Salaries = yodlee.YodleeCashFlowReportModelDict.ContainsKey("3aSalaries and Tax") ? yodlee.YodleeCashFlowReportModelDict["3aSalaries and Tax"][TotalColumn] : 0;
-
 				bankStatementDataModel.Tax = yodlee.YodleeCashFlowReportModelDict.ContainsKey("4aCorporate tax") ? yodlee.YodleeCashFlowReportModelDict["4aCorporate tax"][TotalColumn] : 0;
-
 				bankStatementDataModel.ActualLoansRepayment = yodlee.YodleeCashFlowReportModelDict.ContainsKey("5aLoan Repayments") ? yodlee.YodleeCashFlowReportModelDict["5aLoan Repayments"][TotalColumn] : 0;
 			}
 
+			return bankStatementDataModel;
+		}
+
+		public BankStatementDataModel GetAnualizedBankStatementDataModel(BankStatementDataModel model)
+		{
+			var bankStatementDataModel = new BankStatementDataModel() {
+				DateFrom = model.DateFrom,
+				DateTo = model.DateTo,
+				Period = model.Period,
+				PeriodMonthsNum = model.PeriodMonthsNum
+			};
+
+			if (bankStatementDataModel.DateFrom.HasValue && bankStatementDataModel.DateTo.HasValue) {
+				double annualMult = 365.0/(bankStatementDataModel.DateTo.Value - bankStatementDataModel.DateFrom.Value).TotalDays;
+				bankStatementDataModel.Revenues = model.Revenues*annualMult;
+				bankStatementDataModel.Opex = model.Opex*annualMult;
+				bankStatementDataModel.Salaries = model.Salaries*annualMult;
+				bankStatementDataModel.Tax = model.Tax*annualMult;
+				bankStatementDataModel.ActualLoansRepayment = model.ActualLoansRepayment*annualMult;
+				bankStatementDataModel.TotalValueAdded = bankStatementDataModel.Revenues - Math.Abs(bankStatementDataModel.Opex);
+				bankStatementDataModel.Ebida = bankStatementDataModel.TotalValueAdded - Math.Abs(bankStatementDataModel.Salaries) -
+				                               Math.Abs(bankStatementDataModel.Tax);
+				bankStatementDataModel.FreeCashFlow = bankStatementDataModel.Ebida -
+				                                      Math.Abs(bankStatementDataModel.ActualLoansRepayment);
+			}
 			return bankStatementDataModel;
 		}
 	}

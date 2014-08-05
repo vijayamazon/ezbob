@@ -13,5 +13,6 @@
 		public YodleeRunningBalanceModel RunningBalanceModel { get; set; }
 		public YodleeRuleModel RuleModel { get; set; }
 		public BankStatementDataModel BankStatementDataModel { get; set; }
+		public BankStatementDataModel BankStatementAnnualizedModel { get; set; }
 	}
 }

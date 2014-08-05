@@ -258,6 +258,10 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			yodleeRunningBalanceModel = yodleeRunningBalanceModelBuilder.GetModel();
 			model.BankStatementDataModel = yodleeCashFlowReportModelBuilder.GetBankStatementDataModel();
+			model.BankStatementDataModel.DateFrom = model.banks.SelectMany(x => x.transactions).Min(x => x.transactionDate);
+			model.BankStatementDataModel.DateTo = model.banks.SelectMany(x => x.transactions).Max(x => x.transactionDate);
+			model.BankStatementAnnualizedModel =
+				yodleeCashFlowReportModelBuilder.GetAnualizedBankStatementDataModel(model.BankStatementDataModel);
 			return yodleeCashFlowReportModelBuilder.GetModel();
 		}
 
