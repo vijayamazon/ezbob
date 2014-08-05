@@ -52,7 +52,7 @@
 		{
 			var result = new AuthenticationResults();
 
-			var key = string.Format("{0}_{1}_{2}_{3}", foreName, middleName, surname, postCode);
+			string key = string.Format("{0}_{1}_{2}_{3}", foreName, middleName, surname, postCode);
 
 			if (string.IsNullOrEmpty(xmlForDebug))
 			{
@@ -141,7 +141,7 @@
 
 				result.Parse(r);
 
-				SaveAmlData(customerId, key, res, result);
+				SaveAmlData(customerId, key, res.ServiceLog.Id, res.ServiceLog.InsertDate, result);
 			}
 			catch (Exception exception)
 			{
@@ -160,7 +160,7 @@
 		{
 			var result = new AuthenticationResults();
 
-			var key = String.Format("{0}_{1}_{2}_{3}", foreName, middleName, surname, postCode);
+			string key = string.Format("{0}_{1}_{2}_{3}", foreName, middleName, surname, postCode);
 
 			Log.DebugFormat("Request AML A service for key '{0}'", key);
 			var address = new AddressType
@@ -228,7 +228,7 @@
 				}
 				var writelog = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
 
-				SaveAmlData(customerId, key, writelog, result);
+				SaveAmlData(customerId, key, writelog.ServiceLog.Id, writelog.ServiceLog.InsertDate, result);
 
 				result.Parse(r);
 			}
@@ -242,14 +242,14 @@
 			return result;
 		}
 
-		private void SaveAmlData(int customerId, string key, WriteToLogPackage.OutputData writelog, AuthenticationResults result)
+		private void SaveAmlData(int customerId, string key, long serviceLogId, DateTime serviceLogInsertDate, AuthenticationResults result)
 		{
 			var amlResult = new AmlResults
 				{
 					LookupKey = key,
 					CustomerId = customerId,
-					ServiceLogId = writelog.ServiceLog.Id,
-					Created = writelog.ServiceLog.InsertDate,
+					ServiceLogId = serviceLogId,
+					Created = serviceLogInsertDate,
 					AuthenticationDecision = result.AuthenticationDecision,
 					AuthenticationIndex = result.AuthenticationIndex,
 					AuthIndexText = result.AuthIndexText,
@@ -275,12 +275,14 @@
 			amlResultsRepository.SaveOrUpdate(amlResult);
 		}
 
-		public AuthenticationResults GetResults_ForBackfill(string xml)
+		public AuthenticationResults ParseAndSave_ForBackfill(int customerId, string xml, long serviceLogId, DateTime serviceLogInsertDate, string key)
 		{
 			var result = new AuthenticationResults();
-			ProcessConfigResponseType r;
-			r = GetRequestFromXml(xml);
+			ProcessConfigResponseType r = GetRequestFromXml(xml);
 			result.Parse(r);
+
+			SaveAmlData(customerId, key, serviceLogId, serviceLogInsertDate, result);
+
 			return result;
 		}
 

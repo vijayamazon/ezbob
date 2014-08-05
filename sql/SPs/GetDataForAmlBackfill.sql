@@ -9,39 +9,48 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE GetDataForAmlBackfill
+	(@CustomerId INT,
+	 @ServiceLogId BIGINT)
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE 
-		@Xml NVARCHAR(MAX),
-		@CustomerId INT,
-		@ExistingAmlResult NVARCHAR(100)
+	DECLARE
+		@FirstName NVARCHAR(250),
+		@MiddleName NVARCHAR(250),
+		@Surname NVARCHAR(250),
+		@Postcode VARCHAR(200),
+		@ExistingAmlResult NVARCHAR(100),
+		@IsLastEntryForCustomer BIT
 		
-	CREATE TABLE #DataForAmlBackfill
-	(
-		CustomerId INT,
-		AmlResult NVARCHAR(100),
-		Xml NVARCHAR(MAX)
-	)
+	SELECT @Postcode = Postcode FROM CustomerAddress WHERE addressType = 1 AND CustomerId = @CustomerId
 	
-	DECLARE cur CURSOR FOR 
-		SELECT DISTINCT CustomerId FROM MP_ServiceLog WHERE ServiceType = 'AML A check' AND CustomerId IS NOT NULL AND Id IN (SELECT DISTINCT ServiceLogId FROM MP_ExperianBankCache)
-	OPEN cur
-	FETCH NEXT FROM cur INTO @CustomerId
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		SELECT TOP 1 @Xml = ResponseData FROM MP_ServiceLog WHERE ServiceType = 'AML A check' AND CustomerId = @CustomerId AND Id IN (SELECT DISTINCT ServiceLogId FROM MP_ExperianBankCache) ORDER BY Id DESC
-		SELECT @ExistingAmlResult = AMLResult FROM Customer WHERE Id = @CustomerId
-		
-		INSERT INTO #DataForAmlBackfill (CustomerId, AmlResult, Xml) VALUES (@CustomerId, @ExistingAmlResult, @Xml)
+	SELECT
+		@ExistingAmlResult = AMLResult,
+		@FirstName = FirstName,
+		@MiddleName = MiddleInitial,
+		@Surname = Surname
+	FROM
+		Customer
+	WHERE
+		Id = @CustomerId
 	
-		FETCH NEXT FROM cur INTO @CustomerId
-	END
-	CLOSE cur
-	DEALLOCATE cur
+	IF EXISTS (SELECT 1 FROM MP_ServiceLog WHERE CustomerId = @CustomerId AND Id > @ServiceLogId)
+		SET @IsLastEntryForCustomer = 0
+	ELSE
+		SET @IsLastEntryForCustomer = 1
 	
-	SELECT CustomerId, AmlResult, Xml FROM #DataForAmlBackfill
-	
-	DROP TABLE #DataForAmlBackfill	
+	SELECT
+		InsertDate,
+		ResponseData,
+		@FirstName AS FirstName,
+		@MiddleName AS MiddleName,
+		@Surname AS Surname,
+		@Postcode AS Postcode,
+		@ExistingAmlResult AS ExistingAmlResult,
+		@IsLastEntryForCustomer AS IsLastEntryForCustomer
+	FROM
+		MP_ServiceLog
+	WHERE
+		Id = @ServiceLogId	
 END
 GO
