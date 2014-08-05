@@ -13,7 +13,6 @@
 	using EzBob.Models.Marketplaces;
 	using Ezbob.Backend.Models;
 	using Infrastructure;
-	using LandRegistryLib;
 	using Models;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
@@ -149,44 +148,9 @@
 			sw.Stop();
 			var pricingTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();
-			int numberOfProperties = customer.PropertyStatus.IsOwnerOfMainAddress ? 1 : 0;
-			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
-										 a.Customer.Id == customer.Id &&
-				                         a.AddressType == CustomerAddressType.OtherPropertyAddress);
 
-			numberOfProperties += otherPropertiesCount;
-			var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
-			Zoopla zoopla = null;
-			if (currentAddress != null) zoopla = currentAddress.Zoopla.LastOrDefault();
-			int zooplaValue = 0;
-			int experianMortgage = 0;
-			int experianMortgageCount = 0;
-			int zooplaAverage1YearPrice = 0;
-			DateTime? zooplaUpdateDate = null;
-			if (zoopla != null)
-			{
-				zooplaAverage1YearPrice = zoopla.AverageSoldPrice1Year;
-				zooplaUpdateDate = zoopla.UpdateDate;
-				CrossCheckModel.GetZooplaAndMortgagesData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue, out experianMortgage, out experianMortgageCount);
-			}
-			sw.Stop();
-			var zooplaTime = sw.Elapsed.TotalMilliseconds;
-			sw.Restart();
-			// TODO: fetch data for all owned properties
-			model.Properties = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage, zooplaAverage1YearPrice, zooplaUpdateDate);
-			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res).Select(x => new { Response = x.Response, Title = x.TitleNumber });
-			var b = new LandRegistryModelBuilder();
-			model.Properties.LandRegistries = new List<LandRegistryResModel>();
+			model.Properties = PropertiesController.GetPropertiesModelData(customer, customerAddressRepository);
 			
-			foreach (var lr in lrs)
-			{
-				model.Properties.LandRegistries.Add(b.BuildResModel(lr.Response, lr.Title));
-			}
-
-			var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
-			model.Properties.Postcode = current.Postcode;
-			model.Properties.FormattedAddress = current.FormattedAddress;
-
 			sw.Stop();
 			var propTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();
@@ -243,8 +207,8 @@
 			var mpHistTime = sw.Elapsed.TotalMilliseconds;
 			totalSw.Stop();
 
-			Log.DebugFormat(@"Customer Id {21}
-							Total FullCustomerModel Time taken: {20}ms
+			Log.DebugFormat(@"Customer Id {20}
+							Total FullCustomerModel Time taken: {19}ms
 							PersonalInfoModel Time taken: {0}ms
 							ApplicationInfoModel Time taken: {1}ms
 							MarketPlaces and Affordability Time taken: {2}ms
@@ -254,19 +218,18 @@
 							PaymentAccountModel Time taken: {6}ms
 							MedalCalculations Time taken: {7}ms
 							PricingModelCalculations Time taken: {8}ms
-							ZooplaAndMortgagesData Time taken: {9}ms
-							PropertiesModel Time taken: {10}ms
-							FraudDetectionLog Time taken: {11}ms
-							ApiCheckLogs Time taken: {12}ms
-							Messages Time taken: {13}ms
-							CustomerRelations Time taken: {14}ms
-							AlertDocs Time taken: {15}ms
-							Bugs Time taken: {16}ms
-							CompanyScore Time taken: {17}ms
-							ExperianDirectors Time taken: {18}ms
-							MarketplacesHistory Time taken: {19}ms", 
+							ZooplaAndMortgagesAndPropertiesModel Time taken: {9}ms
+							FraudDetectionLog Time taken: {10}ms
+							ApiCheckLogs Time taken: {11}ms
+							Messages Time taken: {12}ms
+							CustomerRelations Time taken: {13}ms
+							AlertDocs Time taken: {14}ms
+							Bugs Time taken: {15}ms
+							CompanyScore Time taken: {16}ms
+							ExperianDirectors Time taken: {17}ms
+							MarketplacesHistory Time taken: {18}ms", 
 							personalTime, appTime, mpTime, loanTime, expTime, summaryTime, paymentTime, medalTime, pricingTime, 
-							zooplaTime, propTime,fraudTime, apiTime, messagesTime, crmTime, docsTime, bugsTime, expCompTime,
+							propTime,fraudTime, apiTime, messagesTime, crmTime, docsTime, bugsTime, expCompTime,
 							expDirTime, mpHistTime, totalSw.Elapsed.TotalMilliseconds, customer.Id);
 			Log.Debug("full customer model build end");
 			return Json(model, JsonRequestBehavior.AllowGet);

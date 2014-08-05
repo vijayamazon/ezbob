@@ -257,7 +257,7 @@
     };
 
     PersonalInfoView.prototype.onRender = function() {
-      var address, otherAddress;
+      var address, otherPropertiesAddressesView;
 
       address = new EzBob.AddressView({
         model: this.model.get('PersonalAddress'),
@@ -267,18 +267,15 @@
         uiEventControlIdPrefix: this.personAddress.getEl(this.personAddress.el).attr('data-ui-event-control-id-prefix')
       });
       this.personAddress.show(address);
-      if (this.model.get('IsOffline')) {
-        otherAddress = new EzBob.AddressView({
-          model: this.model.get('OtherPropertiesAddresses'),
-          name: 'OtherPropertiesAddresses',
-          max: 1,
-          isShowClear: true,
-          uiEventControlIdPrefix: this.otherPropertiesAddresses.getEl(this.otherPropertiesAddresses.el).attr('data-ui-event-control-id-prefix')
-        });
-        this.otherPropertiesAddresses.show(otherAddress);
-      } else {
-        this.$el.find('.offline').remove();
-      }
+      otherPropertiesAddressesView = new EzBob.AddressView({
+        model: this.model.get('OtherPropertiesAddresses'),
+        name: 'OtherPropertiesAddresses',
+        max: 3,
+        required: "empty",
+        isShowClear: true,
+        uiEventControlIdPrefix: this.otherPropertiesAddresses.getEl(this.otherPropertiesAddresses.el).attr('data-ui-event-control-id-prefix')
+      });
+      this.otherPropertiesAddresses.show(otherPropertiesAddressesView);
       return this;
     };
 

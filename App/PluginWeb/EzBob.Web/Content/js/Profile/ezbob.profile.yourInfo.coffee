@@ -191,17 +191,15 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
         })
         @personAddress.show(address)
 
-        if @model.get('IsOffline')
-            otherAddress = new EzBob.AddressView({
-                model: @model.get('OtherPropertiesAddresses'),
-                name: 'OtherPropertiesAddresses',
-                max: 1,
-                isShowClear: true,
-                uiEventControlIdPrefix: @otherPropertiesAddresses.getEl(@otherPropertiesAddresses.el).attr('data-ui-event-control-id-prefix'),
-            })
-            @otherPropertiesAddresses.show(otherAddress)
-        else
-            @$el.find('.offline').remove()
+        otherPropertiesAddressesView = new EzBob.AddressView({
+            model: @model.get('OtherPropertiesAddresses'),
+            name: 'OtherPropertiesAddresses',
+            max: 3,
+            required: "empty",
+            isShowClear: true,
+            uiEventControlIdPrefix: @otherPropertiesAddresses.getEl(@otherPropertiesAddresses.el).attr('data-ui-event-control-id-prefix')
+        })
+        @otherPropertiesAddresses.show(otherPropertiesAddressesView)
 
         @
 

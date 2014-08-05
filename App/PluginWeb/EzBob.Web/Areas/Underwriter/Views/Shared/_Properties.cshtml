@@ -10,23 +10,21 @@
                 <tr class="box-title">
                     <th>#</th>
                     <th>Market Value</th>
-                    <th>Mortgage</th>
-                    <th>Net Worth</th>
                     <th>Address</th>
                     <th>Year Of Ownership</th>
                     <th># Of Owners</th>
                 </tr>
             </thead>
             <tbody class="box-content">
-                <tr>
-                    <td><span>TBD</span></td>
-                    <td><span>TBD</span></td>
-                    <td><span>TBD</span></td>
-                    <td><span>TBD</span></td>
-                    <td><span>TBD</span></td>
-                    <td><span>TBD</span></td>
-                    <td><span>TBD</span></td>
-                </tr>
+                <% _.each(model.Properties, function(prop, propertyCounter) { %>
+                    <tr>
+                    <td><span><%- propertyCounter %></span></td>
+                    <td><span><%- prop.MarketValue %></span></td>
+                    <td><span><%- prop.Address %></span></td>
+                    <td><span><%- prop.YearOfOwnership %></span></td>
+                    <td><span><%- prop.NumberOfOwners %></span></td>
+                    </tr>
+                <% }); %>
             </tbody>
         </table>
         
@@ -51,11 +49,11 @@
                     <td><b>Zoopla Estimate</b></td>
                     <td>
                         <% if (model.NumberOfProperties > 0) {%>
-                        <span>£ <%- model.MarketValue %></span>
-                        <% if (model.ZooplaUpdateDate != null) { %>
-                        <span>, updated: <%- EzBob.formatDate2(model.ZooplaUpdateDate) %></span>
-                        <% } %>
-                        <span>(average: £ <%- model.Zoopla1YearAverage %>)</span>
+                            <span>£ <%- model.MarketValue %></span>
+                            <% if (model.ZooplaUpdateDate != null) { %>
+                                <span>, updated: <%- EzBob.formatDate2(model.ZooplaUpdateDate) %></span>
+                            <% } %>
+                            <span>(average: £ <%- model.Zoopla1YearAverage %>)</span>
                         <% } %>
                         <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck all owned properties"><i class="fa fa-refresh"></i></button>
                     </td>
@@ -65,7 +63,7 @@
                     <td>
                         <span>£ <%- model.SumOfMortgages %></span>
                         <% if (model.NumberOfMortgages > 0) { %>
-                        <span> (<%- model.NumberOfMortgages %>)</span>
+                            <span> (<%- model.NumberOfMortgages %>)</span>
                         <%}%>
                     </td>
                 </tr>
@@ -73,9 +71,9 @@
                     <td><b>Property net worth</b></td>
                     <td>
                         <% if (model.NumberOfProperties > 0) {%>
-                        £ <%- model.NetWorth %>
+                            £ <%- model.NetWorth %>
                         <% } else { %>
-                        Not home owner
+                            Not home owner
                         <% } %>
                     </td>
                 </tr>
@@ -102,11 +100,11 @@
                                             <%- landRegistry.Rejection.OtherDescription %>
                                         </h3>
                                     <% } else if (landRegistry.Acknowledgement != undefined) { %>
-                                    <h3>
-                                        Acknowledgment: <b>tell developer about it!!!</b>
-                                        <br />
-                                        <%- landRegistry.Acknowledgement.Description %> <%- landRegistry.Acknowledgement.PollDate %>
-                                    </h3>
+                                        <h3>
+                                            Acknowledgment: <b>tell developer about it!!!</b>
+                                            <br />
+                                            <%- landRegistry.Acknowledgement.Description %> <%- landRegistry.Acknowledgement.PollDate %>
+                                        </h3>
                                     <% } else { %>
                                         <div class="tab-content">
                                             <span>Title Number: <%- landRegistry.TitleNumber %></span>

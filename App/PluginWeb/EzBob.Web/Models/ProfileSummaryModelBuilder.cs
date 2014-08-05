@@ -242,7 +242,7 @@
 			var lrs = customer.LandRegistries.Where(x =>
 				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
 				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success).ToList();
-			if (!lrs.Any() && customer.PropertyStatus.IsOwnerOfMainAddress)
+			if (!lrs.Any() && customer.PropertyStatus.IsOwnerOfMainAddress) // TODO: should we have this alert when customer is owner of other addresses
 			{
 				summary.Alerts.Warnings.Add(new AlertModel
 					{

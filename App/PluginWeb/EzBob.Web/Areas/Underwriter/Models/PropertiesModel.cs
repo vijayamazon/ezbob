@@ -17,8 +17,10 @@
 			NetWorthPercentages = 100 - Ltv;
 			Zoopla1YearAverage = zoopla1YearAverage;
 			ZooplaUpdateDate = zooplaUpdateDate;
+			Properties = new List<PropertyModel>();
 		}
 
+		// TODO: add data for main address for fields that holds totals
 		public int NumberOfProperties { get; set; }
 		public int NumberOfMortgages { get; set; }
 		public int MarketValue { get; set; }
@@ -31,5 +33,15 @@
 		public List<LandRegistryResModel> LandRegistries { get; set; }
 		public string Postcode { get; set; }
 		public string FormattedAddress { get; set; }
+		public List<PropertyModel> Properties { get; set; }
+	}
+
+	[Serializable]
+	public class PropertyModel
+	{
+		public int MarketValue { get; set; }
+		public string Address { get; set; }
+		public int YearOfOwnership { get; set; }
+		public int NumberOfOwners { get; set; }
 	}
 }
