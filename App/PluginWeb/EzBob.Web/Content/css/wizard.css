@@ -190,8 +190,8 @@ ul.list_none
     font-size: 35px;
 }
 
-.btn-showmore {
-    width: 95% !important;
+.marketplace-button a.btn-showmore {
+    width: 96%;
     line-height: normal !important;
     cursor: pointer !important;
     float: left;
@@ -199,6 +199,10 @@ ul.list_none
     margin-right: 0;
     color: #4d4d4d;
 
+}
+
+.marketplace-button a.btn-showmore .onhover {
+    width: 96%;
 }
 
 h1.form_start,

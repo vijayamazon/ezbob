@@ -187,10 +187,10 @@
                                 <% if (experian.Consumer.HasExperianError) { %>
                                     <h3>Error retrieving consumer data</h3>
                                 <% } else { %>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-lg-3 col-md-3">
                                         <div class="right-seperator">
                                             <div class="text-center experian-canvas">
-                                                <div>Score</div>
+                                                <div class="text-caption">Score</div>
                                                 <canvas id="consumerScoreCanvas" width="100" height="100" data-color="<%-experian.Consumer.ScoreColor%>" data-percent="<%-experian.Consumer.Score/1200%>"></canvas>
                                                 <div class="half-donut-caption"><%-experian.Consumer.Score%></div>
                                             </div>
@@ -199,10 +199,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                <div class="col-lg-3 col-md-6">
+                                <div class="col-lg-3 col-md-3">
                                     <div class="right-seperator">
                                         <div class="text-center experian-canvas">
-                                            <div>Indebtedness index</div>
+                                            <div class="text-caption">Indebtedness index</div>
                                             <canvas id="consumerCIICanvas" width="100" height="100" data-color="#a7a7a7" data-percent="<%-Math.abs(experian.Consumer.CII)/100%>"></canvas>
                                             <div class="half-donut-caption"><%-experian.Consumer.CII%></div>
                                         </div>
@@ -211,10 +211,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-md-6">
+                                <div class="col-lg-3 col-md-3">
                                     <div class="right-seperator">
                                         <div class="text-center">
-                                            Total CAIS balance
+                                            <div class="text-caption">Total CAIS balance</div>
                                                 <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(experian.Consumer.ConsumerAccountsOverview.Balance_Total);
                                                    var textSize = 'text-big';
                                                    if(balance.length > 5){ textSize = 'text-small';} %>
@@ -229,7 +229,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-md-6">
+                                <div class="col-lg-3 col-md-3">
                                     <% alert = experian.Consumer.NumberOfLates > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
                                         Delays: <%-experian.Consumer.NumberOfLates%>, <%-experian.Consumer.LateStatus%>
@@ -253,10 +253,10 @@
                                     <%if(item.HasExperianError) { %>
                                             <h3>Error retrieving consumer data</h3>
                                     <%} else {%>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-lg-3 col-md-3">
                                         <div class="right-seperator">
                                             <div class="text-center experian-canvas">
-                                                <div>Score</div>
+                                                <div class="text-caption">Score</div>
                                                 <canvas id="directorScoreCanvas<%-i%>" width="100" height="100" data-color="<%-item.ScoreColor%>" data-percent="<%-item.Score/1200%>"></canvas>
                                                 <div class="half-donut-caption"><%-item.Score%></div>
                                             </div>
@@ -265,10 +265,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-lg-3 col-md-3">
                                         <div class="right-seperator">
                                             <div class="text-center experian-canvas">
-                                                <div>Indebtedness index</div>
+                                                <div class="text-caption">Indebtedness index</div>
                                                 <canvas id="directorCIICanvas<%-i%>" width="100" height="100" data-color="#a7a7a7" data-percent="<%-Math.abs(item.CII)/100%>"></canvas>
                                                 <div class="half-donut-caption"><%-item.CII%></div>
                                             </div>
@@ -277,10 +277,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-lg-3 col-md-3">
                                         <div class="right-seperator">
                                             <div class="text-center">
-                                                Total CAIS balance
+                                                <div class="text-caption">Total CAIS balance</div>
                                             <% var balance = EzBob.formatPoundsAsThousandsNoDecimals(item.ConsumerAccountsOverview.Balance_Total);
                                                var textSize = 'text-big';
                                                if(balance.length > 5){ textSize = 'text-small';} %>
@@ -295,7 +295,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
+                                    <div class="col-lg-3 col-md-3">
                                         <% alert = item.NumberOfLates > 0 ? 'alert-danger' : 'alert-info';%>
                                     <div class="alert <%-alert%>">
                                         Delays: <%-item.NumberOfLates%>, <%-item.LateStatus%>
@@ -612,7 +612,7 @@
                                     <th><span data-toggle="tooltip" title="Customer Selection">CS</span></th>
                                     <th>Underwriter</th>
                                     <th>Comment</th>
-                                    <th class="hide">IsCrm </th>
+                                    <th class="hide">IsCrm</th>
                                 </tr>
                             </thead>
                             <tbody>

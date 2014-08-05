@@ -1293,6 +1293,8 @@ td a.edit-loan {
 
 #sidebar {
     position: fixed;
+    height: 95vh !important;
+    overflow-y: auto;
 }
 
 #grids-view {
@@ -1585,6 +1587,14 @@ td a.edit-loan {
     background-color: #ebebeb;
 }
 
+#profileHead.sidebar-collapsed {
+    width: -moz-calc(100% - 320px);/* Firefox */
+    width: -webkit-calc(100% - 320px);/* WebKit */
+    width: -o-calc(100% - 320px);/* Opera */
+    width: calc(100% - 320px);/* Standard */
+}
+
+
     #profileHead .box-content {
         min-height: 140px;
     }
@@ -1798,6 +1808,10 @@ td a.edit-loan {
     color: white;
 }
 
+.text-caption {
+    min-height: 38px;
+}
+
 .right-seperator {
     border-right: #d3d3d5 1px solid;
     height: 100%;
@@ -1877,6 +1891,10 @@ td a.edit-loan {
 
 #esigners-list-container .toggle-all-signers {
 	cursor: pointer;
+}
+
+.source_labels, .source_labels_on {
+    width: 120px;
 }
 
 .editOfferDiv {

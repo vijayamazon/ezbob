@@ -423,7 +423,7 @@
       oBtn.attr('data-current', 'more');
       oBtn.find('.caption').text('Show more account types');
       oBtn.find('.rotate90').html('&laquo;');
-      oBtn.find('.onhover').text('Show more data source connectors');
+      oBtn.find('.onhover-cell').text('Show more data source connectors');
       this.storeList.find('.AddMoreRuleBottom').addClass('hide');
       this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
       return this.storeList.find('.marketplace-button').not('.show-more, .marketplace-button-less').css('display', 'none');
@@ -435,7 +435,7 @@
       oBtn.attr('data-current', 'less');
       oBtn.find('.caption').text('Show less account types');
       oBtn.find('.rotate90').html('&raquo;');
-      oBtn.find('.onhover').text('Show less data source connectors');
+      oBtn.find('.onhover-cell').text('Show less data source connectors');
       this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
       this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
       return this.storeList.find('.marketplace-button').not('.show-more').css('display', 'table');

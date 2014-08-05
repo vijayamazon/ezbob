@@ -19,7 +19,7 @@ EzBob.handleUserLayoutSetting = function () {
     }
     //Collapsed sidebar
     if ($.cookie('sidebar-collapsed') == 'true') {
-        $('div[id="sidebar"]').addClass('sidebar-collapsed');
+        $('div[id="sidebar"], div[id="profileHead"]').addClass('sidebar-collapsed');
     }
 
     //Fixed sidebar
@@ -131,7 +131,7 @@ EzBob.handleUserLayoutSetting = function () {
     
     $("div[id='sidebar-collapse']").unbind('click');
     $("div[id='sidebar-collapse']").click(function () {
-        $("div[id='sidebar']").toggleClass('sidebar-collapsed');
+        $("div[id='sidebar'], div[id='profileHead']").toggleClass('sidebar-collapsed');
         if ($("div[id='sidebar']").hasClass('sidebar-collapsed')) {
             $("div[id='sidebar-collapse']:visible > i").attr('class', 'fa fa-angle-double-right');
             $.cookie('sidebar-collapsed', 'true');
