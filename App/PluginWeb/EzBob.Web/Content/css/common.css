@@ -2687,8 +2687,8 @@ ul#user-menu {
         }
 
 .progress-circle {
-    width: 94px;
-    height: 94px;
+    width: 93px;
+    height: 96px;
     text-align: center;
     vertical-align: middle;
     color: #5C5C5C;
@@ -2719,7 +2719,7 @@ ul#user-menu {
     background-size: contain;
     position: absolute;
     left: 7px;
-    top: 7px;
+    top: 8px;
     width: 80px;
     height: 80px;
     z-index: 3;
