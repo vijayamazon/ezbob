@@ -155,7 +155,7 @@
 			}
 
 			BuildLandRegistryAlerts(customer, summary);
-			BuilDataAlerts(customer, summary, context.UserId);
+			BuildDataAlerts(customer, summary, context.UserId);
 
 			bool hasMortgage = false;
 			bool isHomeOwner = customer.PropertyStatus != null && (customer.PropertyStatus.IsOwnerOfMainAddress || customer.PropertyStatus.IsOwnerOfOtherProperties);
@@ -185,7 +185,7 @@
 			sb.Append("</li>");
 		}
 
-		private void BuilDataAlerts(Customer customer, ProfileSummaryModel summary, int userId)
+		private void BuildDataAlerts(Customer customer, ProfileSummaryModel summary, int userId)
 		{
 			var errorsList = serviceClient.Instance.GetUnfetchedDataErrors(userId, customer.Id).Records;
 			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
