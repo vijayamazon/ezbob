@@ -172,6 +172,8 @@
   <xs:complexType name="BankStatementDataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActualLoansRepayment" type="xs:double" />
+      <xs:element minOccurs="0" name="DateFrom" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateTo" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Ebida" type="xs:double" />
       <xs:element minOccurs="0" name="FreeCashFlow" type="xs:double" />
       <xs:element minOccurs="0" name="Opex" type="xs:double" />
@@ -509,14 +511,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ScoreAtDate" nillable="true" type="tns:ScoreAtDate" />
-  <xs:complexType name="CompanyDataForCreditBureau">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Errors" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LastUpdate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Score" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="CompanyDataForCreditBureau" nillable="true" type="tns:CompanyDataForCreditBureau" />
   <xs:complexType name="ArrayOfPropertyStatusGroupModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PropertyStatusGroupModel" nillable="true" type="tns:PropertyStatusGroupModel" />
