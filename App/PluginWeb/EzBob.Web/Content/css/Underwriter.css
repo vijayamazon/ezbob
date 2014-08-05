@@ -2011,6 +2011,12 @@ td a.edit-loan {
     font-family: 'Open Sans';
 }
 
-.tooltip-inner {
+.tooltip .tooltip-inner {
     text-align:left !important;
+    white-space: normal;
+}
+
+ul.alert-list {
+    list-style-type: circle;
+    list-style-position: inside;
 }

@@ -178,13 +178,11 @@
 			}
 		}
 
-		private void AppendWithHtmlBreak(StringBuilder sb, string error)
+		private void AppendLi(StringBuilder sb, string error)
 		{
-			if (!string.IsNullOrEmpty(sb.ToString()))
-			{
-				sb.Append("<br/>");
-			}
+			sb.AppendLine("<li>");
 			sb.Append(error);
+			sb.Append("</li>");
 		}
 
 		private void BuilDataAlerts(Customer customer, ProfileSummaryModel summary, int userId)
@@ -192,9 +190,10 @@
 			var errorsList = serviceClient.Instance.GetUnfetchedDataErrors(userId, customer.Id).Records;
 			var currAddr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			var errors = new StringBuilder();
+			
 			if (currAddr != null && !currAddr.Zoopla.Any())
 			{
-				AppendWithHtmlBreak(errors, "No zoopla for current address");
+				AppendLi(errors, "No zoopla for current address");
 			}
 
 			if (customer.CustomerMarketPlaces.Any(x => !string.IsNullOrEmpty(x.UpdateError)))
@@ -204,13 +203,13 @@
 					        .Select(x => string.Format("MP {0} : {1}", x.DisplayName, x.UpdateError));
 				foreach (var mpError in mpErrors)
 				{
-					AppendWithHtmlBreak(errors, mpError);
+					AppendLi(errors, mpError);
 				}
 			}
 
 			if (!customer.ExperianConsumerScore.HasValue || customer.ExperianConsumerScore.Value == 0)
 			{
-				AppendWithHtmlBreak(errors, "No consumer score");
+				AppendLi(errors, "No consumer score");
 			}
 
 			if (customer.Company != null &&
@@ -221,19 +220,23 @@
 				                        .Select(x => string.Format("Director {0} {1} don't have consumer score", x.Name, x.Surname));
 				foreach (var dirError in dirErrors)
 				{
-					AppendWithHtmlBreak(errors, dirError);
+					AppendLi(errors, dirError);
 				}
 			}
 
 			foreach (string singleError in errorsList)
 			{
-				AppendWithHtmlBreak(errors, singleError);
+				AppendLi(errors, singleError);
 			}
 
 			string errorStr = errors.ToString();
 			if (!string.IsNullOrEmpty(errorStr))
 			{
-				summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "DATA", Alert = errorStr, AlertType = AlertType.Error.DescriptionAttr() });
+				summary.Alerts.Errors.Add(new AlertModel {
+					Abbreviation = "DATA", 
+					Alert = string.Format("<ul class='alert-list'>{0}</ul>", errorStr),
+					AlertType = AlertType.Error.DescriptionAttr()
+				});
 			}
 		}
 
