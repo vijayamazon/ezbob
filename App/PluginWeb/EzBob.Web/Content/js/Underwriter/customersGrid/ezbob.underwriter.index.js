@@ -76,6 +76,15 @@
 		}, // routes
 
 		handleRoute: function(sViewName, id, type) {
+			if (sViewName !== 'profile') {
+				var oProfileView = this.views.profile;
+
+				if (oProfileView && oProfileView.fetchAvailFundsHandler) {
+					clearInterval(oProfileView.fetchAvailFundsHandler);
+					oProfileView.fetchAvailFundsHandler = null;
+				} // if
+			} // if
+
 			var oView = this.views[sViewName];
 
 			if (!oView.isRendered) {
@@ -96,17 +105,17 @@
 			counterTimer = counterTimer || setInterval(updateCounters, 5000);
 
 			this.handleRoute('grids', null, type);
-		    
+
 			var a = new EzBob.Underwriter.goToCustomerId();
 
-			a.on('ok', function (id) {
-			    oRouter.views.profile.view.router.navigate('profile/' + id, { trigger: true, replace: true });
+			a.on('ok', function(id) {
+				oRouter.views.profile.view.router.navigate('profile/' + id, { trigger: true, replace: true });
 			});
 
-			$('[id="liClient"] > a').unbind("click").on('click', function () {
-			    console.log('render click customers');
-			    a.render();
-			    return false;
+			$('[id="liClient"] > a').unbind("click").on('click', function() {
+				console.log('render click customers');
+				a.render();
+				return false;
 			});
 		}, // customers
 

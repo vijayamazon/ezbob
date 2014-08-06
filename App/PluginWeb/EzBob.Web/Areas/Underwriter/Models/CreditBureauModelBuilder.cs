@@ -344,17 +344,20 @@
 				}
 
 				int relevantYear, relevantMonth, relevantDay;
-				if (caisDetails.SettlementDate != null)
-				{
+
+				if (caisDetails.SettlementDate != null) {
 					relevantYear = caisDetails.SettlementDate.Value.Year;
 					relevantMonth = caisDetails.SettlementDate.Value.Month;
 					relevantDay = caisDetails.SettlementDate.Value.Day;
 				}
-				else
-				{
+				else if (caisDetails.LastUpdatedDate != null) {
 					relevantYear = caisDetails.LastUpdatedDate.Value.Year;
 					relevantMonth = caisDetails.LastUpdatedDate.Value.Month;
 					relevantDay = caisDetails.LastUpdatedDate.Value.Day;
+				}
+				else {
+					Log.Warn("Both SettlementDate and LastUpdatedDate are null in CAIS details entry.");
+					continue;
 				}
 
 				var histStart = new DateTime(relevantYear, relevantMonth, 1);

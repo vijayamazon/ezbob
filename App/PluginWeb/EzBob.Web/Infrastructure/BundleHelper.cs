@@ -281,7 +281,7 @@
 
 				//profile
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.customerFullModel.coffee")
-				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.profile.coffee")
+				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.profile.js")
 				.Add("~/Content/js/underwriter/profile/ezbob.underwriter.broker.profile.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.profileHead.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.emaileditview.js")

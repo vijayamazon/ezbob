@@ -1259,10 +1259,8 @@
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js">
       <DependentUpon>ezbob.underwriter.customerFullModel.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.properties.js" />
-    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.js">
-      <DependentUpon>ezbob.underwriter.profile.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.signature.monitor.js" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js">
       <DependentUpon>ezbob.underwriter.fraudStatus.coffee</DependentUpon>
@@ -2001,7 +1999,6 @@
     <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.coffee" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.coffee" />
-    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.AddBankAccount.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.manualPayment.coffee" />
