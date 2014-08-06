@@ -125,7 +125,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 
 		oXhr.done(function(oResponse) {
 			var theTableOpts = self.initDataTablesOptions(
-				'FirstName,LastName,Status,^ApplyDate,$LoanAmount',
+				'CustomerID,Email,FirstName,LastName,Status,^ApplyDate,$LoanAmount',
 				'brk-grid-state-uw-broker-customer-list'
 			);
 
@@ -208,11 +208,18 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 			});
 
 			theTableOpts.fnRowCallback = function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
-				//if (oData.hasOwnProperty('Marketplaces'))
-				//	$('.grid-item-Marketplaces', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.Marketplaces));
-
 				if (oData.RefNumber) {
 					var sLinkBase = '<a class=profileLink title="Show customer details" href="#profile/' + oData.CustomerID + '">';
+
+					$('.grid-item-CustomerID', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
+						sLinkBase + oData.CustomerID + '</a>'
+					));
+
+					if (oData.hasOwnProperty('Email') && oData.Email) {
+						$('.grid-item-Email', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
+							sLinkBase + oData.Email + '</a>'
+						));
+					} // if has email
 
 					if (oData.hasOwnProperty('FirstName') && oData.FirstName) {
 						$('.grid-item-FirstName', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
@@ -229,7 +236,6 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 			}; // fnRowCallback
 
 			theTableOpts.fnFooterCallback = function(oTR, aryData, nVisibleStart, nVisibleEnd, aryVisual) {
-				// console.log('footer callback', aryData, nVisibleStart, nVisibleEnd, aryVisual);
 				var nLoanSum = 0;
 				var nSetupFeeSum = 0;
 				var nCount = 0;
