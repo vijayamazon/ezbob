@@ -46,6 +46,11 @@
 				Data.IsLimited = sr["IsLimited"];
 			}
 
+			if (refNumber == "NotFound")
+			{
+				return;
+			}
+
 			if (!Data.IsLimited)
 			{
 				DataTable nonLimitedDataTable = DB.ExecuteReader(
