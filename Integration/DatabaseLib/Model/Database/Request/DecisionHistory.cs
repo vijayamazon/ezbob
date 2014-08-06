@@ -73,11 +73,8 @@
 					customer.ManagerApprovedSum = (decimal)customer.LastCashRequest.ManagerApprovedSum;
 				}
 			}
-			else if (action == DecisionActions.Reject)
-			{
-				customer.NumRejects++;
-			}
 
+			
 			var cr = customer.LastCashRequest;
 			var item = new DecisionHistory
 						   {
@@ -91,7 +88,6 @@
 							   RejectReasons = new HashedSet<DecisionHistoryRejectReason>()
 						   };
 			if (rejectionReasons != null) {
-				
 				var repo = new RejectReasonRepository(_session);
 				foreach (var rejectionReason in rejectionReasons) {
 					var reason = repo.Get(rejectionReason);
@@ -101,10 +97,15 @@
 							RejectReason = reason
 						});
 				}
-
-				string reasons = item.RejectReasons.Select(x => x.RejectReason.Reason).Aggregate((a, b) => a + ", " + b);
-				customer.RejectedReason += reasons;
 			}
+
+			if (action == DecisionActions.Reject)
+			{
+				customer.NumRejects++;
+				string reasons = item.RejectReasons.Select(x => x.RejectReason.Reason).Aggregate((a, b) => a + ", " + b);
+				customer.RejectedReason = string.IsNullOrEmpty(reasons) ? comment : string.Format("{0} ({1})", reasons, comment);
+			}
+
 			Save(item);
 		}
 
