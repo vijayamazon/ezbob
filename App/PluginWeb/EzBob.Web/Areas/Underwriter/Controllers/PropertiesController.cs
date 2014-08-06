@@ -123,7 +123,7 @@
 				bool foundMatching = false;
 				foreach (LandRegistryResModel lrData in data.LandRegistries)
 				{
-					foreach (LandRegistryAddressModel propertyAddress in  lrData.PropertyAddresses)
+					foreach (LandRegistryAddressModel propertyAddress in lrData.PropertyAddresses)
 					{
 						if (propertyAddress.PostCode == ownedProperty.Postcode)
 						{
@@ -136,6 +136,7 @@
 
 					if (foundMatching)
 					{
+						data.Properties.Add(ownedPropertyModel);
 						break;
 					}
 				}
