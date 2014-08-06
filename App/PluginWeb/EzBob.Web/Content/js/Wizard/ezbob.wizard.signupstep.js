@@ -189,7 +189,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		});
 		xhr.always(function () {
 			that.$el.find('#mobileCodeDiv').show();
-			that.$el.find('#generateMobileCode').text('Resend activation code');
+			that.$el.find('#generateMobileCode').text('Resend code');
 			if (document.getElementById('generateMobileCode') === document.activeElement) {
 				document.getElementById('mobileCode').focus();
 			}
