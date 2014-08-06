@@ -7,6 +7,7 @@
 	using EzBob.Backend.Models;
 	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.PricingModel;
+	using EzBob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Models;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -183,9 +184,6 @@
 
 		[OperationContract]
 		ActionMetaData MoreBwaInformation(int userId, int customerId);
-
-		[OperationContract]
-		ActionMetaData PasswordChanged(int customerId, Password password);
 
 		[OperationContract]
 		ActionMetaData PasswordRestored(int customerId);
@@ -416,9 +414,6 @@
 		[OperationContract]
 		MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory);
 
-		[OperationContract]
-		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
-
 		#endregion other strategies
 
 		#region pricing model
@@ -483,6 +478,9 @@
 
 		[OperationContract]
 		IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken, bool bIsBrokerLead);
+
+		[OperationContract]
+		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
 
 		#endregion User Management
 

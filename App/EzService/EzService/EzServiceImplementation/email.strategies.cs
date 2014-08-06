@@ -42,10 +42,6 @@
 			return Execute(customerId, userId, typeof(MoreBwaInformation), customerId);
 		} // MoreBwaInformation
 
-		public ActionMetaData PasswordChanged(int customerId, Password password) {
-			return Execute(customerId, null, typeof(PasswordChanged), customerId, password);
-		} // PasswordChanged
-
 		public ActionMetaData PasswordRestored(int customerId) {
 			return Execute(customerId, null, typeof(PasswordRestored), customerId);
 		} // PasswordRestored

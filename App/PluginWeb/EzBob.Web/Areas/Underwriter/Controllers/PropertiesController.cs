@@ -40,7 +40,9 @@
 
 		public static PropertiesModel GetPropertiesModelData(Customer customer, CustomerAddressRepository customerAddressRepository, LandRegistryRepository landRegistryRepository)
 		{
-			int numberOfProperties = customer.PropertyStatus.IsOwnerOfMainAddress ? 1 : 0;
+			// TODO: remove this really ugly patch (applied because underwriter shows no data)
+			int numberOfProperties = (customer.PropertyStatus == null) ? 0 : (customer.PropertyStatus.IsOwnerOfMainAddress ? 1 : 0);
+
 			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
 										 a.Customer.Id == customer.Id &&
 										 a.AddressType == CustomerAddressType.OtherPropertyAddress);
@@ -70,7 +72,8 @@
 				data.LandRegistries.Add(lrData);
 			}
 
-			if (customer.PropertyStatus.IsOwnerOfMainAddress)
+			// TODO: remove this really ugly patch (applied because underwriter shows no data)
+			if (customer.PropertyStatus != null && customer.PropertyStatus.IsOwnerOfMainAddress)
 			{
 				var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
 				if (currentAddress != null)

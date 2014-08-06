@@ -61,7 +61,11 @@
 
 			new PasswordChanged(m_oSpUpdate.UserID, m_oSpUpdate.Password.RawValue, DB, Log).Execute();
 
-            string sAddress = string.Format("<a href='{0}/confirm/{1}'>click here</a>", CurrentValues.Instance.CustomerSite.Value, m_oSpUpdate.RequestID);
+			string sAddress = string.Format(
+				"<a href='{0}/confirm/{1}'>click here</a>",
+				CurrentValues.Instance.CustomerSite.Value,
+				m_oSpUpdate.RequestID
+			);
 
 			new SendEmailVerification(m_oSpUpdate.UserID, m_oData.Email, sAddress, DB, Log).Execute();
 		} // Execute

@@ -6,6 +6,10 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		this.theTable = null;
 
 		this.brokerID2UserID = {}; // TODO: remove this mapping when implementing EZ-2459
+
+		this.nowLoadingCustomers = false;
+		this.nowLoadingBrokerProperties = false;
+		this.nowLoadingCrm = false;
 	}, // initialize
 
 	events: {
@@ -31,20 +35,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		this.myTabHeaders().on('shown.bs.tab', function(e) {
 			var sSection = $(e.target).attr('href').substr(1);
 			self.handleTabSwitch(sSection);
-
-			switch (sSection) {
-			case 'broker-customers-grid':
-				self.reloadCustomerGrid();
-				break;
-
-			case 'broker-profile-summary':
-				self.displayBrokerProperties();
-				break;
-
-			case 'broker-relations':
-				self.startDisplayBrokerRelations();
-				break;
-			} // switch
+			self.redrawCurrentTab(sSection);
 		});
 	}, // render
 
@@ -53,10 +44,16 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 	}, // startDisplayBrokerRelations
 
 	displayBrokerRelations: function() {
+		if (this.nowLoadingCrm)
+			return;
+
+		this.nowLoadingCrm = true;
+
 		var nBrokerID = this.brokerID2UserID[this.brokerID];
 
 		if (!nBrokerID) {
 			EzBob.ShowMessage('Cannot display broker relations: no user id found.');
+			this.nowLoadingCrm = false;
 			return;
 		} // if
 
@@ -70,6 +67,8 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 
 		crmModel.customerId = nBrokerID;
 		crmModel.fetch();
+
+		this.nowLoadingCrm = false;
 	}, // displayBrokerRelations
 
 	loadBrokerID2UserIDEntry: function(oCallback) {
@@ -106,6 +105,11 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 	}, // loadBrokerID2UserIDEntry
 
 	reloadCustomerGrid: function() {
+		if (this.nowLoadingCustomers)
+			return;
+
+		this.nowLoadingCustomers = true;
+
 		if (this.theTable) {
 			this.theTable.fnClearTable();
 			this.theTable = null;
@@ -258,10 +262,17 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 			}; // fnFooterCallback
 
 			self.theTable = oTbl.dataTable(theTableOpts);
+
+			self.nowLoadingCustomers = false;
 		});
 	}, // reloadCustomerGrid
 
 	displayBrokerProperties: function() {
+		if (this.nowLoadingBrokerProperties)
+			return;
+
+		this.nowLoadingBrokerProperties = true;
+
 		var self = this;
 
 		var oXhr = $.getJSON(
@@ -270,8 +281,10 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		);
 
 		oXhr.done(function(oResponse) {
-			if (this.brokerID !== oResponse.brokerID)
+			if (this.brokerID !== oResponse.brokerID) {
+				self.nowLoadingBrokerProperties = false;
 				return;
+			} // if
 
 			self.$el.find('#broker-profile-summary .value').load_display_value({
 				data_source: oResponse,
@@ -287,6 +300,8 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 					return oFieldValue;
 				}, // callback
 			});
+
+			self.nowLoadingBrokerProperties = false;
 		});
 	}, // displayBrokerProperties
 
@@ -294,9 +309,12 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		this.brokerID = id;
 		this.$el.show();
 		this.handleTabSwitch(type);
+
 		EzBob.handleUserLayoutSetting();
 
 		this.loadBrokerID2UserIDEntry();
+
+		this.redrawCurrentTab(type);
 	}, // show
 
 	handleTabSwitch: function(sTabID) {
@@ -308,6 +326,27 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		if (!oTab.hasClass('active'))
 			oTab.tab('show');
 	}, // handelTabSwitch
+
+	redrawCurrentTab: function(sSection) {
+		if (!sSection) {
+			var oTab = this.myTabHeaders().parent('.active').find('a').first();
+			sSection = oTab.attr('href').substr(1);
+		} // if
+
+		switch (sSection) {
+		case 'broker-customers-grid':
+			this.reloadCustomerGrid();
+			break;
+
+		case 'broker-profile-summary':
+			this.displayBrokerProperties();
+			break;
+
+		case 'broker-relations':
+			this.startDisplayBrokerRelations();
+			break;
+		} // switch
+	}, // redrawCurrentTab
 
 	myTabHeaders: function(sTabID, bReturnFirstIfNotFound) {
 		var oAll = this.$el.find('a[data-toggle="tab"]');

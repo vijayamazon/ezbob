@@ -245,6 +245,8 @@
 			var lrs = customer.LandRegistries.Where(x =>
 				x.RequestType == LandRegistryLib.LandRegistryRequestType.Res &&
 				x.ResponseType == LandRegistryLib.LandRegistryResponseType.Success).ToList();
+
+			if (customer.PropertyStatus != null) // TODO: remove this really ugly patch (applied because underwriter shows no data)
 			if (!lrs.Any() && customer.PropertyStatus.IsOwnerOfMainAddress) // TODO: should we have this alert when customer is owner of other addresses
 			{
 				summary.Alerts.Warnings.Add(new AlertModel

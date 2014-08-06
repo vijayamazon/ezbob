@@ -102,11 +102,12 @@
 		private static void LoadFromDBThread() {
 			bool bStop = false;
 			const int nStep = 100;
+			int nRefreshInterval = CurrentValues.Instance.AvailableFundsRefreshInterval;
 
 			for ( ; ; ) {
 				ms_oLog.Debug("Available funds loader: sleeping...");
 
-				for (int i = 0; i < (int)CurrentValues.Instance.AvailableFundsRefreshInterval; i += nStep) {
+				for (int i = 0; i < nRefreshInterval; i += nStep) {
 					if (StopBackgroundThread) {
 						bStop = true;
 						break;
@@ -119,6 +120,7 @@
 					break;
 
 				LoadFromDB();
+				nRefreshInterval = CurrentValues.Instance.AvailableFundsRefreshInterval;
 			} // forever
 		} // LoadFromDBThread
 

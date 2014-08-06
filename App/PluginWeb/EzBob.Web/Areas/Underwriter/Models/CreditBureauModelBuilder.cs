@@ -109,7 +109,11 @@
 		{
 			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
 			Log.DebugFormat("BuildHistoryModel company type: {0}", isLimited ? "Limited" : "NonLimited");
-			var companyHistory = _experianHistoryRepository.GetCompanyHistory(customer.Company.ExperianRefNum, isLimited).ToList();
+
+			List<MP_ExperianHistory> companyHistory = customer.Company == null
+				? new List<MP_ExperianHistory>()
+				: _experianHistoryRepository.GetCompanyHistory(customer.Company.ExperianRefNum, isLimited).ToList();
+
 			if (companyHistory.Any())
 			{
 				Log.Debug("BuildHistoryModel company from history table");

@@ -1,5 +1,4 @@
 ﻿@using System.Web.Mvc
-@using EZBob.DatabaseLib.Model
 @using EzBob.Web.Infrastructure
 @using StructureMap
 
@@ -144,7 +143,7 @@
 
 				case SideBarType.Broker:
 				<li>
-					<a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
+					<a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Brokers</span></a>
 				</li>
 				<li><a href="#broker-customers-grid" data-toggle="tab"><i class="fa fa-female"></i><span>All customers</span></a></li>
 				<li><a href="#broker-profile-summary" data-toggle="tab"><i class="fa fa-user"></i><span>Profile Summary</span></a></li>

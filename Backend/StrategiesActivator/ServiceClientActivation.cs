@@ -275,17 +275,6 @@
 		}
 
 		[Activation]
-		private void PasswordChanged() {
-			int customerId;
-			if (m_aryArgs.Length != 3 || !int.TryParse(m_aryArgs[1], out customerId)) {
-				m_oLog.Msg("Usage: PasswordChanged <CustomerId> <password>");
-				return;
-			}
-
-			m_oServiceClient.PasswordChanged(customerId, new Password(m_aryArgs[2]));
-		}
-
-		[Activation]
 		private void PasswordRestored() {
 			int customerId;
 			if (m_aryArgs.Length != 2 || !int.TryParse(m_aryArgs[1], out customerId)) {

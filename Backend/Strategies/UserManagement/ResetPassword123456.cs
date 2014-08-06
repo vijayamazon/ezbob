@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace EzBob.Backend.Strategies.UserManagement {
 	using System;
 	using System.Runtime.Serialization;
 	using Ezbob.Database;

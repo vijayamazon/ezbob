@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -21,7 +22,7 @@
 		#region property ProfilePage
 
 		protected override string ProfilePage {
-			get { return "https://app.ezbob.com/Broker#login"; }
+			get { return CurrentValues.Instance.BrokerSite + "#login"; }
 		} // ProfilePage
 
 		#endregion property ProfilePage

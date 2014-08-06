@@ -168,13 +168,5 @@
 		} // CalculateModelsAndAffordability
 
 		#endregion method CalculateModelsAndAffordability
-
-		#region method ResetPassword123456
-
-		public ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget) {
-			return Execute<ResetPassword123456>(null, nUnderwriterID, nTargetID, nTarget);
-		} // ResetPassword123456
-
-		#endregion method ResetPassword123456
 	} // class EzServiceImplementation
 } // namespace EzService
