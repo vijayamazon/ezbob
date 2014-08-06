@@ -24,7 +24,6 @@
 
 	public class LoanCreator : ILoanCreator
 	{
-		private readonly ILoanHistoryRepository _loanHistoryRepository;
 		private readonly IPacnetService _pacnetService;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IAgreementsGenerator _agreementsGenerator;
@@ -35,14 +34,12 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanCreator));
 
 		public LoanCreator(
-			ILoanHistoryRepository loanHistoryRepository,
 			IPacnetService pacnetService,
 			IAgreementsGenerator agreementsGenerator,
 			IEzbobWorkplaceContext context,
 			LoanBuilder loanBuilder,
 			ISession session
 		) {
-			_loanHistoryRepository = loanHistoryRepository;
 			_pacnetService = pacnetService;
 			m_oServiceClient = new ServiceClient();
 			_agreementsGenerator = agreementsGenerator;
@@ -113,9 +110,8 @@
 
 			_agreementsGenerator.RenderAgreements(loan, true);
 
-			_loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
-
-			_session.Flush();
+			var loanHistoryRepository = new LoanHistoryRepository(_session);
+			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
 
 			m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber);
 

@@ -119,7 +119,6 @@
 		/// <param name="customer">customer name</param>
 		/// <param name="expiry">card exipiry month/year</param>
 		/// <returns>redirects customer to confirmation page/error page</returns>
-		[Transactional]
 		[NoCache]
 		public RedirectToRouteResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, decimal loan_amount, string card_no, string customer, string expiry)
 		{

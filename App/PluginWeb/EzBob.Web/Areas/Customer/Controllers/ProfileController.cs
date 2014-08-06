@@ -283,7 +283,14 @@
 			var oCustomer = m_oContext.Customer;
 			int payPointCardExpiryMonths = CurrentValues.Instance.PayPointCardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
-			var callback = Url.Action("PayPointCallback", "Profile", new { Area = "Customer", customerId = oCustomer.Id, cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate) }, "https");
+			var callback = Url.Action("PayPointCallback", "Profile",
+				new
+				{
+					Area = "Customer",
+					customerId = oCustomer.Id,
+					cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
+					hideSteps = true
+				}, "https");
 			var url = m_oPayPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
 
 			return Redirect(url);

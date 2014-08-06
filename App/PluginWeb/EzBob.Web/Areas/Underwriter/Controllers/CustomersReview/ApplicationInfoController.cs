@@ -587,7 +587,6 @@
 			try
 			{
 				var lc = new LoanCreatorNoChecks(
-					ObjectFactory.GetInstance<ILoanHistoryRepository>(),
 					ObjectFactory.GetInstance<IPacnetService>(),
 					ObjectFactory.GetInstance<IAgreementsGenerator>(),
 					ObjectFactory.GetInstance<IEzbobWorkplaceContext>(),

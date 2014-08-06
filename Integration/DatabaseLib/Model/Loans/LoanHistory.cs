@@ -88,7 +88,7 @@
 	{
 		public LoanHistoryMap()
 		{
-			Id(x => x.Id);
+			Id(x => x.Id).GeneratedBy.HiLo("100");
 			Map(x => x.Interest);
 			Map(x => x.Principal);
 			Map(x => x.Balance);

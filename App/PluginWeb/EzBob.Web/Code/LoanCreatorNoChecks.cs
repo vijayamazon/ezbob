@@ -9,13 +9,12 @@
 
 	public class LoanCreatorNoChecks : LoanCreator {
 		public LoanCreatorNoChecks(
-			ILoanHistoryRepository loanHistoryRepository,
 			IPacnetService pacnetService,
 			IAgreementsGenerator agreementsGenerator,
 			IEzbobWorkplaceContext context,
 			LoanBuilder loanBuilder,
 			ISession session
-		) : base(loanHistoryRepository, pacnetService, agreementsGenerator, context, loanBuilder, session) {}
+		) : base(pacnetService, agreementsGenerator, context, loanBuilder, session) {}
 
 		public override void ValidateCustomer(Customer cus) {
 		}

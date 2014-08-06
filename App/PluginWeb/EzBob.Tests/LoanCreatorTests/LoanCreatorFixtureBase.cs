@@ -19,8 +19,7 @@
         [SetUp]
         public void Init()
 		{
-			var loanHistoryRepository = new Mock<ILoanHistoryRepository>();
-
+			
             var pacnetService = new Mock<IPacnetService>();
             pacnetService.Setup(x => x.SendMoney(It.IsAny<int>(), It.IsAny<decimal>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
              .Returns(new PacnetReturnData());
@@ -30,7 +29,7 @@
             _loanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
             _loanBuilder = new LoanBuilder(_loanDetailsModelBuilder);
 
-            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, agreementsGenerator.Object, context.Object, _loanBuilder, null);
+            _lc = new LoanCreator(pacnetService.Object, agreementsGenerator.Object, context.Object, _loanBuilder, null);
             SetUp();
         }
 

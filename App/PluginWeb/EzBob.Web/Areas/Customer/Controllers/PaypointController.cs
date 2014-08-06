@@ -75,8 +75,8 @@
 						loanId, 
 						type, 
 						username = (_context.User != null ? _context.User.Name : ""),
-						cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate)
-
+						cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
+						hideSteps = true
 					}, "https");
 
 				var oCustomer = _context.Customer;
