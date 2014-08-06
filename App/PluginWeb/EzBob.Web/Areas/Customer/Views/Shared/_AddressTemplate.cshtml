@@ -12,19 +12,19 @@
 	var i = 0;
 	_.each(addresses, function(address) {
 		var shortAddress = [
-			address.Line1,
-			address.Line2,
-			address.Line3,
-			address.Town,
-			address.Country,
-			address.Postcode
+			address.Line1 || '',
+			address.Line2 || '',
+			address.Line3 || '',
+			address.Town || '',
+			address.Country || '',
+			address.Postcode || ''
 		];
 
 		shortAddress.clean('');
 
 		%><div class="address-selected">
 			<!-- Address information -->
-			<input type="text" class="form_field" id="<%-addresses.addressInput%>" readonly="readonly" name="addressInput" type="text" ui-event-control-id="address-form:address" value="<%-shortAddress.join(", ")%>" />
+			<input type="text" class="form_field" id="<%-addresses.addressInput%>" readonly="readonly" name="addressInput" ui-event-control-id="address-form:address" value="<%-shortAddress.join(', ')%>" />
 			<a href="#" class="removeAddress" style="margin-top: 4px;" element-number="<%=i%>" ui-event-control-id="address-form:clear">clear</a>
 			<input type="hidden" name="<%-name%>[<%=i%>].Credits_display_text" value="<%=address.Credits_display_text%>" />
 			<input type="hidden" name="<%=name%>[<%=i%>].Accountadminpage" value="<%=address.Accountadminpage%>" />
