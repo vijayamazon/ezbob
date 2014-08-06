@@ -1422,9 +1422,7 @@
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.js" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
-      <DependentUpon>ezbob.shops.coffee</DependentUpon>
-    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.js">
       <DependentUpon>ezbob.shops.sage.coffee</DependentUpon>
     </Content>
@@ -2026,7 +2024,6 @@
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.coffee" />
