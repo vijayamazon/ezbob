@@ -103,6 +103,9 @@
 
 		[HttpGet]
 		public System.Web.Mvc.ActionResult Dashboard() {
+			
+			WizardComplete();
+
 			var blm = new WizardBrokerLeadModel(Session);
 
 			if (blm.BrokerFillsForCustomer) {
@@ -135,18 +138,6 @@
 		} // Dashboard
 
 		#endregion method ToProfile
-
-		#region method LinkAccountsComplete
-
-		[Ajax]
-		[HttpPost]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult LinkAccountsComplete() {
-			WizardComplete();
-			return Json(new { });
-		} // LinkAccountsComplete
-
-		#endregion method LinkAccountsComplete
 
 		#region method TakeQuickOffer
 
@@ -183,10 +174,7 @@
 
 		#region method WizardComplete
 
-		[Ajax]
-		[HttpPost]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult WizardComplete() {
+		public void WizardComplete() {
 			Session["WizardComplete"] = true;
 			TempData["WizardComplete"] = true;
 			var customer = m_oContext.Customer;
@@ -207,7 +195,6 @@
 				ms_oLog.Debug("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
 			} // if
 
-			return Json(new { });
 		} // WizardComplete
 
 		private void WizardCompleteTrn(Customer customer) {

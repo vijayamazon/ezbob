@@ -77,8 +77,7 @@
 
             <div class="attardi-button cunt-button form_buttons_container">
                 <button class="back-store button btn-grey pull-right">Back</button>
-                <a class="btn-continue button btn-green continue disabled alignright" id="finish-wizard" ui-event-control-id="link-account:submit">Complete</a>
-
+                <a href="@Url.Action("Dashboard", "CustomerDetails", new { Area="Customer" })" class="btn-continue button btn-green continue disabled alignright" id="finish-wizard" ui-event-control-id="link-account:submit">Complete</a>
                 <a class="btn-back-to-quick-offer button btn-green alignright" ui-event-control-id="link-account:back_to_quick_offer">Back</a>
                 <a id="link_account_implicit_back" style="display: none;" class="hide" ui-event-control-id="link-account:implicit_back"></a>
             </div>

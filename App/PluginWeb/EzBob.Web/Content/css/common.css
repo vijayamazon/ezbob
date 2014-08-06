@@ -1557,6 +1557,7 @@ button,
     cursor: default;
     position:relative;
     top:0;
+    pointer-events: none;
 }
 
 td.account-logo {
@@ -1760,9 +1761,11 @@ div.form_field_container { margin-bottom: 1.6em; }
 
 input.form_field_left_side { max-width: 60%; }
 
-input.form_field_right_side { float: right;margin-right: 14px; width: 32%; max-width: 180px; height: 36px; }
+input.form_field_right_side,
+button.form_field_right_side { float: right;margin-right: 14px; width: 32%; max-width: 180px; height: 36px; }
 
-input.form_field_right_side_signup_phone { float: right; margin-right: 10px; width: 26%;height: 36px; }
+input.form_field_right_side_signup_phone,
+button.form_field_right_side_signup_phone { float: right; margin-right: 10px; width: 26%;height: 36px; }
 
 .add-customer-entry-comment-size {
     width: 96%;

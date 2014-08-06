@@ -89,7 +89,6 @@ class EzBob.StoreInfoView extends Backbone.View
 
     events:
         'click a.connect-store': 'close'
-        'click a.continue': 'next'
         'click .btn-showmore': 'toggleShowMoreAccounts'
         'click .btn-go-to-link-accounts': 'showLinkAccountsForm'
         'click .btn-take-quick-offer': 'takeQuickOffer'
@@ -463,20 +462,6 @@ class EzBob.StoreInfoView extends Backbone.View
         @storeList.show()
         $(document).attr "title", @oldTitle
         #@updateEarnedPoints()
-        false
-
-    next: ->
-        btn = @$el.find(".continue")
-        return if btn.hasClass("disabled")
-
-        BlockUi 'on'
-        btn.addClass('disabled')
-        xhr = $.post window.gRootPath + 'CustomerDetails/LinkAccountsComplete'
-        xhr.done ->
-            EzBob.App.trigger "clear"
-            window.location = window.gRootPath + 'CustomerDetails/Dashboard'
-        xhr.error ->
-            UnBlockUi()
         false
 
     ready: (name) ->
