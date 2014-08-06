@@ -1,6 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Misc
 {
-	using System.Data;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using Ezbob.Database;
@@ -22,42 +22,25 @@
 
 		public override void Execute()
 		{
-			CustomerAddresses = GetAddresses(_customerId);
+			OwnedAddresses = GetAddresses(_customerId);
 		}
 
-		private CustomerAddressesModel GetAddresses(int customerId)
+		private List<CustomerAddressModel> GetAddresses(int customerId)
 		{
 			if (customerId == 0)
 			{
-				return new CustomerAddressesModel();
+				return null;
 			}
 
-			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure,
-												new QueryParameter("CustomerId", customerId));
-			var addressesResults = new SafeReader(dt.Rows[0]);
-			var model = new CustomerAddressesModel();
-			model.CurrentAddress = new CustomerAddressModel
-				{
-					Line1 = addressesResults["Line1"],
-					Line2 = addressesResults["Line2"],
-					Line3 = addressesResults["Line3"],
-					City = addressesResults["Line4"],
-					County = addressesResults["Line5"],
-					PostCode = addressesResults["Line6"],
-				};
-			model.PreviousAddress = new CustomerAddressModel
-				{
-					Line1 = addressesResults["Line1Prev"],
-					Line2 = addressesResults["Line2Prev"],
-					Line3 = addressesResults["Line3Prev"],
-					City = addressesResults["Line4Prev"],
-					County = addressesResults["Line5Prev"],
-					PostCode = addressesResults["Line6Prev"],
-				};
+			List<CustomerAddressModel> ownedAddresses = DB.Fill<CustomerAddressModel>("GetCustomerAddresses",
+			                                                                          CommandSpecies.StoredProcedure,
+			                                                                          new QueryParameter("CustomerId", customerId));
+			foreach (CustomerAddressModel address in ownedAddresses)
+			{
+				FillAddress(address);
+			}
 
-			FillAddress(model.CurrentAddress);
-			FillAddress(model.PreviousAddress);
-			return model;
+			return ownedAddresses;
 		}
 
 		public void FillAddress(CustomerAddressModel model)
@@ -189,6 +172,6 @@
 		}
 
 		private readonly int _customerId;
-		public CustomerAddressesModel CustomerAddresses { get; set; }
+		public List<CustomerAddressModel> OwnedAddresses { get; set; }
 	}
 }

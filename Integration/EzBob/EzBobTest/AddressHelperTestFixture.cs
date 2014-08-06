@@ -13,18 +13,18 @@
 		private readonly List<CustomerAddressModel> _list = new List<CustomerAddressModel>();
 		private AConnection _db;
 		private ConsoleLog _log;
+
 		[Test]
 		public void TestAddress()
 		{
 			var helper = new CustomerAddressHelper(0, _db, _log);
-			foreach (var addr in _list)
+			helper.Execute();
+			foreach (var addr in helper.OwnedAddresses)
 			{
-				helper.FillAddress(addr);
 				bool pass = (!string.IsNullOrEmpty(addr.HouseNumber) || !string.IsNullOrEmpty(addr.HouseName));
 				_log.Debug(addr.ToString());
 				Assert.AreEqual(true, pass);
 			}
-			
 		}
 
 		[SetUp]

@@ -186,8 +186,7 @@
 						Line2 = addr2,
 						Line3 = addr3,
 						Town = addr4,
-						Postcode = postcode,
-						OwnedByCustomer = false
+						Postcode = postcode
 					});
 				} // postcode is not empty
 			} // if company is not null

@@ -1,11 +1,10 @@
-namespace EZBob.DatabaseLib.Model.Database {
+namespace EZBob.DatabaseLib.Model.Database 
+{
 	using System;
 	using System.Collections.Generic;
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
 	using LandRegistryLib;
-
-	#region class LandRegistry
 
 	public class LandRegistry
 	{
@@ -19,12 +18,10 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string Request { get; set; }
 		public virtual string Response { get; set; }
 		public virtual string AttachmentPath { get; set; }
+		public virtual CustomerAddress CustomerAddress { get; set; }
 		public virtual IList<LandRegistryOwner> Owners { get; set; }
-	} // class LandRegistry
+	}
 
-	#endregion class LandRegistry
-
-	#region LandRegistryMap
 	public class LandRegistryMap : ClassMap<LandRegistry>
 	{
 		public LandRegistryMap()
@@ -42,22 +39,23 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.Request).CustomType("StringClob");
 			Map(x => x.Response).CustomType("StringClob");
 			Map(x => x.AttachmentPath).Length(300);
+			References(x => x.CustomerAddress, "AddressId");
 
 			HasMany(x => x.Owners)
 				.AsBag()
 				.KeyColumn("LandRegistryId")
 				.Cascade.All()
 				.Inverse();
-		} // constructor
-	} // class LandRegistryMap
-	#endregion
+		}
+	}
 
 	public class LandRegistryRequestTypeType : EnumStringType<LandRegistryRequestType> { }
 
 	public class LandRegistryResponseTypeType : EnumStringType<LandRegistryResponseType> { }
-} // namespace EZBob.DatabaseLib.Model.Database
+}
 
-namespace EZBob.DatabaseLib.Repository {
+namespace EZBob.DatabaseLib.Repository 
+{
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -67,17 +65,21 @@ namespace EZBob.DatabaseLib.Repository {
 	using NHibernate;
 	using NHibernate.Linq;
 
-	public class LandRegistryRepository : NHibernateRepositoryBase<LandRegistry> {
-		public LandRegistryRepository(ISession session) : base(session) { } // constructor
+	public class LandRegistryRepository : NHibernateRepositoryBase<LandRegistry> 
+	{
+		public LandRegistryRepository(ISession session) : base(session) { }
 
-		public IEnumerable<LandRegistry> GetByCustomer(Customer customer) {
+		public IEnumerable<LandRegistry> GetByCustomer(Customer customer) 
+		{
 			return GetAll().Where(x => x.Customer.Id == customer.Id).ToFuture();
-		} // GetByCustomer
+		}
 
-		public LandRegistry GetRes(int customerId, string titleNumber) {
+		public LandRegistry GetRes(int customerId, string titleNumber) 
+		{
 			bool bIsEmptyTitleNumber = string.IsNullOrWhiteSpace(titleNumber);
 
-			Func<LandRegistry, bool> oIsMatch = x => {
+			Func<LandRegistry, bool> oIsMatch = x => 
+			{
 				if (x.Customer.Id != customerId)
 					return false;
 
@@ -91,12 +93,13 @@ namespace EZBob.DatabaseLib.Repository {
 					return true;
 
 				return x.TitleNumber == titleNumber;
-			}; // oIsMatch
+			};
 
 			return GetAll().Where(oIsMatch).OrderByDescending(x => x.InsertDate).FirstOrDefault();
-		} // GetRes
+		}
 
-		public LandRegistry GetEnquiry(int customerId, string postCode) {
+		public LandRegistry GetEnquiry(int customerId, string postCode) 
+		{
 			return GetAll().Where(x =>
 					(x.Customer.Id == customerId) &&
 					(x.RequestType == LandRegistryRequestType.Enquiry || x.RequestType == LandRegistryRequestType.EnquiryPoll) &&
@@ -105,16 +108,18 @@ namespace EZBob.DatabaseLib.Repository {
 				)
 				.OrderByDescending(x => x.InsertDate)
 				.FirstOrDefault();
-		} // GetEnquiry
+		}
 
-		public LandRegistry GetByTitleNumber(string titleNumber) {
+		public LandRegistry GetByTitleNumber(string titleNumber) 
+		{
 			return GetAll().Where(x => x.TitleNumber == titleNumber && IsResRequest(x)).OrderByDescending(x => x.InsertDate).FirstOrDefault();
-		} // GetByTitleNumber
+		}
 
-		private bool IsResRequest(LandRegistry x) {
+		private bool IsResRequest(LandRegistry x) 
+		{
 			return
 				(x.RequestType == LandRegistryRequestType.Res) ||
 				(x.RequestType == LandRegistryRequestType.ResPoll);
-		} // IsResRequest
-	} // class LandRegistryRepository
-} // namespace EZBob.DatabaseLib.Repository
+		}
+	}
+}

@@ -6,18 +6,22 @@
 
 	public class PropertiesModel
 	{
-		public PropertiesModel(int numberOfProperties, int numberOfMortgages, int assetsValue, int totalMortgages, int zoopla1YearAverage, DateTime? zooplaUpdateDate)
+		public PropertiesModel()
+		{
+			Properties = new List<PropertyModel>();
+		}
+
+		public void Init(int numberOfProperties, int numberOfMortgages, int assetsValue, int totalMortgages, int zoopla1YearAverage, DateTime? zooplaUpdateDate)
 		{
 			NumberOfProperties = numberOfProperties;
 			NumberOfMortgages = numberOfMortgages;
 			MarketValue = assetsValue;
 			SumOfMortgages = totalMortgages;
 			NetWorth = MarketValue - SumOfMortgages;
-			Ltv = MarketValue == 0 ? 0 : SumOfMortgages*100/MarketValue;
+			Ltv = MarketValue == 0 ? 0 : SumOfMortgages * 100 / MarketValue;
 			NetWorthPercentages = 100 - Ltv;
 			Zoopla1YearAverage = zoopla1YearAverage;
 			ZooplaUpdateDate = zooplaUpdateDate;
-			Properties = new List<PropertyModel>();
 		}
 
 		// TODO: add data for main address for fields that holds totals

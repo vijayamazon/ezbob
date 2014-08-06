@@ -40,7 +40,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string Pobox { get; set; }
 		public virtual string Mailsortcode { get; set; }
 		public virtual string Udprn { get; set; }
-		public virtual bool OwnedByCustomer { get; set; }
+		public virtual bool IsOwnerAccordingToLandRegistry { get; set; }
 
 		[Newtonsoft.Json.JsonIgnore]
 		[ScriptIgnore]
@@ -116,6 +116,8 @@ namespace EZBob.DatabaseLib.Model.Database.Mappings
 			Map(x => x.Pobox).Column("Pobox").Length(200);
 			Map(x => x.Mailsortcode).Column("Mailsortcode").Length(200);
 			Map(x => x.Udprn).Column("Udprn").Length(200);
+			Map(x => x.IsOwnerAccordingToLandRegistry);
+			
 			References(x => x.Director, "DirectorId");
 			References(x => x.Customer, "CustomerId");
 			References(x => x.Company, "CompanyId");

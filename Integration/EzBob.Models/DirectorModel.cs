@@ -108,8 +108,7 @@
 						Postcode = director.Postcode,
 						AddressType = nBusinessType == TypeOfBusinessReduced.Limited
 							? CustomerAddressType.LimitedDirectorHomeAddress
-							: CustomerAddressType.NonLimitedDirectorHomeAddress,
-						OwnedByCustomer = false
+							: CustomerAddressType.NonLimitedDirectorHomeAddress
 					},
 				},
 

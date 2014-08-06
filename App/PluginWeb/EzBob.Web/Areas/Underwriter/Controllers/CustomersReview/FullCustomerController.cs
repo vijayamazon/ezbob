@@ -37,6 +37,8 @@
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly LoanRepository _loanRepository;
 		private readonly CustomerAddressRepository customerAddressRepository;
+		private readonly LandRegistryRepository landRegistryRepository;
+
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
 		private readonly ServiceClient serviceClient;
@@ -55,7 +57,8 @@
 											NHibernateRepositoryBase<MP_AlertDocument> docRepo,
 											IBugRepository bugs,
 											LoanRepository loanRepository,
-											CustomerAddressRepository customerAddressRepository)
+											CustomerAddressRepository customerAddressRepository,
+											LandRegistryRepository landRegistryRepository)
 		{
 			_customers = customers;
 			_session = session;
@@ -71,6 +74,7 @@
 			_bugs = bugs;
 			_loanRepository = loanRepository;
 			this.customerAddressRepository = customerAddressRepository;
+			this.landRegistryRepository = landRegistryRepository;
 			serviceClient = new ServiceClient();
 		}
 
@@ -149,7 +153,7 @@
 			var pricingTime = sw.Elapsed.TotalMilliseconds;
 			sw.Restart();
 
-			model.Properties = PropertiesController.GetPropertiesModelData(customer, customerAddressRepository);
+			model.Properties = PropertiesController.GetPropertiesModelData(customer, customerAddressRepository, landRegistryRepository);
 			
 			sw.Stop();
 			var propTime = sw.Elapsed.TotalMilliseconds;

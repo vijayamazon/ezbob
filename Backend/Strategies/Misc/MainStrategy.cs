@@ -227,7 +227,7 @@
 		{
 			var customerAddressesHelper = new CustomerAddressHelper(customerId, DB, Log);
 			customerAddressesHelper.Execute();
-			strategyHelper.GetLandRegistryData(customerId, customerAddressesHelper.CustomerAddresses);
+			strategyHelper.GetLandRegistryData(customerId, customerAddressesHelper.OwnedAddresses);
 		} // Execute
 
 		#endregion method Execute

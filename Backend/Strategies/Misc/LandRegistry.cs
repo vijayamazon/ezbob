@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
+	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -102,8 +103,8 @@
 
 		public override void Execute() {
 			var helper = new StrategyHelper();
-
-			LandRegistryDataModel response = helper.GetLandRegistryData(m_nCustomerID, m_sTitleNumber);
+			LandRegistry landRegistry;
+			LandRegistryDataModel response = helper.GetLandRegistryData(m_nCustomerID, m_sTitleNumber, out landRegistry);
 
 			Result = new Serialized(response);
 		} // Execute

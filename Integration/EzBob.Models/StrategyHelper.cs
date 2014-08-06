@@ -18,15 +18,16 @@
 	using CommonLib.TimePeriodLogic;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
-	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
+	using LandRegistryLib;
 	using Marketplaces;
 	using NHibernate;
 	using StructureMap;
 	using ZooplaLib;
 	using log4net;
 	using MailApi;
+	using EnumDescription = Ezbob.Utils.Extensions.EnumDescription;
 
 	public class StrategyHelper
 	{
@@ -42,6 +43,8 @@
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
 		private readonly ServiceLogRepository serviceLogRepository;
 		private readonly CustomerMarketPlaceRepository _marketPlaceRepository;
+		private readonly CustomerAddressRepository customerAddressRepository;
+		private readonly LandRegistryRepository landRegistryRepository;
 
 		public StrategyHelper()
 		{
@@ -57,6 +60,8 @@
 			loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
 			serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
 			_marketPlaceRepository = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
+			customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
+			landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
 		}
 
 		public double GetAnualTurnOverByCustomer(int customerId)
@@ -669,7 +674,7 @@
 
 			MP_ServiceLog serviceLog = serviceLogRepository
 				.GetByCustomer(customer)
-				.Where(sl => sl.ServiceType == ExperianServiceType.Consumer.DescriptionAttr())
+				.Where(sl => sl.ServiceType == EnumDescription.DescriptionAttr(ExperianServiceType.Consumer))
 				.OrderByDescending(sl => sl.InsertDate)
 				.FirstOrDefault();
 			if (serviceLog == null)
@@ -745,8 +750,7 @@
 
 		public void GetZooplaData(int customerId, bool reCheck = false)
 		{
-			var addressRepo = ObjectFactory.GetInstance<CustomerAddressRepository>();
-			var customerAddress = addressRepo.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
+			var customerAddress = customerAddressRepository.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
 
 			if (customerAddress != null)
 			{
@@ -790,7 +794,7 @@
 			}
 		}
 
-		public LandRegistryLib.LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber)
+		public LandRegistryLib.LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber, out LandRegistry landRegistry)
 		{
 			log.DebugFormat("GetLandRegistryData begin cId {0} titleNumber {1}", customerId, titleNumber);
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
@@ -828,6 +832,8 @@
 
 					lrRepo.SaveOrUpdate(cache);
 				}
+
+				landRegistry = cache;
 				return cacheModel;
 			}
 
@@ -880,6 +886,7 @@
 					dbLr.Owners = owners;
 				}
 				lrRepo.Save(dbLr);
+				landRegistry = dbLr;
 
 				if (model.Attachment != null)
 				{
@@ -900,6 +907,7 @@
 			}
 			else
 			{
+				landRegistry = null;
 				model = new LandRegistryLib.LandRegistryDataModel
 					{
 						Res = new LandRegistryLib.LandRegistryResModel { Rejection = new LandRegistryLib.LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" } },
@@ -1013,43 +1021,80 @@
 			return totals;
 		}
 
-		public void GetLandRegistryData(int customerId, CustomerAddressesModel addresses)
+		public void GetLandRegistryData(int customerId, List<CustomerAddressModel> addresses)
 		{
-			LandRegistryLib.LandRegistryDataModel model = null;
-			if (!string.IsNullOrEmpty(addresses.CurrentAddress.HouseName))
+			foreach (CustomerAddressModel address in addresses)
 			{
-				model = GetLandRegistryEnquiryData(customerId, null, addresses.CurrentAddress.HouseName, null, null,
-										   addresses.CurrentAddress.PostCode);
-			}
-
-			else if (!string.IsNullOrEmpty(addresses.CurrentAddress.HouseNumber))
-			{
-				model = GetLandRegistryEnquiryData(customerId, addresses.CurrentAddress.HouseNumber, null, null, null,
-										   addresses.CurrentAddress.PostCode);
-			}
-
-			else if (!string.IsNullOrEmpty(addresses.CurrentAddress.FlatOrApartmentNumber) && string.IsNullOrEmpty(addresses.CurrentAddress.HouseNumber))
-			{
-				model = GetLandRegistryEnquiryData(customerId, addresses.CurrentAddress.FlatOrApartmentNumber, null, null, null,
-										   addresses.CurrentAddress.PostCode);
-			}
-
-			if (model != null && model.Enquery != null && model.ResponseType == LandRegistryLib.LandRegistryResponseType.Success &&
-				model.Enquery.Titles.Any() && model.Enquery.Titles.Count == 1)
-			{
-				GetLandRegistryData(customerId, model.Enquery.Titles[0].TitleNumber);
-			}
-			else
-			{
-				int num = 0;
-				if (model != null && model.Enquery != null && model.Enquery.Titles.Any())
+				LandRegistryDataModel model = null;
+				if (!string.IsNullOrEmpty(address.HouseName))
 				{
-					num = model.Enquery.Titles.Count;
+					model = GetLandRegistryEnquiryData(customerId, null, address.HouseName, null, null,
+													   address.PostCode);
 				}
-				log.WarnFormat(
-					"No land registry retrieved for customer id: {5}, house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, num of enquries {4}",
-					addresses.CurrentAddress.HouseName, addresses.CurrentAddress.HouseNumber,
-					addresses.CurrentAddress.FlatOrApartmentNumber, addresses.CurrentAddress.PostCode, num, customerId);
+
+				else if (!string.IsNullOrEmpty(address.HouseNumber))
+				{
+					model = GetLandRegistryEnquiryData(customerId, address.HouseNumber, null, null, null,
+													   address.PostCode);
+				}
+
+				else if (!string.IsNullOrEmpty(address.FlatOrApartmentNumber) &&
+						 string.IsNullOrEmpty(address.HouseNumber))
+				{
+					model = GetLandRegistryEnquiryData(customerId, address.FlatOrApartmentNumber, null, null, null,
+													   address.PostCode);
+				}
+
+				if (model != null && model.Enquery != null && model.ResponseType == LandRegistryResponseType.Success &&
+				    model.Enquery.Titles.Any() && model.Enquery.Titles.Count == 1)
+				{
+					LandRegistry dbLandRegistry;
+					LandRegistryDataModel landRegistryDataModel = GetLandRegistryData(customerId, model.Enquery.Titles[0].TitleNumber, out dbLandRegistry);
+					
+					if (landRegistryDataModel.ResponseType == LandRegistryResponseType.Success)
+					{
+						// Verify customer is among owners
+						bool isOwnerAccordingToLandRegistry = false;
+						Customer customer = _customers.Get(customerId);
+
+						// Save for this address if customer is among owners
+						// Also add addressId to LR entry
+						var b = new LandRegistryModelBuilder();
+						var lrData = b.BuildResModel(landRegistryDataModel.Response, landRegistryDataModel.Res.TitleNumber);
+						foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties)
+						{
+							if (customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
+							    customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname))
+							{
+								// Customer is owner
+								isOwnerAccordingToLandRegistry = true;
+								break;
+							}
+						}
+
+						if (isOwnerAccordingToLandRegistry)
+						{
+							CustomerAddress dbAdress = customerAddressRepository.Get(address.AddressId);
+							dbAdress.IsOwnerAccordingToLandRegistry = true;
+							customerAddressRepository.SaveOrUpdate(dbAdress);
+
+							dbLandRegistry.CustomerAddress = dbAdress;
+							landRegistryRepository.SaveOrUpdate(dbLandRegistry);
+						}
+					}
+				}
+				else
+				{
+					int num = 0;
+					if (model != null && model.Enquery != null && model.Enquery.Titles.Any())
+					{
+						num = model.Enquery.Titles.Count;
+					}
+					log.WarnFormat(
+						"No land registry retrieved for customer id: {5}, house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, num of enquries {4}",
+						address.HouseName, address.HouseNumber,
+						address.FlatOrApartmentNumber, address.PostCode, num, customerId);
+				}
 			}
 		}
 	}

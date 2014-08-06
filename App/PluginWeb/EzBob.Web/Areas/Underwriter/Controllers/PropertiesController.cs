@@ -6,6 +6,7 @@
 	using System.Text.RegularExpressions;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using Infrastructure.Attributes;
 	using LandRegistryLib;
@@ -18,11 +19,13 @@
 	{
 		private readonly CustomerRepository customerRepository;
 		private readonly CustomerAddressRepository customerAddressRepository;
+		private readonly LandRegistryRepository landRegistryRepository;
 
 		public PropertiesController()
 		{
 			customerRepository = ObjectFactory.GetInstance<CustomerRepository>();
 			customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
+			landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
 		}
 
 		[Ajax]
@@ -30,12 +33,12 @@
 		public JsonResult Index(int id)
 		{
 			var customer = customerRepository.TryGet(id);
-			PropertiesModel data = GetPropertiesModelData(customer, customerAddressRepository);
+			PropertiesModel data = GetPropertiesModelData(customer, customerAddressRepository, landRegistryRepository);
 
 			return Json(data, JsonRequestBehavior.AllowGet);
 		}
 
-		public static PropertiesModel GetPropertiesModelData(Customer customer, CustomerAddressRepository customerAddressRepository)
+		public static PropertiesModel GetPropertiesModelData(Customer customer, CustomerAddressRepository customerAddressRepository, LandRegistryRepository landRegistryRepository)
 		{
 			int numberOfProperties = customer.PropertyStatus.IsOwnerOfMainAddress ? 1 : 0;
 			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
@@ -51,6 +54,22 @@
 			string postcode = null;
 			string formattedAddress = null;
 
+			var data = new PropertiesModel();
+			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res && 
+														 x.ResponseType == LandRegistryResponseType.Success &&
+														 x.CustomerAddress != null && 
+														 x.CustomerAddress.Customer != null && 
+														 x.CustomerAddress.Customer.Id == customer.Id)
+											 .Select(x => new { Response = x.Response, Title = x.TitleNumber });
+
+			var b = new LandRegistryModelBuilder();
+			data.LandRegistries = new List<LandRegistryResModel>();
+			foreach (var lr in lrs)
+			{
+				LandRegistryResModel lrData = b.BuildResModel(lr.Response, lr.Title);
+				data.LandRegistries.Add(lrData);
+			}
+
 			if (customer.PropertyStatus.IsOwnerOfMainAddress)
 			{
 				var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
@@ -58,63 +77,68 @@
 				{
 					postcode = currentAddress.Postcode;
 					formattedAddress = currentAddress.FormattedAddress;
-					Zoopla zoopla = currentAddress.Zoopla.LastOrDefault();
 
-					if (zoopla != null)
+					if (currentAddress.IsOwnerAccordingToLandRegistry)
 					{
-						zooplaAverage1YearPrice = zoopla.AverageSoldPrice1Year;
-						zooplaUpdateDate = zoopla.UpdateDate;
-						CrossCheckModel.GetZooplaAndMortgagesData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue, out experianMortgage, out experianMortgageCount);
+						Zoopla zoopla = currentAddress.Zoopla.LastOrDefault();
+
+						if (zoopla != null)
+						{
+							zooplaAverage1YearPrice = zoopla.AverageSoldPrice1Year;
+							zooplaUpdateDate = zoopla.UpdateDate;
+							CrossCheckModel.GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
+						}
 					}
 				}
 			}
 
-			var data = new PropertiesModel(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage, zooplaAverage1YearPrice, zooplaUpdateDate);
+			CrossCheckModel.GetMortgagesData(customer, out experianMortgage, out experianMortgageCount);
+
+			data.Init(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage, zooplaAverage1YearPrice, zooplaUpdateDate);
 			data.Postcode = postcode;
 			data.FormattedAddress = formattedAddress;
 
-
-			// TODO: Get all owned addr - most expensive first
-			//data.Properties.Add(new PropertyModel() { Address = "test addr", NumberOfOwners = 7, YearOfOwnership = 1991 });// Fill properly
-			//data.Properties.Add(new PropertyModel() { Address = "test addr2", NumberOfOwners = 71, YearOfOwnership = 1992 });// Fill properly
-
-
 			foreach (CustomerAddress ownedProperty in customer.AddressInfo.OtherPropertiesAddresses)
 			{
-				// TODO: Verify ownership in LR
+				if (!ownedProperty.IsOwnerAccordingToLandRegistry)
+				{
+					continue;
+				}
 
-				var ddd = new PropertyModel();
+				var ownedPropertyModel = new PropertyModel();
 				Zoopla zoopla = ownedProperty.Zoopla.LastOrDefault();
 
 				if (zoopla != null)
 				{
-					ddd.MarketValue = GetZoopla1YearEstimate(zoopla);
+					ownedPropertyModel.MarketValue = GetZoopla1YearEstimate(zoopla);
 
 					// Add to totals
-					zooplaValue += ddd.MarketValue;
+					zooplaValue += ownedPropertyModel.MarketValue;
 					zooplaAverage1YearPrice += zoopla.AverageSoldPrice1Year;
 				}
 
+				ownedPropertyModel.Address = ownedProperty.FormattedAddress;
 
-				ddd.Address = ownedProperty.FormattedAddress;
+				// Find matching land registry
+				bool foundMatching = false;
+				foreach (LandRegistryResModel lrData in data.LandRegistries)
+				{
+					foreach (LandRegistryAddressModel propertyAddress in  lrData.PropertyAddresses)
+					{
+						if (propertyAddress.PostCode == ownedProperty.Postcode)
+						{
+							foundMatching = true;
+							ownedPropertyModel.YearOfOwnership = 2014;// TODO: get from lrData.???;
+							ownedPropertyModel.NumberOfOwners = lrData.Proprietorship.ProprietorshipParties.Count;
+							break;
+						}
+					}
 
-
-				// Get matching LR
-				//ddd.YearOfOwnership = LR.x
-				//ddd.NumberOfOwners = LR.x
-
-
-			}
-
-
-
-			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res).Select(x => new { Response = x.Response, Title = x.TitleNumber });
-			var b = new LandRegistryModelBuilder();
-			data.LandRegistries = new List<LandRegistryResModel>();
-
-			foreach (var lr in lrs)
-			{
-				data.LandRegistries.Add(b.BuildResModel(lr.Response, lr.Title));
+					if (foundMatching)
+					{
+						break;
+					}
+				}
 			}
 
 			return data;

@@ -62,7 +62,7 @@
 			serviceClient = new ServiceClient();
 		}
 
-		public static void GetZooplaAndMortgagesData(Customer customer, string zooplaEstimateStr, int zoopla1YearAvg, out int zooplaValue, out int mortgageBalance, out int mortgageCount)
+		public static void GetZooplaData(Customer customer, string zooplaEstimateStr, int zoopla1YearAvg, out int zooplaValue)
 		{
 			var regexObj = new Regex(@"[^\d]");
 			var stringVal = string.IsNullOrEmpty(zooplaEstimateStr) ? "" : regexObj.Replace(zooplaEstimateStr.Trim(), "");
@@ -72,6 +72,10 @@
 				intVal = zoopla1YearAvg;
 			}
 			zooplaValue = intVal;
+		}
+
+		public static void GetMortgagesData(Customer customer, out int mortgageBalance, out int mortgageCount)
+		{
 			var data = serviceClient.Instance.LoadExperianConsumerMortgageData(customer.Id);
 			mortgageBalance = data.Value.MortgageBalance;
 			mortgageCount = data.Value.NumMortgages;
@@ -103,7 +107,8 @@
 				current.ZooplaEstimate = zoopla.ZooplaEstimate;
 
 				int zooplaValue, experianMortgage, experianMortgageCount;
-				GetZooplaAndMortgagesData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue, out experianMortgage, out experianMortgageCount);
+				GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
+				GetMortgagesData(customer, out experianMortgage, out experianMortgageCount);
 				current.ZooplaValue = zooplaValue;
 				ExperianMortgage = experianMortgage;
 				ExperianMortgageCount = experianMortgageCount;
