@@ -11,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EzBob.AmazonLib;
+	using EzBob.Backend.Strategies.Misc;
 	using EzBob.PayPal;
 	using EzBob.eBayLib;
 	using EzService;
@@ -42,6 +43,8 @@
 			lock (ms_oLock) {
 				ms_bStop = true;
 			} // lock
+
+			GetAvailableFunds.StopBackgroundThread = true;
 		} // Handle
 
 		#endregion method Shutdown
