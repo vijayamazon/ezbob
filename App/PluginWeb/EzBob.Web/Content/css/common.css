@@ -806,7 +806,7 @@ select.SubBank {
     }
 
     .BankContainer span.HSBC.on {
-        background-position: -406px -40px;
+        background-position: -406px -1px;
         width: 153px;
     }
 
@@ -816,18 +816,18 @@ select.SubBank {
     }
 
     .BankContainer span.Barclays.on {
-        background-position: -746px -40px;
+        background-position: -746px -1px;
         width: 177px;
     }
 
     .BankContainer span.Lloyds.off {
         background-position: -193px -1px;
-        width: 210px;
+        width: 190px;
     }
 
     .BankContainer span.Lloyds.on {
-        background-position: -205px -40px;
-        width: 200px;
+        background-position: -205px -1px;
+        width: 190px;
     }
 
     .BankContainer span.RBS.off {
@@ -836,18 +836,18 @@ select.SubBank {
     }
 
     .BankContainer span.RBS.on {
-        background-position: -653px -40px;
+        background-position: -653px -1px;
         width: 93px;
     }
 
     .BankContainer span.Santander.off {
         background-position: 0 -1px;
-        width: 193px;
+        width: 190px;
     }
 
     .BankContainer span.Santander.on {
-        background-position: 0 -40px;
-        width: 193px;
+        background-position: 0 -1px;
+        width: 190px;
     }
 
     .BankContainer span.NatWest.off {
@@ -856,7 +856,7 @@ select.SubBank {
     }
 
     .BankContainer span.NatWest.on {
-        background-position: -928px -40px;
+        background-position: -928px -1px;
         width: 165px;
     }
 
@@ -876,7 +876,7 @@ select.SubBank {
     }
 
     .BankContainer span.Halifax.on {
-        background-position: -562px -40px;
+        background-position: -562px -1px;
         width: 88px;
     }
 
@@ -886,7 +886,7 @@ select.SubBank {
     }
 
     .BankContainer span.Nationwide.on {
-        background-position: -1098px -40px;
+        background-position: -1098px -1px;
         width: 180px;
     }
 
