@@ -31,7 +31,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
     editOfferClick: function () {
         this.ui.editOfferDiv.toggle();
         $.cookie('editOfferVisible', this.ui.editOfferDiv.is(":visible"));
-        $(".profile-content").css({ "margin-top": this.$el.height() + "px" });
+        $(".profile-content").css({ "margin-top": (this.$el.height() + 10) + "px" });
     },
 
     collapseAll: function () {

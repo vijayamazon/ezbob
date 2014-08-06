@@ -15,14 +15,17 @@
 .ui-dialog {
     background-color: #ffffff;
 }
+
 input[type="button"],
 input[type="submit"],
 input[type="reset"],
 button,
 .button,
-.ui-widget button
+.ui-widget button,
+.ui-widget-content
 {
     font-family: 'Open Sans';
+    color: #4d4d4d;
 }
 
 h1, h2, h3, h4, h5, h6 {

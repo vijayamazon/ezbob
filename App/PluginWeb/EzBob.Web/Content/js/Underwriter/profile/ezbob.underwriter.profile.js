@@ -364,6 +364,10 @@
         return false;
       }
       $('.editOfferDiv').hide();
+      $.cookie('editOfferVisible', false);
+      $(".profile-content").css({
+        "margin-top": ($("#profileHead").height() + 10) + "px"
+      });
       if (this.loanInfoModel.get('InterestRate') <= 0) {
         EzBob.ShowMessage('Wrong Interest Rate value (' + this.loanInfoModel.get('InterestRate') + '), please enter the valid value (above zero)', 'Error');
         return false;
