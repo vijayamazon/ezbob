@@ -397,7 +397,7 @@ EzBob.StoreInfoView = Backbone.View.extend({
 		else {
 			sShow = '.wizard_message';
 			sRemove = '.profile_message';
-		}
+		} // if
 
 		this.storeList.find(sShow).show();
 		this.storeList.find(sRemove).remove();
