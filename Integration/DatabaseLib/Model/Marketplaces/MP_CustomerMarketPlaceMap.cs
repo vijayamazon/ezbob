@@ -9,7 +9,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		{
 			Table("MP_CustomerMarketPlace");
 			Id(x => x.Id);
-			Map(x => x.SecurityData).Not.Nullable();
+			Map(x => x.SecurityData).Not.Nullable().Length(int.MaxValue);
 			Map(x => x.Created).CustomType<UtcDateTimeType>();
 			Map(x => x.Updated).CustomType<UtcDateTimeType>();
 			Map(x => x.UpdatingStart).CustomType<UtcDateTimeType>();
