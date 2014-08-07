@@ -123,7 +123,7 @@
                         </tr>
                         <tr>
                             <td><b>Residential Status</b></td>
-                            <td>@(Model.PropertyStatus == null ? "" : Model.PropertyStatus.Description)</td>
+                            <td>@Model.PropertyStatus.Description</td>
                             <td>@Model.EBay.ResidentialStatus</td>
                             <td>@Model.PayPal.ResidentialStatus</td>
                         </tr>
