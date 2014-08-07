@@ -3638,14 +3638,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EmailConfirmationConfirmUserAsync(nUserID, nUnderwriterID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {
-            return base.Channel.ResetPassword123456(nUnderwriterID, nTargetID, nTarget);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ResetPassword123456Async(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {
-            return base.Channel.ResetPassword123456Async(nUnderwriterID, nTargetID, nTarget);
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID) {
             return base.Channel.CalculateVatReturnSummary(nCustomerMarketplaceID);
         }
