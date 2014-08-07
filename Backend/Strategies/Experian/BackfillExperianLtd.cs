@@ -33,7 +33,8 @@
 			IEnumerable<SafeReader> lst = DB.ExecuteEnumerable("LoadServiceLogForLtdBackfill", CommandSpecies.StoredProcedure);
 
 			foreach (SafeReader sr in lst) {
-				var parser = new ParseExperianLtd(sr["Id"], DB, Log);
+				long serviceLogId = sr["Id"];
+				var parser = new ParseExperianLtd(serviceLogId, DB, Log);
 				parser.Execute();
 
 				try {
@@ -41,7 +42,7 @@
 					int? score = parser.Result != null ? parser.Result.CommercialDelphiScore : null;
 					decimal? balance = Utils.GetLimitedCaisBalance(parser.Result);
 					_experianHistoryRepository.SaveOrUpdateLimitedHistory(
-						parser.Result.ServiceLogID,
+						serviceLogId,
 						sr["InsertDate"],
 						companyRefNum,
 						score,
