@@ -226,17 +226,25 @@
 				{
 					r = GetRequestFromXml(xmlForDebug);
 				}
+				Log.Info("zzzzz - going to call writelog");
 				var writelog = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
-
+				Log.Info("zzzzz - after writelog");
+				
+				Log.InfoFormat("zzzzz - going to save aml. Result is {0}", result == null ? " null" : "not null");
 				SaveAmlData(key, writelog.ServiceLog.Id, writelog.ServiceLog.InsertDate, result);
+				Log.Info("zzzzz - after saving aml");
 
+				Log.Info("zzzzz - going to call Parse");
 				result.Parse(r);
+				Log.Info("zzzzz - after Parsing");
 			}
 			catch (Exception exception)
 			{
 				Log.Error(exception);
 				result.Error = exception.Message;
+				Log.Info("zzzzz - going to call writelog in exception");
 				Utils.WriteLog(execRequest, string.Format("Excecption: {0}", exception.Message), ExperianServiceType.Aml, customerId);
+				Log.Info("zzzzz - after writelog in exception");
 			}
 
 			return result;
