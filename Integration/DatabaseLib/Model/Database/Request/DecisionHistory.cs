@@ -102,7 +102,7 @@
 			if (action == DecisionActions.Reject)
 			{
 				customer.NumRejects++;
-				string reasons = item.RejectReasons.Select(x => x.RejectReason.Reason).Aggregate((a, b) => a + ", " + b);
+				string reasons = item.RejectReasons.Any() ? item.RejectReasons.Select(x => x.RejectReason.Reason).Aggregate((a, b) => a + ", " + b) : null;
 				customer.RejectedReason = string.IsNullOrEmpty(reasons) ? comment : string.Format("{0} ({1})", reasons, comment);
 			}
 
