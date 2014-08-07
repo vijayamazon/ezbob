@@ -47,7 +47,7 @@
 			//if (!cr.Customer.OfferStart.HasValue)
 			//	cr.Customer.OfferStart = cr.OfferStart;
 
-			var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.Customer.OfferStart.Value);
+			var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.OfferStart.Value);
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
 			calc.GetState();
