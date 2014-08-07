@@ -17,14 +17,14 @@ BEGIN
 		INSERT INTO CreatePasswordTokens(TokenID, CustomerID, DateCreated, DateAccessed, DateDeleted)
 		SELECT
 			@TokenID,
-			c.Id,
+			c.UserId,
 			@Now,
 			NULL,
 			NULL
 		FROM
-			Customer c
+			Security_User c
 		WHERE
-			c.Name = @Email
+			c.Email = @Email
 
 		IF @@ROWCOUNT = 1
 			SELECT CONVERT(BIT, 1) AS Success

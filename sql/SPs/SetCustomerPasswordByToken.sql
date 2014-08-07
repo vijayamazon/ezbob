@@ -23,16 +23,16 @@ BEGIN
 	IF @IsBrokerLead = 0
 	BEGIN
 		SELECT
-			@CustomerID = c.Id
+			@CustomerID = c.UserId
 		FROM
-			Customer c
+			Security_User c
 			INNER JOIN CreatePasswordTokens t
-				ON c.Id = t.CustomerID
+				ON c.UserId = t.CustomerID
 				AND t.TokenID = @TokenID
 				AND t.DateAccessed IS NOT NULL
 				AND t.DateDeleted IS NULL
 		WHERE
-			c.Name = @Email
+			c.Email = @Email
 	END
 	ELSE BEGIN
 		SELECT

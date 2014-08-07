@@ -366,7 +366,7 @@
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, oOldPassword, oNewPassword);
 
 			if ((oInstance != null) && (oInstance.BrokerID > 0))
-				Execute<BrokerPasswordRestored>(null, oInstance.BrokerID, oInstance.BrokerID, oNewPassword);
+				Execute<BrokerPasswordChanged>(null, oInstance.BrokerID, oInstance.BrokerID, oNewPassword);
 
 			return oMetaData;
 		} // BrokerUpdatePassword

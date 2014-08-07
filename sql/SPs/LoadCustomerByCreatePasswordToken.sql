@@ -22,21 +22,24 @@ BEGIN
 
 	SELECT
 		@CustomerID = c.Id,
-		@Email = c.Name,
-		@FirstName = c.FirstName,
-		@LastName = c.Surname,
+		@Email = u.Email,
+		@FirstName = CASE WHEN c.Id IS NULL THEN b.ContactName ELSE c.FirstName END,
+		@LastName = CASE WHEN c.Id IS NULL THEN '' ELSE c.Surname END,
 		@DateAccessed = t.DateAccessed
 	FROM
-		Customer c
-		INNER JOIN CreatePasswordTokens t
-			ON c.Id = t.CustomerID
-			AND t.TokenID = @TokenID
-			AND (
-				t.DateAccessed IS NULL
-				OR
-				DATEDIFF(minute, t.DateAccessed, @Now) BETWEEN 0 AND 5
-			)
-			AND t.DateDeleted IS NULL
+		CreatePasswordTokens t
+		INNER JOIN Security_User u ON t.CustomerID = u.UserId
+		LEFT JOIN Customer c ON u.UserId = c.Id
+		LEFT JOIN Broker b ON u.UserId = b.UserID
+	WHERE
+		t.TokenID = @TokenID
+		AND (
+			t.DateAccessed IS NULL
+			OR
+			DATEDIFF(minute, t.DateAccessed, @Now) BETWEEN 0 AND 5
+		)
+		AND
+		t.DateDeleted IS NULL
 
 	------------------------------------------------------------------------------
 
@@ -56,5 +59,6 @@ BEGIN
 		@FirstName AS FirstName,
 		@LastName AS LastName
 
+	------------------------------------------------------------------------------
 END
 GO

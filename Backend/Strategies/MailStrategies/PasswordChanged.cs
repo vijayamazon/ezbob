@@ -19,19 +19,35 @@
 
 		public override string Name { get { return "Password Changed"; } } // Name
 
+		#region protected
+
 		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - New password";
 
 			Variables = new Dictionary<string, string> {
-				{"Password", m_sPassword},
-				{"FirstName", CustomerData.FirstName}
+				{ "Password", m_sPassword },
+				{ "FirstName", FirstName }
 			};
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables
 
+		#region property FirstName
+
+		protected virtual string FirstName {
+			get { return CustomerData.FirstName; } // get
+		} // FirstName
+
+		#endregion property FirstName
+
+		#endregion protected
+
+		#region private
+
 		private readonly string m_sPassword;
+
+		#endregion private
 	} // class PasswordChanged
 } // namespace
