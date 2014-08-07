@@ -284,17 +284,26 @@
             $('.header-info').show();
             $('.header-info-text').text("MY ACCOUNT");
             $('form').attr('action', document.location.href);
-            var amount = $('.amount').val();
-            var isPayEarly = amount != 5;
+
+            var isPayEarly = decodeURIComponent(getCallbackValue('payEarly') || "") == "True";
             var cardMinExpiryDate;
 
             if (isPayEarly) {
                 cardMinExpiryDate = moment();
+                $('.PayPointHeader h3').hide();
             }
             else {
                 var param = decodeURIComponent(getCallbackValue('cardMinExpiryDate') || "");
                 cardMinExpiryDate = moment(param || moment().add("months", 3), "DD/MM/YYYY");
             }
+            
+            var hideSteps = decodeURIComponent(getCallbackValue('hideSteps') || "");
+            if (hideSteps != 'True') {
+                $(".dashboard-steps").show();
+            } else {
+                $('#amount-group').show();
+            }
+            
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
             //set user email in top bar
@@ -313,14 +322,6 @@
             $("#expiry").mask("99/99");
             $("#card_no").mask("9999999999999999");
             
-            var hideSteps = decodeURIComponent(getCallbackValue('hideSteps') || "");
-            if (hideSteps != 'True') {
-                $(".dashboard-steps").show();
-            } else {
-                $('#amount-group').show();
-                $('.PayPointHeader h3').hide();
-            }
-
             $('li[rel]').popover({ placement: 'left' });
 
             $('input[name="back"]').click(function () {

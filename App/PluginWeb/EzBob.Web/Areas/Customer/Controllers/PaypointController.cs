@@ -76,7 +76,8 @@
 						type, 
 						username = (_context.User != null ? _context.User.Name : ""),
 						cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
-						hideSteps = true
+						hideSteps = true,
+						payEarly = true
 					}, "https");
 
 				var oCustomer = _context.Customer;
