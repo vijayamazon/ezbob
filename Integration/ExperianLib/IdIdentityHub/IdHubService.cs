@@ -207,9 +207,10 @@
 			};
 			execRequest.PersonalData.Gender = gender == "M" ? GenderType.Male : GenderType.Female;
 
+			bool hadException = false;
+			ProcessConfigResponseType r = null;
 			try
 			{
-				ProcessConfigResponseType r;
 				if (string.IsNullOrEmpty(xmlForDebug))
 				{
 					try
@@ -226,25 +227,32 @@
 				{
 					r = GetRequestFromXml(xmlForDebug);
 				}
-				Log.Info("zzzzz - going to call writelog");
-				var writelog = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
-				Log.Info("zzzzz - after writelog");
-				
-				Log.InfoFormat("zzzzz - going to save aml. Result is {0}", result == null ? " null" : "not null");
-				SaveAmlData(key, writelog.ServiceLog.Id, writelog.ServiceLog.InsertDate, result);
-				Log.Info("zzzzz - after saving aml");
-
-				Log.Info("zzzzz - going to call Parse");
-				result.Parse(r);
-				Log.Info("zzzzz - after Parsing");
 			}
 			catch (Exception exception)
 			{
+				hadException = true;
 				Log.Error(exception);
 				result.Error = exception.Message;
-				Log.Info("zzzzz - going to call writelog in exception");
-				Utils.WriteLog(execRequest, string.Format("Excecption: {0}", exception.Message), ExperianServiceType.Aml, customerId);
-				Log.Info("zzzzz - after writelog in exception");
+			}
+
+			try
+			{
+				if (hadException)
+				{
+					Utils.WriteLog(execRequest, string.Format("Excecption: {0}", result.Error), ExperianServiceType.Aml, customerId);
+				}
+				else
+				{
+					var writelog = Utils.WriteLog(execRequest, r, ExperianServiceType.Aml, customerId);
+
+					SaveAmlData(key, writelog.ServiceLog.Id, writelog.ServiceLog.InsertDate, result);
+
+					result.Parse(r);
+				}
+			}
+			catch (Exception e)
+			{
+				Log.ErrorFormat("Exception while saving aml data: {0}", e);
 			}
 
 			return result;
@@ -269,16 +277,21 @@
 					IsActive = true
 				};
 
-			List<AmlResultsHighRiskRules> highRiskRules =
-				result.ReturnedHRP.Select(
-					rule =>
-					new AmlResultsHighRiskRules
-						{
-							RuleId = rule.HighRiskPolRuleID,
-							RuleText = rule.HighRiskPolRuleText,
-							AmlResult = amlResult
-						}).ToList();
-			amlResult.HighRiskRules = new HashedSet<AmlResultsHighRiskRules>(highRiskRules);
+			if (result.ReturnedHRP != null && result.ReturnedHRP.Length != 0)
+			{
+				List<AmlResultsHighRiskRules> highRiskRules =
+					result.ReturnedHRP.Select(
+						rule =>
+						new AmlResultsHighRiskRules
+							{
+								RuleId = rule.HighRiskPolRuleID,
+								RuleText = rule.HighRiskPolRuleText,
+								AmlResult = amlResult
+							}).ToList();
+
+				amlResult.HighRiskRules = new HashedSet<AmlResultsHighRiskRules>(highRiskRules);
+			}
+
 			amlResultsRepository.SaveOrUpdate(amlResult);
 		}
 
