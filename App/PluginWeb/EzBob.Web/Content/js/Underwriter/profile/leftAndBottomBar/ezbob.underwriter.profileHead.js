@@ -49,7 +49,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
                 that.$el.find(".box-title-collapse").hide();
                 $.cookie('collapseAll', false);
             }
-            $(".profile-content").css({ "margin-top": that.$el.height() + "px" });
+            $(".profile-content").css({ "margin-top": (that.$el.height() + 10) + "px" });
             return false;
         });
         return false;
