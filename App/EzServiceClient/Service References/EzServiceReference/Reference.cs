@@ -195,6 +195,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnPeriodsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult))]
@@ -604,6 +605,45 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="EmailConfirmationTokenActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class EmailConfirmationTokenActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AddressField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid TokenField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Address {
+            get {
+                return this.AddressField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AddressField, value) != true)) {
+                    this.AddressField = value;
+                    this.RaisePropertyChanged("Address");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid Token {
+            get {
+                return this.TokenField;
+            }
+            set {
+                if ((this.TokenField.Equals(value) != true)) {
+                    this.TokenField = value;
+                    this.RaisePropertyChanged("Token");
                 }
             }
         }
@@ -2532,6 +2572,30 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ResetPassword123456", ReplyAction="http://tempuri.org/IEzService/ResetPassword123456Response")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ResetPassword123456Async(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationGenerate", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationGenerateResponse")]
+        ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationGenerate", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationGenerateResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult> EmailConfirmationGenerateAsync(int nUserID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSend", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSendResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, string sFirstName, string sEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSend", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSendResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationGenerateAndSendAsync(int nUserID, string sFirstName, string sEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationCheckOne", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationCheckOneResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult EmailConfirmationCheckOne(System.Guid oToken);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationCheckOne", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationCheckOneResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> EmailConfirmationCheckOneAsync(System.Guid oToken);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationConfirmUser", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationConfirmUserResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationConfirmUser(int nUserID, int nUnderwriterID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationConfirmUser", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationConfirmUserResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationConfirmUserAsync(int nUserID, int nUnderwriterID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateVatReturnSummary", ReplyAction="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
         
@@ -3532,6 +3596,46 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken, bool bIsBrokerLead) {
             return base.Channel.SetCustomerPasswordByTokenAsync(sEmail, oPassword, oToken, bIsBrokerLead);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {
+            return base.Channel.ResetPassword123456(nUnderwriterID, nTargetID, nTarget);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ResetPassword123456Async(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {
+            return base.Channel.ResetPassword123456Async(nUnderwriterID, nTargetID, nTarget);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID) {
+            return base.Channel.EmailConfirmationGenerate(nUserID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult> EmailConfirmationGenerateAsync(int nUserID) {
+            return base.Channel.EmailConfirmationGenerateAsync(nUserID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, string sFirstName, string sEmail) {
+            return base.Channel.EmailConfirmationGenerateAndSend(nUserID, sFirstName, sEmail);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationGenerateAndSendAsync(int nUserID, string sFirstName, string sEmail) {
+            return base.Channel.EmailConfirmationGenerateAndSendAsync(nUserID, sFirstName, sEmail);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.IntActionResult EmailConfirmationCheckOne(System.Guid oToken) {
+            return base.Channel.EmailConfirmationCheckOne(oToken);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> EmailConfirmationCheckOneAsync(System.Guid oToken) {
+            return base.Channel.EmailConfirmationCheckOneAsync(oToken);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationConfirmUser(int nUserID, int nUnderwriterID) {
+            return base.Channel.EmailConfirmationConfirmUser(nUserID, nUnderwriterID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationConfirmUserAsync(int nUserID, int nUnderwriterID) {
+            return base.Channel.EmailConfirmationConfirmUserAsync(nUserID, nUnderwriterID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {

@@ -92,4 +92,76 @@
 	} // AffordabilityType
 
 	#endregion enum AffordabilityType
-} // namespace Ezbob.Backend.Models
+
+	#region enum EmailConfirmationRequestState
+
+	[DataContract]
+	public enum EmailConfirmationRequestState {
+		/// <summary>
+		/// The state of the email is unknown. For old customers.
+		/// </summary>
+		[EnumMember]
+		Unknown = 0,
+		/// <summary>
+		/// Request was issued, but not confirmed.
+		/// </summary>
+		[EnumMember]
+		Pending = 1,
+		/// <summary>
+		/// The email in this request was confirmed.
+		/// </summary>
+		[EnumMember]
+		Confirmed = 2,
+		/// <summary>
+		/// The request is cancelled and not valid any more.
+		/// </summary>
+		[EnumMember]
+		Canceled = 3,
+		/// <summary>
+		/// Manually confirmed customer.
+		/// </summary>
+		[EnumMember]
+		ManuallyConfirmed = 4,
+		/// <summary>
+		/// The request is confirmed because other request for this customer has been confirmed.
+		/// </summary>
+		[EnumMember]
+		ImplicitlyConfirmed = 5,
+
+		[EnumMember]
+		_MAX_
+	} // enum EmailConfirmationRequestState
+
+	#endregion enum EmailConfirmationRequestState
+
+	#region enum EmailConfirmationResponse
+
+	[DataContract]
+	public enum EmailConfirmationResponse {
+		/// <summary>
+		/// This member must be the first.
+		/// </summary>
+		[EnumMember]
+		NotDone = 0,
+
+		/// <summary>
+		/// This member must be the second.
+		/// </summary>
+		[EnumMember]
+		Confirmed = 1,
+
+		[EnumMember]
+		NotFound = 2,
+
+		[EnumMember]
+		InvalidState = 3,
+
+		/// <summary>
+		/// This member must be the last.
+		/// </summary>
+		[EnumMember]
+		OtherError
+	} // enum EmailConfirmationResponse
+
+	#endregion enum EmailConfirmationResponse
+} // namespace

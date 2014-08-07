@@ -29,6 +29,7 @@
 
 		public override void Execute() {
 			m_oSp.GetFirst().Fill(Result);
+			Log.Debug("Result for token id {0} is: {1}.", m_oSp.TokenID, Result);
 		} // Execute
 
 		#endregion method Execute

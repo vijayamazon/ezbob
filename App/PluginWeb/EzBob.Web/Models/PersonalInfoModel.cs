@@ -9,6 +9,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils;
 	using Infrastructure;
+	using Infrastructure.Email;
 	using NHibernate;
 	using CommonLib;
 	using ServiceClientProxy;
@@ -183,7 +184,7 @@
 
 			Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 			Email = customer.Name;
-			EmailState = customer.EmailState.ToString();
+			EmailState = EmailConfirmationState.Get(customer);
 
 			if (customer.GreetingMailSentDate != null)
 			{

@@ -315,9 +315,6 @@
     <Compile Include="Model\Database\LoanOptions.cs" />
     <Compile Include="Model\Database\LoanOptionsMap.cs" />
     <Compile Include="Model\Database\Request\DecisionHistory.cs" />
-    <Compile Include="Model\Email\EmailConfirmationRequest.cs" />
-    <Compile Include="Model\Email\EmailConfirmationRequestRepository.cs" />
-    <Compile Include="Model\Email\IEmailConfirmationRequestRepository.cs" />
     <Compile Include="Model\Fraud\FraudAddress.cs" />
     <Compile Include="Model\Fraud\FraudBankAccount.cs" />
     <Compile Include="Model\Fraud\FraudCompany.cs" />

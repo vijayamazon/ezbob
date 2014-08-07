@@ -1,31 +1,16 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
-	using ConfigManager;
-	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class BrokerPasswordRestored : PasswordRestored {
 		#region constructor
 
-		public BrokerPasswordRestored(int nBrokerID, Password oPassword, AConnection oDb, ASafeLog oLog) : base(nBrokerID, oDb, oLog) {
-			ForcedPassword = oPassword.Primary;
-		} // constructor
-
-		internal BrokerPasswordRestored(int nBrokerID, string sPassword, AConnection oDb, ASafeLog oLog) : base(nBrokerID, oDb, oLog) {
-			ForcedPassword = sPassword;
+		public BrokerPasswordRestored(int nBrokerID, AConnection oDb, ASafeLog oLog) : base(nBrokerID, oDb, oLog) {
 		} // constructor
 
 		#endregion constructor
 
 		public override string Name { get { return "Broker Password Restored"; } } // Name
-
-		#region property ProfilePage
-
-		protected override string ProfilePage {
-			get { return CurrentValues.Instance.BrokerSite + "#login"; }
-		} // ProfilePage
-
-		#endregion property ProfilePage
 
 		#region property Salutation
 

@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
+	using Infrastructure.Email;
 	using Underwriter.Models;
 	using PaymentServices.Calculators;
 	using System.Collections.Generic;
@@ -62,7 +63,7 @@
 			customerModel.Id = customer.Id;
 			customerModel.userName = user.Name;
 			customerModel.Email = customer.Name;
-			customerModel.EmailState = customer.EmailState.ToString();
+			customerModel.EmailState = EmailConfirmationState.Get(customer);
 
 			customerModel.CustomerPersonalInfo = customer.PersonalInfo;
 

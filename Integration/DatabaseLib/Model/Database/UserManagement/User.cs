@@ -31,6 +31,7 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement {
 		public virtual string SecurityAnswer { get; set; }
 		public virtual bool IsPasswordRestored { get; set; }
 		public virtual string EzPassword { get; set; }
+		public virtual int? EmailStateID { get; set; }
 
 		public virtual IEnumerable<Permission> Permissions {
 			get { return Roles.SelectMany(r => r.Permissions); } // get

@@ -6,7 +6,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using System.Web.Script.Serialization;
 	using CustomerRelations;
 	using Loans;
-	using Email;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
 	using NHibernateWrapper.NHibernate.Types;
@@ -513,7 +512,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual decimal SetupFee { get; set; }
 
 		public virtual string ReferenceSource { get; set; }
-		public virtual EmailConfirmationRequestState EmailState { get; set; }
 		public virtual bool IsTest { get; set; }
 		public virtual bool IsAvoid { get; set; }
 		public virtual CardInfo CurrentCard { get; set; }

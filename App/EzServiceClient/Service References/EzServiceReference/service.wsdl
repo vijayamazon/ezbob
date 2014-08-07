@@ -376,6 +376,30 @@
   <wsdl:message name="IEzService_ResetPassword123456_OutputMessage">
     <wsdl:part name="parameters" element="tns:ResetPassword123456Response" />
   </wsdl:message>
+  <wsdl:message name="IEzService_EmailConfirmationGenerate_InputMessage">
+    <wsdl:part name="parameters" element="tns:EmailConfirmationGenerate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailConfirmationGenerate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EmailConfirmationGenerateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailConfirmationGenerateAndSend_InputMessage">
+    <wsdl:part name="parameters" element="tns:EmailConfirmationGenerateAndSend" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailConfirmationGenerateAndSend_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EmailConfirmationGenerateAndSendResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailConfirmationCheckOne_InputMessage">
+    <wsdl:part name="parameters" element="tns:EmailConfirmationCheckOne" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailConfirmationCheckOne_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EmailConfirmationCheckOneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailConfirmationConfirmUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:EmailConfirmationConfirmUser" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailConfirmationConfirmUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EmailConfirmationConfirmUserResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_CalculateVatReturnSummary_InputMessage">
     <wsdl:part name="parameters" element="tns:CalculateVatReturnSummary" />
   </wsdl:message>
@@ -1204,6 +1228,22 @@
     <wsdl:operation name="ResetPassword123456">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ResetPassword123456" message="tns:IEzService_ResetPassword123456_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ResetPassword123456Response" message="tns:IEzService_ResetPassword123456_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EmailConfirmationGenerate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationGenerate" message="tns:IEzService_EmailConfirmationGenerate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationGenerateResponse" message="tns:IEzService_EmailConfirmationGenerate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EmailConfirmationGenerateAndSend">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSend" message="tns:IEzService_EmailConfirmationGenerateAndSend_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSendResponse" message="tns:IEzService_EmailConfirmationGenerateAndSend_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EmailConfirmationCheckOne">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationCheckOne" message="tns:IEzService_EmailConfirmationCheckOne_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationCheckOneResponse" message="tns:IEzService_EmailConfirmationCheckOne_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EmailConfirmationConfirmUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationConfirmUser" message="tns:IEzService_EmailConfirmationConfirmUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailConfirmationConfirmUserResponse" message="tns:IEzService_EmailConfirmationConfirmUser_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CalculateVatReturnSummary">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateVatReturnSummary" message="tns:IEzService_CalculateVatReturnSummary_InputMessage" />
@@ -2060,6 +2100,51 @@
     </wsdl:operation>
     <wsdl:operation name="SetCustomerPasswordByToken">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SetCustomerPasswordByToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetPassword123456">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ResetPassword123456" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EmailConfirmationGenerate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EmailConfirmationGenerate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EmailConfirmationGenerateAndSend">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSend" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EmailConfirmationCheckOne">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EmailConfirmationCheckOne" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EmailConfirmationConfirmUser">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EmailConfirmationConfirmUser" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

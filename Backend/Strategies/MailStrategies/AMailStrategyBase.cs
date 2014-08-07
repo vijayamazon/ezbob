@@ -84,10 +84,21 @@
 		#region method GetRecipients
 
 		protected virtual Addressee[] GetRecipients() {
-			return m_bSendToCustomer ? new[] { new Addressee(CustomerData.Mail, toTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "") } : new Addressee[0];
+			return SendToCustomer ? new[] { new Addressee(CustomerData.Mail, toTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "") } : new Addressee[0];
 		} // GetRecipients
 
 		#endregion method GetCustomerEmail
+
+		#region property SendToCustomer
+
+		protected virtual bool SendToCustomer {
+			get { return m_bSendToCustomer; }
+			set { m_bSendToCustomer = value; }
+		} // SendToCustomer
+
+		private bool m_bSendToCustomer;
+
+		#endregion property SendToCustomer
 
 		#region method SetTemplateAndVariables
 
@@ -161,7 +172,6 @@
 		#region private
 
 		private readonly StrategiesMailer m_oMailer;
-		private readonly bool m_bSendToCustomer;
 
 		private static readonly object ms_oLock;
 		private static bool ms_bDefaultsAreReady;

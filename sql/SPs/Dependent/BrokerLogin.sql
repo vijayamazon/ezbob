@@ -11,14 +11,19 @@ BEGIN
 
 	DECLARE @BrokerId INT
 
+	------------------------------------------------------------------------------
+
 	SELECT
 		@BrokerID = BrokerID
 	FROM
-		Broker
+		Broker b
+		INNER JOIN Security_User u ON b.UserID = u.UserId
 	WHERE
-		ContactEmail = @Email
+		b.ContactEmail = @Email
 		AND
-		Password = @Password
+		u.EzPassword = @Password
+
+	------------------------------------------------------------------------------
 
 	IF @BrokerID IS NULL
 	BEGIN

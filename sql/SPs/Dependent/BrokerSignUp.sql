@@ -40,8 +40,8 @@ BEGIN
 	IF @ErrMsg = ''
 	BEGIN
 		BEGIN TRY
-			INSERT INTO Security_User (UserName, FullName, Email, BranchId)
-				VALUES (@ContactEmail, @FirmName, @ContactEmail, 0)
+			INSERT INTO Security_User (UserName, FullName, Email, BranchId, EzPassword)
+				VALUES (@ContactEmail, @FirmName, @ContactEmail, 0, @Password)
 		END TRY
 		BEGIN CATCH
 			SET @ErrMsg = 'Failed to create a user entry: ' + dbo.udfGetErrorMsg()
@@ -75,7 +75,7 @@ BEGIN
 				BrokerTermsID, IsTest, ReferredBy
 			) VALUES (
 				@FirmName, @FirmRegNum, @ContactName, @ContactEmail, @ContactMobile,
-				@ContactOtherPhone, @TempSourceRef, @EstimatedMonthlyClientAmount, @Password, @UserID,
+				@ContactOtherPhone, @TempSourceRef, @EstimatedMonthlyClientAmount, 'not used', @UserID,
 				@FirmWebSiteUrl, @EstimatedMonthlyApplicationCount, @AgreedToTermsDate, @AgreedToPrivacyPolicyDate,
 				@BrokerTermsID, @IsTest, @ReferredBy
 			)

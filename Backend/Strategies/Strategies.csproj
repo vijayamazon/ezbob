@@ -111,6 +111,9 @@
     <Compile Include="Esign\EsignProcessPending.cs" />
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
+    <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
+    <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationCheckOne.cs" />
+    <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationGenerate.cs" />
     <Compile Include="UserManagement\ResetPassword123456.cs" />
     <Compile Include="Misc\VerifyEnoughAvailableFunds.cs" />
     <Compile Include="Misc\DisableCurrentManualPacnetDeposits.cs" />

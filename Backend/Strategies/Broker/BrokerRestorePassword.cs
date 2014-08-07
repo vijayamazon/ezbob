@@ -3,7 +3,6 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils.Security;
 	using MailStrategies;
 	using Misc;
 
@@ -41,16 +40,7 @@
 
 			Log.Debug("Broker properties search result for mobile phone {0}:\n{1}", m_sMobile, oProperties);
 
-			var oPassword = new SimplePassword(8, oProperties.ContactEmail);
-
-			DB.ExecuteNonQuery(
-				"BrokerResetPassword",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@BrokerID", oProperties.BrokerID),
-				new QueryParameter("@Password", oPassword.Hash)
-			);
-
-			new BrokerPasswordRestored(oProperties.BrokerID, oPassword.RawValue, DB, Log).Execute();
+			new BrokerPasswordRestored(oProperties.BrokerID, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute

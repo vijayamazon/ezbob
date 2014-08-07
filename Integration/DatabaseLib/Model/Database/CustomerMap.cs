@@ -1,5 +1,4 @@
 using System;
-using EZBob.DatabaseLib.Model.Email;
 using FluentNHibernate.Mapping;
 using NHibernate.Type;
 
@@ -158,7 +157,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.Comment, "Comments").CustomType("StringClob").LazyLoad();
 			Map(x => x.SetupFee);
 			Map(x => x.ReferenceSource).Length(200);
-			Map(x => x.EmailState).CustomType<EmailConfirmationRequestStateType>();
 			Map(x => x.IsTest);
 			Map(x => x.IsAvoid, "AvoidAutomaticDescison");
 			Map(x => x.IsOffline);

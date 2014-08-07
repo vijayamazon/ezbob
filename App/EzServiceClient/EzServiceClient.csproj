@@ -73,10 +73,10 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.Misc.xsd">
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.PricingModel.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.PricingModel.xsd">
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.UserManagement.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Utils.xsd">
@@ -147,6 +147,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.EsignatureFileActionResult.datasource">

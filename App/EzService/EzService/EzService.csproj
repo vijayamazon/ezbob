@@ -78,6 +78,7 @@
     <Compile Include="ActionResults\AccountsToUpdateActionResult.cs" />
     <Compile Include="ActionResults\CompanyDataForCompanyScoreActionResult.cs" />
     <Compile Include="ActionResults\CompanyDataForCreditBureauActionResult.cs" />
+    <Compile Include="ActionResults\EmailConfirmationTokenActionResult.cs" />
     <Compile Include="ActionResults\PropertyStatusesActionResult.cs" />
     <Compile Include="ActionResults\CustomerDetailsActionResult.cs" />
     <Compile Include="ActionResults\ExperianConsumerMortgageActionResult.cs" />

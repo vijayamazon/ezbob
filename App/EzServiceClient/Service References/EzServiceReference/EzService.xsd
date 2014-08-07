@@ -204,6 +204,17 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
+  <xs:complexType name="EmailConfirmationTokenActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Address" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Token" type="ser:guid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="EmailConfirmationTokenActionResult" nillable="true" type="tns:EmailConfirmationTokenActionResult" />
   <xs:complexType name="VatReturnDataActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

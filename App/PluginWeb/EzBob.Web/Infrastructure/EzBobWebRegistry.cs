@@ -2,12 +2,10 @@ namespace EzBob.Web.Infrastructure
 {
 	using Code.Bank;
 	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using EZBob.DatabaseLib.Model.Email;
 	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
@@ -18,7 +16,6 @@ namespace EzBob.Web.Infrastructure
 	using Areas.Customer.Models;
 	using Code;
 	using Code.Agreements;
-	using Code.Email;
 	using Code.MpUniq;
 	using Models.Repository;
 	using ServiceClientProxy;
@@ -76,8 +73,6 @@ namespace EzBob.Web.Infrastructure
 				For<IMPUniqChecker>().Use<FakeMPUniqChecker>();
 			}
 
-			For<IEmailConfirmationRequestRepository>().Use<EmailConfirmationRequestRepository>();
-			For<IEmailConfirmation>().Use<EmailConfirmation>();
 			For<IDecisionHistoryRepository>().Use<DecisionHistoryRepository>();
 			
 			For<IYodleeAccountChecker>().Use<YodleeAccountChecker>();

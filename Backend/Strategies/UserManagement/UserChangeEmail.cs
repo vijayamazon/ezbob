@@ -1,7 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.UserManagement {
 	using System;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Email;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
@@ -67,7 +67,8 @@
 				m_oSpUpdate.RequestID
 			);
 
-			new SendEmailVerification(m_oSpUpdate.UserID, m_oData.Email, sAddress, DB, Log).Execute();
+			// TODO in the next line
+			new SendEmailVerification(m_oSpUpdate.UserID, "TODO: name",  m_oData.Email, sAddress, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute

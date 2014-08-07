@@ -1,15 +1,19 @@
 ﻿@model dynamic
-@{
-    var model = Model != null ? new RouteValueDictionary(Model) : null;
-    object message = "";
-    if (model != null)
-    {
-        model.TryGetValue("Message", out message);
-    }
-}
-<div class="span10 offset1">
-    <legend>Email confirmation</legend>
 
-        <h2 style="color: red">@message</h2>
-                
-</div>
+@{
+	var model = Model != null ? new RouteValueDictionary(Model) : null;
+
+	object message = "";
+
+	if (model != null) {
+		model.TryGetValue("Message", out message);
+	}
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2 align="center" style="color: red">@message</h2>

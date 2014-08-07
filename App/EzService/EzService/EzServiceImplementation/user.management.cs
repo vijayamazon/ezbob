@@ -1,7 +1,8 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
-	using EzBob.Backend.Strategies.Misc;
+	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.UserManagement;
+	using EzBob.Backend.Strategies.UserManagement.EmailConfirmation;
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
@@ -173,5 +174,59 @@
 		} // ResetPassword123456
 
 		#endregion method ResetPassword123456
+
+		#region method EmailConfirmationGenerate
+
+		public EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID) {
+			EmailConfirmationGenerate oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, null, nUserID);
+
+			return new EmailConfirmationTokenActionResult {
+				MetaData = oMetaData,
+				Token = oInstance.Token,
+				Address = oInstance.Address,
+			};
+		} // EmailConfirmationGenerate
+
+		#endregion method EmailConfirmationGenerate
+
+		#region method EmailConfirmationGenerateAndSend
+
+		public ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, string sFirstName, string sEmail) {
+			EmailConfirmationGenerate oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, null, nUserID);
+
+			if (string.IsNullOrWhiteSpace(oInstance.Address))
+				return oMetaData;
+
+			return Execute<SendEmailVerification>(nUserID, null, nUserID, sFirstName, sEmail, oInstance.Address);
+		} // EmailConfirmationGenerateAndSend
+
+		#endregion method EmailConfirmationGenerateAndSend
+
+		#region method EmailConfirmationCheckOne
+
+		public IntActionResult EmailConfirmationCheckOne(Guid oToken) {
+			EmailConfirmationCheckOne oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, oToken);
+
+			return new IntActionResult {
+				MetaData = oMetaData,
+				Value = (int)oInstance.Response,
+			};
+		} // EmailConfirmationCheckOne
+
+		#endregion method EmailConfirmationCheckOne
+
+		#region method EmailConfirmationConfirmUser
+
+		public ActionMetaData EmailConfirmationConfirmUser(int nUserID, int nUnderwriterID) {
+			return Execute<EmailConfirmationConfirmUser>(nUserID, nUnderwriterID, nUserID);
+		} // EmailConfirmationConfirmUser
+
+		#endregion method EmailConfirmationConfirmUser
 	} // class EzServiceImplementation
 } // namespace EzService

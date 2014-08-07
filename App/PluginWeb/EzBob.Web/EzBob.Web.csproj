@@ -178,6 +178,7 @@
     <Compile Include="Areas\Underwriter\Controllers\EsignaturesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
     <Compile Include="Areas\Underwriter\Models\DecisionModel.cs" />
+    <Compile Include="Infrastructure\Email\EmailConfirmationState.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManagerException.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcFileProcessor.cs" />
     <Compile Include="Areas\Customer\Models\EkmAccountModel.cs" />
@@ -282,10 +283,6 @@
     <Compile Include="Code\Bank\YodleeAccountChecker.cs" />
     <Compile Include="Code\Bank\IYodleeAccountChecker.cs" />
     <Compile Include="Code\ConcentAgreementHelper.cs" />
-    <Compile Include="Code\Email\EmailConfirmation.cs" />
-    <Compile Include="Code\Email\EmailConfirmationRequestInvalidStateException.cs" />
-    <Compile Include="Code\Email\EmailConfirmationRequestNotFoundException.cs" />
-    <Compile Include="Code\Email\IEmailConfirmation.cs" />
     <Compile Include="Code\LoanBuilder.cs" />
     <Compile Include="Code\LoanCreator.cs" />
     <Compile Include="Code\ReportGenerator\HeaderReportGenerator.cs" />

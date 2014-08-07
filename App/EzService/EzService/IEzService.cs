@@ -5,7 +5,6 @@
 	using ActionResults;
 	using EchoSignLib;
 	using EzBob.Backend.Models;
-	using EzBob.Backend.Strategies.Misc;
 	using EzBob.Backend.Strategies.PricingModel;
 	using EzBob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Models;
@@ -481,6 +480,18 @@
 
 		[OperationContract]
 		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
+
+		[OperationContract]
+		EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID);
+
+		[OperationContract]
+		ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, string sFirstName, string sEmail);
+
+		[OperationContract]
+		IntActionResult EmailConfirmationCheckOne(Guid oToken);
+
+		[OperationContract]
+		ActionMetaData EmailConfirmationConfirmUser(int nUserID, int nUnderwriterID);
 
 		#endregion User Management
 

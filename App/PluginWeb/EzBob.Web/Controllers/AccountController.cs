@@ -22,7 +22,6 @@ namespace EzBob.Web.Controllers {
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib.Ebusiness;
 	using Code;
-	using Code.Email;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -53,7 +52,6 @@ namespace EzBob.Web.Controllers {
 			m_oCustomers = ObjectFactory.GetInstance<CustomerRepository>();
 			m_oServiceClient = new ServiceClient();
 			m_oContext = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
-			m_oConfirmation = ObjectFactory.GetInstance<IEmailConfirmation>();
 			m_oSessionIpLog = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
 			m_oTestCustomers = ObjectFactory.GetInstance<ITestCustomerRepository>();
 			m_oCustomerStatusesRepository = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
@@ -377,7 +375,7 @@ namespace EzBob.Web.Controllers {
 					() => customer = CreateCustomer(model.EMail, promoCode, amount, mobilePhone)
 				).Execute();
 
-				string link = m_oConfirmation.GenerateLink(customer);
+				string link = m_oServiceClient.Instance.EmailConfirmationGenerate(customer.Id).Address;
 
 				var blm = new WizardBrokerLeadModel(Session);
 
@@ -676,6 +674,21 @@ namespace EzBob.Web.Controllers {
 				return Json(new { success = false, errorMessage = "Failed to set a password." }, JsonRequestBehavior.AllowGet);
 			} // if
 
+			try {
+				if (m_oBrokerHelper.IsBroker(model.UserName)) {
+					BrokerHelper.SetAuth(model.UserName);
+
+					return Json(new {
+						success = true,
+						errorMessage = string.Empty,
+						broker = true,
+					});
+				} // if is broker
+			}
+			catch (Exception e) {
+				ms_oLog.Warn(e, "Failed to check whether '{0}' is a broker login, continuing as a customer.", model.UserName);
+			} // try
+
 			Customer customer;
 
 			try {
@@ -707,7 +720,7 @@ namespace EzBob.Web.Controllers {
 			} // if user is disabled
 
 			model.SetCookie(LogOnModel.Roles.Customer);
-			return Json(new { success = true, errorMessage = string.Empty }, JsonRequestBehavior.AllowGet);
+			return Json(new { success = true, broker = false, errorMessage = string.Empty }, JsonRequestBehavior.AllowGet);
 		} // CustomerCreatePassword
 
 		#endregion action CustomerCreatePassword
@@ -996,7 +1009,6 @@ namespace EzBob.Web.Controllers {
 		private readonly CustomerRepository m_oCustomers;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext m_oContext;
-		private readonly IEmailConfirmation m_oConfirmation;
 		private readonly ICustomerSessionsRepository m_oSessionIpLog;
 		private readonly ITestCustomerRepository m_oTestCustomers;
 		private readonly ICustomerStatusesRepository m_oCustomerStatusesRepository;

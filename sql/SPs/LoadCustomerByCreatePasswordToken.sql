@@ -21,7 +21,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@CustomerID = c.Id,
+		@CustomerID = ISNULL(c.Id, b.UserID),
 		@Email = u.Email,
 		@FirstName = CASE WHEN c.Id IS NULL THEN b.ContactName ELSE c.FirstName END,
 		@LastName = CASE WHEN c.Id IS NULL THEN '' ELSE c.Surname END,

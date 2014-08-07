@@ -31,6 +31,7 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement {
 			References(u => u.SecurityQuestion, "SecurityQuestion1Id").LazyLoad();
 			Map(u => u.SecurityAnswer, "SecurityAnswer1").Length(200);
 			Map(u => u.EzPassword).Length(255);
+			Map(u => u.EmailStateID);
 		} // constructor
 	} // class UserMap
 } // namespace

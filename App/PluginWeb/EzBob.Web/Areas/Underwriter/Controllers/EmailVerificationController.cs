@@ -1,49 +1,50 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Code.Email;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Attributes;
-	using Infrastructure.Membership;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
-	public class EmailVerificationController : Controller
-	{
-		public EmailVerificationController(IEmailConfirmation confirmation, ICustomerRepository customers, IUsersRepository users)
-		{
-			_confirmation = confirmation;
+	public class EmailVerificationController : Controller {
+		public EmailVerificationController(ICustomerRepository customers, IEzbobWorkplaceContext oContext) {
 			_customers = customers;
 			m_oServiceClient = new ServiceClient();
-			_users = users;
-		}
+			m_oContext = oContext;
+		} // constructor
 
-		[Transactional]
 		[HttpPost]
 		[Permission(Name = "EmailConfirmationButton")]
-		public JsonResult ManuallyConfirm(int id)
-		{
-			var customer = _customers.Get(id);
-			_confirmation.ConfirmEmail(customer);
+		public JsonResult ManuallyConfirm(int id) {
+			try {
+				m_oServiceClient.Instance.EmailConfirmationConfirmUser(id, m_oContext.User.Id);
+			}
+			catch (Exception e) {
+				ms_oLog.Alert(e, "Failed to generate and send email confirmation request.");
+			} // try
 			return Json(new { });
-		}
+		} // ManuallyConfirm
 
-		[Transactional]
 		[Permission(Name = "EmailConfirmationButton")]
 		[HttpPost]
-		public JsonResult Resend(int id)
-		{
-			var customer = _customers.Get(id);
-			var user = _users.Get(id);
+		public JsonResult Resend(int id) {
+			try {
+				var customer = _customers.Get(id);
 
-			var address = _confirmation.GenerateLink(customer);
-			m_oServiceClient.Instance.SendEmailVerification(user.Id, customer.Name, address);
+				m_oServiceClient.Instance.EmailConfirmationGenerateAndSend(
+					customer.Id,
+					(customer.PersonalInfo == null ? "" : customer.PersonalInfo.FirstName),
+					customer.Name
+				);
+			}
+			catch (Exception e) {
+				ms_oLog.Alert(e, "Failed to generate and send email confirmation request.");
+			} // try
+
 			return Json(new { });
-		}
+		} // Resend
 
 		[HttpPost]
 		[Permission(Name = "EmailConfirmationButton")]
@@ -62,11 +63,10 @@
 			return Json(new { success = string.IsNullOrWhiteSpace(sErrorMessage), error = sErrorMessage, });
 		} // ChangeEmail
 
-		private readonly IEmailConfirmation _confirmation;
 		private readonly ICustomerRepository _customers;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly IUsersRepository _users;
+		private readonly IEzbobWorkplaceContext m_oContext;
 
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (EmailVerificationController));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(EmailVerificationController));
 	} // class EmailVerificationController
 } // namespace

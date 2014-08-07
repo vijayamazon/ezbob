@@ -57,7 +57,7 @@ EzBob.CustomerCreatePasswordView = EzBob.View.extend({
 
 			if (status === 'success') {
 				if (result.success) {
-					document.location.href = '' + window.gRootPath + 'Customer/Profile';
+					document.location.href = window.gRootPath + (result.broker ? 'Broker#login' : 'Customer/Profile');
 					return;
 				} // if
 			} // if
