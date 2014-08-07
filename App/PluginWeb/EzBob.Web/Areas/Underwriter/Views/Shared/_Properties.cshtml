@@ -20,13 +20,13 @@
                         </thead>
                         <tbody class="box-content">
                             <% _.each(model.Properties, function(prop, propertyCounter) { %>
-                        <tr>
-                            <td><span><%- propertyCounter %></span></td>
-                            <td><span><%- prop.MarketValue %></span></td>
-                            <td><span><%- prop.Address %></span></td>
-                            <td><span><%- prop.YearOfOwnership %></span></td>
-                            <td><span><%- prop.NumberOfOwners %></span></td>
-                        </tr>
+                                <tr>
+                                    <td><span><%- propertyCounter + 1 %></span></td>
+                                    <td><span><%- prop.MarketValue %></span></td>
+                                    <td><span><%- prop.Address %></span></td>
+                                    <td><span><%- prop.YearOfOwnership %></span></td>
+                                    <td><span><%- prop.NumberOfOwners %></span></td>
+                                </tr>
                             <% }); %>
                         </tbody>
                     </table>

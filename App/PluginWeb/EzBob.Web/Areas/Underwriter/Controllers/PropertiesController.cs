@@ -89,6 +89,15 @@
 							zooplaUpdateDate = zoopla.UpdateDate;
 							CrossCheckModel.GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
 						}
+						
+						var personalAddressPropertyModel = new PropertyModel { Address = formattedAddress, MarketValue = zooplaValue };
+						LandRegistry matchingLandRegistryEntry = landRegistryRepository.GetAll().FirstOrDefault(x => x.CustomerAddress.AddressId == currentAddress.AddressId);
+						personalAddressPropertyModel.YearOfOwnership = 2014;// TODO: get from lrData.???;
+						if (matchingLandRegistryEntry != null)
+						{
+							personalAddressPropertyModel.NumberOfOwners = matchingLandRegistryEntry.Owners.Count;
+						}
+						data.Properties.Add(personalAddressPropertyModel);
 					}
 				}
 			}
