@@ -9,7 +9,7 @@ EzBob.Profile.GetCashModel = Backbone.Model.extend({
 
 		var that = this;
 
-		$.post(window.gRootPath + 'Customer/Profile/GetRefreshInterval').done(function(result) {
+		$.post(window.gRootPath + 'Customer/CustomerStatus/GetRefreshInterval').done(function (result) {
 			setInterval(function() { that.refresh(); }, result.Interval);
 		});
 	}, // initialize
@@ -21,7 +21,7 @@ EzBob.Profile.GetCashModel = Backbone.Model.extend({
 			that.isRequestInProgress = true;
 
 			$.post(
-				window.gRootPath + 'Customer/Profile/GetCustomerStatus',
+				window.gRootPath + 'Customer/CustomerStatus/GetCustomerStatus',
 				{ customerId: that.customer.get('Id') }
 			).done(function(result) {
 				if (result.State !== that.previousState) {

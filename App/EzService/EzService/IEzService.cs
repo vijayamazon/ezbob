@@ -528,10 +528,7 @@
 
 		[OperationContract]
 		StringActionResult GetCustomerState(int customerId);
-
-		[OperationContract]
-		IntActionResult GetCustomerStatusRefreshInterval();
-
+		
 		#endregion Wizard
 
 		[OperationContract]

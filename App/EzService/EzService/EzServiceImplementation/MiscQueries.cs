@@ -123,26 +123,6 @@
 			};
 		}
 
-		public IntActionResult GetCustomerStatusRefreshInterval()
-		{
-			int res = 1000;
-			try
-			{
-				DataTable dt = DB.ExecuteReader("GetCustomerStatusRefreshInterval", CommandSpecies.StoredProcedure);
-				var sr = new SafeReader(dt.Rows[0]);
-				res = sr["RefreshInterval"];
-			}
-			catch (Exception e)
-			{
-				Log.Error("Exception occurred during calculation of customer's state. The exception:{0}", e);
-			}
-
-			return new IntActionResult
-			{
-				Value = res
-			};
-		}
-
 		public StringActionResult GetCustomerState(int customerId)
 		{
 			string res = string.Empty;

@@ -2151,7 +2151,7 @@ namespace ServiceClientProxy.EzServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetTarget", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.Misc")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PasswordResetTarget", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.UserManagement")]
     public enum PasswordResetTarget : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
@@ -2418,12 +2418,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateModelsAndAffordability", ReplyAction="http://tempuri.org/IEzService/CalculateModelsAndAffordabilityResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.MarketplacesActionResult> CalculateModelsAndAffordabilityAsync(int nCustomerID, System.Nullable<System.DateTime> oHistory);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ResetPassword123456", ReplyAction="http://tempuri.org/IEzService/ResetPassword123456Response")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ResetPassword123456", ReplyAction="http://tempuri.org/IEzService/ResetPassword123456Response")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ResetPassword123456Async(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetPricingModelModel", ReplyAction="http://tempuri.org/IEzService/GetPricingModelModelResponse")]
         ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
         
@@ -2532,6 +2526,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetCustomerPasswordByToken", ReplyAction="http://tempuri.org/IEzService/SetCustomerPasswordByTokenResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> SetCustomerPasswordByTokenAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, System.Guid oToken, bool bIsBrokerLead);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ResetPassword123456", ReplyAction="http://tempuri.org/IEzService/ResetPassword123456Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ResetPassword123456", ReplyAction="http://tempuri.org/IEzService/ResetPassword123456Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ResetPassword123456Async(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateVatReturnSummary", ReplyAction="http://tempuri.org/IEzService/CalculateVatReturnSummaryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
         
@@ -2597,12 +2597,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerState", ReplyAction="http://tempuri.org/IEzService/GetCustomerStateResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> GetCustomerStateAsync(int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval", ReplyAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult GetCustomerStatusRefreshInterval();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval", ReplyAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> GetCustomerStatusRefreshIntervalAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetAvailableFunds", ReplyAction="http://tempuri.org/IEzService/GetAvailableFundsResponse")]
         ServiceClientProxy.EzServiceReference.AvailableFundsActionResult GetAvailableFunds(int underwriterId);
@@ -3396,14 +3390,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CalculateModelsAndAffordabilityAsync(nCustomerID, oHistory);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {
-            return base.Channel.ResetPassword123456(nUnderwriterID, nTargetID, nTarget);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ResetPassword123456Async(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {
-            return base.Channel.ResetPassword123456Async(nUnderwriterID, nTargetID, nTarget);
-        }
-        
         public ServiceClientProxy.EzServiceReference.PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName) {
             return base.Channel.GetPricingModelModel(customerId, underwriterId, scenarioName);
         }
@@ -3548,6 +3534,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SetCustomerPasswordByTokenAsync(sEmail, oPassword, oToken, bIsBrokerLead);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {
+            return base.Channel.ResetPassword123456(nUnderwriterID, nTargetID, nTarget);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ResetPassword123456Async(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget) {
+            return base.Channel.ResetPassword123456Async(nUnderwriterID, nTargetID, nTarget);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID) {
             return base.Channel.CalculateVatReturnSummary(nCustomerMarketplaceID);
         }
@@ -3634,14 +3628,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> GetCustomerStateAsync(int customerId) {
             return base.Channel.GetCustomerStateAsync(customerId);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.IntActionResult GetCustomerStatusRefreshInterval() {
-            return base.Channel.GetCustomerStatusRefreshInterval();
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> GetCustomerStatusRefreshIntervalAsync() {
-            return base.Channel.GetCustomerStatusRefreshIntervalAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.AvailableFundsActionResult GetAvailableFunds(int underwriterId) {

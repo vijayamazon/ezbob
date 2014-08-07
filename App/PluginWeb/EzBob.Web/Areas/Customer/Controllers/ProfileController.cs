@@ -187,30 +187,6 @@
 
 		#endregion action SaveTargeting
 
-		#region action GetRefreshInterval
-
-		[Ajax]
-		[HttpPost]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult GetRefreshInterval() {
-			int refreshInterval = new ServiceClient().Instance.GetCustomerStatusRefreshInterval().Value;
-			return Json(new { Interval = refreshInterval });
-		} // GetRefreshInterval
-
-		#endregion action GetRefreshInterval
-
-		#region action GetCustomerStatus
-
-		[Ajax]
-		[HttpPost]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult GetCustomerStatus(int customerId) {
-			string state = new ServiceClient().Instance.GetCustomerState(customerId).Value;
-			return Json(new { State = state });
-		} // GetCustomerStatus
-
-		#endregion action GetCustomerStatus
-
 		#region action ApplyForALoan
 
 		[Ajax]

@@ -171,6 +171,7 @@
     <Compile Include="Areas\Broker\Controllers\BrokerHomeController\private.cs" />
     <Compile Include="Areas\Broker\Models\BrokerHomeModel.cs" />
     <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustomerStatusController.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
