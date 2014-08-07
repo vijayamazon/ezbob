@@ -18,6 +18,31 @@
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
 				ServicePointManager.Expect100Continue = true;
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+				Random r = new Random();
+				var a = r.Next(100);
+				LREnquiryServiceTestNS.Q1AddressType q1AddressType;
+				if (a < 50)
+				{
+					q1AddressType = new LREnquiryServiceTestNS.Q1AddressType()
+						{
+							BuildingName = null,
+							BuildingNumber = "71", // buildingNumber
+							StreetName = "Allerburn Lea", //streetName
+							CityName = "Alnwick", //cityName
+							PostcodeZone = null //postCode
+						};
+				}
+				else
+				{
+					q1AddressType = new LREnquiryServiceTestNS.Q1AddressType()
+					{
+						BuildingName = null,
+						BuildingNumber = "27", // buildingNumber
+						StreetName = "Church Road", //streetName
+						CityName = "Exeter", //cityName
+						PostcodeZone = null //postCode
+					};
+				}
 
 				var request = new LREnquiryServiceTestNS.RequestSearchByPropertyDescriptionV2_0Type
 					{
@@ -26,20 +51,15 @@
 								{
 									MessageID = new LREnquiryServiceTestNS.Q1TextType { Value = "012345" }
 								},
+
 						Product = new LREnquiryServiceTestNS.Q1ProductType
 							{
 								ExternalReference = new LREnquiryServiceTestNS.Q1ExternalReferenceType { Reference = "12345" },
 								CustomerReference = new LREnquiryServiceTestNS.Q1CustomerReferenceType { Reference = "23456" },
 								SubjectProperty = new LREnquiryServiceTestNS.Q1SubjectPropertyType
 									{
-										Address = new LREnquiryServiceTestNS.Q1AddressType()
-											{
-												BuildingName = null,
-												BuildingNumber = "27", // buildingNumber
-												StreetName = "Church Road", //streetName
-												CityName = "Exeter", //cityName
-												PostcodeZone = null //postCode
-											}
+
+										Address = q1AddressType
 									}
 							}
 					};
