@@ -576,6 +576,7 @@
     <Content Include="Content\css\images\tick.png" />
     <Content Include="Content\css\images\verisign_seal.gif" />
     <Content Include="Content\css\images\vip.PNG" />
+    <Content Include="Content\css\images\vip_bg.png" />
     <Content Include="Content\css\images\volusion-logo.png" />
     <Content Include="Content\css\images\whatsnew.png" />
     <Content Include="Content\css\images\xero-logo.png" />
