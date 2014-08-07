@@ -205,7 +205,7 @@ BEGIN
 		ExperianLtdID = @ExperianLimitedCompanyId
 	
 	SELECT
-		(SELECT AuthenticationIndex FROM AmlResults WHERE LookupKey = @FirstName + '_' + @MiddleInitial + '_' + @LastName + '_' + @Postcode) AS AmlScore,
+		(SELECT AuthenticationIndex FROM AmlResults WHERE LookupKey = @FirstName + '_' + @MiddleInitial + '_' + @LastName + '_' + @Postcode AND IsActive = 1) AS AmlScore,
 		@FirstName AS FirstName,
 		@LastName AS Surname,
 		CAST((CASE @DefaultCount WHEN 0 THEN 0 ELSE 1 END) AS BIT) AS HasDefaultAccounts,
