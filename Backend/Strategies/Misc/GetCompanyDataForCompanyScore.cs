@@ -61,7 +61,8 @@
 				if (nonLimitedDataTable.Rows.Count == 1)
 				{
 					var nonLimitedSafeReader = new SafeReader(nonLimitedDataTable.Rows[0]);
-					
+
+					Data.BusinessName = nonLimitedSafeReader["BusinessName"].ToNullString();
 					Data.Address1 = nonLimitedSafeReader["Address1"].ToNullString();
 					Data.Address2 = nonLimitedSafeReader["Address2"].ToNullString();
 					Data.Address3 = nonLimitedSafeReader["Address3"].ToNullString();
