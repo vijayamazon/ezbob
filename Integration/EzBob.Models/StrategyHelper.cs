@@ -931,7 +931,7 @@
 			}
 		}
 
-		public LandRegistryLib.LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode)
+		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode)
 		{
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
 
@@ -989,7 +989,8 @@
 			}
 
 			var model = lr.EnquiryByPropertyDescription(buildingNumber, buildingName, streetName, cityName, postCode, customerId);
-			var customer = _customers.Get(customerId);
+			Customer customer = _customers.Get(customerId);
+
 			lrRepo.Save(new LandRegistry
 				{
 					Customer = customer,
@@ -998,7 +999,7 @@
 					Request = model.Request,
 					Response = model.Response,
 					RequestType = model.RequestType,
-					ResponseType = model.ResponseType,
+					ResponseType = model.ResponseType
 				});
 			model.DataSource = LandRegistryLib.LandRegistryDataSource.Api;
 			return model;
@@ -1019,6 +1020,65 @@
 					Yodlee3MForRejection = GetYodleeForRejection(customer.Id, Get3MTurnoverFromValues)
 				};
 			return totals;
+		}
+
+		private bool IsOwner(Customer customer, string response, string titleNumber)
+		{
+			var b = new LandRegistryModelBuilder();
+			var lrData = b.BuildResModel(response, titleNumber);
+			foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties)
+			{
+				if (customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
+					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname))
+				{
+					// Customer is owner
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public void LinkLandRegistryAndAddress(int customerId, string response, string titleNumber, int landRegistryId)
+		{
+			var customer = _customers.Get(customerId);
+			var bb = new LandRegistryModelBuilder();
+			LandRegistryResModel landRegistryResModel = bb.BuildResModel(response);
+			bool isOwnerAccordingToLandRegistry = IsOwner(customer, response, titleNumber);
+			if (isOwnerAccordingToLandRegistry)
+			{
+				var ownedProperties = new List<CustomerAddress>(customer.AddressInfo.OtherPropertiesAddresses);
+				if (customer.PropertyStatus.IsOwnerOfMainAddress)
+				{
+					if (customer.AddressInfo.PersonalAddress.Count == 1)
+					{
+						ownedProperties.Add(customer.AddressInfo.PersonalAddress.First());
+					}
+				}
+
+				foreach (CustomerAddress ownedProperty in ownedProperties)
+				{
+					bool foundMatching = false;
+					foreach (LandRegistryAddressModel propertyAddress in landRegistryResModel.PropertyAddresses)
+					{
+						if (propertyAddress.PostCode == ownedProperty.Postcode)
+						{
+							foundMatching = true;
+							break;
+						}
+					}
+
+					if (foundMatching)
+					{
+						ownedProperty.IsOwnerAccordingToLandRegistry = true;
+						customerAddressRepository.SaveOrUpdate(ownedProperty);
+
+						LandRegistry dbLandRegistry = landRegistryRepository.Get(landRegistryId);
+						dbLandRegistry.CustomerAddress = ownedProperty;
+						break;
+					}
+				}
+			}
 		}
 
 		public void GetLandRegistryData(int customerId, List<CustomerAddressModel> addresses)
@@ -1054,24 +1114,8 @@
 					if (landRegistryDataModel.ResponseType == LandRegistryResponseType.Success)
 					{
 						// Verify customer is among owners
-						bool isOwnerAccordingToLandRegistry = false;
 						Customer customer = _customers.Get(customerId);
-
-						// Save for this address if customer is among owners
-						// Also add addressId to LR entry
-						var b = new LandRegistryModelBuilder();
-						var lrData = b.BuildResModel(landRegistryDataModel.Response, landRegistryDataModel.Res.TitleNumber);
-						foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties)
-						{
-							if (customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
-							    customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname))
-							{
-								// Customer is owner
-								isOwnerAccordingToLandRegistry = true;
-								break;
-							}
-						}
-
+						bool isOwnerAccordingToLandRegistry = IsOwner(customer, landRegistryDataModel.Response, landRegistryDataModel.Res.TitleNumber);
 						if (isOwnerAccordingToLandRegistry)
 						{
 							CustomerAddress dbAdress = customerAddressRepository.Get(address.AddressId);

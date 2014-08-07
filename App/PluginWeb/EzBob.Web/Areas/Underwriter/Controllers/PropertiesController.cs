@@ -105,7 +105,7 @@
 				{
 					continue;
 				}
-
+				
 				var ownedPropertyModel = new PropertyModel();
 				Zoopla zoopla = ownedProperty.Zoopla.LastOrDefault();
 
@@ -119,28 +119,14 @@
 				}
 
 				ownedPropertyModel.Address = ownedProperty.FormattedAddress;
-
-				// Find matching land registry
-				bool foundMatching = false;
-				foreach (LandRegistryResModel lrData in data.LandRegistries)
+				LandRegistry matchingLandRegistryEntry = landRegistryRepository.GetAll().FirstOrDefault(x => x.CustomerAddress.AddressId == ownedProperty.AddressId);
+				ownedPropertyModel.YearOfOwnership = 2014;// TODO: get from lrData.???;
+				if (matchingLandRegistryEntry != null)
 				{
-					foreach (LandRegistryAddressModel propertyAddress in lrData.PropertyAddresses)
-					{
-						if (propertyAddress.PostCode == ownedProperty.Postcode)
-						{
-							foundMatching = true;
-							ownedPropertyModel.YearOfOwnership = 2014;// TODO: get from lrData.???;
-							ownedPropertyModel.NumberOfOwners = lrData.Proprietorship.ProprietorshipParties.Count;
-							break;
-						}
-					}
-
-					if (foundMatching)
-					{
-						data.Properties.Add(ownedPropertyModel);
-						break;
-					}
+					ownedPropertyModel.NumberOfOwners = matchingLandRegistryEntry.Owners.Count;
 				}
+
+				data.Properties.Add(ownedPropertyModel);
 			}
 
 			return data;

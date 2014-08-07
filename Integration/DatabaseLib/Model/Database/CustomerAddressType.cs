@@ -11,6 +11,7 @@
 		NonLimitedCompanyAddressPrev = 9,
 		NonLimitedDirectorHomeAddressPrev = 10,
 		OtherPropertyAddress = 11,
+		OtherPropertyAddressRemoved = 12, // Was 11 in the past. 'No longer owned property'
 		ExperianCompanyAddress = 13
 	} // enum CustomerAddressType
 } // namespace EZBob.DatabaseLib.Model.Database

@@ -105,6 +105,7 @@
 			var helper = new StrategyHelper();
 			LandRegistry landRegistry;
 			LandRegistryDataModel response = helper.GetLandRegistryData(m_nCustomerID, m_sTitleNumber, out landRegistry);
+			helper.LinkLandRegistryAndAddress(m_nCustomerID, landRegistry.Response, m_sTitleNumber, landRegistry.Id);
 
 			Result = new Serialized(response);
 		} // Execute
