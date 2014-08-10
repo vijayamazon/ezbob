@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Facebook sharing information tags -->
     <meta property="og:title" content="*|MC:SUBJECT|*">
 
@@ -62,14 +62,7 @@
             /*@editable*/ background-color: #e2e3e4;
         }
         /*
-	@tab Page
-	@section email border
-	@tip Set the border for your email.
-	*/
-        #templateContainer {
-            /*@editable*/ border: 1px solid #DDDDDD;
-        }
-        /*
+	
 	@tab Page
 	@section heading 1
 	@tip Set the styling for all first-level headings in your emails. These should be the largest of your headings.
@@ -274,6 +267,7 @@
 	*/
         #templateContainer, .bodyContent {
             /*@editable*/ background-color: #FFFFFF;
+			width: 600px;
         }
 
         #templateNavigation {
@@ -282,9 +276,9 @@
             background: #D4D5D7;
             line-height: 150%;
             border-bottom: silver 1px solid;
+			width: 100%;
         }
-
-            #templateNavigation td a {
+		   #templateNavigation td a {
                 color:#4D4D4D;
                 text-decoration: none;
                 font-weight: bold;
@@ -326,6 +320,8 @@
         .ezbobQuestions {
             background-image: url(https://gallery.mailchimp.com/6aa310fe9bbbdaa2f2a257dd6/images/101a8bb5-af5d-4431-8234-f8ae825e7881.jpg);
             background-repeat: no-repeat;
+			background-size: contain;
+			background-position: right;
             background-color: #D4D5D7;
             height: 220px;
         }
@@ -335,10 +331,6 @@
                 font-weight: normal;
             }
 
-        .leftrightborder {
-            border-left: 1px #eeeeee solid;
-            border-right: 1px #eeeeee solid;
-        }
         /*
 	@tab Footer
 	@section footer style
@@ -348,6 +340,7 @@
         #templateFooter {
             /*@editable*/ background-color: #4D4D4D;
             /*@editable*/ border-top: 0;
+			width: 600px;
         }
         /*
 	@tab Footer
@@ -389,6 +382,7 @@
         #social {
             /*@editable*/ background-color: #4D4D4D;
             /*@editable*/ border: 0;
+			padding: 10px 0;
         }
             /*
 	@tab Footer
@@ -453,6 +447,33 @@
             float: left;
             border-left: 1px ridge silver;
         }
+		
+		
+		@media only screen and (max-width: 480px) {
+			#headerImage {
+				width: 100% !important;
+				max-width: 480px !important;
+			}
+			
+			#templateContainer, .bodyContent, #templateFooter{
+				width: 100% !important;
+				max-width: 480px !important;
+			}
+			
+			.header_image{
+				margin: 0; 
+				padding: 0;
+				width: 100% !important;
+			}
+			
+			#templateNavigation td{
+				font-size: 10px;
+			}
+			
+			.ezbobQuestions{
+				background-image: none;
+			}
+		}
     </style>
 </head>
 <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
@@ -461,7 +482,7 @@
             <tr>
                 <td align="center" valign="top">
                     <!-- // Begin Template Preheader \\ -->
-                    <table border="0" cellpadding="10" cellspacing="0" width="600" id="templatePreheader">
+                    <table border="0" cellpadding="10" cellspacing="0" id="templatePreheader">
                         <tr>
                             <td valign="top" class="preheaderContent">
 
@@ -472,7 +493,7 @@
                                             <div mc:edit="std_preheader_content">Thank you for registering with ezbob</div>
                                         </td>
                                         <!-- *|IFNOT:ARCHIVE_PAGE|* -->
-                                        <td valign="top" width="190">
+                                        <td valign="top">
                                             <div mc:edit="std_preheader_links"></div>
                                         </td>
                                         <!-- *|END:IF|* -->
@@ -484,38 +505,40 @@
                         </tr>
                     </table>
                     <!-- // End Template Preheader \\ -->
-                    <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
+                    <table border="0" cellpadding="0" cellspacing="0" id="templateContainer">
                         <tr>
                             <td align="center" valign="top">
                                 <!-- // Begin Template Header \\ -->
-                                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
+                                <table border="0" cellpadding="0" cellspacing="0" id="templateHeader">
                                     <tr>
                                         <td class="headerContentLeft">
                                             <!-- // Begin Module: Standard Header Image \\ -->
-                                            <a href="http://www.ezbob.com"><img src="http://gallery.mailchimp.com/6aa310fe9bbbdaa2f2a257dd6/images/25910dc8-5641-43d3-bc17-8546e974ae99.png" alt="" border="0" style="margin: 0; padding: 0;" width="600" height="77" mc:edit="header_image"></a>
+                                            <a href="http://www.ezbob.com">
+												<img class="header_image" src="http://gallery.mailchimp.com/6aa310fe9bbbdaa2f2a257dd6/images/25910dc8-5641-43d3-bc17-8546e974ae99.png" alt="" border="0" mc:edit="header_image">
+											</a>
                                             <!-- // End Module: Standard Header Image \\ -->
                                         </td>
                                     </tr>
                                 </table>
-                                <table border="0" cellpadding="5" cellspacing="0" width="600" id="templateNavigation">
+                                <table border="0" cellpadding="5" cellspacing="0" id="templateNavigation">
                                     <tr>
-                                        <td align="center" width="20%"><a href="http://www.ezbob.com/how-it-works/">How it Works</a></td>
+                                        <td align="center"><a href="http://www.ezbob.com/how-it-works/">How it Works</a></td>
                                         <td>
                                             <div class="vl"></div>
                                         </td>
-                                        <td align="center" width="20%"><a href="http://www.ezbob.com/why-use-ezbob/">Why ezbob</a></td>
+                                        <td align="center"><a href="http://www.ezbob.com/why-use-ezbob/">Why ezbob</a></td>
                                         <td>
                                             <div class="vl"></div>
                                         </td>
-                                        <td align="center" width="20%"><a href="http://www.ezbob.com/about-us/">About Us</a></td>
+                                        <td align="center"><a href="http://www.ezbob.com/about-us/">About Us</a></td>
                                         <td>
                                             <div class="vl"></div>
                                         </td>
-                                        <td align="center" width="20%"><a href="http://www.ezbob.com/blog/">Blog</a></td>
+                                        <td align="center"><a href="http://www.ezbob.com/blog/">Blog</a></td>
                                         <td>
                                             <div class="vl"></div>
                                         </td>
-                                        <td align="center" width="20%"><a href="https://app.ezbob.com/Account/LogOn">Login</a></td>
+                                        <td align="center"><a href="https://app.ezbob.com/Account/LogOn">Login</a></td>
                                     </tr>
                                 </table>
                                 <!-- // End Template Header \\ -->
@@ -524,7 +547,7 @@
                         <tr>
                             <td align="center" valign="top">
                                 <!-- // Begin Template Body \\ -->
-                                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateBody">
+                                <table border="0" cellpadding="0" cellspacing="0" id="templateBody">
                                     <tr>
                                         <td valign="top" class="bodyContent">
 
@@ -581,7 +604,7 @@
                         <tr>
                             <td align="center" valign="top">
                                 <!-- // Begin Template Footer \\ -->
-                                <table border="0" cellpadding="10" cellspacing="0" width="600" id="templateFooter">
+                                <table border="0" cellpadding="10" cellspacing="0" id="templateFooter">
                                     <tr>
                                         <td valign="top" class="footerContent">
 
