@@ -17,7 +17,6 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
     },
     events: {
         "click .zooplaRecheck": "recheckZoopla",
-        "click #zoopla": "showZoopla",
         "click #landregistry": "showLandRegistry",
     },
     recheckZoopla: function () {
@@ -28,14 +27,6 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
             that.render(that.model);
         });
         xhr.always(function () {
-            BlockUi("Off");
-        });
-    },
-    showZoopla: function () {
-        BlockUi("On");
-        $.get(window.gRootPath + "Underwriter/Properties/Zoopla/?customerId=" + this.customerId + "&recheck=false", function (data) {
-            var zooplaView = new EzBob.ZooplaView({ model: data });
-            EzBob.App.jqmodal.show(zooplaView);
             BlockUi("Off");
         });
     },

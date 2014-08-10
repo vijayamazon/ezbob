@@ -126,25 +126,10 @@
 		[HttpGet]
 		public JsonResult Zoopla(int customerId, bool recheck)
 		{
-			// TODO: this method should be changed to handle all owned properties of the customer
-			var address = customerAddressRepository.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
+			var sh = new StrategyHelper();
+			sh.GetZooplaData(customerId, true);
 
-			if (address == null)
-				return Json(new { error = "address not found" }, JsonRequestBehavior.AllowGet);
-
-			var zoopla = address.Zoopla.LastOrDefault();
-
-			if (zoopla == null || recheck)
-			{
-				var sh = new StrategyHelper();
-				sh.GetZooplaData(customerId, recheck);
-				zoopla = address.Zoopla.LastOrDefault();
-
-				if (zoopla == null)
-					return Json(new { error = "zoopla info not found" }, JsonRequestBehavior.AllowGet);
-			}
-
-			return Json(zoopla, JsonRequestBehavior.AllowGet);
+			return Json(new {}, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]

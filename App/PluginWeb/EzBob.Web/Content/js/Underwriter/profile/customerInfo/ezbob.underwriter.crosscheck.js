@@ -277,47 +277,9 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
     }, // name
 
     events: {
-        "click #recheck-targeting": "recheckTargeting",
-        // TODO: The next 3 events should be removed after testing
-        "click #landregistry": "showLandRegistry",
-        "click #zoopla": "showZoopla",
-        "click .zooplaRecheck": "recheckZoopla",
+        "click #recheck-targeting": "recheckTargeting"
     }, // events
-
-    // TODO: Remove the next 3 methods
-    recheckZoopla: function () {
-        BlockUi("On");
-        var that = this;
-        var xhr = $.get(window.gRootPath + "Underwriter/CrossCheck/Zoopla/?customerId=" + this.model.customerId + "&recheck=true");
-        xhr.done(function () {
-            that.render(that.model);
-        });
-        xhr.always(function () {
-            BlockUi("Off");
-        });
-    },
-    showZoopla: function () {
-        BlockUi("On");
-
-        $.get(window.gRootPath + "Underwriter/CrossCheck/Zoopla/?customerId=" + this.model.customerId + "&recheck=false", function (data) {
-            var zooplaView = new EzBob.ZooplaView({ model: data });
-            EzBob.App.jqmodal.show(zooplaView);
-            BlockUi("Off");
-        });
-    }, // showZoopla
-
-    showLandRegistry: function (el) {
-        var address = $(el.currentTarget).attr('data-address');
-        var postcode = $(el.currentTarget).attr('data-postcode');
-        var that = this;
-        BlockUi("On");
-        $.post(window.gRootPath + "Underwriter/CrossCheck/LandRegistryEnquiries/?customerId=" + this.model.customerId, function (data) {
-            BlockUi("Off");
-            that.lrEnqView = new EzBob.LandRegistryEnquiryView({ model: { postcode: postcode, address: address, customerId: that.model.customerId, titles: data.titles } });
-            EzBob.App.vent.on('landregistry:retrieved', that.landRegistryRetrieved, that);
-            EzBob.App.jqmodal.show(that.lrEnqView);
-        });
-    },
+    
     landRegistryRetrieved: function () {
         BlockUi("Off");
         Backbone.history.loadUrl();
