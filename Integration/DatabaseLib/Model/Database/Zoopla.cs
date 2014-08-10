@@ -1,10 +1,13 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database
 {
 	using System;
+	using System.Web.Script.Serialization;
+	using Newtonsoft.Json;
 
 	public class Zoopla
 	{
 		public virtual int Id { get; set; }
+		[JsonIgnore, ScriptIgnore]
 		public virtual CustomerAddress CustomerAddress { get; set; }
 		public virtual string AreaName { get; set; }
 		public virtual int AverageSoldPrice1Year { get; set; }

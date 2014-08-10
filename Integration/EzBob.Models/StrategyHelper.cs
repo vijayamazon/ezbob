@@ -750,45 +750,48 @@
 
 		public void GetZooplaData(int customerId, bool reCheck = false)
 		{
-			var customerAddress = customerAddressRepository.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
+			//TODO add flag customer address - isOwned for simple query and in case customer changes his personal address to have the owned address list correct
+			var customerAddress = customerAddressRepository.GetAll()
+				.Where(a => a.Customer.Id == customerId && (a.AddressType == CustomerAddressType.OtherPropertyAddress ||
+					(a.AddressType == CustomerAddressType.PersonalAddress && a.Customer.PropertyStatus.IsOwnerOfMainAddress)));
 
-			if (customerAddress != null)
+			if (customerAddress.Any())
 			{
-				if (!customerAddress.Zoopla.Any() || reCheck)
-				{
-					var zooplaApi = new ZooplaApi();
-					try
+				foreach (var address in customerAddress) {
+					if (!address.Zoopla.Any() || reCheck)
 					{
-						var areaValueGraphs = zooplaApi.GetAreaValueGraphs(customerAddress.Postcode);
-						var averageSoldPrices = zooplaApi.GetAverageSoldPrices(customerAddress.Postcode);
-						var zooplaEstimate = zooplaApi.GetZooplaEstimate(customerAddress.ZooplaAddress);
-						customerAddress.Zoopla.Add(new Zoopla
-						{
-							AreaName = averageSoldPrices.AreaName,
-							AverageSoldPrice1Year = averageSoldPrices.AverageSoldPrice1Year,
-							AverageSoldPrice3Year = averageSoldPrices.AverageSoldPrice3Year,
-							AverageSoldPrice5Year = averageSoldPrices.AverageSoldPrice5Year,
-							AverageSoldPrice7Year = averageSoldPrices.AverageSoldPrice7Year,
-							NumerOfSales1Year = averageSoldPrices.NumerOfSales1Year,
-							NumerOfSales3Year = averageSoldPrices.NumerOfSales3Year,
-							NumerOfSales5Year = averageSoldPrices.NumerOfSales5Year,
-							NumerOfSales7Year = averageSoldPrices.NumerOfSales7Year,
-							TurnOver = averageSoldPrices.TurnOver,
-							PricesUrl = averageSoldPrices.PricesUrl,
-							AverageValuesGraphUrl = areaValueGraphs.AverageValuesGraphUrl,
-							HomeValuesGraphUrl = areaValueGraphs.HomeValuesGraphUrl,
-							ValueRangesGraphUrl = areaValueGraphs.ValueRangesGraphUrl,
-							ValueTrendGraphUrl = areaValueGraphs.ValueTrendGraphUrl,
-							CustomerAddress = customerAddress,
-							ZooplaEstimate = zooplaEstimate,
-							UpdateDate = DateTime.UtcNow
-						});
+						var zooplaApi = new ZooplaApi();
+						try {
+							var areaValueGraphs = zooplaApi.GetAreaValueGraphs(address.Postcode);
+							var averageSoldPrices = zooplaApi.GetAverageSoldPrices(address.Postcode);
+							var zooplaEstimate = zooplaApi.GetZooplaEstimate(address.ZooplaAddress);
+							address.Zoopla.Add(new Zoopla
+							{
+								AreaName = averageSoldPrices.AreaName,
+								AverageSoldPrice1Year = averageSoldPrices.AverageSoldPrice1Year,
+								AverageSoldPrice3Year = averageSoldPrices.AverageSoldPrice3Year,
+								AverageSoldPrice5Year = averageSoldPrices.AverageSoldPrice5Year,
+								AverageSoldPrice7Year = averageSoldPrices.AverageSoldPrice7Year,
+								NumerOfSales1Year = averageSoldPrices.NumerOfSales1Year,
+								NumerOfSales3Year = averageSoldPrices.NumerOfSales3Year,
+								NumerOfSales5Year = averageSoldPrices.NumerOfSales5Year,
+								NumerOfSales7Year = averageSoldPrices.NumerOfSales7Year,
+								TurnOver = averageSoldPrices.TurnOver,
+								PricesUrl = averageSoldPrices.PricesUrl,
+								AverageValuesGraphUrl = areaValueGraphs.AverageValuesGraphUrl,
+								HomeValuesGraphUrl = areaValueGraphs.HomeValuesGraphUrl,
+								ValueRangesGraphUrl = areaValueGraphs.ValueRangesGraphUrl,
+								ValueTrendGraphUrl = areaValueGraphs.ValueTrendGraphUrl,
+								CustomerAddress = address,
+								ZooplaEstimate = zooplaEstimate,
+								UpdateDate = DateTime.UtcNow
+							});
 
-						_session.Flush();
-					}
-					catch (Exception arg)
-					{
-						log.ErrorFormat("Zoopla error {0}", arg);
+							_session.Flush();
+						}
+						catch (Exception arg) {
+							log.ErrorFormat("Zoopla error {0}", arg);
+						}
 					}
 				}
 			}

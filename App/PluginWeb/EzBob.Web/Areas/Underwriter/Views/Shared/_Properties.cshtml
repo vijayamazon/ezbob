@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <div class="box">
                 <div class="box-content">
-                    <table class="table squeezed rright">
+                    <table class="table">
                         <thead class="box">
                             <tr class="box-title">
                                 <th>#</th>
@@ -16,16 +16,27 @@
                                 <th>Address</th>
                                 <th>Year Of Ownership</th>
                                 <th># Of Owners</th>
+                                <th>Zoopla</th>
+                                <th>Land Registry</th>
                             </tr>
                         </thead>
                         <tbody class="box-content">
-                            <% _.each(model.Properties, function(prop, propertyCounter) { %>
+                            <% _.each(model.Properties, function(prop, propertyCounter) { prop.LandRegistry = prop.LandRegistry || {}; %>
                                 <tr>
                                     <td><span><%- propertyCounter + 1 %></span></td>
-                                    <td><span><%- prop.MarketValue %></span></td>
+                                    <td><span><%- EzBob.formatPoundsAsInt(prop.MarketValue) %></span></td>
                                     <td><span><%- prop.Address %></span></td>
-                                    <td><span><%- prop.YearOfOwnership %></span></td>
+                                    <td><span><%- EzBob.formatDate3(prop.YearOfOwnership) %></span></td>
                                     <td><span><%- prop.NumberOfOwners %></span></td>
+                                    <td><div class="accordion-heading">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#<%-'zoopla' + propertyCounter%>">Zoopla</a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="accordion-heading">
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#<%-prop.LandRegistry.TitleNumber  + 'lr' + propertyCounter%>">Title Number: <%-prop.LandRegistry.TitleNumber%></a>
+                                        </div>
+                                    </td>
                                 </tr>
                             <% }); %>
                         </tbody>
@@ -39,15 +50,6 @@
                             </tr>
                         </thead>
                         <tbody class="box-content">
-                            <tr>
-                                <td><b>Zoopla LR</b></td>
-                                <td>
-                                    <div class="copy-buttons">
-                                        <button class="btn btn-primary" id="zoopla">Zoopla</button>
-                                        <button class="btn btn-primary" id="landregistry" data-postcode="<%- model.Postcode %>" data-address="<%- model.FormattedAddress %>">Land Registry</button>
-                                    </div>
-                                </td>
-                            </tr>
                             <tr>
                                 <td><b>Zoopla Estimate</b></td>
                                 <td><% if (model.NumberOfProperties > 0) {%>
@@ -81,258 +83,350 @@
                         </tbody>
                     </table>
 
-                    <% if (model.LandRegistries != undefined && model.LandRegistries.length > 0) { %>
-                <div class="box">
-                    <div class="box-title">
-                        <h3>Land Registry</h3>
-                    </div>
-                    <div class="box-content">
-                        <% _.each(model.LandRegistries, function(landRegistry) { %>
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" href="#<%-landRegistry.TitleNumber%>">Title Number: <%-landRegistry.TitleNumber%></a>
+                    <div class="box">
+                        <div class="box-title">
+                            <h3>Land Registry</h3>
                         </div>
-                        <div id="<%-landRegistry.TitleNumber%>" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div class="tabbable">
-                                    <% if (landRegistry.Rejection != undefined) { %>
-                                    <h3>Rejection: <%- landRegistry.Rejection.Reason %>
-                                        <br />
-                                        <%- landRegistry.Rejection.OtherDescription %>
-                                    </h3>
-                                    <% } else if (landRegistry.Acknowledgement != undefined) { %>
-                                    <h3>Acknowledgment: <b>tell developer about it!!!</b>
-                                        <br />
-                                        <%- landRegistry.Acknowledgement.Description %> <%- landRegistry.Acknowledgement.PollDate %>
-                                    </h3>
-                                    <% } else { %>
-                                    <div class="tab-content">
-                                        <span>Title Number: <%- landRegistry.TitleNumber %></span>
-                                    </div>
-
-                                    <div class="tab-content">
-                                        <% if (landRegistry.PropertyAddresses.length == 1) { %>
-                                        <div>Property Address: <%- landRegistry.PropertyAddresses[0].Lines %> <%- landRegistry.PropertyAddresses[0].PostCode %></div>
+                        <div class="box-content">
+                            <% _.each(model.Properties, function(property, i) { console.log('property',property);
+                            var landRegistry = property.LandRegistry || {}; %>
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" href="#<%-landRegistry.TitleNumber + 'lr' + i%>">Title Number: <%-landRegistry.TitleNumber%></a>
+                            </div>
+                            <div id="<%-landRegistry.TitleNumber + 'lr' + i%>" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <div class="tabbable">
+                                        <% if (landRegistry.Rejection != undefined) { %>
+                                        <h3>Rejection: <%- landRegistry.Rejection.Reason %>
+                                            <br />
+                                            <%- landRegistry.Rejection.OtherDescription %>
+                                        </h3>
+                                        <% } else if (landRegistry.Acknowledgement != undefined) { %>
+                                        <h3>Acknowledgment: <b>tell developer about it!!!</b>
+                                            <br />
+                                            <%- landRegistry.Acknowledgement.Description %> <%- landRegistry.Acknowledgement.PollDate %>
+                                        </h3>
                                         <% } else { %>
-                                        <table class="table centered squeezed">
-                                            <thead class="box">
-                                                <tr class="box-title">
-                                                    <td colspan="2">Property Address</td>
-                                                </tr>
-                                                <tr class="box-title">
-                                                    <td>Address</td>
-                                                    <td>Postcode</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% _.each(landRegistry.PropertyAddresses, function(propertyAddress) { %>
-                                                <tr>
-                                                    <td class="narrow-as-possible"><%- propertyAddress.Lines %></td>
-                                                    <td><%- propertyAddress.PostCode %></td>
-                                                </tr>
-                                                <% }); %>
-                                            </tbody>
-                                        </table>
+                                        <div class="tab-content">
+                                            <span>Title Number: <%- landRegistry.TitleNumber %></span>
+                                        </div>
+                                        <% if (landRegistry.PropertyAddresses != undefined) { %>
+                                        <div class="tab-content">
+                                            <% if (landRegistry.PropertyAddresses.length == 1) { %>
+                                            <div>Property Address: <%- landRegistry.PropertyAddresses[0].Lines %> <%- landRegistry.PropertyAddresses[0].PostCode %></div>
+                                            <% } else { %>
+                                            <table class="table centered squeezed">
+                                                <thead class="box">
+                                                    <tr class="box-title">
+                                                        <td colspan="2">Property Address</td>
+                                                    </tr>
+                                                    <tr class="box-title">
+                                                        <td>Address</td>
+                                                        <td>Postcode</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% _.each(landRegistry.PropertyAddresses, function(propertyAddress) { %>
+                                                    <tr>
+                                                        <td class="narrow-as-possible"><%- propertyAddress.Lines %></td>
+                                                        <td><%- propertyAddress.PostCode %></td>
+                                                    </tr>
+                                                    <% }); %>
+                                                </tbody>
+                                            </table>
+                                            <% } %>
+                                        </div>
+                                        <%}%>
+                                        <div class="tab-content">
+                                            <% if (landRegistry.PricePaidInfills != undefined && landRegistry.PricePaidInfills.length > 0) { %>
+                                            <table class="table centered squeezed">
+                                                <thead class="box">
+                                                    <tr class="box-title">
+                                                        <td colspan="2">Price Paid</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% _.each(landRegistry.PricePaidInfills, function(pricePaid) { %>
+                                                    <tr>
+                                                        <td class="narrow-as-possible"><%- pricePaid.Key %></td>
+                                                        <td><%- pricePaid.Value %></td>
+                                                    </tr>
+                                                    <% }); %>
+                                                </tbody>
+                                            </table>
+                                            <% } else { %>
+                                            <div><span>No price paid specified.</span></div>
+                                            <% } %>
+                                        </div>
+
+                                        <div class="tab-content">
+                                            <table class="table centered squeezed">
+                                                <thead class="box">
+                                                    <tr class="box-title">
+                                                        <td>Proprietorship</td>
+                                                        <% if (landRegistry.Proprietorship != undefined && landRegistry.Proprietorship.CurrentProprietorshipDate != undefined) { %>
+                                                        <td>Current Proprietorship Date: <%- EzBob.formatDate2(landRegistry.Proprietorship.CurrentProprietorshipDate) %></td>
+                                                        <td colspan="3"></td>
+                                                        <% } else { %>
+                                                        <td colspan="4"></td>
+                                                        <% } %>
+                                                    </tr>
+                                                    <tr class="box-title">
+                                                        <td>Type</td>
+                                                        <td>Party Type</td>
+                                                        <td>Private Individual Name</td>
+                                                        <td>Company Name / Registration Number</td>
+                                                        <td>Proprietorship Addresses</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% if (landRegistry.Proprietorship != undefined && landRegistry.Proprietorship.ProprietorshipParties != undefined) {
+                                                    _.each(landRegistry.Proprietorship.ProprietorshipParties, function(proprietorshipParty) { %>
+                                                    <tr>
+                                                        <td><%- proprietorshipParty.ProprietorshipType %></td>
+                                                        <td><%- proprietorshipParty.ProprietorshipPartyType %></td>
+                                                        <td><%- proprietorshipParty.PrivateIndividualForename %> <%- proprietorshipParty.PrivateIndividualSurname %></td>
+                                                        <td><%- proprietorshipParty.CompanyName %> <%- proprietorshipParty.CompanyRegistrationNumber %></td>
+                                                        <td>
+                                                            <table>
+                                                                <tbody>
+                                                                    <% _.each(proprietorshipParty.ProprietorshipAddresses, function(proprietorshipAddress) { %>
+                                                                    <tr>
+                                                                        <td><%- proprietorshipAddress.Lines %></td>
+                                                                        <td><%- proprietorshipAddress.PostCode %></td>
+                                                                    </tr>
+                                                                    <% }); %>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <% });
+                                                    } %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="tab-content">
+                                            <% if (landRegistry.Charges != undefined && landRegistry.Charges.length > 0) { %>
+                                            <table class="table centered squeezed">
+                                                <thead class="box">
+                                                    <tr class="box-title">
+                                                        <td colspan="6">Charges</td>
+                                                    </tr>
+                                                    <tr class="box-title">
+                                                        <td>Date</td>
+                                                        <td>Entry Text</td>
+                                                        <td>Proprietorship</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% _.each(landRegistry.Charges, function(charge) { %>
+                                                    <tr>
+                                                        <td><%- EzBob.formatDate2(charge.ChargeDate) %></td>
+                                                        <td><%- charge.Description %></td>
+                                                        <td>
+                                                            <table>
+                                                                <thead class="box">
+                                                                    <tr class="box-title">
+                                                                        <td>Type</td>
+                                                                        <td>Party Type</td>
+                                                                        <td>Name</td>
+                                                                        <td>Proprietorship Addresses</td>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <% _.each(charge.Proprietorship.ProprietorshipParties, function(chargeProprietorshipParty) { %>
+                                                                    <tr>
+                                                                        <td><%- chargeProprietorshipParty.ProprietorshipType %></td>
+                                                                        <td><%- chargeProprietorshipParty.ProprietorshipPartyType %></td>
+                                                                        <td><%- chargeProprietorshipParty.CompanyName %> <%- chargeProprietorshipParty.PrivateIndividualForename %> <%- chargeProprietorshipParty.PrivateIndividualSurname %></td>
+                                                                        <td>
+                                                                            <table>
+                                                                                <tbody>
+                                                                                    <% _.each(chargeProprietorshipParty.ProprietorshipAddresses, function(chargeProprietorshipAddress) { %>
+                                                                                    <tr>
+                                                                                        <td><%- chargeProprietorshipAddress.Lines %></td>
+                                                                                        <td><%- chargeProprietorshipAddress.PostCode %></td>
+                                                                                    </tr>
+                                                                                    <% }); %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <% }); %>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <% }); %>
+                                                </tbody>
+                                            </table>
+                                            <% } else { %>
+                                            <span>No charges specified</span>
+                                            <% } %>
+                                        </div>
+
+                                        <div class="tab-content">
+                                            <% if (landRegistry.Restrictions != undefined && landRegistry.Restrictions.length > 0) { %>
+                                            <table class="table centered squeezed">
+                                                <thead class="box">
+                                                    <tr class="box-title">
+                                                        <td colspan="6">Restrictions</td>
+                                                    </tr>
+                                                    <tr class="box-title">
+                                                        <td>Entry Num</td>
+                                                        <td>Entry Text</td>
+                                                        <td>Type</td>
+                                                        <td>SubRegister Code</td>
+                                                        <td>Schedule Code</td>
+                                                        <td>In fills</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% _.each(landRegistry.Restrictions, function(restriction) { %>
+                                                    <tr>
+                                                        <td><%- restriction.EntryNumber %></td>
+                                                        <td><%- restriction.EntryText %></td>
+                                                        <td><%- restriction.Type %></td>
+                                                        <td><%- restriction.SubRegisterCode %></td>
+                                                        <td><%- restriction.ScheduleCode %></td>
+                                                        <td>
+                                                            <table>
+                                                                <tbody>
+                                                                    <% _.each(restriction.Infills, function(inFill) { %>
+                                                                    <tr>
+                                                                        <td><%- inFill.Key %></td>
+                                                                        <td><%- inFill.Value %></td>
+                                                                    </tr>
+                                                                    <% }); %>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <% }); %>
+                                                </tbody>
+                                            </table>
+                                            <% } else { %>
+                                            <span>No restrictions specified</span>
+                                            <% } %>
+                                        </div>
+
+                                        <div class="tab-content">
+                                            <table class="table centered squeezed">
+                                                <thead class="box">
+                                                    <tr class="box-title">
+                                                        <td>Indicators</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% _.each(landRegistry.Indicators, function(indicator) { %>
+                                                    <tr>
+                                                        <td><%- indicator %></td>
+                                                    </tr>
+                                                    <% }); %>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <% } %>
                                     </div>
-
-                                    <div class="tab-content">
-                                        <% if (landRegistry.PricePaidInfills != undefined && landRegistry.PricePaidInfills.length > 0) { %>
-                                        <table class="table centered squeezed">
-                                            <thead class="box">
-                                                <tr class="box-title">
-                                                    <td colspan="2">Price Paid</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% _.each(landRegistry.PricePaidInfills, function(pricePaid) { %>
-                                                <tr>
-                                                    <td class="narrow-as-possible"><%- pricePaid.Key %></td>
-                                                    <td><%- pricePaid.Value %></td>
-                                                </tr>
-                                                <% }); %>
-                                            </tbody>
-                                        </table>
-                                        <% } else { %>
-                                        <div><span>No price paid specified.</span></div>
-                                        <% } %>
-                                    </div>
-
-                                    <div class="tab-content">
-                                        <table class="table centered squeezed">
-                                            <thead class="box">
-                                                <tr class="box-title">
-                                                    <td>Proprietorship</td>
-                                                    <% if (landRegistry.Proprietorship != undefined && landRegistry.Proprietorship.CurrentProprietorshipDate != undefined) { %>
-                                                    <td>Current Proprietorship Date: <%- EzBob.formatDate2(landRegistry.Proprietorship.CurrentProprietorshipDate) %></td>
-                                                    <td colspan="3"></td>
-                                                    <% } else { %>
-                                                    <td colspan="4"></td>
-                                                    <% } %>
-                                                </tr>
-                                                <tr class="box-title">
-                                                    <td>Type</td>
-                                                    <td>Party Type</td>
-                                                    <td>Private Individual Name</td>
-                                                    <td>Company Name / Registration Number</td>
-                                                    <td>Proprietorship Addresses</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% if (landRegistry.Proprietorship != undefined && landRegistry.Proprietorship.ProprietorshipParties != undefined) {
-                                                _.each(landRegistry.Proprietorship.ProprietorshipParties, function(proprietorshipParty) { %>
-                                                <tr>
-                                                    <td><%- proprietorshipParty.ProprietorshipType %></td>
-                                                    <td><%- proprietorshipParty.ProprietorshipPartyType %></td>
-                                                    <td><%- proprietorshipParty.PrivateIndividualForename %> <%- proprietorshipParty.PrivateIndividualSurname %></td>
-                                                    <td><%- proprietorshipParty.CompanyName %> <%- proprietorshipParty.CompanyRegistrationNumber %></td>
-                                                    <td>
-                                                        <table>
-                                                            <tbody>
-                                                                <% _.each(proprietorshipParty.ProprietorshipAddresses, function(proprietorshipAddress) { %>
-                                                                <tr>
-                                                                    <td><%- proprietorshipAddress.Lines %></td>
-                                                                    <td><%- proprietorshipAddress.PostCode %></td>
-                                                                </tr>
-                                                                <% }); %>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                <% });
-                                                } %>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="tab-content">
-                                        <% if (landRegistry.Charges != undefined && landRegistry.Charges.length > 0) { %>
-                                        <table class="table centered squeezed">
-                                            <thead class="box">
-                                                <tr class="box-title">
-                                                    <td colspan="6">Charges</td>
-                                                </tr>
-                                                <tr class="box-title">
-                                                    <td>Date</td>
-                                                    <td>Entry Text</td>
-                                                    <td>Proprietorship</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% _.each(landRegistry.Charges, function(charge) { %>
-                                                <tr>
-                                                    <td><%- EzBob.formatDate2(charge.ChargeDate) %></td>
-                                                    <td><%- charge.Description %></td>
-                                                    <td>
-                                                        <table>
-                                                            <thead class="box">
-                                                                <tr class="box-title">
-                                                                    <td>Type</td>
-                                                                    <td>Party Type</td>
-                                                                    <td>Name</td>
-                                                                    <td>Proprietorship Addresses</td>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <% _.each(charge.Proprietorship.ProprietorshipParties, function(chargeProprietorshipParty) { %>
-                                                                <tr>
-                                                                    <td><%- chargeProprietorshipParty.ProprietorshipType %></td>
-                                                                    <td><%- chargeProprietorshipParty.ProprietorshipPartyType %></td>
-                                                                    <td><%- chargeProprietorshipParty.CompanyName %> <%- chargeProprietorshipParty.PrivateIndividualForename %> <%- chargeProprietorshipParty.PrivateIndividualSurname %></td>
-                                                                    <td>
-                                                                        <table>
-                                                                            <tbody>
-                                                                                <% _.each(chargeProprietorshipParty.ProprietorshipAddresses, function(chargeProprietorshipAddress) { %>
-                                                                                <tr>
-                                                                                    <td><%- chargeProprietorshipAddress.Lines %></td>
-                                                                                    <td><%- chargeProprietorshipAddress.PostCode %></td>
-                                                                                </tr>
-                                                                                <% }); %>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <% }); %>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                <% }); %>
-                                            </tbody>
-                                        </table>
-                                        <% } else { %>
-                                        <span>No charges specified</span>
-                                        <% } %>
-                                    </div>
-
-                                    <div class="tab-content">
-                                        <% if (landRegistry.Restrictions != undefined && landRegistry.Restrictions.length > 0) { %>
-                                        <table class="table centered squeezed">
-                                            <thead class="box">
-                                                <tr class="box-title">
-                                                    <td colspan="6">Restrictions</td>
-                                                </tr>
-                                                <tr class="box-title">
-                                                    <td>Entry Num</td>
-                                                    <td>Entry Text</td>
-                                                    <td>Type</td>
-                                                    <td>SubRegister Code</td>
-                                                    <td>Schedule Code</td>
-                                                    <td>In fills</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% _.each(landRegistry.Restrictions, function(restriction) { %>
-                                                <tr>
-                                                    <td><%- restriction.EntryNumber %></td>
-                                                    <td><%- restriction.EntryText %></td>
-                                                    <td><%- restriction.Type %></td>
-                                                    <td><%- restriction.SubRegisterCode %></td>
-                                                    <td><%- restriction.ScheduleCode %></td>
-                                                    <td>
-                                                        <table>
-                                                            <tbody>
-                                                                <% _.each(restriction.Infills, function(inFill) { %>
-                                                                <tr>
-                                                                    <td><%- inFill.Key %></td>
-                                                                    <td><%- inFill.Value %></td>
-                                                                </tr>
-                                                                <% }); %>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                <% }); %>
-                                            </tbody>
-                                        </table>
-                                        <% } else { %>
-                                        <span>No restrictions specified</span>
-                                        <% } %>
-                                    </div>
-
-                                    <div class="tab-content">
-                                        <table class="table centered squeezed">
-                                            <thead class="box">
-                                                <tr class="box-title">
-                                                    <td>Indicators</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% _.each(landRegistry.Indicators, function(indicator) { %>
-                                                <tr>
-                                                    <td><%- indicator %></td>
-                                                </tr>
-                                                <% }); %>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <% } %>
                                 </div>
                             </div>
+                            <% }); %>
                         </div>
-                        <% }); %>
                     </div>
-                </div>
-                    <% } %>
+                    
+                    <div class="box">
+                        <div class="box-title">
+                            <h3>Zoopla</h3>
+                        </div>
+                        <div class="box-content">
+                            <% _.each(model.Properties, function(property, i) { console.log('property',property);
+                                var data = property.Zoopla || { error: 'no data' }; %>
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" href="#<%-'zoopla' + i%>">Zoopla <%-i+1%></a>
+                            </div>
+                            <div id="<%-'zoopla' + i%>" class="accordion-body collapse">
+                                <% if(data.error) {%>
+                                <h3><%-data.error%></h3>
+
+                                <%} else {%>
+                                <div class="col-md-12">
+                                    <h3><%-property.FormattedAddress%></h3>
+                                    <table class="table">
+                                        <thead class="box">
+                                            <tr class="box-title">
+                                                <th>Estimate</th>
+                                                <th>Update Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><%-EzBob.formatPoundsAsInt(data.ZooplaEstimate)%></td>
+                                                <td><%-EzBob.formatDate3(data.UpdateDate)%></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="table rright">
+                                        <thead class="box">
+                                            <tr class="box-title">
+                                                <th colspan="2"><h3>Average Sales For Area <%-data.AreaName%></h3></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Average Sold Price 1 year</td>
+                                                <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice1Year)%></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Average Sold Price 3 years</td>
+                                                <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice3Year)%></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Average Sold Price 5 years</td>
+                                                <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice5Year)%></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Average Sold Price 7 years</td>
+                                                <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice7Year)%></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Num of Sales 1 Year</td>
+                                                <td><%-EzBob.formatIntWithCommas(data.NumerOfSales1Year)%></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Num of Sales 3 Years</td>
+                                                <td><%-EzBob.formatIntWithCommas(data.NumerOfSales3Year)%></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Num of Sales 5 Years</td>
+                                                <td><%-EzBob.formatIntWithCommas(data.NumerOfSales5Year)%></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Num of Sales 7 Years</td>
+                                                <td><%-EzBob.formatIntWithCommas(data.NumerOfSales7Year)%></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Turnover <i class="icon-white icon-info-sign" data-turnover=""></i></td>
+                                                <td><%-data.TurnOver%>%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <img src="<%-data.AverageValuesGraphUrl%>" />
+                                    <img src="<%-data.HomeValuesGraphUrl%>" />
+                                    <a href="<%-data.PricesUrl%>" class="btn btn-primary" target="_blank">Go to Zoopla <i class="fa fa-info-circle" data-zoopla=""></i></a>
+                                </div>
+                                <div class="class="col-md-6"">
+                                    <img src="<%-data.ValueRangesGraphUrl%>" />
+                                    <img src="<%-data.ValueTrendGraphUrl%>" />
+                                    <img src="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=<%-property.FormattedAddress%>" />
+                                </div>
+                                <%}%>
+                            </div>
+                            <%});%>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

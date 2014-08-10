@@ -40,106 +40,88 @@
 
 		public static PropertiesModel GetPropertiesModelData(Customer customer, CustomerAddressRepository customerAddressRepository, LandRegistryRepository landRegistryRepository)
 		{
-			int numberOfProperties = customer.PropertyStatus.IsOwnerOfMainAddress ? 1 : 0;
-
-			int otherPropertiesCount = customerAddressRepository.GetAll().Count(a =>
-										 a.Customer.Id == customer.Id &&
-										 a.AddressType == CustomerAddressType.OtherPropertyAddress);
-			numberOfProperties += otherPropertiesCount;
-
-			int zooplaAverage1YearPrice = 0;
-			int zooplaValue = 0;
 			int experianMortgage = 0;
 			int experianMortgageCount = 0;
-			DateTime? zooplaUpdateDate = null;
-			string postcode = null;
-			string formattedAddress = null;
-
 			var data = new PropertiesModel();
-			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res && 
-														 x.ResponseType == LandRegistryResponseType.Success &&
-														 x.CustomerAddress != null && 
-														 x.CustomerAddress.Customer != null && 
-														 x.CustomerAddress.Customer.Id == customer.Id)
-											 .Select(x => new { Response = x.Response, Title = x.TitleNumber });
-
-			var b = new LandRegistryModelBuilder();
-			data.LandRegistries = new List<LandRegistryResModel>();
-			foreach (var lr in lrs)
-			{
-				LandRegistryResModel lrData = b.BuildResModel(lr.Response, lr.Title);
-				data.LandRegistries.Add(lrData);
-			}
 
 			if (customer.PropertyStatus.IsOwnerOfMainAddress)
 			{
 				var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
-				if (currentAddress != null)
-				{
-					postcode = currentAddress.Postcode;
-					formattedAddress = currentAddress.FormattedAddress;
-
-					if (currentAddress.IsOwnerAccordingToLandRegistry)
-					{
-						Zoopla zoopla = currentAddress.Zoopla.LastOrDefault();
-
-						if (zoopla != null)
-						{
-							zooplaAverage1YearPrice = zoopla.AverageSoldPrice1Year;
-							zooplaUpdateDate = zoopla.UpdateDate;
-							CrossCheckModel.GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
-						}
-						
-						var personalAddressPropertyModel = new PropertyModel { Address = formattedAddress, MarketValue = zooplaValue };
-						LandRegistry matchingLandRegistryEntry = landRegistryRepository.GetAll().FirstOrDefault(x => x.CustomerAddress.AddressId == currentAddress.AddressId);
-						personalAddressPropertyModel.YearOfOwnership = 2014;// TODO: get from lrData.???;
-						if (matchingLandRegistryEntry != null)
-						{
-							personalAddressPropertyModel.NumberOfOwners = matchingLandRegistryEntry.Owners.Count;
-						}
-						data.Properties.Add(personalAddressPropertyModel);
+				if (currentAddress != null) {
+					var property = GetPropertyModel(customer, currentAddress);
+					if(property != null){
+						data.Properties.Add(property);
 					}
 				}
 			}
 
-			CrossCheckModel.GetMortgagesData(customer, out experianMortgage, out experianMortgageCount);
-
-			data.Init(numberOfProperties, experianMortgageCount, zooplaValue, experianMortgage, zooplaAverage1YearPrice, zooplaUpdateDate);
-			data.Postcode = postcode;
-			data.FormattedAddress = formattedAddress;
-
-			foreach (CustomerAddress ownedProperty in customer.AddressInfo.OtherPropertiesAddresses)
+			foreach (CustomerAddress ownedProperty in customer.AddressInfo.OtherPropertiesAddresses.Where(x => x.IsOwnerAccordingToLandRegistry))
 			{
-				if (!ownedProperty.IsOwnerAccordingToLandRegistry)
+				var property = GetPropertyModel(customer, ownedProperty);
+				if (property != null)
 				{
-					continue;
+					data.Properties.Add(property);
 				}
-				
-				var ownedPropertyModel = new PropertyModel();
-				Zoopla zoopla = ownedProperty.Zoopla.LastOrDefault();
-
-				if (zoopla != null)
-				{
-					ownedPropertyModel.MarketValue = GetZoopla1YearEstimate(zoopla);
-
-					// Add to totals
-					zooplaValue += ownedPropertyModel.MarketValue;
-					zooplaAverage1YearPrice += zoopla.AverageSoldPrice1Year;
-				}
-
-				ownedPropertyModel.Address = ownedProperty.FormattedAddress;
-				LandRegistry matchingLandRegistryEntry = landRegistryRepository.GetAll().FirstOrDefault(x => x.CustomerAddress.AddressId == ownedProperty.AddressId);
-				ownedPropertyModel.YearOfOwnership = 2014;// TODO: get from lrData.???;
-				if (matchingLandRegistryEntry != null)
-				{
-					ownedPropertyModel.NumberOfOwners = matchingLandRegistryEntry.Owners.Count;
-				}
-
-				data.Properties.Add(ownedPropertyModel);
 			}
 
+			CrossCheckModel.GetMortgagesData(customer, out experianMortgage, out experianMortgageCount);
+			data.Init(
+				data.Properties.Count(),
+				experianMortgageCount, 
+				data.Properties.Sum(x => x.MarketValue), 
+				experianMortgage, 
+				data.Properties.Where(x => x.Zoopla != null).Sum(x => x.Zoopla.AverageSoldPrice1Year));
+			
 			return data;
 		}
+
+
+		private static PropertyModel GetPropertyModel(Customer customer, CustomerAddress address) {
+			int zooplaValue = 0;
+			var lrBuilder = new LandRegistryModelBuilder();
+
+			if (address != null)
+			{
+			
+				if (address.IsOwnerAccordingToLandRegistry)
+				{
+					Zoopla zoopla = address.Zoopla.LastOrDefault();
+
+					if (zoopla != null)
+					{
+						CrossCheckModel.GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
+					}
+
+					var personalAddressPropertyModel = new PropertyModel
+					{
+						AddressId = address.AddressId,
+						Address = address.FormattedAddress,
+						FormattedAddress = address.FormattedAddress, 
+						MarketValue = zooplaValue, 
+						Zoopla = zoopla
+					};
+
+					var lr = address.LandRegistry
+										   .OrderByDescending(x => x.InsertDate)
+										   .FirstOrDefault(
+											   x =>
+											   x.RequestType == LandRegistryRequestType.Res &&
+											   x.ResponseType == LandRegistryResponseType.Success);
+
+					if (lr != null)
+					{
+						personalAddressPropertyModel.LandRegistry = lrBuilder.BuildResModel(lr.Response);
+						personalAddressPropertyModel.YearOfOwnership = personalAddressPropertyModel.LandRegistry.Proprietorship.CurrentProprietorshipDate;
+						personalAddressPropertyModel.NumberOfOwners = lr.Owners.Count();
+					}
+
+					return  personalAddressPropertyModel;
+				}
+			}
+
+			return null;
+		}
+
 
 		private static int GetZoopla1YearEstimate(Zoopla zoopla)
 		{
