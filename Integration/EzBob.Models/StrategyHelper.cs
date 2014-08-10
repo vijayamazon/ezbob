@@ -27,7 +27,6 @@
 	using ZooplaLib;
 	using log4net;
 	using MailApi;
-	using EnumDescription = Ezbob.Utils.Extensions.EnumDescription;
 
 	public class StrategyHelper
 	{
@@ -48,7 +47,6 @@
 
 		public StrategyHelper()
 		{
-
 			_session = ObjectFactory.GetInstance<ISession>();
 			_decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -757,11 +755,13 @@
 
 			if (customerAddress.Any())
 			{
-				foreach (var address in customerAddress) {
+				foreach (var address in customerAddress)
+				{
 					if (!address.Zoopla.Any() || reCheck)
 					{
 						var zooplaApi = new ZooplaApi();
-						try {
+						try
+						{
 							var areaValueGraphs = zooplaApi.GetAreaValueGraphs(address.Postcode);
 							var averageSoldPrices = zooplaApi.GetAverageSoldPrices(address.Postcode);
 							var zooplaEstimate = zooplaApi.GetZooplaEstimate(address.ZooplaAddress);
@@ -789,7 +789,8 @@
 
 							_session.Flush();
 						}
-						catch (Exception arg) {
+						catch (Exception arg)
+						{
 							log.ErrorFormat("Zoopla error {0}", arg);
 						}
 					}
@@ -797,7 +798,7 @@
 			}
 		}
 
-		public LandRegistryLib.LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber, out LandRegistry landRegistry)
+		public LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber, out LandRegistry landRegistry)
 		{
 			log.DebugFormat("GetLandRegistryData begin cId {0} titleNumber {1}", customerId, titleNumber);
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
@@ -806,15 +807,15 @@
 			var cache = lrRepo.GetRes(customerId, titleNumber);
 			if (cache != null)
 			{
-				var b = new LandRegistryLib.LandRegistryModelBuilder();
-				var cacheModel = new LandRegistryLib.LandRegistryDataModel
+				var b = new LandRegistryModelBuilder();
+				var cacheModel = new LandRegistryDataModel
 				{
 					Request = cache.Request,
 					Response = cache.Response,
 					Res = b.BuildResModel(cache.Response),
 					RequestType = cache.RequestType,
 					ResponseType = cache.ResponseType,
-					DataSource = LandRegistryLib.LandRegistryDataSource.Cache
+					DataSource = LandRegistryDataSource.Cache
 				};
 
 				if (!cache.Owners.Any())
@@ -840,22 +841,22 @@
 				return cacheModel;
 			}
 
-			var isProd = ConfigManager.CurrentValues.Instance.LandRegistryProd;
+			var isProd = CurrentValues.Instance.LandRegistryProd;
 
-			LandRegistryLib.ILandRegistryApi lr;
+			ILandRegistryApi lr;
 			if (isProd)
 			{
-				lr = new LandRegistryLib.LandRegistryApi(
-					ConfigManager.CurrentValues.Instance.LandRegistryUserName, 
-					Encrypted.Decrypt(ConfigManager.CurrentValues.Instance.LandRegistryPassword), 
-					ConfigManager.CurrentValues.Instance.LandRegistryFilePath);
+				lr = new LandRegistryApi(
+					CurrentValues.Instance.LandRegistryUserName,
+					Encrypted.Decrypt(CurrentValues.Instance.LandRegistryPassword),
+					CurrentValues.Instance.LandRegistryFilePath);
 			}
 			else
 			{
-				lr = new LandRegistryLib.LandRegistryTestApi();
+				lr = new LandRegistryTestApi();
 			}
 
-			LandRegistryLib.LandRegistryDataModel model;
+			LandRegistryDataModel model;
 			if (titleNumber != null)
 			{
 				model = lr.Res(titleNumber, customerId);
@@ -873,7 +874,7 @@
 
 				var owners = new List<LandRegistryOwner>();
 
-				if (model.ResponseType == LandRegistryLib.LandRegistryResponseType.Success && model.Res != null && model.Res.Proprietorship != null && model.Res.Proprietorship.ProprietorshipParties!= null)
+				if (model.ResponseType == LandRegistryResponseType.Success && model.Res != null && model.Res.Proprietorship != null && model.Res.Proprietorship.ProprietorshipParties != null)
 				{
 					foreach (var owner in model.Res.Proprietorship.ProprietorshipParties)
 					{
@@ -911,27 +912,19 @@
 			else
 			{
 				landRegistry = null;
-				model = new LandRegistryLib.LandRegistryDataModel
+				model = new LandRegistryDataModel
 					{
-						Res = new LandRegistryLib.LandRegistryResModel { Rejection = new LandRegistryLib.LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" } },
-						ResponseType = LandRegistryLib.LandRegistryResponseType.None
+						Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" } },
+						ResponseType = LandRegistryResponseType.None
 					};
 			}
 
-			model.DataSource = LandRegistryLib.LandRegistryDataSource.Api;
+			model.DataSource = LandRegistryDataSource.Api;
 			return model;
 		}
 
-		public static bool AreEqual(string a, string b)
-		{
-			if (string.IsNullOrEmpty(a))
-			{
-				return string.IsNullOrEmpty(b);
-			}
-			else
-			{
-				return string.Equals(a, b);
-			}
+		public static bool AreEqual(string a, string b) {
+			return string.IsNullOrEmpty(a) ? string.IsNullOrEmpty(b) : string.Equals(a, b);
 		}
 
 		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode)
@@ -941,7 +934,7 @@
 			try
 			{
 				//check cache
-				var cache = lrRepo.GetAll().Where(x => x.Customer.Id == customerId && x.RequestType == LandRegistryLib.LandRegistryRequestType.Enquiry);
+				var cache = lrRepo.GetAll().Where(x => x.Customer.Id == customerId && x.RequestType == LandRegistryRequestType.Enquiry);
 
 				if (cache.Any())
 				{
@@ -956,15 +949,15 @@
 							AreEqual(lrAddress.PostcodeZone, postCode) &&
 							AreEqual(lrAddress.StreetName, streetName))
 						{
-							var b = new LandRegistryLib.LandRegistryModelBuilder();
-							var cacheModel = new LandRegistryLib.LandRegistryDataModel
+							var b = new LandRegistryModelBuilder();
+							var cacheModel = new LandRegistryDataModel
 							{
 								Request = landRegistry.Request,
 								Response = landRegistry.Response,
 								Enquery = b.BuildEnquiryModel(landRegistry.Response),
 								RequestType = landRegistry.RequestType,
 								ResponseType = landRegistry.ResponseType,
-								DataSource = LandRegistryLib.LandRegistryDataSource.Cache,
+								DataSource = LandRegistryDataSource.Cache,
 							};
 							return cacheModel;
 						}
@@ -976,19 +969,19 @@
 				log.WarnFormat("Failed to retreive land registry enquiry from cache {0}", ex);
 			}
 
-			bool isProd = ConfigManager.CurrentValues.Instance.LandRegistryProd;
+			bool isProd = CurrentValues.Instance.LandRegistryProd;
 
-			LandRegistryLib.ILandRegistryApi lr;
+			ILandRegistryApi lr;
 			if (isProd)
 			{
-				lr = new LandRegistryLib.LandRegistryApi(
-					ConfigManager.CurrentValues.Instance.LandRegistryUserName,
-					Encrypted.Decrypt(ConfigManager.CurrentValues.Instance.LandRegistryPassword),
-					ConfigManager.CurrentValues.Instance.LandRegistryFilePath);
+				lr = new LandRegistryApi(
+					CurrentValues.Instance.LandRegistryUserName,
+					Encrypted.Decrypt(CurrentValues.Instance.LandRegistryPassword),
+					CurrentValues.Instance.LandRegistryFilePath);
 			}
 			else
 			{
-				lr = new LandRegistryLib.LandRegistryTestApi();
+				lr = new LandRegistryTestApi();
 			}
 
 			var model = lr.EnquiryByPropertyDescription(buildingNumber, buildingName, streetName, cityName, postCode, customerId);
@@ -1004,7 +997,7 @@
 					RequestType = model.RequestType,
 					ResponseType = model.ResponseType
 				});
-			model.DataSource = LandRegistryLib.LandRegistryDataSource.Api;
+			model.DataSource = LandRegistryDataSource.Api;
 			return model;
 		}
 
@@ -1109,11 +1102,11 @@
 				}
 
 				if (model != null && model.Enquery != null && model.ResponseType == LandRegistryResponseType.Success &&
-				    model.Enquery.Titles.Any() && model.Enquery.Titles.Count == 1)
+					model.Enquery.Titles.Any() && model.Enquery.Titles.Count == 1)
 				{
 					LandRegistry dbLandRegistry;
 					LandRegistryDataModel landRegistryDataModel = GetLandRegistryData(customerId, model.Enquery.Titles[0].TitleNumber, out dbLandRegistry);
-					
+
 					if (landRegistryDataModel.ResponseType == LandRegistryResponseType.Success)
 					{
 						// Verify customer is among owners
@@ -1144,5 +1137,6 @@
 				}
 			}
 		}
+
 	}
 }
