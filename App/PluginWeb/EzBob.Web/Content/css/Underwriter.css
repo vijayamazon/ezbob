@@ -1376,6 +1376,10 @@ td a.edit-loan {
         padding-left: 2px;
     }
 
+    #sidebar.sidebar-collapsed .nav-list > li > a > i {
+        min-width: inherit;
+    }
+
 .table > tbody + tbody {
     border-top: none;
 }
@@ -1471,6 +1475,18 @@ td a.edit-loan {
 
     .print-customer_details {
         display: none;
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    #profileHead {
+        position: relative !important;
+        width: 98% !important;
+    }
+    
+    .profile-content {
+        margin-top: 0 !important;
+        width: 98% !important;
     }
 }
 
