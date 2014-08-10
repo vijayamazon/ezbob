@@ -13,26 +13,61 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	BEGIN TRY
-		INSERT INTO CreatePasswordTokens(TokenID, CustomerID, DateCreated, DateAccessed, DateDeleted)
-		SELECT
-			@TokenID,
-			c.UserId,
-			@Now,
-			NULL,
-			NULL
-		FROM
-			Security_User c
-		WHERE
-			c.Email = @Email
+	------------------------------------------------------------------------------
 
-		IF @@ROWCOUNT = 1
-			SELECT CONVERT(BIT, 1) AS Success, '' AS ErrorMsg
-		ELSE
-			SELECT CONVERT(BIT, 0) AS Success, 'Row count is not equal to 1' AS ErrorMsg
-	END TRY
-	BEGIN CATCH
-		SELECT CONVERT(BIT, 0) AS Success, dbo.udfGetErrorMsg() AS ErrorMsg
-	END CATCH
+	DECLARE @UserID INT = NULL
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@UserID = UserId
+	FROM
+		Security_User
+	WHERE
+		Email = @Email
+
+	------------------------------------------------------------------------------
+
+	IF @UserID IS NULL
+		SELECT CONVERT(BIT, 0) AS Success
+	ELSE
+	BEGIN
+		SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
+
+		-------------------------------------------------------------------------
+
+		BEGIN TRANSACTION
+
+		-------------------------------------------------------------------------
+
+		UPDATE CreatePasswordTokens SET
+			DateAccessed = @Now
+		WHERE
+			CustomerID = @UserID
+			AND
+			DateAccessed IS NULL
+
+		-------------------------------------------------------------------------
+
+		UPDATE CreatePasswordTokens SET
+			DateDeleted = @Now
+		WHERE
+			CustomerID = @UserID
+			AND
+			DateDeleted IS NULL
+
+		-------------------------------------------------------------------------
+
+		INSERT INTO CreatePasswordTokens(TokenID, CustomerID, DateCreated, DateAccessed, DateDeleted)
+			VALUES (@TokenID, @UserID, @Now, NULL, NULL)
+
+		-------------------------------------------------------------------------
+
+		SELECT CONVERT(BIT, 1) AS Success
+
+		-------------------------------------------------------------------------
+
+		COMMIT TRANSACTION
+	END
 END
 GO
