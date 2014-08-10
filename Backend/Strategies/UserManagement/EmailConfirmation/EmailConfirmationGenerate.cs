@@ -22,6 +22,7 @@
 		public override void Execute() 
 		{
 			sp.ExecuteNonQuery();
+			m_oSp.ExecuteNonQuery();
 			Address = string.Format("<a href='{0}/confirm/{1}'>click here</a>", CurrentValues.Instance.CustomerSite.Value, Token);
 
 			Log.Debug("Confirmation token {0} has been created for user {1}.", Token.ToString("N"), sp.UserID);

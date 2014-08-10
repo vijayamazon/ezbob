@@ -31,16 +31,10 @@
 		[HttpPost]
 		public JsonResult Resend(int id) {
 			try {
-				var customer = _customers.Get(id);
-
-				m_oServiceClient.Instance.EmailConfirmationGenerateAndSend(
-					customer.Id,
-					(customer.PersonalInfo == null ? "" : customer.PersonalInfo.FirstName),
-					customer.Name
-				);
+				m_oServiceClient.Instance.EmailConfirmationGenerateAndSend(id);
 			}
 			catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to generate and send email confirmation request.");
+				ms_oLog.Alert(e, "Failed to generate and send email confirmation request to customer {0}.", id);
 			} // try
 
 			return Json(new { });

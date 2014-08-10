@@ -208,9 +208,6 @@
 		ActionMetaData RequestCashWithoutTakenLoan(int customerId);
 
 		[OperationContract]
-		ActionMetaData SendEmailVerification(int customerId, string email, string address);
-
-		[OperationContract]
 		ActionMetaData ThreeInvalidAttempts(int customerId);
 
 		[OperationContract]
@@ -484,7 +481,7 @@
 		EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID);
 
 		[OperationContract]
-		ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, string sFirstName, string sEmail);
+		ActionMetaData EmailConfirmationGenerateAndSend(int nUserID);
 
 		[OperationContract]
 		IntActionResult EmailConfirmationCheckOne(Guid oToken);

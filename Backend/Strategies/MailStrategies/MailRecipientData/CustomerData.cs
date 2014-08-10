@@ -16,32 +16,18 @@
 		#region method Load
 
 		public virtual void Load() {
-			DB.ForEachRowSafe((sr, bRowsetStart) => {
-				Id = sr["Id"];
-				FirstName = sr["FirstName"];
-				Surname = sr["Surname"];
-				FullName = sr["FullName"];
-				Mail = sr["Mail"];
-				IsOffline = sr["IsOffline"];
-				NumOfLoans = sr["NumOfLoans"];
-				RefNum = sr["RefNum"];
-				MobilePhone = sr["MobilePhone"];
-				DaytimePhone = sr["DaytimePhone"];
-				IsTest = sr["IsTest"];
-				Postcode = sr["Postcode"];
-				City = sr["City"];
-				return ActionResult.SkipAll;
-			},
-				"GetBasicCustomerData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", RequestedID)
-			);
-
-			if (Id != RequestedID)
-				throw new StrategyWarning(Strategy, "Failed to find a customer by id " + RequestedID);
+			LoadFromSp("GetBasicCustomerData");
 		} // Load
 
 		#endregion method Load
+
+		#region method LoadCustomerOrBroker
+
+		public virtual void LoadCustomerOrBroker() {
+			LoadFromSp("GetBasicCustomerOrBrokerData");
+		} // LoadCustomerOrBroker
+
+		#endregion method LoadCustomerOrBroker
 
 		#region method ToString
 
@@ -84,5 +70,35 @@
 		protected AStrategy Strategy { get; private set; }
 		protected AConnection DB { get; private set; }
 		protected int RequestedID { get; private set; }
+
+		#region private
+
+		private void LoadFromSp(string sSpName) {
+			SafeReader sr = DB.GetFirst(
+				sSpName,
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", RequestedID)
+			);
+
+			Id = sr["Id"];
+
+			if (Id != RequestedID)
+				throw new StrategyWarning(Strategy, "Failed to find a customer by id " + RequestedID);
+
+			FirstName = sr["FirstName"];
+			Surname = sr["Surname"];
+			FullName = sr["FullName"];
+			Mail = sr["Mail"];
+			IsOffline = sr["IsOffline"];
+			NumOfLoans = sr["NumOfLoans"];
+			RefNum = sr["RefNum"];
+			MobilePhone = sr["MobilePhone"];
+			DaytimePhone = sr["DaytimePhone"];
+			IsTest = sr["IsTest"];
+			Postcode = sr["Postcode"];
+			City = sr["City"];
+		} // Load
+
+		#endregion private
 	} // class CustomerData
 } // namespace

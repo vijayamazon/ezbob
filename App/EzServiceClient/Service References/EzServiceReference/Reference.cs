@@ -2314,12 +2314,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
@@ -2585,10 +2579,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult> EmailConfirmationGenerateAsync(int nUserID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSend", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSendResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, string sFirstName, string sEmail);
+        ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationGenerateAndSend(int nUserID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSend", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationGenerateAndSendResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationGenerateAndSendAsync(int nUserID, string sFirstName, string sEmail);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationGenerateAndSendAsync(int nUserID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailConfirmationCheckOne", ReplyAction="http://tempuri.org/IEzService/EmailConfirmationCheckOneResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult EmailConfirmationCheckOne(System.Guid oToken);
@@ -3040,12 +3034,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequestCashWithoutTakenLoan", ReplyAction="http://tempuri.org/IEzService/RequestCashWithoutTakenLoanResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RequestCashWithoutTakenLoanAsync(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEmailVerification", ReplyAction="http://tempuri.org/IEzService/SendEmailVerificationResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string email, string address);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEmailVerification", ReplyAction="http://tempuri.org/IEzService/SendEmailVerificationResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendEmailVerificationAsync(int customerId, string email, string address);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ThreeInvalidAttempts", ReplyAction="http://tempuri.org/IEzService/ThreeInvalidAttemptsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ThreeInvalidAttempts(int customerId);
         
@@ -3231,6 +3219,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
         System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3266,14 +3260,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
-            return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
-            return base.Channel.MainStrategy2Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
@@ -3628,12 +3614,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EmailConfirmationGenerateAsync(nUserID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, string sFirstName, string sEmail) {
-            return base.Channel.EmailConfirmationGenerateAndSend(nUserID, sFirstName, sEmail);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData EmailConfirmationGenerateAndSend(int nUserID) {
+            return base.Channel.EmailConfirmationGenerateAndSend(nUserID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationGenerateAndSendAsync(int nUserID, string sFirstName, string sEmail) {
-            return base.Channel.EmailConfirmationGenerateAndSendAsync(nUserID, sFirstName, sEmail);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailConfirmationGenerateAndSendAsync(int nUserID) {
+            return base.Channel.EmailConfirmationGenerateAndSendAsync(nUserID);
         }
         
         public ServiceClientProxy.EzServiceReference.IntActionResult EmailConfirmationCheckOne(System.Guid oToken) {
@@ -4236,14 +4222,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.RequestCashWithoutTakenLoanAsync(customerId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string email, string address) {
-            return base.Channel.SendEmailVerification(customerId, email, address);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendEmailVerificationAsync(int customerId, string email, string address) {
-            return base.Channel.SendEmailVerificationAsync(customerId, email, address);
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData ThreeInvalidAttempts(int customerId) {
             return base.Channel.ThreeInvalidAttempts(customerId);
         }
@@ -4491,5 +4469,13 @@ namespace ServiceClientProxy.EzServiceReference {
         public System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber) {
             return base.Channel.LandRegistryResAsync(customerId, titleNumber);
         }
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
     }
 }

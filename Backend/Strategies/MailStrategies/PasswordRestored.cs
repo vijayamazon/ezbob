@@ -32,15 +32,45 @@
 				throw new StrategyAlert(this, "Failed to generate a change password token for customer " + CustomerData.Mail);
 
 			Variables = new Dictionary<string, string> {
-				{"Link", CurrentValues.Instance.CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N")},
+				{"Link", CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N")},
 				{"FirstName", string.IsNullOrWhiteSpace(CustomerData.FirstName) ? Salutation : CustomerData.FirstName}
 			};
 
-			if (true) { // TODO: check email confirmed
+			SafeReader sr = DB.GetFirst(
+				"LoadEmailConfirmationState",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("UserID", CustomerData.Id)
+			);
+
+			string sErrMsg = null;
+
+			if ((int)sr["UserID"] != CustomerData.Id)
+				sErrMsg = "failed to load email confirmation state";
+			else if (!sr["IsConfirmed"])
+				sErrMsg = "email is not confirmed";
+
+			if (sErrMsg == null)
 				TemplateName = "Mandrill - EZBOB password was restored";
-			}
 			else {
+				int nBrokerID = DB.ExecuteScalar<int>(
+					"BrokerIsBroker",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("ContactEmail", CustomerData.Mail)
+				);
+
 				SendToCustomer = false;
+
+				Variables["UserType"] = (nBrokerID == 0) ? "customer" : "broker";
+
+				Variables["ErrMsg"] = sErrMsg;
+
+				Variables["UserID"] = CustomerData.Id.ToString();
+
+				Variables["ProfileLink"] = (nBrokerID == 0)
+					? UnderwriterSite + "/Underwriter/Customers#profile/" + CustomerData.Id
+					: UnderwriterSite + "/Underwriter/Customers#broker/" + nBrokerID;
+
+				TemplateName = "Mandrill - EZBOB password was restored - to staff";
 			}
 		} // SetTemplateAndVariables
 

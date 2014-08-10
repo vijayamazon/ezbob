@@ -321,18 +321,17 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		});
 	}, // changeFraudStatusManualyClicked
 
-	templateHelpers: {
-		getIcon: function() {
-			return (
-				this.EmailState === "Confirmed" || this.EmailState === "ManuallyConfirmed"
-			) ? "fa fa-check-circle" : "fa fa-question-circle";
-		},
-	}, // templateHelpers
-
 	serializeData: function() {
+		var sEmailState = this.model.get('EmailState');
+
+		var sIcon = (
+			sEmailState === 'Confirmed' || sEmailState === 'ManuallyConfirmed' || sEmailState === 'ImplicitlyConfirmed'
+		) ? 'fa fa-check-circle' : 'fa fa-question-circle';
+
 		return {
 			data: this.model.toJSON(),
-			getIcon: this.templateHelpers.getIcon,
+			icon: sIcon,
+			getIcon: function() { return this.icon; },
 		};
 	}, // serializeData
 

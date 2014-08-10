@@ -8,15 +8,11 @@
 
 		public SendEmailVerification(
 			int nCustomerID,
-			string sFirstName,
-			string sEmail,
 			string sAddress,
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(nCustomerID, true, oDB, oLog) {
-			m_sFirstName = sFirstName;
 			m_sAddress = sAddress;
-			m_sEmail = sEmail;
 		} // constructor
 
 		#endregion constructor
@@ -29,8 +25,8 @@
 			TemplateName = "Mandrill - Confirm your email";
 
 			Variables = new Dictionary<string, string> {
-				{ "FirstName", m_sFirstName },
-				{ "Email", m_sEmail },
+				{ "FirstName", CustomerData.FirstName },
+				{ "Email", CustomerData.Mail },
 				{ "ConfirmEmailAddress", m_sAddress }
 			};
 		} // SetTemplateAndVariables
@@ -40,13 +36,16 @@
 		#region method LoadRecipientData
 
 		protected override void LoadRecipientData() {
-			// Nothing here.
+			Log.Debug("Loading customer data...");
+
+			CustomerData = new CustomerData(this, CustomerId, DB);
+			CustomerData.LoadCustomerOrBroker();
+
+			Log.Debug("Loading customer data complete.");
 		} // LoadRecipientData
 
 		#endregion method LoadRecipientData
 
 		private readonly string m_sAddress;
-		private readonly string m_sEmail;
-		private readonly string m_sFirstName;
 	} // class SendEmailVerification
 } // namespace

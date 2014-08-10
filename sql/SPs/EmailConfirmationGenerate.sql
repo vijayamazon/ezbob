@@ -15,6 +15,11 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO EmailConfirmationRequest(Id, CustomerId, [Date], State)
-		VALUES (@Token, @UserID, @Now, @EmailStateID)
+	SELECT
+		@Token, @UserID, @Now, s.EmailState
+	FROM
+		EmailConfirmationStates s
+	WHERE
+		s.EmailStateID = @EmailStateID
 END
 GO

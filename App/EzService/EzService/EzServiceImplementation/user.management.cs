@@ -193,7 +193,7 @@
 
 		#region method EmailConfirmationGenerateAndSend
 
-		public ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, string sFirstName, string sEmail) {
+		public ActionMetaData EmailConfirmationGenerateAndSend(int nUserID) {
 			EmailConfirmationGenerate oInstance;
 
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, null, nUserID);
@@ -201,7 +201,7 @@
 			if (string.IsNullOrWhiteSpace(oInstance.Address))
 				return oMetaData;
 
-			return Execute<SendEmailVerification>(nUserID, null, nUserID, sFirstName, sEmail, oInstance.Address);
+			return Execute<SendEmailVerification>(nUserID, null, nUserID, oInstance.Address);
 		} // EmailConfirmationGenerateAndSend
 
 		#endregion method EmailConfirmationGenerateAndSend

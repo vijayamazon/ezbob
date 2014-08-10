@@ -355,17 +355,6 @@
 		}
 
 		[Activation]
-		private void SendEmailVerification() {
-			int customerId;
-			if (m_aryArgs.Length != 3 || !int.TryParse(m_aryArgs[1], out customerId)) {
-				m_oLog.Msg("Usage: SendEmailVerification <CustomerId> <address>");
-				return;
-			}
-
-			m_oServiceClient.SendEmailVerification(customerId, "", m_aryArgs[2]);
-		}
-
-		[Activation]
 		private void ThreeInvalidAttempts() {
 			int customerId;
 			if (m_aryArgs.Length != 2 || !int.TryParse(m_aryArgs[1], out customerId)) {

@@ -68,7 +68,7 @@
 			);
 
 			// TODO in the next line
-			new SendEmailVerification(m_oSpUpdate.UserID, "TODO: name",  m_oData.Email, sAddress, DB, Log).Execute();
+			new SendEmailVerification(m_oSpUpdate.UserID, sAddress, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute

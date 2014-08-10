@@ -27,12 +27,12 @@ BEGIN
 			c.Email = @Email
 
 		IF @@ROWCOUNT = 1
-			SELECT CONVERT(BIT, 1) AS Success
+			SELECT CONVERT(BIT, 1) AS Success, '' AS ErrorMsg
 		ELSE
-			SELECT CONVERT(BIT, 0) AS Success
+			SELECT CONVERT(BIT, 0) AS Success, 'Row count is not equal to 1' AS ErrorMsg
 	END TRY
 	BEGIN CATCH
-		SELECT CONVERT(BIT, 0) AS Success
+		SELECT CONVERT(BIT, 0) AS Success, dbo.udfGetErrorMsg() AS ErrorMsg
 	END CATCH
 END
 GO

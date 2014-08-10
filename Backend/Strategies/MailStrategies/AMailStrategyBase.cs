@@ -84,7 +84,9 @@
 		#region method GetRecipients
 
 		protected virtual Addressee[] GetRecipients() {
-			return SendToCustomer ? new[] { new Addressee(CustomerData.Mail, toTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "") } : new Addressee[0];
+			return SendToCustomer
+				? new[] { new Addressee(CustomerData.Mail, toTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "") }
+				: new Addressee[0];
 		} // GetRecipients
 
 		#endregion method GetCustomerEmail
