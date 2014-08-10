@@ -28,7 +28,8 @@
                                     <td><span><%- prop.Address %></span></td>
                                     <td><span><%- EzBob.formatDate3(prop.YearOfOwnership) %></span></td>
                                     <td><span><%- prop.NumberOfOwners %></span></td>
-                                    <td><div class="accordion-heading">
+                                    <td>
+                                        <div class="accordion-heading">
                                             <a class="accordion-toggle" data-toggle="collapse" href="#<%-'zoopla' + propertyCounter%>">Zoopla</a>
                                         </div>
                                     </td>
@@ -51,15 +52,21 @@
                         </thead>
                         <tbody class="box-content">
                             <tr>
+                                <td><b>Land Registry</b></td>
+                                <td>
+                                    <button class="btn btn-primary" id="landregistry" data-postcode="<%- model.Postcode %>" data-address="<%- model.FormattedAddress %>">New Land Registry Enquiry</button>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td><b>Zoopla Estimate</b></td>
                                 <td><% if (model.NumberOfProperties > 0) {%>
-                                <span>£ <%- model.MarketValue %></span>
+                                    <span>£ <%- model.MarketValue %></span>
                                     <% if (model.ZooplaUpdateDate != null) { %>
-                                <span>, updated: <%- EzBob.formatDate2(model.ZooplaUpdateDate) %></span>
+                                    <span>, updated: <%- EzBob.formatDate2(model.ZooplaUpdateDate) %></span>
                                     <% } %>
-                                <span>(average: £ <%- model.Zoopla1YearAverage %>)</span>
+                                    <span>(average: £ <%- model.Zoopla1YearAverage %>)</span>
                                     <% } %>
-                                <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck all owned properties"><i class="fa fa-refresh"></i></button>
+                                    <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck all owned properties"><i class="fa fa-refresh"></i></button>
                                 </td>
                             </tr>
                             <tr>
@@ -67,17 +74,17 @@
                                 <td>
                                     <span>£ <%- model.SumOfMortgages %></span>
                                     <% if (model.NumberOfMortgages > 0) { %>
-                                <span>(<%- model.NumberOfMortgages %>)</span>
+                                    <span>(<%- model.NumberOfMortgages %>)</span>
                                     <%}%>
                                 </td>
                             </tr>
                             <tr>
                                 <td><b>Property net worth</b></td>
                                 <td><% if (model.NumberOfProperties > 0) {%>
-                                £ <%- model.NetWorth %>
-                                <% } else { %>
-                                Not home owner
-                                <% } %>
+                                    £ <%- model.NetWorth %>
+                                    <% } else { %>
+                                    Not home owner
+                                    <% } %>
                                 </td>
                             </tr>
                         </tbody>
@@ -334,7 +341,7 @@
                             <% }); %>
                         </div>
                     </div>
-                    
+
                     <div class="box">
                         <div class="box-title">
                             <h3>Zoopla</h3>
@@ -372,7 +379,9 @@
                                         <table class="table rright">
                                             <thead class="box">
                                                 <tr class="box-title">
-                                                    <th colspan="2"><h3>Average Sales For Area <%-data.AreaName%></h3></th>
+                                                    <th colspan="2">
+                                                        <h3>Average Sales For Area <%-data.AreaName%></h3>
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
