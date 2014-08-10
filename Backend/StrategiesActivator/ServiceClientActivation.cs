@@ -355,17 +355,6 @@
 		}
 
 		[Activation]
-		private void ThreeInvalidAttempts() {
-			int customerId;
-			if (m_aryArgs.Length != 2 || !int.TryParse(m_aryArgs[1], out customerId)) {
-				m_oLog.Msg("Usage: ThreeInvalidAttempts <CustomerId>");
-				return;
-			}
-
-			m_oServiceClient.ThreeInvalidAttempts(customerId);
-		}
-
-		[Activation]
 		private void TransferCashFailed() {
 			int customerId;
 			if (m_aryArgs.Length != 2 || !int.TryParse(m_aryArgs[1], out customerId)) {

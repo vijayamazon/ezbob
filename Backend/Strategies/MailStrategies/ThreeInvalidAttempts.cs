@@ -1,15 +1,16 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System;
 	using System.Collections.Generic;
 	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using StoredProcs;
 	using UserManagement;
 
 	public class ThreeInvalidAttempts : AMailStrategyBase {
 		#region constructor
 
-		public ThreeInvalidAttempts(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(customerId, true, oDb, oLog) {
+		public ThreeInvalidAttempts(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
 		#endregion constructor
@@ -27,10 +28,11 @@
 
 			TemplateName = "Mandrill - Temporary password";
 
+			Guid oToken = InitCreatePasswordToken.Execute(DB, CustomerData.Mail);
+
 			Variables = new Dictionary<string, string> {
-				{"Password", oNewPassGenerator.Password.RawValue},
 				{"FirstName", string.IsNullOrEmpty(CustomerData.FirstName) ? "customer" : CustomerData.FirstName},
-				{"ProfilePage", "https://app.ezbob.com/Customer/Profile"},
+				{"Link", CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N")},
 				{"NIMRODTELEPHONENUMBER", "+44 800 011 4787"} // TODO: change name of variable here and in mandrill\mailchimp
 			};
 		} // SetTemplateAndVariables

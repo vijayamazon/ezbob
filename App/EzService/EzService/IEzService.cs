@@ -208,9 +208,6 @@
 		ActionMetaData RequestCashWithoutTakenLoan(int customerId);
 
 		[OperationContract]
-		ActionMetaData ThreeInvalidAttempts(int customerId);
-
-		[OperationContract]
 		ActionMetaData TransferCashFailed(int customerId);
 
 		[OperationContract]

@@ -1,7 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System.Collections.Generic;
 	using EzBob.Backend.Strategies.MailStrategies;
-	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
 		#region async
@@ -73,10 +72,6 @@
 		public ActionMetaData RequestCashWithoutTakenLoan(int customerId) {
 			return Execute(customerId, null, typeof(RequestCashWithoutTakenLoan), customerId);
 		} // RequestCashWithoutTakenLoan
-
-		public ActionMetaData ThreeInvalidAttempts(int customerId) {
-			return Execute(customerId, null, typeof(ThreeInvalidAttempts), customerId);
-		} // ThreeInvalidAttempts
 
 		public ActionMetaData TransferCashFailed(int customerId) {
 			return Execute(customerId, null, typeof(TransferCashFailed), customerId);
