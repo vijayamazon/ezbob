@@ -125,7 +125,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			schedule: schedule,
 			isShowGift: false,
 			isShowExportBlock: false,
-			isShowExceedMaxInterestForSource: false
+			isShowExceedMaxInterestForSource: false,
+		    isPersonal: this.customer.get("CustomerPersonalInfo").TypeOfBusiness in [0, 4, 2]
 		});
 
 		scheduleView.render();
@@ -253,10 +254,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		var view = this.getCurrentViewId();
 
 		this.agreementView.$el.find('.download').attr('href', "" + window.gRootPath + "Customer/Agreement/Download?amount=" + amount + "&viewName=" + view + "&loanType=" + loanType + "&repaymentPeriod=" + repaymentPeriod);
-
-		console.log('download link is', this.agreementView.$el.find('.download').length);
-		console.log('download link updated to', this.agreementView.$el.find('.download').attr('href'));
-	}, // updateDownloadLink
+        }, // updateDownloadLink
 
 	createAgreementView: function(agreementdata) {
 		var oViewArgs = {

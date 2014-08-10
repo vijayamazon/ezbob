@@ -23,7 +23,8 @@ EzBob.LoanScheduleView = Backbone.Marionette.ItemView.extend({
 			LoanSourceName: this.options.schedule.LoanSourceName,
 			ManualAddressWarning: this.options.ManualAddressWarning,
 			customer: this.options.customer,
-			refNum: this.options.refNum
+			refNum: this.options.refNum,
+			isPersonal: this.options.isPersonal
 		};
 
 		if (data.MaxInterestForSource === null)

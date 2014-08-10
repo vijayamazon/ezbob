@@ -53,6 +53,7 @@
 
 			model.Id = customer.Id;
 			model.CustomerName = customer.PersonalInfo != null ? customer.PersonalInfo.Fullname : "";
+			model.TypeOfBusiness = customer.PersonalInfo != null ? (int)customer.PersonalInfo.TypeOfBusiness : 0;
 			model.CustomerRefNum = customer.RefNumber;
 			if (cr != null)
 			{

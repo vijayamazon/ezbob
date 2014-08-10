@@ -219,6 +219,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
                 ManualAddressWarning: data.ManualAddressWarning
                 customer: that.model.get('CustomerName')
                 refNum: that.model.get('CustomerRefNum')
+                isPersonal: that.model.get('TypeOfBusiness') of [0, 4, 2]
             )
             scheduleView.render()
             that.$el.find("#loan-schedule .simple-well").hide()
@@ -261,7 +262,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
         $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId")+"&isExcel=true&isShowDetails=true&customerId="+@model.get("CustomerId"));
         
     exportToPrint: ->
-        elem = document.getElementsByClassName("loan-schedule")[0]
+        elem = $(".loan-schedule:visible")[0]
         domClone = elem.cloneNode(true)
         $printSection = document.getElementById("printSection");
         if (!$printSection)

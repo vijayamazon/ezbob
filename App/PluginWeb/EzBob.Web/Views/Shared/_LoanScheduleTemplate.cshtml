@@ -14,7 +14,9 @@
 		</div>
 
 		<div class="rlc">
+            <%if(isPersonal) {%>
 			<div class="apr">APR = <%- apr %>%</div>
+            <%}%>
 			<div class="real-cost">Real Loan Cost = <%- EzBob.formatPercents(realInterestCost) %></div>
 		</div>
 	</div>

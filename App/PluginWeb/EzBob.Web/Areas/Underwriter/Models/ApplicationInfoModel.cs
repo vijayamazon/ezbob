@@ -75,5 +75,7 @@
 		public decimal RealCost { get; set; }
 
 		public SuggestedAmountModel[] SuggestedAmounts { get; set; }
+		public int TypeOfBusiness { get; set; }
+
     }
 }

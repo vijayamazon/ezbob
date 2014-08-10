@@ -255,7 +255,8 @@
           isShowExceedMaxInterestForSource: true,
           ManualAddressWarning: data.ManualAddressWarning,
           customer: that.model.get('CustomerName'),
-          refNum: that.model.get('CustomerRefNum')
+          refNum: that.model.get('CustomerRefNum'),
+          isPersonal: that.model.get('TypeOfBusiness') in [0, 4, 2]
         });
         scheduleView.render();
         return that.$el.find("#loan-schedule .simple-well").hide();
@@ -264,7 +265,7 @@
     getButtonName: function() {
       return "Approve";
     },
-    dlgWidth: 650,
+    dlgWidth: 880,
     dlgHeight: 900,
     onSaved: function() {
       var that;
@@ -307,7 +308,7 @@
     },
     exportToPrint: function() {
       var $printSection, domClone, elem;
-      elem = document.getElementsByClassName("loan-schedule")[0];
+      elem = $(".loan-schedule:visible")[0];
       domClone = elem.cloneNode(true);
       $printSection = document.getElementById("printSection");
       if (!$printSection) {
