@@ -8,9 +8,9 @@
         <div class="col-md-12">
             <div class="box">
                 <div class="box-content">
-                    <table class="table">
-                        <thead class="box">
-                            <tr class="box-title">
+                    <table class="table box">
+                        <thead class="box-title">
+                            <tr>
                                 <th>#</th>
                                 <th>Market Value</th>
                                 <th>Address</th>
@@ -42,9 +42,9 @@
                         </tbody>
                     </table>
 
-                    <table class="table squeezed rright">
-                        <thead class="box">
-                            <tr class="box-title">
+                    <table class="table squeezed rright box">
+                        <thead class="box-title">
+                            <tr>
                                 <th>col 1</th>
                                 <th>col 2</th>
                             </tr>
@@ -346,83 +346,85 @@
                                 <a class="accordion-toggle" data-toggle="collapse" href="#<%-'zoopla' + i%>">Zoopla <%-i+1%></a>
                             </div>
                             <div id="<%-'zoopla' + i%>" class="accordion-body collapse">
-                                <% if(data.error) {%>
-                                <h3><%-data.error%></h3>
+                                <div class="row">
+                                    <% if(data.error) {%>
+                                    <h3><%-data.error%></h3>
 
-                                <%} else {%>
-                                <div class="col-md-12">
-                                    <h3><%-property.FormattedAddress%></h3>
-                                    <table class="table">
-                                        <thead class="box">
-                                            <tr class="box-title">
-                                                <th>Estimate</th>
-                                                <th>Update Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><%-EzBob.formatPoundsAsInt(data.ZooplaEstimate)%></td>
-                                                <td><%-EzBob.formatDate3(data.UpdateDate)%></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <%} else {%>
+                                    <div class="col-md-12">
+                                        <h3><%-property.FormattedAddress%></h3>
+                                        <table class="table">
+                                            <thead class="box">
+                                                <tr class="box-title">
+                                                    <th>Estimate</th>
+                                                    <th>Update Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><%-EzBob.formatPoundsAsInt(data.ZooplaEstimate)%></td>
+                                                    <td><%-EzBob.formatDate3(data.UpdateDate)%></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table rright">
+                                            <thead class="box">
+                                                <tr class="box-title">
+                                                    <th colspan="2"><h3>Average Sales For Area <%-data.AreaName%></h3></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Average Sold Price 1 year</td>
+                                                    <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice1Year)%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Sold Price 3 years</td>
+                                                    <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice3Year)%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Sold Price 5 years</td>
+                                                    <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice5Year)%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Sold Price 7 years</td>
+                                                    <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice7Year)%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Num of Sales 1 Year</td>
+                                                    <td><%-EzBob.formatIntWithCommas(data.NumerOfSales1Year)%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Num of Sales 3 Years</td>
+                                                    <td><%-EzBob.formatIntWithCommas(data.NumerOfSales3Year)%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Num of Sales 5 Years</td>
+                                                    <td><%-EzBob.formatIntWithCommas(data.NumerOfSales5Year)%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Num of Sales 7 Years</td>
+                                                    <td><%-EzBob.formatIntWithCommas(data.NumerOfSales7Year)%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Turnover <i class="icon-white icon-info-sign" data-turnover=""></i></td>
+                                                    <td><%-data.TurnOver%>%</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <img src="<%-data.AverageValuesGraphUrl%>" />
+                                        <img src="<%-data.HomeValuesGraphUrl%>" />
+                                        <a href="<%-data.PricesUrl%>" class="btn btn-primary" target="_blank">Go to Zoopla <i class="fa fa-info-circle" data-zoopla=""></i></a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <img src="<%-data.ValueRangesGraphUrl%>" />
+                                        <img src="<%-data.ValueTrendGraphUrl%>" />
+                                        <img src="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=<%-property.FormattedAddress%>" />
+                                    </div>
+                                    <%}%>
                                 </div>
-                                <div class="col-md-6">
-                                    <table class="table rright">
-                                        <thead class="box">
-                                            <tr class="box-title">
-                                                <th colspan="2"><h3>Average Sales For Area <%-data.AreaName%></h3></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Average Sold Price 1 year</td>
-                                                <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice1Year)%></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Average Sold Price 3 years</td>
-                                                <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice3Year)%></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Average Sold Price 5 years</td>
-                                                <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice5Year)%></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Average Sold Price 7 years</td>
-                                                <td><%-EzBob.formatPoundsAsInt(data.AverageSoldPrice7Year)%></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Num of Sales 1 Year</td>
-                                                <td><%-EzBob.formatIntWithCommas(data.NumerOfSales1Year)%></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Num of Sales 3 Years</td>
-                                                <td><%-EzBob.formatIntWithCommas(data.NumerOfSales3Year)%></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Num of Sales 5 Years</td>
-                                                <td><%-EzBob.formatIntWithCommas(data.NumerOfSales5Year)%></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Num of Sales 7 Years</td>
-                                                <td><%-EzBob.formatIntWithCommas(data.NumerOfSales7Year)%></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Turnover <i class="icon-white icon-info-sign" data-turnover=""></i></td>
-                                                <td><%-data.TurnOver%>%</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <img src="<%-data.AverageValuesGraphUrl%>" />
-                                    <img src="<%-data.HomeValuesGraphUrl%>" />
-                                    <a href="<%-data.PricesUrl%>" class="btn btn-primary" target="_blank">Go to Zoopla <i class="fa fa-info-circle" data-zoopla=""></i></a>
-                                </div>
-                                <div class="class="col-md-6"">
-                                    <img src="<%-data.ValueRangesGraphUrl%>" />
-                                    <img src="<%-data.ValueTrendGraphUrl%>" />
-                                    <img src="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=<%-property.FormattedAddress%>" />
-                                </div>
-                                <%}%>
                             </div>
                             <%});%>
                         </div>
