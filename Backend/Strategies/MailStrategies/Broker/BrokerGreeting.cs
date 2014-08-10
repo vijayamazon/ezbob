@@ -3,6 +3,8 @@ using Ezbob.Database;
 using Ezbob.Logger;
 
 namespace EzBob.Backend.Strategies.MailStrategies {
+	using UserManagement.EmailConfirmation;
+
 	public class BrokerGreeting : ABrokerMailToo {
 		#region public
 
@@ -24,9 +26,13 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 		protected override void SetTemplateAndVariables() {
 			TemplateName = "Broker greeting";
 
+			var ecg = new EmailConfirmationGenerate(BrokerData.UserID, DB, Log);
+			ecg.Execute();
+
 			Variables = new Dictionary<string, string> {
 				{ "BrokerName", BrokerData.FirmName },
-				{ "ContactName", BrokerData.FullName }
+				{ "ContactName", BrokerData.FullName },
+				{ "Link", string.Format("{0}/confirm/{1}", CustomerSite, ecg.Token) }
 			};
 		} // SetTemplateAndVariables
 

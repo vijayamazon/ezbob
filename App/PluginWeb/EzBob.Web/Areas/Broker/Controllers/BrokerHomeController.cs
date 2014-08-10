@@ -93,7 +93,7 @@
 			} // if
 
 			ms_oLog.Debug(
-				"Broker signup request:" +
+				"Broker sign up request:" +
 				"\n\tFirm name: {0}" +
 				"\n\tFirm reg num: {1}" +
 				"\n\tContact person name: {2}" +
@@ -129,7 +129,7 @@
 			} // if
 
 			if (User.Identity.IsAuthenticated) {
-				ms_oLog.Warn("Signup request with contact email {0}: already authorised as {1}.", ContactEmail, User.Identity.Name);
+				ms_oLog.Warn("Sign up request with contact email {0}: already authorised as {1}.", ContactEmail, User.Identity.Name);
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
@@ -151,21 +151,21 @@
 					IsCaptchaEnabled != 0,
 					TermsID,
 					sReferredBy
-					);
+				);
 
 				if (!string.IsNullOrEmpty(bp.Properties.ErrorMsg)) {
-					ms_oLog.Warn("Failed to signup as a broker. {0}", bp.Properties.ErrorMsg);
+					ms_oLog.Warn("Failed to sign up as a broker. {0}", bp.Properties.ErrorMsg);
 					return new BrokerForJsonResult(bp.Properties.ErrorMsg);
-				}
+				} // if
 			}
 			catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to signup as a broker.");
+				ms_oLog.Alert(e, "Failed to sign up as a broker.");
 				return new BrokerForJsonResult("Registration failed. Please contact customer care.");
 			} // try
 
 			BrokerHelper.SetAuth(ContactEmail);
 
-			ms_oLog.Debug("Broker signup succeeded for: {0}", ContactEmail);
+			ms_oLog.Debug("Broker sign up succeeded for: {0}", ContactEmail);
 
 			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties) { antiforgery_token = AntiForgery.GetHtml().ToString() };
 		} // Signup

@@ -75,10 +75,9 @@
 			if (!m_bIsCaptchaEnabled) {
 				var oValidator = new ValidateMobileCode(m_oCreateSp.ContactMobile, m_sMobileCode, DB, Log);
 				oValidator.Execute();
+
 				if (!oValidator.IsValidatedSuccessfully())
-				{
 					Properties.ErrorMsg = "Failed to validate mobile code.";
-				}
 			} // if
 
 			m_oCreateSp.FillFirst(Properties);

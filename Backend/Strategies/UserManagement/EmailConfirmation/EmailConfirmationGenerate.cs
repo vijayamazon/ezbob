@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.UserManagement.EmailConfirmation {
 	using System;
-	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -31,7 +30,7 @@
 
 		public override void Execute() {
 			m_oSp.ExecuteNonQuery();
-			Address = string.Format("<a href='{0}/confirm/{1}'>click here</a>", CurrentValues.Instance.CustomerSite.Value, Token);
+			Address = string.Format("<a href='{0}/confirm/{1}'>click here</a>", CustomerSite, Token);
 
 			Log.Debug("Confirmation token {0} has been created for user {1}.", Token.ToString("N"), m_oSp.UserID);
 		} // Execute

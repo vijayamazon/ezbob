@@ -12,7 +12,8 @@ BEGIN
 		BrokerID,
 		FirmName,
 		ContactName,
-		ContactEmail
+		ContactEmail,
+		UserID
 	FROM
 		Broker
 	WHERE
