@@ -122,20 +122,6 @@
 			return null;
 		}
 
-
-		private static int GetZoopla1YearEstimate(Zoopla zoopla)
-		{
-			var regexObj = new Regex(@"[^\d]");
-			var stringVal = string.IsNullOrEmpty(zoopla.ZooplaEstimate) ? "" : regexObj.Replace(zoopla.ZooplaEstimate.Trim(), "");
-			int intVal;
-			if (!int.TryParse(stringVal, out intVal))
-			{
-				intVal = zoopla.AverageSoldPrice1Year;
-			}
-
-			return intVal;
-		}
-
 		[Ajax]
 		[HttpGet]
 		public JsonResult Zoopla(int customerId, bool recheck)
