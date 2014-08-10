@@ -95,7 +95,7 @@
                             <h3>Land Registry</h3>
                         </div>
                         <div class="box-content">
-                            <% _.each(model.Properties, function(property, i) { console.log('property',property);
+                            <% _.each(model.Properties, function(property, i) {
                             var landRegistry = property.LandRegistry || {}; %>
                             <div class="accordion-heading">
                                 <a class="accordion-toggle" data-toggle="collapse" href="#<%-landRegistry.TitleNumber + 'lr' + i%>">Title Number: <%-landRegistry.TitleNumber%></a>
@@ -347,7 +347,7 @@
                             <h3>Zoopla</h3>
                         </div>
                         <div class="box-content">
-                            <% _.each(model.Properties, function(property, i) { console.log('property',property);
+                            <% _.each(model.Properties, function(property, i) {
                                 var data = property.Zoopla || { error: 'no data' }; %>
                             <div class="accordion-heading">
                                 <a class="accordion-toggle" data-toggle="collapse" href="#<%-'zoopla' + i%>">Zoopla <%-i+1%></a>
