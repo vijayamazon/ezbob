@@ -81,6 +81,8 @@ BEGIN
 		INSERT INTO EmailConfirmationRequest(Id, CustomerId, Date, State)
 			VALUES (@RequestID, @UserID, @Now, @RequestState)
 
+		EXECUTE InitCreatePasswordTokenByUserID @RequestID, @UserID, @Now
+
 		COMMIT TRAN
 	END
 

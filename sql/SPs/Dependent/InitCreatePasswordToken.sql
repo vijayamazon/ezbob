@@ -32,42 +32,19 @@ BEGIN
 		SELECT CONVERT(BIT, 0) AS Success
 	ELSE
 	BEGIN
-		SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
-
 		-------------------------------------------------------------------------
+
+		SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
 
 		BEGIN TRANSACTION
 
-		-------------------------------------------------------------------------
+		EXECUTE InitCreatePasswordTokenByUserID @TokenID, @UserID, @Now
 
-		UPDATE CreatePasswordTokens SET
-			DateAccessed = @Now
-		WHERE
-			CustomerID = @UserID
-			AND
-			DateAccessed IS NULL
-
-		-------------------------------------------------------------------------
-
-		UPDATE CreatePasswordTokens SET
-			DateDeleted = @Now
-		WHERE
-			CustomerID = @UserID
-			AND
-			DateDeleted IS NULL
-
-		-------------------------------------------------------------------------
-
-		INSERT INTO CreatePasswordTokens(TokenID, CustomerID, DateCreated, DateAccessed, DateDeleted)
-			VALUES (@TokenID, @UserID, @Now, NULL, NULL)
+		COMMIT TRANSACTION
 
 		-------------------------------------------------------------------------
 
 		SELECT CONVERT(BIT, 1) AS Success
-
-		-------------------------------------------------------------------------
-
-		COMMIT TRANSACTION
 	END
 END
 GO

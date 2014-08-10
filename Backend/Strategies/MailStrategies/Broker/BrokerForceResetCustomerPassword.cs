@@ -5,6 +5,7 @@
 	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using StoredProcs;
 	using UserManagement;
 
 	public class BrokerForceResetCustomerPassword : AMailStrategyBase {
@@ -40,7 +41,7 @@
 			if (!oNewPassGenerator.Success)
 				throw new StrategyAlert(this, "Failed to generate a new password for customer " + CustomerData.Mail);
 
-			Guid oToken = CreateToken();
+			Guid oToken = InitCreatePasswordToken.Execute(DB, CustomerData.Mail);
 
 			if (oToken == Guid.Empty)
 				throw new StrategyAlert(this, "Failed to generate a change password token for customer " + CustomerData.Mail);
@@ -56,23 +57,5 @@
 		#endregion method SetTemplateAndVariables
 
 		#endregion protected
-
-		#region private
-
-		private Guid CreateToken() {
-			Guid oToken = Guid.NewGuid();
-
-			bool bSuccess = DB.ExecuteScalar<bool>(
-				"InitCreatePasswordToken",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("TokenID", oToken),
-				new QueryParameter("Email", CustomerData.Mail),
-				new QueryParameter("Now", DateTime.UtcNow)
-			);
-
-			return bSuccess ? oToken : Guid.Empty;
-		} // CreateToken
-
-		#endregion private
 	} // class BrokerForceResetCustomerPassword
 } // namespace EzBob.Backend.Strategies.Broker

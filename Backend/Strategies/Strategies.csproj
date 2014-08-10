@@ -94,6 +94,7 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="MailStrategies\Broker\BrokerPasswordChanged.cs" />
+    <Compile Include="MailStrategies\EmailChanged.cs" />
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
     <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Esign\EsignProcessPending.cs" />
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
+    <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationCheckOne.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationGenerate.cs" />

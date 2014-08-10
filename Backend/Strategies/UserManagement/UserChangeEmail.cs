@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.UserManagement {
 	using System;
-	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -42,12 +41,24 @@
 		public override void Execute() {
 			Log.Debug("User '{0}': change email request...", m_oData.Email);
 
+			bool bCreateTokenSuccess = false;
+
 			ErrorMessage = null;
 
 			m_oData.ValidateEmail();
 			m_oData.ValidateNewPassword();
 
-			ErrorMessage = m_oSpUpdate.ExecuteScalar<string>();
+			m_oSpUpdate.ForEachRowSafe((sr, bRowsetStart) => {
+				if (sr.ContainsField("Success"))
+					bCreateTokenSuccess = sr["Success"];
+				else if (sr.ContainsField("ErrorMessage"))
+					ErrorMessage = sr["ErrorMessage"];
+
+				return ActionResult.Continue;
+			});
+
+			if (!bCreateTokenSuccess)
+				ErrorMessage = (ErrorMessage ?? string.Empty) + " Failed to init a create password token.";
 
 			Log.Debug(
 				"User '{0}' email has{1} been changed. {2}",
@@ -59,16 +70,9 @@
 			if (!string.IsNullOrWhiteSpace(ErrorMessage))
 				return;
 
-			new PasswordChanged(m_oSpUpdate.UserID, m_oSpUpdate.Password.RawValue, DB, Log).Execute();
+			string sAddress = string.Format("{0}/emailchanged/{1}", CustomerSite, m_oSpUpdate.RequestID);
 
-			string sAddress = string.Format(
-				"<a href='{0}/confirm/{1}'>click here</a>",
-				CurrentValues.Instance.CustomerSite.Value,
-				m_oSpUpdate.RequestID
-			);
-
-			// TODO in the next line
-			new SendEmailVerification(m_oSpUpdate.UserID, sAddress, DB, Log).Execute();
+			new EmailChanged(m_oSpUpdate.UserID, sAddress, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute

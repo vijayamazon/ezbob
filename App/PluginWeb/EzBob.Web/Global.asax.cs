@@ -114,6 +114,12 @@
 			routes.IgnoreRoute("favicon.ico");
 
 			routes.MapRoute(
+				"EmailChanged", // Route name
+				"emailchanged/{code}", // URL with parameters
+				new { controller = "ConfirmEmail", action = "EmailChanged" } // Parameter defaults
+			);
+
+			routes.MapRoute(
 				"EmailConfirmation", // Route name
 				"confirm/{code}", // URL with parameters
 				new { controller = "ConfirmEmail", action = "Index" } // Parameter defaults

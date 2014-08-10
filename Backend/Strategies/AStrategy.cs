@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies {
 	using System;
+	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using Exceptions;
@@ -9,6 +10,15 @@
 	using StructureMap;
 
 	public abstract class AStrategy {
+		#region static constructor
+
+		static AStrategy() {
+			ms_oLock = new object();
+			ms_bDefaultsAreReady = false;
+		} // static constructor
+
+		#endregion static constructor
+
 		#region public
 
 		public abstract string Name { get; }
@@ -30,6 +40,8 @@
 
 			DB = oDB;
 			Log = new StrategyLog(this, oLog);
+
+			InitDefaults(); // should not be moved to static constructor
 		} // constructor
 
 		#endregion constructor
@@ -51,6 +63,74 @@
 
 		#endregion property DbHelper
 
+		#region property CustomerSite
+
+		protected virtual string CustomerSite {
+			get {
+				return RemoveLastSlash(CurrentValues.Instance.CustomerSite);
+			} // get
+		} // CustomerSite
+
+		#endregion property CustomerSite
+
+		#region property BrokerSite
+
+		protected virtual string BrokerSite {
+			get {
+				return RemoveLastSlash(CurrentValues.Instance.BrokerSite);
+			} // get
+		} // BrokerSite
+
+		#endregion property BrokerSite
+
+		#region property UnderwriterSite
+
+		protected virtual string UnderwriterSite {
+			get {
+				return RemoveLastSlash(CurrentValues.Instance.UnderwriterSite);
+			} // get
+		} // UnderwriterSite
+
+		#endregion property UnderwriterSite
+
 		#endregion protected
+
+		#region private
+
+		#region method RemoveLastSlash
+
+		private string RemoveLastSlash(string sResult) {
+			while (sResult.EndsWith("/"))
+				sResult = sResult.Substring(0, sResult.Length - 1);
+
+			return sResult;
+		} // RemoveLastSlash
+
+		#endregion method RemoveLastSlash
+
+		#region method InitDefaults
+
+		private static void InitDefaults() {
+			if (ms_bDefaultsAreReady)
+				return;
+
+			lock (ms_oLock) {
+				if (ms_bDefaultsAreReady)
+					return;
+
+				CurrentValues.Instance
+					.SetDefault(ConfigManager.Variables.CustomerSite, "https://app.ezbob.com")
+					.SetDefault(ConfigManager.Variables.BrokerSite, "https://app.ezbob.com/Broker");
+
+				ms_bDefaultsAreReady = true;
+			} // lock
+		} // InitDefaults
+
+		#endregion method InitDefaults
+
+		private static readonly object ms_oLock;
+		private static bool ms_bDefaultsAreReady;
+
+		#endregion private
 	} // class AStrategy
 } // namespace EzBob.Backend.Strategies

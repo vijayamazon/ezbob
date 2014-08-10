@@ -1,10 +1,11 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
-	using ConfigManager;
+	using System.Globalization;
 	using Exceptions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using StoredProcs;
 	using UserManagement;
 
 	public class PasswordRestored : AMailStrategyBase {
@@ -26,7 +27,7 @@
 			if (!oNewPassGenerator.Success)
 				throw new StrategyAlert(this, "Failed to generate a new password for customer " + CustomerData.Mail);
 
-			Guid oToken = CreateToken();
+			Guid oToken = InitCreatePasswordToken.Execute(DB, CustomerData.Mail);
 
 			if (oToken == Guid.Empty)
 				throw new StrategyAlert(this, "Failed to generate a change password token for customer " + CustomerData.Mail);
@@ -64,7 +65,7 @@
 
 				Variables["ErrMsg"] = sErrMsg;
 
-				Variables["UserID"] = CustomerData.Id.ToString();
+				Variables["UserID"] = CustomerData.Id.ToString(CultureInfo.InvariantCulture);
 
 				Variables["ProfileLink"] = (nBrokerID == 0)
 					? UnderwriterSite + "/Underwriter/Customers#profile/" + CustomerData.Id
@@ -83,23 +84,5 @@
 		} // Salutation
 
 		#endregion property Salutation
-
-		#region private
-
-		private Guid CreateToken() {
-			Guid oToken = Guid.NewGuid();
-
-			bool bSuccess = DB.ExecuteScalar<bool>(
-				"InitCreatePasswordToken",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("TokenID", oToken),
-				new QueryParameter("Email", CustomerData.Mail),
-				new QueryParameter("Now", DateTime.UtcNow)
-			);
-
-			return bSuccess ? oToken : Guid.Empty;
-		} // CreateToken
-
-		#endregion private
 	} // class PasswordRestored
 } // namespace

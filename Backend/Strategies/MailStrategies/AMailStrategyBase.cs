@@ -11,14 +11,6 @@
 	using Ezbob.Utils.Exceptions;
 
 	public abstract class AMailStrategyBase : AStrategy {
-		#region static constructor
-
-		static AMailStrategyBase() {
-			ms_oLock = new object();
-			ms_bDefaultsAreReady = false;
-		} // static constructor
-
-		#endregion static constructor
 
 		#region public
 
@@ -67,8 +59,6 @@
 		#region constructor
 
 		protected AMailStrategyBase(int customerId, bool bSendToCustomer, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			InitDefaults(); // should not be moved to static constructor
-
 			toTrustPilot = false;
 			m_oMailer = new StrategiesMailer(DB, Log);
 
@@ -129,36 +119,6 @@
 
 		#endregion method LoadRecipientData
 
-		#region property CustomerSite
-
-		protected virtual string CustomerSite {
-			get {
-				return RemoveLastSlash(CurrentValues.Instance.CustomerSite);
-			} // get
-		} // CustomerSite
-
-		#endregion property CustomerSite
-
-		#region property BrokerSite
-
-		protected virtual string BrokerSite {
-			get {
-				return RemoveLastSlash(CurrentValues.Instance.BrokerSite);
-			} // get
-		} // BrokerSite
-
-		#endregion property BrokerSite
-
-		#region property UnderwriterSite
-
-		protected virtual string UnderwriterSite {
-			get {
-				return RemoveLastSlash(CurrentValues.Instance.UnderwriterSite);
-			} // get
-		} // UnderwriterSite
-
-		#endregion property UnderwriterSite
-
 		#region properties
 
 		protected virtual string TemplateName { get; set; }
@@ -174,40 +134,6 @@
 		#region private
 
 		private readonly StrategiesMailer m_oMailer;
-
-		private static readonly object ms_oLock;
-		private static bool ms_bDefaultsAreReady;
-
-		#region method RemoveLastSlash
-
-		private string RemoveLastSlash(string sResult) {
-			while (sResult.EndsWith("/"))
-				sResult = sResult.Substring(0, sResult.Length - 1);
-
-			return sResult;
-		} // RemoveLastSlash
-
-		#endregion method RemoveLastSlash
-
-		#region method InitDefaults
-
-		private static void InitDefaults() {
-			if (ms_bDefaultsAreReady)
-				return;
-
-			lock (ms_oLock) {
-				if (ms_bDefaultsAreReady)
-					return;
-
-				CurrentValues.Instance
-					.SetDefault(ConfigManager.Variables.CustomerSite, "https://app.ezbob.com")
-					.SetDefault(ConfigManager.Variables.BrokerSite, "https://app.ezbob.com/Broker");
-
-				ms_bDefaultsAreReady = true;
-			} // lock
-		} // InitDefaults
-
-		#endregion method InitDefaults
 
 		#endregion private
 	} // class MailStrategyBase

@@ -593,6 +593,8 @@ namespace EzBob.Web.Controllers {
 			};
 
 			if (oModel.IsTokenValid) {
+				ms_oLog.Debug("AccountController.CreatePassword: token received {0}.", token);
+
 				try {
 					CustomerDetailsActionResult ar = m_oServiceClient.Instance.LoadCustomerByCreatePasswordToken(oModel.Token);
 
@@ -601,13 +603,25 @@ namespace EzBob.Web.Controllers {
 						oModel.LastName = ar.Value.LastName;
 						oModel.UserName = ar.Value.Email;
 
+						ms_oLog.Debug(
+							"AccountController.CreatePassword: token received {0} -> user {1} ({2}, {3}).",
+							token,
+							oModel.FirstName,
+							ar.Value.CustomerID,
+							oModel.UserName
+						);
+
 						return View(oModel);
 					} // if
+
+					ms_oLog.Debug("AccountController.CreatePassword: token received {0} -> no user found.", token);
 				}
 				catch (Exception e) {
 					ms_oLog.Alert(e, "Failed to check create password token '{0}'.", token);
 				} // try
-			} // if
+			}
+			else
+				ms_oLog.Warn("AccountController.CreatePassword: invalid token received {0}.", token);
 
 			return RedirectToAction("LogOn", "Account", new { Area = "" });
 		} // CreatePassword
