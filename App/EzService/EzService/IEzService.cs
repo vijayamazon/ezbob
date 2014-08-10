@@ -18,12 +18,11 @@
 
 		#endregion Agreements
 
-		#region analytics
-		
 		[OperationContract]
-		ActionMetaData BackfillAml(); // No analytics yet will be filled into customer table
+		ActionMetaData BackfillAml();
 
-		#endregion analytics
+		[OperationContract]
+		ActionMetaData BackfillLandRegistry2PropertyLink();
 
 		[OperationContract]
 		ActionMetaData BackfillNonLimitedCompanies();

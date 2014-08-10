@@ -807,6 +807,18 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 			m_oServiceClient.BackfillAml();
 		}
+
+		[Activation]
+		private void BackfillLandRegistry2PropertyLink()
+		{
+			if ((m_aryArgs.Length != 1))
+			{
+				m_oLog.Msg("Usage: BackfillLandRegistry2PropertyLink");
+				return;
+			} // if
+
+			m_oServiceClient.BackfillLandRegistry2PropertyLink();
+		}
 		
 		[Activation]
 		private void BackfillNonLimitedCompanies()
