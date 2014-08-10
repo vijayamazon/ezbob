@@ -25,16 +25,23 @@ GO
 
 IF NOT EXISTS (SELECT 1 FROM CustomerPropertyStatusGroups WHERE Title = 'Property-owners')
 BEGIN
-	INSERT INTO CustomerPropertyStatusGroups (Name, Title, Priority) VALUES ('Owners', 'Property-owners', 1)
-	INSERT INTO CustomerPropertyStatusGroups (Name, Title, Priority) VALUES ('Not owners', 'I do not own any property', 2)
+	DECLARE @Statement NVARCHAR(MAX)
 	
-	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES ('I own only this property', 1, 1, 1)
-	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES ('I own this property and other properties', 1, 1, 1)
-	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES ('I live in the above and own other properties', 1, 1, 1)
-	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES ('Home owner', 1, 1, 0)
+	SET @Statement = '
+	INSERT INTO CustomerPropertyStatusGroups (Name, Title, Priority) VALUES (''Owners'', ''Property-owners'', 1)
+	INSERT INTO CustomerPropertyStatusGroups (Name, Title, Priority) VALUES (''Not owners'', ''I do not own any property'', 2)
 	
-	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES ('Renting', 0, 2, 1)
-	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES ('Social house', 0, 2, 1)
-	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES ('Living with parents', 0, 2, 1)
+	INSERT INTO CustomerPropertyStatuses (Description, GroupId, IsActive, IsOwnerOfMainAddress, IsOwnerOfOtherProperties) VALUES (''I own only this property'', 1, 1, 1, 0)
+	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES (''I own this property and other properties'', 1, 1, 1, 1)
+	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES (''I live in the above and own other properties'', 1, 1, 0, 1)
+	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES (''Home owner'', 1, 0, 1, 0)
+	
+	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES (''Renting'', 2, 1, 0, 0)
+	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES (''Social house'', 2, 1, 0, 0)
+	INSERT INTO CustomerPropertyStatuses (Description, IsOwner, GroupId, IsActive) VALUES (''Living with parents'', 2, 1, 0, 0)
+	'
+	
+	EXEC(@Statement)
+	
 END
 GO
