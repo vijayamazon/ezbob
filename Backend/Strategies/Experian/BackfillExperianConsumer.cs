@@ -3,11 +3,9 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Xml.Linq;
 	using System.Xml.Serialization;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Experian;
-	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
@@ -125,7 +123,7 @@
 		{
 			if (cais != null)
 			{
-				return cais.Where(c => c.AccountStatus != "S" && c.Balance.HasValue).Sum(c => c.Balance);
+				return cais.Where(c => c.AccountStatus != "S" && c.Balance.HasValue && c.MatchTo == 1).Sum(c => c.Balance);
 			}
 			return null;
 		}

@@ -196,7 +196,7 @@
 		{
 			if (cais != null)
 			{
-				return cais.Where(c => c.AccountStatus != "S" && c.Balance.HasValue).Sum(c => c.Balance);
+				return cais.Where(c => c.AccountStatus != "S" && c.Balance.HasValue && c.MatchTo == 1).Sum(c => c.Balance);
 			}
 			return null;
 		}
