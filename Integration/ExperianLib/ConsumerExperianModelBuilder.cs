@@ -7,8 +7,7 @@ namespace ExperianLib
 	using System.Globalization;
 	using System.Linq;
 	using Ezbob.Backend.ModelsWithDB.Experian;
-	using Newtonsoft.Json;
-
+	
 	public class ConsumerExperianModelBuilder
 	{
 		private string Errors { get; set; }
@@ -16,16 +15,14 @@ namespace ExperianLib
 
 		public ExperianConsumerData Build(OutputRoot outputRoot, int? customerId = null, int? directorId = null, DateTime? insertDate = null, long serviceLogId = 0)
 		{
-			var data = new ExperianConsumerData
-				{
-					Applicants = new List<ExperianConsumerDataApplicant>(),
-					Cais = new List<ExperianConsumerDataCais>()
-				};
-
-			data.ServiceLogId = serviceLogId;
-			data.CustomerId = customerId;
-			data.DirectorId = directorId;
-			data.InsertDate = insertDate.HasValue ? insertDate.Value : new DateTime();
+			var data = new ExperianConsumerData {
+				Applicants = new List<ExperianConsumerDataApplicant>(),
+				Cais = new List<ExperianConsumerDataCais>(),
+				ServiceLogId = serviceLogId,
+				CustomerId = customerId,
+				DirectorId = directorId,
+				InsertDate = insertDate.HasValue ? insertDate.Value : new DateTime()
+			};
 
 			if (outputRoot.Output.Error != null)
 			{
@@ -50,7 +47,7 @@ namespace ExperianLib
 						TryRead(() => app.DateOfBirth = new DateTime(
 															int.Parse(applicant.DateOfBirth.CCYY.ToString(CultureInfo.InvariantCulture)),
 															int.Parse(applicant.DateOfBirth.MM.ToString(CultureInfo.InvariantCulture)),
-															int.Parse(applicant.DateOfBirth.DD.ToString(CultureInfo.InvariantCulture))),
+															int.Parse(applicant.DateOfBirth.DD.ToString(CultureInfo.InvariantCulture)), 0,0,0, DateTimeKind.Utc),
 								"DateOfBirth", false);
 						TryRead(() => app.Gender = applicant.Gender, "Gender");
 						data.Applicants.Add(app);
@@ -84,13 +81,13 @@ namespace ExperianLib
 					{
 						data.CaisDOB = new DateTime(1900 + outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.YY,
 													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.MM,
-													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.DD);
+													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.DD, 0, 0, 0, DateTimeKind.Utc);
 					}
 					else if (null != outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB)
 					{
 						data.CaisDOB = new DateTime(1900 + outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.YY,
 													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.MM,
-													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.DD);
+													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.DD, 0, 0, 0, DateTimeKind.Utc);
 					}
 				}, "CaisDOB", false);
 			TryRead(() => data.CreditCommitmentsRevolving = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPH39), "CreditCommitmentsRevolving");
@@ -113,7 +110,6 @@ namespace ExperianLib
 			data.Nocs = GetNocs(outputRoot);
 			data.Error = Errors;
 			data.HasParsingError = HasParsingError;
-			Console.WriteLine(JsonConvert.SerializeObject(data, new JsonSerializerSettings { Formatting = Formatting.Indented }));
 			return data;
 
 		}
@@ -181,13 +177,13 @@ namespace ExperianLib
 					TryRead(() => residency.ResidencyDateFrom = new DateTime(
 															int.Parse(outputRoot.Output.Residency[i].ResidencyDateFrom.CCYY.ToString(CultureInfo.InvariantCulture)),
 															int.Parse(outputRoot.Output.Residency[i].ResidencyDateFrom.MM.ToString(CultureInfo.InvariantCulture)),
-															int.Parse(outputRoot.Output.Residency[i].ResidencyDateFrom.DD.ToString(CultureInfo.InvariantCulture))),
+															int.Parse(outputRoot.Output.Residency[i].ResidencyDateFrom.DD.ToString(CultureInfo.InvariantCulture)), 0, 0, 0, DateTimeKind.Utc),
 								"ResidencyDateFrom", false);
 
 					TryRead(() => residency.ResidencyDateTo = new DateTime(
 															int.Parse(outputRoot.Output.Residency[i].ResidencyDateTo.CCYY.ToString(CultureInfo.InvariantCulture)),
 															int.Parse(outputRoot.Output.Residency[i].ResidencyDateTo.MM.ToString(CultureInfo.InvariantCulture)),
-															int.Parse(outputRoot.Output.Residency[i].ResidencyDateTo.DD.ToString(CultureInfo.InvariantCulture))),
+															int.Parse(outputRoot.Output.Residency[i].ResidencyDateTo.DD.ToString(CultureInfo.InvariantCulture)), 0, 0, 0, DateTimeKind.Utc),
 								"ResidencyDateTo", false);
 					residencies.Add(residency);
 				}
@@ -215,13 +211,13 @@ namespace ExperianLib
 						var caisDetails = caisData.CAISDetails[j];
 						TryRead(() => account.CAISAccStartDate = new DateTime(caisDetails.CAISAccStartDate.CCYY,
 																			  caisDetails.CAISAccStartDate.MM,
-																			  caisDetails.CAISAccStartDate.DD), "CAISAccStartDate", false);
+																			  caisDetails.CAISAccStartDate.DD, 0, 0, 0, DateTimeKind.Utc), "CAISAccStartDate", false);
 						TryRead(() => account.LastUpdatedDate = new DateTime(caisDetails.LastUpdatedDate.CCYY,
 																			 caisDetails.LastUpdatedDate.MM,
-																			 caisDetails.LastUpdatedDate.DD), "LastUpdatedDate", false);
+																			 caisDetails.LastUpdatedDate.DD, 0, 0, 0, DateTimeKind.Utc), "LastUpdatedDate", false);
 						TryRead(() => account.SettlementDate = new DateTime(caisDetails.SettlementDate.CCYY,
 																			caisDetails.SettlementDate.MM,
-																			caisDetails.SettlementDate.DD), "SettlementDate", false);
+																			caisDetails.SettlementDate.DD, 0, 0, 0, DateTimeKind.Utc), "SettlementDate", false);
 						TryRead(() => account.MatchTo = Convert.ToInt32(caisDetails.MatchDetails.MatchTo), "MatchTo");
 						TryRead(() => account.CreditLimit = Convert.ToInt32(caisDetails.CreditLimit.Amount.Replace("£", "")),
 								"CreditLimit", false);

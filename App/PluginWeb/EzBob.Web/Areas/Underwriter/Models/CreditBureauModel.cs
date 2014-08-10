@@ -115,7 +115,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public int? AccBalance { get; set; } 
 		public string AccountStatus { get; set; } 
 		public string DateType { get; set; } 
-		public DateTime SettlementDate { get; set; } 
+		public DateTime? SettlementDate { get; set; } 
 		public string CashWithdrawals { get; set; } 
 		public string MinimumPayment { get; set; } 
 		public AccountDisplayedYear[] Years { get; set; } 

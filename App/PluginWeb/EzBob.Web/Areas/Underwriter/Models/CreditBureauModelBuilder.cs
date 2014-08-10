@@ -311,7 +311,7 @@
 				string dateType;
 				accountInfo.AccountStatus = GetAccountStatusString(accStatus, out dateType);
 				accountInfo.DateType = dateType;
-				if (accStatus == DefaultCaisStatusName)
+				if (accStatus == DefaultCaisStatusName && var == Variables.FinancialAccounts_MainApplicant) 
 				{
 					numberOfDefaults++;
 					defaultAmount += caisDetails.CurrentDefBalance.HasValue ? caisDetails.CurrentDefBalance.Value : 0;
@@ -347,38 +347,22 @@
 					sList.Add(new AccountStatus { Status = "", StatusColor = "white" });
 				}
 
-				int relevantYear, relevantMonth, relevantDay;
+				accountInfo.SettlementDate = caisDetails.SettlementDate ?? caisDetails.LastUpdatedDate;
 
-				if (caisDetails.SettlementDate != null) {
-					relevantYear = caisDetails.SettlementDate.Value.Year;
-					relevantMonth = caisDetails.SettlementDate.Value.Month;
-					relevantDay = caisDetails.SettlementDate.Value.Day;
-				}
-				else if (caisDetails.LastUpdatedDate != null) {
-					relevantYear = caisDetails.LastUpdatedDate.Value.Year;
-					relevantMonth = caisDetails.LastUpdatedDate.Value.Month;
-					relevantDay = caisDetails.LastUpdatedDate.Value.Day;
-				}
-				else {
-					Log.Warn("Both SettlementDate and LastUpdatedDate are null in CAIS details entry.");
-					continue;
-				}
+				if (accountInfo.SettlementDate.HasValue) {
+					var histStart = new DateTime(accountInfo.SettlementDate.Value.Year, accountInfo.SettlementDate.Value.Month, 1);
 
-				var histStart = new DateTime(relevantYear, relevantMonth, 1);
-				accountInfo.SettlementDate = new DateTime(relevantYear, relevantMonth, relevantDay);
-
-				for (int i = 0; i < caisDetails.NumOfMonthsHistory; i++)
-				{
-					var histDate = histStart.AddMonths(-i);
-					string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
-					var idx = displayedMonths.IndexOf(histDate);
-					if (idx >= 0)
+					for (int i = 0; i < caisDetails.AccountStatusCodes.Length; i++)
 					{
-						sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
-						sList[idx].StatusColor = AccountStatusDictionary.GetAccountStatusColor(indicator);
+						var histDate = histStart.AddMonths(-i);
+						string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
+						var idx = displayedMonths.IndexOf(histDate);
+						if (idx >= 0) {
+							sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
+							sList[idx].StatusColor = AccountStatusDictionary.GetAccountStatusColor(indicator);
+						}
 					}
 				}
-
 				accountInfo.LatestStatuses = sList.ToArray();
 				accountInfo.TermAndfreq = GetRepaymentPeriodString(caisDetails.RepaymentPeriod);
 				accountInfo.Limit = caisDetails.CreditLimit;

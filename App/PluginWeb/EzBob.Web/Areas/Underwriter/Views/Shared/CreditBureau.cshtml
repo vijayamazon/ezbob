@@ -514,14 +514,14 @@
                                     </thead>
                                     <tbody class="box-content">
                                         <tr>
-                                            <td><%- EzBob.formatDate2(ai.OpenDate) %></td>
+                                            <td><%- EzBob.formatDate3(ai.OpenDate) %></td>
                                             <td><%- ai.Account %></td>
                                             <td><%- ai.MatchTo %></td>
                                             <td><%- ai.TermAndfreq %></td>
                                             <td><%- ai.Limit %></td>
                                             <td><%- EzBob.formatPoundsAsInt(ai.AccBalance) %></td>
                                             <td class="experian-account-status <%- ai.AccountStatus %>"><%- ai.AccountStatus %></td>
-                                            <td><%- EzBob.formatDate2(ai.SettlementDate) %></td>
+                                            <td><%- EzBob.formatDate3(ai.SettlementDate) %></td>
                                             <td><%- ai.CashWithdrawals %></td>
                                             <td><%- ai.MinimumPayment %></td>
                                         </tr>
