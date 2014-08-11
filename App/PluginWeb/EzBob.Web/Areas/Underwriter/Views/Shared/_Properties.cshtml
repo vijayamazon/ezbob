@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <div class="box">
                 <div class="box-content">
-                    <table class="table box">
+                    <table id="ownedPropertiesTable" class="table box table-bordered table-striped blue-header centered">
                         <thead class="box-title">
                             <tr>
                                 <th>#</th>
@@ -21,21 +21,21 @@
                             </tr>
                         </thead>
                         <tbody class="box-content">
-                            <% _.each(model.Properties, function(prop, propertyCounter) { prop.LandRegistry = prop.LandRegistry || {}; %>
+                            <% _.each(model.Properties, function(prop) { prop.LandRegistry = prop.LandRegistry || {}; %>
                                 <tr>
-                                    <td><span><%- propertyCounter + 1 %></span></td>
-                                    <td><span><%- EzBob.formatPoundsAsInt(prop.MarketValue) %></span></td>
+                                    <td><span><%- prop.SerialNumberForCustomer %></span></td>
+                                    <td><span><%- prop.MarketValue %></span></td>
                                     <td><span><%- prop.Address %></span></td>
                                     <td><span><%- EzBob.formatDate3(prop.YearOfOwnership) %></span></td>
                                     <td><span><%- prop.NumberOfOwners %></span></td>
                                     <td>
                                         <div class="accordion-heading">
-                                            <a class="accordion-toggle" data-toggle="collapse" href="#<%-'zoopla' + propertyCounter%>">Zoopla</a>
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#<%-'zoopla' + prop.SerialNumberForCustomer%>">Zoopla</a>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="accordion-heading">
-                                            <a class="accordion-toggle" data-toggle="collapse" href="#<%-prop.LandRegistry.TitleNumber  + 'lr' + propertyCounter%>">Title Number: <%-prop.LandRegistry.TitleNumber%></a>
+                                            <a class="accordion-toggle" data-toggle="collapse" href="#<%-prop.LandRegistry.TitleNumber  + 'lr' + prop.SerialNumberForCustomer%>">Title Number: <%-prop.LandRegistry.TitleNumber%></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -97,12 +97,12 @@
                             <h3>Land Registry</h3>
                         </div>
                         <div class="box-content">
-                            <% _.each(model.Properties, function(property, i) {
+                            <% _.each(model.Properties, function(property) {
                                 var landRegistry = property.LandRegistry || {}; %>
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" href="#<%-landRegistry.TitleNumber + 'lr' + i%>">Title Number: <%-landRegistry.TitleNumber%></a>
+                                    <a class="accordion-toggle" data-toggle="collapse" href="#<%-landRegistry.TitleNumber + 'lr' + property.SerialNumberForCustomer%>">Title Number: <%-landRegistry.TitleNumber%></a>
                                 </div>
-                                <div id="<%-landRegistry.TitleNumber + 'lr' + i%>" class="accordion-body collapse">
+                                <div id="<%-landRegistry.TitleNumber + 'lr' + property.SerialNumberForCustomer%>" class="accordion-body collapse">
                                     <div class="accordion-inner">
                                         <div class="tabbable">
                                             <% if (landRegistry.Rejection != undefined) { %>
@@ -349,12 +349,12 @@
                             <h3>Zoopla</h3>
                         </div>
                         <div class="box-content">
-                            <% _.each(model.Properties, function(property, i) {
+                            <% _.each(model.Properties, function(property) {
                                 var data = property.Zoopla || { error: 'no data' }; %>
                             <div class="accordion-heading">
-                                <a class="accordion-toggle" data-toggle="collapse" href="#<%-'zoopla' + i%>">Zoopla <%-i+1%></a>
+                                <a class="accordion-toggle" data-toggle="collapse" href="#<%-'zoopla' + property.SerialNumberForCustomer%>">Zoopla <%-property.SerialNumberForCustomer%></a>
                             </div>
-                            <div id="<%-'zoopla' + i%>" class="accordion-body collapse">
+                            <div id="<%-'zoopla' + property.SerialNumberForCustomer%>" class="accordion-body collapse">
                                 <div class="row">
                                     <% if(data.error) {%>
                                     <h3><%-data.error%></h3>

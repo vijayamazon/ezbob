@@ -42,14 +42,19 @@
 		{
 			int experianMortgage = 0;
 			int experianMortgageCount = 0;
+			int propertyCounter = 0;
 			var data = new PropertiesModel();
 
 			if (customer.PropertyStatus.IsOwnerOfMainAddress)
 			{
 				var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
-				if (currentAddress != null) {
+				if (currentAddress != null) 
+				{
 					var property = GetPropertyModel(customer, currentAddress);
-					if(property != null){
+					if(property != null)
+					{
+						propertyCounter++;
+						property.SerialNumberForCustomer = propertyCounter;
 						data.Properties.Add(property);
 					}
 				}
@@ -60,6 +65,8 @@
 				var property = GetPropertyModel(customer, ownedProperty);
 				if (property != null)
 				{
+					propertyCounter++;
+					property.SerialNumberForCustomer = propertyCounter;
 					data.Properties.Add(property);
 				}
 			}

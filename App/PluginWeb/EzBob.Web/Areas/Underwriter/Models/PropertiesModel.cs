@@ -24,7 +24,6 @@
 			NetWorthPercentages = 100 - Ltv;
 		}
 
-		// TODO: add data for main address for fields that holds totals
 		public int NumberOfProperties { get; set; }
 		public int NumberOfMortgages { get; set; }
 		public int MarketValue { get; set; }
@@ -39,6 +38,7 @@
 	[Serializable]
 	public class PropertyModel
 	{
+		public int SerialNumberForCustomer { get; set; }
 		public int AddressId { get; set; }
 		public int MarketValue { get; set; }
 		public string Address { get; set; }
