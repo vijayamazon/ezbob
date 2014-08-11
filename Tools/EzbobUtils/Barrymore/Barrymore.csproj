@@ -83,6 +83,7 @@
     <Compile Include="MiscUtils.cs" />
     <Compile Include="NameList.cs" />
     <Compile Include="Stopper.cs" />
+    <Compile Include="TimeCounter.cs" />
     <Compile Include="TypeUtils.cs" />
     <Compile Include="XmlUtils\Xml.cs" />
     <Compile Include="XmlUtils\XmlNodeExtensions.cs" />
@@ -95,6 +96,10 @@
     <ProjectReference Include="..\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniResharper\MiniResharper.csproj">
+      <Project>{805F29C1-D575-49C5-A95D-4D393E65481F}</Project>
+      <Name>MiniResharper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
