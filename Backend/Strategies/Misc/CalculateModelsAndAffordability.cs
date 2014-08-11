@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Utils;
 	using CompanyFiles;
 	using EZBob.DatabaseLib.Model.Database;
@@ -12,6 +13,7 @@
 	using Ezbob.Logger;
 	using Newtonsoft.Json;
 	using PayPalServiceLib;
+	using StructureMap;
 	using VatReturn;
 	using YodleeLib.connector;
 
@@ -28,7 +30,7 @@
 				m_oHistory = oHistory;
 				m_oMundMs = new List<LocalMp>();
 				Affordability = new SortedSet<AffordabilityData>();
-				m_oCustomer = DbHelper.GetCustomerInfo(nCustomerID);
+				m_oRepo = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
 			} // using
 		} // constructor
 
@@ -45,11 +47,6 @@
 		#region method Execute
 
 		public override void Execute() {
-			if (m_oCustomer == null) {
-				Log.Warn("Could not find customer by id {0}.", m_nCustomerID);
-				return;
-			} // if
-
 			using (m_oTimeCounter.AddStep("Total mp and affordability strategy execute time")) {
 				using (m_oTimeCounter.AddStep("All marketplaces build time"))
 					GetAllModels();
@@ -112,7 +109,7 @@
 				using (m_oTimeCounter.AddStep("Logging affordability time")) {
 					Log.Debug("**************************************************************************");
 					Log.Debug("*");
-					Log.Debug("* Affordability data for customer {0} - begin:", m_oCustomer.Stringify());
+					Log.Debug("* Affordability data for customer {0} - begin:", m_nCustomerID);
 					Log.Debug("*");
 					Log.Debug("**************************************************************************");
 
@@ -121,7 +118,7 @@
 
 					Log.Debug("**************************************************************************");
 					Log.Debug("*");
-					Log.Debug("* Affordability data for customer {0} - end.", m_oCustomer.Stringify());
+					Log.Debug("* Affordability data for customer {0} - end.", m_nCustomerID);
 					Log.Debug("*");
 					Log.Debug("**************************************************************************");
 				} // using
@@ -158,14 +155,14 @@
 
 		private void HmrcBank(MarketPlaceModel oModel) {
 			if (oModel.HmrcData == null) {
-				Log.Debug("There is no VAT return data for customer {0}.", m_oCustomer.Stringify());
+				Log.Debug("There is no VAT return data for customer {0}.", m_nCustomerID);
 				return;
 			} // if
 
 			var oVat = oModel.HmrcData;
 
 			if (oVat == null) {
-				Log.Debug("There is no VAT return data for customer {0}.", m_oCustomer.Stringify());
+				Log.Debug("There is no VAT return data for customer {0}.", m_nCustomerID);
 				return;
 			} // if
 
@@ -391,12 +388,12 @@
 
 		private void GetAllModels() {
 			List<MP_CustomerMarketPlace> marketplaces = m_oHistory.HasValue
-				? m_oCustomer.CustomerMarketPlaces.Where(mp => mp.Created.HasValue && mp.Created.Value.Date <= m_oHistory.Value.Date).ToList()
-				: m_oCustomer.CustomerMarketPlaces.ToList();
+				? m_oRepo.GetAllByCustomer(m_nCustomerID).Where(mp => mp.Created.HasValue && mp.Created.Value.Date <= m_oHistory.Value.Date).ToList()
+				: m_oRepo.GetAllByCustomer(m_nCustomerID).ToList();
 
 			Log.Debug(
 				"Loading mp models for customer {0}{1}: {2} model{3} loaded.",
-				m_oCustomer.Stringify(),
+				m_nCustomerID,
 				m_oHistory.HasValue
 					? string.Format(" that were created not after {0}", m_oHistory.Value.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture))
 					: string.Empty,
@@ -435,7 +432,7 @@
 
 			if (m_oMundMs.Any(x => x.Model.Name == "HMRC") && m_oMundMs.Any(x => x.Model.Name == "Yodlee")) {
 				foreach (var mp in m_oMundMs.Where(x => x.Model.Name == "HMRC")) {
-					var returnData = new LoadVatReturnFullData(m_oCustomer.Id, mp.Model.Id, DB, Log);
+					var returnData = new LoadVatReturnFullData(m_nCustomerID, mp.Model.Id, DB, Log);
 					returnData.CalculateBankStatements(mp.Model.HmrcData.VatReturn.LastOrDefault(), m_oMundMs.First(x => x.Model.Name == "Yodlee").Model.Yodlee.BankStatementDataModel);
 
 					mp.Model.HmrcData.BankStatement = returnData.BankStatement;
@@ -462,7 +459,7 @@
 
 		#region fields
 
-		private readonly Customer m_oCustomer;
+		private readonly CustomerMarketPlaceRepository m_oRepo;
 		private readonly int m_nCustomerID;
 		private readonly DateTime? m_oHistory;
 

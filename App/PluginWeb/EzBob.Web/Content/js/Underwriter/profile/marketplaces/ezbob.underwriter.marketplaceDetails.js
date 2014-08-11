@@ -52,6 +52,9 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
         data.hideAccounts = data.accounts.length == 0;
         data.hideMarketplaces = data.marketplaces == 0;
 
+	    console.log('market places data:', data);
+	    console.log('model:', this.model);
+
         this.$el.html(this.template(data));
 
 		this.renderHmrcSummary(data);

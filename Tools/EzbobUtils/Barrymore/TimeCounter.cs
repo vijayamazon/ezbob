@@ -32,7 +32,7 @@
 		public class Timer : IDisposable {
 			#region constructor
 
-			public Timer(List<Tuple<string, double>> oCheckpoints, string sFormat, params object[] args) {
+			internal Timer(List<Tuple<string, double>> oCheckpoints, string sFormat, params object[] args) {
 				m_oStopwatch = Stopwatch.StartNew();
 				m_oCheckpoints = oCheckpoints;
 				m_sCheckpoint = string.Format(sFormat, args);
