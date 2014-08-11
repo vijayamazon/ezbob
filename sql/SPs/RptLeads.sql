@@ -22,7 +22,10 @@ BEGIN
 			WHEN  c.IsOffline = 0 THEN 'Online'
 			WHEN c.IsOffline = 1 THEN 'Offline' 
 		END AS Segment,
-		c.ReferenceSource
+		CASE
+			WHEN c.BrokerID IS NULL THEN c.ReferenceSource
+			ELSE 'BROKER'
+		END AS ReferenceSource
 	FROM
 		Customer c
 		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
@@ -37,4 +40,3 @@ BEGIN
 		c.Fullname
 END
 GO
-
