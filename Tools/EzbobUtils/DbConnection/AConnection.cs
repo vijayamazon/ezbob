@@ -50,12 +50,10 @@
 
 		#region method ExecuteReader
 
-		[Obsolete]
 		public virtual DataTable ExecuteReader(string sQuery, params QueryParameter[] aryParams) {
 			return ExecuteReader(sQuery, CommandSpecies.Auto, aryParams);
 		} // ExecuteReader
 
-		[Obsolete]
 		public virtual DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			return (DataTable)Run(null, ExecMode.Reader, nSpecies, sQuery, aryParams);
 		} // ExecuteReader
