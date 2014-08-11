@@ -56,6 +56,8 @@ namespace Sage
 				log.Error(msg);
 				throw new Exception(msg);
 			}
+			int tax_scheme_period_id;
+			int.TryParse(si.tax_scheme_period_id, out tax_scheme_period_id);
 
 			return new SageSalesInvoice
 				{
@@ -68,7 +70,7 @@ namespace Sage
 					outstanding_amount = outstanding_amount,
 					total_net_amount = total_net_amount,
 					total_tax_amount = total_tax_amount,
-					tax_scheme_period_id = si.tax_scheme_period_id,
+					tax_scheme_period_id = tax_scheme_period_id,
 					carriage = carriage,
 					carriage_tax_code = si.carriage_tax_code == null ? null : si.carriage_tax_code.key,
 					carriage_tax_rate_percentage = carriage_tax_rate_percentage,
@@ -111,7 +113,7 @@ namespace Sage
 						ledger_account = si.ledger_account == null ? null : si.ledger_account.key,
 						product_code = si.product_code,
 						product = si.product == null ? null : si.product.key,
-						service = si.service == null ? null : si.service.key,
+						service = null, //removed because returned as null string
 						lock_version = si.lock_version
 					};
 				result.Add(deserialized);
@@ -155,7 +157,8 @@ namespace Sage
 				log.Error(msg);
 				throw new Exception(msg);
 			}
-
+			int tax_scheme_period_id;
+			int.TryParse(si.tax_scheme_period_id, out tax_scheme_period_id);
 			return new SagePurchaseInvoice
 			{
 				SageId = si.id,
@@ -166,7 +169,7 @@ namespace Sage
 				outstanding_amount = outstanding_amount,
 				total_net_amount = total_net_amount,
 				total_tax_amount = total_tax_amount,
-				tax_scheme_period_id = si.tax_scheme_period_id,
+				tax_scheme_period_id = tax_scheme_period_id,
 				contact = si.contact == null ? null : si.contact.key,
 				contact_name = si.contact_name,
 				main_address = si.main_address,
@@ -206,7 +209,7 @@ namespace Sage
 					ledger_account = si.ledger_account == null ? null : si.ledger_account.key,
 					product_code = si.product_code,
 					product = si.product == null ? null : si.product.key,
-					service = si.service == null ? null : si.service.key,
+					service = null,
 					lock_version = si.lock_version
 				};
 				result.Add(deserialized);

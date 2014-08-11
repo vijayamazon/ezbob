@@ -58,7 +58,7 @@
 
 			log.InfoFormat("Making sage request:{0}", fullRequest);
 			IRestResponse response = client.Execute(request);
-			PaginatedResults<TDeserialize> deserializedResponse = CreateDeserializedItems<TDeserialize>(CleanResponse(response.Content));
+			PaginatedResults<TDeserialize> deserializedResponse = CreateDeserializedItems<TDeserialize>(CleanResponse(response.Content, typeof(TDeserialize).Name));
 			if (deserializedResponse == null)
 			{
 				log.Error("Sage response deserialization failed");
@@ -79,7 +79,7 @@
 				log.InfoFormat("Making another sage request:{0}", nextUrl);
 				response = client.Execute(request);
 
-				deserializedResponse = CreateDeserializedItems<TDeserialize>(CleanResponse(response.Content));
+				deserializedResponse = CreateDeserializedItems<TDeserialize>(CleanResponse(response.Content, typeof(TDeserialize).Name));
 				if (deserializedResponse == null)
 				{
 					log.Error("Sage response deserialization failed");
@@ -109,7 +109,7 @@
 				foreach (SageDiagnostic diagnostic in deserializedItems.diagnoses)
 				{
 					log.ErrorFormat("Error occured during sage {0} request. Message:{1} Source:{2} Severity:{3} DataCode:{4}",
-						typeof(TDeserialized), diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
+						typeof(TDeserialized).Name, diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
 				}
 				return null;
 			}
@@ -123,17 +123,22 @@
 			{
 				var js = new JavaScriptSerializer();
 				var deserializedObject = ((PaginatedResults<TDeserialized>)js.Deserialize(cleanResponse, typeof(PaginatedResults<TDeserialized>)));
-				if (deserializedObject == null || (deserializedObject.resources == null && deserializedObject.diagnoses == null))
+				if (deserializedObject == null || (deserializedObject.resources == null))
 				{
-					string errorMessage = string.Format("Error deserializing response:{0}", cleanResponse);
-					log.ErrorFormat(errorMessage);
+					log.ErrorFormat("Error deserializing response:{0}", cleanResponse);
 					throw new Exception();
 				}
 				return deserializedObject;
 			}
 			catch (Exception e)
 			{
-				log.ErrorFormat("Failed deserializing sage {0} response:{1}. The error was:{2}", typeof(TDeserialized), cleanResponse, e);
+				log.ErrorFormat(@"Failed deserializing sage {0} response:
+					
+					{1}
+		
+					The error was:
+
+					{2}", typeof(TDeserialized), cleanResponse, e);
 				return null;
 			}
 		}
@@ -158,8 +163,9 @@
 			}
 		}
 
-		public static string CleanResponse(string originalResponse)
+		public static string CleanResponse(string originalResponse, string type)
 		{
+			log.DebugFormat("original response {1} \n {0}", originalResponse, type);
 			return originalResponse.Replace("\"$", "\"");
 		}
 

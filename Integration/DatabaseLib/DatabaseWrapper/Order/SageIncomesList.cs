@@ -40,7 +40,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public int? source { get; set; }
 		public int? destination { get; set; }
 		//public int? payment_method { get; set; }
-		public bool voided { get; set; }
+		public bool? voided { get; set; }
 		public int lock_version { get; set; }
 
 		public override DateTime RecordTime

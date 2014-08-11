@@ -34,7 +34,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public decimal tax_amount { get; set; }
 		public int? tax_code { get; set; }
 		public decimal tax_rate_percentage { get; set; }
-		public bool unit_price_includes_tax { get; set; }
+		public bool? unit_price_includes_tax { get; set; }
 		public int? ledger_account { get; set; }
 		public string product_code { get; set; }
 		public int? product { get; set; }
@@ -61,7 +61,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public string contact_name { get; set; }
 		public string main_address { get; set; }
 		public string delivery_address { get; set; }
-		public bool delivery_address_same_as_main { get; set; }
+		public bool? delivery_address_same_as_main { get; set; }
 		public string reference { get; set; }
 		public string notes { get; set; }
 		public string terms_and_conditions { get; set; }

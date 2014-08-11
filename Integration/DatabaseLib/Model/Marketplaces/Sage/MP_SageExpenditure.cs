@@ -22,7 +22,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 		public virtual int? SourceId { get; set; }
 		public virtual int? DestinationId { get; set; }
 		//public virtual int? PaymentMethodId { get; set; }
-		public virtual bool voided { get; set; }
+		public virtual bool? voided { get; set; }
 		public virtual int lock_version { get; set; }
 	}
 }

@@ -7,11 +7,13 @@ namespace EzBobTest
 	using System.Threading;
 	using System.Xml;
 	using CompanyFiles;
+	using ConfigManager;
 	using EKM;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EzBob.Models;
 	using EzBob.eBayLib.Config;
 	using EzBob.eBayServiceLib.TradingServiceCore.DataProviders.Model.TokenDependant;
+	using Ezbob.Database;
 	using Ezbob.RegistryScanner;
 	using Ezbob.Utils.Serialization;
 	using FreeAgent;
@@ -45,6 +47,8 @@ namespace EzBobTest
     public class TestRetrieveDataHelper
     {
         private DatabaseDataHelper _Helper;
+		protected AConnection m_oDB;
+		protected ASafeLog m_oLog;
 
         [SetUp]
         public void Init()
@@ -69,6 +73,14 @@ namespace EzBobTest
             });
 
             _Helper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+
+			var oLog4NetCfg = new Log4Net().Init();
+
+			m_oLog = new ConsoleLog(new SafeILog(this));
+
+			m_oDB = new SqlConnection(oLog4NetCfg.Environment, m_oLog);
+
+			ConfigManager.CurrentValues.Init(m_oDB, m_oLog);
         }
 
 		[Test]
@@ -114,7 +126,7 @@ namespace EzBobTest
 
 		[Test]
 		public void UpdateCustomerMarketplace() {
-			var umis = new[] { 18306 };
+			var umis = new[] { 18350 };
 
 			//umis.AsParallel().ForAll( UpdateCustomerMarketplace );
 

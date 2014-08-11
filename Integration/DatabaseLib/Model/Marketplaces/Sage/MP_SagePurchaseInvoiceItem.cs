@@ -14,7 +14,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 		public virtual decimal tax_amount { get; set; }
 		public virtual int? TaxCodeId { get; set; }
 		public virtual decimal tax_rate_percentage { get; set; }
-		public virtual bool unit_price_includes_tax { get; set; }
+		public virtual bool? unit_price_includes_tax { get; set; }
 		public virtual int? LedgerAccountId { get; set; }
 		public virtual string product_code { get; set; }
 		public virtual int? ProductId { get; set; }

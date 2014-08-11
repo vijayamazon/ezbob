@@ -317,7 +317,8 @@
 				PeriodMonthsNum = model.PeriodMonthsNum
 			};
 
-			if (bankStatementDataModel.DateFrom.HasValue && bankStatementDataModel.DateTo.HasValue) {
+			if (bankStatementDataModel.DateFrom.HasValue && bankStatementDataModel.DateTo.HasValue && (bankStatementDataModel.DateTo.Value - bankStatementDataModel.DateFrom.Value).TotalDays > 0)
+			{
 				double annualMult = 365.0/(bankStatementDataModel.DateTo.Value - bankStatementDataModel.DateFrom.Value).TotalDays;
 				bankStatementDataModel.Revenues = model.Revenues*annualMult;
 				bankStatementDataModel.Opex = model.Opex*annualMult;

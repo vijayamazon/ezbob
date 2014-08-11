@@ -3,16 +3,16 @@
 
 	public class SageConfig {
 		public SageConfig() {
-			OAuthIdentifier = CurrentValues.Instance.SageOAuthIdentifier;
-			OAuthSecret = CurrentValues.Instance.SageOAuthSecret;
-			OAuthAuthorizationEndpoint = CurrentValues.Instance.SageOAuthAuthorizationEndpoint;
-			OAuthTokenEndpoint = CurrentValues.Instance.SageOAuthTokenEndpoint;
-			SalesInvoicesRequest = CurrentValues.Instance.SageSalesInvoicesRequest;
-			PurchaseInvoicesRequest = CurrentValues.Instance.SagePurchaseInvoicesRequest;
-			IncomesRequest = CurrentValues.Instance.SageIncomesRequest;
-			ExpendituresRequest = CurrentValues.Instance.SageExpendituresRequest;
-			PaymentStatusesRequest = CurrentValues.Instance.SagePaymentStatusesRequest;
-			RequestForDatesPart = CurrentValues.Instance.SageRequestForDatesPart;
+			OAuthIdentifier = CurrentValues.Instance.SageOAuthIdentifier.Value;
+			OAuthSecret = CurrentValues.Instance.SageOAuthSecret.Value;
+			OAuthAuthorizationEndpoint = CurrentValues.Instance.SageOAuthAuthorizationEndpoint.Value;
+			OAuthTokenEndpoint = CurrentValues.Instance.SageOAuthTokenEndpoint.Value;
+			SalesInvoicesRequest = CurrentValues.Instance.SageSalesInvoicesRequest.Value;
+			PurchaseInvoicesRequest = CurrentValues.Instance.SagePurchaseInvoicesRequest.Value;
+			IncomesRequest = CurrentValues.Instance.SageIncomesRequest.Value;
+			ExpendituresRequest = CurrentValues.Instance.SageExpendituresRequest.Value;
+			PaymentStatusesRequest = CurrentValues.Instance.SagePaymentStatusesRequest.Value;
+			RequestForDatesPart = CurrentValues.Instance.SageRequestForDatesPart.Value;
 		}
 
 		public string OAuthIdentifier { get; set; }

@@ -28,7 +28,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 		public virtual string contact_name { get; set; }
 		public virtual string main_address { get; set; }
 		public virtual string delivery_address { get; set; }
-		public virtual bool delivery_address_same_as_main { get; set; }
+		public virtual bool? delivery_address_same_as_main { get; set; }
 		public virtual string reference { get; set; }
 		public virtual string notes { get; set; }
 		public virtual string terms_and_conditions { get; set; }
