@@ -32,7 +32,7 @@
 				return null;
 			}
 
-			List<CustomerAddressModel> ownedAddresses = DB.Fill<CustomerAddressModel>("GetCustomerAddresses",
+			List<CustomerAddressModel> ownedAddresses = DB.Fill<CustomerAddressModel>("GetCustomerOwnedAddresses",
 			                                                                          CommandSpecies.StoredProcedure,
 			                                                                          new QueryParameter("CustomerId", customerId));
 			foreach (CustomerAddressModel address in ownedAddresses)
