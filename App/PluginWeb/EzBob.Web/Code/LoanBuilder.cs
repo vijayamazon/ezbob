@@ -19,16 +19,16 @@ namespace EzBob.Web.Code
 		public Loan CreateLoan(CashRequest cr, decimal amount, DateTime now, int interestOnlyTerm = 0)
 		{
 			return string.IsNullOrEmpty(cr.LoanTemplate) ?
-							CreateNewLoan(cr, amount, now, interestOnlyTerm) :
+							CreateNewLoan(cr, amount, now, cr.RepaymentPeriod, interestOnlyTerm) :
 							CreateLoanFromTemplate(cr, amount, now);
 		}
 
-		private static Loan CreateNewLoan(CashRequest cr, decimal amount, DateTime now, int interestOnlyTerm = 0)
+		public Loan CreateNewLoan(CashRequest cr, decimal amount, DateTime now, int term, int interestOnlyTerm = 0)
 		{
 			var sfc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
 			var setupFee = sfc.Calculate(amount);
 
-			var calculator = new LoanScheduleCalculator { Interest = cr.InterestRate, Term = cr.RepaymentPeriod };
+			var calculator = new LoanScheduleCalculator { Interest = cr.InterestRate, Term = term };
 			var loanLegal = cr.LoanLegals.LastOrDefault();
 			var loan = new Loan
 				{

@@ -4,18 +4,26 @@
 @model dynamic
 
 <script id="loanhistory-view-template" type="text/template">
-    <div id="loanhistory-table">
-    </div>
-    <div id="loanhistory-details">
-    </div>
-    <div id="loan-editor">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-ezbig">
+                <div class="box">
+                    <div class="box-content">
+                        <div id="loanhistory-table">
+                        </div>
+                        <div id="loanhistory-details">
+                        </div>
+                        <div id="loan-editor">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </script>
 
 
 <script id="loanhistory-template" type="text/template">
-    <div class="row">
-        <div class="col-md-12">
             @Loans()
             <div>
                 <label class="checkbox">
@@ -27,8 +35,6 @@
             </div>
 
             @{Html.RenderPartial("_ExportToExcel");}
-        </div>
-    </div>
 </script>
 
 @helper Loans()

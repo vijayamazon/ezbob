@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using System;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -44,10 +45,10 @@
 		{
 			var cr = _cashRequests.Get(id);
 
-			//if (!cr.Customer.OfferStart.HasValue)
-			//	cr.Customer.OfferStart = cr.OfferStart;
-
-			var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.OfferStart.Value);
+			var loan = _loanBuilder.CreateNewLoan(cr, 
+				cr.ApprovedSum(), 
+				cr.OfferStart.HasValue? cr.OfferStart.Value : DateTime.UtcNow, 
+				cr.ApprovedRepaymentPeriod.HasValue ? cr.ApprovedRepaymentPeriod.Value : 12);
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
 			calc.GetState();
