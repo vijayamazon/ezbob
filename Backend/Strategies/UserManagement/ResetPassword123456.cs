@@ -5,6 +5,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using JetBrains.Annotations;
+	using MailStrategies;
 
 	[DataContract]
 	public enum PasswordResetTarget {
@@ -26,6 +27,8 @@
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
+			m_nTargetType = nTarget;
+
 			m_oSpLoad = new LoadEmailForPasswordReset(DB, Log) {
 				TargetID = nTargetID,
 				Target = nTarget.ToString(),
@@ -55,12 +58,27 @@
 			} // if
 
 			var sp = new SavePassword(m_oSpLoad, DB, Log) {
-				Password = SecurityUtils.HashPassword(sEmail, "123456"),
+				Password = SecurityUtils.HashPassword(sEmail, ThePassword),
 			};
 
 			sp.ExecuteNonQuery();
 
 			Log.Debug("Resetting password for {0} {1} complete.", m_oSpLoad.Target, m_oSpLoad.TargetID);
+
+			AStrategy oEmailSender = null;
+
+			switch (m_nTargetType) {
+			case PasswordResetTarget.Customer:
+				oEmailSender = new PasswordChanged(m_oSpLoad.TargetID, ThePassword, DB, Log);
+				break;
+
+			case PasswordResetTarget.Broker:
+				oEmailSender = new BrokerPasswordChanged(m_oSpLoad.TargetID, ThePassword, DB, Log);
+				break;
+			} // switch
+
+			if (oEmailSender != null)
+				oEmailSender.Execute();
 		} // Execute
 
 		#endregion method Execute
@@ -70,6 +88,9 @@
 		#region private
 
 		private readonly LoadEmailForPasswordReset m_oSpLoad;
+		private readonly PasswordResetTarget m_nTargetType;
+
+		private const string ThePassword = "123456";
 
 		#region class LoadEmailForPasswordReset
 

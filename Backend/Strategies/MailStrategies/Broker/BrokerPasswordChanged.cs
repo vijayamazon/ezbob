@@ -9,6 +9,9 @@
 		public BrokerPasswordChanged(int nBrokerID, Password oPassword, AConnection oDB, ASafeLog oLog) : base(nBrokerID, oPassword, oDB, oLog) {
 		} // constructor
 
+		public BrokerPasswordChanged(int nBrokerID, string sPassword, AConnection oDB, ASafeLog oLog) : base(nBrokerID, sPassword, oDB, oLog) {
+		} // constructor
+
 		#endregion constructor
 
 		#region property Name
