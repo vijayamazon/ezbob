@@ -3,18 +3,10 @@ root.EzBob = root.EzBob or {}
 EzBob.Underwriter = EzBob.Underwriter || {}
 
 class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
-    initialize: ->
-        @model = new EzBob.Underwriter.FundingModel()
-        @model.on "change reset", @render, @
-        @requiredFunds = -1
-        that = this
-        @model.fetch().done(=>
-            setInterval (->
-                that.model.fetch()
-            ), that.model.get('RefreshInterval')
-        )
-
     template: "#funding-template"
+
+    initialize: ->
+        @model.on "change reset", @render, @
 
     events:
         "click #addFundsBtn": "addFunds"
@@ -58,17 +50,8 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
             that.model.fetch()
 
     onRender: ->
-        if !$("body").hasClass("role-manager")
-            @$el.find('#addFundsBtn').hide()
-            @$el.find('#cancelManuallyAddedFundsBtn').hide()
-
-        fundsMenuText = $("[id='liFunding'] span,[id='liFunding'] i")
-        
-        availableFundsNum = @model.get('AvailableFunds')
-        if (@model.get('RequiredFunds') > availableFundsNum)
-            fundsMenuText.addClass('red_cell')
-        else
-            fundsMenuText.removeClass('red_cell')
+        unless $("body").hasClass("role-manager")
+            @$el.find('#addFundsBtn, #cancelManuallyAddedFundsBtn').hide()
 
     hide: ->
         @$el.hide()
@@ -81,3 +64,6 @@ class EzBob.Underwriter.FundingView extends Backbone.Marionette.ItemView
 
 class EzBob.Underwriter.FundingModel extends Backbone.Model
     urlRoot: -> "#{gRootPath}Underwriter/Funding/GetCurrentFundingStatus"
+
+    notEnoughFunds: ->
+        @get('RequiredFunds') > @get('AvailableFunds')

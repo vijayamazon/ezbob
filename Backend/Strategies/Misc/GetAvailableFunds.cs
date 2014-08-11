@@ -22,6 +22,29 @@
 
 		#endregion static constructor
 
+		#region method LoadFromDB
+
+		public static void LoadFromDB() {
+			ms_oLog.Debug("Loading available funds from DB...");
+
+			SafeReader sr = ms_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure);
+			decimal nAvailableFunds = sr["AvailableFunds"];
+			decimal nReservedAmount = sr["ReservedAmount"];
+
+			lock (ms_oDataLock) {
+				ms_nAvailableFunds = nAvailableFunds;
+				ms_nReservedAmount = nReservedAmount;
+			} // lock
+
+			ms_oLog.Debug(
+				"Available funds: {0}, reserved amount: {1}.", 
+				nAvailableFunds.ToString("C2", ms_oCultureInfo),
+				nReservedAmount.ToString("C2", ms_oCultureInfo)
+			);
+		} // LoadFromDB
+
+		#endregion method LoadFromDB
+
 		#region constructor
 
 		public GetAvailableFunds(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
@@ -125,29 +148,6 @@
 		} // LoadFromDBThread
 
 		#endregion method LoadFromDBThread
-
-		#region method LoadFromDB
-
-		private static void LoadFromDB() {
-			ms_oLog.Debug("Loading available funds from DB...");
-
-			SafeReader sr = ms_oDB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure);
-			decimal nAvailableFunds = sr["AvailableFunds"];
-			decimal nReservedAmount = sr["ReservedAmount"];
-
-			lock (ms_oDataLock) {
-				ms_nAvailableFunds = nAvailableFunds;
-				ms_nReservedAmount = nReservedAmount;
-			} // lock
-
-			ms_oLog.Debug(
-				"Available funds: {0}, reserved amount: {1}.", 
-				nAvailableFunds.ToString("C2", ms_oCultureInfo),
-				nReservedAmount.ToString("C2", ms_oCultureInfo)
-			);
-		} // LoadFromDB
-
-		#endregion method LoadFromDB
 
 		#endregion private
 	} // class GetAvailableFunds

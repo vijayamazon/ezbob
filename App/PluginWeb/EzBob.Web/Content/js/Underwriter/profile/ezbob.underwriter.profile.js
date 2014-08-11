@@ -1,7 +1,7 @@
 var EzBob = EzBob || {};
 
 EzBob.Underwriter.ProfileView = EzBob.View.extend({
-	initialize: function() {
+	initialize: function(options) {
 		this.template = _.template($('#profile-template-main').html());
 
 		if (!EzBob.CrmActions || EzBob.CrmActions.length === 0) {
@@ -18,7 +18,8 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			});
 		} // if
 
-		this.fetchAvailFundsHandler = null;
+		this.fundingModel = options.fundingModel;
+		this.fundingModel.on('change reset sync', this.fillFunds, this);
 	}, // initialize
 
 	render: function() {
@@ -169,7 +170,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		});
 
 		this.affordability = new EzBob.Underwriter.Affordability();
-		this.fundingModel = new EzBob.Underwriter.FundingModel();
 		this.dashboardInfoView = new EzBob.Underwriter.DashboardView({
 			el: dashboardInfo,
 			model: this.summaryInfoModel,
@@ -502,6 +502,8 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 				return;
 			} // if
 
+			console.log('Full customer model is', fullModel);
+
 			self.personalInfoModel.set({ Id: id }, { silent: true });
 			self.personalInfoModel.set(fullModel.get('PersonalInfoModel'), { silent: true });
 			self.personalInfoModel.trigger('sync');
@@ -593,15 +595,8 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 			self.signatureMonitorView.reload(id);
 
-			self.fundingModel.fetch().done(function() {
-				self.fillFunds();
-
-				if (!self.fetchAvailFundsHandler) {
-					self.fetchAvailFundsHandler = setInterval(function() {
-						self.fundingModel.fetch().done(function() { self.fillFunds(); });
-					}, self.fundingModel.get('RefreshInterval'));
-				} // if
-			});
+			self.fillFunds();
+			self.fundingModel.fetch();
 
 			EzBob.InitBugs();
 
@@ -615,13 +610,13 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 	fillFunds: function() {
 		var fundingAlert = this.$el.find('.fundingAlert');
-		var availableFundsNum = this.fundingModel.get('AvailableFunds');
-		var reqFunds = this.fundingModel.get('RequiredFunds');
-		var availableFundsStr = 'Funding ' + EzBob.formatPoundsNoDecimals(availableFundsNum).replace(/\s+/g, '');
 
-		fundingAlert.html(availableFundsStr);
+		var availableFundsStr = 'Funding ' +
+			EzBob.formatPoundsNoDecimals(
+				this.fundingModel.get('AvailableFunds')
+			).replace(/\s+/g, '');
 
-		fundingAlert.toggleClass('red_cell', reqFunds > availableFundsNum);
+		fundingAlert.html(availableFundsStr).toggleClass('red_cell', this.fundingModel.notEnoughFunds());
 	}, // fillFunds
 
 	hide: function() {

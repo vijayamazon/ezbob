@@ -15,41 +15,55 @@
 
 	var TUnderwriterRouter = Backbone.Router.extend({
 		initialize: function() {
+			var oFundingModel = new EzBob.Underwriter.FundingModel();
+
+			function fundingModelFetchDone() {
+				$("[id='liFunding'] span,[id='liFunding'] i").toggleClass('red_cell', oFundingModel.notEnoughFunds());
+			} // fundingModelFetchDone
+
+			oFundingModel.fetch().done(function() {
+				fundingModelFetchDone();
+				setInterval(
+					function() { oFundingModel.fetch().done(function() { fundingModelFetchDone(); }); },
+					oFundingModel.get('RefreshInterval')
+				);
+			});
+
 			this.views = {
 				grids: {
-					view: new EzBob.Underwriter.GridsView({ el: $('#grids-view') }),
+					view: new EzBob.Underwriter.GridsView({ el: $('#grids-view'), }),
 					isRendered: false,
 				},
 				profile: {
-					view: new EzBob.Underwriter.ProfileView({ el: $('#profile-view') }),
+					view: new EzBob.Underwriter.ProfileView({ el: $('#profile-view'), fundingModel: oFundingModel, }),
 					isRendered: false,
 				},
 				strategySettings: {
-					view: new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') }),
+					view: new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view'), }),
 					isRendered: false,
 				},
 				strategyAutomation: {
-					view: new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view') }),
+					view: new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view'), }),
 					isRendered: false,
 				},
 				support: {
-					view: new EzBob.Underwriter.SupportView({ el: $('#support-area') }),
+					view: new EzBob.Underwriter.SupportView({ el: $('#support-area'), }),
 					isRendered: false,
 				},
 				fraud: {
-					view: new EzBob.Underwriter.FraudView({ el: $('#fraud-area') }),
+					view: new EzBob.Underwriter.FraudView({ el: $('#fraud-area'), }),
 					isRendered: false,
 				},
 				report: {
-					view: new EzBob.Underwriter.ReportView({ el: $('#report-view') }),
+					view: new EzBob.Underwriter.ReportView({ el: $('#report-view'), }),
 					isRendered: false,
 				},
 				funding: {
-					view: new EzBob.Underwriter.FundingView({ el: $('#funding-view') }),
+					view: new EzBob.Underwriter.FundingView({ el: $('#funding-view'), model: oFundingModel, }),
 					isRendered: false,
 				},
 				broker: {
-					view: new EzBob.Underwriter.BrokerProfileView({ el: $('#broker-profile-view') }),
+					view: new EzBob.Underwriter.BrokerProfileView({ el: $('#broker-profile-view'), }),
 					isRendered: false,
 				},
 			}; // views
@@ -76,15 +90,6 @@
 		}, // routes
 
 		handleRoute: function(sViewName, id, type) {
-			if (sViewName !== 'profile') {
-				var oProfileView = this.views.profile;
-
-				if (oProfileView && oProfileView.fetchAvailFundsHandler) {
-					clearInterval(oProfileView.fetchAvailFundsHandler);
-					oProfileView.fetchAvailFundsHandler = null;
-				} // if
-			} // if
-
 			var oView = this.views[sViewName];
 
 			if (!oView.isRendered) {

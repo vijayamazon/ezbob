@@ -33,7 +33,10 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("UnderwriterName", underwriterName),
 				new QueryParameter("Amount", amount),
-				new QueryParameter("Date", DateTime.UtcNow));
+				new QueryParameter("Date", DateTime.UtcNow)
+			);
+
+			GetAvailableFunds.LoadFromDB();
 		} // Execute
 
 		#endregion property Execute

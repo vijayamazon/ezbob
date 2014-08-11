@@ -24,8 +24,8 @@
 		#region property Execute
 
 		public override void Execute() {
-			DB.ExecuteNonQuery("DisableCurrentManualPacnetDeposits",
-				CommandSpecies.StoredProcedure);
+			DB.ExecuteNonQuery("DisableCurrentManualPacnetDeposits", CommandSpecies.StoredProcedure);
+			GetAvailableFunds.LoadFromDB();
 		} // Execute
 
 		#endregion property Execute
