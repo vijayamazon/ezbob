@@ -107,7 +107,6 @@
 
 		[HttpGet]
 		public System.Web.Mvc.ActionResult Dashboard() {
-			
 			WizardComplete();
 
 			var blm = new WizardBrokerLeadModel(Session);
@@ -175,50 +174,6 @@
 		} // TakeQuickOffer
 
 		#endregion method TakeQuickOffer
-
-		#region method WizardComplete
-
-		public void WizardComplete() {
-			Session["WizardComplete"] = true;
-			TempData["WizardComplete"] = true;
-			var customer = m_oContext.Customer;
-
-			new Transactional(() => WizardCompleteTrn(customer)).Execute();
-
-			// Updates broker lead state if needed and sends "Email Under Review".
-			m_oServiceClient.Instance.BrokerCustomerWizardComplete(customer.Id);
-
-			ms_oLog.Debug("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
-
-			m_oServiceClient.Instance.MainStrategy1(m_oContext.User.Id, m_oContext.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
-
-			ms_oLog.Debug("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
-
-			if (!customer.IsTest) {
-				m_oServiceClient.Instance.FraudChecker(m_oContext.User.Id, FraudMode.FullCheck);
-				ms_oLog.Debug("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
-			} // if
-
-		} // WizardComplete
-
-		private void WizardCompleteTrn(Customer customer) {
-			ms_oLog.Debug("Customer {1} ({0}): has completed wizard.", customer.Id, customer.PersonalInfo.Fullname);
-
-			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
-
-			m_oSession.Flush();
-
-			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
-
-			m_oCashRequestBuilder.CreateCashRequest(customer, CashRequestOriginator.FinishedWizard);
-
-			ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
-
-			m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
-			ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
-		}
-
-		#endregion method WizardComplete
 
 		#region method SaveCompany
 
@@ -861,6 +816,46 @@
 		} // ProcessCompanyInfo
 
 		#endregion static method ProcessCompanyInfo
+
+		#region method WizardComplete
+
+		private void WizardComplete() {
+			Session["WizardComplete"] = true;
+			TempData["WizardComplete"] = true;
+
+			var customer = m_oContext.Customer;
+
+			ms_oLog.Debug("Customer {1} ({0}): has completed wizard.", customer.Id, customer.PersonalInfo.Fullname);
+
+			new Transactional(() => {
+				customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
+				m_oDatabaseHelper.SaveCustomer(customer);
+				m_oSession.Flush();
+				ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
+
+				m_oCashRequestBuilder.CreateCashRequest(customer, CashRequestOriginator.FinishedWizard);
+				ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
+
+				m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
+				ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
+			}).Execute();
+
+			// Updates broker lead state if needed and sends "Email Under Review".
+			m_oServiceClient.Instance.BrokerCustomerWizardComplete(customer.Id);
+
+			ms_oLog.Debug("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
+
+			m_oServiceClient.Instance.MainStrategy1(m_oContext.User.Id, m_oContext.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
+
+			ms_oLog.Debug("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
+
+			if (!customer.IsTest) {
+				m_oServiceClient.Instance.FraudChecker(m_oContext.User.Id, FraudMode.FullCheck);
+				ms_oLog.Debug("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
+			} // if
+		} // WizardComplete
+
+		#endregion method WizardComplete
 
 		#region method SaveCustomerToDB
 

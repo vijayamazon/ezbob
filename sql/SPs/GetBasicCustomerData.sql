@@ -28,7 +28,8 @@ BEGIN
 		c.DaytimePhone,
 		c.IsTest,
 		a.Postcode,
-		a.Town AS City
+		a.Town AS City,
+		c.Id AS UserID
 	FROM
 		Customer c LEFT JOIN CustomerAddress a ON c.Id=a.CustomerId AND a.addressType=1
 	WHERE

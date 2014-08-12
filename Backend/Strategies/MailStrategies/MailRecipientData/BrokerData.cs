@@ -57,8 +57,6 @@
 
 		public virtual string FirmName { get; set; } // FirmName
 
-		public virtual int UserID { get; set; } // UserID
-
 		#endregion properties
 	} // class CustomerData
 } // namespace

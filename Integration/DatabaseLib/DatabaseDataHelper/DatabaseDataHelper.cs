@@ -187,6 +187,11 @@ namespace EZBob.DatabaseLib {
 
 		public ICurrencyConvertor CurrencyConverter { get { return _CurrencyConvertor; } }
 
+		public void SaveCustomer(Customer oCustomer) {
+			if (oCustomer != null)
+				_CustomerRepository.SaveOrUpdate(oCustomer);
+		} // SaveCustomer
+
 		public Customer GetCustomerInfo(int clientId) { return _CustomerRepository.Get(clientId); }
 
 		public Customer FindCustomerByEmail(string sEmail) { return _CustomerRepository.TryGetByEmail(sEmail); } // FindCustomerByEmail

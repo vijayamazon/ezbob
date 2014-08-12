@@ -26,7 +26,8 @@ BEGIN
 			b.ContactOtherPhone AS DaytimePhone,
 			b.IsTest,
 			'' AS Postcode,
-			'' AS City
+			'' AS City,
+			b.UserID AS UserID
 		FROM
 			Broker b
 		WHERE

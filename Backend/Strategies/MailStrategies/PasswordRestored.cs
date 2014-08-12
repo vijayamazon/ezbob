@@ -40,12 +40,12 @@
 			SafeReader sr = DB.GetFirst(
 				"LoadEmailConfirmationState",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("UserID", CustomerData.Id)
+				new QueryParameter("UserID", CustomerData.UserID)
 			);
 
 			string sErrMsg = null;
 
-			if ((int)sr["UserID"] != CustomerData.Id)
+			if ((int)sr["UserID"] != CustomerData.UserID)
 				sErrMsg = "failed to load email confirmation state";
 			else if (!sr["IsConfirmed"])
 				sErrMsg = "email is not confirmed";

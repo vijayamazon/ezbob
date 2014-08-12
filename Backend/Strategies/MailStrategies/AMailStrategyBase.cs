@@ -11,7 +11,6 @@
 	using Ezbob.Utils.Exceptions;
 
 	public abstract class AMailStrategyBase : AStrategy {
-
 		#region public
 
 		#region method Execute

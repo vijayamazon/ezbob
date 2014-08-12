@@ -64,6 +64,7 @@
 		public virtual bool IsTest { get; protected set; }
 		public virtual string Postcode { get; protected set; }
 		public virtual string City { get; protected set; }
+		public virtual int UserID { get; protected set; }
 
 		#endregion properties
 
@@ -97,6 +98,7 @@
 			IsTest = sr["IsTest"];
 			Postcode = sr["Postcode"];
 			City = sr["City"];
+			UserID = sr["UserID"];
 		} // Load
 
 		#endregion private
