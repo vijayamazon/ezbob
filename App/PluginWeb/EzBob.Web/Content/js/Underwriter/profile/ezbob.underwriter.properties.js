@@ -42,10 +42,15 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
         BlockUi("On");
         $.post(window.gRootPath + "Underwriter/Properties/LandRegistryEnquiries/?customerId=" + this.customerId, function (data) {
             BlockUi("Off");
-            that.lrEnqView = new EzBob.LandRegistryEnquiryView({ model: { postcode: postcode, address: address, customerId: that.model.customerId, titles: data.titles } });
+            that.lrEnqView = new EzBob.LandRegistryEnquiryView({ model: { postcode: postcode, address: address, customerId: that.customerId, titles: data.titles } });
             EzBob.App.vent.on('landregistry:retrieved', that.landRegistryRetrieved, that);
             EzBob.App.jqmodal.show(that.lrEnqView);
         });
+    },
+    landRegistryRetrieved: function () {
+        BlockUi("Off");
+        Backbone.history.loadUrl();
+        return false;
     },
 });
 

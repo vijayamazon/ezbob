@@ -279,12 +279,6 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
     events: {
         "click #recheck-targeting": "recheckTargeting"
     }, // events
-    
-    landRegistryRetrieved: function () {
-        BlockUi("Off");
-        Backbone.history.loadUrl();
-        return false;
-    },
     recheckTargeting: function (e) {
         var el = $(e.currentTarget),
             postcode = el.attr("data-postcode"),
