@@ -753,6 +753,8 @@
 				.Where(a => a.Customer.Id == customerId && (a.AddressType == CustomerAddressType.OtherPropertyAddress ||
 					(a.AddressType == CustomerAddressType.PersonalAddress && a.Customer.PropertyStatus.IsOwnerOfMainAddress)));
 
+			log.InfoFormat("Fetching zoopla data for {0} addresses", customerAddress.Count());
+
 			if (customerAddress.Any())
 			{
 				foreach (var address in customerAddress)
