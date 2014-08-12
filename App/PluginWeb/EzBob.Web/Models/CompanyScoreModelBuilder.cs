@@ -139,6 +139,13 @@
 
 			model.CompanyName = data.BusinessName;
 			model.CompanyRefNum = refNumber;
+			if (string.IsNullOrEmpty(refNumber)) {
+				model.Error = "No data found.";
+			}
+
+			if (refNumber == "NotFound") {
+				model.Error = "Customer selected company not found.";
+			}
 
 			model.Score = data.RiskScore ?? 0;
 			model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, CompanyScoreMax, CompanyScoreMin).Color;
