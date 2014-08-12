@@ -2053,3 +2053,13 @@ ul.alert-list {
     list-style-type: circle;
     list-style-position: inside;
 }
+
+.row-top-border {
+    border-top: 2px solid;
+}
+
+.balance-history {
+    width: 300px;
+    height: 300px;
+    display: block;
+}

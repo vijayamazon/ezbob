@@ -124,6 +124,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string[] MonthsDisplayed { get; set; } 
 		public AccountStatus[] LatestStatuses { get; set; } // colors
 		public string MatchTo { get; set; }
+		public string BalanceHistory { get; set; }
 	}
 
 	public class AccountDisplayedYear

@@ -376,6 +376,10 @@
 				accountInfo.Years = years.ToArray();
 				accountInfo.Quarters = quarters.ToArray();
 				accountInfo.MonthsDisplayed = monthsList.ToArray();
+
+				if (caisDetails.AccountBalances.Any()) {
+					accountInfo.BalanceHistory = caisDetails.AccountBalances.Where(x => x.AccountBalance.HasValue).Select(x => x.AccountBalance.Value.ToString(CultureInfo.InvariantCulture)).Aggregate((a, b) => a + "," + b);
+				}
 				accList.Add(accountInfo);
 			}
 

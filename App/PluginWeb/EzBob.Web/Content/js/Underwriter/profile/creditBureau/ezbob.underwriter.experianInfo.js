@@ -30,6 +30,7 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         "click #RunBwaCheckBtn": "RunBwaCheckBtnClick",
         "click .btn-download": "downloadConsent",
         "click .check-history tr:not(:eq(0),:eq(1))": "CheckHistoryClicked",
+        "click .show-balance-history": "showHistory",
     },
     
     CheckHistoryClicked: function(e) {
@@ -46,6 +47,24 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
             BlockUi("off");
         });
         this.render();
+    },
+    showHistory: function(e) {
+        var hist = new EzBob.Underwriter.ExperianBalanceHistory({ history: $(e.currentTarget).data('balance') });
+        EzBob.App.jqmodal.show(hist);
+        $('.balance-history .inline-sparkline').sparkline("html", {
+            width: "100%",
+            height: "100%",
+            lineWidth: 2,
+            spotRadius: 3.5,
+            lineColor: "#cfcfcf",
+            fillColor: "transparent",
+            spotColor: "#cfcfcf",
+            maxSpotColor: "#cfcfcf",
+            minSpotColor: "#cfcfcf",
+            valueSpots: {
+                ':': '#cfcfcf'
+            }
+        });
     },
     downloadConsent: function (e) {
         var $el = $(e.currentTarget);
@@ -184,5 +203,23 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
             });
 
     return false;
+    }
+});
+
+EzBob.Underwriter.ExperianBalanceHistory = Backbone.Marionette.ItemView.extend({
+    template: "#balance-history-template",
+    initialize: function(options) {
+        this.history = options.history;
+    },
+    onRender: function () {
+        this.$el.find('.inline-sparkline').attr('values', this.history);
+    },
+    jqoptions: function() {
+        return {
+            modal: true,
+            width: 320,
+            title: 'Financial Account Balance history',
+            resizable: true
+        };
     }
 });

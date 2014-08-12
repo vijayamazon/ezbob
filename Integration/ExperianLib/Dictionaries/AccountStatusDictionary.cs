@@ -6,6 +6,7 @@
 
 		static AccountStatusDictionary() {
 			ms_oAccountStatuses = new SortedDictionary<string, string> {
+				{" ", "&nbsp;"},
 				{"0", "OK"},
 				{"1", "30"},
 				{"2", "60"},
@@ -22,6 +23,7 @@
 			};
 
 			ms_oAccountDetailedStatuses = new SortedDictionary<string, string> {
+				{" ", "Empty"},
 				{"0", "0 days"},
 				{"1", "30 days"},
 				{"2", "60 days"},
@@ -38,6 +40,7 @@
 			};
 
 			ms_oAccountStatusColors = new SortedDictionary<string, string> {
+				{" ", "white"},
 				{"0", "info"},
 				{"1", "warning"},
 				{"2", "warning"},
