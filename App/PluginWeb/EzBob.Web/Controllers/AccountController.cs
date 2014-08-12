@@ -863,6 +863,15 @@ namespace EzBob.Web.Controllers {
 				ErrorMessage = "Registration"
 			});
 
+			if ((sourceref != null) && !string.IsNullOrWhiteSpace(sourceref.Value)) {
+				try {
+					m_oServiceClient.Instance.SaveSourceRefHistory(user.Id, sourceref.Value, firstvisit == null ? null : firstvisit.Value);
+				}
+				catch (Exception e) {
+					ms_oLog.Warn(e, "Failed to save sourceref history.");
+				} // try
+			} // if
+
 			return customer;
 		} // CreateCustomer
 
