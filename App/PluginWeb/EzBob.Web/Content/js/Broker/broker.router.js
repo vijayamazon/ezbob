@@ -241,8 +241,12 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		})(customerId));
 
 		if (this.getAuth()) {
-			if (this.views)
+			if (this.views) {
+				if (this.views.customer)
+					this.views.customer.clear();
+
 				this.views.customer = null;
+			} // if
 
 			this.createView('customer', EzBob.Broker.CustomerDetailsView, { customerid: customerId });
 			this.show('customer-details', 'log-off', 'customer');
