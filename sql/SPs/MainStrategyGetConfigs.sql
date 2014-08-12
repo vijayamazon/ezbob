@@ -12,8 +12,6 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_CreditScore') AS Reject_Defaults_CreditScore,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_AccountsNum') AS Reject_Defaults_AccountsNum,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'Reject_Minimal_Seniority') AS Reject_Minimal_Seniority,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_MonthsNum') AS Reject_Defaults_MonthsNum,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'Reject_Defaults_Amount') AS Reject_Defaults_Amount,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BWABusinessCheck') AS BWABusinessCheck,
 		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'EnableAutomaticApproval') AS EnableAutomaticApproval,
 		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'EnableAutomaticReApproval') AS EnableAutomaticReApproval,

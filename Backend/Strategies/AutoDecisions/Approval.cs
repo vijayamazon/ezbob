@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using System.Collections.Generic;
 	using EzBob.Models;
 	using Ezbob.Database;
 	using System;
@@ -10,28 +11,30 @@
 	public class Approval
 	{
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-		private readonly AConnection Db;
+		private readonly AConnection db;
 		private readonly int minExperianScore;
 		private readonly int offeredCreditLine;
 		private readonly ASafeLog log;
 		private readonly bool enableAutomaticApproval;
 		private readonly int customerId;
+		private readonly List<string> consumerCaisDetailWorstStatuses;
 
-		public Approval(int customerId, int minExperianScore, int offeredCreditLine, bool enableAutomaticApproval, AConnection oDb, ASafeLog oLog)
+		public Approval(int customerId, int minExperianScore, int offeredCreditLine, bool enableAutomaticApproval, List<string> consumerCaisDetailWorstStatuses, AConnection db, ASafeLog log)
 		{
-			Db = oDb;
-			log = oLog;
+			this.db = db;
+			this.log = log;
 			this.minExperianScore = minExperianScore;
 			this.offeredCreditLine = offeredCreditLine;
 			this.enableAutomaticApproval = enableAutomaticApproval;
 			this.customerId = customerId;
-		} // constructor
+			this.consumerCaisDetailWorstStatuses = consumerCaisDetailWorstStatuses;
+		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
 			try
 			{
-				DataTable configsDataTable = Db.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
+				DataTable configsDataTable = db.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
 				var configSafeReader = new SafeReader(configsDataTable.Rows[0]);
 
 				bool autoApproveIsSilent = configSafeReader["AutoApproveIsSilent"];
@@ -40,17 +43,16 @@
 				decimal minLoanAmount = configSafeReader["MinLoanAmount"];
 				if (enableAutomaticApproval)
 				{
-					var instance = new GetAvailableFunds(Db, log);
+					var instance = new GetAvailableFunds(db, log);
 					instance.Execute();
 					decimal availableFunds = instance.AvailableFunds;
 
-					response.AutoApproveAmount = strategyHelper.AutoApproveCheck(customerId, offeredCreditLine, minExperianScore, instance.ReservedAmount);
+					response.AutoApproveAmount = strategyHelper.AutoApproveCheck(customerId, offeredCreditLine, minExperianScore, instance.ReservedAmount, consumerCaisDetailWorstStatuses);
 					response.AutoApproveAmount = (int)(Math.Round(response.AutoApproveAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount);
 					log.Info("Decided to auto approve rounded amount:{0}", response.AutoApproveAmount);
 
 					if (response.AutoApproveAmount != 0)
 					{
-
 						if (availableFunds > response.AutoApproveAmount)
 						{
 							if (autoApproveIsSilent)
@@ -63,7 +65,7 @@
 							}
 							else
 							{
-								DataTable dt = Db.ExecuteReader(
+								DataTable dt = db.ExecuteReader(
 									"GetLastOfferDataForApproval",
 									CommandSpecies.StoredProcedure,
 									new QueryParameter("CustomerId", customerId),

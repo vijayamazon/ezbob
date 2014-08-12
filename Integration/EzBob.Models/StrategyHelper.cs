@@ -3,9 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.IO;
 	using System.Linq;
-	using System.Xml.Serialization;
 	using ApplicationMng.Repository;
 	using ConfigManager;
 	using EZBob.DatabaseLib;
@@ -16,7 +14,6 @@
 	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Repository;
 	using CommonLib.TimePeriodLogic;
-	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
@@ -40,7 +37,6 @@
 		private readonly CashRequestsRepository cashRequestsRepository;
 		private readonly ExperianDefaultAccountRepository experianDefaultAccountRepository;
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
-		private readonly ServiceLogRepository serviceLogRepository;
 		private readonly CustomerMarketPlaceRepository _marketPlaceRepository;
 		private readonly CustomerAddressRepository customerAddressRepository;
 		private readonly LandRegistryRepository landRegistryRepository;
@@ -56,7 +52,6 @@
 			cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
 			experianDefaultAccountRepository = ObjectFactory.GetInstance<ExperianDefaultAccountRepository>();
 			loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
-			serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
 			_marketPlaceRepository = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
 			customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
 			landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
@@ -346,7 +341,7 @@
 			return Convert.ToInt32((DateTime.UtcNow - _mpFacade.MarketplacesSeniority(customer)).TotalDays);
 		}
 
-		public int AutoApproveCheck(int customerId, int systemCalculatedAmount, int minExperianScore, decimal outstandingOffers)
+		public int AutoApproveCheck(int customerId, int systemCalculatedAmount, int minExperianScore, decimal outstandingOffers, List<string> consumerCaisDetailWorstStatuses)
 		{
 			log.InfoFormat("Checking if auto approval should take place...");
 			var customer = _customers.Get(customerId);
@@ -373,14 +368,14 @@
 
 				if (!loanRepository.ByCustomer(customerId).Any())
 				{
-					if (!CheckWorstCaisStatus(customer, new List<string> { "0", "1", "2" })) // Up to 60 days
+					if (!CheckWorstCaisStatus(new List<string> { "0", "1", "2" }, consumerCaisDetailWorstStatuses)) // Up to 60 days
 					{
 						return 0;
 					}
 				}
 				else
 				{
-					if (!CheckWorstCaisStatus(customer, new List<string> { "0", "1", "2", "3" }) || // Up to 90 days
+					if (!CheckWorstCaisStatus(new List<string> { "0", "1", "2", "3" }, consumerCaisDetailWorstStatuses) || // Up to 90 days
 						!CheckRollovers(customerId) ||
 						!CheckLateDays(customerId) ||
 						!CheckOutstandingLoans(customerId))
@@ -666,41 +661,16 @@
 			return true;
 		}
 
-		private bool CheckWorstCaisStatus(Customer customer, List<string> allowedStatuses)
+		private bool CheckWorstCaisStatus(List<string> allowedStatuses, List<string> consumerCaisDetailWorstStatuses)
 		{
 			log.InfoFormat("checking worst cais status");
 
-			MP_ServiceLog serviceLog = serviceLogRepository
-				.GetByCustomer(customer)
-				.Where(sl => sl.ServiceType == EnumDescription.DescriptionAttr(ExperianServiceType.Consumer))
-				.OrderByDescending(sl => sl.InsertDate)
-				.FirstOrDefault();
-			if (serviceLog == null)
+			foreach (string consumerCaisDetailWorstStatus in consumerCaisDetailWorstStatuses)
 			{
-				log.InfoFormat("No auto approval: Can't find worst CAIS status in MP_ServiceLog");
-				return false;
-			}
-			var serializer = new XmlSerializer(typeof(OutputRoot));
-			using (TextReader sr = new StringReader(serviceLog.ResponseData))
-			{
-				var output = (OutputRoot)serializer.Deserialize(sr);
-
-				if (output == null || output.Output == null || output.Output.FullConsumerData == null || output.Output.FullConsumerData.ConsumerData == null || output.Output.FullConsumerData.ConsumerData.CAIS == null)
+				if (!allowedStatuses.Contains(consumerCaisDetailWorstStatus))
 				{
-					log.InfoFormat("No auto approval: Can't find worst CAIS status in deserialized response");
+					log.InfoFormat("No auto approval: Worst CAIS status is {0}. Allowed CAIS statuses are: {1}", consumerCaisDetailWorstStatus, allowedStatuses.Aggregate((i, j) => i + "," + j));
 					return false;
-				}
-
-				foreach (var caisPart in output.Output.FullConsumerData.ConsumerData.CAIS)
-				{
-					foreach (var caisDetailsPart in caisPart.CAISDetails)
-					{
-						if (!allowedStatuses.Contains(caisDetailsPart.WorstStatus))
-						{
-							log.InfoFormat("No auto approval: Worst CAIS status is {0}. Allowed CAIS statuses are: {1}", caisDetailsPart.WorstStatus, allowedStatuses.Aggregate((i, j) => i + "," + j));
-							return false;
-						}
-					}
 				}
 			}
 

@@ -12,50 +12,38 @@
 
 	public class ExperianConsumerCheck : AStrategy
 	{
-		#region public
+		private readonly int customerId;
+		private readonly int directorId;
+		private readonly bool forceCheck;
 
-		#region constructor
+		private readonly GetCustomerAddresses.ResultRow addressLines;
+		private readonly GetPersonalInfoForConsumerCheck.ResultRow personalData;
 
-		public ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck, AConnection oDB, ASafeLog oLog)
-			: base(oDB, oLog)
-		{
-			m_nCustomerID = nCustomerID;
-			m_nDirectorID = nDirectorID;
-			m_bForceCheck = bForceCheck;
-
-			m_oPersonalData =
-				new GetPersonalInfoForConsumerCheck(m_nCustomerID, m_nDirectorID, DB, Log)
-					.FillFirst<GetPersonalInfoForConsumerCheck.ResultRow>();
-
-			m_oAddressLines = new GetCustomerAddresses(m_nCustomerID, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
-		}
-
-		// constructor
-
-		#endregion constructor
-
-		#region property Name
+		public int Score { get; private set; }
+		public ExperianConsumerData Result { get; private set; }
 
 		public override string Name
 		{
 			get { return "Experian consumer check"; }
 		}
 
-		// Name
+		public ExperianConsumerCheck(int customerId, int directorId, bool bForceCheck, AConnection db, ASafeLog log)
+			: base(db, log)
+		{
+			this.customerId = customerId;
+			this.directorId = directorId;
+			forceCheck = bForceCheck;
 
-		#endregion property Name
+			personalData =
+				new GetPersonalInfoForConsumerCheck(customerId, directorId, DB, Log)
+					.FillFirst<GetPersonalInfoForConsumerCheck.ResultRow>();
 
-		#region property Score
-
-		public int Score { get; private set; }
-
-		#endregion property Score
-
-		#region method Execute
+			addressLines = new GetCustomerAddresses(customerId, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
+		}
 
 		public override void Execute()
 		{
-			Log.Info("Starting consumer check with parameters: {0} {1}.", m_oPersonalData, m_oAddressLines);
+			Log.Info("Starting consumer check with parameters: {0} {1}.", personalData, addressLines);
 
 			bool bSuccess = GetConsumerInfoAndSave(AddressCurrency.Current);
 
@@ -64,54 +52,32 @@
 
 			UpdateAnalytics();
 
-			Log.Info("Consumer check {2} with parameters: {0} {1}.", m_oPersonalData, m_oAddressLines,
+			Log.Info("Consumer check {2} with parameters: {0} {1}.", personalData, addressLines,
 					 bSuccess ? "succeeded" : "failed");
 		}
-
-		// Execute
-
-		#endregion method Execute
-
-		#endregion public
-
-		#region method CanUsePrevAddress
 
 		private bool CanUsePrevAddress()
 		{
 			return
-				(m_nDirectorID == 0) &&
-				(m_oPersonalData.TimeAtAddress == 1) &&
-				!string.IsNullOrEmpty(m_oAddressLines[6, AddressCurrency.Previous]);
+				(directorId == 0) &&
+				(personalData.TimeAtAddress == 1) &&
+				!string.IsNullOrEmpty(addressLines[6, AddressCurrency.Previous]);
 		}
-
-		// CanUsePrevAddress
-
-		#endregion method CanUsePrevAddress
-
-		#region method UpdateAnalytics
 
 		private void UpdateAnalytics()
 		{
 			if ((Result == null) || Result.HasExperianError)
 				return;
 
-			if (m_nDirectorID == 0)
+			if (directorId == 0)
 				UpdateCustomerAnalytics();
 			else
 				UpdateDirectorAnalytics();
 		}
 
-		// UpdateAnalytics
-
-		#endregion method UpdateAnalytics
-
-		#region method UpdateCustomerAnalytics
-
 		private void UpdateCustomerAnalytics()
 		{
-
 			int nCii = Result.CII.HasValue ? Result.CII.Value : 0;
-
 
 			int nNumOfAccounts = 0;
 			int nDefaultCount = 0;
@@ -142,7 +108,7 @@
 				"# defaults = {4}, " +
 				"# defaults = {5} since {6}" +
 				")",
-				m_nCustomerID,
+				customerId,
 				Score,
 				nCii,
 				nNumOfAccounts,
@@ -154,7 +120,7 @@
 			DB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdate",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", m_nCustomerID),
+				new QueryParameter("CustomerID", customerId),
 				new QueryParameter("Score", Score),
 				new QueryParameter("IndebtednessIndex", nCii),
 				new QueryParameter("NumOfAccounts", nNumOfAccounts),
@@ -164,51 +130,39 @@
 				);
 		}
 
-		// UpdateCustomerAnalytics
-
-		#endregion method UpdateCustomerAnalytics
-
-		#region method UpdateDirectorAnalytics
-
 		private void UpdateDirectorAnalytics()
 		{
-			Log.Debug("Updating customer analytics director score (customer = {0}, director = {1}, score = {2})", m_nCustomerID,
-					  m_nDirectorID, Score);
+			Log.Debug("Updating customer analytics director score (customer = {0}, director = {1}, score = {2})", customerId,
+					  directorId, Score);
 
 			DB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateDirector",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", m_nCustomerID),
+				new QueryParameter("CustomerID", customerId),
 				new QueryParameter("Score", Score),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow)
 				);
 		}
 
-		// UpdateDirectorAnalytics
-
-		#endregion method UpdateDirectorAnalytics
-
-		#region method GetConsumerInfoAndSave
-
 		private bool GetConsumerInfoAndSave(AddressCurrency oAddressCurrency)
 		{
-			InputLocationDetailsMultiLineLocation location = m_oAddressLines.GetLocation(oAddressCurrency);
+			InputLocationDetailsMultiLineLocation location = addressLines.GetLocation(oAddressCurrency);
 
 			var consumerService = new ConsumerService();
 
 			Result = consumerService.GetConsumerInfo(
-				m_oPersonalData.FirstName,
-				m_oPersonalData.Surname,
-				m_oPersonalData.Gender,
-				m_oPersonalData.DateOfBirth,
+				personalData.FirstName,
+				personalData.Surname,
+				personalData.Gender,
+				personalData.DateOfBirth,
 				null,
 				location,
 				"PL",
-				m_nCustomerID,
-				m_nDirectorID,
+				customerId,
+				directorId,
 				false,
-				m_nDirectorID != 0,
-				m_bForceCheck
+				directorId != 0,
+				forceCheck
 				);
 
 			if (!Result.HasExperianError)
@@ -217,52 +171,25 @@
 			return !Result.HasExperianError;
 		}
 
-		// GetConsumerInfoAndSave
-
-		#endregion method GetConsumerInfoAndSave
-
-		#region fields
-
-		private readonly int m_nCustomerID;
-		private readonly int m_nDirectorID;
-		private readonly bool m_bForceCheck;
-
-		private readonly GetCustomerAddresses.ResultRow m_oAddressLines;
-		private readonly GetPersonalInfoForConsumerCheck.ResultRow m_oPersonalData;
-		private ExperianConsumerData Result;
-
-		#endregion fields
-
-
-
-		#region stored procedure classes
-
 		// ReSharper disable MemberCanBePrivate.Local
 		// ReSharper disable UnusedAutoPropertyAccessor.Local
-
-		#region class GetPersonalInfoForConsumerCheck
-
 		private class GetPersonalInfoForConsumerCheck : AStoredProcedure
 		{
-			public GetPersonalInfoForConsumerCheck(int nCustomerID, int nDirectorID, AConnection oDB, ASafeLog oLog)
-				: base(oDB, oLog)
+			public GetPersonalInfoForConsumerCheck(int customerId, int directorId, AConnection db, ASafeLog log)
+				: base(db, log)
 			{
-				CustomerID = nCustomerID;
-				DirectorID = nDirectorID;
+				CustomerId = customerId;
+				DirectorId = directorId;
 			}
-
-			// constructor
 
 			public override bool HasValidParameters()
 			{
-				return CustomerID > 0;
+				return CustomerId > 0;
 			}
 
-			// HasValidParameters
+			public int CustomerId { get; set; }
 
-			public int CustomerID { get; set; }
-
-			public int DirectorID { get; set; }
+			public int DirectorId { get; set; }
 
 			public class ResultRow : AResultRow
 			{
@@ -279,21 +206,9 @@
 						FirstName, Surname, Gender, DateOfBirth.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture), TimeAtAddress
 						);
 				}
-
-				// ToString
 			}
-
-			// class ResultRow
 		}
-
-		// class GetPersonalInfoForConsumerCheck
-
-		#endregion class GetPersonalInfoForConsumerCheck
-
-		#endregion class ExperianConsumerCheck
 	}
-
-	#region class CustomerAddressExt
 
 	internal static class CustomerAddressExt
 	{
@@ -329,13 +244,7 @@
 
 				default:
 					throw new ArgumentOutOfRangeException("oCurrency", "Unsupported value: " + oCurrency.ToString());
-			} // switch
+			}
 		}
-
-		// GetLocation
 	}
-
-	// class CustomerAddressExt
-
-	#endregion class CustomerAddressExt
-}	// namespace
+}

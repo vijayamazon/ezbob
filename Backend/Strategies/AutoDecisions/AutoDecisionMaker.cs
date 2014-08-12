@@ -33,7 +33,9 @@
 			int companySeniorityDays,
 			bool isOffline,
 			string customerStatusName,
-			AConnection oDb, ASafeLog oLog)
+			List<string> consumerCaisDetailWorstStatuses,
+			AConnection oDb,
+			ASafeLog oLog)
 		{
 			oLog.Info("Starting auto decision");
 			var autoDecisionResponse = new AutoDecisionResponse();
@@ -49,7 +51,7 @@
 			{
 				decisionName = "Re-Approval";
 			}
-			else if (new Approval(customerId, minExperianScore, offeredCreditLine, enableAutomaticApproval, oDb, oLog).MakeDecision(autoDecisionResponse))
+			else if (new Approval(customerId, minExperianScore, offeredCreditLine, enableAutomaticApproval, consumerCaisDetailWorstStatuses, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
 				decisionName = "Approval";
 			}
