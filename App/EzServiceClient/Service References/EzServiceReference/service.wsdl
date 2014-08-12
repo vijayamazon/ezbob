@@ -112,12 +112,6 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
-  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategySync1" />
   </wsdl:message>
@@ -838,12 +832,6 @@
   <wsdl:message name="IEzService_RequestCashWithoutTakenLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RequestCashWithoutTakenLoanResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ThreeInvalidAttempts_InputMessage">
-    <wsdl:part name="parameters" element="tns:ThreeInvalidAttempts" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ThreeInvalidAttempts_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ThreeInvalidAttemptsResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_TransferCashFailed_InputMessage">
     <wsdl:part name="parameters" element="tns:TransferCashFailed" />
   </wsdl:message>
@@ -1030,6 +1018,12 @@
   <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1053,10 +1047,6 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
-    <wsdl:operation name="MainStrategy2">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="MainStrategySync1">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
@@ -1537,10 +1527,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RequestCashWithoutTakenLoan" message="tns:IEzService_RequestCashWithoutTakenLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RequestCashWithoutTakenLoanResponse" message="tns:IEzService_RequestCashWithoutTakenLoan_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ThreeInvalidAttempts">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ThreeInvalidAttempts" message="tns:IEzService_ThreeInvalidAttempts_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ThreeInvalidAttemptsResponse" message="tns:IEzService_ThreeInvalidAttempts_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="TransferCashFailed">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/TransferCashFailed" message="tns:IEzService_TransferCashFailed_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/TransferCashFailedResponse" message="tns:IEzService_TransferCashFailed_OutputMessage" />
@@ -1665,6 +1651,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="MainStrategy2">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1720,15 +1710,6 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="MainStrategy2">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="MainStrategySync1">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
       <wsdl:input>
@@ -2809,15 +2790,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ThreeInvalidAttempts">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ThreeInvalidAttempts" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="TransferCashFailed">
       <soap12:operation soapAction="http://tempuri.org/IEzService/TransferCashFailed" style="document" />
       <wsdl:input>
@@ -3097,23 +3069,32 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="MainStrategy2">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

@@ -14,9 +14,10 @@
 	using CommonLib;
 	using ServiceClientProxy;
 	using StructureMap;
+	using log4net;
 
 	public class PersonalInfoModel {
-
+		private static readonly ILog Log = LogManager.GetLogger(typeof(PersonalInfoModel));
 		private readonly ServiceClient serviceClient;
 
 		public int Id { get; set; }
@@ -142,14 +143,16 @@
 			NumOfShareholders = expDirModel.NumOfShareHolders;
 			
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-			DateTime? companySeniority;
+			DateTime? companySeniority = null;
 			try
 			{
-				companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
+				if (customer.PersonalInfo != null) {
+					companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited, context.UserId).Value;
+				}
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				companySeniority = DateTime.UtcNow;
+				Log.WarnFormat("Failed to fetch company seniority \n {0}", ex);
 			}
 			int companySeniorityYears = 0, companySeniorityMonths = 0;
 			if (companySeniority.HasValue)

@@ -143,10 +143,20 @@
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			try
 			{
-				DateTime? companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, context.UserId).Value;
-				if (companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow && (companySeniority.Value.Year != DateTime.UtcNow.Year || companySeniority.Value.Month != DateTime.UtcNow.Month || companySeniority.Value.Day != DateTime.UtcNow.Day))
-				{
-					summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "YC", Alert = "Young company. Incorporation date: " + companySeniority.Value.ToString("dd/MM/yyyy"), AlertType = AlertType.Error.DescriptionAttr() });
+				if (customer.PersonalInfo != null) {
+					DateTime? companySeniority =
+						serviceClient.Instance.GetCompanySeniority(customer.Id,
+						                                           customer.PersonalInfo.TypeOfBusiness.Reduce() ==
+						                                           TypeOfBusinessReduced.Limited, context.UserId).Value;
+					if (companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow &&
+					    (companySeniority.Value.Year != DateTime.UtcNow.Year || companySeniority.Value.Month != DateTime.UtcNow.Month ||
+					     companySeniority.Value.Day != DateTime.UtcNow.Day)) {
+						summary.Alerts.Errors.Add(new AlertModel {
+							Abbreviation = "YC",
+							Alert = "Young company. Incorporation date: " + companySeniority.Value.ToString("dd/MM/yyyy"),
+							AlertType = AlertType.Error.DescriptionAttr()
+						});
+					}
 				}
 			}
 			catch (Exception e)

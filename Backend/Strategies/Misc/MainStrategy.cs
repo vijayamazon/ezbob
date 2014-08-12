@@ -836,7 +836,7 @@
 		#region method GetCompanySeniorityDays
 		private void GetCompanySeniorityDays()
 		{
-			var seniority = new GetCompanySeniority(customerId, DB, Log);
+			var seniority = new GetCompanySeniority(customerId, typeOfBusiness == "Limited" || typeOfBusiness == "LLP", DB, Log);
 			seniority.Execute();
 			companySeniorityDays = seniority.CompanyIncorporationDate.HasValue
 				                   ? (DateTime.UtcNow - seniority.CompanyIncorporationDate.Value).Days

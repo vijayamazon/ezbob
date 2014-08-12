@@ -261,7 +261,7 @@
 		DateTimeActionResult GetExperianCompanyCacheDate(string refNumber);
 
 		[OperationContract]
-		NullableDateTimeActionResult GetCompanySeniority(int customerId, int underwriterId);
+		NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId);
 
 		[OperationContract]
 		IntActionResult GetExperianAccountsCurrentBalance(int customerId, int underwriterId);

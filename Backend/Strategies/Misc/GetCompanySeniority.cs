@@ -8,8 +8,8 @@
 
 		#region constructor
 
-		public GetCompanySeniority(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_oSp = new SpGetCompanySeniority(nCustomerID, DB, Log);
+		public GetCompanySeniority(int nCustomerID, bool isLimited, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_oSp = new SpGetCompanySeniority(nCustomerID,isLimited, DB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -45,8 +45,9 @@
 		#region class SpGetCompanySeniority
 
 		private class SpGetCompanySeniority : AStoredProc {
-			public SpGetCompanySeniority(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			public SpGetCompanySeniority(int nCustomerID, bool isLimited, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				CustomerID = nCustomerID;
+				IsLimited = isLimited;
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -54,6 +55,7 @@
 			} // HasValidParameters
 
 			public int CustomerID { get; set; }
+			public bool IsLimited { get; set; }
 		} // class SpGetCompanySeniority
 
 		#endregion class SpGetCompanySeniority

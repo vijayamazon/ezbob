@@ -189,11 +189,11 @@
 			};
 		}
 
-		public NullableDateTimeActionResult GetCompanySeniority(int customerId, int underwriterId)
+		public NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId)
 		{
 			GetCompanySeniority instance;
 
-			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId);
+			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId, isLimited);
 
 			return new NullableDateTimeActionResult
 			{
