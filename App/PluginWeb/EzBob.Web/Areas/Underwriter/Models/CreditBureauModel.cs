@@ -16,8 +16,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 		public AMLInfo AmlInfo { get; set; }
 		public BankAccountVerificationInfo BavInfo { get; set; }
-		public IOrderedEnumerable<CheckHistoryModel> CompanyHistory { get; set; }
-
 	}
 
 	public class ExperianConsumerModel

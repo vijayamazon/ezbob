@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Models {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Linq;
 	using System.Reflection;
 	using System.Text.RegularExpressions;
@@ -11,7 +10,6 @@
 	using Ezbob.Backend.ModelsWithDB.CompanyScore;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.ModelsWithDB.Experian.Attributes;
-	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Infrastructure;
 	using ServiceClientProxy;
@@ -57,7 +55,6 @@
 
 		public CompanyScoreModelBuilder() {
 			m_oServiceClient = new ServiceClient();
-			m_oDB = DbConnectionGenerator.Get(m_oLog);
 			m_oContext = ObjectFactory.GetInstance<IWorkplaceContext>();
 		} // constructor
 
@@ -119,7 +116,7 @@
 				};
 			} // if
 
-			CompanyScoreModel oResult = BuildLimitedScoreModel(oLtdAr.Value);
+			CompanyScoreModel oResult = BuildLimitedScoreModel(oLtdAr);
 
 			foreach (var oSha in oLtdAr.Value.GetChildren<ExperianLtdShareholders>())
 				AddOwners(oResult, oSha.RegisteredNumberOfALimitedCompanyWhichIsAShareholder);
@@ -153,13 +150,13 @@
 			model.CcjMonths = data.AgeOfMostRecentJudgmentDuringOwnershipMonths ?? -1;
 
 			model.Ccjs = data.TotalJudgmentCountLast24Months ?? 0 + data.TotalAssociatedJudgmentCountLast24Months ?? 0;
-			model.NonLimScoreHistories = new List<NonLimScoreHistory>();
+			model.CompanyHistories = new List<CompanyHistory>();
 
 			if (data.ScoreHistory != null)
 			{
 				foreach (ScoreAtDate scoreAtDate in data.ScoreHistory)
 				{
-					model.NonLimScoreHistories.Add(new NonLimScoreHistory {Score = scoreAtDate.Score, ScoreDate = scoreAtDate.Date});
+					model.CompanyHistories.Add(new CompanyHistory {Score = scoreAtDate.Score, Date = scoreAtDate.Date, ServiceLogId = scoreAtDate.ServiceLogId});
 				}
 			}
 
@@ -167,31 +164,17 @@
 		}
 
 		#region method BuildLimitedDashboardModel
-
-		public ComapanyDashboardModel BuildLimitedDashboardModel(long nServiceLogID) {
-			var oModel = new ComapanyDashboardModel {
-				FinDataHistories = new List<FinDataModel>(),
-				LastFinData = new FinDataModel(),
-				IsLimited = true,
-			};
-
-			ExperianLtdActionResult ar = m_oServiceClient.Instance.LoadExperianLtd(nServiceLogID);
-
-			if (ar.Value.ServiceLogID != nServiceLogID)
-				return oModel;
-
-			return BuildLimitedDashboardModel(ar.Value, oModel);
-		} // BuildLimitedDashboardModel
-
-		public ComapanyDashboardModel BuildLimitedDashboardModel(ExperianLtd oExperianLtd, ComapanyDashboardModel oModel = null) {
+		
+		public ComapanyDashboardModel BuildLimitedDashboardModel(ExperianLtdActionResult data, ComapanyDashboardModel oModel = null) {
 			if (oModel == null) {
 				oModel = new ComapanyDashboardModel {
 					FinDataHistories = new List<FinDataModel>(),
 					LastFinData = new FinDataModel(),
 					IsLimited = true,
+					CompanyHistories = new List<CompanyHistory>()
 				};
 			} // if
-
+			var oExperianLtd = data.Value;
 			oModel.CompanyName = oExperianLtd.CompanyName;
 			oModel.CompanyRefNum = oExperianLtd.RegisteredNumber;
 
@@ -201,6 +184,18 @@
 			oModel.CcjMonths = oExperianLtd.GetAgeOfMostRecentCCJDecreeMonths();
 
 			oModel.Ccjs = oExperianLtd.GetNumberOfCcjsInLast24Months();
+
+			if (data.History != null)
+			{
+				foreach (ScoreAtDate scoreAtDate in data.History) {
+					oModel.CompanyHistories.Add(new CompanyHistory {
+						Score = scoreAtDate.Score,
+						Date = scoreAtDate.Date,
+						ServiceLogId = scoreAtDate.ServiceLogId,
+						Balance = scoreAtDate.Balance
+					});
+				}
+			}
 
 			List<ExperianLtdDL97> oDL97List = new List<ExperianLtdDL97>();
 			List<ExperianLtdDL99> oDL99List = new List<ExperianLtdDL99>();
@@ -314,22 +309,22 @@
 			} // try
 
 			if (!string.IsNullOrWhiteSpace(oLtdAr.Value.RegisteredNumber))
-				oPossession.AddOwner(BuildLimitedScoreModel(oLtdAr.Value));
+				oPossession.AddOwner(BuildLimitedScoreModel(oLtdAr));
 		} // AddOwners
 
 		#endregion method AddOwners
 
 		#region method BuildLimitedScoreModel
 
-		private CompanyScoreModel BuildLimitedScoreModel(ExperianLtd oExperianLtd) {
-			SortedDictionary<string, CompanyScoreModelItem> oDataset = oExperianLtd.ToCompanyScoreModel();
+		private CompanyScoreModel BuildLimitedScoreModel(ExperianLtdActionResult oExperianLtd) {
+			SortedDictionary<string, CompanyScoreModelItem> oDataset = oExperianLtd.Value.ToCompanyScoreModel();
 
 			return new CompanyScoreModel {
 				result = CompanyScoreModel.Ok,
 				dataset = oDataset,
 				dataset_display_order = ms_DisplayOrder,
-				company_name = oExperianLtd.CompanyName,
-				company_ref_num = oExperianLtd.RegisteredNumber,
+				company_name = oExperianLtd.Value.CompanyName,
+				company_ref_num = oExperianLtd.Value.RegisteredNumber,
 				Data = null,
 				DashboardModel = BuildLimitedDashboardModel(oExperianLtd),
 			};
@@ -341,8 +336,6 @@
 
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IWorkplaceContext m_oContext;
-		private readonly AConnection m_oDB;
-
 		private static readonly SafeILog m_oLog = new SafeILog(typeof(CompanyScoreModelBuilder));
 
 		private const int CompanyScoreMax = 100;

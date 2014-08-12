@@ -1,4 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.Experian {
+	using System.Collections.Generic;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -44,6 +46,15 @@
 				Log.Alert("Unsupported work mode: {0}", m_nWorkMode.ToString());
 				return;
 			} // switch
+
+			if (Result != null && !string.IsNullOrEmpty(Result.RegisteredNumber)) {
+				var scoreHistory = DB.Fill<ScoreAtDate>(
+							"GetCompanyHistory",
+							CommandSpecies.StoredProcedure,
+							new QueryParameter("RefNumber", Result.RegisteredNumber));
+
+				History = scoreHistory;
+			}
 		} // Execute
 
 		#endregion method Execute
@@ -51,6 +62,7 @@
 		#region property Result
 
 		public ExperianLtd Result { get; private set; }
+		public List<ScoreAtDate> History { get; private set; }
 
 		#endregion property Result
 

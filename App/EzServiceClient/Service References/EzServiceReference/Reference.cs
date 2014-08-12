@@ -201,8 +201,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableFundsActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult))]
@@ -218,6 +216,8 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianLtdActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.SerializedDataTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -862,52 +862,6 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CompanyDataForCompanyScoreActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class CompanyDataForCompanyScoreActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.CompanyData DataField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.CompanyData Data {
-            get {
-                return this.DataField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DataField, value) != true)) {
-                    this.DataField = value;
-                    this.RaisePropertyChanged("Data");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CompanyDataForCreditBureauActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class CompanyDataForCreditBureauActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.CompanyDataForCreditBureau ResultField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.CompanyDataForCreditBureau Result {
-            get {
-                return this.ResultField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
-                    this.ResultField = value;
-                    this.RaisePropertyChanged("Result");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PropertyStatusesActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class PropertyStatusesActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -1413,7 +1367,23 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class ExperianLtdActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.ScoreAtDate[] HistoryField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.ModelsWithDB.Experian.ExperianLtd ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.ScoreAtDate[] History {
+            get {
+                return this.HistoryField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HistoryField, value) != true)) {
+                    this.HistoryField = value;
+                    this.RaisePropertyChanged("History");
+                }
+            }
+        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.ModelsWithDB.Experian.ExperianLtd Value {
@@ -1470,6 +1440,52 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CompanyDataForCompanyScoreActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CompanyDataForCompanyScoreActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.CompanyData DataField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.CompanyData Data {
+            get {
+                return this.DataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DataField, value) != true)) {
+                    this.DataField = value;
+                    this.RaisePropertyChanged("Data");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CompanyDataForCreditBureauActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CompanyDataForCreditBureauActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.CompanyDataForCreditBureau ResultField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.CompanyDataForCreditBureau Result {
+            get {
+                return this.ResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
+                    this.ResultField = value;
+                    this.RaisePropertyChanged("Result");
                 }
             }
         }
@@ -2308,6 +2324,18 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult GenerateMobileCode(string phone);
         
@@ -2679,18 +2707,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateNewMedals", ReplyAction="http://tempuri.org/IEzService/CalculateNewMedalsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateNewMedalsAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse")]
-        ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, string refNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
-        ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors", ReplyAction="http://tempuri.org/IEzService/GetUnfetchedDataErrorsResponse")]
         ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);
@@ -3184,6 +3200,18 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerScore", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerScoreResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> GetExperianConsumerScoreAsync(int customerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse")]
+        ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, string refNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
+        ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
         
@@ -3201,18 +3229,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3240,6 +3256,22 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategySync1Async(underwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult GenerateMobileCode(string phone) {
@@ -3736,22 +3768,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateNewMedalsAsync() {
             return base.Channel.CalculateNewMedalsAsync();
-        }
-        
-        public ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber) {
-            return base.Channel.GetCompanyDataForCompanyScore(underwriterId, refNumber);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, string refNumber) {
-            return base.Channel.GetCompanyDataForCompanyScoreAsync(underwriterId, refNumber);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
-            return base.Channel.GetCompanyDataForCreditBureau(underwriterId, refNumber);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber) {
-            return base.Channel.GetCompanyDataForCreditBureauAsync(underwriterId, refNumber);
         }
         
         public ServiceClientProxy.EzServiceReference.StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId) {
@@ -4410,6 +4426,22 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetExperianConsumerScoreAsync(customerId);
         }
         
+        public ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber) {
+            return base.Channel.GetCompanyDataForCompanyScore(underwriterId, refNumber);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult> GetCompanyDataForCompanyScoreAsync(int underwriterId, string refNumber) {
+            return base.Channel.GetCompanyDataForCompanyScoreAsync(underwriterId, refNumber);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
+            return base.Channel.GetCompanyDataForCreditBureau(underwriterId, refNumber);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber) {
+            return base.Channel.GetCompanyDataForCreditBureauAsync(underwriterId, refNumber);
+        }
+        
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
             return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
         }
@@ -4432,22 +4464,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
             return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
-            return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
-            return base.Channel.MainStrategy2Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategySync1Async(underwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
     }
 }

@@ -103,6 +103,7 @@
 			return new ExperianLtdActionResult {
 				MetaData = oMetaData,
 				Value = oInstance.Result,
+				History = oInstance.History
 			};
 		} // LoadExperianLtd
 
@@ -118,6 +119,7 @@
 			return new ExperianLtdActionResult {
 				MetaData = oMetaData,
 				Value = oInstance.Result,
+				History = oInstance.History
 			};
 		} // CheckLtdCompanyCache
 
@@ -189,6 +191,36 @@
 			{
 				MetaData = oMetaData,
 				Value = oInstance.Score,
+			};
+		}
+
+		public CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber)
+		{
+			GetCompanyDataForCompanyScore strategyInstance;
+			var result = ExecuteSync(out strategyInstance, null, underwriterId, refNumber);
+
+			return new CompanyDataForCompanyScoreActionResult
+			{
+				MetaData = result,
+				Data = strategyInstance.Data
+			};
+		}
+
+		public CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber)
+		{
+			GetCompanyDataForCreditBureau strategyInstance;
+
+			var result = ExecuteSync(out strategyInstance, null, underwriterId, refNumber);
+
+			return new CompanyDataForCreditBureauActionResult
+			{
+				MetaData = result,
+				Result = new CompanyDataForCreditBureau
+				{
+					LastUpdate = strategyInstance.LastUpdate,
+					Score = strategyInstance.Score,
+					Errors = strategyInstance.Errors
+				}
 			};
 		}
 	} // class EzServiceImplementation

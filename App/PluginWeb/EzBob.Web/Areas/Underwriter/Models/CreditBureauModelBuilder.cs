@@ -59,9 +59,6 @@
 				model.AmlInfo = GetAmlInfo(customer);
 				model.BavInfo = GetBavInfo(customer);
 				model.Summary = GetSummaryModel(model);
-
-				//todo move to CompanyScore
-				model.CompanyHistory = GetCompanyHistoryModel(customer);
 			}
 			catch (Exception e)
 			{
@@ -103,76 +100,6 @@
 
 			return null;
 		}
-
-		//todo remove
-		private IOrderedEnumerable<CheckHistoryModel> GetCompanyHistoryModel(Customer customer)
-		{
-			var isLimited = customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited;
-			Log.DebugFormat("BuildHistoryModel company type: {0}", isLimited ? "Limited" : "NonLimited");
-
-			List<MP_ExperianHistory> companyHistory = customer.Company == null
-				? new List<MP_ExperianHistory>()
-				: _experianHistoryRepository.GetCompanyHistory(customer.Company.ExperianRefNum, isLimited).ToList();
-
-			if (companyHistory.Any())
-			{
-				Log.Debug("BuildHistoryModel company from history table");
-				return companyHistory.Select(x => new CheckHistoryModel
-				{
-					Date = x.Date.ToUniversalTime(),
-					Id = x.Id,
-					Score = x.Score,
-					Balance = x.CaisBalance
-				}).OrderByDescending(h => h.Date);
-			}
-			
-			//Not in cache
-			Log.Debug("BuildHistoryModel company from mp_servicelog table");
-			var type = (isLimited ? ExperianServiceType.LimitedData.DescriptionAttr() : ExperianServiceType.NonLimitedData.DescriptionAttr());
-
-			if (isLimited)
-			{
-				List<CheckHistoryModel> checkCompanyHistoryModels = (from s in _session.Query<MP_ServiceLog>()
-																	 where s.Director == null
-																	 where s.Customer.Id == customer.Id
-																	 where s.ServiceType == type
-																	 select GetLimitedHistory(s.InsertDate, s.Id)
-																	).ToList();
-
-				var history =  checkCompanyHistoryModels.Where(h => h != null).OrderByDescending(h => h.Date);
-				foreach (var cModel in checkCompanyHistoryModels)
-				{
-					if (cModel != null)
-					{
-						_experianHistoryRepository.Save(new MP_ExperianHistory
-						{
-							CustomerId = customer.Id,
-							ServiceLogId = cModel.Id,
-							CompanyRefNum = customer.Company.ExperianRefNum,
-							Type = type,
-							Date = cModel.Date,
-							Score = cModel.Score,
-						});
-					}
-				}
-				return history;
-			}
-			return null;
-		}
-		//todo remove
-		private CheckHistoryModel GetLimitedHistory(DateTime date, long id)
-		{
-			ComapanyDashboardModel m = new CompanyScoreModelBuilder().BuildLimitedDashboardModel(id);
-
-			return new CheckHistoryModel
-			{
-				Date = date,
-				Id = id,
-				Balance = m.CaisBalance,
-				Score = m.Score,
-				ServiceLogId = id
-			};
-		} // GetLimitedHistory
 
 		public ExperianConsumerModel GenerateConsumerModel(ExperianConsumerData eInfo, int customerId, int? directorId, long? logId, string name)
 		{

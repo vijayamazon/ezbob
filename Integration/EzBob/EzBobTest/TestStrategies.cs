@@ -232,6 +232,23 @@ namespace EzBobTest
 		}
 
 		[Test]
+		public void TestLoadExperianLtd() {
+			var s = new LoadExperianLtd("06357516", 0, m_oDB, m_oLog);
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+			Assert.IsNotNull(s.Result);
+			Assert.IsNotNull(s.History);
+		}
+
+		[Test]
+		public void TestLoadExperianNonLtd()
+		{
+			var s = new GetCompanyDataForCompanyScore(m_oDB, m_oLog, "10732957");
+			s.Execute();
+			Assert.IsNotNull(s.Data);
+		}
+
+		[Test]
 		public void TestLoadExperianConsumer()
 		{
 			var s = new LoadExperianConsumerData(20323, null, 110285, m_oDB, m_oLog);

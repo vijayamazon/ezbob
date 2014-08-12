@@ -296,6 +296,12 @@
 		[OperationContract]
 		IntActionResult GetExperianConsumerScore(int customerId);
 
+		[OperationContract]
+		CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber);
+
+		[OperationContract]
+		CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
+
 		#endregion Experian
 
 		#region Land Registry
@@ -546,12 +552,6 @@
 
 		[OperationContract]
 		ActionMetaData CalculateNewMedals();
-
-		[OperationContract]
-		CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber);
-
-		[OperationContract]
-		CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
 
 		[OperationContract]
 		StringListActionResult GetUnfetchedDataErrors(int underwriterId, int customerId);

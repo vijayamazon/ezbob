@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc
+﻿namespace EzBob.Backend.Strategies.Experian
 {
 	using System;
 	using System.Data;

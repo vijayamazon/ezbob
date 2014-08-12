@@ -1,4 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Misc 
+﻿namespace EzBob.Backend.Strategies.Experian
 {
 	using System.Collections.Generic;
 	using System.Data;
@@ -22,7 +22,8 @@
 
 		#region property Name
 
-		public override string Name {
+		public override string Name
+		{
 			get { return "GetCompanyDataForCompanyScore"; }
 		} // Name
 
@@ -32,8 +33,9 @@
 
 		#region property Execute
 
-		public override void Execute() {
-			Data = new CompanyData {IsLimited = true};
+		public override void Execute()
+		{
+			Data = new CompanyData { IsLimited = true };
 
 			DataTable dt = DB.ExecuteReader(
 				"GetCompanyIsLimited",
@@ -168,7 +170,7 @@
 							bankruptcyDetail.GazetteDate = bakruptcyDetailsSafeReader["GazetteDate"];
 							bankruptcyDetail.BankruptcyType = bakruptcyDetailsSafeReader["BankruptcyType"].ToNullString();
 							bankruptcyDetail.BankruptcyTypeDesc = bakruptcyDetailsSafeReader["BankruptcyTypeDesc"].ToNullString();
-							
+
 							Data.BankruptcyDetails.Add(bankruptcyDetail);
 						}
 					}
@@ -289,29 +291,15 @@
 								Data.PaymentPerformanceDetails.Add(paymentPerformanceDetail);
 							}
 						}
-
-						DataTable scoreHistoryDataTable = DB.ExecuteReader(
-							"GetNonLimitedCompanyScoreHistory",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("RefNumber", refNumber));
-
-						if (scoreHistoryDataTable.Rows.Count > 0)
-						{
-							Data.ScoreHistory = new List<ScoreAtDate>();
-							foreach (DataRow row in scoreHistoryDataTable.Rows)
-							{
-								var scoreHistorySafeReader = new SafeReader(row);
-
-								var scoreAtDate = new ScoreAtDate();
-								scoreAtDate.Score = scoreHistorySafeReader["RiskScore"];
-								scoreAtDate.Date = scoreHistorySafeReader["Date"];
-
-
-								Data.ScoreHistory.Add(scoreAtDate);
-							}
-						}
 					}
 				}
+
+				var scoreHistory = DB.Fill<ScoreAtDate>(
+					"GetCompanyHistory",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("RefNumber", refNumber));
+
+				Data.ScoreHistory = scoreHistory;
 			}
 		} // Execute
 

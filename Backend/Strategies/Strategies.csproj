@@ -103,8 +103,8 @@
     <Compile Include="Misc\BackfillLandRegistry2PropertyLink.cs" />
     <Compile Include="Misc\GetPropertyStatuses.cs" />
     <Compile Include="Misc\GetUnfetchedDataErrors.cs" />
-    <Compile Include="Misc\GetCompanyDataForCreditBureau.cs" />
-    <Compile Include="Misc\GetCompanyDataForCompanyScore.cs" />
+    <Compile Include="Experian\GetCompanyDataForCreditBureau.cs" />
+    <Compile Include="Experian\GetCompanyDataForCompanyScore.cs" />
     <Compile Include="Misc\GetBankModel.cs" />
     <Compile Include="Misc\Agreement.cs" />
     <Compile Include="Misc\CalculateNewMedals.cs" />

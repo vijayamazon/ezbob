@@ -104,7 +104,6 @@
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
-    <Compile Include="EzServiceImplementation\CompanyData.cs" />
     <Compile Include="EzServiceImplementation\esign.cs" />
     <Compile Include="EzServiceImplementation\Funding.cs" />
     <Compile Include="EzServiceImplementation\vat.return.cs" />

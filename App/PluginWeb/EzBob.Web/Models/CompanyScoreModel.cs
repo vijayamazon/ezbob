@@ -6,9 +6,11 @@
 
 	#region class NonLimScoreHistory
 
-	public class NonLimScoreHistory {
-		public int Score { get; set; }
-		public DateTime ScoreDate { get; set; }
+	public class CompanyHistory {
+		public long ServiceLogId { get; set; }
+		public int? Score { get; set; }
+		public decimal? Balance { get; set; }
+		public DateTime Date { get; set; }
 	} // class NonLimScoreHistory
 
 	#endregion class NonLimScoreHistory
@@ -80,7 +82,7 @@
 		public int LateAccounts { get; set; }
 		public string LateStatus { get; set; }
 		public List<FinDataModel> FinDataHistories { get; set; }
-		public List<NonLimScoreHistory> NonLimScoreHistories { get; set; }
+		public List<CompanyHistory> CompanyHistories { get; set; }
 		public string Error { get; set; }
 	} // class ComapanyDashboardModel
 

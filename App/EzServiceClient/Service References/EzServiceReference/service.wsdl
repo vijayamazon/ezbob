@@ -112,6 +112,18 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySync1" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync1_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySync1Response" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GenerateMobileCode_InputMessage">
     <wsdl:part name="parameters" element="tns:GenerateMobileCode" />
   </wsdl:message>
@@ -483,18 +495,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_CalculateNewMedals_OutputMessage">
     <wsdl:part name="parameters" element="tns:CalculateNewMedalsResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScore" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScoreResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureau" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureauResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetUnfetchedDataErrors_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUnfetchedDataErrors" />
@@ -988,6 +988,18 @@
   <wsdl:message name="IEzService_GetExperianConsumerScore_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetExperianConsumerScoreResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScore" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScoreResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureau" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureauResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
   </wsdl:message>
@@ -1005,18 +1017,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategySync1" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategySync1_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategySync1Response" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -1041,6 +1041,14 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="MainStrategy2">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategySync1">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GenerateMobileCode">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCode" message="tns:IEzService_GenerateMobileCode_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCodeResponse" message="tns:IEzService_GenerateMobileCode_OutputMessage" />
@@ -1288,14 +1296,6 @@
     <wsdl:operation name="CalculateNewMedals">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CalculateNewMedals" message="tns:IEzService_CalculateNewMedals_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CalculateNewMedalsResponse" message="tns:IEzService_CalculateNewMedals_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanyDataForCompanyScore">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" message="tns:IEzService_GetCompanyDataForCompanyScore_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse" message="tns:IEzService_GetCompanyDataForCompanyScore_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanyDataForCreditBureau">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" message="tns:IEzService_GetCompanyDataForCreditBureau_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse" message="tns:IEzService_GetCompanyDataForCreditBureau_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetUnfetchedDataErrors">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetUnfetchedDataErrors" message="tns:IEzService_GetUnfetchedDataErrors_InputMessage" />
@@ -1625,6 +1625,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScore" message="tns:IEzService_GetExperianConsumerScore_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerScoreResponse" message="tns:IEzService_GetExperianConsumerScore_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetCompanyDataForCompanyScore">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" message="tns:IEzService_GetCompanyDataForCompanyScore_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse" message="tns:IEzService_GetCompanyDataForCompanyScore_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyDataForCreditBureau">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" message="tns:IEzService_GetCompanyDataForCreditBureau_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse" message="tns:IEzService_GetCompanyDataForCreditBureau_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
@@ -1636,14 +1644,6 @@
     <wsdl:operation name="MainStrategy1">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy2">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategySync1">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1700,6 +1700,24 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="MainStrategy2">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategySync1">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GenerateMobileCode">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GenerateMobileCode" style="document" />
       <wsdl:input>
@@ -2251,24 +2269,6 @@
     </wsdl:operation>
     <wsdl:operation name="CalculateNewMedals">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CalculateNewMedals" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanyDataForCompanyScore">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanyDataForCreditBureau">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3014,6 +3014,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetCompanyDataForCompanyScore">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyDataForCreditBureau">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
       <wsdl:input>
@@ -3034,24 +3052,6 @@
     </wsdl:operation>
     <wsdl:operation name="MainStrategy1">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy1" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy2">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategySync1">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

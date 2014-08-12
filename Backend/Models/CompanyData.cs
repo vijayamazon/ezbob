@@ -156,10 +156,16 @@
 	public class ScoreAtDate
 	{
 		[DataMember]
+		public long ServiceLogId { get; set; }
+
+		[DataMember]
+		public decimal? Balance { get; set; }
+
+		[DataMember]
 		public DateTime Date { get; set; }
 
 		[DataMember]
-		public int Score { get; set; }
+		public int? Score { get; set; }
 	}
 
 	[DataContract]

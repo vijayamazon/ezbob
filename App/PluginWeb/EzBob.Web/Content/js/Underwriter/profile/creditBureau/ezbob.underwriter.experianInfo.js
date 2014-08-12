@@ -63,6 +63,9 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
             minSpotColor: "#cfcfcf",
             valueSpots: {
                 ':': '#cfcfcf'
+            }, 
+            numberFormatter: function(num) {
+                return EzBob.formatPoundsAsInt(num);
             }
         });
     },

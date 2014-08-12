@@ -186,8 +186,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         }
     },
     onRender: function () {
-        
-
         this.experianSpark();
         this.drawGraphs();
         this.buildJournal();
@@ -218,7 +216,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         }
 
         if (this.experianModel && this.experianModel.get('Directors')) {
-            console.log('dirs', this.experianModel);
             _.each(this.experianModel.get('Directors'), function (director, i) {
                 var historyDirectorSorted = _.sortBy(director.ConsumerHistory, function (history) {
                     return history.Date;
@@ -226,28 +223,22 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                 var directorHistoryScores = _.pluck(historyDirectorSorted, 'Score').join(',');
                 var directorHistoryCIIs = _.pluck(historyDirectorSorted, 'CII').join(',');
                 var directorHistoryCais = _.pluck(historyDirectorSorted, 'Balance').join(',');
-                console.log('dir', i, directorHistoryScores, directorHistoryCIIs, directorHistoryCais);
                 that.$el.find(".directorScoreGraph" + i).attr('values', directorHistoryScores);
                 that.$el.find(".directorCIIGraph" + i).attr('values', directorHistoryCIIs);
                 that.$el.find(".directorBalanceGraph" + i).attr('values', directorHistoryCais);
             });
         }
-        
-        if (this.experianModel && this.experianModel.get('CompanyHistory')) {
-            var historyCompanyScoresSorted = _.sortBy(this.experianModel.get('CompanyHistory'), function (history) {
-                return history.Date;
-            });
-            var companyHistoryScores = _.pluck(historyCompanyScoresSorted, 'Score').join(',');
-            var companyHistoryCais = _.pluck(historyCompanyScoresSorted, 'Balance').join(',');
-            this.$el.find(".companyScoreGraph0").attr('values', companyHistoryScores);
-            this.$el.find(".companyCaisBalanceGraph0").attr('values', companyHistoryCais);
-        }
-        
+
         if (this.expCompany) {
             _.each(this.expCompany, function(c, i) {
-                if (c.NonLimScoreHistories && c.NonLimScoreHistories.length > 0) {
-                    var nonLimHistoryScore = _.pluck(c.NonLimScoreHistories, 'Score').join(',');
-                    that.$el.find(".companyScoreGraph" + i).attr('values', nonLimHistoryScore);
+                if (c.CompanyHistories && c.CompanyHistories.length > 0) {
+                    var historyCompanyScoresSorted = _.sortBy(c.CompanyHistories, function (history) {
+                        return history.Date;
+                    });
+                    var companyHistoryScores = _.pluck(historyCompanyScoresSorted, 'Score').join(',');
+                    var companyHistoryCais = _.pluck(historyCompanyScoresSorted, 'Balance').join(',');
+                    that.$el.find(".companyScoreGraph" + i).attr('values', companyHistoryScores);
+                    that.$el.find(".companyCaisBalanceGraph" + i).attr('values', companyHistoryCais);
                 }
             });
         }
