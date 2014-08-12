@@ -29,33 +29,7 @@
 		} // ExperianConsumerCheck
 
 		#endregion method ExperianConsumerCheck
-
-		#region method GetExperianConsumerCacheDate
-
-		public DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId) {
-			DateTime cacheDate = DateTime.UtcNow;
-			try {
-				SafeReader sr = DB.GetFirst(
-					"GetExperianConsumerCacheDate",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId),
-					new QueryParameter("DirectorId", directorId)
-				);
-
-				DateTime tmpCacheDate = sr["LastUpdateDate"];
-				if (cacheDate > tmpCacheDate)
-					cacheDate = tmpCacheDate;
-			}
-			catch (Exception e) {
-				Log.Error("Exception occurred during execution of GetExperianConsumerCacheDate. The exception:{0}", e);
-			}
-
-			return new DateTimeActionResult {
-				Value = cacheDate
-			};
-		}
-		#endregion method GetExperianConsumerCacheDate
-
+		
 		#region method GetExperianCompanyCacheDate
 
 		public DateTimeActionResult GetExperianCompanyCacheDate(string refNumber)

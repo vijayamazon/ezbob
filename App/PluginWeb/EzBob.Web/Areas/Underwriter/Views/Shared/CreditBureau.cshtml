@@ -205,6 +205,14 @@
                                 <div class="span6 control-group form-horizontal">
                                     <table class="table">
                                         <tbody>
+                                            <tr class="<%- consumerData.IsDataRelevant == true ? '' : 'red_cell'%>">
+                                                <td>Check Date</td>
+                                                <td><%- consumerData.CheckDate %></td>
+                                            </tr>
+                                            <tr class="<%- consumerData.IsDataRelevant == true ? '' : 'red_cell'%>">
+                                                <td>Valid till</td>
+                                                <td><%- consumerData.CheckValidity %></td>
+                                            </tr>
                                             @RawCell("Enquiries in last 3 months", "<%- consumerData.EnquiriesLast3M %>")
                                             @RawCell("Enquiries in last 6 months", "<%- consumerData.EnquiriesLast6M %>")
                                             @RawCell("Credit card utilization", "<%- consumerData.CreditCardUtilization %>")
@@ -591,16 +599,34 @@
                     </tr>
                 </thead>
                 <tbody class="box-content">
-                    @RawCell("Score", "<%- summary.Score  %>")
+                    <tr class="<%- summary.Score >= 500 ? '' : 'red_cell'%>">
+                        <td>Score</td>
+                        <td><%- summary.Score %></td>
+                    </tr>
                     @RawCell("Consumer Indebtedness Index", "<%- summary.ConsumerIndebtednessIndex  %>")
-                    @RawCell("Check Date", "<%- summary.CheckDate  %>")
-                    @RawCell("Valid till", "<%- summary.Validtill  %>")
+                    <tr class="<%- summary.IsDataRelevant ? '' : 'red_cell'%>">
+                        <td>Check Date</td>
+                        <td><%- summary.CheckDate %></td>
+                    </tr>
+                    <tr class="<%- summary.IsDataRelevant ? '' : 'red_cell'%>">
+                        <td>Valid till</td>
+                        <td><%- summary.Validtill %></td>
+                    </tr>
                     @RawCell("Worst Current status", "<%- summary.WorstCurrentstatus  %>")
                     @RawCell("Worst Historical status", "<%- summary.WorstHistoricalstatus  %>")
-                    @RawCell("Number of defaults", "<%- summary.Numberofdefaults  %>")
+                    <tr class="<%- summary.Numberofdefaults > 0 ? 'red_cell' : ''%>">
+                        <td>Number of defaults</td>
+                        <td><%- summary.Numberofdefaults  %></td>
+                    </tr>
                     @RawCell("Active Accounts", "<%- summary.Accounts  %>")
-                    @RawCell("ThinFile", "<%- summary.ThinFile ? 'Yes' : 'No'  %>")
-                    @RawCell("CCJ's", "<%- summary.CCJs  %>")
+                    <tr class="<%- summary.ThinFile ? 'red_cell' : ''%>">
+                        <td>ThinFile</td>
+                        <td><%- summary.ThinFile ? 'Yes' : 'No'  %></td>
+                    </tr>
+                    <tr class="<%- summary.CCJs > 0 ? 'red_cell' : ''%>">
+                        <td>CCJ's</td>
+                        <td><%- summary.CCJs  %></td>
+                    </tr>
                     @RawCell("Most recent CCJ", "<%- summary.MostrecentCCJ  %>")
                     @RawCell("Credit card utilization", "<%- summary.Creditcardutilization  %>")
                     @RawCell("Enquiries in last 6 months", "<%- summary.Enquiriesinlast6months  %>")

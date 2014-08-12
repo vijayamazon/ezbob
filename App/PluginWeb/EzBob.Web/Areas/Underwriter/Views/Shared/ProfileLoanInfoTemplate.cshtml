@@ -164,7 +164,7 @@
                 <td>
                     <span class="customer-details-title">E-mail<i data-title="<%- data.EmailState %>" class="tltp <%=getIcon()%>"/></span>
                     <span class="pull-right">
-                        <%- data.Email.length <= 14 ? data.Email : data.Email.substring(0,11)+'...' %>
+                        <%- data.Email.length <= 19 ? data.Email : data.Email.substring(0,16)+'...' %>
                         <i data-title="<%- data.Email %>" class="tltp-left <%=getIcon()%>"/>
                         <button class="btn btn-mini left-pane-button" name="editEmail">
                             <i class="fa fa-pencil"/>

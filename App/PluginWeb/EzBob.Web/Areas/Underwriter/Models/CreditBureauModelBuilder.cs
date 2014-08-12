@@ -187,15 +187,13 @@
 			}
 
 			var scorePosColor = GetScorePositionAndColor(eInfo.BureauScore.HasValue ? eInfo.BureauScore.Value : 0, ConsumerScoreMax, ConsumerScoreMin);
-
-			var checkDate = eInfo.InsertDate;
-			var checkValidity = checkDate.AddMonths(3);
 			
 			model.ServiceLogId = eInfo.ServiceLogId;
 			model.HasExperianError = eInfo.HasExperianError;
 			model.ModelType = "Consumer";
-			model.CheckDate = checkDate.ToShortDateString();
-			model.CheckValidity = checkValidity.ToShortDateString();
+			model.CheckDate = eInfo.InsertDate.ToShortDateString();
+			model.IsDataRelevant = (DateTime.UtcNow - eInfo.InsertDate).TotalDays < CurrentValues.Instance.UpdateConsumerDataPeriodDays;
+			model.CheckValidity = eInfo.InsertDate.AddDays(CurrentValues.Instance.UpdateConsumerDataPeriodDays).ToShortDateString();
 			model.BorrowerType = "Consumer";
 			model.Score = eInfo.BureauScore;
 			model.Odds = Math.Pow(2, (((double)(eInfo.BureauScore ?? 0)) - 600) / 80);
@@ -536,6 +534,7 @@
 			summary.ConsumerIndebtednessIndex = model.Consumer.CII;
 			summary.CheckDate = model.Consumer.CheckDate;
 			summary.Validtill = model.Consumer.CheckValidity;
+			summary.IsDataRelevant = model.Consumer.IsDataRelevant;
 			summary.WorstCurrentstatus = model.Consumer.WorstCurrentStatus;
 			summary.WorstHistoricalstatus = model.Consumer.WorstCurrentStatus3M;
 			summary.Numberofdefaults = model.Consumer.NumberOfDefaults;

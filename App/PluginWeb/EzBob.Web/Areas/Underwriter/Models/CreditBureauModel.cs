@@ -41,7 +41,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string ApplicantFullNameAge { get; set; }
 		public string ModelType { get; set; }
 		public string BorrowerType { get; set; } 
-		public string CheckDate { get; set; } 
+		public string CheckDate { get; set; }
+		public bool IsDataRelevant { get; set; }
 		public string CheckValidity { get; set; } 
 		public int? Score { get; set; } 
 		public double Odds { get; set; } 
@@ -179,6 +180,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public int? ConsumerIndebtednessIndex { get; set; }
 		public string CheckDate { get; set; }
 		public string Validtill { get; set; }
+		public bool IsDataRelevant { get; set; }
 		public string WorstCurrentstatus { get; set; }
 		public string WorstHistoricalstatus { get; set; }
 		public int? Numberofdefaults { get; set; }

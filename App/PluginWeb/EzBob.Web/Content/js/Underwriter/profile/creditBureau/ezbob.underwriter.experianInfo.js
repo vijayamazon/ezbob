@@ -63,24 +63,31 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         }
 
         var that = this;
-        BlockUi("on");
-        $.post(window.gRootPath + "Underwriter/CreditBureau/IsConsumerCacheRelevant", { customerId: customerId, directorId: directorId })
-            .done(function (response) {
-                if (response.IsRelevant == "True") {
-                    EzBob.ShowMessage("Last check was done at " + response.LastCheckDate +" and cache is valid for " + response.CacheValidForDays + " days. Run check anyway?", "No need for check warning",
-                        function () {
-                            that.RunConsumerCheck(customerId, directorId, true);
-                            return true;
-                        },
-                        "Yes", null, "No");
-                } else {
-                    that.RunConsumerCheck(customerId, directorId, false);
-                }
-            })
-            .complete(function () {
-                BlockUi("off");
-            });
-
+        if (directorId == 0) {
+            var consumer = this.model.get("Consumer");
+            if (consumer.IsDataRelevant) {
+                EzBob.ShowMessage("Last check was done at " + consumer.CheckDate + " and cache is valid till " + consumer.CheckValidity + ". Run check anyway?", "No need for check warning",
+                    function() {
+                        that.RunConsumerCheck(customerId, directorId, true);
+                        return true;
+                    },
+                    "Yes", null, "No");
+            } else {
+                that.RunConsumerCheck(customerId, directorId, false);
+            }
+        } else {
+            var director = _.find(this.model.get('Directors'), function (dir) { return dir.Id == parseInt(directorId); });
+            if (director.IsDataRelevant) {
+                EzBob.ShowMessage("Last check was done at " + director.CheckDate + " and cache is valid till " + director.CheckValidity + ". Run check anyway?", "No need for check warning",
+                    function () {
+                        that.RunConsumerCheck(customerId, directorId, true);
+                        return true;
+                    },
+                    "Yes", null, "No");
+            } else {
+                that.RunConsumerCheck(customerId, directorId, false);
+            }
+        }
         return false;
     },
     RunConsumerCheck: function (customerId, directorId, forceCheck) {

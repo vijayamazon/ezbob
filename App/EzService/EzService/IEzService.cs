@@ -255,9 +255,6 @@
 		ActionMetaData ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck);
 
 		[OperationContract]
-		DateTimeActionResult GetExperianConsumerCacheDate(int customerId, int directorId);
-
-		[OperationContract]
 		DateTimeActionResult GetExperianCompanyCacheDate(string refNumber);
 
 		[OperationContract]

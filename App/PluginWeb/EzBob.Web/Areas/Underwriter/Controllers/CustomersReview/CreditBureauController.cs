@@ -152,17 +152,6 @@
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult IsConsumerCacheRelevant(int customerId, int directorId)
-		{
-			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianConsumerCacheDate(customerId, directorId);
-			DateTime cacheDate = result.Value;
-			int cacheValidForDays = ConfigManager.CurrentValues.Instance.UpdateConsumerDataPeriodDays;
-			string isRelevant = (DateTime.UtcNow - cacheDate).TotalDays > cacheValidForDays ? "False" : "True";
-			return Json(new { IsRelevant = isRelevant, LastCheckDate = cacheDate.ToString("dd/MM/yyyy"), CacheValidForDays = cacheValidForDays.ToString(CultureInfo.InvariantCulture) });
-		}
-
-		[Ajax]
-		[HttpPost]
 		public JsonResult IsCompanyCacheRelevant(int customerId)
 		{
 			var customer = _customers.Get(customerId);
