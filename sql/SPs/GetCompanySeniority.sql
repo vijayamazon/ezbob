@@ -26,12 +26,15 @@ BEGIN
 	END		
 	ELSE
 	BEGIN
-		SELECT TOP 1 e.IncorporationDate AS IncorporationDate 
-		FROM Customer c
-		INNER JOIN Company co ON c.CompanyId=co.Id
-		INNER JOIN ExperianNonLimitedResults e ON e.RefNumber = co.ExperianRefNum
-		WHERE c.Id=@CustomerID
-		ORDER BY e.Created DESC 	
+		SELECT 
+			e.IncorporationDate
+		FROM 
+			Customer c
+			INNER JOIN Company co ON c.CompanyId = co.Id
+			INNER JOIN ExperianNonLimitedResults e ON e.RefNumber = co.ExperianRefNum
+		WHERE 
+			c.Id = @CustomerID AND
+			e.IsActive = 1
 	END		
 END
 
