@@ -9,8 +9,7 @@
 	using ServiceClientProxy.EzServiceReference;
 
 	public class EmailVerificationController : Controller {
-		public EmailVerificationController(ICustomerRepository customers, IEzbobWorkplaceContext oContext) {
-			_customers = customers;
+		public EmailVerificationController(IEzbobWorkplaceContext oContext) {
 			m_oServiceClient = new ServiceClient();
 			m_oContext = oContext;
 		} // constructor
@@ -57,7 +56,6 @@
 			return Json(new { success = string.IsNullOrWhiteSpace(sErrorMessage), error = sErrorMessage, });
 		} // ChangeEmail
 
-		private readonly ICustomerRepository _customers;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext m_oContext;
 

@@ -39,26 +39,12 @@
 		#region method Execute
 
 		public override void Execute() {
-			Log.Debug("User '{0}': change email request...", m_oData.Email);
-
-			bool bCreateTokenSuccess = false;
-
-			ErrorMessage = null;
+			Log.Debug("User '{0}': request to change email to {1}...", m_oSpUpdate.UserID, m_oData.Email);
 
 			m_oData.ValidateEmail();
 			m_oData.ValidateNewPassword();
 
-			m_oSpUpdate.ForEachRowSafe((sr, bRowsetStart) => {
-				if (sr.ContainsField("Success"))
-					bCreateTokenSuccess = sr["Success"];
-				else if (sr.ContainsField("ErrorMessage"))
-					ErrorMessage = sr["ErrorMessage"];
-
-				return ActionResult.Continue;
-			});
-
-			if (!bCreateTokenSuccess)
-				ErrorMessage = (ErrorMessage ?? string.Empty) + " Failed to init a create password token.";
+			ErrorMessage = m_oSpUpdate.ExecuteScalar<string>();
 
 			Log.Debug(
 				"User '{0}' email has{1} been changed. {2}",
@@ -73,6 +59,8 @@
 			string sAddress = string.Format("{0}/emailchanged/{1}", CustomerSite, m_oSpUpdate.RequestID);
 
 			new EmailChanged(m_oSpUpdate.UserID, sAddress, DB, Log).Execute();
+
+			Log.Debug("User '{0}': request to change email to {1} fully processed.", m_oSpUpdate.UserID, m_oData.Email);
 		} // Execute
 
 		#endregion method Execute
