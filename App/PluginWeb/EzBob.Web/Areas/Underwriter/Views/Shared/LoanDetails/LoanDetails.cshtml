@@ -96,7 +96,7 @@
                 <%
                     var  title = _.any(rollovers, function(i){ return i.Status == 0; }) ? "Edit Roll over" : "Add Roll over";
                 %>
-                <button class="btn btn-primary rollover pull-right" style="width: 150px; margin-right: 5px;" ><%-title%>(<%-rolloverCount || '0'%>)</button>
+                <button class="btn btn-primary rollover pull-right <%-rolloverAvailableClass%>" style="width: 150px; margin-right: 5px;" ><%-title%>(<%-rolloverCount || '0'%>)</button>
                 <button  class="btn btn-primary make-payment pull-right" style="width: 150px; margin-right: 5px;" >Make Payment</button>
                 <button  id="btn-options" class="btn btn-primary pull-right" style="width: 150px; margin-right: 5px;" >Options</button>
             </div>

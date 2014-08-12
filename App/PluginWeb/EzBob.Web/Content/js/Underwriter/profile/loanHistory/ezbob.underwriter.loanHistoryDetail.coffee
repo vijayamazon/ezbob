@@ -45,6 +45,7 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
             charges: details and details.Charges
             showFailed: @$el.find('.filter-errors').is(':checked')
             rolloverCount: model.rolloverCount
+            rolloverAvailableClass: model.rolloverAvailableClass
         )
         if modelLoan.Modified
             @$el.find('.offer-status').append("<strong>Loan was manually modified</strong>").css({"margin-top": "-20px"});

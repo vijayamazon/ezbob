@@ -93,8 +93,11 @@
 									LoanScheduleId = x.LoanSchedule.Id
 								});
 			var rolloverCount = _rolloverRepository.GetByLoanId(loan.Id).Count(x => x.Status != RolloverStatus.Removed && x.Status != RolloverStatus.Expired);
+			
+			bool transactionsDoneToday = loan.Transactions.Count(x => x.PostDate.Date == DateTime.UtcNow.Date && x.Status == LoanTransactionStatus.Done) > 0;
+			string rolloverAvailableClass = transactionsDoneToday ? "disabled" : string.Empty;
 
-			var model = new { details, configValues = new { rolloverCharge }, notExperiedRollover, rolloverCount };
+			var model = new { details, configValues = new { rolloverCharge }, notExperiedRollover, rolloverCount, rolloverAvailableClass };
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -131,7 +134,7 @@
 			}
 			if (mounthCount < 1)
 			{
-				throw new Exception("Month count must be more 1");
+				throw new Exception("Month count must be at least 1");
 			}
 
 			if (isEditCurrent)

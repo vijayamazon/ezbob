@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.LoanHistoryDetailsModel = (function(_super) {
-
     __extends(LoanHistoryDetailsModel, _super);
 
     function LoanHistoryDetailsModel() {
-      return LoanHistoryDetailsModel.__super__.constructor.apply(this, arguments);
+      _ref = LoanHistoryDetailsModel.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     LoanHistoryDetailsModel.prototype.url = function() {
@@ -26,11 +26,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.LoanDetailsView = (function(_super) {
-
     __extends(LoanDetailsView, _super);
 
     function LoanDetailsView() {
-      return LoanDetailsView.__super__.constructor.apply(this, arguments);
+      _ref1 = LoanDetailsView.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     LoanDetailsView.prototype.initialize = function() {
@@ -44,6 +44,7 @@
 
     LoanDetailsView.prototype.render = function() {
       var that;
+
       that = this;
       this.$el.dialog({
         modal: true,
@@ -64,6 +65,7 @@
 
     LoanDetailsView.prototype.renderContent = function() {
       var details, model, modelLoan;
+
       modelLoan = this.options.loan;
       model = this.model.toJSON();
       details = model.details;
@@ -76,7 +78,8 @@
         rollovers: details && details.Rollovers,
         charges: details && details.Charges,
         showFailed: this.$el.find('.filter-errors').is(':checked'),
-        rolloverCount: model.rolloverCount
+        rolloverCount: model.rolloverCount,
+        rolloverAvailableClass: model.rolloverAvailableClass
       }));
       if (modelLoan.Modified) {
         return this.$el.find('.offer-status').append("<strong>Loan was manually modified</strong>").css({
@@ -96,6 +99,7 @@
 
     LoanDetailsView.prototype.rollover = function(e) {
       var model;
+
       if (!this.checkForActiveLoan()) {
         return false;
       }
@@ -120,6 +124,7 @@
 
     LoanDetailsView.prototype.removeRollover = function(roloverId) {
       var that;
+
       that = this;
       BlockUi("on");
       return $.post(window.gRootPath + "Underwriter/LoanHistory/RemoveRollover", roloverId).success(function(request) {
@@ -137,6 +142,7 @@
 
     LoanDetailsView.prototype.addRollover = function(model) {
       var that;
+
       that = this;
       BlockUi("on");
       return $.post(window.gRootPath + "Underwriter/LoanHistory/AddRollover", model).success(function(request) {
@@ -155,6 +161,7 @@
 
     LoanDetailsView.prototype.makePayment = function(e) {
       var model, view;
+
       model = {
         loanId: this.options.loan.Id
       };
@@ -167,6 +174,7 @@
 
     LoanDetailsView.prototype.addPayment = function(data) {
       var that;
+
       that = this;
       data += "&CustomerId=" + this.model.id;
       data += "&LoanId=" + this.options.loan.Id;
@@ -188,6 +196,7 @@
 
     LoanDetailsView.prototype.showDialogOptions = function() {
       var that, xhr;
+
       this.loanOptionsModel = new EzBob.Underwriter.LoanOptionsModel();
       this.loanOptionsModel.loanId = this.model.loanid;
       xhr = this.loanOptionsModel.fetch();
@@ -211,6 +220,7 @@
 
     LoanDetailsView.prototype.exportToPdf = function(e) {
       var $el, customerId;
+
       customerId = this.model.id;
       $el = $(e.currentTarget);
       return $el.attr("href", window.gRootPath + "Underwriter/LoanHistory/ExportDetails?id=" + customerId + "&loanid=" + this.options.loan.Id + "&isExcel=false" + "&wError=" + this.$el.find('.filter-errors').is(':checked'));
@@ -218,6 +228,7 @@
 
     LoanDetailsView.prototype.exportToExcel = function(e) {
       var $el, customerId;
+
       customerId = this.model.id;
       $el = $(e.currentTarget);
       return $el.attr("href", window.gRootPath + "Underwriter/LoanHistory/ExportDetails?id=" + customerId + "&loanid=" + this.options.loan.Id + "&isExcel=true" + "&wError=" + this.$el.find('.filter-errors').is(':checked'));
