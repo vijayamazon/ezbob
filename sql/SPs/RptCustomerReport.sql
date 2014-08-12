@@ -15,7 +15,7 @@ BEGIN
 		AccountNumber,
 		Status,
 		PARSENAME(CONVERT(VARCHAR, CONVERT(MONEY, CONVERT(DECIMAL(13, 0), CreditSum)), 1), 2) CreditSum,
-		ReferenceSource
+		(CASE WHEN BrokerID IS NULL THEN ReferenceSource ELSE 'Broker' END) AS ReferenceSource
 	FROM
 		Customer
 	WHERE

@@ -126,7 +126,7 @@ BEGIN
 		END) AS Type,
 		o.CustomerID,
 		c.GreetingMailSentDate,
-		c.ReferenceSource,
+		(CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'Broker' END) AS ReferenceSource,
 		c.GoogleCookie,
 		c.WizardStep,
 		r.CreationDate,
