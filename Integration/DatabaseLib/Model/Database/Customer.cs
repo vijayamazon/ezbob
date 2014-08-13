@@ -219,6 +219,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual IndustryType? IndustryType { get; set; }
 		public virtual string DaytimePhone { get; set; }
 		public virtual string MobilePhone { get; set; }
+		public virtual bool MobilePhoneVerified { get; set; }
 		public virtual decimal? OverallTurnOver { get; set; }
 		public virtual decimal? WebSiteTurnOver { get; set; }
 		public virtual bool ConsentToSearch { get; set; }

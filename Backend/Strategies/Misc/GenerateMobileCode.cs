@@ -1,9 +1,11 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
 	using System;
 	using System.Globalization;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Twilio;
+	using System.Collections.Generic;
 
 	public class GenerateMobileCode : AStrategy {
 		#region public
@@ -106,7 +108,14 @@
 
 			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
 
-			var message = twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, content, "");
+
+			var message = (EzbobSmsMessage)twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, content, "");
+
+			message.UserId = null;
+			message.UnderwriterId = 1; //system id
+
+			DB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure, DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
+			
 
 			if (message.Status == null) {
 				IsError = true;
@@ -120,7 +129,6 @@
 		#endregion method GenerateCodeAndSend
 
 		private readonly string m_sMobilePhone;
-
 		private const string UkMobilePrefix = "+44";
 
 		private string m_sAccountSid;

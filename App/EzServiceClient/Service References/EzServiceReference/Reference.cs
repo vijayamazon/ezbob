@@ -2348,6 +2348,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendSms", ReplyAction="http://tempuri.org/IEzService/SendSmsResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendSms", ReplyAction="http://tempuri.org/IEzService/SendSmsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> SendSmsAsync(int userId, int underwriterId, string phone, string content);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
         
@@ -3294,6 +3300,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code) {
             return base.Channel.ValidateMobileCodeAsync(phone, code);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BoolActionResult SendSms(int userId, int underwriterId, string phone, string content) {
+            return base.Channel.SendSms(userId, underwriterId, phone, content);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> SendSmsAsync(int userId, int underwriterId, string phone, string content) {
+            return base.Channel.SendSmsAsync(userId, underwriterId, phone, content);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier() {

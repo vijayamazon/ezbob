@@ -335,6 +335,9 @@
 		[OperationContract]
 		BoolActionResult ValidateMobileCode(string phone, string code);
 
+		[OperationContract]
+		BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
+		
 		#endregion mobile phone code
 
 		#region other strategies

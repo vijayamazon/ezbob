@@ -144,6 +144,9 @@ namespace Ezbob.Utils.dbutils
 			if (oPropInfo.PropertyType == typeof(long))
 				return "BIGINT NOT NULL";
 
+			if (oPropInfo.PropertyType == typeof(decimal))
+				return "DECIMAL(18,6) NOT NULL";
+
 			if (oPropInfo.PropertyType == typeof(decimal?))
 				return "DECIMAL(18, 6) NULL";
 

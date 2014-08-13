@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using NUnit.Framework;
+	using Ezbob.Backend.ModelsWithDB;
 
 	[TestFixture]
 	class TestDbConnection : BaseTestFixtue {
@@ -82,5 +83,28 @@
 
 			cw.Close();
 		} // TestEnumerableWithPersistent
+
+		[Test]
+		public void TestSaveSms() {
+			var message = new EzbobSmsMessage {
+				AccountSid = "accsid",
+				ApiVersion = "apiver",
+				Body = "test",
+				DateCreated = DateTime.UtcNow,
+				DateSent = DateTime.UtcNow,
+				DateUpdated = DateTime.UtcNow,
+				Direction = "dir",
+				From = "from",
+				To = "to",
+				Price = 0.2M,
+				Sid = "sid",
+				Status = "status",
+				UnderwriterId = 1,
+				UserId = null
+			};
+
+			m_oDB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure,
+								   m_oDB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
+		}
 	} // class TestDbConnection
 } // namespace
