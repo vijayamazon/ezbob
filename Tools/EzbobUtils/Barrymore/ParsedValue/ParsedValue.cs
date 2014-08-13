@@ -405,18 +405,18 @@
 
 			if (!ReferenceEquals(m_oValue, null)) {
 				if (m_oValue is DateTime)
-					return (DateTime)m_oValue;
+					return DateTime.SpecifyKind(((DateTime)m_oValue), DateTimeKind.Utc);
 
 				if (DateTime.TryParse(m_oValue.ToString(), out parsedValue))
-					return parsedValue;
+					return DateTime.SpecifyKind(parsedValue, DateTimeKind.Utc);
 			} // if
 
 			if (!ReferenceEquals(m_oDefault, null)) {
 				if (m_oDefault is DateTime)
-					return (DateTime)m_oDefault;
+					return DateTime.SpecifyKind(((DateTime)m_oValue), DateTimeKind.Utc);
 
 				if (DateTime.TryParse(m_oDefault.ToString(), out parsedValue))
-					return parsedValue;
+					return DateTime.SpecifyKind(parsedValue, DateTimeKind.Utc);
 			} // if
 
 			return default(DateTime);
