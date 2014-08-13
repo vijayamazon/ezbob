@@ -7,6 +7,7 @@
 	using Ezbob.Logger;
 	using StoredProcs;
 	using UserManagement;
+	using UserManagement.EmailConfirmation;
 
 	public class PasswordRestored : AMailStrategyBase {
 		#region constructor
@@ -37,20 +38,10 @@
 				{"FirstName", string.IsNullOrWhiteSpace(CustomerData.FirstName) ? Salutation : CustomerData.FirstName}
 			};
 
-			SafeReader sr = DB.GetFirst(
-				"LoadEmailConfirmationState",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("UserID", CustomerData.UserID)
-			);
+			var ecl = new EmailConfirmationLoad(CustomerData.UserID, DB, Log);
+			ecl.Execute();
 
-			string sErrMsg = null;
-
-			if ((int)sr["UserID"] != CustomerData.UserID)
-				sErrMsg = "failed to load email confirmation state";
-			else if (!sr["IsConfirmed"])
-				sErrMsg = "email is not confirmed";
-
-			if (sErrMsg == null)
+			if (ecl.IsConfirmed)
 				TemplateName = "Mandrill - EZBOB password was restored";
 			else {
 				int nBrokerID = DB.ExecuteScalar<int>(
@@ -63,7 +54,7 @@
 
 				Variables["UserType"] = (nBrokerID == 0) ? "customer" : "broker";
 
-				Variables["ErrMsg"] = sErrMsg;
+				Variables["ErrMsg"] = ecl.ErrorMessage;
 
 				Variables["UserID"] = CustomerData.Id.ToString(CultureInfo.InvariantCulture);
 
