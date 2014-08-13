@@ -40,12 +40,12 @@
 
 		public static PropertiesModel GetPropertiesModelData(Customer customer, CustomerAddressRepository customerAddressRepository, LandRegistryRepository landRegistryRepository)
 		{
-			int experianMortgage = 0;
-			int experianMortgageCount = 0;
+			int experianMortgage;
+			int experianMortgageCount;
 			int propertyCounter = 0;
 			var data = new PropertiesModel();
 
-			if (customer.PropertyStatus.IsOwnerOfMainAddress)
+			if (customer.PropertyStatus != null && customer.PropertyStatus.IsOwnerOfMainAddress)
 			{
 				var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
 				if (currentAddress != null) 
