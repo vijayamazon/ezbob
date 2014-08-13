@@ -4,9 +4,9 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
+	using EZBob.DatabaseLib.Repository;
 	using EzServiceAccessor;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -32,31 +32,32 @@
 			string firstname = null,
 			string surname = null,
 			DateTime? dob = null,
-			string postCode = null
+			string postCode = null,
+			string companyRefNum = null
 		)
 			where TX : class
-			where TY : class
-		{
-			return WriteLog(XSerializer.Serialize(input), XSerializer.Serialize(output), type, customerId, directorId, firstname, surname, dob, postCode);
+			where TY : class {
+
+			string serializedInput;
+			string serializedOutput;
+			if (typeof (TX) == typeof (string) && typeof (TY) == typeof (string)) {
+				serializedInput = input as string;
+				serializedOutput = output as string;
+			}
+			else {
+				serializedInput = XSerializer.Serialize(input);
+				serializedOutput = XSerializer.Serialize(output);
+			}
+
+			var pkg = new WriteToLogPackage(serializedInput, serializedOutput, type, customerId, directorId, firstname, surname, dob, postCode, companyRefNum);
+			WriteLog(pkg);
+			return pkg.Out;
+
 		} // WriteLog
 
 		#endregion generic method WriteLog
 
 		#region method WriteLog
-
-		public static WriteToLogPackage.OutputData WriteLog(string input,
-			string output, ExperianServiceType type,
-			int customerId,
-			int? directorId = null,
-			string firstname = null,
-			string surname = null,
-			DateTime? dob = null,
-			string postCode = null)
-		{
-			var pkg = new WriteToLogPackage(input, output, type, customerId, directorId, firstname, surname, dob, postCode);
-			WriteLog(pkg);
-			return pkg.Out;
-		} // WriteToLog
 
 		public static void WriteLog(WriteToLogPackage oPackage)
 		{
@@ -74,7 +75,8 @@
 				Firstname = oPackage.In.Firstname,
 				Surname = oPackage.In.Surname,
 				DateOfBirth = oPackage.In.DateOfBirth,
-				Postcode = oPackage.In.PostCode
+				Postcode = oPackage.In.PostCode,
+				CompanyRefNum = oPackage.In.CompanyRefNum
 			};
 
 			try
@@ -96,7 +98,7 @@
 
 				ms_oLog.Debug("Input data was: {0}", oPackage.Out.ServiceLog.RequestData);
 				ms_oLog.Debug("Output data was: {0}", oPackage.Out.ServiceLog.ResponseData);
-				var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
+				var repoLog = ObjectFactory.GetInstance<ServiceLogRepository>();
 				oRetryer.Retry(() => repoLog.SaveOrUpdate(oPackage.Out.ServiceLog));
 
 				switch (oPackage.In.ServiceType)

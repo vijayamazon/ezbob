@@ -1,7 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Data;
 	using EZBob.DatabaseLib.Model.Experian;
+	using EZBob.DatabaseLib.Repository;
 	using ExperianLib.EBusiness;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -11,11 +12,13 @@
 	{
 		readonly NonLimitedParser parser = new NonLimitedParser();
 		private readonly ExperianHistoryRepository _experianHistoryRepository;
+		private readonly ServiceLogRepository _serviceLogRepository;
 
 		public BackfillNonLimitedCompanies(AConnection oDB, ASafeLog oLog)
 			: base(oDB, oLog)
 		{
 			_experianHistoryRepository = ObjectFactory.GetInstance<ExperianHistoryRepository>();
+			_serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
 		} // constructor
 
 		public override string Name {
@@ -44,7 +47,11 @@
 					}
 
 					parser.ParseAndStore(response, refNumber, serviceLogId, insertDate);
-					
+
+
+					var serviceLog = _serviceLogRepository.GetById(serviceLogId);
+					serviceLog.CompanyRefNum = refNumber;
+
 					int? score = parser.GetScore();
 					_experianHistoryRepository.SaveOrUpdateNonLimitedHistory(serviceLogId, customerId, insertDate, refNumber, score);
 				}

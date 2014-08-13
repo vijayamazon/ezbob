@@ -105,7 +105,8 @@
 					Date = date,
 					Score = score,
 					CaisBalance = balance,
-					Type = ExperianServiceType.LimitedData.DescriptionAttr()
+					Type = ExperianServiceType.LimitedData.DescriptionAttr(),
+					CompanyRefNum = companyRefNum
 				});
 			}
 		}
@@ -120,7 +121,8 @@
 					CustomerId = customerId,
 					Date = date,
 					Score = score,
-					Type = ExperianServiceType.NonLimitedData.DescriptionAttr()
+					Type = ExperianServiceType.NonLimitedData.DescriptionAttr(),
+					CompanyRefNum = companyRefNum
 				});
 			}
 		}

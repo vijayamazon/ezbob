@@ -24,7 +24,7 @@ namespace EZBob.DatabaseLib.Repository
 			return GetAll().FirstOrDefault(x => x.ServiceType == ExperianServiceType.Consumer.DescriptionAttr() && x.ResponseData != null);
 		}
 
-        public MP_ServiceLog GetById(int id)
+        public MP_ServiceLog GetById(long id)
         {
             return GetAll().First(x => x.Id == id);
         }

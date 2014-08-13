@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Model.Experian;
+	using EZBob.DatabaseLib.Repository;
 	using ExperianLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -15,6 +16,7 @@
 		public BackfillExperianLtd(AConnection oDB, ASafeLog oLog)
 			: base(oDB, oLog) {
 			_experianHistoryRepository = ObjectFactory.GetInstance<ExperianHistoryRepository>();
+			_serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
 		} // constructor
 
 		#endregion constructor
@@ -41,6 +43,8 @@
 					string companyRefNum = parser.Result.RegisteredNumber;
 					int? score = parser.Result != null ? parser.Result.CommercialDelphiScore : null;
 					decimal? balance = Utils.GetLimitedCaisBalance(parser.Result);
+					var serviceLog = _serviceLogRepository.Get(serviceLogId);
+					serviceLog.CompanyRefNum = companyRefNum;
 					_experianHistoryRepository.SaveOrUpdateLimitedHistory(
 						serviceLogId,
 						sr["InsertDate"],
@@ -61,6 +65,7 @@
 
 		#region private
 		private readonly ExperianHistoryRepository _experianHistoryRepository;
+		private readonly ServiceLogRepository _serviceLogRepository;
 		#endregion private
 	} // class BackfillExperianLtd
 } // namespace
