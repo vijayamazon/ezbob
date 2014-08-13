@@ -46,7 +46,8 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 					.append('<span>&nbsp;</span>')
 			); // replaceWith
 
-			that.$el.find('img.field_status').field_status({ required: true });
+		    that.$el.find('img.field_status').field_status({ required: true });
+		    that.$el.find('#CaptchaImage').addClass('captcha-image-margin');
 
 			EzBob.UiAction.registerView(that);
 
