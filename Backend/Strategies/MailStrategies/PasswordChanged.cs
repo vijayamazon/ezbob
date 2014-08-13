@@ -3,6 +3,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using UserManagement.EmailConfirmation;
 
 	public class PasswordChanged : AMailStrategyBase {
 		#region constructor
@@ -24,6 +25,18 @@
 		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
+			var ecl = new EmailConfirmationLoad(CustomerData.UserID, DB, Log);
+			ecl.Execute();
+
+			if (!ecl.IsConfirmed) {
+				SendToCustomer = false;
+
+				Log.Warn(
+					"Not sending new password to user {0} (user ID: {1}) because user's email {2} is not confirmed (error message: '{3}').",
+					FirstName, CustomerData.UserID, CustomerData.Mail, ecl.ErrorMessage
+				);
+			} // if
+
 			TemplateName = "Mandrill - New password";
 
 			Variables = new Dictionary<string, string> {
