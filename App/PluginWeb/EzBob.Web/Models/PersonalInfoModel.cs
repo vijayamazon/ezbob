@@ -185,6 +185,10 @@
 				DaytimePhone = customer.PersonalInfo.DaytimePhone;
 			} // if
 
+			// TODO: add to model data that will allow different display for verified phones
+			//MobilePhoneVerified
+			//DaytimePhoneVerified
+
 			Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 			Email = customer.Name;
 			EmailState = EmailConfirmationState.Get(customer);

@@ -157,8 +157,28 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            @RowCell("Mobile", "<%- data.MobilePhone %>")
-            @RowCell("Daytime", "<%- data.DaytimePhone %>")
+            <tr>
+                <td>
+                    <span class="customer-details-title">Mobile</span>
+                    <span class="pull-right">
+                        <%- data.MobilePhone %>
+                        <button class="btn btn-mini left-pane-button" name="verifyMobile">
+                            <i class="fa fa-pencil"/>
+                        </button>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="customer-details-title">Daytime</span>
+                    <span class="pull-right">
+                        <%- data.DaytimePhone %>
+                        <button class="btn btn-mini left-pane-button" name="verifyDaytime">
+                            <i class="fa fa-pencil"/>
+                        </button>
+                    </span>
+                </td>
+            </tr>
 
             <tr>
                 <td>

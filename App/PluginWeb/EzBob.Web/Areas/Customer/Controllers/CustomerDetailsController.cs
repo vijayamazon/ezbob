@@ -89,7 +89,8 @@
 			ISession oSession,
 			CashRequestBuilder oCashRequestBuilder,
 			DirectorRepository oDirectorRepository,
-			PropertyStatusRepository propertyStatusRepository
+			PropertyStatusRepository propertyStatusRepository,
+			CustomerPhoneRepository customerPhoneRepository
 		) {
 			m_oContext = oContext;
 			m_oDatabaseHelper = oDatabaseHelper;
@@ -99,6 +100,7 @@
 			m_oCashRequestBuilder = oCashRequestBuilder;
 			m_oDirectorRepository = oDirectorRepository;
 			this.propertyStatusRepository = propertyStatusRepository;
+			this.customerPhoneRepository = customerPhoneRepository;
 		} // constructor
 
 		#endregion constructor
@@ -939,13 +941,34 @@
 				lst => customer.AddressInfo.OtherPropertiesAddresses = lst
 			);
 
+			SavePhones(customer.Id, personalInfo.MobilePhone, personalInfo.DaytimePhone);
+
 			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
 			m_oSession.Flush();
 
 			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
-		} // SaveCustomerToDB
+		}
 
 		#endregion method SaveCustomerToDB
+
+		private void SavePhones(int customerId, string mobilePhone, string daytimePhone)
+		{
+			var customerMobilePhoneEntry = new CustomerPhone
+			{
+				CustomerId = customerId,
+				PhoneType = "Mobile",
+				Phone = mobilePhone
+			};
+			customerPhoneRepository.SaveOrUpdate(customerMobilePhoneEntry);
+
+			var customerDaytimePhoneEntry = new CustomerPhone
+			{
+				CustomerId = customerId,
+				PhoneType = "Daytime",
+				Phone = daytimePhone
+			};
+			customerPhoneRepository.SaveOrUpdate(customerDaytimePhoneEntry);
+		}
 
 		#region method MakeAddress
 
@@ -1098,6 +1121,7 @@
 		private readonly DatabaseDataHelper m_oDatabaseHelper;
 		private readonly DirectorRepository m_oDirectorRepository;
 		private readonly PropertyStatusRepository propertyStatusRepository;
+		private readonly CustomerPhoneRepository customerPhoneRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(CustomerDetailsController));
 
 		#endregion private properties

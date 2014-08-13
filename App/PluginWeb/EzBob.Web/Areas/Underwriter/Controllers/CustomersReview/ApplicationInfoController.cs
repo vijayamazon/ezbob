@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System.Globalization;
+	using System.Linq;
 	using Code.Agreements;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -41,6 +42,7 @@
 		private readonly IUsersRepository _users;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
+		private readonly CustomerPhoneRepository customerPhoneRepository;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ApplicationInfoController));
 
@@ -58,7 +60,8 @@
 			ILoanSourceRepository loanSources,
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
-			ISuggestedAmountRepository suggestedAmountRepository)
+			ISuggestedAmountRepository suggestedAmountRepository,
+			CustomerPhoneRepository customerPhoneRepository)
 		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -75,6 +78,7 @@
 			_context = context;
 			_suggestedAmountRepository = suggestedAmountRepository;
 			serviceClient = new ServiceClient();
+			this.customerPhoneRepository = customerPhoneRepository;
 		}
 
 		[Ajax]
@@ -95,6 +99,30 @@
 		{
 			bool res = _customerStatusesRepository.GetIsWarning(status);
 			return Json(res, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpPost]
+		public void VerifyMobilePhone(int customerId)
+		{
+			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Mobile");
+			if (customerPhone != null)
+			{
+				customerPhone.IsVerified = true;
+				customerPhoneRepository.SaveOrUpdate(customerPhone);
+			}
+		}
+
+		[Ajax]
+		[HttpPost]
+		public void VerifyDaytimePhone(int customerId)
+		{
+			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Daytime");
+			if (customerPhone != null)
+			{
+				customerPhone.IsVerified = true;
+				customerPhoneRepository.SaveOrUpdate(customerPhone);
+			}
 		}
 
 		[Ajax]

@@ -114,6 +114,8 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		'click .reset-password-123456': 'resetPassword123456',
 		'click .change-broker': 'startChangeBroker',
 		'click .go-to-broker': 'goToBroker',
+		"click button[name=\"verifyMobile\"]": "verifyMobile",
+		"click button[name=\"verifyDaytime\"]": "verifyDaytime",
 	}, // events
 
 	goToBroker: function() {
@@ -396,6 +398,30 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 		return false;
 	}, // editEmail
+
+	verifyMobile: function () {
+	    BlockUi("on");
+	    $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyMobilePhone", { customerId: this.model.get('Id') }).done(function () {
+	        BlockUi("off");
+
+	        // Reload? make sure display changes
+	        //self.model.fetch();
+	    });
+
+	    return false;
+	},
+
+	verifyDaytime: function () {
+	    BlockUi("on");
+	    $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyDaytimePhone", { customerId: this.model.get('Id') }).done(function () {
+	        BlockUi("off");
+
+	        // Reload? make sure display changes
+	        //self.model.fetch();
+	    });
+
+	    return false;
+	},
 }); // EzBob.Underwriter.PersonInfoView
 
 EzBob.Underwriter.PersonalInfoModel = Backbone.Model.extend({
