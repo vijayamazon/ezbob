@@ -431,3 +431,7 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
     width: 1000px;
     margin: 20px auto 0;
 }
+
+.captcha-image-margin {
+    margin-bottom: 1.0em !important;
+}
