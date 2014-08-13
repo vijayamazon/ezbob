@@ -1,6 +1,6 @@
 var EzBob = EzBob || {};
 
-EzBob.StoreInfoView = Backbone.View.extend({
+EzBob.StoreInfoView = EzBob.View.extend({
 	attributes: {
 		"class": "stores-view"
 	}, // attributes
@@ -123,7 +123,14 @@ EzBob.StoreInfoView = Backbone.View.extend({
 		'click .btn-go-to-link-accounts': 'showLinkAccountsForm',
 		'click .btn-take-quick-offer': 'takeQuickOffer',
 		'click .btn-back-to-quick-offer': 'backToQuickOffer',
+		'click #finish-wizard': 'finishWizard',
 	}, // events
+
+	finishWizard: function() {
+		BlockUi();
+		this.$el.find('#finish-wizard').hide();
+		this.setSomethingEnabled('#finish-wizard-placeholder', false).removeClass('hide');
+	}, // finishWizard
 
 	backToQuickOffer: function() {
 		if (this.shouldRemoveQuickOffer())
