@@ -118,7 +118,10 @@
 					if (lr != null)
 					{
 						personalAddressPropertyModel.LandRegistry = lrBuilder.BuildResModel(lr.Response);
-						personalAddressPropertyModel.YearOfOwnership = personalAddressPropertyModel.LandRegistry.Proprietorship.CurrentProprietorshipDate;
+						if (personalAddressPropertyModel.LandRegistry.Proprietorship.CurrentProprietorshipDate.HasValue)
+						{
+							personalAddressPropertyModel.YearOfOwnership = DateTime.SpecifyKind(personalAddressPropertyModel.LandRegistry.Proprietorship.CurrentProprietorshipDate.Value, DateTimeKind.Utc);
+						}
 						personalAddressPropertyModel.NumberOfOwners = lr.Owners.Count();
 					}
 
