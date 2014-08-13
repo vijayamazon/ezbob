@@ -86,7 +86,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	}, // loanSelectionChanged
 
 	showSubmit: function() {
-		var enabled = EzBob.Validation.checkForm(this.validator);
+		var enabled;
+		enabled = EzBob.Validation.checkForm(this.validator);
 		this.model.set("agree", enabled);
 		this.ui.submit.toggleClass("disabled", !enabled);
 	}, // showSubmit
@@ -229,8 +230,6 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			this.showSubmit();
 			return false;
 		} // if
-
-		this.$el.find('#customerSelectedTerm').val(this.currentRepaymentPeriod);
 
 		this.trigger("submit");
 		return false;

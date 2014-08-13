@@ -40,7 +40,6 @@
 	</div>
 
 	@using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" })) {
-		<input type="hidden" name="customerSelectedTerm" id="customerSelectedTerm" />
 		<div class="controls">
 			<label class="checkbox">
 				<input type="checkbox" id="preAgreementTermsRead" class="preAgreementTermsRead" name="preAgreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-pre-agreement" />
@@ -71,10 +70,10 @@
 				</label>
 			</div>
 		</div>
-		<div class="buttons_container">
-			<a class="btn-continue button btn-green submit <% if (!agree) { %>disabled<% } %>" href="url" ui-event-control-id="loan-legal:continue">Continue</a>
-			<a href="#" class="btn-back button btn-grey" ui-event-control-id="loan-legal:back">Back</a>
-		</div>
+	    <div class="buttons_container">
+            <a class="btn-continue button btn-green submit <% if (!agree) { %>disabled<% } %>" href="url" ui-event-control-id="loan-legal:continue">Continue</a>
+            <a href="#" class="btn-back button btn-grey" ui-event-control-id="loan-legal:back">Back</a>
+        </div>
 	 }
 </script>
 
