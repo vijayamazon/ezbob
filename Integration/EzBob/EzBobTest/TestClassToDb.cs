@@ -1,7 +1,7 @@
 ﻿namespace EzBobTest
 {
 	using System;
-	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Utils.dbutils;
 	using NUnit.Framework;
 
@@ -11,8 +11,8 @@
 		[Test]
 		public void TestClassToDbTableCreate()
 		{
-			Console.WriteLine(CodeToSql.GetCreateTable<ExperianConsumerData>());
-			Console.WriteLine(CodeToSql.GetCreateSp<ExperianConsumerData>());
+			Console.WriteLine(CodeToSql.GetCreateTable<EzbobSmsMessage>());
+			Console.WriteLine(CodeToSql.GetCreateSp<EzbobSmsMessage>());
 		}
 	}
 

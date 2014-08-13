@@ -169,6 +169,11 @@ namespace EzBob.Web.Controllers {
 				if (m_oBrokerHelper.IsBroker(model.UserName)) {
 					BrokerProperties bp = m_oBrokerHelper.TryLogin(model.UserName, model.Password);
 
+					if ((bp != null) && (bp.CurrentTermsID != bp.SignedTermsID)) {
+						Session[Constant.Broker.Terms] = bp.CurrentTerms;
+						Session[Constant.Broker.TermsID] = bp.CurrentTermsID;
+					} // if
+
 					return Json(new {
 						success = (bp != null),
 						errorMessage = (bp == null) ? "User not found or incorrect password." : string.Empty,
@@ -354,10 +359,10 @@ namespace EzBob.Web.Controllers {
 				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
 				if (signupPass1.Length < maxPassLength)
 					throw new Exception(DbStrings.NotValidEmailAddress);
-
+				bool mobilePhoneVerified = false;
 				if (isInCaptchaMode != "True") {
-					bool isCorrect = m_oServiceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
-					if (!isCorrect)
+					mobilePhoneVerified = m_oServiceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
+					if (!mobilePhoneVerified)
 						throw new Exception("Invalid code.");
 				} // if
 
@@ -372,7 +377,7 @@ namespace EzBob.Web.Controllers {
 				Customer customer = null;
 
 				new Transactional(
-					() => customer = CreateCustomer(model.EMail, promoCode, amount, mobilePhone)
+					() => customer = CreateCustomer(model.EMail, promoCode, amount, mobilePhone, mobilePhoneVerified)
 				).Execute();
 
 				string link = m_oServiceClient.Instance.EmailConfirmationGenerate(customer.Id).Address;
@@ -745,7 +750,8 @@ namespace EzBob.Web.Controllers {
 
 		#region method CreateUser
 
-		private MembershipCreateStatus CreateUser(string email, string password, string passwordQuestion, string passwordAnswer) {
+		private MembershipCreateStatus CreateUser(string email, string password, string passwordQuestion, string passwordAnswer)
+		{
 			ms_oLog.Debug("Creating a user '{0}'...", email);
 
 			MembershipCreateStatus status;
@@ -780,7 +786,8 @@ namespace EzBob.Web.Controllers {
 			string email,
 			string promoCode,
 			double? amount,
-			string mobilePhone
+			string mobilePhone,
+			bool mobilePhoneVerified
 		) {
 			var user = m_oUsers.GetUserByLogin(email);
 			var g = new RefNumberGenerator(m_oCustomers);
@@ -798,7 +805,7 @@ namespace EzBob.Web.Controllers {
 				IsOffline = null,
 				PromoCode = promoCode,
 				CustomerInviteFriend = new List<CustomerInviteFriend>(),
-				PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone, },
+				PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone, MobilePhoneVerified = mobilePhoneVerified},
 				TrustPilotStatus = m_oDatabaseHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Neither),
 				GreetingMailSentDate = DateTime.UtcNow,
 				Vip = vip
@@ -862,6 +869,15 @@ namespace EzBob.Web.Controllers {
 				IsPasswdOk = true,
 				ErrorMessage = "Registration"
 			});
+
+			if ((sourceref != null) && !string.IsNullOrWhiteSpace(sourceref.Value)) {
+				try {
+					m_oServiceClient.Instance.SaveSourceRefHistory(user.Id, sourceref.Value, firstvisit == null ? null : firstvisit.Value);
+				}
+				catch (Exception e) {
+					ms_oLog.Warn(e, "Failed to save sourceref history.");
+				} // try
+			} // if
 
 			return customer;
 		} // CreateCustomer

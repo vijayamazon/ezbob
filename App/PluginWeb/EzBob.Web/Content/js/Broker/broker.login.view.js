@@ -51,11 +51,18 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 			UnBlockUi();
 
 			if (res.success) {
+				console.log('broker login result:', res);
+
 				EzBob.Csrf.updateToken(res.antiforgery_token);
 				EzBob.App.trigger('clear');
 				self.clear();
 				self.router.setAuth(sEmail, res.properties);
-				self.router.followReturnUrl();
+
+				if (res.properties.SignedTermsID === res.properties.CurrentTermsID)
+					self.router.followReturnUrl();
+				else
+					self.router.requestAcceptTerms(res.properties.CurrentTermsID, res.properties.CurrentTerms);
+
 				return;
 			} // if
 

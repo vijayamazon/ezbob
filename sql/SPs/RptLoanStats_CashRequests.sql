@@ -47,7 +47,7 @@ BEGIN
 		cps.IsOwnerOfOtherProperties,
 		cps.Description,
 		c.TypeOfBusiness,
-		c.ReferenceSource,
+		(CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'Broker' END) AS ReferenceSource,
 		ISNULL(lmt.LoanId, 0) AS LoanID,
 		ISNULL(lmt.LoanAmount, 0) AS LoanAmount,
 		ISNULL(lmt.Date, 'Jul 1 1976') AS LoanIssueDate,

@@ -14,9 +14,19 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	------------------------------------------------------------------------------
+
+	DECLARE @BrokerTermsID INT = NULL
+
+	------------------------------------------------------------------------------
+
 	SET @ContactEmail = ISNULL(LTRIM(RTRIM(ISNULL(@ContactEmail, ''))), '')
 
+	------------------------------------------------------------------------------
+
 	SET @ContactMobile = ISNULL(LTRIM(RTRIM(ISNULL(@ContactMobile, ''))), '')
+
+	------------------------------------------------------------------------------
 
 	IF @ContactEmail != ''
 	BEGIN
@@ -35,6 +45,17 @@ BEGIN
 		END
 	END
 
+	------------------------------------------------------------------------------
+
+	SELECT TOP 1
+		@BrokerTermsID = BrokerTermsID
+	FROM
+		BrokerTerms
+	ORDER BY
+		DateAdded DESC
+
+	------------------------------------------------------------------------------
+
 	SELECT TOP 1
 		b.BrokerID,
 		b.FirmName AS BrokerName,
@@ -45,9 +66,16 @@ BEGIN
 		b.ContactOtherPhone,
 		b.SourceRef,
 		b.FirmWebSiteUrl AS BrokerWebSiteUrl,
-		'' AS ErrorMsg
+		'' AS ErrorMsg,
+		b.BrokerTermsID AS SignedTermsID,
+		@BrokerTermsID AS CurrentTermsID,
+		(CASE
+			WHEN b.BrokerTermsID IS NULL OR b.BrokerTermsID != @BrokerTermsID THEN t.BrokerTerms
+			ELSE ''
+		END) AS CurrentTerms
 	FROM
 		Broker b
+		INNER JOIN BrokerTerms t ON t.BrokerTermsID = @BrokerTermsID
 	WHERE
 		b.ContactEmail = @ContactEmail
 		OR

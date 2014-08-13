@@ -19,6 +19,8 @@
 			public const string MaxPerPage = "BrokerMaxPerPage";
 			public const string MessageOnStart = "BrokerMessageOnStart";
 			public const string MessageOnStartSeverity = "BrokerMessageOnStartSeverity";
+			public const string TermsID = "TermsID";
+			public const string Terms = "Terms";
 		} // class Broker
 
 		public class Severity {

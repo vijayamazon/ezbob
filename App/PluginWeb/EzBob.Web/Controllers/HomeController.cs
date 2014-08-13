@@ -11,7 +11,6 @@
 	using Models;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
-	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class HomeController : Controller {
@@ -35,6 +34,8 @@
 			string bloken = "",
 			string sourceref_time = ""
 		) {
+			ms_oLog.Debug("HomeController.Index(sourceref = {0}, sourceref_time = {1})", sourceref, sourceref_time);
+
 			Session["Shop"] = shop;
 			CreatePasswordModel oCreatePassword = null;
 
@@ -107,11 +108,9 @@
 		private CreatePasswordModel SetBrokerLeadData(string sBrokerLeadToken) {
 			CreatePasswordModel oResult = null;
 
-			ASafeLog oLog = new SafeILog(LogManager.GetLogger(typeof(HomeController)));
-
 			new WizardBrokerLeadModel(Session).Unset();
 
-			oLog.Debug("Broker token observed in sign up request: {0}, processing...", sBrokerLeadToken);
+			ms_oLog.Debug("Broker token observed in sign up request: {0}, processing...", sBrokerLeadToken);
 
 			try {
 				var oServiceClient = new ServiceClient();
@@ -119,7 +118,7 @@
 				BrokerLeadDetailsActionResult bld = oServiceClient.Instance.BrokerLeadCheckToken(sBrokerLeadToken);
 
 				if (bld.LeadID > 0) {
-					oLog.Debug(
+					ms_oLog.Debug(
 						"Broker lead found: {0} {1} ({2}, {3}), customer id: {4}",
 						bld.FirstName, 
 						bld.LastName,
@@ -137,6 +136,7 @@
 						};
 					}
 					else {
+						// ReSharper disable ObjectCreationAsStatement
 						// This constructor saves data to Session.
 						new WizardBrokerLeadModel(
 							Session,
@@ -146,16 +146,17 @@
 							bld.LastName,
 							false
 						);
+						// ReSharper restore ObjectCreationAsStatement
 					}
 				}
 				else
-					oLog.Debug("No lead found.");
+					ms_oLog.Debug("No lead found.");
 			}
 			catch (Exception e) {
-				oLog.Warn(e, "Something went terribly not so good while processing broker lead token {0}.", sBrokerLeadToken);
+				ms_oLog.Warn(e, "Something went terribly not so good while processing broker lead token {0}.", sBrokerLeadToken);
 			} // try
 
-			oLog.Debug("Broker token observed in sign up request: {0}, processing complete.", sBrokerLeadToken);
+			ms_oLog.Debug("Broker token observed in sign up request: {0}, processing complete.", sBrokerLeadToken);
 
 			return oResult;
 		} // SetBrokerLeadData
@@ -163,6 +164,7 @@
 		#endregion method SetBrokerLeadData
 
 		private readonly AskvilleRepository m_oAskvilleRepository;
+		private readonly ASafeLog ms_oLog = new SafeILog(typeof(HomeController));
 
 		#endregion private
 	} // class HomeController

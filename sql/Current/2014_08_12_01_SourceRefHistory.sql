@@ -1,0 +1,19 @@
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('SourceRefHistory') IS NULL
+BEGIN
+	CREATE TABLE SourceRefHistory (
+		SourceRefID BIGINT IDENTITY(1, 1) NOT NULL,
+		UserID INT NOT NULL,
+		SourceRef NVARCHAR(1000) NOT NULL,
+		VisitTime DATETIME NULL,
+		TimestampCounter ROWVERSION,
+		CONSTRAINT PK_SourceRefHistory PRIMARY KEY (SourceRefID),
+		CONSTRAINT FK_SourceRefHistory_User FOREIGN KEY (UserID) REFERENCES Security_User (UserId)
+	)
+END
+GO

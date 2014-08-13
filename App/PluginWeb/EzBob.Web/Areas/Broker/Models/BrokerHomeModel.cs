@@ -22,6 +22,9 @@
 			PasswordPolicyType = oCfg.PasswordPolicyType;
 			CaptchaMode = oCfg.CaptchaMode;
 			SessionTimeout = oCfg.SessionTimeout;
+
+			TermsID = 0;
+			Terms = string.Empty;
 		} // constructor
 
 		public string ChannelGrabberAccounts {
@@ -48,5 +51,12 @@
 		public string RootUrl { get; set; }
 		public string LogoUrl { get; set; }
 		public string EuIconUrl { get; set; }
+
+		public int TermsID { get; set; }
+		public string Terms { get; set; }
+
+		public string HasTermsStr {
+			get { return TermsID > 0 ? "yes" : "no"; }
+		} // HasTermsStr
 	} // class BrokerHomeModel
 } // namespace

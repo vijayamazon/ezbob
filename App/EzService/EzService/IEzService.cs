@@ -132,6 +132,9 @@
 		[OperationContract]
 		ActionMetaData BrokerAttachCustomer(int nCustomerID, int? nBrokerID, int nUnderwriterID);
 
+		[OperationContract]
+		ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
+
 		#endregion Broker
 
 		#region CAIS
@@ -335,6 +338,9 @@
 		[OperationContract]
 		BoolActionResult ValidateMobileCode(string phone, string code);
 
+		[OperationContract]
+		BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
+		
 		#endregion mobile phone code
 
 		#region other strategies
@@ -408,6 +414,9 @@
 
 		[OperationContract]
 		MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory);
+
+		[OperationContract]
+		ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList);
 
 		#endregion other strategies
 

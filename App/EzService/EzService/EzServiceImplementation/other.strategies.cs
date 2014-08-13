@@ -168,5 +168,13 @@
 		} // CalculateModelsAndAffordability
 
 		#endregion method CalculateModelsAndAffordability
+
+		#region method SaveSourceRefHistory
+
+		public ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList) {
+			return Execute<SaveSourceRefHistory>(nUserID, null, nUserID, sSourceRefList, sVisitTimeList);
+		} // SaveSourceRefHistory
+
+		#endregion method SaveSourceRefHistory
 	} // class EzServiceImplementation
 } // namespace EzService

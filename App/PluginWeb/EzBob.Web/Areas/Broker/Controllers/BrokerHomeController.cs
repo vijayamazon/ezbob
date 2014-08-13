@@ -56,6 +56,14 @@
 				ms_oLog.Info("Broker page sent to browser with authentication result '{0}' for identified name '{1}'.", oModel.Auth, User.Identity.Name);
 			} // if
 
+			oModel.Terms = (Session[Constant.Broker.Terms] ?? string.Empty).ToString().Trim();
+			Session[Constant.Broker.Terms] = null;
+
+			if (!string.IsNullOrWhiteSpace(oModel.Terms)) {
+				oModel.TermsID = Convert.ToInt32(Session[Constant.Broker.TermsID]);
+				Session[Constant.Broker.TermsID] = null;
+			} // if
+
 			return View("Index", oModel);
 		} // Index
 
@@ -222,6 +230,33 @@
 		} // Login
 
 		#endregion action Login
+
+		#region action AcceptTerms
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult AcceptTerms(int nTermsID, string sContactEmail) {
+			ms_oLog.Debug("Broker accept terms request for contact email {0} and terms id {1}...", sContactEmail, nTermsID);
+
+			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Accept terms", sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			try {
+				m_oServiceClient.Instance.BrokerAcceptTerms(nTermsID, sContactEmail);
+			}
+			catch (Exception e) {
+				ms_oLog.Alert(e, "Failed to save terms acceptance request for contact email {0} and terms id {1}.", sContactEmail, nTermsID);
+				return new BrokerForJsonResult("Failed to save terms acceptance.");
+			} // try
+
+			ms_oLog.Debug("Broker accept terms request for contact email {0} and terms id {1} complete.", sContactEmail, nTermsID);
+
+			return new BrokerForJsonResult();
+		} // AcceptTerms
+
+		#endregion action AcceptTerms
 
 		#region action RestorePassword
 

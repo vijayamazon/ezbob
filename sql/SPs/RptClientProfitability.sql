@@ -142,18 +142,18 @@ ORDER BY 1
 SELECT T.CustomerId,
 	   T.Fullname,
 	   CASE 
-	   	   WHEN C.ReferenceSource LIKE 'eBay%'		THEN 'eBay'
-		   WHEN C.ReferenceSource LIKE 'Amazon%'	THEN 'Amazon'
-		   WHEN C.ReferenceSource LIKE 'Ekm%'		THEN 'EKM'
-		   WHEN C.ReferenceSource LIKE 'adwords%'	THEN 'Google'
-		   WHEN C.ReferenceSource LIKE 'Google%'	THEN 'Google'
-		   WHEN C.ReferenceSource LIKE 'adroll%'	THEN 'Adroll'
-		   WHEN C.ReferenceSource LIKE 'Bing%'		THEN 'Bing'
-		   WHEN C.ReferenceSource LIKE 'tam%'		THEN 'Tamebay'
-		   WHEN C.ReferenceSource LIKE 'ChannelG%'	THEN 'ChannelGrabber'
-		   WHEN C.ReferenceSource IS NULL 			THEN 'No SourceRef'
-			
-		   ELSE 'Other'
+			WHEN C.BrokerID IS NOT NULL             THEN 'Broker'
+			WHEN C.ReferenceSource LIKE 'eBay%'		THEN 'eBay'
+			WHEN C.ReferenceSource LIKE 'Amazon%'	THEN 'Amazon'
+			WHEN C.ReferenceSource LIKE 'Ekm%'		THEN 'EKM'
+			WHEN C.ReferenceSource LIKE 'adwords%'	THEN 'Google'
+			WHEN C.ReferenceSource LIKE 'Google%'	THEN 'Google'
+			WHEN C.ReferenceSource LIKE 'adroll%'	THEN 'Adroll'
+			WHEN C.ReferenceSource LIKE 'Bing%'		THEN 'Bing'
+			WHEN C.ReferenceSource LIKE 'tam%'		THEN 'Tamebay'
+			WHEN C.ReferenceSource LIKE 'ChannelG%'	THEN 'ChannelGrabber'
+			WHEN C.ReferenceSource IS NULL 			THEN 'No SourceRef'
+			ELSE 'Other'
 	   END AS SourceRefGroup,
 	   T.CustomerStatus,
 	   T.CreditScore,

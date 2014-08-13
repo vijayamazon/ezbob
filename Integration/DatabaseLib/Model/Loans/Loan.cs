@@ -324,6 +324,8 @@
 
 		public virtual int? LoanLegalId { get; set; }
 
+		public virtual int? CustomerSelectedTerm { get; set; }
+
 		#endregion properties
 
 		#region methods
