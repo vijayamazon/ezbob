@@ -21,7 +21,7 @@ namespace EzBob.Web.Code
 				? CreateNewLoan(cr, amount, now, cr.RepaymentPeriod, interestOnlyTerm)
 				: CreateLoanFromTemplate(cr, amount, now);
 
-			l.CustomerSelectedTerm = cr.CustomerSelectedTerm;
+			l.CustomerSelectedTerm = cr.RepaymentPeriod;
 
 			return l;
 		} // CreateLoan
