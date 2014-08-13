@@ -400,7 +400,10 @@
       <xs:element minOccurs="0" name="ContactMobile" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ContactName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ContactOtherPhone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CurrentTerms" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CurrentTermsID" type="xs:int" />
       <xs:element minOccurs="0" name="ErrorMsg" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SignedTermsID" type="xs:int" />
       <xs:element minOccurs="0" name="SourceRef" nillable="true" type="xs:string" />
     </xs:sequence>
     <xs:attribute ref="ser:Id" />

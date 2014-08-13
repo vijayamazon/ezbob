@@ -33,6 +33,14 @@
 
 		#endregion method BrokerCheckCustomerRelevance
 
+		#region method BrokerAcceptTerms
+
+		public ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail) {
+			return Execute<BrokerAcceptTerms>(null, null, nTermsID, sContactEmail);
+		} // BrokerAcceptTerms
+
+		#endregion method BrokerAcceptTerms
+
 		#endregion async
 
 		#region sync

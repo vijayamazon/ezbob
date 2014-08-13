@@ -33,6 +33,15 @@
 		[DataMember]
 		public string BrokerWebSiteUrl { get; set; }
 
+		[DataMember]
+		public int SignedTermsID { get; set; }
+
+		[DataMember]
+		public int CurrentTermsID { get; set; }
+
+		[DataMember]
+		public string CurrentTerms { get; set; }
+
 		public override string ToString() {
 			return string.Format(
 @"
@@ -45,7 +54,11 @@
 	ContactOtherPhone: {6}
 	SourceRef: {7}
 	BrokerWebSiteUrl: {8}
-	ErrorMsg: {9}",
+	ErrorMsg: {9}
+	CurrentTermsID: {10}
+	SignedTermsID: {11}
+	Current terms text length: {12}
+",
 				BrokerID,
 				BrokerName,
 				BrokerRegNum,
@@ -55,7 +68,10 @@
 				ContactOtherPhone,
 				SourceRef,
 				BrokerWebSiteUrl,
-				ErrorMsg
+				ErrorMsg,
+				CurrentTermsID,
+				SignedTermsID,
+				CurrentTerms.Length
 			);
 		} // ToString
 	} // class BrokerProperties

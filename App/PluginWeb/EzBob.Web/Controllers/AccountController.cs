@@ -169,6 +169,11 @@ namespace EzBob.Web.Controllers {
 				if (m_oBrokerHelper.IsBroker(model.UserName)) {
 					BrokerProperties bp = m_oBrokerHelper.TryLogin(model.UserName, model.Password);
 
+					if ((bp != null) && (bp.CurrentTermsID != bp.SignedTermsID)) {
+						Session[Constant.Broker.Terms] = bp.CurrentTerms;
+						Session[Constant.Broker.TermsID] = bp.CurrentTermsID;
+					} // if
+
 					return Json(new {
 						success = (bp != null),
 						errorMessage = (bp == null) ? "User not found or incorrect password." : string.Empty,

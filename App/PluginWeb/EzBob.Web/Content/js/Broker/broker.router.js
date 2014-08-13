@@ -169,13 +169,42 @@ EzBob.Broker.Router = Backbone.Router.extend({
 			return;
 		} // if
 
-		if (this.getAuth())
-			this.showDashboard();
+		if (this.getAuth()) {
+			var sRat = $('body').attr('data-request-accept-terms');
+
+			if (sRat) {
+				$('body').removeAttr('data-request-accept-terms');
+
+				if (sRat === 'yes')
+					this.requestAcceptTerms();
+				else
+					this.showDashboard();
+			}
+			else
+				this.showDashboard();
+		}
 		else {
 			this.createView('login', EzBob.Broker.LoginView);
 			this.show('login', 'sign-up', 'login');
 		} // if
 	}, // login
+
+	requestAcceptTerms: function(nTermsID, sTerms) {
+		if (this.isForbidden()) {
+			this.forbidden();
+			return;
+		} // if
+
+		if (this.getAuth()) {
+			this.createView('requestAcceptTerms', EzBob.Broker.RequestAcceptTermsView, {
+				termsID: nTermsID,
+				terms: sTerms,
+			});
+			this.show('requestAcceptTerms', 'log-off', 'requestAcceptTerms');
+		}
+		else
+			this.login();
+	}, // requestAcceptTerms
 
 	forgotten: function() {
 		if (this.isForbidden()) {

@@ -1040,6 +1040,7 @@
     <Content Include="Content\js\Broker\broker.login.view.js" />
     <Content Include="Content\js\Broker\broker.main.js" />
     <Content Include="Content\js\Broker\broker.mobilephone.view.js" />
+    <Content Include="Content\js\Broker\broker.requestAcceptTerms.view.js" />
     <Content Include="Content\js\Broker\broker.router.js" />
     <Content Include="Content\js\Broker\broker.signup.view.js" />
     <Content Include="Content\js\Broker\broker.submit.view.js" />

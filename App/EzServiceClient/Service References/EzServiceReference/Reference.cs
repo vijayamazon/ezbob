@@ -2324,6 +2324,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
         
@@ -2924,6 +2930,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAttachCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerAttachCustomerResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerAttachCustomerAsync(int nCustomerID, System.Nullable<int> nBrokerID, int nUnderwriterID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAcceptTerms", ReplyAction="http://tempuri.org/IEzService/BrokerAcceptTermsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAcceptTerms", ReplyAction="http://tempuri.org/IEzService/BrokerAcceptTermsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerAcceptTermsAsync(int nTermsID, string sContactEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
         
@@ -3235,12 +3247,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
         System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3268,6 +3274,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
@@ -4070,6 +4084,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerAttachCustomerAsync(nCustomerID, nBrokerID, nUnderwriterID);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail) {
+            return base.Channel.BrokerAcceptTerms(nTermsID, sContactEmail);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerAcceptTermsAsync(int nTermsID, string sContactEmail) {
+            return base.Channel.BrokerAcceptTermsAsync(nTermsID, sContactEmail);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {
             return base.Channel.CaisGenerate(underwriterId);
         }
@@ -4484,14 +4506,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber) {
             return base.Channel.LandRegistryResAsync(customerId, titleNumber);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
     }
 }

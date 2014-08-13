@@ -60,6 +60,7 @@
 	data-auth="@Model.Auth"
 	data-msg-on-start="@Model.MessageOnStart"
 	data-msg-on-start-severity="@Model.MessageOnStartSeverity"
+	data-request-accept-terms="@Model.HasTermsStr"
 >
 	@AntiForgery.GetHtml()
 
@@ -691,6 +692,21 @@
 							<h2>You are not authorised to see this page.</h2>
 						</div>
 						<!-- section-forbidden -->
+						
+						<div class="page-section hide section-requestacceptterms">
+							<h2>Our terms and conditions have been updated</h2>
+
+							Please accept new terms and conditions to continue.
+
+							<div class="terms-and-conditions">@{ WriteLiteral(Model.Terms); }</div>
+
+							<div class="form_buttons_container">
+								<div class="attardi-button">
+									<button type="submit" id="AcceptTermsButton" data-terms-id="@Model.TermsID" class="button btn-green pull-right" ui-event-control-id="broker:accept-terms">Accept</button>
+								</div>
+							</div>
+						</div>
+						<!-- section-request-accept-terms -->
 					</section>
 				</div>
 			</div>
@@ -795,6 +811,7 @@
 			.Add("~/Content/js/Broker/broker.mobilephone.view.js")
 			.Add("~/Content/js/Broker/broker.forgotten.view.js")
 			.Add("~/Content/js/Broker/broker.dashboard.view.js")
+			.Add("~/Content/js/Broker/broker.requestAcceptTerms.view.js")
 			.Add("~/Content/js/Broker/broker.login.view.js")
 			.Add("~/Content/js/Broker/broker.signup.view.js")
 			.Add("~/Content/js/Broker/broker.addcustomer.view.js")

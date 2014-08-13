@@ -132,6 +132,9 @@
 		[OperationContract]
 		ActionMetaData BrokerAttachCustomer(int nCustomerID, int? nBrokerID, int nUnderwriterID);
 
+		[OperationContract]
+		ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
+
 		#endregion Broker
 
 		#region CAIS
