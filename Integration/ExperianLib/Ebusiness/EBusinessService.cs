@@ -6,10 +6,10 @@
 	using System.Reflection;
 	using System.Text;
 	using System.Web;
-	using ApplicationMng.Repository;
 	using ConfigManager;
 	using EBusiness;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Repository;
 	using EzServiceAccessor;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
@@ -50,7 +50,7 @@
 
 				string response = MakeRequest(requestXml);
 
-				Utils.WriteLog(requestXml, response, ExperianServiceType.Targeting, customerId);
+				Utils.WriteLog(requestXml, response, ExperianServiceType.Targeting, customerId, companyRefNum: regNum);
 
 				return new TargetResults(response);
 			}
@@ -121,7 +121,7 @@
 
 		public CompanyInfo TargetCache(int customerId, string refNumber) {
 			return m_oRetryer.Retry(() => {
-				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
+				var repo = ObjectFactory.GetInstance<ServiceLogRepository>();
 
 				IQueryable<MP_ServiceLog> oCachedValues =
 					repo.GetAll().Where(c => c.ServiceType == "ESeriesTargeting" && c.Customer.Id == customerId);
@@ -219,7 +219,7 @@
 
 			string newResponse = MakeRequest(requestXml);
 
-			var pkg = new WriteToLogPackage(requestXml, newResponse, ExperianServiceType.LimitedData, customerId);
+			var pkg = new WriteToLogPackage(requestXml, newResponse, ExperianServiceType.LimitedData, customerId, companyRefNum: regNumber);
 
 			Utils.WriteLog(pkg);
 
@@ -253,7 +253,7 @@
 
 					var newResponse = MakeRequest(requestXml);
 
-					var writelog = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId);
+					var writelog = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId, companyRefNum: refNumber);
 
 					nonLimitedParser.ParseAndStore(newResponse, refNumber, writelog.ServiceLog.Id);
 

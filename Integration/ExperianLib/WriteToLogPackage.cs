@@ -13,9 +13,10 @@
 			string firstname = null,
 			string surname = null,
 			DateTime? dob = null,
-			string postCode = null
+			string postCode = null,
+			string companyRefNum = null
 		) {
-			In = new InputData(sRequestText, sResponseText, nServiceType, nCustomerID, nDirectorID, firstname, surname, dob, postCode);
+			In = new InputData(sRequestText, sResponseText, nServiceType, nCustomerID, nDirectorID, firstname, surname, dob, postCode, companyRefNum);
 			Out = new OutputData();
 		} // constructor
 
@@ -33,7 +34,8 @@
 				string firstname = null,
 				string surname = null,
 				DateTime? dob = null,
-				string postCode = null
+				string postCode = null,
+				string companyRefNum = null
 			) {
 				Request = sRequest;
 				Response = sResponse;
@@ -44,6 +46,7 @@
 				Surname = surname;
 				DateOfBirth = dob;
 				PostCode = postCode;
+				CompanyRefNum = companyRefNum;
 			} // constructor
 
 			public string Request { get; private set; }
@@ -55,6 +58,7 @@
 			public string Surname { get; private set; }
 			public DateTime? DateOfBirth { get; private set; }
 			public string PostCode { get; private set; }
+			public string CompanyRefNum { get; private set; }
 		} // class In
 
 		public class OutputData {
