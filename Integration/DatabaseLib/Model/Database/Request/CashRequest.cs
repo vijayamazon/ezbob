@@ -106,6 +106,8 @@
 		public virtual CashRequestOriginator? Originator { get; set; }
 
 		public virtual Iesi.Collections.Generic.ISet<DecisionHistory> DecisionHistories { get; set; }
+
+		public virtual int? CustomerSelectedTerm { get; set; }
 	} // class CashRequest
 
 	public class CashRequestOriginatorType : EnumStringType<CashRequestOriginator> { }

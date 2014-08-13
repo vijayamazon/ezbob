@@ -1,9 +1,7 @@
-﻿using EZBob.DatabaseLib.Model.Database.Loans;
-using FluentNHibernate.Mapping;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Database.Mapping {
-	#region class LoanMap
+﻿namespace EZBob.DatabaseLib.Model.Database.Mapping {
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
 
 	public class LoanMap : ClassMap<Loans.Loan> {
 		public LoanMap() {
@@ -95,8 +93,8 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 			Map(x => x.LastRecalculation);
 			References(x => x.LoanSource, "LoanSourceID");
 			Map(x => x.LoanLegalId);
+
+			Map(x => x.CustomerSelectedTerm);
 		} // constructor
 	} // class LoanMap
-
-	#endregion class LoanMap
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping

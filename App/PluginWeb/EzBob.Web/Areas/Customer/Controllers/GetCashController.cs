@@ -186,7 +186,6 @@
 
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
 
-
 				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer);
 
 				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
@@ -269,32 +268,40 @@
 
 		[Transactional]
 		[HttpPost]
-		public JsonResult LoanLegalSigned(bool preAgreementTermsRead = false, bool agreementTermsRead = false, bool euAgreementTermsRead = false, string signedName = "")
-		{
+		public JsonResult LoanLegalSigned(
+			bool preAgreementTermsRead = false,
+			bool agreementTermsRead = false,
+			bool euAgreementTermsRead = false,
+			string signedName = "",
+			int? customerSelectedTerm = null
+		) {
 			_log.DebugFormat("LoanLegalModel agreementTermsRead: {0} preAgreementTermsRead: {1} euAgreementTermsRead: {2}", agreementTermsRead, preAgreementTermsRead, euAgreementTermsRead);
 
 			var cashRequest = _context.Customer.LastCashRequest;
 			var typeOfBusiness = _context.Customer.PersonalInfo.TypeOfBusiness.Reduce();
 
-			if (!preAgreementTermsRead || !agreementTermsRead ||
-				(cashRequest.LoanSource.Name == "EU" && !euAgreementTermsRead))
-			{
-				return Json(new { error = "You must agree to all agreements." });
-			}
+			bool bNotAgreeToSomething =
+				!preAgreementTermsRead ||
+				!agreementTermsRead ||
+				(cashRequest.LoanSource.Name == "EU" && !euAgreementTermsRead);
 
-			_context.Customer.LastCashRequest.LoanLegals.Add(new LoanLegal
-				{
-					CashRequest = cashRequest,
-					Created = DateTime.UtcNow,
-					EUAgreementAgreed = cashRequest.LoanSource.Name == "EU",
-					CreditActAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
-					PreContractAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
-					PrivateCompanyLoanAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
-					GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
-					SignedName = signedName,
-				});
+			if (bNotAgreeToSomething)
+				return Json(new { error = "You must agree to all agreements." });
+
+			_context.Customer.LastCashRequest.LoanLegals.Add(new LoanLegal {
+				CashRequest = cashRequest,
+				Created = DateTime.UtcNow,
+				EUAgreementAgreed = cashRequest.LoanSource.Name == "EU",
+				CreditActAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
+				PreContractAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
+				PrivateCompanyLoanAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
+				GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
+				SignedName = signedName,
+			});
+
+			_context.Customer.LastCashRequest.CustomerSelectedTerm = customerSelectedTerm;
 
 			return Json(new { });
-		}
-	}
-}
+		} // LoadLegalSigned
+	} // class GetCachController
+} // namespace

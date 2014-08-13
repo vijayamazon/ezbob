@@ -16,12 +16,15 @@ namespace EzBob.Web.Code
 			_builder = builder;
 		}
 
-		public Loan CreateLoan(CashRequest cr, decimal amount, DateTime now, int interestOnlyTerm = 0)
-		{
-			return string.IsNullOrEmpty(cr.LoanTemplate) ?
-							CreateNewLoan(cr, amount, now, cr.RepaymentPeriod, interestOnlyTerm) :
-							CreateLoanFromTemplate(cr, amount, now);
-		}
+		public Loan CreateLoan(CashRequest cr, decimal amount, DateTime now, int interestOnlyTerm = 0) {
+			var l = string.IsNullOrEmpty(cr.LoanTemplate)
+				? CreateNewLoan(cr, amount, now, cr.RepaymentPeriod, interestOnlyTerm)
+				: CreateLoanFromTemplate(cr, amount, now);
+
+			l.CustomerSelectedTerm = cr.CustomerSelectedTerm;
+
+			return l;
+		} // CreateLoan
 
 		public Loan CreateNewLoan(CashRequest cr, decimal amount, DateTime now, int term, int interestOnlyTerm = 0)
 		{

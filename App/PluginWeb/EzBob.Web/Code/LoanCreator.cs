@@ -59,7 +59,6 @@
 			var calculator = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
 			var fee = calculator.Calculate(loanAmount);
 
-
 			var transfered = loanAmount - fee;
 			PacnetReturnData ret;
 			if (PacnetSafeGuard(cus, transfered))
