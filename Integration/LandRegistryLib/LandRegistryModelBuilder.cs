@@ -7,8 +7,9 @@
 	using log4net;
 	using Q1AddressType = LRResServiceNS.Q1AddressType;
 
-	public class LandRegistryModelBuilder {
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (LandRegistryModelBuilder));
+	public class LandRegistryModelBuilder
+	{
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(LandRegistryModelBuilder));
 
 		public LandRegistryResponseType GetResponseType(int value)
 		{
@@ -52,7 +53,7 @@
 				var ack = response.GatewayResponse.Acknowledgement.AcknowledgementDetails;
 				model.Acknowledgement = new LandRegistryAcknowledgementModel
 				{
-					PollDate = ack.ExpectedResponseDateTime != null ? ack.ExpectedResponseDateTime.Value : new DateTime(1900,01,01),
+					PollDate = ack.ExpectedResponseDateTime != null ? DateTime.SpecifyKind(ack.ExpectedResponseDateTime.Value, DateTimeKind.Utc) : new DateTime(1900, 01, 01),
 					Description = ack.MessageDescription != null ? ack.MessageDescription.Value : null,
 					UniqueId = ack.UniqueID != null ? ack.UniqueID.Value : null
 				};
@@ -160,21 +161,21 @@
 							{
 								lrProprietorship.ProprietorshipType = "Registered Proprietorship Party";
 							}
-							if (proprietorship.Item.GetType() == typeof (Q1PrivateIndividualType))
+							if (proprietorship.Item.GetType() == typeof(Q1PrivateIndividualType))
 							{
 								lrProprietorship.ProprietorshipPartyType = "Private Individual";
 								lrProprietorship.PrivateIndividualForename =
-									((Q1PrivateIndividualType) proprietorship.Item).Name.ForenamesName != null ? ((Q1PrivateIndividualType) proprietorship.Item).Name.ForenamesName.Value : string.Empty;
+									((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName.Value : string.Empty;
 								lrProprietorship.PrivateIndividualSurname =
-									((Q1PrivateIndividualType) proprietorship.Item).Name.SurnameName != null ? ((Q1PrivateIndividualType) proprietorship.Item).Name.SurnameName.Value : string.Empty;
+									((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName.Value : string.Empty;
 							}
-							else if (proprietorship.Item.GetType() == typeof (Q1OrganizationType))
+							else if (proprietorship.Item.GetType() == typeof(Q1OrganizationType))
 							{
 								lrProprietorship.ProprietorshipPartyType = "Organization";
 								lrProprietorship.CompanyRegistrationNumber =
-									((Q1OrganizationType) proprietorship.Item).CompanyRegistrationNumber != null
-										? ((Q1OrganizationType) proprietorship.Item).CompanyRegistrationNumber.Value : string.Empty;
-								lrProprietorship.CompanyName = ((Q1OrganizationType) proprietorship.Item).Name != null ? ((Q1OrganizationType) proprietorship.Item).Name.Value : string.Empty;
+									((Q1OrganizationType)proprietorship.Item).CompanyRegistrationNumber != null
+										? ((Q1OrganizationType)proprietorship.Item).CompanyRegistrationNumber.Value : string.Empty;
+								lrProprietorship.CompanyName = ((Q1OrganizationType)proprietorship.Item).Name != null ? ((Q1OrganizationType)proprietorship.Item).Name.Value : string.Empty;
 							}
 							lrProprietorship.ProprietorshipAddresses = GetAddresses(proprietorship.Address);
 
@@ -203,17 +204,17 @@
 									break;
 							}
 
-							lrRestriction.TypeCode = (RestrictionTypeCode) (int) restriction.Item.RestrictionTypeCode.Value;
+							lrRestriction.TypeCode = (RestrictionTypeCode)(int)restriction.Item.RestrictionTypeCode.Value;
 							lrRestriction.EntryText = restriction.Item.EntryDetails.EntryText != null ? restriction.Item.EntryDetails.EntryText.Value : string.Empty;
 							lrRestriction.EntryNumber = restriction.Item.EntryDetails.EntryNumber != null ? restriction.Item.EntryDetails.EntryNumber.Value : string.Empty;
-							if (restriction.Item.EntryDetails.Item.GetType() == typeof (ScheduleCodeType))
+							if (restriction.Item.EntryDetails.Item.GetType() == typeof(ScheduleCodeType))
 							{
-								var code = (RestictionScheduleCode) (int) ((ScheduleCodeType) restriction.Item.EntryDetails.Item);
+								var code = (RestictionScheduleCode)(int)((ScheduleCodeType)restriction.Item.EntryDetails.Item);
 								lrRestriction.ScheduleCode = code.DescriptionAttr();
 							}
-							else if (restriction.Item.EntryDetails.Item.GetType() == typeof (SubRegisterCodeType))
+							else if (restriction.Item.EntryDetails.Item.GetType() == typeof(SubRegisterCodeType))
 							{
-								var code = (RestrictionSubRegisterCode) (int) ((SubRegisterCodeType) restriction.Item.EntryDetails.Item);
+								var code = (RestrictionSubRegisterCode)(int)((SubRegisterCodeType)restriction.Item.EntryDetails.Item);
 								lrRestriction.SubRegisterCode = code.DescriptionAttr();
 							}
 
@@ -231,7 +232,7 @@
 						foreach (var charge in data.Charge)
 						{
 							var lrCharge = new LandRegistryChargeModel();
-							lrCharge.ChargeDate = charge.ChargeDate != null ? charge.ChargeDate.Value : new DateTime(1900,1,1);
+							lrCharge.ChargeDate = charge.ChargeDate != null ? DateTime.SpecifyKind(charge.ChargeDate.Value, DateTimeKind.Utc) : new DateTime(1900, 1, 1);
 							lrCharge.Description = charge.RegisteredCharge.EntryDetails.EntryText != null ? charge.RegisteredCharge.EntryDetails.EntryText.Value : string.Empty;
 							var lrProprietorship = new LandRegistryProprietorshipModel
 								{
@@ -262,14 +263,15 @@
 						}
 					}
 				}
-				catch (Exception ex) {
+				catch (Exception ex)
+				{
 					ms_oLog.Error("Error parsing lr data", ex);
 					model.Indicators.Add("Error parsing the data (tell dev)");
 				}
 			}
 			return model;
 		}
-		
+
 		private List<LandRegistryAddressModel> GetAddresses(IEnumerable<Q1AddressType> propertyAddress)
 		{
 			var addresses = new List<LandRegistryAddressModel>();
