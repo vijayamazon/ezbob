@@ -1,12 +1,18 @@
-IF OBJECT_ID('RptLeads') IS NULL
-	EXECUTE('CREATE PROCEDURE RptLeads AS SELECT 1')
+IF OBJECT_ID('RptLeadsAll') IS NULL
+	EXECUTE('CREATE PROCEDURE RptLeadsAll AS SELECT 1')
 GO
 
-ALTER PROCEDURE RptLeads
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE RptLeadsAll
 @DateStart DATETIME,
-@DateEnd DATETIME
+@DateEnd DATETIME,
+@WithBrokerCustomers BIT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	SELECT
 		c.Id,
 		c.GreetingMailSentDate,
@@ -19,7 +25,7 @@ BEGIN
 		c.OverallTurnOver,
 		CASE 
 			WHEN c.IsOffline IS NULL THEN 'None'
-			WHEN  c.IsOffline = 0 THEN 'Online'
+			WHEN c.IsOffline = 0 THEN 'Online'
 			WHEN c.IsOffline = 1 THEN 'Offline' 
 		END AS Segment,
 		CASE
@@ -33,6 +39,11 @@ BEGIN
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 		AND
 		c.IsTest = 0
+		AND (
+			@WithBrokerCustomers = 1
+			OR
+			c.BrokerID IS NULL
+		)
 	ORDER BY
 		w.TheLastOne DESC,
 		w.WizardStepTypeDescription DESC,
