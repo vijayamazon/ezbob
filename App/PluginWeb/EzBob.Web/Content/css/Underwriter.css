@@ -2072,3 +2072,7 @@ ul.alert-list {
     height: 300px;
     display: block;
 }
+
+.verfied-phone {
+    color: #00AB5D;
+}

@@ -160,10 +160,10 @@
             <tr>
                 <td>
                     <span class="customer-details-title">Mobile</span>
-                    <span class="pull-right">
+                    <span class="pull-right <%- data.MobilePhoneVerified ? 'verfied-phone' : '' %>">
                         <%- data.MobilePhone %>
                         <button class="btn btn-mini left-pane-button" name="verifyMobile">
-                            <i class="fa fa-pencil"/>
+                            <i class="fa <%- data.MobilePhoneVerified ? 'fa-check verfied-phone' : 'fa-warning' %>"/>
                         </button>
                     </span>
                 </td>
@@ -171,10 +171,10 @@
             <tr>
                 <td>
                     <span class="customer-details-title">Daytime</span>
-                    <span class="pull-right">
+                    <span class="pull-right <%- data.DaytimePhoneVerified ? 'verfied-phone' : '' %>">
                         <%- data.DaytimePhone %>
                         <button class="btn btn-mini left-pane-button" name="verifyDaytime">
-                            <i class="fa fa-pencil"/>
+                            <i class="fa <%- data.DaytimePhoneVerified ? 'fa-check verfied-phone' : 'fa-warning' %>"/>
                         </button>
                     </span>
                 </td>

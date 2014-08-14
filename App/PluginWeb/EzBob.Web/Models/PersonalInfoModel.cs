@@ -19,6 +19,7 @@
 	public class PersonalInfoModel {
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PersonalInfoModel));
 		private readonly ServiceClient serviceClient;
+		private readonly CustomerPhoneRepository customerPhoneRepository = ObjectFactory.GetInstance <CustomerPhoneRepository>();
 
 		public int Id { get; set; }
 		public string Name { get; set; }
@@ -29,6 +30,8 @@
 		public string Medal { get; set; }
 		public string MobilePhone { get; set; }
 		public string DaytimePhone { get; set; }
+		public bool MobilePhoneVerified { get; set; }
+		public bool DaytimePhoneVerified { get; set; }
 		public string RegistrationDate { get; set; }
 		public List<string> IndustryFields { get; set; }
 		public string UserStatus { get; set; }
@@ -185,9 +188,18 @@
 				DaytimePhone = customer.PersonalInfo.DaytimePhone;
 			} // if
 
-			// TODO: add to model data that will allow different display for verified phones
-			//MobilePhoneVerified
-			//DaytimePhoneVerified
+			List<CustomerPhone> customerPhones =  customerPhoneRepository.GetAll().Where(x => x.CustomerId == customer.Id && x.IsVerified).ToList();
+			foreach (CustomerPhone customerPhone in customerPhones)
+			{
+				if (customerPhone.PhoneType == "Mobile")
+				{
+					MobilePhoneVerified = true;
+				}
+				else if (customerPhone.PhoneType == "Daytime")
+				{
+					DaytimePhoneVerified = true;
+				}
+			}
 
 			Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 			Email = customer.Name;
