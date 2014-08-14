@@ -56,7 +56,7 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 				self.clear();
 				self.router.setAuth(sEmail, res.properties);
 
-				if (res.properties.SignedTermsID === res.properties.CurrentTermsID)
+				if (res.properties.SignedTextID === res.properties.CurrentTextID)
 					self.router.followReturnUrl();
 				else
 					self.router.requestAcceptTerms(res.properties.CurrentTermsID, res.properties.CurrentTerms);

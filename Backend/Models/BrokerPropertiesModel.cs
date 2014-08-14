@@ -37,7 +37,13 @@
 		public int SignedTermsID { get; set; }
 
 		[DataMember]
+		public int SignedTextID { get; set; }
+
+		[DataMember]
 		public int CurrentTermsID { get; set; }
+
+		[DataMember]
+		public int CurrentTextID { get; set; }
 
 		[DataMember]
 		public string CurrentTerms { get; set; }

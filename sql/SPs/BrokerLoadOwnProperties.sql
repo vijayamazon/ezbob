@@ -67,15 +67,18 @@ BEGIN
 		b.SourceRef,
 		b.FirmWebSiteUrl AS BrokerWebSiteUrl,
 		'' AS ErrorMsg,
-		b.BrokerTermsID AS SignedTermsID,
-		@BrokerTermsID AS CurrentTermsID,
+		ts.BrokerTermsID AS SignedTermsID,
+		ts.TermsTextID AS SignedTextID,
+		tc.BrokerTermsID AS CurrentTermsID,
+		tc.TermsTextID AS CurrentTextID,
 		(CASE
-			WHEN b.BrokerTermsID IS NULL OR b.BrokerTermsID != @BrokerTermsID THEN t.BrokerTerms
+			WHEN ts.BrokerTermsID IS NULL OR ts.TermsTextID != tc.TermsTextID THEN tc.BrokerTerms
 			ELSE ''
 		END) AS CurrentTerms
 	FROM
 		Broker b
-		INNER JOIN BrokerTerms t ON t.BrokerTermsID = @BrokerTermsID
+		INNER JOIN BrokerTerms tc ON tc.BrokerTermsID = @BrokerTermsID -- current terms
+		LEFT JOIN BrokerTerms ts ON b.BrokerTermsID = ts.BrokerTermsID -- signed terms
 	WHERE
 		b.ContactEmail = @ContactEmail
 		OR
