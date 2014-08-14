@@ -475,19 +475,19 @@
 								IEnumerable<Customer> customerPortion,
 								Customer customer)
 		{
-
 			var customerSession = customer.Session.FirstOrDefault();
 			if (customerSession == null)
 			{
 				return;
 			}
 
-			if (customer.FilledByBroker)
+			if (customer.FilledByBroker && customer.Broker != null)
 			{
 				// filled by broker ip like of other that not this brokers client, or ip like non broker client
+				// also broker clients from the same firm not considered as fraud (same ip for several brokers in the same firm
 				fraudDetections.AddRange(
 					customerPortion
-						.Where(c => (c.FilledByBroker && c.Broker != customer.Broker && c.Session.Any(x => x.Ip == customerSession.Ip))
+						.Where(c => (c.FilledByBroker && (c.Broker != customer.Broker || ( c.Broker != null && c.Broker.FirmName != customer.Broker.FirmName)) && c.Session.Any(x => x.Ip == customerSession.Ip))
 							|| (!c.FilledByBroker && c.Session.Any(s => s.Ip == customerSession.Ip)))
 						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null,
 															string.Format("{0}", customerSession.Ip))));
