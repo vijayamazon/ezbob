@@ -126,7 +126,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			isShowGift: false,
 			isShowExportBlock: false,
 			isShowExceedMaxInterestForSource: false,
-		    isPersonal: this.customer.get("CustomerPersonalInfo").TypeOfBusiness in [0, 4, 2]
+			isPersonal: _.contains([0, 4, 2], this.customer.get("CustomerPersonalInfo").TypeOfBusiness)
 		});
 
 		scheduleView.render();
@@ -262,7 +262,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			onTabSwitch: _.bind(this.updateDownloadLink, this),
 		};
 
-		if (this.customer.get("CustomerPersonalInfo").TypeOfBusiness in [0, 4, 2])
+		if (_.contains([0, 4, 2], this.customer.get("CustomerPersonalInfo").TypeOfBusiness))
 			this.agreementView = new EzBob.Profile.ConsumersAgreementView(oViewArgs);
 		else
 			this.agreementView = new EzBob.Profile.CompaniesAgreementView(oViewArgs);
