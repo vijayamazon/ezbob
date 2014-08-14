@@ -258,6 +258,34 @@
 
 		#endregion action AcceptTerms
 
+		#region action LoadSignedTerms
+
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult LoadSignedTerms(string sContactEmail) {
+			ms_oLog.Debug("Broker load signed terms request for contact email {0}...", sContactEmail);
+
+			var oIsAuthResult = IsAuth<SignedTermsBrokerForJsonResult>("Accept terms", sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			StringListActionResult slar;
+
+			try {
+				slar = m_oServiceClient.Instance.BrokerLoadSignedTerms(sContactEmail);
+			}
+			catch (Exception e) {
+				ms_oLog.Alert(e, "Failed to load signed terms for contact email {0}.", sContactEmail);
+				return new SignedTermsBrokerForJsonResult("Failed to load signed terms.");
+			} // try
+
+			ms_oLog.Debug("Broker load signed terms request for contact email {0}.", sContactEmail);
+
+			return new SignedTermsBrokerForJsonResult(sTerms: slar.Records[0], sSignedTime: slar.Records[1]);
+		} // LoadSignedTerms
+
+		#endregion action LoadSignedTerms
+
 		#region action RestorePassword
 
 		[HttpPost]

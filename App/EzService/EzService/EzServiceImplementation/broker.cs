@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.MailStrategies;
@@ -465,6 +466,20 @@
 
 		#endregion method BrokerAttachCustomer
 
+		#region method BrokerLoadSignedTerms
+
+		public StringListActionResult BrokerLoadSignedTerms(string sContactEmail) {
+			BrokerLoadSignedTerms oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail);
+
+			return new StringListActionResult {
+				MetaData = oMetaData,
+				Records = new List<string> { oInstance.Terms, oInstance.SignedTime },
+			};
+		} // BrokerLoadSignedTerms
+
+		#endregion method BrokerLoadSignedTerms
 		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

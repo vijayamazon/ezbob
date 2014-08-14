@@ -135,6 +135,9 @@
 		[OperationContract]
 		ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
 
+		[OperationContract]
+		StringListActionResult BrokerLoadSignedTerms(string sContactEmail);
+
 		#endregion Broker
 
 		#region CAIS

@@ -51,8 +51,6 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 			UnBlockUi();
 
 			if (res.success) {
-				console.log('broker login result:', res);
-
 				EzBob.Csrf.updateToken(res.antiforgery_token);
 				EzBob.App.trigger('clear');
 				self.clear();

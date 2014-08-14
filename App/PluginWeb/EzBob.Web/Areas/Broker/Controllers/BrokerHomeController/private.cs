@@ -223,6 +223,26 @@
 
 		#endregion class FileListBrokerForJsonResult
 
+		#region class SignedTermsBrokerForJsonResult
+
+		public class SignedTermsBrokerForJsonResult : BrokerForJsonResult {
+			public SignedTermsBrokerForJsonResult(
+				string sErrorMsg = "",
+				bool? bExplicitSuccess = null,
+				string sTerms = "",
+				string sSignedTime = ""
+			) : base(sErrorMsg, bExplicitSuccess) {
+				terms = sTerms;
+				signedTime = sSignedTime;
+			} // constructor
+
+			public virtual string terms { get; private set; } // terms
+
+			public virtual string signedTime { get; private set; } // signedTime
+		} // SignedTermsBrokerForJsonResult
+
+		#endregion class SignedTermsBrokerForJsonResult
+
 		// ReSharper restore InconsistentNaming
 		#endregion result classes
 

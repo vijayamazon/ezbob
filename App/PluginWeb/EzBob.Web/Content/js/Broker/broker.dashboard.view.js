@@ -58,12 +58,30 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 		this.reloadCustomerList();
 
 		this.displayBrokerProperties();
+
+		this.displaySignedTerms();
 	}, // onRender
+
+	displaySignedTerms: function() {
+		var self = this;
+
+		$.getJSON(
+			window.gRootPath + 'Broker/BrokerHome/LoadSignedTerms',
+			{ sContactEmail: this.router.getAuth(), }
+		).done(function(res) {
+			if (res.success) {
+				self.$el.find('.terms-and-conditions').html(res.terms);
+				self.$el.find('.signed-time').text(res.signedTime);
+			}
+			else {
+				self.$el.find('.terms-and-conditions').html('Failed to load terms and conditions.');
+				self.$el.find('.signed-time').html('&mdash;');
+			} // if
+		});
+	}, // displaySignedTerms
 
 	displayBrokerProperties: function() {
 		var oProps = this.router.getBrokerProperties();
-
-		console.log('broker properties', oProps);
 
 		if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
 			return;

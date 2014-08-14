@@ -2324,6 +2324,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
+        string LandRegistryRes(int customerId, string titleNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
+        System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
@@ -2936,6 +2942,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAcceptTerms", ReplyAction="http://tempuri.org/IEzService/BrokerAcceptTermsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerAcceptTermsAsync(int nTermsID, string sContactEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadSignedTerms", ReplyAction="http://tempuri.org/IEzService/BrokerLoadSignedTermsResponse")]
+        ServiceClientProxy.EzServiceReference.StringListActionResult BrokerLoadSignedTerms(string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadSignedTerms", ReplyAction="http://tempuri.org/IEzService/BrokerLoadSignedTermsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> BrokerLoadSignedTermsAsync(string sContactEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
         
@@ -3241,12 +3253,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         System.Threading.Tasks.Task<string> LandRegistryEnquiryAsync(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
-        string LandRegistryRes(int customerId, string titleNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
-        System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3274,6 +3280,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public string LandRegistryRes(int customerId, string titleNumber) {
+            return base.Channel.LandRegistryRes(customerId, titleNumber);
+        }
+        
+        public System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber) {
+            return base.Channel.LandRegistryResAsync(customerId, titleNumber);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
@@ -4092,6 +4106,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerAcceptTermsAsync(nTermsID, sContactEmail);
         }
         
+        public ServiceClientProxy.EzServiceReference.StringListActionResult BrokerLoadSignedTerms(string sContactEmail) {
+            return base.Channel.BrokerLoadSignedTerms(sContactEmail);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> BrokerLoadSignedTermsAsync(string sContactEmail) {
+            return base.Channel.BrokerLoadSignedTermsAsync(sContactEmail);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {
             return base.Channel.CaisGenerate(underwriterId);
         }
@@ -4498,14 +4520,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<string> LandRegistryEnquiryAsync(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
             return base.Channel.LandRegistryEnquiryAsync(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
-        }
-        
-        public string LandRegistryRes(int customerId, string titleNumber) {
-            return base.Channel.LandRegistryRes(customerId, titleNumber);
-        }
-        
-        public System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber) {
-            return base.Channel.LandRegistryResAsync(customerId, titleNumber);
         }
     }
 }
