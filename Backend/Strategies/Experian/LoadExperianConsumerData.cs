@@ -13,12 +13,15 @@
 		public LoadExperianConsumerData(int customerId, int? directorId, long? nServiceLogId, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			Result = new ExperianConsumerData();
 
-			if (nServiceLogId.HasValue)
+			if (nServiceLogId.HasValue) {
 				m_nWorkMode = WorkMode.ServiceLog;
-			else if (directorId.HasValue)
+			}
+			else if (directorId.HasValue && directorId.Value != 0) {
 				m_nWorkMode = WorkMode.CacheDirector;
-			else
+			}
+			else {
 				m_nWorkMode = WorkMode.CacheCustomer;
+			}
 
 			m_nCustomerId = customerId;
 			m_nDirectorId = directorId;
