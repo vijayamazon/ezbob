@@ -103,7 +103,8 @@
 
 				Log.InfoFormat("GetConsumerInfo: checking cache for {2} id {3} firstName: {0}, surname: {1} birthday: {4}, postcode: {5}", firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode);
 
-				ExperianConsumerData cachedResponse = ObjectFactory.GetInstance<IEzServiceAccessor>().LoadExperianConsumer(customerId, directorId, null);
+				ExperianConsumerData cachedResponse = ObjectFactory.GetInstance<IEzServiceAccessor>()
+					.LoadExperianConsumer(customerId, isDirector ?  directorId : (int?)null , null);
 
 				// debug mode
 				if (cachedResponse.ServiceLogId == null && surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
