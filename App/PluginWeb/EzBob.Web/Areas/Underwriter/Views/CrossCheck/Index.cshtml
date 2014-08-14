@@ -13,6 +13,7 @@
     Model.EBay.SellerInfo = Model.EBay.SellerInfo ?? new EbaySellerInfo();
     Model.EBay.SellerInfo.SellerPaymentAddress = Model.EBay.SellerInfo.SellerPaymentAddress ?? new MP_EbayUserAddressData();
     Model.Customer.PersonalInfo = Model.Customer.PersonalInfo ?? new PersonalInfo();
+    Model.PropertyStatus = Model.PropertyStatus ?? new PropertyStatusModel();
     CrossCheckModel.TriState nIsKnownToExperian = Model.IsExperianDirector(Model.Application);
 
     string sNameClass = "";

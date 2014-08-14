@@ -5,10 +5,12 @@
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Ezbob.Backend.Models;
+	using Infrastructure;
 	using Models;
 	using Infrastructure.csrf;
 	using Infrastructure.Attributes;
 	using NHibernate;
+	using ServiceClientProxy;
 	using log4net;
 
 	public class CustomerRelationsController : Controller {
@@ -24,8 +26,7 @@
 			CRMStatusesRepository crmStatusesRepository,
 			CRMActionsRepository crmActionsRepository,
 			CustomerRelationFollowUpRepository customerRelationFollowUpRepository,
-			CustomerRelationStateRepository customerRelationStateRepository
-		) {
+			CustomerRelationStateRepository customerRelationStateRepository, IWorkplaceContext context) {
 			_customerRelationsRepository = customerRelationsRepository;
 			_loanRepository = loanRepository;
 			_session = session;
@@ -34,6 +35,8 @@
 			_crmActionsRepository = crmActionsRepository;
 			_customerRelationFollowUpRepository = customerRelationFollowUpRepository;
 			_customerRelationStateRepository = customerRelationStateRepository;
+			_context = context;
+			_serviceClient = new ServiceClient();
 		} // constructor
 
 		#endregion constructor
@@ -57,7 +60,7 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult CrmStatic() {
 			try {
-				var ar = new ServiceClientProxy.ServiceClient().Instance.CrmLoadLookups();
+				var ar = _serviceClient.Instance.CrmLoadLookups();
 
 				return Json(new {
 					CrmActions = ar.Actions,
@@ -198,6 +201,35 @@
 
 		#endregion action CloseFollowUp
 
+		#region action SendSms
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonResult SendSms(int customerId, string phone, string content, bool isBroker)
+		{
+			try {
+				//var sendSmsResult = _serviceClient.Instance.SendSms(customerId, _context.UserId, phone, content);
+				//if (!sendSmsResult.Value) {
+				//	return Json(new { success = false, error = "Failed to send SMS via twilio" });
+				//}
+				var action = _crmActionsRepository.GetAll().FirstOrDefault(x => x.Name == "SMS");
+				var status = _crmStatusesRepository.GetAll().FirstOrDefault(x => x.Name == "Note for underwriting");
+				return SaveEntry("Out", 
+					action != null ? action.Id : 1, 
+					status != null ? status.Id : 1, 
+					null,
+					content, 
+					customerId, 
+					isBroker);
+			}
+			catch (Exception e)
+			{
+				Log.ErrorFormat("Exception while trying to close customer relations follow up:{0}", e);
+				return Json(new { success = false, error = "Error saving new customer relations follow up." });
+			} // try
+		} // CloseFollowUp
+		#endregion action SendSms
+
 		#endregion public
 
 		#region private
@@ -210,7 +242,8 @@
 		private readonly CustomerRelationStateRepository _customerRelationStateRepository;
 		private readonly LoanRepository _loanRepository;
 		private readonly ISession _session;
-
+		private readonly ServiceClient _serviceClient;
+		private readonly IWorkplaceContext _context;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CustomerRelationsController));
 
 		#endregion private
