@@ -208,10 +208,12 @@
 		public JsonResult SendSms(int customerId, string phone, string content, bool isBroker)
 		{
 			try {
-				//var sendSmsResult = _serviceClient.Instance.SendSms(customerId, _context.UserId, phone, content);
-				//if (!sendSmsResult.Value) {
-				//	return Json(new { success = false, error = "Failed to send SMS via twilio" });
-				//}
+				var sendSmsResult = _serviceClient.Instance.SendSms(customerId, _context.UserId, phone, content);
+				if (!sendSmsResult.Value)
+				{
+					return Json(new { success = false, error = "Failed to send SMS via twilio" });
+				}
+
 				var action = _crmActionsRepository.GetAll().FirstOrDefault(x => x.Name == "SMS");
 				var status = _crmStatusesRepository.GetAll().FirstOrDefault(x => x.Name == "Note for underwriting");
 				return SaveEntry("Out", 

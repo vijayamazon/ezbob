@@ -1,4 +1,5 @@
-﻿namespace EzBob.Backend.Strategies.Misc {
+﻿namespace EzBob.Backend.Strategies.Misc
+{
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -6,7 +7,6 @@
 	using System.Collections.Generic;
 
 	public class SendSms : AStrategy {
-		
 		public SendSms(int userId, int underwriterId, string sMobilePhone, string content, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog) {
 			m_nUserId = userId;
@@ -16,7 +16,8 @@
 			m_sContent = content;
 
 			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
+				(sr, bRowsetStart) =>
+				{
 					m_sAccountSid = sr["TwilioAccountSid"];
 					m_sAuthToken = sr["TwilioAuthToken"];
 					m_sFromNumber = sr["TwilioSendingNumber"];
@@ -32,20 +33,24 @@
 		} // Name
 
 		public override void Execute() {
+
+			//Debug mode
+			if (m_sMobilePhone == "01111111111") {
+				Result = true;
+				Log.Debug("Send SMS Debug mode");
+				return;
+			}
+
 			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
-
 			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
-
 			var message = (EzbobSmsMessage)twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, m_sContent, "");
-			
 			message.UserId = m_nUserId;
 			message.UnderwriterId = m_nUnderwriterId;
-			
+
 			DB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure,
-								   DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
-			
-			if (message.Status == null)
-			{
+							DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
+
+			if (message.Status == null) {
 				Result = false;
 				Log.Warn("Failed sending SMS to number:{0}", sendMobilePhone);
 				return;
@@ -65,6 +70,5 @@
 		private string m_sAccountSid;
 		private string m_sAuthToken;
 		private string m_sFromNumber;
-		
 	} // class GenerateMobileCode
 } // namespace
