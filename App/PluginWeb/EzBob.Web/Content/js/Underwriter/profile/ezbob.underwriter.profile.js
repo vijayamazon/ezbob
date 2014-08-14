@@ -380,12 +380,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 	ApproveBtnClick: function(e) {
 		if ($(e.currentTarget).hasClass('disabled'))
 			return false;
-
-		$('.editOfferDiv').hide();
-
-		$.cookie('editOfferVisible', false);
-		$(".profile-content").css({ 'margin-top': ($('#profileHead').height() + 10) + 'px', });
-
+        
 		if (this.loanInfoModel.get('InterestRate') <= 0) {
 			EzBob.ShowMessage('Wrong Interest Rate value (' + this.loanInfoModel.get('InterestRate') + '), please enter the valid value (above zero)', 'Error');
 			return false;
@@ -400,6 +395,16 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			EzBob.ShowMessage('Loan offer has expired. Set new validity date.', 'Error');
 			return false;
 		} // if
+
+	    if (this.personalInfoModel.get('CompanyExperianRefNum') == 'NotFound' && _.contains([1, 3, 5],this.loanInfoModel.get('TypeOfBusiness'))) {
+		    EzBob.ShowMessage('Customer with limited/pship business type have selected company not found, this must be fixed in order to approve a loan', 'Error');
+		    return false;
+		}
+	    
+	    $('.editOfferDiv').hide();
+
+	    $.cookie('editOfferVisible', false);
+	    $(".profile-content").css({ 'margin-top': ($('#profileHead').height() + 10) + 'px', });
 
 		this.skipPopupForApprovalWithoutAML = this.loanInfoModel.get('SkipPopupForApprovalWithoutAML');
 
@@ -502,7 +507,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 				return;
 			} // if
 
-			console.log('Full customer model is', fullModel);
+			//console.log('Full customer model is', fullModel);
 
 			self.personalInfoModel.set({ Id: id }, { silent: true });
 			self.personalInfoModel.set(fullModel.get('PersonalInfoModel'), { silent: true });
