@@ -83,6 +83,10 @@
 		} // Execute
 
 		private ActionMetaData Execute(int? nCustomerID, int? nUserID, Type oStrategyType, params object[] args) {
+			return Execute(nCustomerID, nUserID, oStrategyType, null, args);
+		} // Execute
+
+		private ActionMetaData Execute(int? nCustomerID, int? nUserID, Type oStrategyType, Action<ActionMetaData> oOnException, params object[] args) {
 			ActionMetaData amd = null;
 
 			try {
@@ -125,12 +129,21 @@
 			}
 			catch (Exception e) {
 				if (amd != null) {
-					amd.Comment = e.Message;
+					amd.Comment += " Exception caught: " + e.Message;
 					SaveActionStatus(amd, ActionStatus.Failed);
 				} // if
 
 				if (!(e is AException))
 					Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
+
+				if (oOnException != null) {
+					try {
+						oOnException(amd);
+					}
+					catch (Exception ie) {
+						Log.Alert(ie, "Exception during executing of OnException handler of " + oStrategyType + " strategy.");
+					} // try
+				} // if
 
 				throw new FaultException(e.Message);
 			} // try
@@ -213,7 +226,7 @@
 					mostInnerException = mostInnerException.InnerException;
 
 				if (amd != null) {
-					amd.Comment = mostInnerException.Message;
+					amd.Comment += " Exception caught: " + mostInnerException.Message;
 					SaveActionStatus(amd, ActionStatus.Failed);
 				} // if
 

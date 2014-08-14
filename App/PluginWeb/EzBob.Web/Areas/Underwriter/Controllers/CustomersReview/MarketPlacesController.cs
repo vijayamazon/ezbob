@@ -150,7 +150,6 @@
 				throw new Exception("Strategy already started");
 
 			var customer = mp.Customer;
-			_customerMarketplaces.ClearUpdatingEnd(umi);
 
 			switch (mp.Marketplace.Name)
 			{
@@ -206,7 +205,6 @@
 				if (isRefreshed)
 				{
 					var customer = mp.Customer;
-					_customerMarketplaces.ClearUpdatingEnd(umi);
 					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true);
 					return View(new { success = true });
 				}

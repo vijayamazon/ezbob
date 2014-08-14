@@ -16,7 +16,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE MP_CustomerMarketPlace SET
-		UpdatingStart = @UpdatingStart
+		UpdatingStart = @UpdatingStart,
+		UpdatingEnd = NULL
 	WHERE
 		Id = @MarketplaceID
 
