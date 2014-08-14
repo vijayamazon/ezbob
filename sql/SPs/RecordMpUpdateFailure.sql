@@ -2,24 +2,24 @@ IF OBJECT_ID('RecordMpUpdateFailure') IS NULL
 	EXECUTE('CREATE PROCEDURE RecordMpUpdateFailure AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE RecordMpUpdateFailure
-@MpId INT
+@MpId INT,
+@Error NVARCHAR(MAX),
+@Now DATETIME
 AS
 BEGIN
-	DECLARE 
-		@Error NVARCHAR(MAX),
-		@EndTime DATETIME
-		
-	SELECT @Error = UpdateError, @EndTime = UpdatingEnd FROM MP_CustomerMarketPlace WHERE Id = @MpId
-	
-	IF @Error IS NOT NULL AND @Error != ''
-	BEGIN
-		UPDATE MP_CustomerMarketPlace SET UpdateError = 'Strategy failed' WHERE Id = @MpId
-	END
-	
-	IF @EndTime IS NULL
-	BEGIN
-		UPDATE MP_CustomerMarketPlace SET UpdatingEnd = GETUTCDATE() WHERE Id = @MpId
-	END
+	SET NOCOUNT ON;
+
+	UPDATE MP_CustomerMarketPlace SET
+		UpdatingEnd = @Now,
+		UpdateError = CASE
+			WHEN @Error IS NOT NULL AND @Error != '' THEN @Error
+			ELSE 'Strategy failed'
+		END
+	WHERE
+		Id = @MpId
 END
 GO

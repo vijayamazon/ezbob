@@ -7,6 +7,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	using System.Web;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Backend.Models;
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
@@ -86,15 +87,17 @@ namespace EzBob.Models.Marketplaces.Builders
 			mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
 		}
 
-		public void UpdateLastTransactionDate(MP_CustomerMarketPlace mp)
-		{
-			mp.LastTransactionDate = (
-				!mp.LastTransactionDate.HasValue || (
-					mp.UpdatingEnd.HasValue && mp.LastTransactionDate.Value < mp.UpdatingEnd.Value.AddDays(-2)
-				)
-			)
-			? GetLastTransaction(mp)
-			: mp.LastTransactionDate;
+		public void UpdateLastTransactionDate(MP_CustomerMarketPlace mp) {
+			bool bShouldLastTransactionDateBeUpdated =
+				!mp.LastTransactionDate.HasValue ||
+				(mp.UpdatingEnd.HasValue && mp.LastTransactionDate.Value < mp.UpdatingEnd.Value.AddDays(-2));
+
+			if (!bShouldLastTransactionDateBeUpdated)
+				return;
+
+			mp.LastTransactionDate = GetLastTransaction(mp);
+
+			ObjectFactory.GetInstance<CustomerMarketPlaceRepository>().SaveOrUpdate(mp);
 		}
 
 		public virtual DateTime? GetSeniority(MP_CustomerMarketPlace mp)

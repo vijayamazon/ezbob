@@ -22,7 +22,6 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
         DateTime? GetLastEbayOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
         DateTime? GetLastPayPalTransactionRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
         MP_CustomerMarketPlace GetMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
-        void ClearUpdatingEnd(int marketplaceId);
     }
 
     public class CustomerMarketPlaceRepository : NHibernateRepositoryBase<MP_CustomerMarketPlace>, ICustomerMarketPlaceRepository
@@ -147,13 +146,6 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
         {
             //return GetAll().FirstOrDefault(cmp => cmp.Id == databaseCustomerMarketPlace.Id);
 	        return Get(databaseCustomerMarketPlace.Id);
-        }
-
-        public void ClearUpdatingEnd(int marketplaceId)
-        {
-            var mp = Get(marketplaceId);
-            mp.UpdatingEnd = null;
-            Update(mp);
         }
 
 	    private SqlRetryer m_oRetryer;
