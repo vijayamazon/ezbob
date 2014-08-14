@@ -1,0 +1,26 @@
+﻿@model dynamic
+
+<script type="text/template" id="send-sms-template">
+    <div>
+        <form id="customer-relations-form" class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label">
+                    Phone:
+                </label>
+                <div class="controls controls-row">
+                    <input type="text" id="Phone" name="Phone" class="form-control" value="<%-phone%>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Content:</label>
+                <div class="controls controls-row">
+                    <textarea id="Content" name="Content" maxlength="1000" style="width: 100%; height: 100px;"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="pull-right">
+        <button class="btn default-sms" data-default="<%-customerName%>, we tried to contact you but no reply, please contact us on 0800-011-4787 thanks, Ros from ezbob">Default SMS</button>
+        <button class="btn btn-primary">Send</button>
+    </div>
+</script>

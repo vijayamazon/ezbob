@@ -1,35 +1,49 @@
 ﻿@{
     Html.RenderPartial("CustomerRelations/AddCustomerRelationsEntry");
     Html.RenderPartial("CustomerRelations/AddCustomerRelationsFollowUp");
+    Html.RenderPartial("CustomerRelations/SendSms");
 }
 
 <script id="customerRelationsTemplate" type="text/template">
     <div class="box row">
         <div class="col-md-12">
             <div class="box-content">
-                <button class="btn btn-primary addNewCustomerRelationsEntry">Add New Entry</button>
-                <button class="btn btn-primary addFollowUp">Add Follow up</button>
-                <span>Potential rank:</span>
-                <div style="width: 150px; display: inline-block;">
-                    <select class="form_field selectheight" id="Rank" name="Rank">
-                        <option></option>
-                        <% _.each(ranks, function(rank) { %>
+                <div class="box crm-head">
+                    <div class="col-md-3 right-seperator">
+                        <button class="btn btn-primary addNewCustomerRelationsEntry">Add New Entry</button>
+                        <button class="btn btn-primary addFollowUp">Add Follow up</button>
+                    </div>
+                    <div class="col-md-3 right-seperator">
+                        <span>Potential rank:</span>
+                        <select class="selectheight" id="Rank" name="Rank">
+                            <option></option>
+                            <% _.each(ranks, function(rank) { %>
                         <option value="<%- rank.Id %>"><%- rank.Name %></option>
-                        <%});%>
-                    </select>
-                </div>
-                <span>Last status: <%-lastStatus%></span>
+                            <%});%>
+                        </select>
+                    </div>
 
-                <%if(lastFollowUp && !lastFollowUp.IsClosed) {%>
-                <div class="" style="width: 200px; display: inline-block">
-                    <label class="red followUp" title="<%-lastFollowUp.Comment%> <%-EzBob.formatDate2(lastFollowUp.FollowUpDate)%>" data-toggle="tooltip">Followed up</label>
-                    <button id="closeFollowUp" class="btn btn-primary">Close last</button>
-                </div>
-                <%}%>
+                    <%if(lastStatus) {%>
+                    <div class="col-md-3 right-seperator">
+                        <span>Last status: <%-lastStatus%></span>
+                    </div>
+                    <%}%>
+
+                    <%if(lastFollowUp && !lastFollowUp.IsClosed) {%>
+                    <div class="col-md-3 right-seperator">
+                        <label class="red followUp" title="<%-lastFollowUp.Comment%> <%-EzBob.formatDate2(lastFollowUp.FollowUpDate)%>" data-toggle="tooltip">Followed up</label>
+                        <button id="closeFollowUp" class="btn btn-primary">Close last</button>
+                    </div>
+                    <%}%>
     
-                <table class="table centered">
-                    <thead class="box">
-                        <tr class="box-title">
+                    <div class="col-md-3 right-seperator">
+                        <span>phone <%-isPhoneVerified ? '' : 'not ' %>verified</span>
+                        <button id="sendSms" class="btn btn-primary">Send SMS</button>
+                    </div>
+                </div>
+                <table class="table centered box">
+                    <thead class="box-title">
+                        <tr>
                             <th>Date</th>
                             <th>User</th>
                             <th>Action</th>
@@ -58,9 +72,9 @@
 
                 <button class="btn btn-primary toggleSystemCrm" data-toggle="tooltip" title="show/hide system events"><i class="fa fa-search-plus"></i></button>
 
-                <table class="table centered">
-                    <thead class="box">
-                        <tr class="box-title">
+                <table class="table centered box">
+                    <thead class="box-title">
+                        <tr>
                             <th>Created</th>
                             <th>Follow up Date</th>
                             <th>Comment</th>

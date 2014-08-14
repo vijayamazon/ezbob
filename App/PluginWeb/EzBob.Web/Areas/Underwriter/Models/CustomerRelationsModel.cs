@@ -7,6 +7,10 @@
 
 	public class CrmModel
 	{
+		public string CustomerName { get; set; }
+		public string Phone { get; set; }
+		public bool IsPhoneVerified { get; set; }
+
 		public IOrderedEnumerable<CustomerRelationsModel> CustomerRelations { get; set; }
 		public IOrderedEnumerable<FollowUpModel> FollowUps { get; set; }
 		public CRMRanks CurrentRank { get; set; }

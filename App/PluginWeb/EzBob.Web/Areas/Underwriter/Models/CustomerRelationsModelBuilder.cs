@@ -1,7 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models {
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
+	using EZBob.DatabaseLib.Model.Database.Broker;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using NHibernate;
 
 	public class CustomerRelationsModelBuilder {
@@ -10,6 +12,8 @@
 			_customerRelationsRepository = customerRelationsRepository;
 			_customerRelationFollowUpRepository = new CustomerRelationFollowUpRepository(session);
 			_customerRelationStateRepository = new CustomerRelationStateRepository(session);
+			_customerRepository = new CustomerRepository(session);
+			_brokerRepository = new BrokerRepository(session);
 		} // constructor
 
 		public CrmModel Create(int customerId) {
@@ -52,6 +56,20 @@
 				Id = x.Id
 			}).OrderByDescending(x => x.FollowUpDate);
 
+			var customer = _customerRepository.ReallyTryGet(customerId);
+			if (customer != null && customer.PersonalInfo != null) {
+				crmModel.CustomerName = customer.PersonalInfo.FirstName;
+				crmModel.Phone = customer.PersonalInfo.MobilePhone;
+				crmModel.IsPhoneVerified = customer.PersonalInfo.MobilePhoneVerified;
+			}
+			if(customer == null) {
+				var broker = _brokerRepository.GetByUserId(customerId);
+				if (broker != null) {
+					crmModel.CustomerName = broker.ContactName;
+					crmModel.Phone = broker.ContactMobile;
+					crmModel.IsPhoneVerified = true;
+				}
+			}
 			return crmModel;
 		} // Create
 
@@ -59,5 +77,7 @@
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly CustomerRelationStateRepository _customerRelationStateRepository;
 		private readonly ICustomerRelationFollowUpRepository _customerRelationFollowUpRepository;
+		private readonly CustomerRepository _customerRepository;
+		private readonly BrokerRepository _brokerRepository;
 	} // class CustomerRelationsModelBuilder
 } // namespace
