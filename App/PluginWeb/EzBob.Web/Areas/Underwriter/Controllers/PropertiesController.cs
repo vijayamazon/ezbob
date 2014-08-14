@@ -3,7 +3,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Text.RegularExpressions;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
@@ -45,7 +44,7 @@
 			int propertyCounter = 0;
 			var data = new PropertiesModel();
 
-			if (customer.PropertyStatus.IsOwnerOfMainAddress)
+			if (customer.PropertyStatus != null && customer.PropertyStatus.IsOwnerOfMainAddress)
 			{
 				var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
 				if (currentAddress != null) 
