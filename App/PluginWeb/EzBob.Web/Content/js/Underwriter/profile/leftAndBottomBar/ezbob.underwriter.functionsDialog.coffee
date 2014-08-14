@@ -219,7 +219,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
                 ManualAddressWarning: data.ManualAddressWarning
                 customer: that.model.get('CustomerName')
                 refNum: that.model.get('CustomerRefNum')
-                isPersonal: that.model.get('TypeOfBusiness') of [0, 4, 2]
+                isPersonal: _.contains([0, 4, 2], that.model.get('TypeOfBusiness'))
             )
             scheduleView.render()
             that.$el.find("#loan-schedule .simple-well").hide()
