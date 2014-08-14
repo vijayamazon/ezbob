@@ -1,6 +1,8 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models {
+	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Broker;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -14,6 +16,7 @@
 			_customerRelationStateRepository = new CustomerRelationStateRepository(session);
 			_customerRepository = new CustomerRepository(session);
 			_brokerRepository = new BrokerRepository(session);
+			customerPhoneRepository = new CustomerPhoneRepository(session);
 		} // constructor
 
 		public CrmModel Create(int customerId) {
@@ -39,6 +42,14 @@
 			var crmModel = new CrmModel {
 				CustomerRelations = crm.OrderByDescending(x => x.DateTime)
 			};
+
+			crmModel.PhoneNumbers = new List<CrmPhoneNumber>();
+			var phoneNumbers = customerPhoneRepository.GetAll().Where(x => x.CustomerId == customerId);
+			foreach (var phone in phoneNumbers)
+			{
+				var crmPhoneNumber = new CrmPhoneNumber {IsVerified = phone.IsVerified, Number = phone.Phone, Type = phone.PhoneType};
+				crmModel.PhoneNumbers.Add(crmPhoneNumber);
+			}
 
 			var state = _customerRelationStateRepository.GetByCustomer(customerId);
 			if (state != null) {
@@ -79,5 +90,6 @@
 		private readonly ICustomerRelationFollowUpRepository _customerRelationFollowUpRepository;
 		private readonly CustomerRepository _customerRepository;
 		private readonly BrokerRepository _brokerRepository;
+		private readonly CustomerPhoneRepository customerPhoneRepository;
 	} // class CustomerRelationsModelBuilder
 } // namespace

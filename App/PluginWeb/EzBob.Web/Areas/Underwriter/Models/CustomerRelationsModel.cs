@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using System;
@@ -17,6 +18,14 @@
 		public bool IsFollowed { get; set; }
 		public string LastStatus { get; set; }
 		public CustomerRelationFollowUp LastFollowUp { get; set; }
+		public List<CrmPhoneNumber> PhoneNumbers { get; set; }
+	}
+
+	public class CrmPhoneNumber
+	{
+		public string Number { get; set; }
+		public bool IsVerified { get; set; }
+		public string Type { get; set; }
 	}
 
 	public class FollowUpModel

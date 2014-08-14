@@ -27,7 +27,20 @@
                         <select class="form_field selectheight" id="Action" name="Action">
                             <option></option>
                             <% _.each(actions, function(action){ %>
-                                        <option value="<%- action.Id %>"><%- action.Name %></option>
+                                <option value="<%- action.Id %>"><%- action.Name %></option>
+                            <%});%>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div id="phoneNumbersSection" class="control-group form_field_container">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span class="active attardi-has-data">Phone #</span>
+                        <select class="form_field selectheight" id="PhoneNumber" name="PhoneNumber">
+                            <option></option>
+                            <% _.each(phoneNumbers, function(phone) { %>
+                                <option value="<%- phone.Number %>"><%- phone.Type %>: <%- phone.Number %><%- phone.IsVerified ? ' (Verified)' : '' %></option>
                             <%});%>
                         </select>
                     </label>
@@ -57,7 +70,7 @@
                         <select class="form_field selectheight" id="Rank" name="Rank">
                             <option></option>
                             <% _.each(ranks, function(rank) { %>
-                                        <option value="<%- rank.Id %>"><%- rank.Name %></option>
+                                <option value="<%- rank.Id %>"><%- rank.Name %></option>
                             <%});%>
                         </select>
                     </label>

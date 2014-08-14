@@ -86,7 +86,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult SaveEntry(string type, int action, int status, int? rank, string comment, int customerId, bool isBroker) {
+		public JsonResult SaveEntry(string type, int action, int status, int? rank, string comment, int customerId, bool isBroker, string phoneNumber) {
 			try {
 				var newEntry = new CustomerRelations {
 					CustomerId = customerId,
@@ -98,6 +98,7 @@
 					Comment = comment,
 					Timestamp = DateTime.UtcNow,
 					IsBroker = isBroker,
+					PhoneNumber = phoneNumber
 				};
 
 				_customerRelationsRepository.SaveOrUpdate(newEntry);
@@ -222,7 +223,8 @@
 					null,
 					content, 
 					customerId, 
-					isBroker);
+					isBroker,
+					phone);
 			}
 			catch (Exception e)
 			{

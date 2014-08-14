@@ -7,6 +7,8 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
 
     events: {
         'keyup #Comment': 'commentKeyup',
+        'change #Action': 'determinePhoneNumbersState',
+        'change input[name="Type"]': 'determinePhoneNumbersState'
     }, // events
     jqoptions: function () {
         return {
@@ -50,13 +52,27 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
             actions: EzBob.CrmActions,
             statuses: _.filter(EzBob.CrmStatuses, function(s) { return s.IsBroker === bIsBroker; }),
             ranks: EzBob.CrmRanks,
+            phoneNumbers: this.model.get("PhoneNumbers")
         };
     }, // serializeData
 
     commentKeyup: function (el) {
         return this.ui.Comment.val(this.ui.Comment.val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
     }, // commentKeyup
+    
+    determinePhoneNumbersState: function () {
+        var isTypeOutgoing = document.getElementById("Type_Out").checked;
+        var actionElement = document.getElementById("Action");
+        var isActionCall = actionElement.options[actionElement.selectedIndex].text;
 
+        var phoneNumbersSectionJqElement = $("#phoneNumbersSection");
+        if (isTypeOutgoing && isActionCall == 'Call') {
+            phoneNumbersSectionJqElement.removeClass('hide');
+        } else {
+            phoneNumbersSectionJqElement.addClass('hide');
+        }
+    },
+    
     ui: {
         Type: 'input[name="Type"]:checked',
         Status: '#Status',
@@ -65,6 +81,7 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         RankSpan: '.rank-span',
         RankDiv: '.rank-div',
         Comment: '#Comment',
+        PhoneNumber: '#PhoneNumber'
     }, // ui
 
     onSave: function () {
@@ -74,6 +91,11 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
         if (this.ui.Action[0].selectedIndex === 0)
             return false;
 
+        var phoneNumber = '';
+        if (this.ui.PhoneNumber.length > 0) {
+            phoneNumber = this.ui.PhoneNumber[0].value;
+        }
+
         BlockUi();
         var opts = {
             type: this.$el.find('input[name="Type"]:checked').data("value"),
@@ -82,7 +104,8 @@ EzBob.Underwriter.AddCustomerRelationsEntry = EzBob.BoundItemView.extend({
             rank: this.ui.Rank[0].value,
             comment: this.ui.Comment.val(),
             customerId: this.customerId,
-			isBroker: this.isBroker,
+            isBroker: this.isBroker,
+            phoneNumber: phoneNumber
         };
 
         if (this.onbeforesave)

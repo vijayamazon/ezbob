@@ -18,6 +18,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations {
 		public virtual string Comment { get; set; }
 		public virtual DateTime Timestamp { get; set; }
 		public virtual bool? IsBroker { get; set; }
+		public virtual string PhoneNumber { get; set; }
 	} // class CustomerRelations
 
 	#endregion class CustomerRelations

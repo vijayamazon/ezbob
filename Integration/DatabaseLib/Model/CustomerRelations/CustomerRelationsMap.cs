@@ -15,6 +15,7 @@ namespace EZBob.DatabaseLib.Model.CustomerRelations {
 			Map(x => x.Comment).Length(1000);
 			Map(x => x.Timestamp);
 			Map(x => x.IsBroker);
+			Map(x => x.PhoneNumber);
 		} // constructor
 	} // class CustomerRelationsMap
 } // namespace
