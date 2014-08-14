@@ -16,6 +16,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual bool IsVerified { get; set; }
 		public virtual DateTime? VerificationDate { get; set; }
 		public virtual string VerifiedBy { get; set; }
+		public virtual bool IsCurrent { get; set; }
 	}
 
 	public class CustomerPhoneMap : ClassMap<CustomerPhone>
@@ -31,6 +32,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			Map(x => x.IsVerified);
 			Map(x => x.VerificationDate).CustomType<UtcDateTimeType>();
 			Map(x => x.VerifiedBy);
+			Map(x => x.IsCurrent);
 		}
 	}
 

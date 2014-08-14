@@ -101,31 +101,38 @@
 			return Json(res, JsonRequestBehavior.AllowGet);
 		}
 
-		private void VerifyPhone(CustomerPhone customerPhone)
+		private void VerifyPhone(CustomerPhone customerPhone, bool verified)
 		{
-			if (customerPhone != null)
-			{
-				customerPhone.IsVerified = true;
-				customerPhone.VerificationDate = DateTime.UtcNow;
-				customerPhone.VerifiedBy = User.Identity.Name;
-				customerPhoneRepository.SaveOrUpdate(customerPhone);
-			}
+			customerPhone.IsCurrent = false;
+			customerPhoneRepository.SaveOrUpdate(customerPhone);
+
+			var newCustomerPhoneEntry = new CustomerPhone
+				{
+					CustomerId = customerPhone.CustomerId,
+					IsCurrent = true,
+					Phone = customerPhone.Phone,
+					PhoneType = customerPhone.PhoneType,
+					IsVerified = verified,
+					VerificationDate = DateTime.UtcNow,
+					VerifiedBy = User.Identity.Name
+				};
+			customerPhoneRepository.SaveOrUpdate(newCustomerPhoneEntry);
 		}
 
 		[Ajax]
 		[HttpPost]
-		public void VerifyMobilePhone(int customerId)
+		public void VerifyMobilePhone(int customerId, bool verifiedPreviousState)
 		{
-			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Mobile");
-			VerifyPhone(customerPhone);
+			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Mobile" && x.IsCurrent);
+			VerifyPhone(customerPhone, !verifiedPreviousState);
 		}
 
 		[Ajax]
 		[HttpPost]
-		public void VerifyDaytimePhone(int customerId)
+		public void VerifyDaytimePhone(int customerId, bool verifiedPreviousState)
 		{
-			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Daytime");
-			VerifyPhone(customerPhone);
+			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Daytime" && x.IsCurrent);
+			VerifyPhone(customerPhone, !verifiedPreviousState);
 		}
 
 		[Ajax]

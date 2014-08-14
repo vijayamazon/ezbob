@@ -190,33 +190,39 @@
 				DaytimePhone = customer.PersonalInfo.DaytimePhone;
 			} // if
 
-			List<CustomerPhone> customerPhones =  customerPhoneRepository.GetAll().Where(x => x.CustomerId == customer.Id && x.IsVerified).ToList();
+			List<CustomerPhone> customerPhones =  customerPhoneRepository.GetAll().Where(x => x.CustomerId == customer.Id && x.IsCurrent).ToList();
 			MobileTooltip = "Click to verify";
 			DaytimeTooltip = "Click to verify";
 			foreach (CustomerPhone customerPhone in customerPhones)
 			{
 				if (customerPhone.PhoneType == "Mobile")
 				{
-					MobilePhoneVerified = true;
-					if (!string.IsNullOrEmpty(customerPhone.VerifiedBy) && customerPhone.VerificationDate.HasValue)
+					MobilePhoneVerified = customerPhone.IsVerified;
+					if (MobilePhoneVerified)
 					{
-						MobileTooltip = string.Format("Verified by {0} at {1}", customerPhone.VerifiedBy, customerPhone.VerificationDate.Value.ToShortDateString());
-					}
-					else
-					{
-						MobileTooltip = "Verified";
+						if (!string.IsNullOrEmpty(customerPhone.VerifiedBy) && customerPhone.VerificationDate.HasValue)
+						{
+							MobileTooltip = string.Format("Verified by {0} at {1}", customerPhone.VerifiedBy, customerPhone.VerificationDate.Value.ToShortDateString());
+						}
+						else
+						{
+							MobileTooltip = "Verified";
+						}
 					}
 				}
 				else if (customerPhone.PhoneType == "Daytime")
 				{
-					DaytimePhoneVerified = true;
-					if (!string.IsNullOrEmpty(customerPhone.VerifiedBy) && customerPhone.VerificationDate.HasValue)
+					DaytimePhoneVerified = customerPhone.IsVerified;
+					if (DaytimePhoneVerified)
 					{
-						DaytimeTooltip = string.Format("Verified by {0} at {1}", customerPhone.VerifiedBy, customerPhone.VerificationDate.Value.ToShortDateString());
-					}
-					else
-					{
-						DaytimeTooltip = "Verified";
+						if (!string.IsNullOrEmpty(customerPhone.VerifiedBy) && customerPhone.VerificationDate.HasValue)
+						{
+							DaytimeTooltip = string.Format("Verified by {0} at {1}", customerPhone.VerifiedBy, customerPhone.VerificationDate.Value.ToShortDateString());
+						}
+						else
+						{
+							DaytimeTooltip = "Verified";
+						}
 					}
 				}
 			}

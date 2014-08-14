@@ -400,26 +400,22 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 	}, // editEmail
 
 	verifyMobile: function () {
-	    if (!this.model.get('MobilePhoneVerified')) {
-	        var that = this;
-	        BlockUi("on");
-	        $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyMobilePhone", { customerId: this.model.get('Id') }).done(function() {
-	            BlockUi("off");
-	            that.model.fetch();
-	        });
-	    }
+	    var that = this;
+	    BlockUi("on");
+	    $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyMobilePhone", { customerId: this.model.get('Id'), verifiedPreviousState: this.model.get('MobilePhoneVerified') }).done(function () {
+	        BlockUi("off");
+	        that.model.fetch();
+	    });
 	    return false;
 	},
 
 	verifyDaytime: function () {
-	    if (!this.model.get('DaytimePhoneVerified')) {
-	        var that = this;
-	        BlockUi("on");
-	        $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyDaytimePhone", { customerId: this.model.get('Id') }).done(function() {
-	            BlockUi("off");
-	            that.model.fetch();
-	        });
-	    }
+	    var that = this;
+	    BlockUi("on");
+	    $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyDaytimePhone", { customerId: this.model.get('Id'), verifiedPreviousState: this.model.get('DaytimePhoneVerified') }).done(function () {
+	        BlockUi("off");
+	        that.model.fetch();
+	    });
 	    return false;
 	},
 }); // EzBob.Underwriter.PersonInfoView

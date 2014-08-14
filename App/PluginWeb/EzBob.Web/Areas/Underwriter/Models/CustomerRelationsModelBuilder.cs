@@ -44,7 +44,7 @@
 			};
 
 			crmModel.PhoneNumbers = new List<CrmPhoneNumber>();
-			var phoneNumbers = customerPhoneRepository.GetAll().Where(x => x.CustomerId == customerId);
+			var phoneNumbers = customerPhoneRepository.GetAll().Where(x => x.CustomerId == customerId && x.IsCurrent);
 			foreach (var phone in phoneNumbers)
 			{
 				var crmPhoneNumber = new CrmPhoneNumber {IsVerified = phone.IsVerified, Number = phone.Phone, Type = phone.PhoneType};

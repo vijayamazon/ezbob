@@ -957,7 +957,8 @@
 			{
 				CustomerId = customerId,
 				PhoneType = "Mobile",
-				Phone = mobilePhone
+				Phone = mobilePhone,
+				IsCurrent = true
 			};
 			customerPhoneRepository.SaveOrUpdate(customerMobilePhoneEntry);
 
@@ -965,7 +966,8 @@
 			{
 				CustomerId = customerId,
 				PhoneType = "Daytime",
-				Phone = daytimePhone
+				Phone = daytimePhone,
+				IsCurrent = true
 			};
 			customerPhoneRepository.SaveOrUpdate(customerDaytimePhoneEntry);
 		}
