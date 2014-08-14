@@ -101,16 +101,23 @@
 			return Json(res, JsonRequestBehavior.AllowGet);
 		}
 
+		private void VerifyPhone(CustomerPhone customerPhone)
+		{
+			if (customerPhone != null)
+			{
+				customerPhone.IsVerified = true;
+				customerPhone.VerificationDate = DateTime.UtcNow;
+				customerPhone.VerifiedBy = User.Identity.Name;
+				customerPhoneRepository.SaveOrUpdate(customerPhone);
+			}
+		}
+
 		[Ajax]
 		[HttpPost]
 		public void VerifyMobilePhone(int customerId)
 		{
 			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Mobile");
-			if (customerPhone != null)
-			{
-				customerPhone.IsVerified = true;
-				customerPhoneRepository.SaveOrUpdate(customerPhone);
-			}
+			VerifyPhone(customerPhone);
 		}
 
 		[Ajax]
@@ -118,11 +125,7 @@
 		public void VerifyDaytimePhone(int customerId)
 		{
 			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Daytime");
-			if (customerPhone != null)
-			{
-				customerPhone.IsVerified = true;
-				customerPhoneRepository.SaveOrUpdate(customerPhone);
-			}
+			VerifyPhone(customerPhone);
 		}
 
 		[Ajax]

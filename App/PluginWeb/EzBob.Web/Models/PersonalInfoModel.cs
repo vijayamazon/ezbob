@@ -32,6 +32,8 @@
 		public string DaytimePhone { get; set; }
 		public bool MobilePhoneVerified { get; set; }
 		public bool DaytimePhoneVerified { get; set; }
+		public string MobileTooltip { get; set; }
+		public string DaytimeTooltip { get; set; }
 		public string RegistrationDate { get; set; }
 		public List<string> IndustryFields { get; set; }
 		public string UserStatus { get; set; }
@@ -189,15 +191,33 @@
 			} // if
 
 			List<CustomerPhone> customerPhones =  customerPhoneRepository.GetAll().Where(x => x.CustomerId == customer.Id && x.IsVerified).ToList();
+			MobileTooltip = "Click to verify";
+			DaytimeTooltip = "Click to verify";
 			foreach (CustomerPhone customerPhone in customerPhones)
 			{
 				if (customerPhone.PhoneType == "Mobile")
 				{
 					MobilePhoneVerified = true;
+					if (!string.IsNullOrEmpty(customerPhone.VerifiedBy) && customerPhone.VerificationDate.HasValue)
+					{
+						MobileTooltip = string.Format("Verified by {0} at {1}", customerPhone.VerifiedBy, customerPhone.VerificationDate.Value.ToShortDateString());
+					}
+					else
+					{
+						MobileTooltip = "Verified";
+					}
 				}
 				else if (customerPhone.PhoneType == "Daytime")
 				{
 					DaytimePhoneVerified = true;
+					if (!string.IsNullOrEmpty(customerPhone.VerifiedBy) && customerPhone.VerificationDate.HasValue)
+					{
+						DaytimeTooltip = string.Format("Verified by {0} at {1}", customerPhone.VerifiedBy, customerPhone.VerificationDate.Value.ToShortDateString());
+					}
+					else
+					{
+						DaytimeTooltip = "Verified";
+					}
 				}
 			}
 

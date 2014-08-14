@@ -400,24 +400,26 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 	}, // editEmail
 
 	verifyMobile: function () {
-	    var that = this;
-	    BlockUi("on");
-	    $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyMobilePhone", { customerId: this.model.get('Id') }).done(function () {
-	        BlockUi("off");
-	        that.model.fetch();
-	    });
-
+	    if (!this.model.get('MobilePhoneVerified')) {
+	        var that = this;
+	        BlockUi("on");
+	        $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyMobilePhone", { customerId: this.model.get('Id') }).done(function() {
+	            BlockUi("off");
+	            that.model.fetch();
+	        });
+	    }
 	    return false;
 	},
 
 	verifyDaytime: function () {
-	    var that = this;
-	    BlockUi("on");
-	    $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyDaytimePhone", { customerId: this.model.get('Id') }).done(function () {
-	        BlockUi("off");
-	        that.model.fetch();
-	    });
-
+	    if (!this.model.get('DaytimePhoneVerified')) {
+	        var that = this;
+	        BlockUi("on");
+	        $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyDaytimePhone", { customerId: this.model.get('Id') }).done(function() {
+	            BlockUi("off");
+	            that.model.fetch();
+	        });
+	    }
 	    return false;
 	},
 }); // EzBob.Underwriter.PersonInfoView
