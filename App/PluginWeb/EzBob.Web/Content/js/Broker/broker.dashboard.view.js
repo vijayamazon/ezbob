@@ -63,6 +63,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 	displayBrokerProperties: function() {
 		var oProps = this.router.getBrokerProperties();
 
+		console.log('broker properties', oProps);
+
 		if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
 			return;
 
