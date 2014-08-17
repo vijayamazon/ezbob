@@ -7,9 +7,8 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 ALTER PROCEDURE GetCustomerAddresses
-@CustomerId INT
+@CustomerId INT, @DirectorId INT = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -27,39 +26,78 @@ BEGIN
 		@Line4Prev VARCHAR(255),
 		@Line5Prev VARCHAR(255),
 		@Line6Prev VARCHAR(255)
-
-	SELECT
-		@line1 = ca.Line1,
-		@Line2 = ca.Line2,
-		@Line3 = ca.Line3,
-		@Line4 = ca.Town,
-		@Line5 = ca.County,
-		@Line6 = ca.Postcode
-	FROM
-		CustomerAddress ca
-	WHERE
-		ca.addressType = '1'
-		AND 
-		ca.CustomerId = @CustomerId
-		AND 
-		ca.Line1 IS NOT NULL
-
-	SELECT
-		@Line1Prev = ca.Line1,
-		@Line2Prev = ca.Line2, 
-		@Line3Prev = ca.Line3,
-		@Line4Prev = ca.Town, 
-		@Line5Prev = ca.County,
-		@Line6Prev = ca.Postcode
-	FROM
-		CustomerAddress ca
-	WHERE 
-		ca.addressType = '2'
-		AND
-		ca.CustomerId = @CustomerId
-		AND
-		ca.Line1 IS NOT NULL
-
+	IF @DirectorId IS NULL
+	BEGIN
+	
+		SELECT
+			@line1 = ca.Line1,
+			@Line2 = ca.Line2,
+			@Line3 = ca.Line3,
+			@Line4 = ca.Town,
+			@Line5 = ca.County,
+			@Line6 = ca.Postcode
+		FROM
+			CustomerAddress ca
+		WHERE
+			ca.addressType = '1'
+			AND 
+			ca.CustomerId = @CustomerId
+			AND 
+			ca.Line1 IS NOT NULL
+	
+		SELECT
+			@Line1Prev = ca.Line1,
+			@Line2Prev = ca.Line2, 
+			@Line3Prev = ca.Line3,
+			@Line4Prev = ca.Town, 
+			@Line5Prev = ca.County,
+			@Line6Prev = ca.Postcode
+		FROM
+			CustomerAddress ca
+		WHERE 
+			ca.addressType = '2'
+			AND
+			ca.CustomerId = @CustomerId
+			AND
+			ca.Line1 IS NOT NULL
+			
+	END
+	ELSE
+	BEGIN
+		SELECT
+			@line1 = ca.Line1,
+			@Line2 = ca.Line2,
+			@Line3 = ca.Line3,
+			@Line4 = ca.Town,
+			@Line5 = ca.County,
+			@Line6 = ca.Postcode
+		FROM
+			CustomerAddress ca
+		WHERE
+			ca.addressType = '1'
+			AND 
+			ca.DirectorId = @DirectorId
+			AND 
+			ca.Line1 IS NOT NULL
+	
+		SELECT
+			@Line1Prev = ca.Line1,
+			@Line2Prev = ca.Line2, 
+			@Line3Prev = ca.Line3,
+			@Line4Prev = ca.Town, 
+			@Line5Prev = ca.County,
+			@Line6Prev = ca.Postcode
+		FROM
+			CustomerAddress ca
+		WHERE 
+			ca.addressType = '2'
+			AND
+			ca.DirectorId = @DirectorId
+			AND
+			ca.Line1 IS NOT NULL
+	END
+	
+	
 	SELECT
 		@Line1 AS Line1, 
 		@Line2 AS Line2,
@@ -74,4 +112,5 @@ BEGIN
 		@Line5Prev AS Line5Prev,
 		@Line6Prev AS Line6Prev      
 END
+
 GO

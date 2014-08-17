@@ -15,7 +15,7 @@
 		{
 			this.customerId = customerId;
 			GetPersonalInfo();
-			customerAddress = new GetCustomerAddresses(this.customerId, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
+			customerAddress = new GetCustomerAddresses(this.customerId, null, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
 		}
 
 		public AmlChecker(

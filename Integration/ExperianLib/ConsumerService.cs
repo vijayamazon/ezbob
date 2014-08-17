@@ -91,7 +91,7 @@
 			InputLocationDetailsMultiLineLocation mlLocation,
 			string applicationType,
 			int customerId,
-			int directorId,
+			int? directorId,
 			bool checkInCacheOnly,
 			bool isDirector,
 			bool forceCheck
@@ -224,7 +224,7 @@
 			InputLocationDetailsMultiLineLocation mlLocation,
 			string applicationType,
 			int customerId,
-			int directorId,
+			int? directorId,
 			string firstName,
 			string surname,
 			DateTime? birthDate,
