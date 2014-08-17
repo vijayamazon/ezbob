@@ -51,9 +51,9 @@
 			var fout = new StreamWriter(sFileName, false, Encoding.UTF8);
 
 			fout.WriteLine("{0}{1}{2}",
-				"Customer ID;Last Loan Date;Incorporation date;Company score;Company Score Date;",
-				"NDSPCII;NDSPCII Date;Company reg #;Company name;Credit limit;",
-				"NL Commercial Delphi Score;Probability of Default Score;Stability Odds"
+				"Customer ID,Last Loan Date,Incorporation date,Company score,Company Score Date,",
+				"NDSPCII,NDSPCII Date,Company reg #,Company name,Credit limit,",
+				"NL Commercial Delphi Score,Probability of Default Score,Stability Odds"
 			);
 
 			foreach (KeyValuePair<int, LoanDateScoreItem> pair in m_oResult)

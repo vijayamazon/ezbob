@@ -40,10 +40,11 @@
 			switch ((string)oRow["ServiceType"]) {
 			case "Consumer Request":
 				if (DateFits(ref m_oNdspciiDataDate, oInsertDate)) {
-					XmlDocument doc = ExtractXml(oRow["ResponseData"]);
+					ExperianConsumerData data = ExperianConsumerData.Load((long) oRow["ServiceLogID"], oDB, m_oLog);
 
-					if (doc != null)
-						AddNdspciiData(doc);
+					if (data != null && data.ServiceLogId != null) {
+						AddNdspciiData(data.CII);
+					}
 				} // if
 				break;
 
@@ -83,7 +84,7 @@
 		#region method ToOutput
 
 		public void ToOutput(StreamWriter fout) {
-			fout.WriteLine(string.Join(";", new string[] {
+			fout.WriteLine(string.Join(",", new string[] {
 				CustomerID.ToString(), m_oLastLoanDate.ToString("yyyy-MM-dd"),
 				(m_oIncorporationDate.HasValue ? m_oIncorporationDate.Value.ToString("yyyy-MM-dd") : ""),
 				m_nCompanyScore.ToString(), (m_oCompanyDataDate.HasValue ? m_oCompanyDataDate.Value.ToString("yyyy-MM-dd") : ""),
@@ -159,13 +160,8 @@
 
 		#region method AddNdspciiData
 
-		private void AddNdspciiData(XmlDocument doc) {
-			XmlNode oNode = doc.DocumentElement.SelectSingleNode("//NDSPCII");
-
-			if (oNode == null)
-				m_oLog.Warn("Failed to parse Experian output (NDSPCII) for customer {0}", CustomerID);
-			else
-				m_nNdspcii = Convert.ToInt32(oNode.InnerText.Trim());
+		private void AddNdspciiData(int? ndspcii) {
+			m_nNdspcii = ndspcii;
 		} // AddNdspciiDAta
 
 		#endregion method AddNdspciiData

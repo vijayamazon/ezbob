@@ -3,14 +3,14 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	using Database;
+	using Logger;
 	using Newtonsoft.Json;
 	using Utils;
 
 	[DataContract]
-	public class ExperianConsumerData
-	{
-		public ExperianConsumerData()
-		{
+	public class ExperianConsumerData {
+		public ExperianConsumerData() {
 			Cais = new List<ExperianConsumerDataCais>();
 			Applicants = new List<ExperianConsumerDataApplicant>();
 			Nocs = new List<ExperianConsumerDataNoc>();
@@ -122,9 +122,32 @@
 		[NonTraversable]
 		public List<ExperianConsumerDataCais> Cais { get; set; }
 
-		public override string ToString()
-		{
-			return JsonConvert.SerializeObject(this, new JsonSerializerSettings { Formatting = Formatting.Indented });
+		public override string ToString() {
+			return JsonConvert.SerializeObject(this, new JsonSerializerSettings {Formatting = Formatting.Indented});
+		}
+
+		/// <summary>
+		/// Loads only the consumer data table without all the detailed data
+		/// </summary>
+		public static ExperianConsumerData Load(long nServiceLogID, AConnection oDB, ASafeLog m_oLog) {
+			var result = new ExperianConsumerData();
+			var data = oDB.ExecuteEnumerable(
+				"LoadFullExperianConsumer",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("ServiceLogID", nServiceLogID)
+				);
+
+			foreach (SafeReader sr in data) {
+				string sType = sr["DatumType"];
+
+				switch (sType) {
+					case "ExperianConsumerData":
+						sr.Fill(result);
+						result.Id = sr["Id"];
+						break;
+				}
+			}
+			return result;
 		}
 	}
 

@@ -15,7 +15,6 @@ BEGIN
 		c.Id AS CustomerID,
 		e.InsertDate,
 		e.ServiceType,
-		e.ResponseData,
 		e.Id AS ServiceLogID
 	FROM
 		Customer c
