@@ -560,9 +560,19 @@
 					continue;
 				} // if
 
+				var oBuf = new byte[256];
+
+				Array.Copy(oFileContents, oBuf, Math.Min(oBuf.Length, oFileContents.Length));
+
+				var mtr = new MimeTypeResolver();
+
 				ms_oLog.Debug(
-					"File #{0}: {2} out of {1}; file size is {3} bytes.",
-					(i + 1), nFileCount, oFile.FileName, nRead
+					"File #{0} out of {1}: {2}; file size is {3} bytes.\nMIME type from extension: {4},\nMIME type from content: {5}\nMIME type passed: {6}\nMIME type from MS class: {7}",
+					(i + 1), nFileCount, oFile.FileName, nRead,
+					mtr.Get(oFile.FileName),
+					mtr.GetFromFile(oBuf),
+					oFile.ContentType,
+					System.Web.MimeMapping.GetMimeMapping(oFile.FileName)
 				);
 
 				try {

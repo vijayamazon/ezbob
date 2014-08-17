@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
+    <Compile Include="Misc.cs" />
     <Compile Include="TestClassToDb.cs" />
     <Compile Include="TestDbConnection.cs" />
     <Compile Include="MedalScoreCalculatorTestFixture.cs" />

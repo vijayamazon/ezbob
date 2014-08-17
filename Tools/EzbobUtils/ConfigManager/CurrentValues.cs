@@ -57,6 +57,17 @@
 
 		#endregion singleton
 
+		#region method GetUploadLimitations
+
+		public virtual UploadLimitations GetUploadLimitations(int nID) {
+			lock (ms_oInstanceLock) {
+				ReloadIfNeeded();
+				return m_oUploadLimitations;
+			} // lock
+		} // GetUploadLimitations
+
+		#endregion method GetUploadLimitations
+
 		#region method GetByID
 
 		public virtual VariableValue GetByID(int nID) {
@@ -153,7 +164,9 @@
 			m_oDefaults = new SortedDictionary<Variables, VariableValue>();
 
 			DB = oDB;
-			Log = new SafeLog(oLog);
+			Log = oLog ?? new SafeLog();
+
+			m_oUploadLimitations = new UploadLimitations(oDB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -200,6 +213,8 @@
 			VariableValue.LogVerbosityLevel = UnsafeGet(Variables.VerboseConfigurationLogging)
 				? LogVerbosityLevel.Verbose
 				: LogVerbosityLevel.Compact;
+
+			m_oUploadLimitations.Load();
 		} // ReLoad
 
 		#endregion method ReLoad
@@ -273,6 +288,8 @@
 		private readonly SortedDictionary<Variables, VariableValue> m_oDefaults;
 
 		private DateTime m_oLastReloadTime;
+
+		private UploadLimitations m_oUploadLimitations;
 
 		private static CurrentValues ms_oInstance;
 		private static readonly object ms_oInstanceLock;

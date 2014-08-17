@@ -1,4 +1,5 @@
 ﻿@using EzBob.Web.Infrastructure
+@using Microsoft.Web.Administration
 @using SquishIt.Framework
 @using SquishIt.Mvc
 @model EzBob.Web.Areas.Broker.Models.BrokerHomeModel
@@ -11,6 +12,47 @@
 
 	Model.LogoUrl = Url.Content("~/Content/css/images/header/ezbob_logo-white.png");
 	Model.EuIconUrl = Url.Content("~/Content/img/eu-menu.png");
+
+	//uint nMaxAllowedContentLength = 2097152;
+	uint nLocationMaxAllowedContentLength = 2097152;
+
+	/*
+	using (ServerManager serverManager = new ServerManager()) {
+		Microsoft.Web.Administration.Configuration config = serverManager.GetWebConfiguration("Ezbob.Web");
+		ConfigurationSection requestFilteringSection = config.GetSection("system.webServer/security/requestFiltering");
+		ConfigurationElement requestLimitsElement = requestFilteringSection.GetChildElement("requestLimits");
+
+		// requestLimitsElement.SetAttributeValue("maxAllowedContentLength", 1000);
+		
+		ConfigurationAttribute oAttr = requestLimitsElement.GetAttribute("maxAllowedContentLength");
+
+		if (oAttr != null) {
+			uint macl;
+
+			if (uint.TryParse(oAttr.Value.ToString(), out macl)) {
+				nMaxAllowedContentLength = macl;
+			}
+		}
+
+		// serverManager.CommitChanges();
+	}
+*/
+
+	using (ServerManager serverManager = new ServerManager()) {
+		Microsoft.Web.Administration.Configuration config = serverManager.GetWebConfiguration("Ezbob.Web");
+		ConfigurationSection requestFilteringSection = config.GetSection("system.webServer/security/requestFiltering", "BrokerHome/HandleUploadFile");
+		ConfigurationElement requestLimitsElement = requestFilteringSection.GetChildElement("requestLimits");
+
+		ConfigurationAttribute oAttr = requestLimitsElement.GetAttribute("maxAllowedContentLength");
+
+		if (oAttr != null) {
+			uint macl;
+
+			if (uint.TryParse(oAttr.Value.ToString(), out macl)) {
+				nLocationMaxAllowedContentLength = macl;
+			}
+		}
+	}
 }
 <!DOCTYPE html>
 <html>
@@ -836,6 +878,7 @@
 	<script>
 		var EzBob = EzBob || {};
 		EzBob.LoadedConfig = EzBob.LoadedConfig || {};
+		EzBob.LoadedConfig.MaxAllowedContentLength = @nLocationMaxAllowedContentLength;
 		EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';
 		EzBob.LoadedConfig.CaptchaMode = '@Model.CaptchaMode';
 		EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;

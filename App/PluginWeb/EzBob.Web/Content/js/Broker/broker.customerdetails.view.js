@@ -462,9 +462,9 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			url: window.gRootPath + 'Broker/BrokerHome/HandleUploadFile',
 			parallelUploads: 4,
 			uploadMultiple: true,
-			acceptedFiles: 'image/*,application/pdf,.doc,.docx,.odt,.ppt,.pptx,.odp,.xls,.xlsx,.ods,.txt',
+			acceptedFiles: 'image/*,application/pdf,.doc,.docx,.odt,.ppt,.pptx,.odp,.xls,.xlsx,.ods,.txt,.csv',
 			autoProcessQueue: true,
-			maxFilesize: 10,
+			maxFilesize: 10, //EzBob.Config.MaxAllowedContentLength / 1048576.0,
 			headers: {
 				'ezbob-broker-contact-email': self.router.getAuth(),
 				'ezbob-broker-customer-id': self.CustomerID,
@@ -487,7 +487,15 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 				oDropzone.on('error', function(oFile, sErrorMsg, oXhr) {
 					console.error('Upload error:', oFile, sErrorMsg, oXhr);
-					EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
+
+					if (oXhr && (oXhr.status === 404)) {
+						EzBob.App.trigger('error',
+							'Error uploading ' + oFile.name + ': file is too large. ' +
+							'Please contact customercare@ezbob.com'
+						);
+					}
+					else
+						EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
 				}); // always
 
 				oDropzone.on('complete', function(oFile) {

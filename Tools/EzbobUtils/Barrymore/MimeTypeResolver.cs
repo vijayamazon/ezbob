@@ -1,6 +1,9 @@
 ﻿namespace Ezbob.Utils {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
+	using System.Runtime.InteropServices;
+	using Logger;
 
 	public class MimeTypeResolver {
 		#region static constructor
@@ -573,6 +576,37 @@
 
 		#region public
 
+		#region method TestVsBuiltIn
+
+		public void TestVsBuiltIn(ASafeLog oLog) {
+			oLog = oLog ?? new SafeLog();
+
+			foreach (var pair in ms_oMap) {
+				string sOwn = pair.Value;
+				string sBuiltIn = System.Web.MimeMapping.GetMimeMapping("filename" + pair.Key);
+				oLog.Debug("|{2}|Own|{0}|Built in|{1}", sOwn, sBuiltIn, pair.Key);
+			} // TestVsBuiltIn
+		} // TestVsBuiltIn
+
+		#endregion method TestVsBuiltIn
+
+		#region method Get
+
+		public string Get(string sFileName) {
+			string sExtension = null;
+
+			if (!string.IsNullOrWhiteSpace(sFileName)) {
+				int nPos = sFileName.LastIndexOf('.');
+
+				if (nPos >= 0)
+					sExtension = sFileName.Substring(nPos);
+			} // if
+
+			return this[sExtension];
+		} // Get
+
+		#endregion method Get
+
 		#region indexer
 
 		public string this[string sExtension] {
@@ -590,11 +624,46 @@
 
 		#endregion indexer
 
+		#region method GetFromFile
+
+		public string GetFromFile(byte[] buffer) {
+			try {
+				System.UInt32 oMimeType;
+
+				FindMimeFromData(0, null, buffer, (uint)buffer.Length, null, 0, out oMimeType, 0);
+
+				System.IntPtr pMimeType = new IntPtr(oMimeType);
+
+				string sMimeType = Marshal.PtrToStringUni(pMimeType);
+
+				Marshal.FreeCoTaskMem(pMimeType);
+
+				return sMimeType;
+			}
+			catch (Exception) {
+				return "unknown/unknown";
+			} // try
+		} // GetFromFile
+
+		#endregion method GetFromFile
+
 		#endregion public
 
 		#region private
 
 		private static readonly SortedDictionary<string, string> ms_oMap;
+
+		[DllImport(@"urlmon.dll", CharSet = CharSet.Auto)]
+		private extern static System.UInt32 FindMimeFromData(
+			System.UInt32 pBC,
+			[MarshalAs(UnmanagedType.LPStr)] System.String pwzUrl,
+			[MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,
+			System.UInt32 cbSize,
+			[MarshalAs(UnmanagedType.LPStr)] System.String pwzMimeProposed,
+			System.UInt32 dwMimeFlags,
+			out System.UInt32 ppwzMimeOut,
+			System.UInt32 dwReserverd
+		);
 
 		#endregion private
 	} // class MimeTypeResolver
