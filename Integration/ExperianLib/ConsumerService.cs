@@ -107,10 +107,16 @@
 					.LoadExperianConsumer(customerId, isDirector ?  directorId : (int?)null , null);
 
 				// debug mode
-				if (cachedResponse.ServiceLogId == null && surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
+				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
 				{
-					var data = ConsumerDebugResult(surname, customerId);
-					return data;
+					//if (force check) or (no data in cache) or (data expired and not cache only mode)
+					if (forceCheck || 
+						cachedResponse.ServiceLogId == null || 
+						(!checkInCacheOnly && cachedResponse.ServiceLogId != null && !CacheNotExpired(cachedResponse.InsertDate))) {
+						var data = ConsumerDebugResult(surname, customerId);
+						return data;
+					}
+					return cachedResponse;
 				} // if test
 
 				mlLocation = ShiftLocation(mlLocation);
