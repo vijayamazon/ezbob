@@ -42,21 +42,21 @@
 		public override void Execute()
 		{
 			IEnumerable<SafeReader> lst = DB.ExecuteEnumerable("LoadServiceLogForConsumerBackfill", CommandSpecies.StoredProcedure);
-
+			long serviceLogId = 0;
 			foreach (SafeReader sr in lst)
 			{
-				long serviceLogId = sr["Id"];
-				var p = new ParseExperianConsumerData(serviceLogId, DB, Log);
-				p.Execute();
-				if (p.Result != null)
-				{
-					_experianHistoryRepository.SaveOrUpdateConsumerHistory(serviceLogId, p.Result.InsertDate, p.Result.CustomerId,
-																		   p.Result.DirectorId, p.Result.BureauScore,
-																		   GetConsumerCaisBalance(p.Result.Cais), p.Result.CII);
-				}
-
 				try
 				{
+					serviceLogId = sr["Id"];
+					var p = new ParseExperianConsumerData(serviceLogId, DB, Log);
+					p.Execute();
+					if (p.Result != null)
+					{
+						_experianHistoryRepository.SaveOrUpdateConsumerHistory(serviceLogId, p.Result.InsertDate, p.Result.CustomerId,
+																			   p.Result.DirectorId, p.Result.BureauScore,
+																			   GetConsumerCaisBalance(p.Result.Cais), p.Result.CII);
+					}
+
 					var serviceLog = _serviceLogRepository.Get(serviceLogId);
 					if (serviceLog != null && serviceLog.ServiceType == ExperianServiceType.Consumer.DescriptionAttr())
 					{

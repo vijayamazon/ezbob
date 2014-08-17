@@ -24,35 +24,48 @@ namespace ExperianLib
 				InsertDate = insertDate.HasValue ? insertDate.Value : new DateTime()
 			};
 
-			if (outputRoot.Output.Error != null)
+			if (outputRoot == null || outputRoot.Output == null || outputRoot.Output.Error != null)
 			{
-				Errors = string.Format("Error from service with code: {0}, severity: {1}, message: {2} \n", outputRoot.Output.Error.ErrorCode, outputRoot.Output.Error.Severity, outputRoot.Output.Error.Message);
+				if (outputRoot != null && outputRoot.Output != null)
+				{
+					Errors = string.Format("Error from service with code: {0}, severity: {1}, message: {2} \n",
+					                       outputRoot.Output.Error.ErrorCode, outputRoot.Output.Error.Severity,
+					                       outputRoot.Output.Error.Message);
+				}
+				else
+				{
+					Errors = "OutputRoot is null";
+				}
 				data.HasExperianError = true;
 				data.Error = Errors;
 				return data;
 			}
 
 
-			foreach (var applicant in outputRoot.Output.Applicant)
-			{
-				TryRead(() =>
+			TryRead(() =>
+				{
+					foreach (var applicant in outputRoot.Output.Applicant)
 					{
-						var app = new ExperianConsumerDataApplicant();
-						TryRead(() => app.ApplicantIdentifier = Convert.ToInt32(applicant.ApplicantIdentifier), "ApplicantIdentifier");
-						TryRead(() => app.Title = applicant.Name.Title, "Title");
-						TryRead(() => app.Forename = applicant.Name.Forename, "Forename");
-						TryRead(() => app.MiddleName = applicant.Name.MiddleName, "MiddleName");
-						TryRead(() => app.Surname = applicant.Name.Surname, "Surname");
-						TryRead(() => app.Suffix = applicant.Name.Suffix, "Suffix");
-						TryRead(() => app.DateOfBirth = new DateTime(
-															int.Parse(applicant.DateOfBirth.CCYY.ToString(CultureInfo.InvariantCulture)),
-															int.Parse(applicant.DateOfBirth.MM.ToString(CultureInfo.InvariantCulture)),
-															int.Parse(applicant.DateOfBirth.DD.ToString(CultureInfo.InvariantCulture)), 0,0,0, DateTimeKind.Utc),
-								"DateOfBirth", false);
-						TryRead(() => app.Gender = applicant.Gender, "Gender");
-						data.Applicants.Add(app);
-					}, "Applicant");
-			}
+						TryRead(() =>
+							{
+								var app = new ExperianConsumerDataApplicant();
+								TryRead(() => app.ApplicantIdentifier = Convert.ToInt32(applicant.ApplicantIdentifier), "ApplicantIdentifier");
+								TryRead(() => app.Title = applicant.Name.Title, "Title");
+								TryRead(() => app.Forename = applicant.Name.Forename, "Forename");
+								TryRead(() => app.MiddleName = applicant.Name.MiddleName, "MiddleName");
+								TryRead(() => app.Surname = applicant.Name.Surname, "Surname");
+								TryRead(() => app.Suffix = applicant.Name.Suffix, "Suffix");
+								TryRead(() => app.DateOfBirth = new DateTime(
+									                                int.Parse(applicant.DateOfBirth.CCYY.ToString(CultureInfo.InvariantCulture)),
+									                                int.Parse(applicant.DateOfBirth.MM.ToString(CultureInfo.InvariantCulture)),
+									                                int.Parse(applicant.DateOfBirth.DD.ToString(CultureInfo.InvariantCulture)), 0,
+									                                0, 0, DateTimeKind.Utc),
+								        "DateOfBirth", false);
+								TryRead(() => app.Gender = applicant.Gender, "Gender");
+								data.Applicants.Add(app);
+							}, "Applicant");
+					}
+				}, "Applicants", false);
 
 			TryRead(() => data.BureauScore = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.Scoring.E5S051), "BureauScore");
 			TryRead(() => data.CreditCardBalances = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA04), "CreditCardBalances");

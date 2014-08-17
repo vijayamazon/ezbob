@@ -34,11 +34,17 @@
 
 		public override void Execute() {
 			Log.Info("Parsing Experian Consumer for service log entry {0}...", m_nServiceLogID);
+			try
+			{
+				var oTbl = Save(Parse(Load()));
 
-			var oTbl = Save(Parse(Load()));
-
-			if (oTbl != null)
-				Result = oTbl;
+				if (oTbl != null)
+					Result = oTbl;
+			}
+			catch (Exception)
+			{
+				Log.Error("Parsing Experian Consumer for service log entry {0} failed.", m_nServiceLogID);
+			}
 
 			Log.Info("Parsing Experian Consumer for service log entry {0} complete.", m_nServiceLogID);
 		} // Execute
