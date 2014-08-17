@@ -14,7 +14,7 @@
 </script>
 
     
-    
+
     <base href="https://app.ezbob.com"/>
 
     <script type="text/javascript">
@@ -58,6 +58,27 @@
         #paypal_link {
             text-align: center;
         }
+
+        #secure {
+            height: 200px;
+        }
+
+        .login_btn {
+            display: none !important;
+        }
+
+        #logoff-li {
+            display: inline-block !important;
+        }
+
+        .PayPointHeader {
+            margin-top: 80px;
+        }
+        
+        .wizard-steps {
+            margin-bottom: -60px;
+        }
+
     </style>
 
 
@@ -68,16 +89,14 @@
 
     <meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
 
-<link rel="icon shortcut" type="image/png" href="/Content/img/favicon32x32.png" />
-    <!-- for mobile -->
-<link rel="apple-touch-icon" href="/Content/img/favicon57x57.png" />
-<link rel="apple-touch-icon" sizes="72x72" href="/Content/img/favicon72x72.png" />
+<link rel="icon shortcut" type="image/png" href="/Content/img/favicon/favicon_57x57.png" />
+<!-- for mobile -->
+<link rel="apple-touch-icon" href="/Content/img/favicon/favicon_57x57.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/Content/img/favicon/favicon_72x72.png" />
+<!-- todo
 <link rel="apple-touch-icon" sizes="114x114" href="/Content/img/favicon114x114.png" />
-<!--[if IE]>
-<link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
-<![endif]-->
+-->
 
-    <link href='https://fonts.googleapis.com/css?family=Sanchez' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" type="text/css" media="print" href="/Content/css/print.css" />
 
@@ -91,7 +110,6 @@
 <link rel="stylesheet" type="text/css" href="/Content/css/lib/chosen.css" />
 <link rel="stylesheet" type="text/css" href="/Content/css/common.css" />
 <link rel="stylesheet" type="text/css" href="/Content/css/customer.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/mobile.css" />
 
     
 
@@ -210,64 +228,92 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-NQVH6M');</script>
 <!-- End Google Tag Manager -->
 
-    <input name="__RequestVerificationToken" type="hidden" value="7FfM3Dsx_LR1B6DDNpllD2QiTGIYJA0kdtIGBrOqoYjHBh07PJlfaCXy8X-iOXdo4DxxdQa1qYFxDzXXZO1GicqFkfr7JFGYXaNEMvJT58sLWA2al72hqfgzbSOT3iPkd8RRsabqaL4FQ4A10MHVrPvQ4W5qe9ER2f6aqQPZtyc1" /> 
+    
+
+    <input name="__RequestVerificationToken" type="hidden" value="p1DUr59SCLlKL9i5745zPDjJ_vRpUcftSwy6xueIvP6CGJAkfu6-TdMn2z1dQz9P1TII9oQUI64d6zl4ZD92iLVVI3Fbfssqp2D6ybNx6eHYGmSuBiZScMQaWo1lyJ8ePG-plBlhg7MVLWB46rLkc2-6iwcuzAfzJguaCjE4p0I1" /> 
 
     <div id="wrapper">
         <div id="header">
+            <div class="header-bg-strip"></div>
             <div class="header-inner">
-                <a href="http://www.ezbob.com">
-                    <img src="/Content/img/ezbob-logo-2014.png" class="newlogo"></a>
-
-                <div class="header-phone">0800-011-4787</div>
-
-                <div class="eu-menu"><img src="/Content/img/eu-menu.png"><br>Authorised by the<br />European Union</div>
+                <div class="header-logo">
+                    <a href="http://www.ezbob.com">
+                        <img src="/Content/css/images/header/ezbob_logo-white.png" class="newlogo" width="128" height="34">
+                    </a>
+                </div>
+                <div class="header-info" style="display: none;">
+                    <div class="header-info-left"></div>
+                    <div class="header-info-text"></div>
+                    <div class="header-info-right"></div>
+                </div>
 
                 <ul id="user-menu">
                     <li id="logoff-li" class="login" style="display: none;">
-                        <a href="/Account/LogOff">LOG OFF</a>
+                        <a href="/Account/LogOff" class="button btn-grey">Log Off</a>
                     </li>
-                    <li class="login login_btn" style="display: none;"><a href="/Account/LogOn">LOGIN</a></li>
-                    <li class="sign-up signup_btn" style="display: none"><a href="https://localhost:44300/Customer/Wizard#SignUp">SIGN UP</a></li>
+                    <li class="login login_btn" style="display: none;"><a href="/Account/LogOn" class="button btn-grey">Login</a></li>
+                    <li class="sign-up signup_btn" style="display: none"><a href="https://localhost:44300/Customer/Wizard#SignUp" class="button btn-green">Sign Up</a></li>
+                    <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
                 </ul>
             </div>
         </div>
 
-        <div class="inner main-page">
+        <div class="main-page">
             <section id="full_width">
                 
 
-
-<div class="dashboard-steps narrow-dashboard-header">
-    <ul class="application_steps">
-        <li data-step-num="0" class="completed complete">
-            <span class="step_label">Step 1:<br/>Choose Loan Term</span>
-        </li>
-        <li data-step-num="1" class="active current">
-            <span class="step_label">Step 2:<br/>Enter Bank &amp; Debit</span>
-        </li>
-        <li data-step-num="2" class="">
-            <span class="step_label">Step 3:<br/>Get Cash</span>
-        </li>
-    </ul>
-</div>
-
-<div style="padding: 0 30px;">
-    <div class="row-fluid">
-        <div class="pages">
-            <div>
+<div class="row-fluid">
+    <div class="dashboard-header">
+        <div class="dashboard-steps wizard-steps" style="display: none;">
+            <div class="progress-time"></div>
+            <ul class="application_steps">
+                <li class="complete first-circle" data-step-num="0">
+                    <div class="progress-circle">
+                        <div class="inner-circle complete">
+                            <div class="percent">1</div>
+                        </div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-line-complete"></div>
+                    <span class="step_label">Choose Loan Term</span>
+                </li>
+                <li class="current center-circle" data-step-num="1">
+                    <div class="progress-circle">
+                        <div class="inner-circle current">
+                            <div class="percent">2</div>
+                        </div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-line-current"></div>
+                    <span class="step_label">Enter Bank & Debit</span>
+                </li>
+                <li class="last last-circle" data-step-num="2">
+                    <div class="progress-circle ">
+                        <div class="inner-circle">
+                            <div class="percent">3</div>
+                        </div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <span class="step_label">Get Cash</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="inner">
+        <div class="row-fluid">
+            <div class="pages">
                 <div class="row-fluid">
-                    <div class="pages" style="padding-top: 16px;">
-                        
+                    <div class="pages">
                         <div class="PayPointHeader">
                             <h2>Enter your debit card details</h2>
                             <h3>For automatic loan repayment</h3>
                         </div>
-
                         <div class="error">
                             ${error_table}
                         </div>
-                        <form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
-                                <div class="form_field_container control-group">
+                        <div class="bank-account">
+                            <form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
+                                    <div class="form_field_container control-group">
         <div class="controls">
             <label class="attardi-input">
                 <span>${customer_Text:=Name of Cardholder}</span>
@@ -285,27 +331,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 
 
-                            ${start_card_type}
-                            <div class="form_field_container control-group controls">
-                                <label class="attardi-input">
-                                    <span>${card_type_Text:=Card Type}</span>
-                                    <select name="card_type" class="selectheight form_field" tabindex="2">
-                                        <option value></option>
-                                        <option value="Visa" ${card_type="Visa"}>${Visa_Text:=Visa}</option>
-                                        <option value="Debit Master Card" ${card_type="Debit" master="" card=""}>${Debit_Master_Card_Text:=Debit Master Card}</option>
-                                        <option value="Delta" ${card_type="Delta"}>${Delta_Text:=Visa Debit Delta or Connect}</option>
-                                        ${StartIssue}
-                                        <option value="Maestro" ${card_type="Maestro"}>${Maestro_Text:=Maestro}</option>
-                                        <option value="Solo" ${card_type="Solo"}>${Solo_Text:=Solo}</option>
-                                        ${EndIssue}
-                                        ${card_types} 
-                                    </select>
-                                    <img id="card_typeImage" class="field_status required" />
-                                </label>
-                            </div>
-                            ${end_card_type}
+                                ${start_card_type}
+                                <div class="form_field_container control-group controls">
+                                    <label class="attardi-input">
+                                        <span>${card_type_Text:=Card Type}</span>
+                                        <select name="card_type" class="selectheight form_field" tabindex="2">
+                                            <option value></option>
+                                            <option value="Visa" ${card_type="Visa"}>${Visa_Text:=Visa}</option>
+                                            <option value="Debit Master Card" ${card_type="Debit" master="" card=""}>${Debit_Master_Card_Text:=Debit Master Card}</option>
+                                            <option value="Delta" ${card_type="Delta"}>${Delta_Text:=Visa Debit Delta or Connect}</option>
+                                            ${StartIssue}
+                                            <option value="Maestro" ${card_type="Maestro"}>${Maestro_Text:=Maestro}</option>
+                                            <option value="Solo" ${card_type="Solo"}>${Solo_Text:=Solo}</option>
+                                            ${EndIssue}
+                                            ${card_types} 
+                                        </select>
+                                        <img id="card_typeImage" class="field_status required" />
+                                    </label>
+                                </div>
+                                ${end_card_type}
                             
-                                <div class="form_field_container control-group">
+                                    <div class="form_field_container control-group">
         <div class="controls">
             <label class="attardi-input">
                 <span>${card_no_Text:=Card Number}</span>
@@ -323,27 +369,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
     </div>
 
-                            
-                                <div class="form_field_container control-group">
-        <div class="controls">
-            <label class="attardi-input">
-                <span>${cv2_Text:=CV2 (security code)}</span>
-                <input 
-                    type="password" 
-                    name="cv2" 
-                    id="cv2" 
-                    class="form_field" 
-                    value="${cv2}"
-                                                                tabindex="4"
-                                            maxlength="4"
-                                        />
-                    <img id="cv2Image" class="field_status required"/>
-            </label>
-        </div>
-    </div>
 
-                            
-                                <div class="form_field_container control-group">
+                                    <div class="form_field_container control-group">
         <div class="controls">
             <label class="attardi-input">
                 <span>${expiry_Text:=Expiry Date (MM/YY)}</span>
@@ -353,7 +380,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     id="expiry" 
                     class="form_field" 
                     value="${expiry}"
-                                                                tabindex="5"
+                                                                tabindex="4"
                                             maxlength="5"
                                         />
                     <img id="expiryImage" class="field_status required"/>
@@ -362,27 +389,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 
 
-                            <div id="amount-group" class="control-group" style="display: none">
-                                <label class="control-label" for="amount">Amount</label>
-                                <div class="controls">
-                                    <label class="control-label" id="amount">${amount} ${currency:=GBP}</label>
+                                    <div class="form_field_container control-group">
+        <div class="controls">
+            <label class="attardi-input">
+                <span>${cv2_Text:=CV2 (security code)}</span>
+                <input 
+                    type="password" 
+                    name="cv2" 
+                    id="cv2" 
+                    class="form_field" 
+                    value="${cv2}"
+                                                                tabindex="5"
+                                            maxlength="4"
+                                        />
+                    <img id="cv2Image" class="field_status required"/>
+            </label>
+        </div>
+    </div>
+
+
+                                <div id="amount-group" class="control-group" style="display: none">
+                                    <label class="control-label" for="amount">Amount</label>
+                                    <div class="controls">
+                                        <label class="control-label" id="amount">${amount} ${currency:=GBP}</label>
+                                    </div>
                                 </div>
-                            </div>
-
-                            
-
-                            <div class="form_buttons_container">
-                                <input 
-                                    type="submit"
-                                    name="accept" 
-                                    value="Confirm" 
-                                    id="paypoint-submit"
-                                    class="submit pull-right button orange disabled confirm" tabindex="6" />
                                 
-                                <a href="#"class="button grey pull-right back">Back</a>
-                            </div>
+                                <div class="form_buttons_container">
+                                    <input
+                                        type="submit"
+                                        name="accept"
+                                        value="Confirm"
+                                        id="paypoint-submit"
+                                        class="submit pull-right button btn-green disabled confirm" tabindex="6" />
 
-                                <input type="hidden" name="merchant" value="${merchant}">
+                                    <a href="#" class="button btn-grey pull-right back">Back</a>
+                                </div>
+
+                                    <input type="hidden" name="merchant" value="${merchant}">
     <input type="hidden" name="trans_id" value="${trans_id}">
     <input type="hidden" name="callback" value="${callback}">
     <input type="hidden" name="backcallback" value="${backcallback}">
@@ -443,64 +487,62 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
 
 
-                        </form>
-
+                            </form>
+                        </div>
                         <div id="buttons" align="center" class="span7">
                             ${other_pay}<br>
                         </div>
                         <div class="row">
                             <div class="span7" align="center">
                                 ${3ds}
-                                <br>
+                            <br>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12">
-                    <hr>
-                    ${paypal:=<table id="paypal_table">
-                                  <tr>
-                                      <td id="paypal_text">
-                                          <p>Pay with PayPal</p>
-                                      </td>
-                                      <td id="paypal_link">
-                                          <a href="javascript:PPHelp()">What is PayPal?</a>
-                                      </td>
-                                      <td id="paypal_button">
-                                          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" value="PayByPayPal" name="paypal_transaction">
-                                      </td>
-                                  </tr>
-                              </table><hr id="paypal_line">
-                    }
 
-                    <div id="secure">
-                        <table border="0" width="100%" class="secure_table">
-                            <tbody>
-                                <tr>
-                                    <td style="text-align: center; width: 150px;">
-                                        <a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
-                                            <img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
-                                        </a>
-                                    </td>
-                                    <td valign="top" rowspan="2">
-                                        ${wait_Text:=You have now entered a secure transaction environment. Your personal
-                                        information will be encrypted before transmission. Please check that the address
-                                        bar of your browser is visible and that the address begins with <b>https://</b>.
-                                        For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
-                                        incorporates the SECPay service.}
-                                    </td>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: center;">
-                                        Secure Payment<br>
-                                                      <img src="https://www.secpay.com/users/lock.png" alt="The secure padlock" width="16" height="16">
-                                    </td>
-                                </tr>
-                            </tbody>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <hr>
+                        ${paypal:=<table id="paypal_table">
+                            <tr>
+                                <td id="paypal_text">
+                                    <p>Pay with PayPal</p>
+                                </td>
+                                <td id="paypal_link">
+                                    <a href="javascript:PPHelp()">What is PayPal?</a>
+                                </td>
+                                <td id="paypal_button">
+                                    <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" value="PayByPayPal" name="paypal_transaction">
+                                </td>
+                            </tr>
                         </table>
+                        <hr id="paypal_line">
+                        }
+                        <div id="secure">
+                    <table border="0" width="100%" class="secure_table">
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center; width: 150px;">
+                                    <a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
+                                        <img src="https://www.secpay.com/users/small_logo.gif" width="125" height="22" alt="PayPoint.net logo" title="PayPoint.net logo" style="border: 0;" />
+                                    </a>
+                                </td>
+                                <td valign="top" rowspan="2">${wait_Text:=You have now entered a secure transaction environment. Your personal
+                                    information will be encrypted before transmission. Please check that the address
+                                    bar of your browser is visible and that the address begins with <b>https://</b>.
+                                    For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
+                                    incorporates the SECPay service.}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">Secure Payment<br>
+                                    <img src="https://www.secpay.com/users/lock.png" alt="The secure padlock" width="16" height="16">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                     </div>
                 </div>
             </div>
@@ -515,12 +557,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </section>
         </div>
 
-        <div id="modalRegion" class="modal hide fade">
-        </div>
-        <div class="push"></div>
+        <div id="modalRegion" class="modal hide fade"></div>
     </div>
-
-    <!--wraper-->
+    
     <footer>
 <div id="copyrights">
 	<div class="copyrights-inner">
@@ -529,14 +568,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 		<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br/>
 		Registered Address: 145 – 157 John Street, London EC1V 4PW Business Address: 39-41 North Road, London N7 9DP<br/>
 		&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
-
-		<ul id="menu-sub_footer_menu" class="sub_footer_nav">
-			<li><a href="http://www.ezbob.com/terms-and-conditions/" target="_blank">Terms &#038; Conditions</a></li>
-			<li><a href="http://www.ezbob.com/about-us/responsible-lending/" target="_blank">Responsible Lending</a></li>
-			<li><a href="http://www.ezbob.com/privacy-and-cookies/" target="_blank">Privacy &#038; Cookies</a></li>
-			<li><a href="http://www.ezbob.com/blog/" target="_blank">Blog</a></li>
-			<li><a href="http://www.ezbob.com/contact-us/" target="_blank">Contact</a></li>
-		</ul>
 	</div>
 </div>
 
@@ -572,8 +603,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </script>
 
 
-    <script type="text/javascript">var EzBob = EzBob || {};EzBob.dbStrings = {"EmailAddressAlreadyExists":"This email adress already exists in our system.  Please try to log-in or request new password.","NotValidEmailAddress":"This is not a valid email address","PasswordPolicyCheck":"Please enter a password that is 6 characters or more.","PasswordDoesNotMatch":"Passwords don't match, please re-enter","StoreAlreadyExistsInDb":"This store already added. If you have another store please add it now.","StoreAdded":"Congratulations. Your store was added successfully.","AccountAlreadyExixtsInDb":"This PayPal account already exists in our system under a different user.","PayPalAddedByYou":"You've already added this PayPal account","StoreAddedByYou":"You've already added this store. If you have another store please add it now.","QuickSignUpTopNotification":"You are now opening a FREE, SECURE, and PERSONAL account and minutes away from receiving monies.","QuickSignUpSecurityStatement":"You are under no obligation, there is no cost to this service.  EZBOB uses state of the art security : all your data is kept secure!!!","QuickSignUpNeedHelp":"Need Help?  Try live chat, email, or call ####","QuickSignUpCommonQuestions":"<ul><li>What is EZBOB?</li><li>How long is the Process?</li><li>When will I receive my money?</li></ul>","QuickSignUpNotifications":"As part of the appilcation process, you are opening your own, private, EZBOB account.   The entire applicatin process takes no more than 10 minutes to complete. ","StoreInfoSecurityStatement":"Security and Privacy are  paramount at EZBOB. Your information is not shared with any 3rd party.","StoreInfoCommonQuestions":"<ul><li>Does EZBOB have access to my store?</li><li>Benefits of adding a store?</li><li>What information does EZBOB collect?</li></ul>","AmazonTutorial":"We have created a simple visual tutorial to guide you through the process.","AmazonCommonQuestions":"If I add another store how much more money can I get?  Does EZBOB have access to my store?","AmazonSecurityStatement":"EZBOB never sees your store passwords.  We have read only access to your details.","StoreNotification":"EZBOB does not have access to your passwords and cannot alter your store data in anyway.  EZBOB analyzes our online store data in order to make you a financing offer.","EbayTutorial":"We have created a simple visual tutorial to guide you through the process.","PaymentAccountAdded":"Congratulations. Your payment account was addded successfully.","StoreInfoTopNotification":"EZBOB finances based on your online business.  Add your best store first.","StoreInfoAddMore":"Add more stores get more money!","NoPayPalOrBankAccount":"Now we need your payment details so we can send you money!","NoBankAccount":"We need your Bank Account details so we can send you money!","AccountsAdded":"The registration process is almost completed.","NoPayPalAccount":"Since you are an Ebay seller we require your PayPal details.","PayPalTopNotification":"Since you are an ebay seller, you must fill out your PayPal details.","PayPalTutorial":"We have created a simple visual tutorial to guide you through the process.","PayPalQuestions":"What happens if I don't have / fill out my PayPal details?  What does EZBOB do with my PayPal account details?  Do I get more money if I add my Paypal","AccountAddedByYou":"You've already added this account. If you have another account please add it now.","MarketingDefault":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep1":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep2":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep3":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep35":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStep4":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboard":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardMakePayment":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardGetCash":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardLoanDetails":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardAccountActivity":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardYourDetails":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardYourStores":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardPaymentAccounts":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardPayEarly":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingDashboardSettings":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepSignup":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepLinkAccounts":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepPersonalInfo":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepCompanyInfo":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>","MarketingWizardStepDone":"<ul><li>100% safe &amp; secure</li><li>97% would use us again</li><li>98% commend our speed and service</li></ul>"};</script>
-<script type="text/javascript" src="/Content/js/lib/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="/Content/js/lib/jquery-1.8.3.js"></script>
 <script type="text/javascript" src="/Content/js/lib/jquery.browser.min.js"></script>
 <script type="text/javascript" src="/Content/js/lib/jquery.scrollTo.js"></script>
 <script type="text/javascript" src="/Content/js/lib/jquery.blockUI.js"></script>
@@ -585,7 +615,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script type="text/javascript" src="/Content/js/lib/cookies.js"></script>
 <script type="text/javascript" src="/Content/js/lib/underscore.js"></script>
 <script type="text/javascript" src="/Content/js/lib/backbone.js"></script>
-<script type="text/javascript" src="/Content/js/contactUs/ezbo.contactUs.js"></script>
 <script type="text/javascript" src="/Content/js/App/ezbob.validation.js"></script>
 <script type="text/javascript" src="/Content/js/lib/jquery.field_status.js"></script>
 <script type="text/javascript" src="/Content/js/lib/attardi.labels.js"></script>
@@ -627,30 +656,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             return $('.submit').toggleClass('disabled', !isValid);
         }
 
-        (function () {
-            var sSegmentType = decodeURIComponent(new Uri(document.location).getQueryParamValue('segmenttype'));
-            var sLogoClassExt = (sSegmentType === 'offline') ? 'ezbob_logo_offline' : 'ezbob_logo_online';
-            $('.ezbob_logo').removeClass('ezbob_logo_online ezbob_logo_offline').addClass(sLogoClassExt);
-        })();
-
         $(function () {
+            $('.header-info').show();
+            $('.header-info-text').text("MY ACCOUNT");
             $('form').attr('action', document.location.href);
-            var amount = $('.amount').val();
-            var isPayEarly = amount != 5;
+
+            var isPayEarly = decodeURIComponent(getCallbackValue('payEarly') || "") == "True";
             var cardMinExpiryDate;
 
             if (isPayEarly) {
                 cardMinExpiryDate = moment();
+                $('.PayPointHeader h3').hide();
             }
             else {
                 var param = decodeURIComponent(getCallbackValue('cardMinExpiryDate') || "");
                 cardMinExpiryDate = moment(param || moment().add("months", 3), "DD/MM/YYYY");
             }
+            
+            var hideSteps = decodeURIComponent(getCallbackValue('hideSteps') || "");
+            if (hideSteps != 'True') {
+                $(".dashboard-steps").show();
+            } else {
+                $('#amount-group').show();
+            }
+            
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
             //set user email in top bar
-            var html = '<span id="logged-in-user-name">' + decodeURIComponent(getCallbackValue('username') || "") + '</span><a href="/Account/LogOff" class="button grey medium_btn">Log off</a>';
-            $("#header_description").html(html);
+            $('#logoff-li').show().tooltip({ placement: 'bottom', title: decodeURIComponent(getCallbackValue('username') || "") }).tooltip("enable").tooltip('fixTitle');
+            $('#user-menu .login_btn, .signup_btn').hide();
 
             //set url for back button
             var ulrBack = !isPayEarly ? 'https://app.ezbob.com/Customer/Profile#GetCash' : "https://app.ezbob.com/Customer/Profile#PayEarly";
@@ -663,13 +697,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }
             $("#expiry").mask("99/99");
             $("#card_no").mask("9999999999999999");
-
-            if (isPayEarly) {
-                $('#amount-group').show();
-                $('.PayPointHeader h3').hide();
-                $(".dashboard-steps").hide();
-            }
-
+            
             $('li[rel]').popover({ placement: 'left' });
 
             $('input[name="back"]').click(function () {
@@ -688,11 +716,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 else {
                     validator.form();
                 }
-                
+
                 setTimeout(function () {
                     $('#paypoint-submit').prop('disabled', false).removeClass('disabled');
                 }, 10000);
-                
+
                 return false;
             });
 
@@ -772,12 +800,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         $(document).ready(function() {
             $('body').attr('data-user-name', '');
             ShowHideSignLogOnOff();
-        });
-    </script>
 
-    <div style="display: none;" class="hide" id="cg-account-model-template">{&quot;id&quot;:0,&quot;name&quot;:null,&quot;url&quot;:null,&quot;login&quot;:null,&quot;password&quot;:null,&quot;limitDays&quot;:0,&quot;auxLogin&quot;:null,&quot;auxPassword&quot;:null,&quot;realmId&quot;:0,&quot;accountTypeName&quot;:null,&quot;displayName&quot;:null}</div>
-    <div style="display: none;" class="hide" id="current-server-time-zone">+03:00</div>
-    <div style="display: none;" class="hide" id="yodlee-banks">{&quot;ImageBanks&quot;:[{&quot;parentBankName&quot;:&quot;HSBC&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4567,&quot;displayName&quot;:&quot;HSBC Bank (UK)&quot;},{&quot;csId&quot;:17583,&quot;displayName&quot;:&quot;HSBC Business Bank (UK)&quot;},{&quot;csId&quot;:12279,&quot;displayName&quot;:&quot;HSBC Private Bank (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;Barclays&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4721,&quot;displayName&quot;:&quot;Barclays (non Pin Sentry Users) (UK)&quot;},{&quot;csId&quot;:18539,&quot;displayName&quot;:&quot;Barclays (Basic Access) (UK)&quot;},{&quot;csId&quot;:16265,&quot;displayName&quot;:&quot;Barclays Direct( formerly ING Direct) (UK))&quot;}]},{&quot;parentBankName&quot;:&quot;Lloyds&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:16284,&quot;displayName&quot;:&quot;Lloyds TSB Business Banking (UK)&quot;},{&quot;csId&quot;:4495,&quot;displayName&quot;:&quot;Lloyds TSB (UK)&quot;},{&quot;csId&quot;:16445,&quot;displayName&quot;:&quot;Lloyds TSB Offshore (UK) International&quot;}]},{&quot;parentBankName&quot;:&quot;RBS&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:19505,&quot;displayName&quot;:&quot;Royal Bank of Scotland Offshore Digital Banking (UK)&quot;},{&quot;csId&quot;:13203,&quot;displayName&quot;:&quot;Royal Bank of Scotland (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;Santander&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4416,&quot;displayName&quot;:&quot;Santander (UK)&quot;},{&quot;csId&quot;:20344,&quot;displayName&quot;:&quot;Santander Business Banking (UK)&quot;},{&quot;csId&quot;:19345,&quot;displayName&quot;:&quot;Santander A&amp;L Business Banking (UK)&quot;},{&quot;csId&quot;:19345,&quot;displayName&quot;:&quot;Santander A&amp;L Business Banking (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;NatWest&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:19008,&quot;displayName&quot;:&quot;NatWest Bank Business Bankline (UK)&quot;},{&quot;csId&quot;:10249,&quot;displayName&quot;:&quot;NatWest Bank (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;DAG&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:11195,&quot;displayName&quot;:&quot;DAG&quot;}]},{&quot;parentBankName&quot;:&quot;Halifax&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4569,&quot;displayName&quot;:&quot;Halifax Online (UK)&quot;},{&quot;csId&quot;:19356,&quot;displayName&quot;:&quot;Halifax Business Banking (UK)&quot;},{&quot;csId&quot;:13126,&quot;displayName&quot;:&quot;Bank of Scotland (Cust. without Token) (UK)&quot;}]},{&quot;parentBankName&quot;:&quot;Nationwide&quot;,&quot;subBanks&quot;:[{&quot;csId&quot;:4419,&quot;displayName&quot;:&quot;Nationwide Building Society (UK)&quot;},{&quot;csId&quot;:19344,&quot;displayName&quot;:&quot;Nationwide Building Society (Mysave)&quot;}]}],&quot;DropDownBanks&quot;:[{&quot;csId&quot;:19538,&quot;displayName&quot;:&quot;AA (UK) - Savings&quot;},{&quot;csId&quot;:15821,&quot;displayName&quot;:&quot;Adam &amp; Company (UK)&quot;},{&quot;csId&quot;:19507,&quot;displayName&quot;:&quot;Alliance &amp; Leicester (UK) - MyBankOffshore&quot;},{&quot;csId&quot;:9990,&quot;displayName&quot;:&quot;Allied Irish Bank (Ireland)&quot;},{&quot;csId&quot;:19317,&quot;displayName&quot;:&quot;Allied Irish Bank (UK) - Business&quot;},{&quot;csId&quot;:18217,&quot;displayName&quot;:&quot;Bank of Ireland (Ireland)&quot;},{&quot;csId&quot;:11916,&quot;displayName&quot;:&quot;Bank of Ireland (UK)&quot;},{&quot;csId&quot;:19346,&quot;displayName&quot;:&quot;Bank of Scotland (UK) Internet - Business&quot;},{&quot;csId&quot;:18283,&quot;displayName&quot;:&quot;BM Savings (UK)&quot;},{&quot;csId&quot;:19550,&quot;displayName&quot;:&quot;Bradford &amp; Bingley (UK)&quot;},{&quot;csId&quot;:4459,&quot;displayName&quot;:&quot;Cahoot (UK)&quot;},{&quot;csId&quot;:19456,&quot;displayName&quot;:&quot;Cater Allen (UK) - Banking&quot;},{&quot;csId&quot;:19457,&quot;displayName&quot;:&quot;Cater Allen (UK) - Business&quot;},{&quot;csId&quot;:4665,&quot;displayName&quot;:&quot;Citibank Internet Banking (UK)&quot;},{&quot;csId&quot;:11918,&quot;displayName&quot;:&quot;Clydesdale Bank (UK)&quot;},{&quot;csId&quot;:16275,&quot;displayName&quot;:&quot;Coutts (UK) - Online Banking&quot;},{&quot;csId&quot;:18286,&quot;displayName&quot;:&quot;Coventry Building Society (UK)&quot;},{&quot;csId&quot;:19533,&quot;displayName&quot;:&quot;Derbyshire Building Society (UK)&quot;},{&quot;csId&quot;:19554,&quot;displayName&quot;:&quot;FairFX (UK)&quot;},{&quot;csId&quot;:4848,&quot;displayName&quot;:&quot;First Direct (UK)&quot;},{&quot;csId&quot;:11905,&quot;displayName&quot;:&quot;First Trust Bank (UK)&quot;},{&quot;csId&quot;:19410,&quot;displayName&quot;:&quot;First Trust Bank (UK) - iBusiness&quot;},{&quot;csId&quot;:13668,&quot;displayName&quot;:&quot;ICICI Bank (UK)&quot;},{&quot;csId&quot;:19354,&quot;displayName&quot;:&quot;ICICI Bank (UK) - Business&quot;},{&quot;csId&quot;:11890,&quot;displayName&quot;:&quot;Intelligent Finance (UK)&quot;},{&quot;csId&quot;:19357,&quot;displayName&quot;:&quot;Investec.com (UK)&quot;},{&quot;csId&quot;:16514,&quot;displayName&quot;:&quot;Leeds Building Society (UK)&quot;},{&quot;csId&quot;:9856,&quot;displayName&quot;:&quot;Merrill Lynch HSBC (UK) - Banking&quot;},{&quot;csId&quot;:19540,&quot;displayName&quot;:&quot;Metro Bank (UK)&quot;},{&quot;csId&quot;:19262,&quot;displayName&quot;:&quot;Newcastle Building Society (UK)&quot;},{&quot;csId&quot;:11989,&quot;displayName&quot;:&quot;Virgin Money (Northern Rock) (UK)&quot;},{&quot;csId&quot;:19290,&quot;displayName&quot;:&quot;Norwich and Peterborough BS (UK)&quot;},{&quot;csId&quot;:19529,&quot;displayName&quot;:&quot;NS&amp;I (UK)&quot;},{&quot;csId&quot;:19343,&quot;displayName&quot;:&quot;Post Office (UK) - Savings ( Post Office (UK))&quot;},{&quot;csId&quot;:19377,&quot;displayName&quot;:&quot;Principality Building Society (UK)&quot;},{&quot;csId&quot;:18920,&quot;displayName&quot;:&quot;Royal Bank of Scotland (UK) - Business Bankline&quot;},{&quot;csId&quot;:18925,&quot;displayName&quot;:&quot;Royal Bank of Scotland (UK) - Business Digital&quot;},{&quot;csId&quot;:19536,&quot;displayName&quot;:&quot;Saffron Building Society (UK)&quot;},{&quot;csId&quot;:20003,&quot;displayName&quot;:&quot;Scottish Widows Bank (UK)&quot;},{&quot;csId&quot;:5647,&quot;displayName&quot;:&quot;Smile (UK)&quot;},{&quot;csId&quot;:16517,&quot;displayName&quot;:&quot;St James&#39;s Place Bank (UK)&quot;},{&quot;csId&quot;:10787,&quot;displayName&quot;:&quot;Standard Life (UK)&quot;},{&quot;csId&quot;:18282,&quot;displayName&quot;:&quot;Tesco (UK) - Savings&quot;},{&quot;csId&quot;:10781,&quot;displayName&quot;:&quot;The Co-operative Bank (UK)&quot;},{&quot;csId&quot;:16520,&quot;displayName&quot;:&quot;The National Lottery (UK)&quot;},{&quot;csId&quot;:20230,&quot;displayName&quot;:&quot;The One Account (UK) - Banking&quot;},{&quot;csId&quot;:10773,&quot;displayName&quot;:&quot;The Woolwich (UK)&quot;},{&quot;csId&quot;:11892,&quot;displayName&quot;:&quot;Ulster Bank (UK)&quot;},{&quot;csId&quot;:11849,&quot;displayName&quot;:&quot;Yorkshire Bank (UK)&quot;},{&quot;csId&quot;:19405,&quot;displayName&quot;:&quot;Yorkshire Bank (UK) Offshore - Business&quot;},{&quot;csId&quot;:19058,&quot;displayName&quot;:&quot;Yorkshire Building Society (UK)&quot;},{&quot;csId&quot;:22676,&quot;displayName&quot;:&quot;TSB (UK)&quot;},{&quot;csId&quot;:19313,&quot;displayName&quot;:&quot;Ulster Business Bank (UK)&quot;},{&quot;csId&quot;:19316,&quot;displayName&quot;:&quot;Britannia (UK) - Bank&quot;},{&quot;csId&quot;:19337,&quot;displayName&quot;:&quot;Chelsea Building Society (UK) - Bank&quot;},{&quot;csId&quot;:19353,&quot;displayName&quot;:&quot;Cumberland BS (UK) - Bank&quot;},{&quot;csId&quot;:19366,&quot;displayName&quot;:&quot;Clydesdale Bank Offshore Business (UK)&quot;},{&quot;csId&quot;:19369,&quot;displayName&quot;:&quot;Monmouthshire Building Society (UK) - Bank&quot;},{&quot;csId&quot;:19409,&quot;displayName&quot;:&quot;Coutts Business Bankline (UK)&quot;},{&quot;csId&quot;:19438,&quot;displayName&quot;:&quot;Barnsley Building Society (UK) - Bank&quot;},{&quot;csId&quot;:19534,&quot;displayName&quot;:&quot;Saga Savings (UK) - Bank&quot;},{&quot;csId&quot;:22220,&quot;displayName&quot;:&quot;State Bank Of India (UK) - Bank&quot;}]}</div>
-    <div style="display: none;" class="hide" id="customer-name"></div>
+        });
+
+    </script>
 </body>
 </html>
