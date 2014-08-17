@@ -110,7 +110,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			this.stores[accountTypeName] = { view: this[lc + 'AccountInfoView'] };
 		} // for each account type
 
-		this.storeList = $(_.template($("#store-info").html(), { ordpi: Math.random() * 10000000000000000 }));
+		this.storeList = $(_.template($("#store-info").html(), { }));
 
 		EzBob.App.on('ct:storebase.shops.connect', this.connect, this);
 

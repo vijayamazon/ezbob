@@ -3,11 +3,9 @@
 EzBob.QuickSignUpStepView = Backbone.View.extend({
 	initialize: function() {
 		this.template = _.template($('#signup-template').html());
-
-		if (typeof ordsu === 'undefined') { ordsu = Math.random() * 10000000000000000; }
-		if (typeof ordpi === 'undefined') { ordpi = Math.random() * 10000000000000000; }
-		if (typeof ordty === 'undefined') { ordty = Math.random() * 10000000000000000; }
-		if (typeof ordla === 'undefined') { ordla = Math.random() * 10000000000000000; }
+        
+		// This post is for Nir's A\B testing
+		$.post("http://www.ezbob.com/thank-page/", { action: "sptAjaxRecordConversion", sptID: 5765 });
 
 		this.on('ready', this.ready, this);
 		this.model.on('change:loggedIn', this.render, this);
