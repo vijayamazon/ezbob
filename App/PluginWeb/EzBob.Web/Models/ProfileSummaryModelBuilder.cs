@@ -131,6 +131,12 @@
 					break;
 			}
 
+			foreach (var dob in summary.CreditBureau.ApplicantDOBs) {
+				if (dob.HasValue && (dob.Value - DateTime.Today).TotalDays/365 < 18) {
+					summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "A", Alert = "Age of applicant under 18", AlertType = AlertType.Error.DescriptionAttr() });
+				}
+			}
+
 			if (customer.CustomerRelationStates.Any())
 			{
 				var state = customer.CustomerRelationStates.First();
@@ -322,16 +328,8 @@
 
 					//creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
 					creditBureau.FinancialAccounts = result.Value.Cais.Count();
-					var isHasFinancialAccout = false;
-
-					try {
-						isHasFinancialAccout = result.Value.Cais.Any();
-					}
-					catch (Exception ex) {
-						Log.InfoFormat("Can't read value for isHasFinancialAccount because of exception: {0}", ex.Message);
-					} // try
-
-					creditBureau.ThinFile = !isHasFinancialAccout ? "Yes" : "No";
+					creditBureau.ThinFile = creditBureau.FinancialAccounts == 0 ? "Yes" : "No";
+					creditBureau.ApplicantDOBs = result.Value.Applicants.Select(x => x.DateOfBirth).ToList();
 				}
 				else
 				{

@@ -99,6 +99,7 @@
 		public string BorrowerType { get; set; }
 		public int? FinancialAccounts { get; set; }
 		public string ThinFile { get; set; }
+		public List<DateTime?> ApplicantDOBs { get; set; }
 	}
 
 	public class CustomerRequestedLoanModel

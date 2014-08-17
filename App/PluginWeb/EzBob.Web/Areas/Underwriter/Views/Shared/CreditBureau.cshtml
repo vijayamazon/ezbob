@@ -1,13 +1,13 @@
 ﻿@model dynamic
 
 <script id="experian-info-template" type="text/template">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box">
-                <div class="box-content">
-                    @RunCheckButtons()
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-content">
+					@RunCheckButtons()
 
-                    <%
+					<%
                         var summary = experianInfo.Summary || {};
                         var consumerData = experianInfo.Consumer || {};
                         var consumerHistory = consumerData.ConsumerHistory;
@@ -16,10 +16,10 @@
                     %>
 
                     @BureauSummaryForCustomer()
-                    @DisplayConsumerData()
-                    @DisplayConsumerAmlBwaData()
+					@DisplayConsumerData()
+					@DisplayConsumerAmlBwaData()
 
-                    <% if(experianInfo.Directors && experianInfo.Directors.length>0) {
+					<% if(experianInfo.Directors && experianInfo.Directors.length>0) {
                         _.each(experianInfo.Directors, function(director){
                             consumerData = director;
                             errorList = director.ErrorList; 
@@ -27,669 +27,664 @@
                             
                             @DisplayConsumerData()
 
-                    <%});%>
+					<%});%>
                     <% } %>
                 @ExperianConsent()
-                </div>
-            </div>
-            <div id="idhub-custom-address"></div>
-        </div>
-    </div>
+				</div>
+			</div>
+			<div id="idhub-custom-address"></div>
+		</div>
+	</div>
 </script>
 
 
-@helper ButtonStatus(string checkStatus, string checkIcon, string btnStyle)
-{
-    var icon = "<i class=\"" + checkIcon + "\"></i>";
-    var btn = "<a class=\"btn " + btnStyle + " disabled\">" + icon + "&nbsp;" + checkStatus + "</a>";
+@helper ButtonStatus(string checkStatus, string checkIcon, string btnStyle) {
+	var icon = "<i class=\"" + checkIcon + "\"></i>";
+	var btn = "<a class=\"btn " + btnStyle + " disabled\">" + icon + "&nbsp;" + checkStatus + "</a>";
 }
 
-@helper RawHeaderCell(params string[] arguments)
-{
-    <tr class="box-title">
-        <th colspan="@arguments.Length">@Html.Raw(arguments[0])</th>
-    </tr>
+@helper RawHeaderCell(params string[] arguments) {
+	<tr class="box-title">
+		<th colspan="@arguments.Length">@Html.Raw(arguments[0])</th>
+	</tr>
 }
 
-@helper RawCell(params string[] arguments)
-{
-    <tr>
-        @foreach (var s in arguments)
-        {
-            <td>@Html.Raw(s)</td>
-        }
-    </tr>
+@helper RawCell(params string[] arguments) {
+	<tr>
+		@foreach (var s in arguments) {
+			<td>@Html.Raw(s)</td>
+  }
+	</tr>
 }
 
-@helper RawCellClass(params Tuple<string, string>[] arguments)
-{
-    <tr>
-        @foreach (Tuple<string, string> s in arguments)
-        {
-            <td @if (!string.IsNullOrWhiteSpace(s.Item2)) { WriteLiteral("class=\"" + s.Item2 + "\""); }>@Html.Raw(s.Item1)</td>
-        }
-    </tr>
+@helper RawCellClass(params Tuple<string, string>[] arguments) {
+	<tr>
+		@foreach (Tuple<string, string> s in arguments) {
+			<td @if (!string.IsNullOrWhiteSpace(s.Item2)) { WriteLiteral("class=\"" + s.Item2 + "\""); }>@Html.Raw(s.Item1)</td>
+  }
+	</tr>
 }
 
-@helper RawCellCentered(params string[] arguments)
-{
-    <tr>
-        @foreach (var s in arguments)
-        {
-            <td style="text-align: center;">@Html.Raw(s)</td>
-        }
-    </tr>
+@helper RawCellCentered(params string[] arguments) {
+	<tr>
+		@foreach (var s in arguments) {
+			<td style="text-align: center;">@Html.Raw(s)</td>
+  }
+	</tr>
 }
 
-@helper ScoreMark(string score, string scorePos, string valPos, string color, string align)
-{
-    var backDivStyle = "height: 50px; width: 8px; display: inline-block; position:relative; left: " + scorePos + "background-color: " + color;
-    var scoreDivStyle = "height: 50px; width: 120px; display: inline-block; position: relative; font-size: 48px; "
-        + " color: " + color
-        + " left: " + valPos
-        + " text-align: " + "center;"
-        + " float: " + align;
-    <div style="height: 50px;">
-        @Html.Raw("<div style=\"" + backDivStyle + "\"></div>" + "<div style=\"" + scoreDivStyle + "\">" + score + "</div>")
-    </div>
-    <div style="height: 100px;">
-        <img src="@Url.Content("~/Content/img/scoreband.png")" />
-    </div>
+@helper ScoreMark(string score, string scorePos, string valPos, string color, string align) {
+	var backDivStyle = "height: 50px; width: 8px; display: inline-block; position:relative; left: " + scorePos + "background-color: " + color;
+	var scoreDivStyle = "height: 50px; width: 120px; display: inline-block; position: relative; font-size: 48px; "
+		+ " color: " + color
+		+ " left: " + valPos
+		+ " text-align: " + "center;"
+		+ " float: " + align;
+	<div style="height: 50px;">
+		@Html.Raw("<div style=\"" + backDivStyle + "\"></div>" + "<div style=\"" + scoreDivStyle + "\">" + score + "</div>")
+	</div>
+	<div style="height: 100px;">
+		<img src="@Url.Content("~/Content/img/scoreband.png")" />
+	</div>
 }
 
-@helper InputTextSmallReadOnly(string id, string caption, string value)
-{
-    <div class="form-group">
-        <label for="@id" class="control-label">@caption</label>
-        <div class="col-md-4">
-            @Html.Raw("<input class=\"form-control\" id=\"" + id + "\" name=\"" + id + "\" readonly=\"readonly\" type=\"text\" value=\"" + value + "\" />")
-        </div>
-    </div>
+@helper InputTextSmallReadOnly(string id, string caption, string value) {
+	<div class="form-group">
+		<label for="@id" class="control-label">@caption</label>
+		<div class="col-md-4">
+			@Html.Raw("<input class=\"form-control\" id=\"" + id + "\" name=\"" + id + "\" readonly=\"readonly\" type=\"text\" value=\"" + value + "\" />")
+		</div>
+	</div>
 }
 
-@helper BureauSummary(string checkStatus, string checkIcon, string buttonStyle, string score, string borrowerType, string checkDate, string checkValidity, string creditBureauDirectorId = null)
-{
-    <div class="row">
-        <div class="col-lg-6 col-md-12 control-group form-horizontal">
-            @ButtonStatus(checkStatus, checkIcon, buttonStyle)
-            <a href="#" class="btn btn-mini btn-primary" data-bug-type="ExpConsumer" data-credit-bureau-director-id="@Html.Raw(@creditBureauDirectorId)" data-bug-customer="<%=experianInfo.Id%>" style="float:right"><i class="fa fa-bug"></i></a>
-            @InputTextSmallReadOnly("creditb-score", "Credit bureau score", score)
-            @InputTextSmallReadOnly("creditb-borrower-type", "Borrower type", borrowerType)
-        </div>
-        <div class="col-lg-6 col-md-12 control-group form-horizontal">
-            @InputTextSmallReadOnly("creditb-check-date", "Check date", checkDate)
-            @InputTextSmallReadOnly("creditb-valid-till", "Check is valid till", checkValidity)
-        </div>
-    </div>
+@helper BureauSummary(string checkStatus, string checkIcon, string buttonStyle, string score, string borrowerType, string checkDate, string checkValidity, string creditBureauDirectorId = null) {
+	<div class="row">
+		<div class="col-lg-6 col-md-12 control-group form-horizontal">
+			@ButtonStatus(checkStatus, checkIcon, buttonStyle)
+			<a href="#" class="btn btn-mini btn-primary" data-bug-type="ExpConsumer" data-credit-bureau-director-id="@Html.Raw(@creditBureauDirectorId)" data-bug-customer="<%=experianInfo.Id%>" style="float:right"><i class="fa fa-bug"></i></a>
+			@InputTextSmallReadOnly("creditb-score", "Credit bureau score", score)
+			@InputTextSmallReadOnly("creditb-borrower-type", "Borrower type", borrowerType)
+		</div>
+		<div class="col-lg-6 col-md-12 control-group form-horizontal">
+			@InputTextSmallReadOnly("creditb-check-date", "Check date", checkDate)
+			@InputTextSmallReadOnly("creditb-valid-till", "Check is valid till", checkValidity)
+		</div>
+	</div>
 }
 
-@helper RunCheckButtons()
-{
-    <div class="row">
-        <div class="pull-left">
-            <a class="btn btn-primary" href="#" id="RunConsumerCheckBtn">Run Consumer check</a>
-            <select id="ConsumerCheckTarget" class="higherselectheight btn btn-primary">
-                <option selected="selected" value="<%- experianInfo.Consumer.Id %>"><%- experianInfo.Consumer.ApplicantFullNameAge %></option>
-                <% _.each(experianInfo.Directors, function(directorsModel) { %>
-                    <option value="<%- directorsModel.Id %>"><%- directorsModel.ApplicantFullNameAge %></option>
-                <% }); %>
-            </select>
-            <a class="btn btn-primary" href="#" id="RunCompanyCheckBtn">Run Company check</a>
-            <a class="btn btn-primary" href="#" id="RunAmlCheckBtn">Run AML check</a>
-            <a class="btn btn-primary" href="#" id="RunBwaCheckBtn">Run BWA check</a>
-        </div>
-    </div>
+@helper RunCheckButtons() {
+	<div class="row">
+		<div class="pull-left">
+			<a class="btn btn-primary" href="#" id="RunConsumerCheckBtn">Run Consumer check</a>
+			<select id="ConsumerCheckTarget" class="higherselectheight btn btn-primary">
+				<option selected="selected" value="<%- experianInfo.Consumer.Id %>"><%- experianInfo.Consumer.ApplicantFullNameAge %></option>
+				<% _.each(experianInfo.Directors, function(directorsModel) { %>
+				<option value="<%- directorsModel.Id %>"><%- directorsModel.ApplicantFullNameAge %></option>
+				<% }); %>
+			</select>
+			<a class="btn btn-primary" href="#" id="RunCompanyCheckBtn">Run Company check</a>
+			<a class="btn btn-primary" href="#" id="RunAmlCheckBtn">Run AML check</a>
+			<a class="btn btn-primary" href="#" id="RunBwaCheckBtn">Run BWA check</a>
+		</div>
+	</div>
 }
 
-@helper DisplayConsumerData()
-{
-    <div class="accordion page-content-frame" id="accordion-credit-bureau<%-consumerData.Id%>">
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" href="#collapseSummary<%-consumerData.Id%>">
-                <b class="play"></b>Credit Bureau Details for  <%-consumerData.ApplicantFullNameAge%>
-            </a>
-        </div>
-        <div id="collapseSummary<%-consumerData.Id%>" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <div class="row col-md-12">
-                    <%if(!consumerData.HasExperianError) {%>
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" href="#collapseDetails<%-consumerData.Id%>">
-                            <b class="play"></b>Delphi Score Details</a>
-                    </div>
-                    <div id="collapseDetails<%-consumerData.Id%>" class="accordion-body collapse">
-                        <div class="accordion-inner">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    @ScoreMark("<%- consumerData.Score %>",
-                                           "<%- consumerData.ScorePosition %>",
-                                           "<%- consumerData.ScoreValuePosition %>",
-                                           "<%- consumerData.ScoreColor %>",
-                                           "<%- consumerData.ScoreAlign %>")
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span6">
-                                    <table class="table">
-                                        <tbody>
-                                            @RawCell("Delphi Score is", "<%- consumerData.Score %>")
-                                            @RawCell("Consumer Indebtedness Index", "<%- consumerData.CII %>")
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+@helper DisplayConsumerData() {
+	<div class="accordion page-content-frame" id="accordion-credit-bureau<%-consumerData.Id%>">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse" href="#collapseSummary<%-consumerData.Id%>">
+				<b class="play"></b>Credit Bureau Details for  <%-consumerData.ApplicantFullNameAge%>
+			</a>
+		</div>
+		<div id="collapseSummary<%-consumerData.Id%>" class="accordion-body collapse">
+			<div class="accordion-inner">
+				<div class="row col-md-12">
+					<%if(!consumerData.HasExperianError) {%>
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" href="#applicant<%-consumerData.Id%>"><b class="play"></b>Applicant Details</a>
+					</div>
+					<div id="applicant<%-consumerData.Id%>" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<div class="row-fluid">
+								<div class="span12">
+									<table class="table">
+										<tbody>
+											<%consumerData.Applicant = consumerData.Applicant || {};%>
+											@RawCell("Applicant Identifier", "<%- consumerData.Applicant.ApplicantIdentifier %>")
+											@RawCell("Name", "<%- consumerData.Applicant.Title %> <%- consumerData.Applicant.Forename %> <%- consumerData.Applicant.MiddleName %> <%- consumerData.Applicant.Surname %> <%- consumerData.Applicant.Suffix %>")
+											@RawCell("Date Of Birth", "<%- EzBob.formatDate3(consumerData.Applicant.DateOfBirth) %>")
+											@RawCell("Gender", "<%- consumerData.Applicant.Gender %>")
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" href="#collapseDetails<%-consumerData.Id%>"><b class="play"></b>Delphi Score Details</a>
+					</div>
+					<div id="collapseDetails<%-consumerData.Id%>" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<div class="row-fluid">
+								<div class="span12">
+									@ScoreMark("<%- consumerData.Score %>",
+										   "<%- consumerData.ScorePosition %>",
+										   "<%- consumerData.ScoreValuePosition %>",
+										   "<%- consumerData.ScoreColor %>",
+										   "<%- consumerData.ScoreAlign %>")
+								</div>
+							</div>
+							<div class="row-fluid">
+								<div class="span6">
+									<table class="table">
+										<tbody>
+											@RawCell("Delphi Score is", "<%- consumerData.Score %>")
+											@RawCell("Consumer Indebtedness Index", "<%- consumerData.CII %>")
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" href="#collapseCharacteristics<%-consumerData.Id%>">
-                            <b class="play"></b>Summary characteristics</a>
-                    </div>
-                    <div id="collapseCharacteristics<%-consumerData.Id%>" class="accordion-body collapse">
-                        <div class="accordion-inner">
-                            <div class="row-fluid">
-                                <div class="span6 control-group form-horizontal">
-                                    <table class="table">
-                                        <tbody>
-                                            @RawCell("Number of accounts", "<%- consumerData.NumberOfAccounts %>")
-                                            @RawCell("Number of accounts in last 3 months", "<%- consumerData.NumberOfAccounts3M %>")
-                                            @RawCell("Worst current status", "<%- consumerData.WorstCurrentStatus %>")
-                                            @RawCell("Worst historical status", "<%- consumerData.WorstCurrentStatus3M %>")
-                                            @RawCell("Number of defaults", "<%- consumerData.NumberOfDefaults %>")
-                                            @RawCell("Number of CCJs", "<%- consumerData.NumberOfCCJs %>")
-                                            @RawCell("Age of most recent CCJ", "<%- consumerData.AgeOfMostRecentCCJ %>")
-                                            @RawCell("Number credit cards over limit", "<%- consumerData.NumberOfCCOverLimit %>")
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="span6 control-group form-horizontal">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr class="<%- consumerData.IsDataRelevant == true ? '' : 'red_cell'%>">
-                                                <td>Check Date</td>
-                                                <td><%- consumerData.CheckDate %></td>
-                                            </tr>
-                                            <tr class="<%- consumerData.IsDataRelevant == true ? '' : 'red_cell'%>">
-                                                <td>Valid till</td>
-                                                <td><%- consumerData.CheckValidity %></td>
-                                            </tr>
-                                            @RawCell("Enquiries in last 3 months", "<%- consumerData.EnquiriesLast3M %>")
-                                            @RawCell("Enquiries in last 6 months", "<%- consumerData.EnquiriesLast6M %>")
-                                            @RawCell("Credit card utilization", "<%- consumerData.CreditCardUtilization %>")
-                                            @RawCell("Has NOCs on CCJ", "<%- consumerData.NOCsOnCCJ ? 'Yes' : 'No' %>")
-                                            @RawCell("Has NOCs on CAIS", "<%- consumerData.NOCsOnCAIS  ? 'Yes' : 'No' %>")
-                                            @RawCell("CAIS Special Instruction Flag", "<%- consumerData.CAISSpecialInstructionFlag %>")
-                                            @RawCell("Satisfied judgements", "<%- consumerData.SatisfiedJudgements  ? 'Yes' : 'No' %>")
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" href="#collapseCharacteristics<%-consumerData.Id%>"><b class="play"></b>Summary characteristics</a>
+					</div>
+					<div id="collapseCharacteristics<%-consumerData.Id%>" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<div class="row-fluid">
+								<div class="span6 control-group form-horizontal">
+									<table class="table">
+										<tbody>
+											@RawCell("Number of accounts", "<%- consumerData.NumberOfAccounts %>")
+											@RawCell("Number of accounts in last 3 months", "<%- consumerData.NumberOfAccounts3M %>")
+											@RawCell("Worst current status", "<%- consumerData.WorstCurrentStatus %>")
+											@RawCell("Worst historical status", "<%- consumerData.WorstCurrentStatus3M %>")
+											@RawCell("Number of defaults", "<%- consumerData.NumberOfDefaults %>")
+											@RawCell("Number of CCJs", "<%- consumerData.NumberOfCCJs %>")
+											@RawCell("Age of most recent CCJ", "<%- consumerData.AgeOfMostRecentCCJ %>")
+											@RawCell("Number credit cards over limit", "<%- consumerData.NumberOfCCOverLimit %>")
+										</tbody>
+									</table>
+								</div>
+								<div class="span6 control-group form-horizontal">
+									<table class="table">
+										<tbody>
+											<tr class="<%- consumerData.IsDataRelevant == true ? '' : 'red_cell'%>">
+												<td>Check Date</td>
+												<td><%- consumerData.CheckDate %></td>
+											</tr>
+											<tr class="<%- consumerData.IsDataRelevant == true ? '' : 'red_cell'%>">
+												<td>Valid till</td>
+												<td><%- consumerData.CheckValidity %></td>
+											</tr>
+											@RawCell("Enquiries in last 3 months", "<%- consumerData.EnquiriesLast3M %>")
+											@RawCell("Enquiries in last 6 months", "<%- consumerData.EnquiriesLast6M %>")
+											@RawCell("Credit card utilization", "<%- consumerData.CreditCardUtilization %>")
+											@RawCell("Has NOCs on CCJ", "<%- consumerData.NOCsOnCCJ ? 'Yes' : 'No' %>")
+											@RawCell("Has NOCs on CAIS", "<%- consumerData.NOCsOnCAIS  ? 'Yes' : 'No' %>")
+											@RawCell("CAIS Special Instruction Flag", "<%- consumerData.CAISSpecialInstructionFlag %>")
+											@RawCell("Satisfied judgements", "<%- consumerData.SatisfiedJudgements  ? 'Yes' : 'No' %>")
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" href="#collapseAccountOverview<%-consumerData.Id%>">
-                            <b class="play"></b>Account Overview</a>
-                    </div>
-                    <div id="collapseAccountOverview<%-consumerData.Id%>" class="accordion-body collapse">
-                        <div class="accordion-inner">
-                            <div class="row-fluid">
-                                <div class="span12 control-group form-horizontal">
-                                    <table class="table">
-                                        <thead class="box">
-                                            <tr class="box-title">
-                                                <th>Type</th>
-                                                <th>Open Accounts</th>
-                                                <th>Worst Arrears</th>
-                                                <th>Total Current Limits</th>
-                                                <th>Total Balance</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @RawCell("Credit Cards",
-                                                 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_CC %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_CC %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_CC %>",
-                                                 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_CC) %>")
-                                            @RawCell("Mortgages",
-                                                 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_Mtg %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_Mtg %>",
-                                                 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_Mtg) %>")
-                                            @RawCell("Personal Loans",
-                                                 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_PL %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_PL %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_PL %>",
-                                                 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_PL) %>")
-                                            @RawCell("Other",
-                                                 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_Other %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_Other %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_Other %>",
-                                                 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_Other) %>")
-                                        </tbody>
-                                        <tfoot>
-                                            @RawCell("Total",
-                                                 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_Total %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_Total %>",
-                                                 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_Total %>",
-                                                 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_Total) %>")
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" href="#collapseAccountOverview<%-consumerData.Id%>"><b class="play"></b>Account Overview</a>
+					</div>
+					<div id="collapseAccountOverview<%-consumerData.Id%>" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<div class="row-fluid">
+								<div class="span12 control-group form-horizontal">
+									<table class="table">
+										<thead class="box">
+											<tr class="box-title">
+												<th>Type</th>
+												<th>Open Accounts</th>
+												<th>Worst Arrears</th>
+												<th>Total Current Limits</th>
+												<th>Total Balance</th>
+											</tr>
+										</thead>
+										<tbody>
+											@RawCell("Credit Cards",
+												 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_CC %>",
+												 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_CC %>",
+												 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_CC %>",
+												 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_CC) %>")
+											@RawCell("Mortgages",
+												 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
+												 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_Mtg %>",
+												 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_Mtg %>",
+												 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_Mtg) %>")
+											@RawCell("Personal Loans",
+												 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_PL %>",
+												 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_PL %>",
+												 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_PL %>",
+												 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_PL) %>")
+											@RawCell("Other",
+												 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_Other %>",
+												 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_Other %>",
+												 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_Other %>",
+												 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_Other) %>")
+										</tbody>
+										<tfoot>
+											@RawCell("Total",
+												 "<%- consumerData.ConsumerAccountsOverview.OpenAccounts_Total %>",
+												 "<%- consumerData.ConsumerAccountsOverview.WorstArrears_Total %>",
+												 "<%- consumerData.ConsumerAccountsOverview.TotalCurLimits_Total %>",
+												 "<%- EzBob.formatPoundsAsInt(consumerData.ConsumerAccountsOverview.Balance_Total) %>")
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <%var accountsInformation = consumerData.AccountsInformation || [];%>
-                    @FinancialAccounts()
+					<%var accountsInformation = consumerData.AccountsInformation || [];%>
+					@FinancialAccounts()
 
-                    <% if (experianInfo.HasNOCs) { %>
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" href="#collapseNOCs<%-consumerData.Id%>">
-                            <b class="play"></b>Notices of Correction (NOCs)</a>
-                    </div>
-                    <div id="collapseNOCs<%-consumerData.Id%>" class="accordion-body collapse">
-                        <div class="accordion-inner">
-                            <div class="row-fluid">
-                                <div class="span12 control-group form-horizontal">
-                                    <%
-                                _.each(consumerData.NOCs, function(noc){
-                                %>   
-                                <table>
-                                    @RawCell("NOC Reference", "<%- noc.NOCReference %>")
-                                    @RawCell("NOC Lines", "<%- noc.NOCLines %>")
-                                </table>
-                                    <%
-                                });
-                                %>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <% } %>
-                    
+					<% if (experianInfo.HasNOCs) { %>
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" href="#collapseNOCs<%-consumerData.Id%>"><b class="play"></b>Notices of Correction (NOCs)</a>
+					</div>
+					<div id="collapseNOCs<%-consumerData.Id%>" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<div class="row-fluid">
+								<div class="span12 control-group form-horizontal">
+								<%_.each(consumerData.NOCs, function(noc){%>
+								<table>
+									@RawCell("NOC Reference", "<%- noc.NOCReference %>")
+									@RawCell("NOC Lines", "<%- noc.NOCLines %>")
+								</table>
+								<%});%>
+								</div>
+							</div>
+						</div>
+					</div>
+					<% } %>
                     <%}%>
                     @DisplayExperianError()
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 }
 
-@helper DisplayConsumerAmlBwaData()
-{
-    <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" href="#collapseAML">
-            <b class="play"></b>AML and BWA Checks</a>
-    </div>
-    <div id="collapseAML" class="accordion-body collapse">
-        <div class="accordion-inner">
-            <% if (experianInfo.AmlInfo != null) { %>
+@helper DisplayConsumerAmlBwaData() {
+	<div class="accordion-heading">
+		<a class="accordion-toggle" data-toggle="collapse" href="#collapseAML">
+			<b class="play"></b>AML and BWA Checks</a>
+	</div>
+	<div id="collapseAML" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<% if (experianInfo.AmlInfo != null) { %>
             <div class="row-fluid">
-                <div class="span12">
-                    <table class="table">
-                        <tbody>
-                            @RawCell("AML Check Result", "<%- experianInfo.AmlInfo.AMLResult %>")
-                            @RawCell("Authentication Index", "<%- experianInfo.AmlInfo.AuthenticationIndex %>")
-                            @RawCell("Description", "<%- experianInfo.AmlInfo.AuthIndexText %>")
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <% if (experianInfo.AmlInfo.HasAML) {%>
+				<div class="span12">
+					<table class="table">
+						<tbody>
+							@RawCell("AML Check Result", "<%- experianInfo.AmlInfo.AMLResult %>")
+							@RawCell("Authentication Index", "<%- experianInfo.AmlInfo.AuthenticationIndex %>")
+							@RawCell("Description", "<%- experianInfo.AmlInfo.AuthIndexText %>")
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<% if (experianInfo.AmlInfo.HasAML) {%>
                 <div class="row-fluid">
-                    <div class="span6 control-group form-horizontal">
-                        @InputTextSmallReadOnly("aml-prim-items", "Data items", "<%- experianInfo.AmlInfo.NumPrimDataItems %>")
-                        @InputTextSmallReadOnly("aml-prim-srcs", "Data sources", "<%- experianInfo.AmlInfo.NumPrimDataSources %>")
-                        @InputTextSmallReadOnly("aml-prim-date", "From date", "<%- experianInfo.AmlInfo.StartDateOldestPrim %>")
-                    </div>
-                    <div class="span6 control-group form-horizontal">
-                        @InputTextSmallReadOnly("aml-sec-items", "Sec items", "<%- experianInfo.AmlInfo.NumSecDataItems %>")
-                        @InputTextSmallReadOnly("aml-sec-date", "Sec date", "<%- experianInfo.AmlInfo.StartDateOldestSec %>")
-                        @InputTextSmallReadOnly("aml-hrp-count", "HRP", "<%- experianInfo.AmlInfo.ReturnedHRPCount %>")
-                    </div>
-                </div>
-            <%}%>
+					<div class="span6 control-group form-horizontal">
+						@InputTextSmallReadOnly("aml-prim-items", "Data items", "<%- experianInfo.AmlInfo.NumPrimDataItems %>")
+						@InputTextSmallReadOnly("aml-prim-srcs", "Data sources", "<%- experianInfo.AmlInfo.NumPrimDataSources %>")
+						@InputTextSmallReadOnly("aml-prim-date", "From date", "<%- experianInfo.AmlInfo.StartDateOldestPrim %>")
+					</div>
+					<div class="span6 control-group form-horizontal">
+						@InputTextSmallReadOnly("aml-sec-items", "Sec items", "<%- experianInfo.AmlInfo.NumSecDataItems %>")
+						@InputTextSmallReadOnly("aml-sec-date", "Sec date", "<%- experianInfo.AmlInfo.StartDateOldestSec %>")
+						@InputTextSmallReadOnly("aml-hrp-count", "HRP", "<%- experianInfo.AmlInfo.ReturnedHRPCount %>")
+					</div>
+				</div>
+			<%}%>
             <% } else { %>
             <div class="row-fluid">
-                <div class="span6">
-                    <table class="table">
-                        <tbody>
-                            @RawCell("AML Check Result", "No information")
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <% } %>
+				<div class="span6">
+					<table class="table">
+						<tbody>
+							@RawCell("AML Check Result", "No information")
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<% } %>
             <% if (experianInfo.BavInfo != null) { %>
             <div class="row-fluid">
-                <div class="span12">
-                    <table class="table">
-                        <tbody>
-                            @RawCell("BWA Check Result", "<%- experianInfo.BavInfo.BankAccountVerificationResult %>")
-                            @RawCell("Description", "<%- experianInfo.BavInfo.AuthenticationText %>")
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <% if (experianInfo.BavInfo.HasBWA) {%>
+				<div class="span12">
+					<table class="table">
+						<tbody>
+							@RawCell("BWA Check Result", "<%- experianInfo.BavInfo.BankAccountVerificationResult %>")
+							@RawCell("Description", "<%- experianInfo.BavInfo.AuthenticationText %>")
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<% if (experianInfo.BavInfo.HasBWA) {%>
                 <div class="row-fluid">
-                    <div class="span6 control-group form-horizontal">
-                        @InputTextSmallReadOnly("bav-name-score", "Name score", "<%- experianInfo.BavInfo.NameScore %>")
-                        @InputTextSmallReadOnly("bav-addr-srcs", "Address score", "<%- experianInfo.BavInfo.AddressScore %>")
-                        @InputTextSmallReadOnly("bav-status", "Status", "<%- experianInfo.BavInfo.AccountStatus %>")
-                    </div>
-                </div>
-            <%}%>
+					<div class="span6 control-group form-horizontal">
+						@InputTextSmallReadOnly("bav-name-score", "Name score", "<%- experianInfo.BavInfo.NameScore %>")
+						@InputTextSmallReadOnly("bav-addr-srcs", "Address score", "<%- experianInfo.BavInfo.AddressScore %>")
+						@InputTextSmallReadOnly("bav-status", "Status", "<%- experianInfo.BavInfo.AccountStatus %>")
+					</div>
+				</div>
+			<%}%>
             <% } else { %>
             <div class="row-fluid">
-                <div class="span6">
-                    <table class="table">
-                        <tbody>
-                            @RawCell("BWA Check Result", "No information")
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <% } %>
-        </div>
-    </div>
+				<div class="span6">
+					<table class="table">
+						<tbody>
+							@RawCell("BWA Check Result", "No information")
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<% } %>
+		</div>
+	</div>
 }
 
-@helper DisplayExperianError()
-{
-    <div class="row">
-        <%if(errorList && errorList.length > 0){%>
+@helper DisplayExperianError() {
+	<div class="row">
+		<%if(errorList && errorList.length > 0){%>
         <div class="span9 accordion page-content-frame" id="accordion-request-error">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianRequestFailed<%-curId%>">
-                    <b class="play"></b>Experian Errors</a>
-            </div>
-            <div id="collapseExperianRequestFailed<%-curId%>" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <div class="col-md-12">
-                        <div class="span8">
-                            <ul>
-                                <% _.each(errorList, function(errMessage){ %>
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianRequestFailed<%-curId%>">
+					<b class="play"></b>Experian Errors</a>
+			</div>
+			<div id="collapseExperianRequestFailed<%-curId%>" class="accordion-body collapse">
+				<div class="accordion-inner">
+					<div class="col-md-12">
+						<div class="span8">
+							<ul>
+								<% _.each(errorList, function(errMessage){ %>
                                     <li><%- errMessage %></li>
-                                <% }); %>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <%}%>
-    </div>
+								<% }); %>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%}%>
+	</div>
 }
 
 <script id="idhub-customaddress-template" type="text/template">
-    <div class="idHubCustomAddress">
-        <table>
-            <tr>
-                <td>
-                    <fieldset>
-                        <legend>Personal Information</legend>
-                        <table class="table">
-                            <tbody>
-                                @RawCell("First name", "<%- customAddress.Firstname %>")
-                                @RawCell("Middle name", "<%- customAddress.MiddleName %>")
-                                @RawCell("Surname", "<%- customAddress.Surname %>")
-                                @RawCell("Gender", "<%- customAddress.Gender %>")
-                                @RawCell("Date of birth", "<%- customAddress.DateOfBirth %>")
-                            </tbody>
-                        </table>
-                    </fieldset>
-                </td>
-                <td rowspan="2" style="vertical-align: top; padding-left: 40px;">
-                    <fieldset>
-                        <legend>Set New Address and/or Bank Account</legend>
-                        <div class="span4 form-horizontal">
-                            @EzForm.InputTextUnderwriter(this, "idhub-addr-housenumber", "House Number *", "<%- customAddress.IdHubAddressHouseNumber %>")
-                            @EzForm.InputTextUnderwriter(this, "idhub-addr-housename", "House Name *", "<%- customAddress.IdHubAddressHouseName %>")
-                            @EzForm.InputTextUnderwriter(this, "idhub-addr-street", "Street (Mandatory)", "<%- customAddress.IdHubAddressStreet %>")
-                            @EzForm.InputTextUnderwriter(this, "idhub-addr-district", "District (Optional)", "<%- customAddress.IdHubAddressDistrict %>")
-                            @EzForm.InputTextUnderwriter(this, "idhub-addr-town", "Town (Mandatory)", "<%- customAddress.IdHubAddressTown %>")
-                            @EzForm.InputTextUnderwriter(this, "idhub-addr-county", "County (Optional)", "<%- customAddress.IdHubAddressCounty %>")
-                            @EzForm.InputTextUnderwriter(this, "idhub-addr-postcode", "Postcode (Mandatory)", "<%- customAddress.IdHubAddressPostcode %>")
-                            @InputTextSmallReadOnly("idhub-addr-country", "Country(Mandatory)", "<%- customAddress.IdHubAddressCountry %>")
-                            @EzForm.InputTextUnderwriter(this, "idhub-bankaccount", "Bank Account", "<%- customAddress.BankAccount %>")
-                            @EzForm.InputTextUnderwriter(this, "idhub-sortcode", "Sort Code", "<%- customAddress.SortCode%>")
-                        </div>
-                    </fieldset>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <fieldset>
-                        <legend>Address Information</legend>
-                        <table class="table">
-                            <thead class="box">
-                                <tr class="box-title">
-                                    <th>Address Field \ Type Of Address</th>
-                                    <th>Current Address</th>
-                                    <th>Previous Address</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @RawCellClass(new Tuple<string, string>("Address Line 1", ""), new Tuple<string, string>("<%- customAddress.CurAddressLine1 %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressLine1 %>", "previous-address"))
-                                @RawCellClass(new Tuple<string, string>("Address Line 2", ""), new Tuple<string, string>("<%- customAddress.CurAddressLine2 %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressLine2 %>", "previous-address"))
-                                @RawCellClass(new Tuple<string, string>("Address Line 3", ""), new Tuple<string, string>("<%- customAddress.CurAddressLine3 %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressLine3 %>", "previous-address"))
-                                @RawCellClass(new Tuple<string, string>("Town", ""), new Tuple<string, string>("<%- customAddress.CurAddressTown %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressTown %>", "previous-address"))
-                                @RawCellClass(new Tuple<string, string>("County", ""), new Tuple<string, string>("<%- customAddress.CurAddressCounty %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressCounty %>", "previous-address"))
-                                @RawCellClass(new Tuple<string, string>("Postcode", ""), new Tuple<string, string>("<%- customAddress.CurAddressPostcode %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressPostcode %>", "previous-address"))
-                                @RawCellClass(new Tuple<string, string>("Country", ""), new Tuple<string, string>("<%- customAddress.CurAddressCountry %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressCountry %>", "previous-address"))
-                            </tbody>
-                        </table>
-                    </fieldset>
-                </td>
-            </tr>
-        </table>
-    </div>
+	<div class="idHubCustomAddress">
+		<table>
+			<tr>
+				<td>
+					<fieldset>
+						<legend>Personal Information</legend>
+						<table class="table">
+							<tbody>
+								@RawCell("First name", "<%- customAddress.Firstname %>")
+								@RawCell("Middle name", "<%- customAddress.MiddleName %>")
+								@RawCell("Surname", "<%- customAddress.Surname %>")
+								@RawCell("Gender", "<%- customAddress.Gender %>")
+								@RawCell("Date of birth", "<%- customAddress.DateOfBirth %>")
+							</tbody>
+						</table>
+					</fieldset>
+				</td>
+				<td rowspan="2" style="vertical-align: top; padding-left: 40px;">
+					<fieldset>
+						<legend>Set New Address and/or Bank Account</legend>
+						<div class="span4 form-horizontal">
+							@EzForm.InputTextUnderwriter(this, "idhub-addr-housenumber", "House Number *", "<%- customAddress.IdHubAddressHouseNumber %>")
+							@EzForm.InputTextUnderwriter(this, "idhub-addr-housename", "House Name *", "<%- customAddress.IdHubAddressHouseName %>")
+							@EzForm.InputTextUnderwriter(this, "idhub-addr-street", "Street (Mandatory)", "<%- customAddress.IdHubAddressStreet %>")
+							@EzForm.InputTextUnderwriter(this, "idhub-addr-district", "District (Optional)", "<%- customAddress.IdHubAddressDistrict %>")
+							@EzForm.InputTextUnderwriter(this, "idhub-addr-town", "Town (Mandatory)", "<%- customAddress.IdHubAddressTown %>")
+							@EzForm.InputTextUnderwriter(this, "idhub-addr-county", "County (Optional)", "<%- customAddress.IdHubAddressCounty %>")
+							@EzForm.InputTextUnderwriter(this, "idhub-addr-postcode", "Postcode (Mandatory)", "<%- customAddress.IdHubAddressPostcode %>")
+							@InputTextSmallReadOnly("idhub-addr-country", "Country(Mandatory)", "<%- customAddress.IdHubAddressCountry %>")
+							@EzForm.InputTextUnderwriter(this, "idhub-bankaccount", "Bank Account", "<%- customAddress.BankAccount %>")
+							@EzForm.InputTextUnderwriter(this, "idhub-sortcode", "Sort Code", "<%- customAddress.SortCode%>")
+						</div>
+					</fieldset>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<fieldset>
+						<legend>Address Information</legend>
+						<table class="table">
+							<thead class="box">
+								<tr class="box-title">
+									<th>Address Field \ Type Of Address</th>
+									<th>Current Address</th>
+									<th>Previous Address</th>
+								</tr>
+							</thead>
+							<tbody>
+								@RawCellClass(new Tuple<string, string>("Address Line 1", ""), new Tuple<string, string>("<%- customAddress.CurAddressLine1 %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressLine1 %>", "previous-address"))
+								@RawCellClass(new Tuple<string, string>("Address Line 2", ""), new Tuple<string, string>("<%- customAddress.CurAddressLine2 %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressLine2 %>", "previous-address"))
+								@RawCellClass(new Tuple<string, string>("Address Line 3", ""), new Tuple<string, string>("<%- customAddress.CurAddressLine3 %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressLine3 %>", "previous-address"))
+								@RawCellClass(new Tuple<string, string>("Town", ""), new Tuple<string, string>("<%- customAddress.CurAddressTown %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressTown %>", "previous-address"))
+								@RawCellClass(new Tuple<string, string>("County", ""), new Tuple<string, string>("<%- customAddress.CurAddressCounty %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressCounty %>", "previous-address"))
+								@RawCellClass(new Tuple<string, string>("Postcode", ""), new Tuple<string, string>("<%- customAddress.CurAddressPostcode %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressPostcode %>", "previous-address"))
+								@RawCellClass(new Tuple<string, string>("Country", ""), new Tuple<string, string>("<%- customAddress.CurAddressCountry %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressCountry %>", "previous-address"))
+							</tbody>
+						</table>
+					</fieldset>
+				</td>
+			</tr>
+		</table>
+	</div>
 </script>
 
 <script id="balance-history-template" type="text/template">
-    <div class="balance-history"><span class="inline-sparkline"></span></div>
+	<div class="balance-history"><span class="inline-sparkline"></span></div>
 </script>
 
-@helper FinancialAccounts()
-{
-    <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" href="#collapseFinancialAccounts<%-consumerData.Id%>">
-            <b class="play"></b>Financial Accounts</a>
-    </div>
-    <div id="collapseFinancialAccounts<%-consumerData.Id%>" class="accordion-body collapse">
-        <div class="accordion-inner">
-            <div class="row-fluid">
-                <div class="span12 control-group form-horizontal">
-                    <div style="overflow: auto;">
-                        <table class="table box" style="margin-bottom: 0; padding: 4px; table-layout: fixed;">
-                            <thead class="box-title">
-                                <tr>
-                                    <th colspan="1">#</th>
-                                    <th colspan="2">Start Date</th>
-                                    <th colspan="3">Account</th>
-                                    <th colspan="3">Match To</th>
-                                    <th colspan="3">Term &amp; Frequency</th>
-                                    <th colspan="2">Limit</th>
-                                    <th colspan="2">Balance</th>
-                                    <th colspan="2">Status</th>
-                                    <th colspan="2">Last / Settle Date</th>
-                                    <th colspan="2">Cash Withdrawals</th>
-                                    <th colspan="2">Minimum Payment</th>
-                                </tr>
-                            </thead>
-                            <tbody class="box-content">
-                                <%if(accountsInformation) { 
+@helper FinancialAccounts() {
+	<div class="accordion-heading">
+		<a class="accordion-toggle" data-toggle="collapse" href="#collapseFinancialAccounts<%-consumerData.Id%>">
+			<b class="play"></b>Financial Accounts</a>
+	</div>
+	<div id="collapseFinancialAccounts<%-consumerData.Id%>" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row-fluid">
+				<div class="span12 control-group form-horizontal">
+					<div style="overflow: auto;">
+						<table class="table box" style="margin-bottom: 0; padding: 4px; table-layout: fixed;">
+							<thead class="box-title">
+								<tr>
+									<th colspan="1">#</th>
+									<th colspan="2">Start Date</th>
+									<th colspan="3">Account</th>
+									<th colspan="3">Match To</th>
+									<th colspan="3">Term &amp; Frequency</th>
+									<th colspan="2">Limit</th>
+									<th colspan="2">Balance</th>
+									<th colspan="2">Status</th>
+									<th colspan="2">Last / Settle Date</th>
+									<th colspan="2">Cash Withdrawals</th>
+									<th colspan="2">Minimum Payment</th>
+								</tr>
+							</thead>
+							<tbody class="box-content">
+								<%if(accountsInformation) { 
                                     _.each(accountsInformation, function(ai, index){%>
                                     <tr class="row-top-border">
-                                        <td colspan="1">#<%=index+1%> </td>
-                                        <td colspan="2"><%- EzBob.formatDate3(ai.OpenDate) %></td>
-                                        <td colspan="3"><%- ai.Account %></td>
-                                        <td colspan="3"><%- ai.MatchTo %></td>
-                                        <td colspan="3"><%- ai.TermAndfreq %></td>
-                                        <td colspan="2"><%- ai.Limit %></td>
-                                        <td colspan="2"><%- EzBob.formatPoundsAsInt(ai.AccBalance) %> 
+										<td colspan="1">#<%=index+1%> </td>
+										<td colspan="2"><%- EzBob.formatDate3(ai.OpenDate) %></td>
+										<td colspan="3"><%- ai.Account %></td>
+										<td colspan="3"><%- ai.MatchTo %></td>
+										<td colspan="3"><%- ai.TermAndfreq %></td>
+										<td colspan="2"><%- ai.Limit %></td>
+										<td colspan="2"><%- EzBob.formatPoundsAsInt(ai.AccBalance) %> 
                                             <%if(ai.BalanceHistory) { %>
                                                 <button class="btn btn-link show-balance-history" data-balance="<%-ai.BalanceHistory%>">history</button>
-                                            <%}%>
-                                        </td>
-                                        <td colspan="2" class="experian-account-status <%- ai.AccountStatus %>"><%- ai.AccountStatus %></td>
-                                        <td colspan="2"><%- EzBob.formatDate3(ai.SettlementDate) %></td>
-                                        <td colspan="2"><%- ai.CashWithdrawals %></td>
-                                        <td colspan="2"><%- ai.MinimumPayment %></td>
-                                    </tr>
-                                    <%if(ai.LatestStatuses && _.some(ai.LatestStatuses, function(s){ return s.Status != "";})){ %>
+											<%}%>
+										</td>
+										<td colspan="2" class="experian-account-status <%- ai.AccountStatus %>"><%- ai.AccountStatus %></td>
+										<td colspan="2"><%- EzBob.formatDate3(ai.SettlementDate) %></td>
+										<td colspan="2"><%- ai.CashWithdrawals %></td>
+										<td colspan="2"><%- ai.MinimumPayment %></td>
+									</tr>
+								<%if(ai.LatestStatuses && _.some(ai.LatestStatuses, function(s){ return s.Status != "";})){ %>
                                         <tr>
-                                            <% _.each(ai.Years, function(y) {%>
+											<% _.each(ai.Years, function(y) {%>
                                             <td class="no-padding" colspan="<%- y.Span %>"><%- y.Year %></td>
-                                            <%});%>
-                                        </tr>
-                                        <tr>
-                                            <% _.each(ai.Quarters, function(q) {%>
+											<%});%>
+										</tr>
+								<tr>
+									<% _.each(ai.Quarters, function(q) {%>
                                                             <td class="no-padding" colspan="<%- q.Span %>"><%- q.Quarter %></td>
-                                            <%});%>
-                                        </tr>
-                                        <tr>
-                                            <% _.each(ai.LatestStatuses, function(s) {%>
-                                                            <td colspan="1" style="text-align: center; padding: 0;"><div class="alert alert-<%-s.StatusColor || 'white'%>"><%= s.Status %></div></td>
-                                            <%});%>
-                                        </tr>
-                                        <tr>
-                                            <% _.each(ai.MonthsDisplayed, function(m) {%>
+									<%});%>
+								</tr>
+								<tr>
+									<% _.each(ai.LatestStatuses, function(s) {%>
+                                                            <td colspan="1" style="text-align: center; padding: 0;">
+																<div class="alert alert-<%-s.StatusColor || 'white'%>"><%= s.Status %></div>
+															</td>
+									<%});%>
+								</tr>
+								<tr>
+									<% _.each(ai.MonthsDisplayed, function(m) {%>
                                                             <td class="no-padding" style="text-align: center;"><%- m %></td>
-                                            <%});%>
-                                        </tr>
-                                        <% } //if%>
+									<%});%>
+								</tr>
+								<% } //if%>
                                     <% });// each%>
                                     <% } //if%>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 }
 
-@helper ExperianConsent()
-{
-    <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianConsent"><b class="play"></b>Agreement</a>
-    </div>
-    <div id="collapseExperianConsent" class="accordion-body collapse">
-        <div class="accordion-inner">
-            <div class="row-fluid form-horizontal loan-agreements">
-                <ul>
-                    <li><a class="btn-download" href="#">Experian consent</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+@helper ExperianConsent() {
+	<div class="accordion-heading">
+		<a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianConsent"><b class="play"></b>Agreement</a>
+	</div>
+	<div id="collapseExperianConsent" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row-fluid form-horizontal loan-agreements">
+				<ul>
+					<li><a class="btn-download" href="#">Experian consent</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 }
 
-@helper BureauSummaryForCustomer()
-{
-    <div class="row">
-        <div class="col-lg-6 col-md-12">
+@helper BureauSummaryForCustomer() {
+	<div class="row">
+		<div class="col-lg-6 col-md-12">
 
-            <table class="table rright box">
-                <thead class="box">
-                    <tr class="box-title">
-                        @RawHeaderCell("Consumer", "")
-                    </tr>
-                </thead>
-                <tbody class="box-content">
-                    <tr class="<%- summary.Score >= 500 ? '' : 'red_cell'%>">
-                        <td>Score</td>
-                        <td><%- summary.Score %></td>
-                    </tr>
-                    @RawCell("Consumer Indebtedness Index", "<%- summary.ConsumerIndebtednessIndex  %>")
-                    <tr class="<%- summary.IsDataRelevant ? '' : 'red_cell'%>">
-                        <td>Check Date</td>
-                        <td><%- summary.CheckDate %></td>
-                    </tr>
-                    <tr class="<%- summary.IsDataRelevant ? '' : 'red_cell'%>">
-                        <td>Valid till</td>
-                        <td><%- summary.Validtill %></td>
-                    </tr>
-                    @RawCell("Worst Current status", "<%- summary.WorstCurrentstatus  %>")
-                    @RawCell("Worst Historical status", "<%- summary.WorstHistoricalstatus  %>")
-                    <tr class="<%- summary.Numberofdefaults > 0 ? 'red_cell' : ''%>">
-                        <td>Number of defaults</td>
-                        <td><%- summary.Numberofdefaults  %></td>
-                    </tr>
-                    @RawCell("Active Accounts", "<%- summary.Accounts  %>")
-                    <tr class="<%- summary.ThinFile ? 'red_cell' : ''%>">
-                        <td>ThinFile</td>
-                        <td><%- summary.ThinFile ? 'Yes' : 'No'  %></td>
-                    </tr>
-                    <tr class="<%- summary.CCJs > 0 ? 'red_cell' : ''%>">
-                        <td>CCJ's</td>
-                        <td><%- summary.CCJs  %></td>
-                    </tr>
-                    @RawCell("Most recent CCJ", "<%- summary.MostrecentCCJ  %>")
-                    @RawCell("Credit card utilization", "<%- summary.Creditcardutilization  %>")
-                    @RawCell("Enquiries in last 6 months", "<%- summary.Enquiriesinlast6months  %>")
-                    @RawCell("Enquiries in last 3 months", "<%- summary.Enquiriesinlast3months  %>")
-                    @RawCell("Total balance", "<%- EzBob.formatPoundsAsInt(summary.Totalbalance)  %>")
-                </tbody>
-            </table>
-        </div>
-        <div class="col-lg-6 col-md-12">
-            <table class="table rright box">
-                <thead class="box">
-                    @RawHeaderCell("Business/AML", "", "")
-                </thead>
-                <tbody class="box-content">
-                    @RawCell("AML", "<%- summary.AML  %>", "<%- summary.AMLnum  %>")
-                    @RawCell("BWA", "<%- summary.BWA  %>", "<%- summary.BWAnum  %>")
-                </tbody>
-            </table>
-            <table class="table check-history box">
-                <thead class="box">
-                    @RawHeaderCell("Check history", "", "")
-                    @EzForm.RawCellBold("Id", "Date insert", "Score")
-                </thead>
-                <tbody class="box-content">
-                    <% _.each(consumerHistory, function(val, i){%>
+			<table class="table rright box">
+				<thead class="box">
+					<tr class="box-title">
+						@RawHeaderCell("Consumer", "")
+					</tr>
+				</thead>
+				<tbody class="box-content">
+					<tr class="<%- summary.Score >= 500 ? '' : 'red_cell'%>">
+						<td>Score</td>
+						<td><%- summary.Score %></td>
+					</tr>
+					@RawCell("Consumer Indebtedness Index", "<%- summary.ConsumerIndebtednessIndex  %>")
+					<tr class="<%- summary.IsDataRelevant ? '' : 'red_cell'%>">
+						<td>Check Date</td>
+						<td><%- summary.CheckDate %></td>
+					</tr>
+					<tr class="<%- summary.IsDataRelevant ? '' : 'red_cell'%>">
+						<td>Valid till</td>
+						<td><%- summary.Validtill %></td>
+					</tr>
+					@RawCell("Worst Current status", "<%- summary.WorstCurrentstatus  %>")
+					@RawCell("Worst Historical status", "<%- summary.WorstHistoricalstatus  %>")
+					<tr class="<%- summary.Numberofdefaults > 0 ? 'red_cell' : ''%>">
+						<td>Number of defaults</td>
+						<td><%- summary.Numberofdefaults  %></td>
+					</tr>
+					@RawCell("Active Accounts", "<%- summary.Accounts  %>")
+					<tr class="<%- summary.ThinFile ? 'red_cell' : ''%>">
+						<td>ThinFile</td>
+						<td><%- summary.ThinFile ? 'Yes' : 'No'  %></td>
+					</tr>
+					<tr class="<%- summary.CCJs > 0 ? 'red_cell' : ''%>">
+						<td>CCJ's</td>
+						<td><%- summary.CCJs  %></td>
+					</tr>
+					@RawCell("Most recent CCJ", "<%- summary.MostrecentCCJ  %>")
+					@RawCell("Credit card utilization", "<%- summary.Creditcardutilization  %>")
+					@RawCell("Enquiries in last 6 months", "<%- summary.Enquiriesinlast6months  %>")
+					@RawCell("Enquiries in last 3 months", "<%- summary.Enquiriesinlast3months  %>")
+					@RawCell("Total balance", "<%- EzBob.formatPoundsAsInt(summary.Totalbalance)  %>")
+				</tbody>
+			</table>
+		</div>
+		<div class="col-lg-6 col-md-12">
+			<table class="table rright box">
+				<thead class="box">
+					@RawHeaderCell("Business/AML", "", "")
+				</thead>
+				<tbody class="box-content">
+					@RawCell("AML", "<%- summary.AML  %>", "<%- summary.AMLnum  %>")
+					@RawCell("BWA", "<%- summary.BWA  %>", "<%- summary.BWAnum  %>")
+				</tbody>
+			</table>
+			<table class="table check-history box">
+				<thead class="box">
+					@RawHeaderCell("Check history", "", "")
+					@EzForm.RawCellBold("Id", "Date insert", "Score")
+				</thead>
+				<tbody class="box-content">
+					<% _.each(consumerHistory, function(val, i){%>
                     @RawCell("<%-val.ServiceLogId%>", "<%-EzBob.formatDateTime(val.Date)%>", "<%-val.Score%>")
-                    <%})%>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <table class="table box">
-                <thead class="box">
-                    @RawHeaderCell("Account Overview", "", "", "")
-                </thead>
-                <tbody class="box-content">
-                    @RawCell("Type", "Open Accounts", "Worst Arrears", "Total Balance")
-                    @RawCell("Credit Cards",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_CC %>",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_CC %>",
-                             "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_CC) %>")
-                    @RawCell("Mortgages",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_Mtg %>",
-                             "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_Mtg) %>")
-                    @RawCell("Personal Loans",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_PL %>",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_PL %>",
-                             "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_PL) %>")
-                    @RawCell("Other",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_Other %>",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_Other %>",
-                             "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_Other) %>")
-                    @RawCell("Total",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_Total %>",
-                             "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_Total %>",
-                             "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_Total) %>")
-                </tbody>
-            </table>
-        </div>
-    </div>
+					<%})%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12 col-md-12">
+			<table class="table box">
+				<thead class="box">
+					@RawHeaderCell("Account Overview", "", "", "")
+				</thead>
+				<tbody class="box-content">
+					@RawCell("Type", "Open Accounts", "Worst Arrears", "Total Balance")
+					@RawCell("Credit Cards",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_CC %>",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_CC %>",
+							 "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_CC) %>")
+					@RawCell("Mortgages",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_Mtg %>",
+							 "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_Mtg) %>")
+					@RawCell("Personal Loans",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_PL %>",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_PL %>",
+							 "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_PL) %>")
+					@RawCell("Other",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_Other %>",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_Other %>",
+							 "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_Other) %>")
+					@RawCell("Total",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.OpenAccounts_Total %>",
+							 "<%- experianInfo.Consumer.ConsumerAccountsOverview.WorstArrears_Total %>",
+							 "<%- EzBob.formatPoundsAsInt(experianInfo.Consumer.ConsumerAccountsOverview.Balance_Total) %>")
+				</tbody>
+			</table>
+		</div>
+	</div>
 }
