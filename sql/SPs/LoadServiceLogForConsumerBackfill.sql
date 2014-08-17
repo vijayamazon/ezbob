@@ -9,12 +9,16 @@ ALTER PROCEDURE LoadServiceLogForConsumerBackfill
 AS
 BEGIN
 	SET NOCOUNT ON;
+	
+	DECLARE @LastId BIGINT
+	SELECT @LastId = MAX(ServiceLogId) FROM ExperianConsumerData
 
 	SELECT
 		Id
 	FROM
 		MP_ServiceLog
 	WHERE
-		ServiceType = 'Consumer Request'
+		ServiceType = 'Consumer Request' AND
+		Id > @LastId
 END
 GO
