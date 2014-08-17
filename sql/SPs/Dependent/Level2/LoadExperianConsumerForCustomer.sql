@@ -25,6 +25,8 @@ BEGIN
 		l.CustomerId = @CustomerId
 		AND
 		l.ServiceType = 'Consumer Request'
+		AND
+		l.DirectorId IS NULL
 	ORDER BY
 		l.InsertDate DESC,
 		l.Id DESC
