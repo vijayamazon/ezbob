@@ -7,10 +7,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetPersonalInfoForConsumerCheck] 
 	(@CustomerId INT,
-	 @DirectorId INT)
+	 @DirectorId INT = NULL)
 AS
 BEGIN
-	IF @DirectorId = 0
+	IF @DirectorId IS NULL
 	BEGIN
 		SELECT
 			FirstName, 

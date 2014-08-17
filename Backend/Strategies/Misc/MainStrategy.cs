@@ -835,7 +835,7 @@
 			}
 		}
 
-		private void PerformConsumerExperianCheck(int directorId = 0)
+		private void PerformConsumerExperianCheck(int? directorId = null)
 		{
 			if (wasMainStrategyExecutedBefore)
 			{
@@ -1140,7 +1140,7 @@
 			return WaitForUpdateToFinish(GetIsExperianCompanyUpdated, totalTimeToWaitForExperianCompanyCheck, intervalWaitForExperianCompanyCheck);
 		}
 
-		private bool WaitForExperianConsumerCheckToFinishUpdates(int directorId = 0)
+		private bool WaitForExperianConsumerCheckToFinishUpdates(int? directorId = null)
 		{
 			Log.Info("Waiting for experian consumer check");
 			return WaitForUpdateToFinish(() => GetIsExperianConsumerUpdated(directorId), totalTimeToWaitForExperianConsumerCheck, intervalWaitForExperianConsumerCheck);
@@ -1172,7 +1172,7 @@
 			}
 		}
 
-		private bool GetIsExperianConsumerUpdated(int directorId)
+		private bool GetIsExperianConsumerUpdated(int? directorId)
 		{
 			return DB.ExecuteScalar<bool>(
 				"GetIsConsumerDataUpdated",

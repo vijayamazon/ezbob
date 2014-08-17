@@ -9,8 +9,9 @@
 	} // enum AddressCurrency
 
 	public class GetCustomerAddresses : AStoredProcedure {
-		public GetCustomerAddresses(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public GetCustomerAddresses(int nCustomerID, int? nDirectorID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			CustomerID = nCustomerID;
+			DirectorID = nDirectorID;
 		} // constructor
 
 		public override bool HasValidParameters() {
@@ -18,6 +19,7 @@
 		} // HasValidParameters
 
 		public int CustomerID { get; set; }
+		public int? DirectorID { get; set; }
 
 		public class ResultRow : AResultRow {
 			public ResultRow() {

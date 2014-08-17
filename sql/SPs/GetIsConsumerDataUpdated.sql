@@ -7,13 +7,13 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetIsConsumerDataUpdated] 
 	(@CustomerId INT,
-	 @DirectorId INT, 
+	 @DirectorId INT = NULL, 
 	 @Today DATE)
 AS
 BEGIN
 	DECLARE @LastUpdateTime DATE
 			
-	IF @DirectorId = 0
+	IF @DirectorId = NULL
 	BEGIN
 		SELECT @LastUpdateTime = max(InsertDate) FROM MP_ServiceLog WHERE CustomerId = @CustomerId AND (DirectorId IS NULL OR DirectorId = 0)
 	END

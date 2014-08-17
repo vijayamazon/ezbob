@@ -13,7 +13,7 @@
 	public class ExperianConsumerCheck : AStrategy
 	{
 		private readonly int customerId;
-		private readonly int directorId;
+		private readonly int? directorId;
 		private readonly bool forceCheck;
 
 		private readonly GetCustomerAddresses.ResultRow addressLines;
@@ -27,7 +27,7 @@
 			get { return "Experian consumer check"; }
 		}
 
-		public ExperianConsumerCheck(int customerId, int directorId, bool bForceCheck, AConnection db, ASafeLog log)
+		public ExperianConsumerCheck(int customerId, int? directorId, bool bForceCheck, AConnection db, ASafeLog log)
 			: base(db, log)
 		{
 			this.customerId = customerId;
@@ -38,7 +38,7 @@
 				new GetPersonalInfoForConsumerCheck(customerId, directorId, DB, Log)
 					.FillFirst<GetPersonalInfoForConsumerCheck.ResultRow>();
 
-			addressLines = new GetCustomerAddresses(customerId, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
+			addressLines = new GetCustomerAddresses(customerId, directorId, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
 		}
 
 		public override void Execute()
@@ -175,7 +175,7 @@
 		// ReSharper disable UnusedAutoPropertyAccessor.Local
 		private class GetPersonalInfoForConsumerCheck : AStoredProcedure
 		{
-			public GetPersonalInfoForConsumerCheck(int customerId, int directorId, AConnection db, ASafeLog log)
+			public GetPersonalInfoForConsumerCheck(int customerId, int? directorId, AConnection db, ASafeLog log)
 				: base(db, log)
 			{
 				CustomerId = customerId;
@@ -189,7 +189,7 @@
 
 			public int CustomerId { get; set; }
 
-			public int DirectorId { get; set; }
+			public int? DirectorId { get; set; }
 
 			public class ResultRow : AResultRow
 			{
