@@ -168,7 +168,7 @@
 			}
 
 			foreach (var dob in summary.CreditBureau.ApplicantDOBs) {
-				if (dob.HasValue && (dob.Value - DateTime.Today).TotalDays/365 < 18) {
+				if (dob.HasValue && (DateTime.Today - dob.Value).TotalDays / 365 < 18) {
 					summary.Alerts.Errors.Add(new AlertModel { Abbreviation = "A", Alert = "Age of applicant under 18", AlertType = AlertType.Error.DescriptionAttr() });
 				}
 			}
