@@ -78,6 +78,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public int? NumberOfLates { get; set; }
 		public string LateStatus { get; set; }
 		public int? DefaultAmount { get; set; }
+
+		public int? TotalAccountBalances {get; set; }
+		public int? TotalMonthlyRepayments { get; set; }
+		public int? CreditCardBalances { get; set; }
 	}
 
 	public class ConsumerAccountsOverview

@@ -111,7 +111,7 @@
 					model.CreditBureauModel = _creditBureauModelBuilder.Create(customer);
 
 				using (tc.AddStep("SummaryModel Time taken"))
-					model.SummaryModel = _summaryModelBuilder.CreateProfile(customer);
+					model.SummaryModel = _summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel);
 
 				using (tc.AddStep("PaymentAccountModel Time taken"))
 					model.PaymentAccountModel = new PaymentsAccountModel(customer);

@@ -99,6 +99,8 @@
 		public string BorrowerType { get; set; }
 		public int? FinancialAccounts { get; set; }
 		public string ThinFile { get; set; }
+		public int NumDirectorThinFiles { get; set; }
+		public int NumDirectorNA { get; set; } 
 		public List<DateTime?> ApplicantDOBs { get; set; }
 	}
 

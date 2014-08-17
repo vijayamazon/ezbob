@@ -26,45 +26,64 @@
 		private readonly IDecisionHistoryRepository _decisions;
 		private readonly MarketPlacesFacade _mpFacade;
 		private readonly ServiceClient serviceClient;
+		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
 
-		public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, MarketPlacesFacade mpFacade)
+		public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, MarketPlacesFacade mpFacade, CreditBureauModelBuilder creditBureauModelBuilder)
 		{
 			_decisions = decisions;
 			_mpFacade = mpFacade;
+			_creditBureauModelBuilder = creditBureauModelBuilder;
 			serviceClient = new ServiceClient();
 		}
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ProfileSummaryModelBuilder));
 
+		public ProfileSummaryModel CreateProfile(Customer customer, CreditBureauModel creditBureau) {
+			var summary = new ProfileSummaryModel();
+			BuildCustomerSummary(summary, customer);
+			BuildMarketplaces(customer, summary);
+			BuildCreditBureau(customer, summary, creditBureau);
+			BuildPaymentAccounts(customer, summary);
+			AddDecisionHistory(summary, customer);
+			BuildRequestedLoan(summary, customer);
+			BuildAlerts(summary, customer);
+			return summary;
+		}
+
+
 		public ProfileSummaryModel CreateProfile(Customer customer)
 		{
-			var summary = new ProfileSummaryModel { Id = customer.Id, IsOffline = customer.IsOffline };
+			var summary = new ProfileSummaryModel();
+			BuildCustomerSummary(summary, customer);
 			BuildMarketplaces(customer, summary);
 			BuildCreditBureau(customer, summary);
 			BuildPaymentAccounts(customer, summary);
 			AddDecisionHistory(summary, customer);
-
 			BuildRequestedLoan(summary, customer);
+			BuildAlerts(summary, customer);
+			return summary;
+		}
+
+		private void BuildCustomerSummary(ProfileSummaryModel summary, Customer customer) {
+			summary.Id = customer.Id;
+			summary.IsOffline = customer.IsOffline;
 
 			summary.AffordabilityAnalysis =
-					new AffordabilityAnalysis
-					{
+					new AffordabilityAnalysis {
 						CashAvailabilityOrDeficits = "Not implemented now",
 						EzBobMonthlyRepayment = Money(GetRepaymentAmount(customer))
 					};
 			summary.LoanActivity = CreateLoanActivity(customer);
 			summary.AmlBwa =
-				new AmlBwa
-				{
+				new AmlBwa {
 					Aml = customer.AMLResult,
 					Bwa = customer.BWAResult,
 					Lighter = new Lighter(ObtainAmlState(customer))
 				};
-			summary.FraudCheck = new FraudCheck
-				{
-					Status = customer.Fraud.ToString(),
+			summary.FraudCheck = new FraudCheck {
+				Status = customer.Fraud.ToString(),
 
-				};
+			};
 			summary.OverallTurnOver = customer.PersonalInfo == null ? null : customer.PersonalInfo.OverallTurnOver;
 			summary.WebSiteTurnOver = customer.PersonalInfo == null ? null : customer.PersonalInfo.WebSiteTurnOver;
 			summary.Comment = customer.Comment;
@@ -72,14 +91,11 @@
 			summary.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
 			summary.CompanyInfo = CompanyInfoMap.FromCompany(customer.Company);
 			summary.IsOffline = customer.IsOffline;
-
-			BuildAlerts(summary, customer);
-			return summary;
 		}
 
 		private void BuildAlerts(ProfileSummaryModel summary, Customer customer)
 		{
-			summary.Alerts = new AlertsModel()
+			summary.Alerts = new AlertsModel
 				{
 					Errors = new List<AlertModel>(),
 					Warnings = new List<AlertModel>(),
@@ -129,6 +145,26 @@
 				case "N/A":
 					summary.Alerts.Warnings.Add(new AlertModel {Abbreviation="N/A", Alert = "Couldn't get financial accounts", AlertType = AlertType.Warning.DescriptionAttr() });
 					break;
+			}
+
+			if (summary.CreditBureau.NumDirectorThinFiles > 0) {
+				summary.Alerts.Errors.Add(new AlertModel {
+					Abbreviation = "TF",
+					Alert =
+						string.Format("{0} director{1} with thin file", summary.CreditBureau.NumDirectorThinFiles,
+						              summary.CreditBureau.NumDirectorThinFiles == 1 ? "" : "s"),
+					AlertType = AlertType.Error.DescriptionAttr()
+				});
+			}
+
+			if (summary.CreditBureau.NumDirectorNA > 0) {
+				summary.Alerts.Warnings.Add(new AlertModel {
+					Abbreviation = "N/A",
+					Alert =
+						string.Format("{0} director{1} with no experian data available", summary.CreditBureau.NumDirectorNA,
+									  summary.CreditBureau.NumDirectorThinFiles == 1 ? "" : "s"),
+					AlertType = AlertType.Warning.DescriptionAttr()
+				});
 			}
 
 			foreach (var dob in summary.CreditBureau.ApplicantDOBs) {
@@ -310,35 +346,37 @@
 			}
 			summary.RequestedLoan = rl;
 		}
-		private void BuildCreditBureau(Customer customer, ProfileSummaryModel summary)
+		private void BuildCreditBureau(Customer customer, ProfileSummaryModel summary, CreditBureauModel creditBureauModel = null)
 		{
 			var creditBureau = new CreditBureau();
 
-			try
-			{
-				var result = serviceClient.Instance.LoadExperianConsumer(customer.Id, null, null);
-				if (result != null)
-				{
-					creditBureau.CreditBureauScore = result.Value.BureauScore;
-					creditBureau.TotalDebt = result.Value.TotalAccountBalances;
-					creditBureau.TotalMonthlyRepayments = result.Value.CreditCommitmentsRevolving + result.Value.CreditCommitmentsNonRevolving + result.Value.MortgagePayments;
-					creditBureau.CreditCardBalances = result.Value.CreditCardBalances;
-					creditBureau.BorrowerType =
-						TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
-
-					//creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
-					creditBureau.FinancialAccounts = result.Value.Cais.Count();
-					creditBureau.ThinFile = creditBureau.FinancialAccounts == 0 ? "Yes" : "No";
-					creditBureau.ApplicantDOBs = result.Value.Applicants.Select(x => x.DateOfBirth).ToList();
-				}
-				else
-				{
-					creditBureau.ThinFile = "N/A";
-				}
+			if (creditBureauModel == null) {
+				creditBureauModel = _creditBureauModelBuilder.Create(customer);
 			}
-			catch (Exception e)
-			{
-				Log.Error(e);
+
+			if (creditBureauModel.Consumer != null && creditBureauModel.Consumer.ServiceLogId != null) {
+				creditBureau.CreditBureauScore = creditBureauModel.Consumer.Score;
+				creditBureau.TotalDebt = creditBureauModel.Consumer.TotalAccountBalances;
+				creditBureau.TotalMonthlyRepayments = creditBureauModel.Consumer.TotalMonthlyRepayments;
+				creditBureau.CreditCardBalances = creditBureauModel.Consumer.CreditCardBalances;
+				creditBureau.BorrowerType = TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
+				creditBureau.FinancialAccounts = creditBureauModel.Consumer.AccountsInformation.Count();
+				creditBureau.ThinFile = creditBureau.FinancialAccounts == 0 ? "Yes" : "No";
+				creditBureau.ApplicantDOBs = new List<DateTime?>() { { creditBureauModel.Consumer.Applicant.DateOfBirth } };
+
+				if (creditBureauModel.Directors.Any()) {
+					foreach (var director in creditBureauModel.Directors) {
+						if (director != null && director.ServiceLogId != null && !director.AccountsInformation.Any()) {
+							creditBureau.NumDirectorThinFiles++;
+						}
+
+						if (director == null || director.ServiceLogId == null) {
+							creditBureau.NumDirectorNA++;
+						}
+					}
+				}
+			} else {
+				creditBureau.ThinFile = "N/A";
 			}
 
 			summary.CreditBureau = creditBureau;

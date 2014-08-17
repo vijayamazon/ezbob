@@ -129,6 +129,11 @@
 			model.ScoreValuePosition = scorePosColor.ValPosition;
 			model.ScoreColor = scorePosColor.Color;
 			model.Applicant = eInfo.Applicants.FirstOrDefault();
+			model.TotalAccountBalances = eInfo.TotalAccountBalances;
+			model.TotalMonthlyRepayments = eInfo.CreditCommitmentsRevolving + eInfo.CreditCommitmentsNonRevolving +
+			                               eInfo.MortgagePayments;
+			model.CreditCardBalances = eInfo.CreditCardBalances;
+
 			if (model.Applicant != null)
 			{
 				var days = model.Applicant.DateOfBirth.HasValue ? (DateTime.Now - model.Applicant.DateOfBirth.Value).TotalDays : 0;
