@@ -58,7 +58,7 @@ h2 {
     vertical-align: baseline;
 }
 
-.form-read-and-accept input[type="checkbox"] {
+.form_read_and_accept input[type="checkbox"] {
     margin: 0 5px 5px 0;
 }
 
@@ -310,28 +310,13 @@ table.table th {
 	vertical-align: middle;
 }
 
-/*
-@media only screen and (min-device-width : 320px) and (max-device-width : 1000px) {
-    .broker-form {
-        float: left;
-        width: 100%;
-        line-height: 1.8em;
-        margin-bottom: 1.5em;
-    }
-
-    .customer-sidebar {
-        display: none;
-        visibility: hidden;
-    }
-    body,
-    #wrapper,
-    #header,
-    .header-inner,
-    .inner,
-    .copyrights-inner {
-        min-width: 600px;
-        width: 100%;
-    }
-
+div.form_read_and_accept label {
+    display: inline-block;
+    width: 90%;
+    vertical-align: top;
+    white-space: inherit;
 }
-*/
+
+.broker-dashboard {
+    min-width: 1000px !important;
+}

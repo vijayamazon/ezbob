@@ -1,4 +1,4 @@
-@media only screen and (min-device-width : 320px) and (max-device-width : 1000px) {
+@media only screen and (min-width : 320px) and (max-width : 1000px) {
 
     html, body {
         padding: 0;
@@ -16,12 +16,13 @@
         width: 100%;
         min-width: 320px;
     }
-
+    
     ul#user-menu {
         margin: 0;
         width: 170px;
         top: 0;
         right: 0;
+        line-height: inherit;
     }
 
     ul#user-menu li {
@@ -319,5 +320,29 @@
 
     .vip-container {
         display: none;
+    }
+
+    /***broker****/
+    .broker-form {
+        width: 100%;
+        max-width: 640px;
+    }
+
+    .hide-mobile {
+        display: none;
+    }
+
+}
+
+@media only screen and (min-width : 320px) and (max-width : 500px) {
+    .header-info {
+        line-height: initial;
+        color: inherit;
+        width: 100%;
+    }
+    .header-info-left,
+    .header-info-text,
+    .header-info-right {
+        background: none;
     }
 }

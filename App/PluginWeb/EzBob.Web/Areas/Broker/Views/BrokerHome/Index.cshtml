@@ -28,6 +28,7 @@
 	<meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
 
 	<meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	@{
 		Html.RenderPartial("_FavIcon");
@@ -51,6 +52,7 @@
 			.Add("~/Content/css/common.css")
 			.Add("~/Content/css/broker.css")
 			.Add("~/Content/css/edit-experian-director-data.css")
+			.Add("~/Content/css/mobile.css")
 			.MvcRender("~/Content/css/min/broker_#.css")
 		);
 	}
@@ -108,7 +110,7 @@
 									</label>
 								</div>
 
-								<div class="form_field_container">
+								<div class="form_field_container hide-mobile">
 									<label class="attardi-input">
 										<span>Company registration number</span>
 										<input type="text" name="FirmRegNum" id="FirmRegNum" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-regnum" />
@@ -116,7 +118,7 @@
 									</label>
 								</div>
 
-								<div class="form_field_container">
+								<div class="form_field_container hide-mobile">
 									<label class="attardi-input">
 										<span>Company web site</span>
 										<input type="text" name="FirmWebSite" id="FirmWebSite" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-web-site" />
@@ -207,13 +209,13 @@
 									@EzForm.Captcha(Model.CaptchaMode, sId: "broker-captcha")
 								</div>
 
-								<div class="form_field_container form-read-and-accept">
-									<div>
+								<div class="form_field_container">
+									<div class="form_read_and_accept">
 										<input id="AgreeToTerms" name="AgreeToTerms" type="checkbox" value="accepted-terms" ui-event-control-id="broker:signup-agree-to-terms" />
 										<label for="AgreeToTerms">I have read and accept the ezbob <a href="#" class="show-terms-and-conditions">terms and conditions</a></label>
 									</div>
 
-									<div>
+									<div class="form_read_and_accept">
 										<input id="AgreeToPrivacyPolicy" name="AgreeToPrivacyPolicy" type="checkbox" value="accepted-privacy-policy" ui-event-control-id="broker:signup-agree-to-privacy-policy" />
 										<label for="AgreeToPrivacyPolicy">I have read and accept the ezbob <a target="_blank" href="http://www.ezbob.com/privacy-and-cookies">privacy policy</a></label>
 									</div>

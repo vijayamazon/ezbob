@@ -58,7 +58,7 @@ EzBob.Broker.ForgottenView = EzBob.Broker.MobilePhoneView.extend({
 
 	onRender: function() {
 		EzBob.Broker.ForgottenView.__super__.onRender.apply(this, arguments);
-
+		$('body').removeClass('broker-dashboard');
 		this.$el.find('.phonenumber').numericOnly(11);
 		this.$el.find('.phonenumbercode').numericOnly(6);
 	}, // onRender

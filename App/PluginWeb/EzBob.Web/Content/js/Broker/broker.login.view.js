@@ -22,6 +22,10 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 
 		return evt;
 	}, // events
+	
+	onRender: function() {
+		$('body').removeClass('broker-dashboard');
+	},
 
 	forgotten: function(event) {
 		event.preventDefault();

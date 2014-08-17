@@ -52,7 +52,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 		this.inputChanged();
 	}, // clear
 
-	onRender: function() {
+	onRender: function () {
+		$('body').addClass('broker-dashboard');
 		this.$el.tabs();
 
 		this.reloadCustomerList();

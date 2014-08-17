@@ -107,7 +107,8 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 
 	onRender: function() {
 		EzBob.Broker.SignupView.__super__.onRender.apply(this, arguments);
-
+		$('body').removeClass('broker-dashboard');
+		
 		this.$el.find('#EstimatedMonthlyClientAmount').moneyFormat();
 
 		this.$el.find('.phonenumber').numericOnly(11);
