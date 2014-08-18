@@ -1,5 +1,4 @@
-﻿namespace EzBob.Backend.Strategies.Experian
-{
+﻿namespace EzBob.Backend.Strategies.Experian {
 	using System;
 	using System.Globalization;
 	using ConfigManager;
@@ -10,8 +9,7 @@
 	using Ezbob.Logger;
 	using StoredProcs;
 
-	public class ExperianConsumerCheck : AStrategy
-	{
+	public class ExperianConsumerCheck : AStrategy {
 		private readonly int customerId;
 		private readonly int? directorId;
 		private readonly bool forceCheck;
@@ -22,14 +20,12 @@
 		public int Score { get; private set; }
 		public ExperianConsumerData Result { get; private set; }
 
-		public override string Name
-		{
+		public override string Name {
 			get { return "Experian consumer check"; }
 		}
 
 		public ExperianConsumerCheck(int customerId, int? directorId, bool bForceCheck, AConnection db, ASafeLog log)
-			: base(db, log)
-		{
+			: base(db, log) {
 			this.customerId = customerId;
 			this.directorId = directorId;
 			forceCheck = bForceCheck;
@@ -41,42 +37,44 @@
 			addressLines = new GetCustomerAddresses(customerId, directorId, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
 		}
 
-		public override void Execute()
-		{
-			Log.Info("Starting consumer check with parameters: {0} {1}.", personalData, addressLines);
+		public override void Execute() {
+			Log.Info("Starting consumer check with current address, parameters: {0} {1}.", personalData, addressLines);
 
 			bool bSuccess = GetConsumerInfoAndSave(AddressCurrency.Current);
 
-			if (!bSuccess && CanUsePrevAddress())
+			if (!bSuccess && CanUsePrevAddress()) {
+				Log.Info("Starting consumer check with previous address parameters: {0} {1}.", personalData, addressLines);
 				bSuccess = GetConsumerInfoAndSave(AddressCurrency.Previous);
+			}
 
 			UpdateAnalytics();
 
-			Log.Info("Consumer check {2} with parameters: {0} {1}.", personalData, addressLines,
-					 bSuccess ? "succeeded" : "failed");
+			if (!bSuccess) {
+				Log.Error("Consumer check failed with parameters: {0} {1}.", personalData, addressLines);
+			} else {
+				Log.Info("Consumer check succeded with parameters: {0} {1}.", personalData, addressLines);
+			}
+
 		}
 
-		private bool CanUsePrevAddress()
-		{
+		private bool CanUsePrevAddress() {
 			return
-				(directorId == 0) &&
+				(directorId == null) &&
 				(personalData.TimeAtAddress == 1) &&
 				!string.IsNullOrEmpty(addressLines[6, AddressCurrency.Previous]);
 		}
 
-		private void UpdateAnalytics()
-		{
+		private void UpdateAnalytics() {
 			if ((Result == null) || Result.HasExperianError)
 				return;
 
-			if (directorId == 0)
+			if (directorId == null)
 				UpdateCustomerAnalytics();
 			else
 				UpdateDirectorAnalytics();
 		}
 
-		private void UpdateCustomerAnalytics()
-		{
+		private void UpdateCustomerAnalytics() {
 			int nCii = Result.CII.HasValue ? Result.CII.Value : 0;
 
 			int nNumOfAccounts = 0;
@@ -85,8 +83,7 @@
 
 			var dThen = DateTime.UtcNow.AddYears(-CurrentValues.Instance.CustomerAnalyticsDefaultHistoryYears);
 
-			foreach (var detail in Result.Cais)
-			{
+			foreach (var detail in Result.Cais) {
 				nNumOfAccounts++;
 
 				if (detail.AccountStatus != "F")
@@ -130,8 +127,7 @@
 				);
 		}
 
-		private void UpdateDirectorAnalytics()
-		{
+		private void UpdateDirectorAnalytics() {
 			Log.Debug("Updating customer analytics director score (customer = {0}, director = {1}, score = {2})", customerId,
 					  directorId, Score);
 
@@ -144,8 +140,7 @@
 				);
 		}
 
-		private bool GetConsumerInfoAndSave(AddressCurrency oAddressCurrency)
-		{
+		private bool GetConsumerInfoAndSave(AddressCurrency oAddressCurrency) {
 			InputLocationDetailsMultiLineLocation location = addressLines.GetLocation(oAddressCurrency);
 
 			var consumerService = new ConsumerService();
@@ -161,29 +156,26 @@
 				customerId,
 				directorId,
 				false,
-				directorId != 0,
+				directorId != null,
 				forceCheck
 				);
 
-			if (!Result.HasExperianError)
+			if (Result != null && !Result.HasExperianError)
 				Score = Result.BureauScore.HasValue ? Result.BureauScore.Value : 0;
 
-			return !Result.HasExperianError;
+			return Result==null || !Result.HasExperianError;
 		}
 
 		// ReSharper disable MemberCanBePrivate.Local
 		// ReSharper disable UnusedAutoPropertyAccessor.Local
-		private class GetPersonalInfoForConsumerCheck : AStoredProcedure
-		{
+		private class GetPersonalInfoForConsumerCheck : AStoredProcedure {
 			public GetPersonalInfoForConsumerCheck(int customerId, int? directorId, AConnection db, ASafeLog log)
-				: base(db, log)
-			{
+				: base(db, log) {
 				CustomerId = customerId;
 				DirectorId = directorId;
 			}
 
-			public override bool HasValidParameters()
-			{
+			public override bool HasValidParameters() {
 				return CustomerId > 0;
 			}
 
@@ -191,16 +183,14 @@
 
 			public int? DirectorId { get; set; }
 
-			public class ResultRow : AResultRow
-			{
+			public class ResultRow : AResultRow {
 				public string FirstName { get; set; }
 				public string Surname { get; set; }
 				public string Gender { get; set; }
 				public DateTime DateOfBirth { get; set; }
 				public int TimeAtAddress { get; set; }
 
-				public override string ToString()
-				{
+				public override string ToString() {
 					return string.Format(
 						"FirstName='{0}' Surname='{1}' Gender='{2}' DateOfBirth='{3}' Time at address={4}",
 						FirstName, Surname, Gender, DateOfBirth.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture), TimeAtAddress
@@ -210,37 +200,32 @@
 		}
 	}
 
-	internal static class CustomerAddressExt
-	{
+	internal static class CustomerAddressExt {
 		public static InputLocationDetailsMultiLineLocation GetLocation(this GetCustomerAddresses.ResultRow oAddr,
-																		AddressCurrency oCurrency)
-		{
+																		AddressCurrency oCurrency) {
 			if (oAddr == null)
 				throw new ArgumentNullException("oAddr", "Address row not specified.");
 
-			switch (oCurrency)
-			{
+			switch (oCurrency) {
 				case AddressCurrency.Current:
-					return new InputLocationDetailsMultiLineLocation
-						{
-							LocationLine1 = oAddr.Line1,
-							LocationLine2 = oAddr.Line2,
-							LocationLine3 = oAddr.Line3,
-							LocationLine4 = oAddr.Line4,
-							LocationLine5 = oAddr.Line5,
-							LocationLine6 = oAddr.Line6,
-						};
+					return new InputLocationDetailsMultiLineLocation {
+						LocationLine1 = oAddr.Line1,
+						LocationLine2 = oAddr.Line2,
+						LocationLine3 = oAddr.Line3,
+						LocationLine4 = oAddr.Line4,
+						LocationLine5 = oAddr.Line5,
+						LocationLine6 = oAddr.Line6,
+					};
 
 				case AddressCurrency.Previous:
-					return new InputLocationDetailsMultiLineLocation
-						{
-							LocationLine1 = oAddr.Line1Prev,
-							LocationLine2 = oAddr.Line2Prev,
-							LocationLine3 = oAddr.Line3Prev,
-							LocationLine4 = oAddr.Line4Prev,
-							LocationLine5 = oAddr.Line5Prev,
-							LocationLine6 = oAddr.Line6Prev,
-						};
+					return new InputLocationDetailsMultiLineLocation {
+						LocationLine1 = oAddr.Line1Prev,
+						LocationLine2 = oAddr.Line2Prev,
+						LocationLine3 = oAddr.Line3Prev,
+						LocationLine4 = oAddr.Line4Prev,
+						LocationLine5 = oAddr.Line5Prev,
+						LocationLine6 = oAddr.Line6Prev,
+					};
 
 				default:
 					throw new ArgumentOutOfRangeException("oCurrency", "Unsupported value: " + oCurrency.ToString());

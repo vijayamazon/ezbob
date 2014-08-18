@@ -18,6 +18,7 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Newtonsoft.Json;
 	using StructureMap;
 	using log4net;
 	using EZBob.DatabaseLib.Repository;
@@ -99,10 +100,14 @@
 		{
 			try
 			{
+				mlLocation = ShiftLocation(mlLocation);
 				string postcode = GetPostcode(ukLocation, mlLocation);
 
-				Log.InfoFormat("GetConsumerInfo: checking cache for {2} id {3} firstName: {0}, surname: {1} birthday: {4}, postcode: {5}", firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode);
-
+				Log.InfoFormat("GetConsumerInfo: checking cache for {2} id {3} firstName: {0}, surname: {1} birthday: {4}, postcode: {5} gender {6}  apptype: {7} \n {8} {9}", 
+					firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode, gender, applicationType,
+					JsonConvert.SerializeObject(ukLocation, new JsonSerializerSettings { Formatting = Formatting.Indented }),
+					JsonConvert.SerializeObject(mlLocation, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+				
 				ExperianConsumerData cachedResponse = ObjectFactory.GetInstance<IEzServiceAccessor>()
 					.LoadExperianConsumer(customerId, isDirector ?  directorId : (int?)null , null);
 
@@ -119,7 +124,6 @@
 					return cachedResponse;
 				} // if test
 
-				mlLocation = ShiftLocation(mlLocation);
 
 				if (!forceCheck)
 				{

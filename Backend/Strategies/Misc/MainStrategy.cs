@@ -849,7 +849,7 @@
 					consumerCaisDetailWorstStatuses.Add(caisDetails.WorstStatus);
 				}
 
-				if (directorId == 0)
+				if (directorId == null)
 				{
 					experianConsumerScore = strat.Score;
 				}
@@ -859,13 +859,13 @@
 
 			if (!WaitForExperianConsumerCheckToFinishUpdates(directorId))
 			{
-				Log.Info("No data exist from experian consumer check for customer {0}{1}.", customerId, directorId == 0 ? "" : "director " + directorId);
+				Log.Info("No data exist from experian consumer check for customer {0}{1}.", customerId, directorId == null ? "" : "director " + directorId);
 				return;
 			}
 
-			if (directorId == 0)
+			if (directorId == null)
 			{
-				var strat = new ExperianConsumerCheck(customerId, directorId, false, DB, Log);
+				var strat = new ExperianConsumerCheck(customerId, null, false, DB, Log);
 				strat.Execute();
 
 				foreach (var caisDetails in strat.Result.Cais)
