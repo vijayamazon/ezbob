@@ -1001,9 +1001,8 @@
 					proprietorshipParty != null && 
 					proprietorshipParty.PrivateIndividualForename != null && 
 					proprietorshipParty.PrivateIndividualSurname != null &&
-					proprietorshipParty.PrivateIndividualForename.Contains(customer.PersonalInfo.FirstName) &&
-					proprietorshipParty.PrivateIndividualSurname.Contains(customer.PersonalInfo.Surname)
-					)
+					proprietorshipParty.PrivateIndividualForename.IndexOf(customer.PersonalInfo.FirstName, StringComparison.CurrentCultureIgnoreCase) >= 0 &&
+					proprietorshipParty.PrivateIndividualSurname.IndexOf(customer.PersonalInfo.Surname, StringComparison.CurrentCultureIgnoreCase) >= 0)
 				{
 					// Customer is owner
 					return true;
