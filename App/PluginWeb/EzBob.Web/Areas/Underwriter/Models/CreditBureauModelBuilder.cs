@@ -36,13 +36,12 @@
 		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
 		{
 			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
-			var model = new CreditBureauModel { Id = customer.Id };
+			var model = new CreditBureauModel { Id = customer.Id, Directors = new List<ExperianConsumerModel>()};
 			try
 			{
 				model.Consumer = GetConsumerInfo(customer, null, logId, customer.PersonalInfo != null ? customer.PersonalInfo.Fullname : "");
 				if (customer.Company != null && customer.Company.Directors.Any())
 				{
-					model.Directors = new List<ExperianConsumerModel>();
 					foreach (var director in customer.Company.Directors)
 					{
 						model.Directors.Add(GetConsumerInfo(customer, director, null, 
@@ -132,6 +131,7 @@
 			model.ScoreValuePosition = scorePosColor.ValPosition;
 			model.ScoreColor = scorePosColor.Color;
 			model.Applicant = eInfo.Applicants.FirstOrDefault();
+			model.Location = eInfo.Locations.FirstOrDefault();
 			model.TotalAccountBalances = eInfo.TotalAccountBalances;
 			model.TotalMonthlyRepayments = eInfo.CreditCommitmentsRevolving + eInfo.CreditCommitmentsNonRevolving +
 			                               eInfo.MortgagePayments;
@@ -152,6 +152,10 @@
 			if (eInfo.Applicants.Count > 1)
 			{
 				Errors.Add("More than one applicant specified");
+			}
+
+			if (eInfo.Locations.Count > 1) {
+				Errors.Add("More than one locations specified");
 			}
 
 

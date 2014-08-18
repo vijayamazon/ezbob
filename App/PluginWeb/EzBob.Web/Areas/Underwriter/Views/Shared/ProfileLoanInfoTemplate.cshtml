@@ -103,7 +103,12 @@
         </thead>
         <tbody class="box-content">
             @RowCell("Id", "<%- data.Id %>")
-            @RowCell("Name", "<%- data.Name %>")
+			<tr>
+				<td>
+					<span class="customer-details-title">Name</span>
+					<span class="pull-right" style="width:200px"><%- data.Name %></span>
+				</td>
+			</tr>
             <tr>
                 <td class="customer-personal-status-alignment"><%- data.FullGender %>, <%- data.FamilyStatus %>, <%- data.Age %></td>
             </tr>

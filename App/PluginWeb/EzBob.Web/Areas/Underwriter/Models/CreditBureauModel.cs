@@ -36,6 +36,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 
 		public ExperianConsumerDataApplicant Applicant { get; set; }
+		public ExperianConsumerDataLocation Location { get; set; }
+
 		public string ApplicantFullNameAge { get; set; }
 		public string ModelType { get; set; }
 		public string BorrowerType { get; set; } 

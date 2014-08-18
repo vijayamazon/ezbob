@@ -149,11 +149,32 @@
 								<div class="span12">
 									<table class="table">
 										<tbody>
-											<%consumerData.Applicant = consumerData.Applicant || {};%>
+											<%consumerData.Applicant = consumerData.Applicant || {};
+											consumerData.Location = consumerData.Location || {};%>
+											
+											@RawCell("Applicant", "")
 											@RawCell("Applicant Identifier", "<%- consumerData.Applicant.ApplicantIdentifier %>")
 											@RawCell("Name", "<%- consumerData.Applicant.Title %> <%- consumerData.Applicant.Forename %> <%- consumerData.Applicant.MiddleName %> <%- consumerData.Applicant.Surname %> <%- consumerData.Applicant.Suffix %>")
 											@RawCell("Date Of Birth", "<%- EzBob.formatDate3(consumerData.Applicant.DateOfBirth) %>")
 											@RawCell("Gender", "<%- consumerData.Applicant.Gender %>")
+											
+											@RawCell("Location", "")
+											@RawCell("Location Identifier", "<%- consumerData.Location.LocationIdentifier %>")
+											@RawCell("FormattedLocation", "<%- consumerData.Location.FormattedLocation %>")
+											@RawCell("Flat", "<%- consumerData.Location.Flat %>")
+											@RawCell("HouseName", "<%- consumerData.Location.HouseName %>")
+											@RawCell("HouseNumber", "<%- consumerData.Location.HouseNumber %>")
+											@RawCell("Street", "<%- consumerData.Location.Street %>")
+											@RawCell("Street2", "<%- consumerData.Location.Street2 %>")
+											@RawCell("District", "<%- consumerData.Location.District %>")
+											@RawCell("District2", "<%- consumerData.Location.District2 %>")
+											@RawCell("PostTown", "<%- consumerData.Location.PostTown %>")
+											@RawCell("County", "<%- consumerData.Location.County %>")
+											@RawCell("Postcode", "<%- consumerData.Location.Postcode %>")
+											@RawCell("POBox", "<%- consumerData.Location.POBox %>")
+											@RawCell("SharedLetterbox", "<%- consumerData.Location.SharedLetterbox %>")
+											@RawCell("LocationCode", "<%- consumerData.Location.LocationCode %>")
+											@RawCell("TimeAt", "<%- consumerData.Location.TimeAtYears %> Y <%- consumerData.Location.TimeAtMonths %> M")
 										</tbody>
 									</table>
 								</div>
