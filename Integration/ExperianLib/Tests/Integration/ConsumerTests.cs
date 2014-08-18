@@ -68,11 +68,15 @@ namespace ExperianLib.Tests.Integration
 		{
 			var b = new ConsumerExperianModelBuilder();
 			var outputRootSerializer = new XmlSerializer(typeof(OutputRoot));
-			var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(consumerData));
-			b.Build(outputRoot);
-			outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(consumerData2));
-			b.Build(outputRoot);
+			//var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(consumerData));
+			//b.Build(outputRoot);
+			//outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(consumerData2));
+			//b.Build(outputRoot);
 
+
+			var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(consumerDataBad));
+			var model = b.Build(outputRoot);
+			Console.WriteLine(model.ToString());
 		}
 
 		[Test]
@@ -3164,6 +3168,30 @@ namespace ExperianLib.Tests.Integration
     </ThirdPartyData>
   </Output>
 </OutputRoot>";
-		
-    }
+
+		public const string consumerDataBad = @"<?xml version=""1.0"" encoding=""utf-16""?>
+<OutputRoot xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Output xmlns=""http://schema.uk.experian.com/experian/cems/msgs/v1.1/ConsumerData"">
+    <CheckDetails xmlns="""">
+      <LocationIdentifier>1</LocationIdentifier>
+      <PostCodeCheck>R</PostCodeCheck>
+    </CheckDetails>
+    <Control xmlns="""">
+      <ExperianReference>TJKSRNTAG5</ExperianReference>
+    </Control>
+    <LocationDetails xmlns="""">
+      <LocationIdentifier>1</LocationIdentifier>
+      <UKLocation>
+        <HouseNumber>58</HouseNumber>
+        <Street>TRESHAM GREEN</Street>
+        <District>LINCS</District>
+        <SharedLetterbox>N</SharedLetterbox>
+      </UKLocation>
+      <RMC />
+      <RegionNumber />
+      <FormattedLocation>Location not resolved</FormattedLocation>
+    </LocationDetails>
+  </Output>
+</OutputRoot>";
+	}
 }
