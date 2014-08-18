@@ -996,7 +996,9 @@
 			var lrData = b.BuildResModel(response, titleNumber);
 			foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties)
 			{
-				if (customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
+				if (customer.PersonalInfo != null &&
+					customer.PersonalInfo.Fullname != null &&
+					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
 					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname))
 				{
 					// Customer is owner
