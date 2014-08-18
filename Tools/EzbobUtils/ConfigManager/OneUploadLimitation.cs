@@ -2,6 +2,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using Ezbob.Logger;
 	using Ezbob.Utils;
 
 	public class OneUploadLimitation {
@@ -106,22 +107,39 @@
 
 		#region method FileConforms
 
-		public string FileConforms(byte[] oFilePrefix, string sFileName, int? nFilePrefixLength = 256) {
+		public string FileConforms(byte[] oFilePrefix, string sFileName, int? nFilePrefixLength = 256, ASafeLog oLog = null) {
+			oLog = oLog ?? new SafeLog();
+
 			var mtr = new MimeTypeResolver();
 
-			string sMimeType = null;
+			string sMimeType;
 
 			if (oFilePrefix != null) {
 				sMimeType = mtr.GetFromFile(oFilePrefix, nFilePrefixLength);
 
-				if (this.Contains(sMimeType))
+				oLog.Debug("MIME type by content is {0}", sMimeType);
+
+				if (this.Contains(sMimeType)) {
+					oLog.Debug("MIME type by content {0} conforms to this limitation {1}.", sMimeType, this);
 					return sMimeType;
+				} // if
+
+				if (sMimeType != MimeTypeResolver.DefaultMimeType) {
+					oLog.Debug("MIME type by content {0} is well-detected and does not conform to this limitation {1}.", sMimeType, this);
+					return null;
+				} // if
 			} // if
 
 			sMimeType = mtr.Get(sFileName);
 
-			if (this.Contains(sMimeType))
+			oLog.Debug("MIME type by file extension is {0}", sMimeType);
+
+			if (this.Contains(sMimeType)) {
+				oLog.Debug("MIME type by file extension {0} conforms to this limitation {1}.", sMimeType, this);
 				return sMimeType;
+			} // if
+
+			oLog.Debug("MIME type by file extension {0} does not conform to this limitation {1}.", sMimeType, this);
 
 			return null;
 		} // FileConforms

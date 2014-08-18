@@ -7,6 +7,8 @@
 	using NHibernate;
 
 	public class UploadHmrcController : Controller {
+		#region constructor
+
 		public UploadHmrcController(
 			DatabaseDataHelper helper,
 			MarketPlaceRepository mpTypes,
@@ -17,6 +19,8 @@
 			m_oAccountManager = new HmrcManualAccountManager(customers, helper, mpTypes, mpChecker, session);
 		} // constructor
 
+		#endregion constructor
+
 		#region action SaveFile
 
 		[HttpPost]
@@ -26,7 +30,7 @@
 			if (!int.TryParse(Request.Headers["ezbob-underwriter-customer-id"], out nCustomerID))
 				return HmrcManualAccountManager.CreateJsonError("Failed to upload files: customer id header is missing.");
 
-			return m_oAccountManager.SaveUploadedFiles(Request.Files, nCustomerID);
+			return m_oAccountManager.SaveUploadedFiles(Request.Files, nCustomerID, "UploadHmrcController", "SaveFile");
 		} // SaveFile
 
 		#endregion action SaveFile

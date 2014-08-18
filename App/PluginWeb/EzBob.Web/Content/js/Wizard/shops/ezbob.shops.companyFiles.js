@@ -52,11 +52,10 @@ EzBob.CompanyFilesAccountInfoView = Backbone.Marionette.ItemView.extend({
 		var self = this;
 
 		this.Dropzone = new Dropzone(this.ui.companyFilesUploadZone[0], {
-			maxFilesize: 10,
+			maxFilesize: EzBob.Config.CompanyFilesMaxFileSize,
+			acceptedFiles: EzBob.Config.CompanyFilesAcceptedFiles,
 
 			maxFiles: 10,
-
-			dictFileTooBig: 'File is too big, max file size is 10MB',
 
 			success: function(oFile, oResponse) {
 				var enabled;
@@ -73,8 +72,16 @@ EzBob.CompanyFilesAccountInfoView = Backbone.Marionette.ItemView.extend({
 			}, // on success
 
 			error: function(oFile, sErrorMsg, oXhr) {
-				EzBob.App.trigger('error', 'Error uploading ' + oFile.name);
-				this.removeFile(oFile); // TODO: should it be 'this'?
+				if (oXhr && (oXhr.status === 404)) {
+					EzBob.App.trigger('error',
+						'Error uploading ' + oFile.name + ': file is too large. ' +
+						'Please contact customercare@ezbob.com'
+					);
+				}
+				else
+					EzBob.App.trigger('error', 'Error uploading ' + oFile.name);
+
+				this.removeFile(oFile);
 			}, // on error
 
 			maxfilesexceeded: function(o) {

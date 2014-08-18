@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
@@ -38,29 +39,36 @@
         }
 
         //-----------------------------------------------------------------------------------
-        public void UploadDoc(string description, int customerId)
-        {
+        public void UploadDoc(string description, int customerId) {
             var files = Request.Files;
-            if (files.Count == 0) return;
-	        for (int i = 0; i < files.Count; i++)
-	        {
+
+            if (files.Count == 0)
+				return;
+
+			OneUploadLimitation oLimitations = CurrentValues.Instance.GetUploadLimitations("AlertDocsController", "UploadDoc");
+
+	        for (int i = 0; i < files.Count; i++) {
 		        var file = Request.Files[i];
-		        if (file == null) return;
+
+		        if (file == null)
+					continue;
 
 		        var body = new byte[file.InputStream.Length];
 		        file.InputStream.Read(body, 0, file.ContentLength);
 
+				if (string.IsNullOrWhiteSpace(oLimitations.FileConforms(body, file.FileName)))
+					continue;
+
 		        var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 		        var customer = customerRepo.Get(customerId);
-		        var doc = new MP_AlertDocument
-			        {
-				        BinaryBody = body,
-				        Customer = customer,
-				        Employee = _context.User,
-				        Description = description,
-				        UploadDate = DateTime.UtcNow,
-				        DocName = file.FileName
-			        };
+		        var doc = new MP_AlertDocument {
+					BinaryBody = body,
+					Customer = customer,
+					Employee = _context.User,
+					Description = description,
+					UploadDate = DateTime.UtcNow,
+					DocName = file.FileName
+				};
 
 		        _docRepo.SaveOrUpdate(doc);
 	        }

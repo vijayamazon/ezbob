@@ -100,13 +100,13 @@
 
 		#region method SaveUploadedFiles
 
-		public JsonResult SaveUploadedFiles(HttpFileCollectionBase oFiles, int nCustomerID) {
+		public JsonResult SaveUploadedFiles(HttpFileCollectionBase oFiles, int nCustomerID, string sControllerName, string sActionName) {
 			Customer oCustomer = m_oCustomers.ReallyTryGet(nCustomerID);
 
 			if (oCustomer == null)
 				return CreateJsonError("Could not retrieve customer by id {0}.", nCustomerID);
 
-			var oProcessor = new HmrcFileProcessor(nCustomerID, oFiles);
+			var oProcessor = new HmrcFileProcessor(nCustomerID, oFiles, sControllerName, sActionName);
 			oProcessor.Run();
 
 			if (!string.IsNullOrWhiteSpace(oProcessor.ErrorMsg))

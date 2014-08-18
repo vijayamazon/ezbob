@@ -574,6 +574,8 @@
 
 		#region public
 
+		public const string DefaultMimeType = "application/octet-stream";
+
 		#region method Get
 
 		public string Get(string sFileName) {
@@ -639,8 +641,6 @@
 		#endregion public
 
 		#region private
-
-		private const string DefaultMimeType = "application/octet-stream";
 
 		private static readonly SortedDictionary<string, string> ms_oMap;
 

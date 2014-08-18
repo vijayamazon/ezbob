@@ -372,7 +372,8 @@
 				creditBureau.BorrowerType = TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
 				creditBureau.FinancialAccounts = creditBureauModel.Consumer.AccountsInformation.Count();
 				creditBureau.ThinFile = creditBureau.FinancialAccounts == 0 ? "Yes" : "No";
-				creditBureau.ApplicantDOBs = new List<DateTime?>() { { creditBureauModel.Consumer.Applicant.DateOfBirth } };
+				// patch to fix crashing underwriter
+				creditBureau.ApplicantDOBs = new List<DateTime?> {creditBureauModel.Consumer.Applicant != null ? creditBureauModel.Consumer.Applicant.DateOfBirth : null};
 
 				if (creditBureauModel.Directors.Any()) {
 					foreach (var director in creditBureauModel.Directors) {

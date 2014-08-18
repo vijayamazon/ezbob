@@ -5,6 +5,7 @@
 	using System.Web;
 	using System.Web.Mvc;
 	using CompanyFiles;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -52,6 +53,8 @@
 		{
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
 
+			OneUploadLimitation oLimitations = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
+
 			for (int i = 0; i < Request.Files.Count; ++i)
 			{
 				HttpPostedFileBase file = Request.Files[i];
@@ -67,6 +70,14 @@
 						Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
 						continue;
 					} // if
+
+					string sMimeType = oLimitations.FileConforms(content, file.FileName);
+
+					if (string.IsNullOrWhiteSpace(sMimeType)) {
+						Log.WarnFormat("Not saving file #" + (i + 1) + ": " + file.FileName + " because it has unsupported MIME type.");
+						continue;
+					} // if
+
 					m_oServiceClient.Instance.CompanyFilesUpload(_context.Customer.Id, file.FileName, content, file.ContentType);
 				}
 			}

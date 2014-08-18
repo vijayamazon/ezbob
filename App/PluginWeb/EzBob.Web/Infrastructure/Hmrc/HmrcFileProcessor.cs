@@ -15,11 +15,12 @@
 
 		#region constructor
 
-		public HmrcFileProcessor(int nCustomerID, HttpFileCollectionBase oFiles) {
+		public HmrcFileProcessor(int nCustomerID, HttpFileCollectionBase oFiles, string sControllerName, string sActionName) {
 			CustomerID = nCustomerID;
 			FileList = oFiles;
 			FileCache = new HmrcFileCache();
 			ErrorMsg = null;
+			m_oLimitations = CurrentValues.Instance.GetUploadLimitations(sControllerName, sActionName);
 		} // constructor
 
 		#endregion constructor
@@ -44,17 +45,21 @@
 					continue;
 				} // if
 
-				if (oFile.ContentType.Trim().ToLower() != "application/pdf") {
-					ms_oLog.Debug("File {0}: is not PDF content type, ignoring.", i);
-					continue;
-				} // if
-
 				var oFileContents = new byte[oFile.ContentLength];
 
 				int nRead = oFile.InputStream.Read(oFileContents, 0, oFile.ContentLength);
 
 				if (nRead != oFile.ContentLength) {
 					ms_oLog.Warn("File {0}: failed to read entire file contents, ignoring.", i);
+					continue;
+				} // if
+
+				string sMimeType = m_oLimitations.FileConforms(oFileContents, oFile.FileName, oLog: ms_oLog);
+
+				ms_oLog.Debug("File {0}, name: {1}, MIME type {2}", i, oFile.FileName, sMimeType);
+
+				if (string.IsNullOrWhiteSpace(sMimeType)) {
+					ms_oLog.Debug("File {0}: has unsupported content type, ignoring.", i);
 					continue;
 				} // if
 
@@ -136,6 +141,8 @@
 		private HttpFileCollectionBase FileList { get; set; } // FileList
 		private int CustomerID { get; set; } // CustomerID
 		private HmrcFileCache FileCache { get; set; } // FileCache
+
+		private readonly OneUploadLimitation m_oLimitations;
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(HmrcFileProcessor));
 

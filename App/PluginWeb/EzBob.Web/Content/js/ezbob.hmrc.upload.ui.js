@@ -101,9 +101,9 @@
 			this.Dropzone = new Dropzone(this.$el.find('#' + this.options.formID).addClass('dropzone dz-clickable')[0], {
 				parallelUploads: 1,
 				uploadMultiple: true,
-				acceptedFiles: 'application/pdf',
+				acceptedFiles: EzBob.Config.HmrcAcceptedFiles,
+				maxFilesize: EzBob.Config.HmrcMaxFileSize,
 				autoProcessQueue: true,
-				maxFilesize: 10,
 				headers: this.options.headers,
 
 				init: function() {
@@ -142,7 +142,15 @@
 							' Error message:', sErrorMsg
 						);
 
-						EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
+						if (oXhr && (oXhr.status === 404)) {
+							EzBob.App.trigger('error',
+								'Error uploading ' + oFile.name + ': file is too large. ' +
+								'Please contact customercare@ezbob.com'
+							);
+						}
+						else
+							EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
+
 						self.trigger(self.evtUploadSysError(), oFile, sErrorMsg, oXhr);
 					}); // always
 

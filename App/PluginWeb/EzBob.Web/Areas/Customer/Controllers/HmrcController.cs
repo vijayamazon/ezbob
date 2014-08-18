@@ -36,7 +36,7 @@
 			if (nCustomerID <= 0)
 				return HmrcManualAccountManager.CreateJsonError("Please log out and log in again.");
 
-			return m_oAccountManager.SaveUploadedFiles(Request.Files, nCustomerID);
+			return m_oAccountManager.SaveUploadedFiles(Request.Files, nCustomerID, "HmrcController", "SaveFile");
 		} // SaveFile
 
 		#endregion action SaveFile

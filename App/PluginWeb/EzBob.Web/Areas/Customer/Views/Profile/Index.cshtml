@@ -340,6 +340,17 @@
 
         EzBob.Config.EchoSignEnabledCustomer = @(currVals.EchoSignEnabledCustomer ? "true" : "false");
 
+		@{
+			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("HmrcController", "SaveFile");
+			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
+		}
+
+		EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
+		EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
+
+		EzBob.Config.CompanyFilesMaxFileSize = +(@oComanyFilesOul.FileSize / 1048576.0).toFixed(2);
+		EzBob.Config.CompanyFilesAcceptedFiles = '@oComanyFilesOul.AcceptedFiles';
+
         $(function() {
 			@{
                 string wizardComplete = "false";

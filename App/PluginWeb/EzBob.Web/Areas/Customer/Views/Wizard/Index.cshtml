@@ -69,6 +69,17 @@
         EzBob.Config.PayPalEnabled = @CurrentValues.Instance.PayPalEnabled.Value.ToLower(CultureInfo.InvariantCulture);
         EzBob.Config.PasswordPolicyType = '@CurrentValues.Instance.PasswordPolicyType.Value.ToLower(CultureInfo.InvariantCulture)';
 
+		@{
+			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("HmrcController", "SaveFile");
+			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
+		}
+
+		EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
+		EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
+
+		EzBob.Config.CompanyFilesMaxFileSize = +(@oComanyFilesOul.FileSize / 1048576.0).toFixed(2);
+		EzBob.Config.CompanyFilesAcceptedFiles = '@oComanyFilesOul.AcceptedFiles';
+
         $(function() {
             var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer));
             options.el = $('#wizard');

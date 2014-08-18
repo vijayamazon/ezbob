@@ -571,7 +571,7 @@
 				);
 
 				if (string.IsNullOrWhiteSpace(sMimeType))
-					oErrorList.Add("Not saving file #" + (i + 1) + ": " + oFile.FileName + " because it has unsupported type.");
+					oErrorList.Add("Not saving file #" + (i + 1) + ": " + oFile.FileName + " because it has unsupported MIME type.");
 				else {
 					try {
 						m_oServiceClient.Instance.BrokerSaveUploadedCustomerFile(sCustomerID, sContactEmail, oFileContents, oFile.FileName);

@@ -379,6 +379,17 @@
 
         EzBob.Config.EchoSignEnabledUnderwriter = @(CurrentValues.Instance.EchoSignEnabledUnderwriter ? "true" : "false");
 
+		@{
+			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("UploadHmrcController", "SaveFile");
+			OneUploadLimitation oAlertDocOul = CurrentValues.Instance.GetUploadLimitations("AlertDocsController", "UploadDoc");
+		}
+
+		EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
+		EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
+
+		EzBob.Config.AlertDocMaxFileSize = +(@oAlertDocOul.FileSize / 1048576.0).toFixed(2);
+		EzBob.Config.AlertDocAcceptedFiles = '@oAlertDocOul.AcceptedFiles';
+
         var escalatedFlag = @(Model.IsEscalated ? 1 : 0);
         EzBob.handleUserLayoutSetting();
     </script>
