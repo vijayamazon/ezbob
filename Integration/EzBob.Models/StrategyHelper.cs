@@ -998,6 +998,7 @@
 			{
 				if (customer.PersonalInfo != null &&
 					customer.PersonalInfo.Fullname != null &&
+					proprietorshipParty != null &&
 					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
 					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname))
 				{
