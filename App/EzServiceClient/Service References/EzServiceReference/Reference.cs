@@ -3147,10 +3147,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianCompanyCheckAsync(int customerId, bool forceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ExperianConsumerCheck", ReplyAction="http://tempuri.org/IEzService/ExperianConsumerCheckResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck);
+        ServiceClientProxy.EzServiceReference.ActionMetaData ExperianConsumerCheck(int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ExperianConsumerCheck", ReplyAction="http://tempuri.org/IEzService/ExperianConsumerCheckResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianConsumerCheckAsync(int nCustomerID, int nDirectorID, bool bForceCheck);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianConsumerCheckAsync(int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
         ServiceClientProxy.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(string refNumber);
@@ -4378,11 +4378,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.ExperianCompanyCheckAsync(customerId, forceCheck);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck) {
+        public ServiceClientProxy.EzServiceReference.ActionMetaData ExperianConsumerCheck(int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck) {
             return base.Channel.ExperianConsumerCheck(nCustomerID, nDirectorID, bForceCheck);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianConsumerCheckAsync(int nCustomerID, int nDirectorID, bool bForceCheck) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianConsumerCheckAsync(int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck) {
             return base.Channel.ExperianConsumerCheckAsync(nCustomerID, nDirectorID, bForceCheck);
         }
         
