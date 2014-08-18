@@ -82,7 +82,7 @@
 
 					Log.NotifyStart();
 
-					CurrentValues.Init(DbConnectionGenerator.Get(Log), Log);
+					CurrentValues.Init(DbConnectionGenerator.Get(Log), Log, oLimitations => oLimitations.UpdateWebSiteCfg("Ezbob.Web"));
 
 					Ezbob.RegistryScanner.Scanner.Register();
 
@@ -182,8 +182,10 @@
 			var license = new License();
 
 			using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("EzBob.Web.Aspose.Total.lic")) {
-				s.Position = 0;
-				license.SetLicense(s);
+				if (s != null) {
+					s.Position = 0;
+					license.SetLicense(s);
+				} // if
 			} // using
 		} // InitAspose
 
@@ -202,9 +204,7 @@
 			container.Configure(x => x.For<IWorkplaceContext>().Use(GetContext));
 			container.Configure(x => x.AddRegistry<PluginWebRegistry>());
 			container.Configure(x => x.AddRegistry<PaymentServices.PacNet.PacnetRegistry>());
-			container.Configure(x => {
-				x.For<ISession>().Use(() => CurrentSession);
-			});
+			container.Configure(x => x.For<ISession>().Use(() => CurrentSession));
 		} // ConfigureStructureMap
 
 		protected void Application_BeginRequest(Object sender, EventArgs e) {
@@ -223,12 +223,14 @@
 			Response.End();
 		} // CheckForCSSPIE
 
+		// ReSharper disable RedundantDefaultFieldInitializer
 		private static bool _isInitialized = false;
+		// ReSharper restore RedundantDefaultFieldInitializer
 
 		private static SafeILog Log {
 			get {
 				if (ms_oLog == null)
-					ms_oLog = new SafeILog(LogManager.GetLogger(typeof(MvcApplication)));
+					ms_oLog = new SafeILog(typeof(MvcApplication));
 
 				return ms_oLog;
 			} // get

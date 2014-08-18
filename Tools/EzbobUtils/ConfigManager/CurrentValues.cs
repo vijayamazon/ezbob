@@ -22,7 +22,7 @@
 
 		#region method Init
 
-		public static void Init(AConnection oDB, ASafeLog oLog) {
+		public static void Init(AConnection oDB, ASafeLog oLog, UploadLimitations.OnLoadDelegate oUploadLimitationsOnLoad = null) {
 			if (ms_oInstance != null)
 				return;
 
@@ -30,7 +30,7 @@
 				if (ms_oInstance != null)
 					return;
 
-				ms_oInstance = new CurrentValues(oDB, oLog);
+				ms_oInstance = new CurrentValues(oDB, oLog, oUploadLimitationsOnLoad);
 				ms_oInstance.ReLoad();
 			} // lock
 		} // Init
@@ -59,10 +59,17 @@
 
 		#region method GetUploadLimitations
 
-		public virtual UploadLimitations GetUploadLimitations(int nID) {
+		public virtual UploadLimitations GetUploadLimitations() {
 			lock (ms_oInstanceLock) {
 				ReloadIfNeeded();
 				return m_oUploadLimitations;
+			} // lock
+		} // GetUploadLimitations
+
+		public virtual OneUploadLimitation GetUploadLimitations(string sControllerName, string sActionName) {
+			lock (ms_oInstanceLock) {
+				ReloadIfNeeded();
+				return m_oUploadLimitations[sControllerName, sActionName];
 			} // lock
 		} // GetUploadLimitations
 
@@ -155,7 +162,7 @@
 
 		#region constructor
 
-		protected CurrentValues(AConnection oDB, ASafeLog oLog) {
+		protected CurrentValues(AConnection oDB, ASafeLog oLog, UploadLimitations.OnLoadDelegate oUploadLimitationsOnLoad) {
 			m_oLastReloadTime = new DateTime();
 			m_nRefreshIntervalMinutes = 0;
 
@@ -167,6 +174,9 @@
 			Log = oLog ?? new SafeLog();
 
 			m_oUploadLimitations = new UploadLimitations(oDB, Log);
+
+			if (oUploadLimitationsOnLoad != null)
+				m_oUploadLimitations.OnLoad += oUploadLimitationsOnLoad;
 		} // constructor
 
 		#endregion constructor
@@ -289,7 +299,7 @@
 
 		private DateTime m_oLastReloadTime;
 
-		private UploadLimitations m_oUploadLimitations;
+		private readonly UploadLimitations m_oUploadLimitations;
 
 		private static CurrentValues ms_oInstance;
 		private static readonly object ms_oInstanceLock;
