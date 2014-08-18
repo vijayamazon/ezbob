@@ -23,9 +23,8 @@
 			MimeTypes = new SortedSet<string>();
 			FileExtensions = new SortedSet<string>();
 
-			if (sAcceptedFiles == "*") {
-				AcceptedFiles = "*";
-			}
+			if (sAcceptedFiles == Star)
+				AcceptedFiles = Star;
 			else {
 				if (!string.IsNullOrWhiteSpace(sAcceptedFiles)) {
 					foreach (var s in sAcceptedFiles.Split(',')) {
@@ -39,7 +38,7 @@
 							continue;
 						} // if
 
-						int nPos = sItem.IndexOf('*');
+						int nPos = sItem.IndexOf(StarChar);
 
 						if (nPos < 0)
 							MimeTypes.Add(sItem);
@@ -50,7 +49,7 @@
 
 				List<string> oAccepted = new List<string>();
 
-				oAccepted.AddRange(MimeTypePrefixes.Select(s => s + "*"));
+				oAccepted.AddRange(MimeTypePrefixes.Select(s => s + Star));
 				oAccepted.AddRange(MimeTypes);
 				oAccepted.AddRange(FileExtensions);
 
@@ -97,5 +96,8 @@
 		} // ToString
 
 		#endregion method ToString
+
+		private const string Star = "*";
+		private const char StarChar = '*';
 	} // class OneUploadLimitation
 } // namespace
