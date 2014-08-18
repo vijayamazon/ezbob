@@ -2,6 +2,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using Ezbob.Utils;
 
 	public class OneUploadLimitation {
 		#region constructor
@@ -9,6 +10,8 @@
 		public OneUploadLimitation() : this(0, "") {} // constructor
 
 		public OneUploadLimitation(int nFileSize, string sAcceptedFiles) {
+			m_oMimeTypesFromExtensions = new SortedSet<string>();
+
 			Init(nFileSize, sAcceptedFiles);
 		} // constructor
 
@@ -22,6 +25,9 @@
 			MimeTypePrefixes = new SortedSet<string>();
 			MimeTypes = new SortedSet<string>();
 			FileExtensions = new SortedSet<string>();
+			m_oMimeTypesFromExtensions.Clear();
+
+			var mtr = new MimeTypeResolver();
 
 			if (sAcceptedFiles == Star)
 				AcceptedFiles = Star;
@@ -35,6 +41,7 @@
 
 						if (sItem.StartsWith(".")) {
 							FileExtensions.Add(sItem);
+							m_oMimeTypesFromExtensions.Add(mtr[sItem]);
 							continue;
 						} // if
 
@@ -97,7 +104,51 @@
 
 		#endregion method ToString
 
+		#region method FileConforms
+
+		public string FileConforms(byte[] oFilePrefix, string sFileName, int? nFilePrefixLength = 256) {
+			var mtr = new MimeTypeResolver();
+
+			string sMimeType = null;
+
+			if (oFilePrefix != null) {
+				sMimeType = mtr.GetFromFile(oFilePrefix, nFilePrefixLength);
+
+				if (this.Contains(sMimeType))
+					return sMimeType;
+			} // if
+
+			sMimeType = mtr.Get(sFileName);
+
+			if (this.Contains(sMimeType))
+				return sMimeType;
+
+			return null;
+		} // FileConforms
+
+		#endregion method FileConforms
+
+		#region private
+
 		private const string Star = "*";
 		private const char StarChar = '*';
+		private readonly SortedSet<string> m_oMimeTypesFromExtensions;
+
+		#region method Contains
+
+		private bool Contains(string sMimeType) {
+			if (MimeTypes.Contains(sMimeType) || m_oMimeTypesFromExtensions.Contains(sMimeType))
+				return true;
+
+			foreach (var s in MimeTypePrefixes)
+				if (sMimeType.StartsWith(s))
+					return true;
+
+			return false;
+		} // Contains
+
+		#endregion method Contains
+
+		#endregion private
 	} // class OneUploadLimitation
 } // namespace

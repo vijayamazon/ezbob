@@ -1,9 +1,7 @@
 ﻿namespace Ezbob.Utils {
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
 	using System.Runtime.InteropServices;
-	using Logger;
 
 	public class MimeTypeResolver {
 		#region static constructor
@@ -576,20 +574,6 @@
 
 		#region public
 
-		#region method TestVsBuiltIn
-
-		public void TestVsBuiltIn(ASafeLog oLog) {
-			oLog = oLog ?? new SafeLog();
-
-			foreach (var pair in ms_oMap) {
-				string sOwn = pair.Value;
-				string sBuiltIn = System.Web.MimeMapping.GetMimeMapping("filename" + pair.Key);
-				oLog.Debug("|{2}|Own|{0}|Built in|{1}", sOwn, sBuiltIn, pair.Key);
-			} // TestVsBuiltIn
-		} // TestVsBuiltIn
-
-		#endregion method TestVsBuiltIn
-
 		#region method Get
 
 		public string Get(string sFileName) {
@@ -618,7 +602,7 @@
 
 				string sMimeType;
 
-				return ms_oMap.TryGetValue(sExtension, out sMimeType) ? sMimeType : "application/octet-stream";
+				return ms_oMap.TryGetValue(sExtension, out sMimeType) ? sMimeType : DefaultMimeType;
 			} // get
 		} // indexer
 
@@ -626,11 +610,16 @@
 
 		#region method GetFromFile
 
-		public string GetFromFile(byte[] buffer) {
+		public string GetFromFile(byte[] oBuffer, int? nBufferLength = 256) {
 			try {
 				System.UInt32 oMimeType;
 
-				FindMimeFromData(0, null, buffer, (uint)buffer.Length, null, 0, out oMimeType, 0);
+				int nBufLen = nBufferLength ?? oBuffer.Length;
+
+				if ((nBufLen <= 0) || (nBufLen > oBuffer.Length))
+					nBufLen = oBuffer.Length;
+
+				FindMimeFromData(0, null, oBuffer, (uint)nBufLen, null, 0, out oMimeType, 0);
 
 				System.IntPtr pMimeType = new IntPtr(oMimeType);
 
@@ -641,7 +630,7 @@
 				return sMimeType;
 			}
 			catch (Exception) {
-				return "unknown/unknown";
+				return null;
 			} // try
 		} // GetFromFile
 
@@ -650,6 +639,8 @@
 		#endregion public
 
 		#region private
+
+		private const string DefaultMimeType = "application/octet-stream";
 
 		private static readonly SortedDictionary<string, string> ms_oMap;
 

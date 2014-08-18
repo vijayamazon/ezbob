@@ -8,6 +8,7 @@
 	using System.Web.Helpers;
 	using System.Web.Mvc;
 	using Code;
+	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Infrastructure.csrf;
@@ -538,6 +539,8 @@
 
 			var oErrorList = new List<string>();
 
+			OneUploadLimitation oLimitations = CurrentValues.Instance.GetUploadLimitations("BrokerHome", "HandleUploadFile");
+
 			for (int i = 0; i < nFileCount; i++) {
 				HttpPostedFileBase oFile = Request.Files[i];
 
@@ -560,28 +563,24 @@
 					continue;
 				} // if
 
-				var oBuf = new byte[256];
-
-				Array.Copy(oFileContents, oBuf, Math.Min(oBuf.Length, oFileContents.Length));
-
-				var mtr = new MimeTypeResolver();
+				string sMimeType = oLimitations.FileConforms(oFileContents, oFile.FileName);
 
 				ms_oLog.Debug(
-					"File #{0} out of {1}: {2}; file size is {3} bytes.\nMIME type from extension: {4},\nMIME type from content: {5}\nMIME type passed: {6}\nMIME type from MS class: {7}",
-					(i + 1), nFileCount, oFile.FileName, nRead,
-					mtr.Get(oFile.FileName),
-					mtr.GetFromFile(oBuf),
-					oFile.ContentType,
-					System.Web.MimeMapping.GetMimeMapping(oFile.FileName)
+					"File #{0} out of {1}: {2}; file size is {3} bytes, detected MIME type: {4}",
+					(i + 1), nFileCount, oFile.FileName, nRead, sMimeType
 				);
 
-				try {
-					m_oServiceClient.Instance.BrokerSaveUploadedCustomerFile(sCustomerID, sContactEmail, oFileContents, oFile.FileName);
-				}
-				catch (Exception e) {
-					ms_oLog.Alert(e, "Failed to save file #{0}: {2} out of {1}.", (i + 1), nFileCount, oFile.FileName);
-					oErrorList.Add("Failed to save file #" + (i + 1) + ": " + oFile.FileName);
-				} // try
+				if (string.IsNullOrWhiteSpace(sMimeType))
+					oErrorList.Add("Not saving file #" + (i + 1) + ": " + oFile.FileName + " because it has unsupported type.");
+				else {
+					try {
+						m_oServiceClient.Instance.BrokerSaveUploadedCustomerFile(sCustomerID, sContactEmail, oFileContents, oFile.FileName);
+					}
+					catch (Exception e) {
+						ms_oLog.Alert(e, "Failed to save file #{0}: {2} out of {1}.", (i + 1), nFileCount, oFile.FileName);
+						oErrorList.Add("Failed to save file #" + (i + 1) + ": " + oFile.FileName);
+					} // try
+				} // if
 			} // for each file
 
 			ms_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
