@@ -252,7 +252,7 @@
 		ActionMetaData ExperianCompanyCheck(int customerId, bool forceCheck);
 
 		[OperationContract]
-		ActionMetaData ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck);
+		ActionMetaData ExperianConsumerCheck(int nCustomerID, int? nDirectorID, bool bForceCheck);
 
 		[OperationContract]
 		DateTimeActionResult GetExperianCompanyCacheDate(string refNumber);

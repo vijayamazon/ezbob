@@ -27,7 +27,7 @@
 		public ExperianConsumerCheck(int customerId, int? directorId, bool bForceCheck, AConnection db, ASafeLog log)
 			: base(db, log) {
 			this.customerId = customerId;
-			this.directorId = directorId;
+			this.directorId = directorId.HasValue && directorId.Value == 0 ? null : directorId;
 			forceCheck = bForceCheck;
 
 			personalData =

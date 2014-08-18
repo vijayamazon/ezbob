@@ -24,7 +24,7 @@
 
 		#region method ExperianConsumerCheck
 
-		public ActionMetaData ExperianConsumerCheck(int nCustomerID, int nDirectorID, bool bForceCheck) {
+		public ActionMetaData ExperianConsumerCheck(int nCustomerID, int? nDirectorID, bool bForceCheck) {
 			return Execute(nCustomerID, null, typeof(ExperianConsumerCheck), nCustomerID, nDirectorID, bForceCheck);
 		} // ExperianConsumerCheck
 

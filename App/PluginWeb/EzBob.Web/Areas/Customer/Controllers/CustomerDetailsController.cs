@@ -280,7 +280,7 @@
 			var customer = m_oContext.Customer;
 
 			try {
-				m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, 0, false);
+				m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, null, false);
 			}
 			catch (Exception e) {
 				ms_oLog.Error(e, "Something went pretty not so excellent while starting an Experian consumer check for customer {0}.", customer.Id);
