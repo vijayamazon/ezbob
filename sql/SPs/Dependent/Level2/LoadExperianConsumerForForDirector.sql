@@ -28,6 +28,28 @@ BEGIN
 	ORDER BY
 		l.InsertDate DESC,
 		l.Id DESC
+		
+	IF @ServiceLogId IS NULL
+	BEGIN
+		PRINT 'select by name'
+		SELECT TOP 1
+		   @ServiceLogID=l.Id, @InsertDate = l.InsertDate
+		FROM
+		 Director d 
+		 INNER JOIN CustomerAddress a ON a.DirectorId = d.Id AND a.addressType=1
+		 INNER JOIN MP_ServiceLog l on
+		  l.Firstname = d.Name AND
+		  l.Surname = d.Surname AND 
+		  l.DateOfBirth = d.DateOfBirth AND
+		  l.Postcode = a.Postcode AND
+		  l.ServiceType = 'Consumer Request'
+		  
+		  WHERE
+		   d.id=@DirectorId
+		  ORDER BY
+		   l.InsertDate DESC,
+		   l.Id DESC
+	END
 	
 	------------------------------------------------------------------------------
 
