@@ -90,12 +90,12 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
             if (consumer.IsDataRelevant) {
                 EzBob.ShowMessage("Last check was done at " + consumer.CheckDate + " and cache is valid till " + consumer.CheckValidity + ". Run check anyway?", "No need for check warning",
                     function() {
-                        that.RunConsumerCheck(customerId, directorId, true);
+                        that.RunConsumerCheck(customerId, null, true);
                         return true;
                     },
                     "Yes", null, "No");
             } else {
-                that.RunConsumerCheck(customerId, directorId, false);
+                that.RunConsumerCheck(customerId, null, false);
             }
         } else {
             var director = _.find(this.model.get('Directors'), function (dir) { return dir.Id == parseInt(directorId); });
