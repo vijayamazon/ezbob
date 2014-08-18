@@ -33,7 +33,7 @@
 
 		[Ajax]
 		[HttpPost]
-		public JsonResult RunConsumerCheck(int customerId, int directorId, bool forceCheck)
+		public JsonResult RunConsumerCheck(int customerId, int? directorId, bool forceCheck)
 		{
 			m_oServiceClient.Instance.ExperianConsumerCheck(customerId, directorId, forceCheck);
 			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
