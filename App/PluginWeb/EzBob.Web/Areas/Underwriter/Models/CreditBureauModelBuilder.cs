@@ -11,18 +11,14 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Utils.Extensions;
 	using MoreLinq;
-	using NHibernate;
-	using NHibernate.Linq;
 	using System.Text;
 	using ServiceClientProxy;
-	using Web.Models;
 	using log4net;
 	using EZBob.DatabaseLib.Model.Experian;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 
 	public class CreditBureauModelBuilder
 	{
-		private readonly ISession _session;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CreditBureauModelBuilder));
 		private readonly IExperianHistoryRepository _experianHistoryRepository;
 		private const int ConsumerScoreMax = 1400;
@@ -30,10 +26,8 @@
 
 		private readonly ServiceClient _serviceClient;
 
-		public CreditBureauModelBuilder(ISession session,
-			IExperianHistoryRepository experianHistoryRepository)
+		public CreditBureauModelBuilder(IExperianHistoryRepository experianHistoryRepository)
 		{
-			_session = session;
 			_experianHistoryRepository = experianHistoryRepository;
 			Errors = new List<string>();
 			_serviceClient = new ServiceClient();
@@ -45,13 +39,13 @@
 			var model = new CreditBureauModel { Id = customer.Id };
 			try
 			{
-				model.Consumer = GetConsumerInfo(customer.Id, null, logId, customer.PersonalInfo != null ? customer.PersonalInfo.Fullname : "");
+				model.Consumer = GetConsumerInfo(customer, null, logId, customer.PersonalInfo != null ? customer.PersonalInfo.Fullname : "");
 				if (customer.Company != null && customer.Company.Directors.Any())
 				{
 					model.Directors = new List<ExperianConsumerModel>();
 					foreach (var director in customer.Company.Directors)
 					{
-						model.Directors.Add(GetConsumerInfo(customer.Id, director.Id, null, 
+						model.Directors.Add(GetConsumerInfo(customer, director, null, 
 							string.Format("{0} {1} {2}", director.Name, director.Middle, director.Surname)));
 					}
 				}
@@ -73,17 +67,26 @@
 			return model;
 		}
 
-		public ExperianConsumerModel GetConsumerInfo(int customerId, int? directorId, long? logId, string name)
+		public ExperianConsumerModel GetConsumerInfo(Customer customer, Director director, long? logId, string name)
 		{
-			var data = _serviceClient.Instance.LoadExperianConsumer(customerId, directorId, logId);
-			return GenerateConsumerModel(data.Value, customerId, directorId, logId, name);
+			var data = _serviceClient.Instance.LoadExperianConsumer(customer.Id, director != null ? director.Id : (int?)null, logId);
+
+			if (director != null && director.ExperianConsumerScore == null) {
+				director.ExperianConsumerScore = data.Value.BureauScore;
+			}
+
+			if (director == null && customer.ExperianConsumerScore == null) {
+				customer.ExperianConsumerScore = data.Value.BureauScore;
+			}
+
+			return GenerateConsumerModel(data.Value, customer, director, logId, name);
 		}
 
-		private IOrderedEnumerable<CheckHistoryModel> GetConsumerHistoryModel(int customerId, int? directorId)
+		private IOrderedEnumerable<CheckHistoryModel> GetConsumerHistoryModel(Customer customer, Director director)
 		{
-			List<MP_ExperianHistory> consumerHistory = directorId.HasValue ? 
-				_experianHistoryRepository.GetDirectorConsumerHistory(directorId.Value).ToList() : 
-				_experianHistoryRepository.GetCustomerConsumerHistory(customerId).ToList();
+			List<MP_ExperianHistory> consumerHistory = director != null ?
+				_experianHistoryRepository.GetDirectorConsumerHistory(director.Id).ToList() :
+				_experianHistoryRepository.GetCustomerConsumerHistory(customer.Id).ToList();
 
 			if (consumerHistory.Any())
 			{
@@ -101,10 +104,10 @@
 			return null;
 		}
 
-		public ExperianConsumerModel GenerateConsumerModel(ExperianConsumerData eInfo, int customerId, int? directorId, long? logId, string name)
+		public ExperianConsumerModel GenerateConsumerModel(ExperianConsumerData eInfo, Customer customer, Director director, long? logId, string name)
 		{
 			var model = new ExperianConsumerModel { ErrorList = new List<string>(),
-				Id = directorId.HasValue? directorId.Value : customerId };
+				Id = director != null ? director.Id : customer.Id };
 			if (eInfo == null || eInfo.ServiceLogId == null)
 			{
 				model.HasExperianError = true;
@@ -354,7 +357,7 @@
 
 			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
 			
-			model.ConsumerHistory = GetConsumerHistoryModel(customerId, directorId);
+			model.ConsumerHistory = GetConsumerHistoryModel(customer, director);
 			return model;
 		}
 
