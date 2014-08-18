@@ -26,9 +26,9 @@ BEGIN
 		@Line4Prev VARCHAR(255),
 		@Line5Prev VARCHAR(255),
 		@Line6Prev VARCHAR(255)
+		
 	IF @DirectorId IS NULL
 	BEGIN
-	
 		SELECT
 			@line1 = ca.Line1,
 			@Line2 = ca.Line2,
@@ -39,7 +39,7 @@ BEGIN
 		FROM
 			CustomerAddress ca
 		WHERE
-			ca.addressType = '1'
+			ca.addressType = 1
 			AND 
 			ca.CustomerId = @CustomerId
 			AND 
@@ -55,7 +55,7 @@ BEGIN
 		FROM
 			CustomerAddress ca
 		WHERE 
-			ca.addressType = '2'
+			ca.addressType = 2
 			AND
 			ca.CustomerId = @CustomerId
 			AND
@@ -74,7 +74,7 @@ BEGIN
 		FROM
 			CustomerAddress ca
 		WHERE
-			ca.addressType = '1'
+			ca.addressType IN (4, 6)
 			AND 
 			ca.DirectorId = @DirectorId
 			AND 
@@ -90,7 +90,7 @@ BEGIN
 		FROM
 			CustomerAddress ca
 		WHERE 
-			ca.addressType = '2'
+			ca.addressType IN (8, 10)
 			AND
 			ca.DirectorId = @DirectorId
 			AND

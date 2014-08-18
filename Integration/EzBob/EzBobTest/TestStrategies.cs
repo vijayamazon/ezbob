@@ -284,6 +284,16 @@ namespace EzBobTest
 			Console.WriteLine("{0} {1}", s.Result.NumMortgages, s.Result.MortgageBalance);
 		}
 
+
+		[Test]
+		public void TestExperianConsumerCheck() {
+			var s = new ExperianConsumerCheck(85, null, false, m_oDB, m_oLog);
+			s.Execute();
+
+			s = new ExperianConsumerCheck(85, 6, false, m_oDB, m_oLog);
+			s.Execute();
+		}
+
 		[Test]
 		public void TestDecrypt() {
 			string sIn = @"<?xml version=""1.0""?>
