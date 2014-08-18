@@ -35,7 +35,7 @@ BEGIN
 	BEGIN
 		PRINT 'select by name'
 		SELECT TOP 1
-		   l.Id, l.InsertDate
+		   @ServiceLogID=l.Id, @InsertDate = l.InsertDate
 		FROM
 		 Customer c 
 		 INNER JOIN CustomerAddress a ON a.CustomerId = c.Id AND a.addressType=1
