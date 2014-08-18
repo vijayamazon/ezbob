@@ -840,8 +840,8 @@
 		@{
 			OneUploadLimitation oul = CurrentValues.Instance.GetUploadLimitations("BrokerHome", "HandleUploadFile");
 		}
-		EzBob.LoadedConfig.MaxAllowedContentLength = @oul.FileSize;
-		EzBob.LoadedConfig.AcceptedFiles = '@oul.AcceptedFiles';
+		EzBob.LoadedConfig.BrokerMaxFileSize = @oul.FileSize;
+		EzBob.LoadedConfig.BrokerAcceptedFiles = '@oul.AcceptedFiles';
 		EzBob.LoadedConfig.PasswordPolicyType = '@Model.PasswordPolicyType';
 		EzBob.LoadedConfig.CaptchaMode = '@Model.CaptchaMode';
 		EzBob.LoadedConfig.SessionTimeout = @Model.SessionTimeout;

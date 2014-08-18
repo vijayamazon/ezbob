@@ -462,9 +462,9 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			url: window.gRootPath + 'Broker/BrokerHome/HandleUploadFile',
 			parallelUploads: 4,
 			uploadMultiple: true,
-			acceptedFiles: EzBob.Config.AcceptedFiles,
+			acceptedFiles: EzBob.Config.BrokerAcceptedFiles,
 			autoProcessQueue: true,
-			maxFilesize: EzBob.Config.MaxAllowedContentLength / 1048576.0,
+			maxFilesize: EzBob.Config.BrokerMaxFileSize / 1048576.0,
 			headers: {
 				'ezbob-broker-contact-email': self.router.getAuth(),
 				'ezbob-broker-customer-id': self.CustomerID,
