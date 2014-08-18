@@ -13,7 +13,7 @@ CREATE TYPE ExperianConsumerDataList AS TABLE (
 	ServiceLogId BIGINT NULL,
 	CustomerId INT NULL,
 	DirectorId INT NULL,
-	Error NVARCHAR(255) NULL,
+	Error NVARCHAR(MAX) NULL,
 	HasParsingError BIT NOT NULL,
 	HasExperianError BIT NOT NULL,
 	BureauScore INT NULL,

@@ -1,0 +1,2 @@
+ALTER TABLE ExperianConsumerData ALTER COLUMN Error NVARCHAR(MAX) NULL
+GO
