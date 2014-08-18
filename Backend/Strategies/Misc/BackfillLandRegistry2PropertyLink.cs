@@ -42,7 +42,7 @@
 				}
 				catch (Exception e)
 				{
-					Log.Error("Exception during backfill of land registry mapping", e);
+					Log.Error("Exception during backfill of land registry mapping: {0}", e);
 				}
 			}
 		}
