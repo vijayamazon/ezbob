@@ -998,9 +998,12 @@
 			{
 				if (customer.PersonalInfo != null &&
 					customer.PersonalInfo.Fullname != null &&
-					proprietorshipParty != null &&
-					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualForename) &&
-					customer.PersonalInfo.Fullname.Contains(proprietorshipParty.PrivateIndividualSurname))
+					proprietorshipParty != null && 
+					proprietorshipParty.PrivateIndividualForename != null && 
+					proprietorshipParty.PrivateIndividualSurname != null &&
+					proprietorshipParty.PrivateIndividualForename.Contains(customer.PersonalInfo.FirstName) &&
+					proprietorshipParty.PrivateIndividualSurname.Contains(customer.PersonalInfo.Surname)
+					)
 				{
 					// Customer is owner
 					return true;
