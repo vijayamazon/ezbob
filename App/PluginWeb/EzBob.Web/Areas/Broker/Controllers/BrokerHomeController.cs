@@ -10,6 +10,7 @@
 	using Code;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
+	using Ezbob.Utils.MimeTypes;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using Ezbob.Utils;

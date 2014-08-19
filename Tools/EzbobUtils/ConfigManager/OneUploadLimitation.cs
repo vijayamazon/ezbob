@@ -3,7 +3,7 @@
 	using System.Globalization;
 	using System.Linq;
 	using Ezbob.Logger;
-	using Ezbob.Utils;
+	using Ezbob.Utils.MimeTypes;
 
 	public class OneUploadLimitation {
 		#region constructor
@@ -112,34 +112,66 @@
 
 			var mtr = new MimeTypeResolver();
 
-			string sMimeType;
+			MimeType oExtMimeType = mtr.Get(sFileName);
 
-			if (oFilePrefix != null) {
-				sMimeType = mtr.GetFromFile(oFilePrefix, nFilePrefixLength);
+			if (oExtMimeType != null) {
+				oLog.Debug("MIME type by file extension is {0}", oExtMimeType.PrimaryMimeType);
 
-				oLog.Debug("MIME type by content is {0}", sMimeType);
-
-				if (this.Contains(sMimeType)) {
-					oLog.Debug("MIME type by content {0} conforms to this limitation {1}.", sMimeType, this);
-					return sMimeType;
-				} // if
-
-				if (sMimeType != MimeTypeResolver.DefaultMimeType) {
-					oLog.Debug("MIME type by content {0} is well-detected and does not conform to this limitation {1}.", sMimeType, this);
+				if (!this.Contains(oExtMimeType.PrimaryMimeType)) {
+					oLog.Debug("MIME type by file extension {0} does not conform to this limitation {1}.", oExtMimeType.PrimaryMimeType, this);
 					return null;
 				} // if
+			}
+			else
+				oLog.Debug("MIME type cannot be detected by file name {0}.", sFileName);
+
+			if (oFilePrefix != null) {
+				string sFileMimeType = mtr.GetFromFile(oFilePrefix, nFilePrefixLength);
+
+				oLog.Debug("MIME type by content is {0}", sFileMimeType);
+
+				if (this.Contains(sFileMimeType)) {
+					oLog.Debug("MIME type by content {0} conforms to this limitation {1}.", sFileMimeType, this);
+					return sFileMimeType;
+				} // if
+
+				MimeType oFileMimeType = mtr.Find(sFileMimeType);
+
+				if (
+					((oFileMimeType.PrimaryMimeType == MimeTypeResolver.DefaultMimeType) ||
+					(oFileMimeType.PrimaryMimeType == MimeTypeResolver.TextMimeType)) &&
+					(oExtMimeType == null)
+				) {
+					oLog.Debug(
+						"MIME type by file ('{0}') is a common one and MIME type by extension cannot be detected - file should be dropped.",
+						oFileMimeType.PrimaryMimeType
+					);
+					return null;
+				} // if
+
+				if (oFileMimeType * oExtMimeType) {
+					oLog.Debug(
+						"MIME type by file ('{0}') differs from MIME type by extension ('{1}') but they are compatible so using the latter.",
+						oFileMimeType.PrimaryMimeType,
+						oExtMimeType.PrimaryMimeType
+					);
+
+					return oExtMimeType.PrimaryMimeType;
+				} // if
+
+				oLog.Debug(
+					"MIME type by file ('{0}') differs from MIME type by extension ('{1}') and they are not compatible.",
+					oFileMimeType.PrimaryMimeType,
+					oExtMimeType == null ? string.Empty : oExtMimeType.PrimaryMimeType
+				);
+
+				return null;
 			} // if
 
-			sMimeType = mtr.Get(sFileName);
-
-			oLog.Debug("MIME type by file extension is {0}", sMimeType);
-
-			if (this.Contains(sMimeType)) {
-				oLog.Debug("MIME type by file extension {0} conforms to this limitation {1}.", sMimeType, this);
-				return sMimeType;
+			if (oExtMimeType != null) {
+				oLog.Debug("MIME type by file extension {0} conforms to this limitation {1}.", oExtMimeType.PrimaryMimeType, this);
+				return oExtMimeType.PrimaryMimeType;
 			} // if
-
-			oLog.Debug("MIME type by file extension {0} does not conform to this limitation {1}.", sMimeType, this);
 
 			return null;
 		} // DetectFileMimeType

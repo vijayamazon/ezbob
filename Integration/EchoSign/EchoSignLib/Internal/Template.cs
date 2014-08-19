@@ -3,6 +3,7 @@
 	using System.Globalization;
 	using System.Text;
 	using Ezbob.Utils;
+	using Ezbob.Utils.MimeTypes;
 
 	#region enum TemplateType
 

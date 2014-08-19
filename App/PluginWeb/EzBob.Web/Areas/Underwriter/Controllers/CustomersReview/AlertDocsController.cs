@@ -7,7 +7,7 @@
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Ezbob.Utils;
+	using Ezbob.Utils.MimeTypes;
 	using Models;
 	using Infrastructure;
 	using StructureMap;
