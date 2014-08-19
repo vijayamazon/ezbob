@@ -255,22 +255,6 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
     margin-bottom: 25px;
 }
 
-.type-of-business-form_field {
-	box-sizing: border-box;
-	overflow: hidden;
-    height: auto !important; 
-    width: 96%; 
-    padding: 4px;
-    font-size: 18px;
-}
-
-.type-of-business-caption {
-    pointer-events: none;
-    margin-left: 3px;
-    color: #acacac !important;
-    text-shadow: 0 1px 1px #fff;
-}
-
 .CompanyDetailForm .oobts {
 	position: relative;
 }

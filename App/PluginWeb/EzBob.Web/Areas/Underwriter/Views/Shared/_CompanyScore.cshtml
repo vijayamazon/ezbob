@@ -4,8 +4,8 @@
 		<%if(!isOwner) {%>
 		<div class="box">
 			<div class="box-content">
-				<button class="btn">Change company to existing</button> 
-				<button class="btn">Change company to new</button>
+				<button class="btn btn-primary change-company">Change company</button>
+				<button class="btn btn-primary" href="#" id="RunCompanyCheckBtn">Run Company check</button>
 			</div>
 		</div>
 		<%}%>
@@ -109,1040 +109,1090 @@
 	if (response.company_ref_num == null || response.company_ref_num == 'NotFound')
 		sCompanyCaption = '-- no data --';
 	else
-		sCompanyCaption = (response.company_name == null) ? response.company_ref_num : response.company_name + ' (' + response.company_ref_num + ')';
+		sCompanyCaption = (response.company_name == null) ? response.company_ref_num : response.company_name + ' (' + response.company_ref_num + ')'; %>
 
-	print('<h3>' + caption + ': ' + sCompanyCaption + '</h3><div class="box-content">');
-    
+	<h3><%- (caption + ': ' + sCompanyCaption) %></h3>
+	<div class="box-content">
+    <%
 	if (response.result != 'ok') {
 		print(response.result);
-		print('</div>');
-		return;
-	}
+	} else {
     
-    if (response.Data) {
-        %><div class=tab-content>
-            <% if (sCompanyCaption != '-- no data --') { %>
-                <table class="table">
-                    <thead class="box">
-                        <tr class="box-title">
-                            <th colspan="2">Non-Limited company fields</th>
-                        </tr>
-                    </thead>
-		            <tbody>
-                        <% if (response.Data.company_name != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Business name</td><td><%-response.Data.company_name%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.Address1 != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Address line1</td><td><%-response.Data.Address1%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.Address2 != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Address line2</td><td><%-response.Data.Address2%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.Address3 != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Address line3</td><td><%-response.Data.Address3%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.Address4 != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Address line4</td><td><%-response.Data.Address4%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.Address5 != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Address line5</td><td><%-response.Data.Address5%></td>
-                            </tr>
-                        <% } %>    
-                        <% if (response.Data.Postcode != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Postcode</td><td><%-response.Data.Postcode%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.TelephoneNumber != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Telephone #</td><td><%-response.Data.TelephoneNumber%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.PrincipalActivities != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Principal activities</td><td><%-response.Data.PrincipalActivities%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.EarliestKnownDate != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Earliest known date</td><td><%-EzBob.formatDate(response.Data.EarliestKnownDate)%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.DateOwnershipCommenced != undefined) { %>
-                            <tr>
-                                <td class=narrow-as-possible>Date ownership commenced</td><td><%-EzBob.formatDate(response.Data.DateOwnershipCommenced)%></td>
-                            </tr>
-                        <% } %>
-                        <% if (response.Data.IncorporationDate != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Incorporation date</td><td><%-EzBob.formatDate(response.Data.IncorporationDate)%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.DateOwnershipCeased != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Date ownership ceased</td><td><%-EzBob.formatDate(response.Data.DateOwnershipCeased)%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.LastUpdateDate != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Last update date</td><td><%-EzBob.formatDate(response.Data.LastUpdateDate)%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.BankruptcyCountDuringOwnership != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Bankruptcy count during ownership</td><td><%-response.Data.BankruptcyCountDuringOwnership%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AgeOfMostRecentBankruptcyDuringOwnershipMonths != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Age of most recent bankruptcy during ownership (months)</td><td><%-response.Data.AgeOfMostRecentBankruptcyDuringOwnershipMonths%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AssociatedBankruptcyCountDuringOwnership != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Associated bankruptcy count during ownership</td><td><%-response.Data.AssociatedBankruptcyCountDuringOwnership%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Age of most recent associated bankruptcy during ownership (months)</td><td><%-response.Data.AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AgeOfMostRecentJudgmentDuringOwnershipMonths != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Age of most recent judgment during ownership (months)</td><td><%-response.Data.AgeOfMostRecentJudgmentDuringOwnershipMonths%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalJudgmentCountLast12Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total judgment count last 12 (months)</td><td><%-response.Data.TotalJudgmentCountLast12Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalJudgmentValueLast12Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total judgment value last 12 (months)</td><td><%-response.Data.TotalJudgmentValueLast12Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalJudgmentCountLast13To24Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total judgment count last 13 to 24 (months)</td><td><%-response.Data.TotalJudgmentCountLast13To24Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalJudgmentValueLast13To24Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total judgment value last 13 to 24 (months)</td><td><%-response.Data.TotalJudgmentValueLast13To24Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.ValueOfMostRecentAssociatedJudgmentDuringOwnership != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Value of most recent associated judgment during ownership</td><td><%-response.Data.ValueOfMostRecentAssociatedJudgmentDuringOwnership%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalAssociatedJudgmentCountLast12Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total associated judgment count last 12 (months)</td><td><%-response.Data.TotalAssociatedJudgmentCountLast12Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalAssociatedJudgmentValueLast12Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total associated judgment value last 12 (months)</td><td><%-response.Data.TotalAssociatedJudgmentValueLast12Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalAssociatedJudgmentCountLast13To24Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total associated judgment count last 13 to 24 (months)</td><td><%-response.Data.TotalAssociatedJudgmentCountLast13To24Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalAssociatedJudgmentValueLast13To24Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total associated judgment value last 13 to 24 (months)</td><td><%-response.Data.TotalAssociatedJudgmentValueLast13To24Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalJudgmentCountLast24Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total judgment count last 24 (months)</td><td><%-response.Data.TotalJudgmentCountLast24Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalAssociatedJudgmentCountLast24Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total associated judgment count last 24 (months)</td><td><%-response.Data.TotalAssociatedJudgmentCountLast24Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalJudgmentValueLast24Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total judgment value last 24 (months)</td><td><%-response.Data.TotalJudgmentValueLast24Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TotalAssociatedJudgmentValueLast24Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Total associated judgment value last 24 (months)</td><td><%-response.Data.TotalAssociatedJudgmentValueLast24Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.SupplierName != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Supplier name</td><td><%-response.Data.SupplierName%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.FraudCategory != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Fraud category</td><td><%-response.Data.FraudCategory%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.FraudCategoryDesc != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Fraud category description</td><td><%-response.Data.FraudCategoryDesc%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.NumberOfAccountsPlacedForCollection != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Number of accounts placed for collection</td><td><%-response.Data.NumberOfAccountsPlacedForCollection%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.ValueOfAccountsPlacedForCollection != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Value of accounts placed for collection</td><td><%-response.Data.ValueOfAccountsPlacedForCollection%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.NumberOfAccountsPlacedForCollectionLast2Years != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Number of accounts placed for collection last 2 years</td><td><%-response.Data.NumberOfAccountsPlacedForCollectionLast2Years%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AverageDaysBeyondTermsFor0To100 != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Average days beyond terms for 0 to 100</td><td><%-response.Data.AverageDaysBeyondTermsFor0To100%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AverageDaysBeyondTermsFor101To1000 != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Average days beyond terms for 101 to 1000</td><td><%-response.Data.AverageDaysBeyondTermsFor101To1000%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AverageDaysBeyondTermsFor1001To10000 != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Average days beyond terms for 1001 to 10000</td><td><%-response.Data.AverageDaysBeyondTermsFor1001To10000%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AverageDaysBeyondTermsForOver10000 != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Average days beyond terms for over 10000</td><td><%-response.Data.AverageDaysBeyondTermsForOver10000%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AverageDaysBeyondTermsForLast3MonthsOfDataReturned != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Average days beyond terms for last 3 months of data returned</td><td><%-response.Data.AverageDaysBeyondTermsForLast3MonthsOfDataReturned%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AverageDaysBeyondTermsForLast6MonthsOfDataReturned != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Average days beyond terms for last 6 months of data returned</td><td><%-response.Data.AverageDaysBeyondTermsForLast6MonthsOfDataReturned%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AverageDaysBeyondTermsForLast12MonthsOfDataReturned != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Average days beyond terms for last 12 months of data returned</td><td><%-response.Data.AverageDaysBeyondTermsForLast12MonthsOfDataReturned%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.CurrentAverageDebt != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Current average debt</td><td><%-response.Data.CurrentAverageDebt%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AverageDebtLast3Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Average debt last 3 months</td><td><%-response.Data.AverageDebtLast3Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.AverageDebtLast12Months != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Average debt last 12 months</td><td><%-response.Data.AverageDebtLast12Months%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.TelephoneNumberDN36 != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Telephone # (DN36)</td><td><%-response.Data.TelephoneNumberDN36%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.RiskScore != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Risk score</td><td><%-response.Data.RiskScore%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.SearchType != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Search type</td><td><%-response.Data.SearchType%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.SearchTypeDesc != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Search type description</td><td><%-response.Data.SearchTypeDesc%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.CommercialDelphiScore != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Commercial delphi score</td><td><%-response.Data.CommercialDelphiScore%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.CreditRating != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Credit rating</td><td><%-response.Data.CreditRating%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.CreditLimit != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Credit limit</td><td><%-response.Data.CreditLimit%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.ProbabilityOfDefaultScore != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Probability of default score</td><td><%-response.Data.ProbabilityOfDefaultScore%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.StabilityOdds != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Stability odds</td><td><%-response.Data.StabilityOdds%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.RiskBand != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Risk band</td><td><%-response.Data.RiskBand%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.NumberOfProprietorsSearched != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Number of proprietors searched</td><td><%-response.Data.NumberOfProprietorsSearched%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.NumberOfProprietorsFound != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Number of proprietors found</td><td><%-response.Data.NumberOfProprietorsFound%></td>
-	                        </tr>
-                        <% } %>
-                        <% if (response.Data.Errors != undefined) { %>
-	                        <tr>
-		                        <td class=narrow-as-possible>Errors</td><td><%-response.Data.Errors%></td>
-	                        </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-                <% if (response.Data.SicCodes != undefined) { %>
-                    <table class="table">
-                        <thead class="box">
-                            <tr class="box-title">
-                                <th colspan="2">Non-Limited Sic Codes</th>
-                            </tr>
-                            <tr class="box-title">
-                                <th>Code</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-		                <tbody>
-                            <% _.each(response.Data.SicCodes, function(elem, i) {
-                                if (elem != undefined && response.Data.SicDescs[i] != undefined) { %>
-                                    <tr>
-		                                <td class=narrow-as-possible><%-elem%></td>
-		                                <td><%-response.Data.SicDescs[i]%></td>
-	                                </tr>
-                                <% }
-                            }); %>
-                        </tbody>
-                    </table>
-                <% } %>
-                <% if (response.Data.BankruptcyDetails != undefined) { %>
-                    <table class="table">
-                        <thead class="box">
-                            <tr class="box-title">
-                                <th colspan="10">Non-Limited Bankruptcy Details</th>
-                            </tr>
-                            <tr class="box-title">
-                                <th>Name</th>
-                                <th>Addr line 1</th>
-                                <th>Addr line 2</th>
-                                <th>Addr line 3</th>
-                                <th>Addr line 4</th>
-                                <th>Addr line 5</th>
-                                <th>Post code</th>
-                                <th>Gazette date</th>
-                                <th>Bankruptcy type</th>
-                                <th>Bankruptcy type description</th>
-                            </tr>
-                        </thead>
-		                <tbody>
-                            <% _.each(response.Data.BankruptcyDetails, function(elem, i) {
-                                if (elem != undefined) { %>
-                                    <tr>
-		                                <td class=narrow-as-possible><%-elem.BankruptcyName%></td>
-		                                <td class=narrow-as-possible><%-elem.BankruptcyAddr1%></td>
-		                                <td class=narrow-as-possible><%-elem.BankruptcyAddr2%></td>
-		                                <td class=narrow-as-possible><%-elem.BankruptcyAddr3%></td>
-		                                <td class=narrow-as-possible><%-elem.BankruptcyAddr4%></td>
-		                                <td class=narrow-as-possible><%-elem.BankruptcyAddr5%></td>
-		                                <td class=narrow-as-possible><%-elem.PostCode%></td>
-		                                <td class=narrow-as-possible><%-EzBob.formatDate(elem.GazetteDate)%></td>
-		                                <td class=narrow-as-possible><%-elem.BankruptcyType%></td>
-		                                <td><%-elem.BankruptcyTypeDesc%></td>
-	                                </tr>
-                                <% }
-                            }); %>
-                        </tbody>
-                    </table>
-                <% } %>
+		if (response.Data) {
+			%><div class=tab-content>
+				<% if (sCompanyCaption != '-- no data --') { %>
+					<table class="table">
+						<thead class="box">
+							<tr class="box-title">
+								<th colspan="2">Non-Limited company fields</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% if (response.Data.company_name != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Business name</td><td><%-response.Data.company_name%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.Address1 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Address line1</td><td><%-response.Data.Address1%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.Address2 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Address line2</td><td><%-response.Data.Address2%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.Address3 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Address line3</td><td><%-response.Data.Address3%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.Address4 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Address line4</td><td><%-response.Data.Address4%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.Address5 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Address line5</td><td><%-response.Data.Address5%></td>
+								</tr>
+							<% } %>    
+							<% if (response.Data.Postcode != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Postcode</td><td><%-response.Data.Postcode%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TelephoneNumber != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Telephone #</td><td><%-response.Data.TelephoneNumber%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.PrincipalActivities != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Principal activities</td><td><%-response.Data.PrincipalActivities%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.EarliestKnownDate != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Earliest known date</td><td><%-EzBob.formatDate(response.Data.EarliestKnownDate)%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.DateOwnershipCommenced != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Date ownership commenced</td><td><%-EzBob.formatDate(response.Data.DateOwnershipCommenced)%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.IncorporationDate != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Incorporation date</td><td><%-EzBob.formatDate(response.Data.IncorporationDate)%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.DateOwnershipCeased != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Date ownership ceased</td><td><%-EzBob.formatDate(response.Data.DateOwnershipCeased)%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.LastUpdateDate != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Last update date</td><td><%-EzBob.formatDate(response.Data.LastUpdateDate)%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.BankruptcyCountDuringOwnership != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Bankruptcy count during ownership</td><td><%-response.Data.BankruptcyCountDuringOwnership%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AgeOfMostRecentBankruptcyDuringOwnershipMonths != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Age of most recent bankruptcy during ownership (months)</td><td><%-response.Data.AgeOfMostRecentBankruptcyDuringOwnershipMonths%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AssociatedBankruptcyCountDuringOwnership != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Associated bankruptcy count during ownership</td><td><%-response.Data.AssociatedBankruptcyCountDuringOwnership%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Age of most recent associated bankruptcy during ownership (months)</td><td><%-response.Data.AgeOfMostRecentAssociatedBankruptcyDuringOwnershipMonths%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AgeOfMostRecentJudgmentDuringOwnershipMonths != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Age of most recent judgment during ownership (months)</td><td><%-response.Data.AgeOfMostRecentJudgmentDuringOwnershipMonths%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalJudgmentCountLast12Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total judgment count last 12 (months)</td><td><%-response.Data.TotalJudgmentCountLast12Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalJudgmentValueLast12Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total judgment value last 12 (months)</td><td><%-response.Data.TotalJudgmentValueLast12Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalJudgmentCountLast13To24Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total judgment count last 13 to 24 (months)</td><td><%-response.Data.TotalJudgmentCountLast13To24Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalJudgmentValueLast13To24Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total judgment value last 13 to 24 (months)</td><td><%-response.Data.TotalJudgmentValueLast13To24Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.ValueOfMostRecentAssociatedJudgmentDuringOwnership != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Value of most recent associated judgment during ownership</td><td><%-response.Data.ValueOfMostRecentAssociatedJudgmentDuringOwnership%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalAssociatedJudgmentCountLast12Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total associated judgment count last 12 (months)</td><td><%-response.Data.TotalAssociatedJudgmentCountLast12Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalAssociatedJudgmentValueLast12Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total associated judgment value last 12 (months)</td><td><%-response.Data.TotalAssociatedJudgmentValueLast12Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalAssociatedJudgmentCountLast13To24Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total associated judgment count last 13 to 24 (months)</td><td><%-response.Data.TotalAssociatedJudgmentCountLast13To24Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalAssociatedJudgmentValueLast13To24Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total associated judgment value last 13 to 24 (months)</td><td><%-response.Data.TotalAssociatedJudgmentValueLast13To24Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalJudgmentCountLast24Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total judgment count last 24 (months)</td><td><%-response.Data.TotalJudgmentCountLast24Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalAssociatedJudgmentCountLast24Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total associated judgment count last 24 (months)</td><td><%-response.Data.TotalAssociatedJudgmentCountLast24Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalJudgmentValueLast24Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total judgment value last 24 (months)</td><td><%-response.Data.TotalJudgmentValueLast24Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TotalAssociatedJudgmentValueLast24Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Total associated judgment value last 24 (months)</td><td><%-response.Data.TotalAssociatedJudgmentValueLast24Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.SupplierName != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Supplier name</td><td><%-response.Data.SupplierName%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.FraudCategory != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Fraud category</td><td><%-response.Data.FraudCategory%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.FraudCategoryDesc != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Fraud category description</td><td><%-response.Data.FraudCategoryDesc%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.NumberOfAccountsPlacedForCollection != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Number of accounts placed for collection</td><td><%-response.Data.NumberOfAccountsPlacedForCollection%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.ValueOfAccountsPlacedForCollection != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Value of accounts placed for collection</td><td><%-response.Data.ValueOfAccountsPlacedForCollection%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.NumberOfAccountsPlacedForCollectionLast2Years != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Number of accounts placed for collection last 2 years</td><td><%-response.Data.NumberOfAccountsPlacedForCollectionLast2Years%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AverageDaysBeyondTermsFor0To100 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Average days beyond terms for 0 to 100</td><td><%-response.Data.AverageDaysBeyondTermsFor0To100%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AverageDaysBeyondTermsFor101To1000 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Average days beyond terms for 101 to 1000</td><td><%-response.Data.AverageDaysBeyondTermsFor101To1000%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AverageDaysBeyondTermsFor1001To10000 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Average days beyond terms for 1001 to 10000</td><td><%-response.Data.AverageDaysBeyondTermsFor1001To10000%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AverageDaysBeyondTermsForOver10000 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Average days beyond terms for over 10000</td><td><%-response.Data.AverageDaysBeyondTermsForOver10000%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AverageDaysBeyondTermsForLast3MonthsOfDataReturned != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Average days beyond terms for last 3 months of data returned</td><td><%-response.Data.AverageDaysBeyondTermsForLast3MonthsOfDataReturned%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AverageDaysBeyondTermsForLast6MonthsOfDataReturned != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Average days beyond terms for last 6 months of data returned</td><td><%-response.Data.AverageDaysBeyondTermsForLast6MonthsOfDataReturned%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AverageDaysBeyondTermsForLast12MonthsOfDataReturned != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Average days beyond terms for last 12 months of data returned</td><td><%-response.Data.AverageDaysBeyondTermsForLast12MonthsOfDataReturned%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.CurrentAverageDebt != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Current average debt</td><td><%-response.Data.CurrentAverageDebt%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AverageDebtLast3Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Average debt last 3 months</td><td><%-response.Data.AverageDebtLast3Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.AverageDebtLast12Months != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Average debt last 12 months</td><td><%-response.Data.AverageDebtLast12Months%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.TelephoneNumberDN36 != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Telephone # (DN36)</td><td><%-response.Data.TelephoneNumberDN36%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.RiskScore != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Risk score</td><td><%-response.Data.RiskScore%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.SearchType != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Search type</td><td><%-response.Data.SearchType%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.SearchTypeDesc != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Search type description</td><td><%-response.Data.SearchTypeDesc%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.CommercialDelphiScore != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Commercial delphi score</td><td><%-response.Data.CommercialDelphiScore%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.CreditRating != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Credit rating</td><td><%-response.Data.CreditRating%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.CreditLimit != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Credit limit</td><td><%-response.Data.CreditLimit%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.ProbabilityOfDefaultScore != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Probability of default score</td><td><%-response.Data.ProbabilityOfDefaultScore%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.StabilityOdds != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Stability odds</td><td><%-response.Data.StabilityOdds%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.RiskBand != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Risk band</td><td><%-response.Data.RiskBand%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.NumberOfProprietorsSearched != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Number of proprietors searched</td><td><%-response.Data.NumberOfProprietorsSearched%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.NumberOfProprietorsFound != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Number of proprietors found</td><td><%-response.Data.NumberOfProprietorsFound%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.Errors != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Errors</td><td><%-response.Data.Errors%></td>
+								</tr>
+							<% } %>
+						</tbody>
+					</table>
+					<% if (response.Data.SicCodes != undefined) { %>
+						<table class="table">
+							<thead class="box">
+								<tr class="box-title">
+									<th colspan="2">Non-Limited Sic Codes</th>
+								</tr>
+								<tr class="box-title">
+									<th>Code</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% _.each(response.Data.SicCodes, function(elem, i) {
+									if (elem != undefined && response.Data.SicDescs[i] != undefined) { %>
+										<tr>
+											<td class=narrow-as-possible><%-elem%></td>
+											<td><%-response.Data.SicDescs[i]%></td>
+										</tr>
+									<% }
+								}); %>
+							</tbody>
+						</table>
+					<% } %>
+					<% if (response.Data.BankruptcyDetails != undefined) { %>
+						<table class="table">
+							<thead class="box">
+								<tr class="box-title">
+									<th colspan="10">Non-Limited Bankruptcy Details</th>
+								</tr>
+								<tr class="box-title">
+									<th>Name</th>
+									<th>Addr line 1</th>
+									<th>Addr line 2</th>
+									<th>Addr line 3</th>
+									<th>Addr line 4</th>
+									<th>Addr line 5</th>
+									<th>Post code</th>
+									<th>Gazette date</th>
+									<th>Bankruptcy type</th>
+									<th>Bankruptcy type description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% _.each(response.Data.BankruptcyDetails, function(elem, i) {
+									if (elem != undefined) { %>
+										<tr>
+											<td class=narrow-as-possible><%-elem.BankruptcyName%></td>
+											<td class=narrow-as-possible><%-elem.BankruptcyAddr1%></td>
+											<td class=narrow-as-possible><%-elem.BankruptcyAddr2%></td>
+											<td class=narrow-as-possible><%-elem.BankruptcyAddr3%></td>
+											<td class=narrow-as-possible><%-elem.BankruptcyAddr4%></td>
+											<td class=narrow-as-possible><%-elem.BankruptcyAddr5%></td>
+											<td class=narrow-as-possible><%-elem.PostCode%></td>
+											<td class=narrow-as-possible><%-EzBob.formatDate(elem.GazetteDate)%></td>
+											<td class=narrow-as-possible><%-elem.BankruptcyType%></td>
+											<td><%-elem.BankruptcyTypeDesc%></td>
+										</tr>
+									<% }
+								}); %>
+							</tbody>
+						</table>
+					<% } %>
     
-                <% if (response.Data.CcjDetails != undefined) { %>
-                    <table class="table">
-                        <thead class="box">
-                            <tr class="box-title">
-                                <th colspan="24">Non-Limited Ccj Details</th>
-                            </tr>
-                            <tr class="box-title">
-                                <th>Record type</th>
-                                <th>Record type fullName</th>
-                                <th>Judgement date</th>
-                                <th>Satisfaction flag</th>
-                                <th>Satisfaction flag description</th>
-                                <th>Satisfaction date</th>
-                                <th>Judgment type</th>
-                                <th>Judgment type description</th>
-                                <th>Judgment amount</th>
-                                <th>Court</th>
-                                <th>Case #</th>
-                                <th># of judgment names</th>
-                                <th># of trading names</th>
-                                <th>Length of judgment name</th>
-                                <th>Length of trading name</th>
-                                <th>Length of judgment address</th>
-                                <th>Addr line 1</th>
-                                <th>Addr line 2</th>
-                                <th>Addr line 3</th>
-                                <th>Addr line 4</th>
-                                <th>Addr line 5</th>
-                                <th>PostCode</th>
-                                <th>Registered against</th>
-                                <th>Trading names</th>
-                            </tr>
-                        </thead>
-		                <tbody>
-                            <% _.each(response.Data.CcjDetails, function(elem, i) {
-                                if (elem != undefined) { %>
-                                    <tr>
-		                                <td class=narrow-as-possible><%-elem.RecordType%></td>
-		                                <td class=narrow-as-possible><%-elem.RecordTypeFullName%></td>
-		                                <td class=narrow-as-possible><%-EzBob.formatDate(elem.JudgementDate)%></td>
-		                                <td class=narrow-as-possible><%-elem.SatisfactionFlag%></td>
-		                                <td class=narrow-as-possible><%-elem.SatisfactionFlagDesc%></td>
-		                                <td class=narrow-as-possible><%-EzBob.formatDate(elem.SatisfactionDate)%></td>
-		                                <td class=narrow-as-possible><%-elem.JudgmentType%></td>
-		                                <td class=narrow-as-possible><%-elem.JudgmentTypeDesc%></td>
-		                                <td class=narrow-as-possible><%-elem.JudgmentAmount%></td>
-		                                <td class=narrow-as-possible><%-elem.Court%></td>
-		                                <td class=narrow-as-possible><%-elem.CaseNumber%></td>
-		                                <td class=narrow-as-possible><%-elem.NumberOfJudgmentNames%></td>
-		                                <td class=narrow-as-possible><%-elem.NumberOfTradingNames%></td>
-		                                <td class=narrow-as-possible><%-elem.LengthOfJudgmentName%></td>
-		                                <td class=narrow-as-possible><%-elem.LengthOfTradingName%></td>
-		                                <td class=narrow-as-possible><%-elem.LengthOfJudgmentAddress%></td>
-		                                <td class=narrow-as-possible><%-elem.JudgementAddr1%></td>
-		                                <td class=narrow-as-possible><%-elem.JudgementAddr2%></td>
-		                                <td class=narrow-as-possible><%-elem.JudgementAddr3%></td>
-		                                <td class=narrow-as-possible><%-elem.JudgementAddr4%></td>
-		                                <td class=narrow-as-possible><%-elem.JudgementAddr5%></td>
-		                                <td class=narrow-as-possible><%-elem.PostCode%></td>
-		                                <td class=narrow-as-possible>
-                                            <% if (elem.RegisteredAgainst != undefined) { %>
-                                                <table>
-		                                            <tbody>
-                                                        <% _.each(elem.RegisteredAgainst, function(registeredAgainst, i) {
-                                                            if (registeredAgainst != undefined) { %>
-                                                                <tr>
-		                                                            <td class=narrow-as-possible><%-registeredAgainst%></td>
-	                                                            </tr>
-                                                            <% }
-                                                        }); %>
-                                                    </tbody>
-                                                </table>
-                                            <% } %>
-                                        </td>
-		                                <td>
-                                            <% if (elem.TradingNames != undefined) { %>
-                                                <table>
-                                                    <thead class="box">
-                                                        <tr class="box-title">
-                                                            <th>Name</th>
-                                                            <th>Indicator</th>
-                                                            <th>Indicator description</th>
-                                                        </tr>
-                                                    </thead>
-		                                            <tbody>
-                                                        <% _.each(elem.TradingNames, function(tradingName, i) {
-                                                            if (tradingName != undefined) { %>
-                                                                <tr>
-		                                                            <td class=narrow-as-possible><%-tradingName.Name%></td>
-		                                                            <td class=narrow-as-possible><%-tradingName.TradingIndicator%></td>
-		                                                            <td class=narrow-as-possible><%-tradingName.TradingIndicatorDesc%></td>
-	                                                            </tr>
-                                                            <% }
-                                                        }); %>
-                                                    </tbody>
-                                                </table>
-                                            <% } %>
-                                        </td>
-	                                </tr>
-                                <% }
-                            }); %>
-                        </tbody>
-                    </table>
-                <% } %>
+					<% if (response.Data.CcjDetails != undefined) { %>
+						<table class="table">
+							<thead class="box">
+								<tr class="box-title">
+									<th colspan="24">Non-Limited Ccj Details</th>
+								</tr>
+								<tr class="box-title">
+									<th>Record type</th>
+									<th>Record type fullName</th>
+									<th>Judgement date</th>
+									<th>Satisfaction flag</th>
+									<th>Satisfaction flag description</th>
+									<th>Satisfaction date</th>
+									<th>Judgment type</th>
+									<th>Judgment type description</th>
+									<th>Judgment amount</th>
+									<th>Court</th>
+									<th>Case #</th>
+									<th># of judgment names</th>
+									<th># of trading names</th>
+									<th>Length of judgment name</th>
+									<th>Length of trading name</th>
+									<th>Length of judgment address</th>
+									<th>Addr line 1</th>
+									<th>Addr line 2</th>
+									<th>Addr line 3</th>
+									<th>Addr line 4</th>
+									<th>Addr line 5</th>
+									<th>PostCode</th>
+									<th>Registered against</th>
+									<th>Trading names</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% _.each(response.Data.CcjDetails, function(elem, i) {
+									if (elem != undefined) { %>
+										<tr>
+											<td class=narrow-as-possible><%-elem.RecordType%></td>
+											<td class=narrow-as-possible><%-elem.RecordTypeFullName%></td>
+											<td class=narrow-as-possible><%-EzBob.formatDate(elem.JudgementDate)%></td>
+											<td class=narrow-as-possible><%-elem.SatisfactionFlag%></td>
+											<td class=narrow-as-possible><%-elem.SatisfactionFlagDesc%></td>
+											<td class=narrow-as-possible><%-EzBob.formatDate(elem.SatisfactionDate)%></td>
+											<td class=narrow-as-possible><%-elem.JudgmentType%></td>
+											<td class=narrow-as-possible><%-elem.JudgmentTypeDesc%></td>
+											<td class=narrow-as-possible><%-elem.JudgmentAmount%></td>
+											<td class=narrow-as-possible><%-elem.Court%></td>
+											<td class=narrow-as-possible><%-elem.CaseNumber%></td>
+											<td class=narrow-as-possible><%-elem.NumberOfJudgmentNames%></td>
+											<td class=narrow-as-possible><%-elem.NumberOfTradingNames%></td>
+											<td class=narrow-as-possible><%-elem.LengthOfJudgmentName%></td>
+											<td class=narrow-as-possible><%-elem.LengthOfTradingName%></td>
+											<td class=narrow-as-possible><%-elem.LengthOfJudgmentAddress%></td>
+											<td class=narrow-as-possible><%-elem.JudgementAddr1%></td>
+											<td class=narrow-as-possible><%-elem.JudgementAddr2%></td>
+											<td class=narrow-as-possible><%-elem.JudgementAddr3%></td>
+											<td class=narrow-as-possible><%-elem.JudgementAddr4%></td>
+											<td class=narrow-as-possible><%-elem.JudgementAddr5%></td>
+											<td class=narrow-as-possible><%-elem.PostCode%></td>
+											<td class=narrow-as-possible>
+												<% if (elem.RegisteredAgainst != undefined) { %>
+													<table>
+														<tbody>
+															<% _.each(elem.RegisteredAgainst, function(registeredAgainst, i) {
+																if (registeredAgainst != undefined) { %>
+																	<tr>
+																		<td class=narrow-as-possible><%-registeredAgainst%></td>
+																	</tr>
+																<% }
+															}); %>
+														</tbody>
+													</table>
+												<% } %>
+											</td>
+											<td>
+												<% if (elem.TradingNames != undefined) { %>
+													<table>
+														<thead class="box">
+															<tr class="box-title">
+																<th>Name</th>
+																<th>Indicator</th>
+																<th>Indicator description</th>
+															</tr>
+														</thead>
+														<tbody>
+															<% _.each(elem.TradingNames, function(tradingName, i) {
+																if (tradingName != undefined) { %>
+																	<tr>
+																		<td class=narrow-as-possible><%-tradingName.Name%></td>
+																		<td class=narrow-as-possible><%-tradingName.TradingIndicator%></td>
+																		<td class=narrow-as-possible><%-tradingName.TradingIndicatorDesc%></td>
+																	</tr>
+																<% }
+															}); %>
+														</tbody>
+													</table>
+												<% } %>
+											</td>
+										</tr>
+									<% }
+								}); %>
+							</tbody>
+						</table>
+					<% } %>
     
-                <% if (response.Data.PreviousSearches != undefined) { %>
-                    <table class="table">
-                        <thead class="box">
-                            <tr class="box-title">
-                                <th colspan="4">Non-Limited Previous Searches</th>
-                            </tr>
-                            <tr class="box-title">
-                                <th>Previous search date</th>
-                                <th>Enquiry type</th>
-                                <th>Enquiry type descripton</th>
-                                <th>Credit required</th>
-                            </tr>
-                        </thead>
-		                <tbody>
-                            <% _.each(response.Data.PreviousSearches, function(elem, i) {
-                                if (elem != undefined) { %>
-                                    <tr>
-		                                <td class=narrow-as-possible><%-EzBob.formatDate(elem.PreviousSearchDate)%></td>
-		                                <td class=narrow-as-possible><%-elem.EnquiryType%></td>
-		                                <td class=narrow-as-possible><%-elem.EnquiryTypeDesc%></td>
-		                                <td><%-response.Data.PreviousSearches[0].CreditRequired%></td>
-	                                </tr>
-                                <%}
-                            });%>
-                        </tbody>
-                    </table>
-                <% } %>
+					<% if (response.Data.PreviousSearches != undefined) { %>
+						<table class="table">
+							<thead class="box">
+								<tr class="box-title">
+									<th colspan="4">Non-Limited Previous Searches</th>
+								</tr>
+								<tr class="box-title">
+									<th>Previous search date</th>
+									<th>Enquiry type</th>
+									<th>Enquiry type descripton</th>
+									<th>Credit required</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% _.each(response.Data.PreviousSearches, function(elem, i) {
+									if (elem != undefined) { %>
+										<tr>
+											<td class=narrow-as-possible><%-EzBob.formatDate(elem.PreviousSearchDate)%></td>
+											<td class=narrow-as-possible><%-elem.EnquiryType%></td>
+											<td class=narrow-as-possible><%-elem.EnquiryTypeDesc%></td>
+											<td><%-response.Data.PreviousSearches[0].CreditRequired%></td>
+										</tr>
+									<%}
+								});%>
+							</tbody>
+						</table>
+					<% } %>
     
-                <% if (response.Data.PaymentPerformanceDetails != undefined) { %>
-                    <table class="table">
-                        <thead class="box">
-                            <tr class="box-title">
-                                <th colspan="2">Non-Limited Payment Performance Details</th>
-                            </tr>
-                            <tr class="box-title">
-                                <th>Code</th>
-                                <th>Days beyond terms</th>
-                            </tr>
-                        </thead>
-		                <tbody>
-                            <% _.each(response.Data.PaymentPerformanceDetails, function(elem, i) {
-                                if (elem != undefined) { %>
-                                    <tr>
-		                                <td class=narrow-as-possible><%-elem.Code%></td>
-		                                <td class=narrow-as-possible><%-elem.DaysBeyondTerms%></td>
-		                            </tr>
-                                <% }
-                            }); %>
-                        </tbody>
-                    </table>
-                <% } %>
-            <% } else { %>
-                <div class="box-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active" role="tabpanel">No data found.</div>
-            <% } %>
-        </div><%
-    }
-    else
-    {
-        for (var nPosition = 0; nPosition < response.dataset_display_order.length; nPosition++) {
-			var i = response.dataset_display_order[nPosition];
+					<% if (response.Data.PaymentPerformanceDetails != undefined) { %>
+						<table class="table">
+							<thead class="box">
+								<tr class="box-title">
+									<th colspan="2">Non-Limited Payment Performance Details</th>
+								</tr>
+								<tr class="box-title">
+									<th>Code</th>
+									<th>Days beyond terms</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% _.each(response.Data.PaymentPerformanceDetails, function(elem, i) {
+									if (elem != undefined) { %>
+										<tr>
+											<td class=narrow-as-possible><%-elem.Code%></td>
+											<td class=narrow-as-possible><%-elem.DaysBeyondTerms%></td>
+										</tr>
+									<% }
+								}); %>
+							</tbody>
+						</table>
+					<% } %>
+				<% } else { %>
+					<div class="box-content ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active" role="tabpanel">No data found.</div>
+				<% } %>
+			</div><%
+		}
+		else
+		{
+			for (var nPosition = 0; nPosition < response.dataset_display_order.length; nPosition++) {
+				var i = response.dataset_display_order[nPosition];
 	
-			if (!response.dataset[i])
-				continue;
+				if (!response.dataset[i])
+					continue;
 
-		    var aryData = response.dataset[i].Data;
+				var aryData = response.dataset[i].Data;
 		
-		    if (aryData.length > 0) {
-			    var oMetaData = response.dataset[i].MetaData || {};
+				if (aryData.length > 0) {
+					var oMetaData = response.dataset[i].MetaData || {};
 
-			    // console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
-                if (oMetaData.ID == 'DN40') { //skipping drawing of non limited score history
-                    continue;
-                }
-			    var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width table' : 'table';
+					// console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
+					if (oMetaData.ID == 'DN40') { //skipping drawing of non limited score history
+						continue;
+					}
+					var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width table' : 'table';
 
-			    if (oMetaData.ID == 'DL23SHAREHOLDING') {
-				    var nTotal = 0;
+					if (oMetaData.ID == 'DL23SHAREHOLDING') {
+						var nTotal = 0;
 
-				    for (var j = 0; j < aryData.length; j++)
-					    nTotal +=  parseInt(aryData[j].Values['Description of Shareholding']);
+						for (var j = 0; j < aryData.length; j++)
+							nTotal +=  parseInt(aryData[j].Values['Description of Shareholding']);
 
-				    // console.log('total =', nTotal);
+						// console.log('total =', nTotal);
 
-				    if (nTotal != 0) {
-					    for (var j = 0; j < aryData.length; j++)
-						    aryData[j].Values['% of Shareholding'] = EzBob.formatPercents(aryData[j].Values['Description of Shareholding'] / nTotal);
-				    } // if total
-			    } // if
-                var totalBalance = 0;
-                if(oMetaData.ID == 'DL97'){
-                    aryData = _.sortBy(aryData, function(obj) { return obj.Values["Account State"]; } );
-                    totalBalance = _.reduce(aryData, function(memo, data){ 
-                        var balance = 0;
-                        if(data.Values['Account State'][0] != 'S'){
-                            balance = EzBob.poundToNum(data.Values['Current Balance']);
-                        }
-                        return memo + balance;}, 0
-                    );
-                }
-			    if (oMetaData.ID == 'DL41') {
-				    %><div class=tab-content><table class="<%- sTableWidthClass %>">
-					    <thead class="box">
-						    <tr class="box-title">
-							    <th colspan=4><%- i %></th>
-						    </tr>
-						    <tr class="box-title">
-							    <th></th>
-							    <th>Company</th>
-							    <th>Industry</th>
-							    <th></th>
-						    </tr>
-					    </thead>
-					    <tbody><%
-						    var aryCompany = {};
-						    var aryIndustry = {};
+						if (nTotal != 0) {
+							for (var j = 0; j < aryData.length; j++)
+								aryData[j].Values['% of Shareholding'] = EzBob.formatPercents(aryData[j].Values['Description of Shareholding'] / nTotal);
+						} // if total
+					} // if
+					var totalBalance = 0;
+					if(oMetaData.ID == 'DL97'){
+						aryData = _.sortBy(aryData, function(obj) { return obj.Values["Account State"]; } );
+						totalBalance = _.reduce(aryData, function(memo, data){ 
+							var balance = 0;
+							if(data.Values['Account State'][0] != 'S'){
+								balance = EzBob.poundToNum(data.Values['Current Balance']);
+							}
+							return memo + balance;}, 0
+						);
+					}
+					if (oMetaData.ID == 'DL41') {
+						%><div class=tab-content><table class="<%- sTableWidthClass %>">
+							<thead class="box">
+								<tr class="box-title">
+									<th colspan=4><%- i %></th>
+								</tr>
+								<tr class="box-title">
+									<th></th>
+									<th>Company</th>
+									<th>Industry</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody><%
+								var aryCompany = {};
+								var aryIndustry = {};
 
-						    var sSupplierPaymentPattern = '';
+								var sSupplierPaymentPattern = '';
 
-						    var obj = aryData[0].Values;
+								var obj = aryData[0].Values;
 
-						    for (var fld in obj) {
-							    if (fld == 'Supplier Payment Pattern') {
-								    sSupplierPaymentPattern = obj[fld];
-								    continue;
-							    } // if
+								for (var fld in obj) {
+									if (fld == 'Supplier Payment Pattern') {
+										sSupplierPaymentPattern = obj[fld];
+										continue;
+									} // if
 
-							    var nFirstSpace = fld.indexOf(' ');
+									var nFirstSpace = fld.indexOf(' ');
 
-							    var aryTarget = (fld.substr(0, nFirstSpace) == 'Company') ? aryCompany : aryIndustry;
+									var aryTarget = (fld.substr(0, nFirstSpace) == 'Company') ? aryCompany : aryIndustry;
 
-							    var sSuffix = fld.substr(nFirstSpace + 1);
+									var sSuffix = fld.substr(nFirstSpace + 1);
 
-							    if (sSuffix == 'Payment Pattern') {
-								    aryTarget[sSuffix] = obj[fld];
-								    continue;
-							    } // if
+									if (sSuffix == 'Payment Pattern') {
+										aryTarget[sSuffix] = obj[fld];
+										continue;
+									} // if
 
-							    var bIsAverage = (sSuffix.substr(0, 3) == '- A');
+									var bIsAverage = (sSuffix.substr(0, 3) == '- A');
 
-							    var sKey, sNeedle, sNeedleLen;
+									var sKey, sNeedle, sNeedleLen;
 
-							    if (bIsAverage) {
-								    sKey = 'Average DBT';
-								    sNeedle = ' - ';
-								    sNeedleLen = 3;
-							    }
-							    else {
-								    sKey = 'Number of DBT';
-								    sNeedle = '(';
-								    sNeedleLen = 0;
-							    } // if
+									if (bIsAverage) {
+										sKey = 'Average DBT';
+										sNeedle = ' - ';
+										sNeedleLen = 3;
+									}
+									else {
+										sKey = 'Number of DBT';
+										sNeedle = '(';
+										sNeedleLen = 0;
+									} // if
 
-							    if (!aryTarget[sKey])
-								    aryTarget[sKey] = {};
+									if (!aryTarget[sKey])
+										aryTarget[sKey] = {};
 
-							    aryTarget[sKey][sSuffix.substr(sSuffix.indexOf(sNeedle) + sNeedleLen)] = obj[fld];
-						    } // for each field
+									aryTarget[sKey][sSuffix.substr(sSuffix.indexOf(sNeedle) + sNeedleLen)] = obj[fld];
+								} // for each field
 
-						    var sGroup = 'Average DBT';
+								var sGroup = 'Average DBT';
 
-						    %><tr><th class=narrow-as-possible>Payment Pattern</th>
-							    <td class=narrow-as-possible><%- aryCompany['Payment Pattern'] || '' %></td>
-							    <td class=narrow-as-possible><%- aryIndustry['Payment Pattern'] || '' %></td>
-							    <td></td>
-						    </tr>
-						    <tr>
-							    <th colspan=3 class=narrow-as-possible><%- sGroup %></th>
-							    <td></td>
-						    </tr><%
+								%><tr><th class=narrow-as-possible>Payment Pattern</th>
+									<td class=narrow-as-possible><%- aryCompany['Payment Pattern'] || '' %></td>
+									<td class=narrow-as-possible><%- aryIndustry['Payment Pattern'] || '' %></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th colspan=3 class=narrow-as-possible><%- sGroup %></th>
+									<td></td>
+								</tr><%
 
 
-						    var aryMonths = [ 12, 6, 3 ];
-						    aryMonths.sort(function(a, b) { return b - a; });
+								var aryMonths = [ 12, 6, 3 ];
+								aryMonths.sort(function(a, b) { return b - a; });
 						
-						    var aryOutput = [];
-						    var aryLast = null;
+								var aryOutput = [];
+								var aryLast = null;
 
-						    function GetTrend(a, b) {
-							    a = parseInt(a);
-							    b = parseInt(b);
+								function GetTrend(a, b) {
+									a = parseInt(a);
+									b = parseInt(b);
 
-							    var sTrend = 'stable-trend';
+									var sTrend = 'stable-trend';
 
-							    if (a < b)
-								    sTrend = 'positive-trend';
-							    else if (a > b)
-								    sTrend = 'negative-trend';
+									if (a < b)
+										sTrend = 'positive-trend';
+									else if (a > b)
+										sTrend = 'negative-trend';
 
-							    return sTrend;
-						    } // GetTrend
+									return sTrend;
+								} // GetTrend
 
-						    for (var j = 0; j < aryMonths.length; j++) {
-							    var sKey = aryMonths[j] + ' Months';
+								for (var j = 0; j < aryMonths.length; j++) {
+									var sKey = aryMonths[j] + ' Months';
 						
-							    var bHasCompany  = aryCompany[sGroup]  && (typeof aryCompany[sGroup][sKey] !== 'undefined');
-							    var bHasIndustry = aryIndustry[sGroup] && (typeof aryIndustry[sGroup][sKey] !== 'undefined');
+									var bHasCompany  = aryCompany[sGroup]  && (typeof aryCompany[sGroup][sKey] !== 'undefined');
+									var bHasIndustry = aryIndustry[sGroup] && (typeof aryIndustry[sGroup][sKey] !== 'undefined');
 
-							    var aryThis = {
-								    caption: sKey,
+									var aryThis = {
+										caption: sKey,
 
-								    has_company: bHasCompany,
-								    company: (bHasCompany  ? aryCompany[sGroup][sKey]  : ''),
+										has_company: bHasCompany,
+										company: (bHasCompany  ? aryCompany[sGroup][sKey]  : ''),
 
-								    has_industry: bHasIndustry,
-								    industry: (bHasIndustry ? aryIndustry[sGroup][sKey] : ''),
+										has_industry: bHasIndustry,
+										industry: (bHasIndustry ? aryIndustry[sGroup][sKey] : ''),
 
-								    company_trend: '',
-								    company_to_industry_trend: '',
-								    industry_trend: ''
-							    };
+										company_trend: '',
+										company_to_industry_trend: '',
+										industry_trend: ''
+									};
 						
-							    if (bHasCompany && bHasIndustry)
-								    aryThis.company_to_industry_trend = GetTrend(aryThis.company, aryThis.industry);
+									if (bHasCompany && bHasIndustry)
+										aryThis.company_to_industry_trend = GetTrend(aryThis.company, aryThis.industry);
 
-							    aryOutput.push(aryThis);
+									aryOutput.push(aryThis);
 
-							    if (aryLast == null) {
-								    aryLast = aryThis;
-								    continue;
-							    } // if
+									if (aryLast == null) {
+										aryLast = aryThis;
+										continue;
+									} // if
 
-							    if (bHasCompany && aryLast.has_company)
-								    aryThis.company_trend = GetTrend(aryThis.company, aryLast.company);
+									if (bHasCompany && aryLast.has_company)
+										aryThis.company_trend = GetTrend(aryThis.company, aryLast.company);
 
-							    if (bHasIndustry && aryLast.has_industry)
-								    aryThis.industry_trend = GetTrend(aryThis.industry, aryLast.industry);
-						    } // for
+									if (bHasIndustry && aryLast.has_industry)
+										aryThis.industry_trend = GetTrend(aryThis.industry, aryLast.industry);
+								} // for
 
-						    for (var j = aryOutput.length - 1; j >= 0; j--) {
-							    var oCurrent = aryOutput[j];
+								for (var j = aryOutput.length - 1; j >= 0; j--) {
+									var oCurrent = aryOutput[j];
 
-							    %><tr><td class=narrow-as-possible><%- oCurrent.caption %></td>
-							    <td class=narrow-as-possible><%- oCurrent.company %><div class="trend-container">
-								    <span class="<%- oCurrent.company_trend %>" title="<%- oCurrent.company_trend ? 'Self' : '' %>"></span>
-								    <span class="<%- oCurrent.company_to_industry_trend %>" title="<%- oCurrent.company_to_industry_trend ? 'Industry' : '' %>"></span>
-							    </div></td>
-							    <td class=narrow-as-possible><%- oCurrent.industry %><div class=trend-container><span class="<%- oCurrent.industry_trend %>"></span></div></td>
-							    <td></td>
-						    </tr><%
-						    } // for
+									%><tr><td class=narrow-as-possible><%- oCurrent.caption %></td>
+									<td class=narrow-as-possible><%- oCurrent.company %><div class="trend-container">
+										<span class="<%- oCurrent.company_trend %>" title="<%- oCurrent.company_trend ? 'Self' : '' %>"></span>
+										<span class="<%- oCurrent.company_to_industry_trend %>" title="<%- oCurrent.company_to_industry_trend ? 'Industry' : '' %>"></span>
+									</div></td>
+									<td class=narrow-as-possible><%- oCurrent.industry %><div class=trend-container><span class="<%- oCurrent.industry_trend %>"></span></div></td>
+									<td></td>
+								</tr><%
+								} // for
 
-						    sGroup = 'Number of DBT';
+								sGroup = 'Number of DBT';
 
-						    %><tr>
-							    <th colspan=3 class=narrow-as-possible><%- sGroup %></th>
-							    <td></td>
-						    </tr><%
+								%><tr>
+									<th colspan=3 class=narrow-as-possible><%- sGroup %></th>
+									<td></td>
+								</tr><%
 
-						    var aryIntervals = {};
+								var aryIntervals = {};
 
-						    if (aryCompany[sGroup])
-							    for (var j in aryCompany[sGroup])
-								    aryIntervals[j] = 0;
+								if (aryCompany[sGroup])
+									for (var j in aryCompany[sGroup])
+										aryIntervals[j] = 0;
 
-						    if (aryIndustry[sGroup])
-							    for (var j in aryIndustry[sGroup])
-								    aryIntervals[j] = 0;
+								if (aryIndustry[sGroup])
+									for (var j in aryIndustry[sGroup])
+										aryIntervals[j] = 0;
 
-						    var arySortedIntervals = [];
+								var arySortedIntervals = [];
 
-						    for (var j in aryIntervals)
-							    arySortedIntervals.push(j);
+								for (var j in aryIntervals)
+									arySortedIntervals.push(j);
 
-						    arySortedIntervals.sort();
+								arySortedIntervals.sort();
 
-						    for (var j = 0; j < arySortedIntervals.length; j++) {
-							    var sKey = arySortedIntervals[j];
-							    %><tr><td class=narrow-as-possible><%- sKey.substr(1, sKey.length - 2) %></th>
-							    <td class=narrow-as-possible><%- aryCompany[sGroup]  ? (aryCompany[sGroup][sKey] || '') : '' %></td>
-							    <td class=narrow-as-possible><%- aryIndustry[sGroup] ? (aryIndustry[sGroup][sKey] || '') : '' %></td>
-							    <td></td>
-						    </tr><%
-						    } // for
-					    %></tbody>
-					    <tfoot><tr><th class=narrow-as-possible>Supplier Payment Pattern</th>
-						    <td colspan=2 class=narrow-as-possible><%- sSupplierPaymentPattern || '' %></td>
-						    <td></td>
-					    </tr></tfoot><%
-				    %></table></div><%
-			    }
-			    else if (oMetaData.ID == 'DL99') {
-				    aryData.sort(function(a, b) {
-					    var oA = Date.parse(a.Values['Date']);
-					    var oB = Date.parse(b.Values['Date']);
-					    return oA - oB;
-				    });
+								for (var j = 0; j < arySortedIntervals.length; j++) {
+									var sKey = arySortedIntervals[j];
+									%><tr><td class=narrow-as-possible><%- sKey.substr(1, sKey.length - 2) %></th>
+									<td class=narrow-as-possible><%- aryCompany[sGroup]  ? (aryCompany[sGroup][sKey] || '') : '' %></td>
+									<td class=narrow-as-possible><%- aryIndustry[sGroup] ? (aryIndustry[sGroup][sKey] || '') : '' %></td>
+									<td></td>
+								</tr><%
+								} // for
+							%></tbody>
+							<tfoot><tr><th class=narrow-as-possible>Supplier Payment Pattern</th>
+								<td colspan=2 class=narrow-as-possible><%- sSupplierPaymentPattern || '' %></td>
+								<td></td>
+							</tr></tfoot><%
+						%></table></div><%
+					}
+					else if (oMetaData.ID == 'DL99') {
+						aryData.sort(function(a, b) {
+							var oA = Date.parse(a.Values['Date']);
+							var oB = Date.parse(b.Values['Date']);
+							return oA - oB;
+						});
 
-				    var oChartData = [];
+						var oChartData = [];
 
-				    var oSeriesKeys = {
-					    Cash: 1,
-					    'A/R': 2,
-					    Inventory: 3,
-					    'Fixed assets': 4,
-					    'Total short term liabilities': 5,
-					    'Total long term liabilities': 6,
-					    'Tangible equity': 7,
-					    'Adjusted profit': 8,
-				    };
+						var oSeriesKeys = {
+							Cash: 1,
+							'A/R': 2,
+							Inventory: 3,
+							'Fixed assets': 4,
+							'Total short term liabilities': 5,
+							'Total long term liabilities': 6,
+							'Tangible equity': 7,
+							'Adjusted profit': 8,
+						};
 
-				    var sDivChartID = 'chart' + oMetaData.ID + ('' + Math.random()).replace(/\./, '') + '' + (new Date()).getTime();
-				    var sParentDivChartID = 'parent_' + sDivChartID;
+						var sDivChartID = 'chart' + oMetaData.ID + ('' + Math.random()).replace(/\./, '') + '' + (new Date()).getTime();
+						var sParentDivChartID = 'parent_' + sDivChartID;
 
-				    %><table class="<%- sTableWidthClass %>">
-					    <thead  class="box">
-						    <tr class="box-title"><th><%- i %></th></tr>
-					    </thead>
-					    <tbody><tr><td id="<%- sParentDivChartID %>" style="padding-top:40px"></td></tr></tbody>
-				    </table><%
+						%><table class="<%- sTableWidthClass %>">
+							<thead  class="box">
+								<tr class="box-title"><th><%- i %></th></tr>
+							</thead>
+							<tbody><tr><td id="<%- sParentDivChartID %>" style="padding-top:40px"></td></tr></tbody>
+						</table><%
 
-				    for (var j = 0; j < aryData.length; j++) {
-					    var obj = aryData[j].Values;
+						for (var j = 0; j < aryData.length; j++) {
+							var obj = aryData[j].Values;
 
-					    var raw = {};
-					    for (var k in obj)
-						    if (k !== 'Date')
-							    raw[k] =  EzBob.poundToNum(obj[k]);
+							var raw = {};
+							for (var k in obj)
+								if (k !== 'Date')
+									raw[k] =  EzBob.poundToNum(obj[k]);
 
-					    // console.log('aryData[' + j + '] =', obj, '->', raw);
+							// console.log('aryData[' + j + '] =', obj, '->', raw);
 
-					    oChartData.push({ tick: obj.Date, data: {
-						    Cash: raw.TotalCash,
-						    'A/R': raw.Debtors - (raw.PrepayAccRuals + raw.DebtorsGroupLoans + raw.DebtorsDirLoans + raw.OtherDebtors),
-						    Inventory: raw.Inventories,
-						    'Fixed assets': raw.TngblAssets,
-						    'Total short term liabilities': raw.TotalCurrLblts,
-						    'Total long term liabilities': raw.TotalNonCurr,
-						    'Tangible equity': raw.TotalShareFund - raw.InTngblAssets - raw.DebtorsDirLoans + raw.CredDirLoans + raw.OnClDirLoans,
-						    'Adjusted profit': 8,
-						    'Retained earnings': raw.RetainedEarnings,
-					    }});
-				    } // for each group output
+							oChartData.push({ tick: obj.Date, data: {
+								Cash: raw.TotalCash,
+								'A/R': raw.Debtors - (raw.PrepayAccRuals + raw.DebtorsGroupLoans + raw.DebtorsDirLoans + raw.OtherDebtors),
+								Inventory: raw.Inventories,
+								'Fixed assets': raw.TngblAssets,
+								'Total short term liabilities': raw.TotalCurrLblts,
+								'Total long term liabilities': raw.TotalNonCurr,
+								'Tangible equity': raw.TotalShareFund - raw.InTngblAssets - raw.DebtorsDirLoans + raw.CredDirLoans + raw.OnClDirLoans,
+								'Adjusted profit': 8,
+								'Retained earnings': raw.RetainedEarnings,
+							}});
+						} // for each group output
 
-				    for (var j = 1; j < oChartData.length; j++) {
-					    oChartData[j].data['Adjusted profit'] =
-						    oChartData[j].data['Retained earnings'] -
-						    oChartData[j - 1].data['Retained earnings'] +
-						    oChartData[j - 1].data['Fixed assets'] / 5;
-				    } // for
+						for (var j = 1; j < oChartData.length; j++) {
+							oChartData[j].data['Adjusted profit'] =
+								oChartData[j].data['Retained earnings'] -
+								oChartData[j - 1].data['Retained earnings'] +
+								oChartData[j - 1].data['Fixed assets'] / 5;
+						} // for
 	
-				    $('body').append(
-					    $('<div></div>').attr('id', sDivChartID).css({ width: '1200px', height: '600px', display: 'block' })
-				    );
+						$('body').append(
+							$('<div></div>').attr('id', sDivChartID).css({ width: '1200px', height: '600px', display: 'block' })
+						);
 
-				    // console.log(oChartData);
+						// console.log(oChartData);
 
-				    onAfterRender.push(function() {
-					    var aryLabels = [];
+						onAfterRender.push(function() {
+							var aryLabels = [];
 
-					    for (var sSeriesName in oSeriesKeys) {
-						    aryLabels[oSeriesKeys[sSeriesName] - 1] = { 
-							    label: sSeriesName,
-							    renderer:$.jqplot.BarRenderer,
-							    rendererOptions: { fillToZero: true }
-						    };
-					    } // for
+							for (var sSeriesName in oSeriesKeys) {
+								aryLabels[oSeriesKeys[sSeriesName] - 1] = { 
+									label: sSeriesName,
+									renderer:$.jqplot.BarRenderer,
+									rendererOptions: { fillToZero: true }
+								};
+							} // for
 
-					    var aryTicks = [];
-					    var arySeries = [];
+							var aryTicks = [];
+							var arySeries = [];
 
-					    for (var i = 0; i < oChartData.length; i++) {
-						    var oItem = oChartData[i];
+							for (var i = 0; i < oChartData.length; i++) {
+								var oItem = oChartData[i];
 
-						    aryTicks[i] = oItem.tick;
+								aryTicks[i] = oItem.tick;
 
-						    for (var sSeriesName in oSeriesKeys) {
-							    var nSeriesIdx = oSeriesKeys[sSeriesName] - 1;
+								for (var sSeriesName in oSeriesKeys) {
+									var nSeriesIdx = oSeriesKeys[sSeriesName] - 1;
 
-							    if (!arySeries[nSeriesIdx])
-								    arySeries[nSeriesIdx] = [];
+									if (!arySeries[nSeriesIdx])
+										arySeries[nSeriesIdx] = [];
 
-							    if (!isNaN(oItem.data[sSeriesName]))
-								    arySeries[nSeriesIdx][i] = oItem.data[sSeriesName];
-						    } // for
-					    } // for each chart data item
+									if (!isNaN(oItem.data[sSeriesName]))
+										arySeries[nSeriesIdx][i] = oItem.data[sSeriesName];
+								} // for
+							} // for each chart data item
 
-					    $.jqplot(sDivChartID, arySeries, {
-						    series: aryLabels,
-						    grid: {
-							    gridLineColor: 'black',
-							    gridLineWidth: 2.0,
-							    borderColor: 'black',
-							    borderWidth: 2.0
-						    },
-						    legend: {
-							    show: true,
-							    location: 'n',
-							    renderer: $.jqplot.EnhancedLegendRenderer,
-							    rendererOptions: {
-								    numberRows: 1,
-								    numberColumns: null
-							    },
-							    placement: 'outside',
-						    },
-						    axes: {
-							    xaxis: {
-								    show: true,
-								    Label: 'Date',
-								    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-								    renderer: $.jqplot.CategoryAxisRenderer,
-								    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-								    ticks: aryTicks
-							    },
-							    yaxis: {
-								    show: true,
-								    pad: 1.05,
-								    tickOptions: { formatString: "£ %'d" }
-							    }
-						    },
-						    highlighter: {
-							    show: true,
-							    showTooltip: true,
-							    tooltipLocation: 'n',
-							    tooltipOffset: -10,
-							    tooltipAxes: 'y',
-							    showMarker: false,
-							    bringSeriesToFront: true,
-							    useAxesFormatters: true,
-							    tooltipFormatString: "£ %'d",
-							    tooltipContentEditor: function(str, seriesIndex, pointIndex, plot) {
-								    return aryLabels[seriesIndex].label + ': ' + str;
-							    },
-						    },
-						    seriesDefaults: {
-							    trendline: {
-								    show: false
-							    },
-							    pointLabels: {
-								    show: false,
-							    }
-						    },
-					    }); // jqplot
+							$.jqplot(sDivChartID, arySeries, {
+								series: aryLabels,
+								grid: {
+									gridLineColor: 'black',
+									gridLineWidth: 2.0,
+									borderColor: 'black',
+									borderWidth: 2.0
+								},
+								legend: {
+									show: true,
+									location: 'n',
+									renderer: $.jqplot.EnhancedLegendRenderer,
+									rendererOptions: {
+										numberRows: 1,
+										numberColumns: null
+									},
+									placement: 'outside',
+								},
+								axes: {
+									xaxis: {
+										show: true,
+										Label: 'Date',
+										labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+										renderer: $.jqplot.CategoryAxisRenderer,
+										tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+										ticks: aryTicks
+									},
+									yaxis: {
+										show: true,
+										pad: 1.05,
+										tickOptions: { formatString: "£ %'d" }
+									}
+								},
+								highlighter: {
+									show: true,
+									showTooltip: true,
+									tooltipLocation: 'n',
+									tooltipOffset: -10,
+									tooltipAxes: 'y',
+									showMarker: false,
+									bringSeriesToFront: true,
+									useAxesFormatters: true,
+									tooltipFormatString: "£ %'d",
+									tooltipContentEditor: function(str, seriesIndex, pointIndex, plot) {
+										return aryLabels[seriesIndex].label + ': ' + str;
+									},
+								},
+								seriesDefaults: {
+									trendline: {
+										show: false
+									},
+									pointLabels: {
+										show: false,
+									}
+								},
+							}); // jqplot
 	
-					    $('#' + sDivChartID).appendTo('#' + sParentDivChartID);
-				    }); // onAfterRender.push
-			    }
-			    else if (oMetaData.DisplayDirection == 'horizontal') {
-				    var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
+							$('#' + sDivChartID).appendTo('#' + sParentDivChartID);
+						}); // onAfterRender.push
+					}
+					else if (oMetaData.DisplayDirection == 'horizontal') {
+						var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
 	
-				    var nColspan = arySortOrder.length;
-				    if (oMetaData.ID === 'DL65' || oMetaData.ID === 'DL97')
-					    nColspan++;
+						var nColspan = arySortOrder.length;
+						if (oMetaData.ID === 'DL65' || oMetaData.ID === 'DL97')
+							nColspan++;
 
-				    %><div class=tab-content><table class="<%- sTableWidthClass %>">
-				    <thead  class="box">
-					    <tr class="box-title">
-						    <th colspan="<%- nColspan %>"><%= i %></th>
-					    </tr>
-					    <tr class="box-title"><%
-                            if (oMetaData.ID === 'DL97') {
-							    %><th>Account #</th><%
-						    }
-						    for (var j = 0; j < arySortOrder.length; j++) {
-							    %><th><%- arySortOrder[j] %></th><%
-						    }
+						%><div class=tab-content><table class="<%- sTableWidthClass %>">
+						<thead  class="box">
+							<tr class="box-title">
+								<th colspan="<%- nColspan %>"><%= i %></th>
+							</tr>
+							<tr class="box-title"><%
+								if (oMetaData.ID === 'DL97') {
+									%><th>Account #</th><%
+								}
+								for (var j = 0; j < arySortOrder.length; j++) {
+									%><th><%- arySortOrder[j] %></th><%
+								}
 
-						    if (oMetaData.ID === 'DL65') {
-							    %><th>Lender names</th><%
-						    }
-					    %></tr>
-				    </thead>
-                        <%if(oMetaData.ID == 'DL97'){%>
-                        <tbody>
-                            <tr class="total">
-                                <td colspan="<%-arySortOrder.length+1%>">
-                                    <span>Num of accounts: <%-aryData.length%> Total balance (active): <%-EzBob.formatPounds(totalBalance)%></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <% } %>
-                    <tbody><%
-				    for (var j = 0; j < aryData.length; j++) {
-					    var obj = aryData[j].Values;
+								if (oMetaData.ID === 'DL65') {
+									%><th>Lender names</th><%
+								}
+							%></tr>
+						</thead>
+							<%if(oMetaData.ID == 'DL97'){%>
+							<tbody>
+								<tr class="total">
+									<td colspan="<%-arySortOrder.length+1%>">
+										<span>Num of accounts: <%-aryData.length%> Total balance (active): <%-EzBob.formatPounds(totalBalance)%></span>
+									</td>
+								</tr>
+							</tbody>
+							<% } %>
+						<tbody><%
+						for (var j = 0; j < aryData.length; j++) {
+							var obj = aryData[j].Values;
 
-					    print('<tr>');
-                        if(oMetaData.ID == 'DL97'){%>
-                               <td><%=j%></td>
-                        <%}
-					    for (var t = 0; t < arySortOrder.length; t++) {
-						    var fld = arySortOrder[t];
-						    %><td class="<%-AddStyling(obj[fld], fld, oMetaData.ID)%>"><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td><%
-					    } // for each field
+							print('<tr>');
+							if(oMetaData.ID == 'DL97'){%>
+								   <td><%=j%></td>
+							<%}
+							for (var t = 0; t < arySortOrder.length; t++) {
+								var fld = arySortOrder[t];
+								%><td class="<%-AddStyling(obj[fld], fld, oMetaData.ID)%>"><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td><%
+							} // for each field
 
-					    if (oMetaData.ID === 'DL65') {
-						    var aryLenderNames = [];
-						    var oChildren = aryData[j].Children;
+							if (oMetaData.ID === 'DL65') {
+								var aryLenderNames = [];
+								var oChildren = aryData[j].Children;
 
-						    if (oChildren && oChildren['Limited Company Mortgages Details']) {
-							    var oDetails = oChildren['Limited Company Mortgages Details'].Data;
+								if (oChildren && oChildren['Limited Company Mortgages Details']) {
+									var oDetails = oChildren['Limited Company Mortgages Details'].Data;
 
-							    for (var k = 0; k < oDetails.length; k++)
-								    aryLenderNames.push(oDetails[k].Values['Lender name']);
-						    } // if
+									for (var k = 0; k < oDetails.length; k++)
+										aryLenderNames.push(oDetails[k].Values['Lender name']);
+								} // if
 
-						    var sLenderNames = '';
+								var sLenderNames = '';
 						
-						    switch (aryLenderNames.length) {
-						    case 0:
-							    break;
+								switch (aryLenderNames.length) {
+								case 0:
+									break;
 
-						    case 1:
-							    sLenderNames = aryLenderNames[0];
-							    break;
+								case 1:
+									sLenderNames = aryLenderNames[0];
+									break;
 
-						    default:
-							    sLenderNames = '<ul><li>' + aryLenderNames.join('<li>') + '</ul>';
-							    break;
-						    } // switch
+								default:
+									sLenderNames = '<ul><li>' + aryLenderNames.join('<li>') + '</ul>';
+									break;
+								} // switch
 
-						    %><td><% print(sLenderNames); %></td><%
-					    } // if DL65
+								%><td><% print(sLenderNames); %></td><%
+							} // if DL65
 
-					    print('</tr>');
-				    } // for each group output
-				    %></tbody></table></div><%
-			    }
-			    else {
-				    var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
+							print('</tr>');
+						} // for each group output
+						%></tbody></table></div><%
+					}
+					else {
+						var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
 
-				    %><div class=tab-content><table class="<%- sTableWidthClass %>">
-				    <thead  class="box"><tr class="box-title"><th colspan=2><%= i %></th></tr></thead>
-				    <tbody><%
-				    for (var j = 0; j < aryData.length; j++) {
-					    var obj = aryData[j].Values;
+						%><div class=tab-content><table class="<%- sTableWidthClass %>">
+						<thead  class="box"><tr class="box-title"><th colspan=2><%= i %></th></tr></thead>
+						<tbody><%
+						for (var j = 0; j < aryData.length; j++) {
+							var obj = aryData[j].Values;
 
-					    for (var t = 0; t < arySortOrder.length; t++) {
-						    var fld = arySortOrder[t];
-						    %><tr><td class=narrow-as-possible><%- fld %></td><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td></tr><%
-					    } // for each field
-				    } // for each group output
-				    %></tbody></table></div><%
-			    }
-		    } // if
-	    } // for
-    }
-	print('</div>');
-})(companyScoreData, onAfterRender, caption, isOwner);
-%>
+							for (var t = 0; t < arySortOrder.length; t++) {
+								var fld = arySortOrder[t];
+								%><tr><td class=narrow-as-possible><%- fld %></td><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td></tr><%
+							} // for each field
+						} // for each group output
+						%></tbody></table></div><%
+					}
+				} // if
+			} // for
+		}
+	} %>
+	</div>
+<%})(companyScoreData, onAfterRender, caption, isOwner);%>
 		</div>
 	</div>
 </div>
+</script>
+
+
+<script id="change-company-template" type="text/template">
+
+	<div style="padding-top: 20px;">
+		<form class="change-company-form">
+			<div class="control-group form_field_container">
+				<div class="controls">
+					<span class="type-of-business-caption">Type of business</span>
+					<select class="type-of-business-form_field" id="TypeOfBusiness" name="TypeOfBusiness" size="6" autofocus="autofocus" tabindex="1">
+						<option value="Limited">Limited company</option>
+						<option value="LLP">Limited liability partnership</option>
+						<option value="PShip3P">Partnership (less than three)</option>
+						<option value="PShip">Partnership (more than three)</option>
+						<option value="SoleTrader">Sole trader (Inc.)</option>
+						<option value="Entrepreneur">Sole trader (not Inc.)</option>
+					</select>
+					<img id="TypeOfBusinessImage" class="field_status required" />
+				</div>
+			</div>
+			
+			<div class="control-group form_field_container">
+				<div class="controls">
+					<label class="control-label attardi-input">
+						<span class="attardi-has-data">Company registration number</span>
+						<input id="CompanyNumber" name="CompanyNumber" type="text" class="form_field" tabindex="2" />
+						<img id="CompanyNumberImage" class="field_status required" />
+					</label>
+				</div>
+			</div>
+
+			<div class="control-group form_field_container">
+				<div class="controls">
+					<label class="control-label attardi-input">
+						<span class="attardi-has-data">Company name</span>
+						<input id="CompanyName" name="CompanyName" type="text" class="form_field" tabindex="3" />
+						<img id="CompanyNameImage" class="field_status required" />
+					</label>
+				</div>
+			</div>
+
+			@EzForm.AddressInput(this, "CompanyAddress", "Address", "company")
+		</form>
+		<div class="form_buttons_container">
+			<div class="attardi-button">
+				<button class="btn btn-primary btn-change-company" tabindex="4">Target</button>
+			</div>
+		</div>
+	</div>
+
 </script>

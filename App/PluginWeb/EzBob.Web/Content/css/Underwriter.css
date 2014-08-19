@@ -238,6 +238,10 @@ p.yodlee-cashflow-graph-labels {
     margin-bottom: 0 !important;
 }
 
+select {
+    margin-bottom: 0;
+}
+
 select.selectheight {
     height: 30px;
 }

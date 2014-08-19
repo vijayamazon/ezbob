@@ -23,7 +23,7 @@ EzBob.AddressModel = Backbone.Model.extend({
 		Mailsortcod: '',
 		Udprn: ''
 	}, // defaults
-
+	idAttribute: "AddressId",
 	url: function() {
 		var rootPath = window.gRootPath;
 
@@ -32,10 +32,10 @@ EzBob.AddressModel = Backbone.Model.extend({
 			rootPath = '/';
 		} // if
 
-		return rootPath + 'Postcode/GetFullAddressFromId?id=' + this.get('id');
+		return rootPath + 'Postcode/GetFullAddressFromId?id=' + this.get('Id');
 	}, // url
 
-	initialize: function() {
+	initialize: function () {
 	}, // initialize
 }); // EzBob.AddressModel
 
@@ -52,3 +52,11 @@ EzBob.DirectorModel = Backbone.Model.extend({
 EzBob.Directors = Backbone.Collection.extend({
 	model: EzBob.DirectorModel
 }); // EzBob.Directors
+
+EzBob.CompanyModel = Backbone.Model.extend({
+	urlRoot: window.gRootPath + "Underwriter/CompanyScore/ChangeCompany",
+	
+	initialize: function () {
+		this.set('CompanyAddress', new EzBob.AddressModels(this.get('CompanyAddress')));
+	}, // initialize
+}); // EzBob.DirectorModel

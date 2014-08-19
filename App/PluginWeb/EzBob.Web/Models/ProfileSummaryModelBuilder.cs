@@ -171,7 +171,7 @@
 			{
 				foreach (var dob in summary.CreditBureau.ApplicantDOBs)
 				{
-					if (dob.HasValue && (dob.Value.AddYears(18) < DateTime.Today))
+					if (dob.HasValue && (dob.Value.AddYears(18) > DateTime.Today))
 					{
 						summary.Alerts.Errors.Add(new AlertModel
 							{

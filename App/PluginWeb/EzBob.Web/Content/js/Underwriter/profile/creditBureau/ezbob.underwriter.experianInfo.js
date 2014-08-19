@@ -25,7 +25,6 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
     },
     events: {
         "click #RunConsumerCheckBtn" : "RunConsumerCheckBtnClick",
-        "click #RunCompanyCheckBtn": "RunCompanyCheckBtnClick",
         "click #RunAmlCheckBtn": "RunAmlCheckBtnClick",
         "click #RunBwaCheckBtn": "RunBwaCheckBtnClick",
         "click .btn-download": "downloadConsent",
@@ -126,49 +125,7 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
             });
         return false;
     },
-    RunCompanyCheckBtnClick: function (e) {
-        if ($(e.currentTarget).hasClass("disabled")) return false;
-
-        var that = this;
-        BlockUi("on");
-        $.post(window.gRootPath + "Underwriter/CreditBureau/IsCompanyCacheRelevant", { customerId: this.model.get("Id") })
-            .done(function (response) {
-                if (response.NoCompany) {
-                    EzBob.ShowMessage("Customer don't have a company", "Nothing to recheck");
-                } else {
-                    if (response.IsRelevant == "True") {
-                        EzBob.ShowMessage("Last check was done at " + response.LastCheckDate + " and cache is valid for " + response.CacheValidForDays + " days. Run check anyway?", "No need for check warning",
-                            function() {
-                                that.RunCompanyCheck(true);
-                                return true;
-                            },
-                            "Yes", null, "No");
-                    } else {
-                        that.RunCompanyCheck(false);
-                    }
-                }
-            })
-            .complete(function () {
-                BlockUi("off");
-            });
-
-        return false;
-    },
-    RunCompanyCheck: function (forceCheck) {
-        BlockUi("on");
-
-        $.post(window.gRootPath + "Underwriter/CreditBureau/RunCompanyCheck", { id: this.model.get("Id"), forceCheck: forceCheck })
-            .done(function (response) {
-                EzBob.ShowMessage(response.Message, "Information");
-            })
-            .fail(function (data) {
-                console.error(data.responseText);
-            })
-            .complete(function () {
-                BlockUi("off");
-            });
-        return false;
-    },
+    
     RunAmlCheckBtnClick: function () {
         var id = this.model.get("Id");
 

@@ -63,8 +63,10 @@
 		#region method Create
 
 		public CompanyScoreModel Create(Customer customer) {
+			var model = new CompanyScoreModel {CompanyDetails = BuildDetails(customer)};
+
 			bool bHasCompany = false;
-			TypeOfBusinessReduced nBusinessType = TypeOfBusinessReduced.Personal;
+			var nBusinessType = TypeOfBusinessReduced.Personal;
 
 			if (customer != null) {
 				if (customer.Company != null) {
@@ -74,10 +76,10 @@
 			} // if
 
 			if (!bHasCompany) {
-				return new CompanyScoreModel {
-					result = "No data found.",
-					DashboardModel = new ComapanyDashboardModel { Error = "No data found.", },
-				};
+				model.result = "No data found.";
+				model.DashboardModel = new ComapanyDashboardModel {Error = "No data found.",};
+				return model;
+			
 			} // if
 
 			if (nBusinessType != TypeOfBusinessReduced.Limited) {
@@ -86,13 +88,12 @@
 					customer.Company.ExperianRefNum
 				);
 
-				return new CompanyScoreModel {
-					result = CompanyScoreModel.Ok,
-					company_name = oUnlimAr.Data.BusinessName,
-					company_ref_num = customer.Company.ExperianRefNum,
-					Data = oUnlimAr.Data,
-					DashboardModel = BuildNonLimitedDashboardModel(oUnlimAr.Data, customer.Company.ExperianRefNum)
-				};
+				model.result = CompanyScoreModel.Ok;
+				model.company_name = oUnlimAr.Data.BusinessName;
+				model.company_ref_num = customer.Company.ExperianRefNum;
+				model.Data = oUnlimAr.Data;
+				model.DashboardModel = BuildNonLimitedDashboardModel(oUnlimAr.Data, customer.Company.ExperianRefNum);
+				return model;
 			} // if
 
 			ExperianLtdActionResult oLtdAr;
@@ -103,28 +104,45 @@
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to load Experian parsed data for a company '{0}'.", customer.Company.ExperianRefNum);
 
-				return new CompanyScoreModel {
-					result = "Failed to load data.",
-					DashboardModel = new ComapanyDashboardModel { Error = "Failed to load data.", },
-				};
+				model.result = "Failed to load data.";
+				model.DashboardModel = new ComapanyDashboardModel {Error = "Failed to load data.",};
+				return model;
 			} // try
 
 			if (string.IsNullOrWhiteSpace(oLtdAr.Value.RegisteredNumber)) {
-				return new CompanyScoreModel {
-					result = "No data found.",
-					DashboardModel = new ComapanyDashboardModel { Error = "No data found.", },
-				};
+				model.result = "No data found.";
+				model.DashboardModel = new ComapanyDashboardModel {Error = "No data found.",};
+				return model;
 			} // if
 
 			CompanyScoreModel oResult = BuildLimitedScoreModel(oLtdAr);
-
+			oResult.CompanyDetails = model.CompanyDetails;
 			foreach (var oSha in oLtdAr.Value.GetChildren<ExperianLtdShareholders>())
 				AddOwners(oResult, oSha.RegisteredNumberOfALimitedCompanyWhichIsAShareholder);
 
 			AddOwners(oResult, oLtdAr.Value.RegisteredNumberOfTheCurrentUltimateParentCompany);
 
 			return oResult;
-		} // Create
+		}
+
+		private CompanyDetails BuildDetails(Customer customer) {
+			var details = new CompanyDetails{
+				CustomerId = customer.Id,
+				TypeOfBusiness = customer.PersonalInfo != null ? customer.PersonalInfo.TypeOfBusiness.ToString() : TypeOfBusiness.Entrepreneur.ToString()
+			};
+
+			if (customer.Company != null) {
+				details.CompanyName = customer.Company.ExperianCompanyName ?? customer.Company.CompanyName;
+				details.CompanyRefNum = customer.Company.ExperianRefNum ?? customer.Company.CompanyNumber;
+				details.CompanyAddress = customer.Company.CompanyAddress.ToList();
+			}
+			else {
+				details.CompanyAddress = customer.AddressInfo.PersonalAddress.ToList();
+			}
+			return details;
+		}
+
+// Create
 
 		#endregion method Create
 

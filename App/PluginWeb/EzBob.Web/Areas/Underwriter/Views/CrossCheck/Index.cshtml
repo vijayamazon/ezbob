@@ -408,7 +408,7 @@
                                             ).ToUpper();
                                     } // if
                                 }
-                                <td class="application" @if ((oCompanyAddress != null) && oCompanyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@sCrossCheckCompanyAddress</td>
+                                <td class="application" @if ((oCompanyAddress != null) && !string.IsNullOrEmpty(oCompanyAddress.Id) && oCompanyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@sCrossCheckCompanyAddress</td>
                                 <td class="experian"></td>
                                 <td class="hmrc"></td>
                             </tr>
@@ -611,11 +611,4 @@
 
 @AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
 
-<script id="address-popup-template" type="text/template">
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressPopupTemplate.cshtml");}
-</script>
-
-<script id="address-template" type="text/template">
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressTemplate.cshtml");}
-</script>
 

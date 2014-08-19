@@ -1,11 +1,11 @@
 ﻿namespace EzBob.Web.Models {
 	using System;
 	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.CompanyScore;
 
-	#region class NonLimScoreHistory
-
+	
 	public class CompanyHistory {
 		public long ServiceLogId { get; set; }
 		public int? Score { get; set; }
@@ -13,7 +13,13 @@
 		public DateTime Date { get; set; }
 	} // class NonLimScoreHistory
 
-	#endregion class NonLimScoreHistory
+	public class CompanyDetails {
+		public int CustomerId { get; set; }
+		public string TypeOfBusiness { get; set; }
+		public string CompanyRefNum { get; set; }
+		public string CompanyName { get; set; }
+		public List<CustomerAddress> CompanyAddress { get; set; }
+	}
 
 	#region class FinDataModel
 
@@ -27,6 +33,7 @@
 	#region class CompanyScoreModel
 
 	public class CompanyScoreModel {
+		public CompanyDetails CompanyDetails { get;set; }
 		public CompanyData Data { get; set; }
 
 		public const string Ok = "ok";

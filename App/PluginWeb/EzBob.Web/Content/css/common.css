@@ -2682,6 +2682,7 @@ ul#user-menu {
     margin-top: 77px;
 }
 
+.renew-token,
 #get-cash {
     margin-top: 90px;
 }
@@ -3228,4 +3229,20 @@ ul.marketing-files {
 iframe[src^='https://finimpact'] {
     position: absolute;
     top: -1000px;
+}
+
+.type-of-business-form_field {
+	box-sizing: border-box;
+	overflow: hidden;
+    height: auto !important; 
+    width: 96%; 
+    padding: 4px;
+    font-size: 18px;
+}
+
+.type-of-business-caption {
+    pointer-events: none;
+    margin-left: 3px;
+    color: #acacac !important;
+    text-shadow: 0 1px 1px #fff;
 }
