@@ -131,11 +131,22 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		event.preventDefault();
 		event.stopPropagation();
 
-		$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ResetPassword123456", {
-			nCustomerID: this.model.get('Id')
-		});
+		var self = this;
 
-		EzBob.ShowMessageTimeout('Customer password has been reset to 123456.', 'Success', 3);
+		EzBob.ShowMessage(
+			"Do you really want to reset this customer password?",
+			"Please confirm",
+			function() {
+				$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ResetPassword123456", {
+					nCustomerID: self.model.get('Id')
+				});
+
+				EzBob.ShowMessageTimeout('Customer password has been reset to 123456.', 'Success', 3);
+			}, // on ok
+			"Reset",
+			null,
+			"Keep"
+		);
 
 		return false;
 	}, // resetPassword123456

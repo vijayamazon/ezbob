@@ -16,6 +16,19 @@ BEGIN
 	IF @Target = 'Customer'
 		UPDATE Security_User SET EzPassword = @Password WHERE UserId = @TargetID
 	ELSE IF @Target = 'Broker'
-		UPDATE Broker SET Password = @Password WHERE BrokerID = @TargetID
+	BEGIN
+		UPDATE Broker SET
+			Password = @Password
+		WHERE
+			BrokerID = @TargetID
+
+		UPDATE Security_User SET
+			EzPassword = @Password
+		FROM
+			Security_User u
+			INNER JOIN Broker b ON u.UserId = b.UserID
+		WHERE
+			b.BrokerID = @TargetID
+	END
 END
 GO

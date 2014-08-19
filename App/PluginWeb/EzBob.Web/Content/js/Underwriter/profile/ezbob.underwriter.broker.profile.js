@@ -20,11 +20,22 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		event.preventDefault();
 		event.stopPropagation();
 		
-		$.post("" + window.gRootPath + "Underwriter/Brokers/ResetPassword123456", {
-			nBrokerID: this.brokerID,
-		});
+		var self = this;
 
-		EzBob.ShowMessageTimeout('Broker password has been reset to 123456.', 'Success', 3);
+		EzBob.ShowMessage(
+			"Do you really want to reset this broker password?",
+			"Please confirm",
+			function() {
+				$.post("" + window.gRootPath + "Underwriter/Brokers/ResetPassword123456", {
+					nBrokerID: self.brokerID,
+				});
+
+				EzBob.ShowMessageTimeout('Broker password has been reset to 123456.', 'Success', 3);
+			}, // on ok
+			"Reset",
+			null,
+			"Keep"
+		);
 
 		return false;
 	}, // resetPassword123456
