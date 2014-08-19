@@ -563,7 +563,7 @@
 					continue;
 				} // if
 
-				string sMimeType = oLimitations.FileConforms(oFileContents, oFile.FileName);
+				string sMimeType = oLimitations.DetectFileMimeType(oFileContents, oFile.FileName);
 
 				ms_oLog.Debug(
 					"File #{0} out of {1}: {2}; file size is {3} bytes, detected MIME type: {4}",

@@ -7,6 +7,7 @@
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Ezbob.Utils;
 	using Models;
 	using Infrastructure;
 	using StructureMap;
@@ -56,7 +57,7 @@
 		        var body = new byte[file.InputStream.Length];
 		        file.InputStream.Read(body, 0, file.ContentLength);
 
-				if (string.IsNullOrWhiteSpace(oLimitations.FileConforms(body, file.FileName)))
+				if (string.IsNullOrWhiteSpace(oLimitations.DetectFileMimeType(body, file.FileName)))
 					continue;
 
 		        var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
@@ -80,7 +81,7 @@
             var f = _docRepo.Get(id);
             if(f != null)
             {
-                FileResult fs = new FileContentResult(f.BinaryBody, "octet/stream");
+                FileResult fs = new FileContentResult(f.BinaryBody, MimeTypeResolver.DefaultMimeType);
                 fs.FileDownloadName = f.DocName;
                 return fs;
             }

@@ -71,7 +71,7 @@
 						continue;
 					} // if
 
-					string sMimeType = oLimitations.FileConforms(content, file.FileName);
+					string sMimeType = oLimitations.DetectFileMimeType(content, file.FileName);
 
 					if (string.IsNullOrWhiteSpace(sMimeType)) {
 						Log.WarnFormat("Not saving file #" + (i + 1) + ": " + file.FileName + " because it has unsupported MIME type.");

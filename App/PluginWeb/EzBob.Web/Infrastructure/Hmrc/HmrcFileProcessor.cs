@@ -54,7 +54,7 @@
 					continue;
 				} // if
 
-				string sMimeType = m_oLimitations.FileConforms(oFileContents, oFile.FileName, oLog: ms_oLog);
+				string sMimeType = m_oLimitations.DetectFileMimeType(oFileContents, oFile.FileName, oLog: ms_oLog);
 
 				ms_oLog.Debug("File {0}, name: {1}, MIME type {2}", i, oFile.FileName, sMimeType);
 

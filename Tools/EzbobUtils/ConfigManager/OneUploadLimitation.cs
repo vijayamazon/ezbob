@@ -105,9 +105,9 @@
 
 		#endregion method ToString
 
-		#region method FileConforms
+		#region method DetectFileMimeType
 
-		public string FileConforms(byte[] oFilePrefix, string sFileName, int? nFilePrefixLength = 256, ASafeLog oLog = null) {
+		public string DetectFileMimeType(byte[] oFilePrefix, string sFileName, int? nFilePrefixLength = 256, ASafeLog oLog = null) {
 			oLog = oLog ?? new SafeLog();
 
 			var mtr = new MimeTypeResolver();
@@ -142,9 +142,9 @@
 			oLog.Debug("MIME type by file extension {0} does not conform to this limitation {1}.", sMimeType, this);
 
 			return null;
-		} // FileConforms
+		} // DetectFileMimeType
 
-		#endregion method FileConforms
+		#endregion method DetectFileMimeType
 
 		#region private
 
