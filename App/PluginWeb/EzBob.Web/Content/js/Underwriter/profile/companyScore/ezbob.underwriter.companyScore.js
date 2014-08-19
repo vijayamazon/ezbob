@@ -20,6 +20,7 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 
 		var sHtml = this.template({
 			companyScoreData: this.model.toJSON(),
+			isOwner: false,
 			onAfterRender: onAfterRender,
 			caption: 'Company'
 		});
@@ -32,11 +33,12 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 
 		if (oOwners) {
 			for (i = 0; i < oOwners.length; i++) {
-				sHtml = this.template({
+				sHtml += this.template({
 					companyScoreData: oOwners[i],
+					isOwner: true,
 					onAfterRender: onAfterRender,
 					caption: 'Company Owner'
-				}) + sHtml;
+				});
 
 				this.activePanel++;
 			} // for each owner
@@ -50,13 +52,13 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 		this.redisplayAccordion();
 	}, // render
 
-	redisplayAccordion: function() {
+	redisplayAccordion: function () {
 		if (this.list) {
 			this.list.accordion('destroy');
 			this.list = null;
 		} // if
 
-		this.list = this.$el.accordion({
+		this.list = this.$el.find('.company-score-data').accordion({
 			heightStyle: 'content',
 			collapsible: true,
 			active: this.activePanel
