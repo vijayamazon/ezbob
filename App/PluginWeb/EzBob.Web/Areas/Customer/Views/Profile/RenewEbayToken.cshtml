@@ -7,36 +7,41 @@
 @section css {
     @BundleHelper.RenderProfileCss()
 }
-
-<div class="well">
-    <div class="row-fluid notifications"></div>
-    <h2> Please login again to eBay for update token</h2>
-    <a id="ebay-redirect-link" href="@Url.Action("AttachEbay","EbayMarketPlaces", new{ isUpdate = true })" target="_blank">Click for redirecting to eBay</a>
-    <a id="profile-link" href="@Url.Action("Index", "Profile")" style="display: none;">Go to profile</a>
+<div class="inner">
+	<div class="well">
+		<div class="renew-token">
+			<div class="row-fluid notifications"></div>
+			<h2> Please login again to eBay for update token</h2>
+			<a id="ebay-redirect-link" href="@Url.Action("AttachEbay","EbayMarketPlaces", new{ isUpdate = true })" target="_blank" ui-event-control-id="renew-ebay-token-link">Click for redirecting to eBay</a>
+			<a id="profile-link" href="@Url.Action("Index", "Profile")" style="display: none;" ui-event-control-id="renew-ebay-token-back-to-profile-link">Go to profile</a>
+		</div>
+	</div>
 </div>
 
 @section Js{
-    <script type="text/javascript">
-        var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
-        notifications.render();
+	<script type="text/javascript">
+		EzBob.UiAction.register($('#ebay-redirect-link'));
+		EzBob.UiAction.register($('#profile-link'));
+		var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
+		notifications.render();
         
-        window.AlertToken = function (name) {
-            EzBob.App.trigger('clear');
-            $.getJSON(window.gRootPath + "Customer/EbayMarketplaces/FetchToken?callback=?", { username: name })
-                .success(function (result) {
-                    if (result.error) {
-                        EzBob.App.trigger('error', result.error);
-                        $.colorbox.close();
-                        return;
-                    }
-                    $("h2").html(result.msg);
-                    $("#ebay-redirect-link").hide();
-                    $("#profile-link").show();
-                })
-                .error(function () {
-                    EzBob.App.trigger('error', 'Ebay account failed to update');
-                });
-        };
-        
-    </script>
+		window.AlertToken = function (name) {
+			EzBob.App.trigger('clear');
+			$.getJSON(window.gRootPath + "Customer/EbayMarketplaces/FetchToken?callback=?", { username: name })
+				.success(function (result) {
+					if (result.error) {
+						EzBob.App.trigger('error', result.error);
+						$.colorbox.close();
+						return;
+					}
+					$("h2").html(result.msg);
+					$("#ebay-redirect-link").hide();
+					$("#profile-link").show();
+				})
+				.error(function () {
+					EzBob.App.trigger('error', 'Ebay account failed to update');
+				});
+		};
+
+	</script>
 }
