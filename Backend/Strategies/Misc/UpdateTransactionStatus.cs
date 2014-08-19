@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Backend.Strategies.Misc {
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using PaymentServices.PacNet;
@@ -23,10 +22,11 @@
 		#region method Execute
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetPacnetTransactions", CommandSpecies.StoredProcedure);
+			var lst = DB.ExecuteEnumerable("GetPacnetTransactions", CommandSpecies.StoredProcedure);
+
 			var service = ObjectFactory.GetInstance<IPacnetService>();
-			foreach (DataRow row in dt.Rows) {
-				var sr = new SafeReader(row);
+
+			foreach (var sr in lst) {
 				int customerId = sr["CustomerId"];
 				string trackingNumber = sr["TrackingNumber"];
 				
@@ -48,13 +48,23 @@
 					newStatus = "Done";
 					description = "Done";
 				}
+				else if (result.Status.ToLower().Contains("cleared"))
+				{
+					newStatus = "Done";
+					description = "Cleared";
+				}
 				else
 				{
 					newStatus = "Error";
-					description = result.Status + " " + result.Error;
+					description = "Status: '" + result.Status + "' Error: " + result.Error;
 				} // if
 
-				Log.Debug("UpdateTransactionStatus: CustomerId {4}, Tracking number {5}, Pacnet Result: status: {0}, error: {1}, Update data: status {2}, description {3}", result.Status, result.Error, newStatus, description, customerId, trackingNumber);
+				Log.Debug(
+					"UpdateTransactionStatus: CustomerId {4}, Tracking number {5}, " +
+					"Pacnet Result: status: {0}, error: {1}, Update data: status {2}, description {3}",
+					result.Status, result.Error, newStatus, description, customerId, trackingNumber
+				);
+
 				DB.ExecuteNonQuery("UpdateTransactionStatus",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("TrackingId", trackingNumber),
