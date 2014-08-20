@@ -44,8 +44,8 @@ textarea.reason, textarea.yodleeReason {
 }
 
 div.user-name {
-    display: inline-block;
     position: absolute;
+    left: 42px;
 }
 
 .underwriter-body {
@@ -478,11 +478,9 @@ a.ezbob-logo-login {
 }
 
 .roleImg {
-    margin-top: 0px;
-    height: 38px;
-    width: 38px;
-    display: inline-block;
-    margin-right: 0.32em;
+    left: 0;
+    top: 0;
+    position: absolute;
 }
 
 .with-border {
@@ -1384,6 +1382,24 @@ td a.edit-loan {
         min-width: inherit;
     }
 
+.sidebar-collapsed .nav-list > li > ul.submenu {
+    position: relative;
+    z-index: 120;
+    left: -15px;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+    padding: 0;
+}
+
+.sidebar-collapsed .nav-list > li > ul.submenu > li {
+    width: 42px;
+}
+
+.sidebar-collapsed .nav-list > li > ul.submenu span {
+    display: none;
+}
+
 .table > tbody + tbody {
     border-top: none;
 }
@@ -1690,6 +1706,10 @@ td a.edit-loan {
 #sidebar .nav.nav-list li {
     border-bottom: black 1px solid;
     box-shadow: 0px 1px 1px -1px #ebebeb;
+}
+
+.sidebar-collapsed .nav-list > li:hover > a > span {
+    display: block;
 }
 
 .box > .box-title {

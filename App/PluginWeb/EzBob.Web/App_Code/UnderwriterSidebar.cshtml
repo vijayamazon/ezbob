@@ -61,35 +61,36 @@
         <ul class="nav nav-list">
             <li>
                 <a title="click to log out" href="@page.Url.Action("LogOffUnderwriter", "Account", new { Area = "" })" id="uw-name-and-icon" data-uw-id="@userId">
-                    <img data-title="@sRoleImageTitle" class="roleImg" width="40" height="40" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/><div class="user-name">@userName</div>
+	                <img data-title="@sRoleImageTitle" class="roleImg" width="40" height="40" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/>
+					<div class="user-name">@userName</div>
                 </a>
             </li>
             @switch (type)
             {
                 case SideBarType.Customers:
                 <li>
-                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i>Customers</a>
-                    <a href="#" class="dropdown-toggle more-options-link">
+                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#' title="Customers"><i class="fa fa-angle-double-left"></i>Customers</a>
+                    <a href="#" class="dropdown-toggle more-options-link" title="Sub Menu">
                         <i class="fa fa-reorder"></i>
                     </a>
                     <ul class="submenu">
                         @SubMenu(page)
                     </ul>
                 </li>
-                <li class="active"><a href="#waiting-grid" data-toggle="tab"><i class="fa fa-envelope-o"></i><span>Decision(<span id="waiting-count"></span>)</span></a></li>
+                <li class="active"><a href="#waiting-grid" data-toggle="tab" title="Decision"><i class="fa fa-envelope-o"></i><span>Decision(<span id="waiting-count"></span>)</span></a></li>
                 if (isEscalate)
                 {
-                    <li><a href="#escalated-grid" data-toggle="tab"><i class="fa fa-arrow-up"></i><span>Escalated(<span id="escalated-count"></span>)</span></a></li>
+                    <li><a href="#escalated-grid" data-toggle="tab" title="Escalated"><i class="fa fa-arrow-up"></i><span>Escalated(<span id="escalated-count"></span>)</span></a></li>
                 }
-                <li><a href="#pending-grid" data-toggle="tab"><i class="fa fa-clock-o"></i><span>Pending(<span id="pending-count"></span>)</span></a></li>
-                <li><a href="#approved-grid" data-toggle="tab"><i class="fa fa-thumbs-o-up"></i><span>Approved</span></a></li>
-                <li><a href="#rejected-grid" data-toggle="tab"><i class="fa fa-thumbs-o-down"></i><span>Rejected</span></a></li>
-                <li><a href="#loans-grid" data-toggle="tab"><i class="fa fa-gbp"></i><span>Loans</span></a></li>
-                <li><a href="#sales-grid" data-toggle="tab"><i class="fa fa-phone"></i><span>Sales</span></a></li>
-                <li><a href="#collection-grid" data-toggle="tab"><i class="fa fa-rocket"></i><span>Collection</span></a></li>
-                <li><a href="#late-grid" data-toggle="tab"><i class="fa fa-flag"></i><span>Late</span></a></li>
-                <li><a href="#all-grid" data-toggle="tab"><i class="fa fa-female"></i><span>All customers</span></a></li>
-                <li><a href="#registered-grid" data-toggle="tab"><i class="fa fa-bars"></i><span>Registered(<span id="RegisteredCustomers-count"></span>)</span></a></li>
+                <li><a href="#pending-grid" data-toggle="tab" title="Pending"><i class="fa fa-clock-o"></i><span>Pending(<span id="pending-count"></span>)</span></a></li>
+                <li><a href="#approved-grid" data-toggle="tab" title="Approved"><i class="fa fa-thumbs-o-up"></i><span>Approved</span></a></li>
+                <li><a href="#rejected-grid" data-toggle="tab" title="Rejected"><i class="fa fa-thumbs-o-down"></i><span>Rejected</span></a></li>
+                <li><a href="#loans-grid" data-toggle="tab" title="Loans"><i class="fa fa-gbp"></i><span>Loans</span></a></li>
+                <li><a href="#sales-grid" data-toggle="tab" title="Sales"><i class="fa fa-phone"></i><span>Sales</span></a></li>
+                <li><a href="#collection-grid" data-toggle="tab" title="Collection"><i class="fa fa-rocket"></i><span>Collection</span></a></li>
+                <li><a href="#late-grid" data-toggle="tab" title="Late"><i class="fa fa-flag"></i><span>Late</span></a></li>
+                <li><a href="#all-grid" data-toggle="tab" title="All customers"><i class="fa fa-female"></i><span>All customers</span></a></li>
+                <li><a href="#registered-grid" data-toggle="tab" title="Registered"><i class="fa fa-bars"></i><span>Registered(<span id="RegisteredCustomers-count"></span>)</span></a></li>
                 <li class="test-customers" title="Check to include test customers">
                     <i class="fa fa-filter"></i>
                     <label class="checkbox-inline">
@@ -104,50 +105,50 @@
                         Show all customers
                     </label>
                 </li>
-                <li><a href="#logbook-grid" data-toggle="tab"><i class="fa fa-file-text-o"></i><span>Logbook</span></a></li>
-                <li><a href="#brokers-grid" data-toggle="tab"><i class="fa fa-male"></i><span>Brokers</span></a></li>
-                <li id="liClient"><a href='#'><i class="fa fa-search"></i><span>Find</span></a></li>
+                <li><a href="#logbook-grid" data-toggle="tab" title="Logbook"><i class="fa fa-file-text-o"></i><span>Logbook</span></a></li>
+                <li><a href="#brokers-grid" data-toggle="tab" title="Brokers"><i class="fa fa-male"></i><span>Brokers</span></a></li>
+                <li id="liClient"><a href='#' title="Find"><i class="fa fa-search"></i><span>Find</span></a></li>
                     break;
                 case SideBarType.Customer:
                 <li>
-                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
-                    <a href="#" class="dropdown-toggle more-options-link">
+                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#' title="Customers"><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
+                    <a href="#" class="dropdown-toggle more-options-link" title="Sub Menu">
                         <i class="fa fa-reorder"></i>
                     </a>
                     <ul class="submenu">
                         <li id="liClient">
-                            <a href='#'><i class="fa fa-search"></i><span>&nbsp;Find</span></a>
+                            <a href='#' title="Find"><i class="fa fa-search"></i><span>&nbsp;Find</span></a>
                         </li>
                         @SubMenu(page)
                     </ul>
                 </li>
-                <li><a href="#dashboard" data-toggle="tab" class="customer-tab"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>
-                <li><a href="#profile-summary" data-toggle="tab" class="customer-tab"><i class="fa fa-user"></i><span>Profile Summary</span></a></li>
-                <li><a href="#marketplaces" data-toggle="tab" class="customer-tab">
+                <li><a href="#dashboard" data-toggle="tab" class="customer-tab" title="Dashboard"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>
+                <li><a href="#profile-summary" data-toggle="tab" class="customer-tab" title="Profile Summary"><i class="fa fa-user"></i><span>Profile Summary</span></a></li>
+                <li><a href="#marketplaces" data-toggle="tab" class="customer-tab" title="Marketplaces">
                     <div class="source_labels new-ribbon" id="new-ribbon-marketplaces"></div>
                     <i class="fa fa-shopping-cart"></i><span>Marketplaces</span></a>
                 </li>
-                <li><a href="#payment-accounts" data-toggle="tab" class="customer-tab"><i class="fa fa-credit-card"></i><span>Payment accounts</span></a></li>
-                <li><a href="#credit-bureau" data-toggle="tab" class="customer-tab"><i class="fa fa-building"></i><span>Credit bureau</span></a></li>
-                <li><a href="#calculator" data-toggle="tab" class="customer-tab"><i class="fa fa-slack"></i><span>Calculator</span></a></li>
-                <li><a href="#loanhistorys" data-toggle="tab" class="customer-tab"><i class="fa fa-history"></i><span>Loan history</span></a></li>
-                <li><a href="#customer-info" class="customer-tab cross-check-tab" data-toggle="tab"><i class="fa fa-pencil-square-o"></i><span>Cross check</span></a></li>
-                <li><a href="#company-score" class="customer-tab company-score-tab" data-toggle="tab"><i class="fa fa-university"></i><span>Company score</span></a></li>
-                <li><a href="#messages-tab" data-toggle="tab" class="customer-tab"><i class="fa fa-file-text-o"></i><span class="messages-tab">Messages / Files</span></a></li>
-                <li><a href="#apiChecks" data-toggle="tab" class="customer-tab"><i class="fa fa-codepen"></i><span>API checks log</span></a></li>
-                <li><a href="#customerRelations" data-toggle="tab" class="customer-tab crm-tab"><i class="fa fa-users"></i><span>Customer relations</span></a></li>
-                <li><a href="#fraudDetection" data-toggle="tab" class="customer-tab"><i class="fa fa-exclamation-triangle"></i><span>Fraud detection</span></a></li>
-                <li><a href="#properties" data-toggle="tab" class="customer-tab"><i class="fa fa-home"></i><span>Properties</span></a></li>
-                <li><a href="#" class="common-bug" data-bug-customer="0" data-placement="bottom" data-bug-type="Common" style="display: block;"><i class="fa fa-bug" /><span>Bug</span></a></li>
+                <li><a href="#payment-accounts" data-toggle="tab" class="customer-tab"><i class="fa fa-credit-card" title="Payment accounts"></i><span>Payment accounts</span></a></li>
+                <li><a href="#credit-bureau" data-toggle="tab" class="customer-tab"><i class="fa fa-building" title="Credit bureau"></i><span>Credit bureau</span></a></li>
+                <li><a href="#calculator" data-toggle="tab" class="customer-tab"><i class="fa fa-slack" title="Calculator"></i><span>Calculator</span></a></li>
+                <li><a href="#loanhistorys" data-toggle="tab" class="customer-tab"><i class="fa fa-history" title="Loan history"></i><span>Loan history</span></a></li>
+                <li><a href="#customer-info" class="customer-tab cross-check-tab" data-toggle="tab" title="Cross check"><i class="fa fa-pencil-square-o"></i><span>Cross check</span></a></li>
+                <li><a href="#company-score" class="customer-tab company-score-tab" data-toggle="tab" title="Company score"><i class="fa fa-university"></i><span>Company score</span></a></li>
+                <li><a href="#messages-tab" data-toggle="tab" class="customer-tab" title="Messages / Files"><i class="fa fa-file-text-o"></i><span class="messages-tab">Messages / Files</span></a></li>
+                <li><a href="#apiChecks" data-toggle="tab" class="customer-tab" title="API checks log"><i class="fa fa-codepen"></i><span>API checks log</span></a></li>
+                <li><a href="#customerRelations" data-toggle="tab" class="customer-tab crm-tab" title="Customer relations"><i class="fa fa-users"></i><span>Customer relations</span></a></li>
+                <li><a href="#fraudDetection" data-toggle="tab" class="customer-tab" title="Fraud detection"><i class="fa fa-exclamation-triangle"></i><span>Fraud detection</span></a></li>
+                <li><a href="#properties" data-toggle="tab" class="customer-tab" title="Properties"><i class="fa fa-home"></i><span>Properties</span></a></li>
+                <li><a href="#" class="common-bug" data-bug-customer="0" data-placement="bottom" data-bug-type="Common" style="display: block;" title="Bug"><i class="fa fa-bug" /><span>Bug</span></a></li>
                     break;
 
 				case SideBarType.Broker:
 				<li>
 					<a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Brokers</span></a>
 				</li>
-				<li><a href="#broker-customers-grid" data-toggle="tab"><i class="fa fa-female"></i><span>All customers</span></a></li>
-				<li><a href="#broker-profile-summary" data-toggle="tab"><i class="fa fa-user"></i><span>Profile Summary</span></a></li>
-				<li><a href="#broker-relations" data-toggle="tab" class="crm-tab"><i class="fa fa-users"></i><span>Broker relations</span></a></li>
+				<li><a href="#broker-customers-grid" data-toggle="tab" title="All customers"><i class="fa fa-female"></i><span>All customers</span></a></li>
+				<li><a href="#broker-profile-summary" data-toggle="tab" title="Profile Summary"><i class="fa fa-user"></i><span>Profile Summary</span></a></li>
+				<li><a href="#broker-relations" data-toggle="tab" class="crm-tab" title="Broker relations"><i class="fa fa-users"></i><span>Broker relations</span></a></li>
 					break;
 
                 case SideBarType.Other:
@@ -167,15 +168,33 @@
 
 @helper SubMenu(WebViewPage page)
 {
-    <li id="liReports" class="dropdown">
-        <a href="#" class="dropdown-toggle">
-            <i class="fa fa-file-text-o"></i><span>&nbsp;Reports</span>
+	<li id="liReport">
+        <a href="Customers#report" title="Reports"><i class="fa fa-file-text-o"></i><span>&nbsp;Reports</span></a>
+    </li>
+    <li id="liSupport">
+        <a href='Customers#support' title="Support"><i class="fa fa-support"></i><span>&nbsp;Support</span></a>
+    </li>
+    <li id="liFraud">
+        <a href='Customers#fraud' title="Fraud"><i class="fa fa-bomb"></i><span>&nbsp;Fraud</span></a>
+    </li>
+    <li id="liCAIS">
+        <a href="@page.Url.Action("Index", "CAIS")" title="CAIS"><i class="fa fa-building"></i><span>&nbsp;CAIS</span></a>
+    </li>
+    <li id="liAutomation">
+        <a href="Customers#automation" title="Automation"><i class="fa fa-flash"></i><span>&nbsp;Automation</span></a>
+    </li>
+    <li id="liStrategySettings">
+        <a href="Customers#settings" title="Settings"><i class="fa fa-gears"></i><span>&nbsp;Settings</span></a>
+    </li>
+	<li id="liFunding">
+		<a href="Customers#funding" title="Funding"><i class="fa fa-money"></i><span>&nbsp;Funding</span></a>
+	</li>
+	<li id="liReports" class="dropdown">
+        <a href="#" class="dropdown-toggle" title="Other Reports">
+            <i class="fa fa-file-text"></i><span>&nbsp;Other Reports</span>
             <b class="arrow fa fa-angle-right"></b>
         </a>
         <ul class="submenu">
-            <li id="liReport">
-                <a href="Customers#report"><span>Reports</span></a>
-            </li>
             <li id="liCustomerReports">
                 @{
                     var reportsIp = ConfigManager.CurrentValues.Instance.ReportsSite.Value;
@@ -204,23 +223,5 @@
                 <a href='@page.Url.Action("ExpectationReport", "Reports", new { Area = "Underwriter" })'><span>Expectation Report</span></a>
             </li>
         </ul>
-    </li>
-    <li id="liSupport">
-        <a href='Customers#support'><i class="fa fa-support"></i><span>&nbsp;Support</span></a>
-    </li>
-    <li id="liFraud">
-        <a href='Customers#fraud'><i class="fa fa-bomb"></i><span>&nbsp;Fraud</span></a>
-    </li>
-    <li id="liCAIS">
-        <a href="@page.Url.Action("Index", "CAIS")"><i class="fa fa-building"></i><span>&nbsp;CAIS</span></a>
-    </li>
-    <li id="liAutomation">
-        <a href="Customers#automation"><i class="fa fa-flash"></i><span>&nbsp;Automation</span></a>
-    </li>
-    <li id="liStrategySettings">
-        <a href="Customers#settings"><i class="fa fa-gears"></i><span>&nbsp;Settings</span></a>
-    </li>
-    <li id="liFunding">
-        <a href="Customers#funding"><i class="fa fa-money"></i><span>&nbsp;Funding</span></a>
     </li>
 }
