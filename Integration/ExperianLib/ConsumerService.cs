@@ -109,7 +109,7 @@
 					JsonConvert.SerializeObject(mlLocation, new JsonSerializerSettings { Formatting = Formatting.Indented }));
 				
 				ExperianConsumerData cachedResponse = ObjectFactory.GetInstance<IEzServiceAccessor>()
-					.LoadExperianConsumer(customerId, isDirector ?  directorId : (int?)null , null);
+					.LoadExperianConsumer(1, customerId, isDirector ?  directorId : (int?)null , null);
 
 				// debug mode
 				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")

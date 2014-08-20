@@ -10,6 +10,7 @@
 	using EzBob.Models;
 	using System.Text.RegularExpressions;
 	using Ezbob.Backend.Models;
+	using Infrastructure;
 	using LandRegistryLib;
 	using ServiceClientProxy;
 	using StructureMap;
@@ -37,6 +38,7 @@
 		public List<LandRegistryResModel> LandRegistries { get; set; }
 
 		private static readonly ServiceClient serviceClient;
+		private readonly IEzbobWorkplaceContext _context;
 		static CrossCheckModel()
 		{
 			Mapper.CreateMap<EZBob.DatabaseLib.Model.Database.PersonalInfo, PersonalInfo>();
@@ -74,14 +76,14 @@
 			zooplaValue = intVal;
 		}
 
-		public static void GetMortgagesData(Customer customer, out int mortgageBalance, out int mortgageCount)
+		public static void GetMortgagesData(int userId, Customer customer, out int mortgageBalance, out int mortgageCount)
 		{
-			var data = serviceClient.Instance.LoadExperianConsumerMortgageData(customer.Id);
+			var data = serviceClient.Instance.LoadExperianConsumerMortgageData(userId, customer.Id);
 			mortgageBalance = data.Value.MortgageBalance;
 			mortgageCount = data.Value.NumMortgages;
 		}
 
-		public CrossCheckModel(Customer customer)
+		public CrossCheckModel(int userId, Customer customer)
 		{
 			Customer = customer;
 
@@ -108,7 +110,7 @@
 
 				int zooplaValue, experianMortgage, experianMortgageCount;
 				GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
-				GetMortgagesData(customer, out experianMortgage, out experianMortgageCount);
+				GetMortgagesData(userId, customer, out experianMortgage, out experianMortgageCount);
 				current.ZooplaValue = zooplaValue;
 				ExperianMortgage = experianMortgage;
 				ExperianMortgageCount = experianMortgageCount;

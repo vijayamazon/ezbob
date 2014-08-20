@@ -3,133 +3,44 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using LandRegistryLib;
 	using Models;
 	using System.Web.Mvc;
 	using MoreLinq;
-	using StructureMap;
 
 	public class PropertiesController : Controller
 	{
-		private readonly CustomerRepository customerRepository;
-		private readonly CustomerAddressRepository customerAddressRepository;
-		private readonly LandRegistryRepository landRegistryRepository;
-
-		public PropertiesController()
-		{
-			customerRepository = ObjectFactory.GetInstance<CustomerRepository>();
-			customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
-			landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
+		private readonly CustomerRepository _customerRepository;
+		private readonly CustomerAddressRepository _customerAddressRepository;
+		private readonly LandRegistryRepository _landRegistryRepository;
+		private readonly IEzbobWorkplaceContext _context;
+		
+		public PropertiesController(IEzbobWorkplaceContext context, 
+			CustomerRepository customerRepository, 
+			CustomerAddressRepository customerAddressRepository, 
+			LandRegistryRepository landRegistryRepository) {
+			_customerRepository = customerRepository;
+			_customerAddressRepository = customerAddressRepository;
+			_landRegistryRepository = landRegistryRepository;
+			_context = context;
 		}
 
 		[Ajax]
 		[HttpGet]
 		public JsonResult Index(int id)
 		{
-			var customer = customerRepository.TryGet(id);
-			PropertiesModel data = GetPropertiesModelData(customer, customerAddressRepository, landRegistryRepository);
+			var customer = _customerRepository.TryGet(id);
+			var builder = new PropertiesModelBuilder(_customerAddressRepository, _landRegistryRepository, _context);
+			PropertiesModel data = builder.Create(customer);
 
 			return Json(data, JsonRequestBehavior.AllowGet);
 		}
 
-		public static PropertiesModel GetPropertiesModelData(Customer customer, CustomerAddressRepository customerAddressRepository, LandRegistryRepository landRegistryRepository)
-		{
-			int experianMortgage;
-			int experianMortgageCount;
-			int propertyCounter = 0;
-			var data = new PropertiesModel();
-
-			if (customer.PropertyStatus != null && customer.PropertyStatus.IsOwnerOfMainAddress)
-			{
-				var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
-				if (currentAddress != null) 
-				{
-					var property = GetPropertyModel(customer, currentAddress);
-					if(property != null)
-					{
-						propertyCounter++;
-						property.SerialNumberForCustomer = propertyCounter;
-						data.Properties.Add(property);
-					}
-				}
-			}
-
-			foreach (CustomerAddress ownedProperty in customer.AddressInfo.OtherPropertiesAddresses.Where(x => x.IsOwnerAccordingToLandRegistry))
-			{
-				var property = GetPropertyModel(customer, ownedProperty);
-				if (property != null)
-				{
-					propertyCounter++;
-					property.SerialNumberForCustomer = propertyCounter;
-					data.Properties.Add(property);
-				}
-			}
-
-			CrossCheckModel.GetMortgagesData(customer, out experianMortgage, out experianMortgageCount);
-			data.Init(
-				data.Properties.Count(),
-				experianMortgageCount, 
-				data.Properties.Sum(x => x.MarketValue), 
-				experianMortgage, 
-				data.Properties.Where(x => x.Zoopla != null).Sum(x => x.Zoopla.AverageSoldPrice1Year));
-			
-			return data;
-		}
-
-
-		private static PropertyModel GetPropertyModel(Customer customer, CustomerAddress address) {
-			int zooplaValue = 0;
-			var lrBuilder = new LandRegistryModelBuilder();
-
-			if (address != null)
-			{
-			
-				if (address.IsOwnerAccordingToLandRegistry)
-				{
-					Zoopla zoopla = address.Zoopla.LastOrDefault();
-
-					if (zoopla != null)
-					{
-						CrossCheckModel.GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
-					}
-
-					var personalAddressPropertyModel = new PropertyModel
-					{
-						AddressId = address.AddressId,
-						Address = address.FormattedAddress,
-						FormattedAddress = address.FormattedAddress, 
-						MarketValue = zooplaValue, 
-						Zoopla = zoopla
-					};
-
-					var lr = address.LandRegistry
-										   .OrderByDescending(x => x.InsertDate)
-										   .FirstOrDefault(
-											   x =>
-											   x.RequestType == LandRegistryRequestType.Res &&
-											   x.ResponseType == LandRegistryResponseType.Success);
-
-					if (lr != null)
-					{
-						personalAddressPropertyModel.LandRegistry = lrBuilder.BuildResModel(lr.Response);
-						if (personalAddressPropertyModel.LandRegistry.Proprietorship.CurrentProprietorshipDate.HasValue)
-						{
-							personalAddressPropertyModel.YearOfOwnership = DateTime.SpecifyKind(personalAddressPropertyModel.LandRegistry.Proprietorship.CurrentProprietorshipDate.Value, DateTimeKind.Utc);
-						}
-						personalAddressPropertyModel.NumberOfOwners = lr.Owners.Count();
-					}
-
-					return  personalAddressPropertyModel;
-				}
-			}
-
-			return null;
-		}
 
 		[Ajax]
 		[HttpGet]
@@ -145,7 +56,7 @@
 		[HttpPost]
 		public JsonResult LandRegistryEnquiries(int customerId)
 		{
-			var customer = customerRepository.Get(customerId);
+			var customer = _customerRepository.Get(customerId);
 			var b = new LandRegistryModelBuilder();
 			var landRegistryEnquiries = new List<LandRegistryEnquiryTitle>();
 			var lrEnqs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Enquiry).Select(x => x.Response);

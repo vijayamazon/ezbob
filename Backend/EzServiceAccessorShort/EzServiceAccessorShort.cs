@@ -82,7 +82,7 @@
 			return stra.Result;
 		}
 
-		public ExperianConsumerData LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId)
+		public ExperianConsumerData LoadExperianConsumer(int userId, int customerId, int? directorId, long? nServiceLogId)
 		{
 			var stra = new LoadExperianConsumerData(customerId, directorId, nServiceLogId, ms_oDB, ms_oLog);
 			stra.Execute();
@@ -111,7 +111,7 @@
 			return stra.Result;
 		} // LoadExperianLtd
 
-		public ExperianLtd CheckLtdCompanyCache(string sCompanyRefNum) {
+		public ExperianLtd CheckLtdCompanyCache(int userId, string sCompanyRefNum) {
 			var stra = new LoadExperianLtd(sCompanyRefNum, 0, ms_oDB, ms_oLog);
 			stra.Execute();
 			return stra.Result;

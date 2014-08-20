@@ -16,6 +16,7 @@
 	using log4net;
 	using EZBob.DatabaseLib.Model.Experian;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using EzBob.Web.Infrastructure;
 
 	public class CreditBureauModelBuilder
 	{
@@ -25,10 +26,12 @@
 		private const int ConsumerScoreMin = 120;
 
 		private readonly ServiceClient _serviceClient;
+		private readonly IEzbobWorkplaceContext _context;
 
-		public CreditBureauModelBuilder(IExperianHistoryRepository experianHistoryRepository)
+		public CreditBureauModelBuilder(IExperianHistoryRepository experianHistoryRepository, IEzbobWorkplaceContext context)
 		{
 			_experianHistoryRepository = experianHistoryRepository;
+			_context = context;
 			Errors = new List<string>();
 			_serviceClient = new ServiceClient();
 		}
@@ -68,7 +71,7 @@
 
 		public ExperianConsumerModel GetConsumerInfo(Customer customer, Director director, long? logId, string name)
 		{
-			var data = _serviceClient.Instance.LoadExperianConsumer(customer.Id, director != null ? director.Id : (int?)null, logId);
+			var data = _serviceClient.Instance.LoadExperianConsumer(_context.UserId, customer.Id, director != null ? director.Id : (int?)null, logId);
 
 			if (director != null && director.ExperianConsumerScore == null) {
 				director.ExperianConsumerScore = data.Value.BureauScore;

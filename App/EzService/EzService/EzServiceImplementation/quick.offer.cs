@@ -34,7 +34,7 @@
 					return new QuickOfferActionResult {
 						HasValue = false,
 						Value = null,
-						MetaData = ExperianCompanyCheck(customerId, false)
+						MetaData = ExperianCompanyCheck(1, customerId, false)
 					};
 				} // if
 

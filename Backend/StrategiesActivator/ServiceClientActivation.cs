@@ -192,7 +192,7 @@
 				return;
 			}
 
-			m_oServiceClient.EmailRolloverAdded(customerId, amount);
+			m_oServiceClient.EmailRolloverAdded(1, customerId, amount);
 		}
 
 		[Activation]
@@ -214,7 +214,7 @@
 				return;
 			}
 
-			m_oServiceClient.Escalated(customerId);
+			m_oServiceClient.Escalated(customerId, 1);
 		}
 
 		[Activation]
@@ -340,7 +340,7 @@
 				return;
 			}
 
-			m_oServiceClient.RenewEbayToken(customerId, m_aryArgs[2], m_aryArgs[3]);
+			m_oServiceClient.RenewEbayToken(1, customerId, m_aryArgs[2], m_aryArgs[3]);
 		}
 
 		[Activation]
@@ -535,7 +535,7 @@
 				return;
 			}
 
-			m_oServiceClient.ExperianCompanyCheck(customerId, forceCheck);
+			m_oServiceClient.ExperianCompanyCheck(1, customerId, forceCheck);
 		}
 
 		[Activation]
@@ -548,7 +548,7 @@
 				return;
 			}
 
-			m_oServiceClient.ExperianConsumerCheck(customerId, directorId, forceCheck);
+			m_oServiceClient.ExperianConsumerCheck(1, customerId, directorId, forceCheck);
 		}
 
 		[Activation]
@@ -556,12 +556,12 @@
 			int customerId;
 
 			if (m_aryArgs.Length == 2 && int.TryParse(m_aryArgs[1], out customerId)) {
-				m_oServiceClient.CheckAml(customerId);
+				m_oServiceClient.CheckAml(customerId,1);
 				return;
 			}
 
 			if (m_aryArgs.Length == 9 && int.TryParse(m_aryArgs[1], out customerId)) {
-				m_oServiceClient.CheckAmlCustom(customerId, m_aryArgs[2], m_aryArgs[3], m_aryArgs[4], m_aryArgs[5], m_aryArgs[6], m_aryArgs[7], m_aryArgs[8]);
+				m_oServiceClient.CheckAmlCustom(1, customerId, m_aryArgs[2], m_aryArgs[3], m_aryArgs[4], m_aryArgs[5], m_aryArgs[6], m_aryArgs[7], m_aryArgs[8]);
 				return;
 			}
 
@@ -576,12 +576,12 @@
 			int customerId;
 
 			if (m_aryArgs.Length == 2 && int.TryParse(m_aryArgs[1], out customerId)) {
-				m_oServiceClient.CheckBwa(customerId);
+				m_oServiceClient.CheckBwa(customerId, 1);
 				return;
 			}
 
 			if (m_aryArgs.Length == 11 && int.TryParse(m_aryArgs[1], out customerId)) {
-				m_oServiceClient.CheckBwaCustom(customerId, m_aryArgs[2], m_aryArgs[3], m_aryArgs[4], m_aryArgs[5], m_aryArgs[6], m_aryArgs[7], m_aryArgs[8], m_aryArgs[9], m_aryArgs[10]);
+				m_oServiceClient.CheckBwaCustom(1, customerId, m_aryArgs[2], m_aryArgs[3], m_aryArgs[4], m_aryArgs[5], m_aryArgs[6], m_aryArgs[7], m_aryArgs[8], m_aryArgs[9], m_aryArgs[10]);
 				return;
 			}
 
@@ -1050,7 +1050,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 				return;
 			} // if
 
-			var elar = m_oServiceClient.LoadEsignatures(nCustomerID, bPollStatus);
+			var elar = m_oServiceClient.LoadEsignatures(1, nCustomerID, bPollStatus);
 
 			foreach (var e in elar.Data)
 				m_oLog.Msg("{0}", e);
@@ -1120,7 +1120,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 				return;
 			} // if
 
-			var res = m_oServiceClient.LoadExperianConsumer(1, (int?)null, nServiceLogID);
+			var res = m_oServiceClient.LoadExperianConsumer(1, 1, (int?)null, nServiceLogID);
 
 			m_oLog.Msg("Result:\n{0}", res.Value.ToString());
 		} // LoadExperianLtd

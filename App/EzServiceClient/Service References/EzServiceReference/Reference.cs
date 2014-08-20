@@ -2775,28 +2775,28 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillNonLimitedCompaniesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAml", ReplyAction="http://tempuri.org/IEzService/CheckAmlResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CheckAml(int customerId);
+        ServiceClientProxy.EzServiceReference.ActionMetaData CheckAml(int customerId, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAml", ReplyAction="http://tempuri.org/IEzService/CheckAmlResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckAmlAsync(int customerId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckAmlAsync(int customerId, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAmlCustom", ReplyAction="http://tempuri.org/IEzService/CheckAmlCustomResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
+        ServiceClientProxy.EzServiceReference.ActionMetaData CheckAmlCustom(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAmlCustom", ReplyAction="http://tempuri.org/IEzService/CheckAmlCustomResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckAmlCustomAsync(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckAmlCustomAsync(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwa", ReplyAction="http://tempuri.org/IEzService/CheckBwaResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CheckBwa(int customerId);
+        ServiceClientProxy.EzServiceReference.ActionMetaData CheckBwa(int customerId, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwa", ReplyAction="http://tempuri.org/IEzService/CheckBwaResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckBwaAsync(int customerId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckBwaAsync(int customerId, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwaCustom", ReplyAction="http://tempuri.org/IEzService/CheckBwaCustomResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
+        ServiceClientProxy.EzServiceReference.ActionMetaData CheckBwaCustom(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwaCustom", ReplyAction="http://tempuri.org/IEzService/CheckBwaCustomResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckBwaCustomAsync(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckBwaCustomAsync(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
@@ -2973,10 +2973,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CompanyFilesUploadAsync(int customerId, string fileName, byte[] fileContent, string fileContentType);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
-        byte[] GetCompanyFile(int companyFileId);
+        byte[] GetCompanyFile(int userId, int companyFileId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
-        System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int companyFileId);
+        System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount);
@@ -2997,10 +2997,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailUnderReviewAsync(int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Escalated", ReplyAction="http://tempuri.org/IEzService/EscalatedResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData Escalated(int customerId);
+        ServiceClientProxy.EzServiceReference.ActionMetaData Escalated(int customerId, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Escalated", ReplyAction="http://tempuri.org/IEzService/EscalatedResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EscalatedAsync(int customerId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EscalatedAsync(int customerId, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCashFailed", ReplyAction="http://tempuri.org/IEzService/GetCashFailedResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData GetCashFailed(int customerId);
@@ -3063,16 +3063,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RejectUserAsync(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData EmailRolloverAdded(int customerId, decimal amount);
+        ServiceClientProxy.EzServiceReference.ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailRolloverAddedAsync(int customerId, decimal amount);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailRolloverAddedAsync(int userId, int customerId, decimal amount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RenewEbayToken", ReplyAction="http://tempuri.org/IEzService/RenewEbayTokenResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress);
+        ServiceClientProxy.EzServiceReference.ActionMetaData RenewEbayToken(int userId, int customerId, string marketplaceName, string eBayAddress);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RenewEbayToken", ReplyAction="http://tempuri.org/IEzService/RenewEbayTokenResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RenewEbayTokenAsync(int customerId, string marketplaceName, string eBayAddress);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RenewEbayTokenAsync(int userId, int customerId, string marketplaceName, string eBayAddress);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequestCashWithoutTakenLoan", ReplyAction="http://tempuri.org/IEzService/RequestCashWithoutTakenLoanResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData RequestCashWithoutTakenLoan(int customerId);
@@ -3129,22 +3129,22 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EsignProcessPendingAsync(System.Nullable<int> nCustomerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadEsignatures", ReplyAction="http://tempuri.org/IEzService/LoadEsignaturesResponse")]
-        ServiceClientProxy.EzServiceReference.EsignatureListActionResult LoadEsignatures(System.Nullable<int> nCustomerID, bool bPollStatus);
+        ServiceClientProxy.EzServiceReference.EsignatureListActionResult LoadEsignatures(int userId, System.Nullable<int> nCustomerID, bool bPollStatus);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadEsignatures", ReplyAction="http://tempuri.org/IEzService/LoadEsignaturesResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureListActionResult> LoadEsignaturesAsync(System.Nullable<int> nCustomerID, bool bPollStatus);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureListActionResult> LoadEsignaturesAsync(int userId, System.Nullable<int> nCustomerID, bool bPollStatus);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadEsignatureFile", ReplyAction="http://tempuri.org/IEzService/LoadEsignatureFileResponse")]
-        ServiceClientProxy.EzServiceReference.EsignatureFileActionResult LoadEsignatureFile(long nEsignatureID);
+        ServiceClientProxy.EzServiceReference.EsignatureFileActionResult LoadEsignatureFile(int userId, long nEsignatureID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadEsignatureFile", ReplyAction="http://tempuri.org/IEzService/LoadEsignatureFileResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureFileActionResult> LoadEsignatureFileAsync(long nEsignatureID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureFileActionResult> LoadEsignatureFileAsync(int userId, long nEsignatureID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EsignSend", ReplyAction="http://tempuri.org/IEzService/EsignSendResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult EsignSend(EchoSignLib.EchoSignEnvelope[] oPackage);
+        ServiceClientProxy.EzServiceReference.StringActionResult EsignSend(int userId, EchoSignLib.EchoSignEnvelope[] oPackage);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EsignSend", ReplyAction="http://tempuri.org/IEzService/EsignSendResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> EsignSendAsync(EchoSignLib.EchoSignEnvelope[] oPackage);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> EsignSendAsync(int userId, EchoSignLib.EchoSignEnvelope[] oPackage);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianDirectors", ReplyAction="http://tempuri.org/IEzService/BackfillExperianDirectorsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianDirectors(System.Nullable<int> nCustomerID);
@@ -3153,22 +3153,22 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillExperianDirectorsAsync(System.Nullable<int> nCustomerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ExperianCompanyCheck", ReplyAction="http://tempuri.org/IEzService/ExperianCompanyCheckResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData ExperianCompanyCheck(int customerId, bool forceCheck);
+        ServiceClientProxy.EzServiceReference.ActionMetaData ExperianCompanyCheck(int userId, int customerId, bool forceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ExperianCompanyCheck", ReplyAction="http://tempuri.org/IEzService/ExperianCompanyCheckResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianCompanyCheckAsync(int customerId, bool forceCheck);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianCompanyCheckAsync(int userId, int customerId, bool forceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ExperianConsumerCheck", ReplyAction="http://tempuri.org/IEzService/ExperianConsumerCheckResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData ExperianConsumerCheck(int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck);
+        ServiceClientProxy.EzServiceReference.ActionMetaData ExperianConsumerCheck(int userId, int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ExperianConsumerCheck", ReplyAction="http://tempuri.org/IEzService/ExperianConsumerCheckResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianConsumerCheckAsync(int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianConsumerCheckAsync(int userId, int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
-        ServiceClientProxy.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(string refNumber);
+        ServiceClientProxy.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int userId, string refNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(string refNumber);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(int userId, string refNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanySeniority", ReplyAction="http://tempuri.org/IEzService/GetCompanySeniorityResponse")]
         ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId);
@@ -3213,10 +3213,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> LoadExperianLtdAsync(long nServiceLogID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckLtdCompanyCache", ReplyAction="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse")]
-        ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(string sCompanyRefNum);
+        ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckLtdCompanyCache", ReplyAction="http://tempuri.org/IEzService/CheckLtdCompanyCacheResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> CheckLtdCompanyCacheAsync(string sCompanyRefNum);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> CheckLtdCompanyCacheAsync(int userId, string sCompanyRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillExperianConsumer", ReplyAction="http://tempuri.org/IEzService/BackfillExperianConsumerResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianConsumer();
@@ -3231,16 +3231,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> ParseExperianConsumerAsync(long nServiceLogId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumer", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerResponse")]
-        ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId);
+        ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumer", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> LoadExperianConsumerAsync(int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> LoadExperianConsumerAsync(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerMortgageDataResponse")]
-        ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int customerId);
+        ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadExperianConsumerMortgageData", ReplyAction="http://tempuri.org/IEzService/LoadExperianConsumerMortgageDataResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult> LoadExperianConsumerMortgageDataAsync(int customerId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult> LoadExperianConsumerMortgageDataAsync(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerScore", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerScoreResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult GetExperianConsumerScore(int customerId);
@@ -3888,36 +3888,36 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BackfillNonLimitedCompaniesAsync();
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CheckAml(int customerId) {
-            return base.Channel.CheckAml(customerId);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CheckAml(int customerId, int userId) {
+            return base.Channel.CheckAml(customerId, userId);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckAmlAsync(int customerId) {
-            return base.Channel.CheckAmlAsync(customerId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckAmlAsync(int customerId, int userId) {
+            return base.Channel.CheckAmlAsync(customerId, userId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode) {
-            return base.Channel.CheckAmlCustom(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CheckAmlCustom(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode) {
+            return base.Channel.CheckAmlCustom(userId, customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckAmlCustomAsync(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode) {
-            return base.Channel.CheckAmlCustomAsync(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckAmlCustomAsync(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode) {
+            return base.Channel.CheckAmlCustomAsync(userId, customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CheckBwa(int customerId) {
-            return base.Channel.CheckBwa(customerId);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CheckBwa(int customerId, int userId) {
+            return base.Channel.CheckBwa(customerId, userId);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckBwaAsync(int customerId) {
-            return base.Channel.CheckBwaAsync(customerId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckBwaAsync(int customerId, int userId) {
+            return base.Channel.CheckBwaAsync(customerId, userId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber) {
-            return base.Channel.CheckBwaCustom(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CheckBwaCustom(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber) {
+            return base.Channel.CheckBwaCustom(userId, customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckBwaCustomAsync(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber) {
-            return base.Channel.CheckBwaCustomAsync(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CheckBwaCustomAsync(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber) {
+            return base.Channel.CheckBwaCustomAsync(userId, customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
@@ -4152,12 +4152,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CompanyFilesUploadAsync(customerId, fileName, fileContent, fileContentType);
         }
         
-        public byte[] GetCompanyFile(int companyFileId) {
-            return base.Channel.GetCompanyFile(companyFileId);
+        public byte[] GetCompanyFile(int userId, int companyFileId) {
+            return base.Channel.GetCompanyFile(userId, companyFileId);
         }
         
-        public System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int companyFileId) {
-            return base.Channel.GetCompanyFileAsync(companyFileId);
+        public System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId) {
+            return base.Channel.GetCompanyFileAsync(userId, companyFileId);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
@@ -4184,12 +4184,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EmailUnderReviewAsync(customerId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData Escalated(int customerId) {
-            return base.Channel.Escalated(customerId);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData Escalated(int customerId, int userId) {
+            return base.Channel.Escalated(customerId, userId);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EscalatedAsync(int customerId) {
-            return base.Channel.EscalatedAsync(customerId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EscalatedAsync(int customerId, int userId) {
+            return base.Channel.EscalatedAsync(customerId, userId);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData GetCashFailed(int customerId) {
@@ -4272,20 +4272,20 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.RejectUserAsync(userId, customerId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
-            return base.Channel.EmailRolloverAdded(customerId, amount);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount) {
+            return base.Channel.EmailRolloverAdded(userId, customerId, amount);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailRolloverAddedAsync(int customerId, decimal amount) {
-            return base.Channel.EmailRolloverAddedAsync(customerId, amount);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailRolloverAddedAsync(int userId, int customerId, decimal amount) {
+            return base.Channel.EmailRolloverAddedAsync(userId, customerId, amount);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {
-            return base.Channel.RenewEbayToken(customerId, marketplaceName, eBayAddress);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData RenewEbayToken(int userId, int customerId, string marketplaceName, string eBayAddress) {
+            return base.Channel.RenewEbayToken(userId, customerId, marketplaceName, eBayAddress);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RenewEbayTokenAsync(int customerId, string marketplaceName, string eBayAddress) {
-            return base.Channel.RenewEbayTokenAsync(customerId, marketplaceName, eBayAddress);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RenewEbayTokenAsync(int userId, int customerId, string marketplaceName, string eBayAddress) {
+            return base.Channel.RenewEbayTokenAsync(userId, customerId, marketplaceName, eBayAddress);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData RequestCashWithoutTakenLoan(int customerId) {
@@ -4360,28 +4360,28 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EsignProcessPendingAsync(nCustomerID);
         }
         
-        public ServiceClientProxy.EzServiceReference.EsignatureListActionResult LoadEsignatures(System.Nullable<int> nCustomerID, bool bPollStatus) {
-            return base.Channel.LoadEsignatures(nCustomerID, bPollStatus);
+        public ServiceClientProxy.EzServiceReference.EsignatureListActionResult LoadEsignatures(int userId, System.Nullable<int> nCustomerID, bool bPollStatus) {
+            return base.Channel.LoadEsignatures(userId, nCustomerID, bPollStatus);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureListActionResult> LoadEsignaturesAsync(System.Nullable<int> nCustomerID, bool bPollStatus) {
-            return base.Channel.LoadEsignaturesAsync(nCustomerID, bPollStatus);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureListActionResult> LoadEsignaturesAsync(int userId, System.Nullable<int> nCustomerID, bool bPollStatus) {
+            return base.Channel.LoadEsignaturesAsync(userId, nCustomerID, bPollStatus);
         }
         
-        public ServiceClientProxy.EzServiceReference.EsignatureFileActionResult LoadEsignatureFile(long nEsignatureID) {
-            return base.Channel.LoadEsignatureFile(nEsignatureID);
+        public ServiceClientProxy.EzServiceReference.EsignatureFileActionResult LoadEsignatureFile(int userId, long nEsignatureID) {
+            return base.Channel.LoadEsignatureFile(userId, nEsignatureID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureFileActionResult> LoadEsignatureFileAsync(long nEsignatureID) {
-            return base.Channel.LoadEsignatureFileAsync(nEsignatureID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.EsignatureFileActionResult> LoadEsignatureFileAsync(int userId, long nEsignatureID) {
+            return base.Channel.LoadEsignatureFileAsync(userId, nEsignatureID);
         }
         
-        public ServiceClientProxy.EzServiceReference.StringActionResult EsignSend(EchoSignLib.EchoSignEnvelope[] oPackage) {
-            return base.Channel.EsignSend(oPackage);
+        public ServiceClientProxy.EzServiceReference.StringActionResult EsignSend(int userId, EchoSignLib.EchoSignEnvelope[] oPackage) {
+            return base.Channel.EsignSend(userId, oPackage);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> EsignSendAsync(EchoSignLib.EchoSignEnvelope[] oPackage) {
-            return base.Channel.EsignSendAsync(oPackage);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> EsignSendAsync(int userId, EchoSignLib.EchoSignEnvelope[] oPackage) {
+            return base.Channel.EsignSendAsync(userId, oPackage);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianDirectors(System.Nullable<int> nCustomerID) {
@@ -4392,28 +4392,28 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BackfillExperianDirectorsAsync(nCustomerID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData ExperianCompanyCheck(int customerId, bool forceCheck) {
-            return base.Channel.ExperianCompanyCheck(customerId, forceCheck);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData ExperianCompanyCheck(int userId, int customerId, bool forceCheck) {
+            return base.Channel.ExperianCompanyCheck(userId, customerId, forceCheck);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianCompanyCheckAsync(int customerId, bool forceCheck) {
-            return base.Channel.ExperianCompanyCheckAsync(customerId, forceCheck);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianCompanyCheckAsync(int userId, int customerId, bool forceCheck) {
+            return base.Channel.ExperianCompanyCheckAsync(userId, customerId, forceCheck);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData ExperianConsumerCheck(int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck) {
-            return base.Channel.ExperianConsumerCheck(nCustomerID, nDirectorID, bForceCheck);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData ExperianConsumerCheck(int userId, int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck) {
+            return base.Channel.ExperianConsumerCheck(userId, nCustomerID, nDirectorID, bForceCheck);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianConsumerCheckAsync(int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck) {
-            return base.Channel.ExperianConsumerCheckAsync(nCustomerID, nDirectorID, bForceCheck);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExperianConsumerCheckAsync(int userId, int nCustomerID, System.Nullable<int> nDirectorID, bool bForceCheck) {
+            return base.Channel.ExperianConsumerCheckAsync(userId, nCustomerID, nDirectorID, bForceCheck);
         }
         
-        public ServiceClientProxy.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(string refNumber) {
-            return base.Channel.GetExperianCompanyCacheDate(refNumber);
+        public ServiceClientProxy.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int userId, string refNumber) {
+            return base.Channel.GetExperianCompanyCacheDate(userId, refNumber);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(string refNumber) {
-            return base.Channel.GetExperianCompanyCacheDateAsync(refNumber);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(int userId, string refNumber) {
+            return base.Channel.GetExperianCompanyCacheDateAsync(userId, refNumber);
         }
         
         public ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId) {
@@ -4472,12 +4472,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoadExperianLtdAsync(nServiceLogID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(string sCompanyRefNum) {
-            return base.Channel.CheckLtdCompanyCache(sCompanyRefNum);
+        public ServiceClientProxy.EzServiceReference.ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum) {
+            return base.Channel.CheckLtdCompanyCache(userId, sCompanyRefNum);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> CheckLtdCompanyCacheAsync(string sCompanyRefNum) {
-            return base.Channel.CheckLtdCompanyCacheAsync(sCompanyRefNum);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianLtdActionResult> CheckLtdCompanyCacheAsync(int userId, string sCompanyRefNum) {
+            return base.Channel.CheckLtdCompanyCacheAsync(userId, sCompanyRefNum);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillExperianConsumer() {
@@ -4496,20 +4496,20 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.ParseExperianConsumerAsync(nServiceLogId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId) {
-            return base.Channel.LoadExperianConsumer(customerId, directorId, nServiceLogId);
+        public ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId) {
+            return base.Channel.LoadExperianConsumer(userId, customerId, directorId, nServiceLogId);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> LoadExperianConsumerAsync(int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId) {
-            return base.Channel.LoadExperianConsumerAsync(customerId, directorId, nServiceLogId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult> LoadExperianConsumerAsync(int userId, int customerId, System.Nullable<int> directorId, System.Nullable<long> nServiceLogId) {
+            return base.Channel.LoadExperianConsumerAsync(userId, customerId, directorId, nServiceLogId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int customerId) {
-            return base.Channel.LoadExperianConsumerMortgageData(customerId);
+        public ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int userId, int customerId) {
+            return base.Channel.LoadExperianConsumerMortgageData(userId, customerId);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult> LoadExperianConsumerMortgageDataAsync(int customerId) {
-            return base.Channel.LoadExperianConsumerMortgageDataAsync(customerId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ExperianConsumerMortgageActionResult> LoadExperianConsumerMortgageDataAsync(int userId, int customerId) {
+            return base.Channel.LoadExperianConsumerMortgageDataAsync(userId, customerId);
         }
         
         public ServiceClientProxy.EzServiceReference.IntActionResult GetExperianConsumerScore(int customerId) {

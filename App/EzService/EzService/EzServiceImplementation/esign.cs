@@ -15,10 +15,10 @@
 
 		#region method LoadEsignatures
 
-		public EsignatureListActionResult LoadEsignatures(int? nCustomerID, bool bPollStatus) {
+		public EsignatureListActionResult LoadEsignatures(int userId, int? nCustomerID, bool bPollStatus) {
 			LoadEsignatures oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, null, nCustomerID, bPollStatus);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, userId, nCustomerID, bPollStatus);
 
 			List<Esignature> data = new List<Esignature>();
 
@@ -35,10 +35,10 @@
 
 		#region method LoadEsignatureFile
 
-		public EsignatureFileActionResult LoadEsignatureFile(long nEsignatureID) {
+		public EsignatureFileActionResult LoadEsignatureFile(int userId, long nEsignatureID) {
 			LoadEsignatureFile oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nEsignatureID);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, userId, nEsignatureID);
 
 			return new EsignatureFileActionResult {
 				MetaData = oMetaData,
@@ -52,10 +52,10 @@
 
 		#region method EsignSend
 
-		public StringActionResult EsignSend(EchoSignEnvelope[] oPackage) {
+		public StringActionResult EsignSend(int userId, EchoSignEnvelope[] oPackage) {
 			EsignSend oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, s => s.Package = oPackage);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, userId, s => s.Package = oPackage);
 
 			return new StringActionResult {
 				MetaData = oMetaData,

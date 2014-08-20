@@ -30,16 +30,16 @@
 		#region AML and BWA
 
 		[OperationContract]
-		ActionMetaData CheckAml(int customerId);
+		ActionMetaData CheckAml(int customerId, int userId);
 
 		[OperationContract]
-		ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
+		ActionMetaData CheckAmlCustom(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
 
 		[OperationContract]
-		ActionMetaData CheckBwa(int customerId);
+		ActionMetaData CheckBwa(int customerId, int userId);
 
 		[OperationContract]
-		ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
+		ActionMetaData CheckBwaCustom(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
 
 		#endregion AML and BWA
 
@@ -156,7 +156,7 @@
 		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
 
 		[OperationContract]
-		byte[] GetCompanyFile(int companyFileId);
+		byte[] GetCompanyFile(int userId, int companyFileId);
 
 		#endregion
 
@@ -172,7 +172,7 @@
 		ActionMetaData EmailUnderReview(int customerId);
 
 		[OperationContract]
-		ActionMetaData Escalated(int customerId);
+		ActionMetaData Escalated(int customerId, int userId);
 
 		[OperationContract]
 		ActionMetaData GetCashFailed(int customerId);
@@ -205,10 +205,10 @@
 		ActionMetaData RejectUser(int userId, int customerId);
 
 		[OperationContract]
-		ActionMetaData EmailRolloverAdded(int customerId, decimal amount);
+		ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount);
 
 		[OperationContract]
-		ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress);
+		ActionMetaData RenewEbayToken(int userId, int customerId, string marketplaceName, string eBayAddress);
 
 		[OperationContract]
 		ActionMetaData RequestCashWithoutTakenLoan(int customerId);
@@ -242,13 +242,13 @@
 		ActionMetaData EsignProcessPending(int? nCustomerID);
 
 		[OperationContract]
-		EsignatureListActionResult LoadEsignatures(int? nCustomerID, bool bPollStatus);
+		EsignatureListActionResult LoadEsignatures(int userId, int? nCustomerID, bool bPollStatus);
 
 		[OperationContract]
-		EsignatureFileActionResult LoadEsignatureFile(long nEsignatureID);
+		EsignatureFileActionResult LoadEsignatureFile(int userId, long nEsignatureID);
 
 		[OperationContract]
-		StringActionResult EsignSend(EchoSignEnvelope[] oPackage);
+		StringActionResult EsignSend(int userId, EchoSignEnvelope[] oPackage);
 
 		#endregion Esign
 
@@ -258,14 +258,15 @@
 		ActionMetaData BackfillExperianDirectors(int? nCustomerID);
 
 		[OperationContract]
-		ActionMetaData ExperianCompanyCheck(int customerId, bool forceCheck);
+		ActionMetaData ExperianCompanyCheck(int userId, int customerId, bool forceCheck);
 
 		[OperationContract]
-		ActionMetaData ExperianConsumerCheck(int nCustomerID, int? nDirectorID, bool bForceCheck);
+		ActionMetaData ExperianConsumerCheck(int userId, int nCustomerID, int? nDirectorID, bool bForceCheck);
 
 		[OperationContract]
-		DateTimeActionResult GetExperianCompanyCacheDate(string refNumber);
+		DateTimeActionResult GetExperianCompanyCacheDate(int userId, string refNumber);
 
+		//todo remove
 		[OperationContract]
 		NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId);
 
@@ -288,7 +289,7 @@
 		ExperianLtdActionResult LoadExperianLtd(long nServiceLogID);
 
 		[OperationContract]
-		ExperianLtdActionResult CheckLtdCompanyCache(string sCompanyRefNum);
+		ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum);
 
 		[OperationContract]
 		ActionMetaData BackfillExperianConsumer();
@@ -297,10 +298,10 @@
 		ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId);
 
 		[OperationContract]
-		ExperianConsumerActionResult LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId);
+		ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, int? directorId, long? nServiceLogId);
 		
 		[OperationContract]
-		ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int customerId);
+		ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int userId, int customerId);
 
 		[OperationContract]
 		IntActionResult GetExperianConsumerScore(int customerId);

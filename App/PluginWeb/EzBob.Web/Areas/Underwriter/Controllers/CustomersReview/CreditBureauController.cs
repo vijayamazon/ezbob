@@ -7,6 +7,7 @@
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Logger;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models;
 	using Code;
@@ -19,15 +20,17 @@
 		private readonly ServiceClient m_oServiceClient;
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
 		private readonly ConcentAgreementHelper _concentAgreementHelper;
+		private readonly IWorkplaceContext _context;
 
 		public CreditBureauController(
 			CustomerRepository customers,
-			CreditBureauModelBuilder creditBureauModelBuilder
-		)
+			CreditBureauModelBuilder creditBureauModelBuilder, 
+			IWorkplaceContext context)
 		{
 			_customers = customers;
 			m_oServiceClient = new ServiceClient();
 			_creditBureauModelBuilder = creditBureauModelBuilder;
+			_context = context;
 			_concentAgreementHelper = new ConcentAgreementHelper();
 		}
 
@@ -35,7 +38,7 @@
 		[HttpPost]
 		public JsonResult RunConsumerCheck(int customerId, int? directorId, bool forceCheck)
 		{
-			m_oServiceClient.Instance.ExperianConsumerCheck(customerId, directorId, forceCheck);
+			m_oServiceClient.Instance.ExperianConsumerCheck(_context.UserId, customerId, directorId, forceCheck);
 			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
 
@@ -43,7 +46,7 @@
 		[HttpPost]
 		public JsonResult RunCompanyCheck(int id, bool forceCheck)
 		{
-			m_oServiceClient.Instance.ExperianCompanyCheck(id, forceCheck);
+			m_oServiceClient.Instance.ExperianCompanyCheck(_context.UserId, id, forceCheck);
 			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
 
@@ -132,11 +135,11 @@
 		{
 			if (checkType == 1)
 			{
-				m_oServiceClient.Instance.CheckAmlCustom(id, houseNumber, houseName, street, district, town, county, postcode);
+				m_oServiceClient.Instance.CheckAmlCustom(_context.UserId, id, houseNumber, houseName, street, district, town, county, postcode);
 			}
 			else
 			{
-				m_oServiceClient.Instance.CheckBwaCustom(id, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode);
+				m_oServiceClient.Instance.CheckBwaCustom(_context.UserId, id, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode);
 			}
 
 			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
@@ -161,7 +164,7 @@
 				return Json(new { NoCompany = true });
 			}
 
-			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianCompanyCacheDate(customer.Company.ExperianRefNum);
+			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianCompanyCacheDate(_context.UserId, customer.Company.ExperianRefNum);
 
 			DateTime cacheDate = result.Value;
 			int cacheValidForDays = ConfigManager.CurrentValues.Instance.UpdateCompanyDataPeriodDays;

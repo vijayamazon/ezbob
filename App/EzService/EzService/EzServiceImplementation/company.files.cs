@@ -6,9 +6,9 @@
 			return Execute<SaveCompanyFile>(customerId, null, customerId, fileName, fileContent, fileContentType);
 		} // CompanyFilesUpload
 
-		public byte[] GetCompanyFile(int companyFileId) {
+		public byte[] GetCompanyFile(int userId, int companyFileId) {
 			GetCompanyFile oInstance;
-			ExecuteSync(out oInstance, null, null, companyFileId);
+			ExecuteSync(out oInstance, null, userId, companyFileId);
 			return oInstance.FileContext;
 		} // GetCompanyFile
 	} // class EzServiceImplementation

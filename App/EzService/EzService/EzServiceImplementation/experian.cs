@@ -16,23 +16,23 @@
 
 		#region method ExperianCompanyCheck
 
-		public ActionMetaData ExperianCompanyCheck(int nCustomerID, bool bForceCheck) {
-			return Execute<ExperianCompanyCheck>(nCustomerID, null, nCustomerID, bForceCheck);
+		public ActionMetaData ExperianCompanyCheck(int userId, int nCustomerID, bool bForceCheck) {
+			return Execute<ExperianCompanyCheck>(nCustomerID, userId, nCustomerID, bForceCheck);
 		} // ExperianCompanyCheck
 		
 		#endregion method ExperianCompanyCheck
 
 		#region method ExperianConsumerCheck
 
-		public ActionMetaData ExperianConsumerCheck(int nCustomerID, int? nDirectorID, bool bForceCheck) {
-			return Execute<ExperianConsumerCheck>(nCustomerID, null, nCustomerID, nDirectorID, bForceCheck);
+		public ActionMetaData ExperianConsumerCheck(int userId, int nCustomerID, int? nDirectorID, bool bForceCheck) {
+			return Execute<ExperianConsumerCheck>(nCustomerID, userId, nCustomerID, nDirectorID, bForceCheck);
 		} // ExperianConsumerCheck
 
 		#endregion method ExperianConsumerCheck
 		
 		#region method GetExperianCompanyCacheDate
 
-		public DateTimeActionResult GetExperianCompanyCacheDate(string refNumber)
+		public DateTimeActionResult GetExperianCompanyCacheDate(int userId, string refNumber)
 		{
 			DateTime cacheDate = DateTime.UtcNow;
 			try {
@@ -45,7 +45,7 @@
 				cacheDate = sr["LastUpdateDate"];
 			}
 			catch (Exception e) {
-				Log.Error("Exception occurred during execution of GetExperianCompanyCacheDate. The exception:{0}", e);
+				Log.Error(e, "Exception occurred during execution of GetExperianCompanyCacheDate. userId {0} refNumber {1}", userId, refNumber);
 			}
 
 			return new DateTimeActionResult {
@@ -111,10 +111,10 @@
 
 		#region method CheckLtdCompanyCache
 
-		public ExperianLtdActionResult CheckLtdCompanyCache(string sCompanyRefNum) {
+		public ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum) {
 			LoadExperianLtd oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sCompanyRefNum, 0);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, userId, sCompanyRefNum, 0);
 
 			return new ExperianLtdActionResult {
 				MetaData = oMetaData,
@@ -145,11 +145,11 @@
 
 		#region method LoadExperianConsumer
 
-		public ExperianConsumerActionResult LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId)
+		public ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, int? directorId, long? nServiceLogId)
 		{
 			LoadExperianConsumerData oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, null, customerId, directorId, nServiceLogId);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, userId, customerId, directorId, nServiceLogId);
 
 			return new ExperianConsumerActionResult
 			{
@@ -169,11 +169,11 @@
 
 		#endregion method BackfillExperianConsumer
 
-		public ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int customerId)
+		public ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int userId, int customerId)
 		{
 			LoadExperianConsumerMortgageData oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, null, customerId);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, userId, customerId);
 
 			return new ExperianConsumerMortgageActionResult
 			{

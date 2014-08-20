@@ -158,7 +158,7 @@
 					oExperianLtd = DownloadOneLimitedFromExperian(regNumber, customerId);
 
 				if (oExperianLtd == null) {
-					oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().CheckLtdCompanyCache(regNumber);
+					oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().CheckLtdCompanyCache(1, regNumber);
 
 					if ((oExperianLtd == null) || (oExperianLtd.ID == 0)) {
 						oExperianLtd = null;

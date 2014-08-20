@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Utils.Serialization;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using LandRegistryLib;
@@ -26,12 +27,12 @@
 		public CrossCheckController(
 			CustomerRepository customerRepository,
 			CustomerAddressRepository customerAddressRepository,
-			ISession oSession
-		) {
+			ISession oSession, IWorkplaceContext context) {
 			m_oServiceClient = new ServiceClient();
 			_customerRepository = customerRepository;
 			_customerAddressRepository = customerAddressRepository;
 			m_oSession = oSession;
+			_context = context;
 		} // constructor
 
 		#endregion constructor
@@ -41,7 +42,7 @@
 		[Ajax]
 		[HttpGet]
 		public ActionResult Index(int id) {
-			var model = new CrossCheckModel(_customerRepository.Get(id));
+			var model = new CrossCheckModel(_context.UserId, _customerRepository.Get(id));
 			return View(model);
 		} // Index
 
@@ -220,6 +221,7 @@
 		private readonly ServiceClient m_oServiceClient;
 		private readonly CustomerRepository _customerRepository;
 		private readonly CustomerAddressRepository _customerAddressRepository;
+		private readonly IWorkplaceContext _context;
 		private readonly ISession m_oSession;
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (CrossCheckController));

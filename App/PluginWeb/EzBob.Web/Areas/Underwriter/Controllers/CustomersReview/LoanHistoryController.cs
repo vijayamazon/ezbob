@@ -159,7 +159,7 @@
 			rolloverModel.Status = RolloverStatus.New;
 			_rolloverRepository.SaveOrUpdate(rolloverModel);
 
-			m_oServiceClient.Instance.EmailRolloverAdded(customer.Id, payment);
+			m_oServiceClient.Instance.EmailRolloverAdded(_context.UserId, customer.Id, payment);
 		}
 
 		[Ajax]

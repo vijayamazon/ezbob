@@ -233,7 +233,7 @@
 
 				foreach (Director director in directors) {
 					try {
-						m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, director.Id, false);
+						m_oServiceClient.Instance.ExperianConsumerCheck(1, customer.Id, director.Id, false);
 					}
 					catch (Exception e) {
 						ms_oLog.Error(e,
@@ -282,14 +282,14 @@
 			var customer = m_oContext.Customer;
 
 			try {
-				m_oServiceClient.Instance.ExperianConsumerCheck(customer.Id, null, false);
+				m_oServiceClient.Instance.ExperianConsumerCheck(1, customer.Id, null, false);
 			}
 			catch (Exception e) {
 				ms_oLog.Error(e, "Something went pretty not so excellent while starting an Experian consumer check for customer {0}.", customer.Id);
 			} // try
 
 			try {
-				m_oServiceClient.Instance.CheckAml(customer.Id);
+				m_oServiceClient.Instance.CheckAml(customer.Id, 1);
 			}
 			catch (Exception e) {
 				ms_oLog.Error(e, "Something went pretty not so excellent while starting an AML check for customer {0}.", +customer.Id);

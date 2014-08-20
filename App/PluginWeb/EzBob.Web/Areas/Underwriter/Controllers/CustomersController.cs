@@ -463,7 +463,7 @@
 				_historyRepository.LogAction(DecisionActions.Escalate, model.reason, user, customer);
 
 				try {
-					m_oServiceClient.Instance.Escalated(customer.Id);
+					m_oServiceClient.Instance.Escalated(customer.Id, _context.UserId);
 				}
 				catch (Exception e) {
 					sWarning = "Failed to send 'escalated' email: " + e.Message;

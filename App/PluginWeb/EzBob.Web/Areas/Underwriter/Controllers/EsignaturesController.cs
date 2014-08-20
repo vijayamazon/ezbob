@@ -34,7 +34,7 @@
 			Esigner[] oPotentialSigners;
 
 			try {
-				EsignatureListActionResult elar = m_oServiceClient.Instance.LoadEsignatures(nCustomerID, bPollStatus);
+				EsignatureListActionResult elar = m_oServiceClient.Instance.LoadEsignatures(m_oContext.UserId, nCustomerID, bPollStatus);
 				oSignatures = elar.Data;
 				oPotentialSigners = elar.PotentialSigners;
 			}
@@ -81,7 +81,7 @@
 			string sResult;
 
 			try {
-				StringActionResult sar = m_oServiceClient.Instance.EsignSend(oPackageToSend);
+				StringActionResult sar = m_oServiceClient.Instance.EsignSend(m_oContext.UserId, oPackageToSend);
 				sResult = sar.Value;
 			}
 			catch (Exception e) {
@@ -101,7 +101,7 @@
 			ms_oLog.Debug("Loading e-signature file for id {0}...", nEsignatureID);
 
 			try {
-				EsignatureFileActionResult efar = m_oServiceClient.Instance.LoadEsignatureFile(nEsignatureID);
+				EsignatureFileActionResult efar = m_oServiceClient.Instance.LoadEsignatureFile(m_oContext.UserId, nEsignatureID);
 
 				ms_oLog.Debug("Loading e-signature file for id {0} complete.", nEsignatureID);
 

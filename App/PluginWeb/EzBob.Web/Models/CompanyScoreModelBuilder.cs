@@ -99,7 +99,7 @@
 			ExperianLtdActionResult oLtdAr;
 
 			try {
-				oLtdAr = m_oServiceClient.Instance.CheckLtdCompanyCache(customer.Company.ExperianRefNum);
+				oLtdAr = m_oServiceClient.Instance.CheckLtdCompanyCache(m_oContext.UserId, customer.Company.ExperianRefNum);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to load Experian parsed data for a company '{0}'.", customer.Company.ExperianRefNum);
@@ -319,7 +319,7 @@
 			ExperianLtdActionResult oLtdAr;
 
 			try {
-				oLtdAr = m_oServiceClient.Instance.CheckLtdCompanyCache(sOwnerRegNum);
+				oLtdAr = m_oServiceClient.Instance.CheckLtdCompanyCache(m_oContext.UserId, sOwnerRegNum);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to load Experian parsed data for company '{0}'.", sOwnerRegNum);

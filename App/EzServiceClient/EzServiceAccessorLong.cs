@@ -63,9 +63,9 @@
 			return res.Value;
 		}
 
-		public ExperianConsumerData LoadExperianConsumer(int customerId, int? directorId, long? nServiceLogId)
+		public ExperianConsumerData LoadExperianConsumer(int userId, int customerId, int? directorId, long? nServiceLogId)
 		{
-			var res = m_oServiceClient.Instance.LoadExperianConsumer(customerId, directorId, nServiceLogId);
+			var res = m_oServiceClient.Instance.LoadExperianConsumer(userId, customerId, directorId, nServiceLogId);
 			return res.Value;
 		}
 
@@ -89,8 +89,8 @@
 
 		#region method CheckLtdCompanyCache
 
-		public ExperianLtd CheckLtdCompanyCache(string sCompanyRefNum) {
-			ExperianLtdActionResult ar = m_oServiceClient.Instance.CheckLtdCompanyCache(sCompanyRefNum);
+		public ExperianLtd CheckLtdCompanyCache(int userId, string sCompanyRefNum) {
+			ExperianLtdActionResult ar = m_oServiceClient.Instance.CheckLtdCompanyCache(userId, sCompanyRefNum);
 			return ar.Value;
 		} // CheckLtdCompanyCache
 

@@ -17,7 +17,7 @@
 			return Execute<EmailUnderReview>(customerId, null, customerId);
 		} // EmailUnderReview
 
-		public ActionMetaData Escalated(int customerId) {
+		public ActionMetaData Escalated(int customerId, int userId) {
 			return Execute<Escalated>(customerId, customerId, customerId);
 		} // Escalated
 
@@ -61,12 +61,12 @@
 			return Execute<RejectUser>(customerId, userId, customerId);
 		} // RejectUser
 
-		public ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
-			return Execute<EmailRolloverAdded>(customerId, customerId, customerId, amount);
+		public ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount) {
+			return Execute<EmailRolloverAdded>(customerId, userId, customerId, amount);
 		} // EmailRolloverAdded
 
-		public ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {
-			return Execute<RenewEbayToken>(customerId, customerId, customerId, marketplaceName, eBayAddress);
+		public ActionMetaData RenewEbayToken(int userId, int customerId, string marketplaceName, string eBayAddress) {
+			return Execute<RenewEbayToken>(customerId, userId, customerId, marketplaceName, eBayAddress);
 		} // RenewEbayToken
 
 		public ActionMetaData RequestCashWithoutTakenLoan(int customerId) {

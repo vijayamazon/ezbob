@@ -40,8 +40,7 @@
 			IBugRepository bugs,
 			LoanRepository loanRepository,
 			CustomerAddressRepository customerAddressRepository,
-			LandRegistryRepository landRegistryRepository
-		) {
+			LandRegistryRepository landRegistryRepository, PropertiesModelBuilder propertiesModelBuilder) {
 			_customers = customers;
 			_session = session;
 			_infoModelBuilder = infoModelBuilder;
@@ -57,6 +56,7 @@
 			_loanRepository = loanRepository;
 			this.customerAddressRepository = customerAddressRepository;
 			this.landRegistryRepository = landRegistryRepository;
+			_propertiesModelBuilder = propertiesModelBuilder;
 			serviceClient = new ServiceClient();
 		} // constructor
 
@@ -133,9 +133,9 @@
 					}
 				} // using
 
-				using (tc.AddStep("ZooplaAndMortgagesAndPropertiesModel Time taken"))
-					model.Properties = PropertiesController.GetPropertiesModelData(customer, customerAddressRepository, landRegistryRepository);
-
+				using (tc.AddStep("ZooplaAndMortgagesAndPropertiesModel Time taken")) {
+					model.Properties = _propertiesModelBuilder.Create(customer);
+				}
 				using (tc.AddStep("FraudDetectionLog Time taken")) {
 					DateTime? lastDateCheck;
 
@@ -230,6 +230,7 @@
 		private readonly ApiCheckLogBuilder _apiCheckLogBuilder;
 		private readonly MessagesModelBuilder _messagesModelBuilder;
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
+		private readonly PropertiesModelBuilder _propertiesModelBuilder;
 		private readonly LoanRepository _loanRepository;
 		private readonly CustomerAddressRepository customerAddressRepository;
 		private readonly LandRegistryRepository landRegistryRepository;

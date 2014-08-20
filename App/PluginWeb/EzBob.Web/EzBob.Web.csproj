@@ -181,6 +181,7 @@
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EsignaturesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
+    <Compile Include="Areas\Underwriter\Models\PropertiesModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\DecisionModel.cs" />
     <Compile Include="Infrastructure\Email\EmailConfirmationState.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManagerException.cs" />

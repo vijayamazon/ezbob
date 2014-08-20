@@ -8,7 +8,6 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
-	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Serialization;
 	using Infrastructure;
 	using Infrastructure.Attributes;
@@ -19,8 +18,6 @@
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
-	using StructureMap;
 	using Web.Models;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -43,6 +40,7 @@
 		private readonly ISession _session;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly CompanyFilesMetaDataRepository _companyFiles;
+		private readonly IWorkplaceContext _context;
 
 		public MarketPlacesController(CustomerRepository customers,
 			AnalyisisFunctionValueRepository functions,
@@ -55,7 +53,8 @@
 			YodleeRuleRepository yodleeRuleRepository,
 			YodleeGroupRuleMapRepository yodleeGroupRuleMapRepository,
 			ISession session, 
-			CompanyFilesMetaDataRepository companyFiles)
+			CompanyFilesMetaDataRepository companyFiles, 
+			IWorkplaceContext context)
 		{
 			_customerMarketplaces = customerMarketplaces;
 			_marketPlaces = marketPlaces;
@@ -70,6 +69,7 @@
 			_yodleeGroupRuleMapRepository = yodleeGroupRuleMapRepository;
 			_session = session;
 			_companyFiles = companyFiles;
+			_context = context;
 		}
 
 		[Ajax]
@@ -233,6 +233,7 @@
 			var mp = _customerMarketplaces.Get(umi);
 
 			m_oServiceClient.Instance.RenewEbayToken(
+				_context.UserId,
 				mp.Customer.Id,
 				mp.DisplayName,
 				"https://app.ezbob.com/Customer/Profile/RenewEbayToken/"
@@ -313,7 +314,7 @@
 
 		public FileResult DownloadCompanyFile(int fileId)
 		{
-			var file = m_oServiceClient.Instance.GetCompanyFile(fileId);
+			var file = m_oServiceClient.Instance.GetCompanyFile(_context.UserId, fileId);
 			var fileMetaData = _companyFiles.Get(fileId);
 			if (file != null && fileMetaData != null)
 			{
