@@ -10,7 +10,7 @@
 											TemplateModel template,
 											string path1, string path2)
 		{
-			return Execute(customerId, null, typeof(SaveAgreement), customerId, model, refNumber, name, template, path1, path2);
+			return Execute<SaveAgreement>(customerId, null, customerId, model, refNumber, name, template, path1, path2);
 		}
 	}
 }

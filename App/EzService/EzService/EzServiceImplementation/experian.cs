@@ -17,7 +17,7 @@
 		#region method ExperianCompanyCheck
 
 		public ActionMetaData ExperianCompanyCheck(int nCustomerID, bool bForceCheck) {
-			return Execute(nCustomerID, null, typeof(ExperianCompanyCheck), nCustomerID, bForceCheck);
+			return Execute<ExperianCompanyCheck>(nCustomerID, null, nCustomerID, bForceCheck);
 		} // ExperianCompanyCheck
 		
 		#endregion method ExperianCompanyCheck
@@ -25,7 +25,7 @@
 		#region method ExperianConsumerCheck
 
 		public ActionMetaData ExperianConsumerCheck(int nCustomerID, int? nDirectorID, bool bForceCheck) {
-			return Execute(nCustomerID, null, typeof(ExperianConsumerCheck), nCustomerID, nDirectorID, bForceCheck);
+			return Execute<ExperianConsumerCheck>(nCustomerID, null, nCustomerID, nDirectorID, bForceCheck);
 		} // ExperianConsumerCheck
 
 		#endregion method ExperianConsumerCheck

@@ -156,7 +156,7 @@
 							break;
 
 						case ExperianServiceType.NonLimitedData:
-							CompanyDataForCreditBureau notLimitedBusinessData = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCompanyDataForCreditBureau(0/*should be refactored*/, oPackage.Out.ServiceLog.Customer.Company.ExperianRefNum);
+							CompanyDataForCreditBureau notLimitedBusinessData = ObjectFactory.GetInstance<IEzServiceAccessor>().GetCompanyDataForCreditBureau(0/*should be refactored*/, oPackage.Out.ServiceLog.CompanyRefNum);
 							history.Score = notLimitedBusinessData != null ? notLimitedBusinessData.Score : 0;
 							historyRepo.SaveOrUpdate(history);
 							break;

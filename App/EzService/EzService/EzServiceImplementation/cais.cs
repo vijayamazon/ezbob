@@ -1,14 +1,13 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.Misc;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData CaisGenerate(int underwriterId) {
-			return Execute(null, underwriterId, typeof(CaisGenerate), underwriterId);
+			return Execute<CaisGenerate>(null, underwriterId, underwriterId);
 		} // CaisGenerate
 
 		public ActionMetaData CaisUpdate(int userId, int caisId) {
-			return Execute(null, userId, typeof(CaisUpdate), caisId);
+			return Execute<CaisUpdate>(null, userId, caisId);
 		} // CaisUpdate
 	} // class EzServiceImplementation
 } // namespace EzService

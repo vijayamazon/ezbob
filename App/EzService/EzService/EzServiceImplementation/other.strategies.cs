@@ -9,30 +9,30 @@
 
 	partial class EzServiceImplementation {
 		public ActionMetaData FirstOfMonthStatusNotifier() {
-			return Execute(null, null, typeof (FirstOfMonthStatusNotifier));
+			return Execute<FirstOfMonthStatusNotifier>(null, null);
 		} // FirstOfMonthStatusNotifier
 
 		public ActionMetaData FraudChecker(int customerId, FraudMode mode) {
-			return Execute(customerId, null, typeof (FraudChecker), customerId, mode);
+			return Execute<FraudChecker>(customerId, null, customerId, mode);
 		} // FraudChecker
 
 		public ActionMetaData LateBy14Days() {
-			return Execute(null, null, typeof (LateBy14Days));
+			return Execute<LateBy14Days>(null, null);
 		} // LateBy14Days
 
 		public ActionMetaData PayPointCharger() {
-			return Execute(null, null, typeof (PayPointCharger));
+			return Execute<PayPointCharger>(null, null);
 		} // PayPointCharger
 
 		public ActionMetaData SetLateLoanStatus() {
-			return Execute(null, null, typeof (SetLateLoanStatus));
+			return Execute<SetLateLoanStatus>(null, null);
 		} // SetLateLoanStatus
 
 		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
-			return Execute(
+			return Execute<UpdateMarketplace>(
 				customerId,
 				null,
-				typeof (UpdateMarketplace),
+				null,
 				amd =>
 					DB.ExecuteNonQuery(
 						"RecordMpUpdateFailure",
@@ -48,11 +48,11 @@
 		} // UpdateMarketplace
 
 		public ActionMetaData UpdateTransactionStatus() {
-			return Execute(null, null, typeof (UpdateTransactionStatus));
+			return Execute<UpdateTransactionStatus>(null, null);
 		} // UpdateTransactionStatus
 
 		public ActionMetaData XDaysDue() {
-			return Execute(null, null, typeof (XDaysDue));
+			return Execute<XDaysDue>(null, null);
 		} // XDaysDue
 
 		public CrmLookupsActionResult CrmLoadLookups() {
@@ -69,11 +69,11 @@
 		} // CrmLoadLookups
 
 		public ActionMetaData UpdateCurrencyRates() {
-			return Execute(null, null, typeof (UpdateCurrencyRates));
+			return Execute<UpdateCurrencyRates>(null, null);
 		} // UpdateCurrencyRates
 
 		public ActionMetaData UpdateConfigurationVariables() {
-			return Execute(null, null, typeof (UpdateConfigurationVariables));
+			return Execute<UpdateConfigurationVariables>(null, null);
 		} //UpdateConfigurationVariables
 
 		#region method PostcodeSaveLog

@@ -1,21 +1,20 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.Misc;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData CheckAml(int customerId) {
-			return Execute(customerId, null, typeof(AmlChecker), customerId);
+			return Execute<AmlChecker>(customerId, null, customerId);
 		} // CheckAml
 
 		public ActionMetaData CheckAmlCustom(
 			int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet,
 			string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode
 		) {
-			return Execute(customerId, null, typeof(AmlChecker), customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
+			return Execute<AmlChecker>(customerId, null, customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
 		} // CheckAmlCustom
 
 		public ActionMetaData CheckBwa(int customerId) {
-			return Execute(customerId, null, typeof(BwaChecker), customerId);
+			return Execute<BwaChecker>(customerId, null, customerId);
 		} // CheckBwa
 
 		public ActionMetaData CheckBwaCustom(
@@ -23,8 +22,8 @@
 			string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode,
 			string idhubBranchCode, string idhubAccountNumber
 		) {
-			return Execute(
-				customerId, null, typeof(BwaChecker), customerId, idhubHouseNumber, idhubHouseName, idhubStreet,
+			return Execute<BwaChecker>(customerId, null,
+				customerId, idhubHouseNumber, idhubHouseName, idhubStreet,
 				idhubDistrict, idhubTown, idhubCounty, idhubPostCode,
 				idhubBranchCode, idhubAccountNumber
 			);

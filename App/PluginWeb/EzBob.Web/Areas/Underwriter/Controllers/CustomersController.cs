@@ -395,26 +395,41 @@
 
 				_historyRepository.LogAction(DecisionActions.Approve, model.reason, user, customer);
 
+				bool bSendBrokerForceResetCustomerPassword = false;
+
 				if (customer.FilledByBroker) {
 					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
 
-					if (numOfPreviousApprovals == 0) {
-						try {
-							m_oServiceClient.Instance.BrokerForceResetCustomerPassword(user.Id, customer.Id);
-						}
-						catch (Exception e) {
-							m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
-						} // try
-					} // if
+					if (numOfPreviousApprovals == 0)
+						bSendBrokerForceResetCustomerPassword = true;
 				} // if
 
-				if (!request.EmailSendingBanned) {
+				bool bSendApprovedUser = !request.EmailSendingBanned;
+
+				if (bSendBrokerForceResetCustomerPassword && bSendApprovedUser) {
+					try {
+						m_oServiceClient.Instance.BrokerApproveAndResetCustomerPassword(user.Id, customer.Id, sum);
+					}
+					catch (Exception e) {
+						sWarning = "Failed to force reset customer password and send 'approved user' email: " + e.Message;
+						m_oLog.Alert(e, "Failed to force reset customer password and send 'approved user' email.");
+					} // try
+				}
+				else if (bSendApprovedUser) {
 					try {
 						m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, sum);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to send 'approved user' email: " + e.Message;
 						m_oLog.Warn(e, "Failed to send 'approved user' email.");
+					} // try
+				}
+				else if (bSendBrokerForceResetCustomerPassword) {
+					try {
+						m_oServiceClient.Instance.BrokerForceResetCustomerPassword(user.Id, customer.Id);
+					}
+					catch (Exception e) {
+						m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
 					} // try
 				} // if
 

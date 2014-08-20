@@ -231,6 +231,9 @@
 		[OperationContract]
 		ActionMetaData EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail);
 
+		[OperationContract]
+		ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount);
+
 		#endregion email strategies
 
 		#region Esign

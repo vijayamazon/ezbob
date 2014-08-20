@@ -3,7 +3,7 @@
 
 	partial class EzServiceImplementation {
 		public ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType) {
-			return Execute(customerId, null, typeof(SaveCompanyFile), customerId, fileName, fileContent, fileContentType);
+			return Execute<SaveCompanyFile>(customerId, null, customerId, fileName, fileContent, fileContentType);
 		} // CompanyFilesUpload
 
 		public byte[] GetCompanyFile(int companyFileId) {

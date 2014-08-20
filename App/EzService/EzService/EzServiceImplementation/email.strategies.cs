@@ -6,79 +6,79 @@
 		#region async
 
 		public ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
-			return Execute(customerId, userId, typeof(ApprovedUser), customerId, loanAmount);
+			return Execute<ApprovedUser>(customerId, userId, customerId, loanAmount);
 		} // ApprovedUser
 
 		public ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum) {
-			return Execute(customerId, null, typeof(CashTransferred), customerId, amount, loanRefNum);
+			return Execute<CashTransferred>(customerId, null, customerId, amount, loanRefNum);
 		} // CashTransferred
 
 		public ActionMetaData EmailUnderReview(int customerId) {
-			return Execute(customerId, null, typeof(EmailUnderReview), customerId);
+			return Execute<EmailUnderReview>(customerId, null, customerId);
 		} // EmailUnderReview
 
 		public ActionMetaData Escalated(int customerId) {
-			return Execute(customerId, customerId, typeof(Escalated), customerId);
+			return Execute<Escalated>(customerId, customerId, customerId);
 		} // Escalated
 
 		public ActionMetaData GetCashFailed(int customerId) {
-			return Execute(customerId, null, typeof(GetCashFailed), customerId);
+			return Execute<GetCashFailed>(customerId, null, customerId);
 		} // GetCashFailed
 
 		public ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
-			return Execute(customerId, null, typeof(LoanFullyPaid), customerId, loanRefNum);
+			return Execute<LoanFullyPaid>(customerId, null, customerId, loanRefNum);
 		} // LoanFullyPaid
 
 		public ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId) {
-			return Execute(customerId, userId, typeof(MoreAmlAndBwaInformation), customerId);
+			return Execute<MoreAmlAndBwaInformation>(customerId, userId, customerId);
 		} // MoreAmlAndBwaInformation
 
 		public ActionMetaData MoreAmlInformation(int userId, int customerId) {
-			return Execute(customerId, userId, typeof(MoreAmlInformation), customerId);
+			return Execute<MoreAmlInformation>(customerId, userId, customerId);
 		} // MoreAmlInformation
 
 		public ActionMetaData MoreBwaInformation(int userId, int customerId) {
-			return Execute(customerId, userId, typeof(MoreBwaInformation), customerId);
+			return Execute<MoreBwaInformation>(customerId, userId, customerId);
 		} // MoreBwaInformation
 
 		public ActionMetaData PasswordRestored(int customerId) {
-			return Execute(customerId, null, typeof(PasswordRestored), customerId);
+			return Execute<PasswordRestored>(customerId, null, customerId);
 		} // PasswordRestored
 
 		public ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum) {
-			return Execute(customerId, customerId, typeof(PayEarly), customerId, amount, loanRefNum);
+			return Execute<PayEarly>(customerId, customerId, customerId, amount, loanRefNum);
 		} // PayEarly
 
 		public ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId) {
-			return Execute(customerId, underwriterId, typeof(PayPointAddedByUnderwriter), customerId, cardno, underwriterName, underwriterId);
+			return Execute<PayPointAddedByUnderwriter>(customerId, underwriterId, customerId, cardno, underwriterName, underwriterId);
 		} // PayPointAddedByUnderwriter
 
 		public ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName) {
-			return Execute(customerId, userId, typeof(PayPointNameValidationFailed), customerId, cardHolderName);
+			return Execute<PayPointNameValidationFailed>(customerId, userId, customerId, cardHolderName);
 		} // PayPointNameValidationFailed
 
 		public ActionMetaData RejectUser(int userId, int customerId) {
-			return Execute(customerId, userId, typeof(RejectUser), customerId);
+			return Execute<RejectUser>(customerId, userId, customerId);
 		} // RejectUser
 
 		public ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
-			return Execute(customerId, customerId, typeof(EmailRolloverAdded), customerId, amount);
+			return Execute<EmailRolloverAdded>(customerId, customerId, customerId, amount);
 		} // EmailRolloverAdded
 
 		public ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {
-			return Execute(customerId, customerId, typeof(RenewEbayToken), customerId, marketplaceName, eBayAddress);
+			return Execute<RenewEbayToken>(customerId, customerId, customerId, marketplaceName, eBayAddress);
 		} // RenewEbayToken
 
 		public ActionMetaData RequestCashWithoutTakenLoan(int customerId) {
-			return Execute(customerId, null, typeof(RequestCashWithoutTakenLoan), customerId);
+			return Execute<RequestCashWithoutTakenLoan>(customerId, null, customerId);
 		} // RequestCashWithoutTakenLoan
 
 		public ActionMetaData TransferCashFailed(int customerId) {
-			return Execute(customerId, null, typeof(TransferCashFailed), customerId);
+			return Execute<TransferCashFailed>(customerId, null, customerId);
 		} // TransferCashFailed
 
 		public ActionMetaData VipRequest(int customerId, string fullname, string email, string phone) {
-			return Execute(customerId, null, typeof(VipRequest), customerId, fullname, email, phone);
+			return Execute<VipRequest>(customerId, null, customerId, fullname, email, phone);
 		} // TransferCashFailed
 
 		public ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID) {

@@ -1,18 +1,36 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetApprovalData]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetApprovalData]
+IF OBJECT_ID('GetApprovalData') IS NULL
+	EXECUTE('CREATE PROCEDURE GetApprovalData AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetApprovalData] 
-	(@CustomerId INT)
+
+ALTER PROCEDURE GetApprovalData
+@CustomerId INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	DECLARE @NumOfApprovals INT
 	
-	SELECT @NumOfApprovals = count(1) FROM DecisionHistory WHERE CustomerId = @CustomerId
+	SELECT
+		@NumOfApprovals = COUNT(1)
+	FROM
+		DecisionHistory
+	WHERE
+		CustomerId = @CustomerId
 	
-	SELECT @NumOfApprovals AS NumOfApprovals, ValidFor, ApplyForLoan FROM Customer WHERE Id = @CustomerId
+	SELECT
+		@NumOfApprovals AS NumOfApprovals,
+		ValidFor,
+		ApplyForLoan,
+		Id AS CustomerID
+	FROM
+		Customer
+	WHERE
+		Id = @CustomerId
 END
 GO

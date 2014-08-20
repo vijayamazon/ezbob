@@ -96,6 +96,7 @@
     <Compile Include="Experian\ParseExperianLtd.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
+    <Compile Include="MailStrategies\Broker\BrokerApproveAndResetCustomerPassword.cs" />
     <Compile Include="MailStrategies\Broker\BrokerPasswordChanged.cs" />
     <Compile Include="MailStrategies\Broker\GreetingForBrokerFilled.cs" />
     <Compile Include="MailStrategies\EmailChanged.cs" />

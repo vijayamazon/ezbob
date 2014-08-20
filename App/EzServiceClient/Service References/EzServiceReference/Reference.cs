@@ -2324,6 +2324,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
+        string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
+        System.Threading.Tasks.Task<string> LandRegistryEnquiryAsync(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
         string LandRegistryRes(int customerId, string titleNumber);
         
@@ -3110,6 +3116,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailHmrcParsingErrors", ReplyAction="http://tempuri.org/IEzService/EmailHmrcParsingErrorsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailHmrcParsingErrorsAsync(int nCustomerID, int nCustomerMarketplaceID, System.Collections.Generic.Dictionary<string, string> oErrorsToEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPassword", ReplyAction="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPasswordResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPassword", ReplyAction="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPasswordResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerApproveAndResetCustomerPasswordAsync(int nUnderwriterID, int nCustomerID, decimal nLoanAmount);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EsignProcessPending", ReplyAction="http://tempuri.org/IEzService/EsignProcessPendingResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EsignProcessPending(System.Nullable<int> nCustomerID);
         
@@ -3247,12 +3259,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau", ReplyAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
-        string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
-        System.Threading.Tasks.Task<string> LandRegistryEnquiryAsync(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3280,6 +3286,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
+            return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
+        }
+        
+        public System.Threading.Tasks.Task<string> LandRegistryEnquiryAsync(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
+            return base.Channel.LandRegistryEnquiryAsync(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
         }
         
         public string LandRegistryRes(int customerId, string titleNumber) {
@@ -4330,6 +4344,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EmailHmrcParsingErrorsAsync(nCustomerID, nCustomerMarketplaceID, oErrorsToEmail);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount) {
+            return base.Channel.BrokerApproveAndResetCustomerPassword(nUnderwriterID, nCustomerID, nLoanAmount);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerApproveAndResetCustomerPasswordAsync(int nUnderwriterID, int nCustomerID, decimal nLoanAmount) {
+            return base.Channel.BrokerApproveAndResetCustomerPasswordAsync(nUnderwriterID, nCustomerID, nLoanAmount);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData EsignProcessPending(System.Nullable<int> nCustomerID) {
             return base.Channel.EsignProcessPending(nCustomerID);
         }
@@ -4512,14 +4534,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult> GetCompanyDataForCreditBureauAsync(int underwriterId, string refNumber) {
             return base.Channel.GetCompanyDataForCreditBureauAsync(underwriterId, refNumber);
-        }
-        
-        public string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
-            return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
-        }
-        
-        public System.Threading.Tasks.Task<string> LandRegistryEnquiryAsync(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
-            return base.Channel.LandRegistryEnquiryAsync(customerId, buildingNumber, buildingName, streetName, cityName, postCode);
         }
     }
 }

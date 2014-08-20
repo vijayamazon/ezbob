@@ -51,6 +51,20 @@
 
 		#endregion method Execute
 
+		public virtual CustomerData CustomerData { get; set; }
+		public virtual int CustomerId { get; set; }
+
+		#region property SendToCustomer
+
+		public virtual bool SendToCustomer {
+			get { return m_bSendToCustomer; }
+			set { m_bSendToCustomer = value; }
+		} // SendToCustomer
+
+		private bool m_bSendToCustomer;
+
+		#endregion property SendToCustomer
+
 		#endregion public
 
 		#region protected
@@ -79,17 +93,6 @@
 		} // GetRecipients
 
 		#endregion method GetCustomerEmail
-
-		#region property SendToCustomer
-
-		protected virtual bool SendToCustomer {
-			get { return m_bSendToCustomer; }
-			set { m_bSendToCustomer = value; }
-		} // SendToCustomer
-
-		private bool m_bSendToCustomer;
-
-		#endregion property SendToCustomer
 
 		#region method SetTemplateAndVariables
 
@@ -122,9 +125,6 @@
 
 		protected virtual string TemplateName { get; set; }
 		protected virtual Dictionary<string, string> Variables { get; set; }
-
-		protected virtual CustomerData CustomerData { get; set; }
-		protected virtual int CustomerId { get; set; }
 
 		#endregion properties
 

@@ -42,6 +42,26 @@
 
 		#endregion method BrokerAcceptTerms
 
+		#region method BrokerApproveAndResetCustomerPassword
+
+		public ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount) {
+			ActionMetaData oMetaData = Execute<BrokerApproveAndResetCustomerPassword>(nCustomerID, nUnderwriterID, nCustomerID, nLoanAmount);
+
+			if (oMetaData.Status != ActionStatus.Launched)
+				return oMetaData;
+
+			return Execute<ApprovedUser>(
+				nCustomerID,
+				nUnderwriterID,
+				stra => { stra.SendToCustomer = false; },
+				null,
+				nCustomerID,
+				nLoanAmount
+			);
+		} // BrokerApproveAndResetCustomerPassword
+
+		#endregion method BrokerApproveAndResetCustomerPassword
+
 		#endregion async
 
 		#region sync

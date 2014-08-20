@@ -79,14 +79,17 @@
 		#region method Execute
 
 		private ActionMetaData Execute<TStrategy>(int? nCustomerID, int? nUserID, params object[] args) where TStrategy : AStrategy {
-			return Execute(nCustomerID, nUserID, typeof(TStrategy), args);
+			return Execute<TStrategy>(nCustomerID, nUserID, (Action<TStrategy>)null, (Action<ActionMetaData>)null, args);
 		} // Execute
 
-		private ActionMetaData Execute(int? nCustomerID, int? nUserID, Type oStrategyType, params object[] args) {
-			return Execute(nCustomerID, nUserID, oStrategyType, null, args);
-		} // Execute
-
-		private ActionMetaData Execute(int? nCustomerID, int? nUserID, Type oStrategyType, Action<ActionMetaData> oOnException, params object[] args) {
+		private ActionMetaData Execute<TStrategy>(
+			int? nCustomerID,
+			int? nUserID,
+			Action<TStrategy> oInitAction,
+			Action<ActionMetaData> oOnException,
+			params object[] args
+		) where TStrategy : AStrategy {
+			Type oStrategyType = typeof (TStrategy);
 			ActionMetaData amd = null;
 
 			try {
@@ -105,7 +108,19 @@
 
 				amd.UnderlyingThread = new Thread(() => {
 					try {
-						((AStrategy)oCreator.Invoke(oParams.ToArray())).Execute();
+						TStrategy oInstance = (TStrategy)oCreator.Invoke(oParams.ToArray());
+
+						if (oInitAction != null) {
+							Log.Debug(oInstance.Name + " instance created, invoking an initialisation action...");
+
+							oInitAction(oInstance);
+
+							Log.Debug(oInstance.Name + " initialisation action complete.");
+						} // if
+
+						Log.Debug(oInstance.Name + " instance is initialised, executing...");
+
+						oInstance.Execute();
 
 						Log.Debug("Executing " + oStrategyType + " complete.");
 

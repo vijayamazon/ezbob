@@ -112,6 +112,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryEnquiry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryEnquiryResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LandRegistryRes_InputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryRes" />
   </wsdl:message>
@@ -898,6 +904,12 @@
   <wsdl:message name="IEzService_EmailHmrcParsingErrors_OutputMessage">
     <wsdl:part name="parameters" element="tns:EmailHmrcParsingErrorsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerApproveAndResetCustomerPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerApproveAndResetCustomerPassword" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerApproveAndResetCustomerPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerApproveAndResetCustomerPasswordResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_EsignProcessPending_InputMessage">
     <wsdl:part name="parameters" element="tns:EsignProcessPending" />
   </wsdl:message>
@@ -1036,12 +1048,6 @@
   <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureauResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryEnquiry_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryEnquiryResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1065,6 +1071,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="LandRegistryEnquiry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryRes">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryRes" message="tns:IEzService_LandRegistryRes_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryResResponse" message="tns:IEzService_LandRegistryRes_OutputMessage" />
@@ -1589,6 +1599,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailHmrcParsingErrors" message="tns:IEzService_EmailHmrcParsingErrors_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailHmrcParsingErrorsResponse" message="tns:IEzService_EmailHmrcParsingErrors_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BrokerApproveAndResetCustomerPassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPassword" message="tns:IEzService_BrokerApproveAndResetCustomerPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPasswordResponse" message="tns:IEzService_BrokerApproveAndResetCustomerPassword_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="EsignProcessPending">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EsignProcessPending" message="tns:IEzService_EsignProcessPending_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EsignProcessPendingResponse" message="tns:IEzService_EsignProcessPending_OutputMessage" />
@@ -1681,10 +1695,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" message="tns:IEzService_GetCompanyDataForCreditBureau_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse" message="tns:IEzService_GetCompanyDataForCreditBureau_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="LandRegistryEnquiry">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1740,6 +1750,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="LandRegistryEnquiry">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryRes">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryRes" style="document" />
       <wsdl:input>
@@ -2919,6 +2938,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BrokerApproveAndResetCustomerPassword">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="EsignProcessPending">
       <soap12:operation soapAction="http://tempuri.org/IEzService/EsignProcessPending" style="document" />
       <wsdl:input>
@@ -3119,15 +3147,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetCompanyDataForCreditBureau">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LandRegistryEnquiry">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

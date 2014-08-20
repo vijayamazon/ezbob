@@ -9,6 +9,25 @@
 	using UserManagement;
 
 	public class BrokerForceResetCustomerPassword : AMailStrategyBase {
+		#region method GetFromDB
+
+		public static string GetFromDB(AMailStrategyBase oStrategy) {
+			var oNewPassGenerator = new UserResetPassword(oStrategy.CustomerData.Mail, oStrategy.DB, oStrategy.Log);
+			oNewPassGenerator.Execute();
+
+			if (!oNewPassGenerator.Success)
+				throw new StrategyAlert(oStrategy, "Failed to generate a new password for customer " + oStrategy.CustomerData);
+
+			Guid oToken = InitCreatePasswordToken.Execute(oStrategy.DB, oStrategy.CustomerData.Mail);
+
+			if (oToken == Guid.Empty)
+				throw new StrategyAlert(oStrategy, "Failed to generate a change password token for customer " + oStrategy.CustomerData);
+
+			return CurrentValues.Instance.CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N");
+		} // GetFromDB
+
+		#endregion method GetFromDB
+
 		#region public
 
 		#region constructor
@@ -35,20 +54,9 @@
 		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
-			var oNewPassGenerator = new UserResetPassword(CustomerData.Mail, DB, Log);
-			oNewPassGenerator.Execute();
-
-			if (!oNewPassGenerator.Success)
-				throw new StrategyAlert(this, "Failed to generate a new password for customer " + CustomerData.Mail);
-
-			Guid oToken = InitCreatePasswordToken.Execute(DB, CustomerData.Mail);
-
-			if (oToken == Guid.Empty)
-				throw new StrategyAlert(this, "Failed to generate a change password token for customer " + CustomerData.Mail);
-
 			Variables = new Dictionary<string, string> {
-				{"Link", CurrentValues.Instance.CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N") },
-				{"FirstName", CustomerData.FirstName }
+				{ "Link", GetFromDB(this) },
+				{ "FirstName", CustomerData.FirstName }
 			};
 
 			TemplateName = "Broker force reset customer password";
