@@ -299,7 +299,7 @@
 				{
 					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy", autoDecisionResponse.RejectionModel);
 
-					new RejectUser(customerId, DB, Log).Execute();
+					new RejectUser(customerId, true, DB, Log).Execute();
 
 					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
 				}

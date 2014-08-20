@@ -3057,10 +3057,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PayPointNameValidationFailedAsync(int userId, int customerId, string cardHolderName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData RejectUser(int userId, int customerId);
+        ServiceClientProxy.EzServiceReference.ActionMetaData RejectUser(int userId, int customerId, bool bSendToCustomer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RejectUserAsync(int userId, int customerId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RejectUserAsync(int userId, int customerId, bool bSendToCustomer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount);
@@ -4264,12 +4264,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.PayPointNameValidationFailedAsync(userId, customerId, cardHolderName);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData RejectUser(int userId, int customerId) {
-            return base.Channel.RejectUser(userId, customerId);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData RejectUser(int userId, int customerId, bool bSendToCustomer) {
+            return base.Channel.RejectUser(userId, customerId, bSendToCustomer);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RejectUserAsync(int userId, int customerId) {
-            return base.Channel.RejectUserAsync(userId, customerId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RejectUserAsync(int userId, int customerId, bool bSendToCustomer) {
+            return base.Channel.RejectUserAsync(userId, customerId, bSendToCustomer);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount) {

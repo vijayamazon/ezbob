@@ -444,9 +444,18 @@
 
 				request.ManagerApprovedSum = null;
 
+				bool bSendToCustomer = true;
+
+				if (customer.FilledByBroker) {
+					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
+
+					if (numOfPreviousApprovals == 0)
+						bSendToCustomer = false;
+				} // if
+
 				if (!request.EmailSendingBanned) {
 					try {
-						m_oServiceClient.Instance.RejectUser(user.Id, customer.Id);
+						m_oServiceClient.Instance.RejectUser(user.Id, customer.Id, bSendToCustomer);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to send 'reject user' email: " + e.Message;

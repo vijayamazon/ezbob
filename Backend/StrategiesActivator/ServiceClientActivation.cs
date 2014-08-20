@@ -1,5 +1,6 @@
 ﻿namespace StrategiesActivator {
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using System.Reflection;
 	using System.ServiceModel;
@@ -324,12 +325,14 @@
 		private void RejectUser() {
 			int underwriterId;
 			int customerId;
-			if (m_aryArgs.Length != 3 || !int.TryParse(m_aryArgs[1], out underwriterId) || !int.TryParse(m_aryArgs[2], out customerId)) {
-				m_oLog.Msg("Usage: RejectUser <Underwriter ID> <CustomerId>");
+			bool bSendToCustomer;
+
+			if (m_aryArgs.Length != 4 || !int.TryParse(m_aryArgs[1], out underwriterId) || !int.TryParse(m_aryArgs[2], out customerId) || !bool.TryParse(m_aryArgs[3], out bSendToCustomer)) {
+				m_oLog.Msg("Usage: RejectUser <Underwriter ID> <CustomerId> <send to customer>");
 				return;
 			}
 
-			m_oServiceClient.RejectUser(underwriterId, customerId);
+			m_oServiceClient.RejectUser(underwriterId, customerId, bSendToCustomer);
 		}
 
 		[Activation]
@@ -966,12 +969,15 @@ GeneratePassword broker-contact-email@example.com password-itself
 				return;
 			} // if
 
-			string sCustomerID = nCustomerID.ToString();
 			string sDisplayName = m_aryArgs[2];
 			string sPassword = m_aryArgs[3];
 			string sHash = SecurityUtils.Hash(nCustomerID + sPassword + sDisplayName);
 
-			m_oServiceClient.UpdateLinkedHmrcPassword(new Encrypted(sCustomerID), new Encrypted(sDisplayName), new Encrypted(sPassword), sHash);
+			m_oServiceClient.UpdateLinkedHmrcPassword(
+				new Encrypted(nCustomerID.ToString(CultureInfo.InvariantCulture)),
+				new Encrypted(sDisplayName),
+				new Encrypted(sPassword), sHash
+			);
 		} // UpdateLinkedHmrcPassword
 
 		[Activation]
@@ -1122,7 +1128,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 			var res = m_oServiceClient.LoadExperianConsumer(1, 1, (int?)null, nServiceLogID);
 
-			m_oLog.Msg("Result:\n{0}", res.Value.ToString());
+			m_oLog.Msg("Result:\n{0}", res.Value);
 		} // LoadExperianLtd
 
 		[Activation]
@@ -1138,7 +1144,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 
 			var res = m_oServiceClient.ParseExperianConsumer(nServiceLogID);
 
-			m_oLog.Msg("Result:\n{0}", res.Value.ToString());
+			m_oLog.Msg("Result:\n{0}", res.Value);
 		} // LoadExperianLtd
 
 		// ReSharper restore UnusedMember.Local

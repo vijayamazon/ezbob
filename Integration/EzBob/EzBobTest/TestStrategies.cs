@@ -157,7 +157,7 @@ namespace EzBobTest
 		[Test]
 		public void RejectUser()
 		{
-			var s = new RejectUser(21370, m_oDB, m_oLog);
+			var s = new RejectUser(21370, true, m_oDB, m_oLog);
 			s.Execute();
 		}
 

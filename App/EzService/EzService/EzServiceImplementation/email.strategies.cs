@@ -57,8 +57,8 @@
 			return Execute<PayPointNameValidationFailed>(customerId, userId, customerId, cardHolderName);
 		} // PayPointNameValidationFailed
 
-		public ActionMetaData RejectUser(int userId, int customerId) {
-			return Execute<RejectUser>(customerId, userId, customerId);
+		public ActionMetaData RejectUser(int userId, int customerId, bool bSendToCustomer) {
+			return Execute<RejectUser>(customerId, userId, customerId, bSendToCustomer);
 		} // RejectUser
 
 		public ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount) {

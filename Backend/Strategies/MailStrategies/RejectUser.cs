@@ -4,7 +4,7 @@
 	using Ezbob.Logger;
 
 	public class RejectUser : ABrokerMailToo {
-		public RejectUser(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public RejectUser(int customerId, bool bSendToCustomer, AConnection oDB, ASafeLog oLog) : base(customerId, bSendToCustomer, oDB, oLog) {
 		} // constructor
 
 		public override string Name { get { return "Reject User"; } } // Name

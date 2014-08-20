@@ -202,7 +202,7 @@
 		ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName);
 
 		[OperationContract]
-		ActionMetaData RejectUser(int userId, int customerId);
+		ActionMetaData RejectUser(int userId, int customerId, bool bSendToCustomer);
 
 		[OperationContract]
 		ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount);
