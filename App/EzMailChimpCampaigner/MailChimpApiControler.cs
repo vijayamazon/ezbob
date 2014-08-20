@@ -92,17 +92,19 @@
 				EmailType = List.EmailType.Html,
 				SendWelcome = false,
 				UpdateExisting = true,
-				ReplaceInterests = true
+				ReplaceInterests = true,
 			};
 
 			List.BatchSubscribe batchSubscribe = m_oMcApi.ListBatchSubscribe(listId, batch, options);
+			
+			ms_oLog.Debug("ListBatchSubscribe Result: AddCount: {0} UpdateCount: {1} ErrorCount{2}.", batchSubscribe.AddCount, batchSubscribe.UpdateCount, batchSubscribe.ErrorCount);
 
 			if (batchSubscribe.ErrorCount > 0) {
 				foreach (var error in batchSubscribe.Errors)
 					ms_oLog.Error("List.BatchSubscribe error: " + error.Message + " email:" + error.Email + " code:" + error.Code);
 			}
-			else
-				ms_oLog.Debug("ListBatchSubscribe successful. {0} subscribed", subscriberList.Count);
+			
+			
 		} // ListBatchSubscribe
 
 		public string CreateSegmentedCampaign(string listId, int templateId, string condition, string subject, string title, string group) {
@@ -128,11 +130,11 @@
 
 				if (m_oMcApi.CampaignSegmentTest(listId, segmentOptions) > 0) {
 					string campaignId = m_oMcApi.CampaignCreate(McCampaign.Type.Regular, options, cBase, segmentOptions);
-					ms_oLog.Debug("Created Segmented Campaign {0}", campaignId);
+					ms_oLog.Debug("Created Segmented Campaign {0} for {1} {2} {3}", campaignId, templateId, title, condition);
 					return campaignId;
 				} // if
 
-				ms_oLog.Debug("No customers in this segment");
+				ms_oLog.Debug("No customers in this segment: {0} {1} {2}", templateId, title, condition);
 				return string.Empty;
 			}
 			catch (Exception ex) {
@@ -142,8 +144,13 @@
 		}
 
 		public void SendCampaign(string campaignId) {
-			bool success = m_oMcApi.CampaignSendNow(campaignId);
-			ms_oLog.Debug("Campaign {0} sent successfully: {1}", campaignId, success);
+
+			if (m_oMcApi.CampaignSendNow(campaignId)) {
+				ms_oLog.Debug("Campaign {0} sent successfully", campaignId);
+			}
+			else {
+				ms_oLog.Error("Campaign {0} wasn't sent successfully", campaignId);
+			}
 		} // SendCampaign
 
 		public void LoadClickStatsToDb() {

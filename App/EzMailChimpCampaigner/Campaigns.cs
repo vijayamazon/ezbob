@@ -63,12 +63,12 @@
 					break;
 				case Constants.CampaignsType.OnlyRegisteredStore:
 					//day after
-					dayList.Add(new Day
-						{
-							Condition = Constants.DayAfterConditionField,
-							TemplateId = Constants.SecondStepCustomersDayAfterTemplateId,
-							Subject = Constants.SecondStepCustomersDayAfterSubject,
-						});
+					//dayList.Add(new Day
+					//	{
+					//		Condition = Constants.DayAfterConditionField,
+					//		TemplateId = Constants.SecondStepCustomersDayAfterTemplateId,
+					//		Subject = Constants.SecondStepCustomersDayAfterSubject,
+					//	});
 					//threeDays = new Day
 					//{
 					//	Condition = Constants.ThreeDaysConditionField,
@@ -76,19 +76,19 @@
 					//	Subject = Constants.SecondStepCustomersThreeDaysSubject,
 					//};
 					//week
-					dayList.Add(new Day
-						{
-							Condition = Constants.WeekConditionField,
-							TemplateId = Constants.SecondStepCustomersWeekTemplateId,
-							Subject = Constants.SecondStepCustomersWeekSubject,
-						});
-					//two weeks
-					dayList.Add(new Day
-						{
-							Condition = Constants.TwoWeeksConditionField,
-							TemplateId = Constants.SecondStepCustomersTwoWeeksTemplateId,
-							Subject = Constants.SecondStepCustomersTwoWeeksSubject,
-						});
+					//dayList.Add(new Day
+					//	{
+					//		Condition = Constants.WeekConditionField,
+					//		TemplateId = Constants.SecondStepCustomersWeekTemplateId,
+					//		Subject = Constants.SecondStepCustomersWeekSubject,
+					//	});
+					////two weeks
+					//dayList.Add(new Day
+					//	{
+					//		Condition = Constants.TwoWeeksConditionField,
+					//		TemplateId = Constants.SecondStepCustomersTwoWeeksTemplateId,
+					//		Subject = Constants.SecondStepCustomersTwoWeeksSubject,
+					//	});
 					//month
 					//dayList.Add(new Day
 					//	{
