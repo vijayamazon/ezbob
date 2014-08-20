@@ -2877,10 +2877,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerLeadDetailsActionResult> BrokerLeadCanFillWizardAsync(int nLeadID, string sLeadEmail, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadAcquireCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerLeadAcquireCustomerResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink);
+        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sEmailConfirmationLink);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadAcquireCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerLeadAcquireCustomerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID, string sEmailConfirmationLink);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sEmailConfirmationLink);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerCustomerWizardComplete", ReplyAction="http://tempuri.org/IEzService/BrokerCustomerWizardCompleteResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID);
@@ -4018,12 +4018,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerLeadCanFillWizardAsync(nLeadID, sLeadEmail, sContactEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink) {
-            return base.Channel.BrokerLeadAcquireCustomer(nCustomerID, nLeadID, sEmailConfirmationLink);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sEmailConfirmationLink) {
+            return base.Channel.BrokerLeadAcquireCustomer(nCustomerID, nLeadID, sFirstName, bBrokerFillsForCustomer, sEmailConfirmationLink);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID, string sEmailConfirmationLink) {
-            return base.Channel.BrokerLeadAcquireCustomerAsync(nCustomerID, nLeadID, sEmailConfirmationLink);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sEmailConfirmationLink) {
+            return base.Channel.BrokerLeadAcquireCustomerAsync(nCustomerID, nLeadID, sFirstName, bBrokerFillsForCustomer, sEmailConfirmationLink);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {

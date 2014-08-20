@@ -12,8 +12,8 @@
 
 		#region method BrokerLeadAcquireCustomer
 
-		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink) {
-			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID, sEmailConfirmationLink);
+		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sEmailConfirmationLink) {
+			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID, sFirstName, bBrokerFillsForCustomer, sEmailConfirmationLink);
 		} // BrokerLeadAcquireCustomer
 
 		#endregion method BrokerLeadAcquireCustomer
@@ -480,6 +480,7 @@
 		} // BrokerLoadSignedTerms
 
 		#endregion method BrokerLoadSignedTerms
+
 		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

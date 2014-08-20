@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using JetBrains.Annotations;
 	using MailStrategies;
 
 	public class BrokerLeadAcquireCustomer: AStrategy {
@@ -8,14 +9,23 @@
 
 		#region constructor
 
-		public BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLeadAcquireCustomer(
+			int nCustomerID,
+			int nLeadID,
+			string sFirstName,
+			bool bBrokerFillsForCustomer,
+			string sEmailConfirmationLink,
+			AConnection oDB,
+			ASafeLog oLog
+		) : base(oDB, oLog) {
 			m_oSp = new SpBrokerLeadAcquireCustomer(DB, Log) {
 				CustomerID = nCustomerID,
 				LeadID = nLeadID,
-				BrokerFillsForCustomer = string.IsNullOrWhiteSpace(sEmailConfirmationLink),
+				BrokerFillsForCustomer = bBrokerFillsForCustomer,
 			};
 
 			m_sEmailConfirmationLink = sEmailConfirmationLink;
+			m_sFirstName = sFirstName;
 		} // constructor
 
 		#endregion constructor
@@ -33,7 +43,9 @@
 		public override void Execute() {
 			m_oSp.ExecuteNonQuery();
 
-			if (!string.IsNullOrWhiteSpace(m_sEmailConfirmationLink))
+			if (m_oSp.BrokerFillsForCustomer)
+				new GreetingForBrokerFilled(m_oSp.CustomerID, m_sFirstName, m_sEmailConfirmationLink, DB, Log).Execute();
+			else
 				new Greeting(m_oSp.CustomerID, m_sEmailConfirmationLink, DB, Log).Execute();
 		} // Execute
 
@@ -44,6 +56,7 @@
 		#region private
 
 		private readonly string m_sEmailConfirmationLink;
+		private readonly string m_sFirstName;
 
 		private readonly SpBrokerLeadAcquireCustomer m_oSp;
 
@@ -56,9 +69,13 @@
 				return (CustomerID > 0) && (LeadID > 0);
 			} // HasValidParameters
 
+			[UsedImplicitly]
 			public int CustomerID { get; set; }
+
+			[UsedImplicitly]
 			public int LeadID { get; set; }
 
+			[UsedImplicitly]
 			public bool BrokerFillsForCustomer { get; set; }
 		} // SpBrokerLeadAcquireCustomer
 

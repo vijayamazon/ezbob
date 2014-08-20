@@ -103,7 +103,7 @@
 		BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail);
 
 		[OperationContract]
-		ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink);
+		ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sEmailConfirmationLink);
 
 		[OperationContract]
 		ActionMetaData BrokerCustomerWizardComplete(int nCustomerID);

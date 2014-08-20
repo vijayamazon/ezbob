@@ -385,7 +385,7 @@ namespace EzBob.Web.Controllers {
 				var blm = new WizardBrokerLeadModel(Session);
 
 				if (blm.IsSet)
-					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID, blm.BrokerFillsForCustomer ? string.Empty : link);
+					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID, blm.FirstName, blm.BrokerFillsForCustomer, link);
 				else
 					m_oServiceClient.Instance.BrokerCheckCustomerRelevance(customer.Id, customer.Name, customer.ReferenceSource, link);
 
