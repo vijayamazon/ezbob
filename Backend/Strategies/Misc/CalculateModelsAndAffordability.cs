@@ -429,16 +429,22 @@
 
 				m_oMundMs.Add(new LocalMp(model, mp));
 			} // for each mp
+			try {
+				if (m_oMundMs.Any(x => x.Model.Name == "HMRC") && m_oMundMs.Any(x => x.Model.Name == "Yodlee")) {
+					foreach (var mp in m_oMundMs.Where(x => x.Model.Name == "HMRC")) {
+						var returnData = new LoadVatReturnFullData(m_nCustomerID, mp.Model.Id, DB, Log);
+						returnData.CalculateBankStatements(mp.Model.HmrcData.VatReturn.LastOrDefault(),
+						                                   m_oMundMs.First(x => x.Model.Name == "Yodlee")
+						                                            .Model.Yodlee.BankStatementDataModel);
 
-			if (m_oMundMs.Any(x => x.Model.Name == "HMRC") && m_oMundMs.Any(x => x.Model.Name == "Yodlee")) {
-				foreach (var mp in m_oMundMs.Where(x => x.Model.Name == "HMRC")) {
-					var returnData = new LoadVatReturnFullData(m_nCustomerID, mp.Model.Id, DB, Log);
-					returnData.CalculateBankStatements(mp.Model.HmrcData.VatReturn.LastOrDefault(), m_oMundMs.First(x => x.Model.Name == "Yodlee").Model.Yodlee.BankStatementDataModel);
-
-					mp.Model.HmrcData.BankStatement = returnData.BankStatement;
-					mp.Model.HmrcData.BankStatementAnnualized = returnData.BankStatementAnnualized;
-				} // for each HMRC model
-			} // if
+						mp.Model.HmrcData.BankStatement = returnData.BankStatement;
+						mp.Model.HmrcData.BankStatementAnnualized = returnData.BankStatementAnnualized;
+					} // for each HMRC model
+				} // if
+			}
+			catch (Exception ex) {
+				Log.Warn(ex, "Failed to build bank statement for hmrc");
+			}
 		} // GetAllModels
 
 		#endregion method GetAllModels
