@@ -5,6 +5,7 @@
 	using ExperianLib.IdIdentityHub;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using StoredProcs;
 
 	public class BwaChecker : AStrategy
 	{
@@ -165,18 +166,17 @@
 
 		private void GetAddresses()
 		{
-			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var addressesResults = new SafeReader(dt.Rows[0]);
-			line1Current = addressesResults["Line1"];
-			line2Current = addressesResults["Line2"];
-			line3Current = addressesResults["Line3"];
-			line4Current = addressesResults["Line4"];
-			line6Current = addressesResults["Line6"];
-			line1Prev = addressesResults["Line1Prev"];
-			line2Prev = addressesResults["Line2Prev"];
-			line3Prev = addressesResults["Line3Prev"];
-			line4Prev = addressesResults["Line4Prev"];
-			line6Prev = addressesResults["Line6Prev"];
+			var customerAddresses = new GetCustomerAddresses(customerId, null, DB, Log).FillFirst<GetCustomerAddresses.ResultRow>();
+			line1Current = customerAddresses.Line1;
+			line2Current = customerAddresses.Line2;
+			line3Current = customerAddresses.Line3;
+			line4Current = customerAddresses.Line4;
+			line6Current = customerAddresses.Line6;
+			line1Prev = customerAddresses.Line1Prev;
+			line2Prev = customerAddresses.Line2Prev;
+			line3Prev = customerAddresses.Line3Prev;
+			line4Prev = customerAddresses.Line4Prev;
+			line6Prev = customerAddresses.Line6Prev;
 		}
 
 		private void GetPersonalInfo()
