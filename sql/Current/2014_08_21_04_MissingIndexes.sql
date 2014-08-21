@@ -1,3 +1,6 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name='IX_ExperianConsumerDataCaisCardHistory_ExperianConsumerDataCaisId' AND object_id = OBJECT_ID('ExperianConsumerDataCaisCardHistory'))
 BEGIN
 
