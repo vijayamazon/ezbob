@@ -491,8 +491,6 @@
     <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakOrderItemMap.cs" />
     <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakOrderMap.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransaction.cs" />
-    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem.cs" />
-    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItemMap.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionMap.cs" />
     <Compile Include="Model\Database\PerformencePerMedalDataRow.cs" />
     <Compile Include="Model\Database\PerformencePerMedalDataRowMap.cs" />
