@@ -13,7 +13,7 @@ BEGIN
 		FirmName,
 		ContactName,
 		ContactEmail,
-		UserID
+		BrokerID AS UserID
 	FROM
 		Broker
 	WHERE

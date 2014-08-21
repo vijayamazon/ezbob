@@ -6,28 +6,16 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE LoadEmailForPasswordReset
-@TargetID INT,
-@Target NVARCHAR(32)
+@TargetID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		Name AS Email
+		Email
 	FROM
-		Customer
+		Security_User
 	WHERE
-		Id = @TargetID
-		AND
-		@Target = 'Customer'
-	UNION
-	SELECT
-		ContactEmail AS Email
-	FROM
-		Broker
-	WHERE
-		BrokerID = @TargetID
-		AND
-		@Target = 'Broker'
+		UserId = @TargetID
 END
 GO

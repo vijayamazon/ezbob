@@ -2,6 +2,9 @@ IF NOT EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Br
 	EXECUTE('CREATE PROCEDURE BrokerSignUp AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE BrokerSignUp
 @FirmName NVARCHAR(255),
 @FirmRegNum NVARCHAR(255),
@@ -24,7 +27,6 @@ BEGIN
 
 	DECLARE @ErrMsg NVARCHAR(255) = ''
 	DECLARE @BrokerID INT
-	DECLARE @UserID INT
 	DECLARE @SourceRef NVARCHAR(255)
 	DECLARE @IsTest BIT = 0
 	DECLARE @IsAutoTest BIT = 0
@@ -50,7 +52,7 @@ BEGIN
 
 	IF @ErrMsg = ''
 	BEGIN
-		SET @UserID = SCOPE_IDENTITY()
+		SET @BrokerID = SCOPE_IDENTITY()
 
 		SET @IsAutoTest = CASE (SELECT LOWER(ISNULL(LTRIM(RTRIM(Value)), '')) FROM ConfigurationVariables WHERE Name = 'AutomaticTestBrokerMark')
 			WHEN '1' THEN 1
@@ -69,13 +71,13 @@ BEGIN
 
 		BEGIN TRY
 			INSERT INTO Broker(
-				FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile,
-				ContactOtherPhone, SourceRef, EstimatedMonthlyClientAmount, Password, UserID,
+				BrokerID, FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile,
+				ContactOtherPhone, SourceRef, EstimatedMonthlyClientAmount, Password,
 				FirmWebSiteUrl, EstimatedMonthlyApplicationCount, AgreedToTermsDate, AgreedToPrivacyPolicyDate,
 				BrokerTermsID, IsTest, ReferredBy
 			) VALUES (
-				@FirmName, @FirmRegNum, @ContactName, @ContactEmail, @ContactMobile,
-				@ContactOtherPhone, @TempSourceRef, @EstimatedMonthlyClientAmount, 'not used', @UserID,
+				@BrokerID, @FirmName, @FirmRegNum, @ContactName, @ContactEmail, @ContactMobile,
+				@ContactOtherPhone, @TempSourceRef, @EstimatedMonthlyClientAmount, 'not used',
 				@FirmWebSiteUrl, @EstimatedMonthlyApplicationCount, @AgreedToTermsDate, @AgreedToPrivacyPolicyDate,
 				@BrokerTermsID, @IsTest, @ReferredBy
 			)
@@ -83,14 +85,12 @@ BEGIN
 		BEGIN CATCH
 			SET @ErrMsg = 'Failed to create a broker entry: ' + dbo.udfGetErrorMsg()
 
-			DELETE FROM Security_User WHERE UserId = @UserID
+			DELETE FROM Security_User WHERE UserId = @BrokerID
 		END CATCH
 	END
 
 	IF @ErrMsg = ''
 	BEGIN
-		SET @BrokerID = SCOPE_IDENTITY()
-
 		BEGIN TRY
 			EXECUTE BrokerGenerateSourceRef @BrokerID, @SourceRef OUT
 	
@@ -103,7 +103,7 @@ BEGIN
 			SET @ErrMsg = 'Failed to create a broker entry: ' + dbo.udfGetErrorMsg()
 
 			DELETE FROM Broker WHERE BrokerID = @BrokerID
-			DELETE FROM Security_User WHERE UserId = @UserID
+			DELETE FROM Security_User WHERE UserId = @BrokerID
 		END CATCH
 	END
 

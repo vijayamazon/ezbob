@@ -21,7 +21,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@CustomerID = ISNULL(c.Id, b.UserID),
+		@CustomerID = ISNULL(c.Id, b.BrokerID),
 		@Email = u.Email,
 		@FirstName = CASE WHEN c.Id IS NULL THEN b.ContactName ELSE c.FirstName END,
 		@LastName = CASE WHEN c.Id IS NULL THEN '' ELSE c.Surname END,
@@ -30,7 +30,7 @@ BEGIN
 		CreatePasswordTokens t
 		INNER JOIN Security_User u ON t.CustomerID = u.UserId
 		LEFT JOIN Customer c ON u.UserId = c.Id
-		LEFT JOIN Broker b ON u.UserId = b.UserID
+		LEFT JOIN Broker b ON u.UserId = b.BrokerID
 	WHERE
 		t.TokenID = @TokenID
 		AND (

@@ -11,20 +11,17 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @BrokerID INT = 0
-	DECLARE @UserID INT = 0
 
 	------------------------------------------------------------------------------
 
 	IF @OldPassword != @NewPassword
 	BEGIN
 		SELECT
-			@BrokerID = b.BrokerID,
-			@UserID = u.UserId
+			@BrokerID = u.UserID
 		FROM
-			Broker b
-			INNER JOIN Security_User u ON b.UserID = u.UserId
+			Security_User u
 		WHERE
-			b.ContactEmail = @ContactEmail
+			u.Email = @ContactEmail
 			AND
 			u.EzPassword = @OldPassword
 
@@ -33,7 +30,7 @@ BEGIN
 		UPDATE Security_User SET
 			EzPassword = @NewPassword
 		WHERE
-			UserId = @UserID
+			UserId = @BrokerID
 
 		-------------------------------------------------------------------------
 

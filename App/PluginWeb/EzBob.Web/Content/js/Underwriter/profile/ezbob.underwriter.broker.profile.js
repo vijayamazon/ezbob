@@ -5,8 +5,6 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		this.brokerID = null;
 		this.theTable = null;
 
-		this.brokerID2UserID = {}; // TODO: remove this mapping when implementing EZ-2459
-
 		this.nowLoadingCustomers = false;
 		this.nowLoadingBrokerProperties = false;
 		this.nowLoadingCrm = false;
@@ -51,18 +49,12 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 	}, // render
 
 	startDisplayBrokerRelations: function() {
-		this.loadBrokerID2UserIDEntry(_.bind(this.displayBrokerRelations, this));
-	}, // startDisplayBrokerRelations
-
-	displayBrokerRelations: function() {
 		if (this.nowLoadingCrm)
 			return;
 
 		this.nowLoadingCrm = true;
 
-		var nBrokerID = this.brokerID2UserID[this.brokerID];
-
-		if (!nBrokerID) {
+		if (!this.brokerID) {
 			EzBob.ShowMessage('Cannot display broker relations: no user id found.');
 			this.nowLoadingCrm = false;
 			return;
@@ -76,44 +68,11 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 			isBroker: true,
 		});
 
-		crmModel.customerId = nBrokerID;
+		crmModel.customerId = this.brokerID;
 		crmModel.fetch();
 
 		this.nowLoadingCrm = false;
-	}, // displayBrokerRelations
-
-	loadBrokerID2UserIDEntry: function(oCallback) {
-		if (this.brokerID2UserID[this.brokerID]) {
-			if (oCallback)
-				oCallback();
-
-			return;
-		} // if
-
-		if (oCallback)
-			BlockUi();
-
-		var nBrokerID = this.brokerID;
-
-		var oXhr = $.getJSON(
-			'' + window.gRootPath + 'Underwriter/Brokers/LoadBrokerID2UserIDEntry',
-			{ nBrokerID: nBrokerID, }
-		);
-
-		var self = this;
-
-		oXhr.done(function(oResponse) {
-			if (oResponse.userID)
-				self.brokerID2UserID[nBrokerID] = oResponse.userID;
-		});
-
-		oXhr.always(function() {
-			if (oCallback) {
-				UnBlockUi();
-				oCallback();
-			} // if
-		});
-	}, // loadBrokerID2UserIDEntry
+	}, // startDisplayBrokerRelations
 
 	reloadCustomerGrid: function() {
 		if (this.nowLoadingCustomers)
@@ -322,8 +281,6 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 		this.handleTabSwitch(type);
 
 		EzBob.handleUserLayoutSetting();
-
-		this.loadBrokerID2UserIDEntry();
 
 		this.redrawCurrentTab(type);
 	}, // show

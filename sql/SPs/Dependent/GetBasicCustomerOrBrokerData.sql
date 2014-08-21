@@ -11,10 +11,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	IF EXISTS (SELECT BrokerID FROM Broker WHERE UserID = @CustomerId)
+	IF EXISTS (SELECT BrokerID FROM Broker WHERE BrokerID = @CustomerId)
 	BEGIN
 		SELECT
-			b.UserID AS Id,
+			b.BrokerID AS Id,
 			b.ContactName AS FirstName,
 			b.ContactName AS Surname,
 			b.ContactName AS Fullname,
@@ -27,11 +27,11 @@ BEGIN
 			b.IsTest,
 			'' AS Postcode,
 			'' AS City,
-			b.UserID AS UserID
+			b.BrokerID AS UserID
 		FROM
 			Broker b
 		WHERE
-			b.UserID = @CustomerID
+			b.BrokerID = @CustomerID
 	END
 	ELSE
 		EXECUTE GetBasicCustomerData @CustomerId

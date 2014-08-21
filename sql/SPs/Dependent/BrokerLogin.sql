@@ -17,7 +17,7 @@ BEGIN
 		@BrokerID = BrokerID
 	FROM
 		Broker b
-		INNER JOIN Security_User u ON b.UserID = u.UserId
+		INNER JOIN Security_User u ON b.BrokerID = u.UserId
 	WHERE
 		b.ContactEmail = @Email
 		AND

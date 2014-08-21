@@ -56,7 +56,7 @@
                     <tbody>
                         <%_.each(vals, function(val){ %>
                         <tr class="<%if(val.User == 'System') {print('crm-system');}%>" style="display: <%- (val.User == 'System' ? 'none' : 'table-row')%>">
-                            <td><%-EzBob.formatDateTime(val.DateTime)%></td>
+                            <td><%-EzBob.formatDateTime3(val.DateTime)%></td>
                             <td><%-val.User%></td>
                             <td><%-val.Action%></td>
                             <td><%-val.Type%></td>
@@ -86,8 +86,8 @@
                     <tbody>
                         <%_.each(followUps, function(fu) { %>
                         <tr>
-                            <td><%-EzBob.formatDate2(fu.Created)%></td>
-                            <td><%-EzBob.formatDate2(fu.FollowUpDate)%></td>
+                            <td><%-EzBob.formatDate3(fu.Created)%></td>
+                            <td><%-EzBob.formatDate3(fu.FollowUpDate)%></td>
                             <td><%-fu.Comment%></td>
                             <td><%-fu.IsClosed ? 'Yes' : 'No'%></td>
                             <td><%-EzBob.formatDate2(fu.CloseDate)%></td>

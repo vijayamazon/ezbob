@@ -16,10 +16,10 @@ namespace EZBob.DatabaseLib.Model.Database.Broker {
 			return GetAll().FirstOrDefault(x => x.ContactEmail == sContactEmail);
 		} // Find
 
-		public Broker GetByUserId(int userId)
-		{
-			return GetAll().FirstOrDefault(x => x.UserID == userId);
+		public Broker GetByUserId(int userId) {
+			return GetAll().FirstOrDefault(x => x.ID == userId);
 		} // Find
+
 		#endregion method Find
 	} // class BrokerRepository
 } // namespace EZBob.DatabaseLib.Model.Database.Broker

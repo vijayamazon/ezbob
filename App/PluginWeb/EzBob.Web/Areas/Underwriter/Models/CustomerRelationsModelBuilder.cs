@@ -73,7 +73,7 @@
 				crmModel.Phone = customer.PersonalInfo.MobilePhone;
 				crmModel.IsPhoneVerified = customer.PersonalInfo.MobilePhoneVerified;
 			}
-			if(customer == null) {
+			else if(customer == null) {
 				var broker = _brokerRepository.GetByUserId(customerId);
 				if (broker != null) {
 					crmModel.CustomerName = broker.ContactName;

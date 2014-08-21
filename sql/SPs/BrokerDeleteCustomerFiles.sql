@@ -10,12 +10,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @UserID INT
 	DECLARE @BrokerID INT
 
 	SELECT
-		@BrokerID = b.BrokerID,
-		@UserID = b.UserID
+		@BrokerID = b.BrokerID
 	FROM
 		Broker b
 	WHERE
@@ -28,7 +26,7 @@ BEGIN
 		Customer c,
 		@FileIDs f
 	WHERE
-		d.UserId = @UserID
+		d.UserId = @BrokerID
 		AND
 		d.CustomerId = c.Id
 		AND

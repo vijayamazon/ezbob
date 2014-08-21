@@ -18,7 +18,6 @@ namespace EZBob.DatabaseLib.Model.Database.Broker {
 			Map(x => x.SourceRef).Not.Nullable().Length(255);
 			Map(x => x.EstimatedMonthlyClientAmount);
 			Map(x => x.Password).Not.Nullable().Length(255);
-			Map(x => x.UserID);
 		} // constructor
 	} // class BrokerMap
 } // namespace EZBob.DatabaseLib.Model.Database.Broker

@@ -13,22 +13,20 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @ErrorMsg NVARCHAR(1024) = ''
-	DECLARE @UserID INT
 	DECLARE @BrokerID INT
 	DECLARE @CustomerID INT
 
 	IF @ErrorMsg = ''
 	BEGIN
 		SELECT
-			@BrokerID = b.BrokerID,
-			@UserID = b.UserID
+			@BrokerID = b.BrokerID
 		FROM
 			Broker b
 		WHERE
 			b.ContactEmail = @ContactEmail
 
-		IF @BrokerID IS NULL OR @UserID IS NULL
-			SET @ErrorMsg = 'BrokerID/UserID not found by contact email ' + @ContactEmail
+		IF @BrokerID IS NULL
+			SET @ErrorMsg = 'BrokerID not found by contact email ' + @ContactEmail
 	END
 
 	IF @ErrorMsg = ''
@@ -40,7 +38,7 @@ BEGIN
 	END
 
 	INSERT INTO MP_AlertDocument (DocName, UploadDate, UserId, CustomerId, Description, BinaryBody)
-		VALUES (@FileName, @UploadedTime, @UserID, @CustomerID, @FileName, @FileContents)
+		VALUES (@FileName, @UploadedTime, @BrokerID, @CustomerID, @FileName, @FileContents)
 
 	SELECT @ErrorMsg AS ErrorMsg
 END

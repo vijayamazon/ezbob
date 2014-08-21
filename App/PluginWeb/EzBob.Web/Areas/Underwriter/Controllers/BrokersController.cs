@@ -1,8 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
-	using System.Linq;
 	using System.Web.Mvc;
-	using EZBob.DatabaseLib.Model.Database.Broker;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 	using Infrastructure;
@@ -10,7 +8,6 @@
 	using Infrastructure.csrf;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
-	using StructureMap;
 
 	public class BrokersController : Controller {
 		#region constructor
@@ -70,30 +67,6 @@
 		} // LoadProperties
 
 		#endregion action LoadProperties
-
-		#region action LoadBrokerID2UserIDEntry
-
-		// TODO: remove this once EZ-2459 is implemented
-
-		[HttpGet]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult LoadBrokerID2UserIDEntry(int nBrokerID) {
-			int nUserID = 0;
-
-			ms_oLog.Debug("Load broker's user ID request for broker {0}...", nBrokerID);
-
-			Broker oBroker = ObjectFactory.GetInstance<BrokerRepository>().GetAll().FirstOrDefault(b => b.ID == nBrokerID);
-
-			if (oBroker != null)
-				nUserID = oBroker.UserID;
-
-			ms_oLog.Debug("Load broker's user ID request for broker {0} complete.", nBrokerID);
-
-			return Json(new { userID = nUserID }, JsonRequestBehavior.AllowGet);
-		} // LoadBrokerID2UserIDEntry
-
-		#endregion action LoadBrokerID2UserIDEntry
 
 		#region action ResetPassword123456
 
