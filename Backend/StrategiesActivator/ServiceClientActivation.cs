@@ -455,7 +455,7 @@
 				return;
 			}
 
-			m_oServiceClient.UpdateMarketplace(customerId, marketplaceId, bUpdateWizardStep);
+			m_oServiceClient.UpdateMarketplace(customerId, marketplaceId, bUpdateWizardStep, 1);
 		}
 
 		[Activation]
@@ -642,7 +642,7 @@
 			}
 			string[] parameterArgs = parameterList.ToArray();
 
-			m_oServiceClient.GetSpResultTable(spName, parameterArgs);
+			m_oServiceClient.GetSpResultTable(1,spName, parameterArgs);
 		}
 
 		[Activation]
@@ -1126,7 +1126,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 				return;
 			} // if
 
-			var res = m_oServiceClient.LoadExperianConsumer(1, 1, (int?)null, nServiceLogID);
+			var res = m_oServiceClient.LoadExperianConsumer(1, 1, null, nServiceLogID);
 
 			m_oLog.Msg("Result:\n{0}", res.Value);
 		} // LoadExperianLtd

@@ -125,7 +125,7 @@
 
 			Log.InfoFormat("Added or updated yodlee marketplace: {0}", marketPlace.Id);
 			
-			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, marketPlace.Id, true);
+			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, marketPlace.Id, true, _context.UserId);
 
 			return View(YodleeAccountModel.ToModel(marketPlace, new YodleeBanksRepository(_session)));
 		}
@@ -208,7 +208,7 @@
 				return View(new { error = "Error occured updating bank account" });
 			}
 
-			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, id, true);
+			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, id, true, _context.UserId);
 			return View(new {success = true});
 		}
 	}

@@ -28,10 +28,10 @@
 			return Execute<SetLateLoanStatus>(null, null);
 		} // SetLateLoanStatus
 
-		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep, int userId) {
 			return Execute<UpdateMarketplace>(
 				customerId,
-				null,
+				userId,
 				null,
 				amd =>
 					DB.ExecuteNonQuery(
@@ -72,8 +72,8 @@
 			return Execute<UpdateCurrencyRates>(null, null);
 		} // UpdateCurrencyRates
 
-		public ActionMetaData UpdateConfigurationVariables() {
-			return Execute<UpdateConfigurationVariables>(null, null);
+		public ActionMetaData UpdateConfigurationVariables(int userId) {
+			return Execute<UpdateConfigurationVariables>(null, userId);
 		} //UpdateConfigurationVariables
 
 		#region method PostcodeSaveLog
@@ -165,10 +165,10 @@
 
 		#region method CalculateModelsAndAffordability
 
-		public MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory) {
+		public MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory) {
 			CalculateModelsAndAffordability oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, null, nCustomerID, oHistory);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, userId, nCustomerID, oHistory);
 
 			return new MarketplacesActionResult {
 				Models = oInstance.Models,

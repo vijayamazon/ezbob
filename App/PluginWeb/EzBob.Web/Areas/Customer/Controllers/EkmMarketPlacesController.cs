@@ -72,7 +72,7 @@
 
 				var mpId = SaveAccountTrn(customer, model.login, model.password);
 				if (mpId > 0)
-					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true);
+					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true, customer.Id);
 
 				return Json(new EkmAccountModel { id = mpId, login = model.login }, JsonRequestBehavior.AllowGet);
 			}

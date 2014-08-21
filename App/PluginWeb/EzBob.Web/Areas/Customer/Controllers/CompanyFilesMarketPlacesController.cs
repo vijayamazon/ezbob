@@ -92,7 +92,7 @@
 				var mpId = ConnectTrn();
 				if (mpId != -1)
 				{
-					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
+					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true, _context.UserId);
 					m_oServiceClient.Instance.MarketplaceInstantUpdate(mpId);
 				}
 			}

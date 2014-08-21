@@ -12,9 +12,9 @@
 	using Newtonsoft.Json.Converters;
 
 	partial class EzServiceImplementation {
-		public SerializedDataTableActionResult GetSpResultTable(string spName, params string[] parameters) {
+		public SerializedDataTableActionResult GetSpResultTable(int userId, string spName, params string[] parameters) {
 			GetSpResultTable strategyInstance;
-			var result = ExecuteSync(out strategyInstance, null, null, spName, parameters);
+			var result = ExecuteSync(out strategyInstance, null, userId, spName, parameters);
 
 			string serializedDataTable = JsonConvert.SerializeObject(strategyInstance.Result, new DataTableConverter());
 			return new SerializedDataTableActionResult {

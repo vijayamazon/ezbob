@@ -69,7 +69,7 @@
 			try
 			{
 				var mpId = SavePaypoint(model);
-				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
+				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true, _context.Customer.Id);
 				return Json(model);
 			}
 			catch (MarketPlaceAddedByThisCustomerException e)

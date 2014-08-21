@@ -74,8 +74,8 @@
 			DatabaseDataHelper helper,
 			MarketPlaceRepository mpTypes,
 			CGMPUniqChecker mpChecker,
-			ISession session
-		) {
+			ISession session, 
+			IWorkplaceContext context) {
 			if (ms_oVendorInfo == null) {
 				lock (ms_oLockVendorInfo) {
 					if (ms_oVendorInfo == null)
@@ -92,6 +92,7 @@
 			m_oMpTypes = mpTypes;
 			m_oUniquenessChecker = mpChecker;
 			m_oSession = session;
+			m_oContext = context;
 
 			m_oServiceClient = new ServiceClient();
 		} // constructor
@@ -402,7 +403,7 @@
 				// This is done to for two reasons:
 				// 1. update Customer.WizardStep to WizardStepType.Marketplace
 				// 2. insert entries into EzServiceActionHistory
-				m_oServiceClient.Instance.UpdateMarketplace(oCustomer.Id, oState.CustomerMarketPlace.Id, true);
+				m_oServiceClient.Instance.UpdateMarketplace(oCustomer.Id, oState.CustomerMarketPlace.Id, true, m_oContext.UserId);
 			}
 			catch (Exception e) {
 				ms_oLog.Warn(e,
@@ -429,7 +430,7 @@
 		private readonly ISession m_oSession;
 		private readonly VendorInfo m_oVendorInfo;
 		private readonly CustomerRepository m_oCustomers;
-
+		private readonly IWorkplaceContext m_oContext;
 		private static volatile VendorInfo ms_oVendorInfo;
 		private static readonly object ms_oLockVendorInfo = new object();
 

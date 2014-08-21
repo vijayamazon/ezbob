@@ -21,7 +21,7 @@
 			ISession session,
 			CustomerRepository customers
 		) {
-			m_oAccountManager = new HmrcManualAccountManager(customers, helper, mpTypes, mpChecker, session);
+			m_oAccountManager = new HmrcManualAccountManager(customers, helper, mpTypes, mpChecker, session, context);
 			m_oContext = context;
 		} // constructor
 

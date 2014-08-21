@@ -17,7 +17,6 @@
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
-	using StructureMap;
 	using Web.Models;
 	using NHibernate;
 	using System;
@@ -40,7 +39,9 @@
 			IBugRepository bugs,
 			LoanRepository loanRepository,
 			CustomerAddressRepository customerAddressRepository,
-			LandRegistryRepository landRegistryRepository, PropertiesModelBuilder propertiesModelBuilder) {
+			LandRegistryRepository landRegistryRepository, 
+			PropertiesModelBuilder propertiesModelBuilder,
+			IWorkplaceContext context) {
 			_customers = customers;
 			_session = session;
 			_infoModelBuilder = infoModelBuilder;
@@ -57,7 +58,9 @@
 			this.customerAddressRepository = customerAddressRepository;
 			this.landRegistryRepository = landRegistryRepository;
 			_propertiesModelBuilder = propertiesModelBuilder;
+			_context = context;
 			serviceClient = new ServiceClient();
+
 		} // constructor
 
 		#endregion constructor
@@ -98,7 +101,7 @@
 					DateTime historyDate;
 					bool bHasHistoryDate = DateTime.TryParse(history, out historyDate);
 
-					var ar = serviceClient.Instance.CalculateModelsAndAffordability(id, bHasHistoryDate ? historyDate : (DateTime?)null);
+					var ar = serviceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, bHasHistoryDate ? historyDate : (DateTime?)null);
 
 					model.MarketPlaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models).ToList();
 					model.Affordability = ar.Affordability.ToList();
@@ -120,11 +123,9 @@
 					model.MedalCalculations = new MedalCalculators(customer);
 
 				using (tc.AddStep("PricingModelCalculations Time taken")) {
-					var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-
 					try {
 						PricingModelModelActionResult getPricingModelModelResponse =
-							serviceClient.Instance.GetPricingModelModel(customer.Id, context.UserId, "Basic");
+							serviceClient.Instance.GetPricingModelModel(customer.Id, _context.UserId, "Basic");
 
 						model.PricingModelCalculations = getPricingModelModelResponse.Value;
 					}
@@ -237,7 +238,7 @@
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
 		private readonly ServiceClient serviceClient;
-
+		private readonly IWorkplaceContext _context;
 		private static readonly ASafeLog Log = new SafeILog(typeof(FullCustomerController));
 
 		#endregion private

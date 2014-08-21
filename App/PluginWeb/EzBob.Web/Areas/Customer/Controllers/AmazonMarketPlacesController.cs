@@ -143,7 +143,7 @@
 				{
 					return Json(new {});
 				}
-				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
+				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true, _context.UserId);
 				return Json(new { msg = "Congratulations. Amazon account was linked successfully." });
 			}
 			catch (MarketPlaceAddedByThisCustomerException)

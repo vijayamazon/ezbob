@@ -74,7 +74,7 @@
 
 			if (mpId != -1) {
 				try {
-					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true);
+					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mpId, true, _context.UserId);
 				}
 				catch (Exception e) {
 					ms_oLog.Warn(e, "Something not so excellent while updating CG marketplace with id {0}.", mpId);

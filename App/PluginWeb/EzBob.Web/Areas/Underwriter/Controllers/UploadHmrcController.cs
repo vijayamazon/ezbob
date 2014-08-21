@@ -3,6 +3,7 @@
 	using Customer.Controllers;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Infrastructure;
 	using Infrastructure.Hmrc;
 	using NHibernate;
 
@@ -14,10 +15,11 @@
 			MarketPlaceRepository mpTypes,
 			CGMPUniqChecker mpChecker,
 			ISession session,
-			CustomerRepository customers
-		) {
-			m_oAccountManager = new HmrcManualAccountManager(customers, helper, mpTypes, mpChecker, session);
-		} // constructor
+			CustomerRepository customers, IWorkplaceContext context) {
+			m_oAccountManager = new HmrcManualAccountManager(customers, helper, mpTypes, mpChecker, session, context);
+		}
+
+		// constructor
 
 		#endregion constructor
 

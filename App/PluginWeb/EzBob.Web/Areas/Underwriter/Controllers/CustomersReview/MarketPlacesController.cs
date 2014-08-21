@@ -78,7 +78,7 @@
 		{
 			try
 			{
-				var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(id, history);
+				var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, history);
 				var mps = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
 				return Json(mps.ToList(), JsonRequestBehavior.AllowGet);
 			}
@@ -92,7 +92,7 @@
 		[Ajax]
 		[HttpGet]
 		public JsonResult GetAffordabilityData(int id) {
-			var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(id, null);
+			var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, null);
 			return Json(ar.Affordability, JsonRequestBehavior.AllowGet);
 		} // GetAffordabilityData
 
@@ -160,12 +160,12 @@
 				case "Sage":
 				case "PayPoint":
 				case "Pay Pal":
-					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true);
+					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true, _context.UserId);
 					break;
 
 				default:
 					if (null != Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
-						m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true);
+						m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true, _context.UserId);
 					break;
 			} // switch
 		} // ReCheckMarketplaces
@@ -205,7 +205,7 @@
 				if (isRefreshed)
 				{
 					var customer = mp.Customer;
-					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true);
+					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true, _context.UserId);
 					return View(new { success = true });
 				}
 

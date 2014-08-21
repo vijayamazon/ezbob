@@ -30,7 +30,7 @@
 		[HttpPost]
 		public JsonResult Resend(int id) {
 			try {
-				m_oServiceClient.Instance.EmailConfirmationGenerateAndSend(id);
+				m_oServiceClient.Instance.EmailConfirmationGenerateAndSend(id, m_oContext.UserId);
 			}
 			catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to generate and send email confirmation request to customer {0}.", id);
@@ -45,7 +45,7 @@
 			string sErrorMessage;
 
 			try {
-				StringActionResult sar = m_oServiceClient.Instance.UserChangeEmail(id, email);
+				StringActionResult sar = m_oServiceClient.Instance.UserChangeEmail(m_oContext.UserId, id, email);
 				sErrorMessage = sar.Value;
 			}
 			catch (Exception e) {

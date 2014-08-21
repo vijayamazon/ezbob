@@ -70,7 +70,7 @@
 
 			var model = SaveFreeAgentTrn(accessTokenContainer, approvalToken);
 
-			m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, model.id, true);
+			m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, model.id, true, _customer.Id);
 
 			return View(model);
 		}

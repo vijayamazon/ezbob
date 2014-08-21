@@ -317,10 +317,10 @@
 		#region Land Registry
 
 		[OperationContract]
-		string LandRegistryEnquiry(int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
+		string LandRegistryEnquiry(int userId, int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
 		
 		[OperationContract]
-		string LandRegistryRes(int customerId, string titleNumber);
+		string LandRegistryRes(int userId, int customerId, string titleNumber);
 		
 		#endregion Land Registry
 
@@ -368,7 +368,7 @@
 		ActionMetaData SetLateLoanStatus();
 
 		[OperationContract]
-		ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep);
+		ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep, int userId);
 		
 		[OperationContract]
 		ActionMetaData UpdateTransactionStatus();
@@ -383,13 +383,13 @@
 		CrmLookupsActionResult CrmLoadLookups();
 
 		[OperationContract]
-		SerializedDataTableActionResult GetSpResultTable(string spName, params string[] parameters);
+		SerializedDataTableActionResult GetSpResultTable(int userId, string spName, params string[] parameters);
 		
 		[OperationContract]
 		BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType);
 
 		[OperationContract]
-		ActionMetaData UpdateConfigurationVariables();
+		ActionMetaData UpdateConfigurationVariables(int userId);
 
 		[OperationContract]
 		ActionMetaData PostcodeSaveLog(
@@ -420,7 +420,7 @@
 		StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
 
 		[OperationContract]
-		MarketplacesActionResult CalculateModelsAndAffordability(int nCustomerID, DateTime? oHistory);
+		MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory);
 
 		[OperationContract]
 		ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList);
@@ -479,7 +479,7 @@
 		StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer);
 
 		[OperationContract]
-		StringActionResult UserChangeEmail(int nUserID, string sNewEmail);
+		StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);
 
 		[OperationContract]
 		ActionMetaData MarkSessionEnded(int nSessionID);
@@ -497,7 +497,7 @@
 		EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID);
 
 		[OperationContract]
-		ActionMetaData EmailConfirmationGenerateAndSend(int nUserID);
+		ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, int underwriterId);
 
 		[OperationContract]
 		IntActionResult EmailConfirmationCheckOne(Guid oToken);

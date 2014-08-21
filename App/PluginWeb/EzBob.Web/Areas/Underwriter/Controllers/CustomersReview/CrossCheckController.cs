@@ -86,14 +86,14 @@
 		{
 			if (!string.IsNullOrEmpty(titleNumber))
 			{
-				m_oServiceClient.Instance.LandRegistryRes(customerId, titleNumber);
+				m_oServiceClient.Instance.LandRegistryRes(_context.UserId, customerId, titleNumber);
 				return Json(new {isTitle = true});
 			}
 			else
 			{
 				var landregistryXml = m_oServiceClient
 					.Instance
-					.LandRegistryEnquiry(
+					.LandRegistryEnquiry(_context.UserId,
 						customerId,
 						buildingNumber,
 						buildingName,
@@ -147,7 +147,7 @@
 		[HttpPost]
 		public JsonResult LandRegistry(int customerId, string titleNumber = null) {
 			ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1}...", customerId, titleNumber ?? "--null--");
-			m_oServiceClient.Instance.LandRegistryRes(customerId, titleNumber);
+			m_oServiceClient.Instance.LandRegistryRes(_context.UserId, customerId, titleNumber);
 			return Json(new {},JsonRequestBehavior.AllowGet);
 		} // LandRegistry
 

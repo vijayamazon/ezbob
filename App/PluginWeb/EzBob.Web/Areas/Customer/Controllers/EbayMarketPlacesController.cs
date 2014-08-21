@@ -167,7 +167,7 @@
 				_session.Flush();
 
 				if (!isUpdate)
-					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
+					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true, _context.UserId);
 
 				_customers.SaveOrUpdate(customer);
 

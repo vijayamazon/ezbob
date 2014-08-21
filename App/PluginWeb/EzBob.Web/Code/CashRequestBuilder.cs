@@ -153,7 +153,7 @@
 				// Update all marketplaces
 				foreach (var mp in customer.CustomerMarketPlaces)
 				{
-					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, false);
+					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, false, underwriterId);
 				}
 			} // if
 

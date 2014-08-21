@@ -79,6 +79,7 @@
   <xs:element name="LandRegistryEnquiry">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="buildingNumber" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="buildingName" nillable="true" type="xs:string" />
@@ -98,6 +99,7 @@
   <xs:element name="LandRegistryRes">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="titleNumber" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -277,6 +279,7 @@
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="marketplaceId" type="xs:int" />
         <xs:element minOccurs="0" name="doUpdateWizardStep" type="xs:boolean" />
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -338,6 +341,7 @@
   <xs:element name="GetSpResultTable">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
         <xs:element minOccurs="0" name="spName" nillable="true" type="xs:string" />
         <xs:element xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="parameters" nillable="true" type="q27:ArrayOfstring" />
       </xs:sequence>
@@ -367,7 +371,9 @@
   </xs:element>
   <xs:element name="UpdateConfigurationVariables">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdateConfigurationVariablesResponse">
@@ -487,6 +493,7 @@
   <xs:element name="CalculateModelsAndAffordability">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
         <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
         <xs:element minOccurs="0" name="oHistory" nillable="true" type="xs:dateTime" />
       </xs:sequence>
@@ -740,6 +747,7 @@
   <xs:element name="UserChangeEmail">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="underwriterId" type="xs:int" />
         <xs:element minOccurs="0" name="nUserID" type="xs:int" />
         <xs:element minOccurs="0" name="sNewEmail" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -831,6 +839,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nUserID" type="xs:int" />
+        <xs:element minOccurs="0" name="underwriterId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1932,7 +1941,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="userId" type="xs:int" />
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
-        <xs:element minOccurs="0" name="bSendToCustomer" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

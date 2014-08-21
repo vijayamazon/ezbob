@@ -116,10 +116,10 @@
 
 		#region method UserChangeEmail
 
-		public StringActionResult UserChangeEmail(int nUserID, string sNewEmail) {
+		public StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail) {
 			UserChangeEmail oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, nUserID, nUserID, sNewEmail);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, underwriterId, nUserID, sNewEmail);
 
 			return new StringActionResult {
 				MetaData = oMetaData,
@@ -193,10 +193,10 @@
 
 		#region method EmailConfirmationGenerateAndSend
 
-		public ActionMetaData EmailConfirmationGenerateAndSend(int nUserID) {
+		public ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, int underwriterId) {
 			EmailConfirmationGenerate oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, null, nUserID);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, underwriterId, nUserID);
 
 			if (string.IsNullOrWhiteSpace(oInstance.Address))
 				return oMetaData;

@@ -27,14 +27,18 @@
 		private readonly CampaignTypeRepository _campaignTypeRepository;
 		private readonly CustomerRepository _customerRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(StrategySettingsController));
-		private readonly IWorkplaceContext context;
+		private readonly IWorkplaceContext _context;
 
-		public StrategySettingsController(CampaignRepository campaignRepository, CampaignTypeRepository campaignTypeRepository, CustomerRepository customerRepository)
+		public StrategySettingsController(
+			CampaignRepository campaignRepository, 
+			CampaignTypeRepository campaignTypeRepository, 
+			CustomerRepository customerRepository,
+			IWorkplaceContext context)
 		{
-			context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			_campaignRepository = campaignRepository;
 			_campaignTypeRepository = campaignTypeRepository;
 			_customerRepository = customerRepository;
+			_context = context;
 			serviceClient = new ServiceClient();
 		}
 
@@ -73,7 +77,7 @@
 		[HttpGet]
 		public JsonResult SettingsPricingModel()
 		{
-			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(0, context.UserId, "Basic");
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(0, _context.UserId, "Basic");
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
 		}
 
@@ -82,7 +86,7 @@
 		[HttpPost]
 		public JsonResult SettingsPricingModelForScenario(string scenarioName)
 		{
-			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(0, context.UserId, scenarioName);
+			PricingModelModelActionResult getPricingModelModelResponse = serviceClient.Instance.GetPricingModelModel(0, _context.UserId, scenarioName);
 			return Json(getPricingModelModelResponse.Value, JsonRequestBehavior.AllowGet);
 		}
 
@@ -92,7 +96,7 @@
 		public JsonResult SettingsSavePricingModelScenario(string scenarioName, string model)
 		{
 			PricingModelModel inputModel = JsonConvert.DeserializeObject<PricingModelModel>(model);
-			serviceClient.Instance.SavePricingModelSettings(context.UserId, scenarioName, inputModel);
+			serviceClient.Instance.SavePricingModelSettings(_context.UserId, scenarioName, inputModel);
 			return SettingsPricingModelForScenario(scenarioName);
 		}
 
@@ -526,7 +530,7 @@
 		[Transactional]
 		public JsonResult SettingsConfigTable(string tableName)
 		{
-			var entriesList = serviceClient.Instance.GetSpResultTable("GetConfigTable", new[] { "TableName", tableName });
+			var entriesList = serviceClient.Instance.GetSpResultTable(_context.UserId, "GetConfigTable", new[] { "TableName", tableName });
 			var deserializedArray = JsonConvert.DeserializeObject<ConfigTable[]>(entriesList.SerializedDataTable);
 			var configTableEntries = deserializedArray == null ? null : deserializedArray.ToList();
 			if (configTableEntries != null)
@@ -657,7 +661,7 @@
 		} // AddCampaign
 
 		private void UpdateConfigVars() {
-			new ServiceClient().Instance.UpdateConfigurationVariables();
+			new ServiceClient().Instance.UpdateConfigurationVariables(_context.UserId);
 		} // UpdateConfigVars
 	} // class StrategySettingsController
 } // namespace

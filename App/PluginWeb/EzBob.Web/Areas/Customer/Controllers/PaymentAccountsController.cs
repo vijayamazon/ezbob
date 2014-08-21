@@ -99,7 +99,7 @@
 			});
 
 			if (mpId > 0)
-				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true);
+				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mpId, true, _context.UserId);
 
 			return View(permissionsGranted);
 		}
