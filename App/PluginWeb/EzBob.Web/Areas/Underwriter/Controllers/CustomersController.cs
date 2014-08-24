@@ -405,7 +405,7 @@
 				} // if
 
 				bool bSendApprovedUser = !request.EmailSendingBanned;
-
+				_session.Flush();
 				if (bSendBrokerForceResetCustomerPassword && bSendApprovedUser) {
 					try {
 						m_oServiceClient.Instance.BrokerApproveAndResetCustomerPassword(user.Id, customer.Id, sum);
