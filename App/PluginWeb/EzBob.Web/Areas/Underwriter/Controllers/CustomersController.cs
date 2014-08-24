@@ -399,6 +399,7 @@
 					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
 
 					if (numOfPreviousApprovals == 0) {
+				_session.Flush();
 						try {
 							m_oServiceClient.Instance.BrokerForceResetCustomerPassword(user.Id, customer.Id);
 						}
