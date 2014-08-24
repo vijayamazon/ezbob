@@ -38,7 +38,7 @@ namespace EZBob.DatabaseLib.Model.Loans
 			return String.Format("{0}_{1}_{2}_{3}.pdf",
 								 Name,
 								 Loan.Customer.PersonalInfo.FirstName,
-								 Loan.Customer.PersonalInfo.Surname,
+								 Loan.Customer.PersonalInfo.Surname.Replace(":", string.Empty).Replace(@"\", string.Empty).Replace(@"/", string.Empty),
 								 Loan.Date.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture));
 		}
 
@@ -47,7 +47,7 @@ namespace EZBob.DatabaseLib.Model.Loans
 			return String.Format("{0}_{1}_{2}_{3:000}_{4}.pdf",
 								 Name,
 								 Loan.Customer.PersonalInfo.FirstName,
-								 Loan.Customer.PersonalInfo.Surname,
+								 Loan.Customer.PersonalInfo.Surname.Replace(":", string.Empty).Replace(@"\", string.Empty).Replace(@"/", string.Empty),
 								 Loan.Customer.Id,
 								 Loan.Date.ToString("dd-MM-yyyy_hh-mm-ss", CultureInfo.InvariantCulture));
 		}
