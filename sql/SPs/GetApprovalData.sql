@@ -22,6 +22,8 @@ BEGIN
 		DecisionHistory
 	WHERE
 		CustomerId = @CustomerId
+	AND 
+		Action='Approve'
 	
 	SELECT
 		@NumOfApprovals AS NumOfApprovals,

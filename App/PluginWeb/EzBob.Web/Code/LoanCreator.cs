@@ -113,6 +113,8 @@
 			var loanHistoryRepository = new LoanHistoryRepository(_session);
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
 
+			_session.Flush();
+
 			m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber);
 
 			return loan;
