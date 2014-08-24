@@ -117,7 +117,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public string Account { get; set; } 
 		public string TermAndfreq { get; set; } 
 		public int? Limit { get; set; } 
-		public int? AccBalance { get; set; } 
+		public int? AccBalance { get; set; }
+		public int? CurrentDefBalance { get; set; }
 		public string AccountStatus { get; set; } 
 		public string DateType { get; set; } 
 		public DateTime? SettlementDate { get; set; } 

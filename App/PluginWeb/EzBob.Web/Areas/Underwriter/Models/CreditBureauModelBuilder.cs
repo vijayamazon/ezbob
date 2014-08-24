@@ -170,8 +170,8 @@
 
 			model.NumberOfAccounts = 0;
 			model.NumberOfAccounts3M = 0;
-			model.WorstCurrentStatus = AccountStatusDictionary.GetDetailedAccountStatusString(eInfo.WorstCurrentStatus);
-			model.WorstCurrentStatus3M = AccountStatusDictionary.GetDetailedAccountStatusString(eInfo.WorstHistoricalStatus);
+			model.WorstCurrentStatus = AccountStatusDictionary.GetAccountStatus(eInfo.WorstCurrentStatus).LongDescription;
+			model.WorstCurrentStatus3M = AccountStatusDictionary.GetAccountStatus(eInfo.WorstHistoricalStatus).LongDescription;
 			model.EnquiriesLast3M = eInfo.EnquiriesLast3Months;
 			model.EnquiriesLast6M = eInfo.EnquiriesLast6Months;
 			model.NumberOfDefaults = 0;
@@ -265,6 +265,7 @@
 				{
 					accounts[accType]++;
 					var ws = caisDetails.WorstStatus;
+					var status = AccountStatusDictionary.GetAccountStatus(ws);
 					worstStatus[accType] = GetWorstStatus(worstStatus[accType], ws);
 					limits[accType] += caisDetails.CreditLimit.HasValue ? caisDetails.CreditLimit.Value : 0;
 					balances[accType] += caisDetails.Balance.HasValue ? caisDetails.Balance.Value : 0;
@@ -273,7 +274,7 @@
 					if ((accountInfo.OpenDate.HasValue) && (accountInfo.OpenDate.Value >= DateTime.Today.AddMonths(-3)))
 						numberOfAcc3M++;
 
-					if (accStatus == DelinquentCaisStatusName)
+					if (status.IsLate)
 					{
 						numberOfLates++;
 						lateStatus = GetWorstStatus(lateStatus, ws);
@@ -298,8 +299,9 @@
 						string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
 						var idx = displayedMonths.IndexOf(histDate);
 						if (idx >= 0) {
-							sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
-							sList[idx].StatusColor = AccountStatusDictionary.GetAccountStatusColor(indicator);
+							var status = AccountStatusDictionary.GetAccountStatus(indicator);
+							sList[idx].Status = status.ShortDescription;
+							sList[idx].StatusColor = status.Color;
 						}
 					}
 				}
@@ -307,6 +309,7 @@
 				accountInfo.TermAndfreq = GetRepaymentPeriodString(caisDetails.RepaymentPeriod);
 				accountInfo.Limit = caisDetails.CreditLimit;
 				accountInfo.AccBalance = caisDetails.Balance;
+				accountInfo.CurrentDefBalance = caisDetails.CurrentDefBalance;
 
 				foreach (var cardHistory in caisDetails.CardHistories)
 				{
@@ -329,7 +332,7 @@
 			model.NumberOfAccounts3M = numberOfAcc3M;
 			model.NumberOfDefaults = numberOfDefaults;
 			model.NumberOfLates = numberOfLates;
-			model.LateStatus = AccountStatusDictionary.GetDetailedAccountStatusString(lateStatus);
+			model.LateStatus = AccountStatusDictionary.GetAccountStatus(lateStatus).LongDescription;
 			model.DefaultAmount = defaultAmount;
 
 			Log.DebugFormat("Accounts List length: {0}", accList.Count);
@@ -343,11 +346,11 @@
 			model.ConsumerAccountsOverview.OpenAccounts_Other = accounts[3];
 			model.ConsumerAccountsOverview.OpenAccounts_Total = accounts.Sum();
 
-			model.ConsumerAccountsOverview.WorstArrears_CC = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[0]);
-			model.ConsumerAccountsOverview.WorstArrears_Mtg = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[1]);
-			model.ConsumerAccountsOverview.WorstArrears_PL = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[2]);
-			model.ConsumerAccountsOverview.WorstArrears_Other = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[3]);
-			model.ConsumerAccountsOverview.WorstArrears_Total = AccountStatusDictionary.GetDetailedAccountStatusString(GetWorstStatus(worstStatus));
+			model.ConsumerAccountsOverview.WorstArrears_CC = AccountStatusDictionary.GetAccountStatus(worstStatus[0]).LongDescription;
+			model.ConsumerAccountsOverview.WorstArrears_Mtg = AccountStatusDictionary.GetAccountStatus(worstStatus[1]).LongDescription;
+			model.ConsumerAccountsOverview.WorstArrears_PL = AccountStatusDictionary.GetAccountStatus(worstStatus[2]).LongDescription;
+			model.ConsumerAccountsOverview.WorstArrears_Other = AccountStatusDictionary.GetAccountStatus(worstStatus[3]).LongDescription;
+			model.ConsumerAccountsOverview.WorstArrears_Total = AccountStatusDictionary.GetAccountStatus(GetWorstStatus(worstStatus)).LongDescription;
 
 			model.ConsumerAccountsOverview.TotalCurLimits_CC = limits[0];
 			model.ConsumerAccountsOverview.TotalCurLimits_Mtg = limits[1];

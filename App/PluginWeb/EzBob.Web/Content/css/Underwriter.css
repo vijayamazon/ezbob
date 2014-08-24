@@ -992,7 +992,8 @@ div.form_buttons_container {
 }
 
 .experian-account-status.Default {
-    background-color: red;
+    background-color: #f55f60;
+    color: #fff;
 }
 
 .experian-account-status.Delinquent {

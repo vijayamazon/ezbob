@@ -545,8 +545,11 @@
 										<td colspan="3"><%- ai.MatchTo %></td>
 										<td colspan="3"><%- ai.TermAndfreq %></td>
 										<td colspan="2"><%- ai.Limit %></td>
-										<td colspan="2"><%- EzBob.formatPoundsAsInt(ai.AccBalance) %> 
-                                            <%if(ai.BalanceHistory) { %>
+	                                    <td colspan="2"><%- EzBob.formatPoundsAsInt(ai.AccBalance) %> 
+		                                    <%if(ai.CurrentDefBalance) { %>
+											<span class="red_cell">(Def balance: <%- EzBob.formatPoundsAsInt(ai.CurrentDefBalance) %>)</span>
+											<%}%>
+		                                    <%if(ai.BalanceHistory) { %>
                                                 <button class="btn btn-link show-balance-history" data-balance="<%-ai.BalanceHistory%>">history</button>
 											<%}%>
 										</td>
