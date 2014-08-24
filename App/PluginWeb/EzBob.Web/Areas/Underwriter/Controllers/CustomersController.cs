@@ -365,9 +365,10 @@
 			request.UnderwriterComment = model.reason;
 
 			string sWarning = string.Empty;
+			int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
 
 			switch (model.status) {
-			case CreditResultStatus.Approved:
+				case CreditResultStatus.Approved:
 				if (!customer.WizardStep.TheLastOne) {
 					try {
 						var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(CurrentValues.Instance.FinishWizardForApproved);
@@ -396,9 +397,10 @@
 				_historyRepository.LogAction(DecisionActions.Approve, model.reason, user, customer);
 
 				bool bSendBrokerForceResetCustomerPassword = false;
+				
 
 				if (customer.FilledByBroker) {
-					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
+					
 
 					if (numOfPreviousApprovals == 0)
 						bSendBrokerForceResetCustomerPassword = true;
@@ -406,9 +408,11 @@
 
 				bool bSendApprovedUser = !request.EmailSendingBanned;
 				_session.Flush();
+
+				int validForHours = (int)(request.OfferStart - request.OfferValidUntil).Value.TotalHours;
 				if (bSendBrokerForceResetCustomerPassword && bSendApprovedUser) {
 					try {
-						m_oServiceClient.Instance.BrokerApproveAndResetCustomerPassword(user.Id, customer.Id, sum);
+						m_oServiceClient.Instance.BrokerApproveAndResetCustomerPassword(user.Id, customer.Id, sum, validForHours, numOfPreviousApprovals == 0);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to force reset customer password and send 'approved user' email: " + e.Message;
@@ -417,7 +421,8 @@
 				}
 				else if (bSendApprovedUser) {
 					try {
-						m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, sum);
+						
+						m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, sum, validForHours, numOfPreviousApprovals == 0);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to send 'approved user' email: " + e.Message;
@@ -447,8 +452,6 @@
 				bool bSendToCustomer = true;
 
 				if (customer.FilledByBroker) {
-					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
-
 					if (numOfPreviousApprovals == 0)
 						bSendToCustomer = false;
 				} // if

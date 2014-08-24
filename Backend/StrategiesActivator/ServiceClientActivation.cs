@@ -163,25 +163,27 @@
 			int underwriterId;
 			int customerId;
 			decimal loanAmount;
-
-			if (m_aryArgs.Length != 4 || !int.TryParse(m_aryArgs[1], out underwriterId) || !int.TryParse(m_aryArgs[2], out customerId) || !decimal.TryParse(m_aryArgs[3], out loanAmount)) {
-				m_oLog.Msg("Usage: ApprovedUser <Underwriter ID> <CustomerId> <loanAmount>");
+			int validFor;
+			bool isFirst;
+			if (m_aryArgs.Length != 6 || !int.TryParse(m_aryArgs[1], out underwriterId) || !int.TryParse(m_aryArgs[2], out customerId) || !decimal.TryParse(m_aryArgs[3], out loanAmount) || !int.TryParse(m_aryArgs[4], out validFor) || bool.TryParse(m_aryArgs[5], out isFirst)) {
+				m_oLog.Msg("Usage: ApprovedUser <Underwriter ID> <CustomerId> <loanAmount> <ValidFor> <isFirst>");
 				return;
 			}
 
-			m_oServiceClient.ApprovedUser(underwriterId, customerId, loanAmount);
+			m_oServiceClient.ApprovedUser(underwriterId, customerId, loanAmount, validFor, isFirst);
 		}
 
 		[Activation]
 		private void CashTransferred() {
 			int customerId;
 			decimal amount;
-			if (m_aryArgs.Length != 4 || !int.TryParse(m_aryArgs[1], out customerId) || !decimal.TryParse(m_aryArgs[2], out amount)) {
+			bool isFirst;
+			if (m_aryArgs.Length != 5 || !int.TryParse(m_aryArgs[1], out customerId) || !decimal.TryParse(m_aryArgs[2], out amount) || !bool.TryParse(m_aryArgs[3], out isFirst)) {
 				m_oLog.Msg("Usage: CashTransferred <CustomerId> <amount> <loanRefNum>");
 				return;
 			}
 			string loanRefNum = m_aryArgs[3];
-			m_oServiceClient.CashTransferred(customerId, amount, loanRefNum);
+			m_oServiceClient.CashTransferred(customerId, amount, loanRefNum, isFirst);
 		}
 
 		[Activation]

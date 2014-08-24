@@ -163,10 +163,10 @@
 		#region email strategies
 
 		[OperationContract]
-		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount);
+		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
 
 		[OperationContract]
-		ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum);
+		ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst);
 
 		[OperationContract]
 		ActionMetaData EmailUnderReview(int customerId);
@@ -232,7 +232,7 @@
 		ActionMetaData EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail);
 
 		[OperationContract]
-		ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount);
+		ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount, int nValidHours, bool isFirst);
 
 		#endregion email strategies
 

@@ -115,7 +115,7 @@
 
 			_session.Flush();
 
-			m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber);
+			m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
 			return loan;
 		}

@@ -7,9 +7,10 @@
 	public class CashTransferred : ABrokerMailToo {
 		#region constructor
 
-		public CashTransferred(int customerId, decimal amount, string loanRefNum, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog, true) {
+		public CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog, true) {
 			this.amount = amount;
 			this.loanRefNum = loanRefNum;
+			this.isFirst = isFirst;
 			toTrustPilot = true;
 		} // constructor
 
@@ -27,7 +28,7 @@
 				{"LOANREFNUM", loanRefNum}
 			};
 
-			TemplateName = CustomerData.NumOfLoans == 1
+			TemplateName = isFirst
 				               ? "Mandrill - Took Loan (1st loan)"
 				               : "Mandrill - Took Loan (not 1st loan)";
 
@@ -37,5 +38,6 @@
 
 		private readonly decimal amount;
 		private readonly string loanRefNum;
+		private readonly bool isFirst;
 	} // class CashTransferred
 } // namespace

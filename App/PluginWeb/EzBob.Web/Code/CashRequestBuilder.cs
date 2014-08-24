@@ -126,8 +126,8 @@
 			customer.OfferStart = cashRequest.OfferStart;
 			customer.OfferValidUntil = cashRequest.OfferValidUntil;
 			customer.IsLoanTypeSelectionAllowed = 0;
-
-			m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, customer.QuickOffer.Amount);
+			int validForHours = (int)(cashRequest.OfferValidUntil - cashRequest.OfferStart).Value.TotalHours;
+			m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, customer.QuickOffer.Amount, validForHours, customer.NumApproves == 1);
 
 			_historyRepository.LogAction(DecisionActions.Approve, sReason, user, customer);
 

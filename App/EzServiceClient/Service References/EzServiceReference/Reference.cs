@@ -2979,16 +2979,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int userId, int companyFileId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount);
+        ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ApprovedUserAsync(int userId, int customerId, decimal loanAmount);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ApprovedUserAsync(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum);
+        ServiceClientProxy.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, decimal amount, string loanRefNum);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, decimal amount, string loanRefNum, bool isFirst);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EmailUnderReview(int customerId);
@@ -3117,10 +3117,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailHmrcParsingErrorsAsync(int nCustomerID, int nCustomerMarketplaceID, System.Collections.Generic.Dictionary<string, string> oErrorsToEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPassword", ReplyAction="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPasswordResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount);
+        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount, int nValidHours, bool isFirst);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPassword", ReplyAction="http://tempuri.org/IEzService/BrokerApproveAndResetCustomerPasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerApproveAndResetCustomerPasswordAsync(int nUnderwriterID, int nCustomerID, decimal nLoanAmount);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerApproveAndResetCustomerPasswordAsync(int nUnderwriterID, int nCustomerID, decimal nLoanAmount, int nValidHours, bool isFirst);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EsignProcessPending", ReplyAction="http://tempuri.org/IEzService/EsignProcessPendingResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EsignProcessPending(System.Nullable<int> nCustomerID);
@@ -4160,20 +4160,20 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetCompanyFileAsync(userId, companyFileId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
-            return base.Channel.ApprovedUser(userId, customerId, loanAmount);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst) {
+            return base.Channel.ApprovedUser(userId, customerId, loanAmount, nValidHours, isFirst);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ApprovedUserAsync(int userId, int customerId, decimal loanAmount) {
-            return base.Channel.ApprovedUserAsync(userId, customerId, loanAmount);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ApprovedUserAsync(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst) {
+            return base.Channel.ApprovedUserAsync(userId, customerId, loanAmount, nValidHours, isFirst);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum) {
-            return base.Channel.CashTransferred(customerId, amount, loanRefNum);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst) {
+            return base.Channel.CashTransferred(customerId, amount, loanRefNum, isFirst);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, decimal amount, string loanRefNum) {
-            return base.Channel.CashTransferredAsync(customerId, amount, loanRefNum);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, decimal amount, string loanRefNum, bool isFirst) {
+            return base.Channel.CashTransferredAsync(customerId, amount, loanRefNum, isFirst);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData EmailUnderReview(int customerId) {
@@ -4344,12 +4344,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EmailHmrcParsingErrorsAsync(nCustomerID, nCustomerMarketplaceID, oErrorsToEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount) {
-            return base.Channel.BrokerApproveAndResetCustomerPassword(nUnderwriterID, nCustomerID, nLoanAmount);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount, int nValidHours, bool isFirst) {
+            return base.Channel.BrokerApproveAndResetCustomerPassword(nUnderwriterID, nCustomerID, nLoanAmount, nValidHours, isFirst);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerApproveAndResetCustomerPasswordAsync(int nUnderwriterID, int nCustomerID, decimal nLoanAmount) {
-            return base.Channel.BrokerApproveAndResetCustomerPasswordAsync(nUnderwriterID, nCustomerID, nLoanAmount);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerApproveAndResetCustomerPasswordAsync(int nUnderwriterID, int nCustomerID, decimal nLoanAmount, int nValidHours, bool isFirst) {
+            return base.Channel.BrokerApproveAndResetCustomerPasswordAsync(nUnderwriterID, nCustomerID, nLoanAmount, nValidHours, isFirst);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData EsignProcessPending(System.Nullable<int> nCustomerID) {

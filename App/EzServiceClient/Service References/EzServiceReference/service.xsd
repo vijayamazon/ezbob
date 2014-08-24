@@ -1744,6 +1744,8 @@
         <xs:element minOccurs="0" name="userId" type="xs:int" />
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="loanAmount" type="xs:decimal" />
+        <xs:element minOccurs="0" name="nValidHours" type="xs:int" />
+        <xs:element minOccurs="0" name="isFirst" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1760,6 +1762,7 @@
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="amount" type="xs:decimal" />
         <xs:element minOccurs="0" name="loanRefNum" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isFirst" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1941,6 +1944,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="userId" type="xs:int" />
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
+        <xs:element minOccurs="0" name="bSendToCustomer" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2095,6 +2099,8 @@
         <xs:element minOccurs="0" name="nUnderwriterID" type="xs:int" />
         <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
         <xs:element minOccurs="0" name="nLoanAmount" type="xs:decimal" />
+        <xs:element minOccurs="0" name="nValidHours" type="xs:int" />
+        <xs:element minOccurs="0" name="isFirst" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

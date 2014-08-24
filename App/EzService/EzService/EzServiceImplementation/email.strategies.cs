@@ -5,12 +5,12 @@
 	partial class EzServiceImplementation {
 		#region async
 
-		public ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
-			return Execute<ApprovedUser>(customerId, userId, customerId, loanAmount);
+		public ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst) {
+			return Execute<ApprovedUser>(customerId, userId, customerId, loanAmount, nValidHours, isFirst);
 		} // ApprovedUser
 
-		public ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum) {
-			return Execute<CashTransferred>(customerId, null, customerId, amount, loanRefNum);
+		public ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst) {
+			return Execute<CashTransferred>(customerId, null, customerId, amount, loanRefNum, isFirst);
 		} // CashTransferred
 
 		public ActionMetaData EmailUnderReview(int customerId) {

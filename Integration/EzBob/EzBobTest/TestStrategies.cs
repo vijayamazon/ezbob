@@ -52,14 +52,14 @@ namespace EzBobTest
 		[Test]
 		public void ApprovedUser()
 		{
-			var s = new ApprovedUser(3060, 2500, m_oDB, m_oLog);
+			var s = new ApprovedUser(3060, 2500, 24, true, m_oDB, m_oLog);
 			s.Execute();
 		}
 
 		[Test]
 		public void CashTransferred()
 		{
-			var s = new CashTransferred(21340, 2500, "01971847001", m_oDB, m_oLog);
+			var s = new CashTransferred(21340, 2500, "01971847001", true, m_oDB, m_oLog);
 			s.Execute();
 		}
 
