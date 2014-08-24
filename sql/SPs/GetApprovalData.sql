@@ -11,8 +11,8 @@ AS
 BEGIN
 	DECLARE @NumOfApprovals INT
 	
-	SELECT @NumOfApprovals = count(1) FROM DecisionHistory WHERE CustomerId = @CustomerId
-	
+	SELECT @NumOfApprovals = count(1) FROM DecisionHistory WHERE CustomerId = @CustomerId AND Action='Approve'
+
 	SELECT @NumOfApprovals AS NumOfApprovals, ValidFor, ApplyForLoan FROM Customer WHERE Id = @CustomerId
 END
 GO
