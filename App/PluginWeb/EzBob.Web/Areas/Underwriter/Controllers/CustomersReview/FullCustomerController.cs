@@ -17,7 +17,6 @@
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
-	using StructureMap;
 	using Web.Models;
 	using NHibernate;
 	using System;
@@ -40,8 +39,8 @@
 			IBugRepository bugs,
 			LoanRepository loanRepository,
 			CustomerAddressRepository customerAddressRepository,
-			LandRegistryRepository landRegistryRepository
-		) {
+			LandRegistryRepository landRegistryRepository, 
+			IWorkplaceContext context) {
 			_customers = customers;
 			_session = session;
 			_infoModelBuilder = infoModelBuilder;
@@ -57,6 +56,7 @@
 			_loanRepository = loanRepository;
 			this.customerAddressRepository = customerAddressRepository;
 			this.landRegistryRepository = landRegistryRepository;
+			_context = context;
 			serviceClient = new ServiceClient();
 		} // constructor
 
@@ -120,11 +120,9 @@
 					model.MedalCalculations = new MedalCalculators(customer);
 
 				using (tc.AddStep("PricingModelCalculations Time taken")) {
-					var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-
 					try {
 						PricingModelModelActionResult getPricingModelModelResponse =
-							serviceClient.Instance.GetPricingModelModel(customer.Id, context.UserId, "Basic");
+							serviceClient.Instance.GetPricingModelModel(customer.Id, _context.UserId, "Basic");
 
 						model.PricingModelCalculations = getPricingModelModelResponse.Value;
 					}
@@ -133,9 +131,10 @@
 					}
 				} // using
 
-				using (tc.AddStep("ZooplaAndMortgagesAndPropertiesModel Time taken"))
-					model.Properties = PropertiesController.GetPropertiesModelData(customer, customerAddressRepository, landRegistryRepository);
-
+				using (tc.AddStep("PropertiesModel Time taken")) {
+					var builder = new PropertiesModelBuilder(customerAddressRepository, landRegistryRepository, _context);
+					model.Properties = builder.Create(customer);
+				}
 				using (tc.AddStep("FraudDetectionLog Time taken")) {
 					DateTime? lastDateCheck;
 
@@ -236,7 +235,7 @@
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
 		private readonly ServiceClient serviceClient;
-
+		private readonly IWorkplaceContext _context;
 		private static readonly ASafeLog Log = new SafeILog(typeof(FullCustomerController));
 
 		#endregion private

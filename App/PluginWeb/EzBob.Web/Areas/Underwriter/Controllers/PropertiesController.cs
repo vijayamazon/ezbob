@@ -3,11 +3,10 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Text.RegularExpressions;
-	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
+	using Infrastructure;
 	using Infrastructure.Attributes;
 	using LandRegistryLib;
 	using Models;
@@ -20,9 +19,10 @@
 		private readonly CustomerRepository customerRepository;
 		private readonly CustomerAddressRepository customerAddressRepository;
 		private readonly LandRegistryRepository landRegistryRepository;
-
+		private readonly IWorkplaceContext _context;
 		public PropertiesController()
 		{
+			_context = ObjectFactory.GetInstance<IWorkplaceContext>();
 			customerRepository = ObjectFactory.GetInstance<CustomerRepository>();
 			customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
 			landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
@@ -33,105 +33,12 @@
 		public JsonResult Index(int id)
 		{
 			var customer = customerRepository.TryGet(id);
-			PropertiesModel data = GetPropertiesModelData(customer, customerAddressRepository, landRegistryRepository);
+			var builder = new PropertiesModelBuilder(customerAddressRepository, landRegistryRepository, _context);
+			PropertiesModel data = builder.Create(customer);
 
 			return Json(data, JsonRequestBehavior.AllowGet);
 		}
-
-		public static PropertiesModel GetPropertiesModelData(Customer customer, CustomerAddressRepository customerAddressRepository, LandRegistryRepository landRegistryRepository)
-		{
-			int experianMortgage;
-			int experianMortgageCount;
-			int propertyCounter = 0;
-			var data = new PropertiesModel();
-
-			if (customer.PropertyStatus != null && customer.PropertyStatus.IsOwnerOfMainAddress)
-			{
-				var currentAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
-				if (currentAddress != null) 
-				{
-					var property = GetPropertyModel(customer, currentAddress);
-					if(property != null)
-					{
-						propertyCounter++;
-						property.SerialNumberForCustomer = propertyCounter;
-						data.Properties.Add(property);
-					}
-				}
-			}
-
-			foreach (CustomerAddress ownedProperty in customer.AddressInfo.OtherPropertiesAddresses.Where(x => x.IsOwnerAccordingToLandRegistry))
-			{
-				var property = GetPropertyModel(customer, ownedProperty);
-				if (property != null)
-				{
-					propertyCounter++;
-					property.SerialNumberForCustomer = propertyCounter;
-					data.Properties.Add(property);
-				}
-			}
-
-			CrossCheckModel.GetMortgagesData(customer, out experianMortgage, out experianMortgageCount);
-			data.Init(
-				data.Properties.Count(),
-				experianMortgageCount, 
-				data.Properties.Sum(x => x.MarketValue), 
-				experianMortgage, 
-				data.Properties.Where(x => x.Zoopla != null).Sum(x => x.Zoopla.AverageSoldPrice1Year));
-			
-			return data;
-		}
-
-
-		private static PropertyModel GetPropertyModel(Customer customer, CustomerAddress address) {
-			int zooplaValue = 0;
-			var lrBuilder = new LandRegistryModelBuilder();
-
-			if (address != null)
-			{
-			
-				if (address.IsOwnerAccordingToLandRegistry)
-				{
-					Zoopla zoopla = address.Zoopla.LastOrDefault();
-
-					if (zoopla != null)
-					{
-						CrossCheckModel.GetZooplaData(customer, zoopla.ZooplaEstimate, zoopla.AverageSoldPrice1Year, out zooplaValue);
-					}
-
-					var personalAddressPropertyModel = new PropertyModel
-					{
-						AddressId = address.AddressId,
-						Address = address.FormattedAddress,
-						FormattedAddress = address.FormattedAddress, 
-						MarketValue = zooplaValue, 
-						Zoopla = zoopla
-					};
-
-					var lr = address.LandRegistry
-										   .OrderByDescending(x => x.InsertDate)
-										   .FirstOrDefault(
-											   x =>
-											   x.RequestType == LandRegistryRequestType.Res &&
-											   x.ResponseType == LandRegistryResponseType.Success);
-
-					if (lr != null)
-					{
-						personalAddressPropertyModel.LandRegistry = lrBuilder.BuildResModel(lr.Response);
-						if (personalAddressPropertyModel.LandRegistry.Proprietorship.CurrentProprietorshipDate.HasValue)
-						{
-							personalAddressPropertyModel.YearOfOwnership = DateTime.SpecifyKind(personalAddressPropertyModel.LandRegistry.Proprietorship.CurrentProprietorshipDate.Value, DateTimeKind.Utc);
-						}
-						personalAddressPropertyModel.NumberOfOwners = lr.Owners.Count();
-					}
-
-					return  personalAddressPropertyModel;
-				}
-			}
-
-			return null;
-		}
-
+		
 		[Ajax]
 		[HttpGet]
 		public JsonResult Zoopla(int customerId, bool recheck)

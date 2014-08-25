@@ -141,6 +141,8 @@
 		public LandRegistryRejectionModel Rejection { get; set; } // error response
 
 		public string TitleNumber { get; set; } // Note - shouldn't contain spaces for the expand\collapse functionality to work properly
+
+		public int? AttachmentId { get; set; }
 		//public bool CommonholdIndicator { get; set; } //if false indicate (Indicator showing whether the title is commonhold property)
 		public List<KeyValuePair<string, string>> PricePaidInfills { get; set; }
 		

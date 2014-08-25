@@ -7,7 +7,7 @@ EzBob.LandRegistryEnquiryView = Backbone.Marionette.ItemView.extend({
         return this;
     },
     onRender: function () {
-        this.$el.find('input[name="postCode"]').val(this.model.postcode);
+        this.ui.postCode.val(this.model.postcode);
         return this;
     },
     events: {
@@ -15,6 +15,7 @@ EzBob.LandRegistryEnquiryView = Backbone.Marionette.ItemView.extend({
         "click tr": "trClicked",
     },
     ui: {
+    	"postCode": 'input[name="postCode"]', 
         "titleNumber": 'input[name="titleNumber"]',
         "form": 'form',
     },

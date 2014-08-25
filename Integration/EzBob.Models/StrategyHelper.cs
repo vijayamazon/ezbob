@@ -1089,14 +1089,15 @@
 						// Verify customer is among owners
 						Customer customer = _customers.Get(customerId);
 						bool isOwnerAccordingToLandRegistry = IsOwner(customer, landRegistryDataModel.Response, landRegistryDataModel.Res.TitleNumber);
+						CustomerAddress dbAdress = customerAddressRepository.Get(address.AddressId);
+
+						dbLandRegistry.CustomerAddress = dbAdress;
+						landRegistryRepository.SaveOrUpdate(dbLandRegistry);
+
 						if (isOwnerAccordingToLandRegistry)
 						{
-							CustomerAddress dbAdress = customerAddressRepository.Get(address.AddressId);
 							dbAdress.IsOwnerAccordingToLandRegistry = true;
 							customerAddressRepository.SaveOrUpdate(dbAdress);
-
-							dbLandRegistry.CustomerAddress = dbAdress;
-							landRegistryRepository.SaveOrUpdate(dbLandRegistry);
 						}
 					}
 				}

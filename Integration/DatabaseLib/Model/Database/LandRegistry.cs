@@ -1,13 +1,11 @@
-namespace EZBob.DatabaseLib.Model.Database 
-{
+namespace EZBob.DatabaseLib.Model.Database {
 	using System;
 	using System.Collections.Generic;
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
 	using LandRegistryLib;
 
-	public class LandRegistry
-	{
+	public class LandRegistry {
 		public virtual int Id { get; set; }
 		public virtual Customer Customer { get; set; }
 		public virtual DateTime InsertDate { get; set; }
@@ -22,10 +20,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual IList<LandRegistryOwner> Owners { get; set; }
 	}
 
-	public class LandRegistryMap : ClassMap<LandRegistry>
-	{
-		public LandRegistryMap()
-		{
+	public class LandRegistryMap : ClassMap<LandRegistry> {
+		public LandRegistryMap() {
 			Table("LandRegistry");
 			Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
@@ -54,8 +50,7 @@ namespace EZBob.DatabaseLib.Model.Database
 	public class LandRegistryResponseTypeType : EnumStringType<LandRegistryResponseType> { }
 }
 
-namespace EZBob.DatabaseLib.Repository 
-{
+namespace EZBob.DatabaseLib.Repository {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -65,21 +60,17 @@ namespace EZBob.DatabaseLib.Repository
 	using NHibernate;
 	using NHibernate.Linq;
 
-	public class LandRegistryRepository : NHibernateRepositoryBase<LandRegistry> 
-	{
+	public class LandRegistryRepository : NHibernateRepositoryBase<LandRegistry> {
 		public LandRegistryRepository(ISession session) : base(session) { }
 
-		public IEnumerable<LandRegistry> GetByCustomer(Customer customer) 
-		{
+		public IEnumerable<LandRegistry> GetByCustomer(Customer customer) {
 			return GetAll().Where(x => x.Customer.Id == customer.Id).ToFuture();
 		}
 
-		public LandRegistry GetRes(int customerId, string titleNumber) 
-		{
+		public LandRegistry GetRes(int customerId, string titleNumber) {
 			bool bIsEmptyTitleNumber = string.IsNullOrWhiteSpace(titleNumber);
 
-			Func<LandRegistry, bool> oIsMatch = x => 
-			{
+			Func<LandRegistry, bool> oIsMatch = x => {
 				if (x.Customer.Id != customerId)
 					return false;
 
@@ -98,25 +89,23 @@ namespace EZBob.DatabaseLib.Repository
 			return GetAll().Where(oIsMatch).OrderByDescending(x => x.InsertDate).FirstOrDefault();
 		}
 
-		public LandRegistry GetEnquiry(int customerId, string postCode) 
-		{
-			return GetAll().Where(x =>
-					(x.Customer.Id == customerId) &&
-					(x.RequestType == LandRegistryRequestType.Enquiry || x.RequestType == LandRegistryRequestType.EnquiryPoll) &&
-					(x.ResponseType == LandRegistryResponseType.Success) &&
-					(x.Postcode == postCode)
-				)
+		public List<LandRegistry> GetEnquiry(int customerId, string postCode) {
+			return GetAll()
+				.Where(x =>
+					   (x.Customer.Id == customerId) &&
+					   (x.RequestType == LandRegistryRequestType.Enquiry || x.RequestType == LandRegistryRequestType.EnquiryPoll) &&
+					   (x.ResponseType == LandRegistryResponseType.Success) &&
+					   (x.Postcode == postCode))
 				.OrderByDescending(x => x.InsertDate)
-				.FirstOrDefault();
+				.ToList();
+
 		}
 
-		public LandRegistry GetByTitleNumber(string titleNumber) 
-		{
+		public LandRegistry GetByTitleNumber(string titleNumber) {
 			return GetAll().Where(x => x.TitleNumber == titleNumber && IsResRequest(x)).OrderByDescending(x => x.InsertDate).FirstOrDefault();
 		}
 
-		private bool IsResRequest(LandRegistry x) 
-		{
+		private bool IsResRequest(LandRegistry x) {
 			return
 				(x.RequestType == LandRegistryRequestType.Res) ||
 				(x.RequestType == LandRegistryRequestType.ResPoll);

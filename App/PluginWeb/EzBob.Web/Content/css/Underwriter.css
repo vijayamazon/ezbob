@@ -1068,6 +1068,10 @@ textarea.BusinessAddress {
     font-size: 20px;
 }
 
+#ownedPropertiesTable .alert {
+    white-space: nowrap;
+}
+
 .alert {
     padding: 5px !important;
     margin: 3px 1px;
