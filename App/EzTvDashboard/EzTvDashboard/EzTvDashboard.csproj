@@ -231,9 +231,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Dashboard\DashboardTables.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Dashboard\Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
