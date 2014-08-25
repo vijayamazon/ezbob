@@ -186,13 +186,9 @@
 					}
 
 					try {
-						if (!string.IsNullOrWhiteSpace(titleNumber))
-							if (response.GatewayResponse.Results.OCSummaryData.Title.TitleNumber.Value != titleNumber)
-								response.GatewayResponse.Results.OCSummaryData.Title.TitleNumber.Value += "--" + titleNumber;
-
 						Log.DebugFormat(
-							"Title number returned from TEST service is {0}",
-							response.GatewayResponse.Results.OCSummaryData.Title.TitleNumber.Value
+							"Title number returned from TEST service is {0} and requested {1}",
+							response.GatewayResponse.Results.OCSummaryData.Title.TitleNumber.Value, titleNumber
 						);
 					}
 					catch (Exception) {

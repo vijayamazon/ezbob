@@ -1,19 +1,16 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Models
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Models {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using EZBob.DatabaseLib.Model.Database;
 	using LandRegistryLib;
 
-	public class PropertiesModel
-	{
-		public PropertiesModel()
-		{
+	public class PropertiesModel {
+		public PropertiesModel() {
 			Properties = new List<PropertyModel>();
 		}
 
-		public void Init(int numberOfProperties, int numberOfMortgages, int assetsValue, int totalMortgages, int zooplaAverage)
-		{
+		public void Init(int numberOfProperties, int numberOfMortgages, int assetsValue, int totalMortgages, int zooplaAverage) {
 			NumberOfProperties = numberOfProperties;
 			NumberOfMortgages = numberOfMortgages;
 			MarketValue = assetsValue;
@@ -36,9 +33,33 @@
 	}
 
 	[Serializable]
-	public class PropertyModel
-	{
-		public int SerialNumberForCustomer { get; set; }
+	public enum PropertyVerifyStatus {
+		[Description("Owned")]
+		VerifiedOwned,
+		[Description("Not Owned")]
+		VerifiedNotOwned,
+		[Description("Not verified")]
+		NotVerified
+	}
+
+	[Serializable]
+	public class PropertyModel {
+		public PropertyVerifyStatus VerifyStatus { get; set; }
+		public string Status { get { return VerifyStatus.DescriptionAttr(); } }
+		public string StatusAlert {
+			get {
+				switch (VerifyStatus) {
+					case PropertyVerifyStatus.VerifiedOwned:
+						return "success";
+					case PropertyVerifyStatus.VerifiedNotOwned:
+						return "danger";
+					case PropertyVerifyStatus.NotVerified:
+						return "warning";
+					default:
+						return "empty";
+				}
+			}
+		}
 		public int AddressId { get; set; }
 		public int MarketValue { get; set; }
 		public string Address { get; set; }
@@ -46,7 +67,9 @@
 		public int NumberOfOwners { get; set; }
 		public string Postcode { get; set; }
 		public string FormattedAddress { get; set; }
-		public LandRegistryResModel LandRegistry { get; set; }
+		public List<LandRegistryResModel> LandRegistries { get; set; }
+		public List<LandRegistryEnquiryModel> LandRegistryEnquiries { get; set; }
 		public Zoopla Zoopla { get; set; }
+		public string AddressType { get; set; }
 	}
 }

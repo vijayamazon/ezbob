@@ -134,7 +134,7 @@
 					}
 				} // using
 
-				using (tc.AddStep("ZooplaAndMortgagesAndPropertiesModel Time taken")) {
+				using (tc.AddStep("PropertiesModel Time taken")) {
 					model.Properties = _propertiesModelBuilder.Create(customer);
 				}
 				using (tc.AddStep("FraudDetectionLog Time taken")) {
