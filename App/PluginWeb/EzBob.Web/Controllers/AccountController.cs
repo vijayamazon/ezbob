@@ -375,14 +375,16 @@ namespace EzBob.Web.Controllers {
 					throw new Exception("Failed to create user.");
 
 				Customer customer = null;
+				
+				var blm = new WizardBrokerLeadModel(Session);
 
 				new Transactional(
-					() => customer = CreateCustomer(model.EMail, promoCode, amount, mobilePhone, mobilePhoneVerified)
+					() => customer = CreateCustomer(model.EMail, promoCode, amount, mobilePhone, mobilePhoneVerified, blm.BrokerFillsForCustomer)
 				).Execute();
 
 				string link = m_oServiceClient.Instance.EmailConfirmationGenerate(customer.Id).Address;
 
-				var blm = new WizardBrokerLeadModel(Session);
+				
 
 				if (blm.IsSet)
 					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID, blm.FirstName, blm.BrokerFillsForCustomer, link);
@@ -787,7 +789,8 @@ namespace EzBob.Web.Controllers {
 			string promoCode,
 			double? amount,
 			string mobilePhone,
-			bool mobilePhoneVerified
+			bool mobilePhoneVerified,
+			bool brokerFillsForCustomer
 		) {
 			var user = m_oUsers.GetUserByLogin(email);
 			var g = new RefNumberGenerator(m_oCustomers);
@@ -814,18 +817,25 @@ namespace EzBob.Web.Controllers {
 			ms_oLog.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
 
 			var sourceref = Request.Cookies["sourceref"];
-			if (sourceref != null) {
-				var cookie = new HttpCookie("sourceref", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
-				Response.Cookies.Add(cookie);
-				customer.ReferenceSource = sourceref.Value;
-			} // if
-
 			var googleCookie = Request.Cookies["__utmz"];
-			if (googleCookie != null) {
-				var cookie = new HttpCookie("__utmz", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
-				Response.Cookies.Add(cookie);
-				customer.GoogleCookie = googleCookie.Value;
-			} // if
+
+			if (brokerFillsForCustomer) {
+				customer.ReferenceSource = "Broker";
+				customer.GoogleCookie = string.Empty;
+			}
+			else {
+				if (googleCookie != null) {
+					var cookie = new HttpCookie("__utmz", "") {Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true};
+					Response.Cookies.Add(cookie);
+					customer.GoogleCookie = googleCookie.Value;
+				} // if
+
+				if (sourceref != null) {
+					var cookie = new HttpCookie("sourceref", "") {Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true};
+					Response.Cookies.Add(cookie);
+					customer.ReferenceSource = sourceref.Value;
+				} // if
+			}
 
 			var customerInviteFriend = new CustomerInviteFriend(customer);
 			var inviteFriend = Request.Cookies["invite"];
@@ -870,9 +880,9 @@ namespace EzBob.Web.Controllers {
 				ErrorMessage = "Registration"
 			});
 
-			if ((sourceref != null) && !string.IsNullOrWhiteSpace(sourceref.Value)) {
+			if (!string.IsNullOrWhiteSpace(customer.ReferenceSource)) {
 				try {
-					m_oServiceClient.Instance.SaveSourceRefHistory(user.Id, sourceref.Value, firstvisit == null ? null : firstvisit.Value);
+					m_oServiceClient.Instance.SaveSourceRefHistory(user.Id, customer.ReferenceSource, firstvisit == null ? null : firstvisit.Value);
 				}
 				catch (Exception e) {
 					ms_oLog.Warn(e, "Failed to save sourceref history.");
