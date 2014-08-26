@@ -55,10 +55,55 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 			
 			return obj;
 		});
-		
-		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/GetOffer', oData);
-		
-		oRequest.success(function(res) {
+
+		this.targetBusiness(oData);
+	}, // onSubmit
+	
+	targetBusiness: function (oData) {
+		var self = this;
+		$.get(window.gRootPath + "Broker/BrokerHome/TargetBusiness", { companyNameNumber: this.$el.find('#CompanyNameNumber').val() })
+			.success(function (reqData) {
+				if (reqData == undefined || reqData.success === false)
+					self.getInstantOffer(oData, { BusRefNum: "NotFound" });
+				else {
+					switch (reqData.length) {
+						case 0:
+							EzBob.ShowMessage("Company was not found", "Warning", null, "OK");
+							self.getInstantOffer(oData, { BusRefNum: "NotFound" });
+							break;
+						case 1:
+							self.getInstantOffer(oData, reqData[0]);
+							break;
+						default:
+							var companyTargets = new EzBob.companyTargets({ model: reqData });
+							companyTargets.render();
+							companyTargets.on("BusRefNumGetted", function (targetingData) {
+								self.getInstantOffer(oData, targetingData);
+							});
+							break;
+					} // switch
+				} // if
+			}).always(function () {
+				UnBlockUi();
+			});
+	},
+	
+	getInstantOffer: function(oData, companyData) {
+		console.log('companyData', oData, companyData);
+		var self = this;
+
+		if (companyData && companyData.BusRefNum != 'skip') {
+			oData.push({ name: "PostCode", value: companyData.PostCode });
+			oData.push({ name: "BusName", value: companyData.BusName });
+			oData.push({ name: "BusRefNum", value: companyData.BusRefNum });
+			oData.push({ name: "LegalStatus", value: companyData.LegalStatus });
+		} else {
+			oData.push({ name: "BusRefNum", value: "NotFound" });
+		}
+
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/GetOffer', oData );
+
+		oRequest.success(function (res) {
 			UnBlockUi();
 			console.log('res', res);
 			if (res.success) {
@@ -72,12 +117,12 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 			self.setSubmitEnabled(true);
 		}); // on success
 
-		oRequest.fail(function() {
+		oRequest.fail(function () {
 			UnBlockUi();
 			self.setSubmitEnabled(true);
 			EzBob.App.trigger('error', 'Failed to get instant offer. Please retry.');
 		});
-	}, // onSubmit
+	},
 
 	initValidatorCfg: function() {
 		this.validator = this.$el.find('form').validate({

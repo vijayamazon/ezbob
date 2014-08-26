@@ -8,6 +8,7 @@
 	using System.Web.Mvc;
 	using Code;
 	using Ezbob.Backend.Models;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
@@ -19,6 +20,7 @@
 
 		static BrokerHomeController() {
 			ms_oLog = new SafeILog(typeof(BrokerHomeController));
+			m_oDB = DbConnectionGenerator.Get(ms_oLog);
 		} // static constructor
 
 		#endregion static constructor
@@ -71,6 +73,7 @@
 		private readonly BrokerHelper m_oHelper;
 
 		private static readonly ASafeLog ms_oLog;
+		private static readonly AConnection m_oDB;
 
 		#endregion fields
 

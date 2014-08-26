@@ -81,12 +81,12 @@
 
 			try
 			{
-				oRetryer.Retry(() =>
-				{
-					var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
-					oPackage.Out.ServiceLog.Customer = customerRepo.Get(oPackage.In.CustomerID);
-				});
-
+				if (oPackage.In.CustomerID != 0) {
+					oRetryer.Retry(() => {
+						var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
+						oPackage.Out.ServiceLog.Customer = customerRepo.Get(oPackage.In.CustomerID);
+					});
+				}
 				if (oPackage.In.DirectorID != null)
 				{
 					oRetryer.Retry(() =>

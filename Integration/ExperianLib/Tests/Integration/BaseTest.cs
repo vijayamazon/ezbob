@@ -30,6 +30,9 @@
 			var oLog4NetCfg = new Log4Net().Init();
 
 			m_oDB = new SqlConnection(oLog4NetCfg.Environment, m_oLog);
+
+
+			ConfigManager.CurrentValues.Init(m_oDB, m_oLog);
 		} // Start
 
 		protected AConnection m_oDB;

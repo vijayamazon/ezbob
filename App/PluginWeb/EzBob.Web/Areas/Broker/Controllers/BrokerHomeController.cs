@@ -4,11 +4,14 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Net;
+	using System.Text.RegularExpressions;
 	using System.Web;
 	using System.Web.Helpers;
 	using System.Web.Mvc;
 	using Code;
 	using ConfigManager;
+	using ExperianLib.Ebusiness;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.MimeTypes;
 	using Infrastructure;
@@ -19,6 +22,7 @@
 	using Models;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using Web.Controllers;
 
 	#endregion using
 
@@ -992,10 +996,47 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult GetOffer(GetInstantOfferModel model) {
-			return Json(model, JsonRequestBehavior.AllowGet);
+		public JsonResult GetOffer(GetInstantOfferModel model, CompanyInfo company) {
+			return Json(new {model, company}, JsonRequestBehavior.AllowGet);
 		}
-
+		
 		#endregion action GetOffer
+
+		#region action TargetBusiness
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult TargetBusiness(string companyNameNumber) {
+			if (string.IsNullOrEmpty(companyNameNumber)) {
+				return new BrokerForJsonResult("Company name/number not provided");
+			}
+
+			string companyName = "";
+			string companyNumber = "";
+
+			//company ref num is alpha numeric 8 chars length digits only or 2 letters and the digits
+			if (companyNameNumber.Length <= 8 &&
+				(Regex.IsMatch(companyNameNumber, @"^\d+$") || Regex.IsMatch(companyNameNumber, @"^[a-zA-Z]{2}\d+$"))) {
+				companyNumber = companyNameNumber;
+			}
+			else {
+				companyName = companyNameNumber;
+			}
+
+			try {
+				var service = new EBusinessService(m_oDB);
+
+				var result =
+					new TargetResults(
+						"<?xml version='1.0' standalone='yes' ?><GEODS  exp_cid='cPek' > <REQUEST type='BINSIGHT' subtype='CALLBUR' EXP_ExperianRef='' success='Y' timestamp='Tue, 26 Aug 2014 at 3:13 PM' id='cPek'><DK10 seq='00'><CICSREGION>CIXF    </CICSREGION><MFDATE-YYYY>2014</MFDATE-YYYY><MFDATE-MM>08</MFDATE-MM><MFDATE-DD>26</MFDATE-DD><TIME>151324</TIME></DK10><DK12 seq='00'><ACCESSITEMSCOUNT>008</ACCESSITEMSCOUNT><ACCESSITEMS><ITEMCODE>BTAR</ITEMCODE></ACCESSITEMS><ACCESSITEMS><ITEMCODE>BTPC</ITEMCODE></ACCESSITEMS><ACCESSITEMS><ITEMCODE>BTPH</ITEMCODE></ACCESSITEMS><ACCESSITEMS><ITEMCODE>CDEL</ITEMCODE></ACCESSITEMS><ACCESSITEMS><ITEMCODE>CDEN</ITEMCODE></ACCESSITEMS><ACCESSITEMS><ITEMCODE>CDE6</ITEMCODE></ACCESSITEMS><ACCESSITEMS><ITEMCODE>SHNA</ITEMCODE></ACCESSITEMS><ACCESSITEMS><ITEMCODE>CD3L</ITEMCODE></ACCESSITEMS></DK12><DG02 seq='01'><ERRORS><ERRORCODE>W006</ERRORCODE></ERRORS><ERRORS></ERRORS><ERRORS></ERRORS><NUMMATCHES>000</NUMMATCHES><LENLOCALITIES>0000</LENLOCALITIES></DG02><DT10 seq='01'><NUMMATCHES>2</NUMMATCHES><TOOMANYCANDIDATES>N</TOOMANYCANDIDATES><TOOMANYMATCHES>N</TOOMANYMATCHES><BUSREFNUM>06262589</BUSREFNUM><BUSNAME>06262589</BUSNAME></DT10><DT11 seq='01'><LEGALSTATUS>L</LEGALSTATUS><BUSINESSSTATUS>A</BUSINESSSTATUS><MATCHSCORE>100</MATCHSCORE><BUSREFNUM>06262589</BUSREFNUM><BUSNAME>EPATIENT NETWORK LIMITED</BUSNAME><ADDRLINE1>PO BOX 1295 20 STATION ROAD</ADDRLINE1><ADDRLINE2>GERRARDS CROSS</ADDRLINE2><ADDRLINE3>BUCKINGHAMSHIRE</ADDRLINE3><POSTCODE>SL9 8EL</POSTCODE><SICCODETYPE>B</SICCODETYPE><SICCODE>7484</SICCODE><SICCODEDESC>OTHER BUSINESS ACTIVITIES</SICCODEDESC></DT11><DT11 seq='01'><LEGALSTATUS>N</LEGALSTATUS><BUSINESSSTATUS>A</BUSINESSSTATUS><MATCHSCORE>100</MATCHSCORE><BUSREFNUM>06262589</BUSREFNUM><BUSNAME>LITTLEPORT RANGERS FOOTBALL CLUB</BUSNAME><ADDRLINE1>79 FISHERS BANK</ADDRLINE1><ADDRLINE2>LITTLEPORT</ADDRLINE2><ADDRLINE3>ELY</ADDRLINE3><ADDRLINE4>CAMBRIDGESHIRE</ADDRLINE4><POSTCODE>CB6 1LN</POSTCODE></DT11><DM12 seq='00'><NOCCOUNT>0</NOCCOUNT></DM12><DK01 seq='01'><APPNAME>XML8255   </APPNAME><VERSIONMAJOR>0100</VERSIONMAJOR><VERSIONMINOR>0100</VERSIONMINOR></DK01><DK02 seq='01'><USERDEPT>0</USERDEPT><VER0101END>#</VER0101END></DK02><DK03 seq='01'><MESSAGETYPE>BTGR</MESSAGETYPE><MESSAGESUBTYPE>0001</MESSAGESUBTYPE><MESSAGEID>00        </MESSAGEID></DK03><DT01 seq='01'><ADDRINSTANCE>01</ADDRINSTANCE><SEARCHCORP>Y</SEARCHCORP><EXLUDEDISSCORP>N</EXLUDEDISSCORP><SEARCHNONCORP>Y</SEARCHNONCORP><SINGLESHOT>N</SINGLESHOT><EXACTNAMEMATCH>N</EXACTNAMEMATCH><BUSREFNUM>06262589</BUSREFNUM><BUSNAME>06262589</BUSNAME></DT01><ADDR seq='01'><FORMATCODE>UKNLTD  </FORMATCODE><DATACOUNT>3</DATACOUNT><ELEMENTCOUNT>8</ELEMENTCOUNT><DATAITEMS><DATAITEM>NULL</DATAITEM></DATAITEMS><DATAITEMS></DATAITEMS><DATAITEMS></DATAITEMS></ADDR></REQUEST></GEODS>");
+					//service.TargetBusiness(companyName, null, 0, TargetResults.LegalStatus.DontCare, companyNumber);
+
+				return Json(result.Targets, JsonRequestBehavior.AllowGet);
+			} catch (Exception e) {
+				ms_oLog.Alert(e, "Target Business failed.");
+				throw;
+			} // try
+		}
+		#endregion action TargetBusiness
 	} // class BrokerHomeController
 } // namespace

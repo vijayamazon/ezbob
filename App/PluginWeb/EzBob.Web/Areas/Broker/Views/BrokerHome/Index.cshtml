@@ -760,7 +760,8 @@
 
 		Html.RenderPartial("_GoogleTagManager");
 		Html.RenderPartial("security_template");
-
+		Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
+		
 		WriteLiteral(Bundle.JavaScript()
 			.Add("~/Content/js/lib/jquery-1.8.3.js")
 			.Add("~/Content/js/ezbob.csrf.js")
@@ -837,6 +838,7 @@
 			.Add("~/Content/js/Broker/broker.main.js")
 			.Add("~/Content/js/Broker/broker.instantoffer.view.js")
 			.Add("~/Content/js/Broker/broker.changepassword.view.js")
+			.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
 			.MvcRender("~/Content/js/min/jslib_#.js")
 		);
 	}
