@@ -31,7 +31,8 @@ BEGIN
 		ORDER BY
 			Id DESC	
 	
-		SELECT Created AS LastUpdateDate FROM ExperianLtd WHERE ServiceLogId = @ServiceLogId
+		SELECT InsertDate AS LastUpdateDate FROM MP_ServiceLog WHERE Id = @ServiceLogId
 	END
 END
+
 GO
