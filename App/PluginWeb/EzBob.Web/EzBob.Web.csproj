@@ -174,6 +174,7 @@
     <Compile Include="Areas\Broker\Controllers\BrokerHomeController.cs" />
     <Compile Include="Areas\Broker\Controllers\BrokerHomeController\private.cs" />
     <Compile Include="Areas\Broker\Models\BrokerHomeModel.cs" />
+    <Compile Include="Areas\Broker\Models\GetInstantOfferModel.cs" />
     <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustomerStatusController.cs" />
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
@@ -724,6 +725,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\_BrokerProfile.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_Properties.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\SendSms.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\InstantOffer.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1050,6 +1052,8 @@
     <Content Include="Content\js\Broker\broker.router.js" />
     <Content Include="Content\js\Broker\broker.signup.view.js" />
     <Content Include="Content\js\Broker\broker.submit.view.js" />
+    <Content Include="Content\js\Broker\broker.instantoffer.view.js" />
+    <Content Include="Content\js\Broker\broker.changepassword.view.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.min.js">
       <DependentUpon>ezbob.BoundItemView.coffee</DependentUpon>
     </Content>

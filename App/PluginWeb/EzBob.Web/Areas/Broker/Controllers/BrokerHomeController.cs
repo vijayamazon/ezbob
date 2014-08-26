@@ -986,5 +986,16 @@
 		} // SaveExperianDirector
 
 		#endregion action SaveExperianDirector
+
+		#region action GetOffer
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult GetOffer(GetInstantOfferModel model) {
+			return Json(model, JsonRequestBehavior.AllowGet);
+		}
+
+		#endregion action GetOffer
 	} // class BrokerHomeController
 } // namespace

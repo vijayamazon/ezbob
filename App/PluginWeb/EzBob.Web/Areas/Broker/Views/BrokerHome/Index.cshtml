@@ -64,6 +64,7 @@
 	data-msg-on-start="@Model.MessageOnStart"
 	data-msg-on-start-severity="@Model.MessageOnStartSeverity"
 	data-request-accept-terms="@Model.HasTermsStr"
+	data-user-name="@Model.Auth"
 >
 	@AntiForgery.GetHtml()
 
@@ -313,6 +314,8 @@
 										<li><a href="#section-dashboard-account-info">Account information</a></li>
 										<li class="divider-vertical"></li>
 										<li><a href="#section-dashboard-terms-and-conditions">Terms and conditions</a></li>
+										<li class="divider-vertical"></li>
+										<li><a href="#section-dashboard-instant-offer">Instant offer</a></li>
 									</ul>
 								</div>
 							</div>
@@ -519,6 +522,8 @@
 
 								<div class="terms-and-conditions">Loading...</div>
 							</div>
+							
+							@{ Html.RenderPartial("InstantOffer"); }
 						</div>
 						<!-- section-customer-list -->
 
@@ -830,6 +835,8 @@
 			.Add("~/Content/js/Broker/broker.customerdetails.view.js")
 			.Add("~/Content/js/Broker/broker.router.js")
 			.Add("~/Content/js/Broker/broker.main.js")
+			.Add("~/Content/js/Broker/broker.instantoffer.view.js")
+			.Add("~/Content/js/Broker/broker.changepassword.view.js")
 			.MvcRender("~/Content/js/min/jslib_#.js")
 		);
 	}

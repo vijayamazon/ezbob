@@ -2186,6 +2186,12 @@ li[stripped="stripped"] {
     min-height: 18px;
 }
 
+.attardi-input span.form_field_checkbox.attardi-has-data {
+    padding: 8px;
+    top: 0;
+    font-size: inherit;
+}
+
 .profile-widgets .attardi-input span.attardi-has-data,
 .bank-account .attardi-input span.attardi-has-data,
 .paypont-form .attardi-input span.attardi-has-data {

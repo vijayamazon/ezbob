@@ -119,4 +119,4 @@ EzBob.Broker.AddCustomerView = EzBob.Broker.SubmitView.extend({
 			highlight: EzBob.Validation.highlightFS,
 		});
 	}, // initValidatorCfg
-}); // EzBob.Broker.SubmitView
+}); // EzBob.Broker.AddCustomerView

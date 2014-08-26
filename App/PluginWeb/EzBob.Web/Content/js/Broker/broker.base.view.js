@@ -6,11 +6,18 @@ EzBob.Broker.BaseView = EzBob.View.extend({
 		this.router = this.options.router;
 	}, // initialize
 
-	clear: function() {}, // clear
+	events: function() {
+		var evt = {};
+		return evt;
+	},
+	
+	clear: function () { }, // clear
 
 	onFocus: function() {}, // onFocus
 
 	adjustValidatorCfg: function(oCfg) {}, // adjustValidatorCfg
 
-	onBlur: function() { EzBob.App.trigger('clear'); }, // onBlur
+	onBlur: function () { EzBob.App.trigger('clear'); }, // onBlur
+	
+	onRender: function () { }, // onRender
 }); // EzBob.Broker.BaseView

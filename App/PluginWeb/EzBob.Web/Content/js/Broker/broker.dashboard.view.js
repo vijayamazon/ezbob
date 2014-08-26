@@ -1,7 +1,7 @@
 ﻿var EzBob = EzBob || {};
 EzBob.Broker = EzBob.Broker || {};
 
-EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
+EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 	initialize: function() {
 		EzBob.Broker.DashboardView.__super__.initialize.apply(this, arguments);
 
@@ -10,17 +10,10 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 
 		this.$el = $('.section-dashboard');
 
-		this.initSubmitBtn('#UpdatePassword');
-
 		this.router.on('broker-properties-updated', this.displayBrokerProperties, this);
 
-		this.initValidatorCfg();
-
-		this.passwordStrengthView = new EzBob.StrengthPasswordView({
-			model: new EzBob.StrengthPassword(),
-			el: $('#strength-update-password-view'),
-			passwordSelector: '#NewPassword',
-		});
+		this.instantOfferView = new EzBob.Broker.InstantOfferView({ router: this.router });
+		this.changePasswordView = new EzBob.Broker.ChangePasswordView({router: this.router});
 	}, // initialize
 
 	events: function() {
@@ -37,8 +30,6 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 	clear: function() {
 		EzBob.Broker.DashboardView.__super__.clear.apply(this, arguments);
 
-		this.$el.find('form').find('.form_field').val('');
-
 		if (this.theTable) {
 			this.theTable.fnClearTable();
 			this.theTable = null;
@@ -48,11 +39,9 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 			this.leadTable.fnClearTable();
 			this.leadTable = null;
 		} // if
-
-		this.inputChanged();
 	}, // clear
 
-	onRender: function () {
+	render: function () {
 		$('body').addClass('broker-dashboard');
 		this.$el.tabs();
 
@@ -61,6 +50,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 		this.displayBrokerProperties();
 
 		this.displaySignedTerms();
+
+		this.instantOfferView.render();
 	}, // onRender
 
 	displaySignedTerms: function() {
@@ -433,82 +424,4 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 		);
 	}, // fillWizard
 
-	setAuthOnRender: function() {
-		return false;
-	}, // setAuthOnRender
-
-	onSubmit: function() {
-		var oData = this.$el.find('form').serializeArray();
-
-		oData.push({
-			name: "ContactEmail",
-			value: this.router.getAuth(),
-		});
-
-		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/UpdatePassword', oData);
-
-		var self = this;
-
-		oRequest.success(function(res) {
-			UnBlockUi();
-
-			if (res.success) {
-				EzBob.App.trigger('clear');
-				self.$el.find('form').find('.form_field').val('');
-				self.passwordStrengthView.show();
-				self.setSubmitEnabled(false);
-
-				EzBob.App.trigger('info', 'Your password has been updated.');
-				return;
-			} // if
-
-			if (res.error)
-				EzBob.App.trigger('error', res.error);
-			else
-				EzBob.App.trigger('error', 'Failed to update your password. Please retry.');
-
-			self.setSubmitEnabled(true);
-		}); // on success
-
-		oRequest.fail(function() {
-			UnBlockUi();
-			self.setSubmitEnabled(true);
-			EzBob.App.trigger('error', 'Failed to update your password. Please retry.');
-		});
-	}, // onSubmit
-
-	initValidatorCfg: function() {
-		var passPolicy = { required: true, minlength: 6, maxlength: 255 };
-
-		var passPolicyText = EzBob.dbStrings.PasswordPolicyCheck;
-
-		if (EzBob.Config.PasswordPolicyType !== 'simple') {
-			passPolicy.regex = '^.*([a-z]+.*[A-Z]+) |([a-z]+.*[^A-Za-z0-9]+)|([a-z]+.*[0-9]+)|([A-Z]+.*[a-z]+)|([A-Z]+.*[^A-Za-z0-9]+)|([A-Z]+.*[0-9]+)|([^A-Za-z0-9]+.*[a-z]+.)|([^A-Za-z0-9]+.*[A-Z]+)|([^A-Za-z0-9]+.*[0-9]+.)|([0-9]+.*[a-z]+)|([0-9]+.*[A-Z]+)|([0-9]+.*[^A-Za-z0-9]+).*$';
-			passPolicy.minlength = 7;
-			passPolicyText = 'Password has to have 2 types of characters out of 4 (letters, caps, digits, special chars).';
-		} // if
-
-		var passPolicy2 = $.extend({}, passPolicy);
-		passPolicy2.equalTo = '#NewPassword';
-
-		var oCfg = {
-			rules: {
-				OldPassword: $.extend({}, passPolicy),
-				NewPassword: $.extend({}, passPolicy),
-				NewPassword2: passPolicy2,
-			},
-
-			messages: {
-				OldPassword: { required: passPolicyText, regex: passPolicyText },
-				NewPassword: { required: passPolicyText, regex: passPolicyText },
-				NewPassword2: { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
-			},
-
-			errorPlacement: EzBob.Validation.errorPlacement,
-			unhighlight: EzBob.Validation.unhighlightFS,
-			highlight: EzBob.Validation.highlightFS,
-		};
-
-		this.validator = this.$el.find('form').validate(oCfg);
-	}, // initValidatorCfg
-}); // EzBob.Broker.SubmitView
+}); // EzBob.Broker.DashboardView

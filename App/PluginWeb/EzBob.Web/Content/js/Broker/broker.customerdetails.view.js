@@ -516,4 +516,4 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			'&nFileID=' + encodeURIComponent($(event.currentTarget).data('file-id'))
 		);
 	}, // downloadCustomerFile
-}); // EzBob.Broker.SubmitView
+}); // EzBob.Broker.CustomerDetailsView

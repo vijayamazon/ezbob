@@ -1,0 +1,50 @@
+﻿@model dynamic
+
+<div id="section-dashboard-instant-offer">
+	<h2 class="form_start">Instant offer</h2>
+
+	<div class="value-group aka-table table-big box">
+		<div class="box-title aka-caption">Enter customer details and get a tentative offer</div>
+
+		<form class="instant-offer-form" novalidate="novalidate">
+			@{ int nInstantOfferTabIdx = 0; }
+			@Input("CompanyNameNumber", "Company name/number", ++nInstantOfferTabIdx)
+			@Input("AnnualTurnover", "Annual turnover", ++nInstantOfferTabIdx)
+			@Input("AnnualProfit", "Annual profit", ++nInstantOfferTabIdx)
+			@Input("NumOfEmployees", "# of employees", ++nInstantOfferTabIdx)
+			@Input("IsHomeOwner", "Is home owner", ++nInstantOfferTabIdx, false, "checkbox")
+
+			<div class="form_field_container">
+				<label class="attardi-input">
+					<span>Main applicant credit score</span>
+					<select name="MainApplicantCreditScore" id="MainApplicantCreditScore" class="form_field" tabindex="@{ WriteLiteral(++nInstantOfferTabIdx); }" ui-event-control-id="broker:instantoffer-MainApplicantCreditScore">
+						<option></option>
+						<option value="low">low</option>
+						<option value="ok">ok</option>
+						<option value="excellent">excellent</option>
+					</select>
+					<img id="MainApplicantCreditScoreImage" class="field_status required" />
+				</label>
+			</div>
+
+			<div class="form_buttons_container">
+				<div class="attardi-button">
+					<button type="submit" id="GetOffer" class="button btn-green disabled pull-right btn-wide" tabindex="@{ WriteLiteral(++nInstantOfferTabIdx); }" ui-event-control-id="broker:instantoffer-GetOffer">Get offer</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+@helper Input(string name, string caption, int tabindex, bool isReq = true, string type = "text") {
+	var img = name + "Image";
+	var req = isReq ? "required" : "";
+	<div class="form_field_container">
+		<label class="attardi-input">
+			<span class="form_field_@type">@caption</span>
+			<input type="@type" name="@name" id="@name" tabindex="@tabindex" class="form_field" ui-event-control-id="broker:instantoffer-@name" />
+			<img id="@img" class="field_status @req" />
+		</label>
+	</div>
+}

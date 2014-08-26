@@ -297,6 +297,7 @@ table.table th {
     padding-left: 20px;
 }
 
+.instant-offer-form,
 .update-password-form {
     margin-top: 20px;
 }
@@ -319,4 +320,12 @@ div.form_read_and_accept label {
 
 .broker-dashboard {
     min-width: 1000px !important;
+}
+
+input[type="checkbox"].form_field {
+    width: 36px;
+}
+
+.form_field_checkbox {
+    left: 36px;
 }
