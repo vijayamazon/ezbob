@@ -70,7 +70,7 @@
 				};
 
 
-				if (lrModel.PropertyAddresses.Any()) {
+				if (lrModel.PropertyAddresses != null && lrModel.PropertyAddresses.Any()) {
 					unMappedProperty.Postcode = lrModel.PropertyAddresses.First().PostCode;
 					unMappedProperty.NumberOfOwners = unmappedLr.Owners.Count();
 					unMappedProperty.FormattedAddress = lrModel.PropertyAddresses.First().Lines;
