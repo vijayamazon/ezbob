@@ -72,6 +72,7 @@
     <Compile Include="ActionResults\BrokerCustomersActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerFilesActionResult.cs" />
+    <Compile Include="ActionResults\BrokerInstantOfferResponseActionResult.cs" />
     <Compile Include="ActionResults\BrokerLeadDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerPropertiesActionResult.cs" />
     <Compile Include="ActionResults\AvailableFundsActionResult.cs" />

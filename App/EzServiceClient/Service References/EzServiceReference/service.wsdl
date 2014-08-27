@@ -78,6 +78,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.UserManagement" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
     </xsd:schema>
@@ -111,6 +112,12 @@
   </wsdl:message>
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureau" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureauResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
@@ -742,6 +749,12 @@
   <wsdl:message name="IEzService_BrokerLoadSignedTerms_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadSignedTermsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerInstantOffer_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerInstantOffer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerInstantOffer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerInstantOfferResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_CaisGenerate_InputMessage">
     <wsdl:part name="parameters" element="tns:CaisGenerate" />
   </wsdl:message>
@@ -1042,12 +1055,6 @@
   <wsdl:message name="IEzService_GetCompanyDataForCompanyScore_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyDataForCompanyScoreResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureau" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyDataForCreditBureau_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyDataForCreditBureauResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1071,6 +1078,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="GetCompanyDataForCreditBureau">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" message="tns:IEzService_GetCompanyDataForCreditBureau_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse" message="tns:IEzService_GetCompanyDataForCreditBureau_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
@@ -1491,6 +1502,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadSignedTerms" message="tns:IEzService_BrokerLoadSignedTerms_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadSignedTermsResponse" message="tns:IEzService_BrokerLoadSignedTerms_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BrokerInstantOffer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerInstantOffer" message="tns:IEzService_BrokerInstantOffer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerInstantOfferResponse" message="tns:IEzService_BrokerInstantOffer_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="CaisGenerate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CaisGenerateResponse" message="tns:IEzService_CaisGenerate_OutputMessage" />
@@ -1691,10 +1706,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" message="tns:IEzService_GetCompanyDataForCompanyScore_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCompanyScoreResponse" message="tns:IEzService_GetCompanyDataForCompanyScore_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetCompanyDataForCreditBureau">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" message="tns:IEzService_GetCompanyDataForCreditBureau_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyDataForCreditBureauResponse" message="tns:IEzService_GetCompanyDataForCreditBureau_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1750,6 +1761,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetCompanyDataForCreditBureau">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
       <wsdl:input>
@@ -2695,6 +2715,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BrokerInstantOffer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerInstantOffer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="CaisGenerate">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CaisGenerate" style="document" />
       <wsdl:input>
@@ -3138,15 +3167,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetCompanyDataForCompanyScore">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCompanyScore" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanyDataForCreditBureau">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyDataForCreditBureau" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

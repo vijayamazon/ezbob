@@ -109,7 +109,7 @@
 				};
 			offer.MaxInterestForSource = loan.LoanSource == null ? null : loan.LoanSource.MaxInterest;
 			offer.LoanSourceName = loan.LoanSource == null ? "" : loan.LoanSource.Name;
-			offer.ManualAddressWarning = cr.Customer.ManualAddressWarning();
+			offer.ManualAddressWarning = cr.Customer == null ? "" : cr.Customer.ManualAddressWarning();
 
             return offer;
         }

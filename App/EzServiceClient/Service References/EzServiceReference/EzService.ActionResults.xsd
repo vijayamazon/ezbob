@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/EzService.ActionResults" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:complexType name="SerializedDataTableActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/EzService" base="q1:ActionResult">
@@ -11,4 +12,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="SerializedDataTableActionResult" nillable="true" type="tns:SerializedDataTableActionResult" />
+  <xs:complexType name="BrokerInstantOfferResponseActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/EzService" base="q2:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="Response" nillable="true" type="q3:BrokerInstantOfferResponse" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BrokerInstantOfferResponseActionResult" nillable="true" type="tns:BrokerInstantOfferResponseActionResult" />
 </xs:schema>

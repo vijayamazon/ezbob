@@ -3,7 +3,7 @@
 <div id="section-dashboard-instant-offer">
 	<h2 class="form_start">Instant offer</h2>
 
-	<div class="value-group aka-table table-big box">
+	<div class="value-group aka-table table-big box instant-offer-request">
 		<div class="box-title aka-caption">Enter customer details and get a tentative offer</div>
 
 		<form class="instant-offer-form" novalidate="novalidate">
@@ -33,6 +33,15 @@
 				</div>
 			</div>
 		</form>
+	</div>
+	
+	<div class="instant-offer-response" style="display: none;">
+		<div class="loan-schedule"></div>
+		<div class="form_buttons_container">
+			<div class="attardi-button">
+				<button id="InstantOfferBack" class="button btn-green pull-right btn-wide" ui-event-control-id="broker:instantoffer-Back">Back</button>
+			</div>
+		</div>
 	</div>
 </div>
 

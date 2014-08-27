@@ -11,6 +11,8 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 
 	events: function() {
 		var evt = EzBob.Broker.InstantOfferView.__super__.events.apply(this, arguments);
+		
+		evt['click #InstantOfferBack'] = 'toggleReqRes';
 		return evt;
 	}, // events
 
@@ -104,26 +106,45 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/GetOffer', oData );
 
 		oRequest.success(function (res) {
-			UnBlockUi();
 			console.log('res', res);
-			if (res.success) {
-				self.clear();
-				return;
-			} // if
-
-			if (res.error)
+			if (res.error) {
 				EzBob.App.trigger('error', res.error);
-
+				return;
+			}
+			
+			var scheduleView = new EzBob.LoanScheduleView({
+				el: self.$el.find(".loan-schedule"),
+				schedule: res,
+				isShowGift: false,
+				isShowExportBlock: false,
+				isShowExceedMaxInterestForSource: true,
+				ManualAddressWarning: false,
+				customer: "Instant offer customer",
+				refNum: "",
+				isPersonal: false,
+			});
+			scheduleView.render();
 			self.setSubmitEnabled(true);
+
+			self.toggleReqRes();
 		}); // on success
 
 		oRequest.fail(function () {
-			UnBlockUi();
 			self.setSubmitEnabled(true);
 			EzBob.App.trigger('error', 'Failed to get instant offer. Please retry.');
 		});
+
+		oRequest.always(function() {
+			UnBlockUi();
+		});
 	},
 
+	toggleReqRes: function () {
+		console.log('toggle');
+		this.$el.find(".instant-offer-response").toggle();
+		this.$el.find(".instant-offer-request").toggle();
+	},
+	
 	initValidatorCfg: function() {
 		this.validator = this.$el.find('form').validate({
 			rules: {

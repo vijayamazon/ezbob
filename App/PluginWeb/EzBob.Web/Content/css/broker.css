@@ -329,3 +329,15 @@ input[type="checkbox"].form_field {
 .form_field_checkbox {
     left: 36px;
 }
+
+.instant-offer-response {
+    font-size: 16px;
+}
+
+.print-customer_details {
+     display: none;
+}
+
+b, strong {
+    font-family: 'Titillium Web Semi Bold';
+}

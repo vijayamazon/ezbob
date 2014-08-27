@@ -8,6 +8,7 @@
 	using EzBob.Backend.Strategies.PricingModel;
 	using EzBob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
@@ -138,6 +139,8 @@
 		[OperationContract]
 		StringListActionResult BrokerLoadSignedTerms(string sContactEmail);
 
+		[OperationContract]
+		BrokerInstantOfferResponseActionResult BrokerInstantOffer(BrokerInstantOfferRequest request);
 		#endregion Broker
 
 		#region CAIS

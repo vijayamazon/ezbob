@@ -23,7 +23,7 @@ namespace Ezbob.Utils.dbutils
 					return;
 
 				List<CustomAttributeData> oKeyAttr = oPropInfo.CustomAttributes
-				 .Where(a => a.GetType() == typeof(FKAttribute) || a.GetType() == typeof(PKAttribute))
+				 .Where(a => a.AttributeType == typeof(FKAttribute) || a.AttributeType == typeof(PKAttribute))
 				 .ToList();
 
 				if (oKeyAttr.Count == 0)
@@ -35,7 +35,7 @@ namespace Ezbob.Utils.dbutils
 				if (oKeyAttr.Count > 1)
 					throw new Exception("A field cannot be both PRIMARY KEY and FOREIGN KEY simultaneously.");
 
-				if (oKeyAttr[0].AttributeType == typeof(PKAttribute))
+				if (oKeyAttr.Any(x => x.AttributeType ==  typeof(PKAttribute)))
 					oConstraints.Add("\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY (" + oPropInfo.Name + ")");
 				else
 				{
@@ -82,7 +82,7 @@ namespace Ezbob.Utils.dbutils
 
 			oSql.Add("IF TYPE_ID('" + sTypeName + "') IS NOT NULL\n\tDROP TYPE " + sTypeName + "\nGO\n");
 
-			oSql.Add("CREATE TYPE " + sTableName + " AS TABLE (");
+			oSql.Add("CREATE TYPE " + sTypeName + " AS TABLE (");
 
 			PropertyTraverser.Traverse(typeof(T), (oInstance, oPropInfo) =>
 			{

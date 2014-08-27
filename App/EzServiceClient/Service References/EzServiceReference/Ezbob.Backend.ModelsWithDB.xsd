@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="BrokerInstantOfferRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AnnualProfit" type="xs:decimal" />
+      <xs:element minOccurs="0" name="AnnualTurnover" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BrokerId" type="xs:int" />
+      <xs:element minOccurs="0" name="CompanyNameNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Created" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ExperianCompanyLegalStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExperianCompanyName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExperianCompanyPostcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExperianRefNum" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsHomeOwner" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MainApplicantCreditScore" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NumOfEmployees" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="BrokerInstantOfferRequest" nillable="true" type="tns:BrokerInstantOfferRequest" />
+  <xs:complexType name="BrokerInstantOfferResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ApprovedSum" type="xs:int" />
+      <xs:element minOccurs="0" name="BrokerInstantOfferRequestId" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="LoanSourceId" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanTypeId" type="xs:int" />
+      <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="UseBrokerSetupFee" type="xs:boolean" />
+      <xs:element minOccurs="0" name="UseSetupFee" type="xs:boolean" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="BrokerInstantOfferResponse" nillable="true" type="tns:BrokerInstantOfferResponse" />
+</xs:schema>

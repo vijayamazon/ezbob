@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BrokerInstantOfferModels.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItem.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItemValues.cs" />
     <Compile Include="Experian\AExperianLtdDataRow.cs" />

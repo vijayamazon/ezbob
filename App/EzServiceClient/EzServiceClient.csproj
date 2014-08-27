@@ -73,6 +73,9 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.PricingModel.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -117,6 +120,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerCustomersActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerInstantOfferResponseActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerLeadDetailsActionResult.datasource">

@@ -1,12 +1,14 @@
 namespace EzBobTest
 {
 	using System;
+	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.Experian;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.Misc;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using NUnit.Framework;
@@ -291,6 +293,24 @@ namespace EzBobTest
 			s.Execute();
 
 			s = new ExperianConsumerCheck(85, 6, false, m_oDB, m_oLog);
+			s.Execute();
+		}
+
+		[Test]
+		public void TestBrokerInstantOffer() {
+			var s = new BrokerInstantOffer(new BrokerInstantOfferRequest() {
+				BrokerId = 21348,
+				AnnualProfit = 5000,
+				AnnualTurnover = 60000,
+				CompanyNameNumber = "hren",
+				NumOfEmployees = 4,
+				IsHomeOwner = true,
+				MainApplicantCreditScore = "ok",
+				ExperianRefNum = "01234567",
+				ExperianCompanyLegalStatus = "L",
+				ExperianCompanyName = "Hren Limited",
+				ExperianCompanyPostcode = "AB10 1BA",
+			}, m_oDB, m_oLog);
 			s.Execute();
 		}
 

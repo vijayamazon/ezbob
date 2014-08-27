@@ -2,10 +2,12 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ActionResults;
 	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 
 	partial class EzServiceImplementation {
 		#region async
@@ -503,6 +505,20 @@
 
 		#endregion method BrokerLoadSignedTerms
 
+		#region method BrokerInstantOffer
+
+		public BrokerInstantOfferResponseActionResult BrokerInstantOffer(BrokerInstantOfferRequest request) {
+			BrokerInstantOffer oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, request.BrokerId, request);
+
+			return new BrokerInstantOfferResponseActionResult {
+				MetaData = oMetaData,
+				Response = oInstance.Response,
+			};
+		}
+
+		#endregion method BrokerInstantOffer
 		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

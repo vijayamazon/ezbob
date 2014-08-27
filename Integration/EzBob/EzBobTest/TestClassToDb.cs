@@ -11,8 +11,11 @@
 		[Test]
 		public void TestClassToDbTableCreate()
 		{
-			Console.WriteLine(CodeToSql.GetCreateTable<EzbobSmsMessage>());
-			Console.WriteLine(CodeToSql.GetCreateSp<EzbobSmsMessage>());
+			Console.WriteLine(CodeToSql.GetCreateTable<BrokerInstantOfferRequest>());
+			Console.WriteLine(CodeToSql.GetCreateSp<BrokerInstantOfferRequest>());
+			Console.WriteLine(CodeToSql.GetCreateTable<BrokerInstantOfferResponse>());
+			Console.WriteLine(CodeToSql.GetCreateSp<BrokerInstantOfferResponse>());
+			
 		}
 	}
 
