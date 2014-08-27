@@ -42,7 +42,7 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 	}, // onFocus
 
 	
-	onSubmit: function (event) {
+	onSubmit: function () {
 		var self = this;
 		var oData = this.$el.find('form').serializeArray();
 		
@@ -91,7 +91,6 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 	},
 	
 	getInstantOffer: function(oData, companyData) {
-		console.log('companyData', oData, companyData);
 		var self = this;
 
 		if (companyData && companyData.BusRefNum != 'skip') {
@@ -102,11 +101,10 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 		} else {
 			oData.push({ name: "BusRefNum", value: "NotFound" });
 		}
-
+		BlockUi();
 		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/GetOffer', oData );
 
 		oRequest.success(function (res) {
-			console.log('res', res);
 			if (res.error) {
 				EzBob.App.trigger('error', res.error);
 				return;
@@ -140,7 +138,7 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 	},
 
 	toggleReqRes: function () {
-		console.log('toggle');
+		this.clear();
 		this.$el.find(".instant-offer-response").toggle();
 		this.$el.find(".instant-offer-request").toggle();
 	},

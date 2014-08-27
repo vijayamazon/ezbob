@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
@@ -50,17 +51,21 @@
 		private void CalculateInstantOffer() {
 			//TODO do some magic calculation here
 			//TODO experian company check (cache/new)
-
+			var rand = new Random(_requestId);
 			Response = new BrokerInstantOfferResponse {
 				BrokerInstantOfferRequestId = _requestId,
-				ApprovedSum = 5000,
-				InterestRate = 0.035M,
-				RepaymentPeriod = 12,
-				UseSetupFee = true,
-				UseBrokerSetupFee = true,
-				LoanSourceId = 1,
-				LoanTypeId = 1
+				ApprovedSum = rand.Next(1, 50) * 1000,
+				InterestRate = (decimal)rand.NextDouble()/10,
+				RepaymentPeriod = rand.Next(3, 13),
+				UseSetupFee = rand.Next(0,2) > 0,
+				UseBrokerSetupFee = rand.Next(0, 2) > 0,
+				LoanSourceId = rand.Next(1, 3),
+				LoanTypeId = rand.Next(1, 3)
 			};
+
+			if (Response.LoanSourceId == 2) {
+				Response.InterestRate = 0.02M;
+			}
 		}
 
 		private void SaveResponse() {
