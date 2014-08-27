@@ -9,7 +9,6 @@
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Utils;
-	using Misc;
 	using VatReturn;
 
 	public class NewMedalScoreCalculator
@@ -27,10 +26,7 @@
 			this.db = db;
 		}
 
-		public ScoreResult CalculateMedalScore(int customerId)
-		{
-			Results = new ScoreResult();
-			GatherData(customerId);
+		public ScoreResult CalculateMedalScore(ScoreResult inputData) {
 			CalculateWeights();
 			CalculateGrades();
 
@@ -44,8 +40,15 @@
 			return Results;
 		}
 
-		private void GatherData(int customerId)
+		public ScoreResult CalculateMedalScore(int customerId)
 		{
+			
+			var inputData = GatherData(customerId);
+			return CalculateMedalScore(inputData);
+		}
+
+		private ScoreResult GatherData(int customerId) {
+			var inputData = new ScoreResult();
 			DataTable dt = db.ExecuteReader("GetDataForMedalCalculation", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
 			if (dt.Rows.Count != 1)
@@ -55,17 +58,17 @@
 
 			var sr = new SafeReader(dt.Rows[0]);
 
-			Results.BusinessScore = sr["BusinessScore"];
+			inputData.BusinessScore = sr["BusinessScore"];
 			decimal tangibleEquity = sr["TangibleEquity"];
-			Results.BusinessSeniority = sr["BusinessSeniority"];
-			Results.ConsumerScore = sr["ConsumerScore"];
+			inputData.BusinessSeniority = sr["BusinessSeniority"];
+			inputData.ConsumerScore = sr["ConsumerScore"];
 			string maritalStatusStr = sr["MaritalStatus"];
-			Results.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusStr);
+			inputData.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), maritalStatusStr);
 			firstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
-			Results.EzbobSeniority = sr["EzbobSeniority"];
-			Results.NumOfLoans = sr["OnTimeLoans"];
-			Results.NumOfLateRepayments = sr["NumOfLatePayments"];
-			Results.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
+			inputData.EzbobSeniority = sr["EzbobSeniority"];
+			inputData.NumOfLoans = sr["OnTimeLoans"];
+			inputData.NumOfLateRepayments = sr["NumOfLatePayments"];
+			inputData.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
 			int hmrcId = sr["HmrcId"];
 			decimal yodleeTurnover = sr["YodleeTurnover"];
 			string zooplaEstimateStr = sr["ZooplaEstimate"];
@@ -90,30 +93,30 @@
 			if (wasAbleToGetSummaryData)
 			{
 				freeCashFlowDataAvailable = true;
-				Results.AnnualTurnover = summaryData[0].Revenues ?? 0;
+				inputData.AnnualTurnover = summaryData[0].Revenues ?? 0;
 				if (summaryData[0].FreeCashFlow.HasValue && Results.AnnualTurnover != 0)
 				{
-					Results.FreeCashFlow = summaryData[0].FreeCashFlow.Value / Results.AnnualTurnover;
+					inputData.FreeCashFlow = summaryData[0].FreeCashFlow.Value / inputData.AnnualTurnover;
 				}
 				else
 				{
-					Results.FreeCashFlow = 0;
+					inputData.FreeCashFlow = 0;
 				}
 			}
 			else
 			{
 				freeCashFlowDataAvailable = false;
-				Results.AnnualTurnover = yodleeTurnover;
-				Results.FreeCashFlow = 0;
+				inputData.AnnualTurnover = yodleeTurnover;
+				inputData.FreeCashFlow = 0;
 			}
 
-			if (Results.AnnualTurnover != 0)
+			if (inputData.AnnualTurnover != 0)
 			{
-				Results.TangibleEquity = tangibleEquity/Results.AnnualTurnover;
+				inputData.TangibleEquity = tangibleEquity / inputData.AnnualTurnover;
 			}
 			else
 			{
-				Results.TangibleEquity = 0;
+				inputData.TangibleEquity = 0;
 			}
 
 			var regexObj = new Regex(@"[^\d]");
@@ -128,12 +131,14 @@
 			decimal mortgageBalance = GetMortgages(customerId);
 			if (zooplaValue != 0)
 			{
-				Results.NetWorth = (zooplaValue - mortgageBalance)/zooplaValue;
+				inputData.NetWorth = (zooplaValue - mortgageBalance) / zooplaValue;
 			}
 			else
 			{
-				Results.NetWorth = 0;
+				inputData.NetWorth = 0;
 			}
+
+			return inputData;
 		}
 
 		private decimal GetMortgages(int customerId)
@@ -639,5 +644,24 @@
 				Results.MaritalStatusWeight *= ratioForDestionation;
 			}
 		}
+
+		public int GetOfferedCreditLine(MedalMultiplier medal, decimal annualTurnover, int experianScore) {
+			return (int)Math.Round((int)((int)medal * annualTurnover * GetLoanOfferMultiplier(experianScore) / 100) / 100d, 0, MidpointRounding.AwayFromZero) * 100;
+		}
+
+		public decimal GetBasicInterestRate(int experianScore) {
+			DataTable dt = db.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "BasicInterestRate"), new QueryParameter("Key", experianScore));
+			var sr = new SafeReader(dt.Rows[0]);
+			return sr["Value"];
+		}
+
+		private decimal GetLoanOfferMultiplier(int experianScore) {
+			DataTable dt = db.ExecuteReader("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "LoanOfferMultiplier"), new QueryParameter("Key", experianScore));
+			var sr = new SafeReader(dt.Rows[0]);
+			return sr["Value"];
+		}
+
+		
+
 	}
 }

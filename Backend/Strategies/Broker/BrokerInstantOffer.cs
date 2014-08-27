@@ -4,6 +4,7 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using ScoreCalculation;
 
 	public class BrokerInstantOffer : AStrategy {
 		#region public
@@ -49,18 +50,42 @@
 		}
 
 		private void CalculateInstantOffer() {
-			//TODO do some magic calculation here
-			//TODO experian company check (cache/new)
+			//TODO retrieve experian company data (cache/new)
+			int businessScore = 60; //todo
+			decimal tengibleEquaty = 20000M; //todo
+			DateTime businessSeniority = new DateTime(1990,1,1);
+
+			int consumerScore = 0;
+			switch (_request.MainApplicantCreditScore) {
+				case "ok":
+					consumerScore = 700;//todo real number
+					break;
+				case "excellent":
+					consumerScore = 1000;//todo real number
+					break;
+				case "low":
+					consumerScore = 500;//todo real number
+					break;
+			}
+
+			var netWorth = 0;
+			if (_request.IsHomeOwner) {
+				netWorth = 100000; //todo get the net worth
+			}
+			var calculator = new NewMedalScoreCalculator(DB, Log);
+			var medalScore = calculator.CalculateMedalScore(new ScoreResult(businessScore, _request.AnnualProfit, _request.AnnualTurnover,
+			                                               tengibleEquaty, businessSeniority, consumerScore, netWorth));
+			
 			var rand = new Random(_requestId);
 			Response = new BrokerInstantOfferResponse {
 				BrokerInstantOfferRequestId = _requestId,
-				ApprovedSum = rand.Next(1, 50) * 1000,
-				InterestRate = (decimal)rand.NextDouble()/10,
-				RepaymentPeriod = rand.Next(3, 13),
+				ApprovedSum = CalcAndCapOffer(calculator.GetOfferedCreditLine(medalScore.Medal, _request.AnnualTurnover, consumerScore)),
+				InterestRate = calculator.GetBasicInterestRate(consumerScore),
+				RepaymentPeriod = 12,
 				UseSetupFee = rand.Next(0,2) > 0,
-				UseBrokerSetupFee = rand.Next(0, 2) > 0,
-				LoanSourceId = rand.Next(1, 3),
-				LoanTypeId = rand.Next(1, 3)
+				UseBrokerSetupFee = true,
+				LoanSourceId = rand.Next(1, 3), // todo make use calculator to decide weather to give EU or reg loan
+				LoanTypeId = 1 //default loan type regular (not halfway) ?
 			};
 
 			if (Response.LoanSourceId == 2) {
@@ -75,6 +100,18 @@
 					DB.CreateTableParameter<BrokerInstantOfferResponse>("Tbl", new List<BrokerInstantOfferResponse> { Response }));
 
 			Response.Id = responseId;
+		}
+
+		private int CalcAndCapOffer(int offeredCreditLine) {
+
+			if (_request.IsHomeOwner && ConfigManager.CurrentValues.Instance.MaxCapHomeOwner < offeredCreditLine) {
+				return ConfigManager.CurrentValues.Instance.MaxCapHomeOwner;
+			}
+
+			if (!_request.IsHomeOwner && ConfigManager.CurrentValues.Instance.MaxCapNotHomeOwner < offeredCreditLine) {
+				return ConfigManager.CurrentValues.Instance.MaxCapNotHomeOwner;
+			}
+			return offeredCreditLine;
 		}
 
 		private readonly BrokerInstantOfferRequest _request;
