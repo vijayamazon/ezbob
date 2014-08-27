@@ -78,8 +78,8 @@
 					{
 						DataTable dt = DB.ExecuteReader("ShouldStopSendingLateMails", new QueryParameter("LoanId", loanId));
 						var safeReader = new SafeReader(dt.Rows[0]);
-						bool shouldStopSendingLateMails = safeReader["StopSendingEmails"];
-						if (shouldStopSendingLateMails)
+						bool stopSendingEmails = safeReader["StopSendingEmails"];
+						if (!stopSendingEmails)
 						{
 							string templateName = feeAmount >= partialPaymentCharge
 								? "Mandrill - Late fee was added (7D late)"
@@ -139,6 +139,8 @@
 				late90Num = 0;
 				pastDues = 0;
 				pastDuesNum = 0;
+				late90Plus = 0;
+				late90PlusNum = 0;
 			} // if
 
 			if (loanIdPrev == -1)
