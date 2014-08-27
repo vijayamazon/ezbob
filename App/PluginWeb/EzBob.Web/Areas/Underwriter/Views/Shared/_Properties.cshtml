@@ -73,15 +73,15 @@
 							</tr>
 							<tr>
 								<td><b>Mortgage</b></td>
-								<td>
-									<span><%- EzBob.formatPoundsAsInt(model.SumOfMortgages) %> (<%- model.NumberOfMortgages %>)</span>
-								</td>
+								<td><span><%- EzBob.formatPoundsAsInt(model.SumOfMortgages) %> (<%- model.NumberOfMortgages %>)</span></td>
 							</tr>
 							<tr>
 								<td><b>Property net worth</b></td>
-								<td>
-									<%- EzBob.formatPoundsAsInt(model.NetWorth) %>
-								</td>
+								<td><%- EzBob.formatPoundsAsInt(model.NetWorth) %></td>
+							</tr>
+							<tr>
+								<td><b>Land Registry</b></td>
+								<td><button class="btn btn-primary btnEnquiry" data-postcode="" data-address="">Other Land Registry Enquiry</button></td>
 							</tr>
 						</tbody>
 					</table>
