@@ -10,8 +10,8 @@
 		public decimal? Balance { get; set; }
 
 		public override string ToString() {
-			return string.Format("Date: {0} Amount: {1} Description: {2} {3} {4}",
-				Date, Amount, Description, Balance.HasValue ? "Balance: " : "", Balance.HasValue ? Balance.Value.ToString(CultureInfo.InvariantCulture) : "");
+			return string.Format("Date: {0} Amount: {1} {5} Description: {2} {3} {4}",
+				Date, Amount, Description, Balance.HasValue ? "Balance: " : "", Balance.HasValue ? Balance.Value.ToString(CultureInfo.InvariantCulture) : "", IsCredit? "credit" : "debit");
 		}
 	}
 }

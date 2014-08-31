@@ -1,0 +1,8 @@
+Bank csv parsing rules:
+
+Must have header row with following columns:
+1. Amount / Value / Money / (Credit & Debit) / (Money in & Money out)
+2. Date : format dd/mm/yyyy or d/m/yyyy or mm/dd/yyyy or m/d/yyyy
+3. Description / Text / Narrative
+Optional column:
+4. Balance

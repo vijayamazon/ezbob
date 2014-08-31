@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace BankTransactionsParserClient {
+	using System;
 	using System.IO;
 	using BankTransactionsParser;
 
@@ -13,10 +9,11 @@ namespace BankTransactionsParserClient {
 			var parser = new TransactionsParser();
 
 			parser.ParseCsv(GetBytesFromFile(@"c:\ezbob\test-data\bank\bank2.csv"), "bank2.csv");
-
 			parser.ParseCsv(GetBytesFromFile(@"c:\ezbob\test-data\bank\bank3.csv"), "bank3.csv");
-
 			parser.ParseCsv(GetBytesFromFile(@"c:\ezbob\test-data\bank\bank4.csv"), "bank4.csv");
+
+			//var csvFile = parser.XlsToCsv(@"c:\ezbob\test-data\bank\bank1_1.xlsx");
+			parser.ParseCsv(GetBytesFromFile(@"c:\ezbob\test-data\bank\bank1_1.xlsx.csv"), "bank1_1.xls");
 		}
 
 		public static byte[] GetBytesFromFile(string fullFilePath) {
