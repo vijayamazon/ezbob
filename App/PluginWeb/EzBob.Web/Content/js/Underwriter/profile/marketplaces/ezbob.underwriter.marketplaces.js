@@ -80,6 +80,10 @@
       return Affordability.__super__.constructor.apply(this, arguments);
     }
 
+    Affordability.prototype.url = function() {
+      return "" + window.gRootPath + "Underwriter/MarketPlaces/GetAffordabilityData/?id=" + this.customerId;
+    };
+
     return Affordability;
 
   })(Backbone.Model);
@@ -110,7 +114,7 @@
       });
       EzBob.App.vent.on('ct:marketplaces.uploadHmrc', function() {
         var oUploader, uploadHmrcView;
-        oUploader = $('<div></div>');
+        oUploader = $('<div class="box-content"></div>');
         _this.$el.find('#hmrc-upload-container').empty().append(oUploader);
         uploadHmrcView = new EzBob.Underwriter.UploadHmrcView({
           el: oUploader,
@@ -127,6 +131,13 @@
       });
       EzBob.App.vent.on('ct:marketplaces.enterHmrc', function() {
         return EzBob.Underwriter.EnterHmrcView.execute(_this.model.customerId, _this.model);
+      });
+      EzBob.App.vent.on('ct:marketplaces.parseYodlee', function() {
+        return _this.parseYodlee();
+      });
+      EzBob.App.vent.on('ct:marketplaces.parseYodleeBack', function() {
+        _this.$el.find(".mps-tables").show();
+        return _this.$el.find('#parse-yodlee-container').hide().empty();
       });
       return this;
     };
@@ -339,6 +350,19 @@
       return xhr.done(function() {
         return EzBob.ShowMessage("Renew started successfully", "Successfully");
       });
+    };
+
+    MarketPlacesView.prototype.parseYodlee = function() {
+      var parseYodleeView;
+      parseYodleeView = new EzBob.Underwriter.ParseYodleeView({
+        el: this.$el.find('#parse-yodlee-container'),
+        customerId: this.model.customerId,
+        model: this.model
+      });
+      parseYodleeView.render();
+      this.$el.find('#parse-yodlee-container').show();
+      $(".mps-tables").hide();
+      return this;
     };
 
     return MarketPlacesView;

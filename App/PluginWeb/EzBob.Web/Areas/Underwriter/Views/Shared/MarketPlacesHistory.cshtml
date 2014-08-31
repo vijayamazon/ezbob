@@ -15,6 +15,7 @@
             <button class="btn btn-primary showHistoryMarketPlaces">Show History</button>
             <button class="btn btn-primary showCurrentMarketPlaces">Show Current</button>
             <div class="pull-right">
+				<button class="btn btn-primary parseYodleeMp">Parse bank transactions</button>
                 <button class="btn btn-primary uploadHmrcMp">Upload HMRC</button>
                 <button class="btn btn-primary enterHmrcMp">Enter HMRC manually</button>
             </div>
@@ -111,4 +112,35 @@
             <input type="text" class="value form_field" />
         </label>
     </div>
+</script>
+
+<script id="parse-yodlee-template" type="text/template">
+	<div class="box">
+		<div class="box-title">
+			<h3>Select bank file to parse</h3>
+		</div>
+		<div class="box-content">
+			<span>Should be csv/xls/xlsx file with at least those columns: date, amount or (credit and debit), description </span>
+			<%console.log('files', files);%>
+
+			<table class="table">
+				<tbody>
+					<%_.each(files, function(file) {%>
+					<tr>
+						<td><%-file.FileName%></td>
+						<td><input type="radio" name="YodleeBankFile" value="<%-file.Id%>"/></td>
+					</tr>
+					<%});%>
+					<tr>
+						<td colspan="2">
+							<div class="pull-right">
+								<button class="btn btn-primary parseYodlee">Parse bank transactions</button>
+								<button class="btn btn-primary back">Back</button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </script>

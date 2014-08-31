@@ -1323,6 +1323,7 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.rollover.min.js">
       <DependentUpon>ezbob.underwriter.rollover.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.parseYodlee.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js">
       <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
     </Content>

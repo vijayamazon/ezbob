@@ -53,7 +53,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         # end of on history
 
         EzBob.App.vent.on 'ct:marketplaces.uploadHmrc', () =>
-            oUploader = $('<div></div>')
+            oUploader = $('<div class="box-content"></div>')
 
             @$el.find('#hmrc-upload-container').empty().append(oUploader)
 
@@ -77,6 +77,14 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         EzBob.App.vent.on 'ct:marketplaces.enterHmrc', () =>
             EzBob.Underwriter.EnterHmrcView.execute @model.customerId, @model
         # end of on enterHmrc
+
+        EzBob.App.vent.on 'ct:marketplaces.parseYodlee', () =>
+            @parseYodlee()
+            
+        EzBob.App.vent.on 'ct:marketplaces.parseYodleeBack', () =>
+            @$el.find(".mps-tables").show()
+            @$el.find('#parse-yodlee-container').hide().empty()
+
 
         @
     # end of initialize
@@ -226,3 +234,15 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/RenewEbayToken", umi: umi
         xhr.done ->
             EzBob.ShowMessage "Renew started successfully", "Successfully"
+            
+    parseYodlee: () ->
+        parseYodleeView = new EzBob.Underwriter.ParseYodleeView(
+            el: @$el.find('#parse-yodlee-container')
+            customerId: @model.customerId
+            model: @model
+        )
+
+        parseYodleeView.render()
+        @$el.find('#parse-yodlee-container').show()
+        $(".mps-tables").hide()
+        @

@@ -308,6 +308,7 @@
 				.Add("~/Content/js/ezbob.hmrc.upload.ui.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.uploadHmrc.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.enterHmrc.js")
+				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.parseYodlee.js")
 				.Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.experianInfo.js")
 				.Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.idHubCustomAddress.js")
 				.Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.addPayPointCardView.coffee")

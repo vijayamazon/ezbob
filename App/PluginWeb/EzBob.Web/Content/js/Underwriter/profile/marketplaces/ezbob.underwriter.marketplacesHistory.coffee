@@ -25,6 +25,7 @@ class EzBob.Underwriter.MarketPlacesHistoryView extends Backbone.Marionette.Item
     events:
         "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked"
         "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked"
+        "click .parseYodleeMp": "parseYodleeClicked"
         "click .uploadHmrcMp": "uploadHmrcClicked"
         "click .enterHmrcMp": "enterHmrcClicked"
 
@@ -37,6 +38,12 @@ class EzBob.Underwriter.MarketPlacesHistoryView extends Backbone.Marionette.Item
 
     showCurrentMarketPlacesClicked: ->
         EzBob.App.vent.trigger 'ct:marketplaces.history', null
+        
+    parseYodleeClicked: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+
+        EzBob.App.vent.trigger 'ct:marketplaces.parseYodlee'
         
     uploadHmrcClicked: (event) ->
         event.preventDefault()
