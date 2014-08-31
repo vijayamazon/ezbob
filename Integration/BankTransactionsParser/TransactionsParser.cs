@@ -7,15 +7,72 @@
 	using System.Linq;
 	using System.Text;
 	using System.Text.RegularExpressions;
+	using ExcelLibrary.SpreadSheet;
 	using Ezbob.Logger;
 	using Microsoft.VisualBasic.FileIO;
 	using OfficeOpenXml;
 
 	public class TransactionsParser {
 		private static readonly ConsoleLog log = new ConsoleLog();
+		public BankAccount ParseFile(string filePath) {
+			try {
+				string file = null;
+				if (filePath.EndsWith(".csv")) {
+					file = filePath;
+				}
+
+				if (filePath.EndsWith(".xlsx")) {
+					file = XlsxToCsv(filePath);
+				}
+
+				if (filePath.EndsWith(".xls")) {
+					file = XlsToCsv(filePath);
+				}
+
+				return ParseCsv(file);
+			}
+			catch (Exception ex) {
+				log.Warn(ex, "Failed to parse the file {0}", filePath);
+				return null;
+			}
+		}
 
 
 		public string XlsToCsv(string filePath) {
+			Workbook book = Workbook.Load(filePath);
+			if (book.Worksheets != null) {
+				var worksheet = book.Worksheets[0];
+				int maxColumnNumber = worksheet.Cells.LastColIndex;
+				var convertedRecords = new List<List<string>>(worksheet.Cells.LastRowIndex);
+
+				for (int rowIndex = worksheet.Cells.FirstRowIndex; rowIndex <= worksheet.Cells.LastRowIndex; rowIndex++) {
+					var currentRecord = new List<string>(maxColumnNumber);
+					Row row = worksheet.Cells.GetRow(rowIndex);
+					for (int colIndex = worksheet.Cells.FirstColIndex; colIndex <= worksheet.Cells.LastColIndex; colIndex++) {
+						try {
+							Cell currentCell = row.GetCell(colIndex);
+							string val = currentCell.StringValue;
+							try {
+								val = currentCell.DateTimeValue.ToShortDateString();
+							}catch{}
+							AddCellValue(val, currentRecord);
+						}
+						catch (Exception ex) {
+							AddCellValue(String.Empty, currentRecord);
+						}
+					}
+					convertedRecords.Add(currentRecord);
+				}
+
+				string outputFilePath = String.Format("{0}.csv", filePath);
+				WriteToFile(convertedRecords, outputFilePath);
+				return outputFilePath;
+			}
+
+				return null;
+		}
+
+		public string XlsxToCsv(string filePath) {
 			using (var doc = new ExcelPackage(new FileInfo(filePath))) {
 				var workbook = doc.Workbook;
 				if (workbook != null) {
@@ -31,16 +88,16 @@
 								var currentCell = cells.FirstOrDefault(c => c.Start.Column == i);
 								if (currentCell == null) {
 									// Add a cell value for empty cells to keep data aligned.
-									AddCellValue(string.Empty, currentRecord);
+									AddCellValue(String.Empty, currentRecord);
 								} else {
 									// Can't use .Text: http://epplus.codeplex.com/discussions/349696
-									AddCellValue(currentCell.Value == null ? string.Empty : currentCell.Value.ToString(), currentRecord);
+									AddCellValue(currentCell.Value == null ? String.Empty : currentCell.Value.ToString(), currentRecord);
 								}
 							}
 							convertedRecords.Add(currentRecord);
 						});
 
-						string outputFilePath = string.Format("{0}.csv", filePath);
+						string outputFilePath = String.Format("{0}.csv", filePath);
 						WriteToFile(convertedRecords, outputFilePath);
 						return outputFilePath;
 					}
@@ -51,7 +108,7 @@
 		}
 
 		private static void AddCellValue(string s, List<string> record) {
-			record.Add(string.Format("{0}{1}{0}", '"', s));
+			record.Add(String.Format("{0}{1}{0}", '"', s));
 		}
 
 
@@ -62,6 +119,10 @@
 			var commaDelimited = new List<string>(records.Count);
 			records.ForEach(r => commaDelimited.Add(r.ToDelimitedString()));
 			File.WriteAllLines(path, commaDelimited);
+		}
+
+		public BankAccount ParseCsv(string filePath) {
+			return ParseCsv(GetBytesFromFile(filePath), filePath);
 		}
 
 		public BankAccount ParseCsv(byte[] content, string fileName) {
@@ -129,12 +190,12 @@
 					}
 
 					if (headerColumns.Credit != null && headerColumns.Debit != null) {
-						if (!string.IsNullOrEmpty(row[headerColumns.Credit].ToString())) {
+						if (!String.IsNullOrEmpty(row[headerColumns.Credit].ToString())) {
 							transaction.Amount = ParseDecimal(row[headerColumns.Credit].ToString());
 							transaction.IsCredit = true;
 						}
 
-						if (!string.IsNullOrEmpty(row[headerColumns.Debit].ToString())) {
+						if (!String.IsNullOrEmpty(row[headerColumns.Debit].ToString())) {
 							transaction.Amount = ParseDecimal(row[headerColumns.Debit].ToString());
 							transaction.IsCredit = false;
 							transaction.Amount = Math.Abs(transaction.Amount);
@@ -164,7 +225,7 @@
 
 		private DateTime ParseDate(string dateStr) {
 			DateTime date;
-			if (DateTime.TryParseExact(dateStr, new[] { "d/M/yyyy", "dd/MM/yyyy", "MM/dd/yyyy", "M/d/yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out date)) {
+			if (DateTime.TryParseExact(dateStr, new[] { "d/M/yyyy", "dd/MM/yyyy", "MM/dd/yyyy", "M/d/yyyy", "d-M-yyyy", "dd-MM-yyyy", "M-d-yyyy", "MM-dd-yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out date)) {
 				return date;
 			}
 
@@ -172,27 +233,27 @@
 				return date;
 			}
 
-			throw new Exception(string.Format("Failed to parse date {0}", dateStr));
+			throw new Exception(String.Format("Failed to parse date {0}", dateStr));
 		}
 
 		private decimal ParseDecimal(string decimalStr) {
 			decimal dec;
-			if (decimal.TryParse(decimalStr, NumberStyles.AllowCurrencySymbol | NumberStyles.Number, CultureInfo.InvariantCulture, out dec)) {
+			if (Decimal.TryParse(decimalStr, NumberStyles.AllowCurrencySymbol | NumberStyles.Number, CultureInfo.InvariantCulture, out dec)) {
 				return dec;
 			}
 
-			if (decimal.TryParse(Regex.Replace(decimalStr, @"[^0-9-,.]", ""), out dec)) {
+			if (Decimal.TryParse(Regex.Replace(decimalStr, @"[^0-9-,.]", ""), out dec)) {
 				return dec;
 			}
 
-			throw new Exception(string.Format("Failed to parse number {0}", decimalStr));
+			throw new Exception(String.Format("Failed to parse number {0}", decimalStr));
 		}
 
 
 		private bool IsHeader(string[] row) {
 			var isHeader = false;
 			foreach (string cell in row) {
-				if (!string.IsNullOrEmpty(cell)) {
+				if (!String.IsNullOrEmpty(cell)) {
 					var cellLower = cell.ToLowerInvariant();
 					if (cellLower.Contains("amount") ||
 					    cellLower.Contains("date") ||
@@ -215,7 +276,7 @@
 
 			foreach (DataColumn col in dataTable.Columns) {
 				string cell = col.ToString();
-				if (!string.IsNullOrEmpty(cell)) {
+				if (!String.IsNullOrEmpty(cell)) {
 					var cellLower = cell.ToLowerInvariant().Trim();
 
 					if (cellLower.Contains("date")) {
@@ -274,6 +335,24 @@
 				}
 			}
 			return headerColumns;
+		}
+
+		public static byte[] GetBytesFromFile(string fullFilePath) {
+			// this method is limited to 2^32 byte files (4.2 GB)
+
+			FileStream fs = null;
+			try {
+				fs = File.OpenRead(fullFilePath);
+				byte[] bytes = new byte[fs.Length];
+				fs.Read(bytes, 0, Convert.ToInt32(fs.Length));
+				return bytes;
+			} finally {
+				if (fs != null) {
+					fs.Close();
+					fs.Dispose();
+				}
+			}
+
 		}
 
 		public void PrintDataTable(DataTable dataTable) {
