@@ -320,6 +320,12 @@
 			}
 
 			GetZooplaData();
+
+			if (isOffline)
+			{
+				CalculateAndSaveOfflineMedal();
+			}
+
 			SetEndTimestamp();
 		}
 
@@ -689,11 +695,6 @@
 				modelLatePayments,
 				modelEarlyPayments
 			);
-
-			if (isOffline)
-			{
-				CalculateAndSaveOfflineMedal();
-			}
 
 			modelLoanOffer = scoringResult.MaxOffer;
 

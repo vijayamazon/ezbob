@@ -435,7 +435,6 @@
 
 		protected BankAccountVerificationInfo GetBavInfo(Customer customer)
 		{
-
 			var data = new BankAccountVerificationInfo
 			{
 				BankAccountVerificationResult = string.IsNullOrEmpty(customer.BWAResult)
