@@ -16,10 +16,10 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 	serializeData: function () {
 		var companyFiles = _.find(this.model.models, function (model) {
 			return model.get('CompanyFiles') != null;
-		}) || {};
+		});
 		return {
 			customerId: this.customerId,
-			files: companyFiles.get('CompanyFiles').Files
+			files: companyFiles ? companyFiles.get('CompanyFiles').Files : []
 		};
 	},
 	onRender: function () {
@@ -94,7 +94,6 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 						);
 					} else {
 						EzBob.App.trigger('error', 'Error uploading ' + oFile.name + ': ' + sErrorMsg);
-						console.log('Error uploading ' + oFile.name + ': ' + sErrorMsg);
 					}
 				}); // always
 

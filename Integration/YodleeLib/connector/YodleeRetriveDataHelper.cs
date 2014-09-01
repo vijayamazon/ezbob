@@ -124,6 +124,7 @@
 					dateSpecified = true
 				},
 				isSeidMod = 0,
+				isDeleted = 0
 			};
 
 			var transactionsData = new List<BankTransactionData>(parsedData.NumOfTransactions);
@@ -148,6 +149,8 @@
 					isSeidMod = 0,
 					transactionType = trn.IsCredit ? "credit" : "debit",
 					transactionBaseType = trn.IsCredit ? "credit" : "debit",
+					transactionStatusId = (int)datatypes.TransactionStatus.Posted,
+					transactionBaseTypeId = trn.IsCredit ? (int)datatypes.TransactionBaseType.Credit : (int)datatypes.TransactionBaseType.Debit,
 					bankTransactionId = lastTransactionId + (++i)
 				});
 
